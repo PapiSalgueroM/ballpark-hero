@@ -1,0 +1,4 @@
+build exit=0 26s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+mknew exit=0 1s | mk notes: {"event":{"title":"The Scan Room","choice":1,"label":"Back in training tomorrow","wheel":"The Scan Room","chance":0.3},"planned":{"year":2030,"club":"Everton","
+mkold exit=0 1s | mk notes: {"size_plan":24283,"size_keeper":22227,"size_real":15351,"size_roles":16853,"size_summaryWin":30761,"size_summaryOut":27170,"size_summaryEuro":23545,"size_offer
+walk exit=0 123s | review-sc-screens walk: 23 journeys, 0 stopped early, 41 measured problems, 165 shots

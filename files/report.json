@@ -1,0 +1,4367 @@
+{
+ "base": "http://localhost:4173",
+ "notes": {
+  "new": {
+   "event": {
+    "title": "The Scan Room",
+    "choice": 1,
+    "label": "Back in training tomorrow",
+    "wheel": "The Scan Room",
+    "chance": 0.3
+   },
+   "planned": {
+    "year": 2030,
+    "club": "Everton",
+    "choices": {
+     "tactics": "finisher",
+     "promise": "starter",
+     "bonuses": "appearances",
+     "set_pieces": "penalties"
+    },
+    "bonusEuros": 19744
+   },
+   "settledReceipt": {
+    "year": 2030,
+    "club": "Everton",
+    "choices": {
+     "tactics": "finisher",
+     "promise": "starter",
+     "bonuses": "appearances",
+     "set_pieces": "penalties"
+    },
+    "status": "completed",
+    "outcomes": {
+     "tactics": "27 recorded club appearances.",
+     "set_pieces": "1 penalty goals and 0 free kick goals, included in your 6 recorded goals. This is the simulation's season duty allocation.",
+     "promise": "The 26-appearance promise was missed: 23 league appearances. You can request a move in the transfer window.",
+     "bonuses": "The recorded target was not met; no bonus was paid."
+    },
+    "bonusEuros": 0,
+    "penaltyGoals": 1,
+    "freeKickGoals": 0,
+    "secondaryPosition": null,
+    "promise": "broken"
+   },
+   "size_plan": 24826,
+   "size_keeper": 22654,
+   "size_real": 15505,
+   "size_roles": 17017,
+   "size_summaryWin": 31231,
+   "size_summaryOut": 27650,
+   "size_summaryEuro": 23791,
+   "size_offerNo": 22638,
+   "size_offerYes": 63851,
+   "size_event": 23324,
+   "size_appeal": 22870,
+   "size_unseenHub": 22184,
+   "size_settledSummary": 34665,
+   "size_settled": 30841,
+   "size_edited": 24939
+  },
+  "old": {
+   "size_plan": 24283,
+   "size_keeper": 22227,
+   "size_real": 15351,
+   "size_roles": 16853,
+   "size_summaryWin": 30761,
+   "size_summaryOut": 27170,
+   "size_summaryEuro": 23545,
+   "size_offerNo": 22402,
+   "size_offerYes": 62609
+  }
+ },
+ "journeys": [
+  {
+   "id": "320-plans",
+   "facts": [
+    {
+     "label": "hub",
+     "value": {
+      "page": 14514,
+      "vh": 568,
+      "open": {
+       "top": 796,
+       "h": 78,
+       "w": 296
+      },
+      "next": {
+       "top": 502,
+       "bottom": 550
+      },
+      "wide": false
+     }
+    },
+    {
+     "label": "open: page as the walk left it, at the press, after",
+     "value": {
+      "left": 551,
+      "pressed": 551,
+      "after": 551
+     }
+    },
+    {
+     "label": "open: page before and after",
+     "value": {
+      "before": 551,
+      "after": 551,
+      "locked": "1",
+      "overflow": ""
+     }
+    },
+    {
+     "label": "help: boxes",
+     "value": {
+      "mode": "help",
+      "dialog": {
+       "top": 34,
+       "bottom": 534,
+       "h": 500
+      },
+      "body": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 732,
+       "at": 0
+      },
+      "start": {
+       "top": 840,
+       "bottom": 884,
+       "below": 351
+      },
+      "title": "Your career plans: how it works"
+     }
+    },
+    {
+     "label": "list: boxes",
+     "value": {
+      "mode": "list",
+      "dialog": {
+       "top": 34,
+       "bottom": 534,
+       "h": 500
+      },
+      "body": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 782,
+       "at": 0
+      },
+      "start": null,
+      "title": "Your career plans"
+     }
+    },
+    {
+     "label": "list: tiles",
+     "value": [
+      {
+       "id": "tactics",
+       "w": 131,
+       "h": 142
+      },
+      {
+       "id": "position",
+       "w": 131,
+       "h": 142
+      },
+      {
+       "id": "set_pieces",
+       "w": 131,
+       "h": 126
+      },
+      {
+       "id": "promise",
+       "w": 131,
+       "h": 126
+      },
+      {
+       "id": "negotiation",
+       "w": 131,
+       "h": 190
+      },
+      {
+       "id": "bonuses",
+       "w": 131,
+       "h": 190
+      },
+      {
+       "id": "adaptation",
+       "w": 131,
+       "h": 126
+      },
+      {
+       "id": "fitness",
+       "w": 131,
+       "h": 126
+      },
+      {
+       "id": "captain",
+       "w": 131,
+       "h": 142
+      },
+      {
+       "id": "loan",
+       "w": 131,
+       "h": 142
+      }
+     ]
+    },
+    {
+     "label": "detail tactics",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 680,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "finisher",
+        "reason": null,
+        "button": "Choose Finisher",
+        "disabled": false
+       },
+       {
+        "id": "creator",
+        "reason": null,
+        "button": "Choose Creator",
+        "disabled": false
+       },
+       {
+        "id": "cover",
+        "reason": null,
+        "button": "Choose Defensive cover",
+        "disabled": false
+       }
+      ],
+      "focus": "H2:Tactical role"
+     }
+    },
+    {
+     "label": "chose tactics",
+     "value": {
+      "plan": {
+       "year": 2030,
+       "club": "Everton",
+       "choices": {
+        "tactics": "finisher"
+       }
+      },
+      "button": "Current choice",
+      "current": "Current choice: FinisherRecorded outcome: No outcome recorded yet"
+     }
+    },
+    {
+     "label": "detail position",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 876,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "CF",
+        "reason": null,
+        "button": "Choose Train CF",
+        "disabled": false
+       },
+       {
+        "id": "LW",
+        "reason": null,
+        "button": "Choose Train LW",
+        "disabled": false
+       },
+       {
+        "id": "RW",
+        "reason": null,
+        "button": "Choose Train RW",
+        "disabled": false
+       }
+      ],
+      "focus": "H2:Second position"
+     }
+    },
+    {
+     "label": "detail set_pieces",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 614,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "penalties",
+        "reason": null,
+        "button": "Choose Penalty duty",
+        "disabled": false
+       },
+       {
+        "id": "free_kicks",
+        "reason": null,
+        "button": "Choose Free kick duty",
+        "disabled": false
+       }
+      ],
+      "focus": "H2:Set piece duty"
+     }
+    },
+    {
+     "label": "chose set_pieces",
+     "value": {
+      "plan": {
+       "year": 2030,
+       "club": "Everton",
+       "choices": {
+        "tactics": "finisher",
+        "set_pieces": "penalties"
+       }
+      },
+      "button": "Current choice",
+      "current": "Current choice: Penalty dutyRecorded outcome: No outcome recorded yet"
+     }
+    },
+    {
+     "label": "detail promise",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 582,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "rotation",
+        "reason": null,
+        "button": "Choose Regular rotation",
+        "disabled": false
+       },
+       {
+        "id": "starter",
+        "reason": null,
+        "button": "Choose Starting role",
+        "disabled": false
+       }
+      ],
+      "focus": "H2:Manager promise"
+     }
+    },
+    {
+     "label": "chose promise",
+     "value": {
+      "plan": {
+       "year": 2030,
+       "club": "Everton",
+       "choices": {
+        "tactics": "finisher",
+        "set_pieces": "penalties",
+        "promise": "starter"
+       }
+      },
+      "button": "Current choice",
+      "current": "Current choice: Starting roleRecorded outcome: No outcome recorded yet"
+     }
+    },
+    {
+     "label": "? from a detail and Back",
+     "value": {
+      "help": "help",
+      "back": "detail",
+      "title": "Manager promise"
+     }
+    },
+    {
+     "label": "detail negotiation",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 682,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "wage",
+        "reason": "Open the contract window first.",
+        "button": "Choose Ask for more pay",
+        "disabled": true
+       },
+       {
+        "id": "shorter",
+        "reason": "Open the contract window first.",
+        "button": "Choose Shorter commitment",
+        "disabled": true
+       }
+      ],
+      "focus": "H2:Contract counteroffer"
+     }
+    },
+    {
+     "label": "detail bonuses",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 752,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "appearances",
+        "reason": null,
+        "button": "Choose Appearance clause",
+        "disabled": false
+       },
+       {
+        "id": "goals",
+        "reason": null,
+        "button": "Choose Goal clause",
+        "disabled": false
+       },
+       {
+        "id": "assists",
+        "reason": null,
+        "button": "Choose Assist clause",
+        "disabled": false
+       }
+      ],
+      "focus": "H2:Performance bonus"
+     }
+    },
+    {
+     "label": "chose bonuses",
+     "value": {
+      "plan": {
+       "year": 2030,
+       "club": "Everton",
+       "choices": {
+        "tactics": "finisher",
+        "set_pieces": "penalties",
+        "promise": "starter",
+        "bonuses": "appearances"
+       },
+       "bonusEuros": 19744
+      },
+      "button": "Current choice",
+      "current": "Current choice: Appearance clauseRecorded outcome: No outcome recorded yet"
+     }
+    },
+    {
+     "label": "detail adaptation",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 598,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "settle",
+        "reason": "This is for your first season after changing clubs.",
+        "button": "Choose Settle in first",
+        "disabled": true
+       },
+       {
+        "id": "integrate",
+        "reason": "This is for your first season after changing clubs.",
+        "button": "Choose Push for a place",
+        "disabled": true
+       }
+      ],
+      "focus": "H2:New club adaptation"
+     }
+    },
+    {
+     "label": "detail fitness",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 598,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "managed",
+        "reason": "A serious injury in the last saved year is needed.",
+        "button": "Choose Managed return",
+        "disabled": true
+       },
+       {
+        "id": "full",
+        "reason": "A serious injury in the last saved year is needed.",
+        "button": "Choose Full workload",
+        "disabled": true
+       }
+      ],
+      "focus": "H2:Return to fitness"
+     }
+    },
+    {
+     "label": "detail captain",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 582,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "calm",
+        "reason": "You need the current club armband.",
+        "button": "Choose Keep the team calm",
+        "disabled": true
+       },
+       {
+        "id": "rally",
+        "reason": "You need the current club armband.",
+        "button": "Choose Lead from the front",
+        "disabled": true
+       }
+      ],
+      "focus": "H2:Captain duties"
+     }
+    },
+    {
+     "label": "detail loan",
+     "value": {
+      "scroll": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 428,
+       "at": 0
+      },
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "buy",
+        "reason": "You need an active loan at another club.",
+        "button": "Choose Make the move permanent",
+        "disabled": true
+       }
+      ],
+      "focus": "H2:Loan option to stay"
+     }
+    },
+    {
+     "label": "Escape: page and focus",
+     "value": {
+      "y": 551,
+      "overflow": "",
+      "locked": null,
+      "active": "programme-open"
+     }
+    },
+    {
+     "label": "reopen after reload: mode",
+     "value": "help"
+    },
+    {
+     "label": "after reload: promise detail",
+     "value": "Current choice: Starting roleRecorded outcome: No outcome recorded yet"
+    },
+    {
+     "label": "after Cancel plan",
+     "value": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet"
+    }
+   ],
+   "problems": [
+    {
+     "label": "hub: text under 12px",
+     "value": [
+      {
+       "text": "3",
+       "size": 11
+      },
+      {
+       "text": "unread",
+       "size": 11
+      },
+      {
+       "text": "OVR",
+       "size": 10
+      },
+      {
+       "text": "POT",
+       "size": 10
+      },
+      {
+       "text": "72",
+       "size": 10
+      },
+      {
+       "text": "Net Worth",
+       "size": 9
+      },
+      {
+       "text": "Wage",
+       "size": 9
+      },
+      {
+       "text": "Value",
+       "size": 9
+      },
+      {
+       "text": "A",
+       "size": 10
+      },
+      {
+       "text": "16",
+       "size": 11
+      },
+      {
+       "text": "y",
+       "size": 11
+      },
+      {
+       "text": "Youth Academy",
+       "size": 10
+      }
+     ]
+    },
+    {
+     "label": "hub: tap targets under 44px",
+     "value": [
+      {
+       "text": "DoUKnowBall",
+       "w": 150,
+       "h": 24,
+       "disabled": false
+      },
+      {
+       "text": "Go back",
+       "w": 79,
+       "h": 36,
+       "disabled": false
+      },
+      {
+       "text": "Sign up to track your statsTrack stats",
+       "w": 111,
+       "h": 30,
+       "disabled": false
+      },
+      {
+       "text": "🚪 Retire",
+       "w": 78,
+       "h": 40,
+       "disabled": false
+      },
+      {
+       "text": "🔄 New Career",
+       "w": 113,
+       "h": 40,
+       "disabled": false
+      },
+      {
+       "text": "Display currency",
+       "w": 83,
+       "h": 20,
+       "disabled": false
+      },
+      {
+       "text": "Soccer",
+       "w": 41,
+       "h": 16,
+       "disabled": false
+      },
+      {
+       "text": "NBA",
+       "w": 25,
+       "h": 16,
+       "disabled": false
+      },
+      {
+       "text": "NHL",
+       "w": 25,
+       "h": 16,
+       "disabled": false
+      },
+      {
+       "text": "NFL",
+       "w": 23,
+       "h": 16,
+       "disabled": false
+      },
+      {
+       "text": "MLB",
+       "w": 26,
+       "h": 16,
+       "disabled": false
+      },
+      {
+       "text": "College",
+       "w": 43,
+       "h": 16,
+       "disabled": false
+      }
+     ]
+    },
+    {
+     "label": "hub: cut text",
+     "value": [
+      {
+       "text": "Drill ready",
+       "has": 1,
+       "needs": 70
+      },
+      {
+       "text": "unread",
+       "has": 1,
+       "needs": 38
+      },
+      {
+       "text": "Bank, market, everything you can buy, and the card",
+       "has": 220,
+       "needs": 284
+      }
+     ]
+    },
+    {
+     "label": "hub: sideways overflow",
+     "value": {
+      "pageWide": false,
+      "wide": [
+       {
+        "tag": "DIV",
+        "text": "20Age",
+        "left": 307,
+        "right": 364
+       },
+       {
+        "tag": "DIV",
+        "text": "20",
+        "left": 324,
+        "right": 347
+       },
+       {
+        "tag": "DIV",
+        "text": "Age",
+        "left": 324,
+        "right": 347
+       }
+      ]
+     }
+    },
+    {
+     "label": "hub: not inside the screen",
+     "value": {
+      "top": 0,
+      "bottom": 14514,
+      "left": 0,
+      "right": 320
+     }
+    },
+    {
+     "label": "help: See my plans is below the fold of the dialog",
+     "value": {
+      "mode": "help",
+      "dialog": {
+       "top": 34,
+       "bottom": 534,
+       "h": 500
+      },
+      "body": {
+       "top": 164,
+       "bottom": 533,
+       "client": 369,
+       "scroll": 732,
+       "at": 0
+      },
+      "start": {
+       "top": 840,
+       "bottom": 884,
+       "below": 351
+      },
+      "title": "Your career plans: how it works"
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-plans-hub-top.jpg",
+    "320-plans-hub-full.jpg",
+    "320-plans-hub-at-button.jpg",
+    "320-plans-help.jpg",
+    "320-plans-help-bottom.jpg",
+    "320-plans-list.jpg",
+    "320-plans-list-bottom.jpg",
+    "320-plans-detail-tactics.jpg",
+    "320-plans-detail-tactics-bottom.jpg",
+    "320-plans-detail-tactics-chosen.jpg",
+    "320-plans-detail-position.jpg",
+    "320-plans-detail-position-bottom.jpg",
+    "320-plans-detail-set_pieces.jpg",
+    "320-plans-detail-set_pieces-bottom.jpg",
+    "320-plans-detail-set_pieces-chosen.jpg",
+    "320-plans-detail-promise.jpg",
+    "320-plans-detail-promise-bottom.jpg",
+    "320-plans-detail-promise-chosen.jpg",
+    "320-plans-help-from-detail.jpg",
+    "320-plans-detail-negotiation.jpg",
+    "320-plans-detail-negotiation-bottom.jpg",
+    "320-plans-detail-bonuses.jpg",
+    "320-plans-detail-bonuses-bottom.jpg",
+    "320-plans-detail-bonuses-chosen.jpg",
+    "320-plans-detail-adaptation.jpg",
+    "320-plans-detail-adaptation-bottom.jpg",
+    "320-plans-detail-fitness.jpg",
+    "320-plans-detail-fitness-bottom.jpg",
+    "320-plans-detail-captain.jpg",
+    "320-plans-detail-captain-bottom.jpg",
+    "320-plans-detail-loan.jpg",
+    "320-plans-detail-loan-bottom.jpg",
+    "320-plans-list-with-choices.jpg",
+    "320-plans-after-reload-promise.jpg",
+    "320-plans-promise-cancel-button.jpg"
+   ]
+  },
+  {
+   "id": "320-settled",
+   "facts": [
+    {
+     "label": "detail promise",
+     "value": {
+      "context": "2031 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: 2030 at Everton: The 26-appearance promise was missed: 23 league appearances. You can request a move in the transfer window.",
+      "options": [
+       {
+        "id": "rotation",
+        "reason": null,
+        "button": "Choose Regular rotation",
+        "disabled": false
+       },
+       {
+        "id": "starter",
+        "reason": null,
+        "button": "Choose Starting role",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail bonuses",
+     "value": {
+      "context": "2031 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: 2030 at Everton: The recorded target was not met; no bonus was paid.",
+      "options": [
+       {
+        "id": "appearances",
+        "reason": null,
+        "button": "Choose Appearance clause",
+        "disabled": false
+       },
+       {
+        "id": "goals",
+        "reason": null,
+        "button": "Choose Goal clause",
+        "disabled": false
+       },
+       {
+        "id": "assists",
+        "reason": null,
+        "button": "Choose Assist clause",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail set_pieces",
+     "value": {
+      "context": "2031 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: 2030 at Everton: 1 penalty goals and 0 free kick goals, included in your 6 recorded goals. This is the simulation's season duty allocation.",
+      "options": [
+       {
+        "id": "penalties",
+        "reason": null,
+        "button": "Choose Penalty duty",
+        "disabled": false
+       },
+       {
+        "id": "free_kicks",
+        "reason": null,
+        "button": "Choose Free kick duty",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail tactics",
+     "value": {
+      "context": "2031 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: 2030 at Everton: 27 recorded club appearances.",
+      "options": [
+       {
+        "id": "finisher",
+        "reason": null,
+        "button": "Choose Finisher",
+        "disabled": false
+       },
+       {
+        "id": "creator",
+        "reason": null,
+        "button": "Choose Creator",
+        "disabled": false
+       },
+       {
+        "id": "cover",
+        "reason": null,
+        "button": "Choose Defensive cover",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "receipt on the save",
+     "value": {
+      "year": 2030,
+      "club": "Everton",
+      "choices": {
+       "tactics": "finisher",
+       "promise": "starter",
+       "bonuses": "appearances",
+       "set_pieces": "penalties"
+      },
+      "status": "completed",
+      "outcomes": {
+       "tactics": "27 recorded club appearances.",
+       "set_pieces": "1 penalty goals and 0 free kick goals, included in your 6 recorded goals. This is the simulation's season duty allocation.",
+       "promise": "The 26-appearance promise was missed: 23 league appearances. You can request a move in the transfer window.",
+       "bonuses": "The recorded target was not met; no bonus was paid."
+      },
+      "bonusEuros": 0,
+      "penaltyGoals": 1,
+      "freeKickGoals": 0,
+      "secondaryPosition": null,
+      "promise": "broken"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-settled-hub-top.jpg",
+    "320-settled-list.jpg",
+    "320-settled-detail-promise.jpg",
+    "320-settled-detail-bonuses.jpg",
+    "320-settled-detail-set_pieces.jpg",
+    "320-settled-detail-tactics.jpg"
+   ]
+  },
+  {
+   "id": "320-keeper",
+   "facts": [
+    {
+     "label": "detail tactics",
+     "value": {
+      "context": "2029 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "finisher",
+        "reason": "This duty is for an outfield player.",
+        "button": "Choose Finisher",
+        "disabled": true
+       },
+       {
+        "id": "creator",
+        "reason": "This duty is for an outfield player.",
+        "button": "Choose Creator",
+        "disabled": true
+       },
+       {
+        "id": "cover",
+        "reason": null,
+        "button": "Choose Defensive cover",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail set_pieces",
+     "value": {
+      "context": "2029 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "penalties",
+        "reason": "This duty is for an outfield player.",
+        "button": "Choose Penalty duty",
+        "disabled": true
+       },
+       {
+        "id": "free_kicks",
+        "reason": "This duty is for an outfield player.",
+        "button": "Choose Free kick duty",
+        "disabled": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail bonuses",
+     "value": {
+      "context": "2029 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "appearances",
+        "reason": null,
+        "button": "Choose Appearance clause",
+        "disabled": false
+       },
+       {
+        "id": "goals",
+        "reason": "This duty is for an outfield player.",
+        "button": "Choose Goal clause",
+        "disabled": true
+       },
+       {
+        "id": "assists",
+        "reason": "This duty is for an outfield player.",
+        "button": "Choose Assist clause",
+        "disabled": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail position",
+     "value": {
+      "context": "2029 at Everton. Simulation choices; final injuries, bans and selection still apply. No compatible second position is available for this position.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": []
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-keeper-detail-tactics.jpg",
+    "320-keeper-detail-set_pieces.jpg",
+    "320-keeper-detail-bonuses.jpg",
+    "320-keeper-detail-position.jpg"
+   ]
+  },
+  {
+   "id": "320-edited",
+   "facts": [
+    {
+     "label": "detail captain",
+     "value": {
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "calm",
+        "reason": null,
+        "button": "Choose Keep the team calm",
+        "disabled": false
+       },
+       {
+        "id": "rally",
+        "reason": null,
+        "button": "Choose Lead from the front",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "chose captain",
+     "value": "Current choice: Keep the team calmRecorded outcome: No outcome recorded yet"
+    },
+    {
+     "label": "detail fitness",
+     "value": {
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "managed",
+        "reason": null,
+        "button": "Choose Managed return",
+        "disabled": false
+       },
+       {
+        "id": "full",
+        "reason": null,
+        "button": "Choose Full workload",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "chose fitness",
+     "value": "Current choice: Managed returnRecorded outcome: No outcome recorded yet"
+    },
+    {
+     "label": "detail adaptation",
+     "value": {
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "settle",
+        "reason": "This is for your first season after changing clubs.",
+        "button": "Choose Settle in first",
+        "disabled": true
+       },
+       {
+        "id": "integrate",
+        "reason": "This is for your first season after changing clubs.",
+        "button": "Choose Push for a place",
+        "disabled": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail loan",
+     "value": {
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "buy",
+        "reason": "You need an active loan at another club.",
+        "button": "Choose Make the move permanent",
+        "disabled": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail position",
+     "value": {
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "CF",
+        "reason": null,
+        "button": "Choose Train CF",
+        "disabled": false
+       },
+       {
+        "id": "LW",
+        "reason": null,
+        "button": "Choose Train LW",
+        "disabled": false
+       },
+       {
+        "id": "RW",
+        "reason": null,
+        "button": "Choose Train RW",
+        "disabled": false
+       }
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-edited-detail-captain.jpg",
+    "320-edited-detail-captain-chosen.jpg",
+    "320-edited-detail-fitness.jpg",
+    "320-edited-detail-fitness-chosen.jpg",
+    "320-edited-detail-adaptation.jpg",
+    "320-edited-detail-loan.jpg",
+    "320-edited-detail-position.jpg"
+   ]
+  },
+  {
+   "id": "320-oldplan",
+   "facts": [
+    {
+     "label": "old save fields",
+     "value": {
+      "programme": false,
+      "chanceWheel": false,
+      "seasons": 5,
+      "club": "Everton",
+      "phase": "playing"
+     }
+    },
+    {
+     "label": "detail tactics",
+     "value": {
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "finisher",
+        "reason": null,
+        "button": "Choose Finisher",
+        "disabled": false
+       },
+       {
+        "id": "creator",
+        "reason": null,
+        "button": "Choose Creator",
+        "disabled": false
+       },
+       {
+        "id": "cover",
+        "reason": null,
+        "button": "Choose Defensive cover",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail promise",
+     "value": {
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "rotation",
+        "reason": null,
+        "button": "Choose Regular rotation",
+        "disabled": false
+       },
+       {
+        "id": "starter",
+        "reason": null,
+        "button": "Choose Starting role",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "detail negotiation",
+     "value": {
+      "context": "2030 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "wage",
+        "reason": "Open the contract window first.",
+        "button": "Choose Ask for more pay",
+        "disabled": true
+       },
+       {
+        "id": "shorter",
+        "reason": "Open the contract window first.",
+        "button": "Choose Shorter commitment",
+        "disabled": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "old save after only reading",
+     "value": {
+      "programme": false,
+      "chanceWheel": false,
+      "same": true
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-oldplan-hub-top.jpg",
+    "320-oldplan-list.jpg",
+    "320-oldplan-detail-tactics.jpg",
+    "320-oldplan-detail-promise.jpg",
+    "320-oldplan-detail-negotiation.jpg"
+   ]
+  },
+  {
+   "id": "320-offerNo",
+   "facts": [
+    {
+     "label": "offer on the save",
+     "value": {
+      "club": "Rangers",
+      "wage": 10867,
+      "years": 3,
+      "overall": 66,
+      "lastRating": 6.1
+     }
+    },
+    {
+     "label": "window: action buttons",
+     "value": [
+      {
+       "text": "Review contract",
+       "w": 262,
+       "h": 44,
+       "left": 29,
+       "right": 291,
+       "lines": 2,
+       "cut": false
+      },
+      {
+       "text": "Reject & Stay",
+       "w": 144,
+       "h": 58,
+       "left": 12,
+       "right": 156,
+       "lines": 3,
+       "cut": false
+      },
+      {
+       "text": "Reject & Request Transfer 📤",
+       "w": 144,
+       "h": 58,
+       "left": 164,
+       "right": 308,
+       "lines": 3,
+       "cut": false
+      }
+     ]
+    },
+    {
+     "label": "detail negotiation",
+     "value": {
+      "context": "2029 at Rangers. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "wage",
+        "reason": null,
+        "button": "Choose Ask for more pay",
+        "disabled": false
+       },
+       {
+        "id": "shorter",
+        "reason": null,
+        "button": "Choose Shorter commitment",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "counteroffer verdict",
+     "value": {
+      "outcome": "Recorded outcome: 2029 offer at Rangers: Wage counteroffer rejected by the simulation rule. The original offer is unchanged.",
+      "current": "Current choice: Ask for more payRecorded outcome: 2029 offer at Rangers: Wage counteroffer rejected by the simulation rule. The original offer is unchanged.",
+      "negotiated": [
+       {
+        "year": 2029,
+        "club": "Rangers",
+        "mode": "wage",
+        "accepted": false
+       }
+      ],
+      "wageNow": 10867,
+      "wageWas": 10867,
+      "weeklyWage": 4936
+     }
+    },
+    {
+     "label": "after the ask: options",
+     "value": [
+      {
+       "id": "wage",
+       "reason": "This club has already received your counteroffer this year.",
+       "disabled": true,
+       "button": "Current choice"
+      },
+      {
+       "id": "shorter",
+       "reason": "This club has already received your counteroffer this year.",
+       "disabled": true,
+       "button": "Choose Shorter commitment"
+      }
+     ]
+    },
+    {
+     "label": "detail tactics-in-window",
+     "value": {
+      "context": "2029 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "finisher",
+        "reason": "Plan this before the next club season.",
+        "button": "Choose Finisher",
+        "disabled": true
+       },
+       {
+        "id": "creator",
+        "reason": "Plan this before the next club season.",
+        "button": "Choose Creator",
+        "disabled": true
+       },
+       {
+        "id": "cover",
+        "reason": "Plan this before the next club season.",
+        "button": "Choose Defensive cover",
+        "disabled": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "wage lines on the page after the counteroffer",
+     "value": [
+      "€5k/wk",
+      "💰 €5k/wk",
+      "💰 €10k/wk"
+     ]
+    },
+    {
+     "label": "contract review: signed wage shown",
+     "value": {
+      "shown": "10324",
+      "saved": 10867
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-offerNo-window-actions.jpg",
+    "320-offerNo-list-in-window.jpg",
+    "320-offerNo-detail-negotiation.jpg",
+    "320-offerNo-negotiation-verdict.jpg",
+    "320-offerNo-negotiation-verdict-bottom.jpg",
+    "320-offerNo-detail-tactics-in-window.jpg",
+    "320-offerNo-window-after-counter.jpg",
+    "320-offerNo-contract-review.jpg"
+   ]
+  },
+  {
+   "id": "320-offerYes",
+   "facts": [
+    {
+     "label": "offer on the save",
+     "value": {
+      "club": "Barcelona",
+      "wage": 311256,
+      "years": 4,
+      "overall": 92,
+      "lastRating": 8.3
+     }
+    },
+    {
+     "label": "window: action buttons",
+     "value": [
+      {
+       "text": "Review contract",
+       "w": 262,
+       "h": 44,
+       "left": 29,
+       "right": 291,
+       "lines": 2,
+       "cut": false
+      },
+      {
+       "text": "Reject & Stay",
+       "w": 144,
+       "h": 58,
+       "left": 12,
+       "right": 156,
+       "lines": 3,
+       "cut": false
+      },
+      {
+       "text": "Reject & Request Transfer 📤",
+       "w": 144,
+       "h": 58,
+       "left": 164,
+       "right": 308,
+       "lines": 3,
+       "cut": false
+      }
+     ]
+    },
+    {
+     "label": "detail negotiation",
+     "value": {
+      "context": "2036 at Barcelona. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "wage",
+        "reason": null,
+        "button": "Choose Ask for more pay",
+        "disabled": false
+       },
+       {
+        "id": "shorter",
+        "reason": null,
+        "button": "Choose Shorter commitment",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "counteroffer verdict",
+     "value": {
+      "outcome": "Recorded outcome: 2036 offer at Barcelona: Counteroffer accepted. The displayed offer contains the new terms.",
+      "current": "Current choice: Ask for more payRecorded outcome: 2036 offer at Barcelona: Counteroffer accepted. The displayed offer contains the new terms.",
+      "negotiated": [
+       {
+        "year": 2036,
+        "club": "Barcelona",
+        "mode": "wage",
+        "accepted": true
+       }
+      ],
+      "wageNow": 342382,
+      "wageWas": 311256,
+      "weeklyWage": 84892
+     }
+    },
+    {
+     "label": "after the ask: options",
+     "value": [
+      {
+       "id": "wage",
+       "reason": "This club has already received your counteroffer this year.",
+       "disabled": true,
+       "button": "Current choice"
+      },
+      {
+       "id": "shorter",
+       "reason": "This club has already received your counteroffer this year.",
+       "disabled": true,
+       "button": "Choose Shorter commitment"
+      }
+     ]
+    },
+    {
+     "label": "detail tactics-in-window",
+     "value": {
+      "context": "2036 at Liverpool. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "finisher",
+        "reason": "Plan this before the next club season.",
+        "button": "Choose Finisher",
+        "disabled": true
+       },
+       {
+        "id": "creator",
+        "reason": "Plan this before the next club season.",
+        "button": "Choose Creator",
+        "disabled": true
+       },
+       {
+        "id": "cover",
+        "reason": "Plan this before the next club season.",
+        "button": "Choose Defensive cover",
+        "disabled": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "wage lines on the page after the counteroffer",
+     "value": [
+      "€85k/wk",
+      "💰 €85k/wk",
+      "💰 €325k/wk"
+     ]
+    },
+    {
+     "label": "contract review: signed wage shown",
+     "value": {
+      "shown": "325263",
+      "saved": 342382
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-offerYes-window-actions.jpg",
+    "320-offerYes-list-in-window.jpg",
+    "320-offerYes-detail-negotiation.jpg",
+    "320-offerYes-negotiation-verdict.jpg",
+    "320-offerYes-negotiation-verdict-bottom.jpg",
+    "320-offerYes-detail-tactics-in-window.jpg",
+    "320-offerYes-window-after-counter.jpg",
+    "320-offerYes-contract-review.jpg"
+   ]
+  },
+  {
+   "id": "320-oldoffer",
+   "facts": [
+    {
+     "label": "offer on the save",
+     "value": {
+      "club": "Rangers",
+      "wage": 10867,
+      "years": 3,
+      "overall": 66,
+      "lastRating": 6.1
+     }
+    },
+    {
+     "label": "window: action buttons",
+     "value": [
+      {
+       "text": "Review contract",
+       "w": 262,
+       "h": 44,
+       "left": 29,
+       "right": 291,
+       "lines": 2,
+       "cut": false
+      },
+      {
+       "text": "Reject & Stay",
+       "w": 144,
+       "h": 58,
+       "left": 12,
+       "right": 156,
+       "lines": 3,
+       "cut": false
+      },
+      {
+       "text": "Reject & Request Transfer 📤",
+       "w": 144,
+       "h": 58,
+       "left": 164,
+       "right": 308,
+       "lines": 3,
+       "cut": false
+      }
+     ]
+    },
+    {
+     "label": "detail negotiation",
+     "value": {
+      "context": "2029 at Rangers. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "wage",
+        "reason": null,
+        "button": "Choose Ask for more pay",
+        "disabled": false
+       },
+       {
+        "id": "shorter",
+        "reason": null,
+        "button": "Choose Shorter commitment",
+        "disabled": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "counteroffer verdict",
+     "value": {
+      "outcome": "Recorded outcome: 2029 offer at Rangers: Wage counteroffer rejected by the simulation rule. The original offer is unchanged.",
+      "current": "Current choice: Ask for more payRecorded outcome: 2029 offer at Rangers: Wage counteroffer rejected by the simulation rule. The original offer is unchanged.",
+      "negotiated": [
+       {
+        "year": 2029,
+        "club": "Rangers",
+        "mode": "wage",
+        "accepted": false
+       }
+      ],
+      "wageNow": 10867,
+      "wageWas": 10867,
+      "weeklyWage": 4936
+     }
+    },
+    {
+     "label": "after the ask: options",
+     "value": [
+      {
+       "id": "wage",
+       "reason": "This club has already received your counteroffer this year.",
+       "disabled": true,
+       "button": "Current choice"
+      },
+      {
+       "id": "shorter",
+       "reason": "This club has already received your counteroffer this year.",
+       "disabled": true,
+       "button": "Choose Shorter commitment"
+      }
+     ]
+    },
+    {
+     "label": "detail tactics-in-window",
+     "value": {
+      "context": "2029 at Everton. Simulation choices; final injuries, bans and selection still apply.",
+      "current": "Current choice: No choice recordedRecorded outcome: No outcome recorded yet",
+      "options": [
+       {
+        "id": "finisher",
+        "reason": "Plan this before the next club season.",
+        "button": "Choose Finisher",
+        "disabled": true
+       },
+       {
+        "id": "creator",
+        "reason": "Plan this before the next club season.",
+        "button": "Choose Creator",
+        "disabled": true
+       },
+       {
+        "id": "cover",
+        "reason": "Plan this before the next club season.",
+        "button": "Choose Defensive cover",
+        "disabled": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "wage lines on the page after the counteroffer",
+     "value": [
+      "€5k/wk",
+      "💰 €5k/wk",
+      "💰 €10k/wk"
+     ]
+    },
+    {
+     "label": "contract review: signed wage shown",
+     "value": {
+      "shown": "10324",
+      "saved": 10867
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-oldoffer-window-actions.jpg",
+    "320-oldoffer-list-in-window.jpg",
+    "320-oldoffer-detail-negotiation.jpg",
+    "320-oldoffer-negotiation-verdict.jpg",
+    "320-oldoffer-negotiation-verdict-bottom.jpg",
+    "320-oldoffer-detail-tactics-in-window.jpg",
+    "320-oldoffer-window-after-counter.jpg",
+    "320-oldoffer-contract-review.jpg"
+   ]
+  },
+  {
+   "id": "320-wheel",
+   "facts": [
+    {
+     "label": "the choice as the card words it",
+     "value": "⚡\nBack in training tomorrow\nMorale +5, Pace +1 next season, 30% chance of a nagging issue all year"
+    },
+    {
+     "label": "receipt",
+     "value": {
+      "title": "The Scan Room",
+      "chance": 0.3,
+      "roll": 0.3799911538036802,
+      "hit": "Knee setback",
+      "miss": "No setback",
+      "result": false,
+      "seen": false
+     }
+    },
+    {
+     "label": "open: page",
+     "value": {
+      "before": 548,
+      "after": 387,
+      "locked": "1"
+     }
+    },
+    {
+     "label": "wheel boxes",
+     "value": {
+      "dialog": {
+       "top": 34,
+       "bottom": 534,
+       "h": 500,
+       "w": 296
+      },
+      "vh": 568,
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      },
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "transform": "rotate(0deg)",
+      "transition": "2s transform",
+      "background": "conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ",
+      "buttons": [
+       "Spin the wheel",
+       "Show result",
+       "Close"
+      ],
+      "title": "The Scan Room",
+      "text": "The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"
+     }
+    },
+    {
+     "label": "after reload mid wheel",
+     "value": "Ready to reveal your saved result."
+    },
+    {
+     "label": "spun",
+     "value": {
+      "ms": 2081,
+      "transform": "rotate(1303.2deg)",
+      "text": "No setback",
+      "buttons": [
+       "Continue",
+       "Close"
+      ],
+      "transition": "2s transform"
+     }
+    },
+    {
+     "label": "Continue: page and focus",
+     "value": {
+      "y": 0,
+      "overflow": "",
+      "locked": null,
+      "active": "BODY:Skip to main contentLiveLive scores temp"
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "wheel open: the page moved",
+     "value": {
+      "before": 548,
+      "after": 387
+     }
+    },
+    {
+     "label": "wheel open: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      },
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      }
+     }
+    },
+    {
+     "label": "wheel open: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel open: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel result: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      },
+      "disk": {
+       "top": 261,
+       "bottom": 533,
+       "h": 271,
+       "w": 271
+      },
+      "result": {
+       "top": 533,
+       "bottom": 577,
+       "h": 44,
+       "w": 246,
+       "text": "No setback"
+      }
+     }
+    },
+    {
+     "label": "wheel result: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 261,
+       "bottom": 533,
+       "h": 271,
+       "w": 271
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel result: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 533,
+       "bottom": 577,
+       "h": 44,
+       "w": 246,
+       "text": "No setback"
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel Continue: page not put back",
+     "value": {
+      "before": {
+       "y": 548,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "closed": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      }
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-wheel-event-card.jpg",
+    "320-wheel-wheel-open.jpg",
+    "320-wheel-wheel-after-reload.jpg",
+    "320-wheel-wheel-spinning.jpg",
+    "320-wheel-wheel-result.jpg",
+    "320-wheel-after-wheel.jpg"
+   ]
+  },
+  {
+   "id": "320-wheel-reduced",
+   "facts": [
+    {
+     "label": "the choice as the card words it",
+     "value": "⚡\nBack in training tomorrow\nMorale +5, Pace +1 next season, 30% chance of a nagging issue all year"
+    },
+    {
+     "label": "receipt",
+     "value": {
+      "title": "The Scan Room",
+      "chance": 0.3,
+      "roll": 0.8702337255227577,
+      "hit": "Knee setback",
+      "miss": "No setback",
+      "result": false,
+      "seen": false
+     }
+    },
+    {
+     "label": "open: page",
+     "value": {
+      "before": 548,
+      "after": 387,
+      "locked": "1"
+     }
+    },
+    {
+     "label": "wheel boxes",
+     "value": {
+      "dialog": {
+       "top": 34,
+       "bottom": 534,
+       "h": 500,
+       "w": 296
+      },
+      "vh": 568,
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      },
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "transform": "rotate(0deg)",
+      "transition": "1e-06s none",
+      "background": "conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ",
+      "buttons": [
+       "Spin the wheel",
+       "Show result",
+       "Close"
+      ],
+      "title": "The Scan Room",
+      "text": "The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"
+     }
+    },
+    {
+     "label": "spun",
+     "value": {
+      "ms": 98,
+      "transform": "rotate(1126.72deg)",
+      "text": "No setback",
+      "buttons": [
+       "Continue",
+       "Close"
+      ],
+      "transition": "1e-06s none"
+     }
+    },
+    {
+     "label": "Continue: page and focus",
+     "value": {
+      "y": 387,
+      "overflow": "",
+      "locked": null,
+      "active": "BUTTON:🎟️Get them all in free next home game a"
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "wheel open: the page moved",
+     "value": {
+      "before": 548,
+      "after": 387
+     }
+    },
+    {
+     "label": "wheel open: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      },
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      }
+     }
+    },
+    {
+     "label": "wheel open: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel open: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "reduced motion: the disk still has a transition",
+     "value": "1e-06s none"
+    },
+    {
+     "label": "wheel result: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      },
+      "disk": {
+       "top": 261,
+       "bottom": 533,
+       "h": 271,
+       "w": 271
+      },
+      "result": {
+       "top": 533,
+       "bottom": 577,
+       "h": 44,
+       "w": 246,
+       "text": "No setback"
+      }
+     }
+    },
+    {
+     "label": "wheel result: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 261,
+       "bottom": 533,
+       "h": 271,
+       "w": 271
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel result: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 533,
+       "bottom": 577,
+       "h": 44,
+       "w": 246,
+       "text": "No setback"
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel Continue: page not put back",
+     "value": {
+      "before": {
+       "y": 548,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "closed": {
+       "y": 387,
+       "overflow": "",
+       "locked": null,
+       "active": "BUTTON:🎟️Get them all in free next home game a"
+      }
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-wheel-reduced-event-card.jpg",
+    "320-wheel-reduced-wheel-open.jpg",
+    "320-wheel-reduced-wheel-spun-reduced.jpg",
+    "320-wheel-reduced-wheel-result.jpg",
+    "320-wheel-reduced-after-wheel.jpg"
+   ]
+  },
+  {
+   "id": "320-wheel-escape",
+   "facts": [
+    {
+     "label": "Escape before the reveal",
+     "value": {
+      "seen": true,
+      "expected": "No setback",
+      "wheelWordsOnPage": false,
+      "lastEvents": [
+       "🧢 Signed with Cousin Ricky. What could go wrong",
+       "🩻 Back in training the next morning like nothing happened. Nothing did happen"
+      ],
+      "phase": "random_events"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-wheel-escape-after-escape.jpg"
+   ]
+  },
+  {
+   "id": "320-wheel-appeal",
+   "facts": [
+    {
+     "label": "appeal save",
+     "value": {
+      "wheel": {
+       "title": "Red card appeal",
+       "chance": 0.5,
+       "roll": 0.7869630896020681,
+       "hit": "Appeal successful",
+       "miss": "Appeal rejected",
+       "result": false,
+       "seen": false
+      },
+      "pendingAppealResult": {
+       "success": false,
+       "banLength": 4
+      }
+     }
+    },
+    {
+     "label": "the appeal card behind the wheel",
+     "value": {
+      "text": "APPEAL REJECTED",
+      "top": 489,
+      "bottom": 517,
+      "overlay": "rgba(0, 0, 0, 0.8)"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-wheel-appeal-wheel-over-appeal.jpg",
+    "320-wheel-appeal-wheel-over-appeal-result.jpg",
+    "320-wheel-appeal-appeal-card.jpg"
+   ]
+  },
+  {
+   "id": "320-wheel-hub",
+   "facts": [
+    {
+     "label": "unseen receipt on a pre season save",
+     "value": {
+      "title": "The Group Chat Leak",
+      "chance": 0.5,
+      "roll": 0.5090081528760493,
+      "hit": "Leaker found",
+      "miss": "Leaker not found",
+      "result": false,
+      "seen": false
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "wheel on load: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 424,
+       "at": 0
+      },
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "result": {
+       "top": 549,
+       "bottom": 613,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      }
+     }
+    },
+    {
+     "label": "wheel on load: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 424,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel on load: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 549,
+       "bottom": 613,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 424,
+       "at": 0
+      }
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-wheel-hub-wheel-on-load.jpg"
+   ]
+  },
+  {
+   "id": "320-squad-real",
+   "facts": [
+    {
+     "label": "squad open: page as left and at the press",
+     "value": {
+      "left": 3,
+      "pressed": 245
+     }
+    },
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 342,
+       "scroll": 687
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "source": "real",
+      "cells": [
+       {
+        "name": "Marcus Rashford",
+        "pos": "LW",
+        "ovr": "89",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Romelu Lukaku",
+        "pos": "ST",
+        "ovr": "89",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Anthony Martial",
+        "pos": "ST",
+        "ovr": "87",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Paul Pogba",
+        "pos": "CM",
+        "ovr": "90",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Jesse Lingard",
+        "pos": "CAM",
+        "ovr": "85",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Fred",
+        "pos": "CM",
+        "ovr": "84",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Luke Shaw",
+        "pos": "LB",
+        "ovr": "83",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Victor Lindelöf",
+        "pos": "CB",
+        "ovr": "84",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eric Bailly",
+        "pos": "CB",
+        "ovr": "82",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Chris Smalling",
+        "pos": "CB",
+        "ovr": "81",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "David de Gea",
+        "pos": "GK",
+        "ovr": "88",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 398,
+       "scroll": 529
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 245,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 245,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "squad help scrolls",
+     "value": {
+      "client": 342,
+      "scroll": 687
+     }
+    },
+    {
+     "label": "starting eleven scrolls inside the sheet",
+     "value": {
+      "client": 398,
+      "scroll": 529
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-squad-real-squad-tile.jpg",
+    "320-squad-real-squad-first.jpg",
+    "320-squad-real-squad-home.jpg",
+    "320-squad-real-squad-eleven.jpg",
+    "320-squad-real-squad-bench.jpg"
+   ]
+  },
+  {
+   "id": "320-squad-roles",
+   "facts": [
+    {
+     "label": "squad open: page as left and at the press",
+     "value": {
+      "left": 0,
+      "pressed": 241
+     }
+    },
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 342,
+       "scroll": 687
+      },
+      "pageY": 241
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "scope": "There is no checked historical squad for this club and season. Missing teammate names stay as roles.",
+      "source": "roles",
+      "cells": [
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "ST",
+        "ovr": "67",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "Sam Carter",
+        "pos": "ST",
+        "ovr": "64",
+        "src": "you",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "RW",
+        "ovr": "64",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "CM",
+        "ovr": "66",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "CDM",
+        "ovr": "63",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 3rdchoice",
+        "pos": "CM",
+        "ovr": "56",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 4thchoice",
+        "pos": "LB",
+        "ovr": "56",
+        "src": "role",
+        "w": 57,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "CB",
+        "ovr": "69",
+        "src": "role",
+        "w": 57,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "CB",
+        "ovr": "63",
+        "src": "role",
+        "w": 57,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 3rdchoice",
+        "pos": "RB",
+        "ovr": "60",
+        "src": "role",
+        "w": 57,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "GK",
+        "ovr": "56",
+        "src": "role",
+        "w": 104,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 398,
+       "scroll": 552
+      },
+      "pageY": 241
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 241,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 241,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "squad help scrolls",
+     "value": {
+      "client": 342,
+      "scroll": 687
+     }
+    },
+    {
+     "label": "starting eleven scrolls inside the sheet",
+     "value": {
+      "client": 398,
+      "scroll": 552
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-squad-roles-squad-tile.jpg",
+    "320-squad-roles-squad-first.jpg",
+    "320-squad-roles-squad-home.jpg",
+    "320-squad-roles-squad-eleven.jpg",
+    "320-squad-roles-squad-bench.jpg"
+   ]
+  },
+  {
+   "id": "320-squad-invented",
+   "facts": [
+    {
+     "label": "squad open: page as left and at the press",
+     "value": {
+      "left": 3,
+      "pressed": 245
+     }
+    },
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 334,
+       "scroll": 687
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "scope": "Generated teammates are fictional players in your career. These names and ratings belong to your simulated squad.",
+      "source": "invented",
+      "cells": [
+       {
+        "name": "Ross Dunmore",
+        "pos": "ST",
+        "ovr": "69",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Sam Carter",
+        "pos": "ST",
+        "ovr": "65",
+        "src": "you",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Maxi Gorosito",
+        "pos": "RW",
+        "ovr": "62",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Nnamdi Uzoma",
+        "pos": "CM",
+        "ovr": "68",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Shane Ashcroft",
+        "pos": "CDM",
+        "ovr": "64",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Obinna Ikpeba-Ola",
+        "pos": "CM",
+        "ovr": "56",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Onur Öztürkmen",
+        "pos": "LB",
+        "ovr": "56",
+        "src": "generated",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "Mees Nieuwland",
+        "pos": "CB",
+        "ovr": "68",
+        "src": "generated",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "Eddie Stanhope",
+        "pos": "CB",
+        "ovr": "65",
+        "src": "generated",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "Eivind Nordvik",
+        "pos": "RB",
+        "ovr": "62",
+        "src": "generated",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Juvenal Quaresma",
+        "pos": "GK",
+        "ovr": "56",
+        "src": "generated",
+        "w": 104,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 390,
+       "scroll": 567
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 245,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 245,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "squad help scrolls",
+     "value": {
+      "client": 334,
+      "scroll": 687
+     }
+    },
+    {
+     "label": "starting eleven scrolls inside the sheet",
+     "value": {
+      "client": 390,
+      "scroll": 567
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-squad-invented-squad-tile.jpg",
+    "320-squad-invented-squad-first.jpg",
+    "320-squad-invented-squad-home.jpg",
+    "320-squad-invented-squad-eleven.jpg",
+    "320-squad-invented-squad-bench.jpg"
+   ]
+  },
+  {
+   "id": "320-squad-old",
+   "facts": [
+    {
+     "label": "squad open: page as left and at the press",
+     "value": {
+      "left": 3,
+      "pressed": 245
+     }
+    },
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 342,
+       "scroll": 687
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "source": "real",
+      "cells": [
+       {
+        "name": "Marcus Rashford",
+        "pos": "LW",
+        "ovr": "89",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Romelu Lukaku",
+        "pos": "ST",
+        "ovr": "89",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Anthony Martial",
+        "pos": "ST",
+        "ovr": "87",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Paul Pogba",
+        "pos": "CM",
+        "ovr": "90",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Jesse Lingard",
+        "pos": "CAM",
+        "ovr": "85",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Fred",
+        "pos": "CM",
+        "ovr": "84",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Luke Shaw",
+        "pos": "LB",
+        "ovr": "83",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Victor Lindelöf",
+        "pos": "CB",
+        "ovr": "84",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eric Bailly",
+        "pos": "CB",
+        "ovr": "82",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Chris Smalling",
+        "pos": "CB",
+        "ovr": "81",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "David de Gea",
+        "pos": "GK",
+        "ovr": "88",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 398,
+       "scroll": 529
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 245,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 245,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "squad help scrolls",
+     "value": {
+      "client": 342,
+      "scroll": 687
+     }
+    },
+    {
+     "label": "starting eleven scrolls inside the sheet",
+     "value": {
+      "client": 398,
+      "scroll": 529
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-squad-old-squad-tile.jpg",
+    "320-squad-old-squad-first.jpg",
+    "320-squad-old-squad-home.jpg",
+    "320-squad-old-squad-eleven.jpg",
+    "320-squad-old-squad-bench.jpg"
+   ]
+  },
+  {
+   "id": "320-cup-win",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": {
+       "opp": "Millwall",
+       "country": "England",
+       "league": "Championship",
+       "won": true,
+       "for": 5,
+       "against": 1,
+       "home": true
+      },
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Millwall | 5-1",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Millwall | 5-1",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nBrighton vs Millwall\n\n5-1\n\nHome\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "8",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "9",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-cup-win-summary-with-watch.jpg",
+    "320-cup-win-centre-help.jpg",
+    "320-cup-win-kickoff.jpg",
+    "320-cup-win-league-five-full-time.jpg",
+    "320-cup-win-cup-before.jpg",
+    "320-cup-win-cup-result.jpg",
+    "320-cup-win-fixtures-with-cup.jpg",
+    "320-cup-win-bracket.jpg",
+    "320-cup-win-bracket-tie.jpg",
+    "320-cup-win-back-on-league.jpg",
+    "320-cup-win-reopened.jpg"
+   ]
+  },
+  {
+   "id": "320-cup-out",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": false
+       }
+      ],
+      "opening": {
+       "opp": "Newcastle",
+       "country": "England",
+       "league": "Premier League",
+       "won": false,
+       "for": 1,
+       "against": 3,
+       "home": false
+      },
+      "year": 2029,
+      "club": "Everton",
+      "league": 22
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\n1-3\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Newcastle | 1-3",
+       "h": 58
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Newcastle | 1-3"
+      ],
+      "games": 1
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nEverton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nEverton vs Newcastle\n\n1-3\n\nAway\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "14",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "6",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-cup-out-summary-with-watch.jpg",
+    "320-cup-out-centre-help.jpg",
+    "320-cup-out-kickoff.jpg",
+    "320-cup-out-league-five-full-time.jpg",
+    "320-cup-out-cup-before.jpg",
+    "320-cup-out-cup-result.jpg",
+    "320-cup-out-fixtures-with-cup.jpg",
+    "320-cup-out-bracket.jpg",
+    "320-cup-out-bracket-tie.jpg",
+    "320-cup-out-back-on-league.jpg",
+    "320-cup-out-reopened.jpg"
+   ]
+  },
+  {
+   "id": "320-cup-old",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": null,
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Early rounds"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Early rounds | Opponents not recorded | Through",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Early rounds | Early rounds | Opponents not recorded | Through",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nEarly rounds\n\nBrighton vs Opponent not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "8",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "9",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-cup-old-summary-with-watch.jpg",
+    "320-cup-old-centre-help.jpg",
+    "320-cup-old-kickoff.jpg",
+    "320-cup-old-league-five-full-time.jpg",
+    "320-cup-old-cup-before.jpg",
+    "320-cup-old-cup-result.jpg",
+    "320-cup-old-fixtures-with-cup.jpg",
+    "320-cup-old-bracket.jpg",
+    "320-cup-old-bracket-tie.jpg",
+    "320-cup-old-back-on-league.jpg",
+    "320-cup-old-reopened.jpg"
+   ]
+  },
+  {
+   "id": "320-euro",
+   "facts": [
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "competition buttons",
+     "value": [
+      {
+       "id": "league",
+       "text": "Premier League",
+       "h": 44,
+       "w": 149
+      },
+      {
+       "id": "domestic",
+       "text": "FA Cup",
+       "h": 44,
+       "w": 149
+      },
+      {
+       "id": "club",
+       "text": "Champions League",
+       "h": 44,
+       "w": 149
+      },
+      {
+       "id": "squad",
+       "text": "Current squad",
+       "h": 44,
+       "w": 149
+      }
+     ]
+    },
+    {
+     "label": "club view",
+     "value": {
+      "tables": [
+       "League phase: 5 of 36 |  | Only your club's row was kept. |  | Club\tP\tW\tD\tL\tGF\tGA\tPts | Chelsea\t8\t5\t2\t1\t15\t8\t17 |  | Level on points splits on goal difference, then goals scored."
+      ],
+      "rounds": [
+       "League phase | League phase, game 1 | Arsenal | 2-0 | League phase, game 2 | Dortmund | 3-1 | League phase, game 3 | Atl",
+       "↓ Round of 16 | Round of 16, leg 1 | Leverkusen | 0-1 | Round of 16, leg 2 | Leverkusen | 0-0"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-euro-summary-with-watch.jpg",
+    "320-euro-centre-help.jpg",
+    "320-euro-competition-club.jpg",
+    "320-euro-competition-club-bracket.jpg",
+    "320-euro-competition-domestic.jpg",
+    "320-euro-competition-squad.jpg",
+    "320-euro-competition-help.jpg"
+   ]
+  },
+  {
+   "id": "320-euro-night",
+   "facts": [
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games before the first cup night",
+     "value": {
+      "reached": 3,
+      "button": "▶ Champions League: League phase, game 1",
+      "id": "club:0"
+     }
+    },
+    {
+     "label": "first cup night",
+     "value": {
+      "id": "club:0",
+      "revealed": "false",
+      "text": "Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen Champions League bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Champions League",
+       "Current squad",
+       "Open Champions League bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "first cup night revealed",
+     "value": {
+      "id": "club:0",
+      "revealed": "true",
+      "text": "Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\n2-0\n\nYou scored 1. Already included in your season totals.\n\nOpen Champions League bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Champions League",
+       "Current squad",
+       "Open Champions League bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 4",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "continue says",
+     "value": "▶ Matchday 4"
+    },
+    {
+     "label": "after the night",
+     "value": "4"
+    }
+   ],
+   "problems": [
+    {
+     "label": "european night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "10",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "7",
+       "size": 11
+      },
+      {
+       "text": "7",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-euro-night-summary-with-watch.jpg",
+    "320-euro-night-centre-help.jpg",
+    "320-euro-night-before-first-night.jpg",
+    "320-euro-night-night-before.jpg",
+    "320-euro-night-night-result.jpg",
+    "320-euro-night-after-night.jpg"
+   ]
+  },
+  {
+   "id": "430-pinned-bar",
+   "facts": [
+    {
+     "label": "Next Season button at five scroll stops",
+     "value": [
+      {
+       "y": 0,
+       "max": 10937,
+       "top": 866,
+       "bottom": 914,
+       "vh": 932,
+       "hit": true
+      },
+      {
+       "y": 600,
+       "max": 10937,
+       "top": 866,
+       "bottom": 914,
+       "vh": 932,
+       "hit": true
+      },
+      {
+       "y": 1500,
+       "max": 10937,
+       "top": 866,
+       "bottom": 914,
+       "vh": 932,
+       "hit": true
+      },
+      {
+       "y": 3000,
+       "max": 10937,
+       "top": 866,
+       "bottom": 914,
+       "vh": 932,
+       "hit": true
+      },
+      {
+       "y": 10937,
+       "max": 10937,
+       "top": 534,
+       "bottom": 582,
+       "vh": 932,
+       "hit": true
+      }
+     ]
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "430-pinned-bar-bar-at-3000.jpg",
+    "430-pinned-bar-bar-at-bottom.jpg"
+   ]
+  }
+ ],
+ "fonts": {
+  "status": "loaded",
+  "loaded": [
+   "Inter",
+   "Space Grotesk"
+  ],
+  "body": "Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", san"
+ }
+}
