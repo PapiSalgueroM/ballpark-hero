@@ -1,0 +1,3 @@
+#!serial
+eq: git worktree add -f /tmp/base 54e3820a >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules 2>/dev/null; git -C /tmp/base rev-parse --short HEAD; node .rc/x/scEngine.mjs /tmp/base eq
+eqr: node .rc/x/scEngine.mjs /tmp/base eqr
