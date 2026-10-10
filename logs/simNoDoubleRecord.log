@@ -1,0 +1,77 @@
+1) The table, rendered: src/test/noDoubleRecord.test.tsx
+   table: {"rows":41,"fight":3,"career":4,"slug":12,"toggle":11,"restore":7,"extra":4,"checks":26}
+   ok  fight-career                                                     fight    mark yes
+   ok  fight-gym                                                        fight    mark yes
+   ok  fight-promoter                                                   fight    mark yes
+   ok  nfl-my-career                                                    career   mark yes
+   ok  nba-my-career                                                    career   mark yes
+   ok  mlb-my-career                                                    career   mark yes
+   ok  nhl-my-career                                                    career   mark yes
+   ok  nfl-higher-lower                                                 slug     mark yes
+   ok  nba-higher-lower                                                 slug     mark yes
+   ok  mlb-higher-lower                                                 slug     mark yes
+   ok  hockey-higher-lower                                              slug     mark yes
+   ok  cfb-higher-lower                                                 slug     mark yes
+   ok  f1-higher-lower                                                  slug     mark yes
+   ok  tennis-higher-lower                                              slug     mark yes
+   ok  golf-higher-lower                                                slug     mark yes
+   ok  afl-higher-lower                                                 slug     mark yes
+   ok  ufc                                                              slug     mark yes
+   ok  football-connect-4                                               slug     mark yes
+   ok  career                                                           slug     mark yes
+   ok  nba-grid                                                         toggle   mark no 
+   ok  mlb-grid                                                         toggle   mark no 
+   ok  hockey-grid                                                      toggle   mark no 
+   ok  cbb-grid                                                         toggle   mark no 
+   ok  missing-five                                                     toggle   mark yes
+   ok  missing-nine                                                     toggle   mark yes
+   ok  missing-eleven                                                   toggle   mark yes
+   ok  rank-em                                                          toggle   mark yes
+   ok  puck-detective (give up)                                         toggle   mark no 
+   ok  puck-detective (solve)                                           toggle   mark yes
+   ok  guess-the-golfer                                                 toggle   mark yes
+   ok  champ-or-not                                                     restore  mark yes
+   ok  whod-they-beat                                                   restore  mark yes
+   ok  silverware-sort                                                  restore  mark yes
+   ok  jeopardy                                                         restore  mark yes
+   ok  ball-iq                                                          restore  mark yes
+   ok  mystery-box                                                      restore  mark yes
+   ok  nfl-career                                                       restore  mark no 
+   ok  career-ladder                                                    extra    mark yes
+   ok  transfer-path                                                    extra    mark yes
+   ok  grade-transfer                                                   extra    mark yes
+   ok  player-stock-market                                              extra    mark yes
+   ok  nfl-higher-lower: a round decided is saved before its reveal ends check    mark no 
+   ok  nba-higher-lower: a round decided is saved before its reveal ends check    mark no 
+   ok  mlb-higher-lower: a round decided is saved before its reveal ends check    mark no 
+   ok  hockey-higher-lower: a round decided is saved before its reveal ends check    mark no 
+   ok  cfb-higher-lower: a round decided is saved before its reveal ends check    mark no 
+   ok  f1-higher-lower: a round decided is saved before its reveal ends check    mark no 
+   ok  tennis-higher-lower: a round decided is saved before its reveal ends check    mark no 
+   ok  golf-higher-lower: a round decided is saved before its reveal ends check    mark no 
+   ok  afl-higher-lower: a round decided is saved before its reveal ends check    mark no 
+   ok  champ-or-not: a reload inside the final reveal                   check    mark yes
+   ok  whod-they-beat: a reload inside the final reveal                 check    mark yes
+   ok  silverware-sort: a reload inside the final reveal                check    mark yes
+   ok  champ-or-not: Unlimited and back inside the final reveal         check    mark no 
+   ok  whod-they-beat: Unlimited and back inside the final reveal       check    mark no 
+   ok  silverware-sort: Unlimited and back inside the final reveal      check    mark no 
+   ok  champ-or-not: a final pick after midnight ET                     check    mark no 
+   ok  whod-they-beat: a final pick after midnight ET                   check    mark no 
+   ok  silverware-sort: a final pick after midnight ET                  check    mark no 
+   ok  champ-or-not: the board renders after midnight ET before the final pick check    mark no 
+   ok  whod-they-beat: the board renders after midnight ET before the final pick check    mark no 
+   ok  silverware-sort: the board renders after midnight ET before the final pick check    mark no 
+   ok  football-grid: a playing save past the limit, read with Unlimited off check    mark no 
+   ok  nfl-career: a daily dealt before midnight and solved after it    check    mark no 
+   ok  nfl-career: a first clue solve records its clue score            check    mark no 
+   ok  nfl-career: the next day in the same tab records once more       check    mark no 
+   ok  world-cup-bracket: one record per crowned name                   check    mark no 
+   vitest exit 0, 67 rows and checks
+
+2) The source: every recorder in src, read as code
+   115 recorder calls read, 108 with a slug resolved in their own file; 9 mode gates in the baseline
+   prose check: a mode gate and a stray mark written in comments flag nothing
+   no slug mismatch and no new mode gated recorder
+
+simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)

@@ -1,0 +1,17 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCompletionOnce exit=0 6s | simCompletionOnce: all green
+simResultMoment exit=0 8s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simAccessibility exit=0 0s | simAccessibility: all green
+simRevealMoments exit=0 7s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simNoDoubleRecord exit=0 31s | simNoDoubleRecord: all green (67 rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; 115 recorders read)
+simVictoryMoment exit=0 21s | PASS reduce: motion, final facts, first-frame Continue and 320px layout
+simHomeCopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simStorageWrites exit=0 2s | simStorageWrites: all green
+simUsBoardParity exit=0 45s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simBrowserHarnessDiscovery exit=0 12s | Retained actual child receipts: .sim-control/browser-discovery-Dt0zEH/report.json
+simStaleChunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simGoogleOnlyReturn exit=0 91s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+simFlagshipWeight exit=0 1s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simSound exit=0 3s | simSound: 158 checks, 0 failed
+simNumberFormatting exit=1 127s | Node.js v24.21.0

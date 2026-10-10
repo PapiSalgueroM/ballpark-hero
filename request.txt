@@ -1,0 +1,18 @@
+#!build
+#!playwright
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+simSound: node scripts/simSound.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
