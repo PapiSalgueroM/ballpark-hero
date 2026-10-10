@@ -1,0 +1,1 @@
+practice995-all exit=0 56s | Footle practice: 28 modes completed, every expected case executed and exact controls verified.
