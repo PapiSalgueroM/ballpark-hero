@@ -23,7 +23,7 @@
    - The home and away numbers of the MLB formulas against the games played:
      seven club seasons read on Baseball Reference's schedule pages (one in
      2023, 2024 and 2025, four in 2026), each 162 games and 81 at home.
-   1,381 checks in all. No band here was set by feel: every check is an
+   1,389 checks in all. No band here was set by feel: every check is an
    equality, a sum or a set.
 
    IDENTITIES, NOT ONLY COUNTS (the fix pass of 2026-10-10). A count cannot
@@ -147,6 +147,9 @@ const OWN = {
   nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
   /* How many entries each THIN list holds: one cannot quietly lose a line. */
   thin: { mlb: 10, nhl: 9 },
+  /* The one first round whose length is thin (played, and only one source gave its length): the
+     third window, the series of 2020. By its place in the list, so a moved year cannot hide it. */
+  mlbThinFirstRound: [2],
   /* Club seasons whose schedule page was read for the home and away numbers. */
   mlbPlayed: 'DET 2023|TEX 2024|DET 2025|DET 2026|TOR 2026|TEX 2026|HOU 2026',
   /* The NHL playoff block: its first season, the two modified tournaments, its round names. */
@@ -173,7 +176,7 @@ const OWN_NHL_ALIGN = {
 };
 
 /* ---------- the controls: one changed fact each ---------- */
-const EXTRA = { text: '' };
+const EXTRA = { text: '', host: '' };
 const must = (ok, what) => { if (!ok) { console.log(`CONTROL ${CONTROL} ABORTED: ${what} is not there to change`); process.exit(2); } };
 const mlbRow = y => { const r = mlb.MLB_SEASONS.find(x => x.year === y); must(r, `the MLB ${y} row`); return r; };
 const nhlRow = y => { const r = nhl.NHL_SEASONS.find(x => x.year === y); must(r, `the NHL ${y} row`); return r; };
@@ -198,8 +201,11 @@ const CONTROLS = {
   mlbformula: { expect: ['M7'], run() { const f = mlb.MLB_FORMULAS.find(x => x.from === 2025); must(f && f.division.games === 13, 'the 13 division games'); f.division.games = 14; } },
   /* A home and away number off by one, with every total untouched: eight of the 14 interleague series at home. */
   mlbhome: { expect: ['M7'], run() { const f = mlb.MLB_FORMULAS.find(x => x.from === 2025); must(f && f.interleague.homeSeries === 7, 'the seven interleague series at home'); f.interleague.homeSeries = 8; } },
+  /* The 2004 to 2011 window says a wild card round was played and still names none. */
+  firstnull: { expect: ['M9', 'R5'], run() { const w = mlb.MLB_FIRST_ROUND[0]; must(w && w.wildCard === false && w.round === null, 'the window with no wild card round'); w.wildCard = true; } },
   /* A report about another season stands in for a source: the 2025 and 2026 home numbers lean on the 2023 article. */
   otherseason: { expect: ['R1', 'R2'], run() { const f = mlb.MLB_FORMULAS.find(x => x.from === 2025); must(f && f.homeSrc.includes('bref-schedule') && SRC['espn-2023-format'], 'the schedule pages behind the 2025 and 2026 home numbers'); f.homeSrc = f.homeSrc.map(k => (k === 'bref-schedule' ? 'espn-2023-format' : k)); } },
+  host: { expect: ['D2'], run() { EXTRA.host = ' league.example.com'; } },
   nhlfrom: { expect: ['N6'], run() { must(nhl.NHL_PLAYOFF_FORMAT.from === 2013, 'the playoff block starting in 2013'); nhl.NHL_PLAYOFF_FORMAT.from = 2006; } },
   /* The league's own arithmetic stops giving the loser a point: a club of the receipt on twice its wins. */
   nhlpoint: { expect: ['N8'], run() { const r = SRC['nhl-points']?.values?.records?.COL; must(r && r[3] === 2 * r[0] + r[2], 'the Colorado record in the receipt'); r[3] = 2 * r[0]; } },
@@ -378,7 +384,10 @@ const OWN_MLB_DIVISIONS = {
   check('M9', fr[0].from === OWN.mlbYears[0] && fr[fr.length - 1].to === null && fr.every((w, i) => i === 0 || w.from === fr[i - 1].to + 1), 'the first round windows leave a gap or overlap');
   /* WHICH years: this file's own windows, the middle ones too. */
   const windows = JSON.stringify(fr.map(w => [w.from, w.to, w.round, w.clubs]));
-  check('M9', windows === JSON.stringify(OWN.mlbFirstRound), `the first round windows are ${windows}, this harness's own table says ${JSON.stringify(OWN.mlbFirstRound)}`);  const cur = fr[fr.length - 1];
+  check('M9', windows === JSON.stringify(OWN.mlbFirstRound), `the first round windows are ${windows}, this harness's own table says ${JSON.stringify(OWN.mlbFirstRound)}`);
+  /* A null says one thing at a time: no wild card round means no name and no length, and only then. */
+  for (const w of fr) check('M9', typeof w.wildCard === 'boolean' && w.wildCard === (w.round !== null) && (w.wildCard || w.series === null), `the first round window from ${w.from}: wildCard is ${w.wildCard}, its round is ${w.round} and its series ${JSON.stringify(w.series)}`);
+  const cur = fr[fr.length - 1];
   check('M9', cur.from === pf.from && cur.round === pf.rounds[0] && JSON.stringify(cur.series) === JSON.stringify(pf.series[0]) && cur.clubs === pf.clubs, 'the last first round window is not the format');
   check('M9', mlb.MLB_NO_TIEBREAKER_GAME_FROM === pf.from, 'the tiebreaker game did not end with the format');
   /* No club played a 163rd game once the tiebreaker game was gone. */
@@ -563,7 +572,11 @@ const OWN_MLB_DIVISIONS = {
     ...mlb.MLB_FORMULAS.flatMap(f => [f.homeGames, f.division.series, f.from >= 2025 ? f.league.homeTotal : f.division.homeTotal]),
     nhl.NHL_OVERTIME_RULES.skatersBefore2015,
   ];
-  check('R5', empty.every(v => v === null), 'a number only one source gave has been filled');  for (const t of [...mlb.MLB_THIN, ...nhl.NHL_THIN]) check('R5', [t.what, t.oneSource, t.tried].every(x => typeof x === 'string' && x.length > 8), 'a THIN entry is not whole');
+  check('R5', empty.every(v => v === null), 'a number only one source gave has been filled');
+  /* A first round that was played and has no length is thin, and this file's own list says which. */
+  const thinRounds = mlb.MLB_FIRST_ROUND.map((w, i) => (w.wildCard && w.series === null ? i : -1)).filter(i => i >= 0);
+  check('R5', JSON.stringify(thinRounds) === JSON.stringify(OWN.mlbThinFirstRound), `the first round windows with a thin length are number ${thinRounds.join(' ') || '(none)'} of the list (from 0), this harness's own table says ${OWN.mlbThinFirstRound.join(' ')}`);
+  for (const t of [...mlb.MLB_THIN, ...nhl.NHL_THIN]) check('R5', [t.what, t.oneSource, t.tried].every(x => typeof x === 'string' && x.length > 8), 'a THIN entry is not whole');
   check('R5', mlb.MLB_THIN.length === OWN.thin.mlb && nhl.NHL_THIN.length === OWN.thin.nhl, `the THIN lists hold ${mlb.MLB_THIN.length} and ${nhl.NHL_THIN.length} entries, this harness's own table says ${OWN.thin.mlb} and ${OWN.thin.nhl}`);
 
   /* D1: no en dash and no em dash in the ledgers, the receipts, this file or the round's notes. */
@@ -571,7 +584,16 @@ const OWN_MLB_DIVISIONS = {
   for (const f of ['src/data/usSeasonLedgerMlb.ts', 'src/data/usSeasonLedgerNhl.ts', 'scripts/data/usSeasonSources1211.json', 'scripts/simUsSeasonLedger.mjs', 'docs/audits/ROUND-1211-NOTES.md']) {
     const text = readFileSync(path.join(ROOT, f), 'utf8') + EXTRA.text;
     check('D1', !dashes.some(d => text.includes(d)), `${f} holds an en dash or an em dash`);
-  }}
+  }
+
+  /* D2: no address and no host name in a ledger (they ship in src; the receipts hold the addresses).
+     A publisher is named by its name: "the league's own site", never its domain. */
+  const hostLike = /https?:|www[.]|[a-z0-9-]+[.](com|org|net|jp|ca|co|io|tv)(?![a-z])/i;
+  for (const f of ['src/data/usSeasonLedgerMlb.ts', 'src/data/usSeasonLedgerNhl.ts']) {
+    const hit = (readFileSync(path.join(ROOT, f), 'utf8') + EXTRA.host).match(hostLike);
+    check('D2', !hit, `${f} holds an address or a host name: ${hit ? hit[0] : ''}`);
+  }
+}
 
 /* ===== NOTES FOR THE BINDING ROUNDS: where an engine plays something the ledger does not say. Never a red. ===== */
 {

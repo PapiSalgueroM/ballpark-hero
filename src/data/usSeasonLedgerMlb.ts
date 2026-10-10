@@ -332,14 +332,20 @@ export const MLB_PLAYOFF_FORMAT = {
    wild card work? Format, history, stats" (25 September 2025), and Baseball
    Almanac, "MLB Postseason Playoffs 1969 - 2026" (its eras: one wild card
    club to 2011, a wild card game 2012 to 2021, a wild card series from 2022,
-   and a wild card series in 2020). `series: null` is a length only one
-   source gave. */
-export const MLB_FIRST_ROUND: readonly { from: number; to: number | null; round: string | null; clubs: number; series: readonly [number, number] | null }[] = [
-  { from: 2004, to: 2011, round: null, clubs: 8, series: null },
-  { from: 2012, to: 2019, round: 'Wild Card Game', clubs: 10, series: [1, 1] },
-  { from: 2020, to: 2020, round: 'Wild Card Series', clubs: 16, series: null },
-  { from: 2021, to: 2021, round: 'Wild Card Game', clubs: 10, series: [1, 1] },
-  { from: 2022, to: null, round: 'Wild Card Series', clubs: 12, series: [2, 3] },
+   and a wild card series in 2020).
+   A null means one of two things here, and `wildCard` says which:
+   - `wildCard: false`: the season had NO wild card round, so there is no
+     `round` and no `series` to hold (2004 to 2011: for 2004 and for 2011
+     Baseball Almanac lists the Division Series, the League Championship
+     Series and the World Series and no wild card round).
+   - `wildCard: true` with `series: null`: the round was played and its
+     length is a number only one source gave (2020: MLB_THIN). */
+export const MLB_FIRST_ROUND: readonly { from: number; to: number | null; round: string | null; clubs: number; series: readonly [number, number] | null; wildCard: boolean }[] = [
+  { from: 2004, to: 2011, round: null, clubs: 8, series: null, wildCard: false },
+  { from: 2012, to: 2019, round: 'Wild Card Game', clubs: 10, series: [1, 1], wildCard: true },
+  { from: 2020, to: 2020, round: 'Wild Card Series', clubs: 16, series: null, wildCard: true },
+  { from: 2021, to: 2021, round: 'Wild Card Game', clubs: 10, series: [1, 1], wildCard: true },
+  { from: 2022, to: null, round: 'Wild Card Series', clubs: 12, series: [2, 3], wildCard: true },
 ];
 export const MLB_FIRST_ROUND_SRC: readonly string[] = ['espn-wildcard', 'almanac-postseason', 'cbs-2022-playoffs'];
 
@@ -414,7 +420,7 @@ export const MLB_THIN: readonly { what: string; oneSource: string; tried: string
   },
   {
     what: 'The first season of the extra inning runner (2020), and the rule that a game has nine innings and plays on until one side leads.',
-    oneSource: 'CBS Sports (2023 and 2025) gives 2020; For The Win calls the first extra inning "the 10th".',
+    oneSource: 'CBS Sports (2023) gives 2020; For The Win calls the first extra inning "the 10th".',
     tried: 'The league glossary refused the reader; a dictionary page refused the reader; the explainers a search found were not publishers this ledger would cite.',
   },
   {
