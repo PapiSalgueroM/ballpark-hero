@@ -154,6 +154,21 @@ const placeOf = (e: { minute: number; plus?: number }) => e.minute + (e.plus ?? 
 const isChance = (e: { kind: string }) => e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save';
 /** One line's key: what the banner effect remembers it by, and what the plan's start times are looked up by. */
 const lineKey = (e: { kind: string; side: string; minute: number; plus?: number; text: string }) => `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
+/* Round 1218 fix: a goal a review rules out is DRAWN before its review. The engine keeps no shot for it (it counts
+   for nothing), so the pitch is handed one line in its place, by the man the review names at the review's minute.
+   The plan stages it as a shot (what follows it is the defending side's restart, never a kick off) and the screen
+   plays it as a goal (the ball goes in). Nothing else here reads it: not the score, not the stats, not a card. */
+type RuledOutChance = LiveFeedEvent & { ruledOut: string };
+/** A review that takes a goal away. */
+const isRuledOut = (e: LiveFeedEvent): boolean => e.kind === 'var' && e.side !== 'none' && e.review?.incident === 'goal' && e.review.decision === 'disallowed';
+/** How many clock places before the whistle a ruled out goal still has the room to be played with its ball in the
+ *  net before the period ends (an action may start 0.9 after its place and the ball is in 0.756 after that). */
+const RULED_OUT_ROOM = 2;
+const ruledOutChance = (e: LiveFeedEvent): RuledOutChance => ({ minute: e.minute, ...(e.plus ? { plus: e.plus } : {}), side: e.side, kind: 'shot', text: e.text, ruledOut: e.review!.id });
+/** The review a staged line stands for, or null for a line of the feed. */
+const ruledOutOf = (e: object): string | null => (typeof (e as Partial<RuledOutChance>).ruledOut === 'string' ? (e as RuledOutChance).ruledOut : null);
+/** The key the screen remembers that goal's action by. Its third field is the minute, like every fired key. */
+const ruledOutKey = (e: LiveFeedEvent) => `ruledout:${e.side}:${e.minute}:${e.review?.id ?? ''}`;
 /**
  * Round 1146: a goal as this screen announces it (the pill, the goal card and the list beside the pitch all
  * print these runs): the lead words, the scorer, the minute, then the mark a match report prints after it,
@@ -387,7 +402,11 @@ export function stagePitchInput(
     mine, theirs,
     feed: liveFeed(live).filter(e => e.kind !== 'halftime' && e.minute >= lo && e.minute <= hi
       && !(isChance(e) && placeOf(e) < openedAt)
-      && (!settledReviews || !cmVarEventWaiting(e, liveFeed(live), settledReviews))),
+      && (!settledReviews || !cmVarEventWaiting(e, liveFeed(live), settledReviews)))
+      /* Round 1218 fix: the goal a review rules out is staged like any chance, whether its review has been shown
+         or not (so the plan does not change under the review), unless the viewer opened after it or it comes
+         too late in the period to be played out before the whistle. */
+      .map(e => (isRuledOut(e) && placeOf(e) >= openedAt && placeOf(e) <= stageStop - RULED_OUT_ROOM ? ruledOutChance(e) : e)),
     span: { from, to: Math.max(from + BEAT_SPAN, stageStop) },
     kickoffs: [{ at: from, side: kicking }],
     possession: (share ?? 50) / 100,
@@ -410,7 +429,7 @@ function LiveMatchHelp({ onClose, reviews }: { onClose: () => void; reviews?: bo
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
         <li>{reviews ? 'The score changes when the ball is in the net, not before. A penalty a review gives waits for the review first.' : 'The score changes when the ball is in the net, not before.'}</li>
         <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.</li>
-        {reviews && <li>VAR here reviews goals and penalties only, and you only see a review that changed the call. A goal that is ruled out adds no score, scorer or shot stats. A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.</li>}
+        {reviews && <li>VAR here reviews goals and penalties only, and you only see a review that changed the call. A goal that gets ruled out goes in first: the check opens with the ball in the net, the score does not move, and it adds no scorer or shot stats. A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
         <li>Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on.</li>
       </ul>
@@ -418,7 +437,7 @@ function LiveMatchHelp({ onClose, reviews }: { onClose: () => void; reviews?: bo
         <span className="font-bold">Worked example: </span>
         {"It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next."}
       </p>
-      {reviews && <p className="mt-2 text-xs text-foreground"><span className="font-bold">VAR example: </span>At 0-0 a goal goes to a review and is ruled out. It stays 0-0 and nobody gets a goal. If a review gives a penalty and the kick misses, it still stays 0-0.</p>}
+      {reviews && <p className="mt-2 text-xs text-foreground"><span className="font-bold">VAR example: </span>At 0-0 the ball goes in, a check opens and the goal is ruled out. It stays 0-0 and nobody gets a goal. If a review gives a penalty and the kick misses, it still stays 0-0.</p>}
     </div>
   );
 }
@@ -583,10 +602,8 @@ export function LiveSimScreen({
   const nextReview = feed.find(e => e.kind === 'var' && e.review && !settledReviews.has(e.review.id)
     && e.minute >= (stage === 'first' ? 0 : stage === 'extra' ? 91 : 46) && e.minute <= stageEnd
     && placeOf(e) >= openedAt.current);
-  reviewCap.current = nextReview ? Math.max(openedAt.current, stage === 'second' ? 46 : stage === 'extra' ? 90 : 0, placeOf(nextReview) - 0.05) : Infinity;
-  useEffect(() => {
-    if (running && !finished && !reviewEvent && nextReview && clock >= reviewCap.current - 0.001) setReviewEvent(nextReview);
-  }, [running, finished, reviewEvent, nextReview, clock]);
+  /* Round 1218 fix: WHEN that review opens is worked out further down, where the plan of the period is known
+     (see "when a review opens"): it reads what the pitch is playing, so a card never opens over an action. */
   /* Round 781: the whistle goes at the end of the board, and the last action is the one deepest in it. */
   const terminalMinute = stageStop;
   // The last action at the whistle gets its wind-up before the clock reaches it.
@@ -688,7 +705,8 @@ export function LiveSimScreen({
       const dt = Math.min(0.25, (ts - lastTs.current) / 1000);
       lastTs.current = ts;
       /* Round 1101: while a goal's card is up the clock all but stops, at every speed. */
-      setClock(c => Math.min(cap, reviewCap.current, holdRate.current > 0 ? c + dt * holdRate.current : c + dt * BASE_RATE * speed));
+      /* Round 1218 fix: a review holds the clock where it opens, and never sets it back. */
+      setClock(c => Math.min(cap, Math.max(c, reviewCap.current), holdRate.current > 0 ? c + dt * holdRate.current : c + dt * BASE_RATE * speed));
       rafRef.current = requestAnimationFrame(step);
     };
     rafRef.current = requestAnimationFrame(step);
@@ -880,7 +898,9 @@ export function LiveSimScreen({
   const plan = useMemo(() => pitchPlan(pitchInput), [pitchKey]);
   /* When each chance the pitch plays really starts. The plan plays one action at a time, so a chance in the
      minute after another waits its turn inside its own minute, and its line is announced when it starts. */
-  const startAt = useMemo(() => new Map(plan.actions.map(a => [lineKey(a.event), a.at])), [plan]);
+  const startAt = useMemo(() => new Map(plan.actions.filter(a => ruledOutOf(a.event) === null).map(a => [lineKey(a.event), a.at])), [plan]);
+  /* Round 1218 fix: and when the goal a review rules out is played, by its review. */
+  const ruledOutAt = useMemo(() => new Map(plan.actions.flatMap(a => { const id = ruledOutOf(a.event); return id === null ? [] : [[id, a.at] as [string, number]]; })), [plan]);
   /* When a line is told: at its place on the clock, or for a chance that waits, when its action starts.
      (The last kick of a period is wound up BEFORE its place, and is still told at its place.) */
   const firesAt = (e: LiveFeedEvent): number => Math.max(placeOf(e), startAt.get(lineKey(e)) ?? 0);
@@ -893,6 +913,58 @@ export function LiveSimScreen({
     const terminal = e.minute === stageEnd && (e.plus ?? 0) === board;
     return !terminalWindup && !terminal && placeOf(e) >= openedAt.current && isChance(e) && startAt.has(lineKey(e));
   };
+
+  /* ---- when a review opens (Round 1218 fix) ----
+     A review used to open 0.05 before its minute whatever the pitch was doing: over a goal of the minute before
+     that was still in the air (a chance may start 0.9 after its place and plays for 1.05), with the score not
+     moved yet, so a card reading "goal ruled out" sat on a goal that then counted. And a goal a review ruled
+     out was never drawn at all. Now:
+       a ruled out goal is played first, and its review opens with the ball in the net;
+       any other review (a penalty a review gives) opens at its own minute, so the foul is told first;
+       no review opens while another action is still playing: it waits for that action to end;
+       one due inside the last kick's wind up opens just before the wind up, and every review opens before
+       the whistle of its period. */
+  const nextRuledOutKey = nextReview && isRuledOut(nextReview) ? ruledOutKey(nextReview) : null;
+  const reviewOpensAt = (r: LiveFeedEvent): number => {
+    const floor = Math.max(openedAt.current, stage === 'second' ? 46 : stage === 'extra' ? 90 : 0);
+    const staged = ruledOutAt.get(r.review!.id);
+    const playing = liveAction && liveAction.key === nextRuledOutKey ? liveAction.at : null;
+    let t: number;
+    /* A hair past NET_AT: the clock is a float, and a hair short of it the ball would stop on the line, not in the net. */
+    if (staged !== undefined) t = (playing ?? Math.max(staged, floor)) + (reducedMotion ? 0 : NET_AT + 0.004);
+    else {
+      t = placeOf(r);
+      /* The last kick of a period is wound up ACTION_SPAN before the whistle. A review at the whistle's own place
+         (the penalty it gives then IS the last kick) or one due inside a staged last kick's wind up opens just
+         before that wind up, so the kick is played whole after it. */
+      const atWhistle = r.minute === stageEnd && (r.plus ?? 0) === board;
+      const lastKickStaged = plan.actions.some(a => placeOf(a.event) >= stageStop - 1e-6);
+      if ((atWhistle || lastKickStaged) && t > stageStop - ACTION_SPAN - 0.05) t = stageStop - ACTION_SPAN - 0.05;
+      /* Never over an action still playing: it waits for that action to be over, a hair past its end (at its
+         end to the frame, a goal's card and its last picture are still up). */
+      const over = ACTION_SPAN + 0.01;
+      for (const a of [...plan.actions].sort((x, y) => x.at - y.at)) if (a.at < t - 1e-6 && t < a.at + over) t = a.at + over;
+      if (liveAction && liveAction.at < t - 1e-6 && t < liveAction.at + over) t = liveAction.at + over;
+    }
+    return Math.max(floor, Math.min(t, stageStop - 0.05));
+  };
+  reviewCap.current = nextReview ? reviewOpensAt(nextReview) : Infinity;
+  const reviewDue = !!nextReview && clock >= reviewCap.current - 0.001;
+  useEffect(() => {
+    if (running && !finished && !reviewEvent && nextReview && reviewDue) setReviewEvent(nextReview);
+  }, [running, finished, reviewEvent, nextReview, reviewDue]);
+  /* The goal a review is about to rule out starts on the pitch when its turn comes, like any chance. Only the
+     next review's: one review at a time. */
+  useEffect(() => {
+    if (!running || finished || !nextReview || !nextRuledOutKey || (reviewEvent && reviewEvent !== nextReview)) return;
+    const at = ruledOutAt.get(nextReview.review!.id);
+    /* The hair of slack is for reduced motion, where the review opens on the very tick its goal starts. */
+    if (at === undefined || at > clock + 0.002 || firedRef.current.has(nextRuledOutKey)) return;
+    firedRef.current.add(nextRuledOutKey);
+    setMotionEvent({ event: { minute: nextReview.minute, ...(nextReview.plus ? { plus: nextReview.plus } : {}), side: nextReview.side, kind: 'goal', text: nextReview.text }, key: nextRuledOutKey, at: clock });
+    // firedRef is a ref; the clock, the plan and the review are the inputs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clock, running, finished, reviewEvent, nextReview, nextRuledOutKey, ruledOutAt]);
 
   /* ---- banners and the event line, off the committed feed ---- */
   useEffect(() => {
@@ -909,6 +981,8 @@ export function LiveSimScreen({
          Round 1101: and a chance that waits its turn on the pitch fires when its action starts. */
       if (e.kind === 'halftime' || e.minute < lo || e.minute > hi || firesAt(e) > clock) continue;
       if (!cmVarCanAnnounce(e, feed, settledReviews)) continue;
+      /* Round 1218 fix: a chance that would start in the very tick a review opens waits for the review to close. */
+      if (reviewDue && isChance(e) && firesAt(e) >= reviewCap.current - 1e-6) continue;
       const key = `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
       if (firedRef.current.has(key)) continue;
       firedRef.current.add(key);
@@ -940,7 +1014,8 @@ export function LiveSimScreen({
           break;
         }
         case 'var':
-          if (e.review) small = [{ t: cmVarLabel(e.review) }];
+          /* Round 1218 fix: the line says whose it was, like the report's own row: the man and his club. */
+          if (e.review) small = e.text ? [{ t: `${cmVarLabel(e.review)}: ` }, who, { t: ` (${club})` }] : [{ t: `${cmVarLabel(e.review)}, ${club}` }];
           break;
         case 'yellow': big = { segs: [{ t: 'Booked: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
         case 'red': big = { segs: [{ t: 'RED CARD! ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
@@ -1003,7 +1078,7 @@ export function LiveSimScreen({
     if (small) setEventLine(small);
     // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup, startAt, settledReviews]);
+  }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup, startAt, settledReviews, reviewDue]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
 
   /* ---- the dots and the ball, off the shared pitch (Round 1101): the plan is built further up ---- */
@@ -1420,11 +1495,13 @@ export function LiveSimScreen({
 
                   {reviewEvent?.review && (
                     <ClubManagerVarReview key={reviewEvent.review.id} review={reviewEvent.review}
-                      club={reviewEvent.side === 'me' ? career.clubName : opponent} minute={minuteLabel(reviewEvent)} reducedMotion={reducedMotion}
+                      club={reviewEvent.side === 'me' ? career.clubName : opponent} who={reviewEvent.text} minute={minuteLabel(reviewEvent)} reducedMotion={reducedMotion}
                       onComplete={() => {
                         const id = reviewEvent.review!.id;
                         setSettledReviews(previous => new Set([...previous, id]));
                         setReviewEvent(null);
+                        /* Round 1218 fix: the goal that was just ruled out stops there. Nobody celebrates it. */
+                        setMotionEvent(current => (current && current.key.startsWith('ruledout:') ? null : current));
                       }} />
                   )}
                   {/* event banner */}

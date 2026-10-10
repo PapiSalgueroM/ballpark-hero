@@ -13,7 +13,10 @@ function Entry({ row, mine }: { row: TimelineRow; mine: boolean }) {
   const words = `${row.icon} ${row.label}${row.name ? ': ' : ''}`;
   return (
     <span className={cn('inline-flex items-center gap-1 min-w-0 max-w-full', tone)} data-cm-tl-entry="1">
-      <span className="truncate" title={`${words}${row.name}${row.mark ?? ''}${row.second ? (row.kind === 'sub' ? ` on for ${row.second}` : ` (assist: ${row.second})`) : ''}`}>
+      {/* Round 1218 fix: a review row is a sentence ("VAR: goal ruled out: " and the man), far wider than half a
+          phone, and cut off it said nothing a reader could use. It wraps to a second line instead; every other
+          row keeps its one line. */}
+      <span className={row.kind === 'var' ? cn('whitespace-normal break-words leading-tight', mine && 'text-right') : 'truncate'} title={`${words}${row.name}${row.mark ?? ''}${row.second ? (row.kind === 'sub' ? ` on for ${row.second}` : ` (assist: ${row.second})`) : ''}`}>
         {words}{row.name}
         {row.kind === 'sub' && row.second && <> on for {row.second}</>}
         {row.kind === 'goal' && row.second && <span className="font-normal text-muted-foreground"> 🅰️ {row.second}</span>}
