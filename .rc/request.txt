@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+playHomeFold: ENGINES=chromium node scripts/playHomeFold.mjs
+playSoftFourOhFour: ENGINES=chromium node scripts/playSoftFourOhFour.mjs
+playTranslatedPage: ENGINES=chromium node scripts/playTranslatedPage.mjs
+playStorageBlocked: ENGINES=chromium node scripts/playStorageBlocked.mjs
+playFlagshipLazy: ENGINES=chromium node scripts/playFlagshipLazy.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+sweepWeight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
