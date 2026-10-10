@@ -1,0 +1,39 @@
+NFL My Career
+  PASS  NFL: wrote a known three season history onto the save
+  PASS  NFL: the hub opens on 6 boxes (saw 6)
+  PASS  NFL: the hub names "My Player"
+  PASS  NFL: the hub names "The Bank"
+  PASS  NFL: the hub names "Career Log"
+  PASS  NFL: the hub names "Trophy Case"
+  PASS  NFL: the hub names "News"
+  PASS  NFL: the hub names "Inbox"
+  PASS  NFL: the log box survived the reload (reads "📜 / CAREER LOG / 3 seasons / No stats recorded")
+  PASS  NFL: the log box is not pretending the career is empty
+  PASS  NFL: the player box names the meter that is down
+  PASS  NFL: low morale lights the box
+  PASS  NFL: the hub fits the phone (0px of overflow)
+  PASS  NFL: "My Player" opened the screen it names
+  PASS  NFL: opening "My Player" replaced the grid
+  PASS  NFL: "My Player" has a way back
+  PASS  NFL: back returned to all 6 boxes
+  PASS  NFL: "The Bank" opened the screen it names
+  PASS  NFL: opening "The Bank" replaced the grid
+  PASS  NFL: "The Bank" has a way back
+  PASS  NFL: back returned to all 6 boxes
+  PASS  NFL: "Career Log" opened the screen it names
+  PASS  NFL: opening "Career Log" replaced the grid
+  FAIL  NFL: "Career Log" has a way back
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button:has-text("Hub")').first()
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/.rcbase/hub.mjs:154:24 {
+  log: [ `  - waiting for locator('button:has-text("Hub")').first()` ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

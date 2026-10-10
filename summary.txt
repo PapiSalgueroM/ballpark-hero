@@ -1,0 +1,9 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+hub-revert exit=0 45s | playCareerHub control revert: all 36 guarded checks fired (mutations landed: {"inboxBox":8,"moneyHeadline":8})
+hub exit=0 48s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+hub-logback exit=0 55s | playCareerHub control logback: all 4 guarded checks fired (mutations landed: {"logBack":12})
+evidence exit=0 23s | evidence1210: 0 problems
+hub-base exit=1 38s | Node.js v24.21.0
+rivals exit=0 19s | No rival product names found. 0 findings.
+anchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 71s | 
