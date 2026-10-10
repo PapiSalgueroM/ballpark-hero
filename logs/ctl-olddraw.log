@@ -1,0 +1,39 @@
+bundled in 155 ms; seed sets 0, 1, 2, 3, 4; 40 seasons a league kind a set; CONTROL olddraw
+  FAIL (section 3): set 0: points told 27.5370 against the free law's 22.6387, inside 0.25
+  FAIL (section 3): set 0: losers15 told 0.0000 against the free law's 0.4297, inside 0.02
+  FAIL (section 3): set 0: shutouts told 0.0000 against the free law's 0.0148, inside 0.005
+  FAIL (section 3): set 0: forty told 0.0716 against the free law's 0.0517, inside 0.006
+set 0: 80 seasons, 22800 games told in 6524 ms; points a team game 27.54 (free 22.64); losers on 15 or fewer 0.0000 (free 0.4297); shutouts 0.0000 (free 0.0148); sides on 40 or more 0.0716 (free 0.0517); swapped 0.00000; the AFC champion won 38 of 80 title games
+  FAIL (section 3): set 1: points told 27.4923 against the free law's 22.7314, inside 0.25
+  FAIL (section 3): set 1: losers15 told 0.0000 against the free law's 0.4303, inside 0.02
+  FAIL (section 3): set 1: shutouts told 0.0000 against the free law's 0.0156, inside 0.005
+  FAIL (section 3): set 1: forty told 0.0696 against the free law's 0.0535, inside 0.006
+set 1: 80 seasons, 22800 games told in 5952 ms; points a team game 27.49 (free 22.73); losers on 15 or fewer 0.0000 (free 0.4303); shutouts 0.0000 (free 0.0156); sides on 40 or more 0.0696 (free 0.0535); swapped 0.00000; the AFC champion won 46 of 80 title games
+  FAIL (section 3): set 2: points told 27.5303 against the free law's 22.6099, inside 0.25
+  FAIL (section 3): set 2: losers15 told 0.0000 against the free law's 0.4351, inside 0.02
+  FAIL (section 3): set 2: shutouts told 0.0000 against the free law's 0.0137, inside 0.005
+  FAIL (section 3): set 2: forty told 0.0711 against the free law's 0.0505, inside 0.006
+set 2: 80 seasons, 22800 games told in 6274 ms; points a team game 27.53 (free 22.61); losers on 15 or fewer 0.0000 (free 0.4351); shutouts 0.0000 (free 0.0137); sides on 40 or more 0.0711 (free 0.0505); swapped 0.00000; the AFC champion won 47 of 80 title games
+  FAIL (section 3): set 3: points told 27.4914 against the free law's 22.7254, inside 0.25
+  FAIL (section 3): set 3: losers15 told 0.0000 against the free law's 0.4263, inside 0.02
+  FAIL (section 3): set 3: shutouts told 0.0000 against the free law's 0.0146, inside 0.005
+  FAIL (section 3): set 3: forty told 0.0716 against the free law's 0.0523, inside 0.006
+set 3: 80 seasons, 22800 games told in 7531 ms; points a team game 27.49 (free 22.73); losers on 15 or fewer 0.0000 (free 0.4263); shutouts 0.0000 (free 0.0146); sides on 40 or more 0.0716 (free 0.0523); swapped 0.00000; the AFC champion won 43 of 80 title games
+  FAIL (section 3): set 4: points told 27.5025 against the free law's 22.7328, inside 0.25
+  FAIL (section 3): set 4: losers15 told 0.0000 against the free law's 0.4244, inside 0.02
+  FAIL (section 3): set 4: shutouts told 0.0000 against the free law's 0.0139, inside 0.005
+  FAIL (section 3): set 4: forty told 0.0698 against the free law's 0.0520, inside 0.006
+set 4: 80 seasons, 22800 games told in 7195 ms; points a team game 27.50 (free 22.73); losers on 15 or fewer 0.0000 (free 0.4244); shutouts 0.0000 (free 0.0139); sides on 40 or more 0.0698 (free 0.0520); swapped 0.00000; the AFC champion won 47 of 80 title games
+
+MEASURED over seed sets 0, 1, 2, 3, 4 (114000 games):
+  points: told 27.4914 to 27.5370, free 22.6099 to 22.7328, told less free 4.7609 to 4.9204 (band 0.25 either side)
+  losers15: told 0.0000 to 0.0000, free 0.4244 to 0.4351, told less free -0.4351 to -0.4244 (band 0.02 either side)
+  shutouts: told 0.0000 to 0.0000, free 0.0137 to 0.0156, told less free -0.0156 to -0.0137 (band 0.005 either side)
+  forty: told 0.0696 to 0.0716, free 0.0505 to 0.0535, told less free 0.0160 to 0.0206 (band 0.006 either side)
+  swapped share 0.0000 to 0.0000 (band: under 0.002)
+  tries a game by decile of the home chance (games, mean tries, swapped): 0: 0, none, 0 | 0.1: 633, 1.00, 0 | 0.2: 5384, 1.00, 0 | 0.3: 11548, 1.00, 0 | 0.4: 19174, 1.00, 0 | 0.5: 24477, 1.00, 0 | 0.6: 25576, 1.00, 0 | 0.7: 19186, 1.00, 0 | 0.8: 7775, 1.00, 0 | 0.9: 247, 1.00, 0
+  shapes of 114000 stories: trade 0.411, wire 0.201, late 0.199, comeback 0.188
+  the AFC champion's share of title games 0.4750 to 0.5875 a set (a level title game is 0.582 by the engine's arithmetic; printed, never asserted)
+
+control olddraw: RED AT THE NAMED CHECK (section 3); its named checks red: 1 of 1 ("losers15 told 0.0000"); sections red: 3
+simGmGameDay: 188 checks, 20 failed (control olddraw)

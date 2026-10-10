@@ -1,0 +1,17 @@
+SAME: sets (digests, season counts and every kept season)
+SAME: fleet
+SAME: what
+SAME: commit
+keys before: what, commit, engine, finalsBracket, fleet, sets
+keys after:  what, commit, inputs, fleet, sets
+inputs recorded after: 8
+  scripts/lib/gmGameDayFleet.mjs 565e065a3b7f
+  src/data/frontOfficeDepth.ts 2c878c8ab15d
+  src/data/frontOfficePlayers.ts fc37a37e8b07
+  src/lib/entityIds.ts c941b1735d8a
+  src/lib/foNames.ts f60d9bc36220
+  src/lib/frontOffice.ts aa0b61644b90
+  src/lib/frontOfficeCuts.ts 109cfc4ca98f
+  src/lib/leagueCaps.ts 0f1130f0417e
+sets after: 0:80:dc5143a97964 1:80:987fac88e871 2:80:4de2cdbc60e4 3:80:3be06e01aa09 4:80:d37612fc704a
+fix-fixture-compare: 0 of 4 parts differ

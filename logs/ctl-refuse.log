@@ -1,0 +1,29 @@
+bundled in 153 ms; seed sets 0, 1, 2, 3, 4; 40 seasons a league kind a set; CONTROL refuse
+  FAIL (section 1): set 0: the law never refuses a game of the fleet (22800 looked at): 5032 broke it, the first: set 0 fifteen 0 2026|w1|TB|ATL|20-16
+  FAIL (section 3): set 0: every game of the fleet was told and measured (17768 of 22800)
+set 0: 80 seasons, 17768 games told in 6347 ms; points a team game 22.64 (free 22.62); losers on 15 or fewer 0.4325 (free 0.4300); shutouts 0.0138 (free 0.0142); sides on 40 or more 0.0526 (free 0.0527); swapped 0.00023; the AFC champion won 38 of 80 title games
+  FAIL (section 1): set 1: the law never refuses a game of the fleet (22800 looked at): 5076 broke it, the first: set 1 fifteen 0 2026|w1|SF|ARI|24-38
+  FAIL (section 3): set 1: every game of the fleet was told and measured (17724 of 22800)
+set 1: 80 seasons, 17724 games told in 6885 ms; points a team game 22.72 (free 22.74); losers on 15 or fewer 0.4228 (free 0.4296); shutouts 0.0129 (free 0.0152); sides on 40 or more 0.0528 (free 0.0537); swapped 0.00062; the AFC champion won 46 of 80 title games
+  FAIL (section 1): set 2: the law never refuses a game of the fleet (22800 looked at): 5071 broke it, the first: set 2 fifteen 0 2026|w1|SF|ARI|41-29
+  FAIL (section 3): set 2: every game of the fleet was told and measured (17729 of 22800)
+set 2: 80 seasons, 17729 games told in 7443 ms; points a team game 22.68 (free 22.58); losers on 15 or fewer 0.4304 (free 0.4376); shutouts 0.0149 (free 0.0131); sides on 40 or more 0.0541 (free 0.0501); swapped 0.00073; the AFC champion won 47 of 80 title games
+  FAIL (section 1): set 3: the law never refuses a game of the fleet (22800 looked at): 5083 broke it, the first: set 3 fifteen 0 2026|w1|TB|CAR|16-20
+  FAIL (section 3): set 3: every game of the fleet was told and measured (17717 of 22800)
+set 3: 80 seasons, 17717 games told in 7201 ms; points a team game 22.61 (free 22.74); losers on 15 or fewer 0.4349 (free 0.4235); shutouts 0.0130 (free 0.0139); sides on 40 or more 0.0504 (free 0.0529); swapped 0.00068; the AFC champion won 43 of 80 title games
+  FAIL (section 1): set 4: the law never refuses a game of the fleet (22800 looked at): 5074 broke it, the first: set 4 fifteen 0 2026|w1|LAC|KC|28-37
+  FAIL (section 3): set 4: every game of the fleet was told and measured (17726 of 22800)
+set 4: 80 seasons, 17726 games told in 7513 ms; points a team game 22.61 (free 22.77); losers on 15 or fewer 0.4322 (free 0.4254); shutouts 0.0157 (free 0.0138); sides on 40 or more 0.0503 (free 0.0534); swapped 0.00051; the AFC champion won 47 of 80 title games
+
+MEASURED over seed sets 0, 1, 2, 3, 4 (88664 games):
+  points: told 22.6059 to 22.7155, free 22.5788 to 22.7737, told less free -0.1629 to 0.1037 (band 0.25 either side)
+  losers15: told 0.4228 to 0.4349, free 0.4235 to 0.4376, told less free -0.0072 to 0.0113 (band 0.02 either side)
+  shutouts: told 0.0129 to 0.0157, free 0.0131 to 0.0152, told less free -0.0023 to 0.0019 (band 0.005 either side)
+  forty: told 0.0503 to 0.0541, free 0.0501 to 0.0537, told less free -0.0030 to 0.0041 (band 0.006 either side)
+  swapped share 0.0002 to 0.0007 (band: under 0.002)
+  tries a game by decile of the home chance (games, mean tries, swapped): 0: 0, none, 0 | 0.1: 510, 1.98, 3 | 0.2: 4131, 1.95, 1 | 0.3: 8817, 1.98, 0 | 0.4: 15338, 1.99, 0 | 0.5: 18846, 2.03, 0 | 0.6: 20315, 2.02, 0 | 0.7: 14484, 2.03, 7 | 0.8: 6016, 2.11, 35 | 0.9: 207, 1.94, 3
+  shapes of 88664 stories: trade 0.299, wire 0.218, rout 0.169, late 0.169, comeback 0.145
+  the AFC champion's share of title games 0.4750 to 0.5875 a set (a level title game is 0.582 by the engine's arithmetic; printed, never asserted)
+
+control refuse: RED AT THE NAMED CHECK (section 1); its named checks red: 1 of 1 ("never refuses a game of the fleet"); its named checks of other sections red: 1 of 1 ("every game of the fleet was told and measured"); sections red: 1, 3
+simGmGameDay: 188 checks, 10 failed (control refuse)
