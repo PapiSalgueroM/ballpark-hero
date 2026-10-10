@@ -1,0 +1,4 @@
+setup exit=0 1s | dotnet-diagnostic-2132-2952-socket dotnet-diagnostic-2151-3109-socket t-c t-d t-main 
+squad-c exit=0 274s | simCareerSquad: 2205 checks, 0 failed
+squad-d exit=0 276s | simCareerSquad: 2215 checks, 1481 failed
+squad-main exit=0 271s | simCareerSquad: 2205 checks, 0 failed
