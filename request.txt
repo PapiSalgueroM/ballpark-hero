@@ -1,0 +1,28 @@
+#!serial
+plain-before: node scripts/simUsSeasonLedger.mjs
+mutA: node .rc/x/mut.mjs A && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutB: node .rc/x/mut.mjs B && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutD: node .rc/x/mut.mjs D && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutE: node .rc/x/mut.mjs E && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutG: node .rc/x/mut.mjs G && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutH: node .rc/x/mut.mjs H && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutN: node .rc/x/mut.mjs N && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutO: node .rc/x/mut.mjs O && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutC: node .rc/x/mut.mjs C && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutJ: node .rc/x/mut.mjs J && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutK: node .rc/x/mut.mjs K && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutP: node .rc/x/mut.mjs P && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutQ: node .rc/x/mut.mjs Q && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutR: node .rc/x/mut.mjs R && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutS: node .rc/x/mut.mjs S && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixT: node .rc/x/mut2.mjs T && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixU: node .rc/x/mut2.mjs U && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixV: node .rc/x/mut2.mjs V && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixW: node .rc/x/mut2.mjs W && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixX: node .rc/x/mut2.mjs X && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixY: node .rc/x/mut2.mjs Y && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixZ: node .rc/x/mut2.mjs Z && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixAA: node .rc/x/mut2.mjs AA && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixAB: node .rc/x/mut2.mjs AB && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+fixAC: node .rc/x/mut2.mjs AC && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+plain-after: git status --short | head -5; node scripts/simUsSeasonLedger.mjs

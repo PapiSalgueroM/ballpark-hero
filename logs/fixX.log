@@ -1,0 +1,20 @@
+MUT X APPLIED: 1 edit(s)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+MLB: 23 seasons, 16 with a club off the schedule, 50 club lines (2 on 58, 32 on 161, 2 on 162, 14 on 163)
+NHL: 21 seasons in 8 alignments; lengths 82, 48, null, 56, 84
+receipts: 47, cited from 76 places, 3 marked thin and cited by nothing
+
+NOTES FOR THE BINDING ROUNDS (not failures):
+  - MLB engine: a healthy hitter plays 155 to 162 games in every year (gamesFor), and it reads no length ledger. The ledger: the schedule was not 162 in 2020 (60), and 16 seasons hold a club that did not play its schedule's length.
+  - NHL engine: a healthy skater plays 79 to 82 games in every year (gamesFor), and it reads no length ledger. The ledger: the season was not 82 in 2012 (48), 2019 (no single length), 2020 (56), 2026 (84). So the engine plays more than the real season in 2012, 2019 and 2020, and at most 82 of the 84 from 2026.
+  - NHL engine: a skater production is scaled by games / 82 (simNhlSeason), and the season paper counts missed games from 82 (src/lib/nhlCareerLoop.ts). Both are the 82 game season.
+  - MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): stage 0 saves 3 to 5 games, the real rounds hold 2 to 3: 84.7 percent cannot fit; stage 1 saves 7 to 9 games, the real rounds hold 5 to 8: 32.6 percent cannot fit; stage 2 saves 10 to 14 games, the real rounds hold 9 to 15: 0.0 percent cannot fit; stage 3 saves 13 to 19 games, the real rounds hold 13 to 22: 0.0 percent cannot fit; stage 4 saves 16 to 22 games, the real rounds hold 13 to 22: 0.0 percent cannot fit. Stages are the engine results in order: 'Lost the Wild Card series', 'Lost the Division Series', 'Lost the Championship Series', 'Lost the World Series', 'WON THE WORLD SERIES'.
+  - NHL playoff games (the same law against four best of sevens): stage 0 saves 5 to 7 games, the real rounds hold 4 to 7: 0.0 percent cannot fit; stage 1 saves 9 to 13 games, the real rounds hold 8 to 14: 0.0 percent cannot fit; stage 2 saves 14 to 20 games, the real rounds hold 12 to 21: 0.0 percent cannot fit; stage 3 saves 18 to 26 games, the real rounds hold 16 to 28: 0.0 percent cannot fit; stage 4 saves 23 to 28 games, the real rounds hold 16 to 28: 0.0 percent cannot fit. Stages: 'Lost in Round 1', 'Lost in Round 2', 'Lost the Conference Final', 'Lost the Cup Final', 'WON THE STANLEY CUP'.
+  - NHL engine: it writes the same four results in every year. The ledger: NHL_PLAYOFF_FORMAT is two sourced from 2013-14 only; what the playoffs of 2006 to 2012 were has one source (NHL_THIN: the same sixteen clubs and four rounds, under other round names), and the tournaments of the seasons that started in 2019 and 2020 were modified. A binding round that draws a path before 2013 must source it first or draw none.
+  - MLB engine: it writes a Wild Card result in every year. The ledger: no wild card round in 2004 to 2011, one game in 2012 to 2019 and 2021, a series only in 2020 and from 2022; and the engine models no first round bye.
+  - MLB engine: src/lib/mlbCareerLifeB.ts writes cc.team = 'Yomiuri Giants', which is in neither MLB list of the game, and then plays MLB seasons for it. A binding round must hold such a row.
+  - The game prints "Sacramento Athletics" for ATH; both 2026 standings read for the ledger print "Athletics" with no city. CONSEQUENCE for the binding round: an id is listed only where a list's own name is the club's real name, so a present day season row that names the Athletics would carry NO id for them, and a binding that holds clubs by id would open a full view for a club the row lists as short. No such row exists today (2026 lists BAL and NYY). Fix the name or key such a row by id before the first one is written.
+
+FAIL [M7] DET 2023 as played: 32 league games at home, the formula says 33
+FAIL [M7] TEX 2024 as played: 32 league games at home, the formula says 33
+simUsSeasonLedger: RED at M7 (2 failed, 1387 passed)
