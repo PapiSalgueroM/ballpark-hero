@@ -81,7 +81,9 @@
  *     example is the first two fixtures of that club in the Premier League ledger. And the
  *     What's New entry that announced the lists in files of their own (found by the mark on its
  *     list of leagues, read as code with comments taken out) names exactly those leagues, by
- *     the game's names, and counts them right. And the two screens that speak about a job
+ *     the game's names, and counts them right; each example it gives (marked
+ *     data-cm-fixture-example) is that club's first two matchdays in its ledger, opponents
+ *     and venues in order. And the two screens that speak about a job
  *     taken part way through a season say what the engine does (Round 1225 review): Help
  *     says the weeks before a mid season takeover were played in the real order and that a
  *     club you move to during a season keeps generated fixtures, and the dugout screen's
@@ -129,6 +131,8 @@
  *                 under generated fixtures again                       J (red for "help")
  *   newsdrift     the league gone from the What's New entry (the
  *                 leagues whose list is in a file of its own)          J
+ *   newsexample   a What's New example with its two opponents swapped
+ *                 (the leagues the entry gives an example from)        J
  * CM_LEAGUE_FIXTURES_CONTROL=<name> leaves that one fault in place instead: the
  * run then exits 1 with a last line that says the control FIRED as expected, or
  * exits 3 with a last line that says it MISFIRED or could not run.
@@ -502,6 +506,23 @@ function judgeHelp(world, reds) {
         if (!own.some(r => r.leagueId === id)) reds.push({ id, section: 'J', msg: `What's New says ${id} plays its real list and the game binds none for it` });
       }
       if (!world.only && news.count !== news.ids.length) reds.push({ id: 'help', section: 'J', msg: `What's New says "${news.countWord} more leagues" and lists ${news.ids.length}` });
+      /* Round 1225 review: the typed examples of the entry (each marked data-cm-fixture-example="<league>:<club>"),
+         worked out again from the ledger they are about: that club's first two MATCHDAYS, opponent and venue, in
+         that order. The entry speaks of matchdays because that is what a list is the order of: the first version
+         said a club "opens" against its matchday one opponent, and that match had been moved behind matchday two. */
+      for (const ex of news.examples || []) {
+        if (world.only && ex.leagueId !== world.only) continue;
+        const red = msg => reds.push({ id: ex.leagueId, section: 'J', msg });
+        const e = world.entries.find(x => x.ledger && x.ledger.leagueId === ex.leagueId);
+        if (!own.some(r => r.leagueId === ex.leagueId)) { red(`What's New gives an example from ${ex.leagueId} and the game binds no list in a file of its own for it`); continue; }
+        if (!e) continue;   /* the ledger's file is gone: section I says so, and there is nothing to work the example out from */
+        const fixture = round => { const p = (e.ledger.rounds[round] || []).find(x => x[0] === ex.club || x[1] === ex.club); return p ? { home: p[0] === ex.club, opponent: p[0] === ex.club ? p[1] : p[0] } : null; };
+        const [a, b] = [fixture(0), fixture(1)];
+        const escaped = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const said = f => `(?:${f.home ? 'at home to|host' : 'away at|visit|go to'}) ${escaped(f.opponent)}`;
+        const words = f => (f ? `${f.home ? 'at home to' : 'away at'} ${f.opponent}` : 'no fixture');
+        if (!a || !b || !ex.text.includes(ex.club) || !new RegExp(`${said(a)}[\\s\\S]*${said(b)}`).test(ex.text)) red(`What's New's example for ${ex.club} is not that club's first two matchdays in the ledger (${words(a)}, then ${words(b)})`);
+      }
     }
   }
   /* The one worked example, worked out again from the ledger it is about. */
@@ -559,8 +580,9 @@ async function gameRegistryAndHelp() {
   const entry = (/<li>((?:(?!<\/li>)[\s\S])*?data-cm-fixture-leagues="([^"]*)">([^<]*)<(?:(?!<\/li>)[\s\S])*?)<\/li>/.exec(page) || []);
   const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
   const countWord = entry[1] ? ((/fixture list in (\w+) more leagues?/.exec(entry[1]) || [])[1] || '') : '';
-  const news = entry[1] === undefined ? { found: false, ids: [], text: '', count: 0, countWord: '' }
-    : { found: true, ids: entry[2].split(' ').filter(Boolean), text: entry[3], count: WORDS.indexOf(countWord), countWord };
+  const examples = entry[1] === undefined ? [] : [...entry[1].matchAll(/data-cm-fixture-example="([a-z0-9]+):([^"]+)">([^<]*)</g)].map(m => ({ leagueId: m[1], club: m[2], text: unescape(m[3]) }));
+  const news = entry[1] === undefined ? { found: false, ids: [], text: '', count: 0, countWord: '', examples }
+    : { found: true, ids: entry[2].split(' ').filter(Boolean), text: entry[3], count: WORDS.indexOf(countWord), countWord, examples };
   return { registry, help, news };
 }
 
@@ -698,6 +720,18 @@ const CONTROLS = {
     apply(w) { w.help.text = w.help.text.replace('a club you move to during a season keep generated fixtures', 'a job you take part way through a season keep generated fixtures'); },
   },
   newsdrift: { expect: 'J', applies: e => e.ownFile, apply(w, e) { w.news.ids = w.news.ids.filter(id => id !== e.ledger.leagueId); w.news.count -= 1; } },
+  /* Round 1225 review: a What's New example told with its two opponents the other way round. */
+  newsexample: {
+    expect: 'J',
+    applies: e => e.ownFile && game.news.examples.some(x => x.leagueId === e.ledger.leagueId),
+    apply(w, e) {
+      const ex = w.news.examples.find(x => x.leagueId === e.ledger.leagueId);
+      const opponent = round => { const p = e.ledger.rounds[round].find(x => x.includes(ex.club)); return p[0] === ex.club ? p[1] : p[0]; };
+      const [first, second] = [opponent(0), opponent(1)];
+      if (!ex.text.includes(first) || !ex.text.includes(second)) throw new Error('the example does not name both opponents, so there is nothing to swap');
+      ex.text = ex.text.replace(first, '@first@').replace(second, first).replace('@first@', second);
+    },
+  },
 };
 const expectOf = (name, e) => (typeof CONTROLS[name].expect === 'function' ? CONTROLS[name].expect(e) : CONTROLS[name].expect);
 const appliesTo = (name, e) => !CONTROLS[name].applies || CONTROLS[name].applies(e);
