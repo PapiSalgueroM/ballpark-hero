@@ -1,0 +1,5 @@
+overlay exit=0 0s | 100
+build-at exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+bundle-at exit=0 0s | simLiveSimMotion: the bundle section alone is green. The part is 19526 bytes minified, 8179 gzipped, and carries nothing of Club Manager.
+motion-at exit=1 43s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R8%3A th
+weight-at exit=1 32s | sweepWeight: 4 failures
