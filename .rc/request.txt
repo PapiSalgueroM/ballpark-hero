@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usRivalLine.test.ts src/test/usCareerTruthDigest.test.ts src/test/nflTruthRules1104.test.ts --testTimeout=300000 --hookTimeout=120000
+rival-p: RIVAL_PROVE=ac7c22f9 RIVAL_MOVED=none node scripts/simUsRivalSense.mjs
+rival-cutdraw: US_RIVAL_CONTROL=cutdraw RIVAL_PROVE=ac7c22f9 RIVAL_MOVED=none node scripts/simUsRivalSense.mjs
+sense-c: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+parity: node scripts/simUsBoardParity.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simAwards: node scripts/simAwards.mjs
+anchors: node scripts/simHarnessAnchors.mjs
