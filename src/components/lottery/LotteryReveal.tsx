@@ -79,9 +79,9 @@ export function LotteryReveal({
   const grid = [...turning].sort((a, b) => a.slot - b.slot);
   const still = settled || !reveal;
   const blocks = (help ?? []).filter(b => b && b.heading && Array.isArray(b.lines) && b.lines.length > 0);
-  /* The small line of a tile: its seed and its move when there was a drawing, and the mark on his own. */
-  const under = (r: LotteryRevealRow) => [drawn ? `Seed ${r.seed}` : '', drawn ? lotteryMoveWords(r.moved) : '', r.mine ? mineLabel : '']
-    .filter(Boolean).join(' · ');
+  /* The small line of a tile: its seed and its move when there was a drawing. The mark on his own tile is a part of
+     its own that never shrinks, so on a narrow tile the seed is cut before the one word that says the tile is his. */
+  const under = (r: LotteryRevealRow) => (drawn ? `Seed ${r.seed} · ${lotteryMoveWords(r.moved)}` : '');
 
   return (
     <div
@@ -137,7 +137,12 @@ export function LotteryReveal({
                 <span className="relative w-5 shrink-0 text-center text-sm font-black tabular-nums">{r.slot}</span>
                 <span className="relative min-w-0">
                   <span className="block truncate text-xs font-bold">{r.label}</span>
-                  {under(r) && <span data-lottery-under className="block truncate text-[10px] text-muted-foreground">{under(r)}</span>}
+                  {(under(r) || r.mine) && (
+                    <span data-lottery-under className="flex min-w-0 text-[10px] text-muted-foreground">
+                      {under(r) && <span className="truncate">{under(r)}</span>}
+                      {r.mine && <span data-lottery-mark className="shrink-0 whitespace-pre">{under(r) ? ' · ' : ''}{mineLabel}</span>}
+                    </span>
+                  )}
                 </span>
               </span>
             </li>

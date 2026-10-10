@@ -97,43 +97,50 @@ export function lotteryNight(saved: SavedDraftOrder, myClub: string, labelOf: (c
 
 const tenth = (n: number) => Math.round(n * 10) / 10;
 
-/** The saved night was drawn on exactly the chances of this table: same
-    table, same field, every seed's chance the table's own. False when level
-    clubs shared theirs, and false for a table this build does not carry. */
-function drawnAsTable(saved: SavedDraftOrder, lottery: GmLotteryRules | null): lottery is GmLotteryRules {
+/** The table this build carries, when it is the one the night was drawn on: same name, same field. */
+function tableOf(saved: SavedDraftOrder, lottery: GmLotteryRules | null): GmLotteryRules | null {
   const night = saved.lottery;
-  return night !== null && lottery !== null && lottery.table === night.table && lottery.odds.length === night.field.length
-    && night.field.every((f, i) => Math.abs(f.pct - lottery.odds[i]) < 1e-9);
+  return night !== null && lottery !== null && lottery.table === night.table && lottery.odds.length === night.field.length ? lottery : null;
 }
 
-/** The best chance at the first pick ON THIS NIGHT and how many clubs held it, off the saved field. */
-function nightBest(saved: SavedDraftOrder): { clubs: number; drawn: number; pct: number; holders: number; lastPct: number } | null {
+/** The chances THE NIGHT WAS DRAWN ON, off the saved field: the worst record's, the best lottery record's, the
+    best of all and how many clubs held it. Level clubs share theirs, so these are not always the table's. */
+function nightChances(saved: SavedDraftOrder): { clubs: number; drawn: number; first: number; last: number; best: number; holders: number } | null {
   const field = saved.lottery?.field ?? [];
   const total = field.reduce((sum, f) => sum + f.pct, 0);
   if (field.length === 0 || total <= 0) return null;
-  const best = Math.max(...field.map(f => f.pct));
+  const top = Math.max(...field.map(f => f.pct));
   return {
-    clubs: field.length, drawn: Math.max(1, saved.lottery?.wins.length ?? 1), pct: tenth((best / total) * 100),
-    holders: field.filter(f => Math.abs(f.pct - best) < 1e-9).length, lastPct: tenth((field[field.length - 1].pct / total) * 100),
+    clubs: field.length, drawn: Math.max(1, saved.lottery?.wins.length ?? 1),
+    first: tenth((field[0].pct / total) * 100), last: tenth((field[field.length - 1].pct / total) * 100),
+    best: tenth((top / total) * 100), holders: field.filter(x => Math.abs(x.pct - top) < 1e-9).length,
   };
 }
 
 /** The one line under the card's heading, TRUE OF THE NIGHT IT SITS ON.
-    A night drawn on the table's own chances gets the table's line, the same
-    words every lottery card of the site prints. A night where level clubs
-    shared their chances (the 3rd and 4th worst records level are drawn on
-    13.3 and 13.2, not 14 and 12.5) gets its own numbers, and so does a night
-    drawn on a table this build no longer carries. An order nobody drew gets
-    the reason. `lottery` is the table on the pick rules in use, or null. */
+    The table's line (the words every lottery card of the site prints) says
+    four things: how many clubs are in it, how many picks are drawn, the
+    worst record's chance and how many clubs share that chance. When all four
+    are true of the saved night, that line is printed. When level clubs
+    shared their chances at the top (the 3rd and 4th worst records level are
+    drawn on 13.3 and 13.2, so three clubs do NOT hold 14 each), or the night
+    was drawn on a table this build no longer carries, the line is built from
+    the night's own chances. An order nobody drew gets the reason. `lottery`
+    is the table on the pick rules in use, or null. */
 export function lotteryNightRule(saved: SavedDraftOrder, lottery: GmLotteryRules | null): string {
   if (!saved.lottery) return PLAIN_ORDER_WORDS[saved.plain ?? 'no-lottery'];
-  if (drawnAsTable(saved, lottery)) return lotteryRuleLine(lotteryFactsFromWeights(lottery.odds, lottery.draws));
-  const n = nightBest(saved);
+  const table = tableOf(saved, lottery);
+  const says = table ? lotteryFactsFromWeights(table.odds, table.draws) : null;
+  const was = lotteryFactsFromWeights(saved.lottery.field.map(x => x.pct), Math.max(1, saved.lottery.wins.length));
+  if (says && was && says.clubs === was.clubs && says.drawn === was.drawn && says.worstPct === was.worstPct && says.worstShared === was.worstShared) {
+    return lotteryRuleLine(says);
+  }
+  const n = nightChances(saved);
   if (!n) return '';
   const picks = n.drawn === 1 ? 'the first pick is drawn' : `the top ${n.drawn} picks are drawn`;
   const best = n.holders > 1
-    ? `On this night ${n.holders} clubs shared the best chance at the first pick, ${n.pct}% each.`
-    : `On this night the best chance at the first pick was ${n.pct}%.`;
+    ? `On this night ${n.holders} clubs shared the best chance at the first pick, ${n.best}% each.`
+    : `On this night the best chance at the first pick was ${n.best}%.`;
   return `${n.clubs} clubs are in the lottery and ${picks}. ${best}`;
 }
 
@@ -162,8 +169,7 @@ export function lotteryExample(lottery: GmLotteryRules): string[] {
     degrades to the saved table's own words and never to another rule's. */
 export function lotteryHelp(saved: SavedDraftOrder, rules: GmDraftOrderRules | null, lottery: GmLotteryRules | null): LotteryHelpBlock[] {
   const known = rules !== null && rules.id === saved.rulesId ? rules : null;
-  const sameTable = lottery !== null && saved.lottery !== null && lottery.table === saved.lottery.table
-    && lottery.odds.length === saved.lottery.field.length ? lottery : null;
+  const sameTable = tableOf(saved, lottery);
   const blocks: LotteryHelpBlock[] = [];
   /* NOTHING HERE REPEATS THE LINE UNDER THE HEADING (lotteryNightRule): the
      card shows that line and this panel at the same time. */
@@ -183,12 +189,16 @@ export function lotteryHelp(saved: SavedDraftOrder, rules: GmDraftOrderRules | n
   blocks.push({ heading: "This game's own", lines: [...known.gameSays, ...known.partial] });
   if (sameTable) {
     const example = lotteryExample(sameTable);
-    const n = drawnAsTable(saved, sameTable) ? null : nightBest(saved);
-    if (n) {
-      /* Why the night's numbers are not the table's is said only when the saved order shows it: a drawing among lottery clubs. */
-      const inField = new Set(saved.lottery?.field.map(f => f.club) ?? []);
+    /* The example is the table's. When the night's own two numbers are not the table's, say what they were. Why they
+       differ is said only when the saved order shows it: a drawing among lottery clubs. */
+    const says = lotteryFactsFromWeights(sameTable.odds, sameTable.draws);
+    const total = sameTable.odds.reduce((a, b) => a + b, 0);
+    const tableLast = tenth((sameTable.odds[sameTable.odds.length - 1] / total) * 100);
+    const n = nightChances(saved);
+    if (says && n && (n.first !== says.worstPct || n.last !== tableLast)) {
+      const inField = new Set(saved.lottery?.field.map(x => x.club) ?? []);
       const shared = saved.level.some(group => group.every(club => inField.has(club)));
-      example.push(`${shared ? 'On this night clubs level on record shared their chances, so' : 'This night was drawn on its own chances:'} the best chance was ${n.pct}% and the best record in the lottery had ${n.lastPct}%.`);
+      example.push(`${shared ? 'On this night clubs level on record shared their chances, so' : 'This night was drawn on its own chances:'} the worst record's chance was ${n.first}% and the best record in the lottery had ${n.last}%.`);
     }
     blocks.push({ heading: 'A worked example', lines: example });
   }

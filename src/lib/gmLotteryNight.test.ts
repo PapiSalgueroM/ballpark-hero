@@ -129,9 +129,24 @@ describe('the line under the heading is true of the night it sits on', () => {
     /* The worked example stays the table's, says so, and adds what this night was drawn on. */
     const example = lotteryHelp(four, NBA, table).find(b => b.heading === 'A worked example')!.lines;
     expect(example[0]).toBe("By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.");
-    expect(example[example.length - 1]).toBe('On this night clubs level on record shared their chances, so the best chance was 13.7% and the best record in the lottery had 0.5%.');
+    expect(example[example.length - 1]).toBe("On this night clubs level on record shared their chances, so the worst record's chance was 13.7% and the best record in the lottery had 0.5%.");
     /* A night drawn on the table has no such line. */
     expect(lotteryHelp(nights[0], NBA, table).find(b => b.heading === 'A worked example')!.lines.join(' ')).not.toContain('On this night');
+  });
+
+  it('keeps the table\'s line when level clubs lower in the field shared their chances: everything it says is still true', () => {
+    /* The 7th and 8th worst level, as on the league's own 2026 night: 6.8 and 6.7, the top of the table untouched. */
+    const lower = levelNight([6, 7]);
+    expect(lower.lottery!.field.slice(0, 3).map(f => f.pct)).toEqual([14, 14, 14]);
+    expect(lower.lottery!.field.slice(6, 8).map(f => Math.round(f.pct * 10) / 10)).toEqual([6.8, 6.7]);
+    expect(lotteryNightRule(lower, table)).toBe('14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.');
+    /* The 2nd and 3rd worst level: they pool 280 combinations and get 140 each, which is 14% again, so the
+       table's line is still true (the split's arithmetic leaves 14.000000000000002, the same chance). */
+    expect(lotteryNightRule(levelNight([1, 2]), table)).toBe('14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.');
+    /* And the worked example's two numbers are this night's too, so it adds nothing. */
+    expect(lotteryHelp(lower, NBA, table).find(b => b.heading === 'A worked example')!.lines.join(' ')).not.toContain('On this night');
+    /* The pair at the 3rd and 4th: the top changed, the example's two numbers did not. */
+    expect(lotteryHelp(levelNight([2, 3]), NBA, table).find(b => b.heading === 'A worked example')!.lines.join(' ')).not.toContain('On this night');
   });
 
   it('prints the saved chances for a night whose table this build does not carry', () => {

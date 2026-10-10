@@ -65,7 +65,7 @@
  *     percentile 2.03. The band is 4.5, the one simGmPicks section 2 uses for
  *     the same draw, so a healthy module sits far inside it; the flat control
  *     puts 5,065 checks outside and oddsrow 5,070. Both also redden section 8
- *     (2 checks: the line of a night is no longer the table's), nosplit
+ *     (3 and 339 checks: the line of a night is no longer the table's), nosplit
  *     reddens it by its floor (no night with shared chances), and noflip and
  *     flipbeforelottery redden section 4's fourth fleet (6,200 and 540).
  *   Section 3. 3,000 leagues: 5,258 level pairs and 6,881 larger groups in
@@ -105,7 +105,10 @@
  *     reddens the 155 that moved.
  *   Section 8. 600 nights: 200 drawn on the table and 400 where level clubs
  *     shared their chances, 263 of those at the top of the table (floors
- *     100, 200 and 100); tableline reddens 800 checks.
+ *     100, 200 and 100). On the 137 nights where the sharing was lower in
+ *     the field the table's line is still true and is the one printed; on
+ *     the 263 it is the night's own. tableline reddens 526 checks, two for
+ *     each of the 263.
  *   Section 10. 400 nights: 5,256 traded picks used by their holders, 1,427
  *     of them his; he was on the clock 2,091 times, 39 of them at the first
  *     pick of the draft; one night he held no slot at all (floors 1,000, 200
@@ -201,7 +204,7 @@ const CONTROLS = {
   headlineswapped: { expect: [7], swaps: { lottery: [["    if (moved > 0) headline = `Your club's own pick lands ${ordinal(mineSlot)}, up ${places(moved)}.`;", "    if (moved < 0) headline = `Your club's own pick lands ${ordinal(mineSlot)}, up ${places(moved)}.`;"]] } },
   staleexample: { expect: [8], swaps: { lottery: [["  const lines = [`By the table, the worst record's chance at the first pick is ${facts.worstPct}%. The best record in the lottery gets ${lastPct}%.`];", "  const lines = [`By the table, the worst record's chance at the first pick is 25%. The best record in the lottery gets ${lastPct}%.`];"]] } },
   /* the card prints the table's line on every night, also where level clubs shared their chances */
-  tableline: { expect: [8], swaps: { lottery: [['  if (drawnAsTable(saved, lottery)) return lotteryRuleLine(lotteryFactsFromWeights(lottery.odds, lottery.draws));', '  if (lottery) return lotteryRuleLine(lotteryFactsFromWeights(lottery.odds, lottery.draws));']] } },
+  tableline: { expect: [8], swaps: { lottery: [['  if (says && was && says.clubs === was.clubs && says.drawn === was.drawn && says.worstPct === was.worstPct && says.worstShared === was.worstShared) {', '  if (says) {']] } },
   mounted: { expect: [9] },
   norivals: { expect: [10], swaps: { night: [['  while (made < night.slots.length && night.slots[made].holder !== stopFor) {', '  while (made < 0 && night.slots[made].holder !== stopFor) {']] } },
   /* a slot that finds the class dry keeps its marker, which is what the loop did before the review */
@@ -1016,9 +1019,10 @@ open(8);
   const line = L.lotteryNightRule(saved, TABLE);
   check(line === TABLE_LINE, `the line under the heading of a night drawn on the table is not the table's ("${line}")`);
   check(blocks.every(b => !b.lines.includes(line)), 'the "?" prints the line under the heading a second time; the card shows both at once');
-  /* ON A NIGHT WHERE LEVEL CLUBS SHARED THEIR CHANCES THE LINE IS THAT NIGHT'S. Worked out here from the saved field:
-     the best chance and how many clubs held it. The table's line would say three clubs hold 14% each on a night
-     drawn on 14, 14, 13.3 and 13.2. */
+  /* THE LINE IS TRUE OF THE NIGHT IT SITS ON. Worked out here from the saved field: the table's line says the three
+     worst records hold 14% each, so it is printed exactly when that is so on the night (level clubs lower in the
+     field change nothing it says). When level clubs shared their chances AT THE TOP the line is the night's own:
+     the table's would say three clubs hold 14 each on a night drawn on 14, 14, 13.3 and 13.2. */
   {
     const rng = makeRng(808);
     const seenLine = { asTable: 0, shared: 0, sharedTop: 0 };
@@ -1036,13 +1040,23 @@ open(8);
       seenLine.shared += 1;
       const best = Math.max(...pcts);
       const holders = pcts.filter(p => Math.abs(p - best) < 1e-9).length;
-      if (Math.abs(best - TABLE_TYPED[0]) > 1e-9 || holders !== 3) seenLine.sharedTop += 1;
+      const ex = L.lotteryHelp(night, NBA, TABLE).find(b => b.heading === 'A worked example');
+      check(!!ex && ex.lines[0].startsWith('By the table, '), () => `league ${s}: the worked example does not say it is the table's`);
+      const first = say(pcts[0]);
+      const last = say(pcts[pcts.length - 1]);
+      const exampleIsNight = first === say(TABLE_TYPED[0]) && last === say(TABLE_TYPED[TABLE_TYPED.length - 1]);
+      check(!!ex && ex.lines.some(l => l.includes(`the worst record's chance was ${first}% and the best record in the lottery had ${last}%`)) === !exampleIsNight,
+        () => `league ${s}: the night's worst record had ${first}% and its best lottery record ${last}%, and the worked example ${exampleIsNight ? 'adds a line about a night that matched the table' : 'does not say so'}`);
+      if (Math.abs(best - TABLE_TYPED[0]) < 1e-9 && holders === 3) {
+        /* shared lower in the field: everything the table's line says is still true of this night */
+        check(got === TABLE_LINE, () => `league ${s}: the three worst records held ${TABLE_TYPED[0]}% each, and the line is "${got}"`);
+        continue;
+      }
+      seenLine.sharedTop += 1;
       const want = holders > 1 ? `${holders} clubs shared the best chance at the first pick, ${say(best)}% each.` : `the best chance at the first pick was ${say(best)}%.`;
       check(got.endsWith(want) && got.startsWith(`${pcts.length} clubs are in the lottery and the top ${night.lottery.wins.length} picks are drawn.`),
         () => `league ${s}: the night was drawn on ${pcts.slice(0, 5).map(say).join(', ')}... and the line says "${got}"`);
-      check(got !== TABLE_LINE, () => `league ${s}: level clubs shared their chances and the card still prints the table's line`);
-      const ex = L.lotteryHelp(night, NBA, TABLE).find(b => b.heading === 'A worked example');
-      check(!!ex && ex.lines[0].startsWith('By the table, ') && ex.lines[ex.lines.length - 1].includes(`the best chance was ${say(best)}%`), () => `league ${s}: the worked example does not say it is the table's, or does not give this night's own best chance`);
+      check(got !== TABLE_LINE, () => `league ${s}: level clubs shared their chances at the top and the card still prints the table's line`);
     }
     check(seenLine.asTable >= 100 && seenLine.shared >= 200 && seenLine.sharedTop >= 100, `the sample is too thin: ${JSON.stringify(seenLine)}`);
     console.log(`   600 nights: ${seenLine.asTable} drawn on the table and ${seenLine.shared} where level clubs shared their chances (${seenLine.sharedTop} of them at the top of the table); the line under the heading is the night's own every time`);

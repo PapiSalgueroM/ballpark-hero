@@ -68,6 +68,14 @@ describe('the rule line is built from the table', () => {
     expect(lotteryRuleLine(lotteryFactsFromWeights([3, 1], 1))).toContain('the first pick is drawn');
   });
 
+  it('counts clubs as level when their chances are the same number worked out two ways', () => {
+    /* 140 of 1,000 combinations as a percent is 14.000000000000002. It is the same chance as a typed 14. */
+    const shared = (140 / 1000) * 100;
+    expect(shared).not.toBe(14);
+    expect(lotteryFactsFromWeights([14, shared, shared, 12.5, 10.5], 4)!.worstShared).toBe(3);
+    expect(lotteryRuleLine(lotteryFactsFromWeights([14, shared, shared, 12.5, 10.5], 4))).toContain('The 3 worst records share the best chance');
+  });
+
   it('refuses a table it cannot read instead of printing a guess', () => {
     expect(lotteryFactsFromWeights([], 4)).toBeNull();
     expect(lotteryFactsFromWeights([0, 0], 1)).toBeNull();
@@ -220,6 +228,7 @@ describe('LotteryReveal', () => {
     const { container } = render(<LotteryReveal rows={plain} ruleLine="No drawing." reveal={false} drawn={false} mineLabel="your club" />);
     const tiles = [...container.querySelectorAll('[data-lottery-slot]')];
     expect(tiles.map(t => t.querySelector('[data-lottery-under]')?.textContent ?? null)).toEqual([null, 'your club', null]);
+    expect(container.querySelectorAll('[data-lottery-mark]').length).toBe(1);
     expect(container.textContent).not.toMatch(/Seed|Held/);
     /* With a drawing the same rows say both, and the mark is the default one. */
     const drawn = render(<LotteryReveal rows={plain} ruleLine="A drawing." />);

@@ -29,8 +29,13 @@ describe('GmLotteryCard', () => {
     expect(mine.length).toBe(1);
     expect(mine[0].getAttribute('data-lottery-slot')).toBe(String(order.first.indexOf('C05') + 1));
     /* The mark is about his CLUB, whose record earned the pick: the card is never told who holds it tonight. */
-    expect(mine[0].querySelector('[data-lottery-under]')!.textContent).toMatch(/^Seed 5 · (Up \d+|Down \d+|Held) · your club$/);
+    expect(mine[0].querySelector('[data-lottery-under]')!.textContent).toMatch(/^Seed 5 · (Up \d+|Down \d+|Held) · you$/);
     expect(container.textContent).not.toContain('yours');
+    /* The mark is a part of its own that never shrinks: on a narrow tile the seed is cut first, never the mark. */
+    const mark = mine[0].querySelector('[data-lottery-mark]')!;
+    expect(mark.textContent).toBe(' · you');
+    expect(mark.className).toContain('shrink-0');
+    expect(mark.className).not.toContain('truncate');
     expect(container.querySelector('[data-lottery-rule]')!.textContent)
       .toBe('14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.');
     expect(container.querySelector('[data-lottery-headline]')!.textContent).toBe(lotteryNight(order, 'C05', label).headline);
@@ -99,7 +104,7 @@ describe('GmLotteryCard', () => {
     expect(container.textContent!.split('No lottery was drawn').length - 1).toBe(1);
     /* Nothing was seeded and nothing moved, so no tile says Seed or Held. */
     expect(container.textContent).not.toMatch(/Seed \d|Held/);
-    expect([...container.querySelectorAll('[data-lottery-under]')].map(u => u.textContent)).toEqual(['your club']);
+    expect([...container.querySelectorAll('[data-lottery-under]')].map(u => u.textContent)).toEqual(['you']);
     fireEvent.click(container.querySelector('[data-lottery-help]')!);
     const panel = container.querySelector('[data-lottery-help-panel]')!;
     expect(panel.textContent).toContain(PLAIN_ORDER_LINE);

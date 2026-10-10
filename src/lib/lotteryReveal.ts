@@ -115,8 +115,11 @@ export function lotteryFactsFromWeights(weights: readonly number[], drawn: numbe
   const w = (Array.isArray(weights) ? weights : []).filter(x => Number.isFinite(x) && x >= 0);
   const total = w.reduce((a, b) => a + b, 0);
   if (w.length === 0 || total <= 0 || !Number.isInteger(drawn) || drawn < 1) return null;
+  /* Level to a billionth, not to the last bit: chances worked out by sharing
+     combinations (140 of 1,000 as a percent is 14.000000000000002) are the
+     same chance as a typed 14, and a strict compare would count one club. */
   let shared = 1;
-  while (shared < w.length && w[shared] === w[0]) shared += 1;
+  while (shared < w.length && Math.abs(w[shared] - w[0]) < 1e-9) shared += 1;
   return { clubs: w.length, drawn: Math.min(drawn, w.length), worstPct: Math.round((w[0] / total) * 1000) / 10, worstShared: shared };
 }
 

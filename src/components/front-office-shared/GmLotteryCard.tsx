@@ -13,9 +13,11 @@
 
    WHAT IT MARKS IS HIS CLUB'S OWN PICK, the one its record earned. It is
    handed a saved order and a club, never the night's slots, so it cannot
-   know a pick he traded away or one he bought: the tile says "your club"
-   and the closing line says "your club's own pick", which is true either
-   way. A bind that wants more hands the words in. */
+   know a pick he traded away or one he bought: the tile's mark is "you"
+   (the club is his, whoever uses the pick; three letters, because a phone's
+   tile has room for about twenty) and the closing line says "your club's
+   own pick", which is true either way. A bind that wants more hands the
+   words in. */
 import LotteryReveal from '@/components/lottery/LotteryReveal';
 import { lotteryHelp, lotteryNight, lotteryNightRule } from '@/lib/gmLotteryNight';
 import type { SavedDraftOrder } from '@/lib/gmDraftOrder';
@@ -52,7 +54,7 @@ export function GmLotteryCard({ order, myClub, labelOf, rules, lottery, seen = f
         continueLabel={continueLabel}
         reveal={view.reveal && !seen}
         drawn={drawn}
-        mineLabel="your club"
+        mineLabel="you"
       />
     </div>
   );
