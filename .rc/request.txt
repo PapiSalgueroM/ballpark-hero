@@ -1,0 +1,3 @@
+#!serial
+realfix-asis: node scripts/simCmRealFixtures.mjs 2>&1 | tail -3
+realfix-patched: node .rc/x/patchRealFixtures.mjs && node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
