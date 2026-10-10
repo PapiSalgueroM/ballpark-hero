@@ -45,16 +45,20 @@
  *
  * Negative controls (GM_GAMEDAY_CONTROL=...). Each patches a string that must
  * be in its file exactly once (or the run refuses, exit 2), always exits 1
- * when it fires at its named section, and exits 2 when it does not:
- *   winner     the winner test taken out of decidedScore            section 1
- *   twopaths   the told path keys its final differently             section 1
- *   offbyone   a field goal told as four points                     section 2
- *   olddraw    the engine's base and margin score told instead      section 3
- *   pairing    the Divisional ranks swapped in the NFL data         section 4
- *   validator  the replay check answers "no problems" at once       section 4
- *   random     a Math.random() planted in gameStory                 section 5
- *   stream     a Math.random() planted in decidedScore              section 5
- *   mounted    an import planted in memory in a route file          section 6
+ * when its NAMED checks are among the reds, and exits 2 when they are not:
+ *   winner      the winner test taken out of decidedScore            section 1
+ *   twopaths    the told path keys its final differently             section 1
+ *   tries       the law is asked twice, not 24 times                 section 1 (the swapped share)
+ *   offbyone    a field goal told as four points                     section 2
+ *   olddraw     the engine's base and margin score told instead      section 3 (losers on 15 or fewer: none)
+ *   pairing     the Divisional ranks swapped in the NFL data         section 4
+ *   validator   the replay check answers "no problems" at once       section 4
+ *   enginedrift the engine's margin draw changed, in the engine      section 4 (the recorded fixture ALONE: the
+ *               machine still agrees with the engine it is played beside, which must stay green)
+ *   random      a Math.random() planted in gameStory                 section 5
+ *   stream      a Math.random() planted in decidedScore              section 5
+ *   unkeyed     the story's stream keyed to a counter, not the game  section 5 (twice, and through JSON)
+ *   mounted     an import planted in memory in a route file          section 6
  *
  * MEASURED (2026-10-10, seed sets 0 to 4, 22,800 games a set, 114,000 in
  * all; the harness prints this table when it closes, and the runs are named
@@ -67,7 +71,10 @@
  *   The two samples are separate draws, so one set's difference has a
  *   standard error of about 0.066, 0.0046, 0.0011 and 0.0015. The bands
  *   (0.25, 0.02, 0.005, 0.006 either side) are about four of those and 1.8 to
- *   2.7 times the widest difference the five sets showed.
+ *   2.7 times the widest difference the five sets showed. Under control
+ *   olddraw seed set 0 reads 27.54 against 22.64 points, 0.0000 against
+ *   0.4297 losers on 15 or fewer, 0.0000 against 0.0148 shutouts and 0.0716
+ *   against 0.0517 sides on 40 or more: all four far outside.
  *   Section 1, the swapped share: 0.00039 to 0.00066 a set (9 to 15 games in
  *   22,800), nearly all of them road upsets at a home chance of 0.8 or more.
  *   The band is under 0.002, three times the widest seen.
@@ -98,19 +105,24 @@ const NFL_DATA = 'src/data/gmBrackets/nfl.ts';
 const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA];
 const ROUTE_FILE = 'src/pages/FrontOffice.tsx';
 
+/* `labels`: pieces of the check labels that must ALL be among the reds of the control's section for it to count
+   as fired. `clean`: pieces that must be among no red at all (the control is aimed at one fence, not its neighbour). */
 const CONTROLS = {
-  winner: { section: 1, patches: [{ file: SCORE, from: 'if ((s[0] > s[1]) === d.homeWon) return', to: 'if (s[0] !== s[1]) return' }] },
-  twopaths: { section: 1, patches: [{ file: DAY, from: 'const told = quickGame(score, f);', to: 'const told = quickGame(score, { ...f, key: f.key + "|again" });' }] },
-  offbyone: { section: 2, patches: [{ file: DAY, from: 'events.push({ ...e, side });', to: 'events.push({ ...e, side, pts: e.kind === "fg" ? 4 : e.pts });' }] },
-  olddraw: { section: 3, patches: [{ file: SCORE, from: 'const s = law.score(d.pHome, keyedRng(`${key}|score|${t}`), d);', to: 'const r = keyedRng(`${key}|score|${t}`); const base = 16 + Math.floor(r() * 15); const margin = 1 + Math.floor(r() * 17); const s = d.homeWon ? [base + margin, base] : [base, base + margin];' }] },
-  pairing: { section: 4, patches: [
+  winner: { section: 1, labels: ['never names another winner'], patches: [{ file: SCORE, from: 'if ((s[0] > s[1]) === d.homeWon) return', to: 'if (s[0] !== s[1]) return' }] },
+  twopaths: { section: 1, labels: ["tells the quick path's final"], patches: [{ file: DAY, from: 'const told = quickGame(score, f);', to: 'const told = quickGame(score, { ...f, key: f.key + "|again" });' }] },
+  tries: { section: 1, labels: ['the swapped share'], patches: [{ file: SCORE, from: 'export const SCORE_TRIES = 24;', to: 'export const SCORE_TRIES = 2;' }] },
+  offbyone: { section: 2, labels: ['adds up by the independent checker'], patches: [{ file: DAY, from: 'events.push({ ...e, side });', to: 'events.push({ ...e, side, pts: e.kind === "fg" ? 4 : e.pts });' }] },
+  olddraw: { section: 3, labels: ['losers15 told 0.0000'], patches: [{ file: SCORE, from: 'const s = law.score(d.pHome, keyedRng(`${key}|score|${t}`), d);', to: 'const r = keyedRng(`${key}|score|${t}`); const base = 16 + Math.floor(r() * 15); const margin = 1 + Math.floor(r() * 17); const s = d.homeWon ? [base + margin, base] : [base, base + margin];' }] },
+  pairing: { section: 4, labels: ['playBracketAll gives', 'four presses of playBracketWeek'], patches: [
     { file: NFL_DATA, from: 'home: { seed: top }, away: { rankedWinnerOf: wc, rank: 2 }', to: 'home: { seed: top }, away: { rankedWinnerOf: wc, rank: 0 }' },
     { file: NFL_DATA, from: 'home: { rankedWinnerOf: wc, rank: 0 }, away: { rankedWinnerOf: wc, rank: 1 }', to: 'home: { rankedWinnerOf: wc, rank: 1 }, away: { rankedWinnerOf: wc, rank: 2 }' },
   ] },
-  validator: { section: 4, patches: [{ file: BRACKET, from: 'const seen = new Set<string>();', to: 'const seen = new Set<string>(); if (seen.size === 0) return problems;' }] },
-  random: { section: 5, patches: [{ file: DAY, from: "const flip = viewAs === 'away';", to: "const flip = viewAs === 'away'; Math.random();" }] },
-  stream: { section: 5, patches: [{ file: SCORE, from: 'let first: [number, number] | null = null;', to: 'let first: [number, number] | null = null; Math.random();' }] },
-  mounted: { section: 6, patches: [], plant: { file: ROUTE_FILE, text: "\nimport { gameStory } from '@/lib/gmGameDay';\n" } },
+  validator: { section: 4, labels: ['names a doctored winner', 'names a doctored pairing', 'names a tie played out of turn'], patches: [{ file: BRACKET, from: 'const seen = new Set<string>();', to: 'const seen = new Set<string>(); if (seen.size === 0) return problems;' }] },
+  enginedrift: { section: 4, labels: ['is the recorded one'], clean: ['playBracketAll gives', 'four presses of playBracketWeek'], patches: [{ file: 'src/lib/frontOffice.ts', from: 'const margin = 1 + Math.floor(rng() * 17);', to: 'const margin = 1 + Math.floor(rng() * 16);' }] },
+  random: { section: 5, labels: ['holds no Math.random', 'takes no draw from Math.random'], patches: [{ file: DAY, from: "const flip = viewAs === 'away';", to: "const flip = viewAs === 'away'; Math.random();" }] },
+  stream: { section: 5, labels: ['holds no Math.random', 'takes no draw from Math.random', 'moves none of its 272 winners'], patches: [{ file: SCORE, from: 'let first: [number, number] | null = null;', to: 'let first: [number, number] | null = null; Math.random();' }] },
+  unkeyed: { section: 5, labels: ['the same story twice', 'through JSON, tells the same story'], patches: [{ file: DAY, from: 'keyedRng(`${g.key}|story|${g.homeScore}-${g.awayScore}`)', to: 'keyedRng(`${g.key}|story|${(globalThis.__gmDayCalls = (globalThis.__gmDayCalls ?? 0) + 1)}`)' }] },
+  mounted: { section: 6, labels: ['no file under src imports'], patches: [], plant: { file: ROUTE_FILE, text: "\nimport { gameStory } from '@/lib/gmGameDay';\n" } },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown GM_GAMEDAY_CONTROL ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
 const PATCHES = CONTROL ? CONTROLS[CONTROL].patches : [];
@@ -515,10 +527,15 @@ console.log('');
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
   const red = [...failsBy.keys()].sort();
-  const ok = (failsBy.get(String(c.section)) ?? []).length > 0;
+  const mine = failsBy.get(String(c.section)) ?? [];
+  const every = [...failsBy.values()].flat();
+  const named = c.labels.filter(l => mine.some(x => x.includes(l)));
+  const dirty = (c.clean ?? []).filter(l => every.some(x => x.includes(l)));
+  const ok = mine.length > 0 && named.length === c.labels.length && dirty.length === 0;
+  const which = `its named checks red: ${named.length} of ${c.labels.length} (${c.labels.map(l => `"${l}"`).join(', ')})${c.clean ? `; checks that had to stay green and did not: ${dirty.length ? dirty.join(', ') : 'none'}` : ''}`;
   console.log(ok
-    ? `control ${CONTROL}: RED AT THE NAMED CHECK (section ${c.section}); sections red: ${red.join(', ')}`
-    : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (section ${c.section}); sections red: ${red.join(', ') || 'none'}`);
+    ? `control ${CONTROL}: RED AT THE NAMED CHECK (section ${c.section}); ${which}; sections red: ${red.join(', ')}`
+    : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (section ${c.section}); ${which}; sections red: ${red.join(', ') || 'none'}`);
   console.log(`simGmGameDay: ${checks} checks, ${failed} failed (control ${CONTROL})`);
   process.exit(ok ? 1 : 2);
 }

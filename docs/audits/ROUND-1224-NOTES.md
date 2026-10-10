@@ -1,0 +1,207 @@
+# Round 1224 notes: Game Day and a bracket you play, the shared libraries for the front offices
+
+Branch `r1224-gm-gameday-libs`, base `origin/r1221-nfl-score-law` at `5d6ffbef` (Round 1221, the NFL score law in
+`src/lib/gameLaws`). Written by the builder, rewritten after every step.
+Nothing a player sees changes in this round: NEW FILES ONLY, and nothing under `src` imports them but their own
+tests (section 6 of the harness holds that). No What's New entry, no guide sentence, no screen, no saved page.
+
+## What the round is
+
+The four front offices decide a game with one draw and then make a score up, and their whole postseason is one
+press. This round is the second of four (the critic's split): the game day and the bracket as shared, sport
+neutral libraries with the NFL as the first law bound. The next round mounts Game Day on the NFL board, the one
+after plays the NFL postseason a round a press.
+
+| File | What it holds |
+|---|---|
+| `src/lib/gmGameScore.ts` | THE QUICK PATH. `decidedScore(law, decided, key)`: a `ScoreLaw`'s final for a game whose winner an engine already decided (24 tries on keyed streams, the first that is not level and has the winner ahead; after 24 misses the first try handed to the winner, `swapped`; null when the law gives nothing usable). `quickGame`, `toldWinner`, the types `GameDayFixture`, `ToldGame`, `ToldScore`. Imports the keyed stream and types only, so it can sit in a board's chunk. |
+| `src/lib/gmGameDay.ts` | THE TOLD PATH. `gameStory(law, told, viewAs)`: the scoring plays, the score by period, the one to three deciding plays and the shape of a told final, from one club's side, in the shape the Season Center's match clock is handed. `tellGame` (the quick path's final, then its story). `decidingPlays`. The type `GameDayLaw`. THE SAVE FIELD `GmLastGame` with `makeGmLastGame` and `readGmLastGame`. |
+| `src/lib/gameLaws/nflGameDay.ts` | What the NFL hands Game Day on top of its story law: four quarters, `NFL_ROUT` 21, `NFL_COMEBACK` 10, `nflShapeWords`, `NFL_GAME_DAY`, and the "?" (`NFL_GAME_DAY_HELP`, a `HelpWords`). |
+| `src/lib/gmBracket.ts` | A postseason as a saved state machine over `src/lib/finalsBracket.ts` (not edited): `BracketFormat`, `GmBracketSave`, `openBracket`, `playBracketGame`, `playBracketWeek`, `playBracketAll`, `bracketWeek`, `bracketPairings`, `bracketOutcomes`, `bracketChampion`, `bracketOut`, `bracketByes`, `bracketRounds`, and the guard, the replay check and the repair: `isGmBracketSave`, `bracketProblems`, `repairGmBracket`, `BRACKET_REBUILT_LINES`. |
+| `src/data/gmBrackets/nfl.ts` | The NFL postseason as data (`NFL_BRACKET`, id `nfl-14`), the seasons it is true for, its sources, `nflBracketFor`, and the "?" (`NFL_BRACKET_HELP`). |
+| `src/lib/gmGameScore.test.ts`, `gmGameDay.test.ts`, `gmBracket.test.ts` | 11, 22 and 12 unit tests. |
+| `scripts/simGmGameDay.mjs` | The harness: six sections, twelve negative controls. |
+| `scripts/lib/gmGameDayFleet.mjs` | The one definition of the fleet the harness walks and the recorder records. |
+| `scripts/recordGmBracketFixture.mjs`, `scripts/data/gmBracketFixture.json` | The engine's one press postseason over the fleet, recorded. |
+
+No existing file was edited. `src/lib/frontOffice.ts`, `src/lib/finalsBracket.ts`, `src/lib/gameLaws/types.ts`,
+`nfl.ts` and `nflScore.ts` are byte for byte the base's (`git diff --stat origin/r1221-nfl-score-law -- src/lib/frontOffice.ts src/lib/finalsBracket.ts src/lib/gameLaws/types.ts src/lib/gameLaws/nfl.ts src/lib/gameLaws/nflScore.ts` prints nothing).
+
+## The rules the libraries keep
+
+- THE ENGINE DECIDES, THE LAW TELLS. The winner is never moved. Every draw of a score or a story comes from a
+  stream keyed to the game (`src/lib/keyedRng.ts`): `${key}|score|${try}` and `${key}|story|${home}-${away}`.
+- ONE LAW, TWO PATHS. `tellGame` asks `quickGame` for the final and tells that final, so a watched game and the
+  same game only scored cannot differ.
+- FAILS CLOSED. A level final, a final the law has no list for (a side on 1 or 4 in the NFL), a list that does
+  not add up, a minute outside the clock: null, and a card shows the final alone.
+- TEAM LEVEL ONLY. A line names a club. No man is credited, there is no speaker and no quotation mark.
+- THE SAVE BLOCKS ARE OPTIONAL, GUARDED AND REPAIRABLE. `readGmLastGame` answers null for anything that does not
+  read as a last game (mark, never fill). `repairGmBracket` hands a sound bracket back untouched and rebuilds
+  anything else UNPLAYED, from its own seeds when they still read, else from fresh ones, with one line for the
+  feed. Neither ever throws. Every field is damaged one at a time in the unit tests (48 cases for the last game;
+  69 for the bracket's outer shape, 13 saves that read but do not replay, 11 that cannot keep their seeds).
+
+## The facts, and where they are written
+
+`src/data/gmBrackets/nfl.ts` carries them in its header. Read on the web on 2026-10-10:
+- The top seed meets the lowest seed left after the Wild Card round: NBC Sports (7 January 2026), Sports
+  Illustrated (10 January 2026); also Fox Sports (22 December 2025) and the Rochester Democrat and Chronicle
+  (6 January 2025, as carried by Yahoo Sports).
+- The better seed hosts every game through the conference championships: NBC Sports and the Democrat and
+  Chronicle (both state all three rounds).
+- The Super Bowl: NBC Sports calls it a neutral site game, the Democrat and Chronicle a predetermined site. The
+  "?" claims only what both support: a site picked beforehand, so neither club hosts it by its seed.
+- Fourteen clubs, seven a conference, one bye, 2 v 7, 3 v 6, 4 v 5: already two sourced in
+  `src/lib/nflPlayoffFormatHistory.ts` and `src/data/usLeagueShape.ts`; the unit test holds the data to that
+  ledger (field size, first season).
+- Two CBS Sports pages were read and state none of these; they are not cited.
+- THIN, and marked thin in the "?": four quarters of 15 minutes (the ledger's own mark, `NFL_CLOCK`).
+- DATED: the format is the one in use in 2025 (`NFL_BRACKET_SEASONS`), and the "?" says so.
+- THIS SIM'S OWN, said in the "?": the title game leans to the AFC champion 58 times in 100 at level strength
+  (the engine names it first and gives the first club two points; the unit test holds 58 to `winProb`), the
+  seeds are the engine's own standings, nobody heals between rounds, the 21 and the 10 of the shapes.
+- NOT DONE: the league's real points a team game, share of low scores and shutouts were not read on two
+  sources, so the harness prints none beside its measured numbers.
+
+## The proof
+
+Everything heavy ran on GitHub runners (`origin/rc-results/<name>` holds the logs; read one with
+`git show origin/rc-results/<name>:logs/<label>.log | tail -60`). A harness is green on its closing line AND its
+exit code; a control is red on its verdict line (`RED AT THE NAMED CHECK`), never on the exit code alone.
+
+### The harness, `node scripts/simGmGameDay.mjs`
+
+THE FLEET (`scripts/lib/gmGameDayFleet.mjs`): seed sets 0 to 4, each 40 seasons on each of the two leagues the
+engine makes (fifteen man, and full rosters with the GM's club cut down first), played by the untouched engine
+the way the board plays a week (the injury pass, the computer clubs' moves, the week's games). 80 seasons a set:
+21,760 season games and 1,040 playoff games, 114,000 games in all. The seeded generator is installed AS
+`Math.random` and the engine is handed `Math.random`, as on the board, so a stray draw in anything that runs
+between two engine calls moves the engine here as it would on the site.
+
+| Section | What it holds |
+|---|---|
+| 1 | One law, two paths: for every game, with the chance from the engine's `winProb`, the quick path never names another winner, is never level, never refuses, and the told path tells exactly that final. The swapped share sits under 0.002. |
+| 2 | Every story adds up, by a checker written in the harness that calls neither the library's sums nor the law: finals, quarters, what each play is worth by the ledger (6, 7 or 8, 3, 2), whole minutes from 1 to 60 that no two lines share, the deciding plays and the shape by the rule. |
+| 3 | The told scores are the law's scores: against a baseline drawn in the same run (the same law, free, at the same chance) four statistics sit inside two sided bands. |
+| 4 | The bracket is the engine's postseason: `playBracketAll`, and four presses of `playBracketWeek` with the save through JSON between them, give the engine's thirteen games, champion, next 64 draws and 32 records for every season; the engine's own run is the recorded fixture; the data's structure; a doctored winner, a doctored pairing and a tie played out of turn are each named. |
+| 5 | Pure: telling every game of a season right after the engine plays it leaves the engine's generator, its draw count, its 272 winners and its 32 records where they were; a postseason told inside the press is the engine's, draw for draw; the same key tells the same final and story twice, and through the saved last game and JSON; the five new source files hold no `Math.random`, no `Date`, no `localStorage` (comments stripped). |
+| 6 | Nobody mounts it yet: of every `.ts` and `.tsx` under `src`, only the new modules and their three tests import a new module (imports read with the TypeScript scanner, so a comment is never an import). |
+
+The twelve controls (`GM_GAMEDAY_CONTROL=`), each a string that must be in its file exactly once: `winner`,
+`twopaths`, `tries` (section 1), `offbyone` (2), `olddraw` (3), `pairing`, `validator`, `enginedrift` (4),
+`random`, `stream`, `unkeyed` (5), `mounted` (6). A control is counted as fired only when the checks it NAMES are
+among the reds; `enginedrift` also needs the machine's two checks to stay green (it is aimed at the recorded
+fixture alone). An unknown control exits 2.
+
+### MEASURED (identical on Linux and on Windows)
+
+Told less free, the range over the five seed sets (22,800 games a set):
+
+| Statistic | Told | Told less free | Standard error of one set's difference | Band |
+|---|---|---|---|---|
+| points a team game | 22.63 to 22.74 | -0.105 to +0.069 | 0.066 | 0.25 |
+| losers on 15 or fewer | 0.423 to 0.434 | -0.0071 to +0.0074 | 0.0046 | 0.02 |
+| shutouts | 0.0129 to 0.0150 | -0.0028 to +0.0013 | 0.0011 | 0.005 |
+| sides on 40 or more | 0.0510 to 0.0538 | -0.0010 to +0.0033 | 0.0015 | 0.006 |
+
+Each band is about four standard errors and 1.8 to 2.7 times the widest difference seen. Under `olddraw`
+(the engine's base and margin score told instead) seed set 0 reads 27.54 against 22.64 points, 0.0000 against
+0.4297 losers on 15 or fewer (the critic's correction 4: the loser of the old draw is never under 16), 0.0000
+against 0.0148 shutouts and 0.0716 against 0.0517 sides on 40 or more.
+
+- Swapped share: 0.00039 to 0.00066 a set (9 to 15 games in 22,800; 63 of 114,000), 49 of the 63 at a home
+  chance of 0.8 or more. Band: under 0.002. With the law asked twice instead of 24 times (`tries`) it is 0.223.
+- Tries a game: 2.0 in every decile of the chance (1.93 to 2.14). It is 2 by construction while the law's
+  chance is the engine's, so it is printed and never asserted.
+- Shapes of the 114,000 stories: trade 0.299, wire 0.218, late 0.170, rout 0.169, comeback 0.144.
+- The AFC champion won 38, 46, 47, 43 and 47 of 80 title games a set: 221 of 400, 0.5525. A LEVEL title game is
+  0.582 by the engine's arithmetic (1 / (1 + 10^(-2/14))); the fleet's games are not level. Printed, never
+  asserted. The engine is not edited; the lean is a finding for the engine's next rules round.
+- No story was null over the fleet: no told final had a side on 1 or 4.
+- The whole harness takes about 30 s on a runner and 50 s on the owner's PC; one control the same.
+
+### The recorded fixture
+
+`scripts/data/gmBracketFixture.json` (25 KB): a digest a seed set over its 80 seasons and the first three seasons
+of each league kind in full (seeds, thirteen games, champion, a hash of the next 64 draws and of the 32
+records). The recorder bundles only the engine, so it runs on the commit before the round: recorded on a runner
+in a worktree of the base `5d6ffbef` and at the round's head, both files are the committed file byte for byte
+(`cmp`), and the committed file was itself written on Windows. The harness refuses a fixture whose engine or
+resolver hash is not the file on disk. A change to `runPlayoffs`, to `simGame`, to `finalsBracket.ts` or to
+the NFL data that is MEANT must record the fixture again in the same commit and say why.
+
+## What the NBA, MLB and NHL front offices must supply (data plus events, no new engine)
+
+Nothing in `gmGameScore.ts`, `gmGameDay.ts` or `gmBracket.ts` knows a sport. A bind brings:
+
+1. A SCORE LAW, `src/lib/gameLaws/<sport>Score.ts`, a `ScoreLaw` that imports nothing but types:
+   `score(pHome, rng, decided?)` gives `[home, away]`, whole numbers, for a home side that wins `pHome` of the
+   time. It should lean the way its chance says (the quick path asks up to 24 times for the engine's winner; the
+   NFL's needs 2.0 tries a game). It binds the PRESENT DAY era (`nbaScore` in `src/lib/season/nba.ts` takes an
+   era as a fourth argument; it moves here the way the NFL's did in Round 1221). The NHL's must read
+   `decided.beyond`: its engine draws whether a game went past regulation, and the law must tell a one goal game
+   with an extra period when it did. MLB's and the NHL's score laws do not exist yet.
+2. A STORY LAW, `src/lib/gameLaws/<sport>.ts`, a `StoryLaw`: `events(home, away, rng)` (the scoring plays of a
+   final, the HOME club as `us`, each with whole `pts` that sum to the final and a minute inside the clock, or
+   null when no list makes it), `clock` and `line(event, club)`.
+3. A GAME DAY LAW, `src/lib/gameLaws/<sport>GameDay.ts`, a `GameDayLaw`: `story`, `periods` (how many, which one
+   a minute falls in, its short name: four quarters, three periods, nine innings) and `shape` (the margin that
+   makes a rout, the deficit that makes a comeback, one sentence a shape whose verbs read the same for a club
+   named in the singular or the plural), plus its "?" as a `HelpWords` with real, sim's own and one worked
+   example. An extra period is one more entry in `periods` for the law to decide.
+4. A BRACKET, `src/data/gmBrackets/<sport>.ts`, a `BracketFormat` with its sources in the header (two
+   publishers that are not a wiki a fact, the seasons it is true for, thin marked thin): `qualifiers`, `ties`
+   (slots are a seed, a winner, a loser, or the Nth best seeded of several winners), `winsNeeded` by week (the
+   series lengths) and, for these three, `order`. All three engines play one conference or league to its end
+   before the other (`runNbaPlayoffs`, `runMlbPlayoffs`, `runNhlFoPlayoffs`), so week order is not their draw
+   order: with `order` set to the engine's own, `playBracketAll` can be held equal to the old function draw for
+   draw, while the round a press path plays week by week and makes no such claim. The unit test holds both
+   shapes: a ten club conference with a play in (a `loserOf` slot) and best of seven rounds, and a format with
+   an order of its own. The NBA's play in is exactly that; MLB's is byes for seeds 1 and 2 with series of three,
+   five and seven (`winsNeeded` 2, 3, 4, 4); the NHL's is a fixed bracket by division.
+5. A `play: PlayTie` that restates the engine's own series game (for the NBA one draw against one chance for the
+   whole series, `playSeries` in `nbaFrontOffice.ts`), and seeds from the engine's own standings function.
+6. ONE ADDITIVE, OPTIONAL FIELD ON THE ENGINE'S ROUND REPORT: `simRound`, `simMlbRound` and `simNhlRound` hand
+   back only the GM's wins and losses for the four to six games of a press. To tell them a bind needs the GM
+   club's games of the round (opponent, home or away, who won, the chance), with no new draw.
+7. A FIXTURE recorded from the engine's one press postseason and a harness section like section 4 here, and the
+   one save field each: `GmLastGame` for the last told game, `GmBracketSave` while a bracket is open (read
+   through `isGmBracketSave` in that sport's own validator, repaired through `repairGmBracket` on load).
+
+## For the next round (the NFL bind), what this round settled and what it left
+
+- THE LAST TOLD GAME IS A SAVE FIELD, not the schedule (the critic's correction 1): `GmLastGame`, absent on a
+  bye and on every older save; with nothing saved the card draws nothing until the next press. The bind builds
+  the key (`${season}|${where}|${home}|${away}|${the engine's own score}`), so two saves do not tell one game
+  the same way.
+- The score for a press is `quickGame` (static in the board); the story is `gameStory` on the saved final
+  (lazy, with the card). The board must read `playoffs` inside `persist` the way `gm` is read (correction 10).
+- A `playoffs` block on a save whose season already has a champion, or whose week is not 18, is DROPPED by the
+  board, not repaired: `repairGmBracket` only answers "what bracket does this open postseason play on from".
+- A level told final cannot be saved (`makeGmLastGame` answers null): every front office game has a winner.
+- The copy of both "?" sheets describes controls the cards do not have yet (Watch, 3x, Results; one press a
+  round, Sim the rest). The round that draws the cards checks the words against the cards as built.
+- The NFL bind's seven a conference check goes in as `repairGmBracket`'s last argument (`seedsOk`).
+
+## Judgment calls, so the lead can overrule them
+
+1. NO EDIT TO ROUND 1221'S FILES. Its closing report expected this round to add `periods`, `shape` and `help` to
+   `src/lib/gameLaws/types.ts` and `nfl.ts`. The brief says new files only, so the type is `GameDayLaw` in
+   `src/lib/gmGameDay.ts` and the NFL's is the new `src/lib/gameLaws/nflGameDay.ts`.
+2. ONE FILE THE BRIEF DOES NOT NAME: `scripts/lib/gmGameDayFleet.mjs`, so the recorder and the harness share
+   one fleet and cannot drift.
+3. `help` IS THE SEASON CENTER'S `HelpWords` (correction 13 iii), by a type only import from
+   `src/components/season-centre/SeasonCentreHelp.tsx`; nothing of that file is in a bundle.
+4. DECIDING PLAY (2) HAS NO CONDITION. The draft kept the loser's last score before the go ahead only "if it
+   had made it level or put the loser ahead". That is always so (the go ahead is the first score after the LAST
+   such moment), and the unit test holds it over the 1,892 finals from 0-0 to 45-45 the NFL law can tell.
+5. `bracketProblems` skips its "out of turn by week" rule for a format with an `order`, where a later week of
+   one side is rightly played before the first week of the other; a tie whose sides are not known is still named.
+6. `playBracketGame` THROWS on a `play` that names a third club as the winner: that is a bug in a bind, not a
+   state to carry. Everything that reads a SAVE never throws.
+7. THE SUPER BOWL IS WORDED AS "a site picked beforehand", because the two sources use two words.
+8. 21 AND 10 for a rout and a comeback are this builder's choice (three touchdowns; two scores). They are this
+   sim's own, said in the "?", and one constant each.
+9. THREE CONTROLS MORE THAN THE DRAFT (`tries`, `enginedrift`, `unkeyed`) and the critic's `stream`.
+10. No league figure is printed beside the measured numbers: none was read on two sources.
