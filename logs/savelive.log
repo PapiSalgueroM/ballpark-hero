@@ -1,0 +1,65 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mtwo real players whose names slug to one string stay two men
+[22m[39m  the pair: Éderson CM @Atalanta 35.5 | Ederson GK @Fenerbahçe 9.5
+  squad [33m26[39m -> [33m28[39m duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Hertha BSC: 16 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  AC Milan: 21 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Real Madrid: 26 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  a shape: on disk, 53911 bytes, week 0
+  a mentality: on disk, 53912 bytes, week 0
+  an XI change: on disk, 53914 bytes, week 0
+  a training plan: on disk, 53911 bytes, week 0
+  a squad role: on disk, 53918 bytes, week 0
+  a transfer status: on disk, 53944 bytes, week 0
+  a signing: on disk, 54381 bytes, week 0
+  kick off: on disk, 70805 bytes, week 0
+  the second half: on disk, 68622 bytes, week 1
+  leaving the report: on disk, 68622 bytes, week 1
+  a quick sim: on disk, 72238 bytes, week 2
+  leaving that report: on disk, 72238 bytes, week 2
+  a run of weeks: on disk, 85731 bytes, week 8
+  leaving that report too: on disk, 85731 bytes, week 8
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  reloaded: identical, 85731 bytes
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving the site mid match keeps the clock where it stood
+[22m[39m  seeded first half: seed 1218, reviews asked for: false
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving the site mid match keeps the clock where it stood
+[22m[39m  on screen 19', save at 0'
+  after leaving, save at 19'
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving only the viewer, with the page still up, keeps it too
+[22m[39m  seeded first half: seed 1218, reviews asked for: false
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving only the viewer, with the page still up, keeps it too
+[22m[39m  on screen 19', page still up, the match finished at week 1 and the save matches memory
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mStart Fresh is not undone by leaving straight afterwards
+[22m[39m  after Start Fresh and leaving, the slot is empty
+
+ [32m✓[39m src/test/clubManagerSave.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1281[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the save[2m > [22mevery transition is on disk, and a reload loses nothing [33m 506[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerVarLive.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 2301[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: VAR ships dark[2m > [22ma Quick Sim through the hook is the match the engine plays without reviews [33m 1455[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: VAR ships dark[2m > [22mthe fast forward is the engine run without reviews [33m 687[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 16:20:30
+[2m   Duration [22m 6.39s[2m (transform 2.92s, setup 141ms, collect 6.29s, tests 3.58s, environment 1000ms, prepare 427ms)[22m
+

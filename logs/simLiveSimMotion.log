@@ -1,0 +1,114 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > settlement ID comparison rejects changed payloads, retained IDs and allocator prefixes 140ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > the committed action puts goals in the correct net and saves at the keeper 4ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > actual feed triggers player strikes, ball flight, saves and net contact 1177ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > pause freezes the ball and player pose, and the same player still opens changes 345ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > motion leaves committed state and settled results identical 554ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > a substitution during a paused action replaces the clickable player immediately 280ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > speed changes scale action time with the match clock 315ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > reduced motion shows the committed catch immediately without animated poses 151ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=false) 3241ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'goal' reduced=true) 1342ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=false) 1036ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (45 'save' reduced=true) 930ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=false) 2967ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'goal' reduced=true) 2346ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=false) 910ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal goal and save contact precede the unchanged whistle and score (90 'save' reduced=true) 1181ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > terminal resume shows contact and Skip keeps immediate exactly-once whistle callbacks 9478ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > a tactics redraw cancels a terminal action that is no longer committed 812ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > the ninetieth minute asks the latest save: refused means full time, never thirty empty minutes 3856ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > the ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given 1966ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > the extra time banner says what is true: a second leg is level on aggregate 1658ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > the clock runs into the board as 90 plus, with the running aggregate under the score 363ms
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > a goal in the board is announced with its plus, GOAL! ... 90+N 1207ms
+stdout | src/test/liveSimMotion.test.tsx > The pitch part on real feeds > the material is 200 half feeds from five clubs in five leagues
+[1101 material] Aston Villa 20 matches 40 halves, Real Madrid 20 matches 40 halves, Lyon 20 matches 40 halves, Ajax 20 matches 40 halves, Celtic 20 matches 40 halves; frames replayed 168586
+
+ ✓ src/test/liveSimMotion.test.tsx > Live simcast motion > the extra time clock runs into its own board as ET 120 plus 325ms
+stdout | src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R1: the ball is in the goal mouth on goals only
+[1101 R1] goals staged 281, with a frame in the net 281, frames in the mouth 1996, offenders 0
+
+stdout | src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R2: nobody stands on a team mate
+[1101 R2] scenes 20381; overlapping pairs in a scene: new 0, Round 504 0; pairs overlapping two samples running: in a tween 0, in an action 0
+
+stdout | src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R3: at a kick off each side is in its own half, far from the other keeper
+[1101 R3] kick off beats 474, hard rule offenders 0; attack line to the other keeper per seed: new 54.25 54.27 54.24 53.98 53.70, Round 504 18.43 18.50 18.30 18.19 17.85; floor 45
+
+stdout | src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R4: the block follows the ball
+[1101 R4] open beats 9361; slope of the centroid on the ball per seed (the lower of with and without the ball): new 0.415 0.415 0.418 0.409 0.423, Round 504 0.000 0.003 0.003 0.003 0.003 (a centroid that never moves reports 0); with 0.534 0.538 0.535 0.534 0.529, without 0.415 0.415 0.418 0.409 0.423; floor 0.3
+
+stdout | src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R5: nothing is decided here
+[1101 R5] matches 100, frames replayed 168586, Math.random calls inside the replays 0; engine alone ce7ddf22 3f9d68d2 69fc55de 67624789 382295f7; engine with replays ce7ddf22 3f9d68d2 69fc55de 67624789 382295f7
+
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > the material is 200 half feeds from five clubs in five leagues 2524ms
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R1: the ball is in the goal mouth on goals only 1ms
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R2: nobody stands on a team mate 1ms
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R3: at a kick off each side is in its own half, far from the other keeper 1ms
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R4: the block follows the ball 1ms
+stdout | src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R6: a chance starts with the ball at the shooter and ends in its follow up
+[1101 R6] chances staged 2150; holder offenders 0, steady offenders 0, follow up offenders 0; a miss or a save followed by its goal kick or its keeper 1436, led straight on to the next chance 394; set aside and counted: no lead in 75, started from a kick off picture 0, the last kick of the period 43
+[1101 R6 turns] chances that waited for their turn 472 of 2150, by 0.46 on average, later than 0.9 0; still playing when the next one starts 19 (per seed 7 2 1 5 4), by more than a tenth of a minute 0
+[1101 R6 kick offs] goals with play left after them 277: kick off seen whole (0.76 or more) 159, for 0.6 or more 81, for a beat or more 31, cut under a beat by the next chance 6, none because the last kick's wind up came first 0; on average 0.675 of the clock; 0.6 or more per seed 45 of 52, 50 of 56, 48 of 50, 52 of 63, 45 of 56; whole per seed 28 of 52, 32 of 56, 31 of 50, 37 of 63, 31 of 56; under a beat per seed 2 of 52, 0 of 56, 0 of 50, 0 of 63, 4 of 56; no lead in per seed 17 of 414, 11 of 430, 5 of 423, 20 of 437, 22 of 446
+[1101 R6 short kick offs] under 0.6: 37 of 277 (per seed 7 6 2 11 11); the goal itself had to wait 21, the next chance was squeezed from behind 15, the period was ending 1, none of these 0
+
+stdout | src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R7: every dead ball is taken by the right side from the right place
+[1101 R7] dead balls read against their own line of the feed: opening 200, restart 274, corner 690, throwin 1103, freekick 950, goalkick 952, keeper 484; corners whose line names a flank 690; taken by a stand in because that side has no keeper on 5; offenders 0
+
+stdout | src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R8: the pitch is handed the right kick off and the right share of the ball
+[1101 R8] halves handed to the pitch 200 (90 of them away from home, 196 with a share of the ball that is not 50); kick off offenders 0, share offenders 0
+
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R5: nothing is decided here 728ms
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R6: a chance starts with the ball at the shooter and ends in its follow up 2ms
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R7: every dead ball is taken by the right side from the right place 1ms
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R8: the pitch is handed the right kick off and the right share of the ball 1ms
+ ✓ src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R9: a goal gets its kick off before the next chance is led in 6ms
+stdout | src/test/liveSimMotion.test.tsx > The goal sequence > the card's season count is the settled count
+[1101 card] matches 4, cards of mine checked against the settled squad row 9
+
+stdout | src/test/liveSimMotion.test.tsx > The goal sequence > after Skip the second half opens on the right score, with no card and nothing replayed
+[1101 skip] the half found: board 3, its last chance a goal at 45
+
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > the score waits for the ball and the card lands at net contact 487ms
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > the card's season count is the settled count 42ms
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > after Skip the second half opens on the right score, with no card and nothing replayed 496ms
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > nothing says GOAL before the ball is in: not the list beside the pitch, not the line under it 197ms
+stdout | src/test/liveSimMotion.test.tsx > The goal sequence > a goal with the last kick of a period takes nothing off the score while it winds up
+[1101 last kick] the period found ends at 90+4 on a goal by me, the score before it 1 - 0
+
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > no frame draws the new score before the ball is in 197ms
+stdout | src/test/liveSimMotion.test.tsx > The goal sequence > a line fired late by Skip is not played again when extra time starts
+[1101 extra] the late line is a save at 87, the board is 7, found on seed 12 of 30000
+
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > a goal with the last kick of a period takes nothing off the score while it winds up 5566ms
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > a line fired late by Skip is not played again when extra time starts 319ms
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > under reduced motion the card is held for its first stretch only, and then the match runs on 503ms
+stdout | src/test/liveSimMotion.test.tsx > The goal sequence > a goal still on its way when the line up changes off the clock keeps its net, its card and its men
+[AR held cast] the half found on attempt 71: a goal at 82 for me, its action staged at 82.300 behind save at 81, the ball in at 83.056, and the line up changes at 83
+
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > a substitution in a goal's wind up takes the card with the action, and the score stops waiting 288ms
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > a goal still on its way when the line up changes off the clock keeps its net, its card and its men 1639ms
+ ✓ src/test/liveSimMotion.test.tsx > The goal sequence > a scorer card counts his goals up to this one, and gives a season count only to one of mine 3ms
+ ✓ src/test/liveSimMotion.test.tsx > Match mode > a name goes above its figure when another man stands just under him 1ms
+ ✓ src/test/liveSimMotion.test.tsx > Match mode > Back folds the match to a card and pauses it, and the card puts it back 782ms
+ ✓ src/test/liveSimMotion.test.tsx > Match mode > one panel at a time, and Escape closes what is open before it is Back 149ms
+ ✓ src/test/liveSimMotion.test.tsx > Match mode > the stats line a phone keeps in view reads the same count as the full stats 691ms
+ ✓ src/test/liveSimMotion.test.tsx > Match mode > level neighbours take a row each, and a wall shows numbers 2ms
+ ✓ src/test/liveSimMotion.test.tsx > Match mode > at full time the folded card offers the report as well as the way back 52ms
+ ✓ src/test/liveSimMotion.test.tsx > Match mode > a phone on its side gets the pitch on its side 54ms
+ ✓ src/test/liveSimMotion.test.tsx > The part and a change of line up > the part drops an action when the line up under it changes 3ms
+ ✓ src/test/liveSimMotion.test.tsx > The part and a change of line up > a chance whose line fires in the very commit the line up changes is still played, by the new eleven 2ms
+ ✓ src/test/liveSimMotion.test.tsx > The part and an action taken back > the part drops an action the binder has taken back, even with the clock set back before its start 2ms
+
+ Test Files  1 passed (1)
+      Tests  55 passed (55)
+   Start at  16:20:37
+   Duration  55.48s (transform 2.47s, setup 66ms, collect 3.15s, tests 51.33s, environment 419ms, prepare 120ms)
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[1101 bundle] the part alone: 19526 bytes minified, 8179 gzipped (ceiling 23133 and 9693); 6 files, 30 import specifiers read; problems 0
+simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), and the part alone is 19526 bytes minified, 8179 gzipped, with nothing of Club Manager in it.
