@@ -1,0 +1,6 @@
+v24.21.0
+check a exit=0 simCareerPreDraft [seed set a]: ALL GREEN
+check b exit=0 simCareerPreDraft [seed set b]: ALL GREEN
+check c exit=0 simCareerPreDraft [seed set c]: ALL GREEN
+check d exit=0 simCareerPreDraft [seed set d]: ALL GREEN
+check e exit=0 simCareerPreDraft [seed set e]: ALL GREEN

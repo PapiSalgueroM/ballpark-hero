@@ -1,0 +1,1 @@
+record exit=0 10s | check e exit=0 simCareerPreDraft [seed set e]: ALL GREEN

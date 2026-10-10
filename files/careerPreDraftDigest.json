@@ -1,0 +1,1106 @@
+{
+  "what": "Round 1220: sha256 of the 2,000 road states of each sport and era pair, after the showcase and after the draft, per seed set. Written by SIM_PRE_DRAFT_RECORD=1 node scripts/simCareerPreDraft.mjs, checked by its section 9.",
+  "base": "09df145abfb241679022b41903d2f19bc254ebf9",
+  "node": "v24.21.0",
+  "roads": 2000,
+  "src": {
+    "careerPreDraft.ts": "44f2a5f2ed6ad004a598b92975cd557057ade17bb8a69a50ab403661f503d51f",
+    "nflCareerPreDraft.ts": "968ec786c8997c4db3f3e3f93beb78ea06c8b6b79c23e0fda28f82d457a5c03c",
+    "nbaCareerPreDraft.ts": "18339ff9d64be3393617918109e5bb16cd45a117386df0d5912d41bbb40ce2dc",
+    "mlbCareerPreDraft.ts": "bf12a5f83cb555c9efbb078f36758f11c44814a704f4abe8ccd2248ddc8152af",
+    "nhlCareerPreDraft.ts": "38572b8820b7ed5e0c3448d7f61e6817c0c982d1f764d2d27a28979542ed1198",
+    "keyedRng.ts": "dc78803cd8f86fd73c70e26b36faf40915b4e6bbca7f6b0c4efffab28e9032ef"
+  },
+  "sets": {
+    "a": {
+      "nfl:now": {
+        "showcase": "0428afebdccd4e059a4db00166a5a7074ef6c17f1297a039b1e69633068a980f",
+        "draft": "a5d766b3d4066e3dfe5127b65c33e410be61b4778d1dde724bc4133806e140cb",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 3,
+            "pick": null,
+            "team": "BUF"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 79,
+            "pick": 19,
+            "team": "DAL"
+          },
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 68,
+            "pick": 51,
+            "team": "KC"
+          }
+        ]
+      },
+      "nfl:y2005": {
+        "showcase": "14e3fd2ab39af1816e79de552fb1e09f0ea171fb4a483e16a6b014954f8fba57",
+        "draft": "9bd33cf1d0aa24d7e0da30580655e4eeb77b188a6f4ea84c4beb7eda588c4eb7",
+        "first": [
+          {
+            "approach": "steady",
+            "grade": "A",
+            "stock": 73,
+            "pick": 43,
+            "team": "HOU"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 54,
+            "pick": 62,
+            "team": "MIN"
+          },
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 85,
+            "pick": 16,
+            "team": "CLE"
+          }
+        ]
+      },
+      "nba:now": {
+        "showcase": "15cd84fa672b766d6f38b667a6d38180a8609f3b2bbd4d27b2cd87f989442bbe",
+        "draft": "55c10b40092a73cee85348b4b40788aafdb358a743f1c4a7ff601884d1f52c9a",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 33,
+            "pick": 49,
+            "team": "MEM"
+          },
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 73,
+            "pick": 8,
+            "team": "SAC"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 14,
+            "pick": null,
+            "team": "NOP"
+          }
+        ]
+      },
+      "nba:y2004": {
+        "showcase": "b439e3bb3e7845f309e83d5df127e5decdec8178a695db4a2686cf76f9d7046d",
+        "draft": "5bd9b1a7aafea26257cbaab1e722d63bf5a392160f5d4f2f6da9140e4917ecf9",
+        "first": [
+          {
+            "approach": "steady",
+            "grade": "A",
+            "stock": 54,
+            "pick": 26,
+            "team": "HOU"
+          },
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 59,
+            "pick": 14,
+            "team": "NOH"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 32,
+            "pick": 45,
+            "team": "MEM"
+          }
+        ]
+      },
+      "mlb:now": {
+        "showcase": "36e14c4e41da4a19bdfa631bafcaeea353dc862e55a89e65a80e0e9f74ce2d90",
+        "draft": "6b3bbe3f6f470f6c76c85a8339e39265ec3d7a16b25f1a87611b15e9b6834283",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 1,
+            "pick": null,
+            "team": "TBR"
+          },
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 79,
+            "pick": 48,
+            "team": "NYY"
+          },
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 6,
+            "pick": null,
+            "team": "WSN"
+          }
+        ]
+      },
+      "mlb:y2004": {
+        "showcase": "8488e96f41cb5db377c18daae041fb7dd3ec3370bab0695cc4ddc8dff953d77a",
+        "draft": "d90ce48e7772fe2256abfb92fc0df24fd0c382cec61fea5ec5427328e6341f4a",
+        "first": [
+          {
+            "approach": "steady",
+            "grade": "A",
+            "stock": 40,
+            "pick": 1002,
+            "team": "CIN"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 0,
+            "pick": 1425,
+            "team": "LAD"
+          },
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 77,
+            "pick": 200,
+            "team": "SDP"
+          }
+        ]
+      },
+      "nhl:now": {
+        "showcase": "4ef477926076d46be61a067e56620d960a96eeb57d2b4920543373303735ba67",
+        "draft": "75025086069fc6a4f996c07f690cb454d9c3c957d8e571b629b98ca09f1813e2",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "A",
+            "stock": 45,
+            "pick": 131,
+            "team": "MIN"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 0,
+            "pick": 214,
+            "team": "DET"
+          },
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 25,
+            "pick": 198,
+            "team": "NYI"
+          }
+        ]
+      },
+      "nhl:y2006": {
+        "showcase": "9e24726ef385979dccecc06daec36dd665b9f68b708b96fecf3b55e5eb8eb301",
+        "draft": "b914b8986f41652b23e9469c1577948f254945e3172daf301c5c097eae2b77bb",
+        "first": [
+          {
+            "approach": "steady",
+            "grade": "A",
+            "stock": 22,
+            "pick": null,
+            "team": "NYI"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 0,
+            "pick": 200,
+            "team": "PIT"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 80,
+            "pick": 23,
+            "team": "PHX"
+          }
+        ]
+      }
+    },
+    "b": {
+      "nfl:now": {
+        "showcase": "f8dc9632703d79d3eacf7bbfc4784dbb45a3d47d48adcc25acbd9389111d8cce",
+        "draft": "d95c0e8b1b72010f64a8e65d79752a59e73f1d89ab769c2b2b3931552052e1c7",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 82,
+            "pick": 23,
+            "team": "CLE"
+          },
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 6,
+            "pick": null,
+            "team": "SEA"
+          },
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 43,
+            "pick": 141,
+            "team": "IND"
+          }
+        ]
+      },
+      "nfl:y2005": {
+        "showcase": "e0184c5ec2259ef2ff15d76da1fa33edc182c29d9f13f95e95ebf4d9d94430e7",
+        "draft": "4eada9118e5e026063de4331f240c36931eccfe01ca3f968d03c51600d318f40",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 3,
+            "pick": null,
+            "team": "SEA"
+          },
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 41,
+            "pick": 126,
+            "team": "SEA"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 0,
+            "pick": null,
+            "team": "ARI"
+          }
+        ]
+      },
+      "nba:now": {
+        "showcase": "6dfd27acbd30fee05df6cd794c7bae66c17603fbf65e05a4effd64028f89d9a0",
+        "draft": "385234a2b5a06f7c952fcba85b450b36fc40b525cd152b57dbe074f6619ae4af",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 8,
+            "pick": null,
+            "team": "DET"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 65,
+            "pick": 16,
+            "team": "TOR"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 6,
+            "pick": null,
+            "team": "DEN"
+          }
+        ]
+      },
+      "nba:y2004": {
+        "showcase": "dc0814a429133d043e39b51b99435ba87b564c589fc408aa4f0501d8ac74fed8",
+        "draft": "c41868f516c533618a9d47e46174464c4c888fe61b345a618ea6d1d9b4b33291",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 0,
+            "pick": null,
+            "team": "SAS"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 5,
+            "pick": null,
+            "team": "SAS"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 7,
+            "pick": null,
+            "team": "ATL"
+          }
+        ]
+      },
+      "mlb:now": {
+        "showcase": "991fbced683e73c4585c4c5f2e6999b8285baaa5c9b5fbcc583052bb7ac51279",
+        "draft": "001d58265948adac76a3dc34d955773f51095f2341dc84f89b8f1a78923bf9b5",
+        "first": [
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 26,
+            "pick": 571,
+            "team": "LAA"
+          },
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 44,
+            "pick": 310,
+            "team": "SFG"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 17,
+            "pick": null,
+            "team": "NYY"
+          }
+        ]
+      },
+      "mlb:y2004": {
+        "showcase": "0c19a3f74633fbecdedea95990db778a085b6697ea2486089841137c68e5cff1",
+        "draft": "66956e99a620690fdfb2530e06cc4e5f5f07cb7514fe85659312ab70c37b1633",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 0,
+            "pick": null,
+            "team": "LAD"
+          },
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 81,
+            "pick": 138,
+            "team": "NYM"
+          },
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 54,
+            "pick": 667,
+            "team": "NYM"
+          }
+        ]
+      },
+      "nhl:now": {
+        "showcase": "9ee51b4884f9cc40528e2ff2fcf1866fe46de8ff679d36a9ba32e291655a3272",
+        "draft": "ed7fe3168840f8f98206dc56be7c5c98d3bf8387740b70e52f283ca6139bc8d2",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 56,
+            "pick": 94,
+            "team": "NYR"
+          },
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 41,
+            "pick": 126,
+            "team": "LAK"
+          },
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 54,
+            "pick": 100,
+            "team": "FLA"
+          }
+        ]
+      },
+      "nhl:y2006": {
+        "showcase": "1312756100442b072617b8a35481ccaf9f0b8f9aa281d8210a66233bcc9ac7fb",
+        "draft": "e5b4a50a9a97e2dd777949b5fc2bf04029aecb8e3a6f48d90917c4bb5d34d9d8",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 25,
+            "pick": 205,
+            "team": "DET"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 53,
+            "pick": 83,
+            "team": "BUF"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 69,
+            "pick": 51,
+            "team": "BUF"
+          }
+        ]
+      }
+    },
+    "c": {
+      "nfl:now": {
+        "showcase": "89fe8faf99479bbb2c24de30db77faa67d2d2a71287b79c130eabda4b8151e00",
+        "draft": "ab01184df2035aee29ffebf0ab10257de856a38bc83f7b1b05f4ba8db8f1526a",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 52,
+            "pick": 69,
+            "team": "BAL"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 48,
+            "pick": 218,
+            "team": "JAX"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 9,
+            "pick": 182,
+            "team": "HOU"
+          }
+        ]
+      },
+      "nfl:y2005": {
+        "showcase": "078f3d1db51b92aae48ea90db3f4a5da4dd022b77e4d872aab4ad359846eeac3",
+        "draft": "76f8e49bdf19de1ed44cb539786c58af5bd3e699f90627b8aeceffab5ba3c982",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 64,
+            "pick": 44,
+            "team": "OAK"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 8,
+            "pick": null,
+            "team": "PHI"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 77,
+            "pick": 21,
+            "team": "MIA"
+          }
+        ]
+      },
+      "nba:now": {
+        "showcase": "5b351451c8a571da62c8d56015db98c3948d65b2817b51c1620524015e18db27",
+        "draft": "a915cbd621416f94a438abca07bd280e64594ce010e754618ad0c59f74cbff25",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 0,
+            "pick": 60,
+            "team": "PHX"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 30,
+            "pick": 53,
+            "team": "DEN"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 52,
+            "pick": 18,
+            "team": "LAL"
+          }
+        ]
+      },
+      "nba:y2004": {
+        "showcase": "450044729cd817fe3288433bdfb46a0f987e6c658cc4b70aa5f07bfa666d05a5",
+        "draft": "20c940843db48206ceebe28124575ce87b79b214e1a9babfea140fda3bcd688b",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 70,
+            "pick": 9,
+            "team": "MIN"
+          },
+          {
+            "approach": "steady",
+            "grade": "A",
+            "stock": 71,
+            "pick": 13,
+            "team": "TOR"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 59,
+            "pick": 14,
+            "team": "PHX"
+          }
+        ]
+      },
+      "mlb:now": {
+        "showcase": "da5e1aef05f15caa47120fa79be341d46cbbc2817c48e3af5eae29a06c6c10c4",
+        "draft": "b61e92472ea02fe173f33d11ab1710400f541c6c3efa17150669653b831f76d8",
+        "first": [
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 0,
+            "pick": 590,
+            "team": "TEX"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 17,
+            "pick": null,
+            "team": "CIN"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 44,
+            "pick": 224,
+            "team": "PIT"
+          }
+        ]
+      },
+      "mlb:y2004": {
+        "showcase": "b81d0e36c404eb6116fcd4830ae278fddf5eab8852a5e9c5b0a67098725622e2",
+        "draft": "a8629d49825d8019ea505bd4f417d99532da88493b1d16da0b8c5aa556f3abac",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 0,
+            "pick": 1473,
+            "team": "NYM"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 0,
+            "pick": null,
+            "team": "PIT"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 79,
+            "pick": 117,
+            "team": "BOS"
+          }
+        ]
+      },
+      "nhl:now": {
+        "showcase": "c5c5f3fc6114a8fd76f163a6eae5d4a4465aeb24ca797a0127a77416ad617a5c",
+        "draft": "90a86fc6475e6e3c4fb16112879707a93e8ed5d921fee7f3abada41c973c8aac",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 75,
+            "pick": 25,
+            "team": "NJD"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 26,
+            "pick": 213,
+            "team": "CGY"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 13,
+            "pick": 170,
+            "team": "CHI"
+          }
+        ]
+      },
+      "nhl:y2006": {
+        "showcase": "6c2eba999ee7962b1b87394227bde1521d66e5041f4b54d422063a348faba4de",
+        "draft": "a16e390fa4dfdfdb72bf33143afc6cfa54f94528d66528875f2117de3739b335",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 76,
+            "pick": 22,
+            "team": "NYR"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 32,
+            "pick": 175,
+            "team": "STL"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 0,
+            "pick": 199,
+            "team": "STL"
+          }
+        ]
+      }
+    },
+    "d": {
+      "nfl:now": {
+        "showcase": "ec1180ef4e11117675bbdfd55f2c88325ec329c137bf5b254dbe09fc1220651e",
+        "draft": "4ce99512e161fb8959b4243088890fc0ada8bff748a617a85f6394a1536effda",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 16,
+            "pick": 201,
+            "team": "SEA"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 11,
+            "pick": null,
+            "team": "LAC"
+          },
+          {
+            "approach": "steady",
+            "grade": "A",
+            "stock": 67,
+            "pick": 37,
+            "team": "KC"
+          }
+        ]
+      },
+      "nfl:y2005": {
+        "showcase": "71f5c05207d644805bbf695a20a36e11cb50f36788cec1533499ee27374ba1b9",
+        "draft": "28821eb7311c3f87657e7386bd37c09d206085b347818ecb826bb4b8daa505cf",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 59,
+            "pick": 64,
+            "team": "NYJ"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 16,
+            "pick": 178,
+            "team": "PHI"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 51,
+            "pick": 69,
+            "team": "KC"
+          }
+        ]
+      },
+      "nba:now": {
+        "showcase": "b0042b1afa368794a7bb6edbaec270363e6332860ebba91fd77b60c8707bb57f",
+        "draft": "6ef40d9629c10a8b706d9473b2cb2d2657e8eddce7208f27b741a8a6b2e0f3b1",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 77,
+            "pick": 8,
+            "team": "LAL"
+          },
+          {
+            "approach": "allout",
+            "grade": "A",
+            "stock": 89,
+            "pick": 3,
+            "team": "ORL"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 70,
+            "pick": 9,
+            "team": "NOP"
+          }
+        ]
+      },
+      "nba:y2004": {
+        "showcase": "f1c4126f062dcec6ebb3f1c53fe826370271b1e5be867fdcc13845985cf65384",
+        "draft": "9521c602e549e89dc87c24716f5e526d6ac9c71b6b4b676daf8c06e263d4c8bb",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 51,
+            "pick": 23,
+            "team": "PHI"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 46,
+            "pick": 24,
+            "team": "MIL"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 11,
+            "pick": 47,
+            "team": "CHI"
+          }
+        ]
+      },
+      "mlb:now": {
+        "showcase": "e54021f200144b497d67376ae90a02af5e543b4a851c35102226f804c14e7a88",
+        "draft": "02e9652043d6b33893a64448b5e8bf9dbd53177e71d92f8b048639abd29eb84d",
+        "first": [
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 21,
+            "pick": 486,
+            "team": "HOU"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 43,
+            "pick": 256,
+            "team": "MIA"
+          },
+          {
+            "approach": "allout",
+            "grade": "A",
+            "stock": 76,
+            "pick": 59,
+            "team": "CIN"
+          }
+        ]
+      },
+      "mlb:y2004": {
+        "showcase": "9415bdf998f0b58194f6d718111afbe0429e7bb211b725a09be11bdd5dfa1c16",
+        "draft": "0ef9e87a9bdc7a4b8836323dc086c6d0138be3d3375e3456b4ed4d73dbbf2552",
+        "first": [
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 59,
+            "pick": 426,
+            "team": "ANA"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 33,
+            "pick": 827,
+            "team": "CLV"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 36,
+            "pick": 702,
+            "team": "BOS"
+          }
+        ]
+      },
+      "nhl:now": {
+        "showcase": "46474e09c173ae4cc126b9848c70fc92b5839ddbc8e47eecbae940f53c80b2a1",
+        "draft": "bead09f3ec5ad0fb5cf555c202ee8ba4ea18baea7008d8d2ee5769fb813f92c0",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 63,
+            "pick": 55,
+            "team": "NJD"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 78,
+            "pick": 22,
+            "team": "MTL"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 0,
+            "pick": 215,
+            "team": "FLA"
+          }
+        ]
+      },
+      "nhl:y2006": {
+        "showcase": "93512cef6231fbcba9d05a4fee71efbd1776ba65b30230b81e6eb579e7c09211",
+        "draft": "b6a535a326ee23e72211539ca40fbef385dfc0ab54f15da3ab68d595e0eef1c3",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 51,
+            "pick": 80,
+            "team": "BUF"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 35,
+            "pick": 111,
+            "team": "NYR"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 18,
+            "pick": 147,
+            "team": "MTL"
+          }
+        ]
+      }
+    },
+    "e": {
+      "nfl:now": {
+        "showcase": "40454127248b457f9b0c0890a8d13e34f18f07b105a4521c4240c2c7287f9539",
+        "draft": "2de124b37d4d159a4508f5892686136498cd08629fe3e15eeab62ac4ba63f2a5",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 68,
+            "pick": 40,
+            "team": "JAX"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 59,
+            "pick": 156,
+            "team": "BAL"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 30,
+            "pick": 136,
+            "team": "BUF"
+          }
+        ]
+      },
+      "nfl:y2005": {
+        "showcase": "f836d0aa54a0837d83b0f03a5c30e5bec782729c8a39c1e8a4cd87aadd332407",
+        "draft": "606b8bc48028669b3a3ba18373efc9919d3d78a01d83d3dd605b6818b3605000",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 38,
+            "pick": 113,
+            "team": "NYG"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 10,
+            "pick": null,
+            "team": "NYG"
+          },
+          {
+            "approach": "steady",
+            "grade": "A",
+            "stock": 83,
+            "pick": 15,
+            "team": "NE"
+          }
+        ]
+      },
+      "nba:now": {
+        "showcase": "4b651be0d79f3370677c5a39b82ce62fdef2693d46dae527569e8c62da10f0a4",
+        "draft": "fe87399140e9ab4ccc1050b6d35e5e8a7c759b238c8ed1b6d77396b4ad7039db",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "C",
+            "stock": 50,
+            "pick": 22,
+            "team": "GSW"
+          },
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 8,
+            "pick": 59,
+            "team": "CHI"
+          },
+          {
+            "approach": "steady",
+            "grade": "B",
+            "stock": 21,
+            "pick": 45,
+            "team": "HOU"
+          }
+        ]
+      },
+      "nba:y2004": {
+        "showcase": "cc935c1aa96bfa7a5e3f2dd090fb5b7875dda090259cd999c99a70ee191218be",
+        "draft": "417cd4fdc99de01f44df2385e2c86b1978668a5258d090ba2ae1d2c60e7c4849",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 35,
+            "pick": 32,
+            "team": "BOS"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 25,
+            "pick": 41,
+            "team": "UTA"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 4,
+            "pick": null,
+            "team": "NYK"
+          }
+        ]
+      },
+      "mlb:now": {
+        "showcase": "55e29c68ce80597a7198341a82a20ab4a58b187190ae19b141c1b188ea7ca613",
+        "draft": "9d28564e21f7e0af9b85632181b40a920642b591df4bb2536a9fd759b651551f",
+        "first": [
+          {
+            "approach": "steady",
+            "grade": "C",
+            "stock": 25,
+            "pick": 408,
+            "team": "DET"
+          },
+          {
+            "approach": "steady",
+            "grade": "D",
+            "stock": 27,
+            "pick": 402,
+            "team": "CIN"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 2,
+            "pick": null,
+            "team": "WSN"
+          }
+        ]
+      },
+      "mlb:y2004": {
+        "showcase": "194ff138b5b9e013e617db3195ec8a54c9147abfa1a7b01aa68a132c43c6f582",
+        "draft": "c5fd09e8d1e9088b7e73566e0e31fe466703a69e16e68abbc3700d7f20347e99",
+        "first": [
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 3,
+            "pick": null,
+            "team": "SEA"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 23,
+            "pick": 1092,
+            "team": "PIT"
+          },
+          {
+            "approach": "allout",
+            "grade": "A",
+            "stock": 35,
+            "pick": 804,
+            "team": "MIN"
+          }
+        ]
+      },
+      "nhl:now": {
+        "showcase": "6c80126352e21c68f3f9840ed14353acab9bbd184d87c5007278374fd134ad0a",
+        "draft": "ff5c8110d7e80cf7156b907c45e5762fc26111e659eb214e1f9a08c971480766",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 26,
+            "pick": 150,
+            "team": "NJD"
+          },
+          {
+            "approach": "allout",
+            "grade": "D",
+            "stock": 14,
+            "pick": 195,
+            "team": "ANA"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 2,
+            "pick": null,
+            "team": "NSH"
+          }
+        ]
+      },
+      "nhl:y2006": {
+        "showcase": "6df2c0d15801ef9659ce10af6ec31346c4c9d8e83a7e957c0bedc5c4a2694056",
+        "draft": "97905441a1fbbc94b3b5e5bf1d979fd9142a115441e865e0881f18553b7d2ccc",
+        "first": [
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 75,
+            "pick": 26,
+            "team": "WSH"
+          },
+          {
+            "approach": "skip",
+            "grade": null,
+            "stock": 30,
+            "pick": 132,
+            "team": "COL"
+          },
+          {
+            "approach": "allout",
+            "grade": "B",
+            "stock": 9,
+            "pick": 194,
+            "team": "FLA"
+          }
+        ]
+      }
+    }
+  }
+}
