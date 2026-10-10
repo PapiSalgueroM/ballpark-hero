@@ -1,0 +1,12 @@
+simDailyDeals: node scripts/simDailyDeals.mjs
+simCareerLife: node scripts/simCareerLife.mjs
+simFightCareer: node scripts/simFightCareer.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simSeasonReveal: node scripts/simSeasonReveal.mjs
+simDepthChart: node scripts/simDepthChart.mjs
+simExtension: node scripts/simExtension.mjs
+simFreeAgency: node scripts/simFreeAgency.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simSportEras: node scripts/simSportEras.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simUsCoaching: node scripts/simUsCoaching.mjs

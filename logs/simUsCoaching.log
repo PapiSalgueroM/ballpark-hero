@@ -1,0 +1,56 @@
+1) Every offer names a real team the engine knows
+   nfl 32, nba 30, mlb 30, nhl 32 franchises, 12247 generated offers checked, 0 bogus
+   id resolution: KC -> Kansas City Chiefs | BOS -> Boston Celtics | Boston Bruins
+2) A decorated champion gets more, and better, offers than a journeyman
+   NFL champion  rep 100  standing 100  ceiling T1  3.13 offers  0% empty  best T1
+   NFL journeyman rep  20  standing  24  ceiling T4  0.34 offers  66% empty  best T4
+   NBA champion  rep 100  standing 100  ceiling T1  3.15 offers  0% empty  best T1
+   NBA journeyman rep  13  standing  23  ceiling T4  0.34 offers  66% empty  best T4
+   MLB champion  rep 100  standing 100  ceiling T1  3.17 offers  0% empty  best T1
+   MLB journeyman rep  16  standing  24  ceiling T4  0.34 offers  67% empty  best T4
+   NHL champion  rep 100  standing 100  ceiling T1  3.11 offers  0% empty  best T1
+   NHL journeyman rep  15  standing  23  ceiling T4  0.38 offers  63% empty  best T4
+3) You can end up with nothing
+   burned out: standing 0, ceiling null, 100 percent of cycles had zero offers
+   fresh retiree nobody has heard of: standing 40, 0.92 offers, 32 percent empty
+4) Every season out of work costs you
+   0 seasons out: standing  78.3, ceiling T1, 2.40 offers, 0 percent empty
+   1 seasons out: standing  69.8, ceiling T2, 2.09 offers, 0 percent empty
+   2 seasons out: standing  56.6, ceiling T3, 0.81 offers, 35 percent empty
+   3 seasons out: standing  40.8, ceiling T3, 0.35 offers, 65 percent empty
+   4 seasons out: standing  23.1, ceiling T4, 0.36 offers, 64 percent empty
+   recordSeasonOut: 59.2 -> 49.2
+5) How you went out matters
+   poached          standing  92, 2.83 offers
+   resigned         standing  84, 2.58 offers
+   contractExpired  standing  81, 2.51 offers
+   mutual           standing  79, 2.38 offers
+   firedLosing      standing  74, 2.36 offers
+   firedCollapse    standing  66, 1.92 offers
+6) You cannot leap up from where you fell, and you can climb back
+   fired off a staff job: 0 contender jobs across 600 cycles (ceiling T4)
+   T4 can reach T4  |  T4 can reach T3  |  T3 can reach T2  |  T2 can reach T1
+   after three good spells: ceiling T1, standing 100, 4 titles, 20 rounds won
+   then one collapse: standing 100 -> 79, losing seasons 1
+   then five years out: standing 0, ceiling Tnull
+7) Real simulated careers produce sane reputations
+   NFL 2000 careers: rep p05 33, median 45, p95 72, max 100
+        best 20 careers: 2.75 offers, avg standing 85, avg first tier 2.0
+        worst 20       : 0.95 offers, avg standing 48, avg first tier 4.0
+        14 percent skipped the staff route and started as a head coach
+   NBA 2000 careers: rep p05 24, median 36, p95 89, max 100
+        best 20 careers: 2.80 offers, avg standing 88, avg first tier 2.0
+        worst 20       : 1.25 offers, avg standing 45, avg first tier 4.0
+        17 percent skipped the staff route and started as a head coach
+   MLB 2000 careers: rep p05 28, median 38, p95 61, max 100
+        best 20 careers: 2.85 offers, avg standing 82, avg first tier 2.2
+        worst 20       : 0.75 offers, avg standing 46, avg first tier 4.0
+        6 percent skipped the staff route and started as a head coach
+   NHL 2000 careers: rep p05 34, median 48, p95 97, max 100
+        best 20 careers: 2.75 offers, avg standing 88, avg first tier 2.0
+        worst 20       : 1.00 offers, avg standing 49, avg first tier 4.0
+        28 percent skipped the staff route and started as a head coach
+8) Copy check
+   59545 player facing strings checked, all clean
+
+PASS: ALL US COACHING CHECKS PASSED

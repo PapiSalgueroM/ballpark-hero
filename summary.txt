@@ -1,0 +1,12 @@
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+simFightCareer exit=0 14s | simFightCareer: all sections passed
+simSeasonReveal exit=0 0s | simSeasonReveal: green. The curtain celebrates only what the engine wrote, and only when it earned it.
+simDepthChart exit=0 1s | ALL DEPTH CHART CHECKS PASSED
+simExtension exit=0 0s | simExtension: green. The last year of a deal is a decision in all four games now.
+simFreeAgency exit=0 2s | ALL FREE AGENCY CHECKS PASSED
+simUsCareerDefects exit=0 17s | simUsCareerDefects: 157 tests passed across the stat lines, the era cards and the shop cap.
+simSportEras exit=0 0s | ALL SPORT ERA CHECKS PASSED
+simCareerPress exit=0 1s | ALL CAREER PRESS CHECKS PASSED
+simUsCoachCareer exit=0 3s | PASS: ALL US COACHING CAREER CHECKS PASSED
+simUsCoaching exit=0 5s | PASS: ALL US COACHING CHECKS PASSED
+simCareerLife exit=0 32s | simCareerLife: green. Every peak is reachable, the critic has an opinion and it is about the football, and nothing about either of them is on the save.
