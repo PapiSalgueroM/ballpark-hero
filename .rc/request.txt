@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+basebuild: R="$PWD"; git worktree add /tmp/rvbase 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 > /tmp/wt.log 2>&1 && ln -s "$R/node_modules" /tmp/rvbase/node_modules && cd /tmp/rvbase && node_modules/.bin/vite build --outDir /tmp/rvbasedist > /tmp/bb.log 2>&1; s=$?; tail -1 /tmp/bb.log | cut -c1-200; exit $s
+rwalk: node scripts/lib/hostLikeServer.mjs /tmp/rvbasedist 4320 > /tmp/bs.log 2>&1 & p=$!; sleep 3; BASE_OLD=http://localhost:4320 ENGINES=chromium TZ=UTC node .rc/x/rwalk.mjs > "$RC_OUT/rwalk.log" 2>&1; s=$?; kill $p; grep -cE "^FAIL" "$RC_OUT/rwalk.log"; tail -1 "$RC_OUT/rwalk.log" | cut -c1-200; exit $s
+builderwalk: ENGINES=chromium TZ=UTC node scripts/playCmLeagueFixtures.mjs > "$RC_OUT/walk3.log" 2>&1; s=$?; tail -1 "$RC_OUT/walk3.log" | cut -c1-300; exit $s
+ondemand: node scripts/simCmDataOnDemand.mjs > "$RC_OUT/ondemand.log" 2>&1; s=$?; tail -1 "$RC_OUT/ondemand.log" | cut -c1-200; exit $s
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > "$RC_OUT/weight.log" 2>&1; s=$?; grep -E "/club-manager |/manager-hot-seat |/deadline-day |sweepWeight:" "$RC_OUT/weight.log" | tr '\n' '|' | cut -c1-600; exit $s
+tree-clean: test -z "$(git status --porcelain -- src scripts)" && echo "src and scripts are as committed"
