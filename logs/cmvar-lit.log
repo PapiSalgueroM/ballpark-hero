@@ -1,0 +1,3 @@
+cmVarLit: CM_VAR_LIVE turned on in this checkout. Never commit it on from here.
+playCmVar: 2 viewports, 4 actual review outcomes, 8 settled live reports, 2 actual quick reports, 2 mid-match reloads, 3 effective controls; zero external forwarding and source held.
+cmVarLit: CM_VAR_LIVE turned off in this checkout. Never commit it on from here.
