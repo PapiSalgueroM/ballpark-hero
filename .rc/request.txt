@@ -1,0 +1,17 @@
+awards: export TMPDIR=/tmp/t-aw TEMP=/tmp/t-aw TMP=/tmp/t-aw; mkdir -p $TMPDIR; SIM_AWARDS_NIGHT_ARTIFACTS=/tmp/a-aw node scripts/simCareerAwardsNight.mjs
+awards-reorderdraw: export TMPDIR=/tmp/t-aw2 TEMP=/tmp/t-aw2 TMP=/tmp/t-aw2; mkdir -p $TMPDIR; SIM_AWARDS_NIGHT_ARTIFACTS=/tmp/a-aw2 SIM_AWARDS_NIGHT_CONTROL=reorderdraw node scripts/simCareerAwardsNight.mjs
+finish: export TMPDIR=/tmp/t-fi TEMP=/tmp/t-fi TMP=/tmp/t-fi; mkdir -p $TMPDIR; SIM_LEAGUE_FINISH_ARTIFACTS=/tmp/a-fi node scripts/simCareerLeagueFinish.mjs
+finish-train1178: export TMPDIR=/tmp/t-fi2 TEMP=/tmp/t-fi2 TMP=/tmp/t-fi2; mkdir -p $TMPDIR; SIM_LEAGUE_FINISH_ARTIFACTS=/tmp/a-fi2 SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 node scripts/simCareerLeagueFinish.mjs
+finish-stream: export TMPDIR=/tmp/t-fi3 TEMP=/tmp/t-fi3 TMP=/tmp/t-fi3; mkdir -p $TMPDIR; SIM_LEAGUE_FINISH_ARTIFACTS=/tmp/a-fi3 SIM_LEAGUE_FINISH_CONTROL=stream node scripts/simCareerLeagueFinish.mjs
+social: export TMPDIR=/tmp/t-so TEMP=/tmp/t-so TMP=/tmp/t-so; mkdir -p $TMPDIR; SOCIAL_BRANDS_ARTIFACTS=/tmp/a-so node scripts/simCareerSocialBrands.mjs
+social-reorder: export TMPDIR=/tmp/t-so2 TEMP=/tmp/t-so2 TMP=/tmp/t-so2; mkdir -p $TMPDIR; SOCIAL_BRANDS_ARTIFACTS=/tmp/a-so2 SOCIAL_BRANDS_CONTROL=reorder node scripts/simCareerSocialBrands.mjs
+seasons: export TMPDIR=/tmp/t-se TEMP=/tmp/t-se TMP=/tmp/t-se; mkdir -p $TMPDIR; node scripts/simCareerLeagueSeasons.mjs
+keep: export TMPDIR=/tmp/t-k0 TEMP=/tmp/t-k0 TMP=/tmp/t-k0; mkdir -p $TMPDIR; node scripts/simCareerKeepPlaying.mjs
+keep-noconvictionrow: export TMPDIR=/tmp/t-k1 TEMP=/tmp/t-k1 TMP=/tmp/t-k1; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=noconvictionrow node scripts/simCareerKeepPlaying.mjs
+keep-norehabrow: export TMPDIR=/tmp/t-k2 TEMP=/tmp/t-k2 TMP=/tmp/t-k2; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=norehabrow node scripts/simCareerKeepPlaying.mjs
+keep-nomoney: export TMPDIR=/tmp/t-k3 TEMP=/tmp/t-k3 TMP=/tmp/t-k3; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=nomoney node scripts/simCareerKeepPlaying.mjs
+keep-nomoneytrial: export TMPDIR=/tmp/t-k4 TEMP=/tmp/t-k4 TMP=/tmp/t-k4; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=nomoneytrial node scripts/simCareerKeepPlaying.mjs
+keep-nosummertrial: export TMPDIR=/tmp/t-k5 TEMP=/tmp/t-k5 TMP=/tmp/t-k5; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=nosummertrial node scripts/simCareerKeepPlaying.mjs
+keep-zerorehab: export TMPDIR=/tmp/t-k6 TEMP=/tmp/t-k6 TMP=/tmp/t-k6; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=zerorehab node scripts/simCareerKeepPlaying.mjs
+squad: export TMPDIR=/tmp/t-sq TEMP=/tmp/t-sq TMP=/tmp/t-sq; mkdir -p $TMPDIR; node scripts/simCareerSquad.mjs
+appeal-attrib: for f in src/lib/clubManager.ts scripts/simClubManagerSlots.mjs; do for c in 54e3820a 484ee1d3 5d31eaa6 HEAD; do echo "$c $f $(git show $c:$f | sha256sum | cut -d' ' -f1)"; done; done; grep -n '"src/lib/clubManager.ts"\|"scripts/simClubManagerSlots.mjs"' scripts/fixtures/managerAppealIsolation1081/manifest.json
