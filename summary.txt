@@ -1,0 +1,7 @@
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 34s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simNoInventedQuotes exit=0 18s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simNumberFormatting exit=0 121s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simLegalPages exit=0 0s | simLegalPages: all green
+vitest-all exit=0 523s |  Test Files  402 passed | 2 skipped (404)
