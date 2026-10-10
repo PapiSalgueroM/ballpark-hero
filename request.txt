@@ -1,0 +1,6 @@
+#!serial
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+numfmt: node scripts/simNumberFormatting.mjs
+legal: node scripts/simLegalPages.mjs

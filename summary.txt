@@ -1,0 +1,5 @@
+anchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rivals exit=0 13s | No rival product names found. 0 findings.
+quotes exit=0 17s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+numfmt exit=0 120s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+legal exit=0 0s | simLegalPages: all green
