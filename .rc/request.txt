@@ -1,0 +1,5 @@
+#!serial
+setup: for p in "main 074a9054" "c 5d31eaa6" "d de39ef18"; do set -- $p; git worktree add -f /tmp/t-$1 $2 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/t-$1/node_modules; done; ls /tmp | grep t- | tr "\n" " "
+squad-c: cd /tmp/t-c && node scripts/simCareerSquad.mjs 2>&1 | tail -3
+squad-d: cd /tmp/t-d && node scripts/simCareerSquad.mjs 2>&1 | tail -3
+squad-main: cd /tmp/t-main && node scripts/simCareerSquad.mjs 2>&1 | tail -3
