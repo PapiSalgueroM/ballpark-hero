@@ -1,0 +1,9 @@
+# Round 1212 step 0a: the base's walks and weights (60188732)
+#!serve
+#!playwright
+#!serial
+weigh: node .rc/x/weigh.mjs
+playUsSeasonCentre: ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+playSeasonReveal: ENGINES=chromium node scripts/playSeasonReveal.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs

@@ -1,0 +1,6 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weigh exit=0 7s | CHUNK viewer: UsSeasonCentre-BtQVmS9a.js 2.9K
+playUsSeasonCentre exit=0 146s | playUsSeasonCentre: 144 checks, 0 failed
+playCareerHub exit=0 46s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+playSeasonReveal exit=0 20s | ALL SEASON REVEAL WALK CHECKS PASSED
+sweepWeight exit=1 26s | sweepWeight: 13 failures

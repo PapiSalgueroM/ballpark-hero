@@ -1,0 +1,22 @@
+[
+ {
+  "route": "/mlb-my-career",
+  "kb": "549.2",
+  "files": 48
+ },
+ {
+  "route": "/nhl-my-career",
+  "kb": "552.2",
+  "files": 48
+ },
+ {
+  "route": "/nba-my-career",
+  "kb": "562.7",
+  "files": 48
+ },
+ {
+  "route": "/nfl-my-career",
+  "kb": "476.9",
+  "files": 47
+ }
+]
