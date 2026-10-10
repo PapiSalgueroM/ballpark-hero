@@ -20,7 +20,8 @@
    - Engines against the ledger (notes): the playoff game law fits every NHL
      count; for MLB 84.7 percent of Wild Card exits and 32.6 percent of
      Division Series exits save a count the real rounds cannot hold.
-   No band here was set by feel: every check is an equality, a sum or a set.
+   1,185 checks in all. No band here was set by feel: every check is an
+   equality, a sum or a set.
 
    CONTROLS (US_LEDGER_CONTROL=<name>): each changes one fact in the loaded
    data, refuses to run (exit 2, "CONTROL ... ABORTED") when the thing it

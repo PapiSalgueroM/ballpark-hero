@@ -182,6 +182,12 @@
       "says": ["A team will play 13 games against each division rival for a total of 52.", "six or seven against each other club in its league for a total of 64.", "The remaining 46 games are against interleague opponents.", "a home and road two-game series against a so-called natural rival", "a single three-game series against each of the 14 other clubs in the opposite league.", "Natural interleague rivals include Mets-Yankees, Cubs-White Sox, Dodgers-Angels, Giants-Athletics, Reds-Indians, Marlins-Rays, Orioles-Nationals, Royals-Cardinals and Brewers-Twins.", "Among the teams with no geographic interleague rivals, MLB paired Red Sox-Braves, Pirates-Tigers, Phillies-Blue Jays, Rangers-Diamondbacks, Astros-Rockies and Padres-Mariners."],
       "note": "The reader gave the Cleveland pair as Reds-Indians; the club was the Guardians by then, and ESPN's list of the same week prints Guardians."
     },
+    "cbs-2026-rivalry": {
+      "sport": "mlb", "group": "cbs", "publisher": "CBS Sports (Matt Snyder)", "title": "Ranking all 15 matchups for MLB Rivalry Weekend: Why Chicago beats the Subway Series", "published": "2026-05-15",
+      "url": "https://cbssports.com/mlb/news/ranking-15-matchups-mlb-rivalry-weekend", "read": "2026-10-10",
+      "says": ["The fifteen series it ranks: Diamondbacks vs. Rockies, Giants vs. A's, Marlins vs. Rays, Orioles vs. Nationals, Red Sox vs. Braves, Blue Jays vs. Tigers, Padres vs. Mariners, Brewers vs. Twins, Rangers vs. Astros, Dodgers vs. Angels, Royals vs. Cardinals, Reds vs. Guardians, Phillies vs. Pirates, Yankees vs. Mets, Cubs vs. White Sox", "Let's keep that in mind even as I point out a few of the matchups below aren't actual rivalries."],
+      "note": "Eleven of these are interleague rival pairs of the ledger. The other four are the regional series the league's releases set apart; their eight clubs are exactly the clubs of the ledger's four remaining pairs."
+    },
     "cbs-2025-playoffs": {
       "sport": "mlb", "group": "cbs", "publisher": "CBS Sports (R.J. Anderson)", "title": "What to know about 2025 MLB playoffs: Format, tiebreakers, rules, seeds, pitch clock, automatic runners, more", "published": "2025-09-30",
       "url": "https://www.cbssports.com/mlb/news/mlb-playoff-format-rules-2025", "read": "2026-10-10",

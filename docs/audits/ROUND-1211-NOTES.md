@@ -9,8 +9,8 @@ changes, nothing imports the new files yet, and no engine, sport file, board or 
 |---|---|
 | `src/data/usSeasonLedgerMlb.ts` | MLB, 2004 to 2026: every club's games played season by season, the six name spans of the 2004 list, the 2026 divisions, the schedule formulas of 2023 to 2026, the fifteen interleague rival pairs, the postseason format, league scoring for both eras, and `MLB_THIN`. |
 | `src/data/usSeasonLedgerNhl.ts` | The NHL, 2006-07 to 2026-27: every season's length, every club's division in all 21 seasons, the two name spans of the 2006 list, the 84 game formula, the playoff format, league scoring, the games past sixty minutes, the overtime rules, the clock, and `NHL_THIN`. |
-| `scripts/data/usSeasonSources1211.json` | The receipts: 41 of them, each with its publisher, title, address, the date read and what the source literally says. A ledger row names its receipts by key. |
-| `scripts/simUsSeasonLedger.mjs` | The harness: 1,180 checks, 24 negative controls, and a block of notes for the binding rounds that never fails. |
+| `scripts/data/usSeasonSources1211.json` | The receipts: 42 of them, each with its publisher, title, address, the date read and what the source literally says. A ledger row names its receipts by key. |
+| `scripts/simUsSeasonLedger.mjs` | The harness: 1,185 checks, 24 negative controls, and a block of notes for the binding rounds that never fails. |
 
 The rule the ledgers follow: two independent sources that are not a wiki for every fact, a number only one
 source gave is `null` and named in the THIN list, and where two sources print different things both are
@@ -63,13 +63,14 @@ If the lead would rather hold a disputed club than follow two of three, the two 
 
 ## What is THIN (not filled, value `null`)
 
-MLB (`MLB_THIN`, nine entries): the shares of one run games and extra inning games (ESPN only: 27.5 and 8.6
+MLB (`MLB_THIN`, ten entries): the shares of one run games and extra inning games (ESPN only: 27.5 and 8.6
 percent in 2026, 26.3 and 11.8 in 2004) and of shutouts (nothing read); that a division rival is met in four
 series with 26 of 52 at home (Ticketmaster only); home and away inside the 62 league games and the 81 home
 games (no source); the first year of the extra inning runner and the plain nine innings rule; the 2020 Wild
 Card Series as a best of three and the Division Series as a best of five before 2022; the league and season
 length of the Yomiuri Giants (NPB's own standings only: Central League, 143 games); why each club fell short
-(only 2026 and the two ties were read); the schedule formula before 2023.
+(only 2026 and the two ties were read); that the World Series is the only round against the other league
+(CBS Sports only); the schedule formula before 2023.
 
 NHL (`NHL_THIN`, seven entries): 84 is a published schedule, no club has finished a season on it; the schedule
 formula of any 82 game season; four skaters a side in overtime before 2015-16 (NBC only); how the 2020 and
@@ -125,7 +126,7 @@ The harness prints these on every run under "NOTES FOR THE BINDING ROUNDS". None
 
 ## Checks
 
-`node scripts/simUsSeasonLedger.mjs` is green on its closing line with 1,180 checks. `US_LEDGER_CONTROL=list`
+`node scripts/simUsSeasonLedger.mjs` is green on its closing line with 1,185 checks. `US_LEDGER_CONTROL=list`
 prints the 24 controls; each one changes a single fact in the loaded data, refuses to run when that fact is
 not there, and must turn exactly its named labels red (exit 1 and a last line that says FIRED). The runner
 result names are in the closing report of the round.

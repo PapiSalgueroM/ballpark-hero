@@ -20,11 +20,15 @@
    espn      ESPN, "MLB Standings <year>": wins and losses for every club.
              2004 to 2026. It prints no ties.
    bref      Baseball Reference, "<year> Major League Baseball Team
-             Statistics", the games column of Team Standard Batting, and its
-             "Batting Year-by-Year Averages" (team games and runs a game for
-             the whole league). It builds on Retrosheet's game files, so retro
-             and bref count as ONE source here, never as two.
-   almanac   Baseball Almanac, "Year In Review" for a league and year (wins,
+             Statistics", the games column of Team Standard Batting, for the
+             eleven seasons it was read for.
+   bref-league  Baseball Reference, "Major League Baseball Batting
+             Year-by-Year Averages": team games and runs a game for the whole
+             league, all 23 seasons. Baseball Reference builds on Retrosheet's
+             game files, so retro, bref and bref-league count as ONE source
+             here, never as two.
+   espn-runs ESPN's 2004 and 2026 standings again, for the runs columns.
+   almanac-  Baseball Almanac, "Year In Review" for a league and year (wins,
              losses, ties) and "MLB Postseason Playoffs 1969 - 2026".
    The rest are single articles and are named where they are used.
 
@@ -259,13 +263,23 @@ export const MLB_FORMULAS = [
    the 2023 schedule) and Ticketmaster's 2026 guide. Nine are neighbours and
    six were paired by the league (Associated Press: Red Sox and Braves,
    Pirates and Tigers, Phillies and Blue Jays, Rangers and Diamondbacks,
-   Astros and Rockies, Padres and Mariners). */
+   Astros and Rockies, Padres and Mariners).
+   For 2026 itself: CBS Sports, "Ranking all 15 matchups for MLB Rivalry
+   Weekend" (15 May 2026), lists eleven of the fifteen pairs as that
+   weekend's series; the other four series that weekend (Phillies and
+   Pirates, Diamondbacks and Rockies, Blue Jays and Tigers, Rangers and
+   Astros) are what the league's releases call "four other regional
+   matchups", and they are made of exactly the eight clubs of the four pairs
+   left over (Pirates and Tigers, Phillies and Blue Jays, Rangers and
+   Diamondbacks, Astros and Rockies). So those four pairs rest on
+   Ticketmaster's 2026 guide and the two 2022 reports, not on a 2026 fixture
+   list: the league's own schedule pages could not be opened. */
 export const MLB_RIVALS: readonly (readonly [string, string])[] = [
   ['NYY', 'NYM'], ['CHW', 'CHC'], ['LAA', 'LAD'], ['ATH', 'SFG'], ['CLE', 'CIN'],
   ['TBR', 'MIA'], ['BAL', 'WSN'], ['KCR', 'STL'], ['MIN', 'MIL'], ['BOS', 'ATL'],
   ['DET', 'PIT'], ['TOR', 'PHI'], ['TEX', 'ARI'], ['HOU', 'COL'], ['SEA', 'SDP'],
 ];
-export const MLB_RIVALS_SRC: readonly string[] = ['ticketmaster-2026', 'espn-2023-format', 'ap-2023-format'];
+export const MLB_RIVALS_SRC: readonly string[] = ['ticketmaster-2026', 'espn-2023-format', 'ap-2023-format', 'cbs-2026-rivalry'];
 
 /* THE POSTSEASON. From 2022: twelve clubs, six a league; the two division
    winners with the best records in each league skip the first round; the
@@ -388,6 +402,11 @@ export const MLB_THIN: readonly { what: string; oneSource: string; tried: string
     what: 'Why each club on 161 fell short and what each 163rd game was, season by season.',
     oneSource: 'Only 2026 (rain: the Associated Press) and the two ties (2005 and 2016: the Associated Press and NBC Sports) were read. The rows say "finished on 161 games" and "played a 163rd game" and no more.',
     tried: 'Not gathered: 16 seasons hold such a club.',
+  },
+  {
+    what: 'That the World Series is the only round against the other league.',
+    oneSource: 'CBS Sports, 2025: "World Series: Best-of-seven series between AL and NL champion".',
+    tried: 'The Associated Press primer was not asked that; no other source read says it in words.',
   },
   {
     what: 'The schedule formula before 2023.',
