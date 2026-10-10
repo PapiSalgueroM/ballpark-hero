@@ -1,0 +1,13 @@
+#!playwright
+#!serial
+# Round 1215: this round's walk (head 33efc2ce scripts) on the build of origin/release-at-int (src, public, index.html laid over).
+overlay: git checkout origin/release-at-int -- src public index.html && git rev-parse origin/release-at-int && git diff --stat HEAD -- scripts | tail -1
+build-at: npm run build 2>&1 | tail -3
+clean-at: node scripts/playLiveMatchFit.mjs
+clean-at-2: node scripts/playLiveMatchFit.mjs
+replay-at: LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+replay-at-2: LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+noseed-at: LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs
+forced-at: bash .rc/x/forced.sh nocard 4211
+oldsave-at: PORT=4214 LIVE_FIT_SAVE=.rc/x/dump-nocard.json node scripts/playLiveMatchFit.mjs
+fresh-at: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
