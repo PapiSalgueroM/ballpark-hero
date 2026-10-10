@@ -1,0 +1,11 @@
+MUTATED A: scripts/genCmVarRates.mjs, 1 place(s)
+MUTATED A: scripts/genCmVarRates.mjs, 1 place(s)
+genCmVarRates: 3 file(s) in step with the ledgers.
+goalReview: 0.034141
+missedFoulReview: 0.005046
+simCmVarLedger: 6 rate rows from 4 publishers, counted by two: goalsRuledOut, penaltiesAwarded, penaltiesCancelled.
+simCmVarLedger: OWED and open, so the switch must stay off: recent-seasons (have 0 of 2).
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, ucl.
+simCmVarLedger: 2 of 342 checks FAILED.
+RESULT ledger=1
+restored

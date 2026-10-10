@@ -1,0 +1,9 @@
+MUTATED B: src/lib/clubManagerVar.ts, 2 place(s)
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+RESULT simCmVar=1
+restored
