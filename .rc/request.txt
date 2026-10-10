@@ -1,0 +1,3 @@
+var-full: node .rc/x/varProbe.mjs full
+var-off-pre: git worktree add -f /tmp/pre 484ee1d3 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/pre/node_modules; W="$PWD"; cd /tmp/pre && node "$W/.rc/x/varProbe.mjs" off | tail -1
+var-off-head: node .rc/x/varProbe.mjs off | tail -1
