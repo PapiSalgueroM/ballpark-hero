@@ -1,0 +1,63 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dev-all: export TMPDIR=/tmp/tf-1 TEMP=/tmp/tf-1 TMP=/tmp/tf-1; mkdir -p $TMPDIR; CAREER_DEVELOPMENT_CONTROL=all node scripts/simSoccerCareerDevelopment.mjs
+role-all: export TMPDIR=/tmp/tf-2 TEMP=/tmp/tf-2 TMP=/tmp/tf-2; mkdir -p $TMPDIR; CAREER_STORY_ROLE_CONTROL=all node scripts/simCareerStoryRole.mjs
+trophy-all: export TMPDIR=/tmp/tf-3 TEMP=/tmp/tf-3 TMP=/tmp/tf-3; mkdir -p $TMPDIR; CAREER_TROPHY_RUNS_CONTROL=all node scripts/simCareerTrophyRuns.mjs
+season-all: export TMPDIR=/tmp/tf-4 TEMP=/tmp/tf-4 TMP=/tmp/tf-4; mkdir -p $TMPDIR; SEASON_HISTORY_CONTROL=all node scripts/simSoccerSeasonHistory.mjs
+derby-all: export TMPDIR=/tmp/tf-5 TEMP=/tmp/tf-5 TMP=/tmp/tf-5; mkdir -p $TMPDIR; DERBY_HISTORY_CONTROL=all node scripts/simSoccerDerbyHistory.mjs
+ambitions-all: export TMPDIR=/tmp/tf-6 TEMP=/tmp/tf-6 TMP=/tmp/tf-6; mkdir -p $TMPDIR; SIM_CAREER_AMBITION_CONTROL=all node scripts/simSoccerCareerAmbitions.mjs
+awards: export TMPDIR=/tmp/tf-7 TEMP=/tmp/tf-7 TMP=/tmp/tf-7; mkdir -p $TMPDIR; SIM_AWARDS_NIGHT_ARTIFACTS=/tmp/fa-aw node scripts/simCareerAwardsNight.mjs
+awards-reorderdraw: export TMPDIR=/tmp/tf-8 TEMP=/tmp/tf-8 TMP=/tmp/tf-8; mkdir -p $TMPDIR; SIM_AWARDS_NIGHT_ARTIFACTS=/tmp/fa-aw2 SIM_AWARDS_NIGHT_CONTROL=reorderdraw node scripts/simCareerAwardsNight.mjs
+finish: export TMPDIR=/tmp/tf-9 TEMP=/tmp/tf-9 TMP=/tmp/tf-9; mkdir -p $TMPDIR; SIM_LEAGUE_FINISH_ARTIFACTS=/tmp/fa-fi node scripts/simCareerLeagueFinish.mjs
+finish-train1178: export TMPDIR=/tmp/tf-10 TEMP=/tmp/tf-10 TMP=/tmp/tf-10; mkdir -p $TMPDIR; SIM_LEAGUE_FINISH_ARTIFACTS=/tmp/fa-fi2 SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 node scripts/simCareerLeagueFinish.mjs
+finish-stream: export TMPDIR=/tmp/tf-11 TEMP=/tmp/tf-11 TMP=/tmp/tf-11; mkdir -p $TMPDIR; SIM_LEAGUE_FINISH_ARTIFACTS=/tmp/fa-fi3 SIM_LEAGUE_FINISH_CONTROL=stream node scripts/simCareerLeagueFinish.mjs
+social: export TMPDIR=/tmp/tf-12 TEMP=/tmp/tf-12 TMP=/tmp/tf-12; mkdir -p $TMPDIR; SOCIAL_BRANDS_ARTIFACTS=/tmp/fa-so node scripts/simCareerSocialBrands.mjs
+social-reorder: export TMPDIR=/tmp/tf-13 TEMP=/tmp/tf-13 TMP=/tmp/tf-13; mkdir -p $TMPDIR; SOCIAL_BRANDS_ARTIFACTS=/tmp/fa-so2 SOCIAL_BRANDS_CONTROL=reorder node scripts/simCareerSocialBrands.mjs
+seasons: export TMPDIR=/tmp/tf-14 TEMP=/tmp/tf-14 TMP=/tmp/tf-14; mkdir -p $TMPDIR; node scripts/simCareerLeagueSeasons.mjs
+keep: export TMPDIR=/tmp/tf-15 TEMP=/tmp/tf-15 TMP=/tmp/tf-15; mkdir -p $TMPDIR; node scripts/simCareerKeepPlaying.mjs
+keep-noconvictionrow: export TMPDIR=/tmp/tf-16 TEMP=/tmp/tf-16 TMP=/tmp/tf-16; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=noconvictionrow node scripts/simCareerKeepPlaying.mjs
+keep-norehabrow: export TMPDIR=/tmp/tf-17 TEMP=/tmp/tf-17 TMP=/tmp/tf-17; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=norehabrow node scripts/simCareerKeepPlaying.mjs
+keep-nomoney: export TMPDIR=/tmp/tf-18 TEMP=/tmp/tf-18 TMP=/tmp/tf-18; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=nomoney node scripts/simCareerKeepPlaying.mjs
+keep-nomoneytrial: export TMPDIR=/tmp/tf-19 TEMP=/tmp/tf-19 TMP=/tmp/tf-19; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=nomoneytrial node scripts/simCareerKeepPlaying.mjs
+keep-nosummertrial: export TMPDIR=/tmp/tf-20 TEMP=/tmp/tf-20 TMP=/tmp/tf-20; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=nosummertrial node scripts/simCareerKeepPlaying.mjs
+keep-zerorehab: export TMPDIR=/tmp/tf-21 TEMP=/tmp/tf-21 TMP=/tmp/tf-21; mkdir -p $TMPDIR; KEEP_PLAYING_CONTROL=zerorehab node scripts/simCareerKeepPlaying.mjs
+squad: export TMPDIR=/tmp/tf-22 TEMP=/tmp/tf-22 TMP=/tmp/tf-22; mkdir -p $TMPDIR; node scripts/simCareerSquad.mjs
+simSoccerCareer: export TMPDIR=/tmp/tf-23 TEMP=/tmp/tf-23 TMP=/tmp/tf-23; mkdir -p $TMPDIR; node scripts/simSoccerCareer.mjs
+simCareerRealism: export TMPDIR=/tmp/tf-24 TEMP=/tmp/tf-24 TMP=/tmp/tf-24; mkdir -p $TMPDIR; node scripts/simCareerRealism.mjs
+simCareerParity: export TMPDIR=/tmp/tf-25 TEMP=/tmp/tf-25 TMP=/tmp/tf-25; mkdir -p $TMPDIR; node scripts/simCareerParity.mjs
+simCareerStory: export TMPDIR=/tmp/tf-26 TEMP=/tmp/tf-26 TMP=/tmp/tf-26; mkdir -p $TMPDIR; node scripts/simCareerStory.mjs
+simClubSquads: export TMPDIR=/tmp/tf-27 TEMP=/tmp/tf-27 TMP=/tmp/tf-27; mkdir -p $TMPDIR; node scripts/simClubSquads.mjs
+simCareerDerbies: export TMPDIR=/tmp/tf-28 TEMP=/tmp/tf-28 TMP=/tmp/tf-28; mkdir -p $TMPDIR; node scripts/simCareerDerbies.mjs
+simSoccerContractMoves: export TMPDIR=/tmp/tf-29 TEMP=/tmp/tf-29 TMP=/tmp/tf-29; mkdir -p $TMPDIR; node scripts/simSoccerContractMoves.mjs
+simSoccerOfferReview: export TMPDIR=/tmp/tf-30 TEMP=/tmp/tf-30 TMP=/tmp/tf-30; mkdir -p $TMPDIR; node scripts/simSoccerOfferReview.mjs
+simTrophyCabinet: export TMPDIR=/tmp/tf-31 TEMP=/tmp/tf-31 TMP=/tmp/tf-31; mkdir -p $TMPDIR; node scripts/simTrophyCabinet.mjs
+simSeasonLaw: export TMPDIR=/tmp/tf-32 TEMP=/tmp/tf-32 TMP=/tmp/tf-32; mkdir -p $TMPDIR; node scripts/simSeasonLaw.mjs
+dart: export TMPDIR=/tmp/tf-33 TEMP=/tmp/tf-33 TMP=/tmp/tf-33; mkdir -p $TMPDIR; node scripts/simDartDraftPool.mjs
+dart-pool900: export TMPDIR=/tmp/tf-34 TEMP=/tmp/tf-34 TMP=/tmp/tf-34; mkdir -p $TMPDIR; DART_POOL_CONTROL=pool900 node scripts/simDartDraftPool.mjs
+dart-nofloor: export TMPDIR=/tmp/tf-35 TEMP=/tmp/tf-35 TMP=/tmp/tf-35; mkdir -p $TMPDIR; DART_POOL_CONTROL=nofloor node scripts/simDartDraftPool.mjs
+dart-nobest: export TMPDIR=/tmp/tf-36 TEMP=/tmp/tf-36 TMP=/tmp/tf-36; mkdir -p $TMPDIR; DART_POOL_CONTROL=nobest node scripts/simDartDraftPool.mjs
+dart-onepage: export TMPDIR=/tmp/tf-37 TEMP=/tmp/tf-37 TMP=/tmp/tf-37; mkdir -p $TMPDIR; DART_POOL_CONTROL=onepage node scripts/simDartDraftPool.mjs
+dart-pagefloor: export TMPDIR=/tmp/tf-38 TEMP=/tmp/tf-38 TMP=/tmp/tf-38; mkdir -p $TMPDIR; DART_POOL_CONTROL=pagefloor node scripts/simDartDraftPool.mjs
+dart-nomysteryfloor: export TMPDIR=/tmp/tf-39 TEMP=/tmp/tf-39 TMP=/tmp/tf-39; mkdir -p $TMPDIR; DART_POOL_CONTROL=nomysteryfloor node scripts/simDartDraftPool.mjs
+dart-pagemystery: export TMPDIR=/tmp/tf-40 TEMP=/tmp/tf-40 TMP=/tmp/tf-40; mkdir -p $TMPDIR; DART_POOL_CONTROL=pagemystery node scripts/simDartDraftPool.mjs
+dart-machinehalf: export TMPDIR=/tmp/tf-41 TEMP=/tmp/tf-41 TMP=/tmp/tf-41; mkdir -p $TMPDIR; DART_POOL_CONTROL=machinehalf node scripts/simDartDraftPool.mjs
+dart-lasttile: export TMPDIR=/tmp/tf-42 TEMP=/tmp/tf-42 TMP=/tmp/tf-42; mkdir -p $TMPDIR; DART_POOL_CONTROL=lasttile node scripts/simDartDraftPool.mjs
+dart-nobest3: export TMPDIR=/tmp/tf-43 TEMP=/tmp/tf-43 TMP=/tmp/tf-43; mkdir -p $TMPDIR; DART_POOL_CONTROL=nobest3 node scripts/simDartDraftPool.mjs
+dart-fixed8: export TMPDIR=/tmp/tf-44 TEMP=/tmp/tf-44 TMP=/tmp/tf-44; mkdir -p $TMPDIR; DART_POOL_CONTROL=fixed8 node scripts/simDartDraftPool.mjs
+dart-impure: export TMPDIR=/tmp/tf-45 TEMP=/tmp/tf-45 TMP=/tmp/tf-45; mkdir -p $TMPDIR; DART_POOL_CONTROL=impure node scripts/simDartDraftPool.mjs
+dart-anyslot: export TMPDIR=/tmp/tf-46 TEMP=/tmp/tf-46 TMP=/tmp/tf-46; mkdir -p $TMPDIR; DART_POOL_CONTROL=anyslot node scripts/simDartDraftPool.mjs
+rep: node scripts/simReportedGamePools.mjs
+rep-stat-span: REPORTED_POOLS_CONTROL=stat-span node scripts/simReportedGamePools.mjs
+rep-stat-franchises: REPORTED_POOLS_CONTROL=stat-franchises node scripts/simReportedGamePools.mjs
+rep-stat-scope: REPORTED_POOLS_CONTROL=stat-scope node scripts/simReportedGamePools.mjs
+rep-stat-context: REPORTED_POOLS_CONTROL=stat-context node scripts/simReportedGamePools.mjs
+rep-dart-variety: REPORTED_POOLS_CONTROL=dart-variety node scripts/simReportedGamePools.mjs
+rep-dart-best: REPORTED_POOLS_CONTROL=dart-best node scripts/simReportedGamePools.mjs
+rep-dart-used: REPORTED_POOLS_CONTROL=dart-used node scripts/simReportedGamePools.mjs
+rep-dart-slot: REPORTED_POOLS_CONTROL=dart-slot node scripts/simReportedGamePools.mjs
+rep-dart-global: REPORTED_POOLS_CONTROL=dart-global node scripts/simReportedGamePools.mjs
+rep-dart-country: REPORTED_POOLS_CONTROL=dart-country node scripts/simReportedGamePools.mjs
+rep-dart-position: REPORTED_POOLS_CONTROL=dart-position node scripts/simReportedGamePools.mjs
+rep-dart-year: REPORTED_POOLS_CONTROL=dart-year node scripts/simReportedGamePools.mjs
+rep-dart-nation: REPORTED_POOLS_CONTROL=dart-nation node scripts/simReportedGamePools.mjs
+rep-dart-partial: REPORTED_POOLS_CONTROL=dart-partial node scripts/simReportedGamePools.mjs
+simStat: node scripts/simStatDetectiveMotion.mjs
