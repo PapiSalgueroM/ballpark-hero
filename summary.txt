@@ -1,0 +1,12 @@
+f01 exit=0 26s | simDailySaveHardening: part shapes green
+f02 exit=0 26s | simDailySaveHardening: part shapes green
+f03 exit=0 26s | simDailySaveHardening: part shapes green
+f04 exit=0 26s | simDailySaveHardening: part shapes green
+f06 exit=0 27s | simDailySaveHardening: part shapes green
+f05 exit=0 27s | simDailySaveHardening: part shapes green
+f08 exit=0 25s | simDailySaveHardening: part shapes green
+f07 exit=0 25s | simDailySaveHardening: part shapes green
+f09 exit=0 24s | simDailySaveHardening: part shapes green
+f10 exit=0 25s | simDailySaveHardening: part shapes green
+f12 exit=0 25s | simDailySaveHardening: part shapes green
+f11 exit=0 25s | simDailySaveHardening: part shapes green
