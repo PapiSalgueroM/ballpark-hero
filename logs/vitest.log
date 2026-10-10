@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nbaOldSaveLines.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+ [32m✓[39m src/test/nbaTrophyTile.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/test/usTrophyTile.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 525[2mms[22m[39m
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 39388[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 39387[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m57 passed[39m[22m[90m (57)[39m
+[2m   Start at [22m 08:02:19
+[2m   Duration [22m 42.64s[2m (transform 2.09s, setup 296ms, collect 5.34s, tests 40.05s, environment 1.96s, prepare 696ms)[22m
+

@@ -1,0 +1,42 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usTrophyTile.test.ts src/test/nbaTrophyTile.test.ts src/test/usCareerTruthDigest.test.ts src/test/nbaOldSaveLines.test.ts --testTimeout=300000 --hookTimeout=120000
+sense: SENSE_PROVE_1149=808dbbdc SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-tickdraws: SIM_NBA_SENSE_CONTROL=tickdraws SENSE_PROVE_1149=808dbbdc node scripts/simNbaAwardsSense.mjs
+sense-norow: SIM_NBA_SENSE_CONTROL=norow node scripts/simNbaAwardsSense.mjs
+sense-norownfl: SIM_NBA_SENSE_CONTROL=norownfl node scripts/simNbaAwardsSense.mjs
+sense-norowmlb: SIM_NBA_SENSE_CONTROL=norowmlb node scripts/simNbaAwardsSense.mjs
+sense-norownhl: SIM_NBA_SENSE_CONTROL=norownhl node scripts/simNbaAwardsSense.mjs
+sense-twicecounted: SIM_NBA_SENSE_CONTROL=twicecounted node scripts/simNbaAwardsSense.mjs
+sense-oldgateown: SIM_NBA_SENSE_CONTROL=oldgateown node scripts/simNbaAwardsSense.mjs
+sense-droppedanyyear: SIM_NBA_SENSE_CONTROL=droppedanyyear node scripts/simNbaAwardsSense.mjs
+sense-lastyearmlb: SIM_NBA_SENSE_CONTROL=lastyearmlb node scripts/simNbaAwardsSense.mjs
+sense-lastyearnhl: SIM_NBA_SENSE_CONTROL=lastyearnhl node scripts/simNbaAwardsSense.mjs
+sense-lastyearnfl: SIM_NBA_SENSE_CONTROL=lastyearnfl node scripts/simNbaAwardsSense.mjs
+sense-soldascoin: SIM_NBA_SENSE_CONTROL=soldascoin node scripts/simNbaAwardsSense.mjs
+sense-oldgate306: SIM_NBA_SENSE_CONTROL=oldgate306 node scripts/simNbaAwardsSense.mjs
+sense-nearlie: SIM_NBA_SENSE_CONTROL=nearlie node scripts/simNbaAwardsSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+rivalry-deaf: RIVALRY_CONTROL=deaf node scripts/simCareerRivalryEvents.mjs
+rivalry-collision: RIVALRY_CONTROL=collision node scripts/simCareerRivalryEvents.mjs
+rivalry-beatlie: RIVALRY_CONTROL=beatlie node scripts/simCareerRivalryEvents.mjs
+rivalry-beatheat: RIVALRY_CONTROL=beatheat node scripts/simCareerRivalryEvents.mjs
+rivalry-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+rivalry-oldcard: RIVALRY_CONTROL=oldcard node scripts/simCareerRivalryEvents.mjs
+parity: node scripts/simUsBoardParity.mjs
+parity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+parity-draw: US_BOARD_PARITY_CONTROL=draw node scripts/simUsBoardParity.mjs
+parity-binding: US_BOARD_PARITY_CONTROL=binding node scripts/simUsBoardParity.mjs
+parity-restore: US_BOARD_PARITY_CONTROL=restore node scripts/simUsBoardParity.mjs
+parity-era: US_BOARD_PARITY_CONTROL=era node scripts/simUsBoardParity.mjs
+parity-fixture: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNflCareer-rivalwords: NFL_CAREER_CONTROL=rivalwords node scripts/simNflCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivalnames: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+search: node scripts/simSiteSearch.mjs

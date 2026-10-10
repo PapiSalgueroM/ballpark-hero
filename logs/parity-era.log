@@ -1,0 +1,5 @@
+control era: Vitest exit 1, passed [nba, mlb, nhl], failed [nfl]
+   nfl click path step 292 (after "create: Enter the draft"): the save differs first in c.year, c.salary, c.eraId, c.phoneInbox, c.phoneUsedIds; the screen reads "Ryder Blaze · CBNew England Patriots2026 · age 22OVR 68$1.7M x4🪑 BackupDraft dayWith pick 81, the New England Patriots select Ryder BlazeLa
+   nfl click path step 293 (after "hub: 📊My PlayerOVR 68The fans down at 35"): the save differs
+  CONTROL FIRED: [nfl] red on "the save differs", the rest green
+simUsBoardParity control era: green. The control turned its own sports red for its own reason.
