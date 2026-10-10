@@ -1,0 +1,32 @@
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_REPORT=1 node scripts/playLiveMatchFit.mjs
+In the job at Crystal Palace.
+1) The goal in order
+  [match phone] seed 3208792607, 1869 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  the goal watched: 28' Diego Gómez, against me; own goals in its half 0 of 2 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 31 frames it was up
+  ok    a tap on the card ended the hold (26 frames after it, none with the card)
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 245 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit: measuring pass, nothing asserted
+  [report 320 by 568] scoreboard 0 to 82, pitch 82 to 474 (320 by 392), control row 520 to 568, document height 26595, text nodes under 12 px 70 (smallest 9), controls under 44 px 0
+  [report 390 by 844] scoreboard 0 to 82, pitch 82 to 750 (390 by 668), control row 796 to 844, document height 21132, text nodes under 12 px 70 (smallest 9), controls under 44 px 0
+  [labels 390] mean overlapping name labels a frame 0.79 over 24 frames of 21 labels; before match mode 1.63 at 6b1caa20, ratio 0.49
+  [report 1280 by 900] scoreboard 12 to 68, pitch 74 to 796 (541.5 by 722), control row 832 to 888, document height 12392, text nodes under 12 px 89 (smallest 9), controls under 44 px 0
+6) Back folds the match away
+  (not in the measuring pass: the build before match mode has no Back)
+5) The reload
+  ok    reload: left at 66', the save holds 66, the match came back at 66'
+  ok    close: left at 68', the save holds 68, the match came back at 68'
+  ok    hidden tab: the clock read 70' and the save holds 70
+2) Reduced motion
+  [match calm] seed 3208792608, 1799 draws at kick off, digest e14582e9 over 4503 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  the goal watched: 57' João Pedro, against me; own goals in its half 0 of 2 goals
+  ok    under reduced motion the score reads 0 - 1 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  (not in the measuring pass or under control bar)
+playLiveMatchFit: measuring pass done, sections 1, 2, 4 and 5 green, section 3 printed and not asserted.

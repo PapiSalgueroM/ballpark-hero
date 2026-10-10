@@ -1,0 +1,7 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+bar exit=1 59s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+silentlist exit=1 71s | playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 2 GOAL! rewritten) and left the rest green.
+report exit=0 75s | playLiveMatchFit: measuring pass done, sections 1, 2, 4 and 5 green, section 3 printed and not asserted.
+tsc exit=0 54s | 
+rivals exit=0 11s | No rival product names found. 0 findings.
+anchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
