@@ -114,6 +114,16 @@ would make every one of these fields drawable inside both rules; that rule is no
   section 4 green, the seven new or changed controls fired, six fences green.
 The closing run on the merged head is named in the round's finish report.
 
+## Before anybody builds Round B: the other lane has the bind in a draft
+
+Found on 2026-10-10 at 19:00 UTC, after this round's code was closed. Draft PR223, branch
+`codex/manager-ucl-league-phase`, cut from the same origin/main as this round, binds a 36 club league phase into
+`src/lib/clubManager.ts` with its own `src/lib/clubManagerUclLeague.ts`, the cards, the reference page and a
+guide line. Its draw is a shuffled ring (no pots, no association rule), its table uses the same eight steps, its
+play-off pairs are fixed and its round of 16 routes agree with the rule derived here. No file of Round 1228
+overlaps it. The lead rules on how the two meet; until then nobody cuts Round B from this branch on the
+assumption that the engine is still unbound.
+
 ## For whoever builds Round B
 
 - Section 4 reads the engine's field at 36 by editing the BUNDLE line `const UCL_FIELD_SIZE = 32;`. The moment
