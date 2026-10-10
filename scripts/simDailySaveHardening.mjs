@@ -44,9 +44,13 @@
  *           takeNewerSave): exactly the 30 stale tab rows of sections 1, 1b, 2,
  *           2b and the four click rows of 7 must fail on an assertion,
  *           everything else pass.
- *   guard   (review) only the addGuess guard removed: exactly the nine rows no
- *           takeNewerSave covers (the shared hook, 1b, Shirt Number, three
- *           click rows of 7). The Higher or Lower rows hold on takeNewerSave.
+ *   guard   (review) only the addGuess guard removed: exactly the eight rows no
+ *           takeNewerSave covers (the shared hook, 1b, Shirt Number, two
+ *           click rows of 7). The Higher or Lower rows hold on takeNewerSave,
+ *           and since Round 1003 so does NBA Connections' click row of 7 (its
+ *           submit asks takeNewerSave first): nine rows until then, eight
+ *           now, re-recorded in Round 1210's fix pass with the proof in the
+ *           commit. The stale control still turns that row.
  *   turn    (review) only the rest-of-turn drop removed: exactly the three
  *           section 1b rows, where a stale Transfer Path tab used to record a
  *           win for a chain that never reached the target.
@@ -81,6 +85,35 @@
  *           checks (the target is the main where there is one, and it holds
  *           the page's content) can see it. That row, and only that row.
  *
+ * Round 1210, the guide race. The shapes part flaked: one run in four alone,
+ * and 12 of 12 runs red on GitHub runners with three side by side on
+ * origin/main 074a9054 (result r1210-base-shapes: /olympics in all 12,
+ * /nba-career in 2). The fault was the test's, not a page's or the daily
+ * hook's: it took its "fresh" baseline after a counted settle, and the first
+ * row to need a guide file could take it before that file's import landed
+ * (the header of src/test/dailySaveShapes.test.tsx has the mechanism). Each
+ * row now fetches its guide before its first mount and says so by name, and
+ * every R848_SHAPES line carries guide: "ready" or "none". The shapes part
+ * fails on a line that says anything else. Three more controls run the test
+ * with the race switched on (R848_GUIDE), none of them depending on load:
+ *   guideslow the loader answers 300 ms late and the row does its fetch: all
+ *           36 rows green and every line says ready or none. The cure, shown
+ *           under the very delay that made the red.
+ *   guidelate the loader waits behind a gate and the row skips its fetch (the
+ *           fix switched off): exactly the first row of each guide file red,
+ *           on "drew a different page from a fresh daily" and "the fresh page
+ *           moved while the row ran" and nothing else. The set is computed
+ *           here from PATH_BUNDLE and the order of ROWS, never typed, and it
+ *           must hold /olympics and /nba-career or the diagnosis is wrong.
+ *           This is the recorded red, reproduced on demand.
+ *   guideheld the gate never opens: every row with a guide red on the named
+ *           assertion (inside a short bound, never a hang), none on a diff.
+ *   guidepart (review of Round 1210) the test as guidelate runs it, read with
+ *           the shapes PART's own judgement (shapesLineProblems): it must
+ *           name every row whose route has a guide on the word "skipped" and
+ *           none of the others. Until this the part's rule "a guide word
+ *           other than ready or none fails" had no control of its own.
+ *
  * All outcomes are deterministic (fixed clock, Math.random pinned, no network),
  * so there are no bands: the counts below are exact and were the same on every
  * run. Measured 2026-10-01: against the hook before this round 35 of the 36
@@ -100,7 +133,7 @@ const VITEST = path.join(path.dirname(createRequire(path.join(ROOT, 'package.jso
 const PRE = '617b8354';
 const PART = process.env.R848_PART || 'all';
 const CONTROL = process.env.R848_CONTROL || '';
-const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided', 'strict', 'single', 'empty', 'shape', 'skip', 'skipdiv'];
+const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided', 'strict', 'single', 'empty', 'shape', 'skip', 'skipdiv', 'guideslow', 'guidelate', 'guideheld', 'guidepart'];
 assert.ok(['all', 'saves', 'shapes', 'skip', 'parity'].includes(PART), `unknown R848_PART ${PART}`);
 assert.ok(!CONTROL || CONTROLS.includes(CONTROL), `unknown R848_CONTROL ${CONTROL}`);
 
@@ -151,6 +184,16 @@ function copyWith(rel, edits, name) {
 }
 
 const lines = (text, tag) => [...text.matchAll(new RegExp(`^${tag} (.+)$`, 'gm'))].map((m) => JSON.parse(m[1]));
+/** What the shapes part holds one R848_SHAPES line to. One function, so the
+ *  guidepart control runs the part's own judgement and never a copy of it.
+ *  Round 1210: a row whose baseline was taken without its guide proves nothing
+ *  about the forms, so a guide word other than ready or none is a failure. */
+const shapesLineProblems = (l) => {
+  const out = [];
+  if (l.failures.length) out.push(`${l.route}: ${l.failures.join('; ').slice(0, 300)}`);
+  if (l.guide !== 'ready' && l.guide !== 'none') out.push(`${l.route}: its line says guide ${JSON.stringify(l.guide ?? null)}, so its baseline was not taken with the guide landed`);
+  return out;
+};
 
 /* The parity test against the hook as it stood at PRE: the old hook is written
    into this run's folder from git and named by R848_PRE_HOOK. */
@@ -236,11 +279,18 @@ try {
        verdict ask takeNewerSave first. The nine Higher or Lower audit rows
        (and the Higher or Lower click row of section 7) hold while either
        layer stands, so only stale (both removed) turns them. */
-    const guardRows = /a tab behind the stored log takes it over|a finish taken over from another tab|1b\) a handler whose first answer is dropped|Shirt Number: a stale tab cannot drop|7\) .*(Connections|Transfer Path|Footle).*its own next click/;
+    const guardRows = /a tab behind the stored log takes it over|a finish taken over from another tab|1b\) a handler whose first answer is dropped|Shirt Number: a stale tab cannot drop|7\) .*(Transfer Path|Footle).*its own next click/;
     const hlRows = /: the stale tab cannot drop a decided round|7\) .*Higher or Lower: taken over through its own next click/;
     const verdictRows = /2b\) a dropped answer shows no verdict/;
+    /* Round 1003 (758c1b72) gave NBA Connections the second layer: its
+       submit asks takeNewerSave before its own click. Its click row of
+       section 7 was a guard row until then (nine of them) and holds on
+       either layer now, so only stale turns it. Proven on a runner before
+       this list moved (r1210-fix-guard): guard as it stood, 8 of 9 red;
+       with that one line taken out of the hook, 9 of 9. */
+    const connRows = /7\) .*Connections.*its own next click/;
     const want = {
-      stale: (t) => guardRows.test(t) || hlRows.test(t) || verdictRows.test(t),
+      stale: (t) => guardRows.test(t) || connRows.test(t) || hlRows.test(t) || verdictRows.test(t),
       guard: (t) => guardRows.test(t),
       turn: (t) => /1b\) a handler whose first answer is dropped/.test(t),
       verdict: (t) => verdictRows.test(t) || /7\) .*Higher or Lower: taken over through its own next click/.test(t),
@@ -249,7 +299,7 @@ try {
       finished: (t) => /7b\) /.test(t),
       decided: (t) => /8\) .*a finished tab is never sent back to playing/.test(t),
     }[CONTROL];
-    const expected = { stale: 30, guard: 9, turn: 3, verdict: 12, event: 18, mark: 12, finished: 2, decided: 1 }[CONTROL];
+    const expected = { stale: 30, guard: 8, turn: 3, verdict: 12, event: 18, mark: 12, finished: 2, decided: 1 }[CONTROL];
     const failed = run.rows.filter((r) => r.status === 'failed');
     const intended = run.rows.filter((r) => want(r.title));
     assert.equal(intended.length, expected, `the control's ${expected} target rows exist`);
@@ -302,6 +352,76 @@ try {
     else if (!/AssertionError/.test(failed[0].messages)) fail('the /free-kick row failed on something other than its count');
     const counts = lines(run.text, 'R848_SKIP')[0] || {};
     console.log(`R848 ${CONTROL} control: /free-kick drew ${counts["/free-kick"]} target(s) and went red, ${run.rows.length - failed.length} other rows green`);
+  } else if (['guideslow', 'guidelate', 'guideheld', 'guidepart'].includes(CONTROL)) {
+    /* Round 1210: the guide race, switched on in the test (R848_GUIDE). Which
+       rows are exposed is computed: the first row, in the test's own order, of
+       each guide file PATH_BUNDLE names. guidepart runs the test as guidelate
+       does (the fetch skipped) and reads it with the shapes PART's judgement. */
+    const mode = CONTROL === 'guidepart' ? 'late' : CONTROL.slice('guide'.length);
+    const loader = code(read('src/data/gameContent/loader.ts'));
+    const at = loader.indexOf('export const PATH_BUNDLE');
+    assert.ok(at >= 0, 'loader.ts declares PATH_BUNDLE');
+    const bundleOf = new Map([...loader.slice(at, loader.indexOf('\n};', at)).matchAll(/'(\/[^']+)':\s*'(\w+)'/g)].map((m) => [m[1], m[2]]));
+    assert.ok(bundleOf.size >= 100, `PATH_BUNDLE was read (${bundleOf.size} routes)`);
+    const guided = [...shapesRoutes].filter((r) => bundleOf.has(r));
+    const firstRows = [];
+    const files = new Set();
+    for (const r of guided) if (!files.has(bundleOf.get(r))) { files.add(bundleOf.get(r)); firstRows.push(r); }
+    assert.ok(firstRows.length >= 2, 'at least two guide files are in play');
+    const run = vitest(SHAPES, { env: { R848_GUIDE: mode } });
+    const result = lines(run.text, 'R848_SHAPES');
+    assert.equal(result.length, shapesRoutes.size, 'one R848_SHAPES line a route');
+    const switched = lines(run.text, 'R848_GUIDE')[0];
+    assert.ok(switched && switched.mode === mode, `the test ran with R848_GUIDE=${mode} (it printed ${JSON.stringify(switched ?? null)})`);
+    const statusOf = new Map(run.rows.map((r) => [r.title.split(' > ').pop(), r.status]));
+    const DIFF = /: drew a different page from a fresh daily, first at /;
+    const MOVED = /^the fresh page moved while the row ran, first at /;
+    const NAMED = /^the guide for this route had not landed when the baseline was taken/;
+    const red = result.filter((l) => l.failures.length).map((l) => l.route);
+    for (const l of result) if ((statusOf.get(l.route) === 'passed') !== (l.failures.length === 0)) fail(`${l.route}: the row is ${statusOf.get(l.route)} with ${l.failures.length} failure(s) on its line`);
+    if (CONTROL === 'guidepart') {
+      /* Review of Round 1210: the shapes part fails on a line whose guide
+         word is not ready or none, and no control ever made it do so (the
+         three above read l.guide themselves). With the fetch skipped every
+         row that has a guide file says "skipped": the part's own judgement
+         must name exactly those rows on that word, and none without a guide. */
+      const WORD = /: its line says guide "skipped", so its baseline was not taken with the guide landed$/;
+      const namedRows = result.filter((l) => shapesLineProblems(l).some((p) => WORD.test(p))).map((l) => l.route);
+      if (guided.length < 2) fail(`only ${guided.length} rows have a guide file, so the control proves nothing`);
+      if (namedRows.slice().sort().join() !== guided.slice().sort().join()) fail(`expected the shapes part's judgement to name exactly the ${guided.length} rows whose route has a guide, each on its guide word, got ${namedRows.length} (${namedRows.slice(0, 6).join(', ') || 'none'})`);
+      assert.notEqual(run.status, 0, 'the run is red');
+      console.log(`R848 guidepart control: with the fetch skipped the shapes part's own judgement named ${namedRows.length} rows on the guide word "skipped", exactly the ${guided.length} rows whose route has a guide, and none of the ${result.length - guided.length} without`);
+    } else if (mode === 'slow') {
+      if (switched.waited < firstRows.length) fail(`only ${switched.waited} loads were made to wait, fewer than the ${firstRows.length} guide files, so the delay never happened`);
+      for (const l of result) {
+        if (l.failures.length) fail(`${l.route} went red under a slow guide: ${l.failures.join('; ').slice(0, 300)}`);
+        if (l.guide !== 'ready' && l.guide !== 'none') fail(`${l.route}: its line says guide ${JSON.stringify(l.guide)}, not ready or none`);
+      }
+      if (run.status !== 0) fail('the run is not green under a slow guide');
+      console.log(`R848 guideslow control: ${result.filter((l) => !l.failures.length).length} of ${result.length} rows green with the loader 300 ms late (${switched.waited} loads waited), ${result.filter((l) => l.guide === 'ready').length} ready, ${result.filter((l) => l.guide === 'none').length} none`);
+    } else if (mode === 'late') {
+      for (const need of ['/olympics', '/nba-career']) {
+        if (!firstRows.includes(need)) fail(`STOP: ${need} is not the first row of a guide file (first rows: ${firstRows.join(', ')}), so the diagnosis of the recorded red is wrong`);
+      }
+      if (red.slice().sort().join() !== firstRows.slice().sort().join()) fail(`expected exactly the first row of each guide file red (${firstRows.join(', ')}), got ${red.join(', ') || 'none'}`);
+      for (const l of result.filter((x) => firstRows.includes(x.route))) {
+        const other = l.failures.filter((f) => !DIFF.test(f) && !MOVED.test(f));
+        if (other.length) fail(`${l.route} failed on something other than the page difference: ${other[0].slice(0, 200)}`);
+        if (!l.failures.some((f) => DIFF.test(f))) fail(`${l.route}: no damaged form drew a different page, so the recorded red was not reproduced`);
+        if (!l.failures.some((f) => MOVED.test(f))) fail(`${l.route}: the last fresh mount did not report that the fresh page moved`);
+        if (l.guide !== 'skipped') fail(`${l.route}: its line says guide ${JSON.stringify(l.guide)}, the fetch was not skipped`);
+      }
+      assert.notEqual(run.status, 0, 'the run is red');
+      console.log(`R848 guidelate control: ${red.length} rows red, exactly the first row of each of the ${firstRows.length} guide files (${firstRows.join(', ')}), ${result.length - red.length} green; every failure a page difference`);
+    } else {
+      for (const l of result) {
+        if (!guided.includes(l.route)) { if (l.failures.length) fail(`${l.route} has no guide and went red with the guide held back`); continue; }
+        if (l.failures.length !== 1 || !NAMED.test(l.failures[0])) fail(`${l.route}: expected the one named failure, got ${l.failures.length ? l.failures.join('; ').slice(0, 200) : 'none'}`);
+        if (l.failures.some((f) => DIFF.test(f) || MOVED.test(f))) fail(`${l.route} failed on a page difference with the guide held back`);
+      }
+      assert.notEqual(run.status, 0, 'the run is red');
+      console.log(`R848 guideheld control: ${red.length} rows red, exactly the ${guided.length} rows whose route has a guide, each on the named assertion; ${result.length - guided.length} rows with no guide green`);
+    }
   } else {
     /* ------------------------------------------------------- the parts */
     if (PART === 'all' || PART === 'saves') {
@@ -342,9 +462,9 @@ try {
       const run = vitest(SHAPES);
       const result = lines(run.text, 'R848_SHAPES');
       if (result.length !== shapesRoutes.size) fail(`expected ${shapesRoutes.size} route results, got ${result.length}`);
-      for (const l of result) if (l.failures.length) fail(`${l.route}: ${l.failures.join('; ').slice(0, 300)}`);
+      for (const l of result) for (const p of shapesLineProblems(l)) fail(p);
       for (const r of run.rows.filter((x) => x.status !== 'passed')) fail(`${r.title} ${r.status}`);
-      console.log(`   ${result.filter((l) => !l.failures.length).length} of ${shapesRoutes.size} routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily`);
+      console.log(`   ${result.filter((l) => !l.failures.length).length} of ${shapesRoutes.size} routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily (guide ready on ${result.filter((l) => l.guide === 'ready').length}, none on ${result.filter((l) => l.guide === 'none').length})`);
     }
     if (PART === 'all' || PART === 'parity') {
       console.log('parity) every consumer plays and restores through the new hook exactly as through the hook at ' + PRE);

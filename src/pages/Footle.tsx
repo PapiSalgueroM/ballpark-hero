@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { useGame, footleScore, FOOTLE_SCORE_BUCKETS } from '@/hooks/useGame';
 import type { GuessResult, Player } from '@/types/game';
 import { PlayerSearch } from '@/components/game/PlayerSearch';
@@ -20,6 +20,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { fmtCompactUsd } from '@/lib/dealPlayers';
 import { safeSetItem } from '@/lib/safeStorage';
 import { GAME_COUNT_LABEL } from '@/data/gameRegistry';
+import { FlagImg } from '@/components/FlagImg';
 
 const Index = () => {
   const {
@@ -187,7 +188,7 @@ const Index = () => {
                 <h3 className="font-bold text-foreground mb-2">Try a five-puzzle run</h3>
                 <p className="text-muted-foreground">Pick a difficulty and solve five different players. You get eight guesses per player. Give up reveals that answer and counts as a miss. Finish all five for your run receipt. Practice never changes your daily score.</p>
                 <p className="text-muted-foreground mt-2">Worked example: if your guess has 10 goals and the answer has 12, the goals tile is yellow with an up arrow. These example numbers are hypothetical.</p>
-                {examplePlayer && <p className="text-muted-foreground mt-2">From this puzzle pool: {examplePlayer.name} is listed with {examplePlayer.club}, {examplePlayer.nationality}, position {examplePlayer.position}.</p>}
+                {examplePlayer && <p className="text-muted-foreground mt-2">From this puzzle pool: {examplePlayer.name} is listed with {examplePlayer.club}, <FlagImg name={examplePlayer.nationality} size={12} showLabel />, position {examplePlayer.position}.</p>}
                 <p className="text-muted-foreground mt-2">Stats and values use the puzzle data snapshot, not live totals. A question mark or unknown comparison means a clue is unavailable. Different clubs with an unknown league cannot be compared by league.</p>
               </section>
 
@@ -369,7 +370,7 @@ const Index = () => {
                 {gameStatus !== 'playing' && targetPlayer ? (
                   <div className="mt-4" data-testid="practice-feedback">
                     <p role="status" className="font-semibold text-foreground">{gameStatus === 'won' ? 'Solved!' : 'The answer was'} {targetPlayer.name}</p>
-                    <p className="mt-1 text-sm text-muted-foreground">{targetPlayer.club} · {targetPlayer.nationality} · {targetPlayer.position}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{targetPlayer.club} · <FlagImg name={targetPlayer.nationality} size={12} showLabel /> · {targetPlayer.position}</p>
                     <button data-testid="practice-next" onClick={advancePractice} className="mt-4 w-full min-h-[44px] rounded-xl bg-primary px-4 py-3 font-semibold text-primary-foreground">Next puzzle</button>
                     <details className="mt-2"><summary className="min-h-[44px] cursor-pointer py-3 text-sm font-semibold text-primary">View player details</summary><PracticeAnswer player={targetPlayer} /></details>
                   </div>
@@ -498,9 +499,9 @@ const Index = () => {
 };
 
 function PracticeAnswer({ player }: { player: Player }) {
-  const facts = [
+  const facts: [string, ReactNode][] = [
     ['Club', player.club], ['League', player.league === 'Other' ? 'Unknown' : player.league],
-    ['Nation', player.nationality], ['Position', player.position], ['Goals', player.goals ?? 'Unknown'],
+    ['Nation', <FlagImg name={player.nationality} size={12} showLabel />], ['Position', player.position], ['Goals', player.goals ?? 'Unknown'],
     ['Assists', player.assists ?? 'Unknown'], ['Age', player.age], ['Kit #', player.kitNumber ?? 'Unknown'],
     ['Value', fmtCompactUsd(player.marketValue * 1_000_000)],
   ];

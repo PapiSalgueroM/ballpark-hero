@@ -31,6 +31,8 @@ const mounted = {
   rules: 'shows worked rules and derives examples from a loaded non-answer player',
   corrupt: 'rejects a corrupt saved run and permits a clean replacement',
   save: 'reports a failed save while keeping the current run playable',
+  flags: 'prints the answer nationality with its flag in the feedback line, the Nation row and the example',
+  noflag: 'prints a nationality with no flag code as its bare name, never a wrong flag',
   short: 'disables a short practice tier rather than starting fewer puzzles',
 };
 const mapper = 'preserves unknown counts and real zero in both fetched tiers';

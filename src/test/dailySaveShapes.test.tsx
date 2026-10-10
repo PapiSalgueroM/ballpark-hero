@@ -26,16 +26,74 @@
  * scripts/simDailySaveHardening.mjs runs this file and carries the negative
  * control: R848_CONTROL=shape removes the shared shape check from a copy of
  * the hook, and this file must then go red.
+ *
+ * Round 1210: the baseline is taken only once the route's guide has landed.
+ * The test used to call a page settled after six turns of a zero timer, which
+ * is a count and not a condition. Two things on a game page draw differently
+ * before and after the route's guide file arrives (the guide block, which
+ * stamps data-seo-content loading or ready, and the "?" help button, which is
+ * not drawn at all until the guide resolves), and the guide files are fetched
+ * one sport at a time and kept. So the FIRST row that needed a given file paid
+ * for its import inside its own two baseline mounts: when the import landed
+ * after them, "fresh" was the page without its guide, every damaged mount had
+ * it, and the row failed with "drew a different page from a fresh daily" on
+ * healthy code. Measured on GitHub runners on origin/main 074a9054, three runs
+ * side by side: 12 of 12 runs red, /olympics every time and /nba-career twice
+ * (the first rows of world.ts and basketball.ts).
+ * Now each row fetches its route's guide through the loader itself before its
+ * first mount and says by name when it has not landed, takes its baseline, and
+ * after the last damaged form mounts fresh once more: if that differs, the
+ * failure says the fresh page moved, which names any lazy piece that lands
+ * late and not only the guide.
+ * R848_GUIDE makes the race happen on demand (the harness's guide controls):
+ *   slow  the loader answers 300 ms late, the row does its fetch: all green.
+ *   late  the loader waits behind a gate, the row SKIPS its fetch and opens
+ *         the gate only after its baseline (the two named guide assertions are
+ *         off): the first row of each guide file draws the recorded red.
+ *   held  the gate never opens: every row with a guide fails by name within a
+ *         short bound, never on a diff and never by hanging.
  */
 import './dailyReload/mocks';
 import { act, cleanup, render } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ComponentType } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { loadGameContent, peekGameContent, PATH_BUNDLE } from '@/data/gameContent/loader';
 import { resetMocks } from './dailyReload/mocks';
+
+/* The guide loader, passed through untouched unless R848_GUIDE is set. With it
+   set, a load of a route whose guide file is not held yet waits first: a real
+   300 ms under slow, a gate under late and held. A file that is already held
+   is never delayed, so only the first row of each guide file is exposed, as on
+   a real run. */
+const guide = vi.hoisted(() => {
+  const state = { mode: process.env.R848_GUIDE || '', open: () => {}, gate: Promise.resolve(), waited: 0 };
+  state.gate = new Promise<void>((r) => { state.open = r; });
+  return state;
+});
+vi.mock('@/data/gameContent/loader', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/data/gameContent/loader')>();
+  if (!guide.mode) return { ...real };
+  return {
+    ...real,
+    loadGameContent: async (path: string) => {
+      if (real.PATH_BUNDLE[path] !== undefined && real.peekGameContent(path) === undefined) {
+        guide.waited += 1;
+        if (guide.mode === 'slow') await new Promise((r) => setTimeout(r, 300));
+        else await guide.gate;
+      }
+      return real.loadGameContent(path);
+    },
+  };
+});
+const GUIDE = guide.mode;
+if (GUIDE && !['slow', 'late', 'held'].includes(GUIDE)) throw new Error(`unknown R848_GUIDE ${GUIDE}`);
+/* How long a row waits for its guide before it fails by name. */
+const GUIDE_BOUND_MS = GUIDE === 'held' ? 500 : 30000;
+const GUIDE_NOT_LANDED = 'the guide for this route had not landed when the baseline was taken';
 
 /* What each useDailyPuzzle call reads, captured through a pass-through
    wrapper: the storage key prefix, and once it has loaded, the index and id
@@ -191,40 +249,87 @@ beforeEach(() => {
   localStorage.clear();
   resetMocks();
   seen.clear();
+  /* A gate of its own for every row: the one a row opened must not let the
+     next guide file through early. */
+  guide.gate = new Promise<void>((r) => { guide.open = r; });
 });
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
+/* Output, not runtime, proves the switch was on: how many loads were made to wait. */
+afterAll(() => { if (GUIDE) console.log(`R848_GUIDE ${JSON.stringify({ mode: GUIDE, waited: guide.waited })}`); });
+
+/** True when the promise settled inside the bound. The timer is real (only Date is faked here). */
+function landedWithin(work: Promise<unknown>, ms: number): Promise<boolean> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  return Promise.race([
+    work.then(() => true),
+    new Promise<boolean>((r) => { timer = setTimeout(() => r(false), ms); }),
+  ]).finally(() => clearTimeout(timer));
+}
+
+const firstDifference = (a: string, b: string) => {
+  let at = 0;
+  while (at < a.length && a[at] === b[at]) at++;
+  return `first at ${at}: "${a.slice(Math.max(0, at - 60), at + 60)}"`;
+};
 
 describe('a damaged daily save resets itself', () => {
   for (const row of ROWS.filter((r) => !ONLY || r.route === ONLY)) {
     it(row.route, async () => {
-      /* A first mount loads the page's own lazy pieces (the guide block
-         says "loading" until its chunk lands), so the baseline is the second. */
-      await mount(row);
-      localStorage.clear();
-      seen.clear();
-      const fresh = await mount(row);
-      const slugs = [...seen.entries()].filter(([, s]) => s.loaded);
-      expect(slugs.length, 'the daily hook loaded on a fresh mount').toBeGreaterThan(0);
       const failures: string[] = [];
-      for (const form of damaged(slugs[0][1], row)) {
+      const hasGuide = PATH_BUNDLE[row.route] !== undefined;
+      let guideState: 'ready' | 'none' | 'skipped' | 'missing' = hasGuide ? 'missing' : 'none';
+      let slugs: [string, { index: number; id?: string; loaded: boolean }][] = [];
+      run: {
+        /* The route's guide, through the loader itself, before anything is
+           mounted: from here every mount of this row, baseline and damaged
+           alike, starts with the guide held (what peekGameContent is for). */
+        if (hasGuide && GUIDE === 'late') guideState = 'skipped';
+        else if (hasGuide) {
+          const landed = await landedWithin(loadGameContent(row.route), GUIDE_BOUND_MS);
+          if (!landed || peekGameContent(row.route) === undefined) {
+            failures.push(`${GUIDE_NOT_LANDED} (the loader had not answered after ${GUIDE_BOUND_MS} ms)`);
+            break run;
+          }
+          guideState = 'ready';
+        }
+        /* A first mount still warms the page's own lazy pieces, so the
+           baseline is the second. */
+        await mount(row);
         localStorage.clear();
         seen.clear();
-        for (const [slug] of slugs) localStorage.setItem(form.key(slug), form.bytes);
-        let html = '';
-        try {
-          html = await mount(row);
-        } catch (e) {
-          failures.push(`${form.name}: threw ${(e as Error).message.split('\n')[0]}`);
-          continue;
+        const fresh = await mount(row);
+        slugs = [...seen.entries()].filter(([, s]) => s.loaded);
+        expect(slugs.length, 'the daily hook loaded on a fresh mount').toBeGreaterThan(0);
+        if (GUIDE !== 'late' && fresh.includes('data-seo-content="loading"')) {
+          failures.push(`${GUIDE_NOT_LANDED} (the baseline's guide block still says loading)`);
+          break run;
         }
-        if (![...seen.values()].some((s) => s.loaded)) failures.push(`${form.name}: the daily never loaded`);
-        if (form.same && html !== fresh) {
-          let at = 0;
-          while (at < html.length && html[at] === fresh[at]) at++;
-          failures.push(`${form.name}: drew a different page from a fresh daily, first at ${at}: "${html.slice(Math.max(0, at - 60), at + 60)}"`);
+        if (hasGuide && GUIDE === 'late') {
+          guide.open();
+          await loadGameContent(row.route);
         }
+        for (const form of damaged(slugs[0][1], row)) {
+          localStorage.clear();
+          seen.clear();
+          for (const [slug] of slugs) localStorage.setItem(form.key(slug), form.bytes);
+          let html = '';
+          try {
+            html = await mount(row);
+          } catch (e) {
+            failures.push(`${form.name}: threw ${(e as Error).message.split('\n')[0]}`);
+            continue;
+          }
+          if (![...seen.values()].some((s) => s.loaded)) failures.push(`${form.name}: the daily never loaded`);
+          if (form.same && html !== fresh) failures.push(`${form.name}: drew a different page from a fresh daily, ${firstDifference(html, fresh)}`);
+        }
+        /* The baseline once more, last. A lazy piece that landed while the row
+           ran shows here as itself, and not as a damaged save's fault. */
+        localStorage.clear();
+        seen.clear();
+        const again = await mount(row);
+        if (again !== fresh) failures.push(`the fresh page moved while the row ran, ${firstDifference(again, fresh)}`);
       }
-      console.log(`R848_SHAPES ${JSON.stringify({ route: row.route, slugs: slugs.map(([s, v]) => ({ s, i: v.index, id: v.id ?? null })), failures })}`);
+      console.log(`R848_SHAPES ${JSON.stringify({ route: row.route, slugs: slugs.map(([s, v]) => ({ s, i: v.index, id: v.id ?? null })), guide: guideState, failures })}`);
       expect(failures).toEqual([]);
     }, 60000);
   }
