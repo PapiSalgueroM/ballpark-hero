@@ -1,0 +1,3 @@
+simGmXp: node scripts/simGmXp.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simGmDesk: node scripts/simGmDesk.mjs

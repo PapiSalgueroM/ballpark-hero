@@ -1,0 +1,3 @@
+simGmDesk exit=0 1s | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and 
+simGmXp exit=1 1s | simGmXp: 3 failure(s)
+simGmSeat exit=0 53s | simGmSeat: all checks passed
