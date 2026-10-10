@@ -1,0 +1,1505 @@
+{
+ "QB0-p0": {
+  "notes": {
+   "entry": "📺 Week by week",
+   "entryBox": {
+    "w": 159,
+    "h": 44,
+    "inside": true
+   },
+   "card": "Miami Dolphins2026 · NFL17 games · 8 home, 9 away · the league's schedule formula, this career's own drawFirst five1HomeCincinnati Bengals2HomeBuffalo Bills3Awa",
+   "us": "Miami Dolphins",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 8
+   },
+   "started": true,
+   "early": {
+    "full": false,
+    "minute": "1",
+    "anims": 8
+   },
+   "mid": {
+    "full": false,
+    "minute": "11",
+    "score": "0-0"
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 1
+   },
+   "simmed": true,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 9
+   }
+  },
+  "log": {
+   "record": "10-7",
+   "rows": [
+    "G17 | H | NE | W 28-10 | 175 YDS 2 TD 1 INT",
+    "G16 | A | SEA | L 24-31 | Did not play",
+    "G15 | A | LA | L 20-35 | Did not play",
+    "G14 | H | NYJ | W 21-17 | 155 YDS 1 TD 2 INT",
+    "G13 | A | CLE | W 17-14 | Did not play",
+    "G12 | A | BUF | L 13-23 | Did not play",
+    "G11 | A | PIT | W 27-17 | Did not play",
+    "G10 | H | SF | W 45-14 | Did not play",
+    "G9 | A | LAC | W 30-23 | Did not play",
+    "G8 | H | ARI | W 34-20 | Did not play",
+    "G7 | H | IND | W 20-17 | Did not play",
+    "G6 | A | ATL | W 31-16 | 257 YDS 2 TD 1 INT",
+    "G5 | H | BAL | L 13-24 | Did not play",
+    "G4 | A | NE | L 6-20 | Did not play",
+    "G3 | A | NYJ | L 14-34 | 151 YDS 0 TD 0 INT",
+    "G2 | H | BUF | L 21-24 | Did not play",
+    "G1 | H | CIN | W 30-17 | Did not play"
+   ],
+   "wrapped": 0
+  },
+  "review": [
+   [
+    "Games",
+    "4"
+   ],
+   [
+    "Pass yds",
+    "738"
+   ],
+   [
+    "Pass TD",
+    "5"
+   ],
+   [
+    "INT",
+    "4"
+   ]
+  ],
+  "reviewText": "Season review10-7 · Lost in the Wild Card round4Games738Pass yds5Pass TD4INTRegular season, the same numbers as your season card.⭐ Best game: Game 6, W 31-16 vs Atlanta Falcons, 257 yards, 2 touchdowns, 1 interceptionLast five:WWLLWPlayoffsLWild Cardlost to the Buffalo BillsYour playoffs: 1 game, 161 yds, 1 TD, 1 INT",
+  "games": [
+   {
+    "score": "30-17",
+    "full": true,
+    "names": [
+     "MIA",
+     "CIN"
+    ],
+    "feed": [
+     [
+      "Q1 1:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 12:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 7:00",
+      "🏈 Touchdown, Cincinnati Bengals."
+     ],
+     [
+      "Q2 5:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 2:00",
+      "🥅 Field goal, Cincinnati Bengals."
+     ],
+     [
+      "Q3 13:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 7:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 3:00",
+      "🏈 Touchdown, Cincinnati Bengals."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ]
+    ],
+    "line": "Did not play",
+    "cut": 0
+   },
+   {
+    "score": "21-24",
+    "full": true,
+    "names": [
+     "MIA",
+     "BUF"
+    ],
+    "feed": [
+     [
+      "Q1 6:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ],
+     [
+      "Q1 3:00",
+      "🥅 Field goal, Buffalo Bills."
+     ],
+     [
+      "Q3 13:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q3 2:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 11:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 4:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ]
+    ],
+    "line": "Did not play",
+    "cut": 0
+   },
+   {
+    "score": "14-34",
+    "full": true,
+    "names": [
+     "NYJ",
+     "MIA"
+    ],
+    "feed": [
+     [
+      "Q1 13:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q1 3:00",
+      "🥅 Field goal, New York Jets."
+     ],
+     [
+      "Q1 0:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q2 7:00",
+      "🥅 Field goal, New York Jets."
+     ],
+     [
+      "Q3 11:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q3 5:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 11:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, New York Jets."
+     ]
+    ],
+    "line": "151 YDS0 TD0 INT",
+    "cut": 0
+   }
+  ]
+ },
+ "QB0-p1": {
+  "notes": {
+   "entry": "📺 Week by week",
+   "entryBox": {
+    "w": 159,
+    "h": 44,
+    "inside": true
+   },
+   "card": "Miami Dolphins2026 · NFL17 games · 8 home, 9 away · the league's schedule formula, this career's own drawFirst five1HomeCincinnati Bengals2HomeBuffalo Bills3Awa",
+   "us": "Miami Dolphins",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "started": true,
+   "early": {
+    "full": true,
+    "minute": "60",
+    "anims": 0
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "simmed": true,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   }
+  },
+  "log": {
+   "record": "10-7",
+   "rows": [
+    "G17 | H | NE | W 28-10 | 175 YDS 2 TD 1 INT",
+    "G16 | A | SEA | L 24-31 | Did not play",
+    "G15 | A | LA | L 20-35 | Did not play",
+    "G14 | H | NYJ | W 21-17 | 155 YDS 1 TD 2 INT",
+    "G13 | A | CLE | W 17-14 | Did not play",
+    "G12 | A | BUF | L 13-23 | Did not play",
+    "G11 | A | PIT | W 27-17 | Did not play",
+    "G10 | H | SF | W 45-14 | Did not play",
+    "G9 | A | LAC | W 30-23 | Did not play",
+    "G8 | H | ARI | W 34-20 | Did not play",
+    "G7 | H | IND | W 20-17 | Did not play",
+    "G6 | A | ATL | W 31-16 | 257 YDS 2 TD 1 INT",
+    "G5 | H | BAL | L 13-24 | Did not play",
+    "G4 | A | NE | L 6-20 | Did not play",
+    "G3 | A | NYJ | L 14-34 | 151 YDS 0 TD 0 INT",
+    "G2 | H | BUF | L 21-24 | Did not play",
+    "G1 | H | CIN | W 30-17 | Did not play"
+   ],
+   "wrapped": 0
+  },
+  "review": [
+   [
+    "Games",
+    "4"
+   ],
+   [
+    "Pass yds",
+    "738"
+   ],
+   [
+    "Pass TD",
+    "5"
+   ],
+   [
+    "INT",
+    "4"
+   ]
+  ],
+  "reviewText": "Season review10-7 · Lost in the Wild Card round4Games738Pass yds5Pass TD4INTRegular season, the same numbers as your season card.⭐ Best game: Game 6, W 31-16 vs Atlanta Falcons, 257 yards, 2 touchdowns, 1 interceptionLast five:WWLLWPlayoffsLWild Cardlost to the Buffalo BillsYour playoffs: 1 game, 161 yds, 1 TD, 1 INT",
+  "games": [
+   {
+    "score": "30-17",
+    "full": true,
+    "names": [
+     "MIA",
+     "CIN"
+    ],
+    "feed": [
+     [
+      "Q1 1:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 12:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 7:00",
+      "🏈 Touchdown, Cincinnati Bengals."
+     ],
+     [
+      "Q2 5:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 2:00",
+      "🥅 Field goal, Cincinnati Bengals."
+     ],
+     [
+      "Q3 13:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 7:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 3:00",
+      "🏈 Touchdown, Cincinnati Bengals."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ]
+    ],
+    "line": "Did not play",
+    "cut": 0
+   },
+   {
+    "score": "21-24",
+    "full": true,
+    "names": [
+     "MIA",
+     "BUF"
+    ],
+    "feed": [
+     [
+      "Q1 6:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ],
+     [
+      "Q1 3:00",
+      "🥅 Field goal, Buffalo Bills."
+     ],
+     [
+      "Q3 13:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q3 2:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 11:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 4:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ]
+    ],
+    "line": "Did not play",
+    "cut": 0
+   },
+   {
+    "score": "14-34",
+    "full": true,
+    "names": [
+     "NYJ",
+     "MIA"
+    ],
+    "feed": [
+     [
+      "Q1 13:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q1 3:00",
+      "🥅 Field goal, New York Jets."
+     ],
+     [
+      "Q1 0:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q2 7:00",
+      "🥅 Field goal, New York Jets."
+     ],
+     [
+      "Q3 11:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q3 5:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 11:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, New York Jets."
+     ]
+    ],
+    "line": "151 YDS0 TD0 INT",
+    "cut": 0
+   }
+  ]
+ },
+ "QB0-d0": {
+  "notes": {
+   "entry": "📺 Week by week",
+   "entryBox": {
+    "w": 159,
+    "h": 44,
+    "inside": true
+   },
+   "card": "Miami Dolphins2026 · NFL17 games · 8 home, 9 away · the league's schedule formula, this career's own drawFirst five1HomeCincinnati Bengals2HomeBuffalo Bills3Awa",
+   "us": "Miami Dolphins",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 7
+   },
+   "started": true,
+   "early": {
+    "full": false,
+    "minute": "1",
+    "anims": 7
+   },
+   "mid": {
+    "full": false,
+    "minute": "11",
+    "score": "0-0"
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 1
+   },
+   "simmed": true,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 8
+   }
+  },
+  "log": {
+   "record": "10-7",
+   "rows": [
+    "G17 | H | NE | W 28-10 | 175 YDS 2 TD 1 INT",
+    "G16 | A | SEA | L 24-31 | Did not play",
+    "G15 | A | LA | L 20-35 | Did not play",
+    "G14 | H | NYJ | W 21-17 | 155 YDS 1 TD 2 INT",
+    "G13 | A | CLE | W 17-14 | Did not play",
+    "G12 | A | BUF | L 13-23 | Did not play",
+    "G11 | A | PIT | W 27-17 | Did not play",
+    "G10 | H | SF | W 45-14 | Did not play",
+    "G9 | A | LAC | W 30-23 | Did not play",
+    "G8 | H | ARI | W 34-20 | Did not play",
+    "G7 | H | IND | W 20-17 | Did not play",
+    "G6 | A | ATL | W 31-16 | 257 YDS 2 TD 1 INT",
+    "G5 | H | BAL | L 13-24 | Did not play",
+    "G4 | A | NE | L 6-20 | Did not play",
+    "G3 | A | NYJ | L 14-34 | 151 YDS 0 TD 0 INT",
+    "G2 | H | BUF | L 21-24 | Did not play",
+    "G1 | H | CIN | W 30-17 | Did not play"
+   ],
+   "wrapped": 0
+  },
+  "review": [
+   [
+    "Games",
+    "4"
+   ],
+   [
+    "Pass yds",
+    "738"
+   ],
+   [
+    "Pass TD",
+    "5"
+   ],
+   [
+    "INT",
+    "4"
+   ]
+  ],
+  "reviewText": "Season review10-7 · Lost in the Wild Card round4Games738Pass yds5Pass TD4INTRegular season, the same numbers as your season card.⭐ Best game: Game 6, W 31-16 vs Atlanta Falcons, 257 yards, 2 touchdowns, 1 interceptionLast five:WWLLWPlayoffsLWild Cardlost to the Buffalo BillsYour playoffs: 1 game, 161 yds, 1 TD, 1 INT",
+  "games": [
+   {
+    "score": "30-17",
+    "full": true,
+    "names": [
+     "MIA",
+     "CIN"
+    ],
+    "feed": [
+     [
+      "Q1 1:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 12:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 7:00",
+      "🏈 Touchdown, Cincinnati Bengals."
+     ],
+     [
+      "Q2 5:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 2:00",
+      "🥅 Field goal, Cincinnati Bengals."
+     ],
+     [
+      "Q3 13:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 7:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 3:00",
+      "🏈 Touchdown, Cincinnati Bengals."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ]
+    ],
+    "line": "Did not play",
+    "cut": 0
+   },
+   {
+    "score": "21-24",
+    "full": true,
+    "names": [
+     "MIA",
+     "BUF"
+    ],
+    "feed": [
+     [
+      "Q1 6:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ],
+     [
+      "Q1 3:00",
+      "🥅 Field goal, Buffalo Bills."
+     ],
+     [
+      "Q3 13:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q3 2:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 11:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 4:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ]
+    ],
+    "line": "Did not play",
+    "cut": 0
+   },
+   {
+    "score": "14-34",
+    "full": true,
+    "names": [
+     "NYJ",
+     "MIA"
+    ],
+    "feed": [
+     [
+      "Q1 13:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q1 3:00",
+      "🥅 Field goal, New York Jets."
+     ],
+     [
+      "Q1 0:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q2 7:00",
+      "🥅 Field goal, New York Jets."
+     ],
+     [
+      "Q3 11:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q3 5:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 11:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, New York Jets."
+     ]
+    ],
+    "line": "151 YDS0 TD0 INT",
+    "cut": 0
+   }
+  ]
+ },
+ "QB0-d1": {
+  "notes": {
+   "entry": "📺 Week by week",
+   "entryBox": {
+    "w": 159,
+    "h": 44,
+    "inside": true
+   },
+   "card": "Miami Dolphins2026 · NFL17 games · 8 home, 9 away · the league's schedule formula, this career's own drawFirst five1HomeCincinnati Bengals2HomeBuffalo Bills3Awa",
+   "us": "Miami Dolphins",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "started": true,
+   "early": {
+    "full": true,
+    "minute": "60",
+    "anims": 0
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "simmed": true,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   }
+  },
+  "log": {
+   "record": "10-7",
+   "rows": [
+    "G17 | H | NE | W 28-10 | 175 YDS 2 TD 1 INT",
+    "G16 | A | SEA | L 24-31 | Did not play",
+    "G15 | A | LA | L 20-35 | Did not play",
+    "G14 | H | NYJ | W 21-17 | 155 YDS 1 TD 2 INT",
+    "G13 | A | CLE | W 17-14 | Did not play",
+    "G12 | A | BUF | L 13-23 | Did not play",
+    "G11 | A | PIT | W 27-17 | Did not play",
+    "G10 | H | SF | W 45-14 | Did not play",
+    "G9 | A | LAC | W 30-23 | Did not play",
+    "G8 | H | ARI | W 34-20 | Did not play",
+    "G7 | H | IND | W 20-17 | Did not play",
+    "G6 | A | ATL | W 31-16 | 257 YDS 2 TD 1 INT",
+    "G5 | H | BAL | L 13-24 | Did not play",
+    "G4 | A | NE | L 6-20 | Did not play",
+    "G3 | A | NYJ | L 14-34 | 151 YDS 0 TD 0 INT",
+    "G2 | H | BUF | L 21-24 | Did not play",
+    "G1 | H | CIN | W 30-17 | Did not play"
+   ],
+   "wrapped": 0
+  },
+  "review": [
+   [
+    "Games",
+    "4"
+   ],
+   [
+    "Pass yds",
+    "738"
+   ],
+   [
+    "Pass TD",
+    "5"
+   ],
+   [
+    "INT",
+    "4"
+   ]
+  ],
+  "reviewText": "Season review10-7 · Lost in the Wild Card round4Games738Pass yds5Pass TD4INTRegular season, the same numbers as your season card.⭐ Best game: Game 6, W 31-16 vs Atlanta Falcons, 257 yards, 2 touchdowns, 1 interceptionLast five:WWLLWPlayoffsLWild Cardlost to the Buffalo BillsYour playoffs: 1 game, 161 yds, 1 TD, 1 INT",
+  "games": [
+   {
+    "score": "30-17",
+    "full": true,
+    "names": [
+     "MIA",
+     "CIN"
+    ],
+    "feed": [
+     [
+      "Q1 1:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 12:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 7:00",
+      "🏈 Touchdown, Cincinnati Bengals."
+     ],
+     [
+      "Q2 5:00",
+      "🥅 Field goal, Miami Dolphins."
+     ],
+     [
+      "Q2 2:00",
+      "🥅 Field goal, Cincinnati Bengals."
+     ],
+     [
+      "Q3 13:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 7:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 3:00",
+      "🏈 Touchdown, Cincinnati Bengals."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ]
+    ],
+    "line": "Did not play",
+    "cut": 0
+   },
+   {
+    "score": "21-24",
+    "full": true,
+    "names": [
+     "MIA",
+     "BUF"
+    ],
+    "feed": [
+     [
+      "Q1 6:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ],
+     [
+      "Q1 3:00",
+      "🥅 Field goal, Buffalo Bills."
+     ],
+     [
+      "Q3 13:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q3 2:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 11:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 4:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Buffalo Bills."
+     ]
+    ],
+    "line": "Did not play",
+    "cut": 0
+   },
+   {
+    "score": "14-34",
+    "full": true,
+    "names": [
+     "NYJ",
+     "MIA"
+    ],
+    "feed": [
+     [
+      "Q1 13:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q1 3:00",
+      "🥅 Field goal, New York Jets."
+     ],
+     [
+      "Q1 0:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q2 7:00",
+      "🥅 Field goal, New York Jets."
+     ],
+     [
+      "Q3 11:00",
+      "🏈 Touchdown, New York Jets."
+     ],
+     [
+      "Q3 5:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 11:00",
+      "🏈 Touchdown, Miami Dolphins."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, New York Jets."
+     ]
+    ],
+    "line": "151 YDS0 TD0 INT",
+    "cut": 0
+   }
+  ]
+ },
+ "QB1-p0": {
+  "notes": {
+   "entry": "↺ Watch the 2026 season again",
+   "entryBox": {
+    "w": 207,
+    "h": 44,
+    "inside": true
+   },
+   "card": "New York Giants2026 · NFL17 games · 9 home, 8 away · the league's schedule formula, this career's own drawFirst five1HomeChicago Bears2AwayPhiladelphia Eagles3H",
+   "us": "New York Giants",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 2
+   },
+   "started": true,
+   "early": {
+    "full": false,
+    "minute": "1",
+    "anims": 4
+   },
+   "mid": {
+    "full": false,
+    "minute": "11",
+    "score": "14-0"
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 3
+   },
+   "simmed": true,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 10
+   }
+  },
+  "log": {
+   "record": "8-9",
+   "rows": [
+    "G17 | A | LA | W 28-20 | 196 YDS 1 TD 0 INT",
+    "G16 | A | MIN | L 21-23 | 122 YDS 0 TD 1 INT",
+    "G15 | A | WAS | W 37-7 | 193 YDS 1 TD 0 INT",
+    "G14 | H | LAC | L 17-48 | 163 YDS 0 TD 0 INT",
+    "G13 | A | DAL | W 20-17 | 181 YDS 1 TD 0 INT",
+    "G12 | A | GB | L 10-24 | 65 YDS 0 TD 2 INT",
+    "G11 | H | PHI | W 37-14 | 219 YDS 2 TD 0 INT",
+    "G10 | A | LV | W 31-13 | 168 YDS 1 TD 4 INT",
+    "G9 | H | JAX | L 13-24 | 98 YDS 1 TD 0 INT",
+    "G8 | H | WAS | W 38-14 | 154 YDS 3 TD 2 INT",
+    "G7 | H | DET | W 30-24 | 136 YDS 0 TD 2 INT",
+    "G6 | A | KC | L 21-28 | 144 YDS 0 TD 2 INT",
+    "G5 | H | DAL | L 7-31 | 81 YDS 1 TD 0 INT",
+    "G4 | H | CAR | W 24-23 | 157 YDS 0 TD 3 INT",
+    "G3 | H | DEN | L 13-31 | 75 YDS 0 TD 1 INT",
+    "G2 | A | PHI | L 26-28 | 92 YDS 0 TD 1 INT",
+    "G1 | H | CHI | L 17-31 | 176 YDS 0 TD 3 INT"
+   ],
+   "wrapped": 0
+  },
+  "review": [
+   [
+    "Games",
+    "17"
+   ],
+   [
+    "Pass yds",
+    "2,420"
+   ],
+   [
+    "Pass TD",
+    "11"
+   ],
+   [
+    "INT",
+    "21"
+   ]
+  ],
+  "reviewText": "Season review8-9 · Missed the playoffs17Games2,420Pass yds11Pass TD21INTRegular season, the same numbers as your season card.⭐ Best game: Game 11, W 37-14 vs Philadelphia Eagles, 219 yards, 2 touchdownsLast five:WLWLW",
+  "games": [
+   {
+    "score": "17-31",
+    "full": true,
+    "names": [
+     "NYG",
+     "CHI"
+    ],
+    "feed": [
+     [
+      "Q1 13:00",
+      "You are picked off."
+     ],
+     [
+      "Q1 11:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q1 5:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q2 3:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q2 1:00",
+      "🏈 Touchdown, Chicago Bears."
+     ],
+     [
+      "Q3 14:00",
+      "You are picked off."
+     ],
+     [
+      "Q3 9:00",
+      "🏈 Touchdown, Chicago Bears."
+     ],
+     [
+      "Q3 3:00",
+      "🏈 Touchdown, Chicago Bears."
+     ],
+     [
+      "Q3 1:00",
+      "You are picked off."
+     ],
+     [
+      "Q4 9:00",
+      "🏈 Touchdown, Chicago Bears."
+     ],
+     [
+      "Q4 6:00",
+      "🥅 Field goal, Chicago Bears."
+     ]
+    ],
+    "line": "176 YDS0 TD3 INT",
+    "cut": 0
+   },
+   {
+    "score": "26-28",
+    "full": true,
+    "names": [
+     "PHI",
+     "NYG"
+    ],
+    "feed": [
+     [
+      "Q1 8:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q1 5:00",
+      "🏈 Touchdown, Philadelphia Eagles."
+     ],
+     [
+      "Q2 9:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q2 4:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q3 14:00",
+      "🏈 Touchdown, Philadelphia Eagles."
+     ],
+     [
+      "Q3 8:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q3 6:00",
+      "You are picked off."
+     ],
+     [
+      "Q3 0:00",
+      "🏈 Touchdown, Philadelphia Eagles."
+     ],
+     [
+      "Q4 7:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q4 3:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Philadelphia Eagles."
+     ]
+    ],
+    "line": "92 YDS0 TD1 INT",
+    "cut": 0
+   },
+   {
+    "score": "13-31",
+    "full": true,
+    "names": [
+     "NYG",
+     "DEN"
+    ],
+    "feed": [
+     [
+      "Q1 7:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q1 5:00",
+      "🏈 Touchdown, Denver Broncos."
+     ],
+     [
+      "Q1 1:00",
+      "You are picked off."
+     ],
+     [
+      "Q2 12:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q2 1:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q3 9:00",
+      "🏈 Touchdown, Denver Broncos."
+     ],
+     [
+      "Q3 2:00",
+      "🏈 Touchdown, Denver Broncos."
+     ],
+     [
+      "Q4 10:00",
+      "🥅 Field goal, Denver Broncos."
+     ],
+     [
+      "Q4 7:00",
+      "🏈 Touchdown, Denver Broncos."
+     ]
+    ],
+    "line": "75 YDS0 TD1 INT",
+    "cut": 0
+   }
+  ]
+ },
+ "QB1-d0": {
+  "notes": {
+   "entry": "↺ Watch the 2026 season again",
+   "entryBox": {
+    "w": 207,
+    "h": 44,
+    "inside": true
+   },
+   "card": "New York Giants2026 · NFL17 games · 9 home, 8 away · the league's schedule formula, this career's own drawFirst five1HomeChicago Bears2AwayPhiladelphia Eagles3H",
+   "us": "New York Giants",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 2
+   },
+   "started": true,
+   "early": {
+    "full": false,
+    "minute": "1",
+    "anims": 4
+   },
+   "mid": {
+    "full": false,
+    "minute": "11",
+    "score": "14-0"
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 3
+   },
+   "simmed": true,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 10
+   }
+  },
+  "log": {
+   "record": "8-9",
+   "rows": [
+    "G17 | A | LA | W 28-20 | 196 YDS 1 TD 0 INT",
+    "G16 | A | MIN | L 21-23 | 122 YDS 0 TD 1 INT",
+    "G15 | A | WAS | W 37-7 | 193 YDS 1 TD 0 INT",
+    "G14 | H | LAC | L 17-48 | 163 YDS 0 TD 0 INT",
+    "G13 | A | DAL | W 20-17 | 181 YDS 1 TD 0 INT",
+    "G12 | A | GB | L 10-24 | 65 YDS 0 TD 2 INT",
+    "G11 | H | PHI | W 37-14 | 219 YDS 2 TD 0 INT",
+    "G10 | A | LV | W 31-13 | 168 YDS 1 TD 4 INT",
+    "G9 | H | JAX | L 13-24 | 98 YDS 1 TD 0 INT",
+    "G8 | H | WAS | W 38-14 | 154 YDS 3 TD 2 INT",
+    "G7 | H | DET | W 30-24 | 136 YDS 0 TD 2 INT",
+    "G6 | A | KC | L 21-28 | 144 YDS 0 TD 2 INT",
+    "G5 | H | DAL | L 7-31 | 81 YDS 1 TD 0 INT",
+    "G4 | H | CAR | W 24-23 | 157 YDS 0 TD 3 INT",
+    "G3 | H | DEN | L 13-31 | 75 YDS 0 TD 1 INT",
+    "G2 | A | PHI | L 26-28 | 92 YDS 0 TD 1 INT",
+    "G1 | H | CHI | L 17-31 | 176 YDS 0 TD 3 INT"
+   ],
+   "wrapped": 0
+  },
+  "review": [
+   [
+    "Games",
+    "17"
+   ],
+   [
+    "Pass yds",
+    "2,420"
+   ],
+   [
+    "Pass TD",
+    "11"
+   ],
+   [
+    "INT",
+    "21"
+   ]
+  ],
+  "reviewText": "Season review8-9 · Missed the playoffs17Games2,420Pass yds11Pass TD21INTRegular season, the same numbers as your season card.⭐ Best game: Game 11, W 37-14 vs Philadelphia Eagles, 219 yards, 2 touchdownsLast five:WLWLW",
+  "games": [
+   {
+    "score": "17-31",
+    "full": true,
+    "names": [
+     "NYG",
+     "CHI"
+    ],
+    "feed": [
+     [
+      "Q1 13:00",
+      "You are picked off."
+     ],
+     [
+      "Q1 11:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q1 5:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q2 3:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q2 1:00",
+      "🏈 Touchdown, Chicago Bears."
+     ],
+     [
+      "Q3 14:00",
+      "You are picked off."
+     ],
+     [
+      "Q3 9:00",
+      "🏈 Touchdown, Chicago Bears."
+     ],
+     [
+      "Q3 3:00",
+      "🏈 Touchdown, Chicago Bears."
+     ],
+     [
+      "Q3 1:00",
+      "You are picked off."
+     ],
+     [
+      "Q4 9:00",
+      "🏈 Touchdown, Chicago Bears."
+     ],
+     [
+      "Q4 6:00",
+      "🥅 Field goal, Chicago Bears."
+     ]
+    ],
+    "line": "176 YDS0 TD3 INT",
+    "cut": 0
+   },
+   {
+    "score": "26-28",
+    "full": true,
+    "names": [
+     "PHI",
+     "NYG"
+    ],
+    "feed": [
+     [
+      "Q1 8:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q1 5:00",
+      "🏈 Touchdown, Philadelphia Eagles."
+     ],
+     [
+      "Q2 9:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q2 4:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q3 14:00",
+      "🏈 Touchdown, Philadelphia Eagles."
+     ],
+     [
+      "Q3 8:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q3 6:00",
+      "You are picked off."
+     ],
+     [
+      "Q3 0:00",
+      "🏈 Touchdown, Philadelphia Eagles."
+     ],
+     [
+      "Q4 7:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q4 3:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q4 1:00",
+      "🏈 Touchdown, Philadelphia Eagles."
+     ]
+    ],
+    "line": "92 YDS0 TD1 INT",
+    "cut": 0
+   },
+   {
+    "score": "13-31",
+    "full": true,
+    "names": [
+     "NYG",
+     "DEN"
+    ],
+    "feed": [
+     [
+      "Q1 7:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q1 5:00",
+      "🏈 Touchdown, Denver Broncos."
+     ],
+     [
+      "Q1 1:00",
+      "You are picked off."
+     ],
+     [
+      "Q2 12:00",
+      "🥅 Field goal, New York Giants."
+     ],
+     [
+      "Q2 1:00",
+      "🏈 Touchdown, New York Giants."
+     ],
+     [
+      "Q3 9:00",
+      "🏈 Touchdown, Denver Broncos."
+     ],
+     [
+      "Q3 2:00",
+      "🏈 Touchdown, Denver Broncos."
+     ],
+     [
+      "Q4 10:00",
+      "🥅 Field goal, Denver Broncos."
+     ],
+     [
+      "Q4 7:00",
+      "🏈 Touchdown, Denver Broncos."
+     ]
+    ],
+    "line": "75 YDS0 TD1 INT",
+    "cut": 0
+   }
+  ]
+ },
+ "K3-p0": {
+  "notes": {
+   "entry": null,
+   "entryBox": null,
+   "card": "",
+   "us": "",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "started": false,
+   "early": {
+    "full": false,
+    "minute": null,
+    "anims": 0
+   },
+   "mid": {
+    "full": false,
+    "minute": null,
+    "score": null
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "simmed": false,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   }
+  },
+  "log": {
+   "record": "",
+   "rows": [],
+   "wrapped": 0
+  },
+  "review": [],
+  "reviewText": "",
+  "games": []
+ },
+ "LB1-d0": {
+  "notes": {
+   "entry": null,
+   "entryBox": null,
+   "card": "",
+   "us": "",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "started": false,
+   "early": {
+    "full": false,
+    "minute": null,
+    "anims": 0
+   },
+   "mid": {
+    "full": false,
+    "minute": null,
+    "score": null
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "simmed": false,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   }
+  },
+  "log": {
+   "record": "",
+   "rows": [],
+   "wrapped": 0
+  },
+  "review": [],
+  "reviewText": "",
+  "games": []
+ },
+ "QB17-p0": {
+  "notes": {
+   "entry": null,
+   "entryBox": null,
+   "card": "",
+   "us": "",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "started": false,
+   "early": {
+    "full": false,
+    "minute": null,
+    "anims": 0
+   },
+   "mid": {
+    "full": false,
+    "minute": null,
+    "score": null
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "simmed": false,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   }
+  },
+  "log": {
+   "record": "",
+   "rows": [],
+   "wrapped": 0
+  },
+  "review": [],
+  "reviewText": "",
+  "games": []
+ },
+ "WR2-d1": {
+  "notes": {
+   "entry": null,
+   "entryBox": null,
+   "card": "",
+   "us": "",
+   "layKick": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "started": false,
+   "early": {
+    "full": false,
+    "minute": null,
+    "anims": 0
+   },
+   "layFinal": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   },
+   "simmed": false,
+   "layReview": {
+    "sideways": false,
+    "offRight": 0,
+    "anims": 0
+   }
+  },
+  "log": {
+   "record": "",
+   "rows": [],
+   "wrapped": 0
+  },
+  "review": [],
+  "reviewText": "",
+  "games": []
+ }
+}
