@@ -11,6 +11,16 @@ import pw from './lib/playwrightLoader.mjs';
 
 assert(process.env.CI, 'Run the actual VAR browser proof only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+/* Release AT: VAR ships dark, so the page does not ask for reviews and this walk has nothing to drive on a
+   plain build. It refuses to run there (exit 2, neither green nor red) and says how to light the build. */
+{
+  const { cmVarLiveState } = await import('./qa/cmVarLit.mjs');
+  if (cmVarLiveState() !== 'on') {
+    console.error('playCmVar: cannot run: VAR ships dark (CM_VAR_LIVE is false in src/lib/clubManagerVarLive.ts), so the page asks for no review.');
+    console.error('playCmVar: light a scratch checkout first: node scripts/qa/cmVarLit.mjs on, then vite build, then this walk, then node scripts/qa/cmVarLit.mjs off.');
+    process.exit(2);
+  }
+}
 const OUT = path.resolve(process.env.CM_VAR_NATIVE_ARTIFACTS || path.join(ROOT, 'cm-var-artifacts/native'));
 const CACHE = path.resolve(process.env.FREE_KICK_FONT_CACHE || path.join(ROOT, 'cm-var-artifacts/font-cache'));
 const KEY = 'dukb-club-manager-save', NOW = 1791547200000, SECOND_SEED = 5312, FINISH_SEED = 5313;

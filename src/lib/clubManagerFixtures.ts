@@ -23,7 +23,7 @@ export function realPremierFixtureCoverage(state: FixtureContext, leagueId: stri
   if (state.realLeagueFixtures !== REAL_PREMIER_FIXTURE_KEY || !canBindRealPremierFixtures(state, leagueId, clubs)) return null;
   return {
     key: REAL_PREMIER_FIXTURE_KEY,
-    label: 'Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated.',
+    label: 'Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.',
     sources: PREMIER_FIXTURES_2026.sources,
   };
 }
