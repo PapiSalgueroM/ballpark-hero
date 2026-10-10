@@ -1,0 +1,84 @@
+  0 ledger: verified F1 F2 F3 F5 F6 F7 F8 F9 F10 F12 F15a F15b F15c F16 | one publisher F4 F13 F18 | to verify F14 F17
+  0 bracket rule from 10 readings of two seasons: seeded lines 1/2, 3/4, 5/6, 7/8 are fed by play-off pairings 15,16,17,18 | 13,14,19,20 | 11,12,21,22 | 9,10,23,24; quarter-finals 1v4 2v3 (lines), the two meet in one semi-final, 1st and 2nd in opposite halves
+  1 set 11: 1000 fields, at the floor 1000, fell back 0, plain fields strict 445 of 445
+  1 set 23: 1000 fields, at the floor 999, fell back 0, plain fields strict 449 of 449
+  1 set 37: 1000 fields, at the floor 1000, fell back 0, plain fields strict 453 of 453
+  1 by (clubs of the association with most in one pot, most in one pot): fields | at the floor | fell back | mean tries | floors seen (breaks ; over the cap)
+    4 clubs, 3 in a pot         20 |    20 |   0 | 1.00 | 0 ; 0
+    4 clubs, 4 in a pot         30 |    30 |   0 | 1.20 | 0 ; 0
+    5 clubs, 2 in a pot         54 |    54 |   0 | 1.06 | 0 ; 0
+    5 clubs, 3 in a pot        992 |   992 |   0 | 1.06 | 0 ; 0
+    5 clubs, 4 in a pot        608 |   608 |   0 | 1.16 | 0 ; 0
+    5 clubs, 5 in a pot        183 |   183 |   0 | 1.10 | 1,2 ; 0
+    6 clubs, 2 in a pot         29 |    29 |   0 | 1.17 | 0 ; 0
+    6 clubs, 3 in a pot        604 |   604 |   0 | 1.37 | 0 ; 0
+    6 clubs, 4 in a pot        313 |   312 |   0 | 1.58 | 0 ; 2
+    6 clubs, 5 in a pot        165 |   165 |   0 | 1.09 | 1,2 ; 2
+    6 clubs, 6 in a pot          2 |     2 |   0 | 1.00 | 3 ; 0
+  1 one association swollen past anything the game ships: 8 clubs: 8 of 8 at the floor, 0 on the pattern | 10 clubs: 8 of 8 at the floor, 0 on the pattern | 12 clubs: 7 of 8 at the floor, 0 on the pattern | 18 clubs: 0 of 8 at the floor, 6 on the pattern | 36 clubs: 8 of 8 at the floor, 0 on the pattern
+  1 one association with no club in one pot: 10 clubs: 8 of 8 at the floor, 0 on the pattern, 0 fewer on a longer climb | 11 clubs: 8 of 8 at the floor, 0 on the pattern, 0 fewer on a longer climb | 12 clubs: 8 of 8 at the floor, 0 on the pattern, 0 fewer on a longer climb | 13 clubs: 3 of 8 at the floor, 0 on the pattern, 0 fewer on a longer climb | 14 clubs: 0 of 8 at the floor, 2 on the pattern, 0 fewer on a longer climb
+  1 two or three swollen associations, 200 fields: the cap gave way and the ban held in 0, the ban gave way after the cap's budgets in 106, on the pattern 4
+  2 400 random tables agree with the second writing of the order. Neighbours split by: points 3328, goal difference 5007, goals 2644, away goals 948, wins 12, away wins 26, opponents' points 742, their goal difference 116, their goals 41, the name 1136
+  3 2000 draws: 1st in half one 1012, 9th's tie in half one 1009, 9th drawn against 23rd 980
+  4 the season one field at 36: England 5, Spain 5, Italy 5, Germany 5, France 4, Netherlands 2, Portugal 2, Scotland 1, Türkiye 1, Belgium 1, Austria 1, Greece 1, Denmark 1, Switzerland 1, Croatia 1
+  4 the 36 add to today's 32: Real Betis, Liverpool, AC Milan, Lyon. Holders: PSG.
+  4 sample save 1 (started at Arsenal): 0 same association matches, 0 over the cap
+      pot 1: PSG (89.9, France); Manchester City (89.5, England); Manchester United (88.5, England); Barcelona (87.9, Spain); Real Madrid (87.6, Spain); Inter Milan (87.5, Italy); Arsenal (86.7, England); Liverpool (86.3, England); Bayern Munich (85.6, Germany)
+      pot 2: Atlético Madrid (85.4, Spain); Borussia Dortmund (85.4, Germany); AC Milan (84.9, Italy); Aston Villa (84.7, England); Roma (84.5, Italy); Porto (83.6, Portugal); Stuttgart (83.6, Germany); Napoli (83.5, Italy); Galatasaray (83.4, Türkiye)
+      pot 3: Villarreal (82.5, Spain); Como (82.4, Italy); RB Leipzig (82.2, Germany); PSV (81.5, Netherlands); Lyon (81.4, France); Feyenoord (80.2, Netherlands); Sporting CP (79.7, Portugal); Club Brugge (79.5, Belgium); Hoffenheim (79.3, Germany)
+      pot 4: Lille (79.1, France); Real Betis (78, Spain); Lens (77.4, France); AEK Athens (74.2, Greece); Celtic (73, Scotland); Dinamo Zagreb (68.3, Croatia); AGF (63.5, Denmark); LASK (63.5, Austria); Thun (61, Switzerland)
+  4 sample save 2 (started at Manchester City): 0 same association matches, 0 over the cap
+      pot 1: PSG (87.9, France); Arsenal (88.7, England); Bayern Munich (88.6, Germany); Real Madrid (88.6, Spain); Manchester City (88.5, England); Manchester United (88.5, England); Inter Milan (87.5, Italy); Barcelona (86.9, Spain); Liverpool (86.3, England)
+      pot 2: Porto (84.6, Portugal); Roma (84.5, Italy); RB Leipzig (84.2, Germany); Atlético Madrid (83.4, Spain); Borussia Dortmund (83.4, Germany); Como (83.4, Italy); Galatasaray (83.4, Türkiye); Napoli (82.5, Italy); AC Milan (81.9, Italy)
+      pot 3: Aston Villa (81.7, England); Sporting CP (81.7, Portugal); Stuttgart (81.6, Germany); Lyon (81.4, France); Lille (80.1, France); Hoffenheim (79.3, Germany); Real Betis (79, Spain); Club Brugge (78.5, Belgium); Villarreal (78.5, Spain)
+      pot 4: PSV (77.5, Netherlands); Lens (77.4, France); Feyenoord (76.2, Netherlands); AEK Athens (75.2, Greece); Celtic (74, Scotland); Dinamo Zagreb (68.3, Croatia); LASK (67.5, Austria); AGF (62.5, Denmark); Thun (60, Switzerland)
+  4 sample save 3 (started at Manchester United): 0 same association matches, 0 over the cap
+      pot 1: PSG (90.9, France); Arsenal (90.7, England); Real Madrid (90.6, Spain); Barcelona (89.9, Spain); Bayern Munich (89.6, Germany); Manchester City (88.5, England); Liverpool (88.3, England); Inter Milan (87.5, Italy); Borussia Dortmund (86.4, Germany)
+      pot 2: Manchester United (85.5, England); Como (85.4, Italy); AC Milan (84.9, Italy); RB Leipzig (84.2, Germany); Aston Villa (83.7, England); Atlético Madrid (83.4, Spain); Roma (82.5, Italy); Sporting CP (81.7, Portugal); Porto (81.6, Portugal)
+      pot 3: Napoli (81.5, Italy); Galatasaray (80.4, Türkiye); Feyenoord (80.2, Netherlands); Real Betis (80, Spain); Stuttgart (79.6, Germany); Villarreal (79.5, Spain); Hoffenheim (78.3, Germany); Club Brugge (77.5, Belgium); PSV (77.5, Netherlands)
+      pot 4: Lens (77.4, France); Lyon (77.4, France); Lille (77.1, France); Celtic (77, Scotland); AEK Athens (74.2, Greece); Dinamo Zagreb (66.3, Croatia); LASK (64.5, Austria); AGF (62.5, Denmark); Thun (61, Switzerland)
+  4 most clubs of one association in one pot, over 240 seeded saves: 3 in 49 of 240 (20.4%) | 4 in 160 of 240 (66.7%) | 5 in 31 of 240 (12.9%)
+  4 which association fills it: 4 of England 143, 4 of Italy 84, 3 of England 49, 3 of Italy 34, 3 of Spain 30, 5 of Italy 28, 3 of Germany 12, 3 of France 6, 5 of England 5
+  4 THE MEASUREMENT FOR THE LEAD, slates by what the draw had to give up: 0 same association, 0 over the cap: 209 of 240 (87.1%) | 1 same association, 0 over the cap: 29 of 240 (12.1%) | 2 same association, 0 over the cap: 2 of 240 (0.8%)
+  4 drawn exactly at the counting floor: 240 of 240 (100.0%). The critic's line for pots by squad strength is about 19 in 20 with nothing given up.
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 22 whole draws: the ban gave way before the cap had its 60 (set 23, field 316)
+  FAIL [ORDER] 6 same association matches against a floor of 5 after 21 whole draws: the ban gave way before the cap had its 60 (one association of 12 clubs, field 1)
+  FAIL [ORDER] 5 same association matches against a floor of 4 after 30 whole draws: the ban gave way before the cap had its 60 (one association of 18 clubs, field 2)
+  FAIL [ORDER] 5 same association matches against a floor of 4 after 33 whole draws: the ban gave way before the cap had its 60 (one association of 13 clubs with none in pot 2, field 1)
+  FAIL [ORDER] 6 same association matches against a floor of 4 after 43 whole draws: the ban gave way before the cap had its 60 (one association of 13 clubs with none in pot 4, field 3)
+  FAIL [ORDER] 6 same association matches against a floor of 5 after 25 whole draws: the ban gave way before the cap had its 60 (one association of 13 clubs with none in pot 3, field 6)
+  FAIL [ORDER] 14 same association matches against a floor of 12 after 46 whole draws: the ban gave way before the cap had its 60 (one association of 14 clubs with none in pot 1, field 0)
+  FAIL [ORDER] 6 same association matches against a floor of 4 after 42 whole draws: the ban gave way before the cap had its 60 (one association of 14 clubs with none in pot 3, field 2)
+  FAIL [ORDER] 9 same association matches against a floor of 8 after 24 whole draws: the ban gave way before the cap had its 60 (one association of 14 clubs with none in pot 4, field 3)
+  FAIL [ORDER] 6 same association matches against a floor of 4 after 55 whole draws: the ban gave way before the cap had its 60 (one association of 14 clubs with none in pot 1, field 4)
+  FAIL [ORDER] 10 same association matches against a floor of 8 after 45 whole draws: the ban gave way before the cap had its 60 (one association of 14 clubs with none in pot 2, field 5)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 35 whole draws: the ban gave way before the cap had its 60 (associations of 8, 6, 6 clubs, field 0)
+  FAIL [ORDER] 2 same association matches against a floor of 0 after 50 whole draws: the ban gave way before the cap had its 60 (associations of 12, 9, 6 clubs, field 3)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 28 whole draws: the ban gave way before the cap had its 60 (associations of 10, 8, 4 clubs, field 4)
+  FAIL [ORDER] 2 same association matches against a floor of 0 after 42 whole draws: the ban gave way before the cap had its 60 (associations of 7, 10, 5 clubs, field 5)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 22 whole draws: the ban gave way before the cap had its 60 (associations of 8, 10, 3 clubs, field 6)
+  FAIL [ORDER] 2 same association matches against a floor of 1 after 21 whole draws: the ban gave way before the cap had its 60 (associations of 13, 10, 4 clubs, field 7)
+  FAIL [ORDER] 2 same association matches against a floor of 1 after 21 whole draws: the ban gave way before the cap had its 60 (associations of 14, 4, 4 clubs, field 8)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 24 whole draws: the ban gave way before the cap had its 60 (associations of 9, 11, 3 clubs, field 10)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 24 whole draws: the ban gave way before the cap had its 60 (associations of 7, 10, 6 clubs, field 16)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 21 whole draws: the ban gave way before the cap had its 60 (associations of 8, 4, 2 clubs, field 18)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 21 whole draws: the ban gave way before the cap had its 60 (associations of 7, 11, 2 clubs, field 19)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 31 whole draws: the ban gave way before the cap had its 60 (associations of 7, 8, 6 clubs, field 20)
+  FAIL [ORDER] 3 same association matches against a floor of 1 after 56 whole draws: the ban gave way before the cap had its 60 (associations of 12, 7, 3 clubs, field 22)
+  FAIL [ORDER] 2 same association matches against a floor of 1 after 21 whole draws: the ban gave way before the cap had its 60 (associations of 13, 4, 2 clubs, field 28)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 39 whole draws: the ban gave way before the cap had its 60 (associations of 6, 8, 6 clubs, field 31)
+  FAIL [ORDER] 2 same association matches against a floor of 1 after 31 whole draws: the ban gave way before the cap had its 60 (associations of 7, 8, 4 clubs, field 32)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 21 whole draws: the ban gave way before the cap had its 60 (associations of 9, 7, 3 clubs, field 34)
+  FAIL [ORDER] 5 same association matches against a floor of 3 after 45 whole draws: the ban gave way before the cap had its 60 (associations of 14, 10, 5 clubs, field 35)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 23 whole draws: the ban gave way before the cap had its 60 (associations of 10, 7, 2 clubs, field 36)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 21 whole draws: the ban gave way before the cap had its 60 (associations of 12, 6, 5 clubs, field 37)
+  FAIL [ORDER] 2 same association matches against a floor of 1 after 28 whole draws: the ban gave way before the cap had its 60 (associations of 14, 11, 3 clubs, field 38)
+  FAIL [ORDER] 6 same association matches against a floor of 5 after 40 whole draws: the ban gave way before the cap had its 60 (associations of 14, 10, 5 clubs, field 39)
+  FAIL [ORDER] 2 same association matches against a floor of 1 after 22 whole draws: the ban gave way before the cap had its 60 (associations of 13, 10, 3 clubs, field 41)
+  FAIL [ORDER] 2 same association matches against a floor of 1 after 21 whole draws: the ban gave way before the cap had its 60 (associations of 10, 8, 3 clubs, field 43)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 22 whole draws: the ban gave way before the cap had its 60 (associations of 8, 11, 3 clubs, field 46)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 21 whole draws: the ban gave way before the cap had its 60 (associations of 9, 11, 5 clubs, field 48)
+  FAIL [ORDER] 2 same association matches against a floor of 0 after 41 whole draws: the ban gave way before the cap had its 60 (associations of 7, 8, 4 clubs, field 49)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 34 whole draws: the ban gave way before the cap had its 60 (associations of 12, 8, 2 clubs, field 50)
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 27 whole draws: the ban gave way before the cap had its 60 (associations of 14, 8, 2 clubs, field 51)
+simCmLeaguePhase: RED, 7021 checks, 115 failed, sections all.

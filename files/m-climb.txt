@@ -1,0 +1,6 @@
+fmut climb: applied (1 line)
+harness exit=1: simCmLeaguePhase: RED, 7021 checks, 115 failed, sections all.
+  FAIL [ORDER] 1 same association matches against a floor of 0 after 22 whole draws: the ban gave way before the cap had its 60 (set 23, field 316)
+  FAIL [ORDER] 6 same association matches against a floor of 5 after 21 whole draws: the ban gave way before the cap had its 60 (one association of 12 clubs, field 1)
+  FAIL [ORDER] 5 same association matches against a floor of 4 after 30 whole draws: the ban gave way before the cap had its 60 (one association of 18 clubs, field 2)
+vitest exit=0:       Tests  36 passed (36) 

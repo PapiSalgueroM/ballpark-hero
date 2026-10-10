@@ -1,0 +1,50 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/leagueSlate.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 339[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mdraws a legal slate when nothing constrains it, the same one from the same stream[32m 50[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mnever reads Math.random[32m 15[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mkeeps a five club association with four in one pot inside both rules[32m 117[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mbreaks the ban once, and only inside the pot, when five of one association share a pot[32m 67[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mgoes two over the cap, and no further, when a six club association has four in one pot[32m 64[2mms[22m[39m
+[31m   [31m×[31m swissSlate[2m > [22mcounts an association with no club in a pot, and spends the cap there before the ban[39m[32m 8[2mms[22m[39m
+[31m     → expected { breaks: +0, overCap: 34 } to deeply equal { breaks: +0, overCap: 38 }[39m
+   [32m✓[39m swissSlate[2m > [22mcounts a field of one association as every match a break and nobody over the cap[32m 1[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mreports what its matches really cost[32m 8[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mseats the recorded pattern, and says so, when it is given no tries[32m 7[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mholds a recorded pattern that is itself a legal slate[32m 0[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22manswers null for pots it cannot draw, and has no pattern for another shape[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/uclLeaguePhase.test.ts [2m([22m[2m25 tests[22m[2m)[22m[33m 556[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/leagueSlate.test.ts[2m > [22mswissSlate[2m > [22mcounts an association with no club in a pot, and spends the cap there before the ban
+[31m[1mAssertionError[22m: expected { breaks: +0, overCap: 34 } to deeply equal { breaks: +0, overCap: 38 }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "breaks": 0,[22m
+[32m-   "overCap": 38,[39m
+[31m+   "overCap": 34,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/leagueSlate.test.ts:[2m102:30[22m[39m
+    [90m100| [39m       (The first writing of the floor skipped pot one, said 34, and t…
+    [90m101| [39m    const spec = field(['.........', 'EEEE.....', 'EEEE.....', 'EEE...…
+    [90m102| [39m    expect(slateFloor(spec)).toEqual({ breaks: 0, overCap: 4 + 12 + 12…
+    [90m   | [39m                             [31m^[39m
+    [90m103| [39m    [35mfor[39m ([35mlet[39m seed [33m=[39m [34m1[39m[33m;[39m seed [33m<=[39m [34m10[39m[33m;[39m seed [33m+=[39m [34m1[39m) {
+    [90m104| [39m      [35mconst[39m slate [33m=[39m [34mswissSlate[39m(spec[33m,[39m [34mmulberry32[39m(seed))[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m35 passed[39m[22m[90m (36)[39m
+[2m   Start at [22m 20:34:32
+[2m   Duration [22m 1.37s[2m (transform 135ms, setup 84ms, collect 176ms, tests 895ms, environment 619ms, prepare 271ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/leagueSlate.test.ts,title=src/lib/leagueSlate.test.ts > swissSlate > counts an association with no club in a pot%2C and spends the cap there before the ban,line=102,column=30::AssertionError: expected { breaks: +0, overCap: 34 } to deeply equal { breaks: +0, overCap: 38 }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "breaks": 0,%0A-   "overCap": 38,%0A+   "overCap": 34,%0A  }%0A%0A ❯ src/lib/leagueSlate.test.ts:102:30%0A%0A

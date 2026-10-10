@@ -1,0 +1,3 @@
+fmut nofallbackflag: applied (1 line)
+harness exit=0: simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+vitest exit=1: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯  FAIL  src/lib/uclLeaguePhase.test.ts > the pots and the slate > says so on the saved slate when the search gave up and the recorded pattern was seated AssertionError: expected undefined to be true // Object.is equality       Tests  1 failed | 35 passed (36) ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/uclLeaguePhase.

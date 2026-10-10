@@ -1,0 +1,7 @@
+m-clean exit=0 28s | clean: harness=0 vitest=0 | simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+m-homeflag exit=0 27s | homeflag: harness=0 vitest=1 => CAUGHT |
+m-nofallbackflag exit=0 27s | nofallbackflag: harness=0 vitest=1 => CAUGHT |
+m-climb exit=0 23s | climb: harness=1 vitest=0 => CAUGHT |  FAIL [ORDER] 1 same association matches against a floor of 0 after 22 whole draws: the ban gave way before the cap had its 60 (set 
+m-cap3 exit=0 27s | cap3: harness=1 vitest=1 => CAUGHT |  FAIL [COST] the slate says 0 breaks and 0 over the cap, its matches hold 0 and 11 (save 0)
+m-floorabsent exit=0 36s | floorabsent: harness=1 vitest=1 => CAUGHT |  FAIL [FLOOR] the library's floor 1/24 is not the counted 1/26 (one association of 10 clubs, field 0)
+after exit=0 26s | clean: harness=0 vitest=0 | simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.

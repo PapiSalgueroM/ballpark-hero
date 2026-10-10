@@ -1,0 +1,6 @@
+fmut cap3: applied (1 line)
+harness exit=1: simCmLeaguePhase: RED, 7021 checks, 480 failed, sections all.
+  FAIL [COST] the slate says 0 breaks and 0 over the cap, its matches hold 0 and 11 (save 0)
+  FAIL [BUDGET] 11 over the cap, more than its budget of 2 (save 0)
+  FAIL [COST] the slate says 0 breaks and 0 over the cap, its matches hold 0 and 13 (save 1)
+vitest exit=1: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯  FAIL  src/lib/uclLeaguePhase.test.ts > the pots and the slate > says so on the saved slate when the search gave up and the recorded pattern was seated AssertionError: expected { breaks: 19, overCap: 21 } to deeply equal { breaks: 19, overCap: 40 }  FAIL  src/lib/uclLeaguePhase.test.ts > the pots and the slate > hands the builder the cap o

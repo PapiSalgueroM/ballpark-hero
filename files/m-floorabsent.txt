@@ -1,0 +1,6 @@
+fmut floorabsent: applied (1 line)
+harness exit=1: simCmLeaguePhase: RED, 7021 checks, 72 failed, sections all.
+  FAIL [FLOOR] the library's floor 1/24 is not the counted 1/26 (one association of 10 clubs, field 0)
+  FAIL [FLOOR] the library's floor 0/26 is not the counted 0/28 (one association of 10 clubs, field 6)
+  FAIL [FLOOR] the library's floor 1/40 is not the counted 1/46 (one association of 12 clubs, field 4)
+vitest exit=1: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯  FAIL  src/lib/leagueSlate.test.ts > swissSlate > counts an association with no club in a pot, and spends the cap there before the ban AssertionError: expected { breaks: +0, overCap: 34 } to deeply equal { breaks: +0, overCap: 38 }       Tests  1 failed | 35 passed (36) ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/lea

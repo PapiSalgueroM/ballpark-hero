@@ -1,0 +1,1 @@
+floorabsent: harness=1 vitest=1 => CAUGHT |  FAIL [FLOOR] the library's floor 1/24 is not the counted 1/26 (one association of 10 clubs, field 0)

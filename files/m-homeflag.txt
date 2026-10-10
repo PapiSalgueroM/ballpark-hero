@@ -1,0 +1,3 @@
+fmut homeflag: applied (2 lines)
+harness exit=0: simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+vitest exit=1: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯  FAIL  src/lib/uclLeaguePhase.test.ts > the pots and the slate > tells one story about who is at home: the fixture list, a club's own fixture and the saved code agree AssertionError: expected { opponent: 'Club 25', home: false } to deeply equal { opponent: 'Club 25', home: true }       Tests  1 failed | 35 passed (36) ::error file=/home/ru

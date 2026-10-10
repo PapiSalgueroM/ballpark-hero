@@ -1,0 +1,4 @@
+harness exit=0: simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+vitest exit=0:       Tests  36 passed (36) 
+harness exit=0: simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+vitest exit=0:       Tests  36 passed (36) 
