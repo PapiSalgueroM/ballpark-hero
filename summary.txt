@@ -1,0 +1,17 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSaveKeeper exit=0 8s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+simHarnessAnchors exit=0 68s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 25s | No rival product names found. 0 findings.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simStorageWrites exit=0 3s | simStorageWrites: all green
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simStaleChunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simHomeCopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+simTrustCopy exit=0 1s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simAccessibility exit=0 0s | simAccessibility: all green
+simWritesAreSent exit=1 16s | simWritesAreSent: 2 failures
+tsc exit=0 139s | 
+simResultMoment exit=0 12s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+sweepWeight-branch exit=1 32s | sweepWeight: 13 failures
+base-weight-and-nocatch exit=1 97s | sweepWeight: 12 failures
+vitest-all exit=0 612s |    Duration  610.53s (transform 48.14s, setup 25.67s, collect 185.99s, tests 1304.63s, environment 185.54s, prepare 39.36s)
