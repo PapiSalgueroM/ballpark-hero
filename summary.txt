@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 174s | walk: done (it asserts nothing; read the lines above and look at the pictures).
+mutmain-cheap exit=0 58s | mutmain-cheap done
+mutmain-walk exit=1 78s | playSaveKeeper: RED, 4 problem(s).
+mutassign-walk exit=0 78s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.

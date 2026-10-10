@@ -1,0 +1,3535 @@
+{
+ "T": [
+  {
+   "route": "/fight-gym",
+   "width": 390,
+   "reduced": false,
+   "lenA": 1572,
+   "lenB": 1562,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-17=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-17=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-17=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-17=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "press 3",
+     "pressed": false,
+     "why": "no \"Put that save back\" button on screen"
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/fight-gym",
+   "width": 1280,
+   "reduced": false,
+   "lenA": 1572,
+   "lenB": 1562,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-23=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-23=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-23=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-23=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "press 3",
+     "pressed": false,
+     "why": "no \"Put that save back\" button on screen"
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/club-manager",
+   "width": 390,
+   "reduced": false,
+   "lenA": 58466,
+   "lenB": 54023,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "other(55076)",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-30=other(55076)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-30=other(55076)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(55076)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-30=other(55076)",
+      "2026-10-10T14-04-32=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "other(55076)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-30=other(55076)",
+      "2026-10-10T14-04-32=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 3",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-30=other(55076)",
+      "2026-10-10T14-04-32=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 3",
+     "pressedOk": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-30=other(55076)",
+      "2026-10-10T14-04-32=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/club-manager",
+   "width": 1280,
+   "reduced": false,
+   "lenA": 58466,
+   "lenB": 54023,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "other(55076)",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-38=other(55076)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-38=other(55076)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(55076)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-38=other(55076)",
+      "2026-10-10T14-04-40=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "other(55076)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-38=other(55076)",
+      "2026-10-10T14-04-40=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 3",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-38=other(55076)",
+      "2026-10-10T14-04-40=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 3",
+     "pressedOk": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-38=other(55076)",
+      "2026-10-10T14-04-40=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/soccer-career",
+   "width": 390,
+   "reduced": false,
+   "lenA": 4267,
+   "lenB": 4267,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-47=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-47=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-47=other(4772)",
+      "2026-10-10T14-04-49=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-47=other(4772)",
+      "2026-10-10T14-04-49=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 3",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-47=other(4772)",
+      "2026-10-10T14-04-49=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 3",
+     "pressedOk": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-47=other(4772)",
+      "2026-10-10T14-04-49=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/soccer-career",
+   "width": 1280,
+   "reduced": false,
+   "lenA": 4267,
+   "lenB": 4267,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-55=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-55=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-55=other(4772)",
+      "2026-10-10T14-04-57=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-55=other(4772)",
+      "2026-10-10T14-04-57=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 3",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-55=other(4772)",
+      "2026-10-10T14-04-57=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 3",
+     "pressedOk": true,
+     "key": "other(4772)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-04-55=other(4772)",
+      "2026-10-10T14-04-57=other(4772)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/nfl-my-career",
+   "width": 390,
+   "reduced": false,
+   "lenA": 712,
+   "lenB": 731,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": false,
+        "by": "LI."
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": false,
+        "by": "LI."
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": false,
+        "by": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": false,
+     "newDocument": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-11=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": false,
+        "by": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-11=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": false,
+        "by": "LI."
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": false,
+        "by": "LI."
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": false,
+        "by": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": false,
+     "newDocument": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-11=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": false,
+        "by": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-11=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "press 3",
+     "pressed": false,
+     "why": "no \"Put that save back\" button on screen"
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/stadium-tycoon",
+   "width": 390,
+   "reduced": false,
+   "lenA": 1153,
+   "lenB": 1153,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "other(1377)",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(1362)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-42=other(1465)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "other(1362)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-42=other(1465)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(1465)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-42=other(1465)",
+      "2026-10-10T14-05-44=other(1436)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "other(1465)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-42=other(1465)",
+      "2026-10-10T14-05-44=other(1436)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 3",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(1436)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-42=other(1465)",
+      "2026-10-10T14-05-44=other(1436)",
+      "2026-10-10T14-05-46=other(1464)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 3",
+     "pressedOk": true,
+     "key": "other(1436)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-42=other(1465)",
+      "2026-10-10T14-05-44=other(1436)",
+      "2026-10-10T14-05-46=other(1464)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/idle-arena",
+   "width": 1280,
+   "reduced": false,
+   "lenA": 261,
+   "lenB": 261,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-50=other(285)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-50=other(285)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(285)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-50=other(285)",
+      "2026-10-10T14-05-52=other(312)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "other(285)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-50=other(285)",
+      "2026-10-10T14-05-52=other(312)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 3",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(312)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-50=other(285)",
+      "2026-10-10T14-05-52=other(312)",
+      "2026-10-10T14-05-54=other(309)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 3",
+     "pressedOk": true,
+     "key": "other(312)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-50=other(285)",
+      "2026-10-10T14-05-52=other(312)",
+      "2026-10-10T14-05-54=other(309)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/fight-gym",
+   "width": 390,
+   "reduced": true,
+   "lenA": 1572,
+   "lenB": 1562,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-58=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-58=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-58=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-05-58=B"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "press 3",
+     "pressed": false,
+     "why": "no \"Put that save back\" button on screen"
+    }
+   ],
+   "planted": true,
+   "errors": []
+  },
+  {
+   "route": "/club-manager",
+   "width": 1280,
+   "reduced": true,
+   "lenA": 58466,
+   "lenB": 54023,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "other(55076)",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 1",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-06-04=other(55076)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 1",
+     "pressedOk": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-06-04=other(55076)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 2",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(55076)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-06-04=other(55076)",
+      "2026-10-10T14-06-07=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 2",
+     "pressedOk": true,
+     "key": "other(55076)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-06-04=other(55076)",
+      "2026-10-10T14-06-07=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press 3",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-06-04=other(55076)",
+      "2026-10-10T14-06-07=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK",
+     "putBack": "done",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK 3",
+     "pressedOk": true,
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A",
+      "2026-10-10T14-06-04=other(55076)",
+      "2026-10-10T14-06-07=other(59522)"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "planted": true,
+   "errors": []
+  }
+ ],
+ "N": [
+  {
+   "route": "/nfl-my-career",
+   "width": 390,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "EMPTY",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 634,
+      "w": 358,
+      "h": 194,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": false,
+        "by": "LI."
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": false,
+        "by": "LI."
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": false,
+        "by": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press",
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back This is the save that was kept aside. OK",
+     "putBack": "done",
+     "box": {
+      "x": 16,
+      "y": 702,
+      "w": 358,
+      "h": 126,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": false,
+        "by": "DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a"
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK",
+     "key": "A",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "press": {
+    "pressed": true,
+    "realClick": false,
+    "newDocument": true
+   }
+  },
+  {
+   "route": "/club-manager",
+   "width": 1280,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "EMPTY",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 690,
+      "w": 384,
+      "h": 194,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press",
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Your save is back This is the save that was kept aside. OK",
+     "putBack": "done",
+     "box": {
+      "x": 975,
+      "y": 758,
+      "w": 289,
+      "h": 126,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK",
+     "key": "other(59522)",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": null,
+     "putBack": null,
+     "box": null,
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "press": {
+    "pressed": true,
+    "realClick": true,
+    "newDocument": true
+   }
+  }
+ ],
+ "S": [
+  {
+   "route": "/fight-gym",
+   "width": 390,
+   "minutes": 10,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Nothing changed The page took too long to load, so the save was not put back. It is still kept aside, and you can press the button again. OK",
+     "putBack": "refused",
+     "box": {
+      "x": 16,
+      "y": 662,
+      "w": 358,
+      "h": 166,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ]
+  },
+  {
+   "route": "/fight-gym",
+   "width": 1280,
+   "minutes": -10,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Nothing changed The page took too long to load, so the save was not put back. It is still kept aside, and you can press the button again. OK",
+     "putBack": "refused",
+     "box": {
+      "x": 880,
+      "y": 718,
+      "w": 384,
+      "h": 166,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after OK",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ]
+  }
+ ],
+ "Q": [
+  {
+   "route": "/fight-gym",
+   "width": 390,
+   "room": 900,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 16,
+      "y": 594,
+      "w": 358,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Nothing changed Your browser is out of room, so the save could not be put back. It is still kept aside. OK",
+     "putBack": "refused",
+     "box": {
+      "x": 16,
+      "y": 682,
+      "w": 358,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "fill": {
+    "fillerKeys": 23,
+    "filled": 5239310,
+    "freed": 900
+   },
+   "notice": false,
+   "alert": null
+  },
+  {
+   "route": "/club-manager",
+   "width": 1280,
+   "room": 900,
+   "steps": [
+    {
+     "step": "opened",
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+     "putBack": null,
+     "box": {
+      "x": 880,
+      "y": 650,
+      "w": 384,
+      "h": 234,
+      "inside": true,
+      "btns": [
+       {
+        "label": "Put that save back",
+        "w": 180,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Leave it aside",
+        "w": 131,
+        "h": 38,
+        "hit": true,
+        "by": null
+       },
+       {
+        "label": "Delete it",
+        "w": 94,
+        "h": 38,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    },
+    {
+     "step": "after press",
+     "pressed": true,
+     "realClick": true,
+     "newDocument": true,
+     "key": "B",
+     "backups": [
+      "2026-10-04T09-00-00=A"
+     ],
+     "aHeld": true,
+     "journal": false,
+     "card": "Nothing changed Your browser is out of room, so the save could not be put back. It is still kept aside. OK",
+     "putBack": "refused",
+     "box": {
+      "x": 880,
+      "y": 738,
+      "w": 384,
+      "h": 146,
+      "inside": true,
+      "btns": [
+       {
+        "label": "OK",
+        "w": 55,
+        "h": 36,
+        "hit": true,
+        "by": null
+       }
+      ]
+     },
+     "broke": false,
+     "sideways": false,
+     "scrollY": 0,
+     "history": 3
+    }
+   ],
+   "fill": {
+    "fillerKeys": 11,
+    "filled": 5130110,
+    "freed": 900
+   },
+   "notice": false,
+   "alert": null
+  }
+ ],
+ "C": [
+  {
+   "route": "/fight-gym",
+   "width": 390,
+   "state": {
+    "key": "B",
+    "backups": [
+     "2026-10-04T09-00-00=A"
+    ],
+    "aHeld": true,
+    "journal": false,
+    "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+    "putBack": null,
+    "box": {
+     "x": 16,
+     "y": 594,
+     "w": 358,
+     "h": 234,
+     "inside": true,
+     "btns": [
+      {
+       "label": "Put that save back",
+       "w": 180,
+       "h": 38,
+       "hit": false,
+       "by": "P.flex-1 text-center sm:text-left"
+      },
+      {
+       "label": "Leave it aside",
+       "w": 131,
+       "h": 38,
+       "hit": false,
+       "by": "P.flex-1 text-center sm:text-left"
+      },
+      {
+       "label": "Delete it",
+       "w": 94,
+       "h": 38,
+       "hit": false,
+       "by": "DIV.flex items-center gap-2 whitespace-nowrap"
+      }
+     ]
+    },
+    "broke": false,
+    "sideways": false,
+    "scrollY": 0,
+    "history": 3
+   }
+  },
+  {
+   "route": "/fight-gym",
+   "width": 1280,
+   "state": {
+    "key": "B",
+    "backups": [
+     "2026-10-04T09-00-00=A"
+    ],
+    "aHeld": true,
+    "journal": false,
+    "card": "You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it",
+    "putBack": null,
+    "box": {
+     "x": 880,
+     "y": 650,
+     "w": 384,
+     "h": 234,
+     "inside": true,
+     "btns": [
+      {
+       "label": "Put that save back",
+       "w": 180,
+       "h": 38,
+       "hit": true,
+       "by": null
+      },
+      {
+       "label": "Leave it aside",
+       "w": 131,
+       "h": 38,
+       "hit": true,
+       "by": null
+      },
+      {
+       "label": "Delete it",
+       "w": 94,
+       "h": 38,
+       "hit": false,
+       "by": "BUTTON.px-5 py-2 rounded-lg bg-primary text-primary-foreg"
+      }
+     ]
+    },
+    "broke": false,
+    "sideways": false,
+    "scrollY": 0,
+    "history": 3
+   }
+  }
+ ],
+ "D": [
+  {
+   "width": 390,
+   "pages": [
+    {
+     "page": "/",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    },
+    {
+     "page": "/whats-new",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    },
+    {
+     "page": "/leaderboard",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    },
+    {
+     "page": "/about",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    },
+    {
+     "page": "/privacy",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    }
+   ],
+   "planted": true
+  },
+  {
+   "width": 1280,
+   "pages": [
+    {
+     "page": "/",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    },
+    {
+     "page": "/whats-new",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    },
+    {
+     "page": "/leaderboard",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    },
+    {
+     "page": "/about",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    },
+    {
+     "page": "/privacy",
+     "same": 21,
+     "backups": 0,
+     "journal": false,
+     "keys": 25
+    }
+   ],
+   "planted": true
+  }
+ ]
+}

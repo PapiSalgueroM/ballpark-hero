@@ -1,0 +1,7 @@
+rrun-mut nomaincall: applied to src/main.tsx
+simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simHomeCopy: green. The one page a crawler reads first says only true things.
+simStorageWrites: all green
+simErrorBoundary: all green
+tsc exit=0
+mutmain-cheap done

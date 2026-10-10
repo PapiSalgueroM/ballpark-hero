@@ -1,0 +1,32 @@
+rrun-mut nomaincall: applied to src/main.tsx
+[32m✓ built in 28.36s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSaveKeeper: mode assert, parts fresh planted cross K cost, 2 route(s), widths 390
+  branch build /tmp/mdist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+A clean visit and a leave, per route: does the game write its save with no press?
+  quiet   /club-manager  keys left: cookie-consent, dukb-guest-handle
+  WRITES  /idle-arena  keys left: cookie-consent, dukb-guest-handle, dukb-idle-arena-v1
+
+Journey L, the fresh flow, on the branch: the 1 route(s) that write with no press
+  PARTLY    [branch] fresh /idle-arena 390: A (309 chars) is in dukb-idle-arena-v1.broken-2026-01-02T03-04-05; A is the game on screen: false; the game he had is kept aside: false; writes to the key: x' x' x'; backups 1
+
+Journey L, the planted flow, on the branch: real engine saves on 2 route(s)
+  PARTLY    [branch] planted /club-manager 390: A (58466 chars) is in dukb-club-manager-save.broken-2026-01-02T03-04-05; A is the game on screen: false; the game he had is kept aside: false; writes to the key: x' x' x' x; backups 1
+  PARTLY    [branch] planted /idle-arena 390: A (261 chars) is in dukb-idle-arena-v1.broken-2026-01-02T03-04-05; A is the game on screen: false; the game he had is kept aside: false; writes to the key: x' x'; backups 1
+
+Journey L, the cross flow: an academy backup put back from /stadium-tycoon with the Academy tab open
+  PARTLY    [branch] cross /wonderkid-factory from /stadium-tycoon 390: A (333 chars) is in wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: false; the game he had is kept aside: false; writes to the key: x' x' x'; backups 1
+
+The boot pass in Chromium at a 4x CPU throttle, the largest real save of all 21 games held (576652 chars in storage, 22 keys):
+  first pass 5.000 ms, then 1.962 ms a pass over 200. An empty store: first 0.000 ms, then 0.006 ms a pass.
+
+playSaveKeeper, branch: 4 walk(s) judged (1 fresh, 2 planted, 1 cross): 0 LOST the save that was put back, 4 partly, 0 survived; 0 not judged
+playSaveKeeper: the planted flow judged 2 of 2 route(s)
+playSaveKeeper: journey K was NOT run (no build of origin/main was given).
+  FAIL  fresh /idle-arena 390: kept A but A is not the game on screen
+  FAIL  planted /club-manager 390: kept A but A is not the game on screen
+  FAIL  planted /idle-arena 390: kept A but A is not the game on screen
+  FAIL  cross /wonderkid-factory from /stadium-tycoon 390: kept A but A is not the game on screen
+playSaveKeeper: RED, 4 problem(s).

@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/rrun-walk.mjs
+mutmain-cheap: node .rc/x/rrun-mut.mjs nomaincall && { node scripts/simStaleChunk.mjs | tail -1; node scripts/simHomeCopy.mjs | tail -1; node scripts/simStorageWrites.mjs | tail -1; node scripts/simErrorBoundary.mjs | tail -1; node_modules/.bin/tsc --noEmit -p tsconfig.app.json | head -5; echo "tsc exit=${PIPESTATUS[0]}"; }; git checkout -- src scripts; echo "mutmain-cheap done"
+mutmain-walk: node .rc/x/rrun-mut.mjs nomaincall && node_modules/.bin/vite build --outDir /tmp/mdist > /tmp/mbuild.log 2>&1; tail -2 /tmp/mbuild.log; git checkout -- src scripts; KEEPER_DIST=/tmp/mdist ONLY=/idle-arena,/club-manager WIDTHS=390 node scripts/playSaveKeeper.mjs
+mutassign-walk: node .rc/x/rrun-mut.mjs assign && node_modules/.bin/vite build --outDir /tmp/adist > /tmp/abuild.log 2>&1; tail -2 /tmp/abuild.log; git checkout -- src scripts; KEEPER_DIST=/tmp/adist ONLY=/idle-arena,/club-manager WIDTHS=390 node scripts/playSaveKeeper.mjs

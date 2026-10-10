@@ -1,0 +1,28 @@
+rrun-mut assign: applied to src/lib/saveKeeper.ts
+[32m✓ built in 28.76s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSaveKeeper: mode assert, parts fresh planted cross K cost, 2 route(s), widths 390
+  branch build /tmp/adist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+A clean visit and a leave, per route: does the game write its save with no press?
+  quiet   /club-manager  keys left: cookie-consent, dukb-guest-handle
+  WRITES  /idle-arena  keys left: cookie-consent, dukb-guest-handle, dukb-idle-arena-v1
+
+Journey L, the fresh flow, on the branch: the 1 route(s) that write with no press
+  SURVIVED  [branch] fresh /idle-arena 390: A (312 chars) is in dukb-idle-arena-v1.broken-2026-01-02T03-04-05, dukb-idle-arena-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2
+
+Journey L, the planted flow, on the branch: real engine saves on 2 route(s)
+  SURVIVED  [branch] planted /club-manager 390: A (58466 chars) is in dukb-club-manager-save.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2
+  SURVIVED  [branch] planted /idle-arena 390: A (261 chars) is in dukb-idle-arena-v1.broken-2026-01-02T03-04-05, dukb-idle-arena-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' A; backups 2
+
+Journey L, the cross flow: an academy backup put back from /stadium-tycoon with the Academy tab open
+  SURVIVED  [branch] cross /wonderkid-factory from /stadium-tycoon 390: A (335 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2
+
+The boot pass in Chromium at a 4x CPU throttle, the largest real save of all 21 games held (579526 chars in storage, 22 keys):
+  first pass 4.900 ms, then 1.867 ms a pass over 200. An empty store: first 0.000 ms, then 0.008 ms a pass.
+
+playSaveKeeper, branch: 4 walk(s) judged (1 fresh, 2 planted, 1 cross): 0 LOST the save that was put back, 0 partly, 4 survived; 0 not judged
+playSaveKeeper: the planted flow judged 2 of 2 route(s)
+playSaveKeeper: journey K was NOT run (no build of origin/main was given).
+playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
