@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/components/front-office-shared/GmDeskMount.test.tsx src/components/front-office-shared/GmSeatCard.test.tsx src/lib/gmSeat.test.ts src/lib/gmXp.test.ts --testTimeout=300000 --hookTimeout=120000
+h-123: node scripts/simGmDeskHost.mjs
+h-123-again: node scripts/simGmDeskHost.mjs
+h-456: SIM_GM_DESK_HOST_SEEDS=4,5,6 node scripts/simGmDeskHost.mjs
+h-789: SIM_GM_DESK_HOST_SEEDS=7,8,9 node scripts/simGmDeskHost.mjs
+h-77: SIM_GM_DESK_HOST_SEEDS=77 node scripts/simGmDeskHost.mjs
+anchors: SIM_GM_DESK_HOST_ANCHORS=1 node scripts/simGmDeskHost.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+dashes: ! grep -rnP '[\x{2010}-\x{2015}\x{2212}]' scripts/simGmDeskHost.mjs src/lib/gmDeskHost.ts src/lib/gmDeskHost.test.ts src/lib/gmDeskHostNhl.ts src/lib/gmDeskHostNba.ts src/lib/gmDeskHostMlb.ts src/lib/gmDeskHostNfl.ts src/components/front-office-shared/GmJobMarketPanel.tsx src/components/front-office-shared/GmCareerPanel.tsx src/components/front-office-shared/GmXpDeskPanel.tsx src/components/front-office-shared/gmCareerDesk.tsx src/components/front-office-shared/gmLazyPanel.tsx src/components/front-office-shared/GmCareerDesk.test.tsx docs/audits/ROUND-1223-NOTES.md
+dash-control: printf 'a \xe2\x80\x94 b\n' > /tmp/d.txt && grep -cP '[\x{2010}-\x{2015}\x{2212}]' /tmp/d.txt
+inert: git diff --name-status origin/main...HEAD | tee /dev/stderr | awk '$1!="A"{bad=1} END{exit bad}'
+importers: ! grep -rlE "gmDeskHost|gmLazyPanel|GmJobMarketPanel|GmCareerPanel|GmXpDeskPanel|gmCareerDesk|GmCareerDesk" src index.html | grep -vE "src/lib/gmDeskHost(Nhl|Nba|Mlb|Nfl)?\.ts$|src/lib/gmDeskHost\.test\.ts$|src/components/front-office-shared/(gmLazyPanel|GmJobMarketPanel|GmCareerPanel|GmXpDeskPanel|gmCareerDesk)\.tsx$|src/components/front-office-shared/GmCareerDesk\.test\.tsx$"

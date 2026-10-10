@@ -1,0 +1,17 @@
+A	.github/workflows/lane-remote-check.yml
+A	.rc/request.txt
+A	.rc/run.sh
+A	docs/audits/ROUND-1223-NOTES.md
+A	scripts/simGmDeskHost.mjs
+A	src/components/front-office-shared/GmCareerDesk.test.tsx
+A	src/components/front-office-shared/GmCareerPanel.tsx
+A	src/components/front-office-shared/GmJobMarketPanel.tsx
+A	src/components/front-office-shared/GmXpDeskPanel.tsx
+A	src/components/front-office-shared/gmCareerDesk.tsx
+A	src/components/front-office-shared/gmLazyPanel.tsx
+A	src/lib/gmDeskHost.test.ts
+A	src/lib/gmDeskHost.ts
+A	src/lib/gmDeskHostMlb.ts
+A	src/lib/gmDeskHostNba.ts
+A	src/lib/gmDeskHostNfl.ts
+A	src/lib/gmDeskHostNhl.ts
