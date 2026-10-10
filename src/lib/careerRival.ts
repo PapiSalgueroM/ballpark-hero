@@ -74,9 +74,10 @@ export type RivalSeasonPlay = (r: CareerRival, form: number, rng: () => number) 
 /**
  * THE DRAW COUNT LAW. How many draws of the season's stream a sport's rival season takes after the swing: what
  * that sport's built in line took (read off simRivalSeason below: the NHL's goals and assists, MLB's home runs
- * and average, the NFL's three parts or a kicker's one; the NBA's line took one before Round 1112). A binding
- * takes exactly this many and pays for everything else from a stream keyed on the rival, so the player's own
- * stream is where it always was. It outlives the built in lines: the count is the law, not the lines.
+ * and average; the NFL's line, gone since Round 1227, took three parts or a kicker's one, and the NBA's took
+ * one before Round 1112). A binding takes exactly this many and pays for everything else from a stream keyed
+ * on the rival, so the player's own stream is where it always was. It outlives the built in lines: the count
+ * is the law, not the lines.
  */
 export function rivalSeasonDraws(sport: RivalSport, pos: string): number {
   if (sport === 'nba') return 1;
@@ -142,8 +143,8 @@ export function draftRival(
 
 /** The sports whose rival line is still built in below. The NBA's is not: Round 1112 moved it onto the
  *  player's own line (nbaRivalSeason in nbaMyCareer.ts), so an NBA call has to hand in its play. Round 1227
- *  did the same for the NFL (nflRivalSeason in nflMyCareer.ts): no career reaches the NFL lines below any
- *  more, and they go with the rest in the round that moves MLB and the NHL over. */
+ *  did the same for the NFL (nflRivalSeason in nflMyCareer.ts) and took the NFL's built in lines out, since
+ *  no career could reach them any more. MLB's and the NHL's go in the round that moves those two over. */
 export type BuiltInRivalSport = Exclude<RivalSport, 'nba' | 'nfl'>;
 
 /** Roll the rival's season and return a printable line plus a score. */
@@ -156,42 +157,6 @@ export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => num
     const a = Math.max(1, Math.round((9 + (form - 62) * 1.1) + rng() * 5));
     line = `${g}G ${a}A ${g + a}P`;
     score = g + a;
-  } else if (sport === 'nfl') {
-    // Football positions are not on one scale: a quarterback throws for
-    // 4000 yards while a corner never touches the ball, so the rival plays
-    // MY position and is scored the same way I am. Without this the head to
-    // head against a quarterback finished 13-0 every single career, which is
-    // not a rivalry, it is a formality.
-    const p = r.pos;
-    if (p === 'QB') {
-      const yds = Math.max(400, Math.round(1900 + (form - 62) * 92 + rng() * 500));
-      const td = Math.max(1, Math.round(6 + (form - 62) * 0.95 + rng() * 6));
-      const ip = Math.max(1, Math.round(18.5 - (form - 62) * 0.36 + rng() * 4));
-      line = `${yds} yds, ${td} TD, ${ip} INT`;
-      score = yds / 60 + td * 2;
-    } else if (p === 'RB') {
-      const yds = Math.max(80, Math.round(260 + (form - 62) * 46 + rng() * 260));
-      const rec = Math.max(0, Math.round(14 + (form - 62) * 1.1 + rng() * 12));
-      const td = Math.max(0, Math.round(1 + (form - 62) * 0.42 + rng() * 3));
-      line = `${yds} rush yds, ${rec} rec, ${td} TD`;
-      score = (yds + rec * 8) / 60 + td * 2;
-    } else if (p === 'WR' || p === 'TE') {
-      const rec = Math.max(4, Math.round(28 + (form - 62) * 2.5 + rng() * 14));
-      const yds = Math.round(rec * (10.5 + rng() * 4));
-      const td = Math.max(0, Math.round(1 + (form - 62) * 0.35 + rng() * 3));
-      line = `${rec} rec, ${yds} yds, ${td} TD`;
-      score = yds / 60 + td * 2;
-    } else if (p === 'K') {
-      const fg = Math.max(6, Math.round(22 + (form - 62) * 0.5 + rng() * 5));
-      line = `${fg} field goals`;
-      score = (fg * 30) / 60;
-    } else {
-      const tk = Math.max(15, Math.round(95 + (form - 62) * 2.4 + rng() * 20));
-      const sk = Math.max(0, Math.round((3 + (form - 62) * 0.35 + rng() * 3) * 10) / 10);
-      const pk = Math.max(0, Math.round(1 + (form - 62) * 0.08 + rng() * 2));
-      line = `${tk} tackles, ${sk} sacks, ${pk} INT`;
-      score = (tk * 9) / 60 + (sk + pk) * 2;
-    }
   } else {
     const hr = Math.max(0, Math.round((4 + (form - 62) * 0.85) + rng() * 5));
     const avg = Math.min(0.36, Math.max(0.2, Math.round((0.226 + (form - 62) * 0.0026 + rng() * 0.02) * 1000) / 1000));
