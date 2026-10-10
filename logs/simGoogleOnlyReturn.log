@@ -1,0 +1,128 @@
+Round 610: Google players can get back in while Google sign in is paused
+
+A) none of the round's files carries an em or en dash
+   ok, 6 files
+   control dashes: the planted dash was found, check A works
+
+B) the real modal, header and reset page
+   pass  1 the sign in modal tells a Google player how to get back in, on Log In only
+   pass  2 a wrong password, or signing up again, points a Google player at Forgot password
+   pass  3 Forgot password sends the link for the typed email to the reset page
+   pass  4 only an account with Google and no email identity and no saved password counts as Google only
+   pass  5 the account menu offers a Google-only player the change password page, and nobody else
+   pass  6 saving a password on the reset page marks the account so the menu stops asking
+   pass  8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   pass  7 the day Google comes back, all of it goes quiet
+
+C.hint) negative control: the modal hint is never rendered
+   ok   failed 1 the sign in modal tells a Google player how to get back in, on Log In only
+         AssertionError: expected null not to be null
+   ok   passed 2 a wrong password, or signing up again, points a Google player at Forgot password
+   ok   passed 3 Forgot password sends the link for the typed email to the reset page
+   ok   passed 4 only an account with Google and no email identity and no saved password counts as Google only
+   ok   passed 5 the account menu offers a Google-only player the change password page, and nobody else
+   ok   passed 6 saving a password on the reset page marks the account so the menu stops asking
+   ok   passed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   ok   passed 7 the day Google comes back, all of it goes quiet
+
+C.message) negative control: the wrong password message loses its pointer
+   ok   passed 1 the sign in modal tells a Google player how to get back in, on Log In only
+   ok   failed 2 a wrong password, or signing up again, points a Google player at Forgot password
+         AssertionError: expected "spy" to be called with arguments: [ Array(1) ]
+   ok   passed 3 Forgot password sends the link for the typed email to the reset page
+   ok   passed 4 only an account with Google and no email identity and no saved password counts as Google only
+   ok   passed 5 the account menu offers a Google-only player the change password page, and nobody else
+   ok   passed 6 saving a password on the reset page marks the account so the menu stops asking
+   ok   passed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   ok   passed 7 the day Google comes back, all of it goes quiet
+
+C.registered) negative control: the already registered message loses its pointer
+   ok   passed 1 the sign in modal tells a Google player how to get back in, on Log In only
+   ok   failed 2 a wrong password, or signing up again, points a Google player at Forgot password
+         AssertionError: expected "spy" to be called with arguments: [ Array(1) ]
+   ok   passed 3 Forgot password sends the link for the typed email to the reset page
+   ok   passed 4 only an account with Google and no email identity and no saved password counts as Google only
+   ok   passed 5 the account menu offers a Google-only player the change password page, and nobody else
+   ok   passed 6 saving a password on the reset page marks the account so the menu stops asking
+   ok   passed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   ok   passed 7 the day Google comes back, all of it goes quiet
+
+C.forgot) negative control: Forgot password sends somebody else's address
+   ok   passed 1 the sign in modal tells a Google player how to get back in, on Log In only
+   ok   passed 2 a wrong password, or signing up again, points a Google player at Forgot password
+   ok   failed 3 Forgot password sends the link for the typed email to the reset page
+         AssertionError: expected 'nobody@example.com' to be 'player@example.com' // Object.is equality
+   ok   passed 4 only an account with Google and no email identity and no saved password counts as Google only
+   ok   passed 5 the account menu offers a Google-only player the change password page, and nobody else
+   ok   passed 6 saving a password on the reset page marks the account so the menu stops asking
+   ok   passed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   ok   passed 7 the day Google comes back, all of it goes quiet
+
+C.flag) negative control: a saved password never hides the menu item
+   ok   passed 1 the sign in modal tells a Google player how to get back in, on Log In only
+   ok   passed 2 a wrong password, or signing up again, points a Google player at Forgot password
+   ok   passed 3 Forgot password sends the link for the typed email to the reset page
+   ok   failed 4 only an account with Google and no email identity and no saved password counts as Google only
+         AssertionError: expected true to be false // Object.is equality
+   ok   passed 5 the account menu offers a Google-only player the change password page, and nobody else
+   ok   passed 6 saving a password on the reset page marks the account so the menu stops asking
+   ok   passed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   ok   passed 7 the day Google comes back, all of it goes quiet
+
+C.providers) negative control: the app_metadata fallback is dropped
+   ok   passed 1 the sign in modal tells a Google player how to get back in, on Log In only
+   ok   passed 2 a wrong password, or signing up again, points a Google player at Forgot password
+   ok   passed 3 Forgot password sends the link for the typed email to the reset page
+   ok   failed 4 only an account with Google and no email identity and no saved password counts as Google only
+         AssertionError: expected false to be true // Object.is equality
+   ok   passed 5 the account menu offers a Google-only player the change password page, and nobody else
+   ok   passed 6 saving a password on the reset page marks the account so the menu stops asking
+   ok   passed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   ok   passed 7 the day Google comes back, all of it goes quiet
+
+C.menu) negative control: the menu item shows for any signed in player
+   ok   passed 1 the sign in modal tells a Google player how to get back in, on Log In only
+   ok   passed 2 a wrong password, or signing up again, points a Google player at Forgot password
+   ok   passed 3 Forgot password sends the link for the typed email to the reset page
+   ok   passed 4 only an account with Google and no email identity and no saved password counts as Google only
+   ok   failed 5 the account menu offers a Google-only player the change password page, and nobody else
+         AssertionError: expected <a data-set-password="true" …(7)>…(2)</a> to be null
+   ok   passed 6 saving a password on the reset page marks the account so the menu stops asking
+   ok   passed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   ok   passed 7 the day Google comes back, all of it goes quiet
+
+C.reset) negative control: the reset page stops marking the account
+   ok   passed 1 the sign in modal tells a Google player how to get back in, on Log In only
+   ok   passed 2 a wrong password, or signing up again, points a Google player at Forgot password
+   ok   passed 3 Forgot password sends the link for the typed email to the reset page
+   ok   passed 4 only an account with Google and no email identity and no saved password counts as Google only
+   ok   passed 5 the account menu offers a Google-only player the change password page, and nobody else
+   ok   failed 6 saving a password on the reset page marks the account so the menu stops asking
+         AssertionError: expected undefined to be true // Object.is equality
+   ok   passed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   ok   passed 7 the day Google comes back, all of it goes quiet
+
+C.gate) negative control: the menu item ignores the Google flag
+   ok   passed 1 the sign in modal tells a Google player how to get back in, on Log In only
+   ok   passed 2 a wrong password, or signing up again, points a Google player at Forgot password
+   ok   passed 3 Forgot password sends the link for the typed email to the reset page
+   ok   passed 4 only an account with Google and no email identity and no saved password counts as Google only
+   ok   passed 5 the account menu offers a Google-only player the change password page, and nobody else
+   ok   passed 6 saving a password on the reset page marks the account so the menu stops asking
+   ok   passed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+   ok   failed 7 the day Google comes back, all of it goes quiet
+         AssertionError: expected <a data-set-password="true" …(7)>…(2)</a> to be null
+
+C.reauth) negative control: the reset page never offers the email link
+   ok   passed 1 the sign in modal tells a Google player how to get back in, on Log In only
+   ok   passed 2 a wrong password, or signing up again, points a Google player at Forgot password
+   ok   passed 3 Forgot password sends the link for the typed email to the reset page
+   ok   passed 4 only an account with Google and no email identity and no saved password counts as Google only
+   ok   passed 5 the account menu offers a Google-only player the change password page, and nobody else
+   ok   passed 6 saving a password on the reset page marks the account so the menu stops asking
+   ok   failed 8 when the server wants a fresh sign in, the reset page offers the email link to the account email
+         AssertionError: expected null not to be null
+   ok   passed 7 the day Google comes back, all of it goes quiet
+
+simGoogleOnlyReturn: green.
+   8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.

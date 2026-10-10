@@ -1,0 +1,15 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/ownerMandateMotion.test.tsx (7 tests) 111ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  13:38:42
+   Duration  1.26s (transform 251ms, setup 53ms, collect 337ms, tests 111ms, environment 301ms, prepare 123ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Seven actual ownership-card text, trust, boundary and stable-identity checks passed.
