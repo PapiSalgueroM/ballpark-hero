@@ -76,6 +76,12 @@
  *   oldcard    (Round 1149) the tap stops reading the card it was shown, so
  *              a card dealt on the old coin is paid out on today's facts:
  *              the fact beat check's old card half must name it.
+ *   allstar221 (Round 1227) NFL beat 221 says "both make the all star
+ *              roster" again, in a game that picks no such roster: the
+ *              check that no NFL beat claims a roster must name it.
+ *   owndealt206 (Round 1227) the own cards of a roster beat are supported
+ *              whatever the rival's season says: NFL 206's "must stay shut"
+ *              fixture for a season neither made it must name it.
  *
  *   Each control asserts the text it rewrites is present first, so a
  *   control that rewrites a string the file does not contain cannot pass
@@ -93,7 +99,7 @@ import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RIVALRY_CONTROL || '';
-const CONTROLS = ['deaf', 'collision', 'beatlie', 'beatheat', 'coin306', 'oldcard'];
+const CONTROLS = ['deaf', 'collision', 'beatlie', 'beatheat', 'coin306', 'oldcard', 'allstar221', 'owndealt206'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`RIVALRY_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -327,6 +333,17 @@ const BEAT_CONTROLS = {
     file: 'src/lib/nflCareerRivalryEvents.ts',
     from: '      s.morale = clamp(s.morale - 2, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
     to: '      s.morale = clamp(s.morale - 5, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
+  },
+  allstar221: { /* (Round 1227) NFL beat 221 says the two of you made an all star roster again, in a game that picks none */
+    file: 'src/lib/nflCareerRivalryEvents.ts',
+    from: '    description: (_s, r) => `You and ${r.name} end up on the same side at an offseason charity weekend and spend it around each other. It turns out he is easy to like.`,',
+    to: '    description: (_s, r) => `You and ${r.name} both make the all star roster and spend the week around each other. It turns out he is easy to like.`,',
+  },
+  owndealt206: { /* (Round 1227) the two own cards of a roster beat supported whatever the rival's season says: the
+                    "dropped off a year after" card is dealt again in a season he was judged on */
+    file: 'src/lib/careerRivalryEvents.ts',
+    from: '    ? ownRosterCards<P, R>(spec.own).map(k => ({ ...k, when: (s: P, r: R) => facts(s, r) === null && k.when(s, r) }))',
+    to: '    ? ownRosterCards<P, R>(spec.own)',
   },
   coin306: { /* a fact beat back on a coin: the tap picks a card by a draw, not the card the player was shown.
                 Round 1149 moved the beat onto the shared builder, so this one swap breaks every sport on it. */
@@ -670,8 +687,9 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
     203: [nflFixture(), rivalFixture()],
     204: [nflFixture(), rivalFixture()],
     205: [nflFixture(), rivalFixture({ retired: true })],
-    /* Round 1149: 206 is dealt on the season's own first team All-Pro fact, never on a coin. */
-    206: [nflFixture({ seasons: [{ year: 2030, awards: ['All-Pro'] }] }), rivalFixture()],
+    /* Round 1149: 206 is dealt on the season's own first team All-Pro fact, never on a coin. Round 1227: on the
+       two seasons' facts, the rival's own included (he was judged on that year and did not make it). */
+    206: [nflFixture({ seasons: [{ year: 2030, awards: ['All-Pro'] }] }), rivalFixture({ lastYear: 2030, lastAllStar: false })],
     207: [nflFixture({ rings: 0 }), rivalFixture({ rings: 2 })],
     208: [nflFixture({ ovr: 90 }), rivalFixture({ ovr: 85 })],
     209: [nflFixture({ team: 'DAL' }), rivalFixture({ team: 'DAL' })],
@@ -703,11 +721,65 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
   beatWords('NFL', nflRivalry.NFL_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
   /* Round 1149: the All-Pro beat, read off the player's own record (see ownRosterBeatCheck). The engine picks
      no Pro Bowl, so the beat no longer speaks of a ballot: its fact is the first team All-Pro on the season. */
-  ownRosterBeatCheck('NFL', nflRivalry.NFL_RIVALRY_EVENTS, 206, {
-    p: nflFixture, r: rivalFixture, award: nflRivalry.NFL_ROSTER_AWARD, rivalName: 'Rival NFL',
-    made: { says: /^The All-Pro team is out and you are on the first team\./, told: /You were named first team All-Pro\./ },
-    dropped: { says: /^The All-Pro team is out and you are not on the first team, a year after you were\./, told: /You were left off the All-Pro first team\./ },
-  });
+  /* Round 1227: the NFL rival plays the player's position on the player's own stat line now, and the same
+     All-Pro pass judges his season, so the beat names both seasons on the three cards the NBA's 306 has
+     (rosterBeat in careerRivalryEvents.ts): dealt only when at least one of the two made the first team in the
+     ONE season both were judged on, never on the ratings. The two cards of Round 1149 are still in the beat for
+     one purpose, a save sitting on a card the release before dealt, and are never dealt once the rival has been
+     judged on the season at hand: so the rule "every card of one beat promises something different" holds among
+     the cards that can be supported together (the fact cards, then the own cards, each checked as a group). */
+  {
+    const AW = nflRivalry.NFL_ROSTER_AWARD;
+    const season = (has, year = 2030) => ({ year, awards: has ? [AW] : [] });
+    const pair = (mine, his) => ({ p: nflFixture({ seasons: [season(mine)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: his }) });
+    const facts = factBeatCheck('NFL', nflRivalry.NFL_RIVALRY_EVENTS, 206, {
+      never: [
+        { name: 'in a season neither of you made the first team (both rated 90)', p: nflFixture({ ovr: 90, seasons: [season(false)] }), r: rivalFixture({ ovr: 90, lastYear: 2030, lastAllStar: false }) },
+        { name: 'in a season neither made it, a year after you did (the dropped card of Round 1149 is not dealt once he is judged)', p: nflFixture({ seasons: [season(true, 2029), season(false)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: false }) },
+        { name: 'on two different seasons (yours of 2031 without it, his of 2030 with it)', p: nflFixture({ seasons: [season(false, 2030), season(false, 2031)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: true }) },
+        { name: 'on the two ratings (both at 90, nobody on the team, a rival from before Round 1227)', p: nflFixture({ ovr: 90, seasons: [season(false)] }), r: rivalFixture({ ovr: 90 }) },
+        { name: 'on a save with no season played', p: nflFixture({ ovr: 90, seasons: [] }), r: rivalFixture({ ovr: 90 }) },
+      ],
+      deal: [
+        { name: 'mine=true his=false', ...pair(true, false), says: /^The All-Pro team is out\. You are on the first team and Rival NFL is not\.$/, reads: 'Morale +5', move: { morale: 5 }, told: /You were named first team All-Pro and Rival NFL was not\./ },
+        { name: 'mine=false his=true', ...pair(false, true), says: /^The All-Pro team is out\. Rival NFL is on the first team and you are not\.$/, reads: 'Morale -5', move: { morale: -5 }, told: /Rival NFL was named first team All-Pro and you were not\./ },
+        { name: 'mine=true his=true', ...pair(true, true), says: /^The All-Pro team is out, and you and Rival NFL are both on the first team\.$/, reads: 'Fanbase +3', move: { fanbase: 3 }, told: /You and Rival NFL were both named first team All-Pro\./ },
+      ],
+    });
+    /* A save from the release before: its rival was never judged through the hook (no lastYear), and it may sit
+       on one of the two cards that release dealt. The card is found again by its promise and pays what it says. */
+    const silent = /Rival NFL (is|made|did|was)\b|over (you|Rival NFL)/;
+    const own = factBeatCheck('NFL', nflRivalry.NFL_RIVALRY_EVENTS, 206, {
+      deal: [
+        { name: 'an old save: you made it (left off the year before)', p: nflFixture({ seasons: [season(false, 2029), season(true)] }), r: rivalFixture(), silent, says: /^The All-Pro team is out and you are on the first team\./, reads: 'Morale +5', move: { morale: 5 }, told: /You were named first team All-Pro\./ },
+        { name: 'an old save: you are off it a year after you were on it', p: nflFixture({ seasons: [season(true, 2029), season(false)] }), r: rivalFixture(), silent, says: /^The All-Pro team is out and you are not on the first team, a year after you were\./, reads: 'Morale -5', move: { morale: -5 }, told: /You were left off the All-Pro first team\./ },
+      ],
+    });
+    console.log(`   the All-Pro beat (206): ${facts} of 3 fact pairs dealt and applied at 4 rolls each, 5 fixtures it must stay shut on, never on a coin, never on the ratings; ${own} of 2 cards of the release before still pay what they printed on a save whose rival was never judged`);
+    if (facts < 3) fail(`NFL beat 206: only ${facts} of 3 fact pairs were dealt`);
+    if (own < 2) fail(`NFL beat 206: only ${own} of 2 cards an older save can sit on are still honoured`);
+  }
+  /* Round 1227: no NFL beat names a roster, a ballot, a bowl or an all star anything: the game picks none of
+     them. The one all league honour the engine decides is the first team All-Pro, and only beat 206 speaks of
+     it. Read off the cards as the pool builds them from this harness's fixtures, never off the source text
+     (beat 221 said the two of you "both make the all star roster"). */
+  {
+    /* "Roster" alone is not a claim: beat 202, Roster Squeeze, is about the club's own roster and its cap. */
+    const claims = /ballot|\bbowl\b|all[ -]?star|all[ -]?pro/i;
+    let read = 0;
+    for (const def of nflRivalry.NFL_RIVALRY_EVENTS) {
+      const [p, r] = gates[def.id] ?? [];
+      if (!p) continue;
+      const built = rivalryMod.rivalryEventPool(p, r, nflRivalry.NFL_RIVALRY_EVENTS).find(e => e.id === def.id);
+      if (!built) continue;
+      read += 1;
+      const text = `${built.title} ${built.description}`;
+      if (def.id === 206) { if (!/All-Pro team/.test(text) || /roster|ballot|\bbowl\b|all[ -]?star/i.test(text)) fail(`NFL beat 206 reads "${text}": it may name the All-Pro team and nothing else of the kind`); }
+      else if (claims.test(text)) fail(`NFL beat ${def.id} reads "${text}": it names a roster, a ballot, a bowl or an honour the game does not pick there`);
+    }
+    console.log(`   no NFL beat claims a roster, a ballot or a bowl the game never picks: ${read} cards read off the fixtures (206 names the All-Pro team and only that)`);
+    if (read < nflRivalry.NFL_RIVALRY_EVENTS.length) fail(`only ${read} of ${nflRivalry.NFL_RIVALRY_EVENTS.length} NFL beats could be read off their fixtures`);
+  }
   /* Round 1149: the joint practice. It flipped a coin for a winner the game plays nowhere; now it names none. */
   {
     const dealt = factBeatCheck('NFL', nflRivalry.NFL_RIVALRY_EVENTS, 219, {

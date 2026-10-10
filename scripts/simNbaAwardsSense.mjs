@@ -162,8 +162,12 @@
        on both trees: in all four sports the player's careers, the rival's trail and every season note are
        byte equal, and a beat is dealt in exactly the same seasons; the NBA's cards are the same word for
        word; and in each sport the round has moved (Q_MOVED) the cards differ somewhere, so the two trees are
-       not one. A proof for one round, like P and C.
-   S   The roster beat of the other three careers (Round 1149). Each read a coin; each is read off the
+       not one. A proof for one round, like P and C. STALE SINCE ROUND 1227 (the NFL rival's trail moved on
+       purpose, so its byte equal half can no longer hold): never run SENSE_PROVE_1149 again. Round 1227's own
+       proof is sections P1, P2 and L of scripts/simUsRivalSense.mjs.
+   S   Round 1227: the NFL has left this section (its beat 206 names both seasons now; simUsRivalSense N.F5).
+       What follows holds MLB and the NHL until their rivals move onto the player's line too.
+       The roster beat of the other three careers (Round 1149). Each read a coin; each is read off the
        player's own record now (ownRosterBeat in careerRivalryEvents.ts), because those rivals do not play
        their season on the player's line yet. Every card of the beat dealt in the sport's fleet (500 careers
        a seed) is held to the seasons it was dealt on (exact): the card for making the roster only in a
@@ -238,7 +242,8 @@
      lastyearmlb      the MLB tick rolling on the bare save, so the    S red
                       beat reads the season before the one just played
      lastyearnhl      the same swap in the NHL tick                    S red
-     lastyearnfl      the same swap in the NFL tick                    S red
+     (lastyearnfl moved to scripts/simUsRivalSense.mjs in Round 1227, where it turns N.F5 red: the NFL's
+      beat left section S when its rival moved onto the player's line.)
      soldascoin       one NHL beat promising "50/50 outcome" again     S red
    With SENSE_PROVE_AGAINST=<commit> set, rivaldraws must also turn P red (the player's digest moves).
      noscale          the legacy constant back to 1                    H red (refuses when it is 1)
@@ -401,7 +406,6 @@ const CONTROLS = {
   /* S: the MLB tick rolling on the bare save, so the beat reads the season BEFORE the one just played. */
   lastyearmlb: { file: 'src/lib/mlbCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
   lastyearnhl: { file: 'src/lib/nhlCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
-  lastyearnfl: { file: 'src/lib/nflCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
   /* S: one beat sold as a coin again (the NHL's head to head win promising "50/50 outcome" in place of what it does). */
   soldascoin: { file: 'src/lib/nhlCareerRivalryEvents.ts', find: '    consequence: "Fanbase +5, confidence boost",', put: '    consequence: "50/50 outcome",', needs: 'S' },
   /* R: the rival's season taking a second draw of the season's stream (every draw of the player's after it moves). */
@@ -1214,7 +1218,9 @@ const LESSER_ONLY_FLOOR = 230;
 const S_BEAT = {
   mlb: { id: 206, award: 'All-Star', made: /^The All-Star rosters are out and you are on one\./, dropped: /^The All-Star rosters are out and you are not on one, a year after you were\./, floor: { made: 8.4, dropped: 7.8 } },
   nhl: { id: 306, award: 'All-Star', made: /^The All-Star rosters are out and you are on one\./, dropped: /^The All-Star rosters are out and you are not on one, a year after you were\./, floor: { made: 12.4, dropped: 8.6 } },
-  nfl: { id: 206, award: 'All-Pro', made: /^The All-Pro team is out and you are on the first team\./, dropped: /^The All-Pro team is out and you are not on the first team, a year after you were\./, floor: { made: 2.5, dropped: 1.9 } },
+  /* Round 1227: the NFL's row is gone. Its rival plays the player's own line now and its beat 206 names both
+     seasons (rosterBeat), so it deals neither of these two cards any more: scripts/simUsRivalSense.mjs section
+     N.F5 holds its three cards to the two seasons, and section N.O the two old cards on an older save. */
 };
 /* Q, Round 1149: the sports whose roster beat the round has taken off its coin so far. In those the cards must
    differ between the two trees; in the others every card must be the same. */
@@ -1728,7 +1734,7 @@ if (HAS_PASS() && typeof E.nbaAwards.nbaAwardHelpRules === 'function') {
    held to the seasons it was dealt on: the card for making the roster only in a season that holds the award,
    the card for dropping off it only in a season that does not right after one that did, its promise the one
    that card makes, and never a word on the rival's roster. */
-for (const sp of Object.keys(OTHER).filter(k => Q_MOVED[k])) {
+for (const sp of Object.keys(OTHER).filter(k => Q_MOVED[k] && S_BEAT[k])) {
   const B = S_BEAT[sp]; const S = sp.toUpperCase();
   const perSeed = others[sp].map(o => {
     const dealt = o.beats.filter(x => x.id === B.id);

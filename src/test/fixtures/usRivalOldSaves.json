@@ -1,0 +1,2415 @@
+{
+ "recordedFrom": "980654facb2d41a6c9ddc029c43710178b9d49b8",
+ "recordedBy": "RIVAL_PROVE=<commit> node scripts/simUsRivalSense.mjs --record-old-saves",
+ "what": "NFL My Career saves built by the code of recordedFrom (before Round 1227 moved the rival onto the player's line). Read by src/test/usRivalOldSaves.test.ts and by section N.O of the harness. Never edit by hand.",
+ "saves": {
+  "nflMade": {
+   "name": "Drive old-47",
+   "pos": "K",
+   "archetype": {
+    "id": "journey",
+    "label": "Journeyman Boot",
+    "desc": "Cut four times, still kicking",
+    "ovrBoost": 0,
+    "potBoost": 3,
+    "durability": 1
+   },
+   "team": "LV",
+   "year": 2040,
+   "age": 36,
+   "ovr": 86,
+   "pot": 93,
+   "morale": 91,
+   "fanbase": 40,
+   "health": 98,
+   "salary": 8.8,
+   "contractYears": 1,
+   "seasons": [
+    {
+     "year": 2026,
+     "team": "NO",
+     "age": 22,
+     "ovr": 67,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 1.2,
+     "fgAtt": 26,
+     "fgMade": 21,
+     "longFg": 62
+    },
+    {
+     "year": 2027,
+     "team": "NO",
+     "age": 23,
+     "ovr": 69,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 1.2,
+     "fgAtt": 36,
+     "fgMade": 26,
+     "longFg": 55,
+     "poGames": 1,
+     "poLine": "2 of 2 on field goals"
+    },
+    {
+     "year": 2028,
+     "team": "NO",
+     "age": 24,
+     "ovr": 73,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 1.2,
+     "fgAtt": 28,
+     "fgMade": 24,
+     "longFg": 62,
+     "poGames": 1,
+     "poLine": "2 of 3 on field goals"
+    },
+    {
+     "year": 2029,
+     "team": "NO",
+     "age": 25,
+     "ovr": 75,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 1.2,
+     "fgAtt": 25,
+     "fgMade": 24,
+     "longFg": 67,
+     "poGames": 2,
+     "poLine": "4 of 4 on field goals"
+    },
+    {
+     "year": 2030,
+     "team": "ATL",
+     "age": 26,
+     "ovr": 78,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6,
+     "fgAtt": 33,
+     "fgMade": 32,
+     "longFg": 61
+    },
+    {
+     "year": 2031,
+     "team": "ATL",
+     "age": 27,
+     "ovr": 80,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6,
+     "fgAtt": 26,
+     "fgMade": 25,
+     "longFg": 65
+    },
+    {
+     "year": 2032,
+     "team": "ATL",
+     "age": 28,
+     "ovr": 80,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6,
+     "fgAtt": 29,
+     "fgMade": 27,
+     "longFg": 69
+    },
+    {
+     "year": 2033,
+     "team": "ATL",
+     "age": 29,
+     "ovr": 80,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 6,
+     "fgAtt": 25,
+     "fgMade": 22,
+     "longFg": 63,
+     "poGames": 2,
+     "poLine": "4 of 4 on field goals"
+    },
+    {
+     "year": 2034,
+     "team": "ATL",
+     "age": 30,
+     "ovr": 80,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6,
+     "fgAtt": 34,
+     "fgMade": 31,
+     "longFg": 65
+    },
+    {
+     "year": 2035,
+     "team": "ATL",
+     "age": 31,
+     "ovr": 81,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6.2,
+     "fgAtt": 29,
+     "fgMade": 26,
+     "longFg": 68
+    },
+    {
+     "year": 2036,
+     "team": "ATL",
+     "age": 32,
+     "ovr": 81,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6.2,
+     "fgAtt": 29,
+     "fgMade": 27,
+     "longFg": 65
+    },
+    {
+     "year": 2037,
+     "team": "ATL",
+     "age": 33,
+     "ovr": 81,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6.2,
+     "fgAtt": 26,
+     "fgMade": 23,
+     "longFg": 60
+    },
+    {
+     "year": 2038,
+     "team": "ATL",
+     "age": 34,
+     "ovr": 85,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6.2,
+     "fgAtt": 26,
+     "fgMade": 25,
+     "longFg": 58
+    },
+    {
+     "year": 2039,
+     "team": "LV",
+     "age": 35,
+     "ovr": 86,
+     "games": 17,
+     "awards": [
+      "All-Pro"
+     ],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 8.8,
+     "fgAtt": 34,
+     "fgMade": 33,
+     "longFg": 71,
+     "poGames": 2,
+     "poLine": "4 of 4 on field goals"
+    }
+   ],
+   "rings": 0,
+   "mvps": 0,
+   "allPros": 1,
+   "retired": false,
+   "draftPick": 181,
+   "earnings": 78.6,
+   "netWorth": 43.1,
+   "dirtyMoney": 3,
+   "heat": 37,
+   "suspendedSeasons": 0,
+   "purchased": [
+    "Podcast studio",
+    "Trading card brand"
+   ],
+   "lifeFlags": {
+    "b_sibAgent": 2,
+    "b_raccoon": 3,
+    "tank": -1,
+    "b_oldCoach": 2,
+    "b_pod": 2,
+    "honestBody": 1,
+    "b_cards": 3,
+    "localLegend": 1,
+    "b_jersey": 3,
+    "b_partnerCity": 3,
+    "b_owedOne": 1,
+    "peds": 1,
+    "b_rivalTeammate": 2,
+    "book": 1,
+    "b_food": 3
+   },
+   "appearance": null,
+   "yearlyCosts": 0,
+   "rival": {
+    "name": "Beau Brennan",
+    "pos": "K",
+    "team": "NO",
+    "ovr": 71,
+    "pot": 96,
+    "age": 36,
+    "rings": 0,
+    "hisYears": 13,
+    "myYears": 1,
+    "retired": false,
+    "lastLine": "31 field goals",
+    "lastScore": 15.5
+   },
+   "role": "starter",
+   "pendingRivalryEvent": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Beau Brennan.",
+    "consequence": "Morale +5"
+   },
+   "money": {
+    "seed": 3207213809,
+    "vault": 0,
+    "hold": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "cost": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "price": {
+     "ladder": 208.39,
+     "bricks": 162.22,
+     "cleats": 138.17,
+     "screens": 165.15,
+     "spark": 125.7
+    },
+    "hist": {
+     "ladder": [
+      139.6,
+      147.68,
+      155,
+      163.39,
+      171.19,
+      182.01,
+      192.23,
+      208.39
+     ],
+     "bricks": [
+      137.18,
+      133.7,
+      132.34,
+      143.42,
+      144.55,
+      158.48,
+      161.98,
+      162.22
+     ],
+     "cleats": [
+      136.61,
+      140.64,
+      154.27,
+      145.75,
+      137.48,
+      100.18,
+      109.6,
+      138.17
+     ],
+     "screens": [
+      83.03,
+      87.8,
+      107.51,
+      114.86,
+      122.19,
+      122.18,
+      160.86,
+      165.15
+     ],
+     "spark": [
+      95.7,
+      87.74,
+      62.47,
+      87.47,
+      87.52,
+      141.16,
+      97.08,
+      125.7
+     ]
+    },
+    "log": [],
+    "year": 2039,
+    "age": 14,
+    "won": 0,
+    "lost": 0,
+    "cPlays": 0,
+    "cNet": 0,
+    "cYear": 0,
+    "cShut": false,
+    "aYear": 0,
+    "aBest": 0,
+    "aPlays": 0
+   },
+   "karma": 57,
+   "phoneInbox": [
+    {
+     "id": "camp_conditioning-2034",
+     "defId": "camp_conditioning",
+     "from": "Head coach",
+     "emoji": "⏱️",
+     "text": "Conditioning test is the first morning. Anybody who fails it runs after practice all week. No exceptions, and that includes you.",
+     "year": 2034,
+     "choices": [
+      {
+       "label": "I'll pass it",
+       "reply": "I'll pass it coach. Been running all summer",
+       "karma": 3,
+       "morale": 2
+      },
+      {
+       "label": "Ask for a pass",
+       "reply": "Coach, any chance I can skip it this year?",
+       "karma": -4,
+       "morale": -1
+      }
+     ],
+     "beat": "camp",
+     "answered": 1
+    },
+    {
+     "id": "camp_holdout-2035",
+     "defId": "camp_holdout",
+     "from": "Teammate",
+     "emoji": "🚪",
+     "text": "I'm holding out of camp for a new deal. Front office wants guys to say something publicly. Got my back?",
+     "year": 2035,
+     "choices": [
+      {
+       "label": "Back him publicly",
+       "reply": "He's earned it. Pay the man",
+       "karma": 4,
+       "morale": 2,
+       "popularity": -1
+      },
+      {
+       "label": "Stay out of it",
+       "reply": "Love you bro but that's between you and them",
+       "karma": 0
+      },
+      {
+       "label": "Side with the front office",
+       "reply": "We need him here. Business is business",
+       "karma": -5,
+       "popularity": 1
+      }
+     ],
+     "beat": "camp",
+     "answered": 2
+    },
+    {
+     "id": "camp_heat-2036",
+     "defId": "camp_heat",
+     "from": "Strength coach",
+     "emoji": "🥵",
+     "text": "Heat index is 104 out here and the staff wants full pads anyway. You're a leader now. Say something?",
+     "year": 2036,
+     "choices": [
+      {
+       "label": "Speak up for the room",
+       "reply": "Coach, half pads today. We'll get the work in smarter",
+       "karma": 6,
+       "morale": 2
+      },
+      {
+       "label": "Strap up and shut up",
+       "reply": "Pads on. Let's go",
+       "karma": -1,
+       "morale": -2
+      }
+     ],
+     "beat": "camp",
+     "answered": 0
+    },
+    {
+     "id": "contract_reporter-2037",
+     "defId": "contract_reporter",
+     "from": "Reporter",
+     "emoji": "🎙️",
+     "text": "Hearing you and the team are far apart on an extension. Care to comment? I'm running it either way.",
+     "year": 2037,
+     "choices": [
+      {
+       "label": "No comment",
+       "reply": "No comment. Have a good one",
+       "karma": 2
+      },
+      {
+       "label": "Nobody is far apart",
+       "reply": "Nobody is far apart. Write that",
+       "karma": 1,
+       "popularity": 1
+      },
+      {
+       "label": "Say the team is lowballing you",
+       "reply": "Write that they're lowballing me",
+       "karma": -5,
+       "morale": -1,
+       "popularity": 3
+      }
+     ],
+     "beat": "contract",
+     "answered": 0
+    },
+    {
+     "id": "tax_scheme-2038",
+     "defId": "tax_scheme",
+     "from": "Financial advisor",
+     "emoji": "🏝️",
+     "text": "New structure for your name and image money. Runs through three states with no income tax. Technically legal. Probably.",
+     "year": 2038,
+     "choices": [
+      {
+       "label": "Keep it clean",
+       "reply": "Pay what I owe where I earn it. Not risking my name",
+       "karma": 8
+      },
+      {
+       "label": "Do the scheme",
+       "reply": "If it's legal, file it",
+       "karma": -9,
+       "cash": 2
+      }
+     ],
+     "beat": "offseason"
+    },
+    {
+     "id": "playoffs_radio-2039",
+     "defId": "playoffs_radio",
+     "from": "Local radio",
+     "emoji": "📻",
+     "text": "We'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.",
+     "year": 2039,
+     "choices": [
+      {
+       "label": "Do it, hype the city",
+       "reply": "I'm in. Let's get this town loud",
+       "karma": 1,
+       "popularity": 4,
+       "morale": -1
+      },
+      {
+       "label": "Decline, locked in",
+       "reply": "Locked in this week. After we win",
+       "karma": 3,
+       "morale": 2
+      }
+     ],
+     "beat": "playoffs"
+    }
+   ],
+   "phoneUsedIds": [
+    "camp_install",
+    "barber_cut",
+    "crypto_bro",
+    "playoffs_tickets",
+    "playoffs_staff",
+    "playoffs_scout_team",
+    "granny_scam",
+    "documentary",
+    "deadline_agent",
+    "playoffs_meeting",
+    "camp_conditioning",
+    "camp_holdout",
+    "camp_heat",
+    "contract_reporter",
+    "tax_scheme",
+    "playoffs_radio"
+   ],
+   "eventLastFired": {
+    "lifeA_vet_mentor": 2026,
+    "lifeC_k_the_miss": 2036,
+    "lifeA_new_oc": 2027,
+    "lifeC_voluntary_spring": 2035,
+    "lifeC_final_cuts": 2035,
+    "lifeA_therapy_room": 2028,
+    "lifeB_siblingManager": 2028,
+    "story:practiceSquad": 2039,
+    "lifeA_qb_room": 2029,
+    "lifeB_facilityRaccoon": 2029,
+    "lifeA_hospital_visit": 2030,
+    "lifeA_cause_cleats": 2030,
+    "corr_tank_talk": 2031,
+    "lifeB_coachWhoCutYou": 2031,
+    "lifeA_doc_crew": 2038,
+    "lifeA_card_show": 2032,
+    "lifeB_podcastNetwork": 2032,
+    "lifeA_concussion_protocol": 2033,
+    "lifeB_tradingCards": 2033,
+    "lifeA_car_dealership": 2033,
+    "lifeB_jerseyRetirement": 2034,
+    "training": 2037,
+    "lifeC_booth_audition": 2038,
+    "corr_ponzi_pitch": 2036,
+    "lifeB_partnerCity": 2036,
+    "corr_the_program": 2037,
+    "lifeC_your_replacement": 2037,
+    "lifeB_rivalSignsHere": 2038,
+    "corr_the_book": 2039,
+    "lifeB_restaurantFranchise": 2039
+   },
+   "lastRivalryEventId": 202,
+   "pendingRivalryChoice": null,
+   "rivalryChoicesSeen": [
+    "nfl_rival_youth_camp",
+    "nfl_rival_big_deal"
+   ],
+   "rivalryIntensity": 11
+  },
+  "nflDropped": {
+   "name": "Drive old-33",
+   "pos": "RB",
+   "archetype": {
+    "id": "bell",
+    "label": "Bellcow",
+    "desc": "Volume monster, wears down",
+    "ovrBoost": 3,
+    "potBoost": 2,
+    "durability": 0.7
+   },
+   "team": "WAS",
+   "year": 2034,
+   "age": 30,
+   "ovr": 87,
+   "pot": 99,
+   "morale": 100,
+   "fanbase": 100,
+   "health": 100,
+   "salary": 32.1,
+   "contractYears": 1,
+   "seasons": [
+    {
+     "year": 2026,
+     "team": "GB",
+     "age": 22,
+     "ovr": 76,
+     "games": 17,
+     "awards": [
+      "Offensive Rookie of the Year"
+     ],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 6.5,
+     "rushYds": 1555,
+     "rushTd": 12,
+     "rec": 51,
+     "recYds": 384,
+     "poGames": 2,
+     "poLine": "153 rush yds, 1 TD"
+    },
+    {
+     "year": 2027,
+     "team": "GB",
+     "age": 23,
+     "ovr": 78,
+     "games": 9,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6.5,
+     "rushYds": 676,
+     "rushTd": 7,
+     "rec": 25,
+     "recYds": 179
+    },
+    {
+     "year": 2028,
+     "team": "GB",
+     "age": 24,
+     "ovr": 79,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 6.5,
+     "rushYds": 1315,
+     "rushTd": 10,
+     "rec": 36,
+     "recYds": 313,
+     "poGames": 2,
+     "poLine": "142 rush yds, 1 TD"
+    },
+    {
+     "year": 2029,
+     "team": "GB",
+     "age": 25,
+     "ovr": 80,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 6.5,
+     "rushYds": 1312,
+     "rushTd": 12,
+     "rec": 49,
+     "recYds": 440
+    },
+    {
+     "year": 2030,
+     "team": "GB",
+     "age": 26,
+     "ovr": 83,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 18.6,
+     "rushYds": 1518,
+     "rushTd": 14,
+     "rec": 53,
+     "recYds": 411,
+     "poGames": 1,
+     "poLine": "113 rush yds, 1 TD"
+    },
+    {
+     "year": 2031,
+     "team": "WAS",
+     "age": 27,
+     "ovr": 84,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 18.6,
+     "rushYds": 1665,
+     "rushTd": 14,
+     "rec": 55,
+     "recYds": 371
+    },
+    {
+     "year": 2032,
+     "team": "WAS",
+     "age": 28,
+     "ovr": 85,
+     "games": 17,
+     "awards": [
+      "All-Pro"
+     ],
+     "teamResult": "Missed the playoffs",
+     "salary": 18.6,
+     "rushYds": 1691,
+     "rushTd": 14,
+     "rec": 54,
+     "recYds": 398
+    },
+    {
+     "year": 2033,
+     "team": "WAS",
+     "age": 29,
+     "ovr": 86,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 22.3,
+     "rushYds": 1684,
+     "rushTd": 12,
+     "rec": 44,
+     "recYds": 406,
+     "poGames": 1,
+     "poLine": "90 rush yds, 1 TD"
+    }
+   ],
+   "rings": 0,
+   "mvps": 0,
+   "allPros": 1,
+   "retired": false,
+   "draftPick": 12,
+   "earnings": 104.3,
+   "netWorth": 43.2,
+   "dirtyMoney": 0,
+   "heat": 0,
+   "suspendedSeasons": 0,
+   "purchased": [
+    "Three wing franchises",
+    "Trading card brand",
+    "Four family homes",
+    "USL minority stake",
+    "Hometown youth camp"
+   ],
+   "lifeFlags": {
+    "roomRespect": 3,
+    "b_food": 1,
+    "b_cards": 3,
+    "b_record": 2,
+    "b_ghost": 2,
+    "b_parentHome": 1,
+    "b_oldCoach": 2,
+    "b_house": 3,
+    "b_club": 1,
+    "b_sibAgent": 3,
+    "b_tag": 1
+   },
+   "appearance": null,
+   "yearlyCosts": 0,
+   "rival": {
+    "name": "Cole Ferreira",
+    "pos": "RB",
+    "team": "GB",
+    "ovr": 83,
+    "pot": 96,
+    "age": 30,
+    "rings": 1,
+    "hisYears": 1,
+    "myYears": 7,
+    "retired": false,
+    "lastLine": "1201 rush yds, 42 rec, 11 TD",
+    "lastScore": 47.6
+   },
+   "role": "starter",
+   "pendingRivalryEvent": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and Cole Ferreira.",
+    "consequence": "Morale -5"
+   },
+   "money": {
+    "seed": 1694030602,
+    "vault": 0,
+    "hold": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "cost": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "price": {
+     "ladder": 149.71,
+     "bricks": 137.1,
+     "cleats": 140.95,
+     "screens": 122.27,
+     "spark": 150.26
+    },
+    "hist": {
+     "ladder": [
+      101.16,
+      111.25,
+      120.21,
+      124.31,
+      135.7,
+      138.42,
+      144.78,
+      149.71
+     ],
+     "bricks": [
+      97.47,
+      98.82,
+      107.71,
+      115.82,
+      119.42,
+      109.58,
+      128.87,
+      137.1
+     ],
+     "cleats": [
+      107.53,
+      110.04,
+      104.31,
+      105.02,
+      96.83,
+      98.87,
+      110.07,
+      140.95
+     ],
+     "screens": [
+      96.29,
+      90.89,
+      102.01,
+      82.93,
+      101.59,
+      116.87,
+      106.86,
+      122.27
+     ],
+     "spark": [
+      128.62,
+      190.7,
+      318.19,
+      353.81,
+      187.09,
+      213.03,
+      134.86,
+      150.26
+     ]
+    },
+    "log": [],
+    "year": 2033,
+    "age": 8,
+    "won": 0,
+    "lost": 0,
+    "cPlays": 0,
+    "cNet": 0,
+    "cYear": 0,
+    "cShut": false,
+    "aYear": 0,
+    "aBest": 0,
+    "aPlays": 0
+   },
+   "karma": 50,
+   "phoneInbox": [
+    {
+     "id": "playoffs_old_teammate-2028",
+     "defId": "playoffs_old_teammate",
+     "from": "Old teammate",
+     "emoji": "🤙",
+     "text": "If we both win this weekend we see each other next round. Loser buys dinner?",
+     "year": 2028,
+     "choices": [
+      {
+       "label": "Bet's on",
+       "reply": "Bet. Start looking at the menu, you're paying",
+       "karma": 2,
+       "morale": 3
+      },
+      {
+       "label": "Not this week, locked in",
+       "reply": "Love you man but no jokes this week",
+       "karma": 2,
+       "morale": 1
+      }
+     ],
+     "beat": "playoffs",
+     "answered": 1
+    },
+    {
+     "id": "barber_cut-2029",
+     "defId": "barber_cut",
+     "from": "Barber",
+     "emoji": "💈",
+     "text": "New look idea for you. Bold. Might break the internet, might get you fined by the head coach. You in?",
+     "year": 2029,
+     "choices": [
+      {
+       "label": "Send it",
+       "reply": "Chair. Tomorrow. Do your worst",
+       "karma": 2,
+       "popularity": 4
+      },
+      {
+       "label": "Keep it classic",
+       "reply": "Usual cut, big game week",
+       "karma": 1
+      }
+     ],
+     "beat": "bye",
+     "answered": 0
+    },
+    {
+     "id": "playoffs_radio-2030",
+     "defId": "playoffs_radio",
+     "from": "Local radio",
+     "emoji": "📻",
+     "text": "We'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.",
+     "year": 2030,
+     "choices": [
+      {
+       "label": "Do it, hype the city",
+       "reply": "I'm in. Let's get this town loud",
+       "karma": 1,
+       "popularity": 4,
+       "morale": -1
+      },
+      {
+       "label": "Decline, locked in",
+       "reply": "Locked in this week. After we win",
+       "karma": 3,
+       "morale": 2
+      }
+     ],
+     "beat": "playoffs",
+     "answered": 1
+    },
+    {
+     "id": "contract_gm-2031",
+     "defId": "contract_gm",
+     "from": "GM",
+     "emoji": "📋",
+     "text": "Contract year. We want you here long term. Keep it out of the papers and we'll get something done.",
+     "year": 2031,
+     "choices": [
+      {
+       "label": "Quiet talks, deal",
+       "reply": "Deal. Nothing goes to the papers from my side",
+       "karma": 5,
+       "morale": 2
+      },
+      {
+       "label": "My agent handles that",
+       "reply": "Talk to my agent. I just play",
+       "karma": -1,
+       "morale": 1
+      }
+     ],
+     "beat": "contract",
+     "answered": 1
+    },
+    {
+     "id": "documentary-2032",
+     "defId": "documentary",
+     "from": "Streaming service",
+     "emoji": "🎬",
+     "text": "All access documentary on your season. Good money. Cameras everywhere, including the bad days.",
+     "year": 2032,
+     "choices": [
+      {
+       "label": "Do it honestly",
+       "reply": "Deal, but you show the real thing, not a highlight reel",
+       "karma": 5,
+       "popularity": 6,
+       "cash": 1
+      },
+      {
+       "label": "Decline",
+       "reply": "Locker room stays sacred. Pass",
+       "karma": 3
+      }
+     ],
+     "beat": "offseason"
+    },
+    {
+     "id": "playoffs_tickets-2033",
+     "defId": "playoffs_tickets",
+     "from": "Mom",
+     "emoji": "🎟️",
+     "text": "The whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.",
+     "year": 2033,
+     "choices": [
+      {
+       "label": "Buy them all",
+       "reply": "Fourteen tickets, done. Tell him to make the sign big",
+       "karma": 7,
+       "morale": 3,
+       "cash": -0.1
+      },
+      {
+       "label": "Four tickets, that's it",
+       "reply": "Four. Everybody else watches at the house",
+       "karma": -2
+      }
+     ],
+     "beat": "playoffs"
+    }
+   ],
+   "phoneUsedIds": [
+    "camp_conditioning",
+    "lost_wallet",
+    "playoffs_scout_team",
+    "referee_apology",
+    "playoffs_old_teammate",
+    "barber_cut",
+    "playoffs_radio",
+    "contract_gm",
+    "documentary",
+    "playoffs_tickets"
+   ],
+   "eventLastFired": {
+    "lifeA_rookie_dinner": 2026,
+    "lifeC_rb_committee": 2026,
+    "lifeB_restaurantFranchise": 2027,
+    "lifeB_tradingCards": 2027,
+    "lifeC_final_cuts": 2031,
+    "media": 2028,
+    "lifeC_voluntary_spring": 2028,
+    "story:practiceSquad": 2028,
+    "lifeA_thanksgiving": 2029,
+    "lifeB_franchiseRecord": 2029,
+    "lifeB_lockerRoomGhost": 2029,
+    "lifeA_car_dealership": 2030,
+    "lifeB_parentCloser": 2030,
+    "lifeB_coachWhoCutYou": 2030,
+    "story:familyHouse": 2031,
+    "lifeA_captain_vote": 2031,
+    "lifeB_lowerLeagueClub": 2032,
+    "lifeA_doc_crew": 2032,
+    "lifeB_siblingManager": 2032,
+    "story:franchiseTag": 2033,
+    "story:youthCamp": 2033,
+    "lifeA_hospital_visit": 2033
+   },
+   "rivalryIntensity": 0,
+   "lastRivalryEventId": 208
+  },
+  "nfl221": {
+   "name": "Drive old-45",
+   "pos": "CB",
+   "archetype": {
+    "id": "island",
+    "label": "Island Corner",
+    "desc": "Left alone on the boundary, thrives there",
+    "ovrBoost": 2,
+    "potBoost": 5,
+    "durability": 0.9
+   },
+   "team": "MIN",
+   "year": 2035,
+   "age": 31,
+   "ovr": 82,
+   "pot": 91,
+   "morale": 88,
+   "fanbase": 95,
+   "health": 97,
+   "salary": 24.7,
+   "contractYears": 1,
+   "seasons": [
+    {
+     "year": 2026,
+     "team": "DET",
+     "age": 22,
+     "ovr": 75,
+     "games": 17,
+     "awards": [
+      "Defensive Rookie of the Year"
+     ],
+     "teamResult": "WON THE SUPER BOWL",
+     "salary": 4.9,
+     "tackles": 76,
+     "picks": 5,
+     "passDef": 20,
+     "forcedFum": 0,
+     "poGames": 4,
+     "poLine": "32 tackles, 5 passes defended"
+    },
+    {
+     "year": 2027,
+     "team": "DET",
+     "age": 23,
+     "ovr": 77,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 4.9,
+     "tackles": 71,
+     "picks": 2,
+     "passDef": 21,
+     "forcedFum": 1
+    },
+    {
+     "year": 2028,
+     "team": "DET",
+     "age": 24,
+     "ovr": 79,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 4.9,
+     "tackles": 64,
+     "picks": 2,
+     "passDef": 26,
+     "forcedFum": 1,
+     "poGames": 1,
+     "poLine": "9 tackles, 1 pass defended"
+    },
+    {
+     "year": 2029,
+     "team": "DET",
+     "age": 25,
+     "ovr": 80,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 4.9,
+     "tackles": 71,
+     "picks": 3,
+     "passDef": 18,
+     "forcedFum": 1,
+     "poGames": 1,
+     "poLine": "8 tackles, 1 pass defended"
+    },
+    {
+     "year": 2030,
+     "team": "MIN",
+     "age": 26,
+     "ovr": 81,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 24.6,
+     "tackles": 60,
+     "picks": 2,
+     "passDef": 19,
+     "forcedFum": 0
+    },
+    {
+     "year": 2031,
+     "team": "MIN",
+     "age": 27,
+     "ovr": 83,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 24.6,
+     "tackles": 66,
+     "picks": 3,
+     "passDef": 22,
+     "forcedFum": 1,
+     "poGames": 1,
+     "poLine": "9 tackles, 1 pass defended"
+    },
+    {
+     "year": 2032,
+     "team": "MIN",
+     "age": 28,
+     "ovr": 84,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 24.6,
+     "tackles": 81,
+     "picks": 2,
+     "passDef": 26,
+     "forcedFum": 1
+    },
+    {
+     "year": 2033,
+     "team": "MIN",
+     "age": 29,
+     "ovr": 83,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 31.5,
+     "tackles": 79,
+     "picks": 3,
+     "passDef": 25,
+     "forcedFum": 1,
+     "poGames": 1,
+     "poLine": "10 tackles, 2 passes defended"
+    },
+    {
+     "year": 2034,
+     "team": "MIN",
+     "age": 30,
+     "ovr": 83,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 24.7,
+     "tackles": 83,
+     "picks": 5,
+     "passDef": 25,
+     "forcedFum": 0,
+     "poGames": 2,
+     "poLine": "19 tackles, 3 passes defended"
+    }
+   ],
+   "rings": 1,
+   "mvps": 0,
+   "allPros": 0,
+   "retired": false,
+   "draftPick": 25,
+   "earnings": 155.5,
+   "netWorth": 71.1,
+   "dirtyMoney": 0,
+   "heat": 0,
+   "suspendedSeasons": 0,
+   "purchased": [
+    "Challenger brand deal",
+    "Three wing franchises"
+   ],
+   "lifeFlags": {
+    "b_cards": 2,
+    "shoeUpside": 1,
+    "b_sibAgent": 3,
+    "b_oldCoach": 3,
+    "b_food": 1,
+    "b_newborn": 1,
+    "localLegend": 1,
+    "b_hof": 3
+   },
+   "appearance": null,
+   "yearlyCosts": 0,
+   "rival": {
+    "name": "Silas Petrenko",
+    "pos": "CB",
+    "team": "DET",
+    "ovr": 84,
+    "pot": 87,
+    "age": 31,
+    "rings": 3,
+    "hisYears": 9,
+    "myYears": 0,
+    "retired": false,
+    "lastLine": "148 tackles, 11.1 sacks, 3 INT",
+    "lastScore": 50.4
+   },
+   "role": "starter",
+   "pendingRivalryChoice": null,
+   "rivalryChoicesSeen": [
+    "nfl_rival_late_hit",
+    "nfl_rival_big_deal"
+   ],
+   "money": {
+    "seed": 886254134,
+    "vault": 0,
+    "hold": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "cost": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "price": {
+     "ladder": 156.49,
+     "bricks": 122.78,
+     "cleats": 123.46,
+     "screens": 113.2,
+     "spark": 90.28
+    },
+    "hist": {
+     "ladder": [
+      105.85,
+      115.25,
+      121.98,
+      129.28,
+      131.33,
+      141.28,
+      152.47,
+      156.49
+     ],
+     "bricks": [
+      92.88,
+      93.29,
+      100.62,
+      96.75,
+      106.79,
+      132.73,
+      125.97,
+      122.78
+     ],
+     "cleats": [
+      116.69,
+      115.16,
+      110.16,
+      95.78,
+      115.64,
+      138.35,
+      110.66,
+      123.46
+     ],
+     "screens": [
+      109.26,
+      106.16,
+      87.96,
+      106.68,
+      131.96,
+      110.38,
+      120.65,
+      113.2
+     ],
+     "spark": [
+      96.05,
+      109.48,
+      84.16,
+      114.97,
+      19.11,
+      39.22,
+      68.55,
+      90.28
+     ]
+    },
+    "log": [],
+    "year": 2034,
+    "age": 9,
+    "won": 0,
+    "lost": 0,
+    "cPlays": 0,
+    "cNet": 0,
+    "cYear": 0,
+    "cShut": false,
+    "aYear": 0,
+    "aBest": 0,
+    "aPlays": 0
+   },
+   "karma": 75,
+   "phoneInbox": [
+    {
+     "id": "playoffs_scout_team-2029",
+     "defId": "playoffs_scout_team",
+     "from": "Practice squad player",
+     "emoji": "🛡️",
+     "text": "I'm playing the other team's star all week on scout team. Want me to go full speed on you, even if it gets chippy?",
+     "year": 2029,
+     "choices": [
+      {
+       "label": "Full speed, don't hold back",
+       "reply": "Full speed. Make me better",
+       "karma": 3,
+       "morale": 3
+      },
+      {
+       "label": "Keep it clean",
+       "reply": "Go hard but nobody gets hurt this week",
+       "karma": 4
+      }
+     ],
+     "beat": "playoffs",
+     "answered": 1
+    },
+    {
+     "id": "injury_teammate-2030",
+     "defId": "injury_teammate",
+     "from": "Teammate",
+     "emoji": "🏥",
+     "text": "ACL's gone. Nine months. Sitting in this hospital bed wondering if I'll ever be the same, honestly.",
+     "year": 2030,
+     "choices": [
+      {
+       "label": "Visit weekly",
+       "reply": "I'm there every week bro. Rehab buddies. You're coming back stronger",
+       "karma": 10,
+       "morale": 2
+      },
+      {
+       "label": "Send a message",
+       "reply": "Gutted for you. Speedy recovery brother",
+       "karma": 3
+      },
+      {
+       "label": "Read it later",
+       "reply": "",
+       "karma": -6
+      }
+     ],
+     "beat": "deadline",
+     "answered": 0
+    },
+    {
+     "id": "playoffs_radio-2031",
+     "defId": "playoffs_radio",
+     "from": "Local radio",
+     "emoji": "📻",
+     "text": "We'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.",
+     "year": 2031,
+     "choices": [
+      {
+       "label": "Do it, hype the city",
+       "reply": "I'm in. Let's get this town loud",
+       "karma": 1,
+       "popularity": 4,
+       "morale": -1
+      },
+      {
+       "label": "Decline, locked in",
+       "reply": "Locked in this week. After we win",
+       "karma": 3,
+       "morale": 2
+      }
+     ],
+     "beat": "playoffs",
+     "answered": 0
+    },
+    {
+     "id": "agent_cleats-2032",
+     "defId": "agent_cleats",
+     "from": "Agent",
+     "emoji": "💼",
+     "text": "Cleat deal on the table. Good money, but the brand got caught running sweatshops last year. Your call.",
+     "year": 2032,
+     "choices": [
+      {
+       "label": "Take the money",
+       "reply": "Money is money. Send the contract",
+       "karma": -7,
+       "cash": 1.2
+      },
+      {
+       "label": "Turn it down publicly",
+       "reply": "Not wearing that. And I'm saying why",
+       "karma": 9,
+       "popularity": 4
+      },
+      {
+       "label": "Quietly decline",
+       "reply": "Pass on this one. Keep it quiet",
+       "karma": 4
+      }
+     ],
+     "beat": "offseason",
+     "answered": 1
+    },
+    {
+     "id": "playoffs_staff-2033",
+     "defId": "playoffs_staff",
+     "from": "Agent",
+     "emoji": "💼",
+     "text": "Playoff checks just cleared. The equipment guys and trainers make a fraction of what you do. Want to do something for them?",
+     "year": 2033,
+     "choices": [
+      {
+       "label": "Split a bonus with the staff",
+       "reply": "Set it up. Every trainer and equipment guy gets something",
+       "karma": 10,
+       "morale": 3,
+       "cash": -0.15
+      },
+      {
+       "label": "Buy them dinner",
+       "reply": "Steakhouse, whole staff, my card",
+       "karma": 5,
+       "cash": -0.03
+      },
+      {
+       "label": "Keep it",
+       "reply": "They get paid. I get paid",
+       "karma": -4
+      }
+     ],
+     "beat": "playoffs"
+    },
+    {
+     "id": "playoffs_tickets-2034",
+     "defId": "playoffs_tickets",
+     "from": "Mom",
+     "emoji": "🎟️",
+     "text": "The whole family wants playoff tickets. All fourteen of us. Your uncle says he's bringing a sign.",
+     "year": 2034,
+     "choices": [
+      {
+       "label": "Buy them all",
+       "reply": "Fourteen tickets, done. Tell him to make the sign big",
+       "karma": 7,
+       "morale": 3,
+       "cash": -0.1
+      },
+      {
+       "label": "Four tickets, that's it",
+       "reply": "Four. Everybody else watches at the house",
+       "karma": -2
+      }
+     ],
+     "beat": "playoffs"
+    }
+   ],
+   "phoneUsedIds": [
+    "bye_week_party",
+    "playoffs_meeting",
+    "granny_scam",
+    "equipment_fine",
+    "playoffs_street",
+    "playoffs_scout_team",
+    "injury_teammate",
+    "playoffs_radio",
+    "agent_cleats",
+    "playoffs_staff",
+    "playoffs_tickets"
+   ],
+   "eventLastFired": {
+    "lifeA_card_show": 2027,
+    "lifeB_tradingCards": 2027,
+    "lifeC_voluntary_spring": 2031,
+    "lifeA_cleat_deal": 2028,
+    "lifeB_siblingManager": 2028,
+    "lifeC_final_cuts": 2032,
+    "lifeB_coachWhoCutYou": 2029,
+    "lifeB_restaurantFranchise": 2029,
+    "story:practiceSquad": 2030,
+    "lifeA_micd_up": 2031,
+    "story:franchiseTag": 2032,
+    "lifeB_newborn": 2033,
+    "lifeC_your_replacement": 2033,
+    "training": 2033,
+    "lifeA_car_dealership": 2034,
+    "lifeC_booth_audition": 2034,
+    "lifeB_hofPush": 2034
+   },
+   "rivalryIntensity": 5,
+   "pendingRivalryEvent": {
+    "id": 221,
+    "emoji": "🌺",
+    "title": "All Star Week",
+    "description": "You and Silas Petrenko both make the all star roster and spend the week around each other. It turns out he is easy to like.",
+    "consequence": "Fanbase +4, the feud softens"
+   },
+   "lastRivalryEventId": 211
+  },
+  "nflCB": {
+   "name": "Drive old-CB-0",
+   "pos": "CB",
+   "archetype": {
+    "id": "island",
+    "label": "Island Corner",
+    "desc": "Left alone on the boundary, thrives there",
+    "ovrBoost": 2,
+    "potBoost": 5,
+    "durability": 0.9
+   },
+   "team": "PHI",
+   "year": 2032,
+   "age": 28,
+   "ovr": 77,
+   "pot": 89,
+   "morale": 87,
+   "fanbase": 28,
+   "health": 94,
+   "salary": 13,
+   "contractYears": 1,
+   "seasons": [
+    {
+     "year": 2026,
+     "team": "NYG",
+     "age": 22,
+     "ovr": 70,
+     "games": 9,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 2.2,
+     "tackles": 28,
+     "picks": 2,
+     "passDef": 7,
+     "forcedFum": 0,
+     "poGames": 1,
+     "poLine": "7 tackles, 1 pass defended"
+    },
+    {
+     "year": 2027,
+     "team": "NYG",
+     "age": 23,
+     "ovr": 71,
+     "games": 10,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 2.2,
+     "tackles": 36,
+     "picks": 2,
+     "passDef": 10,
+     "forcedFum": 1,
+     "poGames": 2,
+     "poLine": "13 tackles, 2 passes defended"
+    },
+    {
+     "year": 2028,
+     "team": "NYG",
+     "age": 24,
+     "ovr": 72,
+     "games": 10,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 2.2,
+     "tackles": 39,
+     "picks": 1,
+     "passDef": 11,
+     "forcedFum": 1
+    },
+    {
+     "year": 2029,
+     "team": "NYG",
+     "age": 25,
+     "ovr": 74,
+     "games": 8,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 2.2,
+     "tackles": 27,
+     "picks": 1,
+     "passDef": 7,
+     "forcedFum": 0
+    },
+    {
+     "year": 2030,
+     "team": "PHI",
+     "age": 26,
+     "ovr": 75,
+     "games": 7,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 13,
+     "tackles": 31,
+     "picks": 1,
+     "passDef": 10,
+     "forcedFum": 0
+    },
+    {
+     "year": 2031,
+     "team": "PHI",
+     "age": 27,
+     "ovr": 77,
+     "games": 8,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 13,
+     "tackles": 30,
+     "picks": 1,
+     "passDef": 11,
+     "forcedFum": 1
+    }
+   ],
+   "rings": 0,
+   "mvps": 0,
+   "allPros": 0,
+   "retired": false,
+   "draftPick": 58,
+   "earnings": 34.8,
+   "netWorth": 18.3,
+   "dirtyMoney": 0,
+   "heat": 0,
+   "suspendedSeasons": 0,
+   "purchased": [
+    "Three wing franchises",
+    "Trading card brand",
+    "Paid off family home"
+   ],
+   "lifeFlags": {
+    "b_food": 1,
+    "b_cards": 3,
+    "b_house": 2,
+    "b_sibAgent": 2,
+    "b_ritual": 2
+   },
+   "appearance": null,
+   "yearlyCosts": 0,
+   "rival": {
+    "name": "Brody Halstead",
+    "pos": "CB",
+    "team": "NYG",
+    "ovr": 78,
+    "pot": 91,
+    "age": 28,
+    "rings": 0,
+    "hisYears": 6,
+    "myYears": 0,
+    "retired": false,
+    "lastLine": "131 tackles, 8.9 sacks, 4 INT",
+    "lastScore": 45.5
+   },
+   "role": "backup",
+   "pendingRivalryChoice": null,
+   "rivalryChoicesSeen": [
+    "nfl_rival_late_hit"
+   ],
+   "money": {
+    "seed": 3031485982,
+    "vault": 0,
+    "hold": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "cost": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "price": {
+     "ladder": 131.21,
+     "bricks": 122.73,
+     "cleats": 135.29,
+     "screens": 83.4,
+     "spark": 114.94
+    },
+    "hist": {
+     "ladder": [
+      100,
+      105.9,
+      108.74,
+      115.37,
+      123.91,
+      128.41,
+      131.21
+     ],
+     "bricks": [
+      100,
+      92.93,
+      103.5,
+      102.96,
+      108.54,
+      108.8,
+      122.73
+     ],
+     "cleats": [
+      100,
+      103.51,
+      123.06,
+      118.32,
+      111.24,
+      111.46,
+      135.29
+     ],
+     "screens": [
+      100,
+      99.44,
+      129.39,
+      91.5,
+      70.49,
+      67.6,
+      83.4
+     ],
+     "spark": [
+      100,
+      170.06,
+      268.92,
+      195.65,
+      68.25,
+      99.15,
+      114.94
+     ]
+    },
+    "log": [],
+    "year": 2031,
+    "age": 6,
+    "won": 0,
+    "lost": 0,
+    "cPlays": 0,
+    "cNet": 0,
+    "cYear": 0,
+    "cShut": false,
+    "aYear": 0,
+    "aBest": 0,
+    "aPlays": 0
+   },
+   "karma": 55,
+   "phoneInbox": [
+    {
+     "id": "playoffs_radio-2026",
+     "defId": "playoffs_radio",
+     "from": "Local radio",
+     "emoji": "📻",
+     "text": "We'd love you on the pregame show the morning of the game. Ten minutes, fire the city up.",
+     "year": 2026,
+     "choices": [
+      {
+       "label": "Do it, hype the city",
+       "reply": "I'm in. Let's get this town loud",
+       "karma": 1,
+       "popularity": 4,
+       "morale": -1
+      },
+      {
+       "label": "Decline, locked in",
+       "reply": "Locked in this week. After we win",
+       "karma": 3,
+       "morale": 2
+      }
+     ],
+     "beat": "playoffs",
+     "answered": 1
+    },
+    {
+     "id": "playoffs_meeting-2027",
+     "defId": "playoffs_meeting",
+     "from": "Head coach",
+     "emoji": "🧢",
+     "text": "January. Everything we did since camp was for this. Players only meeting tonight, and I want you to talk.",
+     "year": 2027,
+     "choices": [
+      {
+       "label": "Speak from the heart",
+       "reply": "I'll talk. They'll hear it",
+       "karma": 6,
+       "morale": 4,
+       "popularity": 2
+      },
+      {
+       "label": "Let the vets talk",
+       "reply": "Let the vets have the floor. I'll lead on the field",
+       "karma": 1,
+       "morale": 1
+      }
+     ],
+     "beat": "playoffs",
+     "answered": 0
+    },
+    {
+     "id": "contract_policy-2028",
+     "defId": "contract_policy",
+     "from": "Agent",
+     "emoji": "🧾",
+     "text": "One more thing for the contract year. There's an insurance policy that pays you if you get hurt before the new deal. It costs money up front. Want it?",
+     "year": 2028,
+     "choices": [
+      {
+       "label": "Buy the policy",
+       "reply": "Buy it. I'll sleep better",
+       "karma": 2,
+       "morale": 2,
+       "cash": -0.1
+      },
+      {
+       "label": "Bet on my health",
+       "reply": "No policy. I'm betting on me",
+       "karma": 0,
+       "morale": 1
+      }
+     ],
+     "beat": "contract",
+     "answered": 0
+    },
+    {
+     "id": "podcast_invite-2029",
+     "defId": "podcast_invite",
+     "from": "Podcast",
+     "emoji": "🎙️",
+     "text": "Come on the show. Fans want unfiltered. We will ask about your coach, your contract and your rival.",
+     "year": 2029,
+     "choices": [
+      {
+       "label": "Go and stay classy",
+       "reply": "I'll come on. Keeping team stuff in house though",
+       "karma": 5,
+       "popularity": 3
+      },
+      {
+       "label": "Go and spill everything",
+       "reply": "Unfiltered? You'll get unfiltered",
+       "karma": -6,
+       "popularity": 6
+      },
+      {
+       "label": "Decline",
+       "reply": "Not my thing, good luck with the show",
+       "karma": 1
+      }
+     ],
+     "beat": "offseason",
+     "answered": 2
+    },
+    {
+     "id": "tax_scheme-2030",
+     "defId": "tax_scheme",
+     "from": "Financial advisor",
+     "emoji": "🏝️",
+     "text": "New structure for your name and image money. Runs through three states with no income tax. Technically legal. Probably.",
+     "year": 2030,
+     "choices": [
+      {
+       "label": "Keep it clean",
+       "reply": "Pay what I owe where I earn it. Not risking my name",
+       "karma": 8
+      },
+      {
+       "label": "Do the scheme",
+       "reply": "If it's legal, file it",
+       "karma": -9,
+       "cash": 2
+      }
+     ],
+     "beat": "offseason"
+    },
+    {
+     "id": "contract_agent-2031",
+     "defId": "contract_agent",
+     "from": "Agent",
+     "emoji": "💼",
+     "text": "Last year of the deal coming up. Bet on yourself and play it out, or tell the GM we want to talk now?",
+     "year": 2031,
+     "choices": [
+      {
+       "label": "Bet on myself",
+       "reply": "Play it out. Let the tape do the talking",
+       "karma": 1,
+       "morale": 4
+      },
+      {
+       "label": "Tell him we want to talk",
+       "reply": "Open the door. Quietly",
+       "karma": 2,
+       "morale": -1
+      },
+      {
+       "label": "Leak that I want top money",
+       "reply": "Let it slip that I want to be the highest paid at the spot",
+       "karma": -6,
+       "popularity": 2,
+       "morale": 2
+      }
+     ],
+     "beat": "contract"
+    }
+   ],
+   "phoneUsedIds": [
+    "camp_nutritionist",
+    "injury_teammate",
+    "playoffs_radio",
+    "playoffs_meeting",
+    "contract_policy",
+    "podcast_invite",
+    "tax_scheme",
+    "contract_agent"
+   ],
+   "eventLastFired": {
+    "lifeA_booed_home": 2026,
+    "lifeC_kick_coverage": 2029,
+    "lifeC_agent_finds_a_door": 2027,
+    "lifeB_restaurantFranchise": 2027,
+    "story:practiceSquad": 2031,
+    "lifeA_burner_account": 2028,
+    "lifeB_tradingCards": 2028,
+    "lifeC_voluntary_spring": 2028,
+    "story:familyHouse": 2029,
+    "lifeC_final_cuts": 2029,
+    "lifeB_siblingManager": 2030,
+    "lifeB_taquitoRitual": 2031
+   },
+   "rivalryIntensity": 20,
+   "pendingRivalryEvent": null,
+   "lastRivalryEventId": 211
+  },
+  "nflK": {
+   "name": "Drive old-K-0",
+   "pos": "K",
+   "archetype": {
+    "id": "leg",
+    "label": "The Leg",
+    "desc": "Sixty is in range on a calm day",
+    "ovrBoost": 2,
+    "potBoost": 4,
+    "durability": 1
+   },
+   "team": "BUF",
+   "year": 2032,
+   "age": 28,
+   "ovr": 84,
+   "pot": 96,
+   "morale": 100,
+   "fanbase": 60,
+   "health": 96,
+   "salary": 8.2,
+   "contractYears": 2,
+   "seasons": [
+    {
+     "year": 2026,
+     "team": "JAX",
+     "age": 22,
+     "ovr": 73,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 1.3,
+     "fgAtt": 29,
+     "fgMade": 26,
+     "longFg": 59,
+     "poGames": 1,
+     "poLine": "2 of 2 on field goals"
+    },
+    {
+     "year": 2027,
+     "team": "JAX",
+     "age": 23,
+     "ovr": 75,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 1.3,
+     "fgAtt": 26,
+     "fgMade": 22,
+     "longFg": 67,
+     "poGames": 2,
+     "poLine": "4 of 4 on field goals"
+    },
+    {
+     "year": 2028,
+     "team": "JAX",
+     "age": 24,
+     "ovr": 77,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Divisional round",
+     "salary": 1.3,
+     "fgAtt": 28,
+     "fgMade": 27,
+     "longFg": 66,
+     "poGames": 2,
+     "poLine": "4 of 5 on field goals"
+    },
+    {
+     "year": 2029,
+     "team": "JAX",
+     "age": 25,
+     "ovr": 79,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Missed the playoffs",
+     "salary": 1.3,
+     "fgAtt": 31,
+     "fgMade": 30,
+     "longFg": 68
+    },
+    {
+     "year": 2030,
+     "team": "BUF",
+     "age": 26,
+     "ovr": 82,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 8.2,
+     "fgAtt": 25,
+     "fgMade": 25,
+     "longFg": 64,
+     "poGames": 1,
+     "poLine": "2 of 2 on field goals"
+    },
+    {
+     "year": 2031,
+     "team": "BUF",
+     "age": 27,
+     "ovr": 84,
+     "games": 17,
+     "awards": [],
+     "teamResult": "Lost in the Wild Card round",
+     "salary": 8.2,
+     "fgAtt": 30,
+     "fgMade": 29,
+     "longFg": 69,
+     "poGames": 1,
+     "poLine": "2 of 2 on field goals"
+    }
+   ],
+   "rings": 0,
+   "mvps": 0,
+   "allPros": 0,
+   "retired": false,
+   "draftPick": 125,
+   "earnings": 24.599999999999998,
+   "netWorth": 11.6,
+   "dirtyMoney": 0,
+   "heat": 0,
+   "suspendedSeasons": 0,
+   "purchased": [
+    "One wing store"
+   ],
+   "lifeFlags": {
+    "b_leak": 3,
+    "b_cards": 1,
+    "b_psychic": 1,
+    "b_food": 2,
+    "b_nemesis": 1,
+    "b_sibAgent": 1,
+    "b_raccoon": 2,
+    "leagueFine": 1,
+    "b_newborn": 1
+   },
+   "appearance": null,
+   "yearlyCosts": 0,
+   "rival": {
+    "name": "Andre Lindqvist",
+    "pos": "K",
+    "team": "JAX",
+    "ovr": 82,
+    "pot": 93,
+    "age": 28,
+    "rings": 0,
+    "hisYears": 6,
+    "myYears": 0,
+    "retired": false,
+    "lastLine": "35 field goals",
+    "lastScore": 17.5
+   },
+   "role": "starter",
+   "pendingRivalryChoice": null,
+   "rivalryChoicesSeen": [
+    "nfl_rival_youth_camp",
+    "nfl_rival_late_hit",
+    "nfl_rival_big_deal"
+   ],
+   "money": {
+    "seed": 1024561300,
+    "vault": 0,
+    "hold": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "cost": {
+     "ladder": 0,
+     "bricks": 0,
+     "cleats": 0,
+     "screens": 0,
+     "spark": 0
+    },
+    "price": {
+     "ladder": 128.73,
+     "bricks": 119.76,
+     "cleats": 104.42,
+     "screens": 78.41,
+     "spark": 130.69
+    },
+    "hist": {
+     "ladder": [
+      100,
+      101.44,
+      104.58,
+      114.48,
+      117.82,
+      121.57,
+      128.73
+     ],
+     "bricks": [
+      100,
+      114.31,
+      112.13,
+      116.17,
+      110.46,
+      122.46,
+      119.76
+     ],
+     "cleats": [
+      100,
+      109.51,
+      95.89,
+      106.73,
+      110.42,
+      104.44,
+      104.42
+     ],
+     "screens": [
+      100,
+      97.77,
+      94.82,
+      126.65,
+      98,
+      91.96,
+      78.41
+     ],
+     "spark": [
+      100,
+      91.74,
+      54.52,
+      66.49,
+      101.46,
+      110.72,
+      130.69
+     ]
+    },
+    "log": [],
+    "year": 2031,
+    "age": 6,
+    "won": 0,
+    "lost": 0,
+    "cPlays": 0,
+    "cNet": 0,
+    "cYear": 0,
+    "cShut": false,
+    "aYear": 0,
+    "aBest": 0,
+    "aPlays": 0
+   },
+   "karma": 63,
+   "phoneInbox": [
+    {
+     "id": "agent_cleats-2026",
+     "defId": "agent_cleats",
+     "from": "Agent",
+     "emoji": "💼",
+     "text": "Cleat deal on the table. Good money, but the brand got caught running sweatshops last year. Your call.",
+     "year": 2026,
+     "choices": [
+      {
+       "label": "Take the money",
+       "reply": "Money is money. Send the contract",
+       "karma": -7,
+       "cash": 1.2
+      },
+      {
+       "label": "Turn it down publicly",
+       "reply": "Not wearing that. And I'm saying why",
+       "karma": 9,
+       "popularity": 4
+      },
+      {
+       "label": "Quietly decline",
+       "reply": "Pass on this one. Keep it quiet",
+       "karma": 4
+      }
+     ],
+     "beat": "offseason",
+     "answered": 2
+    },
+    {
+     "id": "playoffs_meeting-2027",
+     "defId": "playoffs_meeting",
+     "from": "Head coach",
+     "emoji": "🧢",
+     "text": "January. Everything we did since camp was for this. Players only meeting tonight, and I want you to talk.",
+     "year": 2027,
+     "choices": [
+      {
+       "label": "Speak from the heart",
+       "reply": "I'll talk. They'll hear it",
+       "karma": 6,
+       "morale": 4,
+       "popularity": 2
+      },
+      {
+       "label": "Let the vets talk",
+       "reply": "Let the vets have the floor. I'll lead on the field",
+       "karma": 1,
+       "morale": 1
+      }
+     ],
+     "beat": "playoffs",
+     "answered": 1
+    },
+    {
+     "id": "playoffs_old_teammate-2028",
+     "defId": "playoffs_old_teammate",
+     "from": "Old teammate",
+     "emoji": "🤙",
+     "text": "If we both win this weekend we see each other next round. Loser buys dinner?",
+     "year": 2028,
+     "choices": [
+      {
+       "label": "Bet's on",
+       "reply": "Bet. Start looking at the menu, you're paying",
+       "karma": 2,
+       "morale": 3
+      },
+      {
+       "label": "Not this week, locked in",
+       "reply": "Love you man but no jokes this week",
+       "karma": 2,
+       "morale": 1
+      }
+     ],
+     "beat": "playoffs",
+     "answered": 0
+    },
+    {
+     "id": "deadline_traded-2029",
+     "defId": "deadline_traded",
+     "from": "Teammate",
+     "emoji": "📦",
+     "text": "They traded me. Packing my locker right now. Been a good run with you.",
+     "year": 2029,
+     "choices": [
+      {
+       "label": "Help him pack and drive him",
+       "reply": "Don't move. I'm coming to help and I'm driving you to the airport",
+       "karma": 8,
+       "morale": -1
+      },
+      {
+       "label": "Text him good luck",
+       "reply": "Gonna miss you. Go ball out over there",
+       "karma": 3
+      },
+      {
+       "label": "Leave it",
+       "reply": "",
+       "karma": -5
+      }
+     ],
+     "beat": "deadline",
+     "answered": 1
+    },
+    {
+     "id": "playoffs_street-2030",
+     "defId": "playoffs_street",
+     "from": "Neighbor",
+     "emoji": "🏠",
+     "text": "The whole street put your number up in their windows. The kids made a banner and want you to sign it.",
+     "year": 2030,
+     "choices": [
+      {
+       "label": "Stop by and sign it",
+       "reply": "On my way after practice. Get the markers ready",
+       "karma": 7,
+       "popularity": 3
+      },
+      {
+       "label": "Send signed photos",
+       "reply": "Sending photos for every kid on the street",
+       "karma": 3,
+       "popularity": 1
+      }
+     ],
+     "beat": "playoffs"
+    },
+    {
+     "id": "playoffs_staff-2031",
+     "defId": "playoffs_staff",
+     "from": "Agent",
+     "emoji": "💼",
+     "text": "Playoff checks just cleared. The equipment guys and trainers make a fraction of what you do. Want to do something for them?",
+     "year": 2031,
+     "choices": [
+      {
+       "label": "Split a bonus with the staff",
+       "reply": "Set it up. Every trainer and equipment guy gets something",
+       "karma": 10,
+       "morale": 3,
+       "cash": -0.15
+      },
+      {
+       "label": "Buy them dinner",
+       "reply": "Steakhouse, whole staff, my card",
+       "karma": 5,
+       "cash": -0.03
+      },
+      {
+       "label": "Keep it",
+       "reply": "They get paid. I get paid",
+       "karma": -4
+      }
+     ],
+     "beat": "playoffs"
+    }
+   ],
+   "phoneUsedIds": [
+    "referee_apology",
+    "playoffs_tickets",
+    "agent_cleats",
+    "playoffs_meeting",
+    "playoffs_old_teammate",
+    "deadline_traded",
+    "playoffs_street",
+    "playoffs_staff"
+   ],
+   "eventLastFired": {
+    "lifeB_groupChatLeak": 2026,
+    "lifeC_k_the_miss": 2030,
+    "lifeC_voluntary_spring": 2027,
+    "story:practiceSquad": 2030,
+    "lifeB_tradingCards": 2027,
+    "lifeB_ownerPsychic": 2028,
+    "lifeB_restaurantFranchise": 2028,
+    "lifeC_final_cuts": 2028,
+    "lifeB_nemesisDefender": 2029,
+    "lifeB_siblingManager": 2029,
+    "lifeB_facilityRaccoon": 2029,
+    "lifeA_preseason_snub": 2031,
+    "lifeA_cause_cleats": 2031,
+    "lifeB_newborn": 2031
+   },
+   "rivalryIntensity": 40,
+   "pendingRivalryEvent": null,
+   "lastRivalryEventId": 210
+  }
+ }
+}

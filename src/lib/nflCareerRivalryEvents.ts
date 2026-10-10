@@ -45,7 +45,7 @@
 import type { CareerState, SeasonLine } from "./nflMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, factBeat, withSeasonPlayed, ownRosterBeat,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, factBeat, withSeasonPlayed, rosterBeat,
 } from "./careerRivalryEvents";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
@@ -107,16 +107,39 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
      about that team now, read off your own record on the builder MLB's 206 and the NHL's 306 use
      (ownRosterBeat in careerRivalryEvents.ts, where the rule is written): you made the first team, or you are
      off it a year after you were on it. The NFL rival's season is not on your stat line yet, so nothing here
-     says whether HE made a team. */
-  ownRosterBeat<CareerState, CareerRival>({
-    id: 206, emoji: "🗳️", title: "All-Pro Team", award: NFL_ROSTER_AWARD,
-    made: {
-      description: r => `The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and ${r.name}.`,
-      line: "🗳️ You were named first team All-Pro.",
+     says whether HE made a team.
+     Round 1227: now it is. The rival plays your position on your own stat line (nflRivalSeason in
+     nflMyCareer.ts) and the same All-Pro pass that judges you judges his season, so the beat names both
+     seasons, on the three cards the NBA's 306 has had since Round 1112 (rosterBeat in careerRivalryEvents.ts):
+     both of you, only you, only him, dealt only when at least one of you made the first team. Where the first
+     team names one man (quarterback, running back, tight end, kicker) the "both" card cannot be dealt: his
+     season never holds the honour in a year yours does. The two cards of Round 1149 stay as `own`, never dealt
+     again, only so a save sitting on one of them still pays what that card printed. */
+  rosterBeat<SeasonLine, CareerState, CareerRival>({
+    id: 206, emoji: "🗳️", title: "All-Pro Team",
+    mine: last => last.awards.includes(NFL_ROSTER_AWARD),
+    both: {
+      description: r => `The All-Pro team is out, and you and ${r.name} are both on the first team.`,
+      line: r => `🗳️ You and ${r.name} were both named first team All-Pro.`,
     },
-    dropped: {
-      description: r => `The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and ${r.name}.`,
-      line: "🗳️ You were left off the All-Pro first team.",
+    onlyYou: {
+      description: r => `The All-Pro team is out. You are on the first team and ${r.name} is not.`,
+      line: r => `🗳️ You were named first team All-Pro and ${r.name} was not.`,
+    },
+    onlyHim: {
+      description: r => `The All-Pro team is out. ${r.name} is on the first team and you are not.`,
+      line: r => `🗳️ ${r.name} was named first team All-Pro and you were not.`,
+    },
+    own: {
+      award: NFL_ROSTER_AWARD,
+      made: {
+        description: r => `The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and ${r.name}.`,
+        line: "🗳️ You were named first team All-Pro.",
+      },
+      dropped: {
+        description: r => `The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and ${r.name}.`,
+        line: "🗳️ You were left off the All-Pro first team.",
+      },
     },
   }),
   {
@@ -276,9 +299,13 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 8, 0, 100);
     },
   },
+  /* Round 1227: this card said the two of you "both make the all star roster", in a game that picks no such
+     roster (the one all league honour simSeason decides is the first team All-Pro, and beat 206 reports that
+     one as a fact). It claims no roster, ballot or award now. Same id, gate, promise and apply, so a save
+     sitting on the old words still pays exactly what that card printed. */
   {
-    id: 221, emoji: "🌺", title: "All Star Week",
-    description: (_s, r) => `You and ${r.name} both make the all star roster and spend the week around each other. It turns out he is easy to like.`,
+    id: 221, emoji: "🎗️", title: "The Charity Weekend",
+    description: (_s, r) => `You and ${r.name} end up on the same side at an offseason charity weekend and spend it around each other. It turns out he is easy to like.`,
     consequence: "Fanbase +4, the feud softens",
     when: (s, r) => !r.retired && r.team !== s.team && s.ovr >= 82 && r.ovr >= 82,
     apply: s => {
