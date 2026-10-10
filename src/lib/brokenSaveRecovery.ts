@@ -116,6 +116,13 @@ export const BACKUPS_KEPT = 3;
  * just written). backupKey is null when there was no save left to move
  * (another tab cleared it), which is still a fresh start. Never throws and
  * never removes the original unless an identical copy is already stored.
+ *
+ * Round 1219 review: an older backup that holds the very same bytes as the
+ * save just moved is removed first and does not count toward the cap. Since
+ * that round a put back keeps the backup it came from, so a save that was put
+ * back, broke the page again and was set aside again would otherwise sit in
+ * two slots, then three, and the cap would drop a different career to make
+ * room for copies of bytes the browser already held.
  */
 export function setAsideSave(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date()): SetAsideResult {
   const moved = moveAside(entry, storage, now);
@@ -130,7 +137,19 @@ export function setAsideSave(entry: ContinueSave, storage: SaveStorage | null, n
  */
 function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: string): void {
   if (!storage || typeof (storage as ListableStorage).key !== 'function') return;
-  const others = backupKeysOf(entry, storage as ListableStorage).filter(k => k !== keep);
+  const others: string[] = [];
+  try {
+    const kept = storage.getItem(keep);
+    for (const k of backupKeysOf(entry, storage as ListableStorage)) {
+      if (k === keep) continue;
+      /* A twin of the save just set aside: `keep` holds the same bytes, so nothing is lost with it. */
+      if (kept !== null && storage.getItem(k) === kept) storage.removeItem(k);
+      else others.push(k);
+    }
+  } catch {
+    /* A store that stopped answering: nothing is pruned on a guess. */
+    return;
+  }
   for (const k of others.slice(BACKUPS_KEPT - 1)) {
     try { storage.removeItem(k); } catch { /* left in place, harmless */ }
   }

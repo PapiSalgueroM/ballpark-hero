@@ -49,7 +49,7 @@ import {
   BACKUPS_KEPT, BROKEN_SAVE_MARK, SET_ASIDE_SEEN_KEY, backupDate, backupKeysOf, deleteBackup, dismissBackup, heldSaveEntry,
   offeredBackup, openGame, restoreBackup, setAsideSave, type SaveStorage,
 } from '@/lib/brokenSaveRecovery';
-import { PENDING_RESTORE_KEY, reopenGame, runSaveKeeper } from '@/lib/saveKeeper';
+import { PENDING_RESTORE_KEY, reopenGame, restoreNow, runSaveKeeper } from '@/lib/saveKeeper';
 
 const Boom = () => { throw new Error('deliberate test throw'); };
 /* What a lazy route throws when its chunk cannot load: the network or a
@@ -591,6 +591,45 @@ describe('backups are capped, and one can be waved off or deleted (Round 958 clo
     expect(dismissBackup(entry, key(stamp(1)), s)).toBe(true);
     expect(JSON.parse(m.get(SET_ASIDE_SEEN_KEY)!)).toEqual({ [entry.saveKey]: [key(stamp(1))], [other.saveKey]: ['kept as it was'] });
     expect(offeredBackup(entry, s)).toBeNull();
+  });
+
+  /* Round 1219 review, the second major: since a put back keeps the backup it
+     came from, a save that was put back, broke the page again and was set
+     aside again sat in two slots, then three, and the cap dropped the career
+     the player had been playing to make room for copies of the broken one. */
+  it('a save put back that breaks the page again, try after try, never costs the career he had', () => {
+    localStorage.setItem(entry.saveKey, 'career F');
+    localStorage.setItem(key(stamp(1)), 'broken A');
+    /* The keeper stamps its copy with the clock, so the clock is pinned: the order of the backups is part of what is checked. */
+    vi.useFakeTimers({ now: day(5), toFake: ['Date'] });
+    try {
+      for (let n = 1; n <= 5; n += 1) {
+        const source = backupKeysOf(entry, localStorage).find(k => localStorage.getItem(k) === 'broken A')!;
+        expect(restoreNow(entry, source), `try ${n}`).toEqual({ ok: true });
+        runSaveKeeper();
+        expect(localStorage.getItem(entry.saveKey), `try ${n}`).toBe('broken A');
+        /* The page breaks again, and he presses Start a fresh game. */
+        const moved = setAsideSave(entry, localStorage, day(10 + n));
+        expect(moved, `try ${n}`).toEqual({ ok: true, backupKey: key(stamp(10 + n)) });
+        expect(localStorage.getItem(entry.saveKey), `try ${n}`).toBeNull();
+        expect(backupKeysOf(entry, localStorage).map(k => localStorage.getItem(k)).sort(), `try ${n}`).toEqual(['broken A', 'career F']);
+        /* The save just set aside is the one on offer, as the boundary's line promises. */
+        expect(offeredBackup(entry, localStorage), `try ${n}`).toBe(key(stamp(10 + n)));
+      }
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('an older backup with the same bytes as the save just set aside does not take a second slot', () => {
+    const { m, s } = fakeStorage();
+    m.set(key(stamp(1)), 'kept 1');
+    m.set(key(stamp(2)), 'the same save');
+    m.set(key(stamp(3)), 'kept 3');
+    m.set(entry.saveKey, 'the same save');
+    expect(setAsideSave(entry, s, day(4))).toEqual({ ok: true, backupKey: key(stamp(4)) });
+    expect(backupKeysOf(entry, s)).toEqual([key(stamp(4)), key(stamp(3)), key(stamp(1))]);
+    expect(m.get(key(stamp(4)))).toBe('the same save');
   });
 
   it('a damaged waved-off record means nothing was waved off', () => {
