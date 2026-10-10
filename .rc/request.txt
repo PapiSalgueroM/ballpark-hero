@@ -1,0 +1,1 @@
+f4: node .rc/x/f4.mjs > /tmp/f4.log 2>&1; s=$?; cp /tmp/f4.log "$RC_OUT/f4.log"; tail -4 /tmp/f4.log | cut -c1-420; exit $s
