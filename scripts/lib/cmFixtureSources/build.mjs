@@ -57,6 +57,8 @@ function readSource(league, index, gameClubs, dir) {
   const pages = readSnapshot(dir, source);
   const parsed = parser.parse(pages, source);
   const problems = [];
+  const untimed = pages.filter(p => !READ_AT.test(p.meta.readAtUtc || '')).length;
+  if (untimed) problems.push(`${source.id}: ${untimed} kept page(s) do not say when they were read (readAtUtc in the .meta.json beside the bytes)`);
   const game = new Set(gameClubs);
   const spellings = new Set(parsed.rows.flatMap(r => [r.home, r.away]));
   const mapOf = s => (Object.hasOwn(table, s) ? table[s] : (game.has(s) ? s : null));
@@ -123,6 +125,18 @@ const aggregateSnapshot = pages => {
     ? list[0].sha256
     : crypto.createHash('sha256').update(list.map(p => p.sha256).join('\n')).digest('hex');
   return { files: list.length, bytes, sha256, ...(list.length > 1 ? { pages: list } : {}) };
+};
+
+export const READ_AT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
+/**
+ * When ONE source's bytes were read, for its own entry in the receipt: the day and the moment (UTC) its last
+ * page was saved, and the moment of its first page too when it is more than one page. These pages change every
+ * week, so the moment of the read is part of what identifies a snapshot, and it is written into the repo
+ * because the kept bytes and their .meta.json files are not.
+ */
+export const readTimes = pages => {
+  const times = pages.map(p => p.meta.readAtUtc).sort();
+  return { readOn: times.at(-1).slice(0, 10), readAtUtc: times.at(-1), ...(times.length > 1 ? { firstPageReadAtUtc: times[0] } : {}) };
 };
 
 /**
@@ -210,6 +224,7 @@ export function buildLedger(league, gameLeague, dir) {
         url: s.url,
         citedUrl: s.citedUrl || s.url,
         ...(s.citedNote ? { citedNote: s.citedNote } : {}),
+        ...readTimes(r.pages),
         title,
         ...(s.titleNote ? { titleNote: s.titleNote } : {}),
         ...(s.published || r.parsed.published ? { published: s.published || r.parsed.published } : {}),
