@@ -24,6 +24,9 @@ export const HELD = [
   'src/components/club-manager/ClubDetailScreen.tsx', 'src/data/clubManagerRosters.ts',
   'src/data/clubManagerWorldRosters.ts', 'scripts/simManagerWorldContinuity.mjs',
   'scripts/qa/managerWorldContinuityKit.mjs', '.github/workflows/manager-world-continuity.yml',
+  'scripts/simClubManagerEraUcl.mjs', 'scripts/simEras.mjs',
+  'scripts/qa/managerEraWorldOracles.mjs', 'scripts/simManagerEraWorldOracles.mjs',
+  'scripts/qa/managerWorldSizeDiagnostic.mjs', '.github/workflows/manager-world-size-diagnostic.yml',
   'package.json', 'package-lock.json', 'tsconfig.app.json',
 ];
 export function sourceHashes() {

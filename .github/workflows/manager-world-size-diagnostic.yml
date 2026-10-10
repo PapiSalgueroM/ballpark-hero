@@ -54,6 +54,9 @@ jobs:
       - name: Diagnostic paired unchanged historical SaveSize and Slots
         if: ${{ !cancelled() }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerWorldSizeDiagnostic.mjs 2>&1 | tee manager-world-size-diagnostics/diagnostic.log
+      - name: Diagnostic-only healthy world outcomes, no final build credit
+        if: ${{ !cancelled() }}
+        run: MANAGER_WORLD_CONTINUITY_ARTIFACTS=manager-world-size-diagnostics/world-preflight NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerWorldContinuity.mjs 2>&1 | tee manager-world-size-diagnostics/world-preflight.log
       - name: Diagnostic sources and installed packages held
         if: ${{ !cancelled() }}
         run: |

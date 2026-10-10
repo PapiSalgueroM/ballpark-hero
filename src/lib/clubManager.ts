@@ -44,7 +44,7 @@ import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade 
 import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
-import { readWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub } from '@/lib/clubManagerWorldRoster';
+import { compactWorldRoster, readWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub } from '@/lib/clubManagerWorldRoster';
 import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
@@ -286,7 +286,7 @@ export function refreshWorldRoster(career: CareerState): CareerState {
     }
     return { ...structuredClone(record), year: record.origin.birthYear + player.age, player, status, owner };
   });
-  return { ...career, worldRoster: { ...held, records } };
+  return { ...career, worldRoster: compactWorldRoster({ ...held, records }) };
 }
 
 /** Ownership is applied to the same projected players used for rivals and the market. */

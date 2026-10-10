@@ -14,6 +14,8 @@ on:
       - src/components/club-manager/ClubDetailScreen.tsx
       - scripts/simManagerWorldContinuity.mjs
       - scripts/qa/managerWorldContinuityKit.mjs
+      - scripts/simManagerEraWorldOracles.mjs
+      - scripts/qa/managerEraWorldOracles.mjs
   workflow_dispatch:
 
 permissions:
@@ -25,7 +27,7 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 70
+    timeout-minutes: 120
     defaults:
       run:
         shell: bash
@@ -90,21 +92,21 @@ jobs:
           import {gunzipSync} from 'node:zlib';
           const root='manager-world-continuity-artifacts',read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8')),sha=value=>createHash('sha256').update(value).digest('hex');
           const head=fs.readFileSync(root+'/source-head.txt','utf8').trim(),tree=fs.readFileSync(root+'/source-tree.txt','utf8').trim(),units=read('focused-unit.json'),controls=read('outcomes/controls.json');
-          assert.equal(units.success,true);assert.equal(units.numFailedTests,0);assert.equal(units.numTotalTests,92);assert.equal(units.numPassedTests,92);assert.equal(units.numPendingTests,0);assert.equal(units.numTodoTests??0,0);
-          for(const [file,count]of[['/src/lib/clubManagerWorldRoster.test.ts',48],['/src/lib/clubManagerTrajectory.test.ts',44]]){const suite=units.testResults.find(row=>row.name.replaceAll('\\','/').endsWith(file));assert(suite,file);assert.equal(suite.assertionResults.length,count);assert(suite.assertionResults.every(row=>row.status==='passed'));}
-          const groups=['inactive','constructors','identity','buy-job','year-away','sale','option','release','refresh','seeded-world'];
-          const maps={purchase:['buy-job','year-away','sale','release'],ownership:['identity','buy-job','year-away','sale','option','release'],snapshot:['buy-job','year-away'],stale:['year-away','sale','option','refresh'],sale:['sale'],option:['option'],release:['release'],identity:['identity'],seed:['seeded-world'],draw:['refresh'],entropy:['constructors']};
-          assert.equal(controls.head,head);assert.equal(controls.tree,tree);assert.equal(controls.base,'09df145abfb241679022b41903d2f19bc254ebf9');assert.equal(controls.baseTree,'3d527d2a120e909132bbbde53148d140b6a014e1');assert.deepEqual(controls.sourceBefore,controls.sourceAfter);assert.equal(Object.keys(controls.sourceBefore).length,16);assert.equal(controls.controls.length,12);
+          assert.equal(units.success,true);assert.equal(units.numFailedTests,0);assert.equal(units.numTotalTests,112);assert.equal(units.numPassedTests,112);assert.equal(units.numPendingTests,0);assert.equal(units.numTodoTests??0,0);
+          for(const [file,count]of[['/src/lib/clubManagerWorldRoster.test.ts',68],['/src/lib/clubManagerTrajectory.test.ts',44]]){const suite=units.testResults.find(row=>row.name.replaceAll('\\','/').endsWith(file));assert(suite,file);assert.equal(suite.assertionResults.length,count);assert(suite.assertionResults.every(row=>row.status==='passed'));}
+          const groups=['inactive','constructors','identity','buy-job','year-away','sale','option','release','refresh','seeded-world','storage'];
+          const maps={purchase:['buy-job','year-away','sale','release'],ownership:['identity','buy-job','year-away','sale','option','release'],snapshot:['buy-job','year-away'],stale:['year-away','sale','option','refresh','storage'],sale:['sale'],option:['option'],release:['release'],identity:['identity'],seed:['seeded-world'],draw:['refresh','storage'],entropy:['constructors'],newborn:['seeded-world'],storage:['storage']};
+          assert.equal(controls.head,head);assert.equal(controls.tree,tree);assert.equal(controls.base,'09df145abfb241679022b41903d2f19bc254ebf9');assert.equal(controls.baseTree,'3d527d2a120e909132bbbde53148d140b6a014e1');assert.deepEqual(controls.sourceBefore,controls.sourceAfter);assert.equal(Object.keys(controls.sourceBefore).length,22);assert.equal(controls.controls.length,14);
           assert.deepEqual(controls.controls.map(row=>row.control),['',...Object.keys(maps)]);
           for(const control of ['',...Object.keys(maps)]){
             const dir='outcomes/'+(control||'healthy'),report=read(dir+'/report.json');assert.equal(report.head,head);assert.equal(report.tree,tree);assert.equal(report.base,controls.base);assert.equal(report.baseTree,controls.baseTree);assert.equal(report.sourceHeld,true);assert.deepEqual(report.sourceBefore,controls.sourceBefore);assert.deepEqual(report.sourceAfter,controls.sourceAfter);
             assert.deepEqual(report.groups.map(row=>row.id),groups);assert.equal(report.originalLoaded.length>0,true);assert(report.originalLoaded.every(row=>row.sourceSha256===row.compiledSha256));assert.equal(report.currentLoaded.length>0,true);assert.equal(report.originalScopes.length,71);assert.equal(report.currentScopes.length,53);assert.equal(new Set(report.originalScopes.map(row=>row.label)).size,71);assert.equal(new Set(report.currentScopes.map(row=>row.label)).size,53);assert(report.originalScopes.every(row=>row.bundleSha256===report.originalBundle));assert(report.currentScopes.every(row=>row.bundleSha256===report.currentBundle));
             for(const [key,count]of Object.entries({inactivePairs:24,constructorPairs:6,constructorInterleaves:6,legacyWorldPairs:15}))assert.equal(report.counts[key],count,key);
-            if(control){assert.equal(report.status,'expected-fault');assert.deepEqual(report.failures.map(row=>row.id),maps[control]);assert(report.failures.every(row=>row.name==='AssertionError'));assert.equal(report.patches.length,1);const patch=report.patches[0];assert.equal(patch.count,1);assert.equal(patch.effective,true);assert.notEqual(patch.beforeSha256,patch.afterSha256);const changed=report.currentLoaded.filter(row=>row.sourceSha256!==row.compiledSha256);assert.equal(changed.length,1);assert.equal(changed[0].file,patch.file);assert.equal(changed[0].sourceSha256,patch.beforeSha256);assert.equal(changed[0].compiledSha256,patch.afterSha256);}else{assert.equal(report.status,'passed');assert.deepEqual(report.failures,[]);assert(report.groups.every(row=>row.passed));assert.equal(report.patches.length,0);assert(report.currentLoaded.every(row=>row.sourceSha256===row.compiledSha256));assert.equal(report.counts.completeSeasons,2);assert.equal(report.counts.exercisedOptions,2);assert(report.counts.seededRows>4000);assert.equal(report.measurement.length,6);assert(report.measurement.every(row=>row.variedClubs>0));}
+            if(control){assert.equal(report.status,'expected-fault');assert.deepEqual(report.failures.map(row=>row.id),maps[control]);assert(report.failures.every(row=>row.name==='AssertionError'));assert.equal(report.patches.length,1);const patch=report.patches[0];assert.equal(patch.count,1);assert.equal(patch.effective,true);assert.notEqual(patch.beforeSha256,patch.afterSha256);const changed=report.currentLoaded.filter(row=>row.sourceSha256!==row.compiledSha256);assert.equal(changed.length,1);assert.equal(changed[0].file,patch.file);assert.equal(changed[0].sourceSha256,patch.beforeSha256);assert.equal(changed[0].compiledSha256,patch.afterSha256);}else{assert.equal(report.status,'passed');assert.deepEqual(report.failures,[]);assert(report.groups.every(row=>row.passed));assert.equal(report.patches.length,0);assert(report.currentLoaded.every(row=>row.sourceSha256===row.compiledSha256));assert.equal(report.counts.completeSeasons,2);assert.equal(report.counts.exercisedOptions,2);assert.equal(report.counts.storageRecords,16);assert.equal(report.counts.storageReloadPairs,2);assert.equal(report.counts.storageMalformed,4);assert.equal(report.counts.newbornWorldWitnesses,6);assert(report.counts.newbornSurvivors>0);assert(report.counts.seededRows>4000);assert.equal(report.measurement.length,6);assert(report.measurement.every(row=>row.variedClubs>0));}
             assert.deepEqual(Object.keys(report.evidence),groups);
             for(const receipt of Object.values(report.evidence)){const packed=fs.readFileSync(path.join(root,dir,receipt.file)),bytes=gunzipSync(packed);assert.equal(sha(packed),receipt.archiveSha256);assert.equal(sha(bytes),receipt.sha256);assert.equal(bytes.length,receipt.bytes);const full=JSON.parse(bytes.toString('utf8'));assert(Array.isArray(full)&&full.length>0,'Complete inputs/outcomes/vectors retained even for intended failures');}
           }
-          console.log('Receipt:92 units,12 arms with ten full outcome groups,11 effective loaded faults,24 inactive complete save/vector pairs,6 constructors plus same-module interleaves and15 full legacy worlds in every arm.');
+          console.log('Receipt:112 units,14 arms with eleven full outcome groups,13 effective loaded faults,24 inactive complete save/vector pairs,6 constructors plus same-module interleaves and15 full legacy worlds in every arm.');
           JS
           exit "$failed"
       - name: Upload early exact-source diagnostics
@@ -118,12 +120,34 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simClubManagerDeals simTransfers simClubManagerSave simClubManagerStart simClubManagerCalendar simClubManagerEraMidSeason simClubManagerEraUcl simCmApplications simEras simEraWorldTables simManagerCareer simNoInventedQuotes; do
+          for harness in simClubManagerDeals simTransfers simClubManagerSave simClubManagerStart simClubManagerCalendar simClubManagerSaveSize simClubManagerSlots simClubManagerEraMidSeason simClubManagerEraUcl simCmApplications simEras simEraWorldTables simManagerCareer simNoInventedQuotes; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-world-continuity-artifacts/$harness.log" || failed=1
             grep -Eq "PASS[[:space:]]+$harness\.mjs([[:space:]]|$)" "manager-world-continuity-artifacts/$harness.log" || failed=1
             if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-world-continuity-artifacts/$harness.log"; then failed=1; fi
           done
           exit "$failed"
+      - name: Joined real world oracle controls and full undo
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          MANAGER_ERA_WORLD_ARTIFACTS=manager-world-continuity-artifacts/era-oracles MANAGER_ERA_WORLD_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerEraWorldOracles.mjs 2>&1 | tee manager-world-continuity-artifacts/simManagerEraWorldOracles.log
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import {createHash} from 'node:crypto';
+          import {gunzipSync} from 'node:zlib';
+          const root='manager-world-continuity-artifacts',dir=root+'/era-oracles',report=JSON.parse(fs.readFileSync(dir+'/report.json','utf8'));
+          const sha=value=>createHash('sha256').update(value).digest('hex');
+          const read=receipt=>{const bytes=fs.readFileSync(dir+'/'+receipt.file);assert.equal(bytes.length,receipt.bytes);assert.equal(sha(bytes),receipt.sha256);return JSON.parse(gunzipSync(bytes));};
+          assert.equal(report.head,fs.readFileSync(root+'/source-head.txt','utf8').trim());assert.equal(report.tree,fs.readFileSync(root+'/source-tree.txt','utf8').trim());
+          assert.equal(report.ok,true);assert.equal(report.sourceHeld,true);assert.deepEqual(report.sourceBefore,report.sourceAfter);assert.deepEqual(report.baselineFailures,[]);assert.deepEqual(report.readDraws,[]);assert(report.loaded.length>0);
+          const maps={'row-fields':['year0-identity'],'row-count':['year0-identity','year0-player-count'],'real-name-set':['real-name-membership'],'baked-metadata':['baked-player-count']};
+          assert.deepEqual(report.controls.map(row=>row.name),Object.keys(maps));
+          const baseline=read(report.baseline);
+          for(const row of report.controls){assert.equal(row.changed,true);assert.deepEqual(row.failures,maps[row.name]);assert.deepEqual(row.expected,maps[row.name]);assert.deepEqual(row.undoFailures,[]);assert.notDeepEqual(read(row.fault),baseline);assert.deepEqual(read(row.restored),baseline);assert.equal(row.baselineObservationSha256,row.restoredObservationSha256);}
+          const extra=report.controls.find(row=>row.name==='baked-metadata').additional;assert.equal(extra.length,1);assert.deepEqual(extra[0].field,['bakedMetadata','clubs']);assert.equal(extra[0].changed,true);assert.deepEqual(extra[0].failures,['baked-club-count']);assert.deepEqual(extra[0].expected,['baked-club-count']);assert.deepEqual(extra[0].undoFailures,[]);assert.notDeepEqual(read(extra[0].fault),baseline);assert.deepEqual(read(extra[0].restored),baseline);
+          for(const row of report.sourceBefore)assert.equal(sha(fs.readFileSync(row.file)),row.sha256);
+          console.log('Receipt: joined real world baseline, four copied-observation controls with five exact fault variants, complete undo and held actual app/data/harness bytes.');
+          JS
       - name: All fifteen built-output readers
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |

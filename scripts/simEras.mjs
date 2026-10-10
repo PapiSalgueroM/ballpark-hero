@@ -34,6 +34,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { startingWorldFacts, bakedRosterFacts, realRosterNames, realNameFacts } from './qa/managerEraWorldOracles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENTRY = path.join(os.tmpdir(), 'cmEraSimEntry.mjs');
@@ -47,14 +48,15 @@ globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: 
 const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras.ts');
 const rosters = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
-export { engine, eras, rosters };
+const worldRosters = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerWorldRosters.ts');
+export { engine, eras, rosters, worldRosters };
 `);
 execSync(
   `${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { engine: cm, eras: E, rosters: DATA } = await import(pathToFileURL(BUNDLE).href);
+const { engine: cm, eras: E, rosters: DATA, worldRosters: WORLD } = await import(pathToFileURL(BUNDLE).href);
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await E.ensureAllEraRosters();
 const {
@@ -116,25 +118,15 @@ console.log('1) Year zero is the identity');
     fail(`the roster data says "${CM_CLOCK_META.rosterAsOf}" but the clock is set to ${CM_BASE_YEAR}`);
   }
   const world0 = projectedWorld(0);
-  const clubs = Object.keys(DATA.CM_ROSTERS);
-  let players = 0;
-  let mismatch = 0;
-  for (const club of clubs) {
-    const baked = DATA.CM_ROSTERS[club];
-    const proj = world0[club];
-    if (!proj || proj.length !== baked.length) { mismatch += 1; continue; }
-    for (let i = 0; i < baked.length; i++) {
-      players += 1;
-      const b = baked[i];
-      const p = proj[i];
-      if (p.n !== b.n || p.p !== b.p || p.a !== b.a || p.r !== b.r || p.v !== b.v || p.g) mismatch += 1;
-    }
-  }
-  console.log(`   ${clubs.length} clubs, ${players} players compared field by field against the bake`);
+  const { clubs, players, mismatch, expectedPlayers } = startingWorldFacts(world0, WORLD.CM_WORLD_ROSTERS);
+  console.log(`   ${clubs} clubs, ${players} players compared field by field against the joined real source`);
   if (mismatch) fail(`${mismatch} projected players at year zero differ from the real data`);
-  if (players !== DATA.CM_ROSTER_META.players) {
-    fail(`projected ${players} players at year zero, the bake says ${DATA.CM_ROSTER_META.players}`);
+  if (players !== expectedPlayers) {
+    fail(`projected ${players} players at year zero, the joined real source says ${expectedPlayers}`);
   }
+  const baked = bakedRosterFacts(DATA.CM_ROSTERS, DATA.CM_ROSTER_META);
+  if (baked.players !== baked.metadataPlayers) fail(`the original bake has ${baked.players} players, its metadata says ${baked.metadataPlayers}`);
+  if (baked.clubs !== baked.metadataClubs) fail(`the original bake has ${baked.clubs} clubs, its metadata says ${baked.metadataClubs}`);
   if (Math.round(realNameShare(0) * 100) !== 100) fail('year zero is not 100 percent real players');
   // And the value curve this file duplicates has to be the engine's curve.
   const probe = cm.sellValue({ name: 'x', id: 'x', position: 'ST', rating: 80, age: 25, fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0, isYouth: false, seasonGoals: 0, seasonAssists: 0, contractYears: 9 });
@@ -475,16 +467,12 @@ console.log('6) Real names become made up ones gracefully, and it is labelled');
   // Every made up player is flagged, everywhere, forever.
   let gen = 0;
   let unflaggedReal = 0;
-  const realNames = new Set(Object.values(DATA.CM_ROSTERS).flat().map(p => p.n));
+  const realNames = realRosterNames(WORLD.CM_WORLD_ROSTERS);
   for (const y of [5, 10, 20]) {
-    for (const p of Object.values(projectedWorld(y)).flat()) {
-      if (p.g) {
-        gen += 1;
-        if (realNames.has(p.n)) fail(`a made up player is called ${p.n}, which is a real footballer's name`);
-      } else if (!realNames.has(p.n)) {
-        unflaggedReal += 1;
-      }
-    }
+    const facts = realNameFacts(projectedWorld(y), realNames);
+    gen += facts.generated;
+    unflaggedReal += facts.unflaggedReal;
+    for (const name of facts.generatedRealNames) fail(`a made up player is called ${name}, which is a real footballer's name`);
   }
   console.log(`   ${gen} made up players checked across three projections, none wearing a real name`);
   if (gen < 3000) fail(`only ${gen} made up players, the projection is not generating`);

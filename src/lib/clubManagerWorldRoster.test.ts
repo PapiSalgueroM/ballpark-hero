@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import type { CareerState, CMPlayer } from '@/lib/clubManager';
 import {
   acceptBid, applyForJob, applyTargets, buildMarket, buyPlayer, exerciseLoanOption, loanIn,
@@ -8,7 +9,7 @@ import {
 import { joinClubNow } from '@/lib/clubManagerCalendar';
 import { ensureEraRosters } from '@/lib/clubManagerEras';
 import {
-  readWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterKey, worldRosterOwner,
+  compactWorldRoster, readWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterKey, worldRosterOwner,
   type WorldRosterCareer, type WorldRosterPlayer, type WorldRosterState,
 } from '@/lib/clubManagerWorldRoster';
 
@@ -155,7 +156,7 @@ describe('save-scoped world roster ownership', () => {
   it.each([{ kind: 'release' as const, status: 'released' }, { kind: 'retire' as const, status: 'retired' }])('keeps $kind distinct from a permanent buyer', ({ kind, status }) => {
     const c = bought(); const held = c.squad[0];
     const ended = recordWorldRosterTransfer(c, { player: held, from: c.clubName, to: null, kind });
-    expect(ended.worldRoster!.records[0].status).toBe(status);
+    expect(readWorldRoster(ended)!.records[0].status).toBe(status);
     expect(worldRosterOwner(ended, held.worldRosterKey!)).toBeNull();
     expect(worldRosterClub(ended, 'Source Club', [held])).toEqual([]);
     expect(worldRosterClub(ended, c.clubName, [held])).toEqual([]);
@@ -504,5 +505,153 @@ describe('actual world roster continuity through manager callbacks', () => {
       worldRosterFor(first, c.clubName); worldRosterXIAvg(first, c.clubName); buildMarket(first);
       expect(random).not.toHaveBeenCalled();
     } finally { random.mockRestore(); }
+  });
+});
+
+describe('lossless inactive world roster storage', () => {
+  function inactive(kind: 'release' | 'retire' = 'release'): WorldRosterCareer {
+    const c = bought();
+    return recordWorldRosterTransfer(c, { player: c.squad[0], from: c.clubName, to: null, kind });
+  }
+
+  it('keeps a complete owned-only ledger literal with its exact input bytes and no draws', () => {
+    const c = bought(); const bytes = JSON.stringify(c); const before = structuredClone(c);
+    const random = vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('Compression drew randomness'); });
+    try {
+      expect(compactWorldRoster(c.worldRoster!)).toBe(c.worldRoster);
+      expect(readWorldRoster(c)).toBe(c.worldRoster);
+      expect(c.worldRoster).not.toHaveProperty('packedRecords');
+      expect(JSON.stringify(c)).toBe(bytes); expect(c).toEqual(before); expect(random).not.toHaveBeenCalled();
+    } finally { random.mockRestore(); }
+  });
+
+  it.each([{ kind: 'release' as const }, { kind: 'retire' as const }])('round-trips every complete $kind record without dropping player fields', ({ kind }) => {
+    const c = bought();
+    const expected = { ...structuredClone(c.worldRoster!), records: c.worldRoster!.records.map(r => ({
+      ...structuredClone(r), owner: null, status: kind === 'release' ? 'released' as const : 'retired' as const,
+    })) };
+    const ended = recordWorldRosterTransfer(c, { player: c.squad[0], from: c.clubName, to: null, kind });
+    expect(ended.worldRoster!.records).toEqual([]);
+    expect(typeof ended.worldRoster!.packedRecords).toBe('string');
+    expect(JSON.parse(decompressFromUTF16(ended.worldRoster!.packedRecords!)!)).toEqual(expected.records);
+    const loaded = JSON.parse(JSON.stringify(ended)) as WorldRosterCareer;
+    expect(readWorldRoster(loaded)).toEqual(expected);
+    expect(readWorldRoster(loaded)).not.toHaveProperty('packedRecords');
+    expect(c.worldRoster!.records[0].owner).toBe(c.clubName);
+  });
+
+  it('retains complete mixed owned and inactive payloads, Unicode and saved field order', () => {
+    const c = bought();
+    const p = player({ id: 'second-player', name: 'Recorded Keeper', position: 'GK', age: 23 });
+    const complete = { ...p, recordedMemo: { text: 'Saved café \uD83C\uDFC6', values: [0, null, false] } };
+    const mixed = recordWorldRosterTransfer({ ...c, squad: [...c.squad, complete] },
+      { player: complete, from: 'Second Source', to: null, kind: 'release', since: 0 });
+    const read = readWorldRoster(mixed)!;
+    expect(read.records).toHaveLength(2); expect(read.records.map(r => r.status)).toEqual(['owned', 'released']);
+    expect(read.records[1].player).toEqual({ ...complete, worldRosterKey: read.records[1].key });
+    expect(decompressFromUTF16(mixed.worldRoster!.packedRecords!)).toBe(JSON.stringify(read.records));
+    expect(worldRosterClub(mixed, c.clubName, [])).toEqual([c.squad[0]]);
+    expect(worldRosterClub(mixed, 'Second Source', [p])).toEqual([]);
+    expect(c.worldRoster).not.toHaveProperty('packedRecords');
+  });
+
+  it('reads old plain inactive records without rewriting or mutating their representation', () => {
+    const packed = inactive(); const plain = { ...packed, worldRoster: structuredClone(readWorldRoster(packed)!) };
+    const bytes = JSON.stringify(plain);
+    expect(readWorldRoster(plain)).toBe(plain.worldRoster);
+    expect(plain.worldRoster).not.toHaveProperty('packedRecords');
+    expect(worldRosterOwner(plain, plain.squad[0].worldRosterKey!)).toBeNull();
+    expect(worldRosterClub(plain, 'Source Club', plain.squad)).toEqual([]);
+    expect(JSON.stringify(plain)).toBe(bytes);
+    expect(compactWorldRoster(plain.worldRoster)).toEqual(packed.worldRoster);
+  });
+
+  it('keeps packed bytes stable across reload and read-result mutation with zero global draws', () => {
+    const c = inactive(); const bytes = JSON.stringify(c);
+    const loaded = JSON.parse(bytes) as WorldRosterCareer;
+    const random = vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('A packed read drew randomness'); });
+    try {
+      const first = readWorldRoster(loaded)!; const expected = structuredClone(first);
+      first.records[0].player.rating = 40;
+      expect(readWorldRoster(loaded)).toEqual(expected);
+      expect(compactWorldRoster(expected)).toEqual(c.worldRoster);
+      expect(JSON.stringify(loaded)).toBe(bytes); expect(JSON.stringify(c)).toBe(bytes);
+      expect(random).not.toHaveBeenCalled();
+    } finally { random.mockRestore(); }
+  });
+
+  it('re-packs an actual departing owned snapshot without changing the inactive player', () => {
+    const c = bought(); const other = player({ id: 'other', name: 'Other Recorded Forward', age: 23 });
+    const mixed = recordWorldRosterTransfer(c, { player: other, from: 'Other Source', to: null, kind: 'release' });
+    const before = structuredClone(mixed); const inactiveRecord = readWorldRoster(mixed)!.records[1];
+    const updated = { ...mixed.squad[0], rating: 81, seasonGoals: 11, apps: 28 };
+    const snapshot = snapshotWorldRosterClub({ ...mixed, squad: [updated] }, mixed.clubName);
+    expect(snapshot.worldRoster!.records).toEqual([]);
+    expect(readWorldRoster(snapshot)!.records[0].player).toEqual(updated);
+    expect(readWorldRoster(snapshot)!.records[1]).toEqual(inactiveRecord);
+    expect(mixed).toEqual(before);
+  });
+
+  it('re-signs a released identity loaded from packed bytes with complete new terms', () => {
+    const c = JSON.parse(JSON.stringify(inactive())) as WorldRosterCareer; const key = c.squad[0].worldRosterKey!;
+    const p = { ...c.squad[0], id: 'new-free-signing', wage: 65, contractYears: 2, apps: 0, position: 'CAM' as const };
+    const next = recordWorldRosterTransfer({ ...c, clubName: 'New Buyer', squad: [p] },
+      { player: p, from: null, to: 'New Buyer', kind: 'permanent', key });
+    expect(next.worldRoster).not.toHaveProperty('packedRecords');
+    expect(readWorldRoster(next)!.records).toHaveLength(1);
+    expect(readWorldRoster(next)!.records[0]).toEqual({ key, origin: readWorldRoster(c)!.records[0].origin,
+      owner: 'New Buyer', status: 'owned', year: 2026, player: p });
+    expect(worldRosterClub(next, 'Source Club', c.squad)).toEqual([]);
+  });
+
+  it('keeps a packed retired identity terminal across later years and attempted re-signing', () => {
+    const c = inactive('retire'); const next = { ...c, season: 2, squad: [{ ...c.squad[0], age: 25 }] };
+    const bytes = JSON.stringify(next); const key = next.squad[0].worldRosterKey!;
+    expect(worldRosterOwner(next, key)).toBeNull();
+    expect(worldRosterClub(next, 'Source Club', next.squad)).toEqual([]);
+    expect(recordWorldRosterTransfer(next, { player: next.squad[0], from: null, to: 'New Buyer', kind: 'permanent', key })).toBe(next);
+    expect(refreshWorldRoster(next)).toBe(next); expect(JSON.stringify(next)).toBe(bytes);
+  });
+
+  it('preserves the entire released private aging result against the old plain representation', () => {
+    const packed = { ...inactive(), season: 4, clubName: 'Liverpool', squad: [] };
+    const plain = { ...packed, worldRoster: structuredClone(readWorldRoster(packed)!) };
+    const packedBytes = JSON.stringify(packed), plainBytes = JSON.stringify(plain);
+    const random = vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('Released aging drew globally'); });
+    try {
+      const a = refreshWorldRoster(packed), b = refreshWorldRoster(plain);
+      expect(a).toEqual(b);
+      expect(readWorldRoster(a)).toEqual(readWorldRoster(b));
+      expect(readWorldRoster(a)!.records[0].player.age).toBe(27);
+      expect(readWorldRoster(a)!.records[0].player).toHaveProperty('potential');
+      expect(JSON.stringify(packed)).toBe(packedBytes); expect(JSON.stringify(plain)).toBe(plainBytes);
+      expect(random).not.toHaveBeenCalled();
+    } finally { random.mockRestore(); }
+  });
+
+  it.each([
+    { label: 'empty', kind: 'empty' }, { label: 'nonstring', kind: 'number' }, { label: 'invalid stream', kind: 'garbage' },
+    { label: 'decoded null', kind: 'null' }, { label: 'decoded object', kind: 'object' }, { label: 'empty decoded array', kind: 'array' },
+    { label: 'duplicate identity', kind: 'duplicate' }, { label: 'invalid full player', kind: 'player' },
+    { label: 'owned-only packed', kind: 'owned' }, { label: 'dual plain and packed', kind: 'dual' },
+  ])('deactivates $label packed data while holding the entire save and fallback', ({ kind }) => {
+    const valid = inactive(); const logical = readWorldRoster(valid)!;
+    let packedRecords: unknown = valid.worldRoster!.packedRecords;
+    if (kind === 'empty') packedRecords = '';
+    if (kind === 'number') packedRecords = 7;
+    if (kind === 'garbage') packedRecords = 'not a packed ledger';
+    if (kind === 'null') packedRecords = compressToUTF16('null');
+    if (kind === 'object') packedRecords = compressToUTF16('{}');
+    if (kind === 'array') packedRecords = compressToUTF16('[]');
+    if (kind === 'duplicate') packedRecords = compressToUTF16(JSON.stringify([...logical.records, logical.records[0]]));
+    if (kind === 'player') packedRecords = compressToUTF16(JSON.stringify(logical.records.map(r => ({ ...r, player: null }))));
+    if (kind === 'owned') packedRecords = compressToUTF16(JSON.stringify(bought().worldRoster!.records));
+    const c = { ...valid, worldRoster: { ...valid.worldRoster, records: kind === 'dual' ? logical.records : [], packedRecords } } as unknown as WorldRosterCareer;
+    const bytes = JSON.stringify(c); const fallback = [player()];
+    expect(readWorldRoster(c)).toBeNull();
+    expect(worldRosterClub(c, 'Source Club', fallback)).toBe(fallback);
+    expect(snapshotWorldRosterClub(c, c.clubName)).toBe(c); expect(refreshWorldRoster(c)).toBe(c);
+    expect(recordWorldRosterTransfer(c, { player: c.squad[0], from: null, to: 'New Buyer', kind: 'permanent' })).toBe(c);
+    expect(JSON.stringify(c)).toBe(bytes);
   });
 });

@@ -1,3 +1,4 @@
+import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import type { CareerState, CMPlayer } from '@/lib/clubManager';
 
 export type WorldRosterPlayer = CMPlayer & { worldRosterKey?: string };
@@ -22,6 +23,8 @@ export interface WorldRosterState {
   version: 1;
   eraId: string;
   records: WorldRosterRecord[];
+  /** Complete records, encoded without dropping player fields. */
+  packedRecords?: string;
 }
 export type WorldRosterCareer = CareerState & { squad: WorldRosterPlayer[]; worldRoster?: WorldRosterState };
 export interface WorldRosterTransfer {
@@ -74,8 +77,20 @@ export function readWorldRoster(career: CareerState): WorldRosterState | null {
   const year = yearOf(career);
   const raw: unknown = (career as WorldRosterCareer).worldRoster;
   if (year === null || !object(raw) || raw.version !== 1 || raw.eraId !== (career.eraId ?? 'now') || !Array.isArray(raw.records)) return null;
+  let records: unknown[] = raw.records;
+  const packed = raw.packedRecords !== undefined;
+  if (packed) {
+    if (typeof raw.packedRecords !== 'string' || !raw.packedRecords || raw.records.length !== 0) return null;
+    try {
+      const decoded = decompressFromUTF16(raw.packedRecords);
+      if (!decoded) return null;
+      const values: unknown = JSON.parse(decoded);
+      if (!Array.isArray(values) || !values.length) return null;
+      records = values;
+    } catch { return null; }
+  }
   const keys = new Set<string>();
-  for (const value of raw.records) {
+  for (const value of records) {
     if (!object(value) || !object(value.origin) || !validPlayer(value.player)) return null;
     const origin = value.origin;
     if (!text(origin.club) || !text(origin.name) || typeof origin.position !== 'string' || !positions.has(origin.position)
@@ -86,7 +101,18 @@ export function readWorldRoster(career: CareerState): WorldRosterState | null {
     if (value.status === 'owned' ? !text(value.owner) : (value.status !== 'released' && value.status !== 'retired') || value.owner !== null) return null;
     keys.add(value.key);
   }
-  return raw as unknown as WorldRosterState;
+  if (!packed) return raw as unknown as WorldRosterState;
+  if (records.every(record => object(record) && record.status === 'owned')) return null;
+  const normalized: Record<string, unknown> = { ...raw, records };
+  delete normalized.packedRecords;
+  return normalized as unknown as WorldRosterState;
+}
+
+/** Keep owned-only saves literal; compress complete records once an inactive identity exists. */
+export function compactWorldRoster(state: WorldRosterState): WorldRosterState {
+  if (!state.records.some(record => record.status !== 'owned')) return state;
+  const packedRecords = compressToUTF16(JSON.stringify(state.records));
+  return { ...state, records: [], packedRecords };
 }
 
 /** Fresh transactions supply their actual source club; later moves carry this key unchanged. */
@@ -142,7 +168,7 @@ export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRo
     ? career.squad.map(player => player.id === transfer.player.id && samePlayer(player, origin, year)
       ? { ...structuredClone(player), worldRosterKey: key } : player)
     : career.squad;
-  return { ...career, squad, worldRoster: { version: 1, eraId: career.eraId ?? 'now', records } };
+  return { ...career, squad, worldRoster: compactWorldRoster({ version: 1, eraId: career.eraId ?? 'now', records }) };
 }
 
 /** Update established permanent identities from the actual departing squad, without backfilling unknown origins. */
@@ -163,8 +189,8 @@ export function snapshotWorldRosterClub(career: CareerState, club: string, playe
     const old = held.records.find(record => record.key === key)!;
     return old.year !== year || !samePayload(old.player, player);
   })) return career;
-  return { ...career, worldRoster: { ...held, records: held.records.map(record => updates.has(record.key)
-    ? { ...structuredClone(record), year, player: updates.get(record.key)! } : structuredClone(record)) } };
+  return { ...career, worldRoster: compactWorldRoster({ ...held, records: held.records.map(record => updates.has(record.key)
+    ? { ...structuredClone(record), year, player: updates.get(record.key)! } : structuredClone(record)) }) };
 }
 
 /** Older records retain ownership, but their old payloads are not presented as current-year players. */

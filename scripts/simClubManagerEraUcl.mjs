@@ -246,8 +246,8 @@ const POOL_GUARD = [
   '  const oppPool = getPool().filter(p =>\n',
 ];
 const OLD_NAME_MAP = [
-  '  return projectedRoster(eraEuroName(eraId, club), yearsOnNow, eraId).filter(p => !exclude.has(p.n));\n',
-  '  return projectedRoster(club, yearsOnNow, eraId).filter(p => !exclude.has(p.n));\n',
+  '  const name = eraEuroName(eraId, club);\n  return (career ? worldRosterFor(career, name, yearsOnNow) : projectedRoster(name, yearsOnNow, eraId)).filter(p => !exclude.has(p.n));\n',
+  '  const name = club;\n  return (career ? worldRosterFor(career, name, yearsOnNow) : projectedRoster(name, yearsOnNow, eraId)).filter(p => !exclude.has(p.n));\n',
 ];
 function rewriteEngine(pairs, outName, what) {
   let src = lf(fs.readFileSync(ENGINE, 'utf8'));
