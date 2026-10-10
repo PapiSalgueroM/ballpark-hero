@@ -1,0 +1,36 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+seeds: for s in a b c d e; do SEEDSET=$s node scripts/simCareerPreDraft.mjs > "$RC_OUT/seed-$s.log" 2>&1; c=$?; echo "seed $s exit=$c $(tail -1 "$RC_OUT/seed-$s.log")"; [ $c -eq 0 ] || bad=1; done; exit ${bad:-0}
+c-randomteam: SIM_PRE_DRAFT_CONTROL=randomteam node scripts/simCareerPreDraft.mjs
+c-flatstock: SIM_PRE_DRAFT_CONTROL=flatstock node scripts/simCareerPreDraft.mjs
+c-flatlottery: SIM_PRE_DRAFT_CONTROL=flatlottery node scripts/simCareerPreDraft.mjs
+c-mathrandom: SIM_PRE_DRAFT_CONTROL=mathrandom node scripts/simCareerPreDraft.mjs
+c-cardwords: SIM_PRE_DRAFT_CONTROL=cardwords node scripts/simCareerPreDraft.mjs
+c-showcasewords: SIM_PRE_DRAFT_CONTROL=showcasewords node scripts/simCareerPreDraft.mjs
+c-erarule: SIM_PRE_DRAFT_CONTROL=erarule node scripts/simCareerPreDraft.mjs
+c-ceiling: SIM_PRE_DRAFT_CONTROL=ceiling node scripts/simCareerPreDraft.mjs
+c-ladderskip: SIM_PRE_DRAFT_CONTROL=ladderskip node scripts/simCareerPreDraft.mjs
+c-undraftedtop: SIM_PRE_DRAFT_CONTROL=undraftedtop node scripts/simCareerPreDraft.mjs
+c-squeeze: SIM_PRE_DRAFT_CONTROL=squeeze node scripts/simCareerPreDraft.mjs
+c-laterlottery: SIM_PRE_DRAFT_CONTROL=laterlottery node scripts/simCareerPreDraft.mjs
+c-flatlater: SIM_PRE_DRAFT_CONTROL=flatlater node scripts/simCareerPreDraft.mjs
+c-loadershallow: SIM_PRE_DRAFT_CONTROL=loadershallow node scripts/simCareerPreDraft.mjs
+c-gradeshift: SIM_PRE_DRAFT_CONTROL=gradeshift node scripts/simCareerPreDraft.mjs
+c-extradraw: SIM_PRE_DRAFT_CONTROL=extradraw node scripts/simCareerPreDraft.mjs
+c-nightoffbyone: SIM_PRE_DRAFT_CONTROL=nightoffbyone node scripts/simCareerPreDraft.mjs
+c-nightlottery: SIM_PRE_DRAFT_CONTROL=nightlottery node scripts/simCareerPreDraft.mjs
+c-nightopen: SIM_PRE_DRAFT_CONTROL=nightopen node scripts/simCareerPreDraft.mjs
+c-nightdedup: SIM_PRE_DRAFT_CONTROL=nightdedup node scripts/simCareerPreDraft.mjs
+c-nightdraw: SIM_PRE_DRAFT_CONTROL=nightdraw node scripts/simCareerPreDraft.mjs
+c-projection: SIM_PRE_DRAFT_CONTROL=projection node scripts/simCareerPreDraft.mjs
+vitest-new: node_modules/.bin/vitest run src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/components/motion/LotteryReveal.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-old: node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usBoardFixture.test.tsx src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+prospect: node scripts/simUsCareerProspect.mjs
+reveal: node scripts/simRevealMoments.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+livescores: node scripts/simLiveScores.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+trust: node scripts/simTrustCopy.mjs
+a11y: node scripts/simAccessibility.mjs
+invented: node scripts/simInventedNames.mjs
+record-refuse: SIM_PRE_DRAFT_RECORD=1 SIM_PRE_DRAFT_CONTROL=gradeshift node scripts/simCareerPreDraft.mjs; c=$?; git status --porcelain scripts/data | head -3; exit $c
