@@ -1,0 +1,12 @@
+# Reviewer (run lens), Round 1215, head 36f333be: the type gate and the fences that read scripts/ or could be red.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+livescores: node scripts/simLiveScores.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+names: node scripts/simInventedNames.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+check-walk: node --check scripts/playLiveMatchFit.mjs && node --check scripts/lib/pageSeed.mjs && echo "both parse"
+scope: git diff --stat origin/main...HEAD | tail -5; echo "files under src, public or package files changed: $(git diff --name-only origin/main...HEAD | grep -c -E '^(src/|public/|package)')"
+dashes: node .rc/x/rdash.mjs
+seedof: node .rc/x/rseedof.mjs
