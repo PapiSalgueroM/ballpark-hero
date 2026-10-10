@@ -1,0 +1,26 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usPlayoffs.test.ts src/test/usPostseasonFormat.test.ts src/test/usSeason.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000
+base: node scripts/simUsPostseason.mjs
+c-onesrc: US_POST_CONTROL=onesrc node scripts/simUsPostseason.mjs
+c-sum: US_POST_CONTROL=sum node scripts/simUsPostseason.mjs
+c-drop: US_POST_CONTROL=drop node scripts/simUsPostseason.mjs
+c-clinch: US_POST_CONTROL=clinch node scripts/simUsPostseason.mjs
+c-allhome: US_POST_CONTROL=allhome node scripts/simUsPostseason.mjs
+c-open: US_POST_CONTROL=open node scripts/simUsPostseason.mjs
+c-tries: US_POST_CONTROL=tries node scripts/simUsPostseason.mjs
+c-thin: US_POST_CONTROL=thin node scripts/simUsPostseason.mjs
+c-stream: US_POST_CONTROL=stream node scripts/simUsPostseason.mjs
+v-tries1: US_POST_TRIES=1 node scripts/simUsPostseason.mjs
+v-tries3: US_POST_TRIES=3 node scripts/simUsPostseason.mjs
+v-tries6: US_POST_TRIES=6 node scripts/simUsPostseason.mjs
+v-tries24: US_POST_TRIES=24 node scripts/simUsPostseason.mjs
+v-noclamp: US_POST_VARIANT=noclamp node scripts/simUsPostseason.mjs
+v-form25: US_POST_VARIANT=form25 node scripts/simUsPostseason.mjs
+v-form50: US_POST_VARIANT=form50 node scripts/simUsPostseason.mjs
+v-form100: US_POST_VARIANT=form100 node scripts/simUsPostseason.mjs
+seed0: SEEDSET=0 node scripts/simUsPostseason.mjs
+small: CAREERS=10 node scripts/simUsPostseason.mjs
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+centre-default: node scripts/simUsSeasonCentre.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+simLiveScores: node scripts/simLiveScores.mjs
