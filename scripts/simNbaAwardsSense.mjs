@@ -58,10 +58,15 @@
            before Round 1112 read 32.6 to 33.1 percent of judged years).
        R4  the All-Star beat (306) never contradicts the two seasons it is about: every card dealt in the fleet
            says and promises what the player's own selection and the rival's support, and none is dealt when
-           neither made the roster (exact). It is still dealt in all three cases on every seed (floors).
+           neither made the roster (exact). It is still dealt in all three cases on every seed (floors, each
+           near six tenths of its lowest full size seed, measured 2026-10-09: only me 641, 639, 655, 613, 687;
+           only him 163, 139, 156, 177, 165; both 87, 105, 93, 91, 101, of about 66,400 beats dealt a seed).
+           Printed beside it: the share of judged years each makes the roster (mine 18.1 to 18.4 percent, the
+           rival's 6.5 to 6.6: his case is his line alone, on an even club with the average following).
        R3  unit checks on 400 made up seasons: his season takes exactly one draw of the season's stream, his
            line replays as nbaStatLineFor's through the player's printer, the same inputs give the same
-           season, and his kind is fixed and his position's own.
+           season, and his kind is fixed and his position's own (8 names at 5 positions reach all 15 kinds;
+           the floor of 10 only says the hash is not one kind for everybody).
    H   The Hall of Fame inducted rate and the first ballot rate are main's (31.6 to 31.9 and 27.0 to 27.9).
        Measured on the fix pass tree of 2026-10-08 (the standout marks measured again on the new line, the
        legacy constant 1.4 as a term of the calibration 2 table): 31.68, 31.58, 32.17, 32.3, 31.5 inducted
@@ -133,7 +138,9 @@
    T   The near tie (Round 1112). The one sentence all four sports share ("Nothing in it again. ...") names the
        leader the tally on the save gives, or says the head to head is level. Every near tie note of the NBA
        fleet and of the other three sports' fleets is read against the rival's tally right after its season
-       (exact), and all three readings turn up in every sport (floors).
+       (exact), and all three readings turn up in every sport (a floor of 200 each over a full size run, about
+       half the smallest count measured 2026-10-09: NBA 26668 you lead, 24983 he leads, 6106 level; NFL 1313,
+       2254, 385; MLB 1832, 1862, 421; NHL 3588, 1506, 532). Before this round every one of them said You lead.
    P   The proof of Round 1112, under SENSE_PROVE_AGAINST=<commit> only (the commit before the round's first
        edit). The same fleets are played on this tree and on the tree with every src file that differs read at
        that commit: the NBA player's own path is byte equal (a digest of his lines, awards, role, club, own
@@ -1091,9 +1098,9 @@ const RIVAL_1112 = { myShare: [61.01, 60.83, 61.44, 61.06, 61.09] };
 /* K: careers a full size seed must still find whose only awards are the lesser ones (see the header). */
 const LESSER_ONLY_FLOOR = 1;
 /* T: how many near tie notes of each kind a full size run must still find in each sport (see the header). */
-const NEAR_TIE_FLOOR = 1;
+const NEAR_TIE_FLOOR = 200;
 /* R4: how often a full size seed must still deal the All-Star beat in each of its three cases (see the header). */
-const BEAT306_FLOOR = { mine: 1, his: 1, both: 1 };
+const BEAT306_FLOOR = { mine: 360, his: 80, both: 50 };
 /* R: how many of the fifteen kinds eight names at five positions must reach (measured: see the header). */
 const RIVAL_KINDS_FLOOR = 10;
 const HELD_WIDEN = Math.sqrt(Math.max(1, (6000 * 5) / (CAREERS * SEEDS.length)));
