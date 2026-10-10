@@ -1,0 +1,7 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simMobileChrome exit=0 204s | GREEN: 34 top bar measurements and 117 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+simNumberFormatting exit=0 123s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simBrowserHarnessDiscovery exit=0 11s | Retained actual child receipts: .sim-control/browser-discovery-5bsRoP/report.json
+simGoogleOnlyReturn exit=0 84s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+simSoccerCareerRecords exit=0 10s | simSoccerCareerRecords: 12 outcome checks green, three effective controls caught
+playLiveMatchFit-fresh exit=0 163s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
