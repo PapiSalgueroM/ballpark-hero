@@ -1,0 +1,5 @@
+f-check exit=0 0s | narrowoff 1
+f-narrowoff exit=1 223s | MUT narrowoff vitest=0 build=0 walk=1 | | playDraftNight: 3 FAILURE(S) in 48 nights |  2 FAIL [height]; 1 FAIL [skip];
+f-rangeedge exit=1 4s | MUT rangeedge vitest=1 build=skipped walk=skipped | |  | 
+f-lineswap exit=1 4s | MUT lineswap vitest=1 build=skipped walk=skipped | |  | 
+f-ariaoff exit=1 3s | MUT ariaoff vitest=1 build=skipped walk=skipped | |  | 

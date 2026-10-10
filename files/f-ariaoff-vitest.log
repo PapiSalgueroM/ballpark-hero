@@ -1,0 +1,86 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/careerDraftNight.test.tsx [2m([22m[2m48 tests[22m[2m)[22m[33m 847[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mskipped is the last frame: no delays, no skip, the result said once [33m 335[2mms[22m[39m
+ [31m❯[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 807[2mms[22m[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed[39m[32m 194[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"aria-hidden"[32m[31m[2m, [22m[32m[32m"true"[32m[31m[2m) // element.getAttribute("aria-hidden") === "true"[22m
+
+Expected the element to have attribute:
+[32m  aria-hidden="true"[31m
+Received:
+[31m  null[31m[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'NBA' the night plays, holds its ending, lands, and starts the career it showed[39m[32m 74[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"aria-hidden"[32m[31m[2m, [22m[32m[32m"true"[32m[31m[2m) // element.getAttribute("aria-hidden") === "true"[22m
+
+Expected the element to have attribute:
+[32m  aria-hidden="true"[31m
+Received:
+[31m  null[31m[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'MLB' the night plays, holds its ending, lands, and starts the career it showed[39m[32m 53[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"aria-hidden"[32m[31m[2m, [22m[32m[32m"true"[32m[31m[2m) // element.getAttribute("aria-hidden") === "true"[22m
+
+Expected the element to have attribute:
+[32m  aria-hidden="true"[31m
+Received:
+[31m  null[31m[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'NHL' the night plays, holds its ending, lands, and starts the career it showed[39m[32m 55[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"aria-hidden"[32m[31m[2m, [22m[32m[32m"true"[32m[31m[2m) // element.getAttribute("aria-hidden") === "true"[22m
+
+Expected the element to have attribute:
+[32m  aria-hidden="true"[31m
+Received:
+[31m  null[31m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NFL' skip lands the last frame, and a reload shows the result with no night[32m 57[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' skip lands the last frame, and a reload shows the result with no night[32m 59[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'MLB' skip lands the last frame, and a reload shows the result with no night[32m 64[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NHL' skip lands the last frame, and a reload shows the result with no night[32m 49[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NFL' with the chunk not here yet the press shows the result it always showed[32m 23[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' with the chunk not here yet the press shows the result it always showed[32m 23[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'MLB' with the chunk not here yet the press shows the result it always showed[32m 21[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NHL' with the chunk not here yet the press shows the result it always showed[32m 17[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NFL' less motion starts on the last frame and an undrafted night names no club early[32m 35[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' less motion starts on the last frame and an undrafted night names no club early[32m 30[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'MLB' less motion starts on the last frame and an undrafted night names no club early[32m 28[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NHL' less motion starts on the last frame and an undrafted night names no club early[32m 25[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'NBA' the night plays, holds its ending, lands, and starts the career it showed
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'MLB' the night plays, holds its ending, lands, and starts the career it showed
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'NHL' the night plays, holds its ending, lands, and starts the career it showed
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"aria-hidden"[32m[31m[2m, [22m[32m[32m"true"[32m[31m[2m) // element.getAttribute("aria-hidden") === "true"[22m
+
+Expected the element to have attribute:
+[32m  aria-hidden="true"[31m
+Received:
+[31m  null[31m[39m
+[36m [2m❯[22m src/test/usCareerDraftNightBoard.test.tsx:[2m114:43[22m[39m
+    [90m112| [39m    // A screen reader reads through opacity, so the ending is out of …
+    [90m113| [39m    const ending = () => [journey(view).querySelector('[data-arrival] …
+    [90m114| [39m    for (const el of ending()) expect(el).toHaveAttribute('aria-hidden…
+    [90m   | [39m                                          [31m^[39m
+    [90m115| [39m    // The closing row is the saved outcome, and the rows are the buil…
+    [90m116| [39m    [35mconst[39m built [33m=[39m [34mbuildCareerDraftNight[39m(desc[33m,[39m done[33m.[39mstate)[33m![39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m60 passed[39m[22m[90m (64)[39m
+[2m   Start at [22m 15:23:27
+[2m   Duration [22m 2.58s[2m (transform 1.49s, setup 67ms, collect 2.48s, tests 1.65s, environment 399ms, prepare 145ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'NFL' the night plays%2C holds its ending%2C lands%2C and starts the career it showed,line=114,column=43::Error: expect(element).toHaveAttribute("aria-hidden", "true") // element.getAttribute("aria-hidden") === "true"%0A%0AExpected the element to have attribute:%0A  aria-hidden="true"%0AReceived:%0A  null%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:114:43%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'NBA' the night plays%2C holds its ending%2C lands%2C and starts the career it showed,line=114,column=43::Error: expect(element).toHaveAttribute("aria-hidden", "true") // element.getAttribute("aria-hidden") === "true"%0A%0AExpected the element to have attribute:%0A  aria-hidden="true"%0AReceived:%0A  null%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:114:43%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'MLB' the night plays%2C holds its ending%2C lands%2C and starts the career it showed,line=114,column=43::Error: expect(element).toHaveAttribute("aria-hidden", "true") // element.getAttribute("aria-hidden") === "true"%0A%0AExpected the element to have attribute:%0A  aria-hidden="true"%0AReceived:%0A  null%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:114:43%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'NHL' the night plays%2C holds its ending%2C lands%2C and starts the career it showed,line=114,column=43::Error: expect(element).toHaveAttribute("aria-hidden", "true") // element.getAttribute("aria-hidden") === "true"%0A%0AExpected the element to have attribute:%0A  aria-hidden="true"%0AReceived:%0A  null%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:114:43%0A%0A
