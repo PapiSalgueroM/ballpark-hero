@@ -1,0 +1,11 @@
+homeScore 72: READ accepted | STORY 15 plays, 15 distinct minutes in 1 ms
+homeScore 100: READ accepted | STORY 19 plays, 19 distinct minutes in 1 ms
+homeScore 1000: READ accepted | STORY 147 plays, 60 distinct minutes in 4 ms
+homeScore 10000: READ accepted | STORY 1435 plays, 60 distinct minutes in 12 ms
+homeScore 100000: READ accepted | STORY 14291 plays, 60 distinct minutes in 42 ms
+homeScore 250000: READ accepted | THREW RangeError: Maximum call stack size exceeded after 23 ms
+homeScore 1000000: READ accepted | THREW RangeError: Maximum call stack size exceeded after 95 ms
+homeScore 100000000: READ accepted | THREW RangeError: Maximum call stack size exceeded after 5038 ms
+homeScore 1000000000: READ accepted | NO ANSWER in 25000 ms (killed)
+homeScore 1e+21: READ accepted | NO ANSWER in 25000 ms (killed)
+bigscore: 5 of 10 saved scores that the guard reads make gameStory throw, die or never answer

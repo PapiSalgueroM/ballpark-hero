@@ -1,0 +1,15 @@
+probe: A done
+file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/probe-full.mjs:82
+    else if (mode === 1 && Array.isArray(o)) o.push(JSON.parse(JSON.stringify(o[Number(k)] ?? null)));
+                                                                    ^
+
+TypeError: Converting circular structure to JSON
+    --> starting at object with constructor 'Object'
+    |     property '9' -> object with constructor 'Array'
+    --- index 0 closes the circle
+    at JSON.stringify (<anonymous>)
+    at damage (file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/probe-full.mjs:82:69)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/probe-full.mjs:101:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0

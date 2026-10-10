@@ -1,0 +1,2 @@
+probe exit=1 1s | Node.js v24.21.0
+bigscore exit=0 61s | bigscore: 5 of 10 saved scores that the guard reads make gameStory throw, die or never answer

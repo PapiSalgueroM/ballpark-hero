@@ -1,0 +1,2 @@
+probe: node .rc/x/probe-full.mjs
+bigscore: node .rc/x/bigscore.mjs
