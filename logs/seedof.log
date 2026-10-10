@@ -1,0 +1,23 @@
+undefined -> 3208792607
+"0" -> 0
+"7" -> 7
+" 7 " -> 7
+"007" -> 7
+"1e3" -> 1000
+"0x10" -> 16
+"4294967295" -> 4294967295
+"4294967296" -> THROWS
+"-1" -> THROWS
+"-0" -> 0
+"1.5" -> THROWS
+"" -> THROWS
+" " -> THROWS
+"fresh" -> 614359316
+"Fresh" -> THROWS
+"fresh " -> THROWS
+"abc" -> THROWS
+"NaN" -> THROWS
+"Infinity" -> THROWS
+"12345678901" -> THROWS
+own seed by file url 3208792607, by plain path 3208792607, hash of the bare name 3208792607
+fresh twice in one process: 614359316, 614359316 (whole numbers in range: true)
