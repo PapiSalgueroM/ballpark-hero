@@ -1,0 +1,7 @@
+MUT h1 applied to src/components/us-career/CareerSeasonReview.tsx: "career.seasons.map((saved, index) => ({ saved, index })).reverse().map" is now "career.seasons.map((saved, index) => ({ saved, index })).reverse().sli"
+  FAIL  NFL: the Career Log shows the 3 seasons on the save as 3 season tiles (saw 2)
+  FAIL  NBA: the Career Log shows the 3 seasons on the save as 3 season tiles (saw 2)
+  FAIL  MLB: the Career Log shows the 3 seasons on the save as 3 season tiles (saw 2)
+  FAIL  NHL: the Career Log shows the 3 seasons on the save as 3 season tiles (saw 2)
+playCareerHub: 4 failures
+MUT h1 the Career Log drops its newest season: hub=1

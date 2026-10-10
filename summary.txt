@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+h1 exit=0 76s | MUT h1 the Career Log drops its newest season: hub=1
+h2 exit=0 69s | MUT h2 Back to career does nothing: hub=1
+rebuilt exit=0 78s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.

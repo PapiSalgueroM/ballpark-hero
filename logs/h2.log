@@ -1,0 +1,8 @@
+MUT h2 applied to src/components/us-career/CareerSeasonReview.tsx: "<button ref={back} onClick={season ? () => setSelected(null) : onBack}" is now "<button ref={back} onClick={season ? () => setSelected(null) : () => {"
+  FAIL  NFL: back from "Career Log" returned to all 6 boxes
+  FAIL  NFL: coming back from the Career Log put focus on its own box (focus is on "Back to career")
+  FAIL  NFL: "Trophy Case" opened the screen it names (no such box on the hub)
+  FAIL  NFL: "News" opened the screen it names (no such box on the hub)
+  FAIL  NFL: "Inbox" opened the screen it names (no such box on the hub)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playCareerHub.mjs:213:35 {
+MUT h2 Back to career does nothing: hub=1

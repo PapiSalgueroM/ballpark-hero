@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+h1: node .rc/x/reviewMut.mjs h1 && npm run build > /tmp/build1.log 2>&1 && { ENGINES=chromium node scripts/playCareerHub.mjs > /tmp/a.log 2>&1; a=$?; grep -E "FAIL|playCareerHub" /tmp/a.log | head -14; }; git checkout -q HEAD -- src scripts; echo "MUT h1 the Career Log drops its newest season: hub=$a"
+h2: node .rc/x/reviewMut.mjs h2 && npm run build > /tmp/build2.log 2>&1 && { ENGINES=chromium node scripts/playCareerHub.mjs > /tmp/a.log 2>&1; a=$?; grep -E "FAIL|playCareerHub" /tmp/a.log | head -14; }; git checkout -q HEAD -- src scripts; echo "MUT h2 Back to career does nothing: hub=$a"
+rebuilt: npm run build > /tmp/build3.log 2>&1; ENGINES=chromium node scripts/playCareerHub.mjs | tail -1
