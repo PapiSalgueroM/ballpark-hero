@@ -230,6 +230,14 @@ describe('LotteryReveal', () => {
     expect(tiles.map(t => t.querySelector('[data-lottery-under]')?.textContent ?? null)).toEqual([null, 'your club', null]);
     expect(container.querySelectorAll('[data-lottery-mark]').length).toBe(1);
     expect(container.textContent).not.toMatch(/Seed|Held/);
+    /* It is not a lottery, so the way back from its rules does not call it one. */
+    const order = render(<LotteryReveal rows={plain} ruleLine="No drawing." eyebrow="The draft order" reveal={false} drawn={false} help={HELP} />);
+    const q = order.container.querySelector('[data-lottery-help]') as HTMLButtonElement;
+    expect(q.getAttribute('aria-label')).toBe('How the order works');
+    fireEvent.click(q);
+    expect(order.container.querySelector('[data-lottery-help-close]')!.textContent).toBe('Back to the order');
+    expect(q.getAttribute('aria-label')).toBe('Back to the order');
+    expect(order.container.textContent).not.toMatch(/lottery/i);
     /* With a drawing the same rows say both, and the mark is the default one. */
     const drawn = render(<LotteryReveal rows={plain} ruleLine="A drawing." />);
     expect([...drawn.container.querySelectorAll('[data-lottery-under]')].map(u => u.textContent))

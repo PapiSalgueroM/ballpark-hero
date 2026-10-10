@@ -81,6 +81,8 @@ export function LotteryReveal({
   const blocks = (help ?? []).filter(b => b && b.heading && Array.isArray(b.lines) && b.lines.length > 0);
   /* The small line of a tile: its seed and its move when there was a drawing. The mark on his own tile is a part of
      its own that never shrinks, so on a narrow tile the seed is cut before the one word that says the tile is his. */
+  /* An order nobody drew is not a lottery, and the way back from its rules does not call it one. */
+  const backLabel = drawn ? 'Back to the lottery' : 'Back to the order';
   const under = (r: LotteryRevealRow) => (drawn ? `Seed ${r.seed} · ${lotteryMoveWords(r.moved)}` : '');
 
   return (
@@ -100,7 +102,7 @@ export function LotteryReveal({
           <button
             type="button"
             data-lottery-help
-            aria-label={helpOpen ? 'Back to the lottery' : 'How the lottery works'}
+            aria-label={helpOpen ? backLabel : drawn ? 'How the lottery works' : 'How the order works'}
             aria-expanded={helpOpen}
             onClick={() => setHelpOpen(o => !o)}
             className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full border border-border bg-secondary/60 text-sm font-black text-foreground hover:brightness-110"
@@ -166,7 +168,7 @@ export function LotteryReveal({
               onClick={() => setHelpOpen(false)}
               className="mx-2 mb-2 mt-1 min-h-11 shrink-0 rounded-full border border-border bg-secondary/60 px-3 text-xs font-bold text-foreground hover:brightness-110"
             >
-              Back to the lottery
+              {backLabel}
             </button>
           </div>
         )}
