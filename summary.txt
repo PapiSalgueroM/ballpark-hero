@@ -1,0 +1,7 @@
+prep exit=0 0s | /tmp/base/scripts/simCareerHall.mjs
+hall-mlb-s1 exit=3 5s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-mlb-s2 exit=3 5s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-mlb-s3 exit=3 5s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-mlb-s4 exit=3 5s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-mlb-s5 exit=3 5s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+sense exit=0 101s | simNbaAwardsSense: 171 checks, 0 failed (full size), 100s

@@ -1,0 +1,8 @@
+#!serial
+prep: git worktree add -q /tmp/base 980654facb2d41a6c9ddc029c43710178b9d49b8 && ln -s $PWD/node_modules /tmp/base/node_modules && ls /tmp/base/scripts/simCareerHall.mjs
+hall-mlb-s1: cd /tmp/base && SIM_SEED=1 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000
+hall-mlb-s2: cd /tmp/base && SIM_SEED=2 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000
+hall-mlb-s3: cd /tmp/base && SIM_SEED=3 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000
+hall-mlb-s4: cd /tmp/base && SIM_SEED=4 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000
+hall-mlb-s5: cd /tmp/base && SIM_SEED=5 SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000
+sense: cd /tmp/base && node scripts/simNbaAwardsSense.mjs
