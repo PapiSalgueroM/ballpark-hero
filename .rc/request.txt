@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sense-full-prove: SENSE_PROVE_AGAINST=cd9c3d50 node scripts/simNbaAwardsSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+rivalry-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
