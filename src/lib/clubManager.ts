@@ -276,7 +276,7 @@ export function refreshWorldRoster(career: CareerState): CareerState {
       && p.name === record.origin.name && year - p.age === record.origin.birthYear);
     if (record.owner === career.clubName && actual) return { ...structuredClone(record), year, player: structuredClone(actual) };
     let player = structuredClone(record.player);
-    let status = record.status;
+    let status: WorldRosterState['records'][number]['status'] = record.status;
     let owner = record.owner;
     for (let next = record.year + 1; next <= year; next++) {
       const random = keyedRng(`world-roster|${worldSeedOf(career) ?? 'legacy'}|${record.key}|${next}`);
