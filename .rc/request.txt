@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+basebuild: R="$PWD"; git worktree add /tmp/rvbase 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 > /tmp/wt.log 2>&1 && ln -s "$R/node_modules" /tmp/rvbase/node_modules && cd /tmp/rvbase && node_modules/.bin/vite build --outDir /tmp/rvbasedist > /tmp/bb.log 2>&1; s=$?; tail -1 /tmp/bb.log | cut -c1-200; exit $s
+rwalk: node scripts/lib/hostLikeServer.mjs /tmp/rvbasedist 4320 > /tmp/bs.log 2>&1 & p=$!; sleep 3; BASE_OLD=http://localhost:4320 RV_ONLY=new,old,fail ENGINES=chromium TZ=UTC node .rc/x/rwalk.mjs > "$RC_OUT/rwalk.log" 2>&1; s=$?; kill $p; tail -1 "$RC_OUT/rwalk.log" | cut -c1-200; exit $s
+tree-clean: test -z "$(git status --porcelain -- src scripts)" && echo "src and scripts are as committed"
