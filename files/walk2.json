@@ -1,0 +1,348 @@
+[
+ {
+  "key": "nfl_old",
+  "seasons": 9,
+  "steps": 60,
+  "cards": [
+   {
+    "season": 0,
+    "text": "🪞 RIVALRY / 🗳️ / Ballot Squeeze / Only one of you is making the Pro Bowl ballot at the position this year, and it comes down to Rhys Delgado. / 50/50 outcome",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 2,
+    "text": "🪞 RIVALRY / 💍 / Rival Gets His Ring / Rhys Delgado just won a ring. You are still chasing your first. / Motivation boost: Morale -5, focus sharpens",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 6,
+    "text": "🪞 RIVALRY / 🏈 / Head to Head Win / Your team beat Rhys Delgado's team this season, and you had the better box score. / Fanbase +5, confidence boost",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 7,
+    "text": "🪞 RIVALRY / 🌙 / Prime Time Billing / The schedule comes out and the network builds its prime time promos around you and Rhys Delgado, your faces side by side. The whole country gets the two of you now. / Fanbase +6, rivalry intensifies",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 8,
+    "text": "🪞 RIVALRY / 🔁 / The Re-Draft / A national column re-drafts your class with everything known now, and it comes down to you or Rhys Delgado near the top. / Ranked by today's rating: Fanbase +5 or Morale -4",
+    "mine": "",
+    "revealHadAward": false
+   }
+  ],
+  "reveals": 6,
+  "errors": [],
+  "coin": 0,
+  "contradictions": [],
+  "stalledOn": null,
+  "ended": "stopped after 9 Play presses",
+  "endSave": {
+   "seasons": 13,
+   "retired": false,
+   "morale": 96,
+   "pending": null,
+   "awards": 1
+  }
+ },
+ {
+  "key": "mlb_old",
+  "seasons": 9,
+  "steps": 59,
+  "cards": [
+   {
+    "season": 0,
+    "text": "🪞 RIVALRY / 🗳️ / All-Star Ballot Squeeze / Only one of you is making the All-Star roster at the position this year, and it comes down to Silas Nakamura. / 50/50 outcome",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 3,
+    "text": "🪞 RIVALRY / 🎬 / The Documentary / A streaming service wants to film a season long documentary on you and Silas Nakamura. / Net worth +2M, Fanbase +8",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 7,
+    "text": "🪞 RIVALRY / 👋 / Rival Retires / Silas Nakamura announces retirement. He calls the rivalry the best thing that ever happened to his career. / Legacy +10, end of an era",
+    "mine": "",
+    "revealHadAward": false
+   }
+  ],
+  "reveals": 6,
+  "errors": [],
+  "coin": 0,
+  "contradictions": [],
+  "stalledOn": null,
+  "ended": "stopped after 9 Play presses",
+  "endSave": {
+   "seasons": 16,
+   "retired": false,
+   "morale": 100,
+   "pending": null,
+   "awards": 5
+  }
+ },
+ {
+  "key": "nhl_old",
+  "seasons": 9,
+  "steps": 42,
+  "cards": [
+   {
+    "season": 0,
+    "text": "🪞 RIVALRY / 🗳️ / All-Star Ballot Squeeze / Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead. / 50/50 outcome",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 6,
+    "text": "🪞 RIVALRY / 📈 / Surpassed Your Rival! / For the first time, your rating (88) has pulled ahead of Beau Halstead's (86). / Morale +10",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 7,
+    "text": "🪞 RIVALRY / 👕 / Wrong Sweater / A kid at your hockey school shows up in a Beau Halstead sweater. You sign it anyway, right under his number. / Fanbase +6",
+    "mine": "",
+    "revealHadAward": false
+   }
+  ],
+  "reveals": 5,
+  "errors": [],
+  "coin": 0,
+  "contradictions": [],
+  "stalledOn": null,
+  "ended": "stopped after 9 Play presses",
+  "endSave": {
+   "seasons": 16,
+   "retired": false,
+   "morale": 82,
+   "pending": 310,
+   "awards": 4
+  }
+ },
+ {
+  "key": "nfl_219old",
+  "seasons": 9,
+  "steps": 62,
+  "cards": [
+   {
+    "season": 0,
+    "text": "🪞 RIVALRY / 🥊 / Joint Practice / Your team and Rhys Delgado's team share a field for joint practices in camp. No scoreboard, and everybody keeps score. / 50/50 outcome",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 2,
+    "text": "🪞 RIVALRY / 📉 / Losing the Head to Head / Rhys Delgado is pulling away in the head to head. Every broadcast mentions it now. / Motivation surges",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 3,
+    "text": "🪞 RIVALRY / 🎬 / The Documentary / A streaming service wants to film a season long documentary on you and Rhys Delgado. / Net worth +2M, Fanbase +8",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 7,
+    "text": "🪞 RIVALRY / 🤝 / Rival Shows Respect / Rhys Delgado tells reporters you are the best in the league at your position. / Fanbase +5, Morale +5",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 8,
+    "text": "🪞 RIVALRY / 👋 / Rival Retires / Rhys Delgado announces retirement. He calls the rivalry the best thing that ever happened to his career. / Legacy +10, end of an era",
+    "mine": "",
+    "revealHadAward": false
+   }
+  ],
+  "reveals": 6,
+  "errors": [],
+  "coin": 0,
+  "contradictions": [],
+  "stalledOn": null,
+  "ended": "stopped after 9 Play presses",
+  "endSave": {
+   "seasons": 13,
+   "retired": false,
+   "morale": 84,
+   "pending": null,
+   "awards": 1
+  }
+ },
+ {
+  "key": "nfl_made",
+  "seasons": 9,
+  "steps": 53,
+  "cards": [
+   {
+    "season": 0,
+    "text": "🪞 RIVALRY / 🗳️ / All-Pro Team / The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor. / Morale +5",
+    "mine": "made",
+    "revealHadAward": false
+   },
+   {
+    "season": 3,
+    "text": "🪞 RIVALRY / 🎬 / The Documentary / A streaming service wants to film a season long documentary on you and Tyrell Okafor. / Net worth +2M, Fanbase +8",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 5,
+    "text": "🪞 RIVALRY / 📈 / Surpassed Your Rival! / For the first time, your rating (84) has pulled ahead of Tyrell Okafor's (81). / Morale +10",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 7,
+    "text": "🪞 RIVALRY / 😬 / Rival Becomes Teammate / Tyrell Okafor just signed with your team. The room just got a lot more interesting. / The feud cools, Morale +3, Fanbase +5",
+    "mine": "",
+    "revealHadAward": false
+   }
+  ],
+  "reveals": 5,
+  "errors": [],
+  "coin": 0,
+  "contradictions": [],
+  "stalledOn": null,
+  "ended": "stopped after 9 Play presses",
+  "endSave": {
+   "seasons": 13,
+   "retired": false,
+   "morale": 76,
+   "pending": 213,
+   "awards": 2
+  }
+ },
+ {
+  "key": "mlb_made",
+  "seasons": 9,
+  "steps": 56,
+  "cards": [
+   {
+    "season": 0,
+    "text": "🪞 RIVALRY / 🗳️ / All-Star Rosters / The All-Star rosters are out and you are on one. It goes down as one more line in the argument between you and Zane Salvatore. / Morale +5",
+    "mine": "made",
+    "revealHadAward": false
+   },
+   {
+    "season": 5,
+    "text": "🪞 RIVALRY / 🏛️ / The Hall Question / Writers have started asking whether you and Zane Salvatore both belong in the Hall of Fame, or only one of you. / Fanbase +4, the rivalry heats up",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 7,
+    "text": "🪞 RIVALRY / 📈 / Surpassed Your Rival! / For the first time, your rating (77) has pulled ahead of Zane Salvatore's (72). / Morale +10",
+    "mine": "",
+    "revealHadAward": false
+   }
+  ],
+  "reveals": 5,
+  "errors": [],
+  "coin": 0,
+  "contradictions": [],
+  "stalledOn": null,
+  "ended": "stopped after 9 Play presses",
+  "endSave": {
+   "seasons": 15,
+   "retired": false,
+   "morale": 100,
+   "pending": null,
+   "awards": 2
+  }
+ },
+ {
+  "key": "nhl_dropped",
+  "seasons": 9,
+  "steps": 67,
+  "cards": [
+   {
+    "season": 0,
+    "text": "🪞 RIVALRY / 🗳️ / All-Star Rosters / The All-Star rosters are out and you are not on one, a year after you were. It goes down as one more line in the argument between you and Elias Rylander. / Morale -5",
+    "mine": "dropped",
+    "revealHadAward": false
+   },
+   {
+    "season": 2,
+    "text": "🪞 RIVALRY / 😬 / Rival Becomes Teammate / Elias Rylander just signed with your team. The room just got a lot more interesting. / The feud cools, Morale +3, Fanbase +5",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 4,
+    "text": "🪞 RIVALRY / 🏆 / Count the Cups / You and Elias Rylander have both lifted the Cup now, so the argument has moved on to who has more. / Fanbase +4, the rivalry heats up",
+    "mine": "",
+    "revealHadAward": true
+   },
+   {
+    "season": 7,
+    "text": "🪞 RIVALRY / 🎬 / The Documentary / A streaming service wants to film a season long documentary on you and Elias Rylander. / Net worth +2M, Fanbase +8",
+    "mine": "",
+    "revealHadAward": true
+   }
+  ],
+  "reveals": 7,
+  "errors": [],
+  "coin": 0,
+  "contradictions": [],
+  "stalledOn": null,
+  "ended": "stopped after 9 Play presses",
+  "endSave": {
+   "seasons": 15,
+   "retired": false,
+   "morale": 100,
+   "pending": null,
+   "awards": 9
+  }
+ },
+ {
+  "key": "mlb_lesser",
+  "seasons": 9,
+  "steps": 53,
+  "cards": [
+   {
+    "season": 3,
+    "text": "🪞 RIVALRY / 🌴 / Same Winter Club / Dominic Novak signs with the same winter ball club you play for, and the little ballpark sells out every night the two of you are in the lineup. / Fanbase +3, Morale +2",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 4,
+    "text": "🪞 RIVALRY / 🧢 / Batting Practice Truce / You and Dominic Novak spend early batting practice at the cage mid-series, talking like old friends. The photo is everywhere by the next day. / Fanbase +8, the feud softens",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 6,
+    "text": "🪞 RIVALRY / 🎬 / The Documentary / A streaming service wants to film a season long documentary on you and Dominic Novak. / Net worth +2M, Fanbase +8",
+    "mine": "",
+    "revealHadAward": false
+   },
+   {
+    "season": 8,
+    "text": "🪞 RIVALRY / ⚾ / Season Series Win / Your club took the season series from Dominic Novak's team, and you had the better box score. / Fanbase +5, confidence boost",
+    "mine": "",
+    "revealHadAward": true
+   }
+  ],
+  "reveals": 6,
+  "errors": [],
+  "coin": 0,
+  "contradictions": [],
+  "stalledOn": null,
+  "ended": "stopped after 9 Play presses",
+  "endSave": {
+   "seasons": 11,
+   "retired": false,
+   "morale": 100,
+   "pending": 206,
+   "awards": 5
+  }
+ }
+]
