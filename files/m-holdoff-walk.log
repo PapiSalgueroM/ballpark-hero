@@ -1,0 +1,80 @@
+  walked nfl-390-first-watch: pick 1, 1 rows, card 392 high, 140 frames
+  FAIL [fold] nfl-390-late-watch: the closing row never landed
+  FAIL [last] nfl-390-late-watch: the night ended live, not landed
+  FAIL [last] nfl-390-late-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked nfl-390-late-watch: pick 123, 8 rows, card 636 high, 140 frames
+  FAIL [fold] nfl-390-undrafted-watch: the closing row never landed
+  FAIL [last] nfl-390-undrafted-watch: the night ended live, not landed
+  FAIL [last] nfl-390-undrafted-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked nfl-390-undrafted-watch: pick none, 6 rows, card 581 high, 140 frames
+  walked nfl-390-late-skip: pick 123, 8 rows, card 636 high, 81 frames
+  walked nfl-390-undrafted-reduced: pick none, 6 rows, card 581 high, 43 frames
+  walked nba-390-first-watch: pick 1, 1 rows and 4 lottery tiles, card 668 high, 263 frames
+  FAIL [last] nba-390-late-watch: the night ended live, not landed
+  walked nba-390-late-watch: pick 35, 5 rows and 4 lottery tiles, card 810 high, 264 frames
+  walked nba-390-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 735 high, 264 frames
+  walked nba-390-late-skip: pick 35, 5 rows and 4 lottery tiles, card 810 high, 77 frames
+  walked nba-390-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 735 high, 43 frames
+  walked mlb-390-first-watch: pick 1, 1 rows, card 460 high, 143 frames
+  FAIL [fold] mlb-390-late-watch: the closing row never landed
+  FAIL [last] mlb-390-late-watch: the night ended live, not landed
+  FAIL [last] mlb-390-late-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked mlb-390-late-watch: pick 432, 8 rows, card 764 high, 145 frames
+  FAIL [fold] mlb-390-undrafted-watch: the closing row never landed
+  FAIL [last] mlb-390-undrafted-watch: the night ended live, not landed
+  FAIL [last] mlb-390-undrafted-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked mlb-390-undrafted-watch: pick none, 6 rows, card 689 high, 139 frames
+  walked mlb-390-late-skip: pick 432, 8 rows, card 764 high, 77 frames
+  walked mlb-390-undrafted-reduced: pick none, 6 rows, card 689 high, 43 frames
+  walked nhl-390-first-watch: pick 1, 1 rows, card 480 high, 139 frames
+  FAIL [fold] nhl-390-late-watch: the closing row never landed
+  FAIL [last] nhl-390-late-watch: the night ended live, not landed
+  FAIL [last] nhl-390-late-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked nhl-390-late-watch: pick 128, 8 rows, card 784 high, 140 frames
+  FAIL [fold] nhl-390-undrafted-watch: the closing row never landed
+  FAIL [last] nhl-390-undrafted-watch: the night ended live, not landed
+  FAIL [last] nhl-390-undrafted-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked nhl-390-undrafted-watch: pick none, 6 rows, card 749 high, 140 frames
+  walked nhl-390-late-skip: pick 128, 8 rows, card 784 high, 77 frames
+  walked nhl-390-undrafted-reduced: pick none, 6 rows, card 749 high, 45 frames
+  walked nfl-1280-first-watch: pick 1, 1 rows, card 325 high, 140 frames
+  FAIL [fold] nfl-1280-late-watch: the closing row never landed
+  FAIL [last] nfl-1280-late-watch: the night ended live, not landed
+  FAIL [last] nfl-1280-late-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked nfl-1280-late-watch: pick 123, 8 rows, card 557 high, 140 frames
+  FAIL [fold] nfl-1280-undrafted-watch: the closing row never landed
+  FAIL [last] nfl-1280-undrafted-watch: the night ended live, not landed
+  FAIL [last] nfl-1280-undrafted-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked nfl-1280-undrafted-watch: pick none, 6 rows, card 493 high, 140 frames
+  walked nfl-1280-late-skip: pick 123, 8 rows, card 557 high, 85 frames
+  walked nfl-1280-undrafted-reduced: pick none, 6 rows, card 493 high, 43 frames
+  walked nba-1280-first-watch: pick 1, 1 rows and 4 lottery tiles, card 565 high, 268 frames
+  FAIL [last] nba-1280-late-watch: the night ended live, not landed
+  walked nba-1280-late-watch: pick 35, 5 rows and 4 lottery tiles, card 695 high, 266 frames
+  walked nba-1280-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 631 high, 266 frames
+  walked nba-1280-late-skip: pick 35, 5 rows and 4 lottery tiles, card 695 high, 76 frames
+  walked nba-1280-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 631 high, 43 frames
+  walked mlb-1280-first-watch: pick 1, 1 rows, card 393 high, 148 frames
+  FAIL [fold] mlb-1280-late-watch: the closing row never landed
+  FAIL [last] mlb-1280-late-watch: the night ended live, not landed
+  FAIL [last] mlb-1280-late-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked mlb-1280-late-watch: pick 432, 8 rows, card 665 high, 148 frames
+  FAIL [fold] mlb-1280-undrafted-watch: the closing row never landed
+  FAIL [last] mlb-1280-undrafted-watch: the night ended live, not landed
+  FAIL [last] mlb-1280-undrafted-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked mlb-1280-undrafted-watch: pick none, 6 rows, card 601 high, 140 frames
+  walked mlb-1280-late-skip: pick 432, 8 rows, card 665 high, 76 frames
+  walked mlb-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 43 frames
+  walked nhl-1280-first-watch: pick 1, 1 rows, card 393 high, 140 frames
+  FAIL [fold] nhl-1280-late-watch: the closing row never landed
+  FAIL [last] nhl-1280-late-watch: the night ended live, not landed
+  FAIL [last] nhl-1280-late-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked nhl-1280-late-watch: pick 128, 8 rows, card 645 high, 140 frames
+  FAIL [fold] nhl-1280-undrafted-watch: the closing row never landed
+  FAIL [last] nhl-1280-undrafted-watch: the night ended live, not landed
+  FAIL [last] nhl-1280-undrafted-watch: the last frame has a row at 0, the title at 1, the club at 1, the result at 1
+  walked nhl-1280-undrafted-watch: pick none, 6 rows, card 601 high, 140 frames
+  walked nhl-1280-late-skip: pick 128, 8 rows, card 645 high, 76 frames
+  walked nhl-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 46 frames
+
+playDraftNight: 38 FAILURE(S) in 40 nights

@@ -1,0 +1,1 @@
+m-holdoff exit=1 162s | MUT holdoff harness=0 vitest=0 build=0 walk=1 | simCareerPreDraft [seed set a]: ALL GREEN |  Tests  115 passed (115) | playDraftNight: 38 FAILURE(S) in 40 nights

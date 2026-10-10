@@ -1,0 +1,1 @@
+MUT holdoff harness=0 vitest=0 build=0 walk=1 | simCareerPreDraft [seed set a]: ALL GREEN | [2m Tests [22m [1m[32m115 passed[39m[22m[90m (115)[39m | playDraftNight: 38 FAILURE(S) in 40 nights
