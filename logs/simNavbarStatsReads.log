@@ -1,0 +1,20 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/hooks/useGameNavbarStats.test.tsx[2m > [22mnavbar remote read eligibility and lifecycle[2m > [22m1 guests make no remote reads while local completions and streaks update[32m 27[2mms[22m[39m
+ [32m✓[39m src/hooks/useGameNavbarStats.test.tsx[2m > [22mnavbar remote read eligibility and lifecycle[2m > [22m2 hidden tabs stay local then foreground and visible polling refresh[32m 6[2mms[22m[39m
+ [32m✓[39m src/hooks/useGameNavbarStats.test.tsx[2m > [22mnavbar remote read eligibility and lifecycle[2m > [22m3 login waits for its own profile and profile renaming refreshes[32m 6[2mms[22m[39m
+ [32m✓[39m src/hooks/useGameNavbarStats.test.tsx[2m > [22mnavbar remote read eligibility and lifecycle[2m > [22m4 completion updates local facts immediately and refreshes after the write delay[32m 3[2mms[22m[39m
+ [32m✓[39m src/hooks/useGameNavbarStats.test.tsx[2m > [22mnavbar remote read eligibility and lifecycle[2m > [22m5 old-account results cannot replace the new identity, including equal handles[32m 4[2mms[22m[39m
+ [32m✓[39m src/hooks/useGameNavbarStats.test.tsx[2m > [22mnavbar remote read eligibility and lifecycle[2m > [22m6 obsolete failures cannot finish the new request, and current errors keep local truth[32m 5[2mms[22m[39m
+ [32m✓[39m src/hooks/useGameNavbarStats.test.tsx[2m > [22mnavbar remote read eligibility and lifecycle[2m > [22m7 unmount removes timers and listeners, including a queued completion refresh[32m 3[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 12:58:28
+[2m   Duration [22m 921ms[2m (transform 87ms, setup 57ms, collect 149ms, tests 56ms, environment 293ms, prepare 113ms)[22m
+
+JSON report written to /home/runner/work/_temp/t-simNavbarStatsReads/navbar-stats-be038W/report.json
+
+Navbar stats: 7/7 offline outcome cases passed
+Artifacts: /home/runner/work/_temp/t-simNavbarStatsReads/navbar-stats-be038W

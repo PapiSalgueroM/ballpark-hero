@@ -1,0 +1,51 @@
+
+1) A boundary exists and implements the contract that actually catches
+   getDerivedStateFromError present on a class component
+2) It really catches: a throwing child rendered through the real reconciler
+   NEGATIVE CONTROL ON: getDerivedStateFromError stripped, sections 1 and 2 must go red
+✘ [ERROR] Could not resolve "@/lib/freshBuild"
+
+    node_modules/.dukb-boundary-nocatch.tsx:2:59:
+      2 │ ...StaleChunkError, reloadOnceForStaleChunk } from '@/lib/freshBuild';
+        ╵                                                    ~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@/lib/freshBuild" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+✘ [ERROR] Could not resolve "@/lib/safeStorage"
+
+    node_modules/.dukb-boundary-nocatch.tsx:3:36:
+      3 │ import { releasePendingSaves } from '@/lib/safeStorage';
+        ╵                                     ~~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@/lib/safeStorage" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+✘ [ERROR] Could not resolve "@/lib/brokenSaveRecovery"
+
+    node_modules/.dukb-boundary-nocatch.tsx:4:69:
+      4 │ ...SaveHere, openGame, setAsideSave } from '@/lib/brokenSaveRecovery';
+        ╵                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@/lib/brokenSaveRecovery" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+node:internal/errors:986
+  const err = new Error(message);
+              ^
+
+Error: Command failed: /home/runner/work/ballpark-hero/ballpark-hero/node_modules/.bin/esbuild /home/runner/work/ballpark-hero/ballpark-hero/node_modules/.dukb-boundary-nocatch.tsx --bundle --format=esm --platform=neutral --jsx=automatic --external:react --external:react-dom --external:react/jsx-runtime --outfile=/home/runner/work/ballpark-hero/ballpark-hero/node_modules/.dukb-boundary-bundle.mjs --log-level=error
+    at genericNodeError (node:internal/errors:986:15)
+    at wrappedFn (node:internal/errors:540:14)
+    at checkExecSyncError (node:child_process:942:11)
+    at execSync (node:child_process:1014:15)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simErrorBoundary.mjs:136:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 14359,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v24.21.0

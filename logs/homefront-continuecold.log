@@ -1,0 +1,19 @@
+NEGATIVE CONTROL continuecold ON: "if (saved.length === 0) return null;" becomes "if (saved.length < 0) return null;"
+1) the Main Event band lists exactly the four flagships
+   4 cards rendered, Soccer Career, Club Manager, Stadium Tycoon, NBA My Career, every one a live game
+2) the Continue buttons look for the keys the games really save under
+   /soccer-career -> soccerCareerSave, /club-manager -> dukb-club-manager-save, Continue shows only with that key planted
+3) every category has an ink in both themes and a drawn glyph
+   13 categories, 13 sports, every ink in both themes (lowest 4.90 to 1), every glyph drawn
+4) the dailies rail is exactly the registry's daily games, led by the date's pick
+   75 of 75 dailies on the rail, /perfect-lineup-nba leads on 2026-09-19; over 225 days every daily leads, never twice running
+5) Just shipped reads the ship dates from the registry
+   /cage-clash, /deadline-day, /nhl-gauntlet-draft, /aussie-rules-manager, newest first by addedOn, with the way into /whats-new
+6) the rail is the same for everybody: no ticks, no counts, no reading your record
+   no storage read, identical with a planted record, no progress words
+7) Continue playing: the right keys, real fields, hostile saves, one card per save
+  FAIL [7]: with no save in the browser the row renders 658 characters instead of nothing
+8) the favourite sport moves its own section first and nothing else
+   13 sports, each moves only its own section first, 8 bad stored values read as no pick, one pressed chip
+
+simHomeFront control continuecold: green. Section 7 went red and nothing else did.

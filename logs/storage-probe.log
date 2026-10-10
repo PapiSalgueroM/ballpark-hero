@@ -1,0 +1,17 @@
+   control probe: src/lib/safeStorage.ts changed in memory ("real.getItem(PROBE_KEY);" is now "real.setItem(PROBE_KEY, '1'); real.removeItem(PROB")
+1. every storage write is inside a try of its own function, or allowed with a reason that still holds
+   ok    127 .setItem calls in 91 files: 125 inside a try of their own function, 2 allowed, 0 that can throw
+2. the storage seam is the first thing src/main.tsx imports
+   ok    main.tsx starts with import "./lib/safeStorage"
+3. the Supabase client takes its auth storage from the seam
+   ok    auth.storage is safeLocalStorage and the file never names localStorage
+4. the storage seam only READS as it loads: no write, remove or clear at module scope or in what module scope calls
+   FAIL  2 storage write(s) run as the seam loads (line 191, 191): every import of the Supabase client would write, which three committed browser checks forbid
+5. the seam writes its probe only under the once flag (the first probe) or while it already says full (the recheck)
+   FAIL  2 probe write(s) that an ordinary browser would get more than once a visit:
+           line 191: resolve writes the probe key, and only probeStorageWrites and recheckStorageWrites may
+           line 191: resolve writes the probe key, and only probeStorageWrites and recheckStorageWrites may
+6. "full" is taken back in one place, the recheck, and never while a game holds a refused save
+   ok    1 place takes "full" back, in recheckStorageWrites (line 339), behind the held save's guard (line 333)
+
+simStorageWrites (control probe): 2 failed

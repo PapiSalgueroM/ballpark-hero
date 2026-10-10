@@ -1,0 +1,14 @@
+   NEGATIVE CONTROL ON: the boundary removed from App.tsx, section 4 must go red
+
+1) A boundary exists and implements the contract that actually catches
+   getDerivedStateFromError present on a class component
+2) It really catches: a throwing child rendered through the real reconciler
+   a throwing child was caught and a healthy child rendered through untouched
+3) The recovery screen gives the player a way out and tells them the save is safe
+   home link, save reassurance and the report a bug pointer all present
+4) It wraps the routes in App.tsx, inside Suspense so the footer survives
+  FAIL: src/App.tsx does not wrap anything in RouteErrorBoundary, so a render throw still unmounts the whole root
+5) The boundary's own render is trivial, because nothing catches it
+   no hooks, no imports, no fetch, no storage, no clock in the class body (storage and the clock only through src/lib/brokenSaveRecovery.ts, never-throw pinned in its vitest)
+
+   CONTROL FIRED: the unwrapped mutation was caught

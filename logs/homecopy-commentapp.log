@@ -1,0 +1,26 @@
+   control commentapp: the app description survives only in a comment; part 4b must report it is not a plain string
+1) the static block
+   5752 characters of readable text, 10 headings
+2) every count in the prose, against the registry the site renders
+   registry says 133 games, 36 of them soccer, across 13 categories
+   2 numbers in the prose, all of them floors and all of them under the real figure
+3) every link in the block
+   68 links, 46 of them games, every one a real route and none of them one of the 11 that only redirect
+4) the head the crawler actually gets
+   canonical https://douknowball.com/, title matches the app, description 156 chars
+4b) the home description is one string in the template and the app
+  FAIL: the home PageSeo description in src/pages/Index.tsx is not a plain string, so it cannot be held equal to the template
+   template and app DIFFER, 156 characters, social tags match, floor 130+ against 133 games
+5) nothing in it belongs to one day
+   no years, months, relative dates or results
+6) the template block is exactly what scripts/genHomeCopy.mjs writes from src/data/homeCopy.ts
+   the block between the markers is the module's: 67 blocks with the h1, 68 links, 11 paragraphs of 120+ characters
+7) the home page as React renders it: one h1, the template's, all of it visible, and every word of the copy below the tiles
+   the page: one h1, "DoUKnowBall", nothing in it hidden, 149 game tiles; the About module: all 67 blocks and 68 links in order, nothing hiding it
+   all 11 paragraphs of 120+ characters are in the rendered About section (5653 characters)
+8) no visually hidden text in src/pages/Index.tsx or src/components/home/HomeAbout.tsx
+   none: every class list and style in both files is visible text (the stat chip's screen reader label is the one allowed exception)
+9) the About section is a lazy chunk, mounted for every visitor, and the copy stays out of the entry
+   lazy at module level, mounted once inside <Suspense fallback={null}> outside every condition, after the sport sections; 79 files reached statically from src/main.tsx, none of them the copy or the About component
+
+simHomeCopy control commentapp: green. The planted break was reported by part 4b and nothing else failed.
