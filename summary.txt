@@ -1,0 +1,14 @@
+flags exit=0 1s | simNationalityFlags: green. Every nationality the site prints wears its flag (owed: 1), no code stands in for a name, and the long lists sit under their confederation.
+flags-bare exit=0 1s | simNationalityFlags control: green. The bare site was reported and named as src/pages/HigherLower.tsx:204 (1 finding).
+flags-code exit=0 1s | simNationalityFlags control: green. The three letter code was reported (1 finding).
+flags-confed exit=0 1s | simNationalityFlags control: green. Argentina was dropped from the confederation table and section 3 named it (4 findings).
+vitest-footle exit=0 4s |    Duration  3.20s (transform 689ms, setup 51ms, collect 1.01s, tests 1.48s, environment 369ms, prepare 68ms)
+flags-owedstale exit=0 1s | simNationalityFlags control: green. src/components/soccer-career/TrophyCabinet.tsx {career.nationality} got its flag in memory and its OWED_BARE entry was called stale (1
+flags-league exit=0 1s | simNationalityFlags control: green. Southern Sudan was dropped from the confederation tables, a nation only a gathered league map carries, and section 3 named it (2 findi
+footle-swap exit=0 21s | footleSwap: 3 of 3 controls FIRED, 0 problems
+rivals exit=0 13s | No rival product names found. 0 findings.
+anchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+legal exit=0 1s | simLegalPages: all green
+soccer-intl-untouched exit=0 0s | soccerInternational.ts unchanged against 074a9054
+quotes exit=0 16s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+tsc exit=0 59s | 

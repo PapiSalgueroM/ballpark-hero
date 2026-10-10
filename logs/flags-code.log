@@ -1,0 +1,9 @@
+simNationalityFlags
+   OWED (a bare print this harness knows about and does not fail on): src/components/soccer-career/TrophyCabinet.tsx:135 {career.nationality}, owner the other lane (Soccer Career), listed 2026-10-10
+1. Flags: 72 print sites across 36 files, every one with a flag on its line or the line before, bar 1 owed (16 Round 453 sites pinned)
+   NEGATIVE CONTROL ON: src/data/golfLegends.ts carries nationality: 'ARG' in memory, section 2 must go red
+  FAIL: src/data/golfLegends.ts:87 sets nationality: 'ARG', a three letter code where a country name belongs
+2. Codes: 3118 nationality literals in src/data and src/lib, none a three letter code; WEDGES (5 three letter shorts) stays inside dartDraft.ts, unreferenced by any page or component
+3. Confederations: 134 picker nations and 145 market nationalities each in exactly one of six groups (picker: UEFA 52, CONMEBOL 10, CONCACAF 15, CAF 34, AFC 22, OFC 1); the market is today's world, 4 past worlds and 2 gathered league maps nationalityOf reads (CM_ALEAGUE_NATIONALITIES 299 rows, CM_RUSSIA_NATIONALITIES 402 rows); grouped in SoccerCareer's picker and TransferScreen's filter
+
+simNationalityFlags control: green. The three letter code was reported (1 finding).

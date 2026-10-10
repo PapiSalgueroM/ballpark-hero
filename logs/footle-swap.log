@@ -1,0 +1,5 @@
+base: 11 tests, 0 not passed, exit 0
+control example: FIRED. Exactly the flag case went red, on "the example: one flag", 10 other tests green
+control feedback: FIRED. Exactly the flag case went red, on "feedback line: one flag", 10 other tests green
+control row: FIRED. Exactly the flag case went red, on "Nation row: one flag", 10 other tests green
+footleSwap: 3 of 3 controls FIRED, 0 problems
