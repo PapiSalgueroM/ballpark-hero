@@ -1,0 +1,2 @@
+#!serial
+plain: bash .rc/x/run-plain.sh

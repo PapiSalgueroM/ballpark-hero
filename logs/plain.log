@@ -1,0 +1,11 @@
+base tree head: 46e4231cc82b6c047da6e0b4bdb5dfae5628a928, own goal code in the base's part: 0
+rmut: applied plainmoved to src/components/pitch-motion/motion.tsx
+rmut: applied marked to src/components/pitch-motion/PitchSurface.tsx
+rmut: applied kind to src/components/pitch-motion/motion.tsx
+this round:        [run plain] matches 91, halves 182, chances compared 1873 (save 568, shot 1074, goal 231), lines also read with og on them 1668, own goals set aside 6, frames 77902, markups 51680, digest frames c8c1d215 markup 6fbd9127
+the base tree:     [run plain] matches 91, halves 182, chances compared 1873 (save 568, shot 1074, goal 231), lines also read with og on them 1668, own goals set aside 6, frames 77902, markups 51680, digest frames c8c1d215 markup 6fbd9127
+the base's files:  [run plain] matches 91, halves 182, chances compared 1873 (save 568, shot 1074, goal 231), lines also read with og on them 1668, own goals set aside 6, frames 77902, markups 51680, digest frames c8c1d215 markup 6fbd9127
+plainmoved:        [run plain] matches 91, halves 182, chances compared 1873 (save 568, shot 1074, goal 231), lines also read with og on them 1668, own goals set aside 6, frames 77902, markups 51680, digest frames 650a4c10 markup b1d9cf90
+marked:            [run plain] matches 91, halves 182, chances compared 1873 (save 568, shot 1074, goal 231), lines also read with og on them 1668, own goals set aside 6, frames 77902, markups 51680, digest frames c8c1d215 markup 9cfae16b
+kind:              [run plain] matches 91, halves 182, chances compared 1873 (save 568, shot 1074, goal 231), lines also read with og on them 1668, own goals set aside 6, frames 77902, markups 51680, digest frames 8a605cfe markup 457fa77b
+RUN PLAIN EQUAL: the whole frame and its markup of every chance that is not an own goal is the base's on both readings, and all three controls moved the digest

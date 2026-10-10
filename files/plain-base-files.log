@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/ogRunPlain.test.tsx[2m > [22m[2mRound 1216 review: plain comparison, strict[2m > [22m[2mdigests every frame and its markup of every chance that is not an own goal
+[22m[39m[run plain] matches 91, halves 182, chances compared 1873 (save 568, shot 1074, goal 231), lines also read with og on them 1668, own goals set aside 6, frames 77902, markups 51680, digest frames c8c1d215 markup 6fbd9127
+
+ [32m✓[39m src/test/ogRunPlain.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 40687[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216 review: plain comparison, strict[2m > [22mdigests every frame and its markup of every chance that is not an own goal [33m 40686[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 13:56:42
+[2m   Duration [22m 42.83s[2m (transform 1.25s, setup 39ms, collect 1.55s, tests 40.69s, environment 228ms, prepare 100ms)[22m
+
