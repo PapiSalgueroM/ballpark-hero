@@ -1,13 +1,43 @@
-## Codex 1188-1191 CLAIM: Soccer Career story and selection, 2026-10-09
+## Codex 1188-1191 READY: Soccer Career story and selection, 2026-10-09
 
-Isolated codex/career-story-role starts at released AR
-fa24b3848d99e29367486489b081a483dc544206, tree d9175fa74fc5784ba6acfd1a62f4592cb106f22f.
-Mobile utilities, recorded story navigation, actual new-manager reduced role
-and truthful personal goal milestones are being authored. Contract:
-docs/ROUND1188-1191.md. Remote exact-head verification is pending.
-No dependency on frozen PR208/209/210; preserve AR/AQ integration changes.
-Root app/index/stashes and Recovery ownership are protected. F owns merge,
-final combined release gates and publish. No local runtime or DB work.
+Draft PR212: https://github.com/PapiSalgueroM/ballpark-hero/pull/212
+Branch codex/career-story-role, independent of PR208/209/210/213.
+Worktree C:/Users/antho/.codex/worktrees/career-story-role/ballpark-hero.
+Base AR fa24b3848d99e29367486489b081a483dc544206.
+Accepted source c4358569edf0fd00c0496af53795f12ac732345c,
+tree f9ce60b92f94c6954a3abcd1bb881fe6b9c6e2d2.
+Run38018072799,guide114112722698/verify114112944438 SUCCESS.
+Final artifact11658080616,2981016330bytes,SHA256
+1c99a86d8ef2cdaf51f5ced88abcebca1c6adfeb5c6cce1124eee2619e454f89.
+Downloaded, exact hash/head/tree held, independently audited.
+Receipt docs/ROUND1188-1191-RECEIPT.md.
+
+1188: Phone/Training row above player on phones, Help44px with clear space,
+correct guide/search index and existing desktop dock/footer behavior.
+1189: adjacent saved Story chapters, original tile/list and dialog restore.
+1190: New Manager reduced role costs four planned league games next same-club
+recorded season; renew/interrupt/move/loan/retire/pause paths are explicit.
+1191: truthful personal senior club goal crossings100/200/300/500, saved totals,
+protected news slots, no extra reward, counter or global random draw.
+
+91 units,16 groups/17 effective controls,12 full AR careers/339 years,
+48+48 complete neutral pairs. Root whole-stream hashes:12 healthy exact
+pairs and216 uncopied AR walks across18 arms byte-identical. Six exact
+declared inverse edits; certified shared controls remain effective.
+Native554/0,nine journeys,87 whole save comparisons,18 strict reloads,
+33 chapter readings,36 restorations,four copied detector controls.
+All39 fresh PNGs manually reviewed at320/390/1280, Help overlap repaired.
+Types/build,nine related outcomes,all15 readers/source hold pass.
+SeasonTruth SKIPPED offline, no DB probe or verification credit.
+Actual remote generator's small artifact11657160884 and index hashes match;
+frozen guide fixture held; exact traininglocation control section1-only.
+Broader inherited Hub/Practice/Numbers/SaveRetry/Offer reds remain explicitly
+recorded, including the new role call breaking KeepPlaying's copied anchor.
+EntryGuide fully SUCCESS. No all-repository release-green claim.
+
+Source frozen for F. F owns combined integration, release gates and publish.
+Preserve AQ/AR, other READY drafts, root app/index/stashes and Recovery bytes.
+No local runtime, production DB, paid work, merge or live claim.
 
 ## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
 
