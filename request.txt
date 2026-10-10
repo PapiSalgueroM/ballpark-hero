@@ -1,0 +1,2 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/components/front-office-shared/GmDeskMount.test.tsx src/components/front-office-shared/GmSeatCard.test.tsx src/lib/gmSeat.test.ts src/lib/gmXp.test.ts --testTimeout=300000 --hookTimeout=120000
