@@ -1,0 +1,1 @@
+f4b: F4_LEAGUES=premier,laliga,bundesliga,championship F4_MORE=5 node .rc/x/f4b.mjs > /tmp/f4b.log 2>&1; s=$?; cp /tmp/f4b.log "$RC_OUT/f4b.log"; tail -9 /tmp/f4b.log | cut -c1-520; exit $s
