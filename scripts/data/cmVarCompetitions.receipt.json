@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "ledgerKey": "cm-var-competitions-2026-27-v1",
+  "dataFile": "scripts/data/cmVarCompetitions.json",
+  "readOn": "2026-10-10",
+  "readBy": "the builder of Round 1218, desktop Claude lane",
+  "method": "Each page was opened on the read day through a page reader that answers with lines quoted from the page. Every literal in the ledger is a line that reader quoted. A yes needs two publishers whose pages speak of the 2026-27 season.",
+  "limits": [
+    "No copy of a page was kept, so there is no snapshot hash.",
+    "Five rows are yes. Three rows carry one source and stay unknown. Forty competitions were not read at all in this round and are unknown: they play without reviews until somebody reads two sources for them.",
+    "No source read says from which round a domestic cup uses reviews, so every cup is unknown.",
+    "The Champions League sources speak of the season as a whole. Its knockout rounds are played in 2027, after the read day."
+  ],
+  "checkedBy": "scripts/simCmVarLedger.mjs",
+  "sha256": "321e361807245c3d5c922b51878a1fc4a8456a0fb2229c5b9cfd9a821718dbc7"
+}

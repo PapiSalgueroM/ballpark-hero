@@ -1,0 +1,47 @@
+{
+  "what": "Round 1218. Which competitions a modern Club Manager save can play use a video assistant referee in 2026-27. kickOff asks this file (through the generated src/data/clubManagerVarRates.ts): a match gets reviews only when its competition's row says yes for that stage.",
+  "season": "2026-27",
+  "readOn": "2026-10-10",
+  "rules": [
+    "yes and no need two independent publishers that speak of the 2026-27 season. Fewer than two is unknown.",
+    "unknown plays WITHOUT reviews. Thin data is marked, never filled. A row turns on with data alone: add the second source, run node scripts/genCmVarRates.mjs, nothing else changes.",
+    "Keys are the engine's own: league:<league id of REAL_LEAGUES>, cup:<cup name of LEAGUE_RULES>, ucl. A cup or the Champions League row carries from, the first stage with reviews (cup: R16, QF, SF, F; ucl: group, R16, QF, SF, F).",
+    "A source that only repeats another's text (one agency story on two sites) counts once."
+  ],
+  "rows": [
+    { "key": "league:premier", "name": "Premier League", "verdict": "yes", "sources": [
+      { "publisher": "Liverpool FC, the club's site, on the league's confirmed rule changes", "url": "https://www.liverpoolfc.com/news/premier-league-confirms-rule-changes-2026-27", "published": "2026-06 (the page prints 4 months ago)", "literal": "A VAR review for when second yellow cards are awarded to a player resulting in a red card", "says": "what the video assistant may newly review in 2026-27" },
+      { "publisher": "Sports Illustrated", "url": "https://www.si.com/soccer/every-new-rule-confirmed-2026-27-premier-league-season", "published": "2026-08-14", "literal": "There are several extra responsibilities for the Video Assistant Referee (VAR) next season.", "says": "the 2026-27 Premier League rules" }
+    ] },
+    { "key": "league:laliga", "name": "La Liga", "verdict": "yes", "sources": [
+      { "publisher": "3Cat (Esport3), the Catalan public broadcaster", "url": "https://www.3cat.cat/esport3/les-noves-normes-arbitrals-del-futbol-espanyol-per-a-la-temporada-2026-27/noticia-amp/3423586/", "published": "2026-08-04", "literal": "El VAR tindrà més marge d'actuació.", "says": "the refereeing rules of Spanish football for 2026-27" },
+      { "publisher": "Sports Illustrated", "url": "https://www.si.com/soccer/2026-27-la-liga-rules-how-barcelona-real-madrid-affected", "published": "2026-08-05", "literal": "La Liga referees will now be able to use VAR to correct a number of decisions.", "says": "the 2026-27 La Liga rules" }
+    ] },
+    { "key": "league:seriea", "name": "Serie A", "verdict": "yes", "sources": [
+      { "publisher": "LaPresse, news agency", "url": "https://www.lapresse.it/calcio/2026/08/17/serie-a-2026-27-dal-var-alle-espulsioni-cosa-cambia-per-gli-arbitri/", "published": "2026-08-17", "literal": "Resterà poi l'utilizzo del Var nel momento in cui un secondo giallo venga ritenuto spropositato.", "says": "what changes for referees in Serie A 2026-27" },
+      { "publisher": "Sky Sport Italia", "url": "https://sport.sky.it/calcio/serie-a/serie-a-2026-2027-nuove-regole", "published": "2026-08-22", "literal": "Si estende ad altre nuove e specifiche situazioni la possibilità da parte del VAR di intervenire con un check.", "says": "the new rules of Serie A 2026-27" }
+    ] },
+    { "key": "league:bundesliga", "name": "Bundesliga", "verdict": "yes", "sources": [
+      { "publisher": "bundesliga.com, the league's own site", "url": "https://www.bundesliga.com/de/bundesliga/news/regelanderungen-saison-2026-27-neue-regeln-38031", "published": "2026-07-02", "literal": "Der Video-Assistent darf im Spieljahr 2026/27 bei ungerechtfertigten Gelb-Roten Karten eingreifen", "says": "the rule changes for 2026-27" },
+      { "publisher": "ran (Joyn), national broadcaster", "url": "https://ran.joyn.de/sports/fussball/bundesliga/bundesliga-zeitspiel-var-und-co-das-sind-die-neuen-regeln-zum-saisonstart-172290", "published": "2026-08-22", "literal": "In der neuen Saison darf sich der Video-Assistent (VAR) auch bei falsch gezeigten Gelb-Roten Karten einschalten", "says": "the new Bundesliga rules at the start of the season" }
+    ] },
+    { "key": "ucl", "name": "Champions League", "verdict": "yes", "from": "group", "stageNote": "Both sources speak of the 2026-27 season of the European club cups as a whole. Neither splits it by stage, so the row covers every stage the engine plays.", "sources": [
+      { "publisher": "Sports Mole", "url": "https://www.sportsmole.co.uk/football/psg/champions-league/feature/time-delay-punishments-new-var-measures-everything-you-need-to-know-about-ucl-rule-changes_604692.html", "published": "2026-09-08", "literal": "UEFA have announced that VAR will be used in new areas for the 2026-27 season, including in cases of mistaken identity.", "says": "the Champions League rule changes for the 2026-27 league phase" },
+      { "publisher": "Tunisie Numerique", "url": "https://www.tunisienumerique.com/coupes-deurope-interclubs-luefa-va-reduire-lutilisation-du-var-des-la-saison-prochaine/", "published": "2026-08-01", "literal": "Dès la saison 2026/2027, l'UEFA a décidé d'imposer un cadre beaucoup plus stricte sur l'utilisation de l'assistance vidéo.", "says": "the European club cups (its headline names them, not the Champions League alone)" }
+    ] },
+    { "key": "league:championship", "name": "EFL Championship", "verdict": "unknown", "leans": "no", "sources": [
+      { "publisher": "Morning Star, carrying the Press Association story", "url": "https://morningstaronline.co.uk/node/248752", "published": "2026-04-22", "literal": "clubs have rejected the chance to use a video assistant referee (VAR) challenge system in the Championship next season", "says": "no video review of any kind in the Championship in 2026-27" }
+    ], "note": "The other copies found are the same agency story, so this is one source. It says no; the row stays unknown and plays without reviews either way." },
+    { "key": "league:ligue1", "name": "Ligue 1", "verdict": "unknown", "leans": "yes", "sources": [
+      { "publisher": "TV Direct", "url": "https://www.tv-direct.fr/?p=8815", "published": "2026-07-31", "literal": "la généralisation de la sonorisation des décisions arbitrales après consultation de la VAR", "says": "what is new on the league's channel in 2026-27" }
+    ], "note": "One source. A second that speaks of 2026-27 turns this row on." },
+    { "key": "league:bundesliga2", "name": "2. Bundesliga", "verdict": "unknown", "leans": "yes", "sources": [
+      { "publisher": "bundesliga.com, the league's own site", "url": "https://www.bundesliga.com/de/2bundesliga/news/regelanderungen-saison-2026-27-neue-regeln-38031", "published": "2026-07-02", "literal": "Die meisten bei der WM eingeführten Regeln kommen nun ebenfalls in Bundesliga und 2. Bundesliga zum Einsatz.", "says": "the same rule changes apply in both divisions" }
+    ], "note": "One source, and it speaks of the rules, not of the video assistant by name." }
+  ],
+  "notRead": {
+    "why": "Not read in this round: no source was looked for. unknown, no reviews.",
+    "leagues": ["eredivisie", "saudi", "mlsEast", "mlsWest", "primeira", "scottish", "superlig", "proleague", "austria", "greece", "denmark", "switzerland", "croatia", "brasileirao", "ligamx", "aleague", "serieb", "ligue2", "segunda", "russia"],
+    "cups": ["FA Cup", "Copa del Rey", "Coppa Italia", "DFB-Pokal", "Coupe de France", "KNVB Cup", "King's Cup", "U.S. Open Cup", "Taça de Portugal", "Scottish Cup", "Turkish Cup", "Belgian Cup", "ÖFB Cup", "Greek Cup", "Danish Cup", "Swiss Cup", "Croatian Cup", "Copa do Brasil", "Australia Cup", "Russian Cup"]
+  }
+}

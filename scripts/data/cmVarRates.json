@@ -1,0 +1,67 @@
+{
+  "what": "Round 1218. What a video review changes in top division football, per match, as published counts. The Club Manager review rates are DERIVED from this file by scripts/genCmVarRates.mjs. Nobody types a rate.",
+  "readOn": "2026-10-10",
+  "rules": [
+    "A quantity is USED only when at least two independent publishers give a count for it. One publisher is THIN and is not used.",
+    "Where publishers count differently the engine takes the STRICTER reading: the lowest per match figure in the rows, so a review moves fewer results, never more.",
+    "The range of a quantity is its lowest and highest per match reading. scripts/simCmVar.mjs holds the engine inside that range plus headroom it measured.",
+    "A count is copied as the page prints it, with the sentence or line it was read from. Matches a season is arithmetic on the league's size (20 clubs: 380, 18 clubs: 306)."
+  ],
+  "publishers": {
+    "espn": { "name": "ESPN, Dale Johnson's season tally of overturned decisions in the Premier League", "kind": "a sports outlet's own count, one journalist, the same method every season" },
+    "pieri": { "name": "Tiziano Pieri's count for Serie A, as reported by Blitz Quotidiano", "kind": "a former international referee's own count (video review analyst at Rai Sport), reported by a national news site" },
+    "ligainsider": { "name": "LigaInsider's own evaluation of the Bundesliga season", "kind": "a sports data outlet's own count" }
+  },
+  "rows": [
+    {
+      "id": "espn-pl-2022-23", "publisher": "espn", "competition": "Premier League", "season": "2022-23", "matches": 380,
+      "url": "https://africa.espn.com/football/english-premier-league/story/4722849/how-var-decisions-have-affected-every-premier-league-club-in-2022-23",
+      "published": "2023-05-28", "counts": "overturned decisions only: a call the referee kept after a review is not in it",
+      "literal": ["Total overturns: 116", "Rejected overturns: 4", "Leading to goals: 33", "Leading to disallowed goals: 55", "Penalties awarded: 26 (8 missed)", "Penalties overturned: 12 (3 for offside)", "Goals ruled out for offside: 35", "Goals ruled out for handball: 8", "Goals ruled out for a foul: 10", "Red cards: 6", "Overturned red cards: 3"],
+      "figures": { "goalsRuledOut": 55, "penaltiesAwarded": 26, "penaltiesCancelled": 12, "goalsAwarded": 33, "redCards": 6, "reviewsRejected": 4 }
+    },
+    {
+      "id": "espn-pl-2023-24", "publisher": "espn", "competition": "Premier League", "season": "2023-24", "matches": 380,
+      "url": "https://global.espn.com/football/story/_/id/38196464/how-var-decisions-affect-premier-league-club-2023-24",
+      "published": "2024-05-20", "counts": "overturned decisions only",
+      "literal": ["Total overturns: 110", "Rejected overturns: 2", "Leading to goals: 34", "Leading to disallowed goals: 50", "Penalties awarded: 28 (26 scored)", "Penalties overturned: 12", "Goals ruled out for offside: 32", "Goals ruled out for handball: 10", "Goals ruled out for a foul: 7", "Red cards: 13", "Overturned red cards: 1"],
+      "figures": { "goalsRuledOut": 50, "penaltiesAwarded": 28, "penaltiesCancelled": 12, "goalsAwarded": 34, "redCards": 13, "reviewsRejected": 2, "awardedPenaltiesScored": 26 }
+    },
+    {
+      "id": "espn-pl-2024-25", "publisher": "espn", "competition": "Premier League", "season": "2024-25", "matches": 380,
+      "url": "https://africa.espn.com/football/story/_/id/40894476/how-var-decisions-affect-premier-league-club-2024-25",
+      "published": "2025-05-25", "counts": "overturned decisions only",
+      "literal": ["Total overturns: 108", "Rejected overturns: 2", "Leading to goals: 35", "Leading to disallowed goals: 47", "Penalties awarded: 25 (21 scored)", "Penalties overturned: 11", "Goals ruled out for offside: 34", "Goals ruled out for handball: 7", "Goals disallowed for ball out: 3", "Goals ruled out for a foul: 4", "Red cards: 11", "Overturned red cards: 1"],
+      "figures": { "goalsRuledOut": 47, "penaltiesAwarded": 25, "penaltiesCancelled": 11, "goalsAwarded": 35, "redCards": 11, "reviewsRejected": 2, "awardedPenaltiesScored": 21 }
+    },
+    {
+      "id": "pieri-seriea-2017-18", "publisher": "pieri", "competition": "Serie A", "season": "2017-18", "matches": 380,
+      "url": "https://archivio.blitzquotidiano.it/sport/var-serie-a-bilancio-2881055/",
+      "published": "2018-05-23", "counts": "the league's first season under review: every change of decision at the screen, counted by a former referee",
+      "literal": ["nelle 380 partite disputate la moviola in campo è andata in scena 115 volte", "35 rigori concessi grazie alla tecnologia e 18 tolti con l'on field review", "i gol annullati dal Var sono stati 29, mentre quelli assegnati 14"],
+      "figures": { "goalsRuledOut": 29, "penaltiesAwarded": 35, "penaltiesCancelled": 18, "goalsAwarded": 14 }
+    },
+    {
+      "id": "ligainsider-bundesliga-2025-26", "publisher": "ligainsider", "competition": "Bundesliga", "season": "2025-26", "matches": 306,
+      "url": "https://www.ligainsider.de/ligainsider_1381/var-analyse-diese-klubs-profitierten-am-meisten-414643/",
+      "published": "2026-07-06", "counts": "decisions after a review, by club and in total; the page prints no total of goals ruled out",
+      "literal": ["Insgesamt 40 Elfmeter wurden nach einer Überprüfung zugesprochen", "Insgesamt wurden lediglich zehn Treffer nach einer Überprüfung doch noch anerkannt oder bestätigt"],
+      "literalNote": "The page also gives penalties taken back and red cards after a review. Those two were read without their sentence, so they are not figures here.",
+      "figures": { "penaltiesAwarded": 40, "goalsAwarded": 10 }
+    }
+  ],
+  "quantities": {
+    "goalsRuledOut": { "modelled": true, "label": "goals ruled out after a review, per match" },
+    "penaltiesAwarded": { "modelled": true, "label": "penalties awarded after a review, per match" },
+    "penaltiesCancelled": { "modelled": false, "label": "penalties cancelled after a review, per match", "why": "The engine never takes a given penalty back. Recorded so the number is on file when it does." },
+    "goalsAwarded": { "modelled": false, "label": "goals awarded after a review, per match", "why": "The engine has no goal that was first flagged off and then given." },
+    "redCards": { "modelled": false, "label": "red cards after a review, per match", "why": "The engine reviews goals and penalties only." },
+    "reviewsRejected": { "modelled": false, "label": "reviews after which the referee kept the call, per match", "why": "One publisher, and it does not say whether the call was a goal, a penalty or a card. So the game never shows a review that ends with the call standing." },
+    "awardedPenaltiesScored": { "modelled": false, "label": "penalties awarded after a review that were scored", "why": "One publisher. A penalty a review awards is taken under the engine's own penalty law, the one every other penalty in the match uses." }
+  },
+  "notUsed": [
+    "Why a goal is ruled out (offside, handball, a foul) is split by one publisher only (the ESPN rows above). THIN: the review card names no reason.",
+    "La Liga 2024-25 (a newspaper count repeated by other sites: 189 interventions) was read on a site repeating it, with figures that do not add up between the copies. Not a row.",
+    "Totals of interventions with no split (the Dutch and the German federations' season figures, the Brazilian league's 2025 survey) say nothing about goals or penalties. Not rows."
+  ]
+}
