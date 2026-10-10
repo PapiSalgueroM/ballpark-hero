@@ -123,6 +123,25 @@
  * saves, all but "rookie"). The player's own stream did not move: scripts/
  * simNbaAwardsSense.mjs section P proves that on a fleet that answers no
  * card. 1,872,641 bytes.
+ * Round 1227 (the NFL rival plays the player's position on the player's
+ * own stat line) re-recorded it on purpose on 2026-10-10, on a GitHub
+ * runner, once a step, each from the branch commit its header names.
+ * Step c, the bind (recorded from 96c3f64d). Proof first: the commit
+ * before it, dd3896ac, which only cuts nflStatLineFor out of simSeason,
+ * replays the fixture before green in all four sports and passes the truth
+ * digest with nothing allowed to move, so this recording moves for the bind
+ * alone. The NBA, the MLB and the NHL are byte for byte the same. In the
+ * NFL every one of the 459 clicks is the same button (43 seasons played,
+ * 10 rival beats and 5 rival choices before and after, 685 screen steps).
+ * Step 10, the first season played, is the first save that differs, and it
+ * differs first in c.rival: his line is a wide receiver's own now, his
+ * score is on the printed parts, and he carries the year and whether he
+ * made the first team. The save hash differs at 438 of the 459 steps (the
+ * rival is on every save from there), the markup at 39, and 14 of the 15
+ * fixed saves moved, all but "rookie", which is cut before the first
+ * season. The player's own stream did not move: scripts/simUsRivalSense.mjs
+ * section P1 proves that on a fleet that answers no card, and P2 with
+ * every card answered. 1,869,467 bytes.
  * Round 1149 (the other three careers get what the NBA rival got)
  * re-recorded it on purpose on 2026-10-10, on a GitHub runner, once a step,
  * each from the branch commit its header names.
