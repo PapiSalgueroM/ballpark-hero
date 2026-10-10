@@ -552,7 +552,8 @@ const CONTROLS = {
   roleCancel: { file: ROLE, from: 'delete career.reducedRole;', to: 'return;', fails: ['role recorded year', 'role interruptions', 'role moves and retirement'] },
   roleSettle: { file: ROLE, from: 'if (!plan) return;', to: 'return;', fails: ['role recorded year', 'role interruptions', 'role moves and retirement'] },
   roleMinimum: { file: ROLE, from: "outcome: row.type === 'playing' && row.apps > 0", to: "outcome: row.type === 'playing' && row.apps >= 0", fails: ['role interruptions'] },
-  roleTrust: { file: 'src/lib/soccerClubSquad.ts', from: '(band.min + band.max) / 2 + swing + roleSwing', to: '(band.min + band.max) / 2 + swing', fails: ['role squad display'] },
+  /* Release AT: Round 1185's form swing sits in this sum since the two rounds were merged, so the anchor carries it. */
+  roleTrust: { file: 'src/lib/soccerClubSquad.ts', from: '(band.min + band.max) / 2 + swing + form.swing + roleSwing', to: '(band.min + band.max) / 2 + swing + form.swing', fails: ['role squad display'] },
   rolePlanLine: { file: 'src/lib/soccerClubSquadSheet.ts', from: 'export function planLine(trust: Trust): string {', to: 'export function planLine(trust: Trust): string {\n  trust = { ...trust, roleSwing: 0 };', fails: ['role squad display'] },
   milestoneYouth: { file: MILESTONE, from: "const played = seasons.filter(season => season.type === 'playing'", to: 'const played = seasons.filter(season => true', fails: ['milestone saved tally', 'milestone engine news'] },
   milestoneSlot: { file: MILESTONE, from: "article.type === 'positive' && performance.has(article.headline)", to: "article.type === 'positive'", fails: ['milestone protected news'] },
