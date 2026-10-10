@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+ctl-all: n=0; f=0; for k in $(US_LEDGER_CONTROL=list node scripts/simUsSeasonLedger.mjs); do n=$((n+1)); US_LEDGER_CONTROL=$k node scripts/simUsSeasonLedger.mjs > /tmp/ctl-one.log 2>&1; e=$?; l=$(tail -1 /tmp/ctl-one.log | cut -c1-300); echo "$k exit=$e | $l" >> "$RC_OUT/controls.txt"; echo "$l" | grep -q "FIRED, red at exactly" && f=$((f+1)) || echo "NOT FIRED: $k"; done; echo "controls fired: $f of $n"; [ "$f" = "$n" ]
+hall-nhl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000 > "$RC_OUT/hall-nhl.log" 2>&1; s=$?; grep -E "FAIL|hallshare" "$RC_OUT/hall-nhl.log" | cut -c1-300 | head -12; tail -1 "$RC_OUT/hall-nhl.log" | cut -c1-200; exit $s
+local1: mkdir -p /tmp/l1 && node .rc/x/local1.mjs . /tmp/l1 > "$RC_OUT/local1.log" 2>&1; s=$?; grep -E "Lost the World Series|hitter lines" "$RC_OUT/local1.log" | cut -c1-200 | head -30; echo "local1 exit $s, lines $(wc -l < "$RC_OUT/local1.log")"; exit $s
+local4: git worktree add -q /tmp/base4 980654facb2d41a6c9ddc029c43710178b9d49b8 && mkdir -p /tmp/l4 && node .rc/x/local4.mjs /tmp/base4 . /tmp/l4 2000 > "$RC_OUT/local4.log" 2>&1; s=$?; grep -E "Seasons with any award" "$RC_OUT/local4.log" | cut -c1-220; echo "local4 exit $s, lines $(wc -l < "$RC_OUT/local4.log")"; exit $s
+parity: node scripts/simUsBoardParity.mjs
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeasonSlate.test.ts --testTimeout=300000 --hookTimeout=120000
+head: git log -1 --format=%H HEAD~1; git log -1 --format=%s HEAD | cut -c1-160
