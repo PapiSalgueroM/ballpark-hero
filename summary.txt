@@ -1,0 +1,3 @@
+head-liveSimMotion exit=1 31s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R7%3A ev
+nobind-liveSimMotion exit=0 34s |       Tests  55 passed (55)
+restored exit=0 0s | 0
