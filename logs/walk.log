@@ -1,0 +1,82 @@
+card k306_mine, 390 wide, reduced motion
+fresh, 390 wide, motion on
+  ok   card k306_mine, 390 wide, reduced motion: wrote the engine made save
+  ok   card k306_mine, 390 wide, reduced motion: the board opens on the pending rivalry card
+  ok   card k306_mine, 390 wide, reduced motion: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out. You are on one and Theo Hendricks is not. Morale +5 Sim 62 88 VS Theo Hendricks 87 Continue")
+  ok   card k306_mine, 390 wide, reduced motion: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_mine, 390 wide, reduced motion: the card does not scroll sideways (0 px over)
+  ok   card k306_mine, 390 wide, reduced motion: nothing is still animating under reduced motion (none)
+  ok   fresh, 390 wide, motion on, season 1: the season card does not scroll sideways (0 px over)
+  ok   fresh, 390 wide, motion on, season 1: nothing on the season card pokes out of it (clean)
+  ok   fresh, 390 wide, motion on, season 1: both lines are three averages to one decimal (mine "5.5 ppg, 1.5 rpg, 2.8 apg", note "🪞 Kai Amaro went 6.9 ppg, 2.4 rpg, 2.3 apg and had the better year of the two of you. Head to head 0-1.")
+  ok   fresh, 390 wide, motion on, season 1: the note (his) is what the two printed lines say (mine 5.5 ppg, 1.5 rpg, 2.8 apg = 15.66, his 6.9 ppg, 2.4 rpg, 2.3 apg = 18.31)
+  ok   fresh, 390 wide, motion on, season 1: the note's head to head is the save's tally (Head to head 0-1 against 0-1)
+  ok   card k306_mine, 390 wide, reduced motion: Continue moved exactly what the card promised (morale 78 to 83, fanbase 72 to 72; promised "Morale +5")
+  FAIL card k306_mine, 390 wide, reduced motion: the feed says what happened ("not found")
+card k306_both, 390 wide, reduced motion
+  ok   card k306_both, 390 wide, reduced motion: wrote the engine made save
+  ok   card k306_both, 390 wide, reduced motion: the board opens on the pending rivalry card
+  ok   card k306_both, 390 wide, reduced motion: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out, and you and Reese Moreau are both on them. Fanbase +3 Sim 1164 85 VS Reese Moreau 89 Continue")
+  ok   card k306_both, 390 wide, reduced motion: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_both, 390 wide, reduced motion: the card does not scroll sideways (0 px over)
+  ok   card k306_both, 390 wide, reduced motion: nothing is still animating under reduced motion (none)
+  ok   card k306_both, 390 wide, reduced motion: Continue moved exactly what the card promised (morale 85 to 85, fanbase 48 to 51; promised "Fanbase +3")
+  FAIL card k306_both, 390 wide, reduced motion: the feed says what happened ("not found")
+  ok   fresh, 390 wide, motion on, season 2: the season card does not scroll sideways (0 px over)
+  ok   fresh, 390 wide, motion on, season 2: nothing on the season card pokes out of it (clean)
+  ok   fresh, 390 wide, motion on, season 2: both lines are three averages to one decimal (mine "4.4 ppg, 1.3 rpg, 2.2 apg", note "🪞 Kai Amaro went 8.0 ppg, 2.5 rpg, 3.0 apg and had the better year of the two of you. Head to head 0-2.")
+  ok   fresh, 390 wide, motion on, season 2: the note (his) is what the two printed lines say (mine 4.4 ppg, 1.3 rpg, 2.2 apg = 12.60, his 8.0 ppg, 2.5 rpg, 3.0 apg = 21.40)
+  ok   fresh, 390 wide, motion on, season 2: the tally on the save moved by one to the right side (0-1 to 0-2)
+  ok   fresh, 390 wide, motion on, season 2: the note's head to head is the save's tally (Head to head 0-2 against 0-2)
+  ok   cards, 390 wide, reduced motion: no page errors (clean)
+  ok   cards, 390 wide, reduced motion: no request to the live database finished (0)
+card k306_mine, 1280 wide, motion on
+  ok   fresh, 390 wide, motion on, season 3: the season card does not scroll sideways (0 px over)
+  ok   fresh, 390 wide, motion on, season 3: nothing on the season card pokes out of it (clean)
+  ok   fresh, 390 wide, motion on, season 3: both lines are three averages to one decimal (mine "6.8 ppg, 2.0 rpg, 3.5 apg", note "🪞 Kai Amaro went 8.8 ppg, 2.9 rpg, 3.2 apg and had the better year of the two of you. Head to head 0-3.")
+  ok   fresh, 390 wide, motion on, season 3: the note (his) is what the two printed lines say (mine 6.8 ppg, 2.0 rpg, 3.5 apg = 19.63, his 8.8 ppg, 2.9 rpg, 3.2 apg = 23.58)
+  ok   fresh, 390 wide, motion on, season 3: the tally on the save moved by one to the right side (0-2 to 0-3)
+  ok   fresh, 390 wide, motion on, season 3: the note's head to head is the save's tally (Head to head 0-3 against 0-3)
+  ok   card k306_mine, 1280 wide, motion on: wrote the engine made save
+  ok   card k306_mine, 1280 wide, motion on: the board opens on the pending rivalry card
+  ok   card k306_mine, 1280 wide, motion on: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out. You are on one and Theo Hendricks is not. Morale +5 Sim 62 88 VS Theo Hendricks 87 Continue")
+  ok   card k306_mine, 1280 wide, motion on: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_mine, 1280 wide, motion on: the card does not scroll sideways (0 px over)
+  note card k306_mine, 1280 wide, motion on: animations running with motion on: none
+  ok   card k306_mine, 1280 wide, motion on: Continue moved exactly what the card promised (morale 78 to 83, fanbase 72 to 72; promised "Morale +5")
+  FAIL card k306_mine, 1280 wide, motion on: the feed says what happened ("not found")
+card k306_both, 1280 wide, motion on
+  ok   card k306_both, 1280 wide, motion on: wrote the engine made save
+  ok   card k306_both, 1280 wide, motion on: the board opens on the pending rivalry card
+  ok   card k306_both, 1280 wide, motion on: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out, and you and Reese Moreau are both on them. Fanbase +3 Sim 1164 85 VS Reese Moreau 89 Continue")
+  ok   card k306_both, 1280 wide, motion on: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_both, 1280 wide, motion on: the card does not scroll sideways (0 px over)
+  note card k306_both, 1280 wide, motion on: animations running with motion on: none
+  ok   card k306_both, 1280 wide, motion on: Continue moved exactly what the card promised (morale 85 to 85, fanbase 48 to 51; promised "Fanbase +3")
+  FAIL card k306_both, 1280 wide, motion on: the feed says what happened ("not found")
+  ok   cards, 1280 wide, motion on: no page errors (clean)
+  ok   cards, 1280 wide, motion on: no request to the live database finished (0)
+card k306_his, 390 wide, motion on
+  ok   card k306_his, 390 wide, motion on: wrote the engine made save
+  ok   card k306_his, 390 wide, motion on: the board opens on the pending rivalry card
+  ok   card k306_his, 390 wide, motion on: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out. Malik Vasquez is on one and you are not. Morale -5 Sim 8 83 VS Malik Vasquez 85 Continue")
+  ok   card k306_his, 390 wide, motion on: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_his, 390 wide, motion on: the card does not scroll sideways (0 px over)
+  note card k306_his, 390 wide, motion on: animations running with motion on: none
+  ok   card k306_his, 390 wide, motion on: Continue moved exactly what the card promised (morale 90 to 85, fanbase 44 to 44; promised "Morale -5")
+  FAIL card k306_his, 390 wide, motion on: the feed says what happened ("🗳️ THE ALL-STAR VOTE All-Star fan voting is open and Malik Vasquez's team is running ads for")
+card old306, 390 wide, motion on
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForSelector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-season-reveal]') to be visible
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/rv-walk2.mjs:30:18 {
+  log: [ "  - waiting for locator('[data-season-reveal]') to be visible" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

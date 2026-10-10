@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node .rc/x/rv-walk-all.mjs
