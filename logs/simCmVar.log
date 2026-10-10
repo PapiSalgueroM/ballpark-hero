@@ -1,0 +1,151 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Wolves: where the competition has no reviews, asking for them plays the same match and leaves the stream where it was\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    next: 0.7649751049466431,\n' +
++       '    result: {\n' +
++       "      kind: 'match',\n" +
++       '      report: {\n' +
++       '...\n' +
++       '          {\n' +
++       "+           id: 'msg-1-0-4',\n" +
++       "-           id: 'msg-1-0-5',\n" +
++       "            kind: 'drama',\n" +
++       '            options: [\n' +
++       '              {\n' +
++       "                effect: 'support',\n" +
++       "                label: 'Pay for the fix'\n" +
++       '...\n' +
++       '          pending: {\n' +
++       "+           id: 'pq-1-0-4',\n" +
++       "-           id: 'pq-1-0-5',\n" +
++       "            kind: 'bid',\n" +
++       '            options: [\n' +
++       '              {\n' +
++       '                board: -0.8,\n' +
++       "                label: 'Not for sale at any price',\n",
++     stack: 'AssertionError [ERR_ASSERTION]: Wolves: where the competition has no reviews, asking for them plays the same match and leaves the stream where it was\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    next: 0.7649751049466431,\n' +
++       '    result: {\n' +
++       "      kind: 'match',\n" +
++       '      report: {\n' +
++       '...\n' +
++       '          {\n' +
++       "+           id: 'msg-1-0-4',\n" +
++       "-           id: 'msg-1-0-5',\n" +
++       "            kind: 'drama',\n" +
++       '            options: [\n' +
++       '              {\n' +
++       "                effect: 'support',\n" +
++       "                label: 'Pay for the fix'\n" +
++       '...\n' +
++       '          pending: {\n' +
++       "+           id: 'pq-1-0-4',\n" +
++       "-           id: 'pq-1-0-5',\n" +
++       "            kind: 'bid',\n" +
++       '            options: [\n' +
++       '              {\n' +
++       '                board: -0.8,\n' +
++       "                label: 'Not for sale at any price',\n" +
++       '\n' +
++       '    at Object.coverage (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:317:20)\n' +
++       '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:382:33)\n' +
++       '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:406:46',
++     status: 'failed',
++     title: 'asks for reviews only where the competition uses them and plays the same match everywhere else'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:393:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:406:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'asks for reviews only where the competition uses them and plays the same match everywhere else',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Wolves: where the competition has no reviews, asking for them plays the same match and leaves the stream where it was\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    next: 0.7649751049466431,\n' +
+        '    result: {\n' +
+        "      kind: 'match',\n" +
+        '      report: {\n' +
+        '...\n' +
+        '          {\n' +
+        "+           id: 'msg-1-0-4',\n" +
+        "-           id: 'msg-1-0-5',\n" +
+        "            kind: 'drama',\n" +
+        '            options: [\n' +
+        '              {\n' +
+        "                effect: 'support',\n" +
+        "                label: 'Pay for the fix'\n" +
+        '...\n' +
+        '          pending: {\n' +
+        "+           id: 'pq-1-0-4',\n" +
+        "-           id: 'pq-1-0-5',\n" +
+        "            kind: 'bid',\n" +
+        '            options: [\n' +
+        '              {\n' +
+        '                board: -0.8,\n' +
+        "                label: 'Not for sale at any price',\n",
+      stack: 'AssertionError [ERR_ASSERTION]: Wolves: where the competition has no reviews, asking for them plays the same match and leaves the stream where it was\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    next: 0.7649751049466431,\n' +
+        '    result: {\n' +
+        "      kind: 'match',\n" +
+        '      report: {\n' +
+        '...\n' +
+        '          {\n' +
+        "+           id: 'msg-1-0-4',\n" +
+        "-           id: 'msg-1-0-5',\n" +
+        "            kind: 'drama',\n" +
+        '            options: [\n' +
+        '              {\n' +
+        "                effect: 'support',\n" +
+        "                label: 'Pay for the fix'\n" +
+        '...\n' +
+        '          pending: {\n' +
+        "+           id: 'pq-1-0-4',\n" +
+        "-           id: 'pq-1-0-5',\n" +
+        "            kind: 'bid',\n" +
+        '            options: [\n' +
+        '              {\n' +
+        '                board: -0.8,\n' +
+        "                label: 'Not for sale at any price',\n" +
+        '\n' +
+        '    at Object.coverage (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:317:20)\n' +
+        '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:382:33)\n' +
+        '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:406:46'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

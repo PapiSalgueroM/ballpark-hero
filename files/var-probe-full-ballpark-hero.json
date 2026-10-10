@@ -1,0 +1,72 @@
+{
+  "clubs": 8,
+  "perClub": 50,
+  "matches": 345,
+  "offDigest": "93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488",
+  "A": {
+    "compared": 345,
+    "reportEqual": 345,
+    "scoreEqual": 345,
+    "scorersEqual": 345,
+    "cardsEqual": 345,
+    "drawsEqual": 345,
+    "nextEqual": 345,
+    "tableEqual": 345,
+    "notCompared": 0,
+    "firstDifference": null
+  },
+  "B": {
+    "compared": 345,
+    "reportEqual": 322,
+    "scoreDiffers": 18,
+    "scorersDiffer": 21,
+    "cardsDiffer": 7,
+    "resultDiffers": 9,
+    "drawsDiffer": 18,
+    "nextDiffers": 18,
+    "matchesWithReview": 23,
+    "reviews": 23,
+    "disallowed": 14,
+    "confirmedGoals": 0,
+    "penaltyConfirmed": 0,
+    "penaltyAwarded": 9,
+    "goalsOff": 891,
+    "goalsOn": 885,
+    "firstDifference": {
+      "club": "Everton",
+      "entry": 4,
+      "seed": 931677,
+      "off": [
+        "Everton",
+        "Ipswich Town",
+        0,
+        1,
+        "regular",
+        null
+      ],
+      "on": [
+        "Everton",
+        "Ipswich Town",
+        0,
+        2,
+        "regular",
+        null
+      ],
+      "reviews": [
+        {
+          "id": "2026:Everton:5:Ipswich Town:45:90:me:50:0:Vitaliy Mykolenko:missed-penalty",
+          "incident": "penalty",
+          "decision": "awarded",
+          "reason": "missed_foul",
+          "trigger": {
+            "side": "me",
+            "who": "Vitaliy Mykolenko"
+          }
+        }
+      ],
+      "drawsOff": 832,
+      "drawsOn": 833
+    }
+  },
+  "offMatchesWithReviewLines": 0
+}

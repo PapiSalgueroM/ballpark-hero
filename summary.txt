@@ -1,0 +1,14 @@
+ctl-everywhere exit=0 2s | simCmVar everywhere: actual review outcomes and full prior baseline passed.
+ctl-disabled exit=0 25s | simCmVar disabled: actual review outcomes and full prior baseline passed.
+armA exit=0 11s | varProbe: A HOLDS (showing a review or skipping it is the same match)
+armC exit=0 8s | ARM C HOLDS: off digest 93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488 on both trees
+dailydeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+varlive exit=0 5s |    Duration  4.04s (transform 1.80s, setup 58ms, collect 2.24s, tests 762ms, environment 366ms, prepare 166ms)
+livescores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+tsc exit=0 95s | 
+simCmVar exit=1 98s | Node.js v24.21.0
+ledger exit=0 1s | simCmVarLedger: all 316 checks passed.
+anchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+norival exit=0 15s | No rival product names found. 0 findings.
+gathered exit=0 2s | simClubManagerGathered: all checks passed (1 gathered league(s), 403 men, 1436 printed squad entries accounted for, 83 addresses, 5 cited facts, the old save)
+newleagues exit=0 105s | simClubManagerNewLeagues: all checks passed

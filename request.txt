@@ -1,0 +1,14 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmVar: node scripts/simCmVar.mjs
+ctl-everywhere: CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs
+ctl-disabled: CM_VAR_CONTROL=disabled node scripts/simCmVar.mjs
+armA: node .rc/x/varProbe.mjs full
+armC: node .rc/x/varProbe.mjs off | tail -1 > /tmp/here.txt; git worktree add -q /tmp/base 46e4231c && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node "$OLDPWD/.rc/x/varProbe.mjs" off | tail -1 > /tmp/base.txt); cat /tmp/here.txt /tmp/base.txt; a=$(grep -o 'off digest [0-9a-f]*' /tmp/here.txt); b=$(grep -o 'off digest [0-9a-f]*' /tmp/base.txt); test -n "$a" && test "$a" = "$b" && echo "ARM C HOLDS: $a on both trees"
+dailydeals: node scripts/simDailyDeals.mjs
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+livescores: node scripts/simLiveScores.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+ledger: node scripts/simCmVarLedger.mjs
+newleagues: node scripts/simClubManagerNewLeagues.mjs
+gathered: node scripts/simClubManagerGathered.mjs
