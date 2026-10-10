@@ -1,0 +1,20 @@
+--- 0. the REAL_LEAGUES parse ---
+  read 27 leagues and 454 club rows from src/lib/clubManager.ts
+  not cross-checked, no Footle label: Brasileirão Série A, Liga MX, A-League Men, Serie B, Ligue 2, Segunda División, Russian Premier League
+  every club sits in exactly one of the leagues Footle models
+  no two REAL_LEAGUES clubs collapse onto one name under the 57 spelling aliases
+  aliases pointing outside the modelled leagues: (none)
+
+--- 1. no club is in one league here and another in REAL_LEAGUES ---
+  CLUB_TO_LEAGUE: 242 of 285 entries name a club REAL_LEAGUES carries, and all agree
+  INSANE_CLUB_LEAGUE: 89 of 137 entries name a club REAL_LEAGUES carries, and all agree
+
+--- 2. nobody claims a league they were relegated out of ---
+  CLUB_TO_LEAGUE: 242 entries claim a league the site models
+  INSANE_CLUB_LEAGUE: 89 entries claim a league the site models
+
+--- 3. both English divisions are named in full ---
+  Premier League: all 20 clubs present
+  EFL Championship: all 24 clubs present
+
+simFootleLeagues: both Footle club maps agree with the season Club Manager is playing.

@@ -1,0 +1,10 @@
+1) Shape (146 entries)
+2) Two distinct source hosts per entry
+   hosts: bundesliga.com 134, espn.com 134, fcaugsburg.de 3, bvb.de 2, sv98.de 2, bscyb.ch 2, nau.ch 1, nashvillesc.com 1, bluewin.ch 1, fck.dk 1, scfreiburg.com 1, stlcitysc.com 1, mlssoccer.com 1, alwaslsc.ae 1, dhnet.be 1, southamptonfc.com 1, cagliaricalcio.com 1, koreajoongangdaily.com 1, salzburg24.at 1, plattformj.ch 1, sslazio.it 1
+3) No overlay name repeated, no name twice
+   146 distinct names, overlay holds 241
+4) Every `to` is a club Club Manager models
+   145 engine clubs checked against 483 modelled clubs
+5) Every db spelling is carried by the 2026 rows (or honestly flagged missing)
+
+SUPABASE unreachable (TypeError: fetch failed) for player_market_values?select=club&year=eq.2026&club=eq.RB%20Leipzig&limit=1 after 3 attempts. NOTHING WAS CHECKED.

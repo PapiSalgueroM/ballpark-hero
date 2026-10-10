@@ -1,0 +1,35 @@
+0) an unloaded job market says so, and never pretends to be an empty one
+   unloaded: 0 offers and the note is "Still getting the phone lines up. Give it a se"
+1) A sack no longer hands you another job on the same line
+   182 sackings across 250 careers, 182 left the manager unemployed, 0 were instant rehires
+2) A decorated player gets more interest than a nobody when sacked
+   Ballon d'Or winner sacked: 1.88 offers, 3% empty (181 spells)
+   journeyman sacked:         1.05 offers, 26% empty (175 spells)
+3) Sitting out makes it worse, and you can accept a job
+   sacked with 4 offers ("4 clubs want to talk...."), after another season out: seasonsOut 1
+   accepted Tottenham (tier 2): unemployed now false
+4) Copy check
+   clean
+5) Round 1029: the final table is his own league
+   29263 seasons: 29157 at a club of the list, 106 at a market club, 18697 with a verified size, 7710 with no rival to name
+   79001 named rows checked, 38051 unnamed; wrong league 0, himself twice 0, "of N" wrong 0, size wrong 0
+   1479 market jobs taken (1224 in a league the list spells another way), 506 promotions to the Premier League, 122 relegations to the Championship, 9943 seasons in a named league of unknown size (560 knowing 20 or more clubs)
+   table not his league 0, known clubs wrong 0, a position in a league of unknown size 0, promotion or relegation words wrong 0
+   5556 seasons before 2026-27 in a league the list knows clubs of, 232 finishes in the English pair's move zones before 2004/05; a past season naming a rival or misflagged 0
+   6674 past seasons in a league the game holds, 35 of them with a move line; naming a league 0; 21966 later seasons, header without his league 0
+   Round 1037: 3407 past seasons in a league the ledgers hold, headed wrong 0; 243 jobs placed in the league their club was in that year; 623 past seasons unplaced (the ledgers put the club in none of the six while its label names one)
+   2011 to 2018 in the English pair: 883 seasons, 48 moves between the two, 99 lines saying promoted or relegated
+   the field of unknown size knowing 24 clubs: 24 with his own, 25 for a club outside the list, before and after 2026-27
+   Arsenal met 14 named clubs, 0 from outside the Premier League
+   a Manchester City job met 14 named clubs; Man City among them: false
+   an RB Salzburg job named LASK, Austria Lustenau, Wolfsberger AC, Hartberg, Grazer AK, Sturm Graz, WSG Tirol
+   a club nothing names met 0 named clubs
+   whole fields: Arsenal 19 named of 20, Manchester City 19 of 20, RB Salzburg 11 of 12
+   took Nacional (Primeira Liga): table Primeira Liga, 17 known rivals
+   took Kasimpasa (Süper Lig): table Super Lig, 17 known rivals
+   took West Ham United (EFL Championship): table Championship, 22 known rivals
+   took Eintracht Braunschweig (2. Bundesliga): table 2. Bundesliga, 17 known rivals
+   an old save at Pisa (Serie B) with no league saved plays Serie B
+   rates: t1.title 0.1127, t1.sack 0.1082, t2.title 0.0963, t2.promo 0.1661, t2.sack 0.1228, t3.title 0.0891, t3.promo 0.1577, t3.sack 0.0676, t4.title 0.0634, t4.promo 0.1290
+
+ALL MANAGER CAREER CHECKS PASSED

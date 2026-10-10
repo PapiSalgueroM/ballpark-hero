@@ -1,0 +1,10 @@
+0) Known table in, matching words out
+   title-race lines carry the exact gap from the doctored table
+1) The feed lives through the season, not just the windows
+   Everton: 39 match weeks, fresh news in 33, 12 distinct shapes
+   Braga: 38 match weeks, fresh news in 27, 13 distinct shapes
+   Celtic: 33 match weeks, fresh news in 20, 13 distinct shapes
+2) Every number in a line is the table number, and no line lies
+   85 distinct lines swept for lies, dashes and foreign clubs
+
+simHeadlines: green. The feed is alive and it does not lie.

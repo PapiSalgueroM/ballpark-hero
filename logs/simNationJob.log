@@ -1,0 +1,12 @@
+1) A country does not call a manager who has not done anything
+   standing: a decorated giant 102.5, a giant 26, a small club 8, threshold 70
+2) Every offerable country is one the tournament engine knows
+3) The job is taken and can be given back
+4) A manager helps his country, but the players still decide
+   lift 0 to 6; over 120 summers England won 25 with a top manager against 17 with none
+5) The summer never leaves a nation permanently stronger
+6) Every rollover plays the summer, and results have consequences
+   summers play on the rollover, titles reach the cabinet, a missed tournament ends the job
+7) No em or en dash in the new copy
+
+simNationJob: green. You can manage a country now, and it is a job you have to earn and can lose.
