@@ -1,0 +1,192 @@
+FAIL bundesliga2: gives no key while the list is not here, and refuses to read a saved key without its list
+AssertionError [ERR_ASSERTION]: Fetching the list changes exactly one field of a fresh save
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 3,
+...
+      cornersLeft: 'p-monju-momuluh',
++     cornersRight: 'youth-muwv75s0-86-999',
+-     cornersRight: 'youth-muwv75s0-8-999',
+      freeKicks: 'p-monju-momuluh',
++     penalties: 'youth-muwv75s0-89-313'
+-     penalties: 'youth-muwv75s0-11-313'
+    },
+    severance: [],
+    squad: [
+      {
+        age: 23,
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-79-490',
+-       id: 'youth-muwv75s0-1-490',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Kwame Sundgren (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-80-756',
+-       id: 'youth-muwv75s0-2-756',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Ravi Calvet (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-81-601',
+-       id: 'youth-muwv75s0-3-601',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Kaan Reyes (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-82-237',
+-       id: 'youth-muwv75s0-4-237',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Sam Berg (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-83-460',
+-       id: 'youth-muwv75s0-5-460',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Alfie Nyman (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-84-226',
+-       id: 'youth-muwv75s0-6-226',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Diego Sato (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-85-360',
+-       id: 'youth-muwv75s0-7-360',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Zane Okonjo (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-86-999',
+-       id: 'youth-muwv75s0-8-999',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Luca Diallo (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-87-887',
+-       id: 'youth-muwv75s0-9-887',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Diego Lindqvist (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-88-911',
+-       id: 'youth-muwv75s0-10-911',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Enzo Kimura (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-89-313',
+-       id: 'youth-muwv75s0-11-313',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Aleks Keane (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-90-785',
+-       id: 'youth-muwv75s0-12-785',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Ravi Silva (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-91-855',
+-       id: 'youth-muwv75s0-13-855',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Yusuf Ferreira (Youth)',
+...
+    xiIds: [
++     'youth-muwv75s0-79-490',
+-     'youth-muwv75s0-1-490',
+      'p-henri-koudossou',
++     'youth-muwv75s0-80-756',
++     'youth-muwv75s0-81-601',
++     'youth-muwv75s0-83-460',
++     'youth-muwv75s0-86-999',
++     'youth-muwv75s0-87-887',
++     'youth-muwv75s0-88-911',
+-     'youth-muwv75s0-2-756',
+-     'youth-muwv75s0-3-601',
+-     'youth-muwv75s0-5-460',
+-     'youth-muwv75s0-8-999',
+-     'youth-muwv75s0-9-887',
+-     'youth-muwv75s0-10-911',
+      'p-monju-momuluh',
++     'youth-muwv75s0-89-313',
++     'youth-muwv75s0-91-855'
+-     'youth-muwv75s0-11-313',
+-     'youth-muwv75s0-13-855'
+    ]
+  }
+
+    at Object.unloaded (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:474:16)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:555:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:584:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'gives no key while the list is not here, and refuses to read a saved key without its list'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:570:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:584:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'gives no key while the list is not here, and refuses to read a saved key without its list'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

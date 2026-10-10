@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+daily: node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+daily-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+daily-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+leaguefx: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=9 node scripts/simCmLeagueFixtures.mjs 2>&1 | tail -1 | cut -c1-330; exit ${PIPESTATUS[0]}
+cmfix-bundesliga2: TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 CM_REAL_FIXTURE_LEAGUE=bundesliga2 node scripts/simCmRealFixtures.mjs > /tmp/c.log 2>&1; s=$?; cp /tmp/c.log "$RC_OUT/cmfix-bundesliga2.log"; grep -E '^FAIL' /tmp/c.log | head -4 | cut -c1-240; tail -1 /tmp/c.log | cut -c1-300; exit $s
+cmfix-premier: TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 node scripts/simCmRealFixtures.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+fixbal: node scripts/simFixtureBalance.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
