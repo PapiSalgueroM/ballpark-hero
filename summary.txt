@@ -1,0 +1,5 @@
+simLegalPages exit=0 1s | simLegalPages: all green
+simInventedNames exit=0 10s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 21s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+tsc exit=0 64s | 
