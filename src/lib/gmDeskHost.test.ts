@@ -537,7 +537,7 @@ describe('a year out', () => {
     const log: string[] = [];
     const out = hostSeasonAway({ host, away: awayHost(log), league: lg, desk, legacy: l, rng: keyedRng('away') });
     expect(log).toEqual(['draft', 'summer', 'round', 'round', 'round', 'round', 'playoffs']);
-    if (!out.ok) throw new Error(out.reason);
+    if (out.ok === false) throw new Error(out.reason);
     expect(lg.season).toBe(2031);
     expect(out.report.season).toBe(2031);
     expect(out.report.champion).toBe(lg.champions[2031]);

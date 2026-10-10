@@ -844,6 +844,8 @@ export interface HostAwayReport {
 
 export type HostAwayRefusal = 'in-seat' | 'season-open' | 'market-closed' | 'broken-adapter';
 
+/* Narrow it with `=== false` (or `=== true`): this app compiles without strict
+   null checks, where a bare `!r.ok` does not tell the two halves apart. */
 export type HostAwayResult =
   | { ok: true; desk: GmDesk; report: HostAwayReport }
   | { ok: false; reason: HostAwayRefusal };
@@ -1106,6 +1108,74 @@ export function hostOutOfWorkCard<L>(
   const row = host.clubs(league).find(c => c.id === old.team);
   if (row) lines.push(`The ${nameOf(old.team)} went ${row.record} without you, ${ordinal(row.place)} in the league.`);
   return { title: `Out of work, ${plural(out, 'season')}`, lines };
+}
+
+/** The line of facts under an offer. `line` is what the sport calls its payroll line: 'cap', 'tax line'. */
+export function hostOfferFactsLine(f: HostOfferFacts, line: string): string {
+  const room = f.room >= 0 ? `$${f.room}M under the ${line}` : `$${round1(-f.room)}M over the ${line}`;
+  return `Finished ${f.record}, ${ordinal(f.place)} in the league. Roster ranked ${ordinal(f.strengthRank)}. ${room}.`;
+}
+
+/**
+ * The two actions that cannot be undone take two taps. These are the lines
+ * the first tap shows. On a save whose GM desk has never been opened, taking
+ * a job or sitting out opens it for good, and the line says so.
+ */
+export function hostTakeArmLine(pack: GmSeatPack, offer: SeatOffer, deskOn: boolean): string {
+  return `Tap again to take it. You become the ${offer.teamName} ${pack.role} and it cannot be undone.${deskOn ? '' : ' It also opens your GM desk for good.'}`;
+}
+
+export function hostSitArmLine(deskOn: boolean): string {
+  return `Tap again to stay out. The league plays a whole season without you and it cannot be undone.${deskOn ? '' : ' It also opens your GM desk for good.'}`;
+}
+
+/** How a stint ended, for the Career box. An open one says he is still there. */
+export function hostStintEndWords(s: SeatStint): string {
+  return s.ended === 'fired' ? 'Let go'
+    : s.ended === 'walked' ? 'Walked away'
+    : s.ended === 'poached' ? 'Bought out'
+    : s.ended === 'expired' ? 'Deal ran out'
+    : 'Still here';
+}
+
+/** One stint as the Career panel prints it. The tier is left off when the record does not know it. */
+export interface HostStintView {
+  team: string;
+  name: string;
+  /** 'Took over in 2027, top tier' or just 'Since 2027 or earlier' on an old save. */
+  arrival: string;
+  /** One mark a graded season, oldest first. */
+  marks: string[];
+  /** 'Plus 4 earlier seasons, not graded', or null. */
+  earlier: string | null;
+  ended: string;
+  seasons: number;
+  titles: number;
+}
+
+export function hostStintViews(seat: GmSeatBlock, nameOf: (id: string) => string): HostStintView[] {
+  return seat.career.stints.map((s, i) => {
+    const unknown = i === 0 && seat.before?.tierUnknown === true;
+    const uncounted = i === 0 ? (seat.before?.seasons ?? 0) : 0;
+    return {
+      team: s.team,
+      name: nameOf(s.team),
+      arrival: unknown ? `In the chair since ${s.from}` : `Took over in ${s.from}, ${HOST_TIER_WORDS[s.tier]}`,
+      marks: s.grades.map(g => HOST_GRADE_MARKS[g].mark),
+      earlier: uncounted > 0 ? `Plus ${plural(uncounted, 'earlier season')}, not graded` : null,
+      ended: hostStintEndWords(s),
+      seasons: s.grades.length + uncounted,
+      titles: s.grades.filter(g => g === 'title').length,
+    };
+  });
+}
+
+/** The line of totals above the stints. */
+export function hostCareerTotalsLine(seat: GmSeatBlock): string {
+  const clubs = new Set(seat.career.stints.map(s => s.team)).size;
+  const out = seat.career.seasonsOut;
+  const tail = out > 0 ? `, ${plural(out, 'season')} out of work` : '';
+  return `${plural(hostSeasonsRecorded(seat), 'season')}, ${plural(clubs, 'club')}, ${titleWords(careerTotals(seat.career).titles)}${tail}`;
 }
 
 /**
