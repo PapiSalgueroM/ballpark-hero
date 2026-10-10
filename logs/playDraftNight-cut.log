@@ -1,0 +1,19 @@
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Rockets": 47 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Nuggets": 50 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: a lottery tile cuts "Thunder": 49 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Nuggets" would be cut on a lottery tile: 50 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Thunder" would be cut on a lottery tile: 49 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Timberwolves" would be cut on a lottery tile: 83 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Rockets" would be cut on a lottery tile: 47 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Cavaliers" would be cut on a lottery tile: 55 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Warriors" would be cut on a lottery tile: 50 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Mavericks" would be cut on a lottery tile: 61 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Grizzlies" would be cut on a lottery tile: 51 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Clippers" would be cut on a lottery tile: 50 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Pelicans" would be cut on a lottery tile: 49 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Raptors" would be cut on a lottery tile: 46 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Hornets" would be cut on a lottery tile: 46 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Wizards" would be cut on a lottery tile: 49 px of words in 44 px
+  FAIL [cut] nba-390-late-watch: "Trail Blazers" would be cut on a lottery tile: 72 px of words in 44 px
+  walked nba-390-late-watch: pick 35, 5 rows and 4 lottery tiles, card 783 high, 366 frames
+playDraftNight [control cut]: 17 FAILURE(S) of its own check (cut), as it must

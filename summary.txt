@@ -1,0 +1,11 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playDraftNight exit=0 214s | playDraftNight: ALL GREEN, 49 nights walked
+playDraftNight-again exit=1 8s | playDraftNight [control again]: 1 FAILURE(S) of its own check (scroll), as it must
+playDraftNight-cut exit=1 7s | playDraftNight [control cut]: 17 FAILURE(S) of its own check (cut), as it must
+playDraftNight-fold exit=1 7s | playDraftNight [control fold]: 2 FAILURE(S) of its own check (fold), as it must
+playDraftNight-hidden exit=1 2s | playDraftNight [control hidden]: 2 FAILURE(S) of its own check (reduced), as it must
+playDraftNight-late exit=1 7s | playDraftNight [control late]: 1 FAILURE(S) of its own check (height), as it must
+playDraftNight-spoiler exit=1 7s | playDraftNight [control spoiler]: 4 FAILURE(S) of its own check (spoiler), as it must
+playDraftNight-narrowtile exit=1 8s | playDraftNight [control narrowtile]: 1 FAILURE(S) of its own check (cut), as it must
+playDraftNight-ending exit=1 8s | playDraftNight [control ending]: 2 FAILURE(S) of its own check (fold), as it must
+playDraftNight-nottall exit=1 8s | playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must

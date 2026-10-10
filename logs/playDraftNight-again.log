@@ -1,0 +1,3 @@
+  FAIL [scroll] mlb-390-late-watch: the page stood still at 288 from 283 ms and then moved between 228 and 288
+  walked mlb-390-late-watch: pick 432, 8 rows, card 744 high, 332 frames
+playDraftNight [control again]: 1 FAILURE(S) of its own check (scroll), as it must
