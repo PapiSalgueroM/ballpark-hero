@@ -1,0 +1,7 @@
+build exit=0 19s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSeasonMoments exit=0 41s | playSeasonMoments: 117 checks, 0 failed
+playSoccerCareerDiscipline exit=0 8s | playSoccerCareerDiscipline: 178 checks, 0 failed
+playSoccerCareerLeagueWorld exit=0 10s | playSoccerCareerLeagueWorld: 249 checks, 0 failed; screenshots /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots
+playSoccerCareerOpponents exit=0 9s | playSoccerCareerOpponents: 164 checks, 0 failed
+playSeasonCentre exit=0 90s | playSeasonCentre: 40 checks, 0 failed
+playSeasonCentreMotion exit=0 127s | playSeasonCentreMotion: 77 checks, 0 failed

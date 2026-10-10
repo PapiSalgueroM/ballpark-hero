@@ -1,0 +1,121 @@
+chunks: centre SeasonCentre-NQEFzTdT.js, drill board DrillBoard-DmDjT6NG.js, through ball ThroughBallBoard-CLJ8IKiL.js, training ground TrainingPanel-ogI_BcMA.js
+ok   9. parsed the walker's ACTIONS (17 entries)
+saves: A ST table moments md10 finish call, md13 finish call, md31 finish recreate | B CB table moments md11 tackle call, md16 tackle call, md23 tackle recreate | C CM table moments md7 pass call, md9 pass recreate, md10 finish recreate | D GK table moments md5 save recreate, md9 save call, md13 save call
+ok   the engine produced a season for each board whose first moment is the wanted kind
+ok   1. A desktop wallshot: the page loads no training ground and no drill board (45 scripts)
+ok   2. A desktop wallshot: the kick off card lists the moments ("🎯 3 moments are yours to play this season: matchdays 10, 13 and 31.")
+ok   8. A desktop wallshot: both buttons on the offer are full touch targets (44 and 44 pixels tall, 44 wanted)
+ok   2. A desktop wallshot: the offer says how the board is played before the go is used, and holds the focus ("How it plays: Wall Shot, one shot. A wall with a g", on DIV)
+ok   2. A desktop wallshot: matchday 10 stops for a call (YOUR CALL on matchday 10)
+ok   2. A desktop wallshot: the clock holds a beat before minute 52 (51) and the bar steps aside
+ok   2. A desktop wallshot: reading the offer wrote nothing
+ok   3. A desktop wallshot: the attempt is used before any input ([[10,0,-1]])
+ok   1. A desktop wallshot: the board's code arrived after the press
+ok   8. A desktop wallshot: the board fits (447 to 873 of 1440, page 1440 wide) and the page did not move (0 then 0)
+ok   10. A desktop wallshot: with the board open the focus is inside the Season Centre (on DIV)
+ok   10. A desktop wallshot: no Fixtures button while a moment is on the stage (offer false, board false)
+ok   4. A desktop wallshot: the save holds the moment's entry once the board has reported ([10,0,0,0,0.8,0.3,0.2335])
+ok   10. A desktop wallshot: on the verdict card there is still no Fixtures button and the focus is inside (false, on BUTTON)
+ok   4. A desktop wallshot: the verdict card shows the saved result (missed, 0 stars, entry [10,0,0,0,0.8,0.3,0.2335])
+ok   4. A desktop wallshot: the saved entry replays in node to the same result (0 stars, "Into the wall. Off the gap.")
+ok   4. A desktop wallshot: the deliberate miss is a miss
+ok   5. A desktop wallshot: a YOUR CALL played against the record changes the match (2-0 on the record, 1-0 now)
+ok   5. A desktop wallshot: the card says what it means for the season ("It did not go your way, so the match changes from here. The ")
+ok   5. A desktop wallshot: full time reads 1-0, the decided match is 1-0
+ok   5. A desktop wallshot: the review's finish line carries the plan's 67 points ("Finished 6th of 20 in the Premier League · 67 pts")
+ok   6. A desktop wallshot: the review counts the stars ("🎯 Your moments: 0 of 9 stars from 1 of 3 played. | 🎯 No gains this time")
+ok   6. A desktop wallshot: the banked save is byte for byte the pure functions' output (equal)
+ok   7. A desktop wallshot: after a reload the taken moment is not offered again ("")
+ok   7. A desktop wallshot: the reloaded season shows the decided 1-0 and banks nothing twice
+ok   1. B desktop reduced tackle: the page loads no training ground and no drill board (45 scripts)
+ok   2. B desktop reduced tackle: the kick off card lists the moments ("🎯 3 moments are yours to play this season: matchdays 11, 16 and 23.")
+ok   8. B desktop reduced tackle: both buttons on the offer are full touch targets (44 and 44 pixels tall, 44 wanted)
+ok   2. B desktop reduced tackle: the offer says how the board is played before the go is used, and holds the focus ("How it plays: Tackle, one run. He runs across you ", on DIV)
+ok   2. B desktop reduced tackle: matchday 11 stops for a call (YOUR CALL on matchday 11)
+ok   2. B desktop reduced tackle: the clock holds a beat before minute 63 (62) and the bar steps aside
+ok   2. B desktop reduced tackle: reading the offer wrote nothing
+ok   3. B desktop reduced tackle: the attempt is used before any input ([[11,0,-1]])
+ok   1. B desktop reduced tackle: the board's code arrived after the press
+ok   8. B desktop reduced tackle: the board fits (447 to 873 of 1440, page 1440 wide) and the page did not move (0 then 0)
+ok   10. B desktop reduced tackle: with the board open the focus is inside the Season Centre (on DIV)
+ok   10. B desktop reduced tackle: no Fixtures button while a moment is on the stage (offer false, board false)
+ok   10. B desktop reduced tackle: Escape on the board closes the Season Centre and the go stays used (closed true, [[11,0,-1]])
+ok   7. B desktop reduced tackle: after a reload on the board the moment is not offered again ("🎯 2 moments are yours to play this season: matchdays 16 and 23.")
+ok   7. B desktop reduced tackle: an attempt opened and left is a miss, and matchday 11 shows 1-2 ("astle🎯L 1-2")
+ok   6. B desktop reduced tackle: the left attempt banks as a miss at the review
+ok   1. C phone throughball: the page loads no training ground and no drill board (45 scripts)
+ok   2. C phone throughball: the kick off card lists the moments ("🎯 3 moments are yours to play this season: matchdays 7, 9 and 10.")
+ok   8. C phone throughball: both buttons on the offer are full touch targets (44 and 44 pixels tall, 44 wanted)
+ok   2. C phone throughball: the offer says how the board is played before the go is used, and holds the focus ("How it plays: Through Ball, one ball. Your runner ", on DIV)
+ok   2. C phone throughball: matchday 7 stops for a call (YOUR CALL on matchday 7)
+ok   2. C phone throughball: the clock holds a beat before minute 78 (77) and the bar steps aside
+ok   2. C phone throughball: reading the offer wrote nothing
+ok   3. C phone throughball: the attempt is used before any input ([[7,0,-1]])
+ok   1. C phone throughball: the board's code arrived after the press
+ok   8. C phone throughball: the board fits (12 to 378 of 390, page 390 wide) and the page did not move (559 then 559)
+ok   10. C phone throughball: with the board open the focus is inside the Season Centre (on DIV)
+ok   10. C phone throughball: no Fixtures button while a moment is on the stage (offer false, board false)
+ok   4. C phone throughball: the save holds the moment's entry once the board has reported ([7,0,1,2.78,0.603,2.3615])
+ok   10. C phone throughball: on the verdict card there is still no Fixtures button and the focus is inside (false, on BUTTON)
+ok   4. C phone throughball: the verdict card shows the saved result (made, 1 stars, entry [7,0,1,2.78,0.603,2.3615])
+ok   4. C phone throughball: the saved entry replays in node to the same result (1 stars, "Through. He is in on goal.")
+ok   5. C phone throughball: the card says what it means for the season ("It counts, and the match changes from here. The return game ")
+ok   5. C phone throughball: full time reads 3-1, the decided match is 3-1
+ok   10. C phone throughball: the Fixtures button is back once the moment is done
+ok   5. C phone throughball: the review's finish line carries the plan's 54 points ("Finished 9th of 20 in the Premier League · 54 pts")
+ok   6. C phone throughball: the review counts the stars ("🎯 Your moments: 1 of 9 stars from 1 of 3 played. | 🎯 No gains this time")
+ok   6. C phone throughball: the banked save is byte for byte the pure functions' output (equal)
+ok   7. C phone throughball: after a reload the taken moment is not offered again ("")
+ok   7. C phone throughball: the reloaded season shows the decided 3-1 and banks nothing twice
+ok   1. D phone reduced gloves: the page loads no training ground and no drill board (45 scripts)
+ok   2. D phone reduced gloves: the kick off card lists the moments ("🎯 3 moments are yours to play this season: matchdays 5, 9 and 13.")
+ok   8. D phone reduced gloves: both buttons on the offer are full touch targets (44 and 44 pixels tall, 44 wanted)
+ok   2. D phone reduced gloves: the offer says how the board is played before the go is used, and holds the focus ("How it plays: Glove Save, one shot. Hold and drag ", on DIV)
+ok   2. D phone reduced gloves: matchday 5 stops for a recreate (RECREATE on matchday 5)
+ok   2. D phone reduced gloves: the clock holds a beat before minute 79 (78) and the bar steps aside
+ok   2. D phone reduced gloves: reading the offer wrote nothing
+ok   3. D phone reduced gloves: the attempt is used before any input ([[5,0,-1]])
+ok   1. D phone reduced gloves: the board's code arrived after the press
+ok   8. D phone reduced gloves: the board fits (12 to 378 of 390, page 390 wide) and the page did not move (0 then 0)
+ok   10. D phone reduced gloves: with the board open the focus is inside the Season Centre (on DIV)
+ok   10. D phone reduced gloves: no Fixtures button while a moment is on the stage (offer false, board false)
+ok   4. D phone reduced gloves: the save holds the moment's entry once the board has reported ([5,0,2,1.7,1.0645,1.171])
+ok   10. D phone reduced gloves: on the verdict card there is still no Fixtures button and the focus is inside (false, on BUTTON)
+ok   4. D phone reduced gloves: the verdict card shows the saved result (made, 2 stars, entry [5,0,2,1.7,1.0645,1.171])
+ok   4. D phone reduced gloves: the saved entry replays in node to the same result (2 stars, "Got down to it. Saved.")
+ok   8. D phone reduced gloves: reduced motion, nothing animating on the verdict (0)
+ok   5. D phone reduced gloves: the card says what it means for the season ("The record stands, and the stars are yours.")
+ok   5. D phone reduced gloves: full time reads 1-0, the decided match is 1-0
+ok   10. D phone reduced gloves: the Fixtures button is back once the moment is done
+ok   5. D phone reduced gloves: the review's finish line carries the plan's 81 points ("Champions of the Premier League, top of 20 · 81 pts")
+ok   6. D phone reduced gloves: the review counts the stars ("🎯 Your moments: 2 of 9 stars from 1 of 3 played. | 🎯 No gains this time")
+ok   6. D phone reduced gloves: the banked save is byte for byte the pure functions' output (equal)
+ok   7. D phone reduced gloves: after a reload the taken moment is not offered again ("")
+ok   7. D phone reduced gloves: the reloaded season shows the decided 1-0 and banks nothing twice
+ok   1. E phone reduced gloves: the page loads no training ground and no drill board (45 scripts)
+ok   2. E phone reduced gloves: the kick off card lists the moments ("🎯 3 moments are yours to play this season: matchdays 5, 9 and 13.")
+ok   8. E phone reduced gloves: both buttons on the offer are full touch targets (44 and 44 pixels tall, 44 wanted)
+ok   2. E phone reduced gloves: the offer says how the board is played before the go is used, and holds the focus ("How it plays: Glove Save, one shot. Hold and drag ", on DIV)
+ok   2. E phone reduced gloves: matchday 5 stops for a recreate (RECREATE on matchday 5)
+ok   2. E phone reduced gloves: the clock holds a beat before minute 79 (78) and the bar steps aside
+ok   2. E phone reduced gloves: reading the offer wrote nothing
+ok   3. E phone reduced gloves: the attempt is used before any input ([[5,0,-1]])
+ok   1. E phone reduced gloves: the board's code arrived after the press
+ok   8. E phone reduced gloves: the board fits (12 to 378 of 390, page 390 wide) and the page did not move (0 then 0)
+ok   10. E phone reduced gloves: with the board open the focus is inside the Season Centre (on DIV)
+ok   10. E phone reduced gloves: no Fixtures button while a moment is on the stage (offer false, board false)
+ok   4. E phone reduced gloves: the save holds the moment's entry once the board has reported ([5,0,2,1.7,1.0645,1.1699])
+ok   10. E phone reduced gloves: on the verdict card there is still no Fixtures button and the focus is inside (false, on BUTTON)
+ok   4. E phone reduced gloves: the verdict card shows the saved result (made, 2 stars, entry [5,0,2,1.7,1.0645,1.1699])
+ok   4. E phone reduced gloves: the saved entry replays in node to the same result (2 stars, "Got down to it. Saved.")
+ok   8. E phone reduced gloves: reduced motion, nothing animating on the verdict (0)
+ok   5. E phone reduced gloves: the card says what it means for the season ("The record stands, and the stars are yours.")
+ok   5. E phone reduced gloves: full time reads 1-0, the decided match is 1-0
+ok   10. E phone reduced gloves: the Fixtures button is back once the moment is done
+ok   11. E phone reduced gloves: stepping out early banks nothing and the way back in is still there (phase season_summary, banked undefined, button true)
+ok   11. E phone reduced gloves: Continue on the summary banks the season's stars as the pure function does (phase ballon_dor, ledger {"v":1,"key":"Moment 3|Arsenal|2013|36|0|0|6.8|centre","m":[[5,0,2,1.7,1.0645,1.1699]],"ba)
+ok   11. E phone reduced gloves: the bank's line is in his events, against the 3 moments on offer ("🎯 Season Centre moments: 2 of 9 stars. No gains this time")
+ok   9. no label on the offer, the board or the verdict starts with a walker action ([])
+ok   no page error on any walk ()
+outcomes: A desktop wallshot: missed with 0 stars (call, the record had a make); B desktop reduced tackle: left on the board; C phone throughball: made with 1 stars (call, the record had a miss); D phone reduced gloves: made with 2 stars (recreate, the record had a make); E phone reduced gloves: made with 2 stars (recreate, the record had a make); E phone reduced gloves: left early, banked at Continue
+playSeasonMoments: 117 checks, 0 failed
