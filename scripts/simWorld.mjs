@@ -12,6 +12,7 @@
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import {gzipSync} from 'node:zlib';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -34,6 +35,23 @@ const {
   projectedUclBracket, EURO_CLUBS, LEAGUE_NATIONS, ERA_LEAGUES,
 } = cm;
 
+// Genuine original starts preserve the unchanged in-flight group regression sample.
+const beforeOriginalBoot = Math.random, originalBootDraws = [];
+let originalBundle, uclProof;
+Math.random = () => { const value = ((originalBootDraws.length * 1664525 + 1013904223) >>> 0) / 4294967296; originalBootDraws.push(value); return value; };
+try { uclProof = await import('./qa/managerUclLeagueKit.mjs'); originalBundle = await uclProof.bundleUcl({original:true}); }
+finally { Math.random = beforeOriginalBoot; }
+const originalReceipts = [], receiptRoot = path.join(uclProof.OUT,'world-regression');
+fs.mkdirSync(receiptRoot,{recursive:true});
+function originalGroupStart(club) {
+  const state = originalBundle.value.E.startCareer(club);
+  if (state.uclGroup?.format || state.uclWorld?.length !== 7) throw new Error('Original Europe fixture must retain its seven AI groups');
+  const bytes = JSON.stringify(state), file = `original-start-${originalReceipts.length}.json.gz`;
+  fs.writeFileSync(path.join(receiptRoot,file),gzipSync(bytes));
+  originalReceipts.push({club,file,sha256:uclProof.sha(bytes)});
+  return state;
+}
+fs.writeFileSync(path.join(receiptRoot,'original-source.json'),JSON.stringify({base:uclProof.BASE,loaded:originalBundle.loaded,startupDraws:originalBootDraws,scope:'Additional original-module startup is separate from the existing harness action stream.'},null,2));
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
@@ -118,7 +136,7 @@ console.log('3) The Champions League bracket holds together');
   let withMe = 0, champions = 0, seasons = 0, pensSeen = 0;
   for (let i = 0; i < 25; i++) {
     // Real Madrid start in Europe every time, which exercises the "I am in it" path
-    let s = startCareer('Real Madrid');
+    let s = originalGroupStart('Real Madrid');
     s = runSeason(s);
     const br = s.uclBracket;
     if (!br) { fail('no bracket was ever built'); break; }
@@ -201,7 +219,7 @@ console.log('4) Europe finishes without me');
 {
   let ranWithoutMe = 0, tested = 0;
   for (let i = 0; i < 40; i++) {
-    let s = runSeason(startCareer('Real Madrid'));
+    let s = runSeason(originalGroupStart('Real Madrid'));
     if (s.uclExit !== 'group') continue;
     tested++;
     const br = s.uclBracket ?? [];
@@ -285,7 +303,7 @@ console.log('8) All eight UCL groups play, and the bracket is earned');
   for (const lg of REAL_LEAGUES) for (const c of lg.clubs) realPool.add(c);
 
   // Day one: the whole draw exists before a ball is kicked.
-  let s = startCareer('Real Madrid');
+  let s = originalGroupStart('Real Madrid');
   const world0 = s.uclWorld ?? [];
   console.log(`   fresh career: ${world0.length} AI groups alongside mine`);
   if (world0.length !== 7) fail(`expected 7 AI groups, got ${world0.length}`);
@@ -395,7 +413,7 @@ console.log('8) All eight UCL groups play, and the bracket is earned');
   }
 
   // An old save mid-campaign is caught up, not broken.
-  let o = startCareer('Real Madrid');
+  let o = originalGroupStart('Real Madrid');
   guard = 0;
   while ((o.uclGroup?.matchday ?? 6) < 2 && guard < 60) {
     guard++;
@@ -420,16 +438,27 @@ console.log('8) All eight UCL groups play, and the bracket is earned');
   }
 
   // Rollover: a fresh draw, zeroed, next season.
-  let n = runSeason(startCareer('Real Madrid'));
+  let n = runSeason(originalGroupStart('Real Madrid'));
   n = finishSeason(n).state;
-  n = startNextSeason(n);
-  if (n.uclGroup) {
-    const w = n.uclWorld ?? [];
-    if (w.length !== 7) fail('the new season did not redraw the AI groups');
-    if (w.some(g => g.matchday !== 0 || g.table.some(r => r.pts !== 0))) fail('AI groups carried results across the summer');
-  } else if ((n.uclWorld ?? []).length) {
-    fail('no group stage next season but AI groups exist anyway');
+  const originalRollover = uclProof.seeded(163,()=>originalBundle.value.E.startNextSeason(uclProof.copy(n)));
+  fs.writeFileSync(path.join(receiptRoot,'original-rollover.json.gz'),gzipSync(JSON.stringify({input:n,result:originalRollover})));
+  if (originalRollover.value.uclGroup) {
+    const w = originalRollover.value.uclWorld ?? [];
+    if (w.length !== 7) fail('the original new season did not redraw the AI groups');
+    if (w.some(g => g.matchday !== 0 || g.table.some(r => r.pts !== 0))) fail('original AI groups carried results across the summer');
+  } else if ((originalRollover.value.uclWorld ?? []).length) {
+    fail('no original group stage next season but AI groups exist anyway');
   }
+  n = startNextSeason(n);
+  if (n.uclFormat !== 'league36') fail('current modern rollover does not retain its new league format');
+  if (n.uclGroup) {
+    uclProof.scheduleProof(n.uclGroup,n.uclField,n.clubName);
+    if (n.uclGroup.matchday !== 0 || n.uclGroup.table.some(r => r.pts !== 0)) fail('modern league phase carried results across the summer');
+    if ((n.uclWorld ?? []).length) fail('modern league phase also drew legacy AI groups');
+  } else if ((n.uclWorld ?? []).length) {
+    fail('no modern league phase next season but legacy AI groups exist anyway');
+  }
+  fs.writeFileSync(path.join(receiptRoot,'current-rollover.json.gz'),gzipSync(JSON.stringify(n)));
 
   // The flag map covers every league id, with no strays.
   for (const lg of REAL_LEAGUES) {
@@ -447,5 +476,25 @@ console.log('8) All eight UCL groups play, and the bracket is earned');
   console.log('   groups lockstep, projection honest, bracket earned, old saves caught up, flags mapped');
 }
 
+// The new-format season is additional to every unchanged legacy group sample.
+console.log('9) A fresh modern36 season conserves the field and finishes every round');
+{
+  const start = startCareer('Real Madrid');
+  uclProof.scheduleProof(start.uclGroup,start.uclField,start.clubName);
+  const season = uclProof.runSeason({E:cm},start,1253);
+  const state = season.state, bracket = state.uclBracket ?? [];
+  uclProof.scheduleProof(state.uclGroup,state.uclField,state.clubName);
+  if (state.uclGroup.matchday !== 8 || state.uclGroup.results.length !== 144) fail('modern league phase did not finish all144 matches');
+  for (const [round,count] of [['PO',8],['R16',8],['QF',4],['SF',2],['F',1]]) {
+    const ties = bracket.filter(t => t.round === round);
+    if (ties.length !== count || ties.some(t => !t.winner)) fail(`modern ${round} did not settle its ${count} ties`);
+  }
+  const own = season.reports.filter(r => r.competition === 'uclGroup');
+  if (own.length !== 8 || own.filter(r=>r.home===state.clubName).length !== 4 || own.filter(r=>r.away===state.clubName).length !== 4) fail('modern managed club did not play eight real reports, four home and four away');
+  if (state.week !== state.calendar.length) fail('modern season left actual calendar entries unplayed');
+  fs.writeFileSync(path.join(receiptRoot,'modern-full-season.json.gz'),gzipSync(JSON.stringify({start,season})));
+  console.log(`   36 clubs,144 results,${own.length} managed league fixtures, playoff8/R16eight and a saved final winner`);
+}
+fs.writeFileSync(path.join(receiptRoot,'original-start-receipts.json'),JSON.stringify(originalReceipts,null,2));
 console.log(failures === 0 ? '\nALL WORLD CHECKS PASSED' : `\n${failures} FAILURES`);
 process.exit(failures === 0 ? 0 : 1);

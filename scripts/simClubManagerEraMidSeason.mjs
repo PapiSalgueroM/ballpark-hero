@@ -86,6 +86,8 @@ import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {gzipSync} from 'node:zlib';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -161,6 +163,21 @@ const {
   sortedUclGroup,
 } = cm;
 
+// The old modern-group witnesses begin with actual original09df constructor saves.
+const beforeOriginalBoot = Math.random, originalBootDraws = [];
+let uclProof, originalBundle;
+Math.random = () => { const value = ((originalBootDraws.length * 1664525 + 1013904223) >>> 0) / 4294967296; originalBootDraws.push(value); return value; };
+try { uclProof = await import('./qa/managerUclLeagueKit.mjs'); originalBundle = await uclProof.bundleUcl({original:true}); }
+finally { Math.random = beforeOriginalBoot; }
+const receiptRoot = path.join(uclProof.OUT,'midseason-regression');
+fs.mkdirSync(receiptRoot,{recursive:true});
+fs.writeFileSync(path.join(receiptRoot,'original-source.json'),JSON.stringify({base:uclProof.BASE,loaded:originalBundle.loaded,startupDraws:originalBootDraws,scope:'Additional original-module startup is separate from the existing seeded action stream.'},null,2));
+function originalGroupStart(club) {
+  const state = originalBundle.value.E.startCareer(club);
+  assert.equal(state.uclGroup?.format,undefined);assert.equal(state.uclWorld?.length,7);
+  fs.writeFileSync(path.join(receiptRoot,`${CONTROL || 'healthy'}-${club.replace(/[^A-Za-z0-9]+/g,'-')}-original.json.gz`),gzipSync(JSON.stringify(state)));
+  return state;
+}
 /* ---------- driving the engine the way the page does ---------- */
 const leaguePlayed = s => s.calendar.slice(0, s.week).filter(e => e.type === 'league').length;
 
@@ -426,7 +443,7 @@ function runCareer(bucket, tag, club, eraId, tally) {
     tally.checkpoints += 1; tally.rows += o.rows; tally.leagues += o.leagues; tally.frozen += o.frozen;
     tally.adjacentLevel += o.adjacentLevel; tally.adjacentPairs += o.adjacentPairs;
   };
-  let s = eraId ? startCareer(club, eraId) : startCareer(club);
+  let s = eraId ? startCareer(club, eraId) : club === 'Arsenal' ? originalGroupStart(club) : startCareer(club);
   world('day one', s);
   step(s);
   if (isEra) checkRender(`${tag} day one`, s, tally);
@@ -460,6 +477,25 @@ const modern = newTally();
 runCareer('modern', 'Arsenal', 'Arsenal', undefined, modern);
 runCareer('modern', 'Inter Miami', 'Inter Miami', undefined, modern);
 
+// A complete current-format campaign is separate from every old sample and floor.
+const modernStart = startCareer('Arsenal');
+uclProof.scheduleProof(modernStart.uclGroup,modernStart.uclField,modernStart.clubName);
+const modernSeason = uclProof.runSeason({E:cm},modernStart,1254);
+const modernEnd = modernSeason.state;
+uclProof.scheduleProof(modernEnd.uclGroup,modernEnd.uclField,modernEnd.clubName);
+assert.equal(modernEnd.uclGroup.matchday,8);assert.equal(modernEnd.uclGroup.results.length,144);
+assert.equal(modernEnd.week,modernEnd.calendar.length);
+for (const [round,count] of [['PO',8],['R16',8],['QF',4],['SF',2],['F',1]]) {
+  const ties = (modernEnd.uclBracket ?? []).filter(t=>t.round===round);
+  assert.equal(ties.length,count);assert(ties.every(t=>t.winner));
+}
+const beforeModernRender = JSON.stringify(modernEnd);
+const modernRender = uclProof.seeded(1254,()=>render(UclGroupsCard,{career:modernEnd}));
+assert.equal((modernRender.value.match(/data-club=/g) ?? []).length,36);
+assert(modernRender.value.includes('Champions League league table'));
+assert.deepEqual(modernRender.draws,[]);assert.equal(JSON.stringify(modernEnd),beforeModernRender);
+fs.writeFileSync(path.join(receiptRoot,`${CONTROL || 'healthy'}-modern-season.json.gz`),gzipSync(JSON.stringify({start:modernStart,season:modernSeason,render:modernRender})));
+console.log('Additional modern witness:36 saved rows,144 games,eight matchdays,PO8/fullR16 and read-only actual table markup.');
 /* ---------- the report ---------- */
 let failures = 0;
 function section(title, bucket, lines, extra) {

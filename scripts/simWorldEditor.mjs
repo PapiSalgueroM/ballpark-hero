@@ -46,6 +46,10 @@
      lateucl     next season's field read after the swap   -> section 2 red
      euroone     season one Europe reads the edited league -> section 2 red
      homecountry a moved club's nationality ask follows the league -> section 3 red
+     observer    drops one observed actual league report -> three section 2 counts red
+     tablecount  copies own W+D+L minus one -> three section 2 table counts red
+     historycount copies full h2h count minus one -> three section 2 history counts red
+     calendarcount copies completed week minus one -> three section 2 completion counts red
 
    Measured headroom (SIM_SEED unset and 1, 2, 3, 4): section 3 is
    deterministic (stature comes from the baked rosters, no draw), and its
@@ -65,11 +69,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
 let failures = 0;
+const failureMessages = [];
 let checks = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+const fail = m => { failures += 1; failureMessages.push(m); console.error('  FAIL: ' + m); };
 const ok = (cond, m) => { checks += 1; if (!cond) fail(m); return cond; };
 const CONTROL = process.env.SIM_WORLD_EDITOR_CONTROL ?? '';
-const CONTROLS = ['', 'noregister', 'leak', 'dupe', 'staticrank', 'stature', 'noload', 'lateucl', 'euroone', 'homecountry'];
+const CONTROLS = ['', 'noregister', 'leak', 'dupe', 'staticrank', 'stature', 'noload', 'lateucl', 'euroone', 'homecountry', 'observer', 'tablecount', 'historycount', 'calendarcount'];
 if (!CONTROLS.includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(1); }
 
 /* A worktree has no node_modules of its own, so esbuild is found by walking up. */
@@ -161,11 +166,13 @@ function withSeed(seed, fn) {
 }
 const SEED = Number.isFinite(Number(process.env.SIM_SEED)) ? Number(process.env.SIM_SEED) : 964;
 
-function runSeason(engine, s) {
+function runSeason(engine, s, observe) {
   let guard = 0;
   while (s.week < s.calendar.length && guard < 200) {
     guard++;
+    const week = s.week;
     const r = engine.playNextEntry(s, { skipHalftime: true });
+    if (observe && r.report) observe({ week, kind: r.kind, report: r.report });
     s = r.state;
     if (r.kind === 'seasonOver') break;
   }
@@ -262,9 +269,50 @@ function seasonOn(edit, club, label) {
   const s = cm.startCareer(club, undefined, undefined, undefined, undefined, edit);
   ok(!!s.uclGroup === homeEurope, `${label}: season one Europe is ${!!s.uclGroup} on the edited world and ${homeEurope} in the real one`);
   ok(leagueRounds(s) === realCal, `${label}: ${leagueRounds(s)} league rounds, a real ${L} club plays ${realCal}`);
-  const end = runSeason(cm, s);
-  const leagueOpps = (end.resultLog ?? []).filter(r => r.competition === 'league').map(r => r.opp);
+  const returnedReports = [], observedLeagueReports = [];
+  let omitted = false;
+  const end = runSeason(cm, s, entry => {
+    returnedReports.push(entry);
+    if (entry.report.competition !== 'league') return;
+    if (CONTROL === 'observer' && !omitted) { omitted = true; return; }
+    observedLeagueReports.push(entry.report);
+  });
+  const leagueOpps = observedLeagueReports.map(r => r.home === club ? r.away : r.home);
   ok(leagueOpps.length === realCal, `${label}: played ${leagueOpps.length} league matches of ${realCal}`);
+  const own = end.table.find(r => r.club === club);
+  const ownPlayed = own ? own.w + own.d + own.l : null;
+  const leagueHistory = (end.h2h ?? []).filter(r => r.season === end.season && r.comp === 'league');
+  const originalStateBytes = JSON.stringify(end), originalReportBytes = JSON.stringify(returnedReports);
+  const actualObservation = { ownPlayed, leagueHistoryCount: leagueHistory.length, week: end.week, calendarLength: end.calendar.length };
+  const observation = { ...actualObservation };
+  const observedKey = { tablecount: 'ownPlayed', historycount: 'leagueHistoryCount', calendarcount: 'week' }[CONTROL];
+  if (observedKey) observation[observedKey] -= 1;
+  ok(observation.ownPlayed === realCal, `${label}: final own table records ${observation.ownPlayed} league matches of ${realCal}`);
+  ok(observation.leagueHistoryCount === realCal, `${label}: full season head-to-head records ${observation.leagueHistoryCount} league matches of ${realCal}`);
+  ok(observation.week === observation.calendarLength, `${label}: calendar completed at ${observation.week} of ${observation.calendarLength}`);
+  let observedControl = null;
+  if (observedKey) {
+    const changedKeys = Object.keys(actualObservation).filter(key => observation[key] !== actualObservation[key]);
+    const restored = { ...observation, [observedKey]: actualObservation[observedKey] };
+    const effective = changedKeys.length === 1 && changedKeys[0] === observedKey && observation[observedKey] === actualObservation[observedKey] - 1;
+    const stateHeld = JSON.stringify(end) === originalStateBytes, reportsHeld = JSON.stringify(returnedReports) === originalReportBytes;
+    ok(effective && ownPlayed === realCal && leagueHistory.length === realCal && end.week === end.calendar.length, `${label}: ${CONTROL} must change only its one observed count over a healthy actual season`);
+    ok(JSON.stringify(restored) === JSON.stringify(actualObservation) && stateHeld && reportsHeld, `${label}: ${CONTROL} must restore its entire observation with all original engine state and reports held`);
+    observedControl = { kind: 'Copied actual outcome observation', key: observedKey, before: actualObservation, after: observation, restored, changedKeys, effective, stateHeld, reportsHeld };
+  }
+  const retainedLog = end.resultLog ?? [];
+  const actualLeagueReports = returnedReports.filter(r => r.report.competition === 'league');
+  const logComposition = Object.fromEntries(['league', 'cup', 'uclGroup', 'uclKo'].map(id => [id, retainedLog.filter(r => r.competition === id).length]));
+  const receiptRoot = path.resolve(ROOT, 'manager-ucl-league-artifacts', 'world-editor');
+  fs.mkdirSync(receiptRoot, { recursive: true });
+  fs.writeFileSync(path.join(receiptRoot, `${CONTROL || 'healthy'}-${label.replace(/[^A-Za-z0-9]+/g, '-').toLowerCase()}.json`), JSON.stringify({
+    label, realCal, returnedReports, observedLeagueReports, actualLeagueCount: actualLeagueReports.length,
+    observedLeagueCount: leagueOpps.length, ownPlayed, leagueHistory, complete: end.week === end.calendar.length,
+    resultLogCap: cm.SAVE_CAPS.resultLog, logComposition, retainedLog, finalState: end,
+    control: CONTROL === 'observer' ? { kind: 'Actual returned-report observer omission', omitted, before: actualLeagueReports.length, after: leagueOpps.length } : observedControl,
+  }, null, 2));
+  if (CONTROL === 'observer') ok(omitted && actualLeagueReports.length === realCal && leagueOpps.length === realCal - 1, `${label}: observer omission must change exactly one actual returned league report`);
+  console.log(`   returned ${actualLeagueReports.length} league reports, table ${ownPlayed}, full history ${leagueHistory.length}; retained log ${logComposition.league} league/${retainedLog.length} total (cap ${cm.SAVE_CAPS.resultLog})`);
   const strangers = leagueOpps.filter(o => !lineup.includes(o));
   ok(strangers.length === 0, `${label}: league fixtures against clubs outside the edited ${L}: ${[...new Set(strangers)].slice(0, 4).join(', ')}`);
   ok(sameSet(end.table.map(r => r.club), lineup), `${label}: my final table is not the edited ${L} lineup`);
@@ -300,7 +348,8 @@ function seasonOn(edit, club, label) {
     league,
     clubs: (league.id === L ? cm.sortedWorldTable(end, L, end.table) : end.world?.[league.id] ? cm.sortedWorldTable(end, league.id, end.world[league.id].table) : []).map(r => r.club),
   }));
-  const earned = cm.uclFieldFromTables(played, end.uclBracket?.find(t => t.round === 'F')?.winner);
+  const fieldSize = next.uclFormat === 'league36' || next.uclGroup?.format === 'league36' ? 36 : 32;
+  const earned = cm.uclFieldFromTables(played, end.uclBracket?.find(t => t.round === 'F')?.winner, fieldSize);
   const field = next.uclField ?? [];
   ok(field.length > 0 && JSON.stringify(field) === JSON.stringify(earned), `${label}: next season's Champions League is not the one the played tables earned (${field.slice(0, 4).join(', ')} against ${earned.slice(0, 4).join(', ')})`);
   const europeans = new Set(played.flatMap(t => t.clubs));
@@ -482,4 +531,21 @@ function sectionTwo(chaosEdit) {
 
 fs.rmSync(TMP, { recursive: true, force: true });
 console.log(`\nsimWorldEditor${CONTROL ? ` (control ${CONTROL})` : ''}: ${checks} checks, ${failures} failures`);
+if (CONTROL === 'observer') {
+  if (failures !== 3 || failureMessages.some(m => !/played \d+ league matches of \d+$/.test(m))) {
+    throw new Error('Observer control requires exactly the three real returned-report count failures, no unrelated failures');
+  }
+  console.log('CONTROL observer FIRED: exactly three changed returned-report count assertions, all table/history/calendar predicates held.');
+}
+const observedFailures = {
+  tablecount: /final own table records \d+ league matches of \d+$/,
+  historycount: /full season head-to-head records \d+ league matches of \d+$/,
+  calendarcount: /calendar completed at \d+ of \d+$/,
+};
+if (observedFailures[CONTROL]) {
+  if (failures !== 3 || failureMessages.some(m => !observedFailures[CONTROL].test(m))) {
+    throw new Error(`${CONTROL} requires exactly its three copied-observation assertion failures, no unrelated failures`);
+  }
+  console.log(`CONTROL ${CONTROL} FIRED: exactly three changed ${CONTROL} assertions, all other predicates and full original engine state/reports held; copied observations restored.`);
+}
 process.exit(failures ? 1 : 0);

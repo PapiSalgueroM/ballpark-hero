@@ -180,10 +180,16 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simUclFormatHistory simClubManagerEraUcl; do
+          for harness in simUclFormatHistory simClubManagerEraUcl simWorld simWorldEditor simClubManagerEraMidSeason simGuideHeadings simSiteSearch; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-ucl-league-artifacts/$harness.log" || failed=1
-            grep -Eq 'PASS[[:space:]]+sim' "manager-ucl-league-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\.mjs([[:space:]]|$)" "manager-ucl-league-artifacts/$harness.log" || failed=1
             if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-ucl-league-artifacts/$harness.log"; then failed=1; fi
+          done
+          for control in observer tablecount historycount calendarcount; do
+            status=0
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SIM_WORLD_EDITOR_CONTROL="$control" node scripts/simWorldEditor.mjs 2>&1 | tee "manager-ucl-league-artifacts/world-editor-control-$control.log" || status=$?
+            test "$status" = 1 || failed=1
+            grep -Fq "CONTROL $control FIRED: exactly three" "manager-ucl-league-artifacts/world-editor-control-$control.log" || failed=1
           done
           for control in gap legs table; do
             NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" UCL_FORMAT_CONTROL="$control" node scripts/simUclFormatHistory.mjs 2>&1 | tee "manager-ucl-league-artifacts/format-control-$control.log" || failed=1
@@ -196,7 +202,7 @@ jobs:
           failed=0
           for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-ucl-league-artifacts/$harness.log" || failed=1
-            grep -Eq 'PASS[[:space:]]+sim' "manager-ucl-league-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\.mjs([[:space:]]|$)" "manager-ucl-league-artifacts/$harness.log" || failed=1
             if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-ucl-league-artifacts/$harness.log"; then failed=1; fi
           done
           exit "$failed"
