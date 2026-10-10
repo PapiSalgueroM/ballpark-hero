@@ -1,0 +1,77 @@
+
+5. Every draw comes from keyedRng
+  ok: no Math.random in the code of the five files
+  ok: 16000 careers ran with Math.random made to throw
+  ok: the same seeds replay to the same careers
+
+1. Era rules
+  ok: nfl:now: 7 rounds, 32 teams, routes power, small
+  ok: nfl:y2005: 7 rounds, 32 teams, routes power, small
+  ok: nba:now: 2 rounds, 30 teams, routes one, three
+  ok: nba:y2004: 2 rounds, 29 teams, routes prep, one, three
+  ok: mlb:now: 20 rounds, 30 teams, routes hs, juco, college
+  ok: mlb:y2004: 50 rounds, 30 teams, routes hs, juco, college
+  ok: nhl:now: 7 rounds, 32 teams, routes junior, college, europe
+  ok: nhl:y2006: 7 rounds, 30 teams, routes junior, college, europe
+
+2. The team always equals the holder of the pick
+  ok: nfl:now: all 1486 drafted players joined the holder of their pick, undrafted share 25.7%
+  ok: nfl:y2005: all 1506 drafted players joined the holder of their pick, undrafted share 24.7%
+  ok: nba:now: all 1564 drafted players joined the holder of their pick, undrafted share 21.8%
+  ok: nba:y2004: all 1558 drafted players joined the holder of their pick, undrafted share 22.1%
+  ok: mlb:now: all 1529 drafted players joined the holder of their pick, undrafted share 23.5%
+  ok: mlb:y2004: all 1572 drafted players joined the holder of their pick, undrafted share 21.4%
+  ok: nhl:now: all 1568 drafted players joined the holder of their pick, undrafted share 21.6%
+  ok: nhl:y2006: all 1581 drafted players joined the holder of their pick, undrafted share 20.9%
+
+3. Median pick falls as the stock decile rises
+  ok: nfl:now: rho -0.928, decile medians 225 225 225 188 149 113 80 53 31 12, top over bottom 0.053, middle deciles at 0.585 of the draft, largest next over previous decile 1.000
+  ok: nfl:y2005: rho -0.927, decile medians 225 225 225 181 145 112 80 53 31 10, top over bottom 0.044, middle deciles at 0.573 of the draft, largest next over previous decile 1.000
+  ok: nba:now: rho -0.969, decile medians 61 61 61 51 42 33 25 19 13 7, top over bottom 0.115, middle deciles at 0.625 of the draft, largest next over previous decile 1.000
+  ok: nba:y2004: rho -0.969, decile medians 59 59 58 48 41 33 26 20 14 8, top over bottom 0.136, middle deciles at 0.638 of the draft, largest next over previous decile 1.000
+  ok: mlb:now: rho -0.967, decile medians 601 601 601 510 427 339 271 188 127 53, top over bottom 0.088, middle deciles at 0.638 of the draft, largest next over previous decile 1.000
+  ok: mlb:y2004: rho -0.971, decile medians 1501 1501 1462 1218 986 789 619 447 308 130, top over bottom 0.087, middle deciles at 0.592 of the draft, largest next over previous decile 1.000
+  ok: nhl:now: rho -0.972, decile medians 225 225 221 186 144 115 89 65 44 22, top over bottom 0.098, middle deciles at 0.577 of the draft, largest next over previous decile 1.000
+  ok: nhl:y2006: rho -0.972, decile medians 211 211 208 162 138 111 82 61 42 23, top over bottom 0.107, middle deciles at 0.593 of the draft, largest next over previous decile 1.000
+
+4. NBA lottery frequencies against the verified combinations
+  ok: nba:now: seed 1 won pick 1 14.32% (verified 14%); pick 1: largest |z| 1.88, chi-square 14.4; pick 2: largest |z| 2.40, chi-square 25.7; pick 3: largest |z| 2.24, chi-square 11.1; pick 4: largest |z| 3.43, chi-square 21.6
+  ok: nba:y2004: seed 1 won pick 1 24.90% (verified 25%); pick 1: largest |z| 1.93, chi-square 9.1; pick 2: largest |z| 2.40, chi-square 20.5; pick 3: largest |z| 2.13, chi-square 12.1
+
+4b. Every round after the first is plain inverse record
+  ok: nfl:now: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nfl:y2005: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nba:now: 200 orders, rounds 2 to 2 all inverse record
+  ok: nba:y2004: 200 orders, rounds 2 to 2 all inverse record
+  ok: mlb:now: 200 orders, rounds 2 to 20 all inverse record, round 1 too
+  ok: mlb:y2004: 200 orders, rounds 2 to 50 all inverse record, round 1 too
+  ok: nhl:now: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nhl:y2006: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+
+6. Every card says what it does
+  ok: nfl:now: 6060 choices and 2000 showcases did exactly what they said; 1332 drills graded the same whichever approach
+  ok: nfl:y2005: 6060 choices and 2000 showcases did exactly what they said; 1282 drills graded the same whichever approach
+  ok: nba:now: 4048 choices and 2000 showcases did exactly what they said; 1315 drills graded the same whichever approach
+  ok: nba:y2004: 3386 choices and 2000 showcases did exactly what they said; 1311 drills graded the same whichever approach
+  ok: mlb:now: 4096 choices and 2000 showcases did exactly what they said; 1352 drills graded the same whichever approach
+  ok: mlb:y2004: 4084 choices and 2000 showcases did exactly what they said; 1308 drills graded the same whichever approach
+  ok: nhl:now: 4060 choices and 2000 showcases did exactly what they said; 1367 drills graded the same whichever approach
+  ok: nhl:y2006: 4060 choices and 2000 showcases did exactly what they said; 1305 drills graded the same whichever approach
+
+7. Growth never passes the ceiling
+  ok: nfl:now: 18000 steps, none past the ceiling
+  ok: nfl:y2005: 18000 steps, none past the ceiling
+  ok: nba:now: 13976 steps, none past the ceiling
+  ok: nba:y2004: 12652 steps, none past the ceiling
+  ok: mlb:now: 14072 steps, none past the ceiling
+  ok: mlb:y2004: 14048 steps, none past the ceiling
+  ok: nhl:now: 14000 steps, none past the ceiling
+  ok: nhl:y2006: 14000 steps, none past the ceiling
+
+8. Old saves and corrupt blocks
+  ok: 13 missing or corrupt blocks read as none, 3 good ones round trip, a renamed pending card is dropped
+
+9. The scouts path is byte equal to its recording
+  ok: all 16 digests of seed set b equal the recording (16000 roads, recorded on v24.21.0 at 09df145a)
+
+simCareerPreDraft [seed set b]: ALL GREEN

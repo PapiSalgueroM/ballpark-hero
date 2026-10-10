@@ -1,0 +1,25 @@
+seed-a: SEEDSET=a node scripts/simCareerPreDraft.mjs
+seed-b: SEEDSET=b node scripts/simCareerPreDraft.mjs
+seed-c: SEEDSET=c node scripts/simCareerPreDraft.mjs
+seed-d: SEEDSET=d node scripts/simCareerPreDraft.mjs
+seed-e: SEEDSET=e node scripts/simCareerPreDraft.mjs
+c-randomteam: SIM_PRE_DRAFT_CONTROL=randomteam node scripts/simCareerPreDraft.mjs
+c-flatstock: SIM_PRE_DRAFT_CONTROL=flatstock node scripts/simCareerPreDraft.mjs
+c-flatlottery: SIM_PRE_DRAFT_CONTROL=flatlottery node scripts/simCareerPreDraft.mjs
+c-mathrandom: SIM_PRE_DRAFT_CONTROL=mathrandom node scripts/simCareerPreDraft.mjs
+c-cardwords: SIM_PRE_DRAFT_CONTROL=cardwords node scripts/simCareerPreDraft.mjs
+c-showcasewords: SIM_PRE_DRAFT_CONTROL=showcasewords node scripts/simCareerPreDraft.mjs
+c-erarule: SIM_PRE_DRAFT_CONTROL=erarule node scripts/simCareerPreDraft.mjs
+c-ceiling: SIM_PRE_DRAFT_CONTROL=ceiling node scripts/simCareerPreDraft.mjs
+c-ladderskip: SIM_PRE_DRAFT_CONTROL=ladderskip node scripts/simCareerPreDraft.mjs
+c-undraftedtop: SIM_PRE_DRAFT_CONTROL=undraftedtop node scripts/simCareerPreDraft.mjs
+c-squeeze: SIM_PRE_DRAFT_CONTROL=squeeze node scripts/simCareerPreDraft.mjs
+c-laterlottery: SIM_PRE_DRAFT_CONTROL=laterlottery node scripts/simCareerPreDraft.mjs
+c-flatlater: SIM_PRE_DRAFT_CONTROL=flatlater node scripts/simCareerPreDraft.mjs
+c-loadershallow: SIM_PRE_DRAFT_CONTROL=loadershallow node scripts/simCareerPreDraft.mjs
+c-gradeshift: SIM_PRE_DRAFT_CONTROL=gradeshift node scripts/simCareerPreDraft.mjs
+c-extradraw: SIM_PRE_DRAFT_CONTROL=extradraw node scripts/simCareerPreDraft.mjs
+c-record-refused: SIM_PRE_DRAFT_CONTROL=gradeshift SIM_PRE_DRAFT_RECORD=1 SIM_PRE_DRAFT_BASE=09df145abfb241679022b41903d2f19bc254ebf9 node scripts/simCareerPreDraft.mjs; code=$?; git status --short scripts/data | head -3; exit $code
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+prospect: node scripts/simUsCareerProspect.mjs

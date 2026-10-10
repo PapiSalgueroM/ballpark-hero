@@ -1,0 +1,85 @@
+  control extradraw: mutated src/lib/careerPreDraft.ts
+
+5. Every draw comes from keyedRng
+  ok: no Math.random in the code of the five files
+  ok: 16000 careers ran with Math.random made to throw
+  ok: the same seeds replay to the same careers
+
+1. Era rules
+  ok: nfl:now: 7 rounds, 32 teams, routes power, small
+  ok: nfl:y2005: 7 rounds, 32 teams, routes power, small
+  ok: nba:now: 2 rounds, 30 teams, routes one, three
+  ok: nba:y2004: 2 rounds, 29 teams, routes prep, one, three
+  ok: mlb:now: 20 rounds, 30 teams, routes hs, juco, college
+  ok: mlb:y2004: 50 rounds, 30 teams, routes hs, juco, college
+  ok: nhl:now: 7 rounds, 32 teams, routes junior, college, europe
+  ok: nhl:y2006: 7 rounds, 30 teams, routes junior, college, europe
+
+2. The team always equals the holder of the pick
+  ok: nfl:now: all 1520 drafted players joined the holder of their pick, undrafted share 24.0%
+  ok: nfl:y2005: all 1471 drafted players joined the holder of their pick, undrafted share 26.5%
+  ok: nba:now: all 1578 drafted players joined the holder of their pick, undrafted share 21.1%
+  ok: nba:y2004: all 1583 drafted players joined the holder of their pick, undrafted share 20.8%
+  ok: mlb:now: all 1530 drafted players joined the holder of their pick, undrafted share 23.5%
+  ok: mlb:y2004: all 1595 drafted players joined the holder of their pick, undrafted share 20.3%
+  ok: nhl:now: all 1549 drafted players joined the holder of their pick, undrafted share 22.6%
+  ok: nhl:y2006: all 1565 drafted players joined the holder of their pick, undrafted share 21.8%
+
+3. Median pick falls as the stock decile rises
+  ok: nfl:now: rho -0.932, decile medians 225 225 225 178 144 110 79 51 29 11, top over bottom 0.049, middle deciles at 0.567 of the draft, largest next over previous decile 1.000
+  ok: nfl:y2005: rho -0.930, decile medians 225 225 225 185 144 110 77 51 31 12, top over bottom 0.053, middle deciles at 0.566 of the draft, largest next over previous decile 1.000
+  ok: nba:now: rho -0.972, decile medians 61 61 58 51 42 33 25 18 12 6, top over bottom 0.098, middle deciles at 0.625 of the draft, largest next over previous decile 1.000
+  ok: nba:y2004: rho -0.971, decile medians 59 59 56 45 38 32 25 19 14 8, top over bottom 0.136, middle deciles at 0.603 of the draft, largest next over previous decile 1.000
+  ok: mlb:now: rho -0.970, decile medians 601 601 601 511 409 316 237 186 124 56, top over bottom 0.093, middle deciles at 0.604 of the draft, largest next over previous decile 1.000
+  ok: mlb:y2004: rho -0.974, decile medians 1501 1501 1416 1177 963 768 611 436 296 120, top over bottom 0.080, middle deciles at 0.577 of the draft, largest next over previous decile 1.000
+  ok: nhl:now: rho -0.972, decile medians 225 225 223 186 151 117 90 69 46 25, top over bottom 0.109, middle deciles at 0.598 of the draft, largest next over previous decile 1.000
+  ok: nhl:y2006: rho -0.974, decile medians 211 211 204 171 140 108 78 56 38 20, top over bottom 0.095, middle deciles at 0.589 of the draft, largest next over previous decile 1.000
+
+4. NBA lottery frequencies against the verified combinations
+  ok: nba:now: seed 1 won pick 1 13.61% (verified 14%); pick 1: largest |z| 2.74, chi-square 16.2; pick 2: largest |z| 2.90, chi-square 19.7; pick 3: largest |z| 1.74, chi-square 7.5; pick 4: largest |z| 2.27, chi-square 14.0
+  ok: nba:y2004: seed 1 won pick 1 24.79% (verified 25%); pick 1: largest |z| 2.57, chi-square 11.0; pick 2: largest |z| 2.15, chi-square 12.0; pick 3: largest |z| 1.49, chi-square 4.1
+
+4b. Every round after the first is plain inverse record
+  ok: nfl:now: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nfl:y2005: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nba:now: 200 orders, rounds 2 to 2 all inverse record
+  ok: nba:y2004: 200 orders, rounds 2 to 2 all inverse record
+  ok: mlb:now: 200 orders, rounds 2 to 20 all inverse record, round 1 too
+  ok: mlb:y2004: 200 orders, rounds 2 to 50 all inverse record, round 1 too
+  ok: nhl:now: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+  ok: nhl:y2006: 200 orders, rounds 2 to 7 all inverse record, round 1 too
+
+6. Every card says what it does
+  ok: nfl:now: 6060 choices and 2000 showcases did exactly what they said; 1346 drills graded the same whichever approach
+  ok: nfl:y2005: 6060 choices and 2000 showcases did exactly what they said; 1344 drills graded the same whichever approach
+  ok: nba:now: 4056 choices and 2000 showcases did exactly what they said; 1319 drills graded the same whichever approach
+  ok: nba:y2004: 3444 choices and 2000 showcases did exactly what they said; 1376 drills graded the same whichever approach
+  ok: mlb:now: 4032 choices and 2000 showcases did exactly what they said; 1337 drills graded the same whichever approach
+  ok: mlb:y2004: 4037 choices and 2000 showcases did exactly what they said; 1324 drills graded the same whichever approach
+  ok: nhl:now: 4060 choices and 2000 showcases did exactly what they said; 1369 drills graded the same whichever approach
+  ok: nhl:y2006: 4060 choices and 2000 showcases did exactly what they said; 1333 drills graded the same whichever approach
+
+7. Growth never passes the ceiling
+  ok: nfl:now: 18000 steps, none past the ceiling
+  ok: nfl:y2005: 18000 steps, none past the ceiling
+  ok: nba:now: 13992 steps, none past the ceiling
+  ok: nba:y2004: 12768 steps, none past the ceiling
+  ok: mlb:now: 13944 steps, none past the ceiling
+  ok: mlb:y2004: 13954 steps, none past the ceiling
+  ok: nhl:now: 14000 steps, none past the ceiling
+  ok: nhl:y2006: 14000 steps, none past the ceiling
+
+8. Old saves and corrupt blocks
+  ok: 13 missing or corrupt blocks read as none, 3 good ones round trip, a renamed pending card is dropped
+
+9. The scouts path is byte equal to its recording
+  FAIL: nfl:now: the states after the showcase and after the draft are not the recorded bytes. First three roads recorded [{"approach":"skip","grade":null,"stock":3,"pick":null,"team":"BUF"},{"approach":"skip","grade":null,"stock":79,"pick":19,"team":"DAL"},{"approach":"steady","grade":"C","stock":68,"pick":51,"team":"KC"}], now [{"approach":"skip","grade":null,"stock":3,"pick":null,"team":"BUF"},{"approach":"skip","grade":null,"stock":79,"pick":19,"team":"DAL"},{"approach":"steady","grade":"C","stock":68,"pick":51,"team":"KC"}]
+  FAIL: nfl:y2005: the states after the showcase and after the draft are not the recorded bytes. First three roads recorded [{"approach":"steady","grade":"A","stock":73,"pick":43,"team":"HOU"},{"approach":"skip","grade":null,"stock":54,"pick":62,"team":"MIN"},{"approach":"steady","grade":"C","stock":85,"pick":16,"team":"CLE"}], now [{"approach":"steady","grade":"A","stock":73,"pick":43,"team":"HOU"},{"approach":"skip","grade":null,"stock":54,"pick":62,"team":"MIN"},{"approach":"steady","grade":"C","stock":85,"pick":16,"team":"CLE"}]
+  FAIL: nba:now: the states after the showcase and after the draft are not the recorded bytes. First three roads recorded [{"approach":"skip","grade":null,"stock":33,"pick":49,"team":"MEM"},{"approach":"steady","grade":"C","stock":73,"pick":8,"team":"SAC"},{"approach":"allout","grade":"D","stock":14,"pick":null,"team":"NOP"}], now [{"approach":"skip","grade":null,"stock":33,"pick":49,"team":"MEM"},{"approach":"steady","grade":"B","stock":76,"pick":7,"team":"WAS"},{"approach":"allout","grade":"D","stock":14,"pick":null,"team":"NOP"}]
+  FAIL: nba:y2004: the states after the showcase and after the draft are not the recorded bytes. First three roads recorded [{"approach":"steady","grade":"A","stock":54,"pick":26,"team":"HOU"},{"approach":"allout","grade":"C","stock":59,"pick":14,"team":"NOH"},{"approach":"allout","grade":"D","stock":32,"pick":45,"team":"MEM"}], now [{"approach":"steady","grade":"A","stock":54,"pick":26,"team":"HOU"},{"approach":"allout","grade":"C","stock":59,"pick":14,"team":"NOH"},{"approach":"allout","grade":"D","stock":32,"pick":45,"team":"MEM"}]
+  FAIL: mlb:now: the states after the showcase and after the draft are not the recorded bytes. First three roads recorded [{"approach":"skip","grade":null,"stock":1,"pick":null,"team":"TBR"},{"approach":"steady","grade":"C","stock":79,"pick":48,"team":"NYY"},{"approach":"steady","grade":"D","stock":6,"pick":null,"team":"WSN"}], now [{"approach":"skip","grade":null,"stock":1,"pick":null,"team":"TBR"},{"approach":"steady","grade":"B","stock":82,"pick":38,"team":"MIN"},{"approach":"steady","grade":"D","stock":6,"pick":null,"team":"WSN"}]
+  FAIL: mlb:y2004: the states after the showcase and after the draft are not the recorded bytes. First three roads recorded [{"approach":"steady","grade":"A","stock":40,"pick":1002,"team":"CIN"},{"approach":"allout","grade":"D","stock":0,"pick":1425,"team":"LAD"},{"approach":"allout","grade":"C","stock":77,"pick":200,"team":"SDP"}], now [{"approach":"steady","grade":"A","stock":40,"pick":1002,"team":"CIN"},{"approach":"allout","grade":"C","stock":5,"pick":1313,"team":"MIN"},{"approach":"allout","grade":"C","stock":77,"pick":200,"team":"SDP"}]
+  FAIL: nhl:now: the states after the showcase and after the draft are not the recorded bytes. First three roads recorded [{"approach":"allout","grade":"A","stock":45,"pick":131,"team":"MIN"},{"approach":"skip","grade":null,"stock":0,"pick":214,"team":"DET"},{"approach":"steady","grade":"C","stock":25,"pick":198,"team":"NYI"}], now [{"approach":"allout","grade":"A","stock":45,"pick":131,"team":"MIN"},{"approach":"skip","grade":null,"stock":0,"pick":214,"team":"DET"},{"approach":"steady","grade":"D","stock":23,"pick":207,"team":"NSH"}]
+  FAIL: nhl:y2006: the states after the showcase and after the draft are not the recorded bytes. First three roads recorded [{"approach":"steady","grade":"A","stock":22,"pick":null,"team":"NYI"},{"approach":"allout","grade":"D","stock":0,"pick":200,"team":"PIT"},{"approach":"skip","grade":null,"stock":80,"pick":23,"team":"PHX"}], now [{"approach":"steady","grade":"B","stock":19,"pick":null,"team":"NYI"},{"approach":"allout","grade":"C","stock":0,"pick":200,"team":"PIT"},{"approach":"skip","grade":null,"stock":80,"pick":23,"team":"PHX"}]
+
+simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
