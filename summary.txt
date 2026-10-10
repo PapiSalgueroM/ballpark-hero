@@ -1,0 +1,3 @@
+simNoRivalNames exit=0 8s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 11s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simLegalPages exit=0 1s | simLegalPages: all green
