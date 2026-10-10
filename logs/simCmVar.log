@@ -1,0 +1,43 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Celtic played 12 matches, 7 of them league kickoffs',
++     stack: 'AssertionError [ERR_ASSERTION]: Celtic played 12 matches, 7 of them league kickoffs\n' +
++       '    at Object.coverage (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:376:18)\n' +
++       '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:484:13)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:510:46',
++     status: 'failed',
++     title: 'asks for reviews only where the competition uses them and plays the same match everywhere else'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:495:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:510:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'asks for reviews only where the competition uses them and plays the same match everywhere else',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Celtic played 12 matches, 7 of them league kickoffs',
+      stack: 'AssertionError [ERR_ASSERTION]: Celtic played 12 matches, 7 of them league kickoffs\n' +
+        '    at Object.coverage (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:376:18)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:484:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:510:46'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
