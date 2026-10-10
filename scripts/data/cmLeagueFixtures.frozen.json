@@ -69,6 +69,15 @@
       "fixtures": 306,
       "sha256": "30a2328118048877b830d97ad672e249335c8d9a1456c24ed1d7b979557e090b"
     },
+    "premier-2026-27-v1": {
+      "leagueId": "premier",
+      "file": "src/data/clubManagerPremierFixtures2026.ts",
+      "receipt": "scripts/data/clubManagerPremierFixtures2026.receipt.json",
+      "clubs": 20,
+      "rounds": 38,
+      "fixtures": 380,
+      "sha256": "2a0b44638bbb042ccb0436ff08f143abfce70f19921ab0e7f83b1a8c29c4279c"
+    },
     "primeira-2026-27-v1": {
       "leagueId": "primeira",
       "file": "src/data/clubManagerPrimeiraFixtures2026.ts",

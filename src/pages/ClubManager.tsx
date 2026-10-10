@@ -90,10 +90,10 @@ function ScreenLoading({ children, compact = false }: { children: ReactNode; com
 
 /** Round 832: a past era's squads did not arrive (offline, a dropped
  *  connection, a new deploy). Says so and offers the fetch again. */
-function EraLoadFailed({ label, onRetry, onBack, backLabel = 'Pick another season' }: { label: string; onRetry: () => void; onBack?: () => void; backLabel?: string }) {
+function EraLoadFailed({ label, noun = 'squads', onRetry, onBack, backLabel = 'Pick another season' }: { label: string; noun?: string; onRetry: () => void; onBack?: () => void; backLabel?: string }) {
   return (
     <div role="alert" data-testid="cm-era-load-failed" className="max-w-md mx-auto my-12 rounded-xl border border-border bg-card p-5 text-center">
-      <div className="text-sm font-bold text-foreground">The {label} squads did not load.</div>
+      <div className="text-sm font-bold text-foreground">The {label} {noun} did not load.</div>
       <div className="mt-1 text-xs text-muted-foreground">Check your connection, then try again. Nothing has been lost.</div>
       <button
         onClick={onRetry}
@@ -340,7 +340,23 @@ const ClubManager = () => {
       /* Round 928 review: opening an era slot moves the index first, so a
          failed fetch used to leave the player stuck here, away from managers
          that would open fine. The way back to them is right beside the retry. */
-      return shell(<EraLoadFailed label={g.bootError} onRetry={g.retryBoot} onBack={g.showSlots} backLabel="Back to your managers" />);
+      return shell(<EraLoadFailed label={g.bootError} noun={g.bootNoun} onRetry={g.retryBoot} onBack={g.showSlots} backLabel="Back to your managers" />);
+    }
+    /* Round 1225 review: a new career waiting for its league's real fixture
+       list. The wait says what it is waiting for, and it pulls itself into
+       view: the picker leaves the page scrolled to its last button, and the
+       review measured a bare "Loading…" sitting a whole screen above where the
+       player was looking for all eight seconds. A list that failed or ran out
+       of time says so and asks, rather than starting a generated season
+       under a promise of the real one. */
+    if (g.startWait) {
+      return shell(
+        <div ref={revealRef}>
+          {g.startWait.failed
+            ? <EraLoadFailed label={g.startWait.label} noun="fixture list" onRetry={g.retryStart} onBack={g.startWithoutList} backLabel="Start on generated fixtures" />
+            : <div role="status" data-testid="cm-start-wait" className="text-center py-24 text-muted-foreground animate-pulse">Loading the {g.startWait.label} fixture list…</div>}
+        </div>,
+      );
     }
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
@@ -639,7 +655,7 @@ const ClubManager = () => {
                 return (
                   <button
                     key={c.name}
-                    onClick={() => g.chooseClub(c.name)}
+                    onClick={() => g.chooseClub(c.name, pickEra)}
                     className={cn(
                       'rounded-xl border p-3 text-left transition-all',
                       sel ? 'bg-primary/10 border-primary' : 'bg-card border-border hover:border-primary',

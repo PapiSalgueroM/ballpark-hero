@@ -6,8 +6,9 @@
  *   CM_LEAGUE_FIXTURES_ONLY=<leagueId> node scripts/simCmLeagueFixtures.mjs   one league (not ONLY: the suite
  *       runner passes ONLY=<harness name> down to every harness, and a league filter that read it would match
  *       no ledger and call nothing green; a filter that matches no ledger is a failure here for the same reason)
- *   CM_LEAGUE_FIXTURES_EXPECT=<n> CM_LEAGUE_FIXTURES_EXPECT_FROZEN=<m> node scripts/simCmLeagueFixtures.mjs
- *       the gate's own counts: n ledgers on disk, m of them with a frozen line. Give both in a gate line.
+ *   CM_LEAGUE_FIXTURES_EXPECT=<n> CM_LEAGUE_FIXTURES_EXPECT_FROZEN=<m> CM_LEAGUE_FIXTURES_EXPECT_BOUND=<b> node scripts/simCmLeagueFixtures.mjs
+ *       the gate's own counts: n ledgers on disk, m of them with a frozen line, b of them read by the game.
+ *       Give all three in a gate line.
  *   CM_LEAGUE_FIXTURES_CONTROL=<name> [CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=<leagueId>] node scripts/simCmLeagueFixtures.mjs
  *
  * PURE DATA. It starts no career and plays no match. It finds ledgers by listing
@@ -60,8 +61,39 @@
  *     disk with no frozen line: it is still held to A to G and named on the
  *     summary line. Whoever runs the gate asserts both counts
  *     (CM_LEAGUE_FIXTURES_EXPECT and CM_LEAGUE_FIXTURES_EXPECT_FROZEN).
- * Sections H (the game's registry agrees with the disk) and J (Help names the
- * registered leagues) belong to the round that binds the ledgers, not to this one.
+ *
+ * And, since Round 1225 (the round that binds the ledgers), for every ledger the GAME reads:
+ *  H. The registry. REAL_LEAGUE_FIXTURES in src/lib/clubManagerFixtures.ts is what a career
+ *     reads. Its keys are exactly BOUND_KEYS below, the memory of what has been bound: a
+ *     key that leaves the registry would hand every save that holds it a generated season,
+ *     so a registered key missing from that list and a listed key missing from the registry
+ *     are both RED. Each line's key, league and start year are those of the list it hands
+ *     out (read here the way the game reads it, the lazy ones through their own loader),
+ *     that list has the digest of its frozen line, keys are unique, a league and start year
+ *     with two lists names the newer first, and what the line says the order is the order
+ *     OF (first published in a month, or as it stood on a day) is what the receipt bears
+ *     out; and the words the game prints for that value are the words written out a second
+ *     time in this file (wordsOfAsOf), so a list read on one day cannot be shown as the list
+ *     as first published, or the other way round, by rewording one function (section J
+ *     holds Help's rendered words the same way, and scripts/simCmRealFixtures.mjs group
+ *     eligibility holds the Calendar's whole sentence, league by league).
+ *     A ledger on disk that the game does not read is UNBOUND: named on the summary
+ *     line, counted for the gate (CM_LEAGUE_FIXTURES_EXPECT_BOUND), and green.
+ *  J. Help tells the truth. The fixture paragraph of the rendered Help names exactly the
+ *     registered leagues, each under the words the registry gives its list, by the game's
+ *     own league names; it holds no link (a publisher's address in a .tsx fails
+ *     simLiveScores, and the Calendar already names the sources); and its one worked
+ *     example is the first two fixtures of that club in the Premier League ledger. And the
+ *     What's New entry that announced the lists in files of their own (found by the mark on its
+ *     list of leagues, read as code with comments taken out) names exactly those leagues, by
+ *     the game's names, and counts them right; each example it gives (marked
+ *     data-cm-fixture-example) is that club's first two matchdays in its ledger, opponents
+ *     and venues in order. And the two screens that speak about a job
+ *     taken part way through a season say what the engine does (Round 1225 review): Help
+ *     says the weeks before a mid season takeover were played in the real order and that a
+ *     club you move to during a season keeps generated fixtures, and the dugout screen's
+ *     takeover note does not say the game draws its own fixture list
+ *     (scripts/simCmRealFixtures.mjs group takeover is the engine side of both).
  *
  * CONTROLS. Every run ends by proving its own checks: each control below is
  * applied to an in memory copy of each frozen ledger in turn, must first show
@@ -90,8 +122,24 @@
  *                 after the list came out (leagues that have one)      E
  *   badrecheck    the recorded recheck made to report a difference
  *                 (receipts that hold a recheck)                       E
- *   unfrozen      the ledger's line gone from the frozen file          I
+ *   unfrozen      the ledger's line gone from the frozen file          I (H too when the game reads it)
  *   nodigest      the receipt loses the digest it recorded             I
+ * and, on the ledgers the game reads (falseasof above turns H red on those as well):
+ *   unregistered  the league's line gone from the registry             H J
+ *   unlisted      the league's key gone from BOUND_KEYS                H
+ *   wrongasof     the registry line says the other thing about what
+ *                 the order of its list is the order of                H J
+ *   falsewords    the registry value right and the printed words wrong
+ *                 (a reworded realFixtureListAsOfText)                 H J
+ *   helpdrift     the league gone from the Help paragraph              J
+ *   helplink      a link planted in the Help paragraph                 J (red for "help", not for a league)
+ *   takeoverform  the dugout note says the game draws its own list     J (red for "help")
+ *   takeoverhelp  Help files a job taken part way through a season
+ *                 under generated fixtures again                       J (red for "help")
+ *   newsdrift     the league gone from the What's New entry (the
+ *                 leagues whose list is in a file of its own)          J
+ *   newsexample   a What's New example with its two opponents swapped
+ *                 (the leagues the entry gives an example from)        J
  * CM_LEAGUE_FIXTURES_CONTROL=<name> leaves that one fault in place instead: the
  * run then exits 1 with a last line that says the control FIRED as expected, or
  * exits 3 with a last line that says it MISFIRED or could not run.
@@ -100,7 +148,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, gameLeagues, ledgerFilesOnDisk, loadLedgers } from './lib/cmFixtureSources/gameBundle.mjs';
+import { createRequire } from 'node:module';
+import { ROOT, gameLeagues, importBundled, ledgerFilesOnDisk, loadLedgers } from './lib/cmFixtureSources/gameBundle.mjs';
 import { PARSERS, READ_AT, dayOf, ledgerDigest, listAsOfFrom } from './lib/cmFixtureSources/build.mjs';
 import { cmFixtureLeague } from './lib/cmFixtureSources/leagues.mjs';
 
@@ -113,6 +162,22 @@ const EXPECT_FROZEN = process.env.CM_LEAGUE_FIXTURES_EXPECT_FROZEN || '';
    pending or frozen, and nothing else is let off: every other ledger is the tool's and is held to all of it.
    A second key never joins this list, a new ledger is written by the tool. */
 const PRE_TOOL_KEYS = ['premier-2026-27-v1'];
+/* Section H's memory: every key the game has ever bound, one a line. A key joins this list in the commit
+   that adds its line to REAL_LEAGUE_FIXTURES and never leaves it once a release has shipped it. To hold a
+   league back BEFORE it ships, take out its registry line and its line here in one commit. */
+const BOUND_KEYS = [
+  'premier-2026-27-v1',
+  'championship-2026-27-v1',
+  'laliga-2026-27-v1',
+  'seriea-2026-27-v1',
+  'bundesliga-2026-27-v1',
+  'eredivisie-2026-27-v1',
+  'primeira-2026-27-v1',
+  'superlig-2026-27-v1',
+  'bundesliga2-2026-27-v1',
+  'ligue2-2026-27-v1',
+];
+const EXPECT_BOUND = process.env.CM_LEAGUE_FIXTURES_EXPECT_BOUND || '';
 const CONTROL = process.env.CM_LEAGUE_FIXTURES_CONTROL || '';
 const CONTROL_LEAGUE = process.env.CM_LEAGUE_FIXTURES_CONTROL_LEAGUE || '';
 const FROZEN_REL = 'scripts/data/cmLeagueFixtures.frozen.json';
@@ -120,7 +185,7 @@ const KNOWN_FIELDS = ['schemaVersion', 'key', 'leagueId', 'seasonStartYear', 'co
 /* duplicate is the mark Round 1184's receipt puts on the one row its official source prints twice. */
 const ROW_FIELDS = ['sourceLine', 'ref', 'round', 'home', 'away', 'duplicate'];
 const WIKI_HOST = /(^|\.)(wikipedia|wikimedia|wikidata|fandom)\./i;
-const SECTIONS = { A: 'shape', B: 'no club twice in a matchday', C: 'each pair once at each ground', D: "the game's own clubs", E: 'the drift guard: ledger equals each source in the receipt', F: 'two independent sources', G: 'nothing excluded got in', I: 'frozen' };
+const SECTIONS = { A: 'shape', B: 'no club twice in a matchday', C: 'each pair once at each ground', D: "the game's own clubs", E: 'the drift guard: ledger equals each source in the receipt', F: 'two independent sources', G: 'nothing excluded got in', H: "the game's registry", I: 'frozen', J: 'Help tells the truth' };
 
 const hostOf = url => { try { return new URL(url).host.toLowerCase().replace(/^www\./, ''); } catch { return ''; } };
 const isStr = v => typeof v === 'string' && v.length > 0;
@@ -201,6 +266,8 @@ function evaluate(world) {
     judgeExcluded(e, L, clubs, rounds, red);
   }
   judgeFrozen(world, reds);
+  judgeRegistry(world, reds);
+  judgeHelp(world, reds);
   return reds;
 }
 
@@ -344,21 +411,215 @@ function judgeFrozen(world, reds) {
   }
 }
 
+/* ---- H. the game's registry ---- */
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const monthOf = day => (/^\d{4}-\d{2}-\d{2}/.test(String(day)) ? `${MONTHS[Number(String(day).slice(5, 7)) - 1]} ${String(day).slice(0, 4)}` : null);
+const dayWords = day => (/^\d{4}-\d{2}-\d{2}/.test(String(day)) ? `${Number(String(day).slice(8, 10))} ${monthOf(day)}` : null);
+const leagueOfKey = key => String(key).replace(/-\d{4}-\d{2}-v\d+$/, '');
+const versionOfKey = key => Number((/-v(\d+)$/.exec(String(key)) || [])[1] || 0);
+/** What a receipt bears out about the order of its list, in the registry's own shape. Null when it bears out neither. */
+function asOfFromReceipt(R) {
+  const sources = R && Array.isArray(R.sources) ? R.sources : [];
+  if (!sources.length) return null;
+  if (sources.some(s => 'listAsOf' in s)) {
+    const release = sources.find(s => s.listAsOf === 'release day');
+    if (release) return monthOf(release.released) ? { published: monthOf(release.released) } : null;
+    return dayWords(R.readOn) ? { stoodOn: dayWords(R.readOn) } : null;
+  }
+  /* Round 1184's receipt (written by hand before the tool): both sources are articles of the day the list came out. */
+  const months = new Set(sources.map(s => monthOf(s.published)));
+  return months.size === 1 && !months.has(null) ? { published: [...months][0] } : null;
+}
+/** Round 1225 review: the words a registry value must print, written out here a SECOND time on purpose. The game's
+ *  own are realFixtureListAsOfText in src/lib/clubManagerFixtures.ts, and the Calendar and Help both print through
+ *  it, so comparing one of them with the other proves nothing: the review's mutation made that function say
+ *  "first published in June 2026" for the five lists read on 10 October 2026 and sections H and J stayed green.
+ *  Section H holds the value to the receipt; these words hold what a player reads to the value. */
+const wordsOfAsOf = asOf => (!asOf ? null : 'published' in asOf ? `the list as first published in ${asOf.published}` : `the list as it stood on ${asOf.stoodOn}`);
+function judgeRegistry(world, reds) {
+  const registry = world.registry || [];
+  const bound = world.bound || [];
+  const lines = world.frozen && world.frozen.ledgers ? world.frozen.ledgers : {};
+  const inScope = leagueId => !world.only || leagueId === world.only;
+  const seen = new Map();
+  for (const [i, r] of registry.entries()) {
+    if (!inScope(r.leagueId)) continue;
+    const red = msg => reds.push({ id: r.leagueId, section: 'H', msg });
+    if (seen.has(r.key)) red(`the key ${r.key} is in the registry twice`);
+    seen.set(r.key, i);
+    if (!bound.includes(r.key)) red(`${r.key} is registered in the game and is not on BOUND_KEYS in this harness`);
+    const older = registry.slice(0, i).find(x => x.leagueId === r.leagueId && x.seasonStartYear === r.seasonStartYear && versionOfKey(x.key) <= versionOfKey(r.key));
+    if (older) red(`${r.key} is listed after ${older.key}, and a new career takes the first list of a league and start year: the newer one goes first`);
+    if (r.error || !r.ledger) { red(`the registry could not hand out the list of ${r.key}: ${r.error || 'it has neither a list nor a loader'}`); continue; }
+    if (r.ledger.key !== r.key || r.ledger.leagueId !== r.leagueId || r.ledger.seasonStartYear !== r.seasonStartYear) red(`the line says ${r.key}, ${r.leagueId}, ${r.seasonStartYear} and the list it hands out says ${r.ledger.key}, ${r.ledger.leagueId}, ${r.ledger.seasonStartYear}`);
+    const line = lines[r.key];
+    if (!line) red(`${r.key} is registered and has no frozen line`);
+    else if (ledgerDigest(r.ledger) !== line.sha256) red(`the list the registry hands out for ${r.key} does not have the digest of its frozen line`);
+    const e = world.entries.find(x => x.ledger && x.ledger.key === r.key);
+    if (e && e.receipt) {
+      const want = asOfFromReceipt(e.receipt);
+      if (JSON.stringify(want) !== JSON.stringify(r.asOf)) red(`the registry says the order is ${JSON.stringify(r.asOf)} and the receipt bears out ${JSON.stringify(want)}`);
+    }
+    if (r.asOfText !== wordsOfAsOf(r.asOf)) red(`the game prints "${r.asOfText}" for the order of ${r.key}, and its registry line ${JSON.stringify(r.asOf)} reads "${wordsOfAsOf(r.asOf)}"`);
+  }
+  for (const key of bound) {
+    if (!inScope(leagueOfKey(key)) || registry.some(r => r.key === key)) continue;
+    reds.push({ id: leagueOfKey(key), section: 'H', msg: `${key} was bound and has left the registry: a save that holds it would read a generated season` });
+  }
+}
+
+/* ---- J. Help tells the truth ---- */
+function judgeHelp(world, reds) {
+  const help = world.help;
+  if (!help) return;
+  const registry = (world.registry || []).filter(r => !world.only || r.leagueId === world.only);
+  if (!help.found) { reds.push({ id: 'help', section: 'J', msg: 'the rendered Help has no paragraph marked data-cm-help="real-fixtures"' }); return; }
+  if (help.links) reds.push({ id: 'help', section: 'J', msg: `the fixture paragraph of Help holds ${help.links} link(s): the Calendar names the sources, Help holds none` });
+  /* Round 1225 review: a job taken part way through a season. The picker's takeover (startCareer, then
+     startMidSeason) keeps the list's key, so the manager before you played the real matchdays in their order
+     and the Calendar says so; a club moved to during a season (joinClubNow) plays a generated list.
+     scripts/simCmRealFixtures.mjs group takeover proves both in the engine. These lines hold the two screens
+     that speak about it to that: the reviewed build's dugout note said "this game draws its own fixture list
+     every save" and its Help filed "a job you take part way through a season" under generated fixtures. */
+  if ((world.registry || []).length) {
+    const say = msg => reds.push({ id: 'help', section: 'J', msg });
+    if (/take part way through a season keep generated/i.test(help.text)) say('Help files a job taken part way through a season under generated fixtures, and the picker\'s takeover plays the real list');
+    if (!/Take a club over part way through that first season and the weeks before you were played in the real order too\./.test(help.text)) say('Help does not say that the weeks before a mid season takeover were played in the real order');
+    if (!/a club you move to during a season keep generated fixtures/.test(help.text)) say('Help does not say that a club you move to during a season keeps generated fixtures');
+    if (!help.form) say('the dugout screen (ManagerForm.tsx) could not be read, so its takeover note was not checked');
+    else if (/(draws|shuffles|makes) its own fixture list|own fixture list every save/i.test(help.form)) say('the dugout screen says the game draws its own fixture list every save, and a takeover in a league with a real list plays the real one');
+  }
+  for (const r of registry) {
+    const red = msg => reds.push({ id: r.leagueId, section: 'J', msg });
+    const named = help.leagues.find(l => l.id === r.leagueId);
+    const row = world.leagues.find(l => l.id === r.leagueId);
+    if (!named) { red(`the game binds ${r.key} and Help does not name the league`); continue; }
+    if (!row || named.name !== row.name) red(`Help calls the league "${named.name}", the game calls it "${row ? row.name : 'nothing'}"`);
+    const group = help.groups.find(g => g.ids.includes(r.leagueId));
+    if (!group || group.text !== r.asOfText) red(`Help files the league under "${group ? group.text : 'nothing'}", the registry says "${r.asOfText}"`);
+    else if (group.text !== wordsOfAsOf(r.asOf)) red(`Help prints "${group.text}" for the league, and its registry line ${JSON.stringify(r.asOf)} reads "${wordsOfAsOf(r.asOf)}"`);
+  }
+  for (const l of help.leagues) {
+    if (world.only && l.id !== world.only) continue;
+    if (!(world.registry || []).some(r => r.leagueId === l.id)) reds.push({ id: l.id, section: 'J', msg: `Help names ${l.name} and the game binds no list for it` });
+  }
+  /* What's New. The entry that announced the lists in files of their own (the Premier League had its own entry
+     a release earlier) names exactly those leagues, by the game's names, and counts them right. */
+  const news = world.news;
+  const own = (world.registry || []).filter(r => r.rides === 'file');
+  if (news && (own.length || news.found)) {
+    if (!news.found) reds.push({ id: 'help', section: 'J', msg: "What's New has no entry marked data-cm-fixture-leagues, and the game binds lists it never announced" });
+    else {
+      for (const r of own) {
+        if (world.only && r.leagueId !== world.only) continue;
+        const row = world.leagues.find(l => l.id === r.leagueId);
+        if (!news.ids.includes(r.leagueId)) reds.push({ id: r.leagueId, section: 'J', msg: `the game binds ${r.key} and What's New does not list the league` });
+        else if (!row || !news.text.includes(row.name)) reds.push({ id: r.leagueId, section: 'J', msg: `What's New lists ${r.leagueId} and does not print the game's name for it` });
+      }
+      for (const id of news.ids) {
+        if (world.only && id !== world.only) continue;
+        if (!own.some(r => r.leagueId === id)) reds.push({ id, section: 'J', msg: `What's New says ${id} plays its real list and the game binds none for it` });
+      }
+      if (!world.only && news.count !== news.ids.length) reds.push({ id: 'help', section: 'J', msg: `What's New says "${news.countWord} more leagues" and lists ${news.ids.length}` });
+      /* Round 1225 review: the typed examples of the entry (each marked data-cm-fixture-example="<league>:<club>"),
+         worked out again from the ledger they are about: that club's first two MATCHDAYS, opponent and venue, in
+         that order. The entry speaks of matchdays because that is what a list is the order of: the first version
+         said a club "opens" against its matchday one opponent, and that match had been moved behind matchday two. */
+      for (const ex of news.examples || []) {
+        if (world.only && ex.leagueId !== world.only) continue;
+        const red = msg => reds.push({ id: ex.leagueId, section: 'J', msg });
+        const e = world.entries.find(x => x.ledger && x.ledger.leagueId === ex.leagueId);
+        if (!own.some(r => r.leagueId === ex.leagueId)) { red(`What's New gives an example from ${ex.leagueId} and the game binds no list in a file of its own for it`); continue; }
+        if (!e) continue;   /* the ledger's file is gone: section I says so, and there is nothing to work the example out from */
+        const fixture = round => { const p = (e.ledger.rounds[round] || []).find(x => x[0] === ex.club || x[1] === ex.club); return p ? { home: p[0] === ex.club, opponent: p[0] === ex.club ? p[1] : p[0] } : null; };
+        const [a, b] = [fixture(0), fixture(1)];
+        const escaped = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const said = f => `(?:${f.home ? 'at home to|host' : 'away at|visit|go to'}) ${escaped(f.opponent)}`;
+        const words = f => (f ? `${f.home ? 'at home to' : 'away at'} ${f.opponent}` : 'no fixture');
+        if (!a || !b || !ex.text.includes(ex.club) || !new RegExp(`${said(a)}[\\s\\S]*${said(b)}`).test(ex.text)) red(`What's New's example for ${ex.club} is not that club's first two matchdays in the ledger (${words(a)}, then ${words(b)})`);
+      }
+    }
+  }
+  /* The one worked example, worked out again from the ledger it is about. */
+  const premier = world.entries.find(x => x.ledger && x.ledger.leagueId === 'premier');
+  const told = /Example: ([^.]+?) start (at home to|away at) ([^,]+), then (visit|host) ([^.]+)\./.exec(help.text);
+  if (premier && (world.registry || []).some(r => r.leagueId === 'premier') && (!world.only || world.only === 'premier')) {
+    const red = msg => reds.push({ id: 'premier', section: 'J', msg });
+    if (!told) red('Help has no worked example of the form "Example: <club> start at home to <club>, then visit <club>."');
+    else {
+      const [, club, firstVenue, first, secondVenue, second] = told;
+      const fixture = round => { const p = (premier.ledger.rounds[round] || []).find(x => x[0] === club || x[1] === club); return p ? { home: p[0] === club, opponent: p[0] === club ? p[1] : p[0] } : null; };
+      const [a, b] = [fixture(0), fixture(1)];
+      if (!a || !b || a.opponent !== first || a.home !== (firstVenue === 'at home to') || b.opponent !== second || b.home !== (secondVenue === 'host')) red(`Help's worked example is not the first two fixtures of ${club} in the ledger`);
+    }
+  }
+}
+
+/** The registry the game reads and the Help it shows, each read the way the game would. */
+async function gameRegistryAndHelp() {
+  const from = createRequire(path.join(ROOT, 'package.json'));
+  /* React is loaded here, not bundled: its server renderer is CommonJS and cannot ride in an ES bundle. The
+     component is compiled with the classic transform, which reads React off the global scope as it renders. */
+  const React = from('react');
+  const { renderToStaticMarkup } = from('react-dom/server');
+  globalThis.React = React;
+  const mod = await importBundled([
+    "import { REAL_LEAGUE_FIXTURES, realFixtureListAsOfText } from '@/lib/clubManagerFixtures';",
+    "export { default as Help } from '@/components/club-manager/ClubManagerHelp';",
+    'export async function registry() {',
+    '  const out = [];',
+    '  for (const e of REAL_LEAGUE_FIXTURES) {',
+    '    let ledger = null, error = null;',
+    '    try { ledger = e.ledger ?? (e.load ? await e.load() : null); } catch (err) { error = String((err as Error)?.message ?? err); }',
+    "    out.push({ key: e.key, leagueId: e.leagueId, seasonStartYear: e.seasonStartYear, asOf: { ...e.asOf }, asOfText: realFixtureListAsOfText(e.asOf), rides: e.ledger ? 'engine' : 'file', ledger, error });",
+    '  }',
+    '  return out;',
+    '}',
+  ].join('\n') + '\n');
+  const registry = JSON.parse(JSON.stringify(await mod.registry()));
+  const html = renderToStaticMarkup(React.createElement(mod.Help));
+  const para = (/<p data-cm-help="real-fixtures">([\s\S]*?)<\/p>/.exec(html) || [])[1];
+  const unescape = s => s.replace(/&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  const help = para === undefined ? { found: false, leagues: [], groups: [], links: 0, text: '' } : {
+    found: true,
+    leagues: [...para.matchAll(/data-cm-fixture-league="([^"]+)">([^<]*)</g)].map(m => ({ id: m[1], name: unescape(m[2]) })),
+    groups: [...para.matchAll(/data-cm-fixture-asof="([^"]*)">([^<]*)</g)].map(m => ({ ids: m[1].split(' ').filter(Boolean), text: unescape(m[2]) })),
+    links: (para.match(/<a[\s>]/g) || []).length + (para.match(/https?:\/\//g) || []).length,
+    text: unescape(para.replace(/<[^>]*>/g, '')),
+  };
+  /* The dugout screen, where a mid season takeover is picked: read as code with its comments taken out. */
+  const formFile = path.join(ROOT, 'src/components/club-manager/ManagerForm.tsx');
+  help.form = fs.existsSync(formFile) ? fs.readFileSync(formFile, 'utf8').replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\s+/g, ' ') : '';
+  /* What's New is read as code with its comments taken out, never as prose: the entry is found by the mark on its list. */
+  const page = fs.readFileSync(path.join(ROOT, 'src/pages/WhatsNew.tsx'), 'utf8').replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ');
+  const entry = (/<li>((?:(?!<\/li>)[\s\S])*?data-cm-fixture-leagues="([^"]*)">([^<]*)<(?:(?!<\/li>)[\s\S])*?)<\/li>/.exec(page) || []);
+  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
+  const countWord = entry[1] ? ((/fixture list in (\w+) more leagues?/.exec(entry[1]) || [])[1] || '') : '';
+  const examples = entry[1] === undefined ? [] : [...entry[1].matchAll(/data-cm-fixture-example="([a-z0-9]+):([^"]+)">([^<]*)</g)].map(m => ({ leagueId: m[1], club: m[2], text: unescape(m[3]) }));
+  const news = entry[1] === undefined ? { found: false, ids: [], text: '', count: 0, countWord: '', examples }
+    : { found: true, ids: entry[2].split(' ').filter(Boolean), text: entry[3], count: WORDS.indexOf(countWord), countWord, examples };
+  return { registry, help, news };
+}
+
 /* ---- load what is on disk ---- */
 const readJson = rel => (fs.existsSync(path.join(ROOT, rel)) ? JSON.parse(fs.readFileSync(path.join(ROOT, rel), 'utf8')) : null);
 const frozenOnDisk = readJson(FROZEN_REL) || { ledgers: {} };
 const leagues = await gameLeagues();
 const loaded = await loadLedgers(ledgerFilesOnDisk());
 const frozenKeys = new Set(Object.keys(frozenOnDisk.ledgers));
+const game = await gameRegistryAndHelp();
+const registeredKeys = new Set(game.registry.map(r => r.key));
 const allEntries = loaded.map(l => ({
   ...l,
   receipt: readJson(l.file.replace(/^src\/data\//, 'scripts/data/').replace(/\.ts$/, '.receipt.json')),
   source: fs.readFileSync(path.join(ROOT, l.file), 'utf8'),
   frozen: !!(l.ledger && frozenKeys.has(l.ledger.key)),
   tool: !(l.ledger && PRE_TOOL_KEYS.includes(l.ledger.key)),
+  bound: !!(l.ledger && registeredKeys.has(l.ledger.key)),
+  ownFile: !!(l.ledger && game.registry.some(r => r.key === l.ledger.key && r.rides === 'file')),
 }));
 const entries = ONLY ? allEntries.filter(e => e.ledger && e.ledger.leagueId === ONLY) : allEntries;
-const world = { leagues, entries, frozen: frozenOnDisk, only: ONLY };
+const world = { leagues, entries, frozen: frozenOnDisk, only: ONLY, registry: game.registry, bound: [...BOUND_KEYS], help: game.help, news: game.news };
 const idOf = e => (e.ledger && e.ledger.leagueId) || e.file;
 
 /* ---- the controls: each damages a copy of the world for one league and names the sections that must go red ---- */
@@ -428,7 +689,7 @@ const CONTROLS = {
   noreadtime: { expect: 'E', applies: e => e.tool, apply(w, e) { delete e.receipt.sources[1].readAtUtc; } },
   falsefirstpub: { expect: 'E', applies: e => e.tool, apply(w, e) { e.receipt.asFirstPublished = !e.receipt.asFirstPublished; } },
   falseasof: {
-    expect: 'E',
+    expect: e => (e.bound ? 'EH' : 'E'),
     applies: e => e.tool,
     apply(w, e) {
       /* The receipt is made to agree with itself, so only the working out from the parser and the stamps can see it. */
@@ -448,9 +709,60 @@ const CONTROLS = {
     },
   },
   badrecheck: { expect: 'E', applies: e => e.tool && !!e.receipt.recheck, apply(w, e) { e.receipt.recheck.differences = 1; } },
-  unfrozen: { expect: 'I', applies: e => e.tool, apply(w, e) { delete w.frozen.ledgers[e.ledger.key]; } },
+  unfrozen: { expect: e => (e.bound ? 'HI' : 'I'), applies: e => e.tool, apply(w, e) { delete w.frozen.ledgers[e.ledger.key]; } },
   nodigest: { expect: 'I', applies: e => e.tool, apply(w, e) { delete e.receipt.ledgerDigest; } },
+  /* The rest damage the registry or the Help, so they run on the ledgers the game reads. */
+  unregistered: { expect: 'HJ', applies: e => e.bound, apply(w, e) { w.registry = w.registry.filter(r => r.key !== e.ledger.key); } },
+  unlisted: { expect: 'H', applies: e => e.bound, apply(w, e) { w.bound = w.bound.filter(k => k !== e.ledger.key); } },
+  wrongasof: {
+    expect: 'HJ',
+    applies: e => e.bound,
+    apply(w, e) {
+      const r = w.registry.find(x => x.key === e.ledger.key);
+      r.asOf = 'published' in r.asOf ? { stoodOn: '10 October 2026' } : { published: 'June 2026' };
+      r.asOfText = 'published' in r.asOf ? 'the list as first published in June 2026' : 'the list as it stood on 10 October 2026';
+    },
+  },
+  /* Round 1225 review: what a reworded realFixtureListAsOfText would do. The registry's value stays right and
+     every screen prints the other thing for this league: the words the game hands out, and Help, which prints
+     through the same function (the league is moved into a group of its own so no other league's words move). */
+  falsewords: {
+    expect: 'HJ',
+    applies: e => e.bound,
+    apply(w, e) {
+      const r = w.registry.find(x => x.key === e.ledger.key);
+      const lie = 'published' in r.asOf ? 'the list as it stood on 10 October 2026' : 'the list as first published in June 2026';
+      r.asOfText = lie;
+      for (const g of w.help.groups) g.ids = g.ids.filter(id => id !== e.ledger.leagueId);
+      w.help.groups.push({ ids: [e.ledger.leagueId], text: lie });
+    },
+  },
+  helpdrift: { expect: 'J', applies: e => e.bound, apply(w, e) { w.help.leagues = w.help.leagues.filter(l => l.id !== e.ledger.leagueId); } },
+  helplink: { expect: 'J', redId: 'help', applies: e => e.bound, apply(w) { w.help.links += 1; } },
+  /* Round 1225 review: the two sentences about a job taken part way through a season, each put back as the
+     reviewed build had it. Both damage the text as read, like the three controls around them. */
+  takeoverform: { expect: 'J', redId: 'help', applies: e => e.bound, apply(w) { w.help.form += ' It is a simulated run-in, not the real one: this game draws its own fixture list every save.'; } },
+  takeoverhelp: {
+    expect: 'J',
+    redId: 'help',
+    applies: e => e.bound,
+    apply(w) { w.help.text = w.help.text.replace('a club you move to during a season keep generated fixtures', 'a job you take part way through a season keep generated fixtures'); },
+  },
+  newsdrift: { expect: 'J', applies: e => e.ownFile, apply(w, e) { w.news.ids = w.news.ids.filter(id => id !== e.ledger.leagueId); w.news.count -= 1; } },
+  /* Round 1225 review: a What's New example told with its two opponents the other way round. */
+  newsexample: {
+    expect: 'J',
+    applies: e => e.ownFile && game.news.examples.some(x => x.leagueId === e.ledger.leagueId),
+    apply(w, e) {
+      const ex = w.news.examples.find(x => x.leagueId === e.ledger.leagueId);
+      const opponent = round => { const p = e.ledger.rounds[round].find(x => x.includes(ex.club)); return p[0] === ex.club ? p[1] : p[0]; };
+      const [first, second] = [opponent(0), opponent(1)];
+      if (!ex.text.includes(first) || !ex.text.includes(second)) throw new Error('the example does not name both opponents, so there is nothing to swap');
+      ex.text = ex.text.replace(first, '@first@').replace(second, first).replace('@first@', second);
+    },
+  },
 };
+const expectOf = (name, e) => (typeof CONTROLS[name].expect === 'function' ? CONTROLS[name].expect(e) : CONTROLS[name].expect);
 const appliesTo = (name, e) => !CONTROLS[name].applies || CONTROLS[name].applies(e);
 
 /** Apply one control to one league on a copy. Returns { ok, why, reds }: ok only when exactly the expected sections of exactly that league went red. */
@@ -467,11 +779,13 @@ function runControl(name, leagueId) {
   }
   if (JSON.stringify(copy) === before) return { ok: false, why: 'changed nothing', reds: [] };
   const reds = evaluate(copy);
-  const elsewhere = [...new Set(reds.filter(r => r.id !== leagueId).map(r => `${r.id} ${r.section}`))];
-  const got = [...new Set(reds.filter(r => r.id === leagueId).map(r => r.section))].sort().join('');
+  const redId = CONTROLS[name].redId || leagueId;
+  const want = expectOf(name, target);
+  const elsewhere = [...new Set(reds.filter(r => r.id !== redId).map(r => `${r.id} ${r.section}`))];
+  const got = [...new Set(reds.filter(r => r.id === redId).map(r => r.section))].sort().join('');
   if (elsewhere.length) return { ok: false, why: `another league went red: ${elsewhere.join(', ')}`, reds };
-  if (got !== CONTROLS[name].expect) return { ok: false, why: `sections ${got || 'none'} went red, wanted exactly ${CONTROLS[name].expect}`, reds };
-  return { ok: true, why: `sections ${got} went red for ${leagueId} and nothing else`, reds };
+  if (got !== want) return { ok: false, why: `sections ${got || 'none'} went red, wanted exactly ${want}`, reds };
+  return { ok: true, why: `sections ${got} went red for ${redId} and nothing else`, reds };
 }
 
 function printSections(reds) {
@@ -496,7 +810,8 @@ if (CONTROL) {
     console.error(`CONTROL ${CONTROL} COULD NOT RUN: ${CONTROLS[CONTROL] ? 'no frozen ledger on disk that it applies to' : `no such control, the controls are ${Object.keys(CONTROLS).join(', ')}`}`);
     process.exit(3);
   }
-  console.log(`NEGATIVE CONTROL ON: ${CONTROL} on a copy of ${leagueId}, sections ${CONTROLS[CONTROL].expect} must go red and nothing else`);
+  const controlTarget = entries.find(e => idOf(e) === leagueId);
+  console.log(`NEGATIVE CONTROL ON: ${CONTROL} on a copy of ${leagueId}, sections ${controlTarget ? expectOf(CONTROL, controlTarget) : '?'} must go red and nothing else`);
   const result = runControl(CONTROL, leagueId);
   printSections(result.reds);
   if (!result.ok) {
@@ -517,6 +832,12 @@ if (EXPECT && Number(EXPECT) !== entries.length) {
 if (EXPECT_FROZEN && Number(EXPECT_FROZEN) !== frozenEntries.length) {
   failures += 1;
   console.error(`  FAIL: the gate expects ${EXPECT_FROZEN} frozen ledger(s) and ${frozenEntries.length} of the ${entries.length} on disk have a frozen line`);
+}
+const boundEntries = entries.filter(e => e.bound);
+const unbound = entries.filter(e => !e.bound).map(idOf);
+if (EXPECT_BOUND && Number(EXPECT_BOUND) !== boundEntries.length) {
+  failures += 1;
+  console.error(`  FAIL: the gate expects the game to read ${EXPECT_BOUND} ledger(s) and its registry names ${boundEntries.length} of the ${entries.length} on disk`);
 }
 if (ONLY && !entries.length) {
   failures += 1;
@@ -552,10 +873,10 @@ if (reds.length) {
   }
 }
 
-const tail = `${entries.length} ledger(s), ${frozenEntries.length} frozen, ${pending.length} pending${pending.length ? ` (${pending.join(', ')})` : ''}, ${fixtures} fixtures, ${fired} of ${controlRuns} controls fired`;
+const tail = `${entries.length} ledger(s), ${frozenEntries.length} frozen, ${pending.length} pending${pending.length ? ` (${pending.join(', ')})` : ''}, ${boundEntries.length} bound, ${unbound.length} unbound${unbound.length ? ` (${unbound.join(', ')})` : ''}, ${fixtures} fixtures, ${fired} of ${controlRuns} controls fired`;
 if (!entries.length) console.log('NOTHING CHECKED: no ledger on disk. That is green only for a tree that holds no ledger yet.');
 if (failures) {
   console.error(`simCmLeagueFixtures: FAILED, ${failures} failure(s): ${tail}`);
   process.exit(1);
 }
-console.log(`simCmLeagueFixtures: OK, sections A to G and I green: ${tail}`);
+console.log(`simCmLeagueFixtures: OK, sections A to J green: ${tail}`);

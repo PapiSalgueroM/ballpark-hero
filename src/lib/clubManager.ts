@@ -1,6 +1,6 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
-import { REAL_PREMIER_FIXTURE_KEY, canBindRealPremierFixtures, realPremierFixturePairs, realPremierFixtureCoverage } from '@/lib/clubManagerFixtures';
+import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
 import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, type CmVarDecision } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
@@ -2194,8 +2194,10 @@ export interface CareerState {
    *  season. */
   balancedFixtures?: true;
   /** Round 1184: verified first-season opponent order and venues. Old saves
-   *  have no key and keep their generated schedule for that season. */
-  realLeagueFixtures?: typeof REAL_PREMIER_FIXTURE_KEY;
+   *  have no key and keep their generated schedule for that season.
+   *  Round 1225: the key of the list its first season plays, one line of
+   *  REAL_LEAGUE_FIXTURES in clubManagerFixtures.ts. */
+  realLeagueFixtures?: string;
   /** Round 165: the league's golden boot race, AI entries only. */
   scorerRace?: RaceScorer[];
   /** Round 168: the live mid-season approach, if a club is courting me. */
@@ -10812,12 +10814,13 @@ export function roundPairs(clubs: string[], round: number, balanced: boolean): [
 
 /** One schedule for the fixture card, played match and neutral league rounds. */
 export function careerRoundPairs(state: CareerState, round: number, clubs = state.leagueClubs, leagueId = careerLeagueOf(state).id): [string, string][] {
-  return realPremierFixturePairs(state, leagueId, clubs, round)
+  return realLeagueFixturePairs(state, leagueId, clubs, round)
     ?? roundPairs(clubs, round, !!state.balancedFixtures);
 }
 
 export function careerFixtureCoverage(state: CareerState) {
-  return realPremierFixtureCoverage(state, careerLeagueOf(state).id, state.leagueClubs);
+  const league = careerLeagueOf(state);
+  return realLeagueFixtureCoverage(state, league.id, state.leagueClubs, league.name);
 }
 
 /**
@@ -17489,8 +17492,11 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   /* Round 964: the edited world rides on the save the way a promoted one
      does, so the first summer resolves on it and a reload registers it. */
   if (worldEdit) state.leagueOverrides = worldEdit;
-  if (!world && !worldEdit && !custom && canBindRealPremierFixtures(state, league.id, leagueClubs)) {
-    state.realLeagueFixtures = REAL_PREMIER_FIXTURE_KEY;
+  /* Round 1225: the league's real list, when there is one and it is here (the
+     page fetches it before a new career starts; see clubManagerFixtures.ts). */
+  if (!world && !worldEdit && !custom) {
+    const realList = realLeagueFixtureKeyForStart(state, league.id, leagueClubs);
+    if (realList) state.realLeagueFixtures = realList;
   }
   if (custom) {
     state.customClub = custom;
@@ -20208,6 +20214,22 @@ export function savedCareerEraId(): string | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { eraId?: unknown } | null;
     return parsed && typeof parsed.eraId === 'string' ? parsed.eraId : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Round 1225: the real fixture list the saved career's first season plays,
+ * read without opening it, so the page can fetch that list before anything
+ * reads a fixture off the save. Null when there is no save or it holds no key.
+ */
+export function savedCareerFixtureKey(): string | null {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { realLeagueFixtures?: unknown } | null;
+    return parsed && typeof parsed.realLeagueFixtures === 'string' ? parsed.realLeagueFixtures : null;
   } catch {
     return null;
   }
