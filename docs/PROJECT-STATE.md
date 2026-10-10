@@ -1,6 +1,6 @@
-## Codex1238-1240 IN PROGRESS, 2026-10-10: Soccer farewell season
+## Codex 1238-1240 READY (qualified source), 2026-10-10: Soccer farewell season
 
-Isolated codex/career-farewell-season from09df145a. One bound final season for adult senior players, actual queued ceremonies before existing retirement, inactive saved-state/RNG neutrality. Full contract docs/ROUND1238-1240.md. Remote proof pending, no READY/live claim. G owns integration/main/publish; PR216/217/218 stay frozen. Original state below is preserved.
+Draft PR219, codex/career-farewell-season, accepted source6ea6f92ba5f6ab746ff4d35d71e294d6307a9e00/tree872fd60757759dc95cb6fba000809be158bf1f35 from main09df145a. An adult senior player can announce one final year, including the same already-aged retirement-suggestion year; actual results and queued ceremonies finish before existing retirement. Remote Actions38053385001 SUCCESS: app types/build,85 tests,168 complete old/current save+draw pairs,18 native journeys/1310 checks,39 reviewed PNGs,18 related Soccer gates and15 built readers. Exact source and dependencies held; final artifact11669988787 SHA256 F6C7D2FE6FA28390EB8EAA1B9DCEBC085F000011C9B974B8244E0FAEC4186BA2, expires2026-10-15. Full proof, meaningful negative controls, failure repairs and limits: docs/ROUND1238-1240.md. The next commit is docs only. G owns integration/main/merge/publish; shared CI has separate red jobs and no all-CI/combined/live claim. PR216/217/218 stay frozen. Original state below is preserved.
 
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
