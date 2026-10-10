@@ -1,0 +1,973 @@
+{
+ "base": "http://localhost:4173",
+ "poolSize": 2000,
+ "fixtureRows": 5496,
+ "runs": [
+  {
+   "game": "dart-draft",
+   "viewport": "390x844",
+   "reducedMotion": true,
+   "topic": "Current Stars",
+   "throws": [
+    {
+     "throw": 1,
+     "slot": "GK",
+     "view": "world",
+     "aim": "country fr",
+     "zonesOnMap": [],
+     "title": "France",
+     "caption": "",
+     "tiles": [
+      "Mike Maignan | AC Milan • GK • £27M | 83",
+      "Mathys Detourbet | AS Monaco • GK • £11M | 83",
+      "Valentin Atangana | Al-Ahli SFC • GK • £19M | 82",
+      "Lucas Chevalier | Paris Saint-Germain • GK • £32M | 81",
+      "Robin Risser | RC Lens • GK • £27M | 80",
+      "Pablo Pagis | FC Lorient • GK • £11M | 79",
+      "Paul Joly | 1.FC Kaiserslautern • GK • £3M | 70",
+      "Benjamin Lecomte | Fulham FC • GK • £1M | 69"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 2,
+     "scrollY": 0,
+     "picked": "Mike Maignan"
+    },
+    {
+     "throw": 2,
+     "slot": "RB",
+     "view": "europe",
+     "aim": "zone legend",
+     "zonesOnMap": [
+      "legend"
+     ],
+     "title": "👑 LEGEND ZONE",
+     "caption": "All-time greats at your position. Pick one.",
+     "tiles": [
+      "Paolo Maldini | AC Milan • CB • £185M | 91",
+      "Franz Beckenbauer | Bayern Munich • CB • £195M | 91",
+      "Sergio Ramos | Real Madrid • CB • £180M | 91",
+      "John Terry | Chelsea • CB • £165M | 90",
+      "Virgil van Dijk | Liverpool • CB • £178M | 91",
+      "Cafu | AC Milan • RB • £170M | 90",
+      "Carles Puyol | Barcelona • CB • £165M | 90",
+      "Rio Ferdinand | Manchester United • CB • £168M | 90"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 4,
+     "scrollY": 0,
+     "eligible": 21,
+     "bestThreeExpected": [
+      "Paolo Maldini",
+      "Franz Beckenbauer",
+      "Sergio Ramos"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Paolo Maldini",
+      "Franz Beckenbauer",
+      "Sergio Ramos",
+      "Virgil van Dijk",
+      "Bobby Moore",
+      "Franco Baresi",
+      "Fabio Cannavaro",
+      "Carles Puyol"
+     ],
+     "outsideOldFixed": 3,
+     "allEligible": true,
+     "lowestRatingShown": 90,
+     "picked": "Paolo Maldini"
+    },
+    {
+     "throw": 3,
+     "slot": "CB",
+     "view": "samerica",
+     "aim": "country br",
+     "zonesOnMap": [
+      "shark"
+     ],
+     "title": "Brazil",
+     "caption": "",
+     "tiles": [
+      "Gabriel | Arsenal FC • CB • £81M | 86",
+      "Marquinhos | Paris Saint-Germain • CB • £32M | 85",
+      "Pablo | West Ham United • CB • £19M | 85",
+      "Murillo | Nottingham Forest • CB • £54M | 84",
+      "Léo Ortiz | CR Flamengo • CB • £15M | 77",
+      "David Luiz | Pafos FC • CB • £1M | 72",
+      "Gustavo Neves | Red Bull Bragantino • CB • £4M | 70",
+      "Juninho | Ikoma FC Nara • CB • £1M | 64"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 785,
+     "picked": "Léo Ortiz"
+    },
+    {
+     "throw": 4,
+     "slot": "CB",
+     "view": "world",
+     "aim": "zone wonderkid",
+     "zonesOnMap": [
+      "wonderkid"
+     ],
+     "title": "💎 WONDERKID ZONE",
+     "caption": "Under-21 gems only. The future is now.",
+     "tiles": [
+      "Pau Cubarsí | FC Barcelona • CB • £86M | 87",
+      "Dean Huijsen | Real Madrid • CB • £70M | 85",
+      "Luka Vuskovic | Brighton & Hove Albion • CB • £65M | 85",
+      "Ismaëlo Ganiou | RC Lens • CB • £11M | 75",
+      "Victor Torp | Coventry City • CB • £13M | 76",
+      "Nnamdi Collins | Eintracht Frankfurt • CB • £22M | 79",
+      "Cristhian Mosquera | Arsenal FC • CB • £38M | 82",
+      "Tylel Tati | FC Nantes • CB • £27M | 80"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 1,
+     "scrollY": 134,
+     "eligible": 27,
+     "bestThreeExpected": [
+      "Pau Cubarsí",
+      "Dean Huijsen",
+      "Luka Vuskovic"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Pau Cubarsí",
+      "Dean Huijsen",
+      "Luka Vuskovic",
+      "Jérémy Jacquet",
+      "Leny Yoro",
+      "Abdukodir Khusanov",
+      "Cristhian Mosquera",
+      "Joel Ordóñez"
+     ],
+     "outsideOldFixed": 4,
+     "allEligible": true,
+     "lowestRatingShown": 75,
+     "picked": "Pau Cubarsí"
+    },
+    {
+     "throw": 5,
+     "slot": "LB",
+     "view": "africa",
+     "aim": "country ma",
+     "zonesOnMap": [
+      "storm"
+     ],
+     "title": "Morocco",
+     "caption": "",
+     "tiles": [
+      "Nayef Aguerd | Olympique Marseille • CB • £22M | 79",
+      "Samir El Mourabet | RC Strasbourg Alsace • LB • £19M | 78",
+      "Omar El Hilali | RCD Espanyol Barcelona • LB • £16M | 77",
+      "Issa Diop | Ipswich Town • CB • £11M | 75",
+      "Moncef Zekri | KV Mechelen • CB • £4M | 72",
+      "Amine Sbaï | Angers SCO • CB • £3M | 68",
+      "Younes Taha | FC Groningen • CB • £3M | 68",
+      "Yahia Attiyat Allah | FC Sochi • LB • £1M | 64"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 3,
+     "scrollY": 134,
+     "picked": "Nayef Aguerd"
+    },
+    {
+     "throw": 6,
+     "slot": "CM",
+     "view": "namerica",
+     "aim": "zone legend",
+     "zonesOnMap": [
+      "legend",
+      "shark"
+     ],
+     "title": "👑 LEGEND ZONE",
+     "caption": "All-time greats at your position. Pick one.",
+     "tiles": [
+      "Diego Maradona | Napoli • CAM • £220M | 92",
+      "Xavi | Barcelona • CM • £185M | 91",
+      "Andres Iniesta | Barcelona • CM • £190M | 91",
+      "Andrea Pirlo | Juventus • CDM • £180M | 91",
+      "Frank Lampard | Chelsea • CM • £172M | 90",
+      "Roy Keane | Manchester United • CDM • £162M | 90",
+      "Dennis Bergkamp | Arsenal • CAM • £182M | 91",
+      "Kevin De Bruyne | Manchester City • CM • £178M | 91"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 2,
+     "scrollY": 134,
+     "eligible": 23,
+     "bestThreeExpected": [
+      "Diego Maradona",
+      "Xavi",
+      "Andres Iniesta"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Diego Maradona",
+      "Xavi",
+      "Andres Iniesta",
+      "Zinedine Zidane",
+      "Andrea Pirlo",
+      "Steven Gerrard",
+      "Luka Modric",
+      "Ronaldinho"
+     ],
+     "outsideOldFixed": 4,
+     "allEligible": true,
+     "lowestRatingShown": 90,
+     "picked": "Frank Lampard"
+    },
+    {
+     "throw": 7,
+     "slot": "CM",
+     "view": "world",
+     "aim": "zone wildcard",
+     "zonesOnMap": [
+      "wildcard"
+     ],
+     "title": "🃏 WILDCARD ZONE",
+     "caption": "Free pick off the world top shelf.",
+     "tiles": [
+      "Pedri | FC Barcelona • CM • £162M | 90",
+      "Jude Bellingham | Real Madrid • CAM • £151M | 90",
+      "Declan Rice | Arsenal FC • CM • £130M | 89",
+      "Max Cleworth | Wrexham AFC • CAM • £8M | 73",
+      "Jamal Musiala | Bayern Munich • CAM • £130M | 89",
+      "Diego Luna | Real Salt Lake City • CAM • £9M | 74",
+      "Max Alleyne | Manchester City • CAM • £9M | 74",
+      "Alessandro Vogt | FC St. Gallen 1879 • CAM • £8M | 73"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 1,
+     "scrollY": 134,
+     "eligible": 553,
+     "bestThreeExpected": [
+      "Pedri",
+      "Jude Bellingham",
+      "Declan Rice"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Pedri",
+      "Jude Bellingham",
+      "Declan Rice",
+      "Federico Valverde",
+      "Jamal Musiala",
+      "Cole Palmer",
+      "Florian Wirtz",
+      "João Neves"
+     ],
+     "outsideOldFixed": 4,
+     "allEligible": true,
+     "lowestRatingShown": 73,
+     "picked": "Pedri"
+    },
+    {
+     "throw": 8,
+     "slot": "CM",
+     "view": "europe",
+     "aim": "zone mystery",
+     "zonesOnMap": [
+      "mystery"
+     ],
+     "title": "🎁 MYSTERY ZONE",
+     "caption": "Three names from the top of the pool and one long shot from deep in it. Pure gamble.",
+     "tiles": [
+      "Cole Palmer | Chelsea FC • CAM • £119M | 88",
+      "Kiernan Dewsbury-Hall | Everton FC • CM • £35M | 82",
+      "Exequiel Palacios | Ipswich Town • CM • £32M | 81",
+      "Keny Arroyo | Cruzeiro Esporte Clube • CAM • £10M | 75"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 134,
+     "picked": "Cole Palmer"
+    },
+    {
+     "throw": 9,
+     "slot": "RW",
+     "view": "asia",
+     "aim": "zone wonderkid",
+     "zonesOnMap": [
+      "wonderkid",
+      "storm"
+     ],
+     "title": "💎 WONDERKID ZONE",
+     "caption": "Under-21 gems only. The future is now.",
+     "tiles": [
+      "Lamine Yamal | FC Barcelona • RW • £216M | 92",
+      "Désiré Doué | Paris Saint-Germain • RW • £97M | 87",
+      "Estêvão | Chelsea FC • RW • £86M | 87",
+      "Tyler Dibling | Everton FC • RW • £24M | 80",
+      "Darío Osorio | Crystal Palace • RW • £11M | 75",
+      "Ângelo | Al-Nassr FC • RW • £15M | 77",
+      "Ilias Akhomach | Rayo Vallecano • RW • £13M | 76",
+      "Max Rosenfelder | SC Freiburg • RW • £6M | 72"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 2,
+     "scrollY": 134,
+     "eligible": 25,
+     "bestThreeExpected": [
+      "Lamine Yamal",
+      "Désiré Doué",
+      "Estêvão"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Lamine Yamal",
+      "Désiré Doué",
+      "Estêvão",
+      "Franco Mastantuono",
+      "Geovany Quenda",
+      "Rayan",
+      "Yankuba Minteh",
+      "Ibrahim Mbaye"
+     ],
+     "outsideOldFixed": 5,
+     "allEligible": true,
+     "lowestRatingShown": 72,
+     "picked": "Darío Osorio"
+    },
+    {
+     "throw": 10,
+     "slot": "ST",
+     "view": "samerica",
+     "aim": "country ar",
+     "zonesOnMap": [
+      "legend",
+      "mystery"
+     ],
+     "title": "Argentina",
+     "caption": "",
+     "tiles": [
+      "Julián Alvarez | Atlético de Madrid • CF • £97M | 87",
+      "Lautaro Martínez | Inter Milan • CF • £92M | 87",
+      "Joaquín Panichelli | RC Strasbourg Alsace • CF • £38M | 82",
+      "Santiago Castro | AS Roma • CF • £38M | 82",
+      "Facundo Colidio | CA River Plate • CF • £5M | 71",
+      "Lucas Boyé | Deportivo Alavés • CF • £5M | 71",
+      "Tomás Jacob | Atlanta United FC • CF • £4M | 70",
+      "Nicolás Fernández | Club Atlético Belgrano • CF • £4M | 70"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 6,
+     "scrollY": 134,
+     "picked": "Julián Alvarez"
+    },
+    {
+     "throw": 11,
+     "slot": "LW",
+     "view": "world",
+     "aim": "zone wildcard",
+     "zonesOnMap": [
+      "wildcard",
+      "shark"
+     ],
+     "title": "🃏 WILDCARD ZONE",
+     "caption": "Free pick off the world top shelf.",
+     "tiles": [
+      "Vinicius Junior | Real Madrid • LW • £162M | 90",
+      "Kader Meïté | Stade Rennais FC • LW • £19M | 88",
+      "Khvicha Kvaratskhelia | Paris Saint-Germain • LW • £97M | 87",
+      "Samuel Lino | CR Flamengo • LW • £18M | 78",
+      "Jadon Sancho | Aston Villa • LW • £22M | 79",
+      "Samuel Dahl | SL Benfica • LW • £13M | 83",
+      "Reiss Nelson | Brentford FC • LW • £13M | 76",
+      "Amine Adli | AFC Bournemouth • LW • £22M | 79"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 1,
+     "scrollY": 134,
+     "eligible": 219,
+     "bestThreeExpected": [
+      "Vinicius Junior",
+      "Kader Meïté",
+      "Khvicha Kvaratskhelia"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Vinicius Junior",
+      "Kader Meïté",
+      "Khvicha Kvaratskhelia",
+      "Raphinha",
+      "Kenan Yıldız",
+      "Yan Diomande",
+      "Bradley Barcola",
+      "Luis Díaz"
+     ],
+     "outsideOldFixed": 5,
+     "allEligible": true,
+     "lowestRatingShown": 76,
+     "picked": "Vinicius Junior"
+    }
+   ],
+   "notes": [],
+   "result": "Grade S • XI 86 / A once-in-a-generation XI. The board bowed to you. / Your darts built a champion, series won 2-1! / Accuracy 499 / Series 2-1 / Total 705 / GK / Mike Maignan",
+   "doneOverflowPx": 0,
+   "poolReads": [
+    "0+1000 served 1000 order market_value_usd.desc,player_name.asc,id.asc",
+    "1000+1000 served 1000 order market_value_usd.desc,player_name.asc,id.asc"
+   ],
+   "countryReads": [
+    "in.(France) 0+1000 served 283",
+    "in.(Brazil) 0+1000 served 370",
+    "in.(Morocco) 0+1000 served 73",
+    "in.(Argentina) 0+1000 served 287"
+   ],
+   "pageErrors": [],
+   "writes": []
+  },
+  {
+   "game": "dart-draft",
+   "viewport": "1280x900",
+   "reducedMotion": false,
+   "topic": "Current Stars",
+   "throws": [
+    {
+     "throw": 1,
+     "slot": "GK",
+     "view": "world",
+     "aim": "country fr",
+     "zonesOnMap": [],
+     "title": "France",
+     "caption": "",
+     "tiles": [
+      "Mike Maignan | AC Milan • GK • £27M | 83",
+      "Mathys Detourbet | AS Monaco • GK • £11M | 83",
+      "Valentin Atangana | Al-Ahli SFC • GK • £19M | 82",
+      "Lucas Chevalier | Paris Saint-Germain • GK • £32M | 81",
+      "Robin Risser | RC Lens • GK • £27M | 80",
+      "Pablo Pagis | FC Lorient • GK • £11M | 79",
+      "Paul Joly | 1.FC Kaiserslautern • GK • £3M | 70",
+      "Benjamin Lecomte | Fulham FC • GK • £1M | 69"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 21,
+     "picked": "Mike Maignan"
+    },
+    {
+     "throw": 2,
+     "slot": "RB",
+     "view": "europe",
+     "aim": "zone legend",
+     "zonesOnMap": [
+      "legend"
+     ],
+     "title": "👑 LEGEND ZONE",
+     "caption": "All-time greats at your position. Pick one.",
+     "tiles": [
+      "Paolo Maldini | AC Milan • CB • £185M | 91",
+      "Franz Beckenbauer | Bayern Munich • CB • £195M | 91",
+      "Sergio Ramos | Real Madrid • CB • £180M | 91",
+      "John Terry | Chelsea • CB • £165M | 90",
+      "Virgil van Dijk | Liverpool • CB • £178M | 91",
+      "Cafu | AC Milan • RB • £170M | 90",
+      "Carles Puyol | Barcelona • CB • £165M | 90",
+      "Rio Ferdinand | Manchester United • CB • £168M | 90"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 4,
+     "scrollY": 78,
+     "eligible": 21,
+     "bestThreeExpected": [
+      "Paolo Maldini",
+      "Franz Beckenbauer",
+      "Sergio Ramos"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Paolo Maldini",
+      "Franz Beckenbauer",
+      "Sergio Ramos",
+      "Virgil van Dijk",
+      "Bobby Moore",
+      "Franco Baresi",
+      "Fabio Cannavaro",
+      "Carles Puyol"
+     ],
+     "outsideOldFixed": 3,
+     "allEligible": true,
+     "lowestRatingShown": 90,
+     "picked": "Paolo Maldini"
+    },
+    {
+     "throw": 3,
+     "slot": "CB",
+     "view": "samerica",
+     "aim": "country br",
+     "zonesOnMap": [
+      "shark"
+     ],
+     "title": "Brazil",
+     "caption": "",
+     "tiles": [
+      "Gabriel | Arsenal FC • CB • £81M | 86",
+      "Marquinhos | Paris Saint-Germain • CB • £32M | 85",
+      "Pablo | West Ham United • CB • £19M | 85",
+      "Murillo | Nottingham Forest • CB • £54M | 84",
+      "Léo Ortiz | CR Flamengo • CB • £15M | 77",
+      "David Luiz | Pafos FC • CB • £1M | 72",
+      "Gustavo Neves | Red Bull Bragantino • CB • £4M | 70",
+      "Juninho | Ikoma FC Nara • CB • £1M | 64"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 1379,
+     "picked": "Léo Ortiz"
+    },
+    {
+     "throw": 4,
+     "slot": "CB",
+     "view": "world",
+     "aim": "zone wonderkid",
+     "zonesOnMap": [
+      "wonderkid"
+     ],
+     "title": "💎 WONDERKID ZONE",
+     "caption": "Under-21 gems only. The future is now.",
+     "tiles": [
+      "Pau Cubarsí | FC Barcelona • CB • £86M | 87",
+      "Dean Huijsen | Real Madrid • CB • £70M | 85",
+      "Luka Vuskovic | Brighton & Hove Albion • CB • £65M | 85",
+      "Ismaëlo Ganiou | RC Lens • CB • £11M | 75",
+      "Victor Torp | Coventry City • CB • £13M | 76",
+      "Nnamdi Collins | Eintracht Frankfurt • CB • £22M | 79",
+      "Cristhian Mosquera | Arsenal FC • CB • £38M | 82",
+      "Tylel Tati | FC Nantes • CB • £27M | 80"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 329,
+     "eligible": 27,
+     "bestThreeExpected": [
+      "Pau Cubarsí",
+      "Dean Huijsen",
+      "Luka Vuskovic"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Pau Cubarsí",
+      "Dean Huijsen",
+      "Luka Vuskovic",
+      "Jérémy Jacquet",
+      "Leny Yoro",
+      "Abdukodir Khusanov",
+      "Cristhian Mosquera",
+      "Joel Ordóñez"
+     ],
+     "outsideOldFixed": 4,
+     "allEligible": true,
+     "lowestRatingShown": 75,
+     "picked": "Pau Cubarsí"
+    },
+    {
+     "throw": 5,
+     "slot": "LB",
+     "view": "africa",
+     "aim": "country ma",
+     "zonesOnMap": [
+      "storm"
+     ],
+     "title": "Morocco",
+     "caption": "",
+     "tiles": [
+      "Nayef Aguerd | Olympique Marseille • CB • £22M | 79",
+      "Samir El Mourabet | RC Strasbourg Alsace • LB • £19M | 78",
+      "Omar El Hilali | RCD Espanyol Barcelona • LB • £16M | 77",
+      "Issa Diop | Ipswich Town • CB • £11M | 75",
+      "Moncef Zekri | KV Mechelen • CB • £4M | 72",
+      "Amine Sbaï | Angers SCO • CB • £3M | 68",
+      "Younes Taha | FC Groningen • CB • £3M | 68",
+      "Yahia Attiyat Allah | FC Sochi • LB • £1M | 64"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 1100,
+     "picked": "Nayef Aguerd"
+    },
+    {
+     "throw": 6,
+     "slot": "CM",
+     "view": "namerica",
+     "aim": "zone legend",
+     "zonesOnMap": [
+      "legend",
+      "shark"
+     ],
+     "title": "👑 LEGEND ZONE",
+     "caption": "All-time greats at your position. Pick one.",
+     "tiles": [
+      "Diego Maradona | Napoli • CAM • £220M | 92",
+      "Xavi | Barcelona • CM • £185M | 91",
+      "Andres Iniesta | Barcelona • CM • £190M | 91",
+      "Andrea Pirlo | Juventus • CDM • £180M | 91",
+      "Frank Lampard | Chelsea • CM • £172M | 90",
+      "Roy Keane | Manchester United • CDM • £162M | 90",
+      "Dennis Bergkamp | Arsenal • CAM • £182M | 91",
+      "Kevin De Bruyne | Manchester City • CM • £178M | 91"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 4,
+     "scrollY": 145,
+     "eligible": 23,
+     "bestThreeExpected": [
+      "Diego Maradona",
+      "Xavi",
+      "Andres Iniesta"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Diego Maradona",
+      "Xavi",
+      "Andres Iniesta",
+      "Zinedine Zidane",
+      "Andrea Pirlo",
+      "Steven Gerrard",
+      "Luka Modric",
+      "Ronaldinho"
+     ],
+     "outsideOldFixed": 4,
+     "allEligible": true,
+     "lowestRatingShown": 90,
+     "picked": "Frank Lampard"
+    },
+    {
+     "throw": 7,
+     "slot": "CM",
+     "view": "world",
+     "aim": "zone wildcard",
+     "zonesOnMap": [
+      "wildcard"
+     ],
+     "title": "🃏 WILDCARD ZONE",
+     "caption": "Free pick off the world top shelf.",
+     "tiles": [
+      "Pedri | FC Barcelona • CM • £162M | 90",
+      "Jude Bellingham | Real Madrid • CAM • £151M | 90",
+      "Declan Rice | Arsenal FC • CM • £130M | 89",
+      "Max Cleworth | Wrexham AFC • CAM • £8M | 73",
+      "Jamal Musiala | Bayern Munich • CAM • £130M | 89",
+      "Diego Luna | Real Salt Lake City • CAM • £9M | 74",
+      "Max Alleyne | Manchester City • CAM • £9M | 74",
+      "Alessandro Vogt | FC St. Gallen 1879 • CAM • £8M | 73"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 161,
+     "eligible": 553,
+     "bestThreeExpected": [
+      "Pedri",
+      "Jude Bellingham",
+      "Declan Rice"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Pedri",
+      "Jude Bellingham",
+      "Declan Rice",
+      "Federico Valverde",
+      "Jamal Musiala",
+      "Cole Palmer",
+      "Florian Wirtz",
+      "João Neves"
+     ],
+     "outsideOldFixed": 4,
+     "allEligible": true,
+     "lowestRatingShown": 73,
+     "picked": "Pedri"
+    },
+    {
+     "throw": 8,
+     "slot": "CM",
+     "view": "europe",
+     "aim": "zone mystery",
+     "zonesOnMap": [
+      "mystery"
+     ],
+     "title": "🎁 MYSTERY ZONE",
+     "caption": "Three names from the top of the pool and one long shot from deep in it. Pure gamble.",
+     "tiles": [
+      "Cole Palmer | Chelsea FC • CAM • £119M | 88",
+      "Kiernan Dewsbury-Hall | Everton FC • CM • £35M | 82",
+      "Exequiel Palacios | Ipswich Town • CM • £32M | 81",
+      "Keny Arroyo | Cruzeiro Esporte Clube • CAM • £10M | 75"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 161,
+     "picked": "Cole Palmer"
+    },
+    {
+     "throw": 9,
+     "slot": "RW",
+     "view": "asia",
+     "aim": "zone wonderkid",
+     "zonesOnMap": [
+      "wonderkid",
+      "storm"
+     ],
+     "title": "💎 WONDERKID ZONE",
+     "caption": "Under-21 gems only. The future is now.",
+     "tiles": [
+      "Lamine Yamal | FC Barcelona • RW • £216M | 92",
+      "Désiré Doué | Paris Saint-Germain • RW • £97M | 87",
+      "Estêvão | Chelsea FC • RW • £86M | 87",
+      "Tyler Dibling | Everton FC • RW • £24M | 80",
+      "Darío Osorio | Crystal Palace • RW • £11M | 75",
+      "Ângelo | Al-Nassr FC • RW • £15M | 77",
+      "Ilias Akhomach | Rayo Vallecano • RW • £13M | 76",
+      "Max Rosenfelder | SC Freiburg • RW • £6M | 72"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 4,
+     "scrollY": 161,
+     "eligible": 25,
+     "bestThreeExpected": [
+      "Lamine Yamal",
+      "Désiré Doué",
+      "Estêvão"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Lamine Yamal",
+      "Désiré Doué",
+      "Estêvão",
+      "Franco Mastantuono",
+      "Geovany Quenda",
+      "Rayan",
+      "Yankuba Minteh",
+      "Ibrahim Mbaye"
+     ],
+     "outsideOldFixed": 5,
+     "allEligible": true,
+     "lowestRatingShown": 72,
+     "picked": "Darío Osorio"
+    },
+    {
+     "throw": 10,
+     "slot": "ST",
+     "view": "samerica",
+     "aim": "country ar",
+     "zonesOnMap": [
+      "legend",
+      "mystery"
+     ],
+     "title": "Argentina",
+     "caption": "",
+     "tiles": [
+      "Julián Alvarez | Atlético de Madrid • CF • £97M | 87",
+      "Lautaro Martínez | Inter Milan • CF • £92M | 87",
+      "Joaquín Panichelli | RC Strasbourg Alsace • CF • £38M | 82",
+      "Santiago Castro | AS Roma • CF • £38M | 82",
+      "Facundo Colidio | CA River Plate • CF • £5M | 71",
+      "Lucas Boyé | Deportivo Alavés • CF • £5M | 71",
+      "Tomás Jacob | Atlanta United FC • CF • £4M | 70",
+      "Nicolás Fernández | Club Atlético Belgrano • CF • £4M | 70"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 1379,
+     "picked": "Julián Alvarez"
+    },
+    {
+     "throw": 11,
+     "slot": "LW",
+     "view": "world",
+     "aim": "zone wildcard",
+     "zonesOnMap": [
+      "wildcard",
+      "shark"
+     ],
+     "title": "🃏 WILDCARD ZONE",
+     "caption": "Free pick off the world top shelf.",
+     "tiles": [
+      "Vinicius Junior | Real Madrid • LW • £162M | 90",
+      "Kader Meïté | Stade Rennais FC • LW • £19M | 88",
+      "Khvicha Kvaratskhelia | Paris Saint-Germain • LW • £97M | 87",
+      "Samuel Lino | CR Flamengo • LW • £18M | 78",
+      "Jadon Sancho | Aston Villa • LW • £22M | 79",
+      "Samuel Dahl | SL Benfica • LW • £13M | 83",
+      "Reiss Nelson | Brentford FC • LW • £13M | 76",
+      "Amine Adli | AFC Bournemouth • LW • £22M | 79"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 2,
+     "scrollY": 0,
+     "eligible": 219,
+     "bestThreeExpected": [
+      "Vinicius Junior",
+      "Kader Meïté",
+      "Khvicha Kvaratskhelia"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Vinicius Junior",
+      "Kader Meïté",
+      "Khvicha Kvaratskhelia",
+      "Raphinha",
+      "Kenan Yıldız",
+      "Yan Diomande",
+      "Bradley Barcola",
+      "Luis Díaz"
+     ],
+     "outsideOldFixed": 5,
+     "allEligible": true,
+     "lowestRatingShown": 76,
+     "picked": "Vinicius Junior"
+    }
+   ],
+   "notes": [],
+   "result": "Grade S • XI 86 / A once-in-a-generation XI. The board bowed to you. / Your darts built a champion, series won 2-1! / Accuracy 499 / Series 2-1 / Total 705 / GK / Mike Maignan",
+   "doneOverflowPx": 0,
+   "poolReads": [
+    "0+1000 served 1000 order market_value_usd.desc,player_name.asc,id.asc",
+    "1000+1000 served 1000 order market_value_usd.desc,player_name.asc,id.asc"
+   ],
+   "countryReads": [
+    "in.(France) 0+1000 served 283",
+    "in.(Brazil) 0+1000 served 370",
+    "in.(Morocco) 0+1000 served 73",
+    "in.(Argentina) 0+1000 served 287"
+   ],
+   "pageErrors": [],
+   "writes": []
+  },
+  {
+   "game": "dart-draft",
+   "viewport": "1280x900",
+   "reducedMotion": false,
+   "topic": "All-Time",
+   "throws": [
+    {
+     "throw": 1,
+     "slot": "GK",
+     "view": "world",
+     "aim": "country fr",
+     "zonesOnMap": [],
+     "title": "France",
+     "caption": "",
+     "tiles": [
+      "Mike Maignan | AC Milan • GK • £27M | 83",
+      "Mathys Detourbet | AS Monaco • GK • £11M | 83",
+      "Valentin Atangana | Al-Ahli SFC • GK • £19M | 82",
+      "Lucas Chevalier | Paris Saint-Germain • GK • £32M | 81",
+      "Robin Risser | RC Lens • GK • £27M | 80",
+      "Pablo Pagis | FC Lorient • GK • £11M | 79",
+      "Paul Joly | 1.FC Kaiserslautern • GK • £3M | 70",
+      "Benjamin Lecomte | Fulham FC • GK • £1M | 69"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 0,
+     "scrollY": 21,
+     "picked": "Mike Maignan"
+    },
+    {
+     "throw": 2,
+     "slot": "RB",
+     "view": "europe",
+     "aim": "zone legend",
+     "zonesOnMap": [
+      "legend"
+     ],
+     "title": "👑 LEGEND ZONE",
+     "caption": "All-time greats at your position. Pick one.",
+     "tiles": [
+      "Paolo Maldini | AC Milan • CB • £185M | 91",
+      "Franz Beckenbauer | Bayern Munich • CB • £195M | 91",
+      "Sergio Ramos | Real Madrid • CB • £180M | 91",
+      "John Terry | Chelsea • CB • £165M | 90",
+      "Virgil van Dijk | Liverpool • CB • £178M | 91",
+      "Cafu | AC Milan • RB • £170M | 90",
+      "Carles Puyol | Barcelona • CB • £165M | 90",
+      "Rio Ferdinand | Manchester United • CB • £168M | 90"
+     ],
+     "distinct": true,
+     "usedOffered": [],
+     "overflowPx": 0,
+     "tilesBelowFold": 4,
+     "scrollY": 78,
+     "eligible": 21,
+     "bestThreeExpected": [
+      "Paolo Maldini",
+      "Franz Beckenbauer",
+      "Sergio Ramos"
+     ],
+     "bestThreeFirst": true,
+     "oldFixed": [
+      "Paolo Maldini",
+      "Franz Beckenbauer",
+      "Sergio Ramos",
+      "Virgil van Dijk",
+      "Bobby Moore",
+      "Franco Baresi",
+      "Fabio Cannavaro",
+      "Carles Puyol"
+     ],
+     "outsideOldFixed": 3,
+     "allEligible": true,
+     "lowestRatingShown": 90,
+     "picked": "Paolo Maldini"
+    }
+   ],
+   "notes": [],
+   "poolReads": [
+    "0+1000 served 1000 order market_value_usd.desc,player_name.asc,id.asc",
+    "1000+1000 served 1000 order market_value_usd.desc,player_name.asc,id.asc"
+   ],
+   "countryReads": [
+    "in.(France) 0+1000 served 283"
+   ],
+   "pageErrors": [],
+   "writes": []
+  }
+ ]
+}

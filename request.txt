@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: WALK_ONLY=dart node .rc/x/walk.mjs
