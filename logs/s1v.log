@@ -1,0 +1,6 @@
+MUT s1 applied to src/components/us-career/UsCareerBoard.tsx: "return holdPendingSave(() => { retrySave(); return pendingSave.current" is now "return undefined;"
+MUT s1 applied to src/components/us-career/UsCareerBoard.tsx: "  }, [saveFailed, retrySave]);" is now "  }, [saveFailed, retrySave]);
+  useEffect(() => { if (sport.saveKey ="
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m36 passed[39m[22m[90m (36)[39m
+MUT s1 the hold moved to a dead effect: storage=0 vitest=0

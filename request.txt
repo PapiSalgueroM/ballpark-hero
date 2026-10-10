@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+base-build: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && git log --oneline -1 && npm run build > /tmp/basebuild.log 2>&1; s=$?; tail -1 /tmp/basebuild.log; ls /tmp/base/dist | head -3; exit $s
+oldsaves: (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > /tmp/oldserver.log 2>&1 &) ; sleep 4; OLD_BASE=http://localhost:4174 node .rc/x/reviewOldSaves.mjs
+fleet: node .rc/x/reviewFleet.mjs /tmp/base
+s9: node .rc/x/reviewMut.mjs s9 && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; grep -E "FAIL|NAMED|no list|stale|simStorageWrites" /tmp/a.log | cut -c1-400 | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT s9 Footle names its practice run and leaves the unlimited session owed: storage=$a"
+s1v: node .rc/x/reviewMut.mjs s1 && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; node_modules/.bin/vitest run src/test/usCareerSaveRetry.test.tsx src/test/routeErrorHeldSave.test.tsx > /tmp/b.log 2>&1; b=$?; grep -E "FAIL|Tests |Test Files" /tmp/b.log | cut -c1-200 | tail -8; }; git checkout -q HEAD -- src scripts; echo "MUT s1 the hold moved to a dead effect: storage=$a vitest=$b"
+s10: node .rc/x/reviewMut.mjs s10 && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; node_modules/.bin/vitest run src/test/usCareerSaveRetry.test.tsx src/test/routeErrorHeldSave.test.tsx > /tmp/b.log 2>&1; b=$?; grep -E "FAIL|Tests |Test Files" /tmp/b.log | cut -c1-200 | tail -8; }; git checkout -q HEAD -- src scripts; echo "MUT s10 the hold's condition turned round: storage=$a vitest=$b"
+clean: git status --porcelain -- src scripts | head -5; node scripts/simStorageWrites.mjs | tail -1

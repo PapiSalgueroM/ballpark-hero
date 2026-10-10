@@ -1,0 +1,8 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+base-build exit=0 28s | about
+oldsaves exit=1 36s | reviewOldSaves: 1 problem
+fleet exit=0 0s | reviewFleet: 0 problems
+s9 exit=0 2s | MUT s9 Footle names its practice run and leaves the unlimited session owed: storage=1
+s1v exit=0 11s | MUT s1 the hold moved to a dead effect: storage=0 vitest=0
+s10 exit=0 11s | MUT s10 the hold's condition turned round: storage=0 vitest=0
+clean exit=0 2s | simStorageWrites: all green (owed: 12)

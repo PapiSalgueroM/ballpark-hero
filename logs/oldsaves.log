@@ -1,0 +1,16 @@
+1) Footle practice run, made on the base build
+   base build, puzzle 1: {"name":"The answer was Florian Wirtz","line":"Liverpool FC · Germany · CAM","flag":false}
+  PASS  the base build prints the feedback line bare ("Liverpool FC · Germany · CAM"): this is the page the round changed
+  PASS  the base build wrote a practice save (footle-practice-run-v1); 4 keys copied
+  PASS  the branch build opens the base save on its run, at "Puzzle 2 of 5"
+  PASS  loading left the saved run byte for byte as the base wrote it
+   branch build, puzzle 2: {"name":"The answer was Karim Adeyemi","line":"FC Barcelona · 🇩🇪Germany · RW","flag":true}
+  PASS  puzzle 2 of the old run shows its feedback line with a flag on the branch
+  PASS  the answer is the one the base save dealt (Karim Adeyemi)
+  PASS  no page error ()
+2) Club Manager career, made on the base build
+   base build groups: Europe (UEFA) 48 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 17 | Africa (CAF) 35 | Asia (AFC) 14 | Oceania (OFC) 3 | Elsewhere 3
+  PASS  the base build draws an Elsewhere group (Niger, Southern Sudan, Turkmenistan): this is what the round removes
+  FAIL  the branch build opens the base career straight on its hub (4 keys copied)
+  PASS  no page error ()
+reviewOldSaves: 1 problem

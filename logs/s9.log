@@ -1,0 +1,7 @@
+MUT s9 applied to src/hooks/useGame.ts: "  const [practiceSaveFailed, setPracticeSaveFailed] = useState(false);" is now "  const [practiceSaveFailed, setPracticeSaveFailed] = useState(false);"
+MUT s9 applied to scripts/simStorageWrites.mjs: "  { file: 'src/hooks/useGame.ts', keys: ['state:practiceSaveFailed', '" is now "  { file: 'src/hooks/useGame.ts', keys: ['state:unlimitedSaveFailed'],"
+MUT s9 applied to scripts/simStorageWrites.mjs: "const NOTHING_HELD = [" is now "NAMED.push({ file: 'src/hooks/useGame.ts', keys: ['state:practiceSaveF"
+   FAIL  1 remembered refusal(s) without a true answer:
+           OWED is stale: src/hooks/useGame.ts now names this save to the seam. Delete the entry { file: 'src/hooks/useGame.ts', keys: ['state:unlimitedSaveFailed'] } from OWED in scripts/simStorageWrites.mjs and add it to NAMED (the fix is good, the list is behind)
+simStorageWrites: 1 failed (owed: 12)
+MUT s9 Footle names its practice run and leaves the unlimited session owed: storage=1

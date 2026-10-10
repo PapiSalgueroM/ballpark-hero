@@ -1,0 +1,6 @@
+MUT s10 applied to src/components/us-career/UsCareerBoard.tsx: "    if (!saveFailed) return;
+    return holdPendingSave(" is now "    if (saveFailed) return;
+    return holdPendingSave("
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m36 passed[39m[22m[90m (36)[39m
+MUT s10 the hold's condition turned round: storage=0 vitest=0
