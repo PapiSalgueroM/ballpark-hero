@@ -81,6 +81,10 @@ const savedBytes = (engine, state) => { store.clear(); assert.equal(engine.saveC
 const tempRoot = path.join(ROOT, '.sim-control');
 fs.mkdirSync(tempRoot, { recursive: true });
 const folder = fs.mkdtempSync(path.join(tempRoot, 'cm-fixture-fleet-'));
+/* Round 1225 review: every way out removes the folder. cannot() leaves through process.exit, and it is called
+   while the engines are being bundled (a control's anchor, an unreadable base), which is before the try whose
+   finally removes it further down: an aborted control used to leave its folder behind. */
+process.on('exit', () => { try { fs.rmSync(folder, { recursive: true, force: true }); } catch { /* on the way out there is nothing more to do */ } });
 const require = createRequire(import.meta.url);
 const fresh = file => { delete require.cache[require.resolve(file)]; return require(file); };
 const P = file => JSON.stringify(file.split(path.sep).join('/'));
