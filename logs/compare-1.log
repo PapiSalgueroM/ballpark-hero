@@ -1,0 +1,9 @@
+bundled in 197 ms; sports nba, nfl; 40 careers a sport and a seed set; seed sets 1
+played 96 careers twice in 6406 ms; 1687 seasons observed
+digest nba seed set 1: 900 seasons, 809 derived, season 97a15a51f854372c4ebb5d273850e9c3e07140a1, careers 6c40d9a97274f344b3c1b7f83d1ed9f6967321f5
+digest nfl seed set 1: 787 seasons, 502 derived, season 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe, careers db0e7a9c26966fbd48634c8820b761a7c0d5268a
+digest stray draws (Math.random calls while a season was derived): 0
+ok   digest nba seed set 1 is the record's (900 seasons, 809 derived)
+ok   digest nfl seed set 1 is the record's (787 seasons, 502 derived)
+ok   digest stray draws are the record's (0)
+simUsSeasonCentre digest compare: 3 digests, 0 moved (a receipt of Round 1221's law move, in no gate)

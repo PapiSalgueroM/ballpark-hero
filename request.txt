@@ -1,0 +1,14 @@
+compare-all: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-0: SEEDSET=0 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-1: SEEDSET=1 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-2: SEEDSET=2 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-3: SEEDSET=3 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+compare-4: SEEDSET=4 US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+lawdrift: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+ctl-minutes: US_SEASON_CONTROL=minutes node scripts/simUsSeasonCentre.mjs
+ctl-points: US_SEASON_CONTROL=points node scripts/simUsSeasonCentre.mjs
+ctl-forty: US_SEASON_CONTROL=forty node scripts/simUsSeasonCentre.mjs
+ctl-level: US_SEASON_CONTROL=level node scripts/simUsSeasonCentre.mjs
+ctl-oddtd: US_SEASON_CONTROL=oddtd node scripts/simUsSeasonCentre.mjs
+ctl-bigkick: US_SEASON_CONTROL=bigkick node scripts/simUsSeasonCentre.mjs
+ctl-kick: US_SEASON_CONTROL=kick node scripts/simUsSeasonCentre.mjs
