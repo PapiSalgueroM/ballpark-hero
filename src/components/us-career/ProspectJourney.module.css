@@ -60,6 +60,19 @@
 .history p { margin: 5px 0; }
 .history > div > span { color: #405c72; }
 @keyframes prospect-stamp { from { transform: scale(.96); opacity: .5; } to { transform: scale(1); opacity: 1; } }
+/* Round 1220, draft night. While the picks are still arriving, the words above the board that give the ending away (the title and the club) wait for the closing row on the board's own clock, handed in as --night-hold. The hold is an animation and nothing else: there is no base rule at opacity 0, so anything that stops it (less motion, the rule at the foot of this file) leaves the words visible. It sits on the title and the club line themselves, not on .stageCopy, whose own arrival animation would outrank it. The numbers in the file under the stage are not faded: the journey prints the ones from before the press until the row has landed. */
+.stage[data-night-hold] h2, .stage[data-night-hold] .stageCopy > p:last-child { animation: prospect-night-hold 300ms ease-out var(--night-hold, 0s) both; }
+@keyframes prospect-night-hold { from { opacity: 0; } to { opacity: 1; } }
+.playArea [data-night-board], .playArea [data-lottery-reveal] { border-color: var(--line); background: #fff; color: var(--ink); }
+.playArea [data-night-board] :global(.text-foreground), .playArea [data-lottery-reveal] :global(.text-foreground) { color: var(--ink); }
+.playArea [data-night-row='pick'] { border-color: #d5e0ea; background: #f2f6fa; }
+.playArea [data-night-row='you'] { border-color: #c9962b; background: #fdf1cf; }
+.playArea [data-night-row='unpicked'] { border-color: #b7cadc; background: #e6edf3; }
+.playArea [data-lottery-slot] { border-color: #d5e0ea; background: #e6edf3; }
+.playArea [data-lottery-slot] > span[aria-hidden] { color: #4b647b; }
+.playArea [data-lottery-face] { background: #f2f6fa; color: var(--ink); padding-inline: 6px; gap: 6px; }
 @media (min-width: 540px) { .routes { grid-template-columns: repeat(2, minmax(0, 1fr)); } .route:last-child:nth-child(3) { grid-column: 1 / -1; } .stageCopy { padding-right: 20px; width: 74%; } .portrait { right: 24px; width: 145px; } .acts li { font-size: 12px; } }
-@media (max-width: 359px) { .stageCopy { padding-left: 16px; width: 82%; padding-right: 48px; } .portrait { width: 106px; right: -7px; opacity: .75; } .portrait svg { width: 106px; height: 106px; } .acts { gap: 5px; padding-inline: 10px; } .acts li { font-size: 10px; gap: 4px; } .playArea { padding: 14px; } }
+@media (max-width: 359px) { .stageCopy { padding-left: 16px; width: 82%; padding-right: 48px; } .portrait { width: 106px; right: -7px; opacity: .75; } .portrait svg { width: 106px; height: 106px; } .acts { gap: 5px; padding-inline: 10px; } .acts li { font-size: 10px; gap: 4px; } .playArea { padding: 14px; } .playArea [data-night-actions] button { padding-inline: 4px; font-size: 12px; } }
+/* Round 1220, the lottery tile on a phone under 360 wide. Two tiles to a row leave a club 73 px there, and the longest club's own name needs 83 ("Timberwolves") and the longest line under it 76 ("Seed 1 · Down 3"). So inside the journey the tile gives up 2 px of each side padding, 2 px of its gap and 4 px of the box around its pick number (one digit), which makes the room 83 px, and prints the club at 11 px, where the longest name is 76. The walk measures every club and every seed line of both eras in the tile's own boxes at 320 wide. */
+@media (max-width: 359px) { .playArea [data-lottery-face] { padding-inline: 4px; gap: 4px; } .playArea [data-lottery-face] > span:first-child { width: 16px; } .playArea [data-lottery-face] > span:last-child > span:first-child { font-size: 11px; } }
 @media (prefers-reduced-motion: reduce) { .journey *, .journey *::before, .journey *::after { animation: none !important; transition: none !important; } }

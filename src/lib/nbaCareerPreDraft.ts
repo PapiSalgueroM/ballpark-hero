@@ -14,7 +14,8 @@
    needs that table first, verified twice. An undrafted outcome has pick
    null, and today's career states store the pick as a number. */
 
-import { nbaEraById, nbaEraTeamIds, nbaTeamLabelOf } from './nbaMyCareer';
+import { NBA_TEAMS } from '@/data/conquestDataNba';
+import { NBA_TEAMS_2004, nbaEraById, nbaEraTeamIds, nbaTeamLabelOf } from './nbaMyCareer';
 import type { PreDraftDescriptor, PreDraftLottery, PreDraftRoute, PreDraftStat } from './careerPreDraft';
 
 export const NBA_LOTTERY_NOW: PreDraftLottery = {
@@ -56,6 +57,15 @@ function nbaStatLine(perf: number, rng: () => number, pos: string | undefined): 
   ];
 }
 
+/* Round 1220: the lottery tile on a phone has about a hundred pixels for a
+   club, and "Minnesota Timberwolves" needs 146, so the tile says the club's
+   own name and the line under the tiles keeps the city. The same three lists
+   nbaTeamLabelOf reads, in the same order, read lazily. */
+function nbaTeamNick(id: string, eraId: string): string {
+  const t = nbaEraById(eraId).teams.find(x => x.id === id) ?? NBA_TEAMS.find(x => x.id === id) ?? NBA_TEAMS_2004.find(x => x.id === id);
+  return t ? t.name : id;
+}
+
 export function nbaPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
   const era = nbaEraById(eraId);
   const then = era.id === 'y2004';
@@ -66,6 +76,7 @@ export function nbaPreDraftDescriptor(eraId?: string): PreDraftDescriptor {
     rounds: 2,
     teamIds: () => nbaEraTeamIds(era.id),
     teamLabel: id => nbaTeamLabelOf(id, era.id),
+    teamShort: id => nbaTeamNick(id, era.id),
     lottery: then ? NBA_LOTTERY_2003 : NBA_LOTTERY_NOW,
     routes: then ? [PREP, COLLEGE_ONE, COLLEGE_THREE] : [COLLEGE_ONE, COLLEGE_THREE],
     showcaseName: 'Pre draft workouts',

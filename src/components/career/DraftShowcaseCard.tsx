@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  PRE_DRAFT_APPROACHES, SHOWCASE_DELTAS, SKIP_DELTA, preDraftShowcaseMove,
+  PRE_DRAFT_APPROACHES, SHOWCASE_DELTAS, SKIP_DELTA, preDraftProjection, preDraftProjectionLine, preDraftShowcaseMove,
   type PreDraftApproach, type PreDraftDescriptor, type PreDraftState,
 } from "@/lib/careerPreDraft";
 
@@ -19,15 +20,29 @@ export function approachPromise(id: PreDraftApproach["id"], stock: number): stri
    Three steps on one card. Showcase: pick how hard to go, and every option
    prints the exact stock move per grade. Then the drill result and the
    button that starts the draft. Then the pick: the round, the number, and
-   the team that held it, which is the team you join. */
+   the team that held it, which is the team you join.
+
+   Round 1220, all optional, and a card rendered without them is the card it
+   was: `showRange` prints where the scouts have you above the "Draft day"
+   button, from the same arithmetic the draft is about to draw with. `night`
+   is draft night itself (DraftNightSequence, handed in by the journey only
+   in the mount that pressed "Draft day"): it goes above the result, brings
+   its own "Start your career" beside its skip button, and `nightHold` is the
+   delay the result block waits so it cannot give the pick away early.
+   `nightHeld` is true while the rows are still arriving: the result block is
+   then out of a screen reader's tree as well as out of sight. */
 export function DraftShowcaseCard({
-  desc, state, onShowcase, onRunDraft, onContinue,
+  desc, state, onShowcase, onRunDraft, onContinue, showRange, night, nightHold, nightHeld,
 }: {
   desc: PreDraftDescriptor;
   state: PreDraftState;
   onShowcase: (approach: PreDraftApproach["id"]) => void;
   onRunDraft: () => void;
   onContinue?: () => void;
+  showRange?: boolean;
+  night?: ReactNode;
+  nightHold?: string;
+  nightHeld?: boolean;
 }) {
   const sc = state.showcase;
   const out = state.draft;
@@ -58,12 +73,18 @@ export function DraftShowcaseCard({
         </div>
       )}
 
+      {state.phase === "draft" && showRange && (
+        <p className="text-sm" data-testid="draft-range">{preDraftProjectionLine(preDraftProjection(desc, state), "have")}</p>
+      )}
+
       {state.phase === "draft" && (
         <Button className="w-full" onClick={onRunDraft}>Draft day</Button>
       )}
 
+      {out && night}
+
       {out && (
-        <div className="space-y-2" data-testid="draft-result">
+        <div className={nightHold ? "space-y-2 cm-rise" : "space-y-2"} style={nightHold ? { animationDelay: nightHold } : undefined} aria-hidden={nightHeld || undefined} data-testid="draft-result">
           {out.pick !== null ? (
             <>
               <div className="text-xs uppercase text-muted-foreground">{out.draftYear} draft</div>
@@ -91,7 +112,7 @@ export function DraftShowcaseCard({
               ))}
             </div>
           )}
-          {onContinue && <Button className="w-full" onClick={onContinue}>Start your career</Button>}
+          {onContinue && !night && <Button className="w-full" onClick={onContinue}>Start your career</Button>}
         </div>
       )}
     </div>
