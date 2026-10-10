@@ -46,7 +46,7 @@
         ]
       },
       "laterRounds": {
-        "says": "Round two is all 30 clubs in reverse order of regular season record, and the lottery does not move it.",
+        "says": "Round two is all 30 clubs in reverse order of regular season record: a lottery club does not keep its round one place there.",
         "reads": [
           { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "The Draft selections for the remainder of the first round (No. 15-30) and the entire second round (No. 31-60), are determined by reverse order of regular season record." },
           { "url": "https://www.nbcsports.com/nba/news/2026-nba-draft-complete-list-of-every-pick-from-round-1-and-round-2", "who": "NBC Sports, 24 June 2026", "words": "The 2026 second round as it was picked, by first owner: Portland's pick is 42nd (a playoff club, 42-40), ahead of Miami's at 44 and Charlotte's at 45 (lottery clubs with better records). Utah, Memphis and Chicago, drawn 2nd, 3rd and 4th in the lottery, are 35th, 36th and 39th, where their records put them. An observed order, not a sentence stating the rule." }
@@ -99,7 +99,8 @@
       "realSpan": {
         "says": "This lottery ran from the 2019 draft to the 2026 draft; a new one applies from the 2027 draft.",
         "reads": [
-          { "url": "https://pr.nba.com/nba-board-of-governors-approves-new-draft-lottery-system-to-address-tanking/", "who": "the league, 28 May 2026", "words": "The new system will take effect beginning with the 2027 NBA Draft. / The 3-2-1 Lottery will be in effect for the 2027, 2028 and 2029 NBA Drafts. / Rules governing selection order beginning with the 2030 NBA Draft will be determined by a vote of the Board of Governors. (It expands the lottery from 14 to 16 teams. The league's lottery explainer speaks of the pre-2019 structure.)" },
+          { "url": "https://pr.nba.com/nba-board-of-governors-approves-new-draft-lottery-system-to-address-tanking/", "who": "the league, 28 May 2026", "words": "The new system will take effect beginning with the 2027 NBA Draft. / The 3-2-1 Lottery will be in effect for the 2027, 2028 and 2029 NBA Drafts. / Rules governing selection order beginning with the 2030 NBA Draft will be determined by a vote of the Board of Governors. (It expands the lottery from 14 to 16 teams.)" },
+          { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "Under the revamped format (which began with the 2019 Draft) / The NBA Board of Governors approved changes to the lottery system effective with the 2019 NBA Draft" },
           { "url": "https://sports.yahoo.com/nba/article/the-nbas-3-2-1-lottery-system-is-here-how-will-it-impact-future-drafts-175414282.html", "who": "Yahoo Sports, 29 May 2026", "words": "All 16 teams will be drawn, rather than just the top four teams as it's been since 2019. / Starting in the 2027 draft, the lottery will expand from 14 to 16 teams and flatten the odds." }
         ]
       }

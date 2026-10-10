@@ -44,6 +44,8 @@ describe('the rule sets are whole', () => {
         expect(new Set(keys).size, r.id).toBe(keys.length);
         for (const need of r.lottery?.needs ?? []) expect(keys, `${r.id} needs ${need}`).toContain(need);
         for (const f of r.facts) expect(f.on, `${r.id} ${f.key}`).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+        /* `thin` stops a lottery and nothing else, so only a fact a lottery needs may be thin. */
+        for (const f of r.facts) if (f.thin) expect(r.lottery?.needs ?? [], `${r.id} ${f.key} is thin`).toContain(f.key);
         expect(JSON.stringify(r)).not.toMatch(/https?:|www\./);
       }
     }
@@ -136,6 +138,9 @@ describe('fail closed: no lottery is drawn on a rule that cannot carry one', () 
   const cases: [string, GmDraftOrderRules, GmPickRules, DraftSeason, SavedDraftOrder['plain']][] = [
     ['a thin fact', { ...NBA, facts: NBA.facts.map(f => (f.key === 'draws' ? { ...f, thin: true as const } : f)) }, NBA_PICK_RULES, season, 'thin-rule'],
     ['a missing fact', { ...NBA, facts: NBA.facts.filter(f => f.key !== 'table') }, NBA_PICK_RULES, season, 'thin-rule'],
+    /* Level clubs are seeded by a drawing and share their chances, so the lottery rests on those facts too. */
+    ['a thin fact about how level clubs share their chances', { ...NBA, facts: NBA.facts.map(f => (f.key === 'levelOdds' ? { ...f, thin: true as const } : f)) }, NBA_PICK_RULES, season, 'thin-rule'],
+    ['a thin fact about the drawing between level clubs', { ...NBA, facts: NBA.facts.map(f => (f.key === 'tieDraw' ? { ...f, thin: true as const } : f)) }, NBA_PICK_RULES, season, 'thin-rule'],
     ['another table', NBA, { ...NBA_PICK_RULES, lottery: { ...NBA_PICK_RULES.lottery!, table: 'the 2030 draft' } }, season, 'table'],
     ['no table', NBA, { ...NBA_PICK_RULES, lottery: null }, season, 'table'],
     ['a field of another size', NBA, NBA_PICK_RULES, plainSeason(30, 12, 'nba'), 'field-size'],

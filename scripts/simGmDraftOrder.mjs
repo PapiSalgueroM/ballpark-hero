@@ -112,6 +112,10 @@ const MOUNT_ALLOW = [
 /* control -> { swaps (keyed like the harness lib's FILES), expect: the sections that must go red } */
 const CONTROLS = {
   onesource: { expect: [1] },
+  /* in memory: a fact outside the lottery's needs, read once and marked thin */
+  thinoutside: { expect: [1] },
+  /* in memory: a second lottery table with the name and the size of the first */
+  twintable: { expect: [1] },
   closespan: { expect: [1], swaps: { rules: [['  plays: { from: 2027, to: null },', '  plays: { from: 2027, to: 2030 },']] } },
   flat: { expect: [2, 3], swaps: { order: [['  const pct = pool.map((_, i) => (i < lottery.odds.length ? lottery.odds[i] : 0));', '  const pct = pool.map((_, i) => (i < lottery.odds.length ? 100 / lottery.odds.length : 0));']] } },
   oddsrow: { expect: [2, 3], swaps: { order: [['  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[i] }));', '  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[pool.length - 1 - i] }));']] } },
@@ -282,6 +286,31 @@ open(1);
     if (!Array.isArray(reads) || reads.length < 2) { console.error('control cannot run: the field fact has no second read to drop'); process.exit(3); }
     ledger.rules['nba-2019'].field.reads = reads.slice(0, 1);
   }
+  if (CONTROL === 'thinoutside') {
+    /* a fact no lottery needs, read once and honestly marked thin: nothing in the engine would stop it being played */
+    const fact = RULES.NBA_DRAFT_ORDER_2019.facts.find(f => f.key === 'laterRounds');
+    const reads = ledger.rules?.['nba-2019']?.laterRounds?.reads;
+    if (!fact || fact.thin || !Array.isArray(reads) || reads.length < 2 || RULES.NBA_DRAFT_ORDER_2019.lottery.needs.includes('laterRounds')) {
+      console.error('control cannot run: laterRounds is missing, already thin, has no second read to drop, or is a lottery need');
+      process.exit(3);
+    }
+    fact.thin = true;
+    ledger.rules['nba-2019'].laterRounds.reads = reads.slice(0, 1);
+  }
+  /* The lottery tables on the pick rules. The order refuses a table by its NAME and by the size of the field, so
+     two tables that share both could be swapped unseen. Two of them share a name today; their sizes differ. */
+  const tables = Object.entries(P.GM_PICK_RULES).filter(([, r]) => r.lottery).map(([sport, r]) => ({ sport, table: r.lottery.table, clubs: r.lottery.clubs }));
+  if (CONTROL === 'twintable') {
+    if (tables.length === 0) { console.error('control cannot run: no pick rules carry a lottery table'); process.exit(3); }
+    tables.push({ ...tables[0], sport: 'a twin' });
+  }
+  for (let a = 0; a < tables.length; a += 1) {
+    for (let b = a + 1; b < tables.length; b += 1) {
+      check(!(tables[a].table === tables[b].table && tables[a].clubs === tables[b].clubs),
+        `the lottery tables of ${tables[a].sport} and ${tables[b].sport} share the name "${tables[a].table}" and the size ${tables[a].clubs}, so a rule set read against one accepts the other`);
+    }
+  }
+  check(tables.length >= 2, `only ${tables.length} lottery table(s) on the pick rules, so the check that the order can tell them apart is not looking at anything`);
   const site = url => { try { return new URL(url).hostname.split('.').slice(-2).join('.'); } catch { return ''; } };
   let facts = 0;
   let reads = 0;
@@ -306,6 +335,8 @@ open(1);
         check((hosts.size >= 2) === !f.thin, hosts.size >= 2
           ? `${rule.id}.${f.key} is marked thin and has two publishers`
           : `${rule.id}.${f.key} has ${hosts.size} publisher(s) and is not marked thin, so the lift would play a rule read once`);
+        /* `thin` stops a lottery and nothing else, so a thin fact that no lottery needs would simply be played */
+        if (f.thin) check((rule.lottery?.needs ?? []).includes(f.key), `${rule.id}.${f.key} is marked thin and no lottery needs it, so nothing stops the lift playing a rule read once. Take it out of the facts and name it in partial.`);
       }
       for (const key of Object.keys(twin)) check(rule.facts.some(f => f.key === key), `${rule.id}: the ledger holds ${key}, which the rule set does not carry`);
       for (const need of rule.lottery?.needs ?? []) check(rule.facts.some(f => f.key === need), `${rule.id}: the lottery needs ${need}, which is not a fact`);
