@@ -1,0 +1,8 @@
+vitest exit=0 11s |    Duration  10.77s (transform 4.28s, setup 405ms, collect 7.99s, tests 11.82s, environment 2.96s, prepare 790ms)
+simUsPostseason exit=0 15s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+simUsSeasonCentre exit=0 15s | simUsSeasonCentre: 98 checks, 0 failed
+lay-compare exit=0 17s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+lay-control exit=1 19s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control lay)
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+tsc exit=0 52s | 
+anchors exit=0 27s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
