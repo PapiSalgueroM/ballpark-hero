@@ -104,6 +104,11 @@
  *           This is the recorded red, reproduced on demand.
  *   guideheld the gate never opens: every row with a guide red on the named
  *           assertion (inside a short bound, never a hang), none on a diff.
+ *   guidepart (review of Round 1210) the test as guidelate runs it, read with
+ *           the shapes PART's own judgement (shapesLineProblems): it must
+ *           name every row whose route has a guide on the word "skipped" and
+ *           none of the others. Until this the part's rule "a guide word
+ *           other than ready or none fails" had no control of its own.
  *
  * All outcomes are deterministic (fixed clock, Math.random pinned, no network),
  * so there are no bands: the counts below are exact and were the same on every
@@ -124,7 +129,7 @@ const VITEST = path.join(path.dirname(createRequire(path.join(ROOT, 'package.jso
 const PRE = '617b8354';
 const PART = process.env.R848_PART || 'all';
 const CONTROL = process.env.R848_CONTROL || '';
-const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided', 'strict', 'single', 'empty', 'shape', 'skip', 'skipdiv', 'guideslow', 'guidelate', 'guideheld'];
+const CONTROLS = ['stale', 'guard', 'turn', 'verdict', 'event', 'mark', 'finished', 'decided', 'strict', 'single', 'empty', 'shape', 'skip', 'skipdiv', 'guideslow', 'guidelate', 'guideheld', 'guidepart'];
 assert.ok(['all', 'saves', 'shapes', 'skip', 'parity'].includes(PART), `unknown R848_PART ${PART}`);
 assert.ok(!CONTROL || CONTROLS.includes(CONTROL), `unknown R848_CONTROL ${CONTROL}`);
 
@@ -175,6 +180,16 @@ function copyWith(rel, edits, name) {
 }
 
 const lines = (text, tag) => [...text.matchAll(new RegExp(`^${tag} (.+)$`, 'gm'))].map((m) => JSON.parse(m[1]));
+/** What the shapes part holds one R848_SHAPES line to. One function, so the
+ *  guidepart control runs the part's own judgement and never a copy of it.
+ *  Round 1210: a row whose baseline was taken without its guide proves nothing
+ *  about the forms, so a guide word other than ready or none is a failure. */
+const shapesLineProblems = (l) => {
+  const out = [];
+  if (l.failures.length) out.push(`${l.route}: ${l.failures.join('; ').slice(0, 300)}`);
+  if (l.guide !== 'ready' && l.guide !== 'none') out.push(`${l.route}: its line says guide ${JSON.stringify(l.guide ?? null)}, so its baseline was not taken with the guide landed`);
+  return out;
+};
 
 /* The parity test against the hook as it stood at PRE: the old hook is written
    into this run's folder from git and named by R848_PRE_HOOK. */
@@ -326,11 +341,12 @@ try {
     else if (!/AssertionError/.test(failed[0].messages)) fail('the /free-kick row failed on something other than its count');
     const counts = lines(run.text, 'R848_SKIP')[0] || {};
     console.log(`R848 ${CONTROL} control: /free-kick drew ${counts["/free-kick"]} target(s) and went red, ${run.rows.length - failed.length} other rows green`);
-  } else if (['guideslow', 'guidelate', 'guideheld'].includes(CONTROL)) {
+  } else if (['guideslow', 'guidelate', 'guideheld', 'guidepart'].includes(CONTROL)) {
     /* Round 1210: the guide race, switched on in the test (R848_GUIDE). Which
        rows are exposed is computed: the first row, in the test's own order, of
-       each guide file PATH_BUNDLE names. */
-    const mode = CONTROL.slice('guide'.length);
+       each guide file PATH_BUNDLE names. guidepart runs the test as guidelate
+       does (the fetch skipped) and reads it with the shapes PART's judgement. */
+    const mode = CONTROL === 'guidepart' ? 'late' : CONTROL.slice('guide'.length);
     const loader = code(read('src/data/gameContent/loader.ts'));
     const at = loader.indexOf('export const PATH_BUNDLE');
     assert.ok(at >= 0, 'loader.ts declares PATH_BUNDLE');
@@ -352,7 +368,19 @@ try {
     const NAMED = /^the guide for this route had not landed when the baseline was taken/;
     const red = result.filter((l) => l.failures.length).map((l) => l.route);
     for (const l of result) if ((statusOf.get(l.route) === 'passed') !== (l.failures.length === 0)) fail(`${l.route}: the row is ${statusOf.get(l.route)} with ${l.failures.length} failure(s) on its line`);
-    if (mode === 'slow') {
+    if (CONTROL === 'guidepart') {
+      /* Review of Round 1210: the shapes part fails on a line whose guide
+         word is not ready or none, and no control ever made it do so (the
+         three above read l.guide themselves). With the fetch skipped every
+         row that has a guide file says "skipped": the part's own judgement
+         must name exactly those rows on that word, and none without a guide. */
+      const WORD = /: its line says guide "skipped", so its baseline was not taken with the guide landed$/;
+      const namedRows = result.filter((l) => shapesLineProblems(l).some((p) => WORD.test(p))).map((l) => l.route);
+      if (guided.length < 2) fail(`only ${guided.length} rows have a guide file, so the control proves nothing`);
+      if (namedRows.slice().sort().join() !== guided.slice().sort().join()) fail(`expected the shapes part's judgement to name exactly the ${guided.length} rows whose route has a guide, each on its guide word, got ${namedRows.length} (${namedRows.slice(0, 6).join(', ') || 'none'})`);
+      assert.notEqual(run.status, 0, 'the run is red');
+      console.log(`R848 guidepart control: with the fetch skipped the shapes part's own judgement named ${namedRows.length} rows on the guide word "skipped", exactly the ${guided.length} rows whose route has a guide, and none of the ${result.length - guided.length} without`);
+    } else if (mode === 'slow') {
       if (switched.waited < firstRows.length) fail(`only ${switched.waited} loads were made to wait, fewer than the ${firstRows.length} guide files, so the delay never happened`);
       for (const l of result) {
         if (l.failures.length) fail(`${l.route} went red under a slow guide: ${l.failures.join('; ').slice(0, 300)}`);
@@ -423,9 +451,7 @@ try {
       const run = vitest(SHAPES);
       const result = lines(run.text, 'R848_SHAPES');
       if (result.length !== shapesRoutes.size) fail(`expected ${shapesRoutes.size} route results, got ${result.length}`);
-      for (const l of result) if (l.failures.length) fail(`${l.route}: ${l.failures.join('; ').slice(0, 300)}`);
-      /* Round 1210: a row whose baseline was taken without its guide proves nothing about the forms. */
-      for (const l of result) if (l.guide !== 'ready' && l.guide !== 'none') fail(`${l.route}: its line says guide ${JSON.stringify(l.guide ?? null)}, so its baseline was not taken with the guide landed`);
+      for (const l of result) for (const p of shapesLineProblems(l)) fail(p);
       for (const r of run.rows.filter((x) => x.status !== 'passed')) fail(`${r.title} ${r.status}`);
       console.log(`   ${result.filter((l) => !l.failures.length).length} of ${shapesRoutes.size} routes: nothing thrown on any damaged form, and the audit's and the brief's forms draw exactly a fresh daily (guide ready on ${result.filter((l) => l.guide === 'ready').length}, none on ${result.filter((l) => l.guide === 'none').length})`);
     }

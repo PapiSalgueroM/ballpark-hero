@@ -54,6 +54,10 @@
  * NEGATIVE CONTROL: NATIONALITY_FLAGS_CONTROL=owedstale (Round 1210) gives the
  *   first OWED_BARE site its flag in memory; section 1 must call that entry
  *   stale and say which entry to delete.
+ * NEGATIVE CONTROL: NATIONALITY_FLAGS_CONTROL=owedsecond (review of Round 1210)
+ *   adds, in memory, a second bare print of the first OWED_BARE entry's own
+ *   expression to that entry's file; section 1 must name the new line and
+ *   still carry the first as owed. An entry covers one print, not a file.
  *
  * Round 1210, what changed and why.
  *   The fence had been red on main since 2026-10-03 and everybody read past it.
@@ -83,7 +87,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.NATIONALITY_FLAGS_CONTROL || '';
-const CONTROLS = ['bare', 'code', 'confed', 'league', 'owedstale'];
+const CONTROLS = ['bare', 'code', 'confed', 'league', 'owedstale', 'owedsecond'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`NATIONALITY_FLAGS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -279,6 +283,19 @@ if (CONTROL === 'owedstale') {
   sources.set(o.file, lines.join('\n'));
   controlTarget = `${o.file} {${o.site}}`;
   console.log(`   NEGATIVE CONTROL ON: ${o.file}:${hit.line} wears its flag in memory, section 1 must call its OWED_BARE entry stale`);
+}
+if (CONTROL === 'owedsecond') {
+  const o = OWED_BARE[0];
+  if (!o) refuse('the owedsecond control has nothing to double: OWED_BARE is empty');
+  const src = sources.get(o.file);
+  const before = scanFile(src).filter(b => b.site === o.site).length;
+  if (before !== 1) refuse(`the owedsecond control starts from exactly one bare {${o.site}} in ${o.file} (saw ${before})`);
+  const next = `${src}\nconst plantedSecondPrint = <p>Also from {${o.site}}</p>;\n`;
+  const after = scanFile(next).filter(b => b.site === o.site);
+  if (after.length !== 2) refuse(`the owedsecond control planted a second bare {${o.site}} in ${o.file} and the scanner sees ${after.length}`);
+  sources.set(o.file, next);
+  controlTarget = `${o.file}:${after[1].line}`;
+  console.log(`   NEGATIVE CONTROL ON: ${controlTarget} prints {${o.site}} bare a second time in memory, section 1 must name it and keep the first as owed`);
 }
 
 let totalSites = 0;
@@ -498,6 +515,12 @@ if (CONTROL === 'owedstale') {
   const named = staleOwed.some(o => `${o.file} {${o.site}}` === controlTarget);
   if (named) { console.log(`simNationalityFlags control: green. ${controlTarget} got its flag in memory and its OWED_BARE entry was called stale (${failures} finding${failures === 1 ? '' : 's'}).`); process.exit(0); }
   console.error(`simNationalityFlags control: RED. ${controlTarget} got its flag and its OWED_BARE entry was not called stale, so a dead allowance could hide the next bare print.`);
+  process.exit(1);
+}
+if (CONTROL === 'owedsecond') {
+  const named = unowed.some(b => b.msg.startsWith(controlTarget + ' '));
+  if (named && owedNotes.length === OWED_BARE.length && !staleOwed.length) { console.log(`simNationalityFlags control: green. The second bare print was named as ${controlTarget} and the entry still covers the first one only (${failures} finding${failures === 1 ? '' : 's'}, owed: ${owedNotes.length}).`); process.exit(0); }
+  console.error(`simNationalityFlags control: RED. ${controlTarget} is a second bare print in a file with an OWED_BARE entry and section 1 did not name it (or lost the first), so one entry would cover a whole file.`);
   process.exit(1);
 }
 if (failures > 0) {
