@@ -56,9 +56,10 @@ const BEAT = 0.4;
 const LAND = 0.4;
 /** How many px of the night's top may sit above the screen once its buttons
  *  are brought in: a tile's own padding and its small heading, never a tile
- *  or a pick. Measured: the NBA's night is 6 px taller than a 320 by 640
- *  phone and is still shown whole there; on a phone on its side (844 by 390)
- *  it is well over 100 px taller, and there the press leaves the page alone. */
+ *  or a pick. Measured on a runner: the NBA's night is 646 px high on a 320
+ *  by 640 phone, 6 px over, and is still brought in whole there (the tile's
+ *  heading is what sits at the edge); on a phone on its side it is 547 px on
+ *  a 390 px screen, 157 over, and there the press leaves the page alone. */
 const NIGHT_TOP_SLACK = 28;
 
 export interface CareerNightClock {

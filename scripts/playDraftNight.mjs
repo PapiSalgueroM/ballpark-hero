@@ -490,6 +490,7 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
       if (!c || c.team !== out.team || c.draftPick !== (out.pick ?? 0)) fail(id, 'save', `the career started at ${c && c.team} with pick ${c && c.draftPick}`);
     }
     if (pageErrors.length) fail(id, 'errors', pageErrors.join(' | '));
+    if (size.short) console.log(`  measured ${id}: the night is ${row.nightHeight} high on a ${samples[0].vh} high screen; the page was at rest ${row.scrollSettledMs} ms in with the night's top at ${row.nightTopAtRest}, and moved ${row.endingMovedPx} px for the ending (the closing row started to land at ${row.landing ? `${row.landing.top} to ${row.landing.bottom}` : 'no frame'}, and ends at ${row.closing.join(' to ')})`);
     console.log(`  walked ${id}: pick ${out.pick ?? 'none'}, ${end.rows} rows${end.tiles ? ` and ${end.tiles} lottery tiles` : ''}, card ${Math.round(cMax)} high, ${samples.length} frames`);
   } catch (error) {
     fail(id, 'walk', String(error.message).split('\n')[0]);
