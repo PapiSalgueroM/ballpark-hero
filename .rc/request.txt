@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+old: git worktree add -f /tmp/base 54e3820a >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; W="$PWD"; cd /tmp/base && git rev-parse --short HEAD && node "$W/.rc/x/scMake.mjs" old /tmp/sc-old.json
+new: node .rc/x/scMake.mjs new /tmp/sc-new.json
+probe: node .rc/x/scProbe.mjs /tmp/sc-new.json
+play: SC_ONLY=play node .rc/x/scWalk.mjs /tmp/sc-old.json /tmp/sc-new.json
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+dev-head: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" SHOTS=.tmp-fx/dev-head NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs > /tmp/dev-head.log 2>&1; s=$?; for f in .tmp-fx/dev-head/390-mentor*restoration*.json; do [ -f "$f" ] && cp "$f" "$RC_OUT/head-$(basename "$f")"; done; ls .tmp-fx/dev-head | grep -c .; grep -c "^ok" /tmp/dev-head.log; grep -E "^FAIL" /tmp/dev-head.log | cut -c1-200; tail -1 /tmp/dev-head.log | cut -c1-200; exit $s
+dev-pr210: W="$PWD"; git worktree add -f /tmp/pr210 d90e0e26 >/dev/null 2>&1; ln -s "$W/node_modules" /tmp/pr210/node_modules; cd /tmp/pr210 && git rev-parse --short HEAD && npm run build > /tmp/pr210-build.log 2>&1; test -f dist/index.html && FREE_KICK_FONT_CACHE="$W/.tmp-fx/font-cache" SHOTS=.tmp-fx/dev-pr210 NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs > /tmp/dev-pr210.log 2>&1; s=$?; for f in .tmp-fx/dev-pr210/390-mentor*restoration*.json; do [ -f "$f" ] && cp "$f" "$RC_OUT/pr210-$(basename "$f")"; done; grep -c "^ok" /tmp/dev-pr210.log; grep -E "^FAIL" /tmp/dev-pr210.log | cut -c1-200; tail -1 /tmp/dev-pr210.log | cut -c1-200; exit $s
