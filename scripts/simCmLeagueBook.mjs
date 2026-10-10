@@ -23,7 +23,10 @@
  *            round trip and holds no null; the full reader accepts it. At each season's end the clean
  *            sheets on a club's keeper rows are the matches it conceded nothing in, counted by the
  *            harness from the table before and after every entry, never from the book; my men's league
- *            clean sheets fit the ones I kept. Every season opens with an empty book.
+ *            clean sheets fit the ones I kept. Every season opens with an empty book. One career plays
+ *            a league of fifteen clubs, so the week I do not play (its results are noted at a call of
+ *            their own) is under the law too; one entry can then hold two matches of a club, and where
+ *            the table cannot tell which of the two was the clean sheet that club is judged on a range
  *   names    every man credited in an entry is on that club's roster under that position and was not in
  *            my squad; and the PURCHASE: the best rival scorer is put into my squad at week 22 and
  *            twelve entries are played on: his row at the club he left must not move, and its law holds;
@@ -532,14 +535,14 @@ function reportAgainstBook(mod, acc, label, where, after, rep, opp, d) {
 function watcher(mod, label, acc, opts = {}) {
   const { cm } = mod;
   let keptByClub = new Map();
-  /* Clubs whose clean sheets the table could not tell this season (see the entry hook). */
-  let untold = new Set();
+  /* Clean sheets the table could not tell this season, a club: how many more it MAY have kept (see the entry hook). */
+  let untold = new Map();
   let myKept = 0;
   let leagueId = '';
   const hooks = {
     opened(s, seasonIndex) {
       keptByClub = new Map();
-      untold = new Set();
+      untold = new Map();
       myKept = 0;
       leagueId = cm.careerLeagueOf(s).id;
       tick('law');
@@ -581,10 +584,10 @@ function watcher(mod, label, acc, opts = {}) {
         const xi = before.xi.get(club);
         const scored = now.gf - was.gf;
         /* Clean sheets by the TABLE, a match at a time. In a league with an even number of clubs one entry
-           is one match of a club. With an odd number, one call can play a week I am not part of (the club
-           meets somebody else) and then my own match against it: what it conceded to me is the report's
-           number, the rest is the other match's. Two matches elsewhere in one entry with something
-           conceded cannot be told apart from the table, so that club's count is not judged that season. */
+           is one match of a club. With an odd number, one call can play a week I am not part of and then my
+           own match, so a club can play twice in it: what it conceded to me is the report's number, the
+           rest is what it conceded elsewhere. Two matches elsewhere with something conceded hold one clean
+           sheet or none, and the table cannot say which: that club's season is then judged on a range. */
         const games = played(now) - was.p;
         const vsMe = club === myOpp ? 1 : 0;
         const mineOnThem = vsMe ? (rep.home === after.clubName ? rep.homeGoals : rep.awayGoals) : 0;
@@ -594,7 +597,7 @@ function watcher(mod, label, acc, opts = {}) {
         if (xi) {
           let kept = vsMe && mineOnThem === 0 ? 1 : 0;
           if (elsewhere > 0 && now.ga - was.ga - mineOnThem === 0) kept += elsewhere;
-          else if (elsewhere > 1) untold.add(club);
+          else if (elsewhere > 1) untold.set(club, (untold.get(club) ?? 0) + elsewhere - 1);
           if (kept) keptByClub.set(club, (keptByClub.get(club) ?? 0) + kept);
         }
         const lg = (acc.thin[leagueId] ??= { weeks: 0, bare: 0, clubs: new Map(), rivals: new Set() });
@@ -677,11 +680,12 @@ function watcher(mod, label, acc, opts = {}) {
       if (!book) return;
       /* The clean sheets on a club's keeper rows are the matches it conceded nothing in, with an eleven named. */
       for (const club of rivalsOf(s)) {
-        if (untold.has(club)) { acc.untold += 1; continue; }
         tick('law');
         const onKeepers = Object.entries(book.c[club]?.m ?? {}).filter(([key]) => key.endsWith('|GK')).reduce((n, [, row]) => n + row[2], 0);
         const kept = keptByClub.get(club) ?? 0;
-        if (onKeepers !== kept) fail('law', `${label} ${where}: ${club} kept ${kept} clean sheets by the table, its keepers hold ${onKeepers}`);
+        const maybe = untold.get(club) ?? 0;
+        if (maybe) acc.untold += 1;
+        if (onKeepers < kept || onKeepers > kept + maybe) fail('law', `${label} ${where}: ${club} kept ${kept}${maybe ? ` to ${kept + maybe}` : ''} clean sheets by the table, its keepers hold ${onKeepers}`);
       }
       /* Mine: a league clean sheet has at least one keeper of mine on it, and no man more than there were. */
       tick('law');
@@ -1208,7 +1212,7 @@ if (process.env.BOOK_MEASURE === '1' && !CONTROL) {
 }
 
 /* ---------- the verdict ---------- */
-console.log(`law     ${acc.byeWeeks} weeks I did not play in which the rest of the round did (a league with an odd number of clubs), ${acc.twoInOne} club entries holding two matches of one club, ${acc.untold} club seasons whose clean sheets the table could not tell`);
+console.log(`law     ${acc.byeWeeks} weeks I did not play in which the rest of the round did (a league with an odd number of clubs), ${acc.twoInOne} club entries holding two matches of one club, ${acc.untold} club seasons whose clean sheets are judged on a range for it`);
 console.log(`law     ${checked.get('law')} checks over ${acc.entries} entries of ${fleet.length} careers, and ${accVar.entries} entries of ${accVar.seasons.length} seasons with the video referee on (${accVar.myLeagueMatches} league matches of mine, ${accVar.reviews} reviews, ${accVar.shortLines} reports whose lines did not add up to the score)`);
 let total = 0;
 for (const s of SECTIONS) {
