@@ -1,0 +1,6 @@
+#!serial
+bundle: node_modules/.bin/esbuild src/lib/cmAgeRead.ts --bundle --format=esm --platform=browser --outfile=/tmp/door.mjs && node .rc/x/doorProbe.mjs /tmp/door.mjs
+bind-tsc: node .rc/x/revBind.mjs && node_modules/.bin/tsc --noEmit -p tsconfig.app.json; s=$?; echo "type gate with the door imported by the eras module = exit $s"; exit $s
+bind-vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000; s=$?; echo "the vitest with the door imported = exit $s (1 is right: its last test must refuse a shipped import)"; exit $s
+bind-build: npm run build > /tmp/bind-build.log 2>&1; s=$?; tail -3 /tmp/bind-build.log; n=$(grep -l -r "the level or rating must be a whole number" dist/assets | wc -l); grep -l -r "the level or rating must be a whole number" dist/assets | head -3; git checkout -q -- src scripts; echo "build with the door imported = exit $s, built chunks that hold the age read: $n"; [ "$s" = 0 ] && [ "$n" -ge 1 ]
+restored: git diff --quiet -- src scripts && echo "the tree is restored"
