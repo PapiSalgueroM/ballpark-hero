@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+draftnight-base: git worktree add -q /tmp/base 09df145abfb241679022b41903d2f19bc254ebf9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simDraftNight.mjs
+play-nfl: ENGINES=chromium ONLY=/nfl-my-career node scripts/playGames.mjs
+play-nba: ENGINES=chromium ONLY=/nba-my-career node scripts/playGames.mjs
+play-mlb: ENGINES=chromium ONLY=/mlb-my-career node scripts/playGames.mjs
+play-nhl: ENGINES=chromium ONLY=/nhl-my-career node scripts/playGames.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+reveal: node scripts/simRevealMoments.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
