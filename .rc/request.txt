@@ -1,0 +1,9 @@
+#!serial
+m0: SENSE=1 bash .rc/x/mutrun.sh m0
+m1: SENSE=1 bash .rc/x/mutrun.sh m1
+m2: bash .rc/x/mutrun.sh m2
+m3: SENSE=1 bash .rc/x/mutrun.sh m3
+m4: SENSE=1 bash .rc/x/mutrun.sh m4
+m5: bash .rc/x/mutrun.sh m5
+m6: bash .rc/x/mutrun.sh m6
+m7: bash .rc/x/mutrun.sh m7
