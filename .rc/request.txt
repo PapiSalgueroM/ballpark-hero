@@ -1,0 +1,13 @@
+# Round 1228 closing check (verifier): the gates of the pushed head and the two controls behind the major finding
+headis: echo "round head $(git rev-parse HEAD^) | main $(git rev-parse origin/main) | merge base $(git merge-base origin/main HEAD^)"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/leagueSlate.test.ts src/lib/uclLeaguePhase.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simCmLeaguePhase.mjs > $RC_OUT/sim-all.txt 2>&1; s=$?; tail -1 $RC_OUT/sim-all.txt; exit $s
+sec0: CM_LEAGUE_PHASE_ONLY=0 node scripts/simCmLeaguePhase.mjs > $RC_OUT/sim-sec0.txt 2>&1; s=$?; tail -1 $RC_OUT/sim-sec0.txt; exit $s
+c-capsource: CM_LEAGUE_PHASE_CONTROL=capsource node scripts/simCmLeaguePhase.mjs > $RC_OUT/c-capsource.txt 2>&1; s=$?; tail -1 $RC_OUT/c-capsource.txt; exit $s
+c-shapefigure: CM_LEAGUE_PHASE_CONTROL=shapefigure node scripts/simCmLeaguePhase.mjs > $RC_OUT/c-shapefigure.txt 2>&1; s=$?; tail -1 $RC_OUT/c-shapefigure.txt; exit $s
+c-receipt: CM_LEAGUE_PHASE_CONTROL=receipt node scripts/simCmLeaguePhase.mjs > $RC_OUT/c-receipt.txt 2>&1; s=$?; tail -1 $RC_OUT/c-receipt.txt; exit $s
+receipthash: echo "ledger sha256 $(sha256sum scripts/data/cmUclFormat.json | cut -d' ' -f1) | receipt says $(grep -o '"sha256": *"[0-9a-f]*"' scripts/data/cmUclFormat.receipt.json)"
+newfiles: git diff --name-status origin/main HEAD^ | tee $RC_OUT/newfiles.txt | grep -vc "^A" | grep -qx 0 && echo "$(wc -l < $RC_OUT/newfiles.txt) files added, none modified, deleted or renamed against origin/main"
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simLiveScores: node scripts/simLiveScores.mjs
