@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+rwalk: RWALK_FONTS=1 RWALK_ONLY=road-nba-p,nba-first-p,nba-undrafted-p,nbaold-late-p,nba-late-s,nba-late-m,mlb-late-m,nba-late-n,nba-first-n,nba-und-m,nba-names-1,nba-names-2,nba-names-3,nba-late-d,mlb-late-p node .rc/x/rwalk.mjs

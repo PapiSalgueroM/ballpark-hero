@@ -1,0 +1,16 @@
+walked road-nba-p: pick 17 stage landed rowsMatch true  
+walked nba-first-p: pick 1 stage landed rowsMatch true  
+walked nba-late-d: pick 39 stage landed rowsMatch true  
+walked nba-late-s: pick 39 stage landed rowsMatch true  
+walked nba-undrafted-p: pick null stage landed rowsMatch true  
+walked nbaold-late-p: pick 32 stage landed rowsMatch true  
+walked mlb-late-p: pick 464 stage landed rowsMatch true  
+walked nba-late-m: pick 39 stage landed rowsMatch true  
+walked mlb-late-m: pick 464 stage landed rowsMatch true  
+walked nba-late-n: pick 39 stage landed rowsMatch true  
+walked nba-first-n: pick 1 stage landed rowsMatch true  
+walked nba-und-m: pick null stage landed rowsMatch true  
+walked nba-names-1: pick 38 stage landed rowsMatch true  
+walked nba-names-2: pick 38 stage landed rowsMatch true  
+walked nba-names-3: pick 38 stage landed rowsMatch true  
+rwalk: 15 cases, 0 error(s)

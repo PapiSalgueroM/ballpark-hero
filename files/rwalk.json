@@ -1,0 +1,8091 @@
+{
+ "base": "http://localhost:4173",
+ "errors": [],
+ "report": [
+  {
+   "id": "road-nba-p",
+   "wantPick": 17,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 244,
+    "docH": 11927,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 12 and pick 20 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -42,
+       357,
+       2
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       487,
+       357,
+       531
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 12 and pick 20 of 60.",
+   "stock": 63,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 375,
+    "docH": 12522,
+    "title": "This is your moment.",
+    "club": "Portland Trail Blazers",
+    "srTitle": "Draft night.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 1, pick 17 (17 overall) Portland Trail Blazers hold the pick, and they take you.",
+     "box": [
+      33,
+      895,
+      357,
+      995
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -173,
+       357,
+       -129
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       837,
+       191,
+       883
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       199,
+       837,
+       357,
+       883
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 13 come off the board.",
+      "box": [
+       46,
+       628,
+       344,
+       652
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "14 Chicago Bulls Round 1",
+      "box": [
+       46,
+       656,
+       344,
+       686
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "15 Houston Rockets Round 1",
+      "box": [
+       46,
+       690,
+       344,
+       720
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "16 Los Angeles Lakers Round 1",
+      "box": [
+       46,
+       724,
+       344,
+       754
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 17: Portland Trail Blazers Your name is called. Round 1, pick 17.",
+      "box": [
+       46,
+       758,
+       344,
+       812
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Toronto Raptors Seed 6 · Up 5",
+      "box": [
+       46,
+       405,
+       192,
+       453
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Cleveland Cavaliers Seed 12 · Up 10",
+      "box": [
+       198,
+       405,
+       344,
+       453
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Utah Jazz Seed 4 · Up 1",
+      "box": [
+       46,
+       459,
+       192,
+       507
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 7 · Up 3",
+      "box": [
+       198,
+       459,
+       344,
+       507
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Toronto Raptors hold the first pick.",
+    "nightRange": "The scouts had you between pick 12 and pick 20 of 60.",
+    "nightBox": [
+     33,
+     304,
+     357,
+     883
+    ],
+    "boardBox": [
+     33,
+     560,
+     357,
+     825
+    ],
+    "actionsBox": [
+     33,
+     837,
+     357,
+     883
+    ],
+    "cut": [
+     "Cleveland Cavaliers [100 of 116]",
+     "Charlotte Hornets [100 of 102]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 372,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     767,
+     767
+    ],
+    "journey": [
+     1253,
+     1253
+    ],
+    "scrolls": [
+     [
+      -65,
+      244
+     ],
+     [
+      34,
+      247
+     ],
+     [
+      50,
+      259
+     ],
+     [
+      67,
+      297
+     ],
+     [
+      84,
+      347
+     ],
+     [
+      100,
+      375
+     ],
+     [
+      117,
+      392
+     ],
+     [
+      134,
+      403
+     ],
+     [
+      150,
+      411
+     ],
+     [
+      167,
+      417
+     ],
+     [
+      184,
+      421
+     ],
+     [
+      200,
+      424
+     ]
+    ],
+    "rowsAt": [
+     2567,
+     2917,
+     3267,
+     3617,
+     4183
+    ],
+    "facesAt": [
+     1800,
+     1350,
+     900,
+     450
+    ],
+    "landing": {
+     "ms": 4183,
+     "top": 707,
+     "bottom": 761,
+     "vh": 844,
+     "actsBottom": 832,
+     "y": 426
+    },
+    "h2At": 4117,
+    "clubAt": 4117,
+    "resultAt": 4117,
+    "closingAt": 4117,
+    "heldAt": 0,
+    "confettiAt": 4535,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 707,
+     "bottom": 761,
+     "y": 426
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 426,
+    "docH": 12522,
+    "title": "This is your moment.",
+    "club": "Portland Trail Blazers",
+    "srTitle": "This is your moment.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 1, pick 17 (17 overall) Portland Trail Blazers hold the pick, and they take you.",
+     "box": [
+      33,
+      844,
+      357,
+      944
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -224,
+       357,
+       -180
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       786,
+       357,
+       832
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 1, pick 17, 17 overall. Portland Trail Blazers take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 13 come off the board.",
+      "box": [
+       46,
+       577,
+       344,
+       601
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "14 Chicago Bulls Round 1",
+      "box": [
+       46,
+       605,
+       344,
+       635
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "15 Houston Rockets Round 1",
+      "box": [
+       46,
+       639,
+       344,
+       669
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "16 Los Angeles Lakers Round 1",
+      "box": [
+       46,
+       673,
+       344,
+       703
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 17: Portland Trail Blazers Your name is called. Round 1, pick 17.",
+      "box": [
+       46,
+       707,
+       344,
+       761
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Toronto Raptors Seed 6 · Up 5",
+      "box": [
+       46,
+       354,
+       192,
+       402
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Cleveland Cavaliers Seed 12 · Up 10",
+      "box": [
+       198,
+       354,
+       344,
+       402
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Utah Jazz Seed 4 · Up 1",
+      "box": [
+       46,
+       408,
+       192,
+       456
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 7 · Up 3",
+      "box": [
+       198,
+       408,
+       344,
+       456
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Toronto Raptors hold the first pick.",
+    "nightRange": "The scouts had you between pick 12 and pick 20 of 60.",
+    "nightBox": [
+     33,
+     253,
+     357,
+     832
+    ],
+    "boardBox": [
+     33,
+     509,
+     357,
+     774
+    ],
+    "actionsBox": [
+     33,
+     786,
+     357,
+     832
+    ],
+    "cut": [
+     "Cleveland Cavaliers [100 of 116]",
+     "Charlotte Hornets [100 of 102]",
+     "Round 1, pick 17, 17 overall. Portland Trail Blazers take yo [1 of 448]"
+    ],
+    "confetti": 18,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 93,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Oklahoma City Thunder 136",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Cleveland Cavaliers 116",
+     "Golden State Warriors 127",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 16
+   },
+   "saved": {
+    "pick": 17,
+    "round": 1,
+    "pickInRound": 17,
+    "team": "Portland Trail Blazers",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Charlotte Hornets seed 7 moved 3",
+    "slot 3 Utah Jazz seed 4 moved 1",
+    "slot 2 Cleveland Cavaliers seed 12 moved 10",
+    "slot 1 Toronto Raptors seed 6 moved 5"
+   ],
+   "hadWant": "The scouts had you between pick 12 and pick 20 of 60.",
+   "career": {
+    "team": "POR",
+    "draftPick": 17,
+    "phase": "season",
+    "wantTeam": "POR"
+   }
+  },
+  {
+   "id": "nba-first-p",
+   "wantPick": 1,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 0,
+    "docH": 11907,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you at pick 1 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       202,
+       357,
+       246
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       711,
+       357,
+       755
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you at pick 1 of 60.",
+   "stock": 100,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 160,
+    "docH": 12376,
+    "title": "This is your moment.",
+    "club": "Houston Rockets",
+    "srTitle": "Draft night.",
+    "hold": "2.7s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 1, pick 1 (1 overall) Houston Rockets hold the pick, and they take you.",
+     "box": [
+      33,
+      964,
+      357,
+      1064
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       42,
+       357,
+       86
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       906,
+       191,
+       952
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       199,
+       906,
+       357,
+       952
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "you",
+      "text": "Pick 1: Houston Rockets Your name is called. Round 1, pick 1.",
+      "box": [
+       46,
+       827,
+       344,
+       881
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 10 · Up 9",
+      "box": [
+       46,
+       620,
+       192,
+       668
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Minnesota Timberwolves Seed 3 · Up 1",
+      "box": [
+       198,
+       620,
+       344,
+       668
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Golden State Warriors Seed 4 · Up 1",
+      "box": [
+       46,
+       674,
+       192,
+       722
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Phoenix Suns Seed 2 · Down 2",
+      "box": [
+       198,
+       674,
+       344,
+       722
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you at pick 1 of 60.",
+    "nightBox": [
+     33,
+     519,
+     357,
+     952
+    ],
+    "boardBox": [
+     33,
+     775,
+     357,
+     894
+    ],
+    "actionsBox": [
+     33,
+     906,
+     357,
+     952
+    ],
+    "cut": [
+     "Minnesota Timberwolves [100 of 146]",
+     "Golden State Warriors [100 of 127]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 288,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     621,
+     621
+    ],
+    "journey": [
+     1107,
+     1107
+    ],
+    "scrolls": [
+     [
+      -65,
+      0
+     ],
+     [
+      34,
+      3
+     ],
+     [
+      50,
+      13
+     ],
+     [
+      67,
+      40
+     ],
+     [
+      84,
+      101
+     ],
+     [
+      100,
+      160
+     ],
+     [
+      117,
+      196
+     ],
+     [
+      134,
+      219
+     ],
+     [
+      150,
+      236
+     ],
+     [
+      167,
+      249
+     ],
+     [
+      184,
+      258
+     ],
+     [
+      200,
+      265
+     ]
+    ],
+    "rowsAt": [
+     2783
+    ],
+    "facesAt": [
+     1800,
+     1350,
+     900,
+     450
+    ],
+    "landing": {
+     "ms": 2783,
+     "top": 707,
+     "bottom": 761,
+     "vh": 844,
+     "actsBottom": 832,
+     "y": 280
+    },
+    "h2At": 2717,
+    "clubAt": 2717,
+    "resultAt": 2717,
+    "closingAt": 2717,
+    "heldAt": 0,
+    "confettiAt": 3135,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 707,
+     "bottom": 761,
+     "y": 280
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 280,
+    "docH": 12376,
+    "title": "This is your moment.",
+    "club": "Houston Rockets",
+    "srTitle": "This is your moment.",
+    "hold": "2.7s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 1, pick 1 (1 overall) Houston Rockets hold the pick, and they take you.",
+     "box": [
+      33,
+      844,
+      357,
+      944
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -78,
+       357,
+       -34
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       786,
+       357,
+       832
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 1, pick 1, 1 overall. Houston Rockets take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "you",
+      "text": "Pick 1: Houston Rockets Your name is called. Round 1, pick 1.",
+      "box": [
+       46,
+       707,
+       344,
+       761
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 10 · Up 9",
+      "box": [
+       46,
+       500,
+       192,
+       548
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Minnesota Timberwolves Seed 3 · Up 1",
+      "box": [
+       198,
+       500,
+       344,
+       548
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Golden State Warriors Seed 4 · Up 1",
+      "box": [
+       46,
+       554,
+       192,
+       602
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Phoenix Suns Seed 2 · Down 2",
+      "box": [
+       198,
+       554,
+       344,
+       602
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you at pick 1 of 60.",
+    "nightBox": [
+     33,
+     399,
+     357,
+     832
+    ],
+    "boardBox": [
+     33,
+     655,
+     357,
+     774
+    ],
+    "actionsBox": [
+     33,
+     786,
+     357,
+     832
+    ],
+    "cut": [
+     "Minnesota Timberwolves [100 of 146]",
+     "Golden State Warriors [100 of 127]",
+     "Round 1, pick 1, 1 overall. Houston Rockets take you. [1 of 400]"
+    ],
+    "confetti": 18,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 98,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Oklahoma City Thunder 136",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Cleveland Cavaliers 116",
+     "Golden State Warriors 127",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 16
+   },
+   "saved": {
+    "pick": 1,
+    "round": 1,
+    "pickInRound": 1,
+    "team": "Houston Rockets",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Phoenix Suns seed 2 moved -2",
+    "slot 3 Golden State Warriors seed 4 moved 1",
+    "slot 2 Minnesota Timberwolves seed 3 moved 1",
+    "slot 1 Houston Rockets seed 10 moved 9"
+   ],
+   "hadWant": "The scouts had you at pick 1 of 60."
+  },
+  {
+   "id": "nba-late-d",
+   "wantPick": 39,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 900,
+    "vw": 1280,
+    "sw": 1280,
+    "y": 0,
+    "docH": 7935,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 25 and pick 40 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       899,
+       182,
+       943,
+       226
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       337,
+       665,
+       943,
+       709
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 25 and pick 40 of 60.",
+   "stock": 42,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 900,
+    "vw": 1280,
+    "sw": 1280,
+    "y": 161,
+    "docH": 8494,
+    "title": "This is your moment.",
+    "club": "Brooklyn Nets",
+    "srTitle": "Draft night.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 9 (39 overall) Brooklyn Nets hold the pick, and they take you.",
+     "box": [
+      337,
+      1028,
+      943,
+      1108
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       899,
+       21,
+       943,
+       65
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       337,
+       970,
+       636,
+       1016
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       644,
+       970,
+       943,
+       1016
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 35 come off the board, round 1 into round 2.",
+      "box": [
+       350,
+       761,
+       930,
+       785
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "36 San Antonio Spurs Round 2",
+      "box": [
+       350,
+       789,
+       930,
+       819
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Washington Wizards Round 2",
+      "box": [
+       350,
+       823,
+       930,
+       853
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "38 Charlotte Hornets Round 2",
+      "box": [
+       350,
+       857,
+       930,
+       887
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 39: Brooklyn Nets Your name is called. Round 2, pick 9.",
+      "box": [
+       350,
+       891,
+       930,
+       945
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 San Antonio Spurs Seed 6 · Up 5",
+      "box": [
+       350,
+       554,
+       637,
+       602
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Washington Wizards Seed 7 · Up 5",
+      "box": [
+       643,
+       554,
+       930,
+       602
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Indiana Pacers Seed 5 · Up 2",
+      "box": [
+       350,
+       608,
+       637,
+       656
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 8 · Up 4",
+      "box": [
+       643,
+       608,
+       930,
+       656
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "San Antonio Spurs hold the first pick.",
+    "nightRange": "The scouts had you between pick 25 and pick 40 of 60.",
+    "nightBox": [
+     337,
+     469,
+     943,
+     1016
+    ],
+    "boardBox": [
+     337,
+     709,
+     943,
+     958
+    ],
+    "actionsBox": [
+     337,
+     970,
+     943,
+     1016
+    ],
+    "cut": [],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 375,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     695,
+     695
+    ],
+    "journey": [
+     1172,
+     1172
+    ],
+    "scrolls": [
+     [
+      -34,
+      0
+     ],
+     [
+      33,
+      2
+     ],
+     [
+      49,
+      13
+     ],
+     [
+      66,
+      39
+     ],
+     [
+      83,
+      100
+     ],
+     [
+      99,
+      161
+     ],
+     [
+      116,
+      199
+     ],
+     [
+      133,
+      224
+     ],
+     [
+      149,
+      242
+     ],
+     [
+      166,
+      255
+     ],
+     [
+      183,
+      265
+     ],
+     [
+      199,
+      273
+     ]
+    ],
+    "rowsAt": [
+     2566,
+     2916,
+     3266,
+     3616,
+     4183
+    ],
+    "facesAt": [
+     1799,
+     1349,
+     899,
+     449
+    ],
+    "landing": {
+     "ms": 4183,
+     "top": 763,
+     "bottom": 817,
+     "vh": 900,
+     "actsBottom": 888,
+     "y": 289
+    },
+    "h2At": 4116,
+    "clubAt": 4116,
+    "resultAt": 4116,
+    "closingAt": 4116,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 763,
+     "bottom": 817,
+     "y": 289
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 900,
+    "vw": 1280,
+    "sw": 1280,
+    "y": 289,
+    "docH": 8494,
+    "title": "This is your moment.",
+    "club": "Brooklyn Nets",
+    "srTitle": "This is your moment.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 9 (39 overall) Brooklyn Nets hold the pick, and they take you.",
+     "box": [
+      337,
+      900,
+      943,
+      980
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       899,
+       -107,
+       943,
+       -63
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       337,
+       842,
+       943,
+       888
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 2, pick 9, 39 overall. Brooklyn Nets take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 35 come off the board, round 1 into round 2.",
+      "box": [
+       350,
+       633,
+       930,
+       657
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "36 San Antonio Spurs Round 2",
+      "box": [
+       350,
+       661,
+       930,
+       691
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Washington Wizards Round 2",
+      "box": [
+       350,
+       695,
+       930,
+       725
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "38 Charlotte Hornets Round 2",
+      "box": [
+       350,
+       729,
+       930,
+       759
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 39: Brooklyn Nets Your name is called. Round 2, pick 9.",
+      "box": [
+       350,
+       763,
+       930,
+       817
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 San Antonio Spurs Seed 6 · Up 5",
+      "box": [
+       350,
+       426,
+       637,
+       474
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Washington Wizards Seed 7 · Up 5",
+      "box": [
+       643,
+       426,
+       930,
+       474
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Indiana Pacers Seed 5 · Up 2",
+      "box": [
+       350,
+       480,
+       637,
+       528
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 8 · Up 4",
+      "box": [
+       643,
+       480,
+       930,
+       528
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "San Antonio Spurs hold the first pick.",
+    "nightRange": "The scouts had you between pick 25 and pick 40 of 60.",
+    "nightBox": [
+     337,
+     341,
+     943,
+     888
+    ],
+    "boardBox": [
+     337,
+     581,
+     943,
+     830
+    ],
+    "actionsBox": [
+     337,
+     842,
+     943,
+     888
+    ],
+    "cut": [
+     "Round 2, pick 9, 39 overall. Brooklyn Nets take you. [1 of 397]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 107,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [],
+    "fit": 30
+   },
+   "saved": {
+    "pick": 39,
+    "round": 2,
+    "pickInRound": 9,
+    "team": "Brooklyn Nets",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Charlotte Hornets seed 8 moved 4",
+    "slot 3 Indiana Pacers seed 5 moved 2",
+    "slot 2 Washington Wizards seed 7 moved 5",
+    "slot 1 San Antonio Spurs seed 6 moved 5"
+   ],
+   "hadWant": "The scouts had you between pick 25 and pick 40 of 60."
+  },
+  {
+   "id": "nba-late-s",
+   "wantPick": 39,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 640,
+    "vw": 320,
+    "sw": 320,
+    "y": 573,
+    "docH": 14390,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 25 and pick 40 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       243,
+       -371,
+       287,
+       -327
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       31,
+       160,
+       289,
+       204
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 25 and pick 40 of 60.",
+   "stock": 42,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 640,
+    "vw": 320,
+    "sw": 320,
+    "y": 272,
+    "docH": 15092,
+    "title": "This is your moment.",
+    "club": "Brooklyn Nets",
+    "srTitle": "Draft night.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 9 (39 overall) Brooklyn Nets hold the pick, and they take you.",
+     "box": [
+      31,
+      1080,
+      289,
+      1207
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       243,
+       -70,
+       287,
+       -26
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       31,
+       1002,
+       156,
+       1068
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       164,
+       1002,
+       289,
+       1068
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 35 come off the board, round 1 into round 2.",
+      "box": [
+       44,
+       777,
+       276,
+       817
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "36 San Antonio Spurs Round 2",
+      "box": [
+       44,
+       821,
+       276,
+       851
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Washington Wizards Round 2",
+      "box": [
+       44,
+       855,
+       276,
+       885
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "38 Charlotte Hornets Round 2",
+      "box": [
+       44,
+       889,
+       276,
+       919
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 39: Brooklyn Nets Your name is called. Round 2, pick 9.",
+      "box": [
+       44,
+       923,
+       276,
+       977
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 San Antonio Spurs Seed 6 · Up 5",
+      "box": [
+       44,
+       534,
+       157,
+       582
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Washington Wizards Seed 7 · Up 5",
+      "box": [
+       163,
+       534,
+       276,
+       582
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Indiana Pacers Seed 5 · Up 2",
+      "box": [
+       44,
+       588,
+       157,
+       636
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 8 · Up 4",
+      "box": [
+       163,
+       588,
+       276,
+       636
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "San Antonio Spurs hold the first pick.",
+    "nightRange": "The scouts had you between pick 25 and pick 40 of 60.",
+    "nightBox": [
+     31,
+     402,
+     289,
+     1068
+    ],
+    "boardBox": [
+     31,
+     709,
+     289,
+     990
+    ],
+    "actionsBox": [
+     31,
+     1002,
+     289,
+     1068
+    ],
+    "cut": [
+     "San Antonio Spurs [67 of 107]",
+     "Washington Wizards [67 of 120]",
+     "Indiana Pacers [67 of 86]",
+     "Charlotte Hornets [67 of 102]",
+     "Washington Wizards [109 of 119]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 372,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     861,
+     881
+    ],
+    "journey": [
+     1340,
+     1360
+    ],
+    "scrolls": [
+     [
+      -100,
+      576
+     ],
+     [
+      -84,
+      578
+     ],
+     [
+      -67,
+      579
+     ],
+     [
+      -17,
+      137
+     ],
+     [
+      33,
+      139
+     ],
+     [
+      50,
+      148
+     ],
+     [
+      66,
+      166
+     ],
+     [
+      83,
+      203
+     ],
+     [
+      100,
+      272
+     ],
+     [
+      117,
+      372
+     ],
+     [
+      133,
+      455
+     ],
+     [
+      150,
+      512
+     ]
+    ],
+    "rowsAt": [
+     2566,
+     2916,
+     3266,
+     3616,
+     4183
+    ],
+    "facesAt": [
+     1800,
+     1350,
+     900,
+     450
+    ],
+    "landing": {
+     "ms": 4183,
+     "top": 483,
+     "bottom": 537,
+     "vh": 640,
+     "actsBottom": 628,
+     "y": 712
+    },
+    "h2At": 4116,
+    "clubAt": 4116,
+    "resultAt": 4116,
+    "closingAt": 4116,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 483,
+     "bottom": 537,
+     "y": 712
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 640,
+    "vw": 320,
+    "sw": 320,
+    "y": 712,
+    "docH": 15072,
+    "title": "This is your moment.",
+    "club": "Brooklyn Nets",
+    "srTitle": "This is your moment.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 9 (39 overall) Brooklyn Nets hold the pick, and they take you.",
+     "box": [
+      31,
+      620,
+      289,
+      747
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       243,
+       -510,
+       287,
+       -466
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       31,
+       562,
+       289,
+       608
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 2, pick 9, 39 overall. Brooklyn Nets take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 35 come off the board, round 1 into round 2.",
+      "box": [
+       44,
+       337,
+       276,
+       377
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "36 San Antonio Spurs Round 2",
+      "box": [
+       44,
+       381,
+       276,
+       411
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Washington Wizards Round 2",
+      "box": [
+       44,
+       415,
+       276,
+       445
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "38 Charlotte Hornets Round 2",
+      "box": [
+       44,
+       449,
+       276,
+       479
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 39: Brooklyn Nets Your name is called. Round 2, pick 9.",
+      "box": [
+       44,
+       483,
+       276,
+       537
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 San Antonio Spurs Seed 6 · Up 5",
+      "box": [
+       44,
+       94,
+       157,
+       142
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Washington Wizards Seed 7 · Up 5",
+      "box": [
+       163,
+       94,
+       276,
+       142
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Indiana Pacers Seed 5 · Up 2",
+      "box": [
+       44,
+       148,
+       157,
+       196
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 8 · Up 4",
+      "box": [
+       163,
+       148,
+       276,
+       196
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "San Antonio Spurs hold the first pick.",
+    "nightRange": "The scouts had you between pick 25 and pick 40 of 60.",
+    "nightBox": [
+     31,
+     -38,
+     289,
+     608
+    ],
+    "boardBox": [
+     31,
+     269,
+     289,
+     550
+    ],
+    "actionsBox": [
+     31,
+     562,
+     289,
+     608
+    ],
+    "cut": [
+     "San Antonio Spurs [67 of 107]",
+     "Washington Wizards [67 of 120]",
+     "Indiana Pacers [67 of 86]",
+     "Charlotte Hornets [67 of 102]",
+     "Washington Wizards [109 of 119]",
+     "Round 2, pick 9, 39 overall. Brooklyn Nets take you. [1 of 397]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 67,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Denver Nuggets 95",
+     "Oklahoma City Thunder 136",
+     "Boston Celtics 83",
+     "New York Knicks 99",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Houston Rockets 98",
+     "Cleveland Cavaliers 116",
+     "Indiana Pacers 86",
+     "Golden State Warriors 127",
+     "Dallas Mavericks 100",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "LA Clippers 69",
+     "Phoenix Suns 78",
+     "Sacramento Kings 107",
+     "Atlanta Hawks 84",
+     "New Orleans Pelicans 126",
+     "Toronto Raptors 93",
+     "San Antonio Spurs 107",
+     "Orlando Magic 85",
+     "Charlotte Hornets 102",
+     "Detroit Pistons 85",
+     "Brooklyn Nets 81",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124",
+     "Chicago Bulls 79"
+    ],
+    "fit": 2
+   },
+   "saved": {
+    "pick": 39,
+    "round": 2,
+    "pickInRound": 9,
+    "team": "Brooklyn Nets",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Charlotte Hornets seed 8 moved 4",
+    "slot 3 Indiana Pacers seed 5 moved 2",
+    "slot 2 Washington Wizards seed 7 moved 5",
+    "slot 1 San Antonio Spurs seed 6 moved 5"
+   ],
+   "hadWant": "The scouts had you between pick 25 and pick 40 of 60."
+  },
+  {
+   "id": "nba-undrafted-p",
+   "wantPick": null,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 0,
+    "docH": 11907,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 57 and undrafted. This draft has 60 picks.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       202,
+       357,
+       246
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       711,
+       357,
+       755
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 57 and undrafted. This draft has 60 picks.",
+   "stock": 0,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 165,
+    "docH": 12470,
+    "title": "A different way in.",
+    "club": "Indiana Pacers",
+    "srTitle": "Draft night.",
+    "hold": "3.5s",
+    "range": "",
+    "result": {
+     "text": "Undrafted Nobody calls your name. A team gives you a summer league invite. Your first club: Indiana Pacers.",
+     "box": [
+      33,
+      1049,
+      357,
+      1153
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       37,
+       357,
+       81
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       991,
+       191,
+       1037
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       199,
+       991,
+       357,
+       1037
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 59 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       818,
+       344,
+       858
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "60 Dallas Mavericks Round 2",
+      "box": [
+       46,
+       862,
+       344,
+       892
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "unpicked",
+      "text": "The last pick is in. Your name was not called. Your first club: Indiana Pacers.",
+      "box": [
+       46,
+       896,
+       344,
+       966
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 10 · Up 9",
+      "box": [
+       46,
+       595,
+       192,
+       643
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Minnesota Timberwolves Seed 3 · Up 1",
+      "box": [
+       198,
+       595,
+       344,
+       643
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Golden State Warriors Seed 4 · Up 1",
+      "box": [
+       46,
+       649,
+       192,
+       697
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Phoenix Suns Seed 2 · Down 2",
+      "box": [
+       198,
+       649,
+       344,
+       697
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you between pick 57 and undrafted. This draft has 60 picks.",
+    "nightBox": [
+     33,
+     494,
+     357,
+     1037
+    ],
+    "boardBox": [
+     33,
+     750,
+     357,
+     979
+    ],
+    "actionsBox": [
+     33,
+     991,
+     357,
+     1037
+    ],
+    "cut": [
+     "Minnesota Timberwolves [100 of 146]",
+     "Golden State Warriors [100 of 127]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 336,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     715,
+     715
+    ],
+    "journey": [
+     1201,
+     1201
+    ],
+    "scrolls": [
+     [
+      -66,
+      0
+     ],
+     [
+      33,
+      2
+     ],
+     [
+      50,
+      12
+     ],
+     [
+      66,
+      35
+     ],
+     [
+      83,
+      86
+     ],
+     [
+      100,
+      165
+     ],
+     [
+      116,
+      224
+     ],
+     [
+      133,
+      262
+     ],
+     [
+      150,
+      289
+     ],
+     [
+      166,
+      309
+     ],
+     [
+      183,
+      324
+     ],
+     [
+      200,
+      336
+     ]
+    ],
+    "rowsAt": [
+     2566,
+     2966,
+     3850
+    ],
+    "facesAt": [
+     1800,
+     1350,
+     900,
+     450
+    ],
+    "landing": {
+     "ms": 3850,
+     "top": 692,
+     "bottom": 762,
+     "vh": 844,
+     "actsBottom": 832,
+     "y": 370
+    },
+    "h2At": 3517,
+    "clubAt": 3517,
+    "resultAt": 3517,
+    "closingAt": 3517,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 691,
+     "bottom": 761,
+     "y": 370
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 370,
+    "docH": 12470,
+    "title": "A different way in.",
+    "club": "Indiana Pacers",
+    "srTitle": "A different way in.",
+    "hold": "3.5s",
+    "range": "",
+    "result": {
+     "text": "Undrafted Nobody calls your name. A team gives you a summer league invite. Your first club: Indiana Pacers.",
+     "box": [
+      33,
+      844,
+      357,
+      948
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -168,
+       357,
+       -124
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       786,
+       357,
+       832
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:A different way in.",
+    "status": "Pick 60 is the last one, and your name was not called. Your first club: Indiana Pacers.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 59 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       613,
+       344,
+       653
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "60 Dallas Mavericks Round 2",
+      "box": [
+       46,
+       657,
+       344,
+       687
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "unpicked",
+      "text": "The last pick is in. Your name was not called. Your first club: Indiana Pacers.",
+      "box": [
+       46,
+       691,
+       344,
+       761
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 10 · Up 9",
+      "box": [
+       46,
+       390,
+       192,
+       438
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Minnesota Timberwolves Seed 3 · Up 1",
+      "box": [
+       198,
+       390,
+       344,
+       438
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Golden State Warriors Seed 4 · Up 1",
+      "box": [
+       46,
+       444,
+       192,
+       492
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Phoenix Suns Seed 2 · Down 2",
+      "box": [
+       198,
+       444,
+       344,
+       492
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you between pick 57 and undrafted. This draft has 60 picks.",
+    "nightBox": [
+     33,
+     289,
+     357,
+     832
+    ],
+    "boardBox": [
+     33,
+     545,
+     357,
+     774
+    ],
+    "actionsBox": [
+     33,
+     786,
+     357,
+     832
+    ],
+    "cut": [
+     "Minnesota Timberwolves [100 of 146]",
+     "Golden State Warriors [100 of 127]",
+     "Pick 60 is the last one, and your name was not called. Your  [1 of 644]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 98,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Oklahoma City Thunder 136",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Cleveland Cavaliers 116",
+     "Golden State Warriors 127",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 16
+   },
+   "saved": {
+    "pick": null,
+    "round": null,
+    "pickInRound": null,
+    "team": "Indiana Pacers",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Phoenix Suns seed 2 moved -2",
+    "slot 3 Golden State Warriors seed 4 moved 1",
+    "slot 2 Minnesota Timberwolves seed 3 moved 1",
+    "slot 1 Houston Rockets seed 10 moved 9"
+   ],
+   "hadWant": "The scouts had you between pick 57 and undrafted. This draft has 60 picks.",
+   "reload": {
+    "phase": "done",
+    "hasNight": false,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 0,
+    "docH": 11967,
+    "title": "A different way in.",
+    "club": "Indiana Pacers",
+    "srTitle": "A different way in.",
+    "hold": "",
+    "range": "",
+    "result": {
+     "text": "Undrafted Nobody calls your name. A team gives you a summer league invite. Your first club: Indiana Pacers. Start your career",
+     "box": [
+      33,
+      659,
+      357,
+      815
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       202,
+       357,
+       246
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       771,
+       357,
+       815
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:A different way in.",
+    "status": ""
+   }
+  },
+  {
+   "id": "nbaold-late-p",
+   "wantPick": 32,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 0,
+    "docH": 11927,
+    "title": "You have done the work.",
+    "club": "Straight from high school",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 20 and pick 33 of 58.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       202,
+       357,
+       246
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       731,
+       357,
+       775
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 20 and pick 33 of 58.",
+   "stock": 48,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 160,
+    "docH": 12522,
+    "title": "This is your moment.",
+    "club": "Cleveland Cavaliers",
+    "srTitle": "Draft night.",
+    "hold": "3.85s",
+    "range": "",
+    "result": {
+     "text": "2003 DRAFT Round 2, pick 3 (32 overall) Cleveland Cavaliers hold the pick, and they take you.",
+     "box": [
+      33,
+      1110,
+      357,
+      1210
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       42,
+       357,
+       86
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       1052,
+       191,
+       1098
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       199,
+       1052,
+       357,
+       1098
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 4 to 28 come off the board.",
+      "box": [
+       46,
+       843,
+       344,
+       867
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "29 Memphis Grizzlies Round 1",
+      "box": [
+       46,
+       871,
+       344,
+       901
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "30 Houston Rockets Round 2",
+      "box": [
+       46,
+       905,
+       344,
+       935
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "31 Milwaukee Bucks Round 2",
+      "box": [
+       46,
+       939,
+       344,
+       969
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 32: Cleveland Cavaliers Your name is called. Round 2, pick 3.",
+      "box": [
+       46,
+       973,
+       344,
+       1027
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 1 · Held",
+      "box": [
+       46,
+       620,
+       192,
+       668
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Cleveland Cavaliers Seed 3 · Up 1",
+      "box": [
+       198,
+       620,
+       344,
+       668
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Philadelphia 76ers Seed 10 · Up 7",
+      "box": [
+       46,
+       674,
+       192,
+       722
+      ]
+     }
+    ],
+    "rule": "13 clubs are in the lottery and the top 3 picks are drawn. The worst record has the best chance at the first pick, 25%.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you between pick 20 and pick 33 of 58.",
+    "nightBox": [
+     33,
+     519,
+     357,
+     1098
+    ],
+    "boardBox": [
+     33,
+     775,
+     357,
+     1040
+    ],
+    "actionsBox": [
+     33,
+     1052,
+     357,
+     1098
+    ],
+    "cut": [
+     "Cleveland Cavaliers [100 of 116]",
+     "Philadelphia 76ers [100 of 108]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3"
+    ]
+   },
+   "frames": {
+    "frames": 357,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     767,
+     767
+    ],
+    "journey": [
+     1253,
+     1253
+    ],
+    "scrolls": [
+     [
+      -64,
+      0
+     ],
+     [
+      33,
+      2
+     ],
+     [
+      50,
+      12
+     ],
+     [
+      67,
+      33
+     ],
+     [
+      83,
+      78
+     ],
+     [
+      100,
+      160
+     ],
+     [
+      117,
+      234
+     ],
+     [
+      133,
+      283
+     ],
+     [
+      150,
+      317
+     ],
+     [
+      167,
+      342
+     ],
+     [
+      183,
+      362
+     ],
+     [
+      200,
+      377
+     ]
+    ],
+    "rowsAt": [
+     2117,
+     2516,
+     2917,
+     3316,
+     3933
+    ],
+    "facesAt": [
+     1350,
+     900,
+     450
+    ],
+    "landing": {
+     "ms": 3933,
+     "top": 707,
+     "bottom": 761,
+     "vh": 844,
+     "actsBottom": 832,
+     "y": 426
+    },
+    "h2At": 3867,
+    "clubAt": 3867,
+    "resultAt": 3867,
+    "closingAt": 3867,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 707,
+     "bottom": 761,
+     "y": 426
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 426,
+    "docH": 12522,
+    "title": "This is your moment.",
+    "club": "Cleveland Cavaliers",
+    "srTitle": "This is your moment.",
+    "hold": "3.85s",
+    "range": "",
+    "result": {
+     "text": "2003 DRAFT Round 2, pick 3 (32 overall) Cleveland Cavaliers hold the pick, and they take you.",
+     "box": [
+      33,
+      844,
+      357,
+      944
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -224,
+       357,
+       -180
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       786,
+       357,
+       832
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 2, pick 3, 32 overall. Cleveland Cavaliers take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 4 to 28 come off the board.",
+      "box": [
+       46,
+       577,
+       344,
+       601
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "29 Memphis Grizzlies Round 1",
+      "box": [
+       46,
+       605,
+       344,
+       635
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "30 Houston Rockets Round 2",
+      "box": [
+       46,
+       639,
+       344,
+       669
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "31 Milwaukee Bucks Round 2",
+      "box": [
+       46,
+       673,
+       344,
+       703
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 32: Cleveland Cavaliers Your name is called. Round 2, pick 3.",
+      "box": [
+       46,
+       707,
+       344,
+       761
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 1 · Held",
+      "box": [
+       46,
+       354,
+       192,
+       402
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Cleveland Cavaliers Seed 3 · Up 1",
+      "box": [
+       198,
+       354,
+       344,
+       402
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Philadelphia 76ers Seed 10 · Up 7",
+      "box": [
+       46,
+       408,
+       192,
+       456
+      ]
+     }
+    ],
+    "rule": "13 clubs are in the lottery and the top 3 picks are drawn. The worst record has the best chance at the first pick, 25%.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you between pick 20 and pick 33 of 58.",
+    "nightBox": [
+     33,
+     253,
+     357,
+     832
+    ],
+    "boardBox": [
+     33,
+     509,
+     357,
+     774
+    ],
+    "actionsBox": [
+     33,
+     786,
+     357,
+     832
+    ],
+    "cut": [
+     "Cleveland Cavaliers [100 of 116]",
+     "Philadelphia 76ers [100 of 108]",
+     "Round 2, pick 3, 32 overall. Cleveland Cavaliers take you. [1 of 441]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3"
+    ]
+   },
+   "names": {
+    "avail": 98,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Cleveland Cavaliers 116",
+     "Golden State Warriors 127",
+     "Los Angeles Lakers 115",
+     "Memphis Grizzlies 108",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "New Orleans Hornets 123",
+     "Philadelphia 76ers 108",
+     "Portland Trail Blazers 124",
+     "Sacramento Kings 107",
+     "San Antonio Spurs 107",
+     "Seattle SuperSonics 117",
+     "Washington Wizards 120"
+    ],
+    "fit": 16
+   },
+   "saved": {
+    "pick": 32,
+    "round": 2,
+    "pickInRound": 3,
+    "team": "Cleveland Cavaliers",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 3 Philadelphia 76ers seed 10 moved 7",
+    "slot 2 Cleveland Cavaliers seed 3 moved 1",
+    "slot 1 Houston Rockets seed 1 moved 0"
+   ],
+   "hadWant": "The scouts had you between pick 20 and pick 33 of 58."
+  },
+  {
+   "id": "mlb-late-p",
+   "wantPick": 464,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 0,
+    "docH": 11429,
+    "title": "You have done the work.",
+    "club": "High school senior",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 356 and pick 593 of 600.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       202,
+       357,
+       246
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       731,
+       357,
+       775
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 356 and pick 593 of 600.",
+   "stock": 25,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 161,
+    "docH": 11981,
+    "title": "This is your moment.",
+    "club": "Cincinnati Reds",
+    "srTitle": "Draft night.",
+    "hold": "3.5s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 16, pick 14 (464 overall) Cincinnati Reds hold the pick, and they take you. Minor league seasons Age 18, Double-A AVG .310, OBP .394, SLG .477 Age 19, Triple-A AVG .327, OBP .426, SLG .587",
+     "box": [
+      33,
+      971,
+      357,
+      1166
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       41,
+       357,
+       85
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       913,
+       191,
+       959
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       199,
+       913,
+       357,
+       959
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "pick",
+      "text": "1 Pittsburgh Pirates Round 1",
+      "box": [
+       46,
+       586,
+       344,
+       616
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "2 San Francisco Giants Round 1",
+      "box": [
+       46,
+       620,
+       344,
+       650
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "3 Chicago Cubs Round 1",
+      "box": [
+       46,
+       654,
+       344,
+       684
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "gap",
+      "text": "Picks 4 to 460 come off the board, round 1 into round 16.",
+      "box": [
+       46,
+       688,
+       344,
+       728
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "461 Toronto Blue Jays Round 16",
+      "box": [
+       46,
+       732,
+       344,
+       762
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "462 Colorado Rockies Round 16",
+      "box": [
+       46,
+       766,
+       344,
+       796
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "463 Atlanta Braves Round 16",
+      "box": [
+       46,
+       800,
+       344,
+       830
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 464: Cincinnati Reds Your name is called. Round 16, pick 14.",
+      "box": [
+       46,
+       834,
+       344,
+       888
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [],
+    "rule": "",
+    "note": "",
+    "headline": "",
+    "nightRange": "The scouts had you between pick 356 and pick 593 of 600.",
+    "nightBox": [
+     33,
+     518,
+     357,
+     959
+    ],
+    "boardBox": [
+     33,
+     518,
+     357,
+     901
+    ],
+    "actionsBox": [
+     33,
+     913,
+     357,
+     959
+    ],
+    "cut": [],
+    "confetti": 0,
+    "lowContrast": []
+   },
+   "frames": {
+    "frames": 336,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     724,
+     724
+    ],
+    "journey": [
+     1210,
+     1210
+    ],
+    "scrolls": [
+     [
+      -67,
+      0
+     ],
+     [
+      33,
+      3
+     ],
+     [
+      50,
+      13
+     ],
+     [
+      66,
+      39
+     ],
+     [
+      83,
+      100
+     ],
+     [
+      100,
+      161
+     ],
+     [
+      116,
+      199
+     ],
+     [
+      133,
+      224
+     ],
+     [
+      150,
+      241
+     ],
+     [
+      166,
+      254
+     ],
+     [
+      183,
+      264
+     ],
+     [
+      200,
+      272
+     ]
+    ],
+    "rowsAt": [
+     566,
+     966,
+     1366,
+     1766,
+     2166,
+     2566,
+     2966,
+     3583
+    ],
+    "facesAt": [],
+    "landing": {
+     "ms": 3583,
+     "top": 707,
+     "bottom": 761,
+     "vh": 844,
+     "actsBottom": 832,
+     "y": 288
+    },
+    "h2At": 3516,
+    "clubAt": 3516,
+    "resultAt": 3516,
+    "closingAt": 3516,
+    "heldAt": 3516,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      0,
+      0,
+      0
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 707,
+     "bottom": 761,
+     "y": 288
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 288,
+    "docH": 11981,
+    "title": "This is your moment.",
+    "club": "Cincinnati Reds",
+    "srTitle": "This is your moment.",
+    "hold": "3.5s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 16, pick 14 (464 overall) Cincinnati Reds hold the pick, and they take you. Minor league seasons Age 18, Double-A AVG .310, OBP .394, SLG .477 Age 19, Triple-A AVG .327, OBP .426, SLG .587",
+     "box": [
+      33,
+      844,
+      357,
+      1039
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -86,
+       357,
+       -42
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       786,
+       357,
+       832
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 16, pick 14, 464 overall. Cincinnati Reds take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "pick",
+      "text": "1 Pittsburgh Pirates Round 1",
+      "box": [
+       46,
+       459,
+       344,
+       489
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "2 San Francisco Giants Round 1",
+      "box": [
+       46,
+       493,
+       344,
+       523
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "3 Chicago Cubs Round 1",
+      "box": [
+       46,
+       527,
+       344,
+       557
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "gap",
+      "text": "Picks 4 to 460 come off the board, round 1 into round 16.",
+      "box": [
+       46,
+       561,
+       344,
+       601
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "461 Toronto Blue Jays Round 16",
+      "box": [
+       46,
+       605,
+       344,
+       635
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "462 Colorado Rockies Round 16",
+      "box": [
+       46,
+       639,
+       344,
+       669
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "463 Atlanta Braves Round 16",
+      "box": [
+       46,
+       673,
+       344,
+       703
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 464: Cincinnati Reds Your name is called. Round 16, pick 14.",
+      "box": [
+       46,
+       707,
+       344,
+       761
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [],
+    "rule": "",
+    "note": "",
+    "headline": "",
+    "nightRange": "The scouts had you between pick 356 and pick 593 of 600.",
+    "nightBox": [
+     33,
+     391,
+     357,
+     832
+    ],
+    "boardBox": [
+     33,
+     391,
+     357,
+     774
+    ],
+    "actionsBox": [
+     33,
+     786,
+     357,
+     832
+    ],
+    "cut": [
+     "Round 16, pick 14, 464 overall. Cincinnati Reds take you. [1 of 429]"
+    ],
+    "confetti": 0,
+    "lowContrast": []
+   },
+   "saved": {
+    "pick": 464,
+    "round": 16,
+    "pickInRound": 14,
+    "team": "Cincinnati Reds",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [],
+   "hadWant": "The scouts had you between pick 356 and pick 593 of 600.",
+   "career": {
+    "team": "CIN",
+    "draftPick": 464,
+    "phase": "season",
+    "wantTeam": "CIN"
+   }
+  },
+  {
+   "id": "nba-late-m",
+   "wantPick": 39,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 667,
+    "vw": 375,
+    "sw": 375,
+    "y": 579,
+    "docH": 12386,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 25 and pick 40 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       298,
+       -377,
+       342,
+       -333
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       159,
+       342,
+       203
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 25 and pick 40 of 60.",
+   "stock": 42,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 667,
+    "vw": 375,
+    "sw": 375,
+    "y": 618,
+    "docH": 13017,
+    "title": "This is your moment.",
+    "club": "Brooklyn Nets",
+    "srTitle": "Draft night.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 9 (39 overall) Brooklyn Nets hold the pick, and they take you.",
+     "box": [
+      33,
+      668,
+      342,
+      795
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       298,
+       -416,
+       342,
+       -372
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       610,
+       184,
+       656
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       192,
+       610,
+       342,
+       656
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 35 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       385,
+       329,
+       425
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "36 San Antonio Spurs Round 2",
+      "box": [
+       46,
+       429,
+       329,
+       459
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Washington Wizards Round 2",
+      "box": [
+       46,
+       463,
+       329,
+       493
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "38 Charlotte Hornets Round 2",
+      "box": [
+       46,
+       497,
+       329,
+       527
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 39: Brooklyn Nets Your name is called. Round 2, pick 9.",
+      "box": [
+       46,
+       531,
+       329,
+       585
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 San Antonio Spurs Seed 6 · Up 5",
+      "box": [
+       46,
+       162,
+       185,
+       210
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Washington Wizards Seed 7 · Up 5",
+      "box": [
+       191,
+       162,
+       329,
+       210
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Indiana Pacers Seed 5 · Up 2",
+      "box": [
+       46,
+       216,
+       185,
+       264
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 8 · Up 4",
+      "box": [
+       191,
+       216,
+       329,
+       264
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "San Antonio Spurs hold the first pick.",
+    "nightRange": "The scouts had you between pick 25 and pick 40 of 60.",
+    "nightBox": [
+     33,
+     61,
+     342,
+     656
+    ],
+    "boardBox": [
+     33,
+     317,
+     342,
+     598
+    ],
+    "actionsBox": [
+     33,
+     610,
+     342,
+     656
+    ],
+    "cut": [
+     "San Antonio Spurs [93 of 107]",
+     "Washington Wizards [93 of 120]",
+     "Charlotte Hornets [93 of 102]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 372,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     810,
+     810
+    ],
+    "journey": [
+     1296,
+     1296
+    ],
+    "scrolls": [
+     [
+      -66,
+      581
+     ],
+     [
+      -50,
+      582
+     ],
+     [
+      0,
+      575
+     ],
+     [
+      33,
+      579
+     ],
+     [
+      50,
+      600
+     ],
+     [
+      67,
+      611
+     ],
+     [
+      83,
+      616
+     ],
+     [
+      100,
+      618
+     ],
+     [
+      117,
+      619
+     ]
+    ],
+    "rowsAt": [
+     2567,
+     2917,
+     3267,
+     3617,
+     4183
+    ],
+    "facesAt": [
+     1800,
+     1350,
+     900,
+     450
+    ],
+    "landing": {
+     "ms": 4183,
+     "top": 530,
+     "bottom": 584,
+     "vh": 667,
+     "actsBottom": 655,
+     "y": 619
+    },
+    "h2At": 4117,
+    "clubAt": 4117,
+    "resultAt": 4117,
+    "closingAt": 4117,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 530,
+     "bottom": 584,
+     "y": 619
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 667,
+    "vw": 375,
+    "sw": 375,
+    "y": 619,
+    "docH": 13017,
+    "title": "This is your moment.",
+    "club": "Brooklyn Nets",
+    "srTitle": "This is your moment.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 9 (39 overall) Brooklyn Nets hold the pick, and they take you.",
+     "box": [
+      33,
+      667,
+      342,
+      794
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       298,
+       -417,
+       342,
+       -373
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       609,
+       342,
+       655
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 2, pick 9, 39 overall. Brooklyn Nets take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 35 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       384,
+       329,
+       424
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "36 San Antonio Spurs Round 2",
+      "box": [
+       46,
+       428,
+       329,
+       458
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Washington Wizards Round 2",
+      "box": [
+       46,
+       462,
+       329,
+       492
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "38 Charlotte Hornets Round 2",
+      "box": [
+       46,
+       496,
+       329,
+       526
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 39: Brooklyn Nets Your name is called. Round 2, pick 9.",
+      "box": [
+       46,
+       530,
+       329,
+       584
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 San Antonio Spurs Seed 6 · Up 5",
+      "box": [
+       46,
+       161,
+       185,
+       209
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Washington Wizards Seed 7 · Up 5",
+      "box": [
+       191,
+       161,
+       329,
+       209
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Indiana Pacers Seed 5 · Up 2",
+      "box": [
+       46,
+       215,
+       185,
+       263
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 8 · Up 4",
+      "box": [
+       191,
+       215,
+       329,
+       263
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "San Antonio Spurs hold the first pick.",
+    "nightRange": "The scouts had you between pick 25 and pick 40 of 60.",
+    "nightBox": [
+     33,
+     60,
+     342,
+     655
+    ],
+    "boardBox": [
+     33,
+     316,
+     342,
+     597
+    ],
+    "actionsBox": [
+     33,
+     609,
+     342,
+     655
+    ],
+    "cut": [
+     "San Antonio Spurs [93 of 107]",
+     "Washington Wizards [93 of 120]",
+     "Charlotte Hornets [93 of 102]",
+     "Round 2, pick 9, 39 overall. Brooklyn Nets take you. [1 of 397]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 93,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Denver Nuggets 95",
+     "Oklahoma City Thunder 136",
+     "New York Knicks 99",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Houston Rockets 98",
+     "Cleveland Cavaliers 116",
+     "Golden State Warriors 127",
+     "Dallas Mavericks 100",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 12
+   },
+   "saved": {
+    "pick": 39,
+    "round": 2,
+    "pickInRound": 9,
+    "team": "Brooklyn Nets",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Charlotte Hornets seed 8 moved 4",
+    "slot 3 Indiana Pacers seed 5 moved 2",
+    "slot 2 Washington Wizards seed 7 moved 5",
+    "slot 1 San Antonio Spurs seed 6 moved 5"
+   ],
+   "hadWant": "The scouts had you between pick 25 and pick 40 of 60."
+  },
+  {
+   "id": "mlb-late-m",
+   "wantPick": 464,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 667,
+    "vw": 375,
+    "sw": 375,
+    "y": 579,
+    "docH": 11814,
+    "title": "You have done the work.",
+    "club": "High school senior",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 356 and pick 593 of 600.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       298,
+       -377,
+       342,
+       -333
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       159,
+       342,
+       203
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 356 and pick 593 of 600.",
+   "stock": 25,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 667,
+    "vw": 375,
+    "sw": 375,
+    "y": 575,
+    "docH": 12379,
+    "title": "This is your moment.",
+    "club": "Cincinnati Reds",
+    "srTitle": "Draft night.",
+    "hold": "3.5s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 16, pick 14 (464 overall) Cincinnati Reds hold the pick, and they take you. Minor league seasons Age 18, Double-A AVG .310, OBP .394, SLG .477 Age 19, Triple-A AVG .327, OBP .426, SLG .587",
+     "box": [
+      33,
+      557,
+      342,
+      772
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       298,
+       -373,
+       342,
+       -329
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       499,
+       184,
+       545
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       192,
+       499,
+       342,
+       545
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "pick",
+      "text": "1 Pittsburgh Pirates Round 1",
+      "box": [
+       46,
+       172,
+       329,
+       202
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "2 San Francisco Giants Round 1",
+      "box": [
+       46,
+       206,
+       329,
+       236
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "3 Chicago Cubs Round 1",
+      "box": [
+       46,
+       240,
+       329,
+       270
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "gap",
+      "text": "Picks 4 to 460 come off the board, round 1 into round 16.",
+      "box": [
+       46,
+       274,
+       329,
+       314
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "461 Toronto Blue Jays Round 16",
+      "box": [
+       46,
+       318,
+       329,
+       348
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "462 Colorado Rockies Round 16",
+      "box": [
+       46,
+       352,
+       329,
+       382
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "463 Atlanta Braves Round 16",
+      "box": [
+       46,
+       386,
+       329,
+       416
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 464: Cincinnati Reds Your name is called. Round 16, pick 14.",
+      "box": [
+       46,
+       420,
+       329,
+       474
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [],
+    "rule": "",
+    "note": "",
+    "headline": "",
+    "nightRange": "The scouts had you between pick 356 and pick 593 of 600.",
+    "nightBox": [
+     33,
+     104,
+     342,
+     545
+    ],
+    "boardBox": [
+     33,
+     104,
+     342,
+     487
+    ],
+    "actionsBox": [
+     33,
+     499,
+     342,
+     545
+    ],
+    "cut": [],
+    "confetti": 0,
+    "lowContrast": []
+   },
+   "frames": {
+    "frames": 336,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     744,
+     744
+    ],
+    "journey": [
+     1230,
+     1230
+    ],
+    "scrolls": [
+     [
+      -66,
+      581
+     ],
+     [
+      -50,
+      582
+     ],
+     [
+      0,
+      575
+     ]
+    ],
+    "rowsAt": [
+     567,
+     967,
+     1367,
+     1767,
+     2167,
+     2567,
+     2967,
+     3583
+    ],
+    "facesAt": [],
+    "landing": {
+     "ms": 3583,
+     "top": 420,
+     "bottom": 474,
+     "vh": 667,
+     "actsBottom": 545,
+     "y": 575
+    },
+    "h2At": 3517,
+    "clubAt": 3517,
+    "resultAt": 3517,
+    "closingAt": 3517,
+    "heldAt": 3517,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      0,
+      0,
+      0
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 420,
+     "bottom": 474,
+     "y": 575
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 667,
+    "vw": 375,
+    "sw": 375,
+    "y": 575,
+    "docH": 12379,
+    "title": "This is your moment.",
+    "club": "Cincinnati Reds",
+    "srTitle": "This is your moment.",
+    "hold": "3.5s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 16, pick 14 (464 overall) Cincinnati Reds hold the pick, and they take you. Minor league seasons Age 18, Double-A AVG .310, OBP .394, SLG .477 Age 19, Triple-A AVG .327, OBP .426, SLG .587",
+     "box": [
+      33,
+      557,
+      342,
+      772
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       298,
+       -373,
+       342,
+       -329
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       499,
+       342,
+       545
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 16, pick 14, 464 overall. Cincinnati Reds take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "pick",
+      "text": "1 Pittsburgh Pirates Round 1",
+      "box": [
+       46,
+       172,
+       329,
+       202
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "2 San Francisco Giants Round 1",
+      "box": [
+       46,
+       206,
+       329,
+       236
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "3 Chicago Cubs Round 1",
+      "box": [
+       46,
+       240,
+       329,
+       270
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "gap",
+      "text": "Picks 4 to 460 come off the board, round 1 into round 16.",
+      "box": [
+       46,
+       274,
+       329,
+       314
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "461 Toronto Blue Jays Round 16",
+      "box": [
+       46,
+       318,
+       329,
+       348
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "462 Colorado Rockies Round 16",
+      "box": [
+       46,
+       352,
+       329,
+       382
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "463 Atlanta Braves Round 16",
+      "box": [
+       46,
+       386,
+       329,
+       416
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 464: Cincinnati Reds Your name is called. Round 16, pick 14.",
+      "box": [
+       46,
+       420,
+       329,
+       474
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [],
+    "rule": "",
+    "note": "",
+    "headline": "",
+    "nightRange": "The scouts had you between pick 356 and pick 593 of 600.",
+    "nightBox": [
+     33,
+     104,
+     342,
+     545
+    ],
+    "boardBox": [
+     33,
+     104,
+     342,
+     487
+    ],
+    "actionsBox": [
+     33,
+     499,
+     342,
+     545
+    ],
+    "cut": [
+     "Round 16, pick 14, 464 overall. Cincinnati Reds take you. [1 of 429]"
+    ],
+    "confetti": 0,
+    "lowContrast": []
+   },
+   "saved": {
+    "pick": 464,
+    "round": 16,
+    "pickInRound": 14,
+    "team": "Cincinnati Reds",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [],
+   "hadWant": "The scouts had you between pick 356 and pick 593 of 600."
+  },
+  {
+   "id": "nba-late-n",
+   "wantPick": 39,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 740,
+    "vw": 360,
+    "sw": 360,
+    "y": 579,
+    "docH": 12732,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 25 and pick 40 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       283,
+       -377,
+       327,
+       -333
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       159,
+       327,
+       203
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 25 and pick 40 of 60.",
+   "stock": 42,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 740,
+    "vw": 360,
+    "sw": 360,
+    "y": 575,
+    "docH": 13378,
+    "title": "This is your moment.",
+    "club": "Brooklyn Nets",
+    "srTitle": "Draft night.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 9 (39 overall) Brooklyn Nets hold the pick, and they take you.",
+     "box": [
+      33,
+      726,
+      327,
+      853
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       283,
+       -373,
+       327,
+       -329
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       668,
+       176,
+       714
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       184,
+       668,
+       327,
+       714
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 35 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       443,
+       314,
+       483
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "36 San Antonio Spurs Round 2",
+      "box": [
+       46,
+       487,
+       314,
+       517
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Washington Wizards Round 2",
+      "box": [
+       46,
+       521,
+       314,
+       551
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "38 Charlotte Hornets Round 2",
+      "box": [
+       46,
+       555,
+       314,
+       585
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 39: Brooklyn Nets Your name is called. Round 2, pick 9.",
+      "box": [
+       46,
+       589,
+       314,
+       643
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 San Antonio Spurs Seed 6 · Up 5",
+      "box": [
+       46,
+       220,
+       177,
+       268
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Washington Wizards Seed 7 · Up 5",
+      "box": [
+       183,
+       220,
+       314,
+       268
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Indiana Pacers Seed 5 · Up 2",
+      "box": [
+       46,
+       274,
+       177,
+       322
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 8 · Up 4",
+      "box": [
+       183,
+       274,
+       314,
+       322
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "San Antonio Spurs hold the first pick.",
+    "nightRange": "The scouts had you between pick 25 and pick 40 of 60.",
+    "nightBox": [
+     33,
+     104,
+     327,
+     714
+    ],
+    "boardBox": [
+     33,
+     375,
+     327,
+     656
+    ],
+    "actionsBox": [
+     33,
+     668,
+     327,
+     714
+    ],
+    "cut": [
+     "San Antonio Spurs [85 of 107]",
+     "Washington Wizards [85 of 120]",
+     "Charlotte Hornets [85 of 102]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 372,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     825,
+     825
+    ],
+    "journey": [
+     1311,
+     1311
+    ],
+    "scrolls": [
+     [
+      -66,
+      581
+     ],
+     [
+      -51,
+      582
+     ],
+     [
+      0,
+      575
+     ]
+    ],
+    "rowsAt": [
+     2566,
+     2916,
+     3266,
+     3616,
+     4182
+    ],
+    "facesAt": [
+     1799,
+     1349,
+     899,
+     449
+    ],
+    "landing": {
+     "ms": 4182,
+     "top": 589,
+     "bottom": 643,
+     "vh": 740,
+     "actsBottom": 714,
+     "y": 575
+    },
+    "h2At": 4116,
+    "clubAt": 4116,
+    "resultAt": 4116,
+    "closingAt": 4116,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 589,
+     "bottom": 643,
+     "y": 575
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 740,
+    "vw": 360,
+    "sw": 360,
+    "y": 575,
+    "docH": 13378,
+    "title": "This is your moment.",
+    "club": "Brooklyn Nets",
+    "srTitle": "This is your moment.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 9 (39 overall) Brooklyn Nets hold the pick, and they take you.",
+     "box": [
+      33,
+      726,
+      327,
+      853
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       283,
+       -373,
+       327,
+       -329
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       668,
+       327,
+       714
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 2, pick 9, 39 overall. Brooklyn Nets take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 35 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       443,
+       314,
+       483
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "36 San Antonio Spurs Round 2",
+      "box": [
+       46,
+       487,
+       314,
+       517
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Washington Wizards Round 2",
+      "box": [
+       46,
+       521,
+       314,
+       551
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "38 Charlotte Hornets Round 2",
+      "box": [
+       46,
+       555,
+       314,
+       585
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 39: Brooklyn Nets Your name is called. Round 2, pick 9.",
+      "box": [
+       46,
+       589,
+       314,
+       643
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 San Antonio Spurs Seed 6 · Up 5",
+      "box": [
+       46,
+       220,
+       177,
+       268
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Washington Wizards Seed 7 · Up 5",
+      "box": [
+       183,
+       220,
+       314,
+       268
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Indiana Pacers Seed 5 · Up 2",
+      "box": [
+       46,
+       274,
+       177,
+       322
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Charlotte Hornets Seed 8 · Up 4",
+      "box": [
+       183,
+       274,
+       314,
+       322
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "San Antonio Spurs hold the first pick.",
+    "nightRange": "The scouts had you between pick 25 and pick 40 of 60.",
+    "nightBox": [
+     33,
+     104,
+     327,
+     714
+    ],
+    "boardBox": [
+     33,
+     375,
+     327,
+     656
+    ],
+    "actionsBox": [
+     33,
+     668,
+     327,
+     714
+    ],
+    "cut": [
+     "San Antonio Spurs [85 of 107]",
+     "Washington Wizards [85 of 120]",
+     "Charlotte Hornets [85 of 102]",
+     "Round 2, pick 9, 39 overall. Brooklyn Nets take you. [1 of 397]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 85,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Denver Nuggets 95",
+     "Oklahoma City Thunder 136",
+     "New York Knicks 99",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Houston Rockets 98",
+     "Cleveland Cavaliers 116",
+     "Indiana Pacers 86",
+     "Golden State Warriors 127",
+     "Dallas Mavericks 100",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "Toronto Raptors 93",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 10
+   },
+   "saved": {
+    "pick": 39,
+    "round": 2,
+    "pickInRound": 9,
+    "team": "Brooklyn Nets",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Charlotte Hornets seed 8 moved 4",
+    "slot 3 Indiana Pacers seed 5 moved 2",
+    "slot 2 Washington Wizards seed 7 moved 5",
+    "slot 1 San Antonio Spurs seed 6 moved 5"
+   ],
+   "hadWant": "The scouts had you between pick 25 and pick 40 of 60."
+  },
+  {
+   "id": "nba-first-n",
+   "wantPick": 1,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 740,
+    "vw": 360,
+    "sw": 360,
+    "y": 579,
+    "docH": 12712,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you at pick 1 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       283,
+       -377,
+       327,
+       -333
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       139,
+       327,
+       183
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you at pick 1 of 60.",
+   "stock": 100,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 740,
+    "vw": 360,
+    "sw": 360,
+    "y": 575,
+    "docH": 13188,
+    "title": "This is your moment.",
+    "club": "Houston Rockets",
+    "srTitle": "Draft night.",
+    "hold": "2.7s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 1, pick 1 (1 overall) Houston Rockets hold the pick, and they take you.",
+     "box": [
+      33,
+      564,
+      327,
+      664
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       283,
+       -373,
+       327,
+       -329
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       506,
+       176,
+       552
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       184,
+       506,
+       327,
+       552
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "you",
+      "text": "Pick 1: Houston Rockets Your name is called. Round 1, pick 1.",
+      "box": [
+       46,
+       427,
+       314,
+       481
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 10 · Up 9",
+      "box": [
+       46,
+       220,
+       177,
+       268
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Minnesota Timberwolves Seed 3 · Up 1",
+      "box": [
+       183,
+       220,
+       314,
+       268
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Golden State Warriors Seed 4 · Up 1",
+      "box": [
+       46,
+       274,
+       177,
+       322
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Phoenix Suns Seed 2 · Down 2",
+      "box": [
+       183,
+       274,
+       314,
+       322
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you at pick 1 of 60.",
+    "nightBox": [
+     33,
+     104,
+     327,
+     552
+    ],
+    "boardBox": [
+     33,
+     375,
+     327,
+     494
+    ],
+    "actionsBox": [
+     33,
+     506,
+     327,
+     552
+    ],
+    "cut": [
+     "Houston Rockets [85 of 98]",
+     "Minnesota Timberwolves [85 of 146]",
+     "Golden State Warriors [85 of 127]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 288,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     636,
+     636
+    ],
+    "journey": [
+     1122,
+     1122
+    ],
+    "scrolls": [
+     [
+      -67,
+      581
+     ],
+     [
+      -50,
+      582
+     ],
+     [
+      0,
+      575
+     ]
+    ],
+    "rowsAt": [
+     2783
+    ],
+    "facesAt": [
+     1800,
+     1350,
+     900,
+     450
+    ],
+    "landing": {
+     "ms": 2783,
+     "top": 427,
+     "bottom": 481,
+     "vh": 740,
+     "actsBottom": 552,
+     "y": 575
+    },
+    "h2At": 2717,
+    "clubAt": 2717,
+    "resultAt": 2717,
+    "closingAt": 2717,
+    "heldAt": 0,
+    "confettiAt": 3135,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 427,
+     "bottom": 481,
+     "y": 575
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 740,
+    "vw": 360,
+    "sw": 360,
+    "y": 575,
+    "docH": 13188,
+    "title": "This is your moment.",
+    "club": "Houston Rockets",
+    "srTitle": "This is your moment.",
+    "hold": "2.7s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 1, pick 1 (1 overall) Houston Rockets hold the pick, and they take you.",
+     "box": [
+      33,
+      564,
+      327,
+      664
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       283,
+       -373,
+       327,
+       -329
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       506,
+       327,
+       552
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 1, pick 1, 1 overall. Houston Rockets take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "you",
+      "text": "Pick 1: Houston Rockets Your name is called. Round 1, pick 1.",
+      "box": [
+       46,
+       427,
+       314,
+       481
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 10 · Up 9",
+      "box": [
+       46,
+       220,
+       177,
+       268
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Minnesota Timberwolves Seed 3 · Up 1",
+      "box": [
+       183,
+       220,
+       314,
+       268
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Golden State Warriors Seed 4 · Up 1",
+      "box": [
+       46,
+       274,
+       177,
+       322
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Phoenix Suns Seed 2 · Down 2",
+      "box": [
+       183,
+       274,
+       314,
+       322
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you at pick 1 of 60.",
+    "nightBox": [
+     33,
+     104,
+     327,
+     552
+    ],
+    "boardBox": [
+     33,
+     375,
+     327,
+     494
+    ],
+    "actionsBox": [
+     33,
+     506,
+     327,
+     552
+    ],
+    "cut": [
+     "Houston Rockets [85 of 98]",
+     "Minnesota Timberwolves [85 of 146]",
+     "Golden State Warriors [85 of 127]",
+     "Round 1, pick 1, 1 overall. Houston Rockets take you. [1 of 400]"
+    ],
+    "confetti": 18,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 85,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Denver Nuggets 95",
+     "Oklahoma City Thunder 136",
+     "New York Knicks 99",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Houston Rockets 98",
+     "Cleveland Cavaliers 116",
+     "Indiana Pacers 86",
+     "Golden State Warriors 127",
+     "Dallas Mavericks 100",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "Toronto Raptors 93",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 10
+   },
+   "saved": {
+    "pick": 1,
+    "round": 1,
+    "pickInRound": 1,
+    "team": "Houston Rockets",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Phoenix Suns seed 2 moved -2",
+    "slot 3 Golden State Warriors seed 4 moved 1",
+    "slot 2 Minnesota Timberwolves seed 3 moved 1",
+    "slot 1 Houston Rockets seed 10 moved 9"
+   ],
+   "hadWant": "The scouts had you at pick 1 of 60."
+  },
+  {
+   "id": "nba-und-m",
+   "wantPick": null,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 667,
+    "vw": 375,
+    "sw": 375,
+    "y": 579,
+    "docH": 12386,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 57 and undrafted. This draft has 60 picks.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       298,
+       -377,
+       342,
+       -333
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       159,
+       342,
+       203
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 57 and undrafted. This draft has 60 picks.",
+   "stock": 0,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 667,
+    "vw": 375,
+    "sw": 375,
+    "y": 575,
+    "docH": 12942,
+    "title": "A different way in.",
+    "club": "Indiana Pacers",
+    "srTitle": "Draft night.",
+    "hold": "3.5s",
+    "range": "",
+    "result": {
+     "text": "Undrafted Nobody calls your name. A team gives you a summer league invite. Your first club: Indiana Pacers.",
+     "box": [
+      33,
+      659,
+      342,
+      763
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       298,
+       -373,
+       342,
+       -329
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       601,
+       184,
+       647
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       192,
+       601,
+       342,
+       647
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 59 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       428,
+       329,
+       468
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "60 Dallas Mavericks Round 2",
+      "box": [
+       46,
+       472,
+       329,
+       502
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "unpicked",
+      "text": "The last pick is in. Your name was not called. Your first club: Indiana Pacers.",
+      "box": [
+       46,
+       506,
+       329,
+       576
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 10 · Up 9",
+      "box": [
+       46,
+       205,
+       185,
+       253
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Minnesota Timberwolves Seed 3 · Up 1",
+      "box": [
+       191,
+       205,
+       329,
+       253
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Golden State Warriors Seed 4 · Up 1",
+      "box": [
+       46,
+       259,
+       185,
+       307
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Phoenix Suns Seed 2 · Down 2",
+      "box": [
+       191,
+       259,
+       329,
+       307
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you between pick 57 and undrafted. This draft has 60 picks.",
+    "nightBox": [
+     33,
+     104,
+     342,
+     647
+    ],
+    "boardBox": [
+     33,
+     360,
+     342,
+     589
+    ],
+    "actionsBox": [
+     33,
+     601,
+     342,
+     647
+    ],
+    "cut": [
+     "Houston Rockets [93 of 98]",
+     "Minnesota Timberwolves [93 of 146]",
+     "Golden State Warriors [93 of 127]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 336,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     735,
+     735
+    ],
+    "journey": [
+     1221,
+     1221
+    ],
+    "scrolls": [
+     [
+      -66,
+      581
+     ],
+     [
+      -50,
+      582
+     ],
+     [
+      0,
+      575
+     ]
+    ],
+    "rowsAt": [
+     2566,
+     2966,
+     3850
+    ],
+    "facesAt": [
+     1800,
+     1350,
+     900,
+     450
+    ],
+    "landing": {
+     "ms": 3850,
+     "top": 507,
+     "bottom": 577,
+     "vh": 667,
+     "actsBottom": 647,
+     "y": 575
+    },
+    "h2At": 3516,
+    "clubAt": 3516,
+    "resultAt": 3516,
+    "closingAt": 3516,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 506,
+     "bottom": 576,
+     "y": 575
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 667,
+    "vw": 375,
+    "sw": 375,
+    "y": 575,
+    "docH": 12942,
+    "title": "A different way in.",
+    "club": "Indiana Pacers",
+    "srTitle": "A different way in.",
+    "hold": "3.5s",
+    "range": "",
+    "result": {
+     "text": "Undrafted Nobody calls your name. A team gives you a summer league invite. Your first club: Indiana Pacers.",
+     "box": [
+      33,
+      659,
+      342,
+      763
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       298,
+       -373,
+       342,
+       -329
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       601,
+       342,
+       647
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:A different way in.",
+    "status": "Pick 60 is the last one, and your name was not called. Your first club: Indiana Pacers.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 59 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       428,
+       329,
+       468
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "60 Dallas Mavericks Round 2",
+      "box": [
+       46,
+       472,
+       329,
+       502
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "unpicked",
+      "text": "The last pick is in. Your name was not called. Your first club: Indiana Pacers.",
+      "box": [
+       46,
+       506,
+       329,
+       576
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Houston Rockets Seed 10 · Up 9",
+      "box": [
+       46,
+       205,
+       185,
+       253
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Minnesota Timberwolves Seed 3 · Up 1",
+      "box": [
+       191,
+       205,
+       329,
+       253
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Golden State Warriors Seed 4 · Up 1",
+      "box": [
+       46,
+       259,
+       185,
+       307
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Phoenix Suns Seed 2 · Down 2",
+      "box": [
+       191,
+       259,
+       329,
+       307
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Houston Rockets hold the first pick.",
+    "nightRange": "The scouts had you between pick 57 and undrafted. This draft has 60 picks.",
+    "nightBox": [
+     33,
+     104,
+     342,
+     647
+    ],
+    "boardBox": [
+     33,
+     360,
+     342,
+     589
+    ],
+    "actionsBox": [
+     33,
+     601,
+     342,
+     647
+    ],
+    "cut": [
+     "Houston Rockets [93 of 98]",
+     "Minnesota Timberwolves [93 of 146]",
+     "Golden State Warriors [93 of 127]",
+     "Pick 60 is the last one, and your name was not called. Your  [1 of 644]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 93,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Denver Nuggets 95",
+     "Oklahoma City Thunder 136",
+     "New York Knicks 99",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Houston Rockets 98",
+     "Cleveland Cavaliers 116",
+     "Golden State Warriors 127",
+     "Dallas Mavericks 100",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 12
+   },
+   "saved": {
+    "pick": null,
+    "round": null,
+    "pickInRound": null,
+    "team": "Indiana Pacers",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Phoenix Suns seed 2 moved -2",
+    "slot 3 Golden State Warriors seed 4 moved 1",
+    "slot 2 Minnesota Timberwolves seed 3 moved 1",
+    "slot 1 Houston Rockets seed 10 moved 9"
+   ],
+   "hadWant": "The scouts had you between pick 57 and undrafted. This draft has 60 picks."
+  },
+  {
+   "id": "nba-names-1",
+   "wantPick": 38,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 0,
+    "docH": 11907,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 27 and pick 44 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       202,
+       357,
+       246
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       711,
+       357,
+       755
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 27 and pick 44 of 60.",
+   "stock": 39,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 158,
+    "docH": 12538,
+    "title": "This is your moment.",
+    "club": "Denver Nuggets",
+    "srTitle": "Draft night.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 8 (38 overall) Denver Nuggets hold the pick, and they take you.",
+     "box": [
+      33,
+      1128,
+      357,
+      1228
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       44,
+       357,
+       88
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       1070,
+       191,
+       1116
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       199,
+       1070,
+       357,
+       1116
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 34 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       845,
+       344,
+       885
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "35 Toronto Raptors Round 2",
+      "box": [
+       46,
+       889,
+       344,
+       919
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "36 Memphis Grizzlies Round 2",
+      "box": [
+       46,
+       923,
+       344,
+       953
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "37 New York Knicks Round 2",
+      "box": [
+       46,
+       957,
+       344,
+       987
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 38: Denver Nuggets Your name is called. Round 2, pick 8.",
+      "box": [
+       46,
+       991,
+       344,
+       1045
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Minnesota Timberwolves Seed 3 · Up 2",
+      "box": [
+       46,
+       602,
+       192,
+       650
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Dallas Mavericks Seed 4 · Up 2",
+      "box": [
+       198,
+       602,
+       344,
+       650
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Denver Nuggets Seed 8 · Up 5",
+      "box": [
+       46,
+       656,
+       192,
+       704
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Houston Rockets Seed 2 · Down 2",
+      "box": [
+       198,
+       656,
+       344,
+       704
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Minnesota Timberwolves hold the first pick.",
+    "nightRange": "The scouts had you between pick 27 and pick 44 of 60.",
+    "nightBox": [
+     33,
+     501,
+     357,
+     1116
+    ],
+    "boardBox": [
+     33,
+     777,
+     357,
+     1058
+    ],
+    "actionsBox": [
+     33,
+     1070,
+     357,
+     1116
+    ],
+    "cut": [
+     "Minnesota Timberwolves [100 of 146]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 372,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     783,
+     783
+    ],
+    "journey": [
+     1269,
+     1269
+    ],
+    "scrolls": [
+     [
+      -60,
+      0
+     ],
+     [
+      33,
+      2
+     ],
+     [
+      50,
+      11
+     ],
+     [
+      67,
+      32
+     ],
+     [
+      83,
+      76
+     ],
+     [
+      100,
+      158
+     ],
+     [
+      117,
+      236
+     ],
+     [
+      133,
+      288
+     ],
+     [
+      150,
+      324
+     ],
+     [
+      167,
+      351
+     ],
+     [
+      183,
+      372
+     ],
+     [
+      200,
+      388
+     ]
+    ],
+    "rowsAt": [
+     2566,
+     2916,
+     3266,
+     3616,
+     4183
+    ],
+    "facesAt": [
+     1800,
+     1350,
+     900,
+     450
+    ],
+    "landing": {
+     "ms": 4183,
+     "top": 707,
+     "bottom": 761,
+     "vh": 844,
+     "actsBottom": 832,
+     "y": 442
+    },
+    "h2At": 4117,
+    "clubAt": 4117,
+    "resultAt": 4117,
+    "closingAt": 4117,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 707,
+     "bottom": 761,
+     "y": 442
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 442,
+    "docH": 12538,
+    "title": "This is your moment.",
+    "club": "Denver Nuggets",
+    "srTitle": "This is your moment.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 8 (38 overall) Denver Nuggets hold the pick, and they take you.",
+     "box": [
+      33,
+      844,
+      357,
+      944
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -240,
+       357,
+       -196
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       786,
+       357,
+       832
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 2, pick 8, 38 overall. Denver Nuggets take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 34 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       561,
+       344,
+       601
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "35 Toronto Raptors Round 2",
+      "box": [
+       46,
+       605,
+       344,
+       635
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "36 Memphis Grizzlies Round 2",
+      "box": [
+       46,
+       639,
+       344,
+       669
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "37 New York Knicks Round 2",
+      "box": [
+       46,
+       673,
+       344,
+       703
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 38: Denver Nuggets Your name is called. Round 2, pick 8.",
+      "box": [
+       46,
+       707,
+       344,
+       761
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Minnesota Timberwolves Seed 3 · Up 2",
+      "box": [
+       46,
+       318,
+       192,
+       366
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Dallas Mavericks Seed 4 · Up 2",
+      "box": [
+       198,
+       318,
+       344,
+       366
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Denver Nuggets Seed 8 · Up 5",
+      "box": [
+       46,
+       372,
+       192,
+       420
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Houston Rockets Seed 2 · Down 2",
+      "box": [
+       198,
+       372,
+       344,
+       420
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Minnesota Timberwolves hold the first pick.",
+    "nightRange": "The scouts had you between pick 27 and pick 44 of 60.",
+    "nightBox": [
+     33,
+     217,
+     357,
+     832
+    ],
+    "boardBox": [
+     33,
+     493,
+     357,
+     774
+    ],
+    "actionsBox": [
+     33,
+     786,
+     357,
+     832
+    ],
+    "cut": [
+     "Minnesota Timberwolves [100 of 146]",
+     "Round 2, pick 8, 38 overall. Denver Nuggets take you. [1 of 413]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 100,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Oklahoma City Thunder 136",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Cleveland Cavaliers 116",
+     "Golden State Warriors 127",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 16
+   },
+   "saved": {
+    "pick": 38,
+    "round": 2,
+    "pickInRound": 8,
+    "team": "Denver Nuggets",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Houston Rockets seed 2 moved -2",
+    "slot 3 Denver Nuggets seed 8 moved 5",
+    "slot 2 Dallas Mavericks seed 4 moved 2",
+    "slot 1 Minnesota Timberwolves seed 3 moved 2"
+   ],
+   "hadWant": "The scouts had you between pick 27 and pick 44 of 60."
+  },
+  {
+   "id": "nba-names-2",
+   "wantPick": 38,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 0,
+    "docH": 11927,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 27 and pick 45 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       202,
+       357,
+       246
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       731,
+       357,
+       775
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 27 and pick 45 of 60.",
+   "stock": 38,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 158,
+    "docH": 12518,
+    "title": "This is your moment.",
+    "club": "Atlanta Hawks",
+    "srTitle": "Draft night.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 8 (38 overall) Atlanta Hawks hold the pick, and they take you.",
+     "box": [
+      33,
+      1128,
+      357,
+      1208
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       44,
+       357,
+       88
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       1070,
+       191,
+       1116
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       199,
+       1070,
+       357,
+       1116
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 34 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       845,
+       344,
+       885
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "35 Boston Celtics Round 2",
+      "box": [
+       46,
+       889,
+       344,
+       919
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "36 Oklahoma City Thunder Round 2",
+      "box": [
+       46,
+       923,
+       344,
+       953
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Brooklyn Nets Round 2",
+      "box": [
+       46,
+       957,
+       344,
+       987
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 38: Atlanta Hawks Your name is called. Round 2, pick 8.",
+      "box": [
+       46,
+       991,
+       344,
+       1045
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Boston Celtics Seed 5 · Up 4",
+      "box": [
+       46,
+       622,
+       192,
+       670
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Miami Heat Seed 1 · Down 1",
+      "box": [
+       198,
+       622,
+       344,
+       670
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Houston Rockets Seed 2 · Down 1",
+      "box": [
+       46,
+       676,
+       192,
+       724
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Detroit Pistons Seed 13 · Up 9",
+      "box": [
+       198,
+       676,
+       344,
+       724
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Boston Celtics hold the first pick.",
+    "nightRange": "The scouts had you between pick 27 and pick 45 of 60.",
+    "nightBox": [
+     33,
+     521,
+     357,
+     1116
+    ],
+    "boardBox": [
+     33,
+     777,
+     357,
+     1058
+    ],
+    "actionsBox": [
+     33,
+     1070,
+     357,
+     1116
+    ],
+    "cut": [],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 372,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     763,
+     763
+    ],
+    "journey": [
+     1249,
+     1249
+    ],
+    "scrolls": [
+     [
+      -67,
+      0
+     ],
+     [
+      33,
+      2
+     ],
+     [
+      49,
+      11
+     ],
+     [
+      66,
+      32
+     ],
+     [
+      83,
+      76
+     ],
+     [
+      99,
+      158
+     ],
+     [
+      116,
+      236
+     ],
+     [
+      133,
+      288
+     ],
+     [
+      149,
+      324
+     ],
+     [
+      166,
+      351
+     ],
+     [
+      183,
+      372
+     ],
+     [
+      199,
+      388
+     ]
+    ],
+    "rowsAt": [
+     2566,
+     2916,
+     3266,
+     3616,
+     4182
+    ],
+    "facesAt": [
+     1799,
+     1349,
+     899,
+     449
+    ],
+    "landing": {
+     "ms": 4182,
+     "top": 707,
+     "bottom": 761,
+     "vh": 844,
+     "actsBottom": 832,
+     "y": 442
+    },
+    "h2At": 4116,
+    "clubAt": 4116,
+    "resultAt": 4116,
+    "closingAt": 4116,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 707,
+     "bottom": 761,
+     "y": 442
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 442,
+    "docH": 12518,
+    "title": "This is your moment.",
+    "club": "Atlanta Hawks",
+    "srTitle": "This is your moment.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 8 (38 overall) Atlanta Hawks hold the pick, and they take you.",
+     "box": [
+      33,
+      844,
+      357,
+      924
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -240,
+       357,
+       -196
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       786,
+       357,
+       832
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 2, pick 8, 38 overall. Atlanta Hawks take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 34 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       561,
+       344,
+       601
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "35 Boston Celtics Round 2",
+      "box": [
+       46,
+       605,
+       344,
+       635
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "36 Oklahoma City Thunder Round 2",
+      "box": [
+       46,
+       639,
+       344,
+       669
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Brooklyn Nets Round 2",
+      "box": [
+       46,
+       673,
+       344,
+       703
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 38: Atlanta Hawks Your name is called. Round 2, pick 8.",
+      "box": [
+       46,
+       707,
+       344,
+       761
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Boston Celtics Seed 5 · Up 4",
+      "box": [
+       46,
+       338,
+       192,
+       386
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Miami Heat Seed 1 · Down 1",
+      "box": [
+       198,
+       338,
+       344,
+       386
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Houston Rockets Seed 2 · Down 1",
+      "box": [
+       46,
+       392,
+       192,
+       440
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Detroit Pistons Seed 13 · Up 9",
+      "box": [
+       198,
+       392,
+       344,
+       440
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Boston Celtics hold the first pick.",
+    "nightRange": "The scouts had you between pick 27 and pick 45 of 60.",
+    "nightBox": [
+     33,
+     237,
+     357,
+     832
+    ],
+    "boardBox": [
+     33,
+     493,
+     357,
+     774
+    ],
+    "actionsBox": [
+     33,
+     786,
+     357,
+     832
+    ],
+    "cut": [
+     "Round 2, pick 8, 38 overall. Atlanta Hawks take you. [1 of 399]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 83,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Oklahoma City Thunder 136",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Cleveland Cavaliers 116",
+     "Golden State Warriors 127",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 16
+   },
+   "saved": {
+    "pick": 38,
+    "round": 2,
+    "pickInRound": 8,
+    "team": "Atlanta Hawks",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Detroit Pistons seed 13 moved 9",
+    "slot 3 Houston Rockets seed 2 moved -1",
+    "slot 2 Miami Heat seed 1 moved -1",
+    "slot 1 Boston Celtics seed 5 moved 4"
+   ],
+   "hadWant": "The scouts had you between pick 27 and pick 45 of 60."
+  },
+  {
+   "id": "nba-names-3",
+   "wantPick": 38,
+   "before": {
+    "phase": "draft",
+    "hasNight": false,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 0,
+    "docH": 11927,
+    "title": "You have done the work.",
+    "club": "One year of college",
+    "srTitle": "You have done the work.",
+    "hold": "",
+    "range": "The scouts have you between pick 26 and pick 42 of 60.",
+    "result": null,
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       202,
+       357,
+       246
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Draft day",
+      "box": [
+       33,
+       731,
+       357,
+       775
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 0,
+    "active": "H3:You have done the work.",
+    "status": ""
+   },
+   "rangeWant": "The scouts have you between pick 26 and pick 42 of 60.",
+   "stock": 40,
+   "first": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 158,
+    "docH": 12518,
+    "title": "This is your moment.",
+    "club": "Indiana Pacers",
+    "srTitle": "Draft night.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 8 (38 overall) Indiana Pacers hold the pick, and they take you.",
+     "box": [
+      33,
+      1128,
+      357,
+      1208
+     ],
+     "op": "0"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       44,
+       357,
+       88
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Skip to my pick",
+      "box": [
+       33,
+       1070,
+       191,
+       1116
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       199,
+       1070,
+       357,
+       1116
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:Draft night.",
+    "status": "",
+    "stage": "live",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 34 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       845,
+       344,
+       885
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "35 Boston Celtics Round 2",
+      "box": [
+       46,
+       889,
+       344,
+       919
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "36 Atlanta Hawks Round 2",
+      "box": [
+       46,
+       923,
+       344,
+       953
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Charlotte Hornets Round 2",
+      "box": [
+       46,
+       957,
+       344,
+       987
+      ],
+      "op": "0"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 38: Indiana Pacers Your name is called. Round 2, pick 8.",
+      "box": [
+       46,
+       991,
+       344,
+       1045
+      ],
+      "op": "0"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Cleveland Cavaliers Seed 2 · Up 1",
+      "box": [
+       46,
+       622,
+       192,
+       670
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Los Angeles Lakers Seed 3 · Up 1",
+      "box": [
+       198,
+       622,
+       344,
+       670
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Charlotte Hornets Seed 7 · Up 4",
+      "box": [
+       46,
+       676,
+       192,
+       724
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Boston Celtics Seed 5 · Up 1",
+      "box": [
+       198,
+       676,
+       344,
+       724
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Cleveland Cavaliers hold the first pick.",
+    "nightRange": "The scouts had you between pick 26 and pick 42 of 60.",
+    "nightBox": [
+     33,
+     521,
+     357,
+     1116
+    ],
+    "boardBox": [
+     33,
+     777,
+     357,
+     1058
+    ],
+    "actionsBox": [
+     33,
+     1070,
+     357,
+     1116
+    ],
+    "cut": [
+     "Cleveland Cavaliers [100 of 116]",
+     "Los Angeles Lakers [100 of 115]",
+     "Charlotte Hornets [100 of 102]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "frames": {
+    "frames": 372,
+    "firstStage": "live",
+    "lastStage": "landed",
+    "card": [
+     763,
+     763
+    ],
+    "journey": [
+     1249,
+     1249
+    ],
+    "scrolls": [
+     [
+      -66,
+      0
+     ],
+     [
+      33,
+      2
+     ],
+     [
+      49,
+      11
+     ],
+     [
+      66,
+      32
+     ],
+     [
+      83,
+      76
+     ],
+     [
+      100,
+      158
+     ],
+     [
+      116,
+      236
+     ],
+     [
+      133,
+      288
+     ],
+     [
+      150,
+      324
+     ],
+     [
+      166,
+      351
+     ],
+     [
+      183,
+      372
+     ],
+     [
+      200,
+      388
+     ]
+    ],
+    "rowsAt": [
+     2566,
+     2916,
+     3266,
+     3616,
+     4183
+    ],
+    "facesAt": [
+     1799,
+     1349,
+     900,
+     449
+    ],
+    "landing": {
+     "ms": 4183,
+     "top": 707,
+     "bottom": 761,
+     "vh": 844,
+     "actsBottom": 832,
+     "y": 442
+    },
+    "h2At": 4116,
+    "clubAt": 4116,
+    "resultAt": 4116,
+    "closingAt": 4116,
+    "heldAt": 0,
+    "confettiAt": null,
+    "first": {
+     "h2": 0,
+     "club": 0,
+     "result": 0,
+     "closing": 0,
+     "rowsMin": 0,
+     "held": [
+      1,
+      1,
+      1
+     ]
+    },
+    "end": {
+     "h2": 1,
+     "club": 1,
+     "result": 1,
+     "closing": 1,
+     "rowsMin": 1,
+     "top": 707,
+     "bottom": 761,
+     "y": 442
+    },
+    "wide": false
+   },
+   "end": {
+    "phase": "done",
+    "hasNight": true,
+    "vh": 844,
+    "vw": 390,
+    "sw": 390,
+    "y": 442,
+    "docH": 12518,
+    "title": "This is your moment.",
+    "club": "Indiana Pacers",
+    "srTitle": "This is your moment.",
+    "hold": "4.1s",
+    "range": "",
+    "result": {
+     "text": "2026 DRAFT Round 2, pick 8 (38 overall) Indiana Pacers hold the pick, and they take you.",
+     "box": [
+      33,
+      844,
+      357,
+      924
+     ],
+     "op": "1"
+    },
+    "buttons": [
+     {
+      "text": "Road to the draft help",
+      "box": [
+       313,
+       -240,
+       357,
+       -196
+      ],
+      "disabled": false
+     },
+     {
+      "text": "Start your career",
+      "box": [
+       33,
+       786,
+       357,
+       832
+      ],
+      "disabled": false
+     }
+    ],
+    "starts": 1,
+    "active": "H3:This is your moment.",
+    "status": "Round 2, pick 8, 38 overall. Indiana Pacers take you.",
+    "stage": "landed",
+    "rows": [
+     {
+      "kind": "gap",
+      "text": "Picks 5 to 34 come off the board, round 1 into round 2.",
+      "box": [
+       46,
+       561,
+       344,
+       601
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "35 Boston Celtics Round 2",
+      "box": [
+       46,
+       605,
+       344,
+       635
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "36 Atlanta Hawks Round 2",
+      "box": [
+       46,
+       639,
+       344,
+       669
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "pick",
+      "text": "37 Charlotte Hornets Round 2",
+      "box": [
+       46,
+       673,
+       344,
+       703
+      ],
+      "op": "1"
+     },
+     {
+      "kind": "you",
+      "text": "Pick 38: Indiana Pacers Your name is called. Round 2, pick 8.",
+      "box": [
+       46,
+       707,
+       344,
+       761
+      ],
+      "op": "1"
+     }
+    ],
+    "tiles": [
+     {
+      "slot": "1",
+      "text": "1 Cleveland Cavaliers Seed 2 · Up 1",
+      "box": [
+       46,
+       338,
+       192,
+       386
+      ]
+     },
+     {
+      "slot": "2",
+      "text": "2 Los Angeles Lakers Seed 3 · Up 1",
+      "box": [
+       198,
+       338,
+       344,
+       386
+      ]
+     },
+     {
+      "slot": "3",
+      "text": "3 Charlotte Hornets Seed 7 · Up 4",
+      "box": [
+       46,
+       392,
+       192,
+       440
+      ]
+     },
+     {
+      "slot": "4",
+      "text": "4 Boston Celtics Seed 5 · Up 1",
+      "box": [
+       198,
+       392,
+       344,
+       440
+      ]
+     }
+    ],
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "note": "A simulated lottery. The order is generated for your career.",
+    "headline": "Cleveland Cavaliers hold the first pick.",
+    "nightRange": "The scouts had you between pick 26 and pick 42 of 60.",
+    "nightBox": [
+     33,
+     237,
+     357,
+     832
+    ],
+    "boardBox": [
+     33,
+     493,
+     357,
+     774
+    ],
+    "actionsBox": [
+     33,
+     786,
+     357,
+     832
+    ],
+    "cut": [
+     "Cleveland Cavaliers [100 of 116]",
+     "Los Angeles Lakers [100 of 115]",
+     "Charlotte Hornets [100 of 102]",
+     "Round 2, pick 8, 38 overall. Indiana Pacers take you. [1 of 401]"
+    ],
+    "confetti": 0,
+    "lowContrast": [
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 1",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 2",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 3",
+     "3.24 rgb(111, 133, 152) on rgb(230,237,243) 14px hidden=1 :: 4"
+    ]
+   },
+   "names": {
+    "avail": 100,
+    "font": "Inter, system-ui, \"Apple Color",
+    "size": "12px",
+    "interLoaded": true,
+    "cut": [
+     "Oklahoma City Thunder 136",
+     "Los Angeles Lakers 115",
+     "Milwaukee Bucks 101",
+     "Minnesota Timberwolves 146",
+     "Cleveland Cavaliers 116",
+     "Golden State Warriors 127",
+     "Memphis Grizzlies 108",
+     "Philadelphia 76ers 108",
+     "Sacramento Kings 107",
+     "New Orleans Pelicans 126",
+     "San Antonio Spurs 107",
+     "Charlotte Hornets 102",
+     "Washington Wizards 120",
+     "Portland Trail Blazers 124"
+    ],
+    "fit": 16
+   },
+   "saved": {
+    "pick": 38,
+    "round": 2,
+    "pickInRound": 8,
+    "team": "Indiana Pacers",
+    "sameAsEngine": true
+   },
+   "rowsMatch": true,
+   "tilesWant": [
+    "slot 4 Boston Celtics seed 5 moved 1",
+    "slot 3 Charlotte Hornets seed 7 moved 4",
+    "slot 2 Los Angeles Lakers seed 3 moved 1",
+    "slot 1 Cleveland Cavaliers seed 2 moved 1"
+   ],
+   "hadWant": "The scouts had you between pick 26 and pick 42 of 60."
+  }
+ ]
+}
