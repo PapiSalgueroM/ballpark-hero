@@ -236,6 +236,15 @@ no NBA or NFL season moves, no MLB or NHL season of the engine's own length outs
 the year after a changed season moves; a season whose random stream ends somewhere else than on the base:
 13 of 3,327, all in the year after a changed season, where the first build had 21).
 
+**The summer harness** (`scripts/simUsCareerSummer.mjs`, section 6, the MLB Hall share with the summer loop
+on minus off, bound 3 points). The round moved MLB to 8,000 careers a seed there (350c2121; the header of
+the harness has the measurements on the base and on the first build). The review asked for three more seeds
+at 8,000. On the fixed engine tree 1ed3806d (runner result `r1226-y-s6`): SIM_SEED=7 reads +1.95 points
+(1.11 to 2.78), SIM_SEED=11 +1.42 (0.59 to 2.25), SIM_SEED=13 +2.03 (1.20 to 2.86). All three inside, by
+0.22, 0.75 and 0.14. The margin is thin: the lift is about 1.4 to 2.0 points on every tree measured and the
+interval at 8,000 is 0.83 either way, so a seed whose estimate passes 2.17 would be red. The cure for that is
+more careers again, never the bound. The whole harness takes about 68 minutes on a runner at this size.
+
 ## What the round did NOT bind, and why (each stays a note of the ledger harness or is owed)
 
 1. **A club the ledger does not hold in 2019-20 under the game's id** (the Thrashers and the Phoenix Coyotes of
