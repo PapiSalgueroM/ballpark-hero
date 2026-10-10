@@ -1,0 +1,4 @@
+s3 exit=1 12s | 1
+s9 exit=1 12s | 1
+s10 exit=1 11s | 1
+s4 exit=1 11s | 1

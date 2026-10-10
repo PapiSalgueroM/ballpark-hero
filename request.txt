@@ -1,0 +1,5 @@
+#!serial
+s3: node .rc/x/refleet.mjs 3 && node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/s3.txt 2>&1; s=$?; grep -c 'run same' $RC_OUT/s3.txt; git checkout -- src; exit $s
+s9: node .rc/x/refleet.mjs 9 && node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/s9.txt 2>&1; s=$?; grep -c 'run same' $RC_OUT/s9.txt; git checkout -- src; exit $s
+s10: node .rc/x/refleet.mjs 10 && node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/s10.txt 2>&1; s=$?; grep -c 'run same' $RC_OUT/s10.txt; git checkout -- src; exit $s
+s4: node .rc/x/refleet.mjs 4 && node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/s4.txt 2>&1; s=$?; grep -c 'run same' $RC_OUT/s4.txt; git checkout -- src; exit $s
