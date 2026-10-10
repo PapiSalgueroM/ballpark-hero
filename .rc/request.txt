@@ -1,0 +1,15 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playSoccerCareerDepth: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDepth.mjs
+playCareerStoryRole: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerStoryRole.mjs
+playSoccerCareerDevelopment: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs
+repin: node .rc/x/scRepin.mjs && git status --short | head
+simCareerTrophyRuns-repinned: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+playCareerTrophyRuns: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTrophyRuns.mjs
+simSoccerSeasonHistory-repinned: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+playSeasonHistory1193: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSeasonHistory1193.mjs
+simSoccerDerbyHistory-repinned: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+playDerbyHistory1195: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDerbyHistory1195.mjs
+shots: for d in .tmp-fx/career-trophy-runs/native .tmp-fx/season-history/native .tmp-fx/derby-history/native; do echo "== $d"; ls "$d" 2>/dev/null | head -60; n=0; for f in "$d"/*390*.png; do [ -f "$f" ] || continue; n=$((n+1)); [ $n -le 5 ] && cp "$f" "$RC_OUT/$(basename "$d" | tr / _)-$(basename "$(dirname "$d")")-$(basename "$f")"; done; done; du -sm "$RC_OUT"
