@@ -33,7 +33,7 @@ const cannot = why => { console.error(`simCmLeagueBook: cannot run: ${why}`); pr
 const WEIGHT = 'src/lib/clubManagerGoalWeight.ts';
 /** name -> { patch: [{ file, from, to }], red: the one section that must go red, needs?: 'base' } */
 const CONTROLS = {
-  weight: { patch: [{ file: WEIGHT, from: "pos === 'CAM' ? 3 :", to: "pos === 'CAM' ? 3.1 :" }], red: 'stream', needs: 'base' },
+  weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base' },
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control "${CONTROL}"`);
 if (CONTROL && CONTROLS[CONTROL].needs === 'base' && !BASE) cannot(`control ${CONTROL} is judged against the base commit: set BOOK_BASE`);
