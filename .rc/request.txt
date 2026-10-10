@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+helpfonts: PROBE_LABEL=head PROBE_PARTS=help PROBE_NOFONTS=1 node .rc/x/atgProbe.mjs
