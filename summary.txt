@@ -1,0 +1,8 @@
+vitest exit=0 6s |    Duration  4.92s (transform 1.76s, setup 428ms, collect 2.77s, tests 3.88s, environment 2.82s, prepare 615ms)
+bigscore exit=0 1s | bigscore: 0 of 10 saved scores that the guard reads make gameStory throw, die or never answer
+bigscore-orig exit=0 1s | bigscore: 10 of 10 saved scores that the guard reads make gameStory throw, die or never answer
+sim exit=0 42s | simGmGameDay: 188 checks, 0 failed
+ctl-ceiling exit=1 33s | simGmGameDay: 188 checks, 3 failed (control ceiling)
+newonly exit=0 0s | EVERY-CHANGED-FILE-IS-NEW
+ctl-lawmax exit=1 25s | simGmGameDay: 188 checks, 1 failed (control lawmax)
+tsc exit=0 75s | 

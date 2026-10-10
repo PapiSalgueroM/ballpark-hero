@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmGameScore.test.ts src/lib/gmGameDay.test.ts src/lib/gmBracket.test.ts src/test/gameLawNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simGmGameDay.mjs
+bigscore: node .rc/x/fix-bigscore.mjs
+bigscore-orig: node .rc/x/bigscore.mjs
+ctl-ceiling: GM_GAMEDAY_CONTROL=ceiling node scripts/simGmGameDay.mjs
+ctl-lawmax: GM_GAMEDAY_CONTROL=lawmax node scripts/simGmGameDay.mjs
+newonly: git diff --name-status 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 HEAD -- src scripts docs && test "$(git diff --name-status 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 HEAD -- src scripts docs | grep -vc "^A")" = 0 && echo EVERY-CHANGED-FILE-IS-NEW

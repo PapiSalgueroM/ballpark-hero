@@ -1,0 +1,11 @@
+homeScore 72: child died, status 1 signal null: Node.js v24.21.0
+homeScore 100: child died, status 1 signal null: Node.js v24.21.0
+homeScore 1000: child died, status 1 signal null: Node.js v24.21.0
+homeScore 10000: child died, status 1 signal null: Node.js v24.21.0
+homeScore 100000: child died, status 1 signal null: Node.js v24.21.0
+homeScore 250000: child died, status 1 signal null: Node.js v24.21.0
+homeScore 1000000: child died, status 1 signal null: Node.js v24.21.0
+homeScore 100000000: child died, status 1 signal null: Node.js v24.21.0
+homeScore 1000000000: child died, status 1 signal null: Node.js v24.21.0
+homeScore 1e+21: child died, status 1 signal null: Node.js v24.21.0
+bigscore: 10 of 10 saved scores that the guard reads make gameStory throw, die or never answer

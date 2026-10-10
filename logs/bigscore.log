@@ -1,0 +1,11 @@
+homeScore 72: READ accepted | STORY 15 plays, 15 distinct minutes in 1 ms
+homeScore 100: READ accepted | STORY null in 0 ms
+homeScore 1000: READ refused
+homeScore 10000: READ refused
+homeScore 100000: READ refused
+homeScore 250000: READ refused
+homeScore 1000000: READ refused
+homeScore 100000000: READ refused
+homeScore 1000000000: READ refused
+homeScore 1e+21: READ refused
+bigscore: 0 of 10 saved scores that the guard reads make gameStory throw, die or never answer
