@@ -1,0 +1,26 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-two: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+saveSize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simCmVar: node scripts/simCmVar.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simClubManager: node scripts/simClubManager.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/vitest-all.log 2>&1; s=$?; tail -12 $RC_OUT/vitest-all.log; echo "vitest-all real exit $s"; exit $s

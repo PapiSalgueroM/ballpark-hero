@@ -1,0 +1,13 @@
+ [32m✓[39m src/test/liveScoresTransport.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmInboxPanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 88[2mms[22m[39m
+ [32m✓[39m src/pages/NotFound.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m src/lib/gridRarity.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/data/gameRegistry.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/example.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m403 passed[39m[22m[2m | [22m[33m2 skipped[39m[90m (405)[39m
+[2m      Tests [22m [1m[32m5732 passed[39m[22m[2m | [22m[33m55 skipped[39m[90m (5787)[39m
+[2m   Start at [22m 20:17:32
+[2m   Duration [22m 518.35s[2m (transform 36.20s, setup 23.83s, collect 156.12s, tests 1087.01s, environment 171.80s, prepare 35.55s)[22m
+
+vitest-all real exit 0
