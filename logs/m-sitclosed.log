@@ -1,0 +1,13 @@
+MUTATION ON: sitclosed in src/components/front-office-shared/GmJobMarketPanel.tsx
+ src/components/front-office-shared/GmJobMarketPanel.tsx | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness, first failures
+simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+--- vitest
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmCareerDesk.test.tsx[2m > [22mthe job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules
+[31m[1mAssertionError[22m: expected <button type="button" …(2)></button> to be null[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmCareerDesk.test.tsx,title=src/components/front-office-shared/GmCareerDesk.test.tsx > the job market panel > offers no year out on a closed market%2C and its "?" ope
+MUT sitclosed: harness exit=0 vitest exit=1 restored=yes

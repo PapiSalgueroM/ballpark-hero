@@ -1,0 +1,56 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 207[2mms[22m[39m
+   [32m✓[39m the three boxes[2m > [22mare one module level list, and the Job market box shows only between seats[32m 11[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws one tile an offer and takes a job on the second tap only[32m 76[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mstays out a year on the second tap only, and says when that opens the desk[32m 5[2mms[22m[39m
+[31m   [31m×[31m the job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules[39m[32m 11[2mms[22m[39m
+[31m     → expected <button type="button" …(2)></button> to be null[39m
+   [32m✓[39m the job market panel[2m > [22mdraws something sane while he holds a seat[32m 3[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mdraws a box a stint with a mark a graded season[32m 4[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mleaves the tier off a record older than the block and counts the seasons it cannot grade[32m 7[2mms[22m[39m
+   [32m✓[39m the GM level panel[2m > [22msells a point only in a tree this desk routes[32m 34[2mms[22m[39m
+   [32m✓[39m the GM level panel[2m > [22msays XP has not started on a save whose desk is off[32m 9[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mshows a fixed height box first, then the panel, and keeps the panel across a save[32m 21[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mcontrol: built inside a render, the open panel is remounted by a save and loses what it held[32m 15[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mdraws its fallback under a server render and never throws[32m 7[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mevery loader resolves to a component[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/gmDeskHost.test.ts [2m([22m[2m39 tests[22m[2m)[22m[33m 563[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 487[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmCareerDesk.test.tsx[2m > [22mthe job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules
+[31m[1mAssertionError[22m: expected <button type="button" …(2)></button> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<button
+  class="min-h-[44px] w-full rounded-lg border px-3 text-[11px] font-bold border-border text-foreground"
+  data-gm-sit-out="true"
+  type="button"
+>
+  Stay out for a year
+</button>
+
+[36m [2m❯[22m src/components/front-office-shared/GmCareerDesk.test.tsx:[2m139:58[22m[39m
+    [90m137| [39m    [34mexpect[39m(career[33m.[39mmarket[33m![39m[33m.[39mstate)[33m.[39m[34mtoBe[39m([32m'closed'[39m)[33m;[39m
+    [90m138| [39m    const { container } = render(<GmJobMarketPanel {...panelProps(care…
+    [90m139| [39m    [34mexpect[39m(container[33m.[39m[34mquerySelector[39m([32m'[data-gm-sit-out]'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                                         [31m^[39m
+    [90m140| [39m    expect(container.querySelector('[data-gm-market="closed"]')).not.t…
+    [90m141| [39m    expect(/\bsit|stay out/i.test(container.textContent ?? '')).toBe(f…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 14:19:44
+[2m   Duration [22m 1.59s[2m (transform 284ms, setup 111ms, collect 635ms, tests 770ms, environment 657ms, prepare 269ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmCareerDesk.test.tsx,title=src/components/front-office-shared/GmCareerDesk.test.tsx > the job market panel > offers no year out on a closed market%2C and its "?" opens the rules,line=139,column=58::AssertionError: expected <button type="button" …(2)></button> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<button%0A  class="min-h-[44px] w-full rounded-lg border px-3 text-[11px] font-bold border-border text-foreground"%0A  data-gm-sit-out="true"%0A  type="button"%0A>%0A  Stay out for a year%0A</button>%0A%0A ❯ src/components/front-office-shared/GmCareerDesk.test.tsx:139:58%0A%0A

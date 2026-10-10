@@ -1,0 +1,5 @@
+m-onetap exit=0 43s | MUT onetap: harness exit=0 vitest exit=1 restored=yes
+m-sitclosed exit=0 43s | MUT sitclosed: harness exit=0 vitest exit=1 restored=yes
+m-tileclimb exit=0 45s | MUT tileclimb: harness exit=0 vitest exit=0 restored=yes
+m-climbword exit=0 44s | MUT climbword: harness exit=0 vitest exit=1 restored=yes
+m-canspend exit=0 43s | MUT canspend: harness exit=0 vitest exit=0 restored=yes
