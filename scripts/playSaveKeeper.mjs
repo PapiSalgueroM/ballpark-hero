@@ -12,16 +12,19 @@
  *   3. is the game the player had before the press (B) kept aside, byte for
  *      byte?
  *
- * MEASURED ON origin/main (09df145a, 2026-10-10, remote check r1219-s0a, the
- * build before src/lib/saveKeeper.ts existed): the fresh flow LOST A in 6 of
- * 6 walks, on /stadium-tycoon, /wonderkid-factory and /idle-arena at 390 and
- * 1280. A was in NO KEY: the swap wrote A under the open page, removed the
- * backup it came from, and the game's own leaving write then landed on top.
- * The key's history read "x' A' x' x'" (x a write of the fresh game, the
- * mark a write made by the page that was left). On this branch the same
- * walks read "x' x' x' A": every write of the old page lands first, then the
- * load puts A in. LOSS_ON_MAIN below is that measurement, and the base arm
- * measures it again on every run that is given a build of origin/main.
+ * MEASURED ON origin/main (09df145a, 2026-10-10, remote checks r1219-s0a and
+ * r1219-walk1, a build without src/lib/saveKeeper.ts): the save that was put
+ * back was LOST on five routes, /club-manager, /stadium-tycoon,
+ * /wonderkid-factory, /hall-of-champions and /idle-arena, in every walk
+ * there (10 of 25 walks on that build; the other 16 routes survived). A was
+ * in NO KEY: the swap wrote A under the open page, removed the backup it
+ * came from, and the game's own leaving write then landed on top. The key's
+ * history read "x' A' x' x'" (x a write that is not A, the mark a write made
+ * by the page that was left). On this branch the same walks read
+ * "x' x' x' A": every write of the old page lands first, then the load puts
+ * A in (52 of 52 walks survived, r1219-walk1). LOSS_ON_MAIN below is that
+ * measurement, and the base arm measures it again on every run that is
+ * given a build of origin/main.
  *
  * JOURNEY L, three flows.
  *   fresh    Several games make a fresh game when they open with no save and
@@ -69,8 +72,8 @@
  *     save must be LOST, so the control exits 1 and says FIRED.
  *   KEEPER_CONTROL=extrakey  journey K plants one extra key on the branch
  *     arm: the comparison must fail.
- *   KEEPER_CONTROL=tamper    one character of the stored save is changed
- *     after the load and before the verdict: "A is in a key" must fail.
+ *   KEEPER_CONTROL=tamper    one character of every copy of A is changed
+ *     after the load and before the verdict: no walk may read SURVIVED.
  * A control that fired exits 1 with FIRED on its last line; one that did not
  * exits 2.
  *
@@ -117,9 +120,11 @@ const RESTORE_LABEL = 'Put that save back';
 const BROKE = 'This page broke';
 const BACKUP_MARK = '.broken-';
 const PLANT_STAMP = '2026-01-02T03-04-05';
-/* Measured on origin/main 09df145a on 2026-10-10 (see the header) and again by
-   the base arm of every run. A route joins this list only by measurement. */
-const LOSS_ON_MAIN = ['/stadium-tycoon', '/wonderkid-factory', '/idle-arena'];
+/* Measured on origin/main 09df145a on 2026-10-10 (remote checks r1219-s0a and
+   r1219-walk1, see the header) and again by the base arm of every run. A
+   route joins this list only by measurement. They are the five long games
+   that write their in memory game as the page leaves. */
+const LOSS_ON_MAIN = ['/club-manager', '/stadium-tycoon', '/wonderkid-factory', '/hall-of-champions', '/idle-arena'];
 const HALL = '/hall-of-champions';
 
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -238,6 +243,9 @@ async function openContext(browser, site, width, route = '') {
   await ctx.addInitScript(installLog);
   const page = await ctx.newPage();
   await page.goto(`${site}/robots.txt`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  /* A returning player has answered the cookie banner. Left unanswered it sits on top of the card (it is portalled
+     above everything on purpose, Round 117) and hides the card's buttons at 390; see the notes. */
+  await page.evaluate(() => localStorage.setItem('cookie-consent', 'essential'));
   return { ctx, page };
 }
 
@@ -496,11 +504,15 @@ async function keeperForPage() {
 const PARTS = (process.env.PARTS || (CONTROL === 'inplace' ? 'cross' : CONTROL === 'extrakey' ? 'K' : CONTROL === 'tamper' ? 'fresh' : 'fresh,planted,cross,K,cost')).split(',').map(s => s.trim());
 const has = p => PARTS.includes(p);
 const SHOT_ROUTES = ['/idle-arena', '/club-manager'];
+/* LOST: the save that was put back is not the game on screen AND its bytes are in no key. (A game that loads A and
+   at once saves it again in its own shape has A on screen and A's exact bytes nowhere, on a build that removes the
+   backup: Soccer Career does that on origin/main. That is not a loss, and it is not SURVIVED either.)
+   SURVIVED: A is the game on screen, A's bytes are still in a key, and the game he had is kept aside. */
 const judge = r => {
   if (!r.judged) return 'NOT JUDGED';
-  r.lost = !r.v.aSomewhere;
+  r.lost = !r.v.aSomewhere && !r.v.aIsTheGame;
   r.ok = r.v.aSomewhere && r.v.aIsTheGame && (!r.v.bKnown || r.v.bKeptAside);
-  return r.lost ? 'LOST    ' : r.ok ? 'SURVIVED' : 'WRONG   ';
+  return r.lost ? 'LOST    ' : r.ok ? 'SURVIVED' : 'PARTLY  ';
 };
 const say = (r, label) => {
   const tag = judge(r);
@@ -588,7 +600,7 @@ const br = arms.branch;
 const brJudged = br.filter(r => r.judged);
 const count = (list, f) => list.filter(f).length;
 console.log('');
-console.log(`playSaveKeeper, branch: ${brJudged.length} walk(s) judged (${count(brJudged, r => r.flow === 'fresh')} fresh, ${count(brJudged, r => r.flow === 'planted')} planted, ${count(brJudged, r => r.flow === 'cross')} cross): ${count(brJudged, r => r.lost)} LOST the save that was put back, ${count(brJudged, r => !r.ok && !r.lost)} wrong, ${count(brJudged, r => r.ok)} survived; ${br.length - brJudged.length} not judged`);
+console.log(`playSaveKeeper, branch: ${brJudged.length} walk(s) judged (${count(brJudged, r => r.flow === 'fresh')} fresh, ${count(brJudged, r => r.flow === 'planted')} planted, ${count(brJudged, r => r.flow === 'cross')} cross): ${count(brJudged, r => r.lost)} LOST the save that was put back, ${count(brJudged, r => !r.ok && !r.lost)} partly, ${count(brJudged, r => r.ok)} survived; ${br.length - brJudged.length} not judged`);
 if (arms.main.length) {
   const mj = arms.main.filter(r => r.judged);
   const lostRoutes = [...new Set(mj.filter(r => r.lost).map(r => r.route))];
@@ -603,11 +615,19 @@ if (arms.main.length) {
 
 if (MODE === 'report') { console.log('playSaveKeeper: report mode, nothing asserted.'); process.exit(0); }
 
-if (CONTROL === 'inplace' || CONTROL === 'tamper') {
+if (CONTROL === 'inplace') {
   const fired = brJudged.length > 0 && br.length === brJudged.length && brJudged.every(r => r.lost);
   console.log(fired
-    ? `playSaveKeeper control ${CONTROL}: FIRED. ${brJudged.length} of ${brJudged.length} walk(s) LOST the save.`
-    : `playSaveKeeper control ${CONTROL}: DID NOT FIRE. ${count(brJudged, r => r.lost)} of ${br.length} walk(s) lost the save.`);
+    ? `playSaveKeeper control inplace: FIRED. ${brJudged.length} of ${brJudged.length} walk(s) LOST the save.`
+    : `playSaveKeeper control inplace: DID NOT FIRE. ${count(brJudged, r => r.lost)} of ${br.length} walk(s) lost the save.`);
+  process.exit(fired ? 1 : 2);
+}
+if (CONTROL === 'tamper') {
+  /* One character of every copy of A was changed: A's bytes are in no key, so no walk may read SURVIVED. */
+  const fired = brJudged.length > 0 && br.length === brJudged.length && brJudged.every(r => !r.ok && !r.v.aSomewhere);
+  console.log(fired
+    ? `playSaveKeeper control tamper: FIRED. ${brJudged.length} of ${brJudged.length} walk(s) stopped reading SURVIVED once one character changed.`
+    : `playSaveKeeper control tamper: DID NOT FIRE. ${count(brJudged, r => r.ok)} of ${br.length} walk(s) still read SURVIVED.`);
   process.exit(fired ? 1 : 2);
 }
 if (CONTROL === 'extrakey') {
