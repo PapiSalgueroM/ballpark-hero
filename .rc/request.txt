@@ -1,0 +1,44 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: CM_LEAGUE_FIXTURES_EXPECT=9 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs
+sim-plain: node scripts/simCmLeagueFixtures.mjs
+sim-expect8-must-fail: CM_LEAGUE_FIXTURES_EXPECT=8 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs
+sim-frozen8-must-fail: CM_LEAGUE_FIXTURES_EXPECT=9 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=8 node scripts/simCmLeagueFixtures.mjs
+suite-runner: ONLY=simCmLeagueFixtures node scripts/runAllSims.mjs
+only-each: set -o pipefail; for l in laliga ligue2 eredivisie primeira seriea bundesliga superlig bundesliga2 championship; do CM_LEAGUE_FIXTURES_ONLY=$l CM_LEAGUE_FIXTURES_EXPECT=1 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=1 node scripts/simCmLeagueFixtures.mjs | tail -1 || exit 1; done
+ctl-swapvenue: CM_LEAGUE_FIXTURES_CONTROL=swapvenue CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=superlig node scripts/simCmLeagueFixtures.mjs
+ctl-droprow: CM_LEAGUE_FIXTURES_CONTROL=droprow CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=championship node scripts/simCmLeagueFixtures.mjs
+ctl-twiceinround: CM_LEAGUE_FIXTURES_CONTROL=twiceinround CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=laliga node scripts/simCmLeagueFixtures.mjs
+ctl-ghostclub: CM_LEAGUE_FIXTURES_CONTROL=ghostclub CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=primeira node scripts/simCmLeagueFixtures.mjs
+ctl-receiptdrift: CM_LEAGUE_FIXTURES_CONTROL=receiptdrift CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=ligue2 node scripts/simCmLeagueFixtures.mjs
+ctl-samehost: CM_LEAGUE_FIXTURES_CONTROL=samehost CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=eredivisie node scripts/simCmLeagueFixtures.mjs
+ctl-wikihost: CM_LEAGUE_FIXTURES_CONTROL=wikihost CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga node scripts/simCmLeagueFixtures.mjs
+ctl-datein: CM_LEAGUE_FIXTURES_CONTROL=datein CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=seriea node scripts/simCmLeagueFixtures.mjs
+ctl-extrakey: CM_LEAGUE_FIXTURES_CONTROL=extrakey CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga2 node scripts/simCmLeagueFixtures.mjs
+ctl-refreeze: CM_LEAGUE_FIXTURES_CONTROL=refreeze CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=laliga node scripts/simCmLeagueFixtures.mjs
+ctl-lostfile: CM_LEAGUE_FIXTURES_CONTROL=lostfile CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=championship node scripts/simCmLeagueFixtures.mjs
+ctl-nosnapshot: CM_LEAGUE_FIXTURES_CONTROL=nosnapshot CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=eredivisie node scripts/simCmLeagueFixtures.mjs
+ctl-noreadtime: CM_LEAGUE_FIXTURES_CONTROL=noreadtime CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=laliga node scripts/simCmLeagueFixtures.mjs
+ctl-noreadtime-pages: CM_LEAGUE_FIXTURES_CONTROL=noreadtime CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga2 node scripts/simCmLeagueFixtures.mjs
+ctl-falsefirstpub: CM_LEAGUE_FIXTURES_CONTROL=falsefirstpub CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=seriea node scripts/simCmLeagueFixtures.mjs
+ctl-falseasof-readday: CM_LEAGUE_FIXTURES_CONTROL=falseasof CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=ligue2 node scripts/simCmLeagueFixtures.mjs
+ctl-falseasof-releaseday: CM_LEAGUE_FIXTURES_CONTROL=falseasof CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=championship node scripts/simCmLeagueFixtures.mjs
+ctl-latechange: CM_LEAGUE_FIXTURES_CONTROL=latechange CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga node scripts/simCmLeagueFixtures.mjs
+ctl-latechange-default: CM_LEAGUE_FIXTURES_CONTROL=latechange node scripts/simCmLeagueFixtures.mjs
+ctl-latechange-readday-exit3: CM_LEAGUE_FIXTURES_CONTROL=latechange CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=laliga node scripts/simCmLeagueFixtures.mjs
+ctl-badrecheck: CM_LEAGUE_FIXTURES_CONTROL=badrecheck CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=superlig node scripts/simCmLeagueFixtures.mjs
+ctl-unfrozen: CM_LEAGUE_FIXTURES_CONTROL=unfrozen CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=primeira node scripts/simCmLeagueFixtures.mjs
+ctl-nodigest: CM_LEAGUE_FIXTURES_CONTROL=nodigest CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=seriea node scripts/simCmLeagueFixtures.mjs
+ctl-unknown-name-exit3: CM_LEAGUE_FIXTURES_CONTROL=nosuchcontrol node scripts/simCmLeagueFixtures.mjs
+noraw-exit1: node scripts/genCmLeagueFixtures.mjs fetch laliga; s=$?; if [ -e 'C:' ]; then echo "A FOLDER NAMED C: WAS MADE"; exit 9; fi; echo "no folder made and git status lines: $(git status --short | wc -l), tool exit $s"; exit $s
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+at-tree: H=$(git rev-parse HEAD) && git worktree add -q /tmp/at origin/release-at-int && ln -s "$PWD/node_modules" /tmp/at/node_modules && cd /tmp/at && git checkout -q $H -- scripts/simCmLeagueFixtures.mjs scripts/genCmLeagueFixtures.mjs scripts/lib/cmFixtureSources scripts/data/cmLeagueFixtures.frozen.json 'scripts/data/clubManager*Fixtures2026.receipt.json' 'src/data/clubManager*Fixtures2026.ts' && git rev-parse origin/release-at-int && CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs
+at-tree-frozen10-must-fail: H=$(git rev-parse HEAD) && git worktree add -q /tmp/at5 origin/release-at-int && ln -s "$PWD/node_modules" /tmp/at5/node_modules && cd /tmp/at5 && git checkout -q $H -- scripts/simCmLeagueFixtures.mjs scripts/genCmLeagueFixtures.mjs scripts/lib/cmFixtureSources scripts/data/cmLeagueFixtures.frozen.json 'scripts/data/clubManager*Fixtures2026.receipt.json' 'src/data/clubManager*Fixtures2026.ts' && CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 node scripts/simCmLeagueFixtures.mjs
+at-tree-only-premier-must-fail: H=$(git rev-parse HEAD) && git worktree add -q /tmp/at6 origin/release-at-int && ln -s "$PWD/node_modules" /tmp/at6/node_modules && cd /tmp/at6 && git checkout -q $H -- scripts/simCmLeagueFixtures.mjs scripts/genCmLeagueFixtures.mjs scripts/lib/cmFixtureSources scripts/data/cmLeagueFixtures.frozen.json 'scripts/data/clubManager*Fixtures2026.receipt.json' 'src/data/clubManager*Fixtures2026.ts' && CM_LEAGUE_FIXTURES_ONLY=premier node scripts/simCmLeagueFixtures.mjs
+prem-frozen: H=$(git rev-parse HEAD) && git worktree add -q /tmp/at3 origin/release-at-int && ln -s "$PWD/node_modules" /tmp/at3/node_modules && cp .rc/x/review-run-freezeprem.mjs /tmp/at3/ && cd /tmp/at3 && git checkout -q $H -- scripts/simCmLeagueFixtures.mjs scripts/genCmLeagueFixtures.mjs scripts/lib/cmFixtureSources scripts/data/cmLeagueFixtures.frozen.json 'scripts/data/clubManager*Fixtures2026.receipt.json' 'src/data/clubManager*Fixtures2026.ts' && node review-run-freezeprem.mjs && CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 node scripts/simCmLeagueFixtures.mjs
+prem-frozen-controls: H=$(git rev-parse HEAD) && git worktree add -q /tmp/at4 origin/release-at-int && ln -s "$PWD/node_modules" /tmp/at4/node_modules && cp .rc/x/review-run-freezeprem.mjs /tmp/at4/ && cd /tmp/at4 && git checkout -q $H -- scripts/simCmLeagueFixtures.mjs scripts/genCmLeagueFixtures.mjs scripts/lib/cmFixtureSources scripts/data/cmLeagueFixtures.frozen.json 'scripts/data/clubManager*Fixtures2026.receipt.json' 'src/data/clubManager*Fixtures2026.ts' && node review-run-freezeprem.mjs && for c in swapvenue droprow twiceinround ghostclub receiptdrift samehost wikihost datein extrakey refreeze lostfile nosnapshot; do CM_LEAGUE_FIXTURES_CONTROL=$c CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=premier node scripts/simCmLeagueFixtures.mjs 2>&1 | tail -1; echo "control $c on premier exit ${PIPESTATUS[0]}"; done
+at-tree-fences: set -o pipefail; H=$(git rev-parse HEAD) && git worktree add -q /tmp/at2 origin/release-at-int && ln -s "$PWD/node_modules" /tmp/at2/node_modules && cd /tmp/at2 && git checkout -q $H -- scripts/simCmLeagueFixtures.mjs scripts/genCmLeagueFixtures.mjs scripts/lib/cmFixtureSources scripts/data/cmLeagueFixtures.frozen.json 'scripts/data/clubManager*Fixtures2026.receipt.json' 'src/data/clubManager*Fixtures2026.ts' && node scripts/simNoRivalNames.mjs | tail -3 && node scripts/simHarnessAnchors.mjs | tail -2 && node_modules/.bin/tsc --noEmit -p tsconfig.app.json && echo AT-TREE-TSC-ZERO
