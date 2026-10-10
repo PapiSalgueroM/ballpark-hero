@@ -1,0 +1,13 @@
+FAIL laliga-390-takeover: the dugout step says every result up to here is the game's own (The season up to here is played out by the manager before you, so you inherit his table, his injuries and whatever he left in the bank. It is a simulated run-in, not the real one: this game draws its own fixture list every save, so nobody's)
+FAIL laliga-390-takeover: and it does not say the game draws its own fixture list (The season up to here is played out by the manager before you, so you inherit his table, his injuries and whatever he left in the bank. It is a simulated run-in, not the real one: this game draws its own fixture list every save, so nobody's)
+FAIL laliga-390-takeover: Help says the weeks before a takeover were played in the real order
+FAIL laliga-390-takeover: Help says a club you move to during a season keeps generated fixtures
+FAIL championship-1280-takeover: the dugout step says every result up to here is the game's own (The season up to here is played out by the manager before you, so you inherit his table, his injuries and whatever he left in the bank. It is a simulated run-in, not the real one: this game draws its own fixture list every save, so nobody's)
+FAIL championship-1280-takeover: and it does not say the game draws its own fixture list (The season up to here is played out by the manager before you, so you inherit his table, his injuries and whatever he left in the bank. It is a simulated run-in, not the real one: this game draws its own fixture list every save, so nobody's)
+FAIL championship-1280-takeover: Help says the weeks before a takeover were played in the real order
+FAIL championship-1280-takeover: Help says a club you move to during a season keeps generated fixtures
+FAIL laliga-390-refused-list: the journey ran to its end (locator.waitFor: Timeout 25000ms exceeded.)
+FAIL bundesliga-1280-hung-list: the journey ran to its end (locator.waitFor: Timeout 25000ms exceeded.)
+FAIL championship-390-hung-list: the journey ran to its end (locator.waitFor: Timeout 25000ms exceeded.)
+FAIL championship-1280-late-list: the journey ran to its end (locator.waitFor: Timeout 15000ms exceeded.)
+playCmLeagueFixtures: 12 FAILURE(S) over 14 journeys and 3 quiet pages

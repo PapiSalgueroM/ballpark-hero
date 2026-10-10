@@ -1,0 +1,904 @@
+{
+  "base": "http://localhost:4173",
+  "journeys": [
+    {
+      "id": "championship-390",
+      "checks": [
+        {
+          "what": "the page fetched no fixture list before a club was tapped",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save is the club that was picked",
+          "pass": true,
+          "detail": "Wrexham"
+        },
+        {
+          "what": "the save holds the key of its league's real list",
+          "pass": true,
+          "detail": "championship-2026-27-v1"
+        },
+        {
+          "what": "the page fetched that league's list and no other",
+          "pass": true,
+          "detail": "Championship"
+        },
+        {
+          "what": "the next match card shows the real first fixture: Wrexham vs Cardiff City, Away",
+          "pass": true,
+          "detail": "Wrexham vs Cardiff City Away · their strength ~64 · your XI avg 71 Play Live ⚡ Q"
+        },
+        {
+          "what": "the Calendar names the league and says what is real and what is simulated",
+          "pass": true,
+          "detail": "Real 2026/27 EFL Championship opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 20"
+        },
+        {
+          "what": "the Calendar links the two sources the ledger ships",
+          "pass": true,
+          "detail": "https://www.espn.com/soccer/story/_/id/49173379/efl-championship-fixtures-schedule-2026-27-full https://fixturedownload.com/results/championship-2026"
+        },
+        {
+          "what": "the Calendar grid holds the real first fixture as a day",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the page is no wider than the screen",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help names the league in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help holds no link in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "after a reload the boot fetched the saved key's list and no other",
+          "pass": true,
+          "detail": "Championship"
+        },
+        {
+          "what": "after a reload the Calendar still carries the line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save still holds its key",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "calendarLine": "Real 2026/27 EFL Championship opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026. Sources: ESPN / Fixture Download",
+      "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league."
+    },
+    {
+      "id": "championship-1280",
+      "checks": [
+        {
+          "what": "the page fetched no fixture list before a club was tapped",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save is the club that was picked",
+          "pass": true,
+          "detail": "Wrexham"
+        },
+        {
+          "what": "the save holds the key of its league's real list",
+          "pass": true,
+          "detail": "championship-2026-27-v1"
+        },
+        {
+          "what": "the page fetched that league's list and no other",
+          "pass": true,
+          "detail": "Championship"
+        },
+        {
+          "what": "the next match card shows the real first fixture: Wrexham vs Cardiff City, Away",
+          "pass": true,
+          "detail": "Wrexham vs Cardiff City Away · their strength ~64 · your XI avg 71 Play Live ⚡ Q"
+        },
+        {
+          "what": "the Calendar names the league and says what is real and what is simulated",
+          "pass": true,
+          "detail": "Real 2026/27 EFL Championship opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 20"
+        },
+        {
+          "what": "the Calendar links the two sources the ledger ships",
+          "pass": true,
+          "detail": "https://www.espn.com/soccer/story/_/id/49173379/efl-championship-fixtures-schedule-2026-27-full https://fixturedownload.com/results/championship-2026"
+        },
+        {
+          "what": "the Calendar grid holds the real first fixture as a day",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the page is no wider than the screen",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help names the league in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help holds no link in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "after a reload the boot fetched the saved key's list and no other",
+          "pass": true,
+          "detail": "Championship"
+        },
+        {
+          "what": "after a reload the Calendar still carries the line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save still holds its key",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "calendarLine": "Real 2026/27 EFL Championship opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026. Sources: ESPN / Fixture Download",
+      "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league."
+    },
+    {
+      "id": "laliga-390",
+      "checks": [
+        {
+          "what": "the page fetched no fixture list before a club was tapped",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save is the club that was picked",
+          "pass": true,
+          "detail": "Barcelona"
+        },
+        {
+          "what": "the save holds the key of its league's real list",
+          "pass": true,
+          "detail": "laliga-2026-27-v1"
+        },
+        {
+          "what": "the page fetched that league's list and no other",
+          "pass": true,
+          "detail": "LaLiga"
+        },
+        {
+          "what": "the next match card shows the real first fixture: Barcelona vs Athletic Club, Home",
+          "pass": true,
+          "detail": "Barcelona vs Athletic Club Home · their strength ~81 · your XI avg 87 Play Live "
+        },
+        {
+          "what": "the Calendar names the league and says what is real and what is simulated",
+          "pass": true,
+          "detail": "Real 2026/27 La Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026. Source"
+        },
+        {
+          "what": "the Calendar links the two sources the ledger ships",
+          "pass": true,
+          "detail": "https://fixturedownload.com/results/la-liga-2026 https://www.maxifoot.fr/calendrier-liga-espagne-2026-2027.htm"
+        },
+        {
+          "what": "the Calendar grid holds the real first fixture as a day",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the page is no wider than the screen",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help names the league in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help holds no link in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "after a reload the boot fetched the saved key's list and no other",
+          "pass": true,
+          "detail": "LaLiga"
+        },
+        {
+          "what": "after a reload the Calendar still carries the line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save still holds its key",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "calendarLine": "Real 2026/27 La Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026. Sources: Fixture Download / Maxifoot",
+      "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league."
+    },
+    {
+      "id": "laliga-1280",
+      "checks": [
+        {
+          "what": "the page fetched no fixture list before a club was tapped",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save is the club that was picked",
+          "pass": true,
+          "detail": "Barcelona"
+        },
+        {
+          "what": "the save holds the key of its league's real list",
+          "pass": true,
+          "detail": "laliga-2026-27-v1"
+        },
+        {
+          "what": "the page fetched that league's list and no other",
+          "pass": true,
+          "detail": "LaLiga"
+        },
+        {
+          "what": "the next match card shows the real first fixture: Barcelona vs Athletic Club, Home",
+          "pass": true,
+          "detail": "Barcelona vs Athletic Club Home · their strength ~78 · your XI avg 87 Play Live "
+        },
+        {
+          "what": "the Calendar names the league and says what is real and what is simulated",
+          "pass": true,
+          "detail": "Real 2026/27 La Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026. Source"
+        },
+        {
+          "what": "the Calendar links the two sources the ledger ships",
+          "pass": true,
+          "detail": "https://fixturedownload.com/results/la-liga-2026 https://www.maxifoot.fr/calendrier-liga-espagne-2026-2027.htm"
+        },
+        {
+          "what": "the Calendar grid holds the real first fixture as a day",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the page is no wider than the screen",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help names the league in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help holds no link in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "after a reload the boot fetched the saved key's list and no other",
+          "pass": true,
+          "detail": "LaLiga"
+        },
+        {
+          "what": "after a reload the Calendar still carries the line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save still holds its key",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "calendarLine": "Real 2026/27 La Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026. Sources: Fixture Download / Maxifoot",
+      "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league."
+    },
+    {
+      "id": "bundesliga-390",
+      "checks": [
+        {
+          "what": "the page fetched no fixture list before a club was tapped",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save is the club that was picked",
+          "pass": true,
+          "detail": "Bayern Munich"
+        },
+        {
+          "what": "the save holds the key of its league's real list",
+          "pass": true,
+          "detail": "bundesliga-2026-27-v1"
+        },
+        {
+          "what": "the page fetched that league's list and no other",
+          "pass": true,
+          "detail": "Bundesliga"
+        },
+        {
+          "what": "the next match card shows the real first fixture: Bayern Munich vs Stuttgart, Home",
+          "pass": true,
+          "detail": "Bayern Munich vs Stuttgart Home · their strength ~81 · your XI avg 87 Play Live "
+        },
+        {
+          "what": "the Calendar names the league and says what is real and what is simulated",
+          "pass": true,
+          "detail": "Real 2026/27 Bundesliga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in July 2026. So"
+        },
+        {
+          "what": "the Calendar links the two sources the ledger ships",
+          "pass": true,
+          "detail": "https://www.bundesliga.com/de/bundesliga/news/spielplan-saison-start-termine-daten-2026-27-22043 https://fixturedownload.com/results/bundesliga-2026"
+        },
+        {
+          "what": "the Calendar grid holds the real first fixture as a day",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the page is no wider than the screen",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help names the league in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help holds no link in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "after a reload the boot fetched the saved key's list and no other",
+          "pass": true,
+          "detail": "Bundesliga"
+        },
+        {
+          "what": "after a reload the Calendar still carries the line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save still holds its key",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "calendarLine": "Real 2026/27 Bundesliga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in July 2026. Sources: DFL / Fixture Download",
+      "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league."
+    },
+    {
+      "id": "bundesliga-1280",
+      "checks": [
+        {
+          "what": "the page fetched no fixture list before a club was tapped",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save is the club that was picked",
+          "pass": true,
+          "detail": "Bayern Munich"
+        },
+        {
+          "what": "the save holds the key of its league's real list",
+          "pass": true,
+          "detail": "bundesliga-2026-27-v1"
+        },
+        {
+          "what": "the page fetched that league's list and no other",
+          "pass": true,
+          "detail": "Bundesliga"
+        },
+        {
+          "what": "the next match card shows the real first fixture: Bayern Munich vs Stuttgart, Home",
+          "pass": true,
+          "detail": "Bayern Munich vs Stuttgart Home · their strength ~81 · your XI avg 87 Play Live "
+        },
+        {
+          "what": "the Calendar names the league and says what is real and what is simulated",
+          "pass": true,
+          "detail": "Real 2026/27 Bundesliga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in July 2026. So"
+        },
+        {
+          "what": "the Calendar links the two sources the ledger ships",
+          "pass": true,
+          "detail": "https://www.bundesliga.com/de/bundesliga/news/spielplan-saison-start-termine-daten-2026-27-22043 https://fixturedownload.com/results/bundesliga-2026"
+        },
+        {
+          "what": "the Calendar grid holds the real first fixture as a day",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the page is no wider than the screen",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help names the league in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help holds no link in its fixture paragraph",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "after a reload the boot fetched the saved key's list and no other",
+          "pass": true,
+          "detail": "Bundesliga"
+        },
+        {
+          "what": "after a reload the Calendar still carries the line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save still holds its key",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "calendarLine": "Real 2026/27 Bundesliga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in July 2026. Sources: DFL / Fixture Download",
+      "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league."
+    },
+    {
+      "id": "laliga-1280-slow-list",
+      "checks": [
+        {
+          "what": "with its list three seconds late the career still opens on it: the save holds the key",
+          "pass": true,
+          "detail": "laliga-2026-27-v1"
+        },
+        {
+          "what": "and the Calendar carries the line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "msFromFirstTapToHub": 3571
+    },
+    {
+      "id": "laliga-390-takeover",
+      "checks": [
+        {
+          "what": "the dugout step says every result up to here is the game's own",
+          "pass": true,
+          "detail": "The season up to here is played out by the manager before you, so you inherit his table, his injuries and whatever he left in the bank. It is a simulated run-in, not the real one: every result up to here is played out by the game, so nobody"
+        },
+        {
+          "what": "and it does not say the game draws its own fixture list",
+          "pass": true,
+          "detail": "The season up to here is played out by the manager before you, so you inherit his table, his injuries and whatever he left in the bank. It is a simulated run-in, not the real one: every result up to here is played out by the game, so nobody"
+        },
+        {
+          "what": "the save records the takeover",
+          "pass": true,
+          "detail": "autumn"
+        },
+        {
+          "what": "the save holds the key of its league's real list",
+          "pass": true,
+          "detail": "laliga-2026-27-v1"
+        },
+        {
+          "what": "the 11 league matches the manager before you played are the real matchdays in order, at the real grounds",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the Calendar carries the real list's line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help says the weeks before a takeover were played in the real order",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help says a club you move to during a season keeps generated fixtures",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "playedBefore": 11
+    },
+    {
+      "id": "championship-1280-takeover",
+      "checks": [
+        {
+          "what": "the dugout step says every result up to here is the game's own",
+          "pass": true,
+          "detail": "The season up to here is played out by the manager before you, so you inherit his table, his injuries and whatever he left in the bank. It is a simulated run-in, not the real one: every result up to here is played out by the game, so nobody"
+        },
+        {
+          "what": "and it does not say the game draws its own fixture list",
+          "pass": true,
+          "detail": "The season up to here is played out by the manager before you, so you inherit his table, his injuries and whatever he left in the bank. It is a simulated run-in, not the real one: every result up to here is played out by the game, so nobody"
+        },
+        {
+          "what": "the save records the takeover",
+          "pass": true,
+          "detail": "runIn"
+        },
+        {
+          "what": "the save holds the key of its league's real list",
+          "pass": true,
+          "detail": "championship-2026-27-v1"
+        },
+        {
+          "what": "the 33 league matches the manager before you played are the real matchdays in order, at the real grounds",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the Calendar carries the real list's line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help says the weeks before a takeover were played in the real order",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Help says a club you move to during a season keeps generated fixtures",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "playedBefore": 33
+    },
+    {
+      "id": "laliga-390-refused-list",
+      "checks": [
+        {
+          "what": "the first refused list reloads the page once (the stale chunk rule)",
+          "pass": true,
+          "detail": "page loads since the club tap: 1"
+        },
+        {
+          "what": "and the picker is back at its first step",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the second refusal says the fixture list did not load",
+          "pass": true,
+          "detail": "The 2026-27 fixture list did not load. Check your connection, then try again. Nothing has been lost. Try againStart on generated fixtures"
+        },
+        {
+          "what": "and offers both answers",
+          "pass": true,
+          "detail": "The 2026-27 fixture list did not load. Check your connection, then try again. Nothing has been lost. Try againStart on generated fixtures"
+        },
+        {
+          "what": "the notice is on screen",
+          "pass": true,
+          "detail": "{\"top\":12,\"bottom\":230,\"screen\":844,\"seen\":true}"
+        },
+        {
+          "what": "no career was started behind it",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the page reloaded only that once",
+          "pass": true,
+          "detail": "page loads: 1"
+        },
+        {
+          "what": "Start on generated fixtures starts that club with no key",
+          "pass": true,
+          "detail": "Barcelona undefined"
+        },
+        {
+          "what": "and its Calendar claims no real list",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "bundesliga-1280-hung-list",
+      "checks": [
+        {
+          "what": "the wait says what it is waiting for",
+          "pass": true,
+          "detail": "Loading the 2026-27 fixture list…"
+        },
+        {
+          "what": "the wait is on screen, where the player is looking",
+          "pass": true,
+          "detail": "{\"top\":12,\"bottom\":228,\"screen\":800,\"seen\":true}"
+        },
+        {
+          "what": "the page does not give up on the list before eight seconds",
+          "pass": true,
+          "detail": "8448 ms"
+        },
+        {
+          "what": "it says the fixture list did not load",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the notice is on screen",
+          "pass": true,
+          "detail": "{\"top\":12,\"bottom\":154,\"screen\":800,\"seen\":true}"
+        },
+        {
+          "what": "no career was started while it waited",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Try again goes back to waiting, with no reload, for a list that is only slow",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Start on generated fixtures starts that club with no key",
+          "pass": true,
+          "detail": "Bayern Munich undefined"
+        },
+        {
+          "what": "and its Calendar claims no real list",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "waitPlace": {
+        "top": 12,
+        "bottom": 228,
+        "screen": 800,
+        "seen": true
+      },
+      "msToNotice": 8448,
+      "noticePlace": {
+        "top": 12,
+        "bottom": 154,
+        "screen": 800,
+        "seen": true
+      }
+    },
+    {
+      "id": "championship-390-hung-list",
+      "checks": [
+        {
+          "what": "the wait says what it is waiting for",
+          "pass": true,
+          "detail": "Loading the 2026-27 fixture list…"
+        },
+        {
+          "what": "the wait is on screen, where the player is looking",
+          "pass": true,
+          "detail": "{\"top\":12,\"bottom\":228,\"screen\":844,\"seen\":true}"
+        },
+        {
+          "what": "the page does not give up on the list before eight seconds",
+          "pass": true,
+          "detail": "8825 ms"
+        },
+        {
+          "what": "it says the fixture list did not load",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the notice is on screen",
+          "pass": true,
+          "detail": "{\"top\":12,\"bottom\":230,\"screen\":844,\"seen\":true}"
+        },
+        {
+          "what": "no career was started while it waited",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Try again goes back to waiting, with no reload, for a list that is only slow",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "Start on generated fixtures starts that club with no key",
+          "pass": true,
+          "detail": "Wrexham undefined"
+        },
+        {
+          "what": "and its Calendar claims no real list",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ],
+      "waitPlace": {
+        "top": 12,
+        "bottom": 228,
+        "screen": 844,
+        "seen": true
+      },
+      "msToNotice": 8825,
+      "noticePlace": {
+        "top": 12,
+        "bottom": 230,
+        "screen": 844,
+        "seen": true
+      }
+    },
+    {
+      "id": "championship-1280-late-list",
+      "checks": [
+        {
+          "what": "the notice came first, with no career behind it",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "when the list arrives the career starts on it: the save holds the key",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "and the Calendar carries the line",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ]
+    },
+    {
+      "id": "laliga-1280-boot-refused",
+      "checks": [
+        {
+          "what": "the career to be reopened holds its key",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the boot says the fixture list did not load",
+          "pass": true,
+          "detail": "The 2026-27 fixture list did not load. Check your connection, then try again. Nothing has been lost. Try againBack to your managers"
+        },
+        {
+          "what": "and offers the retry and the way back to the managers",
+          "pass": true,
+          "detail": "The 2026-27 fixture list did not load. Check your connection, then try again. Nothing has been lost. Try againBack to your managers"
+        },
+        {
+          "what": "the career did not open",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "the save bytes are untouched",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "with the file back, Try again brings the career back with its key",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "on its real list",
+          "pass": true,
+          "detail": ""
+        },
+        {
+          "what": "no page error",
+          "pass": true,
+          "detail": ""
+        }
+      ]
+    }
+  ],
+  "quiet": [
+    {
+      "name": "a new career in a league with no list (Celtic)",
+      "lists": [],
+      "pass": true,
+      "extra": true,
+      "errors": []
+    },
+    {
+      "name": "/manager-hot-seat opens",
+      "lists": [],
+      "pass": true,
+      "extra": true,
+      "errors": []
+    },
+    {
+      "name": "/deadline-day opens",
+      "lists": [],
+      "pass": true,
+      "extra": true,
+      "errors": []
+    }
+  ]
+}
