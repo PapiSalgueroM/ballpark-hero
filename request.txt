@@ -1,0 +1,13 @@
+c-weight: git worktree add -q /tmp/base1229 980654fa && BOOK_BASE=/tmp/base1229 BOOK_CONTROL=weight node scripts/simCmLeagueBook.mjs
+c-mathrandom: BOOK_CONTROL=mathrandom node scripts/simCmLeagueBook.mjs
+c-dropmine: BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+c-cleanside: BOOK_CONTROL=cleanside node scripts/simCmLeagueBook.mjs
+c-bought: BOOK_CONTROL=bought node scripts/simCmLeagueBook.mjs
+c-twoman: BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-flat: BOOK_CONTROL=flat node scripts/simCmLeagueBook.mjs
+c-penassist: BOOK_CONTROL=penassist node scripts/simCmLeagueBook.mjs
+c-noog: BOOK_CONTROL=noog node scripts/simCmLeagueBook.mjs
+c-redeal: BOOK_CONTROL=redeal node scripts/simCmLeagueBook.mjs
+c-seasonstamp: BOOK_CONTROL=seasonstamp node scripts/simCmLeagueBook.mjs
+c-strip: BOOK_CONTROL=strip node scripts/simCmLeagueBook.mjs
+c-stripdeadline: BOOK_CONTROL=stripdeadline node scripts/simCmLeagueBook.mjs

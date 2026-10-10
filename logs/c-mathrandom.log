@@ -1,0 +1,14 @@
+simCmLeagueBook: 4 careers x 2 seasons (default fleet, seed set 0), CONTROL mathrandom
+stream  0 of 16 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 4.3s with the book and this harness watching every entry, 3.8s with the book out and nothing watching
+stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit
+shapes  credited rival goals 5716: forwards 56.4%, midfielders 33.4%, defenders 10.2%, keepers 0 goals
+        between other clubs (5510 goals), dealt against the weight: ATT 3050 vs 3024.3 (z 0.70), MID 1773 vs 1795.0 (z -0.63), DEF 545 vs 539.1 (z 0.27)
+        assists 3450 on 5716 credited goals = 0.604 a goal (the rule 0.614, z -1.56); own goals 154 of 5870 = 2.62% (the rule 2.75%, z -0.59)
+        unnamed goals 1775 (club weeks with no named eleven: 1578); my league matches 304, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 414 of 1058 club weeks, 9 of 23 rival clubs seen (Blackburn Rovers, Bolton Wanderers, Cardiff City, Charlton Athletic, Lincoln City, Millwall, Portsmouth, Preston North End, ...)
+        no named eleven in bundesliga2: 1088 of 1156 club weeks, 17 of 19 rival clubs seen (Arminia Bielefeld, Bochum, Braunschweig, Darmstadt, Dynamo Dresden, Elversberg, Energie Cottbus, Greuther Fürth, ...)
+        no named eleven in laliga2010: 76 of 1444 club weeks, 1 of 19 rival clubs seen (Levante)
+        top ten of the Goals board held by forwards and wingers: 8.75 on the book, 6.00 on the old race, rise 2.75 (floor 1) over 8 seasons
+names   13718 checks; 1 purchases probed (the best scorer of the rivals signed at week 22, twelve entries played on)
+simCmLeagueBook: cannot run: the two copies did not make the same save to damage

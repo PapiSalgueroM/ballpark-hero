@@ -1,0 +1,13 @@
+c-mathrandom exit=2 13s | simCmLeagueBook: cannot run: the two copies did not make the same save to damage
+c-dropmine exit=3 20s | simCmLeagueBook: CONTROL dropmine DID NOT FIRE as it must: law has 3434 failures, other red sections [names, oldsave, doors] (20s)
+c-weight exit=3 24s | simCmLeagueBook: CONTROL weight DID NOT FIRE as it must: stream has 11 failures, other red sections [shapes] (24s)
+c-cleanside exit=1 19s | simCmLeagueBook: CONTROL cleanside FIRED: section law went red (96 failures) and no other section did (19s)
+c-bought exit=1 19s | simCmLeagueBook: CONTROL bought FIRED: section names went red (1 failures) and no other section did (19s)
+c-twoman exit=1 19s | simCmLeagueBook: CONTROL twoman FIRED: section shapes went red (4 failures) and no other section did (19s)
+c-flat exit=1 20s | simCmLeagueBook: CONTROL flat FIRED: section shapes went red (3 failures) and no other section did (20s)
+c-penassist exit=1 20s | simCmLeagueBook: CONTROL penassist FIRED: section shapes went red (1 failures) and no other section did (20s)
+c-noog exit=1 19s | simCmLeagueBook: CONTROL noog FIRED: section shapes went red (1 failures) and no other section did (19s)
+c-redeal exit=1 19s | simCmLeagueBook: CONTROL redeal FIRED: section oldsave went red (4 failures) and no other section did (19s)
+c-seasonstamp exit=1 20s | simCmLeagueBook: CONTROL seasonstamp FIRED: section doors went red (32 failures) and no other section did (19s)
+c-strip exit=1 19s | simCmLeagueBook: CONTROL strip FIRED: section dailies went red (8 failures) and no other section did (18s)
+c-stripdeadline exit=1 16s | simCmLeagueBook: CONTROL stripdeadline FIRED: section dailies went red (6 failures) and no other section did (15s)
