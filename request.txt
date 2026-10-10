@@ -1,0 +1,41 @@
+# Release AU proof, Round 1216: the own goal harness and the two live match harnesses beside it
+og-clean: node scripts/simOwnGoalMotion.mjs
+og-plain: OWN_GOAL_CONTROL=plain node scripts/simOwnGoalMotion.mjs
+og-side: OWN_GOAL_CONTROL=side node scripts/simOwnGoalMotion.mjs
+og-crowded: OWN_GOAL_CONTROL=crowded node scripts/simOwnGoalMotion.mjs
+og-late: OWN_GOAL_CONTROL=late node scripts/simOwnGoalMotion.mjs
+og-cheer: OWN_GOAL_CONTROL=cheer node scripts/simOwnGoalMotion.mjs
+og-keeperdown: OWN_GOAL_CONTROL=keeperdown node scripts/simOwnGoalMotion.mjs
+og-through: OWN_GOAL_CONTROL=through node scripts/simOwnGoalMotion.mjs
+og-straight: OWN_GOAL_CONTROL=straight node scripts/simOwnGoalMotion.mjs
+og-keepercorner: OWN_GOAL_CONTROL=keepercorner node scripts/simOwnGoalMotion.mjs
+og-absent: OWN_GOAL_CONTROL=absent node scripts/simOwnGoalMotion.mjs
+og-reducedog: OWN_GOAL_CONTROL=reducedog node scripts/simOwnGoalMotion.mjs
+og-setpiece: OWN_GOAL_CONTROL=setpiece node scripts/simOwnGoalMotion.mjs
+og-kind: OWN_GOAL_CONTROL=kind node scripts/simOwnGoalMotion.mjs
+og-bandlow: OWN_GOAL_CONTROL=bandlow node scripts/simOwnGoalMotion.mjs
+og-bandhigh: OWN_GOAL_CONTROL=bandhigh node scripts/simOwnGoalMotion.mjs
+og-clamp: OWN_GOAL_CONTROL=clamp node scripts/simOwnGoalMotion.mjs
+og-touchmoved: OWN_GOAL_CONTROL=touchmoved node scripts/simOwnGoalMotion.mjs
+og-ruemoved: OWN_GOAL_CONTROL=ruemoved node scripts/simOwnGoalMotion.mjs
+og-viewerplain: OWN_GOAL_CONTROL=viewerplain node scripts/simOwnGoalMotion.mjs
+og-castnow: OWN_GOAL_CONTROL=castnow node scripts/simOwnGoalMotion.mjs
+og-unknown: OWN_GOAL_CONTROL=nosuchcontrol node scripts/simOwnGoalMotion.mjs
+og-fleet9: OWN_GOAL_FLEET=9 node scripts/simOwnGoalMotion.mjs
+og-fleet10: OWN_GOAL_FLEET=10 node scripts/simOwnGoalMotion.mjs
+og-fleet3: OWN_GOAL_FLEET=3 node scripts/simOwnGoalMotion.mjs
+lm-clean: node scripts/simLiveSimMotion.mjs
+lm-save: LIVE_MOTION_CONTROL=save node scripts/simLiveSimMotion.mjs
+lm-lineup: LIVE_MOTION_CONTROL=lineup node scripts/simLiveSimMotion.mjs
+lm-reduced: LIVE_MOTION_CONTROL=reduced node scripts/simLiveSimMotion.mjs
+lm-mouth: LIVE_MOTION_CONTROL=mouth node scripts/simLiveSimMotion.mjs
+lm-takenback: LIVE_MOTION_CONTROL=takenback node scripts/simLiveSimMotion.mjs
+lm-samecommit: LIVE_MOTION_CONTROL=samecommit node scripts/simLiveSimMotion.mjs
+lm-castnow: LIVE_MOTION_CONTROL=castnow node scripts/simLiveSimMotion.mjs
+lc-clean: node scripts/simLiveSimCelebration.mjs
+lc-missing: LIVE_CELEBRATION_CONTROL=missing node scripts/simLiveSimCelebration.mjs
+lc-figure: LIVE_CELEBRATION_CONTROL=figure node scripts/simLiveSimCelebration.mjs
+lc-expiry: LIVE_CELEBRATION_CONTROL=expiry node scripts/simLiveSimCelebration.mjs
+lc-reduced: LIVE_CELEBRATION_CONTROL=reduced node scripts/simLiveSimCelebration.mjs
+lc-ballstep: LIVE_CELEBRATION_CONTROL=ballstep node scripts/simLiveSimCelebration.mjs
+lc-window: LIVE_CELEBRATION_CONTROL=window node scripts/simLiveSimCelebration.mjs
