@@ -1,0 +1,3 @@
+squad-1115-seed1 exit=0 72s | simCareerSquad: 2178 checks, 0 failed
+squad-ap-seed1 exit=0 77s | simCareerSquad: 2180 checks, 0 failed
+squad-aq-seed1 exit=0 163s | simCareerSquad: 2181 checks, 0 failed
