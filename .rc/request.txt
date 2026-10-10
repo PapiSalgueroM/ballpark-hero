@@ -1,0 +1,30 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-near: node_modules/.bin/vitest run src/test/nbaTrophyTile.test.ts src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx src/test/nbaOldSaveLines.test.ts src/test/rivalryChoiceBoard.test.tsx src/test/myCareerRestore.test.tsx src/test/usCareerStatLines.test.tsx src/test/nbaStatLineColumns.test.ts src/test/careerHall.test.tsx src/test/careerDecisionOutcome.test.tsx --testTimeout=300000 --hookTimeout=120000
+sense-full: SENSE_PROVE_AGAINST=cd9c3d50 SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+ctl-oldscale: SIM_NBA_SENSE_CONTROL=oldscale node scripts/simNbaAwardsSense.mjs
+ctl-neutralmine: SIM_NBA_SENSE_CONTROL=neutralmine node scripts/simNbaAwardsSense.mjs
+ctl-rivaldraws: SIM_NBA_SENSE_CONTROL=rivaldraws SENSE_PROVE_AGAINST=cd9c3d50 node scripts/simNbaAwardsSense.mjs
+ctl-oldgate306: SIM_NBA_SENSE_CONTROL=oldgate306 node scripts/simNbaAwardsSense.mjs
+ctl-norow: SIM_NBA_SENSE_CONTROL=norow node scripts/simNbaAwardsSense.mjs
+ctl-nearlie: SIM_NBA_SENSE_CONTROL=nearlie node scripts/simNbaAwardsSense.mjs
+ctl-othersport: SIM_NBA_SENSE_CONTROL=othersport SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+ctl-stalefield: SIM_NBA_SENSE_CONTROL=stalefield node scripts/simNbaAwardsSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+rivalry-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+rivalry-deaf: RIVALRY_CONTROL=deaf node scripts/simCareerRivalryEvents.mjs
+rivalry-collision: RIVALRY_CONTROL=collision node scripts/simCareerRivalryEvents.mjs
+rivalry-beatlie: RIVALRY_CONTROL=beatlie node scripts/simCareerRivalryEvents.mjs
+rivalry-beatheat: RIVALRY_CONTROL=beatheat node scripts/simCareerRivalryEvents.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+parity-fixture: US_BOARD_PARITY_CONTROL=fixture node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerPress: node scripts/simCareerPress.mjs
