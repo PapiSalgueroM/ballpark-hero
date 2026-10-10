@@ -1,0 +1,14 @@
+#!build
+#!playwright
+c-rank: PORT=4600 CAREER_SQUAD_PLAY_CONTROL=rank node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-write: PORT=4610 CAREER_SQUAD_PLAY_CONTROL=write node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-still: PORT=4620 CAREER_SQUAD_PLAY_CONTROL=still node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-nofill: PORT=4630 CAREER_SQUAD_PLAY_CONTROL=nofill node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-clip: PORT=4640 CAREER_SQUAD_PLAY_CONTROL=clip node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-shift: PORT=4650 CAREER_SQUAD_PLAY_CONTROL=shift node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-noscroll: PORT=4660 CAREER_SQUAD_PLAY_CONTROL=noscroll node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-notrap: PORT=4670 CAREER_SQUAD_PLAY_CONTROL=notrap node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-ellipsis: PORT=4680 CAREER_SQUAD_PLAY_CONTROL=ellipsis node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-static: PORT=4690 CAREER_SQUAD_PLAY_CONTROL=static node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-label: PORT=4700 CAREER_SQUAD_PLAY_CONTROL=label node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
+c-timeline: PORT=4710 CAREER_SQUAD_PLAY_CONTROL=timeline node scripts/playCareerSquad.mjs 2>&1 | tail -1; exit ${PIPESTATUS[0]}
