@@ -1,0 +1,146 @@
+FAIL championship: settles a neutral-only league entry through the same real fixture resolver
+AssertionError [ERR_ASSERTION]: actual neutral-only round: exact saved opponent order and home/away pairs
++ actual - expected
+
+  [
+    [
++     'Birmingham City',
++     'Wrexham'
+-     'Bolton Wanderers',
+-     'Preston North End'
+    ],
+    [
+-     'Bristol City',
+-     'Millwall'
+-   ],
+-   [
+      'Burnley',
++     'Charlton Athletic'
+-     'West Ham'
+    ],
+    [
++     'Lincoln City',
++     'West Brom'
+-     'Cardiff City',
+-     'Wrexham'
+    ],
+    [
++     'Middlesbrough',
+-     'Charlton Athletic',
+      'Derby County'
+    ],
+    [
++     'Millwall',
++     'Cardiff City'
+-     'Middlesbrough',
+-     'Lincoln City'
+    ],
+    [
+      'Norwich City',
++     'West Ham'
+-     'West Brom'
+    ],
+    [
+      'Portsmouth',
++     'Watford'
++   ],
++   [
+      'QPR',
++     'Bristol City'
+    ],
+    [
+      'Sheffield United',
++     'Blackburn Rovers'
+-     'Birmingham City'
+    ],
+    [
++     'Southampton',
++     'Bolton Wanderers'
+-     'Stoke City',
+-     'Swansea City'
+    ],
+    [
++     'Swansea City',
++     'Stoke City'
+-     'Watford',
+-     'Southampton'
+    ],
+    [
+      'Wolves',
++     'Preston North End'
+-     'Blackburn Rovers'
+    ]
+  ]
+
+    at assertRound (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:118:10)
+    at Object.bye (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:423:9)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:548:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:576:54
+FAIL championship: gives no key while the list is not here, and refuses to read a saved key without its list
+AssertionError [ERR_ASSERTION]: Fetching the list changes exactly one field of a fresh save
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 2,
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-22-490',
+-       id: 'youth-muwv75s0-1-490',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Kwame Sundgren (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-23-756',
+-       id: 'youth-muwv75s0-2-756',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Ravi Calvet (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-24-601',
+-       id: 'youth-muwv75s0-3-601',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Kaan Reyes (Youth)',
+
+    at Object.unloaded (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:468:16)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:548:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:576:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'settles a neutral-only league entry through the same real fixture resolver',
++   'gives no key while the list is not here, and refuses to read a saved key without its list'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:562:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:576:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'settles a neutral-only league entry through the same real fixture resolver',
+    'gives no key while the list is not here, and refuses to read a saved key without its list'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

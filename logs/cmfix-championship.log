@@ -1,0 +1,3 @@
+FAIL championship: settles a neutral-only league entry through the same real fixture resolver
+FAIL championship: gives no key while the list is not here, and refuses to read a saved key without its list
+Node.js v24.21.0
