@@ -265,8 +265,21 @@ describe('Round 1216: an own goal on real feeds', () => {
   it('OG3: nobody is the scorer, and the man holds his head', () => {
     const present = buildFleet().owns.filter(o => o.man);
     let hops = 0, plainHops = 0, noRue = 0, manCheers = 0, wrongSide = 0, unlike = 0, walkers = 0, cheered = 0;
+    let keepers = 0, keeperDown = 0, keeperBack = 0, plainDown = 0;
     for (const o of present) {
       const own = framesOf(o, 'own'), plain = framesOf(o, 'plain');
+      if (o.man!.keeper) {
+        keepers++;
+        /* A keeper who let it in ends on his feet with his hands at his head, which is the one pose the figure
+           draws them in (lying in his dive he is drawn as any beaten keeper). The beaten keeper of the baseline
+           arm, the same man, ends lying in his dive. */
+        const his = own[own.length - 1].poses[o.man!.key], was = plain[plain.length - 1].poses[o.man!.key];
+        if (his?.dive !== 0 || his?.rue !== 1) keeperDown++;
+        if (Math.abs(was?.dive ?? 0) > 60) plainDown++;
+        /* And on his way up he never leans back down. */
+        const lean = own.filter(frame => frame.phase === 'net').map(frame => Math.abs(frame.poses[o.man!.key]?.dive ?? 0));
+        if (lean.some((now, i) => i > 0 && now > lean[i - 1] + 1e-9)) keeperBack++;
+      }
       const scoring = (frame: Frame) => (o.mine ? frame.mine : frame.theirs);
       const conceding = (frame: Frame) => (o.mine ? frame.theirs : frame.mine);
       const lastFlight = own.filter(frame => frame.phase === 'flight').pop()!;
@@ -288,7 +301,9 @@ describe('Round 1216: an own goal on real feeds', () => {
       if (hopped) hops++;
       if (plainHopped) plainHops++;
     }
-    console.log(`[1216 OG3] own goals ${present.length}; with a hop on a net frame: own goal arm ${hops}, baseline arm ${plainHops}; net frames where the man has no rue ${noRue}, where he celebrates ${manCheers}, where a man of his side celebrates ${wrongSide}, where the raised arms are more than three or not alike ${unlike}, where a man with raised arms has moved ${walkers}; net frames with arms raised ${cheered}`);
+    console.log(`[1216 OG3] own goals ${present.length}; with a hop on a net frame: own goal arm ${hops}, baseline arm ${plainHops}; net frames where the man has no rue ${noRue}, where he celebrates ${manCheers}, where a man of his side celebrates ${wrongSide}, where the raised arms are more than three or not alike ${unlike}, where a man with raised arms has moved ${walkers}; net frames with arms raised ${cheered}; keepers who put it in ${keepers}: not on their feet holding their head on the last frame ${keeperDown}, leaning back down on the way up ${keeperBack}; the same keeper lying in his dive on the baseline arm's last frame ${plainDown}`);
+    expect(keeperDown + keeperBack).toBe(0);
+    expect(plainDown).toBe(keepers);
     expect(hops).toBe(0);
     expect(plainHops).toBe(present.length);
     expect(noRue + manCheers + wrongSide + unlike + walkers).toBe(0);
@@ -474,7 +489,7 @@ describe('Round 1216: an own goal on scenes made by hand', () => {
   });
 
   it('OG7: reduced motion shows the last frame at once, the man with his head in his hands', () => {
-    for (const [side, back] of [['me', 'Away back'], ['opp', 'Home back']] as const) {
+    for (const [side, back] of [['me', 'Away back'], ['opp', 'Home back'], ['me', 'Away keeper'], ['opp', 'Home keeper']] as const) {
       const scene = sceneFor(side);
       const line = handLine(side, back);
       const key = (side === 'me' ? scene.theirs : scene.mine).find(p => p.name === back)!.key;
@@ -483,6 +498,8 @@ describe('Round 1216: an own goal on scenes made by hand', () => {
       expect([first.phase, first.action, first.net, first.ownGoalBy]).toEqual(['net', 'goal', side === 'me' ? 'opp' : 'me', key]);
       expect(inMouth(first.ball)).toBe(true);
       expect(first.poses[key].rue).toBe(1);
+      /* On his feet, a keeper too: the still frame shows the hands at the head, which a dive would not draw. */
+      expect(first.poses[key].dive ?? 0).toBe(0);
       expect(Object.values(first.poses).some(pose => pose.hop !== undefined)).toBe(false);
       /* It is the frame the action ends on, every figure, the ball and every pose of it. */
       const last = actionFrame(scene, line, ACTION_SPAN);
@@ -551,6 +568,25 @@ describe('Round 1216: the recorded own goal', () => {
     /* Both hands at the height of the head, close in beside it. */
     const { container } = render(<LivePitchPlayer color="#85bcf0" keeper={false} pose={{ rue: 1 }} />);
     expect([...container.querySelectorAll('circle')].map(hand => [Math.abs(Number(hand.getAttribute('cx'))), Number(hand.getAttribute('cy'))])).toEqual([[6, -20], [6, -20]]);
+    /* A keeper who put it in, read off the DRAWING and not off the mark: the pose his own goal ends on has him on
+       his feet with both hands at his head. The same line without og leaves the same man lying in his dive, and
+       a rue put on that figure would change nothing it is drawn with (the fourth pose of the record above). */
+    for (const side of ['me', 'opp'] as const) {
+      const [name, key] = side === 'me' ? ['Away keeper', 'o0'] : ['Home keeper', 'm0'];
+      const drawn = (og: boolean) => {
+        const line = handLine(side, name);
+        const view = render(<LivePitchPlayer color="#85bcf0" keeper pose={actionFrame(sceneFor(side), { ...line, event: { ...line.event, og } }, ACTION_SPAN).poses[key]} />);
+        const out = {
+          hands: [...view.container.querySelectorAll('circle')].map(hand => [Math.abs(Number(hand.getAttribute('cx'))), Number(hand.getAttribute('cy'))]),
+          lean: Math.abs(Number(view.container.querySelector('g')!.getAttribute('transform')!.split('rotate(')[1].split(' ')[0])),
+          rue: !!view.container.querySelector('[data-pm-rue]'), pose: view.container.querySelector('svg')!.getAttribute('data-cm-actor-pose'),
+        };
+        view.unmount();
+        return out;
+      };
+      expect(drawn(true)).toEqual({ hands: [[6, -20], [6, -20]], lean: 0, rue: true, pose: 'stand' });
+      expect(drawn(false)).toEqual({ hands: [[5, -20], [5, -20]], lean: 68, rue: false, pose: 'dive' });
+    }
     console.log(`[1216 digest] RUE ${fnv(markup.join('\n'))}`);
     expect(fnv(markup.join('\n'))).toBe(RUE_DIGEST);
   });

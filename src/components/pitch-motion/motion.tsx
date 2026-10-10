@@ -158,9 +158,10 @@ export function ownGoalFigure<T extends MotionPlayer>(conceding: T[], event: Pit
  *  straight line to that corner so the turn can be seen. His keeper goes the other way. When the man IS the
  *  keeper, the ball goes to where his dive has him and off his gloves into the other corner, which is the one
  *  on the side the ball came from: it comes back across him, so the turn can be seen there too (with the
- *  corner left to the line's own flank a ball from the far side went straight through his gloves). A named
- *  man who is not on the grass has no figure moved to the ball: it turns in front of that goal on its own
- *  (anyone standing on its way from there to the net still steps off it). */
+ *  corner left to the line's own flank a ball from the far side went straight through his gloves). He gets
+ *  up as it goes in and ends on his feet, so his hands at his head are drawn (lying in his dive he was drawn
+ *  as any beaten keeper is). A named man who is not on the grass has no figure moved to the ball: it turns
+ *  in front of that goal on its own (anyone standing on its way from there to the net still steps off it). */
 function ownGoalFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: MotionEvent, elapsed: number): MotionFrame<T> {
   const own = action.event;
   const mine = own.side === 'me';
@@ -205,9 +206,11 @@ function ownGoalFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: Mot
   const poses = whole.poses;
   for (const key in poses) delete poses[key].hop;
   if (man) {
-    const rue = smooth((elapsed - NET_AT) / (ACTION_SPAN - NET_AT) / .55);
+    const since = (elapsed - NET_AT) / (ACTION_SPAN - NET_AT);
+    const rue = smooth(since / .55);
     const reach = Math.sin(bounded((elapsed - touchAt) / .25 + .5) * Math.PI);
-    poses[man.key] = man.keeper ? { ...poses[man.key], catching: reach * .6, rue } : { kick: reach, rue };
+    /* A keeper who let it in gets up as it goes in, so that he ends on his feet with his hands at his head. */
+    poses[man.key] = man.keeper ? { ...poses[man.key], dive: (poses[man.key]?.dive ?? 0) * (1 - smooth(since)) || 0, catching: reach * .6, rue } : { kick: reach, rue };
   }
   return { ...whole, mine: place(stood.mine, !mine), theirs: place(stood.theirs, mine), ball, poses, ownGoalBy: man?.key ?? null };
 }

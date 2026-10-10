@@ -13,6 +13,8 @@
  *   crowded    nobody steps off the line from the touch to the corner               OG9
  *   late       the instants are read a tenth of the action late                     OG2
  *   cheer      the hop is left on the man who delivered it                          OG3
+ *   keeperdown a keeper who put it in stays lying in his dive, where the figure
+ *              draws no hands at a head                                             OG3
  *   through    nobody steps aside when the man's walk passes through a team mate    OG4
  *   straight   the ball meets the man ON the straight line to the corner: no turn   OG5
  *   keepercorner  a keeper's own goal ends in the corner the line's own flank or the
@@ -49,6 +51,7 @@ const controls = {
   crowded: { file: MOTION, anchor: 'return p.keeper || gap >= 3.6 ? p', replacement: 'return p.keeper || gap >= 0 ? p', test: 'OG9: from the touch to the net the ball passes nobody else', fails: 1 },
   late: { file: MOTION, anchor: 'const whole = at(elapsed);', replacement: 'const whole = at(elapsed * .9);', test: 'OG2: the instants are the goal it always was', fails: 1 },
   cheer: { file: MOTION, anchor: 'for (const key in poses) delete poses[key].hop;', replacement: 'void poses;', test: 'OG3: nobody is the scorer', fails: 1 },
+  keeperdown: { file: MOTION, anchor: ' * (1 - smooth(since)) || 0, catching: reach', replacement: ', catching: reach', test: 'OG3: nobody is the scorer', fails: 1 },
   through: { file: MOTION, anchor: 'if (ease <= 0) return now;', replacement: 'if (ease <= 1) return now;', test: 'OG4: nobody stands on a team mate', fails: 1 },
   straight: { file: MOTION, anchor: 'if (Math.abs(x - straight) < 5) x = straight + (x < straight ? -5 : 5);', replacement: 'x = straight;', test: 'OG5: the turn can be seen', fails: 1 },
   keepercorner: { file: MOTION, anchor: "const flank: PitchEvent['flank'] = !man ? own.flank : (man.keeper ? drawn(own.flank, PLANT_SPAN).ball.x : man.x) < 50 ? 'left' : 'right';", replacement: "const flank: PitchEvent['flank'] = !man || man.keeper ? own.flank : man.x < 50 ? 'left' : 'right';", test: 'OG5: the turn can be seen', fails: 1 },
