@@ -81,6 +81,11 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   Both read 2026-10-10. Zero tuple differences in 306. Name table: 5 lines for Maxifoot, 17 for the feed. Data
   file `src/data/clubManagerLigue2Fixtures2026.ts` 8,979 bytes; receipt 64,330 bytes. The game spells the club
   `Red Star FC` and `Saint-Étienne`.
+- **eredivisie: IN.** 18 clubs, 34 matchdays, 306 fixtures. Sources: the feed
+  (`https://fixturedownload.com/feed/json/eredivisie-2026`, 66,365 bytes, sha256 `968d871b6c4f...`) and Maxifoot
+  (`https://www.maxifoot.fr/calendrier-pays-bas-2026-2027.htm`, the season stamped address, 110,826 bytes, sha256
+  `46a0df585d9d...`). Both read 2026-10-10. Zero tuple differences in 306. Name table: 8 lines for the feed, 12
+  for Maxifoot. Data file `src/data/clubManagerEredivisieFixtures2026.ts` 10,465 bytes; receipt 64,512 bytes.
 
 ## Runner results
 

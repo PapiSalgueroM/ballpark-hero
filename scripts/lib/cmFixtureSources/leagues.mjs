@@ -86,12 +86,34 @@ export const CM_FIXTURE_LEAGUES = [
   {
     leagueId: 'eredivisie', exportName: 'EREDIVISIE_FIXTURES_2026', file: 'clubManagerEredivisieFixtures2026', orderSource: 0,
     sources: [FEED('eredivisie-2026'), MAXIFOOT('pays-bas')],
-    names: [{}, {}],
+    names: [
+      {
+        AZ: 'AZ Alkmaar', 'Excelsior Rotterdam': 'Excelsior', 'FC Groningen': 'Groningen', 'FC Twente': 'Twente',
+        'FC Utrecht': 'Utrecht', 'N.E.C. Nijmegen': 'NEC Nijmegen', 'SC Cambuur': 'Cambuur', 'sc Heerenveen': 'Heerenveen',
+      },
+      {
+        'ADO La Haye': 'ADO Den Haag', 'Ajax Amsterd.': 'Ajax', 'Cambuur L.': 'Cambuur', 'Excelsior Rot.': 'Excelsior',
+        'FC Groningen': 'Groningen', 'FC Twente': 'Twente', 'FC Utrecht': 'Utrecht', 'Feyenoord Rot.': 'Feyenoord',
+        'Fortuna Sitt.': 'Fortuna Sittard', 'NEC Nimègue': 'NEC Nijmegen', 'PSV Eindhov.': 'PSV', 'SC Telstar': 'Telstar',
+      },
+    ],
   },
   {
     leagueId: 'primeira', exportName: 'PRIMEIRA_FIXTURES_2026', file: 'clubManagerPrimeiraFixtures2026', orderSource: 0,
     sources: [FEED('primeira-liga-2026'), MAXIFOOT('portugal')],
-    names: [{}, {}],
+    names: [
+      {
+        'Académico': 'Académico de Viseu', 'CD Nacional': 'Nacional', 'Casa Pia AC': 'Casa Pia', 'Estoril Praia': 'Estoril',
+        'FC Alverca': 'Alverca', 'FC Arouca': 'Arouca', 'FC Famalicão': 'Famalicão', 'FC Porto': 'Porto',
+        'Gil Vicente FC': 'Gil Vicente', 'Marítimo M.': 'Marítimo', 'Moreirense FC': 'Moreirense', 'Rio Ave FC': 'Rio Ave',
+        'SC Braga': 'Braga', 'SL Benfica': 'Benfica', 'Vitória SC': 'Vitória Guimarães',
+      },
+      {
+        'Academico Viseu': 'Académico de Viseu', 'Benfica Lisbo.': 'Benfica', 'Estoril Praia': 'Estoril', 'FC Porto': 'Porto',
+        Famalicao: 'Famalicão', 'Marit. Funchal': 'Marítimo', 'Nacio. Funchal': 'Nacional', 'Sporting Braga': 'Braga',
+        'Sporting Lisbo.': 'Sporting CP', 'Vit. Guimaraes': 'Vitória Guimarães',
+      },
+    ],
   },
 ];
 
