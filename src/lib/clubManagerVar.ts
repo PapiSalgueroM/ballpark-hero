@@ -1,6 +1,8 @@
 import { keyedRng } from '@/lib/keyedRng';
+import { CM_VAR_RATES as CM_VAR_GAME_RATES, CM_VAR_COVERAGE } from '@/data/clubManagerVarRates';
 
-/** Simplified game simulation, not a claim about a league's VAR coverage or rates.
+/** Round 1218: the rates and the coverage are DERIVED from real football by scripts/genCmVarRates.mjs
+ * (scripts/data/cmVarRates.json, cmVarCompetitions.json) and read from the generated module. No rate is typed here.
  * Review scope: https://www.theifab.com/laws/latest/video-assistant-referee-var-protocol/
  * https://www.uefa.com/running-competitions/refereeing/clear-line/factual-decisions/
  * Decisions are made before a chance commits, then saved with the match. */
@@ -9,9 +11,22 @@ export interface CmVarDecision {
   incident: 'goal' | 'penalty';
   decision: 'confirmed' | 'disallowed' | 'awarded';
   trigger?: { side: 'me' | 'opp'; who: string };
-  reason: 'offside' | 'attacking_foul' | 'handball' | 'clear' | 'penalty_stands' | 'missed_foul';
+  /** 'ruled_out' since Round 1218: one publisher splits why goals are ruled out, so the card names no reason. */
+  reason: 'offside' | 'attacking_foul' | 'handball' | 'ruled_out' | 'clear' | 'penalty_stands' | 'missed_foul';
 }
-export const CM_VAR_GAME_RATES = { goalReview: 0.16, overturn: 0.32, penaltyReview: 0.45, missedFoulReview: 0.015, penaltyScores: 0.74 } as const;
+export { CM_VAR_GAME_RATES };
+
+const CUP_STAGES = ['R16', 'QF', 'SF', 'F'], UCL_STAGES = ['group', 'R16', 'QF', 'SF', 'F'];
+/** Does this competition use reviews at this stage in 2026-27? key is league:<id>, cup:<cup name> or ucl.
+ *  A competition that is not in the generated coverage (no, unknown, never read) does not. */
+export function cmVarCovers(key: string, stage?: string): boolean {
+  const from = Object.prototype.hasOwnProperty.call(CM_VAR_COVERAGE, key) ? CM_VAR_COVERAGE[key] : null;
+  if (!from) return false;
+  if (from === 'all') return true;
+  const order = key === 'ucl' ? UCL_STAGES : CUP_STAGES;
+  const at = order.indexOf(stage ?? ''), first = order.indexOf(from);
+  return at >= 0 && first >= 0 && at >= first;
+}
 type Goal = { name: string; minute: number; plus?: number; penalty?: boolean; freeKick?: boolean };
 type ReviewLine = { minute: number; plus?: number; side: 'me' | 'opp'; kind: 'var'; who: string; review: CmVarDecision };
 
@@ -23,8 +38,7 @@ export function settleGoalReviews<T extends Goal>(goals: T[], side: 'me' | 'opp'
     const rng = keyedRng(id);
     if (rng() >= CM_VAR_GAME_RATES.goalReview) { accepted.push(goal); continue; }
     const overturned = rng() < CM_VAR_GAME_RATES.overturn;
-    const reasons = ['offside', 'attacking_foul', 'handball'] as const;
-    const review: CmVarDecision = { id, incident: 'goal', decision: overturned ? 'disallowed' : 'confirmed', reason: overturned ? reasons[Math.floor(rng() * reasons.length)] : 'clear' };
+    const review: CmVarDecision = { id, incident: 'goal', decision: overturned ? 'disallowed' : 'confirmed', reason: overturned ? 'ruled_out' : 'clear' };
     reviews.push({ minute: goal.minute, ...(goal.plus ? { plus: goal.plus } : {}), side, kind: 'var', who: goal.name, review });
     if (!overturned) accepted.push(goal);
   }
@@ -45,6 +59,7 @@ export function penaltyReviews(play: { kind: string; penalty?: boolean; minute: 
 export function cmVarLabel(review: CmVarDecision): string {
   if (review.incident === 'penalty') return review.decision === 'awarded' ? 'VAR: penalty awarded' : 'VAR: penalty confirmed';
   if (review.decision === 'confirmed') return 'VAR: goal confirmed';
+  if (review.reason === 'ruled_out') return 'VAR: goal ruled out';
   const reason = review.reason === 'offside' ? 'offside' : review.reason === 'handball' ? 'attacking handball' : 'attacking foul';
   return `VAR: goal ruled out, ${reason}`;
 }
@@ -97,7 +112,7 @@ export function awardReviewedPenalties<T extends PenaltyPlay>(input: T[], matchK
     const scored = rng() < CM_VAR_GAME_RATES.penaltyScores;
     const review: CmVarDecision = { id, incident: 'penalty', decision: 'awarded', reason: 'missed_foul', trigger: { side: foul.side, who: foul.who } };
     play[index] = { ...play[index], minute: foul.minute, plus: foul.plus, who: taker.name,
-      penalty: true, on: scored || rng() < 0.70, goal: scored || undefined, xg: 0.76, review };
+      penalty: true, on: scored || rng() < CM_VAR_GAME_RATES.penaltyOnTarget, goal: scored || undefined, xg: CM_VAR_GAME_RATES.penaltyScores, review };
     reviews.push({ minute: foul.minute, ...(foul.plus ? { plus: foul.plus } : {}), side, kind: 'var', who: taker.name, review });
     if (scored) goals.push({ side, ...taker, minute: foul.minute, ...(foul.plus ? { plus: foul.plus } : {}), penalty: true });
     awarded.add(side);

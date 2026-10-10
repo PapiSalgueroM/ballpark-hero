@@ -7,10 +7,23 @@ import { createRequire } from 'node:module';
 import { build } from 'esbuild';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { playFleet } from './lib/cmVarFleet.mjs';
+import { derive } from './genCmVarRates.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const self = fileURLToPath(import.meta.url), engine = 'src/lib/clubManager.ts', helper = 'src/lib/clubManagerVar.ts';
+const self = fileURLToPath(import.meta.url), engine = 'src/lib/clubManager.ts', helper = 'src/lib/clubManagerVar.ts', rates = 'src/data/clubManagerVarRates.ts';
+/* Round 1218: the shipped rates come from real football and are small, so the MECHANICS outcomes below (a goal
+   held for its review, a played review kept on a recut, a reload) are proven on FIXTURE rates, where every kind of
+   review is frequent enough to find in a bounded search: the constants Round 1181 wrote, handed to the engine in
+   place of the generated module. The BANDS outcome plays the generated module itself. */
+const FIXTURE_RATES = 'export const CM_VAR_RATES = { goalReview: 0.16, overturn: 0.32, penaltyReview: 0.45, missedFoulReview: 0.015, penaltyScores: 0.74, penaltyOnTarget: 0.70 } as const;';
+const RATES_LINE = /^export const CM_VAR_RATES = \{[^}]*\} as const;$/m;
+const withFixtureRates = source => { assert.ok(RATES_LINE.test(source), 'The generated rates line exists'); return source.replace(RATES_LINE, FIXTURE_RATES); };
 const clone = value => JSON.parse(JSON.stringify(value));
+/* Round 1218, the bands outcome. The ranges are real football's (scripts/data/cmVarRates.json, through the generator).
+   headroom: how far past a range's edge the fleet's own sampling may put a healthy engine. PROVISIONAL until measured.
+   goalGap: the 0.05 goals a match simCmStoppageTime (tolGpm) already allows a rule to move the goal count by. */
+const BANDS = { seeds: '31,32,33,34,35,36', headroom: 0.25, goalGap: 0.05 };
 const BASE = 'c33d013965aa33b87f5db23e2ca270be6fcd977c';
 export function withCmVarSeed(seed, fn) {
   const previous = Math.random, previousNow = Date.now;
@@ -53,6 +66,7 @@ const titles = {
   resume: 'shows already played reviewed goals and added-time events when a saved later period opens',
   rates: 'uses stated game rates with bilateral outcomes and reports the enabled baseline delta',
   baseline: 'preserves the full prior default match and old live or historical kickoff behavior',
+  bands: 'holds every review outcome a match inside the range real football gives, on the generated rates',
 };
 const controls = {
   counted: { file: engine, from: '  if (myReview) me.goals = myReview.goals;', to: '  if (false) me.goals = myReview!.goals;', test: 'goal' },
@@ -65,6 +79,12 @@ const controls = {
   resume: { file: helper, from: 'return new Set(feed.filter(event => {', to: 'return new Set([]); return new Set(feed.filter(event => {', test: 'resume' },
   announce: { file: helper, from: "  if (event.kind === 'var' && event.review) return settled.has(event.review.id);", to: '  return true;', test: 'reveal' },
   disabled: { file: engine, from: "...(varReviews && worldYear(state) >= 2026", to: "...(false && worldYear(state) >= 2026", test: 'rates' },
+  /* Round 1218: each rate Round 1181 typed, put back into the generated module. Each must leave the range for its own reason. */
+  oldgoalreview: { file: rates, from: /goalReview: [0-9.]+/, to: 'goalReview: 0.16', test: 'bands' },
+  oldoverturn: { file: rates, from: /overturn: [0-9.]+/, to: 'overturn: 0.32', test: 'bands' },
+  oldpenaltyreview: { file: rates, from: /penaltyReview: [0-9.]+/, to: 'penaltyReview: 0.45', test: 'bands' },
+  oldmissedfoul: { file: rates, from: /missedFoulReview: [0-9.]+/, to: 'missedFoulReview: 0.015', test: 'bands' },
+  oldpenaltyscores: { file: rates, from: /penaltyScores: [0-9.]+/, to: 'penaltyScores: 0.74', test: 'bands' },
 };
 async function main() {
   const control = process.env.CM_VAR_CONTROL || '';
@@ -74,7 +94,7 @@ async function main() {
   if (control === 'all') {
     const summary = [];
     for (const name of ['', ...Object.keys(controls)]) {
-      const run = spawnSync(process.execPath, [self], { cwd: root, env: { ...process.env, CM_VAR_CONTROL: name, CM_VAR_ARTIFACTS: evidence }, encoding: 'utf8', timeout: 240000, maxBuffer: 16 * 1024 * 1024, windowsHide: true });
+      const run = spawnSync(process.execPath, [self], { cwd: root, env: { ...process.env, CM_VAR_CONTROL: name, CM_VAR_ARTIFACTS: evidence }, encoding: 'utf8', timeout: 1500000, maxBuffer: 16 * 1024 * 1024, windowsHide: true });
       const output = `${run.stdout || ''}\n${run.stderr || ''}`;
       await writeFile(path.join(evidence, `${name || 'normal'}-runner.log`), output);
       summary.push({ name: name || 'normal', passed: run.status === 0 && !run.error && !run.signal, exit: run.status });
@@ -85,19 +105,20 @@ async function main() {
     assert.ok(summary.every(row => row.passed), 'Normal proof and every effective control execute');
     console.log(`simCmVar: ${Object.keys(titles).length} actual outcomes and ${Object.keys(controls).length} effective controls passed.`); return;
   }
-  const sources = Object.fromEntries(await Promise.all([engine, helper].map(async file => [file, (await readFile(path.join(root, file), 'utf8')).replaceAll('\r\n', '\n')])));
-  const sourceBytes = Object.fromEntries(await Promise.all([engine, helper].map(async file => [file, await readFile(path.join(root, file))])));
+  const sources = Object.fromEntries(await Promise.all([engine, helper, rates].map(async file => [file, (await readFile(path.join(root, file), 'utf8')).replaceAll('\r\n', '\n')])));
+  const sourceBytes = Object.fromEntries(await Promise.all([engine, helper, rates].map(async file => [file, await readFile(path.join(root, file))])));
   const parent = path.join(root, '.sim-control'); await mkdir(parent, { recursive: true });
   const folder = await mkdtemp(path.join(parent, 'cm-var-'));
   const unhandled = [], capture = error => unhandled.push({ name: error?.name, message: String(error?.message ?? error) });
   process.on('unhandledRejection', capture); process.on('uncaughtExceptionMonitor', capture);
   try {
     const require = createRequire(import.meta.url);
-    async function bundle(source, varSource, name) {
-      const entry = path.join(folder, `${name}.ts`), leaf = path.join(folder, `${name}-var.ts`), output = path.join(folder, `${name}.cjs`);
+    async function bundle(source, varSource, name, ratesSource = withFixtureRates(sources[rates])) {
+      const entry = path.join(folder, `${name}.ts`), leaf = path.join(folder, `${name}-var.ts`), ratesLeaf = path.join(folder, `${name}-rates.ts`), output = path.join(folder, `${name}.cjs`);
+      await writeFile(ratesLeaf, ratesSource);
       await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce } from '@/lib/clubManagerVar';\n`);
       await writeFile(leaf, varSource);
-      await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': entry, '@/lib/clubManagerVar': leaf, '@': path.join(root, 'src') } });
+      await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': entry, '@/lib/clubManagerVar': leaf, '@/data/clubManagerVarRates': ratesLeaf, '@': path.join(root, 'src') } });
       return () => { delete require.cache[require.resolve(output)]; return require(output); };
     }
     const git = spawnSync('git', ['show', `${BASE}:${engine}`], { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024, windowsHide: true });
@@ -108,7 +129,7 @@ async function main() {
     if (control) {
       const spec = controls[control]; assert.equal(changed[spec.file].split(spec.from).length - 1, 1, 'One exact executable mutation anchor');
       changed[spec.file] = changed[spec.file].replace(spec.from, spec.to); assert.notEqual(changed[spec.file], sources[spec.file]);
-      await writeFile(path.join(evidence, `${control}-mutation.json`), JSON.stringify({ ...spec, originalHash: createHash('sha256').update(sources[spec.file]).digest('hex'), changedHash: createHash('sha256').update(changed[spec.file]).digest('hex') }, null, 2));
+      await writeFile(path.join(evidence, `${control}-mutation.json`), JSON.stringify({ ...spec, from: String(spec.from), originalHash: createHash('sha256').update(sources[spec.file]).digest('hex'), changedHash: createHash('sha256').update(changed[spec.file]).digest('hex') }, null, 2));
     }
     const candidateFactory = control ? await bundle(changed[engine], changed[helper], 'candidate') : originalFactory;
     const memory = new Map();
@@ -275,6 +296,35 @@ async function main() {
         assert.deepEqual(enabled, plain); assert.deepEqual(oldLive.state.live, before);
         assert.ok(!enabled.report.detail.play.some(e => e.kind === 'var'), 'A loaded legacy live match is never opted in retrospectively');
       },
+      /* Round 1218. The generated rates themselves, on a fleet of league matches in the leagues whose row says
+         yes (scripts/lib/cmVarFleet.mjs: 20 clubs, one season a seed). Each outcome a match must sit inside the
+         range real football gives it in scripts/data/cmVarRates.json, wider by BANDS.headroom on each side.
+         The engine aims at the LOW end of each range (the stricter reading), so the low edge is the one that
+         works; the headroom is what the fleet's own sampling was measured to need, see BANDS. */
+      async bands() {
+        const d = derive();
+        assert.equal(d.engine.provisional, false, 'The engine figures the rates are derived from are measured, not provisional');
+        const real = (await bundle(changed[engine], changed[helper], 'bands', changed[rates]))();
+        const shipped = real.CM_VAR_GAME_RATES;
+        assert.equal(shipped.penaltyScores, real.SHOOTOUT_BASE_RATE, 'A penalty a review awards is taken under the engine penalty law, not under a rate of its own');
+        assert.equal(shipped.penaltyOnTarget, d.law.onTarget, 'A missed review penalty is on target as often as the engine penalty law says');
+        const seeds = (process.env.CM_VAR_BANDS_SEEDS || BANDS.seeds).split(',').map(Number);
+        assert.ok(seeds.length >= 5, 'The fleet plays at least five seeds');
+        const fleet = playFleet(real, { seeds, paired: true });
+        const L = fleet.byKind.league, per = n => n / L.matches;
+        const ruled = per(L.ruledOut), awarded = per(L.penaltyAwarded), gap = (L.goals - L.goalsOff) / L.matches;
+        const r4 = x => Number(x.toFixed(4));
+        metrics.bands = { seeds, leagueMatches: L.matches, ruledOut: L.ruledOut, ruledOutPerMatch: r4(ruled), awarded: L.penaltyAwarded, awardedPerMatch: r4(awarded), awardedScored: L.awardedScored,
+          goalConfirmed: L.goalConfirmed, penaltyConfirmed: L.penaltyConfirmed, goalsPerMatchOn: r4(per(L.goals)), goalsPerMatchOff: r4(per(L.goalsOff)), goalGap: r4(gap), resultMoved: L.resultMoved,
+          penaltiesPerMatch: r4(per(L.penalties)), matchesWithReview: L.matchesWithReview,
+          perSeed: fleet.perSeed.map(s => [s.matches, r4(s.ruledOut / s.matches), r4(s.penaltyAwarded / s.matches)]) };
+        assert.ok(L.matches >= 3000, `The fleet played ${L.matches} league matches, fewer than 3,000`);
+        const inside = (x, range) => x >= range.low * (1 - BANDS.headroom) && x <= range.high * (1 + BANDS.headroom);
+        assert.ok(inside(ruled, d.goals), `Goals ruled out a match ${r4(ruled)} is outside real football's ${r4(d.goals.low)} to ${r4(d.goals.high)} (headroom ${BANDS.headroom})`);
+        assert.ok(inside(awarded, d.pens), `Penalties awarded a match ${r4(awarded)} is outside real football's ${r4(d.pens.low)} to ${r4(d.pens.high)} (headroom ${BANDS.headroom})`);
+        assert.equal(L.goalConfirmed + L.penaltyConfirmed, 0, `The game showed ${L.goalConfirmed} goal and ${L.penaltyConfirmed} penalty reviews that ended with the call standing, and no publisher counts those by kind of call`);
+        assert.ok(Math.abs(gap) <= BANDS.goalGap, `Reviews moved goals a match by ${r4(gap)}, past the ${BANDS.goalGap} the family allows a rule to move them`);
+      },
     };
     for (const [name, title] of Object.entries(titles)) {
       if (control && name !== controls[control].test && name !== 'baseline') { rows.push({ title, status: 'skipped' }); continue; }
@@ -292,6 +342,8 @@ async function main() {
       assert.deepEqual(rows.filter(r => r.status === 'failed'), []); assert.equal(rows.filter(r => r.status === 'passed').length, Object.keys(titles).length);
       await writeFile(path.join(evidence, 'native-fixtures.json'), JSON.stringify(Object.fromEntries(['disallowed', 'confirmed', 'penalty', 'awarded_scored', 'awarded_missed'].map(kind => [kind, findCmVarFixture(original, kind)]))));
     }
+    if (control) console.log(`simCmVar ${control}: CAUGHT by "${String(rows.find(r => r.status === 'failed')?.message).split('\n')[0].slice(0, 220)}"`);
+    if (metrics.bands) console.log(`simCmVar bands: ${JSON.stringify(metrics.bands)}`);
     console.log(`simCmVar ${control || 'normal'}: actual review outcomes and full prior baseline passed.`);
   } finally {
     process.off('unhandledRejection', capture); process.off('uncaughtExceptionMonitor', capture);
