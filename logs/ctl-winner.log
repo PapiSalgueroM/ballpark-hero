@@ -1,0 +1,24 @@
+bundled in 153 ms; seed sets 0, 1, 2, 3, 4; 40 seasons a league kind a set; CONTROL winner
+  FAIL (section 1): set 0: a told final never names another winner than the engine's (22800 looked at): 10053 broke it, the first: set 0 fifteen 0 2026|w1|IND|JAX|29-42: told 41-10, the engine's winner is JAX
+set 0: 80 seasons, 22800 games told in 7962 ms; points a team game 22.70 (free 22.64); losers on 15 or fewer 0.4322 (free 0.4297); shutouts 0.0136 (free 0.0148); sides on 40 or more 0.0537 (free 0.0517); swapped 0.00000; the AFC champion won 38 of 80 title games
+  FAIL (section 1): set 1: a told final never names another winner than the engine's (22800 looked at): 9949 broke it, the first: set 1 fifteen 0 2026|w1|BAL|CIN|30-43: told 38-31, the engine's winner is CIN
+set 1: 80 seasons, 22800 games told in 6552 ms; points a team game 22.73 (free 22.73); losers on 15 or fewer 0.4280 (free 0.4303); shutouts 0.0137 (free 0.0156); sides on 40 or more 0.0524 (free 0.0535); swapped 0.00000; the AFC champion won 46 of 80 title games
+  FAIL (section 1): set 2: a told final never names another winner than the engine's (22800 looked at): 9985 broke it, the first: set 2 fifteen 0 2026|w1|KC|LV|33-25: told 24-27, the engine's winner is KC
+set 2: 80 seasons, 22800 games told in 6765 ms; points a team game 22.62 (free 22.61); losers on 15 or fewer 0.4325 (free 0.4351); shutouts 0.0159 (free 0.0137); sides on 40 or more 0.0534 (free 0.0505); swapped 0.00000; the AFC champion won 47 of 80 title games
+  FAIL (section 1): set 3: a told final never names another winner than the engine's (22800 looked at): 9990 broke it, the first: set 3 fifteen 0 2026|w1|DET|MIN|19-25: told 24-6, the engine's winner is MIN
+set 3: 80 seasons, 22800 games told in 6943 ms; points a team game 22.64 (free 22.73); losers on 15 or fewer 0.4321 (free 0.4263); shutouts 0.0142 (free 0.0146); sides on 40 or more 0.0506 (free 0.0523); swapped 0.00000; the AFC champion won 43 of 80 title games
+  FAIL (section 1): set 4: a told final never names another winner than the engine's (22800 looked at): 9997 broke it, the first: set 4 fifteen 0 2026|w1|LV|DEN|20-27: told 24-20, the engine's winner is DEN
+set 4: 80 seasons, 22800 games told in 7236 ms; points a team game 22.62 (free 22.73); losers on 15 or fewer 0.4316 (free 0.4244); shutouts 0.0154 (free 0.0139); sides on 40 or more 0.0501 (free 0.0520); swapped 0.00000; the AFC champion won 47 of 80 title games
+
+MEASURED over seed sets 0, 1, 2, 3, 4 (114000 games):
+  points: told 22.6221 to 22.7316, free 22.6099 to 22.7328, told less free -0.1086 to 0.0632 (band 0.25 either side)
+  losers15: told 0.4280 to 0.4325, free 0.4244 to 0.4351, told less free -0.0026 to 0.0071 (band 0.02 either side)
+  shutouts: told 0.0136 to 0.0159, free 0.0137 to 0.0156, told less free -0.0019 to 0.0022 (band 0.005 either side)
+  forty: told 0.0501 to 0.0537, free 0.0505 to 0.0535, told less free -0.0020 to 0.0029 (band 0.006 either side)
+  swapped share 0.0000 to 0.0000 (band: under 0.002)
+  tries a game by decile of the home chance (games, mean tries, swapped): 0: 0, none, 0 | 0.1: 633, 1.00, 0 | 0.2: 5384, 1.00, 0 | 0.3: 11548, 1.00, 0 | 0.4: 19174, 1.00, 0 | 0.5: 24477, 1.00, 0 | 0.6: 25576, 1.00, 0 | 0.7: 19186, 1.00, 0 | 0.8: 7775, 1.00, 0 | 0.9: 247, 1.00, 0
+  shapes of 114000 stories: trade 0.299, wire 0.219, rout 0.170, late 0.168, comeback 0.144
+  the AFC champion's share of title games 0.4750 to 0.5875 a set (a level title game is 0.582 by the engine's arithmetic; printed, never asserted)
+
+control winner: RED AT THE NAMED CHECK (section 1); its named checks red: 1 of 1 ("never names another winner"); sections red: 1
+simGmGameDay: 171 checks, 5 failed (control winner)

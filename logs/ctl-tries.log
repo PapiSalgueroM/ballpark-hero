@@ -1,0 +1,24 @@
+bundled in 156 ms; seed sets 0, 1, 2, 3, 4; 40 seasons a league kind a set; CONTROL tries
+  FAIL (section 1): set 0: the swapped share 0.22329 is under 0.002
+set 0: 80 seasons, 22800 games told in 6700 ms; points a team game 22.71 (free 22.64); losers on 15 or fewer 0.4375 (free 0.4297); shutouts 0.0143 (free 0.0148); sides on 40 or more 0.0545 (free 0.0517); swapped 0.22329; the AFC champion won 38 of 80 title games
+  FAIL (section 1): set 1: the swapped share 0.22175 is under 0.002
+set 1: 80 seasons, 22800 games told in 6103 ms; points a team game 22.74 (free 22.73); losers on 15 or fewer 0.4326 (free 0.4303); shutouts 0.0134 (free 0.0156); sides on 40 or more 0.0543 (free 0.0535); swapped 0.22175; the AFC champion won 46 of 80 title games
+  FAIL (section 1): set 2: the swapped share 0.22351 is under 0.002
+set 2: 80 seasons, 22800 games told in 6572 ms; points a team game 22.65 (free 22.61); losers on 15 or fewer 0.4373 (free 0.4351); shutouts 0.0159 (free 0.0137); sides on 40 or more 0.0552 (free 0.0505); swapped 0.22351; the AFC champion won 47 of 80 title games
+  FAIL (section 1): set 3: the swapped share 0.22083 is under 0.002
+set 3: 80 seasons, 22800 games told in 4801 ms; points a team game 22.65 (free 22.73); losers on 15 or fewer 0.4374 (free 0.4263); shutouts 0.0142 (free 0.0146); sides on 40 or more 0.0533 (free 0.0523); swapped 0.22083; the AFC champion won 43 of 80 title games
+  FAIL (section 1): set 4: the swapped share 0.22004 is under 0.002
+set 4: 80 seasons, 22800 games told in 6923 ms; points a team game 22.66 (free 22.73); losers on 15 or fewer 0.4343 (free 0.4244); shutouts 0.0163 (free 0.0139); sides on 40 or more 0.0522 (free 0.0520); swapped 0.22004; the AFC champion won 47 of 80 title games
+
+MEASURED over seed sets 0, 1, 2, 3, 4 (114000 games):
+  points: told 22.6536 to 22.7438, free 22.6099 to 22.7328, told less free -0.0757 to 0.0682 (band 0.25 either side)
+  losers15: told 0.4326 to 0.4375, free 0.4244 to 0.4351, told less free 0.0022 to 0.0111 (band 0.02 either side)
+  shutouts: told 0.0134 to 0.0163, free 0.0137 to 0.0156, told less free -0.0022 to 0.0023 (band 0.005 either side)
+  forty: told 0.0522 to 0.0552, free 0.0505 to 0.0535, told less free 0.0002 to 0.0047 (band 0.006 either side)
+  swapped share 0.2200 to 0.2235 (band: under 0.002)
+  tries a game by decile of the home chance (games, mean tries, swapped): 0: 0, none, 0 | 0.1: 633, 1.30, 87 | 0.2: 5384, 1.39, 1022 | 0.3: 11548, 1.47, 2717 | 0.4: 19174, 1.50, 4716 | 0.5: 24477, 1.50, 6158 | 0.6: 25576, 1.45, 5802 | 0.7: 19186, 1.37, 3700 | 0.8: 7775, 1.27, 1077 | 0.9: 247, 1.15, 16
+  shapes of 114000 stories: trade 0.298, wire 0.218, rout 0.178, late 0.166, comeback 0.141
+  the AFC champion's share of title games 0.4750 to 0.5875 a set (a level title game is 0.582 by the engine's arithmetic; printed, never asserted)
+
+control tries: RED AT THE NAMED CHECK (section 1); its named checks red: 1 of 1 ("the swapped share"); sections red: 1
+simGmGameDay: 171 checks, 5 failed (control tries)
