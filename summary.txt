@@ -1,0 +1,14 @@
+simStorageWrites exit=0 6s | simStorageWrites: all green (owed: 12)
+simEarlyReturnScope exit=0 19s | simEarlyReturnScope: all green
+simSessionMarks exit=0 0s | simSessionMarks: green. Nine games count the day you play them, none of them invented a score or a streak day to do it.
+simManagerMatchPlans exit=0 6s | simManagerMatchPlans: 13 actual outcomes passed.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoInventedQuotes exit=0 26s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simCmLeagueRules exit=0 56s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+daily exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+dashes exit=0 0s | added lines with an en or em dash: 0
+simLiveSimMotion exit=0 62s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+leaguefx exit=0 10s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 236 of 236 controls fired
