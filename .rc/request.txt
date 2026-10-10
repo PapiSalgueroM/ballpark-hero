@@ -1,0 +1,6 @@
+# Reviewer cm, Release AU, request 6: the own goal watches (my seed, with and without motion) and the round walk on a seed of mine
+#!serve
+#!playwright
+#!serial
+walkB: RCM_ONLY=B node .rc/x/review-cm-walk.mjs > $RC_OUT/walkB.txt 2>&1; s=$?; tail -12 $RC_OUT/walkB.txt | cut -c1-420; du -sm $RC_OUT; exit $s
+own-86421: LIVE_FIT_SEED=86421 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own-86421.txt 2>&1; s=$?; grep -h "own goal \(for\|against\)" $RC_OUT/own-86421.txt | cut -c1-300; tail -1 $RC_OUT/own-86421.txt | cut -c1-300; du -sm $RC_OUT; exit $s
