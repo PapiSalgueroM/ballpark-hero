@@ -1,0 +1,2 @@
+#!serial
+sib: bash .rc/x/sib.sh

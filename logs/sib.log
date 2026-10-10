@@ -1,0 +1,10 @@
+== r1218-cm-var-true at d39d0d5ac, engine files that differ from this round's: 3
+vitest exit 0
+[1216 material] 100 matches, 200 half feeds; own goals staged 163 (goals left as they were: 118), for me 79, against me 84; the named man on the viewer's cast 163, not on it 0; by a back 139, by the keeper 24; actions that start outside the goal's own minute 0, wound up as a last kick 0
+[1216 OG5] the sharpest turn of the ball in flight, degrees: own goal arm least 34.1, median 63.6, 90th percentile 123.4, most 130.2; baseline arm least 1.3, median 3.1, 90th percentile 3.2, most 3.3; the floor is 20
+[2m      Tests [22m [1m[32m7 passed[39m[22m[2m | [22m[33m8 skipped[39m[90m (15)[39m
+== r1225-cm-fixtures-bind at f238da12b, engine files that differ from this round's: 3
+vitest exit 0
+[1216 material] 100 matches, 200 half feeds; own goals staged 163 (goals left as they were: 118), for me 79, against me 84; the named man on the viewer's cast 163, not on it 0; by a back 139, by the keeper 24; actions that start outside the goal's own minute 0, wound up as a last kick 0
+[1216 OG5] the sharpest turn of the ball in flight, degrees: own goal arm least 34.1, median 63.6, 90th percentile 123.4, most 130.2; baseline arm least 1.3, median 3.1, 90th percentile 3.2, most 3.3; the floor is 20
+[2m      Tests [22m [1m[32m7 passed[39m[22m[2m | [22m[33m8 skipped[39m[90m (15)[39m
