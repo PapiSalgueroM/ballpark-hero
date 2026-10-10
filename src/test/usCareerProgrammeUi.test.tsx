@@ -3,20 +3,21 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import UsCareerProgramme from '@/components/us-career/UsCareerProgramme';
 import type { ProgrammeCareer } from '@/lib/usCareerProgramme';
+import type { UsSport } from '@/lib/usCoachCareer';
 
 const fixture = (): ProgrammeCareer => ({
   name: 'Generated UI Player', pos: 'PG', team: 'BOS', year: 2026, age: 31, ovr: 78, pot: 90,
   health: 80, morale: 70, salary: 5, contractYears: 4, seasons: [], retired: false, draftPick: 20,
   earnings: 5, netWorth: 2, fanbase: 30,
 });
-function mount(career = fixture()) {
+function mount(career = fixture(), sport: UsSport = 'nba') {
   const changed = vi.fn();
-  function App() { const [c, setC] = useState(career); return <UsCareerProgramme career={c} sport="nba" onChange={next => { changed(next); setC(next); }} />; }
+  function App() { const [c, setC] = useState(career); return <UsCareerProgramme career={c} sport={sport} onChange={next => { changed(next); setC(next); }} />; }
   return { ...render(<App />), changed };
 }
-async function open() {
+async function open(sport: UsSport = 'nba') {
   fireEvent.click(screen.getByRole('button', { name: 'Plan your season' }));
-  await screen.findByRole('dialog', { name: 'NBA season programme' });
+  await screen.findByRole('dialog', { name: sport.toUpperCase() + ' season programme' });
 }
 function start() { fireEvent.click(screen.getByRole('button', { name: 'Continue to programme' })); }
 function tile(id: string): HTMLButtonElement { return document.querySelector('[data-us-programme-tile="' + id + '"]') as HTMLButtonElement; }
@@ -30,6 +31,22 @@ describe('US programme choices and restoration', () => {
     expect(document.querySelector('[data-us-programme-tile]')).toBeNull();
     expect(changed).not.toHaveBeenCalled(); start();
     expect(document.querySelectorAll('[data-us-programme-tile]')).toHaveLength(6);
+  });
+  it.each([
+    { sport: 'nfl', pos: 'QB', attack: 'Season morale +6, durability -0.06. More form, more injury risk.', support: 'Season morale -3, durability +0.06. Less form, less injury risk.' },
+    { sport: 'mlb', pos: 'CF', attack: 'Season morale +6, durability -0.06. More form, more injury risk.', support: 'Season morale -3, durability +0.06. Less form, less injury risk.' },
+    { sport: 'mlb', pos: 'SP', attack: 'Season morale +6, durability -0.06. More form, more injury risk.', support: 'Season morale -3, durability +0.06. Less form, less injury risk.' },
+    { sport: 'nhl', pos: 'G', attack: 'Season morale +6, durability -0.06. More form, more injury risk.', support: 'Season morale -3, durability +0.06. Less form, less injury risk.' },
+    { sport: 'nba', pos: 'PG', attack: 'Season scoring multiplier +8%, playmaking multiplier -8%. Your position stays the same.', support: 'Season playmaking multiplier +8%, scoring multiplier -8%. Your position stays the same.' },
+    { sport: 'nba', pos: 'PF', attack: 'Season scoring multiplier +8%, rebounding multiplier -8%. Your position stays the same.', support: 'Season rebounding multiplier +8%, scoring multiplier -8%. Your position stays the same.' },
+    { sport: 'nhl', pos: 'C', attack: 'Season scoring multiplier +0.08, favoring goals over assists.', support: 'Season scoring multiplier -0.08 (minimum 0.4), favoring assists over goals.' },
+  ] satisfies { sport: UsSport; pos: string; attack: string; support: string }[])('shows the distinct tactical tradeoff on each actual option for $sport $pos', async ({ sport, pos, attack, support }) => {
+    const { changed } = mount({ ...fixture(), pos }, sport); await open(sport); start(); fireEvent.click(tile('tactics'));
+    const attackButton = document.querySelector('[data-us-programme-choice="tactics:attack"]');
+    const supportButton = document.querySelector('[data-us-programme-choice="tactics:support"]');
+    expect(attackButton).toHaveTextContent(attack); expect(attackButton).not.toHaveTextContent(support);
+    expect(supportButton).toHaveTextContent(support); expect(supportButton).not.toHaveTextContent(attack);
+    expect(changed).not.toHaveBeenCalled();
   });
   it('saves a selected choice immediately with the real upcoming team and year', async () => {
     const { changed } = mount(); await open(); start(); fireEvent.click(tile('workload'));

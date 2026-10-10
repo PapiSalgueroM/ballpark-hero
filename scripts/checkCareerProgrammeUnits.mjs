@@ -6,7 +6,7 @@ const required={
   'src/lib/soccerCareerProgramme.test.ts':66,
   'src/test/soccerCareerProgrammeUi.test.tsx':34,
   'src/lib/usCareerProgramme.test.ts':55,
-  'src/test/usCareerProgrammeUi.test.tsx':11,
+  'src/test/usCareerProgrammeUi.test.tsx':18,
   'src/lib/careerChanceWheel.test.ts':10,
   'src/test/careerChanceWheelUi.test.tsx':5,
   'src/test/soccerClubStartingElevenUi.test.tsx':9,
