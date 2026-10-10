@@ -67,6 +67,12 @@ export const STARS_MIN_RATING = 85;
 export const DEEP_MIN_RATING = 60;
 export const DEEP_MAX_RATING = 84;
 
+/* Release AT: Round 1183 put a line on the page saying what the years and the franchise count
+   cover. It was written against the old 500 minute span; Round 1145 made the span and the franchises
+   whole (the view above), so the line says what is true of that: the same claims the Round 1145
+   What's New entry makes. The name is Round 1183's, the page imports it. */
+export const RECORDED_PROFILE_SCOPE = 'Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.';
+
 /* Same floor perfectSeasonNba uses for draftable players. The spans view counts
    rows against the same number (rows_500 in its SQL); the spans test reads the
    migration and fails if the two differ. */
@@ -604,9 +610,9 @@ export function suggestProfiles(
 /** What the page prints where a span would go for a name the view lacks. */
 export const SPAN_NOT_ON_FILE = 'not on file';
 
-/** 'Michael Jordan' active 1985-2003 -> '1985-2003' for the dropdown. An
- *  empty string when his span is not on file, so the dropdown prints no years
- *  rather than invented ones. */
+/** 'Michael Jordan' active 1985-2003 -> '1985-2003' for the dropdown: season
+ *  end years. An empty string when his span is not on file, so the dropdown
+ *  prints no years rather than invented ones. */
 export function careerSpan(profile: PlayerProfile): string {
   if (profile.firstYear === null || profile.lastYear === null) return '';
   return profile.firstYear === profile.lastYear

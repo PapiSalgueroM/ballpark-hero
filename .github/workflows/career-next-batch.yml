@@ -1,0 +1,115 @@
+name: Career depth and player reports
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-next-batch.yml
+      - src/lib/soccerCareerAmbitions.ts
+      - src/lib/soccerCareerRecords.ts
+      - src/components/soccer-career/CareerRecords*.tsx
+      - src/components/soccer-career/SeasonAmbitionTile.tsx
+      - src/lib/clubManagerVar.ts
+      - scripts/simSoccerCareerAmbitions.mjs
+      - scripts/simSoccerCareerRecords.mjs
+      - scripts/simCmVar.mjs
+      - scripts/simReportedGamePools.mjs
+      - scripts/playSoccerCareerDepth.mjs
+      - scripts/playCmVar.mjs
+      - scripts/playDraftDetectiveReports.mjs
+
+permissions:
+  contents: read
+concurrency:
+  group: career-next-batch-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      CM_VAR_ARTIFACTS: career-next-artifacts/var-outcomes
+      CM_VAR_NATIVE_ARTIFACTS: career-next-artifacts/var-native
+      FREE_KICK_FONT_CACHE: career-next-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare remote checks
+        id: prepare
+        run: |
+          mkdir -p career-next-artifacts
+          git rev-parse HEAD > career-next-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-next-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee career-next-artifacts/fonts.log
+      - name: App types and build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-next-artifacts/types.log
+          npm run build 2>&1 | tee career-next-artifacts/build.log
+      - name: New outcome checks and copied defects
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerCareerAmbitions.test.ts src/test/soccerCareerRecords.test.tsx src/test/dartDraftPools.test.ts src/test/statDetectiveScope.test.tsx src/test/statDetectiveMotion.test.tsx --maxWorkers=1 --minWorkers=1 2>&1 | tee career-next-artifacts/focused-unit.log || failed=1
+          for harness in simSoccerCareerAmbitions simSoccerCareerRecords simCmVar simReportedGamePools; do
+            SIM_CAREER_AMBITION_CONTROL=all CM_VAR_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node "scripts/$harness.mjs" 2>&1 | tee "career-next-artifacts/$harness.log" || failed=1
+          done
+          for control in stat-span stat-franchises stat-scope stat-context dart-variety dart-best dart-used dart-slot dart-global dart-country dart-position dart-year dart-nation dart-partial; do
+            REPORTED_POOLS_CONTROL="$control" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportedGamePools.mjs 2>&1 | tee "career-next-artifacts/report-control-$control.log" || failed=1
+          done
+          exit "$failed"
+      - name: Existing career and match outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerSeasonTruth simCareerRecordedStats simCareerStory simClubVerdict simLoanSpell simCareerTraining simNoInventedQuotes simSeasonCentreTable simSeasonCentreNeutral simMatchDetail simMatchScreen simCmStoppageTime simLiveMatch; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-next-artifacts/$harness.log" || failed=1
+          done
+          CM_QUICK_SUBS_CONTROL=all CM_QUICK_SUBS_ARTIFACTS="$PWD/career-next-artifacts/quick-subs" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmQuickSubs.mjs 2>&1 | tee career-next-artifacts/simCmQuickSubs.log || failed=1
+          MATCH_SCREEN_ARTIFACTS="$PWD/career-next-artifacts/match-screen" MATCH_SCREEN_CONTROL=twoengines NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simMatchScreen.mjs 2>&1 | tee career-next-artifacts/match-screen-control.log || failed=1
+          exit "$failed"
+      - name: All built output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-next-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Native career, review and reported-game journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for driver in playSoccerCareerDepth playCmVar playDraftDetectiveReports; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" SHOTS="$PWD/career-next-artifacts/screenshots" node "scripts/$driver.mjs" 2>&1 | tee "career-next-artifacts/$driver.log" || failed=1
+          done
+          exit "$failed"
+      - name: Source unchanged
+        if: ${{ !cancelled() }}
+        run: git diff --exit-code HEAD -- src scripts .github/workflows
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-next-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-next-artifacts/
+          retention-days: 5

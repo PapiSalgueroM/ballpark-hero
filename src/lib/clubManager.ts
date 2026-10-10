@@ -1,6 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { REAL_PREMIER_FIXTURE_KEY, canBindRealPremierFixtures, realPremierFixturePairs, realPremierFixtureCoverage } from '@/lib/clubManagerFixtures';
+import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, type CmVarDecision } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
    briefs instead of a bespoke second offer engine. */
@@ -1125,7 +1126,7 @@ export interface SubLine {
 }
 export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; }
 
-export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul';
+export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul' | 'var';
 
 /** Round 504: one moment of play the engine committed, so the live viewer
  *  shows the same chances the report counts. A goal is a shot with `goal`
@@ -1137,6 +1138,7 @@ export interface PlayEvent {
   side: 'me' | 'opp';
   kind: PlayKind;
   who: string;
+  review?: CmVarDecision;
   on?: boolean;
   goal?: boolean;
   /** Shots only: this chance's share of the half's expected goals, 2dp. */
@@ -1195,13 +1197,14 @@ export type TimelineKind =
   /** Round 714: the committed play on the same clock. A shot off target, a
    *  shot on target that the keeper kept out, a corner, and a penalty given
    *  (its goal row or its save row follows at the same minute). */
-  | 'shot' | 'save' | 'corner' | 'penalty';
+  | 'shot' | 'save' | 'corner' | 'penalty' | 'var';
 
 export interface TimelineEvent {
   minute: number;
   side: 'me' | 'opp' | 'none';
   kind: TimelineKind;
   text: string;
+  review?: CmVarDecision;
   /** Round 714: a goal or a save from the spot, a goal from a direct free kick. */
   penalty?: boolean;
   freeKick?: boolean;
@@ -2422,6 +2425,8 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  /** Simplified reviews enabled only by a new modern Club Manager kickoff. */
+  varReviews?: true;
   /** Index into the calendar, so resuming knows which fixture this is. */
   week: number;
   myGoals: number;
@@ -14311,7 +14316,7 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
 }
 
 /** Inside a minute, a throw in before a foul before a corner before a shot. Round 781: hoisted so the board fold can keep it. */
-const PLAY_ORDER: Record<PlayKind, number> = { throwin: 0, foul: 1, corner: 2, shot: 3 };
+const PLAY_ORDER: Record<PlayKind, number> = { throwin: 0, foul: 1, corner: 2, var: 2.5, shot: 3 };
 
 /** The expected goals a half actually carried: each stretch's full half lambda by its share of the 45. */
 function effectiveLambdas(segs: LamSegment[]): { lamMine: number; lamOpp: number } {
@@ -14553,6 +14558,7 @@ function drawMySegment(
 const goalMinutesOf = (live: LiveMatch): Set<number> => new Set([
   ...(live.h1My ?? []).map(g => g.minute), ...(live.h1Opp ?? []).map(g => g.minute),
   ...(live.h2My ?? []).map(g => g.minute), ...(live.h2Opp ?? []).map(g => g.minute),
+  ...[...(live.h1Play ?? []), ...(live.h2Play ?? [])].filter(e => e.kind === 'var' && e.review?.decision === 'disallowed').map(e => e.minute),
 ]);
 
 const allOppCards = (live: LiveMatch): CardLine[] => [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])];
@@ -14780,6 +14786,9 @@ function drawSegment(
   /* Round 781: and how busy a minute of that board is for a goal. */
   const board: BoardWeight | undefined = period ? { to, w: BOARD[period].weight } : undefined;
   const me = drawMySegment(state, live, xi, from, to, nMine, maxYellows, taken, dutyOf, hi, board);
+  const reviewKey = `${worldYear(state)}:${state.clubName}:${live.week}:${live.opponent}:${from}:${to}`;
+  const myReview = live.varReviews ? settleGoalReviews(me.goals, 'me', reviewKey) : null;
+  if (myReview) me.goals = myReview.goals;
   const oppStart = oppAt(live, from);
   const byMinute = clockOrder;
   if (half === 1) {
@@ -14820,6 +14829,8 @@ function drawSegment(
     fixExits(oppCards, [], oppGoals, hi);
   }
   markOppSetPieceGoals(oppGoals);
+  const theirReview = live.varReviews ? settleGoalReviews(oppGoals, 'opp', reviewKey) : null;
+  if (theirReview) oppGoals = theirReview.goals;
   if (half === 1) live.h1Opp = [...(live.h1Opp ?? []), ...oppGoals].sort(byMinute);
   else live.h2Opp = [...(live.h2Opp ?? []), ...oppGoals].sort(byMinute);
   /* Mine at a minute: the stretch's eleven minus anyone who has since walked or limped off.
@@ -14840,6 +14851,34 @@ function drawSegment(
     setPieces: state.setPieces ?? null,
     myDuty: dutyOf,
   });
+  if (live.varReviews) {
+    const takerAt = (side: 'me' | 'opp', minute: number): { id?: string; name: string } | null => {
+      if (side === 'me') {
+        const on = mineAt(minute);
+        const p = assignedOnPitch(state.setPieces, 'penalties', on)
+          ?? setPieceCandidates(state, 'penalties').find(p => on.some(man => man.id === p.id)) ?? on[0];
+        return p ? { id: p.id, name: p.name } : null;
+      }
+      const p = [...(oppAt(live, minute) ?? [])].sort((a, b) => oppShotWeight(b) - oppShotWeight(a) || a.n.localeCompare(b.n))[0];
+      return p ? { name: p.n } : null;
+    };
+    const awards = awardReviewedPenalties(play, reviewKey, takerAt, [...me.goals, ...oppGoals, ...(myReview?.reviews ?? []), ...(theirReview?.reviews ?? [])]);
+    play.splice(0, play.length, ...awards.play);
+    for (const goal of awards.goals) {
+      if (goal.side === 'me' && goal.id) {
+        const scorer: MyGoalLine = { id: goal.id, name: goal.name, minute: goal.minute, penalty: true };
+        me.goals.push(scorer);
+        if (half === 1) live.h1My!.push(scorer); else live.h2My!.push(scorer);
+      } else if (goal.side === 'opp') {
+        const scorer: ScorerLine = { name: goal.name, minute: goal.minute, penalty: true };
+        oppGoals.push(scorer);
+        if (half === 1) live.h1Opp!.push(scorer); else live.h2Opp!.push(scorer);
+      }
+    }
+    play.push(...(myReview?.reviews ?? []), ...(theirReview?.reviews ?? []), ...awards.reviews, ...penaltyReviews(play, reviewKey));
+    if (half === 1) { live.h1My!.sort(clockOrder); live.h1Opp!.sort(clockOrder); }
+    else { live.h2My!.sort(clockOrder); live.h2Opp!.sort(clockOrder); }
+  }
   if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
   else live.h2Play = [...(live.h2Play ?? []), ...play];
   /* Round 781: everything drawn past the period's last minute is in its
@@ -15172,8 +15211,9 @@ function recutBoard(state: CareerState, entry: CalendarEntry, live: LiveMatch, p
 export interface LiveFeedEvent {
   minute: number;
   side: 'me' | 'opp' | 'none';
-  kind: 'goal' | 'shot' | 'save' | 'corner' | 'throwin' | 'foul' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime';
+  kind: 'goal' | 'shot' | 'save' | 'corner' | 'throwin' | 'foul' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime' | 'var';
   text: string;
+  review?: CmVarDecision;
   /** Round 505: a corner's flank, and a goal or a save from the spot or a
    *  free kick, carried here so no screen has to re-key the play list. */
   flank?: 'left' | 'right';
@@ -15207,7 +15247,7 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
     if (e.goal) continue;
     out.push({
       minute: e.minute, side: e.side, kind: e.kind === 'shot' ? (e.on ? 'save' : 'shot') : e.kind, text: e.who,
-      ...(e.flank ? { flank: e.flank } : {}), ...(e.penalty ? { penalty: true } : {}), ...plusOf(e),
+      ...(e.flank ? { flank: e.flank } : {}), ...(e.penalty ? { penalty: true } : {}), ...(e.review ? { review: e.review } : {}), ...plusOf(e),
     });
   }
   for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) out.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name, ...plusOf(c) });
@@ -15218,7 +15258,7 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
   /* Round 781: the break sits after the first half's board, when one has been drawn. */
   out.push({ minute: 45, side: 'none', kind: 'halftime', text: 'Half time', ...plusOf({ plus: live.added?.h1 }) });
   const ORDER: Record<LiveFeedEvent['kind'], number> = {
-    throwin: 0, foul: 1, corner: 2, shot: 3, save: 3, goal: 4, yellow: 5, red: 5, injury: 5, sub: 6, halftime: 7,
+    throwin: 0, foul: 1, corner: 2, var: 2.5, shot: 3, save: 3, goal: 4, yellow: 5, red: 5, injury: 5, sub: 6, halftime: 7,
   };
   return out.sort((a, b) => clockOrder(a, b) || ORDER[a.kind] - ORDER[b.kind]);
 }
@@ -15593,6 +15633,8 @@ function buildMatchDetail(args: {
       if (e.penalty) timeline.push({ minute: e.minute, side: e.side, kind: 'penalty', text: e.who, ...plusOf(e) });
       if (e.goal) continue;
       timeline.push({ minute: e.minute, side: e.side, kind: e.on ? 'save' : 'shot', text: e.who, ...(e.penalty ? { penalty: true } : {}), ...plusOf(e) });
+    } else if (e.kind === 'var' && e.review) {
+      timeline.push({ minute: e.minute, side: e.side, kind: 'var', text: e.who, review: e.review, ...plusOf(e) });
     } else if (e.kind === 'corner') {
       timeline.push({ minute: e.minute, side: e.side, kind: 'corner', text: e.who, ...plusOf(e) });
     }
@@ -15623,7 +15665,7 @@ function buildMatchDetail(args: {
      what they led to; everything else keeps the order it always had.
      Round 781: and the board after the minute, before the next one. */
   const KIND_ORDER: Record<TimelineKind, number> = {
-    kickoff: 0, corner: 1, penalty: 1,
+    kickoff: 0, var: 0.5, corner: 1, penalty: 1,
     shot: 2, save: 2, goal: 2, yellow: 2, red: 2, injury: 2, sub: 2,
     halftime: 3, extratime: 3, pens: 4, fulltime: 5,
   };
@@ -17540,7 +17582,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: boolean }): PlayResult {
   const state: CareerState = JSON.parse(JSON.stringify(career));
   /* Release AL: `noCoach` plays a quick sim the way it was played before
      Round 1072, with nobody making changes. Manager Hot Seat passes it: its
@@ -17681,7 +17723,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        fixture on the same seed could end 2-1 one way and 0-0 the other and
        the game had two engines wearing one name. Everything kicks off here
        now; quick sims use the same legal changes to look after the team. */
-    const live = kickOff(state, entry);
+    const live = kickOff(state, entry, opts?.varReviews);
     if (!opts?.skipHalftime) {
       state.live = live;
       return { state, kind: 'halftime', live };
@@ -17701,7 +17743,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
  * point where the manager gets to manage: a real half, a real score, and a
  * dressing room where changing something changes what happens next.
  */
-function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
+function kickOff(state: CareerState, entry: CalendarEntry, varReviews = false): LiveMatch {
   const fx = fixtureFor(state, entry)!;
   /* Round 505: the eleven WITH their slots, because the strength reads a
      man in his slot now. */
@@ -17720,6 +17762,7 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
      their teamsheet against me. */
   const squad = pickOppSquad(oppRosterFor(state, fx.opponent));
   const live: LiveMatch = {
+    ...(varReviews && worldYear(state) >= 2026 && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID) ? { varReviews: true as const } : {}),
     week: state.week,
     myGoals: 0,
     oppGoals: 0,

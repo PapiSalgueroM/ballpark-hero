@@ -30,6 +30,8 @@ import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/
 /* Round 1146: the mark after a goal, the report's own. */
 import { scorerMark } from '@/lib/clubManagerScorerLine';
 import type { GoalMarks } from '@/lib/clubManagerScorerLine';
+import { cmVarEventWaiting, cmVarPlayWaiting, cmVarCanAnnounce, cmVarPlayedReviewIds, cmVarLabel } from '@/lib/clubManagerVar';
+import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -357,7 +359,7 @@ function seedOf(text: string): number {
  */
 export function stagePitchInput(
   career: CareerState, live: LiveMatch | null, report: MatchWeekReport | null, stage: Stage, minute: number, plus: number | undefined, stageStop: number,
-  openedAt = 0, mineAt: number = minute,
+  openedAt = 0, mineAt: number = minute, settledReviews?: ReadonlySet<string>,
 ): PitchInput {
   const men = menAt(career, live, report, minute, plus, mineAt);
   const mentality: Mentality = live?.mentality ?? career.mentality;
@@ -384,7 +386,8 @@ export function stagePitchInput(
   return {
     mine, theirs,
     feed: liveFeed(live).filter(e => e.kind !== 'halftime' && e.minute >= lo && e.minute <= hi
-      && !(isChance(e) && placeOf(e) < openedAt)),
+      && !(isChance(e) && placeOf(e) < openedAt)
+      && (!settledReviews || !cmVarEventWaiting(e, liveFeed(live), settledReviews))),
     span: { from, to: Math.max(from + BEAT_SPAN, stageStop) },
     kickoffs: [{ at: from, side: kicking }],
     possession: (share ?? 50) / 100,
@@ -393,7 +396,7 @@ export function stagePitchInput(
 }
 
 /** Round 1101: the "?" on the match. It is in the DOM only while its panel is open. */
-function LiveMatchHelp({ onClose }: { onClose: () => void }) {
+function LiveMatchHelp({ onClose, reviews }: { onClose: () => void; reviews?: boolean }) {
   return (
     <div data-cm-live-help="1" className="bg-card border border-border rounded-2xl p-3 text-left">
       <div className="flex items-center justify-between gap-2">
@@ -405,8 +408,9 @@ function LiveMatchHelp({ onClose }: { onClose: () => void }) {
       <ul className="mt-1 space-y-1.5 text-xs text-muted-foreground list-disc pl-4">
         <li>The half you are watching has already been played by the game. You are seeing it back minute by minute.</li>
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
-        <li>The score changes when the ball is in the net, not before.</li>
+        <li>{reviews ? 'A reviewed goal waits for confirmation, then the score changes when the ball is in the net.' : 'The score changes when the ball is in the net, not before.'}</li>
         <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.</li>
+        {reviews && <li>VAR uses simplified game rules. A ruled-out goal adds no score, scorer or shot stats. A missed foul can earn a penalty, and that kick can score, be saved or miss.</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
         <li>Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on.</li>
       </ul>
@@ -414,6 +418,7 @@ function LiveMatchHelp({ onClose }: { onClose: () => void }) {
         <span className="font-bold">Worked example: </span>
         {"It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next."}
       </p>
+      {reviews && <p className="mt-2 text-xs text-foreground"><span className="font-bold">VAR example: </span>At 0-0 a goal is checked for offside. If ruled out, it stays 0-0 and nobody gets a goal. If a foul review awards a penalty and the kick misses, it still stays 0-0.</p>}
     </div>
   );
 }
@@ -508,6 +513,9 @@ export function LiveSimScreen({
   /* Round 1101: the goal sequence. The moment is set beside the motion when a goal fires on time; the
      hold rate is read by the clock's own frame, and the render sets it. */
   const [goalMoment, setGoalMoment] = useState<GoalMoment | null>(null);
+  const [reviewEvent, setReviewEvent] = useState<LiveFeedEvent | null>(null);
+  const [settledReviews, setSettledReviews] = useState<Set<string>>(() => cmVarPlayedReviewIds(live ? liveFeed(live) : [], clock, stage));
+  const reviewCap = useRef(Infinity);
   const holdRate = useRef(0);
   const [reducedMotion, setReducedMotion] = useState(() => typeof window !== 'undefined' && typeof window.matchMedia === 'function'
     && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -531,7 +539,7 @@ export function LiveSimScreen({
   const orientation = sideways ? 'landscape' : 'portrait';
   /* Every stage change ends whatever was playing: a goal's card never rises in the wrong half, and an
      action that fired late (Skip) is not replayed when the next period opens. */
-  const clearAction = () => { setMotionEvent(null); setGoalMoment(null); };
+  const clearAction = () => { setMotionEvent(null); setGoalMoment(null); setReviewEvent(null); };
   const [picking, setPicking] = useState<string | null>(null);
   /* Round 670 review: the clock reached 90 and the engine has been asked
      about extra time; the next render reads its answer off the live match. */
@@ -568,16 +576,24 @@ export function LiveSimScreen({
   const finalOpp = report ? (report.home === career.clubName ? report.awayGoals : report.homeGoals) : null;
   const running = stage === 'first' || stage === 'second' || stage === 'extra';
   /* Round 670 review: no change while the engine is answering at 90. */
-  const canChange = running && !finished && !(stage === 'second' && askedAt90) && !!liveNow;
+  const canChange = running && !finished && !reviewEvent && !(stage === 'second' && askedAt90) && !!liveNow;
 
   /* ---- the truth this walk goes through ---- */
   const feed: LiveFeedEvent[] = useMemo(() => (liveNow ? liveFeed(liveNow) : []), [liveNow]);
+  const nextReview = feed.find(e => e.kind === 'var' && e.review && !settledReviews.has(e.review.id)
+    && e.minute >= (stage === 'first' ? 0 : stage === 'extra' ? 91 : 46) && e.minute <= stageEnd
+    && placeOf(e) >= openedAt.current);
+  reviewCap.current = nextReview ? Math.max(openedAt.current, stage === 'second' ? 46 : stage === 'extra' ? 90 : 0, placeOf(nextReview) - 0.05) : Infinity;
+  useEffect(() => {
+    if (running && !finished && !reviewEvent && nextReview && clock >= reviewCap.current - 0.001) setReviewEvent(nextReview);
+  }, [running, finished, reviewEvent, nextReview, clock]);
   /* Round 781: the whistle goes at the end of the board, and the last action is the one deepest in it. */
   const terminalMinute = stageStop;
   // The last action at the whistle gets its wind-up before the clock reaches it.
   // Feed order gives a goal priority over another chance at the same minute.
   const terminalAction = useMemo(() => [...feed].reverse().find(e => e.minute === stageEnd && (e.plus ?? 0) === board
-    && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')), [feed, stageEnd, board]);
+    && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')
+    && !cmVarEventWaiting(e, feed, settledReviews)), [feed, stageEnd, board, settledReviews]);
   const terminalWindup = !!terminalAction && clock >= terminalMinute - 1.05 && clock < terminalMinute;
   useEffect(() => {
     if (!running || finished || !terminalWindup || !terminalAction) return;
@@ -627,7 +643,7 @@ export function LiveSimScreen({
     const r = periodRank(e.minute);
     return r < STAGE_RANK[stage] || (r === STAGE_RANK[stage] && e.minute + (e.plus ?? 0) <= clock);
   };
-  const goalsAt = (side: Side) => feed.filter(e => e.kind === 'goal' && e.side === side && happened(e)).length;
+  const goalsAt = (side: Side) => feed.filter(e => e.kind === 'goal' && e.side === side && happened(e) && !cmVarEventWaiting(e, feed, settledReviews)).length;
   const myGoalsNow = stage === 'done' && finalMy !== null ? finalMy : goalsAt('me');
   const oppGoalsNow = stage === 'done' && finalOpp !== null ? finalOpp : goalsAt('opp');
   /* Round 781: on the second leg of a two legged tie, the first leg and the
@@ -644,9 +660,15 @@ export function LiveSimScreen({
   /* ---- stats at this minute, the report's own function ---- */
   const stats: MatchStats | null = useMemo(() => {
     if (stage === 'done' && report?.detail) return report.detail.stats;
-    if (liveNow) return liveStatsAt(liveNow, minute, plus);
+    if (liveNow) {
+      const visible = liveNow.varReviews ? { ...liveNow,
+        h1Play: liveNow.h1Play?.filter(e => !cmVarPlayWaiting(e, feed, settledReviews)),
+        h2Play: liveNow.h2Play?.filter(e => !cmVarPlayWaiting(e, feed, settledReviews)),
+      } : liveNow;
+      return liveStatsAt(visible, minute, plus);
+    }
     return report?.detail?.stats ?? null;
-  }, [stage, report, liveNow, minute, plus]);
+  }, [stage, report, liveNow, minute, plus, feed, settledReviews]);
   /* Round 714: bookings and changes at this minute, off the committed lines. */
   const counts: CardsAndSubs | null = useMemo(() => {
     if (stage === 'done' && report?.detail) {
@@ -659,19 +681,19 @@ export function LiveSimScreen({
 
   /* ---- the clock: BASE_RATE sim minutes per real second, times speed ---- */
   useEffect(() => {
-    if (paused || !running || finished) { lastTs.current = null; return; }
+    if (paused || !running || finished || reviewEvent) { lastTs.current = null; return; }
     const cap = stageStop;
     const step = (ts: number) => {
       if (lastTs.current === null) lastTs.current = ts;
       const dt = Math.min(0.25, (ts - lastTs.current) / 1000);
       lastTs.current = ts;
       /* Round 1101: while a goal's card is up the clock all but stops, at every speed. */
-      setClock(c => Math.min(cap, holdRate.current > 0 ? c + dt * holdRate.current : c + dt * BASE_RATE * speed));
+      setClock(c => Math.min(cap, reviewCap.current, holdRate.current > 0 ? c + dt * holdRate.current : c + dt * BASE_RATE * speed));
       rafRef.current = requestAnimationFrame(step);
     };
     rafRef.current = requestAnimationFrame(step);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [paused, running, finished, stage, speed, stageStop]);
+  }, [paused, running, finished, stage, speed, stageStop, reviewEvent]);
 
   /* Stage transitions off the clock. The whistle is called exactly once.
      Round 781: at the end of each period's board, not on its last minute. */
@@ -849,8 +871,8 @@ export function LiveSimScreen({
      ball of the feed. It is rebuilt only when what it reads changes (a sub, a red card, a redraw), never
      on a tick, and the scene only when the clock crosses into the plan's next stretch. */
   const pitchInput = useMemo(
-    () => stagePitchInput(career, liveNow, report, stage, castMinute, castPlus, stageStop, openedAt.current, minute),
-    [career, liveNow, report, stage, castMinute, castPlus, stageStop, minute],
+    () => stagePitchInput(career, liveNow, report, stage, castMinute, castPlus, stageStop, openedAt.current, minute, settledReviews),
+    [career, liveNow, report, stage, castMinute, castPlus, stageStop, minute, settledReviews],
   );
   const pitchKey = useMemo(() => JSON.stringify(pitchInput), [pitchInput]);
   // The key is the input's whole content, so the plan survives a minute tick that changed nothing.
@@ -886,6 +908,7 @@ export function LiveSimScreen({
       /* Round 781: a line in the board fires when the clock reaches its plus.
          Round 1101: and a chance that waits its turn on the pitch fires when its action starts. */
       if (e.kind === 'halftime' || e.minute < lo || e.minute > hi || firesAt(e) > clock) continue;
+      if (!cmVarCanAnnounce(e, feed, settledReviews)) continue;
       const key = `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
       if (firedRef.current.has(key)) continue;
       firedRef.current.add(key);
@@ -916,6 +939,9 @@ export function LiveSimScreen({
           scored = { e, key, banner: big };
           break;
         }
+        case 'var':
+          if (e.review) small = [{ t: cmVarLabel(e.review) }];
+          break;
         case 'yellow': big = { segs: [{ t: 'Booked: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
         case 'red': big = { segs: [{ t: 'RED CARD! ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
         case 'injury': big = { segs: [{ t: 'Injury: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
@@ -977,7 +1003,7 @@ export function LiveSimScreen({
     if (small) setEventLine(small);
     // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup, startAt]);
+  }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup, startAt, settledReviews]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
 
   /* ---- the dots and the ball, off the shared pitch (Round 1101): the plan is built further up ---- */
@@ -1392,6 +1418,15 @@ export function LiveSimScreen({
                     );
                   })}
 
+                  {reviewEvent?.review && (
+                    <ClubManagerVarReview key={reviewEvent.review.id} review={reviewEvent.review}
+                      club={reviewEvent.side === 'me' ? career.clubName : opponent} minute={minuteLabel(reviewEvent)} reducedMotion={reducedMotion}
+                      onComplete={() => {
+                        const id = reviewEvent.review!.id;
+                        setSettledReviews(previous => new Set([...previous, id]));
+                        setReviewEvent(null);
+                      }} />
+                  )}
                   {/* event banner */}
                   {banner && (
                     <div className={cn(
@@ -1535,7 +1570,11 @@ export function LiveSimScreen({
                   </button>
                 ) : finished ? null : (
                   <button
-                    onClick={() => setClock(stageStop)}
+                    onClick={() => {
+                      setSettledReviews(previous => new Set([...previous, ...feed.filter(e => e.kind === 'var' && e.review && e.minute <= stageEnd).map(e => e.review!.id)]));
+                      setReviewEvent(null);
+                      setClock(stageStop);
+                    }}
                     className="rounded-lg border border-border bg-card text-[11px] leading-tight font-bold text-foreground hover:border-primary/60 transition-colors inline-flex flex-col items-center justify-center"
                   >
                     <FastForward className="w-3.5 h-3.5" /> Skip
@@ -1588,7 +1627,7 @@ export function LiveSimScreen({
               )}
 
               {/* Round 1101: how watching a match works, only while it is asked for. */}
-              {sidePanel === 'help' && <LiveMatchHelp onClose={() => setPanel(null)} />}
+              {sidePanel === 'help' && <LiveMatchHelp onClose={() => setPanel(null)} reviews={!!liveNow?.varReviews} />}
 
               {/* the change sheet: a sub or a shape, at this minute */}
               {sheetOpen && picked && (

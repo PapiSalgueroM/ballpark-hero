@@ -2,6 +2,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { GEO_COUNTRIES, CONTINENT_VIEWS, WORLD_W, WORLD_H, type Continent, type GeoCountry } from '@/data/worldMapGeo';
 import { FORMATIONS, LEGENDS, POSITION_NORMALIZE, WC2026_NATIONS, normalizePosition, playerRating, type FormationSlot } from '@/lib/squadDeal';
 import { getEnrichment } from '@/data/footleEnrichment';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import type { League, Player } from '@/types/game';
 
 /**
@@ -349,13 +350,15 @@ export async function fetchCountryPool(country: GeoCountry): Promise<Player[]> {
   if (cached) return cached;
   try {
     const names = dbNamesFor(country);
-    const { data, error } = await supabase
+    const { data, error } = await fetchAllRows<MarketRow>((from, to) => supabase
       .from('player_market_values')
       .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
       .eq('year', 2026)
       .in('nationality', names)
       .order('market_value_usd', { ascending: false })
-      .limit(120);
+      .order('player_name', { ascending: true })
+      .order('id', { ascending: true })
+      .range(from, to));
     if (error || !data) return [];
     const seen = new Set<string>();
     const pool: Player[] = [];
@@ -373,6 +376,25 @@ export async function fetchCountryPool(country: GeoCountry): Promise<Player[]> {
 }
 
 const fitsSlot = (p: Player, slot: FormationSlot) => slot.allowed.includes(p.position);
+
+/** Keep the strongest three, then offer five different eligible players. */
+export function variedChoices(pool: Player[], slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
+  const used = new Set([...usedNames].map(name => name.toLowerCase()));
+  const seen = new Set<string>();
+  const eligible = pool.filter(player => {
+    const key = player.name.toLowerCase();
+    if (!fitsSlot(player, slot) || used.has(key) || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  }).sort((a, b) => playerRating(b) - playerRating(a));
+  const picks = eligible.slice(0, 3);
+  const remaining = eligible.slice(3);
+  while (picks.length < 8 && remaining.length > 0) {
+    const index = Math.floor(Math.random() * remaining.length);
+    picks.push(...remaining.splice(index, 1));
+  }
+  return picks.map(player => ({ player, outOfPosition: false }));
+}
 
 /** Raw DB position strings that normalize into this slot's allowed positions. */
 function rawPositionsFor(slot: FormationSlot): string[] {
@@ -433,14 +455,16 @@ async function fetchCountryAtPosition(country: GeoCountry, slot: FormationSlot):
   const cached = positionQueryCache.get(key);
   if (cached) return cached;
   try {
-    const { data, error } = await supabase
+    const { data, error } = await fetchAllRows<MarketRow>((from, to) => supabase
       .from('player_market_values')
       .select('player_name, position, age, nationality, club, market_value_usd, goals, assists')
       .eq('year', 2026)
       .in('nationality', dbNamesFor(country))
       .in('position', rawPositionsFor(slot))
       .order('market_value_usd', { ascending: false })
-      .limit(12);
+      .order('player_name', { ascending: true })
+      .order('id', { ascending: true })
+      .range(from, to));
     if (error || !data) return [];
     const seen = new Set<string>();
     const pool: Player[] = [];
@@ -462,8 +486,9 @@ function countryLegends(country: GeoCountry, slot: FormationSlot, usedNames: Set
   const names = new Set(dbNamesFor(country));
   if (country.iso === 'ru') names.add('Soviet Union');
   if (country.iso === 'cz') names.add('Czechoslovakia');
+  const used = new Set([...usedNames].map(name => name.toLowerCase()));
   return LEGENDS
-    .filter(p => names.has(p.nationality) && fitsSlot(p, slot) && !usedNames.has(p.name))
+    .filter(p => names.has(p.nationality) && fitsSlot(p, slot) && !used.has(p.name.toLowerCase()))
     .sort((a, b) => playerRating(b) - playerRating(a));
 }
 
@@ -500,15 +525,23 @@ export async function countryChoices(
   opts: { alltime?: boolean; keepBest?: number } = {},
 ): Promise<DraftChoice[]> {
   const pool = await fetchCountryPool(country);
-  const fresh = pool.filter(p => !usedNames.has(p.name));
+  const used = new Set([...usedNames].map(name => name.toLowerCase()));
+  const fresh = pool.filter(p => !used.has(p.name.toLowerCase()));
   const legends = opts.alltime ? countryLegends(country, slot, usedNames) : [];
   let atPos = fresh.filter(p => fitsSlot(p, slot));
   if (atPos.length === 0) {
     const targeted = await fetchCountryAtPosition(country, slot);
-    atPos = targeted.filter(p => !usedNames.has(p.name));
+    atPos = targeted.filter(p => !used.has(p.name.toLowerCase()));
   }
   if (legends.length > 0 || atPos.length > 0) {
-    const ranked = [...legends, ...atPos].sort((a, b) => playerRating(b) - playerRating(a));
+    /* Release AT: two rounds answered the same report here. Round 1145's rule decides the tiles (the
+       best COUNTRY_KEEP_BEST always, the rest drawn, best first, a shallow country unchanged), and
+       Round 1182's promise that one name is never offered twice is kept in front of it: a legend
+       and the same man's current row are one tile, the legend's. */
+    const offered = new Set<string>();
+    const ranked = [...legends, ...atPos]
+      .filter(p => { const key = p.name.toLowerCase(); if (offered.has(key)) return false; offered.add(key); return true; })
+      .sort((a, b) => playerRating(b) - playerRating(a));
     return countryTiles(ranked, opts.keepBest).map(player => ({ player, outOfPosition: false }));
   }
   const prospect: DraftChoice = { player: academyProspect(country, slot, pool.length), outOfPosition: false };
@@ -517,25 +550,15 @@ export async function countryChoices(
 }
 
 export function legendChoices(slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
-  return LEGENDS
-    .filter(p => !usedNames.has(p.name) && fitsSlot(p, slot))
-    .sort((a, b) => playerRating(b) - playerRating(a))
-    .slice(0, 8)
-    .map(player => ({ player, outOfPosition: false }));
+  return variedChoices(LEGENDS, slot, usedNames);
 }
 
 export function wonderkidChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
-  return prefetch
-    .filter(p => !usedNames.has(p.name) && fitsSlot(p, slot) && p.age > 0 && p.age <= 21)
-    .slice(0, 8)
-    .map(player => ({ player, outOfPosition: false }));
+  return variedChoices(prefetch.filter(p => p.age > 0 && p.age <= 21), slot, usedNames);
 }
 
 export function wildcardChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
-  return prefetch
-    .filter(p => !usedNames.has(p.name) && fitsSlot(p, slot))
-    .slice(0, 10)
-    .map(player => ({ player, outOfPosition: false }));
+  return variedChoices(prefetch, slot, usedNames);
 }
 
 /** Storm zone: blown into the bargain bin. Five picks from the cheap end of the pool.

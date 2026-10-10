@@ -4,6 +4,7 @@ import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
 import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
+import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
@@ -174,6 +175,8 @@ export interface ClubData {
 }
 
 export interface SeasonRecord {
+  /** Round 1180: the chosen personal target and its actual club season result. */
+  ambition?: SeasonAmbitionResult;
   year: number;
   age: number;
   club: string;
@@ -847,6 +850,8 @@ export interface CareerStorySeason {
 }
 
 export interface CareerState {
+  /** Round 1180: one optional personal target for the next club season. */
+  seasonAmbition?: CareerSeasonAmbition;
   playerName: string;
   nationality: string;
   position: string;
@@ -1781,6 +1786,7 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
     s.seasons = [...s.seasons, row];
     simulateSeasonFinances(s, row);
     runTournamentSummer(s, row, row.year, true);
+    settleCareerAmbition(s, row);
   }
 
   const history = [...(s.seriousInjuries ?? [])];
@@ -4377,6 +4383,7 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
     parentCountry: s.currentClubCountry, parentColor: s.currentClubColor,
   };
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
+  if (s.currentClub !== prev.currentClub) delete s.seasonAmbition;
   s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
   s.phase = "playing"; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null;
   /* Round 257: same rule as a transfer. The freeze out was the parent club's,
@@ -4820,6 +4827,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
 export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerState {
   const s = { ...prev };
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
+  if (s.currentClub !== prev.currentClub) delete s.seasonAmbition;
   s.currentClubTier = offer.club.tier; s.currentClubColor = offer.club.color; s.currentLeague = offer.club.league;
   s.contractYearsLeft = offer.contractYears;
   // Round 49: your agent's negotiating skill decides the final wage
@@ -5079,6 +5087,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.pendingSummary = s.seasons[s.seasons.length - 1];
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
+      settleCareerAmbition(s, s.pendingSummary);
       return s;
     }
   }
@@ -5106,6 +5115,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.pendingSummary = s.seasons[s.seasons.length - 1];
     s.phase = "season_summary";
     simulateSeasonFinances(s, s.pendingSummary);
+    settleCareerAmbition(s, s.pendingSummary);
     return s;
   }
 
@@ -5164,6 +5174,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
     simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
     runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
+    settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);
     s.phase = "newspaper";
     return s;
   } else if (heat >= 70 && Math.random() < 0.35) {
@@ -5205,6 +5216,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.pendingSummary = s.seasons[s.seasons.length - 1];
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
+      settleCareerAmbition(s, s.pendingSummary);
       return s;
     }
     if (s.pedSeasonsRemaining === 0) {
@@ -5223,6 +5235,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
   // Forced retirement: overall below 50 at 33+, OR absolute max age 45
   if ((s.overall < 50 && s.age >= 33) || s.age >= 45) {
     s.retired = true;
+    delete s.seasonAmbition;
     const reason = s.age >= 45 ? "👋 Hung up the boots at 45. An incredible career!" : "👋 Body can no longer keep up. Forced retirement";
     s.events.push(reason);
     const lastYr = s.seasons[s.seasons.length - 1].year;
@@ -5350,6 +5363,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       s.seasons = [...s.seasons, injuryRow];
       simulateSeasonFinances(s, injuryRow);
       runTournamentSummer(s, injuryRow, injuryRow.year, true);
+      settleCareerAmbition(s, injuryRow);
       s.phase = "rehab_choice";
       /* Release AQ: the league went on without him, so its season is settled
          here like any other. Before this the injury year never reached the
@@ -5735,6 +5749,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   pushCeiling(s, season);
 
   if (s.events.length === 0) s.events.push(`⚽ Solid season at ${s.currentClub}`);
+  settleCareerAmbition(s, season);
 
   /* Release AQ: the settle reads the saved season and nothing else
      (settledLeagueOrder), so the engine no longer imports the Season Centre's
@@ -6090,6 +6105,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
       s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
       simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
       runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
+      settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);
     }
   }
   /* ROUND 502: THIS LINE ENDED CAREERS, PERMANENTLY, AND THE PLAYER WAS STILL
@@ -8243,6 +8259,7 @@ export function calculateLegacy(state: CareerState): LegacyResult {
 /* ─── Manual Retirement ─── */
 export function manualRetire(prev: CareerState): CareerState {
   const s = { ...prev };
+  delete s.seasonAmbition;
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];
   endClubCaptaincy(s, "retirement");
@@ -8352,6 +8369,7 @@ function applyRetirementMoneySeason(s: CareerState, seasonsSinceRetiring: number
 /* ─── Retirement Suggestion, player can choose to continue or retire ─── */
 export function acceptRetirementSuggestion(prev: CareerState): CareerState {
   const s = { ...prev };
+  delete s.seasonAmbition;
   s.retired = true;
   s.events = [...s.events, "👋 Announced retirement from professional football"];
   const lastYear = s.seasons[s.seasons.length - 1].year;

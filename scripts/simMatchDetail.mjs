@@ -44,7 +44,7 @@ execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm -
 const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
 const {
   startCareer, playNextEntry, resumeMatch, makeHalftimeSub, finishSeason,
-  startNextSeason, matchFacts, benchForHalftime,
+  startNextSeason, matchFacts, benchForHalftime, clockOrder, minuteLabel,
 } = cm;
 
 let failures = 0;
@@ -524,7 +524,7 @@ console.log('7) Two yellows is a red, and nobody leaves before his own last goal
           /* A second yellow: after the first, never on it, and reported as
              what it is. */
           secondYellows += 1;
-          if (his[0].minute >= r.minute) fail(`${r.text}'s second yellow lands on or before his first (${his[0].minute} then ${r.minute})`);
+          if (clockOrder(his[0], r) >= 0) fail(`${r.text}'s second yellow lands on or before his first (${minuteLabel(his[0])} then ${minuteLabel(r)})`);
           const line = (rep.events ?? []).find(e => e.includes(r.text) && /second yellow/.test(e));
           if (!line) fail(`${r.text} walked for a second yellow with no line saying so: ${JSON.stringify(rep.events)}`);
           else cleanLines += 1;

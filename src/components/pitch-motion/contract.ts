@@ -21,7 +21,7 @@ export interface PitchPoint { x: number; y: number }
  *  near y 90); the part mirrors 'opp'. `name` is only matched against a feed line's text to find the
  *  man on the ball; the part never draws it. */
 export interface PitchFigure { key: string; line: PitchLine; slot: PitchPoint; name?: string }
-export type PitchEventKind = 'goal' | 'shot' | 'save' | 'corner' | 'throwin' | 'foul' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime';
+export type PitchEventKind = 'goal' | 'shot' | 'save' | 'corner' | 'throwin' | 'foul' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime' | 'var';
 /** One committed line of the binder's feed. Its place on the clock is minute + (plus ?? 0). */
 export interface PitchEvent {
   minute: number; plus?: number; side: PitchSide | 'none'; kind: PitchEventKind; text: string;

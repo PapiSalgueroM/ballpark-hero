@@ -140,6 +140,7 @@ export async function fetchDartDraftPool(): Promise<DartDraftPool> {
           .not('age', 'is', null)
           .order('market_value_usd', { ascending: false })
           .order('player_name', { ascending: true })
+          .order('id', { ascending: true })
           .range(from, to),
       POOL_ROWS / POOL_PAGE,
       POOL_ROWS,
