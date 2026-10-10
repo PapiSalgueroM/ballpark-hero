@@ -1,0 +1,4 @@
+mut-keyindex exit=0 68s | MUT keyindex default=1 full=1 vitest=1 reds: RED shapes 8 checks, 1 failed;RED shapes 8 checks, 1 failed;
+mut-wrongman exit=0 68s | MUT wrongman default=1 full=1 vitest=0 reds: RED names 21310 checks, 654 failed;RED names 105857 checks, 3390 failed;
+mut-unnamed exit=0 68s | MUT unnamed default=1 full=1 vitest=0 reds: RED names 20404 checks, 402 failed;RED names 101603 checks, 1811 failed;
+mut-assistbench exit=0 68s | MUT assistbench default=1 full=1 vitest=0 reds: RED names 21551 checks, 70 failed;RED names 106959 checks, 351 failed;

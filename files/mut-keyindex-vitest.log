@@ -1,0 +1,43 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/clubManagerGoalWeight.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [31m❯[39m src/lib/clubManagerLeagueBook.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 526[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mdeals the same goals for the same key, every time, and another key deals others[32m 3[2mms[22m[39m
+[31m   [31m×[31m dealGoals[2m > [22mrolls every goal of one match on its own: two or three goals are one man's only as often as the weights say[39m[32m 63[2mms[22m[39m
+[31m     → expected 4959.562262597902 to be less than 117.3043419372837[39m
+   [32m✓[39m dealGoals[2m > [22mshares the open play goals by the weight, each man inside four binomial standard deviations[32m 21[2mms[22m[39m
+   [33m[2m✓[22m[39m dealGoals[2m > [22mpays set pieces and own goals at the shares of the rules, and no assist on any of them [33m 306[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mgives a penalty and a direct free kick to the taker when the rule says so, and by the weight when not[32m 65[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mbreaks a level taker by the name as plain text, and never names a keeper[32m 0[2mms[22m[39m
+   [32m✓[39m dealGoals[2m > [22mdeals the assist of a goal a report already named on its own key, never to the scorer or a keeper[32m 60[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mkeeps the first law after every credit: rows + own goals + unnamed = goals dealt[32m 4[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mis the same book after a JSON round trip, after every kind of credit, and readBook accepts it[32m 1[2mms[22m[39m
+   [32m✓[39m the book[2m > [22msends a new scorer past the row cap to the unnamed count, and still gives a keeper his row[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mgives two men with one name two rows when their positions differ[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mreads a damaged book, or the book of another season, as no book[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22mnever throws in a match week on a club entry or a row that is not one, and leaves it as it found it[32m 0[2mms[22m[39m
+   [32m✓[39m the book[2m > [22msalts by the order of the league, so two orders of the same clubs deal apart[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/clubManagerLeagueBook.test.ts[2m > [22mdealGoals[2m > [22mrolls every goal of one match on its own: two or three goals are one man's only as often as the weights say
+[31m[1mAssertionError[22m: expected 4959.562262597902 to be less than 117.3043419372837[39m
+[36m [2m❯[22m src/lib/clubManagerLeagueBook.test.ts:[2m57:43[22m[39m
+    [90m 55| [39m    [34mexpect[39m(firstScorers[33m.[39msize)[33m.[39m[34mtoBe[39m(outfield[33m.[39mlength)[33m;[39m
+    [90m 56| [39m    [34mexpect[39m(pTwo)[33m.[39m[34mtoBeLessThan[39m([34m0.3[39m)[33m;[39m
+    [90m 57| [39m    expect(Math.abs(firstTwo - N * pTwo)).toBeLessThan(4 * sd(N, pTwo)…
+    [90m   | [39m                                          [31m^[39m
+    [90m 58| [39m    expect(Math.abs(allThree - N * pThree)).toBeLessThan(4 * sd(N, pTh…
+    [90m 59| [39m    /* The assist of each goal is its own roll too: about half of the …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m16 passed[39m[22m[90m (17)[39m
+[2m   Start at [22m 22:09:34
+[2m   Duration [22m 1.05s[2m (transform 63ms, setup 64ms, collect 86ms, tests 557ms, environment 384ms, prepare 217ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerLeagueBook.test.ts,title=src/lib/clubManagerLeagueBook.test.ts > dealGoals > rolls every goal of one match on its own%3A two or three goals are one man's only as often as the weights say,line=57,column=43::AssertionError: expected 4959.562262597902 to be less than 117.3043419372837%0A ❯ src/lib/clubManagerLeagueBook.test.ts:57:43%0A%0A

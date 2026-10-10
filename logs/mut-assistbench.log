@@ -1,0 +1,2 @@
+mut1229: assistbench applied to src/lib/clubManager.ts
+MUT assistbench default=1 full=1 vitest=0 reds: RED names 21551 checks, 70 failed;RED names 106959 checks, 351 failed;
