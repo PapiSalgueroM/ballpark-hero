@@ -1,0 +1,6 @@
+#!serial
+eqc-form: git worktree add -f /tmp/base 54e3820a >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules 2>/dev/null; git -C /tmp/base rev-parse --short HEAD; SC_BUDGET_MS=150000 node .rc/x/scEngine.mjs /tmp/base eqc-form
+eqc-event6: SC_BUDGET_MS=150000 node .rc/x/scEngine.mjs /tmp/base eqc-event6
+eqc-event12: SC_BUDGET_MS=150000 node .rc/x/scEngine.mjs /tmp/base eqc-event12
+eqc-news: SC_BUDGET_MS=150000 node .rc/x/scEngine.mjs /tmp/base eqc-news
+eqc-all: SC_BUDGET_MS=150000 node .rc/x/scEngine.mjs /tmp/base eqc-all

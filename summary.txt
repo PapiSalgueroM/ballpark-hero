@@ -1,0 +1,5 @@
+eqc-form exit=1 5s | eq[inverse event6+event12+newsTally+news100+newsReturn]: CONTROL FIRED. 159 of 160 careers differ from Release AS, as they must with this part of the inverse left out.
+eqc-event6 exit=1 21s | eq[inverse form+event12+newsTally+news100+newsReturn]: CONTROL FIRED. 70 of 160 careers differ from Release AS, as they must with this part of the inverse left out.
+eqc-event12 exit=1 23s | eq[inverse form+event6+newsTally+news100+newsReturn]: CONTROL FIRED. 49 of 160 careers differ from Release AS, as they must with this part of the inverse left out.
+eqc-news exit=1 25s | eq[inverse form+event6+event12]: CONTROL FIRED. 31 of 160 careers differ from Release AS, as they must with this part of the inverse left out.
+eqc-all exit=1 4s | eq[inverse none]: CONTROL FIRED. 160 of 160 careers differ from Release AS, as they must with this part of the inverse left out.
