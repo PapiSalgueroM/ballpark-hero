@@ -1,0 +1,1 @@
+r1220-scm: git fetch -q origin r1220-draft-night; git worktree add -q /tmp/r1220 FETCH_HEAD && ln -s "$PWD/node_modules" /tmp/r1220/node_modules && cd /tmp/r1220 && git log -1 --format='r1220 head %h %s' | cut -c1-120 && node scripts/simSeasonCentreMotion.mjs
