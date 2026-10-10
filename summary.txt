@@ -1,0 +1,8 @@
+c-dropkey exit=1 6s | simSaveKeeper control dropkey: FIRED. Section 0 is red.
+c-norow exit=1 6s | simSaveKeeper control norow: FIRED. Section 1 is red.
+c-versiontable exit=1 6s | simSaveKeeper control versiontable: FIRED. Section 1 is red (and 2, 5, which the same change reaches).
+c-onebyte exit=1 6s | simSaveKeeper control onebyte: FIRED. Section 2 is red.
+c-noaside exit=1 6s | simSaveKeeper control noaside: FIRED. Section 3 is red.
+c-bootwrite exit=1 6s | simSaveKeeper control bootwrite: FIRED. Section 2 is red (and 4, 5, which the same change reaches).
+c-journalfirst exit=1 4s | simSaveKeeper control journalfirst: FIRED. Section 3 is red.
+c-pileup exit=1 4s | simSaveKeeper control pileup: FIRED. Section 4 is red.

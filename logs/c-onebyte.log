@@ -1,0 +1,76 @@
+NEGATIVE CONTROL ON: onebyte (harness side, no source changed)
+simSaveKeeper: building a real save of every long game with its own engine...
+
+0. the fixtures: real saves of all 21 games, and each one is what its game writes
+   ok    21 long games, 4 real saves each (84 saves)
+         /soccer-career            4140 to    4267 chars, median    4267, 4 distinct, keys: playerName nationality position era age potential potentialEarned eliteStreak startingOverall (+103)
+         /club-manager            53768 to   58466 chars, median   55078, 4 distinct, keys: saveVersion clubName season week startYear eraId retiredNames retiredLastSummer budget (+55)
+         /stadium-tycoon           1153 to    1153 chars, median    1153, 4 distinct, keys: v money lifetime rep levels fanbase minute goalsFor goalsAgainst (+23)
+         /wonderkid-factory         308 to     309 chars, median     308, 4 distinct, keys: v seed cash lifetime careerEarned rep levels prospects scoutProgress (+10)
+         /rebuild                   128 to     191 chars, median     188, 4 distinct, keys: v salt preset phase turn seats
+         /front-office            83202 to   83829 chars, median   83796, 4 distinct, keys: league myTeam phase titles seasonsPlayed draftClass picksLeft mandate trust (+4)
+         /nfl-my-career             703 to     731 chars, median     717, 4 distinct, keys: c phase teamQuality coach
+         /cfb-dynasty             57096 to   57705 chars, median   57642, 4 distinct, keys: st phase recruits portal
+         /cbb-dynasty             34712 to   35116 chars, median   34784, 4 distinct, keys: st phase recruits portal
+         /nba-front-office        51158 to   51509 chars, median   51276, 4 distinct, keys: league myTeam phase titles seasonsPlayed draftClass picksLeft mandate trust (+4)
+         /nba-my-career             769 to     790 chars, median     788, 4 distinct, keys: c phase teamQuality coach
+         /mlb-my-career             701 to     727 chars, median     726, 4 distinct, keys: c phase teamQuality coach
+         /mlb-front-office       120940 to  121851 chars, median  121841, 4 distinct, keys: league myTeam phase titles seasonsPlayed draftClass picksLeft mandate trust (+4)
+         /nhl-my-career             758 to     765 chars, median     763, 4 distinct, keys: c phase teamQuality coach
+         /nhl-front-office        65849 to   66373 chars, median   66232, 4 distinct, keys: league myTeam phase titles seasonsPlayed draftClass picksLeft mandate trust (+4)
+         /aussie-rules-manager    84062 to   84107 chars, median   84073, 4 distinct, keys: version seed myClub clubName season format phase stage round (+13)
+         /fight-career             1425 to    1434 chars, median    1432, 4 distinct, keys: st phase
+         /fight-promoter           2365 to    2384 chars, median    2381, 4 distinct, keys: st
+         /fight-gym                1556 to    1574 chars, median    1572, 4 distinct, keys: g
+         /hall-of-champions         235 to     236 chars, median     235, 4 distinct, keys: v seed funds careerEarned owned openWings levels renown plaques (+5)
+         /idle-arena                261 to     261 chars, median     261, 4 distinct, keys: v points earned allTime taps owned upgrades trophies runs (+5)
+         largest real save: /mlb-front-office at 121851 chars
+   ok    21 of 21 games: the writer is found by its setItem (or its named binding) and the fixture is shaped as it writes
+   ok    40 fixtures over 10 games are accepted by the game's own loader
+
+1. the version table: what each save really holds, and what its game does with another number
+   ok    all 10 rows of SAVE_VERSIONS are long games on the list
+   ok    /club-manager: every real save holds 3 at saveVersion
+   ok    /rebuild: every real save holds 2 at v
+   ok    /stadium-tycoon: every real save holds 1 at v
+   ok    /wonderkid-factory: every real save holds 1 at v
+   ok    /hall-of-champions: every real save holds 1 at v
+   ok    /aussie-rules-manager: every real save holds 2 at version
+   ok    /idle-arena: every real save holds 1 at v
+   ok    /fight-career: every real save holds 1 at st.version
+   ok    /fight-gym: every real save holds 1 at g.version
+   ok    /fight-promoter: every real save holds 1 at st.version
+   ok    the other 11 games hold no whole number named v, version or saveVersion at the top level or one level down
+   ok    /club-manager: its own loader refuses a real save one version down and refuses one up, as the row says (refuses, oldest 3)
+   ok    /rebuild: its own loader opens a real save one version down and refuses one up, as the row says (migrates, oldest 1)
+   ok    /stadium-tycoon: its own loader refuses a real save one version down and refuses one up, as the row says (refuses, oldest 1)
+   ok    /wonderkid-factory: its own loader refuses a real save one version down and refuses one up, as the row says (refuses, oldest 1)
+   ok    /hall-of-champions: its own loader refuses a real save one version down and refuses one up, as the row says (refuses, oldest 1)
+   ok    /aussie-rules-manager: its own loader refuses a real save one version down and refuses one up, as the row says (refuses, oldest 2)
+   ok    /idle-arena: its own loader opens a real save one version down and opens one up, as the row says (ignores, oldest 1)
+         /fight-career: no pure loader is exported, so "ignores" is held by reading its engine only
+         /fight-gym: no pure loader is exported, so "ignores" is held by reading its engine only
+         /fight-promoter: no pure loader is exported, so "ignores" is held by reading its engine only
+
+2. an ordinary boot writes nothing
+   ok    the seam reads the page storage as ok, so the keeper really runs
+   ok    zero writes and zero removes in 7 storage calls
+   FAIL  not byte equal after a boot. Changed: soccerCareerSave. New keys: none
+   ok    the keys read are exactly the journal and the 6 games that act on a version (7 keys)
+
+3. the put back on real saves, and every crash point
+   ok    21 of 21 games: staged by restoreNow (key untouched), applied by the boot, the save he had kept aside once, the source backup still there, no journal left
+   ok    21 of 21 games: a full store refuses the put back and the whole store is as it was
+   ok    777 crash points over 21 games: 735 ended applied (the journal had landed), 42 untouched (it had not), and at none of them was a save lost, a key emptied or a copy stacked twice
+
+4. the copy before a version step, on real saves one version down (declared as altered)
+   ok    6 of 6 games that act on a version: one byte equal copy, the three older backups untouched (nothing is pruned without a press), a second boot writes nothing
+         what the card then offers on that game: nothing. The quiet copy is the newest backup and is marked answered, so the three
+         older backups are held but not offered (the card only ever offers the newest). A decision for the lead, see the notes.
+   ok    the 4 games that ignore their version (/fight-career, /fight-promoter, /fight-gym, /idle-arena) get no copy and are not even read
+
+5. what the boot pass costs (printed, not asserted)
+         all 21 saves held (the 6 that are parsed total 144462 chars): median 0.785 ms, 95th 1.368 ms a pass
+         an empty store:                                                   median 0.001 ms, 95th 0.001 ms a pass
+
+simSaveKeeper control onebyte: FIRED. Section 2 is red.
