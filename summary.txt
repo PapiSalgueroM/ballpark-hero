@@ -1,0 +1,7 @@
+bundle exit=0 0s | doorProbe: the bundled door answers as the library does
+vitest exit=0 3s |    Duration  2.45s (transform 1.03s, setup 53ms, collect 1.30s, tests 428ms, environment 281ms, prepare 163ms)
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 22s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simCmDataOnDemand exit=0 10s | simCmDataOnDemand: green. No page downloads data it never reads, and a past season brings its own.
+simHarnessAnchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 51s | 
