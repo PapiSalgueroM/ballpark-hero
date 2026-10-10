@@ -1,0 +1,170 @@
+name: Manager genuine press coverage
+on:
+  push:
+    branches: [codex/manager-press-coverage]
+    paths:
+      - scripts/simClubManagerMeters.mjs
+      - scripts/qa/managerPressCoverageProof.mjs
+      - .github/workflows/manager-press-coverage.yml
+  pull_request:
+    paths:
+      - scripts/simClubManagerMeters.mjs
+      - scripts/qa/managerPressCoverageProof.mjs
+      - .github/workflows/manager-press-coverage.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: manager-press-coverage-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact source and locked dependency preparation
+        run: |
+          mkdir -p manager-press-coverage-artifacts
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse '6a09d71633be3f297494ca6e927cd4ef65f18805^{tree}')" = 0eb17049ea5ea96156f22f690203294898b2f1bf
+          git diff --exit-code 6a09d71633be3f297494ca6e927cd4ef65f18805 HEAD -- src package.json package-lock.json scripts/lib
+          git rev-parse HEAD > manager-press-coverage-artifacts/source-head.txt
+          git rev-parse 'HEAD^{tree}' > manager-press-coverage-artifacts/source-tree.txt
+          git archive --format=zip --output=manager-press-coverage-artifacts/source.zip HEAD
+          git ls-tree -r HEAD > manager-press-coverage-artifacts/source-inventory.txt
+          sha256sum package.json package-lock.json > manager-press-coverage-artifacts/packages-before.txt
+          npm ci
+          DEPENDENCY_OUT=manager-press-coverage-artifacts/dependencies-before.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          npm install --no-save playwright@1.64.0
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          sha256sum package.json package-lock.json > manager-press-coverage-artifacts/packages-after-setup.txt
+          cmp manager-press-coverage-artifacts/packages-before.txt manager-press-coverage-artifacts/packages-after-setup.txt
+      - name: Actual app type gate
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-press-coverage-artifacts/types.log
+      - name: Diagnostic genuine press preflight, no final build credit
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerMeters.mjs 2>&1 | tee manager-press-coverage-artifacts/preflight-meters.log
+          MANAGER_PRESS_COVERAGE_OUT=manager-press-preflight-artifacts NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerPressCoverageProof.mjs 2>&1 | tee manager-press-coverage-artifacts/preflight-proof.log
+          du -sb -c manager-press-preflight-artifacts manager-press-coverage-artifacts > manager-press-coverage-artifacts/preflight-artifact-size.log
+          test "$(du -sb -c manager-press-preflight-artifacts manager-press-coverage-artifacts | tail -n1 | cut -f1)" -lt 500000000
+      - name: Retain preflight
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-press-coverage-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            manager-press-preflight-artifacts/
+            manager-press-coverage-artifacts/
+          retention-days: 5
+      - name: Full production SEO build
+        id: build
+        run: |
+          npm run build:seo 2>&1 | tee manager-press-coverage-artifacts/build.log
+          git diff --binary HEAD -- public scripts/data/lastmod.json > manager-press-coverage-artifacts/generated-public.patch
+          find public -type f -print0 | sort -z | xargs -0 sha256sum > manager-press-coverage-artifacts/generated-public-sha256.txt
+          tar -czf manager-press-coverage-artifacts/generated-public-and-lastmod.tar.gz public scripts/data/lastmod.json
+          sha256sum manager-press-coverage-artifacts/generated-public-and-lastmod.tar.gz > manager-press-coverage-artifacts/generated-public-archive-sha256.txt
+          sha256sum scripts/data/lastmod.json > manager-press-coverage-artifacts/generated-lastmod-sha256.txt
+      - name: Actual final Meters and complete original control undo proof
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simClubManagerMeters.mjs 2>&1 | tee manager-press-coverage-artifacts/final-meters.log || failed=1
+          MANAGER_PRESS_COVERAGE_OUT=manager-press-coverage-artifacts/final NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerPressCoverageProof.mjs 2>&1 | tee manager-press-coverage-artifacts/final-proof.log || failed=1
+          exit "$failed"
+      - name: Retain post-build evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-press-coverage-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-press-coverage-artifacts/
+          retention-days: 5
+      - name: Related actual board and career outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simClubManagerSave simClubManagerCalendar simManagerCareer simNoInventedQuotes simHarnessAnchors; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-press-coverage-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\\.mjs([[:space:]]|$)" "manager-press-coverage-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-press-coverage-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All fifteen rebuilt output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-press-coverage-artifacts/$harness.log" || failed=1
+            grep -Eq "PASS[[:space:]]+$harness\\.mjs([[:space:]]|$)" "manager-press-coverage-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-press-coverage-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Sources packages and installed dependencies held
+        if: ${{ !cancelled() }}
+        run: |
+          if [ -f manager-press-coverage-artifacts/generated-lastmod-sha256.txt ]; then sha256sum --check manager-press-coverage-artifacts/generated-lastmod-sha256.txt; fi
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json ':!scripts/data/lastmod.json' > manager-press-coverage-artifacts/source-held.log
+          sha256sum package.json package-lock.json > manager-press-coverage-artifacts/packages-final.txt
+          cmp manager-press-coverage-artifacts/packages-before.txt manager-press-coverage-artifacts/packages-final.txt
+          DEPENDENCY_OUT=manager-press-coverage-artifacts/dependencies-final.json node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+           if(!directory.startsWith('node_modules/')||!expected.version)continue;
+           const file=directory+'/package.json';
+           if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+           const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);assert.equal(typeof actual.name,'string');installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);assert.equal(installed.length+omitted.length,599);
+          const result={platform:process.platform,arch:process.arch,installed,omitted};
+          fs.writeFileSync(process.env.DEPENDENCY_OUT,JSON.stringify(result,null,2));console.log('PASS full locked dependency census:521 installed and78 platform-qualified optional omissions');
+          JS
+          cmp manager-press-coverage-artifacts/dependencies-before.json manager-press-coverage-artifacts/dependencies-final.json
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';import fs from 'node:fs';assert.equal(JSON.parse(fs.readFileSync('node_modules/playwright/package.json','utf8')).version,'1.64.0');console.log('PASS actual pinned Playwright1.64.0');
+          JS
+          du -sb manager-press-coverage-artifacts > manager-press-coverage-artifacts/artifact-size.log
+          test "$(du -sb manager-press-coverage-artifacts | cut -f1)" -lt 500000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-press-coverage-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-press-coverage-artifacts/
+          retention-days: 5
+          if-no-files-found: error
+
