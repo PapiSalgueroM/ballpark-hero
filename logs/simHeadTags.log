@@ -1,0 +1,13 @@
+0) 153 shipped pages
+1) every head tag appears exactly once
+   11 tag kinds checked on 153 pages, 0 kinds wrong
+2) the tag that survives is the page's own, not the template's
+   0 template written tags left standing
+3) no two pages share a description
+   153 distinct descriptions across 153 pages
+4) no title is long enough to be truncated in a result
+   median 56, longest 60 (/alphabet-sprint), 0 over 60
+5) the trim never takes the brand off a title that had room for it
+   134 keep it, 14 could not have kept it under 60, 5 never used that suffix in their copy
+
+simHeadTags: green. Every page says its own thing, once.

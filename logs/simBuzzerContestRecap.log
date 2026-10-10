@@ -1,0 +1,28 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/buzzerContestRecap.test.tsx[2m > [22mBuzzer contest recap[2m > [22mrecords only landed outcomes through pause help and the exact remaining flight[33m 624[2mms[22m[39m
+ [32m✓[39m src/test/buzzerContestRecap.test.tsx[2m > [22mBuzzer contest recap[2m > [22mrevisits every actual rack with distinct outcomes and exact money ball points[33m 1901[2mms[22m[39m
+ [32m✓[39m src/test/buzzerContestRecap.test.tsx[2m > [22mBuzzer contest recap[2m > [22mclears all earned balls and rack selection when another contest starts[33m 2902[2mms[22m[39m
+ [32m✓[39m src/test/buzzerContestRecap.test.tsx[2m > [22mBuzzer contest recap[2m > [22mkeeps contest results local across restored daily exit and reentry[33m 1902[2mms[22m[39m
+ [32m✓[39m src/test/buzzerContestRecap.test.tsx[2m > [22mBuzzer contest recap[2m > [22msettles reduced motion once and keeps missed money balls distinct from unused balls[33m 698[2mms[22m[39m
+ [32m✓[39m src/test/buzzerContestRecap.test.tsx[2m > [22mBuzzer contest recap[2m > [22mkeeps a released touch from also advancing the freshly shown result[32m 217[2mms[22m[39m
+ [32m✓[39m src/test/buzzerContestRecap.test.tsx[2m > [22mBuzzer contest recap[2m > [22mdoes not invent a rim crossing for an actual blocked practice shot[32m 267[2mms[22m[39m
+ [32m✓[39m src/test/buzzerContestRecap.test.tsx[2m > [22mBuzzer contest recap[2m > [22mdoes not invent a rim crossing for a shot that never reaches rim height[32m 121[2mms[22m[39m
+ [32m✓[39m src/test/buzzerContestRecap.test.tsx[2m > [22mBuzzer contest recap[2m > [22mpreserves original recorded daily and unlimited engine outcomes independently[33m 735[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 16:39:09
+[2m   Duration [22m 11.39s[2m (transform 609ms, setup 71ms, collect 1.02s, tests 9.37s, environment 421ms, prepare 78ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/buzzer-contest-recap-artifacts/mounted/normal-report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/buzzerContestRecap.test.tsx[2m > [22m[2mBuzzer contest recap[2m > [22m[2mrecords only landed outcomes through pause help and the exact remaining flight
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simBuzzerContestRecap: 9 real Board outcomes pass for settled25-shot racks, both money-ball results, replay, local-only records, touch release, actual stopped shots and original recorded modes.
+simBuzzerContestRecap: eleven source hashes held; runtime reports, changed source copies and effective mutation receipts retained.

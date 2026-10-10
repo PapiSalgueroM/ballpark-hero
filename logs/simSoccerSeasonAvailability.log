@@ -1,0 +1,44 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerSeasonAvailability.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 128[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 17:15:53
+[2m   Duration [22m 3.71s[2m (transform 2.01s, setup 75ms, collect 2.45s, tests 128ms, environment 502ms, prepare 145ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-availability-tests.json
+ok saved missed derby, complete totals and feasible calendars passed
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerSeasonAvailability.test.ts [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 88[2mms[22m[39m
+[31m   [31m×[31m saved soccer availability fits the actual calendar[2m > [22mkeeps a recorded missed derby out of a full-apps calendar without losing saved totals[39m[32m 34[2mms[22m[39m
+[31m     → expected null not to be null[39m
+   [32m✓[39m saved soccer availability fits the actual calendar[2m > [22mkeeps an already feasible league target and its saved missed derby unchanged[32m 34[2mms[22m[39m
+   [32m✓[39m saved soccer availability fits the actual calendar[2m > [22mkeeps both saved played derbies and a full calendar when neither was missed[32m 18[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 17:15:57
+[2m   Duration [22m 3.67s[2m (transform 2.03s, setup 89ms, collect 2.42s, tests 88ms, environment 507ms, prepare 224ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-availability-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonAvailability.test.ts[2m > [22msaved soccer availability fits the actual calendar[2m > [22mkeeps a recorded missed derby out of a full-apps calendar without losing saved totals
+[31m[1mAssertionError[22m: expected null not to be null[39m
+[36m [2m❯[22m src/test/soccerSeasonAvailability.test.ts:[2m35:24[22m[39m
+    [90m 33| [39m    vi.spyOn(Math, 'random').mockImplementation(() => { throw new Erro…
+    [90m 34| [39m    [35mconst[39m result [33m=[39m [34mderiveSeason[39m([33mSOCCER[39m[33m,[39m row[33m,[39m ctx)[33m;[39m
+    [90m 35| [39m    [34mexpect[39m(result)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m 36| [39m    [34mexpect[39m(result[33m![39m[33m.[39mmode)[33m.[39m[34mtoBe[39m([32m'table'[39m)[33m;[39m
+    [90m 37| [39m    [34mexpect[39m(result[33m![39m[33m.[39mgames)[33m.[39m[34mtoHaveLength[39m([34m34[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective copied old capacity loses the exact full table, both feasible calendars stay green
+simSoccerSeasonAvailability: three outcomes green and effective old-capacity defect caught
