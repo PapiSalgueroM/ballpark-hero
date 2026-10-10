@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+shapes: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+guideslow: R848_CONTROL=guideslow node scripts/simDailySaveHardening.mjs
+guidelate: R848_CONTROL=guidelate node scripts/simDailySaveHardening.mjs
+guideheld: R848_CONTROL=guideheld node scripts/simDailySaveHardening.mjs
+shape-control: R848_CONTROL=shape node scripts/simDailySaveHardening.mjs
+saves: R848_PART=saves node scripts/simDailySaveHardening.mjs
+skip: R848_PART=skip node scripts/simDailySaveHardening.mjs
+parity: R848_PART=parity node scripts/simDailySaveHardening.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+src-untouched: git diff --name-only 074a9054 HEAD -- src/hooks src/pages src/components src/data
