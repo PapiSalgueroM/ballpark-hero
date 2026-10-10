@@ -1,0 +1,7 @@
+livescores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+vitest exit=0 3s |    Duration  2.50s (transform 845ms, setup 199ms, collect 1.30s, tests 1.40s, environment 1.11s, prepare 345ms)
+norival exit=0 13s | No rival product names found. 0 findings.
+quotes exit=0 17s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+anchors exit=0 28s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+names exit=0 4s | simInventedNames: green. Every invented man on this site is invented all the way down.
+tsc exit=0 48s | 

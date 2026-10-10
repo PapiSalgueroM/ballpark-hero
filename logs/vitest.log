@@ -1,0 +1,12 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 166[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameDay.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 551[2mms[22m[39m
+ [32m✓[39m src/test/gameLawNfl.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 684[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m52 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 16:15:10
+[2m   Duration [22m 2.50s[2m (transform 845ms, setup 199ms, collect 1.30s, tests 1.40s, environment 1.11s, prepare 345ms)[22m
+
