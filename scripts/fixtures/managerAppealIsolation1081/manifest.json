@@ -190,7 +190,7 @@
     }
   },
   "unchangedSource": {
-    "src/lib/clubManager.ts": "1ab749127d12f742406afe6a56eba7a082b85b7568073054b62a3e9597a31fc2",
+    "src/lib/clubManager.ts": "72932c6e93e0418198d439c2164a5a0ae289f274aa27a5acac76a7d85b97b87f",
     "src/lib/clubManagerSlots.ts": "953c366dbe5e56163c81ca2185a60625da9279e4de98f9e39cd0b1cb199fe051",
     "scripts/simClubManagerSlots.mjs": "b3d3102cf25f2a5d897cf4c57db576e18f49ca4265dbf0553eb134475ae9b260",
     "scripts/simClubManagerDecisions.mjs": "fc0214ae9511c16188af0f437bd4cc7d0c0092a3b4cf9cebc2f8fb42a82a4231"
