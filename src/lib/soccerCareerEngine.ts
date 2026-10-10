@@ -3,6 +3,7 @@
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
 import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
+import { settleSoccerPress, type SoccerPressState } from './soccerCareerPress';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
@@ -859,6 +860,8 @@ export interface CareerState {
   currentLeague: string;
   /** Membership for the next unplayed future season. Absent on older saves. */
   leagueWorld?: CareerLeagueWorld;
+  /** Optional public answers and their recorded follow-up seasons. */
+  pressRoom?: SoccerPressState;
   contractYearsLeft: number;
   weeklyWage: number;
   marketValue: number;
@@ -1779,6 +1782,7 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
     row.injury = r.name; row.injuryWeeks = r.weeks; row.injurySevere = true;
     if (s.loan) row.onLoanFrom = s.loan.parentClub;
     s.seasons = [...s.seasons, row];
+    settleSoccerPress(s, row);
     simulateSeasonFinances(s, row);
     runTournamentSummer(s, row, row.year, true);
   }
@@ -5077,6 +5081,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
       }];
       s.pendingSummary = s.seasons[s.seasons.length - 1];
+      settleSoccerPress(s, s.pendingSummary);
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       return s;
@@ -5104,6 +5109,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
     s.pendingSummary = s.seasons[s.seasons.length - 1];
+    settleSoccerPress(s, s.pendingSummary);
     s.phase = "season_summary";
     simulateSeasonFinances(s, s.pendingSummary);
     return s;
@@ -5162,6 +5168,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
        calendar fell a year behind his age (the prison row comes the year
        after). A tournament that summer is played without him. */
     s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+    settleSoccerPress(s, s.seasons[s.seasons.length - 1]);
     simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
     runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
     s.phase = "newspaper";
@@ -5203,6 +5210,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
       }];
       s.pendingSummary = s.seasons[s.seasons.length - 1];
+      settleSoccerPress(s, s.pendingSummary);
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       return s;
@@ -5348,6 +5356,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       const injuryRow: SeasonRecord = { ...season, leagueTitle: false, leagueFinish: undefined, leagueSize: undefined, domesticCup: false };
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
+      settleSoccerPress(s, injuryRow);
       simulateSeasonFinances(s, injuryRow);
       runTournamentSummer(s, injuryRow, injuryRow.year, true);
       s.phase = "rehab_choice";
@@ -5666,6 +5675,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       s.events.push(`🧊 A season in the cold at ${s.currentClub} is over. You are back in the group and back in the reckoning.`);
     }
   }
+  settleSoccerPress(s, season);
   s.pendingSummary = season;
   // Generate newspaper articles
   const news = generateNewsArticles(s, season, totalGoals, totalApps);
@@ -6088,6 +6098,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
     if (lastRow && lastRow.age < s.age) {
       s.events = [...s.events];
       s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+      settleSoccerPress(s, s.seasons[s.seasons.length - 1]);
       simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
       runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
     }

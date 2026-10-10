@@ -69,6 +69,7 @@ import { localizeMoney as money, CURRENCIES, getCurrency, setCurrency, rateNote 
    nothing at all when we have no honest answer for that club and season. */
 import { depthChart, GROUP_LABEL } from "@/lib/soccerClubSquad";
 import { SquadTile } from "@/components/soccer-career/SquadTile";
+import PressRoomTile from "@/components/soccer-career/PressRoomTile";
 import type { TrophyCategory } from "@/components/soccer-career/TrophyCabinet";
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
@@ -4330,6 +4331,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               at a club. Round 1115: the Squad tile, every club and every
               year, and it says whether the squad is real, by role or invented. */}
           {career.phase === "playing" && <SquadTile career={career} />}
+          {onCareerPatch && <PressRoomTile career={career} onCareer={onCareerPatch} />}
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (

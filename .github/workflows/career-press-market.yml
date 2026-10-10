@@ -1,0 +1,119 @@
+name: Career Press and Market decisions
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-press-market.yml
+      - src/lib/soccerCareerPress*
+      - src/lib/soccerCareerEngine.ts
+      - src/pages/SoccerCareer.tsx
+      - src/components/soccer-career/PressRoom*
+      - src/test/soccerPressRoomUi.test.tsx
+      - src/lib/usCareerMarket*
+      - src/components/us-career/UsCareerBoard.tsx
+      - src/components/us-career/ExtensionCard.tsx
+      - src/components/us-career/FreeAgencyPanel.tsx
+      - src/components/us-career/Market*
+      - src/test/usCareerMarket*
+      - scripts/*CareerPressMarket.mjs
+      - scripts/qa/careerPressMarketKit.mjs
+      - scripts/qa/checkCareerPressMarket.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: career-press-market-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      FREE_KICK_FONT_CACHE: career-press-market-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Remote dependencies and font receipts
+        run: |
+          mkdir -p career-press-market-artifacts
+          git rev-parse HEAD > career-press-market-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-press-market-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee career-press-market-artifacts/fonts.log
+      - name: Actual app types and production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-press-market-artifacts/types.log
+          npm run build 2>&1 | tee career-press-market-artifacts/build.log
+      - name: Actual focused helpers and UI tests
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerPress.test.ts src/test/soccerPressRoomUi.test.tsx src/lib/usCareerMarket.test.ts src/test/usCareerMarketUi.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerSummer.test.tsx src/test/usBoardFixture.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-press-market-artifacts/units.json 2>&1 | tee career-press-market-artifacts/units.log
+          node scripts/qa/checkCareerPressMarket.mjs units
+      - name: Actual outcomes and effective copied source controls
+        id: outcomes
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/outcomes.log
+          node scripts/qa/checkCareerPressMarket.mjs outcomes
+      - name: Actual production Press and contract journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.outcomes.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/native.log
+          node scripts/qa/checkCareerPressMarket.mjs native
+      - name: Early focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-press-market-early-${{ github.run_id }}
+          path: career-press-market-artifacts/
+          retention-days: 5
+      - name: Related career regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerDomesticCup simCareerDerbies simCareerSeasonRatings simCareerPositionRatings simCareerRecordedStats simCareerStory simCareerLifeCooldowns simSeasonCentreAgreement simSeasonCentreNeutral simSeasonCentreTable simSoccerSeasonCompetitions simNoInventedQuotes simUsCareerWeight simUsBoardParity simUsSeasonCentre simUsCareerDeckC simCareerRivalryEvents simCareerHub simSoccerOfferReview; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-press-market-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "career-press-market-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All fifteen built readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-press-market-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "career-press-market-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Exact tested source held
+        if: ${{ !cancelled() }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$(cat career-press-market-artifacts/source-head.txt)"
+          test "$(git rev-parse HEAD^{tree})" = "$(cat career-press-market-artifacts/source-tree.txt)"
+          git diff --exit-code HEAD -- src scripts .github/workflows 2>&1 | tee career-press-market-artifacts/source-held.log
+      - name: Final focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-press-market-final-${{ github.run_id }}
+          path: career-press-market-artifacts/
+          retention-days: 5

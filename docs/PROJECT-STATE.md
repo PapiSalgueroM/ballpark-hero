@@ -1,3 +1,9 @@
+## Codex 1230-1234: career press rooms and saved negotiations, 2026-10-10
+
+Source branch: codex/career-press-market, based on faf0a5f3. This independent batch adds Soccer Career press conferences and recorded public promises, plus saved extension/free-agency windows, exact negotiation wheels and offer comparison for all four US careers. Source is prepared for remote verification. No runtime has run on Anthony's PC. PR216 and earlier READY branches remain frozen for G's integration lane.
+
+Details and verification contract: docs/ROUND1230-1234.md. This branch does not claim all existing CI green, integration, main movement or live publication. The root checkout's app files, index and PROJECT-STATE remain owned by the other lanes.
+
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,
