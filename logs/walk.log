@@ -1,0 +1,25 @@
+page built: 384388 bytes of script, css files: ArcadeShotFeedback--eiU5Aah.css, AussieRulesManager-zdcvwuMp.css, BallIq-BjxfiyZ_.css, BudgetBuilder-BMPKocqF.css, ChainLinkMotion-CvpbwvEe.css, ClueAuction-D9aFrid-.css, EmojiGuess-MeLdLiyY.css, F1Constructor-ZNfpvwdP.css, F1Driver-DhrxUQx4.css, FantasyDraft-BBpfFIJM.css, Footle-pT74gEft.css, FreeKick-Db_P_VAd.css, GmTradeBuilder-CsXt162F.css, GridCellLayout-D70wq1lC.css, GuessCbbTeam-BcTI5nvh.css, GuessNascarDriver-B4spQIn2.css, GuessTennisPlayer-BJV-i7my.css, GuessTheNation-BPrjB6wp.css, InboxCard-DDfoldLS.css, ListQuiz-CfGTEzvO.css, LiveSimScreen-CutcJFZR.css, MissingNine-BLGcLOj1.css, MlbFrontOffice-CBF51_-Q.css, MysteryBox-6MFZ-n4f.css, NbaChain-COMs1moS.css, NbaStatLine-DajvjVkC.css, NhlFrontOffice-Ce_3hBzp.css, PitchSurface-BrcOvsZb.css, PuckDetective-CNwlavUM.css, QuizBoard-CBcAEXDf.css, RankEm-Bxuyan4v.css, SearchAndDiscard-Bk7mANi4.css, SetPieceBoard-BIg86Bhl.css, SportHub-wXzienJm.css, StaffScreen-DA5KNI2w.css, StatDetective-D6N_cvHt.css, ThroughBallBoard-gTKr9BrC.css, TrainingPanel-vaffBj46.css, index-BBuOK6mc.css, usCareerSeasonReview-CstHycFO.css, usePracticeClock-ClTOd3XX.css
+site chunks that carry the lottery card: 0 of 489
+up-390-motion: card 358x573 at y 40, tiles 14, shown first/mid/end 0/5/14, animations end 3720 ms, cut labels 9, help panel 370 in 370, page height 844
+up-390-reduced: card 358x573 at y 40, tiles 14, shown first/mid/end 14/14/14, animations end 0 ms, cut labels 9, help panel 370 in 370, page height 844
+up-1280-motion: card 672x537 at y 40, tiles 14, shown first/mid/end 0/5/14, animations end 3720 ms, cut labels 0, help panel 370 in 370, page height 900
+up-1280-reduced: card 672x537 at y 40, tiles 14, shown first/mid/end 14/14/14, animations end 0 ms, cut labels 0, help panel 370 in 370, page height 900
+early-390-motion: shown before 0/14, after 14/14, continues 1
+early-1280-motion: shown before 0/14, after 14/14, continues 1
+down-390-reduced: card 358x573, tiles 14, cut labels 6, headline "Your club's own pick lands 4th, down 3 places."
+notin-390-reduced: card 358x573, tiles 14, cut labels 9, headline "Your club is not in the lottery. Its own round one pick is 22nd."
+plain-390-reduced: card 358x429, tiles 9, cut labels 5, headline "Your club's own pick is 12th in round one."
+level-390-reduced: card 358x553, tiles 14, cut labels 9, headline "Your club's own pick stays 10th."
+abbr-390-reduced: card 358x573, tiles 14, cut labels 0, headline "Your club's own pick lands 2nd, up 3 places."
+seen-390-motion: card 358x573, tiles 14, cut labels 9, headline "Your club's own pick lands 2nd, up 3 places."
+norules-390-reduced: card 358x573, tiles 14, cut labels 9, headline "Your club's own pick lands 2nd, up 3 places."
+down-1280-reduced: card 672x537, tiles 14, cut labels 0, headline "Your club's own pick lands 4th, down 3 places."
+notin-1280-reduced: card 672x537, tiles 14, cut labels 0, headline "Your club is not in the lottery. Its own round one pick is 22nd."
+plain-1280-reduced: card 672x426, tiles 9, cut labels 0, headline "Your club's own pick is 12th in round one."
+level-1280-reduced: card 672x537, tiles 14, cut labels 0, headline "Your club's own pick stays 10th."
+abbr-1280-reduced: card 672x537, tiles 14, cut labels 0, headline "Your club's own pick lands 2nd, up 3 places."
+seen-1280-motion: card 672x537, tiles 14, cut labels 0, headline "Your club's own pick lands 2nd, up 3 places."
+norules-1280-reduced: card 672x537, tiles 14, cut labels 0, headline "Your club's own pick lands 2nd, up 3 places."
+run-390-reduced: lift headline "Picks 1 to 11 are in. You are on the clock at 12.", the card's own heading "9 went off the board.", rows 9, hidden 2
+run-1280-reduced: lift headline "Picks 1 to 11 are in. You are on the clock at 12.", the card's own heading "9 went off the board.", rows 9, hidden 2
+walk: 46 screenshots, 0 problems measured.
