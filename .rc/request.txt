@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: node .rc/x/rev-walk.mjs
