@@ -54,7 +54,17 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
 
 ## Leagues
 
-(one line a league as it lands: in or out, sources, snapshot hashes, sizes, the runner result that proved it)
+(one entry a league as it lands: in or out, sources, snapshot hashes, sizes, the runner result that proved it)
+
+- **laliga: IN.** 20 clubs, 38 matchdays, 380 fixtures. Sources: Fixture Download's JSON feed
+  (`https://fixturedownload.com/feed/json/la-liga-2026`, 83,963 bytes, sha256 `bc918a15c644...`, parser
+  `feedJson`) and Maxifoot's season stamped calendar page
+  (`https://www.maxifoot.fr/calendrier-liga-espagne-2026-2027.htm`, 152,716 bytes, sha256 `e5827f0ec107...`,
+  parser `maxifoot`). Both read 2026-10-10. Zero tuple differences in 380. Name table: 15 lines for the feed
+  (it prints the league's formal names: "R. Racing Club" is Racing Santander, "RC Deportivo" is Deportivo La
+  Coruña), 10 for Maxifoot (French spellings: "La Corogne", "FC Seville", "Betis Séville"). Data file
+  `src/data/clubManagerLaLigaFixtures2026.ts` 13,233 bytes; receipt 80,064 bytes. For the binding round: the
+  game's club names are the row in `REAL_LEAGUES`, nothing differs.
 
 ## Runner results
 

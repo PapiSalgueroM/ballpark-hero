@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "about": [
+    "Round 1213. One line a Club Manager real fixture ledger: the SHA256 of its canonical JSON.",
+    "The canonical JSON is JSON.stringify of exactly these fields in this order: key, leagueId, seasonStartYear, clubs, rounds.",
+    "The sources of a ledger are NOT in the digest, so a dead link can be repaired without a new key.",
+    "A save that holds a key reads that ledger on every load, so once a key has shipped its line never changes:",
+    "a correction ships under a new key beside the old one. scripts/simCmLeagueFixtures.mjs holds every line."
+  ],
+  "digestOf": [
+    "key",
+    "leagueId",
+    "seasonStartYear",
+    "clubs",
+    "rounds"
+  ],
+  "ledgers": {
+    "laliga-2026-27-v1": {
+      "leagueId": "laliga",
+      "file": "src/data/clubManagerLaLigaFixtures2026.ts",
+      "receipt": "scripts/data/clubManagerLaLigaFixtures2026.receipt.json",
+      "clubs": 20,
+      "rounds": 38,
+      "fixtures": 380,
+      "sha256": "efbaf18e2e4fe78cedf6e41192d2af64110fa6e06710fb5303ca0e84174074d7"
+    }
+  }
+}
