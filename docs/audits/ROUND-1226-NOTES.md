@@ -12,9 +12,10 @@ every place an engine played something else. This round makes the engines read t
 |---|---|
 | `seasonLength(sport, year, club)` | The games that club's season held. Total: it never throws. |
 | `seasonLengthRow(...)` | The same number with where it came from: `ledger`, `carried` (a year after the last row reads the last row's schedule) or `engine` (nothing two sourced, so the engine's own season). |
-| `US_ENGINE_SEASON` | 162 and 82: the one typed fallback, and the season the engines' workloads and award gates are written per. |
+| `US_ENGINE_SEASON` | 162 and 82: the one typed fallback, and the season each engine DRAWS. A year of another length is drawn on it first, judged on that draw, and saved carried to its true length (the fix pass, below). |
 | `slateOf(sport, line)` | The length a SAVED season was played on: its own `slate`, or the engine's own season when it has none. |
-| `toSlate`, `fullSeasonOf` | A workload carried to a season of another length, and a count read as its full season equivalent. |
+| `slateField(sport, year, club)` | The `slate` a new line of that year and club is saved with: the length where it is not the engine's own, nothing where it is. A suspended season carries it too. |
+| `toSlate`, `fullSeasonOf` | A count drawn on the engine's own season carried to a season of another length, and a SAVED count read back as the full season it stands for (the comeback gate and the full year badges). |
 | `postseasonRounds(sport, year)` | The rounds a champion played that year, each with its name and `[wins needed, most games]`, or null where the ledger does not hold it. |
 | `postseasonRung`, `playoffRunGames` | The engine's result on that year's ladder, and the games of a run held to the rounds the ledger gives. |
 
@@ -32,7 +33,11 @@ playoff ladder typed for every MLB year. The ledger harness fails if one comes b
   starts in the 48 game season). His line records the season's length like everyone's.
 - The paper counts missed games from the season the line was played on. The full season mark for the badges
   follows it too (80 of 84, 46 of 48, still 78 of 82).
-- Awards are judged on the full season equivalent, so a 48 game season can still hold a scoring title.
+- A season of another length is drawn in full on the engine's own 82 games first. The awards and the rival's
+  year are judged on that draw, and the saved line is that draw carried to the season's length. So a 48 game
+  season hands out exactly the awards the same season played in full would have, and the rival's printed line
+  is carried to 48 games as well (the fix pass, below; the first build judged a full season equivalent of the
+  short line, which handed out about twice the awards).
 
 **MLB My Career**
 - 2020 is 60 games (58 for the Cardinals and the Tigers). The fifty club seasons off their schedule play their
@@ -43,7 +48,10 @@ playoff ladder typed for every MLB year. The ledger harness fails if one comes b
   2012 to 2019 and 2021: "Lost the Wild Card Game", and it is one game. 2020 and from 2022: the Wild Card series.
   From 2022 every run fits a best of three, five, seven and seven: a Wild Card exit is 2 or 3 games (it was 3 to
   5), a Division Series exit 5 to 8 (it was 7 to 9). Before 2022 a run holds one round fewer where the year had
-  no wild card round, and one game for the Wild Card Game.
+  no wild card round, and one game for the Wild Card Game. The Wild Card Series of 2020 is a best of three as
+  well (2 or 3 games; in the ledger on two sources since the fix pass). A lost World Series before 2022 keeps
+  the count the engine always gave it (13 to 19 games): its rounds are thin in the ledger, and one round fewer
+  on the old law could print 10 games where the rounds hold 11 at the least.
 - A hitter's October line is his own arithmetic: "4 for 16 (.250), 1 HR". It printed the number the hits were
   rounded from, with a leading zero ("4 for 16 (0.225)"). A home run now counts as a hit.
 - Three shop sentences stop naming a count of games ("built for 82 games", "all 41 home games", "all 81 home
@@ -108,6 +116,14 @@ of 82, 79 and 60 games in a year the ledger now reads as 84, the Yankees' old 16
 No other recording moved: the whole vitest suite on the head held exactly one red, the digest, before it was
 taken again (5,777 tests, runner result `r1226-h1v`).
 
+Both were taken a second time after the fix pass (below), again with the attribution first, each alone in
+its commit, both the runner's file byte for byte (runner result `r1226-y-rec`, one serial run on 1ed3806d):
+
+| Recording | Attribution | Taken again |
+|---|---|---|
+| `src/test/fixtures/usCareerTruthDigest.json` | On the head the recording of ab761206 is red in 25 keys, MLB and NHL only. With the nine files the fix pass changed under `src/lib` and `src/data` checked out from 350c2121 it replays green. With the six engine files and the recording checked out from the base 980654fa the BASE's recording replays green (with `careerRival.ts` at the head and at the base). | commit 4bcfa116, `DIGEST_ALLOW='nhl|*,mlb|*'`: 15 of 22 MLB keys and 10 of 10 NHL keys moved, 0 of 16 NFL, 0 of 10 NBA; replayed green in a second process |
+| `scripts/data/usBoardFixture.json` | The same three steps: red on the head (the NFL and the NBA pass, MLB and the NHL fail), green with the nine files at 350c2121, and the base's fixture green with the six engine files at 980654fa. | commit 1e63f5e3: MLB and the NHL moved, the NFL and the NBA are byte equal, the coverage counts of all four are the same; replayed green. The header's `recordedFrom` is the recorder's own stamp this time (the runner's HEAD was set to the pushed head before recording). |
+
 ## The rates, before and after (decision 5)
 
 `scripts/simCareerHall.mjs`, the board skipped, 2,000 careers, SIM_SEED 1 to 5, base 980654fa against head
@@ -137,6 +153,89 @@ five seeds, as on the base.
 `scripts/simAwards.mjs` passes on base and head. `scripts/simNbaAwardsSense.mjs` (five seeds a fleet, 171
 checks) passes on both. `scripts/simNhlCareer.mjs` and `scripts/simMlbCareer.mjs` pass on the head.
 
+After the fix pass the same NHL share, five seeds on f8b994b9 (runner result `r1226-x2h`; the three commits
+after it change no skater's line): 13.44, 12.81, 11.54, 12.23, 12.35 percent at or over `from` (red on four
+seeds of five; 1.27, 1.21, 1.06, 1.46, 1.48 at or over `to`, inside), and 12.08 on the default seed of the
+final engine tree (`r1226-y-g1`, red at `marks` and nowhere else, Hall share 28.6 to 30.8 percent against a
+ceiling of 35.9). MLB is green on all five seeds and on the default one. **Still the lead's ruling.** The Hall
+file forbids editing calibration 2 in place (`src/lib/careerHallOfFame.ts`, "Never edit a calibration that has
+shipped: add calibration 3 beside it"), so the two honest ways are a calibration 3 for careers that retire
+from now on (the recipe in the header of `scripts/genCareerHallMarks.mjs`; it moves the NHL keys of the
+digest and the retired states of the board fixture again) or the band moved to the measured share with its
+headroom written beside it.
+
+**The awards of the seasons the round changes** (the review's finding: the first build handed a short season
+about twice the awards). The reviewer's own instrument, a natural fleet of 2,000 careers a position played
+to a target year, that one season then played from the same copy and stream by the base (82 or 162 games)
+and by the head. Seasons with any award, base against head, after the fix pass (on 1ed3806d):
+
+| Season | The review, on 350c2121: base to head | Now, on 1ed3806d: base to head |
+|---|---|---|
+| NHL 2012-13, 48 games (10,000 seasons) | 220 to 414 | 220 to 220 |
+| NHL 2019-20, 68 to 71 games (10,000) | 835 to 910 | 859 to 859 |
+| NHL 2020-21, 56 games (10,000) | 754 to 976 | 757 to 737 (the comeback award alone: 28 to 0) |
+| MLB 2020, 60 games (about 21,700) | 172 to 358 | 170 to 170 |
+| NHL 2011-12, 82 games (the instrument's control) | 123 to 123 | 123 to 123 |
+| MLB 2019 (control) | 323 to 322 | 321 to 321 |
+| NHL 2026-27, 84 games | 37 to 35 | 37 to 37 |
+
+(The base columns differ a little between the two runs because the fleet is played up to the target year by
+the head of the day.)
+
+Award for award the short season is the full one now. The one award that differs by rule is the comeback
+award of the season AFTER a short one (NHL 2013-14: 90 on the base's reading, 0 here; MLB 2021: 159 and 2):
+the base reads the 48 or 60 games before as a lost year, and all of a short season is not a lost year.
+
+## The fix pass (after two adversarial reviews of 350c2121)
+
+The reviews are `review-run-1226.md` and `review-read-1226.md` in the lead's handoff folder. What they found
+and what was done, each its own pushed commit:
+
+1. **A short season handed out about twice the awards, and the rival's year was judged on two scales**
+   (be03384e). The first build drew the short season short and judged its full season equivalent: the noise
+   terms of the scoring formulas do not scale with games, so the equivalent ran hot, and the rival was still
+   a full season. Now both engines draw EVERY season on their own length (82 and 162), judge the awards, the
+   award score and the head to head on that draw, and save the draw carried to the season's length (`cut`
+   in both engines, `toSlate` in the reader). The rival's score stays on the full season and his PRINTED
+   counts are carried to the same length (`RivalLineCut` in `src/lib/careerRival.ts`, an optional last
+   argument only these two engines pass, and only in a season of another length). The same change ends a
+   2020 starter with more wins than starts and a 2020 hitter's RBI running low against his home runs: both
+   are the full line carried now.
+2. **The award rule had no check** (40a83b4e). E8 of the ledger harness, exact and not a band: for one saved
+   state and one stream, a season of another length holds the awards, the head to head and the rival's score
+   of the same season played on the engine's own length (E8a), every saved count is the full count carried
+   and a first choice starter never has more wins than starts (E8b), and nobody wins the comeback award off
+   a short season that was no lost year while a hitter whose 2020 really was lost still can (E8c). Ten
+   controls.
+3. **A lost World Series before 2022 could print 10 or 11 games** where its rounds hold 11 or 12 at the
+   least (f8b994b9). Where a year's later rounds are thin, a lost final keeps the count the engine always
+   gave it (13 to 19, the base's). E4 now holds the games of every October before 2022 to the engine's own
+   law for the rounds that year had (controls `mlbfold`, `mlbpartial`, `mlblostfinal`), and E6 reads the
+   share of whole schedules with one band for a full season and one for a short one.
+4. **The Wild Card Series of 2020** is in the ledger as a best of three on two sources (5fecad18: an ESPN
+   report and a CBS Sports report of 23 July 2020, receipt `cbs-2020-playoffs`), so the reader binds it: a
+   2020 Wild Card exit is 2 or 3 games. The Division Series, the Championship Series and the World Series
+   before 2022 stay thin: a year by year second source was not found.
+5. **A suspended season is saved with the season's length** (c5bd38f0, `slateField`).
+6. **The three badges that ask for a full year** (a .330 season, a sub 2.00 season, a .930 season) can be
+   earned in a short season (1a93d704): the two sport loops hand the badge case the saved games read back
+   as the full season they stand for. `src/lib/careerBadges.ts` itself is unchanged. E9 holds it and the
+   suspended line, three controls.
+7. **What's New says what the code does** (896de1c8): the two clubs of 2019-20 that play 82, a club that
+   went by another name, the best of three of 2020, and "judged at a full season's pace".
+
+Not done, and why: the Hall marks (the lead's ruling, above); the Thrashers and Phoenix Coyotes of 2019-20
+and the six MLB club seasons under an older name are NOT bound (the ledger harness forbids writing a real
+club's row onto the game's old id, checks M3 and `mlbid`; the words carry the exception instead); the rest
+is under "Owed to others".
+
+Proof on the fixed head. The reviewer's own probes, run again: a lost World Series reads 13 to 19 games in
+2005, 2008, 2015 and 2021 (12,000 seasons a year); the awards table above; and its old save probe is green
+(174 saves made by the base read the same by 14 readers, 696 saved lines stay byte for byte when played on,
+no NBA or NFL season moves, no MLB or NHL season of the engine's own length outside an October and outside
+the year after a changed season moves; a season whose random stream ends somewhere else than on the base:
+13 of 3,327, all in the year after a changed season, where the first build had 21).
+
 ## What the round did NOT bind, and why (each stays a note of the ledger harness or is owed)
 
 1. **A club the ledger does not hold in 2019-20 under the game's id** (the Thrashers and the Phoenix Coyotes of
@@ -145,8 +244,9 @@ checks) passes on both. `scripts/simNhlCareer.mjs` and `scripts/simMlbCareer.mjs
    league's mean length (twice the league's games over its clubs, 70); it was not done because no row says it.
 2. **Six MLB club seasons the ledger names that no list of the game holds under that name** (2008, 2011, 2013,
    2016, 2018, 2024: for example the 2008 Nationals) play the schedule's length.
-3. **The rounds after the first before 2022, and the Wild Card Series of 2020.** Their lengths are thin in the
-   ledger (`MLB_THIN`), so the engine's own law plays them.
+3. **The rounds after the first before 2022.** Their lengths are thin in the ledger (`MLB_THIN`), so the
+   engine's own law plays them. (The Wild Card Series of 2020 was thin too when the round was built; the fix
+   pass put it into the ledger on two sources and it is bound now.)
 4. **The first round bye** (`MLB_PLAYOFF_FORMAT.byesPerLeague`). A career's club always plays the first round.
    A bye needs a club's seed, and the engine has no standings to read one from.
 5. **The Yomiuri Giants seasons** (`src/lib/mlbCareerLifeB.ts`, not this round's file). The reader says such a
@@ -168,7 +268,26 @@ checks) passes on both. `scripts/simNhlCareer.mjs` and `scripts/simMlbCareer.mjs
 - **PR216** (`src/lib/usCareerProgramme.ts`, the other lane): `gamesCeiling` types 82 for the NHL. A present day
   skater can play 84 now, so the ceiling should read `seasonLength('nhl', year, club)`.
 - **Rounds 1212 and 1217** (week by week): a saved line carries `slate` when its season was not the engine's
-  own; `slateOf` is the one way to read the length of a saved line.
+  own; `slateOf` is the one way to read the length of a saved line (a suspended season carries it too, since
+  the fix pass). The new result word "Lost the Wild Card Game" has to be added to the `results` of the MLB
+  number file when it is written, or `usBandOf` and `usPlayoffDepth` of `src/lib/season/us.ts` answer null
+  for those seasons. And from 2012 to 2019 and in 2021 most Octobers of a throwback career are that single
+  game: no bye is modelled, and a first exit is the engine's most common result.
+- **One more life card that types a length** (found by the review, not this round's file):
+  `src/lib/nhlCareerCorruption.ts`, "You played 82 games on a body built for 55".
+- **The coaching chapter of the same two games** (`src/lib/usCoachCareer.ts`, not this round's file) still
+  plays 82 and 162 game seasons and one MLB ladder ("lost the Wild Card round") in every year. A present day
+  skater plays 84 game seasons and then coaches 82 game ones in one save. The cure is the same reader
+  (`seasonLength`, `postseasonRung`).
+- **The rival's batting average prints a leading zero** ("went 0.293, 28 HR", `src/lib/careerRival.ts`), the
+  shape this round removed from the October line. Not changed: it is the line of EVERY MLB season, so the
+  change moves every MLB key of the digest and every MLB save of the fixture, which decision 3 forbids here.
+- **The paper's floor for an injury story** (`src/lib/careerSocial.ts`, 30 missed games for a hitter, 15 for
+  a skater) is not scaled to the season, so in the 60 game season a hitter who missed 20 games gets no
+  injury line. Nothing false is printed; the floor is one function of a paper all four sports share.
+- **Nothing in the game says WHY a season is 48 or 60 games.** The ledger's `why` strings were written for
+  it and the "?" help of these two careers has no line on season lengths (the NFL career's has one). A help
+  line is a component and a guide matter, both outside this round.
 
 ## The ledger harness after this round
 
@@ -179,3 +298,13 @@ New controls, each a typed constant put back into the bundled engine: `nhltyped`
 `mlbladder` (E4), `mlbtyped` (E6), `mlbavg` (E7). The reverse checks compare the reader and the engines with the
 harness's OWN typed table, never with the ledger's own rows, so the 38 older controls still fire exactly.
 `US_LEDGER_MEASURE=1` prints the shares the bands were set from.
+
+After the fix pass: 3,023 checks, 59 controls (the 43 above and sixteen more), 7 notes. New labels: E8a, E8b
+and E8c (a season of another length is the full season, carried: awards, head to head, counts, the comeback
+gate) and E9a and E9b (the full year badges, the suspended line). E4 also holds the games of every October
+before 2022, and E6 has two bands. New controls: `nhlawards`, `mlbawards`, `nhlgates`, `mlbgates`,
+`nhlhead`, `mlbhead` (E8a), `nhlcarry`, `mlbcarry` (E8b), `nhlcomeback`, `mlbcomeback` (E8c), `mlbfold`,
+`mlbpartial`, `mlblostfinal` (E4), `mlbbadge`, `nhlbadge` (E9a), `suspslate` (E9b). The two typed length
+controls (`nhltyped`, `mlbtyped`) turn E8 red as well, since a typed length leaves no season of another
+length to compare. The whole harness takes about six seconds; all 59 controls fired on a runner on the
+final engine tree (`r1226-y-g1`, "controls fired: 59 of 59").
