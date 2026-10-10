@@ -1,0 +1,7 @@
+legA exit=0 23s | simCmLeagueRules: all checks passed (modern, eras, pure)
+legB exit=0 24s | simCmLeagueRules: 47 failure(s)
+legC exit=0 64s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+shootout exit=0 20s | simCmShootoutOrder: all sections passed
+cmvar-patched exit=0 19s | simCmVar normal: actual review outcomes and full prior baseline passed.
+realfix-patched exit=0 7s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+customvalues exit=0 70s | simCustomClubValues: 25 checks, 1 failure (sections 3)

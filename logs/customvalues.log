@@ -1,0 +1,12 @@
+   small 15m: created bill / cap after spending p50 0.37 (20); real clubs of a similar budget p50 1.01 (24)
+   mid   40m: created bill / cap after spending p50 0.37 (20); real clubs of a similar budget p50 1.01 (24)
+   big   90m: created bill / cap after spending p50 0.43 (20); real clubs of a similar budget p50 1.00 (13)
+   60 created clubs founded, 0 not on max(bill based cap, realCapForBudget + foundersWageRoom); budget spent p50 1.00, p10 0.99
+   ok   all 60 created clubs opened on the larger of their bill based cap and the cap a real club with their budget has plus their founders' room
+   ok   on every tier a created club that spends its budget sits no further over its cap than real clubs of that budget do (median against their median plus 0.1)
+   founded at 88 above the ceiling (11 tier and era pairs): kept a summer on, cap / bill p50 1.24; with every founder carrying a ratio gone, the cap went 1860k to 247k (line 255k), 1844k to 496k (line 511k), 1898k to 883k (line 910k); after / line p50 0.97, p90 0.97
+   ok   a squad above the money keeps room for its bill while it is there (cap 1.24 of the bill a summer on) and, with its founders gone, falls back to 0.97 of the budget's line a summer on (bound 1.2)
+   old save with its cap at 100k loads at 910k (line 910k); old save with its own cap (2094k) loads at 2094k; a new save brought down to 100k loads at 100k
+   ok   an old created save with its cap under the line loads at the 910k line with every contract as signed
+   ok   the floor leaves an old save's higher cap and a new save's own cap exactly as saved
+simCustomClubValues: 25 checks, 1 failure (sections 3)

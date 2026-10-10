@@ -1,0 +1,2 @@
+patchSaveCompare: scripts/simCmVar.mjs now leaves the league book out of its whole save comparisons
+simCmVar normal: actual review outcomes and full prior baseline passed.
