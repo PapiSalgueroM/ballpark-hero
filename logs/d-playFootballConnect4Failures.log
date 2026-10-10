@@ -1,0 +1,50 @@
+
+HTTP 429
+  PASS  autocomplete used both database search legs (2 requests)
+  PASS  validator was called exactly once (1)
+  PASS  page stayed mounted without a render error
+  PASS  non-valid response placed no piece (0)
+  PASS  non-valid response kept Blue's turn (blue=1, red=0)
+  PASS  non-valid response kept the selected square and an enabled answer input
+  PASS  page explained /busy/i
+  PASS  page explained /not used/i
+  PASS  page explained /try again/i
+
+object-shaped invalid reason
+  PASS  autocomplete used both database search legs (2 requests)
+  PASS  validator was called exactly once (1)
+  PASS  page stayed mounted without a render error
+  PASS  non-valid response placed no piece (0)
+  PASS  non-valid response kept Blue's turn (blue=1, red=0)
+  PASS  non-valid response kept the selected square and an enabled answer input
+  PASS  page explained /matches the column clue/i
+  PASS  page explained /does not match the row clue/i
+
+unverified verdict
+  PASS  autocomplete used both database search legs (2 requests)
+  PASS  validator was called exactly once (1)
+  PASS  page stayed mounted without a render error
+  PASS  non-valid response placed no piece (0)
+  PASS  non-valid response kept Blue's turn (blue=1, red=0)
+  PASS  non-valid response kept the selected square and an enabled answer input
+  PASS  page explained /could not verify/i
+  PASS  page explained /not used/i
+
+contradictory valid and unverified verdict
+  PASS  autocomplete used both database search legs (2 requests)
+  PASS  validator was called exactly once (1)
+  PASS  page stayed mounted without a render error
+  PASS  non-valid response placed no piece (0)
+  PASS  non-valid response kept Blue's turn (blue=1, red=0)
+  PASS  non-valid response kept the selected square and an enabled answer input
+  PASS  page explained /could not be verified/i
+
+valid verdict
+  PASS  autocomplete used both database search legs (2 requests)
+  PASS  validator was called exactly once (1)
+  PASS  page stayed mounted without a render error
+  PASS  valid response placed exactly one piece (1)
+  PASS  valid response handed the turn to Red (blue=0, red=1)
+
+playFootballConnect4Failures: green. Failed checks keep the guess and turn; a valid answer alone places the piece.
+[draws] total 45 in 5 page loads of 5 contexts, walk exit 0; by path: /football-connect-4 45

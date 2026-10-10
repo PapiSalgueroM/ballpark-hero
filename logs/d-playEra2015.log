@@ -1,0 +1,37 @@
+1) The era step now holds three real seasons
+  PASS  the 2015-16 era tile is on the menu
+  PASS  the 2010-11 tile survived the addition
+  PASS  all three eras carry the REAL DATA badge
+  PASS  the 2015-16 tile sells the Leicester season
+2) Spain in 2015
+  PASS  England and Spain offered in 2015
+  PASS  Germany and France offered in 2015 (Round 899)
+  PASS  the Netherlands correctly absent from 2015
+  PASS  the 2015 La Liga is offered
+  PASS  2015 Eibar is a pickable club
+  PASS  Girona correctly absent from 2015 La Liga
+  PASS  the thin-squad marker shows for Las Palmas
+  PASS  the Barcelona tile demands the title
+  PASS  no real page errors on the Spain walk (clean)
+3) The 2015 Premier League
+  PASS  the 2015 Premier League is offered
+  FAIL  2015 Leicester are a pickable club
+  FAIL  2015 Norwich are a pickable club
+  PASS  Barcelona is not in the English league
+[draws] total 14 in 2 page loads of 2 contexts, walk exit 1; by path: /club-manager 14
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.textContent: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button:has-text("Leicester City")').first()
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playEra2015.mjs:116:79 {
+  log: [
+    `  - waiting for locator('button:has-text("Leicester City")').first()`
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

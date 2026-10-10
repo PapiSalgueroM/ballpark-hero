@@ -1,0 +1,10 @@
+1) play a career to the dugout in the engine, so the save is one the game could have written
+   15 seasons, retired at 30, now unemployed at Penarol, save 41 KB
+   Club Manager's code lives in: clubManager-DKt2OvKr.js
+2) a fresh visit does not pay for the dugout
+   no save                    45 js chunks, Club Manager chunk: not fetched, 0 page errors
+3) a career already in the dugout pulls it in, and the screen draws
+   dugout save                54 js chunks, Club Manager chunk: fetched, 0 page errors
+
+playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+[draws] total 14 in 2 page loads of 2 contexts, walk exit 0; by path: /soccer-career 14

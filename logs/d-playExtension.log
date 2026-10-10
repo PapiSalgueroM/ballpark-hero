@@ -1,0 +1,57 @@
+1) The final year opens a decision, in all four games
+  PASS  NFL: created a career and reached the hub
+  PASS  NFL: the final year raised the extension card, not a season
+  PASS  NFL: the card explains what year this is
+  PASS  NFL: the card carries real money
+  PASS  NFL: the card shows the offer against the market
+  PASS  NFL: there is a way to sign
+  PASS  NFL: there is a way to push
+  PASS  NFL: there is a way to turn it down
+  PASS  NFL: no page errors (clean)
+  PASS  NBA: created a career and reached the hub
+  PASS  NBA: the final year raised the extension card, not a season
+  PASS  NBA: the card explains what year this is
+  PASS  NBA: the card carries real money
+  PASS  NBA: the card shows the offer against the market
+  PASS  NBA: there is a way to sign
+  PASS  NBA: there is a way to push
+  PASS  NBA: there is a way to turn it down
+  PASS  NBA: no page errors (clean)
+  PASS  MLB: created a career and reached the hub
+  PASS  MLB: the final year raised the extension card, not a season
+  PASS  MLB: the card explains what year this is
+  PASS  MLB: the card carries real money
+  PASS  MLB: the card shows the offer against the market
+  PASS  MLB: there is a way to sign
+  PASS  MLB: there is a way to push
+  PASS  MLB: there is a way to turn it down
+  PASS  MLB: no page errors (clean)
+  PASS  NHL: created a career and reached the hub
+  PASS  NHL: the final year raised the extension card, not a season
+  PASS  NHL: the card explains what year this is
+  PASS  NHL: the card carries real money
+  PASS  NHL: the card shows the offer against the market
+  PASS  NHL: there is a way to sign
+  PASS  NHL: there is a way to push
+  PASS  NHL: there is a way to turn it down
+  PASS  NHL: no page errors (clean)
+2) Pushing spends the one negotiation, and signing writes the deal
+  PASS  the deal starts on its final year (1)
+  PASS  the first offer is a real number ($59.1M)
+  PASS  the push did not lower the offer ($59.1M then $62.9M)
+  PASS  the push button is spent and says so
+  PASS  the spent push button cannot be pressed again
+  PASS  signing closed the card
+  PASS  signing put years on the deal (1 then 6)
+  PASS  the salary on the save is the number that was on the card ($62.9M vs $62.9M)
+  PASS  signing did not secretly play a season
+  PASS  the feed says the extension was signed
+  PASS  a signed extension is not offered again
+3) Turning it down plays the season out
+  PASS  turning it down closed the card
+  PASS  the season was actually played (0 then 1)
+  PASS  the deal is now up (0 years left), which is what sends you to the market
+  PASS  turning it down did not change the money
+
+playExtension: green. The last year of a deal is a real fork in all four games.
+[draws] total 209 in 12 page loads of 6 contexts, walk exit 0; by path: /nfl-my-career 132, /nba-my-career 26, /nhl-my-career 26, /mlb-my-career 25

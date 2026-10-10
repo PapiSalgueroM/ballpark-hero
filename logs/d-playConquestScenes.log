@@ -1,0 +1,151 @@
+
+=== /conquest @390 ===
+1) The help opens before the first run, then Free Play and a team reach the stage
+  PASS  1. the imperialism help opened before the first run (/conquest @390)
+  PASS  1. the help closes on its button (/conquest @390)
+  PASS  1. a team tile reaches the stage (/conquest @390)
+2) The map is the stage, the strip and the timeline sit under it, every button clears 30px
+  PASS  2. the map is at least 60 percent of the viewport width tall (/conquest @390): 250px of 390
+  PASS  2. the stage runs edge to edge (/conquest @390): 390px wide
+  PASS  2. the standings strip and the timeline sit under the map (/conquest @390)
+  PASS  2. the home rings are on the map (/conquest @390): 32 rings
+  PASS  2. every visible button is 30px or taller on the pick and call screen (/conquest @390): none short
+3) Play starts the scenes: the card first, the score only after it, and the page does not move
+  PASS  3. Play mounted a matchup card (/conquest @390): after 1ms
+  PASS  3. a score landed during the round: after 977ms (/conquest @390)
+  PASS  3. no score before its card (/conquest @390): card 1ms, score 977ms
+  PASS  3. the page did not move during the scenes (/conquest @390): 19 samples, 0 moved from y=887
+  PASS  3. the scene player held its place on the page (/conquest @390): 19 samples, 0 moved from document y=899
+  PASS  3. every visible button is 30px or taller while a scene plays (/conquest @390): none short
+4) Skip ends the round
+  PASS  4. the Skip button is in the viewport and under the mouse (/conquest @390): y 138 to 182 in a 844 tall viewport, it answers elementFromPoint
+  PASS  4. Skip ends the round on the recap card with the player gone (/conquest @390): skip pressed, recap up, player gone
+  PASS  4. the recap did not move the page (/conquest @390): the step sat at document y=899 and the recap mounted at y=899; on screen 12 then 12, window.scrollY 887 then 887
+  PASS  4. the recap lists the round's games (/conquest @390): 16 lines
+5) The timeline scrubs the map back to Start and returns on release
+  PASS  5. the timeline is in the viewport and under the mouse before the drag (/conquest @390): y 407 to 437 in a 844 tall viewport, it answers elementFromPoint
+  PASS  5. the drag moved the thumb off the end (/conquest @390): held at "0", the end was "1"
+  PASS  5. dragging the thumb to the left end shows Start (/conquest @390): label "Start"
+  PASS  5. the Start map paints one empire per home ring (/conquest @390): 32 owners at Start, 32 rings, 16 live
+  PASS  5. release returns the map to now (/conquest @390): label gone, 16 owners against 16 live, thumb back at the end
+6) The season ends on the Conquest Complete banner
+  PASS  6. the season reached the Conquest Complete banner (/conquest @390): 21 rounds played
+  PASS  6. the banner carries the crown and the four season records (/conquest @390): crown 1, records 4
+  PASS  6. the map and the standings agree on who holds land (/conquest @390): 1 colours painted, the strip says 1
+  PASS  6. the map ends under one ruler: the eight biggest empires became the champion's (/conquest @390): 3 clubs held land at the Quarterfinals, so 1 colour(s) should be left and 1 are; the crown holds 56 of 56 regions against the 56 those eight held
+  PASS  6. every visible button is 30px or taller on the banner (/conquest @390): none short
+
+=== /conquest @430 ===
+1) The help opens before the first run, then Free Play and a team reach the stage
+  PASS  1. the imperialism help opened before the first run (/conquest @430)
+  PASS  1. the help closes on its button (/conquest @430)
+  PASS  1. a team tile reaches the stage (/conquest @430)
+2) The map is the stage, the strip and the timeline sit under it, every button clears 30px
+  PASS  2. the map is at least 60 percent of the viewport width tall (/conquest @430): 275px of 430
+  PASS  2. the stage runs edge to edge (/conquest @430): 430px wide
+  PASS  2. the standings strip and the timeline sit under the map (/conquest @430)
+  PASS  2. the home rings are on the map (/conquest @430): 32 rings
+  PASS  2. every visible button is 30px or taller on the pick and call screen (/conquest @430): none short
+3) Play starts the scenes: the card first, the score only after it, and the page does not move
+  PASS  3. Play mounted a matchup card (/conquest @430): after 1ms
+  PASS  3. a score landed during the round: after 975ms (/conquest @430)
+  PASS  3. no score before its card (/conquest @430): card 1ms, score 975ms
+  PASS  3. the page did not move during the scenes (/conquest @430): 19 samples, 0 moved from y=898
+  PASS  3. the scene player held its place on the page (/conquest @430): 19 samples, 0 moved from document y=910
+  PASS  3. every visible button is 30px or taller while a scene plays (/conquest @430): none short
+4) Skip ends the round
+  PASS  4. the Skip button is in the viewport and under the mouse (/conquest @430): y 138 to 182 in a 844 tall viewport, it answers elementFromPoint
+  PASS  4. Skip ends the round on the recap card with the player gone (/conquest @430): skip pressed, recap up, player gone
+  PASS  4. the recap did not move the page (/conquest @430): the step sat at document y=910 and the recap mounted at y=910; on screen 12 then 12, window.scrollY 898 then 898
+  PASS  4. the recap lists the round's games (/conquest @430): 16 lines
+5) The timeline scrubs the map back to Start and returns on release
+  PASS  5. the timeline is in the viewport and under the mouse before the drag (/conquest @430): y 407 to 437 in a 844 tall viewport, it answers elementFromPoint
+  PASS  5. the drag moved the thumb off the end (/conquest @430): held at "0", the end was "1"
+  PASS  5. dragging the thumb to the left end shows Start (/conquest @430): label "Start"
+  PASS  5. the Start map paints one empire per home ring (/conquest @430): 32 owners at Start, 32 rings, 16 live
+  PASS  5. release returns the map to now (/conquest @430): label gone, 16 owners against 16 live, thumb back at the end
+6) The season ends on the Conquest Complete banner
+  PASS  6. the season reached the Conquest Complete banner (/conquest @430): 21 rounds played
+  PASS  6. the banner carries the crown and the four season records (/conquest @430): crown 1, records 4
+  PASS  6. the map and the standings agree on who holds land (/conquest @430): 1 colours painted, the strip says 1
+  PASS  6. the map ends under one ruler: the eight biggest empires became the champion's (/conquest @430): 4 clubs held land at the Quarterfinals, so 1 colour(s) should be left and 1 are; the crown holds 56 of 56 regions against the 56 those eight held
+  PASS  6. every visible button is 30px or taller on the banner (/conquest @430): none short
+
+=== /soccer-conquest @390 ===
+1) The help opens before the first run, then Free Play and a team reach the stage
+  PASS  1. the imperialism help opened before the first run (/soccer-conquest @390)
+  PASS  1. the help closes on its button (/soccer-conquest @390)
+  PASS  1. a team tile reaches the stage (/soccer-conquest @390)
+2) The map is the stage, the strip and the timeline sit under it, every button clears 30px
+  PASS  2. the map is at least 60 percent of the viewport width tall (/soccer-conquest @390): 345px of 390
+  PASS  2. the stage runs edge to edge (/soccer-conquest @390): 390px wide
+  PASS  2. the standings strip and the timeline sit under the map (/soccer-conquest @390)
+  PASS  2. the home rings are on the map (/soccer-conquest @390): 96 rings
+  PASS  2. every visible button is 30px or taller on the pick and call screen (/soccer-conquest @390): none short
+3) Play starts the scenes: the card first, the score only after it, and the page does not move
+  PASS  3. Play mounted a matchup card (/soccer-conquest @390): after 1ms
+  PASS  3. a score landed during the round: after 974ms (/soccer-conquest @390)
+  PASS  3. no score before its card (/soccer-conquest @390): card 1ms, score 974ms
+  PASS  3. the page did not move during the scenes (/soccer-conquest @390): 19 samples, 0 moved from y=998
+  PASS  3. the scene player held its place on the page (/soccer-conquest @390): 19 samples, 0 moved from document y=1010
+  PASS  3. every visible button is 30px or taller while a scene plays (/soccer-conquest @390): none short
+4) Skip ends the round
+  PASS  4. the Skip button is in the viewport and under the mouse (/soccer-conquest @390): y 187 to 231 in a 844 tall viewport, it answers elementFromPoint
+  PASS  4. Skip ends the round on the recap card with the player gone (/soccer-conquest @390): skip pressed, recap up, player gone
+  PASS  4. the recap did not move the page (/soccer-conquest @390): the step sat at document y=1010 and the recap mounted at y=1010; on screen 12 then 12, window.scrollY 998 then 998
+  PASS  4. the recap lists the round's games (/soccer-conquest @390): 48 lines
+5) The timeline scrubs the map back to Start and returns on release
+  PASS  5. the timeline is in the viewport and under the mouse before the drag (/soccer-conquest @390): y 407 to 437 in a 844 tall viewport, it answers elementFromPoint
+  PASS  5. the drag moved the thumb off the end (/soccer-conquest @390): held at "0", the end was "1"
+  PASS  5. dragging the thumb to the left end shows Start (/soccer-conquest @390): label "Start"
+  PASS  5. the Start map paints one empire per home ring (/soccer-conquest @390): 96 owners at Start, 96 rings, 48 live
+  PASS  5. release returns the map to now (/soccer-conquest @390): label gone, 48 owners against 48 live, thumb back at the end
+6) The season ends on the Conquest Complete banner
+  PASS  6. the season reached the Conquest Complete banner (/soccer-conquest @390): 13 rounds played
+  PASS  6. the banner carries the crown and the four season records (/soccer-conquest @390): crown 1, records 4
+  PASS  6. the map and the standings agree on who holds land (/soccer-conquest @390): 7 colours painted, the strip says 7
+  PASS  6. the map ends under one ruler: the eight biggest empires became the champion's (/soccer-conquest @390): 14 clubs held land at the Quarter-finals, so 7 colour(s) should be left and 7 are; the crown holds 135 of 154 regions against the 135 those eight held
+  PASS  6. every visible button is 30px or taller on the banner (/soccer-conquest @390): none short
+
+=== /soccer-conquest @430 ===
+1) The help opens before the first run, then Free Play and a team reach the stage
+  PASS  1. the imperialism help opened before the first run (/soccer-conquest @430)
+  PASS  1. the help closes on its button (/soccer-conquest @430)
+  PASS  1. a team tile reaches the stage (/soccer-conquest @430)
+2) The map is the stage, the strip and the timeline sit under it, every button clears 30px
+  PASS  2. the map is at least 60 percent of the viewport width tall (/soccer-conquest @430): 380px of 430
+  PASS  2. the stage runs edge to edge (/soccer-conquest @430): 430px wide
+  PASS  2. the standings strip and the timeline sit under the map (/soccer-conquest @430)
+  PASS  2. the home rings are on the map (/soccer-conquest @430): 96 rings
+  PASS  2. every visible button is 30px or taller on the pick and call screen (/soccer-conquest @430): none short
+3) Play starts the scenes: the card first, the score only after it, and the page does not move
+  PASS  3. Play mounted a matchup card (/soccer-conquest @430): after 0ms
+  PASS  3. a score landed during the round: after 974ms (/soccer-conquest @430)
+  PASS  3. no score before its card (/soccer-conquest @430): card 0ms, score 974ms
+  PASS  3. the page did not move during the scenes (/soccer-conquest @430): 19 samples, 0 moved from y=1003
+  PASS  3. the scene player held its place on the page (/soccer-conquest @430): 19 samples, 0 moved from document y=1015
+  PASS  3. every visible button is 30px or taller while a scene plays (/soccer-conquest @430): none short
+4) Skip ends the round
+  PASS  4. the Skip button is in the viewport and under the mouse (/soccer-conquest @430): y 138 to 182 in a 844 tall viewport, it answers elementFromPoint
+  PASS  4. Skip ends the round on the recap card with the player gone (/soccer-conquest @430): skip pressed, recap up, player gone
+  PASS  4. the recap did not move the page (/soccer-conquest @430): the step sat at document y=1015 and the recap mounted at y=1015; on screen 12 then 12, window.scrollY 1003 then 1003
+  PASS  4. the recap lists the round's games (/soccer-conquest @430): 48 lines
+5) The timeline scrubs the map back to Start and returns on release
+  PASS  5. the timeline is in the viewport and under the mouse before the drag (/soccer-conquest @430): y 407 to 437 in a 844 tall viewport, it answers elementFromPoint
+  PASS  5. the drag moved the thumb off the end (/soccer-conquest @430): held at "0", the end was "1"
+  PASS  5. dragging the thumb to the left end shows Start (/soccer-conquest @430): label "Start"
+  PASS  5. the Start map paints one empire per home ring (/soccer-conquest @430): 96 owners at Start, 96 rings, 48 live
+  PASS  5. release returns the map to now (/soccer-conquest @430): label gone, 48 owners against 48 live, thumb back at the end
+6) The season ends on the Conquest Complete banner
+  PASS  6. the season reached the Conquest Complete banner (/soccer-conquest @430): 13 rounds played
+  PASS  6. the banner carries the crown and the four season records (/soccer-conquest @430): crown 1, records 4
+  PASS  6. the map and the standings agree on who holds land (/soccer-conquest @430): 9 colours painted, the strip says 9
+  PASS  6. the map ends under one ruler: the eight biggest empires became the champion's (/soccer-conquest @430): 16 clubs held land at the Quarter-finals, so 9 colour(s) should be left and 9 are; the crown holds 121 of 154 regions against the 121 those eight held
+  PASS  6. every visible button is 30px or taller on the banner (/soccer-conquest @430): none short
+
+Console and page errors
+  PASS  no console or page errors across the runs: none
+
+113 checks, 0 failed
+ALL CONQUEST SCENE SCREEN CHECKS PASSED
+[draws] total 7736 in 4 page loads of 4 contexts, walk exit 0; by path: /soccer-conquest 4836, /conquest 2900

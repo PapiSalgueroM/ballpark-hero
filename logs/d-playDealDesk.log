@@ -1,0 +1,36 @@
+0) Taking a job and opening the window
+   in the job at Crystal Palace, 27 in the squad, £900m to spend
+1) The market row shows what your recruitment desk thinks he is worth
+  PASS  1. the market offered rows to talk to: 50 rows
+  PASS  1. every market row carried a valuation read: 50 of 50 rows
+  PASS  1. no market row showed an empty valuation: none
+   talking to the cheapest man over £2m, listed at £62.7m
+2) Talk opens the deal desk
+  PASS  2. the data-deal-desk box opened
+  PASS  2. the bid box is on the desk
+  PASS  2. Offer it refuses while the box is empty: disabled
+3) The meter reads what you type
+  PASS  3. the panel printed their ask: £65.9m
+  PASS  3. a lowball reads as ending the talks: typed 19.8 against an ask of 65.9, meter said "They will end the talks"
+  PASS  3. the full ask reads as agreed: typed 65.9 against an ask of 65.9, meter said "They will take this"
+  PASS  3. Offer it woke up once a number was typed
+4) The ask agrees a fee and opens the second table
+  PASS  4. the panel header says Personal terms: for Alessandro Bastoni
+  PASS  4. his agent is asking for something
+  PASS  4. the terms panel offers the three ways out
+  PASS  4. nobody has signed yet: squad 27 before, 27 with the terms panel open
+  PASS  4. the save says the negotiation is at the terms table: open/terms
+5) Meeting his terms closes the deal
+  PASS  5. Give him what he wants is pressable
+  PASS  5. Put it to him is pressable
+  PASS  5. the panel says DEAL DONE
+  PASS  5. the player is in the saved squad: squad 27 before, 28 after, looking for Alessandro Bastoni
+  PASS  5. he signed on the terms that were agreed: 4y at 86k a week as star
+6) The phone width, and the console
+  PASS  6. nothing scrolls sideways at 390 with the terms panel open: scrollWidth 390 against innerWidth 390
+  PASS  6. no console errors anywhere in the run: none
+
+   22 checks run, 50 market rows read, ask £65.9m, lowball 19.8 read as "They will end the talks", full ask read as "They will take this", squad 27 to 28
+Walked Club Manager's deal desk through its own screens. 0 findings.
+playDealDesk: green. The desk opens, the meter reads the typed number, the fee table hands off to the terms table without signing anybody, and meeting his terms closes it.
+[draws] total 748 in 2 page loads of 1 contexts, walk exit 0; by path: /club-manager 748

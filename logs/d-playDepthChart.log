@@ -1,0 +1,23 @@
+1) Draft night announces your spot
+  PASS  the feed talks about the depth chart
+  PASS  the role chip is on the hub
+2) A benched save renders the bench
+  PASS  the bench chip renders from the save
+3) A bench season is spot duty on the feed
+  PASS  the feed narrates the bench year
+  PASS  no page errors on the NFL walk (clean)
+4) The NBA hub carries the rotation
+  PASS  the rotation chip is on the hub
+  PASS  the second-unit chip renders from the save
+  PASS  no page errors on the NBA walk (clean)
+5) The NHL hub carries the lineup
+  PASS  the lineup chip is on the hub
+  PASS  the bench-side chip renders from the save
+  PASS  no page errors on the NHL walk (clean)
+6) The MLB hub carries the lineup card
+  PASS  the lineup card chip is on the hub
+  PASS  the draft feed talks baseball roles
+  PASS  no page errors on the MLB walk (clean)
+
+ALL DEPTH CHART WALK CHECKS PASSED
+[draws] total 120 in 8 page loads of 4 contexts, walk exit 0; by path: /nfl-my-career 56, /nba-my-career 23, /nhl-my-career 23, /mlb-my-career 18

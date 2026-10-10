@@ -1,0 +1,30 @@
+at 390 by 844
+  PASS  390 wide: the ? panel says how an opening rating is read (3 phrases found in 7501 characters)
+  PASS  390 wide: the running back shelf shows the 4 backs the files hold for Las Vegas Raiders (saw 4: Ashton Jeanty 79, Mike Washington Jr. 70e, Dylan Laube 68, Connor Heyward 63e)
+  PASS  390 wide, roster shelf: every name and number on screen is the committed file's (all agree)
+  PASS  390 wide: the limited evidence mark is on exactly the backs the files mark
+  PASS  390 wide: Ashton Jeanty is the first row of the shelf (first is Ashton Jeanty)
+  PASS  390 wide: Connor Heyward is on the shelf with the mark and outside its top two (63e, row 4 of 4)
+  PASS  390 wide: the rating legend is on screen
+  PASS  390 wide: the shelf fits the viewport (0px of horizontal overflow)
+  PASS  390 wide: seven deals of five cards, every one a man and position the starters file holds (35 cards)
+  PASS  390 wide, draft cards: every name and number on screen is the committed file's (all agree)
+  PASS  390 wide: the draft fits the viewport (0px of horizontal overflow)
+  PASS  390 wide: no uncaught page error (none)
+  PASS  390 wide: no request reached another host (2 hosts asked for and cut: flawuiqbvjobmkfkauhw.supabase.co, fonts.googleapis.com)
+at 1280 by 900
+  PASS  1280 wide: the ? panel says how an opening rating is read (3 phrases found in 7501 characters)
+  PASS  1280 wide: the running back shelf shows the 4 backs the files hold for Las Vegas Raiders (saw 4: Ashton Jeanty 79, Mike Washington Jr. 70e, Dylan Laube 68, Connor Heyward 63e)
+  PASS  1280 wide, roster shelf: every name and number on screen is the committed file's (all agree)
+  PASS  1280 wide: the limited evidence mark is on exactly the backs the files mark
+  PASS  1280 wide: Ashton Jeanty is the first row of the shelf (first is Ashton Jeanty)
+  PASS  1280 wide: Connor Heyward is on the shelf with the mark and outside its top two (63e, row 4 of 4)
+  PASS  1280 wide: the rating legend is on screen
+  PASS  1280 wide: the shelf fits the viewport (0px of horizontal overflow)
+  PASS  1280 wide: seven deals of five cards, every one a man and position the starters file holds (35 cards)
+  PASS  1280 wide, draft cards: every name and number on screen is the committed file's (all agree)
+  PASS  1280 wide: the draft fits the viewport (0px of horizontal overflow)
+  PASS  1280 wide: no uncaught page error (none)
+  PASS  1280 wide: no request reached another host (2 hosts asked for and cut: flawuiqbvjobmkfkauhw.supabase.co, fonts.googleapis.com)
+playFoOneRating: green. The roster shelf and the draft cards print the committed files' numbers at both sizes, and the ? panel carries the rating rule.
+[draws] total 28 in 4 page loads of 2 contexts, walk exit 0; by path: /front-office 18, /nfl-gauntlet-draft 10

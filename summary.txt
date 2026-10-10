@@ -1,0 +1,15 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+d-playConquestScenes exit=0 73s | [draws] total 7736 in 4 page loads of 4 contexts, walk exit 0; by path: /soccer-conquest 4836, /conquest 2900
+d-playCorruptSaves exit=0 135s | [draws] total 458 in 67 page loads of 46 contexts, walk exit 0; by path: /nfl-my-career 33, /nba-my-career 33, /mlb-my-career 33, /nhl-my-career 33, /stadium-tycoon 30, /
+d-playDealDesk exit=0 14s | [draws] total 748 in 2 page loads of 1 contexts, walk exit 0; by path: /club-manager 748
+d-playDepthChart exit=0 21s | [draws] total 120 in 8 page loads of 4 contexts, walk exit 0; by path: /nfl-my-career 56, /nba-my-career 23, /nhl-my-career 23, /mlb-my-career 18
+d-playEra2005 exit=1 40s | Node.js v24.21.0
+d-playEra2010 exit=1 36s | Node.js v24.21.0
+d-playEra2015 exit=1 40s | Node.js v24.21.0
+d-playEra2020 exit=1 41s | Node.js v24.21.0
+d-playExtension exit=0 41s | [draws] total 209 in 12 page loads of 6 contexts, walk exit 0; by path: /nfl-my-career 132, /nba-my-career 26, /nhl-my-career 26, /mlb-my-career 25
+d-playFirstTeamFit exit=0 3s | [draws] total 0 in 0 page loads of 6 contexts, walk exit 0; by path: none
+d-playFlagshipLazy exit=0 7s | [draws] total 14 in 2 page loads of 2 contexts, walk exit 0; by path: /soccer-career 14
+d-playFoHub exit=1 47s | [draws] total 2124 in 12 page loads of 4 contexts, walk exit 1; by path: /front-office 1220, /nba-front-office 483, /mlb-front-office 233, /nhl-front-office 188
+d-playFoOneRating exit=0 8s | [draws] total 28 in 4 page loads of 2 contexts, walk exit 0; by path: /front-office 18, /nfl-gauntlet-draft 10
+d-playFootballConnect4Failures exit=0 5s | [draws] total 45 in 5 page loads of 5 contexts, walk exit 0; by path: /football-connect-4 45
