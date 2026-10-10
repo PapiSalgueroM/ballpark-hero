@@ -12,7 +12,8 @@
     "espn": { "name": "ESPN, Dale Johnson's season tally of overturned decisions in the Premier League", "kind": "a sports outlet's own count, one journalist, the same method every season" },
     "pieri": { "name": "Tiziano Pieri's count for Serie A, as reported by Blitz Quotidiano", "kind": "a former international referee's own count (video review analyst at Rai Sport), reported by a national news site" },
     "agi": { "name": "AGI (Agenzia Giornalistica Italia), data journalism desk, Enrico Bergianti and Danilo Cinti", "kind": "a national news agency's own count: all 380 matches gone through from the post match refereeing analyses of seven outlets and a former referee's blog" },
-    "ligainsider": { "name": "LigaInsider's own evaluation of the Bundesliga season", "kind": "a sports data outlet's own count" }
+    "ligainsider": { "name": "LigaInsider's own evaluation of the Bundesliga season", "kind": "a sports data outlet's own count" },
+    "lfp": { "name": "Ligue de Football Professionnel, the league's own season review of video refereeing on ligue1.com", "kind": "a league's own published season figures; the page credits its total of corrected errors to the French federation's Direction Technique de l'Arbitrage" }
   },
   "rows": [
     {
@@ -57,6 +58,14 @@
       "literal": ["Insgesamt 40 Elfmeter wurden nach einer Überprüfung zugesprochen", "Insgesamt acht zunächst gegebene Elfmeter wurden nach Ansicht der Videobilder wieder zurückgenommen.", "Insgesamt acht Rote Karten wurden erst nach einer Überprüfung der Bilder ausgesprochen.", "Insgesamt wurden lediglich zehn Treffer nach einer Überprüfung doch noch anerkannt oder bestätigt."],
       "literalNote": "The goals line counts goals given OR confirmed after a review (anerkannt oder bestätigt), which is two things, so it is not filed as goals awarded.",
       "figures": { "penaltiesAwarded": 40, "penaltiesCancelled": 8, "redCards": 8 }
+    },
+    {
+      "id": "lfp-ligue1-2023-24", "publisher": "lfp", "competition": "Ligue 1", "season": "2023-24", "matches": 306,
+      "url": "https://ligue1.com/fr/articles/l1_article_35-",
+      "published": "2024-06-19", "counts": "the league's own review of the season (VAR : Le bilan de la saison 2023/2024): decisions corrected thanks to the video assistant, over the 34 matchdays of an 18 club season. Read in the closing fix on 2026-10-10. One publisher, so THIN: on file and not used.",
+      "literal": ["89 erreurs manifestes", "23 buts ont été correctement annulés", "grâce à la VAR, après avoir initialement été accordés à tort. A l’inverse, 19 buts ont été correctement annulés grâce à la VAR, après avoir été initialement refusés à tort.", "23 buts pénaltys ont été justement accordés", "grâce à la VAR sur un total de 105 pénaltys accordés (22% du total contre 25% la saison précédente).", "Enfin, sur les 69 exclusions sur l’ensemble des 34 journées,", "11 cartons rouges"],
+      "literalNote": "The page prints each count as a heading and its sentence under it, so each pair of lines above is one sentence. The 19 is printed as annulés for goals first refused in error, which reads as a slip for goals given after a review; it is left out of the figures.",
+      "figures": { "goalsRuledOut": 23, "penaltiesAwarded": 23, "redCards": 11 }
     }
   ],
   "quantities": {
@@ -72,7 +81,7 @@
     {
       "id": "recent-seasons", "state": "open", "need": 2, "have": 0, "from": "2022-23",
       "rule": "The lead's decision 1 of Round 1218 asks for each number on two independent publishers for at least two recent seasons.",
-      "found": "The one season counted by two publishers is Serie A 2017-18, that league's first season under review. Every count of a season from 2022-23 on that three readers found on 2026-10-10 (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) is one publisher's own, or one newspaper's count repeated by other sites. The recent counts on file, each THIN: goals ruled out 0.124 to 0.145 a match (the used figure, 0.076, is lower, so the game rules out fewer goals than those seasons did), penalties awarded 0.066 to 0.131 a match (the used figure, 0.089, sits inside that).",
+      "found": "The one season counted by two publishers is Serie A 2017-18, that league's first season under review. Every count of a season from 2022-23 on that four readers found on 2026-10-10 (Premier League, La Liga, Serie A, Bundesliga, Ligue 1) is one publisher's own, or one newspaper's count repeated by other sites. The recent counts on file, each THIN: goals ruled out 0.075 a match in Ligue 1 2023-24 by the league's own review, which is where the used figure (0.076) sits, and 0.124 to 0.145 a match in three Premier League seasons by one outlet, so the game rules out as many goals as that French season did and fewer than those English ones; penalties awarded 0.066 to 0.131 a match (the used figure, 0.089, sits inside that).",
       "closes": "Add a second publisher's own count for two seasons from 2022-23 on, or the lead accepts the rates as sourced: set state to accepted and write the ruling (who, when, in what words) under ruling. Then run node scripts/genCmVarRates.mjs."
     }
   ],
