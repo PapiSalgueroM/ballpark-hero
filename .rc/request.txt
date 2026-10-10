@@ -1,0 +1,5 @@
+#!serial
+cmvar-as-is: node scripts/simCmVar.mjs
+realfix-as-is: node scripts/simCmRealFixtures.mjs
+attr-cmvar-bookoff: node .rc/x/mut1229.mjs bookoff && node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
+attr-realfix-bookoff: node .rc/x/mut1229.mjs bookoff && node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- src scripts; exit $s
