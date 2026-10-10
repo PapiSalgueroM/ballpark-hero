@@ -124,7 +124,7 @@ const CONTROLS = {
   dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
   bought: { patch: [{ file: ENGINE, from: '  const notTheirs = mySquadNames(state);', to: '  const notTheirs = NO_NAMES;' }], red: 'names' },
-  twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }], red: 'shapes' },
+  twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }, { file: BOOK, from: '  const taker = rules.taker ? takerOf(outfield) : null;', to: '  const taker = null;' }], red: 'shapes' },
   flat: { patch: [{ file: BOOK, from: SCORER_PICK, to: ': pickWeighted(outfield, () => 1, scorerRoll);' }], red: 'shapes' },
   penassist: { patch: [{ file: BOOK, from: "assistFrom(rng, kind === 'open' ? scorer : null, outfield, rules);", to: "assistFrom(rng, kind === 'og' ? null : scorer, outfield, rules);" }], red: 'shapes' },
   noog: { patch: [{ file: BOOK, from: ": ownGoalTagged(`${key}|${i}|og`, rules.ownGoalOneIn) ? 'og' : 'open';", to: ": 'open';" }], red: 'shapes' },
@@ -536,7 +536,10 @@ const acc = newAcc();
 const midSaves = [];
 let tCand = Date.now();
 const candFaces = fleet.map((f, i) => playCareer(candidate, f.club, f.era, f.seed, watcher(candidate, `${f.club} (${f.era}, seed ${f.seed})`, acc, {
-  onEntry(after, r, season) { if (season === 0 && i < 4 && after.week === 22 && midSaves.length <= i) midSaves.push({ f, state: JSON.parse(JSON.stringify(after)) }); },
+  onEntry(after, r, season) {
+    if (season !== 0 || i >= 4 || after.week < 22 || after.sacked || midSaves.some(m => m.f === f)) return;
+    midSaves.push({ f, state: JSON.parse(JSON.stringify(after)) });
+  },
 })));
 tCand = Date.now() - tCand;
 
@@ -625,14 +628,15 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
 /* ---------- section names: the man I bought gains nothing more for the club he left ---------- */
 {
   let probes = 0;
+  const skipped = [];
   for (const { f, state } of midSaves) {
     const { cm } = candidate;
     const book = cm.leagueBookOf(state);
-    if (!book) continue;
+    if (!book) { skipped.push(`${f.club}: no book`); continue; }
     const mine = cm.mySquadNames(state);
     const target = candidate.book.bookRows(book).filter(r => !mine.has(r.name) && r.pos !== 'GK').sort(byGoals)[0];
     const like = target && (state.squad.find(p => p.position === target.pos && !state.xiIds.includes(p.id)) ?? state.squad.find(p => !state.xiIds.includes(p.id)));
-    if (!target || target.goals < 3 || !like) continue;
+    if (!target || target.goals < 3 || !like) { skipped.push(`${f.club}: ${!target ? 'no rival row' : target.goals < 3 ? `the best rival is on ${target.goals}` : 'no reserve to copy'}`); continue; }
     probes += 1;
     const s0 = JSON.parse(JSON.stringify(state));
     /* He signs: a man of that name is in my squad from now on (a copy of one of my reserves under his name). */
@@ -663,7 +667,7 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
   }
   tick('names');
   if (!probes) fail('names', 'no purchase was probed: no mid season save with a rival scorer on three goals');
-  console.log(`names   ${checked.get('names')} checks; ${probes} purchases probed (the best scorer of the rivals signed at week 22, twelve entries played on)`);
+  console.log(`names   ${checked.get('names')} checks; ${probes} purchases probed of ${midSaves.length} saves kept (the best scorer of the rivals signed at week 22, twelve entries played on)${skipped.length ? `; not probed: ${skipped.join('; ')}` : ''}`);
 }
 
 /* ---------- shared by the last three sections ---------- */
