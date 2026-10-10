@@ -1,0 +1,5 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+base-setup exit=0 30s | served
+mknew exit=0 1s | mk notes: {"event":{"title":"The Scan Room","choice":1,"label":"Back in training tomorrow","wheel":"The Scan Room","chance":0.3},"planned":{"year":2030,"club":"Everton","
+press-base exit=0 9s | review-sc-screens walk: 3 journeys, 0 stopped early, 0 measured problems, 0 shots
+press-head exit=0 8s | review-sc-screens walk: 3 journeys, 0 stopped early, 0 measured problems, 0 shots

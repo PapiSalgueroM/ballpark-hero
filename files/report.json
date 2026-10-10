@@ -1,0 +1,124 @@
+{
+ "base": "http://localhost:4173",
+ "notes": {
+  "new": {
+   "event": {
+    "title": "The Scan Room",
+    "choice": 1,
+    "label": "Back in training tomorrow",
+    "wheel": "The Scan Room",
+    "chance": 0.3
+   },
+   "planned": {
+    "year": 2030,
+    "club": "Everton",
+    "choices": {
+     "tactics": "finisher",
+     "promise": "starter",
+     "bonuses": "appearances",
+     "set_pieces": "penalties"
+    },
+    "bonusEuros": 19744
+   },
+   "settledReceipt": {
+    "year": 2030,
+    "club": "Everton",
+    "choices": {
+     "tactics": "finisher",
+     "promise": "starter",
+     "bonuses": "appearances",
+     "set_pieces": "penalties"
+    },
+    "status": "completed",
+    "outcomes": {
+     "tactics": "27 recorded club appearances.",
+     "set_pieces": "1 penalty goals and 0 free kick goals, included in your 6 recorded goals. This is the simulation's season duty allocation.",
+     "promise": "The 26-appearance promise was missed: 23 league appearances. You can request a move in the transfer window.",
+     "bonuses": "The recorded target was not met; no bonus was paid."
+    },
+    "bonusEuros": 0,
+    "penaltyGoals": 1,
+    "freeKickGoals": 0,
+    "secondaryPosition": null,
+    "promise": "broken"
+   },
+   "size_plan": 24826,
+   "size_keeper": 22654,
+   "size_real": 15505,
+   "size_roles": 17017,
+   "size_summaryWin": 31231,
+   "size_summaryOut": 27650,
+   "size_summaryEuro": 23791,
+   "size_offerNo": 22638,
+   "size_offerYes": 63851,
+   "size_event": 23324,
+   "size_appeal": 22870,
+   "size_unseenHub": 22184,
+   "size_settledSummary": 34665,
+   "size_settled": 30841,
+   "size_edited": 24939
+  },
+  "old": {}
+ },
+ "journeys": [
+  {
+   "id": "320-event-press",
+   "facts": [
+    {
+     "label": "event choice: page at the press and after",
+     "value": {
+      "pressed": 548,
+      "after": 387,
+      "wheel": 1,
+      "pageHeight": 13904
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": []
+  },
+  {
+   "id": "391-event-press",
+   "facts": [
+    {
+     "label": "event choice: page at the press and after",
+     "value": {
+      "pressed": 469,
+      "after": 387,
+      "wheel": 1,
+      "pageHeight": 11941
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": []
+  },
+  {
+   "id": "390-event-press",
+   "facts": [
+    {
+     "label": "event choice: page at the press and after",
+     "value": {
+      "pressed": 2,
+      "after": 2,
+      "wheel": 1,
+      "pageHeight": 11941
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": []
+  }
+ ],
+ "fonts": {
+  "status": "loaded",
+  "loaded": [
+   "Inter",
+   "Space Grotesk"
+  ],
+  "body": "Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", san"
+ }
+}
