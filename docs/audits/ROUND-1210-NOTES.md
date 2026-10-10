@@ -20,6 +20,9 @@ confederation (step 1), the Career Hub walk (step 2), the daily save flake (step
   sideways scroll) and the screenshots are in `dukb-handoff/2026-10-10/review-shots/r1210/`. The jsdom test and its
   swap control stay the committed proof.
 - `simNationalityFlags` is green WITH ONE OWED BARE PRINT, not with none (see step 1).
+- `scripts/sweepWeight.mjs` is RED on this branch, on `/footle` alone, until the lead moves one row (the last section
+  of this file has the numbers and the proof that the row at 348 is green). The branch does not move it: the budget
+  rows are the lead's.
 
 ## Step 1: a flag beside every nationality in Footle, six nations under their confederation
 Commits `bba8a70a`, `feb46ac4`, `7a591d03`.
@@ -248,3 +251,25 @@ off swap, run by the builder and again by the reviewer, 3 of 3 fired); section 7
 state, so a second write that sets an already listed state rides on its entry (the state is what a hold reads, so it
 is the unit); the fence cannot see whether a hold's condition is the right way round (a test holds that for the US
 board, see above).
+
+## After the closing check: the second fix pass (2026-10-10)
+The closing check sent back one finding, the paragraph above about `/footle`, as a major: the release gate's
+`sweepWeight` is red on any tree that holds this round until the row `['/footle', 345]` moves. Nothing in `src/` or
+`scripts/` changed in this pass. The code is right, and the row is still the lead's.
+- What the 3.1K is, file by file (`r1210-fix2-weight`, head `b954f79b`, the same job, the page opened the way section
+  1 of the sweep opens it). The branch: 40 files, 356,415 bytes gzipped, 348.1K. The same tree with only
+  `src/pages/Footle.tsx` put back to main's and the site rebuilt: 39 files, 353,305 bytes, 345.0K. The 3,110 bytes
+  between them are one new file, the flags file `FlagImg` (2,976 bytes), plus 50 in Footle's own file, 26 in the
+  entry and 58 spread over 25 files whose imports were renamed by the rebuild (1 to 5 bytes each). Twelve files are
+  byte for byte the same weight.
+- Why it is not lighter. Round 659 moved the flags out of the entry so that only a page that draws a flag pays for
+  them, and Footle now draws one on its first screen: the rules open by themselves on a first visit (`Footle.tsx`
+  lines 99 to 106) and their example sentence prints a pool player's nationality, with the pool there even when the
+  database is not (it starts as the committed list). Asking for the flags file only when a flag is first drawn was
+  MEASURED, as a rewrite made in the runner's checkout and never committed (`r1210-fix2-lazy`, head `b954f79b`): still
+  40 files, 356,577 bytes, 348.2K, which is 162 bytes MORE than the branch, and the sweep is red the same way. So
+  the page was left as it is. The only lighter Footle is one with no flag in the example, which is the feature.
+- The lead's one step, proven. In the same job the row was moved to 348 in the runner's checkout only and the whole
+  sweep exits 0 ("sweepWeight: green", `/footle` 348K over 40 files against 348). 348.1K is 449 bytes under the
+  point where it rounds to 349, so the release sets the row from its own build, as every row comment there says.
+  The edit is a script kept beside the report (`dukb-handoff/2026-10-10/results-g/fix2-1210-footleRow.mjs`).
