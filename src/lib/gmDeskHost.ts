@@ -1069,18 +1069,38 @@ export const HOST_GRADE_MARKS: Record<FoGradeResult, { mark: string; word: strin
 
 const titleWords = (n: number): string => (n === 0 ? 'no titles' : plural(n, 'title'));
 
+/**
+ * What a hub box can hold. The shared HubTiles draws a box's value and its
+ * sub on one line each and cuts the rest off with an ellipsis, so a string
+ * that outgrows the box loses its end, and the end is where the fact is.
+ * Measured 2026-10-10 in Chromium on the built site's stylesheet (the
+ * review's walk, runner result r1223-run-w): at 390 wide the line is 149 px;
+ * the value's bold 14 px type ran 7.0 to 7.7 px a letter and the sub's 9 px
+ * type 4.2. Each ceiling is that line less a tenth, at the widest letter
+ * measured. scripts/simGmDeskHost.mjs holds every box string to them, with
+ * each sport's real club names (control `longtile`).
+ */
+export const HOST_TILE_VALUE_MAX = 17;
+export const HOST_TILE_SUB_MAX = 32;
+
 /** The Job market box. Null while he holds a seat, so the hub never shows it. */
-export function hostMarketTile(market: HostMarket | null, pack: GmSeatPack): GmTileFace | null {
+export function hostMarketTile(market: HostMarket | null): GmTileFace | null {
   if (!market) return null;
+  /* What a year out leaves, when it is not simply open: the same word on the box whether or not somebody called. */
+  const hangs = 'Next year hangs on your old club';
   if (market.state === 'offers') {
-    return { icon: '\u{1F4DE}', value: `${plural(market.offers.length, pack.seat, pack.seats)} called`, sub: 'Open it to see what each one asks', accent: true };
+    const n = market.offers.length;
+    const sub = market.nextYear === 'shut' ? `The last ${n === 1 ? 'call' : 'calls'} you will get`
+      : market.nextYear === 'climb' ? hangs
+      : 'Open it to see each ask';
+    return { icon: '\u{1F4DE}', value: plural(n, 'offer'), sub, accent: true };
   }
   if (market.state === 'closed') {
-    return { icon: '\u{1F4F5}', value: 'The phone has stopped', sub: 'A new front office is the way back in', accent: false };
+    return { icon: '\u{1F4F5}', value: 'No more calls', sub: 'Only a new front office now', accent: false };
   }
   return {
-    icon: '\u{1F4DE}', value: 'Nobody called this year',
-    sub: market.nextYear === 'climb' ? 'Next year hangs on your old club' : 'Next year is still open',
+    icon: '\u{1F4DE}', value: 'Nobody called',
+    sub: market.nextYear === 'climb' ? hangs : 'Next year is still open',
     accent: false,
   };
 }
@@ -1090,10 +1110,19 @@ export function hostCareerTile(seat: GmSeatBlock, nameOf: (id: string) => string
   const stints = seat.career.stints;
   const index = stints.length - 1;
   const s = stints[index];
-  const clubs = new Set(stints.map(x => x.team)).size;
-  const sub = `${plural(clubs, 'club')}, ${titleWords(careerTotals(seat.career).titles)}`;
-  if (s.ended) return { icon: '\u{1F4D6}', value: 'Out of work', sub, accent: false };
-  return { icon: '\u{1F4D6}', value: `Season ${hostStintSeasons(seat, index) + 1} with the ${nameOf(s.team)}`, sub, accent: false };
+  if (s.ended) {
+    const clubs = new Set(stints.map(x => x.team)).size;
+    return { icon: '\u{1F4D6}', value: 'Out of work', sub: `${plural(clubs, 'club')}, ${titleWords(careerTotals(seat.career).titles)}`, accent: false };
+  }
+  /* The season on the value and the club under it: a club's full name does
+     not fit the value's line at any width (measured: 224 px and up in 149 or
+     182). A name too long even for the sub goes in alone. */
+  const name = nameOf(s.team);
+  const withThe = `With the ${name}`;
+  return {
+    icon: '\u{1F4D6}', value: `Season ${hostStintSeasons(seat, index) + 1}`,
+    sub: withThe.length <= HOST_TILE_SUB_MAX ? withThe : name, accent: false,
+  };
 }
 
 /** True when some tree on this desk can take a point he already has. */
@@ -1108,9 +1137,9 @@ export function hostXpTile(desk: GmDesk | null, live: readonly GmTree[], deskOn:
   const level = gmLevel(xp);
   const free = gmPointsFree(xp);
   const can = hostCanSpend(desk, live);
-  const sub = !deskOn ? 'Starts earning once your GM desk is open'
+  const sub = !deskOn ? 'Starts with your GM desk'
     : can ? `${plural(free, 'point')} to spend`
-    : free > 0 ? `${plural(free, 'point')} saved for a tree that is not here yet`
+    : free > 0 ? `${plural(free, 'point')} saved for later`
     : level >= GM_MAX_LEVEL ? 'Top level'
     : `${Math.max(0, Math.round(xpForLevel(level + 1) - xp.xp))} XP to level ${level + 1}`;
   return { icon: '\u{1F396}\u{FE0F}', value: `GM level ${level}`, sub, accent: deskOn && can };

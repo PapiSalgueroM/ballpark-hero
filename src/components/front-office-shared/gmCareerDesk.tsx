@@ -25,7 +25,7 @@ export const GM_CAREER_KEYS = { market: 'seat', career: 'career', xp: 'xp' } as 
 const MARKET: GmPanelDef<GmCareerFacts> = {
   key: GM_CAREER_KEYS.market,
   title: 'Job market',
-  tile: ({ facts }) => (facts.phase === 'fired' ? hostMarketTile(facts.career.market, facts.career.pack) : null),
+  tile: ({ facts }) => (facts.phase === 'fired' ? hostMarketTile(facts.career.market) : null),
   Panel: lazyGmPanel<GmCareerFacts>(() => import('./GmJobMarketPanel')),
 };
 

@@ -3,7 +3,7 @@
    scripts/simGmDeskHost.mjs. This file holds the same properties small. */
 import { describe, expect, it } from 'vitest';
 import {
-  GM_HOST_KEYS, HOST_BLOCK_RULES, hostArriving, hostCanSitOut, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
+  GM_HOST_KEYS, HOST_BLOCK_RULES, HOST_TILE_SUB_MAX, HOST_TILE_VALUE_MAX, hostArriving, hostCanSitOut, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
   hostCraftCut, hostCutQuote, hostDeskCases, hostEarnsLine, hostFeedKey, hostKey, hostLastGrade, hostLegacy,
   hostLegacySeat, hostMarket, hostMarketHelp, hostMarketTile, hostMoveBlocks, hostNewSeat, hostOutOfWorkCard,
   hostPressOption, hostSeasonAway, hostSeasonVerdict, hostSeasonsRecorded, hostSeatOf, hostSitArmLine, hostSitOut, hostSpendPoint,
@@ -367,7 +367,7 @@ describe('the job market', () => {
   const lg = league();
   it('is null while he holds a seat', () => {
     expect(hostMarket(host, lg, block(BOTTOM, ['met'], false), nameOf)).toBeNull();
-    expect(hostMarketTile(null, GM_SEAT_PACKS.nhl)).toBeNull();
+    expect(hostMarketTile(null)).toBeNull();
   });
   it('reads the same feed every time and a new one a year or a season on', () => {
     const seat = firedFrom(BOTTOM, WINNER);
@@ -403,7 +403,7 @@ describe('the job market', () => {
     expect(closed).toMatchObject({ state: 'closed', nextYear: 'shut', offers: [] });
     expect(/\bsit/i.test(closed.line)).toBe(false);
     expect(closed.line).toContain('the phone has stopped');
-    expect(hostMarketTile(closed, GM_SEAT_PACKS.nhl)).toMatchObject({ value: 'The phone has stopped', accent: false });
+    expect(hostMarketTile(closed)).toMatchObject({ value: 'No more calls', sub: 'Only a new front office now', accent: false });
     /* A tier 1 club's wreck is above the floor today and under it next year
        whatever happens: with an empty feed that is closed, not quiet. */
     let topClosed = 0;
@@ -532,7 +532,8 @@ describe('taking a seat', () => {
     expect(hostArriving(now, lg.season)).toBe(true);
     expect(hostArriving(now, lg.season + 1)).toBe(false);
     expect(hostMarket(host, lg, now, nameOf)).toBeNull();
-    expect(hostCareerTile(now, nameOf)).toMatchObject({ value: `Season 1 with the ${nameOf(pick.teamId)}`, sub: '2 clubs, 5 titles' });
+    expect(hostCareerTile(now, nameOf)).toMatchObject({ value: 'Season 1', sub: `With the ${nameOf(pick.teamId)}` });
+    expect(hostCareerTile(seat, nameOf)).toMatchObject({ value: 'Out of work', sub: '1 club, 5 titles' });
     /* The desk and the save handed in are not changed. */
     expect(desk.blocks.staff).toEqual({ club: BOTTOM });
     expect(save.myTeam).toBe(BOTTOM);
@@ -721,7 +722,7 @@ describe('the words on the boxes', () => {
       for (const seat of seats) {
         const m = hostMarket({ ...host, pack }, lg, seat, nameOf)!;
         clean(m.line);
-        const tile = hostMarketTile(m, pack)!;
+        const tile = hostMarketTile(m)!;
         clean(tile.value); clean(tile.sub);
         const card = hostOutOfWorkCard({ ...host, pack }, lg, seat, m, nameOf);
         clean(card.title); card.lines.forEach(clean);
@@ -730,6 +731,38 @@ describe('the words on the boxes', () => {
       }
     }
     for (const deskOn of [false, true]) { const t = hostXpTile(null, GM_TREES, deskOn); clean(t.value); clean(t.sub); }
+  });
+  it('fit the hub box: a value and a sub each stay on their one line, with a real club name on the Career box', () => {
+    const fits = (t: { value: string; sub: string }) => {
+      expect(t.value.length, t.value).toBeLessThanOrEqual(HOST_TILE_VALUE_MAX);
+      expect(t.sub.length, t.sub).toBeLessThanOrEqual(HOST_TILE_SUB_MAX);
+    };
+    const lg = league();
+    /* Every market state, with and without a call, a year out or four. */
+    const states = new Set<string>();
+    for (const team of [TOP, BOTTOM]) for (const grades of [WINNER, WRECK, ['badly', 'badly'], ['badly', 'badly', 'missed'], ['badly', 'missed', 'missed']] as FoGradeResult[][]) {
+      for (let from = 1990; from < 2027; from++) for (const out of [0, 4]) {
+        const m = hostMarket(host, lg, firedFrom(team, grades, from, out), nameOf)!;
+        states.add(`${m.state} ${m.nextYear}`);
+        fits(hostMarketTile(m)!);
+      }
+    }
+    expect([...states].sort()).toEqual(['closed shut', 'offers climb', 'offers open', 'offers shut', 'quiet climb', 'quiet open']);
+    /* The Career box: the season on the value, the club under it, whatever the name and however long he has stayed. */
+    const long = (id: string) => (id === TOP ? 'Minnesota Timberwolves' : id === BOTTOM ? 'Upper Northern Territory Rovers' : `Club ${id}`);
+    const at = (team: string, seasons: number): GmSeatBlock => block(team, Array.from({ length: seasons }, () => 'met' as FoGradeResult), false);
+    for (const seasons of [0, 9, 40]) { fits(hostCareerTile(at(TOP, seasons), long)); fits(hostCareerTile(at(BOTTOM, seasons), long)); }
+    expect(hostCareerTile(at(TOP, 9), long)).toMatchObject({ value: 'Season 10', sub: 'With the Minnesota Timberwolves' });
+    /* A name too long to follow "With the" goes in alone. */
+    expect(hostCareerTile(at(BOTTOM, 0), long)).toMatchObject({ value: 'Season 1', sub: 'Upper Northern Territory Rovers' });
+    expect(hostCareerTile(firedFrom(TOP, WINNER), long)).toMatchObject({ value: 'Out of work' });
+    fits(hostCareerTile({ ...firedFrom(TOP, WINNER), career: { ...firedFrom(TOP, WINNER).career, seasonsOut: 3 } }, long));
+    /* The GM level box in every state its sub can read. */
+    const full = { ...defaultGmXp(), xp: 1e9, points: Object.fromEntries(GM_TREES.map(t => [t, 5])) as GmXp['points'] };
+    for (const [desk, live, on] of [
+      [null, GM_TREES, false], [null, GM_TREES, true], [deskWith(null, { ...defaultGmXp(), xp: 1e9 }), GM_TREES, true],
+      [deskWith(null, { ...defaultGmXp(), xp: 1e9 }), [], true], [deskWith(null, full), GM_TREES, true],
+    ] as [GmDesk | null, readonly GmTree[], boolean][]) fits(hostXpTile(desk, live, on));
   });
   it('say only what a desk pays for', () => {
     expect(hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate']))

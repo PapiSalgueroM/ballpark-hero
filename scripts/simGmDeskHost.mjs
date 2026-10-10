@@ -43,7 +43,8 @@
  *      line never says sit; no line states fewer seasons than he played;
  *      with offers on the table the line and the stay out line say what
  *      passing costs; the stay out button is drawn only while next year can
- *      hold a call
+ *      hold a call; and every hub box fits its box (a value and a sub of one
+ *      line each), the Career box under each sport's real club names
  * Negative controls (SIM_GM_DESK_HOST_CONTROL), each must go red in its check:
  *   mutate (1) dropclub (1) fillmet (2) readwrites (2) unkeyed (3)
  *   firedclub (4) badlyceiling (4) askseason (4) closedquiet (5)
@@ -51,6 +52,7 @@
  *   flatlevel (7) sharedroll (7) flatowner (7) flatmedia (7) flatcut (7) flatask (7)
  *   spendany (8) stalestaff (9) halfseason (9) noyear (9) lastcall (9)
  *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
+ *   longtile (10) clubvalue (10)
  * SIM_GM_DESK_HOST_ANCHORS=1 checks every control's anchor and stops (light).
  *
  * THE YEAR OUT HERE IS NOT THE BIND'S. Section 9 plays it with each engine's
@@ -155,7 +157,9 @@ const EDITS = {
   lastcall: ['9', 'host', "  if (!hostCanSitOut(market)) return { ok: false, reason: 'last-call' };", "  if (false) return { ok: false, reason: 'last-call' };"],
   shutbutton: ['10', 'host', "  return !!market && market.nextYear !== 'shut';", "  return !!market && (market as HostMarket).state !== 'closed';"],
   passquiet: ['10', 'host', "    return climb !== null ? `${called} Pass, and next year ${climb}` : called;", '    return called;'],
-  emptytile: ['10', 'host', "value: 'The phone has stopped',", "value: '',"],
+  emptytile: ['10', 'host', "value: 'No more calls',", "value: '',"],
+  longtile: ['10', 'host', "value: 'Nobody called',", "value: 'Nobody called this year',"],
+  clubvalue: ['10', 'host', 'value: `Season ${hostStintSeasons(seat, index) + 1}`,', 'value: `Season ${hostStintSeasons(seat, index) + 1} with the ${name}`,'],
   closedsit: ['10', 'host', 'Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.',
     'Nobody has called yet. Sit the year out and see who remembers you.'],
   fewseasons: ['10', 'host', '  const record = seasonsAndTitles(hostStintSeasons(seat, index), s.grades', '  const record = seasonsAndTitles(s.grades.length, s.grades'],
@@ -235,6 +239,10 @@ export { GM_SPORTS } from ${lib('gmSport')};
 export { NHL_OPENING_RATINGS } from '${ROOT_URL}/src/data/nhlOpeningRatings.ts';
 export { NBA_OPENING_RATINGS } from '${ROOT_URL}/src/data/nbaOpeningRatings.ts';
 export { FO_DEPTH } from '${ROOT_URL}/src/data/frontOfficeDepth.ts';
+export { NHL_TEAMS } from '${ROOT_URL}/src/data/conquestDataNhl.ts';
+export { NBA_TEAMS } from '${ROOT_URL}/src/data/conquestDataNba.ts';
+export { MLB_TEAMS } from '${ROOT_URL}/src/data/conquestDataMlb.ts';
+export { FO_TEAMS } from '${ROOT_URL}/src/data/frontOfficePlayers.ts';
 export { GM_CAREER_PANELS } from ${part('gmCareerDesk')};
 export { default as MarketPanel } from ${part('GmJobMarketPanel')};
 export { default as CareerPanel } from ${part('GmCareerPanel')};
@@ -429,6 +437,12 @@ const T = {
    (653 / 651 / 653 offers in 216 feeds on the three seed sets, none from the top tier). */
 
 const nameOf = id => `${id} club`;
+/* A club as each board's own label() prints it, city and name: the names a hub box has to hold. */
+const LABELS = {
+  nhl: Object.fromEntries(M.NHL_TEAMS.map(t => [t.id, `${t.city} ${t.name}`])), nba: Object.fromEntries(M.NBA_TEAMS.map(t => [t.id, `${t.city} ${t.name}`])),
+  mlb: Object.fromEntries(M.MLB_TEAMS.map(t => [t.id, `${t.city} ${t.name}`])), nfl: Object.fromEntries(M.FO_TEAMS.map(t => [t.abbr, `${t.city} ${t.name}`])),
+};
+const labelOf = sport => id => LABELS[sport][id] ?? id;
 const LIVE = XP.GM_TREES;
 const strengthsOf = (d, lg) => Object.fromEntries(Object.values(lg.teams).map(t => [t.abbr, d.strength(t)]));
 const tiersOf = (d, lg) => SEAT.leagueTiers(H.hostSeatTeams(d.host, lg, sameId));
@@ -485,6 +499,8 @@ for (const sport of SPORTS) {
 /* Every string a walk meets, judged together in check 10. */
 const WORDS = [];
 const word = (s, where) => { WORDS.push([s, where]); };
+const BOXES = [];                      // every hub box a walk meets: check 10 judges its words and whether they fit the box
+const boxed = (t, where) => { if (t) BOXES.push([t, where]); };
 const LINES = [];                      // the market's line and box for every career on the ladder
 const SAMPLE = {};                     // sport -> state -> one seat and its market, for the panels
 
@@ -545,8 +561,8 @@ function readAll(d, save, desk, counted, outcome) {
   const xp = H.hostXpOf(desk);
   const market = H.hostMarket(d.host, lg, seat, nameOf);
   const where = `${d.host.sport} ${save.phase}`;
-  const tile = t => { if (t) { word(t.value, `${where} tile`); word(t.sub, `${where} tile`); } };
-  tile(H.hostMarketTile(market, d.host.pack)); tile(H.hostCareerTile(seat, nameOf)); tile(H.hostXpTile(desk, LIVE, !!desk));
+  /* The save's own club under its real name, as the board that binds this will hand it in. */
+  boxed(H.hostMarketTile(market), where); boxed(H.hostCareerTile(seat, labelOf(d.host.sport)), where); boxed(H.hostXpTile(desk, LIVE, !!desk), where);
   if (market) {
     word(market.line, `${where} market line`);
     const card = H.hostOutOfWorkCard(d.host, lg, seat, market, nameOf);
@@ -658,7 +674,7 @@ for (const sport of SPORTS) {
       /* Somebody called, and next year is not open: the last calls, or a year that hangs on a climb. */
       if (m.state === 'offers' && m.nextYear === 'shut') { M4.lastCalls++; lastCallCareers.push({ sport, lg, seat, old, at, m }); }
       if (m.state === 'offers' && m.nextYear === 'climb') M4.passClimb++;
-      const tile = H.hostMarketTile(m, pack);
+      const tile = H.hostMarketTile(m);
       LINES.push({ at, state: m.state, out, line: m.line, value: tile.value, sub: tile.sub, seasons: H.hostStintSeasons(seat, 0), m, pack, seat, oldName: nameOf(old) });
       const kind = m.state === 'quiet' && m.nextYear === 'climb' ? 'climb' : m.state === 'offers' && m.nextYear === 'shut' ? 'last' : m.state === 'offers' && m.nextYear === 'climb' ? 'pass' : m.state;
       (SAMPLE[sport] ??= {})[kind] ??= { seat, m, lg };
@@ -1062,7 +1078,7 @@ for (const sport of SPORTS) {
     ok(refuse(old) === null && refuse(stranger) === null && refuse('no such club') === null, `${at}: a seat nobody offered was taken`);
     const newLegacy = H.hostLegacy(d.host, lg, { team: offer.teamId, seasonsPlayed: save.seasonsPlayed, titles: save.titles, fired: false, seasonCounted: true });
     ok(H.hostTakeSeat({ host: d.host, league: lg, desk: out.desk, save: out.save, legacy: newLegacy, teamId: offer.teamId, nameOf, blocks: RULES }) === null, `${at}: a man who holds a seat took another`);
-    word(H.hostTakeArmLine(d.host.pack, offer, false), `${at} arm`); word(H.hostCareerTile(ns, nameOf).value, `${at} career tile`);
+    word(H.hostTakeArmLine(d.host.pack, offer, false), `${at} arm`); boxed(H.hostCareerTile(ns, labelOf(sport)), `${at} after the move`);
 
     /* The year out. Refused three ways, each before the league is touched. */
     const copy = clone(lg), frozen = J(copy), rng = mulberry32(900 + snap.seed);
@@ -1152,9 +1168,40 @@ const judge = (s, where) => {
   if (RAW.test(s)) fail(`an unfilled value on ${where}: ${s.slice(0, 80)}`);
 };
 for (const [s, where] of WORDS) judge(s, where);
+/* A hub box holds one line of value and one of sub and cuts the rest off (HubTiles), so a string that outgrows the
+   box loses its end. Every box string is held to the host's two ceilings (measured in a browser, see the host). */
+let boxesRead = 0;
+const longest = { value: '', sub: '' };
+const box = (t, where) => {
+  boxesRead++;
+  judge(t.value, `${where} box`); judge(t.sub, `${where} box`);
+  if (typeof t.value !== 'string' || typeof t.sub !== 'string') return;
+  if (t.value.length > H.HOST_TILE_VALUE_MAX) fail(`${where} box: the value is ${t.value.length} letters and the box holds ${H.HOST_TILE_VALUE_MAX} (${t.value})`);
+  if (t.sub.length > H.HOST_TILE_SUB_MAX) fail(`${where} box: the sub is ${t.sub.length} letters and the box holds ${H.HOST_TILE_SUB_MAX} (${t.sub})`);
+  if (t.value.length > longest.value.length) longest.value = t.value;
+  if (t.sub.length > longest.sub.length) longest.sub = t.sub;
+};
+ok(Number.isInteger(H.HOST_TILE_VALUE_MAX) && H.HOST_TILE_VALUE_MAX >= 8 && H.HOST_TILE_VALUE_MAX <= 19 && Number.isInteger(H.HOST_TILE_SUB_MAX) && H.HOST_TILE_SUB_MAX <= 35,
+  `the box ceilings are ${H.HOST_TILE_VALUE_MAX} and ${H.HOST_TILE_SUB_MAX}: the measured line holds about 19 letters of value and 35 of sub`);
+for (const [t, where] of BOXES) box(t, where);
+/* The Career box for every club of every sport, under the name its board prints, in a first, a tenth and a fortieth
+   season: the season and the whole club name are on the box, and both fit. */
+let clubBoxes = 0;
+for (const sport of SPORTS) {
+  const label = labelOf(sport);
+  for (const id of Object.keys(FLEET[sport].closed[0].lg.teams)) {
+    if (label(id) === id) { fail(`${sport} ${id}: the board's team list has no name for this club`); continue; }
+    for (const seasons of [0, 9, 39]) {
+      const t = H.hostCareerTile({ v: 1, career: { version: 1, stints: [{ team: id, tier: 2, from: 2030 - seasons, grades: Array(seasons).fill('met') }], seasonsOut: 0 } }, label);
+      box(t, `${sport} ${id} career, season ${seasons + 1}`);
+      if (!`${t.value} ${t.sub}`.includes(label(id)) || !t.value.includes(String(seasons + 1))) fail(`${sport} ${id}: the Career box reads "${t.value}" over "${t.sub}", without season ${seasons + 1} or without ${label(id)}`);
+      clubBoxes++;
+    }
+  }
+}
 const ARMS = {};
 for (const k of LINES) {
-  judge(k.line, `${k.at} line`); judge(k.value, `${k.at} box`); judge(k.sub, `${k.at} box`);
+  judge(k.line, `${k.at} line`); box({ value: k.value, sub: k.sub }, k.at);
   if (k.state === 'closed' && SIT.test(`${k.line} ${k.value} ${k.sub}`)) fail(`${k.at}: a closed market tells him to sit (${k.line.slice(-70)})`);
   const told = /after (\d+) seasons?/.exec(k.line);
   if (k.out === 0 && (!told || Number(told[1]) !== k.seasons)) fail(`${k.at}: the line states ${told ? told[1] : 'no'} seasons, he ran the club for ${k.seasons}`);
@@ -1193,8 +1240,7 @@ for (const sport of SPORTS) {
     H.hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate', 'overperformance', 'prospects']),
     ...['open', 'climb', 'shut'].flatMap(nextYear => [0, 1, 3].flatMap(n => [true, false].map(on => H.hostSitArmLine({ nextYear, offers: Array(n).fill(null) }, on))))]) judge(s, `${sport} help`);
   for (const [desk, live, on] of [[null, LIVE, false], [deskWith({}), LIVE, true], [deskWith({}), [], true], [G.freshGmDesk(), LIVE, true], [deskWith(Object.fromEntries(LIVE.map(t => [t, 5]))), LIVE, true]]) {
-    const t = H.hostXpTile(desk, live, on);
-    judge(t.value, `${sport} GM level box`); judge(t.sub, `${sport} GM level box`);
+    box(H.hostXpTile(desk, live, on), `${sport} GM level`);
   }
 }
 for (const e of ['fired', 'walked', 'poached', 'expired', undefined]) judge(H.hostStintEndWords({ team: 'AAA', tier: 1, from: 2030, grades: [], ended: e }), 'a stint ending');
@@ -1231,7 +1277,7 @@ for (const sport of SPORTS) {
     draw(M.CareerPanel, G.freshGmDesk(), facts(k.seat, k.m, 'fired', true), `${sport} career panel (${kind})`);
     const tiles = PANELS.map(p => p.tile({ sport: gm, desk: G.freshGmDesk(), facts: facts(k.seat, k.m, 'fired', true) }));
     if (tiles.some(t => !t)) fail(`${sport} (${kind}): a career box is missing between seats`);
-    for (const t of tiles) if (t) { judge(t.value, `${sport} box (${kind})`); judge(t.sub, `${sport} box (${kind})`); }
+    for (const t of tiles) if (t) box(t, `${sport} hub (${kind})`);
   }
   const held = H.hostLegacySeat({ team: 'AAA', tier: 2, season: 2030, seasonCounted: true, seasonsPlayed: 4, titles: 1, fired: false, lastGrade: 'met' });
   draw(M.MarketPanel, G.freshGmDesk(), facts(held, null, 'hub', true), `${sport} job market panel (in a seat)`);
@@ -1243,6 +1289,7 @@ for (const sport of SPORTS) {
 }
 ok(SPORTS.every(s => ['offers', 'quiet', 'closed', 'last'].every(k => SAMPLE[s] && SAMPLE[s][k])), 'a sport reached no career in one of the three market states or on a last call, so its panel was not drawn');
 console.log(`   ${wordsRead} strings read (${LINES.length} market lines, ${legacyLines} lines of an older record), ${panelsDrawn} panels drawn`);
+console.log(`   ${boxesRead} hub boxes held to ${H.HOST_TILE_VALUE_MAX} letters of value and ${H.HOST_TILE_SUB_MAX} of sub (${clubBoxes} Career boxes under real club names); the longest read: "${longest.value}" (${longest.value.length}) over "${longest.sub}" (${longest.sub.length})`);
 
 /* ================================================================== */
 const red = [...failedIn.entries()].filter(([, n]) => n > 0);
