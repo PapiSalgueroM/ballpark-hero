@@ -1,0 +1,1 @@
+fix2 exit=0 4s | cmFix: ALL GREEN. 12 Release AS saves load and play unchanged, the list is a true double round robin for all 20 clubs, a first season plays it and the second does not.
