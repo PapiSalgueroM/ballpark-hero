@@ -320,8 +320,9 @@ async function main() {
         assert.ok(!enabled.report.detail.play.some(e => e.kind === 'var'), 'A loaded legacy live match is never opted in retrospectively');
       },
       /* Round 1218: only where VAR is used. On fixture rates, so a review that slipped into a competition without
-         them would show at once. A match whose competition has no row that says yes (Championship, Eredivisie,
-         Ligue 1, the Scottish Premiership here, and a covered club's domestic cup) is the same match, and leaves
+         them would show at once. A match whose competition has no row that says yes (which ones is read off the
+         ledger below: after the closing fix of 2026-10-10 that is the Championship and every domestic cup of the
+         clubs walked here, while the Eredivisie, Ligue 1 and the Scottish Premiership say yes) is the same match, and leaves
          the random stream in the same place, whether reviews are asked for or not, and its saved live match
          carries no opt in. A league match in a league that says yes carries it. */
       async coverage() {
