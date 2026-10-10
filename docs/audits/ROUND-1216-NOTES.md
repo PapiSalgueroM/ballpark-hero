@@ -3,6 +3,11 @@
 Written 2026-10-10 by the desktop Claude lane (session G), builder of Round 1216.
 Branch `r1216-own-goal-motion`, base origin/release-at-gate 46e4231c (Release AT as it went to its gate).
 
+READ THE LAST SECTION FIRST ("The review fix pass"). Two adversarial reviews found that a keeper's own goal had no
+rule that made the ball turn and that a keeper was never drawn holding his head. Both are fixed, and several
+numbers written below by the builder are superseded there: the count of tests (16, not 15) and of controls (20,
+not 14), the turn's least (it was read off one lucky fleet), the walk bounds, and the recorded OWN digest.
+
 ## Why
 
 A player's report the owner forwarded on 2026-10-09: in a Club Manager live match an own goal still played like any
@@ -234,3 +239,75 @@ and, for the picture before this round, from r1216-ogbefore2 (`files/ogbefore-ow
   names standing by.
 - One thing seen that is not this round's: a booking in the goal's own minute ("Booked: ... 9'") puts its pill
   across the top of that penalty area, and in the keeper's own goal it lies over the keeper while he dives.
+
+## The review fix pass (2026-10-10, after two adversarial reviews)
+
+Head before it f5a40cc2. The reviews: one major (run lens), the rest minors. What changed, and what is now true.
+
+### A keeper's own goal always turns (the major)
+
+For a back the corner is on his own side and he stands 5 off the straight line to it, so the turn is a bound of
+the geometry. For a keeper the corner was left to the line's own flank (Club Manager's goal lines carry none, so
+the minute's parity chose it) and the touch was wherever his dive had him: with the man who delivered it on the
+far side from that corner the ball went almost straight through his gloves. The run reviewer read the committed
+test on sixteen other fleets: 2.2 to 17.2 degrees on four of them, OG5 red with nothing wrong, and the committed
+fleet's least (34.1) was the highest of the seventeen. A floor read off one sample is a coin toss.
+
+The fix, one line of `ownGoalFrame`: a keeper's own goal ends in the corner ON THE SIDE THE BALL CAME FROM, so it
+comes back across him. A back's own goal and a named man who is not on the grass are computed as they were.
+
+OG5 now holds the floor of 20 where it is a bound of the geometry, on a sweep by hand (the man who delivers it at
+25 places across the box for each side; a keeper at five places, each parity of the minute, each flank; a back at
+170 places of his own half; and the scene the read reviewer worked by hand), and reads the fleet beside it.
+`OWN_GOAL_FLEET=<n>` hands the first describe of the test another fleet (the same five clubs on the seeds
+n * 100003 + 17 to 21). Measured on the committed fleet and on fleets 1 to 16 (r1216-fx-a, r1216-fx-b):
+
+| | least on any of the seventeen fleets | on the sweep by hand |
+|---|---|---|
+| the turn off a back | 28.4 (per fleet 28.4 to 46.0) | 27.1 (4,420 scenes) |
+| the turn off a keeper | 59.9 (per fleet 59.9 to 65.7; fleets 9 and 10 gave 2.2 before) | 43.3 (1,500 scenes) |
+| the baseline arm, most | 3.3 on every fleet | |
+
+The scene the reviewer worked by hand (7.2 degrees by arithmetic before) turns by 103.8.
+
+### A keeper who put it in is drawn holding his head
+
+The figure draws hands at a head only when it is not in a dive, and a keeper's own goal left him lying in his dive
+to the end, so he was drawn as any beaten keeper while the help and What's New said he holds his head. He now gets
+up as it goes in: his dive eases back to nothing between the net and the end of the action, and the last frame
+(and the still frame of reduced motion) has him on his feet with both hands at his head. No copy changed: it is
+true of a defender and of a keeper now. The tests read the drawing and not the mark `data-pm-rue` (RUE renders the
+pose his own goal ends on beside the same line without og; OG3 holds it on every keeper of the fleet against the
+baseline arm; OG7 under reduced motion; section 9 of the walk reads how far his figure leans).
+
+### The rest
+
+- The material's two exact counts (100 matches, 200 halves) are a floor and an identity: a walk ends early on a
+  sacking. Its other floors are at half of the least measured over seventeen fleets, not at half of one.
+- OG5's walk bound was the fleet's maximum. It is a bound of the geometry on every back now (he is brought into
+  the band and at most 5 further across, never beyond), and the two statistics are read on backs only with their
+  measured numbers beside them (median 0.0 to 0.6 against 3, 90th percentile 3.0 to 4.8 against 8).
+- OG10 (new) holds each edge of the band a back meets it in, on scenes made by hand. OG8 also holds that og on a
+  shot or a save is not read. The test file has 16 tests.
+- Controls, 20 now. New: `keepercorner` (OG5), `keeperdown` (OG3), `kind` (OG8), `bandlow`, `bandhigh`, `clamp`
+  (OG10). Each exits 1 with "as it must".
+- `scripts/lib/ownGoalBeforeBuild.mjs` is the one edit behind the walk's control ogbefore, so it runs from the repo.
+- OWN_DIGEST was taken again: c648618c, was 669ef935. What moved it is the keeper's own goal alone (6 of the 16
+  recorded variants, 132 of 352 frames). Proof, r1216-fx-p: with the corner line and the get up put back the first
+  recording replays green; with either one put back alone it does not (0e31fa9b, eddb7f1d). RUE_DIGEST did not move.
+
+### Not done in the fix pass, and why
+
+- The test helpers are still copies (seeded, walkClub, overlapping, the FNV digest, step, mount). Lifting them
+  means editing `src/test/liveSimMotion.test.tsx`, which is not on this round's file list, and proving its printed
+  R lines the same before and after. The header of the test no longer promises that its clubs and seeds equal that
+  file's: nothing needs them to.
+- "Facing his own net" is not drawn: a figure is upright and has no face. The lead's to accept or rule on.
+- After the touch the man's `kick` is the sine of pi, a number that is not quite 0, so his `data-cm-actor-pose`
+  reads "strike" while he holds his head (a keeper's reads "dive" until the last frame). Nothing reads that
+  attribute for him, the plain striker has the same artefact on the base, and changing it would move the recorded
+  frames of a back's own goal for nothing a player can see.
+- `off` could in principle send two team mates to one spot (reasoned by the reviewer, 0 seen on 3,000 own goals;
+  OG4 and the older R2 would catch it). A goal that waited behind another chance is delivered by the first
+  outfield man in list order, as on the base. The twin's "man who leaves" case is still run only when the search
+  meets one, as the brief allows (met on attempt 325 of 4,000).
