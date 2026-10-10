@@ -45,6 +45,39 @@
  * SIM_GM_DRAFT_ORDER_CONTROL=all runs every control in turn and exits 0 only
  * if every one fired.
  *
+ * MEASURED, 2026-10-10. Every draw here is keyed and every league is built
+ * from a seeded generator, so these numbers are the same on every machine and
+ * on every run; a number that moves means the modules or this file changed.
+ *   Section 2. 5,000 of 5,000 keys exact. 70 club shares of the first pick
+ *     (14 clubs, seeds 11, 23, 37, 59, 71, 40,000 lotteries each): distance
+ *     from the league's table in standard errors, median 0.55, 95th
+ *     percentile 2.03. The band is 4.5, the one simGmPicks section 2 uses for
+ *     the same draw, so a healthy module sits far inside it; the flat control
+ *     puts 5,065 checks outside and oddsrow 5,070.
+ *   Section 3. 3,000 leagues: 5,258 level pairs and 6,881 larger groups in
+ *     the field, 6,825 with an odd combination. Level pairs reversed in round
+ *     two: 50,648 outside the field, 44,200 inside it (11,521 of those were
+ *     reordered by the lottery first, which is what flipbeforelottery needs),
+ *     14,179 across the line. Floors: 50 cases of each kind. A drawing won:
+ *     21 shares over 20,000 keys each, median 0.38, 95th percentile 1.04
+ *     standard errors from an even chance, band 4.5.
+ *   Section 4. Three rule sets, 2,000 leagues each: 8,464 climbs, 245 of them
+ *     stopped exactly at the cap (floors 1,000 and 20).
+ *   Section 5. 600 leagues: 8,785 of the year's picks changed hands, 600
+ *     leagues hold a club with three or more picks, 351 a club with none, 202
+ *     awarded picks (floors 1,000, 100, 100 and 50).
+ *   Section 7. A lottery fits 3,750 ms for 1 to 32 tiles (14 clubs take
+ *     3,700 ms, 16 take 3,720 ms); the longest run is 3,780 ms against the
+ *     house ceiling of 5,000. Those are rules, not readings: the pace is cut
+ *     to fit, and the check is three quarters of the ceiling for the lottery
+ *     and four fifths for the run.
+ *   Section 10. 400 nights: 5,256 traded picks used by their holders, 1,427
+ *     of them his; he was on the clock 2,091 times, 39 of them at the first
+ *     pick of the draft; one night he held no slot at all (floors 1,000, 200
+ *     and 400).
+ *   The floors are a fraction of the smallest count measured and exist so a
+ *   check that has stopped looking at anything cannot stay green.
+ *
  * Run: node scripts/simGmDraftOrder.mjs
  */
 
@@ -137,7 +170,8 @@ if (CONTROL === 'all') {
   const names = Object.keys(CONTROLS).filter((_, i) => i % shardOf === shardAt);
   for (const name of names) {
     const run = spawnSync(process.execPath, [self], { env: { ...process.env, SIM_GM_DRAFT_ORDER_CONTROL: name }, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
-    const last = (run.stdout + run.stderr).trim().split('\n').pop() ?? '';
+    /* The verdict is the last line of stdout. The FAIL lines go to stderr and say nothing about whether it fired. */
+    const last = String(run.stdout ?? '').trim().split('\n').pop() ?? '';
     const ok = run.status === 1 && last.includes(` CONTROL ${name} FIRED.`);
     if (ok) fired += 1;
     lines.push(`   ${ok ? 'fired ' : 'NOT OK'} exit ${run.status}  ${name.padEnd(18)} ${last.slice(0, 150)}`);
