@@ -1,0 +1,9 @@
+6) balance: on against off, careers a seed mlb 8000, 3 seeds
+   mlb: off peak 82.47, legacy median 395, Hall 31.2%; on peak 82.57, legacy median 406, Hall 32.6%
+      peak OVR: difference 0.10, interval [0.04, 0.17], tolerance 1.00 either way: inside
+      median legacy: difference 2.8%, interval [1.8%, 3.8%], tolerance 7.5% either way: inside
+      Hall share: difference 1.42 pts, interval [0.59 pts, 2.25 pts], tolerance 3.00 pts either way: inside
+      headline awards a season: difference 0.2%, interval [-2.4%, 2.6%], tolerance 15.0% either way: inside
+      6b: on the summer loop, median career majors 0, 7.5% ever win one, Hall 32.6%
+   balance ran in 2534.8 s
+simUsCareerSummer: green. Sections 6 held.
