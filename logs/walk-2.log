@@ -1,0 +1,13 @@
+FAIL 320-soccer-career: AssertionError [ERR_ASSERTION]: 320-soccer-career: Squad Back restores body and page position
+Career programme native: 1080 checks, 20/21 completed gameplay journeys
+320-soccer-career ok=false squad before {"y":3,"overflow":"","computed":"visible","locked":null} after {"y":245,"overflow":"","computed":"visible","locked":null}
+320-soccer-career-wheel ok=true 
+320-soccer-career-counteroffer ok=true 
+390-soccer-career ok=true squad before {"y":0,"overflow":"","computed":"visible","locked":null} after {"y":0,"overflow":"","computed":"visible","locked":null}
+390-soccer-career-wheel ok=true 
+390-soccer-career-counteroffer ok=true 
+1280-soccer-career ok=true squad before {"y":0,"overflow":"","computed":"visible","locked":null} after {"y":0,"overflow":"","computed":"visible","locked":null}
+1280-soccer-career-wheel ok=true 
+1280-soccer-career-counteroffer ok=true 
+checks 1080 cases 21 ok 20
+96

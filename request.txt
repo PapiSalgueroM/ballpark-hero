@@ -1,0 +1,9 @@
+# Release AU: PR216's career walk again on the final head, twice, with what it measured at the Squad sheet's Back
+#!build
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache career-programme-artifacts && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -1
+sim-base-before-merge: node .rc/x/pointProgrammeBase.mjs 2f1919478db9e3a0f13b8f8b34373756944459c1 && SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+walk-1: SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs > "$RC_OUT/walk-1.log" 2>&1; s=$?; grep -E "^FAIL|native:" "$RC_OUT/walk-1.log" | cut -c1-260; node .rc/x/readProgrammeReport.mjs | grep -E "soccer|checks" | cut -c1-330; cp career-programme-artifacts/native/320-soccer-career*squad*.png "$RC_OUT/" 2>/dev/null; ls career-programme-artifacts/native | grep -c png; exit $s
+walk-2: SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs > "$RC_OUT/walk-2.log" 2>&1; s=$?; grep -E "^FAIL|native:" "$RC_OUT/walk-2.log" | cut -c1-260; node .rc/x/readProgrammeReport.mjs | grep -E "soccer|checks" | cut -c1-330; cp career-programme-artifacts/native/320-soccer-career*squad*.png "$RC_OUT/" 2>/dev/null; ls career-programme-artifacts/native | grep -c png; exit $s
+restore: git checkout HEAD -- scripts; echo restored
