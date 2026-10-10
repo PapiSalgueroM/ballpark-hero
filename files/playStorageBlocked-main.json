@@ -1,0 +1,6972 @@
+{
+ "base": "http://localhost:4173",
+ "control": "",
+ "arms": [
+  "blocked",
+  "full"
+ ],
+ "walked": [
+  {
+   "route": "/",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": false,
+   "open": {
+    "route": "/",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 173,
+     "links": 329,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/soccer-career",
+      "top": 315
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 173,
+      "links": 329,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/soccer-career",
+       "top": 315
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 173,
+      "links": 329,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/soccer-career",
+       "top": 315
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/",
+   "view": "desktop",
+   "isGame": false,
+   "mountOnly": false,
+   "open": {
+    "route": "/",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 177,
+     "links": 329,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/soccer-career",
+      "top": 281
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 177,
+      "links": 329,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/soccer-career",
+       "top": 281
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 177,
+      "links": 329,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/soccer-career",
+       "top": 281
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/soccer",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": false,
+   "open": {
+    "route": "/soccer",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 10,
+     "links": 75,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/club-manager",
+      "top": 1138.90625
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/soccer",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 10,
+      "links": 75,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/club-manager",
+       "top": 1138.90625
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/soccer",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 10,
+      "links": 75,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 89,
+      "firstTile": {
+       "p": "/club-manager",
+       "top": 1138.90625
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/soccer",
+   "view": "desktop",
+   "isGame": false,
+   "mountOnly": false,
+   "open": {
+    "route": "/soccer",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 10,
+     "links": 75,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": {
+      "p": "/club-manager",
+      "top": 908.171875
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/soccer",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 10,
+      "links": 75,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 85,
+      "firstTile": {
+       "p": "/club-manager",
+       "top": 908.171875
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/soccer",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 10,
+      "links": 75,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 85,
+      "firstTile": {
+       "p": "/club-manager",
+       "top": 908.171875
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/whats-new",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": false,
+   "open": {
+    "route": "/whats-new",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 4,
+     "links": 195,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/club-manager",
+      "top": 325.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/whats-new",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 4,
+      "links": 195,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 0,
+      "firstTile": {
+       "p": "/club-manager",
+       "top": 325.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/whats-new",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 4,
+      "links": 195,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 0,
+      "firstTile": {
+       "p": "/club-manager",
+       "top": 325.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/whats-new",
+   "view": "desktop",
+   "isGame": false,
+   "mountOnly": false,
+   "open": {
+    "route": "/whats-new",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 4,
+     "links": 195,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/club-manager",
+      "top": 295
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/whats-new",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 4,
+      "links": 195,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 32,
+      "firstTile": {
+       "p": "/club-manager",
+       "top": 295
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/whats-new",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 4,
+      "links": 195,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": null,
+      "mainTop": 32,
+      "firstTile": {
+       "p": "/club-manager",
+       "top": 295
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/soccer-career",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Choose nationality",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Choose position",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Choose era",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "🎲 Surprise me",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 30,
+     "links": 23,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 30,
+     "links": 23,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/soccer-career",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Choose nationality",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Choose position",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Choose era",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🎲 Surprise me",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 30,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 30,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/soccer-career",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Choose nationality",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Choose position",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Choose era",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🎲 Surprise me",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 30,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 30,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/soccer-career",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Choose nationality",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Choose position",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Choose era",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "🎲 Surprise me",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 30,
+     "links": 23,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 30,
+     "links": 23,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/soccer-career",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Choose nationality",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Choose position",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Choose era",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🎲 Surprise me",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 30,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 30,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/soccer-career",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Choose nationality",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Choose position",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Choose era",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🎲 Surprise me",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 30,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 30,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/club-manager",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/club-manager",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "📅 2026-27 Today. Real squads as of Augu",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "📅 Starting 2026-27",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "📅 2026-27 Today. Real squads as of Augu",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "📅 Starting 2026-27",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 13,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/champions-league-format-history",
+      "top": 1132.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 13,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/champions-league-format-history",
+      "top": 1132.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/club-manager",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "📅 2026-27 Today. Real squads as of Augu",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 Starting 2026-27",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 2026-27 Today. Real squads as of Augu",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 Starting 2026-27",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 13,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/champions-league-format-history",
+       "top": 1160.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 13,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/champions-league-format-history",
+       "top": 1160.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/club-manager",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "📅 2026-27 Today. Real squads as of Augu",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 Starting 2026-27",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 2026-27 Today. Real squads as of Augu",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 Starting 2026-27",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 13,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/champions-league-format-history",
+       "top": 1160.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 13,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/champions-league-format-history",
+       "top": 1160.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/club-manager",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/club-manager",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "📅 2026-27 Today. Real squads as of Augu",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "📅 Starting 2026-27",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "📅 2026-27 Today. Real squads as of Augu",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "📅 Starting 2026-27",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 13,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/champions-league-format-history",
+      "top": 868
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 13,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/champions-league-format-history",
+      "top": 868
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/club-manager",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "📅 2026-27 Today. Real squads as of Augu",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 Starting 2026-27",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 2026-27 Today. Real squads as of Augu",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 Starting 2026-27",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 13,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/champions-league-format-history",
+       "top": 896
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 13,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/champions-league-format-history",
+       "top": 896
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/club-manager",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "📅 2026-27 Today. Real squads as of Augu",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 Starting 2026-27",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 2026-27 Today. Real squads as of Augu",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "📅 Starting 2026-27",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 13,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/champions-league-format-history",
+       "top": 896
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 13,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/champions-league-format-history",
+       "top": 896
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/nba-my-career",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "The Pest Picks pockets, gets under skin",
+      "inDialog": false,
+      "changed": false,
+      "threw": false
+     },
+     {
+      "label": "Play your road to the draft",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Got it",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 3,
+    "first": {
+     "buttons": 38,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/soccer-grid",
+      "top": 12116.5
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 11,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/soccer-grid",
+      "top": 11457.6875
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nba-my-career",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "The Pest Picks pockets, gets under skin",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Got it",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 38,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/soccer-grid",
+       "top": 12144.5
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 11,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/soccer-grid",
+       "top": 11485.6875
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nba-my-career",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "The Pest Picks pockets, gets under skin",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Got it",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 38,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/soccer-grid",
+       "top": 12144.5
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 13,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/soccer-grid",
+       "top": 11614.6875
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/nba-my-career",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/nba-my-career",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "The Pest Picks pockets, gets under skin",
+      "inDialog": false,
+      "changed": false,
+      "threw": false
+     },
+     {
+      "label": "Play your road to the draft",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Got it",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 3,
+    "first": {
+     "buttons": 38,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": {
+      "p": "/soccer-grid",
+      "top": 8069.5
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 11,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": {
+      "p": "/soccer-grid",
+      "top": 7385.59375
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nba-my-career",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "The Pest Picks pockets, gets under skin",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Got it",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 38,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/soccer-grid",
+       "top": 8097.5
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 11,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/soccer-grid",
+       "top": 7413.59375
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nba-my-career",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "The Pest Picks pockets, gets under skin",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Got it",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 38,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/soccer-grid",
+       "top": 8097.5
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 13,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/soccer-grid",
+       "top": 7523.09375
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/nfl-my-career",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Play your road to the draft",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Got it",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "3 seasons Big college program Every game",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 41,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/guess-the-nation",
+      "top": 12297
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 9,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/guess-the-nation",
+      "top": 11456
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nfl-my-career",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Got it",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "3 seasons Big college program Every game",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 41,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/guess-the-nation",
+       "top": 12325
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 9,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/guess-the-nation",
+       "top": 11484
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nfl-my-career",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Got it",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Retry",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 41,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/guess-the-nation",
+       "top": 12325
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 13,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/guess-the-nation",
+       "top": 11793.6875
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/nfl-my-career",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Play your road to the draft",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Got it",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "3 seasons Big college program Every game",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 41,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": {
+      "p": "/guess-the-nation",
+      "top": 8314.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 9,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": {
+      "p": "/guess-the-nation",
+      "top": 7579.25
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nfl-my-career",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Got it",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "3 seasons Big college program Every game",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 41,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/guess-the-nation",
+       "top": 8342.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 9,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/guess-the-nation",
+       "top": 7607.25
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nfl-my-career",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Play your road to the draft",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Got it",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Retry",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 41,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/guess-the-nation",
+       "top": 8342.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 13,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/guess-the-nation",
+       "top": 7765.34375
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/stadium-tycoon",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/stadium-tycoon",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's go",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "🏗️ Upgrades 3 ready",
+      "inDialog": false,
+      "changed": false,
+      "threw": false
+     },
+     {
+      "label": "🧑‍🤝‍🧑 Payroll 0 hired",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "🏟️ Stadium",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 3,
+    "first": {
+     "buttons": 29,
+     "links": 23,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 26,
+     "links": 23,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/stadium-tycoon",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's go",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🏗️ Upgrades 3 ready",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "🧑‍🤝‍🧑 Payroll 0 hired",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🏟️ Stadium",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 29,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 26,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/stadium-tycoon",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's go",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🏗️ Upgrades 3 ready",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "🧑‍🤝‍🧑 Payroll 0 hired",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🏟️ Stadium",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 2,
+     "first": {
+      "buttons": 29,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 26,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/stadium-tycoon",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/stadium-tycoon",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's go",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "🏗️ Upgrades 3 ready",
+      "inDialog": false,
+      "changed": false,
+      "threw": false
+     },
+     {
+      "label": "🧑‍🤝‍🧑 Payroll 0 hired",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "🏟️ Stadium",
+      "inDialog": false,
+      "changed": false,
+      "threw": false
+     }
+    ],
+    "changed": 2,
+    "first": {
+     "buttons": 29,
+     "links": 23,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 26,
+     "links": 23,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/stadium-tycoon",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's go",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🏗️ Upgrades 3 ready",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "🧑‍🤝‍🧑 Payroll 0 hired",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🏟️ Stadium",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 2,
+     "first": {
+      "buttons": 29,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 26,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/stadium-tycoon",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's go",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🏗️ Upgrades 3 ready",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      },
+      {
+       "label": "🧑‍🤝‍🧑 Payroll 0 hired",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "🏟️ Stadium",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 2,
+     "first": {
+      "buttons": 29,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 26,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/college-grid",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/college-grid",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Close",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "+",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "+",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "+",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 18,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 6567
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 18,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 6661
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/college-grid",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Close",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 18,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 6595
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 18,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 6689
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/college-grid",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Close",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 18,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 6595
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 18,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 6689
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/college-grid",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/college-grid",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Close",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "+",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "+",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "+",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 18,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 4889.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 18,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 4983.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/college-grid",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Close",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 18,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 4917.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 18,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 5011.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/college-grid",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Close",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "+",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 18,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 4917.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 18,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 5011.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/front-office",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/front-office",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Chicago Bears NFC North",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "✍️ RE-SIGN DESK 6 deals end this spring ",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Process, patience, all the safe words ME",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Hub",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 39,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/nfl-playoff-format-history",
+      "top": 9446.25
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 17,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/nfl-playoff-format-history",
+      "top": 9021.5
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/front-office",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Chicago Bears NFC North",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "✍️ RE-SIGN DESK 6 deals end this spring ",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Process, patience, all the safe words ME",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Hub",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 39,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/nfl-playoff-format-history",
+       "top": 9474.25
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 17,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/nfl-playoff-format-history",
+       "top": 9049.5
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/front-office",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Chicago Bears NFC North",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "✍️ RE-SIGN DESK 6 deals end this spring ",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Process, patience, all the safe words ME",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Hub",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 39,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/nfl-playoff-format-history",
+       "top": 9474.25
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 17,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/nfl-playoff-format-history",
+       "top": 9049.5
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/front-office",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/front-office",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Chicago Bears NFC North",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "✍️ RE-SIGN DESK 6 deals end this spring ",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Process, patience, all the safe words ME",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Hub",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 39,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": {
+      "p": "/nfl-playoff-format-history",
+      "top": 5940.5
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 17,
+     "links": 28,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": {
+      "p": "/nfl-playoff-format-history",
+      "top": 5930.125
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/front-office",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Chicago Bears NFC North",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "✍️ RE-SIGN DESK 6 deals end this spring ",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Process, patience, all the safe words ME",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Hub",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 39,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/nfl-playoff-format-history",
+       "top": 5968.5
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 17,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/nfl-playoff-format-history",
+       "top": 5958.125
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/front-office",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Chicago Bears NFC North",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "✍️ RE-SIGN DESK 6 deals end this spring ",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Process, patience, all the safe words ME",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Hub",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 39,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/nfl-playoff-format-history",
+       "top": 5968.5
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 17,
+      "links": 28,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": {
+       "p": "/nfl-playoff-format-history",
+       "top": 5958.125
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/build-your-xi",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/build-your-xi",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Got it!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "4-3-3 11 players",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Reroll: get a different team",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Reroll: get a different team",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 15,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/perfect-lineup-f1",
+      "top": 5425
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 24,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/perfect-lineup-f1",
+      "top": 6014.5
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/build-your-xi",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Got it!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "4-3-3 11 players",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Reroll: get a different team",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Reroll: get a different team",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 15,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/perfect-lineup-f1",
+       "top": 5453
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 24,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/perfect-lineup-f1",
+       "top": 6042.5
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/build-your-xi",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Got it!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "4-3-3 11 players",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Reroll: get a different team",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Reroll: get a different team",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 15,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/perfect-lineup-f1",
+       "top": 5453
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 24,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/perfect-lineup-f1",
+       "top": 6058.5
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/build-your-xi",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/build-your-xi",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Got it!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "4-3-3 11 players",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Reroll: get a different team",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Reroll: get a different team",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 4,
+    "first": {
+     "buttons": 15,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/perfect-lineup-f1",
+      "top": 3761.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 24,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/perfect-lineup-f1",
+      "top": 4683.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/build-your-xi",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Got it!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "4-3-3 11 players",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Reroll: get a different team",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Reroll: get a different team",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 4,
+     "first": {
+      "buttons": 15,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/perfect-lineup-f1",
+       "top": 3789.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 24,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/perfect-lineup-f1",
+       "top": 4711.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/build-your-xi",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Got it!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "4-3-3 11 players",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Reroll: get a different team",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Reroll: get a different team",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 3,
+     "first": {
+      "buttons": 15,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/perfect-lineup-f1",
+       "top": 3789.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 24,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/perfect-lineup-f1",
+       "top": 4711.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/footle",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/footle",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 1,
+    "first": {
+     "buttons": 12,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/cage-clash",
+      "top": 4416.25
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 12,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/cage-clash",
+      "top": 4416.25
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/footle",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 1,
+     "first": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/cage-clash",
+       "top": 4444.25
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/cage-clash",
+       "top": 4444.25
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/footle",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 1,
+     "first": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/cage-clash",
+       "top": 4444.25
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/cage-clash",
+       "top": 4444.25
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/footle",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/footle",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Let's Play!",
+      "inDialog": true,
+      "changed": true,
+      "threw": false
+     }
+    ],
+    "changed": 1,
+    "first": {
+     "buttons": 12,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/cage-clash",
+      "top": 3301.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 12,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 32,
+     "firstTile": {
+      "p": "/cage-clash",
+      "top": 3301.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/footle",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 1,
+     "first": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/cage-clash",
+       "top": 3329.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/cage-clash",
+       "top": 3329.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/footle",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Let's Play!",
+       "inDialog": true,
+       "changed": true,
+       "threw": false
+      }
+     ],
+     "changed": 1,
+     "first": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/cage-clash",
+       "top": 3329.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 60,
+      "firstTile": {
+       "p": "/cage-clash",
+       "top": 3329.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/free-kick",
+   "view": "phone",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/free-kick",
+    "view": "phone",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Today's ten",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Hold to strike",
+      "inDialog": false,
+      "changed": false,
+      "threw": false
+     }
+    ],
+    "changed": 1,
+    "first": {
+     "buttons": 11,
+     "links": 23,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 9,
+     "links": 23,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/free-kick",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Today's ten",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Hold to strike",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 1,
+     "first": {
+      "buttons": 11,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 9,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/free-kick",
+     "view": "phone",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Today's ten",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Hold to strike",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 1,
+     "first": {
+      "buttons": 11,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 9,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/free-kick",
+   "view": "desktop",
+   "isGame": true,
+   "mountOnly": false,
+   "open": {
+    "route": "/free-kick",
+    "view": "desktop",
+    "mode": "open",
+    "presses": [
+     {
+      "label": "Today's ten",
+      "inDialog": false,
+      "changed": true,
+      "threw": false
+     },
+     {
+      "label": "Hold to strike",
+      "inDialog": false,
+      "changed": false,
+      "threw": false
+     }
+    ],
+    "changed": 1,
+    "first": {
+     "buttons": 11,
+     "links": 23,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "last": {
+     "buttons": 9,
+     "links": 23,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 85,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/free-kick",
+     "view": "desktop",
+     "mode": "blocked",
+     "presses": [
+      {
+       "label": "Today's ten",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Hold to strike",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 1,
+     "first": {
+      "buttons": 11,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 9,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "This browser blocks storage, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/free-kick",
+     "view": "desktop",
+     "mode": "full",
+     "presses": [
+      {
+       "label": "Today's ten",
+       "inDialog": false,
+       "changed": true,
+       "threw": false
+      },
+      {
+       "label": "Hold to strike",
+       "inDialog": false,
+       "changed": false,
+       "threw": false
+      }
+     ],
+     "changed": 1,
+     "first": {
+      "buttons": 11,
+      "links": 23,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "last": {
+      "buttons": 9,
+      "links": 23,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "This browser's storage is full, so progress won't be saved. You can still play everything."
+      },
+      "mainTop": 113,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/connections",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/connections",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 11,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/buzzer-beater",
+      "top": 3954
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/connections",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 11,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/buzzer-beater",
+       "top": 3982
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/connections",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 11,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/buzzer-beater",
+       "top": 3982
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/ufc",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/ufc",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 12,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/mystery-box",
+      "top": 4850.5
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/ufc",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/mystery-box",
+       "top": 4878.5
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/ufc",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 12,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/mystery-box",
+       "top": 4878.5
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/football-grid",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/football-grid",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 10,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/cfb-higher-lower",
+      "top": 5350
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/football-grid",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 10,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/cfb-higher-lower",
+       "top": 5378
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/football-grid",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 10,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/cfb-higher-lower",
+       "top": 5378
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/baseball-career",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/baseball-career",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 14,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/puck-detective",
+      "top": 4268.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/baseball-career",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 14,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/puck-detective",
+       "top": 4296.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/baseball-career",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 14,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/puck-detective",
+       "top": 4296.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/baseball-connections",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/baseball-connections",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 33,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 4435.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/baseball-connections",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 33,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 4463.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/baseball-connections",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 33,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 4463.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/hockey-career",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/hockey-career",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 14,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/nfl-gauntlet-draft",
+      "top": 3987.25
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/hockey-career",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 14,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/nfl-gauntlet-draft",
+       "top": 4015.25
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/hockey-career",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 14,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/nfl-gauntlet-draft",
+       "top": 4015.25
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/hockey-higher-lower",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/hockey-higher-lower",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 14,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/guess-the-college",
+      "top": 3897.15625
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/hockey-higher-lower",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 14,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/guess-the-college",
+       "top": 3925.15625
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/hockey-higher-lower",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 14,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/guess-the-college",
+       "top": 3925.15625
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/soccer-grid",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/soccer-grid",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 24,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 4486.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/soccer-grid",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 24,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 4514.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/soccer-grid",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 24,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 4514.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/conquest",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/conquest",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 9,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/golf-higher-lower",
+      "top": 5787.75
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/conquest",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 9,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 5815.75
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/conquest",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 9,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/golf-higher-lower",
+       "top": 5815.75
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/conquest-nba",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/conquest-nba",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 9,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": {
+      "p": "/baseball-career",
+      "top": 4625
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/conquest-nba",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 9,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/baseball-career",
+       "top": 4653
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/conquest-nba",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 9,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": {
+       "p": "/baseball-career",
+       "top": 4653
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/world-cup-bracket",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/world-cup-bracket",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 40,
+     "links": 28,
+     "inputs": 144,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/world-cup-2026-results",
+      "top": 9206
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/world-cup-bracket",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 40,
+      "links": 28,
+      "inputs": 144,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/world-cup-2026-results",
+       "top": 9234
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/world-cup-bracket",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 40,
+      "links": 28,
+      "inputs": 144,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/world-cup-2026-results",
+       "top": 9234
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/nfl-connections",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/nfl-connections",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 33,
+     "links": 27,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/score-predictor",
+      "top": 4322.5
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nfl-connections",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 33,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/score-predictor",
+       "top": 4350.5
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nfl-connections",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 33,
+      "links": 27,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/score-predictor",
+       "top": 4350.5
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/nba-career",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/nba-career",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 14,
+     "links": 27,
+     "inputs": 1,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 0,
+     "firstTile": {
+      "p": "/guess-nascar-driver",
+      "top": 4190.25
+     },
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/nba-career",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 14,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/guess-nascar-driver",
+       "top": 4218.25
+      },
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/nba-career",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 14,
+      "links": 27,
+      "inputs": 1,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 28,
+      "firstTile": {
+       "p": "/guess-nascar-driver",
+       "top": 4218.25
+      },
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/hof-or-bust",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/hof-or-bust",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 13,
+     "links": 24,
+     "inputs": 0,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/hof-or-bust",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 13,
+      "links": 24,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/hof-or-bust",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 13,
+      "links": 24,
+      "inputs": 0,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  },
+  {
+   "route": "/score-predictor",
+   "view": "phone",
+   "isGame": false,
+   "mountOnly": true,
+   "open": {
+    "route": "/score-predictor",
+    "view": "phone",
+    "mode": "open",
+    "presses": [],
+    "changed": 0,
+    "first": {
+     "buttons": 11,
+     "links": 24,
+     "inputs": 2,
+     "snapshot": false,
+     "bootCover": false,
+     "boundary": false,
+     "notice": null,
+     "mainTop": 89,
+     "firstTile": null,
+     "banner": true,
+     "storageKind": "[object Storage]",
+     "native": {
+      "own": true,
+      "configurable": true
+     }
+    },
+    "pageErrors": [],
+    "storageConsole": [],
+    "thirdParty": 0
+   },
+   "arms": [
+    {
+     "route": "/score-predictor",
+     "view": "phone",
+     "mode": "blocked",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 11,
+      "links": 24,
+      "inputs": 2,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "blocked",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is blocked, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Object]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    },
+    {
+     "route": "/score-predictor",
+     "view": "phone",
+     "mode": "full",
+     "presses": [],
+     "changed": 0,
+     "first": {
+      "buttons": 11,
+      "links": 24,
+      "inputs": 2,
+      "snapshot": false,
+      "bootCover": false,
+      "boundary": false,
+      "notice": {
+       "kind": "full",
+       "height": 28,
+       "shown": true,
+       "text": "Storage is full, so progress won't save."
+      },
+      "mainTop": 117,
+      "firstTile": null,
+      "banner": true,
+      "storageKind": "[object Storage]",
+      "native": {
+       "own": true,
+       "configurable": true
+      }
+     },
+     "pageErrors": [],
+     "storageConsole": [],
+     "thirdParty": 0
+    }
+   ]
+  }
+ ]
+}

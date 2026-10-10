@@ -1,0 +1,17 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSoccerCareer exit=1 478s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+playSeasonCentre exit=0 92s | playSeasonCentre: 40 checks, 0 failed
+playSeasonMoments exit=0 39s | playSeasonMoments: 117 checks, 0 failed
+playSeasonCentreMotion exit=0 124s | playSeasonCentreMotion: 77 checks, 0 failed
+playCareerSquad exit=0 145s | playCareerSquad: 170 checks, 0 failed
+playCareerLeagueWorld exit=0 15s | playCareerLeagueWorld: 39 checks, 0 failed
+playCareerMoments exit=0 58s | playCareerMoments: 34 checks, 0 failed
+playLiveMatchFit exit=0 100s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+playTranslatedPage exit=0 130s | playTranslatedPage: 447 checks, 0 failed
+playStorageBlocked exit=0 267s | playStorageBlocked: 826 checks, 0 failed
+playSoccerCareerOpponents exit=0 9s | playSoccerCareerOpponents: 164 checks, 0 failed
+playSoccerCareerCompetitions exit=0 8s | playSoccerCareerCompetitions: 50 checks, 0 failed
+playSoccerCareerContracts exit=0 20s | playSoccerCareerContracts: 201 checks, 0 failed
+playSoccerCareerDiscipline exit=0 8s | playSoccerCareerDiscipline: 178 checks, 0 failed
+playSoccerCareerFamily exit=0 18s | playSoccerCareerFamily: 72 checks, 0 failed
+playSoccerCareerAwardReveal exit=0 12s | playSoccerCareerAwardReveal: 26 checks, 0 failed
