@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-new exit=1 29s | Node.js v24.21.0
+walk-old exit=1 31s | Node.js v24.21.0
+walk-cards exit=0 170s | playUsRivalLines: 21 checks, 0 failed

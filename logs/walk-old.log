@@ -1,0 +1,33 @@
+old saves, 390 wide
+  ok   old nflMade: the save is loaded
+  ok   old nflMade: the card reads its own title and chip ("All-Pro Team", "Morale +5")
+  ok   old nflMade: Continue is above the fold (its bottom at 556 of 844)
+  ok   old nflMade: nothing scrolls sideways on the card (0 pixels over)
+  ok   old nflMade: the tap moved exactly what the chip says (morale 91 to 96, fanbase 40 to 40)
+  ok   old nflDropped: the save is loaded
+  ok   old nflDropped: the card reads its own title and chip ("All-Pro Team", "Morale -5")
+  ok   old nflDropped: Continue is above the fold (its bottom at 575 of 844)
+  ok   old nflDropped: nothing scrolls sideways on the card (0 pixels over)
+  ok   old nflDropped: the tap moved exactly what the chip says (morale 100 to 95, fanbase 100 to 100)
+  ok   old nfl221: the save is loaded
+  ok   old nfl221: the card reads its own title and chip ("All Star Week", "Fanbase +4, the feud softens")
+  ok   old nfl221: Continue is above the fold (its bottom at 556 of 844)
+  ok   old nfl221: nothing scrolls sideways on the card (0 pixels over)
+  ok   old nfl221: the tap moved exactly what the chip says (morale 88 to 88, fanbase 95 to 99)
+  ok   old nflCB: the save is loaded
+  ok   old nflCB: the Rival screen still prints the line the old code saved ("131 tackles, 8.9 sacks, 4 INT")
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForSelector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-season-reveal]') to be visible
+
+    at playOne (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playUsRivalLines.mjs:197:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playUsRivalLines.mjs:296:21 {
+  log: [ "  - waiting for locator('[data-season-reveal]') to be visible" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

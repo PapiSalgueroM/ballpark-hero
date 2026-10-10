@@ -1,0 +1,25 @@
+new QB, 390 wide
+  ok   new QB, 390 wide: a career of this tree's code after two seasons is on the save
+  ok   new QB, 390 wide, season 1: the rival's line is a QB's own shape ("2,664 yds, 12 TD, 21 INT")
+  ok   new QB, 390 wide, season 1: the season card prints my own line in that shape ("3,654 yds, 22 TD, 14 INT")
+  ok   new QB, 390 wide, season 1: the note says I had the better year, and the two printed lines agree (mine 3,654 yds, 22 TD, 14 INT; his 2,664 yds, 12 TD, 21 INT)
+  ok   new QB, 390 wide, season 1: the rival's note ends inside the season card and is not cut (52 to 358 in 32 to 358)
+  ok   new QB, 390 wide, season 1: nothing scrolls sideways on the season card (0 pixels over)
+  ok   new QB, 390 wide, season 1: the Rival screen's last season line is the note's line ("2,664 yds, 12 TD, 21 INT")
+  ok   new QB, 390 wide, season 1: that line ends inside its card and is not cut (29 to 361 in 16 to 374)
+  ok   new QB, 390 wide, season 1: nothing scrolls sideways on the Rival screen (0 pixels over)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForSelector: Timeout 15000ms exceeded.
+Call log:
+  - waiting for locator('[data-season-reveal]') to be visible
+
+    at playOne (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playUsRivalLines.mjs:197:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playUsRivalLines.mjs:242:27 {
+  log: [ "  - waiting for locator('[data-season-reveal]') to be visible" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

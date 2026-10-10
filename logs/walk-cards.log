@@ -1,0 +1,23 @@
+roster cards of this tree, 390 wide: found onlyYou, onlyHim, both
+  ok   a save sitting on "only you" and one on "only him" were built by this tree's code (onlyYou, onlyHim, both)
+  ok   card onlyYou: the save's card reads the onlyYou words ("The All-Pro team is out. You are on the first team and Malik Vasquez is not.")
+  ok   card onlyYou (WR): the save is loaded
+  ok   card onlyYou (WR): the card reads its own title and chip ("All-Pro Team", "Morale +5")
+  ok   card onlyYou (WR): Continue is above the fold (its bottom at 537 of 844)
+  ok   card onlyYou (WR): nothing scrolls sideways on the card (0 pixels over)
+  ok   card onlyYou (WR): the tap moved exactly what the chip says (morale 100 to 100, fanbase 59 to 59)
+  ok   card onlyHim: the save's card reads the onlyHim words ("The All-Pro team is out. Jaxon Okafor is on the first team and you are not.")
+  ok   card onlyHim (CB): the save is loaded
+  ok   card onlyHim (CB): the card reads its own title and chip ("All-Pro Team", "Morale -5")
+  ok   card onlyHim (CB): Continue is above the fold (its bottom at 537 of 844)
+  ok   card onlyHim (CB): nothing scrolls sideways on the card (0 pixels over)
+  ok   card onlyHim (CB): the tap moved exactly what the chip says (morale 83 to 78, fanbase 87 to 87)
+  ok   card both: the save's card reads the both words ("The All-Pro team is out, and you and Zane Marchetti are both on the first team.")
+  ok   card both (WR): the save is loaded
+  ok   card both (WR): the card reads its own title and chip ("All-Pro Team", "Fanbase +3")
+  ok   card both (WR): Continue is above the fold (its bottom at 537 of 844)
+  ok   card both (WR): nothing scrolls sideways on the card (0 pixels over)
+  ok   card both (WR): the tap moved exactly what the chip says (morale 82 to 82, fanbase 100 to 100)
+  ok   roster cards: no page errors (clean)
+  ok   roster cards: no request to the live database finished (0)
+playUsRivalLines: 21 checks, 0 failed
