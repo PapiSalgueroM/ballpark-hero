@@ -1,0 +1,13 @@
+tsc exit=0 56s | 
+clean-before exit=0 2s |    Duration  2.25s (transform 866ms, setup 55ms, collect 1.07s, tests 423ms, environment 308ms, prepare 135ms)
+x-nullworld exit=1 3s | fix mutation nullworld = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+x-listworld exit=1 2s | fix mutation listworld = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+x-badstretch exit=1 2s | fix mutation badstretch = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+x-calendar exit=1 2s | fix mutation calendar = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+x-leap exit=1 2s | fix mutation leap = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+x-feb exit=1 2s | fix mutation feb = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+x-bornafter exit=1 2s | fix mutation bornafter = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+x-joinname exit=1 2s | fix mutation joinname = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+x-joinoff exit=1 3s | fix mutation joinoff = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+x-yearzero exit=1 3s | fix mutation yearzero = exit 1 (1 the test went red, 3 the mutation refused, 0 it SURVIVED)
+clean-after exit=0 2s |    Duration  2.11s (transform 802ms, setup 51ms, collect 977ms, tests 424ms, environment 287ms, prepare 86ms)
