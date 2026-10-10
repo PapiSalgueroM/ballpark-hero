@@ -1,15 +1,81 @@
 /**
  * Round 1229 harness: Club Manager, the league keeps its book (part one, the book is kept).
  *
- * HEADER GROWS WITH THE ROUND. Sections, controls and the measured numbers are written in below as each
- * step lands (docs/audits/ROUND-1229-NOTES.md has the runner result names).
+ * WHAT THE ROUND DID. Every rival goal of a league season is written down against a named man of that
+ * club's eleven, by the weight my own squad is shared out by, with assists and clean sheets
+ * (src/lib/clubManagerLeagueBook.ts, bound in src/lib/clubManager.ts under creditRaceGoals). Nothing reads
+ * the book for a screen yet: the old scorer race is still written, draws and all, and still what the board
+ * and the awards show. So the failure modes are: the book moves a result or a seeded draw; a club's rows
+ * do not add up to its goals; a row is lost at the engine's JSON clone; a man is credited for a club he
+ * has left; the deal does not follow the weight; a save that began its season without a book is given
+ * one; a job joined in mid season loses its book; a daily game starts carrying one.
+ *
+ * WHAT IT PLAYS. A fleet of careers (club x seed x two whole seasons, summers included, every match a
+ * quick sim) on one seeded stream each, three ways: the engine as committed (the candidate, watched after
+ * every calendar entry), the same source with the book's lines taken out (BOOK_OFF below), and, when
+ * BOOK_BASE names a worktree of the commit before the round, that commit's own source. Sections:
+ *
+ *   stream   the candidate's whole save but the book, and HOW MANY draws the stream gave, are byte equal
+ *            to the engine with the book out at the end of every season and after every summer; and to
+ *            the base commit's source (BOOK_BASE)
+ *   law      after EVERY entry, for every rival club: goals on its rows + own goals + unnamed = its goals
+ *            for in the table; assists never above row goals; the book is the same book after a JSON
+ *            round trip and holds no null; the full reader accepts it. At each season's end the clean
+ *            sheets on a club's keeper rows are the matches it conceded nothing in, counted by the
+ *            harness from the table before and after every entry, never from the book; my men's league
+ *            clean sheets fit the ones I kept. Every season opens with an empty book.
+ *   names    every man credited in an entry is on that club's roster under that position and was not in
+ *            my squad; and the PURCHASE: the best rival scorer is put into my squad at week 22 and
+ *            twelve entries are played on: his row at the club he left must not move, and its law holds
+ *   shapes   (i) the deal follows the weight: of the goals clubs with an eleven score against each other,
+ *            the share credited to forwards, midfielders and defenders against the share the harness
+ *            computes from the same elevens and ITS OWN copy of the table, inside four binomial standard
+ *            deviations, forwards above midfielders above defenders; (ii) the point of the round, paired
+ *            on the same seasons of the same saves: the forwards and wingers in the top ten of the Goals
+ *            board, book against old race, rise by at least PURPOSE_FLOOR; (iii) assists and own goals
+ *            inside four binomial standard deviations of the rule's share of the run's own counts
+ *   oldsave  four saves with no book (the two committed fixtures, loaded through loadCareer, and two
+ *            written in the run twenty entries into a season) finish their season on the candidate
+ *            exactly as on the reference engines, entry by entry, with the same board and summary, and
+ *            never gain a book; the season after opens one that obeys the law from its first round; a
+ *            book that is a string, an array, a number, holed, or last season's own reads as no book, is
+ *            never written into, and the save plays the entries the engine with the book out plays
+ *   doors    the takeover from the picker at its three entries and the job joined today in season one
+ *            and in season three: a whole book at the handover and the law after every entry to the end
+ *   dailies  Manager Hot Seat (four dates, played to a verdict, handed over to Club Manager and played
+ *            on) and Deadline Day (three dates): no state ever carries a book, and every state is byte
+ *            equal to the reference engines' for the same date
+ * Outside section stream "the reference engines" are the engine with the book out and, with BOOK_BASE,
+ * the base commit; each pair is played on two FRESH copies of the bundles asked the same things in the
+ * same order, because the engine numbers its youth players, press questions and messages as it goes.
+ *
+ * NEGATIVE CONTROLS. BOOK_CONTROL=<name> patches the bundle's copy of the source (never a file on disk;
+ * the anchor must occur exactly as often as stated or the run refuses) and the run then exits 1 with
+ * FIRED only if the named section went red and no other did:
+ *   weight        a striker weighs 8, not 5 (needs BOOK_BASE)         -> stream
+ *   mathrandom    the scorer pick reads Math.random                  -> stream
+ *   dropmine      my own league match is not noted                   -> law
+ *   cleanside     the clean sheet goes to the side that did not score -> law
+ *   bought        the book's eleven keeps a man now in my squad      -> names
+ *   twoman        the deal is the old race's: 42 and 26 in a hundred to the two best rated forwards or
+ *                 midfielders, the rest to nobody                    -> shapes
+ *   flat          every outfield man weighs the same                 -> shapes
+ *   penassist     a penalty or a free kick is paid an assist         -> shapes
+ *   noog          no goal is ever an own goal                        -> shapes
+ *   redeal        loadCareer opens a book for a save that has none   -> oldsave
+ *   seasonstamp   the season's number is put back into the stamp     -> doors
+ *   strip         the Hot Seat's strip of the book is taken out      -> dailies
+ *   stripdeadline Deadline Day's strip is taken out                  -> dailies
+ *
+ * MEASURED: see the block above PURPOSE_FLOOR.
  *
  * Exit: 0 green, 1 red (or a control that FIRED: read the last line), 2 could not run, 3 a control that
  * did not fire.
  *
  *   node scripts/simCmLeagueBook.mjs                      the default (small) fleet
  *   BOOK_FLEET=full node scripts/simCmLeagueBook.mjs      the whole fleet (the round's remote check)
- *   BOOK_BASE=<a worktree of the base commit> ...         adds the base arm of section stream
+ *   BOOK_BASE=<a worktree of the base commit> ...         adds the base commit as a reference
+ *   BOOK_MEASURE=1 ...                                    also prints the boards with CM_BOOK_TAKER false
  *   SEEDSET=n                                             another set of seeds
  * Offline: bundles the engine from src, reads no network and no database.
  */
@@ -246,7 +312,8 @@ const tick = (section, n = 1) => checked.set(section, checked.get(section) + n);
 const newAcc = () => ({
   byLine: { ATT: 0, MID: 0, DEF: 0, GK: 0 }, rowGoals: 0, assists: 0, og: 0, u: 0, noXiClubWeeks: 0,
   aiObs: { ATT: 0, MID: 0, DEF: 0 }, aiExp: { ATT: 0, MID: 0, DEF: 0 }, aiGoals: 0,
-  seasons: [], shortLines: 0, myLeagueMatches: 0, entries: 0, movedMen: 0,
+  seasons: [], shortLines: 0, myLeagueMatches: 0, entries: 0,
+  race: { ATT: 0, MID: 0, DEF: 0, GK: 0, rivalGoals: 0 },
 });
 const played = r => r.w + r.d + r.l;
 const rivalsOf = s => s.leagueClubs.filter(c => c !== s.clubName);
@@ -400,6 +467,13 @@ function seasonBoards(mod, s, book, acc, myKept) {
     ...myRows,
   ].filter(r => r.goals > 0).sort(byGoals).slice(0, 10);
   const att = rows => rows.filter(r => r.pos && lineOf(r.pos) === 'ATT').length;
+  /* What the old race made of the same season: how many of the rivals' goals it gave to anybody, and to whom. */
+  for (const e of s.scorerRace ?? []) {
+    if (mine.has(e.name)) continue;
+    const pos = posOf(e.club, e.name);
+    acc.race[pos ? lineOf(pos) : 'GK'] += e.goals;
+  }
+  acc.race.rivalGoals += s.table.filter(r => r.club !== s.clubName).reduce((n, r) => n + r.gf, 0);
   const table = cm.sortedLeagueTable(s).map(r => r.club);
   const place = club => { const i = table.indexOf(club); return i < 0 ? table.length : i; };
   const clubCs = new Map();
@@ -795,6 +869,8 @@ printBoards(`boards  by league, the book against the old race on the same season
   const xs = acc.seasons;
   const lines = ['ATT', 'MID', 'DEF'].map(l => `${l} ${xs.filter(x => x.bootLine === l).length}`).join(', ');
   console.log(`        the top scorer was a: ${lines} (of ${xs.length} seasons)`);
+  const raced = acc.race.ATT + acc.race.MID + acc.race.DEF + acc.race.GK;
+  console.log(`        the old race on the same seasons: ${raced} of ${acc.race.rivalGoals} rival goals given to anybody (${fmt(100 * raced / Math.max(1, acc.race.rivalGoals))}%), of those forwards ${fmt(100 * acc.race.ATT / Math.max(1, raced))}%, midfielders ${fmt(100 * acc.race.MID / Math.max(1, raced))}%; the book names a man for ${fmt(100 * acc.rowGoals / Math.max(1, acc.rowGoals + acc.og + acc.u))}% and marks ${acc.og} own goals and ${acc.u} unnamed`);
   console.log(`        a Clean sheets board of every man (keepers and defenders): its top ten holds men of ${fmt(mean(xs.map(x => x.sheetBoardClubs)), 2)} clubs and ${fmt(mean(xs.map(x => x.sheetBoardKeepers)), 2)} keepers on average`);
   console.log(`        a back four picked by clean sheets + goals + assists: ${fmt(mean(xs.map(x => x.draftedOfOne)), 2)} men of one club on average; by goals + assists (club clean sheets, then table place, to split): ${fmt(mean(xs.map(x => x.deedsOfOne)), 2)}, with ${fmt(mean(xs.map(x => x.deedsBlank)), 2)} of the four on no goal and no assist`);
 }
