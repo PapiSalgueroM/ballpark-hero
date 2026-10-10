@@ -1,0 +1,13 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/usPostseasonFormat.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m src/test/usPlayoffs.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 1304[2mms[22m[39m
+   [33m[2m✓[22m[39m usSeriesOrder[2m > [22mputs the clincher last and lets nobody clinch early, for every length and 200 seeds [33m 732[2mms[22m[39m
+   [33m[2m✓[22m[39m usPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit [33m 435[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m29 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 18:36:08
+[2m   Duration [22m 3.19s[2m (transform 791ms, setup 98ms, collect 1.93s, tests 1.32s, environment 791ms, prepare 347ms)[22m
+

@@ -1,0 +1,3 @@
+vitest exit=0 3s |    Duration  3.19s (transform 791ms, setup 98ms, collect 1.93s, tests 1.32s, environment 791ms, prepare 347ms)
+lay-compare exit=0 13s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+tsc exit=0 35s | 
