@@ -1,0 +1,36 @@
+1) Every page is inside its download budget
+  FAIL: /: 242K of gzipped JavaScript against a budget of 240K
+  FAIL: /club-manager: 585K of gzipped JavaScript against a budget of 582K
+  FAIL: /soccer-career: 808K of gzipped JavaScript against a budget of 797K
+  FAIL: /stadium-tycoon: 299K of gzipped JavaScript against a budget of 297K
+  FAIL: /wonderkid-factory: 273K of gzipped JavaScript against a budget of 271K
+  FAIL: /minefield: 291K of gzipped JavaScript against a budget of 289K
+  FAIL: /footle: 350K of gzipped JavaScript against a budget of 348K
+  FAIL: /nfl-my-career: 477K of gzipped JavaScript against a budget of 469K
+  FAIL: /front-office: 361K of gzipped JavaScript against a budget of 359K
+  FAIL: /soccer-grid: 315K of gzipped JavaScript against a budget of 313K
+  FAIL: /manager-hot-seat: 603K of gzipped JavaScript against a budget of 600K
+  FAIL: /deadline-day: 613K of gzipped JavaScript against a budget of 610K
+  FAIL: /transfer-path: 376K of gzipped JavaScript against a budget of 374K
+   /                   242K gz over   3 files (budget 240K, 242.1K to the tenth)
+   /club-manager       585K gz over  39 files (budget 582K, 585.4K to the tenth)
+   /soccer-career      808K gz over  45 files (budget 797K, 807.7K to the tenth)
+   /stadium-tycoon     299K gz over  23 files (budget 297K, 299.2K to the tenth)
+   /wonderkid-factory  273K gz over  19 files (budget 271K, 272.9K to the tenth)
+   /minefield          291K gz over  20 files (budget 289K, 290.9K to the tenth)
+   /footle             350K gz over  40 files (budget 348K, 349.9K to the tenth)
+   /nfl-my-career      477K gz over  47 files (budget 469K, 476.9K to the tenth)
+   /front-office       361K gz over  34 files (budget 359K, 361.2K to the tenth)
+   /soccer-grid        315K gz over  36 files (budget 313K, 315.0K to the tenth)
+   /leaderboard        250K gz over   9 files (budget 266K, 250.1K to the tenth)
+   /manager-hot-seat   603K gz over  41 files (budget 600K, 602.8K to the tenth)
+   /deadline-day       613K gz over  45 files (budget 610K, 612.9K to the tenth)
+   /transfer-path      376K gz over  40 files (budget 374K, 375.6K to the tenth)
+2) The two things Round 210 moved off the critical path stay off it
+   the screenshot library and the merged guide map are both off the critical path
+3) Every guide is still reachable, one sport at a time
+   132 guides across 13 sport files, every one of them routed
+4) The data these pages never read is in none of the files they fetch
+   10 probe sets (400 probes) all found in the build; 4 routes checked, 0 findings; /soccer-career still fetches the pools (SoccerCareer-5DDNerKp.js)
+
+sweepWeight: 13 failures

@@ -1,0 +1,12 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simMobileChrome exit=0 203s | GREEN: 34 top bar measurements and 117 scroll stops, no overlaps, nothing off the side of the screen, controls reachable everywhere, footer never covered.
+simNumberFormatting exit=0 127s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+simBrowserHarnessDiscovery exit=0 11s | Retained actual child receipts: .sim-control/browser-discovery-RzkHBI/report.json
+simGoogleOnlyReturn exit=0 84s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
+playHomeFold exit=0 30s | playHomeFold: green. The first thing on the page is something to play.
+playSoftFourOhFour exit=0 7s | playSoftFourOhFour: green. A dead address says it is dead before a line of app code runs, and no real page is touched.
+playTranslatedPage exit=0 138s | playTranslatedPage: 447 checks, 0 failed
+playStorageBlocked exit=0 271s | playStorageBlocked: 826 checks, 0 failed
+playFlagshipLazy exit=0 8s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+playReducedMotion exit=1 67s | playReducedMotion: 1 problem(s)
+sweepWeight exit=1 27s | sweepWeight: 13 failures
