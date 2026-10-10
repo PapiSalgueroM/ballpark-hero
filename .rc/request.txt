@@ -1,0 +1,14 @@
+rivalry: node scripts/simCareerRivalryEvents.mjs
+rivalry-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+record-board: node scripts/recordUsBoardFixture.mjs && cp scripts/data/usBoardFixture.json "$RC_OUT/usBoardFixture.json"
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simAwards: node scripts/simAwards.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simCareerHub: node scripts/simCareerHub.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
