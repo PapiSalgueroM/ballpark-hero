@@ -1,0 +1,10 @@
+   fired  exit 1  closespan          simGmDraftOrder: CONTROL closespan FIRED. Red by section 1: 31; every other section green.
+   fired  exit 1  extradraw          simGmDraftOrder: CONTROL extradraw FIRED. Red by section 2: 9999; every other section green.
+   fired  exit 1  nosplit            simGmDraftOrder: CONTROL nosplit FIRED. Red by section 3: 10367; every other section green.
+   fired  exit 1  flipbeforelottery  simGmDraftOrder: CONTROL flipbeforelottery FIRED. Red by section 3: 11521; every other section green.
+   fired  exit 1  laterasfirst       simGmDraftOrder: CONTROL laterasfirst FIRED. Red by section 3: 123206, 4: 3921; every other section green.
+   fired  exit 1  skipslot           simGmDraftOrder: CONTROL skipslot FIRED. Red by section 5: 3600, 6: 1, 10: 3974; every other section green.
+   fired  exit 1  capcount           simGmDraftOrder: CONTROL capcount FIRED. Red by section 7: 2032; every other section green.
+   fired  exit 1  slowcards          simGmDraftOrder: CONTROL slowcards FIRED. Red by section 7: 632; every other section green.
+   fired  exit 1  norivals           simGmDraftOrder: CONTROL norivals FIRED. Red by section 10: 2401; every other section green.
+simGmDraftOrder controls (shard 1/3 of 27): all 9 fired, each in exactly its own sections.

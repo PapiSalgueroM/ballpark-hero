@@ -1,0 +1,10 @@
+   fired  exit 1  onesource          simGmDraftOrder: CONTROL onesource FIRED. Red by section 1: 1; every other section green.
+   fired  exit 1  oddsrow            simGmDraftOrder: CONTROL oddsrow FIRED. Red by section 2: 5070, 3: 33030; every other section green.
+   fired  exit 1  mathrandom         simGmDraftOrder: CONTROL mathrandom FIRED. Red by section 2: 14999, 4: 3970; every other section green.
+   fired  exit 1  noflip             simGmDraftOrder: CONTROL noflip FIRED. Red by section 3: 123206; every other section green.
+   fired  exit 1  champfirst         simGmDraftOrder: CONTROL champfirst FIRED. Red by section 4: 8000; every other section green.
+   fired  exit 1  origpicks          simGmDraftOrder: CONTROL origpicks FIRED. Red by section 5: 600, 10: 2348; every other section green.
+   fired  exit 1  trustnight         simGmDraftOrder: CONTROL trustnight FIRED. Red by section 6: 13; every other section green.
+   fired  exit 1  hidemine           simGmDraftOrder: CONTROL hidemine FIRED. Red by section 7: 1184; every other section green.
+   fired  exit 1  mounted            simGmDraftOrder: CONTROL mounted FIRED. Red by section 9: 1; every other section green.
+simGmDraftOrder controls (shard 0/3 of 27): all 9 fired, each in exactly its own sections.
