@@ -39,8 +39,8 @@ purpose moves it.
 | Step | What | Commit | Runner result |
 |---|---|---|---|
 | a1 | this file, the digest mode and `lawdrift` in the harness, no `src` line moved | `c211113f` | `r1221-a1`: the type gate 0, the default run 0 (98 checks, 0 failed), simHarnessAnchors 0, two prints 0 and byte equal |
-| a2 | the record, made on a runner at a1 (`scripts/data/usSeasonLawDigest.json`, the file the runner wrote, byte for byte) | (this commit) | pending |
-| b | the move | pending | pending |
+| a2 | the record, made on a runner at a1 (`scripts/data/usSeasonLawDigest.json`, the file the runner wrote, byte for byte) | `c367e8b7` | `r1221-a2`: compare of all five seed sets 0, each seed set alone 0, `lawdrift` 1 and red at its named check, the controls minutes, points, forty, level, oddtd, bigkick and kick 1 and red at their named checks (the law still in the number file) |
+| b | the move, ONE commit whose parent is the record commit, no merge of main between | `2388a06d` | see the next section |
 
 ## The record (made on `c211113f`, runner result `r1221-a1`, 2026-10-10)
 
@@ -57,6 +57,65 @@ its drives, its minutes and his line. 68 source files are in the bundle; 66 of t
 not change under a compare, and the other two (`season/nfl.ts` at `9fc77010557c`, `season/core.ts` at
 `02513e627fb5`) are the ones the move edits. Stray draws: 0.
 
+## The move, proven (on `2388a06d`, all on GitHub runners, 2026-10-10)
+
+| Check | Exit | Runner result | What it says |
+|---|---|---|---|
+| the type gate | 0 | `r1221-b1` | zero errors |
+| digest compare, seed sets 0 to 4 in one run | 0 | `r1221-b1` | 11 digests, 0 moved |
+| digest compare, each seed set alone | 0, 0, 0, 0, 0 | `r1221-b1` | 3 digests, 0 moved, five times |
+| control `lawdrift` | 1 | `r1221-b1` | red at its named check: the NFL season digest moved on all five seed sets; the NBA's five, both sports' careers and the stray draws held |
+| the default run | 0 | `r1221-b1` | 98 checks, 0 failed |
+| the five retargeted controls: minutes, points, forty, level, oddtd | 1 each | `r1221-b1` | each red at its named check |
+| the NFL controls still on the number file: sum, kick, days, nflformula, lumpy, flat, tdform, order, bigkick, oddsack, and poscore, nflstage, nflheld | 1 each | `r1221-b1` | each red at its named check |
+| vitest: gameLawNfl (19 tests), usSeasonNfl (35), usSeasonCentre (9), seasonCore (22), seasonCentreWords (3) | 0 | `r1221-b1` | 5 files passed |
+| every `sim*` that reads the season core by path: simCareerLeagueWorld, simSeasonCentreAgreement, simSeasonCentreMotion, simSeasonCentreNeutral, simSeasonCentreTable, simSeasonMoments, simSoccerDiscipline, simSoccerLeagueWorldLookup, simSoccerOwnGoals; and simSeasonLaw | 0 each | `r1221-b2` | all green |
+| the browser walk of the US Season Center (playUsSeasonCentre) | 0 | `r1221-b4` | 144 checks, 0 failed |
+| its control `column` (it patches the clock literal in the built chunk, which must be there once) | 1 | `r1221-b4` | red at its named check; the literal was found once, in one chunk |
+| the weight sweep | 0 | `r1221-b4`, base in `r1221-b6` | /nfl-my-career 468.1K, /front-office 359.3K and /soccer-career 786.3K, the same to the tenth on the base commit |
+
+The drifted digests `lawdrift` prints are the same ten values on the record commit (the law in the number file,
+`r1221-a2`) and on the move commit (the law in its own files, `r1221-b1`): the law answers a changed constant the
+same way from both homes.
+
+The rule fences (`r1221-b3`, on a plain build): 19 of 24 green. The five that are not are not this round's:
+simSchemaNames and simLeaderboardCaps read the live database, which a runner cannot reach by design;
+simWritesAreSent and simResultMoment import a browser library from a path that is not on the runner;
+simDailySaveHardening fails on /olympics with the same two lines on the base commit run alone (`r1221-b5`), and
+Round 1210's branch carries its fix.
+
+## One definition
+
+`git grep` over `src` (tests left out) finds each of these once, in a law file: `function nflScore`,
+`function nflDrives`, `function nflDriveCost`, `function driveOptions`, `function nflMinutePicker`,
+`function nflClockLabel`, `function nflEdgeForShare`, `function nflClubLine`, `function nflTryWords`,
+`const TD_A_GAME`, `const FG_A_DRIVE`, `const DRIVE_GAP`, `const MINUTE_TRIES`, `const MAX_TD`, `const MAX_FG`,
+the 11.3 logistic, the three club sentences and the clock's `labelClass`. The keyed `shuffled` is defined in
+`src/lib/keyedShuffle.ts` alone; the season core's export is that function (the unit test holds the two to be one
+object).
+
+## What the next round needs to know (Game Day's libraries, round B of the critic's split)
+
+- `ScoreLaw` and `StoryLaw` hold what the moved code backs: `score`; `events`, `clock`, `line`. The draft's
+  `shape` (rout and comeback numbers and their sentences), `help` and the clock's periods are NOT in the types
+  yet: they come with the code that reads them and with the facts the "?" must source (the critic's corrections
+  12 and 13). That round adds them to `src/lib/gameLaws/types.ts` and `nfl.ts`, which are this lane's files.
+- `NFL_SCORE_LAW.score(pHome, rng)` is `nflScore(nflEdgeForShare(pHome) - 1, true, rng)`. Measured over 4,000
+  games a cell: the home side wins 0.223, 0.527 and 0.819 of them at 0.2, 0.5 and 0.8 (eight more streams a cell
+  sat between 0.2105 and 0.2290, 0.5148 and 0.5397, 0.8080 and 0.8275). The law leans to the home side by two
+  or three games in 100 because it breaks a level game the home side's way. That is the Season Center's law as it
+  was; a game that tells a score for a winner an engine already decided is not moved by it.
+- `NFL_STORY_LAW.events(home, away, rng)` gives null only when a side is on 1 or 4 (280 of the 5,041 finals from
+  0-0 to 70-70), and at most 26 lines a game.
+- The Season Center's clock IS `NFL_STORY_LAW.clock` now (one object). scripts/playUsSeasonCentre.mjs's control
+  `column` needs the literal `labelClass:"w-14"` once in one built chunk: a second literal of that clock
+  anywhere makes the control refuse.
+- The record `scripts/data/usSeasonLawDigest.json` is a receipt. A round that changes a career or a season on
+  purpose (Round 1149's rivalry beats, the MLB and NHL week by week round) moves its inputs, and the compare then
+  answers "inputs moved under the digest" with exit 3. That is the mode working, not a red.
+
 ## What a later session must not trust
 
-- Nothing here is proven until the table above names a runner result for it.
+- The whole vitest suite and the six browser walks of the Soccer Career Season Centre were not part of the proof
+  above when this was written; the closing report says what was run after.
+- Nothing here measures a front office: no front office file is touched and none imports the law yet.
