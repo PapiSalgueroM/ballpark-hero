@@ -1,0 +1,112 @@
+{
+  "note": "Round 1222. Where every fact in src/data/gmDraftOrder/rules.ts was read: two reads a fact, on two publishers that are not each other, neither a wiki. Joined to the rule sets by rule id and fact key; scripts/simGmDraftOrder.mjs section 1 holds the join. Every page was opened by the round's builder on the day below through a fetch tool that answers with quoted sentences, so `words` is what that answer quoted, in pieces where a sentence was long. `who` says whether a page is the league's own.",
+  "read": "2026-10-10",
+  "rules": {
+    "nba-2019": {
+      "field": {
+        "says": "The 14 clubs that miss the playoffs are in the lottery.",
+        "reads": [
+          { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "The teams eligible for the Draft Lottery are the 14 teams that miss out on the 2026 NBA Playoffs." },
+          { "url": "https://www.si.com/nba/how-does-the-nba-draft-lottery-work-explained-odds", "who": "Sports Illustrated, 8 May 2026", "words": "The 14 NBA teams that failed to make the past season's playoffs participate in the lottery." }
+        ]
+      },
+      "draws": {
+        "says": "Drawings decide the first four picks.",
+        "reads": [
+          { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "Drawings will be conducted to determine the first four picks." },
+          { "url": "https://www.si.com/nba/how-does-the-nba-draft-lottery-work-explained-odds", "who": "Sports Illustrated, 8 May 2026", "words": "The actual \"lottery\" is for the first four picks of the draft." }
+        ]
+      },
+      "table": {
+        "says": "Of 1,000 combinations the clubs hold 140, 140, 140, 125, 105, 90, 75, 60, 45, 30, 20, 15, 10 and 5, worst record first.",
+        "reads": [
+          { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "Before the lottery, 1,000 of those 1,001 combinations will be assigned to the 14 participating lottery teams. / the teams with the three worst regular-season records will each have a 14 percent chance of winning the lottery. The page's 2026 table runs from 14.0 percent down to 0.5 percent with that year's level records already split." },
+          { "url": "https://www.si.com/nba/how-does-the-nba-draft-lottery-work-explained-odds", "who": "Sports Illustrated, 8 May 2026", "words": "1 (worst record): 140 combinations, 14.0% chance of receiving the No. 1 pick; 2: 140; 3: 140; 4: 125; 5: 105; 6: 90; 7: 75; 8: 60; 9: 45; 10: 30; 11: 20; 12: 15; 13: 10; 14: 5 combinations, 0.5% chance." }
+        ]
+      },
+      "restOfLottery": {
+        "says": "Lottery clubs that are not drawn pick 5th to 14th in reverse order of record, so the worst record picks no lower than 5th.",
+        "reads": [
+          { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "will select in positions five through 14 in reverse order of their 2025-26 regular-season records / the team with the worst record will receive no worse than the fifth pick." },
+          { "url": "https://www.si.com/nba/how-does-the-nba-draft-lottery-work-explained-odds", "who": "Sports Illustrated, 8 May 2026", "words": "with team's placed in reverse order of their record the preceding season. / This means that the worst pick the worst team in the NBA can have is the fifth pick in the draft." }
+        ]
+      },
+      "lotteryFirst": {
+        "says": "All 14 lottery clubs pick ahead of the 16 playoff clubs in round one, even where a lottery club has the better record.",
+        "reads": [
+          { "url": "https://pr.nba.com/2026-nba-draft-tiebreakers/", "who": "the league, 20 April 2026", "words": "The release's order: Miami (43-39) and Charlotte (44-38) are the 13th and 14th lottery seeds, and Portland (42-40), a playoff club with the worse record, picks 15th." },
+          { "url": "https://hoopsrumors.com/2018/12/201819-nba-reverse-standings-update.html", "who": "Hoops Rumors, 21 December 2018", "words": "Of course, the 14 non-playoff teams all draft before the 16 playoff teams, even if some non-playoff teams have better records than playoff teams." }
+        ]
+      },
+      "restOfFirst": {
+        "says": "Picks 15 to 30 go to the playoff clubs in reverse order of regular season record.",
+        "reads": [
+          { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "The order of selection of the first round (No. 15-30) and the entire second round (No. 31-60), is determined by reverse order of regular-season record." },
+          { "url": "https://www.nbcsports.com/nba/news/2026-nba-draft-complete-list-of-every-pick-from-round-1-and-round-2", "who": "NBC Sports, 24 June 2026", "words": "The 2026 draft as it was picked, 15 to 30 by first owner: Portland, Phoenix, Philadelphia, Orlando, Toronto, Atlanta, Minnesota, Houston, Cleveland, New York, the Lakers, Denver, Boston, Detroit, San Antonio, Oklahoma City. That is the playoff clubs from the worst record (42-40) to the best (64-18) as the league's release prints the records. An observed order, not a sentence stating the rule." }
+        ]
+      },
+      "laterRounds": {
+        "says": "Round two is all 30 clubs in reverse order of regular season record, and the lottery does not move it.",
+        "reads": [
+          { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "The Draft selections for the remainder of the first round (No. 15-30) and the entire second round (No. 31-60), are determined by reverse order of regular season record." },
+          { "url": "https://www.nbcsports.com/nba/news/2026-nba-draft-complete-list-of-every-pick-from-round-1-and-round-2", "who": "NBC Sports, 24 June 2026", "words": "The 2026 second round as it was picked, by first owner: Portland's pick is 42nd (a playoff club, 42-40), ahead of Miami's at 44 and Charlotte's at 45 (lottery clubs with better records). Utah, Memphis and Chicago, drawn 2nd, 3rd and 4th in the lottery, are 35th, 36th and 39th, where their records put them. An observed order, not a sentence stating the rule." }
+        ]
+      },
+      "rounds": {
+        "says": "The draft is two rounds, one pick a club in each.",
+        "reads": [
+          { "url": "https://www.nba.com/news/nba-draft-lottery-explainer", "who": "the league", "words": "Each NBA team receives one selection in the first round and one selection in the second round." },
+          { "url": "https://www.nbcsports.com/nba/news/2026-nba-draft-complete-list-of-every-pick-from-round-1-and-round-2", "who": "NBC Sports, 24 June 2026", "words": "The page lists 60 picks over two rounds: round one, picks 1 to 30, and round two, picks 31 to 60." }
+        ]
+      },
+      "tieDraw": {
+        "says": "Clubs with identical records are put in order by random drawings.",
+        "reads": [
+          { "url": "https://pr.nba.com/2026-nba-draft-tiebreakers/", "who": "the league, 20 April 2026", "words": "Six ties among teams with identical regular-season records were broken today through random drawings" },
+          { "url": "https://www.eurohoops.net/en/nba-news/1958507/nba-2026-draft-tiebreaker-results/", "who": "Eurohoops, 21 April 2026", "words": "Following tiebreaker drawings on Monday, the NBA officially finalized the selection order for this summer's draft." }
+        ]
+      },
+      "levelOdds": {
+        "says": "Level lottery clubs split the combinations of the seeds they span, and the winner of the drawing takes the odd one.",
+        "reads": [
+          { "url": "https://pr.nba.com/2026-nba-draft-tiebreakers/", "who": "the league, 20 April 2026", "words": "The release's lottery table: Utah and Sacramento, both 22-60, 11.5 percent each (the 4th and 5th seeds, 12.5 and 10.5 in the base table); New Orleans and Dallas, both 26-56, 6.8 and 6.7 percent (the 7th and 8th seeds, 7.5 and 6.0), New Orleans listed first of the pair." },
+          { "url": "https://hoopsrumors.com/2023/04/2023-nba-draft-tiebreaker-results.html", "who": "Hoops Rumors, April 2023", "words": "The Pacers will get one more lottery ball combination (out of 1,000) than the Wizards. (The Pacers won that drawing for the 7th seed.)" },
+          { "url": "https://www.nbcsportsbayarea.com/nba/sacramento-kings/2026-nba-draft-lottery-tiebreaker-utah-jazz/1932773", "who": "NBC Sports Bay Area, 20 April 2026", "words": "Both the Kings and Jazz retain an 11.5-percent chance at landing the No. 1 overall pick / the average of the standard odds for the fourth- and fifth-worst teams." }
+        ]
+      },
+      "levelFirst": {
+        "says": "If no club of a level lottery group is drawn, the winner of the drawing picks first of the group in round one.",
+        "reads": [
+          { "url": "https://www.nbcsportsbayarea.com/nba/sacramento-kings/2026-nba-draft-lottery-tiebreaker-utah-jazz/1932773", "who": "NBC Sports Bay Area, 20 April 2026", "words": "This tiebreaker essentially only comes into play if neither Sacramento nor Utah (the quoted piece stops there; the sentence is about neither landing in the top four) / If so, the Jazz will select one spot ahead of the Kings during the first round" },
+          { "url": "https://hoopsrumors.com/2023/04/2023-nba-draft-tiebreaker-results.html", "who": "Hoops Rumors, April 2023", "words": "The Rockets will draft ahead of the Spurs if neither lands in the top four." }
+        ]
+      },
+      "levelLater": {
+        "says": "Clubs level on record pick in round two in the inverse of their round one order; for lottery clubs that is their order after the lottery.",
+        "reads": [
+          { "url": "https://pr.nba.com/2026-nba-draft-tiebreakers/", "who": "the league, 20 April 2026", "words": "Teams that finished the regular season with identical records will select in the second round in inverse order of the order in which they select in the first round. / With respect to ties between Lottery teams, since the order of selection in the first round for these sets of teams may change based on the results of the Lottery, the order of selection in the second round cannot be determined until after the Lottery is conducted" },
+          { "url": "https://www.nbcsportsbayarea.com/nba/sacramento-kings/2026-nba-draft-lottery-tiebreaker-utah-jazz/1932773", "who": "NBC Sports Bay Area, 20 April 2026", "words": "As for the second round of the draft, these teams will select in the inverse order of their first-round picks. / if Utah's first-round selection is ahead of Sacramento's after the lottery, then the Kings would have the No. 34 overall pick and the Jazz No. 35" },
+          { "url": "https://www.eurohoops.net/en/nba-news/1958507/nba-2026-draft-tiebreaker-results/", "who": "Eurohoops, 21 April 2026", "words": "In the second round, the order for tied teams will be inverted from the first round" }
+        ]
+      },
+      "levelAcross": {
+        "says": "A lottery club and a playoff club level on record: the lottery club is ahead in round one, so the playoff club is ahead in round two.",
+        "reads": [
+          { "url": "https://pr.nba.com/2026-nba-draft-tiebreakers/", "who": "the league, 20 April 2026", "words": "The release's order: the LA Clippers (42-40) are the 12th lottery seed and Portland (42-40) picks 15th; in round two Portland is 42nd and the LA Clippers 43rd." },
+          { "url": "https://www.nbcsports.com/nba/news/2026-nba-draft-complete-list-of-every-pick-from-round-1-and-round-2", "who": "NBC Sports, 24 June 2026", "words": "As picked: 12. Oklahoma City (from LA Clippers); 15. Chicago (from Portland); 42. San Antonio (from Portland via New Orleans); 43. Brooklyn (from LA Clippers via Houston)." }
+        ]
+      },
+      "realSpan": {
+        "says": "This lottery ran from the 2019 draft to the 2026 draft; a new one applies from the 2027 draft.",
+        "reads": [
+          { "url": "https://pr.nba.com/nba-board-of-governors-approves-new-draft-lottery-system-to-address-tanking/", "who": "the league, 28 May 2026", "words": "The new system will take effect beginning with the 2027 NBA Draft. / The 3-2-1 Lottery will be in effect for the 2027, 2028 and 2029 NBA Drafts. / Rules governing selection order beginning with the 2030 NBA Draft will be determined by a vote of the Board of Governors. (It expands the lottery from 14 to 16 teams. The league's lottery explainer speaks of the pre-2019 structure.)" },
+          { "url": "https://sports.yahoo.com/nba/article/the-nbas-3-2-1-lottery-system-is-here-how-will-it-impact-future-drafts-175414282.html", "who": "Yahoo Sports, 29 May 2026", "words": "All 16 teams will be drawn, rather than just the top four teams as it's been since 2019. / Starting in the 2027 draft, the lottery will expand from 14 to 16 teams and flatten the odds." }
+        ]
+      }
+    }
+  },
+  "notRead": [
+    "How the league shares leftover combinations among three or more level lottery clubs. The game hands them out one each in the order of the drawing and says so.",
+    "The 2027 lottery's draw procedure, its chances below the first pick and its level records. Not modelled; the game's drafts run the table above and say so."
+  ]
+}
