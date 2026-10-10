@@ -1,0 +1,14 @@
+A) a synthetic extension with every kind of correction lands exactly
+   2 moved, 3 removed, 1 arrived, 1 folded, 1 namesakes; 12 players in 4 clubs
+B) every guard dies on its own bad correction
+   29 of 29 bad corrections died with their own message
+C) the 2015-16 bake rebuilds from its 60 club base byte for byte
+   SKIPPED: the offline pulls are not on this machine (C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json, C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json); set ERA_PULL and ERA_NEXT, or ERA_PULL_2020, to run it
+C) the 2010-11 bake rebuilds from its 40 club base byte for byte
+   SKIPPED: the offline pulls are not on this machine (C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json, C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json); set ERA_PULL and ERA_NEXT, or ERA_PULL_2020, to run it
+C) the 2005-06 bake rebuilds from its 40 club base byte for byte
+   SKIPPED: the offline pulls are not on this machine (C:/Users/antho/dukb-handoff/data/market-base-2005-2010-2015.json, C:/Users/antho/dukb-handoff/data/market-base-2006-2011-2016.json); set ERA_PULL and ERA_NEXT, or ERA_PULL_2020, to run it
+C) the 2020-21 bake rebuilds from its 0 club base byte for byte
+   SKIPPED: the offline pulls are not on this machine (C:/Users/antho/dukb-handoff/data/market-base-2020-2021.json); set ERA_PULL and ERA_NEXT, or ERA_PULL_2020, to run it
+
+simEraBakeExtend: green. The shared extend step still fails closed on every guard.

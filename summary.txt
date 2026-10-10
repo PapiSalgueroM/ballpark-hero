@@ -1,0 +1,15 @@
+bundle exit=0 0s | doorProbe: the bundled door answers as the library does
+gen-freeagents exit=0 0s | genClubManagerFreeAgents --check: up to date, 7 men
+gen-russia exit=0 0s | src/data/clubManagerRussia2026.ts is a fresh generation from scripts/data/gatheredSquads/russia2026/research.json (sha256 ccbb26127e4609f743ef07593f186efa36ebed6f6c163622
+vitest exit=0 3s |    Duration  2.60s (transform 1.05s, setup 57ms, collect 1.26s, tests 454ms, environment 374ms, prepare 183ms)
+gen-aleague exit=0 0s | A-League file unchanged by a fresh generation
+simClubManagerALeague exit=0 7s | simClubManagerALeague: all checks passed
+simClubManagerGathered exit=0 1s | simClubManagerGathered: all checks passed (1 gathered league(s), 403 men, 1436 printed squad entries accounted for, 83 addresses, 5 cited facts, the old save)
+simEraBakeExtend exit=0 0s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simFreeAgents exit=0 16s | simFreeAgents: all sections passed
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 25s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simCmDataOnDemand exit=0 10s | simCmDataOnDemand: green. No page downloads data it never reads, and a past season brings its own.
+diff-main exit=0 1s | files changed against origin/main faf0a5f3e 9
+simHarnessAnchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 65s | 
