@@ -1,0 +1,5 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+forced-nocard exit=0 125s | FORCED RED REPLAYED: control nocard went red twice on one goal of one match (exits 1 and 1)
+forced-earlyscore exit=0 123s | FORCED RED REPLAYED: control earlyscore went red twice on one goal of one match (exits 1 and 1)
+plain-save exit=0 75s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+sizes exit=0 0s | -rw-r--r-- 1 runner runner  94115 Oct 10 08:42 wide-goal-windup.png
