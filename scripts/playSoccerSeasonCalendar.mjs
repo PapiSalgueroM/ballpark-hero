@@ -92,14 +92,14 @@ try {
       await capture('cup-before'); await active().locator('[data-calendar-cup-reveal]').click();
       check(await active().locator('[data-calendar-cup-verdict]').textContent() === (early.won ? 'Through' : 'Out'), 'Cup result matches actual recorded outcome');
       const opening = run.opening;
-      if (opening) { check((await active().locator('[data-calendar-cup-opponent]').textContent()).includes(opening.opp), 'Opening opponent is exactly saved'); check(await active().locator('[data-calendar-cup-score]').textContent() === opening.for + '-' + opening.against, 'Opening score is exactly saved'); }
+      if (opening) { check((await active().locator('[data-calendar-cup-opponent]').textContent()).includes(opening.opp), 'Opening opponent is exactly saved'); check(await active().locator('[data-calendar-cup-score]').textContent() === opening.for + '-' + opening.against, 'Opening score is exactly saved'); check(await active().getByText(opening.home ? 'Home' : 'Away', { exact: true }).isVisible(), 'Opening venue is exactly saved'); }
       else check(await active().locator('[data-calendar-cup-score]').textContent() === 'Score not recorded', 'Old early-round bundle remains honestly missing');
       await heldRead('cup-revealed'); await capture('cup-result');
       check(await active().locator('[data-centre-table]').textContent() === leagueFiveTable, 'Cup result leaves the complete fifth-game league table held');
       if (width < 1000) await active().locator('[data-centre-fixtures]').click();
       const scoreParts = leagueFiveScore.split('-');
-      check((await active().locator('[data-fixture-row="5"]').textContent()).includes(scoreParts[0] + '-' + scoreParts[1]), 'Actual league-five fixture score stays held through cup reveal');
-      if (fixture.id === 'advance') { check((await active().locator('[data-fixture-cup="domestic:1"] [data-fixture-cup-opponent]').textContent()) === next.opp, 'Saved win adds exact next named opponent'); }
+      check((await active().locator('[data-fixture-row="5"]:visible').textContent()).includes(scoreParts[0] + '-' + scoreParts[1]), 'Actual league-five fixture score stays held through cup reveal');
+      if (fixture.id === 'advance') { check((await active().locator('[data-fixture-cup="domestic:1"]:visible [data-fixture-cup-opponent]').textContent()) === next.opp, 'Saved win adds exact next named opponent'); }
       else if (!early.won) check(await active().locator('[data-fixture-cup="domestic:1"]').count() === 0, 'Saved opening loss adds no later cup game');
       if (width < 1000) await active().getByRole('button', { name: '← Back', exact: true }).click();
       await active().locator('[data-calendar-cup-competition]').click();

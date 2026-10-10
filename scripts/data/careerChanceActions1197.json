@@ -837,7 +837,7 @@
     {
       "file": "soccerCareerLife.ts",
       "id": 272,
-      "choice": 2,
+      "choice": 1,
       "chance": 0.5,
       "title": "The Body Talks",
       "hit": "Morning routine works",
@@ -850,7 +850,7 @@
     {
       "file": "soccerCareerLife.ts",
       "id": 272,
-      "choice": 3,
+      "choice": 2,
       "chance": 0.2,
       "title": "The Body Talks",
       "hit": "Pace drops by 1",
