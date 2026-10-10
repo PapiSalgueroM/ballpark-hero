@@ -13,6 +13,8 @@ import ShareButtons from '@/components/game/ShareButtons';
    conquest data on all four routes, as it did before this round.
    Wire a new screen here, once. */
 import type { UsCareerCore, UsCareerEvent, UsCareerSeason, UsCareerSport, UsShopItem } from '@/lib/usCareerSport';
+import UsCareerProgramme from '@/components/us-career/UsCareerProgramme';
+import { expireUsCareerProgramme, prepareUsCareerProgramme, restoreUsCareerProgramme, settleUsCareerProgramme, type ProgrammeCareer } from '@/lib/usCareerProgramme';
 // Round 179: real free agency, shared engine and shared screen.
 import { pushFaOffer, applyFaSigning, oneYearWindow } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
@@ -98,7 +100,7 @@ type Phase = 'create' | 'prospect' | 'season' | 'event' | 'extension' | 'freeage
 /* The board holds a career as the part every sport keeps. Each sport's own
    fields (its stats, its awards) ride along untouched and are read only by
    the sport's own functions. */
-type CareerState = UsCareerCore;
+type CareerState = ProgrammeCareer;
 type SeasonLine = UsCareerSeason;
 type CareerEvent = UsCareerEvent<UsCareerCore>;
 
@@ -377,6 +379,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
     retrySave();
   }, [sport.saveKey, retrySave]);
   const persist = useCallback((c: CareerState, ph: Phase, tq: number | null) => {
+    expireUsCareerProgramme(c);
     if (sport.hall) stampOnRetirement(c, sport.saveKey); // Round 1051: the calibration stamp, on the write that retires a career
     /* Release AO: the stamp stays above the write. Round 1084's saveValue holds the write's try (and the retry
        of a refused one), so the stamped career is what gets serialised, first time and on every retry. */
@@ -507,6 +510,7 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
       c.seasons.push(banned);
       c.headlines = pushHeadlines(c.headlines, sport.headlinesFor(c, banned));
       const banNotes = sport.progress(c, Math.random);
+      settleUsCareerProgramme(c, banned, sport.slug);
       setLastLine(banned);
       setCareer(c);
       setFeed([sport.suspendedNote, ...banNotes]);
@@ -562,9 +566,12 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
 
     /* Round 182: every season starts with a camp, and camps have losers. */
     const campNote = sport.campBattle(c, teamQuality, Math.random);
+    const programmePreparation = prepareUsCareerProgramme(c, sport.slug);
     const { line, notes } = sport.simSeason(c, teamQuality, Math.random);
     playedRef.current = c;
+    restoreUsCareerProgramme(c, programmePreparation);
     const progressNotes = sport.progress(c, Math.random);
+    settleUsCareerProgramme(c, line, sport.slug, programmePreparation);
     /* Round 469: the paper writes the season up, position aware, and the
        lines stay on the save so the News screen survives a reload. */
     c.headlines = pushHeadlines(c.headlines, sport.headlinesFor(c, line));
@@ -1479,6 +1486,11 @@ export default function UsCareerBoard({ sport }: { sport: UsCareerSport }) {
           <p className="mt-2 text-xs text-muted-foreground">
             Career so far: {sport.careerSoFar(career)}
           </p>
+          <UsCareerProgramme career={career} sport={sport.slug} onChange={next => {
+            if (next === career || phase !== 'season') return;
+            setCareer(next);
+            persist(next, 'season', teamQuality);
+          }} />
           <section data-career-practice aria-label="Season practice" className="mt-4 rounded-xl border border-primary/30 bg-gradient-to-br from-primary/15 via-card to-card p-3 text-left">
             <div className="flex items-start justify-between gap-3">
               <div>

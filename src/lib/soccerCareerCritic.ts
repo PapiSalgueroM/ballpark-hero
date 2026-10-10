@@ -1,3 +1,4 @@
+import { rollCareerChance } from "./careerChanceWheel";
 /* ─── Round 473: Soccer Career's binding for the critic ─────────────────────
 
    careerCritic.ts holds the columnist, his stance maths and his voice, and
@@ -187,7 +188,7 @@ export function getCriticEvents(state: CareerState): RandomEvent[] {
         consequence: "55%: the room is with you (Popularity +8, Morale +6). 45%: it reads as rattled (Popularity -10, Morale -6). Either way he is invested now, and every season after this counts harder with him",
         apply: s => {
           setFlag(s, CRITIC_FLAG, 1);
-          if (Math.random() < 0.55) {
+          if (rollCareerChance(s, 0.55, "The Column About You", "The room backs your answer", "Your answer reads as rattled")) {
             s.popularity = clamp(s.popularity + 8, 0, 100);
             s.morale = clamp(s.morale + 6, 0, 100);
             s.events = [...s.events, `🎤 Answered ${name} on the record and the room went with you. He will be watching every touch now`];

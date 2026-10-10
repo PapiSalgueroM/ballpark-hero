@@ -1,3 +1,10 @@
+## Codex prepared: ten Soccer gameplay systems, four sport careers, cups, Starting 11 and chance wheels, 2026-10-10
+
+Isolated branch codex/career-next-ten, base a131ed713d65e844aa8d86c92dbb8be396ba55af.
+Product and focused remote acceptance are in docs/ROUND1197-1208.md. Source 9040d118, run 38037847189, is verified.
+F owns train integration, merge and publication. Root dirty checkout and prior READY branches are held.
+This prefix records focused source verification. Integration and publication remain pending.
+
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,

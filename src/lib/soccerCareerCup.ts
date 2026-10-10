@@ -288,6 +288,8 @@ export interface CupFinal {
 export interface CupRun {
   cup?: string;
   stages: CupTie[];
+  /** A simplified opening match saved for new modern runs, never backfilled. */
+  opening?: { opp: string; country: string; league: string; won: boolean; for: number; against: number; home: boolean };
   /** Present when he reached the final and the window says how many legs. */
   final?: CupFinal;
 }
@@ -333,6 +335,22 @@ export interface CupRunInput {
   apps: number;
   /** Anything that pins this season down; it seeds the run's generator. */
   seedKey: string;
+  /** The actual engine opts new runs in; legacy callers keep their exact output. */
+  includeOpening?: boolean;
+}
+
+function drawOpeningCupTie(input: CupRunInput, stages: readonly CupTie[], pool: readonly ClubData[]): CupRun['opening'] {
+  if (!input.includeOpening || input.year < 2026 || input.status.kind !== 'NAMED' || stages[0]?.stage !== 'early') return undefined;
+  const used = new Set(stages.flatMap(tie => tie.opp ? [tie.opp] : []));
+  const candidates = pool.filter(club => !used.has(club.name) && club.name !== input.worldWinner);
+  if (!candidates.length) return undefined;
+  const rng = keyedRng(`${input.seedKey}|cup-opening`);
+  const opponent = candidates[Math.floor(rng() * candidates.length)];
+  const a = Math.min(29, poissonGoals(TIE_LAMBDA_HI, rng)), b = Math.min(29, poissonGoals(TIE_LAMBDA_LO, rng));
+  let hi = Math.max(a, b), lo = Math.min(a, b);
+  if (hi === lo) hi += 1;
+  const won = stages[0].won;
+  return { opp: opponent.name, country: opponent.country, league: opponent.league, won, for: won ? hi : lo, against: won ? lo : hi, home: rng() < 0.5 };
 }
 
 /** The season's cup run, or null when there is none to tell: a NONE season,
@@ -428,7 +446,8 @@ export function drawCupRun(input: CupRunInput): CupRun | null {
       if (rng() < 1 - Math.pow(1 - perGame, legs)) final.scored = true;
     }
   }
-  return { ...(status.kind === "NAMED" ? { cup: status.name } : {}), stages: out, ...(final ? { final } : {}) };
+  const opening = drawOpeningCupTie(input, out, all);
+  return { ...(status.kind === "NAMED" ? { cup: status.name } : {}), stages: out, ...(final ? { final } : {}), ...(opening ? { opening } : {}) };
 }
 
 /* ─── Reading a saved run ───
@@ -443,8 +462,8 @@ const nameOk = (s: unknown): s is string => typeof s === "string" && s.length > 
 
 export function readCupRun(row: unknown): CupRun | null {
   if (!row || typeof row !== "object") return null;
-  const r = row as { cupRun?: unknown; domesticCup?: unknown };
-  const raw = r.cupRun as { cup?: unknown; stages?: unknown; final?: unknown } | undefined;
+  const r = row as { cupRun?: unknown; domesticCup?: unknown; year?: unknown; club?: unknown };
+  const raw = r.cupRun as { cup?: unknown; stages?: unknown; final?: unknown; opening?: unknown } | undefined;
   if (!raw || typeof raw !== "object" || !Array.isArray(raw.stages)) return null;
   const list = raw.stages as unknown[];
   if (list.length < 1 || list.length > ORDER.length) return null;
@@ -472,6 +491,16 @@ export function readCupRun(row: unknown): CupRun | null {
   if (won !== (r.domesticCup === true)) return null;
   const run: CupRun = { stages };
   if (raw.cup !== undefined) { if (!nameOk(raw.cup)) return null; run.cup = raw.cup; }
+  if (raw.opening !== undefined) {
+    const opening = raw.opening as Partial<NonNullable<CupRun['opening']>> | null;
+    if (!opening || typeof opening !== 'object' || !Number.isSafeInteger(r.year) || (r.year as number) < 2026 || !nameOk(opening.opp)
+      || opening.opp === r.club || stages.some(tie => tie.opp === opening.opp) || typeof opening.country !== 'string' || typeof opening.league !== 'string'
+      || typeof opening.won !== 'boolean' || opening.won !== stages[0].won || typeof opening.home !== 'boolean'
+      || !goalsOk(opening.for) || !goalsOk(opening.against) || opening.for === opening.against || (opening.for > opening.against) !== opening.won) return null;
+    const status = cupFor(cupAssociation(opening.country, opening.league), r.year as number);
+    if (status.kind !== 'NAMED' || status.name !== run.cup) return null;
+    run.opening = { opp: opening.opp, country: opening.country, league: opening.league, won: opening.won, for: opening.for, against: opening.against, home: opening.home };
+  }
   if (raw.final !== undefined) {
     const f = raw.final as Partial<CupFinal> | null;
     if (!f || typeof f !== "object" || end.stage !== "F" || !goalsOk(f.for) || !goalsOk(f.against) || (f.legs !== 1 && f.legs !== 2)) return null;

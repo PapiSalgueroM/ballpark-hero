@@ -1,0 +1,1147 @@
+{
+  "scope": "Fictional isolated action inputs for actual original and current getAllEvents catalogues. Patches merge nested objects into the complete held carrier; arrays replace only where explicitly recorded here. Catalog eligibility draws use the valid held value 0 in both arms, before independent action draws.",
+  "base": "a131ed713d65e844aa8d86c92dbb8be396ba55af",
+  "baseTree": "ebd03b225527047d52a97ccbc9bf594edea536e1",
+  "carrier": "Root captured ere career, repaired, age 26, overall 85, ST, Arsenal, netWorth 100, weeklyWage 50000, captain. First held save ends in 2028. Other original fields remain held.",
+  "actions": [
+    {
+      "file": "careerEras.ts",
+      "id": 42,
+      "choice": 2,
+      "chance": 0.5,
+      "title": "The Proposal",
+      "hit": "Relationship ends",
+      "miss": "You both agree to wait",
+      "catalogRoll": 0,
+      "patch": {
+        "hasRelationship": true,
+        "family": {
+          "isMarried": false
+        }
+      }
+    },
+    {
+      "file": "careerEras.ts",
+      "id": 45,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "Child Support Claim",
+      "hit": "DNA test clears you",
+      "miss": "Paternity confirmed",
+      "catalogRoll": 0,
+      "patch": {
+        "family": {
+          "isMarried": false
+        },
+        "popularity": 60
+      }
+    },
+    {
+      "file": "careerEras.ts",
+      "id": 46,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "Nightclub Photos Leak",
+      "hit": "Story blows over",
+      "miss": "Denial backfires",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "careerEras.ts",
+      "id": 47,
+      "choice": 1,
+      "chance": 0.4,
+      "title": "Tax Investigation",
+      "hit": "Tax case won",
+      "miss": "Tax case lost",
+      "catalogRoll": 0,
+      "patch": {
+        "netWorth": 100
+      }
+    },
+    {
+      "file": "careerEras.ts",
+      "id": 51,
+      "choice": 2,
+      "chance": 0.5,
+      "title": "Dressing Room Bust-Up",
+      "hit": "Board backs you",
+      "miss": "Board backs your teammate",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "careerEras.ts",
+      "id": 52,
+      "choice": 1,
+      "chance": 0.55,
+      "title": "High-Stakes Poker Invitation",
+      "hit": "Poker win",
+      "miss": "Poker loss",
+      "catalogRoll": 0,
+      "patch": {
+        "netWorth": 100
+      }
+    },
+    {
+      "file": "careerEras.ts",
+      "id": 56,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "Agent Demands 15%",
+      "hit": "Sharper new agent",
+      "miss": "Representation chaos",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "careerEras.ts",
+      "id": 57,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "Contract Standoff",
+      "hit": "Wage rises by 20%",
+      "miss": "Holdout backfires",
+      "catalogRoll": 0,
+      "patch": {
+        "contractYearsLeft": 2
+      }
+    },
+    {
+      "file": "careerEras.ts",
+      "id": 62,
+      "choice": 0,
+      "chance": 0.3,
+      "title": "Training Ground Collision",
+      "hit": "Knock gets worse",
+      "miss": "You play through the knock",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "careerEras.ts",
+      "id": 63,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "Leaked Group Chat",
+      "hit": "Manager respects your honesty",
+      "miss": "You are benched",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerBoot.ts",
+      "id": 501,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "Your Own Boot",
+      "hit": "Boot sells out",
+      "miss": "Boot stays on the shelves",
+      "catalogRoll": 0,
+      "patch": {
+        "seasons": [
+          {
+            "year": 2023,
+            "age": 21,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 32,
+            "leagueApps": 30,
+            "goals": 10,
+            "assists": 6,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 7.6,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          },
+          {
+            "year": 2024,
+            "age": 22,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 32,
+            "leagueApps": 30,
+            "goals": 10,
+            "assists": 6,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 7.6,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          },
+          {
+            "year": 2025,
+            "age": 23,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 32,
+            "leagueApps": 30,
+            "goals": 10,
+            "assists": 6,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 7.6,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          },
+          {
+            "year": 2026,
+            "age": 24,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 32,
+            "leagueApps": 30,
+            "goals": 10,
+            "assists": 6,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 7.6,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          },
+          {
+            "year": 2027,
+            "age": 25,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 32,
+            "leagueApps": 30,
+            "goals": 10,
+            "assists": 6,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 7.6,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          },
+          {
+            "year": 2028,
+            "age": 26,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 32,
+            "leagueApps": 30,
+            "goals": 10,
+            "assists": 6,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 7.6,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          }
+        ],
+        "socialMediaFollowers": 25,
+        "lifeFlags": {
+          "signatureBoot": 0
+        }
+      }
+    },
+    {
+      "file": "soccerCareerCorruption.ts",
+      "id": 311,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "The Vote Broker Kept Receipts",
+      "hit": "Cleared of vote buying",
+      "miss": "Convicted of vote buying",
+      "catalogRoll": 0,
+      "patch": {
+        "lifeFlags": {
+          "voteArc": 1
+        },
+        "netWorth": 100
+      }
+    },
+    {
+      "file": "soccerCareerCritic.ts",
+      "id": 500,
+      "choice": 0,
+      "chance": 0.55,
+      "title": "The Column About You",
+      "hit": "The room backs your answer",
+      "miss": "Your answer reads as rattled",
+      "catalogRoll": 0,
+      "patch": {
+        "seasons": [
+          {
+            "year": 2026,
+            "age": 24,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 8,
+            "leagueApps": 8,
+            "goals": 1,
+            "assists": 1,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 5.5,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          },
+          {
+            "year": 2027,
+            "age": 25,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 8,
+            "leagueApps": 8,
+            "goals": 1,
+            "assists": 1,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 5.5,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          },
+          {
+            "year": 2028,
+            "age": 26,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 8,
+            "leagueApps": 8,
+            "goals": 1,
+            "assists": 1,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 5.5,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          }
+        ],
+        "popularity": 35,
+        "lifeFlags": {
+          "criticAnswered": 0
+        }
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 210,
+      "choice": 0,
+      "chance": 0.15,
+      "title": "The Halftime Backflip",
+      "hit": "Hamstring tweaked",
+      "miss": "Backflip lands safely",
+      "catalogRoll": 0,
+      "patch": {
+        "personality": "showman"
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 218,
+      "choice": 0,
+      "chance": 0.6,
+      "title": "The Monastery Offseason",
+      "hit": "Sharper after the retreat",
+      "miss": "Pace drops by 1",
+      "catalogRoll": 0,
+      "patch": {
+        "personality": "enigma"
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 219,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "The Cape Era",
+      "hit": "The cape is loved",
+      "miss": "The cape divides opinion",
+      "catalogRoll": 0,
+      "patch": {
+        "personality": "enigma"
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 220,
+      "choice": 2,
+      "chance": 0.5,
+      "title": "The Group Chat Leak",
+      "hit": "Leaker found",
+      "miss": "Leaker not found",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 224,
+      "choice": 0,
+      "chance": 0.7,
+      "title": "Mascot Beef",
+      "hit": "You win the race",
+      "miss": "The mascot wins",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 227,
+      "choice": 0,
+      "chance": 0.4,
+      "title": "Esports Season Results",
+      "hit": "Your team wins",
+      "miss": "The organisation folds",
+      "catalogRoll": 0,
+      "patch": {
+        "lifeFlags": {
+          "esports": 1
+        }
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 229,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "The Milk Protocol",
+      "hit": "The protocol works",
+      "miss": "The protocol goes badly",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 232,
+      "choice": 0,
+      "chance": 0.6,
+      "title": "The Statue Vote",
+      "hit": "Statue vote passes",
+      "miss": "Statue vote fails",
+      "catalogRoll": 0,
+      "patch": {
+        "age": 27
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 237,
+      "choice": 0,
+      "chance": 0.65,
+      "title": "The Repayment",
+      "hit": "Repaid with a letter",
+      "miss": "No repayment",
+      "catalogRoll": 0,
+      "patch": {
+        "lifeFlags": {
+          "teammateLoan": 1
+        }
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 243,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "Reality Dating Show Invite",
+      "hit": "You find a relationship",
+      "miss": "Finale argument",
+      "catalogRoll": 0,
+      "patch": {
+        "hasRelationship": false,
+        "family": {
+          "isMarried": false
+        },
+        "popularity": 60
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 251,
+      "choice": 0,
+      "chance": 0.25,
+      "title": "The Teammate Coin",
+      "hit": "Coin pays out",
+      "miss": "Coin loses the investment",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 253,
+      "choice": 2,
+      "chance": 0.5,
+      "title": "Your Mum Is In The Comments",
+      "hit": "Fans love the account takeover",
+      "miss": "Sponsor leaves",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 254,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "The Sibling Trial",
+      "hit": "Your brother earns a place",
+      "miss": "Your brother misses out",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 255,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "Grandad's Club",
+      "hit": "You score against the club",
+      "miss": "You do not score",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 257,
+      "choice": 0,
+      "chance": 0.25,
+      "title": "The Energy Drink Pitch",
+      "hit": "Product recall",
+      "miss": "Sponsorship succeeds",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 258,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "The Garden Centre Charge",
+      "hit": "Fraud charge refunded",
+      "miss": "The charge was your dad",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 259,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "The Accountant's Spreadsheet",
+      "hit": "Accountant refunds the retainer",
+      "miss": "Accountant quits",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 260,
+      "choice": 1,
+      "chance": 0.65,
+      "title": "The Head Knock",
+      "hit": "You play without a setback",
+      "miss": "The head knock has a cost",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 261,
+      "choice": 1,
+      "chance": 0.6,
+      "title": "The Niggle",
+      "hit": "The niggle settles",
+      "miss": "The hamstring goes",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 261,
+      "choice": 2,
+      "chance": 0.7,
+      "title": "The Niggle",
+      "hit": "The tape holds",
+      "miss": "The hamstring tears",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 262,
+      "choice": 1,
+      "chance": 0.65,
+      "title": "The Comeback Game",
+      "hit": "Comeback goes well",
+      "miss": "The leg says no",
+      "catalogRoll": 0,
+      "patch": {
+        "seriousInjuries": [
+          {
+            "weeks": 16,
+            "name": "Recorded action fixture injury",
+            "path": "plan",
+            "setback": false,
+            "year": 2028
+          }
+        ]
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 263,
+      "choice": 0,
+      "chance": 0.6,
+      "title": "Secret Santa",
+      "hit": "The thoughtful gift helps",
+      "miss": "A quiet thanks",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 263,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "Secret Santa",
+      "hit": "The joke lands",
+      "miss": "The joke does not land",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 264,
+      "choice": 0,
+      "chance": 0.6,
+      "title": "The Rookie's First Car",
+      "hit": "The rookie listens",
+      "miss": "The rookie keeps the car",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 264,
+      "choice": 2,
+      "chance": 0.25,
+      "title": "The Rookie's First Car",
+      "hit": "The rookie scrapes the car",
+      "miss": "The car stays fine",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 265,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "The Agent Poach",
+      "hit": "Your agent finds interest",
+      "miss": "Your agent goes quiet",
+      "catalogRoll": 0,
+      "patch": {
+        "agentId": "cousin"
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 266,
+      "choice": 0,
+      "chance": 0.3,
+      "title": "The Release Clause Rumour",
+      "hit": "Club is furious",
+      "miss": "The rumour boosts your value",
+      "catalogRoll": 0,
+      "patch": {
+        "marketValue": 50
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 267,
+      "choice": 2,
+      "chance": 0.5,
+      "title": "The Camp Roommate",
+      "hit": "The prank war is loved",
+      "miss": "The coach is unimpressed",
+      "catalogRoll": 0,
+      "patch": {
+        "internationalCareer": true,
+        "intStats": {
+          "isRetired": false
+        }
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 268,
+      "choice": 0,
+      "chance": 0.2,
+      "title": "The Under Nines' Medal Night",
+      "hit": "Sponsor trims the deal",
+      "miss": "Sponsor reschedules",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 268,
+      "choice": 2,
+      "chance": 0.3,
+      "title": "The Under Nines' Medal Night",
+      "hit": "Late to both events",
+      "miss": "You make both events",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 269,
+      "choice": 2,
+      "chance": 0.5,
+      "title": "Forty Feet, One Typo",
+      "hit": "The typo trends",
+      "miss": "The typo stays on the banner",
+      "catalogRoll": 0,
+      "patch": {
+        "popularity": 60
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 271,
+      "choice": 0,
+      "chance": 0.6,
+      "title": "The Screen Test",
+      "hit": "Screen test goes well",
+      "miss": "Screen test goes badly",
+      "catalogRoll": 0,
+      "patch": {
+        "age": 31,
+        "lifeFlags": {
+          "screenTest": 0
+        }
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 272,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "The Body Talks",
+      "hit": "Morning routine works",
+      "miss": "Morning routine changes nothing",
+      "catalogRoll": 0,
+      "patch": {
+        "age": 33
+      }
+    },
+    {
+      "file": "soccerCareerLife.ts",
+      "id": 272,
+      "choice": 2,
+      "chance": 0.2,
+      "title": "The Body Talks",
+      "hit": "Pace drops by 1",
+      "miss": "No setback",
+      "catalogRoll": 0,
+      "patch": {
+        "age": 33
+      }
+    },
+    {
+      "file": "soccerCareerRealismA.ts",
+      "id": 402,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "The Kit Man's System",
+      "hit": "Experiment goes well",
+      "miss": "Experiment goes badly",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerRealismA.ts",
+      "id": 410,
+      "choice": 0,
+      "chance": 0.6,
+      "title": "They Printed A Quote You Never Said",
+      "hit": "Court case won",
+      "miss": "Court case lost",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerRealismA.ts",
+      "id": 422,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "Somebody Screenshotted The Squad Group Chat",
+      "hit": "Leaker found",
+      "miss": "Leaker not found",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerRealismA.ts",
+      "id": 423,
+      "choice": 2,
+      "chance": 0.5,
+      "title": "The New Striker Wants Your Penalties",
+      "hit": "You win the shootout",
+      "miss": "You lose the shootout",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerRealismA.ts",
+      "id": 432,
+      "choice": 0,
+      "chance": 0.25,
+      "title": "It Started With The Left Sock",
+      "hit": "Ritual falls apart",
+      "miss": "Ritual continues",
+      "catalogRoll": 0,
+      "patch": {
+        "lifeFlags": {
+          "rKitSystem": 1
+        }
+      }
+    },
+    {
+      "file": "soccerCareerRealismA.ts",
+      "id": 433,
+      "choice": 1,
+      "chance": 0.3,
+      "title": "The Scan Room",
+      "hit": "Knee setback",
+      "miss": "No setback",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerRealismA.ts",
+      "id": 440,
+      "choice": 0,
+      "chance": 0.2,
+      "title": "The Charity Match Nobody Said Was Full Contact",
+      "hit": "Injury at the charity match",
+      "miss": "Charity match goes well",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerRealismA.ts",
+      "id": 442,
+      "choice": 0,
+      "chance": 0.5,
+      "title": "The Car With Two Hundred Bad Reviews",
+      "hit": "Car breaks down on the way",
+      "miss": "Car repairs stay manageable",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerRealismA.ts",
+      "id": 443,
+      "choice": 0,
+      "chance": 0.45,
+      "title": "Your Cousin's Restaurant Needs €400k",
+      "hit": "Restaurant succeeds",
+      "miss": "Restaurant closes",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 450,
+      "choice": 2,
+      "chance": 0.5,
+      "title": "The Boycott Vote",
+      "hit": "Deal brokered",
+      "miss": "Deal attempt backfires",
+      "catalogRoll": 0,
+      "patch": {
+        "internationalCareer": true,
+        "intStats": {
+          "caps": 12,
+          "isRetired": false
+        },
+        "lifeFlags": {
+          "boycott": 0
+        }
+      }
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 456,
+      "choice": 2,
+      "chance": 0.6,
+      "title": "One A.M. Call From The National Coach",
+      "hit": "National captaincy agreed",
+      "miss": "Armband request rejected",
+      "catalogRoll": 0,
+      "patch": {
+        "intStats": {
+          "isRetired": true
+        }
+      }
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 465,
+      "choice": 0,
+      "chance": 0.35,
+      "title": "Charity Boxing, Three Rounds",
+      "hit": "Boxing takes a toll",
+      "miss": "Boxing goes well",
+      "catalogRoll": 0,
+      "patch": {
+        "popularity": 60
+      }
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 469,
+      "choice": 1,
+      "chance": 0.3,
+      "title": "Her Job Is In Another City",
+      "hit": "Relationship ends",
+      "miss": "Partner agrees to wait",
+      "catalogRoll": 0,
+      "patch": {
+        "hasRelationship": true
+      }
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 476,
+      "choice": 0,
+      "chance": 0.4,
+      "title": "The New Owner Has A Slideshow",
+      "hit": "New project falls apart",
+      "miss": "New project goes well",
+      "catalogRoll": 0,
+      "patch": {}
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 478,
+      "choice": 1,
+      "chance": 0.5,
+      "title": "The Armband Is Going To Someone Else",
+      "hit": "You keep the armband",
+      "miss": "You lose the armband",
+      "catalogRoll": 0,
+      "patch": {
+        "isLeader": true
+      }
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 482,
+      "choice": 2,
+      "chance": 0.3,
+      "title": "Celebrity XI",
+      "hit": "Hamstring pulled",
+      "miss": "Challenge won cleanly",
+      "catalogRoll": 0,
+      "patch": {
+        "popularity": 60
+      }
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 483,
+      "choice": 0,
+      "chance": 0.25,
+      "title": "The Sponsor Bought A Horse",
+      "hit": "Horse ride goes badly",
+      "miss": "Horse ride goes well",
+      "catalogRoll": 0,
+      "patch": {
+        "popularity": 60
+      }
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 486,
+      "choice": 0,
+      "chance": 0.12,
+      "title": "The Streamer Wants Five Penalties",
+      "hit": "You lose the shootout",
+      "miss": "You win the shootout",
+      "catalogRoll": 0,
+      "patch": {
+        "socialMediaFollowers": 25
+      }
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 492,
+      "choice": 1,
+      "chance": 0.45,
+      "title": "A Loan To Get Minutes",
+      "hit": "You earn the shirt",
+      "miss": "You stay on the bench",
+      "catalogRoll": 0,
+      "patch": {
+        "seasons": [
+          {
+            "year": 2028,
+            "age": 26,
+            "club": "Arsenal",
+            "clubCountry": "England",
+            "clubTier": 1,
+            "apps": 18,
+            "leagueApps": 18,
+            "goals": 10,
+            "assists": 6,
+            "cleanSheets": 4,
+            "yellowCards": 4,
+            "redCards": 0,
+            "rating": 7.6,
+            "leagueTitle": false,
+            "domesticCup": false,
+            "championsLeague": false,
+            "worldCup": false,
+            "ballonDor": false,
+            "ballonDorRank": null,
+            "type": "playing",
+            "intApps": 0,
+            "intGoals": 0,
+            "intAssists": 0,
+            "intRating": 0,
+            "tournament": null,
+            "tournamentResult": null
+          }
+        ]
+      }
+    },
+    {
+      "file": "soccerCareerRealismB.ts",
+      "id": 493,
+      "choice": 1,
+      "chance": 0.6,
+      "title": "Take The Pay Cut Or Take The Train",
+      "hit": "You find a better deal",
+      "miss": "You sign for less",
+      "catalogRoll": 0,
+      "patch": {
+        "age": 31,
+        "contractYearsLeft": 1
+      }
+    }
+  ]
+}

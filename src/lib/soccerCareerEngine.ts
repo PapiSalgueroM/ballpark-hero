@@ -1,8 +1,11 @@
 // Soccer Career Simulation Engine v2, Youth Academy + Pro System
 
+import { rollCareerChance, type CareerChanceWheelReceipt } from '@/lib/careerChanceWheel';
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
 import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
+import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interruptSoccerProgramme, completeProgrammeLoanBuy, programmePromiseBroken } from './soccerCareerProgramme';
+import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
@@ -174,6 +177,7 @@ export interface ClubData {
 }
 
 export interface SeasonRecord {
+  programme?: SoccerProgrammeReceipt;
   year: number;
   age: number;
   club: string;
@@ -847,6 +851,8 @@ export interface CareerStorySeason {
 }
 
 export interface CareerState {
+  programme?: SoccerProgrammeState;
+  chanceWheel?: CareerChanceWheelReceipt;
   playerName: string;
   nationality: string;
   position: string;
@@ -1339,7 +1345,7 @@ export const SOCCER_RIVALRY_CHOICES: RivalryChoiceDef<CareerState, RivalPlayer>[
         label: "Plot revenge for the rematch", emoji: "😈", consequence: "The feud goes nuclear", risk: "30% chance you see red doing it: popularity and morale -5",
         apply: (s, r, rng) => {
           s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 25, 0, 100);
-          if (rng() < 0.3) {
+          if (rollCareerChance(s, 0.3, 'Derby revenge', 'Red card', 'Escaped a card', rng)) {
             s.popularity = clamp(s.popularity - 5, 0, 100);
             s.morale = clamp(s.morale - 5, 0, 100);
             return `🟥 Revenge tasted sweet for four seconds, then the red card came out. Popularity and morale -5, and ${r?.name ?? "your rival"} smiled the whole time.`;
@@ -1378,7 +1384,7 @@ export const SOCCER_RIVALRY_CHOICES: RivalryChoiceDef<CareerState, RivalPlayer>[
         label: "Go on and cook them", emoji: "🔥", consequence: "2M fee", risk: "35% chance a clip goes viral badly: popularity -8",
         apply: (s, _r, rng) => {
           s.netWorth = Math.round((s.netWorth + 2) * 100) / 100;
-          if (rng() < 0.35) {
+          if (rollCareerChance(s, 0.35, 'Debate show', 'Bad viral clip', 'Good viral clip', rng)) {
             s.popularity = clamp(s.popularity - 8, 0, 100);
             return "🎤 You went on the debate show and one heated clip went viral for the wrong reasons. 2M banked, popularity -8.";
           }
@@ -1732,13 +1738,15 @@ export const MORAL_DILEMMAS: MoralDilemma[] = [
    null he spent the year at his own club (a year lost to injury). */
 function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
   const last = s.seasons[s.seasons.length - 1];
-  return {
+  const row: SeasonRecord = {
     year: (last ? last.year : 2019) + 1, age: s.age,
     club: reason ?? s.currentClub, clubCountry: reason ? "" : s.currentClubCountry, clubTier: reason ? 99 : s.currentClubTier,
     apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, rating: 0,
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "playing",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   };
+  interruptSoccerProgramme(s, row);
+  return row;
 }
 
 /**
@@ -1835,7 +1843,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         // Accept
         s.netWorth = Math.round((s.netWorth + 5) * 100) / 100;
         s.events = [...s.events, "🎰 Accepted €5M to fix a match..."];
-        if (Math.random() < 0.30) {
+        if (rollCareerChance(s, 0.30, 'Match fixing', 'Caught and banned', 'No investigation')) {
           // Caught! matchFixBanned counts down BEFORE advanceProSeason checks
           // it, so 2 here is one season out, which is what the card says.
           s.matchFixBanned = 2;
@@ -1936,7 +1944,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       if (choiceIndex === 0) {
         s.netWorth = Math.round((s.netWorth + 2) * 100) / 100;
         s.events = [...s.events, "💵 Took €2M from the fixer to miss a penalty..."];
-        if (Math.random() < 0.25) {
+        if (rollCareerChance(s, 0.25, 'Fixer offer', 'Recording leaked', 'Recording stayed hidden')) {
           s.matchFixBanned = 2;
           s.popularity = clamp(s.popularity - 35, 0, 100);
           s.morale = clamp(s.morale - 25, 0, 100);
@@ -2051,7 +2059,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.events = [...s.events, "🙇 Owned up publicly and apologized. Fined a week's wages, popularity +5 for honesty."];
       } else if (choiceIndex === 1) {
         s.events = [...s.events, "🙅 Denied everything. The story might resurface later."];
-        if (Math.random() < 0.35) {
+        if (rollCareerChance(s, 0.35, 'Public denial', 'Story resurfaced', 'Story stayed quiet')) {
           s.popularity = clamp(s.popularity - 15, 0, 100);
           s.events = [...s.events, "📰 The denial didn't hold. Story resurfaced. Popularity -15."];
         }
@@ -2071,7 +2079,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.netWorth = Math.round((s.netWorth + 6) * 100) / 100;
         s.totalEarnings += 6;
         s.popularity = clamp(s.popularity + 18, 0, 100);
-        if (Math.random() < 0.25) {
+        if (rollCareerChance(s, 0.25, 'Magazine shoot', 'Sponsor left', 'Sponsor stayed')) {
           s.netWorth = Math.round((s.netWorth - 2) * 100) / 100;
           s.events = [...s.events, "🙈 The artistic cover breaks the internet. 6M earned, popularity +18... and a family-brand sponsor quietly walked, costing 2M."];
         } else {
@@ -2102,7 +2110,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
       if (choiceIndex === 0) {
         s.netWorth = Math.round((s.netWorth + 15) * 100) / 100;
         s.mafiaStage = 2;
-        if (Math.random() < 0.5) {
+        if (rollCareerChance(s, 0.5, 'Second offer', 'Investigation landed', 'Investigation missed')) {
           s.matchFixBanned = 3;
           s.popularity = clamp(s.popularity - 40, 0, 100);
           s.integrityBonus -= 40;
@@ -2112,7 +2120,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         }
       } else if (choiceIndex === 1) {
         s.mafiaStage = 2;
-        if (Math.random() < 0.4) {
+        if (rollCareerChance(s, 0.4, 'Refusing the offer', 'First fix leaked', 'First fix stayed hidden')) {
           s.matchFixBanned = 2;
           s.popularity = clamp(s.popularity - 30, 0, 100);
           s.integrityBonus -= 25;
@@ -2149,7 +2157,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.popularity = clamp(s.popularity + 15, 0, 100);
         s.events = [...s.events, "⚖️ You sued and won. The court statement trended. Popularity +15, lawyers +1M."];
       } else if (choiceIndex === 1) {
-        if (Math.random() < 0.2) {
+        if (rollCareerChance(s, 0.2, 'Parody response', 'Backlash', 'Response landed')) {
           s.popularity = clamp(s.popularity - 10, 0, 100);
           s.events = [...s.events, "🎭 The parody video read wrong. Think pieces everywhere. Popularity -10."];
         } else {
@@ -2211,7 +2219,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.netWorth = Math.round((s.netWorth + 3) * 100) / 100;
         s.totalEarnings += 3;
         s.popularity = clamp(s.popularity + 8, 0, 100);
-        if (Math.random() < 0.25) {
+        if (rollCareerChance(s, 0.25, 'Reality show', 'Secret aired', 'Secrets stayed private')) {
           s.morale = clamp(s.morale - 10, 0, 100);
           s.events = [...s.events, "🎬 The show was a hit... until episode six aired a dressing-room story. Training is FROSTY. Morale -10."];
         } else {
@@ -2232,7 +2240,7 @@ export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number):
         s.popularity = clamp(s.popularity + 15, 0, 100);
         s.events = [...s.events, "🐉 You got the crest tattooed live outside training. The ultras wept. Popularity +15, forever."];
       } else if (choiceIndex === 1) {
-        if (Math.random() < 0.3) {
+        if (rollCareerChance(s, 0.3, 'Tattoo prank', 'Prank discovered', 'Prank went unnoticed')) {
           s.popularity = clamp(s.popularity - 10, 0, 100);
           s.events = [...s.events, "🖌️ The henna washed off at the pool and someone had a camera. The ultras are NOT laughing. Popularity -10."];
         } else {
@@ -3874,7 +3882,9 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
      on 36 or 37 of a possible 38 in the league, so a multiplier applied there
      was being eaten by the ceiling and a build that should have been notably
      more durable came out two games better across twelve seasons. */
-  apps = Math.max(0, Math.round(apps * fx.appsMult));
+  const programme = state ? programmeEffects(state) : null;
+  apps = Math.max(0, Math.round(apps * fx.appsMult * (programme?.appsMult ?? 1)));
+  if (programme && programme.appsMult !== 1) leagueApps = clamp(Math.round(leagueApps * programme.appsMult), 0, Math.min(38, apps));
 
   let injured = false;
   let injuryWeeks = 0;
@@ -3914,6 +3924,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
      fragile, capped at six points so a career of shortcuts is a real
      handicap rather than a death sentence. */
   injuryChance += state?.rehabFragility ?? 0;
+  injuryChance += programme?.injuryDelta ?? 0;
   injuryChance = clamp(injuryChance, 0.04, 0.42);
   const injuryRoll = rollSeasonInjury(injuryChance);
   if (injuryRoll) {
@@ -4081,18 +4092,19 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
   const appearance = calcAppearances(overall, currentClubTier, age, state, fx);
   const { apps, leagueApps, served } = serveClubSuspension(appearance.apps, appearance.leagueApps, state.pendingSuspensionMatches);
   const { injured, injuryWeeks, injuryName, injurySevere } = appearance;
-  let goals = calcGoals(position, apps, overall, fx.goalMult);
+  const programme = programmeEffects(state);
+  let goals = calcGoals(position, apps, overall, fx.goalMult * programme.goalMult);
   // Diving reputation: +2 goals from penalties
   if (apps > 0 && state.divingActive && !isGK) goals += 2;
-  const assists = calcAssists(position, apps, overall, fx.assistMult);
+  const assists = calcAssists(position, apps, overall, fx.assistMult * programme.assistMult);
   /* A clean sheet belongs to the whole back line, not the keeper alone. This
      was gated on GK, so a defender's Clean Sheets tile read 0 for an entire
      career (a player reported it on 2026-09-23). The back line now draws the
      same share of the team's shutouts as the keeper does. */
   const keepsSheets = isGK || position === "CB" || position === "LB" || position === "RB";
-  const cleanSheets = keepsSheets ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult), 0, apps) : 0;
-  const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
-  const redCards = Math.random() < 0.08 && apps > 0 ? 1 : 0;
+  const cleanSheets = keepsSheets ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult * programme.cleanSheetMult), 0, apps) : 0;
+  const yellowCards = Math.round(rand(0, Math.min(8, Math.round(apps * 0.25))) * programme.yellowCardMult);
+  const redCards = Math.random() < 0.08 * programme.redCardMult && apps > 0 ? 1 : 0;
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
 
   // --- Trophy realism ---
@@ -4639,7 +4651,7 @@ export function determineTransferSituation(state: CareerState, clubs: ClubData[]
 /* ─── Request transfer, 50/50 ─── */
 export function requestTransfer(state: CareerState, clubs: ClubData[]): TransferSituation {
   clubs = projectLeagueWorldClubs(state, adjustClubsForYear(clubs, (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1), (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1);
-  if (Math.random() < 0.5) {
+  if (Math.random() < 0.5 || programmePromiseBroken(state)) {
     const exclude = new Set<string>([state.currentClub]);
     const offer = makeOffer(clubs, pick(getInterestedTiers(state.overall, state.age)), state.overall, state.age, exclude, state.marketValue);
     return { type: "request_result", offer };
@@ -5077,6 +5089,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
       }];
       s.pendingSummary = s.seasons[s.seasons.length - 1];
+      interruptSoccerProgramme(s, s.pendingSummary);
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       return s;
@@ -5104,6 +5117,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
     }];
     s.pendingSummary = s.seasons[s.seasons.length - 1];
+    interruptSoccerProgramme(s, s.pendingSummary);
     s.phase = "season_summary";
     simulateSeasonFinances(s, s.pendingSummary);
     return s;
@@ -5203,6 +5217,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
         intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
       }];
       s.pendingSummary = s.seasons[s.seasons.length - 1];
+      interruptSoccerProgramme(s, s.pendingSummary);
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       return s;
@@ -5301,6 +5316,7 @@ export function awardAllTimeTopScorer(s: CareerState, thisYear: number): void {
    play was never played or recorded: one live career lost six seasons and
    finished six years behind its own calendar (audit QA847-14). */
 function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
+  prepareSoccerProgramme(s);
   const worldClubs = prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
   const season = generateSeasonStats(s, worldClubs);
   recordLeagueWorldSeason(s, clubs, season);
@@ -5349,6 +5365,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
       simulateSeasonFinances(s, injuryRow);
+      settleSoccerProgramme(s, injuryRow);
       runTournamentSummer(s, injuryRow, injuryRow.year, true);
       s.phase = "rehab_choice";
       /* Release AQ: the league went on without him, so its season is settled
@@ -5673,6 +5690,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   s.phase = news.length > 0 ? "newspaper" : "season_summary";
   // Financial simulation
   simulateSeasonFinances(s, season);
+  settleSoccerProgramme(s, season);
   if (s.contractYearsLeft <= 1) s.events.push("⚠️ Your contract is expiring!");
 
   /* ─── Round 124: the international summer ───
@@ -5711,6 +5729,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   {
     const worldLeague = worldLeagueOf(cupAssoc);
     const run = drawCupRun({
+      includeOpening: true,
       status: domesticCupFor(cupAssoc, season.year), club: season.club, year: season.year, won: season.domesticCup,
       chance: cupChanceFor({ elite: eliteInYear(ELITE_CLUBS, season.club, season.year), tier: season.clubTier, performanceBoost: seasonPerformanceBoost(season.ovr ?? s.overall, season.rating) }),
       clubs, worldWinner: worldLeague ? world.cups[worldLeague] ?? null : null,
@@ -5750,6 +5769,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      One season, then home, the way nearly every real loan works. The verdict
      line quotes the SAME projection the appearance model will draw from next
      season, so the screen can promise nothing the simulation will not keep. */
+  const programmeLoanClub = s.loan ? worldClubs.find(club => club.name === s.currentClub) : undefined;
+  if (programmeLoanClub) completeProgrammeLoanBuy(s, programmeLoanClub);
   if (s.loan) {
     const back = s.loan;
     s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
@@ -6179,7 +6200,7 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
           apply: s => { s.pendingSuspensionMatches = serveClubSuspension(0, 0, s.pendingSuspensionMatches).remaining + 3; s.popularity = clamp(s.popularity - 5, 0, 100); s.events = [...s.events, "🟥 Banned 3 matches for violent foul"]; return s; } },
         { label: "Appeal the decision", emoji: "⚖️", color: "bg-amber-600", consequence: "Appeal submitted, result in 3-5 days",
           apply: s => {
-            const success = Math.random() < 0.5;
+            const success = rollCareerChance(s, 0.5, 'Red card appeal', 'Appeal successful', 'Appeal rejected');
             const banLength = success ? 0 : rand(2, 4);
             s.pendingAppealResult = { success, banLength };
             s.phase = "red_card_appeal_result" as any;
@@ -6200,7 +6221,7 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Focus on recovery", emoji: "🏥", color: "bg-red-600", consequence: "Pace -2 permanently, miss apps next season",
           apply: s => { s.pace = clamp(s.pace - 2, 20, 99); s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "🏥 Serious hamstring injury: Pace -2"]; return s; } },
         { label: "Rush back early", emoji: "⚡", color: "bg-amber-600", consequence: "Pace -1 but 30% chance of reinjury (Pace -3)",
-          apply: s => { if (Math.random() < 0.3) { s.pace = clamp(s.pace - 3, 20, 99); s.events = [...s.events, "🏥 Rushed back, reinjured! Pace -3"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "🏥 Rushed back successfully: Pace -1"]; } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.3, 'Injury return', 'Reinjury', 'Successful return')) { s.pace = clamp(s.pace - 3, 20, 99); s.events = [...s.events, "🏥 Rushed back, reinjured! Pace -3"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "🏥 Rushed back successfully: Pace -1"]; } return s; } },
       ] },
     { id: 12, emoji: "👔", title: "New Manager!", description: "Your manager is sacked. The new manager does not rate you.",
       category: "negative", choices: [
@@ -6214,7 +6235,7 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Apologize publicly", emoji: "😔", color: "bg-blue-600", consequence: "Popularity -3, Manager relationship saved",
           apply: s => { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "📸 Party scandal, apologized publicly"]; return s; } },
         { label: "Deny it", emoji: "🤷", color: "bg-muted", consequence: "50/50: believed or more backlash",
-          apply: s => { if (Math.random() < 0.5) { s.events = [...s.events, "📸 Denied party, public believed you"]; } else { s.popularity = clamp(s.popularity - 8, 0, 100); s.events = [...s.events, "📸 Denied party, backlash got worse"]; } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, 'Party denial', 'Public believed you', 'Backlash')) { s.events = [...s.events, "📸 Denied party, public believed you"]; } else { s.popularity = clamp(s.popularity - 8, 0, 100); s.events = [...s.events, "📸 Denied party, backlash got worse"]; } return s; } },
         { label: "Laugh it off on social media", emoji: "😂", color: "bg-amber-600", consequence: "Popularity +5 with fans, -5 with manager",
           apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "📸 Laughed off party scandal, fans loved it"]; return s; } },
       ] },
@@ -6228,7 +6249,7 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 15, emoji: "📋", title: "Dropped!", description: "You are dropped from the starting lineup without explanation.",
       category: "negative", choices: [
         { label: "Demand explanation", emoji: "😠", color: "bg-red-600", consequence: "Morale -5, 50% chance manager explains",
-          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); if (Math.random() < 0.5) { s.events = [...s.events, "📋 Demanded explanation, manager understood"]; } else { s.events = [...s.events, "📋 Demanded explanation, relationship worsened"]; } return s; } },
+          apply: s => { s.morale = clamp(s.morale - 5, 0, 100); if (rollCareerChance(s, 0.5, 'Manager talks', 'Manager understood', 'Relationship worsened')) { s.events = [...s.events, "📋 Demanded explanation, manager understood"]; } else { s.events = [...s.events, "📋 Demanded explanation, relationship worsened"]; } return s; } },
         { label: "Train harder, fight for place", emoji: "💪", color: "bg-emerald-600", consequence: "Physical +1, Morale +5",
           apply: s => { s.physical = clamp(s.physical + 1, 20, 99); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "📋 Dropped, trained harder to fight back"]; return s; } },
       ] },
@@ -6237,7 +6258,7 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
         { label: "Accept lower wage, stay loyal", emoji: "🤝", color: "bg-blue-600", consequence: "Wage -15%, Morale +5",
           apply: s => { s.weeklyWage = Math.round(s.weeklyWage * 0.85); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "📝 Accepted lower wage, stayed loyal"]; return s; } },
         { label: "Push for more money", emoji: "💰", color: "bg-amber-600", consequence: "50% chance: Wage +20% or relationship damaged",
-          apply: s => { if (Math.random() < 0.5) { s.weeklyWage = Math.round(s.weeklyWage * 1.2); s.events = [...s.events, "📝 Pushed for more, got a raise!"]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "📝 Pushed too hard, relationship damaged"]; } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, 'Contract negotiation', '20% wage raise', 'Relationship damaged')) { s.weeklyWage = Math.round(s.weeklyWage * 1.2); s.events = [...s.events, "📝 Pushed for more, got a raise!"]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "📝 Pushed too hard, relationship damaged"]; } return s; } },
         { label: "Walk away when contract expires", emoji: "🚶", color: "bg-red-600", consequence: "Contract not renewed, become free agent sooner",
           apply: s => { s.contractYearsLeft = Math.min(s.contractYearsLeft, 1); s.events = [...s.events, "📝 Walking away, will leave on free"]; return s; } },
       ] },
@@ -6279,7 +6300,7 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 22, emoji: "💼", title: "Business Venture", description: "Your agent suggests investing in a restaurant chain. €500k investment.",
       category: "life", choices: [
         { label: "Invest €500k", emoji: "💰", color: "bg-emerald-600", consequence: "Random: +€1M profit or -€500k loss",
-          apply: s => { if (Math.random() < 0.5) { s.netWorth += 1; s.investments = [...s.investments, "Restaurant Chain ✅"]; s.events = [...s.events, "💼 Restaurant investment succeeded! +€1M"]; } else { s.netWorth -= 0.5; s.investments = [...s.investments, "Restaurant Chain ❌"]; s.events = [...s.events, "💼 Restaurant investment failed, lost €500k"]; } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, 'Business venture', 'EUR 1M profit', 'EUR 500k loss')) { s.netWorth += 1; s.investments = [...s.investments, "Restaurant Chain ✅"]; s.events = [...s.events, "💼 Restaurant investment succeeded! +€1M"]; } else { s.netWorth -= 0.5; s.investments = [...s.investments, "Restaurant Chain ❌"]; s.events = [...s.events, "💼 Restaurant investment failed, lost €500k"]; } return s; } },
         { label: "Pass on it", emoji: "✋", color: "bg-muted", consequence: "No risk, no reward",
           apply: s => { s.events = [...s.events, "💼 Passed on restaurant investment"]; return s; } },
       ] },
