@@ -94,6 +94,14 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   land on the game's `Académico de Viseu` and the two lists then agree on all 34 of its rows, which is what
   checks that line. "Sporting Lisbo." is `Sporting CP` and "Sporting Braga" is `Braga`. Data file
   `src/data/clubManagerPrimeiraFixtures2026.ts` 10,638 bytes; receipt 64,893 bytes.
+- **seriea: IN.** 20 clubs, 38 matchdays, 380 fixtures. Sources: TuttoMercatoWeb's release day article
+  (`https://www.tuttomercatoweb.com/serie-a/serie-a-2026-2027-ecco-il-nuovo-calendario-completo-con-le-38-giornate-2241512`,
+  115,093 bytes, sha256 `afc43e946402...`, parser `tuttomercatoweb`: one paragraph a matchday, Home-Away a line)
+  and the feed (`https://fixturedownload.com/feed/json/serie-a-2026`, 79,172 bytes, sha256 `451786660663...`).
+  Both read 2026-10-10. Zero tuple differences in 380. Name table: "Inter" and "Internazionale" are the game's
+  `Inter Milan`, "Milan" is `AC Milan`. The article is the list as printed on release day, so its matchday
+  numbers are the first published ones by construction. Data file `src/data/clubManagerSerieAFixtures2026.ts`
+  10,652 bytes; receipt 71,745 bytes.
 
 ## Runner results
 

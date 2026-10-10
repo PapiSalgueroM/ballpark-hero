@@ -50,6 +50,15 @@
       "rounds": 34,
       "fixtures": 306,
       "sha256": "669270be5b32146048d0b92c8cdb8d09975f3b6e4a7ba477bf8921aee551d029"
+    },
+    "seriea-2026-27-v1": {
+      "leagueId": "seriea",
+      "file": "src/data/clubManagerSerieAFixtures2026.ts",
+      "receipt": "scripts/data/clubManagerSerieAFixtures2026.receipt.json",
+      "clubs": 20,
+      "rounds": 38,
+      "fixtures": 380,
+      "sha256": "1f49177674e198166c600bb9cd1dccc6d9a9654476e1c7601bd9b87219047e25"
     }
   }
 }

@@ -10,8 +10,9 @@ import crypto from 'node:crypto';
 import { readSnapshot } from './fetchRaw.mjs';
 import * as feedJson from './feedJson.mjs';
 import * as maxifoot from './maxifoot.mjs';
+import * as tuttomercatoweb from './tuttomercatoweb.mjs';
 
-export const PARSERS = { feedJson, maxifoot };
+export const PARSERS = { feedJson, maxifoot, tuttomercatoweb };
 
 export const COVERAGE = 'Real league opponent order and home/away venues only. Calendar dates and match results are simulated.';
 export const DIGEST_FIELDS = ['key', 'leagueId', 'seasonStartYear', 'clubs', 'rounds'];

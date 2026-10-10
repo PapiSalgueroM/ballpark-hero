@@ -115,6 +115,73 @@ export const CM_FIXTURE_LEAGUES = [
       },
     ],
   },
+  {
+    leagueId: 'seriea', exportName: 'SERIEA_FIXTURES_2026', file: 'clubManagerSerieAFixtures2026', orderSource: 0,
+    sources: [
+      {
+        id: 'tmw', kind: 'press', label: 'TuttoMercatoWeb', ext: 'html', parser: 'tuttomercatoweb',
+        url: 'https://www.tuttomercatoweb.com/serie-a/serie-a-2026-2027-ecco-il-nuovo-calendario-completo-con-le-38-giornate-2241512',
+      },
+      FEED('serie-a-2026'),
+    ],
+    names: [{ Inter: 'Inter Milan', Milan: 'AC Milan' }, { Internazionale: 'Inter Milan', Milan: 'AC Milan' }],
+  },
+  {
+    leagueId: 'bundesliga', exportName: 'BUNDESLIGA_FIXTURES_2026', file: 'clubManagerBundesligaFixtures2026', orderSource: 0,
+    sources: [
+      {
+        id: 'dfl', kind: 'league', label: 'DFL', ext: 'pdf', parser: 'dflPdf',
+        url: 'https://media.dfl.de/sites/2/2026/07/DE_s73GnueV_Bundesliga_Spielplan_2026_27.pdf',
+      },
+      FEED('bundesliga-2026'),
+    ],
+    names: [{}, {}],
+  },
+  {
+    leagueId: 'superlig', exportName: 'SUPERLIG_FIXTURES_2026', file: 'clubManagerSuperLigFixtures2026', orderSource: 0,
+    sources: [
+      { id: 'tff', kind: 'federation', label: 'TFF', ext: 'html', parser: 'tff', url: 'https://www.tff.org/default.aspx?pageID=198' },
+      FEED('super-lig-2026'),
+    ],
+    names: [{}, {}],
+  },
+  {
+    leagueId: 'proleague', exportName: 'PROLEAGUE_FIXTURES_2026', file: 'clubManagerProLeagueFixtures2026', orderSource: 0,
+    sources: [
+      {
+        id: 'walfoot', kind: 'press', label: 'Walfoot', ext: 'html', parser: 'walfoot',
+        url: 'https://www.walfoot.be/belgique/jupiler-pro-league/calendrier',
+      },
+      MAXIFOOT('belgique'),
+    ],
+    names: [{}, {}],
+  },
+  {
+    leagueId: 'bundesliga2', exportName: 'BUNDESLIGA2_FIXTURES_2026', file: 'clubManagerBundesliga2Fixtures2026', orderSource: 0,
+    sources: [
+      {
+        id: 'dfl', kind: 'league', label: 'DFL', ext: 'pdf', parser: 'dflPdf',
+        url: 'https://media.dfl.de/sites/2/2026/07/DE_mgKX2qjj_2.-Bundesliga_Spielplan_2026_27.pdf',
+      },
+      {
+        id: 'hessenschau', kind: 'broadcaster', label: 'hessenschau', ext: 'html', parser: 'hessenschau',
+        url: 'https://www.hessenschau.de/sport/ergebnisse-tabellen/fussball-2bl100~_matchday-1.html',
+        pages: Array.from({ length: 34 }, (_, i) => `https://www.hessenschau.de/sport/ergebnisse-tabellen/fussball-2bl100~_matchday-${i + 1}.html`),
+      },
+    ],
+    names: [{}, {}],
+  },
+  {
+    leagueId: 'championship', exportName: 'CHAMPIONSHIP_FIXTURES_2026', file: 'clubManagerChampionshipFixtures2026', orderSource: 1,
+    sources: [
+      {
+        id: 'espn', kind: 'press', label: 'ESPN', ext: 'html', parser: 'espnByDate',
+        url: 'https://www.espn.com/soccer/story/_/id/49173379/efl-championship-fixtures-schedule-2026-27-full',
+      },
+      FEED('championship-2026'),
+    ],
+    names: [{}, {}],
+  },
 ];
 
 export const cmFixtureLeague = id => CM_FIXTURE_LEAGUES.find(l => l.leagueId === id) ?? null;
