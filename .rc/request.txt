@@ -1,0 +1,26 @@
+# Release AU proof, lane B, part 1 of 2: a plain build, three at a time
+#!build
+#!playwright
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simUsCareerActionConfirm: node scripts/simUsCareerActionConfirm.mjs
+simUsCareerPractice: node scripts/simUsCareerPractice.mjs
+simUsCareerProspect: node scripts/simUsCareerProspect.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsCareerRecovery: node scripts/simUsCareerRecovery.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simBuzzerContestRecap: node scripts/simBuzzerContestRecap.mjs
+simThreePointContest: node scripts/simThreePointContest.mjs
+simCagePracticeFeedback: node scripts/simCagePracticeFeedback.mjs
+simCageFightStats: node scripts/simCageFightStats.mjs
+simCageReadiness: node scripts/simCageReadiness.mjs
+simTycoonTicketPolicy: node scripts/simTycoonTicketPolicy.mjs
+simTycoonLoads: node scripts/simTycoonLoads.mjs
