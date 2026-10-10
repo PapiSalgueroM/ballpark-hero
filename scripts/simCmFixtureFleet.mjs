@@ -205,9 +205,10 @@ function carry(engine, bytes, seed) {
 }
 async function oldsaves() {
   for (const reg of REGISTERED) {
-    const base = fresh(baseFile), cand = await candidate(true);
     for (const club of clubsOf(probe, reg.leagueId, 2)) for (const seed of [41, 42]) {
-      /* The save is made by the base's own code, start to last week. */
+      /* The save is made by the base's own code, start to last week, in a copy of the base engine of its own:
+         the engine keeps counters in its module, and the two engines that carry a save must both start clean. */
+      const base = fresh(baseFile);
       let state = seeded(seed, () => base.cm.startCareer(club)).value;
       const stages = [['week 0', clone(state)]];
       let leagueRounds = 0;
@@ -225,7 +226,7 @@ async function oldsaves() {
         if (JSON.parse(bytes).realLeagueFixtures) { const bare = JSON.parse(bytes); delete bare.realLeagueFixtures; variants.push([`${stage}, its key taken out`, JSON.stringify(bare)]); }
         for (const [label, input] of variants) {
           counts.oldsaves += 1;
-          const x = carry(base.cm, input, seed + 500), y = carry(cand.cm, input, seed + 500);
+          const x = carry(fresh(baseFile).cm, input, seed + 500), y = carry((await candidate(true)).cm, input, seed + 500);
           if (x.threw || x.refused) red('oldsaves', reg.leagueId, `${club} seed ${seed}, ${label}: the BASE could not carry its own save (${x.threw || 'refused'})`);
           else if (!same(x, y)) red('oldsaves', reg.leagueId, `${club} seed ${seed}, ${label}: base ${JSON.stringify(x)}, candidate ${JSON.stringify(y)}`);
         }
