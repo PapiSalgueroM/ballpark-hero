@@ -57,6 +57,8 @@ export interface AwardSeasonLine {
   games: number;
   // basketball
   ppg?: number; rpg?: number; apg?: number;
+  // basketball, Round 1103: absent on a season saved before it
+  mpg?: number; spg?: number; bpg?: number;
   // football
   passYds?: number; passTd?: number; ints?: number;
   rushYds?: number; rushTd?: number;
@@ -164,6 +166,11 @@ export function nhlSeasonScore(pos: string, line: AwardSeasonLine): number {
  * carry a negative grade. Without it the theory bar sits past where the
  * engine can actually reach, which is exactly the ovr >= 92 bug again in a
  * more sophisticated costume.
+ *
+ * Round 1103, 2026-10-07: the five NBA rows were re-measured on the simNbaAwardsSense fleet (6,000 careers a
+ * seed, seeds 1 to 5, the five seed mean), because the NBA line they are a distribution of changed that round.
+ * One population, the one a player lives: every season of half a schedule or more, bench years included, scored
+ * on the era neutral line. Section E of scripts/simNbaAwardsSense.mjs fails when they go stale again.
  */
 const LEAGUE: Record<UsAwardSport, Record<string, { mean: number; sd: number }>> = {
   nfl: {
@@ -177,11 +184,11 @@ const LEAGUE: Record<UsAwardSport, Record<string, { mean: number; sd: number }>>
     K: { mean: 116.2, sd: 15.9 },
   },
   nba: {
-    PG: { mean: 46.4, sd: 11.4 },
-    SG: { mean: 46.3, sd: 11.2 },
-    SF: { mean: 48.4, sd: 12.7 },
-    PF: { mean: 46.6, sd: 10.5 },
-    C: { mean: 44.1, sd: 10.3 },
+    PG: { mean: 36.8, sd: 16.4 },
+    SG: { mean: 34.9, sd: 15.6 },
+    SF: { mean: 37.4, sd: 16.8 },
+    PF: { mean: 34.3, sd: 14.9 },
+    C: { mean: 35.7, sd: 15.5 },
   },
   mlb: {
     SP: { mean: 63.2, sd: 11.3 },
@@ -238,7 +245,7 @@ export interface FieldConfig {
 }
 
 /** A standard Gumbel draw, G = -ln(-ln u). Mean is Euler's constant, 0.5772. */
-function gumbel(rng: () => number): number {
+export function gumbel(rng: () => number): number {
   const u = Math.min(1 - 1e-12, Math.max(1e-12, rng()));
   return -Math.log(-Math.log(u));
 }
@@ -262,11 +269,16 @@ function gumbel(rng: () => number): number {
  * Kareem Abdul-Jabbar holds the record at six, in twenty seasons.
  */
 function bestOfN(n: number, rng: () => number): number {
+  return bestOfNAt(n, gumbel(rng));
+}
+/** Round 1103: the same bar with the draw passed in, so awards that share one league (All-Star, All-NBA and
+ *  MVP in NBA My Career) can be decided against the SAME year instead of a fresh one each. `g` is a gumbel draw. */
+export function bestOfNAt(n: number, g: number): number {
   const nn = Math.max(2, n);
   const L = Math.log(nn);
   const root = Math.sqrt(2 * L);
   const loc = root - (Math.log(L) + Math.log(4 * Math.PI)) / (2 * root);
-  return loc + gumbel(rng) / root;
+  return loc + g / root;
 }
 
 /**
@@ -370,28 +382,51 @@ const NFL_DPOY: Record<string, FieldConfig | null> = {
    of 150 counts starters, and the league is 30 clubs of 15 men; counting all
    450 would be worse, because most of a bench is never in the conversation.
    The nudge is the cheapest honest way to put the median back on zero. */
-const NBA_ALL_NBA: FieldConfig = { pool: 150, slots: 15, grade: 0.15 };
-const NBA_MVP: FieldConfig = { pool: 150, slots: 1 };
-const NBA_DPOY: FieldConfig = { pool: 150, slots: 1, grade: -0.2 };
+/* Round 1103, 2026-10-07. The NBA line changed shape that round (minutes times a rate, a kink in the points
+   rate), and the field above is now measured with bench years in it, so its tail sits somewhere else in
+   standard deviations. The grades were set for the old shape. Six of them were moved, each only to hold its
+   own award where main had it, worked out from every season's z over 30,000 careers and then played:
+     All-NBA 0.15 to -0.15 (1.96 to 2.03 a career on five seeds; main 1.97 to 2.01)
+     MVP none to -0.37 (0.303 to 0.327; main 0.310 to 0.323)
+     Finals MVP 0.3 to 0.04 (0.143 to 0.168; main 0.140 to 0.159)
+     All-Defensive 0.2 to -0.12 (1.34 to 1.37; main 1.34 to 1.38)
+     Rookie of the Year -1.6 to -2.15 and Defensive Player -0.2 to -0.45 (a rookie's and an anchor's line fell
+     furthest against the field, and at the old grades the two awards fired a fifth and a half as often).
+   What one grade cannot hold is how the awards are SPREAD: on the new line 18 percent of careers win an MVP
+   against 16.5 and 63 percent an All-NBA against 59, at the same number a career.
+   Later in the same round the career's awards moved into one pass that decides them together
+   (nbaCareerAwards.ts, with its own field and grades). NBA My Career now calls only the Finals MVP config
+   below. The other NBA configs and their union members stay as that pass found them: scripts/simAwards.mjs
+   prints two of their bars, and nothing in the app calls them. */
+const NBA_ALL_NBA: FieldConfig = { pool: 150, slots: 15, grade: -0.15 };
+const NBA_MVP: FieldConfig = { pool: 150, slots: 1, grade: -0.37 };
+const NBA_DPOY: FieldConfig = { pool: 150, slots: 1, grade: -0.45 };
 /** Rookie of the Year, one a year out of the rookies who actually play. */
-const NBA_ROY: FieldConfig = { pool: 45, slots: 1, grade: -1.6 };
+const NBA_ROY: FieldConfig = { pool: 45, slots: 1, grade: -2.15 };
 /**
  * Finals MVP. You have already won the title to get here, so the field is
  * the handful of people on your own team who could take it off you. Michael
  * Jordan holds the record with six.
  */
-const NBA_FINALS_MVP: FieldConfig = { pool: 7, slots: 1, grade: 0.3 };
+const NBA_FINALS_MVP: FieldConfig = { pool: 7, slots: 1, grade: 0.04 };
 /** The three league leader awards. One winner each, from the starters. */
 const NBA_SCORING: FieldConfig = { pool: 150, slots: 1, grade: -0.35 };
 const NBA_ASSISTS: FieldConfig = { pool: 150, slots: 1, grade: -0.35 };
 const NBA_REBOUNDS: FieldConfig = { pool: 150, slots: 1, grade: -0.35 };
 /** All-Defensive is two teams of five, so ten a year rather than one. */
-const NBA_ALL_DEF: FieldConfig = { pool: 150, slots: 10, grade: 0.2 };
+const NBA_ALL_DEF: FieldConfig = { pool: 150, slots: 10, grade: -0.12 };
 /** All-Rookie is two teams of five out of the rookie class. */
 const NBA_ALL_ROOKIE: FieldConfig = { pool: 45, slots: 10, grade: -1.6 };
 /** Sixth Man and Most Improved: one a year, and both have their own gates. */
 const NBA_SIXTH_MAN: FieldConfig = { pool: 60, slots: 1, grade: -1.3 };
 const NBA_MIP: FieldConfig = { pool: 150, slots: 1, grade: -0.5 };
+
+/** Round 1103: how far past a normal season for his job an NBA season got, in standard deviations of the
+ *  field above (LEAGUE.nba). Hand it the score of the era neutral line. */
+export function nbaFieldZ(pos: string, score: number): number {
+  const base = fieldFor('nba', pos);
+  return base.sd > 0 ? (score - base.mean) / base.sd : 0;
+}
 
 /**
  * Baseball. Both All-Star rosters are 32 players, so 64 a season, per the

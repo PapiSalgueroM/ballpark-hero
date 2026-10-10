@@ -87,7 +87,42 @@
  * NHL retirement cards, where the release grouped the totals 1085 left
  * bare (games in the NBA line, all four numbers in the NHL one): 12 screens
  * each. 1,864,932 bytes.
- * Recorded twice from the same tree, the fixture came out byte for byte the
+ * Round 1104 (NFL truth and the one bank) re-recorded it on its own branch
+ * at e9d10a10, and that recording shipped with Release AP.
+ * Round 1103 (the NBA numbers) re-recorded it on purpose on 2026-10-09, on
+ * a GitHub runner, from its branch merged with Release AP (head 5320efca).
+ * Against Release AP's fixture the NFL, the MLB and the NHL are byte for
+ * byte the same: the path, the fifteen fixed saves and every screen. Only
+ * the NBA moved, at the two places the round names. The first step that
+ * differs is 12, the hub's Trophy Case before a game is played: the save
+ * is the same and the screen reads "Badges 0 of 23" where it read "0 of
+ * 21" (the two All-Star badges). The first save that differs is step 20,
+ * the first season played, which is the new stat line: the second unit
+ * rookie's "13 ppg, 3.6 rpg, 2.3 apg" is "6.9 ppg, 1.5 rpg, 1.0 apg", and
+ * the line takes its own draws from the seeded stream, so the career goes
+ * its own way from there (540 clicks where there were 523, still 24
+ * seasons and 705 screen steps; 14 of the 15 fixed saves, all but
+ * "rookie", which is cut before the first season). 1,881,710 bytes.
+ * Round 1112 (the NBA rival on the player's line) re-recorded it on purpose
+ * on 2026-10-09, on a GitHub runner, from its branch merged with Release AR
+ * (head 70cb5722). Against Round 1103's fixture the MLB is byte for byte
+ * the same. The NFL and the NHL keep every click and every save (the path
+ * and the fifteen fixed saves each): what moved is the one sentence the
+ * four sports share, a near tie now naming who leads the head to head. That
+ * is one screen in the NFL (path step 345, the 2011 season card) and
+ * fifteen in the NHL (path step 57, the 2034 season card, and 14 steps over
+ * the fixed saves). The NBA moved at the place the round names. Step 20,
+ * the first season played, is the first save that differs, and c.rival is
+ * the only field in it: his line is the new one. Up to step 106 nothing
+ * else on the save differs. At step 107 (the 2031 season) the rivalry roll
+ * deals a different beat, because the All-Star beat is now dealt only when
+ * one of the two made the roster, and at 109 that beat moves the fanbase;
+ * the clicks part at step 122 and the career goes its own way (507 clicks
+ * where there were 540, still 24 seasons and 705 screen steps, 10 rival
+ * beats and 6 rival choices where there were 13 and 4; 14 of the 15 fixed
+ * saves, all but "rookie"). The player's own stream did not move: scripts/
+ * simNbaAwardsSense.mjs section P proves that on a fleet that answers no
+ * card. 1,872,641 bytes.
  * same (cmp exit 0), which is what makes a red replay mean something. There is no
  * band here on purpose: the check is byte equality, and a path either
  * replays or it does not.

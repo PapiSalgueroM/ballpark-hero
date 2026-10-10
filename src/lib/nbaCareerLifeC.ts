@@ -566,11 +566,12 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
     /* Modern era only: the national TV expectation comes from the 2023-24
        Player Participation Policy, which counts as a star anyone picked
        All-Star or All-NBA in the past three seasons. The engine keeps
-       All-NBA and MVP (a real MVP is always an All-NBA pick) and has no
-       All-Star selection, so the gate reads those two and nothing else. */
+       All-NBA and MVP (an MVP is always an All-NBA pick) and, since Round
+       1103, the All-Star selection too, so the gate reads all three. A season
+       saved before that round has no All-Star to read. */
     id: 'nbaC_rule_national_tv', category: 'rules', cooldown: 2, story: 'loadManagement',
     when: c => isModern(c) && c.role !== 'backup' && yrsOf(c) >= 2
-      && c.seasons.slice(-3).some(s => (s.awards ?? []).some(a => a === 'All-NBA' || a === 'MVP')),
+      && c.seasons.slice(-3).some(s => (s.awards ?? []).some(a => a === 'All-NBA' || a === 'MVP' || a === 'All-Star')),
     title: 'Your rest night is the national TV game',
     body: 'The training staff has you down to sit the second night of a back to back. The trouble is that it is the national TV game, and the league now expects a healthy star to be on the floor for those. The team can move your rest night. It cannot just sit you.',
     options: [
@@ -608,7 +609,7 @@ export const NBA_LIFE_C: NbaLifeCDef[] = [
     id: 'nbaC_rule_allstar_reserves', category: 'rules', cooldown: 3, story: 'allStarSnub',
     when: c => {
       const last = c.seasons[c.seasons.length - 1];
-      const honored = !!last && (last.awards ?? []).some(a => a === 'All-NBA' || a === 'MVP');
+      const honored = !!last && (last.awards ?? []).some(a => a === 'All-NBA' || a === 'MVP' || a === 'All-Star');
       return yrsOf(c) >= 4 && c.ovr >= 80 && c.ovr <= 89 && !honored;
     },
     title: 'The coaches left you off the list',

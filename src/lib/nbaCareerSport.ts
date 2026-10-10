@@ -33,6 +33,8 @@ import { usSeasonHeldLine } from '@/data/usSeasonLengths';
    page's Continue fence (simHomeFront section 7) can find where every save
    key in src is declared; the value is the one the old board used. */
 const SAVE_KEY = 'nba-my-career-save-v1';
+/** The awards the Trophy Case tile already counts in a row of their own (the honours below). */
+const NBA_TILE_NAMED = ['MVP', 'All-NBA', 'All-Star'];
 
 /* Round 1104: built through withBankFloor, the one bank rule the four US
    careers share (src/lib/usCareerBank.ts). */
@@ -122,7 +124,17 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   ringsOf: c => c.rings,
   ringWord: 'ring',
   ringsLabel: 'rings',
-  honours: c => [{ label: 'MVPs', n: c.mvps }, { label: 'All-NBA nods', n: c.allNbas }],
+  /* Round 1103: the engine picks All-Stars now, so the hub counts them. Without this row a player whose only
+     honour is an All-Star selection read "Empty" on the tile while the case behind it listed the selection.
+     A save from before the round has no count and adds nothing. */
+  /* Round 1112: and one row for everything else a season's awards hold (All-Defensive, All-Rookie, Rookie of
+     the Year, Most Improved, Sixth Man, Defensive Player, the stat titles, Finals MVP). A career whose only
+     awards were those read "Empty" on the tile over a case that listed them. Counted off the seasons, the way
+     the case itself reads them. */
+  honours: c => [
+    { label: 'MVPs', n: c.mvps }, { label: 'All-NBA nods', n: c.allNbas }, { label: 'All-Star nods', n: c.allStars ?? 0 },
+    { label: 'in other awards', n: c.seasons.reduce((n, s) => n + (s.awards ?? []).filter(a => !NBA_TILE_NAMED.includes(a)).length, 0) },
+  ],
   roleBadge: c => (c.role === 'backup' ? '🪑 Second unit' : '⭐ Starting five'),
   careerSoFar: c =>
     `${countOf(c.rings, 'ring', 'rings')} · ${countOf(c.mvps, 'MVP', 'MVPs')} · ${c.allNbas} All-NBA · ${nbaCareerTotals(c).pts.toLocaleString()} career points`,

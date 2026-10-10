@@ -1,0 +1,1303 @@
+{
+ "note": "Round 1103: the four fictional six season scouts that simUsCoachPoaching.mjs and usCoachPoaching.test.ts start a coaching career from, as the NBA player engine made them before Round 1103 moved the stat line, with the draws each used. Written by scripts/recordUsCoachPoachingScouts.mjs on the commit below; never edited by hand and never recorded again.",
+ "recordedOn": "c623e77d22541ac88c30f48b078a9a8a9c699e1d",
+ "scouts": {
+  "1": {
+   "draws": 195,
+   "player": {
+    "name": "Fictional supported coach scout",
+    "pos": "PG",
+    "archetype": {
+     "id": "pointgod",
+     "label": "Point God",
+     "desc": "The offense runs through you",
+     "ovrBoost": 1,
+     "potBoost": 5,
+     "durability": 0.95,
+     "scoring": 0.85,
+     "playmaking": 1.55,
+     "rebounding": 0.55
+    },
+    "team": "CHI",
+    "year": 2032,
+    "age": 27,
+    "ovr": 83,
+    "pot": 89,
+    "morale": 65,
+    "fanbase": 23,
+    "health": 100,
+    "salary": 2.5,
+    "contractYears": -2,
+    "seasons": [
+     {
+      "year": 2026,
+      "team": "CHI",
+      "age": 21,
+      "ovr": 74,
+      "games": 80,
+      "ppg": 5,
+      "rpg": 1,
+      "apg": 2.9,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 2.5
+     },
+     {
+      "year": 2027,
+      "team": "CHI",
+      "age": 22,
+      "ovr": 75,
+      "games": 81,
+      "ppg": 7,
+      "rpg": 2.2,
+      "apg": 4.1,
+      "awards": [],
+      "teamResult": "Lost in the first round",
+      "salary": 2.5,
+      "poGames": 6,
+      "poPpg": 15,
+      "poRpg": 5.1,
+      "poApg": 9.9
+     },
+     {
+      "year": 2028,
+      "team": "CHI",
+      "age": 23,
+      "ovr": 76,
+      "games": 82,
+      "ppg": 8,
+      "rpg": 3.7,
+      "apg": 5.1,
+      "awards": [],
+      "teamResult": "Lost the NBA Finals",
+      "salary": 2.5,
+      "poGames": 22,
+      "poPpg": 16,
+      "poRpg": 3.6,
+      "poApg": 8.8
+     },
+     {
+      "year": 2029,
+      "team": "CHI",
+      "age": 24,
+      "ovr": 78,
+      "games": 80,
+      "ppg": 10,
+      "rpg": 3.6,
+      "apg": 6.2,
+      "awards": [],
+      "teamResult": "Lost the Conference Finals",
+      "salary": 2.5,
+      "poGames": 16,
+      "poPpg": 14,
+      "poRpg": 4.7,
+      "poApg": 9.7
+     },
+     {
+      "year": 2030,
+      "team": "CHI",
+      "age": 25,
+      "ovr": 80,
+      "games": 79,
+      "ppg": 10,
+      "rpg": 3.6,
+      "apg": 4.7,
+      "awards": [],
+      "teamResult": "Lost the Conference Finals",
+      "salary": 2.5,
+      "poGames": 16,
+      "poPpg": 15,
+      "poRpg": 4.9,
+      "poApg": 9.7
+     },
+     {
+      "year": 2031,
+      "team": "CHI",
+      "age": 26,
+      "ovr": 82,
+      "games": 80,
+      "ppg": 10,
+      "rpg": 1.8,
+      "apg": 6.7,
+      "awards": [],
+      "teamResult": "Lost in the first round",
+      "salary": 2.5,
+      "poGames": 6,
+      "poPpg": 17,
+      "poRpg": 5.2,
+      "poApg": 11.1
+     }
+    ],
+    "rings": 0,
+    "mvps": 0,
+    "allNbas": 0,
+    "finalsMvps": 0,
+    "retired": false,
+    "draftPick": 30,
+    "earnings": 15,
+    "netWorth": 6.9,
+    "dirtyMoney": 0,
+    "heat": 0,
+    "suspendedSeasons": 0,
+    "purchased": [],
+    "lifeFlags": {},
+    "appearance": null,
+    "yearlyCosts": 0,
+    "rival": {
+     "name": "Brody Salvatore",
+     "pos": "PG",
+     "team": "CHI",
+     "ovr": 82,
+     "pot": 88,
+     "age": 27,
+     "rings": 1,
+     "hisYears": 5,
+     "myYears": 1,
+     "retired": false,
+     "lastLine": "17 ppg, 6 rpg, 5.9 apg",
+     "lastScore": 45.6
+    },
+    "role": "backup",
+    "money": {
+     "seed": 156578449,
+     "vault": 0,
+     "hold": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+     },
+     "cost": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+     },
+     "price": {
+      "ladder": 131.79,
+      "bricks": 117.42,
+      "cleats": 107.28,
+      "screens": 88.13,
+      "spark": 68.94
+     },
+     "hist": {
+      "ladder": [
+       100,
+       106.61,
+       108.11,
+       112.88,
+       117.2,
+       119.61,
+       131.79
+      ],
+      "bricks": [
+       100,
+       86.42,
+       103.48,
+       108.82,
+       109.12,
+       119.02,
+       117.42
+      ],
+      "cleats": [
+       100,
+       92.14,
+       108.41,
+       124.67,
+       123.64,
+       101.09,
+       107.28
+      ],
+      "screens": [
+       100,
+       99.23,
+       106.97,
+       113.12,
+       108.11,
+       79.33,
+       88.13
+      ],
+      "spark": [
+       100,
+       49.41,
+       58.93,
+       31.07,
+       62.5,
+       52.49,
+       68.94
+      ]
+     },
+     "log": [],
+     "year": 2031,
+     "age": 6,
+     "won": 0,
+     "lost": 0,
+     "cPlays": 0,
+     "cNet": 0,
+     "cYear": 0,
+     "cShut": false,
+     "aYear": 0,
+     "aBest": 0,
+     "aPlays": 0
+    },
+    "karma": 50,
+    "phoneInbox": [
+     {
+      "id": "teammate_bench-2026",
+      "defId": "teammate_bench",
+      "from": "Teammate",
+      "emoji": "😤",
+      "text": "Coach has had me at the end of the bench again man. Thinking about asking for a trade. What would you do?",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Be honest with him",
+        "reply": "You deserve minutes mate. If he won't give them, go get them somewhere",
+        "karma": 6,
+        "morale": 2
+       },
+       {
+        "label": "Tell him to stop whining",
+        "reply": "Outwork him then. Nobody owes you a jersey",
+        "karma": -5
+       },
+       {
+        "label": "Dodge the question",
+        "reply": "Tough one bro. Sleep on it",
+        "karma": -1
+       }
+      ],
+      "beat": "camp"
+     },
+     {
+      "id": "kid_dm-2026",
+      "defId": "kid_dm",
+      "from": "Fan DM",
+      "emoji": "🧒",
+      "text": "you're my favorite player ever. im in the hospital and all i want is a signed jersey. no worries if youre busy",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Send a signed jersey and visit",
+        "reply": "Jersey is on the way and I'm coming to see you after the next home stand. Stay strong",
+        "karma": 12,
+        "popularity": 6,
+        "cash": -0.1
+       },
+       {
+        "label": "Send the jersey",
+        "reply": "On its way little legend",
+        "karma": 6,
+        "popularity": 3
+       },
+       {
+        "label": "Ignore it",
+        "reply": "",
+        "karma": -8
+       }
+      ],
+      "beat": "allstar"
+     },
+     {
+      "id": "summer_mom-2026",
+      "defId": "summer_mom",
+      "from": "Mom",
+      "emoji": "❤️",
+      "text": "Is it supposed to be that hot there? Are you drinking water? You looked tired in the second half. I could tell.",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Drinking water, promise",
+        "reply": "Water all day mama, I promise",
+        "karma": 4,
+        "morale": 2
+       },
+       {
+        "label": "It's hot for everybody",
+        "reply": "Mom it's a hundred degrees for the other team too",
+        "karma": 1,
+        "morale": 1
+       }
+      ],
+      "beat": "summer"
+     }
+    ],
+    "phoneUsedIds": [
+     "teammate_bench",
+     "kid_dm",
+     "summer_mom"
+    ],
+    "pendingRivalryEvent": {
+     "id": 304,
+     "emoji": "🏀",
+     "title": "Head to Head Win",
+     "description": "Your team beat Brody Salvatore's team this season, and you had the better box score.",
+     "consequence": "Fanbase +5, confidence boost"
+    }
+   }
+  },
+  "2": {
+   "draws": 174,
+   "player": {
+    "name": "Fictional supported coach scout",
+    "pos": "PG",
+    "archetype": {
+     "id": "pointgod",
+     "label": "Point God",
+     "desc": "The offense runs through you",
+     "ovrBoost": 1,
+     "potBoost": 5,
+     "durability": 0.95,
+     "scoring": 0.85,
+     "playmaking": 1.55,
+     "rebounding": 0.55
+    },
+    "team": "PHX",
+    "year": 2032,
+    "age": 27,
+    "ovr": 83,
+    "pot": 93,
+    "morale": 59,
+    "fanbase": 23,
+    "health": 100,
+    "salary": 2.5,
+    "contractYears": -2,
+    "seasons": [
+     {
+      "year": 2026,
+      "team": "PHX",
+      "age": 21,
+      "ovr": 74,
+      "games": 79,
+      "ppg": 9,
+      "rpg": 2.2,
+      "apg": 5.9,
+      "awards": [],
+      "teamResult": "Lost in the first round",
+      "salary": 2.5,
+      "poGames": 5,
+      "poPpg": 18,
+      "poRpg": 5.5,
+      "poApg": 10.2
+     },
+     {
+      "year": 2027,
+      "team": "PHX",
+      "age": 22,
+      "ovr": 76,
+      "games": 78,
+      "ppg": 10,
+      "rpg": 1.8,
+      "apg": 5.9,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 2.5
+     },
+     {
+      "year": 2028,
+      "team": "PHX",
+      "age": 23,
+      "ovr": 77,
+      "games": 80,
+      "ppg": 8,
+      "rpg": 3,
+      "apg": 5.8,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 2.5
+     },
+     {
+      "year": 2029,
+      "team": "PHX",
+      "age": 24,
+      "ovr": 79,
+      "games": 79,
+      "ppg": 10,
+      "rpg": 2.7,
+      "apg": 6.9,
+      "awards": [],
+      "teamResult": "Lost in the conference semis",
+      "salary": 2.5,
+      "poGames": 13,
+      "poPpg": 19,
+      "poRpg": 3.5,
+      "poApg": 10.9
+     },
+     {
+      "year": 2030,
+      "team": "PHX",
+      "age": 25,
+      "ovr": 81,
+      "games": 82,
+      "ppg": 7,
+      "rpg": 3.1,
+      "apg": 4.4,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 2.5
+     },
+     {
+      "year": 2031,
+      "team": "PHX",
+      "age": 26,
+      "ovr": 82,
+      "games": 82,
+      "ppg": 10,
+      "rpg": 2.2,
+      "apg": 6,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 2.5
+     }
+    ],
+    "rings": 0,
+    "mvps": 0,
+    "allNbas": 0,
+    "finalsMvps": 0,
+    "retired": false,
+    "draftPick": 24,
+    "earnings": 15,
+    "netWorth": 6.9,
+    "dirtyMoney": 0,
+    "heat": 0,
+    "suspendedSeasons": 0,
+    "purchased": [],
+    "lifeFlags": {},
+    "appearance": null,
+    "yearlyCosts": 0,
+    "rival": {
+     "name": "Beau Petrenko",
+     "pos": "PG",
+     "team": "PHX",
+     "ovr": 82,
+     "pot": 95,
+     "age": 27,
+     "rings": 1,
+     "hisYears": 5,
+     "myYears": 1,
+     "retired": false,
+     "lastLine": "22 ppg, 7.4 rpg, 7.4 apg",
+     "lastScore": 58.1
+    },
+    "role": "backup",
+    "pendingRivalryEvent": {
+     "id": 304,
+     "emoji": "🏀",
+     "title": "Head to Head Win",
+     "description": "Your team beat Beau Petrenko's team this season, and you had the better box score.",
+     "consequence": "Fanbase +5, confidence boost"
+    },
+    "money": {
+     "seed": 156578449,
+     "vault": 0,
+     "hold": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+     },
+     "cost": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+     },
+     "price": {
+      "ladder": 131.79,
+      "bricks": 117.42,
+      "cleats": 107.28,
+      "screens": 88.13,
+      "spark": 68.94
+     },
+     "hist": {
+      "ladder": [
+       100,
+       106.61,
+       108.11,
+       112.88,
+       117.2,
+       119.61,
+       131.79
+      ],
+      "bricks": [
+       100,
+       86.42,
+       103.48,
+       108.82,
+       109.12,
+       119.02,
+       117.42
+      ],
+      "cleats": [
+       100,
+       92.14,
+       108.41,
+       124.67,
+       123.64,
+       101.09,
+       107.28
+      ],
+      "screens": [
+       100,
+       99.23,
+       106.97,
+       113.12,
+       108.11,
+       79.33,
+       88.13
+      ],
+      "spark": [
+       100,
+       49.41,
+       58.93,
+       31.07,
+       62.5,
+       52.49,
+       68.94
+      ]
+     },
+     "log": [],
+     "year": 2031,
+     "age": 6,
+     "won": 0,
+     "lost": 0,
+     "cPlays": 0,
+     "cNet": 0,
+     "cYear": 0,
+     "cShut": false,
+     "aYear": 0,
+     "aBest": 0,
+     "aPlays": 0
+    },
+    "karma": 50,
+    "phoneInbox": [
+     {
+      "id": "teammate_bench-2026",
+      "defId": "teammate_bench",
+      "from": "Teammate",
+      "emoji": "😤",
+      "text": "Coach has had me at the end of the bench again man. Thinking about asking for a trade. What would you do?",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Be honest with him",
+        "reply": "You deserve minutes mate. If he won't give them, go get them somewhere",
+        "karma": 6,
+        "morale": 2
+       },
+       {
+        "label": "Tell him to stop whining",
+        "reply": "Outwork him then. Nobody owes you a jersey",
+        "karma": -5
+       },
+       {
+        "label": "Dodge the question",
+        "reply": "Tough one bro. Sleep on it",
+        "karma": -1
+       }
+      ],
+      "beat": "camp"
+     },
+     {
+      "id": "playoffs_film-2026",
+      "defId": "playoffs_film",
+      "from": "Assistant coach",
+      "emoji": "📼",
+      "text": "I cut forty minutes of how they guard the pick and roll. Want it tonight, or after shootaround?",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Tonight, send it",
+        "reply": "Send it now. I'll have it down by morning",
+        "karma": 4,
+        "morale": -1
+       },
+       {
+        "label": "After shootaround",
+        "reply": "After shootaround. I need to sleep tonight",
+        "karma": 1,
+        "morale": 2
+       }
+      ],
+      "beat": "playoffs"
+     },
+     {
+      "id": "summer_fan-2026",
+      "defId": "summer_fan",
+      "from": "Fan DM",
+      "emoji": "🎟️",
+      "text": "drove six hours to watch u in summer league lol. any chance u sign my ticket after?",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Sign it and take a picture",
+        "reply": "Find me by the tunnel after. Picture too",
+        "karma": 7,
+        "popularity": 3
+       },
+       {
+        "label": "Leave it on read",
+        "reply": "",
+        "karma": -4
+       }
+      ],
+      "beat": "summer"
+     }
+    ],
+    "phoneUsedIds": [
+     "teammate_bench",
+     "playoffs_film",
+     "summer_fan"
+    ]
+   }
+  },
+  "3": {
+   "draws": 174,
+   "player": {
+    "name": "Fictional supported coach scout",
+    "pos": "PG",
+    "archetype": {
+     "id": "pointgod",
+     "label": "Point God",
+     "desc": "The offense runs through you",
+     "ovrBoost": 1,
+     "potBoost": 5,
+     "durability": 0.95,
+     "scoring": 0.85,
+     "playmaking": 1.55,
+     "rebounding": 0.55
+    },
+    "team": "BOS",
+    "year": 2032,
+    "age": 27,
+    "ovr": 83,
+    "pot": 89,
+    "morale": 64,
+    "fanbase": 23,
+    "health": 93,
+    "salary": 2.5,
+    "contractYears": -2,
+    "seasons": [
+     {
+      "year": 2026,
+      "team": "BOS",
+      "age": 21,
+      "ovr": 74,
+      "games": 78,
+      "ppg": 6,
+      "rpg": 2.6,
+      "apg": 3.7,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 2.5
+     },
+     {
+      "year": 2027,
+      "team": "BOS",
+      "age": 22,
+      "ovr": 76,
+      "games": 58,
+      "ppg": 8,
+      "rpg": 2.6,
+      "apg": 3.9,
+      "awards": [],
+      "teamResult": "Lost in the first round",
+      "salary": 2.5,
+      "poGames": 6,
+      "poPpg": 8,
+      "poRpg": 3,
+      "poApg": 5.2
+     },
+     {
+      "year": 2028,
+      "team": "BOS",
+      "age": 23,
+      "ovr": 78,
+      "games": 78,
+      "ppg": 6,
+      "rpg": 1.6,
+      "apg": 3.3,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 2.5
+     },
+     {
+      "year": 2029,
+      "team": "BOS",
+      "age": 24,
+      "ovr": 80,
+      "games": 82,
+      "ppg": 11,
+      "rpg": 3.5,
+      "apg": 5.9,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 2.5
+     },
+     {
+      "year": 2030,
+      "team": "BOS",
+      "age": 25,
+      "ovr": 81,
+      "games": 78,
+      "ppg": 11,
+      "rpg": 2.5,
+      "apg": 5.9,
+      "awards": [],
+      "teamResult": "Lost in the first round",
+      "salary": 2.5,
+      "poGames": 6,
+      "poPpg": 14,
+      "poRpg": 3.4,
+      "poApg": 8.5
+     },
+     {
+      "year": 2031,
+      "team": "BOS",
+      "age": 26,
+      "ovr": 82,
+      "games": 81,
+      "ppg": 7,
+      "rpg": 2,
+      "apg": 5.2,
+      "awards": [],
+      "teamResult": "Lost the NBA Finals",
+      "salary": 2.5,
+      "poGames": 25,
+      "poPpg": 5,
+      "poRpg": 1.4,
+      "poApg": 3.3
+     }
+    ],
+    "rings": 0,
+    "mvps": 0,
+    "allNbas": 0,
+    "finalsMvps": 0,
+    "retired": false,
+    "draftPick": 28,
+    "earnings": 15,
+    "netWorth": 6.9,
+    "dirtyMoney": 0,
+    "heat": 0,
+    "suspendedSeasons": 0,
+    "purchased": [],
+    "lifeFlags": {},
+    "appearance": null,
+    "yearlyCosts": 0,
+    "rival": {
+     "name": "Zane Petrenko",
+     "pos": "PG",
+     "team": "BOS",
+     "ovr": 80,
+     "pot": 87,
+     "age": 27,
+     "rings": 0,
+     "hisYears": 5,
+     "myYears": 1,
+     "retired": false,
+     "lastLine": "15 ppg, 4.6 rpg, 4.4 apg",
+     "lastScore": 37.9
+    },
+    "role": "backup",
+    "pendingRivalryEvent": {
+     "id": 306,
+     "emoji": "🗳️",
+     "title": "All-Star Ballot Squeeze",
+     "description": "Only one of you is making the All-Star roster at the position this year, and it comes down to Zane Petrenko.",
+     "consequence": "50/50 outcome"
+    },
+    "money": {
+     "seed": 156578449,
+     "vault": 0,
+     "hold": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+     },
+     "cost": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+     },
+     "price": {
+      "ladder": 131.79,
+      "bricks": 117.42,
+      "cleats": 107.28,
+      "screens": 88.13,
+      "spark": 68.94
+     },
+     "hist": {
+      "ladder": [
+       100,
+       106.61,
+       108.11,
+       112.88,
+       117.2,
+       119.61,
+       131.79
+      ],
+      "bricks": [
+       100,
+       86.42,
+       103.48,
+       108.82,
+       109.12,
+       119.02,
+       117.42
+      ],
+      "cleats": [
+       100,
+       92.14,
+       108.41,
+       124.67,
+       123.64,
+       101.09,
+       107.28
+      ],
+      "screens": [
+       100,
+       99.23,
+       106.97,
+       113.12,
+       108.11,
+       79.33,
+       88.13
+      ],
+      "spark": [
+       100,
+       49.41,
+       58.93,
+       31.07,
+       62.5,
+       52.49,
+       68.94
+      ]
+     },
+     "log": [],
+     "year": 2031,
+     "age": 6,
+     "won": 0,
+     "lost": 0,
+     "cPlays": 0,
+     "cNet": 0,
+     "cYear": 0,
+     "cShut": false,
+     "aYear": 0,
+     "aBest": 0,
+     "aPlays": 0
+    },
+    "karma": 50,
+    "phoneInbox": [
+     {
+      "id": "beat_writer_leak-2026",
+      "defId": "beat_writer_leak",
+      "from": "Beat writer",
+      "emoji": "📰",
+      "text": "I know the locker room turned on the coaching staff. Give me the inside story, you stay anonymous.",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Keep it in house",
+        "reply": "Nothing to tell. Locker room stays in the locker room",
+        "karma": 8,
+        "morale": 2
+       },
+       {
+        "label": "Leak it",
+        "reply": "Ok but this NEVER came from me",
+        "karma": -10,
+        "popularity": 3
+       }
+      ],
+      "beat": "deadline"
+     },
+     {
+      "id": "offseason_youth_camp-2026",
+      "defId": "offseason_youth_camp",
+      "from": "Camp director",
+      "emoji": "⛺",
+      "text": "Want your name on a three day youth camp this summer? You show up all three days, not just for photos.",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "All three days",
+        "reply": "All three days. I'll run the drills myself",
+        "karma": 8,
+        "popularity": 3,
+        "morale": -1
+       },
+       {
+        "label": "Just the photos",
+        "reply": "Put my name on it, I'll stop in for pictures",
+        "karma": -4,
+        "popularity": 2,
+        "cash": 0.1
+       }
+      ],
+      "beat": "offseason"
+     },
+     {
+      "id": "summer_sneaker-2026",
+      "defId": "summer_sneaker",
+      "from": "Sneaker rep",
+      "emoji": "👟",
+      "text": "Loved the game last night. We made a pair with your initials on the tongue, if you want to wear them Friday. No contract, just see how they feel.",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Wear them Friday",
+        "reply": "Send them over. I'll break them in Friday",
+        "karma": 0,
+        "popularity": 2
+       },
+       {
+        "label": "Not until there's a deal",
+        "reply": "Appreciate it. Talk to my agent first",
+        "karma": 1
+       },
+       {
+        "label": "Sticking with what I've got",
+        "reply": "I'm good in what I've got. Thank you though",
+        "karma": 2,
+        "morale": 1
+       }
+      ],
+      "beat": "summer"
+     }
+    ],
+    "phoneUsedIds": [
+     "beat_writer_leak",
+     "offseason_youth_camp",
+     "summer_sneaker"
+    ]
+   }
+  },
+  "4": {
+   "draws": 163,
+   "player": {
+    "name": "Fictional supported coach scout",
+    "pos": "PG",
+    "archetype": {
+     "id": "pointgod",
+     "label": "Point God",
+     "desc": "The offense runs through you",
+     "ovrBoost": 1,
+     "potBoost": 5,
+     "durability": 0.95,
+     "scoring": 0.85,
+     "playmaking": 1.55,
+     "rebounding": 0.55
+    },
+    "team": "BOS",
+    "year": 2032,
+    "age": 25,
+    "ovr": 87,
+    "pot": 95,
+    "morale": 50,
+    "fanbase": 48,
+    "health": 100,
+    "salary": 8.8,
+    "contractYears": -2,
+    "seasons": [
+     {
+      "year": 2026,
+      "team": "BOS",
+      "age": 19,
+      "ovr": 76,
+      "games": 79,
+      "ppg": 9,
+      "rpg": 2.7,
+      "apg": 6.2,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 8.8
+     },
+     {
+      "year": 2027,
+      "team": "BOS",
+      "age": 20,
+      "ovr": 78,
+      "games": 80,
+      "ppg": 7,
+      "rpg": 3.4,
+      "apg": 5.7,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 8.8
+     },
+     {
+      "year": 2028,
+      "team": "BOS",
+      "age": 21,
+      "ovr": 80,
+      "games": 79,
+      "ppg": 7,
+      "rpg": 2.2,
+      "apg": 5.5,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 8.8
+     },
+     {
+      "year": 2029,
+      "team": "BOS",
+      "age": 22,
+      "ovr": 82,
+      "games": 79,
+      "ppg": 8,
+      "rpg": 1.8,
+      "apg": 5.2,
+      "awards": [],
+      "teamResult": "Missed the playoffs",
+      "salary": 8.8
+     },
+     {
+      "year": 2030,
+      "team": "BOS",
+      "age": 23,
+      "ovr": 84,
+      "games": 82,
+      "ppg": 11,
+      "rpg": 2.8,
+      "apg": 7.9,
+      "awards": [],
+      "teamResult": "Lost in the first round",
+      "salary": 8.8,
+      "poGames": 6,
+      "poPpg": 19,
+      "poRpg": 4.6,
+      "poApg": 10
+     },
+     {
+      "year": 2031,
+      "team": "BOS",
+      "age": 24,
+      "ovr": 86,
+      "games": 81,
+      "ppg": 12,
+      "rpg": 2.6,
+      "apg": 8.2,
+      "awards": [],
+      "teamResult": "Lost in the first round",
+      "salary": 8.8,
+      "poGames": 6,
+      "poPpg": 19,
+      "poRpg": 5.1,
+      "poApg": 12.4
+     }
+    ],
+    "rings": 0,
+    "mvps": 0,
+    "allNbas": 0,
+    "finalsMvps": 0,
+    "retired": false,
+    "draftPick": 12,
+    "earnings": 52.8,
+    "netWorth": 25.2,
+    "dirtyMoney": 0,
+    "heat": 0,
+    "suspendedSeasons": 0,
+    "purchased": [],
+    "lifeFlags": {},
+    "appearance": null,
+    "yearlyCosts": 0,
+    "rival": {
+     "name": "Theo Delgado",
+     "pos": "PG",
+     "team": "BOS",
+     "ovr": 87,
+     "pot": 96,
+     "age": 25,
+     "rings": 1,
+     "hisYears": 6,
+     "myYears": 0,
+     "retired": false,
+     "lastLine": "17 ppg, 6.1 rpg, 5.9 apg",
+     "lastScore": 45.8
+    },
+    "role": "backup",
+    "pendingRivalryEvent": {
+     "id": 321,
+     "emoji": "☀️",
+     "title": "Summer Pickup",
+     "description": "Theo Delgado turns up at the summer pickup run you have played in for years. Neither of you leaves until the gym closes.",
+     "consequence": "Morale +3, the rivalry heats up"
+    },
+    "money": {
+     "seed": 156578449,
+     "vault": 0,
+     "hold": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+     },
+     "cost": {
+      "ladder": 0,
+      "bricks": 0,
+      "cleats": 0,
+      "screens": 0,
+      "spark": 0
+     },
+     "price": {
+      "ladder": 131.79,
+      "bricks": 117.42,
+      "cleats": 107.28,
+      "screens": 88.13,
+      "spark": 68.94
+     },
+     "hist": {
+      "ladder": [
+       100,
+       106.61,
+       108.11,
+       112.88,
+       117.2,
+       119.61,
+       131.79
+      ],
+      "bricks": [
+       100,
+       86.42,
+       103.48,
+       108.82,
+       109.12,
+       119.02,
+       117.42
+      ],
+      "cleats": [
+       100,
+       92.14,
+       108.41,
+       124.67,
+       123.64,
+       101.09,
+       107.28
+      ],
+      "screens": [
+       100,
+       99.23,
+       106.97,
+       113.12,
+       108.11,
+       79.33,
+       88.13
+      ],
+      "spark": [
+       100,
+       49.41,
+       58.93,
+       31.07,
+       62.5,
+       52.49,
+       68.94
+      ]
+     },
+     "log": [],
+     "year": 2031,
+     "age": 6,
+     "won": 0,
+     "lost": 0,
+     "cPlays": 0,
+     "cNet": 0,
+     "cYear": 0,
+     "cShut": false,
+     "aYear": 0,
+     "aBest": 0,
+     "aPlays": 0
+    },
+    "karma": 50,
+    "phoneInbox": [
+     {
+      "id": "teammate_bench-2026",
+      "defId": "teammate_bench",
+      "from": "Teammate",
+      "emoji": "😤",
+      "text": "Coach has had me at the end of the bench again man. Thinking about asking for a trade. What would you do?",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Be honest with him",
+        "reply": "You deserve minutes mate. If he won't give them, go get them somewhere",
+        "karma": 6,
+        "morale": 2
+       },
+       {
+        "label": "Tell him to stop whining",
+        "reply": "Outwork him then. Nobody owes you a jersey",
+        "karma": -5
+       },
+       {
+        "label": "Dodge the question",
+        "reply": "Tough one bro. Sleep on it",
+        "karma": -1
+       }
+      ],
+      "beat": "camp"
+     },
+     {
+      "id": "deadline_gm-2026",
+      "defId": "deadline_gm",
+      "from": "GM",
+      "emoji": "📋",
+      "text": "We're making moves before the deadline. Not you, but some guys you're close to. Wanted you to hear it from me first.",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Thanks for the heads up",
+        "reply": "Appreciate you telling me straight",
+        "karma": 3,
+        "morale": -2
+       },
+       {
+        "label": "Then move me too",
+        "reply": "If we're selling, sell me too",
+        "karma": -6,
+        "morale": -4,
+        "popularity": 2
+       }
+      ],
+      "beat": "deadline"
+     },
+     {
+      "id": "summer_strength-2026",
+      "defId": "summer_strength",
+      "from": "Strength coach",
+      "emoji": "🏋️",
+      "text": "You cramped up in the fourth. That's sleep and salt, not bad luck. Curfew is your call, but I know what time you got in.",
+      "year": 2026,
+      "choices": [
+       {
+        "label": "Lights out at ten all week",
+        "reply": "Lights out at ten the rest of the week. My fault",
+        "karma": 5,
+        "morale": 1
+       },
+       {
+        "label": "It's summer league, relax",
+        "reply": "It's summer league. I'm fine",
+        "karma": -4,
+        "morale": 2
+       }
+      ],
+      "beat": "summer"
+     }
+    ],
+    "phoneUsedIds": [
+     "teammate_bench",
+     "deadline_gm",
+     "summer_strength"
+    ]
+   }
+  }
+ }
+}

@@ -1,0 +1,932 @@
+{
+ "nba": {
+  "recordedOn": "4e1d2fb726d02626383159fe3741193c9f2ace5f",
+  "careers": 6000,
+  "seeds": [
+   {
+    "seed": 1,
+    "m": {
+     "careers": 6000,
+     "seasons": 114576,
+     "inducted": 31.7,
+     "firstBallot": 27.03,
+     "inducted_now": 31.56,
+     "inducted_y2004": 32.13,
+     "scoreP50": 363,
+     "scoreP90": 917,
+     "perCareer": {
+      "All-Star": 0,
+      "Rookie of the Year": 0.026,
+      "All-NBA": 1.972,
+      "MVP": 0.316,
+      "Finals MVP": 0.14,
+      "Defensive Player of the Year": 0.076,
+      "All-Defensive Team": 1.342,
+      "Scoring Champion": 0.472,
+      "Assists Leader": 0.126,
+      "Rebounding Champion": 0.095,
+      "Most Improved Player": 0.191,
+      "Sixth Man of the Year": 0.316,
+      "All-Rookie Team": 0.089
+     },
+     "everMvp": 16.22,
+     "everAllNba": 59.07,
+     "mvpSeasons": 1894,
+     "mvpMissedPlayoffs": 28.35,
+     "mvpNotAllNba": 8.66,
+     "mvpAlsoMip": 24.97,
+     "roySeasons": 153,
+     "royOnAllRookie": 0,
+     "allRookieInFirstSeason": 0,
+     "allDefByArch": {
+      "pointgod": 0.323,
+      "scoringpg": 3.44,
+      "pest": 0.53,
+      "bucket": 3.228,
+      "sniper": 0.433,
+      "twoway": 0.613,
+      "alpha": 2.655,
+      "threed": 0.015,
+      "pointforward": 1.403,
+      "stretch4": 1.385,
+      "bruiser": 1.143,
+      "swiss": 1.288,
+      "paintbeast": 1.975,
+      "stretch": 1.433,
+      "anchor": 0.273
+     },
+     "myShare": 62.33,
+     "myShareByArch": {
+      "pointgod": 56,
+      "scoringpg": 77.9,
+      "pest": 57.6,
+      "bucket": 76.3,
+      "sniper": 57,
+      "twoway": 55.1,
+      "alpha": 81.3,
+      "threed": 44.8,
+      "pointforward": 75.4,
+      "stretch4": 64.1,
+      "bruiser": 59.8,
+      "swiss": 66.7,
+      "paintbeast": 61.5,
+      "stretch": 60.4,
+      "anchor": 41
+     },
+     "rivalDisagree": 0,
+     "starters": {
+      "80-83": {
+       "PG": [
+        19.3,
+        4.4,
+        8.3,
+        4358
+       ],
+       "SG": [
+        21.6,
+        4.9,
+        5.5,
+        4493
+       ],
+       "SF": [
+        19.3,
+        6.6,
+        6.7,
+        4456
+       ],
+       "PF": [
+        18.7,
+        8.3,
+        5.6,
+        4344
+       ],
+       "C": [
+        17.6,
+        9,
+        4.5,
+        4338
+       ]
+      },
+      "88-91": {
+       "PG": [
+        25.7,
+        5.3,
+        10.1,
+        2226
+       ],
+       "SG": [
+        28.1,
+        6,
+        7.1,
+        2215
+       ],
+       "SF": [
+        25.6,
+        8.1,
+        8.8,
+        2572
+       ],
+       "PF": [
+        23.8,
+        10.7,
+        6.5,
+        2289
+       ],
+       "C": [
+        22.4,
+        11.6,
+        5.5,
+        1902
+       ]
+      }
+     },
+     "rookieStarterPpg": 13.9,
+     "benchPpg": 10.6,
+     "starterPpg": 19.7,
+     "gates": {
+      "ppg28": 6.788,
+      "apg10": 5.228,
+      "rpg11": 4.702,
+      "rpg125big": 3.517,
+      "jump6": 8.439,
+      "ppg14": 70.328
+     },
+     "tripleDouble": 216,
+     "ppg16share": 59.83,
+     "career12k": 99.58,
+     "career25k": 54.25,
+     "bothTitles": 497,
+     "wing8ast": 19.17,
+     "field": {
+      "PG": [
+       46.21,
+       15.27
+      ],
+      "SG": [
+       45.93,
+       14.99
+      ],
+      "SF": [
+       47.89,
+       16.33
+      ],
+      "PF": [
+       45.96,
+       14.23
+      ],
+      "C": [
+       43.34,
+       13.76
+      ]
+     }
+    }
+   },
+   {
+    "seed": 2,
+    "m": {
+     "careers": 6000,
+     "seasons": 114637,
+     "inducted": 31.88,
+     "firstBallot": 27.93,
+     "inducted_now": 31.42,
+     "inducted_y2004": 33.27,
+     "scoreP50": 367,
+     "scoreP90": 940,
+     "perCareer": {
+      "All-Star": 0,
+      "Rookie of the Year": 0.02,
+      "All-NBA": 2.006,
+      "MVP": 0.323,
+      "Finals MVP": 0.159,
+      "Defensive Player of the Year": 0.079,
+      "All-Defensive Team": 1.383,
+      "Scoring Champion": 0.485,
+      "Assists Leader": 0.128,
+      "Rebounding Champion": 0.095,
+      "Most Improved Player": 0.192,
+      "Sixth Man of the Year": 0.329,
+      "All-Rookie Team": 0.093
+     },
+     "everMvp": 16.85,
+     "everAllNba": 58.88,
+     "mvpSeasons": 1935,
+     "mvpMissedPlayoffs": 25.94,
+     "mvpNotAllNba": 9.2,
+     "mvpAlsoMip": 24.08,
+     "roySeasons": 118,
+     "royOnAllRookie": 0,
+     "allRookieInFirstSeason": 0,
+     "allDefByArch": {
+      "pointgod": 0.345,
+      "scoringpg": 3.5,
+      "pest": 0.54,
+      "bucket": 3.705,
+      "sniper": 0.568,
+      "twoway": 0.495,
+      "alpha": 2.545,
+      "threed": 0.018,
+      "pointforward": 1.35,
+      "stretch4": 1.353,
+      "bruiser": 1.198,
+      "swiss": 1.408,
+      "paintbeast": 2.113,
+      "stretch": 1.33,
+      "anchor": 0.28
+     },
+     "myShare": 63.02,
+     "myShareByArch": {
+      "pointgod": 57.3,
+      "scoringpg": 78.7,
+      "pest": 58.3,
+      "bucket": 77.6,
+      "sniper": 55.5,
+      "twoway": 57.4,
+      "alpha": 80.3,
+      "threed": 44,
+      "pointforward": 75.4,
+      "stretch4": 65.1,
+      "bruiser": 64.5,
+      "swiss": 66.1,
+      "paintbeast": 62.2,
+      "stretch": 61.8,
+      "anchor": 40.8
+     },
+     "rivalDisagree": 0,
+     "starters": {
+      "80-83": {
+       "PG": [
+        19.2,
+        4.4,
+        8.3,
+        4461
+       ],
+       "SG": [
+        21.7,
+        4.9,
+        5.5,
+        4378
+       ],
+       "SF": [
+        19.3,
+        6.6,
+        6.7,
+        4588
+       ],
+       "PF": [
+        18.8,
+        8.4,
+        5.5,
+        4315
+       ],
+       "C": [
+        17.6,
+        9,
+        4.5,
+        4347
+       ]
+      },
+      "88-91": {
+       "PG": [
+        26.1,
+        5.3,
+        10.1,
+        2286
+       ],
+       "SG": [
+        28.3,
+        5.9,
+        7,
+        2479
+       ],
+       "SF": [
+        25.7,
+        8.1,
+        8.8,
+        2548
+       ],
+       "PF": [
+        23.9,
+        10.6,
+        6.6,
+        2262
+       ],
+       "C": [
+        22.2,
+        11.6,
+        5.5,
+        2015
+       ]
+      }
+     },
+     "rookieStarterPpg": 13.8,
+     "benchPpg": 10.6,
+     "starterPpg": 19.7,
+     "gates": {
+      "ppg28": 7.112,
+      "apg10": 5.227,
+      "rpg11": 4.787,
+      "rpg125big": 3.596,
+      "jump6": 8.316,
+      "ppg14": 70.324
+     },
+     "tripleDouble": 208,
+     "ppg16share": 59.93,
+     "career12k": 99.72,
+     "career25k": 53.87,
+     "bothTitles": 474,
+     "wing8ast": 18.676,
+     "field": {
+      "PG": [
+       46.39,
+       15.3
+      ],
+      "SG": [
+       46.32,
+       15.12
+      ],
+      "SF": [
+       47.65,
+       16.2
+      ],
+      "PF": [
+       46.06,
+       14.36
+      ],
+      "C": [
+       43.25,
+       13.71
+      ]
+     }
+    }
+   },
+   {
+    "seed": 3,
+    "m": {
+     "careers": 6000,
+     "seasons": 114695,
+     "inducted": 31.78,
+     "firstBallot": 27.83,
+     "inducted_now": 31.93,
+     "inducted_y2004": 31.33,
+     "scoreP50": 367,
+     "scoreP90": 928,
+     "perCareer": {
+      "All-Star": 0,
+      "Rookie of the Year": 0.018,
+      "All-NBA": 1.981,
+      "MVP": 0.31,
+      "Finals MVP": 0.153,
+      "Defensive Player of the Year": 0.077,
+      "All-Defensive Team": 1.357,
+      "Scoring Champion": 0.464,
+      "Assists Leader": 0.118,
+      "Rebounding Champion": 0.101,
+      "Most Improved Player": 0.192,
+      "Sixth Man of the Year": 0.338,
+      "All-Rookie Team": 0.098
+     },
+     "everMvp": 16.27,
+     "everAllNba": 58.6,
+     "mvpSeasons": 1859,
+     "mvpMissedPlayoffs": 26.68,
+     "mvpNotAllNba": 8.34,
+     "mvpAlsoMip": 23.4,
+     "roySeasons": 108,
+     "royOnAllRookie": 0,
+     "allRookieInFirstSeason": 0,
+     "allDefByArch": {
+      "pointgod": 0.368,
+      "scoringpg": 3.21,
+      "pest": 0.518,
+      "bucket": 3.375,
+      "sniper": 0.403,
+      "twoway": 0.595,
+      "alpha": 2.595,
+      "threed": 0.01,
+      "pointforward": 1.293,
+      "stretch4": 1.488,
+      "bruiser": 1.195,
+      "swiss": 1.383,
+      "paintbeast": 2.2,
+      "stretch": 1.448,
+      "anchor": 0.27
+     },
+     "myShare": 62.3,
+     "myShareByArch": {
+      "pointgod": 57.4,
+      "scoringpg": 76.6,
+      "pest": 57.7,
+      "bucket": 76.5,
+      "sniper": 57.2,
+      "twoway": 54.5,
+      "alpha": 80.2,
+      "threed": 45.7,
+      "pointforward": 73.2,
+      "stretch4": 64.3,
+      "bruiser": 62.6,
+      "swiss": 66.1,
+      "paintbeast": 62.3,
+      "stretch": 61.3,
+      "anchor": 39.2
+     },
+     "rivalDisagree": 0,
+     "starters": {
+      "80-83": {
+       "PG": [
+        19.2,
+        4.4,
+        8.3,
+        4482
+       ],
+       "SG": [
+        21.6,
+        4.9,
+        5.5,
+        4346
+       ],
+       "SF": [
+        19.2,
+        6.6,
+        6.7,
+        4442
+       ],
+       "PF": [
+        18.9,
+        8.4,
+        5.5,
+        4340
+       ],
+       "C": [
+        17.5,
+        9,
+        4.5,
+        4319
+       ]
+      },
+      "88-91": {
+       "PG": [
+        25.5,
+        5.3,
+        10.2,
+        2077
+       ],
+       "SG": [
+        28.2,
+        6,
+        7.1,
+        2358
+       ],
+       "SF": [
+        25.6,
+        8.1,
+        8.8,
+        2665
+       ],
+       "PF": [
+        23.8,
+        10.6,
+        6.6,
+        2322
+       ],
+       "C": [
+        22.3,
+        11.6,
+        5.4,
+        2056
+       ]
+      }
+     },
+     "rookieStarterPpg": 13.7,
+     "benchPpg": 10.6,
+     "starterPpg": 19.7,
+     "gates": {
+      "ppg28": 6.71,
+      "apg10": 5.193,
+      "rpg11": 4.81,
+      "rpg125big": 3.68,
+      "jump6": 8.208,
+      "ppg14": 70.116
+     },
+     "tripleDouble": 219,
+     "ppg16share": 59.83,
+     "career12k": 99.73,
+     "career25k": 54.33,
+     "bothTitles": 420,
+     "wing8ast": 18.945,
+     "field": {
+      "PG": [
+       46.05,
+       15.05
+      ],
+      "SG": [
+       45.81,
+       15.18
+      ],
+      "SF": [
+       47.78,
+       16.18
+      ],
+      "PF": [
+       46.17,
+       14.29
+      ],
+      "C": [
+       43.33,
+       13.84
+      ]
+     }
+    }
+   },
+   {
+    "seed": 4,
+    "m": {
+     "careers": 6000,
+     "seasons": 114608,
+     "inducted": 31.75,
+     "firstBallot": 27.57,
+     "inducted_now": 32.02,
+     "inducted_y2004": 30.93,
+     "scoreP50": 366,
+     "scoreP90": 938,
+     "perCareer": {
+      "All-Star": 0,
+      "Rookie of the Year": 0.019,
+      "All-NBA": 1.987,
+      "MVP": 0.313,
+      "Finals MVP": 0.15,
+      "Defensive Player of the Year": 0.081,
+      "All-Defensive Team": 1.337,
+      "Scoring Champion": 0.453,
+      "Assists Leader": 0.119,
+      "Rebounding Champion": 0.105,
+      "Most Improved Player": 0.193,
+      "Sixth Man of the Year": 0.328,
+      "All-Rookie Team": 0.089
+     },
+     "everMvp": 16.75,
+     "everAllNba": 58.68,
+     "mvpSeasons": 1879,
+     "mvpMissedPlayoffs": 26.82,
+     "mvpNotAllNba": 7.82,
+     "mvpAlsoMip": 25.39,
+     "roySeasons": 114,
+     "royOnAllRookie": 0,
+     "allRookieInFirstSeason": 0,
+     "allDefByArch": {
+      "pointgod": 0.36,
+      "scoringpg": 3.195,
+      "pest": 0.57,
+      "bucket": 3.055,
+      "sniper": 0.533,
+      "twoway": 0.463,
+      "alpha": 2.79,
+      "threed": 0.02,
+      "pointforward": 1.183,
+      "stretch4": 1.285,
+      "bruiser": 1.175,
+      "swiss": 1.4,
+      "paintbeast": 2.318,
+      "stretch": 1.475,
+      "anchor": 0.233
+     },
+     "myShare": 62.52,
+     "myShareByArch": {
+      "pointgod": 58.3,
+      "scoringpg": 75.8,
+      "pest": 57.1,
+      "bucket": 74.4,
+      "sniper": 57.8,
+      "twoway": 56.7,
+      "alpha": 80.6,
+      "threed": 44,
+      "pointforward": 74.4,
+      "stretch4": 63.9,
+      "bruiser": 62.8,
+      "swiss": 68.4,
+      "paintbeast": 63.1,
+      "stretch": 61.5,
+      "anchor": 38.6
+     },
+     "rivalDisagree": 0,
+     "starters": {
+      "80-83": {
+       "PG": [
+        19.2,
+        4.4,
+        8.4,
+        4469
+       ],
+       "SG": [
+        21.7,
+        4.9,
+        5.5,
+        4478
+       ],
+       "SF": [
+        19.1,
+        6.6,
+        6.7,
+        4523
+       ],
+       "PF": [
+        18.8,
+        8.4,
+        5.5,
+        4487
+       ],
+       "C": [
+        17.6,
+        9,
+        4.5,
+        4289
+       ]
+      },
+      "88-91": {
+       "PG": [
+        25.6,
+        5.3,
+        10.1,
+        2122
+       ],
+       "SG": [
+        27.9,
+        6,
+        7,
+        2143
+       ],
+       "SF": [
+        25.9,
+        8.1,
+        8.6,
+        2561
+       ],
+       "PF": [
+        23.9,
+        10.6,
+        6.6,
+        2272
+       ],
+       "C": [
+        22.5,
+        11.6,
+        5.4,
+        2044
+       ]
+      }
+     },
+     "rookieStarterPpg": 13.8,
+     "benchPpg": 10.6,
+     "starterPpg": 19.7,
+     "gates": {
+      "ppg28": 6.698,
+      "apg10": 5.148,
+      "rpg11": 4.821,
+      "rpg125big": 3.695,
+      "jump6": 8.313,
+      "ppg14": 70.208
+     },
+     "tripleDouble": 200,
+     "ppg16share": 59.83,
+     "career12k": 99.5,
+     "career25k": 54.08,
+     "bothTitles": 462,
+     "wing8ast": 18.904,
+     "field": {
+      "PG": [
+       46.1,
+       15.09
+      ],
+      "SG": [
+       45.86,
+       14.94
+      ],
+      "SF": [
+       47.89,
+       16.21
+      ],
+      "PF": [
+       46.06,
+       14.3
+      ],
+      "C": [
+       43.13,
+       14.02
+      ]
+     }
+    }
+   },
+   {
+    "seed": 5,
+    "m": {
+     "careers": 6000,
+     "seasons": 114688,
+     "inducted": 31.55,
+     "firstBallot": 27.45,
+     "inducted_now": 31.09,
+     "inducted_y2004": 32.93,
+     "scoreP50": 365,
+     "scoreP90": 918,
+     "perCareer": {
+      "All-Star": 0,
+      "Rookie of the Year": 0.025,
+      "All-NBA": 1.986,
+      "MVP": 0.311,
+      "Finals MVP": 0.156,
+      "Defensive Player of the Year": 0.081,
+      "All-Defensive Team": 1.361,
+      "Scoring Champion": 0.468,
+      "Assists Leader": 0.123,
+      "Rebounding Champion": 0.099,
+      "Most Improved Player": 0.196,
+      "Sixth Man of the Year": 0.359,
+      "All-Rookie Team": 0.091
+     },
+     "everMvp": 16.68,
+     "everAllNba": 58.93,
+     "mvpSeasons": 1866,
+     "mvpMissedPlayoffs": 27.28,
+     "mvpNotAllNba": 8.36,
+     "mvpAlsoMip": 23.9,
+     "roySeasons": 152,
+     "royOnAllRookie": 0,
+     "allRookieInFirstSeason": 0,
+     "allDefByArch": {
+      "pointgod": 0.415,
+      "scoringpg": 3.383,
+      "pest": 0.583,
+      "bucket": 3.155,
+      "sniper": 0.495,
+      "twoway": 0.568,
+      "alpha": 2.525,
+      "threed": 0.008,
+      "pointforward": 1.3,
+      "stretch4": 1.408,
+      "bruiser": 1.273,
+      "swiss": 1.463,
+      "paintbeast": 2.135,
+      "stretch": 1.435,
+      "anchor": 0.275
+     },
+     "myShare": 62.8,
+     "myShareByArch": {
+      "pointgod": 60,
+      "scoringpg": 78.9,
+      "pest": 57.3,
+      "bucket": 77.4,
+      "sniper": 57.9,
+      "twoway": 58.9,
+      "alpha": 78.6,
+      "threed": 44.5,
+      "pointforward": 72.1,
+      "stretch4": 64.9,
+      "bruiser": 61.8,
+      "swiss": 67.5,
+      "paintbeast": 60.4,
+      "stretch": 61.3,
+      "anchor": 40.6
+     },
+     "rivalDisagree": 0,
+     "starters": {
+      "80-83": {
+       "PG": [
+        19.4,
+        4.4,
+        8.4,
+        4479
+       ],
+       "SG": [
+        21.6,
+        4.9,
+        5.5,
+        4534
+       ],
+       "SF": [
+        19.2,
+        6.6,
+        6.7,
+        4357
+       ],
+       "PF": [
+        18.8,
+        8.3,
+        5.5,
+        4451
+       ],
+       "C": [
+        17.5,
+        9,
+        4.5,
+        4337
+       ]
+      },
+      "88-91": {
+       "PG": [
+        25.5,
+        5.3,
+        10.2,
+        2325
+       ],
+       "SG": [
+        28,
+        6,
+        7,
+        2414
+       ],
+       "SF": [
+        25.5,
+        8.1,
+        8.8,
+        2609
+       ],
+       "PF": [
+        23.9,
+        10.7,
+        6.6,
+        2388
+       ],
+       "C": [
+        22.4,
+        11.5,
+        5.5,
+        1966
+       ]
+      }
+     },
+     "rookieStarterPpg": 13.8,
+     "benchPpg": 10.6,
+     "starterPpg": 19.7,
+     "gates": {
+      "ppg28": 6.787,
+      "apg10": 5.397,
+      "rpg11": 4.795,
+      "rpg125big": 3.659,
+      "jump6": 8.427,
+      "ppg14": 70.252
+     },
+     "tripleDouble": 225,
+     "ppg16share": 60,
+     "career12k": 99.62,
+     "career25k": 54.05,
+     "bothTitles": 458,
+     "wing8ast": 18.513,
+     "field": {
+      "PG": [
+       46.66,
+       15.18
+      ],
+      "SG": [
+       46.17,
+       15.03
+      ],
+      "SF": [
+       47.36,
+       16.28
+      ],
+      "PF": [
+       46.22,
+       14.44
+      ],
+      "C": [
+       43.06,
+       13.73
+      ]
+     }
+    }
+   }
+  ]
+ },
+ "others": {
+  "recordedOn": "05cfeef1916c5e3d1cbe84750ce66e6ac1b885db",
+  "per": 500,
+  "seeds": [
+   1,
+   2,
+   3,
+   4,
+   5
+  ],
+  "hashes": {
+   "nfl": [
+    "70382099f607d0a45a951ece10fc3a018b29704541a72182101cdeb0e2d1b7a6",
+    "e8fb8651581835b1d9a1b37a8089bc3b9f1d6ecd35c6ef5323f762d7d04fd909",
+    "33aa974537bc891a6ae37ce09911d98b42ab385c94bd1f9999b7e1ef623d1d48",
+    "6255bddf43e017f6b3e42f669081a7ae7ed92168b3be35dde2dedb82da78bb5b",
+    "5438ed56647a0bb19e398c54a036c850d4874291ab0bc7ce1adb1d2da3df3abd"
+   ],
+   "mlb": [
+    "7eca2172c21399d49e54f7473b24bfc001037791fef3557a4a7c416c22bae1a9",
+    "23fab5fab03c8ae65a73633abf4e904498760e7af824e18a44b397c1bef3b37f",
+    "b02a08823e76cab327c8c7db5b50ddabda770ed022eba2013dfdc4c57bb31f55",
+    "9c08d6068884b80069993fb198a788f29a25b2b4a0fc9b07705a5fc97737a571",
+    "5a098befee6f0bae724835781d0582385dee946d5923da2f6bdca392d627fdcb"
+   ],
+   "nhl": [
+    "6f7b2075b0720598381934d01958a5de30485d79c7e5a45fea7be98a2c05762d",
+    "b1a45ab20fd8a9b8100f454ed27dcad8d388507a9c2cded5b5a2421f6c1701c0",
+    "16dbc4fe9152b9988bcccb88f7de5143adadcbbf119d132c9ad1fe81149fe7cd",
+    "a6c6114a3a0da924b83674201f6608a2ccbe6b50c339ccddcf6cacd8c648ed48",
+    "06cb342617964e7ef04425c29426664704febb24f8f9ac0b17a5976a15e5a3e2"
+   ]
+  }
+ }
+}

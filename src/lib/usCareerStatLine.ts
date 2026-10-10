@@ -122,9 +122,25 @@ export function nflMajorAward(p: CareerPos): { one: string; many: string } {
 
 /* ─── NBA ─────────────────────────────────────────────────────────────────── */
 
-/** One NBA season. Every position records the same three averages. */
-export function nbaStatLine(s: NbaSeasonLine): string {
-  return seasonLine(s.teamResult, [[s.ppg, n => `${formatNumber(n)} ppg`], [s.rpg, n => `${formatNumber(n)} rpg`], [s.apg, n => `${formatNumber(n)} apg`]]);
+/** One NBA season. Every position records the same three averages. A season on the Round 1103 line (it
+ *  recorded minutes) prints each of them to one decimal, "17.0 ppg"; a season saved before it prints exactly
+ *  what it always did. Three parts on purpose: the hub's Career Log tile has room for three and cuts a longer
+ *  line off, and the season card says the minutes, steals and blocks in a note of its own. */
+export function nbaStatLine(s: Pick<NbaSeasonLine, 'ppg' | 'rpg' | 'apg' | 'mpg' | 'teamResult'>): string {
+  const one = isNum(s.mpg);
+  const avg = (n: number): string => (one ? n.toFixed(1) : formatNumber(n));
+  return seasonLine(s.teamResult, [[s.ppg, n => `${avg(n)} ppg`], [s.rpg, n => `${avg(n)} rpg`], [s.apg, n => `${avg(n)} apg`]]);
+}
+
+/** Round 1103: the whole line of a new season, six parts, for a row with room for it. A season saved before
+ *  Round 1103 recorded three, so this prints the same three nbaStatLine does. Abbreviations only. */
+export function nbaStatLineFull(s: NbaSeasonLine): string {
+  const one = isNum(s.mpg);
+  const avg = (n: number): string => (one ? n.toFixed(1) : formatNumber(n));
+  return seasonLine(s.teamResult, [
+    [s.ppg, n => `${avg(n)} ppg`], [s.rpg, n => `${avg(n)} rpg`], [s.apg, n => `${avg(n)} apg`],
+    [s.spg, n => `${n.toFixed(1)} spg`], [s.bpg, n => `${n.toFixed(1)} bpg`], [s.mpg, n => `${n.toFixed(1)} mpg`],
+  ]);
 }
 
 /* ─── MLB ─────────────────────────────────────────────────────────────────── */

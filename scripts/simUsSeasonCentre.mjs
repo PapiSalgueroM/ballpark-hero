@@ -35,6 +35,8 @@
  *   record   the record target ignored                         -> section 3
  *   length   the held gate removed                             -> section 2
  *   stage    the engine writes a result its own list lacks     -> sections 1 and 4
+ *   short82  the NBA engine back on 82 games in every year
+ *            (Round 1103 plays the ledger's 66 and 72)         -> section 1
  *   names    the shape window opened for the throwback era,
  *            the binding's id guard off                        -> section 5
  *   window   the same window with the guard ON: the ledger
@@ -108,6 +110,7 @@ const CONTROLS = {
   record: { section: 3, patches: [{ file: US, from: "const target: TeamTarget = band ? { kind: 'record', winsMin: band[0], winsMax: band[1] } : { kind: 'none' };", to: "const target: TeamTarget = { kind: 'none' };" }] },
   length: { section: 2, patches: [{ file: US, from: 'if (length === null || length !== bind.fullSeason) {', to: 'if (length === null) {' }] },
   stage: { section: 1, also: 4, patches: [{ file: 'src/lib/nbaMyCareer.ts', from: '    result = stages[stage];', to: "    result = stages[stage] + ' ';" }] },
+  short82: { section: 1, patches: [{ file: 'src/lib/nbaMyCareer.ts', from: "  return usSeasonLength('nba', year) ?? 82;", to: '  return 82;' }] },
   names: { section: 5, patches: [WINDOW, { file: US, from: '  if (ledger.length !== own.length || new Set(ledger).size !== ledger.length) return null;\n  const ownSet = new Set(own);\n  if (ownSet.size !== own.length || !ledger.every(id => ownSet.has(id))) return null;\n', to: '  const ownSet = new Set(own);\n' }] },
   window: { section: 5, patches: [WINDOW] },
   formula: { section: 5, patches: [{ file: NBA, from: 'for (let s = 1; s <= d; s += 1) add(s, 2, 2);', to: 'for (let s = 1; s <= d; s += 1) add(s, 3, 1);' }, { file: NBA, from: '  if (ctx.shape) out.push(...nbaDealProblems(ctx, s.games));\n', to: '' }] },
@@ -148,7 +151,7 @@ const CONTROLS = {
 const CONTROL_SPORT = {
   stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
-  oddsack: 'nfl',
+  oddsack: 'nfl', short82: 'nba',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 
@@ -174,9 +177,17 @@ const controlPlugin = {
   },
 };
 
+/* Round 1103: the NBA engine plays the ledger's length (66 games in 2011-12, 72 in 2020-21, 82 in a held year),
+   so its two windows of games played are restated by season, off the LEDGER and never off the engine's own
+   read of it (control short82 puts the engine back on 82 and this must go red): a healthy man misses up to
+   four, a hurt one misses 8 to 42 of 82, scaled to the length and rounded the way gamesFor rounds them. At 82
+   these are the 40 to 74 and 78 to 82 this row typed before. M is the bundle below, read when a check runs. */
+const nbaWindows = year => { const L = M.usSeasonLength('nba', year) ?? 82; return { L, hurtMin: L - Math.round((42 * L) / 82), hurtMax: L - Math.round((8 * L) / 82) }; };
+const nbaShortYear = year => nbaWindows(year).L !== 82;
+
 /* ─── The bundle: the two real bindings, the season modules, the ledgers ─── */
 const SPORT_DEFS = {
-  nba: { binding: 'NBA_CAREER_SPORT', bindingFile: 'src/lib/nbaCareerSport.ts', bindName: 'NBA_SEASON', numberFile: 'src/lib/season/nba.ts', positions: ['PG', 'SG', 'SF', 'PF', 'C'], eras: ['now', 'y2004'], gamesOk: g => (g >= 40 && g <= 74) || (g >= 78 && g <= 82), injury: l => l.games <= 74, targetedFrom: { era: 'y2004', year: 2016 } },
+  nba: { binding: 'NBA_CAREER_SPORT', bindingFile: 'src/lib/nbaCareerSport.ts', bindName: 'NBA_SEASON', numberFile: 'src/lib/season/nba.ts', positions: ['PG', 'SG', 'SF', 'PF', 'C'], eras: ['now', 'y2004'], gamesOk: (g, year) => { const w = nbaWindows(year); return (g >= w.hurtMin && g <= w.hurtMax) || (g >= w.L - 4 && g <= w.L); }, injury: l => l.games <= nbaWindows(l.year).hurtMax, targetedFrom: { era: 'y2004', year: 2016 } },
   nfl: { binding: 'NFL_CAREER_SPORT', bindingFile: 'src/lib/nflCareerSport.ts', bindName: 'NFL_SEASON', numberFile: 'src/lib/season/nfl.ts', positions: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], eras: ['now', 'y2005'], gamesOk: g => g >= 1 && g <= 17, injury: l => !l.backup && l.games < nflYearLength(l.year), targetedFrom: { era: 'y2005', year: 2018 } },
 };
 /* Release AP: since Round 1104 an NFL career plays the year's real length, so "under 17 games" stopped
@@ -585,7 +596,8 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
                                                                 72 point floor lifts the old era a touch)
      his share of his team's
      points, 99th percentile    0.442, 0.437, 0.414, 0.416, 0.442   band: under 0.50
-     median wins by result, pooled (asserted only with 20 or more seasons): missed 29 (band 17 to 40),
+     median wins by result, pooled (asserted only on the five sets pooled, with 20 or more seasons; one set
+     alone prints them, see section 7): missed 29 (band 17 to 40),
      first round 46 (41 to 52), semis 49 (45 to 57), conference finals 54 (48 to 61), lost the Finals 56
      (50 to 64), champions 58 (52 to 67): every one inside the middle half of its band, so strengthFor's
      7.9 was kept as designed.
@@ -875,7 +887,15 @@ for (const slug of SPORTS) {
   /* 1 */
   const unknown = live.filter(r => r.teamResult !== o.missed && !o.results.includes(r.teamResult));
   tally('1', `${slug} every team result is the engine's missed word or one of its five`, unknown.slice(0, 5).map(r => JSON.stringify(r.teamResult)), live.length);
-  tally('1', `${slug} games played sit in the engine's ranges`, live.filter(r => !d.gamesOk(r.games)).map(r => `${r.games}`), live.length);
+  tally('1', `${slug} games played sit in the engine's ranges`, live.filter(r => !d.gamesOk(r.games, r.year)).map(r => `${r.games} in ${r.year}`), live.length);
+  if (slug === 'nba') {
+    /* The floor is a seed set's: 41 to 45 short seasons a seed set at 40 careers (seed sets 0 to 14 one at a
+       time, 2026-10-09; 220 over the first five on 2026-10-08), so 20 each. Typed as 100 for the run, it failed
+       every run of one seed set, which is how this harness is measured. */
+    const short = live.filter(r => nbaShortYear(r.year)).length;
+    const shortFloor = Math.ceil(20 * SEEDSETS.length * Math.min(1, CAREERS / 40));
+    check('1', short >= shortFloor, `nba short seasons (66 or 72 games) are in the population (${short}, floor ${shortFloor}: 20 a seed set, 41 to 45 measured)`);
+  }
   const depthN = o.results.map(t => live.filter(r => r.teamResult === t).length);
   console.log(`     by result: missed ${live.filter(r => r.teamResult === o.missed).length}, ${o.results.map((t, i) => `${depthN[i]}`).join(' / ')} (depth 0 to title)`);
   check('1', depthN.every(n => n > 0), `${slug} every playoff depth and a title are in the population`);
@@ -974,8 +994,16 @@ for (const slug of SPORTS) {
     const q1 = lo + (hi - lo) * 0.25; const q3 = lo + (hi - lo) * 0.75;
     const med = median(w);
     console.log(`     wins for "${t}": n ${w.length}, median ${med}, p10 ${pct(w, 0.1)}, p90 ${pct(w, 0.9)} (band ${lo} to ${hi}, middle half ${q1} to ${q3})`);
-    if (w.length >= 20) check('7', med >= q1 && med <= q3, `${slug} the median record for "${t}" sits in the middle half of its band`);
-    else console.log(`     (not asserted: ${w.length} seasons is too few for a median)`);
+    /* Round 1103, the lead's ruling pass: the NBA's medians are judged on the five seed sets pooled, which is
+       how the header measured them. One seed set alone holds 19 to 34 "Lost the NBA Finals" seasons, and over
+       twenty runs of one set (seed sets 0 to 14 on this round's tree, 0 to 4 on Release AP's) that median ran
+       53 to 57 against a middle half that starts at 53.5: under it once (seed set 0 here, 53), half a win over
+       it twice (54 and 54 on Release AP's), on trees whose pooled median was 56 every time. At that size the
+       check was a coin toss and said nothing about strengthFor. The NFL keeps its own rule (its header measured
+       a set at a time). */
+    const pooledEnough = slug !== 'nba' || SEEDSETS.length >= 5;
+    if (w.length >= 20 && pooledEnough) check('7', med >= q1 && med <= q3, `${slug} the median record for "${t}" sits in the middle half of its band`);
+    else console.log(`     (not asserted: ${w.length >= 20 ? `${SEEDSETS.length} seed set${SEEDSETS.length === 1 ? '' : 's'} of the five this median is judged on` : `${w.length} seasons is too few for a median`})`);
   });
   for (const era of d.eras) {
     const p = points[`${slug}|${era}`];
@@ -1103,6 +1131,8 @@ if (CONTROL) {
   const labels = failsBy.get(String(c.section)) ?? [];
   let ok = labels.length > 0;
   let note = '';
+  /* Round 1103: the engine back on 82 must fail the games windows and nothing else. */
+  if (CONTROL === 'short82') ok = ok && labels.some(l => l.includes("nba games played sit in the engine's ranges")) && red.length === 1;
   if (CONTROL === 'stage' || CONTROL === 'nflstage') {
     /* the season with the unknown string derives with no band and no path, and section 4 has nothing to say about it */
     const sl = CONTROL_SPORT[CONTROL];

@@ -11,7 +11,10 @@ import { keyedRng } from '@/lib/keyedRng';
 import { buildUsSeason, dealUnnamed, splitTotal, usBandOf, usPlayoffPath, type UsRow } from '@/lib/season/us';
 import { deriveSeason, type DerivedGame } from '@/lib/season/core';
 import { NBA_SEASON, nbaDeal, nbaDealProblems, nbaTakeover } from '@/lib/season/nba';
-import { NBA_MISSED_PLAYOFFS, NBA_PLAYOFF_RESULTS, nbaEraTeamIds, nbaTeamLabelOf } from '@/lib/nbaMyCareer';
+import {
+  NBA_ARCHETYPES, NBA_MISSED_PLAYOFFS, NBA_PLAYOFF_RESULTS, nbaEraTeamIds, nbaSeasonGames, nbaTeamLabelOf, simNbaSeason, startNbaCareer,
+  type NbaCareerPos,
+} from '@/lib/nbaMyCareer';
 
 const SPORTS: UsLengthSport[] = ['nba', 'nfl'];
 
@@ -32,7 +35,7 @@ describe('the season length ledger', () => {
       expect(ws[ws.length - 1].from).toBeLessThanOrEqual(US_LENGTHS_VERIFIED_TO[sport]);
     }
   });
-  it('holds a year exactly when its real length is not the one the career plays', () => {
+  it('holds a year exactly when its real length is not the one the view is built for', () => {
     for (const sport of SPORTS) {
       let held = 0; let open = 0;
       for (let year = 1990; year <= 2060; year += 1) {
@@ -56,7 +59,10 @@ describe('the season length ledger', () => {
     expect(usSeasonHeldLine('nfl', 2022)).toBe('📺 No week by week this season: the real 2022 season had one game called off for good, so two teams finished on 16 games.');
     expect(usSeasonHeldLine('nfl', 2023)).toBeNull();
     expect(usSeasonHeldLine('nfl', 2026)).toBeNull();
-    expect(usSeasonHeldLine('nba', 2011)).toBe('📺 No week by week this season: the real 2011-12 season had 66 games and this career plays 82.');
+    /* Since Round 1103 an NBA career plays the real 66 and 72 games, so the line must not say the career plays 82. */
+    expect(usSeasonHeldLine('nba', 2011)).toBe('📺 No week by week this season: the real 2011-12 season had 66 games and the week by week view is built for 82.');
+    expect(usSeasonHeldLine('nba', 2020)).toBe('📺 No week by week this season: the real 2020-21 season had 72 games and the week by week view is built for 82.');
+    for (let year = 2003; year <= 2030; year++) expect(usSeasonHeldLine('nba', year) ?? '').not.toContain('this career plays');
     expect(usSeasonHeldLine('nba', 2019)).toBe('📺 No week by week this season: the real 2019-20 season was cut short and teams finished on different numbers of games.');
     expect(usSeasonHeldLine('nba', 2012)).toContain('2012-13');
     expect(usSeasonHeldLine('nba', 2020)).toContain('72 games');
@@ -65,6 +71,67 @@ describe('the season length ledger', () => {
     expect(usSeasonHeldLine('nba', 1999)).toContain('no verified length');
     expect(usSeasonLabel('nba', 1999)).toBe('1999-00');
     expect(usSeasonLabel('nba', 2009)).toBe('2009-10');
+  });
+});
+
+/* Round 1103: the held line above tells an NBA player "the week by week view is built for 82" of a 66 or 72 game
+   season. That is only the honest reason while the career really plays the ledger's length, so the real engine
+   plays seasons in every ledger year here: the club's record adds up to the year's length, nobody plays more
+   games than the year has, the healthy and the hurt windows are the engine's own scaled to it, and somebody
+   plays every game. A year the ledger holds with no single length (2012-13, 2019-20) plays 82, and its held
+   line gives the real reason and says nothing about what the career plays. */
+describe('Round 1103: an NBA career plays the season the ledger holds', () => {
+  const POS: NbaCareerPos[] = ['PG', 'SG', 'SF', 'PF', 'C'];
+  const SEEDS = 80;
+  it('plays the ledger length in every year the ledger holds one, and 82 in a year it holds none for', () => {
+    const lengths = new Set<number>();
+    let seasons = 0;
+    for (let year = 2003; year <= 2045; year += 1) {
+      const real = usSeasonLength('nba', year);
+      const L = real ?? 82;
+      expect(nbaSeasonGames(year), `${year}`).toBe(L);
+      lengths.add(L);
+      let everyGame = 0; let hurt = 0;
+      for (let seed = 0; seed < SEEDS; seed += 1) {
+        const rng = keyedRng(`nba-plays-the-ledger-${year}-${seed}`);
+        const pos = POS[seed % POS.length];
+        const types = NBA_ARCHETYPES[pos];
+        const c = startNbaCareer('Ledger Test', pos, types[seed % types.length], rng, null, year < 2026 ? 'y2004' : 'now');
+        c.year = year;
+        const { line, notes } = simNbaSeason(c, 70 + (seed % 5) * 5, rng);
+        seasons += 1;
+        expect(line.year).toBe(year);
+        expect((line.clubWins ?? -1) + (line.clubLosses ?? -1), `${year} seed ${seed}: the club's record`).toBe(L);
+        const wasHurt = notes.some(n => n.startsWith('🚑 Missed'));
+        if (wasHurt) {
+          hurt += 1;
+          expect(line.games, `${year} seed ${seed}: hurt`).toBeLessThanOrEqual(L - Math.round((8 * L) / 82));
+          expect(line.games).toBeGreaterThanOrEqual(Math.max(Math.round((20 * L) / 82), L - Math.round((42 * L) / 82)));
+        } else {
+          expect(line.games, `${year} seed ${seed}: healthy`).toBeLessThanOrEqual(L);
+          expect(line.games).toBeGreaterThanOrEqual(L - 4);
+        }
+        if (line.games === L) everyGame += 1;
+      }
+      expect(everyGame, `${year}: somebody plays all ${L}`).toBeGreaterThan(0);
+      expect(hurt, `${year}: not every season is a hurt one`).toBeLessThan(SEEDS);
+    }
+    expect([...lengths].sort((a, b) => a - b)).toEqual([66, 72, 82]);
+    expect(seasons).toBe(43 * SEEDS);
+  });
+  it('so a short season is held for the view, and a year with no single length for what really happened', () => {
+    let short = 0; let none = 0;
+    for (let year = 2003; year <= 2045; year += 1) {
+      const real = usSeasonLength('nba', year);
+      const line = usSeasonHeldLine('nba', year);
+      if (real === US_FULL_SEASON.nba) { expect(line, `${year}`).toBeNull(); continue; }
+      expect(line, `${year}`).not.toBeNull();
+      if (real === null) { none += 1; expect(line).not.toContain('built for'); expect(nbaSeasonGames(year)).toBe(82); continue; }
+      short += 1;
+      expect(line).toContain(`had ${nbaSeasonGames(year)} games and the week by week view is built for 82.`);
+    }
+    expect(short).toBe(2);
+    expect(none).toBe(2);
   });
 });
 

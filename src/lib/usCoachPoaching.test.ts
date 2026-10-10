@@ -1,14 +1,26 @@
 // Fictional six-season players and real coaching transitions, not sports history.
 import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   acceptCoachOffer, coachOutlook, ensureCoachCareer, playCoachSeason,
   sitOutCoachSeason, startCoachCareer, type CoachCareerState,
 } from '@/lib/usCoachCareer';
-import { NBA_ARCHETYPES, nbaAssignRole, nbaProgress, simNbaSeason, startNbaCareer } from '@/lib/nbaMyCareer';
+import type { UsCareerLike } from '@/lib/usCareerToCoach';
 
 interface Transition { seed: number; year: number; before: CoachCareerState; tape: number[] }
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
+/* Round 1103: each six-season scout is a recording made on main before that round moved the NBA stat line
+   (scripts/recordUsCoachPoachingScouts.mjs), with the draws he used. The stream is wound on by that many and
+   the coach engine carries on down it, so the pinned seasons below no longer ride on the player engine's
+   draws. Every coaching season is still played on the real engine, and no expectation changed. */
+interface Scout { draws: number; player: UsCareerLike & { year: number } }
+const scoutOf = (seed: number): Scout => {
+  const file = path.resolve(__dirname, '../test/fixtures/usCoachPoachingScouts888.json');
+  const scout = (JSON.parse(readFileSync(file, 'utf8')) as { scouts: Record<string, Scout> }).scouts[String(seed)];
+  if (!scout || scout.player.seasons.length !== 6) throw new Error(`Missing recorded scout ${seed}`);
+  return scout;
+};
 const transitions: Transition[] = process.env.US_COACH_POACHING_FIXTURES
   ? JSON.parse(readFileSync(process.env.US_COACH_POACHING_FIXTURES, 'utf8')) as Transition[] : [];
 const generated = new Set<number>();
@@ -22,9 +34,9 @@ function seedRandom(seed: number) {
 }
 function fixture(seed: number, year: number): Transition {
   if (!process.env.US_COACH_POACHING_FIXTURES && !generated.has(seed)) {
-    const r = seedRandom(seed), player = startNbaCareer('Fictional supported coach scout', 'PG', NBA_ARCHETYPES.PG[0], r.draw);
-    nbaAssignRole(player, 80, r.draw);
-    for (let i = 0; i < 6; i++) { simNbaSeason(player, 80, r.draw); nbaProgress(player, r.draw); }
+    const r = seedRandom(seed), scout = scoutOf(seed);
+    for (let i = 0; i < scout.draws; i++) r.draw();
+    const player = clone(scout.player);
     player.retired = true; let state = startCoachCareer('nba', player, player.year, r.draw);
     for (let i = 0; i < 40 && state.year <= 2063; i++) {
       if (state.unemployed) { state = state.offers.length ? acceptCoachOffer(state, 0) : sitOutCoachSeason(state, r.draw).state; continue; }

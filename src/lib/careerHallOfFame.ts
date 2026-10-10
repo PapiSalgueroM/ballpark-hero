@@ -261,7 +261,10 @@ export interface HallVoterWords {
  *  the table itself; and the standout, only when it was worth saying (standoutSaid points or more). Kept
  *  short: with a standout it has to fit four lines of small text on a phone. */
 export function hallWeighLine(words: HallVoterWords, weights: LegacyWeights, pos: string, standout: LegacyRead["standout"]): string {
-  const terms = (weights.positions[pos] ?? weights.positions["*"]).terms.map(t => words.reads[t.stat] ?? t.stat);
+  // Round 1103: a noun two terms share is said once (the NBA table reads points twice: every point, and again
+  // the points of seasons on the newer stat line, which are still "points" to a player).
+  const nouns = (weights.positions[pos] ?? weights.positions["*"]).terms.map(t => words.reads[t.stat] ?? t.stat);
+  const terms = nouns.filter((n, i) => nouns.indexOf(n) === i);
   const own = words.readsBy?.[pos];
   const said = standout && Math.round(standout.credit) >= LEGACY_GAME_RULES.standoutSaid ? standout : null;
   if (said) {

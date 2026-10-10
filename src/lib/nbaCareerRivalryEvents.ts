@@ -37,7 +37,7 @@
    scripts/simCareerRivalryEvents.mjs re-proves that as its own explicit
    section rather than trusting the existing green run. */
 
-import type { NbaCareerState } from "./nbaMyCareer";
+import type { NbaCareerState, NbaSeasonLine } from "./nbaMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
   rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
@@ -50,6 +50,16 @@ const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v
 
 /** The beat that fires forced, once, the season the rival retires. */
 export const NBA_RIVAL_RETIRE_ID = 305;
+
+/* Round 1112: who made the All-Star roster in the season the rival was last judged on. Mine is my own season
+   of that year off the save (the engine picks All-Stars since Round 1103). His is the same pass on his line
+   (nbaRivalSeason in nbaMyCareer.ts writes it on the rival). Null when the save's last season is not that
+   year, so a beat that reads this is never dealt on two different seasons. */
+export function nbaAllStarFacts(s: Pick<NbaCareerState, 'seasons'>, r: Pick<CareerRival, 'lastYear' | 'lastAllStar'>): { mine: boolean; his: boolean } | null {
+  const last = s.seasons[s.seasons.length - 1];
+  if (!last || r.lastYear !== last.year) return null;
+  return { mine: !!last.allStar, his: r.lastAllStar === true };
+}
 
 /* Seventeen beats, gated on what an NBA rival's save actually tracks: rings,
    overall, team, age, and the head to head record judgeRivalSeason already
@@ -93,14 +103,30 @@ export const NBA_RIVALRY_EVENTS: RivalryEventDef<NbaCareerState, CareerRival>[] 
     when: (_s, r) => r.retired,
     apply: s => { s.fanbase = clamp(s.fanbase + 10, 0, 100); },
   },
+  /* Round 1112: no coin. Until this round the beat flipped one for who made the roster, in a game whose
+     engine has picked All-Stars for real since Round 1103, so the card could say you made it in a year your
+     season card said you did not. Now it is dealt only when at least one of you made it, and it says and does
+     only what those two facts support. */
   {
-    id: 306, emoji: "🗳️", title: "All-Star Ballot Squeeze",
-    description: (_s, r) => `Only one of you is making the All-Star roster at the position this year, and it comes down to ${r.name}.`,
-    consequence: "50/50 outcome",
-    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,
-    apply: (s, r, rng, pushLine) => {
-      if (rng() < 0.5) { s.morale = clamp(s.morale + 5, 0, 100); pushLine(`🗳️ You made the All-Star roster over ${r.name}!`); }
-      else { s.morale = clamp(s.morale - 5, 0, 100); pushLine(`🗳️ ${r.name} made the All-Star roster over you.`); }
+    id: 306, emoji: "🗳️", title: "All-Star Rosters",
+    description: (s, r) => {
+      const f = nbaAllStarFacts(s, r);
+      if (f?.mine && f.his) return `The All-Star rosters are out, and you and ${r.name} are both on them.`;
+      return f?.mine
+        ? `The All-Star rosters are out. You are on one and ${r.name} is not.`
+        : `The All-Star rosters are out. ${r.name} is on one and you are not.`;
+    },
+    consequence: (s, r) => {
+      const f = nbaAllStarFacts(s, r);
+      return f?.mine && f.his ? "Fanbase +3" : f?.mine ? "Morale +5" : "Morale -5";
+    },
+    when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && (f.mine || f.his); },
+    apply: (s, r, _rng, pushLine) => {
+      const f = nbaAllStarFacts(s, r);
+      if (!f) return;
+      if (f.mine && f.his) { s.fanbase = clamp(s.fanbase + 3, 0, 100); pushLine(`🗳️ You and ${r.name} both made the All-Star roster.`); }
+      else if (f.mine) { s.morale = clamp(s.morale + 5, 0, 100); pushLine(`🗳️ You made the All-Star roster and ${r.name} did not.`); }
+      else if (f.his) { s.morale = clamp(s.morale - 5, 0, 100); pushLine(`🗳️ ${r.name} made the All-Star roster and you did not.`); }
     },
   },
   {
@@ -281,12 +307,16 @@ export const NBA_RIVALRY_EVENTS: RivalryEventDef<NbaCareerState, CareerRival>[] 
  * flagship and the NFL binding roll their own. Returns null on a season with
  * nothing to show.
  */
-export function nbaRivalryTick(c: NbaCareerState, rng: () => number = Math.random): RivalryEvent | null {
+export function nbaRivalryTick(c: NbaCareerState, rng: () => number = Math.random, season?: NbaSeasonLine): RivalryEvent | null {
   if (!c.rival) return null;
+  /* Round 1112: simNbaSeason rolls this before the season is on the save, and a beat may read the season (306
+     does), so the gates and the words see the save as it stands once the season is on it. Nothing is drawn
+     for it and nothing is written. */
+  const p = season ? { ...c, seasons: [...c.seasons, season] } : c;
   const lastId = c.lastRivalryEventId ?? null;
-  const rolled = rollRivalryEvent(c, c.rival, lastId, NBA_RIVALRY_EVENTS, rng);
+  const rolled = rollRivalryEvent(p, c.rival, lastId, NBA_RIVALRY_EVENTS, rng);
   if (rolled) return rolled;
-  return forcedRetirementEvent(c, c.rival, lastId, NBA_RIVALRY_EVENTS, NBA_RIVAL_RETIRE_ID);
+  return forcedRetirementEvent(p, c.rival, lastId, NBA_RIVALRY_EVENTS, NBA_RIVAL_RETIRE_ID);
 }
 
 /**

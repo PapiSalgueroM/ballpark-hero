@@ -88,7 +88,18 @@ const OUT = process.env.MARKS_OUT || path.join(ROOT, 'scripts/data/careerHallMar
 const SEEDS = ['base', '1', '2', '3', '4', '5'];
 const RAMP_FLOOR = 1.10, HALF = 0.5, BASE_TARGET = 110, MIN_POOL = 1500, DEFAULT_N = 2000, TOP_SHARE = 0.05, COVERED = 0.9;
 /* Rule B bases that are fixed, not measured. */
-const FIXED_BASE = { mlb: { RP: [{ stat: 'saves', per: 8 }, { stat: 'holds', per: 12 }, { stat: 'so', per: 40 }] } };
+/* Round 1103 added the basketball rows, and they are not a base in rule B's sense (calibration 1 read points
+   at every NBA position). That round moved the NBA stat line about a fifth lower and held the Hall rate with
+   one constant on the points of seasons played on the new line (NBA_LEGACY_NEW_LINE_SCALE in
+   src/lib/nbaMyCareer.ts). The constant enters the calibration 2 table as one fixed added term at every
+   position, the new line's points at 430 over (the constant less one): 1,075 at 1.4. It is recorded here so
+   the ledger carries it and section 19 (a) of the harness holds the table to it like any other added term.
+   A round that moves that constant moves these five numbers with it and measures again. */
+const NBA_NEW_LINE = [{ stat: 'newLinePts', per: 1075 }];
+const FIXED_BASE = {
+  mlb: { RP: [{ stat: 'saves', per: 8 }, { stat: 'holds', per: 12 }, { stat: 'so', per: 40 }] },
+  nba: { PG: NBA_NEW_LINE, SG: NBA_NEW_LINE, SF: NBA_NEW_LINE, PF: NBA_NEW_LINE, C: NBA_NEW_LINE },
+};
 
 /* The plural noun the ballot card prints for each family. */
 const LABELS = {
@@ -99,7 +110,10 @@ const LABELS = {
 };
 /* Families the engines total that are never a standout, by hand, each with its reason. */
 const EXCLUDED = {
-  nba: { games: 'games played is longevity, which the season weight already pays' },
+  nba: {
+    games: 'games played is longevity, which the season weight already pays',
+    newLinePts: 'the points of seasons on the Round 1103 stat line: part of the points total, read by a fixed term of the table, never a stat of its own',
+  },
   nfl: {
     ints: 'interceptions thrown are a quarterback losing the ball, not production',
     forcedFum: 'forced fumbles: left out by hand in the design, with holds; a game rule, not a measured one and not a claim about any real Hall',

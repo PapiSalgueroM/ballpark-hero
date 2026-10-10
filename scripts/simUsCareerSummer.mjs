@@ -142,6 +142,27 @@
      at 8000. The next round that moves the NFL engine should expect this
      line to speak first, and the honest answers are a smaller lift from the
      deck's later cards or more careers again, never a wider bound.
+     THE NBA NEXT, with Round 1103 (2026-10-09, the tree with the NBA's new
+     stat line and awards, merged with Release AP). The NBA's Hall share, on
+     minus off, in points, all on GitHub runners:
+       this tree, 2000 a seed, default seed   +1.90 [0.29, 3.51]    red
+       this tree, 2000 a seed, SIM_SEED=7     +0.43 [-1.19, 2.05]   inside
+       this tree, 2000 a seed, SIM_SEED=11    +0.43 [-1.18, 2.05]   inside
+       this tree, 8000 a seed                 +1.30 [0.49, 2.11]    inside
+       Release AP's, 2000, default seed       +0.62 [-1.02, 2.25]   inside
+       Release AP's, 2000, SIM_SEED=7         +1.33 [-0.31, 2.98]   inside by 0.02
+       Release AP's, 8000 a seed              +1.20 [0.39, 2.02]    inside
+     So the lift is about 1.25 points on both trees and Round 1103 did not
+     move it. At 2000 a seed the interval is 1.62 points either way against a
+     bound of 3, so a run goes red whenever its estimate passes 1.38, a
+     tenth of a point over the lift itself: one run of five did and another
+     sat 0.02 inside, on two trees. The NBA
+     runs 8000 a seed by default now (BAL_DEFAULT below, the same cure, the
+     bound untouched): 0.89 points inside, about 46 minutes for that child
+     on a runner with one other heavy job beside it. Its median legacy at
+     8000 reads +3.6% [2.1, 5.5] here and +2.3% [0.8, 3.7] on Release AP's.
+     NOT CHANGED, and the next to speak: the MLB's Hall share at 2000 a seed
+     is +1.28 [-0.38, 2.95], 0.05 inside, on a tree no round has moved.
      6b on the summer loop: median career majors 0 in all four, a major
      ever won by 4.5, 16.9, 7.6 and 15.5 percent, Hall 15.1, 30.1, 32.0 and
      27.9 percent (floors: median 0, at most 25 percent, Hall at least 5).
@@ -644,9 +665,13 @@ const TOL = { peak: 1.0, legacyRel: 0.075, hofPts: 3, headlineRel: 0.15 };
 /* Careers a seed, by sport. The NFL runs four times the others since Release
    AP (2026-10-09): at 2000 its legacy interval is about plus or minus 5 points
    wide against a tolerance of 7.5, so a real lift near 4 percent came up red
-   on two runs of four (the header has the measurement). SIM_BALANCE_CAREERS
-   still sets one size for every sport. */
-const BAL_DEFAULT = { nfl: 8000 };
+   on two runs of four (the header has the measurement). The NBA does too
+   since Round 1103 (2026-10-09): at 2000 its Hall share interval is 1.62
+   points either way against a tolerance of 3, and a lift near 1.25 points
+   came up red on one run of five and 0.02 inside on another, on two trees
+   (the header has the measurement). SIM_BALANCE_CAREERS still sets one size
+   for every sport. */
+const BAL_DEFAULT = { nfl: 8000, nba: 8000 };
 const balCareers = slug => Number(process.env.SIM_BALANCE_CAREERS || BAL_DEFAULT[slug] || 2000);
 const BAL_SIZES = Object.keys(SPORTS).map(slug => `${slug} ${balCareers(slug)}`).join(', ');
 const BAL_SEEDS = 3;
