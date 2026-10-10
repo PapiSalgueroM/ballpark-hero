@@ -1,0 +1,12 @@
+1) the rate table, published 2026-08-21
+   8 currencies, euro pinned at 1
+2) every line the game can draw, run through the rewriter
+   510 distinct lines harvested, 155 of them mention money
+   euro path left all 510 lines byte identical
+   1134 amounts converted correctly, 2485 money free lines left alone
+3) 40 careers played twice, once in euros and once in yen
+   40 pairs compared on 9 fields each, 40 of them played 4 or more seasons, 0 differences
+4) the screens are wired to it
+   26 money() call sites, both central formatters converting, the rate date on screen
+
+simSoccerCurrency: green. The money reads in your currency and the game underneath it never noticed.

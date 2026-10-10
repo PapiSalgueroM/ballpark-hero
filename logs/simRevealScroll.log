@@ -1,0 +1,1 @@
+HEAD RED exit 1: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/claude/.npm-global/lib/node_modules/playwright/index.js' imported from /home/runner/work/ballp || BASE exit 1: Node.js v24.21.0

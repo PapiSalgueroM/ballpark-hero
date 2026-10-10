@@ -1,0 +1,33 @@
+
+Sampled 30419 qualified campaigns across 15 player/club combinations.
+1) The format is read from the competition's history, not retyped
+   two legs per tie, one for the final, no round of 16 before 2003, and 1991-92 goes groups straight to the final
+2) The outcome is derived from the score, and a level tie is really settled
+   52317 ties, 0 disagreements, 9106 level on aggregate (17.4%) settled as {"aggregate":43211,"penalties":5191,"extraTime":3915}
+3) Balance held: the advance rate matches the model this replaced
+   36 cells over 300 campaigns: signed drift -0.42, mean absolute 1.15
+   worst single cell (not gated, a max is noise): Ajax 85 SF 38.0% against 42.0%
+4) Balance held: knockout goals and the top scorer rate have not moved
+   mean 1.04 knockout goals a campaign that reached the knockouts, top scorer 0.2% of the time
+5) Away goals only in the seasons that had them
+   none in 2026, 228 in 1500 campaigns of 2015-16
+   50238 two legged ties: every second leg carries an aggregate that adds its legs up, and no first leg carries one
+7) Extra time is read by the season's own rule: away goals count in it only in the seasons that had them
+   2015-16: 29682 ties, 2281 to extra time, 116 settled there on an away goal, 1198 to penalties; 3085 settled on away goals at 90, 0 of those played extra time
+   1995-96: 28486 ties, 2451 to extra time, 87 settled there on an away goal, 1317 to penalties; 2714 settled on away goals at 90, 0 of those played extra time
+   2026-27: 34119 ties, 6108 to extra time, 0 settled there on an away goal, 3455 to penalties; 0 settled on away goals at 90, 0 of those played extra time
+8) The first stage the season really had is played, and the cup is won as often as before
+   1990-91 european-cup: 0+5 games to the final in 225 runs, 0 of 589 out in the first stage
+   1991-92 first-groups: 6+1 games to the final in 595 runs, 56 of 651 out in the first stage
+   1992-93 renamed: 6+1 games to the final in 591 runs, 59 of 650 out in the first stage
+   1993-94 one-leg-semis: 6+2 games to the final in 379 runs, 60 of 654 out in the first stage
+   1994-95 four-groups: 6+5 games to the final in 233 runs, 64 of 658 out in the first stage
+   1997-98 six-groups: 6+5 games to the final in 191 runs, 72 of 650 out in the first stage
+   1999-2000 two-group-stages: 12+5 games to the final in 249 runs, 58 of 665 out in the first stage
+   2003-04 eight-groups-r16: 6+7 games to the final in 133 runs, 58 of 654 out in the first stage
+   2024-25 league-phase: 8+7 games to the final in 114 runs, 4 of 650 out in the first stage
+   Real Madrid: title 5.990% (main 5.92 +/- 0.264), knockouts 85.26% (main 85.01), top scorer 0.25% of knockout runs (main 0.43)
+   Ajax: title 3.418% (main 3.385 +/- 0.202), knockouts 85.38% (main 85.03), top scorer 0.21% of knockout runs (main 0.31)
+   Sevilla: title 0.678% (main 0.656 +/- 0.090), knockouts 34.90% (main 34.92), top scorer 0.12% of knockout runs (main 0.22)
+
+simSoccerCareerUcl: all green

@@ -1,0 +1,10 @@
+1) Pool lint (35 texts)
+2) pickPhoneTexts filters
+3) initCareer seeds the phone
+4) 25 careers, replying at random every season
+   801 texts answered across 25 careers, crashes=0
+5) Exact effect application
+6) Season drift toward 50 with coupling
+7) Old saves without phone fields
+
+ALL PHONE CHECKS PASSED

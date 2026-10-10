@@ -1,0 +1,17 @@
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simInjuryArc exit=0 88s | simInjuryArc: green. Three roads back, and every one of them costs something real.
+simInternational exit=0 29s | ALL INTERNATIONAL CHECKS PASSED
+simManagerCareer exit=0 15s | ALL MANAGER CAREER CHECKS PASSED
+simManagerEpilogue exit=0 1s | simManagerEpilogue: green. The dugout season is a table, and the table cannot lie.
+simClubManagerNewLeagues exit=0 137s | simClubManagerNewLeagues: all checks passed
+simPhone exit=0 6s | ALL PHONE CHECKS PASSED
+simPhone2 exit=1 345s | HEAD RED exit 1:    mean relationship drop after four ignored seasons: 28.0 points over 90 threads || BASE exit 1: 1 FAILURES
+simPotential exit=0 9s | ALL POTENTIAL CHECKS PASSED
+simRevealScroll exit=1 1s | HEAD RED exit 1: Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/home/claude/.npm-global/lib/node_modules/playwright/index.js' imported from /home/runner/work/ballp ||
+simScoreShown exit=0 33s | simScoreShown: all sections green
+simSoccerCareerUcl exit=0 8s | simSoccerCareerUcl: all green
+simSoccerCurrency exit=0 8s | simSoccerCurrency: green. The money reads in your currency and the game underneath it never noticed.
+simStartingXi exit=0 0s | simStartingXi: green. He can see the eleven, and not one man on it is somebody real.
+simTraining exit=0 3s | ALL TRAINING CHECKS PASSED
+simMoney exit=1 492s | HEAD RED exit 1:    spends    peak 80.97  apps 595  morale 20.2  popularity 56.8  legacy credit 37.2  wealth 2.8m || BASE exit 1: 1 FAILURES
+simCreation exit=1 913s | HEAD RED exit 1:    old save played 24 pro seasons, peaked 83, retired=true, verdict SOLID PRO, frame repaired to 180cm || BASE exit 1: 1 FAILURES

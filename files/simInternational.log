@@ -1,0 +1,46 @@
+1) Every tournament crowns exactly one winner
+   432 tournaments played, 432 crowned a champion
+   73 of them the player was not in at all, 73 still crowned a champion
+   0 tournaments found in the four off years (want 0)
+2) The bracket holds up
+   144 brackets, 2976 ties, 22% went to penalties
+   field sizes: World Cup 48, Euros 24, Copa América 16, Asian Cup 24, Gold Cup 16, Nations Cup 8, AFCON 24
+3) Strong nations win more than weak ones
+   400 World Cups: 37 different champions
+   most successful: Spain 14%, Argentina 14%, England 11%, France 9%, Morocco 6%
+   average champion strength 84.5 against a world average of 64.1
+   Spain (rank 1) won 14% of World Cups, Vietnam (rank 99) won 0%
+4) Missing out is possible, and it is not a coin flip
+   Spain        UEFA      rank   1  qualified 100%
+   England      UEFA      rank   4  qualified 99%
+   Japan        AFC       rank  17  qualified 89%
+   Nigeria      CAF       rank  26  qualified 71%
+   Scotland     UEFA      rank  42  qualified 41%
+   New Zealand  OFC       rank  86  qualified 39%
+   Vietnam      AFC       rank  99  qualified 5%
+   squad selection, by player rating (good form, age 26):
+     Spain     68ovr 0%  74ovr 0%  78ovr 35%  82ovr 100%  88ovr 100%
+     Japan     68ovr 22%  74ovr 100%  78ovr 100%  82ovr 100%  88ovr 100%
+     Vietnam   68ovr 100%  74ovr 100%  78ovr 100%  82ovr 100%  88ovr 100%
+   same 80 rated striker: after a great season 100%, after a bad one 0%
+   the same striker at 36 years old: 0%
+5) Full careers, and the cabinet agrees with the brackets
+   90/90 careers finished, 722 tournaments lived through
+   526 of those summers the player was in the picture for
+   of those: 10% country did not qualify, 22% left out of the squad, 68% played
+   11% of the tournaments the player played in, he won
+   10 careers ended with a World Cup, 28 with a continental title, average 83 caps
+   biggest save seen: 93 KB
+6) An international career against a paired do nothing baseline
+   54 paired careers
+   international regular: 77 caps, 0.57 international trophies, 14.4 awards, legacy 59.3
+   walked away:           1 caps, 0.00 international trophies, 13.7 awards, legacy 54.4
+   international awards won: 1.09 against 0.00
+   legacy scored for 54 and 54 careers
+   the International line of the legacy breakdown: 5.1 against 0.0
+   3 World Cup winners score 14.0 on that line, the other 41 capped players score 5.5
+   54/54 of the walk-away careers still watched the tournaments happen
+7) Copy check
+   4 files checked, 0 external hosts referenced
+
+ALL INTERNATIONAL CHECKS PASSED

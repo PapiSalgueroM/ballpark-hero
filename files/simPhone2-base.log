@@ -1,0 +1,28 @@
+1) Catalog lint: 49 conversations, 17 contacts
+   113 beats, 280 preset replies, 41/49 conversations run to two beats or more
+2) Replying produces another message, and it is the right one
+   340 replies across 120 fresh careers, 340/340 answers matched the preset picked
+   116/120 careers reached a second exchange, 104/120 reached a third, mean depth 2.83
+3) Contacts you can open yourself
+   829 conversations opened by the player across 16 different contacts
+4) Silence cools people, and the copy changes
+   mean relationship drop after four ignored seasons: 28.0 points over 90 threads
+   escalation stages observed: done, seeit, fame
+   apologies that repaired the relationship: 90/90
+5) 320 paired careers: reply to people against never opening the phone
+   replies warmly         peak 80.14  goals 88.0  morale 99.6  worth 30.5m  standing 73.6  taps/career 117.7
+   replies at random      peak 79.94  goals 82.0  morale 98.4  worth 25.7m  standing 68.6  taps/career 118.1
+   never opens phone      peak 78.72  goals 63.9  morale 2.2  worth 7.6m  standing 22.0  taps/career 0.0
+   peak overall gap 1.42 (standard error 0.35, 4.0 sigma)
+   career goals gap 24.1 (standard error 4.7, 5.1 sigma)
+   random replying sits at peak 79.94 against 78.72 silent and 80.14 warm
+6) The sports feed against the world model that produced it
+   840 feed items across 70 careers, 235 of them transfers, 187 different players moved
+7) Save size over a full career
+   whole save: median 65.7 KB, biggest 88.0 KB
+   the phone's share: mean 7.3 KB, biggest 8.2 KB
+  FAIL: biggest save is 88.0 KB
+8) Pre Round 130 saves open and keep working
+   30 stripped saves opened cold, read cleanly and ticked into the new system
+
+1 FAILURES

@@ -1,0 +1,107 @@
+
+1) Rendered: src/test/scoreShown.test.tsx, the real pages with the recorder mocked
+   SHOWN soccer-career start 99: recorded [84] shown "LEGEND: 84/100" (peak 99, 14 Ballon d'Or, 2 UCL, 2 WC, 9 leagues)
+   SHOWN soccer-career same record from 55: recorded [100] shown "GOAT: 100/100"
+   SHOWN soccer-career after the manager road: recorded [56] shown "JOURNEYMAN: 56/100" (ceremony legacy 56)
+   SHOWN soccer-career after the pundit road: recorded [67] shown "SOLID PRO: 67/100" (ceremony legacy 56); studio tile "+6" (Legacy Bonus (max +6)), legacy card Punditry 6
+   SHOWN soccer-career after the owner road: recorded [56] shown "JOURNEYMAN: 56/100" (ceremony legacy 56)
+   SHOWN soccer-career youth retirement then the studio: recorded [0] shown "JOURNEYMAN: 0/100"; studio tile "0" (No legacy bonus, no senior career), legacy card Punditry 0
+   SHOWN footle won in 1: recorded [700] stats panel 700, rows 700 500-600 300-400 100-200 0, landing in 700
+   SHOWN footle won in 3: recorded [500] stats panel 500, rows 700 500-600 300-400 100-200 0, landing in 500-600
+   SHOWN player-bingo first line: recorded [100] shown "1/12 lines · 100 pts"
+   SHOWN player-bingo blackout: recorded [1700] shown "12/12 lines · 1700 pts"
+   SHOWN rarity-round Rarity perfect run: recorded [500] headline "Goalless! A perfect 500 of 500" Obscurity "500/500" share "500/500 obscurity" fame points "0"
+   SHOWN rarity-round Rarity mixed run: recorded [300] headline "You scored 300 of 500" Obscurity "300/500" share "300/500 obscurity" fame points "200"
+   SHOWN rarity-round Crowd Says run: 1 record(s), score [null], shown "489", note on screen true
+   SHOWN fantasy-draft: recorded [75] verdict "Season score: 75/100" from 85 season points (loss); share "Season score 75/100 (85 pts vs the AI's 88)", text "The AI outdrafted me on Fantasy Draft at DoUKnowBall. Season score 75/100, 85 pts to the AI's 88. Can you build a better squad? douknowball.com/fantasy-draft"
+   SHOWN quiz-board all wrong: recorded [0] final card "$0" shared $0
+   SHOWN quiz-board four right: recorded [2600] final card "$2600" shared $2600
+   SHOWN nfl-career win at clue 1: recorded [6] share "6 pts (1 clues)"
+   INFO nfl-career loss (Round 645 owns this record): recorded [0] share "0 pts"
+  ok   soccer-career: records the legacy score the retirement screen shows, and a 99 start records less than the same record climbed from 55
+  ok   soccer-career: ending a manager career records the legacy score the final screen shows
+  ok   soccer-career: ending a pundit career records the legacy score the final screen shows
+  ok   soccer-career: ending an owner career records the legacy score the final screen shows
+  ok   soccer-career: a career retired in its first youth year gets nothing from the studio, and the tile says so
+  ok   footle: a daily won in 1 records the score its stats panel places you with, on rows of the recorded scale
+  ok   footle: a daily won in 3 records the score its stats panel places you with, on rows of the recorded scale
+  ok   player-bingo: a banked first line records the points the result screen shows
+  ok   player-bingo: a blackout records the full board, 1700
+  ok   rarity-round: a perfect Rarity run records 500, and the headline, the stat and the share all say it
+  ok   rarity-round: a mixed Rarity run records what every line shows, and Crowd Says records a play with no score and says so
+  ok   fantasy-draft: the verdict card and the share carry the season score the draft records, and the share tells the result as it was
+  ok   quiz-board: a board cleared below zero shows, shares and records the same bank, $0
+  ok   quiz-board: a winning board shows, shares and records the same bank
+  ok   nfl-career: a daily win shares the points it records
+  ok   nfl-career: a daily loss, reported for Round 645
+   16 of 16 rendered cases passed, vitest exit 0, unhandled errors none
+
+2) Soccer Career over seeded careers: the start, and the tail after retirement
+   the 99 start flag, same record with and without it, over 40 careers: mean -16.0 (bound: at or below -13)
+  ok   typing 99 costs 16.0 points on the same career record
+   the same record from 99 against from 55, over 40 careers: mean -20.7 (bound: at or below -12)
+  ok   a 99 start records 20.7 points less than the same career record climbed from 55
+   natural play from 55 (80 ceiling): old record 11.5 points a career (0 of 40 at the cap), new record 54.3 (0 at the cap)
+   natural play from 99: old record 84.1 points a career (21 of 40 at the cap), new record 67.3 (0 at the cap)
+   retired in the first youth year, then 30 bold predictions: 20 careers, prediction bonus earned 30.4 on average, recorded 0
+  ok   a career with no senior season records 0 however well the studio goes
+   a pundit tail of 30 bold predictions on 40 played careers: mean +11.0 (limit: the flat 5 plus the cap, 11)
+  ok   punditry adds 11.0 on average, inside 11
+   an owner tail of 20 seasons on 40 played careers: mean +6.0 (limit: the cap, 6)
+  ok   owning a club adds 6.0 on average, inside 6
+
+3) The caps the migration sets, against the ceilings the code reaches
+  ok   soccer-career: cap 100 equals a career that wins everything, climbed from 55, 100
+  ok   player-bingo: cap 1700 equals the blackout shown in section 1, 1700
+  ok   rarity-round: cap 500 equals the perfect Rarity run shown in section 1, 500
+
+4) The migration: its shape read off the SQL, then the rescale and the totals modelled on live and synthetic rows
+  ok   the P token appears exactly once in the file
+  ok   P is one literal on the v_p line
+  ok   P must be an ISO timestamp with an offset, so the placeholder, now, a bare date and a missing offset are all refused
+  ok   a P in the future or before the morning recompute is refused
+  ok   M, the morning recompute, is the measured 2026-09-19 06:20 UTC
+  ok   part 1 runs once: skipped once done, refused if the cap moved without it
+  ok   part 1 counts rows before P that break the multiple of 50 invariant, and says so
+  ok   part 1 refuses to run if any soccer account no longer holds the morning rule plus raw saves
+  ok   part 1 backs every table up before it changes one
+  ok   part 1 backs up game_completions
+  ok   part 1 backs up user_game_scores
+  ok   part 1 backs up user_scores
+  ok   part 1 backs up game_score_caps
+  ok   the three caps are backed up whole: game, max_score, note, updated_at
+  ok   the caps are backed up before the upsert
+  ok   game_completions: the backup takes the same rows part 1 divides
+  ok   user_game_scores: the backup takes the same rows part 1 divides
+  ok   game_completions: before P only the old formula's rows (multiples of 50) are divided
+  ok   user_game_scores: before P only the old formula's rows (multiples of 50) are divided
+  ok   part 1 stores the md5 of record_auth_completion's definition
+  ok   part 2 refuses to run, before any write, if record_auth_completion changed since part 1
+  ok   the user_game_scores snapshot: old tab rows after P above 100
+  ok   the game_completions snapshot: the same rows
+  ok   part 2 delta: old minus new for each snapshotted old tab play
+  ok   the game_completions backup reads the snapshot
+  ok   the user_game_scores backup reads the snapshot
+  ok   game_completions is divided by snapshot id
+  ok   user_game_scores is divided by snapshot id
+  ok   no part 2 update reads the live table instead of its snapshot
+  ok   user_best_scores is never divided
+  ok   bests are rebuilt as each player's max(score), from one snapshot of the rows that differ
+  ok   a best raised by a save after the snapshot is left for the next rerun
+  ok   no total is recomputed whole
+  ok   part 1 delta, days before M: the morning rule's soccer line at cap 1000 minus the same after the rescale at cap 100
+  ok   part 1 delta, plays between M and P: old minus new for each play it divides
+  ok   part 1 subtracts its delta
+  ok   part 2 subtracts its delta
+  ok   part 2 reports the rows since P at exactly 50 or 100 and how long ago P was
+  ok   part 2 backs a total up before adjusting it
+  ok   part 2 backs a best up before rebuilding it
+  ok   game_completions: 19,738 live rows, 1617290.0 row points before, 1617290.0 after, worst row 0.000
+  ok   user_game_scores: 5,532 live rows, 187155.0 row points before, 187155.0 after, worst row 0.000
+   live, read only 2026-09-19 evening (queries in the migration and the report): 9,350 soccer-career player days before P = now(), 826,185 points before and after, 0 days changed; totals: 118 accounts without soccer move by 0, 427 of 427 soccer accounts land exactly on the rescaled rule
+  ok   the transform on every integer 0 to 3000: worst 0.500 points (at 5), exact on every multiple of 10, order kept
+  ok   first apply [100,85,5,0,84,84,50,80], a second apply changes nothing
+  ok   a best rebuilt from the plays keeps the real 84, where dividing the stored 800 would give 80
+  ok   totals on 400 seeded accounts (249 with soccer plays on both sides of M): 0 land off the rescaled rule after the delta, 0 without soccer plays moved
+
+simScoreShown: all sections green
