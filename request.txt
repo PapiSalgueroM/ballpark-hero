@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000 --hookTimeout=120000
+vitest-neighbours: node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=120000
+bundle: node_modules/.bin/esbuild src/lib/cmAgeRead.ts --bundle --format=esm --platform=browser --outfile=/tmp/door.mjs && node .rc/x/doorProbe.mjs /tmp/door.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+gen-freeagents: node scripts/genClubManagerFreeAgents.mjs --check
+gen-russia: node scripts/genClubManagerGathered.mjs russia2026 --check
+gen-aleague: node scripts/genClubManagerALeague.mjs && git diff --exit-code -- src/data/clubManagerALeague2026.ts && echo "A-League file unchanged by a fresh generation"
+simFreeAgents: node scripts/simFreeAgents.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+gen-basis-instep: node scripts/genCmAgesBasis2026.mjs --from HEAD
+eslint-new: node_modules/.bin/eslint src/lib/cmAgeRead.ts src/test/cmValueCurve.test.ts scripts/lib/cmValueCurve.mjs scripts/lib/cmAges.mjs scripts/genCmAgesBasis2026.mjs
+dashes: node .rc/x/fxDashes.mjs
+diff-main: git fetch -q origin main && git diff --name-status origin/main HEAD^ | cat && echo "files changed against origin/main $(git rev-parse --short origin/main) $(git diff --name-only origin/main HEAD^ | wc -l)"

@@ -1,0 +1,11 @@
+A	docs/audits/ROUND-1214-NOTES.md
+A	scripts/data/cmAgesBasis2026.json
+A	scripts/data/cmBirthDates2026.json
+A	scripts/data/finalTables2025.json
+A	scripts/genCmAgesBasis2026.mjs
+A	scripts/lib/cmAges.mjs
+M	scripts/lib/cmValueCurve.mjs
+A	src/lib/cmAgeRead.ts
+A	src/test/cmValueCurve.test.ts
+A	src/test/fixtures/cmValueCurve.json
+files changed against origin/main 09df145ab 10

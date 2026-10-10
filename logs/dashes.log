@@ -1,0 +1,2 @@
+files against main (09df145a): docs/audits/ROUND-1214-NOTES.md, scripts/data/cmAgesBasis2026.json, scripts/data/cmBirthDates2026.json, scripts/data/finalTables2025.json, scripts/genCmAgesBasis2026.mjs, scripts/lib/cmAges.mjs, scripts/lib/cmValueCurve.mjs, src/lib/cmAgeRead.ts, src/test/cmValueCurve.test.ts, src/test/fixtures/cmValueCurve.json
+fxDashes: 10 files read, 0 lines with a dash, 16 commits, 0 commit message lines with a dash, 0 subjects off shape
