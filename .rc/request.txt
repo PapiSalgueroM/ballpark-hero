@@ -1,0 +1,7 @@
+law-compare: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+lay-print: US_SEASON_DIGEST=print US_SEASON_DIGEST_RECEIPT=lay US_SEASON_DIGEST_COMMIT=5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 US_SEASON_DIGEST_OUT=$RC_OUT/usSeasonLayDigest.json node scripts/simUsSeasonCentre.mjs
+default: node scripts/simUsSeasonCentre.mjs
+base-law: git worktree add -q /tmp/base 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+lawdrift: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
