@@ -1,0 +1,39 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+cmvar-all: CM_VAR_ARTIFACTS=/tmp/all CM_VAR_CONTROL=all node scripts/simCmVar.mjs
+ledger: node scripts/simCmVarLedger.mjs
+l-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+l-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+l-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+l-missing: CM_VAR_LEDGER_CONTROL=missing node scripts/simCmVarLedger.mjs
+l-extra: CM_VAR_LEDGER_CONTROL=extra node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+l-highest: CM_VAR_LEDGER_CONTROL=highest node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+livemotion: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+save10: r=0; for i in 1 2 3 4 5 6 7 8 9 10; do node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/save-$i.log 2>&1 || r=$((r+1)); done; echo "clubManagerSave alone, reviews off: $r of 10 runs red"; exit $r
+save10lit: r=0; for i in 1 2 3 4 5 6 7 8 9 10; do CM_SAVE_VAR=on node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/lit-$i.log 2>&1 || r=$((r+1)); done; echo "clubManagerSave alone, reviews ON for this file: $r of 10 runs red"; exit $r
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+appeal-head: node scripts/simManagerAppealIsolation.mjs

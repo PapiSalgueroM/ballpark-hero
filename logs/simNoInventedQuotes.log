@@ -1,0 +1,12 @@
+3) Self test: the detector still catches what Round 137 removed
+   10 of 10 known bad lines flagged
+   7 of 7 defensible lines left alone
+1) Runtime: every line real seasons can put on screen
+   harvested 1478 distinct lines across 8 clubs
+   0 of them put words in a real player's mouth
+2) Static: hand written copy in src
+   scanned 1704 files, 0 offending lines
+   flags: a real player speaking in the first person, in a page file
+   flags: the same line in what used to be the exempt directory
+
+simNoInventedQuotes: green. No real player is quoted or accused anywhere.
