@@ -1,0 +1,13 @@
+#!serial
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+numfmt: node scripts/simNumberFormatting.mjs
+storage: node scripts/simStorageWrites.mjs
+legal: node scripts/simLegalPages.mjs
+live: node scripts/simLiveScores.mjs
+agree: node scripts/simSeasonCentreAgreement.mjs
+neutral: node scripts/simSeasonCentreNeutral.mjs
+parity: node scripts/simUsBoardParity.mjs
+hall: node scripts/simCareerHall.mjs
+vitest-more: node_modules/.bin/vitest run src/test/usBoardFixture.test.tsx src/test/usCareerTruthDigest.test.ts src/test/seasonCentreWords.test.tsx src/test/seasonCentreSlots.test.tsx --testTimeout=300000 --hookTimeout=120000
