@@ -17,7 +17,7 @@ function run(kind,mode,source){
 try{
  fs.mkdirSync(OUT,{recursive:true});
  for(const spec of [
-  {id:'page-double-callback',kind:'page',file:page,total:10,failed:['executes the real agent mutation once for two captured same-render page callbacks','rejects a never-used stale eligible callback after the actual next season without invoking the agent mutation'],edits:[{from:'agentReviewAttempt.current === career || ',to:''},{from:'prev === career ? changeCareerAgent(prev, agentId) : prev',to:'changeCareerAgent(prev, agentId)'}]},
+  {id:'page-double-callback',kind:'page',file:page,total:10,failed:['executes the real agent mutation once for two captured same-render page callbacks','does not consume the captured-state guard for an invalid or current-agent selection','rejects a never-used stale eligible callback after the actual next season without invoking the agent mutation'],edits:[{from:'agentReviewAttempt.current === career || ',to:''},{from:'prev === career ? changeCareerAgent(prev, agentId) : prev',to:'changeCareerAgent(prev, agentId)'}]},
   {id:'component-double-confirm',kind:'component',file:component,total:28,failed:['confirms once for two captured rapid confirmation clicks through the real component guard'],edits:[{from:'submitted.current || ',to:''}]},
  ]){
   const source=fs.readFileSync(spec.file,'utf8').replaceAll('\r\n','\n'),baseline=run(spec.kind,'baseline',source),healthy=baseline.result.testResults.flatMap(t=>t.assertionResults);assert.equal(baseline.exit,0);assert.equal(baseline.result.success,true);assert.equal(baseline.result.numPendingTests,0);assert.equal(healthy.length,spec.total);assert(healthy.every(t=>t.status==='passed'));
