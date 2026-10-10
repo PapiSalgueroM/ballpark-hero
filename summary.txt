@@ -1,0 +1,8 @@
+lawdrift exit=1 16s | simUsSeasonCentre digest compare: 11 digests, 5 moved (control lawdrift)
+compare-all exit=0 17s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+vitest-law exit=0 5s |    Duration  4.42s (transform 1.98s, setup 288ms, collect 4.16s, tests 3.80s, environment 1.91s, prepare 712ms)
+norival exit=0 10s | No rival product names found. 0 findings.
+default exit=0 17s | simUsSeasonCentre: 98 checks, 0 failed
+livescores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+tsc exit=0 47s | 
+anchors exit=0 23s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
