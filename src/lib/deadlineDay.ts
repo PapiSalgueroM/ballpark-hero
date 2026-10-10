@@ -342,6 +342,10 @@ function stickerOf(mp: MarketPlayer): number {
 export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
   return onStaticWorld(() => {
     const state0 = withSeed(mixSeed(setup.seed, SEED_START), () => startCareer(setup.club));
+    /* Release AT: a daily never carries the real fixture list (see startOnStaticWorld in
+       managerHotSeat.ts). Deadline Day plays no match, so the key was inert here; it comes off so the
+       day's state is the shape it was before Round 1184. scripts/simDailyDeals.mjs holds it. */
+    delete state0.realLeagueFixtures;
     const rng = mulberry32(mixSeed(setup.seed, SEED_BRIEF));
     const count = rng() < 0.5 ? 3 : 4;
     const market = buildMarket(state0);

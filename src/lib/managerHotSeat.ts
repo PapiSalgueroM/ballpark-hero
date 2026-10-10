@@ -473,6 +473,15 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
      onStaticWorld wrapper is what hands a Club Manager save's registrations
      back once this returns. */
   let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club));
+  /* Release AT: a hot seat day never plays the real fixture list. Round 1184 binds the real 2026/27
+     Premier League list to any new original Premier League career, and startCareer above is one. Left on,
+     the weeks this function plays to find the crisis were another season: five of 120 daily dates dealt a
+     different job (Nottingham Forest on 2026-10-27 went from 6th after 11 games to 12th after 6), and a
+     free play run in flight was rebuilt against other opponents by replayHotSeat. The key comes off
+     before the first week is played, so every date deals what it dealt before Round 1184, and the
+     career handed to Club Manager (handoverState) says generated fixtures, which is how the day was
+     played. scripts/simDailyDeals.mjs holds the deals and its bind control puts this line back out. */
+  delete s.realLeagueFixtures;
   const rounds = leagueRounds(s);
   const lastWeek = Math.max(HOT_SEAT_TAKEOVER_MIN, Math.min(HOT_SEAT_TAKEOVER_MAX, rounds - HOT_SEAT_LEASH - 1));
   let best: { state: CareerState; formPts: number; week: number } | null = null;
