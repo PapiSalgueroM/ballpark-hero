@@ -1,0 +1,11 @@
+simUsSeasonCentre exit=0 21s | simUsSeasonCentre: 98 checks, 0 failed
+digest-print exit=0 18s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/digest-base.json
+vitest-us exit=0 43s |    Duration  42.79s (transform 4.53s, setup 644ms, collect 10.44s, tests 47.47s, environment 4.70s, prepare 1.24s)
+tsc exit=0 56s | 
+simMlbCareer exit=0 13s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simUsSeasonLedger exit=0 3s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simUsPostseason exit=0 11s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+simUsBoardParity exit=0 35s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.

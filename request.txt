@@ -1,0 +1,12 @@
+# Round 1212 step 0a: the base (60188732 = release-au-int 20f2f475 + Round 1226 + Round 1300), measured before any edit
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonNfl.test.ts src/test/usSeasonSlate.test.ts src/test/usPlayoffs.test.ts src/test/usPostseasonFormat.test.ts src/test/seasonCentreWords.test.tsx src/test/seasonCore.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=300000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+digest-print: US_SEASON_DIGEST=print US_SEASON_DIGEST_OUT=$RC_OUT/digest-base.json node scripts/simUsSeasonCentre.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simLiveScores: node scripts/simLiveScores.mjs
