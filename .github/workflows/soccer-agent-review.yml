@@ -1,0 +1,124 @@
+name: Soccer Agent Review
+on:
+  pull_request:
+    paths:
+      - .github/workflows/soccer-agent-review.yml
+      - src/lib/soccerAgentReview*
+      - src/lib/soccerCareerEngine.ts
+      - src/pages/SoccerCareer.tsx
+      - src/components/soccer-career/AgentReviewCard.tsx
+      - src/components/soccer-career/SoccerOfferReview.tsx
+      - src/components/CookieConsent.tsx
+      - src/test/soccer*AgentReview*
+      - scripts/*SoccerAgentReview*.mjs
+      - src/lib/soccerCareerLife.ts
+      - src/lib/careerIdentity.ts
+      - scripts/qa/*soccerAgentReview*.mjs
+      - scripts/qa/*SoccerAgentReview*.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: soccer-agent-review-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      FREE_KICK_FONT_CACHE: soccer-agent-review-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Remote dependencies and font receipts
+        run: |
+          mkdir -p soccer-agent-review-artifacts
+          git rev-parse HEAD > soccer-agent-review-artifacts/source-head.txt
+          git rev-parse "HEAD^{tree}" > soccer-agent-review-artifacts/source-tree.txt
+          npm ci
+          node scripts/qa/soccerAgentReviewDependencies.mjs before
+          npm install --no-save playwright
+          node scripts/qa/soccerAgentReviewDependencies.mjs after
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee soccer-agent-review-artifacts/fonts.log
+      - name: Actual app types and production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-agent-review-artifacts/types.log
+          npm run build 2>&1 | tee soccer-agent-review-artifacts/build.log
+      - name: Actual focused helper page and UI tests
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerAgentReview.test.ts src/test/soccerAgentReviewUi.test.tsx src/test/soccerAgentReviewPage.test.tsx src/test/soccerCareerSaveRetry.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=soccer-agent-review-artifacts/units.json 2>&1 | tee soccer-agent-review-artifacts/units.log
+          node scripts/qa/checkSoccerAgentReview.mjs units
+      - name: Actual outcomes and seven effective copied source controls
+        id: outcomes
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReview.mjs 2>&1 | tee soccer-agent-review-artifacts/outcomes.log
+          node scripts/qa/checkSoccerAgentReview.mjs outcomes
+      - name: Actual captured page and component guard faults
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerAgentReviewPageControl.mjs 2>&1 | tee soccer-agent-review-artifacts/page-control.log
+          node scripts/qa/checkSoccerAgentReview.mjs page-control
+      - name: Actual production agent choice and future deal journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.outcomes.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerAgentReview.mjs 2>&1 | tee soccer-agent-review-artifacts/native.log
+          node scripts/qa/checkSoccerAgentReview.mjs native
+      - name: Early focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-agent-review-early-${{ github.run_id }}
+          path: soccer-agent-review-artifacts/
+          retention-days: 5
+      - name: Related Soccer source and save regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerDomesticCup simCareerDerbies simCareerSeasonRatings simCareerPositionRatings simCareerRecordedStats simCareerStory simCareerLifeCooldowns simCareerLife simSeasonCentreAgreement simSeasonCentreNeutral simSeasonCentreTable simSoccerSeasonCompetitions simNoInventedQuotes simCareerRivalryEvents simCareerHub simSoccerOfferReview simClubVerdict simLoanSpell simSoccerContractMoves simInternational simNationalPools; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-agent-review-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "soccer-agent-review-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All fifteen built readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-agent-review-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "soccer-agent-review-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Exact tested source held
+        if: ${{ !cancelled() }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$(cat soccer-agent-review-artifacts/source-head.txt)"
+          test "$(git rev-parse "HEAD^{tree}")" = "$(cat soccer-agent-review-artifacts/source-tree.txt)"
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json 2>&1 | tee soccer-agent-review-artifacts/source-held.log
+      - name: Final focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-agent-review-final-${{ github.run_id }}
+          path: soccer-agent-review-artifacts/
+          retention-days: 5

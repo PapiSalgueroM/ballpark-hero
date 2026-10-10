@@ -40,7 +40,7 @@ export function SoccerOfferReview({ club, review, onAccept }: {
           Review contract
         </Button>
       </DialogTrigger>
-      <DialogContent data-soccer-offer-review className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 rounded-xl p-4 [&>button:last-child]:h-11 [&>button:last-child]:w-11"
+      <DialogContent data-soccer-offer-review className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 rounded-xl p-4 [&>button:last-child]:h-11 [&>button:last-child]:w-11 [&>button:last-child]:opacity-100"
         onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
         onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
         <DialogTitle ref={heading} tabIndex={-1} className="pr-12 text-base">Review contract</DialogTitle>
