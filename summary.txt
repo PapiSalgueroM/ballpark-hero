@@ -1,0 +1,3 @@
+branch-practice995 exit=1 5s | Node.js v24.21.0
+attr-practice995 exit=0 5s | Footle practice: 3 modes completed, every expected case executed and exact controls verified.
+clean-practice995 exit=0 0s | test file back at head
