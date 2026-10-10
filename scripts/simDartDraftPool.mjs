@@ -45,6 +45,10 @@ import './lib/seedRandom.mjs';
      DART_POOL_CONTROL=pagemystery     the page copy stops handing the mystery zone its floor
      DART_POOL_CONTROL=machinehalf     the map copy lets The Machine draw from the top half at a slot with no cap of forty
      DART_POOL_CONTROL=lasttile        every hit in the after arm offers only its last tile: the grade check must see it
+     DART_POOL_CONTROL=nobest3         the map copy keeps no best three in a gold zone: all eight tiles are drawn
+     DART_POOL_CONTROL=fixed8          the map copy draws nothing in a gold zone: the old fixed eight
+     DART_POOL_CONTROL=impure          the map copy draws a gold zone from a counter of its own, not from the seeded stream
+     DART_POOL_CONTROL=anyslot         the map copy stops checking the position in a gold zone
 */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -53,7 +57,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.DART_POOL_CONTROL || '';
-const CONTROLS = ['pool900', 'nofloor', 'nobest', 'onepage', 'pagefloor', 'nomysteryfloor', 'pagemystery', 'machinehalf', 'lasttile'];
+const CONTROLS = ['pool900', 'nofloor', 'nobest', 'onepage', 'pagefloor', 'nomysteryfloor', 'pagemystery', 'machinehalf', 'lasttile', 'nobest3', 'fixed8', 'impure', 'anyslot'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`DART_POOL_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -162,6 +166,21 @@ if (CONTROL === 'machinehalf') {
   fs.writeFileSync(mapEntry, changed);
   console.log('NEGATIVE CONTROL ON: the map copy lets The Machine draw from the top half at a slot, with no cap of forty');
 }
+/* Release AT: the four controls of section 2, each one edit on a copy of the map. */
+const GOLD_CONTROLS = {
+  nobest3: ['const picks = eligible.slice(0, 3);', 'const picks = eligible.slice(0, 0);', 'a gold zone keeps no best three: all eight tiles are drawn'],
+  fixed8: ['const index = Math.floor(Math.random() * remaining.length);', 'const index = 0;', 'a gold zone draws nothing: the old fixed eight'],
+  impure: ['const index = Math.floor(Math.random() * remaining.length);', 'const index = ((globalThis as any).__goldDraws = ((globalThis as any).__goldDraws ?? 0) + 1) % remaining.length;', 'a gold zone draws from a counter of its own, not from the seeded stream'],
+  anyslot: ['!fitsSlot(player, slot) || used.has(key)', 'used.has(key)', 'a gold zone stops checking the position'],
+};
+if (GOLD_CONTROLS[CONTROL]) {
+  const [from, to, what] = GOLD_CONTROLS[CONTROL];
+  const changed = swap(read(MAP_FILE), from, to, MAP_FILE);
+  if (/from '\.\.?\//.test(changed)) { console.error('control cannot run: dartMap.ts imports by relative path, so a copy of it cannot be bundled'); process.exit(1); }
+  mapEntry = fwd(path.join(tmp, 'dartMap.ts'));
+  fs.writeFileSync(mapEntry, changed);
+  console.log(`NEGATIVE CONTROL ON: ${what}`);
+}
 const entry = path.join(tmp, 'entry.ts');
 fs.writeFileSync(entry, `export * as draft from '${libEntry}';\nexport * as map from '${mapEntry}';\nexport { getEnrichment } from '${fwd(path.join(ROOT, 'src/data/footleEnrichment.ts'))}';\nexport { playerRating, LEGENDS } from '${fwd(path.join(ROOT, 'src/lib/squadDeal.ts'))}';\nexport { GEO_COUNTRIES } from '${fwd(path.join(ROOT, 'src/data/worldMapGeo.ts'))}';\n`);
 const out = path.join(tmp, 'bundle.mjs');
@@ -219,22 +238,84 @@ console.log('1) the pool is the top 2,000 in two pages, and the old 900 are stil
   if (/Top-450/.test(read(LIB_FILE))) fail('dartDraft.ts still calls the pool "Top-450"');
 }
 
-console.log('2) the gold zones give what they gave: the top of the pool did not move');
+console.log('2) the gold zones: the best three always, five drawn from the pool, a pure function of the seed');
 {
-  let wildSame = 0, kidSame = 0, kidGrew = 0;
-  for (const slot of SLOTS) {
-    const none = new Set();
-    const w0 = names(M.wildcardChoices(before.current, slot, none)), w1 = names(M.wildcardChoices(after.current, slot, none));
-    if (w0.join('|') === w1.join('|')) wildSame += 1; else fail(`wildcard at ${slot.label} changed: ${w0.join(', ')} became ${w1.join(', ')}`);
-    const k0 = names(M.wonderkidChoices(before.current, slot, none)), k1 = names(M.wonderkidChoices(after.current, slot, none));
-    if (k0.every((n, i) => k1[i] === n)) { kidSame += 1; if (k1.length > k0.length) kidGrew += 1; } else fail(`wonderkids at ${slot.label} lost somebody: ${k0.join(', ')} became ${k1.join(', ')}`);
+  /* Release AT (ruling R2). Round 1182 made the legend, wonderkid and wildcard zones the best three at the slot
+     plus five drawn without replacement from everybody else who fits, over Round 1145's 2,000. Until then this
+     section held the wildcard ten and the wonderkid eight to the names they had on the 900 row pool, which is the
+     rule Round 1182 replaced on purpose: with those two zones answering as Release AS did, the old section is green
+     (remote check rAT-pools-m, line revert2). So it asserts the rule itself now, for every slot in each of the
+     three zones, over GOLD_SEEDS seeded throws with the best man at the slot already drafted:
+       best three  the first three tiles rate what the three best who fit rate, by an oracle written here;
+       the pool    every tile is a player of the pool the zone was handed, fits the slot (and is 21 or under in
+                   the wonderkid zone), no name twice, nobody already drafted, eight tiles or everybody who fits;
+       drawn       the tiles after the best three are not the same five on every seed wherever more than eight
+                   fit, and they go out best first;
+       pure        the same seed deals the same tiles twice: nothing but the seeded stream is read.
+     Controls, each must turn this section red: nobest3, fixed8, impure, anyslot. */
+  const GOLD_SEEDS = 24;
+  const seededRandom = seed => { let a = seed >>> 0; return () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+  const withSeed = (seed, fn) => { const real = Math.random; Math.random = seededRandom(seed); try { return fn(); } finally { Math.random = real; } };
+  const eligibleAt = (pool, slot, usedLower) => {
+    const seen = new Set(), out = [];
+    for (const p of pool) { const key = p.name.toLowerCase(); if (!slot.allowed.includes(p.position) || usedLower.has(key) || seen.has(key)) continue; seen.add(key); out.push(p); }
+    return out;
+  };
+  const young = p => p.age > 0 && p.age <= 21;
+  const zones = [
+    ['wildcard', (slot, used) => M.wildcardChoices(after.current, slot, used), after.current, () => true],
+    ['wonderkid', (slot, used) => M.wonderkidChoices(after.current, slot, used), after.current.filter(young), young],
+    ['legend', (slot, used) => M.legendChoices(slot, used), lib.LEGENDS, () => true],
+  ];
+  const tally = { throws: 0, varied: 0, couldVary: 0, thin: 0, fewestNames: Infinity, mostNames: 0 };
+  for (const [zone, deal, pool, fitsZone] of zones) {
+    for (const slot of SLOTS) {
+      const where = `${zone} at ${slot.label}`;
+      const best = eligibleAt(pool, slot, new Set()).sort((x, y) => lib.playerRating(y) - lib.playerRating(x))[0];
+      const used = new Set(best ? [best.name] : []);
+      const fits = eligibleAt(pool, slot, new Set([...used].map(n => n.toLowerCase())));
+      const top = [...fits].sort((x, y) => lib.playerRating(y) - lib.playerRating(x)).slice(0, 3).map(p => lib.playerRating(p));
+      const due = Math.min(8, fits.length);
+      const drawnNames = new Set();
+      let bad = '';
+      for (let seed = 1; seed <= GOLD_SEEDS && !bad; seed += 1) {
+        const tiles = withSeed(seed * 7919, () => deal(slot, used));
+        const again = withSeed(seed * 7919, () => deal(slot, used));
+        tally.throws += 1;
+        const ns = names(tiles);
+        const misfits = tiles.filter(t => !slot.allowed.includes(t.player.position) || !fitsZone(t.player) || t.outOfPosition);
+        const got = tiles.slice(0, 3).map(t => lib.playerRating(t.player));
+        const rest = tiles.slice(3).map(t => lib.playerRating(t.player));
+        if (ns.join('|') !== names(again).join('|')) bad = `seed ${seed} dealt [${ns.join(', ')}] and then [${names(again).join(', ')}]: the zone is not a pure function of its seed`;
+        else if (tiles.length !== due) bad = `seed ${seed} dealt ${tiles.length} tiles where ${due} were due (${fits.length} fit)`;
+        else if (new Set(ns.map(n => n.toLowerCase())).size !== ns.length) bad = `seed ${seed} offered a name twice: ${ns.join(', ')}`;
+        else if (tiles.some(t => !pool.includes(t.player))) bad = `seed ${seed} offered somebody who is not in the pool the zone was handed`;
+        else if (misfits.length) bad = `seed ${seed} offered somebody who does not fit: ${misfits.map(t => `${t.player.name} (${t.player.position}, ${t.player.age})`).join(', ')}`;
+        else if (best && ns.includes(best.name)) bad = `seed ${seed} offered ${best.name}, who is already drafted`;
+        else if (got.join(',') !== top.slice(0, got.length).join(',')) bad = `seed ${seed}: the first three tiles rate ${got.join(', ')} and the best three who fit rate ${top.join(', ')}`;
+        else if (rest.some((r, i) => i > 0 && r > rest[i - 1])) bad = `seed ${seed}: the drawn tiles are not best first (${rest.join(', ')})`;
+        for (const n of ns.slice(3)) drawnNames.add(n);
+      }
+      if (bad) { fail(`${where}: ${bad}`); continue; }
+      if (fits.length <= 8) { tally.thin += 1; continue; }
+      /* Five names over every seed is the old fixed tiles. With N men to draw five from, 24 seeds reach nearly all
+         of them when N is small and dozens when it is large; the measured span is printed below. */
+      tally.couldVary += 1;
+      tally.fewestNames = Math.min(tally.fewestNames, drawnNames.size);
+      tally.mostNames = Math.max(tally.mostNames, drawnNames.size);
+      if (drawnNames.size > 5) tally.varied += 1;
+      else fail(`${where}: ${fits.length} fit and the drawn tiles were the same five names on all ${GOLD_SEEDS} seeds: nothing is drawn`);
+    }
   }
-  /* The legend zone is not compared between the arms because it cannot differ: it never reads the pool. What can be
-     checked is that this stays so, and that it still offers somebody at every slot. */
+  /* The legend zone never reads the pool. What can be checked is that this stays so, and that it still offers
+     somebody at every slot. */
   if (M.legendChoices.length !== 2) fail(`legendChoices takes ${M.legendChoices.length} arguments; it took (slot, usedNames) and no pool, which is why a deeper pool cannot move it`);
   const legendless = SLOTS.filter(slot => M.legendChoices(slot, new Set()).length === 0).map(slot => slot.label);
   if (legendless.length) fail(`the legend zone offers nobody at ${legendless.join(', ')}`);
-  console.log(`   wildcard identical at ${wildSame} of ${SLOTS.length} slots; wonderkids keep every name at ${kidSame} of ${SLOTS.length} and gain names at ${kidGrew} where the old pool ran short of eight`);
+  /* A harness that never met a zone with more than eight to draw from would prove nothing about the draw. */
+  if (tally.couldVary < SLOTS.length) fail(`only ${tally.couldVary} slot and zone pairs had more than eight who fit; the wildcard zone alone should give ${SLOTS.length}`);
+  console.log(`   ${tally.throws} seeded throws, ${SLOTS.length} slots in three zones: the best three lead every one, every tile is from the pool and fits, and each throw replays from its seed`);
+  console.log(`   the drawn five: more than five names over ${GOLD_SEEDS} seeds at ${tally.varied} of ${tally.couldVary} slot and zone pairs with more than eight who fit (between ${tally.fewestNames} and ${tally.mostNames} names); ${tally.thin} pairs have eight or fewer and show everybody`);
 }
 
 console.log('3) the storm did not get worse');
@@ -429,7 +510,7 @@ console.log('8) clubs the league lookup does not know');
   console.log(`   ${byClub.size} clubs in the pool are unknown to the lookup; the twenty with the most players (players, dearest in M): ${worst.map(([club, c]) => `${club} (${c.n}, ${c.top})`).join('; ')}`);
   const tiles = [];
   for (const country of lib.GEO_COUNTRIES) tiles.push(...await M.fetchCountryPool(country));
-  console.log(`   players a country hit reads (the top 120 of each nation): ${tiles.length}, ${(100 * share(tiles)).toFixed(1)}% at a club the lookup does not know`);
+  console.log(`   players a country hit reads (every 2026 row of each nation since Round 1182; it was the top 120): ${tiles.length}, ${(100 * share(tiles)).toFixed(1)}% at a club the lookup does not know`);
   for (const label of ['before', 'after']) {
     const ds = chem[label];
     const paid = ds.filter(d => d.rating !== d.apart);
@@ -447,8 +528,13 @@ console.log('8) clubs the league lookup does not know');
      points wide, so a whole point of drift is the line, five times the largest move seen. The random picker is
      printed and NOT held to it, and the reader should know what he gives up: 1.74 to 1.89 at the big nations (81.0
      to 79.1, still an A at the median, with about 400 of 2,000 drafts sliding from A to B), 0.38 to 0.56 on open
-     land and 0.21 to 0.34 for a blind thrower. That is the price of tiles that reach past the best eight. His
-     median grade does not move, and nobody who takes the best tile pays it. DART_POOL_CONTROL=lasttile is the proof
+     land and 0.21 to 0.34 for a blind thrower. That is the price of tiles that reach past the best eight.
+     Release AT: those are Round 1145's numbers, when a country was read as its first 120 rows. Round 1182 reads a
+     country all the way down, so the four drawn tiles of a country hit now reach every row of the nation, and
+     the random picker at the big nations pays more: 80.92 before and 77.61 after on the integrated tree, a
+     median of 77, which is a B, with 1,005 of 2,000 drafts at B (remote check rAT-pc; Release AS measured 79.08,
+     median 79, an A, 485 at B in rAT-bis). So his median grade DOES move now, from A to B. The best pick does
+     not (86.98 against 87.02), and nobody who takes the best tile pays it. DART_POOL_CONTROL=lasttile is the proof
      that the grade check below can go red: with only the last tile of every hit on offer the sharp thrower's median
      falls from S to B. */
   for (const [name, row] of [['land thrower, best pick', lb], ['sharp thrower, best pick', sb]]) {
@@ -484,4 +570,4 @@ if (CONTROL) {
   process.exit(1);
 }
 if (failures) { console.error(`\nsimDartDraftPool: ${failures} FAILURE(S)`); process.exit(1); }
-console.log('\nsimDartDraftPool: green. The pool is the top 2,000, the gold zones and the storm give what they gave, the mystery zone pays what it paid and adds a long shot, a country hit keeps its best four and shows more names, The Machine is the opponent it was, and whole drafts grade where they did.');
+console.log('\nsimDartDraftPool: green. The pool is the top 2,000, the gold zones keep their best three and draw five from the pool, the storm gives what it gave, the mystery zone pays what it paid and adds a long shot, a country hit keeps its best four and shows more names, The Machine is the opponent it was, and whole drafts grade where they did.');

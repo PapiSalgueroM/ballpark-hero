@@ -389,11 +389,16 @@ export function variedChoices(pool: Player[], slot: FormationSlot, usedNames: Se
   }).sort((a, b) => playerRating(b) - playerRating(a));
   const picks = eligible.slice(0, 3);
   const remaining = eligible.slice(3);
-  while (picks.length < 8 && remaining.length > 0) {
+  const drawn: Player[] = [];
+  while (picks.length + drawn.length < 8 && remaining.length > 0) {
     const index = Math.floor(Math.random() * remaining.length);
-    picks.push(...remaining.splice(index, 1));
+    drawn.push(...remaining.splice(index, 1));
   }
-  return picks.map(player => ({ player, outOfPosition: false }));
+  /* Release AT: the five drawn tiles go out best first, the way a country hit shows its tiles. They used
+     to go out in the order they were drawn (a wildcard read 90, 90, 89, 73, 89, 74, 74, 73). Who is drawn
+     does not change. */
+  drawn.sort((a, b) => playerRating(b) - playerRating(a));
+  return [...picks, ...drawn].map(player => ({ player, outOfPosition: false }));
 }
 
 /** Raw DB position strings that normalize into this slot's allowed positions. */

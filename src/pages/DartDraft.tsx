@@ -361,7 +361,7 @@ const DartDraft = () => {
       ? ({
           legend: 'All-time greats at your position. Pick one.',
           wonderkid: 'Under-21 gems only. The future is now.',
-          wildcard: 'Free pick off the world top shelf.',
+          wildcard: 'Free pick: the three best in the world at your spot, plus five drawn from the whole pool.',
           mystery: 'Three names from the top of the pool and one long shot from deep in it. Pure gamble.',
           storm: 'Blown into the bargain bin. Best of the cheap seats.',
           shark: 'It ate your dart. A 40-rated trialist swims out instead.',
@@ -637,6 +637,7 @@ const DartDraft = () => {
             'Lock the sweeping line twice: once for left-right, once for up-down.',
             'Hit a country and pick from its real players at your position. No pro there? You get their academy kid.',
             'Gold zones pay legends, wonderkids, free picks and mystery gambles. Red zones are sharks and storms.',
+            'A legend, wonderkid or free pick zone shows eight tiles: the three best at your position are always there, and the other five are drawn from everyone else who fits, best first, so they change from dart to dart.',
             'Ocean throws hand you a 40-rated trialist, with one lifeboat re-throw per game.',
             'Fill all 11 slots, then your XI plays The Machine in a 3 match series.',
           ]}
