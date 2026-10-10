@@ -198,6 +198,41 @@ describe('the row that ends the night, word for word', () => {
   });
 });
 
+/* The lottery tile is two to a row, about a hundred pixels for a club on a
+   390 wide phone, and the full NBA names were cut off there. The mount hands
+   it the club's own name; the walk measures the pixels of every club. */
+describe('the lottery tile names each winner in words that fit', () => {
+  const LOTTERIES = PAIRS.filter(([, d]) => !!d.lottery);
+
+  it('only the NBA has a lottery here, in both eras', () => {
+    expect(LOTTERIES.map(([name]) => name)).toEqual(['NBA now', 'NBA 2003']);
+  });
+
+  it.each(LOTTERIES)('%s: every club has a name of its own, the end of its full name', (_, desc) => {
+    for (const id of desc.teamIds()) {
+      const short = desc.teamShort!(id);
+      expect(short.length).toBeGreaterThan(0);
+      expect(desc.teamLabel(id).endsWith(` ${short}`)).toBe(true);
+      // The longest today is "Trail Blazers". A longer one must be measured in the walk first.
+      expect(short.length).toBeLessThanOrEqual(13);
+    }
+  });
+
+  it.each(LOTTERIES)('%s: each tile prints the winner by that name, and the line under the tiles keeps the city', (_, desc) => {
+    for (let n = 0; n < 12; n += 1) {
+      const state = endedAt(desc, 40, `tile-${n}`);
+      const o = preDraftOrder(desc, state.seed);
+      const view = render(<DraftNightSequence night={buildCareerDraftNight(desc, state)!} desc={desc} draftYear={state.draft!.draftYear} stage="skipped" onLanded={noop} onSkip={noop} onContinue={noop} />);
+      for (let slot = 1; slot <= desc.lottery!.drawn; slot += 1) {
+        const face = view.container.querySelector<HTMLElement>(`[data-lottery-slot='${slot}'] [data-lottery-face]`)!;
+        expect(face.lastElementChild!.children[0].textContent).toBe(desc.teamShort!(o.lotteryWinners[slot - 1]));
+      }
+      expect(view.container.querySelector('[data-lottery-headline]')!.textContent).toBe(`${desc.teamLabel(o.lotteryWinners[0])} hold the first pick.`);
+      view.unmount();
+    }
+  });
+});
+
 describe('the card that hosts the night', () => {
   const desc = nflPreDraftDescriptor('now');
   it('without the new props it is the card it was', () => {

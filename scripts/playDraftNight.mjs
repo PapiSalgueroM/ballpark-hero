@@ -28,13 +28,18 @@
  *      first frame.                                         Control `hidden`.
  *   8. Skip: one press lands every row and every held word at once, and the
  *      page does not move for it.
+ *   9. THE WORDS ON A LOTTERY TILE FIT THE TILE. Both lines of every tile on
+ *      screen, and then every other club of the era in the first tile's own
+ *      label box, measured in the site's own typeface (it is let through
+ *      from Google Fonts; if it does not load the check fails rather than
+ *      measure a fallback).                                  Control `cut`.
  * The live database host is aborted in every context. No page error.
  *
  * Needs dist/ (npm run build). It serves it itself through
  * scripts/lib/hostLikeServer.mjs. ENGINES=chromium is the only engine.
  *
  * Run:      node scripts/playDraftNight.mjs
- * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden> node scripts/playDraftNight.mjs
+ * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden|cut> node scripts/playDraftNight.mjs
  *           (must exit 1 on its own check, and exits 2 if it changed nothing)
  * Output:   screenshots and measurements in $RC_OUT, or .tmp-fx/play-draft-night.
  */
@@ -51,7 +56,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_DRAFT_NIGHT_CONTROL || '';
-const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced' };
+const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced', cut: 'cut' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-draft-night'));
 fs.mkdirSync(OUT, { recursive: true });
@@ -120,8 +125,7 @@ await new Promise((resolve, reject) => {
   server.stdout.on('data', data => { if (String(data).includes('host-like server:')) { clearTimeout(timer); resolve(); } });
 });
 
-const SIZES = [{ width: 390, height: 844, touch: true }, { width: 1280, height: 800, touch: false }];
-const results = [];
+const SIZES = [{ width: 390, height: 844, touch: true }, { width: 1280, height: 800, touch: false }];const results = [];
 const failures = [];
 const fail = (id, check, message) => { failures.push({ id, check, message }); console.error(`  FAIL [${check}] ${id}: ${message}`); };
 
@@ -137,6 +141,8 @@ const CONTROL_STYLE = {
   spoiler: '[data-night-hold] h2, [data-night-hold] p, [data-night-held], [data-testid="draft-result"] { animation: none !important; opacity: 1 !important; }',
   /* A row left invisible for somebody who asked for less motion. */
   hidden: '[data-night-row] { opacity: 0 !important; }',
+  /* A lottery tile with less room for its words than the words need. */
+  cut: '[data-lottery-face] > span:last-child { max-width: 44px; }',
 };
 const CONTROL_INIT = {
   /* The press reveals nothing: the board stays wherever the page happened to be. */
@@ -167,6 +173,23 @@ const BUTTONS = () => [...document.querySelectorAll('[data-prospect-journey] but
   const r = b.getBoundingClientRect();
   return { text: (b.textContent || b.getAttribute('aria-label') || '').trim().slice(0, 40), disabled: b.disabled, opacity: o, w: r.width, h: r.height };
 });
+/* The words on the lottery tiles, measured in their own boxes: the two lines of every tile on
+   screen, then every other club of this era in the first tile's own label box and typeface. */
+const FIT = names => {
+  const lines = [...document.querySelectorAll('[data-lottery-face] > span:last-child > span')];
+  const need = el => { const r = document.createRange(); r.selectNodeContents(el); return Math.round(r.getBoundingClientRect().width * 10) / 10; };
+  const cut = lines.filter(el => el.scrollWidth > el.clientWidth).map(el => ({ text: el.textContent, need: need(el), room: el.clientWidth }));
+  const el = lines[0], keep = el.textContent, clubs = [];
+  let widest = { text: '', need: 0 };
+  for (const text of names) {
+    el.textContent = text;
+    const w = need(el);
+    if (w > widest.need) widest = { text, need: w };
+    if (el.scrollWidth > el.clientWidth) clubs.push({ text, need: w, room: el.clientWidth });
+  }
+  el.textContent = keep;
+  return { cut, clubs, room: el.clientWidth, widest, font: getComputedStyle(el).fontFamily.split(',')[0] };
+};
 const CARD = () => ({ y: window.scrollY, card: document.querySelector('[data-testid="draft-showcase"]').getBoundingClientRect().height, stage: document.querySelector('[data-career-night]').dataset.nightStage });
 const END = () => {
   const night = document.querySelector('[data-career-night]');
@@ -193,6 +216,8 @@ async function open(browser, sport, size, p, mode) {
     const url = r.request().url();
     if (/supabase\.co/.test(url)) return r.abort();
     if (new URL(url).origin === BASE) return r.continue();
+    /* The site's own typeface comes from here, and a width measured in a fallback is not the width a player sees. */
+    if (/^https:\/\/fonts\.(googleapis|gstatic)\.com\//.test(url)) return r.continue();
     const type = r.request().resourceType();
     return r.fulfill({ status: 200, contentType: type === 'stylesheet' ? 'text/css' : 'application/json', body: type === 'stylesheet' ? '' : '[]' });
   });
@@ -201,8 +226,14 @@ async function open(browser, sport, size, p, mode) {
   await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded' });
   await page.locator('[data-prospect-phase="draft"]').waitFor();
   await page.evaluate(() => document.fonts.ready);
+  /* Every weight the night prints in, here before the press, so no face arrives in mid night. */
+  const inter = await page.evaluate(async () => {
+    const got = await Promise.all(['400', '600', '700'].map(w => document.fonts.load(`${w} 12px Inter`).catch(() => [])));
+    await document.fonts.ready;
+    return got.every(faces => faces.length > 0);
+  });
   if (CONTROL_STYLE[CONTROL]) await page.addStyleTag({ content: CONTROL_STYLE[CONTROL] });
-  return { context, page };
+  return { context, page, inter };
 }
 
 async function run(browser, sport, size, found, mode, { startCareer = false, shots = false } = {}) {
@@ -211,7 +242,7 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
   const out = done.draft;
   const row = { id, mode, kind, pick: out.pick, team: out.team };
   results.push(row);
-  const { context, page } = await open(browser, sport, size, p, mode);
+  const { context, page, inter } = await open(browser, sport, size, p, mode);
   const pageErrors = [];
   page.on('pageerror', error => pageErrors.push(String(error)));
   const shot = async name => { if (shots) await page.screenshot({ path: path.join(OUT, `${id}-${name}.png`) }); };
@@ -299,6 +330,14 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     const said = end.text.replace(/\s+/g, ' ').trim();
     const wantSaid = out.pick === null ? `The last pick is in. Your name was not called. Your first club: ${club}.` : `Pick ${out.pick}: ${club} Your name is called. Round ${out.round}, pick ${out.pickInRound}.`;
     if (said !== wantSaid) fail(id, 'save', `the closing row says "${said}", the save says "${wantSaid}"`);
+    /* 9. The words on a lottery tile fit the tile, in the site's own typeface. */
+    if (end.tiles) {
+      const fit = await page.evaluate(FIT, desc.teamIds().map(team => (desc.teamShort ?? desc.teamLabel)(team)));
+      row.tileFit = { room: fit.room, widest: fit.widest, font: fit.font, inter, cut: fit.cut, clubs: fit.clubs };
+      if (!inter) fail(id, 'cut', `the site's typeface did not load (the tile is in ${fit.font}), so the fit of its words was not measured`);
+      for (const c of fit.cut) fail(id, 'cut', `a lottery tile cuts "${c.text}": ${c.need} px of words in ${c.room} px`);
+      for (const c of fit.clubs) fail(id, 'cut', `"${c.text}" would be cut on a lottery tile: ${c.need} px of words in ${c.room} px`);
+    }
     const save = JSON.parse(await page.evaluate(k => localStorage.getItem(k), sport.saveKey));
     try { assert.deepEqual(save, JSON.parse(JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: { ...p, state: done } }))); } catch { fail(id, 'save', 'the save is not the engine state after the draft'); }
     if (startCareer) {
@@ -324,8 +363,9 @@ try {
      closing row's check cannot tell them apart otherwise. */
   for (const c of cases) assert.notEqual(c.late.done.draft.pick, c.late.done.draft.pickInRound, `${c.sport.slug}: the late pick must be past round one`);
   if (CONTROL) {
-    /* One case, the one the control's check is about. MLB's late pick is the tallest board. */
-    const c = cases[CONTROL === 'hidden' ? 1 : 2];
+    /* One case, the one the control's check is about. MLB's late pick is the tallest board, and
+       the NBA's is the one with a lottery tile. */
+    const c = cases[CONTROL === 'hidden' || CONTROL === 'cut' ? 1 : 2];
     await run(browser, c.sport, SIZES[0], c.late, CONTROL === 'hidden' ? 'reduced' : 'watch');
     const own = failures.filter(f => f.check === CONTROLS[CONTROL]);
     if (!own.length) { console.error(`Control ${CONTROL} changed nothing its check can see (${failures.map(f => f.check).join(', ') || 'no failure at all'}). Refusing to call that a result.`); exitCode = 2; }

@@ -93,6 +93,9 @@ export interface PreDraftDescriptor {
   /** Read lazily, never at module scope. */
   teamIds: () => string[];
   teamLabel: (id: string) => string;
+  /** Round 1220: the club's own name without its city ("Trail Blazers"), for
+   *  a tile too narrow for both. Optional: without it a tile prints teamLabel. */
+  teamShort?: (id: string) => string;
   lottery: PreDraftLottery | null;
   routes: PreDraftRoute[];
   showcaseName: string;

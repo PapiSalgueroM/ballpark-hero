@@ -101,13 +101,17 @@ export function DraftNightSequence({
   const before = night.board.slice(0, -1);
   const L = desc.lottery;
   const first = night.lottery.find(r => r.slot === 1);
+  /* A tile is two to a row and has room for a club's own name, not for its
+     city as well (on a 390 wide phone 14 of the 30 NBA names were cut off).
+     The line under the tiles prints the first pick's club in full. */
+  const tileLabel = desc.teamShort ?? desc.teamLabel;
 
   return (
     <div data-career-night data-night-stage={stage} className="space-y-3">
       <CelebrationStyles />
       {L && night.lottery.length > 0 && (
         <LotteryReveal
-          rows={night.lottery.map(r => ({ slot: r.slot, label: desc.teamLabel(r.team), seed: r.seed, moved: r.seed - r.slot }))}
+          rows={night.lottery.map(r => ({ slot: r.slot, label: tileLabel(r.team), seed: r.seed, moved: r.seed - r.slot }))}
           ruleLine={lotteryRuleLine(lotteryFactsFromWeights(L.combos, L.drawn))}
           eyebrow="The lottery"
           note="A simulated lottery. The order is generated for your career."
