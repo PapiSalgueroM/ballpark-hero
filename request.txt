@@ -1,0 +1,16 @@
+# Release AU proof, the browser walk list part 1: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+playSeasonCentre: node scripts/playSeasonCentre.mjs
+playSoccerCareer: node scripts/playSoccerCareer.mjs
+playReducedMotion: node scripts/playReducedMotion.mjs
+playLeagueTableFit: node scripts/playLeagueTableFit.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
+playCareerPress: node scripts/playCareerPress.mjs
+playSeasonReveal: node scripts/playSeasonReveal.mjs
+playSeasonMoments: node scripts/playSeasonMoments.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+simTactics: node scripts/simTactics.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playUsSeasonCentre: node scripts/playUsSeasonCentre.mjs

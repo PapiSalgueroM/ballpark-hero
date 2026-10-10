@@ -1,0 +1,13 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSeasonCentre exit=1 199s | playSeasonCentre: 40 checks, 3 failed
+playSoccerCareer exit=1 479s |   - 6. no console or page errors across the walk: Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to load resource: net::ERR_CONNECTION_REFUSED | Failed to 
+playReducedMotion exit=1 67s | playReducedMotion: 1 problem(s)
+playLeagueTableFit exit=0 4s | playLeagueTableFit: green. 5208 name cells fit at all four widths using the actual component.
+playFlagshipLazy exit=0 8s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+playCareerPress exit=0 15s | ALL CAREER PRESS WALK CHECKS PASSED
+playSeasonReveal exit=0 20s | ALL SEASON REVEAL WALK CHECKS PASSED
+playSeasonMoments exit=1 154s | playSeasonMoments: 9 checks, 5 failed
+playTranslatedPage exit=0 136s | playTranslatedPage: 447 checks, 0 failed
+simTactics exit=0 35s | ALL TACTICS CHECKS PASSED
+playStorageBlocked exit=0 270s | playStorageBlocked: 826 checks, 0 failed
+playUsSeasonCentre exit=0 150s | playUsSeasonCentre: 144 checks, 0 failed

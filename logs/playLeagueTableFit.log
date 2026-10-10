@@ -1,0 +1,11 @@
+Stylesheet: shipped dist/assets (41 file(s))
+Club Manager 320px: 966 name cells, 483 bold own rows, 0 findings; font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif
+Club Manager 390px: 966 name cells, 483 bold own rows, 0 findings; font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif
+Club Manager 430px: 966 name cells, 483 bold own rows, 0 findings; font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif
+Club Manager 1440px: 966 name cells, 483 bold own rows, 0 findings; font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif
+Stadium Tycoon 320px: 336 name cells, 168 bold own rows, 0 findings; font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif
+Stadium Tycoon 390px: 336 name cells, 168 bold own rows, 0 findings; font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif
+Stadium Tycoon 430px: 336 name cells, 168 bold own rows, 0 findings; font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif
+Stadium Tycoon 1440px: 336 name cells, 168 bold own rows, 0 findings; font Inter, system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif
+Screenshots: /home/runner/work/_temp/t-playLeagueTableFit/dukb-table-fit-FWRH3l
+playLeagueTableFit: green. 5208 name cells fit at all four widths using the actual component.

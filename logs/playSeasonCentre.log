@@ -1,0 +1,46 @@
+Season Centre chunk SeasonCentre-Cdw8L2GE.js, 44.6 KB raw
+ok   8. the Season Centre chunk carries no Club Manager marker
+ok   5. parsed the walker's ACTIONS (17 entries) and SKIP from its text
+saves: playing, champion, results, title
+ok   the engine produced a playing save, a title season, a named champion season and a results only season
+ok   1. the hub does not load the Season Centre (45 scripts)
+ok   1. the action bar's first button is still Next Season ("Next Season")
+ok   5. on the hub the walker presses "Next Season"
+ok   2. 📺 Week by week writes exactly the save Next Season writes (equal, 25559 bytes)
+ok   1. the Season Centre chunk loads after the press, and the overlay opens
+FAIL 2. a full watch reaches the season review
+ok   2. Back to the papers closes the overlay
+ok   2. the save is byte for byte the same after a full watch (same)
+ok   2. that watch met his moments and let every one play (1 offers)
+ok   3. title: the summary card shows
+ok   3. title: review apps, goals and assists equal the card's ({"Apps":"53","Goals":"37","Assists":"16","Avg rating":"8.7"} vs {"Apps":"53","Goals":"37","Assists":"16"})
+ok   3. title: the review's finish "Champions of the Premier League, top of 20 · 87 pts" starts with the card's "Champions of the Premier League, top of 20"
+ok   3. title: the final table puts him 1st, the card 1st
+ok   3. title: no champion named on the card, none in the review
+ok   3. champion: the summary card shows
+ok   3. champion: review apps, goals and assists equal the card's ({"Apps":"17","Goals":"4","Assists":"3","Avg rating":"6.0"} vs {"Apps":"17","Goals":"4","Assists":"3"})
+ok   3. champion: the review's finish "Finished 5th of 20 in the Premier League · 68 pts" starts with the card's "Finished 5th of 20 in the Premier League"
+ok   3. champion: the final table puts him 5th, the card 5th
+ok   3. champion: "Liverpool won it" on the card, "Liverpool won it" in the review, Liverpool top of the table
+ok   6. desktop: three columns side by side (260, 458, 380 px)
+ok   6. desktop: the dialog sits inside the screen (20 to 880) and the page has not moved
+ok   4. desktop: the score bug equals the derived goals at every sampled minute (148 frames, 0 wrong)
+FAIL the desktop tour reached a derby day and the title clinch
+   the tour saw [. | .]; the title season is 2019 Man United, 53 apps (36 league), saved field none; derived at the pick: 38 matchdays, clinch after matchday 35, derbies on matchdays 6, 17, 25, 36
+ok   6. desktop: the page did not move across the matchdays (0 then 0)
+ok   6. phone: no sideways scroll on the kick off card (390, 0)
+ok   6. phone: the bar sits inside the screen once the season starts (731 to 844)
+ok   4. phone: the score bug equals the derived goals at every sampled minute (149 frames, 0 wrong)
+FAIL the phone tour reached a derby day and the title clinch
+   the tour saw [. | .]; the title season is 2019 Man United, 53 apps (36 league), saved field none; derived at the pick: 38 matchdays, clinch after matchday 35, derbies on matchdays 6, 17, 25, 36
+ok   6. phone: the page did not move across the matchdays (0 then 0)
+ok   6. phone: Next Season 174 px beside 📺 (44 px), 226 px without it
+ok   the "?" sheet opens by itself the first time
+ok   7. reduced motion: the first frame of a match is full time
+ok   7. reduced motion: nothing animating 100 ms after each arrival (0, 0, 0)
+ok   the "?" button opens the sheet again
+ok   5. the walker's pick never landed on a new button (0)
+ok   5. no Season Centre label starts with a walker ACTIONS entry (51 labels seen)
+ok   no page errors (0)
+screenshots in .tmp-fx/shots
+playSeasonCentre: 40 checks, 3 failed
