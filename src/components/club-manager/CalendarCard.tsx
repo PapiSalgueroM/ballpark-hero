@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CalendarDays } from 'lucide-react';
-import { careerLeagueOf, roundPairs } from '@/lib/clubManager';
+import { careerLeagueOf, roundPairs, fixtureFor } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry } from '@/lib/clubManager';
 
 /** Round 73: the season at a glance. Recent results plus what's coming. */
@@ -31,11 +31,18 @@ export function CalendarCard({ career, onQuickSim }: { career: CareerState; onQu
           });
         }
       } else if (entry.type === 'uclGroup' && career.uclGroup && career.uclKoRound === null) {
-        out.push({ label: `⭐ UCL Group MD${entry.round + 1}`, detail: career.uclGroup.opponents[entry.round % 3] ?? '' });
+        if (career.uclGroup.format === 'league36') {
+          const fixture = fixtureFor(career, entry);
+          if (fixture) out.push({ label: `⭐ UCL League MD${entry.round + 1}`, detail: `${fixture.opponent} (${fixture.home ? 'H' : 'A'})` });
+        } else {
+          out.push({ label: `⭐ UCL Group MD${entry.round + 1}`, detail: career.uclGroup.opponents[entry.round % 3] ?? '' });
+        }
       } else if (entry.type === 'uclKo' && entry.uclRound && career.uclKoRound === entry.uclRound) {
+        const modern = career.uclGroup?.format === 'league36';
+        const fixture = modern ? fixtureFor(career, entry) : null;
         out.push({
-          label: `⭐ UCL ${entry.uclRound === 'F' ? 'Final' : entry.uclRound}`,
-          detail: career.uclDraw[entry.uclRound] ?? 'Draw to come',
+          label: `⭐ UCL ${entry.uclRound === 'F' ? 'Final' : entry.uclRound === 'PO' ? 'Playoff' : entry.uclRound}${modern && entry.uclLeg ? ` L${entry.uclLeg}` : ''}`,
+          detail: fixture ? `${fixture.opponent} (${fixture.home ? 'H' : 'A'})` : career.uclDraw[entry.uclRound] ?? 'Draw to come',
         });
       }
     }

@@ -24,7 +24,7 @@
  *     date is a real date not in the future.
  *  3. The engine agrees with the history: the generated JSON equals what the
  *     engine computes right now, every historic Club Manager era's shape
- *     matches its real season's row, the modern save is declared a stand in,
+ *     matches its real season's row, new modern saves play the league phase,
  *     and the years typed in the module equal the years the engine exports.
  *  4. The shipped snapshot carries every row, the source list and enough of
  *     the page that a crawler receives the page rather than a shell.
@@ -196,7 +196,7 @@ console.log('2) every period rests on at least two publishers, and the provenanc
 
 /* ---------- 3. The engine agrees with history, and the JSON with the engine ---------- */
 section = '3';
-console.log('3) the generated block equals the engine, every era plays its real season, and the modern save admits it is a stand in');
+console.log('3) the generated block equals the engine, historic eras match and new modern saves play the league phase');
 {
   const r16 = UCL_FORMAT_PERIODS.find(p => p.stage === 'groups' && p.roundOf16);
   if (!r16) fail('no period with eight groups and a round of 16, so the engine years have nothing to match');
@@ -234,16 +234,35 @@ console.log('3) the generated block equals the engine, every era plays its real 
 
   let historic = 0;
   let matched = 0;
-  let standIns = 0;
+  let modern = 0;
   for (const s of shapes) {
     const real = periodFor(s.era.startYear);
     if (s.era.id === 'now') {
-      /* the modern save is the one place the engine does not play the real
-         format, and the page must say so rather than claim a match */
-      if (s.matchesReal) fail(`the modern save claims to match the real ${real.title}, which the engine does not play`);
-      if (!/stand in/.test(s.line)) fail(`the modern save's line does not say it is a stand in: ${s.line}`);
-      if (s.firstKo !== 'QF') fail(`the modern save's first knockout round is ${s.firstKo}, expected QF`);
-      standIns += 1;
+      if (!s.matchesReal || real.stage !== 'leaguePhase') fail(`the modern league phase does not match the real initial-stage shape: ${real.title}`);
+      if (s.firstKo !== 'PO' || s.legs !== 2 || s.awayGoals) fail(`the modern knockout path is ${s.firstKo}/${s.legs}/${s.awayGoals}, expected PO/2/false`);
+      for (const text of ['Thirty six', 'eight different opponents', 'four home and four away', 'Top eight', '9 to 24', 'simulated', 'coefficient pots and association limits are not modelled']) {
+        if (!s.line.includes(text)) fail(`the modern line omits ${text}: ${s.line}`);
+      }
+      const career = engine.startCareer('Arsenal', 'now');
+      const group = career.uclGroup;
+      if (!group || group.format !== 'league36' || group.table.length !== 36 || group.fixtures.length !== 8) fail('a genuine modern start does not contain its 36-club eight-matchday saved schedule');
+      else {
+        const pairs = new Set();
+        for (const day of group.fixtures) {
+          if (day.length !== 18 || new Set(day.flat()).size !== 36) fail('a modern matchday does not conserve all 36 clubs');
+          for (const pair of day) { const key = JSON.stringify([...pair].sort()); if (pairs.has(key)) fail('a modern opponent pair is repeated'); pairs.add(key); }
+        }
+        if (pairs.size !== 144) fail(`the modern draw has ${pairs.size} distinct games rather than 144`);
+        for (const row of group.table) {
+          const games = group.fixtures.flat().filter(pair => pair.includes(row.club));
+          if (games.length !== 8 || games.filter(pair => pair[0] === row.club).length !== 4 || new Set(games.map(pair => pair[0] === row.club ? pair[1] : pair[0])).size !== 8) fail(`${row.club}: eight opponents and four home/four away were not conserved`);
+        }
+      }
+      for (const [round, count] of [['uclGroup', 8], ['PO', 2], ['R16', 2]]) {
+        const actual = career.calendar.filter(entry => round === 'uclGroup' ? entry.type === round : entry.type === 'uclKo' && entry.uclRound === round).length;
+        if (actual !== count) fail(`the modern ${round} calendar has ${actual} entries rather than ${count}`);
+      }
+      modern += 1;
       continue;
     }
     historic += 1;
@@ -253,7 +272,7 @@ console.log('3) the generated block equals the engine, every era plays its real 
     }
     if (s.matchesReal && !/That is the real/.test(s.line)) fail(`${s.era.label}: the line does not state the match: ${s.line}`);
   }
-  console.log(`   ${matched} of ${historic} historic eras match their real season, ${standIns} modern save declared a stand in, generated file ${stale === 0 ? 'fresh' : 'STALE'}`);
+  console.log(`   ${matched} of ${historic} historic eras match their real season, ${modern} new modern league phase, generated file ${stale === 0 ? 'fresh' : 'STALE'}`);
 }
 
 /* ---------- 4. The shipped snapshot ---------- */
@@ -273,7 +292,7 @@ if (CONTROL || SOURCE_ONLY) {
       if (!text.includes(p.title)) fail(`the snapshot does not carry the row "${p.title}"`);
       else rows += 1;
     }
-    for (const must of [UCL_FORMAT_VERIFIED_ON, 'stand in', 'That is the real']) {
+    for (const must of [UCL_FORMAT_VERIFIED_ON, clubManagerUclShapes().find(s => s.era.id === 'now').line, 'That is the real']) {
       if (!text.includes(must)) fail(`the snapshot does not contain ${JSON.stringify(must)}`);
     }
     /* the source list itself, by URL, because the words UEFA and RSSSF occur

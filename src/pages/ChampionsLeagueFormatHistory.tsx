@@ -25,7 +25,7 @@ import engineShapes from '@/data/uclEngineShapes.json';
 
 interface EngineShape {
   era: { id: string; label: string; startYear: number; emoji: string };
-  firstKo: 'R16' | 'QF';
+  firstKo: 'PO' | 'R16' | 'QF';
   legs: 1 | 2;
   awayGoals: boolean;
   realId: string;
@@ -72,7 +72,7 @@ function engineFaqAnswer(): string {
   const real = SHAPES.filter(s => s.matchesReal);
   const realLabels = real.map(s => s.era.label).join(', ');
   const standInText = standIns.map(s => `The ${s.era.label} start is the stand in: ${s.line.replace(/ A stand in: /, ' ').replace(/^Eight/, 'eight')}`).join(' ');
-  return `Because the engine does not play the league phase yet, and we would rather say so than pretend. ${standInText} The ${realLabels} starts play the real format of their own seasons.`;
+  return `New modern seasons play a 36 club league phase, eight matches and knockout playoffs into the round of 16. Qualification and fixture draws are simulated. Old saved group seasons finish their existing format. ${standInText} The ${realLabels} starts use the competition structure of their own seasons.`;
 }
 
 const FAQS = [
@@ -93,7 +93,7 @@ const FAQS = [
     a: 'Thirty six clubs sit in one table. Each plays eight different opponents, four at home and four away. The top eight go straight to the round of 16, ninth to 24th play a two legged play-off for the other eight places, and 25th to 36th go out with no Europa League place. From the play-offs to the semi-finals the ties are two legged, and the final is one match.',
   },
   {
-    q: 'Why does the modern Club Manager save play groups instead of the league phase?',
+    q: 'What Champions League format does Club Manager play?',
     a: engineFaqAnswer(),
   },
 ];

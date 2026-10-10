@@ -15,13 +15,13 @@
  */
 import type { CMEra } from '@/lib/clubManagerEras';
 import { CM_ERAS } from '@/lib/clubManagerEras';
-import { uclFirstKoRound, uclLegsFor, uclAwayGoalsApply } from '@/lib/clubManager';
+import { uclFirstKoRound, uclLegsFor, uclAwayGoalsApply, modernUclLeaguePhase } from '@/lib/clubManager';
 import { periodFor, seasonOf, UCL_AWAY_GOALS, type UclFormatPeriod } from '@/lib/uclFormatHistory';
 
 export interface ClubManagerUclShape {
   era: Pick<CMEra, 'id' | 'label' | 'startYear' | 'emoji'>;
-  /** The first knockout round the engine plays after its eight groups. */
-  firstKo: 'R16' | 'QF';
+  /** The first knockout round after the era's initial stage. */
+  firstKo: 'PO' | 'R16' | 'QF';
   legs: 1 | 2;
   awayGoals: boolean;
   /** The id of the real format period the era starts in. */
@@ -38,6 +38,7 @@ export function clubManagerUclLine(
   s: Pick<ClubManagerUclShape, 'era' | 'firstKo' | 'legs' | 'awayGoals' | 'matchesReal'>,
   real: UclFormatPeriod,
 ): string {
+  if (s.firstKo === 'PO') return 'Thirty six clubs in one table, eight different opponents, four home and four away. Top eight into the round of 16; places 9 to 24 play two legged playoffs. No away goals rule. Qualification and the fixture draw are simulated; coefficient pots and association limits are not modelled.';
   const ko = s.firstKo === 'R16' ? 'round of 16' : 'quarter-finals';
   const legs = s.legs === 2 ? 'two legged ties' : 'one off ties';
   const ag = s.awayGoals ? 'away goals count double' : 'no away goals rule';
@@ -50,20 +51,20 @@ export function clubManagerUclLine(
 /**
  * Every value here comes from the engine's own helpers, never from the
  * timeline, so the page can only ever describe what the game does. The engine
- * always draws eight groups (initUclWorld in clubManager.ts); what changes by
- * era is where the knockout starts, how many legs a tie has and whether away
- * goals count.
+ * draws the modern league phase or the era's groups. Its helpers also decide
+ * where the knockout starts, how many legs a tie has and whether away goals
+ * count.
  */
 export function clubManagerUclShape(era: CMEra): ClubManagerUclShape {
-  const firstKo = uclFirstKoRound({ eraId: era.id }) === 'R16' ? 'R16' : 'QF';
+  const firstKo = modernUclLeaguePhase(era.id) ? 'PO' : uclFirstKoRound({ eraId: era.id }) === 'R16' ? 'R16' : 'QF';
   const legs = uclLegsFor(era.id, 'QF');
   const awayGoals = uclAwayGoalsApply(era.id);
   const real = periodFor(era.startYear);
   const matchesReal =
-    real.stage === 'groups'
+    (firstKo === 'PO' ? real.stage === 'leaguePhase' : real.stage === 'groups'
     && real.groups === 8
     && !real.secondGroupStage
-    && real.roundOf16 === (firstKo === 'R16')
+    && real.roundOf16 === (firstKo === 'R16'))
     && real.koLegs === legs
     && awayGoals === (era.startYear <= UCL_AWAY_GOALS.lastSeason);
   const shape: Omit<ClubManagerUclShape, 'line'> = {

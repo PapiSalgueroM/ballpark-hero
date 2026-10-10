@@ -152,6 +152,7 @@
 */
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
 import './lib/seedRandom.mjs';
+import assert from 'node:assert/strict';
 import { execSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
@@ -159,11 +160,13 @@ import os from 'node:os';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { bundleUcl, scheduleProof, runSeason, OUT as UCL_PROOF_OUT } from './qa/managerUclLeagueKit.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_UCL_CONTROL || '';
+const PATH_CONTROL = process.env.CM_UCL_PATH_CONTROL || '';
 if (CONTROL && !['nor16', 'vanish', 'gdonly', 'uclgd', 'adjacent', 'poolnames', 'oldname'].includes(CONTROL)) {
   console.error(`CM_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -177,6 +180,12 @@ const lf = s => s.replaceAll('\r\n', '\n');
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'UclGroupsCard.tsx');
 const GROUPS = path.join(ROOT, 'src', 'lib', 'clubManagerUclGroups.ts');
+if (PATH_CONTROL) {
+  assert(['modern', 'legacy'].includes(PATH_CONTROL), 'Known copied-code card path detector');
+  assert.equal(CONTROL, '', 'Card path detector stays separate from engine source controls');
+  checkGroupPathDetector(PATH_CONTROL);
+  process.exit(1);
+}
 let groupsAlias = '';
 let enginePath = `${ROOT_URL}/src/lib/clubManager.ts`;
 let cardPath = `${ROOT_URL}/src/components/club-manager/UclGroupsCard.tsx`;
@@ -310,6 +319,17 @@ const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
 const { cm, UclGroupsCard, UclBracketCard, render, staticPool, eraRosters } = createRequire(import.meta.url)(BUNDLE);
 const twinCm = createRequire(import.meta.url)(TWIN_BUNDLE).cm;
+// Explicit original saves retain the old group regression sample and its RNG stream.
+const beforeOriginalBoot = Math.random;
+const originalBootDraws = [];
+Math.random = (() => { const draw = mulberry(520); return () => { const value = draw(); originalBootDraws.push(value); return value; }; })();
+let originalGroupBundle;
+try { originalGroupBundle = await bundleUcl({ original: true }); } finally { Math.random = beforeOriginalBoot; }
+const originalGroupEngine = originalGroupBundle.value.E;
+const retainedOriginalStarts = [];
+function originalGroupStart(club) { const state = originalGroupEngine.startCareer(club); if (state.uclGroup?.format) throw new Error('Original group fixture unexpectedly has a new format'); retainedOriginalStarts.push(clone(state)); return state; }
+fs.mkdirSync(UCL_PROOF_OUT, { recursive: true });
+fs.writeFileSync(path.join(UCL_PROOF_OUT, 'era-harness-original-source.json'), JSON.stringify({ base: '09df145abfb241679022b41903d2f19bc254ebf9', loaded: originalGroupBundle.loaded, startupDraws: originalBootDraws, scope: 'Additional original-module startup is separate from the unchanged harness action stream.' }, null, 2));
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await cm.ensureAllEraRosters();
 const {
@@ -768,7 +788,7 @@ function checkMigration(tally) {
     tally.shapes += 1;
   }
   // A modern save is left exactly as it was.
-  let m = startCareer('Real Madrid');
+  let m = originalGroupStart('Real Madrid');
   m = playUntil(m, st => (st.uclGroup?.matchday ?? 0) >= 3);
   const mOld = clone(m);
   delete mOld.pairResults;
@@ -1081,11 +1101,20 @@ function checkGroupRule(tally) {
  * number of places that sort at all is held rather than the shape of the
  * ones this round happened to touch.
  */
-function checkGroupPaths() {
-  const engine = lf(fs.readFileSync(ENGINE, 'utf8'));
-  const cards = fs.readdirSync(path.join(ROOT, 'src', 'components', 'club-manager'))
-    .filter(f => f.endsWith('.tsx'))
-    .map(f => [f, lf(fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', f), 'utf8'))]);
+function readGroupPathSources() {
+  return {
+    engine: lf(fs.readFileSync(ENGINE, 'utf8')),
+    cards: fs.readdirSync(path.join(ROOT, 'src', 'components', 'club-manager'))
+      .filter(f => f.endsWith('.tsx'))
+      .map(f => [f, lf(fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', f), 'utf8'))]),
+  };
+}
+function groupPathFailures(sources) {
+  const codeOnly = src => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
+  const engine = codeOnly(lf(sources.engine));
+  const cards = sources.cards.map(([name, src]) => [name, codeOnly(lf(src))]);
+  const findings = [];
+  const fail = (key, message) => findings.push({key, message});
   const count = (src, needle) => src.split(needle).length - 1;
   /* Measured on the shipped tree: sortedTable is declared once and called at
      the three league helpers; sortedUclGroup is declared once and called at
@@ -1095,13 +1124,65 @@ function checkGroupPaths() {
      and somebody has to say which order it should read. */
   const plain = count(engine, 'sortedTable(');
   const group = count(engine, 'sortedUclGroup(');
-  if (plain !== 4) note('groups', `clubManager.ts calls sortedTable in ${plain} places rather than 4 (one declaration and the three league helpers); if a new one sorts a Champions League group it must use sortedUclGroup`);
-  if (group !== 6) note('groups', `clubManager.ts names sortedUclGroup in ${group} places rather than 6 (one declaration and the five group reads); a new group reader must be checked against this section`);
+  if (plain !== 4) fail('engine-league-read-count', `clubManager.ts calls sortedTable in ${plain} places rather than 4 (one declaration and the three league helpers); if a new one sorts a Champions League group it must use sortedUclGroup`);
+  if (group !== 6) fail('engine-group-read-count', `clubManager.ts names sortedUclGroup in ${group} places rather than 6 (one declaration and the five group reads); a new group reader must be checked against this section`);
   for (const [f, src] of cards) {
-    if (count(src, 'sortedTable(')) note('groups', `${f} sorts a table with the plain sortedTable; a Club Manager card showing a group must use sortedUclGroup`);
+    if (count(src, 'sortedTable(')) fail('plain-card-read', `${f} sorts a table with the plain sortedTable; a Club Manager card showing a group must use sortedUclGroup`);
   }
   const cardGroup = cards.reduce((n, [, src]) => n + count(src, 'sortedUclGroup('), 0);
-  if (cardGroup !== 1) note('groups', `the Club Manager cards call sortedUclGroup in ${cardGroup} places rather than 1 (the groups card)`);
+  const groupCard = cards.find(([name]) => name === 'UclGroupsCard.tsx')?.[1] ?? '';
+  const modernGuard = "if (group.format === 'league36') {";
+  const modernStart = groupCard.indexOf(modernGuard);
+  const legacyStart = groupCard.indexOf('const world = career.uclWorld ?? [];', modernStart);
+  const modernCode = modernStart >= 0 && legacyStart > modernStart ? groupCard.slice(modernStart, legacyStart) : '';
+  const legacyCode = legacyStart >= 0 ? groupCard.slice(legacyStart) : '';
+  if (count(groupCard, modernGuard) !== 1 || count(modernCode, 'sortedUclGroup(') !== 1 || count(modernCode, 'sortedUclGroup(career, group.table)') !== 1) {
+    fail('modern-reader', 'the modern league36 card must have exactly one guarded sortedUclGroup read of its saved group.table');
+  }
+  if (count(legacyCode, 'sortedUclGroup(') !== 1 || count(legacyCode, 'sortedUclGroup(career, activeTable)') !== 1) {
+    fail('legacy-reader', 'the original saved-group card must keep exactly one sortedUclGroup read of its selected activeTable');
+  }
+  if (cardGroup !== 2) fail('card-read-count', `the Club Manager cards call sortedUclGroup in ${cardGroup} places rather than the one modern and one original group read; no unrelated group readers are allowed`);
+  return findings;
+}
+function checkGroupPaths() {
+  for (const finding of groupPathFailures(readGroupPathSources())) note('groups', finding.message);
+}
+function checkGroupPathDetector(mode) {
+  const hash = value => createHash('sha256').update(value).digest('hex');
+  const sourceHashes = sources => [{file: 'src/lib/clubManager.ts', sha256: hash(sources.engine)}, ...sources.cards.map(([name, raw]) => ({file: `src/components/club-manager/${name}`, sha256: hash(raw)}))];
+  const originalSources = readGroupPathSources();
+  const sourceBefore = sourceHashes(originalSources);
+  const healthyFailures = groupPathFailures(originalSources);
+  assert.deepEqual(healthyFailures, [], 'Actual complete source-card detector baseline is healthy');
+  const faultySources = JSON.parse(JSON.stringify(originalSources));
+  const card = faultySources.cards.find(([name]) => name === 'UclGroupsCard.tsx');
+  assert(card, 'Actual groups card is retained');
+  const from = mode === 'modern' ? 'sortedUclGroup(career, group.table)' : 'sortedUclGroup(career, activeTable)';
+  const to = mode === 'modern' ? 'group.table' : 'activeTable';
+  const count = card[1].split(from).length - 1;
+  assert.equal(count, 1, 'Copied card-reader anchor occurs exactly once');
+  const beforeSha256 = hash(card[1]);
+  card[1] = card[1].replace(from, to);
+  const afterSha256 = hash(card[1]);
+  assert.notEqual(afterSha256, beforeSha256, 'Copied raw card source actually changed');
+  const faultFailures = groupPathFailures(faultySources);
+  const expectedKeys = [mode === 'modern' ? 'modern-reader' : 'legacy-reader', 'card-read-count'];
+  assert.deepEqual(faultFailures.map(f => f.key), expectedKeys, 'Exactly the selected reader and total-card fences detect the copied fault');
+  const restoredSources = JSON.parse(JSON.stringify(faultySources));
+  restoredSources.cards.find(([name]) => name === 'UclGroupsCard.tsx')[1] = originalSources.cards.find(([name]) => name === 'UclGroupsCard.tsx')[1];
+  assert.deepEqual(restoredSources, originalSources, 'The entire copied source observation is restored');
+  assert.deepEqual(groupPathFailures(restoredSources), [], 'Restored copied source passes the exact original detector');
+  const diskAfter = readGroupPathSources();
+  assert.deepEqual(diskAfter, originalSources, 'Every actual engine and card byte remains unchanged');
+  const sourceAfter = sourceHashes(diskAfter);
+  assert.deepEqual(sourceAfter, sourceBefore);
+  fs.mkdirSync(UCL_PROOF_OUT, {recursive: true});
+  fs.writeFileSync(path.join(UCL_PROOF_OUT, `card-path-control-${mode}.json`), JSON.stringify({type: 'copied-code-observation-detector', mode, head: execSync('git rev-parse HEAD', {cwd: ROOT, encoding: 'utf8'}).trim(), tree: execSync('git rev-parse "HEAD^{tree}"', {cwd: ROOT, encoding: 'utf8'}).trim(), healthyFailures, expectedKeys, faultFailures, fault: {file: 'src/components/club-manager/UclGroupsCard.tsx', from, to, count, beforeSha256, afterSha256}, changed: true, undo: true, originalSources, faultySources, restoredSources, sourceBefore, sourceAfter}, null, 2));
+  console.log('PASS actual source-card detector baseline: modern1, legacy1, total2, no unrelated reads.');
+  console.log(`PASS copied ${mode} reader anchor changed exactly once and retained complete raw inputs.`);
+  console.log('PASS complete copied-source undo and every actual engine/card byte held.');
+  console.log(`CONTROL card-path-${mode} FIRED: exactly ${expectedKeys.join(', ')}.`);
 }
 
 /** A save from before this round: the group results are gone, the fall back
@@ -1151,7 +1232,7 @@ const tally = {
 function runCareer(tag, club, eraId) {
   const isEra = !!eraId;
   let koStart = null;
-  let s = eraId ? startCareer(club, eraId) : startCareer(club);
+  let s = eraId ? startCareer(club, eraId) : originalGroupStart(club);
   /* Round 478: every group of every save is read on every group night, not
      only at the final whistle, so the mid group fall back is walked too. */
   let seenMd = -1;
@@ -1221,8 +1302,8 @@ const ERA_CAREERS = [
   ['PSG 2020', 'PSG', 'era2020'],
 ];
 for (const [tag, club, era] of ERA_CAREERS) runCareer(tag, club, era);
-runCareer('Real Madrid (modern control)', 'Real Madrid');
-runCareer('Arsenal (modern control)', 'Arsenal');
+runCareer('Real Madrid (original modern group save)', 'Real Madrid');
+runCareer('Arsenal (original modern group save)', 'Arsenal');
 checkRule();
 checkMigration(tally);
 checkGroupRule(tally);
@@ -1356,7 +1437,7 @@ function modernDigest(engine) {
   const saved = Math.random;
   Math.random = mulberry(1028);
   try {
-    let s = engine.startCareer('Real Madrid');
+    let s = clone(twinOriginalInput);
     const parts = [];
     let guard = 0;
     while (guard++ < 200) {
@@ -1372,9 +1453,32 @@ function modernDigest(engine) {
     Math.random = saved;
   }
 }
+const beforeTwinFixture = Math.random;
+let twinOriginalInput;
+Math.random = mulberry(1028);
+try { twinOriginalInput = originalGroupStart('Real Madrid'); } finally { Math.random = beforeTwinFixture; }
 checkEraNights(tally);
 const twinBefore = modernDigest(twinCm);
 const twinNow = modernDigest(cm);
+// The new-format witness is additional to every original historic and old-save floor.
+const beforeModern = Math.random;
+Math.random = mulberry(1253);
+let modernLeague;
+try {
+  const start = cm.startCareer('Arsenal', 'now');
+  const field = cm.seasonOneUclField('now');
+  scheduleProof(start.uclGroup, field, start.clubName);
+  modernLeague = runSeason({ E: cm }, start, 1253);
+  const state = modernLeague.state;
+  scheduleProof(state.uclGroup, field, state.clubName);
+  if (state.week !== state.calendar.length || state.uclGroup.matchday !== 8 || state.uclGroup.results.length !== 144) note('format', 'the genuine modern league phase did not finish all eight matchdays and 144 games');
+  for (const [round, count] of [['PO', 8], ['R16', 8], ['QF', 4], ['SF', 2], ['F', 1]]) {
+    const ties = state.uclBracket.filter(tie => tie.round === round);
+    if (ties.length !== count || ties.some(tie => tie.winner !== tie.home && tie.winner !== tie.away)) note('format', `the modern ${round} path did not finish all ${count} ties`);
+  }
+  fs.writeFileSync(path.join(UCL_PROOF_OUT, 'era-harness-new-modern.json'), JSON.stringify({ start, complete: modernLeague }, null, 2));
+} finally { Math.random = beforeModern; }
+fs.writeFileSync(path.join(UCL_PROOF_OUT, 'era-harness-original-saves.json'), JSON.stringify({ originals: retainedOriginalStarts, twinInput: twinOriginalInput, current: twinNow, pre1028: twinBefore }, null, 2));
 
 /* ---------- the report ---------- */
 let failures = 0;
@@ -1385,8 +1489,9 @@ function section(title, bucket, lines, extra) {
   for (const m of buckets[bucket]) console.error('  FAIL: ' + m);
   failures += buckets[bucket].length;
 }
-section('1) The format: an era plays eight groups into a round of 16, the modern save keeps its shape', 'format', [
-  `${tally.careers} careers played to the final whistle (${ERA_CAREERS.length} era, 2 modern), ${tally.sacked} ended in the sack first`,
+section('1) The format: historic and original groups stay held, new modern seasons finish the league phase', 'format', [
+  `${tally.careers} careers played to the final whistle (${ERA_CAREERS.length} era, 2 original modern group saves), ${tally.sacked} ended in the sack first`,
+  `New modern witness: 36 clubs, eight matchdays, 144 saved games, eight completed PO ties and a full round of 16.`,
 ], () => {
   if (tally.careers < 10) note('format', `only ${tally.careers} careers reached the final whistle (floor 10)`);
 });
