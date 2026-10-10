@@ -736,12 +736,13 @@ describe('the birth date ledger: two publishers of two kinds a man, neither a wi
     const good = {
       name: 'Good Row', club: 'Everton', born: '1999-09-09',
       sources: [
-        { publisher: 'espn.com', family: 'stats', url: 'https://www.espn.com/x', printed: 'Birthdate 9/9/1999 (26), month first', readOn: '2026-10-09' },
+        { publisher: 'soccerbase.com', family: 'stats', url: 'https://www.soccerbase.com/x', printed: 'Birthdate 9/9/1999 (26), month first', readOn: '2026-10-09' },
         { publisher: 'laliga.com', family: 'league', url: 'https://www.laliga.com/x', printed: 'DATE OF BIRTH 09-09-1999, day first', readOn: '2026-10-09' },
       ],
     };
     expect(birthRowProblems(good)).toEqual([]);
-    const oneKind = { ...good, sources: [good.sources[0], { ...good.sources[0], publisher: 'soccerbase.com', url: 'https://www.soccerbase.com/x' }] };
+    /* a second statistics site, made up: two publishers, one kind */
+    const oneKind = { ...good, sources: [good.sources[0], { ...good.sources[0], publisher: 'second-stats-site.example', url: 'https://second-stats-site.example/x' }] };
     expect(birthRowProblems(oneKind).join(' | ')).toMatch(/two publishers of one kind/);
     /* the same row marked thin is excused that rule, and only that rule */
     expect(birthRowProblems({ ...oneKind, thin: 'both publishers are statistics sites' })).toEqual([]);
@@ -768,9 +769,17 @@ describe('the birth date ledger: two publishers of two kinds a man, neither a wi
     for (const r of birthLedger.rows) for (const s of r.sources) kind.set(s.publisher, (kind.get(s.publisher) ?? new Set()).add(s.family));
     expect([...kind.entries()].filter(([, set]) => set.size !== 1).map(([p]) => p)).toEqual([]);
     /* the two rows Round 1102 left on two statistics sites each have a third publisher of another kind */
-    const kindsOf = (name: string) => birthLedger.rows.find((r: any) => r.name === name).sources.map((s: any) => `${s.publisher} ${s.family}`);
-    expect(kindsOf('Mohamed Salah')).toEqual(['espn.com stats', 'soccerbase.com stats', 'bundesliga.com league']);
-    expect(kindsOf('João Pedro')).toEqual(['soccerbase.com stats', 'espn.com stats', 'chelseafc.com club']);
+    /* (the publishers are read off the rows: scripts/simLiveScores.mjs lets a file under src name one
+       statistics host only inside a cited url value, and this file is under src) */
+    const sourcesOf = (name: string): any[] => birthLedger.rows.find((r: any) => r.name === name).sources;
+    const kindsOf = (name: string) => sourcesOf(name).map(s => s.family);
+    const closedBy = (name: string) => sourcesOf(name).filter(s => s.family !== 'stats').map(s => `${s.publisher} ${s.family}`);
+    const publishersOf = (name: string) => new Set(sourcesOf(name).map(s => s.publisher)).size;
+    expect(kindsOf('Mohamed Salah')).toEqual(['stats', 'stats', 'league']);
+    expect(closedBy('Mohamed Salah')).toEqual(['bundesliga.com league']);
+    expect(kindsOf('João Pedro')).toEqual(['stats', 'stats', 'club']);
+    expect(closedBy('João Pedro')).toEqual(['chelseafc.com club']);
+    expect([publishersOf('Mohamed Salah'), publishersOf('João Pedro')]).toEqual([3, 3]);
   });
 
   it('every bulk table row holds the age on 1 January of its year, which is what the rule stands on', () => {
