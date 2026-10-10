@@ -694,7 +694,7 @@ export function nbaRivalSeason(year: number, seasonsPlayed: number): RivalSeason
     });
     return {
       line: nbaStatLine({ ppg: stat.ppg, rpg: stat.rpg, apg: stat.apg, mpg: stat.mpg, teamResult: '' }),
-      score: nbaSeasonScore(stat),
+      score: nbaSeasonScore({ games: L, ...stat }),
       year, allStar: !!won.allStar,
     };
   };

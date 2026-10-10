@@ -178,6 +178,14 @@ export function ageRival(r: CareerRival, rng: () => number): void {
   if (r.ovr <= 60 || r.age >= 39 || (r.age >= 35 && rng() < 0.25)) r.retired = true;
 }
 
+/** Round 1112: who leads the head to head, off the tally and nothing else. The near tie note said "You lead"
+ *  whoever led, in all four sports. */
+export function rivalLeadLine(r: Pick<CareerRival, 'myYears' | 'hisYears'>): string {
+  if (r.myYears > r.hisYears) return `You lead the head to head ${r.myYears}-${r.hisYears}.`;
+  if (r.hisYears > r.myYears) return `He leads the head to head ${r.hisYears}-${r.myYears}.`;
+  return `The head to head is level at ${r.myYears}-${r.hisYears}.`;
+}
+
 /**
  * Score one season of the race and produce the note the player reads.
  * `myScore` is the player's own season on the same scale as the rival's.
@@ -206,7 +214,7 @@ export function judgeRivalSeason(
   const head = `${r.myYears}-${r.hisYears}`;
 
   if (Math.abs(gap) < score * 0.06) {
-    notes.push(`🪞 ${r.name} went ${line}. Nothing in it again. You lead the head to head ${head}.`);
+    notes.push(`🪞 ${r.name} went ${line}. Nothing in it again. ${rivalLeadLine(r)}`);
   } else if (mine) {
     notes.push(`🪞 ${r.name} went ${line}. You had the better year. Head to head ${head}.`);
   } else {

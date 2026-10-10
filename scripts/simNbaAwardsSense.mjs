@@ -49,8 +49,10 @@
        percent (measured across five seeds: at most 0.042 and 2.3 on the first, at most 0.033 and 1.6 on the second).
    R   The rival (Round 1112). He plays his season on the player's own line (nbaRivalSeason in nbaMyCareer.ts,
        through the one hook careerRival.ts takes), so:
-       R1  my share of the head to head years is held at what Round 1112 measured (RIVAL_1112 below), no longer
-           at main's, whose 62.3 to 63.0 percent was the old rival line's.
+       R1  my share of the head to head years is held at what Round 1112 measured (RIVAL_1112 below: 61.01,
+           60.83, 61.44, 61.06, 61.09 percent on five full size seeds, 2026-10-09), no longer at main's, whose
+           62.3 to 63.0 percent was the old rival line's. The player's own path did not move to get there (see
+           section P): what moved is the rival's line.
        R2  every rival line reads back off its printed text and is in the player's own shape, and the verdict
            NEVER disagrees with the two printed lines scored the same way (exact, at every size; the tree
            before Round 1112 read 32.6 to 33.1 percent of judged years).
@@ -124,6 +126,16 @@
        against the real numbers typed in this file (never against the rule table the help is built from: the
        two agreeing is one mistake said twice), the badge count on the page against NBA_BADGES.
    C   The NFL, MLB and NHL careers hash equal to the baseline (under SENSE_PROVE_OTHERS=1 only).
+   T   The near tie (Round 1112). The one sentence all four sports share ("Nothing in it again. ...") names the
+       leader the tally on the save gives, or says the head to head is level. Every near tie note of the NBA
+       fleet and of the other three sports' fleets is read against the rival's tally right after its season
+       (exact), and all three readings turn up in every sport (floors).
+   P   The proof of Round 1112, under SENSE_PROVE_AGAINST=<commit> only (the commit before the round's first
+       edit). The same fleets are played on this tree and on the tree with every src file that differs read at
+       that commit: the NBA player's own path is byte equal (a digest of his lines, awards, role, club, own
+       notes, summer cards and final numbers) while the rival's line is not; and in the NFL, MLB and NHL the
+       player's careers and the rival's own trail are byte equal, and the only notes that moved are near ties.
+       A proof for one round, like C: once another round edits these engines the commit is stale.
    R, H and B6 compare the mean over the run's seeds with the mean over main's, within a FIXED width typed in
    HELD_TOL (heldAt below says why a seed by seed band was thrown away, and why the width is no longer worked
    out from the spread of the run being judged). Each width is what three standard errors came to at full
@@ -157,6 +169,8 @@
      neutralmine      my side of the verdict off the era neutral line  R red (the 2003-04 careers tell)
      rivaldraws       the rival's season taking a second draw          R red
      oldgate306       the All-Star beat dealt on the two ratings again R red
+     nearlie          the near tie saying "You lead" whoever leads     T red
+   With SENSE_PROVE_AGAINST=<commit> set, rivaldraws must also turn P red (the player's digest moves).
      noscale          the legacy constant back to 1                    H red (refuses when it is 1)
      nomvpworth       an MVP worth nothing to the legacy score         H red
      independent      MVP with no First Team gate and no playoff gate  B1 red (may: B3, B4, B6, H)
@@ -206,6 +220,11 @@ const CAREERS = Number(process.env.SENSE_CAREERS || 6000);
 const OTHERS_PER = Number(process.env.SENSE_OTHERS || 500);
 const FULL = CAREERS >= 6000 && SEEDS.length >= 5;
 const PROVE_OTHERS = process.env.SENSE_PROVE_OTHERS === '1';
+/* Section P: SENSE_PROVE_AGAINST=<commit> plays the same fleets on this tree and on the tree with every src file
+   that differs taken back to that commit (read with git show, swapped in memory), and compares them. */
+const PROVE_AGAINST = process.env.SENSE_PROVE_AGAINST || '';
+if (PROVE_AGAINST && !/^[0-9a-f]{7,40}$/.test(PROVE_AGAINST)) { console.error('SENSE_PROVE_AGAINST needs a commit hash (7 to 40 hex digits)'); process.exit(2); }
+const PROVE_CAREERS = Number(process.env.SENSE_PROVE_CAREERS || 1500);
 const BASELINE_FILE = path.join(ROOT, 'scripts', 'data', 'nbaAwardsSenseBaseline.json');
 const norm = s => s.replace(/\r\n/g, '\n');
 /* Section E's tolerances: how far a seed's measured field may sit from the committed row. */
@@ -286,7 +305,7 @@ const CONTROLS = {
   /* R: the old scale back under the verdict. The rival is scored on the line before Round 1112 (whole number
      points off his form, no archetype, no minutes) while the screen prints his new one, which is what the bridge
      did: the verdict then says what the two printed lines do not. */
-  oldscale: { file: 'src/lib/nbaMyCareer.ts', find: '      score: nbaSeasonScore(stat),',
+  oldscale: { file: 'src/lib/nbaMyCareer.ts', find: '      score: nbaSeasonScore({ games: L, ...stat }),',
     put: '      score: Math.max(3, Math.round(5 + (form - 64) * 0.62 + 1.5)) * 1.6 + Math.max(1, 2 + (form - 64) * 0.22) * 1.4 + Math.max(0.5, 1.5 + (form - 64) * 0.24) * 1.7,', needs: 'R' },
   /* R: my side of the verdict read off the era neutral line again instead of the printed one. In a modern
      season the two are the same number, so only the 2003-04 careers can tell (one career in four). */
@@ -296,7 +315,9 @@ const CONTROLS = {
      turns up in years neither made the roster, saying one of them did. */
   oldgate306: { file: 'src/lib/nbaCareerRivalryEvents.ts', find: '    when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && (f.mine || f.his); },', put: '    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,', needs: 'R' },
   /* R: the rival's season taking a second draw of the season's stream (every draw of the player's after it moves). */
-  rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);", put: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng() + rng()}`);", needs: 'R' },
+  rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);", put: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng() + rng()}`);", needs: PROVE_AGAINST ? 'R,P' : 'R' },
+  /* T: the near tie saying "You lead" whoever leads, as it did in all four sports. */
+  nearlie: { file: 'src/lib/careerRival.ts', find: 'Nothing in it again. ${rivalLeadLine(r)}`);', put: 'Nothing in it again. You lead the head to head ${head}.`);', needs: 'T' },
   /* H: the legacy constant back to 1. Refuses when it already is 1 (then nomvpworth is the control H has). */
   noscale: { file: 'src/lib/nbaMyCareer.ts', find: LEGACY_SCALE_LINE, put: 'export const NBA_LEGACY_NEW_LINE_SCALE: number = 1;', needs: 'H' },
   /* H: an MVP worth nothing to the legacy score of a career retiring today. */
@@ -405,6 +426,30 @@ async function bundleWith(list, tag) {
   try { unlinkSync(out); } catch { /* another run may have cleaned it */ }
   return mod;
 }
+/** Section P: the engine with every src file that differs from `commit` read at that commit (git show, in
+ *  memory). Says how many files it took back, so a proof against a tree that is this tree cannot pass quietly. */
+async function bundleAt(commit) {
+  const changed = execSync(`git diff --name-only ${commit} -- src`, { cwd: ROOT }).toString().split('\n').map(x => x.trim()).filter(Boolean);
+  const served = new Set();
+  const plugin = {
+    name: 'sense-before',
+    setup(b) {
+      b.onLoad({ filter: /[.]tsx?$/ }, args => {
+        const rel = path.relative(ROOT, args.path).replace(/\\/g, '/');
+        if (!changed.includes(rel)) return undefined;
+        let contents;
+        try { contents = execSync(`git show ${commit}:${rel}`, { cwd: ROOT, maxBuffer: 1 << 28, stdio: ['ignore', 'pipe', 'ignore'] }).toString(); } catch { return undefined; /* a file the round added */ }
+        served.add(rel);
+        return { contents: norm(contents), loader: rel.endsWith('x') ? 'tsx' : 'ts' };
+      });
+    },
+  };
+  const out = path.join(os.tmpdir(), `nba-sense-${process.pid}-before.mjs`);
+  await build({ ...BUNDLE, outfile: out, plugins: [plugin] });
+  const mod = await import(pathToFileURL(out).href);
+  try { unlinkSync(out); } catch { /* another run may have cleaned it */ }
+  return { mod, changed, served: [...served] };
+}
 const BUNDLE = {
   stdin: {
     contents: [
@@ -457,12 +502,19 @@ const ARCH_IDS = POS.flatMap(p => nba.NBA_ARCHETYPES[p].map(a => a.id));
 /* ------------------------------------------------------------------ */
 /** Plays `careers` NBA careers on one seed, the board's own order. Every season is kept with what the engine
  *  knew going in (rating, morale, club, role, seasons played), so a section can replay it through a function. */
-function playFleet(seed, careers, M = E) {
+function playFleet(seed, careers, M = E, digest = false) {
   const nba = M.nba;
   const rnd = mulberry32(seed);
   Math.random = rnd;
   const seasons = [];
   const out = [];
+  const nearTies = [];
+  /* Section P: everything the player lives and sees that is his own. Each season's line (awards on it), his
+     role, his club's quality, his own notes (the rival's note, the one line that starts with the mirror, is
+     left out: it is what Round 1112 moves), the summer card he drew and the option taken, and every number on
+     the final save. */
+  const h = digest ? crypto.createHash('sha256') : null;
+  const trail = [];
   for (let i = 0; i < careers; i++) {
     const pos = POS[i % 5];
     const arch = nba.NBA_ARCHETYPES[pos][i % 3];
@@ -483,16 +535,23 @@ function playFleet(seed, careers, M = E) {
         /* The fleet never answers a rivalry card, so the pending one can be an older season's: a beat is this
            season's only when the object is new. */
         const pendingBefore = c.pendingRivalryEvent;
-        const { line } = nba.simNbaSeason(c, tq, rnd);
+        const { line, notes: seasonNotes } = nba.simNbaSeason(c, tq, rnd);
         const beat = c.pendingRivalryEvent && c.pendingRivalryEvent !== pendingBefore ? c.pendingRivalryEvent : null;
+        if (h) trail.push({ role: c.role ?? 'starter', tq, line, notes: seasonNotes.filter(n => !n.startsWith(MIRROR)) });
+        nearTies.push(...nearTieOf(seasonNotes, c.rival));
         seasons.push({ i, pos, arch: arch.id, era, tq, ...pre, prev, line, won: (c.rival?.myYears ?? 0) - pre.my, lost: (c.rival?.hisYears ?? 0) - pre.his, rivalScore: c.rival?.lastScore ?? null, rivalLine: c.rival?.lastLine ?? null,
           rivalAllStar: c.rival?.lastAllStar === true, beat306: beat && beat.id === 306 ? { says: beat.description, does: beat.consequence } : null, beatDealt: !!beat });
       }
       nba.nbaProgress(c, rnd);
       const ev = nba.drawNbaEvent(c, rnd);
-      if (ev) { const pick = ev.options[Math.floor(rnd() * ev.options.length)]; pick.apply(c, rnd); }
+      if (ev) { const k = Math.floor(rnd() * ev.options.length); const pick = ev.options[k]; pick.apply(c, rnd); if (h) trail.push({ card: ev.id, option: k }); }
       tq = nba.nbaRollTeamQuality(tq, rnd);
       if (nba.nbaShouldRetire(c)) done = true;
+    }
+    if (h) {
+      const counters = Object.fromEntries(Object.entries(c).filter(([, v]) => typeof v === 'number').sort(([a], [b]) => (a < b ? -1 : 1)));
+      h.update(JSON.stringify({ trail, counters }));
+      trail.length = 0;
     }
     /* Read while the career is still open: a career retiring today is told on today's calibration (Round 1051). */
     const leg = nba.nbaLegacyOf(c);
@@ -501,7 +560,7 @@ function playFleet(seed, careers, M = E) {
     out.push({ i, pos, arch: arch.id, era, seasons: c.seasons.length, mvps: c.mvps, allNbas: c.allNbas, allStars: c.allStars ?? 0, rings: c.rings, finalsMvps: c.finalsMvps,
       score: leg.score, inducted: hall.outcome === 'inducted', firstBallot: !!hall.firstBallot, my: c.rival?.myYears ?? 0, his: c.rival?.hisYears ?? 0, pts: tot.pts });
   }
-  return { seasons, careers: out };
+  return { seasons, careers: out, nearTies, digest: h ? h.digest('hex') : null };
 }
 
 const band = o => (o < 72 ? '<72' : o < 76 ? '72-75' : o < 80 ? '76-79' : o < 84 ? '80-83' : o < 88 ? '84-87' : o < 92 ? '88-91' : o < 96 ? '92-95' : '96+');
@@ -511,6 +570,24 @@ const healthy = s => s.line.games >= 58;
 const printedLine = t => { const x = /^([0-9]+(?:[.][0-9]+)?) ppg, ([0-9]+(?:[.][0-9]+)?) rpg, ([0-9]+(?:[.][0-9]+)?) apg$/.exec(t ?? ''); return x ? { ppg: Number(x[1]), rpg: Number(x[2]), apg: Number(x[3]) } : null; };
 const RIVAL_SHAPE = /^[0-9]+[.][0-9] ppg, [0-9]+[.][0-9] rpg, [0-9]+[.][0-9] apg$/;
 const isNewLine = l => typeof l.mpg === 'number';
+/* The rival's season note starts with this (careerRival.ts). */
+const MIRROR = '\u{1FA9E}';
+/* T: a near tie note read against the tally on the save, right after the season that wrote it. */
+const NEAR_TIE = /Nothing in it again[.] (?:(You lead) the head to head (\d+)-(\d+)|(He leads) the head to head (\d+)-(\d+)|The head to head is (level) at (\d+)-(\d+))[.]$/;
+function nearTieOf(notes, rival) {
+  const out = [];
+  if (!rival) return out;
+  for (const n of notes ?? []) {
+    if (!n.includes('Nothing in it')) continue;
+    const x = NEAR_TIE.exec(n);
+    const my = rival.myYears; const his = rival.hisYears;
+    if (!x) out.push({ kind: 'unread', ok: false, note: n });
+    else if (x[1]) out.push({ kind: 'mine', ok: my > his && Number(x[2]) === my && Number(x[3]) === his, note: n });
+    else if (x[4]) out.push({ kind: 'his', ok: his > my && Number(x[5]) === his && Number(x[6]) === my, note: n });
+    else out.push({ kind: 'level', ok: my === his && Number(x[8]) === my && Number(x[9]) === his, note: n });
+  }
+  return out;
+}
 
 /** Every rate the bands hang off, for one seed's fleet. Plain numbers only: this is what the baseline stores. */
 function measure(f, M = E) {
@@ -893,15 +970,21 @@ function snubDecks(seed, n) {
 /* ------------------------------------------------------------------ */
 /* The other three sports: a hash of every career, and two printed rates */
 /* ------------------------------------------------------------------ */
-const OTHER = {
+const otherOf = ({ nfl, mlb, nhl }) => ({
   nfl: { pos: ['QB', 'RB', 'WR', 'TE', 'LB', 'CB', 'EDGE', 'K'], arch: () => nfl.ARCHETYPES, start: (...a) => nfl.startCareer(...a), tq: (...a) => nfl.rollTeamQuality(...a), sim: (...a) => nfl.simSeason(...a), prog: (...a) => nfl.progress(...a), stop: c => nfl.shouldRetire(c) },
   mlb: { pos: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'], arch: () => mlb.MLB_ARCHETYPES, start: (...a) => mlb.startMlbCareer(...a), tq: (...a) => mlb.mlbRollTeamQuality(...a), sim: (...a) => mlb.simMlbSeason(...a), prog: (...a) => mlb.mlbProgress(...a), stop: c => mlb.mlbShouldRetire(c) },
   nhl: { pos: ['C', 'LW', 'RW', 'D', 'G'], arch: () => nhl.NHL_ARCHETYPES, start: (...a) => nhl.startNhlCareer(...a), tq: (...a) => nhl.nhlRollTeamQuality(...a), sim: (...a) => nhl.simNhlSeason(...a), prog: (...a) => nhl.nhlProgress(...a), stop: c => nhl.nhlShouldRetire(c) },
-};
+});
+const OTHER = otherOf(E);
 /** Each engine's own loop (the one scripts/simAwards.mjs walks), `per` careers on one seed. Returns the sha256
  *  of every season line and every numeric counter on the final save, and the season lines for the prints. */
-function playOther(sport, seed, per) {
-  const d = OTHER[sport];
+function playOther(sport, seed, per, M = E) {
+  const d = (M === E ? OTHER : otherOf(M))[sport];
+  /* Round 1112: the rival's own trail (his line, his score, the tally, his rings, rating, age, whether he has
+     retired) hashed apart from the player's, the season notes kept for section P, the near ties for section T. */
+  const hr = crypto.createHash('sha256');
+  const notes = [];
+  const nearTies = [];
   const rnd = mulberry32(seed * 7919 + sport.charCodeAt(1) * 104729);
   Math.random = rnd;
   const h = crypto.createHash('sha256');
@@ -912,14 +995,20 @@ function playOther(sport, seed, per) {
     const c = d.start('Sim', pos, archs[i % archs.length], rnd, null);
     let tq = null; let guard = 0; let done = false;
     while (!done && guard++ < 30) {
-      tq = d.tq(tq, rnd); d.sim(c, tq, rnd); d.prog(c, rnd);
+      tq = d.tq(tq, rnd);
+      const played = d.sim(c, tq, rnd);
+      const r = c.rival;
+      if (r) hr.update(JSON.stringify([r.lastLine, r.lastScore, r.myYears, r.hisYears, r.rings, r.ovr, r.age, r.retired]));
+      notes.push(played?.notes ?? []);
+      nearTies.push(...nearTieOf(played?.notes, r));
+      d.prog(c, rnd);
       if (d.stop(c)) done = true;
     }
     const counters = Object.fromEntries(Object.entries(c).filter(([, v]) => typeof v === 'number').sort(([a], [b]) => (a < b ? -1 : 1)));
     h.update(JSON.stringify({ seasons: c.seasons, counters }));
     for (const s of c.seasons) lines.push(s);
   }
-  return { hash: h.digest('hex'), lines };
+  return { hash: h.digest('hex'), lines, rivalHash: hr.digest('hex'), notes, nearTies };
 }
 
 /* ------------------------------------------------------------------ */
@@ -986,7 +1075,9 @@ const HELD_TOL = {
   everMvp: 0.93, everAllNba: 1.19,
 };
 /* R: my share of the head to head years as Round 1112 shipped it, five full size seeds (see the header). */
-const RIVAL_1112 = { myShare: [60.9, 60.9, 60.9, 60.9, 60.9] };
+const RIVAL_1112 = { myShare: [61.01, 60.83, 61.44, 61.06, 61.09] };
+/* T: how many near tie notes of each kind a full size run must still find in each sport (see the header). */
+const NEAR_TIE_FLOOR = 1;
 /* R4: how often a full size seed must still deal the All-Star beat in each of its three cases (see the header). */
 const BEAT306_FLOOR = { mine: 1, his: 1, both: 1 };
 /* R: how many of the fifteen kinds eight names at five positions must reach (measured: see the header). */
@@ -1008,6 +1099,7 @@ function heldAt(section, main, now, label, key, whose) {
 const t0 = Date.now();
 console.log(`simNbaAwardsSense: ${CAREERS} careers a seed, seeds ${SEEDS.join(', ')}${CONTROL ? `, control ${CONTROL}` : ''}${TRY_SCALE ? `, TRIAL legacy scale ${TRY_SCALE}` : ''}${FULL ? '' : JUDGE ? ` (shrunk run, judged at its own size)` : ' (quick run, bands not judged)'}`);
 const per = [];
+const nbaNearTies = [];
 const aStats = [];
 const fields = [];
 const anchors = [];
@@ -1021,6 +1113,7 @@ for (const seed of SEEDS) {
   const f = playFleet(seed, CAREERS);
   const m = measure(f);
   per.push(m);
+  nbaNearTies.push(f.nearTies);
   if (HAS_LINE) aStats.push(lineStats(f, seed));
   fields.push(fieldOf(f));
   if (mainGates) anchors.push(reanchor(f, mainGates));
@@ -1451,6 +1544,55 @@ if (HAS_PASS() && typeof E.nbaAwards.nbaAwardHelpRules === 'function') {
   /* The guide file is not this round's (its owner holds it). What it still says is printed for the lead. */
   const guide = srcOf('src/data/gameContent/basketball.ts');
   console.log(`  note [F] the guide for /nba-my-career still says, and its owner owes the change: ${[/62 games/.test(guide) ? '"62 games"' : null, /21 of them/.test(guide) ? '"21 of them"' : null, /Each of the 21 badges/.test(guide) ? '"Each of the 21 badges"' : null].filter(Boolean).join(', ') || 'nothing stale'}`);
+}
+
+/* T, the near tie (Round 1112): the one sentence all four sports share names the leader the tally gives. */
+{
+  const bySport = { nba: nbaNearTies.flat(), ...Object.fromEntries(Object.keys(OTHER).map(sp => [sp, others[sp].flatMap(o => o.nearTies)])) };
+  for (const [sp, list] of Object.entries(bySport)) {
+    const count = k => list.filter(x => x.kind === k).length;
+    const wrong = list.filter(x => !x.ok);
+    exact('T', list.length > 0 && wrong.length === 0, `${sp.toUpperCase()}: ${list.length} near tie notes, each naming the leader the tally gives (you lead ${count('mine')}, he leads ${count('his')}, level ${count('level')}, unreadable ${count('unread')})${wrong.length ? `; ${wrong.length} wrong, the first: "${wrong[0].note}"` : ''}`);
+    banded('T', count('mine') >= NEAR_TIE_FLOOR && count('his') >= NEAR_TIE_FLOOR && count('level') >= NEAR_TIE_FLOOR, `${sp.toUpperCase()}: all three ways a near tie can read turn up (floor ${NEAR_TIE_FLOOR} each over the run)`);
+  }
+}
+
+/* P, the proof of Round 1112 (judged only when asked, like C): the player's own path did not move, and neither
+   did the other three sports' rivals. The same fleets on this tree and on the tree before. */
+if (!PROVE_AGAINST) console.log('  note [P] the before and after proof: not judged in a plain run (SENSE_PROVE_AGAINST=<commit> plays both trees)');
+else {
+  const before = await bundleAt(PROVE_AGAINST);
+  console.log(`  note [P] against ${PROVE_AGAINST}: ${before.changed.length} src files differ, ${before.served.length} read at that commit (${before.served.map(x => x.replace('src/lib/', '')).join(', ')})`);
+  exact('P', before.served.length > 0, 'the tree before is a different tree (at least one bundled file was read at the commit)');
+  const mine = []; const rivalMoved = [];
+  for (const seed of SEEDS) {
+    const a = playFleet(seed, PROVE_CAREERS, before.mod, true); const b = playFleet(seed, PROVE_CAREERS, E, true);
+    mine.push(a.digest === b.digest && a.seasons.length === b.seasons.length);
+    rivalMoved.push(a.seasons.filter((x, k) => x.rivalLine !== b.seasons[k]?.rivalLine).length);
+    console.log(`  note [P] NBA seed ${seed}: ${PROVE_CAREERS} careers, ${b.seasons.length} seasons, player digest ${a.digest.slice(0, 12)} before and ${b.digest.slice(0, 12)} after`);
+  }
+  exact('P', mine.every(Boolean), `NBA: the player's own path is byte equal before and after on every seed (his season lines and awards, his role, his club, his own notes, his summer cards and the option taken, every number on the final save; ${PROVE_CAREERS} careers a seed)`);
+  exact('P', rivalMoved.every(n => n > 0), `NBA: the rival's printed line did move, so the two trees are not one (seasons whose rival line differs: ${rivalMoved.join(', ')})`);
+  for (const sport of Object.keys(OTHER)) {
+    let same = true; let rivalSame = true; let notesMoved = 0; let otherWords = 0; let first = '';
+    for (const seed of SEEDS) {
+      const a = playOther(sport, seed, OTHERS_PER, before.mod); const b = playOther(sport, seed, OTHERS_PER, E);
+      if (a.hash !== b.hash) same = false;
+      if (a.rivalHash !== b.rivalHash) rivalSame = false;
+      a.notes.forEach((na, k) => {
+        const nb = b.notes[k] ?? [];
+        for (let j = 0; j < Math.max(na.length, nb.length); j++) {
+          if (na[j] === nb[j]) continue;
+          notesMoved++;
+          const cut = t => (typeof t === 'string' && t.includes('Nothing in it again. ') ? t.slice(0, t.indexOf('Nothing in it again. ')) : null);
+          if (cut(na[j]) === null || cut(na[j]) !== cut(nb[j])) { otherWords++; if (!first) first = `"${na[j]}" became "${nb[j]}"`; }
+        }
+      });
+    }
+    exact('P', same, `${sport.toUpperCase()}: the player's careers hash equal before and after on every seed`);
+    exact('P', rivalSame, `${sport.toUpperCase()}: the rival's own trail is byte equal before and after on every seed (his line, his score, the tally, rings, rating, age, retired)`);
+    exact('P', otherWords === 0, `${sport.toUpperCase()}: the only season notes that moved are near ties, after "Nothing in it again." (${notesMoved} moved)${first ? `; the first other: ${first}` : ''}`);
+  }
 }
 
 /* C, the other sports did not move. A proof for one round, judged only when asked. */
