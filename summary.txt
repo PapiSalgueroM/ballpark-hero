@@ -1,0 +1,3 @@
+anchors exit=0 0s | simGmDeskHost anchors: 27 rewrites checked, 0 cannot run
+simGmDeskHost exit=0 39s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simGmDeskHost-again exit=0 40s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)

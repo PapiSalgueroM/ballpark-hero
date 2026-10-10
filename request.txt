@@ -1,0 +1,3 @@
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmDeskHost-again: node scripts/simGmDeskHost.mjs
+anchors: SIM_GM_DESK_HOST_ANCHORS=1 node scripts/simGmDeskHost.mjs
