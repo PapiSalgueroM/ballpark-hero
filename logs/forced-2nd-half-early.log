@@ -1,0 +1,41 @@
+-rw-r--r-- 1 runner runner 89780 Oct 10 10:45 /home/runner/work/_temp/rc-out/files/earlyscore-live-fit-save-wide.json
+--- first run, exit 1
+playLiveMatchFit: seed 636123010. Replay this run with: LIVE_FIT_SEED=636123010 LIVE_FIT_CONTROL=earlyscore node scripts/playLiveMatchFit.mjs
+  [match phone] seed 636123010, 1825 draws at kick off, digest ce9bf837 over 5761 characters of drawn match: Crystal Palace v Tottenham, goals of the first half 13' Ismaïla Sarr, 17' Honest Ahanor (own goal); own goals among them 1
+  the goal watched: 13' Ismaïla Sarr, for me; own goals in its half 1 of 2 goals
+  [labels 390] mean overlapping name labels a frame 0.38 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.23
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace1 - 1TottenhamPaused at 27'Back ", and the clock held at 27' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (27' to 28')
+  [match calm] seed 636123011, 1854 draws at kick off, digest 7847a521 over 4538 characters of drawn match: Crystal Palace v Bournemouth, goals of the first half none; own goals among them 0
+  the goal watched: 60' Jørgen Strand Larsen, for me; own goals in its half 0 of 2 goals
+  [match wide] seed 636123012, 1799 draws at kick off, digest c99a3079 over 4079 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the first half none; own goals among them 0
+  the goal watched: 49' Morgan Gibbs-White, against me; own goals in its half 0 of 3 goals
+  FAIL: the score changed before the ball was in: 46 of 46 plant and flight frames already read the new score
+      RED TO REPLAY: section 7 (wide), match digest bf06f7fc, the goal watched 49' Morgan Gibbs-White, against me
+      its save is in /home/runner/work/_temp/rc-out/files/earlyscore-live-fit-save-wide.json (74394 bytes as stored). Replay that half with: LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/earlyscore-live-fit-save-wide.json LIVE_FIT_CONTROL=earlyscore node scripts/playLiveMatchFit.mjs
+playLiveMatchFit: control earlyscore turned section 7 red on the line it must (the score changed before the ball was in, 1 node touched) and left the rest green.
+--- replay from the file, exit 1
+playLiveMatchFit: seed 636123010. Replay this run with: LIVE_FIT_SEED=636123010 LIVE_FIT_CONTROL=earlyscore LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/earlyscore-live-fit-save-wide.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/earlyscore-live-fit-save-wide.json: 74394 bytes as stored, Crystal Palace v Nottingham Forest, match digest bf06f7fc, to watch the goal at 49' Morgan Gibbs-White, against me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 636123010, 7 draws at kick off, digest bf06f7fc over 8647 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the second half 49' Morgan Gibbs-White, 63' Liam Delap, 90' Liam Delap; own goals among them 0
+  ok    the match that opened is the one in the file (digest bf06f7fc)
+  the goal watched: 49' Morgan Gibbs-White, against me; own goals in its half 0 of 3 goals
+  [labels 390] mean overlapping name labels a frame 0.29 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.18
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace0 - 2Nottingham ForestPaused at ", and the clock held at 64' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (64' to 65')
+  [match calm] seed 636123011, 7 draws at kick off, digest bf06f7fc over 8647 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the second half 49' Morgan Gibbs-White, 63' Liam Delap, 90' Liam Delap; own goals among them 0
+  ok    the match that opened is the one in the file (digest bf06f7fc)
+  the goal watched: 49' Morgan Gibbs-White, against me; own goals in its half 0 of 3 goals
+  [match wide] seed 636123012, 7 draws at kick off, digest bf06f7fc over 8647 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the second half 49' Morgan Gibbs-White, 63' Liam Delap, 90' Liam Delap; own goals among them 0
+  ok    the match that opened is the one in the file (digest bf06f7fc)
+  the goal watched: 49' Morgan Gibbs-White, against me; own goals in its half 0 of 3 goals
+  FAIL: the score changed before the ball was in: 46 of 46 plant and flight frames already read the new score
+      RED TO REPLAY: section 7 (wide), match digest bf06f7fc, the goal watched 49' Morgan Gibbs-White, against me
+      its save is in /home/runner/work/_temp/rc-out/files/earlyscore-live-fit-save-wide-replay.json (74394 bytes as stored). Replay that half with: LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/earlyscore-live-fit-save-wide-replay.json LIVE_FIT_CONTROL=earlyscore node scripts/playLiveMatchFit.mjs
+playLiveMatchFit: control earlyscore turned section 7 red on the line it must (the score changed before the ball was in, 1 node touched) and left the rest green.
+first :       RED TO REPLAY: section 7 (wide), match digest bf06f7fc, the goal watched 49' Morgan Gibbs-White, against me
+replay:       RED TO REPLAY: section 7 (wide), match digest bf06f7fc, the goal watched 49' Morgan Gibbs-White, against me
+FORCED RED REPLAYED: control earlyscore went red twice on one goal of one match (exits 1 and 1)

@@ -1,0 +1,56 @@
+MUTATED scripts/playLiveMatchFit.mjs (alwaysdump): "if (failures > before) dumpSave();" became "dumpSave();"
+--- the walk on seed 636123010 with every goal dumped, exit 0
+playLiveMatchFit: seed 636123010. Replay this run with: LIVE_FIT_SEED=636123010 node scripts/playLiveMatchFit.mjs
+  [match phone] seed 636123010, 1825 draws at kick off, digest ce9bf837 over 5761 characters of drawn match: Crystal Palace v Tottenham, goals of the first half 13' Ismaïla Sarr, 17' Honest Ahanor (own goal); own goals among them 1
+  the goal watched: 13' Ismaïla Sarr, for me; own goals in its half 1 of 2 goals
+      RED TO REPLAY: section 1 (phone), match digest ce9bf837, the goal watched 13' Ismaïla Sarr, for me
+  [match calm] seed 636123011, 1854 draws at kick off, digest 7847a521 over 4538 characters of drawn match: Crystal Palace v Bournemouth, goals of the first half none; own goals among them 0
+  the goal watched: 60' Jørgen Strand Larsen, for me; own goals in its half 0 of 2 goals
+      RED TO REPLAY: section 2 (calm), match digest 77fe2e19, the goal watched 60' Jørgen Strand Larsen, for me
+  [match wide] seed 636123012, 1799 draws at kick off, digest c99a3079 over 4079 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the first half none; own goals among them 0
+  the goal watched: 49' Morgan Gibbs-White, against me; own goals in its half 0 of 3 goals
+      RED TO REPLAY: section 7 (wide), match digest bf06f7fc, the goal watched 49' Morgan Gibbs-White, against me
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- replay of the phone dump (13' Ismaïla Sarr, for me), exit 0, contexts that watched that goal: 3 of 3
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/dump-636123010/live-fit-save-phone.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/dump-636123010/live-fit-save-phone.json: 71857 bytes as stored, Crystal Palace v Tottenham, match digest ce9bf837, to watch the goal at 13' Ismaïla Sarr, for me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest ce9bf837 over 5761 characters of drawn match: Crystal Palace v Tottenham, goals of the first half 13' Ismaïla Sarr, 17' Honest Ahanor (own goal); own goals among them 1
+  ok    the match that opened is the one in the file (digest ce9bf837)
+  the goal watched: 13' Ismaïla Sarr, for me; own goals in its half 1 of 2 goals
+  [match calm] seed 3208792608, 7 draws at kick off, digest ce9bf837 over 5761 characters of drawn match: Crystal Palace v Tottenham, goals of the first half 13' Ismaïla Sarr, 17' Honest Ahanor (own goal); own goals among them 1
+  ok    the match that opened is the one in the file (digest ce9bf837)
+  the goal watched: 13' Ismaïla Sarr, for me; own goals in its half 1 of 2 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest ce9bf837 over 5761 characters of drawn match: Crystal Palace v Tottenham, goals of the first half 13' Ismaïla Sarr, 17' Honest Ahanor (own goal); own goals among them 1
+  ok    the match that opened is the one in the file (digest ce9bf837)
+  the goal watched: 13' Ismaïla Sarr, for me; own goals in its half 1 of 2 goals
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- replay of the calm dump (60' Jørgen Strand Larsen, for me), exit 0, contexts that watched that goal: 3 of 3
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/dump-636123010/live-fit-save-calm.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/dump-636123010/live-fit-save-calm.json: 74980 bytes as stored, Crystal Palace v Bournemouth, match digest 77fe2e19, to watch the goal at 60' Jørgen Strand Larsen, for me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest 77fe2e19 over 8607 characters of drawn match: Crystal Palace v Bournemouth, goals of the second half 60' Jørgen Strand Larsen, 76' Junior Kroupi; own goals among them 0
+  ok    the match that opened is the one in the file (digest 77fe2e19)
+  the goal watched: 60' Jørgen Strand Larsen, for me; own goals in its half 0 of 2 goals
+  [match calm] seed 3208792608, 7 draws at kick off, digest 77fe2e19 over 8607 characters of drawn match: Crystal Palace v Bournemouth, goals of the second half 60' Jørgen Strand Larsen, 76' Junior Kroupi; own goals among them 0
+  ok    the match that opened is the one in the file (digest 77fe2e19)
+  the goal watched: 60' Jørgen Strand Larsen, for me; own goals in its half 0 of 2 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest 77fe2e19 over 8607 characters of drawn match: Crystal Palace v Bournemouth, goals of the second half 60' Jørgen Strand Larsen, 76' Junior Kroupi; own goals among them 0
+  ok    the match that opened is the one in the file (digest 77fe2e19)
+  the goal watched: 60' Jørgen Strand Larsen, for me; own goals in its half 0 of 2 goals
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- replay of the wide dump (49' Morgan Gibbs-White, against me), exit 0, contexts that watched that goal: 3 of 3
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/dump-636123010/live-fit-save-wide.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/dump-636123010/live-fit-save-wide.json: 74394 bytes as stored, Crystal Palace v Nottingham Forest, match digest bf06f7fc, to watch the goal at 49' Morgan Gibbs-White, against me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest bf06f7fc over 8647 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the second half 49' Morgan Gibbs-White, 63' Liam Delap, 90' Liam Delap; own goals among them 0
+  ok    the match that opened is the one in the file (digest bf06f7fc)
+  the goal watched: 49' Morgan Gibbs-White, against me; own goals in its half 0 of 3 goals
+  [match calm] seed 3208792608, 7 draws at kick off, digest bf06f7fc over 8647 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the second half 49' Morgan Gibbs-White, 63' Liam Delap, 90' Liam Delap; own goals among them 0
+  ok    the match that opened is the one in the file (digest bf06f7fc)
+  the goal watched: 49' Morgan Gibbs-White, against me; own goals in its half 0 of 3 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest bf06f7fc over 8647 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the second half 49' Morgan Gibbs-White, 63' Liam Delap, 90' Liam Delap; own goals among them 0
+  ok    the match that opened is the one in the file (digest bf06f7fc)
+  the goal watched: 49' Morgan Gibbs-White, against me; own goals in its half 0 of 3 goals
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+EVERY DUMP REPLAYED: seed 636123010, three files, each green and each watching its own goal three times
