@@ -246,7 +246,7 @@ describe('Soccer farewell real page actions', () => {
   it('keeps the original manual Retire confirmation without declaring a farewell', () => {
     const view = mount(senior()), before = read();
     const expectedDraws = tape(), expected = copy(E.manualRetire(copy(before)));
-    const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Retire', exact: true }));
+    const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Retire' }));
     const dialog = view.getByRole('dialog', { name: 'Retire?' });
     fireEvent.click(within(dialog).getByRole('button', { name: 'Confirm Retirement' }));
     expect(read()).toEqual(expected); expect(actualDraws).toEqual(expectedDraws);
@@ -267,7 +267,7 @@ describe('Soccer farewell real page actions', () => {
     expect(view.getByRole('heading', { name: 'Season Summary' }).parentElement).toHaveTextContent('2027/28');
     const expectedDraws = tape(), expected = copy(E.dismissSummary(copy(before), E.FALLBACK_CLUBS));
     expect(expected.retired).toBe(true); expect(expected.phase).toBe('retirement_ceremony');
-    const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Continue →', exact: true }));
+    const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Continue →' }));
     expect(read()).toEqual(expected); expect(actualDraws).toEqual(expectedDraws); expect(actualDraws).toEqual([]);
     expect(read().seasons).toEqual(before.seasons); expect(read().age).toBe(before.age);
     expect(view.container.querySelector('[data-farewell-open]')).toBeNull();
@@ -282,11 +282,11 @@ describe('Soccer farewell real page actions', () => {
     const view = mount(saved), before = read();
     const expectedDraws = tape(), expectedTournament = copy(E.dismissSummary(copy(before), E.FALLBACK_CLUBS));
     expect(expectedTournament.phase).toBe('world_cup'); expect(expectedTournament.retired).toBe(false);
-    const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Continue →', exact: true }));
+    const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Continue →' }));
     expect(read()).toEqual(expectedTournament); expect(actualDraws).toEqual(expectedDraws);
     expect(read().pendingWorldCup).toEqual(saved.pendingWorldCup); expect(read().seasons).toEqual(before.seasons);
     const nextExpectedDraws = tape(), expectedRetirement = copy(E.dismissWorldCup(copy(read()), E.FALLBACK_CLUBS));
-    const nextActualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Continue →', exact: true }));
+    const nextActualDraws = tape(); fireEvent.click(view.getByRole('button', { name: 'Continue →' }));
     expect(read()).toEqual(expectedRetirement); expect(nextActualDraws).toEqual(nextExpectedDraws);
     expect(read().phase).toBe('retirement_ceremony'); expect(read().retired).toBe(true);
     expect(read().pendingWorldCup).toBeNull(); expect(read().seasons).toEqual(before.seasons);
