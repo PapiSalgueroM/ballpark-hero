@@ -1,0 +1,346 @@
+[
+ {
+  "cfg": "p390",
+  "key": "nfl_made",
+  "note": "All-Pro Team / The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor. / awards [\"All-Pro\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Pro Team",
+    "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 78,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "consequence": "Morale +5"
+   },
+   "last": 203,
+   "phase": "season"
+  },
+  "failed": "page.waitForSelector: Timeout 45000ms exceeded."
+ },
+ {
+  "cfg": "p390",
+  "key": "mlb_rich",
+  "note": "rich: rings 1, rows [{\"label\":\"MVP or Cy Young awards\",\"n\":0},{\"label\":\"All-Star nods\",\"n\":1},{\"label\":\"in other awards\",\"n\":2}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 83,
+   "fanbase": 89,
+   "heat": 5,
+   "ovr": 83,
+   "netWorth": 2.8,
+   "pending": null,
+   "last": 212,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": null,
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 ring | 3 individual honours across 6 seasons. | All-Star | x1 | 2030 | Gold Glove | x1 | 2030 | Silver Slugger | x1 | 2030",
+  "caseOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "caseTop": 243
+ },
+ {
+  "cfg": "p390",
+  "key": "nhl_old",
+  "note": "old coin card: All-Star Ballot Squeeze / Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Ballot Squeeze",
+    "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 516,
+    "bottom": 556,
+    "left": 132,
+    "right": 259
+   },
+   "root": {
+    "left": 16,
+    "right": 374,
+    "bottom": 556
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 844,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "before": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Ballot Squeeze",
+    "description": "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 310,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ All-Star Ballot Squeeze"
+  ],
+  "tile": null,
+  "hubOverflow": {
+   "sw": 390,
+   "iw": 390
+  },
+  "scrollAfterTap": 0
+ },
+ {
+  "cfg": "d1280",
+  "key": "nfl_made",
+  "note": "All-Pro Team / The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor. / awards [\"All-Pro\"]",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Pro Team",
+    "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "Morale +5"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 78,
+   "fanbase": 77,
+   "heat": 15,
+   "ovr": 82,
+   "netWorth": 18.1,
+   "pending": {
+    "id": 206,
+    "emoji": "🗳️",
+    "title": "All-Pro Team",
+    "description": "The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.",
+    "consequence": "Morale +5"
+   },
+   "last": 203,
+   "phase": "season"
+  },
+  "failed": "page.waitForSelector: Timeout 45000ms exceeded."
+ },
+ {
+  "cfg": "d1280",
+  "key": "mlb_rich",
+  "note": "rich: rings 1, rows [{\"label\":\"MVP or Cy Young awards\",\"n\":0},{\"label\":\"All-Star nods\",\"n\":1},{\"label\":\"in other awards\",\"n\":2}]",
+  "errors": [],
+  "blocked": 1,
+  "after": {
+   "morale": 83,
+   "fanbase": 89,
+   "heat": 5,
+   "ovr": 83,
+   "netWorth": 2.8,
+   "pending": null,
+   "last": 212,
+   "phase": "season"
+  },
+  "feed": [],
+  "tile": null,
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0,
+  "caseAtMount": {
+   "anim": "cmTickIn",
+   "dur": "0.35s"
+  },
+  "case": "1 ring | 3 individual honours across 6 seasons. | All-Star | x1 | 2030 | Gold Glove | x1 | 2030 | Silver Slugger | x1 | 2030",
+  "caseOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "caseTop": 223
+ },
+ {
+  "cfg": "d1280",
+  "key": "nhl_old",
+  "note": "old coin card: All-Star Ballot Squeeze / Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+  "errors": [],
+  "blocked": 1,
+  "atMount": {
+   "anim": "cmSlam",
+   "dur": "0.4s",
+   "opacity": "0"
+  },
+  "card": {
+   "ps": [
+    "🪞 RIVALRY",
+    "🗳️",
+    "All-Star Ballot Squeeze",
+    "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "50/50 outcome"
+   ],
+   "btn": {
+    "top": 477,
+    "bottom": 517,
+    "left": 577,
+    "right": 704
+   },
+   "root": {
+    "left": 320,
+    "right": 960,
+    "bottom": 517
+   },
+   "cut": [],
+   "settled": {
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)"
+   },
+   "vh": 900,
+   "scrollY": 0
+  },
+  "cardOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "before": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": {
+    "id": 306,
+    "emoji": "🗳️",
+    "title": "All-Star Ballot Squeeze",
+    "description": "Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.",
+    "consequence": "50/50 outcome"
+   },
+   "last": 310,
+   "phase": "season"
+  },
+  "after": {
+   "morale": 62,
+   "fanbase": 79,
+   "heat": 15,
+   "ovr": 88,
+   "netWorth": 16.5,
+   "pending": null,
+   "last": 306,
+   "phase": "season"
+  },
+  "feed": [
+   "🗳️ All-Star Ballot Squeeze"
+  ],
+  "tile": null,
+  "hubOverflow": {
+   "sw": 1280,
+   "iw": 1280
+  },
+  "scrollAfterTap": 0
+ }
+]

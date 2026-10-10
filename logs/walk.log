@@ -1,0 +1,439 @@
+2026-10-10T09:04:40.455Z pw:api => browserType.launch started
+2026-10-10T09:04:42.199Z pw:api <= browserType.launch succeeded
+2026-10-10T09:04:42.200Z pw:api => browser.newContext started
+2026-10-10T09:04:42.208Z pw:api <= browser.newContext succeeded
+2026-10-10T09:04:42.209Z pw:api => browserContext.route started
+2026-10-10T09:04:42.210Z pw:api <= browserContext.route succeeded
+2026-10-10T09:04:42.210Z pw:api => browserContext.newPage started
+2026-10-10T09:04:42.249Z pw:api <= browserContext.newPage succeeded
+2026-10-10T09:04:42.250Z pw:api => page.addInitScript started
+2026-10-10T09:04:42.252Z pw:api <= page.addInitScript succeeded
+2026-10-10T09:04:42.252Z pw:api => page.goto started
+2026-10-10T09:04:42.252Z pw:api navigating to "http://localhost:4173/nfl-my-career", waiting until "domcontentloaded"
+2026-10-10T09:04:42.271Z pw:api   "commit" event fired
+2026-10-10T09:04:42.271Z pw:api   navigated to "http://localhost:4173/nfl-my-career"
+2026-10-10T09:04:42.411Z pw:api   "domcontentloaded" event fired
+2026-10-10T09:04:42.411Z pw:api <= page.goto succeeded
+2026-10-10T09:04:42.412Z pw:api => page.waitForSelector started
+2026-10-10T09:04:42.416Z pw:api waiting for locator('[data-rivalry-event]') to be visible
+2026-10-10T09:04:42.420Z pw:api   "load" event fired
+2026-10-10T09:04:42.437Z pw:api   navigated to "http://localhost:4173/nfl-my-career"
+2026-10-10T09:04:42.482Z pw:api => route.abort started
+2026-10-10T09:04:42.492Z pw:api <= route.abort succeeded
+2026-10-10T09:04:42.619Z pw:api   locator resolved to visible <div class="space-y-3" data-rivalry-event="true">…</div>
+2026-10-10T09:04:42.628Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:04:42.629Z pw:api => page.evaluate started
+2026-10-10T09:04:42.650Z pw:api <= page.evaluate succeeded
+2026-10-10T09:04:43.109Z pw:api   "networkidle" event fired
+2026-10-10T09:04:44.551Z pw:api => page.evaluate started
+2026-10-10T09:04:44.554Z pw:api <= page.evaluate succeeded
+2026-10-10T09:04:44.554Z pw:api => page.evaluate started
+2026-10-10T09:04:44.555Z pw:api <= page.evaluate succeeded
+2026-10-10T09:04:44.555Z pw:api => page.screenshot started
+2026-10-10T09:04:44.555Z pw:api taking page screenshot
+2026-10-10T09:04:44.557Z pw:api waiting for fonts to load...
+2026-10-10T09:04:44.558Z pw:api fonts loaded
+2026-10-10T09:04:44.567Z pw:api <= page.screenshot succeeded
+2026-10-10T09:04:44.568Z pw:api => page.evaluate started
+2026-10-10T09:04:44.569Z pw:api <= page.evaluate succeeded
+2026-10-10T09:04:44.570Z pw:api => locator.click started
+2026-10-10T09:04:44.571Z pw:api waiting for locator('[data-rivalry-event] button').filter({ hasText: 'Continue' })
+2026-10-10T09:04:44.574Z pw:api   locator resolved to <button class="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110">Continue</button>
+2026-10-10T09:04:44.575Z pw:api attempting click action
+2026-10-10T09:04:44.575Z pw:api   waiting for element to be visible, enabled and stable
+2026-10-10T09:04:44.604Z pw:api   element is visible, enabled and stable
+2026-10-10T09:04:44.604Z pw:api   scrolling into view if needed
+2026-10-10T09:04:44.605Z pw:api   done scrolling
+2026-10-10T09:04:44.607Z pw:api   performing click action
+2026-10-10T09:04:44.615Z pw:api   click action done
+2026-10-10T09:04:44.615Z pw:api   waiting for scheduled navigations to finish
+2026-10-10T09:04:44.616Z pw:api   navigations have finished
+2026-10-10T09:04:44.616Z pw:api <= locator.click succeeded
+2026-10-10T09:04:44.617Z pw:api => page.waitForSelector started
+2026-10-10T09:04:44.617Z pw:api waiting for locator('[data-career-hub-buttons]') to be visible
+2026-10-10T09:05:29.617Z pw:api <= page.waitForSelector failed
+2026-10-10T09:05:29.617Z pw:api => page.screenshot started
+2026-10-10T09:05:29.617Z pw:api taking page screenshot
+2026-10-10T09:05:29.618Z pw:api waiting for fonts to load...
+2026-10-10T09:05:29.619Z pw:api fonts loaded
+2026-10-10T09:05:29.628Z pw:api <= page.screenshot succeeded
+2026-10-10T09:05:29.629Z pw:api => browserContext.close started
+2026-10-10T09:05:29.633Z pw:api <= browserContext.close succeeded
+2026-10-10T09:05:29.634Z pw:api => browser.newContext started
+2026-10-10T09:05:29.637Z pw:api <= browser.newContext succeeded
+2026-10-10T09:05:29.637Z pw:api => browserContext.route started
+2026-10-10T09:05:29.637Z pw:api <= browserContext.route succeeded
+2026-10-10T09:05:29.637Z pw:api => browserContext.newPage started
+2026-10-10T09:05:29.664Z pw:api <= browserContext.newPage succeeded
+2026-10-10T09:05:29.665Z pw:api => page.addInitScript started
+2026-10-10T09:05:29.666Z pw:api <= page.addInitScript succeeded
+2026-10-10T09:05:29.666Z pw:api => page.goto started
+2026-10-10T09:05:29.667Z pw:api navigating to "http://localhost:4173/mlb-my-career", waiting until "domcontentloaded"
+2026-10-10T09:05:29.677Z pw:api   "commit" event fired
+2026-10-10T09:05:29.677Z pw:api   navigated to "http://localhost:4173/mlb-my-career"
+2026-10-10T09:05:29.791Z pw:api   "domcontentloaded" event fired
+2026-10-10T09:05:29.792Z pw:api <= page.goto succeeded
+2026-10-10T09:05:29.792Z pw:api => page.waitForSelector started
+2026-10-10T09:05:29.792Z pw:api waiting for locator('[data-career-hub-buttons]') to be visible
+2026-10-10T09:05:29.842Z pw:api   navigated to "http://localhost:4173/mlb-my-career"
+2026-10-10T09:05:29.849Z pw:api => route.abort started
+2026-10-10T09:05:29.852Z pw:api <= route.abort succeeded
+2026-10-10T09:05:29.880Z pw:api   "load" event fired
+2026-10-10T09:05:29.968Z pw:api   locator resolved to visible <div data-career-hub-buttons="">…</div>
+2026-10-10T09:05:29.983Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:05:30.454Z pw:api   "networkidle" event fired
+2026-10-10T09:05:30.884Z pw:api => page.evaluate started
+2026-10-10T09:05:30.886Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:30.886Z pw:api => page.evaluate started
+2026-10-10T09:05:30.887Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:30.887Z pw:api => page.evaluate started
+2026-10-10T09:05:30.888Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:30.889Z pw:api => page.evaluate started
+2026-10-10T09:05:30.889Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:30.890Z pw:api => page.evaluate started
+2026-10-10T09:05:30.890Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:30.890Z pw:api => page.screenshot started
+2026-10-10T09:05:30.891Z pw:api taking page screenshot
+2026-10-10T09:05:30.892Z pw:api waiting for fonts to load...
+2026-10-10T09:05:30.892Z pw:api fonts loaded
+2026-10-10T09:05:30.909Z pw:api <= page.screenshot succeeded
+2026-10-10T09:05:30.910Z pw:api => page.evaluate started
+2026-10-10T09:05:30.911Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:31.161Z pw:api => page.screenshot started
+2026-10-10T09:05:31.162Z pw:api taking page screenshot
+2026-10-10T09:05:31.163Z pw:api waiting for fonts to load...
+2026-10-10T09:05:31.164Z pw:api fonts loaded
+2026-10-10T09:05:31.175Z pw:api <= page.screenshot succeeded
+2026-10-10T09:05:31.176Z pw:api => locator.click started
+2026-10-10T09:05:31.176Z pw:api waiting for locator('[data-career-hub-buttons] button').filter({ hasText: 'Trophy Case' })
+2026-10-10T09:05:31.180Z pw:api   locator resolved to <button class="rounded-xl border bg-card p-3 text-left transition-all hover:-translate-y-0.5 hover:border-primary border-border">…</button>
+2026-10-10T09:05:31.181Z pw:api attempting click action
+2026-10-10T09:05:31.181Z pw:api   waiting for element to be visible, enabled and stable
+2026-10-10T09:05:31.202Z pw:api   element is visible, enabled and stable
+2026-10-10T09:05:31.202Z pw:api   scrolling into view if needed
+2026-10-10T09:05:31.203Z pw:api   done scrolling
+2026-10-10T09:05:31.205Z pw:api   performing click action
+2026-10-10T09:05:31.221Z pw:api   click action done
+2026-10-10T09:05:31.221Z pw:api   waiting for scheduled navigations to finish
+2026-10-10T09:05:31.223Z pw:api   navigations have finished
+2026-10-10T09:05:31.224Z pw:api <= locator.click succeeded
+2026-10-10T09:05:31.224Z pw:api => page.waitForSelector started
+2026-10-10T09:05:31.224Z pw:api waiting for locator('[data-trophy-case]') to be visible
+2026-10-10T09:05:31.226Z pw:api   locator resolved to visible <div class="space-y-2" data-trophy-case="true">…</div>
+2026-10-10T09:05:31.228Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:05:31.229Z pw:api => page.evaluate started
+2026-10-10T09:05:31.230Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:32.732Z pw:api => page.evaluate started
+2026-10-10T09:05:32.733Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:32.733Z pw:api => page.evaluate started
+2026-10-10T09:05:32.734Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:32.734Z pw:api => page.evaluate started
+2026-10-10T09:05:32.735Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:32.735Z pw:api => page.screenshot started
+2026-10-10T09:05:32.735Z pw:api taking page screenshot
+2026-10-10T09:05:32.736Z pw:api waiting for fonts to load...
+2026-10-10T09:05:32.737Z pw:api fonts loaded
+2026-10-10T09:05:32.745Z pw:api <= page.screenshot succeeded
+2026-10-10T09:05:32.746Z pw:api => browserContext.close started
+2026-10-10T09:05:32.751Z pw:api <= browserContext.close succeeded
+2026-10-10T09:05:32.751Z pw:api => browser.newContext started
+2026-10-10T09:05:32.754Z pw:api <= browser.newContext succeeded
+2026-10-10T09:05:32.754Z pw:api => browserContext.route started
+2026-10-10T09:05:32.754Z pw:api <= browserContext.route succeeded
+2026-10-10T09:05:32.754Z pw:api => browserContext.newPage started
+2026-10-10T09:05:32.779Z pw:api <= browserContext.newPage succeeded
+2026-10-10T09:05:32.780Z pw:api => page.addInitScript started
+2026-10-10T09:05:32.782Z pw:api <= page.addInitScript succeeded
+2026-10-10T09:05:32.782Z pw:api => page.goto started
+2026-10-10T09:05:32.782Z pw:api navigating to "http://localhost:4173/nhl-my-career", waiting until "domcontentloaded"
+2026-10-10T09:05:32.792Z pw:api   "commit" event fired
+2026-10-10T09:05:32.793Z pw:api   navigated to "http://localhost:4173/nhl-my-career"
+2026-10-10T09:05:32.908Z pw:api   "domcontentloaded" event fired
+2026-10-10T09:05:32.909Z pw:api <= page.goto succeeded
+2026-10-10T09:05:32.909Z pw:api => page.waitForSelector started
+2026-10-10T09:05:32.909Z pw:api waiting for locator('[data-rivalry-event]') to be visible
+2026-10-10T09:05:32.958Z pw:api   navigated to "http://localhost:4173/nhl-my-career"
+2026-10-10T09:05:32.967Z pw:api => route.abort started
+2026-10-10T09:05:32.968Z pw:api <= route.abort succeeded
+2026-10-10T09:05:33.002Z pw:api   "load" event fired
+2026-10-10T09:05:33.082Z pw:api   locator resolved to visible <div class="space-y-3" data-rivalry-event="true">…</div>
+2026-10-10T09:05:33.097Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:05:33.098Z pw:api => page.evaluate started
+2026-10-10T09:05:33.111Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:33.577Z pw:api   "networkidle" event fired
+2026-10-10T09:05:35.012Z pw:api => page.evaluate started
+2026-10-10T09:05:35.014Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:35.015Z pw:api => page.evaluate started
+2026-10-10T09:05:35.015Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:35.015Z pw:api => page.screenshot started
+2026-10-10T09:05:35.016Z pw:api taking page screenshot
+2026-10-10T09:05:35.017Z pw:api waiting for fonts to load...
+2026-10-10T09:05:35.017Z pw:api fonts loaded
+2026-10-10T09:05:35.026Z pw:api <= page.screenshot succeeded
+2026-10-10T09:05:35.026Z pw:api => page.evaluate started
+2026-10-10T09:05:35.027Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:35.028Z pw:api => locator.click started
+2026-10-10T09:05:35.028Z pw:api waiting for locator('[data-rivalry-event] button').filter({ hasText: 'Continue' })
+2026-10-10T09:05:35.031Z pw:api   locator resolved to <button class="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110">Continue</button>
+2026-10-10T09:05:35.031Z pw:api attempting click action
+2026-10-10T09:05:35.032Z pw:api   waiting for element to be visible, enabled and stable
+2026-10-10T09:05:35.052Z pw:api   element is visible, enabled and stable
+2026-10-10T09:05:35.052Z pw:api   scrolling into view if needed
+2026-10-10T09:05:35.053Z pw:api   done scrolling
+2026-10-10T09:05:35.054Z pw:api   performing click action
+2026-10-10T09:05:35.073Z pw:api   click action done
+2026-10-10T09:05:35.073Z pw:api   waiting for scheduled navigations to finish
+2026-10-10T09:05:35.075Z pw:api   navigations have finished
+2026-10-10T09:05:35.075Z pw:api <= locator.click succeeded
+2026-10-10T09:05:35.075Z pw:api => page.waitForSelector started
+2026-10-10T09:05:35.076Z pw:api waiting for locator('[data-career-hub-buttons]') to be visible
+2026-10-10T09:05:35.078Z pw:api   locator resolved to visible <div data-career-hub-buttons="">…</div>
+2026-10-10T09:05:35.080Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:05:35.981Z pw:api => page.evaluate started
+2026-10-10T09:05:35.983Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:35.983Z pw:api => page.evaluate started
+2026-10-10T09:05:35.984Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:35.984Z pw:api => page.evaluate started
+2026-10-10T09:05:35.985Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:35.986Z pw:api => page.evaluate started
+2026-10-10T09:05:35.986Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:35.987Z pw:api => page.evaluate started
+2026-10-10T09:05:35.987Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:35.988Z pw:api => page.screenshot started
+2026-10-10T09:05:35.988Z pw:api taking page screenshot
+2026-10-10T09:05:35.988Z pw:api waiting for fonts to load...
+2026-10-10T09:05:35.989Z pw:api fonts loaded
+2026-10-10T09:05:36.009Z pw:api <= page.screenshot succeeded
+2026-10-10T09:05:36.009Z pw:api => page.evaluate started
+2026-10-10T09:05:36.010Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:36.261Z pw:api => page.screenshot started
+2026-10-10T09:05:36.261Z pw:api taking page screenshot
+2026-10-10T09:05:36.262Z pw:api waiting for fonts to load...
+2026-10-10T09:05:36.263Z pw:api fonts loaded
+2026-10-10T09:05:36.275Z pw:api <= page.screenshot succeeded
+2026-10-10T09:05:36.276Z pw:api => browserContext.close started
+2026-10-10T09:05:36.278Z pw:api <= browserContext.close succeeded
+2026-10-10T09:05:36.278Z pw:api => browser.newContext started
+2026-10-10T09:05:36.281Z pw:api <= browser.newContext succeeded
+2026-10-10T09:05:36.281Z pw:api => browserContext.route started
+2026-10-10T09:05:36.281Z pw:api <= browserContext.route succeeded
+2026-10-10T09:05:36.282Z pw:api => browserContext.newPage started
+2026-10-10T09:05:36.308Z pw:api <= browserContext.newPage succeeded
+2026-10-10T09:05:36.309Z pw:api => page.addInitScript started
+2026-10-10T09:05:36.310Z pw:api <= page.addInitScript succeeded
+2026-10-10T09:05:36.311Z pw:api => page.goto started
+2026-10-10T09:05:36.311Z pw:api navigating to "http://localhost:4173/nfl-my-career", waiting until "domcontentloaded"
+2026-10-10T09:05:36.320Z pw:api   "commit" event fired
+2026-10-10T09:05:36.320Z pw:api   navigated to "http://localhost:4173/nfl-my-career"
+2026-10-10T09:05:36.434Z pw:api   "domcontentloaded" event fired
+2026-10-10T09:05:36.435Z pw:api <= page.goto succeeded
+2026-10-10T09:05:36.435Z pw:api => page.waitForSelector started
+2026-10-10T09:05:36.435Z pw:api waiting for locator('[data-rivalry-event]') to be visible
+2026-10-10T09:05:36.490Z pw:api   navigated to "http://localhost:4173/nfl-my-career"
+2026-10-10T09:05:36.501Z pw:api => route.abort started
+2026-10-10T09:05:36.503Z pw:api <= route.abort succeeded
+2026-10-10T09:05:36.535Z pw:api   "load" event fired
+2026-10-10T09:05:36.606Z pw:api   locator resolved to visible <div class="space-y-3" data-rivalry-event="true">…</div>
+2026-10-10T09:05:36.613Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:05:36.613Z pw:api => page.evaluate started
+2026-10-10T09:05:36.634Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:37.096Z pw:api   "networkidle" event fired
+2026-10-10T09:05:38.536Z pw:api => page.evaluate started
+2026-10-10T09:05:38.538Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:38.538Z pw:api => page.evaluate started
+2026-10-10T09:05:38.539Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:38.539Z pw:api => page.screenshot started
+2026-10-10T09:05:38.539Z pw:api taking page screenshot
+2026-10-10T09:05:38.540Z pw:api waiting for fonts to load...
+2026-10-10T09:05:38.541Z pw:api fonts loaded
+2026-10-10T09:05:38.559Z pw:api <= page.screenshot succeeded
+2026-10-10T09:05:38.560Z pw:api => page.evaluate started
+2026-10-10T09:05:38.561Z pw:api <= page.evaluate succeeded
+2026-10-10T09:05:38.561Z pw:api => locator.click started
+2026-10-10T09:05:38.561Z pw:api waiting for locator('[data-rivalry-event] button').filter({ hasText: 'Continue' })
+2026-10-10T09:05:38.564Z pw:api   locator resolved to <button class="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110">Continue</button>
+2026-10-10T09:05:38.565Z pw:api attempting click action
+2026-10-10T09:05:38.565Z pw:api   waiting for element to be visible, enabled and stable
+2026-10-10T09:05:38.585Z pw:api   element is visible, enabled and stable
+2026-10-10T09:05:38.585Z pw:api   scrolling into view if needed
+2026-10-10T09:05:38.586Z pw:api   done scrolling
+2026-10-10T09:05:38.588Z pw:api   performing click action
+2026-10-10T09:05:38.595Z pw:api   click action done
+2026-10-10T09:05:38.595Z pw:api   waiting for scheduled navigations to finish
+2026-10-10T09:05:38.595Z pw:api   navigations have finished
+2026-10-10T09:05:38.596Z pw:api <= locator.click succeeded
+2026-10-10T09:05:38.596Z pw:api => page.waitForSelector started
+2026-10-10T09:05:38.596Z pw:api waiting for locator('[data-career-hub-buttons]') to be visible
+2026-10-10T09:06:23.596Z pw:api <= page.waitForSelector failed
+2026-10-10T09:06:23.596Z pw:api => page.screenshot started
+2026-10-10T09:06:23.596Z pw:api taking page screenshot
+2026-10-10T09:06:23.597Z pw:api waiting for fonts to load...
+2026-10-10T09:06:23.598Z pw:api fonts loaded
+2026-10-10T09:06:23.617Z pw:api <= page.screenshot succeeded
+2026-10-10T09:06:23.619Z pw:api => browserContext.close started
+2026-10-10T09:06:23.622Z pw:api <= browserContext.close succeeded
+2026-10-10T09:06:23.623Z pw:api => browser.newContext started
+2026-10-10T09:06:23.625Z pw:api <= browser.newContext succeeded
+2026-10-10T09:06:23.625Z pw:api => browserContext.route started
+2026-10-10T09:06:23.625Z pw:api <= browserContext.route succeeded
+2026-10-10T09:06:23.625Z pw:api => browserContext.newPage started
+2026-10-10T09:06:23.655Z pw:api <= browserContext.newPage succeeded
+2026-10-10T09:06:23.656Z pw:api => page.addInitScript started
+2026-10-10T09:06:23.657Z pw:api <= page.addInitScript succeeded
+2026-10-10T09:06:23.657Z pw:api => page.goto started
+2026-10-10T09:06:23.657Z pw:api navigating to "http://localhost:4173/mlb-my-career", waiting until "domcontentloaded"
+2026-10-10T09:06:23.666Z pw:api   "commit" event fired
+2026-10-10T09:06:23.666Z pw:api   navigated to "http://localhost:4173/mlb-my-career"
+2026-10-10T09:06:23.783Z pw:api   "domcontentloaded" event fired
+2026-10-10T09:06:23.783Z pw:api <= page.goto succeeded
+2026-10-10T09:06:23.784Z pw:api => page.waitForSelector started
+2026-10-10T09:06:23.784Z pw:api waiting for locator('[data-career-hub-buttons]') to be visible
+2026-10-10T09:06:23.838Z pw:api   navigated to "http://localhost:4173/mlb-my-career"
+2026-10-10T09:06:23.846Z pw:api => route.abort started
+2026-10-10T09:06:23.849Z pw:api <= route.abort succeeded
+2026-10-10T09:06:23.876Z pw:api   "load" event fired
+2026-10-10T09:06:23.960Z pw:api   locator resolved to visible <div data-career-hub-buttons="">…</div>
+2026-10-10T09:06:23.965Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:06:24.452Z pw:api   "networkidle" event fired
+2026-10-10T09:06:24.865Z pw:api => page.evaluate started
+2026-10-10T09:06:24.867Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:24.867Z pw:api => page.evaluate started
+2026-10-10T09:06:24.869Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:24.869Z pw:api => page.evaluate started
+2026-10-10T09:06:24.870Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:24.870Z pw:api => page.evaluate started
+2026-10-10T09:06:24.870Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:24.871Z pw:api => page.evaluate started
+2026-10-10T09:06:24.871Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:24.871Z pw:api => page.screenshot started
+2026-10-10T09:06:24.871Z pw:api taking page screenshot
+2026-10-10T09:06:24.873Z pw:api waiting for fonts to load...
+2026-10-10T09:06:24.873Z pw:api fonts loaded
+2026-10-10T09:06:24.900Z pw:api <= page.screenshot succeeded
+2026-10-10T09:06:24.901Z pw:api => page.evaluate started
+2026-10-10T09:06:24.901Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:25.152Z pw:api => page.screenshot started
+2026-10-10T09:06:25.152Z pw:api taking page screenshot
+2026-10-10T09:06:25.153Z pw:api waiting for fonts to load...
+2026-10-10T09:06:25.154Z pw:api fonts loaded
+2026-10-10T09:06:25.183Z pw:api <= page.screenshot succeeded
+2026-10-10T09:06:25.184Z pw:api => locator.click started
+2026-10-10T09:06:25.184Z pw:api waiting for locator('[data-career-hub-buttons] button').filter({ hasText: 'Trophy Case' })
+2026-10-10T09:06:25.188Z pw:api   locator resolved to <button class="rounded-xl border bg-card p-3 text-left transition-all hover:-translate-y-0.5 hover:border-primary border-border">…</button>
+2026-10-10T09:06:25.188Z pw:api attempting click action
+2026-10-10T09:06:25.188Z pw:api   waiting for element to be visible, enabled and stable
+2026-10-10T09:06:25.217Z pw:api   element is visible, enabled and stable
+2026-10-10T09:06:25.217Z pw:api   scrolling into view if needed
+2026-10-10T09:06:25.217Z pw:api   done scrolling
+2026-10-10T09:06:25.219Z pw:api   performing click action
+2026-10-10T09:06:25.233Z pw:api   click action done
+2026-10-10T09:06:25.233Z pw:api   waiting for scheduled navigations to finish
+2026-10-10T09:06:25.236Z pw:api   navigations have finished
+2026-10-10T09:06:25.236Z pw:api <= locator.click succeeded
+2026-10-10T09:06:25.236Z pw:api => page.waitForSelector started
+2026-10-10T09:06:25.236Z pw:api waiting for locator('[data-trophy-case]') to be visible
+2026-10-10T09:06:25.240Z pw:api   locator resolved to visible <div class="space-y-2" data-trophy-case="true">…</div>
+2026-10-10T09:06:25.242Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:06:25.242Z pw:api => page.evaluate started
+2026-10-10T09:06:25.245Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:26.746Z pw:api => page.evaluate started
+2026-10-10T09:06:26.748Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:26.748Z pw:api => page.evaluate started
+2026-10-10T09:06:26.749Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:26.749Z pw:api => page.evaluate started
+2026-10-10T09:06:26.750Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:26.750Z pw:api => page.screenshot started
+2026-10-10T09:06:26.750Z pw:api taking page screenshot
+2026-10-10T09:06:26.751Z pw:api waiting for fonts to load...
+2026-10-10T09:06:26.752Z pw:api fonts loaded
+2026-10-10T09:06:26.770Z pw:api <= page.screenshot succeeded
+2026-10-10T09:06:26.772Z pw:api => browserContext.close started
+2026-10-10T09:06:26.774Z pw:api <= browserContext.close succeeded
+2026-10-10T09:06:26.774Z pw:api => browser.newContext started
+2026-10-10T09:06:26.779Z pw:api <= browser.newContext succeeded
+2026-10-10T09:06:26.779Z pw:api => browserContext.route started
+2026-10-10T09:06:26.779Z pw:api <= browserContext.route succeeded
+2026-10-10T09:06:26.780Z pw:api => browserContext.newPage started
+2026-10-10T09:06:26.808Z pw:api <= browserContext.newPage succeeded
+2026-10-10T09:06:26.809Z pw:api => page.addInitScript started
+2026-10-10T09:06:26.812Z pw:api <= page.addInitScript succeeded
+2026-10-10T09:06:26.812Z pw:api => page.goto started
+2026-10-10T09:06:26.812Z pw:api navigating to "http://localhost:4173/nhl-my-career", waiting until "domcontentloaded"
+2026-10-10T09:06:26.824Z pw:api   "commit" event fired
+2026-10-10T09:06:26.824Z pw:api   navigated to "http://localhost:4173/nhl-my-career"
+2026-10-10T09:06:26.933Z pw:api   "domcontentloaded" event fired
+2026-10-10T09:06:26.933Z pw:api <= page.goto succeeded
+2026-10-10T09:06:26.933Z pw:api => page.waitForSelector started
+2026-10-10T09:06:26.934Z pw:api waiting for locator('[data-rivalry-event]') to be visible
+2026-10-10T09:06:26.989Z pw:api   navigated to "http://localhost:4173/nhl-my-career"
+2026-10-10T09:06:26.998Z pw:api => route.abort started
+2026-10-10T09:06:27.001Z pw:api <= route.abort succeeded
+2026-10-10T09:06:27.027Z pw:api   "load" event fired
+2026-10-10T09:06:27.106Z pw:api   locator resolved to visible <div class="space-y-3" data-rivalry-event="true">…</div>
+2026-10-10T09:06:27.113Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:06:27.113Z pw:api => page.evaluate started
+2026-10-10T09:06:27.134Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:27.600Z pw:api   "networkidle" event fired
+2026-10-10T09:06:29.035Z pw:api => page.evaluate started
+2026-10-10T09:06:29.038Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:29.038Z pw:api => page.evaluate started
+2026-10-10T09:06:29.039Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:29.039Z pw:api => page.screenshot started
+2026-10-10T09:06:29.039Z pw:api taking page screenshot
+2026-10-10T09:06:29.040Z pw:api waiting for fonts to load...
+2026-10-10T09:06:29.041Z pw:api fonts loaded
+2026-10-10T09:06:29.060Z pw:api <= page.screenshot succeeded
+2026-10-10T09:06:29.061Z pw:api => page.evaluate started
+2026-10-10T09:06:29.062Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:29.062Z pw:api => locator.click started
+2026-10-10T09:06:29.062Z pw:api waiting for locator('[data-rivalry-event] button').filter({ hasText: 'Continue' })
+2026-10-10T09:06:29.065Z pw:api   locator resolved to <button class="cm-rise mx-auto flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:brightness-110">Continue</button>
+2026-10-10T09:06:29.066Z pw:api attempting click action
+2026-10-10T09:06:29.066Z pw:api   waiting for element to be visible, enabled and stable
+2026-10-10T09:06:29.083Z pw:api   element is visible, enabled and stable
+2026-10-10T09:06:29.083Z pw:api   scrolling into view if needed
+2026-10-10T09:06:29.084Z pw:api   done scrolling
+2026-10-10T09:06:29.085Z pw:api   performing click action
+2026-10-10T09:06:29.099Z pw:api   click action done
+2026-10-10T09:06:29.099Z pw:api   waiting for scheduled navigations to finish
+2026-10-10T09:06:29.099Z pw:api   navigations have finished
+2026-10-10T09:06:29.099Z pw:api <= locator.click succeeded
+2026-10-10T09:06:29.100Z pw:api => page.waitForSelector started
+2026-10-10T09:06:29.100Z pw:api waiting for locator('[data-career-hub-buttons]') to be visible
+2026-10-10T09:06:29.103Z pw:api   locator resolved to visible <div data-career-hub-buttons="">…</div>
+2026-10-10T09:06:29.107Z pw:api <= page.waitForSelector succeeded
+2026-10-10T09:06:30.008Z pw:api => page.evaluate started
+2026-10-10T09:06:30.009Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:30.009Z pw:api => page.evaluate started
+2026-10-10T09:06:30.011Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:30.011Z pw:api => page.evaluate started
+2026-10-10T09:06:30.012Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:30.012Z pw:api => page.evaluate started
+2026-10-10T09:06:30.013Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:30.013Z pw:api => page.evaluate started
+2026-10-10T09:06:30.013Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:30.014Z pw:api => page.screenshot started
+2026-10-10T09:06:30.014Z pw:api taking page screenshot
+2026-10-10T09:06:30.015Z pw:api waiting for fonts to load...
+2026-10-10T09:06:30.015Z pw:api fonts loaded
+2026-10-10T09:06:30.049Z pw:api <= page.screenshot succeeded
+2026-10-10T09:06:30.050Z pw:api => page.evaluate started
+2026-10-10T09:06:30.051Z pw:api <= page.evaluate succeeded
+2026-10-10T09:06:30.302Z pw:api => page.screenshot started
+2026-10-10T09:06:30.302Z pw:api taking page screenshot
+2026-10-10T09:06:30.303Z pw:api waiting for fonts to load...
+2026-10-10T09:06:30.304Z pw:api fonts loaded
+2026-10-10T09:06:30.334Z pw:api <= page.screenshot succeeded
+2026-10-10T09:06:30.335Z pw:api => browserContext.close started
+2026-10-10T09:06:30.341Z pw:api <= browserContext.close succeeded
+2026-10-10T09:06:30.341Z pw:api => browser.close started
+2026-10-10T09:06:30.360Z pw:api <= browser.close succeeded
+REC {"cfg":"p390","key":"nfl_made","atMount":{"anim":"cmSlam","dur":"0.4s","opacity":"0"},"card":{"ps":["🪞 RIVALRY","🗳️","All-Pro Team","The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.","Morale +5"],"btn":{"top":516,"bottom":556,"left":132,"right":259},"cut":[],"settled":{"opacity":"1","transform":"matrix(1, 0, 0, 1, 0, 0)"},"vh":844},"cardOverflow":{"sw":390,"iw":390},"before":{"morale":78,"fanbase":77,"heat":15},"blocked":1,"errors":[],"failed":"page.waitForSelector: Timeout 45000ms exceeded."}
+REC {"cfg":"p390","key":"mlb_rich","after":{"morale":83,"fanbase":89,"heat":5,"pending":null,"last":212},"feed":[],"tile":null,"hubOverflow":{"sw":390,"iw":390},"scrollAfterTap":0,"caseAtMount":{"anim":"cmTickIn","dur":"0.35s"},"case":"1 ring | 3 individual honours across 6 seasons. | All-Star | x1 | 2030 | Gold Glove | x1 | 2030 | Silver Slugger | x1 | 2030","caseOverflow":{"sw":390,"iw":390},"caseTop":243,"blocked":1,"errors":[]}
+REC {"cfg":"p390","key":"nhl_old","atMount":{"anim":"cmSlam","dur":"0.4s","opacity":"0"},"card":{"ps":["🪞 RIVALRY","🗳️","All-Star Ballot Squeeze","Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.","50/50 outcome"],"btn":{"top":516,"bottom":556,"left":132,"right":259},"cut":[],"settled":{"opacity":"1","transform":"matrix(1, 0, 0, 1, 0, 0)"},"vh":844},"cardOverflow":{"sw":390,"iw":390},"before":{"morale":62,"fanbase":79,"heat":15},"after":{"morale":62,"fanbase":79,"heat":15,"pending":null,"last":306},"feed":["🗳️ All-Star Ballot Squeeze"],"tile":null,"hubOverflow":{"sw":390,"iw":390},"scrollAfterTap":0,"blocked":1,"errors":[]}
+REC {"cfg":"d1280","key":"nfl_made","atMount":{"anim":"cmSlam","dur":"0.4s","opacity":"0"},"card":{"ps":["🪞 RIVALRY","🗳️","All-Pro Team","The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and Tyrell Okafor.","Morale +5"],"btn":{"top":477,"bottom":517,"left":577,"right":704},"cut":[],"settled":{"opacity":"1","transform":"matrix(1, 0, 0, 1, 0, 0)"},"vh":900},"cardOverflow":{"sw":1280,"iw":1280},"before":{"morale":78,"fanbase":77,"heat":15},"blocked":1,"errors":[],"failed":"page.waitForSelector: Timeout 45000ms exceeded."}
+REC {"cfg":"d1280","key":"mlb_rich","after":{"morale":83,"fanbase":89,"heat":5,"pending":null,"last":212},"feed":[],"tile":null,"hubOverflow":{"sw":1280,"iw":1280},"scrollAfterTap":0,"caseAtMount":{"anim":"cmTickIn","dur":"0.35s"},"case":"1 ring | 3 individual honours across 6 seasons. | All-Star | x1 | 2030 | Gold Glove | x1 | 2030 | Silver Slugger | x1 | 2030","caseOverflow":{"sw":1280,"iw":1280},"caseTop":223,"blocked":1,"errors":[]}
+REC {"cfg":"d1280","key":"nhl_old","atMount":{"anim":"cmSlam","dur":"0.4s","opacity":"0"},"card":{"ps":["🪞 RIVALRY","🗳️","All-Star Ballot Squeeze","Only one of you is making the All-Star ballot at the position this year, and it comes down to Beau Halstead.","50/50 outcome"],"btn":{"top":477,"bottom":517,"left":577,"right":704},"cut":[],"settled":{"opacity":"1","transform":"matrix(1, 0, 0, 1, 0, 0)"},"vh":900},"cardOverflow":{"sw":1280,"iw":1280},"before":{"morale":62,"fanbase":79,"heat":15},"after":{"morale":62,"fanbase":79,"heat":15,"pending":null,"last":306},"feed":["🗳️ All-Star Ballot Squeeze"],"tile":null,"hubOverflow":{"sw":1280,"iw":1280},"scrollAfterTap":0,"blocked":1,"errors":[]}
+walk: 6 loads, 2 with a failure or a page error
+  p390 nfl_made: page.waitForSelector: Timeout 45000ms exceeded. 
+  d1280 nfl_made: page.waitForSelector: Timeout 45000ms exceeded. 
