@@ -1,0 +1,10 @@
+playSaveKeeper: mode assert, CONTROL assignload, parts cross, 21 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+Journey L, the cross flow: an academy backup put back from /stadium-tycoon with the Academy tab open
+  SURVIVED  [branch] cross /wonderkid-factory from /stadium-tycoon 390: A (335 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; history entries 5 then 6
+  SURVIVED  [branch] cross /wonderkid-factory from /stadium-tycoon 1280: A (335 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; history entries 5 then 6
+
+playSaveKeeper, branch: 2 walk(s) judged (0 fresh, 0 planted, 2 cross): 0 LOST the save that was put back, 0 partly, 2 survived; 0 not judged
+playSaveKeeper control assignload: FIRED. 2 of 2 walk(s) saw the history grow by one entry, the old page a Back press away.

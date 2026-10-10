@@ -1,0 +1,152 @@
+09df145ab
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSaveKeeper: mode assert, parts fresh planted cross toggle K cost, 21 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  origin/main build /tmp/base-dist
+
+A clean visit and a leave, per route: does the game write its save with no press?
+  quiet   /soccer-career  keys left: cookie-consent, dukb-guest-handle
+  quiet   /club-manager  keys left: cookie-consent, dukb-guest-handle
+  WRITES  /stadium-tycoon  keys left: cookie-consent, dukb-guest-handle, stadiumTycoonSaveV1
+  WRITES  /wonderkid-factory  keys left: cookie-consent, dukb-guest-handle, wonderkidFactoryV1
+  quiet   /rebuild  keys left: cookie-consent, dukb-guest-handle
+  quiet   /front-office  keys left: cookie-consent, dukb-guest-handle
+  quiet   /nfl-my-career  keys left: cookie-consent, dukb-guest-handle
+  quiet   /cfb-dynasty  keys left: cookie-consent, dukb-guest-handle
+  quiet   /cbb-dynasty  keys left: cookie-consent, dukb-guest-handle
+  quiet   /nba-front-office  keys left: cookie-consent, dukb-guest-handle
+  quiet   /nba-my-career  keys left: cookie-consent, dukb-guest-handle
+  quiet   /mlb-my-career  keys left: cookie-consent, dukb-guest-handle
+  quiet   /mlb-front-office  keys left: cookie-consent, dukb-guest-handle
+  quiet   /nhl-my-career  keys left: cookie-consent, dukb-guest-handle
+  quiet   /nhl-front-office  keys left: cookie-consent, dukb-guest-handle
+  quiet   /aussie-rules-manager  keys left: cookie-consent, dukb-guest-handle, rules-gate-seen:/aussie-rules-manager
+  quiet   /fight-career  keys left: cookie-consent, dukb-guest-handle
+  quiet   /fight-promoter  keys left: cookie-consent, dukb-guest-handle
+  quiet   /fight-gym  keys left: cookie-consent, dukb-guest-handle
+  WRITES  /hall-of-champions  keys left: cookie-consent, dukb-guest-handle, hallOfChampionsV1
+  WRITES  /idle-arena  keys left: cookie-consent, dukb-guest-handle, dukb-idle-arena-v1
+
+Journey L, the fresh flow, on the branch: the 4 route(s) that write with no press
+  SURVIVED  [branch] fresh /stadium-tycoon 390: A (1245 chars) is in stadiumTycoonSaveV1.broken-2026-01-02T03-04-05, stadiumTycoonSaveV1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] fresh /stadium-tycoon 1280: A (1243 chars) is in stadiumTycoonSaveV1.broken-2026-01-02T03-04-05, stadiumTycoonSaveV1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] fresh /wonderkid-factory 390: A (335 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] fresh /wonderkid-factory 1280: A (346 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] fresh /hall-of-champions 390: A (252 chars) is in hallOfChampionsV1.broken-2026-01-02T03-04-05, hallOfChampionsV1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] fresh /hall-of-champions 1280: A (252 chars) is in hallOfChampionsV1.broken-2026-01-02T03-04-05, hallOfChampionsV1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] fresh /idle-arena 390: A (309 chars) is in dukb-idle-arena-v1.broken-2026-01-02T03-04-05, dukb-idle-arena-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] fresh /idle-arena 1280: A (309 chars) is in dukb-idle-arena-v1.broken-2026-01-02T03-04-05, dukb-idle-arena-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; the button under a pointer: yes
+
+Journey L, the planted flow, on the branch: real engine saves on 21 route(s)
+  SURVIVED  [branch] planted /soccer-career 390: A (4267 chars) is in soccerCareerSave.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' A x; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /soccer-career 1280: A (4267 chars) is in soccerCareerSave.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' A x; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /club-manager 390: A (58466 chars) is in dukb-club-manager-save.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /club-manager 1280: A (58466 chars) is in dukb-club-manager-save.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /stadium-tycoon 390: A (1153 chars) is in stadiumTycoonSaveV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /stadium-tycoon 1280: A (1153 chars) is in stadiumTycoonSaveV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /wonderkid-factory 390: A (308 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /wonderkid-factory 1280: A (308 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /rebuild 390: A (129 chars) is in rebuild-table.broken-2026-01-02T03-04-05, rebuild-table; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /rebuild 1280: A (129 chars) is in rebuild-table.broken-2026-01-02T03-04-05, rebuild-table; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /front-office 390: A (83702 chars) is in front-office-save-v1.broken-2026-01-02T03-04-05, front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /front-office 1280: A (83702 chars) is in front-office-save-v1.broken-2026-01-02T03-04-05, front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /nfl-my-career 390: A (712 chars) is in nfl-my-career-save-v1.broken-2026-01-02T03-04-05, nfl-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by a dialog (How to playThe stepsCreate your player: )
+  SURVIVED  [branch] planted /nfl-my-career 1280: A (712 chars) is in nfl-my-career-save-v1.broken-2026-01-02T03-04-05, nfl-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by div
+  SURVIVED  [branch] planted /cfb-dynasty 390: A (57626 chars) is in cfb-dynasty-save-v1.broken-2026-01-02T03-04-05, cfb-dynasty-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /cfb-dynasty 1280: A (57626 chars) is in cfb-dynasty-save-v1.broken-2026-01-02T03-04-05, cfb-dynasty-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /cbb-dynasty 390: A (35032 chars) is in cbb-dynasty-save-v1.broken-2026-01-02T03-04-05, cbb-dynasty-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /cbb-dynasty 1280: A (35032 chars) is in cbb-dynasty-save-v1.broken-2026-01-02T03-04-05, cbb-dynasty-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /nba-front-office 390: A (51468 chars) is in nba-front-office-save-v1, nba-front-office-save-v1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /nba-front-office 1280: A (51468 chars) is in nba-front-office-save-v1, nba-front-office-save-v1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /nba-my-career 390: A (784 chars) is in nba-my-career-save-v1, nba-my-career-save-v1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by a dialog (How to playThe stepsCreate your player: )
+  SURVIVED  [branch] planted /nba-my-career 1280: A (784 chars) is in nba-my-career-save-v1, nba-my-career-save-v1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by div
+  SURVIVED  [branch] planted /mlb-my-career 390: A (726 chars) is in mlb-my-career-save-v1.broken-2026-01-02T03-04-05, mlb-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by a dialog (How to playThe stepsCreate your player: )
+  SURVIVED  [branch] planted /mlb-my-career 1280: A (726 chars) is in mlb-my-career-save-v1.broken-2026-01-02T03-04-05, mlb-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by div
+  SURVIVED  [branch] planted /mlb-front-office 390: A (121730 chars) is in mlb-front-office-save-v1.broken-2026-01-02T03-04-05, mlb-front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /mlb-front-office 1280: A (121730 chars) is in mlb-front-office-save-v1.broken-2026-01-02T03-04-05, mlb-front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /nhl-my-career 390: A (763 chars) is in nhl-my-career-save-v1.broken-2026-01-02T03-04-05, nhl-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by a dialog (How to playThe stepsCreate your player: )
+  SURVIVED  [branch] planted /nhl-my-career 1280: A (763 chars) is in nhl-my-career-save-v1.broken-2026-01-02T03-04-05, nhl-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by div
+  SURVIVED  [branch] planted /nhl-front-office 390: A (66275 chars) is in nhl-front-office-save-v1.broken-2026-01-02T03-04-05, nhl-front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /nhl-front-office 1280: A (66275 chars) is in nhl-front-office-save-v1.broken-2026-01-02T03-04-05, nhl-front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /aussie-rules-manager 390: A (84062 chars) is in aussie-rules-manager-save-v2, aussie-rules-manager-save-v2.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by a dialog (How to Play Aussie Rules ManagerPick one)
+  SURVIVED  [branch] planted /aussie-rules-manager 1280: A (84062 chars) is in aussie-rules-manager-save-v2, aussie-rules-manager-save-v2.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: NO, covered by div
+  SURVIVED  [branch] planted /fight-career 390: A (1425 chars) is in fight-career-save-v1.broken-2026-01-02T03-04-05, fight-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /fight-career 1280: A (1425 chars) is in fight-career-save-v1.broken-2026-01-02T03-04-05, fight-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /fight-promoter 390: A (2365 chars) is in fight-promoter-save-v1.broken-2026-01-02T03-04-05, fight-promoter-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /fight-promoter 1280: A (2365 chars) is in fight-promoter-save-v1.broken-2026-01-02T03-04-05, fight-promoter-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /fight-gym 390: A (1572 chars) is in fight-gym-save-v1.broken-2026-01-02T03-04-05, fight-gym-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /fight-gym 1280: A (1572 chars) is in fight-gym-save-v1.broken-2026-01-02T03-04-05, fight-gym-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /hall-of-champions 390: A (235 chars) is in hallOfChampionsV1.broken-2026-01-02T03-04-05, hallOfChampionsV1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /hall-of-champions 1280: A (235 chars) is in hallOfChampionsV1.broken-2026-01-02T03-04-05, hallOfChampionsV1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /idle-arena 390: A (261 chars) is in dukb-idle-arena-v1.broken-2026-01-02T03-04-05, dukb-idle-arena-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /idle-arena 1280: A (261 chars) is in dukb-idle-arena-v1.broken-2026-01-02T03-04-05, dukb-idle-arena-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' A; backups 2; the button under a pointer: yes
+
+Journey L, the fresh flow, on the build of origin/main: the 4 route(s) that write with no press
+  LOST      [main] fresh /stadium-tycoon 390: A (1245 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false; writes to the key: x' A' x' x'; backups 1; the button under a pointer: yes
+  LOST      [main] fresh /wonderkid-factory 390: A (346 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: true; writes to the key: x' A' x' x'; backups 1; the button under a pointer: yes
+  LOST      [main] fresh /hall-of-champions 390: A (252 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false; writes to the key: x' A' x' x'; backups 1; the button under a pointer: yes
+  LOST      [main] fresh /idle-arena 390: A (312 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false; writes to the key: x' A' x' x'; backups 1; the button under a pointer: yes
+
+Journey L, the planted flow, on the build of origin/main: real engine saves on 21 route(s)
+  PARTLY    [main] planted /soccer-career 390: A (4267 chars) is in NO KEY; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' A' x; backups 1; the button under a pointer: yes
+  LOST      [main] planted /club-manager 390: A (58466 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: true; writes to the key: x' A' x' x' x; backups 1; the button under a pointer: yes
+  LOST      [main] planted /stadium-tycoon 390: A (1153 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false; writes to the key: x' A' x' x'; backups 1; the button under a pointer: yes
+  LOST      [main] planted /wonderkid-factory 390: A (308 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false; writes to the key: A' x' x'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /rebuild 390: A (129 chars) is in rebuild-table; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /front-office 390: A (83702 chars) is in front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /nfl-my-career 390: A (712 chars) is in nfl-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: NO, covered by a dialog (How to playThe stepsCreate your player: )
+  SURVIVED  [main] planted /cfb-dynasty 390: A (57626 chars) is in cfb-dynasty-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /cbb-dynasty 390: A (35032 chars) is in cbb-dynasty-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /nba-front-office 390: A (51468 chars) is in nba-front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /nba-my-career 390: A (784 chars) is in nba-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: NO, covered by a dialog (How to playThe stepsCreate your player: )
+  SURVIVED  [main] planted /mlb-my-career 390: A (726 chars) is in mlb-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: NO, covered by a dialog (How to playThe stepsCreate your player: )
+  SURVIVED  [main] planted /mlb-front-office 390: A (121730 chars) is in mlb-front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /nhl-my-career 390: A (763 chars) is in nhl-my-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: NO, covered by a dialog (How to playThe stepsCreate your player: )
+  SURVIVED  [main] planted /nhl-front-office 390: A (66275 chars) is in nhl-front-office-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /aussie-rules-manager 390: A (84062 chars) is in aussie-rules-manager-save-v2; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: NO, covered by a dialog (How to Play Aussie Rules ManagerPick one)
+  SURVIVED  [main] planted /fight-career 390: A (1425 chars) is in fight-career-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /fight-promoter 390: A (2365 chars) is in fight-promoter-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  SURVIVED  [main] planted /fight-gym 390: A (1572 chars) is in fight-gym-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A'; backups 1; the button under a pointer: yes
+  LOST      [main] planted /hall-of-champions 390: A (235 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false; writes to the key: A' x' x'; backups 1; the button under a pointer: yes
+  LOST      [main] planted /idle-arena 390: A (261 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false; writes to the key: A' x' x'; backups 1; the button under a pointer: yes
+
+Journey L, the cross flow: an academy backup put back from /stadium-tycoon with the Academy tab open
+  SURVIVED  [branch] cross /wonderkid-factory from /stadium-tycoon 390: A (335 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; history entries 5 then 5
+  SURVIVED  [branch] cross /wonderkid-factory from /stadium-tycoon 1280: A (335 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; history entries 5 then 5
+
+Journey T, the toggle, on the branch: 3 presses in a row with a real pointer on 21 route(s) at 390, the card's OK pressed after each
+  HELD        toggle /soccer-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /club-manager 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /stadium-tycoon 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /wonderkid-factory 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /rebuild 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /front-office 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nfl-my-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /cfb-dynasty 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /cbb-dynasty 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nba-front-office 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nba-my-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /mlb-my-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /mlb-front-office 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nhl-my-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nhl-front-office 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /aussie-rules-manager 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /fight-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /fight-promoter 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /fight-gym 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /hall-of-champions 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /idle-arena 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+
+Journey K: the storage keys after an ordinary visit (a real save of all 21 games, the home page and every route once)
+  origin/main: 27 keys. branch: 27 keys. Added on the branch: none. Only on origin/main: none.
+  the branch's keys: aussie-rules-manager-save-v2, cbb-dynasty-save-v1, cfb-dynasty-save-v1, cookie-consent, dukb-club-manager-save, dukb-guest-handle, dukb-idle-arena-v1, dukb-play-diary-v1, dukb-streaks-v1, fight-career-save-v1, fight-gym-save-v1, fight-promoter-save-v1, front-office-save-v1, hallOfChampionsV1, mlb-front-office-save-v1, mlb-my-career-save-v1, nba-front-office-save-v1, nba-my-career-save-v1, nfl-my-career-save-v1, nhl-front-office-save-v1, nhl-my-career-save-v1, rebuild-table, rules-gate-seen:/aussie-rules-manager, soccerCareerSave, stadiumTycoonSaveV1, tycoonRewardsV1, wonderkidFactoryV1
+
+The boot pass in Chromium at a 4x CPU throttle, the largest real save of all 21 games held (576652 chars in storage, 22 keys):
+  first pass 5.100 ms, then 1.861 ms a pass over 200. An empty store: first 0.000 ms, then 0.006 ms a pass.
+
+playSaveKeeper, branch: 52 walk(s) judged (8 fresh, 42 planted, 2 cross): 0 LOST the save that was put back, 0 partly, 52 survived; 0 not judged
+playSaveKeeper, origin/main: 25 walk(s) judged: 9 LOST, on /stadium-tycoon, /wonderkid-factory, /hall-of-champions, /idle-arena, /club-manager; 15 survived; 0 not judged
+playSaveKeeper, the toggle: 21 of 21 route(s) held through 3 presses with a real pointer; the history told a replace from an assign on 21 of them
+playSaveKeeper, journey L's own presses (made in the page, see pressAndJudge): the button was under a pointer in 40 of 50 walk(s); covered on planted /nfl-my-career 390 (a dialog (How to playThe stepsCreate your player: )), planted /nfl-my-career 1280 (div), planted /nba-my-career 390 (a dialog (How to playThe stepsCreate your player: )), planted /nba-my-career 1280 (div), planted /mlb-my-career 390 (a dialog (How to playThe stepsCreate your player: )), planted /mlb-my-career 1280 (div), planted /nhl-my-career 390 (a dialog (How to playThe stepsCreate your player: )), planted /nhl-my-career 1280 (div), planted /aussie-rules-manager 390 (a dialog (How to Play Aussie Rules ManagerPick one)), planted /aussie-rules-manager 1280 (div)
+playSaveKeeper: the planted flow judged 21 of 21 route(s)
+playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.

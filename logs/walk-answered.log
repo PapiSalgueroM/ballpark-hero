@@ -1,0 +1,30 @@
+playSaveKeeper: mode assert, CONTROL answered, parts toggle, 21 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+Journey T, the toggle, on the branch: 3 presses in a row with a real pointer on 21 route(s) at 390, the card's OK pressed after each (CONTROL: every kept aside save is listed as answered after the first press)
+  STOPPED     toggle /soccer-career 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /club-manager 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /stadium-tycoon 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /wonderkid-factory 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /rebuild 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /front-office 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /nfl-my-career 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /cfb-dynasty 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /cbb-dynasty 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /nba-front-office 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /nba-my-career 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /mlb-my-career 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /mlb-front-office 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /nhl-my-career 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /nhl-front-office 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /aussie-rules-manager 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /fight-career 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /fight-promoter 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /fight-gym 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /hall-of-champions 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /idle-arena 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+
+playSaveKeeper, branch: 0 walk(s) judged (0 fresh, 0 planted, 0 cross): 0 LOST the save that was put back, 0 partly, 0 survived; 0 not judged
+playSaveKeeper, the toggle: 0 of 21 route(s) held through 3 presses with a real pointer; the history told a replace from an assign on 0 of them
+playSaveKeeper control answered: FIRED. 21 of 21 route(s) stopped at "the card offers NOTHING" after the first press.
