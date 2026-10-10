@@ -1,0 +1,1 @@
+prem-frozen exit=1 1s | simCmLeagueFixtures: FAILED, 5 failure(s): 10 ledger(s), 10 frozen, 0 pending, 3528 fixtures, 0 of 0 controls fired
