@@ -33,7 +33,7 @@ const spec = {
   'dart-best': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: 'const picks = eligible.slice(0, 3);', replacement: 'const picks = eligible.slice(-3);', outcomes: ['variety', 'bonus'] },
   'dart-used': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: 'used.has(key) || seen.has(key)', replacement: 'false', outcomes: ['eligible', 'bonus'] },
   'dart-slot': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: '!fitsSlot(player, slot)', replacement: 'false', outcomes: ['eligible', 'bonus'] },
-  'dart-global': { file: 'src/lib/dartDraft.ts', alias: '@/lib/dartDraft', old: '.range(from, to),', replacement: '.range(from, to).limit(900),', outcomes: ['global'] },
+  'dart-global': { file: 'src/lib/dartDraft.ts', alias: '@/lib/dartDraft', old: '.range(from, to),', replacement: '.range(from, to).limit(900),', outcomes: ['global', 'partial'] }, /* a page cut to 900 ends the read before the failing page is asked for */
   'dart-country': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: ".in('nationality', names)", replacement: ".in('nationality', names).limit(120)", outcomes: ['country', 'partial'] },
   'dart-position': { file: 'src/lib/dartMap.ts', alias: '@/lib/dartMap', old: ".in('position', rawPositionsFor(slot))", replacement: ".in('position', rawPositionsFor(slot)).limit(12)", outcomes: ['position'] },
   'dart-year': { file: 'src/lib/dartDraft.ts', alias: '@/lib/dartDraft', old: ".eq('year', 2026)", replacement: ".eq('year', 2025)", outcomes: ['global'] },

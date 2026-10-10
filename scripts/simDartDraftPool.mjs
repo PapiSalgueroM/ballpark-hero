@@ -298,8 +298,9 @@ console.log('2) the gold zones: the best three always, five drawn from the pool,
       }
       if (bad) { fail(`${where}: ${bad}`); continue; }
       if (fits.length <= 8) { tally.thin += 1; continue; }
-      /* Five names over every seed is the old fixed tiles. With N men to draw five from, 24 seeds reach nearly all
-         of them when N is small and dozens when it is large; the measured span is printed below. */
+      /* Five names over every seed is the old fixed tiles. Measured on the fixture (rAT-fx-e): 30 slot and zone
+         pairs have more than eight who fit, and over 24 seeds their drawn tiles reach between 8 and 105 names; 3
+         pairs (thin legend slots) have eight or fewer and show everybody. The span is printed below. */
       tally.couldVary += 1;
       tally.fewestNames = Math.min(tally.fewestNames, drawnNames.size);
       tally.mostNames = Math.max(tally.mostNames, drawnNames.size);
@@ -531,10 +532,12 @@ console.log('8) clubs the league lookup does not know');
      land and 0.21 to 0.34 for a blind thrower. That is the price of tiles that reach past the best eight.
      Release AT: those are Round 1145's numbers, when a country was read as its first 120 rows. Round 1182 reads a
      country all the way down, so the four drawn tiles of a country hit now reach every row of the nation, and
-     the random picker at the big nations pays more: 80.92 before and 77.61 after on the integrated tree, a
-     median of 77, which is a B, with 1,005 of 2,000 drafts at B (remote check rAT-pc; Release AS measured 79.08,
-     median 79, an A, 485 at B in rAT-bis). So his median grade DOES move now, from A to B. The best pick does
-     not (86.98 against 87.02), and nobody who takes the best tile pays it. DART_POOL_CONTROL=lasttile is the proof
+     the random picker at the big nations pays more. On this tree: 81.02 before and 77.64 after, a median of
+     78, the bottom of the A band, with 990 of 2,000 drafts at B (remote check rAT-fx-e). Release AS measured
+     79.08, median 79, 485 at B (rAT-bis), and the integrated tree before the drawn tiles went out best first
+     77.61, median 77, a B, 1,005 at B (rAT-pc). So his median now sits on the line between A and B and about
+     half his drafts are a B where a quarter were. The best pick does not move (86.98 against 87.02), and
+     nobody who takes the best tile pays it. DART_POOL_CONTROL=lasttile is the proof
      that the grade check below can go red: with only the last tile of every hit on offer the sharp thrower's median
      falls from S to B. */
   for (const [name, row] of [['land thrower, best pick', lb], ['sharp thrower, best pick', sb]]) {
