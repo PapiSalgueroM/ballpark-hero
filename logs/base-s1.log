@@ -1,0 +1,8 @@
+1) Fifteen seasons at three clubs: under 196000 bytes, slope under 2000 bytes a season, every ledger inside its cap
+   Real Madrid   seasons 15, day one 58119, season 1 159919, season 15 179671, slope after season 3 240 bytes a season
+                 sizes: 58119 159919 168258 173338 179990 173701 178688 179680 182410 181676 179851 180191 180007 179997 181462 179671
+   Everton       seasons 15, day one 53970, season 1 144856, season 15 185341, slope after season 3 1079 bytes a season
+                 sizes: 53970 144856 155441 162669 170686 173854 179278 182975 183347 184048 184143 184649 185273 184055 184807 185341
+   Lincoln City  seasons 15, day one 53842, season 1 146279, season 15 184799, slope after season 3 909 bytes a season
+                 sizes: 53842 146279 157089 163421 169770 177962 181746 182855 183744 184271 185149 185243 184028 184269 185279 184799
+   board nudges over the whole run: 237

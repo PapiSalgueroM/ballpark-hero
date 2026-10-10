@@ -1,0 +1,7 @@
+#!serial
+base-default: mkdir -p /tmp/b && git archive 980654fa | tar -x -C /tmp/b && ln -s $PWD/node_modules /tmp/b/node_modules && cd /tmp/b && node scripts/simClubManagerSaveSize.mjs | head -8
+base-s1: cd /tmp/b && SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs | head -8
+base-s2: cd /tmp/b && SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs | head -8
+base-s3: cd /tmp/b && SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs | head -8
+base-s4: cd /tmp/b && SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs | head -8
+base-s5: cd /tmp/b && SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs | head -8
