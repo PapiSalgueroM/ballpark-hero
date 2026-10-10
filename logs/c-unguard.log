@@ -1,0 +1,31 @@
+   control unguard: src/pages/Footle.tsx changed in memory ("safeSetItem('footle-rules-seen', '1')" is now "localStorage.setItem('footle-rules-seen', '1')")
+1. every storage write is inside a try of its own function, or allowed with a reason that still holds
+   FAIL  1 storage write(s) that can throw into a render, an effect or a handler:
+           src/pages/Footle.tsx:104  localStorage.setItem('footle-rules-seen', '1')
+           use safeSetItem from @/lib/safeStorage, or guard the write where it is made
+2. the storage seam is the first thing src/main.tsx imports
+   ok    main.tsx starts with import "./lib/safeStorage"
+3. the Supabase client takes its auth storage from the seam
+   ok    auth.storage is safeLocalStorage and the file never names localStorage
+4. the storage seam only READS as it loads: no write, remove or clear at module scope or in what module scope calls
+   ok    14 write, remove or clear calls in the seam, 0 of them at module scope or in rawRequested, resolve, standInForLocks
+5. the seam writes its probe only under the once flag (the first probe) or while it already says full (the recheck)
+   ok    4 probe writes: 2 in probeStorageWrites under "!probedWrites", 2 in recheckStorageWrites under "refusedWrite"
+6. "full" is taken back in one place, the recheck, and never while a game holds a refused save
+   ok    1 place takes "full" back, in recheckStorageWrites (line 339), behind the held save's guard (line 333)
+7. a save a game remembers was refused is named to the seam, or listed with the reason it need not be
+   ok    122 guarded writes, 85 with an empty catch; 55 keys in 32 files, each on one list: 1 named to the seam (1 entry), 38 with nothing held (25 entries), 16 owed (12 entries)
+           owed: src/pages/SoccerCareer.tsx [state:saveFailed], owner the other lane, listed 2026-10-10
+           owed: src/hooks/useGame.ts [state:practiceSaveFailed, state:unlimitedSaveFailed], owner the other lane, listed 2026-10-10
+           owed: src/pages/RankEm.tsx [state:saveFailed, keeps:saveCircuit], owner the other lane, listed 2026-10-10
+           owed: src/hooks/useClubManager.ts [state:saveFailed, keeps:saveCareer], owner this lane, after Release AT lands (the train edits this file), listed 2026-10-10
+           owed: src/hooks/useAussieRulesLeague.ts [state:storageNotice], owner this lane, listed 2026-10-10
+           owed: src/hooks/useAussieRulesManager.ts [state:storageNotice], owner this lane, listed 2026-10-10
+           owed: src/hooks/useStadiumTycoon.ts [state:ticketSaveFailed, keeps:saveTicketState], owner to be named by the lead, listed 2026-10-10
+           owed: src/lib/tycoonRewards.ts [write:saveLedger], owner to be named by the lead, listed 2026-10-10
+           owed: src/hooks/useMmaPromotion.ts [write:change], owner to be named by the lead, listed 2026-10-10
+           owed: src/hooks/useNbaConnections.ts [state:notesWarning], owner to be named by the lead (low: scratch notes, the daily result has its own save), listed 2026-10-10
+           owed: src/hooks/useNhlConnections.ts [state:notesWarning], owner to be named by the lead (low: scratch notes, the daily result has its own save), listed 2026-10-10
+           owed: src/hooks/useGamePicks.ts [write:toggle], owner to be named by the lead (low: a list of pinned games, not a game), listed 2026-10-10
+
+simStorageWrites (control unguard): 1 failed (owed: 12)
