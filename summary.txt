@@ -1,0 +1,3 @@
+simNhlCareer exit=0 16s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+simMlbCareer exit=0 24s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simNbaAwardsSense exit=0 112s | simNbaAwardsSense: 171 checks, 0 failed (full size), 112s
