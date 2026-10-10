@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+m-rowswap: bash .rc/x/mrun.sh rowswap walk
+m-movedflip: bash .rc/x/mrun.sh movedflip walk

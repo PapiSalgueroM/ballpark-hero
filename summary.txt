@@ -1,0 +1,2 @@
+m-rowswap exit=0 182s | MUT rowswap harness=0 vitest=0 build=0 walk=0 | simCareerPreDraft [seed set a]: ALL GREEN |  Tests  115 passed (115) | playDraftNight: ALL GREEN, 40 nights walked
+m-movedflip exit=0 178s | MUT movedflip harness=0 vitest=0 build=0 walk=0 | simCareerPreDraft [seed set a]: ALL GREEN |  Tests  115 passed (115) | playDraftNight: ALL GREEN, 40 nights walked
