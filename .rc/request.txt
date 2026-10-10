@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+set-refuse-lower: node .rc/x/setBudgetsAT.mjs /club-manager=577; s=$?; git diff --quiet -- scripts/sweepWeight.mjs && echo "refused with exit $s, file unchanged"; exit $s
+set-refuse-norow: node .rc/x/setBudgetsAT.mjs /no-such-route=5; s=$?; git diff --quiet -- scripts/sweepWeight.mjs && echo "refused with exit $s, file unchanged"; exit $s
+weight-set: node .rc/x/setBudgetsAT.mjs /club-manager=582 /soccer-career=796 /manager-hot-seat=600 /deadline-day=610 && git diff -- scripts/sweepWeight.mjs > "$RC_OUT/sweepWeight-budgets.patch" && node --check scripts/sweepWeight.mjs && SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/ws.log 2>&1; s=$?; cp /tmp/ws.log "$RC_OUT/weight-set-full.log"; git diff --numstat -- scripts/sweepWeight.mjs; grep -E "FAIL|K gz over|probe sets|sweepWeight:" /tmp/ws.log | head -30; git checkout -- scripts/sweepWeight.mjs; exit $s
+weight-set-planted: node .rc/x/setBudgetsAT.mjs /club-manager=582 /soccer-career=796 /manager-hot-seat=600 /deadline-day=610 > /dev/null && SWEEP_WEIGHT_CONTROL=planted SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wp.log 2>&1; s=$?; cp /tmp/wp.log "$RC_OUT/weight-set-planted-full.log"; grep -E "FAIL|CONTROL|control|sweepWeight" /tmp/wp.log | cut -c1-220 | head -12; git checkout -- scripts/sweepWeight.mjs; exit $s
+weight-set-late: node .rc/x/setBudgetsAT.mjs /club-manager=582 /soccer-career=796 /manager-hot-seat=600 /deadline-day=610 > /dev/null && SWEEP_WEIGHT_CONTROL=late SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wl.log 2>&1; s=$?; cp /tmp/wl.log "$RC_OUT/weight-set-late-full.log"; grep -E "FAIL|CONTROL|control|sweepWeight" /tmp/wl.log | cut -c1-220 | head -12; git checkout -- scripts/sweepWeight.mjs; exit $s
+weight-one-lower: node .rc/x/setBudgetsAT.mjs /club-manager=581 /soccer-career=795 /manager-hot-seat=599 /deadline-day=609 > /dev/null && SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wo.log 2>&1; s=$?; grep -E "FAIL|sweepWeight:" /tmp/wo.log | cut -c1-200 | head -8; git checkout -- scripts/sweepWeight.mjs; exit $s
+weight-plain: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs 2>&1 | grep -E "FAIL|sweepWeight:" | cut -c1-200 | head -8; exit ${PIPESTATUS[0]}
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+tree-clean: git status --porcelain -- scripts | head -5; test -z "$(git status --porcelain -- scripts/sweepWeight.mjs)" && echo "scripts/sweepWeight.mjs is as committed"
