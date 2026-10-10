@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: node .rc/x/r1222walk.mjs
