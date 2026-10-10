@@ -1,0 +1,2 @@
+AssertionError [ERR_ASSERTION]: Control must target one actual binding
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simReportedGamePools.mjs:48:12 {

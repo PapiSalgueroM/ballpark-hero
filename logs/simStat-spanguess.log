@@ -1,0 +1,5161 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > holds this file's copy of the view to the rows the migration's SQL is held to 11ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > makes one career per name, out of the men who reached the floor and nobody else 6ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > cuts two men apart only past the cohort gap 7ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > counts the floor in the view at the number the page uses, and keeps the first draft columns first 6ms
+ ✓ src/test/statDetectiveSpans.test.tsx > a career span belongs to a man, not to a name > does not let a namesake who never reached 500 minutes stretch a famous career 82ms
+ ✓ src/test/statDetectiveSpans.test.tsx > a career span belongs to a man, not to a name > keeps two men who both reached the floor as the one generous profile they always were 51ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > counts every team he has a row for as a franchise he played for 22ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > reads the true first and last season for a man whose career ran past his 500 minute seasons 17ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > judges the era of a guess on the true span 20ms
+ × src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > fails the whole load when the spans cannot be read, and never falls back to the 500 minute span 3206ms
+   → expected { …(3) } to be null
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > reads a view deeper than the pages it asks for at once to the end, and asks again for a page that failed once 886ms
+ × src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > gives a name the view lacks no span at all and says so, rather than guessing one 27ms
+   → expected [ 2006, null ] to deeply equal [ null, null ]
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective mysteries do not move with the span > builds byte identical mystery pools, and they do not depend on what the view says 67ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > opens its retry state when the spans cannot be read, and recovers when they can 1387ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > prints the true years beside a name in the guess box 134ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > prints the famous man his own years beside a name he shares 92ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 14 passed (16)
+   Start at  09:05:26
+   Duration  8.25s (transform 686ms, setup 147ms, collect 1.03s, tests 6.02s, environment 459ms, prepare 209ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > fails the whole load when the spans cannot be read, and never falls back to the 500 minute span
+AssertionError: expected { …(3) } to be null
+
+- Expected: 
+null
+
++ Received: 
+{
+  "byName": Map {
+    "fixture guard sable" => {
+      "firstYear": 2006,
+      "franchises": [
+        "heat",
+      ],
+      "lastYear": null,
+      "name": "Fixture Guard Sable",
+      "peak": 79,
+      "positions": [
+        "PG",
+      ],
+    },
+    "fixture wing rowan" => {
+      "firstYear": 1990,
+      "franchises": [
+        "nuggets",
+      ],
+      "lastYear": null,
+      "name": "Fixture Wing Rowan",
+      "peak": 76,
+      "positions": [
+        "SF",
+      ],
+    },
+    "fixture pivot elm" => {
+      "firstYear": 1996,
+      "franchises": [
+        "wizards",
+      ],
+      "lastYear": null,
+      "name": "Fixture Pivot Elm",
+      "peak": 95,
+      "positions": [
+        "PF",
+      ],
+    },
+    "fixture filler 0899" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0899",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0898" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0898",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0897" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0897",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0896" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0896",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0895" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0895",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0894" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0894",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0893" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0893",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0892" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0892",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0891" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0891",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0890" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0890",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0889" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0889",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0888" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0888",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0887" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0887",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0886" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0886",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0885" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0885",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0884" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0884",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0883" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0883",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0882" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0882",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0881" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0881",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0880" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0880",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0879" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0879",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0878" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0878",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0877" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0877",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0876" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0876",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0875" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0875",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0874" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0874",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0873" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0873",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0872" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0872",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0871" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0871",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0870" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0870",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0869" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0869",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0868" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0868",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0867" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0867",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0866" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0866",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0865" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0865",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0864" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0864",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0863" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0863",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0862" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0862",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0861" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0861",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0860" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0860",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0859" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0859",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0858" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0858",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0857" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0857",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0856" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0856",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0855" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0855",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0854" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0854",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0853" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0853",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0852" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0852",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0851" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0851",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0850" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0850",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0849" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0849",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0848" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0848",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0847" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0847",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0846" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0846",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0845" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0845",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0844" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0844",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0843" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0843",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0842" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0842",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0841" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0841",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0840" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0840",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0839" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0839",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0838" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0838",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0837" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0837",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0836" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0836",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0835" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0835",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0834" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0834",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0833" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0833",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0832" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0832",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0831" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0831",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0830" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0830",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0829" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0829",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0828" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0828",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0827" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0827",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0826" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0826",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0825" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0825",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0824" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0824",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0823" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0823",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0822" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0822",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0821" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0821",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0820" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0820",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0819" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0819",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0818" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0818",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0817" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0817",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0816" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0816",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0815" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0815",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0814" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0814",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0813" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0813",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0812" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0812",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0811" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0811",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0810" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0810",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0809" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0809",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0808" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0808",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0807" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0807",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0806" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0806",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0805" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0805",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0804" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0804",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0803" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0803",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0802" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0802",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0801" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0801",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0800" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0800",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0799" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0799",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0798" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0798",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0797" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0797",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0796" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0796",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0795" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0795",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0794" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0794",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0793" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0793",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0792" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0792",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0791" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0791",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0790" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0790",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0789" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0789",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0788" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0788",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0787" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0787",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0786" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0786",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0785" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0785",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0784" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0784",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0783" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0783",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0782" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0782",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0781" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0781",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0780" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0780",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0779" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0779",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0778" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0778",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0777" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0777",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0776" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0776",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0775" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0775",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0774" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0774",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0773" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0773",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0772" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0772",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0771" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0771",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0770" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0770",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0769" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0769",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0768" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0768",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0767" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0767",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0766" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0766",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0765" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0765",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0764" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0764",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0763" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0763",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0762" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0762",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0761" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0761",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0760" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0760",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0759" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0759",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0758" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0758",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0757" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0757",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0756" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0756",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0755" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0755",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0754" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0754",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0753" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0753",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0752" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0752",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0751" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0751",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0750" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0750",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0749" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0749",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0748" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0748",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0747" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0747",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0746" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0746",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0745" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0745",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0744" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0744",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0743" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0743",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0742" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0742",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0741" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0741",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0740" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0740",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0739" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0739",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0738" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0738",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0737" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0737",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0736" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0736",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0735" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0735",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0734" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0734",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0733" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0733",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0732" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0732",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0731" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0731",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0730" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0730",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0729" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0729",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0728" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0728",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0727" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0727",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0726" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0726",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0725" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0725",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0724" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0724",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0723" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0723",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0722" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0722",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0721" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0721",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0720" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0720",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0719" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0719",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0718" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0718",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0717" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0717",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0716" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0716",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0715" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0715",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0714" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0714",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0713" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0713",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0712" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0712",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0711" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0711",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0710" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0710",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0709" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0709",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0708" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0708",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0707" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0707",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0706" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0706",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0705" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0705",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0704" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0704",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0703" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0703",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0702" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0702",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0701" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0701",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0700" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0700",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0699" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0699",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0698" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0698",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0697" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0697",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0696" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0696",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0695" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0695",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0694" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0694",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0693" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0693",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0692" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0692",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0691" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0691",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0690" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0690",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0689" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0689",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0688" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0688",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0687" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0687",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0686" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0686",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0685" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0685",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0684" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0684",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0683" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0683",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0682" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0682",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0681" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0681",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0680" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0680",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0679" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0679",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0678" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0678",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0677" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0677",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0676" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0676",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0675" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0675",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0674" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0674",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0673" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0673",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0672" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0672",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0671" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0671",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0670" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0670",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0669" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0669",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0668" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0668",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0667" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0667",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0666" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0666",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0665" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0665",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0664" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0664",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0663" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0663",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0662" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0662",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0661" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0661",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0660" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0660",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0659" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0659",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0658" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0658",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0657" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0657",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0656" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0656",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0655" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0655",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0654" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0654",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0653" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0653",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0652" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0652",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0651" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0651",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0650" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0650",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0649" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0649",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0648" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0648",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0647" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0647",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0646" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0646",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0645" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0645",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0644" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0644",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0643" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0643",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0642" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0642",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0641" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0641",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0640" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0640",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0639" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0639",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0638" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0638",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0637" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0637",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0636" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0636",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0635" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0635",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0634" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0634",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0633" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0633",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0632" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0632",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0631" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0631",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0630" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0630",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0629" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0629",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0628" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0628",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0627" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0627",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0626" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0626",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0625" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0625",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0624" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0624",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0623" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0623",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0622" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0622",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0621" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0621",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0620" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0620",
+      "peak": 72,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0619" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0619",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0618" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0618",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0617" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0617",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0616" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0616",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0615" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0615",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0614" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0614",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0613" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0613",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0612" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0612",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0611" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0611",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0610" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0610",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0609" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0609",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0608" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0608",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0607" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0607",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0606" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0606",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0605" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0605",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0604" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0604",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0603" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0603",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0602" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0602",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0601" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0601",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0600" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0600",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0599" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0599",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0598" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0598",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0597" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0597",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0596" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0596",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0595" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0595",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0594" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0594",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0593" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0593",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0592" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0592",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0591" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0591",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0590" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0590",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0589" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0589",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0588" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0588",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0587" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0587",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0586" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0586",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0585" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0585",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0584" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0584",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0583" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0583",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0582" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0582",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0581" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0581",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0580" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0580",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0579" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0579",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0578" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0578",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0577" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0577",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0576" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0576",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0575" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0575",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0574" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0574",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0573" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0573",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0572" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0572",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0571" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0571",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0570" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0570",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0569" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0569",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0568" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0568",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0567" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0567",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0566" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0566",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0565" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0565",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0564" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0564",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0563" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0563",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0562" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0562",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0561" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0561",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0560" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0560",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0559" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0559",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0558" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0558",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0557" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0557",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0556" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0556",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0555" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0555",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0554" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0554",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0553" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0553",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0552" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0552",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0551" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0551",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0550" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0550",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0549" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0549",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0548" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0548",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0547" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0547",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0546" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0546",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0545" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0545",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0544" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0544",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0543" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0543",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0542" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0542",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0541" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0541",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0540" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0540",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0539" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0539",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0538" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0538",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0537" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0537",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0536" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0536",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0535" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0535",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0534" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0534",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0533" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0533",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0532" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0532",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0531" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0531",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0530" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0530",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0529" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0529",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0528" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0528",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0527" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0527",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0526" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0526",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0525" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0525",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0524" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0524",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0523" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0523",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0522" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0522",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0521" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0521",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0520" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0520",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0519" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0519",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0518" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0518",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0517" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0517",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0516" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0516",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0515" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0515",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0514" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0514",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0513" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0513",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0512" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0512",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0511" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0511",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0510" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0510",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0509" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0509",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0508" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0508",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0507" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0507",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0506" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0506",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0505" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0505",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0504" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0504",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0503" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0503",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0502" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0502",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0501" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0501",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0500" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0500",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0499" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0499",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0498" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0498",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0497" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0497",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0496" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0496",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0495" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0495",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0494" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0494",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0493" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0493",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0492" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0492",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0491" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0491",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0490" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0490",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0489" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0489",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0488" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0488",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0487" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0487",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0486" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0486",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0485" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0485",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0484" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0484",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0483" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0483",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0482" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0482",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0481" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0481",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0480" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0480",
+      "peak": 94,
+      "positions": [
+        "SG",
+      ],
+    },
+    "fixture filler 0479" => {
+      "firstYear": 1994,
+      "franchises": [
+        "celtics",
+      ],
+      "lastYear": null,
+      "name": "Fixture Filler 0...
+
+ ❯ src/test/statDetectiveSpans.test.tsx:300:44
+    298|     expect(await fetchStatDetectiveData()).toBeNull();
+    299|     db[SPANS] = { rows, pageCap: 400 }; // a server that cuts pages sh…
+    300|     expect(await fetchStatDetectiveData()).toBeNull();
+       |                                            ^
+    301|     // A later page that keeps failing. The extra names sort after eve…
+    302|     // span by then and only the failed page can fail this: half a rea…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > gives a name the view lacks no span at all and says so, rather than guessing one
+AssertionError: expected [ 2006, null ] to deeply equal [ null, null ]
+
+- Expected
++ Received
+
+  [
+-   null,
++   2006,
+    null,
+  ]
+
+ ❯ src/test/statDetectiveSpans.test.tsx:325:51
+    323|     expect(data).not.toBeNull();
+    324|     const unfiled = data!.byName.get(normalizeName(UNFILED))!;
+    325|     expect([unfiled.firstYear, unfiled.lastYear]).toEqual([null, null]…
+       |                                                   ^
+    326|     expect(careerSpan(unfiled)).toBe('');
+    327|     const feedback = evaluateGuess(unfiled, mystery2000s);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+simStatDetectiveMotion spanguess: the copied lib line failed its intended span outcome while independent outcomes passed.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

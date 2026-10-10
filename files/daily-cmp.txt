@@ -1,0 +1,127 @@
+same hotseat 2026-10-10 (Athletic Club, laliga) opens wk 8 pos 15 pts 8/8 target 5 | Elche 1-1; @Real Sociedad 3-2; Alavés 0-2; @Atlético Madrid 0-1; Espanyol
+same deadline 2026-10-10 (Rangers, scottish) budget 21 | needs GK>73,CB>74,LB>74 | targets James Beadle, Yehvann Diouf, Ionuț Radu, Luiz Felipe, Saúl Coco,
+same hotseat 2026-10-11 (Young Boys, switzerland) opens wk 9 pos 2 pts 18/9 target 10 | @Grasshopper 1-0; Thun 1-1; @FC Zürich 1-0; Lugano 3-0; @Vaduz 2-0 | sur
+same deadline 2026-10-11 (Borussia Dortmund, bundesliga) budget 94.5 | needs CB>79,LB>83,LW>84 | targets Olivier Boscagli, Isak Hien, António Silva, Tomás Araújo, Alph
+same hotseat 2026-10-12 (Westerlo, proleague) opens wk 8 pos 12 pts 10/8 target 6 | Beveren 3-1; @Cercle Brugge 1-1; Gent 3-2 | survived
+same deadline 2026-10-12 (Atalanta, seriea) budget 70 | needs LB>79,CB>81,CM>81 | targets Abdoul Koné, Lucas Hernández, Carlos Augusto, Lucas Beraldo, Cha
+same hotseat 2026-10-13 (Celta Vigo, laliga) opens wk 7 pos 20 pts 2/7 target 3 | Valencia 1-1; Elche 2-0 | survived
+same deadline 2026-10-13 (Trabzonspor, superlig) budget 18.5 | needs CB>60,LB>73,LW>73 | targets Ardian Ismajli, Luca Reggiani, Jeremiah St. Juste, Thierry Sma
+same hotseat 2026-10-14 (Monza, seriea) opens wk 9 pos 20 pts 2/9 target 3 | Lecce 3-1 | survived
+same deadline 2026-10-14 (PAOK, greece) budget 13.5 | needs CB>65,GK>68,RB>71 | targets Tim Oermann, Çağlar Söyüncü, Raphael Kofler, Dani Cárdenas, Ál
+same hotseat 2026-10-15 (Osasuna, laliga) opens wk 14 pos 20 pts 8/14 target 3 | @Racing Santander 2-2; @Rayo Vallecano 1-1; Espanyol 0-1; Deportivo La 
+DIFF deadline 2026-10-15 (St. Pauli, bundesliga2): sales | state keys only first / only second: - / -
+same hotseat 2026-10-16 (Cruz Azul, ligamx) opens wk 9 pos 16 pts 6/9 target 7 | Pachuca 0-0; @Guadalajara 1-1; Puebla 0-1; @Santos Laguna 0-0; Tijuana 1-
+same deadline 2026-10-16 (Nice, ligue1) budget 38.5 | needs CM>73,CB>75,LB>75,GK>77 | targets Sandi Lovrić, Junior Olaitan, Patrick Osterhage, Abdoula
+same hotseat 2026-10-17 (Trabzonspor, superlig) opens wk 13 pos 1 pts 32/13 target 9 | @Göztepe 2-1; @Fenerbahçe 1-2; Konyaspor 2-0; @Galatasaray 1-2; @Gazian
+same deadline 2026-10-17 (Valencia, laliga) budget 27.5 | needs GK>69,CB>74,LB>74,CM>77 | targets Matheus, Anthoni, Álvaro Valles, Christopher Wooh, Marti
+same hotseat 2026-10-18 (Al-Ahli, saudi) opens wk 6 pos 9 pts 9/6 target 10 | Al-Hazem 5-0; Al-Khaleej 3-0; @Al-Fayha 1-0; Al-Hazem 2-0; @Al-Ittihad 3-
+DIFF deadline 2026-10-18 (Nottingham Forest, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+same hotseat 2026-10-19 (Hamburg, bundesliga) opens wk 11 pos 17 pts 8/11 target 4 | RB Leipzig 0-0; @Schalke 04 1-2; Köln 2-4; @Hertha BSC 2-2; Elversberg 
+same deadline 2026-10-19 (Cruzeiro, brasileirao) budget 25 | needs CB>64,GK>69,CM>78 | targets Emmanuel Biumla, Léo Realpe, Tchoca, Ezequiel Unsain, Melker Ell
+same hotseat 2026-10-20 (Toulouse, ligue1) opens wk 9 pos 12 pts 10/9 target 5 | Le Mans 1-1; @Angers 0-2; PSG 2-2; Monaco 1-2; @Paris FC 3-0 | survived
+same deadline 2026-10-20 (Monterrey, ligamx) budget 14 | needs GK>69,RW>69,LB>71 | targets Bartosz Mrozek, Vladan Kovacevic, Álvaro Valles, Marin Soticek, 
+same hotseat 2026-10-21 (Anderlecht, proleague) opens wk 14 pos 1 pts 33/14 target 8 | @Mechelen 3-0; Zulte Waregem 4-0; @Gent 1-2; Union Saint-Gilloise 2-0; 
+same deadline 2026-10-21 (Como, seriea) budget 56.5 | needs CB>73,LB>78,RW>82 | targets João Victor, Diego Carlos, Charlie Hughes, Kacper Potulski, Ar
+same hotseat 2026-10-22 (León, ligamx) opens wk 8 pos 12 pts 7/8 target 5 | Atlas 4-1; @FC Juárez 1-3; Pachuca 0-1; Atlante 2-1 | survived
+same deadline 2026-10-22 (Auxerre, ligue1) budget 12.5 | needs CB>58,GK>63,RW>73 | targets Branimir Mlacic, João Marcelo, Sadibou Sané, Daniel Heuer Fern
+same hotseat 2026-10-23 (Elche, laliga) opens wk 13 pos 19 pts 9/13 target 3 | Valencia 1-0 | survived
+DIFF deadline 2026-10-23 (Heidenheim, bundesliga2): sales | state keys only first / only second: - / -
+same hotseat 2026-10-24 (Athletico Paranaense, brasileirao) opens wk 10 pos 14 pts 10/10 target 3 | @Internacional 0-2; Vitória 1-2; @Vasco da Gama 2-2; Flamengo 2-0 | su
+same deadline 2026-10-24 (Monaco, ligue1) budget 31 | needs GK>73,RW>75,CB>78 | targets Yahia Fofana, Marvin Keller, Agustín Rossi, Jacob Trenskow, Ludo
+DIFF hotseat 2026-10-27 (Nottingham Forest, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 11 pos 6 pts 19/11 target 6 | @Newcastle 2-0; Leeds United 1-0 | survived
+   second: opens wk 6 pos 12 pts 7/6 target 4 | Arsenal 1-2; Chelsea 1-2; @Ipswich Town 0-1; @Brentford 2-2; Manchester City 1-2 | boardSacked
+DIFF deadline 2026-11-01 (Manchester United, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF deadline 2026-11-09 (Sunderland, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat 2026-11-14 (Sunderland, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 7 pos 18 pts 6/7 target 3 | Coventry City 0-2; @Ipswich Town 2-3; Hull City 1-1; @Fulham 1-2; Arsenal 2-2; @Brentford 0-2 | sacked
+   second: opens wk 14 pos 19 pts 7/14 target 3 | Nottingham Forest 1-0 | survived
+DIFF deadline 2026-11-16 (Crystal Palace, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat 2027-01-19 (Fulham, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 12 pos 13 pts 15/12 target 5 | @Crystal Palace 0-4; Everton 4-2; @Leeds United 0-1; @Arsenal 1-0; Chelsea 1-1; @Brentford 0-0 | survived
+   second: opens wk 6 pos 13 pts 7/6 target 5 | Hull City 1-1; Millwall 4-2; @Coventry City 0-2; @Aston Villa 0-1; Newcastle 0-2; @Manchester City 1-1 | sacked
+DIFF hotseat 2027-01-30 (Everton, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 9 pos 9 pts 12/9 target 4 | Hull City 1-0; @Chelsea 2-4; Sunderland 1-0 | survived
+   second: opens wk 9 pos 15 pts 9/9 target 4 | Coventry City 3-2; @Brentford 2-5; Liverpool 2-1 | survived
+DIFF hotseat-free Arsenal (Arsenal, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 8 pos 10 pts 11/8 target 6 | Newcastle 3-0; RB Leipzig 1-1; @Nottingham Forest 1-1; @Brighton 2-0 | survived
+   second: opens wk 7 pos 10 pts 10/7 target 6 | Tottenham 4-1; Everton 2-0; @Liverpool 1-0 | survived
+DIFF deadline-free Arsenal (Arsenal, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Manchester City (Manchester City, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 9 pos 4 pts 15/9 target 7 | RB Leipzig 4-0; Tottenham 2-3; @Ipswich Town 1-1; @Thun 3-0; Brentford 1-1; @Manchester United 0-3 | sacked
+   second: opens wk 8 pos 18 pts 5/8 target 5 | Brighton 3-0; RB Leipzig 5-0; @Nottingham Forest 1-2; Fulham 3-0 | survived
+DIFF deadline-free Manchester City (Manchester City, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Liverpool (Liverpool, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 11 pos 15 pts 13/11 target 6 | Hull City 1-0; @Bournemouth 0-1; Crystal Palace 0-1; @Fulham 0-1; Manchester City 0-1 | boardSacked
+   second: opens wk 11 pos 19 pts 7/11 target 5 | @Everton 1-1; Sunderland 2-0; @Chelsea 0-0 | survived
+DIFF deadline-free Liverpool (Liverpool, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Chelsea (Chelsea, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 6 pos 19 pts 3/6 target 5 | Liverpool 1-0; Newcastle 1-1; @Manchester United 4-3 | survived
+   second: opens wk 7 pos 4 pts 13/7 target 7 | Newcastle 4-0; Tottenham 3-1; Manchester United 1-1; @Sunderland 1-0 | survived
+DIFF deadline-free Chelsea (Chelsea, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Manchester United (Manchester United, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 7 pos 16 pts 7/7 target 4 | Ipswich Town 4-1; Chelsea 3-1; @Manchester City 0-1; Barcelona 0-4; Coventry City 1-0 | survived
+   second: opens wk 7 pos 20 pts 6/7 target 4 | Ipswich Town 4-1; Bournemouth 2-1; @Chelsea 1-1 | survived
+DIFF deadline-free Manchester United (Manchester United, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Tottenham (Tottenham, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 14 pos 3 pts 24/14 target 6 | Manchester United 1-1; @Manchester City 0-1; @Chelsea 1-1; Manchester City 0-1; @Coventry City 1-1; Hull City 1-1 | sacked
+   second: opens wk 6 pos 20 pts 4/6 target 6 | Coventry City 2-1; Portsmouth 3-2; @Chelsea 4-3 | survived
+DIFF deadline-free Tottenham (Tottenham, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Newcastle (Newcastle, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 14 pos 9 pts 21/14 target 5 | @Leeds United 2-2; Chelsea 2-1; Liverpool 1-1 | survived
+   second: opens wk 11 pos 18 pts 8/11 target 4 | @Brighton 1-1; Manchester United 0-1; Sunderland 1-1; @Ipswich Town 0-3; @Brentford 0-2 | sacked
+DIFF deadline-free Newcastle (Newcastle, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Nottingham Forest (Nottingham Forest, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 11 pos 16 pts 12/11 target 5 | Tottenham 1-1; @Ipswich Town 0-1; Brentford 1-1; @Manchester United 0-1; Leeds United 1-2 | sacked
+   second: opens wk 11 pos 16 pts 12/11 target 5 | Chelsea 1-1; @Hull City 1-1; Brighton 0-1; @Sunderland 0-3; Everton 0-1 | sacked
+DIFF deadline-free Nottingham Forest (Nottingham Forest, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Aston Villa (Aston Villa, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 8 pos 19 pts 4/8 target 4 | Chelsea 1-2; RB Leipzig 0-1; @Liverpool 0-2; Coventry City 3-0; @Thun 3-0; Brighton 3-2 | survived
+   second: opens wk 8 pos 19 pts 2/8 target 4 | Fulham 2-0; RB Leipzig 1-0; @Manchester United 1-2; Sunderland 1-0 | survived
+DIFF deadline-free Aston Villa (Aston Villa, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Crystal Palace (Crystal Palace, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 6 pos 18 pts 3/6 target 4 | @Newcastle 1-5; Portsmouth 3-1; Sunderland 1-0; @Arsenal 0-1; Ipswich Town 1-1 | survived
+   second: opens wk 6 pos 20 pts 1/6 target 3 | @Brighton 2-0 | survived
+DIFF deadline-free Crystal Palace (Crystal Palace, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Brentford (Brentford, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 11 pos 19 pts 9/11 target 4 | @Manchester City 0-0; Newcastle 0-1; @Nottingham Forest 0-0; Arsenal 0-3; @Everton 0-1 | sacked
+   second: opens wk 14 pos 20 pts 10/14 target 4 | @Fulham 2-2; Newcastle 2-0 | survived
+DIFF deadline-free Brentford (Brentford, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Bournemouth (Bournemouth, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 7 pos 20 pts 3/7 target 4 | Brentford 4-3; Ipswich Town 3-0; Brentford 1-0 | survived
+   second: opens wk 6 pos 20 pts 1/6 target 4 | Sunderland 0-1; Brentford 1-0; @Manchester United 0-2; Leeds United 0-0; @Ipswich Town 2-0 | survived
+DIFF deadline-free Bournemouth (Bournemouth, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Brighton (Brighton, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / decisions,realLeagueFixtures
+   first : opens wk 6 pos 18 pts 3/6 target 4 | @Sunderland 1-0; Tottenham 1-0; Arsenal 2-1 | survived
+   second: opens wk 12 pos 13 pts 17/12 target 6 | @Bournemouth 1-3; @Nottingham Forest 0-1; Everton 1-0; Ipswich Town 2-0 | survived
+DIFF deadline-free Brighton (Brighton, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Everton (Everton, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 14 pos 19 pts 11/14 target 3 | @Ipswich Town 2-2; Brentford 2-1 | survived
+   second: opens wk 11 pos 19 pts 8/11 target 4 | Liverpool 1-1; @Aston Villa 1-0 | survived
+DIFF deadline-free Everton (Everton, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Fulham (Fulham, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 6 pos 16 pts 6/6 target 4 | @Arsenal 0-1; Sunderland 1-0; Everton 1-1; @Tottenham 0-1; Ipswich Town 3-1 | survived
+   second: opens wk 11 pos 20 pts 5/11 target 3 | Bournemouth 1-1; @Tottenham 1-0 | survived
+DIFF deadline-free Fulham (Fulham, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Sunderland (Sunderland, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 6 pos 20 pts 3/6 target 4 | Brentford 0-1; Manchester United 0-2; @Manchester United 0-2; Leeds United 0-0; @Chelsea 1-2; Liverpool 2-0 | survived
+   second: opens wk 14 pos 15 pts 15/14 target 4 | Nottingham Forest 2-2; Crystal Palace 2-1 | survived
+DIFF deadline-free Sunderland (Sunderland, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Leeds United (Leeds United, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 11 pos 18 pts 9/11 target 3 | Crystal Palace 1-1; @Fulham 0-1; @Manchester City 0-1; Newcastle 0-3; @Nottingham Forest 0-2 | sacked
+   second: opens wk 11 pos 20 pts 5/11 target 4 | Coventry City 1-0; @Manchester City 1-0 | survived
+DIFF deadline-free Leeds United (Leeds United, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Ipswich Town (Ipswich Town, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 14 pos 20 pts 8/14 target 2 | Everton 2-2; @Tottenham 1-1 | survived
+   second: opens wk 11 pos 20 pts 7/11 target 3 | Aston Villa 1-1; @Coventry City 0-1; @Leeds United 0-0; Newcastle 0-3; @Brighton 0-2 | sacked
+DIFF deadline-free Ipswich Town (Ipswich Town, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Coventry City (Coventry City, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 6 pos 20 pts 1/6 target 3 | Leeds United 0-1; Manchester United 1-1; @Chelsea 0-3; Liverpool 0-1; Brighton 2-0 | survived
+   second: opens wk 14 pos 20 pts 9/14 target 2 | Aston Villa 2-2; @Bournemouth 0-1; Chelsea 1-2; Brentford 1-2; @Liverpool 2-6 | sacked
+DIFF deadline-free Coventry City (Coventry City, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat-free Hull City (Hull City, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+   first : opens wk 12 pos 20 pts 6/12 target 3 | Coventry City 1-1; @Aston Villa 0-1; Sunderland 1-3; Brighton 0-2; @Bournemouth 1-2 | sacked
+   second: opens wk 14 pos 20 pts 10/14 target 2 | Tottenham 1-2; @Manchester City 1-1; Liverpool 1-2; Leeds United 1-1 | survived
+DIFF deadline-free Hull City (Hull City, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+
+77 deals compared, 50 differ. first=/tmp/base54 second=/home/runner/work/ballpark-hero/ballpark-hero

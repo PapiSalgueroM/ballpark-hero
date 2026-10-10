@@ -1,0 +1,74 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ × src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows 386ms
+   → expect(element).toHaveClass("_wrong_4208ea")
+
+Expected the element to have class:
+  _wrong_4208ea
+Received:
+  bg-card border rounded-xl px-4 py-3 border-border
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps the non-first native option mounted during focus transfer and preserves input Enter-first matching 160ms
+ × src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > cues a committed win once with exact helper feedback, share truth and undefined completion score 135ms
+   → expect(element).toHaveClass("_correct_4208ea")
+
+Expected the element to have class:
+  _correct_4208ea
+Received:
+  bg-card border rounded-xl px-4 py-3 border-correct
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > ends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty 401ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > derives the real sparse-profile unlock gaps without inventing career clues 235ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps short and duplicate queries quiet and clears owned feedback timers on unmount 132ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door 140ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 5 passed (7)
+   Start at  09:04:55
+   Duration  3.75s (transform 517ms, setup 69ms, collect 877ms, tests 1.59s, environment 364ms, prepare 93ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows
+Error: expect(element).toHaveClass("_wrong_4208ea")
+
+Expected the element to have class:
+  _wrong_4208ea
+Received:
+  bg-card border rounded-xl px-4 py-3 border-border
+ ❯ src/test/statDetectiveMotion.test.tsx:70:22
+     68|       choose(view, wrong[index]);
+     69|       const newest = row(view, wrong[index].name);
+     70|       expect(newest).toHaveClass(motion.wrong); expect(newest).toHaveA…
+       |                      ^
+     71|       expect(view.container.querySelectorAll('[data-stat-guess][data-s…
+     72|       expect(clues(view).map(node => node.textContent)).toEqual(hintsF…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > cues a committed win once with exact helper feedback, share truth and undefined completion score
+Error: expect(element).toHaveClass("_correct_4208ea")
+
+Expected the element to have class:
+  _correct_4208ea
+Received:
+  bg-card border rounded-xl px-4 py-3 border-correct
+ ❯ src/test/statDetectiveMotion.test.tsx:106:38
+    104|     const result = view.getByRole('group', { name: 'Case closed' });
+    105|     expect(result).toHaveFocus(); expect(result).toHaveClass(motion.re…
+    106|     expect(row(view, target.player)).toHaveClass(motion.correct); expe…
+       |                                      ^
+    107|     const expected = [evaluateGuess(suspect, target), evaluateGuess(ta…
+    108|     expect(shared(view)).toHaveAttribute('data-score', '2/8 (Stars)');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+simStatDetectiveMotion guess: asserted copied binding failed its intended outcome while independent real-helper checks passed.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

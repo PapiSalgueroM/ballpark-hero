@@ -1,0 +1,15 @@
+dumped 77 deals from /home/runner/work/ballpark-hero/ballpark-hero; first Premier League days: hot seat 2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30; deadline 2026-10-18, 2026-11-01, 2026-11-09, 2026-11-16
+dumped 77 deals from /tmp/base54; first Premier League days: hot seat 2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30; deadline 2026-10-18, 2026-11-01, 2026-11-09, 2026-11-16
+dumped 77 deals from /tmp/base54; first Premier League days: hot seat 2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30; deadline 2026-10-18, 2026-11-01, 2026-11-09, 2026-11-16
+base vs base exit=1
+15
+12
+DIFF deadline 2026-10-15 (St. Pauli, bundesliga2): sales | state keys only first / only second: - / -
+DIFF deadline 2026-10-18 (Nottingham Forest, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF deadline 2026-10-23 (Heidenheim, bundesliga2): sales | state keys only first / only second: - / -
+DIFF hotseat 2026-10-27 (Nottingham Forest, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF deadline 2026-11-01 (Manchester United, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF deadline 2026-11-09 (Sunderland, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF hotseat 2026-11-14 (Sunderland, premier): takeover, fixtures, table, balanced, attacking, realList | state keys only first / only second: - / realLeagueFixtures
+DIFF deadline 2026-11-16 (Crystal Palace, premier): fixtures, realList | state keys only first / only second: - / realLeagueFixtures
+77 deals compared, 50 differ. first=/tmp/base54 second=/home/runner/work/ballpark-hero/ballpark-hero

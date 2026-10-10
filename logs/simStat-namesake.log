@@ -1,0 +1,419 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > holds this file's copy of the view to the rows the migration's SQL is held to 12ms
+ × src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > makes one career per name, out of the men who reached the floor and nobody else 23ms
+   → expected { …(10) } to deeply equal { …(9) }
+ × src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > cuts two men apart only past the cohort gap 10ms
+   → expected { first: 1993, last: 1999, …(1) } to match object { first: 1993, last: 1996 }
+(1 matching property omitted from actual)
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > counts the floor in the view at the number the page uses, and keeps the first draft columns first 6ms
+ × src/test/statDetectiveSpans.test.tsx > a career span belongs to a man, not to a name > does not let a namesake who never reached 500 minutes stretch a famous career 53ms
+   → expected '1978-2001' to be '1992-2001' // Object.is equality
+ ✓ src/test/statDetectiveSpans.test.tsx > a career span belongs to a man, not to a name > keeps two men who both reached the floor as the one generous profile they always were 37ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > counts every team he has a row for as a franchise he played for 20ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > reads the true first and last season for a man whose career ran past his 500 minute seasons 18ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > judges the era of a guess on the true span 17ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > fails the whole load when the spans cannot be read, and never falls back to the 500 minute span 3822ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > reads a view deeper than the pages it asks for at once to the end, and asks again for a page that failed once 860ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > gives a name the view lacks no span at all and says so, rather than guessing one 21ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective mysteries do not move with the span > builds byte identical mystery pools, and they do not depend on what the view says 57ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > opens its retry state when the spans cannot be read, and recovers when they can 1374ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > prints the true years beside a name in the guess box 124ms
+ × src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > prints the famous man his own years beside a name he shares 368ms
+   → Unable to find an accessible element with the role "button" and name "Fixture Forward Larch 1992-2001"
+
+Here are the accessible roles:
+
+  main:
+
+  Name "":
+  [36m<main[39m
+    [33mclass[39m=[32m"min-h-screen bg-background"[39m
+    [33mid[39m=[32m"dukb-main"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "How to play":
+  [36m<button[39m
+    [33maria-label[39m=[32m"How to play"[39m
+    [33mclass[39m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Fixture Forward Larch 1978-2001":
+  [36m<button[39m
+    [33mclass[39m=[32m"w-full text-left px-4 py-2.5 hover:bg-secondary transition-colors _option_4208ea"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  banner:
+
+  Name "":
+  [36m<header[39m
+    [33mclass[39m=[32m"text-center mb-6"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "STAT DETECTIVE":
+  [36m<h1[39m
+    [33mclass[39m=[32m"text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-muted-foreground text-sm md:text-base"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground mb-2"[39m
+    [33mdata-stat-profile-scope[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground inline-flex items-center gap-1 mt-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Guess the mystery player":
+  [36m<input[39m
+    [33maria-label[39m=[32m"Guess the mystery player"[39m
+    [33mclass[39m=[32m"w-full rounded-xl border border-border bg-card pl-10 pr-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"[39m
+    [33mplaceholder[39m=[32m"Who is it? Type 2+ letters..."[39m
+    [33mvalue[39m=[32m"Fixture Forward"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  list:
+
+  Name "":
+  [36m<ul[39m
+    [33mclass[39m=[32m"absolute z-20 top-full left-0 right-0 mt-1 bg-card border border-border rounded-xl overflow-hidden shadow-lg"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<main[39m
+      [33mclass[39m=[32m"min-h-screen bg-background"[39m
+      [33mid[39m=[32m"dukb-main"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"How to play"[39m
+          [33mclass[39m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+   ...
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 12 passed (16)
+   Start at  09:05:31
+   Duration  8.42s (transform 442ms, setup 57ms, collect 697ms, tests 6.82s, environment 367ms, prepare 150ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > makes one career per name, out of the men who reached the floor and nobody else
+AssertionError: expected { …(10) } to deeply equal { …(9) }
+
+- Expected
++ Received
+
+@@ -13,12 +13,13 @@
+        "lakers",
+      ],
+      "last": 1952,
+    },
+    "fixture forward larch": {
+-     "first": 1992,
++     "first": 1978,
+      "franchises": [
++       "clippers",
+        "hornets",
+        "knicks",
+      ],
+      "last": 2001,
+    },
+@@ -44,20 +45,29 @@
+      "last": 1971,
+    },
+    "fixture pivot fir": {
+      "first": 1963,
+      "franchises": [
++       "bulls",
+        "celtics",
++       "lakers",
+      ],
+-     "last": 1963,
++     "last": 1998,
+    },
+    "fixture wing cedar": {
+      "first": 1958,
+      "franchises": [
+        "sixers",
+      ],
+      "last": 1964,
++   },
++   "fixture wing gum": {
++     "first": 2011,
++     "franchises": [
++       "bucks",
++     ],
++     "last": 2011,
+    },
+    "fixture wing koa": {
+      "first": 2000,
+      "franchises": [
+        "grizzlies",
+
+ ❯ src/test/statDetectiveSpans.test.tsx:196:17
+    194|     const got = Object.fromEntries([...careers].map(([key, c]) => [key…
+    195|     const want = Object.fromEntries(Object.entries(CASES.careers).map(…
+    196|     expect(got).toEqual(want);
+       |                 ^
+    197|   });
+    198| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > cuts two men apart only past the cohort gap
+AssertionError: expected { first: 1993, last: 1999, …(1) } to match object { first: 1993, last: 1996 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "first": 1993,
+-   "last": 1996,
++   "last": 1999,
+  }
+
+ ❯ src/test/statDetectiveSpans.test.tsx:207:8
+    205|     // One year past it they are two, and the one under the floor is n…
+    206|     expect(careersFromSpanRows([man(1970, '1992-93', '1995-96', 3), ma…
+    207|       .toMatchObject({ first: 1993, last: 1996 });
+       |        ^
+    208|   });
+    209| 
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/test/statDetectiveSpans.test.tsx > a career span belongs to a man, not to a name > does not let a namesake who never reached 500 minutes stretch a famous career
+AssertionError: expected '1978-2001' to be '1992-2001' // Object.is equality
+
+Expected: "1992-2001"
+Received: "1978-2001"
+
+ ❯ src/test/statDetectiveSpans.test.tsx:227:31
+    225|     const all = db[SEASONS].rows.filter(r => r.player_name === NAMESAK…
+    226|     expect([all[0], all[all.length - 1]]).toEqual(['1977-78', '2000-01…
+    227|     expect(careerSpan(larch)).toBe('1992-2001');
+       |                               ^
+    228|     // He is a Stars mystery, and the first clue he gives is his own c…
+    229|     const asMystery = data!.pools.stars.find(m => m.player === NAMESAK…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > prints the famous man his own years beside a name he shares
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Fixture Forward Larch 1992-2001"
+
+Here are the accessible roles:
+
+  main:
+
+  Name "":
+  [36m<main[39m
+    [33mclass[39m=[32m"min-h-screen bg-background"[39m
+    [33mid[39m=[32m"dukb-main"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  button:
+
+  Name "How to play":
+  [36m<button[39m
+    [33maria-label[39m=[32m"How to play"[39m
+    [33mclass[39m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[39m
+    [33mtype[39m=[32m"button"[39m
+  [36m/>[39m
+
+  Name "Fixture Forward Larch 1978-2001":
+  [36m<button[39m
+    [33mclass[39m=[32m"w-full text-left px-4 py-2.5 hover:bg-secondary transition-colors _option_4208ea"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  banner:
+
+  Name "":
+  [36m<header[39m
+    [33mclass[39m=[32m"text-center mb-6"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  heading:
+
+  Name "STAT DETECTIVE":
+  [36m<h1[39m
+    [33mclass[39m=[32m"text-4xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display mb-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-muted-foreground text-sm md:text-base"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground mb-2"[39m
+    [33mdata-stat-profile-scope[39m=[32m"true"[39m
+  [36m/>[39m
+
+  Name "":
+  [36m<p[39m
+    [33mclass[39m=[32m"text-xs text-muted-foreground inline-flex items-center gap-1 mt-1"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Guess the mystery player":
+  [36m<input[39m
+    [33maria-label[39m=[32m"Guess the mystery player"[39m
+    [33mclass[39m=[32m"w-full rounded-xl border border-border bg-card pl-10 pr-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"[39m
+    [33mplaceholder[39m=[32m"Who is it? Type 2+ letters..."[39m
+    [33mvalue[39m=[32m"Fixture Forward"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  list:
+
+  Name "":
+  [36m<ul[39m
+    [33mclass[39m=[32m"absolute z-20 top-full left-0 right-0 mt-1 bg-card border border-border rounded-xl overflow-hidden shadow-lg"[39m
+  [36m/>[39m
+
+  --------------------------------------------------
+  listitem:
+
+  Name "":
+  [36m<li />[39m
+
+  --------------------------------------------------
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<main[39m
+      [33mclass[39m=[32m"min-h-screen bg-background"[39m
+      [33mid[39m=[32m"dukb-main"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"How to play"[39m
+          [33mclass[39m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+   ...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ getByRole node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/test/statDetectiveSpans.test.tsx:399:17
+    397|     fireEvent.focus(box);
+    398|     fireEvent.change(box, { target: { value: 'Fixture Forward' } });
+    399|     expect(view.getByRole('button', { name: `${NAMESAKE} 1992-2001` })…
+       |                 ^
+    400|     expect(view.queryByRole('button', { name: `${NAMESAKE} 1978-2001` …
+    401|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+simStatDetectiveMotion namesake: the copied lib line failed its intended span outcome while independent outcomes passed.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

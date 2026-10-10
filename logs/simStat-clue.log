@@ -1,0 +1,51 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ × src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows 421ms
+   → expect(element).toHaveClass("_clue_4208ea")
+
+Expected the element to have class:
+  _clue_4208ea
+Received:
+  text-sm text-foreground _text_4208ea
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps the non-first native option mounted during focus transfer and preserves input Enter-first matching 188ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > cues a committed win once with exact helper feedback, share truth and undefined completion score 130ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > ends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty 386ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > derives the real sparse-profile unlock gaps without inventing career clues 223ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps short and duplicate queries quiet and clears owned feedback timers on unmount 105ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door 141ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  09:04:55
+   Duration  3.65s (transform 494ms, setup 58ms, collect 896ms, tests 1.60s, environment 362ms, prepare 201ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows
+Error: expect(element).toHaveClass("_clue_4208ea")
+
+Expected the element to have class:
+  _clue_4208ea
+Received:
+  text-sm text-foreground _text_4208ea
+ ❯ src/test/statDetectiveMotion.test.tsx:74:34
+     72|       expect(clues(view).map(node => node.textContent)).toEqual(hintsF…
+     73|       expect(clues(view).filter(node => node.hasAttribute('data-stat-f…
+     74|       expect(clues(view).at(-1)).toHaveClass(motion.clue);
+       |                                  ^
+     75|       expect(search(view)).toHaveFocus();
+     76|       if (original) { expect(row(view, suspect.name)).toBe(original); …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simStatDetectiveMotion clue: asserted copied binding failed its intended outcome while independent real-helper checks passed.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

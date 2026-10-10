@@ -1,0 +1,79 @@
+same hotseat 2026-10-10 (Athletic Club, laliga) opens wk 8 pos 15 pts 8/8 target 5 | Elche 1-1; @Real Sociedad 3-2; Alavés 0-2; @Atlético Madrid 0-1; Espanyol
+same deadline 2026-10-10 (Rangers, scottish) budget 21 | needs GK>73,CB>74,LB>74 | targets James Beadle, Yehvann Diouf, Ionuț Radu, Luiz Felipe, Saúl Coco,
+same hotseat 2026-10-11 (Young Boys, switzerland) opens wk 9 pos 2 pts 18/9 target 10 | @Grasshopper 1-0; Thun 1-1; @FC Zürich 1-0; Lugano 3-0; @Vaduz 2-0 | sur
+same deadline 2026-10-11 (Borussia Dortmund, bundesliga) budget 94.5 | needs CB>79,LB>83,LW>84 | targets Olivier Boscagli, Isak Hien, António Silva, Tomás Araújo, Alph
+same hotseat 2026-10-12 (Westerlo, proleague) opens wk 8 pos 12 pts 10/8 target 6 | Beveren 3-1; @Cercle Brugge 1-1; Gent 3-2 | survived
+same deadline 2026-10-12 (Atalanta, seriea) budget 70 | needs LB>79,CB>81,CM>81 | targets Abdoul Koné, Lucas Hernández, Carlos Augusto, Lucas Beraldo, Cha
+same hotseat 2026-10-13 (Celta Vigo, laliga) opens wk 7 pos 20 pts 2/7 target 3 | Valencia 1-1; Elche 2-0 | survived
+same deadline 2026-10-13 (Trabzonspor, superlig) budget 18.5 | needs CB>60,LB>73,LW>73 | targets Ardian Ismajli, Luca Reggiani, Jeremiah St. Juste, Thierry Sma
+same hotseat 2026-10-14 (Monza, seriea) opens wk 9 pos 20 pts 2/9 target 3 | Lecce 3-1 | survived
+same deadline 2026-10-14 (PAOK, greece) budget 13.5 | needs CB>65,GK>68,RB>71 | targets Tim Oermann, Çağlar Söyüncü, Raphael Kofler, Dani Cárdenas, Ál
+same hotseat 2026-10-15 (Osasuna, laliga) opens wk 14 pos 20 pts 8/14 target 3 | @Racing Santander 2-2; @Rayo Vallecano 1-1; Espanyol 0-1; Deportivo La 
+DIFF deadline 2026-10-15 (St. Pauli, bundesliga2): sales | state keys only first / only second: - / -
+same hotseat 2026-10-16 (Cruz Azul, ligamx) opens wk 9 pos 16 pts 6/9 target 7 | Pachuca 0-0; @Guadalajara 1-1; Puebla 0-1; @Santos Laguna 0-0; Tijuana 1-
+same deadline 2026-10-16 (Nice, ligue1) budget 38.5 | needs CM>73,CB>75,LB>75,GK>77 | targets Sandi Lovrić, Junior Olaitan, Patrick Osterhage, Abdoula
+same hotseat 2026-10-17 (Trabzonspor, superlig) opens wk 13 pos 1 pts 32/13 target 9 | @Göztepe 2-1; @Fenerbahçe 1-2; Konyaspor 2-0; @Galatasaray 1-2; @Gazian
+same deadline 2026-10-17 (Valencia, laliga) budget 27.5 | needs GK>69,CB>74,LB>74,CM>77 | targets Matheus, Anthoni, Álvaro Valles, Christopher Wooh, Marti
+same hotseat 2026-10-18 (Al-Ahli, saudi) opens wk 6 pos 9 pts 9/6 target 10 | Al-Hazem 5-0; Al-Khaleej 3-0; @Al-Fayha 1-0; Al-Hazem 2-0; @Al-Ittihad 3-
+same deadline 2026-10-18 (Nottingham Forest, premier) budget 72.5 | needs GK>77,CM>82,LB>83 | targets Illan Meslier, Konstantinos Tzolakis, Mike Penders, Emile Smit
+same hotseat 2026-10-19 (Hamburg, bundesliga) opens wk 11 pos 17 pts 8/11 target 4 | RB Leipzig 0-0; @Schalke 04 1-2; Köln 2-4; @Hertha BSC 2-2; Elversberg 
+same deadline 2026-10-19 (Cruzeiro, brasileirao) budget 25 | needs CB>64,GK>69,CM>78 | targets Emmanuel Biumla, Léo Realpe, Tchoca, Ezequiel Unsain, Melker Ell
+same hotseat 2026-10-20 (Toulouse, ligue1) opens wk 9 pos 12 pts 10/9 target 5 | Le Mans 1-1; @Angers 0-2; PSG 2-2; Monaco 1-2; @Paris FC 3-0 | survived
+same deadline 2026-10-20 (Monterrey, ligamx) budget 14 | needs GK>69,RW>69,LB>71 | targets Bartosz Mrozek, Vladan Kovacevic, Álvaro Valles, Marin Soticek, 
+same hotseat 2026-10-21 (Anderlecht, proleague) opens wk 14 pos 1 pts 33/14 target 8 | @Mechelen 3-0; Zulte Waregem 4-0; @Gent 1-2; Union Saint-Gilloise 2-0; 
+same deadline 2026-10-21 (Como, seriea) budget 56.5 | needs CB>73,LB>78,RW>82 | targets João Victor, Diego Carlos, Charlie Hughes, Kacper Potulski, Ar
+same hotseat 2026-10-22 (León, ligamx) opens wk 8 pos 12 pts 7/8 target 5 | Atlas 4-1; @FC Juárez 1-3; Pachuca 0-1; Atlante 2-1 | survived
+same deadline 2026-10-22 (Auxerre, ligue1) budget 12.5 | needs CB>58,GK>63,RW>73 | targets Branimir Mlacic, João Marcelo, Sadibou Sané, Daniel Heuer Fern
+same hotseat 2026-10-23 (Elche, laliga) opens wk 13 pos 19 pts 9/13 target 3 | Valencia 1-0 | survived
+DIFF deadline 2026-10-23 (Heidenheim, bundesliga2): sales | state keys only first / only second: - / -
+same hotseat 2026-10-24 (Athletico Paranaense, brasileirao) opens wk 10 pos 14 pts 10/10 target 3 | @Internacional 0-2; Vitória 1-2; @Vasco da Gama 2-2; Flamengo 2-0 | su
+same deadline 2026-10-24 (Monaco, ligue1) budget 31 | needs GK>73,RW>75,CB>78 | targets Yahia Fofana, Marvin Keller, Agustín Rossi, Jacob Trenskow, Ludo
+same hotseat 2026-10-27 (Nottingham Forest, premier) opens wk 11 pos 6 pts 19/11 target 6 | @Newcastle 2-0; Leeds United 1-0 | survived
+same deadline 2026-11-01 (Manchester United, premier) budget 204.5 | needs GK>84,LB>85,CB>86,LW>86 | targets Mile Svilar, Bart Verbruggen, Gianluigi Donnarumma, Jar
+same deadline 2026-11-09 (Sunderland, premier) budget 88.5 | needs LB>80,CB>82,GK>83 | targets Nnamdi Collins, Karim Coulibaly, Dávid Hancko, Jhon Lucumí, Al
+same hotseat 2026-11-14 (Sunderland, premier) opens wk 7 pos 18 pts 6/7 target 3 | Coventry City 0-2; @Ipswich Town 2-3; Hull City 1-1; @Fulham 1-2; Arsenal
+same deadline 2026-11-16 (Crystal Palace, premier) budget 104 | needs CM>79,CB>82,LW>82,RB>83 | targets Facundo Buonanotte, Lamare Bogarde, Mason Mount, Ladislav
+same hotseat 2027-01-19 (Fulham, premier) opens wk 12 pos 13 pts 15/12 target 5 | @Crystal Palace 0-4; Everton 4-2; @Leeds United 0-1; @Arsenal 1-0; Che
+same hotseat 2027-01-30 (Everton, premier) opens wk 9 pos 9 pts 12/9 target 4 | Hull City 1-0; @Chelsea 2-4; Sunderland 1-0 | survived
+same hotseat-free Arsenal (Arsenal, premier) opens wk 8 pos 10 pts 11/8 target 6 | Newcastle 3-0; RB Leipzig 1-1; @Nottingham Forest 1-1; @Brighton 2-0 | s
+same deadline-free Arsenal (Arsenal, premier) budget 218 | needs LW>84,GK>85,CB>87,LB>87 | targets Bazoumana Touré, Gabriel Martinelli, Luis Díaz, Bart Verb
+same hotseat-free Manchester City (Manchester City, premier) opens wk 9 pos 4 pts 15/9 target 7 | RB Leipzig 4-0; Tottenham 2-3; @Ipswich Town 1-1; @Thun 3-0; Brentford 1-
+same deadline-free Manchester City (Manchester City, premier) budget 310 | needs LB>87,CB>88,RB>89,CM>89 | targets Jérémy Jacquet, Alessandro Bastoni, Nuno Mendes, Micky va
+same hotseat-free Liverpool (Liverpool, premier) opens wk 11 pos 15 pts 13/11 target 6 | Hull City 1-0; @Bournemouth 0-1; Crystal Palace 0-1; @Fulham 0-1; Manc
+same deadline-free Liverpool (Liverpool, premier) budget 134 | needs RW>80,CB>82,GK>84,LB>86 | targets Anan Khalaili, Chemsdine Talbi, Matías Soulé, Jhon Lucumí
+same hotseat-free Chelsea (Chelsea, premier) opens wk 6 pos 19 pts 3/6 target 5 | Liverpool 1-0; Newcastle 1-1; @Manchester United 4-3 | survived
+same deadline-free Chelsea (Chelsea, premier) budget 177.5 | needs GK>80,LB>85,LW>85,CB>86 | targets Marcin Bulka, Mike Maignan, Mile Svilar, Alphonso Davie
+same hotseat-free Manchester United (Manchester United, premier) opens wk 7 pos 16 pts 7/7 target 4 | Ipswich Town 4-1; Chelsea 3-1; @Manchester City 0-1; Barcelona 0-4; Coven
+same deadline-free Manchester United (Manchester United, premier) budget 188.5 | needs GK>84,LB>85,CB>86,LW>86 | targets David Raya, Diogo Costa, Joan García, Castello Lukeba, 
+same hotseat-free Tottenham (Tottenham, premier) opens wk 14 pos 3 pts 24/14 target 6 | Manchester United 1-1; @Manchester City 0-1; @Chelsea 1-1; Manchester C
+same deadline-free Tottenham (Tottenham, premier) budget 150.5 | needs GK>80,CB>83,LB>85,CM>86 | targets Marcin Bulka, Mike Maignan, Mile Svilar, Nathan Collins
+same hotseat-free Newcastle (Newcastle, premier) opens wk 14 pos 9 pts 21/14 target 5 | @Leeds United 2-2; Chelsea 2-1; Liverpool 1-1 | survived
+same deadline-free Newcastle (Newcastle, premier) budget 110 | needs CB>75,GK>80,CM>83,ST>84 | targets Alessandro Marcandalli, Wout Faes, Omar Alderete, Vanja M
+same hotseat-free Nottingham Forest (Nottingham Forest, premier) opens wk 11 pos 16 pts 12/11 target 5 | Tottenham 1-1; @Ipswich Town 0-1; Brentford 1-1; @Manchester United 0-
+same deadline-free Nottingham Forest (Nottingham Forest, premier) budget 118 | needs GK>77,CM>82,LB>83,CB>84 | targets Christos Mandas, Filip Jørgensen, Guglielmo Vicario, Manu
+same hotseat-free Aston Villa (Aston Villa, premier) opens wk 8 pos 19 pts 4/8 target 4 | Chelsea 1-2; RB Leipzig 0-1; @Liverpool 0-2; Coventry City 3-0; @Thun 3-0
+same deadline-free Aston Villa (Aston Villa, premier) budget 130.5 | needs GK>82,CB>82,RB>83,LB>84 | targets Robert Sánchez, Djordje Petrovic, Diogo Costa, Joachim 
+same hotseat-free Crystal Palace (Crystal Palace, premier) opens wk 6 pos 18 pts 3/6 target 4 | @Newcastle 1-5; Portsmouth 3-1; Sunderland 1-0; @Arsenal 0-1; Ipswich Tow
+same deadline-free Crystal Palace (Crystal Palace, premier) budget 108.5 | needs CM>79,CB>82,LW>82,RB>83 | targets Djaoui Cissé, Mateus Mané, Yasin Ayari, Joachim Anderse
+same hotseat-free Brentford (Brentford, premier) opens wk 11 pos 19 pts 9/11 target 4 | @Manchester City 0-0; Newcastle 0-1; @Nottingham Forest 0-0; Arsenal 0-
+same deadline-free Brentford (Brentford, premier) budget 158 | needs GK>83,CB>84,LB>84,CM>84 | targets Djordje Petrovic, Mile Svilar, Joan García, Evan Ndicka, 
+same hotseat-free Bournemouth (Bournemouth, premier) opens wk 7 pos 20 pts 3/7 target 4 | Brentford 4-3; Ipswich Town 3-0; Brentford 1-0 | survived
+same deadline-free Bournemouth (Bournemouth, premier) budget 124 | needs CB>82,LW>82,LB>83,CM>83 | targets Pau Torres, Vitor Reis, Malick Thiaw, Jean-Mattéo Bahoya,
+same hotseat-free Brighton (Brighton, premier) opens wk 6 pos 18 pts 3/6 target 4 | @Sunderland 1-0; Tottenham 1-0; Arsenal 2-1 | survived
+same deadline-free Brighton (Brighton, premier) budget 134 | needs CB>80,CM>83,LW>83,LB>84 | targets Jaka Bijol, Honest Ahanor, Bremer, Noah Sadiki, Bilal El 
+same hotseat-free Everton (Everton, premier) opens wk 14 pos 19 pts 11/14 target 3 | @Ipswich Town 2-2; Brentford 2-1 | survived
+same deadline-free Everton (Everton, premier) budget 101.5 | needs CB>74,GK>80,LB>83,LW>83 | targets Joaquim, Emmanuel Fernandez, Tuta, Vanja Milinković-Sav
+same hotseat-free Fulham (Fulham, premier) opens wk 6 pos 16 pts 6/6 target 4 | @Arsenal 0-1; Sunderland 1-0; Everton 1-1; @Tottenham 0-1; Ipswich Town 3
+same deadline-free Fulham (Fulham, premier) budget 93 | needs GK>77,CB>78,LB>83,CM>83 | targets Christos Mandas, Filip Jørgensen, Guglielmo Vicario, Léo O
+same hotseat-free Sunderland (Sunderland, premier) opens wk 6 pos 20 pts 3/6 target 4 | Brentford 0-1; Manchester United 0-2; @Manchester United 0-2; Leeds Unite
+same deadline-free Sunderland (Sunderland, premier) budget 117 | needs LB>80,CB>82,GK>83,RB>83 | targets Jayden Oosterwolde, Jhon Lucumí, Destiny Udogie, Joachim 
+same hotseat-free Leeds United (Leeds United, premier) opens wk 11 pos 18 pts 9/11 target 3 | Crystal Palace 1-1; @Fulham 0-1; @Manchester City 0-1; Newcastle 0-3; @
+same deadline-free Leeds United (Leeds United, premier) budget 109 | needs CB>80,CM>81,RB>82,LB>82 | targets Jayden Oosterwolde, Honest Ahanor, Bremer, Thiago Pitarch
+same hotseat-free Ipswich Town (Ipswich Town, premier) opens wk 14 pos 20 pts 8/14 target 2 | Everton 2-2; @Tottenham 1-1 | survived
+same deadline-free Ipswich Town (Ipswich Town, premier) budget 71.5 | needs GK>77,ST>79,RB>80,CB>80 | targets Christos Mandas, Filip Jørgensen, Guglielmo Vicario, Mak
+same hotseat-free Coventry City (Coventry City, premier) opens wk 6 pos 20 pts 1/6 target 3 | Leeds United 0-1; Manchester United 1-1; @Chelsea 0-3; Liverpool 0-1; Bri
+same deadline-free Coventry City (Coventry City, premier) budget 57 | needs LB>76,CB>77,GK>78,CM>79 | targets Mariano Troilo, Fran García, Manuel Akanji, Jan Bednarek, 
+same hotseat-free Hull City (Hull City, premier) opens wk 12 pos 20 pts 6/12 target 3 | Coventry City 1-1; @Aston Villa 0-1; Sunderland 1-3; Brighton 0-2; @Bou
+same deadline-free Hull City (Hull City, premier) budget 54.5 | needs CB>75,LB>78,CM>78,LW>78 | targets Alessandro Marcandalli, Arseniy Batagov, Robin Koch, Nun
+
+77 deals compared, 2 differ. first=/tmp/base54 second=/tmp/base54

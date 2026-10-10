@@ -1,0 +1,3 @@
+AssertionError: expected [ 'Fixture Pro 15', …(2) ] to deeply equal [ 'Fixture Pro 0', …(2) ]
+AssertionError: expected 5 to be 8 // Object.is equality
+AssertionError: expected [ { …(11) }, { …(11) }, …(1998) ] to have a length of 2105 but got 2000

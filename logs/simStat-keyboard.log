@@ -1,0 +1,48 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows 710ms
+ × src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps the non-first native option mounted during focus transfer and preserves input Enter-first matching 158ms
+   → expected false to be true // Object.is equality
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > cues a committed win once with exact helper feedback, share truth and undefined completion score 197ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > ends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty 553ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > derives the real sparse-profile unlock gaps without inventing career clues 299ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps short and duplicate queries quiet and clears owned feedback timers on unmount 148ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door 157ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  09:05:00
+   Duration  4.97s (transform 665ms, setup 63ms, collect 1.12s, tests 2.22s, environment 447ms, prepare 399ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps the non-first native option mounted during focus transfer and preserves input Enter-first matching
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/test/statDetectiveMotion.test.tsx:90:80
+     88|     const first = view.getByRole('button', { name: `${targetProfile.na…
+     89|     const next = view.getByRole('button', { name: `${suspect.name} ${c…
+     90|     fireEvent.blur(input, { relatedTarget: first }); expect(first.isCo…
+       |                                                                                ^
+     91|     act(() => first.focus()); expect(first).toHaveFocus();
+     92|     fireEvent.blur(first, { relatedTarget: next }); expect(next.isConn…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simStatDetectiveMotion keyboard: asserted copied binding failed its intended outcome while independent real-helper checks passed.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

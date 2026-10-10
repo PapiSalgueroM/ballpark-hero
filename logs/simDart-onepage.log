@@ -1,0 +1,68 @@
+fixture: 5496 rows of 2026 (name, nationality, club and value as pulled); position and age real for 2497, drawn for 2999
+   row 900 is worth 15M, row 2000 5M; in the top 2,000 the position is real for 1360
+NEGATIVE CONTROL ON: the lib copy asks for one page of the pool
+1) the pool is the top 2,000 in two pages, and the old 900 are still its first 900
+   before: 900 players from 900 rows; after: 1000 players from 2000 rows, asked for as 0+1000
+  FAIL: the pool was asked for as [0+1000]; it must be two pages of 1000 and nothing past them: 0+1000 and 1000+1000
+  FAIL: the pool holds 1000 players; 2,000 rows should give well over 1,700
+   the cheapest man: 15M before, 13M after; the storm floor is 15M in both
+   what the pool costs to read, as JSON before compression: 146 KiB in one request before, 324 KiB over two requests after
+2) the gold zones give what they gave: the top of the pool did not move
+  FAIL: wildcard at GK changed: Kévin Denkey, Thibaut Courtois, David Raya, Brooke Norton-Cuffy, Robert Sánchez, Sidiki Chérif, Elia Caprile, Bart Verbruggen became Kévin Denkey, Diego López, Thibaut Courtois, Senne Lammens, Dean Henderson, Gianluigi Donnarumma, Lucas Chevalier, Vanja Milinković-Savić
+  FAIL: wildcard at RB changed: William Saliba, Achraf Hakimi, Pau Cubarsí, Trai Hume, Oumar Solet, Mohamed Simakan, Dan Ballard, Castello Lukeba became William Saliba, Achraf Hakimi, Pau Cubarsí, Gabriel, Jaka Bijol, Kristoffer Ajer, Éder Militão, Nahuel Molina
+  FAIL: wonderkids at RB lost somebody: Pau Cubarsí, Dean Huijsen, Luka Vuskovic, Josh Acheampong, Jacobo Ramón, Noahkai Banks, Marco Palestra, Nnamdi Collins became Pau Cubarsí, Dean Huijsen, Luka Vuskovic, Noahkai Banks, Cristhian Mosquera, Givairo Read, Josh Acheampong, Leny Yoro
+  FAIL: wildcard at CB changed: William Saliba, Pau Cubarsí, Gabriel, Sven Botman, Kristoffer Ajer, Sverre Nypan, Pietro Comuzzo, Ibrahima Konaté became William Saliba, Pau Cubarsí, Gabriel, Wilfried Singo, Eduardo Quaresma, Cristhian Mosquera, Mario Gila, Pietro Comuzzo
+  FAIL: wonderkids at CB lost somebody: Pau Cubarsí, Dean Huijsen, Luka Vuskovic, Jérémy Jacquet, Jaydee Canvot, Joel Ordóñez, Noahkai Banks, Giovanni Leoni became Pau Cubarsí, Dean Huijsen, Luka Vuskovic, Antonín Kinský, Jacobo Ramón, Finn Jeltsch, Leny Yoro, Giovanni Leoni
+  FAIL: wildcard at CB changed: William Saliba, Pau Cubarsí, Gabriel, Charlie Cresswell, Ilya Zabarnyi, Mateo Pellegrino, Jeff Chabot, Strahinja Pavlović became William Saliba, Pau Cubarsí, Gabriel, Moussa Niakhaté, Josko Gvardiol, Maxime Estève, Bremer, Lucas Høgsberg
+  FAIL: wonderkids at CB lost somebody: Pau Cubarsí, Dean Huijsen, Luka Vuskovic, Joel Ordóñez, Jacobo Ramón, Mamadou Sarr, Jérémy Jacquet, Honest Ahanor became Pau Cubarsí, Dean Huijsen, Luka Vuskovic, Giovanni Leoni, Antonín Kinský, Vitor Reis, Finn Jeltsch, Jon Martín
+  FAIL: wildcard at LB changed: William Saliba, Pau Cubarsí, Saïmon Bouabré, Dan Ballard, Taylor Harwood-Bellis, Joe Gomez, Marc Cucurella, Éder Militão became William Saliba, Pau Cubarsí, Saïmon Bouabré, Adrien Truffert, Emmanuel Agbadou, Justin Devenny, Joe Rodon, Jacobo Ramón
+  FAIL: wonderkids at LB lost somebody: Pau Cubarsí, Dean Huijsen, Luka Vuskovic, Jorrel Hato, Noahkai Banks, Pietro Comuzzo, Tylel Tati, Samson Baidoo became Pau Cubarsí, Dean Huijsen, Luka Vuskovic, Honest Ahanor, Jon Martín, Cristhian Mosquera, El Hadji Malick Diouf, Myles Lewis-Skelly
+  FAIL: wildcard at CM changed: Pedri, Jude Bellingham, Declan Rice, Senny Mayulu, Veljko Milosavljevic, Nilson Angulo, Paul Nebel, Jacob Ramsey became Pedri, Jude Bellingham, Declan Rice, Jean Lucas, Leon Goretzka, Julian Brandt, Mateus Mané, Curtis Jones
+  FAIL: wonderkids at CM lost somebody: João Neves, Arda Güler, Nico Paz, Lucas Bergvall, Habib Diarra, Breno Bidon, Chris Rigg, Niccolò Pisilli became João Neves, Arda Güler, Nico Paz, Noah Sadiki, Nilson Angulo, Breno Bidon, Konstantinos Karetsas, Rodrigo Mendoza
+  FAIL: wildcard at CM changed: Pedri, Jude Bellingham, Declan Rice, Gabri Veiga, Enzo Le Fée, Carlos Alcaraz, Felix Nmecha, Orkun Kökçü became Pedri, Jude Bellingham, Declan Rice, Carlos Alcaraz, Imrân Louza, Fabián Ruiz, Dani Olmo, Claudinho
+  FAIL: wonderkids at CM lost somebody: João Neves, Arda Güler, Nico Paz, Rodrigo Mora, Jobe Bellingham, Matvey Kislyak, Yegor Yarmolyuk, Niccolò Pisilli became João Neves, Arda Güler, Nico Paz, Rodrigo Mendoza, Matvey Kislyak, Jobe Bellingham, Habib Diarra, Brajan Gruda
+  FAIL: wildcard at CM changed: Pedri, Jude Bellingham, Declan Rice, Brenden Aaronson, Fabio Miretti, Warren Zaïre-Emery, Georgiy Sudakov, Jens Odgaard became Pedri, Jude Bellingham, Declan Rice, Alberto Costa, Bruno Fernandes, Bernardo Silva, Corentin Tolisso, Enzo Fernández
+  FAIL: wonderkids at CM lost somebody: João Neves, Arda Güler, Nico Paz, Bilal El Khannouss, Nathan De Cat, Rodrigo Mendoza, Mateus Mané, Lennart Karl became João Neves, Arda Güler, Nico Paz, Hugo Larsson, Paul Wanner, Mateus Mané, Niccolò Pisilli, Bilal El Khannouss
+  FAIL: wildcard at RW changed: Lamine Yamal, Michael Olise, Bukayo Saka, Dodi Lukébakio, Mohammed Kudus, Yunus Akgün, Karim Adeyemi, Francisco Conceição became Lamine Yamal, Michael Olise, Bukayo Saka, Anthony Elanga, Rayan, Ilias Akhomach, Federico Chiesa, Désiré Doué
+  FAIL: wonderkids at RW lost somebody: Lamine Yamal, Désiré Doué, Estêvão, Rayan, Ernest Poku, Chemsdine Talbi, Roger Fernandes, Jayden Addai became Lamine Yamal, Désiré Doué, Estêvão, Rayan, Roger Fernandes, Ernest Poku, Franco Mastantuono, Max Dowman
+  FAIL: wildcard at ST changed: Erling Haaland, Kylian Mbappé, Harry Kane, Robinio Vaz, Georges Mikautadze, Endrick, Victor Osimhen, Lorenzo Lucca became Erling Haaland, Kylian Mbappé, Harry Kane, Liam Delap, Alexander Sørloth, Benjamin Sesko, Lucas Perri, Gonçalo Ramos
+  FAIL: wonderkids at ST lost somebody: Pio Esposito, Samu Aghehowa, Christian Kofane, Mathys Tel, Charalampos Kostoulas, Vitor Roque, Stefanos Tzimas, Santiago Castro became Pio Esposito, Samu Aghehowa, Christian Kofane, Giovane, Stefanos Tzimas, Charalampos Kostoulas, Junior Kroupi, Gonzalo García
+  FAIL: wildcard at LW changed: Vinicius Junior, Kader Meïté, Khvicha Kvaratskhelia, Jonathan Rowe, Alberto Moleiro, Barış Alper Yılmaz, Abde Ezzalzouli, Keane Lewis-Potter became Vinicius Junior, Kader Meïté, Khvicha Kvaratskhelia, Said El Mala, Callum Hudson-Odoi, Nathan Zézé, Anass Salah-Eddine, Sven Mijnans
+  FAIL: wonderkids at LW lost somebody: Kenan Yıldız, Yan Diomande, Alejandro Garnacho, Malick Fofana, Mika Godts, Said El Mala, Jean-Mattéo Bahoya, Eliesse Ben Seghir became Kenan Yıldız, Yan Diomande, Alejandro Garnacho, Djaoui Cissé, Malick Fofana, Oskar Pietuszewski, Assane Diao, Mika Godts
+   wildcard identical at 0 of 11 slots; wonderkids keep every name at 1 of 11 and gain names at 0 where the old pool ran short of eight
+3) the storm did not get worse
+   cheapest storm tile before>after, and what the deeper pool would have handed out: GK 15M>15M (13M with no floor), RB 15M>15M (13M with no floor), CB 15M>15M (13M with no floor), LB 15M>15M (13M with no floor), CM 15M>15M (13M with no floor), RW 15M>15M (13M with no floor), ST 15M>15M (13M with no floor), LW 16M>15M (13M with no floor)
+   the five storm tiles' average rating fell by -0.36 a slot on average (slot by slot: -0.80, -0.40, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, -0.60, 0.00, -2.20); 0 slots fell by more than half a point
+   with no floor it would have fallen by 0.80 a slot on average (slot by slot: 0.60, 2.20, 0.80, 0.80, 0.80, 0.60, 0.60, 0.60, 0.40, 1.00, 0.40)
+4) a country hit keeps its best four and reaches deeper for the rest
+   739 country and slot pairs have real players; 218 of them run deeper than eight
+   names a country hit could show: 3242 before, 6459 after 30 hits each (1.99x)
+5) the mystery zone pays what it paid, and the deeper pool shows as a fourth tile
+   names a mystery tile could be, summed over the 11 slots: 1878 before, 2052 after
+   the best tile is rated 83.35 on average before (median 83), 83.26 after (median 83); three from anywhere in the deeper pool would have given 83.06 (median 83)
+   4400 of 4400 hits carried a fourth tile from under the 15M line; 0 hits had one of the three under it
+6) The Machine is the opponent it was
+   The Machine's XI is rated 86.88 on average before (median 87), 86.69 after (median 87): a move of -0.18
+   players at a slot, fewest to most: 49 to 234 before, 59 to 260 after; The Machine draws from the top forty or the top half, whichever is fewer
+7) 2000 whole drafts a model, before and after, graded by the game's own functions
+   the twelve dearest nations: France, Spain, United Kingdom, Brazil, Germany, Argentina, Portugal, Netherlands, Italy, Norway, Sweden, Côte d'Ivoire
+   sharp thrower, best pick, before: XI 86.97 on average, median 87 (S); grades F 0, D 0, C 0, B 0, A 145, S 1855
+   sharp thrower, best pick, after: XI 86.95 on average, median 87 (S); grades F 0, D 0, C 0, B 0, A 155, S 1845
+   sharp thrower, random pick, before: XI 81.00 on average, median 81 (A); grades F 0, D 0, C 0, B 66, A 1834, S 100
+   sharp thrower, random pick, after: XI 77.64 on average, median 78 (A); grades F 0, D 0, C 0, B 995, A 1000, S 5
+   land thrower, best pick, before: XI 73.68 on average, median 74 (B); grades F 0, D 3, C 229, B 1538, A 230, S 0
+   land thrower, best pick, after: XI 73.56 on average, median 74 (B); grades F 0, D 6, C 243, B 1524, A 227, S 0
+   land thrower, random pick, before: XI 69.80 on average, median 70 (B); grades F 0, D 39, C 840, B 1114, A 7, S 0
+   land thrower, random pick, after: XI 69.19 on average, median 69 (C); grades F 1, D 41, C 973, B 981, A 4, S 0
+   any thrower, best pick, before: XI 51.81 on average, median 52 (F); grades F 1279, D 642, C 79, B 0, A 0, S 0
+   any thrower, best pick, after: XI 51.50 on average, median 51 (F); grades F 1341, D 595, C 63, B 1, A 0, S 0
+   any thrower, random pick, before: XI 49.97 on average, median 50 (F); grades F 1554, D 427, C 19, B 0, A 0, S 0
+   any thrower, random pick, after: XI 49.77 on average, median 49 (F); grades F 1598, D 381, C 21, B 0, A 0, S 0
+8) clubs the league lookup does not know
+   pool players at a club the lookup does not know: 0.9% of the old 900, 1.4% of the 1000
+   9 clubs in the pool are unknown to the lookup; the twenty with the most players (players, dearest in M): FC Toulouse (4, 27); Stade Reims (2, 22); Leicester City (2, 13); AS Saint-Étienne (1, 16); UD Almería (1, 16); Al-Sadd SC (1, 13); Aston Villa U21 (1, 13); Fluminense Football Club (1, 13); Grêmio Foot-Ball Porto Alegrense (1, 13)
+   players a country hit reads (the top 120 of each nation): 5467, 46.7% at a club the lookup does not know
+   before: 8000 aimed drafts carry 1.98 such players each; in 20.6% of them the chemistry bonus counts unknown clubs as one league (1.76 rating points when it does)
+   after: 8000 aimed drafts carry 2.56 such players each; in 30.7% of them the chemistry bonus counts unknown clubs as one league (1.94 rating points when it does)
+
+simDartDraftPool control onepage: fired, 23 failure(s) above. Exit 1 is the expected result.

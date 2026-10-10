@@ -1,0 +1,56 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ × src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows 492ms
+   → expected <div …(2)>…(2)</div> to be <div …(3)>…(2)</div> // Object.is equality
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps the non-first native option mounted during focus transfer and preserves input Enter-first matching 213ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > cues a committed win once with exact helper feedback, share truth and undefined completion score 200ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > ends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty 595ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > derives the real sparse-profile unlock gaps without inventing career clues 355ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps short and duplicate queries quiet and clears owned feedback timers on unmount 195ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door 134ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 6 passed (7)
+   Start at  09:05:00
+   Duration  4.93s (transform 629ms, setup 84ms, collect 1.07s, tests 2.19s, environment 500ms, prepare 220ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows
+AssertionError: expected <div …(2)>…(2)</div> to be <div …(3)>…(2)</div> // Object.is equality
+
+- Expected
++ Received
+
+@@ -1,8 +1,7 @@
+  <div
+-   class="bg-card border rounded-xl px-4 py-3 border-border _wrong_4208ea"
+-   data-stat-feedback="wrong"
++   class="bg-card border rounded-xl px-4 py-3 border-border"
+    data-stat-guess="Fixture Aster Rowan"
+  >
+    <div
+      class="flex items-center justify-between gap-2 mb-1.5"
+    >
+
+ ❯ src/test/statDetectiveMotion.test.tsx:76:55
+     74|       expect(clues(view).at(-1)).toHaveClass(motion.clue);
+     75|       expect(search(view)).toHaveFocus();
+     76|       if (original) { expect(row(view, suspect.name)).toBe(original); …
+       |                                                       ^
+     77|       else original = newest;
+     78|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simStatDetectiveMotion keys: asserted copied binding failed its intended outcome while independent real-helper checks passed.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

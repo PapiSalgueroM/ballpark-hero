@@ -1,0 +1,74 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ × src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows 475ms
+   → expect(element).not.toHaveClass("_wrong_4208ea")
+
+Expected the element not to have class:
+  _wrong_4208ea
+Received:
+  bg-card border rounded-xl px-4 py-3 border-border _wrong_4208ea
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps the non-first native option mounted during focus transfer and preserves input Enter-first matching 230ms
+ × src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > cues a committed win once with exact helper feedback, share truth and undefined completion score 219ms
+   → expect(element).not.toHaveClass("_correct_4208ea")
+
+Expected the element not to have class:
+  _correct_4208ea
+Received:
+  bg-card border rounded-xl px-4 py-3 border-correct _correct_4208ea
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > ends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty 551ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > derives the real sparse-profile unlock gaps without inventing career clues 284ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps short and duplicate queries quiet and clears owned feedback timers on unmount 231ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door 163ms
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 5 passed (7)
+   Start at  09:05:06
+   Duration  4.85s (transform 566ms, setup 59ms, collect 1.05s, tests 2.16s, environment 441ms, prepare 533ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows
+Error: expect(element).not.toHaveClass("_wrong_4208ea")
+
+Expected the element not to have class:
+  _wrong_4208ea
+Received:
+  bg-card border rounded-xl px-4 py-3 border-border _wrong_4208ea
+ ❯ src/test/statDetectiveMotion.test.tsx:76:92
+     74|       expect(clues(view).at(-1)).toHaveClass(motion.clue);
+     75|       expect(search(view)).toHaveFocus();
+     76|       if (original) { expect(row(view, suspect.name)).toBe(original); …
+       |                                                                                            ^
+     77|       else original = newest;
+     78|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > cues a committed win once with exact helper feedback, share truth and undefined completion score
+Error: expect(element).not.toHaveClass("_correct_4208ea")
+
+Expected the element not to have class:
+  _correct_4208ea
+Received:
+  bg-card border rounded-xl px-4 py-3 border-correct _correct_4208ea
+ ❯ src/test/statDetectiveMotion.test.tsx:115:89
+    113|     expect(view.getByRole('group', { name: 'Case closed' })).toBe(resu…
+    114|     settle(); expect(view.container.querySelector('[data-stat-feedback…
+    115|     expect(result).not.toHaveClass(motion.result); expect(row(view, ta…
+       |                                                                                         ^
+    116|     expect(row(view, suspect.name)).not.toHaveClass(motion.wrong);
+    117|     view.rerender(<StatDetective />); expect(view.container.querySelec…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+simStatDetectiveMotion quiet: asserted copied binding failed its intended outcome while independent real-helper checks passed.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

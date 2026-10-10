@@ -1,0 +1,25 @@
++ actual - expected
+
++ [
++   'captures the exact random case and mode while keeping the answer out of visible play',
++   'explains the eligible season window before play and in reopened help',
++   'pages global 2026 rows past 900 and 1000 while excluding other years and unknown positions',
++   'shows recorded seasons and franchises without claiming complete career dates'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simReportedGamePools.mjs:73:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'captures the exact random case and mode while keeping the answer out of visible play',
+    'explains the eligible season window before play and in reopened help',
+    'pages global 2026 rows past 900 and 1000 while excluding other years and unknown positions',
+    'shows recorded seasons and franchises without claiming complete career dates'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
