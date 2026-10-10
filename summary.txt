@@ -1,0 +1,10 @@
+vitest exit=0 3s |    Duration  2.54s (transform 179ms, setup 137ms, collect 214ms, tests 1.45s, environment 1.13s, prepare 296ms)
+cand-s1 exit=0 46s | simClubManagerSaveSize: all sections green
+cand-default exit=0 52s | simClubManagerSaveSize: all sections green
+tsc exit=0 79s | 
+cand-s2 exit=0 48s | simClubManagerSaveSize: all sections green
+cand-s3 exit=0 47s | simClubManagerSaveSize: all sections green
+cand-s4 exit=0 48s | simClubManagerSaveSize: all sections green
+simCmRealFixtures exit=1 4s | Node.js v24.21.0
+cand-s5 exit=0 45s | simClubManagerSaveSize: all sections green
+cand-uncapped exit=1 45s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
