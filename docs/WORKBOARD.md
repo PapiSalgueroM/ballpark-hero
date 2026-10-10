@@ -1,15 +1,29 @@
-## Codex 1192 CLAIM: Soccer Career saved trophy campaigns, 2026-10-09
+## Codex 1192 READY: Soccer Career saved trophy campaigns, 2026-10-09
 
-Isolated codex/career-trophy-runs at AR fa24b3848d99e29367486489b081a483dc544206.
+Draft PR213: https://github.com/PapiSalgueroM/ballpark-hero/pull/213
+Branch codex/career-trophy-runs, independent of PR208/209/210/212.
 Worktree C:/Users/antho/.codex/worktrees/career-trophy-runs/ballpark-hero.
-European and other club wins will show only their anchored saved campaign:
-first-stage games, legs, player goals and recorded tie decisions. Old or
-unanchored saves get honest missing detail. All wins restores its tile/list.
-No engine, competition reader, save, score or random-stream change. Verify
-actual saved rows, effective controls, native320/390/1280 read/reload,
-focus/scroll/body/save holds, types/build and all15 built-output readers.
-Independent of drafts208/209/210/212. F owns integration and publication.
-No local application runtime, production DB or paid work.
+Base AR fa24b3848d99e29367486489b081a483dc544206.
+Accepted source 949eeceea07e8f3c38ef9bfcf19ba9b9fce32aea,
+tree 09bb3cb40073b86bf166fc15214a5852e75d6969.
+Run38018547778/job114114205129 SUCCESS, every owned step passed.
+Final artifact11656854894,19645120bytes,SHA256
+b18c34ea3b51e6856cb27fbe6bd0ef147e13d47fa4f5ad61c5a22c3495226022.
+Downloaded, exact hash/head/tree held and independently audited.
+Receipt docs/ROUND1192-RECEIPT.md.
+
+Recorded club titles now show their exact saved campaign, all games/legs,
+separate player goals and retained tie decisions. Old/missing or invalid
+anchors remain honest. All wins/Help restore the original tile/list/focus.
+No engine, reader, save, score, random-stream or reward change.
+34 units,9 groups,7 loaded source controls,24 full AR season pairs,
+192 full campaign/RNG pairs. Copied scroll control18/1intended/17passed.
+Native407/0,12 journeys,48 whole reads,24 raw reloads,3 detector controls.
+All33 fresh PNGs manually reviewed across320/390/1280. Types/build,
+four related outcomes,all15 readers/source hold pass. SeasonTruth SKIPPED
+offline, no DB probe or verification credit. All runtime remote-only.
+F owns combined release gates, integration, merge and publication.
+No live claim. Preserve AQ/AR, every READY draft and root Recovery bytes.
 
 ## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
 
