@@ -19,6 +19,9 @@ export const CM_VAR_RATES = { goalReview: 0.031938, overturn: 1, penaltyReview: 
 /** Real football, a match: what the harness bands and the help text read. */
 export const CM_VAR_REAL = { goalsRuledOut: { low: 0.076316, high: 0.144737 }, penaltiesAwarded: { low: 0.065789, high: 0.130719 } } as const;
 
+/** The same competitions by the name the help text prints. */
+export const CM_VAR_COVERED_NAMES: readonly string[] = ['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Champions League'];
+
 /** Competitions with reviews in 2026-27, by the engine's own key, to the first stage that has them
  *  ('all' for a league). A key that is not here plays without reviews. */
 export const CM_VAR_COVERAGE: Readonly<Record<string, string>> = { 'league:premier': 'all', 'league:laliga': 'all', 'league:seriea': 'all', 'league:bundesliga': 'all', 'ucl': 'group' };

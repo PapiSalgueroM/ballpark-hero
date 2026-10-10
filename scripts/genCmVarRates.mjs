@@ -84,7 +84,7 @@ export function derive() {
   const law = penaltyLaw();
   const coverage = Object.fromEntries(comps.rows.filter(r => r.verdict === 'yes').map(r => [r.key, r.key.startsWith('league:') ? 'all' : r.from]));
   return {
-    engine, goals, pens, law, coverage,
+    engine, goals, pens, law, coverage, names: comps.rows.filter(r => r.verdict === 'yes').map(r => r.name),
     rates: {
       goalReview: n6(goals.low / engine.reviewableGoalsPerMatch), overturn: 1, penaltyReview: 0,
       missedFoulReview: n6(pens.low / engine.awardsPerMatchPerUnitRate), penaltyScores: law.scores, penaltyOnTarget: law.onTarget,
@@ -116,6 +116,9 @@ export function generatedSource() {
     '',
     '/** Real football, a match: what the harness bands and the help text read. */',
     `export const CM_VAR_REAL = { goalsRuledOut: { low: ${n6(g.low)}, high: ${n6(g.high)} }, penaltiesAwarded: { low: ${n6(p.low)}, high: ${n6(p.high)} } } as const;`,
+    '',
+    '/** The same competitions by the name the help text prints. */',
+    `export const CM_VAR_COVERED_NAMES: readonly string[] = ${JSON.stringify(d.names).replaceAll('"', "'").replaceAll("','", "', '")};`,
     '',
     "/** Competitions with reviews in 2026-27, by the engine's own key, to the first stage that has them",
     " *  ('all' for a league). A key that is not here plays without reviews. */",

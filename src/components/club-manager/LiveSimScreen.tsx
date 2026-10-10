@@ -408,9 +408,9 @@ function LiveMatchHelp({ onClose, reviews }: { onClose: () => void; reviews?: bo
       <ul className="mt-1 space-y-1.5 text-xs text-muted-foreground list-disc pl-4">
         <li>The half you are watching has already been played by the game. You are seeing it back minute by minute.</li>
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
-        <li>{reviews ? 'A reviewed goal waits for confirmation, then the score changes when the ball is in the net.' : 'The score changes when the ball is in the net, not before.'}</li>
+        <li>{reviews ? 'The score changes when the ball is in the net, not before. A penalty a review gives waits for the review first.' : 'The score changes when the ball is in the net, not before.'}</li>
         <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.</li>
-        {reviews && <li>VAR uses simplified game rules. A ruled-out goal adds no score, scorer or shot stats. A missed foul can earn a penalty, and that kick can score, be saved or miss.</li>}
+        {reviews && <li>VAR here reviews goals and penalties only, and you only see a review that changed the call. A goal that is ruled out adds no score, scorer or shot stats. A foul the referee missed can become a penalty, and that kick can go in, be saved or miss.</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
         <li>Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on.</li>
       </ul>
@@ -418,7 +418,7 @@ function LiveMatchHelp({ onClose, reviews }: { onClose: () => void; reviews?: bo
         <span className="font-bold">Worked example: </span>
         {"It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next."}
       </p>
-      {reviews && <p className="mt-2 text-xs text-foreground"><span className="font-bold">VAR example: </span>At 0-0 a goal is checked for offside. If ruled out, it stays 0-0 and nobody gets a goal. If a foul review awards a penalty and the kick misses, it still stays 0-0.</p>}
+      {reviews && <p className="mt-2 text-xs text-foreground"><span className="font-bold">VAR example: </span>At 0-0 a goal goes to a review and is ruled out. It stays 0-0 and nobody gets a goal. If a review gives a penalty and the kick misses, it still stays 0-0.</p>}
     </div>
   );
 }
