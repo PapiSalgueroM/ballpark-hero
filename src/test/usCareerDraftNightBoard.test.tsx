@@ -59,6 +59,7 @@ async function nightLoaded() {
   for (let n = 0; n < 3; n++) await act(async () => { await import('@/components/career/DraftNightSequence'); await Promise.resolve(); });
 }
 const srTitle = (view: View) => journey(view).querySelector('h3.sr-only');
+const fileOf = (view: View) => journey(view).querySelector<HTMLElement>('[data-prospect-file]')!.textContent ?? '';
 const nightOf = (view: View) => journey(view).querySelector<HTMLElement>('[data-career-night]');
 const closingRow = (view: View) => nightOf(view)!.querySelector<HTMLElement>("[data-night-row='you'], [data-night-row='unpicked']")!;
 
@@ -82,6 +83,7 @@ describe('draft night on the actual boards', () => {
     await nightLoaded();
     const done = { ...p, state: preDraftRunDraft(desc, p.state!) };
     const out = done.state.draft!;
+    const fileBefore = fileOf(view);
     fireEvent.click(buttons(view).getByRole('button', { name: 'Draft day' }));
     // The save is the save it always was: the night adds no field.
     expect(saved(row)).toEqual(prospectSave(done));
@@ -99,6 +101,10 @@ describe('draft night on the actual boards', () => {
     expect(journey(view).style.getPropertyValue('--night-hold')).toMatch(/^\d+(\.\d+)?s$/);
     expect(srTitle(view)).toHaveTextContent('Draft night.');
     expect(document.activeElement).toBe(srTitle(view));
+    // The file under the stage still reads as it did before the press: the age and the
+    // rating after the minors would say how the night ends, and nothing in it goes blank.
+    expect(fileOf(view)).toBe(fileBefore);
+    if (desc.postDraft) expect(out.devSeasons.length).toBeGreaterThan(0);
     const result = buttons(view).getByTestId('draft-result');
     expect(result.className).toContain('cm-rise');
     expect(result.style.animationDelay).toBe(journey(view).style.getPropertyValue('--night-hold'));
@@ -115,6 +121,10 @@ describe('draft night on the actual boards', () => {
     expect(buttons(view).queryByRole('button', { name: 'Skip to my pick' })).toBeNull();
     expect(srTitle(view)).toHaveTextContent(out.pick === null ? 'A different way in.' : 'This is your moment.');
     expect(within(nightOf(view)!).getByRole('status')).toHaveTextContent(careerNightResultLine(built.board[built.board.length - 1], desc.teamLabel));
+    // Now the file moves on to the numbers the career starts with.
+    expect(fileOf(view)).toContain(`${p.pos} · Age ${out.ageAfter}`);
+    expect(fileOf(view)).toContain(`Rating${out.ratingAfter}`);
+    expect(fileOf(view) !== fileBefore).toBe(out.devSeasons.length > 0);
     expect(saved(row)).toEqual(prospectSave(done));
     // And the career that starts is the pick and the club the row showed.
     fireEvent.click(buttons(view).getByRole('button', { name: 'Start your career' }));

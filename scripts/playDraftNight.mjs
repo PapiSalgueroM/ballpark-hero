@@ -11,7 +11,10 @@
  *      reveal has settled the page does not scroll again. No frame overflows
  *      sideways.                                            Control `late`.
  *   3. NO SPOILER. Until the closing row starts to land, the title, the club
- *      line, the result block and the closing row itself are at opacity 0.
+ *      line, the result block and the closing row itself are at opacity 0,
+ *      and the file under the stage (age, rating, health) reads exactly as
+ *      it did before the press: the numbers after the minors come with the
+ *      ending, and nothing in the file goes blank.
  *      The opacity is read on the elements that carry the hold (it is not
  *      inherited, so a child of a held parent reports 1). The moment is the
  *      closing row's OWN animation delay, never the page's number for the
@@ -141,7 +144,7 @@ const CONTROL_STYLE = {
   /* Rows that take their room only when they arrive: the card grows under the player. */
   late: '@keyframes lateMount { from { max-height: 0; padding-top: 0; padding-bottom: 0; border-width: 0; overflow: hidden; opacity: 0; } to { max-height: 160px; opacity: 1; } } [data-night-row] { animation-name: lateMount !important; animation-fill-mode: both !important; }',
   /* The hold taken off the words above the board and off the result block. */
-  spoiler: '[data-night-hold] h2, [data-night-hold] p, [data-night-held], [data-testid="draft-result"] { animation: none !important; opacity: 1 !important; }',
+  spoiler: '[data-night-hold] h2, [data-night-hold] p, [data-testid="draft-result"] { animation: none !important; opacity: 1 !important; }',
   /* A row left invisible for somebody who asked for less motion. */
   hidden: '[data-night-row] { opacity: 0 !important; }',
   /* A lottery tile with less room for its words than the words need. */
@@ -166,7 +169,8 @@ const RECORD = () => {
     window.__night.push({ t: performance.now() - t0, y: window.scrollY, card: card ? card.getBoundingClientRect().height : null, journey: j ? j.getBoundingClientRect().height : null,
       stage: night ? night.dataset.nightStage : null, h2: op(j && j.querySelector('[data-arrival] h2')), club: op(j && j.querySelector('[data-arrival] h2 + p')),
       result: op(document.querySelector('[data-testid="draft-result"]')), closing: op(closing), top: r ? r.top : null, bottom: r ? r.bottom : null, rowsMin: rows.length ? Math.min(...rows) : null,
-      vh: window.innerHeight, sw: document.documentElement.scrollWidth, vw: document.documentElement.clientWidth });
+      vh: window.innerHeight, sw: document.documentElement.scrollWidth, vw: document.documentElement.clientWidth,
+      file: j && j.querySelector('[data-prospect-file]') ? j.querySelector('[data-prospect-file]').textContent : null });
     if (performance.now() - t0 < 9000) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
@@ -190,8 +194,11 @@ const FIT = names => {
     if (w > widest.need) widest = { text, need: w };
     if (el.scrollWidth > el.clientWidth) clubs.push({ text, need: w, room: el.clientWidth });
   }
+  /* The box sizes to its words up to the room the tile has, so the room is read with more words than fit. */
+  el.textContent = 'W'.repeat(60);
+  const room = el.clientWidth;
   el.textContent = keep;
-  return { cut, clubs, room: el.clientWidth, widest, font: getComputedStyle(el).fontFamily.split(',')[0] };
+  return { cut, clubs, room, widest, font: getComputedStyle(el).fontFamily.split(',')[0] };
 };
 const CARD = () => ({ y: window.scrollY, card: document.querySelector('[data-testid="draft-showcase"]').getBoundingClientRect().height, stage: document.querySelector('[data-career-night]').dataset.nightStage });
 const END = () => {
@@ -199,7 +206,7 @@ const END = () => {
   const closing = night.querySelector("[data-night-row='you'], [data-night-row='unpicked']");
   const r = closing.getBoundingClientRect();
   const at = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-  return { text: closing.innerText, top: r.top, bottom: r.bottom, vh: window.innerHeight, covered: !(at && closing.contains(at)),
+  return { text: closing.innerText, top: r.top, bottom: r.bottom, vh: window.innerHeight, covered: !(at && closing.contains(at)), file: document.querySelector('[data-prospect-file]').textContent,
     rows: night.querySelectorAll('[data-night-row]').length, tiles: night.querySelectorAll('[data-lottery-slot]').length, kinds: [...night.querySelectorAll('[data-night-row]')].map(x => x.dataset.nightRow),
     tileWords: [...night.querySelectorAll('[data-lottery-slot]')].map(li => [li.dataset.lotterySlot, ...[...li.querySelectorAll('[data-lottery-face] > span:last-child > span')].map(x => x.textContent)].join(' | ')) };
 };
@@ -260,6 +267,7 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     await page.waitForFunction(() => performance.getEntriesByType('resource').some(e => /DraftNightSequence/.test(e.name)), null, { timeout: 15000 });
     await page.waitForTimeout(250);
     await shot('1-before');
+    const fileBefore = await page.locator('[data-prospect-file]').evaluate(el => el.textContent);
     await page.evaluate(RECORD);
     await press('Draft day');
     await page.locator('[data-prospect-phase="done"]').waitFor();
@@ -319,6 +327,9 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
       const leak = early.find(s => s.h2 > 0.05 || s.club > 0.05 || s.result > 0.05 || s.closing > 0.05);
       if (!early.length) fail(id, 'spoiler', 'no frame was recorded while the hold was on');
       else if (leak) fail(id, 'spoiler', `at ${Math.round(leak.t - t0)} ms of ${Math.round(hold * 1000)} the title is at ${leak.h2}, the club at ${leak.club}, the result at ${leak.result}, the closing row at ${leak.closing}`);
+      /* The file under the stage reads as it did before the press: the age and rating after the minors are part of the ending. */
+      const moved = early.find(s => s.file !== fileBefore);
+      if (moved) fail(id, 'spoiler', `at ${Math.round(moved.t - t0)} ms of ${Math.round(hold * 1000)} the file reads "${moved.file}", and before the press it read "${fileBefore}"`);
       /* 4. The closing row is on screen at the frame it lands. */
       const landing = samples.find(s => s.closing > 0.9);
       if (!landing) fail(id, 'fold', 'the closing row never landed');
@@ -336,6 +347,8 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     const end = await page.evaluate(END);
     Object.assign(row, { rows: end.rows, tiles: end.tiles, closing: [Math.round(end.top), Math.round(end.bottom)] });
     if (end.top < -1 || end.bottom > end.vh + 1 || end.covered) fail(id, 'fold', `the closing row sits at ${Math.round(end.top)} to ${Math.round(end.bottom)} in a ${end.vh} high viewport${end.covered ? ', covered' : ''}`);
+    /* Once the night is over the file has moved on to the numbers the career starts with. */
+    if (!end.file.includes(`Age ${out.ageAfter}`) || !end.file.includes(`Rating${out.ratingAfter}`)) fail(id, 'last', `the file reads "${end.file}" at the end, and the career starts at age ${out.ageAfter}, rated ${out.ratingAfter}`);
     const built = M.buildCareerDraftNight(desc, done);
     if (JSON.stringify(end.kinds) !== JSON.stringify(built.board.map(r => r.kind))) fail(id, 'save', `the rows are ${end.kinds.join(', ')}, the builder made ${built.board.map(r => r.kind).join(', ')}`);
     if (end.rows + end.tiles > 12 || end.tiles !== (desc.lottery ? desc.lottery.drawn : 0)) fail(id, 'save', `${end.rows} rows and ${end.tiles} lottery tiles are on screen`);

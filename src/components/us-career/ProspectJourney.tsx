@@ -57,6 +57,11 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
   const nightHold = night && nightKit && nightStage !== 'skipped' ? `${nightKit.careerNightClock(night).closeAt}s` : undefined;
   const held = !!night && nightStage === 'live';
   const out = state?.draft;
+  /* The file keeps the numbers it had before the press until the closing row
+     has landed: the age, rating and health after the minors are part of the
+     ending. (They were faded out and back in at first, which left "Rating" and
+     "Health" with nothing beside them and took the position away as well.) */
+  const after = held ? undefined : out;
   const title = !state ? 'Your career starts here.' : state.phase === 'done'
     ? out?.pick === null ? 'A different way in.' : 'This is your moment.'
     : state.phase === 'showcase' ? 'One last look.' : state.phase === 'draft' ? 'You have done the work.'
@@ -83,12 +88,12 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
         </div>
         <div className={styles.portrait} aria-hidden="true"><PlayerAvatar appearance={prospect.appearance} clubColor={sport.create.clubColor} size={130} /></div>
       </div>
-      <div className={styles.file} data-night-hold={nightHold && out?.devSeasons.length ? '' : undefined}>
-        <div className={styles.identity}><strong>{prospect.name}</strong><span data-night-held>{prospect.pos}{state ? ` · Age ${out?.ageAfter ?? state.age}` : ''}</span></div>
+      <div className={styles.file} data-prospect-file>
+        <div className={styles.identity}><strong>{prospect.name}</strong><span>{prospect.pos}{state ? ` · Age ${after?.ageAfter ?? state.age}` : ''}</span></div>
         <dl className={styles.meters}>
-          <div><dt>Rating</dt><dd data-night-held>{out?.ratingAfter ?? state?.rating ?? prospect.rating}</dd></div>
+          <div><dt>Rating</dt><dd>{after?.ratingAfter ?? state?.rating ?? prospect.rating}</dd></div>
           <div><dt>Potential</dt><dd>{prospect.pot}</dd></div>
-          <div><dt>Health</dt><dd data-night-held>{out?.devSeasons.length ? 100 : state?.health ?? 100}</dd></div>
+          <div><dt>Health</dt><dd>{after?.devSeasons.length ? 100 : state?.health ?? 100}</dd></div>
           {state && <div><dt>Draft stock</dt><dd>{state.stock}<small>/100</small></dd></div>}
         </dl>
       </div>

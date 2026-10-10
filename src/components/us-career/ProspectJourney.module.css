@@ -60,8 +60,8 @@
 .history p { margin: 5px 0; }
 .history > div > span { color: #405c72; }
 @keyframes prospect-stamp { from { transform: scale(.96); opacity: .5; } to { transform: scale(1); opacity: 1; } }
-/* Round 1220, draft night. While the picks are still arriving, the words above the board that give the ending away (the title, the club, the numbers after the minors) wait for the closing row on the board's own clock, handed in as --night-hold. The hold is an animation and nothing else: there is no base rule at opacity 0, so anything that stops it (less motion, the rule at the foot of this file) leaves the words visible. It sits on the title and the club line themselves, not on .stageCopy, whose own arrival animation would outrank it. */
-.stage[data-night-hold] h2, .stage[data-night-hold] .stageCopy > p:last-child, .file[data-night-hold] [data-night-held] { animation: prospect-night-hold 300ms ease-out var(--night-hold, 0s) both; }
+/* Round 1220, draft night. While the picks are still arriving, the words above the board that give the ending away (the title and the club) wait for the closing row on the board's own clock, handed in as --night-hold. The hold is an animation and nothing else: there is no base rule at opacity 0, so anything that stops it (less motion, the rule at the foot of this file) leaves the words visible. It sits on the title and the club line themselves, not on .stageCopy, whose own arrival animation would outrank it. The numbers in the file under the stage are not faded: the journey prints the ones from before the press until the row has landed. */
+.stage[data-night-hold] h2, .stage[data-night-hold] .stageCopy > p:last-child { animation: prospect-night-hold 300ms ease-out var(--night-hold, 0s) both; }
 @keyframes prospect-night-hold { from { opacity: 0; } to { opacity: 1; } }
 .playArea [data-night-board], .playArea [data-lottery-reveal] { border-color: var(--line); background: #fff; color: var(--ink); }
 .playArea [data-night-board] :global(.text-foreground), .playArea [data-lottery-reveal] :global(.text-foreground) { color: var(--ink); }
