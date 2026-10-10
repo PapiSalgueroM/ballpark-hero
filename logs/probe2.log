@@ -1,0 +1,6 @@
+PART 1: 580 base made saves read by 14 readers on both trees. Differences by sport and reader: none
+PART 2: 4060 saved lines stayed byte for byte through three more seasons on the head (reds above if not); 1717 new lines checked for their slate; NBA and NFL careers played on, same on both trees: 256 of 256
+PART 3: 11094 seasons, each played from one copy on both engines. Class of season => fields that differ: count
+PART 3 examples (the first of each class that moved):
+probe2: green. Old saves read the same, saved lines stay, the NBA and the NFL did not move.
+probe2: green. Old saves read the same, saved lines stay, the NBA and the NFL did not move.

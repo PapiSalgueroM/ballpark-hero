@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+ctl-all: n=0; f=0; for k in $(US_LEDGER_CONTROL=list node scripts/simUsSeasonLedger.mjs); do n=$((n+1)); US_LEDGER_CONTROL=$k node scripts/simUsSeasonLedger.mjs | tail -1 | grep -q "FIRED, red at exactly" && f=$((f+1)) || echo "NOT FIRED: $k"; done; echo "controls fired: $f of $n"; [ "$f" = "$n" ]
+ctl-unknown: US_LEDGER_CONTROL=nosuchcontrol node scripts/simUsSeasonLedger.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simAwards: node scripts/simAwards.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+hall-nhl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000
+hall-mlb: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000
+hall-nfl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl 2000
+hall-nba: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba 2000
+probe2: git worktree add -q /tmp/base 980654facb2d41a6c9ddc029c43710178b9d49b8 && node .rc/x/probe2.mjs /tmp/base . 10 "$RC_OUT" > "$RC_OUT/probe2.log" 2>&1; s=$?; grep -E "^PART [123]|^probe2|RED" "$RC_OUT/probe2.log" | cut -c1-400 | head -12; tail -1 "$RC_OUT/probe2.log" | cut -c1-200; exit $s

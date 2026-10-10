@@ -1,0 +1,85 @@
+simCareerHall nfl: 2000 careers, 0 crashed, seed base
+  hof 25.1% (501), first ballot 67.7% of them; bottom third 39.5%, top third 99.4%
+  outcomes {"inducted":501,"waiting":991,"notOnBallot":508}; jerseys 747; talk reached 87.1% of careers
+  ladder 0.345 0.400 0.476 0.539 0.618 0.683 0.750 0.824 0.893 0.964; smallest step 0.054
+  deciles 0.36 0.42 0.44 0.40 0.66 0.68 0.82 0.98 1.00 1.00; cuts 0.35 0.36 0.39 0.45 0.44 0.46 0.45 0.41 0.36; smallest cut 0.352
+  misses: iff 0, outcome 0, table [], offset 0, promise 0/623, draws 0, notSame 0, sides 0, talk 0+0, jersey 0
+  talk timing: talks a career, median 1; first talk at 35; career ends at 38; non finite scores 0
+  board loop: 0 careers a policy, 0 crashed; talks answered one more year 0; identity misses 0
+  ends: retire now 0, talk farewells 0, deck farewells 0, misses 0
+  once: 0 offseasons with the talk (0 asked mid-summer, 0 after a banned year), 0 offered a retirement card; listed ids seen 0, unseen [lifeB_retireHealthy,lifeB_retirementTour], farewell cards not listed [] (decks probed on 0 careers)
+  seek: 0 talks caught in the board loop, 0 forged summers on a deck retirement card, 0 landed on it with no hold-out (at card 1 0, at a later card 0), 0 with the board's
+  jersey (deck): 0 recorded, 0 at a club other than the one with most seasons, 0 misnamed; synthetic 0, 0 missed; wait answers 0, 0 wrote a club
+  era: verified from the Class of 2027; {"boundary":{"below":100,"above":100}}; misses 0
+  16 never below: table misses []; 0 of 2000 careers lower on 2; 1072 moved up, 663 up a verdict tier, 111 newly in the Hall
+  19 (b) Hall share 19.5 -> 25.1 percent; legacy score median 293 -> 355, mean 375.3 -> 441.5 (points paid)
+     by position: QB 58.0 -> 58.0, RB 10.0 -> 10.8, WR 24.8 -> 25.6, TE 10.4 -> 21.6, LB 12.0 -> 22.4, CB 4.4 -> 16.8, EDGE 28.4 -> 37.2, K 8.0 -> 8.0
+  15 (d) calibration 2 as recorded: the table and the rules equal the recording; 0 of 20 recorded saves are told something else on 2 (9 of them with a standout)
+  17 (a) marks: 13 standout cells; at or over from, pooled 10.09 percent (band 9.37 to 10.91), cells out of 4.2 to 17.4: []; at or over to, pooled 0.77 percent (band 0.12 to 1.48)
+  17 (b) half rule and ledger: 0 misses []
+     ramps (width in seasons at the from mark's own rate, to over the median): QB passYds 1.7s x1.26 floor, QB passTd 1.8s x1.32, RB rushYds 1.9s x1.47, RB rushTd 2.1s x1.51, WR rec 1.9s x1.42 top 150, WR recYds 2.0s x1.44 top 150, TE rec 1.9s x1.39, TE recYds 1.9s x1.39, TE recTd 1.8s x1.39, LB tackles 1.9s x1.40, LB picks 3.2s x1.62, CB picks 3.2s x1.59, CB passDef 2.2s x1.45
+  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: QB passYds 100>100, QB passTd 100>100, RB rushYds 62>77, RB rushTd 69>77, WR rec 92>100, WR recYds 100>100, TE rec 38>100, TE recYds 54>100, TE recTd 46>92, LB tackles 54>100, LB picks 23>77, CB picks 15>92, CB passDef 23>100
+     pooled over the cells under 90 percent on 1: 50 -> 106 of 117 careers, a gain of 47.9 points (needs 16.8); over the first ballot line (900) on 2 and not on 1: 44 careers (3 of them newly in the Hall)
+     the standout's own part, every cell: 124 in with the standout taken out, 158 with it, of 169, a gain of 20.1 points (needs 5.9)
+  17 (d) cap: 0 of 2000 careers off the restated score on 2; the standout paid on 173
+  19 (a) base: median base credit TE 110.4 (109.2 to 114.7), LB 108.1 (106.4 to 112.3), CB 110.5 (105.3 to 114.1), EDGE 109.7 (105.6 to 111.8); misses []
+  19 (c) words: example CB picks 36 to 59: +331 on 2, +0 on 1; card lines off 0 of 4000 records (146 name a standout, 27 had one worth under 30 points and stay quiet); longest line the table can print 183 characters (budget 200); misses []
+  18 anchors: 22 men in 25 rows ({"first":8,"later":9,"never":4} men on the main ballot, 1 by a committee, printed apart); the majority call is first from a score of 629
+     what the agreement's controls can reach here: a real never or later in the books reading 4, and the band with every push tripled breaks (standoutbig can fire); agreeing on 2 by the push alone 1, and the band with every push switched off holds (standoutgone CANNOT fire)
+     nfl-rec-1 WR rec real first: raw 2124 first > 2319 first; books 2124 first > 2319 first
+     nfl-rec-2 TE rec real first: raw 1087 first > 1623 first; books 1087 first > 1621 first
+     nfl-rec-3 WR rec real later: raw 777 first > 777 first; books 830 first > 1025 first
+     nfl-rec-4 WR rec real later: raw 575 later > 575 later; books 626 first > 776 first
+     nfl-rec-5 WR rec real later: raw 294 never > 294 never; books 349 never > 544 later
+     nfl-recTd-1 WR recTd real first: raw 2124 first > 2319 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-recTd-2 WR recTd real first: raw 863 first > 863 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-recTd-3 WR recTd real later: raw 1029 first > 1029 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-recTd-4 WR recTd real later: raw 575 later > 575 later; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-recTd-5 WR recTd real later: raw 777 first > 777 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-picks-1 CB picks real later: raw 626 first > 1124 first; books 626 first > 1005 first
+     nfl-picks-2 CB picks real first: raw 1397 first > 1882 first; books 1397 first > 1776 first
+     nfl-picks-3 CB picks real never (committee later, outside the count): raw 315 never > 792 first; books 315 never > 694 first
+     nfl-picks-4 CB picks real first: raw 958 first > 1435 first; books 958 first > 1337 first
+     nfl-picks-5 CB picks real first: raw 1192 first > 1667 first; books 1192 first > 1571 first
+     nfl-sacks-1 EDGE sacks real first: raw 1869 first > 1949 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-sacks-2 EDGE sacks real first: raw 1905 first > 1984 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-sacks-3 EDGE sacks real later: raw 465 never > 529 later; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-sacks-4 EDGE sacks real later: raw 465 never > 525 later; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-sacks-5 EDGE sacks real later: raw 1075 first > 1132 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-fgMade-1 K fgMade real later: raw 725 first > 725 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-fgMade-2 K fgMade real never: raw 403 never > 403 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-fgMade-3 K fgMade real never: raw 231 never > 231 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-fgMade-4 K fgMade real never: raw 439 never > 439 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nfl-fgMade-5 K fgMade real never: raw 220 never > 220 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     agreement, in or out and exact ballot, calibration 1 > 2: raw 21 > 23 and 15 > 17 of 24; books 8 > 9 and 5 > 6 of 9; decisions the anchors made: ["WR touchdown catches standout dropped","K field goals standout dropped","EDGE sacks standout dropped","WR receiving yards standout halved","WR catches standout halved"]
+     moved past his real ballot by calibration 2 (in for a real never, first for a real later, and read lower on 1), must be none: raw [], books []
+  15 (c) calibration rule: 0 misses over 13 cases and 2000 careers; engine careers stamped 2000
+  20 board stamp: 0 board careers retired, 0 stamped 2, 0 scored on another calibration
+  15 v1: 20 recorded saves (base 8fe82a4d), 0 read differently today; 0 of 2000 engine careers off the Round 123 formula on calibration 1
+  ok   crashes: 0 crashed of 2000
+  ok   iff: 0 disagree with the engine's own legacyOf, 501 inducted
+  ok   outcome: 0 careers outside the Hall with the wrong outcome; 508 off the ballot, 991 on it, 0 early fall offs
+  ok   table: rules off the audit table: [], 0 careers on the wrong first class
+  ok   rises: smallest of the nine decile cuts 0.352 (needs 0.06), smallest ladder step 0.054 (needs over 0.015)
+  ok   promise: 0 of 623 promised first ballots missed
+  ok   keyed: 0 Math.random draws, 0 records that changed on a second run
+  ok   sides: 0 ballots on the wrong side of a rule
+  ok   talk: 0 talks off the rule, 0 before the age, reached 87.1 percent (needs 70)
+  ok   answers: 0 answers that did not do what the button says; answered {"retireNow":434,"oneMore":440,"farewell":432}
+  ok   jersey: 0 jerseys off the rule or misnamed, 0 named by a bare club id, 747 retired
+  ok   v1replay: 0 readings of 20 recorded saves differ from the version 1 recording
+  ok   v2replay: calibration 2 against its recording: the table and the rules equal, 0 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 3)
+  ok   v1formula: 0 of 2000 engine careers score off the Round 123 formula on calibration 1
+  ok   calrule: 0 readings off the calibration rule; 2000 of 2000 engine careers stamped
+  ok   neverbelow: calibration 2 drops or changes [] of calibration 1; 0 of 2000 careers score lower, lose a tier or leave the Hall on 2 (1072 moved up)
+  ok   marks: at or over from: pooled 10.09 percent, 0 cells out of band []; at or over to: pooled 0.77 percent
+  ok   halfrule: 0 cells off the half rule, the ledger's marks or the ramp floor []
+  ok   standoutgain: top 5 percent by family: 50 -> 106 of 117 in the Hall, a gain of 47.9 points (needs 16.8); owed to the standout alone 20.1 points (needs 5.9)
+  ok   standoutcap: 0 careers off the restated score on 2 (one family, capped); the standout paid on 173
+  ok   base: 0 base misses []
+  ok   words: 0 misses in the rule, the example or the card []; 0 card lines off
+  ok   anchorshape: 0 misses in the ledger's shape []; 66 anchors in the file, sports built [mlb, nba, nhl, nfl]
+  ok   anchors: agreement on 2 against 1: raw in or out 21 > 23, exact 15 > 17; books in or out 8 > 9, exact 5 > 6 (must not fall, and must stay within two of the measured {"raw2":{"inOut":23,"exact":17,"n":24},"books2":{"inOut":9,"exact":6,"n":9},"realNotFirstInBooks":4,"pushAlone":1,"standoutbigFires":true,"standoutgoneFires":false,"read":"After five decisions (a receiver's touchdown catches, a kicker's field goals and an edge rusher's sacks dropped; a receiver's yards and catches halved). Calibration 1 agrees on raw 21 and 15 of 24 and on books 8 and 5 of 9. A row is a man on a list, so 24 rows are 21 men on the main ballot. Before the last three decisions the books reading held 14 rows (11 and 7 on 1, 14 and 7 on 2) and three real later men who were out on 1 went straight in on the first ballot on 2 (nfl-rec-5, nfl-sacks-3, nfl-sacks-4); the count of agreements could not see it, the moved past rule does, and the closing pass of 2026-10-08 decided on it. Now the two edge rushers are read later by the base alone (529 and 525 raw) and nfl-rec-5 later at 544 in the books, the ballot the real Hall gave each. The other three real later men of the books reading (nfl-rec-3, nfl-rec-4, nfl-picks-1) are first on calibration 1 already, on hardware, and no push decides their call. The corner the modern era vote never took (nfl-picks-3, chosen by a seniors committee, printed apart and outside the count) goes straight in on calibration 2, 792 raw and 694 in the books: the rule keeps him out of every count, so nothing was decided on him, and he is the lead's to weigh. With every push tripled nfl-rec-5 goes first again (moved past), so standoutbig fires here. With every push switched off the band holds (one man agrees by the push alone), so standoutgone refuses. decisionback (the kicker's push put back) and basebig (the edge rusher's base five times its size: the two real later edge rushers go first in the raw reading) fire too."}); a real never or later in the books reading 4, agreeing by the push alone 1, the band breaks with every push tripled true, with every push off false (all four as recorded: true); moved past a real ballot by calibration 2: raw 0, books 0 (must be none)
+  ok   anchorcalls: 0 anchor readings whose majority call is not the one firstBallotChance gives []
+  ok   hallshare: Hall share 19.5 -> 25.1 percent (ceiling 28.3)
+simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)

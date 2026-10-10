@@ -1,0 +1,16 @@
+ledger exit=0 6s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+ctl-unknown exit=2 0s | unknown US_LEDGER_CONTROL "nosuchcontrol", expected one of: mlbyear, mlbsum, mlbid, mlbspan, mlbclub, mlbspanyear, mlbrivalswap, mlbfirstround, mlbown, mlbdiv, mlbformula
+simUsBoardParity exit=0 61s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simNhlCareer exit=0 23s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+tsc exit=0 94s | 
+simMlbCareer exit=0 27s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simAwards exit=0 9s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simUsSeasonCentre exit=0 27s | simUsSeasonCentre: 98 checks, 0 failed
+hall-nhl exit=3 5s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+hall-mlb exit=3 9s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nfl exit=3 8s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nba exit=3 6s | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+simNbaAwardsSense exit=0 154s | simNbaAwardsSense: 171 checks, 0 failed (full size), 154s
+ctl-all exit=0 260s | controls fired: 59 of 59
+probe2 exit=0 164s | probe2: green. Old saves read the same, saved lines stay, the NBA and the NFL did not move.
