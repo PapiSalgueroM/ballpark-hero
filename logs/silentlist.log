@@ -1,0 +1,43 @@
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+In the job at Crystal Palace.
+1) The goal in order
+  [match phone] seed 3208792607, 1864 draws at kick off, digest d3b0b2c5 over 6255 characters of drawn match: Crystal Palace v Everton, goals of the first half 28' Hayden Hackney, 32' Jake O'Brien; own goals among them 0
+  the goal watched: 28' Hayden Hackney, against me; own goals in its half 0 of 2 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 31 frames it was up
+  ok    a tap on the card ended the hold (27 frames after it, none with the card)
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 244 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.04 over 24 frames of 21 labels; before match mode 1.63 at 6b1caa20, ratio 0.03
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace0 - 2EvertonPaused at 47'Back to", and the clock held at 47' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (47' to 48')
+5) The reload
+  (skipped under a control)
+2) Reduced motion
+  [match calm] seed 3208792608, 1799 draws at kick off, digest c5d9295b over 4603 characters of drawn match: Crystal Palace v Everton, goals of the first half none; own goals among them 0
+  the goal watched: 57' Thierno Barry, against me; own goals in its half 0 of 2 goals
+  ok    under reduced motion the score reads 0 - 1 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  [match wide] seed 3208792609, 1829 draws at kick off, digest 2e8ee4d0 over 5002 characters of drawn match: Crystal Palace v Everton, goals of the first half 5' Jaydee Canvot; own goals among them 0
+  Negative control: every GOAL! in the list beside the pitch is rewritten as it is drawn.
+  the goal watched: 5' Jaydee Canvot, for me; own goals in its half 0 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  FAIL: the list beside the pitch never said this goal (0 GOAL! lines all through 326 frames)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+      what was drawn: pass/pass 0 - 0 3' e882 x55 | pass/pass 0 - 0 4' e882 x44 | pass/pass 0 - 0 4' e693 x1 | pass/pass 0 - 0 4' e762 x1 | pass/pass 0 - 0 4' e604 x1 | pass/pass 0 - 0 4' e062 x1 | pass/pass 0 - 0 4' e693 x2 | pass/pass 0 - 0 4' e882 x10 | goal/plant 0 - 0 5' e882 x16 | goal/flight 0 - 0 5' e882 x30 | goal/net 1 - 0 card 5' e882 x15 | goal/net 1 - 0 card 5' e517 x27 | goal/net 1 - 0 card 5' e882 x38 | goal/net 1 - 0 card 6' e882 x25 | pass/pass 1 - 0 6' e882 x5 | pass/pass 1 - 0 6' e407 x1 | pass/pass 1 - 0 6' e122 x1 | pass/pass 1 - 0 6' e053 x1 | pass/pass 1 - 0 6' e882 x48 | pass/pass 1 - 0 7' e882 x4
+      the list at the end: 7'Throw in, Everton / 7'Throw in, Crystal Palace / 5'Scored. Jaydee Canvot / 5'Foul by Vitaliy Mykolenko / 4'Throw in, Crystal Palace
+      RED TO REPLAY: section 7 (wide), match digest 2e8ee4d0, the goal watched 5' Jaydee Canvot, for me
+      its save is in /home/runner/work/_temp/rc-out/files/silentlist-live-fit-save-wide.json (70977 bytes as stored). Replay that half with: LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/silentlist-live-fit-save-wide.json LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 2 GOAL! rewritten) and left the rest green.
