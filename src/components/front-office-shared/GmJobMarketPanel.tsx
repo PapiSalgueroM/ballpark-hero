@@ -32,7 +32,18 @@ export default function GmJobMarketPanel({ sport, facts }: GmPanelProps<GmCareer
   const { pack, market, deskOn, take, sitOut } = facts.career;
   const [help, setHelp] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
-  const [armed, setArmed] = useState<'take' | 'sit' | null>(null);
+  /*
+   * The first tap arms, the second acts, and an arm never outlives the market
+   * it was made on. The panel keeps its state across a save (the mount holds
+   * it), so an arm kept as a bare flag would still be set after a year out,
+   * and one more tap would play a second season with no first tap. So the arm
+   * carries the market it belongs to (the season and the years out, which a
+   * year out and a new job both move) and is dropped when the action fires.
+   */
+  const stamp = market ? `${market.season}|${market.seasonsOut}` : '';
+  const [arm, setArm] = useState<{ what: 'take' | 'sit'; stamp: string } | null>(null);
+  const armed = arm && arm.stamp === stamp ? arm.what : null;
+  const setArmed = (what: 'take' | 'sit' | null) => setArm(what ? { what, stamp } : null);
 
   if (!market) {
     return (
@@ -94,7 +105,7 @@ export default function GmJobMarketPanel({ sport, facts }: GmPanelProps<GmCareer
           <button
             type="button"
             data-gm-take={offer.teamId}
-            onClick={() => { if (armed === 'take') take(offer); else setArmed('take'); }}
+            onClick={() => { if (armed === 'take') { setArmed(null); take(offer); } else setArmed('take'); }}
             className={cn(
               'mt-2 min-h-[44px] w-full rounded-lg px-3 text-[11px] font-black',
               armed === 'take' ? 'bg-gold text-background' : 'bg-primary text-primary-foreground',
@@ -129,7 +140,7 @@ export default function GmJobMarketPanel({ sport, facts }: GmPanelProps<GmCareer
           <button
             type="button"
             data-gm-sit-out
-            onClick={() => { if (armed === 'sit') sitOut(); else setArmed('sit'); }}
+            onClick={() => { if (armed === 'sit') { setArmed(null); sitOut(); } else setArmed('sit'); }}
             className={cn(
               'min-h-[44px] w-full rounded-lg border px-3 text-[11px] font-bold',
               armed === 'sit' ? 'border-gold bg-gold text-background' : 'border-border text-foreground',

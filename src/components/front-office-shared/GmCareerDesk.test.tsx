@@ -117,6 +117,10 @@ describe('the job market panel', () => {
     fireEvent.click(container.querySelector('[data-gm-take]')!);
     expect(career.take).toHaveBeenCalledTimes(1);
     expect(career.take).toHaveBeenCalledWith(offer);
+    /* The arm is spent with the action: a third tap arms again and takes nothing. */
+    fireEvent.click(container.querySelector('[data-gm-take]')!);
+    expect(career.take).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('[data-gm-arm="take"]')).not.toBeNull();
   });
   it('stays out a year on the second tap only, and says when that opens the desk', () => {
     const career = binding(CLIMB, { deskOn: false });
@@ -133,6 +137,28 @@ describe('the job market panel', () => {
     expect(hostSitArmLine(career.market!, true)).not.toContain('opens your GM desk');
     fireEvent.click(button);
     expect(career.sitOut).toHaveBeenCalledTimes(1);
+    /* The arm is spent with the action: one more tap only arms again, it never plays a second year. */
+    expect(container.querySelector('[data-gm-arm="sit"]')).toBeNull();
+    fireEvent.click(container.querySelector('[data-gm-sit-out]')!);
+    expect(career.sitOut).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('[data-gm-arm="sit"]')).not.toBeNull();
+  });
+  it('drops an armed tap when the market under it changes, so no year out ever takes one tap', () => {
+    const before = firedFrom(['badly', 'missed', 'missed']);
+    const after: GmSeatBlock = { ...before, career: { ...before.career, seasonsOut: 1 } };
+    const first = binding(before);
+    const { container, rerender } = render(<GmJobMarketPanel {...panelProps(first)} />);
+    fireEvent.click(container.querySelector('[data-gm-sit-out]')!);
+    expect(container.querySelector('[data-gm-arm="sit"]')).not.toBeNull();
+    /* What a board does after a year out: the same panel, kept by the mount, over a new market. */
+    const second = binding(after);
+    expect(second.market!.seasonsOut).toBe(1);
+    rerender(<GmJobMarketPanel {...panelProps(second)} />);
+    expect(container.querySelector('[data-gm-arm="sit"]')).toBeNull();
+    fireEvent.click(container.querySelector('[data-gm-sit-out]')!);
+    expect(first.sitOut).not.toHaveBeenCalled();
+    expect(second.sitOut).not.toHaveBeenCalled();
+    expect(container.querySelector('[data-gm-arm="sit"]')).not.toBeNull();
   });
   it('offers no year out when the calls on the table are the last ones, and the line says so', () => {
     /* A top tier club's wreck: over the floor today, under it next year whatever
