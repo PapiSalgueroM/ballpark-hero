@@ -1,0 +1,52 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+ledger-via-runner: ONLY=simUsSeasonLedger node scripts/runAllSims.mjs
+ctl-list: US_LEDGER_CONTROL=list node scripts/simUsSeasonLedger.mjs
+ctl-unknown: US_LEDGER_CONTROL=nope node scripts/simUsSeasonLedger.mjs
+ctl-mlbyear: US_LEDGER_CONTROL=mlbyear node scripts/simUsSeasonLedger.mjs
+ctl-mlbsum: US_LEDGER_CONTROL=mlbsum node scripts/simUsSeasonLedger.mjs
+ctl-mlbid: US_LEDGER_CONTROL=mlbid node scripts/simUsSeasonLedger.mjs
+ctl-mlbspan: US_LEDGER_CONTROL=mlbspan node scripts/simUsSeasonLedger.mjs
+ctl-mlbclub: US_LEDGER_CONTROL=mlbclub node scripts/simUsSeasonLedger.mjs
+ctl-mlbspanyear: US_LEDGER_CONTROL=mlbspanyear node scripts/simUsSeasonLedger.mjs
+ctl-mlbrivalswap: US_LEDGER_CONTROL=mlbrivalswap node scripts/simUsSeasonLedger.mjs
+ctl-mlbfirstround: US_LEDGER_CONTROL=mlbfirstround node scripts/simUsSeasonLedger.mjs
+ctl-mlbown: US_LEDGER_CONTROL=mlbown node scripts/simUsSeasonLedger.mjs
+ctl-mlbdiv: US_LEDGER_CONTROL=mlbdiv node scripts/simUsSeasonLedger.mjs
+ctl-mlbformula: US_LEDGER_CONTROL=mlbformula node scripts/simUsSeasonLedger.mjs
+ctl-mlbhome: US_LEDGER_CONTROL=mlbhome node scripts/simUsSeasonLedger.mjs
+ctl-firstnull: US_LEDGER_CONTROL=firstnull node scripts/simUsSeasonLedger.mjs
+ctl-otherseason: US_LEDGER_CONTROL=otherseason node scripts/simUsSeasonLedger.mjs
+ctl-host: US_LEDGER_CONTROL=host node scripts/simUsSeasonLedger.mjs
+ctl-nhlfrom: US_LEDGER_CONTROL=nhlfrom node scripts/simUsSeasonLedger.mjs
+ctl-nhlpoint: US_LEDGER_CONTROL=nhlpoint node scripts/simUsSeasonLedger.mjs
+ctl-mlbrival: US_LEDGER_CONTROL=mlbrival node scripts/simUsSeasonLedger.mjs
+ctl-mlbplayoff: US_LEDGER_CONTROL=mlbplayoff node scripts/simUsSeasonLedger.mjs
+ctl-mlbscore: US_LEDGER_CONTROL=mlbscore node scripts/simUsSeasonLedger.mjs
+ctl-dash: US_LEDGER_CONTROL=dash node scripts/simUsSeasonLedger.mjs
+ctl-nosource: US_LEDGER_CONTROL=nosource node scripts/simUsSeasonLedger.mjs
+ctl-onesource: US_LEDGER_CONTROL=onesource node scripts/simUsSeasonLedger.mjs
+ctl-wiki: US_LEDGER_CONTROL=wiki node scripts/simUsSeasonLedger.mjs
+ctl-thincited: US_LEDGER_CONTROL=thincited node scripts/simUsSeasonLedger.mjs
+ctl-filled: US_LEDGER_CONTROL=filled node scripts/simUsSeasonLedger.mjs
+ctl-nhlyear: US_LEDGER_CONTROL=nhlyear node scripts/simUsSeasonLedger.mjs
+ctl-nhlgames: US_LEDGER_CONTROL=nhlgames node scripts/simUsSeasonLedger.mjs
+ctl-nhl84: US_LEDGER_CONTROL=nhl84 node scripts/simUsSeasonLedger.mjs
+ctl-nhlalign: US_LEDGER_CONTROL=nhlalign node scripts/simUsSeasonLedger.mjs
+ctl-nhlaligndiv: US_LEDGER_CONTROL=nhlaligndiv node scripts/simUsSeasonLedger.mjs
+ctl-nhlclubgames: US_LEDGER_CONTROL=nhlclubgames node scripts/simUsSeasonLedger.mjs
+ctl-nhllist: US_LEDGER_CONTROL=nhllist node scripts/simUsSeasonLedger.mjs
+ctl-nhlrules: US_LEDGER_CONTROL=nhlrules node scripts/simUsSeasonLedger.mjs
+ctl-thinlost: US_LEDGER_CONTROL=thinlost node scripts/simUsSeasonLedger.mjs
+ctl-nhlformula: US_LEDGER_CONTROL=nhlformula node scripts/simUsSeasonLedger.mjs
+ctl-nhlplayoff: US_LEDGER_CONTROL=nhlplayoff node scripts/simUsSeasonLedger.mjs
+ctl-nhlscore: US_LEDGER_CONTROL=nhlscore node scripts/simUsSeasonLedger.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+vitest-us: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts --testTimeout=300000 --hookTimeout=120000
+diffnames: git diff --name-status origin/main HEAD
+samecode: git diff --quiet origin/main HEAD -- src/lib src/components src/pages src/hooks src/test src/integrations src/types public index.html package.json package-lock.json vite.config.ts && echo "engines, pages, tests, public and packages are byte equal with origin/main"
