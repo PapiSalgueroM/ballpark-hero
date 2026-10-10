@@ -51,7 +51,7 @@ One presenter of a lottery reveal for every game that has one. It knows no sport
 |---|---|
 | `src/components/lottery/LotteryReveal.tsx` | the card: tiles in a fixed two column grid, a rule line, a "?", a continue button |
 | `src/lib/lotteryReveal.ts` | the pace, the row cleaner, the move words, the rule line built from a table |
-| `src/components/lottery/LotteryReveal.test.tsx` | 18 cases, jsdom and server rendered |
+| `src/components/lottery/LotteryReveal.test.tsx` | 19 cases, jsdom and server rendered |
 
 Proven on runner result `r1222-s1` for commit `538d90e6`: the type gate exit 0, vitest exit 0 (14 of 14),
 simRevealMoments exit 0 (19 files declare a keyframe, 52 animated classes named inside a reduced motion rule, 31
@@ -132,7 +132,7 @@ holds that with an allowlist.
 | `src/lib/gmLotteryNight.ts` | a saved order as lottery rows and words, and the rules behind the "?" |
 | `src/components/front-office-shared/GmLotteryCard.tsx` | a thin binding of the two to the one presenter |
 | `scripts/simGmDraftOrder.mjs`, `scripts/lib/gmDraftOrderHarness.mjs` | the harness: ten sections, 40 negative controls |
-| four test files beside the modules | 63 cases (order 27, night 17, lottery night 12, card 7) |
+| four test files beside the modules | 64 cases (order 27, night 17, lottery night 13, card 7) |
 
 ### What it does
 
@@ -360,6 +360,18 @@ For commit `bdebb085`, runner results `r1222-f1` and `r1222-f2`: the 24 rule fen
 simSchemaNames and simLeaderboardCaps need the live database, which a runner cannot reach, and simWritesAreSent
 could not drive Guess the Nation on a runner with the database blocked: none of the three is a result, and no
 file of this round is in any page.
+
+THE FIX PASS, after the reviews. The last commit that changes code is `bcd2f279`; the gates ran on `fffea80c`, which
+adds only this file to it. Runner result `r1222-fz1`, every line exit 0 unless said: the type gate; vitest, 109 of
+109 in six files (presenter 19, order 27, night 17, lottery night 13, card 7, gmPicks' own 26); simGmDraftOrder twice,
+602,997 checks both times; the 40 controls in three shards, "all 14 fired", "all 13 fired", "all 13 fired", each in
+exactly its own sections; a control name the harness does not know, exit 3 as it must; simSeasonCentreMotion ("17
+checks, 0 failed", the harness that was red on the first pass); simRevealMoments, simLiveScores, simHarnessAnchors,
+simNoRivalNames (0 findings), simStorageWrites, simGmPicks (1,199 checks), simNoInventedQuotes, simInventedNames,
+simNoInventedConduct, simGmDesk, simNbaDraftCapital, simOwnerMandateMotion, simTradeTalksMotion; and every file of
+the round against the base is an added one. Runner result `r1222-fzw`: the Chromium walk of the real card, exit 0,
+46 screenshots, 0 problems measured, animations end at 3,720 ms for 14 tiles at 390 and at 1,280 (the lib says
+3,720), the card the same size on every frame, and no chunk of the site's build carries the card.
 
 A RED ON MAIN, NOT THIS ROUND'S: simDraftNight section 5 fails for the NBA board ("NBA does not hand the captured
 rivals to buildDraftNight"). The same harness on the base commit `09df145a`, in the same runner request
