@@ -1,0 +1,55 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+ledger-via-runner: ONLY=simUsSeasonLedger node scripts/runAllSims.mjs
+ctl-list: US_LEDGER_CONTROL=list node scripts/simUsSeasonLedger.mjs
+ctl-unknown: US_LEDGER_CONTROL=nope node scripts/simUsSeasonLedger.mjs
+ctl-mlbyear: US_LEDGER_CONTROL=mlbyear node scripts/simUsSeasonLedger.mjs
+ctl-mlbsum: US_LEDGER_CONTROL=mlbsum node scripts/simUsSeasonLedger.mjs
+ctl-mlbid: US_LEDGER_CONTROL=mlbid node scripts/simUsSeasonLedger.mjs
+ctl-mlbspan: US_LEDGER_CONTROL=mlbspan node scripts/simUsSeasonLedger.mjs
+ctl-mlbown: US_LEDGER_CONTROL=mlbown node scripts/simUsSeasonLedger.mjs
+ctl-mlbdiv: US_LEDGER_CONTROL=mlbdiv node scripts/simUsSeasonLedger.mjs
+ctl-mlbformula: US_LEDGER_CONTROL=mlbformula node scripts/simUsSeasonLedger.mjs
+ctl-mlbrival: US_LEDGER_CONTROL=mlbrival node scripts/simUsSeasonLedger.mjs
+ctl-mlbplayoff: US_LEDGER_CONTROL=mlbplayoff node scripts/simUsSeasonLedger.mjs
+ctl-mlbscore: US_LEDGER_CONTROL=mlbscore node scripts/simUsSeasonLedger.mjs
+ctl-dash: US_LEDGER_CONTROL=dash node scripts/simUsSeasonLedger.mjs
+ctl-nosource: US_LEDGER_CONTROL=nosource node scripts/simUsSeasonLedger.mjs
+ctl-onesource: US_LEDGER_CONTROL=onesource node scripts/simUsSeasonLedger.mjs
+ctl-wiki: US_LEDGER_CONTROL=wiki node scripts/simUsSeasonLedger.mjs
+ctl-thincited: US_LEDGER_CONTROL=thincited node scripts/simUsSeasonLedger.mjs
+ctl-filled: US_LEDGER_CONTROL=filled node scripts/simUsSeasonLedger.mjs
+ctl-nhlyear: US_LEDGER_CONTROL=nhlyear node scripts/simUsSeasonLedger.mjs
+ctl-nhlgames: US_LEDGER_CONTROL=nhlgames node scripts/simUsSeasonLedger.mjs
+ctl-nhl84: US_LEDGER_CONTROL=nhl84 node scripts/simUsSeasonLedger.mjs
+ctl-nhlalign: US_LEDGER_CONTROL=nhlalign node scripts/simUsSeasonLedger.mjs
+ctl-nhllist: US_LEDGER_CONTROL=nhllist node scripts/simUsSeasonLedger.mjs
+ctl-nhlformula: US_LEDGER_CONTROL=nhlformula node scripts/simUsSeasonLedger.mjs
+ctl-nhlplayoff: US_LEDGER_CONTROL=nhlplayoff node scripts/simUsSeasonLedger.mjs
+ctl-nhlscore: US_LEDGER_CONTROL=nhlscore node scripts/simUsSeasonLedger.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+vitest-us: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeason.test.ts --testTimeout=300000 --hookTimeout=120000
+diffnames: git diff --name-status origin/main HEAD; echo ---; git diff --name-status origin/main...HEAD; echo ---; grep -rn 'usSeasonLedger' src scripts --include=*.ts --include=*.tsx --include=*.mjs --include=*.json -l
