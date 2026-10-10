@@ -1,0 +1,49 @@
+simCmLeagueBook: 5 careers x 2 seasons (default fleet, seed set 3), CONTROL penassistmine
+stream  20 of 20 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 7.8s with the book and this harness watching every entry, 6.9s with the book out and nothing watching
+        the book's own cost: 4 careers x 2 seasons took 6843ms with the book and 5794ms with it out (18.1% more)
+stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit
+shapes  credited rival goals 6208: forwards 55.3%, midfielders 35.1%, defenders 9.6%, keepers 0 goals
+        between other clubs (5936 goals), dealt against the weight: ATT 3222 vs 3292.0 (z -1.83), MID 1996 vs 1914.5 (z 2.26), DEF 565 vs 566.3 (z -0.06)
+        clubs with an eleven: assists 3718 on 6059 credited goals = 0.614 a goal (the rule 0.614, z 0.00); own goals 157 of 6216 = 2.53% (the rule 2.75%, z -1.08); every club: 3718 assists on 6208 credited goals = 0.599 a goal
+        every goal its own roll: one man took every goal in 226 of 1695 matches a club with an eleven scored two or more in = 13.3% (the weight says 12.9%, z 0.50)
+        unnamed goals 2781 (club weeks with no named eleven: 2512); my league matches 368, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 828 of 2116 club weeks, 9 of 26 rival clubs seen (Blackburn Rovers 7 men, 1 keepers; Bolton Wanderers 3 men, 0 keepers; Cardiff City 4 men, 1 keepers; Charlton Athletic 8 men, 1 keepers; Lincoln City 2 men, 0 keepers; Millwall 11 men, 0 keepers; ...)
+        no named eleven in bundesliga2: 1122 of 1156 club weeks, 18 of 19 rival clubs seen (Arminia Bielefeld 3 men, 1 keepers; Bochum 4 men, 0 keepers; Braunschweig 2 men, 1 keepers; Darmstadt 4 men, 0 keepers; Dynamo Dresden 1 men, 0 keepers; Elversberg 10 men, 1 keepers; ...)
+        no named eleven in laliga2010: 76 of 1444 club weeks, 1 of 19 rival clubs seen (Levante 10 men, 1 keepers)
+        no named eleven in mlsEast: 486 of 758 club weeks, 9 of 14 rival clubs seen (Atlanta United 11 men, 0 keepers; CF Montréal 7 men, 1 keepers; Charlotte FC 10 men, 1 keepers; D.C. United 6 men, 0 keepers; FC Cincinnati 6 men, 1 keepers; Nashville SC 7 men, 0 keepers; ...)
+        top ten of the Goals board held by forwards and wingers: 8.90 on the book, 5.30 on the old race, rise 3.60 (floor 1.5) over 10 seasons
+names   21435 checks; 4 purchases probed of 4 saves kept (the best scorer of the rivals signed at week 22, twelve entries played on)
+        the book against the report of 366 league matches of mine: 440 goal lines, 423 naming a man of that club's roster (each on his row), 12 naming nobody its roster holds, 44 from the spot or a free kick, 186 assists (each by a man on their pitch); 2 matches not judged, the opponent played twice in the entry
+oldsave 766 checks: 4 saves with no book finished on the candidate and on the book out engine, the season after each, and six unreadable books
+doors   2439 checks: three takeovers and two joined jobs (season one and season three), the law at the handover and after every entry to the end of the season
+dailies 50 checks: 4 Hot Seat dates played to a verdict, handed over and played on, 3 Deadline Day dates, each state byte equal to the book out engine's
+boards  by league, the book against the old race on the same seasons (penalties and free kicks to the taker)
+        premier      20 clubs,  2 seasons: top scorer mean 30.0 (31 29), old race mean 26.0, most assists mean 12.0, leading keeper's clean sheets mean 16.0
+        championship 24 clubs,  2 seasons: top scorer mean 38.0 (36 40), old race mean 40.0, most assists mean 16.0, leading keeper's clean sheets mean 23.5
+        bundesliga2  18 clubs,  2 seasons: top scorer mean 16.5 (20 13), old race mean 26.5, most assists mean 9.5, leading keeper's clean sheets mean 14.5
+        laliga2010   20 clubs,  2 seasons: top scorer mean 31.5 (36 27), old race mean 27.5, most assists mean 13.0, leading keeper's clean sheets mean 22.5
+        mlsEast      15 clubs,  2 seasons: top scorer mean 20.0 (18 22), old race mean 22.5, most assists mean 9.0, leading keeper's clean sheets mean 9.5
+        38 game leagues: 4 seasons, top scorer mean 30.75, standard deviation 3.34, standard error 1.67; old race mean 26.75
+        34 game leagues: 2 seasons, top scorer mean 16.50, standard deviation 3.50, standard error 2.47; old race mean 26.50
+        46 game leagues: 2 seasons, top scorer mean 38.00, standard deviation 2.00, standard error 1.41; old race mean 40.00
+        28 game leagues (15 clubs): 2 seasons, top scorer mean 20.00, standard deviation 2.00, standard error 1.41; old race mean 22.50
+        the top scorer was a: ATT 10, MID 0, DEF 0 (of 10 seasons)
+        the old race on the same seasons: 5709 of 9147 rival goals given to anybody (62.4%), of those forwards 53.9%, midfielders 46.1%; the book names a man for 67.9% and marks 158 own goals and 2781 unnamed
+        a Clean sheets board of every man (keepers and defenders): its top ten holds men of 2.20 clubs and 2.00 keepers on average
+        a back four picked by clean sheets + goals + assists: 3.10 men of one club on average; by goals + assists (club clean sheets, then table place, to split): 2.00, with 0.00 of the four on no goal and no assist
+law     4 weeks I did not play in which the rest of the round did (a league with an odd number of clubs), 26 club entries holding two matches of one club, 3 club seasons whose clean sheets are judged on a range for it
+law     10976 checks over 427 entries of 5 careers, and 91 entries of 2 seasons with the video referee on (84 league matches of mine, 63 reviews, 0 reports whose lines did not add up to the score)
+green stream   20 checks
+green law      10976 checks
+RED   names    21435 checks, 34 failed
+        Everton (now, seed 28406) season 1 week 20: 1 assists for Fulham on 0 goals that may carry one (1 from the spot or a free kick)
+        Everton (now, seed 28406) season 1 week 20: Kevin of Fulham is given 1 assist(s), and was on their pitch for 0 goal(s) he could have set up
+        Everton (now, seed 28406) season 1 week 48: 2 assists for Fulham on 0 goals that may carry one (2 from the spot or a free kick)
+        Everton (now, seed 28406) season 1 week 48: Gonzalo García of Fulham is given 1 assist(s), and was on their pitch for 0 goal(s) he could have set up
+        Everton (now, seed 28406) season 1 week 48: Josh King of Fulham is given 1 assist(s), and was on their pitch for 0 goal(s) he could have set up
+green shapes   8 checks
+green oldsave  766 checks
+green doors    2439 checks
+green dailies  50 checks
+simCmLeagueBook: CONTROL penassistmine FIRED: section names went red (34 failures) and no other section did (48s)
