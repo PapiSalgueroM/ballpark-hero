@@ -1,0 +1,9 @@
+A	.github/workflows/lane-remote-check.yml
+A	.rc/request.txt
+A	.rc/run.sh
+A	.rc/x/mut.mjs
+A	docs/audits/ROUND-1211-NOTES.md
+A	scripts/data/usSeasonSources1211.json
+A	scripts/simUsSeasonLedger.mjs
+A	src/data/usSeasonLedgerMlb.ts
+A	src/data/usSeasonLedgerNhl.ts
