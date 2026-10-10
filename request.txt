@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+sweepGames-cm: ENGINES=chromium ONLY=/club-manager,/manager-hot-seat,/deadline-day node scripts/sweepGames.mjs

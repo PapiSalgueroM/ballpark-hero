@@ -1,0 +1,22 @@
+sweeping 183 routes (145 games, 38 other pages)
+
+== chromium/phone ==
+  ...40 checks
+  ...80 checks
+  ...120 checks
+  ...160 checks
+
+== chromium/tablet ==
+  ...200 checks
+  ...240 checks
+  ...280 checks
+  ...320 checks
+  ...360 checks
+
+== chromium/desktop ==
+  ...400 checks
+  ...440 checks
+  ...480 checks
+  ...520 checks
+
+Swept 183 routes across 1 engines and 3 viewports (549 checks). 0 findings.
