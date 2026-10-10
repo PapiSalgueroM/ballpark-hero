@@ -1,0 +1,1 @@
+probe2 exit=0 0s | probe: done (it asserts nothing; read the lines above).
