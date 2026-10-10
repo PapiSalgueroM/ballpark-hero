@@ -1,0 +1,121 @@
+{
+ "home": {
+  "keeper (saveKeeper.ts)": [
+   "index-BYq3hXLz.js"
+  ],
+  "keeper card (BrokenSaveRestore.tsx)": [
+   "WhatsNew-bguvJ4mW.js",
+   "index-BYq3hXLz.js"
+  ],
+  "law score+story (gameLaws)": [
+   "nfl-xmQKod73.js"
+  ],
+  "presenter (LotteryReveal.tsx)": [
+   "DraftNightSequence-DaNPzBEg.js"
+  ],
+  "presenter lib (lotteryReveal.ts)": [
+   "DraftNightSequence-DaNPzBEg.js"
+  ],
+  "draft order rules (data/gmDraftOrder/rules.ts)": [],
+  "lottery night (gmLotteryNight.ts)": [],
+  "GM lottery card (GmLotteryCard.tsx)": [],
+  "GM draft night (gmDraftNight.ts)": [],
+  "desk host (gmDeskHost.ts)": [],
+  "draft night mount (DraftNightSequence.tsx, Round 1220)": [
+   "DraftNightSequence-DaNPzBEg.js"
+  ]
+ },
+ "table": {
+  "/": {
+   "total": 247288,
+   "n": 3,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/front-office": {
+   "total": 369015,
+   "n": 34,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/nba-front-office": {
+   "total": 384289,
+   "n": 37,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/mlb-front-office": {
+   "total": 369983,
+   "n": 36,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/nhl-front-office": {
+   "total": 371452,
+   "n": 38,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/nfl-my-career": {
+   "total": 487353,
+   "n": 47,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/nba-my-career": {
+   "total": 574948,
+   "n": 48,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/mlb-my-career": {
+   "total": 558015,
+   "n": 47,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/nhl-my-career": {
+   "total": 561240,
+   "n": 47,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/soccer-career": {
+   "total": 825307,
+   "n": 45,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/club-manager": {
+   "total": 597233,
+   "n": 39,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/stadium-tycoon": {
+   "total": 305709,
+   "n": 23,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  },
+  "/minefield": {
+   "total": 297188,
+   "n": 20,
+   "watched": [
+    "index-BYq3hXLz.js"
+   ]
+  }
+ }
+}

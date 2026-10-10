@@ -1,0 +1,37 @@
+[head] 505 js chunks in /home/runner/work/ballpark-hero/ballpark-hero/dist
+  keeper (saveKeeper.ts): index-BYq3hXLz.js (235.3K gz, 775K raw)
+  keeper card (BrokenSaveRestore.tsx): WhatsNew-bguvJ4mW.js (105.2K gz, 329K raw), index-BYq3hXLz.js (235.3K gz, 775K raw)
+  law score+story (gameLaws): nfl-xmQKod73.js (8.2K gz, 20K raw)
+  presenter (LotteryReveal.tsx): DraftNightSequence-DaNPzBEg.js (5.0K gz, 13K raw)
+  presenter lib (lotteryReveal.ts): DraftNightSequence-DaNPzBEg.js (5.0K gz, 13K raw)
+  draft order rules (data/gmDraftOrder/rules.ts): IN NO CHUNK
+  lottery night (gmLotteryNight.ts): IN NO CHUNK
+  GM lottery card (GmLotteryCard.tsx): IN NO CHUNK
+  GM draft night (gmDraftNight.ts): IN NO CHUNK
+  desk host (gmDeskHost.ts): IN NO CHUNK
+  draft night mount (DraftNightSequence.tsx, Round 1220): DraftNightSequence-DaNPzBEg.js (5.0K gz, 13K raw)
+  /                     241.5K gz in   3 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /front-office         360.4K gz in  34 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /nba-front-office     375.3K gz in  37 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /mlb-front-office     361.3K gz in  36 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /nhl-front-office     362.7K gz in  38 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /nfl-my-career        475.9K gz in  47 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /nba-my-career        561.5K gz in  48 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /mlb-my-career        544.9K gz in  47 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /nhl-my-career        548.1K gz in  47 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /soccer-career        806.0K gz in  45 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /club-manager         583.2K gz in  39 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /stadium-tycoon       298.5K gz in  23 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  /minefield            290.2K gz in  20 chunks; of the watched chunks it downloads: index-BYq3hXLz.js
+  which library each page got: 
+    keeper (saveKeeper.ts): / /front-office /nba-front-office /mlb-front-office /nhl-front-office /nfl-my-career /nba-my-career /mlb-my-career /nhl-my-career /soccer-career /club-manager /stadium-tycoon /minefield
+    keeper card (BrokenSaveRestore.tsx): / /front-office /nba-front-office /mlb-front-office /nhl-front-office /nfl-my-career /nba-my-career /mlb-my-career /nhl-my-career /soccer-career /club-manager /stadium-tycoon /minefield
+    law score+story (gameLaws): no page of the list
+    presenter (LotteryReveal.tsx): no page of the list
+    presenter lib (lotteryReveal.ts): no page of the list
+    draft order rules (data/gmDraftOrder/rules.ts): no page of the list
+    lottery night (gmLotteryNight.ts): no page of the list
+    GM lottery card (GmLotteryCard.tsx): no page of the list
+    GM draft night (gmDraftNight.ts): no page of the list
+    desk host (gmDeskHost.ts): no page of the list
+    draft night mount (DraftNightSequence.tsx, Round 1220): no page of the list

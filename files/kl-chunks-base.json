@@ -1,0 +1,112 @@
+{
+ "home": {
+  "keeper (saveKeeper.ts)": [],
+  "keeper card (BrokenSaveRestore.tsx)": [
+   "index-Q9OVxNaQ.js"
+  ],
+  "law score+story (gameLaws)": [
+   "nfl-B5Yg8TKc.js"
+  ],
+  "presenter (LotteryReveal.tsx)": [],
+  "presenter lib (lotteryReveal.ts)": [],
+  "draft order rules (data/gmDraftOrder/rules.ts)": [],
+  "lottery night (gmLotteryNight.ts)": [],
+  "GM lottery card (GmLotteryCard.tsx)": [],
+  "GM draft night (gmDraftNight.ts)": [],
+  "desk host (gmDeskHost.ts)": [],
+  "draft night mount (DraftNightSequence.tsx, Round 1220)": []
+ },
+ "table": {
+  "/": {
+   "total": 245398,
+   "n": 3,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/front-office": {
+   "total": 367125,
+   "n": 34,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/nba-front-office": {
+   "total": 382402,
+   "n": 37,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/mlb-front-office": {
+   "total": 368096,
+   "n": 36,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/nhl-front-office": {
+   "total": 369561,
+   "n": 38,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/nfl-my-career": {
+   "total": 479001,
+   "n": 47,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/nba-my-career": {
+   "total": 566558,
+   "n": 48,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/mlb-my-career": {
+   "total": 549652,
+   "n": 47,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/nhl-my-career": {
+   "total": 552879,
+   "n": 47,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/soccer-career": {
+   "total": 814256,
+   "n": 45,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/club-manager": {
+   "total": 593424,
+   "n": 39,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/stadium-tycoon": {
+   "total": 303827,
+   "n": 23,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  },
+  "/minefield": {
+   "total": 295304,
+   "n": 20,
+   "watched": [
+    "index-Q9OVxNaQ.js"
+   ]
+  }
+ }
+}

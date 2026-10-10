@@ -1,0 +1,9 @@
+# keeper-libs reviewer, request C: chunks of head and base, my walk of the card and the error page, the two committed storage walks
+#!serve
+#!playwright
+#!serial
+chunks-head: node .rc/x/klChunks.mjs
+walk: node .rc/x/klRealFix.mjs both && node .rc/x/klWalk.mjs; s=$?; git checkout -- scripts; exit $s
+blocked: node scripts/playStorageBlocked.mjs
+corrupt: node scripts/playCorruptSaves.mjs
+chunks-base: git worktree add -q /tmp/base origin/release-at-gate && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KL_DIST=/tmp/base-dist KL_TAG=base node .rc/x/klChunks.mjs

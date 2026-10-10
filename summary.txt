@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+chunks-head exit=0 63s |     draft night mount (DraftNightSequence.tsx, Round 1220): no page of the list
+walk exit=0 114s | klWalk: done. 0 line(s) marked FINDING?. Screenshots and kl-walk.txt are in RC_OUT.
+blocked exit=0 271s | playStorageBlocked: 826 checks, 0 failed
+corrupt exit=0 138s | playCorruptSaves: green. No broken save traps a long game.
+chunks-base exit=0 92s |     draft night mount (DraftNightSequence.tsx, Round 1220): no page of the list

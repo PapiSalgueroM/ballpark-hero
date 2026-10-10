@@ -1,0 +1,214 @@
+klRealFix: scripts/lib/realSaves.mjs rewritten in this checkout (arm both).
+klRealFix: soccer seed 0: 2 seasons played, plan {"version":1,"receipts":[],"plan":{"year":2024,"club":"Everton","choices":{"tactics":"finisher"}}}, wheel on the save: no
+klRealFix: nfl seed 0: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"nfl","y
+klRealFix: nba seed 0: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"nba","y
+klRealFix: mlb seed 0: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"mlb","y
+klRealFix: nhl seed 0: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"nhl","y
+klRealFix: soccer seed 1: 2 seasons played, plan {"version":1,"receipts":[],"plan":{"year":2024,"club":"Sevilla","choices":{"tactics":"finisher"}}}, wheel on the save: no
+klRealFix: nfl seed 1: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"nfl","y
+klRealFix: nba seed 1: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"nba","y
+klRealFix: mlb seed 1: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"mlb","y
+klRealFix: nhl seed 1: plan on the save: {"workload":"push","tactics":"normal","expectation":"steady","partnership":"normal","bonus":"normal","reinvention":"normal","sport":"nhl","y
+real saves built: soccer 16222,20305 chars, nfl 888,907, club manager 58474,54233
+
+JOURNEY 1 /soccer-career at 390
+   shot kl-soccer-arrive-390.png
+   arrival: card at 16,594,358,234 of 390x844, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z40 [0,760,390,85] flex items-center gap-3 fixed bottom-0 left-0 right-0 z-40 b "Next Season Retire 📺 19 AGE"
+   offer: card at 16,594,358,234 of 390x844, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z40 [0,760,390,85] flex items-center gap-3 fixed bottom-0 left-0 right-0 z-40 b "Next Season Retire 📺 19 AGE"
+   shot kl-soccer-offer-390.png
+   store before the press: KEY.broken-2026-01-02T03-04-05=A | KEY=B
+   after the press: card at 16,682,358,146 of 390x844, scrollY 0, put back done :: Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK
+      buttons: OK 55x36
+      overlaps: fixed z40 [0,760,390,85] flex items-center gap-3 fixed bottom-0 left-0 right-0 z-40 b "Next Season Retire 📺 19 AGE"
+   shot kl-soccer-done-390.png
+   store after the load: KEY.broken-2026-01-02T03-04-05=A | KEY.broken-2026-10-10T20-21-07=B | KEY=A
+   second visit (the undo offer): card at 16,594,358,234 of 390x844, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z40 [0,760,390,85] flex items-center gap-3 fixed bottom-0 left-0 right-0 z-40 b "Next Season Retire 📺 19 AGE"
+   shot kl-soccer-undo-390.png
+   store on the second visit: KEY.broken-2026-01-02T03-04-05=A | KEY.broken-2026-10-10T20-21-07=B | KEY=A
+
+JOURNEY 1 /nfl-my-career at 390
+   shot kl-nfl-arrive-390.png
+   arrival: card at 16,594,358,234 of 390x844, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 NOT REACHABLE ; Leave it aside 131x38 NOT REACHABLE ; Delete it 94x38 NOT REACHABLE
+      a dialog is open over the page: How to play The steps Create your player: name, one of 8 positions (QB
+      overlaps: fixed z50 [0,0,390,844] fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in  "" ;; fixed z50 [0,63,390,717] fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50 "How to play The steps Create your player: name, on"
+      arrival: on arrival a dialog is open: "How to play The steps Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB" buttons [Let's Play!, Close]
+   offer: card at 16,594,358,234 of 390x844, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+   shot kl-nfl-offer-390.png
+   store before the press: KEY.broken-2026-01-02T03-04-05=A | KEY=B
+   after the press: card at 16,682,358,146 of 390x844, scrollY 0, put back done :: Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK
+      buttons: OK 55x36
+   shot kl-nfl-done-390.png
+   store after the load: KEY.broken-2026-01-02T03-04-05=A | KEY.broken-2026-10-10T20-21-15=B | KEY=A
+   second visit (the undo offer): card at 16,594,358,234 of 390x844, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+   shot kl-nfl-undo-390.png
+   store on the second visit: KEY.broken-2026-01-02T03-04-05=A | KEY.broken-2026-10-10T20-21-15=B | KEY=A
+
+JOURNEY 2 (a save that breaks /nfl-my-career) at 390
+   error page: broke=true fresh button [101,328,188,40] of height 844, page height 916 :: Skip to main content 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it. Back to the games Try this page again Start a fresh game If trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back next time you open it. Each game keeps its t
+   shot kl-broke-390.png
+   after a fresh start: card at 16,634,358,194 of 390x844, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 NOT REACHABLE ; Leave it aside 131x38 NOT REACHABLE ; Delete it 94x38 NOT REACHABLE
+      a dialog is open over the page: How to play The steps Create your player: name, one of 8 positions (QB
+      overlaps: fixed z50 [0,0,390,844] fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in  "" ;; fixed z50 [0,63,390,717] fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50 "How to play The steps Create your player: name, on"
+   shot kl-fresh-390.png
+   store after the fresh start: KEY.broken-2026-10-10T20-21-22=X
+      fresh: on arrival a dialog is open: "How to play The steps Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB" buttons [Let's Play!, Close]
+   after putting the broken save back: broke=true :: Skip to main content 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it. Back to t
+   card over the error page: NO CARD on screen (the error page is up)
+   shot kl-broke-again-390.png
+   store after the put back: KEY.broken-2026-10-10T20-21-22=X | KEY=X
+   after the second fresh start: card at 16,634,358,194 of 390x844, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+   shot kl-fresh-again-390.png
+   store after the second fresh start: KEY.broken-2026-10-10T20-21-27=X
+
+JOURNEY 3 storage full (all) on /nfl-my-career at 390
+      arrival: on arrival a dialog is open: "How to play The steps Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB" buttons [Let's Play!, Close]
+   after the press with the store full: card at 16,550,358,278 of 390x844, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Your browser would not let us swap the saves, so nothing changed. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+   alerts and status lines on screen: Your browser would not let us swap the saves, so nothing changed.
+   shot kl-full-all-390.png
+   store before: KEY.broken-2026-01-02T03-04-05=A | KEY=B
+   store after:  KEY.broken-2026-01-02T03-04-05=A | KEY=B
+
+JOURNEY 3 storage full (copy) on /nfl-my-career at 390
+      arrival: on arrival a dialog is open: "How to play The steps Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB" buttons [Let's Play!, Close]
+   after the press with the store full: card at 16,682,358,146 of 390x844, scrollY 0, put back refused :: Nothing changed Your browser is out of room, so the save could not be put back. It is still kept aside. OK
+      buttons: OK 55x36
+   alerts and status lines on screen: Your browser is out of room, so the save could not be put back. It is still kept aside.
+   shot kl-full-copy-390.png
+   store before: KEY.broken-2026-01-02T03-04-05=A | KEY=B
+   store after:  KEY.broken-2026-01-02T03-04-05=A | KEY=B
+
+JOURNEY 4 a save one version down on /club-manager at 390
+   arrival: NO CARD on screen
+   the page says: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout 📅 2026-27 Today. Re
+   shot kl-version-copy-390.png
+   store: KEY.broken-2026-10-10T20-21-41=OLD | KEY=OLD | dukb-set-aside-seen={"dukb-club-manager-save":["dukb-club-manager-save.broken-2026-10-10T20-21-41"]}
+   second visit: NO CARD on screen
+   store on the second visit: KEY.broken-2026-10-10T20-21-41=OLD | KEY=OLD | dukb-set-aside-seen={"dukb-club-manager-save":["dukb-club-manager-save.broken-2026-10-10T20-21-41"]}
+
+JOURNEY 4 a save one version down on /club-manager at 390, no room for its copy
+   arrival: card at 16,642,358,186 of 390x844, scrollY 0 :: No room to keep a copy Your save of this game is from a different version of the game, so it may not open. Your browser is out of room, so we could not keep a copy of it aside first. OK
+      buttons: OK 55x36
+   the page says: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout 📅 2026-27 Today. Re
+   shot kl-version-noroom-390.png
+   store: KEY=OLD
+   second visit: card at 16,642,358,186 of 390x844, scrollY 0 :: No room to keep a copy Your save of this game is from a different version of the game, so it may not open. Your browser is out of room, so we could not keep a copy of it aside first. OK
+      buttons: OK 55x36
+   store on the second visit: KEY=OLD
+
+JOURNEY 1 /soccer-career at 1280
+   shot kl-soccer-arrive-1280.png
+   arrival: card at 880,650,384,234 of 1280x900, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers "" ;; fixed z40 [1208,756,56,56] Open the training ground "🏋️ Drill ready" ;; fixed z40 [1208,824,56,56] Open your phone "📱 3 unread" ;; fixed z40 [128,816,1024,85] flex items-center gap-3 fixed bottom-0 left-0 right-0 z-40 b "Next Season Retire 📺 Week by week NEW 19 AGE"
+   offer: card at 880,650,384,234 of 1280x900, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers "" ;; fixed z40 [1208,756,56,56] Open the training ground "🏋️ Drill ready" ;; fixed z40 [1208,824,56,56] Open your phone "📱 3 unread" ;; fixed z40 [128,816,1024,85] flex items-center gap-3 fixed bottom-0 left-0 right-0 z-40 b "Next Season Retire 📺 Week by week NEW 19 AGE"
+   shot kl-soccer-offer-1280.png
+   store before the press: KEY.broken-2026-01-02T03-04-05=A | KEY=B
+   after the press: card at 880,738,384,146 of 1280x900, scrollY 0, put back done :: Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK
+      buttons: OK 55x36
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers "" ;; fixed z40 [1208,756,56,56] Open the training ground "🏋️ Drill ready" ;; fixed z40 [1208,824,56,56] Open your phone "📱 3 unread" ;; fixed z40 [128,816,1024,85] flex items-center gap-3 fixed bottom-0 left-0 right-0 z-40 b "Next Season Retire 📺 Week by week NEW 19 AGE"
+   shot kl-soccer-done-1280.png
+   store after the load: KEY.broken-2026-01-02T03-04-05=A | KEY.broken-2026-10-10T20-22-03=B | KEY=A
+   second visit (the undo offer): card at 880,650,384,234 of 1280x900, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers "" ;; fixed z40 [1208,756,56,56] Open the training ground "🏋️ Drill ready" ;; fixed z40 [1208,824,56,56] Open your phone "📱 3 unread" ;; fixed z40 [128,816,1024,85] flex items-center gap-3 fixed bottom-0 left-0 right-0 z-40 b "Next Season Retire 📺 Week by week NEW 19 AGE"
+   shot kl-soccer-undo-1280.png
+   store on the second visit: KEY.broken-2026-01-02T03-04-05=A | KEY.broken-2026-10-10T20-22-03=B | KEY=A
+
+JOURNEY 1 /nfl-my-career at 1280
+   shot kl-nfl-arrive-1280.png
+   arrival: card at 880,650,384,234 of 1280x900, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 NOT REACHABLE ; Leave it aside 131x38 NOT REACHABLE ; Delete it 94x38 NOT REACHABLE
+      a dialog is open over the page: How to play The steps Create your player: name, one of 8 positions (QB
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers "" ;; fixed z50 [0,0,1280,900] fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in  ""
+      arrival: on arrival a dialog is open: "How to play The steps Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB" buttons [Let's Play!, Close]
+   offer: card at 880,650,384,234 of 1280x900, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers ""
+   shot kl-nfl-offer-1280.png
+   store before the press: KEY.broken-2026-01-02T03-04-05=A | KEY=B
+   after the press: card at 880,738,384,146 of 1280x900, scrollY 0, put back done :: Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK
+      buttons: OK 55x36
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers ""
+   shot kl-nfl-done-1280.png
+   store after the load: KEY.broken-2026-01-02T03-04-05=A | KEY.broken-2026-10-10T20-22-12=B | KEY=A
+   second visit (the undo offer): card at 880,650,384,234 of 1280x900, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers ""
+   shot kl-nfl-undo-1280.png
+   store on the second visit: KEY.broken-2026-01-02T03-04-05=A | KEY.broken-2026-10-10T20-22-12=B | KEY=A
+
+JOURNEY 2 (a save that breaks /nfl-my-career) at 1280
+   error page: broke=true fresh button [546,336,188,40] of height 900, page height 900 :: Skip to main content LIVE Live scores temporarily unavailable 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, and nothing here has touched it. Back to the games Try this page again Start a fresh game If trying again keeps breaking, you can start a fresh game. Your old save gets moved aside to a backup in this browser, not deleted, and the game offers to put it back nex
+   shot kl-broke-1280.png
+   after a fresh start: card at 880,690,384,194 of 1280x900, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 NOT REACHABLE ; Leave it aside 131x38 NOT REACHABLE ; Delete it 94x38 NOT REACHABLE
+      a dialog is open over the page: How to play The steps Create your player: name, one of 8 positions (QB
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers "" ;; fixed z50 [0,0,1280,900] fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in  ""
+   shot kl-fresh-1280.png
+   store after the fresh start: KEY.broken-2026-10-10T20-22-18=X
+      fresh: on arrival a dialog is open: "How to play The steps Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB" buttons [Let's Play!, Close]
+   after putting the broken save back: broke=true :: Skip to main content LIVE Live scores temporarily unavailable 😬 This page broke Something in this game went wrong and it stopped drawing. It is our fault, not anything you did. If you had a save going, it is still on this device. It is kept in your browser, a
+   card over the error page: NO CARD on screen (the error page is up)
+   shot kl-broke-again-1280.png
+   store after the put back: KEY.broken-2026-10-10T20-22-18=X | KEY=X
+   after the second fresh start: card at 880,690,384,194 of 1280x900, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers ""
+   shot kl-fresh-again-1280.png
+   store after the second fresh start: KEY.broken-2026-10-10T20-22-23=X
+
+JOURNEY 3 storage full (all) on /nfl-my-career at 1280
+      arrival: on arrival a dialog is open: "How to play The steps Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB" buttons [Let's Play!, Close]
+   after the press with the store full: card at 880,606,384,278 of 1280x900, scrollY 0 :: You have a save kept aside There's a save of this game kept aside in this browser from Jan 2. Want it back? The game you have now gets kept aside in its place, so nothing is deleted. Your browser would not let us swap the saves, so nothing changed. Put that save back Leave it aside Delete it
+      buttons: Put that save back 180x38 ; Leave it aside 131x38 ; Delete it 94x38
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers ""
+   alerts and status lines on screen: Your browser would not let us swap the saves, so nothing changed.
+   shot kl-full-all-1280.png
+   store before: KEY.broken-2026-01-02T03-04-05=A | KEY=B
+   store after:  KEY.broken-2026-01-02T03-04-05=A | KEY=B
+
+JOURNEY 3 storage full (copy) on /nfl-my-career at 1280
+      arrival: on arrival a dialog is open: "How to play The steps Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB" buttons [Let's Play!, Close]
+   after the press with the store full: card at 880,738,384,146 of 1280x900, scrollY 0, put back refused :: Nothing changed Your browser is out of room, so the save could not be put back. It is still kept aside. OK
+      buttons: OK 55x36
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers ""
+   alerts and status lines on screen: Your browser is out of room, so the save could not be put back. It is still kept aside.
+   shot kl-full-copy-1280.png
+   store before: KEY.broken-2026-01-02T03-04-05=A | KEY=B
+   store after:  KEY.broken-2026-01-02T03-04-05=A | KEY=B
+
+JOURNEY 4 a save one version down on /club-manager at 1280
+   arrival: NO CARD on screen
+   the page says: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2
+   shot kl-version-copy-1280.png
+   store: KEY.broken-2026-10-10T20-22-38=OLD | KEY=OLD | dukb-set-aside-seen={"dukb-club-manager-save":["dukb-club-manager-save.broken-2026-10-10T20-22-38"]}
+   second visit: NO CARD on screen
+   store on the second visit: KEY.broken-2026-10-10T20-22-38=OLD | KEY=OLD | dukb-set-aside-seen={"dukb-club-manager-save":["dukb-club-manager-save.broken-2026-10-10T20-22-38"]}
+
+JOURNEY 4 a save one version down on /club-manager at 1280, no room for its copy
+   arrival: card at 880,698,384,186 of 1280x900, scrollY 0 :: No room to keep a copy Your save of this game is from a different version of the game, so it may not open. Your browser is out of room, so we could not keep a copy of it aside first. OK
+      buttons: OK 55x36
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers ""
+   the page says: Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2
+   shot kl-version-noroom-1280.png
+   store: KEY=OLD
+   second visit: card at 880,698,384,186 of 1280x900, scrollY 0 :: No room to keep a copy Your save of this game is from a different version of the game, so it may not open. Your browser is out of room, so we could not keep a copy of it aside first. OK
+      buttons: OK 55x36
+      overlaps: fixed z100 [860,868,420,32] fixed top-0 z-[100] flex max-h-screen w-full flex-col-revers ""
+   store on the second visit: KEY=OLD
+
+klWalk: done. 0 line(s) marked FINDING?. Screenshots and kl-walk.txt are in RC_OUT.
