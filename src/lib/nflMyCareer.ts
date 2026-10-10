@@ -543,88 +543,11 @@ export function simSeason(
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
-  const g = games / NFL_RATE_GAMES;
   const line: SeasonLine = {
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
   };
-  if (c.pos === 'QB') {
-    // Round 98: capped just under Peyton Manning's 5477 in 2013, which is
-    // the real record. A career year should scrape it, never beat it.
-    line.passYds = Math.min(5450, Math.round((1900 + (form - 62) * 92 + rng() * 500) * g));
-    line.passTd = Math.max(4, Math.round((6 + (form - 62) * 0.95 + rng() * 6) * g));
-    // Round 56 realism fix: the old slope (0.25) meant a 95 rated quarterback
-    // still threw 12 interceptions a year, which no elite passer does. Real
-    // reference points: elite seasons land around 6 to 9, average starters 12
-    // to 14, and bad starters 18 to 20. The steeper slope hits all three.
-    line.ints = Math.max(1, Math.round((18.5 - (form - 62) * 0.36 + rng() * 4) * g));
-  } else if (c.pos === 'RB') {
-    /* Round 127: the same cap the quarterback line has had since Round 98,
-       which the running back line never got. Eric Dickerson ran for 2105 in
-       1984 and nobody has beaten it since, so a career year here scrapes it
-       and never passes it. Without the cap a peak back cleared the record by
-       one to twenty six yards in roughly three runs out of five, and
-       simCareerRealism has been failing on it for a while. */
-    line.rushYds = Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g));
-    line.rushTd = Math.max(0, Math.round((1 + (form - 62) * 0.42 + rng() * 3) * g));
-    line.rec = Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g);
-    line.recYds = Math.round((line.rec ?? 0) * (6.5 + rng() * 3));
-  } else if (c.pos === 'WR') {
-    line.rec = Math.min(NFL_WR_REC_CAP, Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g));
-    line.recYds = Math.min(NFL_WR_YDS_CAP, Math.round((line.rec ?? 0) * (10.5 + rng() * 4)));
-    line.recTd = Math.max(0, Math.round((1 + (form - 62) * 0.32 + rng() * 3) * g));
-  } else if (c.pos === 'TE') {
-    // Tight ends catch fewer, shorter, but score near the goal line.
-    line.rec = Math.round((22 + (form - 62) * 1.9 + rng() * 12) * g);
-    line.recYds = Math.min(NFL_TE_YDS_CAP, Math.round((line.rec ?? 0) * (9 + rng() * 3.5)));
-    line.recTd = Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g));
-  } else if (c.pos === 'LB') {
-    /* Round 144: same treatment the EDGE sack line got in Round 123 (see the
-       long note below): the tail of this curve brushed past the harness's
-       200 tackle ceiling about once in a few thousand seasons, and a sim
-       should never out-stat the record book. Tackles are an unofficial stat
-       counted differently across eras, so 200 is the conservative bound the
-       realism harness has always used, and the engine now agrees with it. */
-    line.tackles = Math.min(200, Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g));
-    /* Round 1104: a sack is credited whole or split in two, so the line is
-       rounded to halves (it was tenths: 11.3 sacks is not a number football
-       has). The same at the two other sack lines below. */
-    line.sacks = Math.max(0, Math.round(((form - 66) * 0.18 + rng() * 3) * g * 2) / 2);
-    line.picks = Math.max(0, Math.round(((form - 70) * 0.05 + rng() * 2) * g));
-    line.forcedFum = Math.max(0, Math.round((rng() * 3) * g));
-  } else if (c.pos === 'CB') {
-    line.tackles = Math.round((38 + (form - 62) * 1.2 + rng() * 18) * g);
-    line.picks = Math.max(0, Math.round(((form - 68) * 0.11 + rng() * 3) * g));
-    line.passDef = Math.round((7 + (form - 62) * 0.5 + rng() * 9) * g);
-    line.forcedFum = Math.max(0, Math.round((rng() * 2) * g));
-  } else if (c.pos === 'EDGE') {
-    /* Round 123: capped at the real single season record, which nothing in
-       this game should ever cross. Myles Garrett has it at 23.0 in 2025, per
-       Pro Football Reference's single season leaders; Michael Strahan in 2001
-       and T.J. Watt in 2021 share the previous mark at 22.5, and Al Baker's
-       23.0 in 1978 sits above both but predates 1982, when sacks became an
-       official statistic.
-
-       This came out of Round 123 by accident. simCareerRealism.mjs was going
-       red about one run in four on "EDGE sacks: 22.6 beats the real single
-       season record of 22.5", and the first assumption was that this round
-       had broken something. It had not: measured over 56,000 EDGE seasons,
-       the unmodified engine at Round 122 crossed 22.5 three times and topped
-       out at 23.1, and this round's engine crossed it once. The bug was two
-       separate things wearing each other's coat. The harness bound was STALE,
-       written in Round 97 when 22.5 really was the record, and the engine had
-       no cap at all, so on the day somebody broke the record in real life the
-       harness became both wrong and still, occasionally, right. */
-    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 2) / 2));
-    line.tackles = Math.round((32 + (form - 62) * 1.1 + rng() * 16) * g);
-    line.forcedFum = Math.max(0, Math.round(((form - 74) * 0.06 + rng() * 3) * g));
-    line.passDef = Math.max(0, Math.round((rng() * 4) * g));
-  } else if (c.pos === 'K') {
-    line.fgAtt = Math.round((24 + rng() * 12) * g);
-    const acc = Math.min(0.98, 0.66 + (form - 62) * 0.011 + rng() * 0.06);
-    line.fgMade = Math.round((line.fgAtt ?? 0) * acc);
-    line.longFg = Math.round(48 + (form - 64) * 0.5 + rng() * 12);
-  }
+  Object.assign(line, nflStatLineFor({ form, pos: c.pos, games }, rng));
 
   // team result
   const strength = teamQuality + (c.ovr - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
@@ -743,6 +666,114 @@ export function simSeason(
   else nflRivalryChoiceTick(c);
   c.seasons.push(line);
   return { line, notes };
+}
+
+/* ─── Round 1227: one regular season's stat line, as a function ───────────────
+
+   This is the stat block of simSeason, cut out with no draw moved and no
+   number changed (Round 1103 cut nbaStatLineFor the same way), so the
+   player's season and his rival's are ONE function: the rival plays the
+   player's position on the player's own line, with its caps, its halves and
+   the season's real length (nflRivalSeason below).
+
+   THE RULES OF THE CUT. It reads its input and `rng` and nothing else. It
+   returns only the keys that position records, in the order the block wrote
+   them (the saved key order is part of a save, and a key holding undefined
+   is not an absent key). The draws are the block's, in the block's order:
+   QB 3 (yards, touchdowns, interceptions), RB 4 (rush yards, touchdowns,
+   catches, yards a catch), WR 3 and TE 3 (catches, yards a catch,
+   touchdowns), LB 4 (tackles, sacks, interceptions, forced fumbles), CB 4
+   (tackles, interceptions, passes defended, forced fumbles), EDGE 4 (sacks,
+   tackles, forced fumbles, passes defended), K 3 (attempts, accuracy, long).
+   src/test/usRivalLine.test.ts holds the counts and the key order. */
+
+/** What a stat line is made from: the form of the season, the position, and the games of real action. */
+export interface NflLineInput { form: number; pos: CareerPos; games: number }
+/** The stats of one season line, without the season around them. */
+export type NflStatLine = Pick<SeasonLine, 'passYds' | 'passTd' | 'ints' | 'rushYds' | 'rushTd' | 'rec' | 'recYds' | 'recTd' | 'tackles' | 'sacks' | 'picks' | 'passDef' | 'forcedFum' | 'fgMade' | 'fgAtt' | 'longFg'>;
+
+export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine {
+  const { form, pos } = x;
+  const g = x.games / NFL_RATE_GAMES;
+  const line: NflStatLine = {};
+  if (pos === 'QB') {
+    // Round 98: capped just under Peyton Manning's 5477 in 2013, which is
+    // the real record. A career year should scrape it, never beat it.
+    line.passYds = Math.min(5450, Math.round((1900 + (form - 62) * 92 + rng() * 500) * g));
+    line.passTd = Math.max(4, Math.round((6 + (form - 62) * 0.95 + rng() * 6) * g));
+    // Round 56 realism fix: the old slope (0.25) meant a 95 rated quarterback
+    // still threw 12 interceptions a year, which no elite passer does. Real
+    // reference points: elite seasons land around 6 to 9, average starters 12
+    // to 14, and bad starters 18 to 20. The steeper slope hits all three.
+    line.ints = Math.max(1, Math.round((18.5 - (form - 62) * 0.36 + rng() * 4) * g));
+  } else if (pos === 'RB') {
+    /* Round 127: the same cap the quarterback line has had since Round 98,
+       which the running back line never got. Eric Dickerson ran for 2105 in
+       1984 and nobody has beaten it since, so a career year here scrapes it
+       and never passes it. Without the cap a peak back cleared the record by
+       one to twenty six yards in roughly three runs out of five, and
+       simCareerRealism has been failing on it for a while. */
+    line.rushYds = Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g));
+    line.rushTd = Math.max(0, Math.round((1 + (form - 62) * 0.42 + rng() * 3) * g));
+    line.rec = Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g);
+    line.recYds = Math.round((line.rec ?? 0) * (6.5 + rng() * 3));
+  } else if (pos === 'WR') {
+    line.rec = Math.min(NFL_WR_REC_CAP, Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g));
+    line.recYds = Math.min(NFL_WR_YDS_CAP, Math.round((line.rec ?? 0) * (10.5 + rng() * 4)));
+    line.recTd = Math.max(0, Math.round((1 + (form - 62) * 0.32 + rng() * 3) * g));
+  } else if (pos === 'TE') {
+    // Tight ends catch fewer, shorter, but score near the goal line.
+    line.rec = Math.round((22 + (form - 62) * 1.9 + rng() * 12) * g);
+    line.recYds = Math.min(NFL_TE_YDS_CAP, Math.round((line.rec ?? 0) * (9 + rng() * 3.5)));
+    line.recTd = Math.max(0, Math.round((2 + (form - 62) * 0.3 + rng() * 3) * g));
+  } else if (pos === 'LB') {
+    /* Round 144: same treatment the EDGE sack line got in Round 123 (see the
+       long note below): the tail of this curve brushed past the harness's
+       200 tackle ceiling about once in a few thousand seasons, and a sim
+       should never out-stat the record book. Tackles are an unofficial stat
+       counted differently across eras, so 200 is the conservative bound the
+       realism harness has always used, and the engine now agrees with it. */
+    line.tackles = Math.min(200, Math.round((62 + (form - 62) * 3.1 + rng() * 26) * g));
+    /* Round 1104: a sack is credited whole or split in two, so the line is
+       rounded to halves (it was tenths: 11.3 sacks is not a number football
+       has). The same at the two other sack lines below. */
+    line.sacks = Math.max(0, Math.round(((form - 66) * 0.18 + rng() * 3) * g * 2) / 2);
+    line.picks = Math.max(0, Math.round(((form - 70) * 0.05 + rng() * 2) * g));
+    line.forcedFum = Math.max(0, Math.round((rng() * 3) * g));
+  } else if (pos === 'CB') {
+    line.tackles = Math.round((38 + (form - 62) * 1.2 + rng() * 18) * g);
+    line.picks = Math.max(0, Math.round(((form - 68) * 0.11 + rng() * 3) * g));
+    line.passDef = Math.round((7 + (form - 62) * 0.5 + rng() * 9) * g);
+    line.forcedFum = Math.max(0, Math.round((rng() * 2) * g));
+  } else if (pos === 'EDGE') {
+    /* Round 123: capped at the real single season record, which nothing in
+       this game should ever cross. Myles Garrett has it at 23.0 in 2025, per
+       Pro Football Reference's single season leaders; Michael Strahan in 2001
+       and T.J. Watt in 2021 share the previous mark at 22.5, and Al Baker's
+       23.0 in 1978 sits above both but predates 1982, when sacks became an
+       official statistic.
+
+       This came out of Round 123 by accident. simCareerRealism.mjs was going
+       red about one run in four on "EDGE sacks: 22.6 beats the real single
+       season record of 22.5", and the first assumption was that this round
+       had broken something. It had not: measured over 56,000 EDGE seasons,
+       the unmodified engine at Round 122 crossed 22.5 three times and topped
+       out at 23.1, and this round's engine crossed it once. The bug was two
+       separate things wearing each other's coat. The harness bound was STALE,
+       written in Round 97 when 22.5 really was the record, and the engine had
+       no cap at all, so on the day somebody broke the record in real life the
+       harness became both wrong and still, occasionally, right. */
+    line.sacks = Math.min(23, Math.max(0, Math.round(((form - 64) * 0.52 + rng() * 5) * g * 2) / 2));
+    line.tackles = Math.round((32 + (form - 62) * 1.1 + rng() * 16) * g);
+    line.forcedFum = Math.max(0, Math.round(((form - 74) * 0.06 + rng() * 3) * g));
+    line.passDef = Math.max(0, Math.round((rng() * 4) * g));
+  } else if (pos === 'K') {
+    line.fgAtt = Math.round((24 + rng() * 12) * g);
+    const acc = Math.min(0.98, 0.66 + (form - 62) * 0.011 + rng() * 0.06);
+    line.fgMade = Math.round((line.fgAtt ?? 0) * acc);
+    line.longFg = Math.round(48 + (form - 64) * 0.5 + rng() * 12);
+  }
+  return line;
 }
 
 /** End-of-season progression: growth to potential, decline with age and wear. */

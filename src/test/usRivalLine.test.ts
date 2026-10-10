@@ -11,6 +11,7 @@ import {
   nflLineAsPrinted, mlbLineAsPrinted, nhlLineAsPrinted, NFL_RB_PRINTED_YARDS_A_CATCH,
 } from '@/lib/usCareerStatLine';
 import { keyedRng } from '@/lib/keyedRng';
+import { nflStatLineFor } from '@/lib/nflMyCareer';
 import type { CareerPos, SeasonLine } from '@/lib/nflMyCareer';
 import type { MlbCareerPos, MlbSeasonLine } from '@/lib/mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
@@ -71,10 +72,63 @@ describe('Round 1227: a picker returns exactly what its printer prints', () => {
       }
     }
   });
-  it('NFL: the bridge is 8 yards a catch, the middle of the engine\'s 6.5 plus up to 3', () => {
-    expect(NFL_RB_PRINTED_YARDS_A_CATCH).toBe(8);
-    expect(6.5 + 3 / 2).toBe(NFL_RB_PRINTED_YARDS_A_CATCH);
+  it('NFL: the bridge is the mean yards a catch of the engine\'s own running back line', () => {
+    /* 20,000 lines of nflStatLineFor on one keyed stream (so the number is the same in every run), forms from 62
+       to 95, full seasons. Yards a catch is 6.5 plus a uniform 0 to 3: mean 8, sd 0.87 a line, so the mean of
+       20,000 sits within 0.006 of 8 and the band is five of those. A bridge of 7 or 9 misses it by a yard. */
+    const rng = keyedRng('usRivalLine|bridge');
+    let rec = 0; let yds = 0;
+    for (let i = 0; i < 20000; i += 1) {
+      const line = nflStatLineFor({ form: 62 + (i % 34), pos: 'RB', games: 17 }, rng);
+      rec += line.rec ?? 0; yds += line.recYds ?? 0;
+    }
+    expect(Math.abs(yds / rec - NFL_RB_PRINTED_YARDS_A_CATCH), `measured ${(yds / rec).toFixed(4)} yards a catch`).toBeLessThan(0.03);
   });
+});
+
+describe('Round 1227: nflStatLineFor is the cut of simSeason\'s stat block', () => {
+  const KEYS: Record<CareerPos, string[]> = {
+    QB: ['passYds', 'passTd', 'ints'],
+    RB: ['rushYds', 'rushTd', 'rec', 'recYds'],
+    WR: ['rec', 'recYds', 'recTd'],
+    TE: ['rec', 'recYds', 'recTd'],
+    LB: ['tackles', 'sacks', 'picks', 'forcedFum'],
+    CB: ['tackles', 'picks', 'passDef', 'forcedFum'],
+    EDGE: ['sacks', 'tackles', 'forcedFum', 'passDef'],
+    K: ['fgAtt', 'fgMade', 'longFg'],
+  };
+  const DRAWS: Record<CareerPos, number> = { QB: 3, RB: 4, WR: 3, TE: 3, LB: 4, CB: 4, EDGE: 4, K: 3 };
+  it('writes only its position\'s keys, in the order the block wrote them, and every one a number', () => {
+    for (const pos of Object.keys(KEYS) as CareerPos[]) {
+      const rng = keyedRng(`usRivalLine|keys|${pos}`);
+      for (const games of [1, 9, 16, 17]) for (const form of [55, 70, 84, 99]) {
+        const line = nflStatLineFor({ form, pos, games }, rng);
+        expect(Object.keys(line), `${pos} at form ${form}, ${games} games`).toEqual(KEYS[pos]);
+        for (const v of Object.values(line)) expect(Number.isFinite(v)).toBe(true);
+      }
+    }
+  });
+  it('takes exactly its position\'s draws and reads nothing but its input', () => {
+    for (const pos of Object.keys(DRAWS) as CareerPos[]) {
+      const base = keyedRng(`usRivalLine|draws|${pos}`);
+      const seen: number[] = [];
+      const counting = () => { const v = base(); seen.push(v); return v; };
+      const first = nflStatLineFor({ form: 84, pos, games: 17 }, counting);
+      expect(seen.length, `${pos} draws`).toBe(DRAWS[pos]);
+      let k = 0;
+      const replay = () => seen[k++];
+      expect(nflStatLineFor({ form: 84, pos, games: 17 }, replay)).toEqual(first);
+    }
+  });
+  it('a 16 game season is sixteen seventeenths of the same draws', () => {
+    const a = nflStatLineFor({ form: 84, pos: 'QB', games: 17 }, keyedRng('usRivalLine|len'));
+    const b = nflStatLineFor({ form: 84, pos: 'QB', games: 16 }, keyedRng('usRivalLine|len'));
+    expect((b.passYds ?? 0)).toBeLessThan(a.passYds ?? 0);
+    expect(Math.abs((b.passYds ?? 0) / (a.passYds ?? 1) - 16 / 17)).toBeLessThan(0.001);
+  });
+});
+
+describe('Round 1227: the other two sports', () => {
 
   it('MLB: a starter, a reliever and a bat', () => {
     const shape = (p: MlbCareerPos): RegExp => (p === 'SP'

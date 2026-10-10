@@ -54,6 +54,10 @@ const CONTROLS = {
      draw of the season's stream, so every draw of the player's after it moves. */
   tickdraws: { file: 'src/lib/mlbCareerRivalryEvents.ts', prove: true, needs: 'P1,P2',
     find: '  const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);', put: '  rng(); const rolled = rollRivalryEvent(p, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);' },
+  /* P1, P2: the NFL line function takes one draw more than the block it was cut from (every draw of the player's
+     after his stat line moves). */
+  cutdraw: { file: 'src/lib/nflMyCareer.ts', prove: true, needs: 'P1,P2',
+    find: '  const g = x.games / NFL_RATE_GAMES;', put: '  rng(); const g = x.games / NFL_RATE_GAMES;' },
   /* P1: the lifted stream keyed one character off the NBA's own key of Round 1112 (the NBA rival's whole trail
      moves, and nothing of the player's does). */
   liftkey: { file: 'src/lib/careerRival.ts', prove: true, needs: 'P1',
