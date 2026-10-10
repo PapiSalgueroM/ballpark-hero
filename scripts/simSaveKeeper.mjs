@@ -37,6 +37,21 @@
  *      save held, beside a pass over an empty store. Printed, not asserted
  *      (node on a runner is not a phone; the walk measures it in Chromium
  *      under a CPU throttle).
+ *   6  the wiring, read on the TypeScript tree: src/main.tsx calls
+ *      runSaveKeeper once before the app is mounted, and reopenGame loads
+ *      the game with window.location.replace and nothing else.
+ *
+ * ADDED BY THE ROUND'S REVIEW (2026-10-10), all on the same real saves:
+ *   3  the undo: after the first put back, four more presses, and after
+ *      every one the card (offeredBackup) offers the OTHER save, with one
+ *      copy of each kept and nothing marked answered. Put back, broken
+ *      again, fresh start, three times over: one copy of each save, and the
+ *      career he had still kept. And a store with room for the save and none
+ *      for its copy: refused, the key exactly as it was (the full store case
+ *      cannot see that rule, because there the key's own write throws too).
+ *   4  a save with NO whole number where its version should be (removed, or
+ *      written as text) gets its copy, and where the game exports its loader
+ *      the loader is asked and must refuse that save.
  *
  * NEGATIVE CONTROLS, SIM_SAVE_KEEPER_CONTROL=<name>. Each one changes the
  * keeper's source IN MEMORY (or a fixture), refuses to run when the text it
@@ -49,6 +64,14 @@
  *   noaside       the apply skips the copy aside                       (3)
  *   journalfirst  the journal is removed before the key is written     (3)
  *   pileup        the byte equal check before a quiet copy is skipped  (4)
+ *   nocopycheck   the apply carries on when the copy aside failed      (3)
+ *   hidebehind    the card offers nothing when the newest backup is
+ *                 the save being played (src/lib/brokenSaveRecovery.ts) (3)
+ *   twins         a fresh start no longer removes an older backup with
+ *                 the same bytes (src/lib/brokenSaveRecovery.ts)        (3)
+ *   numberonly    no copy for a save with no version number            (4)
+ *   nomaincall    runSaveKeeper(); is taken out of src/main.tsx        (6)
+ *   assign        reopenGame uses window.location.assign               (6)
  * A control that fired exits 1 and its last line says FIRED. One that did not
  * fire, or could not run, exits 2 and says so. A green run exits 0.
  *
@@ -70,7 +93,8 @@ import { buildRealSaves, WRITERS, PURE_LOADERS } from './lib/realSaves.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
-const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup'];
+const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
+  'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simSaveKeeper-'));
@@ -87,6 +111,8 @@ const readLF = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\
 /* The keeper under test, bundled with the real seam. A control rewrites
    saveKeeper.ts in memory and refuses to run when its anchor is gone. */
 const KEEPER = 'src/lib/saveKeeper.ts';
+const RECOVERY = 'src/lib/brokenSaveRecovery.ts';
+const MAIN = 'src/main.tsx';
 const SWAPS = {
   versiontable: ["'/club-manager': { at: ['saveVersion'], current: 3, oldest: 3, other: 'refuses' },", "'/club-manager': { at: ['saveVersion'], current: 4, oldest: 4, other: 'refuses' },"],
   norow: ["  '/stadium-tycoon': { at: ['v'], current: 1, oldest: 1, other: 'refuses' },\n", ''],
@@ -94,16 +120,28 @@ const SWAPS = {
   noaside: ["      const copied = copyAside(entry, storage, now);\n      if (!copied.ok) return done(false, { why: 'no-room' });\n      made = copied.backupKey;", '      const copied = { ok: true, backupKey: null as string | null };\n      made = copied.backupKey;'],
   journalfirst: ['  try {\n    /* Written OVER the old save', '  forget(storage);\n  try {\n    /* Written OVER the old save'],
   pileup: ['    if (heldAside(entry, storage, raw)) continue;\n', ''],
+  /* Round 1219 review. */
+  nocopycheck: ["      if (!copied.ok) return done(false, { why: 'no-room' });\n", '      if (!copied.ok) { /* control: carry on without the copy */ }\n'],
+  numberonly: ['    if (versionIn(raw, row.at) === row.current) continue;\n', '    const heldNumber = versionIn(raw, row.at);\n    if (heldNumber === null || heldNumber === row.current) continue;\n'],
+  assign: ['  window.location.replace(path);\n', '  window.location.assign(path);\n'],
 };
-let keeperSrc = readLF(KEEPER);
-if (CONTROL in SWAPS) {
-  const [from, to] = SWAPS[CONTROL];
-  if (!keeperSrc.includes(from)) { console.error(`simSaveKeeper control ${CONTROL}: CANNOT RUN. The text it rewrites is not in ${KEEPER}, so the control would change nothing.`); process.exit(2); }
-  keeperSrc = keeperSrc.replace(from, to);
-  console.log(`NEGATIVE CONTROL ON: ${CONTROL} (${KEEPER} rewritten in memory)`);
+/* The same, for the two controls that rewrite another file. */
+const SWAPS_ELSEWHERE = {
+  hidebehind: [RECOVERY, '      if (playing !== null && storage.getItem(k) === playing) continue;\n', '      if (playing !== null && storage.getItem(k) === playing) return null;\n'],
+  twins: [RECOVERY, '      if (kept !== null && storage.getItem(k) === kept) storage.removeItem(k);\n      else others.push(k);\n', '      others.push(k);\n'],
+  nomaincall: [MAIN, 'runSaveKeeper();\n', ''],
+};
+/* Every source file a section reads or the bundle loads, as the control left it. */
+const sources = { [KEEPER]: readLF(KEEPER), [RECOVERY]: readLF(RECOVERY), [MAIN]: readLF(MAIN) };
+if (CONTROL in SWAPS || CONTROL in SWAPS_ELSEWHERE) {
+  const [file, from, to] = CONTROL in SWAPS ? [KEEPER, ...SWAPS[CONTROL]] : SWAPS_ELSEWHERE[CONTROL];
+  if (!sources[file].includes(from)) { console.error(`simSaveKeeper control ${CONTROL}: CANNOT RUN. The text it rewrites is not in ${file}, so the control would change nothing.`); process.exit(2); }
+  sources[file] = sources[file].replace(from, to);
+  console.log(`NEGATIVE CONTROL ON: ${CONTROL} (${file} rewritten in memory)`);
 } else if (CONTROL) {
   console.log(`NEGATIVE CONTROL ON: ${CONTROL} (harness side, no source changed)`);
 }
+const keeperSrc = sources[KEEPER];
 
 /** A Map backed storage that counts, records the keys it was read at, and can die at call N. */
 function makeStore(m = new Map()) {
@@ -113,7 +151,7 @@ function makeStore(m = new Map()) {
     get length() { tick(); return s.m.size; },
     key: i => { tick(); return [...s.m.keys()][i] ?? null; },
     getItem: k => { tick(); s.read.add(String(k)); return s.m.has(k) ? s.m.get(k) : null; },
-    setItem: (k, v) => { tick(); if (s.full) throw new Error('QuotaExceededError'); s.sets += 1; s.wrote.push(String(k)); s.m.set(String(k), String(v)); },
+    setItem: (k, v) => { tick(); if (s.full || (s.refuse && s.refuse(String(k)))) throw new Error('QuotaExceededError'); s.sets += 1; s.wrote.push(String(k)); s.m.set(String(k), String(v)); },
     removeItem: k => { tick(); s.removes += 1; s.wrote.push(String(k)); s.m.delete(String(k)); },
     clear: () => { s.m.clear(); },
   };
@@ -165,7 +203,7 @@ await build({
     contents: `
       export * from './src/lib/saveKeeper';
       export { CONTINUE_SAVES, describeSave } from './src/data/continueSaves';
-      export { BROKEN_SAVE_MARK, BACKUPS_KEPT, SET_ASIDE_SEEN_KEY, backupKeysOf, offeredBackup } from './src/lib/brokenSaveRecovery';
+      export { BROKEN_SAVE_MARK, BACKUPS_KEPT, SET_ASIDE_SEEN_KEY, backupKeysOf, offeredBackup, setAsideSave } from './src/lib/brokenSaveRecovery';
       export { getStorageTrouble } from './src/lib/safeStorage';
     `,
     resolveDir: ROOT, loader: 'ts',
@@ -176,6 +214,7 @@ await build({
     name: 'keeper-control',
     setup(b) {
       b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]saveKeeper\.ts$/ }, args => ({ contents: keeperSrc, loader: 'ts', resolveDir: path.dirname(args.path) }));
+      b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]brokenSaveRecovery\.ts$/ }, args => ({ contents: sources[RECOVERY], loader: 'ts', resolveDir: path.dirname(args.path) }));
     },
   }],
 });
@@ -412,6 +451,7 @@ const T0 = new Date('2026-10-10T08:00:00Z');
 const at = ms => new Date(T0.getTime() + ms);
 {
   let whole = 0; let points = 0; let applied = 0; let untouched = 0; let refusedFull = 0;
+  let swapped = 0; let refusedCopy = 0; let conserved = 0;
   const broken = [];
   for (const e of ENTRIES) {
     const [A, B] = fleet[e.path];
@@ -432,6 +472,61 @@ const at = ms => new Date(T0.getTime() + ms);
       && backupsIn(page.m, e).length === 2 && !page.m.has(PENDING) && !!out && out.ok === true && out.kept === true && page.m.get(other.saveKey) === bystander;
     if (good) whole += 1;
     else broken.push(`${e.path}: staged ${JSON.stringify(staged)}, key is ${page.m.get(e.saveKey) === A ? 'A' : page.m.get(e.saveKey) === B ? 'B' : 'neither'}, copies of B ${copies.length}, backups ${backupsIn(page.m, e).length}, journal left ${page.m.has(PENDING)}, outcome ${JSON.stringify(out)}`);
+
+    /* Round 1219 review, THE UNDO: he puts the other save back, and again, and again. After every press the card
+       must offer the OTHER save. It used to offer nothing after the second press, with the first career kept in
+       storage and no screen that reached it. What the card would offer is asked of offeredBackup, as the card does. */
+    if (good) {
+      let turns = 0;
+      let holds = A;
+      for (let press = 2; press <= 5; press += 1) {
+        const offered = K.offeredBackup(e, page.api);
+        const asked = offered ? page.m.get(offered) : null;
+        if (asked !== (holds === A ? B : A)) break;
+        const st = K.restoreNow(e, offered);
+        K.runSaveKeeper();
+        const o = K.takeOutcome(e.path);
+        const texts = backupsIn(page.m, e).map(k => page.m.get(k)).sort();
+        if (!(st.ok === true && o && o.ok === true && page.m.get(e.saveKey) === asked && JSON.stringify(texts) === JSON.stringify([A, B].sort()))) break;
+        holds = asked;
+        turns += 1;
+      }
+      const still = K.offeredBackup(e, page.api);
+      if (turns === 4 && still && page.m.get(still) === (holds === A ? B : A) && !page.m.has(K.SET_ASIDE_SEEN_KEY)) swapped += 1;
+      else broken.push(`${e.path}: the undo stopped after ${turns} of 4 more presses. The key holds ${page.m.get(e.saveKey) === A ? 'A' : page.m.get(e.saveKey) === B ? 'B' : 'neither'}, the card offers ${still ? (page.m.get(still) === A ? 'A' : page.m.get(still) === B ? 'B' : 'another save') : 'NOTHING'}, backups ${backupsIn(page.m, e).length}, something marked answered ${page.m.has(K.SET_ASIDE_SEEN_KEY)}`);
+    }
+
+    /* Round 1219 review, PUT BACK, BROKEN AGAIN, FRESH START, three times over (the save still breaks its page, so
+       he presses Start a fresh game each time). The backup a put back came from stays, so the fresh start used to
+       set the same bytes aside a second and a third time and the cap then dropped the career he had been playing. */
+    {
+      const again = makeStore(new Map([[e.saveKey, B], [src, A]]));
+      let tries = 0;
+      for (let n = 1; n <= 3; n += 1) {
+        const from = backupsIn(again.m, e).find(k => again.m.get(k) === A);
+        if (!from || !K.stageRestore(e, from, again.api, at(n * 60000)).ok) break;
+        const o = K.applyPending(again.api, at(n * 60000 + 1000));
+        if (!o || o.ok !== true || again.m.get(e.saveKey) !== A) break;
+        const moved = K.setAsideSave(e, again.api, at(n * 60000 + 30000));
+        const texts = backupsIn(again.m, e).map(k => again.m.get(k)).sort();
+        if (!(moved.ok === true && !again.m.has(e.saveKey) && JSON.stringify(texts) === JSON.stringify([A, B].sort()))) break;
+        tries += 1;
+      }
+      if (tries === 3) conserved += 1;
+      else broken.push(`${e.path}: put back, broken again, fresh start: stopped at try ${tries + 1} of 3 with ${backupsIn(again.m, e).length} backups (${backupsIn(again.m, e).filter(k => again.m.get(k) === A).length} of the save put back, ${backupsIn(again.m, e).filter(k => again.m.get(k) === B).length} of the career he had)`);
+    }
+
+    /* Round 1219 review, ROOM FOR THE SAVE AND NONE FOR THE COPY: the store takes every write but a new backup.
+       The full store below cannot tell "the copy failed, so the key was left alone" from "the key's own write
+       failed too". This one can: a copy that cannot be written must leave the key exactly as it was. */
+    {
+      const tight = makeStore(seed());
+      K.stageRestore(e, src, tight.api, T0);
+      tight.refuse = k => k.startsWith(`${e.saveKey}${MARK}`);
+      const tightOut = K.applyPending(tight.api, at(1000));
+      if (tightOut && tightOut.ok === false && tightOut.why === 'no-room' && JSON.stringify([...tight.m].sort()) === JSON.stringify([...seed()].sort())) refusedCopy += 1;
+      else broken.push(`${e.path}: with room for the save and none for its copy the put back answered ${JSON.stringify(tightOut)} and the key holds ${tight.m.get(e.saveKey) === B ? 'B' : tight.m.get(e.saveKey) === A ? 'A: the save he had was written over with no copy kept' : 'neither'}`);
+    }
 
     /* A full store (writes throw, removes work): refused, and nothing but the journal's own absence differs. */
     const full = makeStore(seed());
@@ -475,6 +570,9 @@ const at = ms => new Date(T0.getTime() + ms);
   if (broken.length > 8) fail(`and ${broken.length - 8} more`);
   check(whole === ENTRIES.length, `${whole} of ${ENTRIES.length} games: staged by restoreNow (key untouched), applied by the boot, the save he had kept aside once, the source backup still there, no journal left`);
   check(refusedFull === ENTRIES.length, `${refusedFull} of ${ENTRIES.length} games: a full store refuses the put back and the whole store is as it was`);
+  check(refusedCopy === ENTRIES.length, `${refusedCopy} of ${ENTRIES.length} games: with room for the save and none for its copy the put back is refused and the key is left exactly as it was`);
+  check(swapped === ENTRIES.length, `${swapped} of ${ENTRIES.length} games: the put back undone, and three more presses: after every one the card offers the other save, each save is kept once, nothing is marked answered`);
+  check(conserved === ENTRIES.length, `${conserved} of ${ENTRIES.length} games: put back, broken again, fresh start, three times over: one copy of each save every time, and the career he had is still kept`);
   check(broken.length === 0 && points > ENTRIES.length * 8 && untouched > 0 && applied > untouched,
     `${points} crash points over ${ENTRIES.length} games: ${applied} ended applied (the journal had landed), ${untouched} untouched (it had not), and at none of them was a save lost, a key emptied or a copy stacked twice`);
 }
@@ -508,6 +606,35 @@ console.log('\n4. the copy before a version step, on real saves one version down
     else fail(`${e.path}: copies of the old save ${copies.length} (want 1), backups ${all.length} (want 4), the three older ones kept ${olderKept}, removes ${removes}, a second boot quiet ${secondQuiet}, the card offers ${offered ?? 'nothing'} (want ${newestOlder})`);
   }
   check(held === acting.length, `${held} of ${acting.length} games that act on a version: one byte equal copy, the three older backups untouched (nothing is pruned without a press), a second boot writes nothing, and the card still offers the newest older backup the player never answered`);
+  /* Round 1219 review: a real save with NO whole number where its version should be (the field removed, or the
+     number written as text; both declared as altered). The copy used to be skipped for these, yet every one of
+     these games refuses such a save exactly as it refuses another number. Where the game exports its loader the
+     refusal is asked of the loader, so "it gets a copy because the game will not open it" is held to an outcome. */
+  {
+    let cases = 0; let kept = 0; let asked = 0;
+    for (const e of acting) {
+      const row = V[e.path];
+      for (const [what, value] of [['removed', undefined], ['written as text', String(row.current)]]) {
+        cases += 1;
+        const odd = withVersion(fleet[e.path][0], row.at, value);
+        const opens = accepts[e.path] ? accepts[e.path](odd) : null;
+        if (opens !== null) asked += 1;
+        page.m = new Map([[e.saveKey, odd]]);
+        page.reset();
+        K.runSaveKeeper();
+        const all = backupsIn(page.m, e);
+        const copies = all.filter(k => page.m.get(k) === odd);
+        const offered = K.offeredBackup(e, page.api);
+        page.reset();
+        K.runSaveKeeper();
+        const secondQuiet = page.sets === 0 && page.removes === 0;
+        if (opens !== true && K.versionIn(odd, row.at) === null && copies.length === 1 && all.length === 1 && page.m.get(e.saveKey) === odd && secondQuiet && offered === null) kept += 1;
+        else fail(`${e.path}, its version number ${what}: its own loader ${opens === null ? 'is not exported' : opens ? 'OPENS it, so the keeper\'s claim that the game refuses it is wrong' : 'refuses it'}, copies kept ${copies.length} (want 1), backups ${all.length} (want 1), a second boot quiet ${secondQuiet}, the card offers ${offered ?? 'nothing'}`);
+      }
+    }
+    check(kept === cases && cases === acting.length * 2, `${kept} of ${cases} cases (${acting.length} games, the version number removed and written as text): one byte equal copy, quiet, and a second boot writes nothing; ${asked} of them were handed to the game's own loader, which refused every one`,
+      `a save with no whole number where its version should be: ${kept} of ${cases} cases held (want ${acting.length * 2}), see the lines above`);
+  }
   const ignoring = ENTRIES.filter(e => V[e.path] && V[e.path].other === 'ignores');
   page.m = new Map(ignoring.map(e => [e.saveKey, withVersion(fleet[e.path][0], V[e.path].at, V[e.path].current - 1)]));
   page.reset();
@@ -538,11 +665,42 @@ console.log('\n5. what the boot pass costs (printed, not asserted)');
 }
 
 /* ------------------------------------------------------------------ */
+section = '6';
+console.log('\n6. the wiring: the boot call, and the load that leaves no way back');
+{
+  /* Read on the TypeScript tree of each file as the control left it, so a
+     comment or a string that mentions the call counts for nothing. */
+  const calledIn = node => { const out = []; walkTree(node, n => { if (ts.isCallExpression(n)) out.push(n.expression.getText().replace(/\s+/g, '')); }); return out; };
+  const mainSf = ts.createSourceFile(MAIN, sources[MAIN], ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const top = [...mainSf.statements];
+  const isBootCall = st => ts.isExpressionStatement(st) && ts.isCallExpression(st.expression) && ts.isIdentifier(st.expression.expression) && st.expression.expression.text === 'runSaveKeeper';
+  const bootAt = top.findIndex(isBootCall);
+  const bootCalls = top.filter(isBootCall).length;
+  const mountAt = top.findIndex(st => calledIn(st).includes('createRoot'));
+  const imported = top.some(st => ts.isImportDeclaration(st) && /(^|\/)lib\/saveKeeper$/.test(st.moduleSpecifier.text)
+    && !!st.importClause?.namedBindings && ts.isNamedImports(st.importClause.namedBindings)
+    && st.importClause.namedBindings.elements.some(el => el.name.text === 'runSaveKeeper'));
+  check(imported && bootCalls === 1 && mountAt > -1 && bootAt > -1 && bootAt < mountAt,
+    `${MAIN} imports runSaveKeeper from the keeper and calls it once, as statement ${bootAt + 1}, before the app is mounted (createRoot, statement ${mountAt + 1})`,
+    `${MAIN}: runSaveKeeper imported from the keeper ${imported}, called ${bootCalls} time(s) at the top level (want 1), ${bootAt < 0 ? 'no call' : `call at statement ${bootAt + 1}`}, createRoot ${mountAt < 0 ? 'not found' : `at statement ${mountAt + 1}`}. Without that call before the mount, Put that save back stages, reloads and does nothing, with no word on screen`);
+
+  const keeperSf = ts.createSourceFile(KEEPER, sources[KEEPER], ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+  let reopen = null;
+  walkTree(keeperSf, n => { if (ts.isFunctionDeclaration(n) && n.name?.text === 'reopenGame') reopen = n; });
+  const reopenCalls = reopen ? calledIn(reopen) : [];
+  check(reopenCalls.length === 1 && reopenCalls[0] === 'window.location.replace',
+    'reopenGame loads the game with window.location.replace and nothing else, so no way back into the page that held the old game is left',
+    `reopenGame ${reopen ? `calls ${reopenCalls.join(', ') || 'nothing'}` : 'is not in the keeper'}; it must call window.location.replace and only that (with assign the old page is one Back press away, its save timer still running)`);
+}
+
+/* ------------------------------------------------------------------ */
 const red = [...failed].sort();
 console.log('');
-const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4' };
-/* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. */
-const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'] };
+const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
+  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6' };
+/* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
+   behind the save being played is also seen where the quiet copy sits in front of older backups. */
+const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };
 if (CONTROL) {
   const stray = red.filter(s => s !== OWN[CONTROL] && !(ALSO[CONTROL] ?? []).includes(s));
   if (failed.has(OWN[CONTROL]) && stray.length === 0) {
