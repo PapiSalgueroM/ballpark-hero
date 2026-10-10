@@ -1,0 +1,4 @@
+#!playwright
+#!serial
+base-simDailySaveHardening: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && git log --oneline -1 && (node_modules/.bin/vite build > /tmp/base-build.log 2>&1; echo "build exit $?") && node scripts/simDailySaveHardening.mjs
+base-simWritesAreSent: cd /tmp/base && git log --oneline -1 && node scripts/simWritesAreSent.mjs

@@ -1,0 +1,2 @@
+base-simDailySaveHardening exit=0 60s | simDailySaveHardening: part all green
+base-simWritesAreSent exit=1 13s | simWritesAreSent: 2 failures
