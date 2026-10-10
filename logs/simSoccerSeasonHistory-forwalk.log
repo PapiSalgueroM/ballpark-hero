@@ -1,0 +1,91 @@
+FAIL engine baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.171478500822559,
+      0.22020065295509994,
+      0.5847681371960789,
+...
+          cup: 'KNVB Cup',
++         opening: {
++           against: 0,
++           country: 'Netherlands',
++           for: 1,
++           home: true,
++           league: 'Eredivisie',
++           opp: 'Cambuur',
++           won: true
++         },
+          stages: [
+            {
+              stage: 'early',
+              won: true
+            },
+...
+            cup: 'KNVB Cup',
++           opening: {
++             against: 0,
++             country: 'Netherlands',
++             for: 1,
++             home: true,
++             league: 'Eredivisie',
++             opp: 'Cambuur',
++             won: true
++           },
+            stages: [
+              {
+                stage: 'early',
+                won: true
+              },
+
+PASS campaign baseline
+FAIL existing readers: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      id: 'domestic',
+      matches: [
+        {
+...
+          goalsFor: 2,
++         home: true,
+          note: undefined,
+          opponent: 'PSV',
+          result: 'Out',
+          round: 'Quarter-final'
+        }
+
+PASS saved rows
+PASS comparison
+PASS availability
+PASS defaults
+PASS identity rejection
+PASS read boundary
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'engine baseline',
++   'existing readers'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/seasonHistory1193.mjs:142:48
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [ 'engine baseline', 'existing readers' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

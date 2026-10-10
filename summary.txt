@@ -1,0 +1,16 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simSoccerCareerDevelopment-forwalk exit=1 2s | simSoccerCareerDevelopment: 18 outcome groups, 0+0 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 2 failed
+simCareerStoryRole-forwalk exit=1 6s | simCareerStoryRole: 16 groups, 2 failed, 48 full AR pairs
+simCareerTrophyRuns-forwalk exit=1 2s | Node.js v24.21.0
+simSoccerSeasonHistory-forwalk exit=1 1s | Node.js v24.21.0
+simSoccerDerbyHistory-forwalk exit=1 1s | Node.js v24.21.0
+simCmRealFixtures-forwalk exit=0 3s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+playSoccerCareerDepth exit=0 11s | playSoccerCareerDepth: 80 checks, 0 failed
+playSoccerCareerDevelopment exit=1 67s |     at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:293:41
+playCareerStoryRole exit=1 413s | Node.js v24.21.0
+playCareerTrophyRuns exit=1 1s | Node.js v24.21.0
+playDerbyHistory1195 exit=1 1s | Node.js v24.21.0
+playSeasonHistory1193 exit=1 1s | Node.js v24.21.0
+playCmRealFixtures exit=0 22s | playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved stat
+playDraftDetectiveReports exit=0 9s | playDraftDetectiveReports: 44 checks, 0 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots

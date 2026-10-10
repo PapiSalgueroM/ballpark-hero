@@ -1,0 +1,75 @@
+FAIL engine baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.9099940943997353,
+      0.5267227969598025,
+      0.6762043265625834,
+...
+          cup: 'KNVB Cup',
++         opening: {
++           against: 2,
++           country: 'Netherlands',
++           for: 1,
++           home: true,
++           league: 'Eredivisie',
++           opp: 'Utrecht',
++           won: false
++         },
+          stages: [
+            {
+              stage: 'early',
+              won: false
+            }
+...
+            cup: 'KNVB Cup',
++           opening: {
++             against: 2,
++             country: 'Netherlands',
++             for: 1,
++             home: true,
++             league: 'Eredivisie',
++             opp: 'Utrecht',
++             won: false
++           },
+            stages: [
+              {
+                stage: 'early',
+                won: false
+              }
+
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+PASS team and player totals
+PASS recorded status
+PASS rival identities
+PASS rival totals
+PASS read boundary
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'engine baseline'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/derbyHistory1195.mjs:140:305
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [ 'engine baseline' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
