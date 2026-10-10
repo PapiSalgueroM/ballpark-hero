@@ -1,0 +1,6 @@
+head:  /club-manager 0K gz over 39 files (budget 578K, 0.0K to the tenth)| /manager-hot-seat 0K gz over 41 files (budget 596K, 0.0K to the tenth)| /deadline-day 0K gz over 45 files (budget 606K, 0.0K to the tenth)|
+mutSrc noninelines: nine lazy registry lines taken out of src/lib/clubManagerFixtures.ts
+nonine:  /club-manager 0K gz over 39 files (budget 578K, 0.0K to the tenth)| /manager-hot-seat 0K gz over 41 files (budget 596K, 0.0K to the tenth)| /deadline-day 0K gz over 45 files (budget 606K, 0.0K to the tenth)|
+nonine-basehook:  /club-manager 0K gz over 39 files (budget 578K, 0.0K to the tenth)| /manager-hot-seat 0K gz over 41 files (budget 596K, 0.0K to the tenth)| /deadline-day 0K gz over 45 files (budget 606K, 0.0K to the tenth)|
+base:  /club-manager 0K gz over 39 files (budget 578K, 0.0K to the tenth)| /manager-hot-seat 0K gz over 41 files (budget 596K, 0.0K to the tenth)| /deadline-day 0K gz over 45 files (budget 606K, 0.0K to the tenth)|
+src restored: 0 file(s) differ from the head
