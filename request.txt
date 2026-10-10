@@ -1,0 +1,4 @@
+fleet-nhl: set -o pipefail; bash .rc/x/dumps.sh . /tmp/fleet-nhl nhl 2000 $(seq 6 77) | tail -2 && node .rc/x/fleet.mjs /tmp/fleet-nhl nhl . $RC_OUT | tee $RC_OUT/fleet-nhl.txt
+fleet-nfl: set -o pipefail; bash .rc/x/dumps.sh . /tmp/fleet-nfl nfl 2000 $(seq 6 77) | tail -2 && node .rc/x/fleet.mjs /tmp/fleet-nfl nfl . $RC_OUT | tee $RC_OUT/fleet-nfl.txt
+fleet-nba: set -o pipefail; bash .rc/x/dumps.sh . /tmp/fleet-nba nba 2000 $(seq 6 77) | tail -2 && node .rc/x/fleet.mjs /tmp/fleet-nba nba . $RC_OUT | tee $RC_OUT/fleet-nba.txt
+fleet-mlb: set -o pipefail; bash .rc/x/dumps.sh . /tmp/fleet-mlb mlb 2000 $(seq 6 77) | tail -2 && node .rc/x/fleet.mjs /tmp/fleet-mlb mlb . $RC_OUT | tee $RC_OUT/fleet-mlb.txt

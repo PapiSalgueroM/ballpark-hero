@@ -1,0 +1,13 @@
+nhl seed 77 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+dumps: 72 row files of nhl in /tmp/fleet-nhl, 72 runs in 216 s
+nhl against the calibration 2 marks: 72 seeds (6 to 77), 12 cells
+  pooled from: mean 12.694 sd 0.612 min 11.33 max 14.17
+  pooled to:   mean 1.423 sd 0.250 min 0.79 max 1.98
+  from by seed: 13.06 12.00 12.35 12.17 11.33 12.85 12.58 13.54 12.90 11.63 13.33 14.17 12.44 12.69 13.52 12.88 13.06 12.13 13.10 13.06 12.79 12.92 12.35 13.02 12.60 11.98 11.90 12.13 11.67 11.52 12.40 11.94 12.48 12.02 12.73 12.29 11.56 13.19 13.00 13.48 12.79 13.04 13.63 12.31 12.83 12.79 12.75 13.04 13.38 13.13 11.69 13.04 12.15 13.81 13.58 13.02 13.06 12.35 12.56 13.65 12.65 12.88 13.04 13.88 12.85 11.79 12.40 13.29 12.54 12.67 12.17 12.44
+  cells, fleet mean (seed sd): C goals 12.7(1.2), C assists 13.2(1.4), C points 13.5(1.3), LW goals 12.8(1.3), LW assists 13.0(1.5), LW points 13.7(1.5), RW goals 12.3(1.4), RW assists 13.3(1.5), RW points 13.3(1.5), D assists 12.9(1.8), D points 11.3(1.6), G wins 10.4(1.4)
+nhl against the marks derived on this engine: 72 seeds (6 to 77), 12 cells
+  pooled from: mean 10.387 sd 0.545 min 9.29 max 11.40
+  pooled to:   mean 0.982 sd 0.205 min 0.54 max 1.48
+  from by seed: 10.83 9.50 9.90 10.00 9.31 10.27 10.52 10.96 10.69 9.71 11.04 11.35 9.67 10.52 10.96 10.17 10.85 9.71 10.77 10.71 10.42 10.33 10.29 10.46 10.23 9.77 9.65 9.60 9.42 9.56 10.35 9.58 10.27 9.29 10.54 10.35 9.63 10.83 10.77 11.21 10.33 10.52 11.33 10.25 10.81 10.48 10.67 10.65 10.94 10.65 9.60 10.88 10.35 11.17 11.40 10.46 10.46 9.92 10.44 11.33 10.60 11.00 10.85 11.17 10.44 9.42 10.40 10.67 9.98 10.33 10.25 10.15
+  cells, fleet mean (seed sd): C goals 10.5(1.2), C assists 10.4(1.3), C points 10.4(1.2), LW goals 10.9(1.4), LW assists 10.4(1.3), LW points 10.5(1.4), RW goals 9.9(1.2), RW assists 10.2(1.4), RW points 10.3(1.1), D assists 10.2(1.6), D points 10.3(1.6), G wins 10.8(1.4)
+fleet: wrote fleet-nhl.json

@@ -1,0 +1,8 @@
+nfl seed 77 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+dumps: 72 row files of nfl in /tmp/fleet-nfl, 72 runs in 288 s
+nfl against the calibration 2 marks: 72 seeds (6 to 77), 13 cells
+  pooled from: mean 10.371 sd 0.684 min 8.71 max 12.00
+  pooled to:   mean 0.982 sd 0.211 min 0.55 max 1.60
+  from by seed: 9.42 10.34 10.83 11.20 10.86 10.62 10.37 10.89 9.97 10.09 10.74 10.18 10.89 12.00 9.97 10.68 9.88 10.46 10.62 10.28 11.32 10.34 10.22 10.25 10.15 9.88 10.15 9.72 11.11 8.98 9.23 9.51 10.74 11.05 10.74 9.48 10.03 9.66 10.98 9.60 11.02 11.88 10.25 10.22 10.43 10.09 10.65 9.88 9.82 10.25 11.14 10.40 9.88 11.88 11.66 9.63 10.55 10.12 10.15 9.48 10.15 10.52 10.68 10.40 11.14 10.86 8.71 11.02 10.00 8.71 10.49 11.26
+  cells, fleet mean (seed sd): QB passYds 9.6(1.8), QB passTd 9.6(1.7), RB rushYds 10.0(1.8), RB rushTd 11.7(2.0), WR rec 9.6(1.8), WR recYds 8.9(1.9), TE rec 9.2(1.9), TE recYds 9.1(1.7), TE recTd 9.5(1.8), LB tackles 11.4(1.8), LB picks 11.5(1.7), CB picks 12.4(2.1), CB passDef 12.2(1.8)
+fleet: wrote fleet-nfl.json

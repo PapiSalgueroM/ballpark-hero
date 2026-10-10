@@ -1,0 +1,4 @@
+fleet-nhl exit=0 217s | fleet: wrote fleet-nhl.json
+fleet-nba exit=0 257s | fleet: wrote fleet-nba.json
+fleet-nfl exit=0 289s | fleet: wrote fleet-nfl.json
+fleet-mlb exit=0 210s | fleet: wrote fleet-mlb.json
