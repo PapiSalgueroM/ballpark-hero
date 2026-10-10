@@ -1,0 +1,29 @@
+#!serial
+base-practice995: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && git log --oneline -1 && node scripts/simFootlePractice995.mjs
+attr-practice995: git checkout -q origin/main -- src/test/footlePractice.test.tsx && node scripts/simFootlePractice995.mjs; s=$?; git checkout -q HEAD -- src scripts; echo "ATTR practice995 with only footlePractice.test.tsx from origin/main: exit=$s"; exit $s
+branch-practice995: node scripts/simFootlePractice995.mjs
+fleet: node .rc/x/reviewFleet.mjs /tmp/base
+base-guard-1: cd /tmp/base && R848_CONTROL=guard node scripts/simDailySaveHardening.mjs
+base-guard-2: cd /tmp/base && R848_CONTROL=guard node scripts/simDailySaveHardening.mjs
+branch-guard-1: R848_CONTROL=guard node scripts/simDailySaveHardening.mjs
+branch-guard-2: R848_CONTROL=guard node scripts/simDailySaveHardening.mjs
+branch-guard-3: R848_CONTROL=guard node scripts/simDailySaveHardening.mjs
+base-flags: cd /tmp/base && node scripts/simNationalityFlags.mjs
+base-storage: cd /tmp/base && node scripts/simStorageWrites.mjs
+f1: node .rc/x/reviewMut.mjs f1 && { node scripts/simNationalityFlags.mjs > /tmp/a.log 2>&1; a=$?; grep -E "Footle|green|RED|failure" /tmp/a.log | tail -5; node_modules/.bin/vitest run src/test/footlePractice.test.tsx > /tmp/b.log 2>&1; b=$?; grep -E "FAIL|Tests " /tmp/b.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT f1 feedback line bare: flags=$a vitest=$b"
+f2: node .rc/x/reviewMut.mjs f2 && { node scripts/simNationalityFlags.mjs > /tmp/a.log 2>&1; a=$?; grep -E "Footle|green|RED|failure" /tmp/a.log | tail -5; node_modules/.bin/vitest run src/test/footlePractice.test.tsx > /tmp/b.log 2>&1; b=$?; grep -E "FAIL|Tests " /tmp/b.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT f2 Nation row bare: flags=$a vitest=$b"
+f3: node .rc/x/reviewMut.mjs f3 && { node scripts/simNationalityFlags.mjs > /tmp/a.log 2>&1; a=$?; grep -E "Footle|green|RED|failure" /tmp/a.log | tail -5; node_modules/.bin/vitest run src/test/footlePractice.test.tsx > /tmp/b.log 2>&1; b=$?; grep -E "FAIL|Tests " /tmp/b.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT f3 example bare: flags=$a vitest=$b"
+f4: node .rc/x/reviewMut.mjs f4 && { node scripts/simNationalityFlags.mjs > /tmp/a.log 2>&1; a=$?; tail -8 /tmp/a.log; }; git checkout -q HEAD -- src scripts; echo "MUT f4 Turkmenistan row dropped: flags=$a"
+f5: node .rc/x/reviewMut.mjs f5 && { node scripts/simNationalityFlags.mjs > /tmp/a.log 2>&1; a=$?; tail -8 /tmp/a.log; node scripts/simNationalities.mjs > /tmp/b.log 2>&1; b=$?; tail -3 /tmp/b.log; }; git checkout -q HEAD -- src scripts; echo "MUT f5 a league map row names an unknown nation: flags=$a nationalities=$b"
+f6: node .rc/x/reviewMut.mjs f6 && { node scripts/simNationalityFlags.mjs > /tmp/a.log 2>&1; a=$?; tail -8 /tmp/a.log; }; git checkout -q HEAD -- src scripts; echo "MUT f6 a second bare print in the owed file: flags=$a"
+f7: node .rc/x/reviewMut.mjs f7 && { node scripts/simNationalityFlags.mjs > /tmp/a.log 2>&1; a=$?; tail -8 /tmp/a.log; }; git checkout -q HEAD -- src scripts; echo "MUT f7 French Guiana row dropped (a past world only): flags=$a"
+f8: node .rc/x/reviewMut.mjs f8 && { node scripts/simNationalityFlags.mjs > /tmp/a.log 2>&1; a=$?; tail -8 /tmp/a.log; }; git checkout -q HEAD -- src scripts; echo "MUT f8 Mauritius dropped (era2015 only): flags=$a"
+s1: node .rc/x/reviewMut.mjs s1 && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; grep -E "^7\.|NAMED|no list|stale|simStorageWrites" /tmp/a.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT s1 the hold moved to an effect that never reads the save state: storage=$a"
+s2: node .rc/x/reviewMut.mjs s2 && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; grep -E "NAMED|no list|stale|simStorageWrites" /tmp/a.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT s2 a second refused save with a new state in a listed file: storage=$a"
+s3: node .rc/x/reviewMut.mjs s3 && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; grep -E "FAIL|NAMED|no list|stale|simStorageWrites" /tmp/a.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT s3 a helper writes bare and its caller's catch sets state: storage=$a"
+s4: node .rc/x/reviewMut.mjs s4 && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; grep -E "FAIL|NAMED|no list|stale|simStorageWrites" /tmp/a.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT s4 a kept safeSetItem answer sets a banner in a new file: storage=$a"
+s5a: node .rc/x/reviewMut.mjs s5a && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; grep -E "FAIL|NAMED|no list|stale|simStorageWrites" /tmp/a.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT s5a a second refused save in the NAMED board, on no list: storage=$a"
+s5b: node .rc/x/reviewMut.mjs s5b && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; grep -E "^7\.|FAIL|ok|NAMED|no list|stale|simStorageWrites" /tmp/a.log | tail -8; }; git checkout -q HEAD -- src scripts; echo "MUT s5b the same second save claimed NAMED with nothing holding it: storage=$a"
+s6: node .rc/x/reviewMut.mjs s6 && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; grep -E "FAIL|NAMED|no list|stale|simStorageWrites" /tmp/a.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT s6 Soccer Career names its save inside the component: storage=$a"
+s7: node .rc/x/reviewMut.mjs s7 && { node scripts/simStorageWrites.mjs > /tmp/a.log 2>&1; a=$?; grep -E "FAIL|NAMED|no list|stale|simStorageWrites" /tmp/a.log | tail -6; }; git checkout -q HEAD -- src scripts; echo "MUT s7 a catch that only shows a toast, new file: storage=$a"
+clean: git status --porcelain -- src scripts | head -5; node scripts/simStorageWrites.mjs | tail -1; node scripts/simNationalityFlags.mjs | tail -1
