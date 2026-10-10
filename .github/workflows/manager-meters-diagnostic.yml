@@ -1,0 +1,73 @@
+name: Manager Meters Paired Data Diagnostic
+on:
+  push:
+    branches: [codex/manager-meters-diagnostic]
+    paths:
+      - scripts/qa/managerMetersDiagnostic.mjs
+      - .github/workflows/manager-meters-diagnostic.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: manager-meters-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    env:
+      MANAGER_METERS_DIAGNOSTICS: manager-meters-diagnostics
+      SIM_NETWORK: offline
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Exact original and current sources and locked dependencies
+        run: |
+          mkdir -p manager-meters-diagnostics
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}"
+          git rev-parse HEAD > manager-meters-diagnostics/source-head.txt
+          git rev-parse 'HEAD^{tree}' > manager-meters-diagnostics/source-tree.txt
+          test "$(git rev-parse '4842fdd24e9ab2b85c8b5a0a85be4526b585f569^{tree}')" = 4d1ce2ed884bf864d318eac08ea6380bc84a4f8b
+          git diff --exit-code 4842fdd24e9ab2b85c8b5a0a85be4526b585f569 HEAD -- src package.json package-lock.json scripts/simClubManagerMeters.mjs scripts/lib
+          sha256sum package.json package-lock.json > manager-meters-diagnostics/packages-before.txt
+          npm ci
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),rows=[];
+          for(const [directory,expected]of Object.entries(lock.packages)){if(!directory.startsWith('node_modules/')||!expected.version||!fs.existsSync(directory+'/package.json'))continue;const actual=JSON.parse(fs.readFileSync(directory+'/package.json','utf8'));assert.equal(actual.version,expected.version,directory);rows.push({directory,name:actual.name,version:actual.version});}
+          assert.equal(rows.length,521);fs.writeFileSync('manager-meters-diagnostics/dependencies-before.json',JSON.stringify(rows,null,2));
+          JS
+      - name: Actual current app types before any diagnostic runtime
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-meters-diagnostics/types.log
+      - name: Complete original and current Meters harnesses with effective observer undo
+        run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerMetersDiagnostic.mjs 2>&1 | tee manager-meters-diagnostics/diagnostic.log
+      - name: Actual diagnostic sources and installed packages held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json > manager-meters-diagnostics/source-held.log
+          sha256sum package.json package-lock.json > manager-meters-diagnostics/packages-after.txt
+          cmp manager-meters-diagnostics/packages-before.txt manager-meters-diagnostics/packages-after.txt
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('manager-meters-diagnostics/dependencies-before.json','utf8')),after=[];
+          for(const expected of before){const actual=JSON.parse(fs.readFileSync(expected.directory+'/package.json','utf8'));assert.equal(actual.name,expected.name);assert.equal(actual.version,expected.version);after.push({directory:expected.directory,name:actual.name,version:actual.version});}
+          fs.writeFileSync('manager-meters-diagnostics/dependencies-after.json',JSON.stringify(after,null,2));
+          JS
+          du -sb manager-meters-diagnostics > manager-meters-diagnostics/artifact-size.log
+          test "$(du -sb manager-meters-diagnostics | cut -f1)" -lt 500000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-meters-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-meters-diagnostics/
+          retention-days: 5
