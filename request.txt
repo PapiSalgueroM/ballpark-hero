@@ -1,0 +1,11 @@
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+c-dropkey: SIM_SAVE_KEEPER_CONTROL=dropkey node scripts/simSaveKeeper.mjs
+c-versiontable: SIM_SAVE_KEEPER_CONTROL=versiontable node scripts/simSaveKeeper.mjs
+c-norow: SIM_SAVE_KEEPER_CONTROL=norow node scripts/simSaveKeeper.mjs
+c-onebyte: SIM_SAVE_KEEPER_CONTROL=onebyte node scripts/simSaveKeeper.mjs
+c-bootwrite: SIM_SAVE_KEEPER_CONTROL=bootwrite node scripts/simSaveKeeper.mjs
+c-noaside: SIM_SAVE_KEEPER_CONTROL=noaside node scripts/simSaveKeeper.mjs
+c-journalfirst: SIM_SAVE_KEEPER_CONTROL=journalfirst node scripts/simSaveKeeper.mjs
+c-pileup: SIM_SAVE_KEEPER_CONTROL=pileup node scripts/simSaveKeeper.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs

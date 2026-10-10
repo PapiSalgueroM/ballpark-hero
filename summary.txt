@@ -1,0 +1,11 @@
+simSaveKeeper exit=2 2s | simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-
+c-versiontable exit=2 2s | simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-
+c-dropkey exit=2 2s | simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-
+c-bootwrite exit=2 2s | simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-
+c-norow exit=2 2s | simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-
+c-onebyte exit=2 2s | simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-
+c-journalfirst exit=2 2s | simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-
+c-noaside exit=2 2s | simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-
+c-pileup exit=2 2s | simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

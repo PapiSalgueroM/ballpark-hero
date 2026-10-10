@@ -1,0 +1,3 @@
+NEGATIVE CONTROL ON: norow (src/lib/saveKeeper.ts rewritten in memory)
+simSaveKeeper: building a real save of every long game with its own engine...
+simSaveKeeper: the fixtures could not be built: Error: Rebuild had nothing to save after the clubs were drawn |     at Module.makeSaves (file:///home/runner/work/_temp/t-c-norow/simSaveKeeper-W0f29P/real/realSaves.bundle.mjs:59145:20) |     at buildRealSaves (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/realSaves.mjs:196:21) |     at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
