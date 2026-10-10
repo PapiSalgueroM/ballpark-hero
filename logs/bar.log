@@ -1,0 +1,34 @@
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+In the job at Crystal Palace.
+1) The goal in order
+  [match phone] seed 3208792607, 1869 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  the goal watched: 28' Diego Gómez, against me; own goals in its half 0 of 2 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 29 frames it was up
+  ok    a tap on the card ended the hold (26 frames after it, none with the card)
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 247 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  Negative control: the control row is pushed 200 px down.
+  FAIL: 320 by 568: the control row ends at 768, under a window 568 tall; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+  FAIL: 390 by 844: the control row ends at 1044, under a window 844 tall; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+  [labels 390] mean overlapping name labels a frame 0.83 over 24 frames of 21 labels; before match mode 1.63 at 6b1caa20, ratio 0.51
+  FAIL: 768 by 1024: the control row ends at 1212, under a window 1024 tall; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+  FAIL: 1280 by 900: the control row ends at 1088, under a window 900 tall; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+  FAIL: 844 by 390: the control row ends at 590, under a window 390 tall; something is drawn over: Pause, 0.5x, 1x, 2x, 4x, Squad and stamina, Skip
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace0 - 2BrightonPaused at 47'Back t", and the clock held at 47' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (47' to 48')
+5) The reload
+  (skipped under a control)
+2) Reduced motion
+  [match calm] seed 3208792608, 1799 draws at kick off, digest e14582e9 over 4503 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  the goal watched: 57' João Pedro, against me; own goals in its half 0 of 2 goals
+  ok    under reduced motion the score reads 0 - 1 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  (not in the measuring pass or under control bar)
+playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
