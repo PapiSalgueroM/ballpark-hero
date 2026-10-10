@@ -10,7 +10,9 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-export const BASE = '4ab80fa978cf362427bcd024c64c6691e7f83c2a';
+/* Release AT: the base is the tree just before Rounds 1185 to 1187 were merged on the release line (5d31eaa6, PR208
+   merged over Release AS), not PR208's own head, which is older than Release AQ's Soccer Career train. */
+export const BASE = '5d31eaa61335ea32b51c47f039f27c8815ee620a';
 export const NOW = 1791547200000;
 const OUT = path.resolve(ROOT, process.env.CAREER_DEVELOPMENT_ARTIFACTS || '.tmp-fx/career-development-outcomes');
 const IMPORT_ONLY = process.env.CAREER_DEVELOPMENT_IMPORT_ONLY === '1';
@@ -110,7 +112,8 @@ if (!IMPORT_ONLY) {
   assert.equal([...engineSource.matchAll(/^[ \t]+settleCareerPreparation\(s, [^\n]+;$/gm)].length, 8, 'All eight recorded-year settlement hooks are held');
   assert.equal(engineSource.split('s.phase = "retirement_suggestion";').length - 1, 2, 'Both actual retirement pause paths are held');
   const controls = {
-    formEligibility: { file: 'src/lib/soccerCareerSelection.ts', from: 'row.leagueApps < 10', to: 'row.leagueApps < 1', fails: ['form eligibility'] },
+    formEligibility: { file: 'src/lib/soccerCareerSelection.ts', from: 'games < 10', to: 'games < 1', fails: ['form eligibility'] },
+    formHeld: { file: 'src/lib/soccerCareerSelection.ts', from: 'Math.min(league, row.apps) : league', to: 'league : league', fails: ['form eligibility'] },
     formBoundary: { file: 'src/lib/soccerCareerSelection.ts', from: 'row.rating >= 7.6', to: 'row.rating >= 8', fails: ['form boundaries', 'form projections and actual draws'] },
     formDraw: { file: engine, from: ' + recentClubForm(state).swing', to: '', fails: ['form projections and actual draws'] },
     formRng: { file: 'src/lib/soccerCareerSelection.ts', from: '  const none: RecentClubForm = ', to: '  Math.random();\n  const none: RecentClubForm = ', fails: ['form purity and chronology', 'neutral complete saves and RNG against actual PR208'] },
@@ -133,6 +136,8 @@ if (!IMPORT_ONLY) {
     mentorRemember: { file: engine, from: 'state.mentor ? "Remember your academy mentorship" : "Take them under your wing"', to: '"Take them under your wing"', fails: ['repeated Youth Mentor event preserves every saved spell'] },
     mentorMove: { file: mentor, from: 'destination === mentor.club', to: 'true', fails: ['mentor pauses graduation and moves', 'actual moves and retirement'] },
     mentorRetire: { file: mentor, from: 'export function endCareerMentorForRetirement(state: CareerState): CareerState {', to: 'export function endCareerMentorForRetirement(state: CareerState): CareerState {\n  return state;', fails: ['mentor retirement', 'actual moves and retirement'] },
+    mentorValid: { file: mentor, from: "if (m.generated !== true || !words(m.name)", to: "if (!words(m.name)", fails: ['mentor deterministic creation and saved rows'] },
+    mentorRepair: { file: engine, from: '  if (s.mentor !== undefined && !validMentor(s.mentor)) delete s.mentor;', to: ';', fails: ['mentor deterministic creation and saved rows'] },
     mentorRecord: { file: engine, from: '  Object.assign(s, recordMentorSeason(s, season));', to: '  void s;', fails: ['actual recorded plan growth and mentor credit'] },
   };
   const CONTROL = process.env.CAREER_DEVELOPMENT_CONTROL || '';
@@ -186,7 +191,7 @@ if (!IMPORT_ONLY) {
   await check('form boundaries', () => {
     const state = developmentFixture(B), row = state.seasons.at(-1);
     for (const [rating, leagueApps, swing] of [[7.6, 10, 2], [10, 38, 2], [6.4, 10, -2], [0, 38, -2], [7.599, 30, 0], [6.401, 30, 0]]) {
-      Object.assign(row, { rating, leagueApps });
+      Object.assign(row, { rating, leagueApps, apps: leagueApps });
       const result = B.form.recentClubForm(state);
       assert.equal(result.swing, swing, 'Exact saved rating and ten-game boundaries decide the form swing');
       assert.equal(result.row, row); assert(result.reason.includes(`${rating.toFixed(1)} over ${leagueApps} league games`));
@@ -194,7 +199,9 @@ if (!IMPORT_ONLY) {
   });
   await check('form eligibility', () => {
     const state = developmentFixture(B), row = state.seasons.at(-1), year = row.year + 1;
-    for (const extra of [{ leagueApps: undefined }, { leagueApps: 9 }, { leagueApps: 39 }, { leagueApps: 10.5 }, { rating: NaN },
+    /* Release AT: { apps: 9 } is a season of 30 drawn league games and 9 games played (an injury cut the games and
+       not the league count); the count is held to the games, so it is under the ten game line. */
+    for (const extra of [{ leagueApps: undefined }, { leagueApps: 9 }, { apps: 9 }, { leagueApps: 39 }, { leagueApps: 10.5 }, { rating: NaN },
       { rating: Infinity }, { rating: -1 }, { rating: 11 }, { type: 'youth' }, { club: 'Foreign Fixture Club' }, { year: row.year - 1 }]) {
       const input = { ...state, seasons: [{ ...row, rating: 8, leagueApps: 30, ...extra }] };
       assert.deepEqual(B.form.recentClubForm(input, state.currentClub, year), { swing: 0, row: null,
@@ -310,6 +317,25 @@ if (!IMPORT_ONLY) {
     const credited = M.recordMentorSeason(appended, row);
     assert.deepEqual([credited.mentor.progress, credited.mentor.age, credited.mentor.status, credited.mentor.history.length], [1, 17, 'active', 1]);
     assert.equal(serial(appended), snapshot); assert.equal(M.recordMentorSeason(credited, row), credited, 'The same mentoring year cannot count twice');
+    /* Release AT: a damaged saved mentor is no mentorship at all. Measured before the fix over 360 such saves:
+       192 threw while the season was recorded ("mentor.history is not iterable") and 120 were treated as live. */
+    const damagedValues = [7, 'x', true, [], {}, { status: 'active' }, { ...mentor, generated: false }, { ...mentor, history: null },
+      { ...mentor, history: 'none' }, { ...mentor, progress: 'two' }, { ...mentor, progress: 4 }, { ...mentor, startYear: 'x' },
+      { ...mentor, status: 'weird' }, { ...mentor, club: 7 }, { generated: true, name: 'A', status: 'paused' }, { ...mentor, history: [{ year: 'x' }] }];
+    for (const value of damagedValues) {
+      const damaged = { ...appended, mentor: value }, label = serial(value).slice(0, 48);
+      let result;
+      assert.doesNotThrow(() => { result = M.validMentor(value); }, `Reading a damaged mentor never throws: ${label}`);
+      assert.equal(result, null, `A damaged mentor is refused: ${label}`);
+      assert.doesNotThrow(() => { result = M.recordMentorSeason(damaged, row); }, `Recording a year never throws on a damaged mentor: ${label}`);
+      assert.equal(result, damaged, `A damaged mentor records nothing: ${label}`);
+      assert.doesNotThrow(() => { result = M.endCareerMentorForMove(damaged, 'Another Club'); }); assert.equal(result, damaged, `A move writes nothing for a damaged mentor: ${label}`);
+      assert.doesNotThrow(() => { result = M.endCareerMentorForRetirement(damaged); }); assert.equal(result, damaged, `Retirement writes nothing for a damaged mentor: ${label}`);
+      assert.equal('mentor' in B.soccer.repairCareer(JSON.parse(serial(damaged))), false, `A damaged mentor is dropped when the save loads: ${label}`);
+      assert.equal(serial(M.createCareerMentor({ ...state, mentor: value }).mentor), serial(created.value.mentor), `The card starts the same mentorship over a damaged one: ${label}`);
+    }
+    assert.equal(M.validMentor(credited.mentor), credited.mentor, 'A mentor the game wrote is kept');
+    assert.equal(serial(B.soccer.repairCareer(JSON.parse(serial(credited))).mentor), serial(credited.mentor), 'Loading keeps a good mentor byte for byte');
   });
   await check('mentor pauses graduation and moves', () => {
     const M = B.mentor, created = M.createCareerMentor(developmentFixture(B));

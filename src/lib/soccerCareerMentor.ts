@@ -27,6 +27,34 @@ export interface CareerMentor {
 
 const YEAR_OUT = ['BANNED', 'BANNED (PED)', 'PRISON', 'CONVICTED'];
 const POSITIONS = ['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST'];
+const STATUSES: readonly string[] = ['active', 'paused', 'ended', 'graduated'];
+const REASONS: readonly string[] = ['season', 'few-apps', 'serious-injury', 'banned', 'prison', 'club-move'];
+const whole = (value: unknown): value is number => typeof value === 'number' && Number.isInteger(value);
+const words = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
+
+/** Release AT: a damaged saved mentor is no mentorship at all.
+ *  The other three fields this train saves (the season target, the preseason plan, the smaller role) are
+ *  validated where they are read. This one was spread as it stood, so a save whose mentor was a number, a
+ *  string, an empty object or a mentor without its history threw inside the season ("mentor.history is not
+ *  iterable") and the year could never be recorded, and one with a made up status was treated as live.
+ *  Every reader goes through here now: the three functions below, the Youth Mentor card and the tile.
+ *  repairCareer also drops a damaged one when a save loads, the way Rounds 972 and 1041 drop theirs. */
+export function validMentor(value: unknown): CareerMentor | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const m = value as Partial<CareerMentor>;
+  if (m.generated !== true || !words(m.name) || !words(m.position) || !words(m.club)) return null;
+  if (!whole(m.startYear) || !whole(m.lastYear) || !whole(m.age) || !whole(m.progress) || m.progress < 0 || m.progress > 3) return null;
+  if (!STATUSES.includes(m.status as string)) return null;
+  if (m.endReason !== undefined && m.endReason !== 'club-move' && m.endReason !== 'retirement') return null;
+  if (!Array.isArray(m.history)) return null;
+  for (const entry of m.history as unknown[]) {
+    if (!entry || typeof entry !== 'object') return null;
+    const e = entry as Partial<CareerMentorSeason>;
+    if (!whole(e.year) || !words(e.club) || !whole(e.age) || !whole(e.progress)
+      || !STATUSES.includes(e.status as string) || !REASONS.includes(e.reason as string)) return null;
+  }
+  return value as CareerMentor;
+}
 
 /** A private draw never advances the career engine's random stream. */
 function mentorDraw(key: string): () => number {
@@ -38,7 +66,7 @@ function mentorDraw(key: string): () => number {
 /** One saved fictional player for this career, including after the spell ends. */
 export function createCareerMentor(state: CareerState): CareerState {
   const lastYear = state.seasons[state.seasons.length - 1]?.year;
-  if (state.mentor || state.retired || !state.currentClub || YEAR_OUT.includes(state.currentClub)
+  if (validMentor(state.mentor) || state.retired || !state.currentClub || YEAR_OUT.includes(state.currentClub)
     || typeof lastYear !== 'number' || !Number.isInteger(lastYear)) return state;
   const startYear = lastYear + 1;
   const draw = mentorDraw(`${state.playerName}|${state.nationality}|${state.currentClub}|${startYear}`);
@@ -59,7 +87,7 @@ export function createCareerMentor(state: CareerState): CareerState {
 
 /** Only a newly appended senior season can advance or pause the saved spell. */
 export function recordMentorSeason(state: CareerState, row: SeasonRecord): CareerState {
-  const mentor = state.mentor;
+  const mentor = validMentor(state.mentor);
   if (!mentor || mentor.status === 'ended' || mentor.status === 'graduated' || row.type !== 'playing'
     || !state.seasons.includes(row) || row.year <= mentor.lastYear || row.year < mentor.startYear) return state;
   const reason: CareerMentorReason = row.club === 'PRISON' || row.club === 'CONVICTED' ? 'prison'
@@ -83,7 +111,7 @@ export function recordMentorSeason(state: CareerState, row: SeasonRecord): Caree
 
 /** A transfer or loan ends this spell immediately, without inventing a season. */
 export function endCareerMentorForMove(state: CareerState, destination: string): CareerState {
-  const mentor = state.mentor;
+  const mentor = validMentor(state.mentor);
   if (!mentor || mentor.status === 'ended' || mentor.status === 'graduated' || destination === mentor.club) return state;
   return { ...state, mentor: { ...mentor, status: 'ended', endReason: 'club-move' }, events: [...state.events,
     `🤝 Shared-club mentorship with generated player ${mentor.name} ended when you left ${mentor.club}.`] };
@@ -91,7 +119,7 @@ export function endCareerMentorForMove(state: CareerState, destination: string):
 
 /** Retirement closes the saved spell without claiming another mentoring year. */
 export function endCareerMentorForRetirement(state: CareerState): CareerState {
-  const mentor = state.mentor;
+  const mentor = validMentor(state.mentor);
   if (!mentor || mentor.status === 'ended' || mentor.status === 'graduated') return state;
   return { ...state, mentor: { ...mentor, status: 'ended', endReason: 'retirement' }, events: [...state.events,
     `🤝 Academy mentorship with generated player ${mentor.name} ended when you retired from playing.`] };

@@ -9,7 +9,7 @@ import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, s
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
-import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, type CareerMentor } from './soccerCareerMentor';
+import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, validMentor, type CareerMentor } from './soccerCareerMentor';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
@@ -2792,6 +2792,10 @@ export function repairCareer<T extends CareerState>(state: T): T {
   /* Round 1047: a moments ledger its own reader refuses is dropped whole (no
      draw); a save without one, every save that never took a moment, is untouched. */
   if (s.seasonMoments !== undefined && !readSeasonMoments(s.seasonMoments)) delete s.seasonMoments;
+  /* Release AT: a saved mentor its own reader refuses (hand edited, half written, a later schema) is
+     dropped on load, the same way. It used to stop the season: recording the year spread a history
+     that was not a list. A save without one, and every good one, is left exactly as it is. */
+  if (s.mentor !== undefined && !validMentor(s.mentor)) delete s.mentor;
   /* Round 974: a save from before the story starts it from the season it
      loads; a damaged story resets alone and never costs the career. */
   s.story = cleanCareerStory(s.story);
@@ -4359,7 +4363,13 @@ function enterTransferWindow(s: CareerState, clubs: ClubData[]): void {
       ? null
       : determineLoanOffers(s, clubs);
     s.phase = "transfer_window";
+    /* Release AT: the club's own sale or loan cancels an accepted smaller role too. acceptLoan and
+       acceptOffer cancel it with a delete on THEIR copy, and the assign below copies what the moved copy
+       has but cannot take away a key it lacks, so the plan stayed on the save (one of 113 queued plans in
+       500 careers; a ban year after it would have written an interrupted role result for the old club). */
+    const verdictClub = s.currentClub, verdictLoan = s.loan;
     Object.assign(s, completeClubVerdictMove(s));
+    if (s.currentClub !== verdictClub || s.loan !== verdictLoan) cancelReducedRole(s);
   } else { s.phase = "playing"; }
 }
 
@@ -6185,6 +6195,8 @@ export function dismissNewspaper(prev: CareerState): CareerState {
 
 /* ─── All 24 Random Events ─── */
 export function getAllEvents(state: CareerState): RandomEvent[] {
+  /* Release AT: the Youth Mentor card reads the saved mentor, and a damaged one reads as none. */
+  if (state.mentor !== undefined && !validMentor(state.mentor)) state = { ...state, mentor: undefined };
   const pos = state.position;
   const isAttacker = ["ST","CAM","LW","RW"].includes(pos);
   return [
@@ -6227,7 +6239,7 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
       : "A generated 16-year-old academy player needs a mentor. Each season at your shared club with 10+ appearances adds progress. Three mentoring years complete it; a move ends it and keeps its history.",
       category: "positive", choices: [
         { label: state.mentor ? "Remember your academy mentorship" : "Take them under your wing", emoji: "🤝", color: "bg-emerald-600", consequence: state.mentor ? "Popularity +5, morale +5. Keep your existing mentorship and its history" : "Popularity +5, morale +5. Begin your saved academy mentorship",
-          apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, s.mentor ? "🤝 Remembered your saved academy mentorship" : "👶 Mentored a promising youth player"]; return createCareerMentor(s); } },
+          apply: s => { s.popularity = clamp(s.popularity + 5, 0, 100); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, validMentor(s.mentor) ? "🤝 Remembered your saved academy mentorship" : "👶 Mentored a promising youth player"]; return createCareerMentor(s); } },
       ] },
     { id: 7, emoji: "🎯", title: "Puskas Nominee!", description: "You score a Puskas Award-nominated goal.",
       category: "positive", choices: [

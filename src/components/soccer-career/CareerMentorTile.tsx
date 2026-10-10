@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import type { CareerState } from '@/lib/soccerCareerEngine';
-import type { CareerMentorReason, CareerMentorStatus } from '@/lib/soccerCareerMentor';
+import { validMentor, type CareerMentorReason, type CareerMentorStatus } from '@/lib/soccerCareerMentor';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const STATUS: Record<CareerMentorStatus, string> = {
@@ -19,7 +19,7 @@ export function CareerMentorTile({ career }: { career: CareerState }) {
   const [open, setOpen] = useState(false);
   const [help, setHelp] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
-  const mentor = career.mentor;
+  const mentor = validMentor(career.mentor);
   if (!mentor) return null;
   return <Dialog open={open} onOpenChange={next => { setOpen(next); if (!next) setHelp(false); }}>
     <DialogTrigger asChild>

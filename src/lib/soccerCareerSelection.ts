@@ -8,6 +8,17 @@ export interface RecentClubForm {
 
 const YEAR_OUT = ['BANNED', 'BANNED (PED)', 'PRISON', 'CONVICTED'];
 
+/** The league games a saved row can really hold.
+ *  Release AT: outside a saved league world an injury cuts a row's appearances and leaves its drawn league
+ *  count alone (312 of 9,469 rows measured had more league games than games), so the league count by
+ *  itself let a season lost to injury pass the ten game test and printed games that were never played
+ *  ("5.4 over 13 league games" for a year of 6 appearances). The count is held to his appearances. */
+function leagueGamesOf(row: SeasonRecord): number | null {
+  const league = row.leagueApps;
+  if (typeof league !== 'number' || !Number.isInteger(league) || league > 38) return null;
+  return typeof row.apps === 'number' && Number.isInteger(row.apps) && row.apps >= 0 ? Math.min(league, row.apps) : league;
+}
+
 /** A small selection adjustment from the club season immediately before this one. */
 export function recentClubForm(
   career: CareerState,
@@ -21,11 +32,12 @@ export function recentClubForm(
   for (let i = career.seasons.length - 1; i >= 0; i--) {
     if (career.seasons[i].year === year - 1) { row = career.seasons[i]; break; }
   }
+  const games = row ? leagueGamesOf(row) : null;
   if (!row || row.type !== 'playing' || row.club !== club || YEAR_OUT.includes(row.club)
-    || typeof row.leagueApps !== 'number' || !Number.isInteger(row.leagueApps) || row.leagueApps < 10 || row.leagueApps > 38
+    || games === null || games < 10
     || !Number.isFinite(row.rating) || row.rating < 0 || row.rating > 10) return none;
   const swing = row.rating >= 7.6 ? 2 : row.rating <= 6.4 ? -2 : 0;
-  const record = `Last season at ${club}: ${row.rating.toFixed(1)} over ${row.leagueApps} league games.`;
+  const record = `Last season at ${club}: ${row.rating.toFixed(1)} over ${games} league games.`;
   const effect = swing > 0 ? 'Strong form adds up to 2 league games in this simulation.'
     : swing < 0 ? 'Poor form takes away up to 2 league games in this simulation.'
       : 'That form keeps the next season\'s appearance plan unchanged.';
