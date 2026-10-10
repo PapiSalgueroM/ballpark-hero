@@ -1,6 +1,6 @@
-## Codex 1241-1243 IN PROGRESS, 2026-10-10: national-team comeback
+## Codex 1241-1243 READY (qualified source), 2026-10-10: national-team comeback
 
-Isolated codex/career-national-comeback from09df145a. Capped players can intentionally make themselves available again; actual selector decides appearances. Strict actual-year optional receipt, no instant cap/reward/draw, past history and inactive saves held. Full contract docs/ROUND1241-1243.md. Remote proof pending. G owns integration/main/merge/publish; PR216/217/218/219 remain frozen. Original state below preserved.
+Draft PR220, source17f38b00/treeaf1d10f0 from09df145a. Dedicated run38059350586 SUCCESS: app types/build,122tests,8groups/6source faults,90 complete original/current neutral pairs, actual page2/8 and UI1/20 faults, native12/12 with854checks and30 independently reviewed PNGs, all20related plus15built readers, exact source and521 dependency versions held. Finalartifact11672154212 SHA B8FF4BBA568EEC84B9F1559E09FE76FEEB18EA31623C2D64BED5DBAA339E0E12, expiry2026-10-15T14:35:43Z. Full scoped counts, failures and limitations in docs/ROUND1241-1243.md and ownWORKBOARD. Shared old-source fences and Offer old LeagueSeasons esbuild remain separately qualified, no all-CI/live claim. G owns integration/main/merge/publish. Earlier state below preserved.
 
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
