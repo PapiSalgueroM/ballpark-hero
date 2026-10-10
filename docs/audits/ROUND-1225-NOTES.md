@@ -18,12 +18,16 @@ October 2026) and links the two sources. Help names the ten leagues, read off th
 `src/lib/clubManagerFixtures.ts` is a registry, `REAL_LEAGUE_FIXTURES`: ONE LINE a league.
 
 - The Premier League's list rides with the engine (`ledger:`), exactly as Release AT ships it.
-- Every other list is in a file of its own (`load:`), one small chunk a league, fetched by the page:
-  when a club is tapped in the picker (`chooseClub` in `src/hooks/useClubManager.ts`), again at the start if
-  it has not arrived (`confirmClub` waits on the loading screen; a fetch that fails starts the career on
-  generated fixtures and the Calendar then claims nothing), and at boot for a saved career that holds a key
-  (`savedCareerFixtureKey` is read without opening the save, and the list is fetched in the same wait as an
-  era's squads; a list that will not load shows the retry notice, never a generated season).
+- Every other list is in a file of its own (`load:`), one small chunk a league, fetched by the page in two
+  places, both in `src/hooks/useClubManager.ts`. When a club is tapped in the picker the page passes the
+  picked era to `chooseClub`, which starts the fetch and keeps it; `confirmClub` starts at once when the list
+  is here, and when THAT fetch is still out it waits for it on the loading screen (a fetch that fails, or one
+  still out after eight seconds, starts the career on generated fixtures and the Calendar then claims
+  nothing). A caller that taps a club with no era asked for no list and starts at once, as before this round:
+  the hook's own tests do exactly that, and an earlier form that waited for a list nobody had asked for broke
+  five of them. And at boot, for a saved career that holds a key: `savedCareerFixtureKey` is read without
+  opening the save and the list is fetched in the same wait as an era's squads; a list that will not load
+  shows the retry notice, never a generated season.
 - `startCareer` gives a new career a key ONLY when that league's list is already here. A caller that fetched
   nothing gets the generated list and no key, exactly as before this round.
 - A save that holds a registered key whose list has not arrived THROWS on its first fixture read
