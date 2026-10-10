@@ -1,0 +1,8 @@
+Auto-merging src/lib/clubManager.ts
+Auto-merging src/components/club-manager/ClubManagerHelp.tsx
+CONFLICT (content): Merge conflict in src/components/club-manager/ClubManagerHelp.tsx
+Auto-merging src/lib/clubManager.ts
+CONFLICT (content): Merge conflict in src/lib/clubManager.ts
+Automatic merge failed; fix conflicts and then commit the result.
+UU src/components/club-manager/ClubManagerHelp.tsx
+UU src/lib/clubManager.ts

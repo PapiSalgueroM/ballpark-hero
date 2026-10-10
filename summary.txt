@@ -1,0 +1,11 @@
+merge exit=1 0s | UU src/lib/clubManager.ts
+merged-tsc exit=2 3s | src/lib/clubManager.ts(9,1): error TS1185: Merge conflict marker encountered.
+merged-book exit=2 0s | src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+merged-realfix exit=1 0s | Node.js v24.21.0
+merged-realfix-base exit=1 0s | Node.js v24.21.0
+merged-cmvar exit=1 0s | Node.js v24.21.0
+merged-dailydeals exit=1 0s | Node.js v24.21.0
+merged-owngoals exit=1 0s | simCmOwnGoals: FAILED, the harness threw
+merged-livematch exit=1 0s | Node.js v24.21.0
+merged-savesize exit=1 0s | Node.js v24.21.0
+merged-anchors exit=0 28s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
