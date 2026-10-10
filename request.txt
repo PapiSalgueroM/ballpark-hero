@@ -1,0 +1,4 @@
+simExtension: node scripts/simExtension.mjs
+simFreeAgency: node scripts/simFreeAgency.mjs
+simCareerPress: node scripts/simCareerPress.mjs
+simCareerBanking: node scripts/simCareerBanking.mjs

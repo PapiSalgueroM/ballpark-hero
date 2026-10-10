@@ -1,0 +1,4 @@
+simExtension exit=0 1s | simExtension: green. The last year of a deal is a decision in all four games now.
+simCareerPress exit=0 2s | ALL CAREER PRESS CHECKS PASSED
+simFreeAgency exit=0 2s | ALL FREE AGENCY CHECKS PASSED
+simCareerBanking exit=0 2s | simCareerBanking: green. Every career banks its pay, scales with it, and a broken save is repaired.
