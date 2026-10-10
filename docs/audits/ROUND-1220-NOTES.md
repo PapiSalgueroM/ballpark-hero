@@ -173,23 +173,45 @@ the two vitest files, a fresh build and the walk). All ten went red for their ow
 | the two numbers of the screen reader sentence are swapped | vitest |
 | the title is back in a screen reader's tree while the rows arrive | vitest |
 
+## The second fix pass, after the closing check (2026-10-10)
+
+| What was open | What changed | What holds it now |
+|---|---|---|
+| At 320 wide the lottery tile cut its longest club and a long seed line (73 px of room; "Timberwolves" 83, "Seed 1 · Down 3" 76) | the journey's own CSS gives the tile's words 10 px more under 360 wide and prints the club at 11 px: 83 px of room, "Timberwolves" 77, the widest seed line ("Seed 2 · Down 2") 78. The presenter is not edited | the walk's check 9 is judged at 320 as at every width, and tries every seed line the era's lottery can print (56 today, 39 in 2003); control `narrowtile` (8 failures at 320 wide) |
+| On a screen shorter than the night (844 by 390) the closing row landed below the fold, or, when the night's own reveal won, the press jumped to the buttons and the lottery and first picks arrived off the top | a night more than 28 px taller than the screen is left at its start by the press, and the reveal under the board is asked when the closing row starts to land, or on Skip; a night that fits is brought in whole, as before | the walk's 49th night (item 4b: the top on screen at rest, no move until the closing row starts, the row wholly on screen a second after it landed, the page at rest at the end); controls `ending` and `nottall`; five vitest cases with the layout handed in |
+| "Skip to my pick" on a night that has no pick | "Skip to the end" on every night | the tests and the walk press it by that name |
+| The real world statements the night prints stood on rows of other names | sixteen rows of their own in `US-PRE-DRAFT-RULES-2026-10.md`, each with the two sources its row above carried (nothing read again) | read |
+
+Measured on a runner on the fixed head: the NBA's night is 646 px high at 320 by 640, 610 at 360
+by 740, 595 at 390 by 844 and 547 at 844 or 1280 wide; the NFL's and MLB's are 441 at 390 wide. At
+844 by 390 the page stands at rest from the first frame with the top of the night on screen, moves
+310 px when the closing row starts to land, and the row ends at 253 to 307 of 390.
+
+The control `nottall` fired in 15 of its 16 runs on runners and once exited 2 ("changed nothing"),
+which the walk refuses to call a result. Why that one run differed is not known; the report of
+the pass has what was measured. A gate that runs it should run it again alone before reading an
+exit 2 as anything.
+
 ## Residual, known and written down
 
 - The night plays once. There is no "watch it again" after a reload.
 - If the chunk has not arrived when "Draft day" is pressed (a slow connection, a press in the same
   frame as the mount), there is no night, only the result block. Nothing is lost.
 - The reveal is one `useRevealScroll` on the row of buttons, aligned to the bottom of the screen.
-  On a viewport shorter than the card itself (the NBA's, with its lottery, measured 810 px on a 390
-  wide phone) the top of the lottery tile is above the screen when the name is called. On every
-  upright phone measured (640 px high and up, down to 320 wide) the closing row and the buttons are
-  in view. On a screen shorter than the night itself they are NOT: on a phone on its side (844 by
-  390, the review's case `nba-late-l`) the closing row lands at 506 to 560 px in a 390 px high
-  viewport and the buttons end at 631, because there the journey's own reveal of the play area wins
-  over the night's. Not a target size, and not changed.
-- At 320 wide the lottery tile (the shared presenter, Round 1222's file) has 73 px for a club, so
-  it still cuts its longest club ("Timberwolves", 83 px) and a long seed line ("Seed 1 · Down 3",
-  76 px). The walk writes that down at 320 and does not judge it. A two line label or a one column
-  grid on a narrow screen belongs in the presenter.
+  Where the night fits on the screen (every upright phone measured, 640 px high and up, down to
+  320 wide) the press brings it in whole and the page does not move again. On a screen shorter
+  than the night itself (a phone on its side, 844 by 390: the NBA's night is 547 px high) the
+  start and the ending cannot both be on screen. There the press leaves the page where the player
+  is looking, at the start of the night, and the same reveal is asked when the closing row starts
+  to land, or on Skip: one more move, 310 px in the walk, after which the closing row sits at 253
+  to 307 of 390. See the second fix pass below. Under less motion the night starts on its last
+  frame, so on such a screen the press brings the ending in and the start is a scroll up.
+- "Fits" has 28 px of give (`NIGHT_TOP_SLACK`): the NBA's night is 646 px high on a 320 by 640
+  phone, 6 px over, and is still brought in whole there with the tile's small heading at the edge.
+- Under 360 wide the lottery tile is restyled by the journey's own CSS (4 px of padding, 2 px of
+  gap, 4 px of the number box, the club at 11 px), so a tile has 83 px for its words where the
+  shared presenter alone gives 73. The presenter (Round 1222's file) still cuts "Timberwolves"
+  (83 px at its own 12 px) on a screen that narrow anywhere else it is mounted.
 - "Skip to the end" is the label on every night. It was "Skip to my pick" until the second fix
   pass: a night that ends without his name has no pick to skip to, and a different label on that
   night alone would give the ending away in the first frame, so every night wears the one label
