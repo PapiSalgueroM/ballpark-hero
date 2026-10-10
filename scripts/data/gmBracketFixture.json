@@ -1,8 +1,16 @@
 {
  "what": "The NFL Front Office engine one press postseason (runPlayoffs) over the fleet of scripts/lib/gmGameDayFleet.mjs. Recorded by scripts/recordGmBracketFixture.mjs; read by scripts/simGmGameDay.mjs section 4.",
  "commit": "5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79",
- "engine": "aa0b61644b902859a48ef7a60a2d73b867a97b56",
- "finalsBracket": "7440a69b041e40da61041dfedf01182b1e94b4c6",
+ "inputs": {
+  "scripts/lib/gmGameDayFleet.mjs": "565e065a3b7ff6984eae3e20885615d31a764360",
+  "src/data/frontOfficeDepth.ts": "2c878c8ab15d8e0eec4fdf90849fcf88815fdf27",
+  "src/data/frontOfficePlayers.ts": "fc37a37e8b07809228b55efbf14a5fcf9e2fafa8",
+  "src/lib/entityIds.ts": "c941b1735d8a80efa76cc5bde96a2e6cc1992a7d",
+  "src/lib/foNames.ts": "f60d9bc36220d85ecb581ab067dfd04d7efddb32",
+  "src/lib/frontOffice.ts": "aa0b61644b902859a48ef7a60a2d73b867a97b56",
+  "src/lib/frontOfficeCuts.ts": "109cfc4ca98ff547c321e71cdf4006c5b664c750",
+  "src/lib/leagueCaps.ts": "0f1130f0417e7af4963a19036fbec56df2ca4025"
+ },
  "fleet": {
   "sets": [
    0,

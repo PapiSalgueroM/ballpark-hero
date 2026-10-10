@@ -57,7 +57,8 @@ export function withMathRandom(gen, fn) {
 }
 
 /** Bundle `entry` (lines of an ES module, paths from the repo root). `patches` is a control's list of
- *  { file, from, to }: each `from` must be in its file exactly once, or the bundle refuses. */
+ *  { file, from, to }: each `from` must be in its file exactly once, or the bundle refuses.
+ *  `inputs`: every file of the repo the bundle read (paths from the repo root, sorted), by esbuild's own account. */
 export async function bundle(entry, patches = [], tag = 'base') {
   const fired = new Set();
   const plugin = {
@@ -79,15 +80,19 @@ export async function bundle(entry, patches = [], tag = 'base') {
     },
   };
   const out = path.join(os.tmpdir(), `gm-game-day-${tag}-${process.pid}-${Date.now()}.mjs`);
-  await build({
+  const built = await build({
     stdin: { contents: entry.join('\n'), resolveDir: ROOT, loader: 'ts' },
-    bundle: true, format: 'esm', platform: 'node', outfile: out, absWorkingDir: ROOT,
+    bundle: true, format: 'esm', platform: 'node', outfile: out, absWorkingDir: ROOT, metafile: true,
     logLevel: 'error', alias: { '@': './src' }, plugins: [plugin], jsx: 'automatic',
   });
+  const inputs = Object.keys(built.metafile.inputs).map(f => f.split(path.sep).join('/')).filter(f => f.startsWith('src/') || f.startsWith('scripts/')).sort();
   const M = await import(pathToFileURL(out).href);
   try { fs.unlinkSync(out); } catch { /* the temp file is only a copy */ }
-  return { M, fired };
+  return { M, fired, inputs };
 }
+
+/** This file's own path from the repo root: the fleet is an input of everything recorded from it. */
+export const FLEET_FILE = 'scripts/lib/gmGameDayFleet.mjs';
 
 /** The engine side of the bundle: the untouched NFL Front Office engine and its two rosters. */
 export const ENGINE_ENTRY = [

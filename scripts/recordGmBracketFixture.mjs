@@ -19,6 +19,10 @@
  *
  * The file holds a digest a seed set over all 80 of its seasons, and the
  * first three seasons of each league kind in full, to point at a mismatch.
+ * It also holds, under `inputs`, the hash of every file the record was taken
+ * from (what the engine bundle read, by esbuild's own account, and the
+ * fleet), so that when a digest moves the harness can name the files that
+ * changed: a roster refresh moves this record as surely as the engine does.
  *
  * Run: node scripts/recordGmBracketFixture.mjs
  *   GM_BRACKET_FIXTURE_OUT=<path>   write somewhere else (a runner's $RC_OUT, a scratch folder)
@@ -28,13 +32,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
-import { ENGINE_ENTRY, FLEET, NEXT_DRAWS, ROOT, bundle, enginePostseason, playRegularSeason, readSrc, seasonId, sha1 } from './lib/gmGameDayFleet.mjs';
+import { ENGINE_ENTRY, FLEET, FLEET_FILE, NEXT_DRAWS, ROOT, bundle, enginePostseason, playRegularSeason, readSrc, seasonId, sha1 } from './lib/gmGameDayFleet.mjs';
 
 const OUT = process.env.GM_BRACKET_FIXTURE_OUT || path.join(ROOT, 'scripts', 'data', 'gmBracketFixture.json');
 const KEPT_A_KIND = 3;
 const git = cmd => { try { return execSync(`git ${cmd}`, { cwd: ROOT, encoding: 'utf8' }).trim(); } catch { return ''; } };
 
-const { M } = await bundle(ENGINE_ENTRY, [], 'record');
+const { M, inputs } = await bundle(ENGINE_ENTRY, [], 'record');
 const sets = {};
 let seasons = 0;
 for (const set of FLEET.sets) {
@@ -57,9 +61,10 @@ for (const set of FLEET.sets) {
 const fixture = {
   what: 'The NFL Front Office engine one press postseason (runPlayoffs) over the fleet of scripts/lib/gmGameDayFleet.mjs. Recorded by scripts/recordGmBracketFixture.mjs; read by scripts/simGmGameDay.mjs section 4.',
   commit: process.env.GM_BRACKET_FIXTURE_COMMIT || git('rev-parse HEAD'),
-  /* the two files a change to which should move this record: the engine, and the resolver the second writing sits on */
-  engine: sha1(readSrc('src/lib/frontOffice.ts')),
-  finalsBracket: sha1(readSrc('src/lib/finalsBracket.ts')),
+  /* every file whose bytes can move this record, each with the hash it had when the record was taken: what the engine
+     bundle read by esbuild's own account (the engine, its rosters and everything they import) and the fleet that
+     plays it. When the digests below move, scripts/simGmGameDay.mjs names the ones of these that changed. */
+  inputs: Object.fromEntries([...new Set([...inputs, FLEET_FILE])].sort().map(rel => [rel, sha1(readSrc(rel))])),
   fleet: { ...FLEET, nextDraws: NEXT_DRAWS },
   sets,
 };
