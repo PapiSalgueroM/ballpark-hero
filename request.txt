@@ -1,0 +1,7 @@
+#!serial
+clean-before: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000
+m-dropdb: node .rc/x/revMut.mjs dropdb && node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000; s=$?; git checkout -q -- src scripts; echo "rev mutation dropdb = exit $s (1 the test went red, 3 the mutation did not apply, 0 the test stayed green)"; exit $s
+m-namesakeedge: node .rc/x/revMut.mjs namesakeedge && node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000; s=$?; git checkout -q -- src scripts; echo "rev mutation namesakeedge = exit $s (1 the test went red, 3 the mutation did not apply, 0 the test stayed green)"; exit $s
+m-tableswapunshipped: node .rc/x/revMut.mjs tableswapunshipped && node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000; s=$?; git checkout -q -- src scripts; echo "rev mutation tableswapunshipped = exit $s (1 the test went red, 3 the mutation did not apply, 0 the test stayed green)"; exit $s
+m-tableswapdeep: node .rc/x/revMut.mjs tableswapdeep && node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000; s=$?; git checkout -q -- src scripts; echo "rev mutation tableswapdeep = exit $s (1 the test went red, 3 the mutation did not apply, 0 the test stayed green)"; exit $s
+clean-after: git diff --quiet -- src scripts && echo "the tree is restored" && node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000
