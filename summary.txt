@@ -1,0 +1,4 @@
+inv exit=1 59s | inv (in memory): RED. 1 failure(s) over 500 careers and 9469 playing rows.
+ab exit=0 66s | ab: GREEN. 373 season starts: each new decision changed only what it says (targets 1164, plans 746, roles 372, mentors 373, selection sums 35056, bans 626).
+mal exit=1 15s | mal: RED. Over 1920 malformed saves on 24 season starts: 192 threw while playing, 120 changed the season, 0 threw in a reader, 192 threw in the mentor dialog's reads, 0 m
+invr exit=1 130s | invr (a save and a reload before every step): RED. 1 failure(s) over 500 careers and 9475 playing rows.

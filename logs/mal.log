@@ -1,0 +1,20 @@
+{"samples":24,"cases":1920,"threw":192,"changed":120,"readerThrew":0,"dialogThrew":192,"formCases":220,"formMoved":0}
+by field {"seasonAmbition":{"cases":432,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"seasonPreparation":{"cases":312,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"reducedRole":{"cases":384,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"mentor":{"cases":360,"threw":192,"changed":120,"readerThrew":0,"dialogThrew":192},"row.ambition":{"cases":144,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"row.preparation":{"cases":144,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0},"row.reducedRole":{"cases":144,"threw":0,"changed":0,"readerThrew":0,"dialogThrew":0}}
+  mentor threw: 7: playing the season threw mentor.history is not iterable
+  mentor dialogThrew: 7: m.history is not iterable
+  mentor threw: "x": playing the season threw mentor.history is not iterable
+  mentor dialogThrew: "x": m.history is not iterable
+  mentor threw: true: playing the season threw mentor.history is not iterable
+  mentor dialogThrew: true: m.history is not iterable
+  mentor threw: []: playing the season threw mentor.history is not iterable
+  mentor dialogThrew: []: m.history is not iterable
+  mentor threw: {}: playing the season threw mentor.history is not iterable
+  mentor dialogThrew: {}: m.history is not iterable
+  mentor threw: {"status":"active"}: playing the season threw mentor.history is not iterable
+  mentor dialogThrew: {"status":"active"}: m.history is not iterable
+  mentor threw: {"generated":true,"name":"Probe Mentor","position":"CM","club":"Atletico Madrid","startYear":2023,"lastYear":2022,"age":16,"progress":0,"status":"active","history":null}: playing the season threw mentor.history is not iterable
+  mentor dialogThrew: {"generated":true,"name":"Probe Mentor","position":"CM","club":"Atletico Madrid","startYear":2023,"lastYear":2022,"age":16,"progress":0,"status":"active","history":null}: m.history is not iterable
+  mentor changed: {"generated":true,"name":"Probe Mentor","position":"CM","club":"Atletico Madrid","startYear":2023,"lastYear":2022,"age":16,"progress":0,"status":"active","history":"none"}: .events.5: base undefined | head "🤝 Generated academy player Probe Mentor: completed mentoring season 1 of 3 (2023)."
+  mentor threw: {"generated":true,"name":"A","status":"paused"}: playing the season threw mentor.history is not iterable
+  mentor dialogThrew: {"generated":true,"name":"A","status":"paused"}: m.history is not iterable
+mal: RED. Over 1920 malformed saves on 24 season starts: 192 threw while playing, 120 changed the season, 0 threw in a reader, 192 threw in the mentor dialog's reads, 0 moved form.

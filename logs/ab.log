@@ -1,0 +1,3 @@
+{"samples":373,"failures":0,"ambPairs":1164,"ambAchieved":234,"ambEqualElsewhere":1164,"prepPairs":746,"prepSameInjury":716,"prepDrawsEqual":673,"pushInjured":3809,"noneInjured":3335,"recoveryInjured":2766,"injuryTrials":14920,"rolePairs":372,"roleLeagueCut":1151,"roleAppsCut":1351,"roleRows":289,"mentorPairs":373,"mentorEqualElsewhere":373,"composeCases":35056,"composeSkipped":0,"composeLow":1303,"banCases":626,"banZeroApps":312,"formCases":20032}
+injury rate over 14920 paired draws: recovery 0.1854, none 0.2235, push 0.2553 (the rule says minus 0.04 and plus 0.03 before the 0.04 to 0.42 clamp)
+ab: GREEN. 373 season starts: each new decision changed only what it says (targets 1164, plans 746, roles 372, mentors 373, selection sums 35056, bans 626).
