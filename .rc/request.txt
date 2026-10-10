@@ -1,0 +1,22 @@
+# Release AT, the final run on the fixed head, the walks and the suites on a plain served build
+#!serve
+#!playwright
+#!serial
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simMobileChrome: node scripts/simMobileChrome.mjs
+playCareerSquad: node scripts/playCareerSquad.mjs
+playSeasonReveal: node scripts/playSeasonReveal.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+playSoccerCareer: node scripts/playSoccerCareer.mjs
+playSeasonCentre: node scripts/playSeasonCentre.mjs
+playCareerHub: node scripts/playCareerHub.mjs
+playUsSeasonCentre: node scripts/playUsSeasonCentre.mjs
+playGames-soccer-career: ONLY=/soccer-career node scripts/playGames.mjs
+playGames-nfl-my-career: ONLY=/nfl-my-career node scripts/playGames.mjs
