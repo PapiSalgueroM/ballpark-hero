@@ -84,14 +84,19 @@ length each sport can show.
 ## What holds the ending back, and what a screen reader hears
 
 While the rows arrive, the title ("This is your moment." or "A different way in."), the club line
-under it, the numbers after the minors and the result block wait for the closing row. The hold is
-a CSS animation with a delay and nothing else: there is no base rule at opacity 0, so anything
-that stops it leaves the words visible (fail safe). It sits on the title and the club line
-themselves, not on `.stageCopy`, whose own arrival animation would outrank it.
+under it and the result block wait for the closing row. The hold is a CSS animation with a delay
+and nothing else: there is no base rule at opacity 0, so anything that stops it leaves the words
+visible (fail safe). It sits on the title and the club line themselves, not on `.stageCopy`, whose
+own arrival animation would outrank it.
+The file under the stage (age, rating, health) is NOT faded. Since the fix pass the journey prints
+the numbers from before the press until the closing row has landed, and then the ones the career
+starts with (MLB and the NHL have minors in between, so those change). Nothing in it goes blank.
 Confetti mounts only once the closing row has landed (the kit's burst fires on mount).
 A screen reader: focus lands on the hidden heading, which reads "Draft night." while the rows
-arrive; every row is in the DOM and can be read ahead (the same final frame less motion gets);
-when the closing row lands a `role="status"` line says the result in one sentence.
+arrive. Since the fix pass the four things that say the ending (the title, the club line, the
+result block and the closing row) are `aria-hidden` while the rows arrive, because a screen reader
+reads through opacity; the rows above the closing row can be read ahead. When the closing row
+lands they come back and a `role="status"` line says the result in one sentence.
 With less motion the night starts on its last frame and nothing is held.
 
 ## The walk (scripts/playDraftNight.mjs), measured on a GitHub runner
@@ -128,6 +133,46 @@ refusal is for; the styles now go in after load.
 
 `fold` is also the proof the reveal is needed: without it the name is called below the screen.
 
+## The fix pass after the two reviews (2026-10-10)
+
+Two adversarial reviews (one that ran things, one that read) found two majors and a list of minors.
+Everything below is on the branch, each in its own commit, proven on GitHub runners.
+
+| Finding | What changed | What holds it now |
+|---|---|---|
+| The closing row could print the overall pick as the pick in the round with every check green (every case ended in round one) | nothing in the product: the row was right | `careerDraftNight.test.tsx`, "the row that ends the night, word for word": the fifth pick of round two and the last pick of the draft in all eight pairs, the 85th NFL pick typed out, the undrafted row; the walk compares the whole row with the save |
+| The NBA lottery tile cut 14 of 30 club names at 390 wide | the tile is handed the club's own name (`teamShort` on the descriptor, the NBA's only; "Trail Blazers", not "Portland Trail Blazers"), the line under the tiles keeps the city, and the journey gives the tile 6 px more room | the walk's check 9 measures both lines of every tile and every club of the era in the tile's own box, in the site's typeface, at 390, 360 and 1280; control `cut` |
+| Nothing held which way "Up" and "Down" point | nothing in the product | vitest reads Up, Down and Held off real tiles in both NBA eras, and two cases typed out; the walk compares every tile with the order |
+| The walk judged the hold against the page's own number for the hold | the walk | the moment is the closing row's own animation delay, and each held element's own delay must reach it |
+| The range line's boundary and the screen reader sentence could go wrong unseen | nothing in the product | both typed out in vitest |
+| The file under the stage went blank while the night played (MLB, NHL) | the journey prints the numbers from before the press until the row has landed; the fade is gone | the board test on all four boards; the walk reads the file in every frame of the hold |
+| A screen reader could read the ending early | the title, the club line, the result block and the closing row are `aria-hidden` while the rows arrive | the board test and the component's test |
+| At 320 wide the card lost 20 px when the skip went | the journey's narrow rule keeps the night's two buttons on one line | the walk's 320 wide night |
+| One era and two widths walked | the walk | a late pick of each throwback era at 390, the NBA's night at 360 by 740 and 320 by 640: 48 nights |
+| The scroll check started a fixed 1,500 ms in | the walk | the page must be SEEN standing still (measured: 33 to 350 ms after the night's first frame, median 266), and never move after; control `again` |
+| The face down number on a tile was about 3.3 to 1 | it is the journey's muted ink, 5.2 to 1 | read from the CSS |
+| What's New said the picks come off "one at a time" | the words | read |
+
+Measured with the site's typeface (Inter, let through from Google Fonts in the walk): a tile has
+106 px for a club at 390 wide, 91 at 360 and 247 at 1280, and the longest of the 30 clubs of today
+and the 29 of 2003 is "Timberwolves" at 83 px.
+
+Each new check was shown to bite by putting the defect back on a runner (one source mutation, then
+the two vitest files, a fresh build and the walk). All ten went red for their own reason:
+
+| Mutation | Red in |
+|---|---|
+| the closing row prints the overall pick as the pick in the round | vitest and the walk (`save`) |
+| the tile's "moved" number has its sign flipped | vitest and the walk (`save`) |
+| the tile is handed the city and the name again | vitest and the walk (`cut`, `save`) |
+| the hold ends at the first row | the walk (`spoiler`) |
+| the hold ends one second early | the walk (`spoiler`) |
+| the file shows the numbers after the minors while the night plays | vitest and the walk (`spoiler`) |
+| the narrow rule for the two buttons is removed | the walk (`height`, `skip`: 861 to 881 px at 320 wide) |
+| the range line says "and undrafted" for a range ending on the last pick | vitest |
+| the two numbers of the screen reader sentence are swapped | vitest |
+| the title is back in a screen reader's tree while the rows arrive | vitest |
+
 ## Residual, known and written down
 
 - The night plays once. There is no "watch it again" after a reload.
@@ -135,8 +180,18 @@ refusal is for; the styles now go in after load.
   frame as the mount), there is no night, only the result block. Nothing is lost.
 - The reveal is one `useRevealScroll` on the row of buttons, aligned to the bottom of the screen.
   On a viewport shorter than the card itself (the NBA's, with its lottery, measured 810 px on a 390
-  wide phone) the top of the lottery tile is above the screen when the name is called. The closing
-  row and the buttons are in view either way.
+  wide phone) the top of the lottery tile is above the screen when the name is called. On every
+  upright phone measured (640 px high and up, down to 320 wide) the closing row and the buttons are
+  in view. On a screen shorter than the night itself they are NOT: on a phone on its side (844 by
+  390, the review's case `nba-late-l`) the closing row lands at 506 to 560 px in a 390 px high
+  viewport and the buttons end at 631, because there the journey's own reveal of the play area wins
+  over the night's. Not a target size, and not changed.
+- At 320 wide the lottery tile (the shared presenter, Round 1222's file) has 73 px for a club, so
+  it still cuts its longest club ("Timberwolves", 83 px) and a long seed line ("Seed 1 · Down 3",
+  76 px). The walk writes that down at 320 and does not judge it. A two line label or a one column
+  grid on a narrow screen belongs in the presenter.
+- "Skip to my pick" is the label on every night, the ones that end without his name too. A
+  different label there would give the ending away in the first frame.
 - The NHL and MLB lotteries are real and not modelled by the career engines: no tile, and no
   sentence that says there is none.
 
