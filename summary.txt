@@ -1,0 +1,3 @@
+inbox-head exit=1 54s | simCareerInboxBeats: 1 failure
+inbox-nowheel exit=0 54s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+base-inbox exit=0 54s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
