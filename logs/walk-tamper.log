@@ -1,0 +1,20 @@
+playSaveKeeper: mode assert, CONTROL tamper, parts fresh, 3 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+A clean visit and a leave, per route: does the game write its save with no press?
+  WRITES  /stadium-tycoon  keys left: cookie-consent, dukb-guest-handle, stadiumTycoonSaveV1
+  WRITES  /wonderkid-factory  keys left: cookie-consent, dukb-guest-handle, wonderkidFactoryV1
+  WRITES  /idle-arena  keys left: cookie-consent, dukb-guest-handle, dukb-idle-arena-v1
+
+Journey L, the fresh flow, on the branch: the 3 route(s) that write with no press
+  PARTLY    [branch] fresh /stadium-tycoon 390: A (1246 chars) is in NO KEY; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+  PARTLY    [branch] fresh /stadium-tycoon 1280: A (1247 chars) is in NO KEY; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+  PARTLY    [branch] fresh /wonderkid-factory 390: A (335 chars) is in NO KEY; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+  PARTLY    [branch] fresh /wonderkid-factory 1280: A (335 chars) is in NO KEY; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+  PARTLY    [branch] fresh /idle-arena 390: A (312 chars) is in NO KEY; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+  PARTLY    [branch] fresh /idle-arena 1280: A (309 chars) is in NO KEY; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A x; backups 2; the button under a pointer: yes
+
+playSaveKeeper, branch: 6 walk(s) judged (6 fresh, 0 planted, 0 cross): 0 LOST the save that was put back, 6 partly, 0 survived; 0 not judged
+playSaveKeeper, journey L's own presses (made in the page, see pressAndJudge): the button was under a pointer in 6 of 6 walk(s)
+playSaveKeeper control tamper: FIRED. 6 of 6 walk(s) stopped reading SURVIVED once one character changed.

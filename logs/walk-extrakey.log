@@ -1,0 +1,10 @@
+playSaveKeeper: mode assert, CONTROL extrakey, parts K, 21 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  origin/main build /tmp/base-dist
+
+Journey K: the storage keys after an ordinary visit (a real save of all 21 games, the home page and every route once)
+  origin/main: 27 keys. branch: 28 keys. Added on the branch: dukb-control-extra-key. Only on origin/main: none.
+  the branch's keys: aussie-rules-manager-save-v2, cbb-dynasty-save-v1, cfb-dynasty-save-v1, cookie-consent, dukb-club-manager-save, dukb-control-extra-key, dukb-guest-handle, dukb-idle-arena-v1, dukb-play-diary-v1, dukb-streaks-v1, fight-career-save-v1, fight-gym-save-v1, fight-promoter-save-v1, front-office-save-v1, hallOfChampionsV1, mlb-front-office-save-v1, mlb-my-career-save-v1, nba-front-office-save-v1, nba-my-career-save-v1, nfl-my-career-save-v1, nhl-front-office-save-v1, nhl-my-career-save-v1, rebuild-table, rules-gate-seen:/aussie-rules-manager, soccerCareerSave, stadiumTycoonSaveV1, tycoonRewardsV1, wonderkidFactoryV1
+
+playSaveKeeper, branch: 0 walk(s) judged (0 fresh, 0 planted, 0 cross): 0 LOST the save that was put back, 0 partly, 0 survived; 0 not judged
+playSaveKeeper control extrakey: FIRED. Journey K saw the key the branch arm added.
