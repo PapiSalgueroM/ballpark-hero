@@ -1,0 +1,12 @@
+#!serial
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000 > $RC_OUT/vitest-all.txt 2>&1; s=$?; grep -E "Test Files|Tests " $RC_OUT/vitest-all.txt | tr "\n" " "; grep -E "^ (FAIL|❯) " $RC_OUT/vitest-all.txt | head -5; exit $s
+simLiveSim: node scripts/simLiveSim.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
