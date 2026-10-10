@@ -63,6 +63,10 @@ const cases = {
   uncopied: 'passes the whole base comparison with untouched current source under every copied fault',
 };
 const NEEDS_BASE = ['legacy', 'baseline', 'uncopied'];
+/* The neutral-only probe damages a save so that its club is in no league. The engine reads a save's league off its
+   club, and a club it does not know reads as the game's first league, so the probe can only stand in the Premier
+   League. Every bound league has an even number of clubs, so no real save of one ever has a neutral-only round. */
+const PREMIER_ONLY = ['bye'];
 const controls = {
   venues: { file: helperFile, from: '=> [home, away]);', to: '=> [away, home]);', test: 'ledger' },
   card: { file: cardFile, from: 'import { careerLeagueOf, careerRoundPairs }', to: 'import { careerLeagueOf, careerRoundPairs, roundPairs }',
@@ -70,7 +74,7 @@ const controls = {
   settlement: { file: engineFile, from: "if (fx.competition === 'league') {\n    const pairs = careerRoundPairs(state, entry.round);",
     to: "if (fx.competition === 'league') {\n    const pairs = roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);", test: 'settlement' },
   bye: { file: engineFile, from: '        const pairs = careerRoundPairs(state, entry.round);',
-    to: '        const pairs = roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);', test: 'bye' },
+    to: '        const pairs = roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);', test: 'bye', premierOnly: true },
   world: { file: engineFile, from: 'careerRoundPairs(state, w.round, lg.clubs, lg.id)',
     to: 'roundPairs(lg.clubs, w.round, !!state.balancedFixtures)', test: 'world' },
   edited: { file: helperFile, from: '&& !state.customClub && !state.leagueOverrides', to: '&& true', test: 'eligibility' },
@@ -151,7 +155,7 @@ async function main() {
   await mkdir(evidence, { recursive: true });
   if (control === 'all') {
     const summary = [];
-    let reads = 0;
+    let reads = 0, groups = 0;
     for (const name of ['', ...Object.keys(controls)]) {
       const run = spawnSync(process.execPath, [self], { cwd: root, env: { ...process.env, CM_REAL_FIXTURE_CONTROL: name, CM_REAL_FIXTURE_ARTIFACTS: evidence }, encoding: 'utf8', timeout: 480000, maxBuffer: 16 * 1024 * 1024, windowsHide: true });
       const output = `${run.stdout || ''}\n${run.stderr || ''}`;
@@ -162,16 +166,16 @@ async function main() {
       const rows = report?.cases ?? [], failed = rows.filter(r => r.status === 'failed'), passed = rows.filter(r => r.status === 'passed');
       const effective = name ? JSON.stringify(failed.map(r => [r.title, r.errorName])) === JSON.stringify(expectedFailures(name).map(title => [title, 'AssertionError']))
         && JSON.stringify(passed.map(r => r.title)) === JSON.stringify(expectedPasses(name))
-        : failed.length === 0 && passed.length === Object.keys(cases).length;
+        : failed.length === 0 && passed.length === report?.expectedToPass;
       const ok = run.status === 0 && !run.error && !run.signal && report?.numUnhandledErrors === 0 && report?.sourceBytesHeld === true && report?.league === LEAGUE && effective;
-      if (!name) reads = report?.fixtureReads ?? 0;
+      if (!name) { reads = report?.fixtureReads ?? 0; groups = passed.length; }
       summary.push({ control: name || 'normal', passed: ok, exit: run.status, assertions: passed.length + failed.length, intendedFailures: name ? expectedFailures(name) : [] });
       console.log(`${ok ? 'PASS' : 'FAIL'} real fixtures ${LEAGUE} ${name || 'normal'}`);
       process.stdout.write(ok ? output.split('\n').filter(line => line.startsWith('simCmRealFixtures')).join('\n') + '\n' : output.slice(-12000));
     }
     await writeFile(path.join(evidence, tag('summary.json')), JSON.stringify(summary, null, 2));
     assert.ok(summary.every(row => row.passed), 'Normal and every effective copied control execute their exact assertions');
-    console.log(`simCmRealFixtures ${LEAGUE}: ${Object.keys(cases).length} actual outcome groups, ${reads} fixture reads, ${reads} calendar reads and ${summary.length - 1} effective controls passed against the base ${baseSha}.`);
+    console.log(`simCmRealFixtures ${LEAGUE}: ${groups} actual outcome groups, ${reads} fixture reads, ${reads} calendar reads and ${summary.length - 1} effective controls passed against the base ${baseSha}.`);
     return;
   }
   /* Which files hold this league's list: its frozen line names them. */
@@ -255,9 +259,11 @@ async function main() {
     if (!entry) cannot(`the game's registry has no list for the league ${LEAGUE}`);
     if (entry.key !== key) cannot(`the registry gives ${LEAGUE} the key ${entry.key} and its frozen line is ${key}`);
     const lazy = !entry.ledger;
-    if (control && controls[control].lazyOnly && !lazy) {
-      await writeFile(path.join(evidence, tag(`${control}-report.json`)), JSON.stringify({ league: LEAGUE, control, notApplicable: 'this list rides with the engine, so it is never absent' }, null, 2));
-      console.log(`simCmRealFixtures ${control} ${LEAGUE}: does not apply, this list rides with the engine.`);
+    const inapplicable = !control ? '' : controls[control].lazyOnly && !lazy ? 'this list rides with the engine, so it is never absent'
+      : controls[control].premierOnly && LEAGUE !== 'premier' ? 'the neutral-only probe can only stand in the Premier League' : '';
+    if (inapplicable) {
+      await writeFile(path.join(evidence, tag(`${control}-report.json`)), JSON.stringify({ league: LEAGUE, control, notApplicable: inapplicable }, null, 2));
+      console.log(`simCmRealFixtures ${control} ${LEAGUE}: does not apply, ${inapplicable}.`);
       return;
     }
     const data = clone(original.__ledgerOf(key));
@@ -545,12 +551,14 @@ async function main() {
     for (const [name, title] of Object.entries(cases)) {
       if (control && name !== controls[control].test && name !== 'baseline' && name !== 'uncopied') { rows.push({ title, status: 'skipped' }); continue; }
       if (!BASE && NEEDS_BASE.includes(name)) { rows.push({ title, status: 'not run' }); continue; }
+      if (LEAGUE !== 'premier' && PREMIER_ONLY.includes(name)) { rows.push({ title, status: 'not applicable' }); continue; }
       try { await outcomes[name](); rows.push({ title, status: 'passed' }); }
       catch (error) { rows.push({ title, status: 'failed', errorName: error.name, message: error.message, stack: error.stack }); }
     }
     await new Promise(resolve => setImmediate(resolve));
     for (const verify of verifyBytes) await verify();
-    await writeFile(path.join(evidence, tag(`${control || 'normal'}-report.json`)), JSON.stringify({ league: LEAGUE, key, lazy, clubs: n, matchdays: R, base: baseSha || null, baselineSourceSha256, originalHash: sourceHashes.get(engineFile), control: control || 'normal', ...observations, sourceBytesHeld: true, numUnhandledErrors: unhandled.length, unhandled, cases: rows }, null, 2));
+    const expectedToPass = Object.keys(cases).length - (BASE ? 0 : NEEDS_BASE.length) - (LEAGUE === 'premier' ? 0 : PREMIER_ONLY.length);
+    await writeFile(path.join(evidence, tag(`${control || 'normal'}-report.json`)), JSON.stringify({ league: LEAGUE, key, lazy, expectedToPass, clubs: n, matchdays: R, base: baseSha || null, baselineSourceSha256, originalHash: sourceHashes.get(engineFile), control: control || 'normal', ...observations, sourceBytesHeld: true, numUnhandledErrors: unhandled.length, unhandled, cases: rows }, null, 2));
     assert.deepEqual(unhandled, [], 'Import/runtime errors never count as an effective control');
     const failed = rows.filter(r => r.status === 'failed');
     if (control) {
@@ -560,7 +568,7 @@ async function main() {
     } else {
       for (const row of failed) console.error(`FAIL ${LEAGUE}: ${row.title}\n${row.stack}`);
       assert.deepEqual(failed.map(r => r.title), []);
-      assert.equal(rows.filter(r => r.status === 'passed').length, Object.keys(cases).length - (BASE ? 0 : NEEDS_BASE.length));
+      assert.equal(rows.filter(r => r.status === 'passed').length, expectedToPass);
     }
     if (!BASE) console.log(`simCmRealFixtures ${LEAGUE}: NOT RUN, ${NEEDS_BASE.length} groups that compare with a base engine (${NEEDS_BASE.join(', ')}): no CM_FIXTURE_BASE was given.`);
     console.log(control
