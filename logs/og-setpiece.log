@@ -1,0 +1,2352 @@
+Negative control changed temporary source: setpiece (src/components/pitch-motion/motion.tsx)
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it
+[1216 material] fleet 0 (Aston Villa 110101, Real Madrid 110102, Lyon 110103, Ajax 110104, Celtic 110105): 100 matches, 200 half feeds; own goals staged 163 (goals left as they were: 118), for me 79, against me 84; the named man on the viewer's cast 163, not on it 0; by a back 139, by the keeper 24; actions that start outside the goal's own minute 0, wound up as a last kick 0
+
+ ❯ src/test/pitchOwnGoal.test.tsx (16 tests | 1 failed | 14 skipped) 1764ms
+   ✓ Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it  1655ms
+   ↓ Round 1216: an own goal on real feeds > OG1: the ball goes in off the man the line names
+   ↓ Round 1216: an own goal on real feeds > OG9: from the touch to the net the ball passes nobody else
+   ↓ Round 1216: an own goal on real feeds > OG2: the instants are the goal it always was
+   ↓ Round 1216: an own goal on real feeds > OG3: nobody is the scorer, and the man holds his head
+   ↓ Round 1216: an own goal on real feeds > OG4: nobody stands on a team mate while it plays
+   ↓ Round 1216: an own goal on real feeds > OG5: the turn can be seen, and the ball comes to the man
+   ↓ Round 1216: an own goal on scenes made by hand > OG6: who it goes in off, and a man who is not there moves nobody
+   ↓ Round 1216: an own goal on scenes made by hand > OG7: reduced motion shows the last frame at once, the man with his head in his hands
+   × Round 1216: an own goal on scenes made by hand > OG8: a goal from the spot or from a direct free kick is never drawn as an own goal 107ms
+     → expected [ { …(10) }, { …(10) }, …(41) ] to deeply equal [ …(43) ]
+   ↓ Round 1216: an own goal on scenes made by hand > OG10: a back meets it in a band in front of his own goal, wherever he stands
+   ↓ Round 1216: the recorded own goal > OWN: every own goal frame of the hand made scenes is the recorded one
+   ↓ Round 1216: the recorded own goal > RUE: the figure with his head in his hands is the recorded one, and at rue 0 it is the figure it was
+   ↓ Round 1216: an own goal in the live match > the live match draws an own goal for me off the man on its card
+   ↓ Round 1216: an own goal in the live match > the live match draws an own goal for opp off the man on its card
+   ↓ Round 1216: an own goal and a change of line up off the clock > an own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 14 skipped (16)
+   Start at  15:32:42
+   Duration  4.86s (transform 1.76s, setup 62ms, collect 2.27s, tests 1.76s, environment 381ms, prepare 127ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/own-goal-bi8zgY/result.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on scenes made by hand > OG8: a goal from the spot or from a direct free kick is never drawn as an own goal
+AssertionError: expected [ { …(10) }, { …(10) }, …(41) ] to deeply equal [ …(43) ]
+
+- Expected
++ Received
+
+@@ -50,20 +50,25 @@
+          "y": 27,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
+        },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -158,20 +163,25 @@
+          "y": 26.58640588069443,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
+        },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -181,11 +191,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.027572941287037,
++         "y": 17.027394149742083,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -266,18 +276,23 @@
+          "y": 25.462788995668813,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -289,11 +304,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.10248073362208,
++         "y": 17.099909101170475,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -374,18 +389,23 @@
+          "y": 23.804897554259796,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -397,11 +417,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.213006829716015,
++         "y": 17.201384461969702,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -482,18 +502,23 @@
+          "y": 21.788479765804027,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -505,11 +530,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.347434682279733,
++         "y": 17.314905139891028,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -590,18 +615,23 @@
+          "y": 19.58928383963815,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -613,11 +643,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.494047744024122,
++         "y": 17.42437615751492,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -698,18 +728,23 @@
+          "y": 17.3830579850988,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0.29475517441090454,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -721,11 +756,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.64112946766008,
++         "y": 17.515801003391086,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -806,20 +841,25 @@
+          "y": 15.34555041152263,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0.5735764363510464,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
+        },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -829,11 +869,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.77696330589849,
++         "y": 17.578263519556046,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -914,18 +954,23 @@
+          "y": 13.65250932824629,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0.7971325072229224,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -937,11 +982,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.889832711450246,
++         "y": 17.60461332542824,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1022,20 +1067,25 @@
+          "y": 12.479682944606415,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0.9438833303083676,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
+        },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -1045,11 +1095,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.968021137026238,
++         "y": 17.591854778080698,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1130,20 +1180,25 @@
+          "y": 12.00281946993965,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "plant",
+      "poses": {
+        "m9": {
+          "kick": 0.9996891820008162,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
+        },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -1153,11 +1208,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 17.999812035337357,
++         "y": 17.541239468891245,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1188,12 +1243,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 51.76014504567818,
+-       "y": 10.543650793650793,
++       "x": 52.02186147186147,
++       "y": 11.497835497835498,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -1238,18 +1293,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 0.9591730613269878,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -1261,11 +1321,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.470536721905912,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1296,12 +1356,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 52.255514387032406,
+-       "y": 10.047619047619047,
++       "x": 52.8064935064935,
++       "y": 12.03896103896104,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -1346,18 +1406,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 0.8262387743159946,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -1369,11 +1434,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.400258523992242,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1404,12 +1469,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 52.74088305782174,
+-       "y": 9.5515873015873,
++       "x": 53.591125541125535,
++       "y": 12.58008658008658,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -1454,18 +1519,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 0.6136947947920475,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -0.48958772225444463,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -1477,11 +1547,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.331771777429545,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1512,12 +1582,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 53.211340344224794,
+-       "y": 9.055555555555554,
++       "x": 54.375757575757575,
++       "y": 13.121212121212121,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -1562,18 +1632,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 0.34202014332566844,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -2.0892968363374345,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -1585,11 +1660,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.266341631476987,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1620,12 +1695,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 53.66233690701139,
+-       "y": 8.559523809523808,
++       "x": 55.16038961038961,
++       "y": 13.662337662337663,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -1670,20 +1745,25 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 0.037391194276325444,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -4.668245721656183,
+        },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -1693,11 +1773,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.205233235393727,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1728,12 +1808,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 54.08979503392161,
+-       "y": 8.063492063492063,
++       "x": 55.94502164502164,
++       "y": 14.203463203463203,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -1778,18 +1858,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -8.089821686911064,
++       },
++       "o3": {
++         "kick": 0,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -1801,11 +1886,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.149711738438935,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1836,12 +1921,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 54.49020746225423,
+-       "y": 7.567460317460316,
++       "x": 56.72965367965368,
++       "y": 14.744588744588745,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -1886,19 +1971,24 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -12.217412040802447,
+        },
++       "o3": {
++         "kick": 0.2584144163442352,
++         "rue": 0,
++       },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+@@ -1909,11 +1999,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.10104228987177,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -1944,12 +2034,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 54.860722376717426,
+-       "y": 7.071428571428571,
++       "x": 57.51428571428571,
++       "y": 15.285714285714285,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -1994,18 +2084,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -16.914404092030694,
++       },
++       "o3": {
++         "kick": 0.5442876857382131,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -2017,11 +2112,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.060490038951393,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -2052,12 +2147,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 55.199212522635065,
+-       "y": 6.575396825396825,
++       "x": 58.298917748917745,
++       "y": 15.826839826839826,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -2102,20 +2197,25 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -22.04418514929619,
+        },
++       "o3": {
++         "kick": 0.7768822841768378,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -2125,11 +2225,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.029320134936974,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -2160,12 +2260,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 55.50432675956304,
+-       "y": 6.07936507936508,
++       "x": 59.083549783549785,
++       "y": 16.36796536796537,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -2210,20 +2310,25 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -27.470142521299262,
+        },
++       "o3": {
++         "kick": 0.9334302317830764,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -2233,11 +2338,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.008797727087668,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -2268,12 +2373,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 55.77552280592334,
+-       "y": 5.583333333333332,
++       "x": 59.86818181818182,
++       "y": 16.90909090909091,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -2318,19 +2423,24 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -33.05566351674034,
+        },
++       "o3": {
++         "kick": 0.9986075247115431,
++         "rue": 0,
++       },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+@@ -2341,11 +2451,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17.000187964662643,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -2376,12 +2486,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 56.01308038109588,
+-       "y": 5.087301587301586,
++       "x": 59.72486772486772,
++       "y": 15.532627865961196,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -2426,20 +2536,25 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -38.66413544431975,
+        },
++       "o3": {
++         "kick": 0.9660341554134969,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -2449,11 +2564,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -2484,12 +2599,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 56.21809442647212,
+-       "y": 4.59126984126984,
++       "x": 59.39417989417989,
++       "y": 13.768959435626098,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -2534,18 +2649,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -44.15894561273785,
++       },
++       "o3": {
++         "kick": 0.8388986322278393,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -2557,11 +2677,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -2592,12 +2712,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 56.39244856975668,
+-       "y": 4.095238095238093,
++       "x": 59.06349206349206,
++       "y": 12.005291005291,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -2642,18 +2762,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -49.403481330695044,
++       },
++       "o3": {
++         "kick": 0.6296458659692592,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -2665,11 +2790,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -2700,12 +2825,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 56.5387694756048,
+-       "y": 3.599206349206349,
++       "x": 58.732804232804234,
++       "y": 10.241622574955908,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -2750,18 +2875,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -54.26112990689163,
++       },
++       "o3": {
++         "kick": 0.3587589753488997,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -2773,11 +2903,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -2808,12 +2938,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 56.660363188899346,
+-       "y": 3.103174603174603,
++       "x": 58.402116402116405,
++       "y": 8.47795414462081,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -2858,20 +2988,25 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -58.595278650028064,
+        },
++       "o3": {
++         "kick": 0.05275425660062624,
++         "rue": 0,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -2881,11 +3016,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -2916,12 +3051,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 56.761135013375906,
+-       "y": 2.607142857142856,
++       "x": 58.07142857142857,
++       "y": 6.71428571428571,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -2966,18 +3101,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -62.26931486880468,
++       },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -2989,11 +3129,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -3024,12 +3164,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 56.8454948673226,
+-       "y": 2.111111111111109,
++       "x": 57.74074074074074,
++       "y": 4.950617283950612,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -3074,18 +3214,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -65.14662587192183,
++       },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -3097,11 +3242,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -3132,12 +3277,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 56.91825041004119,
+-       "y": 1.6150793650793638,
++       "x": 57.41005291005291,
++       "y": 3.1869488536155135,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -3182,18 +3327,23 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -67.09059896807987,
++       },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -3205,11 +3355,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -3240,12 +3390,12 @@
+      ],
+    },
+    {
+      "action": "goal",
+      "ball": {
+-       "x": 56.984490529129715,
+-       "y": 1.1190476190476186,
++       "x": 57.079365079365076,
++       "y": 1.4232804232804224,
+      },
+      "holderKey": null,
+      "mine": [
+        {
+          "keeper": true,
+@@ -3290,19 +3440,24 @@
+          "y": 12,
+        },
+      ],
+      "net": null,
+      "netPulse": 0,
++     "ownGoalBy": "o3",
+      "phase": "flight",
+      "poses": {
+        "m9": {
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -67.9646214659792,
+        },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0,
++       },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+@@ -3313,11 +3468,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -3378,19 +3533,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 44.04122926261724,
+-         "y": 33.84882603707011,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 59.9312845623046,
+-         "y": 37.82133986199195,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -3398,28 +3553,32 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.20163615175563404,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 0.03817524316411318,
+        },
+        "m8": {
+          "celebrate": 0.03817524316411318,
+        },
+        "m9": {
+          "celebrate": 0.03817524316411318,
+-         "hop": 0.8065446070225362,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
+        },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0.03817524316411296,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -3429,11 +3588,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -3494,19 +3653,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 44.196380759717464,
+-         "y": 33.2799372143693,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 59.672698733804225,
+-         "y": 37.149016707890986,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -3514,28 +3673,32 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.45303813884061667,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 0.18183403677543,
+        },
+        "m8": {
+          "celebrate": 0.18183403677543,
+        },
+        "m9": {
+          "celebrate": 0.18183403677543,
+-         "hop": 1.8121525553624667,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
+        },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0.18183403677543045,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -3545,11 +3708,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -3610,19 +3773,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 44.422130265504265,
+-         "y": 32.45218902648437,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 59.29644955749289,
+-         "y": 36.170768849481526,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -3630,28 +3793,32 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.6723008902613168,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 0.3908613569483917,
+        },
+        "m8": {
+          "celebrate": 0.3908613569483917,
+        },
+        "m9": {
+          "celebrate": 0.3908613569483917,
+-         "hop": 2.689203561045267,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
+        },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0.39086135694839214,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -3661,11 +3828,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -3726,19 +3893,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 44.67058225169638,
+-         "y": 31.54119841044661,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 58.88236291383937,
+-         "y": 35.09414357598236,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -3746,28 +3913,32 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.8438695627580833,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 0.6209094923114615,
+        },
+        "m8": {
+          "celebrate": 0.6209094923114615,
+        },
+        "m9": {
+          "celebrate": 0.6209094923114615,
+-         "hop": 3.3754782510323333,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
+        },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0.6209094923114619,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -3777,11 +3948,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -3842,19 +4013,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 44.89384119001255,
+-         "y": 30.722582303287314,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 58.510264683312414,
+-         "y": 34.126688176612284,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -3862,26 +4033,30 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.9555728057861405,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 0.8276307314931023,
+        },
+        "m8": {
+          "celebrate": 0.8276307314931023,
+        },
+        "m9": {
+          "celebrate": 0.8276307314931023,
+-         "hop": 3.822291223144562,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
++       },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0.8276307314931026,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -3893,11 +4068,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -3958,19 +4133,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 45.044011552171526,
+-         "y": 30.17195764203775,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 58.2599807463808,
+-         "y": 33.47594994059007,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -3978,26 +4153,30 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.9994862162006879,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 0.9666773631217804,
+        },
+        "m8": {
+          "celebrate": 0.9666773631217804,
+        },
+        "m9": {
+          "celebrate": 0.9666773631217804,
+-         "hop": 3.9979448648027516,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
++       },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 0.9666773631217803,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -4009,11 +4188,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -4074,19 +4253,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 45.08,
+-         "y": 30.04,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 58.2,
+-         "y": 33.32,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -4094,26 +4273,30 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.9724945078367512,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 1,
+        },
+        "m8": {
+          "celebrate": 1,
+        },
+        "m9": {
+          "celebrate": 1,
+-         "hop": 3.8899780313470047,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
++       },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 1,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -4125,11 +4308,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -4190,19 +4373,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 45.08,
+-         "y": 30.04,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 58.2,
+-         "y": 33.32,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -4210,26 +4393,30 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.8765125147926477,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 1,
+        },
+        "m8": {
+          "celebrate": 1,
+        },
+        "m9": {
+          "celebrate": 1,
+-         "hop": 3.5060500591705908,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
++       },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 1,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -4241,11 +4428,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -4306,19 +4493,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 45.08,
+-         "y": 30.04,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 58.2,
+-         "y": 33.32,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -4326,28 +4513,32 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.7183493500977273,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 1,
+        },
+        "m8": {
+          "celebrate": 1,
+        },
+        "m9": {
+          "celebrate": 1,
+-         "hop": 2.873397400390909,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
+        },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 1,
+        },
++     },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+          "name": "Away keeper",
+@@ -4357,11 +4548,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -4422,19 +4613,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 45.08,
+-         "y": 30.04,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 58.2,
+-         "y": 33.32,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -4442,26 +4633,30 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.5092253565614235,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 1,
+        },
+        "m8": {
+          "celebrate": 1,
+        },
+        "m9": {
+          "celebrate": 1,
+-         "hop": 2.036901426245694,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
++       },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 1,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -4473,11 +4668,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -4538,19 +4733,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 45.08,
+-         "y": 30.04,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 58.2,
+-         "y": 33.32,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -4558,26 +4753,30 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 0.26397611806750904,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 1,
+        },
+        "m8": {
+          "celebrate": 1,
+        },
+        "m9": {
+          "celebrate": 1,
+-         "hop": 1.0559044722700361,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
++       },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 1,
+        },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+@@ -4589,11 +4788,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+@@ -4654,19 +4853,19 @@
+        },
+        {
+          "keeper": false,
+          "key": "m8",
+          "name": "Home near",
+-         "x": 45.08,
+-         "y": 30.04,
++         "x": 44,
++         "y": 34,
+        },
+        {
+          "keeper": false,
+          "key": "m7",
+          "name": "Home next",
+-         "x": 58.2,
+-         "y": 33.32,
++         "x": 60,
++         "y": 38,
+        },
+        {
+          "keeper": false,
+          "key": "m9",
+          "name": "Home striker",
+@@ -4674,27 +4873,31 @@
+          "y": 12,
+        },
+      ],
+      "net": "opp",
+      "netPulse": 1.2246467991473532e-16,
++     "ownGoalBy": "o3",
+      "phase": "net",
+      "poses": {
+        "m7": {
+          "celebrate": 1,
+        },
+        "m8": {
+          "celebrate": 1,
+        },
+        "m9": {
+          "celebrate": 1,
+-         "hop": 4.898587196589413e-16,
+          "kick": 1.2246467991473532e-16,
+        },
+        "o0": {
+          "catching": 0,
+          "dive": -68,
+        },
++       "o3": {
++         "kick": 1.2246467991473532e-16,
++         "rue": 1,
++       },
+      },
+      "theirs": [
+        {
+          "keeper": true,
+          "key": "o0",
+@@ -4705,11 +4908,11 @@
+        {
+          "keeper": false,
+          "key": "o3",
+          "name": "Away back",
+          "x": 60,
+-         "y": 18,
++         "y": 17,
+        },
+        {
+          "keeper": false,
+          "key": "o4",
+          "name": "Away other back",
+
+ ❯ src/test/pitchOwnGoal.test.tsx:538:22
+    536|       const tagged = handFrames(side, back, flag);
+    537|       const plain = TICKS.map(t => actionFrame(sceneFor(side), { ...ha…
+    538|       expect(tagged).toEqual(plain);
+       |                      ^
+    539|       expect(tagged.every(frame => frame.ownGoalBy === undefined)).toB…
+    540|     }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simOwnGoalMotion: control setpiece turned "OG8: a goal from the spot or from a direct free kick" red on an assertion (1 failed) and the material stayed green, as it must.
