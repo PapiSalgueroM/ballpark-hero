@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playDraftNight.mjs
+walk-cut: PLAY_DRAFT_NIGHT_CONTROL=cut RC_OUT="$RC_OUT/c-cut" node scripts/playDraftNight.mjs
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
