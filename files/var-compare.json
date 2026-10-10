@@ -1,0 +1,181 @@
+{
+  "clubs": 21,
+  "matches": 680,
+  "walkEqual": 6,
+  "walkDiffer": 695,
+  "firstWalkDifference": {
+    "club": "Arsenal",
+    "entry": 4,
+    "seed": 931677
+  },
+  "offQuick": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 0,
+      "result": 0,
+      "scorers": 0,
+      "cards": 0,
+      "subs": 0,
+      "draws": 0,
+      "next": 0,
+      "state": 674,
+      "report": 0
+    },
+    "first": {
+      "club": "Arsenal",
+      "entry": 4,
+      "seed": 931677,
+      "field": "state",
+      "as": "[\"Everton\",\"Arsenal\",0,2,\"regular\",null]",
+      "head": "[\"Everton\",\"Arsenal\",0,2,\"regular\",null]",
+      "asDraws": 1316,
+      "headDraws": 1316
+    }
+  },
+  "offLive": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 0,
+      "result": 0,
+      "scorers": 0,
+      "cards": 0,
+      "subs": 0,
+      "draws": 0,
+      "next": 0,
+      "state": 675,
+      "report": 0
+    },
+    "first": {
+      "club": "Arsenal",
+      "entry": 5,
+      "seed": 939596,
+      "field": "state",
+      "as": "[\"Arsenal\",\"Crystal Palace\",2,0,\"regular\",null]",
+      "head": "[\"Arsenal\",\"Crystal Palace\",2,0,\"regular\",null]",
+      "asDraws": 902,
+      "headDraws": 902
+    }
+  },
+  "onQuick": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 196,
+      "result": 85,
+      "scorers": 240,
+      "cards": 139,
+      "subs": 174,
+      "draws": 207,
+      "next": 207,
+      "state": 677,
+      "report": 385
+    },
+    "first": {
+      "club": "Arsenal",
+      "entry": 0,
+      "seed": 900001,
+      "field": "state",
+      "as": "[\"Chelsea\",\"Arsenal\",1,1,\"regular\",null]",
+      "head": "[\"Chelsea\",\"Arsenal\",1,1,\"regular\",null]",
+      "asDraws": 1322,
+      "headDraws": 1322
+    }
+  },
+  "onLive": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 157,
+      "result": 64,
+      "scorers": 162,
+      "cards": 32,
+      "subs": 19,
+      "draws": 120,
+      "next": 120,
+      "state": 677,
+      "report": 356
+    },
+    "first": {
+      "club": "Arsenal",
+      "entry": 0,
+      "seed": 900001,
+      "field": "state",
+      "as": "[\"Chelsea\",\"Arsenal\",1,1,\"regular\",null]",
+      "head": "[\"Chelsea\",\"Arsenal\",1,1,\"regular\",null]",
+      "asDraws": 1322,
+      "headDraws": 1322
+    }
+  },
+  "shownVsSkipped": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 0,
+      "result": 0,
+      "scorers": 0,
+      "cards": 0,
+      "subs": 0,
+      "draws": 0,
+      "next": 0,
+      "state": 224,
+      "report": 0
+    },
+    "first": {
+      "club": "Arsenal",
+      "entry": 0,
+      "seed": 900001,
+      "field": "state",
+      "as": "[\"Chelsea\",\"Arsenal\",1,1,\"regular\",null]",
+      "head": "[\"Chelsea\",\"Arsenal\",1,1,\"regular\",null]",
+      "asDraws": 1322,
+      "headDraws": 1322
+    }
+  },
+  "on": {
+    "matchesWithReview": 345,
+    "reviews": 469,
+    "disallowed": 76,
+    "confirmed": 166,
+    "penaltyConfirmed": 104,
+    "penaltyAwarded": 123,
+    "matchesWithAwardedPenalty": 116,
+    "goalsAS": 1722,
+    "goalsOn": 1758,
+    "byComp": {
+      "league": 308,
+      "uclGroup": 11,
+      "cup": 24,
+      "uclKo": 2
+    },
+    "reviewWithoutItsGoal": 68,
+    "firstReviewWithoutItsGoal": {
+      "club": "Arsenal",
+      "entry": 7,
+      "seed": 955434,
+      "review": {
+        "minute": 17,
+        "side": "me",
+        "kind": "var",
+        "text": "Christos Tzolis",
+        "review": {
+          "id": "2026:Arsenal:7:Roma:0:45:me:17:0:Christos Tzolis:goal",
+          "incident": "goal",
+          "decision": "confirmed",
+          "reason": "clear"
+        }
+      },
+      "goalRowsThatMinute": [
+        {
+          "minute": 17,
+          "side": "me",
+          "kind": "goal",
+          "text": "Mile Svilar",
+          "og": true
+        }
+      ]
+    },
+    "boundStates": 0
+  }
+}

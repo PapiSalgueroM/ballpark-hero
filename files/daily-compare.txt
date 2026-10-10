@@ -1,0 +1,254 @@
+2026-10-10 HOT Athletic Club (La Liga) bound=no SAME | DEADLINE Rangers bound=no SAME
+2026-10-11 HOT Young Boys (Swiss Super League) bound=no SAME | DEADLINE Borussia Dortmund bound=no SAME
+2026-10-12 HOT Westerlo (Belgian Pro League) bound=no SAME | DEADLINE Atalanta bound=no SAME
+2026-10-13 HOT Celta Vigo (La Liga) bound=no SAME | DEADLINE Trabzonspor bound=no SAME
+2026-10-14 HOT Monza (Serie A) bound=no SAME | DEADLINE PAOK bound=no SAME
+2026-10-15 HOT Osasuna (La Liga) bound=no SAME | DEADLINE St. Pauli bound=no SAME
+2026-10-16 HOT Cruz Azul (Liga MX) bound=no SAME | DEADLINE Nice bound=no SAME
+2026-10-17 HOT Trabzonspor (Süper Lig) bound=no SAME | DEADLINE Valencia bound=no SAME
+2026-10-18 HOT Al-Ahli (Saudi Pro League) bound=no SAME | DEADLINE Nottingham Forest bound=yes SAME
+2026-10-19 HOT Hamburg (Bundesliga) bound=no SAME | DEADLINE Cruzeiro bound=no SAME
+2026-10-20 HOT Toulouse (Ligue 1) bound=no SAME | DEADLINE Monterrey bound=no SAME
+2026-10-21 HOT Anderlecht (Belgian Pro League) bound=no SAME | DEADLINE Como bound=no SAME
+2026-10-22 HOT León (Liga MX) bound=no SAME | DEADLINE Auxerre bound=no SAME
+2026-10-23 HOT Elche (La Liga) bound=no SAME | DEADLINE Heidenheim bound=no SAME
+2026-10-24 HOT Athletico Paranaense (Brasileirão Série A) bound=no SAME | DEADLINE Monaco bound=no SAME
+2026-10-25 HOT Samsunspor (Süper Lig) bound=no SAME | DEADLINE Deportivo La Coruña bound=no SAME
+2026-10-26 HOT Le Havre (Ligue 1) bound=no SAME | DEADLINE FC Juárez bound=no SAME
+2026-10-27 HOT Nottingham Forest (Premier League) bound=yes DIFFERENT | DEADLINE Al-Hilal bound=no SAME
+    AS   opened: 6/20 P11 19pts wk11 target 6 next {"kind":"match","competition":"league","compLabel":"Premier League · Round 12","opponent":
+    head opened: 12/20 P6 7pts wk6 target 4 next {"kind":"match","competition":"league","compLabel":"Premier League · Round 7","opponent":"
+    AS   played: Newcastle 2-0, Leeds United 1-0 => ["survived",6]
+    head played: Arsenal 1-2, Chelsea 1-2, Ipswich Town 0-1, Brentford 2-2, Manchester City 1-2 => ["boardSacked",1]
+2026-10-28 HOT PSG (Ligue 1) bound=no DIFFERENT | DEADLINE Red Bull Bragantino bound=no SAME
+    AS   opened: 2/18 P8 22pts wk8 target 12 next {"kind":"match","competition":"uclGroup","compLabel":"Champions League · Group MD3","oppon
+    head opened: 2/18 P8 22pts wk8 target 12 next {"kind":"match","competition":"uclGroup","compLabel":"Champions League · Group MD3","oppon
+    AS   played: RB Leipzig 0-0, Marseille 4-1, Brest 4-0, AEK Athens 1-0, Lorient 5-0, Le Havre 1-0 => ["survived",12]
+    head played: RB Leipzig 0-0, Marseille 4-1, Brest 4-0, AEK Athens 1-0, Lorient 5-0, Le Havre 1-0 => ["survived",12]
+2026-10-29 HOT FC Midtjylland (Danish Superliga) bound=no DIFFERENT | DEADLINE Lecce bound=no SAME
+    AS   opened: 2/12 P7 15pts wk7 target 9 next {"kind":"match","competition":"league","compLabel":"Danish Superliga · Round 8","opponent"
+    head opened: 2/12 P7 15pts wk7 target 9 next {"kind":"match","competition":"league","compLabel":"Danish Superliga · Round 8","opponent"
+    AS   played: Brøndby IF 2-1, FC Nordsjælland 2-1, SønderjyskE 0-2, Viborg FF 1-1, Randers FC 2-1 => ["survived",10]
+    head played: Brøndby IF 2-1, FC Nordsjælland 2-1, SønderjyskE 0-2, Viborg FF 1-1, Randers FC 2-1 => ["survived",10]
+2026-10-30 HOT Sturm Graz (Austrian Bundesliga) bound=no DIFFERENT | DEADLINE Sassuolo bound=no SAME
+    AS   opened: 4/12 P10 18pts wk10 target 9 next {"kind":"match","competition":"league","compLabel":"Austrian Bundesliga · Round 11","oppon
+    head opened: 4/12 P10 18pts wk10 target 9 next {"kind":"match","competition":"league","compLabel":"Austrian Bundesliga · Round 11","oppon
+    AS   played: WSG Tirol 3-0, Altach 2-0, Austria Lustenau 0-1, Hartberg 4-0 => ["survived",9]
+    head played: WSG Tirol 3-0, Altach 2-0, Austria Lustenau 0-1, Hartberg 4-0 => ["survived",9]
+2026-10-31 HOT Deportivo La Coruña (La Liga) bound=no DIFFERENT | DEADLINE Göztepe bound=no SAME
+    AS   opened: 13/20 P14 15pts wk14 target 5 next {"kind":"match","competition":"league","compLabel":"La Liga · Round 15","opponent":"Valenc
+    head opened: 13/20 P14 15pts wk14 target 5 next {"kind":"match","competition":"league","compLabel":"La Liga · Round 15","opponent":"Valenc
+    AS   played: Valencia 0-0, Elche 0-1, Osasuna 0-4, Celta Vigo 1-3, Málaga 0-1 => ["sacked",1]
+    head played: Valencia 0-0, Elche 0-1, Osasuna 0-4, Celta Vigo 1-3, Málaga 0-1 => ["sacked",1]
+2026-11-01 HOT Utrecht (Eredivisie) bound=no DIFFERENT | DEADLINE Manchester United bound=yes SAME
+    AS   opened: 5/18 P14 23pts wk14 target 5 next {"kind":"match","competition":"league","compLabel":"Eredivisie · Round 15","opponent":"Aja
+    head opened: 5/18 P14 23pts wk14 target 5 next {"kind":"match","competition":"league","compLabel":"Eredivisie · Round 15","opponent":"Aja
+    AS   played: Ajax 1-0, Willem II 1-2, AZ Alkmaar 0-2, Heerenveen 0-2, Groningen 1-1 => ["sacked",4]
+    head played: Ajax 1-0, Willem II 1-2, AZ Alkmaar 0-2, Heerenveen 0-2, Groningen 1-1 => ["sacked",4]
+2026-11-02 HOT RB Salzburg (Austrian Bundesliga) bound=no DIFFERENT | DEADLINE Torino bound=no SAME
+    AS   opened: 1/12 P10 26pts wk10 target 9 next {"kind":"match","competition":"league","compLabel":"Austrian Bundesliga · Round 11","oppon
+    head opened: 1/12 P10 26pts wk10 target 9 next {"kind":"match","competition":"league","compLabel":"Austrian Bundesliga · Round 11","oppon
+    AS   played: Altach 3-0, LASK 1-0, Austria Lustenau 2-1 => ["survived",9]
+    head played: Altach 3-0, LASK 1-0, Austria Lustenau 2-1 => ["survived",9]
+2026-11-03 HOT Real Betis (La Liga) bound=no DIFFERENT | DEADLINE Celtic bound=no SAME
+    AS   opened: 5/20 P8 15pts wk8 target 6 next {"kind":"match","competition":"league","compLabel":"La Liga · Round 9","opponent":"Getafe"
+    head opened: 5/20 P8 15pts wk8 target 6 next {"kind":"match","competition":"league","compLabel":"La Liga · Round 9","opponent":"Getafe"
+    AS   played: Getafe 2-1, Levante 2-1 => ["survived",6]
+    head played: Getafe 2-1, Levante 2-1 => ["survived",6]
+2026-11-04 HOT Flamengo (Brasileirão Série A) bound=no DIFFERENT | DEADLINE Hoffenheim bound=no SAME
+    AS   opened: 4/20 P7 13pts wk7 target 9 next {"kind":"match","competition":"cup","compLabel":"Copa do Brasil · Round of 16","opponent":
+    head opened: 4/20 P7 13pts wk7 target 9 next {"kind":"match","competition":"cup","compLabel":"Copa do Brasil · Round of 16","opponent":
+    AS   played: Internacional 0-1, Coritiba 1-0, Grêmio 0-1, Remo 3-0, Fluminense 1-2, Bahia 0-2 => ["sacked",6]
+    head played: Internacional 0-1, Coritiba 1-0, Grêmio 0-1, Remo 3-0, Fluminense 1-2, Bahia 0-2 => ["sacked",6]
+2026-11-05 HOT AZ Alkmaar (Eredivisie) bound=no DIFFERENT | DEADLINE Wellington Phoenix bound=no SAME
+    AS   opened: 1/18 P14 40pts wk14 target 9 next {"kind":"match","competition":"cup","compLabel":"KNVB Cup · Quarter-final","opponent":"Hee
+    head opened: 1/18 P14 40pts wk14 target 9 next {"kind":"match","competition":"cup","compLabel":"KNVB Cup · Quarter-final","opponent":"Hee
+    AS   played: Heerenveen 2-1, Ajax 1-2, Groningen 4-0, NEC Nijmegen 4-0, Utrecht 2-0 => ["survived",9]
+    head played: Heerenveen 2-1, Ajax 1-2, Groningen 4-0, NEC Nijmegen 4-0, Utrecht 2-0 => ["survived",9]
+2026-11-06 HOT QPR (EFL Championship) bound=no DIFFERENT | DEADLINE Rio Ave bound=no SAME
+    AS   opened: 5/24 P14 25pts wk14 target 5 next {"kind":"match","competition":"league","compLabel":"EFL Championship · Round 15","opponent
+    head opened: 5/24 P14 25pts wk14 target 5 next {"kind":"match","competition":"league","compLabel":"EFL Championship · Round 15","opponent
+    AS   played: Charlton Athletic 1-2, Swansea City 1-2, Southampton 0-0, Norwich City 1-0, Bristol City 2-1 => ["survived",7]
+    head played: Charlton Athletic 1-2, Swansea City 1-2, Southampton 0-0, Norwich City 1-0, Bristol City 2-1 => ["survived",7]
+2026-11-07 HOT Fenerbahçe (Süper Lig) bound=no DIFFERENT | DEADLINE Stoke City bound=no SAME
+    AS   opened: 3/18 P6 14pts wk6 target 10 next {"kind":"match","competition":"cup","compLabel":"Turkish Cup · Round of 16","opponent":"Am
+    head opened: 3/18 P6 14pts wk6 target 10 next {"kind":"match","competition":"cup","compLabel":"Turkish Cup · Round of 16","opponent":"Am
+    AS   played: Amedspor 6-0, Alanyaspor 2-0, Eyüpspor 6-0, Trabzonspor 3-1, Kasımpaşa 5-0 => ["survived",12]
+    head played: Amedspor 6-0, Alanyaspor 2-0, Eyüpspor 6-0, Trabzonspor 3-1, Kasımpaşa 5-0 => ["survived",12]
+2026-11-08 HOT Hoffenheim (Bundesliga) bound=no DIFFERENT | DEADLINE Toluca bound=no SAME
+    AS   opened: 10/18 P8 9pts wk8 target 4 next {"kind":"match","competition":"league","compLabel":"Bundesliga · Round 9","opponent":"Werd
+    head opened: 10/18 P8 9pts wk8 target 4 next {"kind":"match","competition":"league","compLabel":"Bundesliga · Round 9","opponent":"Werd
+    AS   played: Werder Bremen 1-0, Paderborn 0-4, Stuttgart 2-1 => ["survived",6]
+    head played: Werder Bremen 1-0, Paderborn 0-4, Stuttgart 2-1 => ["survived",6]
+2026-11-09 HOT Minnesota United (MLS Western Conference) bound=no DIFFERENT | DEADLINE Sunderland bound=yes SAME
+    AS   opened: 1/15 P10 25pts wk10 target 6 next {"kind":"match","competition":"league","compLabel":"MLS Western Conference · Round 11","op
+    head opened: 1/15 P10 25pts wk10 target 6 next {"kind":"match","competition":"league","compLabel":"MLS Western Conference · Round 11","op
+    AS   played: LA Galaxy 0-2, St. Louis City 3-0, Real Salt Lake 3-0 => ["survived",6]
+    head played: LA Galaxy 0-2, St. Louis City 3-0, Real Salt Lake 3-0 => ["survived",6]
+2026-11-10 HOT Dynamo Makhachkala (Russian Premier League) bound=no DIFFERENT | DEADLINE New York City FC bound=no SAME
+    AS   opened: 14/16 P13 11pts wk13 target 3 next {"kind":"match","competition":"league","compLabel":"Russian Premier League · Round 14","op
+    head opened: 14/16 P13 11pts wk13 target 3 next {"kind":"match","competition":"league","compLabel":"Russian Premier League · Round 14","op
+    AS   played: Krylia Sovetov 1-0 => ["survived",3]
+    head played: Krylia Sovetov 1-0 => ["survived",3]
+2026-11-11 HOT Swansea City (EFL Championship) bound=no DIFFERENT | DEADLINE Rangers bound=no SAME
+    AS   opened: 14/24 P11 13pts wk11 target 5 next {"kind":"match","competition":"league","compLabel":"EFL Championship · Round 12","opponent
+    head opened: 14/24 P11 13pts wk11 target 5 next {"kind":"match","competition":"league","compLabel":"EFL Championship · Round 12","opponent
+    AS   played: Blackburn Rovers 1-1, Millwall 1-2, Norwich City 1-1, Portsmouth 1-1, Birmingham City 2-2 => ["sacked",4]
+    head played: Blackburn Rovers 1-1, Millwall 1-2, Norwich City 1-1, Portsmouth 1-1, Birmingham City 2-2 => ["sacked",4]
+2026-11-12 HOT Derby County (EFL Championship) bound=no DIFFERENT | DEADLINE Başakşehir bound=no SAME
+    AS   opened: 21/24 P9 9pts wk9 target 6 next {"kind":"match","competition":"league","compLabel":"EFL Championship · Round 10","opponent
+    head opened: 21/24 P9 9pts wk9 target 6 next {"kind":"match","competition":"league","compLabel":"EFL Championship · Round 10","opponent
+    AS   played: Birmingham City 2-2, Bristol City 1-0, Blackburn Rovers 2-0 => ["survived",7]
+    head played: Birmingham City 2-2, Bristol City 1-0, Blackburn Rovers 2-0 => ["survived",7]
+2026-11-13 HOT Başakşehir (Süper Lig) bound=no DIFFERENT | DEADLINE Derby County bound=no SAME
+    AS   opened: 7/18 P8 13pts wk8 target 6 next {"kind":"match","competition":"league","compLabel":"Süper Lig · Round 9","opponent":"Ameds
+    head opened: 7/18 P8 13pts wk8 target 6 next {"kind":"match","competition":"league","compLabel":"Süper Lig · Round 9","opponent":"Ameds
+    AS   played: Amedspor 4-1, Göztepe 2-1 => ["survived",6]
+    head played: Amedspor 4-1, Göztepe 2-1 => ["survived",6]
+2026-11-14 HOT Sunderland (Premier League) bound=yes DIFFERENT | DEADLINE Minnesota United bound=no SAME
+    AS   opened: 18/20 P7 6pts wk7 target 3 next {"kind":"match","competition":"cup","compLabel":"FA Cup · Round of 16","opponent":"Coventr
+    head opened: 19/20 P14 7pts wk14 target 3 next {"kind":"match","competition":"league","compLabel":"Premier League · Round 15","opponent":
+    AS   played: Coventry City 0-2, Ipswich Town 2-3, Hull City 1-1, Fulham 1-2, Arsenal 2-2, Brentford 0-2 => ["sacked",2]
+    head played: Nottingham Forest 1-0 => ["survived",3]
+2026-11-15 HOT León (Liga MX) bound=no DIFFERENT | DEADLINE Köln bound=no SAME
+    AS   opened: 12/18 P13 16pts wk13 target 4 next {"kind":"match","competition":"league","compLabel":"Liga MX · Round 14","opponent":"Tigres
+    head opened: 12/18 P13 16pts wk13 target 4 next {"kind":"match","competition":"league","compLabel":"Liga MX · Round 14","opponent":"Tigres
+    AS   played: Tigres UANL 2-0, Toluca 0-2, Necaxa 2-1 => ["survived",6]
+    head played: Tigres UANL 2-0, Toluca 0-2, Necaxa 2-1 => ["survived",6]
+2026-11-16 HOT Portland Timbers (MLS Western Conference) bound=no DIFFERENT | DEADLINE Crystal Palace bound=yes SAME
+    AS   opened: 13/15 P6 4pts wk6 target 5 next {"kind":"match","competition":"league","compLabel":"MLS Western Conference · Round 8","opp
+    head opened: 13/15 P6 4pts wk6 target 5 next {"kind":"match","competition":"league","compLabel":"MLS Western Conference · Round 8","opp
+    AS   played: San Jose Earthquakes 0-0, Sporting Kansas City 1-2, Houston Dynamo 0-4, Real Salt Lake 2-1, FC Dallas 6-2 => ["survived",7]
+    head played: San Jose Earthquakes 0-0, Sporting Kansas City 1-2, Houston Dynamo 0-4, Real Salt Lake 2-1, FC Dallas 6-2 => ["survived",7]
+2026-11-17 HOT West Ham (EFL Championship) bound=no DIFFERENT | DEADLINE Sporting CP bound=no SAME
+    AS   opened: 1/24 P8 20pts wk8 target 8 next {"kind":"match","competition":"cup","compLabel":"FA Cup · Round of 16","opponent":"Swansea
+    head opened: 1/24 P8 20pts wk8 target 8 next {"kind":"match","competition":"cup","compLabel":"FA Cup · Round of 16","opponent":"Swansea
+    AS   played: Swansea City 2-1, Sheffield United 1-0, Norwich City 2-0, Middlesbrough 1-4, Southampton 1-1, Birmingham City 2-0 => ["survived",10]
+    head played: Swansea City 2-1, Sheffield United 1-0, Norwich City 2-0, Middlesbrough 1-4, Southampton 1-1, Birmingham City 2-0 => ["survived",10]
+2026-11-18 HOT Guadalajara (Liga MX) bound=no DIFFERENT | DEADLINE Freiburg bound=no SAME
+    AS   opened: 1/18 P10 26pts wk10 target 9 next {"kind":"match","competition":"league","compLabel":"Liga MX · Round 11","opponent":"Santos
+    head opened: 1/18 P10 26pts wk10 target 9 next {"kind":"match","competition":"league","compLabel":"Liga MX · Round 11","opponent":"Santos
+    AS   played: Santos Laguna 3-1, Pachuca 3-0, Tigres UANL 2-1 => ["survived",9]
+    head played: Santos Laguna 3-1, Pachuca 3-0, Tigres UANL 2-1 => ["survived",9]
+2026-11-19 HOT Saint-Étienne (Ligue 2) bound=no DIFFERENT | DEADLINE Brest bound=no SAME
+    AS   opened: 14/18 P10 10pts wk10 target 7 next {"kind":"match","competition":"league","compLabel":"Ligue 2 · Round 11","opponent":"Montpe
+    head opened: 14/18 P10 10pts wk10 target 7 next {"kind":"match","competition":"league","compLabel":"Ligue 2 · Round 11","opponent":"Montpe
+    AS   played: Montpellier 2-1, Dijon 0-0, Dunkerque 1-0 => ["survived",7]
+    head played: Montpellier 2-1, Dijon 0-0, Dunkerque 1-0 => ["survived",7]
+2026-11-20 HOT St. Louis City (MLS Western Conference) bound=no DIFFERENT | DEADLINE Ipswich Town bound=yes SAME
+    AS   opened: 2/15 P12 23pts wk12 target 5 next {"kind":"match","competition":"league","compLabel":"MLS Western Conference · Round 14","op
+    head opened: 2/15 P12 23pts wk12 target 5 next {"kind":"match","competition":"league","compLabel":"MLS Western Conference · Round 14","op
+    AS   played: Austin FC 2-2, Minnesota United 4-1, Colorado Rapids 6-3 => ["survived",7]
+    head played: Austin FC 2-2, Minnesota United 4-1, Colorado Rapids 6-3 => ["survived",7]
+2026-11-21 HOT Birmingham City (EFL Championship) bound=no DIFFERENT | DEADLINE Celtic bound=no SAME
+    AS   opened: 18/24 P11 11pts wk11 target 5 next {"kind":"match","competition":"league","compLabel":"EFL Championship · Round 12","opponent
+    head opened: 18/24 P11 11pts wk11 target 5 next {"kind":"match","competition":"league","compLabel":"EFL Championship · Round 12","opponent
+    AS   played: QPR 2-1, Middlesbrough 3-1 => ["survived",6]
+    head played: QPR 2-1, Middlesbrough 3-1 => ["survived",6]
+2026-11-22 HOT Internacional (Brasileirão Série A) bound=no DIFFERENT | DEADLINE RB Leipzig bound=no SAME
+    AS   opened: 14/20 P14 14pts wk14 target 5 next {"kind":"match","competition":"league","compLabel":"Brasileirão Série A · Round 15","oppon
+    head opened: 14/20 P14 14pts wk14 target 5 next {"kind":"match","competition":"league","compLabel":"Brasileirão Série A · Round 15","oppon
+    AS   played: Bahia 0-1, São Paulo 2-1, Botafogo 1-2, São Paulo 1-4, Red Bull Bragantino 1-0, Mirassol 2-2 => ["sacked",4]
+    head played: Bahia 0-1, São Paulo 2-1, Botafogo 1-2, São Paulo 1-4, Red Bull Bragantino 1-0, Mirassol 2-2 => ["sacked",4]
+2026-11-23 HOT Rennes (Ligue 1) bound=no DIFFERENT | DEADLINE Melbourne Victory bound=no SAME
+    AS   opened: 6/18 P6 10pts wk6 target 8 next {"kind":"match","competition":"cup","compLabel":"Coupe de France · Round of 16","opponent"
+    head opened: 6/18 P6 10pts wk6 target 8 next {"kind":"match","competition":"cup","compLabel":"Coupe de France · Round of 16","opponent"
+    AS   played: Monaco 3-2, Lorient 2-2, Brest 0-2, Lens 3-0, Marseille 1-0, Le Mans 2-0 => ["survived",10]
+    head played: Monaco 3-2, Lorient 2-2, Brest 0-2, Lens 3-0, Marseille 1-0, Le Mans 2-0 => ["survived",10]
+2026-11-24 HOT Monaco (Ligue 1) bound=no DIFFERENT | DEADLINE Newcastle Jets bound=no SAME
+    AS   opened: 4/18 P12 22pts wk12 target 9 next {"kind":"match","competition":"league","compLabel":"Ligue 1 · Round 13","opponent":"Brest"
+    head opened: 4/18 P12 22pts wk12 target 9 next {"kind":"match","competition":"league","compLabel":"Ligue 1 · Round 13","opponent":"Brest"
+    AS   played: Brest 2-1, Lyon 0-0, Boulogne 4-0, Troyes 1-0, Nice 1-1, Lorient 2-1 => ["survived",11]
+    head played: Brest 2-1, Lyon 0-0, Boulogne 4-0, Troyes 1-0, Nice 1-1, Lorient 2-1 => ["survived",11]
+2026-11-25 HOT Mallorca (Segunda División) bound=no DIFFERENT | DEADLINE Ajax bound=no SAME
+    AS   opened: 8/20 P14 22pts wk14 target 8 next {"kind":"match","competition":"league","compLabel":"Segunda División · Round 15","opponent
+    head opened: 8/20 P14 22pts wk14 target 8 next {"kind":"match","competition":"league","compLabel":"Segunda División · Round 15","opponent
+    AS   played: Córdoba 3-0, Eibar 0-1, Leganés 1-2, Ceuta 0-0, Tenerife 2-0 => ["sacked",7]
+    head played: Córdoba 3-0, Eibar 0-1, Leganés 1-2, Ceuta 0-0, Tenerife 2-0 => ["sacked",7]
+2026-11-26 HOT Sheffield United (EFL Championship) bound=no DIFFERENT | DEADLINE Rio Ave bound=no SAME
+    AS   opened: 20/24 P8 8pts wk8 target 6 next {"kind":"match","competition":"cup","compLabel":"FA Cup · Round of 16","opponent":"Hull Ci
+    head opened: 20/24 P8 8pts wk8 target 6 next {"kind":"match","competition":"cup","compLabel":"FA Cup · Round of 16","opponent":"Hull Ci
+    AS   played: Hull City 1-2, Cardiff City 0-0, West Ham 1-0, Blackburn Rovers 5-1 => ["survived",7]
+    head played: Hull City 1-2, Cardiff City 0-0, West Ham 1-0, Blackburn Rovers 5-1 => ["survived",7]
+2026-11-27 HOT Palmeiras (Brasileirão Série A) bound=no DIFFERENT | DEADLINE Torino bound=no SAME
+    AS   opened: 6/20 P14 24pts wk14 target 7 next {"kind":"match","competition":"league","compLabel":"Brasileirão Série A · Round 15","oppon
+    head opened: 6/20 P14 24pts wk14 target 7 next {"kind":"match","competition":"league","compLabel":"Brasileirão Série A · Round 15","oppon
+    AS   played: São Paulo 2-0, Vasco da Gama 2-1, Bahia 0-1, Vitória 3-2, Santos 0-0 => ["survived",7]
+    head played: São Paulo 2-0, Vasco da Gama 2-1, Bahia 0-1, Vitória 3-2, Santos 0-0 => ["survived",7]
+2026-11-28 HOT Verona (Serie B) bound=no DIFFERENT | DEADLINE Auxerre bound=no SAME
+    AS   opened: 8/20 P8 12pts wk8 target 8 next {"kind":"match","competition":"league","compLabel":"Serie B · Round 9","opponent":"Ascoli"
+    head opened: 8/20 P8 12pts wk8 target 8 next {"kind":"match","competition":"league","compLabel":"Serie B · Round 9","opponent":"Ascoli"
+    AS   played: Ascoli 0-1, Sampdoria 3-0, Südtirol 1-1, Juve Stabia 1-1, Mantova 5-1 => ["survived",8]
+    head played: Ascoli 0-1, Sampdoria 3-0, Südtirol 1-1, Juve Stabia 1-1, Mantova 5-1 => ["survived",8]
+2026-11-29 HOT Twente (Eredivisie) bound=no DIFFERENT | DEADLINE Dynamo Moscow bound=no SAME
+    AS   opened: 7/18 P13 21pts wk13 target 8 next {"kind":"match","competition":"league","compLabel":"Eredivisie · Round 14","opponent":"PEC
+    head opened: 7/18 P13 21pts wk13 target 8 next {"kind":"match","competition":"league","compLabel":"Eredivisie · Round 14","opponent":"PEC
+    AS   played: PEC Zwolle 2-2, Feyenoord 1-3, Feyenoord 1-2, Willem II 0-1, Utrecht 1-1 => ["sacked",2]
+    head played: PEC Zwolle 2-2, Feyenoord 1-3, Feyenoord 1-2, Willem II 0-1, Utrecht 1-1 => ["sacked",2]
+2026-11-30 HOT Auckland FC (A-League Men) bound=no DIFFERENT | DEADLINE Lyon bound=no SAME
+    AS   opened: 3/12 P7 11pts wk7 target 5 next {"kind":"match","competition":"league","compLabel":"A-League Men · Round 8","opponent":"Br
+    head opened: 3/12 P7 11pts wk7 target 5 next {"kind":"match","competition":"league","compLabel":"A-League Men · Round 8","opponent":"Br
+    AS   played: Brisbane Roar 2-1, Central Coast Mariners 3-0 => ["survived",6]
+    head played: Brisbane Roar 2-1, Central Coast Mariners 3-0 => ["survived",6]
+2026-12-01 HOT Getafe (La Liga) bound=no DIFFERENT | DEADLINE RB Salzburg bound=no SAME
+    AS   opened: 15/20 P14 17pts wk14 target 4 next {"kind":"match","competition":"league","compLabel":"La Liga · Round 15","opponent":"Rayo V
+    head opened: 15/20 P14 17pts wk14 target 4 next {"kind":"match","competition":"league","compLabel":"La Liga · Round 15","opponent":"Rayo V
+    AS   played: Rayo Vallecano 2-2, Elche 3-2 => ["survived",4]
+    head played: Rayo Vallecano 2-2, Elche 3-2 => ["survived",4]
+2026-12-02 HOT Toluca (Liga MX) bound=no DIFFERENT | DEADLINE Hoffenheim bound=no SAME
+    AS   opened: 4/18 P10 18pts wk10 target 8 next {"kind":"match","competition":"league","compLabel":"Liga MX · Round 11","opponent":"Atlant
+    head opened: 4/18 P10 18pts wk10 target 8 next {"kind":"match","competition":"league","compLabel":"Liga MX · Round 11","opponent":"Atlant
+    AS   played: Atlante 1-0, Atlético San Luis 3-0, América 3-1 => ["survived",9]
+    head played: Atlante 1-0, Atlético San Luis 3-0, América 3-1 => ["survived",9]
+2026-12-03 HOT Real Betis (La Liga) bound=no DIFFERENT | DEADLINE Union Saint-Gilloise bound=no SAME
+    AS   opened: 9/20 P13 18pts wk13 target 7 next {"kind":"match","competition":"league","compLabel":"La Liga · Round 14","opponent":"Celta 
+    head opened: 9/20 P13 18pts wk13 target 7 next {"kind":"match","competition":"league","compLabel":"La Liga · Round 14","opponent":"Celta 
+    AS   played: Celta Vigo 3-1, Alavés 1-0, Valencia 0-1, Atlético Madrid 1-2, Real Sociedad 4-3 => ["survived",9]
+    head played: Celta Vigo 3-1, Alavés 1-0, Valencia 0-1, Atlético Madrid 1-2, Real Sociedad 4-3 => ["survived",9]
+2026-12-04 HOT CSKA Moscow (Russian Premier League) bound=no DIFFERENT | DEADLINE Utrecht bound=no SAME
+    AS   opened: 9/16 P13 18pts wk13 target 7 next {"kind":"match","competition":"league","compLabel":"Russian Premier League · Round 14","op
+    head opened: 9/16 P13 18pts wk13 target 7 next {"kind":"match","competition":"league","compLabel":"Russian Premier League · Round 14","op
+    AS   played: Rubin Kazan 2-2, Fakel Voronezh 3-0, Dynamo Moscow 0-2, Rodina Moscow 1-2, Spartak Moscow 3-3 => ["sacked",5]
+    head played: Rubin Kazan 2-2, Fakel Voronezh 3-0, Dynamo Moscow 0-2, Rodina Moscow 1-2, Spartak Moscow 3-3 => ["sacked",5]
+2026-12-05 HOT Inter Milan (Serie A) bound=no DIFFERENT | DEADLINE AEK Athens bound=no SAME
+    AS   opened: 14/20 P14 15pts wk14 target 8 next {"kind":"match","competition":"league","compLabel":"Serie A · Round 15","opponent":"Parma"
+    head opened: 14/20 P14 15pts wk14 target 8 next {"kind":"match","competition":"league","compLabel":"Serie A · Round 15","opponent":"Parma"
+    AS   played: Parma 2-0, Sassuolo 2-0, Torino 1-0, Dinamo Zagreb 1-1, Udinese 5-1 => ["survived",9]
+    head played: Parma 2-0, Sassuolo 2-0, Torino 1-0, Dinamo Zagreb 1-1, Udinese 5-1 => ["survived",9]
+2026-12-06 HOT Al-Ittihad (Saudi Pro League) bound=no DIFFERENT | DEADLINE Akron Tolyatti bound=no SAME
+    AS   opened: 4/18 P12 27pts wk12 target 9 next {"kind":"match","competition":"league","compLabel":"Saudi Pro League · Round 13","opponent
+    head opened: 4/18 P12 27pts wk12 target 9 next {"kind":"match","competition":"league","compLabel":"Saudi Pro League · Round 13","opponent
+    AS   played: Al-Fateh 4-2, Al-Qadsiah 0-0, Al-Hazem 2-0, Al-Fayha 2-1, Al-Kholood 2-0 => ["survived",10]
+    head played: Al-Fateh 4-2, Al-Qadsiah 0-0, Al-Hazem 2-0, Al-Fayha 2-1, Al-Kholood 2-0 => ["survived",10]
+2026-12-07 HOT Juventus (Serie A) bound=no DIFFERENT | DEADLINE FC Midtjylland bound=no SAME
+    AS   opened: 9/20 P9 12pts wk9 target 8 next {"kind":"match","competition":"league","compLabel":"Serie A · Round 10","opponent":"Lecce"
+    head opened: 9/20 P9 12pts wk9 target 8 next {"kind":"match","competition":"league","compLabel":"Serie A · Round 10","opponent":"Lecce"
+    AS   played: Lecce 2-1, Venezia 2-0, Bologna 2-2, Atalanta 1-1 => ["survived",8]
+    head played: Lecce 2-1, Venezia 2-0, Bologna 2-2, Atalanta 1-1 => ["survived",8]
+2026-12-08 HOT Charlotte FC (MLS Eastern Conference) bound=no DIFFERENT | DEADLINE Chelsea bound=yes SAME
+    AS   opened: 11/15 P11 13pts wk11 target 6 next {"kind":"match","competition":"cup","compLabel":"U.S. Open Cup · Quarter-final","opponent"
+    head opened: 11/15 P11 13pts wk11 target 6 next {"kind":"match","competition":"cup","compLabel":"U.S. Open Cup · Quarter-final","opponent"
+    AS   played: FC Dallas 1-4, CF Montréal 2-2, Nashville SC 4-2, Inter Miami 1-2, Columbus Crew 0-2, New England Revolution 1-0 => ["survived",7]
+    head played: FC Dallas 1-4, CF Montréal 2-2, Nashville SC 4-2, Inter Miami 1-2, Columbus Crew 0-2, New England Revolution 1-0 => ["survived",7]
+{
+  "dates": 60,
+  "first14": {
+    "hotSame": 14,
+    "hotDiffer": 0,
+    "ddSame": 14,
+    "ddDiffer": 0
+  },
+  "all": {
+    "hotSame": 17,
+    "hotDiffer": 43,
+    "ddSame": 60,
+    "ddDiffer": 0
+  },
+  "hotBoundDays": 2,
+  "hotBoundDiffer": 2,
+  "hotUnboundDiffer": 41,
+  "ddBoundDays": 6,
+  "ddBoundDiffer": 0,
+  "pickDiffers": 0,
+  "replayBroken": 60
+}

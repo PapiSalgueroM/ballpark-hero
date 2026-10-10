@@ -1,0 +1,2 @@
+daily exit=1 26s | cmDaily: RE-DEAL. Hot Seat differs on 43 of 60 dates (0 of the first 14), Deadline Day on 0 (0 of the first 14); bound days 2, of which 2 differ; unbound days that differ
+var exit=1 55s | cmVar: default path byte equal to AS: NO; the lead's rule (a review never moves a result): BROKEN; at least 500 matches
