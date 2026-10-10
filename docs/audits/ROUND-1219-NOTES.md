@@ -83,3 +83,47 @@ walk's verdict says so.)
   same save. Storage has no lock that can be taken before React mounts. Known, not fixed.
 - Headless Chromium does not exercise the back and forward cache, so "replace, not assign" is
   held by reading the code only. Only Chromium was walked.
+
+## The version table, and what "no number" means
+
+`SAVE_VERSIONS` in `src/lib/saveKeeper.ts` has ten rows. What each game does with a number other
+than the one it writes, read in the engine and held by `scripts/simSaveKeeper.mjs` section 1
+against each game's own loader where one is exported:
+
+| Game | Where | Current | Oldest it opens | Another number |
+|---|---|---|---|---|
+| Club Manager | `saveVersion` | 3 | 3 | refuses (the save is treated as no save) |
+| Rebuild | `v` | 2 | 1 | migrates 1 to 2, refuses anything else |
+| Stadium Tycoon | `v` | 1 | 1 | refuses, then writes a fresh game over it with no press |
+| Wonderkid Factory | `v` | 1 | 1 | refuses, then writes a fresh game over it with no press |
+| Hall of Champions | `v` | 1 | 1 | refuses, then writes a fresh game over it with no press |
+| Aussie Rules Manager | `version` | 2 | 2 | refuses |
+| Idle Arena | `v` | 1 | 1 | ignores (the number is written and never read) |
+| Fight Career | `st.version` | 1 | 1 | ignores (no pure loader exported: by reading) |
+| Fight Gym | `g.version` | 1 | 1 | ignores (by reading) |
+| Fight Promoter | `st.version` | 1 | 1 | ignores (by reading) |
+
+The boot copy means something on the first six only, so only those six keys are read at boot.
+A save with NO whole number at its path (older than the field, or damaged) is left alone: the
+keeper cannot tell what it is, and the game's own loader decides. The other eleven games hold no
+version at the top level or one level down; the harness fails the day one of them grows one, or
+one of the ten changes its number, until the table says so. Club Manager's number now lives in
+three places (`clubManager.ts` SAVE_VERSION, `clubManagerSlots.ts`, this table); the harness
+holds this one to a real save.
+
+## Things a later reader must not trust without checking
+
+- The fixtures of the thirteen board wrapped games carry the board's opening values (a phase,
+  zeros, nulls) as read on 2026-10-10. Only their top level KEYS are held to the writer's literal
+  (read on the TypeScript tree). The engine state inside them is real.
+- `settlePendingSaves()` is called by `restoreNow` before it stages (Round 1144's rule for a
+  reload on the app's own account). `scripts/simStaleChunk.mjs` cannot see that call site (it
+  reads `Footer.tsx` and `freshBuild.ts`); `src/test/saveKeeper.test.ts` holds it.
+- Seen in the walk's screenshots, NOT changed: on a profile that has not answered the cookie
+  banner, the banner sits on top of the kept aside card (it is portalled above everything on
+  purpose, Round 117). At 390 the card's buttons are hidden behind it and the shorter outcome
+  card is hidden whole; at 1280 the card's lower half is. The outcome has no timer, so it is
+  there once the banner is answered. This was already true of Round 958's card.
+- What the card offers after a quiet copy: nothing. The quiet copy is the newest backup and is
+  marked answered, and the card only ever offers the newest, so an older backup the player never
+  answered is held but no longer offered. The harness prints this in section 4.
