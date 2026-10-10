@@ -12,6 +12,7 @@ import { formatNumber } from './formatNumber';
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nhlSeasonScore, wonAward } from './careerAwards';
+import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf } from './usSeasonShape';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
 
@@ -115,6 +116,10 @@ export interface NhlSeasonLine {
   age: number;
   ovr: number;
   games: number;
+  /** Round 1226: the games his club's season held, saved only when that is not
+   *  the engine's own season. Absent on every line saved before the engine
+   *  read the season ledger, and such a line was played on the engine's own. */
+  slate?: number;
   goals?: number; assists?: number; points?: number;
   wins?: number; svpct?: number;
   /** Round 103: the run to the Cup, or the four games that ended it. */
@@ -413,9 +418,21 @@ export function nhlMarketSalary(c: NhlCareerState): number {
   return Math.max(0.4, Math.round(base * mult * scale * 10) / 10);
 }
 
-function gamesFor(c: NhlCareerState, rng: () => number): { games: number; note: string | null } {
+/** Round 1226: the season a skater or a goalie works through, out of a club
+ *  season of `slate` games. A skater plays the schedule, so his games follow
+ *  it at any length. A goalie's starts are the job's and not the schedule's,
+ *  so they only give way when the season is too short to hold them. */
+function nhlWorkSlate(pos: string, slate: number): number {
+  return pos === 'G' ? Math.min(slate, US_ENGINE_SEASON.nhl) : slate;
+}
+
+function gamesFor(c: NhlCareerState, rng: () => number, slate: number): { games: number; note: string | null } {
   const risk = careerRecoveryRisk('nhl', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 250);
-  const full = c.pos === 'G' ? 58 + Math.floor(rng() * 10) : 79 + Math.floor(rng() * 4);
+  /* The draw is the one this engine always made, on its own season: 58 to 67
+     starts, or all but zero to three of the games. Round 1226 carries it to
+     the season the ledger says his club played that year. */
+  const own = US_ENGINE_SEASON.nhl;
+  const full = toSlate('nhl', c.pos === 'G' ? 58 + Math.floor(rng() * 10) : own - 3 + Math.floor(rng() * 4), nhlWorkSlate(c.pos, slate));
   if (rng() < risk) {
     const frac = 0.45 + rng() * 0.35;
     return { games: Math.max(20, Math.round(full * frac)), note: 'Injuries bit into the season.' };
@@ -427,7 +444,16 @@ export function simNhlSeason(
   c: NhlCareerState, teamQuality: number, rng: () => number,
 ): { line: NhlSeasonLine; notes: string[] } {
   const notes: string[] = [];
-  let { games, note } = gamesFor(c, rng);
+  /* Round 1226: how many games his club's season holds comes from the sourced
+     ledger (src/data/usSeasonLedgerNhl.ts) by year and club, never from a
+     number typed here: 84 from 2026-27, 48 in 2012-13, 56 in 2020-21, club by
+     club in 2019-20. `work` is the part of it his position works through,
+     and `eq` reads one of his counts as its full season equivalent, which is
+     what every award gate below is written in. */
+  const slate = seasonLength('nhl', c.year, c.team);
+  const work = nhlWorkSlate(c.pos, slate);
+  const eq = (n: number) => fullSeasonOf('nhl', n, work);
+  let { games, note } = gamesFor(c, rng, slate);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 7; }
   /* Round 183: the lineup decides the workload. A backup goalie gets the
      twenty-odd starts the role really carries; a skater down the lineup
@@ -452,11 +478,14 @@ export function simNhlSeason(
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
   };
+  if (slate !== US_ENGINE_SEASON.nhl) line.slate = slate;
   if (c.pos === 'G') {
     line.wins = Math.max(8, Math.round(games * (0.3 + (form - 64) * 0.009) + rng() * 4));
     line.svpct = Math.min(0.938, Math.max(0.885, Math.round((0.898 + (form - 64) * 0.0011 + rng() * 0.006) * 1000) / 1000));
   } else {
-    const g = games / 82;
+    /* The scoring formulas below are written per season of the engine's own
+       length, so a longer season holds more of everything and a short one less. */
+    const g = games / US_ENGINE_SEASON.nhl;
     const mult = c.archetype.scoringMult;
     // Round 97: NHL_POS_PROFILE carries an offense weight (D is 0.55) that
     // this line never used, so defencemen were finishing with a median of 20
@@ -470,7 +499,8 @@ export function simNhlSeason(
   // Round 123: computed up here rather than down with the rest of the awards
   // because the Conn Smythe is decided inside the playoff block below and it
   // needs the same number everything else is judged on.
-  const statScore = nhlSeasonScore(c.pos, line);
+  const statScore = nhlSeasonScore(c.pos, work === US_ENGINE_SEASON.nhl ? line
+    : { ...line, points: eq(line.points ?? 0), wins: line.wins === undefined ? undefined : eq(line.wins) });
 
   const strength = teamQuality + (c.ovr - 76) * 0.4;
   const playoffOdds = Math.max(0.05, Math.min(0.9, (strength - 66) / 28));
@@ -508,7 +538,7 @@ export function simNhlSeason(
       line.poSvpct = Math.min(0.96, Math.max(0.86, Math.round((0.903 + (poForm - 64) * 0.0012 + rng() * 0.006) * 1000) / 1000));
       notes.push(`📊 Playoffs: ${poG} games, ${line.poWins} wins, ${line.poSvpct.toFixed(3)} SV%.`);
     } else {
-      const pg = poG / 82;
+      const pg = poG / US_ENGINE_SEASON.nhl;
       const off = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).offense;
       line.poGoals = Math.max(0, Math.round((4 + (poForm - 62) * 1.35) * c.archetype.scoringMult * off * pg + rng() * 2));
       line.poAssists = Math.max(0, Math.round((7 + (poForm - 62) * 1.5) * (c.pos === 'D' ? 1.15 : 1.05 - (c.archetype.scoringMult - 1) * 0.5) * pg + rng() * 3));
@@ -550,25 +580,27 @@ export function simNhlSeason(
   // wrong: the Rocket Richard and the Art Ross have exactly one winner each
   // per season and the old code gave them out on a 60 percent roll.
   const isSkater = c.pos !== 'G';
-  const pts = (line.points ?? 0);
-  if (isSkater && (line.goals ?? 0) >= 45 && games >= 70 && wonAward(rng, 'nhl', 'rocketRichard', c.pos, statScore)) {
+  const pts = eq(line.points ?? 0);
+  const eqGames = eq(games);
+  if (isSkater && eq(line.goals ?? 0) >= 45 && eqGames >= 70 && wonAward(rng, 'nhl', 'rocketRichard', c.pos, statScore)) {
     line.awards.push('Rocket Richard'); notes.push('🚀 Rocket Richard, most goals in the league.');
   }
-  if (isSkater && pts >= 100 && games >= 70 && wonAward(rng, 'nhl', 'artRoss', c.pos, statScore)) {
+  if (isSkater && pts >= 100 && eqGames >= 70 && wonAward(rng, 'nhl', 'artRoss', c.pos, statScore)) {
     line.awards.push('Art Ross'); notes.push('🎩 Art Ross, league scoring title.');
   }
-  if (c.pos === 'C' && games >= 70 && wonAward(rng, 'nhl', 'selke', c.pos, statScore)) {
+  if (c.pos === 'C' && eqGames >= 70 && wonAward(rng, 'nhl', 'selke', c.pos, statScore)) {
     line.awards.push('Selke Trophy'); notes.push('🛡️ Selke Trophy, best defensive forward.');
   }
-  if (c.pos === 'G' && (line.svpct ?? 0) >= 0.925 && games >= 50 && wonAward(rng, 'nhl', 'jennings', c.pos, statScore)) {
+  if (c.pos === 'G' && (line.svpct ?? 0) >= 0.925 && eqGames >= 50 && wonAward(rng, 'nhl', 'jennings', c.pos, statScore)) {
     line.awards.push('William Jennings'); notes.push('🧱 Jennings Trophy, fewest goals against.');
   }
-  if (isSkater && games >= 78 && c.health >= 80 && wonAward(rng, 'nhl', 'masterton', c.pos, statScore)) {
+  if (isSkater && eqGames >= 78 && c.health >= 80 && wonAward(rng, 'nhl', 'masterton', c.pos, statScore)) {
     line.awards.push('Masterton Nominee'); notes.push('🎖️ Masterton nomination for perseverance.');
   }
   // A real bounce off a lost season, not just a good year.
   const prevSeason = c.seasons[c.seasons.length - 1];
-  if (prevSeason && prevSeason.games <= 35 && games >= 70 && wonAward(rng, 'nhl', 'nhlComeback', c.pos, statScore)) {
+  const prevEq = prevSeason ? fullSeasonOf('nhl', prevSeason.games, nhlWorkSlate(c.pos, prevSeason.slate ?? US_ENGINE_SEASON.nhl)) : 0;
+  if (prevSeason && prevEq <= 35 && eqGames >= 70 && wonAward(rng, 'nhl', 'nhlComeback', c.pos, statScore)) {
     line.awards.push('Comeback Player of the Year'); notes.push('🔁 Comeback Player of the Year.');
   }
 

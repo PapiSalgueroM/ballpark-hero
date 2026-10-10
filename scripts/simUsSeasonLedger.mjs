@@ -54,7 +54,7 @@
 import os from 'node:os';
 import path from 'node:path';
 import { build } from 'esbuild';
-import { readFileSync, unlinkSync } from 'node:fs';
+import { readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
 const ROOT = process.cwd();
@@ -72,12 +72,27 @@ await build({
       "export { MLB_TEAMS } from './src/data/conquestDataMlb.ts';",
       "export { NHL_TEAMS } from './src/data/conquestDataNhl.ts';",
       "export { playoffGames } from './src/lib/careerVariance.ts';",
+      "export * as shape from './src/lib/usSeasonShape.ts';",
+      "export * as nhlEngine from './src/lib/nhlMyCareer.ts';",
+      "export { nhlFullSlateOf, nhlHeadlinesFor } from './src/lib/nhlCareerLoop.ts';",
     ].join('\n'),
     resolveDir: ROOT, loader: 'ts',
   },
   bundle: true, format: 'esm', platform: 'node', outfile: OUT,
   logLevel: 'error', alias: { '@': './src' },
 });
+/* Round 1226, the ENGINE controls: each puts one typed constant back into
+   the bundled engine, where the reader of the ledger is asked today. They
+   change the bundle's text and nothing on disk, and refuse to run when the
+   line they change is not there. */
+const ENGINE_CONTROLS = {
+  nhltyped: { expect: ['E2'], from: 'const slate = seasonLength("nhl", c.year, c.team);', to: 'const slate = 82;' },
+};
+if (ENGINE_CONTROLS[CONTROL]) {
+  const k = ENGINE_CONTROLS[CONTROL]; const text = readFileSync(OUT, 'utf8');
+  if (text.split(k.from).length !== 2) { console.log(`CONTROL ${CONTROL} ABORTED: the engine line "${k.from}" is not there once to change`); process.exit(2); }
+  writeFileSync(OUT, text.replace(k.from, () => k.to));
+}
 const game = await import(pathToFileURL(OUT).href);
 try { unlinkSync(OUT); } catch { /* a temp file left behind is harmless */ }
 
@@ -236,6 +251,7 @@ const CONTROLS = {
   nhlplayoff: { expect: ['N6'], run() { must(nhl.NHL_PLAYOFF_FORMAT.series[0][1] === 7, 'the best of seven'); nhl.NHL_PLAYOFF_FORMAT.series[0] = [3, 5]; } },
   nhlscore: { expect: ['N7'], run() { must(nhl.NHL_OVERTIME.now.shootouts === 119, 'the 119 shootouts'); nhl.NHL_OVERTIME.now.shootouts = 0; } },
 };
+for (const [name, k] of Object.entries(ENGINE_CONTROLS)) CONTROLS[name] = { expect: k.expect, run() {} };
 if (CONTROL === 'list') { console.log(Object.keys(CONTROLS).join(' ')); process.exit(0); }
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_LEDGER_CONTROL "${CONTROL}", expected one of: ${Object.keys(CONTROLS).join(', ')}`); process.exit(2); }
 if (CONTROL) CONTROLS[CONTROL].run();
@@ -595,6 +611,69 @@ const OWN_MLB_DIVISIONS = {
   }
 }
 
+/* ===== Round 1226, THE REVERSE CHECK: the engines play what the ledger says. =====
+   E1  the reader (src/lib/usSeasonShape.ts) hands back the ledger's length
+       for every NHL season in range, held to THIS FILE'S OWN TABLE, and the
+       engine's own season where the ledger holds nothing.
+   E2  the NHL engine plays it: a skater's season never holds more games than
+       his club's did, about a quarter of healthy seasons are the whole
+       schedule (the engine's own draw is four equal counts, so 25 percent;
+       measured 23.5 to 26.1 percent over 12 year and club cells of 1,500
+       seasons each, about 1,140 of them healthy skaters; the band is 19 to 31), the saved line carries the length
+       exactly when it is not the engine's own, and the engine's code types
+       no season length of its own. Control: nhltyped. */
+const mulberry = seed => () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+const ENGINE_OWN = 82;
+{
+  const S = game.shape;
+  const own2019 = Object.fromEntries(OWN.nhl2019.split(' ').reduce((a, x, i, l) => (i % 2 ? a : [...a, [x, Number(l[i + 1])]]), []));
+  /* Ids typed here: two the ledger holds in 2019-20 under the game's id, and the two of the 2006 list it does not. */
+  const IDS = ['BOS', 'CAR', 'ATL', 'PHX'];
+  for (const y of rangeOf(OWN.nhlYears[0], OWN.nhlYears[1])) for (const id of IDS) {
+    const want = y === 2019 ? (own2019[id] ?? ENGINE_OWN) : (y in OWN.nhlGames ? OWN.nhlGames[y] : ENGINE_OWN);
+    const from = y === 2019 && !(id in own2019) ? 'engine' : 'ledger';
+    const got = S.seasonLengthRow('nhl', y, id);
+    check('E1', got.games === want && got.from === from && S.seasonLength('nhl', y, id) === want, `the reader says ${got.games} (${got.from}) for the NHL ${y} season of ${id}; this file's own table says ${want} (${from})`);
+  }
+  for (const y of [2027, 2035, 2046]) { const got = S.seasonLengthRow('nhl', y, 'BOS'); check('E1', got.games === OWN.nhlGames[2026] && got.from === 'carried', `the reader says ${got.games} (${got.from}) for the NHL ${y} season; the last row carried forward is ${OWN.nhlGames[2026]}`); }
+  for (const y of [1990, 2005]) { const got = S.seasonLengthRow('nhl', y, 'BOS'); check('E1', got.games === ENGINE_OWN && got.from === 'engine', `the reader says ${got.games} (${got.from}) for the NHL ${y} season, a year before the ledger; the engine's own season is ${ENGINE_OWN}`); }
+  check('E1', S.US_ENGINE_SEASON.nhl === ENGINE_OWN && S.slateOf('nhl', {}) === ENGINE_OWN && S.slateOf('nhl', { slate: 84 }) === 84, 'a saved line with no slate is not read as the engine own season, or one with a slate is not read as its own');
+
+  /* E2: the engine, played. */
+  const N = game.nhlEngine;
+  const CELLS = [[2006, 'BOS', 82], [2012, 'BOS', 48], [2012, 'ATL', 48], [2019, 'BOS', 70], [2019, 'CAR', 68], [2019, 'ATL', 82], [2020, 'BOS', 56], [2025, 'BOS', 82], [2026, 'BOS', 84], [2026, 'UTA', 84], [2031, 'BOS', 84], [2040, 'BOS', 84]];
+  for (const [year, team, want] of CELLS) {
+    let over = 0; let whole = 0; let healthy = 0; let slateBad = 0; let goalieOver = 0; const SEASONS = 1500;
+    for (let i = 0; i < SEASONS; i++) {
+      const rng = mulberry(year * 1000 + i);
+      const pos = i % 5 === 4 ? 'G' : ['C', 'LW', 'RW', 'D'][i % 4];
+      const c = N.startNhlCareer('Ledger Check', pos, N.NHL_ARCHETYPES[pos][0], rng, null, year < 2026 ? 'y2006' : undefined);
+      c.year = year; c.team = team; c.health = 100;
+      const { line, notes: said } = N.simNhlSeason(c, 80, rng);
+      if ((line.slate ?? ENGINE_OWN) !== want || ('slate' in line) !== (want !== ENGINE_OWN)) slateBad++;
+      if (pos === 'G') { if (line.games > want) goalieOver++; continue; }
+      if (line.games > want) over++;
+      if (!said.some(n => n.includes('Injuries'))) { healthy++; if (line.games === want) whole++; }
+    }
+    const share = healthy ? 100 * whole / healthy : 0;
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE nhl ${year} ${team} want ${want}: whole ${share.toFixed(1)} percent of ${healthy} healthy skater seasons`);
+    check('E2', over === 0 && goalieOver === 0, `${over} skater seasons and ${goalieOver} goalie seasons of ${SEASONS} hold more games than the ${want} of the ${year} season of ${team}`);
+    check('E2', share >= 19 && share <= 31, `${share.toFixed(1)} percent of healthy skater seasons are the whole ${want} game schedule of ${year} (${team}); the engine's draw makes it 25 (band 19 to 31)`);
+    check('E2', slateBad === 0, `${slateBad} of ${SEASONS} saved lines of ${year} (${team}) carry the wrong season length, or carry one where the engine's own was played`);
+  }
+  /* The engine's code, comments stripped, types no season length. */
+  const stripC = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const nhlCode = stripC(readFileSync(path.join(ROOT, 'src/lib/nhlMyCareer.ts'), 'utf8')).split('export const NHL_SPEND_ITEMS')[0];
+  const loopCode = stripC(readFileSync(path.join(ROOT, 'src/lib/nhlCareerLoop.ts'), 'utf8'));
+  for (const [what, code, re] of [['nhlMyCareer.ts', nhlCode, /\/ 8[24]\b|\b79 \+ Math\.floor|= 8[24];/], ['nhlCareerLoop.ts', loopCode, /\b8[24]\b|\b78\b/]]) {
+    const hit = code.match(re);
+    check('E2', !hit, `src/lib/${what} types a season length of its own again ("${hit?.[0]}"); it must ask src/lib/usSeasonShape.ts`);
+  }
+  /* A saved line keeps the season it was played on: the mark for a full season and the paper's count both read it. */
+  check('E2', game.nhlFullSlateOf('C', {}) === 78 && game.nhlFullSlateOf('C', { slate: 84 }) === 80 && game.nhlFullSlateOf('C', { slate: 48 }) === 46 && game.nhlFullSlateOf('G', { slate: 84 }) === 55 && game.nhlFullSlateOf('G', { slate: 48 }) === 32,
+    `the full season mark does not follow the saved length: ${[{}, { slate: 84 }, { slate: 48 }].map(l => game.nhlFullSlateOf('C', l)).join(', ')} for a skater (78, 80, 46 expected), ${game.nhlFullSlateOf('G', { slate: 84 })} and ${game.nhlFullSlateOf('G', { slate: 48 })} for a goalie (55 and 32)`);
+}
+
 /* ===== NOTES FOR THE BINDING ROUNDS: where an engine plays something the ledger does not say. Never a red. ===== */
 {
   const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -608,7 +687,8 @@ const OWN_MLB_DIVISIONS = {
   else if (mlbSrc.includes('155 + Math.floor(rng() * 8)')) notes.push(`MLB engine: a healthy hitter plays 155 to 162 games in every year (gamesFor), and it reads no length ledger. The ledger: the schedule was not 162 in ${mlbOdd.join(', ')}, and ${mlb.MLB_SEASONS.filter(r => r.clubs.some(g => g.games !== r.games)).length} seasons hold a club that did not play its schedule's length.`);
   else notes.push('MLB engine: the line that draws a hitter games count has moved; this note could not be made.');
   const nhlOdd = nhl.NHL_SEASONS.filter(r => r.games !== 82).map(r => `${r.year} (${r.games === null ? 'no single length' : r.games})`);
-  if (readsLedger(nhlSrc)) notes.push('NHL engine: it reads a length ledger now. Read gamesFor again before trusting the notes below.');
+  const nhlUnheld = NHL_LISTS[0].teams.map(t => t.id).filter(id => !(id in nhl.NHL_2019_CLUB_GAMES));
+  if (nhlSrc.includes("seasonLength('nhl', c.year, c.team)")) notes.push(`NHL engine: it reads its season length from the ledger by year and club (Round 1226, src/lib/usSeasonShape.ts). What it still plays on its own ${ENGINE_OWN} games: the 2019-20 season of a club the ledger does not hold under the game's id (${nhlUnheld.join(', ')} of the 2006 list: that season has no single length, and no club is mapped across a move or a rename). A goalie keeps the engine's 58 to 67 starts and gives way only to a season too short to hold them.`);
   else if (nhlSrc.includes('79 + Math.floor(rng() * 4)')) notes.push(`NHL engine: a healthy skater plays 79 to 82 games in every year (gamesFor), and it reads no length ledger. The ledger: the season was not 82 in ${nhlOdd.join(', ')}. So the engine plays more than the real season in 2012, 2019 and 2020, and at most 82 of the 84 from 2026.`);
   else notes.push('NHL engine: the line that draws a skater games count has moved; this note could not be made.');
   if (nhlSrc.includes('games / 82')) notes.push('NHL engine: a skater production is scaled by games / 82 (simNhlSeason), and the season paper counts missed games from 82 (src/lib/nhlCareerLoop.ts). Both are the 82 game season.');

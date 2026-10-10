@@ -7,7 +7,7 @@
    cycle.
 
    Hockey's split is the crease: simNhlSeason deals a goalie 58 to 67 starts
-   and a skater 79 to 82 games, so a full season and a missed one are
+   and a skater all but zero to three of his club's games, so a full season and a missed one are
    different numbers for the two of them. */
 
 import type { NhlCareerState, NhlSeasonLine } from './nhlMyCareer';
@@ -16,17 +16,27 @@ import { NHL_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, NhlBadgeFacts } from './careerBadges';
 import { fanComments, followersFromFanbase, fmtFollowers, nhlSeasonHeadlines } from './careerSocial';
 import { nhlMoneyWealth } from './nhlCareerMoney';
+import { US_ENGINE_SEASON, slateOf, toSlate } from './usSeasonShape';
 
 /** The schedule this job plays when nothing goes wrong. An injured season is
  *  dealt at 45 to 80 percent of it, so these numbers sit clear of both. */
 export function nhlFullSlate(pos: string): number {
-  return pos === 'G' ? 55 : 78;
+  return pos === 'G' ? 55 : US_ENGINE_SEASON.nhl - 4;
+}
+
+/** Round 1226: the same mark for one saved season, on the games that season
+ *  held (48 in 2012-13, 84 from 2026-27). A line saved before the engine read
+ *  the season ledger carries no `slate` and is judged on the engine's own
+ *  season, as it was played. A goalie's starts only give way to a season too
+ *  short to hold them, the engine's own rule (nhlWorkSlate in nhlMyCareer.ts). */
+export function nhlFullSlateOf(pos: string, line: { slate?: number }): number {
+  const slate = slateOf('nhl', line);
+  return toSlate('nhl', nhlFullSlate(pos), pos === 'G' ? Math.min(slate, US_ENGINE_SEASON.nhl) : slate);
 }
 
 /** Everything the badge table reads, off the save and the legacy verdict. */
 export function nhlBadgeFacts(c: NhlCareerState): NhlBadgeFacts {
   const t = nhlCareerTotals(c);
-  const slate = nhlFullSlate(c.pos);
   return {
     pos: c.pos,
     seasons: c.seasons.map(s => ({
@@ -38,7 +48,7 @@ export function nhlBadgeFacts(c: NhlCareerState): NhlBadgeFacts {
     connSmythes: c.connSmythes,
     allStars: c.allStars,
     totals: { goals: t.goals, assists: t.assists, points: t.points, wins: t.wins },
-    fullSeasons: c.seasons.filter(s => s.games >= slate).length,
+    fullSeasons: c.seasons.filter(s => s.games >= nhlFullSlateOf(c.pos, s)).length,
     wealth: Math.round(((c.netWorth ?? 0) + nhlMoneyWealth(c)) * 100) / 100,
     retired: c.retired,
     hof: c.retired && nhlLegacyOf(c).hof,
@@ -71,7 +81,11 @@ export function nhlFanComments(c: NhlCareerState): string[] {
 
 /** The paper for the season just played. */
 export function nhlHeadlinesFor(c: NhlCareerState, line: NhlSeasonLine): string[] {
-  const slate = c.pos === 'G' ? 58 : 82;
+  /* Round 1226: missed games are counted from the season this line was played
+     on (its own `slate`), so an 84 game season and a saved 82 game one each
+     read true beside the same paper. */
+  const held = slateOf('nhl', line);
+  const slate = c.pos === 'G' ? toSlate('nhl', 58, Math.min(held, US_ENGINE_SEASON.nhl)) : held;
   return nhlSeasonHeadlines({
     name: c.name,
     team: nhlTeamLabelOf(line.team, c.eraId),
