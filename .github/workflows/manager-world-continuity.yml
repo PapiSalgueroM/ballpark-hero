@@ -1,6 +1,16 @@
 name: Club Manager world roster continuity
 
 on:
+  push:
+    branches: [codex/manager-world-continuity]
+    paths:
+      - src/**
+      - scripts/**
+      - .github/workflows/manager-world-continuity.yml
+      - .github/workflows/manager-world-size-diagnostic.yml
+      - package.json
+      - package-lock.json
+      - vitest.config.ts
   pull_request:
     paths:
       - .github/workflows/manager-world-continuity.yml
