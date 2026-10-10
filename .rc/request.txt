@@ -1,0 +1,4 @@
+#!serial
+branch-practice995: node scripts/simFootlePractice995.mjs
+attr-practice995: git checkout faf0a5f3e4bdce3d7ca0f1350911f4e20c0903b2 -- src/test/footlePractice.test.tsx && node scripts/simFootlePractice995.mjs; s=$?; git checkout HEAD -- src/test/footlePractice.test.tsx; exit $s
+clean-practice995: git status --porcelain --untracked-files=no | grep -v '^.. .rc/' | head -5; git diff --quiet HEAD -- src/test/footlePractice.test.tsx && echo "test file back at head"
