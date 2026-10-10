@@ -1,0 +1,8 @@
+1) every harness parses
+   ok   788 harnesses pass node --check
+2) no harness carries an anchor it can never match
+   788 harnesses, 214 carry a multi line anchor into src, 245 normalised reads guard one
+   ok   214 harnesses are in scope, so the check is looking at something
+   ok   every read a multi line anchor can search normalises line endings first
+
+simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
