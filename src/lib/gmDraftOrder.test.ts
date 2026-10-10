@@ -251,6 +251,31 @@ describe('a saved order is trusted only whole', () => {
     expect(bad(o => { o.lottery = null; })).toBe(false);
     expect(bad(o => { o.lottery = null; (o as { plain: unknown }).plain = 'because'; })).toBe(false);
   });
+
+  it('refuses a round one that contradicts its own saved draw', () => {
+    /* The club the saved wins say was drawn first, moved to the last lottery slot. */
+    expect(bad(o => { const at = o.first.indexOf(o.lottery!.wins[0].club); [o.first[at], o.first[13]] = [o.first[13], o.first[at]]; })).toBe(false);
+    /* Two clubs the lottery never drew, swapped: the undrawn keep their seed order. */
+    const undrawn = good.first.slice(0, 14).filter(id => !good.lottery!.wins.some(w => w.club === id));
+    expect(undrawn.length).toBe(10);
+    expect(bad(o => { const a = o.first.indexOf(undrawn[8]); const b = o.first.indexOf(undrawn[9]); [o.first[a], o.first[b]] = [o.first[b], o.first[a]]; })).toBe(false);
+    /* A win that says a slot its club is not at. */
+    expect(bad(o => { o.lottery!.wins[3].slot = 9; })).toBe(false);
+    /* Every real night passes, also one with a capped climb, where a later win pushes an earlier winner down a place. */
+    for (let year = 2027; year < 2127; year += 1) {
+      const night = buildDraftOrder({ ...season2026, draftYear: year }, NBA, NBA_PICK_RULES);
+      expect(isSavedDraftOrder(night, ids2026), String(year)).toBe(true);
+    }
+    const capped: GmPickRules = { ...NBA_PICK_RULES, lottery: { clubs: 14, odds: NBA_PICK_RULES.lottery!.odds, draws: 3, maxClimb: 2, table: NBA_PICK_RULES.lottery!.table } };
+    let pushed = 0;
+    for (let year = 2027; year < 2227; year += 1) {
+      const night = buildDraftOrder({ ...season2026, draftYear: year }, NBA, capped);
+      expect(isSavedDraftOrder(night, ids2026), `capped ${year}`).toBe(true);
+      if (night.lottery!.wins.some(w => night.first.indexOf(w.club) + 1 !== w.slot)) pushed += 1;
+    }
+    /* The case the replay exists for really turns up: a winner who no longer sits at the slot its draw recorded. */
+    expect(pushed).toBeGreaterThan(0);
+  });
 });
 
 describe('slots over a pick ledger', () => {

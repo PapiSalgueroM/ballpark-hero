@@ -120,8 +120,10 @@ const CONTROLS = {
   flat: { expect: [2, 3], swaps: { order: [['  const pct = pool.map((_, i) => (i < lottery.odds.length ? lottery.odds[i] : 0));', '  const pct = pool.map((_, i) => (i < lottery.odds.length ? 100 / lottery.odds.length : 0));']] } },
   oddsrow: { expect: [2, 3], swaps: { order: [['  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[i] }));', '  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[pool.length - 1 - i] }));']] } },
   extradraw: { expect: [2], swaps: { order: [['    const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|lottery`));', '    const stray = keyedRng(`${key}|lottery`); stray(); const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, stray);']] } },
-  /* round one then comes from a second draw the saved wins do not describe, which section 4 sees as well */
-  seconddraw: { expect: [2, 4], swaps: { order: [['    top = drawn.order;', '    top = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|again`)).order;']] } },
+  /* round one then comes from a second draw the saved wins do not describe. Section 4 sees it in the order, and since
+     the validator replays the saved wins (review finding 6) it refuses such an order outright, so the two sections
+     that read a real order back as valid, 6 and 10, go red with it. */
+  seconddraw: { expect: [2, 4, 6, 10], swaps: { order: [['    top = drawn.order;', '    top = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|again`)).order;']] } },
   mathrandom: { expect: [2, 4], swaps: { order: [['    const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|lottery`));', '    const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, Math.random);']] } },
   nosplit: { expect: [3], swaps: { order: [["  if (rules.level.odds === 'split') {", "  if (rules.level.odds === 'never') {"]] } },
   tiebyid: { expect: [3], swaps: { order: [['        const pick = Math.floor(rng() * (k + 1));', '        const pick = k;']] } },
@@ -138,6 +140,8 @@ const CONTROLS = {
   skipslot: { expect: [5, 6, 10], swaps: { order: [['    for (const s of roundSlots(ledger, ledgerYear, round, round === 1 ? order.first : order.later)) {', '    for (const s of roundSlots(ledger, ledgerYear, round, round === 1 ? order.first : order.later).slice(1)) {']] } },
   trustall: { expect: [6], swaps: { order: [["  if (!raw || typeof raw !== 'object') return false;", '  if (raw !== 0) return true;']] } },
   trustnight: { expect: [6], swaps: { night: [["  if (!raw || typeof raw !== 'object') return false;", '  if (raw !== 0) return true;']] } },
+  /* the validator holds round one's head to be the field's clubs and no longer to be what the saved wins make of them */
+  winsloose: { expect: [6], swaps: { order: [['  if (!head.every((id, i) => first[i] === id)) return false;', '  if (!head.every(id => first.includes(id))) return false;']] } },
   capcount: { expect: [7], swaps: { night: [['    headline: runHeadline(made, next),', '    headline: runHeadline(rows, next),']] } },
   ghostrow: { expect: [7], swaps: { night: [["        overall: s.overall, team: s.team, playerName: s.playerName.trim(), pos: typeof s.pos === 'string' ? s.pos : '',", "        overall: s.overall + 1, team: s.team, playerName: s.playerName.trim(), pos: typeof s.pos === 'string' ? s.pos : '',"]] } },
   hidemine: { expect: [7], swaps: { night: [['  const keep = new Set<RunStep>(made.filter(s => s.mine).slice(-MAX_REVEALED));', '  const keep = new Set<RunStep>();']] } },
@@ -730,6 +734,10 @@ open(6);
     'a seed out of place': o => { o.lottery.field[2].seed = 9; },
     'a chance that is not a number': o => { o.lottery.field[2].pct = 'high'; },
     'a playoff club in the lottery slots': o => { const at = o.first.indexOf(playoffClub); [o.first[0], o.first[at]] = [o.first[at], o.first[0]]; },
+    /* an order that contradicts its own draw: the review's forged night, "drawn first" and picking 14th */
+    'the club that was drawn first moved to the last lottery slot': o => { const at = o.first.indexOf(o.lottery.wins[0].club); [o.first[at], o.first[13]] = [o.first[13], o.first[at]]; },
+    'two clubs the lottery never drew out of seed order': o => { [o.first[12], o.first[13]] = [o.first[13], o.first[12]]; },
+    'a win at a slot its club does not hold': o => { o.lottery.wins[3].slot = 9; },
     'a reason and a lottery at once': o => { o.plain = 'thin-rule'; },
     'no lottery and no reason': o => { o.lottery = null; },
     'a drawing of one club': o => { o.level.push([clubs[0]]); },

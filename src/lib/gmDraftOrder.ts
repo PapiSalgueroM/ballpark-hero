@@ -222,7 +222,12 @@ const isPerm = (v: unknown, ids: string[]): v is string[] =>
 /** A saved order this build can trust for these clubs. Fails closed, like
     validateLedger: one wrong field and the whole order is refused. A rule id
     this build no longer knows is NOT a reason to refuse: the order was drawn
-    and somebody may have watched it. */
+    and somebody may have watched it.
+
+    WHAT IT CAN AND CANNOT HOLD. Round one's lottery slots are held exactly to
+    the saved field and wins. The rest of round one and every later round are
+    held to be each club once: their order follows from the season's records,
+    which a saved order does not carry, so it is not re-derived here. */
 export function isSavedDraftOrder(raw: unknown, teamIds: string[]): raw is SavedDraftOrder {
   if (!raw || typeof raw !== 'object') return false;
   const o = raw as Record<string, unknown>;
@@ -261,6 +266,25 @@ export function isSavedDraftOrder(raw: unknown, teamIds: string[]): raw is Saved
     if (!Number.isInteger(w.slot) || (w.slot as number) < 1 || (w.slot as number) > clubs.length) return false;
     winners.add(w.club);
   }
+  /* ROUND ONE'S HEAD IS WHAT THE SAVED DRAW MAKES OF THE SAVED FIELD, club for
+     club. Replay it: the field in seed order, then each win in turn lifts its
+     club to the slot the draw recorded, which is the one move runLottery
+     makes, capped climb or not. A win whose club already sits above its
+     recorded slot never happened. What comes out must be the head of round
+     one, so an order that contradicts its own draw (a winner moved down, two
+     undrawn clubs swapped) is refused and never shown as a night. */
+  const head = [...clubs];
+  for (const w of wins) {
+    const at = head.indexOf(w.club as string);
+    const to = (w.slot as number) - 1;
+    if (at < to) return false;
+    if (at > to) {
+      head.splice(at, 1);
+      head.splice(to, 0, w.club as string);
+    }
+  }
+  const first = o.first as string[];
+  if (!head.every((id, i) => first[i] === id)) return false;
   return true;
 }
 
