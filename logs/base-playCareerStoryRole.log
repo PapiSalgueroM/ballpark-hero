@@ -1,0 +1,559 @@
+ok   320-playing: initial-current-Chromium-loader: every serialized saved field and key is identical
+ok   320-playing: canonical-second-load: reload preserves every raw saved byte
+ok   320-playing: Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help
+ok   320-playing: Reopenable help explains chapter navigation, the four-game role and the personal goal example
+ok   320-playing: The actual loaded guide states both the mobile and desktop Training positions
+ok   320-playing: rules: painted controls and readable capture settle for four frames without overlap
+ok   320-playing: rules-escape: exact opener focus, body scroll and page position restore
+ok   320-playing: rules-readonly: every serialized saved field and key is identical
+ok   320-playing: rules-readonly: raw complete save bytes stay unchanged
+ok   320-playing: Recorded chapter oracle contains the actual saved years and lines
+ok   320-playing: The page contains one persistent utility button per available action
+ok   320-playing: training: compiled CSS uses mobile flow and the desktop dock
+ok   320-playing: training: actual control is at least 44 pixels
+ok   320-playing: training: opening places focus inside the actual panel
+ok   320-playing: training-close: exact opener focus, body scroll and page position restore
+ok   320-playing: training-readonly: every serialized saved field and key is identical
+ok   320-playing: training-readonly: raw complete save bytes stay unchanged
+ok   320-playing: phone: compiled CSS uses mobile flow and the desktop dock
+ok   320-playing: phone: actual control is at least 44 pixels
+ok   320-playing: phone: opening places focus inside the actual panel
+ok   320-playing: phone-close: exact opener focus, body scroll and page position restore
+ok   320-playing: phone-readonly: every serialized saved field and key is identical
+ok   320-playing: phone-readonly: raw complete save bytes stay unchanged
+ok   320-playing: utilities: painted controls and readable capture settle for four frames without overlap
+ok   320-playing: The saved role note states exact club, upcoming year and four planned games
+ok   320-playing: Shared story dialog locks body scrolling
+ok   320-playing: Story list contains exactly the projected saved chapters
+ok   320-playing: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   320-playing: Chapter s25: heading receives focus
+ok   320-playing: Chapter s25: navigation stops at the real recorded boundaries
+ok   320-playing: chapter-1: every serialized saved field and key is identical
+ok   320-playing: chapter-1: raw complete save bytes stay unchanged
+ok   320-playing: Chapter s24: exact saved year, age, club and every recorded line are shown
+ok   320-playing: Chapter s24: heading receives focus
+ok   320-playing: Chapter s24: navigation stops at the real recorded boundaries
+ok   320-playing: chapter-2: every serialized saved field and key is identical
+ok   320-playing: chapter-2: raw complete save bytes stay unchanged
+ok   320-playing: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   320-playing: Chapter s25: heading receives focus
+ok   320-playing: Chapter s25: navigation stops at the real recorded boundaries
+ok   320-playing: chapter-3: every serialized saved field and key is identical
+ok   320-playing: chapter-3: raw complete save bytes stay unchanged
+ok   320-playing: Tab remains within the story dialog
+ok   320-playing: Tab remains within the story dialog
+ok   320-playing: Shift+Tab remains within the story dialog
+ok   320-playing: Shift+Tab remains within the story dialog
+ok   320-playing: story-chapter: painted controls and readable capture settle for four frames without overlap
+ok   320-playing: Visible chapter, Back and Close controls are at least 44 pixels
+ok   320-playing: All seasons restores the original selected tile, list offset and page position
+ok   320-playing: Short phone journey exercises a genuinely scrolled recorded chapter list
+ok   320-playing: Chapter now: exact saved year, age, club and every recorded line are shown
+ok   320-playing: Chapter now: heading receives focus
+ok   320-playing: Chapter now: navigation stops at the real recorded boundaries
+ok   320-playing: chapter-4: every serialized saved field and key is identical
+ok   320-playing: chapter-4: raw complete save bytes stay unchanged
+ok   320-playing: Returning from the actual NOW or LAST chapter restores its tile
+ok   320-playing: story-escape: exact opener focus, body scroll and page position restore
+ok   320-playing: story-escape: every serialized saved field and key is identical
+ok   320-playing: story-escape: raw complete save bytes stay unchanged
+ok   320-playing: story-back: exact opener focus, body scroll and page position restore
+ok   320-playing: story-back: every serialized saved field and key is identical
+ok   320-playing: story-back: raw complete save bytes stay unchanged
+ok   320-playing: footer-access: painted controls and readable capture settle for four frames without overlap
+ok   320-playing: footer-readonly: every serialized saved field and key is identical
+ok   320-playing: footer-readonly: raw complete save bytes stay unchanged
+ok   320-playing: read-only-complete: reload preserves every raw saved byte
+CONTROL FIRED(native overlap): overlap
+CONTROL FIRED(native wrong-chapter): wrong-chapter
+CONTROL FIRED(native focus-body): focus, computed-overflow
+CONTROL FIRED(native help-utilities): help-target, help-overlap, guide-training
+ok   320-playing: All copied detector controls leave the actual complete save unchanged
+ok   320-playing: Actual page and owned assets report no errors
+ok   320-playing: Every external write attempt is intercepted locally, with zero forwarding
+ok   320-summary: initial-current-Chromium-loader: every serialized saved field and key is identical
+ok   320-summary: canonical-second-load: reload preserves every raw saved byte
+ok   320-summary: Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help
+ok   320-summary: Reopenable help explains chapter navigation, the four-game role and the personal goal example
+ok   320-summary: The actual loaded guide states both the mobile and desktop Training positions
+ok   320-summary: rules: painted controls and readable capture settle for four frames without overlap
+ok   320-summary: rules-escape: exact opener focus, body scroll and page position restore
+ok   320-summary: rules-readonly: every serialized saved field and key is identical
+ok   320-summary: rules-readonly: raw complete save bytes stay unchanged
+ok   320-summary: Recorded chapter oracle contains the actual saved years and lines
+ok   320-summary: The page contains one persistent utility button per available action
+ok   320-summary: training: compiled CSS uses mobile flow and the desktop dock
+ok   320-summary: training: actual control is at least 44 pixels
+ok   320-summary: training: opening places focus inside the actual panel
+ok   320-summary: training-close: exact opener focus, body scroll and page position restore
+ok   320-summary: training-readonly: every serialized saved field and key is identical
+ok   320-summary: training-readonly: raw complete save bytes stay unchanged
+ok   320-summary: phone: compiled CSS uses mobile flow and the desktop dock
+ok   320-summary: phone: actual control is at least 44 pixels
+ok   320-summary: phone: opening places focus inside the actual panel
+ok   320-summary: phone-close: exact opener focus, body scroll and page position restore
+ok   320-summary: phone-readonly: every serialized saved field and key is identical
+ok   320-summary: phone-readonly: raw complete save bytes stay unchanged
+ok   320-summary: utilities: painted controls and readable capture settle for four frames without overlap
+ok   320-summary: Summary accurately distinguishes served and interrupted selection plans
+ok   320-summary: Summary milestone uses only the held senior tally and makes no club record claim
+ok   320-summary: Actual summary has exactly one Continue control
+ok   320-summary: summary-continue: painted controls and readable capture settle for four frames without overlap
+ok   320-summary: Summary Continue is painted and at least 44 pixels
+ok   320-summary: Shared story dialog locks body scrolling
+ok   320-summary: Story list contains exactly the projected saved chapters
+ok   320-summary: Legacy notice truthfully preserves the first retained story year
+ok   320-summary: Chapter s0: exact saved year, age, club and every recorded line are shown
+ok   320-summary: Chapter s0: heading receives focus
+ok   320-summary: Chapter s0: navigation stops at the real recorded boundaries
+ok   320-summary: The exact saved truncated count remains visible
+ok   320-summary: chapter-1: every serialized saved field and key is identical
+ok   320-summary: chapter-1: raw complete save bytes stay unchanged
+ok   320-summary: Chapter s1: exact saved year, age, club and every recorded line are shown
+ok   320-summary: Chapter s1: heading receives focus
+ok   320-summary: Chapter s1: navigation stops at the real recorded boundaries
+ok   320-summary: chapter-2: every serialized saved field and key is identical
+ok   320-summary: chapter-2: raw complete save bytes stay unchanged
+ok   320-summary: Tab remains within the story dialog
+ok   320-summary: Tab remains within the story dialog
+ok   320-summary: Shift+Tab remains within the story dialog
+ok   320-summary: Shift+Tab remains within the story dialog
+ok   320-summary: story-chapter: painted controls and readable capture settle for four frames without overlap
+ok   320-summary: Visible chapter, Back and Close controls are at least 44 pixels
+ok   320-summary: All seasons restores the original selected tile, list offset and page position
+ok   320-summary: Chapter now: exact saved year, age, club and every recorded line are shown
+ok   320-summary: Chapter now: heading receives focus
+ok   320-summary: Chapter now: navigation stops at the real recorded boundaries
+ok   320-summary: chapter-3: every serialized saved field and key is identical
+ok   320-summary: chapter-3: raw complete save bytes stay unchanged
+ok   320-summary: Returning from the actual NOW or LAST chapter restores its tile
+ok   320-summary: story-escape: exact opener focus, body scroll and page position restore
+ok   320-summary: story-escape: every serialized saved field and key is identical
+ok   320-summary: story-escape: raw complete save bytes stay unchanged
+ok   320-summary: story-back: exact opener focus, body scroll and page position restore
+ok   320-summary: story-back: every serialized saved field and key is identical
+ok   320-summary: story-back: raw complete save bytes stay unchanged
+ok   320-summary: footer-access: painted controls and readable capture settle for four frames without overlap
+ok   320-summary: footer-readonly: every serialized saved field and key is identical
+ok   320-summary: footer-readonly: raw complete save bytes stay unchanged
+ok   320-summary: read-only-complete: reload preserves every raw saved byte
+ok   320-summary: Reload retains the derived personal goal milestone
+ok   320-summary: Actual page and owned assets report no errors
+ok   320-summary: Every external write attempt is intercepted locally, with zero forwarding
+ok   320-retired: initial-current-Chromium-loader: every serialized saved field and key is identical
+ok   320-retired: canonical-second-load: reload preserves every raw saved byte
+ok   320-retired: Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help
+ok   320-retired: Reopenable help explains chapter navigation, the four-game role and the personal goal example
+ok   320-retired: The actual loaded guide states both the mobile and desktop Training positions
+ok   320-retired: rules: painted controls and readable capture settle for four frames without overlap
+ok   320-retired: rules-escape: exact opener focus, body scroll and page position restore
+ok   320-retired: rules-readonly: every serialized saved field and key is identical
+ok   320-retired: rules-readonly: raw complete save bytes stay unchanged
+ok   320-retired: Recorded chapter oracle contains the actual saved years and lines
+ok   320-retired: The page contains one persistent utility button per available action
+ok   320-retired: phone: compiled CSS uses mobile flow and the desktop dock
+ok   320-retired: phone: actual control is at least 44 pixels
+ok   320-retired: phone: opening places focus inside the actual panel
+ok   320-retired: phone-close: exact opener focus, body scroll and page position restore
+ok   320-retired: phone-readonly: every serialized saved field and key is identical
+ok   320-retired: phone-readonly: raw complete save bytes stay unchanged
+ok   320-retired: utilities: painted controls and readable capture settle for four frames without overlap
+ok   320-retired: Story list contains exactly the projected saved chapters
+ok   320-retired: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   320-retired: Chapter s25: heading receives focus
+ok   320-retired: Chapter s25: navigation stops at the real recorded boundaries
+ok   320-retired: chapter-1: every serialized saved field and key is identical
+ok   320-retired: chapter-1: raw complete save bytes stay unchanged
+ok   320-retired: Chapter s24: exact saved year, age, club and every recorded line are shown
+ok   320-retired: Chapter s24: heading receives focus
+ok   320-retired: Chapter s24: navigation stops at the real recorded boundaries
+ok   320-retired: chapter-2: every serialized saved field and key is identical
+ok   320-retired: chapter-2: raw complete save bytes stay unchanged
+ok   320-retired: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   320-retired: Chapter s25: heading receives focus
+ok   320-retired: Chapter s25: navigation stops at the real recorded boundaries
+ok   320-retired: chapter-3: every serialized saved field and key is identical
+ok   320-retired: chapter-3: raw complete save bytes stay unchanged
+ok   320-retired: retired-chapter: painted controls and readable capture settle for four frames without overlap
+ok   320-retired: All seasons restores the original selected tile, list offset and page position
+ok   320-retired: Chapter now: exact saved year, age, club and every recorded line are shown
+ok   320-retired: Chapter now: heading receives focus
+ok   320-retired: Chapter now: navigation stops at the real recorded boundaries
+ok   320-retired: chapter-4: every serialized saved field and key is identical
+ok   320-retired: chapter-4: raw complete save bytes stay unchanged
+ok   320-retired: Returning from the actual NOW or LAST chapter restores its tile
+ok   320-retired: footer-access: painted controls and readable capture settle for four frames without overlap
+ok   320-retired: footer-readonly: every serialized saved field and key is identical
+ok   320-retired: footer-readonly: raw complete save bytes stay unchanged
+ok   320-retired: read-only-complete: reload preserves every raw saved byte
+ok   320-retired: Actual page and owned assets report no errors
+ok   320-retired: Every external write attempt is intercepted locally, with zero forwarding
+ok   390-playing: initial-current-Chromium-loader: every serialized saved field and key is identical
+ok   390-playing: canonical-second-load: reload preserves every raw saved byte
+ok   390-playing: Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help
+ok   390-playing: Reopenable help explains chapter navigation, the four-game role and the personal goal example
+ok   390-playing: The actual loaded guide states both the mobile and desktop Training positions
+ok   390-playing: rules: painted controls and readable capture settle for four frames without overlap
+ok   390-playing: rules-escape: exact opener focus, body scroll and page position restore
+ok   390-playing: rules-readonly: every serialized saved field and key is identical
+ok   390-playing: rules-readonly: raw complete save bytes stay unchanged
+ok   390-playing: Recorded chapter oracle contains the actual saved years and lines
+ok   390-playing: The page contains one persistent utility button per available action
+ok   390-playing: training: compiled CSS uses mobile flow and the desktop dock
+ok   390-playing: training: actual control is at least 44 pixels
+ok   390-playing: training: opening places focus inside the actual panel
+ok   390-playing: training-close: exact opener focus, body scroll and page position restore
+ok   390-playing: training-readonly: every serialized saved field and key is identical
+ok   390-playing: training-readonly: raw complete save bytes stay unchanged
+ok   390-playing: phone: compiled CSS uses mobile flow and the desktop dock
+ok   390-playing: phone: actual control is at least 44 pixels
+ok   390-playing: phone: opening places focus inside the actual panel
+ok   390-playing: phone-close: exact opener focus, body scroll and page position restore
+ok   390-playing: phone-readonly: every serialized saved field and key is identical
+ok   390-playing: phone-readonly: raw complete save bytes stay unchanged
+ok   390-playing: utilities: painted controls and readable capture settle for four frames without overlap
+ok   390-playing: The saved role note states exact club, upcoming year and four planned games
+ok   390-playing: Shared story dialog locks body scrolling
+ok   390-playing: Story list contains exactly the projected saved chapters
+ok   390-playing: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   390-playing: Chapter s25: heading receives focus
+ok   390-playing: Chapter s25: navigation stops at the real recorded boundaries
+ok   390-playing: chapter-1: every serialized saved field and key is identical
+ok   390-playing: chapter-1: raw complete save bytes stay unchanged
+ok   390-playing: Chapter s24: exact saved year, age, club and every recorded line are shown
+ok   390-playing: Chapter s24: heading receives focus
+ok   390-playing: Chapter s24: navigation stops at the real recorded boundaries
+ok   390-playing: chapter-2: every serialized saved field and key is identical
+ok   390-playing: chapter-2: raw complete save bytes stay unchanged
+ok   390-playing: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   390-playing: Chapter s25: heading receives focus
+ok   390-playing: Chapter s25: navigation stops at the real recorded boundaries
+ok   390-playing: chapter-3: every serialized saved field and key is identical
+ok   390-playing: chapter-3: raw complete save bytes stay unchanged
+ok   390-playing: Tab remains within the story dialog
+ok   390-playing: Tab remains within the story dialog
+ok   390-playing: Shift+Tab remains within the story dialog
+ok   390-playing: Shift+Tab remains within the story dialog
+ok   390-playing: story-chapter: painted controls and readable capture settle for four frames without overlap
+ok   390-playing: Visible chapter, Back and Close controls are at least 44 pixels
+ok   390-playing: All seasons restores the original selected tile, list offset and page position
+ok   390-playing: Chapter now: exact saved year, age, club and every recorded line are shown
+ok   390-playing: Chapter now: heading receives focus
+ok   390-playing: Chapter now: navigation stops at the real recorded boundaries
+ok   390-playing: chapter-4: every serialized saved field and key is identical
+ok   390-playing: chapter-4: raw complete save bytes stay unchanged
+ok   390-playing: Returning from the actual NOW or LAST chapter restores its tile
+ok   390-playing: story-escape: exact opener focus, body scroll and page position restore
+ok   390-playing: story-escape: every serialized saved field and key is identical
+ok   390-playing: story-escape: raw complete save bytes stay unchanged
+ok   390-playing: story-back: exact opener focus, body scroll and page position restore
+ok   390-playing: story-back: every serialized saved field and key is identical
+ok   390-playing: story-back: raw complete save bytes stay unchanged
+ok   390-playing: footer-access: painted controls and readable capture settle for four frames without overlap
+ok   390-playing: footer-readonly: every serialized saved field and key is identical
+ok   390-playing: footer-readonly: raw complete save bytes stay unchanged
+ok   390-playing: read-only-complete: reload preserves every raw saved byte
+ok   390-playing: Actual page and owned assets report no errors
+ok   390-playing: Every external write attempt is intercepted locally, with zero forwarding
+ok   390-summary: initial-current-Chromium-loader: every serialized saved field and key is identical
+ok   390-summary: canonical-second-load: reload preserves every raw saved byte
+ok   390-summary: Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help
+ok   390-summary: Reopenable help explains chapter navigation, the four-game role and the personal goal example
+ok   390-summary: The actual loaded guide states both the mobile and desktop Training positions
+ok   390-summary: rules: painted controls and readable capture settle for four frames without overlap
+ok   390-summary: rules-escape: exact opener focus, body scroll and page position restore
+ok   390-summary: rules-readonly: every serialized saved field and key is identical
+ok   390-summary: rules-readonly: raw complete save bytes stay unchanged
+ok   390-summary: Recorded chapter oracle contains the actual saved years and lines
+ok   390-summary: The page contains one persistent utility button per available action
+ok   390-summary: training: compiled CSS uses mobile flow and the desktop dock
+ok   390-summary: training: actual control is at least 44 pixels
+ok   390-summary: training: opening places focus inside the actual panel
+ok   390-summary: training-close: exact opener focus, body scroll and page position restore
+ok   390-summary: training-readonly: every serialized saved field and key is identical
+ok   390-summary: training-readonly: raw complete save bytes stay unchanged
+ok   390-summary: phone: compiled CSS uses mobile flow and the desktop dock
+ok   390-summary: phone: actual control is at least 44 pixels
+ok   390-summary: phone: opening places focus inside the actual panel
+ok   390-summary: phone-close: exact opener focus, body scroll and page position restore
+ok   390-summary: phone-readonly: every serialized saved field and key is identical
+ok   390-summary: phone-readonly: raw complete save bytes stay unchanged
+ok   390-summary: utilities: painted controls and readable capture settle for four frames without overlap
+ok   390-summary: Summary accurately distinguishes served and interrupted selection plans
+ok   390-summary: Summary milestone uses only the held senior tally and makes no club record claim
+ok   390-summary: Actual summary has exactly one Continue control
+ok   390-summary: summary-continue: painted controls and readable capture settle for four frames without overlap
+ok   390-summary: Summary Continue is painted and at least 44 pixels
+ok   390-summary: Shared story dialog locks body scrolling
+ok   390-summary: Story list contains exactly the projected saved chapters
+ok   390-summary: Legacy notice truthfully preserves the first retained story year
+ok   390-summary: Chapter s0: exact saved year, age, club and every recorded line are shown
+ok   390-summary: Chapter s0: heading receives focus
+ok   390-summary: Chapter s0: navigation stops at the real recorded boundaries
+ok   390-summary: The exact saved truncated count remains visible
+ok   390-summary: chapter-1: every serialized saved field and key is identical
+ok   390-summary: chapter-1: raw complete save bytes stay unchanged
+ok   390-summary: Chapter s1: exact saved year, age, club and every recorded line are shown
+ok   390-summary: Chapter s1: heading receives focus
+ok   390-summary: Chapter s1: navigation stops at the real recorded boundaries
+ok   390-summary: chapter-2: every serialized saved field and key is identical
+ok   390-summary: chapter-2: raw complete save bytes stay unchanged
+ok   390-summary: Tab remains within the story dialog
+ok   390-summary: Tab remains within the story dialog
+ok   390-summary: Shift+Tab remains within the story dialog
+ok   390-summary: Shift+Tab remains within the story dialog
+ok   390-summary: story-chapter: painted controls and readable capture settle for four frames without overlap
+ok   390-summary: Visible chapter, Back and Close controls are at least 44 pixels
+ok   390-summary: All seasons restores the original selected tile, list offset and page position
+ok   390-summary: Chapter now: exact saved year, age, club and every recorded line are shown
+ok   390-summary: Chapter now: heading receives focus
+ok   390-summary: Chapter now: navigation stops at the real recorded boundaries
+ok   390-summary: chapter-3: every serialized saved field and key is identical
+ok   390-summary: chapter-3: raw complete save bytes stay unchanged
+ok   390-summary: Returning from the actual NOW or LAST chapter restores its tile
+ok   390-summary: story-escape: exact opener focus, body scroll and page position restore
+ok   390-summary: story-escape: every serialized saved field and key is identical
+ok   390-summary: story-escape: raw complete save bytes stay unchanged
+ok   390-summary: story-back: exact opener focus, body scroll and page position restore
+ok   390-summary: story-back: every serialized saved field and key is identical
+ok   390-summary: story-back: raw complete save bytes stay unchanged
+ok   390-summary: footer-access: painted controls and readable capture settle for four frames without overlap
+ok   390-summary: footer-readonly: every serialized saved field and key is identical
+ok   390-summary: footer-readonly: raw complete save bytes stay unchanged
+ok   390-summary: read-only-complete: reload preserves every raw saved byte
+ok   390-summary: Reload retains the derived personal goal milestone
+ok   390-summary: Actual page and owned assets report no errors
+ok   390-summary: Every external write attempt is intercepted locally, with zero forwarding
+ok   390-retired: initial-current-Chromium-loader: every serialized saved field and key is identical
+ok   390-retired: canonical-second-load: reload preserves every raw saved byte
+ok   390-retired: Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help
+ok   390-retired: Reopenable help explains chapter navigation, the four-game role and the personal goal example
+ok   390-retired: The actual loaded guide states both the mobile and desktop Training positions
+ok   390-retired: rules: painted controls and readable capture settle for four frames without overlap
+ok   390-retired: rules-escape: exact opener focus, body scroll and page position restore
+ok   390-retired: rules-readonly: every serialized saved field and key is identical
+ok   390-retired: rules-readonly: raw complete save bytes stay unchanged
+ok   390-retired: Recorded chapter oracle contains the actual saved years and lines
+ok   390-retired: The page contains one persistent utility button per available action
+ok   390-retired: phone: compiled CSS uses mobile flow and the desktop dock
+ok   390-retired: phone: actual control is at least 44 pixels
+ok   390-retired: phone: opening places focus inside the actual panel
+ok   390-retired: phone-close: exact opener focus, body scroll and page position restore
+ok   390-retired: phone-readonly: every serialized saved field and key is identical
+ok   390-retired: phone-readonly: raw complete save bytes stay unchanged
+ok   390-retired: utilities: painted controls and readable capture settle for four frames without overlap
+ok   390-retired: Story list contains exactly the projected saved chapters
+ok   390-retired: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   390-retired: Chapter s25: heading receives focus
+ok   390-retired: Chapter s25: navigation stops at the real recorded boundaries
+ok   390-retired: chapter-1: every serialized saved field and key is identical
+ok   390-retired: chapter-1: raw complete save bytes stay unchanged
+ok   390-retired: Chapter s24: exact saved year, age, club and every recorded line are shown
+ok   390-retired: Chapter s24: heading receives focus
+ok   390-retired: Chapter s24: navigation stops at the real recorded boundaries
+ok   390-retired: chapter-2: every serialized saved field and key is identical
+ok   390-retired: chapter-2: raw complete save bytes stay unchanged
+ok   390-retired: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   390-retired: Chapter s25: heading receives focus
+ok   390-retired: Chapter s25: navigation stops at the real recorded boundaries
+ok   390-retired: chapter-3: every serialized saved field and key is identical
+ok   390-retired: chapter-3: raw complete save bytes stay unchanged
+ok   390-retired: retired-chapter: painted controls and readable capture settle for four frames without overlap
+ok   390-retired: All seasons restores the original selected tile, list offset and page position
+ok   390-retired: Chapter now: exact saved year, age, club and every recorded line are shown
+ok   390-retired: Chapter now: heading receives focus
+ok   390-retired: Chapter now: navigation stops at the real recorded boundaries
+ok   390-retired: chapter-4: every serialized saved field and key is identical
+ok   390-retired: chapter-4: raw complete save bytes stay unchanged
+ok   390-retired: Returning from the actual NOW or LAST chapter restores its tile
+ok   390-retired: footer-access: painted controls and readable capture settle for four frames without overlap
+ok   390-retired: footer-readonly: every serialized saved field and key is identical
+ok   390-retired: footer-readonly: raw complete save bytes stay unchanged
+ok   390-retired: read-only-complete: reload preserves every raw saved byte
+ok   390-retired: Actual page and owned assets report no errors
+ok   390-retired: Every external write attempt is intercepted locally, with zero forwarding
+ok   1280-playing: initial-current-Chromium-loader: every serialized saved field and key is identical
+ok   1280-playing: canonical-second-load: reload preserves every raw saved byte
+ok   1280-playing: Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help
+ok   1280-playing: Reopenable help explains chapter navigation, the four-game role and the personal goal example
+ok   1280-playing: The actual loaded guide states both the mobile and desktop Training positions
+ok   1280-playing: rules: painted controls and readable capture settle for four frames without overlap
+ok   1280-playing: rules-escape: exact opener focus, body scroll and page position restore
+ok   1280-playing: rules-readonly: every serialized saved field and key is identical
+ok   1280-playing: rules-readonly: raw complete save bytes stay unchanged
+ok   1280-playing: Recorded chapter oracle contains the actual saved years and lines
+ok   1280-playing: The page contains one persistent utility button per available action
+ok   1280-playing: training: compiled CSS uses mobile flow and the desktop dock
+ok   1280-playing: training: actual control is at least 44 pixels
+ok   1280-playing: training: opening places focus inside the actual panel
+ok   1280-playing: training-close: exact opener focus, body scroll and page position restore
+ok   1280-playing: training-readonly: every serialized saved field and key is identical
+ok   1280-playing: training-readonly: raw complete save bytes stay unchanged
+ok   1280-playing: phone: compiled CSS uses mobile flow and the desktop dock
+ok   1280-playing: phone: actual control is at least 44 pixels
+ok   1280-playing: phone: opening places focus inside the actual panel
+ok   1280-playing: phone-close: exact opener focus, body scroll and page position restore
+ok   1280-playing: phone-readonly: every serialized saved field and key is identical
+ok   1280-playing: phone-readonly: raw complete save bytes stay unchanged
+ok   1280-playing: utilities: painted controls and readable capture settle for four frames without overlap
+ok   1280-playing: The saved role note states exact club, upcoming year and four planned games
+ok   1280-playing: Shared story dialog locks body scrolling
+ok   1280-playing: Story list contains exactly the projected saved chapters
+ok   1280-playing: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   1280-playing: Chapter s25: heading receives focus
+ok   1280-playing: Chapter s25: navigation stops at the real recorded boundaries
+ok   1280-playing: chapter-1: every serialized saved field and key is identical
+ok   1280-playing: chapter-1: raw complete save bytes stay unchanged
+ok   1280-playing: Chapter s24: exact saved year, age, club and every recorded line are shown
+ok   1280-playing: Chapter s24: heading receives focus
+ok   1280-playing: Chapter s24: navigation stops at the real recorded boundaries
+ok   1280-playing: chapter-2: every serialized saved field and key is identical
+ok   1280-playing: chapter-2: raw complete save bytes stay unchanged
+ok   1280-playing: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   1280-playing: Chapter s25: heading receives focus
+ok   1280-playing: Chapter s25: navigation stops at the real recorded boundaries
+ok   1280-playing: chapter-3: every serialized saved field and key is identical
+ok   1280-playing: chapter-3: raw complete save bytes stay unchanged
+ok   1280-playing: Tab remains within the story dialog
+ok   1280-playing: Tab remains within the story dialog
+ok   1280-playing: Shift+Tab remains within the story dialog
+ok   1280-playing: Shift+Tab remains within the story dialog
+ok   1280-playing: story-chapter: painted controls and readable capture settle for four frames without overlap
+ok   1280-playing: Visible chapter, Back and Close controls are at least 44 pixels
+ok   1280-playing: All seasons restores the original selected tile, list offset and page position
+ok   1280-playing: Chapter now: exact saved year, age, club and every recorded line are shown
+ok   1280-playing: Chapter now: heading receives focus
+ok   1280-playing: Chapter now: navigation stops at the real recorded boundaries
+ok   1280-playing: chapter-4: every serialized saved field and key is identical
+ok   1280-playing: chapter-4: raw complete save bytes stay unchanged
+ok   1280-playing: Returning from the actual NOW or LAST chapter restores its tile
+ok   1280-playing: story-escape: exact opener focus, body scroll and page position restore
+ok   1280-playing: story-escape: every serialized saved field and key is identical
+ok   1280-playing: story-escape: raw complete save bytes stay unchanged
+ok   1280-playing: story-back: exact opener focus, body scroll and page position restore
+ok   1280-playing: story-back: every serialized saved field and key is identical
+ok   1280-playing: story-back: raw complete save bytes stay unchanged
+ok   1280-playing: footer-access: painted controls and readable capture settle for four frames without overlap
+ok   1280-playing: footer-readonly: every serialized saved field and key is identical
+ok   1280-playing: footer-readonly: raw complete save bytes stay unchanged
+ok   1280-playing: read-only-complete: reload preserves every raw saved byte
+ok   1280-playing: Actual page and owned assets report no errors
+ok   1280-playing: Every external write attempt is intercepted locally, with zero forwarding
+ok   1280-summary: initial-current-Chromium-loader: every serialized saved field and key is identical
+ok   1280-summary: canonical-second-load: reload preserves every raw saved byte
+ok   1280-summary: Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help
+ok   1280-summary: Reopenable help explains chapter navigation, the four-game role and the personal goal example
+ok   1280-summary: The actual loaded guide states both the mobile and desktop Training positions
+ok   1280-summary: rules: painted controls and readable capture settle for four frames without overlap
+ok   1280-summary: rules-escape: exact opener focus, body scroll and page position restore
+ok   1280-summary: rules-readonly: every serialized saved field and key is identical
+ok   1280-summary: rules-readonly: raw complete save bytes stay unchanged
+ok   1280-summary: Recorded chapter oracle contains the actual saved years and lines
+ok   1280-summary: The page contains one persistent utility button per available action
+ok   1280-summary: training: compiled CSS uses mobile flow and the desktop dock
+ok   1280-summary: training: actual control is at least 44 pixels
+ok   1280-summary: training: opening places focus inside the actual panel
+ok   1280-summary: training-close: exact opener focus, body scroll and page position restore
+ok   1280-summary: training-readonly: every serialized saved field and key is identical
+ok   1280-summary: training-readonly: raw complete save bytes stay unchanged
+ok   1280-summary: phone: compiled CSS uses mobile flow and the desktop dock
+ok   1280-summary: phone: actual control is at least 44 pixels
+ok   1280-summary: phone: opening places focus inside the actual panel
+ok   1280-summary: phone-close: exact opener focus, body scroll and page position restore
+ok   1280-summary: phone-readonly: every serialized saved field and key is identical
+ok   1280-summary: phone-readonly: raw complete save bytes stay unchanged
+ok   1280-summary: utilities: painted controls and readable capture settle for four frames without overlap
+ok   1280-summary: Summary accurately distinguishes served and interrupted selection plans
+ok   1280-summary: Summary milestone uses only the held senior tally and makes no club record claim
+ok   1280-summary: Actual summary has exactly one Continue control
+ok   1280-summary: summary-continue: painted controls and readable capture settle for four frames without overlap
+ok   1280-summary: Summary Continue is painted and at least 44 pixels
+ok   1280-summary: Shared story dialog locks body scrolling
+ok   1280-summary: Story list contains exactly the projected saved chapters
+ok   1280-summary: Legacy notice truthfully preserves the first retained story year
+ok   1280-summary: Chapter s0: exact saved year, age, club and every recorded line are shown
+ok   1280-summary: Chapter s0: heading receives focus
+ok   1280-summary: Chapter s0: navigation stops at the real recorded boundaries
+ok   1280-summary: The exact saved truncated count remains visible
+ok   1280-summary: chapter-1: every serialized saved field and key is identical
+ok   1280-summary: chapter-1: raw complete save bytes stay unchanged
+ok   1280-summary: Chapter s1: exact saved year, age, club and every recorded line are shown
+ok   1280-summary: Chapter s1: heading receives focus
+ok   1280-summary: Chapter s1: navigation stops at the real recorded boundaries
+ok   1280-summary: chapter-2: every serialized saved field and key is identical
+ok   1280-summary: chapter-2: raw complete save bytes stay unchanged
+ok   1280-summary: Tab remains within the story dialog
+ok   1280-summary: Tab remains within the story dialog
+ok   1280-summary: Shift+Tab remains within the story dialog
+ok   1280-summary: Shift+Tab remains within the story dialog
+ok   1280-summary: story-chapter: painted controls and readable capture settle for four frames without overlap
+ok   1280-summary: Visible chapter, Back and Close controls are at least 44 pixels
+ok   1280-summary: All seasons restores the original selected tile, list offset and page position
+ok   1280-summary: Chapter now: exact saved year, age, club and every recorded line are shown
+ok   1280-summary: Chapter now: heading receives focus
+ok   1280-summary: Chapter now: navigation stops at the real recorded boundaries
+ok   1280-summary: chapter-3: every serialized saved field and key is identical
+ok   1280-summary: chapter-3: raw complete save bytes stay unchanged
+ok   1280-summary: Returning from the actual NOW or LAST chapter restores its tile
+ok   1280-summary: story-escape: exact opener focus, body scroll and page position restore
+ok   1280-summary: story-escape: every serialized saved field and key is identical
+ok   1280-summary: story-escape: raw complete save bytes stay unchanged
+ok   1280-summary: story-back: exact opener focus, body scroll and page position restore
+ok   1280-summary: story-back: every serialized saved field and key is identical
+ok   1280-summary: story-back: raw complete save bytes stay unchanged
+ok   1280-summary: footer-access: painted controls and readable capture settle for four frames without overlap
+ok   1280-summary: footer-readonly: every serialized saved field and key is identical
+ok   1280-summary: footer-readonly: raw complete save bytes stay unchanged
+ok   1280-summary: read-only-complete: reload preserves every raw saved byte
+ok   1280-summary: Reload retains the derived personal goal milestone
+ok   1280-summary: Actual page and owned assets report no errors
+ok   1280-summary: Every external write attempt is intercepted locally, with zero forwarding
+ok   1280-retired: initial-current-Chromium-loader: every serialized saved field and key is identical
+ok   1280-retired: canonical-second-load: reload preserves every raw saved byte
+ok   1280-retired: Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help
+ok   1280-retired: Reopenable help explains chapter navigation, the four-game role and the personal goal example
+ok   1280-retired: The actual loaded guide states both the mobile and desktop Training positions
+ok   1280-retired: rules: painted controls and readable capture settle for four frames without overlap
+ok   1280-retired: rules-escape: exact opener focus, body scroll and page position restore
+ok   1280-retired: rules-readonly: every serialized saved field and key is identical
+ok   1280-retired: rules-readonly: raw complete save bytes stay unchanged
+ok   1280-retired: Recorded chapter oracle contains the actual saved years and lines
+ok   1280-retired: The page contains one persistent utility button per available action
+ok   1280-retired: phone: compiled CSS uses mobile flow and the desktop dock
+ok   1280-retired: phone: actual control is at least 44 pixels
+ok   1280-retired: phone: opening places focus inside the actual panel
+ok   1280-retired: phone-close: exact opener focus, body scroll and page position restore
+ok   1280-retired: phone-readonly: every serialized saved field and key is identical
+ok   1280-retired: phone-readonly: raw complete save bytes stay unchanged
+ok   1280-retired: utilities: painted controls and readable capture settle for four frames without overlap
+ok   1280-retired: Story list contains exactly the projected saved chapters
+ok   1280-retired: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   1280-retired: Chapter s25: heading receives focus
+ok   1280-retired: Chapter s25: navigation stops at the real recorded boundaries
+ok   1280-retired: chapter-1: every serialized saved field and key is identical
+ok   1280-retired: chapter-1: raw complete save bytes stay unchanged
+ok   1280-retired: Chapter s24: exact saved year, age, club and every recorded line are shown
+ok   1280-retired: Chapter s24: heading receives focus
+ok   1280-retired: Chapter s24: navigation stops at the real recorded boundaries
+ok   1280-retired: chapter-2: every serialized saved field and key is identical
+ok   1280-retired: chapter-2: raw complete save bytes stay unchanged
+ok   1280-retired: Chapter s25: exact saved year, age, club and every recorded line are shown
+ok   1280-retired: Chapter s25: heading receives focus
+ok   1280-retired: Chapter s25: navigation stops at the real recorded boundaries
+ok   1280-retired: chapter-3: every serialized saved field and key is identical
+ok   1280-retired: chapter-3: raw complete save bytes stay unchanged
+ok   1280-retired: retired-chapter: painted controls and readable capture settle for four frames without overlap
+ok   1280-retired: All seasons restores the original selected tile, list offset and page position
+ok   1280-retired: Chapter now: exact saved year, age, club and every recorded line are shown
+ok   1280-retired: Chapter now: heading receives focus
+ok   1280-retired: Chapter now: navigation stops at the real recorded boundaries
+ok   1280-retired: chapter-4: every serialized saved field and key is identical
+ok   1280-retired: chapter-4: raw complete save bytes stay unchanged
+ok   1280-retired: Returning from the actual NOW or LAST chapter restores its tile
+ok   1280-retired: footer-access: painted controls and readable capture settle for four frames without overlap
+ok   1280-retired: footer-readonly: every serialized saved field and key is identical
+ok   1280-retired: footer-readonly: raw complete save bytes stay unchanged
+ok   1280-retired: read-only-complete: reload preserves every raw saved byte
+ok   1280-retired: Actual page and owned assets report no errors
+ok   1280-retired: Every external write attempt is intercepted locally, with zero forwarding
+Career Story native: 554 checks, 0 failed, 9/9 journeys; artifacts /tmp/atg/.tmp-fx/career-story-role/native

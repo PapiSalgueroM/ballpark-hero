@@ -1,0 +1,25 @@
+# Release AU: every red of the proof, run on origin/release-at-gate (65ef763996a3203cb0eb7bac4820f52ccf33e66e) on the same runner, its own build on port 4174
+#!playwright
+#!serial
+setup: git worktree add -f /tmp/atg 65ef763996a3203cb0eb7bac4820f52ccf33e66e >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/atg/node_modules; cd /tmp/atg && git rev-parse --short HEAD && npm run build > /tmp/atg-build.log 2>&1; tail -1 /tmp/atg-build.log | cut -c1-120; setsid nohup node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/atg-server.log 2>&1 & sleep 4; mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1
+base-simCareerLeagueFinish: cd /tmp/atg && node scripts/simCareerLeagueFinish.mjs
+base-simCareerSocialBrands: cd /tmp/atg && node scripts/simCareerSocialBrands.mjs
+base-simCareerAwardsNight: cd /tmp/atg && node scripts/simCareerAwardsNight.mjs
+base-simCareerKeepPlaying: cd /tmp/atg && node scripts/simCareerKeepPlaying.mjs
+base-simCareerLeagueSeasons: cd /tmp/atg && node scripts/simCareerLeagueSeasons.mjs
+base-simSoccerDiscipline: cd /tmp/atg && node scripts/simSoccerDiscipline.mjs
+base-simSoccerCareerDevelopment: cd /tmp/atg && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+base-simCareerTrophyRuns: cd /tmp/atg && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+base-simCareerStoryRole: cd /tmp/atg && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+base-simSoccerSeasonHistory: cd /tmp/atg && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+base-simSoccerDerbyHistory: cd /tmp/atg && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+base-playCareerSquad: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playCareerSquad.mjs
+base-playSeasonCentreMotion: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playSeasonCentreMotion.mjs
+base-playCareerMoments: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playCareerMoments.mjs
+base-playSoccerCareerCompetitions: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node scripts/playSoccerCareerCompetitions.mjs
+base-playSoccerCareerDevelopment: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs
+base-playCareerStoryRole: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerStoryRole.mjs
+base-playCareerTrophyRuns: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTrophyRuns.mjs
+base-playDerbyHistory1195: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDerbyHistory1195.mjs
+base-playSeasonHistory1193: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSeasonHistory1193.mjs
+base-sweepWeight: cd /tmp/atg && BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
