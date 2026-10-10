@@ -1,0 +1,6 @@
+#!serial
+m-onetap: bash .rc/x/runmut.sh onetap
+m-sitclosed: bash .rc/x/runmut.sh sitclosed
+m-tileclimb: bash .rc/x/runmut.sh tileclimb
+m-climbword: bash .rc/x/runmut.sh climbword
+m-canspend: bash .rc/x/runmut.sh canspend
