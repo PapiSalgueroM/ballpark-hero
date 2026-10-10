@@ -139,11 +139,11 @@ async function load(page, c) {
 }
 const playButton = page => page.locator('button', { hasText: /^\s*Play the \d+ season\s*$/ });
 /* One move the way a player would make it, by what is on the screen (the board fixture's walker, shortened). */
-async function step(page) {
+async function step(page, leaveTheCard = false) {
   const lastIn = async sel => { const b = page.locator(`${sel} button:not([disabled])`); const n = await b.count(); if (!n) return false; await b.nth(n - 1).click(); return true; };
   const firstIn = async sel => { const b = page.locator(`${sel} button:not([disabled])`); if (!(await b.count())) return false; await b.first().click(); return true; };
   if (await page.locator('[role="alertdialog"]').count()) return lastIn('[role="alertdialog"]');
-  if (await page.locator('[data-season-reveal]').count()) return lastIn('[data-season-reveal]');
+  if (await page.locator('[data-season-reveal]').count()) return leaveTheCard ? false : lastIn('[data-season-reveal]');
   if (await page.locator('[data-decision-continue]').count()) { await page.locator('[data-decision-continue]').first().click(); return true; }
   if (await page.locator('[data-rivalry-event]').count()) return lastIn('[data-rivalry-event]');
   if (await page.locator('[data-rivalry-choice]').count()) return (await page.locator('[data-rivalry-choice] [data-rivalry-outcome]').count()) ? lastIn('[data-rivalry-choice]') : firstIn('[data-rivalry-choice]');
@@ -179,7 +179,7 @@ const fits = box => !!box && !box.cut && box.right <= box.cardRight + 0.5 && box
 async function rivalScreen(page, what) {
   await page.locator('button:has(div.uppercase)').filter({ hasText: /News/i }).first().click();
   await page.waitForTimeout(500);
-  await page.locator('button', { hasText: 'Rival' }).first().click();
+  await page.locator('button', { hasText: /^\s*\S+ Rival\s*$/ }).first().click();
   await page.waitForTimeout(500);
   const text = await page.locator('main').innerText();
   const m = /Last season he went (.+)[.]\s*$/m.exec(text);
@@ -194,6 +194,14 @@ async function rivalScreen(page, what) {
 let notesRead = 0;
 async function playOne(page, pos, what) {
   await playButton(page).first().click();
+  /* The season does not always start at once: an extension talk or a free agency window can stand in front of
+     it (a rookie deal runs out in the walk's third season). Answer what is there, never the season card. */
+  for (let i = 0; i < 30 && !(await page.locator('[data-season-reveal]').count()); i += 1) {
+    await page.waitForTimeout(500);
+    if (await page.locator('[data-season-reveal]').count()) break;
+    if (await step(page, true)) continue;
+    if (await playButton(page).count()) await playButton(page).first().click();
+  }
   await page.waitForSelector('[data-season-reveal]', { timeout: 15000 });
   await page.waitForTimeout(2600);
   const card = await page.locator('[data-season-reveal]').innerText();
