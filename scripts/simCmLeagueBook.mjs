@@ -26,8 +26,13 @@
  *            clean sheets fit the ones I kept. Every season opens with an empty book.
  *   names    every man credited in an entry is on that club's roster under that position and was not in
  *            my squad; and the PURCHASE: the best rival scorer is put into my squad at week 22 and
- *            twelve entries are played on: his row at the club he left must not move, and its law holds
- *   shapes   (i) the deal follows the weight: of the goals clubs with an eleven score against each other,
+ *            twelve entries are played on: his row at the club he left must not move, and its law holds;
+ *            and THE BOOK AGAINST THE REPORT of every league match of mine (reportAgainstBook): an own
+ *            goal line is an own goal of the book, no man gains more than the report names him for, a
+ *            line whose name is on that club's roster is on his row and only a name the roster does not
+ *            hold is counted unnamed, no assist on a goal from the spot or a free kick, and every man
+ *            given an assist was on their pitch when a goal he did not score went in
+ *   shapes  (i) the deal follows the weight: of the goals clubs with an eleven score against each other,
  *            the share credited to forwards, midfielders and defenders against the share the harness
  *            computes from the same elevens and ITS OWN copy of the table, inside four binomial standard
  *            deviations, forwards above midfielders above defenders; (ii) the point of the round, paired
@@ -66,7 +71,16 @@
  *                 sections that check the law (names, oldsave, doors)
  *   cleanside     the clean sheet goes to the side that did not score -> law
  *   bought        the book's eleven keeps a man now in my squad      -> names
- *   twoman        the deal is the old race's: 42 and 26 in a hundred to the two best rated forwards or
+ *   wrongman      a goal against me goes to the first outfield man on their pitch, whoever the report
+ *                 named                                              -> names
+ *   unnamed       the name lookup of my match finds nobody: every goal against me is counted unnamed
+ *                                                                    -> names
+ *   offbyone      their last line against me is never read           -> names
+ *   penassistmine a penalty or a free kick against me is paid an assist -> names (shapes may go with it:
+ *                 the same assists are in the share section shapes judges)
+ *   assistbench   the assist in my match is dealt over their eleven and bench, not the men on the pitch
+ *                 at that minute                                     -> names
+ *   twoman       the deal is the old race's: 42 and 26 in a hundred to the two best rated forwards or
  *                 midfielders, the rest to nobody, and no taker      -> shapes
  *   flat          every outfield man weighs the same                 -> shapes
  *   penassist     a penalty or a free kick is paid an assist         -> shapes
@@ -123,6 +137,8 @@ const BOOK_OFF = [
   { file: ENGINE, from: NOTE_MINE, to: '' },
   { file: ENGINE, from: NOTE_RESULT, to: '', n: 2 },
 ];
+/* The line of noteBookMine that credits a report's line and decides whether its assist is dealt. */
+const MINE_GATE = '    if (!creditGoal(book, opp, man) || !man || line.penalty || line.freeKick) return;';
 const SCORER_PICK = ': pickWeighted(outfield, m => goalWeight(m.p, m.r), scorerRoll);';
 const TWO_MAN = ": ((men, roll) => { const two = men.filter(m => !['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(m.p)).sort((a, b) => b.r - a.r); return roll < 0.42 ? (two[0] ?? null) : roll < 0.68 ? (two[1] ?? null) : null; })(outfield, scorerRoll);";
 
@@ -135,6 +151,11 @@ const CONTROLS = {
   dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
   bought: { patch: [{ file: ENGINE, from: '  const notTheirs = mySquadNames(state);', to: '  const notTheirs = NO_NAMES;' }], red: 'names' },
+  wrongman: { patch: [{ file: ENGINE, from: '    let man: OppXiLine | null = bookNamed(there, line.name) ?? bookNamed(theirs, line.name);', to: "    let man: OppXiLine | null = there.find(p => p.p !== 'GK') ?? bookNamed(theirs, line.name);" }], red: 'names' },
+  unnamed: { patch: [{ file: ENGINE, from: MINE_GATE, to: `    man = null;\n${MINE_GATE}` }], red: 'names' },
+  offbyone: { patch: [{ file: ENGINE, from: '  const lines = oppScorers.slice(0, oppGoals);', to: '  const lines = oppScorers.slice(0, Math.max(0, oppGoals - 1));' }], red: 'names' },
+  penassistmine: { patch: [{ file: ENGINE, from: MINE_GATE, to: '    if (!creditGoal(book, opp, man) || !man) return;' }], red: 'names', also: ['shapes'] },
+  assistbench: { patch: [{ file: ENGINE, from: '    const assist = dealAssist(`${key}|${i}`, man, there, rules);', to: '    const assist = dealAssist(`${key}|${i}`, man, theirs, rules);' }], red: 'names' },
   twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }, { file: BOOK, from: '  const taker = rules.taker ? takerOf(outfield) : null;', to: '  const taker = null;' }], red: 'shapes' },
   flat: { patch: [{ file: BOOK, from: SCORER_PICK, to: ': pickWeighted(outfield, () => 1, scorerRoll);' }], red: 'shapes' },
   penassist: { patch: [{ file: BOOK, from: "assistFrom(rng, kind === 'open' ? scorer : null, outfield, rules);", to: "assistFrom(rng, kind === 'og' ? null : scorer, outfield, rules);" }], red: 'shapes' },
@@ -387,6 +408,10 @@ const newAcc = () => ({
   /* Matches a club with an eleven scored two or more in against another club: how many, in how many every
      goal went to one man, what the harness's own table expects of that, and the variance of that sum. */
   multi: { n: 0, one: 0, exp: 0, vr: 0 },
+  /* The book against the report of my own league matches: matches judged, their goal lines, the lines whose
+     name that club's roster holds and the lines it does not, set piece lines, assists, and the matches left
+     out because the opponent played a second match inside the same entry. */
+  report: { matches: 0, lines: 0, known: 0, offRoster: 0, setPieces: 0, assists: 0, twice: 0 },
 });
 const played = r => r.w + r.d + r.l;
 const rivalsOf = s => s.leagueClubs.filter(c => c !== s.clubName);
@@ -411,6 +436,75 @@ function lawNow(mod, s, label, where, section = 'law') {
   }
   if (book.c[s.clubName]) fail(section, `${label} ${where}: my own club has an entry in the rivals' book`);
   return book;
+}
+
+/**
+ * One league match of mine: what the book wrote down for my opponent, against the report of that match.
+ * The engine credits the report's own lines there and deals nothing but the assist, so every one of these
+ * is exact: an own goal line is an own goal of the book; no man gains more than the report names him for;
+ * a line whose name is on that club's roster as the save sees it (and is not a man of mine) IS on his row,
+ * so only a name the roster does not hold (a shirt number line) can be counted unnamed; the lines on no
+ * row are the unnamed count; a goal from the spot or a direct free kick carries no assist; and every man
+ * given an assist was on their pitch, by the report's own eleven, substitutions and red cards read the way
+ * the engine reads them, when a goal he did not score himself went in.
+ * `d` is what the book gained for that club in the entry: goalsBy and assistsBy (name -> count), og, u,
+ * rows (how many rows the club holds now), mineBefore and mineNow (my squad's names either side).
+ */
+function reportAgainstBook(mod, acc, label, where, after, rep, opp, d) {
+  const theirGoals = rep.home === after.clubName ? rep.awayGoals : rep.homeGoals;
+  const lines = rep.oppScorers ?? [];
+  /* A report whose lines do not add up to its score is counted (shortLines) and is not judged here. */
+  if (lines.length !== theirGoals) return;
+  acc.report.matches += 1;
+  acc.report.lines += lines.length;
+  tick('names');
+  const ogLines = lines.filter(l => l.og).length;
+  if (d.og !== ogLines) fail('names', `${label} ${where}: the report has ${ogLines} own goal lines for ${opp}, the book added ${d.og}`);
+  const want = new Map();
+  for (const l of lines) if (!l.og) want.set(l.name, (want.get(l.name) ?? 0) + 1);
+  for (const [name, g] of d.goalsBy) {
+    tick('names');
+    if (g > (want.get(name) ?? 0)) fail('names', `${label} ${where}: the book gave ${g} to ${name} of ${opp}, the report names him for ${want.get(name) ?? 0}`);
+  }
+  const roster = mod.cm.oppRosterFor(after, opp, EMPTY);
+  let offRow = 0;
+  for (const [name, c] of want) {
+    tick('names');
+    const g = d.goalsBy.get(name) ?? 0;
+    offRow += Math.max(0, c - g);
+    const known = roster.some(p => p.n === name) && !d.mineBefore.has(name) && !d.mineNow.has(name);
+    if (known) acc.report.known += c; else acc.report.offRoster += c;
+    if (known && g < c && d.rows < mod.book.BOOK_ROWS_PER_CLUB) fail('names', `${label} ${where}: the report names ${name} of ${opp} for ${c}, he is on its roster, and his row gained ${g}`);
+  }
+  tick('names');
+  if (offRow !== d.u) fail('names', `${label} ${where}: ${offRow} named lines of ${opp} are on no row, the book counted ${d.u} unnamed`);
+  /* The assists. */
+  const eligible = lines.filter(l => !l.og && !l.penalty && !l.freeKick);
+  const setPieces = lines.filter(l => !l.og && (l.penalty || l.freeKick)).length;
+  const assists = [...d.assistsBy.values()].reduce((n, x) => n + x, 0);
+  acc.report.setPieces += setPieces;
+  acc.report.assists += assists;
+  tick('names');
+  if (assists > eligible.length) fail('names', `${label} ${where}: ${assists} assists for ${opp} on ${eligible.length} goals that may carry one (${setPieces} from the spot or a free kick)`);
+  /* Who was on their pitch at a minute, as the engine reads it (oppOnPitchAt and oppAt): a substitution
+     counts from the minute AFTER it, a red card from its own minute. */
+  const xi0 = (rep.detail?.oppXi ?? []).map(p => p.n);
+  const subs = rep.detail?.oppSubs ?? [];
+  const reds = (rep.detail?.oppCards ?? []).filter(c => c.kind === 'red');
+  const onPitchAt = minute => {
+    const names = [...xi0];
+    for (const s of subs) {
+      if (s.minute >= minute) continue;
+      const i = names.indexOf(s.off);
+      if (i >= 0) names[i] = s.on;
+    }
+    return names.filter(n => !reds.some(c => c.name === n && c.minute <= minute));
+  };
+  for (const [name, n] of d.assistsBy) {
+    tick('names');
+    const could = eligible.filter(l => l.name !== name && onPitchAt(l.minute).includes(name)).length;
+    if (could < n) fail('names', `${label} ${where}: ${name} of ${opp} is given ${n} assist(s), and was on their pitch for ${could} goal(s) he could have set up`);
+  }
 }
 
 /**
@@ -447,7 +541,8 @@ function watcher(mod, label, acc, opts = {}) {
       const book = lawNow(mod, after, label, where);
       if (!book || !before.book) return;
       const mineNow = cm.mySquadNames(after);
-      const myOpp = r.kind === 'match' && r.report.competition === 'league' ? (r.report.home === after.clubName ? r.report.away : r.report.home) : null;
+      const rep = r.kind === 'match' && r.report.competition === 'league' ? r.report : null;
+      const myOpp = rep ? (rep.home === after.clubName ? rep.away : rep.home) : null;
       if (myOpp) {
         acc.myLeagueMatches += 1;
         const theirs = r.report.home === after.clubName ? r.report.awayGoals : r.report.homeGoals;
@@ -483,12 +578,16 @@ function watcher(mod, label, acc, opts = {}) {
         const got = { ATT: 0, MID: 0, DEF: 0, GK: 0 };
         /* The most goals one row gained in this entry. */
         let mostOnOneRow = 0;
+        /* My opponent of this entry: what its rows gained, by name, for the comparison with the report. */
+        const gained = club === myOpp ? { goalsBy: new Map(), assistsBy: new Map() } : null;
         for (const [key, row] of Object.entries(entry.m)) {
           const old = prior.m[key] ?? [0, 0, 0, 0];
           if (row[0] === old[0] && row[1] === old[1] && row[2] === old[2]) continue;
           const bar = key.lastIndexOf('|');
           const name = key.slice(0, bar);
           const pos = key.slice(bar + 1);
+          if (gained && row[0] !== old[0]) gained.goalsBy.set(name, (gained.goalsBy.get(name) ?? 0) + row[0] - old[0]);
+          if (gained && row[1] !== old[1]) gained.assistsBy.set(name, (gained.assistsBy.get(name) ?? 0) + row[1] - old[1]);
           tick('names');
           /* He is on that club's roster as this save sees it, under that position ... */
           roster ??= cm.oppRosterFor(after, club, EMPTY);
@@ -502,6 +601,14 @@ function watcher(mod, label, acc, opts = {}) {
           acc.assists += row[1] - old[1];
           if (xi) { acc.xiRows += row[0] - old[0]; acc.xiAssists += row[1] - old[1]; }
         }
+        /* My own league match: the book against the report. Only when that match was the opponent's one
+           match of the entry (in a league with an odd number of clubs one entry can play my bye week, in
+           which they met somebody else, and then my match against them: their rows then hold both). */
+        if (gained && played(now) - was.p === 1) {
+          reportAgainstBook(mod, acc, label, where, after, rep, club, {
+            ...gained, og: entry.og - prior.og, u: entry.u - prior.u, rows: Object.keys(entry.m).length, mineBefore: before.mine, mineNow,
+          });
+        } else if (gained) acc.report.twice += 1;
         /* A match between two other clubs, by a club with an eleven: the deal against the harness's own table. */
         if (club !== myOpp && xi && scored > 0) {
           const exp = expectedByLine(xi);
@@ -768,7 +875,10 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
   }
   tick('names');
   if (!probes) fail('names', 'no purchase was probed: no mid season save with a rival scorer on three goals');
+  tick('names');
+  if (!acc.report.matches || !acc.report.known || !acc.report.assists) fail('names', `the book was held against the report of ${acc.report.matches} league matches of mine, ${acc.report.known} lines naming a roster man, ${acc.report.assists} assists: nothing to judge on`);
   console.log(`names   ${checked.get('names')} checks; ${probes} purchases probed of ${midSaves.length} saves kept (the best scorer of the rivals signed at week 22, twelve entries played on)${skipped.length ? `; not probed: ${skipped.join('; ')}` : ''}`);
+  console.log(`        the book against the report of ${acc.report.matches} league matches of mine: ${acc.report.lines} goal lines, ${acc.report.known} naming a man of that club's roster (each on his row), ${acc.report.offRoster} naming nobody its roster holds, ${acc.report.setPieces} from the spot or a free kick, ${acc.report.assists} assists (each by a man on their pitch); ${acc.report.twice} matches not judged, the opponent played twice in the entry`);
 }
 
 /* ---------- shared by the last three sections ---------- */
