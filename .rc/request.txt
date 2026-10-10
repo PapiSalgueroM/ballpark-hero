@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+walk3: ENGINES=chromium TZ=UTC node scripts/playCmLeagueFixtures.mjs > /tmp/walk3.log 2>&1; s=$?; cp /tmp/walk3.log "$RC_OUT/walk3.log"; grep -E "^FAIL" /tmp/walk3.log | head -12 | cut -c1-300; tail -1 /tmp/walk3.log | cut -c1-300; exit $s
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; cp /tmp/w.log "$RC_OUT/weight-final.log"; grep -E "FAIL|/club-manager|/manager-hot-seat|/deadline-day|sweepWeight:" /tmp/w.log | cut -c1-220 | head -16; exit $s
+suite-runner: ONLY=simCmLeagueFixtures,simCmRealFixtures,simCmFixtureFleet,simDailyDeals,simFixtureBalance node scripts/runAllSims.mjs > /tmp/sr.log 2>&1; s=$?; cp /tmp/sr.log "$RC_OUT/suite-runner.log"; grep -E "PASS|FAIL|EMPTY|SKIP|green" /tmp/sr.log | tail -9 | cut -c1-200; exit $s
+cmfix-nobase: TZ=UTC node scripts/simCmRealFixtures.mjs 2>&1 | tail -14 | cut -c1-200; exit ${PIPESTATUS[0]}
+cmfix-laliga: TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 CM_REAL_FIXTURE_LEAGUE=laliga node scripts/simCmRealFixtures.mjs 2>&1 | tail -13 | cut -c1-200; exit ${PIPESTATUS[0]}
+fleet: TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 node scripts/simCmFixtureFleet.mjs > /tmp/fl.log 2>&1; s=$?; cp /tmp/fl.log "$RC_OUT/fleet-final.log"; tail -3 /tmp/fl.log | cut -c1-420; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simLiveScores: node scripts/simLiveScores.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+dashes: n=$(git diff --name-only 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 HEAD | xargs grep -lP "[\x{2013}\x{2014}]" 2>/dev/null | wc -l); git diff 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 HEAD | grep -P "^\+.*[\x{2013}\x{2014}]" | head -3 | cut -c1-160; a=$(git diff 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 HEAD | grep -cP "^\+.*[\x{2013}\x{2014}]"); echo "added lines with an en or em dash: $a"; [ "$a" -eq 0 ]
