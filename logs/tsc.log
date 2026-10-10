@@ -1,0 +1,6 @@
+src/lib/gmDeskHost.ts(880,3): error TS2322: Type 'void | GmDesk' is not assignable to type 'GmDesk'.
+  Type 'void' is not assignable to type 'GmDesk'.
+src/lib/gmDeskHost.ts(881,3): error TS2322: Type 'void | GmDesk' is not assignable to type 'GmDesk'.
+  Type 'void' is not assignable to type 'GmDesk'.
+src/lib/gmDeskHost.ts(883,37): error TS2322: Type 'void | GmDesk' is not assignable to type 'GmDesk'.
+  Type 'void' is not assignable to type 'GmDesk'.
