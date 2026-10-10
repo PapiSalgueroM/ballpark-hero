@@ -1,0 +1,102 @@
+== liverpool2026-390-reduced
+  PASS  liverpool2026-390-reduced: the season tile pressed
+  PASS  liverpool2026-390-reduced: England pressed
+  PASS  liverpool2026-390-reduced: Premier League pressed
+  INFO  liverpool2026-390-reduced: club tile says: Liverpool👑 EliteSquad88Budget£137mBoard wantsWin the Premier League
+  PASS  liverpool2026-390-reduced: the career header says the season and Season 1
+  PASS  liverpool2026-390-reduced: the Squad tab listed the squad
+  PASS  liverpool2026-390-reduced: Virgil van Dijk is in the squad list
+  INFO  liverpool2026-390-reduced: row text:  100 | 80-82 | 80 | 🙂 | CB | Virgil van Dijk | 34y | 🧥 | fit 100 | 80-82 | 80 | 🙂 | RW | Federico Chiesa | XI | 28y | 🔥 | fit 100 | 79-8
+  FAIL  liverpool2026-390-reduced: Mohamed Salah is in the squad list
+  PASS  liverpool2026-390-reduced: no sideways scroll (the page is 0 px wider than the screen)
+  PASS  liverpool2026-390-reduced: no page error (clean)
+== barcelona2010-390-reduced
+  PASS  barcelona2010-390-reduced: the season tile pressed
+  PASS  barcelona2010-390-reduced: Spain pressed
+  PASS  barcelona2010-390-reduced: La Liga pressed
+  INFO  barcelona2010-390-reduced: club tile says: 🇪🇸Barcelona👑 EliteSquad88Budget£82mBoard wantsWin the La Liga
+  PASS  barcelona2010-390-reduced: the career header says the season and Season 1
+  PASS  barcelona2010-390-reduced: the Squad tab listed the squad
+  PASS  barcelona2010-390-reduced: Lionel Messi is in the squad list
+  INFO  barcelona2010-390-reduced: row text: rale | Position | Name | RW | Lionel Messi | XI | 22y | ⭐ | fit 100 | 97-99 | 97 | 🙂 | CM | Xavi | XI | C | 29y | ⭐ | fit 100 | 94-96 | 94 
+  PASS  barcelona2010-390-reduced: Xavi is in the squad list
+  INFO  barcelona2010-390-reduced: row text:  100 | 97-99 | 97 | 🙂 | CM | Xavi | XI | C | 29y | ⭐ | fit 100 | 94-96 | 94 | 🙂 | CM | Andrés Iniesta | XI | 25y | ⭐ | fit 100 | 92-95 | 9
+  PASS  barcelona2010-390-reduced: no sideways scroll (the page is 0 px wider than the screen)
+  PASS  barcelona2010-390-reduced: no page error (clean)
+== liverpool2026-390-motion
+  PASS  liverpool2026-390-motion: the season tile pressed
+  PASS  liverpool2026-390-motion: England pressed
+  PASS  liverpool2026-390-motion: Premier League pressed
+  INFO  liverpool2026-390-motion: club tile says: Liverpool👑 EliteSquad88Budget£137mBoard wantsWin the Premier League
+  PASS  liverpool2026-390-motion: the career header says the season and Season 1
+  PASS  liverpool2026-390-motion: the Squad tab listed the squad
+  PASS  liverpool2026-390-motion: Virgil van Dijk is in the squad list
+  INFO  liverpool2026-390-motion: row text:  100 | 80-82 | 80 | 🙂 | CB | Virgil van Dijk | 34y | 🧥 | fit 100 | 80-82 | 80 | 🙂 | RW | Federico Chiesa | XI | 28y | 🔥 | fit 100 | 79-8
+  FAIL  liverpool2026-390-motion: Mohamed Salah is in the squad list
+  PASS  liverpool2026-390-motion: no sideways scroll (the page is 0 px wider than the screen)
+  PASS  liverpool2026-390-motion: no page error (clean)
+== barcelona2010-390-motion
+  PASS  barcelona2010-390-motion: the season tile pressed
+  PASS  barcelona2010-390-motion: Spain pressed
+  PASS  barcelona2010-390-motion: La Liga pressed
+  INFO  barcelona2010-390-motion: club tile says: 🇪🇸Barcelona👑 EliteSquad88Budget£82mBoard wantsWin the La Liga
+  PASS  barcelona2010-390-motion: the career header says the season and Season 1
+  PASS  barcelona2010-390-motion: the Squad tab listed the squad
+  PASS  barcelona2010-390-motion: Lionel Messi is in the squad list
+  INFO  barcelona2010-390-motion: row text: rale | Position | Name | RW | Lionel Messi | XI | 22y | ⭐ | fit 100 | 97-99 | 97 | 🙂 | CM | Xavi | XI | C | 29y | ⭐ | fit 100 | 94-96 | 94 
+  PASS  barcelona2010-390-motion: Xavi is in the squad list
+  INFO  barcelona2010-390-motion: row text:  100 | 97-99 | 97 | 🙂 | CM | Xavi | XI | C | 29y | ⭐ | fit 100 | 94-96 | 94 | 🙂 | CM | Andrés Iniesta | XI | 25y | ⭐ | fit 100 | 93-97 | 9
+  PASS  barcelona2010-390-motion: no sideways scroll (the page is 0 px wider than the screen)
+  PASS  barcelona2010-390-motion: no page error (clean)
+== liverpool2026-1280-reduced
+  PASS  liverpool2026-1280-reduced: the season tile pressed
+  PASS  liverpool2026-1280-reduced: England pressed
+  PASS  liverpool2026-1280-reduced: Premier League pressed
+  INFO  liverpool2026-1280-reduced: club tile says: Liverpool👑 EliteSquad88Budget£137mBoard wantsWin the Premier League
+  PASS  liverpool2026-1280-reduced: the career header says the season and Season 1
+  PASS  liverpool2026-1280-reduced: the Squad tab listed the squad
+  PASS  liverpool2026-1280-reduced: Virgil van Dijk is in the squad list
+  INFO  liverpool2026-1280-reduced: row text: 23k | 2y | £12.2m | 🙂 | CB | Virgil van Dijk | 🧥 Backup | 0 apps · 0g 0a | 34 | 80 | 80-82 | - | 24k | 1y | £5.8m | 🙂 | RW | Federico Chi
+  FAIL  liverpool2026-1280-reduced: Mohamed Salah is in the squad list
+  PASS  liverpool2026-1280-reduced: no sideways scroll (the page is 0 px wider than the screen)
+  PASS  liverpool2026-1280-reduced: no page error (clean)
+== barcelona2010-1280-reduced
+  PASS  barcelona2010-1280-reduced: the season tile pressed
+  PASS  barcelona2010-1280-reduced: Spain pressed
+  PASS  barcelona2010-1280-reduced: La Liga pressed
+  INFO  barcelona2010-1280-reduced: club tile says: 🇪🇸Barcelona👑 EliteSquad88Budget£82mBoard wantsWin the La Liga
+  PASS  barcelona2010-1280-reduced: the career header says the season and Season 1
+  PASS  barcelona2010-1280-reduced: the Squad tab listed the squad
+  PASS  barcelona2010-1280-reduced: Lionel Messi is in the squad list
+  INFO  barcelona2010-1280-reduced: row text: L | WORTH | FIT | MOOD | RW | Lionel Messi | XI | ⭐ Star man | 0 apps · 0g 0a | 22 | 97 | 97-99 | - | 85k | 1y | £32.8m | 🙂 | CM | Xavi | X
+  PASS  barcelona2010-1280-reduced: Xavi is in the squad list
+  INFO  barcelona2010-1280-reduced: row text: 85k | 1y | £32.8m | 🙂 | CM | Xavi | XI | C | ⭐ Star man | 0 apps · 0g 0a | 29 | 94 | 94-96 | - | 62k | 1y | £21.3m | 🙂 | CM | Andrés Inies
+  PASS  barcelona2010-1280-reduced: no sideways scroll (the page is 0 px wider than the screen)
+  PASS  barcelona2010-1280-reduced: no page error (clean)
+== liverpool2026-1280-motion
+  PASS  liverpool2026-1280-motion: the season tile pressed
+  PASS  liverpool2026-1280-motion: England pressed
+  PASS  liverpool2026-1280-motion: Premier League pressed
+  INFO  liverpool2026-1280-motion: club tile says: Liverpool👑 EliteSquad88Budget£137mBoard wantsWin the Premier League
+  PASS  liverpool2026-1280-motion: the career header says the season and Season 1
+  PASS  liverpool2026-1280-motion: the Squad tab listed the squad
+  PASS  liverpool2026-1280-motion: Virgil van Dijk is in the squad list
+  INFO  liverpool2026-1280-motion: row text: 23k | 2y | £12.2m | 🙂 | CB | Virgil van Dijk | 🧥 Backup | 0 apps · 0g 0a | 34 | 80 | 80-82 | - | 24k | 1y | £5.8m | 🙂 | RW | Federico Chi
+  FAIL  liverpool2026-1280-motion: Mohamed Salah is in the squad list
+  PASS  liverpool2026-1280-motion: no sideways scroll (the page is 0 px wider than the screen)
+  PASS  liverpool2026-1280-motion: no page error (clean)
+== barcelona2010-1280-motion
+  PASS  barcelona2010-1280-motion: the season tile pressed
+  PASS  barcelona2010-1280-motion: Spain pressed
+  PASS  barcelona2010-1280-motion: La Liga pressed
+  INFO  barcelona2010-1280-motion: club tile says: 🇪🇸Barcelona👑 EliteSquad88Budget£82mBoard wantsWin the La Liga
+  PASS  barcelona2010-1280-motion: the career header says the season and Season 1
+  PASS  barcelona2010-1280-motion: the Squad tab listed the squad
+  PASS  barcelona2010-1280-motion: Lionel Messi is in the squad list
+  INFO  barcelona2010-1280-motion: row text: L | WORTH | FIT | MOOD | RW | Lionel Messi | XI | ⭐ Star man | 0 apps · 0g 0a | 22 | 97 | 97-99 | - | 85k | 1y | £32.8m | 🙂 | CM | Xavi | X
+  PASS  barcelona2010-1280-motion: Xavi is in the squad list
+  INFO  barcelona2010-1280-motion: row text: 85k | 1y | £32.8m | 🙂 | CM | Xavi | XI | C | ⭐ Star man | 0 apps · 0g 0a | 29 | 94 | 94-96 | - | 62k | 1y | £21.3m | 🙂 | CM | Andrés Inies
+  PASS  barcelona2010-1280-motion: no sideways scroll (the page is 0 px wider than the screen)
+  PASS  barcelona2010-1280-motion: no page error (clean)
+
+revWalk: 4 failure(s)
