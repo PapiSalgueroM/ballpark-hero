@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+head-scm exit=1 10s | simSeasonCentreMotion: 17 checks, 3 failed
+base-scm exit=0 11s | simSeasonCentreMotion: 17 checks, 0 failed
+attrib-scm exit=0 11s | simSeasonCentreMotion: 17 checks, 0 failed
+r1220-scm exit=1 11s | simSeasonCentreMotion: 17 checks, 3 failed
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+head-scm-fence-control exit=1 10s | simSeasonCentreMotion: 17 checks, 3 failed
