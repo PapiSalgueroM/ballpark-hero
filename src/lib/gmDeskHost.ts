@@ -1209,9 +1209,12 @@ export function hostXpHelp(earns: string): string[] {
   const eased = cushionTrustLoss(loss, 2);
   const kept = applyMandateResult(-loss, { result: 'missed', verdict: '', trustDelta: eased });
   const season = gmSeasonXp({ winPct: 0.6, titles: 0, playoffRoundsWon: 1, mandateSteps: mandateSteps('met'), placesAboveExpectation: 0, prospectsGraduated: 0 });
+  /* The honest pace (scripts/simGmDeskHost.mjs measures it on the four engines: the median club is near this). */
+  const even = gmSeasonXp({ winPct: 0.5, titles: 0, playoffRoundsWon: 0, mandateSteps: mandateSteps('met'), placesAboveExpectation: 0, prospectsGraduated: 0 });
   return [
     earns,
     `Level 2 costs ${XP_FIRST_LEVEL} XP and every level after it costs a little more. Each level is one point, and ${GM_MAX_TREE_POINTS} points fill a tree.`,
+    `A .500 season that meets the ask pays ${even.total} XP, so at that pace the first point is about ${plural(Math.ceil(XP_FIRST_LEVEL / even.total), 'season')} away. Playoff rounds, a title and beating the ask bring it sooner.`,
     'A tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.',
     `Worked example: a .600 season that met the ask and won one playoff round pays ${season.total} XP. And with two ${GM_TREE_INFO.ownership.label} points, missing the ask on trust ${-loss} costs ${-eased}, not ${-loss}, so you keep the job on trust ${kept.trust}.`,
   ];

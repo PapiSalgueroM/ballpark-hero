@@ -693,6 +693,7 @@ describe('the words on the boxes', () => {
   it('compute the worked examples from the lib they describe', () => {
     const help = hostXpHelp('x').join(' ');
     expect(help).toContain('pays 170 XP');
+    expect(help).toContain('pays 110 XP, so at that pace the first point is about 4 seasons away');
     expect(help).toContain('costs 14, not 16, so you keep the job on trust 2');
     expect(hostMarketHelp(GM_SEAT_PACKS.nhl).join(' ')).toContain('no top tier franchise calls');
   });

@@ -793,13 +793,20 @@ for (const sport of SPORTS) {
     if (fxAt(sport, 'trading', L).premium(1.07) !== XP.tradePremium(1.07, L) || fxAt(sport, 'ownership', L).trustDelta(-28) !== XP.cushionTrustLoss(-28, L)
       || fxAt(sport, 'media', L).pressOdds(0.45) !== XP.pressOdds(0.45, L)) fail(`${sport} level ${L}: a plain effect is not gmXp's`);
   }
-  /* (c) The consumers. Scouting: the read error left on a real class, a club at a time. */
-  const cls = KLASS[sport](lg, mulberry32(77)), someClubs = Object.keys(lg.teams).sort().slice(0, 8);
+  if (J(lg) !== before) fail(`${sport}: reading the effects changed the league`);
+}
+/* (c) The consumers, one closed league at a time. The totals are summed over every closed league of the sport
+   (three seasons a seed) before a step is judged, so no step leans on one roster. */
+const add = (row, tree, arr) => { row[tree] = (row[tree] ?? LEVELS.map(() => 0)).map((v, i) => v + arr[i]); };
+function consume(sport, lg, nth, row) {
+  const d = DRIVE[sport], season = lg.season, before = J(lg);
+  const men = Object.values(lg.teams).flatMap(t => t.players.map(p => ({ club: t.abbr, p })));
+  /* Scouting: the read error left on a real class, a club at a time. */
+  const cls = KLASS[sport](lg, mulberry32(77 + nth)), someClubs = Object.keys(lg.teams).sort().slice(0, 8);
   C7.prospects += cls.length;
-  row.scouting = LEVELS.map(L => { const fx = fxAt(sport, 'scouting', L); let s = 0; for (const club of someClubs) for (const pr of cls) for (const n of [-4, -3, -2, 2, 3, 4]) s += Math.abs(fx.scoutNoise(n, H.hostKey(club, season, pr.id))); return s; });
-  steps(`${sport} scouting, read error left`, row.scouting, -1);
+  add(row, 'scouting', LEVELS.map(L => { const fx = fxAt(sport, 'scouting', L); let s = 0; for (const club of someClubs) for (const pr of cls) for (const n of [-4, -3, -2, 2, 3, 4]) s += Math.abs(fx.scoutNoise(n, H.hostKey(club, season, pr.id))); return s; }));
   /* Negotiation: the asks on every club's real re-sign desk. */
-  row.negotiation = LEVELS.map(() => 0);
+  const asks = LEVELS.map(() => 0);
   for (const club of Object.keys(lg.teams)) {
     try {
       const base = GC.deskCases(d.contracts, lg, GC.openLedger(lg, club));
@@ -812,17 +819,16 @@ for (const sport of SPORTS) {
           if (!b.canNegotiate || L === 0) { if (J(c) !== J(b)) fail(`${sport} ${club} level ${L}: ${b.man.id} cannot be talked down and his case moved`); }
           /* gmXp keeps money in tenths, so the floor it can hold is the minimum's own tenth. */
           else if (c.ask.salary > b.ask.salary || c.ask.salary < Math.min(b.ask.salary, Math.floor(minimum * 10 + 1e-9) / 10) || J({ ...c, ask: { ...c.ask, salary: b.ask.salary } }) !== J(b)) fail(`${sport} ${club} level ${L}: ${b.man.id} asks ${c.ask.salary} from ${b.ask.salary}, or more than the ask moved`);
-          if (b.canNegotiate) { row.negotiation[L] += c.ask.salary; if (c.ask.salary < Math.min(b.ask.salary, minimum) - 1e-9) C7.underMin++; }
+          if (b.canNegotiate) { asks[L] += c.ask.salary; if (c.ask.salary < Math.min(b.ask.salary, minimum) - 1e-9) C7.underMin++; }
         });
       }
       C7.cases += base.filter(b => b.canNegotiate).length;
     } catch (e) { fail(`${sport} ${club}: the re-sign desk threw (${String(e && e.message).slice(0, 100)})`); }
   }
-  steps(`${sport} negotiation, asks`, row.negotiation, -1);
-  /* Cap craft: the quote on every man, then the charge after the engine's own release. */
-  row.capCraft = LEVELS.map(L => { const fx = fxAt(sport, 'capCraft', L); let s = 0; for (const { club, p } of men) { const q = H.hostCutQuote(p, fx, club, season), b = FC.deadMoneyFor(p); s += q.now; if (q.now > b.now || q.next !== (b.next > 0 ? Math.round((q.now / 2) * 10) / 10 : 0) || (L === 0 && J(q) !== J(b))) fail(`${sport} level ${L}: the quote on ${p.id} is ${J(q)} from ${J(b)}`); } return s; });
-  steps(`${sport} cap craft, dead money quoted`, row.capCraft, -1);
-  for (const L of LEVELS) {
+  add(row, 'negotiation', asks);
+  /* Cap craft: the quote on every man, then (in the first league) the charge after the engine's own release. */
+  add(row, 'capCraft', LEVELS.map(L => { const fx = fxAt(sport, 'capCraft', L); let s = 0; for (const { club, p } of men) { const q = H.hostCutQuote(p, fx, club, season), b = FC.deadMoneyFor(p); s += q.now; if (q.now > b.now || q.next !== (b.next > 0 ? Math.round((q.now / 2) * 10) / 10 : 0) || (L === 0 && J(q) !== J(b))) fail(`${sport} level ${L}: the quote on ${p.id} is ${J(q)} from ${J(b)}`); } return s; }));
+  for (const L of nth === 0 ? LEVELS : []) {
     const lgc = clone(lg), fx = fxAt(sport, 'capCraft', L);
     for (const club of Object.keys(lgc.teams).sort().slice(0, 6)) {
       const t = lgc.teams[club];
@@ -839,19 +845,26 @@ for (const sport of SPORTS) {
   /* Development: one year of growth for every man with room under his ceiling. */
   const young = men.filter(({ p }) => typeof p.pot === 'number' && p.pot - p.ovr >= 2);
   C7.young += young.length;
-  row.development = LEVELS.map(L => { const fx = fxAt(sport, 'development', L); let s = 0; for (const { club, p } of young) { const g = fx.growth(1, p.pot - p.ovr, H.hostKey(club, season, p.id)); if (g < 1 || p.ovr + g > p.pot) fail(`${sport} level ${L}: ${p.id} grows ${g} past his ceiling`); s += g; } return s; });
-  steps(`${sport} development, growth`, row.development, 1);
+  add(row, 'development', LEVELS.map(L => { const fx = fxAt(sport, 'development', L); let s = 0; for (const { club, p } of young) { const g = fx.growth(1, p.pot - p.ovr, H.hostKey(club, season, p.id)); if (g < 1 || p.ovr + g > p.pot) fail(`${sport} level ${L}: ${p.id} grows ${g} past his ceiling`); s += g; } return s; }));
   /* Trading: a rival's margin, and the real pairs it lets through by the engine's own value. */
-  for (const premium of [1.02, 1.07, 1.15]) {
+  for (const premium of nth === 0 ? [1.02, 1.07, 1.15] : []) {
     const at = LEVELS.map(L => fxAt(sport, 'trading', L).premium(premium));
     steps(`${sport} trading, the ${premium} margin`, at, -1);
     if (at.some(x => x < 1)) fail(`${sport} trading: a margin under value (${at.map(r2).join(' / ')})`);
   }
   const mine = lg.teams[d.team].players.map(p => d.value(p)), theirs = men.filter(m => m.club !== d.team).map(m => d.value(m.p)).filter(v => v > 0);
   C7.pairs += mine.length * theirs.length;
-  row.trading = LEVELS.map(L => { const ask = fxAt(sport, 'trading', L).premium(1.07); let n = 0; for (const a of mine) for (const b of theirs) if (a >= b * ask) n++; return n; });
-  steps(`${sport} trading, pairs a rival accepts`, row.trading, 1);
+  add(row, 'trading', LEVELS.map(L => { const ask = fxAt(sport, 'trading', L).premium(1.07); let n = 0; for (const a of mine) for (const b of theirs) if (a >= b * ask) n++; return n; }));
   if (J(lg) !== before) fail(`${sport}: walking the trees changed the league`);
+}
+for (const sport of SPORTS) {
+  const row = LADDER[sport];
+  FLEET[sport].closed.forEach((snap, nth) => consume(sport, snap.lg, nth, row));
+  steps(`${sport} scouting, read error left`, row.scouting, -1);
+  steps(`${sport} negotiation, asks`, row.negotiation, -1);
+  steps(`${sport} cap craft, dead money quoted`, row.capCraft, -1);
+  steps(`${sport} development, growth`, row.development, 1);
+  steps(`${sport} trading, pairs a rival accepts`, row.trading, 1);
 }
 /* Ownership: the trust every real season that fell short of the ask costs, through the verdict. */
 for (const sport of SPORTS) {
