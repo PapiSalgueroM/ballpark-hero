@@ -1,0 +1,29 @@
+// Release AU, ATTRIBUTION ARMS for a runner's throwaway checkout only (the request line restores src after each).
+// PR216 adds two fields to a Soccer Career save: a simplified opening cup tie on a new row from 2026
+// (row.cupRun.opening) and the receipt of a chance (state.chanceWheel). A harness of the release line that compares
+// whole saves with an engine from before PR216 sees both. Each mode takes ONE of the two additions out, at the one
+// line PR216 itself uses as its switch, and nothing else, so a harness that turns green names its cause.
+//   noopening  src/lib/soccerCareerEngine.ts: "includeOpening: true," becomes "includeOpening: false,"
+//              (the same edit scripts/simCareerProgramme.mjs makes for its own compatibility arm)
+//   nowheel    src/lib/careerChanceWheel.ts: the line that stores the receipt is removed (the draw and its result stay)
+//   noground   src/lib/soccerSeasonCompetitions.ts: the line that copies a non final cup tie's recorded ground into the
+//              saved competition view is removed (PR216's third visible change: the reader, not the save)
+// usage: node .rc/x/mutAU.mjs noopening [nowheel] [noground]
+import fs from 'node:fs';
+const MODES = {
+  noopening: ['src/lib/soccerCareerEngine.ts', 'includeOpening: true,', 'includeOpening: false,'],
+  noground: ['src/lib/soccerSeasonCompetitions.ts', '          ...(tie.home !== undefined && !final ? { home: tie.home } : {}),\n', ''],
+  /* PR216's fourth visible change: cup nights between the league games of the Season Centre. With no competitions
+     handed to the calendar there is none, and the Season Centre plays the league through as it did. */
+  nocalendar: ['src/components/soccer-career/SoccerSeasonCentre.tsx', 'cupCalendar(competitions, season.games.length)', 'cupCalendar([], season.games.length)'],
+  nowheel: ['src/lib/careerChanceWheel.ts', '  state.chanceWheel = { title, chance, roll, hit, miss, result, seen: false };\n', ''],
+};
+const asked = process.argv.slice(2);
+if (!asked.length || asked.some(m => !MODES[m])) { console.error('usage: mutAU.mjs noopening|nowheel|noground ...'); process.exit(2); }
+for (const m of asked) {
+  const [file, from, to] = MODES[m];
+  const src = fs.readFileSync(file, 'utf8').replaceAll('\r\n', '\n');
+  if (src.split(from).length !== 2) { console.error(`mutAU ${m}: ABORTED, the anchor must be in ${file} exactly once`); process.exit(3); }
+  fs.writeFileSync(file, src.replace(from, to));
+  console.log(`mutAU ${m}: applied to ${file}`);
+}
