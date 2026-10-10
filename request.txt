@@ -1,0 +1,1 @@
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
