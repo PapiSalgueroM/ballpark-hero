@@ -1,0 +1,2 @@
+probe: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && PROBE_BASE=/tmp/base node .rc/x/rrun-probe.mjs
+basehead: git rev-parse origin/main && git -C /tmp/base rev-parse HEAD 2>/dev/null; git diff --stat origin/main...HEAD -- src/lib src/hooks src/pages src/components | tail -8
