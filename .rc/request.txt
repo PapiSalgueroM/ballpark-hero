@@ -1,0 +1,7 @@
+#!playwright
+#!serial
+f-check: node .rc/x/fmut.mjs --check
+f-narrowoff: bash .rc/x/frun.sh narrowoff walk
+f-rangeedge: bash .rc/x/frun.sh rangeedge
+f-lineswap: bash .rc/x/frun.sh lineswap
+f-ariaoff: bash .rc/x/frun.sh ariaoff
