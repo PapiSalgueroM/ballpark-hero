@@ -59,10 +59,15 @@ export interface LotteryRevealProps {
   continueLabel?: string;
   /** False draws the last frame at once: an order with no draw, or a night already watched. */
   reveal?: boolean;
+  /** False for an order no drawing made: a tile then says its club and nothing about a seed or a move,
+      because nothing was seeded and nothing moved. */
+  drawn?: boolean;
+  /** What marks the one tile flagged `mine`. */
+  mineLabel?: string;
 }
 
 export function LotteryReveal({
-  rows, ruleLine, eyebrow = 'Lottery night', headline, note, help, onContinue, continueLabel = 'Continue to the draft', reveal = true,
+  rows, ruleLine, eyebrow = 'Lottery night', headline, note, help, onContinue, continueLabel = 'Continue to the draft', reveal = true, drawn = true, mineLabel = 'yours',
 }: LotteryRevealProps) {
   const [settled, setSettled] = useState(!reveal);
   const [helpOpen, setHelpOpen] = useState(false);
@@ -74,6 +79,9 @@ export function LotteryReveal({
   const grid = [...turning].sort((a, b) => a.slot - b.slot);
   const still = settled || !reveal;
   const blocks = (help ?? []).filter(b => b && b.heading && Array.isArray(b.lines) && b.lines.length > 0);
+  /* The small line of a tile: its seed and its move when there was a drawing, and the mark on his own. */
+  const under = (r: LotteryRevealRow) => [drawn ? `Seed ${r.seed}` : '', drawn ? lotteryMoveWords(r.moved) : '', r.mine ? mineLabel : '']
+    .filter(Boolean).join(' · ');
 
   return (
     <div
@@ -97,7 +105,8 @@ export function LotteryReveal({
             onClick={() => setHelpOpen(o => !o)}
             className="flex min-h-11 min-w-11 shrink-0 items-center justify-center rounded-full border border-border bg-secondary/60 text-sm font-black text-foreground hover:brightness-110"
           >
-            ?
+            {/* The same button closes the panel, so it shows a close mark while the panel is open. */}
+            {helpOpen ? '×' : '?'}
           </button>
         )}
       </div>
@@ -128,9 +137,7 @@ export function LotteryReveal({
                 <span className="relative w-5 shrink-0 text-center text-sm font-black tabular-nums">{r.slot}</span>
                 <span className="relative min-w-0">
                   <span className="block truncate text-xs font-bold">{r.label}</span>
-                  <span className="block truncate text-[10px] text-muted-foreground">
-                    Seed {r.seed} · {lotteryMoveWords(r.moved)}{r.mine ? ' · yours' : ''}
-                  </span>
+                  {under(r) && <span data-lottery-under className="block truncate text-[10px] text-muted-foreground">{under(r)}</span>}
                 </span>
               </span>
             </li>
@@ -138,18 +145,21 @@ export function LotteryReveal({
         </ol>
 
         {helpOpen && (
-          <div data-lottery-help-panel className="absolute inset-0 space-y-2 overflow-y-auto rounded-lg border border-border bg-card p-2.5">
-            {blocks.map(b => (
-              <div key={b.heading}>
-                <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{b.heading}</p>
-                {b.lines.map((l, i) => <p key={i} className="text-xs text-foreground">{l}</p>)}
-              </div>
-            ))}
+          <div data-lottery-help-panel className="absolute inset-0 flex flex-col rounded-lg border border-border bg-card">
+            {/* Only the words scroll. The way back stays in sight under them, whatever the length of the rules. */}
+            <div data-lottery-help-text className="min-h-0 flex-1 space-y-2 overflow-y-auto p-2.5">
+              {blocks.map(b => (
+                <div key={b.heading}>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{b.heading}</p>
+                  {b.lines.map((l, i) => <p key={i} className="text-xs text-foreground">{l}</p>)}
+                </div>
+              ))}
+            </div>
             <button
               type="button"
               data-lottery-help-close
               onClick={() => setHelpOpen(false)}
-              className="min-h-11 w-full rounded-full border border-border bg-secondary/60 px-3 text-xs font-bold text-foreground hover:brightness-110"
+              className="mx-2 mb-2 mt-1 min-h-11 shrink-0 rounded-full border border-border bg-secondary/60 px-3 text-xs font-bold text-foreground hover:brightness-110"
             >
               Back to the lottery
             </button>

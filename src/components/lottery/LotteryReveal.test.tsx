@@ -195,9 +195,36 @@ describe('LotteryReveal', () => {
     expect(stage.querySelectorAll('[data-lottery-slot]').length).toBe(14);
     expect(stage.querySelector('[data-lottery-grid]')!.className).toContain('invisible');
     expect(help.getAttribute('aria-expanded')).toBe('true');
-    fireEvent.click(container.querySelector('[data-lottery-help-close]')!);
+    /* The same button closes it, and says so: a close mark while the panel is open, never a "?" over open rules. */
+    expect(help.textContent).toBe('×');
+    /* Only the words scroll. The way back is outside the scrolling part, so long rules cannot push it out of sight. */
+    const words = panel.querySelector('[data-lottery-help-text]')!;
+    const back = panel.querySelector('[data-lottery-help-close]')!;
+    expect(words.className).toContain('overflow-y-auto');
+    expect(panel.className).not.toContain('overflow-y-auto');
+    expect(words.contains(back)).toBe(false);
+    expect(back.className).toContain('shrink-0');
+    expect(words.textContent).toContain('Every prospect is generated.');
+    fireEvent.click(back);
     expect(container.querySelector('[data-lottery-help-panel]')).toBeNull();
     expect(stage.querySelector('[data-lottery-grid]')!.className).not.toContain('invisible');
+    expect(help.textContent).toBe('?');
+    /* And the "?" itself closes what it opened. */
+    fireEvent.click(help);
+    fireEvent.click(help);
+    expect(container.querySelector('[data-lottery-help-panel]')).toBeNull();
+  });
+
+  it('says nothing about a seed or a move on an order no drawing made, and marks his tile in the caller\'s words', () => {
+    const plain = [3, 2, 1].map(slot => ({ slot, label: `Club ${slot}`, seed: slot, moved: 0, ...(slot === 2 ? { mine: true } : {}) }));
+    const { container } = render(<LotteryReveal rows={plain} ruleLine="No drawing." reveal={false} drawn={false} mineLabel="your club" />);
+    const tiles = [...container.querySelectorAll('[data-lottery-slot]')];
+    expect(tiles.map(t => t.querySelector('[data-lottery-under]')?.textContent ?? null)).toEqual([null, 'your club', null]);
+    expect(container.textContent).not.toMatch(/Seed|Held/);
+    /* With a drawing the same rows say both, and the mark is the default one. */
+    const drawn = render(<LotteryReveal rows={plain} ruleLine="A drawing." />);
+    expect([...drawn.container.querySelectorAll('[data-lottery-under]')].map(u => u.textContent))
+      .toEqual(['Seed 1 · Held', 'Seed 2 · Held · yours', 'Seed 3 · Held']);
   });
 
   it('draws the last frame at once when there is nothing to reveal', () => {
