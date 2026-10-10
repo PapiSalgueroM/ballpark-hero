@@ -70,6 +70,6 @@ export const BUNDESLIGA_FIXTURES_2026 = {
   ],
   sources: [
     { label: "DFL", url: "https://www.bundesliga.com/de/bundesliga/news/spielplan-saison-start-termine-daten-2026-27-22043" },
-    { label: "Fixture Download", url: "https://fixturedownload.com/feed/json/bundesliga-2026" },
+    { label: "Fixture Download", url: "https://fixturedownload.com/results/bundesliga-2026" },
   ],
 } as const;

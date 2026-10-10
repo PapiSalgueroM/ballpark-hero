@@ -76,6 +76,6 @@ export const SERIEA_FIXTURES_2026 = {
   ],
   sources: [
     { label: "TuttoMercatoWeb", url: "https://www.tuttomercatoweb.com/serie-a/serie-a-2026-2027-ecco-il-nuovo-calendario-completo-con-le-38-giornate-2241512" },
-    { label: "Fixture Download", url: "https://fixturedownload.com/feed/json/serie-a-2026" },
+    { label: "Fixture Download", url: "https://fixturedownload.com/results/serie-a-2026" },
   ],
 } as const;

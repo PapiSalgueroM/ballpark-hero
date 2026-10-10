@@ -69,7 +69,7 @@ export const EREDIVISIE_FIXTURES_2026 = {
     [["Cambuur", "Ajax"], ["NEC Nijmegen", "Utrecht"], ["Willem II", "Go Ahead Eagles"], ["Telstar", "Excelsior"], ["Heerenveen", "PSV"], ["Sparta Rotterdam", "Fortuna Sittard"], ["PEC Zwolle", "Twente"], ["Feyenoord", "Groningen"], ["ADO Den Haag", "AZ Alkmaar"]],
   ],
   sources: [
-    { label: "Fixture Download", url: "https://fixturedownload.com/feed/json/eredivisie-2026" },
+    { label: "Fixture Download", url: "https://fixturedownload.com/results/eredivisie-2026" },
     { label: "Maxifoot", url: "https://www.maxifoot.fr/calendrier-pays-bas-2026-2027.htm" },
   ],
 } as const;

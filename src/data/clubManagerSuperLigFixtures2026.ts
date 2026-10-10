@@ -70,6 +70,6 @@ export const SUPERLIG_FIXTURES_2026 = {
   ],
   sources: [
     { label: "TFF", url: "https://www.tff.org/default.aspx?pageID=198" },
-    { label: "Fixture Download", url: "https://fixturedownload.com/feed/json/super-lig-2026" },
+    { label: "Fixture Download", url: "https://fixturedownload.com/results/super-lig-2026" },
   ],
 } as const;

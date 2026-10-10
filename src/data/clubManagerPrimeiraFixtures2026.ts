@@ -69,7 +69,7 @@ export const PRIMEIRA_FIXTURES_2026 = {
     [["Casa Pia", "Académico de Viseu"], ["Marítimo", "Alverca"], ["Estoril", "Estrela Amadora"], ["Benfica", "Arouca"], ["Porto", "Braga"], ["Vitória Guimarães", "Famalicão"], ["Gil Vicente", "Nacional"], ["Moreirense", "Rio Ave"], ["Santa Clara", "Sporting CP"]],
   ],
   sources: [
-    { label: "Fixture Download", url: "https://fixturedownload.com/feed/json/primeira-liga-2026" },
+    { label: "Fixture Download", url: "https://fixturedownload.com/results/primeira-liga-2026" },
     { label: "Maxifoot", url: "https://www.maxifoot.fr/calendrier-portugal-2026-2027.htm" },
   ],
 } as const;

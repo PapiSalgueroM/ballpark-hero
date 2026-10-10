@@ -34,8 +34,13 @@
 const feed = slug => `https://fixturedownload.com/feed/json/${slug}`;
 const maxifoot = slug => `https://www.maxifoot.fr/calendrier-${slug}-2026-2027.htm`;
 
+/* The feed is raw JSON, and it carries dates and scores besides: not an address to send a player to. The game
+   links the same publisher's page for a reader of the same list. Checked 2026-10-10 for every league below
+   that reads a feed: that page answers a plain request and its bytes name every club the feed names. */
 const FEED = slug => ({
   id: 'feed', kind: 'compiled feed', label: 'Fixture Download', url: feed(slug), ext: 'json', parser: 'feedJson',
+  citedUrl: `https://fixturedownload.com/results/${slug}`,
+  citedNote: 'The fetched address is the feed itself, which is raw JSON. The cited address is the same publisher\'s page for a reader of the same list: its bytes named every club of the feed when read on 2026-10-10.',
   title: `Fixture Download JSON feed ${slug}`,
   titleNote: 'A JSON feed has no title of its own. This line names the feed.',
 });

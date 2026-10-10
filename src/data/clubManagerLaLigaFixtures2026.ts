@@ -75,7 +75,7 @@ export const LALIGA_FIXTURES_2026 = {
     [["Athletic Club", "Rayo Vallecano"], ["Real Betis", "Atlético Madrid"], ["Elche", "Racing Santander"], ["Espanyol", "Alavés"], ["Getafe", "Barcelona"], ["Levante", "Celta Vigo"], ["Málaga", "Sevilla"], ["Osasuna", "Valencia"], ["Real Madrid", "Deportivo La Coruña"], ["Real Sociedad", "Villarreal"]],
   ],
   sources: [
-    { label: "Fixture Download", url: "https://fixturedownload.com/feed/json/la-liga-2026" },
+    { label: "Fixture Download", url: "https://fixturedownload.com/results/la-liga-2026" },
     { label: "Maxifoot", url: "https://www.maxifoot.fr/calendrier-liga-espagne-2026-2027.htm" },
   ],
 } as const;

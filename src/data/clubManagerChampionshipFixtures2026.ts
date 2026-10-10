@@ -88,6 +88,6 @@ export const CHAMPIONSHIP_FIXTURES_2026 = {
   ],
   sources: [
     { label: "ESPN", url: "https://www.espn.com/soccer/story/_/id/49173379/efl-championship-fixtures-schedule-2026-27-full" },
-    { label: "Fixture Download", url: "https://fixturedownload.com/feed/json/championship-2026" },
+    { label: "Fixture Download", url: "https://fixturedownload.com/results/championship-2026" },
   ],
 } as const;

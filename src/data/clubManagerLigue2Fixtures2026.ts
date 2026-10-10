@@ -70,6 +70,6 @@ export const LIGUE2_FIXTURES_2026 = {
   ],
   sources: [
     { label: "Maxifoot", url: "https://www.maxifoot.fr/calendrier-ligue-2-france-2026-2027.htm" },
-    { label: "Fixture Download", url: "https://fixturedownload.com/feed/json/ligue-2-2026" },
+    { label: "Fixture Download", url: "https://fixturedownload.com/results/ligue-2-2026" },
   ],
 } as const;
