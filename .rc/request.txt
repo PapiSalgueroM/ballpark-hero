@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+compare-all: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+lawdrift: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+default: node scripts/simUsSeasonCentre.mjs
+vitest-law: node_modules/.bin/vitest run src/test/gameLawNfl.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonCentre.test.tsx src/test/seasonCore.test.ts src/test/seasonCentreWords.test.tsx --testTimeout=300000 --hookTimeout=120000
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+livescores: node scripts/simLiveScores.mjs
