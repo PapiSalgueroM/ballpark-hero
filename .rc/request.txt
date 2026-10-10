@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk-new: RIVAL_WALK_STRETCH=new RIVAL_WALK_POS=QB,CB,K node scripts/playUsRivalLines.mjs
+walk-old: RIVAL_WALK_STRETCH=old node scripts/playUsRivalLines.mjs
+walk-cards: RIVAL_WALK_STRETCH=cards node scripts/playUsRivalLines.mjs
