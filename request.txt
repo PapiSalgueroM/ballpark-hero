@@ -1,0 +1,3 @@
+#!playwright
+#!serial
+weight-base: git worktree add /tmp/wbase 09df145a >/dev/null 2>&1 && ln -s $PWD/node_modules /tmp/wbase/node_modules && cd /tmp/wbase && npm run build > /tmp/wbase-build.log 2>&1 && (node scripts/lib/hostLikeServer.mjs dist 4199 > /dev/null 2>&1 &) && sleep 4 && BASE=http://localhost:4199 SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
