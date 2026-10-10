@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+base-setup: git worktree add -f /tmp/atg3 fb8d68112fbd3a94f8d8cb5787c8b29c7d4e037c >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/atg3/node_modules; cd /tmp/atg3 && git rev-parse --short HEAD && npm run build > /tmp/atg3-build.log 2>&1; tail -1 /tmp/atg3-build.log | cut -c1-120; setsid nohup node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/atg3-server.log 2>&1 & sleep 4; echo served
+mknew: node .rc/x/review-sc-screens-mk.mjs /tmp/rev-new.json new
+press-base: BASE=http://localhost:4174 PREFIX=base- WIDTHS=320,391,390 FILES=j3 ONLY=event-press NEW_SAVES=/tmp/rev-new.json OLD_SAVES=/tmp/none.json node .rc/x/review-sc-screens-walk.mjs
+press-head: WIDTHS=320,391,390 FILES=j3 ONLY=event-press NEW_SAVES=/tmp/rev-new.json OLD_SAVES=/tmp/none.json node .rc/x/review-sc-screens-walk.mjs
