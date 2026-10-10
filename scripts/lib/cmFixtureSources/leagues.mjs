@@ -34,10 +34,16 @@ const MAXIFOOT = (slug, title) => ({
 });
 
 /* The DFL's PDFs carry a random token in their file names, so the game links the league page that links them.
-   Checked 2026-10-10: the bytes of that page hold both PDF file names. */
+   Checked 2026-10-10: the bytes of that page hold both PDF file names.
+   released is the day the list came out. A PDF does not print it, so it is typed here from that same league
+   page, whose own bytes stamp it as published and last changed at 2026-07-02T09:02:00Z. The tool holds the
+   PDF to it: a document whose own latest change stamp is after that day is not a release day copy. An
+   article source needs no such line, its day is the publication stamp in its own bytes. */
 const DFL_CITED = {
   citedUrl: 'https://www.bundesliga.com/de/bundesliga/news/spielplan-saison-start-termine-daten-2026-27-22043',
   citedNote: 'The fetched address is the PDF itself. The cited address is the league page that links it: its bytes held the file name of this PDF when read on 2026-10-10.',
+  released: '2026-07-02',
+  releasedNote: 'The day the league page that links this PDF was published, from that page\'s own stamp (2026-07-02T09:02:00Z, in its bytes as read on 2026-10-10).',
 };
 /* The league's formal names, which the DFL's list and the feed both print. */
 const BUNDESLIGA_NAMES = {

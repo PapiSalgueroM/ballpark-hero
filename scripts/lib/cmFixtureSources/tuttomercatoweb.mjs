@@ -13,10 +13,13 @@
  * It throws, and the tool then writes nothing, on such a line, on an empty
  * club, or when the article holds no matchday paragraph.
  */
-import { decodePage, lineCounter, textOf, titleOf } from './html.mjs';
+import { articleStamps, decodePage, lineCounter, textOf, titleOf } from './html.mjs';
 
 export const roundBasis = 'labelled';
-/* An article printed the day the list came out: it is the list as first published. */
+/* An article printed the day the list came out CAN be the list as first published. Whether this copy of it
+   is one is not decided here: parse returns the article's own publication and last change stamps, and the
+   tool calls the source a release day copy only when the bytes were last changed no later than the day they
+   were published (listAsOfFrom in build.mjs). An article edited on a later day is a read day source. */
 export const listAsOf = 'release day';
 
 const MATCHDAY = /<p>\s*<strong>\s*Giornata\s+(\d+)[^<]*<\/strong>([\s\S]*?)<\/p>/g;
@@ -49,5 +52,5 @@ export function parse(pages) {
       rows.push({ sourceLine: lineOf(at), ref: `offset ${at}`, round, home: parts[0].trim(), away: parts[1].trim() });
     }
   }
-  return { rows, title: titleOf(text) };
+  return { rows, title: titleOf(text), ...articleStamps(text) };
 }

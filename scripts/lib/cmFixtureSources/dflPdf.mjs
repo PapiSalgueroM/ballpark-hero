@@ -31,10 +31,29 @@
 import { contentStreams, linesOf, textRuns } from './pdfText.mjs';
 
 export const roundBasis = 'labelled';
-/* The document the league body issued the day the list came out: it is the list as first published. */
+/* The document the league body issued the day the list came out CAN be the list as first published. Whether
+   this copy of it is one is not decided here: parse returns the document's own creation stamp and its latest
+   change stamp, and the tool calls the source a release day copy only when that latest change is no later
+   than the day the list came out (listAsOfFrom in build.mjs; the day is in the league table, with where it
+   was read). A document the league reissued on a later day is a read day source. */
 export const listAsOf = 'release day';
 
 const joined = cells => cells.map(c => c.text).join('').replace(/\s+/g, ' ').trim();
+
+const PDF_DATE = /\/(CreationDate|ModDate)\s*\(D:(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})([+-])(\d{2})'(\d{2})'?\)/g;
+/**
+ * The document's own stamps, from its information dictionaries: when it was created and when it was last
+ * changed. A PDF saved more than once keeps one dictionary a saved revision, so the creation stamp must be
+ * the same in all of them (or it is not read) and the change stamp is the latest one.
+ */
+export function pdfStamps(body) {
+  const found = { CreationDate: [], ModDate: [] };
+  for (const m of body.toString('latin1').matchAll(PDF_DATE)) {
+    found[m[1]].push(`${m[2]}-${m[3]}-${m[4]}T${m[5]}:${m[6]}:${m[7]}${m[8]}${m[9]}:${m[10]}`);
+  }
+  const latest = [...found.ModDate].sort((a, b) => Date.parse(a) - Date.parse(b)).at(-1) ?? null;
+  return { created: new Set(found.CreationDate).size === 1 ? found.CreationDate[0] : null, modified: latest };
+}
 
 export function parse(pages) {
   if (pages.length !== 1) throw new Error(`dflPdf reads one file, got ${pages.length}`);
@@ -80,5 +99,5 @@ export function parse(pages) {
   rows.forEach((r, i) => {
     if (r.number !== i + 1) throw new Error(`dflPdf: the match numbers are not 1 to ${rows.length} without a hole or a repeat (position ${i + 1} holds match ${r.number})`);
   });
-  return { rows: rows.map(({ number, ...r }) => r), title };
+  return { rows: rows.map(({ number, ...r }) => r), title, ...pdfStamps(pages[0].body) };
 }

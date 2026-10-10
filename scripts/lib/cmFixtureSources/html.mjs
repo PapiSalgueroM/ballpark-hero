@@ -40,6 +40,23 @@ export function titleOf(text) {
   return m ? textOf(m[1]) : null;
 }
 
+const PUBLISHED = /"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}[^"]*)"/g;
+const MODIFIED = /"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}[^"]*)"/g;
+
+/**
+ * An article's own publication stamp and last change stamp, as its structured data prints them
+ * ("datePublished":"2026-06-05T19:56:07+02:00"). Only a stamp with a time of day counts (a page can carry
+ * its publisher's founding date in the same field), and only when the page prints exactly one such value:
+ * where it prints two different ones this reads neither, rather than pick one.
+ */
+export function articleStamps(text) {
+  const one = re => {
+    const found = new Set([...text.matchAll(re)].map(m => m[1]));
+    return found.size === 1 ? [...found][0] : null;
+  };
+  return { published: one(PUBLISHED), modified: one(MODIFIED) };
+}
+
 /** Line number (from 1) of an offset in a text. */
 export function lineCounter(text) {
   const starts = [0];

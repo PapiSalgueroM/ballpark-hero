@@ -48,6 +48,36 @@ export function fencedReason(s) {
 
 const tupleOf = r => `${r.round}|${r.home}|${r.away}`;
 
+/** The calendar day of a stamp, in the stamp's own offset: its first ten characters, or null when it has no day. */
+export const dayOf = stamp => (typeof stamp === 'string' && /^\d{4}-\d{2}-\d{2}/.test(stamp) ? stamp.slice(0, 10) : null);
+
+/**
+ * Is a source a release day copy of the list, or a page kept up to date?
+ * 'release day' takes all three: a parser family that reads release day documents (the parser's own
+ * listAsOf), the day the list came out (released), and a last change stamp from the source's bytes
+ * (modified) that is no later than that day. Anything less is 'read day'. The harness calls this with what a
+ * receipt recorded, so a receipt cannot claim more than its own evidence bears out.
+ */
+export function listAsOfFrom(parserListAsOf, released, modified) {
+  const [day, changed] = [dayOf(released), dayOf(modified)];
+  return parserListAsOf === 'release day' && day && changed && changed <= day ? 'release day' : 'read day';
+}
+
+/**
+ * The day the list a source prints came out, and how that day is known. An article says it itself (its
+ * publication stamp). A document that prints no such stamp takes it from the league table (released, typed
+ * there with where it was read). When both exist they must be the same day.
+ */
+function releaseDay(source, parsed) {
+  const own = dayOf(parsed.published);
+  if (own && source.released && own !== source.released) {
+    return { problem: `${source.id}: the league table says its list came out on ${source.released} and its own publication stamp says ${own}` };
+  }
+  if (own) return { released: own, releasedBasis: 'The publication stamp in this source\'s own bytes.' };
+  if (source.released) return { released: source.released, releasedBasis: source.releasedNote || 'Typed in the league table.' };
+  return {};
+}
+
 /** Parse one source and map its spellings. Returns the mapped rows and every reason the source cannot be used. */
 function readSource(league, index, gameClubs, dir) {
   const source = league.sources[index];
@@ -84,7 +114,16 @@ function readSource(league, index, gameClubs, dir) {
     else { seen.set(t, true); rows.push(mapped); }
   }
   const used = Object.fromEntries(Object.entries(table).filter(([from]) => spellings.has(from)).sort(([a], [b]) => (a < b ? -1 : 1)));
-  return { source, pages, parsed, rows, duplicates, problems, used, roundBasis: parser.roundBasis, listAsOf: parser.listAsOf };
+  const day = releaseDay(source, parsed);
+  if (day.problem) problems.push(day.problem);
+  const stamps = {
+    ...(parsed.published ? { published: parsed.published } : {}),
+    ...(parsed.created ? { created: parsed.created } : {}),
+    ...(parsed.modified ? { modified: parsed.modified } : {}),
+    ...(day.released ? { released: day.released, releasedBasis: day.releasedBasis } : {}),
+  };
+  const listAsOf = listAsOfFrom(parser.listAsOf, day.released, parsed.modified);
+  return { source, pages, parsed, rows, duplicates, problems, used, roundBasis: parser.roundBasis, listAsOf, stamps };
 }
 
 /** Every structural reason a list is not a whole double round robin for these clubs. */
@@ -230,7 +269,7 @@ export function buildLedger(league, gameLeague, dir) {
         ...readTimes(r.pages),
         title,
         ...(s.titleNote ? { titleNote: s.titleNote } : {}),
-        ...(s.published || r.parsed.published ? { published: s.published || r.parsed.published } : {}),
+        ...r.stamps,
         parser: `scripts/lib/cmFixtureSources/${s.parser}.mjs`,
         roundBasis: r.roundBasis,
         listAsOf: r.listAsOf,

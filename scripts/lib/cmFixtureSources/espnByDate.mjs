@@ -22,10 +22,13 @@
  * "Home vs. Away <kick off time>", on a club meeting itself, or on a match
  * whose two counts differ.
  */
-import { decodePage, lineCounter, textOf, titleOf } from './html.mjs';
+import { articleStamps, decodePage, lineCounter, textOf, titleOf } from './html.mjs';
 
 export const roundBasis = 'ordinal';
-/* An article printed the day the list came out: it is the list as first published. */
+/* An article printed the day the list came out CAN be the list as first published. Whether this copy of it
+   is one is not decided here: parse returns the article's own publication and last change stamps, and the
+   tool calls the source a release day copy only when the bytes were last changed no later than the day they
+   were published (listAsOfFrom in build.mjs). An article edited on a later day is a read day source. */
 export const listAsOf = 'release day';
 
 /* Between a date and its paragraph of matches the page may drop an advert block, so the gap is allowed to hold
@@ -74,6 +77,5 @@ export function parse(pages) {
      without any count disagreeing (the first draft missed one that sat behind an advert block, exactly so). */
   const printed = (text.match(/ vs\. /g) || []).length;
   if (printed !== rows.length) throw new Error(`espnByDate: the article prints " vs. " ${printed} times and ${rows.length} match lines were read`);
-  const stamp = /"content_publish_timestamp":"(\d{4}-\d{2}-\d{2})T/.exec(text);
-  return { rows, title: titleOf(text), published: stamp ? stamp[1] : null };
+  return { rows, title: titleOf(text), ...articleStamps(text) };
 }
