@@ -1,0 +1,51 @@
+mutAU noopening: applied to src/lib/soccerCareerEngine.ts
+mutAU nowheel: applied to src/lib/careerChanceWheel.ts
+PASS engine baseline
+FAIL reader baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      id: 'domestic',
+      matches: [
+        {
+...
+          goalsFor: 2,
++         home: false,
+          note: undefined,
+          opponent: 'Chelsea',
+          result: 'Through',
+          round: 'Quarter-final'
+        },
+
+PASS saved markup
+PASS missing markup
+PASS actual campaign baseline
+PASS actual campaign markup
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All nine healthy outcome groups pass
++ actual - expected
+
++ [
++   'reader baseline'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerTrophyRuns.mjs:148:50
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 'reader baseline' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

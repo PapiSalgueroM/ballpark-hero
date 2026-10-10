@@ -1,0 +1,14 @@
+mutAU noopening: applied to src/lib/soccerCareerEngine.ts
+mutAU nowheel: applied to src/lib/careerChanceWheel.ts
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS season identities
+PASS saved meetings
+PASS orientation
+PASS team and player totals
+PASS recorded status
+PASS rival identities
+PASS rival totals
+PASS read boundary
+Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/outcomes

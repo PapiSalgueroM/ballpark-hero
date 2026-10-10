@@ -1,0 +1,12 @@
+dev-noadd exit=0 3s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+trophy-noadd exit=1 2s | Node.js v24.21.0
+story-noadd exit=0 29s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+history-noadd exit=1 2s | Node.js v24.21.0
+derby-noadd exit=0 2s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+brands-noadd exit=0 20s | ALL SOCIAL AND BRAND CHECKS PASSED
+finish-noadd exit=0 12s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4813 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+awards-noadd exit=0 57s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+seasons-noadd exit=0 23s | simCareerLeagueSeasons: all sections green
+brands-nowheel exit=0 20s | ALL SOCIAL AND BRAND CHECKS PASSED
+brands-noopening exit=1 20s | 1 FAILURE
+held exit=0 0s | src differs from the head in 0 file(s)
