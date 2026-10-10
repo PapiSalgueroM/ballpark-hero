@@ -1,0 +1,13 @@
+ok   7. save A at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":559,"bench":617,"place":681,"last":265,"help":806,"examples":600,"closed":0})
+ok   7. save D at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":486,"eleven":581,"bench":617,"place":577,"last":265,"help":806,"examples":600,"closed":0})
+ok   7. save R at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":448,"eleven":588,"bench":617,"place":607,"last":321,"help":806,"examples":600,"closed":0})
+ok   7. save B at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":486,"eleven":547,"bench":617,"place":631,"last":265,"help":806,"examples":600,"closed":0})
+ok   7. save M at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":625,"bench":657,"place":627,"last":330,"help":806,"examples":600,"closed":0})
+ok   7. save E at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":486,"eleven":547,"bench":534,"place":577,"last":265,"help":806,"examples":600,"closed":0})
+ok   7. save A at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":431,"eleven":528,"bench":594,"place":631,"last":265,"help":691,"examples":510,"closed":0})
+ok   7. save D at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":547,"bench":594,"place":544,"last":265,"help":691,"examples":510,"closed":0})
+ok   7. save R at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":448,"eleven":588,"bench":594,"place":557,"last":302,"help":691,"examples":510,"closed":0})
+ok   7. save B at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":547,"bench":594,"place":581,"last":265,"help":691,"examples":510,"closed":0})
+ok   7. save M at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":431,"eleven":625,"bench":614,"place":594,"last":311,"help":691,"examples":510,"closed":0})
+ok   7. save E at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":547,"bench":534,"place":544,"last":265,"help":691,"examples":510,"closed":0})
+playCareerSquad: 170 checks, 0 failed

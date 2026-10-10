@@ -1,0 +1,7 @@
+run 1 exit 0 | 0 FAIL lines | Rival cards met on this run: 1 beat, 0 choice (the draw decides; both are walked when they come).
+run 2 exit 0 | 0 FAIL lines | Rival cards met on this run: 1 beat, 1 choice (the draw decides; both are walked when they come).
+run 3 exit 0 | 0 FAIL lines | Rival cards met on this run: 2 beat, 0 choice (the draw decides; both are walked when they come).
+run 4 exit 0 | 0 FAIL lines | Rival cards met on this run: 0 beat, 1 choice (the draw decides; both are walked when they come).
+run 5 exit 0 | 0 FAIL lines | Rival cards met on this run: 1 beat, 0 choice (the draw decides; both are walked when they come).
+run 6 exit 0 | 0 FAIL lines | Rival cards met on this run: 2 beat, 0 choice (the draw decides; both are walked when they come).
+6 of 6 runs green
