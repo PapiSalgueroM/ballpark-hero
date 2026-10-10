@@ -1,0 +1,19 @@
+#!serve
+#!playwright
+#!serial
+playSoccerCareer: node scripts/playSoccerCareer.mjs
+playSeasonCentre: node scripts/playSeasonCentre.mjs
+playSeasonMoments: node scripts/playSeasonMoments.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+playCareerSquad: node scripts/playCareerSquad.mjs
+playCareerLeagueWorld: node scripts/playCareerLeagueWorld.mjs
+playCareerMoments: node scripts/playCareerMoments.mjs
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playSoccerCareerOpponents: node scripts/playSoccerCareerOpponents.mjs
+playSoccerCareerCompetitions: node scripts/playSoccerCareerCompetitions.mjs
+playSoccerCareerContracts: node scripts/playSoccerCareerContracts.mjs
+playSoccerCareerDiscipline: node scripts/playSoccerCareerDiscipline.mjs
+playSoccerCareerFamily: node scripts/playSoccerCareerFamily.mjs
+playSoccerCareerAwardReveal: node scripts/playSoccerCareerAwardReveal.mjs
