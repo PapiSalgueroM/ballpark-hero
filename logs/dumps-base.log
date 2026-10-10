@@ -1,0 +1,7 @@
+nhl seed base exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed 1 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed 2 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed 3 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed 4 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+nhl seed 5 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+dumps: 6 row files of nhl in /tmp/rows-base, 6 runs in 20 s

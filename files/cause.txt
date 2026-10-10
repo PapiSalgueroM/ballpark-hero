@@ -1,0 +1,24 @@
+1. rows equal to the base, byte for byte: the head with 82 put back on 6 of 6 seeds; the head itself on 0 of 6
+2. share of a position's careers at or over a calibration 2 mark, pooled over 12 cells, percent (seeds base 1 2 3 4 5)
+   base (origin/main)        : from 10.35 10.17 9.33 9.58 10.85 9.73 mean 10.00; to 0.88 0.96 0.69 0.79 0.90 0.94 mean 0.86
+   head, 84 read as 82       : from 10.35 10.17 9.33 9.58 10.85 9.73 mean 10.00; to 0.88 0.96 0.69 0.79 0.90 0.94 mean 0.86
+   head (84 games)           : from 12.08 13.44 12.81 11.54 12.23 12.35 mean 12.41; to 1.21 1.27 1.21 1.06 1.46 1.48 mean 1.28
+   head, skater marks x 84/82: from 8.90 10.60 9.83 8.92 9.23 9.58 mean 9.51; to 0.83 0.85 0.77 0.67 0.88 0.77 mean 0.80
+   BY CAUSE, points of the from share: 84 game seasons 2.41; everything else in Round 1226 (short seasons at true length, awards on the full season, the rest) 0.00; total 2.41
+   and with the skater marks carried the same 84 over 82 the head reads 9.51 against the base's 10.00: what is left over is -0.49 points
+3. careers 12000 head, 12000 base; the same position, seasons and awards at the same index: 753 (6.28 percent)
+   skaters, games: head over base 1.0258 (mean 1528.2 -> 1567.7)
+   skaters, goals: head over base 1.0200 (mean 556.5 -> 567.6)
+   skaters, assists: head over base 1.0211 (mean 825.1 -> 842.5)
+   skaters, points: head over base 1.0206 (mean 1381.6 -> 1410.1)
+   goalies, games: head over base 0.9982 (mean 1289.5 -> 1287.2)
+   goalies, wins: head over base 0.9978 (mean 656.6 -> 655.2)
+   seasons a career: base 19.919, head 19.924
+4. cups a career: base 0.8813, head 0.8800, head over base 0.9985
+4. harts a career: base 0.2550, head 0.2449, head over base 0.9605
+4. connSmythes a career: base 0.1845, head 0.1832, head over base 0.9932
+4. allStars a career: base 2.1132, head 2.0622, head over base 0.9758
+5. Hall share on calibration 1: base 29.75 30.25 30.25 29.95 32.00 29.40 | head 28.55 29.15 30.40 30.20 31.15 29.30
+   Hall share on calibration 2: base 31.00 31.85 31.10 31.45 33.30 30.80 | head 30.80 31.15 32.50 32.30 32.60 31.10
+   legacy score on 1, mean: base 447.6, head 444.7; on 2: base 466.6, head 468.9
+cause: the whole rise is the 84 game season (the head with the one number put back is the base, byte for byte)

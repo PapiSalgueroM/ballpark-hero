@@ -1,0 +1,4 @@
+dumps-head exit=0 20s | dumps: 6 row files of nhl in /tmp/rows-head, 6 runs in 20 s
+dumps-base exit=0 21s | dumps: 6 row files of nhl in /tmp/rows-base, 6 runs in 20 s
+dumps-mut exit=0 21s | dumps: 6 row files of nhl in /tmp/rows-mut, 6 runs in 19 s
+cause exit=0 0s | cause: the whole rise is the 84 game season (the head with the one number put back is the base, byte for byte)
