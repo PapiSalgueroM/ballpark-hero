@@ -490,6 +490,8 @@ if (PROVE) {
      careers are driven one season further at a time, and at the first season where anything OFF the rival
      differs (a different beat was dealt or answered), every season line played so far is still byte equal. */
   const P2N = FULL ? 1000 : Math.min(200, CAREERS);
+  /* How many careers of a named sport are stepped season by season (each step is a whole drive on both trees). */
+  const P2_STEPPED = 300;
   console.log(`P2) with every card answered: ${P2N} careers a sport, driven through the sport's binding`);
   const driven = (M, sport, i, seasons) => {
     const F = FLEET[sport]; const S = F.desc(M); const pos = F.pos[i % F.pos.length];
@@ -509,20 +511,25 @@ if (PROVE) {
       const now = driven(E, sport, i, 40); const was = driven(B.mod, sport, i, 40);
       cards += now.cards; choices += now.choices; seasons += now.seasons;
       if (now.json === was.json) { equal += 1; continue; }
-      if (!named) continue;
-      for (let k = 1; k <= Math.max(now.seasons, was.seasons); k += 1) {
-        const a = offRival(driven(E, sport, i, k).json); const b = offRival(driven(B.mod, sport, i, k).json);
-        if (a.rest === b.rest) continue;
-        parted += 1; if (a.seasons === b.seasons) linesHeld += 1;
-        for (const key of new Set([...Object.keys(a.c), ...Object.keys(b.c)])) if (JSON.stringify(a.c[key]) !== JSON.stringify(b.c[key])) firstKeys[key] = (firstKeys[key] ?? 0) + 1;
-        break;
-      }
+      if (!named || i >= P2_STEPPED) continue;
+      /* The first season where anything off the rival differs, by halving (a save that has parted stays parted:
+         the feed and the last beat's id are on it), then proven at the season found: equal one season earlier. */
+      const pair = k => ({ a: offRival(driven(E, sport, i, k).json), b: offRival(driven(B.mod, sport, i, k).json) });
+      const last = Math.max(now.seasons, was.seasons);
+      const end = pair(last);
+      if (end.a.rest === end.b.rest) continue;
+      let lo = 1; let hi = last; let at = end;
+      while (lo < hi) { const mid = (lo + hi) >> 1; const m = pair(mid); if (m.a.rest !== m.b.rest) { hi = mid; at = m; } else lo = mid + 1; }
+      parted += 1;
+      const before = lo > 1 ? pair(lo - 1) : null;
+      if (at.a.seasons === at.b.seasons && (!before || before.a.rest === before.b.rest)) linesHeld += 1;
+      for (const key of new Set([...Object.keys(at.a.c), ...Object.keys(at.b.c)])) if (JSON.stringify(at.a.c[key]) !== JSON.stringify(at.b.c[key])) firstKeys[key] = (firstKeys[key] ?? 0) + 1;
     }
     check('P2', cards > 0 && seasons > 0, `${sport}: the drive answered ${cards} rivalry cards and ${choices} rival choices over ${seasons} seasons (more than none)`);
     if (!named) check('P2', equal === P2N, `${sport}: ${equal} of ${P2N} whole saves are byte equal`);
     else {
       check('P2', equal < P2N, `${sport}: the saves moved, as this step says they do (${P2N - equal} of ${P2N} differ)`);
-      check('P2', linesHeld === parted, `${sport}: at the first season where anything off the rival differs, every season line so far is byte equal (${linesHeld} of ${parted} careers that part; ${P2N - equal - parted} differ under the rival alone)`);
+      check('P2', parted > 0 && linesHeld === parted, `${sport}: at the first season where anything off the rival differs, every season line so far is byte equal and the season before it nothing off the rival differs (${linesHeld} of ${parted} careers that part, among the first ${Math.min(P2N, P2_STEPPED)} stepped season by season)`);
       console.log(`     ${sport}: what differs off the rival at that first season, by top level key: ${Object.entries(firstKeys).sort((x, y) => y[1] - x[1]).map(([k, n]) => `${k} ${n}`).join(', ') || 'nothing'}`);
     }
   }

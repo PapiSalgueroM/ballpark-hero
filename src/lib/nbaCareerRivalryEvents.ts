@@ -57,10 +57,10 @@ export const NBA_RIVAL_RETIRE_ID = 305;
    (nbaRivalSeason in nbaMyCareer.ts writes it on the rival). Null when the save's last season is not that
    year, so a beat that reads this is never dealt on two different seasons. */
 export function nbaAllStarFacts(s: Pick<NbaCareerState, 'seasons'>, r: Pick<CareerRival, 'lastYear' | 'lastAllStar'>): { mine: boolean; his: boolean } | null {
-  return rosterFacts(s, r, nbaMadeAllStar);
+  return rosterFacts<NbaSeasonLine>(s, r, nbaMadeAllStar);
 }
 /** The player's own All-Star season, off the season line the engine wrote. */
-const nbaMadeAllStar = (last: Pick<NbaSeasonLine, 'allStar'>): boolean => !!last.allStar;
+const nbaMadeAllStar = (last: NbaSeasonLine): boolean => !!last.allStar;
 
 /* Seventeen beats, gated on what an NBA rival's save actually tracks: rings,
    overall, team, age, and the head to head record judgeRivalSeason already
