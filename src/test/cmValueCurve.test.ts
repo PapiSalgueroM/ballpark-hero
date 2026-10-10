@@ -951,6 +951,22 @@ const leagueProblems = (id: string, league: any): string[] => {
   return out;
 };
 
+/** What a spot checked line says: "Coventry City 95", "Schalke 04 70", "Volos NFC 17 (last of the
+ *  Europe play-offs)". The points are the last number before a bracketed remark. */
+const printedRow = (text: string): { club: string; points: number } | null => {
+  const m = /^(.*?)[,\s]+(\d+)$/.exec(String(text).replace(/\s*\(.*\)\s*$/, ''));
+  return m ? { club: m[1], points: Number(m[2]) } : null;
+};
+/** A club name as its words: accents folded (the combining marks dropped by code point), lower case. */
+const wordsOf = (name: string) => new Set(
+  [...String(name).normalize('NFD')].filter(ch => ch.charCodeAt(0) < 0x300 || ch.charCodeAt(0) > 0x36f).join('')
+    .toLowerCase().split(/[^a-z0-9]+/).filter(Boolean),
+);
+const allIn = (a: Set<string>, b: Set<string>) => a.size > 0 && [...a].every(word => b.has(word));
+const namesOf = (row: any): string[] => [row.source, row.club].filter(Boolean);
+const fitsClub = (printed: string, row: any) => namesOf(row).some(name => allIn(wordsOf(printed), wordsOf(name)) || allIn(wordsOf(name), wordsOf(printed)));
+const sameWords = (printed: string, row: any) => namesOf(row).some(name => allIn(wordsOf(printed), wordsOf(name)) && allIn(wordsOf(name), wordsOf(printed)));
+
 describe('the folded final tables: two table publishers a league, neither a wiki', () => {
   const leagues: [string, any][] = Object.entries(finalTables.leagues);
 
@@ -1007,6 +1023,60 @@ describe('the folded final tables: two table publishers a league, neither a wiki
     }
     expect(apart).toEqual([]);
     expect([shipped.length, places]).toEqual([15, 145]);
+  });
+
+  /* The comparison above reaches 145 places, the top of 15 leagues. The two tests below hold all 27
+     leagues to the bottom row, from the file's own second witnesses: the order a table has to be in,
+     and the three rows of each league a checker read off a page on the day of the fold. */
+  it('points never rise down a table, except where a split league starts a new group', () => {
+    /* A final table runs in points order, so two rows that changed places show as a rise. Four
+       leagues stack two or three group tables and restart at the first place of a group; each place
+       is typed from the league's own format line. (The Scottish and Swiss splits lock places 1 to 6
+       as well, and their format lines say no bottom half club passed a top half club this season.) */
+    const GROUP_STARTS = { austria: [7], proleague: [7, 13], denmark: [7], greece: [9] };
+    const rises: Record<string, number[]> = {};
+    let rows = 0;
+    for (const [id, league] of leagues) {
+      rows += league.rows.length;
+      const at = league.rows.filter((r: any, i: number) => i > 0 && r.points > league.rows[i - 1].points).map((r: any) => r.pos);
+      if (at.length) rises[id] = at;
+    }
+    expect(rises).toEqual(GROUP_STARTS);
+    expect(rows).toBe(456);
+    for (const [id, starts] of Object.entries(GROUP_STARTS)) {
+      for (const place of starts) expect([id, place, finalTables.leagues[id].format.includes(`${place} to `)]).toEqual([id, place, true]);
+    }
+  });
+
+  it('each league still says what its spot checked page printed: the first row, a middle row and the last, club and points', () => {
+    /* the checker itself: the points are the last number before a bracketed remark, and a club fits a
+       row when one name's words are all in the other's (a publisher adds or drops FC, SC and the like) */
+    expect(printedRow('Schalke 04 70')).toEqual({ club: 'Schalke 04', points: 70 });
+    expect(printedRow('Panserraikos FC, 29 (last of the relegation group)')).toEqual({ club: 'Panserraikos FC', points: 29 });
+    expect(printedRow('no points here')).toBe(null);
+    expect(fitsClub('SC Amiens', { source: 'Amiens SC', club: null })).toBe(true);
+    expect(fitsClub('Sheffield United', { source: 'Sheffield Wednesday', club: 'Sheffield Wednesday' })).toBe(false);
+    expect(fitsClub('Arsenal', { source: 'Manchester City', club: 'Manchester City' })).toBe(false);
+    const wrong: string[] = [];
+    let read = 0;
+    for (const [id, league] of leagues) {
+      const spot = league.spotChecked;
+      const whole = spot && spot.rows?.length === 3 && spot.printed?.length === 3 && ISO_DAY.test(String(spot.on)) && /^https:\/\//.test(String(spot.url));
+      if (!whole) { wrong.push(`${id}: no whole spot check`); continue; }
+      if (spot.rows[0] !== 1 || spot.rows[2] !== league.rows.length) wrong.push(`${id}: the spot check does not read the first and the last row`);
+      spot.rows.forEach((pos: number, k: number) => {
+        read += 1;
+        const row = league.rows[pos - 1];
+        const said = printedRow(spot.printed[k]);
+        if (!row || !said) { wrong.push(`${id} ${pos}: no row, or the printed text has no points`); return; }
+        if (said.points !== row.points) wrong.push(`${id} ${pos}: the page printed ${said.points} points for ${said.club}, the row holds ${row.points}`);
+        /* his own row, and where the words fit a second row too (Dundee United and Dundee) the exact one */
+        const fits = league.rows.filter((r: any) => fitsClub(said.club, r));
+        if (!fits.includes(row) || (fits.length > 1 && !sameWords(said.club, row))) wrong.push(`${id} ${pos}: the page printed ${said.club}, the row holds ${row.source}`);
+      });
+    }
+    expect(wrong).toEqual([]);
+    expect(read).toBe(81);
   });
 });
 
