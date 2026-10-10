@@ -15,11 +15,16 @@
  * Round 1218 did the first half of that and left the switch where it was. Done: the rates are derived from
  * published counts of real football (scripts/data/cmVarRates.json through scripts/genCmVarRates.mjs), a match
  * gets reviews only in a competition two sources confirm uses VAR in 2026-27 (cmVarCompetitions.json), and
- * simCmVar holds both on a fleet of 4,000 league matches. Still owed before this line may read true: the
- * review screen cases nobody has played (a review in the last minute of a half, two in one minute, leaving
- * mid review, Skip to the whistle during one, one in the minute of the other side's change), each with a
- * test, and scripts/playCmVar.mjs walked on a lit build at 390 and 1280 on the new rates, where a review
- * that confirms no longer exists. docs/audits/ROUND-1218-NOTES.md has the list.
+ * simCmVar holds both on a fleet of 4,000 league matches.
+ *
+ * The review fix of Round 1218 did the screen: a review never opens over an action, a goal that gets ruled out
+ * is drawn first (src/test/clubManagerVarScreen.test.tsx), and scripts/playCmVar.mjs walks a lit build at 390
+ * and 1280 on the real rates. It still left the switch off, for ONE reason, and scripts/simCmVarLedger.mjs
+ * holds it: the lead asked for each rate on two publishers for two recent seasons, and the only season two
+ * publishers counted is Serie A 2017-18. That is written under owed in scripts/data/cmVarRates.json. While
+ * an owed entry is open this line must read false. The lead closes it (a second count, or a ruling written
+ * into the entry), then this line, the What's New entry and the cases of the unit file follow.
+ * docs/audits/ROUND-1218-NOTES.md has the whole list.
  *
  * Kept in its own file with no import so the help text, which several harnesses render with a plain
  * bundler, can read it without pulling the hook in. src/test/clubManagerVarLive.test.tsx holds it.

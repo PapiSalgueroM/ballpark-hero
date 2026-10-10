@@ -149,3 +149,66 @@ same match on every run. Ten runs with reviews off and ten with the switch on fo
 - The coverage is thin on purpose. Ligue 1 needs one more source that speaks of 2026-27 to turn on, and so does
   the 2. Bundesliga. The Championship's one source says no. Every cup needs two sources AND the round its
   coverage starts.
+
+## 8. The review fix (2026-10-10, after two adversarial reviews). The switch has still NOT moved.
+
+Sections 1 to 7 are the builder's and are left as he wrote them. Where this section disagrees, this section is
+the current one. The reviews are `review-run-1218.md` and `review-read-1218.md` in the lead's handoff folder.
+
+**The rates ledger now does what the lead's decision 1 says.** A FIGURE is one quantity in one competition in
+one season, and it is used only when two publishers on two hosts each counted it. Before, a quantity was used
+when two publishers counted it anywhere, so both shipped rates stood on one url. AGI's own count of Serie A
+2017-18 (31 goals ruled out, 34 penalties given, 19 taken back, 117 changed decisions, 26 May 2018) joined
+Tiziano Pieri's (29, 35, 18, 115). The stricter count of each is used: goals ruled out 29 in 380 (unchanged,
+`goalReview` 0.031938), penalties 34 in 380 where it was one publisher's 25 in 380 (`missedFoulReview` 0.003605
+to 0.004902). So the game now gives a penalty after a review about once in 11 matches, not once in 15. The
+ESPN and LigaInsider rows are still on file, THIN, and are read by nothing.
+
+**What is still owed, and it holds the switch.** The lead asked for two RECENT seasons on two publishers each.
+Three readers looked (the builder in five leagues, the read reviewer for the Premier League split, the fixer
+for the Bundesliga, Serie A, the Premier League and La Liga) and every recent count is one publisher's own or
+one newspaper's count repeated by others. That is written in the ledger under `owed` (`recent-seasons`,
+state open), and `scripts/simCmVarLedger.mjs` fails if `CM_VAR_LIVE` reads true while an owed entry is open
+(control `owedlive`). The lead closes it with a second count for two seasons from 2022-23 on, or by writing a
+ruling into the entry (`"state": "accepted"`, `"ruling": "who, when, in what words"`), then
+`node scripts/genCmVarRates.mjs`.
+
+**The review screen** (`LiveSimScreen.tsx`, the block headed "when a review opens"):
+- A review used to open 0.05 before its minute whatever the pitch was doing. Played on the real rates that put
+  a card reading "goal ruled out" on top of a real goal of the minute before that was still in the air and
+  then counted. Now no review opens while another action is playing.
+- A goal a review rules out is drawn first: the pitch plays it as a goal (the plan stages it as a shot, so the
+  defending side restarts and nobody kicks off), the card opens with the ball in the net, the score never
+  moves, and the action stops when the card closes. A goal ruled out in the last two clock places of a period
+  is NOT drawn (there is no room to play it before the whistle): its card opens on its own.
+- A penalty a review gives opens at its own minute, after the foul is told, and its kick is played after the
+  card. One at the whistle's own place opens before the last kick's wind up, so the kick is played whole.
+- The card names the man, his club and the minute and says what the call means. Under reduced motion the wait
+  is 0.3 s and the decision stays up 1.2 s, as long as with motion.
+- The feed line and the report row name the man and his club, and a review row of the report wraps.
+
+**What holds it.** `src/test/clubManagerVarScreen.test.tsx`: twelve cases on real halves of the engine on the
+shipped rates. Six of them fail on the screen as it was (runner `r1218-fx-d0`): the ruled out goal not drawn,
+the card over the goal of the minute before (twice), the card a minute early, the save told the wrong minute
+on leaving, the decision up 0.8 s under reduced motion. `scripts/playCmVar.mjs` is rewritten on fixtures the
+real rates hold and asserts every case: 21 cases and two help views at 390 and 1280 on a lit build.
+`scripts/simCmVar.mjs`: the historic era clause is held again (control `historic`), a review dealt from the
+match stream is caught (outcome `stream`, controls `streamgoal` and `streamfoul`), and the coverage outcome
+reads what a kickoff should carry off the ledger itself, so a row that turns to yes needs no hand in the
+harness. The Eredivisie row was the proof: it turned to yes with its two sources and nothing else changed.
+
+**The help** states the 2026/27 protocol: red cards, and since 1 July 2026 a red that came from a clearly wrong
+second yellow (the laws' own page and FIFA's release of the IFAB meeting of 28 February 2026), a modern save
+only, and which season the counts are from.
+
+**Still not done.**
+- Coverage: 39 competitions unread (19 leagues, every domestic cup), three one source short.
+- A review in the same minute as the other side's substitution, an own goal beside a review, a review in
+  extra time, two reviews in the same minute: no such half was found in 7,500 searched, so no test plays them.
+  By the code a review waits for whatever action is playing and a change off the clock waits for the action,
+  which is the rule Release AR already holds for goals.
+- Penalties a match with reviews on is about 0.45 to 0.48 and held by no band (no Club Manager harness holds
+  one). Penalties cancelled, goals awarded and red cards after a review are on file and not modelled.
+- `scripts/playCmRealFixtures.mjs` plays its oracle without reviews and needs the opt in when the switch moves.
+- The What's New entry. It is written when the switch moves, and must say: goals and penalties only, in which
+  competitions, a modern save from its next kickoff, rare, and that it changes results.

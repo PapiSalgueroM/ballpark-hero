@@ -48,7 +48,10 @@ export function seeded(seed, fn) {
   try { return fn(); } finally { Math.random = previous; Date.now = previousNow; }
 }
 
-/** Five clubs from each league whose row says yes, so the fleet is the football the rule applies to. */
+/** Five clubs from each of the four leagues whose rows said yes when the engine was measured, so the fleet is the
+ *  football the rule applies to. The rates are a goal and a foul, so a league whose row turns to yes later (the
+ *  Eredivisie did, in the review fix) is reviewed at the same rates and is not added here: adding clubs moves the
+ *  measured engine figures and the bands' numbers, which is a measure on a runner, not an edit. */
 export const FLEET_CLUBS = [
   'Everton', 'Arsenal', 'Brighton', 'Fulham', 'Newcastle',
   'Real Madrid', 'Sevilla', 'Villarreal', 'Getafe', 'Osasuna',

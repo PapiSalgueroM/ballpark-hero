@@ -25,6 +25,10 @@
       { "publisher": "bundesliga.com, the league's own site", "url": "https://www.bundesliga.com/de/bundesliga/news/regelanderungen-saison-2026-27-neue-regeln-38031", "published": "2026-07-02", "literal": "Der Video-Assistent darf im Spieljahr 2026/27 bei ungerechtfertigten Gelb-Roten Karten eingreifen", "says": "the rule changes for 2026-27" },
       { "publisher": "ran (Joyn), national broadcaster", "url": "https://ran.joyn.de/sports/fussball/bundesliga/bundesliga-zeitspiel-var-und-co-das-sind-die-neuen-regeln-zum-saisonstart-172290", "published": "2026-08-22", "literal": "In der neuen Saison darf sich der Video-Assistent (VAR) auch bei falsch gezeigten Gelb-Roten Karten einschalten", "says": "the new Bundesliga rules at the start of the season" }
     ] },
+    { "key": "league:eredivisie", "name": "Eredivisie", "verdict": "yes", "note": "Read by the review fixer on 2026-10-10. The federation's page speaks of Dutch professional football as a whole and does not name the Eredivisie, which is its top division; the other source names the Eredivisie season in its headline.", "sources": [
+      { "publisher": "FCUpdate, Dutch football news site", "url": "https://www.fcupdate.nl/voetbalnieuws/2026/07/nieuwe-spelregels-eredivisie-tijdrekken-var", "published": "2026-07-30", "literal": "De VAR mag ingrijpen bij een onterecht gegeven tweede gele kaart", "says": "its headline: the new laws that apply in the 2026/27 Eredivisie season; the line is the start of a longer sentence" },
+      { "publisher": "KNVB, the Dutch federation's own site", "url": "https://www.knvb.nl/node/72080", "published": "2026-08-07", "literal": "Ook krijgt de VAR op een aantal onderdelen extra bevoegdheden.", "says": "the law changes that come in with the start of the new season, and what they mean for Dutch professional football (het Nederlandse betaald voetbal)" }
+    ] },
     { "key": "ucl", "name": "Champions League", "verdict": "yes", "from": "group", "stageNote": "Both sources speak of the 2026-27 season of the European club cups as a whole. Neither splits it by stage, so the row covers every stage the engine plays.", "sources": [
       { "publisher": "Sports Mole", "url": "https://www.sportsmole.co.uk/football/psg/champions-league/feature/time-delay-punishments-new-var-measures-everything-you-need-to-know-about-ucl-rule-changes_604692.html", "published": "2026-09-08", "literal": "UEFA have announced that VAR will be used in new areas for the 2026-27 season, including in cases of mistaken identity.", "says": "the Champions League rule changes for the 2026-27 league phase" },
       { "publisher": "Tunisie Numerique", "url": "https://www.tunisienumerique.com/coupes-deurope-interclubs-luefa-va-reduire-lutilisation-du-var-des-la-saison-prochaine/", "published": "2026-08-01", "literal": "Dès la saison 2026/2027, l'UEFA a décidé d'imposer un cadre beaucoup plus stricte sur l'utilisation de l'assistance vidéo.", "says": "the European club cups (its headline names them, not the Champions League alone)" }
@@ -41,7 +45,7 @@
   ],
   "notRead": {
     "why": "Not read in this round: no source was looked for. unknown, no reviews.",
-    "leagues": ["eredivisie", "saudi", "mlsEast", "mlsWest", "primeira", "scottish", "superlig", "proleague", "austria", "greece", "denmark", "switzerland", "croatia", "brasileirao", "ligamx", "aleague", "serieb", "ligue2", "segunda", "russia"],
+    "leagues": ["saudi", "mlsEast", "mlsWest", "primeira", "scottish", "superlig", "proleague", "austria", "greece", "denmark", "switzerland", "croatia", "brasileirao", "ligamx", "aleague", "serieb", "ligue2", "segunda", "russia"],
     "cups": ["FA Cup", "Copa del Rey", "Coppa Italia", "DFB-Pokal", "Coupe de France", "KNVB Cup", "King's Cup", "U.S. Open Cup", "Taça de Portugal", "Scottish Cup", "Turkish Cup", "Belgian Cup", "ÖFB Cup", "Greek Cup", "Danish Cup", "Swiss Cup", "Croatian Cup", "Copa do Brasil", "Australia Cup", "Russian Cup"]
   }
 }
