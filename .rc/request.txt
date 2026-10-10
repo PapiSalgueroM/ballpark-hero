@@ -1,0 +1,14 @@
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs > /tmp/simEarlyReturnScope.log 2>&1; s=$?; tail -1 /tmp/simEarlyReturnScope.log | cut -c1-200; exit $s
+simStorageWrites: node scripts/simStorageWrites.mjs > /tmp/simStorageWrites.log 2>&1; s=$?; tail -1 /tmp/simStorageWrites.log | cut -c1-200; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs > /tmp/simHarnessAnchors.log 2>&1; s=$?; tail -1 /tmp/simHarnessAnchors.log | cut -c1-200; exit $s
+simNoRivalNames: node scripts/simNoRivalNames.mjs > /tmp/simNoRivalNames.log 2>&1; s=$?; tail -1 /tmp/simNoRivalNames.log | cut -c1-200; exit $s
+simSessionMarks: node scripts/simSessionMarks.mjs > /tmp/simSessionMarks.log 2>&1; s=$?; tail -1 /tmp/simSessionMarks.log | cut -c1-200; exit $s
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs > /tmp/simManagerMatchPlans.log 2>&1; s=$?; tail -1 /tmp/simManagerMatchPlans.log | cut -c1-200; exit $s
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs > /tmp/simLiveSimMotion.log 2>&1; s=$?; tail -1 /tmp/simLiveSimMotion.log | cut -c1-200; exit $s
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs > /tmp/simCmLeagueRules.log 2>&1; s=$?; tail -1 /tmp/simCmLeagueRules.log | cut -c1-200; exit $s
+simLiveScores: node scripts/simLiveScores.mjs > /tmp/simLiveScores.log 2>&1; s=$?; tail -1 /tmp/simLiveScores.log | cut -c1-200; exit $s
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs > /tmp/simNoInventedQuotes.log 2>&1; s=$?; tail -1 /tmp/simNoInventedQuotes.log | cut -c1-200; exit $s
+simTrustCopy: node scripts/simTrustCopy.mjs > /tmp/simTrustCopy.log 2>&1; s=$?; tail -1 /tmp/simTrustCopy.log | cut -c1-200; exit $s
+leaguefx: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs 2>&1 | tail -1 | cut -c1-330; exit ${PIPESTATUS[0]}
+daily: node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+dashes: a=$(git diff 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 HEAD | grep -cP '^\+.*[\x{2013}\x{2014}]'); echo "added lines with an en or em dash: $a"; [ "$a" -eq 0 ]
