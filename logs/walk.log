@@ -1,0 +1,105 @@
+     mlb-390-rm0: pressed "Enter the draft" at scrollY 1090; the page rests at scrollY 1090 of 11703; the play button is at y -555 (OFF SCREEN)
+ok   mlb-390-rm0: the hub shows one "Play the season" button (saw 1)
+ok   mlb-390-rm0: no week by week entry on a sport that is not bound
+ok   mlb-390-rm0: the hub does not say "week by week"
+ok   mlb-390-rm0: the hub fits the width (0px of overflow)
+ok   mlb-390-rm0: one press put a season on the save (1 season(s))
+     mlb-390-rm0: the season line reads {"year":2026,"team":"BOS","games":74,"result":"Missed October","pos":"CF"}
+ok   mlb-390-rm0: the save is byte equal after a reload (3254 characters)
+FAIL mlb-390-rm0: the season card is back after the reload, with Continue
+     mlb-390-rm0: after Continue the buttons on the page are: Back | Track stats | Tell the papers what happened Morale down, fans up | Let your agent handle it quietly Morale up | Use the anger in the batting cage Rating up, morale down | 📊 MY PLAYER OVR 74 The fans down at 28 | 💰 THE BANK $0.8M $0.8M a year, 5 years left | 📜 CAREER LOG 1 season .259, 9 HR
+ok   mlb-390-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-390-rm0: no page error
+     mlb-390-rm0: 3 request(s) to the live database were refused by the walk
+     mlb-390-rm1: pressed "Enter the draft" at scrollY 1090; the page rests at scrollY 1090 of 11703; the play button is at y -555 (OFF SCREEN)
+ok   mlb-390-rm1: the hub shows one "Play the season" button (saw 1)
+ok   mlb-390-rm1: no week by week entry on a sport that is not bound
+ok   mlb-390-rm1: the hub does not say "week by week"
+ok   mlb-390-rm1: the hub fits the width (0px of overflow)
+ok   mlb-390-rm1: one press put a season on the save (1 season(s))
+     mlb-390-rm1: the season line reads {"year":2026,"team":"MIA","games":83,"result":"Missed October","pos":"CF"}
+ok   mlb-390-rm1: the save is byte equal after a reload (3487 characters)
+FAIL mlb-390-rm1: the season card is back after the reload, with Continue
+     mlb-390-rm1: after Continue the buttons on the page are: Back | Track stats | Toss them a ball every inning Morale up, fans up | Buy the section pizza for a month Fans up, money out | Tune it all out Rating up, morale up | 📊 MY PLAYER OVR 72 The fans down at 28 | 💰 THE BANK $0.8M $0.8M a year, 5 years left | 📜 CAREER LOG 1 season .242, 4 HR, 22 RBI | �
+ok   mlb-390-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-390-rm1: no page error
+     mlb-390-rm1: 3 request(s) to the live database were refused by the walk
+     mlb-1280-rm0: pressed "Enter the draft" at scrollY 946; the page rests at scrollY 946 of 7824; the play button is at y -506 (OFF SCREEN)
+ok   mlb-1280-rm0: the hub shows one "Play the season" button (saw 1)
+ok   mlb-1280-rm0: no week by week entry on a sport that is not bound
+ok   mlb-1280-rm0: the hub does not say "week by week"
+ok   mlb-1280-rm0: the hub fits the width (0px of overflow)
+ok   mlb-1280-rm0: one press put a season on the save (1 season(s))
+     mlb-1280-rm0: the season line reads {"year":2026,"team":"HOU","games":157,"result":"Missed October","pos":"CF"}
+ok   mlb-1280-rm0: the save is byte equal after a reload (3460 characters)
+FAIL mlb-1280-rm0: the season card is back after the reload, with Continue
+     mlb-1280-rm0: after Continue the buttons on the page are: Back | Sign up to track your stats | Get right in the middle of it Room love, suspension | Grab your own guy and drag him out Peacemaker, still counts | Stand at the edge and do nothing Safe, remembered badly | 📊 MY PLAYER OVR 73 The fans down at 32 | 💰 THE BANK $0.8M $0.8M a year, 5 years left | 
+ok   mlb-1280-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-1280-rm0: no page error
+     mlb-1280-rm0: 3 request(s) to the live database were refused by the walk
+     mlb-1280-rm1: pressed "Enter the draft" at scrollY 946; the page rests at scrollY 946 of 7824; the play button is at y -506 (OFF SCREEN)
+ok   mlb-1280-rm1: the hub shows one "Play the season" button (saw 1)
+ok   mlb-1280-rm1: no week by week entry on a sport that is not bound
+ok   mlb-1280-rm1: the hub does not say "week by week"
+ok   mlb-1280-rm1: the hub fits the width (0px of overflow)
+ok   mlb-1280-rm1: one press put a season on the save (1 season(s))
+     mlb-1280-rm1: the season line reads {"year":2026,"team":"KCR","games":76,"result":"Missed October","pos":"CF"}
+ok   mlb-1280-rm1: the save is byte equal after a reload (3527 characters)
+FAIL mlb-1280-rm1: the season card is back after the reload, with Continue
+     mlb-1280-rm1: after Continue the buttons on the page are: Back | Sign up to track your stats | Go, play every game they give you Money and reps, no rest | Go for three weeks and leave Half and half | Stay home and do nothing for six weeks Full reset | 📊 MY PLAYER OVR 72 The fans down at 31 | 💰 THE BANK $0.8M $0.8M a year, 5 years left | 📜 CAREER LOG 1 s
+ok   mlb-1280-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-1280-rm1: no page error
+     mlb-1280-rm1: 3 request(s) to the live database were refused by the walk
+     nhl-390-rm0: pressed "Enter the draft" at scrollY 1145; the page rests at scrollY 1145 of 11186; the play button is at y -610 (OFF SCREEN)
+ok   nhl-390-rm0: the hub shows one "Play the season" button (saw 1)
+ok   nhl-390-rm0: no week by week entry on a sport that is not bound
+ok   nhl-390-rm0: the hub does not say "week by week"
+ok   nhl-390-rm0: the hub fits the width (0px of overflow)
+ok   nhl-390-rm0: one press put a season on the save (1 season(s))
+     nhl-390-rm0: the season line reads {"year":2026,"team":"LAK","games":80,"result":"Missed the playoffs","pos":"C"}
+ok   nhl-390-rm0: the save is byte equal after a reload (3619 characters)
+FAIL nhl-390-rm0: the season card is back after the reload, with Continue
+     nhl-390-rm0: after Continue the buttons on the page are: Back | Track stats | Say the line, take the truck Local legend | Bring your linemate in and split it Two man bit | Pass, keep the dignity No green screen | 📊 MY PLAYER OVR 74 C, age 19, 0 Cups | 💰 THE BANK $2.1M $3.5M a year, 2 years left | 📜 CAREER LOG 1 season 32 G, 31 A, 63 P | 🏆 TROPHY CASE 
+ok   nhl-390-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-390-rm0: no page error
+     nhl-390-rm0: 3 request(s) to the live database were refused by the walk
+     nhl-390-rm1: pressed "Enter the draft" at scrollY 1145; the page rests at scrollY 1145 of 11186; the play button is at y -610 (OFF SCREEN)
+ok   nhl-390-rm1: the hub shows one "Play the season" button (saw 1)
+ok   nhl-390-rm1: no week by week entry on a sport that is not bound
+ok   nhl-390-rm1: the hub does not say "week by week"
+ok   nhl-390-rm1: the hub fits the width (0px of overflow)
+ok   nhl-390-rm1: one press put a season on the save (1 season(s))
+     nhl-390-rm1: the season line reads {"year":2026,"team":"BOS","games":82,"result":"Lost in Round 1","pos":"C"}
+ok   nhl-390-rm1: the save is byte equal after a reload (3707 characters)
+FAIL nhl-390-rm1: the season card is back after the reload, with Continue
+     nhl-390-rm1: after Continue the buttons on the page are: Back | Track stats | Chirp away Viral | Keep it boring Respect | 📊 MY PLAYER OVR 78 C, age 19, 0 Cups | 💰 THE BANK $2.1M $3.5M a year, 2 years left | 📜 CAREER LOG 1 season 42 G, 43 A, 85 P | 🏆 TROPHY CASE Empty Nothing in it. Go and win something | 📰 NEWS 1 headline 🤝 The Handshake Line | 📱 I
+ok   nhl-390-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-390-rm1: no page error
+     nhl-390-rm1: 3 request(s) to the live database were refused by the walk
+     nhl-1280-rm0: pressed "Enter the draft" at scrollY 997; the page rests at scrollY 997 of 7519; the play button is at y -557 (OFF SCREEN)
+ok   nhl-1280-rm0: the hub shows one "Play the season" button (saw 1)
+ok   nhl-1280-rm0: no week by week entry on a sport that is not bound
+ok   nhl-1280-rm0: the hub does not say "week by week"
+ok   nhl-1280-rm0: the hub fits the width (0px of overflow)
+ok   nhl-1280-rm0: one press put a season on the save (1 season(s))
+     nhl-1280-rm0: the season line reads {"year":2026,"team":"CAR","games":82,"result":"Missed the playoffs","pos":"C"}
+ok   nhl-1280-rm0: the save is byte equal after a reload (3317 characters)
+FAIL nhl-1280-rm0: the season card is back after the reload, with Continue
+     nhl-1280-rm0: after Continue the buttons on the page are: Back | Sign up to track your stats | Live on his schedule Rating up, morale down | Ask to room with the other young guys Morale up, health down | Ask him to teach you the league Rating up, morale up | 📊 MY PLAYER OVR 79 C, age 20, 0 Cups | 💰 THE BANK $2.1M $3.5M a year, 2 years left | 📜 CAREER LO
+ok   nhl-1280-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-1280-rm0: no page error
+     nhl-1280-rm0: 3 request(s) to the live database were refused by the walk
+     nhl-1280-rm1: pressed "Enter the draft" at scrollY 997; the page rests at scrollY 997 of 7519; the play button is at y -557 (OFF SCREEN)
+ok   nhl-1280-rm1: the hub shows one "Play the season" button (saw 1)
+ok   nhl-1280-rm1: no week by week entry on a sport that is not bound
+ok   nhl-1280-rm1: the hub does not say "week by week"
+ok   nhl-1280-rm1: the hub fits the width (0px of overflow)
+ok   nhl-1280-rm1: one press put a season on the save (1 season(s))
+     nhl-1280-rm1: the season line reads {"year":2026,"team":"EDM","games":81,"result":"Missed the playoffs","pos":"C"}
+ok   nhl-1280-rm1: the save is byte equal after a reload (3670 characters)
+FAIL nhl-1280-rm1: the season card is back after the reload, with Continue
+     nhl-1280-rm1: after Continue the buttons on the page are: Back | Sign up to track your stats | Host it, play a hole with every group Full send | Host it, charity keeps everything All to charity | Skip it, send a signed jersey Summer off | 📊 MY PLAYER OVR 71 The fans down at 33 | 💰 THE BANK $0.9M $0.9M a year, 2 years left | 📜 CAREER LOG 1 season 8 G, 12
+ok   nhl-1280-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-1280-rm1: no page error
+     nhl-1280-rm1: 3 request(s) to the live database were refused by the walk
+walk1211: RED. 8 failed, 64 passed.
