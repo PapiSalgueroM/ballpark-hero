@@ -3,18 +3,18 @@
  *
  * In: scripts/data/cmVarRates.json (real football), cmVarCompetitions.json (who uses reviews in 2026-27),
  *     cmVarEngine.json (the engine, measured on a runner).
- * PROVISIONAL: the engine figures below are not measured yet. Nothing may ship on this file.
+ * Engine figures: 6780 league matches, runner result r1218-b1, head b6d1cf80.
  *
  * Goals ruled out after a review: lowest reading 29 in 380 (pieri-seriea-2017-18) = 0.076316 a match, highest 0.144737.
- *   The engine draws 2.27 goals a match a review can look at (no penalty, no direct free kick).
- *   goalReview = 0.076316 / 2.27 = 0.033619 a goal. overturn = 1 and penaltyReview = 0: no publisher
+ *   The engine draws 2.3895 goals a match a review can look at (no penalty, no direct free kick).
+ *   goalReview = 0.076316 / 2.3895 = 0.031938 a goal. overturn = 1 and penaltyReview = 0: no publisher
  *   counts reviews that end with the call standing by kind of call, so the game shows none.
  * Penalties awarded after a review: lowest reading 25 in 380 (espn-pl-2024-25) = 0.065789 a match, highest 0.130719.
- *   The engine awards 16 penalties a match per unit of rate (measured at 0.004 a foul).
- *   missedFoulReview = 0.065789 / 16 = 0.004112 a foul.
+ *   The engine awards 18.252 penalties a match per unit of rate (measured at 0.004 a foul).
+ *   missedFoulReview = 0.065789 / 18.252 = 0.003605 a foul.
  * The kick: the engine's own penalty law, SHOOTOUT_BASE_RATE 0.76 and SHOOTOUT_SAVE_SHARE 0.65.
  */
-export const CM_VAR_RATES = { goalReview: 0.033619, overturn: 1, penaltyReview: 0, missedFoulReview: 0.004112, penaltyScores: 0.76, penaltyOnTarget: 0.65 } as const;
+export const CM_VAR_RATES = { goalReview: 0.031938, overturn: 1, penaltyReview: 0, missedFoulReview: 0.003605, penaltyScores: 0.76, penaltyOnTarget: 0.65 } as const;
 
 /** Real football, a match: what the harness bands and the help text read. */
 export const CM_VAR_REAL = { goalsRuledOut: { low: 0.076316, high: 0.144737 }, penaltiesAwarded: { low: 0.065789, high: 0.130719 } } as const;

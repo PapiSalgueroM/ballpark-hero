@@ -11,11 +11,12 @@
  *   3. the competitions file names every competition the engine can play exactly once and none it cannot
  *      (the keys are read off REAL_LEAGUES and the rules table of the bundled engine), and a yes or a no
  *      stands on two publishers on two hosts;
- *   4. each receipt carries the hash of the ledger it vouches for, and what the generator writes is on disk;
+ *   4. each receipt carries the hash of the ledger it vouches for, what the generator writes is on disk (a hand
+ *      edit of the generated rates file fails here), and the engine figures the rates stand on were measured;
  *   5. no dash of the two banned kinds in any of the files.
  *
  * Controls, each of which changes the data in memory, proves it changed something, and must go red for its own
- * reason: CM_VAR_LEDGER_CONTROL=thin | wiki | figure | missing | extra | onesource | receipt.
+ * reason: CM_VAR_LEDGER_CONTROL=thin | wiki | figure | missing | extra | onesource | receipt | handedit.
  * A control that fires ends "FIRED" and exits 1. One that changes nothing or is not caught exits 3.
  */
 import './lib/offlineTransport.cjs';
@@ -25,7 +26,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { settle, stampedReceipts, LEDGERS } from './genCmVarRates.mjs';
+import { settle, stampedReceipts, generatedSource, LEDGERS } from './genCmVarRates.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
@@ -34,7 +35,7 @@ const CONTROL = process.env.CM_VAR_LEDGER_CONTROL || '';
 const EXPECT = {
   thin: /goalsRuledOut is modelled but THIN/, wiki: /is a wiki/, figure: /is not printed in its literals/,
   missing: /is not in the ledger/, extra: /the engine cannot play/, onesource: /stands on fewer than two publishers/,
-  receipt: /does not carry the hash/,
+  receipt: /does not carry the hash/, handedit: /is not what the generator writes \(a hand edit/,
 };
 if (CONTROL && !Object.hasOwn(EXPECT, CONTROL)) { console.log(`simCmVarLedger: unknown control ${CONTROL}`); process.exit(2); }
 
@@ -56,6 +57,9 @@ if (CONTROL === 'missing') { const n = comps.rows.length; comps.rows = comps.row
 if (CONTROL === 'extra') { comps.rows.push({ key: 'league:atlantis', name: 'Atlantis League', verdict: 'unknown', sources: [] }); changed = true; }
 if (CONTROL === 'onesource') { const row = comps.rows.find(r => r.key === 'league:seriea'); if (row && row.sources.length === 2) { row.sources.pop(); changed = true; } }
 if (CONTROL === 'receipt') { receiptTwist = s => `${s} `; changed = true; }
+/* handedit: a rate typed into the generated file. In memory: the comparison below reads the file through this twist. */
+let generatedTwist = s => s;
+if (CONTROL === 'handedit') { generatedTwist = s => s.replace(/goalReview: [0-9.]+/, 'goalReview: 0.16'); changed = generatedTwist(text('src/data/clubManagerVarRates.ts')) !== text('src/data/clubManagerVarRates.ts'); }
 if (CONTROL && !changed) { console.log(`simCmVarLedger control ${CONTROL}: ABORTED, the control changed nothing.`); process.exit(3); }
 
 /* 1. Every rates row is a reading somebody can open. */
@@ -132,6 +136,10 @@ for (const { ledger, receipt } of LEDGERS) {
   ok(JSON.parse(text(receipt)).sha256 === want, `${receipt} does not carry the hash of ${ledger}`);
 }
 for (const { file, body } of stampedReceipts()) ok(text(file) === body, `${file} is not what the generator writes`);
+ok(generatedTwist(text('src/data/clubManagerVarRates.ts')) === generatedSource(), 'src/data/clubManagerVarRates.ts is not what the generator writes (a hand edit, or a ledger changed without the generator)');
+const engineFigures = JSON.parse(text('scripts/data/cmVarEngine.json'));
+ok(engineFigures.provisional === false && /^[0-9a-f]{7,40}$/.test(engineFigures.head ?? '') && (engineFigures.runner ?? '').length > 3 && engineFigures.leagueMatches >= 3000,
+  'scripts/data/cmVarEngine.json is provisional, or does not say where it was measured, or stands on fewer than 3,000 league matches');
 
 /* 5. No dash of the two banned kinds, in the ledgers, the receipts or this harness's own messages. */
 const DASHES = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];

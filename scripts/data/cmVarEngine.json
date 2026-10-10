@@ -1,14 +1,25 @@
 {
-  "what": "Round 1218. What the Club Manager engine itself does a league match, measured by scripts/measureCmVarEngine.mjs on a GitHub runner. scripts/genCmVarRates.mjs divides the real per match figures of cmVarRates.json by these to get a rate per goal and per foul. A measurement, never an estimate: provisional true makes the generator refuse.",
-  "provisional": true,
+  "what": "Round 1218. What the Club Manager engine itself does a league match, measured by scripts/measureCmVarEngine.mjs on a GitHub runner. scripts/genCmVarRates.mjs divides the real per match figures of cmVarRates.json by these to get a rate per goal and per foul. A measurement, never an estimate: provisional true fails scripts/simCmVarLedger.mjs and the bands of scripts/simCmVar.mjs.",
+  "provisional": false,
   "fleet": "scripts/lib/cmVarFleet.mjs: 20 clubs (five from each league whose row says yes), one season a seed, league matches only",
-  "seeds": [],
-  "leagueMatches": 0,
-  "reviewableGoalsPerMatch": 2.27,
-  "foulsPerMatch": 0,
+  "seeds": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "leagueMatches": 6780,
+  "reviewableGoalsPerMatch": 2.3895,
+  "foulsPerMatch": 20.14,
   "probeRate": 0.004,
-  "awardsAtProbeRate": 0,
-  "awardsPerMatchPerUnitRate": 16.0,
-  "runner": "",
-  "head": ""
+  "awardsAtProbeRate": 495,
+  "awardsPerMatchPerUnitRate": 18.252,
+  "runner": "r1218-b1",
+  "head": "b6d1cf80"
 }
