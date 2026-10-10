@@ -1,5 +1,6 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
+import { REAL_PREMIER_FIXTURE_KEY, canBindRealPremierFixtures, realPremierFixturePairs, realPremierFixtureCoverage } from '@/lib/clubManagerFixtures';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
    briefs instead of a bespoke second offer engine. */
@@ -2189,6 +2190,9 @@ export interface CareerState {
    *  which keeps the old list for the season it is in so nothing flips mid
    *  season. */
   balancedFixtures?: true;
+  /** Round 1184: verified first-season opponent order and venues. Old saves
+   *  have no key and keep their generated schedule for that season. */
+  realLeagueFixtures?: typeof REAL_PREMIER_FIXTURE_KEY;
   /** Round 165: the league's golden boot race, AI entries only. */
   scorerRace?: RaceScorer[];
   /** Round 168: the live mid-season approach, if a club is courting me. */
@@ -10801,6 +10805,16 @@ export function roundPairs(clubs: string[], round: number, balanced: boolean): [
   return pairs;
 }
 
+/** One schedule for the fixture card, played match and neutral league rounds. */
+export function careerRoundPairs(state: CareerState, round: number, clubs = state.leagueClubs, leagueId = careerLeagueOf(state).id): [string, string][] {
+  return realPremierFixturePairs(state, leagueId, clubs, round)
+    ?? roundPairs(clubs, round, !!state.balancedFixtures);
+}
+
+export function careerFixtureCoverage(state: CareerState) {
+  return realPremierFixtureCoverage(state, careerLeagueOf(state).id, state.leagueClubs);
+}
+
 /**
  * Season calendar: every league round with the domestic cup, UCL group
  * matchdays, UCL knockouts and the January window interleaved between them.
@@ -11029,7 +11043,7 @@ function syncWorld(state: CareerState, myPlayed: number): void {
     let guard = 0;
     while (w.round < target && guard < 200) {
       guard += 1;
-      for (const [h, a] of roundPairs(lg.clubs, w.round, !!state.balancedFixtures)) {
+      for (const [h, a] of careerRoundPairs(state, w.round, lg.clubs, lg.id)) {
         const [hg, ag] = simAiMatch(state, h, a);
         applyResult(w.table, h, a, hg, ag);
         notePair(state, lg.id, h, a, hg, ag);
@@ -15404,7 +15418,7 @@ export interface MyFixture {
 export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null {
   if (!entryInvolvesMe(state, entry)) return null;
   if (entry.type === 'league') {
-    const pairs = roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);
+    const pairs = careerRoundPairs(state, entry.round);
     const mine = pairs.find(([h, a]) => h === state.clubName || a === state.clubName);
     if (!mine) return null;
     const home = mine[0] === state.clubName;
@@ -16028,7 +16042,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   let confDelta = won ? 4 : drawn ? 0.5 : -4.5;
 
   if (fx.competition === 'league') {
-    const pairs = roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);
+    const pairs = careerRoundPairs(state, entry.round);
     // Round 165: the race board exists before this round's goals land on it.
     ensureScorerRace(state);
     // Round 462: every result of the round goes into the pair ledger too.
@@ -17433,6 +17447,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   /* Round 964: the edited world rides on the save the way a promoted one
      does, so the first summer resolves on it and a reload registers it. */
   if (worldEdit) state.leagueOverrides = worldEdit;
+  if (!world && !worldEdit && !custom && canBindRealPremierFixtures(state, league.id, leagueClubs)) {
+    state.realLeagueFixtures = REAL_PREMIER_FIXTURE_KEY;
+  }
   if (custom) {
     state.customClub = custom;
     /* Round 640: its founders were priced by the market rule above, so a load
@@ -17607,7 +17624,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       // Round 72: on my bye week (odd-sized leagues) the rest of the round
       // still gets played, or the table comes up short for everyone else.
       if (entry.type === 'league') {
-        const pairs = roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);
+        const pairs = careerRoundPairs(state, entry.round);
         ensureScorerRace(state);
         const myLeagueId = careerLeagueOf(state).id;
         for (const [h, a] of pairs) {
@@ -19751,6 +19768,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // was registered above, so a reload registers the same world back.
     leagueOverrides: pr.overrides ?? undefined,
   };
+  delete state.realLeagueFixtures;
   /* Round 154: the deep copy above carried the old spec either way, so make
      the outcome explicit: staying keeps the re-measured spec, moving drops
      the club you built. */

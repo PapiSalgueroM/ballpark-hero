@@ -1,5 +1,5 @@
-/* Club Manager: the league fixture list alternates venues the way a real one
-   does, and a save from before the change keeps the list it started with.
+/* Club Manager: the generated fixture list alternates venues as promised.
+   A save from before the change keeps the list it started with.
 
    Round 617. roundPairs in src/lib/clubManager.ts builds each league round
    with the circle method and used to swap home and away on (r + i) % 2,
@@ -15,7 +15,7 @@
    roundPairs(clubs, round, balanced) swaps on the round's parity alone when
    balanced is true and on (r + i) when it is false, byte for byte the old
    output. CareerState carries balancedFixtures?: true, startCareer and
-   startNextSeason set it, every caller passes !!state.balancedFixtures, and
+   startNextSeason set it, the resolver passes !!state.balancedFixtures, and
    a save without the field keeps its old venues for the season it is in.
 
    Sections:
@@ -46,14 +46,14 @@
         world really wrote) holds exactly the balanced pairs for the rounds
         it has played, and the replayed list has no club at one venue three
         rounds running.
-     5) words match code, on the comment stripped source: roundPairs is
-        exported with (clubs, round, balanced), one branch swaps on the round
-        alone with the flag on its line or the six above, one swaps on
-        (r + i), every caller passes three arguments with the save's
-        balancedFixtures as the third, the interface declares the field, both
-        season starts set it, the file has no dash, and no other file under src
-        carries its own copy of the venue swap (the detector is first held to
-        the old calendar card's body, so a clean result is a real one).
+     5) words match code, on the comment stripped source: roundPairs keeps
+        both parity branches and one generated fallback in careerRoundPairs
+        reads the saved balancedFixtures flag. Four named engine paths and
+        CalendarCard use that resolver. The interface, both season starts,
+        cross-file scan floor and detector for private venue swaps stay checked.
+     6) a natural real-eligible start binds its key and opening source pairs.
+        simCmRealFixtures owns the real list's complete 380/760 proof. Sections
+        3 and 4 explicitly remove only that key for their generated contract.
 
    What a same venue run is here. It is measured over rounds. In an odd
    league a club's bye round ends the run: the balanced rule then gives at
@@ -82,6 +82,12 @@
                                 Section 3 must go red.
      FIXTURE_CONTROL=flipold    the legacy branch swaps on the round alone.
                                 Sections 2 and 3 must go red.
+     FIXTURE_CONTROL=nobinding checks natural saved-version binding.
+     FIXTURE_CONTROL=fallbackflag/fallbackcount check the one saved-flag fallback.
+     FIXTURE_CONTROL=enginebypass checks all four named engine consumers.
+     FIXTURE_CONTROL=calendarbypass checks the fifth consumer and scan floor.
+     New controls also require exact source assertion identities, all unrelated
+     sections green and no caught runtime exception.
 
    Nothing here asserts a max of a noisy quantity: the schedule is a pure
    function of (clubs, round, balanced), so "at most 2" is a structural fact.
@@ -107,12 +113,15 @@ const norm = p => path.resolve(p).replaceAll('\\', '/').toLowerCase();
 let failures = 0;
 let section = '';
 const redSections = new Set();
+const sourceFaults = new Set();
+const thrownSections = new Set();
+const sourceFail = (id, message) => { sourceFaults.add(id); fail(message); };
 const fail = m => { failures += 1; redSections.add(section); console.error('  FAIL: ' + m); };
 const run = (id, title, body) => {
   section = id;
   console.log(`${id}) ${title}`);
   let note = '';
-  try { note = body() || ''; } catch (e) { fail(`threw: ${e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e}`); }
+  try { note = body() || ''; } catch (e) { thrownSections.add(id); fail(`threw: ${e && e.stack ? e.stack.split('\n').slice(0, 3).join(' | ') : e}`); }
   if (note) console.log(`   ${note}`);
 };
 /* Many faults of one kind are one story: print a few, count the rest. */
@@ -175,6 +184,34 @@ const CONTROLS = {
     red: ['3'], region: 'startCareer', what: 'startCareer no longer sets balancedFixtures',
     rewrites: [[new RegExp(SETS_FLAG_LINE.source, 'm'), '']],
   },
+  nobinding: {
+    red: ['6'], sourceRed: [], region: 'startCareer',
+    what: 'a natural eligible start never stores its real fixture version',
+    rewrites: [[/state\.realLeagueFixtures = REAL_PREMIER_FIXTURE_KEY;/, '']],
+  },
+  fallbackflag: {
+    red: ['3', '5'], sourceRed: ['wrapper-fallback'], region: 'careerRoundPairs',
+    what: 'the generated fallback ignores the saved balancedFixtures flag',
+    rewrites: [[/!!state\.balancedFixtures/, 'true']],
+  },
+  fallbackcount: {
+    red: ['5'], sourceRed: ['wrapper-fallback'], region: 'careerRoundPairs',
+    what: 'a second generated pairing call is added inside the resolver',
+    rewrites: [[/return realPremierFixturePairs/, 'roundPairs(clubs, round, !!state.balancedFixtures);\n  return realPremierFixturePairs']],
+  },
+  enginebypass: {
+    red: ['5', '6'], sourceRed: ['consumer-syncWorld', 'consumer-fixtureFor', 'consumer-playMyMatch', 'consumer-playNextEntry', 'engine-direct-fallback'],
+    what: 'all four engine fixture consumers bypass the saved resolver',
+    regionRewrites: [
+      ['syncWorld', /careerRoundPairs\(state, w\.round, lg\.clubs, lg\.id\)/, 'roundPairs(lg.clubs, w.round, !!state.balancedFixtures)'],
+      ...['fixtureFor', 'playMyMatch', 'playNextEntry'].map(name => [name, /careerRoundPairs\(state, entry\.round\)/, 'roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures)']),
+    ],
+  },
+  calendarbypass: {
+    red: ['5'], sourceRed: ['calendar-resolver', 'external-direct-fallback'], file: 'calendar', region: 'leagueOpponentFor',
+    what: 'the calendar card bypasses the saved resolver',
+    rewrites: [[/careerRoundPairs\(career, round\)/, 'roundPairs(career.leagueClubs, round, !!career.balancedFixtures)']],
+  },
 };
 const CONTROL = process.env.FIXTURE_CONTROL || '';
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -182,18 +219,38 @@ if (CONTROL && !CONTROLS[CONTROL]) {
   process.exit(1);
 }
 const rawEngine = lf(fs.readFileSync(ENGINE_PATH, 'utf8'));
+const CALENDAR_PATH = path.join(ROOT, 'src/components/club-manager/CalendarCard.tsx');
+const rawCalendar = lf(fs.readFileSync(CALENDAR_PATH, 'utf8'));
 let engineText = rawEngine;
+let calendarText = rawCalendar;
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
+  const original = c.file === 'calendar' ? rawCalendar : rawEngine;
   let applied = null;
-  for (const [re, to] of c.rewrites) {
-    const { out, hits } = rewriteOutsideComments(rawEngine, c.region, re, to);
-    if (hits) { applied = { out, hits, re }; break; }
+  if (c.regionRewrites) {
+    let out = original, hits = 0;
+    for (const [region, re, to] of c.regionRewrites) {
+      const rewritten = rewriteOutsideComments(out, region, re, to);
+      if (rewritten.hits !== 1 || rewritten.out === out) {
+        console.error('control cannot run: ' + CONTROL + ' expected one effective rewrite in ' + region + ', found ' + rewritten.hits);
+        process.exit(1);
+      }
+      out = rewritten.out; hits += rewritten.hits;
+    }
+    applied = { out, hits, re: 'all named consumer calls' };
+  } else {
+    for (const [re, to] of c.rewrites) {
+      const { out, hits } = rewriteOutsideComments(original, c.region, re, to);
+      if (hits) { applied = { out, hits, re }; break; }
+    }
   }
-  if (!applied) { console.error(`control cannot run: ${ENGINE_REL} has none of ${c.rewrites.map(([re]) => re.source).join(' or ')} in ${c.region}, so FIXTURE_CONTROL=${CONTROL} has nothing to rewrite`); process.exit(1); }
-  if (applied.out === rawEngine) { console.error(`control cannot run: FIXTURE_CONTROL=${CONTROL} found ${applied.re.source} ${applied.hits} time(s) but changed nothing`); process.exit(1); }
-  engineText = applied.out;
-  console.log(`NEGATIVE CONTROL ON (${CONTROL}): ${c.what} (rewrote ${applied.re.source}, ${applied.hits} hit${applied.hits === 1 ? '' : 's'}). Section(s) ${c.red.join(', ')} must go red.`);
+  if (!applied || applied.out === original) {
+    console.error('control cannot run: ' + CONTROL + ' has no effective source rewrite');
+    process.exit(1);
+  }
+  if (c.file === 'calendar') calendarText = applied.out;
+  else engineText = applied.out;
+  console.log('NEGATIVE CONTROL ON (' + CONTROL + '): ' + c.what + ' (rewrote ' + applied.re + ', ' + applied.hits + ' hits). Sections ' + c.red.join(', ') + ' must go red.');
 }
 
 /* ---- bundle the engine, with the control's copy swapped in for the real file ---- */
@@ -388,11 +445,38 @@ run('2', 'The old rule is untouched: roundPairs(clubs, r, false) equals the pre 
   return `${compared} rounds across ${SIZES.length} sizes compared to the verbatim pre 617 function, ${differed} differ; the oracle's worst run is n minus 1 at every size`;
 });
 
+/* Real schedules have an exact-source contract, not the generated run-of-two rule.
+   simCmRealFixtures owns all 380 fixtures and 760 club appearances. */
+run('6', 'Natural real eligibility binds the saved wrapper; opening fixtures match the retained receipt', () => {
+  const receipt = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/clubManagerPremierFixtures2026.receipt.json'), 'utf8'));
+  const official = receipt.sources.find(source => source.role === 'official');
+  const pairs = official?.rows.filter(row => row.round === 1 && !row.duplicate).map(row => [row.home, row.away]);
+  if (!pairs || pairs.length !== 10) { fail('the retained official opening round does not have 10 unique fixtures'); return ''; }
+  const state = withStream(118401, () => startCareer('Everton'));
+  if (state.realLeagueFixtures !== 'premier-2026-27-v1') fail('a natural unedited 2026/27 Premier League career did not bind the real key');
+  if (typeof cm.careerRoundPairs !== 'function' || typeof cm.careerFixtureCoverage !== 'function') { fail('the saved resolver or coverage wrapper is not exported'); return ''; }
+  if (cm.careerFixtureCoverage(state)?.key !== 'premier-2026-27-v1') fail('coverage did not describe the naturally bound fixture key');
+  const actual = cm.careerRoundPairs(state, 0).map(pair => pair.join('|')).sort();
+  const expected = pairs.map(pair => pair.join('|')).sort();
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) fail('the wrapper opening round differs from the retained source receipt');
+  const entry = state.calendar.find(row => row.type === 'league' && row.round === 0);
+  const openingClubs = [...new Set(pairs.flat())];
+  if (openingClubs.length !== 20) fail('the retained opening round does not cover all 20 clubs');
+  for (const club of openingClubs) {
+    const fixture = entry && fixtureFor({ ...state, clubName: club }, entry);
+    const mine = pairs.find(pair => pair.includes(club));
+    if (!fixture || !mine || fixture.opponent !== (mine[0] === club ? mine[1] : mine[0]) || fixture.home !== (mine[0] === club)) fail('fixtureFor bypassed the saved real opening opponent or venue for ' + club);
+  }
+  return 'real opening 10 pairs and all 20 club opponent/venue readings agree; full 380/760 proof belongs to simCmRealFixtures';
+});
+
 /* ---------- 3. Through the engine ---------- */
 run('3', 'Through the engine: a new career carries the field and plays the balanced list, the same save without it plays the old one, and the rollover sets it', () => {
   let flagged = 0, balancedOk = 0, oldOk = 0, rolled = 0, worstNew = 0, worstOld = 0;
   for (const [i, { n, league, club }] of PICKS.entries()) {
     const state = withStream(300 + i, () => startCareer(club));
+    // Generated schedules keep their original contract; real order has separate exact-source proof.
+    delete state.realLeagueFixtures;
     const where = `${club} (${league.id}, ${n} clubs)`;
     if (state.balancedFixtures === true) flagged += 1;
     else fail(`${where}: a new career's balancedFixtures is ${JSON.stringify(state.balancedFixtures)}, not true`);
@@ -453,6 +537,7 @@ run('3', 'Through the engine: a new career carries the field and plays the balan
 run('4', 'The AI world plays the same list: every world league\'s pair ledger is the balanced pairs, and no club sits at one venue three rounds running', () => {
   if (!roundPairs) { fail(NO_ROUND_PAIRS); return ''; }
   let s = withStream(700, () => startCareer(WORLD_CLUB));
+  delete s.realLeagueFixtures;
   const myPlayed = st => st.calendar.slice(0, st.week).filter(e => e.type === 'league').length;
   withStream(701, () => {
     let guard = 0;
@@ -507,7 +592,7 @@ run('4', 'The AI world plays the same list: every world league\'s pair ledger is
 });
 
 /* ---------- 5. Words match code ---------- */
-run('5', 'Words match code: the balanced branch swaps on the round alone, the legacy branch on (r + i), every caller passes the flag, both season starts set it, no dash', () => {
+run('5', 'Words match code: unchanged parity, one saved-flag fallback, four engine resolver consumers and CalendarCard, both season starts set the flag, no dash', () => {
   const src = engineText;
   const blank = blankComments(src);
   const region = functionRegion(blank, 'roundPairs');
@@ -538,58 +623,14 @@ run('5', 'Words match code: the balanced branch swaps on the round alone, the le
     shape = 'neither shape found';
   }
 
-  /* Every caller passes three arguments, the third reading the save's field. */
-  const calls = [];
-  const callRe = /\broundPairs\(/g;
-  let m;
-  while ((m = callRe.exec(blank))) {
-    if (m.index >= region.start && m.index < braceAt) continue;
-    const open = m.index + m[0].length - 1;
-    let depth = 0, j = open;
-    for (; j < blank.length; j++) {
-      if (blank[j] === '(') depth += 1;
-      else if (blank[j] === ')') { depth -= 1; if (depth === 0) break; }
-    }
-    const args = [];
-    let d = 0, cur = '';
-    for (const ch of blank.slice(open + 1, j)) {
-      if (ch === '(' || ch === '[' || ch === '{') d += 1;
-      if (ch === ')' || ch === ']' || ch === '}') d -= 1;
-      if (ch === ',' && d === 0) { args.push(cur.trim()); cur = ''; } else cur += ch;
-    }
-    if (cur.trim()) args.push(cur.trim());
-    calls.push({ line: blank.slice(0, m.index).split('\n').length, args });
-  }
-  for (const c of calls) {
-    if (c.args.length !== 3) fail(`the roundPairs call at line ${c.line} passes ${c.args.length} argument(s): (${c.args.join(', ')})`);
-    else if (!/\bbalancedFixtures\b/.test(c.args[2])) fail(`the roundPairs call at line ${c.line} passes "${c.args[2]}" as the flag, not the save's balancedFixtures`);
-  }
-  if (calls.length < 4) fail(`${calls.length} roundPairs caller(s) found, the contract names four`);
-
-  /* ROUND 626: EVERY CALLER ANYWHERE IN src, NOT JUST THE ONES IN THE ENGINE.
-     Everything above this reads only clubManager.ts, because `src` is set to the
-     engine text at the top of this section. Round 617 created a FIFTH caller
-     outside it, in src/components/club-manager/CalendarCard.tsx, replacing that
-     card's own private copy of the circle method. Nothing here could see it, and
-     the floor of four was satisfied by the engine's four on its own.
-
-     Reproduced on this branch before the fix was written: hardcoding the card's
-     third argument to true left this harness printing PASS and reporting
-     "4 callers", under a heading that reads "every caller passes the flag".
-     The other cross file check in this section cannot cover it either, because
-     a card calling roundPairs with the wrong flag carries no copy of the venue
-     swap to find.
-
-     What it would cost. A save from before Round 617 has no balancedFixtures
-     field, so a card with the flag hardcoded would list the balanced opponent
-     and venue while the engine plays the legacy one, and the next up card would
-     name a different opponent, at a different ground, from the match the player
-     actually gets. That is exactly the disagreement Round 617 exists to end. */
-  const argsOfCallsIn = (text) => {
+  /* The unchanged generated function has one production fallback caller.
+     Engine paths and screens share the saved resolver for real and old saves. */
+  const argsOfCallsIn = (text, name) => {
     const out = [];
-    const re = /\broundPairs\(/g;
+    const re = new RegExp('\\b' + name + '\\(', 'g');
     let mm;
     while ((mm = re.exec(text))) {
+      if (/\bfunction\s+$/.test(text.slice(Math.max(0, mm.index - 24), mm.index))) continue;
       const open = mm.index + mm[0].length - 1;
       let depth = 0, j = open;
       for (; j < text.length; j++) {
@@ -604,39 +645,57 @@ run('5', 'Words match code: the balanced branch swaps on the round alone, the le
         if (ch === ',' && d === 0) { args.push(cur.trim()); cur = ''; } else cur += ch;
       }
       if (cur.trim()) args.push(cur.trim());
-      out.push({ line: text.slice(0, mm.index).split('\n').length, args });
+      out.push({ line: text.slice(0, mm.index).split('\n').length, args, offset: mm.index });
     }
     return out;
   };
-
+  const resolver = functionRegion(blank, 'careerRoundPairs');
+  const resolverBody = resolver ? blank.slice(resolver.start, resolver.end) : '';
+  const generatedCalls = argsOfCallsIn(blank, 'roundPairs');
+  const fallback = argsOfCallsIn(resolverBody, 'roundPairs');
+  const verified = argsOfCallsIn(resolverBody, 'realPremierFixturePairs');
+  if (fallback.length !== 1 || JSON.stringify(fallback[0]?.args) !== JSON.stringify(['clubs', 'round', '!!state.balancedFixtures'])
+    || verified.length !== 1 || JSON.stringify(verified[0]?.args) !== JSON.stringify(['state', 'leagueId', 'clubs', 'round'])
+    || !/return\s+realPremierFixturePairs\([\s\S]*?\)\s*\?\?\s*roundPairs\(/.test(resolverBody)) {
+    sourceFail('wrapper-fallback', 'careerRoundPairs must have one verified lookup and exactly one generated fallback reading the saved balancedFixtures flag');
+  }
+  if (generatedCalls.some(call => !resolver || call.offset < resolver.start || call.offset >= resolver.end)) {
+    sourceFail('engine-direct-fallback', 'an engine consumer calls roundPairs outside the saved resolver fallback');
+  }
+  const consumers = [
+    ['syncWorld', ['state', 'w.round', 'lg.clubs', 'lg.id']],
+    ...['fixtureFor', 'playMyMatch', 'playNextEntry'].map(name => [name, ['state', 'entry.round']]),
+  ];
+  for (const [name, expectedArgs] of consumers) {
+    const rg = functionRegion(blank, name);
+    const found = rg ? argsOfCallsIn(blank.slice(rg.start, rg.end), 'careerRoundPairs') : [];
+    if (found.length !== 1 || JSON.stringify(found[0]?.args) !== JSON.stringify(expectedArgs)) {
+      sourceFail('consumer-' + name, name + ' must ask careerRoundPairs once with (' + expectedArgs.join(', ') + ')');
+    }
+  }
+  const calls = argsOfCallsIn(blank, 'careerRoundPairs');
+  if (calls.length < 4) fail(calls.length + ' saved resolver callers found in the engine, the contract names four');
   const outsideCalls = [];
+  const outsideGenerated = [];
   const walkCallers = dir => {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
       const p = path.join(dir, e.name);
       if (e.isDirectory()) { walkCallers(p); continue; }
-      if (!/\.(ts|tsx)$/.test(e.name)) continue;
-      if (path.resolve(p) === path.resolve(ENGINE_PATH)) continue;
-      const text = blankComments(fs.readFileSync(p, 'utf8'));
-      for (const c of argsOfCallsIn(text)) {
-        outsideCalls.push({ file: path.relative(ROOT, p).split(path.sep).join('/'), line: c.line, args: c.args });
-      }
+      if (!/\.(ts|tsx)$/.test(e.name) || norm(p) === norm(ENGINE_PATH)) continue;
+      const text = blankComments(norm(p) === norm(CALENDAR_PATH) ? calendarText : fs.readFileSync(p, 'utf8'));
+      const file = path.relative(ROOT, p).split(path.sep).join('/');
+      for (const c of argsOfCallsIn(text, 'careerRoundPairs')) outsideCalls.push({ file, ...c });
+      for (const c of argsOfCallsIn(text, 'roundPairs')) outsideGenerated.push({ file, ...c });
     }
   };
   walkCallers(path.join(ROOT, 'src'));
-
-  for (const c of outsideCalls) {
-    if (c.args.length !== 3) {
-      fail(`the roundPairs call in ${c.file} line ${c.line} passes ${c.args.length} argument(s), not three: (${c.args.join(', ')})`);
-    } else if (!/\bbalancedFixtures\b/.test(c.args[2])) {
-      fail(`the roundPairs call in ${c.file} line ${c.line} passes "${c.args[2]}" as the balanced flag instead of reading the save's balancedFixtures, so that screen can disagree with the engine about who plays where`);
-    }
+  const cardCalls = outsideCalls.filter(call => call.file === 'src/components/club-manager/CalendarCard.tsx');
+  if (cardCalls.length !== 1 || JSON.stringify(cardCalls[0]?.args) !== JSON.stringify(['career', 'round'])) {
+    sourceFail('calendar-resolver', 'CalendarCard must ask careerRoundPairs(career, round) once');
   }
-  /* A floor on the SCAN itself, so a walk that silently finds nothing fails
-     here rather than reporting every caller as correct. Round 617 created one
-     caller outside the engine and it is still there. */
-  if (outsideCalls.length < 1) {
-    fail(`the cross file caller scan found no roundPairs callers outside the engine, and Round 617 created one in CalendarCard.tsx, so the scan itself is broken`);
-  }
+  if (outsideGenerated.length) sourceFail('external-direct-fallback', outsideGenerated.length + ' roundPairs calls outside the engine bypass the saved resolver');
+  /* Keep the cross-file scan floor after removing direct generated callers. */
+  if (outsideCalls.length < 1) fail('the cross-file scan found no saved resolver caller outside the engine; CalendarCard is the fifth consumer');
 
   if (!/^\s*balancedFixtures\?:\s*true;/m.test(blank)) fail('CareerState does not declare balancedFixtures?: true');
   for (const name of ['startCareer', 'startNextSeason']) {
@@ -664,7 +723,7 @@ run('5', 'Words match code: the balanced branch swaps on the round alone, the le
   };
   walk(path.join(ROOT, 'src'));
   for (const c of copies) fail(`${c} carries its own copy of the circle method's venue swap; it must read roundPairs from the engine`);
-  return `roundPairs ${/^export /.test(head) ? 'exported' : 'not exported'}; ${shape}; ${calls.length} callers, third arguments: ${calls.map(c => c.args[2] ?? '(none)').join(' / ')}; interface, startCareer and startNextSeason checked; ${DASH_RE.test(src) ? 'a dash found' : 'no dash'}; ${copies.length} other copies of the venue swap under src`;
+  return `roundPairs ${/^export /.test(head) ? 'exported' : 'not exported'}; ${shape}; one generated fallback; ${calls.length} engine resolver calls and ${outsideCalls.length} external resolver calls; interface, startCareer and startNextSeason checked; ${DASH_RE.test(src) ? 'a dash found' : 'no dash'}; ${copies.length} other copies of the venue swap under src`;
 });
 
 console.log('');
@@ -672,6 +731,15 @@ if (CONTROL) {
   const want = CONTROLS[CONTROL].red;
   const stayedGreen = want.filter(s => !redSections.has(s));
   const extra = [...redSections].filter(s => !want.includes(s));
+  if (CONTROLS[CONTROL].sourceRed) {
+    const wantedSource = CONTROLS[CONTROL].sourceRed;
+    const missingSource = wantedSource.filter(id => !sourceFaults.has(id));
+    const extraSource = [...sourceFaults].filter(id => !wantedSource.includes(id));
+    if (missingSource.length || extraSource.length || extra.length || thrownSections.size) {
+      console.error('simFixtureBalance: CONTROL DID NOT FIRE EXACTLY (' + CONTROL + '); missing source assertions ' + (missingSource.join(', ') || 'none') + ', extra source assertions ' + (extraSource.join(', ') || 'none') + ', extra red sections ' + (extra.join(', ') || 'none') + ', thrown sections ' + ([...thrownSections].join(', ') || 'none'));
+      process.exit(1);
+    }
+  }
   if (!stayedGreen.length) {
     console.log(`simFixtureBalance: CONTROL FIRED (${CONTROL}). Section(s) ${want.join(', ')} went red as they must${extra.length ? `; ${extra.join(', ')} went red as well` : ''}.`);
     process.exit(0);
@@ -683,4 +751,4 @@ if (failures > 0) {
   console.error(`simFixtureBalance: ${failures} failure${failures === 1 ? '' : 's'} in section(s) ${[...redSections].join(', ')}`);
   process.exit(1);
 }
-console.log('simFixtureBalance: PASS. Every club alternates venues with a longest run of 2 at every league size, a save without the field keeps its old list, the rollover converges it, the AI world plays the same list, and the words match the code.');
+console.log('simFixtureBalance: PASS. Generated schedules keep the run-of-two contract at every league size, old saves keep their generated list, rollovers converge the flag, the AI world shares that list, and all five consumers use the saved resolver. Natural real eligibility is bound; complete real-order proof belongs to simCmRealFixtures.');

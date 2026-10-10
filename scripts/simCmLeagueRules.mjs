@@ -552,6 +552,10 @@ async function digestSaves(saves, mod) {
     if (sv.eraId !== 'now') await ensureEra(mod, sv.eraId);
     Math.random = seeded(hashKey(`cm-league-rules|${sv.key}`));
     let s = cm.startCareer(sv.club, sv.eraId);
+    /* Round1184: these committed hashes describe generated fixture saves.
+       Keep that exact context; the naturally bound real first season is
+       measured separately by simCmRealFixtures against both source ledgers. */
+    delete s.realLeagueFixtures;
     const comp = { start: hash(s) };
     let played = playSeason(cm, s);
     if (played.stuck) fail(`${sv.key}: season one never ended`);

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CalendarDays } from 'lucide-react';
-import { careerLeagueOf, roundPairs } from '@/lib/clubManager';
+import { careerLeagueOf, careerRoundPairs } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry } from '@/lib/clubManager';
 
 /** Round 73: the season at a glance. Recent results plus what's coming. */
@@ -113,7 +113,7 @@ function leagueOpponentFor(career: CareerState, round: number): string {
      rule it plays, so there is one list and this card cannot disagree with
      it. The bye ghost never comes out in a pair, so a round without my club
      is a bye week. */
-  for (const [h, a] of roundPairs(career.leagueClubs, round, !!career.balancedFixtures)) {
+  for (const [h, a] of careerRoundPairs(career, round)) {
     if (h === career.clubName) return `${a} (H)`;
     if (a === career.clubName) return `${h} (A)`;
   }

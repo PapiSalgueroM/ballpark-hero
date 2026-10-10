@@ -338,6 +338,8 @@ const PER_CLUB = 7;
 const fixtures = [];
 for (const club of CLUBS) {
   let base = withSeed(4100 + club.length, () => startCareer(club));
+  // Keep the measured generated fixture baseline; natural real openers are checked separately below.
+  delete base.realLeagueFixtures;
   let got = 0;
   let guard = 0;
   while (got < PER_CLUB && guard < 40) {
@@ -993,6 +995,7 @@ begin(10, 'A man in my squad never turns out for the club he left, real or gener
   let namedElevens = 0;
   let previews = 0;
   let noRoster = 0;
+  let realOpenersChecked = 0;
   let idx = 0;
   const cmPlayerOf = (pl, n) => ({
     id: `r742-signed-${n}`, name: pl.n, position: pl.p, rating: pl.r, age: pl.a,
@@ -1004,10 +1007,24 @@ begin(10, 'A man in my squad never turns out for the club he left, real or gener
     .filter(p => p.p !== 'GK' && want(p))
     .sort((a, b) => b.r - a.r || a.n.localeCompare(b.n))[0] ?? null;
   const namesIn = (xs, key) => (xs ?? []).map(x => x[key]);
-  for (const f of fixtures) {
+  const sourceRows = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/clubManagerPremierFixtures2026.receipt.json'), 'utf8')).sources.find(source => source.role === 'official').rows;
+  const realFixtures = [];
+  for (const [i, club] of ['Everton', 'Newcastle'].entries()) {
+    const seed = 118410 + i;
+    const pre = withSeed(seed, () => startCareer(club));
+    if (pre.realLeagueFixtures !== 'premier-2026-27-v1') fail(`${club}: the natural real fixture start is not bound`);
+    const pair = sourceRows.find(row => row.round === 1 && (row.home === club || row.away === club));
+    const ht = withSeed(seed + 100, () => playNextEntry(pre));
+    if (!pair || ht.kind !== 'halftime' || !ht.state.live) { fail(`${club}: the real opening fixture did not reach the interval`); continue; }
+    const opponent = pair.home === club ? pair.away : pair.home;
+    if (ht.state.live.opponent !== opponent || ht.state.live.home !== (pair.home === club)) fail(`${club}: the real opener differs from its independently sourced pairing or venue`);
+    realFixtures.push({ club, seed, pre, ht: ht.state, real: true });
+  }
+  if (realFixtures.length !== 2) fail(`only ${realFixtures.length} natural real openers reached the signed-player checks`);
+  for (const f of [...fixtures, ...realFixtures]) {
     idx += 1;
     const opp = f.ht.live.opponent;
-    const wantGen = idx % 2 === 0;
+    const wantGen = !f.real && idx % 2 === 0;
     const base = wantGen ? { ...f.pre, season: f.pre.season + BUMP } : f.pre;
     const roster = projectedRoster(opp, yearsOn(base), base.eraId ?? 'now');
     const man = (wantGen ? topOutfield(roster, p => p.g) : null) ?? topOutfield(roster, p => !p.g);
@@ -1017,8 +1034,10 @@ begin(10, 'A man in my squad never turns out for the club he left, real or gener
     const name = man.n;
     const ctx = `${ctxOf(f)} [${man.g ? 'generated' : 'real'} ${name} in my squad]`;
     const pre = { ...base, squad: [...base.squad, cmPlayerOf(man, idx)] };
-    checked += 1;
-    if (man.g) genMen += 1; else realMen += 1;
+    if (!f.real) {
+      checked += 1;
+      if (man.g) genMen += 1; else realMen += 1;
+    }
     const theirs = (label, names) => { if (names.includes(name)) fail(`${ctx}: ${label} names him for ${opp}`); };
     /* Before a ball is kicked: the preview's danger men and the race board. */
     const facts = withSeed(f.seed + 800, () => matchFacts(pre));
@@ -1041,8 +1060,10 @@ begin(10, 'A man in my squad never turns out for the club he left, real or gener
     const fin = withSeed(f.seed + 803, () => resumeMatch(s2));
     /* The quick sim of the same fixture. */
     const quick = withSeed(f.seed + 804, () => playNextEntry(pre, { skipHalftime: true }));
+    let finishingPaths = 0;
     for (const [pathName, res] of [['live', fin], ['quick', quick]]) {
       if (res.kind !== 'match' || !res.report?.detail) { fail(`${ctx}: the ${pathName} path came back "${res.kind}"`); continue; }
+      finishingPaths += 1;
       const r = res.report;
       const d = r.detail;
       theirs(`the ${pathName} path's scorers`, (r.oppScorers ?? []).map(l => l.drawn ?? l.name));
@@ -1053,6 +1074,7 @@ begin(10, 'A man in my squad never turns out for the club he left, real or gener
       theirs(`the ${pathName} path's cards`, namesIn(d.oppCards, 'name'));
       theirs(`the golden boot board after the ${pathName} path`, goldenBootTable(res.state, 1000).filter(e => e.club === opp).map(e => e.name));
     }
+    if (f.real && finishingPaths === 2) realOpenersChecked += 1;
   }
   /* Floors from the fixture walk itself: 42 fixtures, half of them asked for
      a generated man, and at three years on about one club in eight still has
@@ -1061,7 +1083,8 @@ begin(10, 'A man in my squad never turns out for the club he left, real or gener
   if (checked < 30) fail(`only ${checked} fixtures checked`);
   if (realMen < 10) fail(`only ${realMen} fixtures put a real man in my squad`);
   if (genMen < 10) fail(`only ${genMen} fixtures put a generated man in my squad`);
-  console.log(`   ${checked} fixtures with the next opponent's top man in my squad (${realMen} real, ${genMen} generated; ${noRoster} opponents with no roster to take from), ${namedElevens} named elevens, ${previews} previews: his name never on their eleven, bench, subs, scorers, ratings sheet, play or cards, never a danger man for them, never theirs in the scorer race, both ways of finishing (floor 0)`);
+  if (realOpenersChecked !== 2) fail(`only ${realOpenersChecked} natural real openers checked the signed player through both finishing paths`);
+  console.log(`   ${checked} generated-schedule fixtures with the next opponent's top man in my squad (${realMen} real, ${genMen} generated; ${noRoster} opponents with no roster to take from), plus ${realOpenersChecked} separately sourced real openers, ${namedElevens} named elevens, ${previews} previews: his name never on their eleven, bench, subs, scorers, ratings sheet, play or cards, never a danger man for them, never theirs in the scorer race, both ways of finishing (floor 0)`);
 }
 
 /* ---------- the verdict ---------- */
