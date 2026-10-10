@@ -1,0 +1,26 @@
+#!serial
+headsha: git log -1 --format=%H%n%s HEAD~1 2>/dev/null | head -2; git log --oneline -3 | cat
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+plain-before: node scripts/simUsSeasonLedger.mjs
+mutA: node .rc/x/mut.mjs A && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutB: node .rc/x/mut.mjs B && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutD: node .rc/x/mut.mjs D && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutE: node .rc/x/mut.mjs E && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutG: node .rc/x/mut.mjs G && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutH: node .rc/x/mut.mjs H && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutN: node .rc/x/mut.mjs N && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+mutO: node .rc/x/mut.mjs O && git diff --shortstat && node scripts/simUsSeasonLedger.mjs; s=$?; git checkout -- src scripts; exit $s
+ctl-list: US_LEDGER_CONTROL=list node scripts/simUsSeasonLedger.mjs
+ctl-mlbclub: US_LEDGER_CONTROL=mlbclub node scripts/simUsSeasonLedger.mjs
+ctl-mlbspanyear: US_LEDGER_CONTROL=mlbspanyear node scripts/simUsSeasonLedger.mjs
+ctl-mlbrivalswap: US_LEDGER_CONTROL=mlbrivalswap node scripts/simUsSeasonLedger.mjs
+ctl-otherseason: US_LEDGER_CONTROL=otherseason node scripts/simUsSeasonLedger.mjs
+ctl-onesource: US_LEDGER_CONTROL=onesource node scripts/simUsSeasonLedger.mjs
+ctl-filled: US_LEDGER_CONTROL=filled node scripts/simUsSeasonLedger.mjs
+ctl-mlbhome: US_LEDGER_CONTROL=mlbhome node scripts/simUsSeasonLedger.mjs
+ctl-nhlfrom: US_LEDGER_CONTROL=nhlfrom node scripts/simUsSeasonLedger.mjs
+ctl-nhlpoint: US_LEDGER_CONTROL=nhlpoint node scripts/simUsSeasonLedger.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+diffnames: git diff --name-status origin/main HEAD
+plain-after: git status --short | head -5; node scripts/simUsSeasonLedger.mjs
