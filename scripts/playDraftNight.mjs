@@ -19,9 +19,11 @@
  *      nothing is drawn over it.                              Control `fold`.
  *   5. Nothing live is hidden: no enabled button sits inside an element whose
  *      own or inherited opacity is 0, and every button is at least 44 by 44.
- *   6. The last frame is the save: the closing row is the saved pick and
- *      club, the save is byte for byte what the engine says, at most twelve
- *      rows are on screen, and the career that starts is that club.
+ *   6. The last frame is the save: the closing row says, word for word, the
+ *      saved pick, club, round and pick in that round (the late pick is past
+ *      round one, where the last two differ), the save is byte for byte what
+ *      the engine says, at most twelve rows are on screen, and the career
+ *      that starts is that club.
  *   7. Less motion: every row and every held word is at opacity 1 in the
  *      first frame.                                         Control `hidden`.
  *   8. Skip: one press lands every row and every held word at once, and the
@@ -290,7 +292,13 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     const built = M.buildCareerDraftNight(desc, done);
     if (JSON.stringify(end.kinds) !== JSON.stringify(built.board.map(r => r.kind))) fail(id, 'save', `the rows are ${end.kinds.join(', ')}, the builder made ${built.board.map(r => r.kind).join(', ')}`);
     if (end.rows + end.tiles > 12 || end.tiles !== (desc.lottery ? desc.lottery.drawn : 0)) fail(id, 'save', `${end.rows} rows and ${end.tiles} lottery tiles are on screen`);
-    if (!end.text.includes(desc.teamLabel(out.team)) || (out.pick !== null && !end.text.includes(`Pick ${out.pick}:`))) fail(id, 'save', `the closing row does not show pick ${out.pick} and ${desc.teamLabel(out.team)}`);
+    /* The whole row, word for word, from the SAVED outcome: the pick, the club, the round and the
+       pick in that round. (Until the fix pass this only looked for "Pick N:" and the club, and a
+       row that printed the overall pick as the pick in the round walked 40 nights green.) */
+    const club = desc.teamLabel(out.team);
+    const said = end.text.replace(/\s+/g, ' ').trim();
+    const wantSaid = out.pick === null ? `The last pick is in. Your name was not called. Your first club: ${club}.` : `Pick ${out.pick}: ${club} Your name is called. Round ${out.round}, pick ${out.pickInRound}.`;
+    if (said !== wantSaid) fail(id, 'save', `the closing row says "${said}", the save says "${wantSaid}"`);
     const save = JSON.parse(await page.evaluate(k => localStorage.getItem(k), sport.saveKey));
     try { assert.deepEqual(save, JSON.parse(JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: { ...p, state: done } }))); } catch { fail(id, 'save', 'the save is not the engine state after the draft'); }
     if (startCareer) {
@@ -312,6 +320,9 @@ let exitCode = 1;
 try {
   browser = await chromium.launch({ headless: true });
   const cases = M.sports.map(sport => ({ sport, first: find(sport, 'first'), late: find(sport, 'late'), undrafted: find(sport, 'undrafted') }));
+  /* A late pick is past round one, where the overall pick and the pick in the round differ: the
+     closing row's check cannot tell them apart otherwise. */
+  for (const c of cases) assert.notEqual(c.late.done.draft.pick, c.late.done.draft.pickInRound, `${c.sport.slug}: the late pick must be past round one`);
   if (CONTROL) {
     /* One case, the one the control's check is about. MLB's late pick is the tallest board. */
     const c = cases[CONTROL === 'hidden' ? 1 : 2];

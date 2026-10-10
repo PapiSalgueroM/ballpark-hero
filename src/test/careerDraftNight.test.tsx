@@ -156,6 +156,48 @@ describe('the first frame holds the whole night', () => {
   });
 });
 
+/* The one row the night exists to show, held word for word. Every other case
+   in this file ends on pick 20 or pick 40, and pick 20 is in round one in
+   every sport and era, where the overall pick and the pick in the round are
+   the same number: a row that printed one for the other passed everything. */
+describe('the row that ends the night, word for word', () => {
+  const rowWords = (root: HTMLElement, kind: 'you' | 'unpicked') => [...root.querySelector<HTMLElement>(`[data-night-row='${kind}']`)!.children].map(el => el.textContent);
+
+  it.each(PAIRS)('%s: a pick past round one prints its round and its pick in that round', (_, desc) => {
+    const teams = desc.teamIds().length;
+    // The numbers are typed here, not read back from the state: the fifth pick
+    // of round two, and the last pick of the draft.
+    const cases = [{ pick: teams + 5, round: 2, inRound: 5 }, { pick: total(desc), round: desc.rounds, inRound: teams }];
+    for (const c of cases) {
+      expect(c.pick).not.toBe(c.inRound);
+      const state = endedAt(desc, c.pick);
+      const label = desc.teamLabel(state.draft!.team);
+      const view = render(<DraftNightSequence night={buildCareerDraftNight(desc, state)!} desc={desc} draftYear={state.draft!.draftYear} stage="landed" onLanded={noop} onSkip={noop} onContinue={noop} />);
+      expect(rowWords(view.container, 'you')).toEqual([`Pick ${c.pick}: ${label}`, `Your name is called. Round ${c.round}, pick ${c.inRound}.`]);
+      // And what a screen reader hears when it lands: the same three numbers, each in its place.
+      expect(within(view.container).getByRole('status').textContent).toBe(`Round ${c.round}, pick ${c.inRound}, ${c.pick} overall. ${label} take you.`);
+      view.unmount();
+    }
+  });
+
+  it('NFL now, typed out: the 85th pick is the 21st pick of round 3', () => {
+    const desc = nflPreDraftDescriptor('now');
+    expect(desc.teamIds().length).toBe(32);
+    const state = endedAt(desc, 85);
+    const view = render(<DraftNightSequence night={buildCareerDraftNight(desc, state)!} desc={desc} draftYear={2026} stage="landed" onLanded={noop} onSkip={noop} onContinue={noop} />);
+    expect(rowWords(view.container, 'you')[0]).toBe(`Pick 85: ${desc.teamLabel(state.draft!.team)}`);
+    expect(rowWords(view.container, 'you')[1]).toBe('Your name is called. Round 3, pick 21.');
+  });
+
+  it.each(PAIRS)('%s: a night without his name says so and names the club that signs him', (_, desc) => {
+    const state = endedAt(desc, null);
+    const label = desc.teamLabel(state.draft!.team);
+    const view = render(<DraftNightSequence night={buildCareerDraftNight(desc, state)!} desc={desc} draftYear={state.draft!.draftYear} stage="landed" onLanded={noop} onSkip={noop} onContinue={noop} />);
+    expect(rowWords(view.container, 'unpicked')).toEqual(['The last pick is in.', `Your name was not called. Your first club: ${label}.`]);
+    expect(within(view.container).getByRole('status').textContent).toBe(`Pick ${total(desc)} is the last one, and your name was not called. Your first club: ${label}.`);
+  });
+});
+
 describe('the card that hosts the night', () => {
   const desc = nflPreDraftDescriptor('now');
   it('without the new props it is the card it was', () => {
