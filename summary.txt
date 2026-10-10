@@ -1,0 +1,3 @@
+controls-2 exit=0 133s | simGmDraftOrder controls (shard 2/3 of 40): all 13 fired, each in exactly its own sections.
+controls-1 exit=0 141s | simGmDraftOrder controls (shard 1/3 of 40): all 13 fired, each in exactly its own sections.
+controls-0 exit=0 152s | simGmDraftOrder controls (shard 0/3 of 40): all 14 fired, each in exactly its own sections.
