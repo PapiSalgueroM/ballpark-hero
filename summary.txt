@@ -1,0 +1,7 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 57s | 
+simCmLeagueFixtures exit=0 3s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 99 of 99 controls fired
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simWritesAreSent exit=1 14s | simWritesAreSent: 2 failures
+simResultMoment exit=0 5s | simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three 
+simDailySaveHardening exit=1 56s | simDailySaveHardening: 2 failure(s)
