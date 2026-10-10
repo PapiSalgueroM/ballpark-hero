@@ -1,0 +1,5 @@
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[32m✓ built in 27.68s[39m
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+dist/assets/clubManager-C_TAiBkV.js
+build with the door imported = exit 0, built chunks that hold the age read: 1

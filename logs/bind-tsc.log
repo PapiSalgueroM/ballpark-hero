@@ -1,0 +1,2 @@
+REV BIND APPLIED: src/lib/clubManagerEras.ts imports the door
+type gate with the door imported by the eras module = exit 0

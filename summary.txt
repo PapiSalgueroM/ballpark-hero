@@ -1,0 +1,5 @@
+bundle exit=0 0s | doorProbe: the bundled door answers as the library does
+bind-tsc exit=0 50s | type gate with the door imported by the eras module = exit 0
+bind-vitest exit=1 2s | the vitest with the door imported = exit 1 (1 is right: its last test must refuse a shipped import)
+bind-build exit=0 28s | build with the door imported = exit 0, built chunks that hold the age read: 1
+restored exit=0 0s | the tree is restored
