@@ -123,16 +123,22 @@ const results = [];
 const failures = [];
 const fail = (id, check, message) => { failures.push({ id, check, message }); console.error(`  FAIL [${check}] ${id}: ${message}`); };
 
-/* What a control breaks, put in before the page runs. */
-const CONTROL_INIT = {
+/* What a control breaks. A style goes in once the page has loaded, before the
+   press (the first run of this walk put it in from an init script, where the
+   document has no root element yet, so three controls changed nothing and the
+   walk refused them: exit 2, as it must). The one patch goes in before any
+   page code runs. */
+const CONTROL_STYLE = {
   /* Rows that take their room only when they arrive: the card grows under the player. */
-  late: () => { const s = document.createElement('style'); s.textContent = '@keyframes lateMount { from { max-height: 0; padding-top: 0; padding-bottom: 0; border-width: 0; overflow: hidden; opacity: 0; } to { max-height: 160px; opacity: 1; } } [data-night-row] { animation-name: lateMount !important; animation-fill-mode: both !important; }'; document.documentElement.appendChild(s); },
+  late: '@keyframes lateMount { from { max-height: 0; padding-top: 0; padding-bottom: 0; border-width: 0; overflow: hidden; opacity: 0; } to { max-height: 160px; opacity: 1; } } [data-night-row] { animation-name: lateMount !important; animation-fill-mode: both !important; }',
   /* The hold taken off the words above the board and off the result block. */
-  spoiler: () => { const s = document.createElement('style'); s.textContent = '[data-night-hold] h2, [data-night-hold] p, [data-night-held], [data-testid="draft-result"] { animation: none !important; opacity: 1 !important; }'; document.documentElement.appendChild(s); },
+  spoiler: '[data-night-hold] h2, [data-night-hold] p, [data-night-held], [data-testid="draft-result"] { animation: none !important; opacity: 1 !important; }',
+  /* A row left invisible for somebody who asked for less motion. */
+  hidden: '[data-night-row] { opacity: 0 !important; }',
+};
+const CONTROL_INIT = {
   /* The press reveals nothing: the board stays wherever the page happened to be. */
   fold: () => { Element.prototype.scrollIntoView = function () {}; },
-  /* A row left invisible for somebody who asked for less motion. */
-  hidden: () => { const s = document.createElement('style'); s.textContent = '[data-night-row] { opacity: 0 !important; }'; document.documentElement.appendChild(s); },
 };
 
 /* The frame by frame record, started before the press so the first frame of the night is in it. */
@@ -179,7 +185,7 @@ async function open(browser, sport, size, p, mode) {
       { name: `rules-gate-seen:${route}`, value: '1' }, { name: 'cookie-consent', value: 'essential' },
     ] }] },
   });
-  if (CONTROL) await context.addInitScript(CONTROL_INIT[CONTROL]);
+  if (CONTROL_INIT[CONTROL]) await context.addInitScript(CONTROL_INIT[CONTROL]);
   /* The live database host is aborted; anything else off this origin gets an empty answer. */
   await context.route('**/*', r => {
     const url = r.request().url();
@@ -193,6 +199,7 @@ async function open(browser, sport, size, p, mode) {
   await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded' });
   await page.locator('[data-prospect-phase="draft"]').waitFor();
   await page.evaluate(() => document.fonts.ready);
+  if (CONTROL_STYLE[CONTROL]) await page.addStyleTag({ content: CONTROL_STYLE[CONTROL] });
   return { context, page };
 }
 

@@ -174,7 +174,9 @@ export function DraftNightSequence({
       </div>
       <div ref={actionsRef} data-night-actions className={cn('grid scroll-mb-3 gap-2', !over && 'grid-cols-2')}>
         {!over && <Button variant="outline" className="w-full whitespace-normal" onClick={onSkip}>Skip to my pick</Button>}
-        {onContinue && <Button className="w-full whitespace-normal" onClick={onContinue}>Start your career</Button>}
+        {/* The same border box as the outlined skip beside it, so the row keeps its
+            height when the skip goes (the walk measured 2 px without this). */}
+        {onContinue && <Button className="w-full whitespace-normal border border-transparent" onClick={onContinue}>Start your career</Button>}
       </div>
     </div>
   );

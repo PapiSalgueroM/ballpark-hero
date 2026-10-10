@@ -108,3 +108,34 @@ The 2006 combine's own test list did not confirm twice, so the 2006 era's showca
   career that drafts in 2027 or later needs the new table verified twice first.
 - Real prospects, real draft classes and real 2026 draft order: never used. Every other
   prospect is unnamed; teams come from the careers' existing era lists.
+
+## Round 1220 (2026-10-10): what draft night prints, and the row behind each statement
+
+Draft night (`src/lib/careerDraftNight.ts`, `src/components/career/DraftNightSequence.tsx`) adds
+no real world fact of its own. Each statement it prints about the real leagues is already a row
+above with its two sources. Nothing was read again for this round and nothing new is claimed.
+
+| What the night prints | Where | The rows above that carry it |
+|---|---|---|
+| "Round N" on a pick row, and "round A into round B" on a gap | every sport and era | Rounds: NFL 7 in both eras, NBA 2 in both, MLB 20 now and 50 in 2004, NHL 7 in both |
+| "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each." | NBA now | Lottery teams; Picks drawn; No. 1 odds by seed |
+| "13 clubs are in the lottery and the top 3 picks are drawn. The worst record has the best chance at the first pick, 25%." | NBA y2004 | Lottery teams then; Picks drawn then; No. 1 odds by seed then |
+| The picks after the drawn ones in inverse record (the order of the board, not a sentence) | NBA, both eras | Picks drawn ("then the rest of the lottery in inverse record") |
+
+The lottery line is built from the descriptor's own table by
+`lotteryRuleLine(lotteryFactsFromWeights(...))` (`src/lib/lotteryReveal.ts`, Round 1222) and is
+never typed. `src/test/careerDraftNight.test.tsx` holds the career's NBA table equal to the
+front office's table in `src/lib/gmPicks.ts`, so the two cannot drift apart.
+
+Not facts about the world, and the screen says so ("A simulated lottery. The order is generated
+for your career." on the tile; "All prospects and results are fictional" and "a simplified order
+without traded or extra picks" in the help): the generated standings, which club holds which
+pick, the number of picks in a draft of this game (rounds times clubs, so 224 for the NFL, where
+a real draft has compensatory picks on top), the range the scouts quote, and the pick itself.
+
+Still left out, as above: the NHL and MLB lotteries are real and are not modelled by the career
+engines. The night shows no lottery tile for them and prints no sentence that says there is
+none. For a later round: `src/lib/gmPicks.ts` now carries the modern NHL lottery with two non
+wiki sources for the front offices, but binding it to the career road would change which club
+holds the first picks, so no NHL road would stay byte equal, and it would have to say out loud
+that it re-deals them. The 2006 NHL era and MLB are still unsourced.
