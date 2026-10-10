@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fleet0: node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f0.txt 2>&1; s=$?; grep -h "1216 OG5\|1216 material\|Tests  \|AssertionError" $RC_OUT/f0.txt | cut -c1-700 | tail -8; exit $s
+kc: OWN_GOAL_CONTROL=keepercorner node scripts/simOwnGoalMotion.mjs
+straight: OWN_GOAL_CONTROL=straight node scripts/simOwnGoalMotion.mjs
