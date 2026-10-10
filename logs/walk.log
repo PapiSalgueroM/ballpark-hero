@@ -1,0 +1,13 @@
+nba: the save is a SG after 2 seasons, team quality 86
+FAIL nba 390x844 motion on: a playoff season was played within 16 seeded presses (4000: no entry | 4001: no entry | 4002: no entry | 4003: no entry | 4004: no entry | 4005: no entry | 4006: no entry | 4007: no entry)
+FAIL nba 390x844 reduced motion: a playoff season was played within 16 seeded presses (4000: no entry | 4001: no entry | 4002: no entry | 4003: no entry | 4004: no entry | 4005: no entry | 4006: no entry | 4007: no entry)
+FAIL nba 1280x900 motion on: a playoff season was played within 16 seeded presses (4000: no entry | 4001: no entry | 4002: no entry | 4003: no entry | 4004: no entry | 4005: no entry | 4006: no entry | 4007: no entry)
+FAIL nba 1280x900 reduced motion: skipped, the walk ran out of its nine minutes
+nfl: the save is a QB after 2 seasons, team quality 86
+FAIL nfl 390x844 motion on: skipped, the walk ran out of its nine minutes
+FAIL nfl 390x844 reduced motion: skipped, the walk ran out of its nine minutes
+FAIL nfl 1280x900 motion on: skipped, the walk ran out of its nine minutes
+FAIL nfl 1280x900 reduced motion: skipped, the walk ran out of its nine minutes
+
+24 requests to the database host aborted, none let through
+review-run-walk: 8 checks, 8 failed
