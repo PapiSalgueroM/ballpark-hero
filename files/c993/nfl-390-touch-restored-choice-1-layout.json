@@ -1,0 +1,52 @@
+{
+  "width": 390,
+  "scrollWidth": 390,
+  "scrollY": 484,
+  "headings": [
+    {
+      "text": "Scouts are watching.",
+      "top": -126.890625,
+      "bottom": -68.109375,
+      "height": 58.78125
+    },
+    {
+      "text": "The offseasonTime off between seasons. Your coach has a plan, your friends have ",
+      "top": 286,
+      "bottom": 502,
+      "height": 216
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_k27ec_17",
+      "text": "",
+      "width": 356,
+      "scrollWidth": 468
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "Scouts are watching.",
+      "width": 1,
+      "scrollWidth": 167
+    }
+  ],
+  "controls": [
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Train all summerDraft stock +1, Rating +2",
+      "width": 324,
+      "height": 66
+    },
+    {
+      "text": "Rest upNo change",
+      "width": 324,
+      "height": 66
+    }
+  ]
+}

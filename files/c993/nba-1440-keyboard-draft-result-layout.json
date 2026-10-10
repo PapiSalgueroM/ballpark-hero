@@ -1,0 +1,48 @@
+{
+  "width": 1440,
+  "scrollWidth": 1440,
+  "scrollY": 135,
+  "headings": [
+    {
+      "text": "This is your moment.",
+      "top": 182,
+      "bottom": 266.25,
+      "height": 84.25
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_k27ec_17",
+      "text": "",
+      "width": 638,
+      "scrollWidth": 750
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "This is your moment.",
+      "width": 1,
+      "scrollWidth": 169
+    },
+    {
+      "tag": "P",
+      "className": "sr-only",
+      "text": "Round 1, pick 14, 14 overall. Detroit Pistons take you.",
+      "width": 1,
+      "scrollWidth": 430
+    }
+  ],
+  "controls": [
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Start your career",
+      "width": 606,
+      "height": 46
+    }
+  ]
+}
