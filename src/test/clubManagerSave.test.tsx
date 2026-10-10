@@ -46,6 +46,10 @@ vi.mock('@/lib/completions', () => ({
   recordStreakDay: vi.fn(),
 }));
 
+/* Round 1218: CM_SAVE_VAR=on plays this file with the reviews switch on, for this file only, so the two live
+   match cases can be run lit before the switch itself moves (and after it, the plain run is the lit one). */
+if (process.env.CM_SAVE_VAR === 'on') vi.doMock('@/lib/clubManagerVarLive', () => ({ CM_VAR_LIVE: true }));
+
 const hookPath = process.env.CM_HOOK;
 const { useClubManager } = hookPath
   ? await import(/* @vite-ignore */ hookPath)
@@ -103,7 +107,36 @@ const duplicateIds = (squad: any[]): string[][] => {
 const FAKE = ['requestAnimationFrame', 'cancelAnimationFrame', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'Date', 'performance'] as any;
 
 beforeEach(() => { localStorage.clear(); api = null; });
-afterEach(() => { vi.useRealTimers(); });
+afterEach(() => { vi.useRealTimers(); seededRandom?.mockRestore(); seededRandom = null; });
+
+/* Round 1218: the two live match cases below watch twenty seconds of a first half. They used to play whatever
+   match the dice gave, and with reviews on a review in that stretch holds the clock, so about one run in sixteen
+   read "the viewer never got going" on a healthy viewer. The match is SEEDED now, the same one on every run,
+   and it is a first half with no review in it: seeds are tried in a fixed order and the first such half is the
+   match (with reviews off that is always the first seed). What the cases assert has not changed. A review that
+   holds the clock is another subject and wants a case of its own. */
+let seededRandom: ReturnType<typeof vi.spyOn> | null = null;
+const SEEDS = [1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225];
+function mulberry(seed: number): () => number {
+  let a = seed >>> 0;
+  return () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+async function seededFirstHalf() {
+  for (const seed of SEEDS) {
+    localStorage.clear();
+    seededRandom?.mockRestore();
+    seededRandom = vi.spyOn(Math, 'random').mockImplementation(mulberry(seed));
+    const r = await booted();
+    let guard = 0;
+    while (api.phase !== 'halftime' && guard++ < 20) act(() => api.play());
+    const reviews = (api.career?.live?.h1Play ?? []).filter((e: any) => e.kind === 'var').length;
+    if (api.career?.live && reviews === 0) { console.log(`  seeded first half: seed ${seed}, reviews asked for: ${api.career.live.varReviews === true}`); return r; }
+    act(() => { r.unmount(); });
+    vi.useRealTimers();
+    api = null;
+  }
+  throw new Error(`none of the ${SEEDS.length} seeded first halves is free of a review`);
+}
 
 async function booted(club = CLUB) {
   vi.useFakeTimers({ toFake: FAKE });
@@ -187,9 +220,7 @@ describe('Club Manager: the save', () => {
   }, 180000);
 
   it('leaving the site mid match keeps the clock where it stood', async () => {
-    const r = await booted();
-    let guard = 0;
-    while (api.phase !== 'halftime' && guard++ < 20) act(() => api.play());
+    const r = await seededFirstHalf();
     expect(api.career.live).toBeTruthy();
     /* Twenty seconds of the viewer's own clock at its default speed. */
     act(() => { vi.advanceTimersByTime(20000); });
@@ -210,9 +241,7 @@ describe('Club Manager: the save', () => {
   it('leaving only the viewer, with the page still up, keeps it too', async () => {
     /* The case Round 543 did cover, kept as the pair to the one above: if this
        one went red the fix would be worse than the defect. */
-    const r = await booted();
-    let guard = 0;
-    while (api.phase !== 'halftime' && guard++ < 20) act(() => api.play());
+    const r = await seededFirstHalf();
     act(() => { vi.advanceTimersByTime(20000); });
     const shown = /LIVE (\d+)'/.exec(r.container.textContent || '');
     const onScreen = shown ? Number(shown[1]) : 0;
