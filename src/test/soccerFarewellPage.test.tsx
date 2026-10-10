@@ -182,6 +182,15 @@ describe('Soccer farewell real page actions', () => {
     expect(readSeasonMoments(saved.seasonMoments)?.banked).toBeUndefined();
     const { closeSeasonMoments } = await import('@/lib/season/soccerMoments');
     const view = mount(saved), before = read();
+    const startupStacks: string[] = [], startupDraws = tape(12345, startupStacks);
+    await act(async () => {});
+    console.info('FAREWELL_ASYNC_ACT_STARTUP', JSON.stringify({
+      scope: 'Unfiltered empty async act initialization before either career action tape',
+      values: startupDraws, stacks: startupStacks,
+      attribution: { diagnosticRun: '38051776558', source: '11c30639',
+        caller: 'react.development.js:2458:45 enqueueTask, recursivelyFlushAsyncActWork' },
+    }));
+    expect(read()).toEqual(before);
     const expectedDraws = tape(), banked = closeSeasonMoments(copy(before), E.FALLBACK_CLUBS);
     expect(readSeasonMoments(banked.seasonMoments)?.banked).toBe(1);
     const expected = copy(E.advanceProSeason(banked, E.FALLBACK_CLUBS));
