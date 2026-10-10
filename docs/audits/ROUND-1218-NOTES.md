@@ -237,3 +237,35 @@ October 2026 speak of 2025-26, so the cups were not filed.
 **What it took.** Data alone: the two ledgers, the generator, and one comment in `scripts/simCmVar.mjs`. The
 fleet the bands are measured on is a fixed list of clubs, so its numbers did not move (seeds 31 to 36: goals
 ruled out 0.0704 a match, penalties given 0.0873).
+
+## 10. The switch commit is written and proven, and it waits on a separate branch
+
+The round's branch (`r1218-cm-var-true`) still ships dark. The last step of the round is on its own branch,
+`r1218-cm-var-switch`, one commit on top of the round's branch: `CM_VAR_LIVE = true`, the What's New entry, and
+the unit file `src/test/clubManagerVarLive.test.tsx` turned to hold the lit rule (four cases; its control is now
+`CM_VAR_LIVE_CONTROL=off`, the dark build of Release AT, and it must go red).
+
+**Why it is not on the round's branch.** `scripts/simCmVarLedger.mjs` is red on that commit, on purpose: the
+owed entry `recent-seasons` of `scripts/data/cmVarRates.json` is open. A fifth read on 2026-10-10 (La Liga
+2022-23, Serie A 2023-24, the Bundesliga 2025-26) found no second count either; what it opened is in the
+ledger's `notUsed` list. So the entry closes one way only, the lead's ruling written into it.
+
+**To switch VAR on** (the lead, by hand):
+1. In `scripts/data/cmVarRates.json`, entry `owed[0]`: set `"state": "accepted"` and add `"ruling"` (who, when,
+   in what words). Run `node scripts/genCmVarRates.mjs` (it rewrites the generated rates file without its OWED
+   line and stamps the receipt) and commit the three files.
+2. Merge `r1218-cm-var-switch`.
+3. Gates: `node scripts/simCmVarLedger.mjs` exits 0, `node scripts/genCmVarRates.mjs --check` exits 0, the unit
+   file is green and its control red, `scripts/playCmVar.mjs` is green on the plain build.
+
+**What follows the switch.** Two browser proofs compare the page's Quick Sim with an engine run of their own:
+`scripts/playCmQuickSubs.mjs` and `scripts/playCmRealFixtures.mjs`. Both now ask the engine what the hook asks
+(they read the switch from the source the build was made from, the way `scripts/playCmVar.mjs` does), so they
+hold with the switch off and with it on. `.github/workflows/career-next-batch.yml` runs `scripts/playCmVar.mjs`,
+which exits 2 on a dark build and runs for real once the switch is on.
+
+**Proven on runners with a stand-in ruling** (applied on the runner only, never committed): the ledger harness
+and the generator check exit 0, the three ledger controls fire, the type gate is clean, the unit file is green
+and its control fails three cases, every test file that drives the hook, the help or the live screen is green,
+and the walk is green on the plain build at 390 and 1280 (21 cases, two help views). The runner names and the
+numbers are in the closing report of the fix.
