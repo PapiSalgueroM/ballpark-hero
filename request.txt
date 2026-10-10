@@ -1,0 +1,7 @@
+# Round 1218 review (run lens), request F: the Club Manager and live match unit files the builder did not run, on the pushed head.
+vitest-cm: node_modules/.bin/vitest run src/test/clubManagerBracketMoment.test.tsx src/test/clubManagerDealMoment.test.tsx src/test/clubManagerDecisions.test.tsx src/test/clubManagerDeskCues.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerEraNationalities.test.ts src/test/clubManagerEraPicker.test.tsx src/test/clubManagerJobHunt.test.ts src/test/clubManagerManagerFace.test.tsx src/test/clubManagerRowButtons.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerShootoutOrder.test.ts src/test/clubManagerShootoutTile.test.tsx src/test/clubManagerSlots.test.tsx src/test/clubManagerVarLive.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/liveSimCelebration.test.tsx src/test/liveSimMotion.test.tsx src/test/managerScorerMarks.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simExtraTime: node scripts/simExtraTime.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs

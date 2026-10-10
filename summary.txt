@@ -1,0 +1,6 @@
+simMatchScreen exit=0 8s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+simRevealMoments exit=0 19s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+vitest-cm exit=0 81s |    Duration  80.58s (transform 7.29s, setup 2.15s, collect 23.12s, tests 106.60s, environment 14.74s, prepare 3.59s)
+simLiveSimMotion exit=0 91s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simCmRealFixtures exit=0 10s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+simExtraTime exit=0 101s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
