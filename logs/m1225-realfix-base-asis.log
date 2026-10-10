@@ -1,0 +1,1585 @@
+  ok   premier ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   premier calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   premier settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  ok   premier bye: settles a neutral-only league entry through the same real fixture resolver
+  ok   premier world: settles the actual world league round through the same real fixture resolver
+  ok   premier eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   premier takeover: keeps the key through a mid season takeover, played in the real order before and after the handover, and gives none to a club joined during a season
+  ok   premier unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  RED  premier legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   premier future: refuses stale keys in later seasons, other years and changed league membership
+  RED  premier rollover: clears the real fixture key after a fully played season before generating the next season
+  RED  premier baseline: matches the base engine for unsupported starts and genuine match outcomes
+  RED  premier uncopied: passes the whole base comparison with untouched current source under every copied fault
+FAIL premier: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+AssertionError [ERR_ASSERTION]: Only the optional fixture key changes the fresh save
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 3,
+...
+    },
++   leagueBook: {
++     c: {},
++     my: [],
++     s: 'premier|1rfw42'
++   },
+    leagueClubs: [
+      'Manchester City',
+      'Newcastle',
+      'Brentford',
+      'Sunderland',
+
+    at Object.legacy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:566:86)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:631:13)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:662:54
+FAIL premier: clears the real fixture key after a fully played season before generating the next season
+AssertionError [ERR_ASSERTION]: A generated future season preserves the full base rollover state and random stream
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 4,
+...
+    leagueBook: {
++     c: {},
++     my: [],
++     s: 'premier|ebcqnv'
+-     c: {
+-       'Aston Villa': {
+-         m: {
+-           'Aaron Wan-Bissaka|RB': [
+-             3,
+-             2,
+-             11,
+-             0
+-           ],
+-           'Alejandro Garnacho|LW': [
+-             12,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Amadou Onana|CDM': [
+-             1,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Boubacar Kamara|CDM': [
+-             3,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Ian Maatsen|LB': [
+-             2,
+-             3,
+-             11,
+-             0
+-           ],
+-           'Johan Manzambi|CM': [
+-             4,
+-             2,
+-             0,
+-             0
+-           ],
+-           'João Gomes|CM': [
+-             3,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Matty Cash|RB': [
+-             3,
+-             2,
+-             11,
+-             0
+-           ],
+-           'Nicolas Jackson|ST': [
+-             18,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Pau Torres|CB': [
+-             0,
+-             2,
+-             11,
+-             0
+-           ],
+-           'Zion Suzuki|GK': [
+-             0,
+-             0,
+-             11,
+-             0
+-           ]
+-         },
+-         og: 0,
+-         u: 0
+-       },
+-       'Coventry City': {
+-         m: {
+-           'Aurèle Amenda|CB': [
+-             1,
+-             2,
+-             6,
+-             0
+-           ],
+-           'Bobby Thomas|CB': [
+-             1,
+-             0,
+-             6,
+-             0
+-           ],
+-           'Carl Rushworth|GK': [
+-             0,
+-             0,
+-             6,
+-             0
+-           ],
+-           'Ephron Mason-Clark|LM': [
+-             3,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Ethan Pinnock|CB': [
+-             0,
+-             0,
+-             6,
+-             0
+-           ],
+-           'Gustavo Hamer|CM': [
+-             1,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Jack Rudoni|CAM': [
+-             9,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Milan van Ewijk|RB': [
+-             1,
+-             2,
+-             6,
+-             0
+-           ],
+-           'Sidiki Chérif|ST': [
+-             8,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Victor Torp|CM': [
+-             4,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Yann Gboho|LW': [
+-             6,
+-             7,
+-             0,
+-             0
+-           ]
+-         },
+-         og: 0,
+-         u: 0
+-       },
+-       'Crystal Palace': {
+-         m: {
+-           'Adam Wharton|CDM': [
+-             3,
+-             0,
+-             0,
+-             0
+-           ],
+-           'Anan Khalaili|RM': [
+-             4,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Chris Richards|CB': [
+-             1,
+-             3,
+-             6,
+-             0
+-           ],
+-           'Daichi Kamada|CAM': [
+-             7,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Dean Henderson|GK': [
+-             0,
+-             0,
+-             6,
+-             0
+-           ],
+-           'Honest Ahanor|CB': [
+-             0,
+-             1,
+-             6,
+-             0
+-           ],
+-           'Ismaïla Sarr|RW': [
+-             2,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Jaydee Canvot|CB': [
+-             1,
+-             0,
+-             6,
+-             0
+-           ],
+-           'Jørgen Strand Larsen|ST': [
+-             17,
+-             10,
+-             0,
+-             0
+-           ],
+-           'Quinten Timber|CM': [
+-             1,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Tyrick Mitchell|LB': [
+-             3,
+-             2,
+-             6,
+-             0
+-           ]
+-         },
+-         og: 1,
+-         u: 0
+-       },
+-       'Hull City': {
+-         m: {
+-           'Brooke Norton-Cuffy|RB': [
+-             5,
+-             1,
+-             11,
+-             0
+-           ],
+-           'Charlie Hughes|CB': [
+-             1,
+-             0,
+-             11,
+-             0
+-           ],
+-           'Christos Mouzakitis|CM': [
+-             1,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Hidemasa Morita|CM': [
+-             1,
+-             0,
+-             0,
+-             0
+-           ],
+-           'Jens Hjertø-Dahl|CM': [
+-             5,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Konstantinos Tzolakis|GK': [
+-             0,
+-             0,
+-             11,
+-             0
+-           ],
+-           'Mohamed-Ali Cho|RW': [
+-             10,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Nobel Mendy|CB': [
+-             1,
+-             1,
+-             11,
+-             0
+-           ],
+-           'Robinio Vaz|ST': [
+-             13,
+-             10,
+-             0,
+-             0
+-           ],
+-           'Ryan Giles|LB': [
+-             1,
+-             1,
+-             11,
+-             0
+-           ],
+-           'Tim Iroegbunam|CM': [
+-             4,
+-             6,
+-             0,
+-             0
+-           ]
+-         },
+-         og: 2,
+-         u: 0
+-       },
+-       'Ipswich Town': {
+-         m: {
+-           "Dara O'Shea|CB": [
+-             5,
+-             2,
+-             10,
+-             0
+-           ],
+-           'Abdoul Ouattara|RB': [
+-             2,
+-             3,
+-             10,
+-             0
+-           ],
+-           'Abdul Fatawu|RW': [
+-             10,
+-             6,
+-             0,
+-             0
+-           ],
+-           'Anis Mehmeti|CAM': [
+-             6,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Exequiel Palacios|CM': [
+-             7,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Florentino|CDM': [
+-             1,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Jack Clarke|LW': [
+-             8,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Jacob Greaves|CB': [
+-             2,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Julio Enciso|CAM': [
+-             5,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Kjell Scherpen|GK': [
+-             0,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Leif Davis|LB': [
+-             4,
+-             3,
+-             10,
+-             0
+-           ]
+-         },
+-         og: 1,
+-         u: 0
+-       },
+-       'Leeds United': {
+-         m: {
+-           'Anton Stach|CDM': [
+-             1,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Brenden Aaronson|CAM': [
+-             10,
+-             6,
+-             0,
+-             0
+-           ],
+-           'Ethan Ampadu|CDM': [
+-             1,
+-             0,
+-             0,
+-             0
+-           ],
+-           'Gabriel Gudmundsson|LB': [
+-             2,
+-             1,
+-             6,
+-             0
+-           ],
+-           'Harry Wilson|RW': [
+-             14,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Jaka Bijol|CB': [
+-             0,
+-             1,
+-             6,
+-             0
+-           ],
+-           'James Trafford|GK': [
+-             0,
+-             0,
+-             6,
+-             0
+-           ],
+-           'Jean-Mattéo Bahoya|LW': [
+-             14,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Joe Rodon|CB': [
+-             1,
+-             1,
+-             6,
+-             0
+-           ],
+-           'Sean Longstaff|CM': [
+-             5,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Tarik Muharemović|CB': [
+-             1,
+-             1,
+-             6,
+-             0
+-           ]
+-         },
+-         og: 2,
+-         u: 0
+-       },
+-       'Manchester City': {
+-         m: {
+-           "Nico O'Reilly|LB": [
+-             1,
+-             3,
+-             6,
+-             0
+-           ],
+-           'Antoine Semenyo|RW': [
+-             13,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Elliot Anderson|CM': [
+-             3,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Enzo Fernández|CM': [
+-             7,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Erling Haaland|ST': [
+-             26,
+-             6,
+-             0,
+-             0
+-           ],
+-           'Gianluigi Donnarumma|GK': [
+-             0,
+-             0,
+-             6,
+-             0
+-           ],
+-           'Josko Gvardiol|CB': [
+-             1,
+-             1,
+-             6,
+-             0
+-           ],
+-           'Marc Guéhi|CB': [
+-             1,
+-             0,
+-             6,
+-             0
+-           ],
+-           'Phil Foden|CAM': [
+-             12,
+-             9,
+-             0,
+-             0
+-           ],
+-           'Rayan Cherki|CAM': [
+-             7,
+-             11,
+-             0,
+-             0
+-           ],
+-           'Rúben Dias|CB': [
+-             2,
+-             1,
+-             6,
+-             0
+-           ]
+-         },
+-         og: 2,
+-         u: 0
+-       },
+-       'Manchester United': {
+-         m: {
+-           'Andrey Santos|CM': [
+-             4,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Benjamin Sesko|ST': [
+-             1,
+-             0,
+-             0,
+-             0
+-           ],
+-           'Bruno Fernandes|CAM': [
+-             8,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Bryan Mbeumo|RW': [
+-             11,
+-             6,
+-             0,
+-             0
+-           ],
+-           'Carlos Baleba|CDM': [
+-             1,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Kobbie Mainoo|CM': [
+-             5,
+-             0,
+-             0,
+-             0
+-           ],
+-           'Leny Yoro|CB': [
+-             0,
+-             1,
+-             14,
+-             0
+-           ],
+-           'Lisandro Martínez|CB': [
+-             1,
+-             1,
+-             14,
+-             0
+-           ],
+-           'Matheus Cunha|ST': [
+-             18,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Matthijs de Ligt|CB': [
+-             2,
+-             3,
+-             14,
+-             0
+-           ],
+-           'Patrick Dorgu|LB': [
+-             1,
+-             3,
+-             14,
+-             0
+-           ],
+-           'Senne Lammens|GK': [
+-             0,
+-             0,
+-             14,
+-             0
+-           ]
+-         },
+-         og: 1,
+-         u: 0
+-       },
+-       'Nottingham Forest': {
+-         m: {
+-           'Dan Ndoye|RW': [
+-             9,
+-             9,
+-             0,
+-             0
+-           ],
+-           'Daniel Muñoz|RB': [
+-             0,
+-             4,
+-             13,
+-             0
+-           ],
+-           'Ibrahim Sangaré|CDM': [
+-             2,
+-             2,
+-             0,
+-             0
+-           ],
+-           'James McAtee|CAM': [
+-             3,
+-             1,
+-             0,
+-             0
+-           ],
+-           'John Victor|GK': [
+-             0,
+-             0,
+-             13,
+-             0
+-           ],
+-           'Liam Delap|ST': [
+-             12,
+-             8,
+-             0,
+-             0
+-           ],
+-           'Morgan Gibbs-White|CAM': [
+-             14,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Murillo|CB': [
+-             2,
+-             0,
+-             13,
+-             0
+-           ],
+-           'Nicolás Domínguez|CM': [
+-             1,
+-             0,
+-             0,
+-             0
+-           ],
+-           'Nikola Milenković|CB': [
+-             2,
+-             1,
+-             13,
+-             0
+-           ],
+-           'Ousmane Diomande|CB': [
+-             1,
+-             4,
+-             13,
+-             0
+-           ]
+-         },
+-         og: 1,
+-         u: 0
+-       },
+-       Bournemouth: {
+-         m: {
+-           'Adrien Truffert|LB': [
+-             0,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Alex Scott|CM': [
+-             5,
+-             5,
+-             0,
+-             0
+-           ],
+-           'António Silva|CB': [
+-             2,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Bafodé Diakité|CB': [
+-             1,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Djordje Petrovic|GK': [
+-             0,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Junior Kroupi|ST': [
+-             17,
+-             8,
+-             0,
+-             0
+-           ],
+-           'Justin Kluivert|CAM': [
+-             6,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Marcus Tavernier|CAM': [
+-             8,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Rayan|RW': [
+-             6,
+-             6,
+-             0,
+-             0
+-           ],
+-           'Tyler Adams|CDM': [
+-             0,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Veljko Milosavljevic|CB': [
+-             3,
+-             2,
+-             10,
+-             0
+-           ]
+-         },
+-         og: 2,
+-         u: 0
+-       },
+-       Brentford: {
+-         m: {
+-           'Caoimhín Kelleher|GK': [
+-             0,
+-             0,
+-             14,
+-             0
+-           ],
+-           'Dango Ouattara|RW': [
+-             7,
+-             3,
+-             0,
+-             0
+-           ],
+-           'El Hadji Malick Diouf|LB': [
+-             1,
+-             2,
+-             14,
+-             0
+-           ],
+-           'Igor Thiago|ST': [
+-             14,
+-             8,
+-             0,
+-             0
+-           ],
+-           'Jaidon Anthony|LW': [
+-             1,
+-             0,
+-             0,
+-             0
+-           ],
+-           'Keane Lewis-Potter|LM': [
+-             3,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Mamadou Sangaré|CM': [
+-             1,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Michael Kayode|RB': [
+-             3,
+-             0,
+-             14,
+-             0
+-           ],
+-           'Mikkel Damsgaard|CAM': [
+-             9,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Nathan Collins|CB': [
+-             0,
+-             2,
+-             14,
+-             0
+-           ],
+-           'Sepp van den Berg|CB': [
+-             0,
+-             1,
+-             14,
+-             0
+-           ],
+-           'Yegor Yarmolyuk|CM': [
+-             3,
+-             3,
+-             0,
+-             0
+-           ]
+-         },
+-         og: 1,
+-         u: 0
+-       },
+-       Brighton: {
+-         m: {
+-           "Matt O'Riley|CM": [
+-             4,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Bart Verbruggen|GK': [
+-             0,
+-             0,
+-             13,
+-             0
+-           ],
+-           'Diego Gómez|CM': [
+-             6,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Ferdi Kadıoğlu|LB': [
+-             0,
+-             0,
+-             13,
+-             0
+-           ],
+-           'Georginio Rutter|ST': [
+-             17,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Jack Hinshelwood|CDM': [
+-             2,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Luka Vuskovic|CB': [
+-             1,
+-             2,
+-             13,
+-             0
+-           ],
+-           'Mats Wieffer|RB': [
+-             2,
+-             0,
+-             13,
+-             0
+-           ],
+-           'Maxim De Cuyper|LB': [
+-             0,
+-             4,
+-             13,
+-             0
+-           ],
+-           'Pascal Struijk|CB': [
+-             1,
+-             0,
+-             0,
+-             0
+-           ],
+-           'Yankuba Minteh|RW': [
+-             10,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Yasin Ayari|CM': [
+-             1,
+-             3,
+-             0,
+-             0
+-           ]
+-         },
+-         og: 1,
+-         u: 0
+-       },
+-       Chelsea: {
+-         m: {
+-           'Cole Palmer|CAM': [
+-             7,
+-             6,
+-             0,
+-             0
+-           ],
+-           'Emiliano Martínez|GK': [
+-             0,
+-             0,
+-             17,
+-             0
+-           ],
+-           'Estêvão|RW': [
+-             12,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Jorrel Hato|LB': [
+-             1,
+-             1,
+-             17,
+-             0
+-           ],
+-           'João Pedro|ST': [
+-             16,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Levi Colwill|CB': [
+-             1,
+-             3,
+-             17,
+-             0
+-           ],
+-           'Maxence Lacroix|CB': [
+-             1,
+-             2,
+-             17,
+-             0
+-           ],
+-           'Moisés Caicedo|CDM': [
+-             1,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Morgan Rogers|CAM': [
+-             6,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Reece James|RB': [
+-             4,
+-             2,
+-             17,
+-             0
+-           ],
+-           'Valentín Barco|CM': [
+-             3,
+-             3,
+-             0,
+-             0
+-           ]
+-         },
+-         og: 1,
+-         u: 0
+-       },
+-       Everton: {
+-         m: {
+-           "Jake O'Brien|RB": [
+-             1,
+-             2,
+-             8,
+-             0
+-           ],
+-           'Ainsley Maitland-Niles|RB': [
+-             1,
+-             1,
+-             8,
+-             0
+-           ],
+-           'Brennan Johnson|RW': [
+-             4,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Hayden Hackney|CDM': [
+-             2,
+-             1,
+-             0,
+-             0
+-           ],
+-           'James Garner|CDM': [
+-             4,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Jarrad Branthwaite|CB': [
+-             1,
+-             3,
+-             8,
+-             0
+-           ],
+-           'Jordan Pickford|GK': [
+-             0,
+-             0,
+-             8,
+-             0
+-           ],
+-           'Kiernan Dewsbury-Hall|CM': [
+-             5,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Merlin Röhl|CAM': [
+-             4,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Thierno Barry|ST': [
+-             19,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Vitaliy Mykolenko|LB': [
+-             2,
+-             2,
+-             8,
+-             0
+-           ]
+-         },
+-         og: 3,
+-         u: 0
+-       },
+-       Fulham: {
+-         m: {
+-           'Antonee Robinson|LB': [
+-             0,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Bernd Leno|GK': [
+-             0,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Calvin Bassey|CB': [
+-             0,
+-             1,
+-             10,
+-             0
+-           ],
+-           'Emile Smith Rowe|CAM': [
+-             8,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Gonzalo García|ST': [
+-             17,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Hugo Larsson|CM': [
+-             5,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Joachim Andersen|CB': [
+-             1,
+-             5,
+-             10,
+-             0
+-           ],
+-           'Josh King|CAM': [
+-             3,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Kevin|LW': [
+-             6,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Oscar Bobb|RW': [
+-             1,
+-             0,
+-             0,
+-             0
+-           ],
+-           'Ryan Sessegnon|LB': [
+-             0,
+-             1,
+-             10,
+-             0
+-           ],
+-           'Sander Berge|CDM': [
+-             2,
+-             2,
+-             0,
+-             0
+-           ]
+-         },
+-         og: 2,
+-         u: 0
+-       },
+-       Liverpool: {
+-         m: {
+-           'Alexander Isak|ST': [
+-             17,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Alexis Mac Allister|CM': [
+-             2,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Conor Bradley|RB': [
+-             1,
+-             1,
+-             15,
+-             0
+-           ],
+-           'Dominik Szoboszlai|CAM': [
+-             5,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Florian Wirtz|CAM': [
+-             11,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Giorgi Mamardashvili|GK': [
+-             0,
+-             0,
+-             15,
+-             0
+-           ],
+-           'Hugo Ekitiké|ST': [
+-             10,
+-             11,
+-             0,
+-             0
+-           ],
+-           'Jeremie Frimpong|RB': [
+-             0,
+-             1,
+-             15,
+-             0
+-           ],
+-           'Jérémy Jacquet|CB': [
+-             5,
+-             0,
+-             15,
+-             0
+-           ],
+-           'Milos Kerkez|LB': [
+-             0,
+-             2,
+-             15,
+-             0
+-           ],
+-           'Ryan Gravenberch|CDM': [
+-             4,
+-             3,
+-             0,
+-             0
+-           ]
+-         },
+-         og: 2,
+-         u: 0
+-       },
+-       Newcastle: {
+-         m: {
+-           'Aladji Bamba|CDM': [
+-             3,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Anthony Elanga|RW': [
+-             15,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Bazoumana Touré|LW': [
+-             8,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Jacob Ramsey|CM': [
+-             7,
+-             2,
+-             0,
+-             0
+-           ],
+-           'Joelinton|CM': [
+-             5,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Lewis Hall|LB': [
+-             4,
+-             3,
+-             9,
+-             0
+-           ],
+-           'Lewis Miley|CM': [
+-             2,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Lukas Hornicek|GK': [
+-             0,
+-             0,
+-             9,
+-             0
+-           ],
+-           'Malick Thiaw|CB': [
+-             2,
+-             2,
+-             9,
+-             0
+-           ],
+-           'Sven Botman|CB': [
+-             1,
+-             1,
+-             9,
+-             0
+-           ],
+-           'Tino Livramento|RB': [
+-             3,
+-             0,
+-             9,
+-             0
+-           ]
+-         },
+-         og: 2,
+-         u: 0
+-       },
+-       Sunderland: {
+-         m: {
+-           'Brian Brobbey|ST': [
+-             25,
+-             10,
+-             0,
+-             0
+-           ],
+-           'Chris Rigg|CAM': [
+-             6,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Dan Ballard|CB': [
+-             1,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Enzo Le Fée|CM': [
+-             9,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Habib Diarra|CM': [
+-             9,
+-             6,
+-             0,
+-             0
+-           ],
+-           'Kevin Danso|CB': [
+-             0,
+-             1,
+-             10,
+-             0
+-           ],
+-           'Malick Fofana|LW': [
+-             8,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Noah Sadiki|CM': [
+-             3,
+-             3,
+-             0,
+-             0
+-           ],
+-           'Nordi Mukiele|RB': [
+-             1,
+-             4,
+-             10,
+-             0
+-           ],
+-           'Robin Roefs|GK': [
+-             0,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Trai Hume|RB': [
+-             2,
+-             2,
+-             10,
+-             0
+-           ]
+-         },
+-         og: 1,
+-         u: 0
+-       },
+-       Tottenham: {
+-         m: {
+-           'Antonín Kinský|GK': [
+-             0,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Archie Gray|CM': [
+-             7,
+-             5,
+-             0,
+-             0
+-           ],
+-           'Destiny Udogie|LB': [
+-             0,
+-             0,
+-             10,
+-             0
+-           ],
+-           'Jan Paul van Hecke|CB': [
+-             0,
+-             1,
+-             10,
+-             0
+-           ],
+-           'Lucas Bergvall|CM': [
+-             4,
+-             7,
+-             0,
+-             0
+-           ],
+-           'Micky van de Ven|CB': [
+-             2,
+-             2,
+-             10,
+-             0
+-           ],
+-           'Mohammed Kudus|RW': [
+-             9,
+-             4,
+-             0,
+-             0
+-           ],
+-           'Omar Marmoush|ST': [
+-             19,
+-             8,
+-             0,
+-             0
+-           ],
+-           'Pedro Porro|RB': [
+-             2,
+-             3,
+-             10,
+-             0
+-           ],
+-           'Sandro Tonali|CDM': [
+-             4,
+-             1,
+-             0,
+-             0
+-           ],
+-           'Xavi Simons|CAM': [
+-             6,
+-             6,
+-             0,
+-             0
+-           ]
+-         },
+-         og: 1,
+-         u: 0
+-       }
+-     },
+-     my: [
+-       [
+-         'p-david-raya',
+-         15
+-       ],
+-       [
+-         'p-william-saliba',
+-         14
+-       ],
+-       [
+-         'p-gabriel',
+-         15
+-       ],
+-       [
+-         'p-piero-hincapie',
+-         15
+-       ],
+-       [
+-         'p-riccardo-calafiori',
+-         15
+-       ],
+-       [
+-         'p-ezri-konsa',
+-         8
+-       ],
+-       [
+-         'p-jurrien-timber',
+-         3
+-       ],
+-       [
+-         'p-myles-lewis-skelly',
+-         2
+-       ],
+-       [
+-         'p-cristhian-mosquera',
+-         3
+-       ],
+-       [
+-         'p-illan-meslier',
+-         1
+-       ]
+-     ],
+-     s: 'premier|1rfw42'
+    },
+    leagueClubs: [
+      'Brighton',
+      'Liverpool',
+      'Sunderland',
+
+    at Object.rollover (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:609:59)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:631:13)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:662:54
+FAIL premier: matches the base engine for unsupported starts and genuine match outcomes
+AssertionError [ERR_ASSERTION]: Unsupported fresh save stays byte-for-byte at the base
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 5,
+...
+    },
++   leagueBook: {
++     c: {},
++     my: [],
++     s: 'scottish|13g9dvw'
++   },
+    leagueClubs: [
+      'St Mirren',
+      'Falkirk',
+      'Rangers',
+      'St Johnstone',
+
+    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:370:48)
+    at async Object.baseline (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:620:9)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:631:13)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:662:54
+FAIL premier: passes the whole base comparison with untouched current source under every copied fault
+AssertionError [ERR_ASSERTION]: Unsupported fresh save stays byte-for-byte at the base
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 5,
+...
+    },
++   leagueBook: {
++     c: {},
++     my: [],
++     s: 'scottish|13g9dvw'
++   },
+    leagueClubs: [
+      'St Mirren',
+      'Falkirk',
+      'Rangers',
+      'St Johnstone',
+
+    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:370:48)
+    at async Object.uncopied (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:623:9)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:631:13)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:662:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload',
++   'clears the real fixture key after a fully played season before generating the next season',
++   'matches the base engine for unsupported starts and genuine match outcomes',
++   'passes the whole base comparison with untouched current source under every copied fault'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:648:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:662:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload',
+    'clears the real fixture key after a fully played season before generating the next season',
+    'matches the base engine for unsupported starts and genuine match outcomes',
+    'passes the whole base comparison with untouched current source under every copied fault'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

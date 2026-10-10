@@ -1,0 +1,4 @@
+m1225 exit=0 0s | 0af44fe9a Merge remote-tracking branch 'origin/r1225-cm-fixtures-bind' into rc/r1229-vfy-d
+m1225-realfix-base-asis exit=1 2s | Node.js v24.21.0
+m1225-realfix-base-block exit=0 5s | simCmRealFixtures normal premier: 13 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 980654facb2d41a6c9ddc029c4
+m1225-realfix-default exit=0 2s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
