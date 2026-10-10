@@ -1,0 +1,210 @@
+A) Footle at 390-rm
+  PASS  390-rm: How to play carries the "From this puzzle pool" example with the database host blocked (4 requests aborted)
+   example: {"text":"From this puzzle pool: Erling Haaland is listed with Manchester City, 🇳🇴Norway, position CF.","flag":true,"alt":"Norway","loaded":true,"pH":41,"flagW":12,"flagH":9}
+  PASS  390-rm: the example line holds a flag beside the country
+  PASS  390-rm: Start run is enabled with the host blocked (the pool is the committed file, not empty)
+   puzzle 1: {"line":"Manchester City · 🇵🇹Portugal · CB","lineFlag":true,"lineAlt":"Portugal","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇵🇹Portugal","nationFlag":true,"nationAlt":"Portugal","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  390-rm: puzzle 1, the feedback line "Manchester City · 🇵🇹Portugal · CB" holds its flag inside the line
+  PASS  390-rm: puzzle 1, the Nation box "🇵🇹Portugal" holds its flag and does not spill
+   puzzle 2: {"line":"Tottenham Hotspur · 🇳🇱Netherlands · CB","lineFlag":true,"lineAlt":"Netherlands","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇳🇱Netherlands","nationFlag":true,"nationAlt":"Netherlands","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  390-rm: puzzle 2, the feedback line "Tottenham Hotspur · 🇳🇱Netherlands · CB" holds its flag inside the line
+  PASS  390-rm: puzzle 2, the Nation box "🇳🇱Netherlands" holds its flag and does not spill
+   puzzle 3: {"line":"Manchester City · 🇵🇹Portugal · RB","lineFlag":true,"lineAlt":"Portugal","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇵🇹Portugal","nationFlag":true,"nationAlt":"Portugal","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  390-rm: puzzle 3, the feedback line "Manchester City · 🇵🇹Portugal · RB" holds its flag inside the line
+  PASS  390-rm: puzzle 3, the Nation box "🇵🇹Portugal" holds its flag and does not spill
+   puzzle 4: {"line":"Paris Saint-Germain · 🇫🇷France · RW","lineFlag":true,"lineAlt":"France","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇫🇷France","nationFlag":true,"nationAlt":"France","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  390-rm: puzzle 4, the feedback line "Paris Saint-Germain · 🇫🇷France · RW" holds its flag inside the line
+  PASS  390-rm: puzzle 4, the Nation box "🇫🇷France" holds its flag and does not spill
+  FAIL  390-rm: puzzle 5 showed no feedback after giving up
+  PASS  390-rm: the run receipt shows after five puzzles
+  PASS  390-rm: the receipt's opened player details carry the flag ([{"text":"🇵🇹Portugal","flag":true},{"text":"🇳🇱Netherlands","flag":true},{"text":"🇵🇹Portugal","flag":true},{"text":"🇫🇷France","flag":true},{"text":"🇧🇷Brazil","flag":true}])
+  PASS  390-rm: Footle has no sideways scroll (0px)
+  PASS  390-rm: Footle threw no page error ()
+A) Footle at 390-mo
+  PASS  390-mo: How to play carries the "From this puzzle pool" example with the database host blocked (4 requests aborted)
+   example: {"text":"From this puzzle pool: Erling Haaland is listed with Manchester City, 🇳🇴Norway, position CF.","flag":true,"alt":"Norway","loaded":true,"pH":41,"flagW":12,"flagH":9}
+  PASS  390-mo: the example line holds a flag beside the country
+  PASS  390-mo: Start run is enabled with the host blocked (the pool is the committed file, not empty)
+   puzzle 1: {"line":"FC Barcelona · 🇩🇪Germany · RW","lineFlag":true,"lineAlt":"Germany","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇩🇪Germany","nationFlag":true,"nationAlt":"Germany","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  390-mo: puzzle 1, the feedback line "FC Barcelona · 🇩🇪Germany · RW" holds its flag inside the line
+  PASS  390-mo: puzzle 1, the Nation box "🇩🇪Germany" holds its flag and does not spill
+   puzzle 2: {"line":"Chicago Fire FC · 🇵🇱Poland · CF","lineFlag":true,"lineAlt":"Poland","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇵🇱Poland","nationFlag":true,"nationAlt":"Poland","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  390-mo: puzzle 2, the feedback line "Chicago Fire FC · 🇵🇱Poland · CF" holds its flag inside the line
+  PASS  390-mo: puzzle 2, the Nation box "🇵🇱Poland" holds its flag and does not spill
+   puzzle 3: {"line":"Real Madrid · England · RB","lineFlag":true,"lineAlt":null,"lineLoaded":null,"lineH":21,"flagInLine":true,"nation":"England","nationFlag":true,"nationAlt":null,"nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  390-mo: puzzle 3, the feedback line "Real Madrid · England · RB" holds its flag inside the line
+  PASS  390-mo: puzzle 3, the Nation box "England" holds its flag and does not spill
+   puzzle 4: {"line":"Galatasaray · 🇵🇹Portugal · LW","lineFlag":true,"lineAlt":"Portugal","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇵🇹Portugal","nationFlag":true,"nationAlt":"Portugal","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  390-mo: puzzle 4, the feedback line "Galatasaray · 🇵🇹Portugal · LW" holds its flag inside the line
+  PASS  390-mo: puzzle 4, the Nation box "🇵🇹Portugal" holds its flag and does not spill
+  FAIL  390-mo: puzzle 5 showed no feedback after giving up
+  PASS  390-mo: the run receipt shows after five puzzles
+  PASS  390-mo: the receipt's opened player details carry the flag ([{"text":"🇩🇪Germany","flag":true},{"text":"🇵🇱Poland","flag":true},{"text":"England","flag":true},{"text":"🇵🇹Portugal","flag":true},{"text":"🇮🇹Italy","flag":true}])
+  PASS  390-mo: Footle has no sideways scroll (0px)
+  PASS  390-mo: Footle threw no page error ()
+A) Footle at 1280-rm
+  PASS  1280-rm: How to play carries the "From this puzzle pool" example with the database host blocked (4 requests aborted)
+   example: {"text":"From this puzzle pool: Erling Haaland is listed with Manchester City, 🇳🇴Norway, position CF.","flag":true,"alt":"Norway","loaded":true,"pH":41,"flagW":12,"flagH":9}
+  PASS  1280-rm: the example line holds a flag beside the country
+  PASS  1280-rm: Start run is enabled with the host blocked (the pool is the committed file, not empty)
+   puzzle 1: {"line":"SSC Napoli · 🇬🇧Scotland · CM","lineFlag":true,"lineAlt":"Scotland","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇬🇧Scotland","nationFlag":true,"nationAlt":"Scotland","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  1280-rm: puzzle 1, the feedback line "SSC Napoli · 🇬🇧Scotland · CM" holds its flag inside the line
+  PASS  1280-rm: puzzle 1, the Nation box "🇬🇧Scotland" holds its flag and does not spill
+   puzzle 2: {"line":"Arsenal FC · 🇸🇪Sweden · CF","lineFlag":true,"lineAlt":"Sweden","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇸🇪Sweden","nationFlag":true,"nationAlt":"Sweden","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  1280-rm: puzzle 2, the feedback line "Arsenal FC · 🇸🇪Sweden · CF" holds its flag inside the line
+  PASS  1280-rm: puzzle 2, the Nation box "🇸🇪Sweden" holds its flag and does not spill
+   puzzle 3: {"line":"Chelsea FC · England · CB","lineFlag":true,"lineAlt":null,"lineLoaded":null,"lineH":21,"flagInLine":true,"nation":"England","nationFlag":true,"nationAlt":null,"nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  1280-rm: puzzle 3, the feedback line "Chelsea FC · England · CB" holds its flag inside the line
+  PASS  1280-rm: puzzle 3, the Nation box "England" holds its flag and does not spill
+   puzzle 4: {"line":"Bayern Munich · 🇨🇦Canada · LB","lineFlag":true,"lineAlt":"Canada","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇨🇦Canada","nationFlag":true,"nationAlt":"Canada","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  1280-rm: puzzle 4, the feedback line "Bayern Munich · 🇨🇦Canada · LB" holds its flag inside the line
+  PASS  1280-rm: puzzle 4, the Nation box "🇨🇦Canada" holds its flag and does not spill
+  FAIL  1280-rm: puzzle 5 showed no feedback after giving up
+  PASS  1280-rm: the run receipt shows after five puzzles
+  PASS  1280-rm: the receipt's opened player details carry the flag ([{"text":"🇬🇧Scotland","flag":true},{"text":"🇸🇪Sweden","flag":true},{"text":"England","flag":true},{"text":"🇨🇦Canada","flag":true},{"text":"🇫🇷France","flag":true}])
+  PASS  1280-rm: Footle has no sideways scroll (0px)
+  PASS  1280-rm: Footle threw no page error ()
+A) Footle at 1280-mo
+  PASS  1280-mo: How to play carries the "From this puzzle pool" example with the database host blocked (4 requests aborted)
+   example: {"text":"From this puzzle pool: Erling Haaland is listed with Manchester City, 🇳🇴Norway, position CF.","flag":true,"alt":"Norway","loaded":true,"pH":41,"flagW":12,"flagH":9}
+  PASS  1280-mo: the example line holds a flag beside the country
+  PASS  1280-mo: Start run is enabled with the host blocked (the pool is the committed file, not empty)
+   puzzle 1: {"line":"FC Barcelona · 🇪🇸Spain · CAM","lineFlag":true,"lineAlt":"Spain","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇪🇸Spain","nationFlag":true,"nationAlt":"Spain","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  1280-mo: puzzle 1, the feedback line "FC Barcelona · 🇪🇸Spain · CAM" holds its flag inside the line
+  PASS  1280-mo: puzzle 1, the Nation box "🇪🇸Spain" holds its flag and does not spill
+   puzzle 2: {"line":"Fenerbahce · England · RW","lineFlag":true,"lineAlt":null,"lineLoaded":null,"lineH":21,"flagInLine":true,"nation":"England","nationFlag":true,"nationAlt":null,"nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  1280-mo: puzzle 2, the feedback line "Fenerbahce · England · RW" holds its flag inside the line
+  PASS  1280-mo: puzzle 2, the Nation box "England" holds its flag and does not spill
+   puzzle 3: {"line":"Arsenal FC · England · RW","lineFlag":true,"lineAlt":null,"lineLoaded":null,"lineH":21,"flagInLine":true,"nation":"England","nationFlag":true,"nationAlt":null,"nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  1280-mo: puzzle 3, the feedback line "Arsenal FC · England · RW" holds its flag inside the line
+  PASS  1280-mo: puzzle 3, the Nation box "England" holds its flag and does not spill
+   puzzle 4: {"line":"Liverpool FC · 🇫🇷France · CF","lineFlag":true,"lineAlt":"France","lineLoaded":true,"lineH":21,"flagInLine":true,"nation":"🇫🇷France","nationFlag":true,"nationAlt":"France","nationInBox":true,"nationSpill":0,"boxH":53}
+  PASS  1280-mo: puzzle 4, the feedback line "Liverpool FC · 🇫🇷France · CF" holds its flag inside the line
+  PASS  1280-mo: puzzle 4, the Nation box "🇫🇷France" holds its flag and does not spill
+  FAIL  1280-mo: puzzle 5 showed no feedback after giving up
+  PASS  1280-mo: the run receipt shows after five puzzles
+  PASS  1280-mo: the receipt's opened player details carry the flag ([{"text":"🇪🇸Spain","flag":true},{"text":"England","flag":true},{"text":"England","flag":true},{"text":"🇫🇷France","flag":true},{"text":"🇲🇦Morocco","flag":true}])
+  PASS  1280-mo: Footle has no sideways scroll (0px)
+  PASS  1280-mo: Footle threw no page error ()
+B) Club Manager Market at 390-rm-2026-27
+  PASS  390-rm-2026-27: the season 2026-27 can be picked on the start screen
+  PASS  390-rm-2026-27: the career started and the hub shows a Market tab
+  PASS  390-rm-2026-27: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 48 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 17 | Africa (CAF) 37 | Asia (AFC) 15 | Oceania (OFC) 3
+  PASS  390-rm-2026-27: no "Elsewhere" group
+  PASS  390-rm-2026-27: Niger sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  390-rm-2026-27: Southern Sudan sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  390-rm-2026-27: Turkmenistan sits under Asia (AFC) (found under: Asia (AFC))
+   filtered to Niger: {"flagsOfPick":2,"loaded":2}
+  PASS  390-rm-2026-27: filtering to Niger lists at least one man wearing that flag (2)
+  PASS  390-rm-2026-27: the Market screen has no sideways scroll (0px)
+  PASS  390-rm-2026-27: Club Manager threw no page error ()
+B) Club Manager Market at 390-mo-2026-27
+  PASS  390-mo-2026-27: the season 2026-27 can be picked on the start screen
+  PASS  390-mo-2026-27: the career started and the hub shows a Market tab
+  PASS  390-mo-2026-27: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 48 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 17 | Africa (CAF) 37 | Asia (AFC) 15 | Oceania (OFC) 3
+  PASS  390-mo-2026-27: no "Elsewhere" group
+  PASS  390-mo-2026-27: Niger sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  390-mo-2026-27: Southern Sudan sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  390-mo-2026-27: Turkmenistan sits under Asia (AFC) (found under: Asia (AFC))
+   filtered to Niger: {"flagsOfPick":2,"loaded":2}
+  PASS  390-mo-2026-27: filtering to Niger lists at least one man wearing that flag (2)
+  PASS  390-mo-2026-27: the Market screen has no sideways scroll (0px)
+  PASS  390-mo-2026-27: Club Manager threw no page error ()
+B) Club Manager Market at 1280-rm-2026-27
+  PASS  1280-rm-2026-27: the season 2026-27 can be picked on the start screen
+  PASS  1280-rm-2026-27: the career started and the hub shows a Market tab
+  PASS  1280-rm-2026-27: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 48 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 17 | Africa (CAF) 37 | Asia (AFC) 15 | Oceania (OFC) 3
+  PASS  1280-rm-2026-27: no "Elsewhere" group
+  PASS  1280-rm-2026-27: Niger sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  1280-rm-2026-27: Southern Sudan sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  1280-rm-2026-27: Turkmenistan sits under Asia (AFC) (found under: Asia (AFC))
+   filtered to Niger: {"flagsOfPick":2,"loaded":2}
+  PASS  1280-rm-2026-27: filtering to Niger lists at least one man wearing that flag (2)
+  PASS  1280-rm-2026-27: the Market screen has no sideways scroll (0px)
+  PASS  1280-rm-2026-27: Club Manager threw no page error ()
+B) Club Manager Market at 1280-mo-2026-27
+  PASS  1280-mo-2026-27: the season 2026-27 can be picked on the start screen
+  PASS  1280-mo-2026-27: the career started and the hub shows a Market tab
+  PASS  1280-mo-2026-27: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 48 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 17 | Africa (CAF) 37 | Asia (AFC) 15 | Oceania (OFC) 3
+  PASS  1280-mo-2026-27: no "Elsewhere" group
+  PASS  1280-mo-2026-27: Niger sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  1280-mo-2026-27: Southern Sudan sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  1280-mo-2026-27: Turkmenistan sits under Asia (AFC) (found under: Asia (AFC))
+   filtered to Niger: {"flagsOfPick":2,"loaded":2}
+  PASS  1280-mo-2026-27: filtering to Niger lists at least one man wearing that flag (2)
+  PASS  1280-mo-2026-27: the Market screen has no sideways scroll (0px)
+  PASS  1280-mo-2026-27: Club Manager threw no page error ()
+B) Club Manager Market at 390-rm-2005-06
+  PASS  390-rm-2005-06: the season 2005-06 can be picked on the start screen
+  PASS  390-rm-2005-06: the career started and the hub shows a Market tab
+  PASS  390-rm-2005-06: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 40 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 13 | Africa (CAF) 26 | Asia (AFC) 6 | Oceania (OFC) 2
+  PASS  390-rm-2005-06: no "Elsewhere" group
+  PASS  390-rm-2005-06: Namibia sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  390-rm-2005-06: French Guiana sits under North and Central America, Caribbean (CONCACAF) (found under: North and Central America, Caribbean (CONCACAF))
+   filtered to French Guiana: {"flagsOfPick":2,"loaded":2}
+  PASS  390-rm-2005-06: filtering to French Guiana lists at least one man wearing that flag (2)
+  PASS  390-rm-2005-06: the Market screen has no sideways scroll (0px)
+  PASS  390-rm-2005-06: Club Manager threw no page error ()
+B) Club Manager Market at 1280-mo-2010-11
+  PASS  1280-mo-2010-11: the season 2010-11 can be picked on the start screen
+  PASS  1280-mo-2010-11: the career started and the hub shows a Market tab
+  PASS  1280-mo-2010-11: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 42 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 12 | Africa (CAF) 28 | Asia (AFC) 6 | Oceania (OFC) 2
+  PASS  1280-mo-2010-11: no "Elsewhere" group
+  PASS  1280-mo-2010-11: Niger sits under Africa (CAF) (found under: Africa (CAF))
+  PASS  1280-mo-2010-11: French Guiana sits under North and Central America, Caribbean (CONCACAF) (found under: North and Central America, Caribbean (CONCACAF))
+   filtered to French Guiana: {"flagsOfPick":1,"loaded":1}
+  PASS  1280-mo-2010-11: filtering to French Guiana lists at least one man wearing that flag (1)
+  PASS  1280-mo-2010-11: the Market screen has no sideways scroll (0px)
+  PASS  1280-mo-2010-11: Club Manager threw no page error ()
+B) Club Manager Market at 390-mo-2015-16
+  PASS  390-mo-2015-16: the season 2015-16 can be picked on the start screen
+  PASS  390-mo-2015-16: the career started and the hub shows a Market tab
+  PASS  390-mo-2015-16: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 39 | South America (CONMEBOL) 9 | North and Central America, Caribbean (CONCACAF) 8 | Africa (CAF) 28 | Asia (AFC) 5 | Oceania (OFC) 2
+  PASS  390-mo-2015-16: no "Elsewhere" group
+  PASS  390-mo-2015-16: Mauritius sits under Africa (CAF) (found under: Africa (CAF))
+   filtered to Mauritius: {"flagsOfPick":1,"loaded":1}
+  PASS  390-mo-2015-16: filtering to Mauritius lists at least one man wearing that flag (1)
+  PASS  390-mo-2015-16: the Market screen has no sideways scroll (0px)
+  PASS  390-mo-2015-16: Club Manager threw no page error ()
+B) Club Manager Market at 1280-rm-2020-21
+  PASS  1280-rm-2020-21: the season 2020-21 can be picked on the start screen
+  PASS  1280-rm-2020-21: the career started and the hub shows a Market tab
+  PASS  1280-rm-2020-21: the nationality filter is on the Market screen with 6 groups
+   groups: Europe (UEFA) 41 | South America (CONMEBOL) 9 | North and Central America, Caribbean (CONCACAF) 12 | Africa (CAF) 29 | Asia (AFC) 8 | Oceania (OFC) 2
+  PASS  1280-rm-2020-21: no "Elsewhere" group
+  PASS  1280-rm-2020-21: the Market screen has no sideways scroll (0px)
+  PASS  1280-rm-2020-21: Club Manager threw no page error ()
+C) What's New at 390-rm
+  PASS  390-rm: the Round 1210 entry is on the page
+  PASS  390-rm: the entry links Footle and Club Manager (/footle, /club-manager)
+  PASS  390-rm: the entry is the first of its list (newest first)
+  PASS  390-rm: the entry holds no en or em dash
+  PASS  390-rm: What's New has no sideways scroll (0px)
+C) What's New at 1280-rm
+  PASS  1280-rm: the Round 1210 entry is on the page
+  PASS  1280-rm: the entry links Footle and Club Manager (/footle, /club-manager)
+  PASS  1280-rm: the entry is the first of its list (newest first)
+  PASS  1280-rm: the entry holds no en or em dash
+  PASS  1280-rm: What's New has no sideways scroll (0px)
+D) NBA My Career, the opened Career Log at 390-rm
+  PASS  390-rm: a career was started and three seasons written into its save
+  PASS  390-rm: the opened Career Log shows three season tiles (saw 3)
+  PASS  390-rm: exactly one "Back to career" button on the opened log (saw 1)
+  PASS  390-rm: the opened Career Log has no sideways scroll (0px)
+  PASS  390-rm: after "Back to career" the hub is back with its boxes (6 tiles)
+  PASS  390-rm: the career page threw no page error ()
+D) NBA My Career, the opened Career Log at 1280-mo
+  PASS  1280-mo: a career was started and three seasons written into its save
+  PASS  1280-mo: the opened Career Log shows three season tiles (saw 3)
+  PASS  1280-mo: exactly one "Back to career" button on the opened log (saw 1)
+  PASS  1280-mo: the opened Career Log has no sideways scroll (0px)
+  PASS  1280-mo: after "Back to career" the hub is back with its boxes (6 tiles)
+  PASS  1280-mo: the career page threw no page error ()
+reviewRunWalk: 4 problems

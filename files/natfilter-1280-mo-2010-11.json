@@ -1,0 +1,132 @@
+[
+ {
+  "label": "Europe (UEFA)",
+  "nations": [
+   "Spain",
+   "France",
+   "Italy",
+   "Germany",
+   "England",
+   "Netherlands",
+   "Portugal",
+   "Ireland",
+   "Croatia",
+   "Serbia",
+   "Czech Republic",
+   "Switzerland",
+   "Austria",
+   "Poland",
+   "Belgium",
+   "Denmark",
+   "Scotland",
+   "Slovenia",
+   "Wales",
+   "Bosnia-Herzegovina",
+   "Sweden",
+   "Türkiye",
+   "Norway",
+   "Romania",
+   "Greece",
+   "Slovakia",
+   "Finland",
+   "Northern Ireland",
+   "Russia",
+   "Bulgaria",
+   "Hungary",
+   "Israel",
+   "North Macedonia",
+   "Albania",
+   "Iceland",
+   "Montenegro",
+   "Ukraine",
+   "Armenia",
+   "Belarus",
+   "Gibraltar",
+   "Kosovo",
+   "Lithuania"
+  ]
+ },
+ {
+  "label": "South America (CONMEBOL)",
+  "nations": [
+   "Argentina",
+   "Brazil",
+   "Uruguay",
+   "Colombia",
+   "Chile",
+   "Venezuela",
+   "Paraguay",
+   "Peru",
+   "Ecuador",
+   "Bolivia"
+  ]
+ },
+ {
+  "label": "North and Central America, Caribbean (CONCACAF)",
+  "nations": [
+   "Martinique",
+   "United States",
+   "Jamaica",
+   "Mexico",
+   "Honduras",
+   "Guadeloupe",
+   "Trinidad and Tobago",
+   "Barbados",
+   "Canada",
+   "French Guiana",
+   "Grenada",
+   "St. Kitts & Nevis"
+  ]
+ },
+ {
+  "label": "Africa (CAF)",
+  "nations": [
+   "Senegal",
+   "Cote d'Ivoire",
+   "Cameroon",
+   "Algeria",
+   "Mali",
+   "Morocco",
+   "Nigeria",
+   "Ghana",
+   "Tunisia",
+   "DR Congo",
+   "Togo",
+   "Guinea",
+   "Burkina Faso",
+   "Congo",
+   "Gabon",
+   "Cape Verde",
+   "Kenya",
+   "South Africa",
+   "Benin",
+   "Burundi",
+   "Comoros",
+   "Egypt",
+   "Equatorial Guinea",
+   "Madagascar",
+   "Niger",
+   "Seychelles",
+   "Sierra Leone",
+   "Zimbabwe"
+  ]
+ },
+ {
+  "label": "Asia (AFC)",
+  "nations": [
+   "Japan",
+   "Australia",
+   "Korea, South",
+   "Iran",
+   "China",
+   "Lebanon"
+  ]
+ },
+ {
+  "label": "Oceania (OFC)",
+  "nations": [
+   "New Zealand",
+   "Tahiti"
+  ]
+ }
+]

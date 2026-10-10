@@ -1,0 +1,123 @@
+[
+ {
+  "label": "Europe (UEFA)",
+  "nations": [
+   "Spain",
+   "France",
+   "Germany",
+   "Italy",
+   "England",
+   "Netherlands",
+   "Portugal",
+   "Serbia",
+   "Belgium",
+   "Switzerland",
+   "Croatia",
+   "Poland",
+   "Sweden",
+   "Scotland",
+   "Austria",
+   "Greece",
+   "Wales",
+   "Bosnia-Herzegovina",
+   "Denmark",
+   "Slovenia",
+   "Ireland",
+   "Türkiye",
+   "Czech Republic",
+   "Romania",
+   "Slovakia",
+   "Norway",
+   "Iceland",
+   "Northern Ireland",
+   "Albania",
+   "Hungary",
+   "Montenegro",
+   "Bulgaria",
+   "Russia",
+   "Armenia",
+   "Estonia",
+   "Finland",
+   "Kosovo",
+   "Latvia",
+   "Moldova"
+  ]
+ },
+ {
+  "label": "South America (CONMEBOL)",
+  "nations": [
+   "Argentina",
+   "Brazil",
+   "Colombia",
+   "Uruguay",
+   "Chile",
+   "Ecuador",
+   "Paraguay",
+   "Venezuela",
+   "Peru"
+  ]
+ },
+ {
+  "label": "North and Central America, Caribbean (CONCACAF)",
+  "nations": [
+   "United States",
+   "Mexico",
+   "Costa Rica",
+   "Jamaica",
+   "Haiti",
+   "Martinique",
+   "Curacao",
+   "Guadeloupe"
+  ]
+ },
+ {
+  "label": "Africa (CAF)",
+  "nations": [
+   "Senegal",
+   "Cote d'Ivoire",
+   "Cameroon",
+   "Ghana",
+   "Nigeria",
+   "Algeria",
+   "Morocco",
+   "Mali",
+   "Guinea",
+   "Tunisia",
+   "DR Congo",
+   "Gabon",
+   "Togo",
+   "Benin",
+   "Burkina Faso",
+   "Comoros",
+   "Angola",
+   "Cape Verde",
+   "Mozambique",
+   "Burundi",
+   "Central African Republic",
+   "Congo",
+   "Egypt",
+   "Equatorial Guinea",
+   "Kenya",
+   "Mauritius",
+   "South Africa",
+   "The Gambia"
+  ]
+ },
+ {
+  "label": "Asia (AFC)",
+  "nations": [
+   "Japan",
+   "Korea, South",
+   "Australia",
+   "Indonesia",
+   "Syria"
+  ]
+ },
+ {
+  "label": "Oceania (OFC)",
+  "nations": [
+   "New Zealand",
+   "New Caledonia"
+  ]
+ }
+]
