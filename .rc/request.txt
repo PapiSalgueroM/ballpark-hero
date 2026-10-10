@@ -1,0 +1,14 @@
+# Release AU proof, Round 1220's draft night walk and its controls: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+playDraftNight: node scripts/playDraftNight.mjs
+playDraftNight-again: PLAY_DRAFT_NIGHT_CONTROL=again node scripts/playDraftNight.mjs
+playDraftNight-cut: PLAY_DRAFT_NIGHT_CONTROL=cut node scripts/playDraftNight.mjs
+playDraftNight-fold: PLAY_DRAFT_NIGHT_CONTROL=fold node scripts/playDraftNight.mjs
+playDraftNight-hidden: PLAY_DRAFT_NIGHT_CONTROL=hidden node scripts/playDraftNight.mjs
+playDraftNight-late: PLAY_DRAFT_NIGHT_CONTROL=late node scripts/playDraftNight.mjs
+playDraftNight-spoiler: PLAY_DRAFT_NIGHT_CONTROL=spoiler node scripts/playDraftNight.mjs
+playDraftNight-narrowtile: PLAY_DRAFT_NIGHT_CONTROL=narrowtile node scripts/playDraftNight.mjs
+playDraftNight-ending: PLAY_DRAFT_NIGHT_CONTROL=ending node scripts/playDraftNight.mjs
+playDraftNight-nottall: PLAY_DRAFT_NIGHT_CONTROL=nottall node scripts/playDraftNight.mjs
