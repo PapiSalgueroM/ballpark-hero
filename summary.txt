@@ -1,0 +1,7 @@
+finish exit=0 17s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4809 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+finish-train1178 exit=0 1s | ATTRIBUTION train1178: src/lib/soccerCareerEngine.ts, src/lib/soccerPhone.ts bundled with the train taken out and Rounds 1185 and 1187 reversed; 16 of 16 careers record t
+finish-stream exit=1 15s | simCareerLeagueFinish: control stream turned section 4 red and nothing else. The check works.
+tsc exit=0 69s | 
+seasons exit=0 35s | simCareerLeagueSeasons: all sections green
+awards exit=0 76s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+social exit=0 20s | ALL SOCIAL AND BRAND CHECKS PASSED
