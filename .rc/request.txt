@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+#!serial
+files-branch: node .rc/x/footleFiles.mjs footle-branch
+lazy-try: node .rc/x/lazyFlag.mjs && { npm run build > /tmp/blazy.log 2>&1 || { tail -8 /tmp/blazy.log; false; }; } && node .rc/x/footleFiles.mjs footle-lazy && ENGINES=chromium SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/wl.log 2>&1; s=$?; git diff --stat HEAD -- src | tail -1; grep -E "footle|FAIL" /tmp/wl.log | cut -c1-200; tail -1 /tmp/wl.log; git checkout -q HEAD -- src; exit $s
+files-attr: git checkout 09df145abfb241679022b41903d2f19bc254ebf9 -- src/pages/Footle.tsx && npm run build > /tmp/battr.log 2>&1 && node .rc/x/footleFiles.mjs footle-attr; s=$?; git checkout -q HEAD -- src; exit $s
+cmp-lazy-attr: node .rc/x/cmpFiles.mjs footle-lazy footle-attr
+cmp-lazy-branch: node .rc/x/cmpFiles.mjs footle-lazy footle-branch
+clean: git diff --quiet HEAD -- src scripts && echo "tree back at head"
