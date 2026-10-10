@@ -1,0 +1,466 @@
+{
+  "base": "http://localhost:4173",
+  "parts": {
+    "p1": {
+      "day1": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 0,
+        "hasBook": true,
+        "bytes": 56126,
+        "bookBytes": 37,
+        "stamp": "premier|7weof0",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "afterLive": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 1,
+        "hasBook": true,
+        "bytes": 71416,
+        "bookBytes": 2203,
+        "stamp": "premier|7weof0",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 13,
+        "rows": 55,
+        "goalsFor": 28,
+        "onRows": 25,
+        "og": 3,
+        "u": 0,
+        "assists": 15,
+        "sheets": 25,
+        "my": 5,
+        "race": 38,
+        "played": 1
+      },
+      "afterSix": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 7,
+        "hasBook": true,
+        "bytes": 92293,
+        "bookBytes": 6123,
+        "stamp": "premier|7weof0",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 179,
+        "goalsFor": 152,
+        "onRows": 147,
+        "og": 5,
+        "u": 0,
+        "assists": 90,
+        "sheets": 140,
+        "my": 6,
+        "race": 38,
+        "played": 6
+      },
+      "afterReload": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 10,
+        "hasBook": true,
+        "bytes": 100326,
+        "bookBytes": 6187,
+        "stamp": "premier|7weof0",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 181,
+        "goalsFor": 178,
+        "onRows": 171,
+        "og": 7,
+        "u": 0,
+        "assists": 105,
+        "sheets": 170,
+        "my": 6,
+        "race": 38,
+        "played": 7
+      },
+      "card": "All comps League FA Cup 🏅 AWARD RACES 👟 GOLDEN BOOT 1 Cole Palmer Chelsea 6 2 Hugo Larsson Fulham 6 3 Yankuba Minteh Brighton 6 4 Anthony Elanga Newcastle 5 5 Bryan Mbeumo Manchester United 5 6 Habib Diarra Sunderland 5 7 Morgan Gibbs-White Nottingham Forest 5 8 Amadou Onana Aston Villa 4 🎖️ PLAYER OF THE SEASON WATCH Yankuba Minteh Brighton 6 gls · form score 8.5 Hugo Larsson Fulham 6 gls · form score 8.1 Igor Thiago Brentford 4 gls · form score 7.5 One formula for everyone: goals plus a lift for playing high in the table. 🌍 BALLON D'OR WATCH Cole Palmer Chelsea · 6 league goals Hugo Lars"
+    },
+    "p2": {
+      "opened": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 10,
+        "hasBook": true,
+        "bytes": 100326,
+        "bookBytes": 6187,
+        "stamp": "premier|7weof0",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 181,
+        "goalsFor": 178,
+        "onRows": 171,
+        "og": 7,
+        "u": 0,
+        "assists": 105,
+        "sheets": 170,
+        "my": 6,
+        "race": 38,
+        "played": 7
+      },
+      "end": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 15,
+        "hasBook": true,
+        "bytes": 109804,
+        "bookBytes": 6747,
+        "stamp": "premier|7weof0",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 200,
+        "goalsFor": 280,
+        "onRows": 271,
+        "og": 9,
+        "u": 0,
+        "assists": 162,
+        "sheets": 275,
+        "my": 6,
+        "race": 38,
+        "played": 11
+      },
+      "card": "All comps League FA Cup 🏅 AWARD RACES 👟 GOLDEN BOOT 1 Bryan Mbeumo Manchester United 7 2 Cole Palmer Chelsea 6 3 Hugo Larsson Fulham 6 4 Yankuba Minteh Brighton 6 5 Amadou Onana Aston Villa 5 6 Anthony Elanga Newcastle 5 7 Habib Diarra Sunderland 5 8 Morgan Gibbs-White Nottingham Forest 5 🎖️ PLAYER OF THE SEASON WATCH Yankuba Minteh Brighton 6 gls · form score 9.2 Hugo Larsson Fulham 6 gls · form score 8.8 Bryan Mbeumo Manchester United 7 gls · form score 7.7 One formula for everyone: goals plus a lift for playing high in the table. 🌍 BALLON D'OR WATCH Bryan Mbeumo Manchester United · 7 le",
+      "live": {
+        "done": 1,
+        "halftimes": 1,
+        "summers": 0
+      },
+      "quick": {
+        "done": 3,
+        "halftimes": 0,
+        "summers": 0
+      }
+    },
+    "p3": {
+      "opened": {
+        "save": true,
+        "club": "Sevilla",
+        "season": 1,
+        "week": 48,
+        "hasBook": false,
+        "bytes": 135088,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "end": {
+        "save": true,
+        "club": "Sevilla",
+        "season": 1,
+        "week": 53,
+        "hasBook": false,
+        "bytes": 138977,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "later": {
+        "save": true,
+        "club": "Sevilla",
+        "season": 2,
+        "week": 10,
+        "hasBook": true,
+        "bytes": 105054,
+        "bookBytes": 4754,
+        "stamp": "laliga|1cw28yb",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 136,
+        "goalsFor": 168,
+        "onRows": 130,
+        "og": 7,
+        "u": 31,
+        "assists": 87,
+        "sheets": 205,
+        "my": 4,
+        "race": 38,
+        "played": 7
+      },
+      "card": "All comps League Copa del Rey 🏅 AWARD RACES 👟 GOLDEN BOOT 1 Lamine Yamal Barcelona 9 2 Pablo Barrios Atlético Madrid 8 3 Pedri Barcelona 8 4 Matteo Prati Racing Santander 6 5 Pape Gueye Villarreal 6 6 Julián Alvarez Atlético Madrid 5 7 Alberto Moleiro Villarreal 4 8 Antony Real Betis 4 🎖️ PLAYER OF THE SEASON WATCH Lamine Yamal Barcelona 9 gls · form score 12.2 Pablo Barrios Atlético Madrid 8 gls · form score 11.5 Pedri Barcelona 8 gls · form score 11.2 One formula for everyone: goals plus a lift for playing high in the table. 🌍 BALLON D'OR WATCH Lamine Yamal Barcelona · 9 league goals Pab",
+      "played": {
+        "done": 3,
+        "halftimes": 0,
+        "summers": 0
+      },
+      "on": {
+        "done": 9,
+        "halftimes": 0,
+        "summers": 1
+      }
+    },
+    "p4": {
+      "opened": {
+        "save": true,
+        "club": "Valencia",
+        "season": 1,
+        "week": 48,
+        "hasBook": false,
+        "bytes": 129093,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "end": {
+        "save": true,
+        "club": "Valencia",
+        "season": 1,
+        "week": 53,
+        "hasBook": false,
+        "bytes": 133108,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "later": {
+        "save": true,
+        "club": "Valencia",
+        "season": 2,
+        "week": 10,
+        "hasBook": true,
+        "bytes": 104869,
+        "bookBytes": 5432,
+        "stamp": "laliga|d1f17t",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 158,
+        "goalsFor": 182,
+        "onRows": 159,
+        "og": 4,
+        "u": 19,
+        "assists": 89,
+        "sheets": 174,
+        "my": 8,
+        "race": 38,
+        "played": 7
+      },
+      "card": "All comps League Copa del Rey 🏅 AWARD RACES 👟 GOLDEN BOOT 1 Lamine Yamal Barcelona 8 2 Nico Williams Athletic Club 8 3 Jude Bellingham Real Madrid 7 4 Antony Real Betis 6 5 Jorge de Frutos Rayo Vallecano 6 6 Lucas Stassin Sevilla 6 7 Diego López Valencia 5 8 Yassir Zabiri Racing Santander 5 🎖️ PLAYER OF THE SEASON WATCH Lamine Yamal Barcelona 8 gls · form score 11.2 Jude Bellingham Real Madrid 7 gls · form score 10.5 Nico Williams Athletic Club 8 gls · form score 10.1 One formula for everyone: goals plus a lift for playing high in the table. 🌍 BALLON D'OR WATCH Lamine Yamal Barcelona · 8 l",
+      "played": {
+        "done": 3,
+        "halftimes": 0,
+        "summers": 0
+      },
+      "on": {
+        "done": 9,
+        "halftimes": 0,
+        "summers": 1
+      }
+    },
+    "p5-handover": {
+      "first": {
+        "save": true,
+        "club": "Athletic Club",
+        "season": 1,
+        "week": 18,
+        "hasBook": false,
+        "bytes": 100011,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "then": {
+        "save": true,
+        "club": "Athletic Club",
+        "season": 1,
+        "week": 21,
+        "hasBook": false,
+        "bytes": 103917,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "on": {
+        "done": 2,
+        "halftimes": 0,
+        "summers": 0
+      }
+    },
+    "p5/manager-hot-seat": {
+      "pressed": [
+        "^Take today's job$/i",
+        "^Take the job$/i",
+        "press answer",
+        "^Kick off$/i",
+        "press answer",
+        "^Next match$/i",
+        "^Kick off$/i",
+        "^Next match$/i",
+        "^Kick off$/i",
+        "press answer",
+        "^Next match$/i",
+        "^Kick off$/i",
+        "^Next match$/i",
+        "^Kick off$/i",
+        "^Carry on in Club Man"
+      ],
+      "store": [
+        {
+          "k": "manager-hot-seat-daily-2026-10-10",
+          "bytes": 399,
+          "book": false
+        },
+        {
+          "k": "dukb-play-diary-v1",
+          "bytes": 248,
+          "book": false
+        },
+        {
+          "k": "dukb-guest-handle",
+          "bytes": 17,
+          "book": false
+        },
+        {
+          "k": "rules-gate-seen:/manager-hot-seat",
+          "bytes": 1,
+          "book": false
+        },
+        {
+          "k": "dukb-club-manager-save",
+          "bytes": 103917,
+          "book": false
+        },
+        {
+          "k": "cookie-consent",
+          "bytes": 9,
+          "book": false
+        },
+        {
+          "k": "dukb-earned-badges-v1",
+          "bytes": 2,
+          "book": false
+        },
+        {
+          "k": "dukb-streaks-v1",
+          "bytes": 265,
+          "book": false
+        },
+        {
+          "k": "dukb-local-completions",
+          "bytes": 65,
+          "book": false
+        }
+      ]
+    },
+    "p5/deadline-day": {
+      "pressed": [
+        "^Open today's window$"
+      ],
+      "store": [
+        {
+          "k": "cookie-consent",
+          "bytes": 9,
+          "book": false
+        },
+        {
+          "k": "rules-gate-seen:/deadline-day",
+          "bytes": 1,
+          "book": false
+        },
+        {
+          "k": "dukb-guest-handle",
+          "bytes": 17,
+          "book": false
+        }
+      ]
+    }
+  },
+  "findings": [],
+  "pageErrors": []
+}

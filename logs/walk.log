@@ -1,0 +1,24 @@
+1) a new career at 390 x 844, motion on
+   part 1, day one: Crystal Palace season 1 week 0: book 37 bytes, 0 clubs, 0 rows, 0+0+0 of 0 goals, 0 assists, 0 sheets, mine 0; save 56126 bytes
+   part 1: fixtures played live 1, half times seen 1
+   part 1, after one live match: Crystal Palace season 1 week 1: book 2203 bytes, 13 clubs, 55 rows, 25+3+0 of 28 goals, 15 assists, 25 sheets, mine 5; save 71416 bytes
+   part 1, after five quick sims more: Crystal Palace season 1 week 7: book 6123 bytes, 19 clubs, 179 rows, 147+5+0 of 152 goals, 90 assists, 140 sheets, mine 6; save 92293 bytes
+   part 1, two fixtures after a page reload: Crystal Palace season 1 week 10: book 6187 bytes, 19 clubs, 181 rows, 171+7+0 of 178 goals, 105 assists, 170 sheets, mine 6; save 100326 bytes
+2) the same career at 1280 x 900, reduced motion
+   part 2, opened: Crystal Palace season 1 week 10: book 6187 bytes, 19 clubs, 181 rows, 171+7+0 of 178 goals, 105 assists, 170 sheets, mine 6; save 100326 bytes
+   part 2, after one live and three quick: Crystal Palace season 1 week 15: book 6747 bytes, 19 clubs, 200 rows, 271+9+0 of 280 goals, 162 assists, 275 sheets, mine 6; save 109804 bytes
+3) an old save with no book: scripts/data/cmOldSave1052Fixture.json, 390 wide, reduced motion true
+   part 3, old save opened: Sevilla season 1 week 48: book none; save 135088 bytes
+   part 3, old save after 3 fixtures: Sevilla season 1 week 53: book none; save 138977 bytes
+   part 3, old save 9 fixtures and 1 summers later, season 2: Sevilla season 2 week 10: book 4754 bytes, 19 clubs, 136 rows, 130+7+31 of 168 goals, 87 assists, 205 sheets, mine 4; save 105054 bytes
+4) an old save with no book: scripts/data/cmSecondTierOldSaveFixture.json, 1280 wide, reduced motion false
+   part 4, old save opened: Valencia season 1 week 48: book none; save 129093 bytes
+   part 4, old save after 3 fixtures: Valencia season 1 week 53: book none; save 133108 bytes
+   part 4, old save 9 fixtures and 1 summers later, season 2: Valencia season 2 week 10: book 5432 bytes, 19 clubs, 158 rows, 159+4+19 of 182 goals, 89 assists, 174 sheets, mine 8; save 104869 bytes
+5) /manager-hot-seat at 390 x 844
+   part 5, a hot seat run handed over to Club Manager: Athletic Club season 1 week 18: book none; save 100011 bytes
+   part 5, the handed over career 2 fixtures on: Athletic Club season 1 week 21: book none; save 103917 bytes
+   /manager-hot-seat: pressed [^Take today's job$/i | ^Take the job$/i | press answer | ^Kick off$/i | press answer | ^Next match$/i | ^Kick off$/i | ^Next match$/i | ^Kick off$/i | press answer | ^Next match$/i | ^Kick off$/i | ^Next match$/i | ^Kick off$/i | ^Carry on in Club Man], stored keys manager-hot-seat-daily-2026-10-10:399, dukb-play-diary-v1:248, dukb-guest-handle:17, rules-gate-seen:/manager-hot-seat:1, dukb-club-manager-save:103917, cookie-consent:9, dukb-earned-badges-v1:2, dukb-streaks-v1:265, dukb-local-completions:65
+5) /deadline-day at 390 x 844
+   /deadline-day: pressed [^Open today's window$], stored keys cookie-consent:9, rules-gate-seen:/deadline-day:1, dukb-guest-handle:17
+walk1229: green, nothing found
