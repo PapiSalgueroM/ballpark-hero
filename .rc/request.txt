@@ -1,0 +1,15 @@
+#!build
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: mutations applied on the runner by an extra file and restored in the same line.
+m-noseedcall-replay: node .rc/x/rmut.mjs noseedcall && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-noseedcall-clean: node .rc/x/rmut.mjs noseedcall && node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-flatstream-replay: node .rc/x/rmut.mjs flatstream && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-flatseedat-replay: node .rc/x/rmut.mjs flatseedat && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-thindigest-replay: node .rc/x/rmut.mjs thindigest && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-thindigest-noseed: node .rc/x/rmut.mjs thindigest && LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-timer400-replay: node .rc/x/rmut.mjs timer400 && npm run build > /dev/null 2>&1 && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-timer6000-replay: node .rc/x/rmut.mjs timer6000 && npm run build > /dev/null 2>&1 && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-timer6000-replay-2: node .rc/x/rmut.mjs timer6000 && npm run build > /dev/null 2>&1 && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-timer6000-clean: node .rc/x/rmut.mjs timer6000 && npm run build > /dev/null 2>&1 && node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+restored: git status --short | head -5; echo "tree restored: $(git status --short | grep -c -v '^??') tracked files differ"
