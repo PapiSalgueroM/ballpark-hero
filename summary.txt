@@ -1,0 +1,3 @@
+rival exit=0 22s | simUsRivalSense: 14 checks, 0 failed (full size)
+parity exit=0 40s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 57s | 
