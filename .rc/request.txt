@@ -1,0 +1,1 @@
+r1210-fence: cp .rc/x/simStorageWrites.r1210.mjs scripts/simStorageWrites.r1210.mjs && node scripts/simStorageWrites.r1210.mjs > /tmp/f.log 2>&1; s=$?; rm -f scripts/simStorageWrites.r1210.mjs; grep -n "FAIL\|stale\|no list\|brokenSaveRecovery\|saveKeeper\|BrokenSaveRestore" /tmp/f.log | cut -c1-300; tail -1 /tmp/f.log; exit $s
