@@ -1,0 +1,3 @@
+#!playwright
+# Round 1218 fixer: the review walk on a LIT build (the switch turned on in this checkout only, then turned off again).
+litwalk: node scripts/qa/cmVarLit.mjs on && npm run build > /tmp/build.log 2>&1; b=$?; echo "BUILD exit=$b"; if [ $b -eq 0 ]; then node scripts/playCmVar.mjs > /tmp/walk.log 2>&1; s=$?; grep -E "^FIXTURE|^CASE|^HELP|^FAIL|^playCmVar" /tmp/walk.log | cut -c1-560 | tail -90; else tail -20 /tmp/build.log; s=9; fi; node scripts/qa/cmVarLit.mjs off; git status --short | head -3; echo "RESULT walk=$s"; exit $s
