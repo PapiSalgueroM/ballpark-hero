@@ -1,0 +1,144 @@
+   NEGATIVE CONTROL ON: deaf
+1) Source: careerRivalryEvents.ts is the only home for the rule
+   4 rule fingerprints checked, 13 bindings confirmed
+2) Soccer unchanged: same facts in, same pool and same mutation out
+  FAIL: seed 1: pool differs
+     golden: [{"id":101,"emoji":"🏅","title":"Rival Wins Ballon d'Or","description":"Rival 1 won the Ballon d'Or. You finished 3rd.","consequence":"Motivation boost: stats +1 next season"},{"id":102,"emoji":"🏠","title":"Transfer Battle","description":"You and Rival 1 both want to sign for the same club. The club chose your rival.","consequence":"Morale -5"},{"id":103,"emoji":"🤝","title":"Rival Shows Respect","description":"Rival 1 publicly says he respects you as the best player in the world.","consequence":"Popularity +5, Morale +5"},{"id":104,"emoji":"⚽","title":"Head to Head Victory!","description":"In a head-to-head match you scored twice against Rival 1's team.","consequence":"Popularity +5, Confidence boost"},{"id":106,"emoji":"🇺🇳","title":"National Team Battle","description":"Both you and Rival 1 are on the same national team. The manager must pick one to start.","consequence":"50/50 outcome"},{"id":108,"emoji":"📈","title":"Surpassed Your Rival!","description":"For the first time in your career, your overall rating (85) has surpassed Rival 1's (79).","consequence":"Morale +10, Legacy boost"},{"id":110,"emoji":"🤬","title":"Tunnel Bust-Up","description":"Cameras catch you and Rival 1 chest to chest in the tunnel after a bad-blood derby. Lip readers are having the week of their lives.","consequence":"Rivalry intensifies, the league schedules you for prime time"},{"id":113,"emoji":"👕","title":"The Shirt Swap","description":"After a classic against Rival 1, you swap shirts and embrace. The photo becomes the wallpaper of half the football internet.","consequence":"Popularity +8, the feud softens"},{"id":114,"emoji":"🏥","title":"Rival Goes Down","description":"Rival 1 tears a ligament and faces a year out. You post a genuine get-well message within the hour.","consequence":"Integrity +5, Popularity +5, rivalry cools"}]
+     real:   []
+  FAIL: seed 2: pool differs
+     golden: [{"id":102,"emoji":"🏠","title":"Transfer Battle","description":"You and Rival 2 both want to sign for the same club. The club chose your rival.","consequence":"Morale -5"},{"id":103,"emoji":"🤝","title":"Rival Shows Respect","description":"Rival 2 publicly says he respects you as the best player in the world.","consequence":"Popularity +5, Morale +5"},{"id":104,"emoji":"⚽","title":"Head to Head Victory!","description":"In a head-to-head match you scored twice against Rival 2's team.","consequence":"Popularity +5, Confidence boost"},{"id":106,"emoji":"🇺🇳","title":"National Team Battle","description":"Both you and Rival 2 are on the same national team. The manager must pick one to start.","consequence":"50/50 outcome"},{"id":107,"emoji":"⭐","title":"Rival Wins Champions League","description":"Rival 2 wins the Champions League. You were eliminated in the semis.","consequence":"Morale -5, Motivation boost"},{"id":109,"emoji":"😬","title":"Your Rival Is Now Your Teammate","description":"Rival 2 just signed for YOUR club. The first training session is the most watched non-match footage of the year.","consequence":"The feud cools, the cameras multiply"},{"id":110,"emoji":"🤬","title":"Tunnel Bust-Up","description":"Cameras catch you and Rival 2 chest to chest in the tunnel after a bad-blood derby. Lip readers are having the week of their lives.","consequence":"Rivalry intensifies, the league schedules you for prime time"},{"id":113,"emoji":"👕","title":"The Shirt Swap","description":"After a classic against Rival 2, you swap shirts and embrace. The photo becomes the wallpaper of half the football internet.","consequence":"Popularity +8, the feud softens"},{"id":114,"emoji":"🏥","title":"Rival Goes Down","description":"Rival 2 tears a ligament and faces a year out. You post a genuine get-well message within the hour.","consequence":"Integrity +5, Popularity +5, rivalry cools"},{"id":116,"emoji":"🏴","title":"The Banner","description":"Rival 2's ultras unveil a 40-meter banner mocking you before kickoff. You answer the only way that matters.","consequence":"+1 Shooting and +1 Dribbling next season, rivalry intensifies"}]
+     real:   []
+  FAIL: seed 3: pool differs
+     golden: [{"id":102,"emoji":"🏠","title":"Transfer Battle","description":"You and Rival 3 both want to sign for the same club. The club chose your rival.","consequence":"Morale -5"},{"id":103,"emoji":"🤝","title":"Rival Shows Respect","description":"Rival 3 publicly says he respects you as the best player in the world.","consequence":"Popularity +5, Morale +5"},{"id":104,"emoji":"⚽","title":"Head to Head Victory!","description":"In a head-to-head match you scored twice against Rival 3's team.","consequence":"Popularity +5, Confidence boost"},{"id":107,"emoji":"⭐","title":"Rival Wins Champions League","description":"Rival 3 wins the Champions League. You were eliminated in the semis.","consequence":"Morale -5, Motivation boost"},{"id":110,"emoji":"🤬","title":"Tunnel Bust-Up","description":"Cameras catch you and Rival 3 chest to chest in the tunnel after a bad-blood derby. Lip readers are having the week of their lives.","consequence":"Rivalry intensifies, the league schedules you for prime time"},{"id":112,"emoji":"💫","title":"The Armband Snub","description":"The national team named Rival 3 captain. Your shirt number stays, the armband does not.","consequence":"Morale -5, motivation +2 Physical next season"},{"id":113,"emoji":"👕","title":"The Shirt Swap","description":"After a classic against Rival 3, you swap shirts and embrace. The photo becomes the wallpaper of half the football internet.","consequence":"Popularity +8, the feud softens"},{"id":114,"emoji":"🏥","title":"Rival Goes Down","description":"Rival 3 tears a ligament and faces a year out. You post a genuine get-well message within the hour.","consequence":"Integrity +5, Popularity +5, rivalry cools"},{"id":116,"emoji":"🏴","title":"The Banner","description":"Rival 3's ultras unveil a 40-meter banner mocking you before kickoff. You answer the only way that matters.","consequence":"+1 Shooting and +1 Dribbling next season, rivalry intensifies"},{"id":117,"emoji":"🎬","title":"The Rivalry Documentary","description":"A streaming giant offers to make a series about you and Rival 3. Both camps say yes before the call ends.","consequence":"Net worth +3M, Popularity +8"}]
+     real:   []
+   600 fixtures, 18 of 18 beat ids appeared, 600 pool mismatches, 0 apply mismatches
+  FAIL: 597 more pool mismatches, not printed
+3) Soccer end to end: a real career, the pending slot, the no-repeat rule, the forced beat
+   60 of 60 careers drafted a rival, 0 pending beats seen, 0 dismissed cleanly, 60 of 60 careers never repeated the last beat back to back, 0 saw the forced retirement beat
+  FAIL: not one pending rivalry beat appeared across 60 careers, so the trigger may not be firing
+  FAIL: not one dismiss actually cleared the pending slot
+4) The NFL binding: every beat reachable and correct, and the tick fires in real careers
+  FAIL: beat 201: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 202: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 203: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 204: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 205: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 206: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 207: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 208: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 209: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 210: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 211: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 212: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 213: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 214: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 215: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 216: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 217: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 218: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 219: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 220: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 221: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 222: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 223: rivalryEventPool did not include it even though when() returned true
+   23 of 23 beats reachable with a built fixture, 0 of 23 actually mutated state when applied
+   40 of 40 NFL careers drafted a rival, 0 showed at least one pending beat, 0 pending beats total over 560 career-seasons (rate 0.000), 0 dismissed cleanly, 0 saw the forced retirement beat
+  FAIL: the pending-beat rate is 0.000 per career-season, well under the measured 0.5 coin flip; the tick may be firing far less often than it should
+  FAIL: not one NFL dismiss actually cleared the pending slot
+
+5) THE INVENTED-NAME COLLISION GUARD: the rival can never be a real player
+   19651 real names harvested (src/data plus the sealed Club Manager worlds and the international pools)
+   24 first names x 24 surnames = 576 combinations, 0 collide with a real name
+   6000 live draftRival rolls, 576 distinct names, 0 of them real
+6) The MLB binding: every beat reachable and correct, and the tick fires in real careers
+  FAIL: beat 201: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 202: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 203: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 204: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 205: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 206: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 207: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 208: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 209: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 210: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 211: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 212: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 213: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 214: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 215: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 216: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 217: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 218: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 219: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 220: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 221: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 222: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 223: rivalryEventPool did not include it even though when() returned true
+   23 of 23 beats reachable with a built fixture, 0 of 23 actually mutated state when applied
+   40 of 40 MLB careers drafted a rival, 0 showed at least one pending beat, 0 pending beats total over 560 career-seasons (rate 0.000), 0 dismissed cleanly, 0 saw the forced retirement beat
+  FAIL: the pending-beat rate is 0.000 per career-season, well under the measured 0.5 coin flip; the tick may be firing far less often than it should
+  FAIL: not one MLB dismiss actually cleared the pending slot
+7) The NBA binding: every beat reachable and correct, and the tick fires in real careers
+  FAIL: NBA beat 306 is not dealt when mine=true his=false
+  FAIL: NBA beat 306 is not dealt when mine=false his=true
+  FAIL: NBA beat 306 is not dealt when mine=true his=true
+   the All-Star beat: 0 of 3 fact pairs dealt and applied at 4 rolls each, never on a coin, never when neither made it
+  FAIL: only 0 of 3 All-Star fact pairs were dealt
+  FAIL: NBA beat 301: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 302: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 303: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 304: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 305: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 306: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 307: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 308: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 309: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 310: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 311: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 312: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 313: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 314: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 315: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 316: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 317: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 318: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 319: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 320: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 321: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 322: rivalryEventPool did not include it even though when() returned true
+  FAIL: NBA beat 323: rivalryEventPool did not include it even though when() returned true
+   23 of 23 beats reachable with a built fixture, 0 of 23 actually mutated state when applied
+   40 of 40 NBA careers drafted a rival, 0 showed at least one pending beat, 0 pending beats total over 560 career-seasons (rate 0.000), 0 dismissed cleanly, 0 saw the forced retirement beat
+  FAIL: the NBA pending-beat rate is 0.000 per career-season, well under the measured 0.5 coin flip; the tick may be firing far less often than it should
+  FAIL: not one NBA dismiss actually cleared the pending slot
+8) The NHL binding: every beat reachable and correct, and the tick fires in real careers
+  FAIL: beat 301: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 302: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 303: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 304: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 305: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 306: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 307: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 308: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 309: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 310: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 311: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 312: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 313: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 314: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 315: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 316: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 317: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 318: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 319: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 320: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 321: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 322: rivalryEventPool did not include it even though when() returned true
+  FAIL: beat 323: rivalryEventPool did not include it even though when() returned true
+   23 of 23 beats reachable with a built fixture, 0 of 23 actually mutated state when applied
+   40 of 40 NHL careers drafted a rival, 0 showed at least one pending beat, 0 pending beats total over 560 career-seasons (rate 0.000), 0 dismissed cleanly, 0 saw the forced retirement beat
+  FAIL: the NHL pending-beat rate is 0.000 per career-season, well under the measured 0.5 coin flip; the tick may be firing far less often than it should
+  FAIL: not one NHL dismiss actually cleared the pending slot
+9) The 24 new beats, words against effects: 160 applies over NFL and MLB 218 to 223, NBA and NHL 318 to 323
+
+simCareerRivalryEvents: 110 failures
