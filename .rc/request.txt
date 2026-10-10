@@ -1,0 +1,17 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/leagueSlate.test.ts src/lib/uclLeaguePhase.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simCmLeaguePhase.mjs
+sim4: CM_LEAGUE_PHASE_ONLY=4 node scripts/simCmLeaguePhase.mjs > $RC_OUT/section4.txt; s=$?; tail -1 $RC_OUT/section4.txt; exit $s
+c-const: CM_LEAGUE_PHASE_CONTROL=const node scripts/simCmLeaguePhase.mjs
+c-steps: CM_LEAGUE_PHASE_CONTROL=steps node scripts/simCmLeaguePhase.mjs
+c-feed: CM_LEAGUE_PHASE_CONTROL=feed node scripts/simCmLeaguePhase.mjs
+c-gdonly: CM_LEAGUE_PHASE_CONTROL=gdonly node scripts/simCmLeaguePhase.mjs
+c-ninthdirect: CM_LEAGUE_PHASE_CONTROL=ninthdirect node scripts/simCmLeaguePhase.mjs
+c-flipseed: CM_LEAGUE_PHASE_CONTROL=flipseed node scripts/simCmLeaguePhase.mjs
+c-freebracket: CM_LEAGUE_PHASE_CONTROL=freebracket node scripts/simCmLeaguePhase.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
