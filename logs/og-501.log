@@ -1,0 +1,15 @@
+playLiveMatchFit: seed 501. Replay this run with: LIVE_FIT_SEED=501 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 501 and in one on seed 502
+  [match replay A] seed 501, 1782 draws at kick off, digest 4d3b3c6d over 4365 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 8' Daichi Kamada; own goals among them 0
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 728 with the job taken, 1782 at kick off, 1782 after 2.5 seconds of the match
+  [match replay B] seed 501, 1782 draws at kick off, digest 4d3b3c6d over 4365 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 8' Daichi Kamada; own goals among them 0
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 728 with the job taken, 1782 at kick off, 1782 after 2.5 seconds of the match
+  [match replay C] seed 501, 1782 draws at kick off, digest 4d3b3c6d over 4365 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 8' Daichi Kamada; own goals among them 0
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 728 with the job taken, 1782 at kick off, 1782 after 2.5 seconds of the match
+  [match replay D] seed 502, 1862 draws at kick off, digest 1d0e6360 over 5456 characters of drawn match: Crystal Palace v Aston Villa, goals of the first half 8' Nicolas Jackson, 43' Alejandro Garnacho; own goals among them 0
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 732 with the job taken, 1862 at kick off, 1862 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 501 gave digest 4d3b3c6d in A, B and C (Crystal Palace v Newcastle)
+  ok    the page drew 1782 times before kick off in A, B and C
+  ok    another seed, another match: seed 502 gave digest 1d0e6360
+  ok    the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)
+playLiveMatchFit: the replay is green. Seed 501 opened one match three times (digest 4d3b3c6d, 1782 draws at kick off) and seed 502 opened another (digest 1d0e6360); the page drew nothing while idle.

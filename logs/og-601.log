@@ -1,0 +1,15 @@
+playLiveMatchFit: seed 601. Replay this run with: LIVE_FIT_SEED=601 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 601 and in one on seed 602
+  [match replay A] seed 601, 1810 draws at kick off, digest 8a98328d over 4863 characters of drawn match: Crystal Palace v Manchester United, goals of the first half none; own goals among them 0
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 730 with the job taken, 1810 at kick off, 1810 after 2.5 seconds of the match
+  [match replay B] seed 601, 1810 draws at kick off, digest 8a98328d over 4863 characters of drawn match: Crystal Palace v Manchester United, goals of the first half none; own goals among them 0
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 730 with the job taken, 1810 at kick off, 1810 after 2.5 seconds of the match
+  [match replay C] seed 601, 1810 draws at kick off, digest 8a98328d over 4863 characters of drawn match: Crystal Palace v Manchester United, goals of the first half none; own goals among them 0
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 730 with the job taken, 1810 at kick off, 1810 after 2.5 seconds of the match
+  [match replay D] seed 602, 1798 draws at kick off, digest cb403eaa over 4465 characters of drawn match: Crystal Palace v Ipswich Town, goals of the first half none; own goals among them 0
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 737 with the job taken, 1798 at kick off, 1798 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 601 gave digest 8a98328d in A, B and C (Crystal Palace v Manchester United)
+  ok    the page drew 1810 times before kick off in A, B and C
+  ok    another seed, another match: seed 602 gave digest cb403eaa
+  ok    the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)
+playLiveMatchFit: the replay is green. Seed 601 opened one match three times (digest 8a98328d, 1810 draws at kick off) and seed 602 opened another (digest cb403eaa); the page drew nothing while idle.

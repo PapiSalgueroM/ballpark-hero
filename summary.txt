@@ -1,0 +1,13 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+og-101 exit=0 41s | playLiveMatchFit: the replay is green. Seed 101 opened one match three times (digest 9457ca12, 1840 draws at kick off) and seed 102 opened another (digest c9da4e83); the 
+og-201 exit=0 41s | playLiveMatchFit: the replay is green. Seed 201 opened one match three times (digest 6c4d8089, 1841 draws at kick off) and seed 202 opened another (digest 7d1f1035); the 
+og-301 exit=0 41s | playLiveMatchFit: the replay is green. Seed 301 opened one match three times (digest 8f9b5744, 1859 draws at kick off) and seed 302 opened another (digest 9a0416f9); the 
+og-401 exit=0 41s | playLiveMatchFit: the replay is green. Seed 401 opened one match three times (digest b48e78ac, 1840 draws at kick off) and seed 402 opened another (digest 1cff4dd1); the 
+og-501 exit=0 41s | playLiveMatchFit: the replay is green. Seed 501 opened one match three times (digest 4d3b3c6d, 1782 draws at kick off) and seed 502 opened another (digest 1d0e6360); the 
+og-601 exit=0 41s | playLiveMatchFit: the replay is green. Seed 601 opened one match three times (digest 8a98328d, 1810 draws at kick off) and seed 602 opened another (digest cb403eaa); the 
+og-701 exit=0 40s | playLiveMatchFit: the replay is green. Seed 701 opened one match three times (digest 8244216f, 1855 draws at kick off) and seed 702 opened another (digest 9781d660); the 
+og-801 exit=0 40s | playLiveMatchFit: the replay is green. Seed 801 opened one match three times (digest 8f889bb0, 1805 draws at kick off) and seed 802 opened another (digest 3f9aef06); the 
+og-901 exit=0 41s | playLiveMatchFit: the replay is green. Seed 901 opened one match three times (digest c9c153f1, 1883 draws at kick off) and seed 902 opened another (digest 9f9b3541); the 
+og-1001 exit=0 41s | playLiveMatchFit: the replay is green. Seed 1001 opened one match three times (digest 9d10e90d, 1880 draws at kick off) and seed 1002 opened another (digest c7f09c0e); th
+og-1101 exit=0 41s | playLiveMatchFit: the replay is green. Seed 1101 opened one match three times (digest 268b176b, 1825 draws at kick off) and seed 1102 opened another (digest 5f5589f3); th
+og-1201 exit=0 41s | playLiveMatchFit: the replay is green. Seed 1201 opened one match three times (digest a45bf724, 1797 draws at kick off) and seed 1202 opened another (digest 9a1a2f2d); th

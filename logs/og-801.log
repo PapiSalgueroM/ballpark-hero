@@ -1,0 +1,15 @@
+playLiveMatchFit: seed 801. Replay this run with: LIVE_FIT_SEED=801 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 801 and in one on seed 802
+  [match replay A] seed 801, 1805 draws at kick off, digest 8f889bb0 over 5057 characters of drawn match: Crystal Palace v Arsenal, goals of the first half 12' William Saliba (own goal), 28' Bukayo Saka; own goals among them 1
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 727 with the job taken, 1805 at kick off, 1805 after 2.5 seconds of the match
+  [match replay B] seed 801, 1805 draws at kick off, digest 8f889bb0 over 5057 characters of drawn match: Crystal Palace v Arsenal, goals of the first half 12' William Saliba (own goal), 28' Bukayo Saka; own goals among them 1
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 727 with the job taken, 1805 at kick off, 1805 after 2.5 seconds of the match
+  [match replay C] seed 801, 1805 draws at kick off, digest 8f889bb0 over 5057 characters of drawn match: Crystal Palace v Arsenal, goals of the first half 12' William Saliba (own goal), 28' Bukayo Saka; own goals among them 1
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 727 with the job taken, 1805 at kick off, 1805 after 2.5 seconds of the match
+  [match replay D] seed 802, 1819 draws at kick off, digest 3f9aef06 over 5292 characters of drawn match: Crystal Palace v Chelsea, goals of the first half 24' Estêvão; own goals among them 0
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 744 with the job taken, 1819 at kick off, 1819 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 801 gave digest 8f889bb0 in A, B and C (Crystal Palace v Arsenal)
+  ok    the page drew 1805 times before kick off in A, B and C
+  ok    another seed, another match: seed 802 gave digest 3f9aef06
+  ok    the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)
+playLiveMatchFit: the replay is green. Seed 801 opened one match three times (digest 8f889bb0, 1805 draws at kick off) and seed 802 opened another (digest 3f9aef06); the page drew nothing while idle.

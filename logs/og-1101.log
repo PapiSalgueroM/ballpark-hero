@@ -1,0 +1,15 @@
+playLiveMatchFit: seed 1101. Replay this run with: LIVE_FIT_SEED=1101 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 1101 and in one on seed 1102
+  [match replay A] seed 1101, 1825 draws at kick off, digest 268b176b over 5137 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 733 with the job taken, 1825 at kick off, 1825 after 2.5 seconds of the match
+  [match replay B] seed 1101, 1825 draws at kick off, digest 268b176b over 5137 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 733 with the job taken, 1825 at kick off, 1825 after 2.5 seconds of the match
+  [match replay C] seed 1101, 1825 draws at kick off, digest 268b176b over 5137 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 733 with the job taken, 1825 at kick off, 1825 after 2.5 seconds of the match
+  [match replay D] seed 1102, 1851 draws at kick off, digest 5f5589f3 over 5917 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 16' Tino Livramento, 33' Ismaïla Sarr, 37' Anthony Elanga; own goals among them 0
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 741 with the job taken, 1851 at kick off, 1851 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 1101 gave digest 268b176b in A, B and C (Crystal Palace v Chelsea)
+  ok    the page drew 1825 times before kick off in A, B and C
+  ok    another seed, another match: seed 1102 gave digest 5f5589f3
+  ok    the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)
+playLiveMatchFit: the replay is green. Seed 1101 opened one match three times (digest 268b176b, 1825 draws at kick off) and seed 1102 opened another (digest 5f5589f3); the page drew nothing while idle.

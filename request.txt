@@ -1,0 +1,16 @@
+#!build
+#!playwright
+#!serial
+# Round 1215: how often the opening match holds an own goal, over 24 more seeded matches (replay arms A and D).
+og-101: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=101 node scripts/playLiveMatchFit.mjs
+og-201: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=201 node scripts/playLiveMatchFit.mjs
+og-301: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=301 node scripts/playLiveMatchFit.mjs
+og-401: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=401 node scripts/playLiveMatchFit.mjs
+og-501: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=501 node scripts/playLiveMatchFit.mjs
+og-601: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=601 node scripts/playLiveMatchFit.mjs
+og-701: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=701 node scripts/playLiveMatchFit.mjs
+og-801: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=801 node scripts/playLiveMatchFit.mjs
+og-901: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=901 node scripts/playLiveMatchFit.mjs
+og-1001: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=1001 node scripts/playLiveMatchFit.mjs
+og-1101: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=1101 node scripts/playLiveMatchFit.mjs
+og-1201: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=1201 node scripts/playLiveMatchFit.mjs

@@ -1,0 +1,15 @@
+playLiveMatchFit: seed 901. Replay this run with: LIVE_FIT_SEED=901 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 901 and in one on seed 902
+  [match replay A] seed 901, 1883 draws at kick off, digest c9c153f1 over 6634 characters of drawn match: Crystal Palace v Arsenal, goals of the first half 2' Tyrick Mitchell (own goal), 8' Viktor Gyökeres, 19' Jaydee Canvot, 20' Dwight McNeil, 24' Ismaïla Sarr; own goals among them 1
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 731 with the job taken, 1883 at kick off, 1883 after 2.5 seconds of the match
+  [match replay B] seed 901, 1883 draws at kick off, digest c9c153f1 over 6634 characters of drawn match: Crystal Palace v Arsenal, goals of the first half 2' Tyrick Mitchell (own goal), 8' Viktor Gyökeres, 19' Jaydee Canvot, 20' Dwight McNeil, 24' Ismaïla Sarr; own goals among them 1
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 731 with the job taken, 1883 at kick off, 1883 after 2.5 seconds of the match
+  [match replay C] seed 901, 1883 draws at kick off, digest c9c153f1 over 6634 characters of drawn match: Crystal Palace v Arsenal, goals of the first half 2' Tyrick Mitchell (own goal), 8' Viktor Gyökeres, 19' Jaydee Canvot, 20' Dwight McNeil, 24' Ismaïla Sarr; own goals among them 1
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 731 with the job taken, 1883 at kick off, 1883 after 2.5 seconds of the match
+  [match replay D] seed 902, 1806 draws at kick off, digest 9f9b3541 over 5171 characters of drawn match: Crystal Palace v Ipswich Town, goals of the first half 20' Dwight McNeil; own goals among them 0
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 732 with the job taken, 1806 at kick off, 1806 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 901 gave digest c9c153f1 in A, B and C (Crystal Palace v Arsenal)
+  ok    the page drew 1883 times before kick off in A, B and C
+  ok    another seed, another match: seed 902 gave digest 9f9b3541
+  ok    the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)
+playLiveMatchFit: the replay is green. Seed 901 opened one match three times (digest c9c153f1, 1883 draws at kick off) and seed 902 opened another (digest 9f9b3541); the page drew nothing while idle.

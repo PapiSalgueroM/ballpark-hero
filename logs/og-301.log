@@ -1,0 +1,15 @@
+playLiveMatchFit: seed 301. Replay this run with: LIVE_FIT_SEED=301 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 301 and in one on seed 302
+  [match replay A] seed 301, 1859 draws at kick off, digest 8f9b5744 over 5146 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the first half 27' Morgan Gibbs-White, 41' Dan Ndoye; own goals among them 0
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 733 with the job taken, 1859 at kick off, 1859 after 2.5 seconds of the match
+  [match replay B] seed 301, 1859 draws at kick off, digest 8f9b5744 over 5146 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the first half 27' Morgan Gibbs-White, 41' Dan Ndoye; own goals among them 0
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 733 with the job taken, 1859 at kick off, 1859 after 2.5 seconds of the match
+  [match replay C] seed 301, 1859 draws at kick off, digest 8f9b5744 over 5146 characters of drawn match: Crystal Palace v Nottingham Forest, goals of the first half 27' Morgan Gibbs-White, 41' Dan Ndoye; own goals among them 0
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 733 with the job taken, 1859 at kick off, 1859 after 2.5 seconds of the match
+  [match replay D] seed 302, 1749 draws at kick off, digest 9a0416f9 over 4101 characters of drawn match: Crystal Palace v Bournemouth, goals of the first half none; own goals among them 0
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 737 with the job taken, 1749 at kick off, 1749 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 301 gave digest 8f9b5744 in A, B and C (Crystal Palace v Nottingham Forest)
+  ok    the page drew 1859 times before kick off in A, B and C
+  ok    another seed, another match: seed 302 gave digest 9a0416f9
+  ok    the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)
+playLiveMatchFit: the replay is green. Seed 301 opened one match three times (digest 8f9b5744, 1859 draws at kick off) and seed 302 opened another (digest 9a0416f9); the page drew nothing while idle.

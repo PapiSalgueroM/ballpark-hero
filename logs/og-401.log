@@ -1,0 +1,15 @@
+playLiveMatchFit: seed 401. Replay this run with: LIVE_FIT_SEED=401 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 401 and in one on seed 402
+  [match replay A] seed 401, 1840 draws at kick off, digest b48e78ac over 5704 characters of drawn match: Crystal Palace v Everton, goals of the first half 7' Jørgen Strand Larsen, 38' Thierno Barry; own goals among them 0
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 727 with the job taken, 1840 at kick off, 1840 after 2.5 seconds of the match
+  [match replay B] seed 401, 1840 draws at kick off, digest b48e78ac over 5704 characters of drawn match: Crystal Palace v Everton, goals of the first half 7' Jørgen Strand Larsen, 38' Thierno Barry; own goals among them 0
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 727 with the job taken, 1840 at kick off, 1840 after 2.5 seconds of the match
+  [match replay C] seed 401, 1840 draws at kick off, digest b48e78ac over 5704 characters of drawn match: Crystal Palace v Everton, goals of the first half 7' Jørgen Strand Larsen, 38' Thierno Barry; own goals among them 0
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 727 with the job taken, 1840 at kick off, 1840 after 2.5 seconds of the match
+  [match replay D] seed 402, 1809 draws at kick off, digest 1cff4dd1 over 4479 characters of drawn match: Crystal Palace v Newcastle, goals of the first half none; own goals among them 0
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 731 with the job taken, 1809 at kick off, 1809 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 401 gave digest b48e78ac in A, B and C (Crystal Palace v Everton)
+  ok    the page drew 1840 times before kick off in A, B and C
+  ok    another seed, another match: seed 402 gave digest 1cff4dd1
+  ok    the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)
+playLiveMatchFit: the replay is green. Seed 401 opened one match three times (digest b48e78ac, 1840 draws at kick off) and seed 402 opened another (digest 1cff4dd1); the page drew nothing while idle.
