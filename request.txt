@@ -1,0 +1,7 @@
+#!serial
+digest-head: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=900000 --hookTimeout=120000 2>&1 | grep -E "nhl\||mlb\||nba\||nfl\||Tests |passed|failed" | tr -d '\n' | cut -c1-1800; echo; exit 0
+digest-reverted-all: node .rc/x/revert.mjs all && node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=900000 --hookTimeout=120000; s=$?; git checkout -- src; exit $s
+digest-reverted-nhl: node .rc/x/revert.mjs nhl && node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=900000 --hookTimeout=120000 2>&1 | grep -E "nhl\||mlb\||nba\||nfl\||Tests " | tr -d '\n' | cut -c1-1500; echo; git checkout -- src; exit 0
+digest-reverted-mlb: node .rc/x/revert.mjs mlb && node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=900000 --hookTimeout=120000 2>&1 | grep -E "nhl\||mlb\||nba\||nfl\||Tests " | tr -d '\n' | cut -c1-1500; echo; git checkout -- src; exit 0
+digest-record: DIGEST_RECORD=1 DIGEST_ALLOW='nhl|*,mlb|*' node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=900000 --hookTimeout=120000; s=$?; cp src/test/fixtures/usCareerTruthDigest.json "$RC_OUT/usCareerTruthDigest.json"; git diff --stat -- src/test/fixtures > "$RC_OUT/digest-diff.txt"; exit $s
+digest-replay: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=900000 --hookTimeout=120000

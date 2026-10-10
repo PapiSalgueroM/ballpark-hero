@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/usCareerTruthDigest.test.ts[2m > [22m[2mRound 1104: the US career truth digest[2m > [22m[2mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[22m[39mdigest: 32 of 58 keys moved (253 of 464 careers; 0 careers were below zero on the committed code); allow=nhl|*,mlb|*; outside the allow list: 0
+digest moved: mlb|now|SP mlb|now|RP mlb|now|C mlb|now|1B mlb|now|2B mlb|now|3B mlb|now|SS mlb|now|LF mlb|now|CF mlb|now|RF mlb|now|DH mlb|y2004|SP mlb|y2004|RP mlb|y2004|C mlb|y2004|1B mlb|y2004|2B mlb|y2004|3B mlb|y2004|SS mlb|y2004|LF mlb|y2004|CF mlb|y2004|RF mlb|y2004|DH nhl|now|C nhl|now|LW nhl|now|RW nhl|now|D nhl|now|G nhl|y2006|C nhl|y2006|LW nhl|y2006|RW nhl|y2006|D nhl|y2006|G
+
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 33513[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 33512[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 16:35:52
+[2m   Duration [22m 35.45s[2m (transform 937ms, setup 50ms, collect 1.17s, tests 33.51s, environment 288ms, prepare 63ms)[22m
+
