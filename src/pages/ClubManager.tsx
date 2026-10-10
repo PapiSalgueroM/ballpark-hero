@@ -342,6 +342,22 @@ const ClubManager = () => {
          that would open fine. The way back to them is right beside the retry. */
       return shell(<EraLoadFailed label={g.bootError} noun={g.bootNoun} onRetry={g.retryBoot} onBack={g.showSlots} backLabel="Back to your managers" />);
     }
+    /* Round 1225 review: a new career waiting for its league's real fixture
+       list. The wait says what it is waiting for, and it pulls itself into
+       view: the picker leaves the page scrolled to its last button, and the
+       review measured a bare "Loading…" sitting a whole screen above where the
+       player was looking for all eight seconds. A list that failed or ran out
+       of time says so and asks, rather than starting a generated season
+       under a promise of the real one. */
+    if (g.startWait) {
+      return shell(
+        <div ref={revealRef}>
+          {g.startWait.failed
+            ? <EraLoadFailed label={g.startWait.label} noun="fixture list" onRetry={g.retryStart} onBack={g.startWithoutList} backLabel="Start on generated fixtures" />
+            : <div role="status" data-testid="cm-start-wait" className="text-center py-24 text-muted-foreground animate-pulse">Loading the {g.startWait.label} fixture list…</div>}
+        </div>,
+      );
+    }
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
 

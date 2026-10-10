@@ -117,6 +117,8 @@ function carryAcross(state: CareerState, from: Formation, to: Formation): { xiId
 function startFixtureKey(clubName: string, eraId: string): string | null {
   return isHistoricEra(eraId) ? null : realLeagueFixtureKeyFor(leagueOf(clubName).id, eraById(eraId).startYear);
 }
+/** Round 1225 review: a new career held back while its league's fixture list is out. */
+type StartHold = { key: string; begin: () => void; settle: () => void; over: boolean; timer: ReturnType<typeof setTimeout> | null };
 
 export function useClubManager() {
   const [phase, setPhase] = useState<CMPhase>('boot');
@@ -468,8 +470,29 @@ export function useClubManager() {
   /* Round 1225: a league with a real first season fixture list keeps it in a
      small file of its own. The page asks for it when a club is tapped (it
      passes the picked era), while the dugout step is on screen, so the career
-     starts on it without a wait. fixtureFetch is that fetch while it is out. */
+     starts on it without a wait. fixtureFetch is that fetch while it is out.
+     Round 1225 review: what a file that will not load does, said as it is.
+     The first failed chunk in a tab, online, meets the site's stale chunk rule
+     (reloadOnceForStaleChunk in src/lib/freshBuild.ts): the page reloads to
+     pick up the new build, the picker starts over and the next pick gets its
+     list. Only after that, offline, or with session storage blocked does the
+     failure reach confirmClub below, which then says so and asks. */
   const fixtureFetch = useRef<{ key: string; done: Promise<void> } | null>(null);
+  /* Round 1225 review: a career whose start is waiting for its list. startWait
+     is what the page shows (the season's label, and whether the list has
+     failed or run out of time); startHold is the start itself, kept so the
+     player's answer can finish it. Leaving the page drops it: the review found
+     the first version began the career up to eight seconds later whatever
+     page was on screen by then. */
+  const [startWait, setStartWait] = useState<{ label: string; failed: boolean } | null>(null);
+  const startHold = useRef<StartHold | null>(null);
+  const dropStartHold = useCallback(() => {
+    const hold = startHold.current;
+    if (hold?.timer) clearTimeout(hold.timer);
+    startHold.current = null;
+    return hold;
+  }, []);
+  useEffect(() => () => { dropStartHold(); }, [dropStartHold]);
   const chooseClub = useCallback((clubName: string, eraId?: string) => {
     setPendingClub(clubName);
     const key = clubName && eraId ? startFixtureKey(clubName, eraId) : null;
@@ -498,21 +521,64 @@ export function useClubManager() {
     };
     /* Round 1225: startCareer opens a career on its league's real list only
        when that list is here. It nearly always is (the club tap asked for
-       it). When that fetch is still out, wait for it on the loading screen: a
-       fetch that fails, or one still out after eight seconds, starts the
-       career on generated fixtures, which is what the calendar then says. A
-       caller that never asked for the list (a test that drives this hook taps
-       a club with no era) starts at once, on generated fixtures, exactly as
-       before this round. */
+       it). When that fetch is still out, wait for it on a screen that says
+       what it is waiting for. A caller that never asked for the list (a test
+       that drives this hook taps a club with no era) starts at once, on
+       generated fixtures, exactly as before this round.
+       Round 1225 review: a list that failed, or is still out after eight
+       seconds, no longer starts the career on generated fixtures without a
+       word. Help and What's New promise the real list, so the page says the
+       list did not load and the player picks: try again, or start on
+       generated fixtures (retryStart and startWithoutList below). A list
+       that turns up while the notice is on screen starts the career on it. */
     const fixtureKey = edit ? null : startFixtureKey(club, era);
     const fetching = fixtureFetch.current;
     if (!fixtureKey || realLeagueFixturesLoaded(fixtureKey) || !fetching || fetching.key !== fixtureKey) { begin(); return; }
+    const label = eraById(era).label;
+    dropStartHold();
+    const hold: StartHold = {
+      key: fixtureKey,
+      begin,
+      over: false,
+      timer: null,
+      settle: () => {
+        if (startHold.current !== hold) return;   /* answered already, or the page was left */
+        if (hold.timer) { clearTimeout(hold.timer); hold.timer = null; }
+        if (realLeagueFixturesLoaded(fixtureKey)) { startHold.current = null; setStartWait(null); begin(); }
+        else setStartWait({ label, failed: true });
+      },
+    };
+    startHold.current = hold;
+    setStartWait({ label, failed: false });
     setPhase('boot');
-    let begun = false;
-    const beginOnce = () => { if (!begun) { begun = true; begin(); } };
-    fetching.done.then(beginOnce);
-    setTimeout(beginOnce, 8000);
-  }, [pendingClub]);
+    fetching.done.then(() => { hold.over = true; hold.settle(); });
+    hold.timer = setTimeout(hold.settle, 8000);
+  }, [pendingClub, dropStartHold]);
+
+  /* Round 1225 review: Try again on that notice. A fetch that failed stays
+     failed for the life of the page in Chromium (see reloadToRetryChunk), so
+     asking again means a new page: the picker starts over there, and nothing
+     had been saved yet. Offline that reload is refused and the notice stays.
+     A fetch that is only slow is still out, so it gets another eight seconds. */
+  const retryStart = useCallback(() => {
+    const hold = startHold.current;
+    if (!hold) return;
+    if (realLeagueFixturesLoaded(hold.key)) { hold.settle(); return; }
+    if (hold.over) { reloadToRetryChunk(); return; }
+    setStartWait(w => (w ? { ...w, failed: false } : w));
+    if (hold.timer) clearTimeout(hold.timer);
+    hold.timer = setTimeout(hold.settle, 8000);
+  }, []);
+
+  /* And the other answer: start now, on the game's own generated fixtures.
+     startCareer gives no key while the list is not here, so the Calendar
+     claims nothing it cannot show. */
+  const startWithoutList = useCallback(() => {
+    const hold = dropStartHold();
+    if (!hold) return;
+    setStartWait(null);
+    hold.begin();
+  }, [dropStartHold]);
 
   /* Round 154: founding your own club skips the pending-club dance, because
      the create form is its own confirmation. */
@@ -1098,6 +1164,7 @@ export function useClubManager() {
     simToWeek,
     saveFailed, deskNote, clearDeskNote: () => setDeskNote(null),
     bootError, bootNoun, retryBoot,
+    startWait, retryStart, startWithoutList,
     slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
