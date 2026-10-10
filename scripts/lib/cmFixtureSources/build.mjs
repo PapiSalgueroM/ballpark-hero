@@ -197,7 +197,10 @@ export function buildLedger(league, gameLeague, dir) {
     rounds,
     sources: league.sources.map(s => ({ label: s.label, url: s.citedUrl || s.url })),
   };
+  /* Counted from each side, never copied from the other: the receipt says what was measured. */
   const homePerClub = new Set(clubs.map(c => order.filter(r => r.home === c).length));
+  const awayPerClub = new Set(clubs.map(c => order.filter(r => r.away === c).length));
+  if (homePerClub.size !== 1 || awayPerClub.size !== 1) return { problems: ['the clubs do not all have the same number of home games and of away games'] };
   const readOn = read.flatMap(r => r.pages.map(p => p.meta.readAtUtc)).sort().at(-1).slice(0, 10);
   const released = read.find(r => r.listAsOf === 'release day');
   const receipt = {
@@ -247,7 +250,7 @@ export function buildLedger(league, gameLeague, dir) {
       matchesPerRound: n / 2,
       clubsPerRound: n,
       homePerClub: [...homePerClub][0],
-      awayPerClub: [...homePerClub][0],
+      awayPerClub: [...awayPerClub][0],
       roundHomeAwayTupleDifferences: 0,
       unmappedClubs: 0,
       duplicates: read.flatMap(r => r.duplicates.map(d => ({ source: r.source.id, ...d, handling: 'Dropped the repeated row. The other source prints this fixture once in the same matchday.' }))),
