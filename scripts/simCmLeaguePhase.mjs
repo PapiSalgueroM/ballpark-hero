@@ -10,10 +10,43 @@
  *      two seasons as played add up (points are three a win and one a draw, goals for equal goals against,
  *      two publishers agree on the top 24); and the BRACKET RULE IS DERIVED from those two seasons, never
  *      typed: which play-off pairing feeds which seeded pair, which ties meet in the quarter-finals and the
- *      semi-finals. Every source of both seasons must give the same rule.
+ *      semi-finals. Every source of both seasons must give the same rule. Then the library: every constant of
+ *      uclLeaguePhase.ts equals its row, the bracket constants equal the derived rule, and Soccer Career's own
+ *      four numbers (the other lane's file, read and never edited) agree with the ledger.
+ *   1  the slate. 3,000 fields on keyed streams over three seed sets (the big five and the rest; the same with
+ *      a sixth club in one association; a fullest pot forced to three, four or five of one association). On
+ *      every slate, from its matches alone: eight matches against eight different clubs, four at home, one
+ *      home and one away opponent from each pot, one match a club a matchday, 18 a matchday; the two counts
+ *      the slate reports are the counts its matches hold; no slate is under the counting floor (written a
+ *      second time here) and none is over its budget. Rates, each seed set on its own: fields that fell back
+ *      to the recorded pattern, and fields drawn exactly at the counting floor.
+ *      MEASURED 2026-10-10, sets 11, 23, 37, 1,000 fields each: at the floor 1000, 1000, 1000; fell back 0, 0,
+ *      0; fields with at most four of one association in a pot and five in an association, drawn inside both
+ *      rules: 445 of 445, 449 of 449, 453 of 453. The bands (no more than 5 in 1,000 falling back, at least
+ *      990 in 1,000 at the floor) sit that far from a measurement that never moved; if one goes red the
+ *      answer is more fields and a look at the search, never a wider band.
+ *   2  the table. A crafted pair for each of the eight steps, level on every earlier step, handed in three
+ *      orders and named so the name alone would get it wrong; 400 whole league phases with random scores,
+ *      at every matchday, against the order written a second time from the results; the two real tables.
+ *   3  the knockout draw. 2,000 final orders: the top eight are the seeds, every play-off tie sits inside
+ *      the pairing that feeds its seed (by the DERIVED rule, not the library's constants), 25th down are
+ *      nowhere, 1st and 2nd are in opposite halves; played through on a keyed coin, each quarter-final pairs
+ *      the lines the real ones paired, and the side carrying the higher seed hosts every second leg; every
+ *      round of 16 tie the two real seasons played is one the draw can make.
+ *   4  the real season one field, MEASURED and printed for the lead (step A5 of the round). The engine is
+ *      bundled as it is and never edited; the field of 36 is its own rule read at the league phase's size.
+ *      240 seeded saves: the pots of three by name, the fullest pot, what each draw had to give up.
+ *      THE BINDING ROUND MUST CHANGE section 4 when it makes the field size an argument: see FIELD_LINE.
  *
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
- * A control is CM_LEAGUE_PHASE_CONTROL=<name>; it must turn its own check red (the last line says FIRED).
+ * A control is CM_LEAGUE_PHASE_CONTROL=<name>; it runs its own section only and must turn its own check
+ * red and nothing that is not its own (the last line says FIRED, DID NOT FIRE CLEANLY or ABORTED).
+ *   section 0, the data twisted in memory: onesource wiki thinused figure receipt steps feed points;
+ *              the library edited in the bundle: const (a direct place too many)
+ *   section 1, src/lib/leagueSlate.ts edited in the bundle: ninth sameassoc cap twoaday pot lie nosearch
+ *   section 2: gdonly (the stand in order: steps 3 to 8 go red, 1 and 2 stay green)
+ *   section 3: ninthdirect (9th straight to the round of 16), flipseed (the second leg handed to the lower
+ *              seed), freebracket (the slots in table order, so the wrong lines meet)
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -35,14 +68,20 @@ const CONTROLS = {
   onesource: [0, /^F3 is verified and stands on fewer than two publishers/, /^F3 is verified and stands on fewer than two publishers|^F3: capPerAssociation 2 is not printed by two/],
   wiki: [0, /^F7: .* is a wiki/], thinused: [0, /^F4 is not verified and carries/],
   figure: [0, /^F3: capPerAssociation 2 is not printed by two publishers/], receipt: [0, /does not carry the hash/],
-  steps: [0, /^table step [34] is /],
-  feed: [0, /fed by two play-off pairings/, /fed by two play-off pairings|disagree on|is not one round of 16 tie|do not give one bracket rule|too few readings/],
+  steps: [0, /^table step [34] is /, /^table step [34] is |^LEAGUE_PHASE_STEPS are not/],
+  feed: [0, /fed by two play-off pairings/, /fed by two play-off pairings|disagree on|is not one round of 16 tie|do not give one bracket rule|too few readings|^BRACKET_LINES are not|^HALF_SLOTS pairs lines/],
+  const: [0, /^ucl\.direct is 9 in uclLeaguePhase\.ts and 8 in the ledger/],
   points: [0, /points are not three a win/, /points are not three a win|disagree on the points of place 1$/],
   /* Section 1. These edit the bundled source of src/lib/leagueSlate.ts: see EDITS. */
   ninth: [1, /^\[EIGHT\]/, /^\[(EIGHT|COUNT|HOMEAWAY|POT|DAY|BUDGET|RATE)\]/], sameassoc: [1, /^\[BUDGET\].*breaks/, /^\[(BUDGET|RATE)\]/],
   cap: [1, /^\[BUDGET\].*over the cap/, /^\[(BUDGET|RATE)\]/], twoaday: [1, /^\[DAY\]/, /^\[(DAY|COUNT)\]/],
   pot: [1, /^\[POT\]/, /^\[(POT|HOMEAWAY)\]/], lie: [1, /^\[COST\]/, /^\[(COST|FLOOR|BUDGET|RATE)\]/],
   nosearch: [1, /^\[RATE\].*recorded pattern/, /^\[RATE\]/],
+  /* Sections 2 and 3: edits of src/lib/uclLeaguePhase.ts. gdonly is the stand in order the game sorts by
+     today (goal difference, goals, the name): steps 3 to 8 must go red and steps 1 and 2 must not. */
+  gdonly: [2, /^\[STEP [3-8]\]/, /^\[(STEP [3-8]|FLEET)\]/],
+  ninthdirect: [3, /^\[SEEDS\]/, /^\[(SEEDS|PLAYOFF|OUT|HOST|APART|MEETS|REAL|TOSS)\]/],
+  flipseed: [3, /^\[HOST\]/], freebracket: [3, /^\[MEETS\]/, /^\[(MEETS|HOST)\]/],
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control ${CONTROL}`);
 /* A control runs its own section and nothing else. */
@@ -50,6 +89,7 @@ const runs = n => (CONTROL ? CONTROLS[CONTROL][0] === n : ONLY.length === 0 || O
 
 /* The source edits. Each target line must be in its file exactly once, or the harness refuses to run. */
 const SLATE = 'src/lib/leagueSlate.ts';
+const UCL_FILE = 'src/lib/uclLeaguePhase.ts';
 const EDITS = {
   ninth: [SLATE, '        const matches = pairs.map(([h, a], e): [number, number, number] => [h, a, day[e]]);', '        const matches = pairs.map(([h, a], e): [number, number, number] => [h, a, day[e]]).concat([[pairs[0][1], pairs[0][0], (day[0] + 1) % days]]);'],
   sameassoc: [SLATE, '    if (assoc[h] === assoc[v]) return breaks < maxBreaks ? [1, 0] : null;', '    if (assoc[h] === assoc[v]) return [0, 0];'],
@@ -58,6 +98,11 @@ const EDITS = {
   pot: [SLATE, '    for (let i = 0; i < s; i += 1) out.push([hosts[i], guests[guestOf[i]]]);', '    for (let i = 0; i < s; i += 1) out.push(a === 0 && b === 1 ? [guests[guestOf[i]], hosts[i]] : [hosts[i], guests[guestOf[i]]]);'],
   lie: [SLATE, '    if (spec.assoc[h] === spec.assoc[a]) { breaks += 1; continue; }', '    if (spec.assoc[h] === spec.assoc[a]) { continue; }'],
   nosearch: [SLATE, '  const tries = spec.tries ?? 20;', '  const tries = 0;'],
+  const: [UCL_FILE, '  ucl: { clubs: 36, pots: 4, potSize: 9, perPot: 2, games: 8, home: 4, away: 4, direct: 8, playoffTo: 24, capPerAssociation: 2 },', '  ucl: { clubs: 36, pots: 4, potSize: 9, perPot: 2, games: 8, home: 4, away: 4, direct: 9, playoffTo: 24, capPerAssociation: 2 },'],
+  gdonly: [UCL_FILE, '    for (const step of LEAGUE_PHASE_STEPS) {', '    for (const step of LEAGUE_PHASE_STEPS.slice(0, 2)) {'],
+  ninthdirect: [UCL_FILE, '  const at = (position: number) => order[position - 1];', '  const at = (position: number) => order[position === 8 ? 8 : position === 9 ? 7 : position - 1];'],
+  flipseed: [UCL_FILE, '  return { home: winners[2 * i + 1], away: winners[2 * i] };', '  return { home: winners[2 * i], away: winners[2 * i + 1] };'],
+  freebracket: [UCL_FILE, 'export const HALF_SLOTS = [0, 3, 1, 2] as const;', 'export const HALF_SLOTS = [0, 1, 2, 3] as const;'],
 };
 const editPlugin = {
   name: 'cm-league-phase-control',
@@ -75,13 +120,13 @@ const editPlugin = {
   },
 };
 /** Bundle the given entry files (repo paths) into one module and import it. */
-async function bundle(name, entries) {
+async function bundle(name, entries, extra = []) {
   const work = fs.mkdtempSync(path.join(os.tmpdir(), `cm-league-phase-${name}-`));
   const entry = path.join(work, 'entry.ts');
   const P = f => JSON.stringify(path.join(ROOT, f).split(path.sep).join('/'));
   fs.writeFileSync(entry, Object.entries(entries).map(([as, f]) => `export * as ${as} from ${P(f)};`).join('\n'));
   const out = path.join(work, 'bundle.mjs');
-  await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'esm', outfile: out, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') }, plugins: [editPlugin] });
+  await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'esm', outfile: out, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') }, plugins: [editPlugin, ...extra] });
   return import(pathToFileURL(out).href);
 }
 
@@ -377,8 +422,259 @@ async function section1() {
   }
 }
 
-if (runs(0)) section0();
+/* ── Section 0, second half: the library states what the ledger states ─────────────────────────────── */
+const UCL = UCL_FILE;
+const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1');
+async function section0b() {
+  const { ucl: lib } = await bundle('ucl0', { ucl: UCL });
+  for (const [c, shape] of Object.entries(ledger.competitions)) for (const [key, n] of Object.entries(shape)) {
+    if (key === 'name') continue;
+    const have = c === 'ucl' ? lib.UCL_LEAGUE[key] : lib.LEAGUE_PHASE_SHAPES[c][key];
+    ok(have === n, `${c}.${key} is ${have} in uclLeaguePhase.ts and ${n} in the ledger`);
+  }
+  ok(same(Object.keys(lib.LEAGUE_PHASE_SHAPES).sort(), Object.keys(ledger.competitions).sort()), 'the library and the ledger do not hold the same competitions');
+  ok(same([...lib.LEAGUE_PHASE_STEPS], ledger.tableSteps.slice(0, ledger.tableStepsKept)), 'LEAGUE_PHASE_STEPS are not the first table steps of the ledger, in order');
+  ok(same(lib.PLAYOFF_PAIRS, ledger.playoffPairs), 'PLAYOFF_PAIRS are not the ledger\'s pairings');
+  ok(DERIVED !== null && same(lib.BRACKET_LINES.map(l => l.playoff), DERIVED.feed) && same(lib.BRACKET_LINES.map(l => l.seeds), [[1, 2], [3, 4], [5, 6], [7, 8]]), 'BRACKET_LINES are not the lines the two seasons as played give');
+  const slots = lib.HALF_SLOTS;
+  const meets = [[0, 1], [2, 3]].map(([x, y]) => [slots[x] + 1, slots[y] + 1].sort().join('v')).sort();
+  ok(DERIVED !== null && same(meets, DERIVED.meets), `HALF_SLOTS pairs lines ${meets.join(' ')}, the two seasons as played pair ${DERIVED ? DERIVED.meets.join(' ') : 'nothing'}`);
+  ok(slots[0] < slots[1] && slots[2] < slots[3] && slots[0] < slots[2], 'the even slot does not carry the higher seeded line, so nextRoundTie would hand the second leg to the wrong side');
+  const used = new Set(ledger.rows.filter(r => r.status === 'verified').flatMap(r => r.usedBy));
+  for (const name of used) ok(Object.hasOwn(lib, name.split('.')[0]), `a row names ${name}, which uclLeaguePhase.ts does not export`);
+  for (const key of Object.keys(lib.UCL_LEAGUE)) ok(used.has(`UCL_LEAGUE.${key}`), `UCL_LEAGUE.${key} stands on no verified row`);
+  for (const name of ['LEAGUE_PHASE_STEPS', 'PLAYOFF_PAIRS', 'BRACKET_LINES', 'HALF_SLOTS', 'drawUclKnockout', 'nextRoundTie', 'LEAGUE_PHASE_SHAPES.uel', 'LEAGUE_PHASE_SHAPES.uecl']) ok(used.has(name), `${name} stands on no verified row`);
+  /* Soccer Career keeps four of the same numbers in its own file (the other lane's). Read, never edited. */
+  const theirs = /export const LEAGUE_PHASE = \{([^}]*)\}/.exec(stripComments(text('src/lib/soccerCareerContinental.ts')));
+  ok(theirs !== null, 'Soccer Career\'s LEAGUE_PHASE constant was not found');
+  for (const [, key, n] of (theirs ? theirs[1] : '').matchAll(/(\w+):\s*(\d+)/g)) ok(ledger.competitions.ucl[key] === Number(n), `Soccer Career's LEAGUE_PHASE.${key} is ${n} and the ledger says ${ledger.competitions.ucl[key]}`);
+  noDash(UCL, text(UCL)); noDash(SLATE, text(SLATE));
+}
+
+/* ── Section 2: the table ──────────────────────────────────────────────────────────────────────────── */
+/** The order written a second time, from the results alone, so the library is not checked by itself. */
+function referenceOrder(rows, results) {
+  const info = new Map(rows.map(r => [r.club, { ag: 0, aw: 0, opp: [] }]));
+  for (const [key, [hg, ag]] of Object.entries(results)) {
+    const [h, a] = key.split('|');
+    if (!info.has(h) || !info.has(a)) continue;
+    info.get(a).ag += ag; if (ag > hg) info.get(a).aw += 1;
+    info.get(h).opp.push(a); info.get(a).opp.push(h);
+  }
+  const by = new Map(rows.map(r => [r.club, r]));
+  const keyOf = r => { const i = info.get(r.club); const o = i.opp.map(c => by.get(c)); const t = f => o.reduce((x, y) => x + f(y), 0); return [r.pts, r.gf - r.ga, r.gf, i.ag, r.w, i.aw, t(y => y.pts), t(y => y.gf - y.ga), t(y => y.gf)]; };
+  const decided = new Array(10).fill(0);
+  const sorted = [...rows].sort((a, b) => { const [ka, kb] = [keyOf(a), keyOf(b)]; for (let i = 0; i < ka.length; i += 1) if (ka[i] !== kb[i]) return kb[i] - ka[i]; return a.club < b.club ? -1 : 1; });
+  for (let i = 1; i < sorted.length; i += 1) { const [ka, kb] = [keyOf(sorted[i - 1]), keyOf(sorted[i])]; const at = ka.findIndex((v, j) => v !== kb[j]); decided[at < 0 ? 9 : at] += 1; }
+  return { order: sorted.map(r => r.club), decided };
+}
+async function section2() {
+  const { ucl: lib, slate: slateLib } = await bundle('ucl2', { ucl: UCL, slate: SLATE });
+  const row = (club, over = {}) => ({ club, w: 3, d: 1, l: 1, gf: 10, ga: 5, pts: 10, ...over });
+  const strong = row('Strong', { pts: 9, gf: 9, ga: 4 });
+  /* Zeta must finish above Alpha whichever is handed in first; by name alone Alpha would lead. */
+  const crafted = [
+    [0, 'points', { pts: 11 }, { gf: 30 }, {}, []],
+    [1, 'goal difference', { ga: 4 }, {}, {}, []],
+    [2, 'goals scored', { gf: 11, ga: 6 }, {}, {}, []],
+    [3, 'away goals scored', {}, {}, { 'Strong|Zeta': [0, 3], 'Strong|Alpha': [0, 1] }, [strong]],
+    [4, 'wins', { w: 3, d: 1 }, { w: 2, d: 4 }, {}, []],
+    [5, 'away wins', {}, {}, { 'Strong|Zeta': [0, 1], 'Strong|Alpha': [1, 1] }, [strong]],
+    [6, 'the points of the clubs played', {}, {}, { 'Zeta|Strong': [1, 0], 'Alpha|Weak': [1, 0] }, [strong, row('Weak', { pts: 3, gf: 9, ga: 4 })]],
+    [7, 'their goal difference', {}, {}, { 'Zeta|Strong': [1, 0], 'Alpha|Weak': [1, 0] }, [strong, row('Weak', { pts: 9, gf: 9, ga: 8 })]],
+    [8, 'their goals', {}, {}, { 'Zeta|Strong': [1, 0], 'Alpha|Weak': [1, 0] }, [strong, row('Weak', { pts: 9, gf: 6, ga: 1 })]],
+  ];
+  for (const [step, name, zeta, alpha, results, others] of crafted) {
+    const [z, a] = [row('Zeta', zeta), row('Alpha', alpha)];
+    const good = [[z, a, ...others], [a, z, ...others], [...others, a, z]].every(rows => { const s = lib.sortedLeaguePhaseTable(rows, results).map(r => r.club); return s.indexOf('Zeta') < s.indexOf('Alpha'); });
+    ok(good, `[STEP ${step}] a pair level on every earlier step is not split by ${name}`);
+  }
+  ok(same(lib.sortedLeaguePhaseTable([row('Zeta'), row('Alpha')]).map(r => r.club), ['Alpha', 'Zeta']), '[NAME] a pair level on all eight steps is not listed by name');
+  /* Whole league phases with random scores, against the order written a second time above. */
+  const decided = new Array(10).fill(0);
+  let tables = 0;
+  for (let i = 0; i < 400; i += 1) {
+    const rnd = mulberry(900 + i);
+    const slate = slateLib.swissSlate({ pots: POTS, assoc: makeField(i % 3, mulberry(7000 + i)) }, mulberry(8000 + i));
+    const clubs = Array.from({ length: 36 }, (_, c) => `C${String(c).padStart(2, '0')}`);
+    const rows = clubs.map(club => ({ club, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 }));
+    const results = {};
+    const upTo = 1 + (i % 8); // tables in the middle of the phase too
+    for (const [h, a, d] of slate.matches) {
+      if (d >= upTo) continue;
+      const [hg, ag] = [Math.floor(rnd() * rnd() * 5), Math.floor(rnd() * rnd() * 4)];
+      results[`${clubs[h]}|${clubs[a]}`] = [hg, ag];
+      const [H, A] = [rows[h], rows[a]];
+      H.gf += hg; H.ga += ag; A.gf += ag; A.ga += hg;
+      if (hg > ag) { H.w += 1; H.pts += 3; A.l += 1; } else if (hg < ag) { A.w += 1; A.pts += 3; H.l += 1; } else { H.d += 1; A.d += 1; H.pts += 1; A.pts += 1; }
+    }
+    const ref = referenceOrder(rows, results);
+    ref.decided.forEach((n, k) => { decided[k] += n; });
+    tables += 1;
+    const mixed = [...rows].reverse();
+    ok(same(lib.sortedLeaguePhaseTable(rows, results).map(r => r.club), ref.order) && same(lib.sortedLeaguePhaseTable(mixed, results).map(r => r.club), ref.order), `[FLEET] table ${i} (after matchday ${upTo}) is not in the order the results give`);
+  }
+  console.log(`  2 ${tables} random tables agree with the second writing of the order. Neighbours split by: points ${decided[0]}, goal difference ${decided[1]}, goals ${decided[2]}, away goals ${decided[3]}, wins ${decided[4]}, away wins ${decided[5]}, opponents' points ${decided[6]}, their goal difference ${decided[7]}, their goals ${decided[8]}, the name ${decided[9]}`);
+  ok(decided.slice(1, 9).every(n => n > 0), `[FLEET] the random tables never reached one of the eight steps (${decided.join(' ')}), so they prove less than they say`);
+  /* The two real tables: the rows alone, in the order the two publishers print, wherever two steps decide. */
+  for (const [name, season] of Object.entries(ledger.asPlayed)) {
+    const real = season.table.espn.rows.map(([club, w, d, l, gf, ga, pts]) => ({ club, w, d, l, gf, ga, pts }));
+    const got = lib.sortedLeaguePhaseTable([...real].reverse()).map(r => r.club);
+    const level = new Set(season.table.levelOnTwoSteps.flat());
+    const wrong = real.map((r, i) => (r.club === got[i] || level.has(r.club) ? null : r.club)).filter(Boolean);
+    ok(wrong.length === 0, `[REAL] ${name}: the library does not give the published order for ${wrong.join(', ')}`);
+  }
+}
+
+/* ── Section 3: the knockout draw ──────────────────────────────────────────────────────────────────── */
+async function section3() {
+  const { ucl: lib } = await bundle('ucl3', { ucl: UCL });
+  if (!DERIVED) section0();
+  if (!DERIVED) { fails.push('[RULE] no bracket rule could be derived from the ledger'); return; }
+  const pairs = ledger.playoffPairs;
+  const lineOfSeed = p => Math.ceil(p / 2); // 1 to 4
+  const DRAWS = 2000;
+  const tossed = { seedsHalfOne: 0, tieHalfOne: 0, straight: 0 };
+  for (let i = 0; i < DRAWS; i += 1) {
+    const rnd = mulberry(31000 + i);
+    const order = Array.from({ length: 36 }, (_, c) => `K${String(c).padStart(2, '0')}`);
+    for (let c = 35; c > 0; c -= 1) { const j = Math.floor(rnd() * (c + 1)); [order[c], order[j]] = [order[j], order[c]]; }
+    const pos = new Map(order.map((c, k) => [c, k + 1]));
+    const seed = Math.floor(rnd() * 4294967296);
+    const d = lib.drawUclKnockout(order, seed);
+    const tag = `(draw ${i})`;
+    if (!d) { fails.push(`[SEEDS] no draw ${tag}`); continue; }
+    checks += 1;
+    const seeds = d.seeds.map(c => pos.get(c));
+    if (!same([...seeds].sort((a, b) => a - b), [1, 2, 3, 4, 5, 6, 7, 8])) fails.push(`[SEEDS] the seeded clubs are positions ${seeds.join(' ')} ${tag}`);
+    const inTies = d.playoffs.flatMap(t => [pos.get(t.home), pos.get(t.away)]).sort((a, b) => a - b);
+    if (!same(inTies, Array.from({ length: 16 }, (_, k) => k + 9))) fails.push(`[OUT] the play-off clubs are positions ${inTies.join(' ')} ${tag}`);
+    d.playoffs.forEach((t, slot) => {
+      const [high, low] = pairs[DERIVED.feed[lineOfSeed(seeds[slot]) - 1]] ?? [[], []];
+      if (!high.includes(pos.get(t.away)) || !low.includes(pos.get(t.home))) fails.push(`[PLAYOFF] slot ${slot}: seed ${seeds[slot]} is fed by ${pos.get(t.home)} against ${pos.get(t.away)} ${tag}`);
+    });
+    if (Math.floor(seeds.indexOf(1) / 4) === Math.floor(seeds.indexOf(2) / 4)) fails.push(`[APART] 1st and 2nd are in one half ${tag}`);
+    /* Play it through on a keyed coin. Each side carries the seed of its slot: a seed passes to whoever knocks its holder out. */
+    let sides = d.playoffs.map((t, slot) => ({ club: rnd() < 0.5 ? (rnd() < 0.5 ? t.home : t.away) : d.seeds[slot], seed: seeds[slot] }));
+    for (const round of ['QF', 'SF']) {
+      const next = [];
+      for (let k = 0; k < sides.length / 2; k += 1) {
+        const tie = lib.nextRoundTie(sides, k);
+        const lines = [lineOfSeed(tie.home.seed), lineOfSeed(tie.away.seed)].sort().join('v');
+        if (round === 'QF' && !DERIVED.meets.includes(lines)) fails.push(`[MEETS] a quarter-final pairs lines ${lines} ${tag}`);
+        if ([tie.home.seed, tie.away.seed].sort().join() === '1,2') fails.push(`[APART] the seeds of 1st and 2nd meet in the ${round} ${tag}`);
+        const top = round === 'QF' ? 4 : 2;
+        if (!(tie.away.seed <= top && tie.away.seed < tie.home.seed)) fails.push(`[HOST] the ${round} second leg is hosted by the side carrying seed ${tie.away.seed} against ${tie.home.seed} ${tag}`);
+        next.push({ club: rnd() < 0.5 ? tie.home.club : tie.away.club, seed: Math.min(tie.home.seed, tie.away.seed) });
+      }
+      sides = next;
+    }
+    if (i % 40 === 0) {
+      ok(same(lib.drawUclKnockout(order, seed), d), `[SAME] the same order and seed gave two draws ${tag}`);
+      const swapped = [...order]; [swapped[27], swapped[33]] = [swapped[33], swapped[27]];
+      ok(same(lib.drawUclKnockout(swapped, seed), d), `[SAME] a swap between 28th and 34th moved the draw ${tag}`);
+    }
+    tossed.seedsHalfOne += seeds.indexOf(1) < 4 ? 1 : 0;
+    tossed.tieHalfOne += d.playoffs.findIndex(t => pos.get(t.away) === 9) < 4 ? 1 : 0;
+    tossed.straight += d.playoffs.some(t => pos.get(t.away) === 9 && pos.get(t.home) === 23) ? 1 : 0;
+  }
+  /* Three tosses a line. Each must land both ways: a toss that never turns is a bracket fixed by hand. */
+  for (const [name, n] of Object.entries(tossed)) ok(n > DRAWS * 0.4 && n < DRAWS * 0.6, `[TOSS] ${name} landed one way ${n} times in ${DRAWS}`);
+  console.log(`  3 ${DRAWS} draws: 1st in half one ${tossed.seedsHalfOne}, 9th's tie in half one ${tossed.tieHalfOne}, 9th drawn against 23rd ${tossed.straight}`);
+  /* The two real seasons: every round of 16 tie that was played is one this draw can make from that table. */
+  for (const [name, season] of Object.entries(ledger.asPlayed)) {
+    const canon = n => ledger.aliases[n] ?? n;
+    const order = season.table.espn.rows.map(r => r[0]);
+    const made = new Set();
+    for (let seed = 0; seed < 400; seed += 1) { const d = lib.drawUclKnockout(order, seed); d.playoffs.forEach((t, slot) => { made.add(`${t.home}|${d.seeds[slot]}`); made.add(`${t.away}|${d.seeds[slot]}`); }); }
+    for (const tie of season.r16[0].ties) { const [x, y] = tie.map(canon); ok(made.has(`${x}|${y}`) || made.has(`${y}|${x}`), `[REAL] ${name}: ${tie.join(' against ')} was played and this draw can never make it`); }
+  }
+}
+
+/* ── Section 4: the real season one field, measured (step A5) ──────────────────────────────────────── */
+const ENGINE = 'src/lib/clubManager.ts';
+const FIELD_LINE = 'const UCL_FIELD_SIZE = 32;';
+/** The engine as it is, and a second copy of the BUNDLE (never of the source) whose field holds 36: the
+ *  rule that fills the field is the engine's own, only its size is read as the league phase's. When the
+ *  binding round makes the size an argument this line goes and seasonOneUclField is called with 36. */
+const widePlugin = {
+  name: 'cm-league-phase-field-of-36',
+  setup(b) {
+    b.onLoad({ filter: /clubManager[.]ts$/ }, async args => {
+      const source = (await fs.promises.readFile(args.path, 'utf8')).replaceAll('\r\n', '\n');
+      const count = source.split(FIELD_LINE).length - 1;
+      if (count !== 1) cannot(`section 4: "${FIELD_LINE}" is in ${ENGINE} ${count} times, it must be exactly once`);
+      return { contents: source.replace(FIELD_LINE, 'const UCL_FIELD_SIZE = 36;'), loader: 'ts' };
+    });
+  },
+};
+const SAVES = 240;
+async function section4() {
+  const { engine } = await bundle('engine', { engine: ENGINE });
+  const { engine: wide } = await bundle('engine36', { engine: ENGINE }, [widePlugin]);
+  const { ucl: lib } = await bundle('ucl4', { ucl: UCL });
+  const field32 = engine.seasonOneUclField('now') ?? [];
+  const field = wide.seasonOneUclField('now') ?? [];
+  const holder = engine.CM_FINAL_TABLES_2025_26.holders;
+  ok(field32.length === 32 && field.length === 36 && new Set(field).size === 36, `[FIELD] the season one field is ${field32.length} clubs today and ${field.length} at the league phase's size`);
+  ok(field32.every(c => field.includes(c)), '[FIELD] the 36 do not contain the 32');
+  ok(field.includes(holder), `[FIELD] the holders (${holder}) are not in the field`);
+  const added = field.filter(c => !field32.includes(c));
+  const realRandom = Math.random;
+  const realNow = Date.now;
+  const escape = {};
+  const fullest = {};
+  const fullestWho = {};
+  const samples = [];
+  let atFloor = 0;
+  let drawn = 0;
+  let nations = null;
+  try {
+    Date.now = () => 1789430400000;
+    for (let i = 0; i < SAVES; i += 1) {
+      Math.random = mulberry(52000 + i);
+      const state = engine.startCareer(field32[i % field32.length]);
+      const seed = Math.floor(Math.random() * 4294967296);
+      const strengthOf = c => engine.strengthOf(state, c);
+      const assocOf = c => engine.uclClubCountry(state, c);
+      if (i === 0) { nations = {}; for (const c of field) nations[assocOf(c)] = (nations[assocOf(c)] ?? 0) + 1; ok(field.every(c => assocOf(c)), `[FIELD] a club of the field has no association: ${field.filter(c => !assocOf(c)).join(', ')}`); }
+      const slate = lib.drawUclLeaguePhase({ field, holder, seed, strengthOf, assocOf });
+      checks += 1;
+      if (!slate) { fails.push(`[FIELD] no slate for save ${i}`); continue; }
+      drawn += 1;
+      const names = [...new Set(slate.clubs.map(assocOf))];
+      const assoc = slate.clubs.map(c => names.indexOf(assocOf(c)));
+      const floor = floorOf(assoc);
+      const matches = slate.fx.map(code => [Math.floor(code / 36) % 36, code % 36, Math.floor(code / 1296)]);
+      for (const f of slateFaults(assoc, { matches, breaks: slate.breaks, overCap: slate.overCap, floor, fallback: slate.fallback === true })) fails.push(`${f} (save ${i})`);
+      const key = `${slate.breaks} same association, ${slate.overCap} over the cap${slate.fallback ? ', the recorded pattern' : ''}`;
+      escape[key] = (escape[key] ?? 0) + 1;
+      if (!slate.fallback && slate.breaks === floor.breaks && slate.overCap === floor.overCap) atFloor += 1;
+      fullest[floor.most[0]] = (fullest[floor.most[0]] ?? 0) + 1;
+      const pots = [0, 1, 2, 3].map(p => slate.clubs.slice(p * 9, p * 9 + 9));
+      const who = new Set();
+      for (const pot of pots) { const n = {}; for (const c of pot) n[assocOf(c)] = (n[assocOf(c)] ?? 0) + 1; for (const [a, k] of Object.entries(n)) if (k === floor.most[0]) who.add(a); }
+      for (const a of who) fullestWho[`${floor.most[0]} of ${a}`] = (fullestWho[`${floor.most[0]} of ${a}`] ?? 0) + 1;
+      if (samples.length < 3) samples.push({ club: state.clubName, pots: pots.map(pot => pot.map(c => `${c} (${strengthOf(c)}, ${assocOf(c)})`)), slate });
+    }
+  } finally { Math.random = realRandom; Date.now = realNow; }
+  ok(drawn >= 200, `[FIELD] only ${drawn} season one fields were drawn`);
+  ok(drawn > 0 && atFloor / drawn >= BANDS.atFloorLeast, `[RATE] ${atFloor} of ${drawn} season one fields were drawn exactly at the counting floor`);
+  const share = n => `${n} of ${drawn} (${(100 * n / Math.max(1, drawn)).toFixed(1)}%)`;
+  console.log(`  4 the season one field at 36: ${Object.entries(nations ?? {}).sort((a, b) => b[1] - a[1]).map(([a, n]) => `${a} ${n}`).join(', ')}`);
+  console.log(`  4 the 36 add to today's 32: ${added.join(', ')}. Holders: ${holder}.`);
+  samples.forEach((s, i) => { console.log(`  4 sample save ${i + 1} (started at ${s.club}): ${s.slate.breaks} same association matches, ${s.slate.overCap} over the cap`); s.pots.forEach((pot, p) => console.log(`      pot ${p + 1}: ${pot.join('; ')}`)); });
+  console.log(`  4 most clubs of one association in one pot, over ${drawn} seeded saves: ${Object.entries(fullest).sort().map(([k, n]) => `${k} in ${share(n)}`).join(' | ')}`);
+  console.log(`  4 which association fills it: ${Object.entries(fullestWho).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(', ')}`);
+  console.log(`  4 THE MEASUREMENT FOR THE LEAD, slates by what the draw had to give up: ${Object.entries(escape).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k}: ${share(n)}`).join(' | ')}`);
+  console.log(`  4 drawn exactly at the counting floor: ${share(atFloor)}. The critic's line for pots by squad strength is about 19 in 20 with nothing given up.`);
+}
+
+if (runs(0)) { section0(); await section0b(); }
 if (runs(1)) await section1();
+if (runs(2)) await section2();
+if (runs(3)) await section3();
+if (runs(4)) await section4();
 
 /* ── The verdict ───────────────────────────────────────────────────────────────────────────────────── */
 if (CONTROL) {
