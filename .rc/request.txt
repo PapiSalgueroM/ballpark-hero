@@ -1,0 +1,20 @@
+c-rostergate: US_RIVAL_CONTROL=rostergate node scripts/simUsRivalSense.mjs
+c-owndealt: US_RIVAL_CONTROL=owndealt node scripts/simUsRivalSense.mjs
+c-owndead: US_RIVAL_CONTROL=owndead node scripts/simUsRivalSense.mjs
+c-lastyearnfl: US_RIVAL_CONTROL=lastyearnfl node scripts/simUsRivalSense.mjs
+c-verdictswap: US_RIVAL_CONTROL=verdictswap node scripts/simUsRivalSense.mjs
+c-oneslot: US_RIVAL_CONTROL=oneslot node scripts/simUsRivalSense.mjs
+c-workload17: US_RIVAL_CONTROL=workload17 node scripts/simUsRivalSense.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+names: node scripts/simInventedNames.mjs
+livescores: node scripts/simLiveScores.mjs
+trustcopy: node scripts/simTrustCopy.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simCareerHub: node scripts/simCareerHub.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
