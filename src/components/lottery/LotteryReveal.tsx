@@ -24,10 +24,16 @@
      lottery from the people who asked for less motion.
    - CLUBS, NEVER PEOPLE. A tile is a club and a slot. Nobody is quoted. */
 import { useState } from 'react';
+import type { CSSProperties } from 'react';
 import { cn } from '@/lib/utils';
 import { revealDelay } from '@/components/club-manager/Celebration';
-import { cleanLotteryRows, lotteryMoveWords, lotteryRevealPace } from '@/lib/lotteryReveal';
+import { LOTTERY_REVEAL_CLOSE_S, LOTTERY_REVEAL_TURN_S, cleanLotteryRows, lotteryMoveWords, lotteryRevealPace } from '@/lib/lotteryReveal';
 import type { LotteryRevealRow } from '@/lib/lotteryReveal';
+
+/* How long a tile takes to turn and the closing line to arrive. The lib owns
+   both numbers and counts them in its pace; the CSS below reads them here, so
+   the time the lib reports is the time the screen takes. */
+const PACE_VARS = { '--lr-turn': `${LOTTERY_REVEAL_TURN_S}s`, '--lr-close': `${LOTTERY_REVEAL_CLOSE_S}s` } as CSSProperties;
 
 export interface LotteryRevealHelpBlock {
   /** "The league's rule", "This game's own", "A worked example". */
@@ -74,6 +80,7 @@ export function LotteryReveal({
       data-lottery-reveal
       data-lottery-settled={still ? '' : undefined}
       className={cn('relative overflow-hidden rounded-2xl border border-border bg-card p-3', still && 'lr-settled')}
+      style={PACE_VARS}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
@@ -177,9 +184,9 @@ export function LotteryReveal({
           0% { opacity: 0; transform: scaleY(0.2); }
           100% { opacity: 1; transform: scaleY(1); }
         }
-        .lr-face { opacity: 0; animation: lrTurn 0.32s ease-out forwards; }
+        .lr-face { opacity: 0; animation: lrTurn var(--lr-turn) ease-out forwards; }
         @keyframes lrAfter { 0% { opacity: 0; } 100% { opacity: 1; } }
-        .lr-after { opacity: 0; animation: lrAfter 0.3s ease-out forwards; }
+        .lr-after { opacity: 0; animation: lrAfter var(--lr-close) ease-out forwards; }
         .lr-settled .lr-face, .lr-settled .lr-after { animation: none; opacity: 1; transform: none; }
         @media (prefers-reduced-motion: reduce) {
           .lr-face, .lr-after, .lr-settled .lr-face, .lr-settled .lr-after {

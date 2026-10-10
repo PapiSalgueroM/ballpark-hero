@@ -11,9 +11,9 @@
    draws nothing, picks nothing and reads no clock.
 
    THE PACE IS A RULE. A reveal that holds a screen is a loading screen, so
-   the whole run of any field fits inside LOTTERY_REVEAL_CEILING_MS with a
-   quarter of it in hand, by construction: the step shrinks as the field
-   grows. That is the house number draft night already answers to (5,000 ms,
+   the whole run of any field, to the END of its last animation, fits inside
+   LOTTERY_REVEAL_CEILING_MS with a quarter of it in hand, by construction:
+   the step shrinks as the field grows. That is the house number draft night already answers to (5,000 ms,
    scripts/simDraftNight.mjs) and the reason is the same one draftNight.ts
    gives for its own step: a threshold sitting on top of the number it checks
    is a coin toss. */
@@ -40,25 +40,36 @@ export const LOTTERY_REVEAL_USE = 0.75;
 export const LOTTERY_REVEAL_LEAD_S = 0.2;
 /** A small field does not rush: the gap between tiles is never longer than this. */
 export const LOTTERY_REVEAL_MAX_STEP_S = 0.45;
+/** How long one tile takes to turn, and how long the closing line takes to
+    arrive. The presenter's CSS reads these two, so the pace below is the
+    screen's own and not a number beside it. */
+export const LOTTERY_REVEAL_TURN_S = 0.32;
+export const LOTTERY_REVEAL_CLOSE_S = 0.3;
 
 export interface LotteryRevealPace {
   /** Seconds before the first tile turns. */
   start: number;
   /** Seconds between tiles. */
   step: number;
-  /** When the last tile has turned and the closing line is in, in ms. */
+  /** When the closing line STARTS to arrive, one step after the last tile starts, in ms. */
+  closingMs: number;
+  /** When every animation on the card is over: the last tile has turned and the closing line is in, in ms. */
   totalMs: number;
 }
 
 /** The pace of a run of `count` tiles. The step is cut to the hundredth of a
-    second BELOW what would fill the allowed time, so a run can never round
+    second BELOW what would fill the allowed time once the last turn and the
+    closing line's arrival are counted, so the END of a run can never round
     its way over it. */
 export function lotteryRevealPace(count: number): LotteryRevealPace {
   const n = Math.max(1, Math.floor(Number.isFinite(count) ? count : 1));
   const allowed = (LOTTERY_REVEAL_CEILING_MS / 1000) * LOTTERY_REVEAL_USE;
-  const fit = Math.floor(((allowed - LOTTERY_REVEAL_LEAD_S) / n) * 100) / 100;
+  const tail = Math.max(LOTTERY_REVEAL_TURN_S, LOTTERY_REVEAL_CLOSE_S);
+  const fit = Math.floor(((allowed - LOTTERY_REVEAL_LEAD_S - tail) / n) * 100) / 100;
   const step = Math.max(0.01, Math.min(LOTTERY_REVEAL_MAX_STEP_S, fit));
-  return { start: LOTTERY_REVEAL_LEAD_S, step, totalMs: Math.round((LOTTERY_REVEAL_LEAD_S + n * step) * 1000) };
+  const closing = LOTTERY_REVEAL_LEAD_S + n * step;
+  const end = Math.max(LOTTERY_REVEAL_LEAD_S + (n - 1) * step + LOTTERY_REVEAL_TURN_S, closing + LOTTERY_REVEAL_CLOSE_S);
+  return { start: LOTTERY_REVEAL_LEAD_S, step, closingMs: Math.round(closing * 1000), totalMs: Math.round(end * 1000) };
 }
 
 /** The rows a card may draw, in the order they were handed in (which is the

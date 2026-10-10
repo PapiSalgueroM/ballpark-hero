@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import LotteryReveal from './LotteryReveal';
 import {
-  LOTTERY_REVEAL_CEILING_MS, LOTTERY_REVEAL_USE, cleanLotteryRows, lotteryFactsFromWeights, lotteryMoveWords,
+  LOTTERY_REVEAL_CEILING_MS, LOTTERY_REVEAL_CLOSE_S, LOTTERY_REVEAL_TURN_S, LOTTERY_REVEAL_USE, cleanLotteryRows, lotteryFactsFromWeights, lotteryMoveWords,
   lotteryRevealPace, lotteryRuleLine, type LotteryRevealRow,
 } from '@/lib/lotteryReveal';
 
@@ -40,6 +40,20 @@ describe('the pace of a lottery reveal', () => {
     expect(lotteryRevealPace(14).totalMs).toBeGreaterThan(allowed - 14 * 10);
     expect(lotteryRevealPace(16).totalMs).toBeGreaterThan(allowed - 16 * 10);
     expect(lotteryRevealPace(Number.NaN).totalMs).toBe(lotteryRevealPace(1).totalMs);
+  });
+
+  it('reports the END of the run: the last tile has turned and the closing line is in', () => {
+    for (let n = 1; n <= 40; n += 1) {
+      const p = lotteryRevealPace(n);
+      const lastTileStarts = (p.start + (n - 1) * p.step) * 1000;
+      /* The closing line starts one step after the last tile does, and the run is over when both have finished. */
+      expect(p.closingMs, `${n} tiles`).toBe(Math.round((p.start + n * p.step) * 1000));
+      expect(p.totalMs, `${n} tiles`).toBeGreaterThanOrEqual(Math.round(lastTileStarts + LOTTERY_REVEAL_TURN_S * 1000));
+      expect(p.totalMs, `${n} tiles`).toBe(Math.max(Math.round(lastTileStarts + LOTTERY_REVEAL_TURN_S * 1000), p.closingMs + LOTTERY_REVEAL_CLOSE_S * 1000));
+    }
+    /* Typed here, not read from the lib: fourteen clubs end at 3,720 ms and sixteen at 3,700. */
+    expect([lotteryRevealPace(14).closingMs, lotteryRevealPace(14).totalMs]).toEqual([3420, 3720]);
+    expect([lotteryRevealPace(16).closingMs, lotteryRevealPace(16).totalMs]).toEqual([3400, 3700]);
   });
 });
 
@@ -104,8 +118,22 @@ describe('LotteryReveal', () => {
     expect(at(1)).toBe(Math.max(...inRevealOrder));
     const closing = seconds(container.querySelector('[data-lottery-headline]')!);
     expect(closing).toBeGreaterThan(at(1));
-    expect(closing * 1000).toBeLessThanOrEqual(LOTTERY_REVEAL_CEILING_MS * LOTTERY_REVEAL_USE);
-    expect(Math.round(closing * 1000)).toBe(lotteryRevealPace(14).totalMs);
+    expect(Math.round(closing * 1000)).toBe(lotteryRevealPace(14).closingMs);
+    /* The line is IN one fade later, and that is the number the lib reports as the end. */
+    expect(Math.round(closing * 1000) + LOTTERY_REVEAL_CLOSE_S * 1000).toBe(lotteryRevealPace(14).totalMs);
+    expect(lotteryRevealPace(14).totalMs).toBeLessThanOrEqual(LOTTERY_REVEAL_CEILING_MS * LOTTERY_REVEAL_USE);
+  });
+
+  it('takes its two durations from the lib, so the pace the lib reports is the one the screen runs', () => {
+    const { container } = render(<LotteryReveal rows={rows} ruleLine={rule} headline="x" />);
+    const box = container.querySelector('[data-lottery-reveal]') as HTMLElement;
+    expect(box.style.getPropertyValue('--lr-turn')).toBe(`${LOTTERY_REVEAL_TURN_S}s`);
+    expect(box.style.getPropertyValue('--lr-close')).toBe(`${LOTTERY_REVEAL_CLOSE_S}s`);
+    const css = container.querySelector('style')!.textContent ?? '';
+    expect(css).toMatch(/\.lr-face\s*\{[^}]*animation:\s*lrTurn var\(--lr-turn\)/);
+    expect(css).toMatch(/\.lr-after\s*\{[^}]*animation:\s*lrAfter var\(--lr-close\)/);
+    /* No duration typed in the CSS: a number there is one the lib cannot see. */
+    expect(css).not.toMatch(/animation:[^;}]*\d(\.\d+)?m?s\b/);
   });
 
   it('marks his tile and only his', () => {
