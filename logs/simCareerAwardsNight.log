@@ -1,0 +1,13 @@
+1) Soccer Career replays the pre-lift fixture byte for byte
+   Round 1172 attribution: exact copied new-generation, newspaper and ceremony changes restored for the old fixture; current outcomes still checked in sections 2 to 7 and simSoccerAwardReveal
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerAwardsNight.mjs:225
+    if (!text.includes(p.from)) throw new Error(`train out refused: ${file} does not contain ${JSON.stringify(p.from.slice(0, 80))}`);
+                                      ^
+
+Error: train out refused: src/lib/soccerCareerEngine.ts does not contain "const redCards = Math.random() < 0.08 && apps > 0 ? 1 : 0;"
+    at trainOutOf (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerAwardsNight.mjs:225:39)
+    at attributedAwardsBundle (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerAwardsNight.mjs:439:20)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerAwardsNight.mjs:589:99
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0
