@@ -1,0 +1,2 @@
+tsc exit=0 81s | 
+vitest-all exit=1 423s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
