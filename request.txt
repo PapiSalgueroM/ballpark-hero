@@ -1,0 +1,1 @@
+probe2: git worktree add -q /tmp/base 980654facb2d41a6c9ddc029c43710178b9d49b8 && node .rc/x/probe2.mjs /tmp/base . 10 $RC_OUT > $RC_OUT/probe2.log 2>&1; s=$?; tail -5 $RC_OUT/probe2.log | cut -c1-300; exit $s

@@ -1,0 +1,1 @@
+probe2 exit=1 139s | probe2: RED, 1 failures
