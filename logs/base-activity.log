@@ -1,0 +1,4 @@
+  FAIL: the season advance (advanceProSeason(career, clubs)) is not in the file, the check needs re-anchoring
+  FAIL: the season advance no longer pings recordActivity('/soccer-career') within 600 characters
+simActivityNotCompletion: 2 failure(s)
+simActivityNotCompletion: 2 failure(s)

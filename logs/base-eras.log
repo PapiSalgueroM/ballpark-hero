@@ -1,0 +1,5 @@
+  FAIL: 1 projected players at year zero differ from the real data
+  FAIL: projected 4377 players at year zero, the bake says 4401
+  FAIL: 189 players are not in the real data and are not flagged as made up
+3 FAILURES
+3 FAILURES
