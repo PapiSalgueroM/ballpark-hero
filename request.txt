@@ -1,0 +1,5 @@
+#!serial
+parity-head: node scripts/simUsBoardParity.mjs
+parity-reverted: node .rc/x/revert.mjs all && node scripts/simUsBoardParity.mjs; s=$?; git checkout -- src; exit $s
+record: node scripts/recordUsBoardFixture.mjs; s=$?; cp scripts/data/usBoardFixture.json "$RC_OUT/usBoardFixture.json"; exit $s
+parity-recorded: node scripts/simUsBoardParity.mjs
