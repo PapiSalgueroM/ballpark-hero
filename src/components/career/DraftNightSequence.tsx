@@ -27,6 +27,7 @@
    The lottery tile is the ONE shared presenter (Round 1222,
    src/components/motion/LotteryReveal.tsx). It is mounted, never copied, and
    only where the career engine models a lottery: the NBA, both eras. */
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { CelebrationStyles, ConfettiBurst, revealAfter, revealDelay } from '@/components/club-manager/Celebration';
@@ -92,13 +93,19 @@ export function DraftNightSequence({
   onSkip: () => void;
   onContinue?: () => void;
 }) {
-  /* The press brought the night in below the button. The buttons under the
-     board are what must end up on screen, so the closing row above them is
-     in view when it lands and the page does not move again after this. */
-  const actionsRef = useRevealScroll<HTMLDivElement>('career-night', { skipFirst: false, block: 'end' });
   const clock = careerNightClock(night);
   const moving = stage !== 'skipped';
   const over = stage !== 'live';
+  /* The press brought the night in below the button. The buttons under the
+     board are what must end up on screen, so the closing row above them is
+     in view when it lands and the page does not move again after this.
+     On a screen shorter than the night itself (a phone on its side) that
+     cannot hold from the first frame: the top of the board is what the press
+     shows there. So the same reveal is asked once more when the closing row
+     starts to land, and on Skip. Where the buttons are already readable it
+     does nothing, which is every screen the night fits on. */
+  const [closingOn, setClosingOn] = useState(false);
+  const actionsRef = useRevealScroll<HTMLDivElement>(closingOn || over ? 'career-night-end' : 'career-night', { skipFirst: false, block: 'end' });
   const closing = night.board[night.board.length - 1];
   const before = night.board.slice(0, -1);
   const L = desc.lottery;
@@ -159,6 +166,7 @@ export function DraftNightSequence({
               )}
               style={moving ? { animationDelay: `${clock.closeAt}s` } : undefined}
               aria-hidden={stage === 'live' || undefined}
+              onAnimationStart={e => { if (e.target === e.currentTarget) setClosingOn(true); }}
               onAnimationEnd={e => { if (e.target === e.currentTarget) onLanded(); }}
             >
               {closing.kind === 'you' && (

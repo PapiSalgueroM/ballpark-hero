@@ -117,6 +117,67 @@ describe('the first frame holds the whole night', () => {
     expect(within(view.container).getAllByRole('button').map(b => b.textContent)).toEqual(['Skip to my pick']);
   });
 
+  /* A screen shorter than the night (a phone on its side): the buttons under the board, and the
+     closing row above them, are below the fold when the night starts. The browser walk measures
+     the real thing at 844 by 390; this holds the wiring, with the layout handed in. */
+  describe('the ending is brought into view when it arrives', () => {
+    const desc = nflPreDraftDescriptor('now');
+    const night = buildCareerDraftNight(desc, endedAt(desc, 40))!;
+    /** jsdom lays nothing out and cannot scroll: hand the buttons a place on a 768 high screen and count the asks. */
+    function screen(actionsTop: number) {
+      const asked: ScrollIntoViewOptions[] = [];
+      vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation(cb => { cb(0); return 0; });
+      vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+        const top = this.hasAttribute('data-night-actions') ? actionsTop : 0, height = this.hasAttribute('data-night-actions') ? 48 : 0;
+        return { top, bottom: top + height, height, left: 0, right: 300, width: 300, x: 0, y: top, toJSON: () => ({}) };
+      });
+      const doc = document as unknown as { elementsFromPoint?: unknown };
+      const proto = Element.prototype as unknown as { scrollIntoView?: unknown };
+      doc.elementsFromPoint = () => [];
+      proto.scrollIntoView = function (this: Element, options: ScrollIntoViewOptions) { if (this.hasAttribute('data-night-actions')) asked.push(options); };
+      return { asked, undo: () => { delete doc.elementsFromPoint; delete proto.scrollIntoView; } };
+    }
+    const closingRow = (root: HTMLElement) => { const rows = root.querySelectorAll<HTMLElement>('[data-night-row]'); return rows[rows.length - 1]; };
+
+    it('below the fold: once for the press, once more when the closing row starts to land, never a third time', () => {
+      const s = screen(900);
+      try {
+        const view = render(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="live" onLanded={noop} onSkip={noop} onContinue={noop} />);
+        expect(s.asked.length).toBe(1);
+        // A row above the closing one starting to arrive is not the ending, and neither is a child of the closing row.
+        fireEvent.animationStart(view.container.querySelector('[data-night-row]')!);
+        fireEvent.animationStart(closingRow(view.container).firstElementChild!);
+        expect(s.asked.length).toBe(1);
+        fireEvent.animationStart(closingRow(view.container));
+        expect(s.asked.length).toBe(2);
+        expect(s.asked[1]).toMatchObject({ block: 'end' });
+        // Landing after that is the same ending: the page is not asked to move again.
+        view.rerender(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="landed" onLanded={noop} onSkip={noop} onContinue={noop} />);
+        expect(s.asked.length).toBe(2);
+      } finally { s.undo(); }
+    });
+
+    it('below the fold: Skip brings the ending in as well', () => {
+      const s = screen(900);
+      try {
+        const view = render(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="live" onLanded={noop} onSkip={noop} onContinue={noop} />);
+        expect(s.asked.length).toBe(1);
+        view.rerender(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="skipped" onLanded={noop} onSkip={noop} onContinue={noop} />);
+        expect(s.asked.length).toBe(2);
+      } finally { s.undo(); }
+    });
+
+    it('on screen already: the page is never asked to move, at the press or at the ending', () => {
+      const s = screen(600);
+      try {
+        const view = render(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="live" onLanded={noop} onSkip={noop} onContinue={noop} />);
+        fireEvent.animationStart(closingRow(view.container));
+        view.rerender(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="landed" onLanded={noop} onSkip={noop} onContinue={noop} />);
+        expect(s.asked.length).toBe(0);
+      } finally { s.undo(); }
+    });
+  });
+
   it('skipped is the last frame: no delays, no skip, the result said once', () => {
     for (const [, desc] of PAIRS) {
       for (const pick of [1, 40, null]) {

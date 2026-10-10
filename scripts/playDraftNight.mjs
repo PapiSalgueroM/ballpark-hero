@@ -6,8 +6,9 @@
  * (a first round pick, which for the NBA is a lottery pick; a late pick; an
  * undrafted one), watched, skipped and with less motion. Then a late pick in
  * the OTHER era of each sport at 390 (the 2003 NBA lottery is three tiles,
- * MLB's 2004 draft is 1,500 picks), and the NBA's night watched and skipped
- * at 360 by 740 and 320 by 640. 48 nights in all.
+ * MLB's 2004 draft is 1,500 picks), the NBA's night watched and skipped
+ * at 360 by 740 and 320 by 640, and the NBA's night watched on a phone on its
+ * side, 844 by 390 (item 4b). 49 nights in all.
  *   1. The range the card prints before the press is the engine's own line.
  *   2. NOTHING JUMPS. From the frame the night is on screen to the last one,
  *      the card and the journey keep their height (down to 320 wide, where
@@ -28,6 +29,13 @@
  *   4. YOU SEE YOUR NAME CALLED. At the frame the closing row lands it is
  *      wholly inside the viewport, with no scroll from the driver, and
  *      nothing is drawn over it.                              Control `fold`.
+ *  4b. ON A SCREEN SHORTER THAN THE NIGHT (844 by 390) the ending cannot be
+ *      on screen from the first frame. There the page stands still while the
+ *      picks come in, moves once more when the closing row starts to land and
+ *      not a frame before, and a second after the row landed it is wholly
+ *      inside the viewport, uncovered, with the page at rest.
+ *      Control `ending` (a reveal asked once the closing row has started to
+ *      land is dropped: the row stays below the fold).
  *   5. Nothing live is hidden: no enabled button sits inside an element whose
  *      own or inherited opacity is 0, and every button is at least 44 by 44.
  *   6. The last frame is the save: the closing row says, word for word, the
@@ -54,7 +62,7 @@
  * scripts/lib/hostLikeServer.mjs. ENGINES=chromium is the only engine.
  *
  * Run:      node scripts/playDraftNight.mjs
- * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden|cut|again|narrowtile> node scripts/playDraftNight.mjs
+ * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden|cut|again|narrowtile|ending> node scripts/playDraftNight.mjs
  *           (must exit 1 on its own check, and exits 2 if it changed nothing)
  * Output:   screenshots and measurements in $RC_OUT, or .tmp-fx/play-draft-night.
  */
@@ -71,7 +79,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_DRAFT_NIGHT_CONTROL || '';
-const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced', cut: 'cut', again: 'scroll', narrowtile: 'cut' };
+const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced', cut: 'cut', again: 'scroll', narrowtile: 'cut', ending: 'fold' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-draft-night'));
 fs.mkdirSync(OUT, { recursive: true });
@@ -147,6 +155,11 @@ const SIZES = [{ width: 390, height: 844, touch: true }, { width: 1280, height: 
    lottery tile's words is judged at both (at 320 it was only written down until the journey's
    narrow rule gave the tile the room: the shared presenter alone cuts its longest club there). */
 const NARROW = [{ width: 360, height: 740, touch: true }, { width: 320, height: 640, touch: true }];
+/* A phone on its side: a screen SHORTER than the night itself (the NBA's card is over 800 px high
+   and this viewport is 390). The ending cannot be on screen from the first frame there, so the
+   rule is a different one: the page shows the top of the board, stands still while the picks come
+   in, and moves once more when the closing row starts to land, to bring the ending in. */
+const SHORT = { width: 844, height: 390, touch: true, short: true };
 /* The other era of each sport: the 2003 NBA lottery is three tiles in a two column grid, and
    MLB's 2004 draft is 1,500 picks. */
 const THROWBACK = { nfl: 'y2005', nba: 'y2004', mlb: 'y2004', nhl: 'y2006' };const results = [];
@@ -177,6 +190,15 @@ const CONTROL_INIT = {
   again: () => {
     const real = Element.prototype.scrollIntoView;
     Element.prototype.scrollIntoView = function (...args) { real.apply(this, args); setTimeout(() => window.scrollBy(0, -60), 2000); };
+  },
+  /* The ending is not brought into view: a reveal asked once the closing row has started to land is dropped. */
+  ending: () => {
+    const real = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (...args) {
+      const closing = document.querySelector("[data-night-row='you'], [data-night-row='unpicked']");
+      if (closing && Number(getComputedStyle(closing).opacity) > 0) return;
+      real.apply(this, args);
+    };
   },
 };
 
@@ -357,10 +379,18 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
       else if (i - from >= 4 && samples[i].t - samples[from].t >= 300) still = samples[from];
     }
     row.scrollSettledMs = still ? Math.round(still.t - t0) : null;
+    /* On a screen shorter than the night the page may move once more, from the moment the closing
+       row starts to land and not a frame before, and must be at rest again in the last frames. */
+    const until = size.short && mode === 'watch' ? t0 + hold * 1000 - 50 : Infinity;
     if (!still) fail(id, 'scroll', 'the page was never seen standing still');
     else {
-      const ys = samples.filter(s => s.t >= still.t).map(s => s.y);
-      if (Math.max(...ys) - Math.min(...ys) > 1) fail(id, 'scroll', `the page stood still at ${Math.round(still.y)} from ${Math.round(still.t - t0)} ms and then moved between ${Math.round(Math.min(...ys))} and ${Math.round(Math.max(...ys))}`);
+      const ys = samples.filter(s => s.t >= still.t && s.t < until).map(s => s.y);
+      if (ys.length && Math.max(...ys) - Math.min(...ys) > 1) fail(id, 'scroll', `the page stood still at ${Math.round(still.y)} from ${Math.round(still.t - t0)} ms and then moved between ${Math.round(Math.min(...ys))} and ${Math.round(Math.max(...ys))}${size.short ? ' before the closing row started to land' : ''}`);
+      if (size.short) {
+        const tail = samples.filter(s => s.t > last.t - 300).map(s => s.y);
+        row.endingMovedPx = Math.round(last.y - still.y);
+        if (Math.max(...tail) - Math.min(...tail) > 1) fail(id, 'scroll', `the page is still moving in the last 300 ms of the record (between ${Math.round(Math.min(...tail))} and ${Math.round(Math.max(...tail))})`);
+      }
     }
     const wide = samples.find(s => s.sw > s.vw + 1);
     if (wide) fail(id, 'overflow', `a frame is ${wide.sw} wide in a ${wide.vw} viewport`);
@@ -379,7 +409,14 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
       if (!landing) fail(id, 'fold', 'the closing row never landed');
       else {
         row.landing = { ms: Math.round(landing.t - t0), top: Math.round(landing.top), bottom: Math.round(landing.bottom), vh: landing.vh };
-        if (landing.top < -1 || landing.bottom > landing.vh + 1) fail(id, 'fold', `the closing row landed at ${Math.round(landing.top)} to ${Math.round(landing.bottom)} in a ${landing.vh} high viewport`);
+        if (!size.short && (landing.top < -1 || landing.bottom > landing.vh + 1)) fail(id, 'fold', `the closing row landed at ${Math.round(landing.top)} to ${Math.round(landing.bottom)} in a ${landing.vh} high viewport`);
+        if (size.short) {
+          /* It starts to land below the fold there, and the page brings it in: wholly on screen a second later. */
+          const shown = samples.find(s => s.t >= landing.t + 1000);
+          row.shown = shown ? { ms: Math.round(shown.t - t0), top: Math.round(shown.top), bottom: Math.round(shown.bottom), vh: shown.vh } : null;
+          if (!shown) fail(id, 'fold', 'no frame was recorded a second after the closing row landed');
+          else if (shown.top < -1 || shown.bottom > shown.vh + 1) fail(id, 'fold', `a second after it landed the closing row sits at ${Math.round(shown.top)} to ${Math.round(shown.bottom)} in a ${shown.vh} high viewport (it landed at ${Math.round(landing.top)} to ${Math.round(landing.bottom)})`);
+        }
       }
       if (last.stage !== 'landed') fail(id, 'last', `the night ended ${last.stage}, not landed`);
     }
@@ -452,7 +489,7 @@ try {
   if (CONTROL) {
     /* One case, the one the control's check is about. MLB's late pick is the tallest board, and
        the NBA's is the one with a lottery tile; the narrow tile is judged where it is narrow. */
-    const [sportAt, sizeAt, modeAt] = { hidden: [1, SIZES[0], 'reduced'], cut: [1, SIZES[0], 'watch'], narrowtile: [1, NARROW[1], 'watch'] }[CONTROL] ?? [2, SIZES[0], 'watch'];
+    const [sportAt, sizeAt, modeAt] = { hidden: [1, SIZES[0], 'reduced'], cut: [1, SIZES[0], 'watch'], narrowtile: [1, NARROW[1], 'watch'], ending: [1, SHORT, 'watch'] }[CONTROL] ?? [2, SIZES[0], 'watch'];
     const c = cases[sportAt];
     await run(browser, c.sport, sizeAt, c.late, modeAt);
     const own = failures.filter(f => f.check === CONTROLS[CONTROL]);
@@ -474,6 +511,8 @@ try {
       await run(browser, cases[1].sport, size, cases[1].late, 'watch', { shots: true });
       await run(browser, cases[1].sport, size, cases[1].late, 'skip');
     }
+    /* A phone on its side: the NBA's night, watched. */
+    await run(browser, cases[1].sport, SHORT, cases[1].late, 'watch', { shots: true });
     fs.writeFileSync(path.join(OUT, 'play-draft-night.json'), JSON.stringify({ results, failures }, null, 2));
     console.log(`\nplayDraftNight: ${failures.length === 0 ? `ALL GREEN, ${results.length} nights walked` : `${failures.length} FAILURE(S) in ${results.length} nights`}`);
     exitCode = failures.length === 0 ? 0 : 1;
