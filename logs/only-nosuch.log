@@ -1,0 +1,13 @@
+simCmLeagueFixtures: 0 ledger(s) on disk for nosuch: none
+A) shape: green for 0 ledger(s)
+B) no club twice in a matchday: green for 0 ledger(s)
+C) each pair once at each ground: green for 0 ledger(s)
+D) the game's own clubs: green for 0 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 0 ledger(s)
+F) two independent sources: green for 0 ledger(s)
+G) nothing excluded got in: green for 0 ledger(s)
+I) frozen: green for 0 ledger(s)
+  FAIL: CM_LEAGUE_FIXTURES_ONLY=nosuch matches no ledger on disk, so nothing was checked
+K) the controls: 0 of 0 fired exactly as written (11 controls on each of 0 frozen ledger(s))
+NOTHING CHECKED: no ledger on disk. That is green only for a tree that holds no ledger yet.
+simCmLeagueFixtures: FAILED, 1 failure(s): 0 ledger(s), 0 frozen, 0 pending, 0 fixtures, 0 of 0 controls fired
