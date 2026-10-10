@@ -142,6 +142,20 @@
  * season. The player's own stream did not move: scripts/simUsRivalSense.mjs
  * section P1 proves that on a fleet that answers no card, and P2 with
  * every card answered. 1,869,467 bytes.
+ * The All-Pro card and beat 221 (recorded from 5bdd0a9c). Proof first: the
+ * head with step c's recording in, 83d42fec, replays green in all four
+ * sports and passes the truth digest plain, and between the two heads the
+ * player's lines and the rival's trail are byte equal over the fleet (the
+ * floor at zero in between moved no season of 107,618). The NBA, the MLB
+ * and the NHL are byte for byte the same again, and so is the whole NFL
+ * click path, all 459 steps, with every one of the fifteen fixed saves as
+ * it starts. One screen walk moved: fixed save "negNet", step 52 (the 2034
+ * season). The fixture before dealt the All-Pro card that said he was off
+ * the first team a year after he was on it, a card of Round 1149 that is
+ * no longer dealt once the rival is judged on the season; the same roll
+ * now picks "Head to Head Win" from the pool, and steps 53 and 54 follow
+ * it (4 of that save's 56 steps differ, in pendingRivalryEvent, then
+ * morale and lastRivalryEventId). 1,869,465 bytes.
  * Round 1149 (the other three careers get what the NBA rival got)
  * re-recorded it on purpose on 2026-10-10, on a GitHub runner, once a step,
  * each from the branch commit its header names.
