@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+mknew: node .rc/x/review-sc-screens-mk.mjs /tmp/rev-new.json new
+mkold: git worktree add -f /tmp/base 24f57a98fa44e280f1c848276a27d86e0a3e2745 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; W="$PWD"; cd /tmp/base && git rev-parse --short HEAD && node "$W/.rc/x/review-sc-screens-mk.mjs" /tmp/rev-old.json old
+walk: WIDTHS=320 NEW_SAVES=/tmp/rev-new.json OLD_SAVES=/tmp/rev-old.json node .rc/x/review-sc-screens-walk.mjs
