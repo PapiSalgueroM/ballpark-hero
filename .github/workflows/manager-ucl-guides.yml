@@ -1,0 +1,102 @@
+name: Manager UCL guide data refresh
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/manager-ucl-guides.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: manager-ucl-guides-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Hold source and locked dependencies
+        run: |
+          mkdir -p manager-ucl-guide-artifacts/before manager-ucl-guide-artifacts/after
+          git rev-parse HEAD > manager-ucl-guide-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > manager-ucl-guide-artifacts/source-tree.txt
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          git archive --format=zip --output=manager-ucl-guide-artifacts/source.zip HEAD
+          sha256sum package.json package-lock.json > manager-ucl-guide-artifacts/packages-before.txt
+          cp scripts/data/guideHeadingsFrozen.json manager-ucl-guide-artifacts/before/guideHeadingsFrozen.json
+          cp src/data/searchKeywords.json manager-ucl-guide-artifacts/before/searchKeywords.json
+          npm ci
+          node scripts/qa/managerUclLeagueKit.mjs dependencies before
+      - name: Generate the verified rule fixture and search data
+        run: |
+          node scripts/simGuideHeadings.mjs --refresh /club-manager 2>&1 | tee manager-ucl-guide-artifacts/refresh.log
+          node scripts/genSearchKeywords.mjs 2>&1 | tee manager-ucl-guide-artifacts/search-generation.log
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const read=f=>JSON.parse(fs.readFileSync(f,'utf8'));
+          const before=read('manager-ucl-guide-artifacts/before/guideHeadingsFrozen.json'),after=read('scripts/data/guideHeadingsFrozen.json');
+          const route='/club-manager',expected="New modern Champions League seasons have 36 clubs in one table and eight different opponents, four home and four away. Top eight go straight into the round of 16; places 9 to 24 play two legged playoffs; places 25 to 36 go out. Every knockout before the final has two legs. Example: finish 12th and win your playoff to reach the last 16; finish 6th and skip the playoff. Qualification and fixture draws are simulated, with no real coefficient pots or association limits. Old saved groups finish their existing season before changing; historic eras keep their own format.";
+          assert(fs.readFileSync('src/data/gameContent/clubManagement.ts','utf8').includes(JSON.stringify(expected)),'Reviewed rule equals authored guide text');
+          assert.deepEqual(Object.keys(after),Object.keys(before));
+          assert.deepEqual(Object.keys(after.routes),Object.keys(before.routes));
+          for(const [name,value] of Object.entries(before.routes))if(name!==route)assert.deepEqual(after.routes[name],value,name);
+          assert.deepEqual(Object.keys(after.routes[route]),Object.keys(before.routes[route]));
+          for(const part of Object.keys(before.routes[route])){
+            const got=after.routes[route][part];
+            if(part==='rules'){
+              assert.equal(got.filter(line=>line===expected).length,1);
+              assert.deepEqual(got.filter(line=>line!==expected),before.routes[route][part]);
+              assert.equal(got.length,before.routes[route][part].length+1);
+            }else assert.deepEqual(got,before.routes[route][part],part);
+          }
+          for(const key of Object.keys(before))if(key!=='about'&&key!=='routes')assert.deepEqual(after[key],before[key],key);
+          assert.equal(after.about,before.about,'Existing generator refresh marker held');
+          const receipt={head:fs.readFileSync('manager-ucl-guide-artifacts/source-head.txt','utf8').trim(),tree:fs.readFileSync('manager-ucl-guide-artifacts/source-tree.txt','utf8').trim(),route,addedRule:expected,otherRoutesHeld:Object.keys(before.routes).length-1,otherPartsHeld:true};
+          fs.writeFileSync('manager-ucl-guide-artifacts/rule-receipt.json',JSON.stringify(receipt,null,2)+'\n');
+          console.log('PASS one verified rule added; all other route/part text held');
+          JS
+          cp scripts/data/guideHeadingsFrozen.json manager-ucl-guide-artifacts/after/guideHeadingsFrozen.json
+          cp src/data/searchKeywords.json manager-ucl-guide-artifacts/after/searchKeywords.json
+          sha256sum manager-ucl-guide-artifacts/after/*.json > manager-ucl-guide-artifacts/generated-sha256.txt
+          git diff --binary HEAD -- scripts/data/guideHeadingsFrozen.json src/data/searchKeywords.json > manager-ucl-guide-artifacts/generated.patch
+      - name: Check actual regenerated guides and search
+        run: |
+          failed=0
+          node scripts/simGuideHeadings.mjs 2>&1 | tee manager-ucl-guide-artifacts/simGuideHeadings.log || failed=1
+          node scripts/simSiteSearch.mjs 2>&1 | tee manager-ucl-guide-artifacts/simSiteSearch.log || failed=1
+          exit "$failed"
+      - name: Hold every other source and package
+        if: ${{ !cancelled() }}
+        run: |
+          sha256sum package.json package-lock.json > manager-ucl-guide-artifacts/packages-after.txt
+          cmp manager-ucl-guide-artifacts/packages-before.txt manager-ucl-guide-artifacts/packages-after.txt
+          node scripts/qa/managerUclLeagueKit.mjs dependencies after
+          git diff --name-only HEAD > manager-ucl-guide-artifacts/changed-paths.txt
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const paths=fs.readFileSync('manager-ucl-guide-artifacts/changed-paths.txt','utf8').trim().split('\n').filter(Boolean).sort();
+          assert.deepEqual(paths,['scripts/data/guideHeadingsFrozen.json','src/data/searchKeywords.json']);
+          JS
+          cp manager-ucl-league-artifacts/dependencies-*.json manager-ucl-guide-artifacts/
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: manager-ucl-guide-data-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-ucl-guide-artifacts/
+          retention-days: 5
