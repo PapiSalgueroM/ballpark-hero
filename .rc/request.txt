@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+oldsave: git worktree add -q /tmp/base 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 && ln -s $PWD/node_modules /tmp/base/node_modules && (cd /tmp/base && npm run build > $RC_OUT/base-build.log 2>&1; echo "base build exit=$?") && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > $RC_OUT/base-server.log 2>&1 & echo $! > /tmp/base.pid) ; sleep 3; BASE_OLD=http://localhost:4174 node .rc/x/oldsave.mjs; s=$?; kill "$(cat /tmp/base.pid)"; exit $s
