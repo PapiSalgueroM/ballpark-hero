@@ -1,0 +1,28 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2ma 2010-11 save resumes once its squads arrive, exactly as saved
+[22m[39m  2010-11 Barcelona resumed with 27 players
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  offline: the boot holds on the retry notice and the save is untouched
+
+[90mstdout[2m | src/test/clubManagerEraLoad.test.tsx[2m > [22m[2mClub Manager: an era save waits for its era[2m > [22m[2mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it
+[22m[39m  back online: the retry fetched the squads and the career resumed
+
+ [32m✓[39m src/test/clubManagerEraLoad.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 3342[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22ma 2010-11 save resumes once its squads arrive, exactly as saved [33m 2006[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: an era save waits for its era[2m > [22mwith the 2005-06 squads unreachable the boot holds, keeps the save, and the retry resumes it [33m 638[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerSlots.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 1948[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mtwo managers survive leaving the page, and either one opens [33m 343[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: three manager slots[2m > [22mthe screen asks before it deletes, and every tile says what it holds [33m 374[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDeskCues.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 2045[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager desk cues: contracts[2m > [22ma plain renewal says who and the terms the save now holds, on the slam, once [33m 485[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerEraPicker.test.tsx [2m([22m[2m1 test[22m[2m)[22m[33m 678[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager picker: a past season waits for its squads[2m > [22mholds the league step on a loading line until the 2010-11 squads land, then draws it [33m 677[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m32 passed[39m[22m[90m (32)[39m
+[2m   Start at [22m 19:11:14
+[2m   Duration [22m 6.00s[2m (transform 2.42s, setup 250ms, collect 4.74s, tests 8.01s, environment 1.49s, prepare 448ms)[22m
+

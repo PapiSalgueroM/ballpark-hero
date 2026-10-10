@@ -1,0 +1,27 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerBracketMoment.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 586[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerDealMoment.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1924[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mslams DEAL DONE only after the flip, with the fee the save holds [33m 674[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mplays nothing when the screen opens onto a deal that was already done [33m 460[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the deal moment[2m > [22mshakes once for a hijack and for a collapse, and never slams [33m 473[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/clubManagerDecisions.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 205[2mms[22m[39m
+ [32m✓[39m src/test/managerWorldBrowser.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 3124[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager world browser[2m > [22moffers every current league once with its actual club count [33m 392[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager world browser[2m > [22mkeeps selection through empty searches Back and Escape and returns to My league [33m 489[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager world browser[2m > [22mpreserves exact saved standings rounds tiebreaks and scout callbacks [33m 307[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerShootoutTile.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 533[2mms[22m[39m
+   [33m[2m✓[22m[39m the shootout order tile[2m > [22mopens on request, adds on tap, removes on a second tap, and backs out [33m 321[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerRowButtons.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+ [32m✓[39m src/test/clubManagerManagerFace.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1786[2mms[22m[39m
+   [33m[2m✓[22m[39m the manager on the career panel[2m > [22mlets a Skip career name its manager, background point and all [33m 743[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m      Tests [22m [1m[32m56 passed[39m[22m[90m (56)[39m
+[2m   Start at [22m 19:11:40
+[2m   Duration [22m 9.40s[2m (transform 3.82s, setup 470ms, collect 9.13s, tests 8.26s, environment 3.12s, prepare 822ms)[22m
+

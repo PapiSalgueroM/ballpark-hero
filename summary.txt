@@ -1,0 +1,13 @@
+varlive-off exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR is switch
+varlive exit=0 5s |    Duration  4.24s (transform 1.59s, setup 55ms, collect 2.05s, tests 1.11s, environment 342ms, prepare 344ms)
+save exit=0 5s |    Duration  4.14s (transform 1.90s, setup 44ms, collect 2.48s, tests 783ms, environment 280ms, prepare 192ms)
+cmhook1 exit=0 7s |    Duration  6.00s (transform 2.42s, setup 250ms, collect 4.74s, tests 8.01s, environment 1.49s, prepare 448ms)
+cmhook2 exit=0 6s |    Duration  6.46s (transform 2.48s, setup 289ms, collect 6.81s, tests 4.67s, environment 1.77s, prepare 569ms)
+varscreen exit=0 31s |    Duration  30.01s (transform 1.86s, setup 47ms, collect 2.47s, tests 26.63s, environment 293ms, prepare 208ms)
+cmrest exit=0 9s |    Duration  9.40s (transform 3.82s, setup 470ms, collect 9.13s, tests 8.26s, environment 3.12s, prepare 822ms)
+tsc exit=0 67s | 
+simDailyDeals exit=0 2s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+cmvar-everywhere exit=0 1s | simCmVar everywhere: actual review outcomes and full prior baseline passed.
+livemotion exit=0 47s |    Duration  46.63s (transform 2.78s, setup 350ms, collect 6.91s, tests 44.39s, environment 2.07s, prepare 589ms)
+cmvar-historic exit=0 3s | simCmVar historic: actual review outcomes and full prior baseline passed.
+simCmVar exit=0 53s | simCmVar normal: actual review outcomes and full prior baseline passed.

@@ -1,0 +1,98 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/clubManagerVarLive.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[33m 561[2mms[22m[39m
+   [32m✓[39m Club Manager: VAR is switched on[2m > [22mthe switch is on[32m 1[2mms[22m[39m
+[31m   [31m×[31m Club Manager: VAR is switched on[2m > [22ma live kick off through the hook asks for reviews[39m[32m 142[2mms[22m[39m
+[31m     → the saved match does not carry the review opt in: expected undefined to be true // Object.is equality[39m
+[31m   [31m×[31m Club Manager: VAR is switched on[2m > [22ma Quick Sim through the hook is the match the engine plays with reviews asked for[39m[32m 152[2mms[22m[39m
+[31m     → match 1 was chosen for its review and shows none: expected 0 to be greater than 0[39m
+[31m   [31m×[31m Club Manager: VAR is switched on[2m > [22mthe fast forward is the engine run with reviews asked for[39m[32m 264[2mms[22m[39m
+[31m     → the results of the run differ from the engine with reviews asked for: expected [ { week: +0, …(6) }, …(4) ] to deeply equal [ { week: +0, …(6) }, …(4) ][39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarLive.test.tsx[2m > [22mClub Manager: VAR is switched on[2m > [22ma live kick off through the hook asks for reviews
+[31m[1mAssertionError[22m: the saved match does not carry the review opt in: expected undefined to be true // Object.is equality[39m
+
+[32m- Expected:[39m 
+true
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/clubManagerVarLive.test.tsx:[2m98:92[22m[39m
+    [90m 96| [39m    [34mexpect[39m(plain[33m.[39mkind)[33m.[39m[34mtoBe[39m([32m'halftime'[39m)[33m;[39m
+    [90m 97| [39m    expect(plain.state.live && 'varReviews' in plain.state.live, 'the …
+    [90m 98| [39m    expect(api.career.live.varReviews, 'the saved match does not carry…
+    [90m   | [39m                                                                                           [31m^[39m
+    [90m 99| [39m    r[33m.[39m[34munmount[39m()[33m;[39m
+    [90m100| [39m  }[33m,[39m [34m180000[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarLive.test.tsx[2m > [22mClub Manager: VAR is switched on[2m > [22ma Quick Sim through the hook is the match the engine plays with reviews asked for
+[31m[1mAssertionError[22m: match 1 was chosen for its review and shows none: expected 0 to be greater than 0[39m
+[36m [2m❯[22m src/test/clubManagerVarLive.test.tsx:[2m120:113[22m[39m
+    [90m118| [39m      const expected = seeded(seed, () => playNextEntry(clone(before),…
+    [90m119| [39m      [34mexpect[39m(expected[33m.[39mkind)[33m.[39m[34mtoBe[39m([32m'match'[39m)[33m;[39m
+    [90m120| [39m      if (found) expect(reviewRows(api.report), `match ${played + 1} w…
+    [90m   | [39m                                                                                                                [31m^[39m
+    [90m121| [39m      expect(clone(api.report), `match ${played + 1} differs from the …
+    [90m122| [39m      played[33m++[39m[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarLive.test.tsx[2m > [22mClub Manager: VAR is switched on[2m > [22mthe fast forward is the engine run with reviews asked for
+[31m[1mAssertionError[22m: the results of the run differ from the engine with reviews asked for: expected [ { week: +0, …(6) }, …(4) ] to deeply equal [ { week: +0, …(6) }, …(4) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -21,20 +21,20 @@[39m
+[2m      "comp": "Premier League · Round 3",[22m
+[2m      "competition": "league",[22m
+[2m      "home": true,[22m
+[2m      "opp": "Manchester United",[22m
+[2m      "res": "L",[22m
+[32m-     "score": "1-4",[39m
+[31m+     "score": "0-2",[39m
+[2m      "week": 2,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "comp": "Premier League · Round 4",[22m
+[2m      "competition": "league",[22m
+[2m      "home": false,[22m
+[2m      "opp": "Tottenham",[22m
+[32m-     "res": "D",[39m
+[32m-     "score": "1-1",[39m
+[31m+     "res": "L",[39m
+[31m+     "score": "1-3",[39m
+[2m      "week": 4,[22m
+[2m    },[22m
+[2m    {[22m
+[2m      "comp": "Premier League · Round 5",[22m
+[2m      "competition": "league",[22m
+
+[36m [2m❯[22m src/test/clubManagerVarLive.test.tsx:[2m147:113[22m[39m
+    [90m145| [39m    [34mact[39m(() [33m=>[39m [34mseeded[39m(seed[33m,[39m () [33m=>[39m api[33m.[39m[34msimToWeek[39m(target)))[33m;[39m
+    [90m146| [39m    [34mexpect[39m(api[33m.[39mcareer[33m.[39mweek)[33m.[39m[34mtoBe[39m(expected[33m.[39mstate[33m.[39mweek)[33m;[39m
+    [90m147| [39m    expect(clone(api.career.resultLog), 'the results of the run differ…
+    [90m   | [39m                                                                                                                [31m^[39m
+    [90m148| [39m    expect(clone(api.career.resultLog), 'the run is the one the engine…
+    [90m149| [39m    r[33m.[39m[34munmount[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 19:11:04
+[2m   Duration [22m 3.66s[2m (transform 1.72s, setup 47ms, collect 2.15s, tests 561ms, environment 301ms, prepare 116ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR is switched on > a live kick off through the hook asks for reviews,line=98,column=92::AssertionError: the saved match does not carry the review opt in: expected undefined to be true // Object.is equality%0A%0A- Expected: %0Atrue%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/clubManagerVarLive.test.tsx:98:92%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR is switched on > a Quick Sim through the hook is the match the engine plays with reviews asked for,line=120,column=113::AssertionError: match 1 was chosen for its review and shows none: expected 0 to be greater than 0%0A ❯ src/test/clubManagerVarLive.test.tsx:120:113%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR is switched on > the fast forward is the engine run with reviews asked for,line=147,column=113::AssertionError: the results of the run differ from the engine with reviews asked for: expected [ { week: +0, …(6) }, …(4) ] to deeply equal [ { week: +0, …(6) }, …(4) ]%0A%0A- Expected%0A+ Received%0A%0A@@ -21,20 +21,20 @@%0A      "comp": "Premier League · Round 3",%0A      "competition": "league",%0A      "home": true,%0A      "opp": "Manchester United",%0A      "res": "L",%0A-     "score": "1-4",%0A+     "score": "0-2",%0A      "week": 2,%0A    },%0A    {%0A      "comp": "Premier League · Round 4",%0A      "competition": "league",%0A      "home": false,%0A      "opp": "Tottenham",%0A-     "res": "D",%0A-     "score": "1-1",%0A+     "res": "L",%0A+     "score": "1-3",%0A      "week": 4,%0A    },%0A    {%0A      "comp": "Premier League · Round 5",%0A      "competition": "league",%0A%0A ❯ src/test/clubManagerVarLive.test.tsx:147:113%0A%0A
