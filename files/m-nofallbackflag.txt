@@ -1,0 +1,6 @@
+rmut nofallbackflag: applied (1 line)
+harness exit=0: simCmLeaguePhase: GREEN, 6711 checks, 0 failed, sections all.
+vitest exit=0:       Tests  32 passed (32) 
+reviewer's probe exit=1: rprobe: 10 FAULTS (scale 0.25).
+  FAULT B: swollen 0 is past the search's budget (28/52 against a floor of 10/88) and the saved slate does not say fallback
+  FAULT B: swollen 2 is past the search's budget (31/46 against a floor of 22/64) and the saved slate does not say fallback

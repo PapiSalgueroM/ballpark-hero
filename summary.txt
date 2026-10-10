@@ -1,0 +1,14 @@
+clean exit=0 14s | tree clean before the mutations
+m-climb exit=1 26s | climb: harness=0 vitest=0 probe=0 => SURVIVED by the round's own gates
+m-cap3 exit=0 26s | cap3: harness=1 vitest=0 probe=1 => CAUGHT by the round's own gates
+m-homeflag exit=1 27s | homeflag: harness=0 vitest=0 probe=1 => SURVIVED by the round's own gates
+m-nofallbackflag exit=1 27s | nofallbackflag: harness=0 vitest=0 probe=1 => SURVIVED by the round's own gates
+m-opponents exit=0 27s | opponents: harness=1 vitest=0 probe=1 => CAUGHT by the round's own gates
+m-feedswap exit=0 27s | feedswap: harness=1 vitest=0 probe=1 => CAUGHT by the round's own gates
+m-onesidecap exit=0 26s | onesidecap: harness=1 vitest=1 probe=0 => CAUGHT by the round's own gates
+m-onetoss exit=0 26s | onetoss: harness=1 vitest=0 probe=1 => CAUGHT by the round's own gates
+m-twice exit=0 26s | twice: harness=1 vitest=1 probe=1 => CAUGHT by the round's own gates
+v-seedsB exit=0 5s | seedsB: section 4 exit=0 | simCmLeaguePhase: GREEN, 486 checks, 0 failed, sections 4.
+v-seedsC exit=0 5s | seedsC: section 4 exit=0 | simCmLeaguePhase: GREEN, 486 checks, 0 failed, sections 4.
+v-setsB exit=0 15s | setsB: section 1 exit=0 | simCmLeaguePhase: GREEN, 5158 checks, 0 failed, sections 1.
+after exit=0 14s | simCmLeaguePhase: GREEN, 6711 checks, 0 failed, sections all.

@@ -1,0 +1,22 @@
+  4 the season one field at 36: England 5, Spain 5, Italy 5, Germany 5, France 4, Netherlands 2, Portugal 2, Scotland 1, Türkiye 1, Belgium 1, Austria 1, Greece 1, Denmark 1, Switzerland 1, Croatia 1
+  4 the 36 add to today's 32: Real Betis, Liverpool, AC Milan, Lyon. Holders: PSG.
+  4 sample save 1 (started at Arsenal): 1 same association matches, 0 over the cap
+      pot 1: PSG (88.9, France); Real Madrid (88.6, Spain); Manchester City (88.5, England); Manchester United (88.5, England); Barcelona (87.9, Spain); Arsenal (87.7, England); Bayern Munich (87.6, Germany); Atlético Madrid (87.4, Spain); Liverpool (87.3, England)
+      pot 2: Aston Villa (85.7, England); Inter Milan (85.5, Italy); AC Milan (84.9, Italy); Napoli (84.5, Italy); Roma (84.5, Italy); Galatasaray (84.4, Türkiye); Porto (83.6, Portugal); Como (83.4, Italy); Villarreal (82.5, Spain)
+      pot 3: Borussia Dortmund (82.4, Germany); Sporting CP (81.7, Portugal); Stuttgart (81.6, Germany); Lyon (81.4, France); RB Leipzig (81.2, Germany); Hoffenheim (80.3, Germany); Feyenoord (80.2, Netherlands); Lille (80.1, France); Club Brugge (78.5, Belgium)
+      pot 4: PSV (78.5, Netherlands); Real Betis (78, Spain); Celtic (76, Scotland); Lens (75.4, France); AEK Athens (72.2, Greece); Dinamo Zagreb (69.3, Croatia); LASK (67.5, Austria); AGF (62.5, Denmark); Thun (60, Switzerland)
+  4 sample save 2 (started at Manchester City): 0 same association matches, 0 over the cap
+      pot 1: PSG (87.9, France); Real Madrid (89.6, Spain); Bayern Munich (88.6, Germany); Arsenal (87.7, England); Inter Milan (87.5, Italy); Manchester United (87.5, England); Barcelona (86.9, Spain); Manchester City (86.5, England); Liverpool (86.3, England)
+      pot 2: Roma (85.5, Italy); Atlético Madrid (85.4, Spain); Como (85.4, Italy); RB Leipzig (84.2, Germany); AC Milan (83.9, Italy); Aston Villa (83.7, England); Villarreal (82.5, Spain); Borussia Dortmund (82.4, Germany); Porto (81.6, Portugal)
+      pot 3: Stuttgart (80.6, Germany); Napoli (80.5, Italy); Galatasaray (80.4, Türkiye); Lyon (80.4, France); Sporting CP (79.7, Portugal); Lens (79.4, France); Lille (79.1, France); Real Betis (79, Spain); Hoffenheim (78.3, Germany)
+      pot 4: Feyenoord (78.2, Netherlands); Club Brugge (77.5, Belgium); PSV (77.5, Netherlands); AEK Athens (74.2, Greece); Celtic (74, Scotland); LASK (67.5, Austria); Dinamo Zagreb (65.3, Croatia); AGF (64.5, Denmark); Thun (61, Switzerland)
+  4 sample save 3 (started at Manchester United): 0 same association matches, 0 over the cap
+      pot 1: PSG (86.9, France); Arsenal (90.7, England); Real Madrid (88.6, Spain); Barcelona (87.9, Spain); Manchester City (87.5, England); Bayern Munich (86.6, Germany); Manchester United (86.5, England); Liverpool (86.3, England); Inter Milan (85.5, Italy)
+      pot 2: RB Leipzig (85.2, Germany); Roma (84.5, Italy); Atlético Madrid (84.4, Spain); Borussia Dortmund (84.4, Germany); Aston Villa (82.7, England); Sporting CP (82.7, Portugal); Napoli (81.5, Italy); PSV (81.5, Netherlands); Villarreal (81.5, Spain)
+      pot 3: Como (81.4, Italy); AC Milan (80.9, Italy); Porto (80.6, Portugal); Galatasaray (80.4, Türkiye); Stuttgart (79.6, Germany); Feyenoord (79.2, Netherlands); Club Brugge (78.5, Belgium); Lyon (78.4, France); Real Betis (78, Spain)
+      pot 4: Hoffenheim (77.3, Germany); Lille (77.1, France); Celtic (76, Scotland); Lens (75.4, France); AEK Athens (72.2, Greece); Dinamo Zagreb (66.3, Croatia); LASK (65.5, Austria); AGF (62.5, Denmark); Thun (62, Switzerland)
+  4 most clubs of one association in one pot, over 480 seeded saves: 3 in 76 of 480 (15.8%) | 4 in 327 of 480 (68.1%) | 5 in 77 of 480 (16.0%)
+  4 which association fills it: 4 of England 295, 4 of Italy 163, 3 of England 76, 5 of Italy 59, 3 of Spain 55, 3 of Italy 52, 5 of England 26, 3 of Germany 25, 3 of France 13, 4 of Germany 3
+  4 THE MEASUREMENT FOR THE LEAD, slates by what the draw had to give up: 0 same association, 0 over the cap: 403 of 480 (84.0%) | 1 same association, 0 over the cap: 69 of 480 (14.4%) | 2 same association, 0 over the cap: 8 of 480 (1.7%)
+  4 drawn exactly at the counting floor: 480 of 480 (100.0%). The critic's line for pots by squad strength is about 19 in 20 with nothing given up.
+simCmLeaguePhase: GREEN, 486 checks, 0 failed, sections 4.

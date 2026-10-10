@@ -1,0 +1,6 @@
+rmut homeflag: applied (2 lines)
+harness exit=0: simCmLeaguePhase: GREEN, 6711 checks, 0 failed, sections all.
+vitest exit=0:       Tests  32 passed (32) 
+reviewer's probe exit=1: rprobe: 400 FAULTS (scale 0.25).
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 20 hosts Club 19, slateFixtureOf(Club 20) says {"opponent":"Club 19","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 19 visits Club 20, slateFixtureOf(Club 19) says {"opponent":"Club 20","home":true}

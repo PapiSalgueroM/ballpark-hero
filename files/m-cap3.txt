@@ -1,0 +1,9 @@
+rmut cap3: applied (1 line)
+harness exit=1: simCmLeaguePhase: RED, 6711 checks, 480 failed, sections all.
+  FAIL [COST] the slate says 0 breaks and 0 over the cap, its matches hold 0 and 11 (save 0)
+  FAIL [BUDGET] 11 over the cap, more than its budget of 2 (save 0)
+  FAIL [COST] the slate says 0 breaks and 0 over the cap, its matches hold 0 and 13 (save 1)
+vitest exit=0:       Tests  32 passed (32) 
+reviewer's probe exit=1: rprobe: 29 FAULTS (scale 0.25).
+  FAULT B: seed 0 says 0/0 and holds 0/7
+  FAULT B: seed 1 says 0/0 and holds 0/5

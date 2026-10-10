@@ -1,0 +1,9 @@
+rmut feedswap: applied (1 line)
+harness exit=1: simCmLeaguePhase: RED, 6711 checks, 8009 failed, sections all.
+  FAIL BRACKET_LINES are not the lines the two seasons as played give
+  FAIL [PLAYOFF] slot 0: seed 2 is fed by 19 against 13 (draw 0)
+  FAIL [PLAYOFF] slot 2: seed 4 is fed by 17 against 16 (draw 0)
+vitest exit=0:       Tests  32 passed (32) 
+reviewer's probe exit=1: rprobe: 400 FAULTS (scale 0.25).
+  FAULT D draw 0: seed 1 is fed by 20 against 14
+  FAULT D draw 0: seed 4 is fed by 17 against 15

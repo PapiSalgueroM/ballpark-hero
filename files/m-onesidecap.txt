@@ -1,0 +1,7 @@
+rmut onesidecap: applied (1 line)
+harness exit=1: simCmLeaguePhase: RED, 6711 checks, 2852 failed, sections all.
+  FAIL [BUDGET] 3 over the cap, more than its budget of 2 (set 11, field 0)
+  FAIL [BUDGET] 12 over the cap, more than its budget of 2 (set 11, field 1)
+  FAIL [BUDGET] 8 over the cap, more than its budget of 2 (set 11, field 3)
+vitest exit=1: ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯  FAIL  src/lib/leagueSlate.test.ts > swissSlate > keeps a five club association with four in one pot inside both rules AssertionError: expected { …(6) } to match object { breaks: +0, overCap: +0, …(1) }  FAIL  src/lib/leagueSlate.test.ts
+reviewer's probe exit=0: rprobe: NO FAULT (scale 0.25).

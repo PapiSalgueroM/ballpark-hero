@@ -1,0 +1,59 @@
+B. drawUclLeaguePhase on 14 seeds of every kind: 6 different slates. Seeds that share a slate: 4294967295 draws what -1 draws; 4294967296 draws what 0 draws; 4294967297 draws what 1 draws; 9007199254740992 draws what 0 draws; 1.5 draws what 1 draws; 0.25 draws what 0 draws; NaN draws what 0 draws; Infinity draws what 0 draws
+B. saved slates of 18 clubs of one association: 10 were past the search's budget, 10 of those say fallback. Worst draw through the wrapper 176 ms.
+A. swissSlate on fields of the reviewer's own: n | null | pattern | inside both rules | at its floor | over its floor (searched) | lied | mean ms | worst ms | mean breaks | mean over cap | mean tries
+   real mix, even strength                    375 | 0 |   0 |   368 |   375 |    0 | 0 |     2.6 |     21 | 0.02 | 0.00 | 1.1
+   real mix, big five far stronger            375 | 0 |   0 |   363 |   375 |    0 | 0 |     2.3 |     17 | 0.03 | 0.00 | 1.1
+   one association of 06                        6 | 0 |   0 |     5 |     6 |    0 | 0 |     2.5 |      6 | 0.00 | 0.33 | 1.0
+   one association of 07                        6 | 0 |   0 |     1 |     6 |    0 | 0 |     2.2 |      6 | 0.00 | 3.00 | 1.0
+   one association of 08                        6 | 0 |   0 |     0 |     6 |    0 | 0 |     3.4 |      9 | 0.00 | 8.00 | 1.5
+   one association of 09                        6 | 0 |   0 |     0 |     6 |    0 | 0 |     7.2 |     15 | 0.33 | 17.33 | 1.7
+   one association of 10                        6 | 0 |   0 |     0 |     6 |    0 | 0 |     3.9 |      9 | 0.00 | 28.00 | 1.0
+   one association of 11                        6 | 0 |   0 |     0 |     5 |    1 | 0 |    19.4 |    108 | 0.33 | 37.33 | 17.8
+   one association of 12                        6 | 0 |   0 |     0 |     6 |    0 | 0 |     0.5 |      1 | 0.17 | 47.67 | 1.0
+   one association of 14                        6 | 0 |   0 |     0 |     6 |    0 | 0 |     2.8 |     12 | 0.83 | 66.33 | 1.2
+   one association of 16                        6 | 0 |   3 |     0 |     2 |    1 | 0 |    76.7 |    183 | 13.00 | 62.00 | 112.8
+   one association of 18                        6 | 0 |   5 |     0 |     0 |    1 | 0 |    91.4 |    179 | 24.17 | 59.67 | 170.8
+   one association of 20                        6 | 0 |   6 |     0 |     0 |    0 | 0 |   136.2 |    265 | 37.00 | 54.00 | 180.0
+   one association of 24                        6 | 0 |   6 |     0 |     0 |    0 | 0 |   238.5 |    291 | 58.00 | 52.00 | 180.0
+   one association of 27                        6 | 0 |   6 |     0 |     0 |    0 | 0 |   242.4 |    318 | 75.83 | 46.33 | 180.0
+   one association of 30                        6 | 0 |   5 |     0 |     3 |    1 | 0 |   265.0 |    401 | 96.50 | 35.00 | 160.8
+   one association of 36                        6 | 0 |   0 |     0 |     6 |    0 | 0 |     2.5 |     10 | 144.00 | 0.00 | 1.2
+   pot one all one association                  3 | 0 |   0 |     0 |     3 |    0 | 0 |     5.8 |     12 | 9.00 | 0.00 | 1.0
+   pots one and two, one association each       3 | 0 |   0 |     0 |     3 |    0 | 0 |     2.9 |      7 | 18.00 | 0.00 | 1.0
+   two associations of 18, by pot               3 | 0 |   3 |     0 |     0 |    0 | 0 |    40.7 |     43 | 72.00 | 72.00 | 180.0
+   two associations of 18, alternating          3 | 0 |   3 |     0 |     0 |    0 | 0 |   118.9 |    119 | 56.67 | 102.67 | 180.0
+   four associations of 9, one a pot            3 | 0 |   0 |     0 |     3 |    0 | 0 |     1.3 |      3 | 36.00 | 0.00 | 1.0
+   nine associations of 4                       3 | 0 |   0 |     3 |     3 |    0 | 0 |     6.3 |      8 | 0.00 | 0.00 | 1.0
+C. 75 tables at every matchday from 0 to 8: 0 out of order; neighbours left to the name 549 times. The name step is localeCompare: of 36 names with accents, 34 sit somewhere else than in plain code order (locale en-US).
+D. 1000 knockout draws played to a final under Articles 19.01 to 19.04: the eight ways the three tosses of a line can land each came up (least to most, expected 125): line 1/2 105 to 151, 3/4 107 to 133, 5/6 114 to 138, 7/8 110 to 141. Slots moved by a change that is not theirs: 0.
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 20 hosts Club 19, slateFixtureOf(Club 20) says {"opponent":"Club 19","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 19 visits Club 20, slateFixtureOf(Club 19) says {"opponent":"Club 20","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 03 hosts Club 34, slateFixtureOf(Club 03) says {"opponent":"Club 34","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 34 visits Club 03, slateFixtureOf(Club 34) says {"opponent":"Club 03","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 06 hosts Club 29, slateFixtureOf(Club 06) says {"opponent":"Club 29","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 29 visits Club 06, slateFixtureOf(Club 29) says {"opponent":"Club 06","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 07 hosts Club 05, slateFixtureOf(Club 07) says {"opponent":"Club 05","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 05 visits Club 07, slateFixtureOf(Club 05) says {"opponent":"Club 07","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 08 hosts Club 24, slateFixtureOf(Club 08) says {"opponent":"Club 24","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 24 visits Club 08, slateFixtureOf(Club 24) says {"opponent":"Club 08","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 09 hosts Club 23, slateFixtureOf(Club 09) says {"opponent":"Club 23","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 23 visits Club 09, slateFixtureOf(Club 23) says {"opponent":"Club 09","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 10 hosts Club 28, slateFixtureOf(Club 10) says {"opponent":"Club 28","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 28 visits Club 10, slateFixtureOf(Club 28) says {"opponent":"Club 10","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 12 hosts Club 21, slateFixtureOf(Club 12) says {"opponent":"Club 21","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 21 visits Club 12, slateFixtureOf(Club 21) says {"opponent":"Club 12","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 14 hosts Club 13, slateFixtureOf(Club 14) says {"opponent":"Club 13","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 13 visits Club 14, slateFixtureOf(Club 13) says {"opponent":"Club 14","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 15 hosts Club 18, slateFixtureOf(Club 15) says {"opponent":"Club 18","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 18 visits Club 15, slateFixtureOf(Club 18) says {"opponent":"Club 15","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 16 hosts Club 36, slateFixtureOf(Club 16) says {"opponent":"Club 36","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 36 visits Club 16, slateFixtureOf(Club 36) says {"opponent":"Club 16","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 17 hosts Club 04, slateFixtureOf(Club 17) says {"opponent":"Club 04","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 04 visits Club 17, slateFixtureOf(Club 04) says {"opponent":"Club 17","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 22 hosts Club 01, slateFixtureOf(Club 22) says {"opponent":"Club 01","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 01 visits Club 22, slateFixtureOf(Club 01) says {"opponent":"Club 22","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 25 hosts Club 02, slateFixtureOf(Club 25) says {"opponent":"Club 02","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 02 visits Club 25, slateFixtureOf(Club 02) says {"opponent":"Club 25","home":true}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 27 hosts Club 26, slateFixtureOf(Club 27) says {"opponent":"Club 26","home":false}
+  FAULT B: seed 0 matchday 0: slateFixtures says Club 26 visits Club 27, slateFixtureOf(Club 26) says {"opponent":"Club 27","home":true}
+rprobe: 400 FAULTS (scale 0.25).

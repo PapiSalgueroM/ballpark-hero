@@ -1,0 +1,6 @@
+  1 set 101: 1000 fields, at the floor 1000, fell back 0, plain fields strict 431 of 431
+  1 set 211: 1000 fields, at the floor 1000, fell back 0, plain fields strict 436 of 436
+  1 set 307: 1000 fields, at the floor 1000, fell back 0, plain fields strict 451 of 451
+  1 set 401: 1000 fields, at the floor 1000, fell back 0, plain fields strict 452 of 452
+  1 set 503: 1000 fields, at the floor 1000, fell back 0, plain fields strict 453 of 453
+setsB: section 1 exit=0 | simCmLeaguePhase: GREEN, 5158 checks, 0 failed, sections 1.

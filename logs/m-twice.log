@@ -1,0 +1,1 @@
+twice: harness=1 vitest=1 probe=1 => CAUGHT by the round's own gates

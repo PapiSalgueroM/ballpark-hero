@@ -1,0 +1,18 @@
+#!serial
+# Round 1228, the reviewer who runs things: mutations of the core rule and data path, one at a time, each restored in its own line.
+# A mutation line exits 0 when the round's own gates caught it and 1 when it survived both the harness and the two vitest files.
+clean: node scripts/simCmLeaguePhase.mjs | tail -1; git diff --quiet -- src scripts && echo "tree clean before the mutations"
+m-climb: bash .rc/x/rmutrun.sh climb
+m-cap3: bash .rc/x/rmutrun.sh cap3
+m-homeflag: bash .rc/x/rmutrun.sh homeflag
+m-nofallbackflag: bash .rc/x/rmutrun.sh nofallbackflag
+m-opponents: bash .rc/x/rmutrun.sh opponents
+m-feedswap: bash .rc/x/rmutrun.sh feedswap
+m-onesidecap: bash .rc/x/rmutrun.sh onesidecap
+m-onetoss: bash .rc/x/rmutrun.sh onetoss
+m-twice: bash .rc/x/rmutrun.sh twice
+# Not mutations: the harness's own measurements on seeds it was not recorded on.
+v-seedsB: bash .rc/x/rmutrun.sh seedsB only 4
+v-seedsC: bash .rc/x/rmutrun.sh seedsC only 4
+v-setsB: bash .rc/x/rmutrun.sh setsB only 1
+after: git diff --quiet -- src scripts && node scripts/simCmLeaguePhase.mjs | tail -1

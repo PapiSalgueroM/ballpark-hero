@@ -1,0 +1,18 @@
+  1 set 101: 1000 fields, at the floor 1000, fell back 0, plain fields strict 431 of 431
+  1 set 211: 1000 fields, at the floor 1000, fell back 0, plain fields strict 436 of 436
+  1 set 307: 1000 fields, at the floor 1000, fell back 0, plain fields strict 451 of 451
+  1 set 401: 1000 fields, at the floor 1000, fell back 0, plain fields strict 452 of 452
+  1 set 503: 1000 fields, at the floor 1000, fell back 0, plain fields strict 453 of 453
+  1 by (clubs of the association with most in one pot, most in one pot): fields | at the floor | fell back | mean tries | floors seen (breaks ; over the cap)
+    4 clubs, 3 in a pot         41 |    41 |   0 | 1.05 | 0 ; 0
+    4 clubs, 4 in a pot         47 |    47 |   0 | 1.17 | 0 ; 0
+    5 clubs, 2 in a pot         74 |    74 |   0 | 1.14 | 0 ; 0
+    5 clubs, 3 in a pot       1703 |  1703 |   0 | 1.07 | 0 ; 0
+    5 clubs, 4 in a pot        959 |   959 |   0 | 1.14 | 0 ; 0
+    5 clubs, 5 in a pot        304 |   304 |   0 | 1.06 | 1 ; 0,2
+    6 clubs, 2 in a pot         51 |    51 |   0 | 1.14 | 0 ; 0
+    6 clubs, 3 in a pot        980 |   980 |   0 | 1.39 | 0 ; 0
+    6 clubs, 4 in a pot        524 |   524 |   0 | 1.46 | 0 ; 2
+    6 clubs, 5 in a pot        317 |   317 |   0 | 1.06 | 1 ; 2
+  1 one association swollen past anything the game ships: 8 clubs: 8 of 8 at the floor, 0 on the pattern | 10 clubs: 6 of 8 at the floor, 0 on the pattern | 12 clubs: 7 of 8 at the floor, 0 on the pattern | 18 clubs: 0 of 8 at the floor, 5 on the pattern | 36 clubs: 8 of 8 at the floor, 0 on the pattern
+simCmLeaguePhase: GREEN, 5158 checks, 0 failed, sections 1.

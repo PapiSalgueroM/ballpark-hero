@@ -1,0 +1,9 @@
+rmut opponents: applied (1 line)
+harness exit=1: simCmLeaguePhase: RED, 6711 checks, 201 failed, sections all.
+  FAIL [FLEET] table 0 (after matchday 1) is not in the order the results give
+  FAIL [FLEET] table 1 (after matchday 2) is not in the order the results give
+  FAIL [FLEET] table 8 (after matchday 1) is not in the order the results give
+vitest exit=0:       Tests  32 passed (32) 
+reviewer's probe exit=1: rprobe: 26 FAULTS (scale 0.25).
+  FAULT C: table 2 after matchday 2 is not in the order of Article 18.01
+  FAULT C: table 3 after matchday 3 is not in the order of Article 18.01

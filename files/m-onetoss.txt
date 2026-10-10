@@ -1,0 +1,8 @@
+rmut onetoss: applied (1 line)
+harness exit=1: simCmLeaguePhase: RED, 6711 checks, 7 failed, sections all.
+  FAIL [REAL] 2024-25: PSV Eindhoven against Arsenal was played and this draw can never make it
+  FAIL [REAL] 2024-25: Borussia Dortmund against Lille was played and this draw can never make it
+  FAIL [REAL] 2025-26: Paris against Chelsea was played and this draw can never make it
+vitest exit=0:       Tests  32 passed (32) 
+reviewer's probe exit=1: rprobe: 1 FAULTS (scale 0.25).
+  FAULT D: one of the eight ways a line can be drawn never came up

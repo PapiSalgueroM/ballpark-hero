@@ -1,0 +1,4 @@
+rmut climb: applied (1 line)
+harness exit=0: simCmLeaguePhase: GREEN, 6711 checks, 0 failed, sections all.
+vitest exit=0:       Tests  32 passed (32) 
+reviewer's probe exit=0: rprobe: NO FAULT (scale 0.25).

@@ -1,0 +1,131 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/leagueSlate.test.ts [2m([22m[2m10 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 177[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mdraws a legal slate when nothing constrains it, the same one from the same stream[32m 48[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mnever reads Math.random[32m 17[2mms[22m[39m
+[31m   [31m×[31m swissSlate[2m > [22mkeeps a five club association with four in one pot inside both rules[39m[32m 37[2mms[22m[39m
+[31m     → expected { …(6) } to match object { breaks: +0, overCap: +0, …(1) }
+(5 matching properties omitted from actual)[39m
+   [32m✓[39m swissSlate[2m > [22mbreaks the ban once, and only inside the pot, when five of one association share a pot[32m 61[2mms[22m[39m
+[31m   [31m×[31m swissSlate[2m > [22mgoes two over the cap, and no further, when a six club association has four in one pot[39m[32m 3[2mms[22m[39m
+[31m     → expected { …(6) } to match object { breaks: +0, overCap: 2, …(1) }
+(5 matching properties omitted from actual)[39m
+   [32m✓[39m swissSlate[2m > [22mcounts a field of one association as every match a break and nobody over the cap[32m 1[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mreports what its matches really cost[32m 1[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mseats the recorded pattern, and says so, when it is given no tries[32m 7[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22mholds a recorded pattern that is itself a legal slate[32m 0[2mms[22m[39m
+   [32m✓[39m swissSlate[2m > [22manswers null for pots it cannot draw, and has no pattern for another shape[32m 0[2mms[22m[39m
+ [31m❯[39m src/lib/uclLeaguePhase.test.ts [2m([22m[2m22 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 191[2mms[22m[39m
+   [32m✓[39m the league phase numbers[2m > [22mare the real ones, and the Europa League shares them[32m 4[2mms[22m[39m
+   [32m✓[39m the league phase numbers[2m > [22msort a position into its zone[32m 0[2mms[22m[39m
+   [32m✓[39m the pots and the slate[2m > [22mputs the holders top of pot one, then goes by strength, then by name[32m 14[2mms[22m[39m
+[31m   [31m×[31m the pots and the slate[2m > [22mdraws the same slate from the same seed and survives a round trip through JSON[39m[32m 99[2mms[22m[39m
+[31m     → expected { v: 1, seed: 77, …(4) } to match object { v: 1, seed: 77, breaks: +0, …(1) }
+(2 matching properties omitted from actual)[39m
+   [32m✓[39m the pots and the slate[2m > [22mgives every club eight different opponents, four at home, none of its own association[32m 23[2mms[22m[39m
+   [32m✓[39m the pots and the slate[2m > [22mrefuses a field with a club that has no association[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mputs points first[32m 1[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 1, goal difference[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 2, goals scored[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 3, away goals scored[32m 1[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 4, wins[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 5, away wins[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 6, the points of the clubs each has played[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 7, their goal difference[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mstep 8, their goals[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mfalls to the name only when all eight are level[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22mhas no head to head step[32m 0[2mms[22m[39m
+   [32m✓[39m the single table[2m > [22msays its order in words, with no dash[32m 0[2mms[22m[39m
+   [32m✓[39m the knockout draw[2m > [22mseeds the top eight, pairs the play-offs inside the real pairings and leaves 25th down out[32m 43[2mms[22m[39m
+   [32m✓[39m the knockout draw[2m > [22mworks the example: 10th is seeded against 23rd or 24th, and a win brings 7th or 8th[32m 0[2mms[22m[39m
+   [32m✓[39m the knockout draw[2m > [22mis the same draw from the same order and seed, and only moves when one of its own positions does[32m 1[2mms[22m[39m
+   [32m✓[39m the knockout draw[2m > [22mpairs the winners of slots 2i and 2i + 1, the even slot at home in the second leg[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/leagueSlate.test.ts[2m > [22mswissSlate[2m > [22mkeeps a five club association with four in one pot inside both rules
+[31m[1mAssertionError[22m: expected { …(6) } to match object { breaks: +0, overCap: +0, …(1) }
+(5 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "breaks": 0,[22m
+[2m    "fallback": false,[22m
+[32m-   "overCap": 0,[39m
+[31m+   "overCap": 2,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/leagueSlate.test.ts:[2m68:21[22m[39m
+    [90m 66| [39m      [35mconst[39m slate [33m=[39m [34mswissSlate[39m(spec[33m,[39m [34mmulberry32[39m(seed))[33m;[39m
+    [90m 67| [39m      [34mexpect[39m(slate [33m&&[39m [34mfaults[39m(spec[33m,[39m slate[33m.[39mmatches))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m 68| [39m      expect(slate).toMatchObject({ breaks: 0, overCap: 0, fallback: f…
+    [90m   | [39m                    [31m^[39m
+    [90m 69| [39m    }
+    [90m 70| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/leagueSlate.test.ts[2m > [22mswissSlate[2m > [22mgoes two over the cap, and no further, when a six club association has four in one pot
+[31m[1mAssertionError[22m: expected { …(6) } to match object { breaks: +0, overCap: 2, …(1) }
+(5 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "breaks": 0,[22m
+[2m    "fallback": false,[22m
+[32m-   "overCap": 2,[39m
+[31m+   "overCap": 6,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/leagueSlate.test.ts:[2m92:21[22m[39m
+    [90m 90| [39m      [35mconst[39m slate [33m=[39m [34mswissSlate[39m(spec[33m,[39m [34mmulberry32[39m(seed))[33m;[39m
+    [90m 91| [39m      [34mexpect[39m(slate [33m&&[39m [34mfaults[39m(spec[33m,[39m slate[33m.[39mmatches))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m 92| [39m      expect(slate).toMatchObject({ breaks: 0, overCap: 2, fallback: f…
+    [90m   | [39m                    [31m^[39m
+    [90m 93| [39m    }
+    [90m 94| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/uclLeaguePhase.test.ts[2m > [22mthe pots and the slate[2m > [22mdraws the same slate from the same seed and survives a round trip through JSON
+[31m[1mAssertionError[22m: expected { v: 1, seed: 77, …(4) } to match object { v: 1, seed: 77, breaks: +0, …(1) }
+(2 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "breaks": 0,[22m
+[32m-   "overCap": 0,[39m
+[31m+   "overCap": 6,[39m
+[2m    "seed": 77,[22m
+[2m    "v": 1,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/uclLeaguePhase.test.ts:[2m42:19[22m[39m
+    [90m 40| [39m    [34mexpect[39m(slate[33m?.[39mfx)[33m.[39mnot[33m.[39m[34mtoEqual[39m([34mdraw[39m([34m78[39m)[33m?.[39mfx)[33m;[39m
+    [90m 41| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mparse[39m([33mJSON[39m[33m.[39m[34mstringify[39m(slate)))[33m.[39m[34mtoEqual[39m(slate)[33m;[39m
+    [90m 42| [39m    expect(slate).toMatchObject({ v: 1, seed: 77, breaks: 0, overCap: …
+    [90m   | [39m                  [31m^[39m
+    [90m 43| [39m    expect(slate?.clubs).toEqual(leaguePhasePots(FIELD, 'Club 30', str…
+    [90m 44| [39m    [34mexpect[39m(slate[33m?.[39mfx)[33m.[39m[34mtoHaveLength[39m([34m144[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m29 passed[39m[22m[90m (32)[39m
+[2m   Start at [22m 19:47:33
+[2m   Duration [22m 1.06s[2m (transform 130ms, setup 104ms, collect 179ms, tests 368ms, environment 643ms, prepare 291ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/leagueSlate.test.ts,title=src/lib/leagueSlate.test.ts > swissSlate > keeps a five club association with four in one pot inside both rules,line=68,column=21::AssertionError: expected { …(6) } to match object { breaks: +0, overCap: +0, …(1) }%0A(5 matching properties omitted from actual)%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "breaks": 0,%0A    "fallback": false,%0A-   "overCap": 0,%0A+   "overCap": 2,%0A  }%0A%0A ❯ src/lib/leagueSlate.test.ts:68:21%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/leagueSlate.test.ts,title=src/lib/leagueSlate.test.ts > swissSlate > goes two over the cap%2C and no further%2C when a six club association has four in one pot,line=92,column=21::AssertionError: expected { …(6) } to match object { breaks: +0, overCap: 2, …(1) }%0A(5 matching properties omitted from actual)%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "breaks": 0,%0A    "fallback": false,%0A-   "overCap": 2,%0A+   "overCap": 6,%0A  }%0A%0A ❯ src/lib/leagueSlate.test.ts:92:21%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/uclLeaguePhase.test.ts,title=src/lib/uclLeaguePhase.test.ts > the pots and the slate > draws the same slate from the same seed and survives a round trip through JSON,line=42,column=19::AssertionError: expected { v: 1, seed: 77, …(4) } to match object { v: 1, seed: 77, breaks: +0, …(1) }%0A(2 matching properties omitted from actual)%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "breaks": 0,%0A-   "overCap": 0,%0A+   "overCap": 6,%0A    "seed": 77,%0A    "v": 1,%0A  }%0A%0A ❯ src/lib/uclLeaguePhase.test.ts:42:19%0A%0A
