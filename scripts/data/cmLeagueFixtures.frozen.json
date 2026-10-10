@@ -68,6 +68,15 @@
       "rounds": 38,
       "fixtures": 380,
       "sha256": "1f49177674e198166c600bb9cd1dccc6d9a9654476e1c7601bd9b87219047e25"
+    },
+    "superlig-2026-27-v1": {
+      "leagueId": "superlig",
+      "file": "src/data/clubManagerSuperLigFixtures2026.ts",
+      "receipt": "scripts/data/clubManagerSuperLigFixtures2026.receipt.json",
+      "clubs": 18,
+      "rounds": 34,
+      "fixtures": 306,
+      "sha256": "09636c646515d5b6e98aad249796b074bf2e778120ffd0d13ae7306c5c527ba6"
     }
   }
 }

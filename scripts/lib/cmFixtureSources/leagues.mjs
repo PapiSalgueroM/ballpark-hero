@@ -158,7 +158,20 @@ export const CM_FIXTURE_LEAGUES = [
       { id: 'tff', kind: 'federation', label: 'TFF', ext: 'html', parser: 'tff', url: 'https://www.tff.org/default.aspx?pageID=198' },
       FEED('super-lig-2026'),
     ],
-    names: [{}, {}],
+    names: [
+      {
+        'AMED SPORTİF FAALİYETLER': 'Amedspor', 'ARCA ÇORUM FK': 'Çorum FK', 'BEŞİKTAŞ A.Ş.': 'Beşiktaş',
+        'CORENDON ALANYASPOR': 'Alanyaspor', 'ERZURUMSPOR FK': 'Erzurumspor', 'EYÜPSPOR': 'Eyüpspor',
+        'FENERBAHÇE A.Ş.': 'Fenerbahçe', 'GALATASARAY A.Ş.': 'Galatasaray', 'GAZİANTEP FUTBOL KULÜBÜ A.Ş.': 'Gaziantep FK',
+        'GENÇLERBİRLİĞİ': 'Gençlerbirliği', 'GÖZTEPE A.Ş.': 'Göztepe', 'KASIMPAŞA A.Ş.': 'Kasımpaşa',
+        'KOCAELİSPOR': 'Kocaelispor', 'SAMSUNSPOR A.Ş.': 'Samsunspor', 'TRABZONSPOR A.Ş.': 'Trabzonspor',
+        'TÜMOSAN KONYASPOR': 'Konyaspor', 'ÇAYKUR RİZESPOR A.Ş.': 'Rizespor', 'İSTANBUL BAŞAKŞEHİR FK': 'Başakşehir',
+      },
+      {
+        Besiktas: 'Beşiktaş', Gaziantep: 'Gaziantep FK', 'Gençlerbirligi': 'Gençlerbirliği', 'Istanbul Basaksehir': 'Başakşehir',
+        Kasimpasa: 'Kasımpaşa', 'Çaykur Rizespor': 'Rizespor', 'Çorum': 'Çorum FK',
+      },
+    ],
   },
   {
     leagueId: 'proleague', exportName: 'PROLEAGUE_FIXTURES_2026', file: 'clubManagerProLeagueFixtures2026', orderSource: 0,

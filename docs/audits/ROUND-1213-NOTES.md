@@ -118,6 +118,16 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   bytes. OWED BY THE LEAD: every page of the PDF prints that all rights to the fixture list lie with the
   league body. The ledger holds matchday, home club and away club only, with the source linked, the same class
   of fact as the Premier League list in Release AT; `docs/LEGAL_REVIEW.md` has no entry on fixture lists yet.
+- **superlig: IN.** 18 clubs, 34 matchdays, 306 fixtures. Sources: the Turkish federation's own fixture page
+  (`https://www.tff.org/default.aspx?pageID=198`, 336,663 bytes, sha256 `7ce787598690...`, parser `tff`, decoded
+  by its declared charset windows-1254) and the feed (`https://fixturedownload.com/feed/json/super-lig-2026`,
+  67,482 bytes, sha256 `d28cc553706f...`). Both read 2026-10-10. Zero tuple differences in 306. Name table: 18
+  lines for the federation (it prints company and sponsor forms in capitals, "TÜMOSAN KONYASPOR", "ÇAYKUR
+  RİZESPOR A.Ş.", "AMED SPORTİF FAALİYETLER"), 7 for the feed (it drops Turkish letters: "Besiktas",
+  "Kasimpasa"). FOR THE BINDING ROUND: the federation's address is a ROLLING page (no season in it; no season
+  stamped address is known), so next summer it will show another season. The receipt records the day read, and
+  the ledger's sources are outside the frozen digest so the link can be mended. Data file
+  `src/data/clubManagerSuperLigFixtures2026.ts` 11,032 bytes; receipt 69,057 bytes.
 
 ## Runner results
 
