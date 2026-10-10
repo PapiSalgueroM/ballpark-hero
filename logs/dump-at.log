@@ -1,0 +1,56 @@
+MUTATED scripts/playLiveMatchFit.mjs (alwaysdump): "if (failures > before) dumpSave();" became "dumpSave();"
+--- the walk on seed 3208792607 with every goal dumped, exit 0
+playLiveMatchFit: seed 3208792607. Replay this run with: LIVE_FIT_SEED=3208792607 node scripts/playLiveMatchFit.mjs
+  [match phone] seed 3208792607, 1864 draws at kick off, digest d3b0b2c5 over 6255 characters of drawn match: Crystal Palace v Everton, goals of the first half 28' Hayden Hackney, 32' Jake O'Brien; own goals among them 0
+  the goal watched: 28' Hayden Hackney, against me; own goals in its half 0 of 2 goals
+      RED TO REPLAY: section 1 (phone), match digest d3b0b2c5, the goal watched 28' Hayden Hackney, against me
+  [match calm] seed 3208792608, 1799 draws at kick off, digest c5d9295b over 4603 characters of drawn match: Crystal Palace v Everton, goals of the first half none; own goals among them 0
+  the goal watched: 57' Thierno Barry, against me; own goals in its half 0 of 2 goals
+      RED TO REPLAY: section 2 (calm), match digest 46f249f3, the goal watched 57' Thierno Barry, against me
+  [match wide] seed 3208792609, 1829 draws at kick off, digest 2e8ee4d0 over 5002 characters of drawn match: Crystal Palace v Everton, goals of the first half 5' Jaydee Canvot; own goals among them 0
+  the goal watched: 5' Jaydee Canvot, for me; own goals in its half 0 of 1 goals
+      RED TO REPLAY: section 7 (wide), match digest 2e8ee4d0, the goal watched 5' Jaydee Canvot, for me
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- replay of the phone dump (28' Hayden Hackney, against me), exit 0, contexts that watched that goal: 3 of 3
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-phone.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-phone.json: 72493 bytes as stored, Crystal Palace v Everton, match digest d3b0b2c5, to watch the goal at 28' Hayden Hackney, against me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest d3b0b2c5 over 6255 characters of drawn match: Crystal Palace v Everton, goals of the first half 28' Hayden Hackney, 32' Jake O'Brien; own goals among them 0
+  ok    the match that opened is the one in the file (digest d3b0b2c5)
+  the goal watched: 28' Hayden Hackney, against me; own goals in its half 0 of 2 goals
+  [match calm] seed 3208792608, 7 draws at kick off, digest d3b0b2c5 over 6255 characters of drawn match: Crystal Palace v Everton, goals of the first half 28' Hayden Hackney, 32' Jake O'Brien; own goals among them 0
+  ok    the match that opened is the one in the file (digest d3b0b2c5)
+  the goal watched: 28' Hayden Hackney, against me; own goals in its half 0 of 2 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest d3b0b2c5 over 6255 characters of drawn match: Crystal Palace v Everton, goals of the first half 28' Hayden Hackney, 32' Jake O'Brien; own goals among them 0
+  ok    the match that opened is the one in the file (digest d3b0b2c5)
+  the goal watched: 28' Hayden Hackney, against me; own goals in its half 0 of 2 goals
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- replay of the calm dump (57' Thierno Barry, against me), exit 0, contexts that watched that goal: 3 of 3
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-calm.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-calm.json: 74478 bytes as stored, Crystal Palace v Everton, match digest 46f249f3, to watch the goal at 57' Thierno Barry, against me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest 46f249f3 over 8675 characters of drawn match: Crystal Palace v Everton, goals of the second half 57' Thierno Barry, 79' Merlin Röhl; own goals among them 0
+  ok    the match that opened is the one in the file (digest 46f249f3)
+  the goal watched: 57' Thierno Barry, against me; own goals in its half 0 of 2 goals
+  [match calm] seed 3208792608, 7 draws at kick off, digest 46f249f3 over 8675 characters of drawn match: Crystal Palace v Everton, goals of the second half 57' Thierno Barry, 79' Merlin Röhl; own goals among them 0
+  ok    the match that opened is the one in the file (digest 46f249f3)
+  the goal watched: 57' Thierno Barry, against me; own goals in its half 0 of 2 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest 46f249f3 over 8675 characters of drawn match: Crystal Palace v Everton, goals of the second half 57' Thierno Barry, 79' Merlin Röhl; own goals among them 0
+  ok    the match that opened is the one in the file (digest 46f249f3)
+  the goal watched: 57' Thierno Barry, against me; own goals in its half 0 of 2 goals
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- replay of the wide dump (5' Jaydee Canvot, for me), exit 0, contexts that watched that goal: 3 of 3
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-wide.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/dump-3208792607/live-fit-save-wide.json: 70977 bytes as stored, Crystal Palace v Everton, match digest 2e8ee4d0, to watch the goal at 5' Jaydee Canvot, for me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest 2e8ee4d0 over 5002 characters of drawn match: Crystal Palace v Everton, goals of the first half 5' Jaydee Canvot; own goals among them 0
+  ok    the match that opened is the one in the file (digest 2e8ee4d0)
+  the goal watched: 5' Jaydee Canvot, for me; own goals in its half 0 of 1 goals
+  [match calm] seed 3208792608, 7 draws at kick off, digest 2e8ee4d0 over 5002 characters of drawn match: Crystal Palace v Everton, goals of the first half 5' Jaydee Canvot; own goals among them 0
+  ok    the match that opened is the one in the file (digest 2e8ee4d0)
+  the goal watched: 5' Jaydee Canvot, for me; own goals in its half 0 of 1 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest 2e8ee4d0 over 5002 characters of drawn match: Crystal Palace v Everton, goals of the first half 5' Jaydee Canvot; own goals among them 0
+  ok    the match that opened is the one in the file (digest 2e8ee4d0)
+  the goal watched: 5' Jaydee Canvot, for me; own goals in its half 0 of 1 goals
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+EVERY DUMP REPLAYED: seed 3208792607, three files, each green and each watching its own goal three times

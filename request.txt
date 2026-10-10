@@ -1,0 +1,14 @@
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: this round's walk on the build of origin/release-at-int (its src, public and
+# index.html laid over the checkout, this round's scripts kept), and two SECOND HALF dumps made on main's build replayed there
+# (a match in flight saved before Release AT and resumed after it).
+overlay: git checkout origin/release-at-int -- src public index.html && git rev-parse origin/release-at-int
+build-at: npm run build 2>&1 | tail -2
+clean-at: LIVE_FIT_SHOTS=$RC_OUT/at-clean node scripts/playLiveMatchFit.mjs
+replay-at: LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+noseed-at: LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs
+old-57-at: PORT=4261 LIVE_FIT_SAVE=.rc/x/main-calm-57.json LIVE_FIT_SHOTS=$RC_OUT/at-old57 node scripts/playLiveMatchFit.mjs
+old-49-at: PORT=4262 LIVE_FIT_SAVE=.rc/x/main-wide-49.json LIVE_FIT_SHOTS=$RC_OUT/at-old49 node scripts/playLiveMatchFit.mjs
+dump-at: bash .rc/x/rdump.sh 3208792607 4263
+trim: rm -f "$RC_OUT"/at-*/fit-*.png "$RC_OUT"/at-*/panel-*.png; echo "src is release-at-int's: $(git diff --cached --name-only | grep -c '^src/') files staged from it"

@@ -1,0 +1,9 @@
+overlay exit=0 0s | b79766227467308f94531f2b96ac40583f3a34f4
+build-at exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+clean-at exit=0 96s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+replay-at exit=0 40s | playLiveMatchFit: the replay is green. Seed 3208792607 opened one match three times (digest d3b0b2c5, 1864 draws at kick off) and seed 3208792608 opened another (digest c
+noseed-at exit=1 30s | playLiveMatchFit: control noseed turned the replay red on the line it must (with no seed, three contexts opened three different matches: 5c68edb0, 2bfb786a, 1ae9e890).
+old-57-at exit=0 83s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+old-49-at exit=0 70s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+dump-at exit=0 367s | EVERY DUMP REPLAYED: seed 3208792607, three files, each green and each watching its own goal three times
+trim exit=0 0s | src is release-at-int's: 64 files staged from it
