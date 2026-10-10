@@ -1,0 +1,12 @@
+54e3820a2
+old-first: score 1; seed 1 ST 0 senior seasons; phase playing; club Real Madrid; mentor none; cup rows 0; derby rows 0; book apps n/a; derby meetings n/a
+old-event-mentor: score 6; seed 2 CM 17 senior seasons; phase random_events; club Flamengo; mentor none; cup rows 0; derby rows 13; book apps n/a; derby meetings n/a
+old-home: score 24; seed 6 ST 12 senior seasons; phase playing; club Liverpool; mentor none; cup rows 2; derby rows 12; book apps n/a; derby meetings n/a
+old-one-season: score 1; seed 1 ST 1 senior seasons; phase playing; club Real Madrid; mentor none; cup rows 0; derby rows 1; book apps n/a; derby meetings n/a
+old-summary: score 2; seed 1 ST 9 senior seasons; phase season_summary; club Real Madrid; mentor none; cup rows 0; derby rows 9; book apps n/a; derby meetings n/a
+old-ceremony: score 15; seed 1 ST 15 senior seasons; phase retirement_ceremony; club Real Madrid; mentor none; cup rows 0; derby rows 15; book apps n/a; derby meetings n/a
+old-retired: score 24; seed 11 GK 18 senior seasons; phase retired; club River Plate; mentor none; cup rows 4; derby rows 0; book apps n/a; derby meetings n/a
+old-gk: score 9; seed 3 GK 9 senior seasons; phase playing; club Bayern Munich; mentor none; cup rows 0; derby rows 9; book apps n/a; derby meetings n/a
+old-news-milestone: score 1; seed 4 LW 11 senior seasons; phase newspaper; club PSG; mentor none; cup rows 0; derby rows 11; book apps n/a; derby meetings n/a
+old-event-manager: score 6; seed 8 ST 6 senior seasons; phase random_events; club Flamengo; mentor none; cup rows 0; derby rows 2; book apps n/a; derby meetings n/a
+scMake old: 10 saves from 16 careers and 277 senior seasons, by the code in /tmp/base

@@ -1,0 +1,8 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+old exit=0 3s | scMake old: 10 saves from 16 careers and 277 senior seasons, by the code in /tmp/base
+new exit=0 5s | scMake new: 13 saves from 40 careers and 687 senior seasons, by the code in /home/runner/work/ballpark-hero/ballpark-hero
+probe exit=0 73s | scProbe: done
+play exit=0 48s | sc-screens walk: 20 checks, 0 failed, 11 shots, 3.0 MB
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+dev-head exit=1 35s |     at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:278:41
+dev-pr210 exit=0 78s | Soccer Career development native: 301 checks, 0 failed, 6 actual journeys. Screenshots and complete saved-state evidence: /tmp/pr210/.tmp-fx/dev-pr210
