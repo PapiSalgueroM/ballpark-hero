@@ -1,0 +1,11 @@
+rmut tieValuesReversed: applied to src/lib/gmDraftOrder.ts
+  FAIL: a league by class with a capped climb, league 0: the clubs that were not drawn are not worst record first
+  FAIL: a league by class with a capped climb, league 0: the playoff clubs are not by class and then record
+  FAIL: a league by class with a capped climb, league 1: the clubs that were not drawn are not worst record first
+  FAIL: a league by class with a capped climb, league 1: the playoff clubs are not by class and then record
+simGmDraftOrder: 7118 FAILURES, by section 4: 7118.
+[41m[1m FAIL [22m[49m src/lib/gmDraftOrder.test.ts[2m > [22ma league that orders by class and keeps its later rounds off the lottery[2m > [22muses the league's tiebreak values before any drawing
+[31m[1mAssertionError[22m: expected [ 'A', 'C', 'B' ] to deeply equal [ 'B', 'C', 'A' ][39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDraftOrder.test.ts,title=src/lib/gmDraftOrder.test.ts > a league that orders by class and keeps its later rounds off the lottery > uses the league's tiebreak values before any drawing,line=190,column=23::AssertionError: expected [ 'A', 'C', 'B' ] to deeply equal [ 'B', 'C', 'A' ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "B",%0A-   "C",%0A    "A",%0A+   "C",%0A+   "B",%0A  ]%0A%0A ❯ src/lib/gmDraftOrder.test.ts:190:23%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+MUT tieValuesReversed sim=1 vitest=1 KILLED

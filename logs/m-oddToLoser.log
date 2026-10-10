@@ -1,0 +1,11 @@
+rmut oddToLoser: applied to src/lib/gmDraftOrder.ts
+  FAIL: league 0: the odd combination did not go to the winner of the drawing (43, 43, 43, 43, 43, 43, 43, 43.99999999999999)
+  FAIL: league 1: the odd combination did not go to the winner of the drawing (31, 32, 32)
+  FAIL: league 1: the odd combination did not go to the winner of the drawing (7.000000000000001, 8)
+  FAIL: league 2: the odd combination did not go to the winner of the drawing (99, 99, 99, 99, 99, 100)
+simGmDraftOrder: 6825 FAILURES, by section 3: 6825.
+[41m[1m FAIL [22m[49m src/lib/gmDraftOrder.test.ts[2m > [22mthe 2026 night, as the league printed it[2m > [22msplits level lottery clubs as the league did: 11.5 each, and 6.8 with 6.7
+[31m[1mAssertionError[22m: expected 6.7 to be 6.8 // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDraftOrder.test.ts,title=src/lib/gmDraftOrder.test.ts > the 2026 night%2C as the league printed it > splits level lottery clubs as the league did%3A 11.5 each%2C and 6.8 with 6.7,line=81,column=26::AssertionError: expected 6.7 to be 6.8 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 6.8%0A+ 6.7%0A%0A ❯ src/lib/gmDraftOrder.test.ts:81:26%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+MUT oddToLoser sim=1 vitest=1 KILLED

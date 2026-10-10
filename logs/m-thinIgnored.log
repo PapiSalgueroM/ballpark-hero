@@ -1,0 +1,7 @@
+rmut thinIgnored: applied to src/lib/gmDraftOrder.ts
+simGmDraftOrder: green. 512050 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+[41m[1m FAIL [22m[49m src/lib/gmDraftOrder.test.ts[2m > [22mfail closed: no lottery is drawn on a rule that cannot carry one[2m > [22ma thin fact: plain reverse standings, and the order says why
+[31m[1mAssertionError[22m: expected null to be 'thin-rule' // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDraftOrder.test.ts,title=src/lib/gmDraftOrder.test.ts > fail closed%3A no lottery is drawn on a rule that cannot carry one > a thin fact%3A plain reverse standings%2C and the order says why,line=147,column=27::AssertionError: expected null to be 'thin-rule' // Object.is equality%0A%0A- Expected: %0A"thin-rule"%0A%0A+ Received: %0Anull%0A%0A ❯ src/lib/gmDraftOrder.test.ts:147:27%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+MUT thinIgnored sim=0 vitest=1 KILLED

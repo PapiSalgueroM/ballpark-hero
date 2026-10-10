@@ -1,0 +1,7 @@
+rmut needDropped: applied to src/lib/gmDraftOrder.ts
+simGmDraftOrder: green. 512050 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+[41m[1m FAIL [22m[49m src/lib/gmDraftOrder.test.ts[2m > [22mthe choice of a rival club[2m > [22mlets need split men whose reads are close, and never pass a clearly better man
+[31m[1mAssertionError[22m: expected 'p2' to be 'p1' // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmDraftOrder.test.ts,title=src/lib/gmDraftOrder.test.ts > the choice of a rival club > lets need split men whose reads are close%2C and never pass a clearly better man,line=327,column=52::AssertionError: expected 'p2' to be 'p1' // Object.is equality%0A%0AExpected: "p1"%0AReceived: "p2"%0A%0A ❯ src/lib/gmDraftOrder.test.ts:327:52%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+MUT needDropped sim=0 vitest=1 KILLED

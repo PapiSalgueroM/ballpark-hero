@@ -1,0 +1,16 @@
+rmut slotsLaterAsFirst: applied to src/lib/gmDraftOrder.ts
+  FAIL: league 0, round 2: the picks are not at the places of their first owners
+  FAIL: league 1, round 2: the picks are not at the places of their first owners
+  FAIL: league 2, round 2: the picks are not at the places of their first owners
+  FAIL: league 3, round 2: the picks are not at the places of their first owners
+simGmDraftOrder: 3092 FAILURES, by section 5: 600, 6: 1, 10: 2491.
+[41m[1m FAIL [22m[49m src/lib/gmDraftNight.test.ts[2m > [22ma saved night is trusted only whole[2m > [22maccepts what it opened, after JSON, at any cursor
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/lib/gmDraftNight.test.ts[2m > [22ma saved night is trusted only whole[2m > [22mrefuses another year and every corruption
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/lib/gmDraftNight.test.ts[2m > [22mthe night, played through a host[2m > [22mnever reads a pick ledger again: a night that went through JSON mid draft finishes the same
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/lib/gmDraftOrder.test.ts[2m > [22mslots over a pick ledger[2m > [22muses every pick once, by its holder, at the place of its first owner
+[31m[1mAssertionError[22m: expected [ 'SAC', 'BKN', 'UTA', 'MIA', …(26) ] to deeply equal [ 'WAS', 'IND', 'BKN', 'UTA', …(26) ][39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m64 passed[39m[22m[90m (68)[39m
+MUT slotsLaterAsFirst sim=1 vitest=1 KILLED

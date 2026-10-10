@@ -1,0 +1,12 @@
+m-base exit=0 9s | MUT NONE sim=0 vitest=0 SURVIVED
+m-oddToLoser exit=0 9s | MUT oddToLoser sim=1 vitest=1 KILLED
+m-slotsLaterAsFirst exit=0 9s | MUT slotsLaterAsFirst sim=1 vitest=1 KILLED
+m-thinIgnored exit=0 9s | MUT thinIgnored sim=0 vitest=1 KILLED
+m-fieldSizeIgnored exit=0 9s | MUT fieldSizeIgnored sim=0 vitest=1 KILLED
+m-tableIgnored exit=0 9s | MUT tableIgnored sim=0 vitest=1 KILLED
+m-combosFloor exit=0 9s | MUT combosFloor sim=0 vitest=0 SURVIVED
+m-restLevelDropped exit=0 9s | MUT restLevelDropped sim=0 vitest=0 SURVIVED
+m-tieValuesReversed exit=0 9s | MUT tieValuesReversed sim=1 vitest=1 KILLED
+m-rivalTieHigherId exit=0 9s | MUT rivalTieHigherId sim=0 vitest=1 KILLED
+m-needDropped exit=0 9s | MUT needDropped sim=0 vitest=1 KILLED
+clean exit=0 0s | tracked changes above (none expected)
