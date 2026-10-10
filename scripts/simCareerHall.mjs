@@ -1386,7 +1386,11 @@ const inBand = (x, b) => x >= b.lo && x <= b.hi;
 /* 17 (a). The marks, the tripwire for a later round that moves an engine's
    stats: the share of a position's careers at or over a from mark (about one
    in ten by construction), per cell and pooled, and the pooled share at or
-   over a to mark. Never a per cell check on to (a count of 0 to 5). */
+   over a to mark. Never a per cell check on to (a count of 0 to 5).
+   Round 1226: where the ledger's bands carry measuredAgain (the lead's
+   ruling, the header of scripts/genCareerHallMarks.mjs says when), the marks
+   were kept and the bands measured again on the engine as it now plays, so
+   the share is the ledger's and no longer one in ten; the line below says so. */
 let fromHits = 0, toHits = 0, cellN = 0;
 const cellOut = [];
 for (const { pos, s } of tableCells) {
@@ -1399,7 +1403,7 @@ for (const { pos, s } of tableCells) {
 const fromPooled = cellN ? fromHits / cellN : 0, toPooled = cellN ? toHits / cellN : 0;
 const fromOk = cellOut.length === 0 && inBand(fromPooled, ML.bands.fromPooled);
 const toOk = inBand(toPooled, ML.bands.toPooled);
-console.log(`  17 (a) marks: ${tableCells.length} standout cells; at or over from, pooled ${(100 * fromPooled).toFixed(2)} percent (band ${(100 * ML.bands.fromPooled.lo).toFixed(2)} to ${(100 * ML.bands.fromPooled.hi).toFixed(2)}), cells out of ${(100 * ML.bands.fromCell.lo).toFixed(1)} to ${(100 * ML.bands.fromCell.hi).toFixed(1)}: [${cellOut.join(', ')}]; at or over to, pooled ${(100 * toPooled).toFixed(2)} percent (band ${(100 * ML.bands.toPooled.lo).toFixed(2)} to ${(100 * ML.bands.toPooled.hi).toFixed(2)})`);
+console.log(`  17 (a) marks: ${tableCells.length} standout cells; at or over from, pooled ${(100 * fromPooled).toFixed(2)} percent (band ${(100 * ML.bands.fromPooled.lo).toFixed(2)} to ${(100 * ML.bands.fromPooled.hi).toFixed(2)}), cells out of ${(100 * ML.bands.fromCell.lo).toFixed(1)} to ${(100 * ML.bands.fromCell.hi).toFixed(1)}: [${cellOut.join(', ')}]; at or over to, pooled ${(100 * toPooled).toFixed(2)} percent (band ${(100 * ML.bands.toPooled.lo).toFixed(2)} to ${(100 * ML.bands.toPooled.hi).toFixed(2)})${ML.bands.measuredAgain ? `; the marks kept and these bands measured again in Round ${ML.bands.measuredAgain.round} (pooled from was ${(100 * ML.bands.measuredAgain.replaced.fromPooled[0]).toFixed(2)} to ${(100 * ML.bands.measuredAgain.replaced.fromPooled[1]).toFixed(2)})` : ''}`);
 
 /* 17 (b). The table is the ledger, exactly: the list is the half rule both
    ways (a family is on a position's list if and only if its from mark is

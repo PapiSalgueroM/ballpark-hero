@@ -3208,35 +3208,53 @@
    "bands": {
     "defaultCareers": 2000,
     "fromCell": {
-     "lo": 0.0613,
-     "hi": 0.1438,
-     "measuredLo": 0.075,
-     "measuredHi": 0.13,
+     "lo": 0.0606,
+     "hi": 0.2069,
+     "measuredLo": 0.085,
+     "measuredHi": 0.1825,
      "cells": 72
     },
     "fromPooled": {
-     "lo": 0.0859,
-     "hi": 0.1189,
+     "lo": 0.1059,
+     "hi": 0.1439,
      "measured": [
-      0.0967,
-      0.1106,
-      0.0942,
-      0.0969,
-      0.1073,
-      0.1019
+      0.1208,
+      0.1344,
+      0.1281,
+      0.1154,
+      0.1223,
+      0.1235
      ]
     },
     "toPooled": {
-     "lo": 0.0027,
+     "lo": 0.0085,
      "hi": 0.0169,
      "measured": [
-      0.0081,
-      0.0133,
-      0.0067,
-      0.0085,
-      0.0063,
-      0.0098
+      0.0121,
+      0.0127,
+      0.0121,
+      0.0106,
+      0.0146,
+      0.0148
      ]
+    },
+    "measuredAgain": {
+     "round": 1226,
+     "why": "The NHL plays 84 games from 2026-27 (src/data/usSeasonLedgerNhl.ts, two sources), so a present day skater totals about 2.4 percent more than on the 82 game engine the marks were measured on. Calibration 2 has shipped and its marks stay, so more careers reach a from mark than one in ten.",
+     "replaced": {
+      "fromCell": [
+       0.0613,
+       0.1438
+      ],
+      "fromPooled": [
+       0.0859,
+       0.1189
+      ],
+      "toPooled": [
+       0.0027,
+       0.0169
+      ]
+     }
     }
    },
    "outcome": {

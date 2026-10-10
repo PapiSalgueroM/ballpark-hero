@@ -19,6 +19,22 @@
    four *MyCareer.ts files, HALL_CALIBRATION 3 in careerHallOfFame.ts, the
    marks below derived for it, and its own recording.
 
+   THE ONE OTHER WAY BACK, AND ONLY ON THE LEAD'S RULING (Round 1226): THE
+   BANDS MEASURED AGAIN, THE MARKS KEPT. Where the real league changed what a
+   season holds (the NHL plays 84 games from 2026-27) and the ruling is that
+   the marks stay where calibration 2 put them, the three bands of section
+   17 (a) are measured again on the engine as it now plays and nothing else
+   in the ledger moves: no mark, no list, no base, no outcome, no table, no
+   recording. The share at or over a from mark is then no longer one in ten
+   by construction, and the ledger says so: the sport's bands carry
+   measuredAgain (the round, the reason, the bands they replace). Each such
+   sport is named in KEPT below with its reason; a sport that is not there
+   cannot be measured this way.
+     1. The six measuring runs of that sport, as in HOW TO DERIVE.
+     2. MARKS_KEEP=<sport> node scripts/genCareerHallMarks.mjs <dir>
+        (only that sport's row files are read; every other sport's block is
+        written back exactly as the ledger holds it).
+
    HOW TO DERIVE:
      1. Six measuring runs a sport, the board skipped, one row file each:
           SIM_SKIP_BOARD=1 SIM_DUMP_ROWS=<dir>/rows-<sport>-base.json node scripts/simCareerHall.mjs <sport> <careers>
@@ -87,6 +103,16 @@ if (!DIR) { console.error('usage: node scripts/genCareerHallMarks.mjs <dir with 
 const OUT = process.env.MARKS_OUT || path.join(ROOT, 'scripts/data/careerHallMarks.json');
 const SEEDS = ['base', '1', '2', '3', '4', '5'];
 const RAMP_FLOOR = 1.10, HALF = 0.5, BASE_TARGET = 110, MIN_POOL = 1500, DEFAULT_N = 2000, TOP_SHARE = 0.05, COVERED = 0.9;
+/* Round 1226: the sports whose bands may be measured again with the marks kept
+   (the header says when), each with the reason the ledger then records. */
+const KEPT = {
+  nhl: { round: 1226, why: 'The NHL plays 84 games from 2026-27 (src/data/usSeasonLedgerNhl.ts, two sources), so a present day skater totals about 2.4 percent more than on the 82 game engine the marks were measured on. Calibration 2 has shipped and its marks stay, so more careers reach a from mark than one in ten.' },
+};
+const KEEP = (process.env.MARKS_KEEP || '').split(',').filter(Boolean);
+const LEDGER_FILE = path.join(ROOT, 'scripts/data/careerHallMarks.json');
+for (const s of KEEP) if (!KEPT[s]) { console.error(`MARKS_KEEP=${s}: not a sport of KEPT, so its bands cannot be measured again with the marks kept`); process.exit(2); }
+if (KEEP.length && !existsSync(LEDGER_FILE)) { console.error('MARKS_KEEP needs the ledger it keeps the marks of'); process.exit(2); }
+const WAS = KEEP.length ? JSON.parse(readFileSync(LEDGER_FILE, 'utf8')) : null;
 /* Rule B bases that are fixed, not measured. */
 /* Round 1103 added the basketball rows, and they are not a base in rule B's sense (calibration 1 read points
    at every NBA position). That round moved the NBA stat line about a fifth lower and held the Hall rate with
@@ -157,8 +183,31 @@ const ledger = {
   labels: LABELS,
   sports: {},
 };
+const widen = (xs, k) => { const lo = Math.min(...xs), hi = Math.max(...xs); return { lo: Math.max(0, Math.round((lo - k * (hi - lo)) * 1e4) / 1e4), hi: Math.round((hi + k * (hi - lo)) * 1e4) / 1e4, measured: xs.map(x => Math.round(x * 1e4) / 1e4) }; };
+/* The bands, at the default size, against the marks and the lists `out` holds
+   (the ones just derived, or with MARKS_KEEP the ones the ledger already held). */
+const measureBands = (sport, out, runs) => {
+  const cells = POSITIONS[sport].flatMap(pos => (out.standouts[pos] ?? []).filter(f => !decided(sport, pos, 'standout', f, 'dropped')).map(f => ({ pos, f, m: out.positions[pos].families[f] })));
+  const cellShares = [], fromPooled = [], toPooled = [];
+  for (const run of runs) {
+    let a = 0, b = 0, n = 0;
+    for (const { pos, f, m } of cells) {
+      const mine = run.filter(r => r.pos === pos);
+      const over = mine.filter(r => (r.t[f] ?? 0) >= m.from).length;
+      cellShares.push(over / mine.length);
+      a += over; b += mine.filter(r => (r.t[f] ?? 0) >= m.to).length; n += mine.length;
+    }
+    fromPooled.push(a / n); toPooled.push(b / n);
+  }
+  const env = widen(cellShares, 0.25);
+  return { cells, bands: { defaultCareers: DEFAULT_N, fromCell: { lo: env.lo, hi: env.hi, measuredLo: Math.min(...env.measured), measuredHi: Math.max(...env.measured), cells: cellShares.length }, fromPooled: widen(fromPooled, 0.5), toPooled: widen(toPooled, 0.5) } };
+};
+const bandsLine = b => `a cell's share at or over from ${(100 * b.fromCell.measuredLo).toFixed(1)} to ${(100 * b.fromCell.measuredHi).toFixed(1)} percent over ${b.fromCell.cells} cell runs (band ${(100 * b.fromCell.lo).toFixed(1)} to ${(100 * b.fromCell.hi).toFixed(1)}); pooled from ${b.fromPooled.measured.map(x => (100 * x).toFixed(2)).join(' ')} (band ${(100 * b.fromPooled.lo).toFixed(2)} to ${(100 * b.fromPooled.hi).toFixed(2)}); pooled to ${b.toPooled.measured.map(x => (100 * x).toFixed(2)).join(' ')} (band ${(100 * b.toPooled.lo).toFixed(2)} to ${(100 * b.toPooled.hi).toFixed(2)})`;
+
 let short = 0;
 for (const sport of Object.keys(POSITIONS)) {
+  // MARKS_KEEP: a sport that is not named keeps its whole block, and no row file of it is read.
+  if (KEEP.length && !KEEP.includes(sport)) { ledger.sports[sport] = WAS.sports[sport]; continue; }
   const rows = [];
   const perSeed = [];
   const runs = [];
@@ -169,6 +218,19 @@ for (const sport of Object.keys(POSITIONS)) {
     perSeed.push(r.length);
     rows.push(...r);
     runs.push(r.slice(0, DEFAULT_N));
+  }
+  if (KEEP.includes(sport)) {
+    /* The marks kept: the block as the ledger holds it, the three bands alone
+       measured again on these runs, and the reason written beside them. */
+    const kept = { ...WAS.sports[sport] };
+    const old = kept.bands;
+    const first = old.measuredAgain?.replaced ?? { fromCell: [old.fromCell.lo, old.fromCell.hi], fromPooled: [old.fromPooled.lo, old.fromPooled.hi], toPooled: [old.toPooled.lo, old.toPooled.hi] };
+    kept.bands = { ...measureBands(sport, kept, runs).bands, measuredAgain: { round: KEPT[sport].round, why: KEPT[sport].why, replaced: first } };
+    ledger.sports[sport] = kept;
+    console.log(`\n== ${sport}: THE MARKS KEPT, the bands measured again on ${rows.length} careers (${perSeed.join(', ')})`);
+    console.log(`  bands at ${DEFAULT_N} careers: ${bandsLine(kept.bands)}`);
+    console.log(`  they replace: a cell ${(100 * first.fromCell[0]).toFixed(1)} to ${(100 * first.fromCell[1]).toFixed(1)}; pooled from ${(100 * first.fromPooled[0]).toFixed(2)} to ${(100 * first.fromPooled[1]).toFixed(2)}; pooled to ${(100 * first.toPooled[0]).toFixed(2)} to ${(100 * first.toPooled[1]).toFixed(2)}`);
+    continue;
   }
   const families = Object.keys(rows[0].t).filter(f => !(f in EXCLUDED[sport]));
   const out = { careers: rows.length, runs: perSeed, positions: {}, standouts: {}, base: {}, nearHalf: [] };
@@ -214,21 +276,8 @@ for (const sport of Object.keys(POSITIONS)) {
   for (const [pos, terms] of Object.entries(FIXED_BASE[sport] ?? {})) out.base[pos] = terms.map(t => ({ ...t, fixed: true, median: out.positions[pos].families[t.stat].median }));
 
   /* The bands, at the default size. */
-  const widen = (xs, k) => { const lo = Math.min(...xs), hi = Math.max(...xs); return { lo: Math.max(0, Math.round((lo - k * (hi - lo)) * 1e4) / 1e4), hi: Math.round((hi + k * (hi - lo)) * 1e4) / 1e4, measured: xs.map(x => Math.round(x * 1e4) / 1e4) }; };
-  const cells = POSITIONS[sport].flatMap(pos => (out.standouts[pos] ?? []).filter(f => !decided(sport, pos, 'standout', f, 'dropped')).map(f => ({ pos, f, m: out.positions[pos].families[f] })));
-  const cellShares = [], fromPooled = [], toPooled = [];
-  for (const run of runs) {
-    let a = 0, b = 0, n = 0;
-    for (const { pos, f, m } of cells) {
-      const mine = run.filter(r => r.pos === pos);
-      const over = mine.filter(r => (r.t[f] ?? 0) >= m.from).length;
-      cellShares.push(over / mine.length);
-      a += over; b += mine.filter(r => (r.t[f] ?? 0) >= m.to).length; n += mine.length;
-    }
-    fromPooled.push(a / n); toPooled.push(b / n);
-  }
-  const env = widen(cellShares, 0.25);
-  out.bands = { defaultCareers: DEFAULT_N, fromCell: { lo: env.lo, hi: env.hi, measuredLo: Math.min(...env.measured), measuredHi: Math.max(...env.measured), cells: cellShares.length }, fromPooled: widen(fromPooled, 0.5), toPooled: widen(toPooled, 0.5) };
+  const { cells, bands } = measureBands(sport, out, runs);
+  out.bands = bands;
 
   /* The second pass: the outcome on calibration 2, when the rows carry it. */
   if (runs.every(run => run.every(r => typeof r.hof2 === 'boolean' && typeof r.hof2b === 'boolean'))) {
