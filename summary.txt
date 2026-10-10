@@ -1,0 +1,1 @@
+simSaveKeeper exit=0 3s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
