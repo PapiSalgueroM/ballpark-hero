@@ -195,7 +195,7 @@ async function engine(label, root, patches = []) {
 }
 
 /** The gate of section shapes (ii), set from measured headroom: see the header. */
-const PURPOSE_FLOOR = 1;
+const PURPOSE_FLOOR = 2;
 
 /* ---------- the seeded stream, counted ---------- */
 function seeded(seed) {
@@ -281,7 +281,7 @@ function playCareer(mod, club, eraId, seed, hooks = {}, seasons = SEASONS) {
       let guard = 0;
       while (s.week < s.calendar.length && guard++ < 220) {
         const before = hooks.peek ? hooks.peek(s) : null;
-        const r = cm.playNextEntry(s, { skipHalftime: true });
+        const r = cm.playNextEntry(s, hooks.play ?? { skipHalftime: true });
         hooks.entry?.(before, r.state, r, season);
         s = r.state;
         if (r.kind === 'seasonOver') break;
@@ -312,7 +312,7 @@ const tick = (section, n = 1) => checked.set(section, checked.get(section) + n);
 const newAcc = () => ({
   byLine: { ATT: 0, MID: 0, DEF: 0, GK: 0 }, rowGoals: 0, assists: 0, og: 0, u: 0, noXiClubWeeks: 0,
   aiObs: { ATT: 0, MID: 0, DEF: 0 }, aiExp: { ATT: 0, MID: 0, DEF: 0 }, aiGoals: 0,
-  seasons: [], shortLines: 0, myLeagueMatches: 0, entries: 0,
+  seasons: [], shortLines: 0, myLeagueMatches: 0, entries: 0, reviews: 0, xiRows: 0, xiAssists: 0, xiOg: 0,
   race: { ATT: 0, MID: 0, DEF: 0, GK: 0, rivalGoals: 0 }, thin: {},
 });
 const played = r => r.w + r.d + r.l;
@@ -379,6 +379,7 @@ function watcher(mod, label, acc, opts = {}) {
         acc.myLeagueMatches += 1;
         const theirs = r.report.home === after.clubName ? r.report.awayGoals : r.report.homeGoals;
         if (r.report.oppScorers.length !== theirs) acc.shortLines += 1;
+        acc.reviews += (r.report.detail?.play ?? []).filter(e => e.kind === 'var').length;
         if (theirs === 0) myKept += 1;
       }
       for (const club of rivalsOf(after)) {
@@ -388,13 +389,22 @@ function watcher(mod, label, acc, opts = {}) {
         const xi = before.xi.get(club);
         const scored = now.gf - was.gf;
         if (now.ga === was.ga && xi) keptByClub.set(club, (keptByClub.get(club) ?? 0) + 1);
-        const lg = (acc.thin[leagueId] ??= { weeks: 0, bare: 0, clubs: new Set(), rivals: new Set() });
+        const lg = (acc.thin[leagueId] ??= { weeks: 0, bare: 0, clubs: new Map(), rivals: new Set() });
         lg.weeks += 1;
         lg.rivals.add(club);
-        if (!xi) { acc.noXiClubWeeks += 1; lg.bare += 1; lg.clubs.add(club); }
+        if (!xi) {
+          acc.noXiClubWeeks += 1;
+          lg.bare += 1;
+          if (!lg.clubs.has(club)) {
+            /* Why it has none, once a club: how many men its roster holds as this save sees it, and how many keepers. */
+            const men = cm.oppRosterFor(after, club, EMPTY);
+            lg.clubs.set(club, `${club} ${men.length} men, ${men.filter(p => p.p === 'GK').length} keepers`);
+          }
+        }
         const entry = book.c[club] ?? { m: {}, og: 0, u: 0 };
         const prior = before.book.c[club] ?? { m: {}, og: 0, u: 0 };
         acc.og += entry.og - prior.og;
+        if (xi) acc.xiOg += entry.og - prior.og;
         acc.u += entry.u - prior.u;
         let roster = null;
         const got = { ATT: 0, MID: 0, DEF: 0, GK: 0 };
@@ -414,6 +424,7 @@ function watcher(mod, label, acc, opts = {}) {
           acc.byLine[lineOf(pos)] += row[0] - old[0];
           acc.rowGoals += row[0] - old[0];
           acc.assists += row[1] - old[1];
+          if (xi) { acc.xiRows += row[0] - old[0]; acc.xiAssists += row[1] - old[1]; }
         }
         /* A match between two other clubs, by a club with an eleven: the deal against the harness's own table. */
         if (club !== myOpp && xi && scored > 0) {
@@ -527,6 +538,16 @@ const candFaces = fleet.map((f, i) => playCareer(candidate, f.club, f.era, f.see
 })));
 tCand = Date.now() - tCand;
 
+/* The law once more with the video referee on. In a match I play a review can chalk a goal off or award a
+   penalty, and the score is counted off the lines that are left; the book credits those same lines. The
+   engine plays reviews when asked (the switch a player sees is another round's), so it is asked here. */
+const accVar = newAcc();
+fleet.filter(f => f.era === 'now').slice(0, FULL ? 6 : 2).forEach(f => playCareer(candidate, f.club, f.era, (f.seed ^ 0x5a5a) >>> 0, {
+  ...watcher(candidate, `${f.club} (reviews on, seed ${(f.seed ^ 0x5a5a) >>> 0})`, accVar), play: { skipHalftime: true, varReviews: true },
+}, 1));
+tick('law');
+if (!accVar.reviews) fail('law', 'with the video referee on, no league match of mine had a review: the arm proved nothing');
+
 /* ---------- section stream: the same careers with the book taken out, and on the base commit ---------- */
 let tOff = Date.now();
 const offFaces = fleet.map(f => playCareer(nobook, f.club, f.era, f.seed));
@@ -575,23 +596,26 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
      board, how many more places forwards and wingers hold on the book's board than on the old race's. */
   tick('shapes');
   if (!(purposeRise >= PURPOSE_FLOOR)) fail('shapes', `forwards hold ${fmt(mean(acc.seasons.map(x => x.bookAtt)), 2)} of the top ten on the book's board and ${fmt(mean(acc.seasons.map(x => x.raceAtt)), 2)} on the old race's: a rise of ${fmt(purposeRise, 2)}, under ${PURPOSE_FLOOR}`);
-  /* (iii) the assists and the own goals, each against the rule's own share of the run's own counts. */
+  /* (iii) the assists and the own goals, each against the rule's own share of the run's own counts. Only the
+     goals of a club that had an eleven that week are judged: a side with no eleven can still have a goal
+     against ME on a row (the report names a man of its roster), and that goal has nobody to set it up, so
+     counting it made every one of ten fleets read under the rule (0.606 a goal against 0.614). */
   tick('shapes');
-  const za = (acc.assists - P_ASSIST * acc.rowGoals) / Math.max(1e-9, sd(acc.rowGoals, P_ASSIST));
-  if (Math.abs(za) > 4) fail('shapes', `${acc.assists} assists on ${acc.rowGoals} credited goals, the rule says ${fmt(P_ASSIST * acc.rowGoals)} (z ${fmt(za, 2)})`);
+  const za = (acc.xiAssists - P_ASSIST * acc.xiRows) / Math.max(1e-9, sd(acc.xiRows, P_ASSIST));
+  if (Math.abs(za) > 4) fail('shapes', `${acc.xiAssists} assists on ${acc.xiRows} credited goals of clubs with an eleven, the rule says ${fmt(P_ASSIST * acc.xiRows)} (z ${fmt(za, 2)})`);
   tick('shapes');
-  const named = acc.rowGoals + acc.og;
-  const zo = (acc.og - P_OG * named) / Math.max(1e-9, sd(named, P_OG));
-  if (Math.abs(zo) > 4) fail('shapes', `${acc.og} own goals in ${named} goals of clubs with an eleven, the rule says ${fmt(P_OG * named)} (z ${fmt(zo, 2)})`);
+  const named = acc.xiRows + acc.xiOg;
+  const zo = (acc.xiOg - P_OG * named) / Math.max(1e-9, sd(named, P_OG));
+  if (Math.abs(zo) > 4) fail('shapes', `${acc.xiOg} own goals in ${named} goals of clubs with an eleven, the rule says ${fmt(P_OG * named)} (z ${fmt(zo, 2)})`);
   if (acc.rowGoals < 1500) fail('shapes', `only ${acc.rowGoals} credited goals: too few to judge a share on`);
   const all = acc.byLine.ATT + acc.byLine.MID + acc.byLine.DEF + acc.byLine.GK;
   const pct = x => fmt(100 * x / Math.max(1, all));
   console.log(`shapes  credited rival goals ${all}: forwards ${pct(acc.byLine.ATT)}%, midfielders ${pct(acc.byLine.MID)}%, defenders ${pct(acc.byLine.DEF)}%, keepers ${acc.byLine.GK} goals`);
   console.log(`        between other clubs (${n} goals), dealt against the weight: ${LINES.map(l => `${l} ${acc.aiObs[l]} vs ${fmt(acc.aiExp[l])} (z ${fmt((acc.aiObs[l] - acc.aiExp[l]) / Math.max(1e-9, sd(n, acc.aiExp[l] / Math.max(1, n))), 2)})`).join(', ')}`);
-  console.log(`        assists ${acc.assists} on ${acc.rowGoals} credited goals = ${fmt(acc.assists / Math.max(1, acc.rowGoals), 3)} a goal (the rule ${fmt(P_ASSIST, 3)}, z ${fmt(za, 2)}); own goals ${acc.og} of ${named} = ${fmt(100 * acc.og / Math.max(1, named), 2)}% (the rule ${fmt(100 * P_OG, 2)}%, z ${fmt(zo, 2)})`);
+  console.log(`        clubs with an eleven: assists ${acc.xiAssists} on ${acc.xiRows} credited goals = ${fmt(acc.xiAssists / Math.max(1, acc.xiRows), 3)} a goal (the rule ${fmt(P_ASSIST, 3)}, z ${fmt(za, 2)}); own goals ${acc.xiOg} of ${named} = ${fmt(100 * acc.xiOg / Math.max(1, named), 2)}% (the rule ${fmt(100 * P_OG, 2)}%, z ${fmt(zo, 2)}); every club: ${acc.assists} assists on ${acc.rowGoals} credited goals = ${fmt(acc.assists / Math.max(1, acc.rowGoals), 3)} a goal`);
   console.log(`        unnamed goals ${acc.u} (club weeks with no named eleven: ${acc.noXiClubWeeks}); my league matches ${acc.myLeagueMatches}, reports whose lines did not add up to the score: ${acc.shortLines}`);
   for (const [league, t] of Object.entries(acc.thin)) {
-    if (t.bare) console.log(`        no named eleven in ${league}: ${t.bare} of ${t.weeks} club weeks, ${t.clubs.size} of ${t.rivals.size} rival clubs seen (${[...t.clubs].sort().slice(0, 8).join(', ')}${t.clubs.size > 8 ? ', ...' : ''})`);
+    if (t.bare) console.log(`        no named eleven in ${league}: ${t.bare} of ${t.weeks} club weeks, ${t.clubs.size} of ${t.rivals.size} rival clubs seen (${[...t.clubs.values()].sort().slice(0, 6).join('; ')}${t.clubs.size > 6 ? '; ...' : ''})`);
   }
   console.log(`        top ten of the Goals board held by forwards and wingers: ${fmt(mean(acc.seasons.map(x => x.bookAtt)), 2)} on the book, ${fmt(mean(acc.seasons.map(x => x.raceAtt)), 2)} on the old race, rise ${fmt(purposeRise, 2)} (floor ${PURPOSE_FLOOR}) over ${acc.seasons.length} seasons`);
 }
@@ -905,7 +929,7 @@ if (process.env.BOOK_MEASURE === '1' && !CONTROL) {
 }
 
 /* ---------- the verdict ---------- */
-console.log(`law     ${checked.get('law')} checks over ${acc.entries} entries of ${fleet.length} careers`);
+console.log(`law     ${checked.get('law')} checks over ${acc.entries} entries of ${fleet.length} careers, and ${accVar.entries} entries of ${accVar.seasons.length} seasons with the video referee on (${accVar.myLeagueMatches} league matches of mine, ${accVar.reviews} reviews, ${accVar.shortLines} reports whose lines did not add up to the score)`);
 let total = 0;
 for (const s of SECTIONS) {
   const xs = red.get(s);
