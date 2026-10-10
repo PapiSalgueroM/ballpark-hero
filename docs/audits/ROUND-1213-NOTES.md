@@ -102,6 +102,22 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   `Inter Milan`, "Milan" is `AC Milan`. The article is the list as printed on release day, so its matchday
   numbers are the first published ones by construction. Data file `src/data/clubManagerSerieAFixtures2026.ts`
   10,652 bytes; receipt 71,745 bytes.
+- **bundesliga: IN, and the lead owes a ruling before it is bound.** 18 clubs, 34 matchdays, 306 fixtures.
+  Sources: the DFL's own fixture list PDF
+  (`https://media.dfl.de/sites/2/2026/07/DE_s73GnueV_Bundesliga_Spielplan_2026_27.pdf`, 631,949 bytes, sha256
+  `7408552a6c3b...`, parser `dflPdf` over `pdfText`: the text layer read with zlib alone, a league row is a whole
+  number under Spieltag, a match number, Heim and Gast, and the match numbers kept must run 1 to 306 with no
+  hole) and the feed (`https://fixturedownload.com/feed/json/bundesliga-2026`, 68,680 bytes, sha256
+  `f47773844254...`). Both read 2026-10-10. Zero tuple differences in 306. The same 15 line name table serves
+  both: the feed prints the league's formal names. The PDF address carries a random token, so the ledger SHIPS
+  the league page that links it,
+  `https://www.bundesliga.com/de/bundesliga/news/spielplan-saison-start-termine-daten-2026-27-22043`: its bytes
+  (599,821, sha256 `3cae76538785...`, kept beside the snapshots as `cited-bundesliga-com-de.html`) hold both PDF
+  file names. The English page `.../en/bundesliga/news/2026-27-fixture-lists-now-available-38068` links other
+  files and was not used. Data file `src/data/clubManagerBundesligaFixtures2026.ts` 11,160 bytes; receipt 71,257
+  bytes. OWED BY THE LEAD: every page of the PDF prints that all rights to the fixture list lie with the
+  league body. The ledger holds matchday, home club and away club only, with the source linked, the same class
+  of fact as the Premier League list in Release AT; `docs/LEGAL_REVIEW.md` has no entry on fixture lists yet.
 
 ## Runner results
 

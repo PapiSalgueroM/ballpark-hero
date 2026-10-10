@@ -15,6 +15,15 @@
     "rounds"
   ],
   "ledgers": {
+    "bundesliga-2026-27-v1": {
+      "leagueId": "bundesliga",
+      "file": "src/data/clubManagerBundesligaFixtures2026.ts",
+      "receipt": "scripts/data/clubManagerBundesligaFixtures2026.receipt.json",
+      "clubs": 18,
+      "rounds": 34,
+      "fixtures": 306,
+      "sha256": "1bf9249ddc4d3f49c4068dbf105c7a6d1ab10177333c023c03712318f5593c99"
+    },
     "eredivisie-2026-27-v1": {
       "leagueId": "eredivisie",
       "file": "src/data/clubManagerEredivisieFixtures2026.ts",

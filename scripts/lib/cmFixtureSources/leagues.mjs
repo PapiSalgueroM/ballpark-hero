@@ -33,6 +33,20 @@ const MAXIFOOT = (slug, title) => ({
   id: 'maxifoot', kind: 'press', label: 'Maxifoot', url: maxifoot(slug), ext: 'htm', parser: 'maxifoot', title,
 });
 
+/* The DFL's PDFs carry a random token in their file names, so the game links the league page that links them.
+   Checked 2026-10-10: the bytes of that page hold both PDF file names. */
+const DFL_CITED = {
+  citedUrl: 'https://www.bundesliga.com/de/bundesliga/news/spielplan-saison-start-termine-daten-2026-27-22043',
+  citedNote: 'The fetched address is the PDF itself. The cited address is the league page that links it: its bytes held the file name of this PDF when read on 2026-10-10.',
+};
+/* The league's formal names, which the DFL's list and the feed both print. */
+const BUNDESLIGA_NAMES = {
+  '1. FC Köln': 'Köln', '1. FC Union Berlin': 'Union Berlin', '1. FSV Mainz 05': 'Mainz', 'Bayer 04 Leverkusen': 'Bayer Leverkusen',
+  'Borussia Mönchengladbach': 'Gladbach', 'FC Augsburg': 'Augsburg', 'FC Bayern München': 'Bayern Munich', 'FC Schalke 04': 'Schalke 04',
+  'Hamburger SV': 'Hamburg', 'SC Paderborn 07': 'Paderborn', 'SV Elversberg': 'Elversberg', 'SV Werder Bremen': 'Werder Bremen',
+  'Sport-Club Freiburg': 'Freiburg', 'TSG Hoffenheim': 'Hoffenheim', 'VfB Stuttgart': 'Stuttgart',
+};
+
 export const CM_FIXTURE_LEAGUES = [
   {
     leagueId: 'laliga', exportName: 'LALIGA_FIXTURES_2026', file: 'clubManagerLaLigaFixtures2026', orderSource: 0,
@@ -132,10 +146,11 @@ export const CM_FIXTURE_LEAGUES = [
       {
         id: 'dfl', kind: 'league', label: 'DFL', ext: 'pdf', parser: 'dflPdf',
         url: 'https://media.dfl.de/sites/2/2026/07/DE_s73GnueV_Bundesliga_Spielplan_2026_27.pdf',
+        ...DFL_CITED,
       },
       FEED('bundesliga-2026'),
     ],
-    names: [{}, {}],
+    names: [BUNDESLIGA_NAMES, BUNDESLIGA_NAMES],
   },
   {
     leagueId: 'superlig', exportName: 'SUPERLIG_FIXTURES_2026', file: 'clubManagerSuperLigFixtures2026', orderSource: 0,
@@ -162,6 +177,7 @@ export const CM_FIXTURE_LEAGUES = [
       {
         id: 'dfl', kind: 'league', label: 'DFL', ext: 'pdf', parser: 'dflPdf',
         url: 'https://media.dfl.de/sites/2/2026/07/DE_mgKX2qjj_2.-Bundesliga_Spielplan_2026_27.pdf',
+        ...DFL_CITED,
       },
       {
         id: 'hessenschau', kind: 'broadcaster', label: 'hessenschau', ext: 'html', parser: 'hessenschau',
