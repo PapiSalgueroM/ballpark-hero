@@ -519,6 +519,69 @@ describe('Round 1216: an own goal on scenes made by hand', () => {
       expect(tagged).toEqual(plain);
       expect(tagged.every(frame => frame.ownGoalBy === undefined)).toBe(true);
     }
+    /* Nor is anything that is not a goal. The engine tags goals alone, so no player can meet this: a binder that
+       sets og on a shot that goes wide or on a save by mistake still gets the chance it asked for. */
+    for (const side of ['me', 'opp'] as const) for (const kind of ['shot', 'save'] as const) {
+      const line = handLine(side, side === 'me' ? 'Away back' : 'Home back', { kind });
+      const tagged = TICKS.map(t => actionFrame(sceneFor(side), line, t));
+      expect(tagged).toEqual(TICKS.map(t => actionFrame(sceneFor(side), { ...line, event: { ...line.event, og: false } }, t)));
+      expect(tagged.every(frame => frame.ownGoalBy === undefined && frame.action === kind)).toBe(true);
+    }
+  });
+
+  it('OG10: a back meets it in a band in front of his own goal, wherever he stands', () => {
+    /* The band the own goal's comment promises: 13 to 18 from his own goal line, no wider than 26 from the middle
+       (24 to 76 across), and 5 off the straight line from the foot to the corner when he would stand on it. The
+       fleet holds no back nearer his line than 14.8, and none of its rules reads how wide he is met, so each
+       edge of the band has a scene of its own. */
+    let read = 0;
+    for (const side of ['me', 'opp'] as const) {
+      const line = handLine(side, side === 'me' ? 'Away back' : 'Home back');
+      const depthOn = (y: number) => (side === 'me' ? y : 100 - y);
+      /* The back at x and that deep, and (when given) the man who delivers it moved across to `holderX`. */
+      const met = (x: number, depth: number, holderX?: number) => {
+        const scene = structuredClone(sceneFor(side));
+        Object.assign((side === 'me' ? scene.theirs : scene.mine)[1], { x, y: depthOn(depth) });
+        if (holderX !== undefined) (side === 'me' ? scene.mine : scene.theirs)[5].x = holderX;
+        /* The ball on the foot (the end of the plant, .24 of the action) and in the corner. */
+        const last = actionFrame(scene, line, ACTION_SPAN), from = actionFrame(scene, line, .24 * ACTION_SPAN).ball;
+        const at = (side === 'me' ? last.theirs : last.mine)[1];
+        read++;
+        /* Where the straight line from the foot to the corner crosses the depth he is met at. */
+        const straight = from.x + (last.ball.x - from.x) * (at.y - from.y) / (last.ball.y - from.y);
+        return { x: at.x, depth: depthOn(at.y), straight };
+      };
+      for (const x of [30, 50, 70]) {
+        /* Deep in his own six yard box, even on his line: brought out to 13, never met nearer his goal. */
+        for (const depth of [0, 3, 9, 12.9]) expect(met(x, depth).depth).toBeCloseTo(13, 9);
+        /* Inside the band he is met at the depth he stands at. */
+        for (const depth of [13, 15, 18]) expect(met(x, depth).depth).toBeCloseTo(depth, 9);
+        /* Further up the pitch: brought back to 18, never met further out. */
+        for (const depth of [18.1, 30, 55]) expect(met(x, depth).depth).toBeCloseTo(18, 9);
+      }
+      /* Out by a touchline: met no wider than 26 from the middle. */
+      for (const depth of [5, 15, 40]) {
+        for (const x of [0, 5, 23.9]) expect(met(x, depth).x).toBeCloseTo(24, 9);
+        for (const x of [76.1, 95, 100]) expect(met(x, depth).x).toBeCloseTo(76, 9);
+        /* A man well off the line stays where he is across the pitch. */
+        for (const x of [24, 30, 70, 76]) expect(met(x, depth).x).toBeCloseTo(x, 9);
+      }
+      /* On the straight line from the foot to the corner, or within 5 of it: he stands 5 off it, on his own side of
+         it. The man who delivers it is put wide on the back's own side, so the line and everything within 5 of it
+         stays in one half of the pitch (the corner is chosen by the half the back stands in). */
+      for (const depth of [13, 15, 18]) for (const holderX of [30, 70]) {
+        const on = met(holderX < 50 ? 40 : 60, depth, holderX).straight;
+        expect(Math.abs(on - 50)).toBeGreaterThan(8);
+        for (const aside of [-4.9, -2, 0, 2, 4.9]) {
+          const there = met(on + aside, depth, holderX);
+          expect(there.straight).toBeCloseTo(on, 6);
+          expect(Math.abs(there.x - there.straight)).toBeCloseTo(5, 6);
+          if (aside) expect(Math.sign(there.x - there.straight)).toBe(Math.sign(aside));
+        }
+        for (const aside of [-5.1, 5.1]) expect(met(on + aside, depth, holderX).x).toBeCloseTo(on + aside, 9);
+      }
+    }
+    console.log(`[1216 OG10] the band a back meets it in, read on ${read} scenes made by hand: 13 to 18 from his own line, 24 to 76 across, 5 off the straight line`);
   });
 });
 
@@ -694,7 +757,8 @@ describe('Round 1216: an own goal in the live match', () => {
 
   it.each(['me', 'opp'] as const)('the live match draws an own goal for %s off the man on its card', async side => {
     const fixture = findOwnGoals().get(side);
-    expect(fixture, `no first half of the search held an own goal for ${side} standing on its own`).toBeTruthy();    const { career, goal } = fixture!;
+    expect(fixture, `no first half of the search held an own goal for ${side} standing on its own`).toBeTruthy();
+    const { career, goal } = fixture!;
     const before = scoreBy(career, clockPos(goal) - 1), after = scoreBy(career, clockPos(goal));
     expect(after).not.toBe(before);
     const mounted = mount(career);
