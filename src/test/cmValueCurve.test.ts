@@ -36,6 +36,8 @@ import {
   ageOn, buildBirths, tableAugustAge, augustAge2026,
 } from '../../scripts/lib/cmAges.mjs';
 import { DB_TO_ENGINE } from '../../scripts/lib/dbClubNames.mjs';
+import * as door from '../lib/cmAgeRead';
+import type { AgeReading, AgeWorld } from '../lib/cmAgeRead';
 import { eraUpliftRating } from '../lib/clubManagerEras';
 import { CM_ROSTERS, CM_ROSTER_META } from '../data/clubManagerRosters';
 import { CM_ALEAGUE_ROSTERS } from '../data/clubManagerALeague2026';
@@ -963,5 +965,62 @@ describe('the folded final tables: two table publishers a league, neither a wiki
     }
     expect(apart).toEqual([]);
     expect([shipped.length, places]).toEqual([15, 145]);
+  });
+});
+
+/* THE TYPED DOOR, src/lib/cmAgeRead.ts: what the engine will import. It must be the script's own
+   functions (one implementation for the bake and the engine), typed, and imported by nothing yet. */
+const IMPORTS_THE_AGE_READ = /(?:\bfrom\s*|\bimport\s*\(\s*|\brequire\s*\(\s*|^\s*import\s+)['"][^'"\n]*(?:cmAgeRead|scripts\/lib\/cmValueCurve|scripts\/lib\/cmAges)(?:\.[a-z]+)?['"]/m;
+const sourceFilesUnder = (dir: string): string[] => fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+  const full = path.join(dir, entry.name);
+  if (entry.isDirectory()) return sourceFilesUnder(full);
+  return /\.(ts|tsx|mts|js|jsx|mjs)$/.test(entry.name) ? [full] : [];
+});
+
+describe('the typed door the engine will import (src/lib/cmAgeRead.ts)', () => {
+  it('is the script library itself, not a second implementation', () => {
+    expect(door.agePoints).toBe(agePoints);
+    expect(door.ageRead).toBe(ageRead);
+    expect(door.levelFrom).toBe(levelFrom);
+    expect(door.readInWorld).toBe(readInWorld);
+    expect([door.RATING_FLOOR, door.RATING_CEIL, door.LEVEL_MAX, door.CM_AGE_CURVE, door.ERA_RATING_AGE_SHIFT]).toEqual([48, 94, 99, 2, 1]);
+    expect(Object.keys(door).sort()).toEqual(['CM_AGE_CURVE', 'ERA_RATING_AGE_SHIFT', 'LEVEL_MAX', 'RATING_CEIL', 'RATING_FLOOR', 'agePoints', 'ageRead', 'levelFrom', 'readInWorld']);
+  });
+
+  it('reads a man through its types the way the engine will', () => {
+    const season2010: AgeWorld = { stretch: r => eraUpliftRating('era2010', r), top: 97, ageShift: door.ERA_RATING_AGE_SHIFT };
+    const messi: AgeReading = door.readInWorld(90, 22, season2010);
+    expect(messi).toEqual({ level: 97, age: 23, rating: 97 });
+    const vanDijk: number = door.ageRead(80, 35);
+    const kayodeLevel: number = door.levelFrom(82, 22);
+    const youth: number = door.agePoints(84, 22, door.RATING_CEIL);
+    expect([vanDijk, kayodeLevel, youth]).toEqual([85, 84, -2]);
+    /* a past season row the way part two will write it: the shown rating beside the level it stands on */
+    const nedved = door.readInWorld(82, 32, { stretch: r => eraUpliftRating('era2005', r), top: 96, ageShift: 1 });
+    expect({ r: nedved.rating, l: nedved.level }).toEqual({ r: 88, l: 85 });
+    expect(door.levelFrom(nedved.rating, nedved.age, 96)).toBe(nedved.level);
+  });
+
+  it('nothing shipped imports it, or either script library, yet (part two deletes this test with its first import)', () => {
+    /* the shape fires on an import and stays quiet on prose about the file */
+    expect(IMPORTS_THE_AGE_READ.test("import { ageRead } from '@/lib/cmAgeRead';")).toBe(true);
+    expect(IMPORTS_THE_AGE_READ.test("import { ageRead } from './cmAgeRead';")).toBe(true);
+    expect(IMPORTS_THE_AGE_READ.test("const m = await import('../../scripts/lib/cmValueCurve.mjs');")).toBe(true);
+    expect(IMPORTS_THE_AGE_READ.test("import '../../scripts/lib/cmAges.mjs';")).toBe(true);
+    expect(IMPORTS_THE_AGE_READ.test('// rated on the curve (scripts/lib/cmValueCurve.mjs). 310 players')).toBe(false);
+    expect(IMPORTS_THE_AGE_READ.test(' * the typed door is src/lib/cmAgeRead.ts')).toBe(false);
+    const root = path.resolve(process.cwd(), 'src');
+    const files = sourceFilesUnder(root);
+    expect(files.length).toBeGreaterThan(1500);
+    const allowed = new Set(['lib/cmAgeRead.ts', 'test/cmValueCurve.test.ts']);
+    const importers = files
+      .map(file => path.relative(root, file).split(path.sep).join('/'))
+      .filter(rel => !allowed.has(rel))
+      .filter(rel => IMPORTS_THE_AGE_READ.test(fs.readFileSync(path.join(root, rel), 'utf8')));
+    expect(importers).toEqual([]);
+    /* and the door itself imports the two script libraries and nothing else */
+    const doorSource = fs.readFileSync(path.join(root, 'lib/cmAgeRead.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    const doorImports = [...doorSource.matchAll(/from\s+'([^']+)'/g)].map(m => m[1]);
+    expect(doorImports).toEqual(['../../scripts/lib/cmValueCurve.mjs', '../../scripts/lib/cmAges.mjs']);
   });
 });
