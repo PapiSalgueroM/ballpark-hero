@@ -1,0 +1,3 @@
+inv144 exit=3 1s | inv (in memory): INCONCLUSIVE, only 1 careers inside the budget.
+ab2 exit=0 47s | ab: GREEN. 373 season starts: each new decision changed only what it says (targets 1164, plans 746, roles 372, mentors 373, selection sums 35056, bans 626).
+bal exit=0 99s | bal: measured, no verdict.
