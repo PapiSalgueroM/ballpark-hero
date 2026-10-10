@@ -1103,10 +1103,10 @@ function checkGroupRule(tally) {
  */
 function readGroupPathSources() {
   return {
-    engine: fs.readFileSync(ENGINE, 'utf8'),
+    engine: lf(fs.readFileSync(ENGINE, 'utf8')),
     cards: fs.readdirSync(path.join(ROOT, 'src', 'components', 'club-manager'))
       .filter(f => f.endsWith('.tsx'))
-      .map(f => [f, fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', f), 'utf8')]),
+      .map(f => [f, lf(fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', f), 'utf8'))]),
   };
 }
 function groupPathFailures(sources) {
