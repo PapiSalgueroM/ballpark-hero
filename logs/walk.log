@@ -1,0 +1,31 @@
+FIXTURE ruledOut: league match 1, seed 2460, me 9' Kiernan Dewsbury-Hall, disallowed
+FIXTURE penaltyScored: league match 1, seed 1735, opp 34' Alexander Isak, awarded
+FIXTURE penaltySaved: league match 3, seed 2193, me 36' Thierno Barry, awarded
+FIXTURE goalBefore: league match 2, seed 1724, opp 8' João Gomes, disallowed
+FIXTURE two: league match 1, seed 2453, opp 12' Hugo Ekitiké, disallowed
+HELP 390-hub-help: ok | 📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked r
+HELP 1280-hub-help: ok | 📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked r
+CASE 390-motion-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 390-motion-penaltyScored-plain: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 24s
+CASE 390-motion-penaltySaved-plain: ok | awarded me 36' | card "VAR: checking for a penalty |  | Thierno Barry, Everton, 36' |  | Play waits for the decision." at 36' | score under it {"me":0,"opp":0} | result 1-1 | 24s
+CASE 390-motion-goalBefore-plain: ok | disallowed opp 8' | card "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision." at 9' | score under it {"me":1,"opp":0} | result 3-1 | 11s
+CASE 1280-motion-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 1280-motion-penaltyScored-plain: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 24s
+CASE 1280-motion-penaltySaved-plain: ok | awarded me 36' | card "VAR: checking for a penalty |  | Thierno Barry, Everton, 36' |  | Play waits for the decision." at 36' | score under it {"me":0,"opp":0} | result 1-1 | 23s
+CASE 1280-motion-goalBefore-plain: ok | disallowed opp 8' | card "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision." at 9' | score under it {"me":1,"opp":0} | result 3-1 | 10s
+CASE 390-reduced-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 8s
+CASE 390-reduced-penaltyScored-plain: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 22s
+CASE 1280-reduced-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 8s
+CASE 1280-reduced-penaltyScored-plain: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 22s
+CASE 390-motion-two-plain: ok | disallowed opp 12' | card "VAR: checking the goal |  | Hugo Ekitiké, Liverpool, 12' |  | Play waits for the decision." at 12' | score under it {"me":0,"opp":0} | result 0-2 | 23s
+CASE 390-motion-ruledOut-leave: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 390-motion-penaltyScored-leave: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 24s
+CASE 1280-motion-ruledOut-leave: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 1280-motion-penaltyScored-leave: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 24s
+CASE 390-motion-ruledOut-skip: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 8s
+CASE 390-motion-penaltyScored-skip: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 22s
+CASE 1280-motion-ruledOut-skip: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 7s
+CASE 1280-motion-penaltyScored-skip: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 21s
+playCmVar: 21 cases and 2 help views at 390 and 1280, 5 of 5 fixtures found, 0 failed assertion(s).
+playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
+RESULT walk=0
