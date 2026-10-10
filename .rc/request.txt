@@ -1,0 +1,32 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000
+book-default: node scripts/simCmLeagueBook.mjs
+book-full-base: git worktree add -q /tmp/base1229 f78037dc && BOOK_BASE=/tmp/base1229 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+c-keyindex: BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+c-wrongman: BOOK_CONTROL=wrongman node scripts/simCmLeagueBook.mjs
+c-unnamed: BOOK_CONTROL=unnamed node scripts/simCmLeagueBook.mjs
+c-offbyone: BOOK_CONTROL=offbyone node scripts/simCmLeagueBook.mjs
+c-penassistmine: BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+c-assistbench: BOOK_CONTROL=assistbench node scripts/simCmLeagueBook.mjs
+c-byeweek: BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+c-hurtentry: BOOK_CONTROL=hurtentry node scripts/simCmLeagueBook.mjs
+simCmVar: node scripts/simCmVar.mjs
+simCmVar-controls: CM_VAR_CONTROL=all node scripts/simCmVar.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
+simClubManager: node scripts/simClubManager.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+savesize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
