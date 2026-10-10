@@ -1,0 +1,175 @@
+FAIL engine baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.23147535882890224,
+      0.21313480869866908,
+      0.31649208161979914,
+...
+        {
++         body: '5 goals and 7 assists in 36 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out.',
+-         body: '5 goals and 7 assists in 34 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out.',
+          headline: 'THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So',
+          newspaper: 'The Beautiful Game Report',
+          type: 'positive'
+        },
+        {
++         body: 'After averaging a 8.1 rating across 36 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition.',
+-         body: 'After averaging a 8.1 rating across 34 appearances, World ere has been selected in the official Team of the Season. A thoroughly deserved recognition.',
+          headline: 'World ere Named In Team Of The Season',
+          newspaper: 'El Golazo',
+          type: 'positive'
+        }
+      ],
+...
+        age: 20,
++       apps: 36,
+-       apps: 34,
+        assists: 7,
+        ballonDor: false,
+        ballonDorRank: null,
+        championsLeague: false,
+        cleanSheets: 0,
+...
+          cup: 'KNVB Cup',
+-         final: {
+-           against: 2,
+-           for: 1,
+-           legs: 1
+-         },
+          stages: [
+            {
+              stage: 'early',
+              won: true
+            },
+            {
++             against: 1,
++             for: 0,
++             home: false,
++             opp: 'AZ Alkmaar',
+-             against: 0,
+-             for: 4,
+-             home: true,
+-             opp: 'PSV',
+              stage: 'QF',
+-             won: true
+-           },
+-           {
+-             against: 0,
+-             for: 1,
+-             opp: 'Ajax',
+-             stage: 'SF',
+-             won: true
+-           },
+-           {
+-             opp: 'Feyenoord',
+-             stage: 'F',
+              won: false
+            }
+          ]
+        },
+        domesticCup: false,
+...
+        intRating: 6.5,
++       leagueApps: 32,
++       leagueFinish: 5,
+-       leagueApps: 30,
+-       leagueFinish: 3,
+        leagueSize: 18,
+        leagueTitle: false,
+        ovr: 75,
+        rating: 8.1,
+        redCards: 0,
+...
+          age: 20,
++         apps: 36,
+-         apps: 34,
+          assists: 7,
+          ballonDor: false,
+          ballonDorRank: null,
+          championsLeague: false,
+          cleanSheets: 0,
+...
+            cup: 'KNVB Cup',
+-           final: {
+-             against: 2,
+-             for: 1,
+-             legs: 1
+-           },
+            stages: [
+              {
+                stage: 'early',
+                won: true
+              },
+              {
++               against: 1,
++               for: 0,
++               home: false,
++               opp: 'AZ Alkmaar',
+-               against: 0,
+-               for: 4,
+-               home: true,
+-               opp: 'PSV',
+                stage: 'QF',
+-               won: true
+-             },
+-             {
+-               against: 0,
+-               for: 1,
+-               opp: 'Ajax',
+-               stage: 'SF',
+-               won: true
+-             },
+-             {
+-               opp: 'Feyenoord',
+-               stage: 'F',
+                won: false
+              }
+            ]
+          },
+          domesticCup: false,
+...
+          intRating: 6.5,
++         leagueApps: 32,
++         leagueFinish: 5,
+-         leagueApps: 30,
+-         leagueFinish: 3,
+          leagueSize: 18,
+          leagueTitle: false,
+          ovr: 75,
+          rating: 8.1,
+          redCards: 0,
+
+PASS reader baseline
+PASS saved markup
+PASS missing markup
+PASS actual campaign baseline
+PASS actual campaign markup
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All nine healthy outcome groups pass
++ actual - expected
+
++ [
++   'engine baseline'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerTrophyRuns.mjs:146:50
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 'engine baseline' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

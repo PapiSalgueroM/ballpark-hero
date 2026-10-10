@@ -1,0 +1,17 @@
+awards: node scripts/simCareerAwardsNight.mjs
+derbies: node scripts/simCareerDerbies.mjs
+finish: node scripts/simCareerLeagueFinish.mjs
+seasons: node scripts/simCareerLeagueSeasons.mjs
+social: node scripts/simCareerSocialBrands.mjs
+storyrole-all: CAREER_STORY_ROLE_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+trophyruns-all: CAREER_TROPHY_RUNS_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+ambitions-all: SIM_CAREER_AMBITION_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs
+development-all: CAREER_DEVELOPMENT_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+records: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRecords.mjs
+derbyhistory-all: DERBY_HISTORY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+seasonhistory-all: SEASON_HISTORY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+keepplaying: node scripts/simCareerKeepPlaying.mjs
+guideheadings: node scripts/simGuideHeadings.mjs
+guideheadings-traininglocation: GUIDE_HEADINGS_CONTROL=traininglocation node scripts/simGuideHeadings.mjs
+sitesearch: node scripts/simSiteSearch.mjs
+harnessanchors: node scripts/simHarnessAnchors.mjs

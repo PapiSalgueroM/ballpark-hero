@@ -1,0 +1,17 @@
+finish exit=1 20s | simCareerLeagueFinish: 3 failure(s) in section(s) 4
+derbies exit=0 52s | simCareerDerbies: all 8 sections green
+seasons exit=0 47s | simCareerLeagueSeasons: all sections green
+storyrole-all exit=1 7s | Node.js v24.21.0
+trophyruns-all exit=1 3s | Node.js v24.21.0
+social exit=1 42s | 1 FAILURE
+development-all exit=1 4s | Node.js v24.21.0
+ambitions-all exit=0 24s | simSoccerCareerAmbitions: healthy outcomes green, ten effective controls caught
+derbyhistory-all exit=1 2s | Node.js v24.21.0
+awards exit=1 109s | simCareerAwardsNight: 7 FAILURES
+keepplaying exit=1 0s |   FAIL: anchor "revert conviction" is in the engine 0 times, it must be exactly once
+seasonhistory-all exit=1 2s | Node.js v24.21.0
+records exit=0 10s | simSoccerCareerRecords: 12 outcome checks green, three effective controls caught
+guideheadings-traininglocation exit=1 1s | simGuideHeadings control traininglocation: section 1 red and every other section green, the break was caught where it should be (exit 1)
+guideheadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+sitesearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+harnessanchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
