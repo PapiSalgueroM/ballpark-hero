@@ -1,0 +1,9 @@
+#!serial
+V1-ruled-out-goal-still-counts: node .rc/x/mut.mjs V1 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
+V2-reviews-in-every-year-and-era: node .rc/x/mut.mjs V2 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
+V3-ten-times-the-missed-foul-rate: node .rc/x/mut.mjs V3 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
+V5-reviews-dealt-from-the-match-stream: node .rc/x/mut.mjs V5 && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs; s=$?; git checkout -- src scripts; exit $s
+F0-healthy-titles: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/f0.log 2>&1; echo "exit $?"; grep -E "^\+ +title:" /tmp/f0.log | sort -u
+F1-season-two-keeps-the-list: node .rc/x/mut.mjs F1 && (NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/f1.log 2>&1; echo "exit $?"; grep -E "^\+ +title:" /tmp/f1.log | sort -u); git checkout -- src scripts
+F2-a-job-move-binds: node .rc/x/mut.mjs F2 && (NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/f2.log 2>&1; echo "exit $?"; grep -E "^\+ +title:" /tmp/f2.log | sort -u); git checkout -- src scripts
+V1-simLiveMatch-family: node .rc/x/mut.mjs V1 && (node scripts/simCmMatchCentre.mjs | tail -1; node scripts/simLiveMatch.mjs | tail -1; node scripts/simMatchDetail.mjs | tail -1); git checkout -- src scripts
