@@ -1,0 +1,54 @@
+playLiveMatchFit: seed 11. Replay this run with: LIVE_FIT_SEED=11 node scripts/playLiveMatchFit.mjs
+In the job at Crystal Palace.
+1) The goal in order
+  [match phone] seed 11, 1829 draws at kick off, digest fdfd4a79 over 5356 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 29' Quinten Timber; own goals among them 0
+      a goal is coming at 29, the clock is at 2
+  the goal watched: 29' Quinten Timber, for me; own goals in its half 0 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 30 frames it was up
+  ok    a tap on the card ended the hold (45 frames after it, none with the card)
+      what was drawn: shot/flight 0 - 0 27' e217 x26 | shot/wide 0 - 0 27' e217 x18 | pass/pass 0 - 0 27' e217 x1 | pass/pass 0 - 0 28' e217 x49 | pass/pass 0 - 0 28' e989 x2 | pass/pass 0 - 0 28' e217 x9 | goal/plant 0 - 0 29' e217 x16 | goal/flight 0 - 0 29' e217 x11 | goal/flight 0 - 0 29' e813 x19 | goal/net 1 - 0 card 29' e813 x27 | TAP | goal/net 1 - 0 card 29' e813 x3 | pass/pass 1 - 0 30' e217 x1 | pass/pass 1 - 0 30' e216 x1 | pass/pass 1 - 0 30' e989 x1 | pass/pass 1 - 0 30' e217 x1 | pass/pass 1 - 0 30' e813 x1 | pass/pass 1 - 0 30' e217 x52 | pass/pass 1 - 0 31' e217 x3
+      the list at the end: 29'GOAL! Quinten Timber / 29'Save! Lukas Hornicek / 28'Foul by Tino Livramento / 28'Throw in, Crystal Palace / 27'Throw in, Newcastle
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 241 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 4.10 over 10 frames of 22 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.25 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.15
+  ok    name labels overlap 0.25 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 0.90 over 10 frames of 22 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.20 over 10 frames of 22 labels
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+  [labels 844 by 390] mean overlapping name labels a frame 0.70 over 10 frames of 22 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace1 - 0NewcastlePaused at 57'Back ", and the clock held at 57' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (57' to 58')
+5) The reload
+  ok    reload: left at 66', the save holds 66, the match came back at 66'
+  ok    close: left at 68', the save holds 68, the match came back at 68'
+  ok    hidden tab: the clock read 70' and the save holds 70
+2) Reduced motion
+  [match calm] seed 12, 1778 draws at kick off, digest 4eab5042 over 4595 characters of drawn match: Crystal Palace v Ipswich Town, goals of the first half 24' Jørgen Strand Larsen; own goals among them 0
+      a goal is coming at 24, the clock is at 0
+  the goal watched: 24' Jørgen Strand Larsen, for me; own goals in its half 0 of 1 goals
+  ok    under reduced motion the score reads 1 - 0 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+      what was drawn: pass/pass 0 - 0 22' e929 x13 | pass/pass 0 - 0 22' e976 x23 | pass/pass 0 - 0 22' e929 x12 | pass/pass 0 - 0 23' e929 x14 | pass/pass 0 - 0 23' e831 x23 | pass/pass 0 - 0 23' e655 x23 | goal/net 1 - 0 card 24' e655 x151 | goal/net 1 - 0 card 25' e655 x4 | pass/pass 1 - 0 25' e929 x56 | pass/pass 1 - 0 26' e929 x4
+      the list at the end: 25'Throw in, Crystal Palace / 24'GOAL! Penalty, Jørgen Strand Larsen (P) / 18'Corner, left, Ismaïla Sarr / 17'Throw in, Crystal Palace / 16'Shot: Dara O'Shea
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  [match wide] seed 13, 1792 draws at kick off, digest a4d717f3 over 5029 characters of drawn match: Crystal Palace v Sunderland, goals of the first half 1' Jørgen Strand Larsen; own goals among them 0
+      a goal is coming at 18, the clock is at 0
+  the goal watched: 18' Daichi Kamada, for me; own goals in its half 1 of 2 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 1 - 0)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+      what was drawn: shot/plant 0 - 0 16' e636 x2 | shot/flight 0 - 0 16' e636 x30 | shot/wide 0 - 0 16' e636 x14 | shot/wide 0 - 0 17' e636 x4 | pass/pass 0 - 0 17' e636 x5 | pass/pass 0 - 0 17' e547 x2 | pass/pass 0 - 0 17' e636 x49 | goal/plant 0 - 0 18' e636 x16 | goal/flight 0 - 0 18' e636 x30 | goal/net 1 - 0 card 18' e636 x80 | goal/net 1 - 0 card 19' e636 x25 | pass/pass 1 - 0 19' e636 x10 | pass/pass 1 - 0 19' e622 x1 | pass/pass 1 - 0 19' e636 x45 | pass/pass 1 - 0 20' e636 x4
+      the list at the end: 20'Booked: Boubacar Kamara / 20'Foul by Boubacar Kamara / 18'GOAL! Daichi Kamada / 18'Throw in, Crystal Palace / 17'Corner, right, Dwight McNeil
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.

@@ -1,0 +1,54 @@
+playLiveMatchFit: seed 31. Replay this run with: LIVE_FIT_SEED=31 node scripts/playLiveMatchFit.mjs
+In the job at Crystal Palace.
+1) The goal in order
+  [match phone] seed 31, 1848 draws at kick off, digest 6e0c7ef1 over 5017 characters of drawn match: Crystal Palace v Fulham, goals of the first half 33' Ryan Sessegnon; own goals among them 0
+      a goal is coming at 33, the clock is at 2
+  the goal watched: 33' Ryan Sessegnon, against me; own goals in its half 0 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 31 frames it was up
+  ok    a tap on the card ended the hold (45 frames after it, none with the card)
+      what was drawn: save/plant 0 - 0 31' e014 x6 | save/flight 0 - 0 31' e014 x30 | save/caught 0 - 0 31' e014 x13 | save/caught 0 - 0 32' e014 x5 | pass/pass 0 - 0 32' e014 x55 | goal/plant 0 - 0 33' e014 x16 | goal/flight 0 - 0 33' e014 x30 | goal/net 0 - 1 card 33' e014 x23 | TAP | goal/net 0 - 1 card 33' e014 x8 | pass/pass 0 - 1 34' e014 x55 | pass/pass 0 - 1 34' e620 x1 | pass/pass 0 - 1 34' e014 x1 | shot/plant 0 - 1 35' e014 x3
+      the list at the end: 35'Booked: Ryan Sessegnon / 35'Shot: Daichi Kamada / 35'Foul by Ryan Sessegnon / 34'Corner, right, Emile Smith Rowe / 34'Throw in, Fulham
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 246 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 2.60 over 10 frames of 22 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.54 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.33
+  ok    name labels overlap 0.54 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 0.60 over 10 frames of 22 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.00 over 10 frames of 22 labels
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+  [labels 844 by 390] mean overlapping name labels a frame 0.20 over 10 frames of 22 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace0 - 1FulhamPaused at 64'Back to ", and the clock held at 64' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (64' to 65')
+5) The reload
+  ok    reload: left at 66', the save holds 66, the match came back at 66'
+  ok    close: left at 68', the save holds 68, the match came back at 68'
+  ok    hidden tab: the clock read 70' and the save holds 70
+2) Reduced motion
+  [match calm] seed 32, 1810 draws at kick off, digest 14dcf686 over 4830 characters of drawn match: Crystal Palace v Coventry City, goals of the first half 30' Sidiki Chérif; own goals among them 0
+      a goal is coming at 30, the clock is at 0
+  the goal watched: 30' Sidiki Chérif, against me; own goals in its half 0 of 1 goals
+  ok    under reduced motion the score reads 0 - 1 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+      what was drawn: save/caught 0 - 0 28' e575 x50 | save/caught 0 - 0 29' e575 x4 | pass/pass 0 - 0 29' e575 x56 | goal/net 0 - 1 card 30' e575 x151 | goal/net 0 - 1 card 31' e575 x4 | pass/pass 0 - 1 31' e575 x56 | shot/wide 0 - 1 32' e575 x2
+      the list at the end: 32'Shot: Gustavo Hamer / 32'Foul by Bobby Thomas / 32'Foul by Honest Ahanor / 31'Foul by Honest Ahanor / 31'Throw in, Coventry City
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  [match wide] seed 33, 1800 draws at kick off, digest 445b2b7d over 4092 characters of drawn match: Crystal Palace v Bournemouth, goals of the first half 30' Marcus Tavernier; own goals among them 0
+      a goal is coming at 30, the clock is at 2
+  the goal watched: 30' Marcus Tavernier, against me; own goals in its half 0 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 0 - 1)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+      what was drawn: pass/pass 0 - 0 28' e687 x10 | shot/plant 0 - 0 28' e687 x16 | shot/flight 0 - 0 28' e687 x26 | shot/flight 0 - 0 29' e687 x4 | shot/wide 0 - 0 29' e687 x18 | pass/pass 0 - 0 29' e687 x38 | goal/plant 0 - 0 30' e687 x16 | goal/flight 0 - 0 30' e687 x30 | goal/net 0 - 1 card 30' e687 x81 | goal/net 0 - 1 card 31' e687 x24 | pass/pass 0 - 1 31' e687 x56 | pass/pass 0 - 1 32' e687 x3
+      the list at the end: 30'GOAL! Marcus Tavernier / 28'Shot: Jørgen Strand Larsen / 28'Injury: Jaydee Canvot / 27'Save! Dean Henderson / 22'Corner, left, Marcus Tavernier
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.

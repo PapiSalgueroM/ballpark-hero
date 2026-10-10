@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: is the whole walk the same walk on the seed it printed?
+# fresh first (the lever the builder proposes for the release gate), then two seeds of my own.
+twice-fresh: bash .rc/x/rtwice.sh fresh 4241
+twice-11: bash .rc/x/rtwice.sh 11 4242
+twice-31: bash .rc/x/rtwice.sh 31 4243
+trim: rm -f "$RC_OUT"/tw-*/fit-*.png "$RC_OUT"/tw-*/panel-*.png; ls "$RC_OUT" | head -40

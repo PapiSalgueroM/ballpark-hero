@@ -1,0 +1,25 @@
+--- run 1 (LIVE_FIT_SEED=31), exit 0
+  [match phone] seed 31, 1848 draws at kick off, digest 6e0c7ef1 over 5017 characters of drawn match: Crystal Palace v Fulham, goals of the first half 33' Ryan Sessegnon; own goals among them 0
+  the goal watched: 33' Ryan Sessegnon, against me; own goals in its half 0 of 1 goals
+  [match calm] seed 32, 1810 draws at kick off, digest 14dcf686 over 4830 characters of drawn match: Crystal Palace v Coventry City, goals of the first half 30' Sidiki Chérif; own goals among them 0
+  the goal watched: 30' Sidiki Chérif, against me; own goals in its half 0 of 1 goals
+  [match wide] seed 33, 1800 draws at kick off, digest 445b2b7d over 4092 characters of drawn match: Crystal Palace v Bournemouth, goals of the first half 30' Marcus Tavernier; own goals among them 0
+  the goal watched: 30' Marcus Tavernier, against me; own goals in its half 0 of 1 goals
+playLiveMatchFit: seed 31. Replay this run with: LIVE_FIT_SEED=31 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 33, the clock is at 2
+      a goal is coming at 30, the clock is at 0
+      a goal is coming at 30, the clock is at 2
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- run 2 (LIVE_FIT_SEED=31), exit 0
+  [match phone] seed 31, 1848 draws at kick off, digest 6e0c7ef1 over 5017 characters of drawn match: Crystal Palace v Fulham, goals of the first half 33' Ryan Sessegnon; own goals among them 0
+  the goal watched: 33' Ryan Sessegnon, against me; own goals in its half 0 of 1 goals
+  [match calm] seed 32, 1810 draws at kick off, digest 14dcf686 over 4830 characters of drawn match: Crystal Palace v Coventry City, goals of the first half 30' Sidiki Chérif; own goals among them 0
+  the goal watched: 30' Sidiki Chérif, against me; own goals in its half 0 of 1 goals
+  [match wide] seed 33, 1800 draws at kick off, digest 445b2b7d over 4092 characters of drawn match: Crystal Palace v Bournemouth, goals of the first half 30' Marcus Tavernier; own goals among them 0
+  the goal watched: 30' Marcus Tavernier, against me; own goals in its half 0 of 1 goals
+playLiveMatchFit: seed 31. Replay this run with: LIVE_FIT_SEED=31 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 33, the clock is at 2
+      a goal is coming at 30, the clock is at 0
+      a goal is coming at 30, the clock is at 2
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+SAME WALK TWICE: seed 31 opened the same three matches and watched the same three goals (exits 0 and 0)

@@ -1,0 +1,25 @@
+--- run 1 (LIVE_FIT_SEED=fresh), exit 0
+  [match phone] seed 631260316, 1819 draws at kick off, digest 331fecd9 over 4673 characters of drawn match: Crystal Palace v Coventry City, goals of the first half none; own goals among them 0
+  the goal watched: 52' Quinten Timber, for me; own goals in its half 0 of 1 goals
+  [match calm] seed 631260317, 1797 draws at kick off, digest 6d4db58f over 4902 characters of drawn match: Crystal Palace v Leeds United, goals of the first half 35' Adam Wharton; own goals among them 0
+  the goal watched: 35' Adam Wharton, for me; own goals in its half 0 of 1 goals
+  [match wide] seed 631260318, 1833 draws at kick off, digest 6dfbfa0e over 5140 characters of drawn match: Crystal Palace v Hull City, goals of the first half 2' Mohamed-Ali Cho, 36' Robinio Vaz; own goals among them 0
+  the goal watched: 36' Robinio Vaz, against me; own goals in its half 0 of 2 goals
+playLiveMatchFit: seed 631260316 (drawn fresh from the clock). Replay this run with: LIVE_FIT_SEED=631260316 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 52, the clock is at 46
+      a goal is coming at 35, the clock is at 0
+      a goal is coming at 36, the clock is at 2
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- run 2 (LIVE_FIT_SEED=631260316), exit 0
+  [match phone] seed 631260316, 1819 draws at kick off, digest 331fecd9 over 4673 characters of drawn match: Crystal Palace v Coventry City, goals of the first half none; own goals among them 0
+  the goal watched: 52' Quinten Timber, for me; own goals in its half 0 of 1 goals
+  [match calm] seed 631260317, 1797 draws at kick off, digest 6d4db58f over 4902 characters of drawn match: Crystal Palace v Leeds United, goals of the first half 35' Adam Wharton; own goals among them 0
+  the goal watched: 35' Adam Wharton, for me; own goals in its half 0 of 1 goals
+  [match wide] seed 631260318, 1833 draws at kick off, digest 6dfbfa0e over 5140 characters of drawn match: Crystal Palace v Hull City, goals of the first half 2' Mohamed-Ali Cho, 36' Robinio Vaz; own goals among them 0
+  the goal watched: 36' Robinio Vaz, against me; own goals in its half 0 of 2 goals
+playLiveMatchFit: seed 631260316. Replay this run with: LIVE_FIT_SEED=631260316 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 52, the clock is at 46
+      a goal is coming at 35, the clock is at 0
+      a goal is coming at 36, the clock is at 2
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+SAME WALK TWICE: seed 631260316 opened the same three matches and watched the same three goals (exits 0 and 0)

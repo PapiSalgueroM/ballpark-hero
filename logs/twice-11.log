@@ -1,0 +1,25 @@
+--- run 1 (LIVE_FIT_SEED=11), exit 0
+  [match phone] seed 11, 1829 draws at kick off, digest fdfd4a79 over 5356 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 29' Quinten Timber; own goals among them 0
+  the goal watched: 29' Quinten Timber, for me; own goals in its half 0 of 1 goals
+  [match calm] seed 12, 1778 draws at kick off, digest 4eab5042 over 4595 characters of drawn match: Crystal Palace v Ipswich Town, goals of the first half 24' Jørgen Strand Larsen; own goals among them 0
+  the goal watched: 24' Jørgen Strand Larsen, for me; own goals in its half 0 of 1 goals
+  [match wide] seed 13, 1792 draws at kick off, digest a4d717f3 over 5029 characters of drawn match: Crystal Palace v Sunderland, goals of the first half 1' Jørgen Strand Larsen; own goals among them 0
+  the goal watched: 18' Daichi Kamada, for me; own goals in its half 1 of 2 goals
+playLiveMatchFit: seed 11. Replay this run with: LIVE_FIT_SEED=11 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 29, the clock is at 2
+      a goal is coming at 24, the clock is at 0
+      a goal is coming at 18, the clock is at 0
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- run 2 (LIVE_FIT_SEED=11), exit 0
+  [match phone] seed 11, 1829 draws at kick off, digest fdfd4a79 over 5356 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 29' Quinten Timber; own goals among them 0
+  the goal watched: 29' Quinten Timber, for me; own goals in its half 0 of 1 goals
+  [match calm] seed 12, 1778 draws at kick off, digest 4eab5042 over 4595 characters of drawn match: Crystal Palace v Ipswich Town, goals of the first half 24' Jørgen Strand Larsen; own goals among them 0
+  the goal watched: 24' Jørgen Strand Larsen, for me; own goals in its half 0 of 1 goals
+  [match wide] seed 13, 1792 draws at kick off, digest a4d717f3 over 5029 characters of drawn match: Crystal Palace v Sunderland, goals of the first half 1' Jørgen Strand Larsen; own goals among them 0
+  the goal watched: 18' Daichi Kamada, for me; own goals in its half 1 of 2 goals
+playLiveMatchFit: seed 11. Replay this run with: LIVE_FIT_SEED=11 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 29, the clock is at 2
+      a goal is coming at 24, the clock is at 0
+      a goal is coming at 18, the clock is at 0
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+SAME WALK TWICE: seed 11 opened the same three matches and watched the same three goals (exits 0 and 0)

@@ -1,0 +1,54 @@
+playLiveMatchFit: seed 631260316. Replay this run with: LIVE_FIT_SEED=631260316 node scripts/playLiveMatchFit.mjs
+In the job at Crystal Palace.
+1) The goal in order
+  [match phone] seed 631260316, 1819 draws at kick off, digest 331fecd9 over 4673 characters of drawn match: Crystal Palace v Coventry City, goals of the first half none; own goals among them 0
+      a goal is coming at 52, the clock is at 46
+  the goal watched: 52' Quinten Timber, for me; own goals in its half 0 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 29 frames it was up
+  ok    a tap on the card ended the hold (45 frames after it, none with the card)
+      what was drawn: pass/pass 0 - 0 50' e949 x48 | pass/pass 0 - 0 51' e949 x60 | goal/plant 0 - 0 52' e949 x16 | goal/flight 0 - 0 52' e949 x19 | goal/flight 0 - 0 52' e841 x11 | goal/net 1 - 0 card 52' e841 x24 | TAP | goal/net 1 - 0 card 52' e841 x4 | goal/net 1 - 0 card 52' e949 x1 | pass/pass 1 - 0 53' e949 x6 | pass/pass 1 - 0 53' e841 x1 | pass/pass 1 - 0 53' e949 x1 | pass/pass 1 - 0 53' e020 x1 | pass/pass 1 - 0 53' e949 x47 | pass/pass 1 - 0 54' e949 x4
+      the list at the end: 54'Throw in, Coventry City / 53'Foul by Adam Wharton / 53'Throw in, Coventry City / 52'GOAL! Quinten Timber / 52'Save! Dean Henderson
+4) Nothing moves the page
+  ok    window.scrollY stayed at 975 through 243 frames before, during and after a goal
+  ok    window.scrollY stayed at 975 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 2.50 over 10 frames of 22 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.42 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.26
+  ok    name labels overlap 0.42 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 0.60 over 10 frames of 22 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.30 over 10 frames of 22 labels
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+  [labels 844 by 390] mean overlapping name labels a frame 0.70 over 10 frames of 22 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace1 - 0Coventry CityPaused at 78'B", and the clock held at 78' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (78' to 79')
+5) The reload
+  ok    reload: left at 79', the save holds 79, the match came back at 79'
+  ok    close: left at 81', the save holds 81, the match came back at 81'
+  ok    hidden tab: the clock read 83' and the save holds 83
+2) Reduced motion
+  [match calm] seed 631260317, 1797 draws at kick off, digest 6d4db58f over 4902 characters of drawn match: Crystal Palace v Leeds United, goals of the first half 35' Adam Wharton; own goals among them 0
+      a goal is coming at 35, the clock is at 0
+  the goal watched: 35' Adam Wharton, for me; own goals in its half 0 of 1 goals
+  ok    under reduced motion the score reads 1 - 0 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 155 frames it was up
+      what was drawn: shot/wide 0 - 0 33' e775 x46 | shot/wide 0 - 0 34' e775 x4 | pass/pass 0 - 0 34' e775 x56 | goal/net 1 - 0 card 35' e775 x151 | goal/net 1 - 0 card 36' e775 x4 | pass/pass 1 - 0 36' e775 x47 | pass/pass 1 - 0 36' e601 x9 | pass/pass 1 - 0 37' e601 x4
+      the list at the end: 35'GOAL! Adam Wharton / 34'Foul by Anton Stach / 33'Shot: Dwight McNeil / 32'Throw in, Crystal Palace / 31'Throw in, Crystal Palace
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  [match wide] seed 631260318, 1833 draws at kick off, digest 6dfbfa0e over 5140 characters of drawn match: Crystal Palace v Hull City, goals of the first half 2' Mohamed-Ali Cho, 36' Robinio Vaz; own goals among them 0
+      a goal is coming at 36, the clock is at 2
+  the goal watched: 36' Robinio Vaz, against me; own goals in its half 0 of 2 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 1, and the first frame reading 0 - 2 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 0 - 2)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+      what was drawn: pass/pass 0 - 1 34' e900 x46 | pass/pass 0 - 1 35' e900 x60 | goal/plant 0 - 1 36' e900 x16 | goal/flight 0 - 1 36' e900 x30 | goal/net 0 - 2 card 36' e900 x44 | goal/net 0 - 2 card 36' e756 x5 | goal/net 0 - 2 card 36' e659 x37 | goal/net 0 - 2 card 37' e659 x19 | pass/pass 0 - 2 37' e659 x1 | pass/pass 0 - 2 37' e756 x1 | pass/pass 0 - 2 37' e900 x6 | pass/pass 0 - 2 37' e485 x1 | pass/pass 0 - 2 37' e900 x48 | pass/pass 0 - 2 38' e900 x1
+      the list at the end: 38'Foul by Adam Wharton / 36'GOAL! Robinio Vaz / 36'Shot: Ismaïla Sarr / 36'Corner, left, Charlie Hughes / 36'Throw in, Crystal Palace
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
