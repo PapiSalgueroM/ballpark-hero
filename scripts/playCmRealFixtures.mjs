@@ -8,8 +8,14 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import pw from './lib/playwrightLoader.mjs';
+import { cmVarLiveState } from './qa/cmVarLit.mjs';
 
 assert(process.env.CI, 'Club Manager fixture journeys run only on remote CI');
+/* Round 1218: the page's Quick Sim asks the engine for video reviews when the switch CM_VAR_LIVE is on (the
+   hook's own line), so the engine run this proof compares the page with asks for the same. The switch is read
+   from the source the build was made from, the way scripts/playCmVar.mjs reads it. With the switch off this is
+   the call it always was. */
+const HOOK_ASKS = cmVarLiveState() === 'on' ? { varReviews: true } : {};
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.env.CM_REAL_FIXTURE_NATIVE_ARTIFACTS || path.join(ROOT, 'cm-real-fixture-artifacts/native'));
 const ENGINE_OUT = path.resolve(process.env.CM_REAL_FIXTURE_ARTIFACTS || path.join(ROOT, 'cm-real-fixture-artifacts/outcomes'));
@@ -53,7 +59,7 @@ const ready = new Promise((resolve, reject) => {
   server.stderr.on('data', data => { serverLog += data; });
 });
 async function expectedSeason(state, seed, play = false) {
-  return oracle.evaluate(({ state, seed, play, now }) => {
+  return oracle.evaluate(({ state, seed, play, now, asks }) => {
     const { cm, calendar } = window.__cmFixtureOracle, oldRandom = Math.random, OldDate = Date; let t = seed >>> 0;
     window.Date = class extends OldDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
     Math.random = () => { t = (t + 0x6d2b79f5) | 0; let x = Math.imul(t ^ (t >>> 15), 1 | t); x = (x + Math.imul(x ^ (x >>> 7), 61 | x)) ^ x; return ((x ^ (x >>> 14)) >>> 0) / 4294967296; };
@@ -62,10 +68,10 @@ async function expectedSeason(state, seed, play = false) {
       const day = [...days.entryDays.values()].find(d => d.weekIdx === state.week);
       const pairs = cm.careerRoundPairs(state, entry.round), coverage = cm.careerFixtureCoverage(state);
       const generated = cm.roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);
-      const played = play ? cm.playNextEntry(state, { skipHalftime: true }) : null;
+      const played = play ? cm.playNextEntry(state, { skipHalftime: true, ...asks }) : null;
       return JSON.parse(JSON.stringify({ fixture, day, dateLabel: calendar.shortDate(day.date), pairs, generated, coverage, played: played && { ...played, state: cm.trimCareer(played.state) } }));
     } finally { Math.random = oldRandom; window.Date = OldDate; }
-  }, { state, seed, play, now: NOW });
+  }, { state, seed, play, now: NOW, asks: HOOK_ASKS });
 }
 async function expectedReload(state) {
   return oracle.evaluate(({ state, key, now }) => {
