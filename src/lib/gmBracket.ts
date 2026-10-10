@@ -108,11 +108,18 @@ export function bracketPairings(format: BracketFormat, save: GmBracketSave, week
   return out;
 }
 
-/** One game of one tie. The save itself comes back when the tie is unknown, decided or cannot be named yet. Never mutates. */
+/** One game of one tie. The save itself comes back when the tie is unknown,
+ *  decided, cannot be named yet, or would be played OUT OF TURN: in a format
+ *  with no `order` of its own, before every tie of an earlier week is
+ *  settled. `bracketProblems` names such a save and the repair then wipes it,
+ *  so no mover may make one (the NFL's top seed can be paired as soon as its
+ *  own conference's Wild Card round is in, a week before the other
+ *  conference has to be). Never mutates. */
 export function playBracketGame(format: BracketFormat, save: GmBracketSave, tieId: string, play: PlayTie): GmBracketSave {
   const tie = format.ties.find(t => t.id === tieId);
   const done = bracketOutcomes(format, save);
   if (!tie || done[tieId]) return save;
+  if (!format.order && format.ties.some(t => t.week < tie.week && !done[t.id])) return save;
   const pair = pairingOf(format, save, tie, done);
   if (!pair) return save;
   const before = save.played.find(p => p.id === tieId);
@@ -188,7 +195,9 @@ const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'obj
  *  list of distinct club ids, and a list of played ties whose games hold two
  *  scores (whole, from 0 to the ceiling src/lib/gmGameScore.ts sets, so a
  *  damaged number never reaches a story law) and a club id. It does not
- *  replay the bracket (`bracketProblems` does) and it never throws. */
+ *  replay the bracket (`bracketProblems` does) and it never throws.
+ *  `isClub` must be a real membership test (a Set, or Object.hasOwn): a bare
+ *  object lookup such as `id => !!teams[id]` says yes to `constructor`. */
 export function isGmBracketSave(value: unknown, isClub: (id: string) => boolean): value is GmBracketSave {
   try {
     if (!isRecord(value) || value.v !== 1 || !isText(value.format) || !isCount(value.season)) return false;
@@ -248,11 +257,24 @@ export const BRACKET_REBUILT_LINES = {
 
 export interface BracketRepair { save: GmBracketSave; rebuilt: null | 'seeds' | 'fresh'; line: string | null; problems: string[] }
 
-/** The bracket a board plays on from after a load. A sound save of this
- *  season comes back as it is. Anything else is rebuilt UNPLAYED: from the
- *  block's own seeds when they are still a full list of this league's clubs
- *  for this season (and `seedsOk`, a league's own check, agrees), else from
- *  `freshSeeds()`. Never throws on a damaged block. */
+/** The bracket a board plays on from after a load, FOR A SAVE THAT IS IN ITS
+ *  POSTSEASON. A sound save of this season whose seeds the league accepts
+ *  (`seedsOk`, a league's own check: the block cannot know its seeds are the
+ *  wrong clubs, the league can) comes back as it is. Anything else is rebuilt
+ *  UNPLAYED: from the block's own seeds when they are still a full list of
+ *  this league's clubs for this season and `seedsOk` agrees, else from
+ *  `freshSeeds()`.
+ *
+ *  ASK FIRST WHETHER THE SAVE SHOULD HOLD A BRACKET. An absent block
+ *  (undefined: every save from before the bracket, and every save outside
+ *  its postseason) is answered like a damaged one, rebuilt 'fresh' with the
+ *  line that it could not be read. A board that called this on every load
+ *  would open a bracket on a save that never had one and print a false line.
+ *
+ *  Never throws on a damaged block. It does throw when the caller's own
+ *  `freshSeeds()` is not a bracket the validator would read (the wrong
+ *  number of seeds, a seed twice, a seed that is not a club): that is a
+ *  bind's bug, and a bracket no press can play must not be saved quietly. */
 export function repairGmBracket(
   format: BracketFormat, value: unknown, season: number, freshSeeds: () => readonly string[],
   isClub: (id: string) => boolean, seedsOk: (seeds: string[]) => boolean = () => true,
@@ -263,6 +285,7 @@ export function repairGmBracket(
     if (isGmBracketSave(value, isClub)) {
       problems = bracketProblems(format, value, isClub);
       if (value.season !== season) problems.push(`the block is of season ${value.season}, not ${season}`);
+      if (problems.length === 0 && seedsOk([...value.seeds]) !== true) problems.push('the league does not accept the seeds of the block');
       if (problems.length === 0) return { save: value, rebuilt: null, line: null, problems };
     }
     const seeds = isRecord(value) && value.season === season && Array.isArray(value.seeds) ? value.seeds : null;
@@ -270,7 +293,9 @@ export function repairGmBracket(
   } catch {
     kept = null;
   }
-  return kept
-    ? { save: openBracket(format, season, kept), rebuilt: 'seeds', line: BRACKET_REBUILT_LINES.seeds, problems }
-    : { save: openBracket(format, season, freshSeeds()), rebuilt: 'fresh', line: BRACKET_REBUILT_LINES.fresh, problems };
+  if (kept) return { save: openBracket(format, season, kept), rebuilt: 'seeds', line: BRACKET_REBUILT_LINES.seeds, problems };
+  const fresh = openBracket(format, season, freshSeeds());
+  const wrong = bracketProblems(format, fresh, isClub);
+  if (wrong.length > 0) throw new Error(`gmBracket: the fresh seeds do not open a bracket of ${format.id} (${wrong[0]})`);
+  return { save: fresh, rebuilt: 'fresh', line: BRACKET_REBUILT_LINES.fresh, problems };
 }

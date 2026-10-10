@@ -70,6 +70,24 @@ describe('the NFL bracket as data', () => {
       const [top, other] = bracketPairings(NFL_BRACKET, s, 2)!;
       expect([seedNo(top.homeId), seedNo(top.awayId)]).toEqual([1, alive[2]]);
       expect([seedNo(other.homeId), seedNo(other.awayId)]).toEqual([alive[0], alive[1]]);
+      /* and on to the conference championship, whoever wins the two Divisional games: the better seed of the two is at home */
+      for (let div = 0; div < 4; div += 1) {
+        const later = ['AFC-DIV-1', 'AFC-DIV-2'].filter((_, k) => div & (1 << k));
+        const s2 = playBracketWeek(NFL_BRACKET, s, chalk(later));
+        const through = [later.includes('AFC-DIV-1') ? alive[2] : 1, later.includes('AFC-DIV-2') ? alive[1] : alive[0]].sort((a, b) => a - b);
+        const title = bracketPairings(NFL_BRACKET, s2, 3)![0];
+        expect([title.id, seedNo(title.homeId), seedNo(title.awayId)], `wild card upsets ${upsets.join(' ')}, divisional upsets ${later.join(' ')}`).toEqual(['AFC-CC', through[0], through[1]]);
+      }
+    }
+  });
+
+  it('gives the home side of every game before the title game to the better seed, in both conferences, whoever wins', () => {
+    /* sixteen ways the bracket can go (a keyed coin a game); the title game is the one tie with no host by seed */
+    for (let run = 0; run < 16; run += 1) {
+      const coin = keyedRng(`gmBracket hosts|${run}`);
+      const all = playBracketAll(NFL_BRACKET, openBracket(NFL_BRACKET, 2026, SEEDS), (home, away) => (coin() < 0.5 ? { homeScore: 27, awayScore: 20, winner: home } : { homeScore: 17, awayScore: 24, winner: away }));
+      expect(all.played.length).toBe(13);
+      for (const p of all.played.filter(x => x.id !== 'SB')) expect(seedNo(p.home), `run ${run}, ${p.id}: ${p.home} hosts ${p.away}`).toBeLessThan(seedNo(p.away));
     }
   });
 
@@ -190,6 +208,44 @@ describe('the shapes the other front offices bring', () => {
     expect(playBracketGame(NFL_BRACKET, open, 'SB', chalk())).toBe(open);
     expect(playBracketGame(NFL_BRACKET, open, 'no such tie', chalk())).toBe(open);
   });
+
+  it('plays no tie out of turn: a tie that can be named is still not played before an earlier week is settled', () => {
+    /* the AFC's Wild Card round is in, the NFC's is not: the AFC's top seed can be paired, and the validator would call that game out of turn */
+    let s = openBracket(NFL_BRACKET, 2026, SEEDS);
+    for (const id of ['AFC-WC-1', 'AFC-WC-2', 'AFC-WC-3']) s = playBracketGame(NFL_BRACKET, s, id, chalk());
+    expect(s.played.length).toBe(3);
+    expect(playBracketGame(NFL_BRACKET, s, 'AFC-DIV-1', chalk())).toBe(s);
+    expect(playBracketGame(NFL_BRACKET, s, 'AFC-DIV-2', chalk())).toBe(s);
+    for (const id of ['NFC-WC-1', 'NFC-WC-2', 'NFC-WC-3']) s = playBracketGame(NFL_BRACKET, s, id, chalk());
+    const next = playBracketGame(NFL_BRACKET, s, 'AFC-DIV-1', chalk());
+    expect(next.played.map(p => p.id)).toEqual(['AFC-WC-1', 'AFC-WC-2', 'AFC-WC-3', 'NFC-WC-1', 'NFC-WC-2', 'NFC-WC-3', 'AFC-DIV-1']);
+    expect(bracketProblems(NFL_BRACKET, next, isClub)).toEqual([]);
+    /* a format with an order of its own is played in that order, across its weeks */
+    const halves = playBracketGame(HALVES, openBracket(HALVES, 2026, SEEDS.slice(0, 4)), 'B', alternate);
+    expect(halves.played.map(p => p.id)).toEqual(['B']);
+  });
+
+  it('never makes a save the validator condemns, whatever tie is asked for next', () => {
+    /* a keyed walk: ask for any tie of the format, in any order, a game at a time, until the bracket is played out */
+    const formats: [BracketFormat, string[]][] = [[NFL_BRACKET, SEEDS], [PLAY_IN, SEEDS.slice(0, 10)], [HALVES, SEEDS.slice(0, 4)]];
+    for (const [format, seeds] of formats) {
+      for (let run = 0; run < 12; run += 1) {
+        const pick = keyedRng(`gmBracket any order|${format.id}|${run}`);
+        const coin: PlayTie = (home, away) => (pick() < 0.5 ? { homeScore: 5, awayScore: 3, winner: home } : { homeScore: 2, awayScore: 4, winner: away });
+        let s = openBracket(format, 2026, seeds);
+        let moves = 0;
+        for (let ask = 0; ask < 4000 && bracketChampion(format, s) === null; ask += 1) {
+          const next = playBracketGame(format, s, format.ties[Math.floor(pick() * format.ties.length)].id, coin);
+          if (next === s) continue;
+          moves += 1;
+          s = JSON.parse(JSON.stringify(next));
+          expect(bracketProblems(format, s, isClub), `${format.id} run ${run} after ${moves} games`).toEqual([]);
+          expect(repairGmBracket(format, s, 2026, () => seeds, isClub).save).toBe(s);
+        }
+        expect(bracketChampion(format, s), `${format.id} run ${run}`).not.toBeNull();
+      }
+    }
+  });
 });
 
 describe('the saved bracket: optional, guarded and repairable', () => {
@@ -304,5 +360,47 @@ describe('the saved bracket: optional, guarded and repairable', () => {
       expect(asked, name).toBe(before + 1);
     }
     for (const line of Object.values(BRACKET_REBUILT_LINES)) expect(line).not.toMatch(NOT_PLAIN);
+  });
+
+  it('asks the league about the seeds of a save that replays soundly, and starts again from fresh ones when it says no', () => {
+    const fresh = () => SEEDS.slice().reverse();
+    const sound = played();
+    const seen: string[][] = [];
+    const yes = repairGmBracket(NFL_BRACKET, sound, 2026, fresh, isClub, seeds => { seen.push(seeds); return true; });
+    expect(yes.save).toBe(sound);
+    expect(seen).toEqual([SEEDS]);
+    expect(seen[0]).not.toBe(sound.seeds);
+    /* a sound save with no fault of its own, and a league that refuses its seeds */
+    const no = repairGmBracket(NFL_BRACKET, sound, 2026, fresh, isClub, () => false);
+    expect([no.rebuilt, no.line]).toEqual(['fresh', BRACKET_REBUILT_LINES.fresh]);
+    expect(no.problems.some(p => /does not accept the seeds/.test(p))).toBe(true);
+    expect(no.save).toEqual(openBracket(NFL_BRACKET, 2026, fresh()));
+    /* the block cannot know its seeds are the wrong clubs: an unplayed bracket with two seeds exchanged replays soundly, and only the league can tell */
+    const swapped = openBracket(NFL_BRACKET, 2026, [SEEDS[13], ...SEEDS.slice(1, 13), SEEDS[0]]);
+    expect(bracketProblems(NFL_BRACKET, swapped, isClub)).toEqual([]);
+    const rightList = (seeds: string[]) => seeds.join() === fresh().join();
+    expect(repairGmBracket(NFL_BRACKET, swapped, 2026, fresh, isClub, rightList).rebuilt).toBe('fresh');
+    expect(repairGmBracket(NFL_BRACKET, openBracket(NFL_BRACKET, 2026, fresh()), 2026, fresh, isClub, rightList).rebuilt).toBeNull();
+    /* a league whose check answers something that is not true is a refusal */
+    expect(repairGmBracket(NFL_BRACKET, sound, 2026, fresh, isClub, (() => 1) as never).rebuilt).toBe('fresh');
+  });
+
+  it('answers a save with no block like a damaged one, which is why a board asks first whether the save is in its postseason', () => {
+    const r = repairGmBracket(NFL_BRACKET, undefined, 2026, () => SEEDS, isClub);
+    expect([r.rebuilt, r.line, r.problems]).toEqual(['fresh', BRACKET_REBUILT_LINES.fresh, ['the block does not read as a saved bracket']]);
+    expect(isGmBracketSave(undefined, isClub)).toBe(false);
+  });
+
+  it('throws when the fresh seeds themselves do not open a bracket, and only then', () => {
+    const sound = played();
+    const badFresh: [string, string[]][] = [['thirteen seeds', SEEDS.slice(0, 13)], ['a seed twice', [...SEEDS.slice(0, 13), 'S1']], ['a seed that is not a club', [...SEEDS.slice(0, 13), 'ZZZ']], ['no seeds', []]];
+    for (const [name, seeds] of badFresh) {
+      expect(() => repairGmBracket(NFL_BRACKET, null, 2026, () => seeds, isClub), name).toThrow(/fresh seeds/);
+      /* a sound save, and a damaged one whose own seeds still read, never ask for fresh ones */
+      expect(repairGmBracket(NFL_BRACKET, sound, 2026, () => seeds, isClub).rebuilt, name).toBeNull();
+      const bad = copy(sound);
+      bad.played[0].games[0].winner = 'S14';
+      expect(repairGmBracket(NFL_BRACKET, bad, 2026, () => seeds, isClub).rebuilt, name).toBe('seeds');
+    }
   });
 });
