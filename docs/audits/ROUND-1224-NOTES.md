@@ -205,3 +205,59 @@ Nothing in `gmGameScore.ts`, `gmGameDay.ts` or `gmBracket.ts` knows a sport. A b
    sim's own, said in the "?", and one constant each.
 9. THREE CONTROLS MORE THAN THE DRAFT (`tries`, `enginedrift`, `unkeyed`) and the critic's `stream`.
 10. No league figure is printed beside the measured numbers: none was read on two sources.
+
+## Runner results
+
+| Result | Commit | What ran | Outcome |
+|---|---|---|---|
+| `r1224-s1` | `3962f8c1` | the type gate; the two new unit files and gameLawNfl; simLiveScores, simNoRivalNames, simHarnessAnchors, simNoInventedQuotes, simInventedNames | all exit 0; 52 tests |
+| `r1224-s2` | `5c7c12a4` | the type gate; the three new unit files and gameLawNfl; the harness; the recorder at the head and in a worktree of the base, each `cmp` with the committed fixture; ten fences (the five above, simNoInventedConduct, simNumberFormatting, simLegalPages, simTrustCopy, simStorageWrites) | all exit 0; 64 tests; `simGmGameDay: 171 checks, 0 failed`; both recordings are the committed file |
+| `r1224-s2c` | `5c7c12a4` | the first nine controls and an unknown one | nine exit 1, each `RED AT THE NAMED CHECK`; the unknown one exit 2 |
+| `r1224-f1` | `be21930c` | the type gate; the four unit files; the harness; all twelve controls and an unknown one; both recordings; `git diff --name-status` against the base | gate 0; 64 tests; `171 checks, 0 failed`; twelve controls exit 1, each `RED AT THE NAMED CHECK` with every check it names among the reds (`enginedrift` with the machine's two checks green); unknown exit 2; both recordings the committed file; every changed file is new |
+| `r1224-f2` | `be21930c` | a build, then the 24 rule fences one at a time | 19 exit 0. Five exit 1, none of them this round's and all five red on the base: simSchemaNames and simLeaderboardCaps (the live database is unreachable from a runner by design), simWritesAreSent and simResultMoment (a browser library path that is not on the runner), simDailySaveHardening (/olympics, fixed on Round 1210's branch) |
+| `r1224-f3` | `be21930c` | the whole unit suite in three shards | see below |
+| `r1224-f4` | `be21930c` | a served build, `SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs` | exit 0, green; /front-office 359.3K over 34 files, /nfl-my-career 468.1K over 47, /soccer-career 786.3K over 45: the base's rows to the tenth |
+| `r1224-f5` | `be21930c` | `src/test/throughBallDrill.test.ts` alone: at the head, in a worktree of the base, at the head again | exit 0 all three times (the file passes in about 3.5 s alone, at the head and at the base) |
+
+The whole unit suite (`r1224-f3`, `node_modules/.bin/vitest run --shard=k/3 --testTimeout=300000 --hookTimeout=120000`):
+
+| Shard | Exit | Totals |
+|---|---|---|
+| 1 of 3 | 0 | 130 files passed, 1 skipped; 1,780 tests passed, 10 skipped |
+| 2 of 3 | 1 | 129 files passed, 1 FAILED, 1 skipped; 2,070 tests passed, 1 failed, 4 skipped |
+| 3 of 3 | 1 | 130 files passed, 1 FAILED; 1,534 tests passed, 1 failed, 41 skipped |
+
+393 test files, three more than the base's 390: this round's three. Neither failure is in a file of this round:
+- Shard 3: `src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself > /olympics`, red on main and
+  on the base (Round 1221's `r1221-b5`), fixed on Round 1210's branch.
+- Shard 2: `src/test/throughBallDrill.test.ts > seeded Through Ball rules > settles every verdict the rules name,
+  and no round is free`: `Test timed out in 20000ms` (the test carries its own 20 second limit, and three shards
+  shared one runner; the shard took 522 s). A timing red, so it was run alone: alone it passes at the head, in a worktree of the base and at the head again, in about 3.5 s each time (`r1224-f5`, exit 0 three times). It is not red.
+
+The pushed head's own last check (the type gate, the harness, the unit files) is named in the closing report,
+`C:/Users/antho/dukb-handoff/2026-10-10/results-g/finish-1224.md`.
+
+## Not run, and why
+
+- Nothing that reads or writes the live database (no MCP SQL, no deploy). simSchemaNames and simLeaderboardCaps
+  need it and are red on a runner for that reason alone; the lead runs them at release.
+- simWritesAreSent and simResultMoment did not run their checks on the runner (`ERR_MODULE_NOT_FOUND`).
+- `npm run build:seo`, the prerenderer, the snapshot harnesses, `runAllSims`, `sweepGames`, `playGames`, any
+  browser walk: not run. No page, route, guide, component or snapshot changes, and nothing mounts the new files.
+- WebKit: not run.
+- No type gate, build or unit suite ran on the owner's PC. What ran there: git, the recorder (10 s), the
+  harness (50 s for all five seed sets, 10 s for one) and three small probes.
+
+## Owed, and what a later session must not trust
+
+- GATE LIST: `simGmGameDay` belongs in the release gate from this round on (the critic's point 23): its section
+  4 is the fence that sees a later edit to `runPlayoffs`, `simGame`, `finalsBracket.ts` or the NFL data.
+- Nothing is owed to the other lane: no guide sentence changes. When Game Day is mounted, the /front-office
+  guide (`src/data/gameContent/football.ts`) should gain it; that is the mounting round's note to write.
+- The board sentence of the critic's correction 9 (the two cards and the four boards are this lane's for these
+  rounds) is still the lead's to write before a card is drawn.
+- DO NOT TRUST: that section 6 is a permanent rule. The round that mounts a card must turn it into "the cards
+  are lazy" in the same commit, or the harness goes red the moment a board imports `gmGameScore`.
+- DO NOT TRUST: the "?" copy against a card that does not exist yet (its `controls` sentences).
+- DO NOT TRUST: `SCORE_TRIES` = 24 for another sport without measuring its swapped share. The games that run
+  out of tries here are road upsets at a home chance of 0.8 or more (49 of the 63 swapped games in 114,000).
