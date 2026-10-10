@@ -1,0 +1,10 @@
+#!build
+#!playwright
+#!serial
+# Round 1215 step (b), head 33efc2ce: the replay mode three times in a row, its control, another seed.
+replay-1: LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+replay-2: LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+replay-3: LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+noseed: LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs
+replay-7: LIVE_FIT_REPLAY=1 LIVE_FIT_SEED=7 node scripts/playLiveMatchFit.mjs
+noseed-alone: LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs

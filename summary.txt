@@ -1,0 +1,7 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+replay-1 exit=0 41s | playLiveMatchFit: the replay is green. Seed 3208792607 opened one match three times (digest 421656fa, 1869 draws at kick off) and seed 3208792608 opened another (digest e
+replay-2 exit=0 41s | playLiveMatchFit: the replay is green. Seed 3208792607 opened one match three times (digest 421656fa, 1869 draws at kick off) and seed 3208792608 opened another (digest e
+replay-3 exit=0 41s | playLiveMatchFit: the replay is green. Seed 3208792607 opened one match three times (digest 421656fa, 1869 draws at kick off) and seed 3208792608 opened another (digest e
+noseed exit=1 31s | playLiveMatchFit: control noseed turned the replay red on the line it must (with no seed, three contexts opened three different matches: 2cacae82, 394d4f60, e8b04a58).
+replay-7 exit=0 41s | playLiveMatchFit: the replay is green. Seed 7 opened one match three times (digest 8ef206aa, 1823 draws at kick off) and seed 8 opened another (digest d319e98e); the page
+noseed-alone exit=2 1s | LIVE_FIT_CONTROL=noseed is the replay mode's control and its only one: set LIVE_FIT_REPLAY=1 with it, and no other control with LIVE_FIT_REPLAY

@@ -1,0 +1,15 @@
+playLiveMatchFit: seed 7. Replay this run with: LIVE_FIT_SEED=7 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 7 and in one on seed 8
+  [match replay A] seed 7, 1823 draws at kick off, digest 8ef206aa over 5393 characters of drawn match: Crystal Palace v Fulham, goals of the first half 18' Antonee Robinson (own goal), 45+4' Jørgen Strand Larsen; own goals among them 1
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 737 with the job taken, 1823 at kick off, 1823 after 2.5 seconds of the match
+  [match replay B] seed 7, 1823 draws at kick off, digest 8ef206aa over 5393 characters of drawn match: Crystal Palace v Fulham, goals of the first half 18' Antonee Robinson (own goal), 45+4' Jørgen Strand Larsen; own goals among them 1
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 737 with the job taken, 1823 at kick off, 1823 after 2.5 seconds of the match
+  [match replay C] seed 7, 1823 draws at kick off, digest 8ef206aa over 5393 characters of drawn match: Crystal Palace v Fulham, goals of the first half 18' Antonee Robinson (own goal), 45+4' Jørgen Strand Larsen; own goals among them 1
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 737 with the job taken, 1823 at kick off, 1823 after 2.5 seconds of the match
+  [match replay D] seed 8, 1867 draws at kick off, digest d319e98e over 5668 characters of drawn match: Crystal Palace v Sunderland, goals of the first half 5' Ismaïla Sarr, 7' Trai Hume (own goal), 15' Jørgen Strand Larsen; own goals among them 1
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 733 with the job taken, 1867 at kick off, 1867 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 7 gave digest 8ef206aa in A, B and C (Crystal Palace v Fulham)
+  ok    the page drew 1823 times before kick off in A, B and C
+  ok    another seed, another match: seed 8 gave digest d319e98e
+  ok    the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)
+playLiveMatchFit: the replay is green. Seed 7 opened one match three times (digest 8ef206aa, 1823 draws at kick off) and seed 8 opened another (digest d319e98e); the page drew nothing while idle.
