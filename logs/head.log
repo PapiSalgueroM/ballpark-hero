@@ -1,0 +1,19 @@
+PROBE /home/runner/work/ballpark-hero/ballpark-hero: 8436 fleet lines, 709 old save lines, deriver present, Math.random calls while observing 0
+    2001  fleet nba a list: LAID OUT
+    2041  fleet nba no list: lay
+     451  fleet nba not opened (held)
+    3757  fleet nba twin laid out
+   60915  fleet nba twin refused
+    1220  fleet nfl a list: numbers
+    1302  fleet nfl no list: lay
+    1421  fleet nfl not opened (held)
+   40352  fleet nfl twin refused
+     182  hall nba a list: LAID OUT
+     185  hall nba no list: lay
+       5  hall nba not opened (empty)
+     348  hall nba twin laid out
+    5524  hall nba twin refused
+     150  hall nfl a list: numbers
+     187  hall nfl no list: lay
+    5392  hall nfl twin refused
+PROBE sha f00c3e8030814530 lines 9145

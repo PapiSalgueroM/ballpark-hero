@@ -1,0 +1,5 @@
+base exit=0 6s | PROBE sha f00c3e8030814530 lines 9145
+head exit=0 11s | PROBE sha f00c3e8030814530 lines 9145
+cmp exit=0 0s | PROBE EQUAL: every save, derived season, playoff list and doctored list is byte equal between the base and the head
+ctl-lay exit=0 13s | PROBE CONTROL FIRED: 3617 lines differ under mutation m6
+srcdiff exit=0 0s | engine and viewer files changed since the base: 0

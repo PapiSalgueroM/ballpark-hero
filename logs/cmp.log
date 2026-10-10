@@ -1,0 +1,3 @@
+   9145 /tmp/probe-base.txt
+   9145 /tmp/probe-head.txt
+PROBE EQUAL: every save, derived season, playoff list and doctored list is byte equal between the base and the head
