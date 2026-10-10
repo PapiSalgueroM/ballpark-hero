@@ -216,8 +216,21 @@ describe('Round 1216: an own goal on real feeds', () => {
       }
       if (hit) { offenders++; if (examples.length < 4) examples.push(`${o.label} passes ${hit}`); }
     }
-    console.log(`[1216 OG9] own goals whose ball comes within 2 of another figure between the touch and the net: ${offenders} of ${present.length} (a keeper ${byKeeper}, a man of the side that got it ${byScoringSide})${examples.length ? ` | ${examples.join('; ')}` : ''}`);
+    /* And one made by hand, so the rule does not rest on what the fleet happens to hold: a man of the side that
+       got the goal standing ON the line from the touch to the corner. He steps off it before the ball comes. */
+    const crowded = structuredClone(sceneFor('me'));
+    Object.assign(crowded.mine[4], { x: 58.9, y: 11 });
+    const line = handLine('me', 'Away back');
+    const turn = sharpestTurn(TICKS.map(t => actionFrame(crowded, line, t))).at;
+    let nearest = Infinity;
+    for (let t = TICKS[turn]; t <= ACTION_SPAN; t += .0125) {
+      const frame = actionFrame(crowded, line, t);
+      if (frame.phase !== 'flight') continue;
+      nearest = Math.min(nearest, gapTo(frame.mine[4], frame.ball));
+    }
+    console.log(`[1216 OG9] own goals whose ball comes within 2 of another figure between the touch and the net: ${offenders} of ${present.length} (a keeper ${byKeeper}, a man of the side that got it ${byScoringSide})${examples.length ? ` | ${examples.join('; ')}` : ''}; the man placed on that line by hand is never nearer the ball than ${nearest.toFixed(2)}`);
     expect(offenders).toBe(0);
+    expect(nearest).toBeGreaterThanOrEqual(2);
   }, 300000);
 
   it('OG2: the instants are the goal it always was', () => {
@@ -279,9 +292,10 @@ describe('Round 1216: an own goal on real feeds', () => {
     const examples: string[] = [];
     for (const o of owns) {
       /* R2's own reading (every .05) and the finer one (every .025). */
-      const found = runsOf(framesOf(o, 'own', TICKS.filter((_t, i) => i % 2 === 0)).map(overlapping)) + runsOf(framesOf(o, 'own').map(overlapping));
+      const fine = framesOf(o, 'own').map(overlapping);
+      const found = runsOf(framesOf(o, 'own', TICKS.filter((_t, i) => i % 2 === 0)).map(overlapping)) + runsOf(fine);
       runs += found;
-      if (found && examples.length < 4) examples.push(o.label);
+      if (found && examples.length < 4) examples.push(`${o.label}: ${[...new Set(fine.flat())].join(' ')}, the man ${o.man?.key ?? 'not on the grass'}`);
     }
     /* A walk through a team mate, made by hand: a man of the side that conceded far up the pitch, with a team mate
        on the straight line to where he meets the ball. The fleet has one or two of these and may have none tomorrow. */
@@ -410,10 +424,9 @@ describe('Round 1216: an own goal on scenes made by hand', () => {
       expect(inMouth(first.ball)).toBe(true);
       expect(first.poses[key].rue).toBe(1);
       expect(Object.values(first.poses).some(pose => pose.hop !== undefined)).toBe(false);
-      /* The man is where he met it, not where he started. */
-      const start = (side === 'me' ? scene.theirs : scene.mine).find(p => p.key === key)!;
-      const shown = (side === 'me' ? first.theirs : first.mine).find(p => p.key === key)!;
-      expect(gapTo(shown, start)).toBeGreaterThan(0);
+      /* It is the frame the action ends on, every figure, the ball and every pose of it. */
+      const last = actionFrame(scene, line, ACTION_SPAN);
+      expect([first.mine, first.theirs, first.ball, first.poses]).toEqual([last.mine, last.theirs, last.ball, last.poses]);
       /* Nothing moves after that: a fifth of a second on (0.4 of the clock at the default speed) it is the same frame. */
       rerender({ clock: 5.41 });
       expect(result.current).toEqual(first);
@@ -562,7 +575,7 @@ describe('Round 1216: an own goal in the live match', () => {
     const found = new Map<string, { career: CareerState; goal: LiveFeedEvent; match: number }>();
     let career = startCareer('Aston Villa');
     let match = 0;
-    for (let attempt = 0; attempt < 60 && found.size < 2; attempt++) {
+    for (let attempt = 0; attempt < 200 && found.size < 2 && !career.sacked; attempt++) {
       const next = playNextEntry(career);
       career = next.state;
       if (!career.live) continue;
@@ -570,8 +583,9 @@ describe('Round 1216: an own goal in the live match', () => {
       const feed = liveFeed(career.live);
       for (const goal of feed) {
         if (goal.kind !== 'goal' || !goal.og || goal.minute < 3 || goal.minute > 40 || found.has(goal.side)) continue;
-        /* On its own: no other chance and no review within two minutes of it, so the score has one step to take. */
-        if (feed.some(other => other !== goal && (isChance(other) || other.kind === 'var') && Math.abs(clockPos(other) - clockPos(goal)) < 2.2)) continue;
+        /* On its own: no other chance and no review from where the viewer opens (a fifth of a minute before it)
+           to the end of its action, so it starts on time and the score has one step to take. */
+        if (feed.some(other => other !== goal && (isChance(other) || other.kind === 'var') && Math.abs(clockPos(other) - clockPos(goal)) < 1.2)) continue;
         const copy = structuredClone(career);
         copy.live!.minute = goal.minute - .2;
         found.set(goal.side, { career: copy, goal, match });
@@ -583,8 +597,7 @@ describe('Round 1216: an own goal in the live match', () => {
 
   it.each(['me', 'opp'] as const)('the live match draws an own goal for %s off the man on its card', async side => {
     const fixture = findOwnGoals().get(side);
-    expect(fixture, `no first half of the search held an own goal for ${side} standing on its own`).toBeTruthy();
-    const { career, goal } = fixture!;
+    expect(fixture, `no first half of the search held an own goal for ${side} standing on its own`).toBeTruthy();    const { career, goal } = fixture!;
     const before = scoreBy(career, clockPos(goal) - 1), after = scoreBy(career, clockPos(goal));
     expect(after).not.toBe(before);
     const mounted = mount(career);

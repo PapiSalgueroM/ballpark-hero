@@ -183,9 +183,18 @@ function ownGoalFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: Mot
     touch = { x, y };
   }
   const walked = smooth(elapsed / touchAt);
-  const walk = (players: T[]) => (man && !man.keeper && players.some(p => p.key === man.key)
-    ? passing(players, players.map(p => (p.key === man.key ? { ...p, ...touch } : p)), players.map(p => (p.key === man.key ? { ...p, ...point(p, touch, walked) } : { ...p })), walked)
-    : players);
+  /* From the touch to the net the ball passes nobody: anyone but the keepers within 3.6 of that leg steps off it
+     while the man comes to meet the ball (3.6 clears a team mate's place as well: nobody stands where he meets it). */
+  const span = (end.x - touch.x) ** 2 + (end.y - touch.y) ** 2;
+  const off = (p: T): Point => {
+    const on = point(touch, end, bounded(((p.x - touch.x) * (end.x - touch.x) + (p.y - touch.y) * (end.y - touch.y)) / span));
+    const gap = Math.hypot(p.x - on.x, p.y - on.y);
+    return p.keeper || gap >= 3.6 ? p : gap ? point(on, p, 3.6 / gap) : { x: on.x + 3.6, y: on.y };
+  };
+  const place = (players: T[], his: boolean) => {
+    const to = players.map(p => ({ ...p, ...(his && man && !man.keeper && p.key === man.key ? touch : off(p)) }));
+    return passing(players, to, to.map((p, i) => ({ ...p, ...point(players[i], p, walked) })), walked);
+  };
   const flight = bounded((elapsed - PLANT_SPAN) / (NET_AT - PLANT_SPAN));
   const ball = whole.phase !== 'flight' ? whole.ball
     : flight < OWN_GOAL_TOUCH ? point(from, touch, flight / OWN_GOAL_TOUCH) : point(touch, end, (flight - OWN_GOAL_TOUCH) / (1 - OWN_GOAL_TOUCH));
@@ -196,7 +205,7 @@ function ownGoalFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: Mot
     const reach = Math.sin(bounded((elapsed - touchAt) / .25 + .5) * Math.PI);
     poses[man.key] = man.keeper ? { ...poses[man.key], catching: reach * .6, rue } : { kick: reach, rue };
   }
-  return { ...whole, mine: walk(stood.mine), theirs: walk(stood.theirs), ball, poses, ownGoalBy: man?.key ?? null };
+  return { ...whole, mine: place(stood.mine, !mine), theirs: place(stood.theirs, mine), ball, poses, ownGoalBy: man?.key ?? null };
 }
 
 /** Uses the viewer's clock, so pausing freezes players, ball and action poses. */
