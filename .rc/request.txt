@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+# Round 1215 step (b), head 33efc2ce: a forced red dumps its save and LIVE_FIT_SAVE replays it to the same red.
+forced-nocard: bash .rc/x/forced.sh nocard 4211
+forced-earlyscore: bash .rc/x/forced.sh earlyscore 4212
+plain-save: node .rc/x/plain.mjs "$RC_OUT/nocard-live-fit-save-wide.json" "$RC_OUT/plain-save.json" && PORT=4213 LIVE_FIT_SAVE="$RC_OUT/plain-save.json" node scripts/playLiveMatchFit.mjs
+sizes: ls -l "$RC_OUT" | cut -c1-160; rm -f "$RC_OUT/plain-save.json"
