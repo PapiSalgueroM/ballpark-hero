@@ -1,0 +1,7 @@
+ M scripts/data/cmVarRates.json
+ M scripts/data/cmVarRates.receipt.json
+ M src/data/clubManagerVarRates.ts
+ scripts/data/cmVarRates.json         | 266 +++++++++++++++++++++++++++++------
+ scripts/data/cmVarRates.receipt.json |   2 +-
+ src/data/clubManagerVarRates.ts      |   1 -
+ 3 files changed, 225 insertions(+), 44 deletions(-)
