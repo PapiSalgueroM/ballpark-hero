@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+f-check: node .rc/x/fmut.mjs --check
+f-rowswap: bash .rc/x/frun.sh rowswap walk
+f-labelfull: bash .rc/x/frun.sh labelfull walk

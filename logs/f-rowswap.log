@@ -1,0 +1,1 @@
+MUT rowswap vitest=1 build=0 walk=1 | | playDraftNight: 24 FAILURE(S) in 48 nights |  24 FAIL [save];

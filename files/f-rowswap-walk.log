@@ -1,0 +1,76 @@
+  walked nfl-390-first-watch: pick 1, 1 rows, card 345 high, 163 frames
+  FAIL [save] nfl-390-late-watch: the closing row says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 123.", the save says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 27."
+  walked nfl-390-late-watch: pick 123, 8 rows, card 636 high, 332 frames
+  walked nfl-390-undrafted-watch: pick none, 6 rows, card 561 high, 284 frames
+  FAIL [save] nfl-390-late-skip: the closing row says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 123.", the save says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 27."
+  walked nfl-390-late-skip: pick 123, 8 rows, card 636 high, 80 frames
+  walked nfl-390-undrafted-reduced: pick none, 6 rows, card 561 high, 43 frames
+  walked nba-390-first-watch: pick 1, 1 rows and 4 lottery tiles, card 621 high, 288 frames
+  FAIL [save] nba-390-late-watch: the closing row says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 35.", the save says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 5."
+  walked nba-390-late-watch: pick 35, 5 rows and 4 lottery tiles, card 783 high, 371 frames
+  walked nba-390-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 715 high, 335 frames
+  FAIL [save] nba-390-late-skip: the closing row says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 35.", the save says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 5."
+  walked nba-390-late-skip: pick 35, 5 rows and 4 lottery tiles, card 783 high, 77 frames
+  walked nba-390-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 715 high, 43 frames
+  walked mlb-390-first-watch: pick 1, 1 rows, card 413 high, 167 frames
+  FAIL [save] mlb-390-late-watch: the closing row says "Pick 432: Texas Rangers Your name is called. Round 15, pick 432.", the save says "Pick 432: Texas Rangers Your name is called. Round 15, pick 12."
+  walked mlb-390-late-watch: pick 432, 8 rows, card 744 high, 335 frames
+  walked mlb-390-undrafted-watch: pick none, 6 rows, card 689 high, 283 frames
+  FAIL [save] mlb-390-late-skip: the closing row says "Pick 432: Texas Rangers Your name is called. Round 15, pick 432.", the save says "Pick 432: Texas Rangers Your name is called. Round 15, pick 12."
+  walked mlb-390-late-skip: pick 432, 8 rows, card 744 high, 77 frames
+  walked mlb-390-undrafted-reduced: pick none, 6 rows, card 689 high, 43 frames
+  walked nhl-390-first-watch: pick 1, 1 rows, card 453 high, 163 frames
+  FAIL [save] nhl-390-late-watch: the closing row says "Pick 128: Chicago Blackhawks Your name is called. Round 4, pick 128.", the save says "Pick 128: Chicago Blackhawks Your name is called. Round 4, pick 32."
+  walked nhl-390-late-watch: pick 128, 8 rows, card 764 high, 331 frames
+  walked nhl-390-undrafted-watch: pick none, 6 rows, card 749 high, 283 frames
+  FAIL [save] nhl-390-late-skip: the closing row says "Pick 128: Chicago Blackhawks Your name is called. Round 4, pick 128.", the save says "Pick 128: Chicago Blackhawks Your name is called. Round 4, pick 32."
+  walked nhl-390-late-skip: pick 128, 8 rows, card 764 high, 77 frames
+  walked nhl-390-undrafted-reduced: pick none, 6 rows, card 749 high, 45 frames
+  walked nfl-1280-first-watch: pick 1, 1 rows, card 325 high, 163 frames
+  FAIL [save] nfl-1280-late-watch: the closing row says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 123.", the save says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 27."
+  walked nfl-1280-late-watch: pick 123, 8 rows, card 557 high, 332 frames
+  walked nfl-1280-undrafted-watch: pick none, 6 rows, card 493 high, 284 frames
+  FAIL [save] nfl-1280-late-skip: the closing row says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 123.", the save says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 27."
+  walked nfl-1280-late-skip: pick 123, 8 rows, card 557 high, 84 frames
+  walked nfl-1280-undrafted-reduced: pick none, 6 rows, card 493 high, 43 frames
+  walked nba-1280-first-watch: pick 1, 1 rows and 4 lottery tiles, card 565 high, 291 frames
+  FAIL [save] nba-1280-late-watch: the closing row says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 35.", the save says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 5."
+  walked nba-1280-late-watch: pick 35, 5 rows and 4 lottery tiles, card 695 high, 374 frames
+  walked nba-1280-undrafted-watch: pick none, 3 rows and 4 lottery tiles, card 631 high, 338 frames
+  FAIL [save] nba-1280-late-skip: the closing row says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 35.", the save says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 5."
+  walked nba-1280-late-skip: pick 35, 5 rows and 4 lottery tiles, card 695 high, 77 frames
+  walked nba-1280-undrafted-reduced: pick none, 3 rows and 4 lottery tiles, card 631 high, 43 frames
+  walked mlb-1280-first-watch: pick 1, 1 rows, card 393 high, 171 frames
+  FAIL [save] mlb-1280-late-watch: the closing row says "Pick 432: Texas Rangers Your name is called. Round 15, pick 432.", the save says "Pick 432: Texas Rangers Your name is called. Round 15, pick 12."
+  walked mlb-1280-late-watch: pick 432, 8 rows, card 665 high, 339 frames
+  walked mlb-1280-undrafted-watch: pick none, 6 rows, card 601 high, 283 frames
+  FAIL [save] mlb-1280-late-skip: the closing row says "Pick 432: Texas Rangers Your name is called. Round 15, pick 432.", the save says "Pick 432: Texas Rangers Your name is called. Round 15, pick 12."
+  walked mlb-1280-late-skip: pick 432, 8 rows, card 665 high, 76 frames
+  walked mlb-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 43 frames
+  walked nhl-1280-first-watch: pick 1, 1 rows, card 393 high, 163 frames
+  FAIL [save] nhl-1280-late-watch: the closing row says "Pick 128: Chicago Blackhawks Your name is called. Round 4, pick 128.", the save says "Pick 128: Chicago Blackhawks Your name is called. Round 4, pick 32."
+  walked nhl-1280-late-watch: pick 128, 8 rows, card 645 high, 332 frames
+  walked nhl-1280-undrafted-watch: pick none, 6 rows, card 601 high, 283 frames
+  FAIL [save] nhl-1280-late-skip: the closing row says "Pick 128: Chicago Blackhawks Your name is called. Round 4, pick 128.", the save says "Pick 128: Chicago Blackhawks Your name is called. Round 4, pick 32."
+  walked nhl-1280-late-skip: pick 128, 8 rows, card 645 high, 76 frames
+  walked nhl-1280-undrafted-reduced: pick none, 6 rows, card 601 high, 46 frames
+  FAIL [save] nfl-y2005-390-late-watch: the closing row says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 123.", the save says "Pick 123: Buffalo Bills Your name is called. Round 4, pick 27."
+  walked nfl-y2005-390-late-watch: pick 123, 8 rows, card 636 high, 331 frames
+  FAIL [save] nba-y2004-390-late-watch: the closing row says "Pick 36: Denver Nuggets Your name is called. Round 2, pick 36.", the save says "Pick 36: Denver Nuggets Your name is called. Round 2, pick 7."
+  walked nba-y2004-390-late-watch: pick 36, 5 rows and 3 lottery tiles, card 783 high, 357 frames
+  FAIL [save] mlb-y2004-390-late-watch: the closing row says "Pick 1079: New York Yankees Your name is called. Round 36, pick 1079.", the save says "Pick 1079: New York Yankees Your name is called. Round 36, pick 29."
+  walked mlb-y2004-390-late-watch: pick 1079, 8 rows, card 764 high, 331 frames
+  FAIL [save] nhl-y2006-390-late-watch: the closing row says "Pick 120: Detroit Red Wings Your name is called. Round 4, pick 120.", the save says "Pick 120: Detroit Red Wings Your name is called. Round 4, pick 30."
+  walked nhl-y2006-390-late-watch: pick 120, 8 rows, card 784 high, 331 frames
+  FAIL [save] nba-360-late-watch: the closing row says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 35.", the save says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 5."
+  walked nba-360-late-watch: pick 35, 5 rows and 4 lottery tiles, card 825 high, 370 frames
+  FAIL [save] nba-360-late-skip: the closing row says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 35.", the save says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 5."
+  walked nba-360-late-skip: pick 35, 5 rows and 4 lottery tiles, card 825 high, 77 frames
+  FAIL [save] nba-320-late-watch: the closing row says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 35.", the save says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 5."
+  noted nba-320-late-watch: the tile has 73 px for a club, 1 line(s) on screen and 1 of 30 clubs do not fit (not judged at this width)
+  walked nba-320-late-watch: pick 35, 5 rows and 4 lottery tiles, card 877 high, 370 frames
+  FAIL [save] nba-320-late-skip: the closing row says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 35.", the save says "Pick 35: Denver Nuggets Your name is called. Round 2, pick 5."
+  noted nba-320-late-skip: the tile has 73 px for a club, 1 line(s) on screen and 1 of 30 clubs do not fit (not judged at this width)
+  walked nba-320-late-skip: pick 35, 5 rows and 4 lottery tiles, card 877 high, 77 frames
+
+playDraftNight: 24 FAILURE(S) in 48 nights
