@@ -44,6 +44,20 @@
  *      season, a pick with no round, a late phase with no showcase or outcome,
  *      a pending card of null) read as none; good blocks round trip; with the
  *      descriptor a renamed pending card is dropped.       Control `loadershallow`.
+ *   9. Round 1220: THE SCOUTS PATH IS BYTE EQUAL TO ITS RECORDING. The 2,000
+ *      roads of every sport and era pair are hashed twice, once as the states
+ *      after the showcase and once as the states after the draft (sha256 of
+ *      their JSON: the grade, the stock, the pick, the round, the club and
+ *      every development season, every byte), and both must equal
+ *      scripts/data/careerPreDraftDigest.json for this seed set. The file was
+ *      written by SIM_PRE_DRAFT_RECORD=1 in a commit that touches no file
+ *      under src, and carries the base sha, the Node version and a hash of
+ *      each engine file as it stood, so anyone can check what it was recorded
+ *      on. Beside each pair it keeps the first three roads as plain values, so
+ *      a red line names a road to look at and not only "moved". This proves
+ *      the engine FUNCTIONS; that the three buttons still call them is Round
+ *      993's test (src/test/usCareerProspect.test.tsx), which this round does
+ *      not edit.                        Controls `gradeshift` and `extradraw`.
  *
  * Bands, measured over five seed sets (SEEDSET=a..e, 2,000 careers per sport
  * and era each, 20,000 lottery draws per era each), 2026-10-03, on the tree
@@ -77,8 +91,12 @@
  *
  * Run:      node scripts/simCareerPreDraft.mjs
  * Control:  SIM_PRE_DRAFT_CONTROL=<name> node scripts/simCareerPreDraft.mjs   (must exit 1)
+ * Record:   SIM_PRE_DRAFT_RECORD=1 SIM_PRE_DRAFT_BASE=<sha> SEEDSET=<a..e> node scripts/simCareerPreDraft.mjs
+ *           (section 9's file, one seed set a run; refused together with a control. Only
+ *           for a round that means to move the scouts path and says so out loud.)
  */
 import os from 'node:os';
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -86,6 +104,7 @@ import * as esbuild from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_PRE_DRAFT_CONTROL || '';
+const RECORD = process.env.SIM_PRE_DRAFT_RECORD === '1';
 const SEEDSET = process.env.SEEDSET || 'a';
 const N = 2000;
 const LOTTERY_DRAWS = 20000;
@@ -125,12 +144,18 @@ const CONTROLS = {
   ceiling: ['src/lib/careerPreDraft.ts', 'return Math.min(Math.max(pot, rating), rating + 1 + Math.floor(rng() * 3));', 'return rating + 1 + Math.floor(rng() * 3);'],
   ladderskip: ['src/lib/mlbCareerPreDraft.ts', 'MLB_MINOR_LEVELS[MLB_MINOR_LEVELS.length - n + i]', 'MLB_MINOR_LEVELS[MLB_MINOR_LEVELS.length - n + i + 1]'],
   undraftedtop: ['src/lib/careerPreDraft.ts', 'const n = drafted ? preDraftDevSeasonCount(desc.postDraft, rating, dev) : desc.postDraft.max;', 'const n = preDraftDevSeasonCount(desc.postDraft, rating, dev);'],
-  squeeze: ['src/lib/careerPreDraft.ts', 'const rank = preDraftBoardRank(s.stock, order.length, rng);', 'const rank = preDraftBoardRank(s.stock, teams.length, rng);'],
+  /* Round 1220: this needle ended in `rng);` and Round 1104 had made the line
+     end in the position offset, so since then the control refused to run
+     (exit 2) and proved nothing. It carries the line as it is today. */
+  squeeze: ['src/lib/careerPreDraft.ts', 'const rank = preDraftBoardRank(s.stock, order.length, rng) + (desc.pickOffset?.(s.pos) ?? 0);', 'const rank = preDraftBoardRank(s.stock, teams.length, rng) + (desc.pickOffset?.(s.pos) ?? 0);'],
   laterlottery: ['src/lib/careerPreDraft.ts', 'for (let r = 2; r <= desc.rounds; r += 1) order.push(...standings);', 'for (let r = 2; r <= desc.rounds; r += 1) order.push(...first);'],
   flatlater: ['src/lib/careerPreDraft.ts', 'const total = pool.reduce((a, p) => a + p.w, 0);', 'if (d > 0) for (const p of pool) p.w = 1; const total = pool.reduce((a, p) => a + p.w, 0);'],
   loadershallow: ['src/lib/careerPreDraft.ts', 'if (!Array.isArray(r.lines) || !r.lines.every(isSeasonRecord)) return null;', 'if (!Array.isArray(r.lines)) return null;'],
+  gradeshift: ['src/lib/careerPreDraft.ts', "return roll > 0.8 ? 'A' : roll > 0.5 ? 'B' : roll > 0.2 ? 'C' : 'D';", "return roll > 0.79 ? 'A' : roll > 0.5 ? 'B' : roll > 0.2 ? 'C' : 'D';"],
+  extradraw: ['src/lib/careerPreDraft.ts', 'const grade = preDraftShowcaseGrade(s, rng);', 'rng(); const grade = preDraftShowcaseGrade(s, rng);'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && RECORD) { console.error('A recording is never written from a mutated engine. Refusing to run.'); process.exit(2); }
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'predraft-'));
 const ENTRY = path.join(TMP, 'entry.ts');
@@ -197,8 +222,9 @@ function road(desc, i) {
   const pre = s;
   s = M.preDraftShowcase(desc, s, approach);
   const stockAtDraft = s.stock;
+  const shown = s;
   s = M.preDraftRunDraft(desc, s);
-  return { s, route, trail, approach, pre, stockAtDraft };
+  return { s, route, trail, approach, pre, shown, stockAtDraft };
 }
 
 /* ─── Section 5 first: every draw from keyedRng ─── */
@@ -486,6 +512,56 @@ console.log('\n8. Old saves and corrupt blocks');
   const healOk = healed && healed.pendingChoice === null && (healed.phase === 'season' || healed.phase === 'showcase');
   if (wrong.length || trips || !healOk) fail(`corrupt cases loaded: ${wrong.join(', ') || 'none'}; ${trips} good blocks failed to round trip; renamed card healed: ${!!healOk}`);
   else ok(`${cases.length} missing or corrupt blocks read as none, 3 good ones round trip, a renamed pending card is dropped`);
+}
+
+/* ─── Section 9: the scouts path, byte for byte ─── */
+console.log('\n9. The scouts path is byte equal to its recording');
+{
+  const DIGEST_FILE = path.join(ROOT, 'scripts/data/careerPreDraftDigest.json');
+  const sha = text => crypto.createHash('sha256').update(text).digest('hex');
+  /* The first three roads as plain values: a hash only says "moved". */
+  const firstOf = rs => rs.slice(0, 3).map(r => ({ approach: r.approach, grade: r.s.showcase.grade, stock: r.stockAtDraft, pick: r.s.draft.pick, team: r.s.draft.team }));
+  const now = Object.fromEntries(DESCS.map(d => {
+    const rs = RUNS.get(tag(d));
+    return [tag(d), { showcase: sha(JSON.stringify(rs.map(r => r.shown))), draft: sha(JSON.stringify(rs.map(r => r.s))), first: firstOf(rs) }];
+  }));
+  if (RECORD) {
+    const base = process.env.SIM_PRE_DRAFT_BASE || '';
+    if (!/^[0-9a-f]{40}$/.test(base)) { console.error('SIM_PRE_DRAFT_BASE must be the full sha the engine stood at. Refusing to record.'); process.exit(2); }
+    if (failures) { console.error('Sections 1 to 8 are not green on this engine. Refusing to record.'); process.exit(2); }
+    /* A hash of each engine file with LF endings, so the recording names the
+       engine it was taken on whatever a checkout does to line endings. */
+    const srcOf = Object.fromEntries([...FILES, 'keyedRng.ts'].map(f => [f, sha(fs.readFileSync(path.join(ROOT, 'src/lib', f), 'utf-8').replace(/\r\n/g, '\n'))]));
+    const prev = fs.existsSync(DIGEST_FILE) ? JSON.parse(fs.readFileSync(DIGEST_FILE, 'utf-8')) : null;
+    const same = prev && prev.base === base && prev.node === process.version && prev.roads === N && JSON.stringify(prev.src) === JSON.stringify(srcOf);
+    const sets = { ...(same ? prev.sets : {}), [SEEDSET]: now };
+    const out = {
+      what: 'Round 1220: sha256 of the 2,000 road states of each sport and era pair, after the showcase and after the draft, per seed set. Written by SIM_PRE_DRAFT_RECORD=1 node scripts/simCareerPreDraft.mjs, checked by its section 9.',
+      base, node: process.version, roads: N, src: srcOf,
+      sets: Object.fromEntries(Object.keys(sets).sort().map(k => [k, sets[k]])),
+    };
+    fs.writeFileSync(DIGEST_FILE, JSON.stringify(out, null, 2) + '\n');
+    ok(`recorded seed set ${SEEDSET} on ${process.version} at ${base.slice(0, 8)}: ${Object.keys(out.sets).length} set(s) in the file`);
+  } else if (!fs.existsSync(DIGEST_FILE)) {
+    fail('scripts/data/careerPreDraftDigest.json is missing, so nothing says what the scouts path was');
+  } else {
+    const rec = JSON.parse(fs.readFileSync(DIGEST_FILE, 'utf-8'));
+    const set = rec.sets?.[SEEDSET];
+    const major = v => String(v).split('.')[0];
+    const nodeNote = major(rec.node) === major(process.version) ? '' : ` (recorded on Node ${rec.node}, this is ${process.version}: check on the recording's major before reading this as a moved engine)`;
+    if (rec.roads !== N || !set) fail(`the recording has no seed set ${SEEDSET} of ${N} roads`);
+    else {
+      let moved = 0;
+      for (const d of DESCS) {
+        const want = set[tag(d)], got = now[tag(d)];
+        const halves = ['showcase', 'draft'].filter(h => !want || want[h] !== got[h]);
+        if (!halves.length) continue;
+        moved += 1;
+        fail(`${tag(d)}: the states after the ${halves.join(' and after the ')} are not the recorded bytes${nodeNote}. First three roads recorded ${JSON.stringify(want?.first ?? null)}, now ${JSON.stringify(got.first)}`);
+      }
+      if (!moved) ok(`all ${DESCS.length * 2} digests of seed set ${SEEDSET} equal the recording (${DESCS.length * N} roads, recorded on ${rec.node} at ${String(rec.base).slice(0, 8)})`);
+    }
+  }
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });
