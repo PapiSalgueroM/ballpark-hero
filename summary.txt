@@ -1,0 +1,8 @@
+build exit=0 19s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playHomeFold exit=0 28s | playHomeFold: green. The first thing on the page is something to play.
+playSoftFourOhFour exit=0 7s | playSoftFourOhFour: green. A dead address says it is dead before a line of app code runs, and no real page is touched.
+playTranslatedPage exit=0 129s | playTranslatedPage: 447 checks, 0 failed
+playStorageBlocked exit=0 262s | playStorageBlocked: 826 checks, 0 failed
+playFlagshipLazy exit=0 7s | playFlagshipLazy: green. The dugout costs nothing until you walk into it, and it still works when you do.
+playReducedMotion exit=0 34s | playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone e
+sweepWeight exit=1 26s | sweepWeight: 4 failures
