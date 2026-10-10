@@ -1,0 +1,13 @@
+c-mathrandom exit=2 22s | simCmLeagueBook: cannot run: the two copies did not make the same save to damage
+c-dropmine exit=3 29s | simCmLeagueBook: CONTROL dropmine DID NOT FIRE as it must: law has 4492 failures, other red sections [names, oldsave, doors] (29s)
+c-weight exit=3 37s | simCmLeagueBook: CONTROL weight DID NOT FIRE as it must: stream has 11 failures, other red sections [shapes, oldsave] (36s)
+c-cleanside exit=3 30s | simCmLeagueBook: CONTROL cleanside DID NOT FIRE as it must: law has 127 failures, other red sections [oldsave] (30s)
+c-bought exit=3 30s | simCmLeagueBook: CONTROL bought DID NOT FIRE as it must: names has 1 failures, other red sections [oldsave] (30s)
+c-twoman exit=3 31s | simCmLeagueBook: CONTROL twoman DID NOT FIRE as it must: shapes has 4 failures, other red sections [oldsave] (30s)
+c-flat exit=3 31s | simCmLeagueBook: CONTROL flat DID NOT FIRE as it must: shapes has 3 failures, other red sections [oldsave] (31s)
+c-penassist exit=3 29s | simCmLeagueBook: CONTROL penassist DID NOT FIRE as it must: shapes has 1 failures, other red sections [oldsave] (28s)
+c-noog exit=3 31s | simCmLeagueBook: CONTROL noog DID NOT FIRE as it must: shapes has 1 failures, other red sections [oldsave] (31s)
+c-redeal exit=1 29s | simCmLeagueBook: CONTROL redeal FIRED: section oldsave went red (13 failures) and no other section did (28s)
+c-seasonstamp exit=3 32s | simCmLeagueBook: CONTROL seasonstamp DID NOT FIRE as it must: doors has 32 failures, other red sections [oldsave] (31s)
+c-strip exit=3 28s | simCmLeagueBook: CONTROL strip DID NOT FIRE as it must: dailies has 8 failures, other red sections [oldsave] (27s)
+c-stripdeadline exit=3 24s | simCmLeagueBook: CONTROL stripdeadline DID NOT FIRE as it must: dailies has 6 failures, other red sections [oldsave] (24s)

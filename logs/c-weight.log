@@ -1,0 +1,50 @@
+simCmLeagueBook: 4 careers x 2 seasons (default fleet, seed set 0), CONTROL weight
+stream  16 of 16 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 6.4s with the book and this harness watching every entry, 5.7s with the book out and nothing watching
+stream  5 of 16 faces equal to the source of the base commit
+shapes  credited rival goals 5653: forwards 62.9%, midfielders 28.9%, defenders 8.3%, keepers 0 goals
+        between other clubs (5480 goals), dealt against the weight: ATT 3384 vs 3018.4 (z 9.93), MID 1496 vs 1773.8 (z -8.02), DEF 435 vs 537.1 (z -4.64)
+        clubs with an eleven: assists 3423 on 5577 credited goals = 0.614 a goal (the rule 0.614, z 0.02); own goals 171 of 5748 = 2.97% (the rule 2.75%, z 1.04); every club: 3423 assists on 5653 credited goals = 0.606 a goal
+        unnamed goals 1806 (club weeks with no named eleven: 1578); my league matches 304, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 414 of 1058 club weeks, 9 of 23 rival clubs seen (Blackburn Rovers 7 men, 1 keepers; Bolton Wanderers 3 men, 0 keepers; Cardiff City 4 men, 1 keepers; Charlton Athletic 8 men, 1 keepers; Lincoln City 2 men, 0 keepers; Millwall 11 men, 0 keepers; ...)
+        no named eleven in bundesliga2: 1088 of 1156 club weeks, 17 of 19 rival clubs seen (Arminia Bielefeld 3 men, 1 keepers; Bochum 4 men, 0 keepers; Braunschweig 2 men, 1 keepers; Darmstadt 4 men, 0 keepers; Dynamo Dresden 1 men, 0 keepers; Elversberg 10 men, 1 keepers; ...)
+        no named eleven in laliga2010: 76 of 1444 club weeks, 1 of 19 rival clubs seen (Levante 10 men, 1 keepers)
+        top ten of the Goals board held by forwards and wingers: 9.00 on the book, 5.25 on the old race, rise 3.75 (floor 2) over 8 seasons
+names   17896 checks; 1 purchases probed (the best scorer of the rivals signed at week 22, twelve entries played on)
+oldsave 611 checks: 4 saves with no book finished on the candidate and on the book out engine, the season after each, and five unreadable books
+doors   2579 checks: three takeovers and two joined jobs (season one and season three), the law at the handover and after every entry to the end of the season
+dailies 50 checks: 4 Hot Seat dates played to a verdict, handed over and played on, 3 Deadline Day dates, each state byte equal to the book out engine's
+boards  by league, the book against the old race on the same seasons (penalties and free kicks to the taker)
+        premier      20 clubs,  3 seasons: top scorer mean 32.0 (30 35 31), old race mean 30.7, most assists mean 12.0, leading keeper's clean sheets mean 17.7
+        championship 24 clubs,  1 seasons: top scorer mean 47.0 (47), old race mean 33.0, most assists mean 20.0, leading keeper's clean sheets mean 27.0
+        bundesliga2  18 clubs,  2 seasons: top scorer mean 34.0 (36 32), old race mean 27.5, most assists mean 13.0, leading keeper's clean sheets mean 17.0
+        laliga2010   20 clubs,  2 seasons: top scorer mean 36.5 (40 33), old race mean 35.5, most assists mean 14.0, leading keeper's clean sheets mean 20.0
+        38 game leagues: 5 seasons, top scorer mean 33.80, standard deviation 3.54, standard error 1.58; old race mean 32.60
+        34 game leagues: 2 seasons, top scorer mean 34.00, standard deviation 2.00, standard error 1.41; old race mean 27.50
+        46 game leagues: 1 seasons, top scorer mean 47.00, standard deviation 0.00, standard error 0.00; old race mean 33.00
+        the top scorer was a: ATT 8, MID 0, DEF 0 (of 8 seasons)
+        the old race on the same seasons: 4746 of 7633 rival goals given to anybody (62.2%), of those forwards 51.6%, midfielders 48.4%; the book names a man for 74.1% and marks 174 own goals and 1806 unnamed
+        a Clean sheets board of every man (keepers and defenders): its top ten holds men of 2.00 clubs and 2.00 keepers on average
+        a back four picked by clean sheets + goals + assists: 3.13 men of one club on average; by goals + assists (club clean sheets, then table place, to split): 1.75, with 0.00 of the four on no goal and no assist
+law     9173 checks over 335 entries of 4 careers, and 90 entries of 2 seasons with the video referee on (84 league matches of mine, 55 reviews, 0 reports whose lines did not add up to the score)
+RED   stream   32 checks, 11 failed
+        Everton (now, seed 4649) at the end of season 1: base 8c3a7863b5496792a1c6b0ca|48956, candidate a57d4de1adaecf170edf518b|50187
+        Everton (now, seed 4649) after the summer of season 1: base d796550475df3d4991e7bb7d|49765, candidate 9fd56c3b40d3f202cb34ac2f|51025
+        Everton (now, seed 4649) at the end of season 2: base c42afc1f1355c19057435f99|101722, candidate 4e08be2a21e329de4e7bdd60|98989
+        Everton (now, seed 4649) after the summer of season 2: base c4f3a5c0f85f804cd9a11f5a|102554, candidate 52806f9877f5bf4f80d71f19|99817
+        Southampton (now, seed 4780) at the end of season 1: base 28b04ac891d01ec6e062bce7|54459, candidate 6b657188ef51ebc759548f90|54459
+green law      9173 checks
+green names    17896 checks
+RED   shapes   7 checks, 3 failed
+        ATT: 3384 of 5480 goals between other clubs, the weight says 3018.4 (z 9.93)
+        MID: 1496 of 5480 goals between other clubs, the weight says 1773.8 (z -8.02)
+        DEF: 435 of 5480 goals between other clubs, the weight says 537.1 (z -4.64)
+RED   oldsave  611 checks, 9 failed
+        Everton, twenty entries in, written by the book out engine: the next season did not open with an empty book
+        Everton, twenty entries in, written by the book out engine next season, entry 1: the save has no readable book
+        Everton, twenty entries in, written by the book out engine next season, entry 2: the save has no readable book
+        Everton, twenty entries in, written by the book out engine next season, entry 3: the save has no readable book
+        Everton, twenty entries in, written by the book out engine next season, entry 4: the save has no readable book
+green doors    2579 checks
+green dailies  50 checks
+simCmLeagueBook: CONTROL weight DID NOT FIRE as it must: stream has 11 failures, other red sections [shapes, oldsave] (36s)
