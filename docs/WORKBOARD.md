@@ -1,3 +1,22 @@
+## Codex1195-1196 IN PROGRESS: Soccer Career season and rival derby history, 2026-10-10
+
+Branch codex/career-derby-history, base48790763e65446b75c7699498b806637dc5c0111.
+This is current main's AR product tree plus two F handoff documentation commits.
+No queued READY draft is merged here. The new read-only rivalry history retains
+original saved season, rival and meeting indices, including duplicate years,
+loans and zero appearances. Club fixture results and the player's appearances
+have separate totals. Old missing or invalid data is identified honestly.
+1196 adds whole-career records against exact saved rival names, keeping the
+original season, club and meeting identity in the rival details.
+Design: docs/ROUND1195.md. Runtime verification is remote-only and pending.
+F owns integration, combined release gates, merge and publication.
+
+Previous1193-1194 Hub run38023406154 has now finished: 35/36 unchanged
+regressions passed, only LeagueSeasons fails under its historical baseline;
+all20 built/source readers passed. The workflow remains red on that baseline
+and the fixed6f57ce78 source fence. This supplies no combined release waiver.
+PR214 stays frozen at217b10b0. No source changes in that worktree.
+
 ## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
 
 Claude lane (session F). main 8c5ce655, deployment 468b616a-f984-4af9-959d-12f584834eaa, entry index-DNvMbg1w.js (was index-DBSXBErW.js, Release AQ,
