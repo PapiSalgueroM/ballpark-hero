@@ -1,0 +1,5 @@
+gm1: node scripts/simGmGameDay.mjs
+google: node scripts/simGoogleOnlyReturn.mjs
+records: node scripts/simSoccerCareerRecords.mjs
+gm2: node scripts/simGmGameDay.mjs
+gm3: node scripts/simGmGameDay.mjs
