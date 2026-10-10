@@ -111,9 +111,12 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
      Round 1227: now it is. The rival plays your position on your own stat line (nflRivalSeason in
      nflMyCareer.ts) and the same All-Pro pass that judges you judges his season, so the beat names both
      seasons, on the three cards the NBA's 306 has had since Round 1112 (rosterBeat in careerRivalryEvents.ts):
-     both of you, only you, only him, dealt only when at least one of you made the first team. Where the first
-     team names one man (quarterback, running back, tight end, kicker) the "both" card cannot be dealt: his
-     season never holds the honour in a year yours does. The two cards of Round 1149 stay as `own`, never dealt
+     both of you, only you, only him, dealt only when at least one of you made the first team. Where the game's
+     first team names one man (quarterback, running back, tight end, kicker: the team as it is picked today,
+     which the award table uses in every era, sources beside NFL_ALL_PRO in careerAwards.ts) the "both" card
+     cannot be dealt: his season never holds the honour in a year yours does. The real team named two running
+     backs through the 2015 season, so in a throwback career this is the game's table speaking, and no card
+     says anything about the real ballot of that year. The two cards of Round 1149 stay as `own`, never dealt
      again, only so a save sitting on one of them still pays what that card printed. */
   rosterBeat<SeasonLine, CareerState, CareerRival>({
     id: 206, emoji: "🗳️", title: "All-Pro Team",

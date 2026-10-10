@@ -314,6 +314,28 @@ export function beatsField(
  * secondary, then a kicker, a punter and the return men. Position pools are
  * starters in a 32 team league.
  *
+ * A second source for the slot counts, recorded in Round 1227 because the
+ * NFL rival's one place rule now reads them (awardSlots, further down): the
+ * AP's own 2025 roster as Fox Sports carried it ("2025 NFL All-Pro Team: See
+ * who made the roster", read 2026-10-10) names one quarterback, one running
+ * back, three wide receivers, one tight end, three edge rushers, two
+ * linebackers, two cornerbacks and a slot cornerback, and one placekicker,
+ * the same counts as the NFL.com story.
+ *
+ * THE TABLE IS TODAY'S FORMAT, USED FOR EVERY ERA. The real ballot was not
+ * the same in the seasons a throwback career plays: the 2005 first team
+ * named TWO running backs (the AP's story as ESPN's wire and the Patriots'
+ * own site carried it) and so did the 2015 team (NFL.com's analysis of that
+ * roster; Pro Football Rumors), and the AP's revamp for the 2016 season
+ * left "only one running back" on the team and added a flex player (the
+ * AP's story as Fox News and the News Tribune carried it; all read
+ * 2026-10-10). The engine picks one running back in a 2005 season all the
+ * same, for the player and, since Round 1227, for the pair of him and his
+ * rival. A slot count that knows its year would move the player's own award
+ * odds in every throwback career, so it is a round of its own. Until then no
+ * word a player reads may say the real team of an older season had one
+ * place: say "the way the team is picked today".
+ *
  * The career record is ten first team selections, held jointly by Jerry Rice
  * and Jim Otto (Pro Football Reference career leaders). Ten. The engine was
  * handing a MEDIAN career ten and a good one eighteen.
@@ -585,9 +607,11 @@ export function wonAward(
 
 /**
  * Round 1227: how many players an award names at a position, read off the tables above so no caller types a
- * slot count a second time (the first team All-Pro names one quarterback and three wide receivers). Null when
- * the award is not given at that position. The NFL rival's season reads it: at a one slot position he and the
- * player cannot both be on the first team.
+ * slot count a second time (the first team All-Pro as it is picked today names one quarterback and three wide
+ * receivers). Null when the award is not given at that position. The NFL rival's season reads it: at a one slot
+ * position he and the player cannot both be on the first team. The count is the TABLE'S, which is today's format
+ * in every era (the comment above NFL_ALL_PRO has the sources and the seasons where the real team named two
+ * running backs), so this is a rule about the game's own team, never a claim about a real season's.
  */
 export function awardSlots(sport: UsAwardSport, award: UsAward, pos: string): number | null {
   return configFor(sport, award, pos)?.slots ?? null;

@@ -817,10 +817,15 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
                 neither on the save.
      honour     the first team All-Pro, by the same expression that decides
                 the player's (wonAward on the season score of his whole line at
-                a full schedule pace). At a position the first team names ONE
-                man (awardSlots: quarterback, running back, tight end, kicker)
-                he is not on it in a season the player is: two men cannot
-                hold one place.
+                a full schedule pace). At a position the GAME'S first team
+                names ONE man (awardSlots: quarterback, running back, tight
+                end, kicker) he is not on it in a season the player is: two
+                men cannot hold one place. That is the team as it is picked
+                today, which the award table uses in every era; the real
+                team named two running backs through the 2015 season (the
+                sources are beside NFL_ALL_PRO in careerAwards.ts), so in a
+                2005 to 2015 season this rule follows the game's table and
+                is not a statement about the real ballot of that year.
 
    THE VERDICT is nflHeadToHeadScore for BOTH seasons: the season score of
    exactly the parts the season line prints (nflLineAsPrinted in
