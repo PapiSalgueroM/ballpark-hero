@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+base-build: git worktree add -f /tmp/base faf0a5f3 > /dev/null 2>&1; cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && git rev-parse --short HEAD && npm run build 2>&1 | tail -2
+base-simWritesAreSent: cd /tmp/base && node scripts/simWritesAreSent.mjs
+base-simDailySaveHardening: cd /tmp/base && node scripts/simDailySaveHardening.mjs

@@ -1,0 +1,3 @@
+base-build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+base-simWritesAreSent exit=1 13s | simWritesAreSent: 2 failures
+base-simDailySaveHardening exit=1 55s | simDailySaveHardening: 2 failure(s)
