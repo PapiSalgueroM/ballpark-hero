@@ -1,0 +1,8 @@
+#!serial
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000 > $RC_OUT/vitest-all.txt 2>&1; s=$?; grep -h "Test Files\|Tests  \|FAIL" $RC_OUT/vitest-all.txt | cut -c1-200 | tail -6; exit $s
