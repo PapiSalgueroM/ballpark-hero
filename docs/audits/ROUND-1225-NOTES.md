@@ -21,9 +21,12 @@ October 2026) and links the two sources. Help names the ten leagues, read off th
 - Every other list is in a file of its own (`load:`), one small chunk a league, fetched by the page in two
   places, both in `src/hooks/useClubManager.ts`. When a club is tapped in the picker the page passes the
   picked era to `chooseClub`, which starts the fetch and keeps it; `confirmClub` starts at once when the list
-  is here, and when THAT fetch is still out it waits for it on the loading screen (a fetch that fails, or one
-  still out after eight seconds, starts the career on generated fixtures and the Calendar then claims
-  nothing). A caller that taps a club with no era asked for no list and starts at once, as before this round:
+  is here, and when THAT fetch is still out it waits for it on a screen that names what it waits for and
+  pulls itself into view. Since the review fixes (see the last section): a fetch that failed, or one still out
+  after eight seconds, no longer starts a generated season by itself; the page says the list did not load and
+  the player picks Try again or Start on generated fixtures. And the first failed chunk in a tab, online,
+  never reaches that code at all: the site's stale chunk rule (`src/lib/freshBuild.ts`) reloads the page once
+  and the picker starts over. A caller that taps a club with no era asked for no list and starts at once, as before this round:
   the hook's own tests do exactly that, and an earlier form that waited for a list nobody had asked for broke
   five of them. And at boot, for a saved career that holds a key: `savedCareerFixtureKey` is read without
   opening the save and the list is fetched in the same wait as an era's squads; a list that will not load
@@ -178,3 +181,45 @@ sit on both sides of zero. What is left is La Liga's mean of about half a point 
 as the yardstick for ONE pair (0.0047) and so about 2.4 times the yardstick for a mean of six. That is the
 one number here worth another look, in a round of its own with more seasons. Nothing was tuned, and nothing
 is asserted on these numbers by any harness: a band set from one measurement would be a coin toss.
+
+## Review fixes (2026-10-10, after two adversarial reviews of `f238da12`)
+
+The full account, with every runner result name, exit code and number, is
+`C:/Users/antho/dukb-handoff/2026-10-10/results-g/fix-1225.md`. What changed in the game and why:
+
+- A MID SEASON TAKEOVER SAYS WHAT IT PLAYS (the one major). The dugout step told a player who picks Autumn,
+  New year or The run-in that "this game draws its own fixture list every save", and Help filed "a job you
+  take part way through a season" under generated fixtures. In a league with a real list neither was true:
+  the save keeps the key through `startMidSeason`, the manager before you plays the real matchdays in their
+  order and the Calendar says so. The copy was fixed, not the binding (decision 4 stands: a new original
+  career in the default modern world). The note now rests on what is true everywhere (every result is the
+  game's own); Help says the weeks before a takeover were played in the real order too and that "a club you
+  move to during a season" (`joinClubNow`, opened inside the save's running world, so no key) keeps
+  generated fixtures. Release AT ships the same contradiction for the Premier League alone until this merges.
+- THE START THAT WAITS FOR ITS LIST. The wait names what it waits for ("Loading the 2026-27 fixture list")
+  and is revealed with the page's own `useRevealScroll`. A list that failed or is eight seconds late shows
+  the era squads' notice with two answers, Try again and Start on generated fixtures; a list that turns up
+  while the notice is on screen starts the career on it. The held start lives in a ref that unmounting drops.
+- WHAT'S NEW gives Barcelona's example by matchday (the real matchday one game was moved behind matchday two).
+
+What changed in the harnesses:
+
+- `scripts/simCmRealFixtures.mjs`: new group takeover (three takeovers keep the key, every league match the
+  manager before you played is the real fixture at the real ground, the first matchday you play is the next
+  real one in full, a club joined during a season holds no key) with two copied faults, handover and jobmove,
+  in `src/lib/clubManagerCalendar.ts`. Group eligibility now holds the Calendar's whole sentence to the letter
+  for every league and starts a past season with the list already fetched. Counts: 13 groups for the Premier
+  League, 12 elsewhere, 11 effective controls a league.
+- `scripts/simCmLeagueFixtures.mjs`: section H holds the words the game prints to the registry value, in
+  words written out a second time on purpose (the review's mutation of `realFixtureListAsOfText` left H and
+  J green); section J holds Help's rendered words the same way, the two takeover sentences, the dugout note,
+  and each What's New example against its ledger. Four new controls: falsewords, takeoverform, takeoverhelp,
+  newsexample (29 in all, 268 control runs).
+- `scripts/playCmLeagueFixtures.mjs`: seven more journeys (two takeovers, a list refused, two that never
+  answer, one thirteen seconds late, a saved career whose list is refused at boot).
+- `src/test/clubManagerStartWait.test.tsx` (new): the real hook against the real registry with the list files
+  gated, including "once the page has been left nothing builds a career".
+- `scripts/simCmFixtureFleet.mjs` removes its scratch folder on every way out.
+
+Not changed, and why: the rule "newer list first" in section H still reads the version off the key (no
+league has two lists, so nothing can prove a rewrite either way; for the round that adds a second list).
