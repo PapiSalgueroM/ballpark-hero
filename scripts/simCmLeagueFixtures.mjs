@@ -6,7 +6,8 @@
  *   CM_LEAGUE_FIXTURES_ONLY=<leagueId> node scripts/simCmLeagueFixtures.mjs   one league (not ONLY: the suite
  *       runner passes ONLY=<harness name> down to every harness, and a league filter that read it would match
  *       no ledger and call nothing green; a filter that matches no ledger is a failure here for the same reason)
- *   CM_LEAGUE_FIXTURES_EXPECT=<n> node scripts/simCmLeagueFixtures.mjs   the gate's own count of ledgers
+ *   CM_LEAGUE_FIXTURES_EXPECT=<n> CM_LEAGUE_FIXTURES_EXPECT_FROZEN=<m> node scripts/simCmLeagueFixtures.mjs
+ *       the gate's own counts: n ledgers on disk, m of them with a frozen line. Give both in a gate line.
  *   CM_LEAGUE_FIXTURES_CONTROL=<name> [CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=<leagueId>] node scripts/simCmLeagueFixtures.mjs
  *
  * PURE DATA. It starts no career and plays no match. It finds ledgers by listing
@@ -33,6 +34,13 @@
  *     page: that proof is the tool's (two sources, two different committed
  *     parsers, every tuple equal) plus a reviewer's fresh read with
  *     `node scripts/genCmLeagueFixtures.mjs check <leagueId> --dir <new folder>`.
+ *     For every ledger the tool wrote (all but the one named in PRE_TOOL_KEYS)
+ *     each source also carries the hash of its kept bytes, the day and the
+ *     moment they were read, and a parser this repo holds; and what a source
+ *     says its list is a copy of (release day, read day) is worked out again
+ *     here from that parser's own family and the stamps the receipt recorded,
+ *     with the tool's own rule, so "as first published" cannot be claimed by
+ *     editing a receipt.
  *  F. Two independent sources: two different hosts, neither one a wiki, and the
  *     two addresses the ledger ships are the two the receipt cites.
  *  G. Nothing that was excluded got in. Stated exactly, because club names
@@ -44,16 +52,23 @@
  *  I. Frozen. Every line of scripts/data/cmLeagueFixtures.frozen.json has its
  *     ledger on disk with exactly that digest (key, leagueId, seasonStartYear,
  *     clubs, rounds; the sources are left out so a dead link can be mended).
- *     A ledger on disk with no frozen line is PENDING: it is still held to A to
- *     G, it is named on the summary line, and whoever runs the gate asserts
- *     the count with CM_LEAGUE_FIXTURES_EXPECT.
+ *     The tool freezes every ledger it writes, in the same write. So a ledger
+ *     of the tool's with no frozen line, or whose receipt records no digest,
+ *     is RED: a line was lost (a merge of the frozen file that kept one side
+ *     does exactly that). Only the ledger written before the tool existed
+ *     (PRE_TOOL_KEYS: Round 1184's Premier League list) may be PENDING, on
+ *     disk with no frozen line: it is still held to A to G and named on the
+ *     summary line. Whoever runs the gate asserts both counts
+ *     (CM_LEAGUE_FIXTURES_EXPECT and CM_LEAGUE_FIXTURES_EXPECT_FROZEN).
  * Sections H (the game's registry agrees with the disk) and J (Help names the
  * registered leagues) belong to the round that binds the ledgers, not to this one.
  *
  * CONTROLS. Every run ends by proving its own checks: each control below is
  * applied to an in memory copy of each frozen ledger in turn, must first show
  * it changed something, and must turn red EXACTLY the sections written beside
- * it for exactly that league while every other league stays green.
+ * it for exactly that league while every other league stays green. A run that
+ * checked ledgers and ran no control at all is RED: nothing in it was shown
+ * able to fail.
  *   swapvenue     one match's home and away flipped in the ledger      C E I
  *   droprow       one match removed from a matchday                    A B C E I
  *   twiceinround  one away club replaced by a club already playing     B C E I
@@ -65,6 +80,16 @@
  *   extrakey      a ninth field on the export                          G
  *   refreeze      a consistent rewrite of ledger AND receipt           I
  *   lostfile      the ledger file gone while its frozen line stays     I
+ * and, on the ledgers the tool wrote:
+ *   nosnapshot    a source loses the hash of its kept bytes            E
+ *   noreadtime    a source loses the moment its bytes were read        E
+ *   falsefirstpub the receipt's "as first published" flipped           E
+ *   falseasof     a source's release day or read day flipped, and the
+ *                 receipt's "as first published" made to agree with it E
+ *   latechange    a release day source's bytes say they were changed
+ *                 after the list came out (leagues that have one)      E
+ *   unfrozen      the ledger's line gone from the frozen file          I
+ *   nodigest      the receipt loses the digest it recorded             I
  * CM_LEAGUE_FIXTURES_CONTROL=<name> leaves that one fault in place instead: the
  * run then exits 1 with a last line that says the control FIRED as expected, or
  * exits 3 with a last line that says it MISFIRED or could not run.
@@ -74,10 +99,18 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, gameLeagues, ledgerFilesOnDisk, loadLedgers } from './lib/cmFixtureSources/gameBundle.mjs';
-import { ledgerDigest } from './lib/cmFixtureSources/build.mjs';
+import { PARSERS, READ_AT, dayOf, ledgerDigest, listAsOfFrom } from './lib/cmFixtureSources/build.mjs';
+import { cmFixtureLeague } from './lib/cmFixtureSources/leagues.mjs';
 
 const ONLY = process.env.CM_LEAGUE_FIXTURES_ONLY || '';
 const EXPECT = process.env.CM_LEAGUE_FIXTURES_EXPECT || '';
+const EXPECT_FROZEN = process.env.CM_LEAGUE_FIXTURES_EXPECT_FROZEN || '';
+/* The one ledger written before scripts/genCmLeagueFixtures.mjs existed: Round 1184's Premier League list.
+   Its receipt was written by hand in another shape (no hash of kept bytes, no read time, no digest) and is
+   not this harness's to demand a rewrite of. It is held to everything its shape can carry, it may be
+   pending or frozen, and nothing else is let off: every other ledger is the tool's and is held to all of it.
+   A second key never joins this list, a new ledger is written by the tool. */
+const PRE_TOOL_KEYS = ['premier-2026-27-v1'];
 const CONTROL = process.env.CM_LEAGUE_FIXTURES_CONTROL || '';
 const CONTROL_LEAGUE = process.env.CM_LEAGUE_FIXTURES_CONTROL_LEAGUE || '';
 const FROZEN_REL = 'scripts/data/cmLeagueFixtures.frozen.json';
@@ -196,12 +229,14 @@ function judgeReceipt(e, L, clubs, pairs, n, red) {
       const sorted = [...inOrder].sort((x, y) => Number(x.split('|')[0]) - Number(y.split('|')[0]));
       if (sorted.join('\n') !== ledgerTuples.join('\n')) red('E', `source ${si + 1} gives the order of matches and the ledger's order differs from it`);
     }
-    if (e.frozen && !(s.snapshot && /^[0-9a-f]{64}$/.test(s.snapshot.sha256 || '') && s.snapshot.bytes > 0)) red('E', `source ${si + 1}: no hash of the bytes its rows were parsed from`);
-    if (e.frozen && !['release day', 'read day'].includes(s.listAsOf)) red('E', `source ${si + 1} does not say whether it is a release day copy of the list or a page kept up to date`);
+    if (e.tool) judgeToolSource(L, s, si, red);
     return set;
   });
-  /* A receipt may say "the list as first published" only when one of its sources is a release day copy. */
-  if (e.frozen && R.asFirstPublished !== sources.some(s => s.listAsOf === 'release day')) red('E', 'the receipt says the list is as first published, and its sources do not bear that out (or the reverse)');
+  if (e.tool) {
+    /* A receipt may say "the list as first published" only when one of its sources is a release day copy. */
+    if (R.asFirstPublished !== sources.some(s => s.listAsOf === 'release day')) red('E', 'the receipt says the list is as first published, and its sources do not bear that out (or the reverse)');
+    if (R.readOn !== sources.map(s => String(s.readOn)).sort().at(-1)) red('E', `the receipt's readOn (${R.readOn}) is not the day its later source was read`);
+  }
   if (mappedSets.length >= 2) {
     const differ = [...mappedSets[0]].filter(t => !mappedSets[1].has(t)).length + [...mappedSets[1]].filter(t => !mappedSets[0].has(t)).length;
     if (differ) red('E', `the two sources differ in ${differ} matchday|home|away tuple(s)`);
@@ -221,6 +256,31 @@ function judgeReceipt(e, L, clubs, pairs, n, red) {
   const shipped = (Array.isArray(L.sources) ? L.sources : []).map(s => s && s.url);
   if (cited.join('\n') !== shipped.join('\n')) red('F', 'the addresses the ledger ships are not the ones the receipt cites');
   if (new Set(shipped.map(hostOf)).size !== shipped.length) red('F', 'the two addresses the ledger ships are on one host');
+}
+
+/**
+ * E, for a ledger the tool wrote: what its receipt says about ONE source, held to the tool's own parsers and
+ * league table rather than to another field of the same receipt.
+ */
+function judgeToolSource(L, s, si, red) {
+  const n = si + 1;
+  if (!(s.snapshot && /^[0-9a-f]{64}$/.test(s.snapshot.sha256 || '') && s.snapshot.bytes > 0)) red('E', `source ${n}: no hash of the bytes its rows were parsed from`);
+  const pages = s.snapshot && Array.isArray(s.snapshot.pages) ? s.snapshot.pages : [];
+  const lastPage = pages.map(p => String(p.readAtUtc)).sort().at(-1);
+  if (!READ_AT.test(s.readAtUtc || '') || s.readOn !== String(s.readAtUtc).slice(0, 10) || pages.some(p => !READ_AT.test(p.readAtUtc || '')) || (pages.length && lastPage !== s.readAtUtc)) {
+    red('E', `source ${n} does not say when its bytes were read (readOn, readAtUtc, and the same for each page of a source of many pages)`);
+  }
+  const name = path.basename(String(s.parser || ''), '.mjs');
+  const family = Object.hasOwn(PARSERS, name) && s.parser === `scripts/lib/cmFixtureSources/${name}.mjs` ? PARSERS[name] : null;
+  if (!family) { red('E', `source ${n} names no parser this repo holds (${s.parser})`); return; }
+  if (s.roundBasis !== family.roundBasis) red('E', `source ${n} says its matchdays are ${s.roundBasis}, its parser reads them as ${family.roundBasis}`);
+  /* The day the list came out is the source's own publication stamp, or the day typed in the league table for a document that prints none. */
+  const table = cmFixtureLeague(L.leagueId);
+  const wantDay = dayOf(s.published) || (table && table.sources[si] && table.sources[si].released) || undefined;
+  if (s.released !== wantDay) red('E', `source ${n} says its list came out on ${s.released}, and neither its own publication stamp nor the league table says so`);
+  if (s.listAsOf !== listAsOfFrom(family.listAsOf, s.released, s.modified)) {
+    red('E', `source ${n} says it is a ${s.listAsOf} copy of the list, and its parser and the stamps it recorded do not bear that out (came out ${s.released || 'unknown'}, last changed ${s.modified || 'unknown'})`);
+  }
 }
 
 /* ---- G. nothing that was excluded got in ---- */
@@ -257,10 +317,18 @@ function judgeFrozen(world, reds) {
     if (e.file !== line.file) red(`the frozen line names ${line.file}, the ledger is in ${e.file}`);
     if (ledgerDigest(e.ledger) !== line.sha256) red(`the ledger's digest is not the frozen ${String(line.sha256).slice(0, 16)}: a frozen ledger never changes, a correction ships under a new key`);
   }
-  /* The digest the tool wrote into the receipt is the same promise, kept beside the evidence. */
+  /* The digest the tool wrote into the receipt is the same promise, kept beside the evidence. And the tool
+     writes the ledger, the receipt with that digest and the frozen line in one go, so a ledger of the tool's
+     that lacks either has LOST it: the frozen file is one JSON object that every later league round edits,
+     and a merge that keeps one side drops the other side's lines without touching a ledger. */
   for (const e of world.entries) {
+    if (!e.ledger) continue;
+    const red = msg => reds.push({ id: e.ledger.leagueId || e.file, section: 'I', msg });
     const recorded = e.receipt && e.receipt.ledgerDigest && e.receipt.ledgerDigest.sha256;
-    if (recorded && e.ledger && recorded !== ledgerDigest(e.ledger)) reds.push({ id: e.ledger.leagueId || e.file, section: 'I', msg: 'the digest the receipt recorded is not the ledger\'s' });
+    if (recorded && recorded !== ledgerDigest(e.ledger)) red('the digest the receipt recorded is not the ledger\'s');
+    if (!e.tool) continue;
+    if (!Object.hasOwn(lines, e.ledger.key)) red(`no frozen line for ${e.ledger.key}: the tool freezes every ledger it writes, so the line was lost`);
+    if (e.receipt && !recorded) red('the receipt records no digest of its ledger, and every receipt the tool writes does');
   }
 }
 
@@ -275,6 +343,7 @@ const allEntries = loaded.map(l => ({
   receipt: readJson(l.file.replace(/^src\/data\//, 'scripts/data/').replace(/\.ts$/, '.receipt.json')),
   source: fs.readFileSync(path.join(ROOT, l.file), 'utf8'),
   frozen: !!(l.ledger && frozenKeys.has(l.ledger.key)),
+  tool: !(l.ledger && PRE_TOOL_KEYS.includes(l.ledger.key)),
 }));
 const entries = ONLY ? allEntries.filter(e => e.ledger && e.ledger.leagueId === ONLY) : allEntries;
 const world = { leagues, entries, frozen: frozenOnDisk, only: ONLY };
@@ -342,13 +411,41 @@ const CONTROLS = {
     },
   },
   lostfile: { expect: 'I', apply(w, e) { w.entries.splice(w.entries.indexOf(e), 1); } },
+  /* The rest damage what only a receipt of the tool's carries, so they run on the tool's ledgers (applies). */
+  nosnapshot: { expect: 'E', applies: e => e.tool, apply(w, e) { delete e.receipt.sources[0].snapshot.sha256; } },
+  noreadtime: { expect: 'E', applies: e => e.tool, apply(w, e) { delete e.receipt.sources[1].readAtUtc; } },
+  falsefirstpub: { expect: 'E', applies: e => e.tool, apply(w, e) { e.receipt.asFirstPublished = !e.receipt.asFirstPublished; } },
+  falseasof: {
+    expect: 'E',
+    applies: e => e.tool,
+    apply(w, e) {
+      /* The receipt is made to agree with itself, so only the working out from the parser and the stamps can see it. */
+      const s = e.receipt.sources.find(x => x.listAsOf === 'release day') || e.receipt.sources[0];
+      s.listAsOf = s.listAsOf === 'release day' ? 'read day' : 'release day';
+      e.receipt.asFirstPublished = e.receipt.sources.some(x => x.listAsOf === 'release day');
+    },
+  },
+  latechange: {
+    expect: 'E',
+    applies: e => e.tool && e.receipt.sources.some(s => s.listAsOf === 'release day'),
+    apply(w, e) {
+      const s = e.receipt.sources.find(x => x.listAsOf === 'release day');
+      const [y, rest] = [Number(String(s.released).slice(0, 4)), String(s.released).slice(4)];
+      if (!y) throw new Error('the release day source records no day its list came out');
+      s.modified = `${y + 1}${rest}T09:00:00Z`;
+    },
+  },
+  unfrozen: { expect: 'I', applies: e => e.tool, apply(w, e) { delete w.frozen.ledgers[e.ledger.key]; } },
+  nodigest: { expect: 'I', applies: e => e.tool, apply(w, e) { delete e.receipt.ledgerDigest; } },
 };
+const appliesTo = (name, e) => !CONTROLS[name].applies || CONTROLS[name].applies(e);
 
 /** Apply one control to one league on a copy. Returns { ok, why, reds }: ok only when exactly the expected sections of exactly that league went red. */
 function runControl(name, leagueId) {
   const copy = structuredClone(world);
   const target = copy.entries.find(e => idOf(e) === leagueId);
   if (!target) return { ok: false, why: `no ledger for ${leagueId}`, reds: [] };
+  if (!appliesTo(name, target)) return { ok: false, why: `it does not apply to ${leagueId} (its receipt has nothing for this control to damage)`, reds: [] };
   const before = JSON.stringify(copy);
   try {
     CONTROLS[name].apply(copy, target);
@@ -380,9 +477,10 @@ console.log(`simCmLeagueFixtures: ${entries.length} ledger(s) on disk${ONLY ? ` 
 
 if (CONTROL) {
   /* One fault left in place, so the run is red on purpose. Exit 1 = it fired exactly as written. Exit 3 = it did not. */
-  const leagueId = CONTROL_LEAGUE || (frozenEntries[0] && idOf(frozenEntries[0])) || '';
+  const first = CONTROLS[CONTROL] && frozenEntries.find(e => appliesTo(CONTROL, e));
+  const leagueId = CONTROL_LEAGUE || (first && idOf(first)) || '';
   if (!CONTROLS[CONTROL] || !leagueId) {
-    console.error(`CONTROL ${CONTROL} COULD NOT RUN: ${CONTROLS[CONTROL] ? 'no frozen ledger on disk to damage' : `no such control, the controls are ${Object.keys(CONTROLS).join(', ')}`}`);
+    console.error(`CONTROL ${CONTROL} COULD NOT RUN: ${CONTROLS[CONTROL] ? 'no frozen ledger on disk that it applies to' : `no such control, the controls are ${Object.keys(CONTROLS).join(', ')}`}`);
     process.exit(3);
   }
   console.log(`NEGATIVE CONTROL ON: ${CONTROL} on a copy of ${leagueId}, sections ${CONTROLS[CONTROL].expect} must go red and nothing else`);
@@ -403,6 +501,10 @@ if (EXPECT && Number(EXPECT) !== entries.length) {
   failures += 1;
   console.error(`  FAIL: the gate expects ${EXPECT} ledger(s) and ${entries.length} are on disk`);
 }
+if (EXPECT_FROZEN && Number(EXPECT_FROZEN) !== frozenEntries.length) {
+  failures += 1;
+  console.error(`  FAIL: the gate expects ${EXPECT_FROZEN} frozen ledger(s) and ${frozenEntries.length} of the ${entries.length} on disk have a frozen line`);
+}
 if (ONLY && !entries.length) {
   failures += 1;
   console.error(`  FAIL: CM_LEAGUE_FIXTURES_ONLY=${ONLY} matches no ledger on disk, so nothing was checked`);
@@ -415,14 +517,26 @@ if (reds.length) {
   console.log('K) the controls: not run, the ledgers themselves are red');
 } else {
   const misfires = [];
+  const everRan = new Set();
   for (const e of frozenEntries) for (const name of Object.keys(CONTROLS)) {
+    if (!appliesTo(name, e)) continue;
     controlRuns += 1;
+    everRan.add(name);
     const result = runControl(name, idOf(e));
     if (result.ok) fired += 1; else misfires.push(`${name} on ${idOf(e)}: ${result.why}`);
   }
-  console.log(`K) the controls: ${fired} of ${controlRuns} fired exactly as written (${Object.keys(CONTROLS).length} controls on each of ${frozenEntries.length} frozen ledger(s))`);
+  console.log(`K) the controls: ${fired} of ${controlRuns} fired exactly as written (${everRan.size} of the ${Object.keys(CONTROLS).length} controls ran, each on every one of the ${frozenEntries.length} frozen ledger(s) it applies to)`);
   misfires.slice(0, 12).forEach(m => console.error(`  FAIL: control ${m}`));
   failures += misfires.length;
+  /* A whole run (no league filter) must have run every control at least once, or a check has lost its control without anybody seeing. */
+  const idle = Object.keys(CONTROLS).filter(name => !everRan.has(name));
+  if (entries.length && !controlRuns) {
+    failures += 1;
+    console.error('  FAIL: no control ran: none of the ledgers checked has a frozen line, so nothing above was shown able to fail');
+  } else if (!ONLY && idle.length && frozenEntries.some(e => e.tool)) {
+    failures += 1;
+    console.error(`  FAIL: ${idle.length} control(s) ran on no ledger at all: ${idle.join(', ')}`);
+  }
 }
 
 const tail = `${entries.length} ledger(s), ${frozenEntries.length} frozen, ${pending.length} pending${pending.length ? ` (${pending.join(', ')})` : ''}, ${fixtures} fixtures, ${fired} of ${controlRuns} controls fired`;
