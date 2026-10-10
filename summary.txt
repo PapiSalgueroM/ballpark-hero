@@ -1,0 +1,16 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+corrupt-nobutton exit=0 90s | playCorruptSaves control: FIRED. With the button hidden, 21 of 21 routes that need it are trapped.
+corrupt-multiline exit=0 0s | playCorruptSaves control multiline: FIRED. continueSaves.ts has 22 path: rows in CONTINUE_SAVES but the row pattern read 21; a row written over several lines is not walke
+playSoftFourOhFour exit=0 7s | playSoftFourOhFour: green. A dead address says it is dead before a line of app code runs, and no real page is touched.
+corrupt-norestore exit=0 128s | playCorruptSaves control: FIRED. With the restore card hidden, 21 of 21 routes that need it are trapped.
+playCorruptSaves exit=0 147s | playCorruptSaves: green. No broken save traps a long game.
+playUsCareerSaveSeam exit=0 35s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+playInboxCard exit=0 15s | playInboxCard: owned temporary files, headless browser and localhost server cleaned.
+playHomeFold exit=0 35s | playHomeFold: green. The first thing on the page is something to play.
+playTranslatedPage exit=0 135s | playTranslatedPage: 447 checks, 0 failed
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+simPrerender exit=1 0s | simPrerender: 1 failure
+simSnapshotAssets exit=0 0s | simSnapshotAssets: green. Every page knows where its own code is, and finding out costs nobody a round trip.
+sweepWeight exit=1 28s | sweepWeight: 13 failures
+playStorageBlocked exit=0 278s | playStorageBlocked: 826 checks, 0 failed
+sweepSaves exit=0 415s | sweepSaves: green. Every save on the site survives being garbage.

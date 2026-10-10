@@ -1,0 +1,51 @@
+  PASS  /soccer-career shell: coped without the button, 0 click(s), buttons: Delete unusable save | Choose nationality | Choose position
+  PASS  /soccer-career wrongtype: coped without the button, 0 click(s), buttons: Delete unusable save | Choose nationality | Choose position
+  PASS  /club-manager shell: coped without the button, 0 click(s), buttons: 📅2026-27Today. Real squ | 🏟️2020-21Haaland and Be | 🦊2015-16The Leicester s
+  PASS  /club-manager wrongtype: coped without the button, 0 click(s), buttons: 📅2026-27Today. Real squ | 🏟️2020-21Haaland and Be | 🦊2015-16The Leicester s
+  PASS  /stadium-tycoon shell: coped without the button, 0 click(s), buttons: 🏟️ Stadium | 🎓 Academy | 🏆 League
+  PASS  /stadium-tycoon wrongtype: coped without the button, 0 click(s), buttons: 🏟️ Stadium | 🎓 Academy | 🏆 League
+  PASS  /wonderkid-factory shell: coped without the button, 0 click(s), buttons: How it works | 🎪 SHOWCASE DAY READY: p | ⚽First team0 / 5 players
+  PASS  /wonderkid-factory wrongtype: coped without the button, 0 click(s), buttons: How it works | 🎪 SHOWCASE DAY READY: p | ⚽First team0 / 5 players
+  PASS  /rebuild shell: coped without the button, 0 click(s), buttons: Just me | 2 players | 3 players
+  PASS  /rebuild wrongtype: coped without the button, 0 click(s), buttons: Just me | 2 players | 3 players
+  PASS  /front-office shell: coped without the button, 0 click(s), buttons: Delete unusable save | Arizona CardinalsNFC Wes | Atlanta FalconsNFC South
+  PASS  /front-office wrongtype: coped without the button, 0 click(s), buttons: Delete unusable save | Arizona CardinalsNFC Wes | Atlanta FalconsNFC South
+  PASS  /nfl-my-career shell: needed the button, 2 click(s), buttons: 🏈 2026The league as it  | ⏪ 2005 throwbackThe 2005 | QB
+  PASS  /nfl-my-career wrongtype: needed the button, 2 click(s), buttons: 🏈 2026The league as it  | ⏪ 2005 throwbackThe 2005 | QB
+  PASS  /nfl-my-career summer: needed the button, 2 click(s), buttons: 🏈 2026The league as it  | ⏪ 2005 throwbackThe 2005 | QB
+  PASS  /cfb-dynasty shell: needed the button, 1 click(s), buttons: AlabamaPrestige 95 | GeorgiaPrestige 96 | TexasPrestige 94
+  PASS  /cfb-dynasty wrongtype: needed the button, 1 click(s), buttons: AlabamaPrestige 95 | GeorgiaPrestige 96 | TexasPrestige 94
+  PASS  /cbb-dynasty shell: needed the button, 1 click(s), buttons: DukePrestige 95 | North CarolinaPrestige 9 | VirginiaPrestige 84
+  PASS  /cbb-dynasty wrongtype: needed the button, 1 click(s), buttons: DukePrestige 95 | North CarolinaPrestige 9 | VirginiaPrestige 84
+  PASS  /nba-front-office shell: coped without the button, 0 click(s), buttons: Denver NuggetsWest | Oklahoma City ThunderWes | Boston CelticsEast
+  PASS  /nba-front-office wrongtype: coped without the button, 0 click(s), buttons: Denver NuggetsWest | Oklahoma City ThunderWes | Boston CelticsEast
+  PASS  /nba-my-career shell: needed the button, 2 click(s), buttons: 🏀 2026The league as it  | ⏪ 2003-04 throwbackThe 2 | PG
+  PASS  /nba-my-career wrongtype: needed the button, 2 click(s), buttons: 🏀 2026The league as it  | ⏪ 2003-04 throwbackThe 2 | PG
+  PASS  /nba-my-career summer: needed the button, 2 click(s), buttons: 🏀 2026The league as it  | ⏪ 2003-04 throwbackThe 2 | PG
+  PASS  /mlb-my-career shell: needed the button, 2 click(s), buttons: ⚾ 2026The league as it i | ⏪ 2004 throwbackThe 2004 | SP
+  PASS  /mlb-my-career wrongtype: needed the button, 2 click(s), buttons: ⚾ 2026The league as it i | ⏪ 2004 throwbackThe 2004 | SP
+  PASS  /mlb-my-career summer: needed the button, 2 click(s), buttons: ⚾ 2026The league as it i | ⏪ 2004 throwbackThe 2004 | SP
+  PASS  /mlb-front-office shell: coped without the button, 0 click(s), buttons: Delete this save and cho
+  PASS  /mlb-front-office wrongtype: coped without the button, 0 click(s), buttons: Delete this save and cho
+  PASS  /nhl-my-career shell: needed the button, 2 click(s), buttons: 🏒 2026The league as it  | ⏪ 2006-07 throwbackThe 3 | C
+  PASS  /nhl-my-career wrongtype: needed the button, 2 click(s), buttons: 🏒 2026The league as it  | ⏪ 2006-07 throwbackThe 3 | C
+  PASS  /nhl-my-career summer: needed the button, 2 click(s), buttons: 🏒 2026The league as it  | ⏪ 2006-07 throwbackThe 3 | C
+  PASS  /nhl-front-office shell: coped without the button, 0 click(s), buttons: Delete unusable save | Boston BruinsEastern | Buffalo SabresEastern
+  PASS  /nhl-front-office wrongtype: coped without the button, 0 click(s), buttons: Delete unusable save | Boston BruinsEastern | Buffalo SabresEastern
+  PASS  /aussie-rules-manager shell: coped without the button, 1 click(s), buttons: Caldermere CometsControl | Hollowmere PloversDirect | Elverfern LarrikinsPress
+  PASS  /aussie-rules-manager wrongtype: coped without the button, 1 click(s), buttons: Caldermere CometsControl | Hollowmere PloversDirect | Elverfern LarrikinsPress
+  PASS  /fight-career shell: coped without the button, 0 click(s), buttons: Flyweight112 lbs | Bantamweight118 lbs | Featherweight126 lbs
+  PASS  /fight-career wrongtype: needed the button, 1 click(s), buttons: Flyweight112 lbs | Bantamweight118 lbs | Featherweight126 lbs
+  PASS  /fight-promoter shell: needed the button, 1 click(s), buttons: MMABuild your organizati | BoxingMake the fights, s
+  PASS  /fight-promoter wrongtype: needed the button, 1 click(s), buttons: MMABuild your organizati | BoxingMake the fights, s
+  PASS  /fight-gym shell: needed the button, 1 click(s), buttons: Open the doors
+  PASS  /fight-gym wrongtype: needed the button, 1 click(s), buttons: Open the doors
+  SKIP  /hall-of-champions shell: not judged offline, 0 click(s), buttons: Try again
+  SKIP  /hall-of-champions wrongtype: not judged offline, 0 click(s), buttons: Try again
+  PASS  /idle-arena shell: coped without the button, 0 click(s), buttons: ⚽TAP TO SCORE | x1 | x10
+  PASS  /idle-arena wrongtype: coped without the button, 0 click(s), buttons: ⚽TAP TO SCORE | x1 | x10
+  note  /hall-of-champions shell not judged offline: the championship archive comes from the database before the museum save is read
+  note  /hall-of-champions wrongtype not judged offline: the championship archive comes from the database before the museum save is read
+
+46 broken saves over 21 long games: 21 reached the error page and needed the button, 23 were coped with by the game, 0 drew the broken save without throwing, 2 could not be judged offline, 0 trapped
+playCorruptSaves: green. No broken save traps a long game.

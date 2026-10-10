@@ -1,0 +1,1 @@
+playCorruptSaves control multiline: FIRED. continueSaves.ts has 22 path: rows in CONTINUE_SAVES but the row pattern read 21; a row written over several lines is not walked, so write it on one line or teach this parser its shape
