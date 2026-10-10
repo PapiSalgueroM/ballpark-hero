@@ -135,6 +135,13 @@ const CONTROLS = {
     ['      .sort((a, b) => byRecord(a, b) || flip * ((place.get(a.id) ?? 0) - (place.get(b.id) ?? 0)))', '      .sort((a, b) => (place.get(a.id) ?? 0) - (place.get(b.id) ?? 0))'],
     ['    later = [...missed.order, ...rest.order];', '    later = [...first];'],
   ] } },
+  /* a later round off the lottery: only the level clubs that missed are flipped, or none at all */
+  restlevel: { expect: [4], swaps: { order: [['      for (const group of [...missed.level, ...rest.level]) {', '      for (const group of [...missed.level]) {']] } },
+  flipbranchoff: { expect: [4], swaps: { order: [['    if (flip < 0) {', '    if (flip > 1) {']] } },
+  /* fail closed, one control a refusal: a fact read once is played, any table is drawn on, any field is drawn on */
+  thinplayed: { expect: [4], swaps: { order: [["    if (!fact || fact.thin) return 'thin-rule';", "    if (!fact) return 'thin-rule';"]] } },
+  anytable: { expect: [4], swaps: { order: [["  if (!lottery || lottery.table !== rules.lottery.table) return 'table';", "  if (!lottery) return 'table';"]] } },
+  anyfield: { expect: [4], swaps: { order: [["  if (fieldSize !== lottery.clubs || lottery.odds.length !== lottery.clubs) return 'field-size';", "  if (lottery.odds.length !== lottery.clubs) return 'field-size';"]] } },
   rowkey: { expect: [4], swaps: { order: [['  const rows = [...season.rows].sort(byId)', '  const rows = [...season.rows]']] } },
   origpicks: { expect: [5, 10], swaps: { order: [["        overall: out.length + 1, round, slot: s.slot, orig: s.pick.orig, holder: s.pick.holder, kind: s.pick.kind ?? 'std',", "        overall: out.length + 1, round, slot: s.slot, orig: s.pick.orig, holder: s.pick.orig, kind: s.pick.kind ?? 'std',"]] } },
   skipslot: { expect: [5, 6, 10], swaps: { order: [['    for (const s of roundSlots(ledger, ledgerYear, round, round === 1 ? order.first : order.later)) {', '    for (const s of roundSlots(ledger, ledgerYear, round, round === 1 ? order.first : order.later).slice(1)) {']] } },
@@ -554,8 +561,9 @@ open(3);
 }
 
 /* ---------- 4. the order ---------- */
-/* Two rule sets no league has, so every branch of the engine is proven before a sport binds it: a league that
-   orders its playoff clubs by class, keeps later rounds off the lottery and caps a climb; and one with no lottery. */
+/* Three rule sets no league has, so every branch of the engine is proven before a sport binds it: a league that
+   orders its playoff clubs by class, keeps later rounds off the lottery and caps a climb; one with no lottery; and
+   one that flips its level clubs in a later round off the lottery. */
 const HOCKEY_TABLE = P.NHL_PICK_RULES.lottery;
 const TOY_CLASS = {
   ...NBA, id: 'toy-class', sport: 'toy', real: { from: 2000, to: null }, plays: { from: 2000, to: null },
@@ -564,6 +572,10 @@ const TOY_CLASS = {
 };
 const TOY_CLASS_PICKS = { ...P.NHL_PICK_RULES };
 const TOY_PLAIN = { ...TOY_CLASS, id: 'toy-plain', lottery: null };
+/* The same league, except that clubs still level after the league's tie values pick in a later round in the reverse
+   of their round one order. The branch of the engine that does that off the lottery was run by no rule set and no
+   check before the review (its mutations restLevelDropped and flipBranchDead survived). */
+const TOY_FLIP = { ...TOY_CLASS, id: 'toy-flip', level: { odds: 'keep', later: 'reverse-of-first' } };
 /* 32 clubs, 16 in a bracket: eight out in round one, four in round two, two in round three, a finalist and a champion. */
 function classSeason(rng) {
   const rows = ids(32).map(id => { const wins = 20 + Math.floor(rng() * 30); return { id, wins, losses: 82 - wins, made: false, tie: [Math.floor(rng() * 3)] }; });
@@ -573,17 +585,19 @@ function classSeason(rng) {
   ranked.forEach((r, i) => { r.made = true; r.cls = classes[i]; });
   return { sport: 'toy', draftYear: 2030 + Math.floor(rng() * 20), rows };
 }
+const FLIP_FLOORS = { missed: 1000, made: 300, afterLottery: 100 }; // a fraction of the counts measured, see MEASURED
 const tieOf = r => (r.tie ?? [0])[0];
 const noLaterThan = (a, b) => shareOf(a) < shareOf(b) || (shareOf(a) === shareOf(b) && tieOf(a) <= tieOf(b));
 
 open(4);
 {
   const rng = makeRng(404);
-  const seen = { capped: 0, climbs: 0, shuffles: 0 };
+  const seen = { capped: 0, climbs: 0, shuffles: 0, flipMissed: 0, flipMade: 0, flipAfterLottery: 0 };
   const fleets = [
     { name: 'the NBA rule set', rules: NBA, picks: NBA_PICKS, make: () => randomSeason(rng) },
     { name: 'a league by class with a capped climb', rules: TOY_CLASS, picks: TOY_CLASS_PICKS, make: () => classSeason(rng) },
     { name: 'a league with no lottery', rules: TOY_PLAIN, picks: TOY_CLASS_PICKS, make: () => classSeason(rng) },
+    { name: 'a league by class whose level clubs flip in a later round', rules: TOY_FLIP, picks: TOY_CLASS_PICKS, make: () => classSeason(rng) },
   ];
   for (const fleet of fleets) {
     for (let s = 0; s < 2000; s += 1) {
@@ -615,7 +629,30 @@ open(4);
         check(later.every((r, i) => i === 0 || shareOf(later[i - 1]) <= shareOf(r)), () => `${where}: round two is not every club by record`);
       } else {
         const seeds = saved.lottery ? saved.lottery.field.map(f => f.club) : saved.first.slice(0, missed);
-        check(sameList(saved.later, [...seeds, ...saved.first.slice(missed)]), () => `${where}: a later round is not round one as it stood before the lottery`);
+        const before = [...seeds, ...saved.first.slice(missed)];
+        if (fleet.rules.level.later === 'as-first') {
+          check(sameList(saved.later, before), () => `${where}: a later round is not round one as it stood before the lottery`);
+        } else {
+          /* Round one as it stood before the lottery, except inside each group of level clubs: a group keeps its own
+             seats and fills them in the REVERSE of its round one order, which for lottery clubs is read after the lottery. */
+          const groupOf = new Map();
+          saved.level.forEach((group, g) => group.forEach(id => groupOf.set(id, g)));
+          check(saved.later.every((id, i) => (groupOf.has(id) ? groupOf.get(before[i]) === groupOf.get(id) : before[i] === id)),
+            () => `${where}: in a later round a club that is level with nobody moved, or a level club left its group's seats`);
+          const firstAt = new Map(saved.first.map((id, i) => [id, i]));
+          const laterAt = new Map(saved.later.map((id, i) => [id, i]));
+          const seedAt = new Map(seeds.map((id, i) => [id, i]));
+          for (const group of saved.level) {
+            for (let a = 0; a < group.length; a += 1) {
+              for (let b = a + 1; b < group.length; b += 1) {
+                const [x, y] = [group[a], group[b]];
+                if (row.get(x).made) seen.flipMade += 1; else seen.flipMissed += 1;
+                if (!row.get(x).made && (seedAt.get(x) < seedAt.get(y)) !== (firstAt.get(x) < firstAt.get(y))) seen.flipAfterLottery += 1;
+                check((firstAt.get(x) < firstAt.get(y)) === (laterAt.get(x) > laterAt.get(y)), () => `${where}: ${x} and ${y} are level and a later round is not the reverse of their round one order`);
+              }
+            }
+          }
+        }
       }
       /* the draw itself */
       if (saved.lottery) {
@@ -638,7 +675,44 @@ open(4);
     }
   }
   check(seen.climbs >= 1000 && seen.capped >= 20, `only ${seen.climbs} climbs and ${seen.capped} climbs stopped exactly at the cap, so the cap check is not looking at anything`);
-  console.log(`   3 rule sets, 2000 leagues each: every round a permutation, each round by its rule, ${seen.climbs} climbs (${seen.capped} stopped exactly at the cap), ${seen.shuffles} reorderings drew the same night`);
+  check(seen.flipMissed >= FLIP_FLOORS.missed && seen.flipMade >= FLIP_FLOORS.made && seen.flipAfterLottery >= FLIP_FLOORS.afterLottery,
+    `the flip of level clubs off the lottery was hardly looked at: ${seen.flipMissed} pairs that missed, ${seen.flipMade} playoff pairs, ${seen.flipAfterLottery} pairs the lottery reordered first`);
+  console.log(`   ${fleets.length} rule sets, 2000 leagues each: every round a permutation, each round by its rule, ${seen.climbs} climbs (${seen.capped} stopped exactly at the cap), ${seen.shuffles} reorderings drew the same night`);
+  console.log(`   level clubs flipped in a later round off the lottery: ${seen.flipMissed} pairs that missed the playoffs (${seen.flipAfterLottery} of them reordered by the lottery first), ${seen.flipMade} playoff pairs`);
+
+  /* FAIL CLOSED, the lead's decision 3: no lottery on a rule that cannot carry one. Each case below must come out as
+     the plain order: nothing drawn, no lottery stream opened, the saved order saying why, and both rounds worst
+     record first (this league has no level records and its playoff clubs are its best records). */
+  {
+    const NEEDS_TYPED = ['field', 'draws', 'table', 'restOfLottery', 'tieDraw', 'levelOdds', 'levelFirst']; // typed here: what a night's result rests on
+    const season = ladder(30, 14);
+    const thinOn = key => ({ ...NBA, facts: NBA.facts.map(f => (f.key === key ? { ...f, thin: true } : f)) });
+    const cases = [
+      ...NEEDS_TYPED.map(key => ({ name: `the fact ${key} read once`, rules: thinOn(key), picks: NBA_PICKS, season, why: 'thin-rule' })),
+      { name: 'a fact the lottery needs missing', rules: { ...NBA, facts: NBA.facts.filter(f => f.key !== 'draws') }, picks: NBA_PICKS, season, why: 'thin-rule' },
+      { name: 'a table of another name', rules: NBA, picks: { ...NBA_PICKS, lottery: { ...TABLE, table: 'a table this rule was not read against' } }, season, why: 'table' },
+      { name: 'no table at all', rules: NBA, picks: { ...NBA_PICKS, lottery: null }, season, why: 'table' },
+      { name: 'a playoff field of another size', rules: NBA, picks: NBA_PICKS, season: ladder(30, 12), why: 'field-size' },
+      { name: 'a table one row short', rules: NBA, picks: { ...NBA_PICKS, lottery: { ...TABLE, odds: TABLE.odds.slice(0, -1) } }, season, why: 'field-size' },
+      { name: 'a league with no lottery', rules: { ...NBA, lottery: null }, picks: NBA_PICKS, season, why: 'no-lottery' },
+    ];
+    let refused = 0;
+    for (const c of cases) {
+      tally.keys.length = 0;
+      tally.draws = 0;
+      const saved = O.buildDraftOrder(c.season, c.rules, c.picks);
+      const plain = c.season.rows.map(r => r.id);
+      if (saved.lottery === null && saved.plain === c.why) refused += 1;
+      check(saved.lottery === null && saved.plain === c.why, `${c.name}: ${saved.lottery ? 'a lottery was drawn' : `no lottery, and the order says "${saved.plain}"`}; it must refuse with "${c.why}"`);
+      check(sameList(saved.first, plain) && sameList(saved.later, plain), `${c.name}: the order is not the plain one, worst record first`);
+      check(tally.keys.length === 0 && tally.draws === 0, `${c.name}: ${tally.keys.length} stream(s) opened and ${tally.draws} number(s) drawn for an order nobody may draw`);
+      check(O.isSavedDraftOrder(JSON.parse(JSON.stringify(saved)), plain), `${c.name}: the plain order does not read back as valid`);
+    }
+    check(sameList([...NBA.lottery.needs].sort(), [...NEEDS_TYPED].sort()), `the NBA lottery needs ${NBA.lottery.needs.join(', ')}; a night's result rests on ${NEEDS_TYPED.join(', ')}`);
+    /* and the same season with nothing wrong IS drawn, so the cases above are refusals and not a league that never draws */
+    check(O.buildDraftOrder(season, NBA, NBA_PICKS).lottery !== null, 'the season the refusals are built on draws no lottery even when nothing is wrong');
+    console.log(`   fail closed: ${refused} of ${cases.length} orders refused the lottery for the reason expected (a fact read once for each of the ${NEEDS_TYPED.length} needs, a missing fact, another table, no table, another field size, a short table, no lottery), each the plain order with nothing drawn`);
+  }
 }
 
 /* A league's pick ledger after a summer of random trades, some of them his. */

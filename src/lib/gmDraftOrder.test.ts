@@ -186,6 +186,38 @@ describe('a league that orders by class and keeps its later rounds off the lotte
     expect(order.lottery!.field.map(f => f.pct)).toEqual([40, 30, 20, 10]);
   });
 
+  it('flips clubs that are still level in a later round, in their own seats, and moves nobody else', () => {
+    const FLIP: GmDraftOrderRules = { ...CLASS, id: 'toy-flip', level: { odds: 'keep', later: 'reverse-of-first' } };
+    const level: DraftSeason = {
+      sport: 'toy', draftYear: 2030,
+      rows: [
+        { id: 'A', wins: 1, losses: 9, made: false }, { id: 'B', wins: 2, losses: 8, made: false },
+        { id: 'C', wins: 2, losses: 8, made: false }, { id: 'D', wins: 4, losses: 6, made: false },
+        { id: 'W', wins: 5, losses: 5, made: true, cls: 3 }, { id: 'X', wins: 9, losses: 1, made: true, cls: 1 },
+        { id: 'Y', wins: 9, losses: 1, made: true, cls: 1 }, { id: 'Z', wins: 7, losses: 3, made: true, cls: 2 },
+      ],
+    };
+    const clubs = level.rows.map(r => r.id);
+    let reorderedByLottery = 0;
+    for (let k = 0; k < 80; k += 1) {
+      /* One key for both rule sets, so they share every drawing and differ only in the later round. */
+      const order = buildDraftOrder(level, FLIP, PICKS, `flip-${k}`);
+      const asFirst = buildDraftOrder(level, CLASS, PICKS, `flip-${k}`);
+      expect(order.first).toEqual(asFirst.first);
+      expect([order.later[0], order.later[3], order.later[6], order.later[7]]).toEqual(['A', 'D', 'Z', 'W']);
+      /* The pair that missed: the reverse of round one as it stands AFTER the lottery. */
+      const bAhead = order.first.indexOf('B') < order.first.indexOf('C');
+      expect(order.later.slice(1, 3)).toEqual(bAhead ? ['C', 'B'] : ['B', 'C']);
+      if ((asFirst.later.indexOf('B') < asFirst.later.indexOf('C')) !== bAhead) reorderedByLottery += 1;
+      /* The playoff pair, level inside one class: the reverse of round one. */
+      const xAhead = order.first.indexOf('X') < order.first.indexOf('Y');
+      expect(order.later.slice(4, 6)).toEqual(xAhead ? ['Y', 'X'] : ['X', 'Y']);
+      expect(isSavedDraftOrder(order, clubs)).toBe(true);
+    }
+    /* Some nights the lottery put the lower seed of the pair ahead, so "after the lottery" is really tested. */
+    expect(reorderedByLottery).toBeGreaterThan(0);
+  });
+
   it("uses the league's tiebreak values before any drawing", () => {
     const level: DraftClubRow[] = [
       { id: 'A', wins: 5, losses: 5, made: false, tie: [0.6] }, { id: 'B', wins: 5, losses: 5, made: false, tie: [0.4] },
