@@ -1,0 +1,4 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+R848 decided control: 1 rows red, exactly the 1 target rows, 73 green
+simDailySaveHardening: control decided fired as designed
