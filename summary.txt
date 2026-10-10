@@ -1,0 +1,11 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk-oldline exit=1 12s | playUsRivalLines: 6 checks, 2 failed (control oldline)
+playNbaNumbers exit=0 63s | playNbaNumbers: 85 checks, 0 failed
+walk-rivalflip exit=1 132s | playUsRivalLines: 115 checks, 10 failed (control rivalflip)
+playUsSeasonCentre exit=0 151s | playUsSeasonCentre: 144 checks, 0 failed
+playNflTruth exit=0 103s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+playSeasonReveal exit=0 20s | ALL SEASON REVEAL WALK CHECKS PASSED
+playCareerPress exit=0 16s | ALL CAREER PRESS WALK CHECKS PASSED
+sweepWeight exit=1 33s | sweepWeight: 1 failure
+playGames-nfl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+walk exit=0 553s | playUsRivalLines: 361 checks, 0 failed
