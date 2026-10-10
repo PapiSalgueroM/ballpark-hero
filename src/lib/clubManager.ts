@@ -47,7 +47,7 @@ import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 /* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
 import { keyedRng } from '@/lib/keyedRng';
 /* Round 1229: the one scorer weight table. It imports a type and nothing else, so there is no cycle. */
-import { goalWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
+import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWeight';
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
 import {
   bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
@@ -335,7 +335,11 @@ function creditRaceGoals(state: CareerState, club: string, goals: number): void 
 
 /** A rival's penalties and direct free kicks go to the taker of its eleven (takerOf), the man the engine
  *  already names when a review awards the opposition a penalty against me. My own squad's rule is the
- *  same idea with an assigned taker (markSetPieceGoals). False deals them by the weight like any goal. */
+ *  same idea with an assigned taker (markSetPieceGoals). False deals them by the weight like any goal.
+ *  This is the rule of a rival's matches against OTHER clubs, the ones the book deals. In its match
+ *  against me the book deals no scorer at all: it credits the report's own lines (noteBookMine), and the
+ *  report flags a penalty or a free kick on whichever man the weight had already picked
+ *  (markOppSetPieceGoals), so there the taker rule does not apply. */
 export const CM_BOOK_TAKER = true;
 
 /**
@@ -13589,7 +13593,9 @@ function creditMyScorers(
     if (Math.random() < ASSIST_SHARE && !line.penalty && !line.freeKick) {
       const there = onPitchAt ? onPitchAt(line.minute) : xi;
       const others = (there.length ? there : xi).filter(p => p.id !== line.id && p.position !== 'GK');
-      const assister = weightedPick(others, p => (scorerWeight(p) * 0.6 + 0.5) * dutyAssistMult(dutyAt?.(line.minute, p)));
+      /* Round 1229 fix: the assist weight is the shared one the league book pays rivals by (the same
+         arithmetic in the same order as the expression that was typed here, so the same double). */
+      const assister = weightedPick(others, p => assistWeight(p.position, p.rating) * dutyAssistMult(dutyAt?.(line.minute, p)));
       if (assister && !own) {
         assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
         const aq = state.squad.find(p => p.id === assister.id);
