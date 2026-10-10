@@ -1,0 +1,10 @@
+unregistered on championship exit=1 CONTROL unregistered FIRED as expected on championship: sections HJ went red for championship and nothing else
+unlisted on laliga exit=1 CONTROL unlisted FIRED as expected on laliga: sections H went red for laliga and nothing else
+wrongasof on seriea exit=1 CONTROL wrongasof FIRED as expected on seriea: sections HJ went red for seriea and nothing else
+wrongasof on primeira exit=1 CONTROL wrongasof FIRED as expected on primeira: sections HJ went red for primeira and nothing else
+helpdrift on bundesliga exit=1 CONTROL helpdrift FIRED as expected on bundesliga: sections J went red for bundesliga and nothing else
+helplink on superlig exit=1 CONTROL helplink FIRED as expected on superlig: sections J went red for help and nothing else
+newsdrift on ligue2 exit=1 CONTROL newsdrift FIRED as expected on ligue2: sections J went red for ligue2 and nothing else
+unfrozen on bundesliga2 exit=1 CONTROL unfrozen FIRED as expected on bundesliga2: sections HI went red for bundesliga2 and nothing else
+falseasof on eredivisie exit=1 CONTROL falseasof FIRED as expected on eredivisie: sections EH went red for eredivisie and nothing else
+unregistered on premier exit=1 CONTROL unregistered FIRED as expected on premier: sections HJ went red for premier and nothing else
