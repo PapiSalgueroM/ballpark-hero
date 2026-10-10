@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmVar: node scripts/simCmVar.mjs
+ledger: node scripts/simCmVarLedger.mjs
+livescores: node scripts/simLiveScores.mjs
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+academy: node scripts/simAcademy.mjs
+aleague: node scripts/simClubManagerALeague.mjs
+budget: node scripts/simClubManagerBudget.mjs
+meters: node scripts/simClubManagerMeters.mjs
+score: node scripts/simClubManagerScore.mjs
+eras: node scripts/simEras.mjs
+press: node scripts/simPress.mjs
+roles: node scripts/simRoles.mjs
+wilderness: node scripts/simWilderness.mjs
+matchcentre: node scripts/simCmMatchCentre.mjs
+stoppage: node scripts/simCmStoppageTime.mjs
+extratime: node scripts/simExtraTime.mjs
+motion: node scripts/simLiveSimMotion.mjs
+matchscreen: node scripts/simMatchScreen.mjs
+reveal: node scripts/simRevealMoments.mjs
+numbers: node scripts/simNumberFormatting.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+vitests: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
