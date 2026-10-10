@@ -1,0 +1,9 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+play-nba exit=0 54s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-nfl exit=0 54s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-mlb exit=0 54s | Played 1 games. 0 findings, 0 the harness could not drive.
+draftnight exit=1 0s | simDraftNight: 2 FAILURES
+storage exit=0 1s | simStorageWrites: all green
+uscareerweight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+play-nhl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+revealscroll exit=0 217s | Green. 56 presses measured, nothing dragged the page down on content that was already readable, no panel lost its top, and 4 presses proved the feature still does its job
