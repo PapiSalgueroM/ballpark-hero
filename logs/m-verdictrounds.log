@@ -1,0 +1,14 @@
+MUTATION ON: verdictrounds in src/lib/gmDeskHost.ts
+ src/lib/gmDeskHost.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness, first failures
+  FAIL [6]: nhl seed 1 season 1 CBJ (met): the award is not gmSeasonXp of the season's facts
+  FAIL [6]: nhl seed 1 season 1 COL (badly): the award is not gmSeasonXp of the season's facts
+  FAIL [6]: nhl seed 1 season 1 DAL (badly): the award is not gmSeasonXp of the season's facts
+  FAIL [6]: nhl seed 1 season 1 NJD (overachieved): the award is not gmSeasonXp of the season's facts
+  FAIL [6]: nhl seed 1 season 1 STL (overachieved): the award is not gmSeasonXp of the season's facts
+simGmDeskHost: FAILED, red checks 6:270
+--- vitest
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m52 passed[39m[22m[90m (52)[39m
+MUT verdictrounds: harness exit=1 vitest exit=0 restored=yes

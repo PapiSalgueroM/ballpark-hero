@@ -1,0 +1,47 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 193[2mms[22m[39m
+   [32m✓[39m the three boxes[2m > [22mare one module level list, and the Job market box shows only between seats[32m 10[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws one tile an offer and takes a job on the second tap only[32m 59[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mstays out a year on the second tap only, and says when that opens the desk[32m 5[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules[32m 6[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws something sane while he holds a seat[32m 2[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mdraws a box a stint with a mark a graded season[32m 5[2mms[22m[39m
+[31m   [31m×[31m the career panel[2m > [22mleaves the tier off a record older than the block and counts the seasons it cannot grade[39m[32m 23[2mms[22m[39m
+[31m     → expected 'Club T31Took over in 2022, bottom tie…' to contain 'In the chair since 2022'[39m
+   [32m✓[39m the GM level panel[2m > [22msells a point only in a tree this desk routes[32m 33[2mms[22m[39m
+   [32m✓[39m the GM level panel[2m > [22msays XP has not started on a save whose desk is off[32m 8[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mshows a fixed height box first, then the panel, and keeps the panel across a save[32m 20[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mcontrol: built inside a render, the open panel is remounted by a save and loses what it held[32m 12[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mdraws its fallback under a server render and never throws[32m 6[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mevery loader resolves to a component[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/gmDeskHost.test.ts [2m([22m[2m39 tests[22m[2m)[22m[33m 592[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 517[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmCareerDesk.test.tsx[2m > [22mthe career panel[2m > [22mleaves the tier off a record older than the block and counts the seasons it cannot grade
+[31m[1mAssertionError[22m: expected 'Club T31Took over in 2022, bottom tie…' to contain 'In the chair since 2022'[39m
+
+Expected: [32m"In the chair since 2022"[39m
+Received: [31m"Club T31Took over in 2022, bottom tier🏆 🏆Plus 7 earlier seasons, not gradedLet go"[39m
+
+[36m [2m❯[22m src/components/front-office-shared/GmCareerDesk.test.tsx:[2m169:29[22m[39m
+    [90m167| [39m    const { container } = render(<GmCareerPanel {...panelProps(binding…
+    [90m168| [39m    [35mconst[39m box [33m=[39m container[33m.[39m[34mquerySelector[39m([32m'[data-gm-stint]'[39m)[33m![39m[33m;[39m
+    [90m169| [39m    [34mexpect[39m(box[33m.[39mtextContent)[33m.[39m[34mtoContain[39m([32m'In the chair since 2022'[39m)[33m;[39m
+    [90m   | [39m                            [31m^[39m
+    [90m170| [39m    [34mexpect[39m(box[33m.[39mtextContent)[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'tier'[39m)[33m;[39m
+    [90m171| [39m    expect(container.querySelector('[data-gm-earlier]')!.textContent).…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m51 passed[39m[22m[90m (52)[39m
+[2m   Start at [22m 14:27:23
+[2m   Duration [22m 1.65s[2m (transform 289ms, setup 119ms, collect 637ms, tests 785ms, environment 645ms, prepare 151ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmCareerDesk.test.tsx,title=src/components/front-office-shared/GmCareerDesk.test.tsx > the career panel > leaves the tier off a record older than the block and counts the seasons it cannot grade,line=169,column=29::AssertionError: expected 'Club T31Took over in 2022, bottom tie…' to contain 'In the chair since 2022'%0A%0AExpected: "In the chair since 2022"%0AReceived: "Club T31Took over in 2022, bottom tier🏆 🏆Plus 7 earlier seasons, not gradedLet go"%0A%0A ❯ src/components/front-office-shared/GmCareerDesk.test.tsx:169:29%0A%0A

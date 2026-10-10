@@ -1,0 +1,12 @@
+MUTATION ON: nhlgames in src/lib/gmDeskHostNhl.ts
+ src/lib/gmDeskHostNhl.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+--- harness, first failures
+  FAIL [9]: nhl seed 1: the league played 2256 club games while he was away, a whole season is 2231
+  FAIL [9]: nhl seed 2: the league played 2241 club games while he was away, a whole season is 2237
+  FAIL [9]: nhl seed 3: the league played 2244 club games while he was away, a whole season is 2228
+simGmDeskHost: FAILED, red checks 9:3
+--- vitest
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m52 passed[39m[22m[90m (52)[39m
+MUT nhlgames: harness exit=1 vitest exit=0 restored=yes

@@ -1,0 +1,7 @@
+#!serial
+m-nhlgames: bash .rc/x/runmut2.sh nhlgames
+m-tierunknown: bash .rc/x/runmut2.sh tierunknown
+m-awayxp: bash .rc/x/runmut2.sh awayxp
+m-verdictrounds: bash .rc/x/runmut2.sh verdictrounds
+m-rankplace: bash .rc/x/runmut2.sh rankplace
+m-closegames: bash .rc/x/runmut2.sh closegames

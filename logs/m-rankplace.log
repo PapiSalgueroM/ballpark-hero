@@ -1,0 +1,9 @@
+MUTATION ON: rankplace in src/lib/gmDeskHost.ts
+ src/lib/gmDeskHost.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness, first failures
+simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+--- vitest
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m52 passed[39m[22m[90m (52)[39m
+MUT rankplace: harness exit=0 vitest exit=0 restored=yes
