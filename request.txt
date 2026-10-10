@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: my own probe of the page seed helper on the served build, then the walk
+# started from two PLAIN stored saves the probe took (mid half after Pause, and at the interval if it got there).
+probe: node .rc/x/rprobe.mjs
+from-mid: if [ -f "$RC_OUT/plain-mid.json" ]; then LIVE_FIT_SAVE="$RC_OUT/plain-mid.json" LIVE_FIT_SHOTS="$RC_OUT/from-mid" node scripts/playLiveMatchFit.mjs; else echo "no plain-mid.json"; exit 9; fi
+from-interval: if [ -f "$RC_OUT/plain-interval.json" ]; then LIVE_FIT_SAVE="$RC_OUT/plain-interval.json" LIVE_FIT_SHOTS="$RC_OUT/from-interval" node scripts/playLiveMatchFit.mjs; else echo "no plain-interval.json (the probe did not stop at the interval)"; exit 9; fi
+probe-7: mkdir -p "$RC_OUT/p7" && PROBE_SEED=7 RC_OUT="$RC_OUT/p7" node .rc/x/rprobe.mjs
+trim: rm -f "$RC_OUT"/from-*/fit-*.png "$RC_OUT"/from-*/panel-*.png "$RC_OUT"/p7/plain-*.json; ls -R "$RC_OUT" | head -40

@@ -1,0 +1,14 @@
+ok    P1 an empty document starts at 0 draws and counts 6 after 6 (0, 6), seed 3208792607
+ok    P1 the page's first six numbers are the node harness stream's for seed 3208792607: 0.569657509913668, 0.555277720792219 against 0.569657509913668, 0.555277720792219
+[screen 390-motion] {"name":"390-motion","settled":7,"idleLanding":[7,7,7,7,7,7,7,7],"inJob":736,"idleClubPage":[736,736,736,736,736,736,736,736],"kickOff":1869,"digest":"421656fa","match":"Crystal Palace v Brighton","width":390,"reduced":false,"paused":true,"idlePaused":["1869@1'","1869@1'","1869@1'","1869@1'"],"running2x":["1869@1'","1869@3'","1869@6'","1869@9'","1869@13'","1869@16'","1869@19'","1869@22'"],"plainMid":{"bytes":72411,"storedMinute":0,"clock":25},"running4x":["1869@25'","1869@29'","1869@33'","1869@38'","1869@45'","1869@0'","1869@0'","1869@0'","1869@0'","1869@0'"],"stageAfter":"interval","plainInterval":{"bytes":72412,"storedMinute":45,"h2Drawn":false},"reload":{"before":1869,"after":4,"seed":3208792607},"errors":[]}
+[screen 390-reduced] {"name":"390-reduced","settled":7,"inJob":736,"kickOff":1869,"digest":"421656fa","match":"Crystal Palace v Brighton","width":390,"reduced":true,"errors":[]}
+[screen 1280-motion] {"name":"1280-motion","settled":7,"inJob":736,"kickOff":1869,"digest":"421656fa","match":"Crystal Palace v Brighton","width":1280,"reduced":false,"errors":[]}
+[screen 1280-reduced] {"name":"1280-reduced","settled":7,"inJob":736,"kickOff":1869,"digest":"421656fa","match":"Crystal Palace v Brighton","width":1280,"reduced":true,"errors":[]}
+ok    P2 the landing page untouched for 40 seconds: draws [7,7,7,7,7,7,7,7]
+ok    P2 the club page (job taken) untouched for 40 seconds: draws [736,736,736,736,736,736,736,736]
+ok    P2 the match held for 20 seconds: draws ["1869@1'","1869@1'","1869@1'","1869@1'"]
+ok    P2 the match running at 2x for 24 seconds: draws ["1869@1'","1869@3'","1869@6'","1869@9'","1869@13'","1869@16'","1869@19'","1869@22'"]
+ok    P2 the match running at 4x for 30 seconds (stage after: interval): draws ["1869@25'","1869@29'","1869@33'","1869@38'","1869@45'","1869@0'","1869@0'","1869@0'","1869@0'","1869@0'"]
+ok    P4 a reload starts the stream again: {"before":1869,"after":4,"seed":3208792607}
+ok    P3 one seed at four screens: digests 390-motion 421656fa (1869 draws, Crystal Palace v Brighton); 390-reduced 421656fa (1869 draws, Crystal Palace v Brighton); 1280-motion 421656fa (1869 draws, Crystal Palace v Brighton); 1280-reduced 421656fa (1869 draws, Crystal Palace v Brighton)
+probe done: 0 lines marked ODD (a reading, not a verdict: the reviewer judges each)

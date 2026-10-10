@@ -1,0 +1,138 @@
+{
+ "seed": 3208792607,
+ "base": "http://localhost:4173",
+ "p1": {
+  "inPage": {
+   "before": 0,
+   "six": [
+    0.569657509913668,
+    0.555277720792219,
+    0.2921914109028876,
+    0.03345588571392,
+    0.04357652575708926,
+    0.7118490983266383
+   ],
+   "after": 6,
+   "seed": 3208792607
+  },
+  "inNode": [
+   0.569657509913668,
+   0.555277720792219,
+   0.2921914109028876,
+   0.03345588571392,
+   0.04357652575708926,
+   0.7118490983266383
+  ]
+ },
+ "screens": [
+  {
+   "name": "390-motion",
+   "settled": 7,
+   "idleLanding": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+   ],
+   "inJob": 736,
+   "idleClubPage": [
+    736,
+    736,
+    736,
+    736,
+    736,
+    736,
+    736,
+    736
+   ],
+   "kickOff": 1869,
+   "digest": "421656fa",
+   "match": "Crystal Palace v Brighton",
+   "width": 390,
+   "reduced": false,
+   "paused": true,
+   "idlePaused": [
+    "1869@1'",
+    "1869@1'",
+    "1869@1'",
+    "1869@1'"
+   ],
+   "running2x": [
+    "1869@1'",
+    "1869@3'",
+    "1869@6'",
+    "1869@9'",
+    "1869@13'",
+    "1869@16'",
+    "1869@19'",
+    "1869@22'"
+   ],
+   "plainMid": {
+    "bytes": 72411,
+    "storedMinute": 0,
+    "clock": 25
+   },
+   "running4x": [
+    "1869@25'",
+    "1869@29'",
+    "1869@33'",
+    "1869@38'",
+    "1869@45'",
+    "1869@0'",
+    "1869@0'",
+    "1869@0'",
+    "1869@0'",
+    "1869@0'"
+   ],
+   "stageAfter": "interval",
+   "plainInterval": {
+    "bytes": 72412,
+    "storedMinute": 45,
+    "h2Drawn": false
+   },
+   "reload": {
+    "before": 1869,
+    "after": 4,
+    "seed": 3208792607
+   },
+   "errors": []
+  },
+  {
+   "name": "390-reduced",
+   "settled": 7,
+   "inJob": 736,
+   "kickOff": 1869,
+   "digest": "421656fa",
+   "match": "Crystal Palace v Brighton",
+   "width": 390,
+   "reduced": true,
+   "errors": []
+  },
+  {
+   "name": "1280-motion",
+   "settled": 7,
+   "inJob": 736,
+   "kickOff": 1869,
+   "digest": "421656fa",
+   "match": "Crystal Palace v Brighton",
+   "width": 1280,
+   "reduced": false,
+   "errors": []
+  },
+  {
+   "name": "1280-reduced",
+   "settled": 7,
+   "inJob": 736,
+   "kickOff": 1869,
+   "digest": "421656fa",
+   "match": "Crystal Palace v Brighton",
+   "width": 1280,
+   "reduced": true,
+   "errors": []
+  }
+ ]
+}

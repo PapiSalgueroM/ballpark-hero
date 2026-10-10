@@ -1,0 +1,138 @@
+{
+ "seed": 7,
+ "base": "http://localhost:4173",
+ "p1": {
+  "inPage": {
+   "before": 0,
+   "six": [
+    0.011704753153026104,
+    0.06195825757458806,
+    0.97690763277933,
+    0.6990287057124078,
+    0.5214452685322613,
+    0.4055216880515218
+   ],
+   "after": 6,
+   "seed": 7
+  },
+  "inNode": [
+   0.011704753153026104,
+   0.06195825757458806,
+   0.97690763277933,
+   0.6990287057124078,
+   0.5214452685322613,
+   0.4055216880515218
+  ]
+ },
+ "screens": [
+  {
+   "name": "390-motion",
+   "settled": 7,
+   "idleLanding": [
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7
+   ],
+   "inJob": 737,
+   "idleClubPage": [
+    737,
+    737,
+    737,
+    737,
+    737,
+    737,
+    737,
+    737
+   ],
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "width": 390,
+   "reduced": false,
+   "paused": true,
+   "idlePaused": [
+    "1823@1'",
+    "1823@1'",
+    "1823@1'",
+    "1823@1'"
+   ],
+   "running2x": [
+    "1823@1'",
+    "1823@3'",
+    "1823@6'",
+    "1823@9'",
+    "1823@12'",
+    "1823@16'",
+    "1823@18'",
+    "1823@20'"
+   ],
+   "plainMid": {
+    "bytes": 71609,
+    "storedMinute": 0,
+    "clock": 23
+   },
+   "running4x": [
+    "1823@23'",
+    "1823@29'",
+    "1823@35'",
+    "1823@41'",
+    "1823@45'",
+    "1823@0'",
+    "1823@0'",
+    "1823@0'",
+    "1823@0'",
+    "1823@0'"
+   ],
+   "stageAfter": "interval",
+   "plainInterval": {
+    "bytes": 71610,
+    "storedMinute": 45,
+    "h2Drawn": false
+   },
+   "reload": {
+    "before": 1823,
+    "after": 4,
+    "seed": 7
+   },
+   "errors": []
+  },
+  {
+   "name": "390-reduced",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "width": 390,
+   "reduced": true,
+   "errors": []
+  },
+  {
+   "name": "1280-motion",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "width": 1280,
+   "reduced": false,
+   "errors": []
+  },
+  {
+   "name": "1280-reduced",
+   "settled": 7,
+   "inJob": 737,
+   "kickOff": 1823,
+   "digest": "8ef206aa",
+   "match": "Crystal Palace v Fulham",
+   "width": 1280,
+   "reduced": true,
+   "errors": []
+  }
+ ]
+}

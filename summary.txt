@@ -1,0 +1,6 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+probe exit=0 177s | probe done: 0 lines marked ODD (a reading, not a verdict: the reviewer judges each)
+from-mid exit=0 115s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+from-interval exit=1 87s | playLiveMatchFit: 1 failure.
+probe-7 exit=0 176s | probe done: 0 lines marked ODD (a reading, not a verdict: the reviewer judges each)
+trim exit=0 0s | probe.json
