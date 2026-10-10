@@ -93,6 +93,14 @@ describe('swissSlate', () => {
     }
   });
 
+  it('counts a field of one association as every match a break and nobody over the cap', () => {
+    const spec = { pots: POTS, assoc: new Array(36).fill(7) };
+    expect(slateFloor(spec)).toEqual({ breaks: 144, overCap: 0 });
+    const slate = swissSlate(spec, mulberry32(2));
+    expect(slate && faults(spec, slate.matches)).toEqual([]);
+    expect(slate).toMatchObject({ breaks: 144, overCap: 0, fallback: false });
+  });
+
   it('reports what its matches really cost', () => {
     const spec = field(['EEEEE....', 'SSSS.....', 'SS.......', '.........']);
     const slate = swissSlate(spec, mulberry32(11));

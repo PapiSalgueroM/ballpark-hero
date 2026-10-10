@@ -305,9 +305,17 @@ function floorOf(assoc) {
   let most = [0, 0]; // [most of one association in a pot, the size of that association]
   for (let a = 0; a < 4; a += 1) for (const [x, n] of Object.entries(k[a])) {
     const inside = Math.max(0, 2 * n - 9);
-    breaks += inside;
-    for (let b = 0; b < 4; b += 1) if (b !== a) breaks += Math.max(0, n + (k[b][x] ?? 0) - 9);
-    overCap += Math.max(0, 2 * total[x] - 2 * inside - 2 * (9 - n));
+    /* Matches the ban cannot avoid between this pot's clubs of the association and another pot's: one in
+       each direction for every club the two pots hold past nine between them. */
+    let cross = 0;
+    for (let b = 0; b < 4; b += 1) if (b !== a) cross += Math.max(0, n + (k[b][x] ?? 0) - 9);
+    breaks += inside + cross;
+    /* The association pays 2K visits to this pot. A forced match inside it takes two of them off the pot's
+       other clubs, a forced match with another pot takes one each way. What is left lands on the others,
+       who have room for two each. Found wrong on 2026-10-10 by the swollen fields below: the first writing
+       forgot the matches forced across pots and put a field of one association 216 over a cap nobody can
+       break there. */
+    overCap += Math.max(0, 2 * total[x] - 2 * inside - 2 * cross - 2 * (9 - n));
     if (n > most[0] || (n === most[0] && total[x] > most[1])) most = [n, total[x]];
   }
   return { breaks, overCap, most, largest: Math.max(...Object.values(total)) };
@@ -409,6 +417,28 @@ async function section1() {
   console.log('  1 by (clubs of the association with most in one pot, most in one pot): fields | at the floor | fell back | mean tries | floors seen (breaks ; over the cap)');
   for (const key of Object.keys(table).sort()) { const r = table[key]; console.log(`    ${key.padEnd(24)} ${String(r.n).padStart(5)} | ${String(r.exact).padStart(5)} | ${String(r.fallback).padStart(3)} | ${(r.tries / r.n).toFixed(2)} | ${[...r.floorB].sort().join(',')} ; ${[...r.floorC].sort().join(',')}`); }
   ok(total >= 2000, `[COUNT] only ${total} draws were played`);
+  /* Fields the game as shipped cannot make and a world editor can: one association swollen to 8, 10, 12, 18
+     and all 36 clubs. The builder must still answer, with a legal slate and honest counts. Printed, and held
+     only by the rules every slate is held by (never null, never under the floor, never over its budget). */
+  const swollen = [];
+  for (const big of [8, 10, 12, 18, 36]) {
+    let exact = 0;
+    let fell = 0;
+    for (let t = 0; t < 8; t += 1) {
+      const rnd = mulberry(4000 + big * 10 + t);
+      const seats = Array.from({ length: 36 }, (_, c) => c);
+      for (let i = 35; i > 0; i -= 1) { const j = Math.floor(rnd() * (i + 1)); [seats[i], seats[j]] = [seats[j], seats[i]]; }
+      const assoc = new Array(36).fill(0).map((_, c) => (seats.indexOf(c) < big ? 0 : 100 + c));
+      const slate = lib.swissSlate({ pots: POTS, assoc }, mulberry(4500 + big * 10 + t));
+      checks += 1;
+      for (const f of slateFaults(assoc, slate)) fails.push(`${f} (one association of ${big} clubs, field ${t})`);
+      if (!slate) continue;
+      const floor = floorOf(assoc);
+      if (slate.fallback) fell += 1; else if (slate.breaks === floor.breaks && slate.overCap === floor.overCap) exact += 1;
+    }
+    swollen.push(`${big} clubs: ${exact} of 8 at the floor, ${fell} on the pattern`);
+  }
+  console.log(`  1 one association swollen past anything the game ships: ${swollen.join(' | ')}`);
   /* The recorded pattern is itself a legal slate, and a search given no tries seats it and says so. */
   const pattern = lib.PATTERN_4X9.map(code => [Math.floor(code / 36) % 36, code % 36, Math.floor(code / 1296)]);
   const distinct = Array.from({ length: 36 }, (_, i) => i);

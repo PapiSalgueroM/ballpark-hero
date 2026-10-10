@@ -83,7 +83,9 @@ export function slateFloor(spec: SlateSpec): { breaks: number; overCap: number }
       let across = 0;
       for (let b = 0; b < inPot.length; b += 1) if (b !== a) across += Math.max(0, k + (inPot[b].get(x) ?? 0) - sh.s);
       breaks += inside + across; // each ordered pair of pots is one matching, so both directions are counted
-      overCap += Math.max(0, 2 * (total.get(x) ?? 0) - 2 * inside - cap * (sh.s - k));
+      /* A forced match inside the pot takes two of the association's 2K visits to this pot off the other
+         clubs, a forced match with another pot takes one, and there is one of those in each direction. */
+      overCap += Math.max(0, 2 * (total.get(x) ?? 0) - 2 * inside - 2 * across - cap * (sh.s - k));
     }
   });
   return { breaks, overCap };

@@ -86,6 +86,15 @@ and five in an association drew inside both rules (445 of 445, 449 of 449, 453 o
 with four in one pot has a floor of two over the cap and was always drawn at exactly two (the critic's count in
 correction 5). A draw takes about 3 ms on the owner's PC, the slowest seen 52 ms, 1.0 to 1.6 tries on average.
 
+Fields the game as shipped cannot make and a world editor can (one association swollen to 8, 10, 12, 18 and all
+36 clubs, eight fields each): never null, always a legal slate with honest counts. 8 clubs: 8 of 8 at the
+floor. 10 clubs: 6 of 8 at the floor, the other two inside the budget. 12 clubs: 7 of 8. 18 clubs: none at the
+floor and 5 of 8 on the recorded pattern, which is the bounded last resort doing its job. 36 clubs: 8 of 8
+(every match is a break and the builder says so). These fields found a fault in the first writing of the
+counting floor (it forgot the matches forced ACROSS pots and put a one association field 216 over a cap
+nobody can break there); the floor in the library and its second writing in the harness were both corrected
+before the round closed, and the 3,000 ordinary fields did not move.
+
 Section 4, THE FINDING THE LEAD MUST RULE ON BEFORE ROUND B. The real season one field at 36, by the engine's own
 rule read at that size, is England 5, Spain 5, Italy 5, Germany 5, France 4, Netherlands 2, Portugal 2 and nine
 single clubs; it adds Real Betis, Liverpool, AC Milan and Lyon to today's 32 (Hoffenheim is already the 32nd).
