@@ -1,0 +1,48 @@
+simNflTruth: seed 1, 300 careers a position and seed (2000 for the award bands of 1b)
+1) seasons are as long as they really were
+   throwback through 2020: 36358 seasons, 0 over 16 games; 22777 healthy starter seasons, 0 not exactly 16
+   throwback from 2021: 1078 healthy starter seasons (0 careers built from 2019 to reach them), 0 not exactly 17
+   2026 careers: 6240 healthy starter seasons, 0 not exactly 17
+1b) a 16 game schedule does not cost a throwback career its awards (five seeds of 2000 careers, by position; 17 game arm -> now)
+   QB   All-Pros a career 0.079 -> 0.080 (1.4 percent); MVP or DPOY 0.019 -> 0.019; Hall percent 27.0 -> 23.8 (0.884 of it)
+   RB   All-Pros a career 0.091 -> 0.090 (-0.4 percent); MVP or DPOY 0.008 -> 0.008; Hall percent 2.2 -> 1.9 (0.860 of it)
+   WR   All-Pros a career 0.140 -> 0.140 (0.4 percent); MVP or DPOY 0.001 -> 0.001; Hall percent 7.0 -> 6.5 (0.933 of it)
+   TE   All-Pros a career 0.080 -> 0.082 (2.6 percent); MVP or DPOY 0.000 -> 0.000; Hall percent 5.7 -> 5.5 (0.960 of it)
+   LB   All-Pros a career 0.084 -> 0.082 (-2.1 percent); MVP or DPOY 0.014 -> 0.015; Hall percent 6.3 -> 5.6 (0.893 of it)
+   CB   All-Pros a career 0.090 -> 0.091 (0.8 percent); MVP or DPOY 0.005 -> 0.005; Hall percent 4.7 -> 4.2 (0.894 of it)
+   EDGE All-Pros a career 0.209 -> 0.206 (-1.1 percent); MVP or DPOY 0.060 -> 0.057; Hall percent 12.2 -> 11.6 (0.952 of it)
+   K    All-Pros a career 0.241 -> 0.238 (-1.3 percent); MVP or DPOY 0.000 -> 0.000; Hall percent 4.8 -> 4.7 (0.987 of it)
+2) rookie pay is the draft slot, and no kicker goes before round four
+   table now (2026): 32 first round rows, 32 two sourced within 2 percent; later round ends two sourced within 2 percent: 33, 64, 65, 140, 257; THIN, no figure in the table: 100, 101, 141, 181, 182, 216, 217
+   table y2005: HELD as a whole, paid the now slot times 0.32
+   held values in the tables: 8
+   now: pick 1 14.3M a year, pick 32 4.2M, pick 33 3.3M, pick 97 1.6M, pick 224 1.1M, undrafted 0.9M; 0 rises
+   y2005: pick 1 4.6M a year, pick 32 1.3M, pick 33 1.1M, pick 97 0.5M, pick 224 0.4M, undrafted 0.3M; 0 rises
+   thin ends: 192 slots of rounds two to seven read, 0 off the line between two sourced picks; what the 7 thin ends are paid over four years: 100 6358883 (-5.5 percent on the estimate); 101 6329137 (+10.9 percent on the estimate); 141 5163340 (+4.2 percent on the estimate); 181 4935499 (+4.5 percent on the estimate); 182 4929803 (+4.6 percent on the estimate); 216 4736137 (+3.2 percent on the estimate); 217 4730441 (+3.6 percent on the estimate)
+   now: 20000 quick starts, 0 not paid their slot; 2500 kickers, 0 before pick 97 (earliest 97); pick 1 is paid 14.3M a year (the old formula paid pick 1 32.8M)
+   y2005: 20000 quick starts, 0 not paid their slot; 2500 kickers, 0 before pick 97 (earliest 97); pick 1 is paid 4.6M a year (the old formula paid pick 1 10.5M)
+   now road to the draft: 4000 kicker prospects, 3032 drafted, 968 undrafted, 0 before pick 97, the busiest pick holds 72
+   y2005 road to the draft: 4000 kicker prospects, 3028 drafted, 972 undrafted, 0 before pick 97, the busiest pick holds 67
+3) sacks come in halves
+   19605 LB and EDGE season lines, 0 not in halves; the engine as found: 15574 of 19605 (79.4 percent)
+4) no receiver passes the record book
+   WR at 99: 3816 healthy seasons, 0 over the cap; the engine as found passed a record (1,964 yards or 149 catches) in 340 of 3816 (8.9 percent)
+   TE at 99: 3714 healthy seasons, 0 over the cap; the engine as found passed the record (1,416 yards) in 19 of 3714 (0.5 percent)
+5) MEASURED, asserted on nothing
+   for a later round (not fixed here): a 95 rated linebacker averages 183 tackles a full season; a 95 rated tight end 1017 yards
+   a 95 rated starter's mean full season today (Round 1104 did not ship the means by rating band): QB 5265 pass yards and 42.1 touchdowns; RB 1965 rush yards; EDGE 19.6 sacks; WR 1529 yards
+   for Round 1123, open market pay at 75/85/95 in now (M a year): QB 21/50.4/79.9, RB 9.9/23.9/37.8, WR 12.7/30.5/48.4, TE 10.5/25.2/39.9, LB 11.1/26.6/42.1, CB 13.3/31.9/50.5, EDGE 16/38.5/61, K 3.9/9.3/14.7
+   for Round 1123, open market pay at 75/85/95 in y2005 (M a year): QB 6.7/16.1/25.6, RB 3.2/7.6/12.1, WR 4.1/9.8/15.5, TE 3.4/8.1/12.8, LB 3.5/8.5/13.5, CB 4.2/10.2/16.1, EDGE 5.1/12.3/19.5, K 1.2/3/4.7
+   for Round 1112, the head to head share of decided years in the throwback, 17 game arm -> now (the rival keeps a 17 game line against a 16 game player): QB 41.2 -> 33.7, RB 25.6 -> 20.7, WR 32.6 -> 26.1, TE 21.0 -> 15.9, LB 0.3 -> 0.1, CB 0.0 -> 0.0, EDGE 0.6 -> 0.3, K 12.9 -> 6.8
+   for Round 1051's owner, the Hall percent by position in the throwback, 17 game arm -> now: QB 27.0 -> 23.8, RB 2.2 -> 1.9, WR 7.0 -> 6.5, TE 5.7 -> 5.5, LB 6.3 -> 5.6, CB 4.7 -> 4.2, EDGE 12.2 -> 11.6, K 4.8 -> 4.7
+   for Round 1123, the engine's open market pay for a 95 against the real 2026 top of the market, two sourced (M a year): QB 79.9 against 63 (1.27x), RB 37.8 against 22.5 (1.68x), WR 48.4 against 42.15 (1.15x), TE 39.9 against 19.1 (2.09x), LB 42.1 against 21 (2.00x), CB 50.5 against 33.75 (1.50x), EDGE 61 against 50 (1.22x), K 14.7 against 7 (2.10x)
+   (the MLB years whose longest line is shorter than 163: 2004 162 games on 160 lines, 2006 162 games on 160 lines, 2008 162 games on 160 lines, 2009 162 games on 160 lines, 2010 162 games on 160 lines, 2011 162 games on 160 lines, 2012 162 games on 160 lines, 2013 162 games on 160 lines, 2014 162 games on 160 lines, 2015 162 games on 160 lines, 2016 162 games on 160 lines, 2017 162 games on 160 lines, 2019 162 games on 160 lines, 2020 60 games on 158 lines, 2021 162 games on 143 lines, 2022 162 games on 92 lines, 2023 162 games on 38 lines, 2024 162 games on 16 lines)
+   for Round 1137, the MLB throwback (2004 throwback): 160 careers reach season years 2004 to 2024, and the engine plays a 163 game season in 3 of those 21 years (the rest are listed above, each on a handful of lines)
+      UNVERIFIED candidate seasons (from memory, for Round 1137 to check): 2020: 158 season lines, the engine played 60 games
+      UNVERIFIED candidate clubs in the era's list of 30 that may have moved or been renamed in those years: Tampa Bay Devil Rays (TBD), Cleveland Indians (CLV), Anaheim Angels (ANA), Oakland Athletics (OAK), Florida Marlins (FLA), Montreal Expos (MON)
+   (the NHL years whose longest line is shorter than 84: 2006 82 games on 160 lines, 2007 82 games on 160 lines, 2008 82 games on 160 lines, 2009 82 games on 160 lines, 2010 82 games on 160 lines, 2011 82 games on 160 lines, 2012 48 games on 160 lines, 2013 82 games on 160 lines, 2014 82 games on 160 lines, 2015 82 games on 160 lines, 2016 82 games on 160 lines, 2017 82 games on 160 lines, 2018 82 games on 160 lines, 2019 82 games on 160 lines, 2020 56 games on 160 lines, 2021 82 games on 160 lines, 2022 82 games on 160 lines, 2023 82 games on 159 lines, 2024 82 games on 158 lines, 2025 82 games on 149 lines)
+   for Round 1137, the NHL throwback (2006-07 throwback): 160 careers reach season years 2006 to 2027, and the engine plays a 84 game season in 2 of those 22 years (the rest are listed above, each on a handful of lines)
+      UNVERIFIED candidate seasons (from memory, for Round 1137 to check): 2012: 160 season lines, the engine played 48 games; 2019: 160 season lines, the engine played 82 games; 2020: 160 season lines, the engine played 56 games
+      UNVERIFIED candidate clubs in the era's list of 30 that may have moved or been renamed in those years: Atlanta Thrashers (ATL), Phoenix Coyotes (PHX)
+
+simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves, and no receiver passes the record book.
