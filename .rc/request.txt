@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
