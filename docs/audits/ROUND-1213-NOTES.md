@@ -128,6 +128,20 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   stamped address is known), so next summer it will show another season. The receipt records the day read, and
   the ledger's sources are outside the frozen digest so the link can be mended. Data file
   `src/data/clubManagerSuperLigFixtures2026.ts` 11,032 bytes; receipt 69,057 bytes.
+- **proleague: OUT of this round (held), one source is one row short.** Both sources were fetched and parsed.
+  Maxifoot (`https://www.maxifoot.fr/calendrier-belgique-2026-2027.htm`, 109,946 bytes, sha256
+  `54e47a7245e1...`): 306 rows, 34 matchdays of 9, 18 clubs that map onto the game's row, a whole double round
+  robin. Walfoot (`https://www.walfoot.be/belgique/jupiler-pro-league/calendrier`, a rolling address, 374,773
+  bytes, sha256 `bb7c961fcfed...`, parser `walfoot`): 305 league rows. Its matchday 30 has eight rows; the
+  ninth, **Club Brugge v Union Saint-Gilloise**, is not in its table at all (the page's prose mentions the game
+  and a provisional date, which is not a row). The tool's verdict, in full: `walfoot: matchday 30 holds 8
+  matches and 16 different clubs, wanted 9 and 18`; `1 ordered pair(s) of clubs never meet`; `the two sources
+  differ in 1 tuple: only in maxifoot: 30|Club Brugge|Union Saint-Gilloise`. So the other 305 tuples are equal
+  in both, and nothing was filled in. What a later round needs: a second WHOLE source (the league's own page
+  through a browser on a runner, or Walfoot once it shows the row). Things the parser had to learn about that
+  page, all stated in `walfoot.mjs`: matchday 13's links are written `journee-13-`; the Supercup is a row of
+  the same table with a `supercoupe` link and is passed over; two clubs have two slugs each (`la-louvire` for
+  La Louvière in match links, `waasland-beveren` for Beveren).
 
 ## Runner results
 

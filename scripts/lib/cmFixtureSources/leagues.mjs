@@ -173,6 +173,10 @@ export const CM_FIXTURE_LEAGUES = [
       },
     ],
   },
+  /* HELD, read 2026-10-10: Walfoot's table holds 305 of the 306 matches. Matchday 30 has eight rows there; the
+     ninth, Club Brugge at home to Union Saint-Gilloise, is named only in the page's prose. Maxifoot prints it,
+     and the other 305 rows of the two sources are equal. One source short of a whole list is not two sources:
+     the tool writes nothing and the row is never filled in from the other. The tables below are checked. */
   {
     leagueId: 'proleague', exportName: 'PROLEAGUE_FIXTURES_2026', file: 'clubManagerProLeagueFixtures2026', orderSource: 0,
     sources: [
@@ -182,7 +186,20 @@ export const CM_FIXTURE_LEAGUES = [
       },
       MAXIFOOT('belgique'),
     ],
-    names: [{}, {}],
+    names: [
+      {
+        'Cercle de Bruges': 'Cercle Brugge', 'FC Bruges': 'Club Brugge', 'KRC Genk': 'Genk', 'KV Courtrai': 'Kortrijk',
+        'KV Malines': 'Mechelen', 'La Gantoise': 'Gent', 'Lommel SK': 'Lommel', 'OH Louvain': 'OH Leuven',
+        'RAAL La Louvière': 'La Louvière', 'SK Beveren': 'Beveren', STVV: 'Sint-Truiden', Standard: 'Standard Liège',
+        'Union SG': 'Union Saint-Gilloise',
+      },
+      {
+        'Cercle Bruges': 'Cercle Brugge', 'Charleroi SC': 'Charleroi', 'FC Bruges': 'Club Brugge', 'FC Malines': 'Mechelen',
+        'KSV Beveren': 'Beveren', 'KV Courtrai': 'Kortrijk', 'La Gantoise': 'Gent', 'Lommel united': 'Lommel',
+        'OH Louvain': 'OH Leuven', 'RAAL La Louv.': 'La Louvière', 'RU St Gilloise': 'Union Saint-Gilloise',
+        'Racing Genk': 'Genk', 'Royal Antwerp': 'Antwerp', 'Saint-Trond': 'Sint-Truiden', 'Zulte-Waregem': 'Zulte Waregem',
+      },
+    ],
   },
   {
     leagueId: 'bundesliga2', exportName: 'BUNDESLIGA2_FIXTURES_2026', file: 'clubManagerBundesliga2Fixtures2026', orderSource: 0,
