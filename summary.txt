@@ -1,0 +1,2 @@
+prerender-branch exit=1 30s |    171 documents read, 0 waiting lines found
+prerender-reverted exit=0 30s | simPrerender: green. Every page answers with its own words, no JavaScript required.

@@ -1,0 +1,3 @@
+#!serial
+prerender-branch: set -o pipefail; npm run build > /tmp/b1.log 2>&1; node scripts/simPrerender.mjs | tail -8
+prerender-reverted: set -o pipefail; git checkout origin/main -- src/pages/WhatsNew.tsx && npm run build > /tmp/b2.log 2>&1; node scripts/simPrerender.mjs | tail -8; s=$?; git checkout HEAD -- src/pages/WhatsNew.tsx; exit $s

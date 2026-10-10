@@ -1,0 +1,10 @@
+  FAIL: /whats-new drops the entry "Put that save back: now it stays back.", which means the extractor is throwing away real content again
+simPrerender: 1 failure
+   171 sitemap documents, 0 carrying a noindex
+   the snapshot write holds: it replaces, it rides out a transient hold, it throws rather than
+   damage the old page, it does not retry a genuine error, and it leaves no litter
+16) no random pick seeds React state directly
+   1832 source files scanned, 23 raw random initialiser(s), 22 file(s) on the frozen baseline, 0 new
+17) no saved page opens on a frozen loading line
+   171 documents read, 0 waiting lines found
+
