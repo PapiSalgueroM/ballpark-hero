@@ -1,0 +1,28 @@
+rival-p: RIVAL_PROVE=f78037dc RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+rival: node scripts/simUsRivalSense.mjs
+c-liftkey: RIVAL_PROVE=f78037dc RIVAL_MOVED=nfl RIVAL_CARDS=nfl US_RIVAL_CONTROL=liftkey node scripts/simUsRivalSense.mjs
+c-verdictswap: US_RIVAL_CONTROL=verdictswap node scripts/simUsRivalSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+rivalry-collision: RIVALRY_CONTROL=collision node scripts/simCareerRivalryEvents.mjs
+sense-c: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+parity: node scripts/simUsBoardParity.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+livescores: node scripts/simLiveScores.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+names: node scripts/simInventedNames.mjs
+legal: node scripts/simLegalPages.mjs
+numbers: node scripts/simNumberFormatting.mjs
+trustcopy: node scripts/simTrustCopy.mjs
+sitesearch: node scripts/simSiteSearch.mjs
