@@ -1,0 +1,14 @@
+docs/audits/ROUND-1223-NOTES.md
+scripts/simGmDeskHost.mjs
+src/components/front-office-shared/GmCareerDesk.test.tsx
+src/components/front-office-shared/GmCareerPanel.tsx
+src/components/front-office-shared/GmJobMarketPanel.tsx
+src/components/front-office-shared/GmXpDeskPanel.tsx
+src/components/front-office-shared/gmCareerDesk.tsx
+src/components/front-office-shared/gmLazyPanel.tsx
+src/lib/gmDeskHost.test.ts
+src/lib/gmDeskHost.ts
+src/lib/gmDeskHostMlb.ts
+src/lib/gmDeskHostNba.ts
+src/lib/gmDeskHostNfl.ts
+src/lib/gmDeskHostNhl.ts

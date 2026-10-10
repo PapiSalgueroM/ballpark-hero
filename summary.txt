@@ -1,0 +1,5 @@
+listed exit=0 0s | 14
+baseGmStaff exit=1 2s | GM STAFF: 16 failure(s)
+baseDraftNight exit=1 0s | simDraftNight: 2 FAILURES
+baseDailySave exit=1 45s | simDailySaveHardening: 2 failure(s)
+restored exit=0 0s | 0
