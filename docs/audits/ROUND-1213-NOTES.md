@@ -175,6 +175,94 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   the same table with a `supercoupe` link and is passed over; two clubs have two slugs each (`la-louvire` for
   La Louvière in match links, `waasland-beveren` for Beveren).
 
+## The count, for whoever runs the gate
+
+Nine ledgers, all frozen, 3,148 fixtures (380 x 2, 552, 306 x 6). `CM_LEAGUE_FIXTURES_EXPECT=9` today. When
+Release AT brings the Premier League's file to main the harness lists ten, nine frozen and one pending
+(premier), 3,528 fixtures: `CM_LEAGUE_FIXTURES_EXPECT=10`. That was run on a runner with the Premier League's
+two files taken from `origin/release-at-int` and is green.
+
+## Sizes (bytes), for the binding round's weight decision
+
+Source as committed (LF), minified with esbuild, minified and gzipped at level 9. Measured 2026-10-10.
+
+| ledger | source | minified | gzip |
+|---|---|---|---|
+| bundesliga | 11,160 | 9,735 | 1,710 |
+| bundesliga2 | 11,607 | 10,325 | 1,785 |
+| championship | 19,737 | 17,664 | 2,806 |
+| eredivisie | 10,465 | 8,966 | 1,710 |
+| laliga | 13,233 | 11,879 | 2,040 |
+| ligue2 | 8,979 | 7,557 | 1,612 |
+| primeira | 10,638 | 9,488 | 1,698 |
+| seriea | 10,652 | 8,979 | 1,900 |
+| superlig | 11,032 | 10,865 | 1,721 |
+| all nine | 107,503 | 95,458 | 16,982 |
+
+Nothing imports these files, so no route's weight changes in this round and no budget row was touched.
+
+## The tool refusing, seen happen
+
+- Two real leagues: ligue1 (an ordered pair missing and one repeated, in both sources) and proleague (one
+  source a row short, one tuple difference). Nothing written for either.
+- A snapshot with one byte changed: `snapshot ... no longer matches the hash recorded when it was read`, exit 1.
+- A snapshot with match 1's clubs swapped and its hash record rewritten to match: `the two sources differ in 2
+  matchday|home|away tuple(s)`, with both rows printed, exit 1.
+- A frozen line with another digest: `laliga-2026-27-v1 is frozen as ... and this read gives ...`, exit 1.
+- Three parsers refused their own first drafts through their self checks, each kept in its header: `dflPdf` (a
+  hole in the match numbers), `espnByDate` (fewer rows than the article prints matches), `walfoot` (a row whose
+  cells and link disagree).
+- The tool is deterministic here: `write bundesliga` again after the PDF parser was reworked left no diff.
+
+## For the round that binds these ledgers
+
+- IN, with file names: `clubManagerLaLigaFixtures2026.ts` (LALIGA_FIXTURES_2026),
+  `clubManagerLigue2Fixtures2026.ts` (LIGUE2_FIXTURES_2026), `clubManagerEredivisieFixtures2026.ts`
+  (EREDIVISIE_FIXTURES_2026), `clubManagerPrimeiraFixtures2026.ts` (PRIMEIRA_FIXTURES_2026),
+  `clubManagerSerieAFixtures2026.ts` (SERIEA_FIXTURES_2026), `clubManagerBundesligaFixtures2026.ts`
+  (BUNDESLIGA_FIXTURES_2026), `clubManagerSuperLigFixtures2026.ts` (SUPERLIG_FIXTURES_2026),
+  `clubManagerBundesliga2Fixtures2026.ts` (BUNDESLIGA2_FIXTURES_2026),
+  `clubManagerChampionshipFixtures2026.ts` (CHAMPIONSHIP_FIXTURES_2026). Keys are `<leagueId>-2026-27-v1`.
+- Every ledger's clubs equal the league's row in `REAL_LEAGUES` on main (section D). No club is named
+  differently, no league starts on another calendar: all nine are double round robins of 2 x (n - 1) matchdays,
+  which is the shape the engine plays.
+- Same eight fields as the Premier League's ledger, in the same order, `as const`. Two differences in form
+  only: unquoted keys, and a matchday a line. A registry typed on the fields reads both.
+- The `coverage` sentence is the Premier League's, word for word.
+- `sources[].label` is what the Calendar line would print as link text: Fixture Download, Maxifoot,
+  TuttoMercatoWeb, DFL, TFF, hessenschau, ESPN.
+- Rolling addresses among the shipped links (no season in the address): the Turkish federation's page and
+  hessenschau's matchday-1 page. The Maxifoot links are season stamped. The DFL link is the league's article.
+- The frozen file is the list of what is registered as data. The binding round adds the Premier League's line
+  from Round 1184's untouched file and the registry section H.
+- If a ledger must be corrected before it ships in a release, `write <leagueId> --refreeze` is the only way
+  the tool changes a frozen line. After a key has shipped, a correction is a new key.
+
+## Owed by the lead
+
+- A ruling in `docs/LEGAL_REVIEW.md` on shipping fixture lists (matchday, home, away, source linked) before
+  bundesliga and bundesliga2 are bound: both PDFs print that all rights to the list lie with the league body.
+  It covers the Premier League list in Release AT just the same.
+- An independent recheck by a reviewer for each ledger (`fetch --dir <new folder>` then `check --dir`), and the
+  receipt's `recheck` field filled. The builder's own `check bundesliga` (0 differences) is not independent.
+- A gate list line: `simCmLeagueFixtures` with `CM_LEAGUE_FIXTURES_EXPECT=9`.
+- ligue1 and proleague for the second wave, with what each needs (their entries above).
+- No guide sentence is owed to the other lane: nothing a player sees changed.
+
 ## Runner results
 
-(name, commit, what ran, exit codes)
+Every result is on the branch `origin/rc-results/<name>`. A league's request ran the type gate, this harness,
+simNoRivalNames, simLiveScores, simInventedNames, simHarnessAnchors and the harness again with the Premier
+League's two files added from `origin/release-at-int`.
+
+| name | commit | result |
+|---|---|---|
+| r1213-s1 | dc125f8a | tsc 0; harness 0; 11 controls each exit 1 and FIRED; unknown control exit 3; a wrong expected count exit 1; simLiveScores 0 and its citedespn control exit 1 (fired on leagueCaps.ts); the Premier League's file RED in G (its receipt rows carry a `duplicate` field), fixed in 3d99594b |
+| r1213-ligue2 | 72f59a31 | 7 of 7 exit 0 |
+| r1213-eredivisie | 24cbd5d1 | 7 of 7 exit 0 |
+| r1213-primeira | 37c64e61 | 7 of 7 exit 0 |
+| r1213-seriea | a3e5e568 | 7 of 7 exit 0 |
+| r1213-bundesliga | a1bd09fc | 7 of 7 exit 0 |
+| r1213-superlig | 95def69b | 7 of 7 exit 0 |
+| r1213-bundesliga2 | a23c7f25 | 7 of 7 exit 0 |
+| r1213-championship | 349ecfe9 | 7 of 7 exit 0 (simLiveScores green with the espn.com address in the ledger) |
