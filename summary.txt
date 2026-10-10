@@ -1,0 +1,7 @@
+setup exit=0 1s | 83d42fec7 Round 1227: the truth digest taken again for step c, NFL keys only (DIGEST_RECORD=1 DIGEST_ALLOW='nfl|*' on a runner, from 96c3f64d)
+floor-parity exit=1 29s | simUsBoardParity: 3 failures
+floor-digest exit=0 28s |    Duration  27.58s (transform 743ms, setup 38ms, collect 942ms, tests 26.08s, environment 218ms, prepare 85ms)
+cards-parity-expected-red exit=1 28s | simUsBoardParity: 3 failures
+cards-digest-expected-red exit=1 27s | ::error file=/tmp/w5b/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the co
+overlay-floor-parity exit=0 28s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+overlay-floor-digest exit=0 28s |    Duration  27.41s (transform 740ms, setup 39ms, collect 928ms, tests 25.91s, environment 224ms, prepare 109ms)

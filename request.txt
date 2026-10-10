@@ -1,0 +1,8 @@
+#!serial
+setup: git worktree add -q /tmp/w55 55339449 && ln -s "$PWD/node_modules" /tmp/w55/node_modules && git worktree add -q /tmp/w5b 5bdd0a9c && ln -s "$PWD/node_modules" /tmp/w5b/node_modules && git -C /tmp/w55 log --oneline -1 && git -C /tmp/w5b log --oneline -1 && git -C /tmp/w55 log --oneline -1 -- scripts/data/usBoardFixture.json && git -C /tmp/w55 log --oneline -1 -- src/test/fixtures/usCareerTruthDigest.json
+floor-parity: cd /tmp/w55 && node scripts/simUsBoardParity.mjs
+floor-digest: cd /tmp/w55 && node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+cards-parity-expected-red: cd /tmp/w5b && node scripts/simUsBoardParity.mjs
+cards-digest-expected-red: cd /tmp/w5b && node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+overlay-floor-parity: git checkout -q 55339449 -- src scripts && node scripts/simUsBoardParity.mjs; s=$?; git checkout -q HEAD -- src scripts; exit $s
+overlay-floor-digest: git checkout -q 55339449 -- src scripts && node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -q HEAD -- src scripts; exit $s

@@ -1,0 +1,4 @@
+553394490 Round 1227: seven counts of nflStatLineFor are floored at zero (a back's rushing yards could print negative under a form of 56, and the rival now plays this line)
+5bdd0a9c2 Round 1227: the NFL All-Pro card names both seasons (beat 206 on rosterBeat, its two old cards kept only for a save sitting on one), beat 221 is The Charity Weekend, old saves are held by a fixture built by the base code, and What's New
+44c2e4d22 Round 1227: the board recording taken again for step c, the NFL bind (recorded on a runner from 96c3f64d)
+83d42fec7 Round 1227: the truth digest taken again for step c, NFL keys only (DIGEST_RECORD=1 DIGEST_ALLOW='nfl|*' on a runner, from 96c3f64d)

@@ -1,0 +1,17 @@
+A) the fixture is whole
+   recorded from 96c3f64def6dc495caa3ac0b893a93c818d1deec (not main: src differs from 09df145abfb241679022b41903d2f19bc254ebf9)
+   nfl: 459 clicks, 24 seasons, 15 fixed saves, 685 screen steps
+   nba: 507 clicks, 24 seasons, 15 fixed saves, 705 screen steps
+   mlb: 449 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+   nhl: 415 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [nba, mlb, nhl], failed [nfl]
+   nfl save "noCoachKey" step 38 (after "event: Announce this is the last seasonNext season is your last"): the screen reads "Ryder Blaze · WRNew York Jets2033 · age 29OVR 81$13.3M x1⭐ Starter🎤 Farewell season, 2033Everyone knows this is the last one. Every road cr", fixture "Ryder Blaze · WRNew York Jets2033 · age 29OVR 81$13.3M x1⭐ StarterLast season: 70 rec, 929 yds, 7 TD · Missed the playoffs Pl
+  FAIL: the replay exited 1
+  FAIL: the replay passed [nba, mlb, nhl], not all four sports
+  FAIL: 1 step differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures
