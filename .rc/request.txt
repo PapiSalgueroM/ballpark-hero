@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/components/front-office-shared/GmDeskMount.test.tsx src/components/front-office-shared/GmSeatCard.test.tsx src/lib/gmSeat.test.ts src/lib/gmXp.test.ts --testTimeout=300000 --hookTimeout=120000
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmDeskHost-again: node scripts/simGmDeskHost.mjs
+simGmDeskHost-456: SIM_GM_DESK_HOST_SEEDS=4,5,6 node scripts/simGmDeskHost.mjs
+simGmDeskHost-789: SIM_GM_DESK_HOST_SEEDS=7,8,9 node scripts/simGmDeskHost.mjs
+anchors: SIM_GM_DESK_HOST_ANCHORS=1 node scripts/simGmDeskHost.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simGmSeat: node scripts/simGmSeat.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simDailySaveHardening-alone: node scripts/simDailySaveHardening.mjs
