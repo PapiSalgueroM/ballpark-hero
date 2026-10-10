@@ -1,0 +1,13 @@
+mutAU noopening: applied to src/lib/soccerCareerEngine.ts
+mutAU nowheel: applied to src/lib/careerChanceWheel.ts
+mutAU noground: applied to src/lib/soccerSeasonCompetitions.ts
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+PASS comparison
+PASS availability
+PASS defaults
+PASS identity rejection
+PASS read boundary
+Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-history/outcomes

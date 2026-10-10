@@ -1,0 +1,16 @@
+# Release AU, attribution arms with PR216's third visible change off too (the recorded ground in the saved competition view)
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tail -1
+trophy-three: node .rc/x/mutAU.mjs noopening nowheel noground && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs; s=$?; git checkout HEAD -- src; exit $s
+history-three: node .rc/x/mutAU.mjs noopening nowheel noground && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs; s=$?; git checkout HEAD -- src; exit $s
+trophy-noground-only: node .rc/x/mutAU.mjs noground && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs; s=$?; git checkout HEAD -- src; exit $s
+rebuild-noground: node .rc/x/mutAU.mjs noground && npm run build > /tmp/b1.log 2>&1; s=$?; tail -1 /tmp/b1.log | cut -c1-120; exit $s
+playSoccerCareerCompetitions-noground: node scripts/playSoccerCareerCompetitions.mjs
+rebuild-three: node .rc/x/mutAU.mjs noopening nowheel && npm run build > /tmp/b2.log 2>&1; s=$?; tail -1 /tmp/b2.log | cut -c1-120; exit $s
+simCareerTrophyRuns-three-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerSeasonHistory-three-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+playCareerTrophyRuns-three: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTrophyRuns.mjs
+playSeasonHistory1193-three: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSeasonHistory1193.mjs
+restore: git checkout HEAD -- src; echo "src differs from the head in $(git diff --name-only HEAD -- src | wc -l) file(s)"

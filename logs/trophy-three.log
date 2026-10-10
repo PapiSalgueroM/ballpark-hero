@@ -1,0 +1,13 @@
+mutAU noopening: applied to src/lib/soccerCareerEngine.ts
+mutAU nowheel: applied to src/lib/careerChanceWheel.ts
+mutAU noground: applied to src/lib/soccerSeasonCompetitions.ts
+PASS engine baseline
+PASS reader baseline
+PASS saved markup
+PASS missing markup
+PASS actual campaign baseline
+PASS actual campaign markup
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/outcomes

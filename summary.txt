@@ -1,0 +1,13 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+trophy-three exit=0 3s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+history-three exit=0 2s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+trophy-noground-only exit=1 2s | Node.js v24.21.0
+rebuild-noground exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSoccerCareerCompetitions-noground exit=0 9s | playSoccerCareerCompetitions: 50 checks, 0 failed
+rebuild-three exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCareerTrophyRuns-three-forwalk exit=0 3s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+simSoccerSeasonHistory-three-forwalk exit=0 2s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+playCareerTrophyRuns-three exit=0 40s | Trophy Cabinet native: 407 checks,0 failed,12/12 journeys,3 copied detector controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/n
+playSeasonHistory1193-three exit=0 44s | Season history native: 598 checks,0 failed,9/9 journeys,4 copied observation controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-history/nati
+restore exit=0 0s | src differs from the head in 0 file(s)
