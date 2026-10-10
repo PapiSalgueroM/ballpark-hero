@@ -1,0 +1,16 @@
+1) every brand asset exists and is what it says it is
+   6 PNGs at their sizes, 4 SVGs made of outlines, the .ico with three sizes
+2) the template links the icons, the social image and the theme colour
+   3 icon links, og:image and twitter:image present, theme colour set
+3) no image the template points a crawler at lives off the domain
+   5 image references, 0 off the domain
+4) the Organization logo is the square mark, in both copies of the site block
+   both say /icon-512.png, a 512 by 512 square
+5) the header draws the mark from the generated geometry
+   LogoMark in the header, shape from logoMark.ts, hidden from screen readers
+6) the shipped geometry and SVGs are exactly what the generator produces
+   generator re-run, 5 files compared, 0 drifted
+7) the manifest makes the site installable with the same face
+   2 icons at their declared sizes, 3 shortcuts on live routes, theme colour agrees with the template
+
+simBrand: green. One mark, drawn from one source, everywhere the site shows its face.
