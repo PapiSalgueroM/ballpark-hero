@@ -1,0 +1,7 @@
+simCmLeagueFixtures exit=0 1s | simCmLeagueFixtures: OK, sections A to G and I green: 5 ledger(s), 5 frozen, 0 pending, 1678 fixtures, 55 of 55 controls fired
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simInventedNames exit=0 8s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+premier-pending exit=0 4s | simCmLeagueFixtures: OK, sections A to G and I green: 6 ledger(s), 5 frozen, 1 pending (premier), 2058 fixtures, 55 of 55 controls fired
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 70s | 
