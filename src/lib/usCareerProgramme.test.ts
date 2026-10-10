@@ -183,6 +183,7 @@ it.each([
 });
 it('rejects an unknown bonus choice at settlement even after the year has advanced', () => {
   const c = plan(fixture(NBA_CAREER_SPORT), NBA_CAREER_SPORT, { bonus: 'steady' });
+  expect(c.programme).toBeDefined();
   (c.programme as unknown as Record<string, unknown>).bonus = 'bogus'; const row = heldLine(c, { apg: 20 }); c.year++;
   const before = copy(c); expect(settleUsCareerProgramme(c, row, 'nba')).toBeNull(); expect(c).toEqual(before);
 });
