@@ -1,0 +1,7 @@
+tsc exit=0 57s | 
+clean-before exit=0 2s |    Duration  2.19s (transform 829ms, setup 55ms, collect 999ms, tests 429ms, environment 304ms, prepare 130ms)
+m-dropdb exit=1 2s | rev mutation dropdb = exit 1 (1 the test went red, 3 the mutation did not apply, 0 the test stayed green)
+m-namesakeedge exit=1 2s | rev mutation namesakeedge = exit 1 (1 the test went red, 3 the mutation did not apply, 0 the test stayed green)
+m-tableswapunshipped exit=1 2s | rev mutation tableswapunshipped = exit 1 (1 the test went red, 3 the mutation did not apply, 0 the test stayed green)
+m-tableswapdeep exit=1 2s | rev mutation tableswapdeep = exit 1 (1 the test went red, 3 the mutation did not apply, 0 the test stayed green)
+clean-after exit=0 2s |    Duration  2.16s (transform 823ms, setup 52ms, collect 1.01s, tests 425ms, environment 293ms, prepare 112ms)
