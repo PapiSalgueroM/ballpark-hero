@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000 --hookTimeout=120000
+bundle: node_modules/.bin/esbuild src/lib/cmAgeRead.ts --bundle --format=esm --platform=browser --outfile=/tmp/door.mjs && node .rc/x/doorProbe.mjs /tmp/door.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
