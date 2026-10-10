@@ -66,6 +66,11 @@ export const PO_TRIES = 12;
  *  thirty point games. A tuning number: scripts/simUsPostseason.mjs prints the repairs with it and without. */
 const PO_SHARE_MIN = 0.3;
 const PO_SHARE_MAX = 0.7;
+/** How much of the core's game to game form a total made from a mean follows (0: none, every game is as likely
+ *  to take the next unit; 1: the whole of it). Measured over the fleet of scripts/simUsPostseason.mjs on
+ *  2026-10-10 as his lowest game of a run over his average game: at 0 the median is 0.63, which is where the
+ *  first games of the same regular seasons put it (0.63); at 0.25 it is 0.59, at 0.5 0.53 and at 1 0.37. */
+const PO_MEAN_FORM = 0;
 
 /** One series of the run. `from` and `to` are game numbers (1 based) of `season.games`. */
 export interface UsPostSeries { round: string; opp: string; named: boolean; need: number; most: number; from: number; to: number; won: boolean }
@@ -113,7 +118,7 @@ export function usPostTotals(totals: readonly StatTotal[], games: number): StatT
       out.push(t);
     } else if (t.kind === 'mean') {
       if (t.perGame !== 'int' || t.min !== 0 || !Number.isFinite(t.mean) || t.mean < 0) return null;
-      out.push({ key: t.key, kind: 'sum', total: Math.round((Math.round(t.mean * 10) * games) / 10), perGameCap: t.max, formPower: 0.5 });
+      out.push({ key: t.key, kind: 'sum', total: Math.round((Math.round(t.mean * 10) * games) / 10), perGameCap: t.max, formPower: PO_MEAN_FORM });
     } else return null;
   }
   return out;

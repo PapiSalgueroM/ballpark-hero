@@ -98,7 +98,7 @@ describe('usPostTotals', () => {
   it('keeps a sum and turns a mean of whole numbers into the nearest whole total, worked in tenths', () => {
     const sum: StatTotal = { key: 'passTd', kind: 'sum', total: 6, perGameCap: 6, teamFor: true, teamPoints: 7 };
     expect(usPostTotals([sum], 2)).toEqual([sum]);
-    expect(usPostTotals([mean(24.5)], 5)).toEqual([{ key: 'pts', kind: 'sum', total: 123, perGameCap: 60, formPower: 0.5 }]);
+    expect(usPostTotals([mean(24.5)], 5)).toEqual([{ key: 'pts', kind: 'sum', total: 123, perGameCap: 60, formPower: 0 }]);
     /* 4.1 times 15 is 61.49999999999999 as a float and 2.3 times 25 is 57.49999999999999: plain rounding
        drops both a point, the tenths make them 61.5 and 57.5 */
     expect(Math.round(4.1 * 15)).toBe(61);
