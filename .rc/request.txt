@@ -1,0 +1,11 @@
+c-verdictswap: US_RIVAL_CONTROL=verdictswap node scripts/simUsRivalSense.mjs
+c-oldscalenfl: US_RIVAL_CONTROL=oldscalenfl node scripts/simUsRivalSense.mjs
+c-fullscorenfl: US_RIVAL_CONTROL=fullscorenfl node scripts/simUsRivalSense.mjs
+c-offshapenfl: US_RIVAL_CONTROL=offshapenfl node scripts/simUsRivalSense.mjs
+c-drawsnfl: US_RIVAL_CONTROL=drawsnfl RIVAL_PROVE=dd3896ac RIVAL_MOVED=nfl node scripts/simUsRivalSense.mjs
+c-bridge: US_RIVAL_CONTROL=bridge node scripts/simUsRivalSense.mjs
+c-oneslot: US_RIVAL_CONTROL=oneslot node scripts/simUsRivalSense.mjs
+c-workload17: US_RIVAL_CONTROL=workload17 node scripts/simUsRivalSense.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+livescores: node scripts/simLiveScores.mjs
