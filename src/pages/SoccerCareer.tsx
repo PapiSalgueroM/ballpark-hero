@@ -106,6 +106,8 @@ import { SoccerOfferReview } from "@/components/soccer-career/SoccerOfferReview"
 import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
+import { InternationalReturnCard } from "@/components/soccer-career/InternationalReturnCard";
+import { internationalReturnEligibility, makeInternationallyAvailable } from "@/lib/soccerInternationalReturn";
 import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";
 import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";
 import { heatLabel } from "@/lib/soccerCareerCorruption";
@@ -922,6 +924,7 @@ export default function SoccerCareer() {
      out of the academy byte for byte the save it always was. */
   const [academyReport, setAcademyReport] = useState<AcademyReport | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const internationalReturnAttempt = useRef<CareerState | null>(null);
   /* Round 129: the training and phone buttons are pinned to the bottom right on
      every screen of this game, so they were sitting over the footer's Privacy
      and Terms links at the end of the page in exactly the way the action bar
@@ -1168,6 +1171,12 @@ export default function SoccerCareer() {
     if (!career) return;
     setCareer(retireFromInternational(career));
     toast("Retired from international football");
+  };
+
+  const handleReturnInternational = () => {
+    if (!career || internationalReturnAttempt.current === career || !internationalReturnEligibility(career).available) return;
+    internationalReturnAttempt.current = career;
+    setCareer(prev => prev === career ? makeInternationallyAvailable(prev) : prev);
   };
 
   const handleDismissRivalryEvent = () => {
@@ -1437,6 +1446,7 @@ export default function SoccerCareer() {
               onDismissWorldCup={handleDismissWorldCup}
               onWorldCupSpeech={handleWorldCupSpeech}
               onRetireInternational={handleRetireInternational}
+              onReturnInternational={handleReturnInternational}
               onDismissRivalryEvent={handleDismissRivalryEvent}
               onDismissBallonDor={handleDismissBallonDor}
               onBdorSpeech={handleBdorSpeech}
@@ -2682,7 +2692,7 @@ function WorldCupResultCard({ wc, career, onDismiss, onSpeech }: { wc: WorldCupR
 }
 
 /* ─── International Stats Panel ─── */
-function InternationalStatsPanel({ career, onRetire }: { career: CareerState; onRetire: () => void }) {
+function InternationalStatsPanel({ career, onRetire, onReturn }: { career: CareerState; onRetire: () => void; onReturn: () => void }) {
   const is = career.intStats;
   const hasHistory = (career.intlHistory ?? []).length > 0;
   if (!career.internationalCareer && !is.isRetired && is.caps === 0 && !hasHistory) return null;
@@ -2726,6 +2736,7 @@ function InternationalStatsPanel({ career, onRetire }: { career: CareerState; on
         last={career.lastTournament ?? null}
       />
       {is.isRetired && <div className="text-[11px] text-muted-foreground italic">Retired from international football</div>}
+      <InternationalReturnCard career={career} onReturn={onReturn} />
       {career.internationalCareer && !is.isRetired && (
         <Button variant="outline" onClick={onRetire} className="w-full h-8 text-xs">
           Retire from International Football 🚶
@@ -3694,7 +3705,7 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onAdvanceManager, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch }: {
   career: CareerState;
   clubs: ClubData[];
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
@@ -3717,6 +3728,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   onDismissWorldCup: () => void;
   onWorldCupSpeech: (choice: WorldCupSpeechChoice) => void;
   onRetireInternational: () => void;
+  onReturnInternational: () => void;
   onDismissRivalryEvent: () => void;
   onDismissBallonDor: () => void;
   onBdorSpeech: (choice: BdorSpeechChoice) => void;
@@ -4530,7 +4542,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           )}
 
           {/* International Stats */}
-          <InternationalStatsPanel career={career} onRetire={onRetireInternational} />
+          <InternationalStatsPanel career={career} onRetire={onRetireInternational} onReturn={onReturnInternational} />
 
           {/* Rival Comparison */}
           <RivalComparisonPanel career={visibleCareer} />

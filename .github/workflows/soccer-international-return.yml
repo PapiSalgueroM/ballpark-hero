@@ -1,0 +1,123 @@
+name: Soccer International Return
+on:
+  pull_request:
+    paths:
+      - .github/workflows/soccer-international-return.yml
+      - src/lib/soccerInternationalReturn*
+      - src/lib/soccerCareerEngine.ts
+      - src/pages/SoccerCareer.tsx
+      - src/components/soccer-career/InternationalReturnCard.tsx
+      - src/components/CookieConsent.tsx
+      - src/test/soccer*InternationalReturn*
+      - scripts/*SoccerInternationalReturn*.mjs
+      - src/lib/soccerInternational.ts
+      - src/lib/soccerInternationalSquads.ts
+      - scripts/qa/*soccerInternationalReturn*.mjs
+      - scripts/qa/*SoccerInternationalReturn*.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: soccer-international-return-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      FREE_KICK_FONT_CACHE: soccer-international-return-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Remote dependencies and font receipts
+        run: |
+          mkdir -p soccer-international-return-artifacts
+          git rev-parse HEAD > soccer-international-return-artifacts/source-head.txt
+          git rev-parse "HEAD^{tree}" > soccer-international-return-artifacts/source-tree.txt
+          npm ci
+          node scripts/qa/soccerInternationalReturnDependencies.mjs before
+          npm install --no-save playwright
+          node scripts/qa/soccerInternationalReturnDependencies.mjs after
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee soccer-international-return-artifacts/fonts.log
+      - name: Actual app types and production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-international-return-artifacts/types.log
+          npm run build 2>&1 | tee soccer-international-return-artifacts/build.log
+      - name: Actual focused helper page and UI tests
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/soccerInternationalReturn.test.ts src/test/soccerInternationalReturnUi.test.tsx src/test/soccerInternationalReturnPage.test.tsx src/test/soccerCareerSaveRetry.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=soccer-international-return-artifacts/units.json 2>&1 | tee soccer-international-return-artifacts/units.log
+          node scripts/qa/checkSoccerInternationalReturn.mjs units
+      - name: Actual outcomes and six effective copied source controls
+        id: outcomes
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerInternationalReturn.mjs 2>&1 | tee soccer-international-return-artifacts/outcomes.log
+          node scripts/qa/checkSoccerInternationalReturn.mjs outcomes
+      - name: Actual captured page and component guard faults
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerInternationalReturnPageControl.mjs 2>&1 | tee soccer-international-return-artifacts/page-control.log
+          node scripts/qa/checkSoccerInternationalReturn.mjs page-control
+      - name: Actual production international availability journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.outcomes.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerInternationalReturn.mjs 2>&1 | tee soccer-international-return-artifacts/native.log
+          node scripts/qa/checkSoccerInternationalReturn.mjs native
+      - name: Early focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-international-return-early-${{ github.run_id }}
+          path: soccer-international-return-artifacts/
+          retention-days: 5
+      - name: Related Soccer source and save regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerDomesticCup simCareerDerbies simCareerSeasonRatings simCareerPositionRatings simCareerRecordedStats simCareerStory simCareerLifeCooldowns simSeasonCentreAgreement simSeasonCentreNeutral simSeasonCentreTable simSoccerSeasonCompetitions simNoInventedQuotes simCareerRivalryEvents simCareerHub simSoccerOfferReview simClubVerdict simLoanSpell simSoccerContractMoves simInternational simNationalPools; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-international-return-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "soccer-international-return-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All fifteen built readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-international-return-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "soccer-international-return-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Exact tested source held
+        if: ${{ !cancelled() }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$(cat soccer-international-return-artifacts/source-head.txt)"
+          test "$(git rev-parse "HEAD^{tree}")" = "$(cat soccer-international-return-artifacts/source-tree.txt)"
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json 2>&1 | tee soccer-international-return-artifacts/source-held.log
+      - name: Final focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-international-return-final-${{ github.run_id }}
+          path: soccer-international-return-artifacts/
+          retention-days: 5

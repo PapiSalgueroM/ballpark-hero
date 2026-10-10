@@ -27,6 +27,7 @@ import {
   BDOR_WIN_MIN_GOALS, rollPotential, pickPhoneTexts, PHONE_POOL,
 } from "./careerEras";
 import type { PhoneChoiceDef } from "./careerEras";
+import type { SoccerInternationalReturn } from './soccerInternationalReturn';
 /* Round 929: every season's league finish, and the era aware elite rule. */
 import { divisionMove, drawLeagueFinish, eliteInYear, finishZone, leagueKeyInYear, managerLeagueField, MANAGER_FIELD, ordinal } from "./soccerCareerLeague";
 /* Round 1012: real club rivalries, played as league derbies each season. */
@@ -924,6 +925,7 @@ export interface CareerState {
   eventLastFired?: Record<string, number>;
   statBoostNextSeason: Partial<Record<"pace"|"shooting"|"passing"|"dribbling"|"defending"|"physical"|"reflexes", number>>;
   internationalCareer: boolean;
+  internationalReturn?: SoccerInternationalReturn;
   sponsorDeal: string | null;
   totalEarnings: number;
   popularity: number;
