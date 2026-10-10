@@ -1,0 +1,4 @@
+fleet1 exit=1 7s | 0
+fleet2 exit=1 7s | 0
+fleet3 exit=1 7s | 0
+fleet4 exit=1 7s | 0

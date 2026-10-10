@@ -1,0 +1,17 @@
+[39m[1216 material] 93 matches, 186 half feeds; own goals staged 187 (goals left as they were: 75), for me 98, against me 89; the named man on the viewer's cast 187, not on it 0; by a back 168, by the keeper 19; actions that start outside the goal's own minute 3, wound up as a last kick 3
+[39m[1216 OG1] own goals with the man on the grass 187; at the touch the figure nearest the ball is the named man, within 1: own goal arm 187, baseline arm 0; the man's gap to the ball at the touch: least 0.0, median 0.1, 90th percentile 0.1, most 0.1
+[39m[1216 OG9] own goals whose ball comes within 2 of another figure between the touch and the net: 0 of 187 (a keeper 0, a man of the side that got it 0); the man placed on that line by hand is never nearer the ball than 3.60
+[39m[1216 OG2] own goals 187, samples 8041; samples whose phase, action, net, net pulse or holder differ from the baseline arm's 0; frames with the ball in the goal mouth 2450, outside flight and net 0; own goals with a frame in the net 187
+[39m[1216 OG3] own goals 187; with a hop on a net frame: own goal arm 0, baseline arm 187; net frames where the man has no rue 0, where he celebrates 0, where a man of his side celebrates 0, where the raised arms are more than three or not alike 0, where a man with raised arms has moved 0; net frames with arms raised 2244
+[39m[1216 OG4] own goals 187; pairs of one side overlapping two samples running 0; the scene made by hand: the man covers 28.0 past a team mate, pairs overlapping two samples running 0
+[39m[1216 OG5] the sharpest turn of the ball in flight, degrees: own goal arm least 17.2, median 83.5, 90th percentile 124.5, most 130.6; baseline arm least 1.3, median 3.0, 90th percentile 3.2, most 3.3; the floor is 20
+[1216 OG5 walk] how far the man goes to meet it: least 0.0, median 0.8, 90th percentile 5.8, most 27.1; from his own third (185 of 187): least 0.0, median 0.8, 90th percentile 5.8, most 6.9; standing further up when it starts 2; shown by his number alone at the touch 0
+[39m[1216 digest] OWN 669ef935
+[39m[1216 digest] RUE c9817b1a
+[39m[1216 viewer] an own goal for me, match 3 of the search, 7' Nobel Mendy: card "GOAL! Nobel Mendy 7' (O.G)" under "Aston Villa"
+[39m[1216 viewer] an own goal for opp, match 17 of the search, 10' Zion Suzuki: card "GOAL! Zion Suzuki 10' (O.G)" under "Ipswich Town"
+[39m[1216 held cast] 326 halves redrawn (cap 4000); the own goal found on attempt 274; one whose man is the one leaving on attempt 325
+[39m[1216 held cast] 82' for opp, Taylor Harwood-Bellis: staged at 82.300, the ball in at 83.056, card "GOAL! Taylor Harwood-Bellis 82' (O.G)"
+[39m[1216 held cast] 71' for me, Maxim De Cuyper (he is the man who leaves at 72): staged at 71.300, the ball in at 72.056, card "GOAL! Maxim De Cuyper 71' (O.G)"
+2]⎯[22m[39m
+2]⎯[22m[39m
