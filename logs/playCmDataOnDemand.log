@@ -1,0 +1,24 @@
+0) the built files: the 2010-11 nationalities in era2010-YNeWL_4t.js, its squads in clubManagerEra2010-CiScj6R7.js, the pools in SoccerCareer-CA3gbUrO.js
+1) a 2010-11 career, started and saved by the engine in node
+   Barcelona, 27 players, 26 of them with a country in era2010, save 28 KB under 1 key(s)
+2) arm 1: a fresh visit to the four routes fetches no pool and no past season
+   /club-manager      phone    39 js files, 0 of them a pool or a past season, 0 page errors
+   /club-manager      desktop  39 js files, 0 of them a pool or a past season, 0 page errors
+   /manager-hot-seat  phone    41 js files, 0 of them a pool or a past season, 0 page errors
+   /manager-hot-seat  desktop  41 js files, 0 of them a pool or a past season, 0 page errors
+   /deadline-day      phone    45 js files, 0 of them a pool or a past season, 0 page errors
+   /deadline-day      desktop  45 js files, 0 of them a pool or a past season, 0 page errors
+   /transfer-path     phone    40 js files, 0 of them a pool or a past season, 0 page errors
+   /transfer-path     desktop  40 js files, 0 of them a pool or a past season, 0 page errors
+3) arm 2: a saved 2010-11 career fetches its own season and shows its flags
+   phone   career opened; 27 squad rows, 26 flags on the 26 men who have a country, 0 missing, 0 on men who have none; fetched nationalities yes, squads yes, other seasons 0; 0 page errors
+   desktop career opened; 27 squad rows, 26 flags on the 26 men who have a country, 0 missing, 0 on men who have none; fetched nationalities yes, squads yes, other seasons 0; 0 page errors
+4) arm 3: the 2010-11 nationality file (era2010-YNeWL_4t.js) held back; the page is read while it waits and once it has arrived
+   phone   saved career   waiting: scrollY 0, first heading "Club Manager: Free Footb" at 377; arrived: scrollY 0, first heading "CLUB MANAGER" at 113; the reader was not moved; the heading under the game went from 377 to 932 (555 px)
+   phone   club picker    waiting: scrollY 101, first heading "CLUB MANAGER" at 12; arrived: scrollY 101, first heading "CLUB MANAGER" at 12; did not move
+   desktop saved career   waiting: scrollY 0, first heading "Club Manager: Free Footb" at 389; arrived: scrollY 0, first heading "CLUB MANAGER" at 125; the reader was not moved; the heading under the game went from 389 to 520 (131 px)
+   desktop club picker    waiting: scrollY 0, first heading "CLUB MANAGER" at 125; arrived: scrollY 0, first heading "CLUB MANAGER" at 125; did not move
+5) arm 4: /soccer-career still fetches the national team pools
+   45 js files, the pools in SoccerCareer-CA3gbUrO.js, 0 page errors
+
+playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.

@@ -1,0 +1,159 @@
+ok   saves: M at Newcastle 2028 with 8 real men still there, E real at Real Madrid 2022, H after an injured season at Corinthians
+ok   saves: A invented at Blackburn Rovers 2030, B real at Newcastle 2018, R by role at Sunderland 1994, C academy (no squad), D real with a line of 10
+ok   2. save A: the tile prints 1st of 6, trust 66 (Starter most weeks); the page shows ["1st","66"]
+ok   2. save A: no page error (none)
+ok   2. save B: the tile prints 8th of 8, trust 55 (Starter most weeks); the page shows ["8th","55"]
+ok   2. save B: no page error (none)
+ok   2. save R: the tile prints 2nd of 6, trust 74 (Nailed on starter); the page shows ["2nd","74"]
+ok   2. save R: no page error (none)
+ok   2. save D: the tile prints 6th of 10, trust 58 (Starter most weeks); the page shows ["6th","58"]
+ok   2. save D: no page error (none)
+ok   2. save C (an academy year) shows no tile
+ok   3. the first open shows the help
+ok   3. focus is inside the dialog
+ok   3. the worked examples print the numbers the lib computes
+ok   3. save A is labelled INVENTED TEAMMATES
+ok   3. save A: an invented squad carries ages (17)
+ok   3. a viewer who has seen the help opens on home
+ok   3. save B is labelled REAL SQUAD
+ok   3. save B: a real squad carries no age, flag, NEW chip or arrival line ([0,0,0,0])
+ok   3. save R is labelled ROLES ONLY
+ok   3. save R: every man is a role, none has a name or a flag, and the sheet says why (17 men)
+ok   3. save R: a sheet by role still carries ages (17)
+ok   3b. save M's chip reads REAL AND INVENTED ("REAL AND INVENTED")
+ok   3b. and the home screen says how many (From 2026/27 this is your career's own world. 8 of the real 2025/26 squad are still here, and the new faces ar)
+ok   3b. every real man still there is tagged REAL where he is listed, and nobody else is (8 tagged of 8; wrong: none)
+ok   3b. save F is headed Man City 2022/23 REAL SQUAD (Man City 2022/23 REAL SQUAD ? On our ratings you are 5th of 6 forwards. Jack Grealish is t)
+ok   3b. and it is that season's squad: the striker who signed in the summer of 2022 is on it, and the screen lists exactly the 17 men the lib holds (17 listed)
+ok   4. save A: 4 screens opened from their tiles and Back returned home each time (4 expected)
+ok   4. save A: the eleven is 11 cells with him in one of them ({"all":11,"me":1})
+ok   4. save A: Escape went home, then closed, and focus is back on the tile
+ok   5. save A: a fresh context prints the same text on all 6 screens
+ok   6. save A: the save string is byte identical before opening, after every screen and after closing
+ok   6. save A: the only key added to localStorage is soccerSquad:help (soccerSquad:help)
+ok   4. save B: 4 screens opened from their tiles and Back returned home each time (4 expected)
+ok   4. save B: the eleven is 11 cells with him in none of them ({"all":11,"me":0})
+ok   4. save B: Escape went home, then closed, and focus is back on the tile
+ok   5. save B: a fresh context prints the same text on all 6 screens
+ok   6. save B: the save string is byte identical before opening, after every screen and after closing
+ok   6. save B: the only key added to localStorage is soccerSquad:help (soccerSquad:help)
+ok   4. save R: 4 screens opened from their tiles and Back returned home each time (4 expected)
+ok   4. save R: the eleven is 11 cells with him in one of them ({"all":11,"me":1})
+ok   4. save R: Escape went home, then closed, and focus is back on the tile
+ok   5. save R: a fresh context prints the same text on all 6 screens
+ok   6. save R: the save string is byte identical before opening, after every screen and after closing
+ok   6. save R: the only key added to localStorage is soccerSquad:help (soccerSquad:help)
+ok   7. save A at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":713,"bench":617,"place":681,"last":265,"help":806,"examples":600,"closed":0})
+ok   7. save A at 390 by 844: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save A at 390 by 844: every button at least 44 px tall (all)
+ok   7. save A at 390 by 844: no text under 12 px (none)
+ok   7. save A at 390 by 844: the panel does not scroll on any screen but the bench (none)
+ok   7. save A at 390 by 844: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save A at 390 by 844: no name in a row of the bench or of his line is cut short (18 rows read; cut: none)
+ok   7. save D at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":486,"eleven":673,"bench":617,"place":577,"last":265,"help":806,"examples":600,"closed":0})
+ok   7. save D at 390 by 844: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save D at 390 by 844: every button at least 44 px tall (all)
+ok   7. save D at 390 by 844: no text under 12 px (none)
+ok   7. save D at 390 by 844: the panel does not scroll on any screen but the bench (none)
+ok   7. save D at 390 by 844: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save D at 390 by 844: no name in a row of the bench or of his line is cut short (21 rows read; cut: none)
+ok   7. save R at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":448,"eleven":665,"bench":617,"place":607,"last":321,"help":806,"examples":600,"closed":0})
+ok   7. save R at 390 by 844: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save R at 390 by 844: every button at least 44 px tall (all)
+ok   7. save R at 390 by 844: no text under 12 px (none)
+ok   7. save R at 390 by 844: the panel does not scroll on any screen but the bench (none)
+ok   7. save R at 390 by 844: every role in the eleven reads whole (10 role cells, 0 cut, e.g. "1st choice")
+ok   7. save R at 390 by 844: no name in a row of the bench or of his line is cut short (18 rows read; cut: none)
+ok   7. save B at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":486,"eleven":639,"bench":617,"place":631,"last":265,"help":806,"examples":600,"closed":0})
+ok   7. save B at 390 by 844: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save B at 390 by 844: every button at least 44 px tall (all)
+ok   7. save B at 390 by 844: no text under 12 px (none)
+ok   7. save B at 390 by 844: the panel does not scroll on any screen but the bench (none)
+ok   7. save B at 390 by 844: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save B at 390 by 844: no name in a row of the bench or of his line is cut short (18 rows read; cut: none)
+ok   7. save M at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":763,"bench":657,"place":627,"last":330,"help":806,"examples":600,"closed":0})
+ok   7. save M at 390 by 844: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save M at 390 by 844: every button at least 44 px tall (all)
+ok   7. save M at 390 by 844: no text under 12 px (none)
+ok   7. save M at 390 by 844: the panel does not scroll on any screen but the bench (none)
+ok   7. save M at 390 by 844: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save M at 390 by 844: no name in a row of the bench or of his line is cut short (18 rows read; cut: none)
+ok   7. save E at 390 by 844: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":486,"eleven":639,"bench":534,"place":577,"last":265,"help":806,"examples":600,"closed":0})
+ok   7. save E at 390 by 844: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save E at 390 by 844: every button at least 44 px tall (all)
+ok   7. save E at 390 by 844: no text under 12 px (none)
+ok   7. save E at 390 by 844: the panel does not scroll on any screen but the bench (none)
+ok   7. save E at 390 by 844: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save E at 390 by 844: no name in a row of the bench or of his line is cut short (15 rows read; cut: none)
+ok   7. save A at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":431,"eleven":665,"bench":594,"place":631,"last":265,"help":691,"examples":510,"closed":0})
+ok   7. save A at 1280 by 800: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save A at 1280 by 800: every button at least 44 px tall (all)
+ok   7. save A at 1280 by 800: no text under 12 px (none)
+ok   7. save A at 1280 by 800: the panel does not scroll on any screen but the bench (none)
+ok   7. save A at 1280 by 800: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save A at 1280 by 800: no name in a row of the bench or of his line is cut short (18 rows read; cut: none)
+ok   7. save D at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":639,"bench":594,"place":544,"last":265,"help":691,"examples":510,"closed":0})
+ok   7. save D at 1280 by 800: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save D at 1280 by 800: every button at least 44 px tall (all)
+ok   7. save D at 1280 by 800: no text under 12 px (none)
+ok   7. save D at 1280 by 800: the panel does not scroll on any screen but the bench (none)
+ok   7. save D at 1280 by 800: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save D at 1280 by 800: no name in a row of the bench or of his line is cut short (21 rows read; cut: none)
+ok   7. save R at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":448,"eleven":665,"bench":594,"place":557,"last":302,"help":691,"examples":510,"closed":0})
+ok   7. save R at 1280 by 800: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save R at 1280 by 800: every button at least 44 px tall (all)
+ok   7. save R at 1280 by 800: no text under 12 px (none)
+ok   7. save R at 1280 by 800: the panel does not scroll on any screen but the bench (none)
+ok   7. save R at 1280 by 800: every role in the eleven reads whole (10 role cells, 0 cut, e.g. "1st choice")
+ok   7. save R at 1280 by 800: no name in a row of the bench or of his line is cut short (18 rows read; cut: none)
+ok   7. save B at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":639,"bench":594,"place":581,"last":265,"help":691,"examples":510,"closed":0})
+ok   7. save B at 1280 by 800: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save B at 1280 by 800: every button at least 44 px tall (all)
+ok   7. save B at 1280 by 800: no text under 12 px (none)
+ok   7. save B at 1280 by 800: the panel does not scroll on any screen but the bench (none)
+ok   7. save B at 1280 by 800: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save B at 1280 by 800: no name in a row of the bench or of his line is cut short (18 rows read; cut: none)
+ok   7. save M at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":431,"eleven":747,"bench":614,"place":594,"last":311,"help":691,"examples":510,"closed":0})
+ok   7. save M at 1280 by 800: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save M at 1280 by 800: every button at least 44 px tall (all)
+ok   7. save M at 1280 by 800: no text under 12 px (none)
+ok   7. save M at 1280 by 800: the panel does not scroll on any screen but the bench (none)
+ok   7. save M at 1280 by 800: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save M at 1280 by 800: no name in a row of the bench or of his line is cut short (18 rows read; cut: none)
+ok   7. save E at 1280 by 800: no sideways scroll and the panel inside the screen (all inside; heights {"tile":0,"home":470,"eleven":639,"bench":534,"place":544,"last":265,"help":691,"examples":510,"closed":0})
+ok   7. save E at 1280 by 800: window.scrollY stayed at 120 across open, every screen and close (never moved)
+ok   7. save E at 1280 by 800: every button at least 44 px tall (all)
+ok   7. save E at 1280 by 800: no text under 12 px (none)
+ok   7. save E at 1280 by 800: the panel does not scroll on any screen but the bench (none)
+ok   7. save E at 1280 by 800: no name in the eleven is cut short (0 of 11 cut)
+ok   7. save E at 1280 by 800: no name in a row of the bench or of his line is cut short (15 rows read; cut: none)
+ok   7b. save A at 375 by 553: Back is on the screen and a tap on it works on every screen (7 taps; the body scrolls on first open (help), eleven, place, examples; never stuck)
+ok   7b. save R at 375 by 553: Back is on the screen and a tap on it works on every screen (6 taps; the body scrolls on eleven, place, examples; never stuck)
+ok   7b. save A at 320 by 568: Back is on the screen and a tap on it works on every screen (7 taps; the body scrolls on first open (help), eleven, place, examples; never stuck)
+ok   7b. save R at 320 by 568: Back is on the screen and a tap on it works on every screen (6 taps; the body scrolls on eleven, place, examples; never stuck)
+ok   7b. save A at 360 by 640: Back is on the screen and a tap on it works on every screen (7 taps; the body scrolls on first open (help), eleven, place; never stuck)
+ok   7b. save R at 360 by 640: Back is on the screen and a tap on it works on every screen (6 taps; the body scrolls on eleven; never stuck)
+ok   7b. save A at 844 by 390: Back is on the screen and a tap on it works on every screen (7 taps; the body scrolls on first open (help), eleven, place, examples, home; never stuck)
+ok   7b. save R at 844 by 390: Back is on the screen and a tap on it works on every screen (6 taps; the body scrolls on eleven, place, examples, home; never stuck)
+ok   4b. Tab and Shift+Tab stay inside the sheet: 0 of 22 stops landed outside it, 6 different stops reached
+ok   4b. the page behind did not move while the keyboard went round the sheet (120 then 120)
+ok   4b. and it is where it was after closing (120 then 120)
+ok   13. save H is an injured season: 25 league games drawn, 23 games on the row
+ok   13. the Last season tile prints the 23 games played, not the league figure ("Last season 23 games")
+ok   13. the Last season screen never prints more league games than games ("Last season at Corinthians, on loan 23 games in all competitions An injury took games off that total. Before it, your place was worth 25 league games.")
+ok   8. motion on: 20 ms after the eleven opens its last cell is not showing yet (opacity 0)
+ok   8. reduced motion: 100 ms after home arrives nothing is animating and the trust bar is at its figure (running 0, bar off by 0.0)
+ok   8. reduced motion: 100 ms after each screen arrives nothing in the sheet is still animating (0 running at worst)
+ok   8. reduced motion: all eleven cells show at once (11 of 11)
+ok   page: the sheet is one chunk of its own (SquadSheet-wrAQ6bhC.js)
+ok   9. parsed the walker's ACTIONS (17 entries) and SKIP from its text
+ok   1. no sheet chunk on a fresh hub (46 scripts loaded)
+ok   2. page, save A: one tile on the hub, printing rank 1 and trust 66 ({"rank":"1","trust":"66","n":1})
+ok   10. page, save A at 390: the season list is inside the Career Timeline card, one row a season, and the card ends where the list ends (rows 5 of 5, grid children 2, card {"t":2413,"b":2736,"l":12,"r":378}, list {"t":2455,"b":2735,"l":13,"r":377}, hub column {"t":399,"b":2401,"l":12,"r":378})
+ok   10. page, save A at 390: the hub column is in the same grid as the card, above it on a phone (rows 5 of 5, grid children 2, card {"t":2413,"b":2736,"l":12,"r":378}, list {"t":2455,"b":2735,"l":13,"r":377}, hub column {"t":399,"b":2401,"l":12,"r":378})
+FAIL page mode stopped: TimeoutError: page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-squad-tile]')
+    - locator resolved to <button type="button" data-squad-tile="true" aria-haspopup="dialog"
+   screenshots in /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots, work folder /home/runner/work/_temp/t-playCareerSquad/careersquadplay-rNrkWI
+playCareerSquad: 154 checks, 1 failed

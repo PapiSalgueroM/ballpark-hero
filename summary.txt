@@ -1,0 +1,13 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playCareerSquad exit=1 181s | playCareerSquad: 154 checks, 1 failed
+playCollegeGridFirstTap exit=0 30s | playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a
+playGridCls exit=0 30s | playGridCls: green. The boards hold their ground; the network only fills them in.
+playCmDataOnDemand exit=0 28s | playCmDataOnDemand: green. The manager games open without the data they never read, and a past season brings its own.
+playTycoonGearFit exit=0 7s | PASS gear fit: 3 widths, full collection, real equipment and persisted upgrade, save failure and Back. /home/runner/work/_temp/t-playTycoonGearFit/dukb-tycoon-gear-fit-Dn
+playTycoonSetPieceFit exit=0 26s | playTycoonSetPieceFit: green, six actual built-page cases and six durable goals.
+playUsCareerSaveSeam exit=0 32s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed
+playCareerLeagueWorld exit=0 15s | playCareerLeagueWorld: 39 checks, 0 failed
+playSeasonCentreMotion exit=1 98s | Node.js v24.21.0
+playCareerMoments exit=1 48s | playCareerMoments: 20 checks, 2 failed
+playLiveMatchFit exit=0 140s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.
+playAutocompleteRace exit=0 151s | playAutocompleteRace: 204 taps on 3 pages at 390 and 1280, 0 stale names offered, 0 stale picks, 6 of 6 current picks landed, target leg 0 of 20.

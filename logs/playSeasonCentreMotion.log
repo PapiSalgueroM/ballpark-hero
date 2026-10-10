@@ -1,0 +1,89 @@
+tables from node: 414 table seasons in the probe, five used: Probe 0 2000 Juventus (34); Probe 9 1997 Atletico Madrid (38); Probe 14 2035 Inter Milan (38); Probe 28 2018 Inter Milan (38); Probe 34 2011 Bayern Munich (34)
+B1) 874 transitions over 4 layouts and 5 seasons; largest deviation at the first frame 0.000 px, at the last 0.000 px; 697 rows entered a compact window
+ok   B1. enough transitions were measured (874, floor 400)
+ok   B1. every row starts within 1 px of where it truly was (0 did not)
+ok   B1. every row reads as the new table's row from the first frame (0 texts, 0 orders wrong)
+ok   B1. every row ends within 1 px of its place in the still card (0 did not)
+ok   B1. nothing is left on a row after a flight (0 leftovers)
+ok   B1. the box is the same size at the first frame, the last frame and still (0 differed)
+ok   B1. the largest deviation seen is at most half a pixel, so the 1 px bound is not a rounding accident (0.000 and 0.000)
+B2) by season: Probe 0 2000 Juventus 81 of 86 (94.2%); Probe 9 1997 Atletico Madrid 78 of 94 (83.0%); Probe 14 2035 Inter Milan 85 of 94 (90.4%); Probe 28 2018 Inter Milan 87 of 94 (92.6%); Probe 34 2011 Bayern Munich 78 of 86 (90.7%)
+ok   B2. one matchday steps in which a row carried a transform: 409 of 454 (90.1%, floor 75%), 3165 rows moved
+ok   B3. a first mount plays nothing (0 of 520 mounts moved)
+ok   B3. pre season to matchday 1 does not slide (0 of 20 did)
+ok   B1i. a flight was in the air when the second table landed in 38 of 40 cases (floor half)
+ok   B1i. the second flight starts at the first table's true places and ends at the second's, nothing left (0 bad starts, 0 bad ends, 0 leftovers; largest start deviation 0.000 px)
+ok   B4. under reduced motion no step slides (0 of 50 did)
+ok   B4. and every row is at its new place in the same frame (0 were not)
+ok   B5. the bare page carries the pitch part's own stylesheet (nets, ball and figures are placed)
+ok   B5. the pitch plays the goal that happened: side, net, ring, words, order, pause, a goal already past, Results speed (0 of 46 held checks failed)
+C) chunks: Season Centre SeasonCentre-Cdw8L2GE.js, little pitch MiniPitch-ChdxyAbE.js, pitch part PitchSurface-B5RjYYHA.js
+C) save: Motion 0, 12 played seasons (4 replay, 2 open for the cup games they kept, 6 locked), the last 2025/26 Arsenal with 38 matchdays; his goal and a goal against on matchday 7
+ok   C. the save has seasons that replay and seasons that are locked (4 and 6; floors 2 and 1)
+C) the YOUR CALL save: Held 0, 2014 Arsenal, matchday 7 (finish, on the record missed): as saved 0-1, as he played it 1-1; ledger {"v":1,"key":"Held 0|Arsenal|2014|25|10|4|6.8|centre","m":[[7,0,2]],"banked":1}
+ok   C8. node: his YOUR CALL changes the score of matchday 7 and the table that week
+C) the results only save: Probe 0, 1992 Al Ahli, 38 league games
+ok   C2. the hub loads neither the Season Centre, the little pitch nor the pitch part
+ok   C3. with no place kept the hub shows Season replays and no Resume chip
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[data-open-season-replays]')
+    - locator resolved to <button type="button" data-open-season-replays="true" class="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonCentreMotion.mjs:1022:16 {
+  log: [
+    "  - waiting for locator('[data-open-season-replays]')",
+    '    - locator resolved to <button type="button" data-open-season-replays="true" class="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>',
+    '  - attempting click action',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '    - retrying click action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible, enabled and stable',
+    '      - element is visible, enabled and stable',
+    '      - scrolling into view if needed',
+    '      - done scrolling',
+    '      - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '    - retrying click action',
+    '      - waiting 100ms',
+    '    58 × waiting for element to be visible, enabled and stable',
+    '       - element is visible, enabled and stable',
+    '       - scrolling into view if needed',
+    '       - done scrolling',
+    '       - <div data-state="open" aria-hidden="true" data-aria-hidden="true" class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"></div> intercepts pointer events',
+    '     - retrying click action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
