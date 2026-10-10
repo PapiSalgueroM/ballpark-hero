@@ -326,6 +326,13 @@
       promotions and every other next season and second season view held
       in all 47, and pure held 48/0. Written with --part=modern,eras,pure
       --write on the tree itself, then run green whole on the same runner.
+      Taken a second time the same day at 852b05fc (remote check
+      r1229-rules2) after the book's list of my own men's clean sheets
+      changed from a map by player id to a list of pairs, a change of
+      shape inside the book and of nothing else. Both legs again, each
+      against the file as it stood before the round (980654fa): leg A the
+      file byte for byte, leg B the same 151 hashes in the same 47 saves
+      and no other. The file this tree carries is that second writing.
       scripts/simCmLeagueBook.mjs holds the same thing from the other side:
       the whole save but the book, and the count of draws, equal with the
       book in and out and equal to the commit before the round.

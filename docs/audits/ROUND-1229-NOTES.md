@@ -169,6 +169,13 @@ weeks a seed set, and 9,072 to 10,001 unnamed goals beside about 33,500 named on
 | Eredivisie | 2,244 of 3,468 | 11 of 17 |
 | 2. Bundesliga | 2,720 of 2,890 | 17 of 19 |
 
+MOST OF THEM ARE A FEW MEN SHORT, NOT EMPTY. What the roster of such a club holds as the save sees it (seed set
+0, the harness prints it): Schalke 04 16 men and no keeper, Espanyol 14 and no keeper, Swansea City 14 and no
+keeper, Millwall 11 and no keeper, Girona 10 with a keeper, Heidenheim 10 and no keeper, Elversberg, St. Pauli and
+Levante 10 with one, Holstein Kiel 9, Mallorca 8, Blackburn Rovers 7; and at the far end Bolton Wanderers 3,
+Lincoln City 2, Dynamo Dresden 1, ADO Den Haag, Cambuur and FC Andorra none. On seed set 0 the Premier League had
+two as well, both promoted for season two (Millwall and Swansea City, 76 of 8,664 club weeks). A keeper is what
+most of the nearly whole ones lack.
 The old race named two men for every one of those clubs (it reads the roster, not the eleven). So a Goals
 board read from the book in the 2. Bundesliga would show two rival clubs, my own men and whoever scored
 against me. This is not a defect of the round (the Match Centre draws unlabelled dots for the same clubs
