@@ -173,17 +173,20 @@ describe('Round 1216: an own goal on real feeds', () => {
     console.log(`[1216 material] fleet ${FLEET} (${FIVE_CLUBS.map(c => `${c.club} ${c.seed}`).join(', ')}): ${f.matches} matches, ${f.halves} half feeds; own goals staged ${f.owns.length} (goals left as they were: ${f.plainGoals}), for me ${f.owns.filter(o => o.mine).length}, against me ${f.owns.filter(o => !o.mine).length}; the named man on the viewer's cast ${present.length}, not on it ${f.owns.length - present.length}; by a back ${present.length - keepers.length}, by the keeper ${keepers.length}; actions that start outside the goal's own minute ${f.offMinute}, wound up as a last kick ${f.lastKick}`);
     for (const o of f.owns.filter(x => !x.man).slice(0, 5)) console.log(`[1216 material] not on the grass: ${o.label}`);
     /* A walk ends early when the club sacks its manager, so the count of matches is a floor and never an exact
-       number: the committed fleet walks 100, and other fleets of five clubs were measured at 82, 93, 93 and 97.
-       Every match that is walked hands over both its halves. */
-    expect(f.matches).toBeGreaterThanOrEqual(50);
+       number: the committed fleet walks 100, fleets 1 and 7 walk 94 and 93, and fleets of other clubs were
+       measured at 82. Every match that is walked hands over both its halves. */
+    expect(f.matches).toBeGreaterThanOrEqual(40);
     expect(f.halves).toBe(2 * f.matches);
-    /* Floors at half of what was measured (163 staged, 79 for me, 84 against me, 139 by a back, 24 by the keeper, 163 on the grass). */
-    expect(f.owns.length).toBeGreaterThanOrEqual(81);
-    expect(f.owns.filter(o => o.mine).length).toBeGreaterThanOrEqual(39);
-    expect(f.owns.filter(o => !o.mine).length).toBeGreaterThanOrEqual(42);
-    expect(present.length - keepers.length).toBeGreaterThanOrEqual(69);
-    expect(keepers.length).toBeGreaterThanOrEqual(12);
-    expect(present.length).toBeGreaterThanOrEqual(81);
+    /* Floors at half of the LEAST measured on seventeen fleets (the committed one and OWN_GOAL_FLEET 1 to 16,
+       remote checks r1216-fx-a and r1216-fx-b). The committed fleet: 163 staged, 79 for me, 84 against me, 139 by
+       a back, 24 by the keeper, 163 on the cast. Over the seventeen: staged 151 to 203, for me 65 to 125, against
+       me 66 to 104, by a back 134 to 180, by the keeper 12 to 31, and the named man on the cast every time. */
+    expect(f.owns.length).toBeGreaterThanOrEqual(75);
+    expect(f.owns.filter(o => o.mine).length).toBeGreaterThanOrEqual(32);
+    expect(f.owns.filter(o => !o.mine).length).toBeGreaterThanOrEqual(33);
+    expect(present.length - keepers.length).toBeGreaterThanOrEqual(67);
+    expect(keepers.length).toBeGreaterThanOrEqual(6);
+    expect(present.length).toBeGreaterThanOrEqual(75);
   }, 300000);
 
   it('OG1: the ball goes in off the man the line names', () => {
@@ -403,17 +406,33 @@ describe('Round 1216: an own goal on real feeds', () => {
     const worked = sharpestTurn(TICKS.map(t => actionFrame(wide, handLine('me', 'Away keeper'), t))).turn;
     console.log(`[1216 OG5 geometry] swept by hand: off a keeper (${swept.keeper.length} scenes) ${spreadOf(swept.keeper)}, the corner on the far side from where it came ${farCorner}; off a back (${swept.back.length} scenes) ${spreadOf(swept.back)}; the scene the review worked by hand ${worked.toFixed(1)}`);
 
-    /* The baseline arm never turns by 20 (the same line with og off: measured at most 3.3 on seventeen fleets). */
+    /* WHAT WAS MEASURED (remote checks r1216-fx-a and r1216-fx-b, the committed fleet and OWN_GOAL_FLEET 1 to 16).
+       The baseline arm, the same line with og off, never turns by more than 3.3 on any of the seventeen.
+       The least turn of each fleet, in the order 0 to 16:
+         off a back    41.6 45.2 28.4 45.0 44.4 42.9 29.6 28.4 46.0 44.9 43.2 45.0 44.0 31.4 43.7 43.5 28.4
+         off a keeper  62.0 62.0 61.2 59.9 61.6 61.5 62.1 61.3 65.7 62.1 61.2 63.6 60.9 64.6 62.3 61.6 61.4
+       The sweep by hand: never under 27.1 off a back (4,420 scenes) or under 43.3 off a keeper (1,500 scenes), and
+       the scene the review worked by hand turns by 103.8.
+       BEFORE THE REVIEW the floor was read on the committed fleet alone, whose least turn (34.1, a keeper) was the
+       highest of seventeen fleets: a keeper's corner was left to the minute's parity, and on fleets 9 and 10 the
+       same test went red at 2.2 degrees with nothing changed. A floor read off one sample is a coin toss. So the
+       floor of 20 is held where it is a bound of the geometry, on the sweep, and the fleet then cannot fall
+       under it; the fleets' leasts above are the measured headroom, not the reason it holds. */
     expect(plainTurns.filter(turn => turn >= 20).length).toBe(0);
-    /* The floor of 20, a bound of the geometry: on the sweep, for a keeper and for a back, and so on every own goal of the fleet. */
     expect(farCorner).toBe(0);
     expect(swept.keeper.filter(turn => turn < 20).length).toBe(0);
     expect(swept.back.filter(turn => turn < 20).length).toBe(0);
     expect(worked).toBeGreaterThanOrEqual(20);
     expect(ownTurns.filter(turn => turn < 20).length).toBe(0);
-    /* A bound of the geometry on every back's own goal: he is brought into the band and at most 5 further across, never beyond. */
+    /* A bound of the geometry on EVERY back's own goal, the ones who stand far up the pitch among them: he is
+       brought into the band and at most 5 further across, never beyond that. (Before the review this was "no back
+       from his own third walks more than 15", which was the fleet's maximum and no bound of anything: it held
+       because the widest back of that fleet happened to stand 31.6 from the middle.) */
     expect(beyond).toBe(0);
-    /* Two statistics of the fleet, with room over what was measured (written here once the fleets are read). */
+    /* Two statistics of the backs of the fleet, which say the ball comes to the man and not the man to the ball.
+       Measured on the seventeen fleets: the median walk 0.0 to 0.6, the 90th percentile 3.0 to 4.8 (134 to 180
+       backs a fleet). The bounds leave room over both. The longest walk of a fleet (6.3 to 37.4: a back the cast
+       has far up the pitch is brought all the way back) is printed and bounded by the rule above, never by a number. */
     expect(quantile(walks, .5)).toBeLessThanOrEqual(3);
     expect(quantile(walks, .9)).toBeLessThanOrEqual(8);
   }, 300000);
@@ -589,7 +608,7 @@ describe('Round 1216: an own goal on scenes made by hand', () => {
    liveSimCelebration.test.tsx, whose three digests (every frame that is NOT an own goal, and the figure in every
    pose it had) this round does not edit. These two are new: recorded in the commit that drew the own goal.
    OWN was taken again once, in the review fix pass, and RUE was not. What moved OWN is the keeper's own goal alone
-   (4 of the 16 variants below, 88 of 352 frames): his corner is the one on the side the ball came from, and he
+   (6 of the 16 variants below, three for each side, 132 of 352 frames): his corner is the one on the side the ball came from, and he
    gets up as it goes in. Proof, remote check r1216-fx-p: with those two lines of motion.tsx put back the first
    recording, 669ef935, replays green; with either one put back alone it does not (0e31fa9b, eddb7f1d). */
 const fnv = (text: string) => {
