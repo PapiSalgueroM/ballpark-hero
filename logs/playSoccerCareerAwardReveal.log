@@ -1,0 +1,27 @@
+ok   390x844 newspaper: newspaper, own badge, award and trophy count do not announce the result
+ok   390x844 summary: newspaper, own badge, award and trophy count do not announce the result
+ok   390x844: rank 10 arrives first after a waiting state
+ok   390x844: only bottom ranks exist until higher ranks arrive
+ok   390x844: no headline, speech button, badge or own win count before top rank arrives
+ok   390x844: no confetti spreads over any part of the screen
+ok   390x844: saved vote order and points determine the complete list
+ok   390x844: correct winning result and speech choices arrive after the list
+ok   390x844: reveal writes only its seen flag, leaving exact career bytes intact
+ok   390x844: reload retains the revealed result without rerolling the save
+ok   390x844: rank, nomination, win and every vote remain the completed saved ballot
+ok   390x844: actual speech saves once while votes, rank and season win stay frozen
+ok   390x844: speech screen has no confetti, page errors or horizontal overflow
+ok   1280x900 newspaper: newspaper, own badge, award and trophy count do not announce the result
+ok   1280x900 summary: newspaper, own badge, award and trophy count do not announce the result
+ok   1280x900: rank 10 arrives first after a waiting state
+ok   1280x900: only bottom ranks exist until higher ranks arrive
+ok   1280x900: no headline, speech button, badge or own win count before top rank arrives
+ok   1280x900: no confetti spreads over any part of the screen
+ok   1280x900: saved vote order and points determine the complete list
+ok   1280x900: correct winning result and speech choices arrive after the list
+ok   1280x900: reveal writes only its seen flag, leaving exact career bytes intact
+ok   1280x900: reload retains the revealed result without rerolling the save
+ok   1280x900: rank, nomination, win and every vote remain the completed saved ballot
+ok   1280x900: actual speech saves once while votes, rank and season win stay frozen
+ok   1280x900: speech screen has no confetti, page errors or horizontal overflow
+playSoccerCareerAwardReveal: 26 checks, 0 failed
