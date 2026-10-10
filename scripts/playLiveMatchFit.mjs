@@ -877,9 +877,10 @@ async function findOwnGoalSaves() {
   const found = {};
   let matches = 0;
   try {
-    /* Up to thirty seasons, five clubs in turn. An own goal that fits is in about one first half in a hundred
-       for each side, so thirty seasons hold a dozen of each: the search finding none is a defect, not bad luck. */
-    for (let season = 0; season < 30 && !(found.me && found.opp); season++) {
+    /* Up to ninety seasons, five clubs in turn. Measured on the walk's own seed: the one for me was in match 69
+       of the search and the one against me in match 371, and ninety seasons are over ten times that many matches,
+       so a search that finds none is a defect and not bad luck. */
+    for (let season = 0; season < 90 && !(found.me && found.opp); season++) {
       let career = cm.startCareer(['Aston Villa', 'Real Madrid', 'Lyon', 'Ajax', 'Celtic'][season % 5]);
       for (let guard = 0; guard < 400 && !(found.me && found.opp); guard++) {
         const next = cm.playNextEntry(career);
@@ -1004,7 +1005,7 @@ async function ownGoalSection() {
 function ownShots(page, prefix) {
   const done = new Map();
   return async () => {
-    if (!SHOTS || done.size === 3) return;
+    if (!SHOTS || done.has('card')) return;
     const now = await page.evaluate(() => {
       const p = document.querySelector('[data-cm-live-pitch]');
       return { motion: p ? p.getAttribute('data-cm-motion') : null, phase: p ? p.getAttribute('data-cm-motion-phase') : null, card: !!document.querySelector('[data-cm-goal-card]'), t: performance.now() };
@@ -1012,7 +1013,10 @@ function ownShots(page, prefix) {
     if (!now) return;
     if (now.motion === 'goal' && now.phase === 'flight' && !done.has('a')) { done.set('a', now.t); await shoot(page, prefix + '-flight-a'); }
     else if (now.motion === 'goal' && now.phase === 'flight' && !done.has('b')) { done.set('b', now.t); await shoot(page, prefix + '-flight-b'); }
-    else if (now.card && !done.has('card')) { done.set('card', now.t); await shoot(page, prefix + '-card'); }
+    /* The card is shot seven tenths of a second after it rises, in the middle of its hold: by then the man has
+       his hands to his head and the side that got the goal has its arms up. */
+    else if (now.card && !done.has('seen')) done.set('seen', now.t);
+    else if (now.card && !done.has('card') && now.t - done.get('seen') >= 700) { done.set('card', now.t); await shoot(page, prefix + '-card'); }
   };
 }
 
