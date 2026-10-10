@@ -1,0 +1,14 @@
+           owed: src/pages/SoccerCareer.tsx [state:saveFailed], owner the other lane, listed 2026-10-10
+           owed: src/hooks/useGame.ts [state:practiceSaveFailed, state:unlimitedSaveFailed], owner the other lane, listed 2026-10-10
+           owed: src/pages/RankEm.tsx [state:saveFailed, keeps:saveCircuit], owner the other lane, listed 2026-10-10
+           owed: src/hooks/useClubManager.ts [state:saveFailed, keeps:saveCareer], owner this lane, after Release AT lands (the train edits this file), listed 2026-10-10
+           owed: src/hooks/useAussieRulesLeague.ts [state:storageNotice], owner this lane, listed 2026-10-10
+           owed: src/hooks/useAussieRulesManager.ts [state:storageNotice], owner this lane, listed 2026-10-10
+           owed: src/hooks/useStadiumTycoon.ts [state:ticketSaveFailed, keeps:saveTicketState], owner to be named by the lead, listed 2026-10-10
+           owed: src/lib/tycoonRewards.ts [write:saveLedger], owner to be named by the lead, listed 2026-10-10
+           owed: src/hooks/useMmaPromotion.ts [write:change], owner to be named by the lead, listed 2026-10-10
+           owed: src/hooks/useNbaConnections.ts [state:notesWarning], owner to be named by the lead (low: scratch notes, the daily result has its own save), listed 2026-10-10
+           owed: src/hooks/useNhlConnections.ts [state:notesWarning], owner to be named by the lead (low: scratch notes, the daily result has its own save), listed 2026-10-10
+           owed: src/hooks/useGamePicks.ts [write:toggle], owner to be named by the lead (low: a list of pinned games, not a game), listed 2026-10-10
+
+simStorageWrites: 1 failed (owed: 12)
