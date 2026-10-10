@@ -1,0 +1,128 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/soccerCareerProgramme.test.ts [2m([22m[2m66 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 95[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mtactics finisher changes expected goals and assists with a recorded choice[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mtactics creator has the opposite scoring tradeoff[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mtactics cover changes clean sheet expectation without adding saved clean sheets[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mtactics outfield duties reject a keeper and unknown choice[32m 0[2mms[22m[39m
+[31m   [31m×[31m Soccer career programme outcomes[2m > [22mposition training takes two consecutive played years and improves actual selection[39m[32m 8[2mms[22m[39m
+[31m     → expected 'RW' to be null[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mposition incompatible groups and primary position do not train[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mposition an interrupted year cannot graduate[32m 0[2mms[22m[39m
+[31m   [31m×[31m Soccer career programme outcomes[2m > [22mposition a paused training year resets consecutive progress[39m[32m 2[2mms[22m[39m
+[31m     → expected { club: 'Fixture Club', …(2) } to be undefined[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mposition a move cancels training and learned club selection benefit[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mset_pieces penalty allocation is a subset of recorded goals[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mset_pieces free kick allocation preserves all actual totals[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mset_pieces no played goals creates no duty credit[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mpromise actual league appearances meet the agreed target[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mpromise a fit league shortfall earns a recorded broken promise[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mpromise availability or missing league data excuses the target {"injury":"Hamstring","injuryWeeks":4}[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mpromise availability or missing league data excuses the target {"suspensionMatches":3}[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mpromise availability or missing league data excuses the target {}[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mpromise a past or foreign verdict cannot carry to the next club[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation changes the actual professional offer once and keeps current pay[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation shorter terms have the stated wage cost[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation canonical displayed offer path {"type":"dream_club","offer":{"club":{"id":"fixture","name":"Offered Club","country":"Fixture Country","tier":2,"league":"Fixture League","color":"#112233"},"wage":20000,"contractYears":3,"transferFee":4}}[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation canonical displayed offer path {"type":"request_result","offer":{"club":{"id":"fixture","name":"Offered Club","country":"Fixture Country","tier":2,"league":"Fixture League","color":"#112233"},"wage":20000,"contractYears":3,"transferFee":4}}[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation canonical displayed offer path {"type":"bidding_war","offerA":{"club":{"id":"fixture","name":"Offered Club","country":"Fixture Country","tier":2,"league":"Fixture League","color":"#112233"},"wage":20000,"contractYears":3,"transferFee":4},"offerB":{"club":{"id":"fixture","name":"Offered Club","country":"Fixture Country","tier":2,"league":"Fixture League","color":"#112233"},"wage":30000,"contractYears":3,"transferFee":4}}[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation canonical displayed offer path {"type":"contract_expiry","offers":[{"club":{"id":"fixture","name":"Offered Club","country":"Fixture Country","tier":2,"league":"Fixture League","color":"#112233"},"wage":20000,"contractYears":3,"transferFee":4}]}[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation canonical displayed offer path {"type":"frozen_out","mode":"transfer_listed","reasons":[],"offers":[{"club":{"id":"fixture","name":"Offered Club","country":"Fixture Country","tier":2,"league":"Fixture League","color":"#112233"},"wage":20000,"contractYears":3,"transferFee":4}]}[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation rejects a loan, absent offer and one-year shortening[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation youth first offer is updated through its actual stored path[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation a rejected wage ask holds the complete offer and consumes the chance[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mnegotiation a different offer club has its own current choice and context[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mbonuses exact quoted cash is paid once and survives reload[32m 14[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mbonuses appearances pays from actual target data[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mbonuses assists pays from actual target data[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mbonuses missing league data and under-target totals do not pay[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mbonuses a serious injury preserves a target actually earned while zero apps cannot earn it[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22madaptation settling sacrifices selection for recorded morale[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22madaptation integration offers selection at an injury cost[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22madaptation cannot repeat at the same club or guess a missing past club[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mfitness managed return reduces risk with fewer planned appearances[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mfitness full workload has the actual stated injury tradeoff[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mfitness a stale injury cannot activate the return programme[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mcaptain calm leadership lowers both card rates at a selection cost[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mcaptain rally raises selection and yellow card expectation[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mcaptain a foreign armband and a non-captain cannot choose duties[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mloan buy settles real permanent terms once instead of returning[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mloan an interrupted year cannot complete the purchase[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mloan wrong destination or changed parent cannot consume a saved option[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mloan permanent players cannot queue an option[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mreading absent old saves preserves every field and consumes no random draws[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22minvalid programme and year data are neutral[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mchoices cancel without changing other saved plans or original input[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mmoves and stale years clear plans before actual play[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mprepare and settlement detach optional state before changing a shallow engine copy[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mview labels old outcomes with their actual recorded year and club[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22msettlement rejects foreign, nonplaying and invalid recorded rows[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer career programme outcomes[2m > [22mreading never accesses hidden awards or changes the saved primary season identity[32m 0[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22mrecords interrupted Fixture Club rows against the actual held club without changing saved stats[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22mrecords interrupted BANNED rows against the actual held club without changing saved stats[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22mrecords interrupted BANNED (PED) rows against the actual held club without changing saved stats[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22mrecords interrupted PRISON rows against the actual held club without changing saved stats[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22mrecords interrupted CONVICTED rows against the actual held club without changing saved stats[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22mrejects foreign, nonzero, wrong-year and nonplaying interruption rows[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22msettles the actual ban engine path once and preserves its entire no-plan result and draw count[32m 16[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22msettles the actual prison engine path once and preserves its entire no-plan result and draw count[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22msettles the actual ped engine path once and preserves its entire no-plan result and draw count[32m 8[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22msettles the actual legacy rehab engine path once and preserves its entire no-plan result and draw count[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer programme zero-appearance interruptions[2m > [22msettles the actual legacy conviction engine path once and preserves its entire no-plan result and draw count[32m 4[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerProgrammeUi.test.tsx [2m([22m[2m34 tests[22m[2m)[22m[33m 1786[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerCareerProgramme.test.ts[2m > [22mSoccer career programme outcomes[2m > [22mposition training takes two consecutive played years and improves actual selection
+[31m[1mAssertionError[22m: expected 'RW' to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+"RW"
+
+[36m [2m❯[22m src/lib/soccerCareerProgramme.test.ts:[2m54:56[22m[39m
+    [90m 52| [39m    [35mlet[39m state [33m=[39m [34mchooseProgramme[39m([34mcareer[39m()[33m,[39m [32m'position'[39m[33m,[39m [32m'RW'[39m)[33m;[39m
+    [90m 53| [39m    [34mexpect[39m([34mprogrammeEffects[39m(state)[33m.[39mappsMult)[33m.[39m[34mtoBe[39m([34m0.97[39m)[33m;[39m
+    [90m 54| [39m    [34mexpect[39m([34mfinish[39m(state)[33m.[39mprogramme[33m?.[39msecondaryPosition)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                                       [31m^[39m
+    [90m 55| [39m    state.phase = 'playing'; state = chooseProgramme(state, 'position'…
+    [90m 56| [39m    [34mexpect[39m([34mfinish[39m(state)[33m.[39mprogramme[33m?.[39msecondaryPosition)[33m.[39m[34mtoBe[39m([32m'RW'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/soccerCareerProgramme.test.ts[2m > [22mSoccer career programme outcomes[2m > [22mposition a paused training year resets consecutive progress
+[31m[1mAssertionError[22m: expected { club: 'Fixture Club', …(2) } to be undefined[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+{
+  "club": "Fixture Club",
+  "position": "RW",
+  "primary": "ST",
+}
+
+[36m [2m❯[22m src/lib/soccerCareerProgramme.test.ts:[2m70:109[22m[39m
+    [90m 68| [39m    let state = chooseProgramme(career(), 'position', 'RW'); finish(st…
+    [90m 69| [39m    state.seasons.push(row({ year: 2028 })); state = chooseProgramme(s…
+    [90m 70| [39m    expect(state.programme?.secondaryTraining?.seasons).toBe(1); expec…
+    [90m   | [39m                                                                                                            [31m^[39m
+    [90m 71| [39m  })[33m;[39m
+    [90m 72| [39m  it('position a move cancels training and learned club selection bene…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m98 passed[39m[22m[90m (100)[39m
+[2m   Start at [22m 20:39:38
+[2m   Duration [22m 3.95s[2m (transform 1.07s, setup 101ms, collect 2.57s, tests 1.88s, environment 657ms, prepare 256ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerProgramme.test.ts,title=src/lib/soccerCareerProgramme.test.ts > Soccer career programme outcomes > position training takes two consecutive played years and improves actual selection,line=54,column=56::AssertionError: expected 'RW' to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A"RW"%0A%0A ❯ src/lib/soccerCareerProgramme.test.ts:54:56%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/soccerCareerProgramme.test.ts,title=src/lib/soccerCareerProgramme.test.ts > Soccer career programme outcomes > position a paused training year resets consecutive progress,line=70,column=109::AssertionError: expected { club: 'Fixture Club', …(2) } to be undefined%0A%0A- Expected: %0Aundefined%0A%0A+ Received: %0A{%0A  "club": "Fixture Club",%0A  "position": "RW",%0A  "primary": "ST",%0A}%0A%0A ❯ src/lib/soccerCareerProgramme.test.ts:70:109%0A%0A

@@ -1,0 +1,2 @@
+scMut goals14: applied
+MUT goals14: caught. unit exit 1 ([41m[1m FAIL [22m[49m src/lib/soccerCareerProgramme.test.ts[2m > [22mSoccer career programme outcomes[2); sim exit 0 (); src and scripts differ from the head in 0 file(s)

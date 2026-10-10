@@ -1,0 +1,23 @@
+# Release AU review, lens sc-engine: one settlement rule mutated at a time in this checkout only (exit 1 = caught,
+# exit 0 = SURVIVED, exit 3 = aborted). Then the wheel and the opening tie taken out one at a time for the two
+# harnesses the integrator did not separate.
+#!serial
+none: bash .rc/x/scMutRun.sh none
+goals14: bash .rc/x/scMutRun.sh goals14
+injuryErases: bash .rc/x/scMutRun.sh injuryErases
+noExcuse: bash .rc/x/scMutRun.sh noExcuse
+oneYear: bash .rc/x/scMutRun.sh oneYear
+moveKeeps: bash .rc/x/scMutRun.sh moveKeeps
+morale4: bash .rc/x/scMutRun.sh morale4
+redCalm: bash .rc/x/scMutRun.sh redCalm
+settleTwice: bash .rc/x/scMutRun.sh settleTwice
+noSureOffer: bash .rc/x/scMutRun.sh noSureOffer
+injuryYearUnsettled: bash .rc/x/scMutRun.sh injuryYearUnsettled
+freeKick20: bash .rc/x/scMutRun.sh freeKick20
+starter25: bash .rc/x/scMutRun.sh starter25
+finish-head: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueFinish.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+finish-nowheel: node .rc/x/mutAU.mjs nowheel >/dev/null && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueFinish.mjs 2>&1 | tail -1 | cut -c1-200; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
+finish-noopening: node .rc/x/mutAU.mjs noopening >/dev/null && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueFinish.mjs 2>&1 | tail -1 | cut -c1-200; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
+awards-nowheel: node .rc/x/mutAU.mjs nowheel >/dev/null && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs 2>&1 | tail -1 | cut -c1-200; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
+awards-noopening: node .rc/x/mutAU.mjs noopening >/dev/null && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs 2>&1 | tail -1 | cut -c1-200; s=${PIPESTATUS[0]}; git checkout HEAD -- src; exit $s
+held: echo "src and scripts differ from the head in $(git status --short -- src scripts | wc -l) file(s)"
