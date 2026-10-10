@@ -1,0 +1,14 @@
+rivalry exit=0 6s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+rivalry-coin306 exit=1 7s | simCareerRivalryEvents: 36 failures
+simUsSeasonCentre exit=0 28s | simUsSeasonCentre: 98 checks, 0 failed
+record-board exit=0 57s | recordUsBoardFixture: wrote scripts/data/usBoardFixture.json (1872641 bytes)
+simCareerRealism exit=0 7s | ALL CAREER REALISM CHECKS PASSED
+simCareerParity exit=0 16s | simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
+simAwards exit=0 8s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simNflCareer exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+simMlbCareer exit=0 25s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simNhlCareer exit=0 21s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+simCareerHub exit=0 0s | simCareerHub: green. Nine games on the same boxes now, and every award has a year on it.
+simCareerInboxBeats exit=0 62s | simCareerInboxBeats: green. Soccer is unchanged, the NFL, NBA, MLB and NHL inboxes each run on their own calendar, and every rival choice does what it says.
+vitest-all exit=1 491s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career t
+simCareerHall exit=0 889s | simCareerHall: all four sports green
