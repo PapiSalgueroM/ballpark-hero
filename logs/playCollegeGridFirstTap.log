@@ -1,0 +1,27 @@
+playCollegeGridFirstTap: assets/collegeGridSearch-Bs7o3gLM.json and assets/collegeGridJudge-BnVqn2Y8.json, the database host aborted on every page
+
+1) The board does not wait for the key
+   390 by 844: nine empty cells 250 ms after navigation, search box open and focused, both key files still held
+   1280 by 900: nine empty cells 217 ms after navigation, search box open and focused, both key files still held
+
+2) Requests: one per key file, none to the table
+   390 by 844: 2 key requests and 0 table reads (main: 36 reads, 72 requests, 9,462,264 bytes decoded); 1 other database requests aborted
+   1280 by 900: 2 key requests and 0 table reads (main: 36 reads, 72 requests, 9,462,264 bytes decoded); 1 other database requests aborted
+
+3) Time to nine cells
+   median 672 ms to nine cells over 5 fresh contexts at 4 times CPU throttle [707, 670, 682, 663, 672]; ceiling 3150 ms; main's board took 9528 to 15553 ms. Medians measured when the ceiling was set: 776, 771 and 769 ms (tight figure 1,200 ms; 2,601 ms on a PC at full load)
+
+4) Search from memory, offline
+   390 by 844, offline: "Morten Ander" listed Morten Andersen and the surname "morocco" alone listed Zippy Morocco, with 0 requests. Longest task at 4 times throttle: 137 ms while the key landed, 92 ms on the first search
+
+5) A pick judged offline
+   390 by 844, offline, board Tennessee / Texas A&M / Oklahoma x Wide Receiver / Top 5 Pick / Top 10 Pick: no Morten Andersen took the count 15 to 14; unknown Jeff Feagles cost nothing; yes Cordarrelle Patterson filled its cell
+
+6) Fail closed in three worlds
+   the judge file aborted: unverified, 15 left, save untouched, then judged after release; the judge file answered 200 with index.html: unverified, 15 left, save untouched, then judged after release; the judge file answered with its stamp changed: unverified, 15 left, save untouched, then judged after release
+
+7) Geometry: the board holds its ground when the key lands
+   390 by 844: board rectangle 16,329,358,318.5 before and after the key landed, no sideways overflow; cumulative layout shift 0 at 375 by 812 with both key files held 1500 ms (ceiling 0.05)
+   1280 by 900: board rectangle 384,405,512,422.5 before and after the key landed, no sideways overflow
+
+playCollegeGridFirstTap: green. The board is up before the key, the key is two requests and never the table, the search and the judge read memory with the network gone, a pick nobody could check costs nothing and saves nothing, and nothing moves when the key lands.
