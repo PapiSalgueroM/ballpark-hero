@@ -1,0 +1,12 @@
+ledger exit=0 1s | simUsSeasonLedger: green. 2967 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+ctl-nhltyped exit=1 1s | simUsSeasonLedger: CONTROL nhltyped FIRED, red at exactly E2
+ctl-mlbrounds exit=1 2s | simUsSeasonLedger: CONTROL mlbrounds FIRED, red at exactly E4
+ctl-mlbladder exit=1 1s | simUsSeasonLedger: CONTROL mlbladder FIRED, red at exactly E4
+ctl-mlbtyped exit=1 1s | simUsSeasonLedger: CONTROL mlbtyped FIRED, red at exactly E6
+ctl-mlbavg exit=1 1s | simUsSeasonLedger: CONTROL mlbavg FIRED, red at exactly E7
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+ctl-all exit=0 60s | controls fired: 43 of 43
+simUsBoardParity exit=1 47s | simUsBoardParity: 3 failures
+slate-test exit=0 2s |    Duration  1.78s (transform 745ms, setup 43ms, collect 944ms, tests 26ms, environment 312ms, prepare 101ms)
+tsc exit=0 69s | 
+simUsSeasonCentre exit=0 18s | simUsSeasonCentre: 98 checks, 0 failed
