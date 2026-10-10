@@ -1,0 +1,3 @@
+#!build
+#!playwright
+walkL-report: KEEPER_MODE=report node scripts/playSaveKeeper.mjs

@@ -1,0 +1,35 @@
+playSaveKeeper: mode report, 21 route(s), widths 390 and 1280, build /home/runner/work/ballpark-hero/ballpark-hero/dist
+
+A clean visit and a leave, per route: does the game write its save with no press?
+  quiet   /soccer-career  keys left: dukb-guest-handle
+  quiet   /club-manager  keys left: dukb-guest-handle
+  WRITES  /stadium-tycoon  keys left: dukb-guest-handle, stadiumTycoonSaveV1
+  WRITES  /wonderkid-factory  keys left: dukb-guest-handle, wonderkidFactoryV1
+  quiet   /rebuild  keys left: dukb-guest-handle
+  quiet   /front-office  keys left: dukb-guest-handle
+  quiet   /nfl-my-career  keys left: dukb-guest-handle
+  quiet   /cfb-dynasty  keys left: dukb-guest-handle
+  quiet   /cbb-dynasty  keys left: dukb-guest-handle
+  quiet   /nba-front-office  keys left: dukb-guest-handle
+  quiet   /nba-my-career  keys left: dukb-guest-handle
+  quiet   /mlb-my-career  keys left: dukb-guest-handle
+  quiet   /mlb-front-office  keys left: dukb-guest-handle
+  quiet   /nhl-my-career  keys left: dukb-guest-handle
+  quiet   /nhl-front-office  keys left: dukb-guest-handle
+  quiet   /aussie-rules-manager  keys left: dukb-guest-handle, rules-gate-seen:/aussie-rules-manager
+  quiet   /fight-career  keys left: dukb-guest-handle
+  quiet   /fight-promoter  keys left: dukb-guest-handle
+  quiet   /fight-gym  keys left: dukb-guest-handle
+  quiet   /hall-of-champions  keys left: dukb-guest-handle
+  WRITES  /idle-arena  keys left: dukb-guest-handle, dukb-idle-arena-v1
+
+Journey L, the fresh flow, on the 3 route(s) that write with no press:
+  LOST      /stadium-tycoon 390: A (1246 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false (at the key: true); writes to the key: x' A' x' x'; backups 1
+  LOST      /stadium-tycoon 1280: A (1246 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false (at the key: true); writes to the key: x' A' x' x'; backups 1
+  LOST      /wonderkid-factory 390: A (335 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: true (at the key: true); writes to the key: x' A' x' x'; backups 1
+  LOST      /wonderkid-factory 1280: A (335 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: true (at the key: true); writes to the key: x' A' x' x'; backups 1
+  LOST      /idle-arena 390: A (312 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false (at the key: true); writes to the key: x' A' x' x'; backups 1
+  LOST      /idle-arena 1280: A (312 chars) is in NO KEY; A is the game on screen: false; the game he had is kept aside: false (at the key: true); writes to the key: x' A' x' x'; backups 1
+
+playSaveKeeper journey L: 6 walk(s) judged over 3 route(s) that write with no press (/stadium-tycoon, /wonderkid-factory, /idle-arena): 6 LOST the save that was put back, 0 kept it but not as the game on screen or lost the other one, 0 survived, 0 not judged
+playSaveKeeper: report mode, nothing asserted.
