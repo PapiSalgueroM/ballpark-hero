@@ -1,0 +1,21 @@
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+NEGATIVE CONTROL ON: droprow on a copy of eredivisie, sections ABCEI must go red and nothing else
+A) shape: RED for eredivisie
+  FAIL: eredivisie: 1 matchday(s) do not hold 9 matches, the first is matchday 5 with 8
+B) no club twice in a matchday: RED for eredivisie
+  FAIL: eredivisie: 1 matchday(s) do not hold every club exactly once, the first is matchday 5
+C) each pair once at each ground: RED for eredivisie
+  FAIL: eredivisie: 1 ordered pair(s) never meet and 0 meet more than once
+  FAIL: eredivisie: 2 club(s) do not have 17 home and 17 away games, the first is Feyenoord
+D) the game's own clubs: green for 9 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: RED for eredivisie
+  FAIL: eredivisie: source 1: 0 ledger fixture(s) are not in its rows and 1 of its rows are not in the ledger
+  FAIL: eredivisie: source 1 gives the order of matches and the ledger's order differs from it
+  FAIL: eredivisie: source 2: 0 ledger fixture(s) are not in its rows and 1 of its rows are not in the ledger
+  FAIL: eredivisie: the receipt's counts are not the ledger's: matches 306 not 305
+F) two independent sources: green for 9 ledger(s)
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: RED for eredivisie
+  FAIL: eredivisie: the ledger's digest is not the frozen 243fae5518439498: a frozen ledger never changes, a correction ships under a new key
+  FAIL: eredivisie: the digest the receipt recorded is not the ledger's
+CONTROL droprow FIRED as expected on eredivisie: sections ABCEI went red for eredivisie and nothing else
