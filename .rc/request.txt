@@ -1,0 +1,42 @@
+vitest5: node_modules/.bin/vitest run src/test/dartDraftPool.test.ts src/test/dartDraftPools.test.ts src/test/statDetectiveMotion.test.tsx src/test/statDetectiveScope.test.tsx src/test/statDetectiveSpans.test.tsx --reporter=verbose --testTimeout=300000 --hookTimeout=120000
+daily: git worktree add /tmp/base54 54e3820a >/dev/null 2>&1; node .rc/x/dailyProbe.mjs dump . $RC_OUT/daily-head.json 2026-10-10 15 && node .rc/x/dailyProbe.mjs dump /tmp/base54 $RC_OUT/daily-base.json 2026-10-10 15 && node .rc/x/dailyProbe.mjs dump /tmp/base54 $RC_OUT/daily-base2.json 2026-10-10 15; node .rc/x/dailyProbe.mjs cmp $RC_OUT/daily-base.json $RC_OUT/daily-base2.json > $RC_OUT/daily-cmp-base-base.txt; echo "base vs base exit=$?"; node .rc/x/dailyProbe.mjs cmp $RC_OUT/daily-base.json $RC_OUT/daily-head.json > $RC_OUT/daily-cmp.txt; s=$?; grep -c "^same hotseat 2026" $RC_OUT/daily-cmp.txt; grep -c "^same deadline 2026" $RC_OUT/daily-cmp.txt; grep "^DIFF hotseat 2026\|^DIFF deadline 2026" $RC_OUT/daily-cmp.txt | cut -c1-200; tail -1 $RC_OUT/daily-cmp.txt; exit $s
+simDart: node scripts/simDartDraftPool.mjs
+simDart-pool900: DART_POOL_CONTROL=pool900 node scripts/simDartDraftPool.mjs
+simDart-nofloor: DART_POOL_CONTROL=nofloor node scripts/simDartDraftPool.mjs
+simDart-nobest: DART_POOL_CONTROL=nobest node scripts/simDartDraftPool.mjs
+simDart-onepage: DART_POOL_CONTROL=onepage node scripts/simDartDraftPool.mjs
+simDart-pagefloor: DART_POOL_CONTROL=pagefloor node scripts/simDartDraftPool.mjs
+simDart-nomysteryfloor: DART_POOL_CONTROL=nomysteryfloor node scripts/simDartDraftPool.mjs
+simDart-pagemystery: DART_POOL_CONTROL=pagemystery node scripts/simDartDraftPool.mjs
+simDart-machinehalf: DART_POOL_CONTROL=machinehalf node scripts/simDartDraftPool.mjs
+simDart-lasttile: DART_POOL_CONTROL=lasttile node scripts/simDartDraftPool.mjs
+simStat: node scripts/simStatDetectiveMotion.mjs
+simStat-guess: STAT_DETECTIVE_CONTROL=guess node scripts/simStatDetectiveMotion.mjs
+simStat-clue: STAT_DETECTIVE_CONTROL=clue node scripts/simStatDetectiveMotion.mjs
+simStat-result: STAT_DETECTIVE_CONTROL=result node scripts/simStatDetectiveMotion.mjs
+simStat-keys: STAT_DETECTIVE_CONTROL=keys node scripts/simStatDetectiveMotion.mjs
+simStat-keyboard: STAT_DETECTIVE_CONTROL=keyboard node scripts/simStatDetectiveMotion.mjs
+simStat-pointer: STAT_DETECTIVE_CONTROL=pointer node scripts/simStatDetectiveMotion.mjs
+simStat-focus: STAT_DETECTIVE_CONTROL=focus node scripts/simStatDetectiveMotion.mjs
+simStat-quiet: STAT_DETECTIVE_CONTROL=quiet node scripts/simStatDetectiveMotion.mjs
+simStat-cleanup: STAT_DETECTIVE_CONTROL=cleanup node scripts/simStatDetectiveMotion.mjs
+simStat-guide: STAT_DETECTIVE_CONTROL=guide node scripts/simStatDetectiveMotion.mjs
+simStat-span: STAT_DETECTIVE_CONTROL=span node scripts/simStatDetectiveMotion.mjs
+simStat-spanfail: STAT_DETECTIVE_CONTROL=spanfail node scripts/simStatDetectiveMotion.mjs
+simStat-spanend: STAT_DETECTIVE_CONTROL=spanend node scripts/simStatDetectiveMotion.mjs
+simStat-spanshort: STAT_DETECTIVE_CONTROL=spanshort node scripts/simStatDetectiveMotion.mjs
+simStat-spanguess: STAT_DETECTIVE_CONTROL=spanguess node scripts/simStatDetectiveMotion.mjs
+simStat-spanera: STAT_DETECTIVE_CONTROL=spanera node scripts/simStatDetectiveMotion.mjs
+simStat-namesake: STAT_DETECTIVE_CONTROL=namesake node scripts/simStatDetectiveMotion.mjs
+simStat-cohortgap: STAT_DETECTIVE_CONTROL=cohortgap node scripts/simStatDetectiveMotion.mjs
+simStat-franchise: STAT_DETECTIVE_CONTROL=franchise node scripts/simStatDetectiveMotion.mjs
+simStat-franchiseguess: STAT_DETECTIVE_CONTROL=franchiseguess node scripts/simStatDetectiveMotion.mjs
+simRep: node scripts/simReportedGamePools.mjs 2>&1 | tail -25
+simRep-stat-span: REPORTED_POOLS_CONTROL=stat-span node scripts/simReportedGamePools.mjs 2>&1 | grep -E "AssertionError|Control must|Only the exact|simReportedGamePools" | head -3
+simRep-stat-scope: REPORTED_POOLS_CONTROL=stat-scope node scripts/simReportedGamePools.mjs 2>&1 | grep -E "AssertionError|Control must|Only the exact|simReportedGamePools" | head -3
+simRep-stat-context: REPORTED_POOLS_CONTROL=stat-context node scripts/simReportedGamePools.mjs 2>&1 | grep -E "AssertionError|Control must|Only the exact|simReportedGamePools" | head -3
+simRep-dart-variety: REPORTED_POOLS_CONTROL=dart-variety node scripts/simReportedGamePools.mjs 2>&1 | grep -E "AssertionError|Control must|Only the exact|simReportedGamePools" | head -3
+simRep-dart-best: REPORTED_POOLS_CONTROL=dart-best node scripts/simReportedGamePools.mjs 2>&1 | grep -E "AssertionError|Control must|Only the exact|simReportedGamePools" | head -3
+simRep-dart-global: REPORTED_POOLS_CONTROL=dart-global node scripts/simReportedGamePools.mjs 2>&1 | grep -E "AssertionError|Control must|Only the exact|simReportedGamePools" | head -3
+simRep-dart-country: REPORTED_POOLS_CONTROL=dart-country node scripts/simReportedGamePools.mjs 2>&1 | grep -E "AssertionError|Control must|Only the exact|simReportedGamePools" | head -3
+simRep-dart-partial: REPORTED_POOLS_CONTROL=dart-partial node scripts/simReportedGamePools.mjs 2>&1 | grep -E "AssertionError|Control must|Only the exact|simReportedGamePools" | head -3
