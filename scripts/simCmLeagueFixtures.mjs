@@ -151,6 +151,7 @@ const BOUND_KEYS = [
   'primeira-2026-27-v1',
   'superlig-2026-27-v1',
   'bundesliga2-2026-27-v1',
+  'ligue2-2026-27-v1',
 ];
 const EXPECT_BOUND = process.env.CM_LEAGUE_FIXTURES_EXPECT_BOUND || '';
 const CONTROL = process.env.CM_LEAGUE_FIXTURES_CONTROL || '';
