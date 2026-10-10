@@ -1,0 +1,4 @@
+sense-full: SENSE_PROVE_AGAINST=cd9c3d50 SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+ctl-stalefield: SIM_NBA_SENSE_CONTROL=stalefield node scripts/simNbaAwardsSense.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
