@@ -1,0 +1,9 @@
+#!serial
+# Round 1228 fix pass: the reviewer's surviving mutations and the floor taken back out, each must now be CAUGHT
+m-clean: bash .rc/x/fmutrun.sh clean
+m-homeflag: bash .rc/x/fmutrun.sh homeflag
+m-nofallbackflag: bash .rc/x/fmutrun.sh nofallbackflag
+m-climb: bash .rc/x/fmutrun.sh climb
+m-cap3: bash .rc/x/fmutrun.sh cap3
+m-floorabsent: bash .rc/x/fmutrun.sh floorabsent
+after: bash .rc/x/fmutrun.sh clean
