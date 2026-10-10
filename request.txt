@@ -1,0 +1,6 @@
+#!playwright
+#!serial
+setup: bash .rc/x/follow.sh setup
+move: bash .rc/x/follow.sh move
+after-build: cd /tmp/r1220 && set -o pipefail && node_modules/.bin/vite build 2>&1 | tail -6
+after-walk: cd /tmp/r1220 && ENGINES=chromium node scripts/playDraftNight.mjs

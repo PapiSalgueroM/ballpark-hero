@@ -1,0 +1,9 @@
+what the move changed in Round 1220's tree:
+ M src/components/career/DraftNightSequence.tsx
+R  src/components/motion/LotteryReveal.test.tsx -> src/components/lottery/LotteryReveal.test.tsx
+R  src/components/motion/LotteryReveal.tsx -> src/components/lottery/LotteryReveal.tsx
+ M src/lib/careerDraftNight.ts
+M  src/lib/lotteryReveal.ts
+ 5 files changed, 170 insertions(+), 40 deletions(-)
+lines that still name the old path (src, scripts, the round's notes): 0
+presenter files left in src/components/motion: 0

@@ -1,0 +1,6 @@
+r1220 head: e2cab96b3d0d6db0b720299f39542099252ada13 Round 1220: the notes say what is true after the fix pass (the hold, the screen
+r1222 head under test: 2e731a0a2
+presenter files at r1220 head:
+src/components/motion/LotteryReveal.test.tsx
+src/components/motion/LotteryReveal.tsx
+src/lib/lotteryReveal.ts
