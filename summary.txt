@@ -1,0 +1,10 @@
+seeds exit=0 17s | seed e exit=0 simCareerPreDraft [seed set e]: ALL GREEN
+controls-night exit=0 18s | projection exit=1 mutated=1 in13=8 all=8 simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
+controls-old exit=0 49s | extradraw exit=1 mutated=1 simCareerPreDraft [control extradraw] [seed set a]: 8 FAILURE(S)
+vitest exit=0 16s |    Duration  16.21s (transform 3.63s, setup 161ms, collect 6.39s, tests 12.08s, environment 1.08s, prepare 548ms)
+prospect exit=0 21s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+rivals exit=0 16s | No rival product names found. 0 findings.
+livescores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+tsc exit=0 98s | 
+anchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+quotes exit=0 20s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.

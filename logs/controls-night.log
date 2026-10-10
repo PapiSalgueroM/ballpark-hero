@@ -1,0 +1,6 @@
+nightoffbyone exit=1 mutated=1 in13=8 all=8 simCareerPreDraft [control nightoffbyone] [seed set a]: 8 FAILURE(S)
+nightlottery exit=1 mutated=1 in13=2 all=2 simCareerPreDraft [control nightlottery] [seed set a]: 2 FAILURE(S)
+nightopen exit=1 mutated=1 in13=8 all=8 simCareerPreDraft [control nightopen] [seed set a]: 8 FAILURE(S)
+nightdedup exit=1 mutated=1 in13=8 all=8 simCareerPreDraft [control nightdedup] [seed set a]: 8 FAILURE(S)
+nightdraw exit=1 mutated=1 in13=1 all=1 simCareerPreDraft [control nightdraw] [seed set a]: 1 FAILURE(S)
+projection exit=1 mutated=1 in13=8 all=8 simCareerPreDraft [control projection] [seed set a]: 8 FAILURE(S)
