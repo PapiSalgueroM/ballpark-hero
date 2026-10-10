@@ -1,0 +1,3 @@
+#!serial
+prep: git worktree add -q /tmp/base 980654facb2d41a6c9ddc029c43710178b9d49b8 && ln -s $PWD/node_modules /tmp/base/node_modules && ls /tmp/base/scripts/simUsCareerSummer.mjs
+base-mlb-bal-8000: cd /tmp/base && SIM_SECTIONS=6 SIM_SPORTS=mlb SIM_BALANCE_CAREERS=8000 node scripts/simUsCareerSummer.mjs
