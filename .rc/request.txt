@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+#!serial
+playSeasonReveal: node scripts/playSeasonReveal.mjs
+playSeasonReveal-muted: SEASON_REVEAL_CONTROL=muted node scripts/playSeasonReveal.mjs
+playUsSeasonCentre: node scripts/playUsSeasonCentre.mjs
+playCareerPress: node scripts/playCareerPress.mjs
+playCareerHub: node scripts/playCareerHub.mjs
+playNflTruth: node scripts/playNflTruth.mjs
+playNbaNumbers: node scripts/playNbaNumbers.mjs
+playDraftNight: node scripts/playDraftNight.mjs
+playDraftNight-late: PLAY_DRAFT_NIGHT_CONTROL=late node scripts/playDraftNight.mjs
+playDraftNight-spoiler: PLAY_DRAFT_NIGHT_CONTROL=spoiler node scripts/playDraftNight.mjs
+playDraftNight-fold: PLAY_DRAFT_NIGHT_CONTROL=fold node scripts/playDraftNight.mjs
+playDraftNight-hidden: PLAY_DRAFT_NIGHT_CONTROL=hidden node scripts/playDraftNight.mjs
+playDraftNight-cut: PLAY_DRAFT_NIGHT_CONTROL=cut node scripts/playDraftNight.mjs
+playDraftNight-again: PLAY_DRAFT_NIGHT_CONTROL=again node scripts/playDraftNight.mjs
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
