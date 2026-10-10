@@ -1,0 +1,26 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-us: node_modules/.bin/vitest run src/lib/usCareerProgramme.test.ts src/test/usCareerProgrammeUi.test.tsx src/test/usBoardFixture.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/components/lottery/LotteryReveal.test.tsx src/test/usCareerTruthDigest.test.ts src/test/usCareerProspect.test.tsx src/test/usCareerReveals.test.tsx src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usTrophyTile.test.ts src/test/nbaTrophyTile.test.ts src/test/rivalryChoiceBoard.test.tsx src/test/usCareerPractice.test.tsx src/test/usCareerSummer.test.tsx src/test/usCareerHallBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsBoardParity-label: US_BOARD_PARITY_CONTROL=label node scripts/simUsBoardParity.mjs
+simUsBoardParity-draw: US_BOARD_PARITY_CONTROL=draw node scripts/simUsBoardParity.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simCareerPreDraft: node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightdraw: SIM_PRE_DRAFT_CONTROL=nightdraw node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightlottery: SIM_PRE_DRAFT_CONTROL=nightlottery node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightoffbyone: SIM_PRE_DRAFT_CONTROL=nightoffbyone node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightopen: SIM_PRE_DRAFT_CONTROL=nightopen node scripts/simCareerPreDraft.mjs
+simCareerPreDraft-nightdedup: SIM_PRE_DRAFT_CONTROL=nightdedup node scripts/simCareerPreDraft.mjs
+simUsCareerProspect: node scripts/simUsCareerProspect.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsCareerPractice: node scripts/simUsCareerPractice.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simTrophyCabinet: node scripts/simTrophyCabinet.mjs
+lottery-one-place: test "$(git ls-files src/components/motion | grep -ci lottery)" = 0 && test "$(git ls-files | grep -c -i 'LotteryReveal.tsx$')" = 1 && test -z "$(git grep -l 'motion/LotteryReveal' -- src scripts)" && echo "one presenter, outside src/components/motion, nothing imports the old path"

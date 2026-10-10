@@ -1,0 +1,35 @@
+
+=== ROUND 58 MLB MY CAREER PLAYTEST ===
+careers            : 400  (100 in the 2004 era, 2474 bench seasons)
+crashes            : 0
+NaN values         : 0
+empty stat lines   : 0  (must be 0, every position needs real stats)
+avg peak OVR       : 82.4  (min 74, median 82, max 96)
+peak 95+ rate      : 1%  (should be rare)
+suspensions served : 9
+distinct events    : 148
+  lifeA fired      : 43/45
+  lifeB fired      : 44/45
+  lifeC fired      : 36/36  (floor 34; rarest card drawn 2 times, median 9)
+    rarest three   : mlbC_rule_innings_limit 2 (eligible in 185 offseasons), mlbC_sp_new_pitch 4 (eligible in 644 offseasons), mlbC_dh_between 4 (eligible in 713 offseasons)
+  corruption fired : 19
+shop items usable  : 49/49
+C1e era leaks      : 0  (a gated card eligible or drawn too early in a 2004 career, must be 0)
+C2 words vs effect : 72000 draws, 0 mismatches, 0 outcomes never seen, 0 cards with no eligible save, 436 trades from a 2004 save checked against the era
+C2r at the clamps  : 21600 draws on saves as left, at the ceilings and at the floors, 0 mismatches
+T  life cards drawn: 4327, without tags: 0
+
+sample stat lines by position:
+  SP  4.83 ERA, 187 K, 15-8
+  RP  3.15 ERA, 100 K, 2-2, 1 SV, 35 HLD
+  C   .281, 19 HR, 71 RBI, 2 SB
+  1B  .276, 25 HR, 78 RBI, 3 SB
+  2B  .315, 24 HR, 80 RBI, 11 SB
+  3B  .309, 33 HR, 112 RBI, 6 SB
+  SS  .297, 27 HR, 88 RBI, 7 SB
+  LF  .301, 31 HR, 107 RBI, 38 SB
+  CF  .323, 31 HR, 91 RBI, 11 SB
+  RF  .268, 25 HR, 88 RBI
+  DH  .260, 18 HR, 68 RBI
+
+PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
