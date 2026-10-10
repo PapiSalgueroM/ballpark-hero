@@ -1,0 +1,4 @@
+vitest exit=0 4s |    Duration  3.53s (transform 1.36s, setup 302ms, collect 2.10s, tests 2.07s, environment 1.89s, prepare 691ms)
+bigscore exit=0 1s | bigscore: 0 of 10 saved scores that the guard reads make gameStory throw, die or never answer
+sim exit=0 22s | simGmGameDay: 169 checks, 0 failed
+tsc exit=0 48s | 
