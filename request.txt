@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playDraftNight.mjs
+walk-ending: PLAY_DRAFT_NIGHT_CONTROL=ending RC_OUT="$RC_OUT/c-ending" node scripts/playDraftNight.mjs
+walk-narrowtile: PLAY_DRAFT_NIGHT_CONTROL=narrowtile RC_OUT="$RC_OUT/c-narrowtile" node scripts/playDraftNight.mjs

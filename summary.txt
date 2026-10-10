@@ -1,0 +1,4 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 205s | playDraftNight: ALL GREEN, 49 nights walked
+walk-ending exit=2 7s | Control ending changed nothing its check can see (no failure at all). Refusing to call that a result.
+walk-narrowtile exit=1 8s | playDraftNight [control narrowtile]: 8 FAILURE(S) of its own check (cut), as it must
