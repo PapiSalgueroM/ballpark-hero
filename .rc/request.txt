@@ -1,0 +1,15 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000 --hookTimeout=120000
+gen-freeagents: node scripts/genClubManagerFreeAgents.mjs --check
+gen-russia: node scripts/genClubManagerGathered.mjs russia2026 --check
+gen-aleague: node scripts/genClubManagerALeague.mjs && git diff --exit-code -- src/data/clubManagerALeague2026.ts && echo "A-League file unchanged by a fresh generation"
+simFreeAgents: node scripts/simFreeAgents.mjs
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs
+simClubManagerGathered: node scripts/simClubManagerGathered.mjs
+simEraBakeExtend: node scripts/simEraBakeExtend.mjs
+simCmDataOnDemand: node scripts/simCmDataOnDemand.mjs
+eslint-new: node_modules/.bin/eslint src/lib/cmAgeRead.ts src/test/cmValueCurve.test.ts scripts/lib/cmValueCurve.mjs scripts/lib/cmAges.mjs
+simLiveScores-head: node scripts/simLiveScores.mjs
+simLiveScores-base: git worktree add -f /tmp/base faf0a5f3 > /dev/null 2>&1; cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && git rev-parse --short HEAD && node scripts/simLiveScores.mjs
+dashes: node .rc/x/revDashes.mjs
+vitest-neighbours: node_modules/.bin/vitest run src/lib/frontOfficeRatings.test.ts src/test/cmWorldIdentity1052.test.ts --testTimeout=300000 --hookTimeout=120000
