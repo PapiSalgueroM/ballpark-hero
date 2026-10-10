@@ -1300,9 +1300,15 @@ export function hostCareerHelp(pack: GmSeatPack): string[] {
 }
 
 export function hostXpHelp(earns: string): string[] {
-  const loss = -16;
+  /* What a season one step short of the ask costs, read off gradeSeason itself (it exports no constant): an owner
+     who asks for the postseason and a season that misses it. */
+  const missed = gradeSeason(
+    { tier: 'playoffs', text: '', winFloor: 0, reqLevel: 1, season: 0 },
+    { wins: 0, madePlayoffs: false, roundsWon: 0, reachedFinal: false, wonTitle: false },
+  );
+  const loss = missed.trustDelta;
   const eased = cushionTrustLoss(loss, 2);
-  const kept = applyMandateResult(-loss, { result: 'missed', verdict: '', trustDelta: eased });
+  const kept = applyMandateResult(-loss, { ...missed, trustDelta: eased });
   const season = gmSeasonXp({ winPct: 0.6, titles: 0, playoffRoundsWon: 1, mandateSteps: mandateSteps('met'), placesAboveExpectation: 0, prospectsGraduated: 0 });
   /* The honest pace (scripts/simGmDeskHost.mjs measures it on the four engines: the median club is near this). */
   const even = gmSeasonXp({ winPct: 0.5, titles: 0, playoffRoundsWon: 0, mandateSteps: mandateSteps('met'), placesAboveExpectation: 0, prospectsGraduated: 0 });

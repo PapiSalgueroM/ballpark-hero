@@ -780,6 +780,18 @@ describe('the words on the boxes', () => {
     expect(help).toContain('pays 170 XP');
     expect(help).toContain('pays 110 XP, so at that pace the first point is about 4 seasons away');
     expect(help).toContain('costs 14, not 16, so you keep the job on trust 2');
+    /* The trust example is gradeSeason's own figure for a season one step short of the ask, taken through the
+       cushion and the firing rule: the job is kept with the points and lost without them, as the sentence says. */
+    const missed = gradeSeason(
+      { tier: 'playoffs', text: '', winFloor: 0, reqLevel: 1, season: 2030 },
+      { wins: 0, madePlayoffs: false, roundsWon: 0, reachedFinal: false, wonTitle: false },
+    );
+    expect(missed.result).toBe('missed');
+    const eased = cushionTrustLoss(missed.trustDelta, 2);
+    const kept = applyMandateResult(-missed.trustDelta, { ...missed, trustDelta: eased });
+    expect(kept.fired).toBe(false);
+    expect(applyMandateResult(-missed.trustDelta, missed).fired).toBe(true);
+    expect(help).toContain(`missing the ask on trust ${-missed.trustDelta} costs ${-eased}, not ${-missed.trustDelta}, so you keep the job on trust ${kept.trust}`);
     expect(hostMarketHelp(GM_SEAT_PACKS.nhl).join(' ')).toContain('no top tier franchise calls');
   });
 });
