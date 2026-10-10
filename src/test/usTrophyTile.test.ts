@@ -77,7 +77,7 @@ describe('Round 1149: the lesser awards are not an empty case, in the NFL, MLB a
       for (const award of S.lesser) {
         const c = careerWith(S.zero, [[], [award]]);
         const rows = S.sport.honours(c);
-        expect(trophyLines((c as { seasons: { awards: string[] }[] }).seasons).map(l => l.label), award).toEqual([award]);
+        expect(trophyLines((c as { seasons: { year: number; awards: string[] }[] }).seasons).map(l => l.label), award).toEqual([award]);
         const tile = tileOf(0, S.sport.ringWord, rows);
         expect(tile.value, award).toBe('1 honour');
         expect(tile.sub, award).toBe(`1 in other awards, no ${S.sport.ringWord} yet`);
