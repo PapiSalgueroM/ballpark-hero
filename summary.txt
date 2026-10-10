@@ -1,0 +1,13 @@
+shapes exit=0 34s | simDailySaveHardening: part shapes green
+guideslow exit=0 37s | simDailySaveHardening: control guideslow fired as designed
+guideheld exit=0 21s | simDailySaveHardening: control guideheld fired as designed
+guidelate exit=0 25s | simDailySaveHardening: control guidelate fired as designed
+saves exit=0 10s | simDailySaveHardening: part saves green
+tsc exit=0 82s | 
+shape-control exit=0 32s | simDailySaveHardening: control shape fired as designed
+parity exit=0 20s | simDailySaveHardening: part parity green
+skip exit=0 38s | simDailySaveHardening: part skip green
+rivals exit=0 17s | No rival product names found. 0 findings.
+src-untouched exit=0 0s | src/pages/Footle.tsx
+quotes exit=0 20s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+anchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

@@ -1,0 +1,5 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+skip) one skip target on every page
+   173 of 173 addresses (171 sitemap pages, reset-password, an unknown address) draw exactly one #dukb-main
+simDailySaveHardening: part skip green
