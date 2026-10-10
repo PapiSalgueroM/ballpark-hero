@@ -1,0 +1,6 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000 > /tmp/vitest-all.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests " /tmp/vitest-all.log | tail -30 | cut -c1-260; exit $s
