@@ -1,0 +1,4 @@
+seriea tmw: status 200, 115252 bytes, text/html; charset=UTF-8, sha256 b232ce038e1003e9 <- https://www.tuttomercatoweb.com/serie-a/serie-a-2026-2027-ecco-il-nuovo-calendario-completo-con-le-38-giornate-2241512
+seriea feed: status 200, 79172 bytes, application/json; charset=utf-8, sha256 4517866606637363 <- https://fixturedownload.com/feed/json/serie-a-2026
+seriea: both sources kept in /tmp/fresh/seriea
+seriea: fresh read in /tmp/fresh/seriea: 38 matchdays compared, 0 tuple difference(s), digest equal (1f49177674e19816)

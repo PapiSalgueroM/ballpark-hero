@@ -1,0 +1,4 @@
+laliga feed: status 200, 83963 bytes, application/json; charset=utf-8, sha256 bc918a15c64469d6 <- https://fixturedownload.com/feed/json/la-liga-2026
+laliga maxifoot: status 200, 152716 bytes, text/html, sha256 ec94de2ba01f17be <- https://www.maxifoot.fr/calendrier-liga-espagne-2026-2027.htm
+laliga: both sources kept in /tmp/fresh/laliga
+laliga: fresh read in /tmp/fresh/laliga: 38 matchdays compared, 0 tuple difference(s), digest equal (efbaf18e2e4fe78c)

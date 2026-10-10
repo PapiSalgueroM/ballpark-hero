@@ -1,0 +1,17 @@
+harness-head exit=0 3s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 99 of 99 controls fired
+fresh-laliga exit=0 2s | laliga: fresh read in /tmp/fresh/laliga: 38 matchdays compared, 0 tuple difference(s), digest equal (efbaf18e2e4fe78c)
+fresh-ligue2 exit=0 2s | ligue2: fresh read in /tmp/fresh/ligue2: 34 matchdays compared, 0 tuple difference(s), digest equal (30a2328118048877)
+fresh-eredivisie exit=0 1s | eredivisie: fresh read in /tmp/fresh/eredivisie: 34 matchdays compared, 0 tuple difference(s), digest equal (243fae5518439498)
+fresh-primeira exit=0 1s | primeira: fresh read in /tmp/fresh/primeira: 34 matchdays compared, 0 tuple difference(s), digest equal (669270be5b321460)
+fresh-seriea exit=0 3s | seriea: fresh read in /tmp/fresh/seriea: 38 matchdays compared, 0 tuple difference(s), digest equal (1f49177674e19816)
+fresh-bundesliga exit=0 1s | bundesliga: fresh read in /tmp/fresh/bundesliga: 34 matchdays compared, 0 tuple difference(s), digest equal (1bf9249ddc4d3f49)
+fresh-superlig exit=0 2s | superlig: fresh read in /tmp/fresh/superlig: 34 matchdays compared, 0 tuple difference(s), digest equal (09636c646515d5b6)
+fresh-bundesliga2 exit=0 15s | bundesliga2: fresh read in /tmp/fresh/bundesliga2: 34 matchdays compared, 0 tuple difference(s), digest equal (3fabe3f12e5532f9)
+fresh-championship exit=1 1s | championship: 1 page(s) could not be read in /tmp/fresh/championship
+held-ligue1 exit=1 1s |   feed: 1 ordered pair(s) of clubs never meet and 1 meet more than once
+held-proleague exit=1 2s |     only in maxifoot: 30|Club Brugge|Union Saint-Gilloise
+mut-m1-onevenue exit=1 1s | simCmLeagueFixtures: FAILED, 7 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+mut-m2-bothvenues exit=1 0s | simCmLeagueFixtures: FAILED, 5 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+mut-m4-frozenline exit=0 3s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 8 frozen, 1 pending (laliga), 3148 fixtures, 88 of 88 controls fired
+mut-m5-noreceipt exit=1 0s | simCmLeagueFixtures: FAILED, 2 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+harness-after exit=0 3s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 99 of 99 controls fired

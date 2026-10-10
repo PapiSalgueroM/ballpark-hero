@@ -1,0 +1,4 @@
+primeira feed: status 200, 70041 bytes, application/json; charset=utf-8, sha256 85df04dc94b1efe2 <- https://fixturedownload.com/feed/json/primeira-liga-2026
+primeira maxifoot: status 200, 108804 bytes, text/html, sha256 92ff6be95ac8218c <- https://www.maxifoot.fr/calendrier-portugal-2026-2027.htm
+primeira: both sources kept in /tmp/fresh/primeira
+primeira: fresh read in /tmp/fresh/primeira: 34 matchdays compared, 0 tuple difference(s), digest equal (669270be5b321460)

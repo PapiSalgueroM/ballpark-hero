@@ -1,0 +1,4 @@
+eredivisie feed: status 200, 66365 bytes, application/json; charset=utf-8, sha256 968d871b6c4fe324 <- https://fixturedownload.com/feed/json/eredivisie-2026
+eredivisie maxifoot: status 200, 110826 bytes, text/html, sha256 a45d5a29807da138 <- https://www.maxifoot.fr/calendrier-pays-bas-2026-2027.htm
+eredivisie: both sources kept in /tmp/fresh/eredivisie
+eredivisie: fresh read in /tmp/fresh/eredivisie: 34 matchdays compared, 0 tuple difference(s), digest equal (243fae5518439498)

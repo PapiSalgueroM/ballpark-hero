@@ -1,0 +1,18 @@
+#!serial
+harness-head: CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs
+fresh-laliga: node scripts/genCmLeagueFixtures.mjs fetch laliga --dir /tmp/fresh/laliga && node scripts/genCmLeagueFixtures.mjs check laliga --dir /tmp/fresh/laliga
+fresh-ligue2: node scripts/genCmLeagueFixtures.mjs fetch ligue2 --dir /tmp/fresh/ligue2 && node scripts/genCmLeagueFixtures.mjs check ligue2 --dir /tmp/fresh/ligue2
+fresh-eredivisie: node scripts/genCmLeagueFixtures.mjs fetch eredivisie --dir /tmp/fresh/eredivisie && node scripts/genCmLeagueFixtures.mjs check eredivisie --dir /tmp/fresh/eredivisie
+fresh-primeira: node scripts/genCmLeagueFixtures.mjs fetch primeira --dir /tmp/fresh/primeira && node scripts/genCmLeagueFixtures.mjs check primeira --dir /tmp/fresh/primeira
+fresh-seriea: node scripts/genCmLeagueFixtures.mjs fetch seriea --dir /tmp/fresh/seriea && node scripts/genCmLeagueFixtures.mjs check seriea --dir /tmp/fresh/seriea
+fresh-bundesliga: node scripts/genCmLeagueFixtures.mjs fetch bundesliga --dir /tmp/fresh/bundesliga && node scripts/genCmLeagueFixtures.mjs check bundesliga --dir /tmp/fresh/bundesliga
+fresh-superlig: node scripts/genCmLeagueFixtures.mjs fetch superlig --dir /tmp/fresh/superlig && node scripts/genCmLeagueFixtures.mjs check superlig --dir /tmp/fresh/superlig
+fresh-bundesliga2: node scripts/genCmLeagueFixtures.mjs fetch bundesliga2 --dir /tmp/fresh/bundesliga2 && node scripts/genCmLeagueFixtures.mjs check bundesliga2 --dir /tmp/fresh/bundesliga2
+fresh-championship: node scripts/genCmLeagueFixtures.mjs fetch championship --dir /tmp/fresh/championship && node scripts/genCmLeagueFixtures.mjs check championship --dir /tmp/fresh/championship
+held-ligue1: node scripts/genCmLeagueFixtures.mjs fetch ligue1 --dir /tmp/fresh/ligue1 && node scripts/genCmLeagueFixtures.mjs check ligue1 --dir /tmp/fresh/ligue1
+held-proleague: node scripts/genCmLeagueFixtures.mjs fetch proleague --dir /tmp/fresh/proleague && node scripts/genCmLeagueFixtures.mjs check proleague --dir /tmp/fresh/proleague
+mut-m1-onevenue: node .rc/x/mut.mjs m1 && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-m2-bothvenues: node .rc/x/mut.mjs m2 && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-m4-frozenline: node .rc/x/mut.mjs m4 && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -- src scripts; exit $s
+mut-m5-noreceipt: node .rc/x/mut.mjs m5 && CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs; s=$?; git checkout -- src scripts; exit $s
+harness-after: CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs && git status --short | head -5

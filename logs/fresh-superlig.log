@@ -1,0 +1,4 @@
+superlig tff: status 200, 336683 bytes, text/html; charset=windows-1254, sha256 22bc48194101db2f <- https://www.tff.org/default.aspx?pageID=198
+superlig feed: status 200, 67482 bytes, application/json; charset=utf-8, sha256 d28cc553706fad86 <- https://fixturedownload.com/feed/json/super-lig-2026
+superlig: both sources kept in /tmp/fresh/superlig
+superlig: fresh read in /tmp/fresh/superlig: 34 matchdays compared, 0 tuple difference(s), digest equal (09636c646515d5b6)

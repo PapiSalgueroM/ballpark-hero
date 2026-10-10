@@ -1,0 +1,3 @@
+championship espn: status 202, 2015 bytes, text/html; charset=UTF-8, sha256 7498e30959a4f634 <- https://www.espn.com/soccer/story/_/id/49173379/efl-championship-fixtures-schedule-2026-27-full
+championship feed: status 200, 122462 bytes, application/json; charset=utf-8, sha256 4f834d4c924d5eb2 <- https://fixturedownload.com/feed/json/championship-2026
+championship: 1 page(s) could not be read in /tmp/fresh/championship

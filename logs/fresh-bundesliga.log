@@ -1,0 +1,4 @@
+bundesliga dfl: status 200, 631949 bytes, application/pdf, sha256 7408552a6c3bca91 <- https://media.dfl.de/sites/2/2026/07/DE_s73GnueV_Bundesliga_Spielplan_2026_27.pdf
+bundesliga feed: status 200, 68680 bytes, application/json; charset=utf-8, sha256 f47773844254a1ce <- https://fixturedownload.com/feed/json/bundesliga-2026
+bundesliga: both sources kept in /tmp/fresh/bundesliga
+bundesliga: fresh read in /tmp/fresh/bundesliga: 34 matchdays compared, 0 tuple difference(s), digest equal (1bf9249ddc4d3f49)

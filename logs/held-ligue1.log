@@ -1,0 +1,6 @@
+ligue1 maxifoot: status 200, 131148 bytes, text/html, sha256 f2c2a2f019e677c4 <- https://www.maxifoot.fr/calendrier-ligue-1-france-2026-2027.htm
+ligue1 feed: status 200, 68393 bytes, application/json; charset=utf-8, sha256 625cb36e45cc62cb <- https://fixturedownload.com/feed/json/ligue-1-2026
+ligue1: both sources kept in /tmp/fresh/ligue1
+ligue1: NOTHING WRITTEN, 2 reason(s):
+  maxifoot: 1 ordered pair(s) of clubs never meet and 1 meet more than once
+  feed: 1 ordered pair(s) of clubs never meet and 1 meet more than once

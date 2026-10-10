@@ -1,0 +1,17 @@
+m2: both meetings of Alavés and Getafe flipped
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+A) shape: green for 9 ledger(s)
+B) no club twice in a matchday: green for 9 ledger(s)
+C) each pair once at each ground: green for 9 ledger(s)
+D) the game's own clubs: green for 9 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: RED for laliga
+  FAIL: laliga: source 1: 2 ledger fixture(s) are not in its rows and 2 of its rows are not in the ledger
+  FAIL: laliga: source 1 gives the order of matches and the ledger's order differs from it
+  FAIL: laliga: source 2: 2 ledger fixture(s) are not in its rows and 2 of its rows are not in the ledger
+F) two independent sources: green for 9 ledger(s)
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: RED for laliga
+  FAIL: laliga: the ledger's digest is not the frozen efbaf18e2e4fe78c: a frozen ledger never changes, a correction ships under a new key
+  FAIL: laliga: the digest the receipt recorded is not the ledger's
+K) the controls: not run, the ledgers themselves are red
+simCmLeagueFixtures: FAILED, 5 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired

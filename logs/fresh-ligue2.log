@@ -1,0 +1,4 @@
+ligue2 maxifoot: status 200, 104183 bytes, text/html, sha256 c875fc5f92bbfeb4 <- https://www.maxifoot.fr/calendrier-ligue-2-france-2026-2027.htm
+ligue2 feed: status 200, 69651 bytes, application/json; charset=utf-8, sha256 faa579116111ec7d <- https://fixturedownload.com/feed/json/ligue-2-2026
+ligue2: both sources kept in /tmp/fresh/ligue2
+ligue2: fresh read in /tmp/fresh/ligue2: 34 matchdays compared, 0 tuple difference(s), digest equal (30a2328118048877)

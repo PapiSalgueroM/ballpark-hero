@@ -1,0 +1,8 @@
+proleague walfoot: status 200, 374862 bytes, text/html; charset=UTF-8, sha256 26d58521a93363df <- https://www.walfoot.be/belgique/jupiler-pro-league/calendrier
+proleague maxifoot: status 200, 109946 bytes, text/html, sha256 f7587dc33498eff1 <- https://www.maxifoot.fr/calendrier-belgique-2026-2027.htm
+proleague: both sources kept in /tmp/fresh/proleague
+proleague: NOTHING WRITTEN, 3 reason(s):
+  walfoot: matchday 30 holds 8 matches and 16 different clubs, wanted 9 and 18
+  walfoot: 1 ordered pair(s) of clubs never meet and 0 meet more than once
+  the two sources differ in 1 matchday|home|away tuple(s)
+    only in maxifoot: 30|Club Brugge|Union Saint-Gilloise
