@@ -1,0 +1,9 @@
+legA exit=0 24s | simCmLeagueRules: all checks passed (modern, eras, pure)
+legB exit=0 26s | simCmLeagueRules: 47 failure(s)
+legC exit=0 67s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+customvalues exit=0 73s | simCustomClubValues: 25 checks, 0 failures
+shootout exit=0 21s | simCmShootoutOrder: all sections passed
+appeal exit=0 32s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+savesize exit=0 36s | simClubManagerSaveSize: all sections green
+tsc exit=0 61s | 
+vitest exit=0 3s |    Duration  1.82s (transform 111ms, setup 102ms, collect 130ms, tests 1.00s, environment 676ms, prepare 279ms)

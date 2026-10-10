@@ -1,0 +1,10 @@
+#!serial
+legA: git show 980654fa:scripts/data/cmLeagueRulesDigest.json > scripts/data/cmLeagueRulesDigest.json && mkdir -p /tmp/noBook1229 && git archive HEAD | tar -x -C /tmp/noBook1229 && node .rc/x/bookOut.mjs /tmp/noBook1229 && CM_RULES_ROOT=/tmp/noBook1229 node scripts/simCmLeagueRules.mjs --part=modern,eras,pure
+legB: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure > /tmp/legB.txt 2>&1; grep FAIL /tmp/legB.txt | sed -E "s/.*differs in //" | sort | uniq -c; grep -c "FAIL: modern" /tmp/legB.txt; grep -c "FAIL: era" /tmp/legB.txt; tail -1 /tmp/legB.txt
+legC: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/" && node scripts/simCmLeagueRules.mjs
+customvalues: node scripts/simCustomClubValues.mjs
+shootout: node scripts/simCmShootoutOrder.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+savesize: node scripts/simClubManagerSaveSize.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
