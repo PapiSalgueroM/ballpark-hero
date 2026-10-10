@@ -1,0 +1,5 @@
+vitest exit=0 2s |    Duration  2.11s (transform 909ms, setup 47ms, collect 1.12s, tests 268ms, environment 303ms, prepare 101ms)
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 18s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simHarnessAnchors exit=0 25s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 41s | 
