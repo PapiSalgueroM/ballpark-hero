@@ -3,8 +3,8 @@
  * Three leagues of three sizes (EFL Championship 24, La Liga 20, Bundesliga 18), each at 390 by 844 and
  * 1280 by 800, through the picker a player uses, on a served build:
  *   - the page fetches that league's list (one small file) when the club is tapped, and no other league's;
- *   - the save holds the league's key, the Season calendar card shows the real first opponent and ground,
- *     and the Calendar's line names the league, says what is real and what is simulated, and links the two
+ *   - the save holds the league's key, the hub's next match card shows the real first opponent and ground,
+ *     the Calendar grid holds that fixture as a day, and the Calendar's line names the league, says what is real and what is simulated, and links the two
  *     sources the ledger ships;
  *   - Help names the league in its fixture paragraph and holds no link there;
  *   - after a reload the career is resumed on the same list (the boot waits for the file again).
@@ -75,7 +75,7 @@ async function journey(walk, profile) {
   const ok = (what, pass, detail = '') => { row.checks.push({ what, pass, detail }); if (!pass) failures.push(`${id}: ${what}${detail ? ` (${detail})` : ''}`); };
   const ledger = ledgers.get(walk.leagueId), key = ledger.key;
   const fixture = round => { const p = ledger.rounds[round].find(x => x.includes(walk.club)); return { opponent: p[0] === walk.club ? p[1] : p[0], home: p[0] === walk.club }; };
-  const [first, second] = [fixture(0), fixture(1)];
+  const first = fixture(0);
   const s = await open(profile);
   try {
     await s.page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
@@ -85,9 +85,11 @@ async function journey(walk, profile) {
     ok('the save is the club that was picked', save?.clubName === walk.club, String(save?.clubName));
     ok('the save holds the key of its league\'s real list', save?.realLeagueFixtures === key, String(save?.realLeagueFixtures));
     ok('the page fetched that league\'s list and no other', JSON.stringify([...new Set(s.lists)]) === JSON.stringify([walk.file]), s.lists.join(','));
-    const hub = await s.page.locator('body').innerText();
-    ok(`the Season calendar card shows the real first fixture: ${first.opponent} (${first.home ? 'H' : 'A'})`, hub.includes(`${first.opponent} (${first.home ? 'H' : 'A'})`));
-    row.secondOnCard = hub.includes(`${second.opponent} (${second.home ? 'H' : 'A'})`);
+    /* The hub's next match card: "<club> vs <opponent>" over "Home" or "Away". The picker leaves the page scrolled, so go to the top first. */
+    await s.page.evaluate(() => window.scrollTo(0, 0));
+    const hub = (await s.page.locator('body').innerText()).replace(/\s+/g, ' ');
+    const venue = first.home ? 'Home' : 'Away';
+    ok(`the next match card shows the real first fixture: ${walk.club} vs ${first.opponent}, ${venue}`, hub.includes(`${walk.club} vs ${first.opponent} ${venue}`), hub.slice(Math.max(0, hub.indexOf(walk.club + ' vs')), hub.indexOf(walk.club + ' vs') + 80));
     await s.page.screenshot({ path: path.join(OUT, `${id}-hub.png`) });
     await openCalendar(s);
     const line = s.page.locator(`[data-cm-fixture-coverage="${key}"]`);
