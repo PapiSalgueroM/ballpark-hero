@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: the whole walk twice on three more seeds, and the walk's own seed with the clock readings.
+twice-own: bash .rc/x/rtwice.sh 3208792607 4251
+twice-23: bash .rc/x/rtwice.sh 23 4252
+twice-4242: bash .rc/x/rtwice.sh 4242 4253
+trim: rm -f "$RC_OUT"/tw-*/fit-*.png "$RC_OUT"/tw-*/panel-*.png; ls "$RC_OUT" | head -40
