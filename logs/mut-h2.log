@@ -1,0 +1,11 @@
+MUT h2 applied to src/components/us-career/CareerSeasonReview.tsx: "<button ref={back} onClick={season ? () => setSelected(null) : onBack}" is now "<button ref={back} onClick={season ? () => setSelected(null) : () => {"
+NFL My Career
+  FAIL  NFL: back from "Career Log" returned to all 6 boxes
+NBA My Career
+  FAIL  NBA: back from "Career Log" returned to all 6 boxes
+MLB My Career
+  FAIL  MLB: back from "Career Log" returned to all 6 boxes
+NHL My Career
+  FAIL  NHL: back from "Career Log" returned to all 6 boxes
+
+playCareerHub: 4 failures
