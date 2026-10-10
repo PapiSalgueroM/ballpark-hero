@@ -131,6 +131,7 @@ import { readSeasonMoments } from '@/lib/season/momentsSave';
 const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));
 const TrophyCabinet = lazy(() => import("@/components/soccer-career/TrophyCabinet"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
+const SoccerDerbyHistory = lazy(() => import("@/components/soccer-career/SoccerDerbyHistory"));
 /* Round 1047: the training ground (its drills and its boards) loads when it
    is opened, not with the page; the page's budget came down by what it weighed. */
 const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));
@@ -324,7 +325,7 @@ function getPositionCareerStats(pos: string, totals: ReturnType<typeof getCareer
   ];
 }
 
-export function CareerStatsCard({ career, totals }: { career: Pick<CareerState, "position" | "seasons">; totals: ReturnType<typeof getCareerTotals> }) {
+export function CareerStatsCard({ career, totals, onDerbyHistory }: { career: Pick<CareerState, "position" | "seasons">; totals: ReturnType<typeof getCareerTotals>; onDerbyHistory?: () => void }) {
   const stats = getPositionCareerStats(career.position, totals, career.seasons);
   return <div className="bg-card border border-border rounded-xl p-4" data-career-recorded-stats>
     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Stats</span>
@@ -337,6 +338,8 @@ export function CareerStatsCard({ career, totals }: { career: Pick<CareerState, 
     </div>
     {stats.some(s => s.v === null) && <p className="mt-2 text-xs text-muted-foreground">Clean sheets may not have been counted in older seasons.</p>}
     <CareerDerbyTotals seasons={career.seasons} />
+    {onDerbyHistory && career.seasons.some(s => s.type === "playing") && <button type="button" onClick={onDerbyHistory} data-open-derby-history
+      className="mt-2 min-h-11 rounded-lg px-3 text-xs font-bold text-orange-400 hover:bg-orange-500/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">🔥 Derby history</button>}
   </div>;
 }
 
@@ -3783,6 +3786,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const [storyOpen, setStoryOpen] = useState(false);
   // Round 1011: every season's rating and the overall it was played at
   const [ratingsOpen, setRatingsOpen] = useState(false);
+  const [derbyHistoryOpen, setDerbyHistoryOpen] = useState(false);
   const [trophyCategory, setTrophyCategory] = useState<TrophyCategory | null>(null);
   /* Round 1045: the Season Centre. centreFor is the row count when 📺 was
      pressed, so the overlay opens on exactly the row that press added;
@@ -4393,7 +4397,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           </div>
 
           {/* Career totals, position-specific */}
-          <CareerStatsCard career={career} totals={totals} />
+          <CareerStatsCard career={career} totals={totals} onDerbyHistory={() => setDerbyHistoryOpen(true)} />
 
           {/* Trophies */}
           <div className="bg-card border border-border rounded-xl p-4">
@@ -4597,6 +4601,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       {storyOpen && <CareerStory career={visibleCareer} onClose={() => setStoryOpen(false)} />}
       {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-trophy-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">Opening your trophies...</div></div>}><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
       {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={visibleCareer} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
+      {derbyHistoryOpen && <CentreMountBoundary what="derby history" onClose={() => setDerbyHistoryOpen(false)}><Suspense fallback={null}><SoccerDerbyHistory seasons={visibleCareer.seasons} onClose={() => setDerbyHistoryOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
         /* Round 1046: moments are offered only while the season's own screens are up; a way back in later is a way to watch */

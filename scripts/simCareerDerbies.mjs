@@ -37,7 +37,7 @@
       sponsorship, money and the morale gated life events by a bounded amount.
    7. old saves and UI (exact): a save without derbies loads and plays on; the
       reader returns nothing for garbage; the components render nothing for an
-      old season and the W-D-L for a derby season; no button in the derby UI.
+      old season and the W-D-L for a derby season; no button in the recorded fact lines. Round1195 adds one separate history opener, with five copied page guard controls.
    8. copy (exact): the three reworded texts no longer claim a derby; no dash
       in a derby log or fan line; fan lines pass simCareerParity's rule.
 
@@ -934,9 +934,29 @@ console.log('7) an old save plays on, garbage reads as nothing, the UI draws onl
   if (!totals.includes('Derbies: 2 played, 1 W 1 D 0 L, 1 goal')) fail(`the career line is wrong: ${totals}`);
   const uiSrc = fs.readFileSync(path.join(ROOT, 'src/components/soccer-career/DerbyLines.tsx'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(?<!:)\/\/[^\n]*/g, ' ');
   if (/<button|<Button|onClick/.test(uiSrc)) fail('the derby UI has a button');
-  const page = fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').split('\n').filter(l => /Derby/.test(l) && !/^\s*(\/\/|\/\*|\*|\{\/\*)/.test(l));
-  if (page.length < 4) fail(`only ${page.length} derby lines found in SoccerCareer.tsx, the page guard reads nothing`);
-  if (page.some(l => /<button|<Button|onClick/.test(l))) fail('a derby line on the page carries a button');
+  const pageSource = fs.readFileSync(path.join(ROOT, 'src/pages/SoccerCareer.tsx'), 'utf8').replace(/\r\n/g, '\n').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(?<!:)\/\/[^\n]*/g, ' ');
+  const historyEntry = /\{onDerbyHistory && career\.seasons\.some\(s => s\.type === "playing"\) && <button type="button" onClick=\{onDerbyHistory\} data-open-derby-history\s+className="[^"<>]*">🔥 Derby history<\/button>\}/g;
+  const pageGuard = source => {
+    const entries = [...source.matchAll(historyEntry)];
+    const lines = source.replace(historyEntry, '').split('\n').filter(l => /Derby/.test(l) && !/^\s*(\/\/|\/\*|\*|\{\/\*)/.test(l));
+    return { entries: entries.length, lines: lines.length, button: lines.some(l => /<button|<Button|onClick/.test(l)) };
+  };
+  const page = pageGuard(pageSource), entry = [...pageSource.matchAll(historyEntry)];
+  if (page.entries !== 1) fail(`expected one separate history opener, found ${page.entries}`);
+  if (page.lines < 4) fail(`only ${page.lines} derby lines found in SoccerCareer.tsx, the page guard reads nothing`);
+  if (page.button) fail('a derby line on the page carries a button');
+  if (entry.length === 1) for (const control of [
+    { name: 'career-total-click', from: '<CareerDerbyTotals seasons={career.seasons} />', to: '<CareerDerbyTotals seasons={career.seasons} onClick={onDerbyHistory} />' },
+    { name: 'season-summary-click', from: '<SeasonDerbyLines season={season} />', to: '<SeasonDerbyLines season={season} onClick={() => {}} />' },
+    { name: 'timeline-chip-click', from: '<DerbyChip season={season} />', to: '<DerbyChip season={season} onClick={() => {}} />' },
+    { name: 'duplicate-history-opener', from: entry[0][0], to: entry[0][0] + '\n' + entry[0][0] },
+    { name: 'wrong-history-handler', from: entry[0][0], to: entry[0][0].replace('onClick={onDerbyHistory}', 'onClick={() => {}}') },
+  ]) {
+    const copied = edit(pageSource, control.from, control.to, control.name, 'SoccerCareer.tsx'), observed = pageGuard(copied);
+    if (copied === pageSource || sha(copied) === sha(pageSource)) fail(control.name + ': copied page did not change');
+    if (observed.entries === 1 && observed.lines >= 4 && !observed.button) fail(control.name + ': copied page guard control did not fire');
+    else console.log(`   CONTROL FIRED(page ${control.name}): ${JSON.stringify(observed)}; original ${sha(pageSource)}; copied ${sha(copied)}`);
+  }
 }
 
 section = 8;
