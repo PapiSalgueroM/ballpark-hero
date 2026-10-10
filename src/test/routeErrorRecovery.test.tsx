@@ -49,7 +49,7 @@ import {
   BACKUPS_KEPT, BROKEN_SAVE_MARK, SET_ASIDE_SEEN_KEY, backupDate, backupKeysOf, deleteBackup, dismissBackup, heldSaveEntry,
   offeredBackup, openGame, restoreBackup, setAsideSave, type SaveStorage,
 } from '@/lib/brokenSaveRecovery';
-import { PENDING_RESTORE_KEY, reopenGame, restoreNow, runSaveKeeper } from '@/lib/saveKeeper';
+import { PENDING_RESTORE_KEY, reopenGame, restoreNow, runSaveKeeper, takeOutcome } from '@/lib/saveKeeper';
 
 const Boom = () => { throw new Error('deliberate test throw'); };
 /* What a lazy route throws when its chunk cannot load: the network or a
@@ -608,6 +608,8 @@ describe('backups are capped, and one can be waved off or deleted (Round 958 clo
         expect(restoreNow(entry, source), `try ${n}`).toEqual({ ok: true });
         runSaveKeeper();
         expect(localStorage.getItem(entry.saveKey), `try ${n}`).toBe('broken A');
+        /* The outcome is taken, as the game's page would: it is kept for one page load and must not reach another case. */
+        expect(takeOutcome(entry.path), `try ${n}`).toEqual({ path: entry.path, ok: true, kept: n === 1 });
         /* The page breaks again, and he presses Start a fresh game. */
         const moved = setAsideSave(entry, localStorage, day(10 + n));
         expect(moved, `try ${n}`).toEqual({ ok: true, backupKey: key(stamp(10 + n)) });
