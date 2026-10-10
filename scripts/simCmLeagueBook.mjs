@@ -192,6 +192,8 @@ const seedOf = (clubIndex, k) => (0x1229 + SEEDSET * 7919 + clubIndex * 131 + k 
 
 /* Each run its own temp folder: two bundling harnesses at once must never share one. */
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-book-'));
+/* And each run takes its folder away again when it ends, however it ends (a control's exit included). */
+process.on('exit', () => { try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* a folder left behind fails nothing */ } });
 globalThis.localStorage ??= { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 
 /** The engine and its neighbours, bundled from `root` with exact text patches applied to the bundle's copy. */
@@ -426,7 +428,7 @@ const newAcc = () => ({
   report: { matches: 0, lines: 0, known: 0, offRoster: 0, setPieces: 0, assists: 0, twice: 0 },
   /* A league with an odd number of clubs: weeks I did not play in which the rest of the round did, club
      entries that held two matches of one club, and club seasons whose clean sheets the table could not tell. */
-  byeWeeks: 0, twoInOne: 0, untold: 0,
+  byeWeeks: 0, twoInOne: 0, untold: 0, cover: [],
 });
 const played = r => r.w + r.d + r.l;
 const rivalsOf = s => s.leagueClubs.filter(c => c !== s.clubName);
@@ -668,6 +670,9 @@ function watcher(mod, label, acc, opts = {}) {
     },
     seasonEnd(s, season) {
       const where = `at the end of season ${season + 1}`;
+      /* What this season covered, for the fleet's own promise (see "the fleet is what it says" below): how many
+         clubs its league had, and whether that league keeps its results (a tiebreak that reads them). */
+      acc.cover.push({ clubs: s.leagueClubs.length, ledger: Object.keys(s.pairResults?.[cm.careerLeagueOf(s).id] ?? {}).length > 0 });
       const book = lawNow(mod, s, label, where);
       if (!book) return;
       /* The clean sheets on a club's keeper rows are the matches it conceded nothing in, with an eleven named. */
@@ -772,6 +777,14 @@ const candFaces = fleet.map((f, i) => playCareer(candidate, f.club, f.era, f.see
   },
 })));
 tCand = Date.now() - tCand;
+/* THE FLEET IS WHAT IT SAYS, or the run says so and judges nothing: a data update that moves one of these
+   clubs into another league must not quietly drop the arm it was picked for (the boards are only printed). */
+{
+  const sizes = new Set(acc.cover.map(x => x.clubs));
+  const missing = [15, 18, 20, 24].filter(n => !sizes.has(n));
+  if (missing.length) cannot(`the fleet no longer plays a league of ${missing.join(' and of ')} clubs (it played ${[...sizes].sort((a, b) => a - b).join(', ')}): pick another club for that arm`);
+  if (!acc.cover.some(x => x.ledger) || !acc.cover.some(x => !x.ledger)) cannot('the fleet no longer plays both a league that keeps its results (a tiebreak reads them) and one that keeps none: pick another club for that arm');
+}
 
 /* The law once more with the video referee on. In a match I play a review can chalk a goal off or award a
    penalty, and the score is counted off the lines that are left; the book credits those same lines. The
@@ -1081,7 +1094,7 @@ const whole = s => sha(JSON.stringify(s));
   /* The job you applied for, joined today (joinClubNow), in season one and in season three: the new club's
      run-in is played as a fresh season one career and then takes the number of the season you were in. */
   for (const [seasonsFirst, from, to] of [[0, 'Everton', 'Ajax'], [2, 'Bayern Munich', 'Arsenal']]) {
-    /* The manager has to still be in the job when the letter comes: the first of four seeds that gets there. */
+    /* The manager has to still be in the job when the letter comes: the first of twelve seeds that gets there. */
     const reach = seed => onStream(seed, () => {
       let s = cm.startCareer(from);
       for (let k = 0; k < seasonsFirst && !s.sacked; k++) {
@@ -1094,9 +1107,11 @@ const whole = s => sha(JSON.stringify(s));
     });
     let raw = null;
     let seed = 0x7200 + seasonsFirst * 16;
-    for (let tries = 0; tries < 4 && !raw; tries++) raw = reach(seed += 1);
+    for (let tries = 0; tries < 12 && !raw; tries++) raw = reach(seed += 1);
+    /* No such save is no fault of the book (an engine change that gets this manager sacked every time is
+       somebody else's): the door then cannot be tried at all, and the run says that and judges nothing. */
+    if (!raw) cannot(`no career at ${from} reached week 16 of season ${seasonsFirst + 1} still in the job on twelve seeds: the joined job of section doors could not be tried`);
     tick('doors');
-    if (!raw) { fail('doors', `no career at ${from} reached week 16 of season ${seasonsFirst + 1} in the job on four seeds`); continue; }
     onStream(seed + 0x100, () => {
       const s = wake(candidate, JSON.parse(raw));
       const label = `the job at ${to} joined from ${from} in season ${s.season}`;
