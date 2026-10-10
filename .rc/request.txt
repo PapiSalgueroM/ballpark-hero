@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: DEBUG=pw:api WALK_CFGS=p390,d1280 WALK_KEYS=nfl_made,mlb_rich,nhl_old node .rc/x/rev-walkd.mjs
