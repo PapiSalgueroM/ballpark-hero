@@ -1,0 +1,6 @@
+1) no database write in src is built and then dropped on the floor
+   22 write calls in src, 0 never sent
+2) a finished round really does put a request on the wire
+   played=true, POSTs to guess_nation_scores seen: 1
+
+simWritesAreSent: green. Every write is sent, and a finished round proves it on the wire.

@@ -1,0 +1,15 @@
+1) every key the source can send is allowlisted
+   144 keys in source, 156 rows in game_score_caps, 0 uncovered
+2) a key that is not allowlisted earns nothing
+   denominators published: 156, for invented or test keys: 0
+3) every denominator is at least 1
+   156 of 156 denominators are sane
+4) nothing that already has scores was left out
+   ignoring 2 key(s) no code can send and nobody declared, whose rows were posted rather than played: draft-duel, nrl-my-career
+   143 keys carry real scores, 0 of them uncovered
+5) the allowlist itself refuses an anonymous write
+   anonymous insert into game_score_caps answered 401
+6) nothing on the allowlist is a key no code can send
+   156 allowlisted keys, 144 the source can send, 12 declared retirements, 0 named by nobody
+
+simLeaderboardCaps: green. Every shipped game can score, nothing else can, and the allowlist is not writable.

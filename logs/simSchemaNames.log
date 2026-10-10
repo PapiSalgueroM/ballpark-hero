@@ -1,0 +1,5 @@
+1) 78 tables read across 155 chains and 14 search source configs (297 dynamic table names and 0 embedded select parts not probed)
+   78 tables probed, 0 answered outside 200/400/404
+   widest reads: bref_nba_player_seasons (17), career_seasons (8), game_player_pool (11), lahman_appearances (12), lahman_batting (9), lahman_pitching (10)
+
+simSchemaNames: all green
