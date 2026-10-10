@@ -1,0 +1,12 @@
+playSaveKeeper: mode assert, CONTROL answered, parts toggle, 3 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+Journey T, the toggle, on the branch: 3 presses in a row with a real pointer on 3 route(s) at 390, the card's OK pressed after each (CONTROL: every kept aside save is listed as answered after the first press)
+  STOPPED     toggle /club-manager 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /fight-gym 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+  STOPPED     toggle /idle-arena 390: press 1: the card offers NOTHING after the press and its OK, with 2 save(s) of this game kept aside and no other door to them
+
+playSaveKeeper, branch: 0 walk(s) judged (0 fresh, 0 planted, 0 cross): 0 LOST the save that was put back, 0 partly, 0 survived; 0 not judged
+playSaveKeeper, the toggle: 0 of 3 route(s) held through 3 presses with a real pointer; the history told a replace from an assign on 0 of them
+playSaveKeeper control answered: FIRED. 3 of 3 route(s) stopped at "the card offers NOTHING" after the first press.

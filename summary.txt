@@ -1,0 +1,4 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 199s | walk: done (it asserts nothing; read the lines above and look at the pictures).
+toggle exit=0 202s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
+walk-answered exit=1 18s | playSaveKeeper control answered: FIRED. 3 of 3 route(s) stopped at "the card offers NOTHING" after the first press.

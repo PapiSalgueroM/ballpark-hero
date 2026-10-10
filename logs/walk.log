@@ -1,0 +1,129 @@
+walk: 21 long games read from continueSaves.ts; base http://localhost:4173
+walk: building real saves with each game's own engine...
+T /fight-gym 390 (A 1572 chars, B 1562 chars)
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=yyy hist=3
+   after press 1  key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-22=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 1     key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-22=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+   after press 2  key=B backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-22=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 2     key=B backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-22=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=yyy hist=3
+   after press 3  key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-22=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 3     key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-22=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+T /fight-gym 1280 (A 1572 chars, B 1562 chars)
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=880,650 384x234 hit=yyy hist=3
+   after press 1  key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-30=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 1     key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-30=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+   after press 2  key=B backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-30=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 2     key=B backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-30=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=880,650 384x234 hit=yyy hist=3
+   after press 3  key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-30=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 3     key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-30=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+T /club-manager 390 (A 58466 chars, B 54023 chars)
+   opened         key=other(55076) backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=yyy hist=3
+   after press 1  key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-39=other(55076)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 1     key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-39=other(55076)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+   after press 2  key=other(55076) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-39=other(55076), 2026-10-10T15-54-41=other(59522)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 2     key=other(55076) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-39=other(55076), 2026-10-10T15-54-41=other(59522)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+   after press 3  key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-39=other(55076), 2026-10-10T15-54-41=other(59522)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 3     key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-39=other(55076), 2026-10-10T15-54-41=other(59522)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+T /club-manager 1280 (A 58466 chars, B 54023 chars)
+   opened         key=other(55076) backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=880,650 384x234 hit=yyy hist=3
+   after press 1  key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-47=other(55076)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 1     key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-47=other(55076)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+   after press 2  key=other(55076) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-47=other(55076), 2026-10-10T15-54-49=other(59522)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 2     key=other(55076) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-47=other(55076), 2026-10-10T15-54-49=other(59522)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+   after press 3  key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-47=other(55076), 2026-10-10T15-54-49=other(59522)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 3     key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-47=other(55076), 2026-10-10T15-54-49=other(59522)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+T /soccer-career 390 (A 4267 chars, B 4267 chars)
+   opened         key=other(4772) backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=yyy hist=3
+   after press 1  key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-56=other(4772)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 1     key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-56=other(4772)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+   after press 2  key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-56=other(4772), 2026-10-10T15-54-58=other(4772)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 2     key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-56=other(4772), 2026-10-10T15-54-58=other(4772)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+   after press 3  key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-56=other(4772), 2026-10-10T15-54-58=other(4772)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 3     key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-54-56=other(4772), 2026-10-10T15-54-58=other(4772)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+T /soccer-career 1280 (A 4267 chars, B 4267 chars)
+   opened         key=other(4772) backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=880,650 384x234 hit=yyy hist=3
+   after press 1  key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-04=other(4772)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 1     key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-04=other(4772)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+   after press 2  key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-04=other(4772), 2026-10-10T15-55-06=other(4772)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 2     key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-04=other(4772), 2026-10-10T15-55-06=other(4772)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+   after press 3  key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-04=other(4772), 2026-10-10T15-55-06=other(4772)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 3     key=other(4772) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-04=other(4772), 2026-10-10T15-55-06=other(4772)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+T /nfl-my-career 390 (A 712 chars, B 731 chars)
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=n(LI.)n(LI.)n(DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a) hist=3
+   after press 1  key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-21=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=n(DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a) hist=3
+   after OK 1     key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-21=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=n(LI.)n(LI.)n(DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a) hist=3
+   after press 2  key=B backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-21=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=n(DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a) hist=3
+   after OK 2     key=B backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-21=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=n(LI.)n(LI.)n(DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a) hist=3
+   after press 3  key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-21=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=n(DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a) hist=3
+   after OK 3     key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-55-21=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=n(LI.)n(LI.)n(DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a) hist=3
+T /stadium-tycoon 390 (A 1153 chars, B 1153 chars)
+   opened         key=other(1372) backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=yyy hist=3
+   after press 1  key=other(1372) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-09=other(1459)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 1     key=other(1372) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-09=other(1459)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+   after press 2  key=other(1459) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-09=other(1459), 2026-10-10T15-56-11=other(1458)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 2     key=other(1459) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-09=other(1459), 2026-10-10T15-56-11=other(1458)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+   after press 3  key=other(1458) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-09=other(1459), 2026-10-10T15-56-11=other(1458), 2026-10-10T15-56-14=other(1456)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 3     key=other(1458) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-09=other(1459), 2026-10-10T15-56-11=other(1458), 2026-10-10T15-56-14=other(1456)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,554 358x274 hit=yyy hist=3
+T /idle-arena 1280 (A 261 chars, B 261 chars)
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=880,650 384x234 hit=yyy hist=3
+   after press 1  key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-18=other(285)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 1     key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-18=other(285)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+   after press 2  key=other(285) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-18=other(285), 2026-10-10T15-56-20=other(312)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 2     key=other(285) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-18=other(285), 2026-10-10T15-56-20=other(312)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+   after press 3  key=other(312) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-18=other(285), 2026-10-10T15-56-20=other(312), 2026-10-10T15-56-22=other(309)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 3     key=other(312) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-18=other(285), 2026-10-10T15-56-20=other(312), 2026-10-10T15-56-22=other(309)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,630 384x254 hit=yyy hist=3
+T /fight-gym 390 reduced motion (A 1572 chars, B 1562 chars)
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=yyy hist=3
+   after press 1  key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-26=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 1     key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-26=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+   after press 2  key=B backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-26=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 2     key=B backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-26=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=yyy hist=3
+   after press 3  key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-26=B] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=16,682 358x146 hit=y hist=3
+   after OK 3     key=A backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-26=B] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=16,594 358x234 hit=yyy hist=3
+T /club-manager 1280 reduced motion (A 58466 chars, B 54023 chars)
+   opened         key=other(55076) backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=880,650 384x234 hit=yyy hist=3
+   after press 1  key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-34=other(55076)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 1     key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-34=other(55076)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+   after press 2  key=other(55076) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-34=other(55076), 2026-10-10T15-56-37=other(59522)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 2     key=other(55076) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-34=other(55076), 2026-10-10T15-56-37=other(59522)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+   after press 3  key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-34=other(55076), 2026-10-10T15-56-37=other(59522)] card="Your save is back The game you had before is kept aside in this browser, so nothing was deleted. OK" box=880,738 384x146 hit=y hist=3
+   after OK 3     key=other(59522) backups=[2026-10-04T09-00-00=A, 2026-10-10T15-56-34=other(55076), 2026-10-10T15-56-37=other(59522)] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 10. Want it back? T" box=880,650 384x234 hit=yyy hist=3
+N /nfl-my-career 390
+   opened         key=EMPTY backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Pu" box=16,634 358x194 hit=n(LI.)n(LI.)n(DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a) hist=3
+   after press    key=A backups=[2026-10-04T09-00-00=A] card="Your save is back This is the save that was kept aside. OK" box=16,702 358x126 hit=n(DIV.fixed inset-0 z-50 bg-black/80 data-[state=open]:a) hist=3
+   after OK       key=A backups=[2026-10-04T09-00-00=A] card=none hist=3
+N /club-manager 1280
+   opened         key=EMPTY backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Pu" box=880,690 384x194 hit=yyy hist=3
+   after press    key=other(59522) backups=[2026-10-04T09-00-00=A] card="Your save is back This is the save that was kept aside. OK" box=975,758 289x126 hit=y hist=3
+   after OK       key=other(59522) backups=[2026-10-04T09-00-00=A] card=none hist=3
+S /fight-gym 390, a journal staged 10 minutes ago
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="Nothing changed The page took too long to load, so the save was not put back. It is still kept aside, and you " box=16,662 358x166 hit=y hist=3
+   after OK       key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=yyy hist=3
+S /fight-gym 1280, a journal staged -10 minutes ago
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="Nothing changed The page took too long to load, so the save was not put back. It is still kept aside, and you " box=880,718 384x166 hit=y hist=3
+   after OK       key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=880,650 384x234 hit=yyy hist=3
+Q /fight-gym 390, the store filled and about 900 characters freed ({"fillerKeys":23,"filled":5239310,"freed":900})
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=yyy hist=3
+   after press    key=B backups=[2026-10-04T09-00-00=A] card="Nothing changed Your browser is out of room, so the save could not be put back. It is still kept aside. OK" box=16,682 358x146 hit=y hist=3
+   the card's alert: none; the site's "Storage is full" line on screen: false; A still held: true
+Q /club-manager 1280, the store filled and about 900 characters freed ({"fillerKeys":11,"filled":5130110,"freed":900})
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=880,650 384x234 hit=yyy hist=3
+   after press    key=B backups=[2026-10-04T09-00-00=A] card="Nothing changed Your browser is out of room, so the save could not be put back. It is still kept aside. OK" box=880,738 384x146 hit=y hist=3
+   the card's alert: none; the site's "Storage is full" line on screen: false; A still held: true
+C /fight-gym 390, the cookie banner unanswered
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=16,594 358x234 hit=n(P.flex-1 text-center sm:text-left)n(P.flex-1 text-center sm:text-left)n(DIV.flex items-center gap-2 whitespace-nowrap) hist=3
+C /fight-gym 1280, the cookie banner unanswered
+   opened         key=B backups=[2026-10-04T09-00-00=A] card="You have a save kept aside There's a save of this game kept aside in this browser from Oct 4. Want it back? Th" box=880,650 384x234 hit=yyn(BUTTON.px-5 py-2 rounded-lg bg-primary text-primary-foreg) hist=3
+D 390: 21 real saves planted (true)
+   /              21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+   /whats-new     21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+   /leaderboard   21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+   /about         21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+   /privacy       21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+D 1280: 21 real saves planted (true)
+   /              21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+   /whats-new     21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+   /leaderboard   21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+   /about         21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+   /privacy       21 of 21 saves byte equal, 0 backups, journal false, 25 keys in storage
+walk: done (it asserts nothing; read the lines above and look at the pictures).

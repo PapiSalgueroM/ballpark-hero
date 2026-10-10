@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/rrun-walk.mjs
+toggle: PARTS=toggle,cross node scripts/playSaveKeeper.mjs
+walk-answered: KEEPER_CONTROL=answered ONLY=/fight-gym,/club-manager,/idle-arena node scripts/playSaveKeeper.mjs
