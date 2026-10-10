@@ -730,11 +730,21 @@ for (const [width, height] of SHORT) {
       if (!(await tapOut(id, true))) { alive = false; break; }
     }
     if (alive) {
-      await page.click(`${SHEET} button[aria-label="How the squad works"]`);
-      await screenIs(page, 'help');
-      await page.click(`${SHEET} button:has-text("Worked examples")`);
-      await screenIs(page, 'examples');
-      alive = await tapOut('examples', true);
+      /* Release AT gate: a button a tap cannot reach is a finding of this check, not a crash of the walk.
+         With the help one rule longer than it was, the noscroll control leaves Worked examples under the
+         bottom of a 360 by 640 screen (718 to 762 of 640), the click below could not land, and its timeout
+         was thrown out of the walk: the control fired its 7b reds and then died before the closing line,
+         which is an abort, not a result. The same two clicks, and a miss is said in this check's words. */
+      try {
+        await page.click(`${SHEET} button[aria-label="How the squad works"]`, { timeout: 8000 });
+        await screenIs(page, 'help');
+        await page.click(`${SHEET} button:has-text("Worked examples")`, { timeout: 8000 });
+        await screenIs(page, 'examples');
+        alive = await tapOut('examples', true);
+      } catch (e) {
+        stuck.push(`help: the way to the worked examples could not be tapped (${String(e).split('\n')[0].slice(0, 90)})`);
+        alive = false;
+      }
     }
     if (alive) {
       await shot(page, `short-${k}-home-${width}x${height}`);
