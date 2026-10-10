@@ -523,14 +523,37 @@ function scan(mods, R) {
    role, about 3,500 squads read after the last real man should have gone. A
    full run without the controls takes about 80 seconds on a GitHub runner and
    about 20 minutes on a loaded machine. */
+/* RE-MEASURED 2026-10-10 for Release AT: the two rows of section 9 only, 200 careers an era on a GitHub runner
+   (remote checks rAT-fx-q, rAT-fx-o, rAT-fx-r). "League games minus the plan" had left its line, and not in
+   this release:
+
+   seed                                 1       2       3       4       5
+   Round 1115's own head (42ee6af3)  -0.15                                   the table above
+   Release AP (bfc6197f)             -0.16
+   Release AR (fa24b384)             -0.28                                   Release AQ's Soccer Career train is in
+   Release AS (54e3820a)             -0.28   -0.27   -0.29   -0.30   -0.30   red on seed 4 against the old 0.3
+     its worst trust label            0.42    0.34    0.38    0.43    0.43
+   Release AT, this tree             -0.30   -0.26   -0.31   -0.29   -0.30   red on seeds 1, 3 and 5 against 0.3
+     its worst trust label            0.54    0.43    0.53    0.50    0.46   one hundredth under the old 0.55
+   this tree, the form swing out     -0.28                                   Round 1185 adds about 0.02
+
+   What moved it is Release AQ: since then a ban that is served takes league games, and inside a saved league
+   world an injury takes league games too, while the plan is, in the sheet's own words, the games before
+   injuries and bans. So the average gap went from 0.16 to 0.28 on main and the old line, 0.18 over 0.6, sat
+   inside what was being measured: a coin toss, which Release AS loses on one seed in five. Round 1185's form
+   swing adds a little more (a draw is cut at 38 games after the swing, the middle of the plan is not).
+   Both lines are set again by this file's own rule, the largest value seen over 0.6: 0.31 gives 0.52 and
+   0.54 gives 0.9. They still catch a plan that forgets a swing of two games or more for a whole label. That
+   the plan now overstates the season by about a third of a game on average (half a game for a squad
+   player) is a fact about the game, written here so it is not lost. */
 const FLOORS = {
   arrivalsMin: 3.3, arrivalsMax: 9.2,     // 7: mean arrivals a summer, squads the game made
   gap13: 3.1,                             // 8: per era, mean league games ranked 1st minus ranked 3rd
   gapBench: 8.6,                          // 8: pooled, in the eleven on rating minus outside it
   gap13Real: 2.7,                         // 8: the real squad arm, pooled
   disagreeMax: 0.011,                     // 8b: share of seasons in squads the game made where rating and plan disagree
-  trustTol: 0.3,                          // 9: |mean(league games - trust.expected)|
-  labelTol: 0.55,                         // 9: the same, per trust label with 200 or more seasons
+  trustTol: 0.52,                         // 9: |mean(league games - trust.expected)|; re-measured for Release AT, it was 0.3
+  labelTol: 0.9,                          // 9: the same, per trust label with 200 or more seasons; re-measured, it was 0.55
   fallbackMax: 0.67,                      // 10: share of thin seasons with no selection reason (the fallback line)
   underGap: 8.3,                          // 10: seasons with the "under the level" line play this many fewer
   sameSlotMax: 0.027,                     // 7: share of moves that meet a namesake in the same slot
