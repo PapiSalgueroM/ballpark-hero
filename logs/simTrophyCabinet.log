@@ -1,0 +1,235 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/trophyCabinet.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 347[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 11:13:31
+[2m   Duration [22m 1.99s[2m (transform 880ms, setup 31ms, collect 1.18s, tests 347ms, environment 176ms, prepare 85ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/trophy-tests.json
+ok actual winning seasons, stats, old saves and controls
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/trophyCabinet.test.tsx [2m([22m[2m12 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[32m 246[2mms[22m[39m
+[31m   [31m×[31m Soccer Career trophy cabinet records[2m > [22mmatches all seven actual career counters without counting awards or national history twice[39m[32m 6[2mms[22m[39m
+[31m     → league: expected [ Array(4) ] to have a length of 1 but got 4[39m
+[31m   [31m×[31m Soccer Career trophy cabinet records[2m > [22mreturns the actual winning rows newest first and leaves the source seasons untouched[39m[32m 3[2mms[22m[39m
+[31m     → expected [ Array(3) ] to deeply equal [ Array(2) ][39m
+[31m   [31m×[31m Soccer Career trophy cabinet records[2m > [22mdoes not grant a win just because a losing season has a cup run, an award or a national winner[39m[32m 1[2mms[22m[39m
+[31m     → expected [ { year: 2026, age: 22, …(23) } ] to deeply equal [][39m
+[31m   [31m×[31m Soccer Career trophy cabinet records[2m > [22mkeeps old flags without fabricating names or numbers missing from a saved row[39m[32m 1[2mms[22m[39m
+[31m     → expected [ { year: 1994, age: 22, …(23) } ] to deeply equal [][39m
+[31m   [31m×[31m Soccer Career trophy cabinet panel[2m > [22mopens the recorded year and club, shows full season stats, then returns to the same win list[39m[32m 29[2mms[22m[39m
+[31m     → expected [ '2028', '2026', '2024' ] to deeply equal [ '2026', '2024' ][39m
+   [32m✓[39m Soccer Career trophy cabinet panel[2m > [22muses the recorded continental competition and keeps national numbers separate from club totals[32m 41[2mms[22m[39m
+   [32m✓[39m Soccer Career trophy cabinet panel[2m > [22mreads a non-European club cup under its own saved name[32m 33[2mms[22m[39m
+   [32m✓[39m Soccer Career trophy cabinet panel[2m > [22mshows a saved domestic cup route and final without substituting season goals for cup goals[32m 35[2mms[22m[39m
+   [32m✓[39m Soccer Career trophy cabinet panel[2m > [22mkeeps the saved loan parent instead of the player current club[32m 14[2mms[22m[39m
+   [32m✓[39m Soccer Career trophy cabinet panel[2m > [22mkeeps help reopenable, returns to the picked win, and never changes the career record[32m 53[2mms[22m[39m
+   [32m✓[39m Soccer Career trophy cabinet panel[2m > [22mlocks the page, keeps keyboard focus inside, and restores the opener and body styles on close[32m 16[2mms[22m[39m
+   [32m✓[39m Soccer Career trophy cabinet panel[2m > [22mcloses by Escape, Back and the backdrop but keeps content clicks inside the panel[32m 12[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 11:13:34
+[2m   Duration [22m 1.68s[2m (transform 688ms, setup 43ms, collect 887ms, tests 246ms, environment 230ms, prepare 95ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/trophy-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/trophyCabinet.test.tsx[2m > [22mSoccer Career trophy cabinet records[2m > [22mmatches all seven actual career counters without counting awards or national history twice
+[31m[1mAssertionError[22m: league: expected [ Array(4) ] to have a length of 1 but got 4[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 4[39m
+
+[36m [2m❯[22m src/test/trophyCabinet.test.tsx:[2m47:54[22m[39m
+    [90m 45| [39m    }[33m;[39m
+    [90m 46| [39m    [35mfor[39m ([35mconst[39m category [35mof[39m [33mObject[39m[33m.[39m[34mkeys[39m(expected) [35mas[39m [33mTrophyCategory[39m[]) {
+    [90m 47| [39m      expect(trophyWins(source, category), category).toHaveLength(expe…
+    [90m   | [39m                                                     [31m^[39m
+    [90m 48| [39m      expect(trophyWins(source, category).some(row => row.year === 202…
+    [90m 49| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/trophyCabinet.test.tsx[2m > [22mSoccer Career trophy cabinet records[2m > [22mreturns the actual winning rows newest first and leaves the source seasons untouched
+[31m[1mAssertionError[22m: expected [ Array(3) ] to deeply equal [ Array(2) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -41,10 +41,37 @@[39m
+[2m      "goals": 27,[22m
+[2m      "intApps": 6,[22m
+[2m      "intAssists": 2,[22m
+[2m      "intGoals": 3,[22m
+[2m      "intRating": 0,[22m
+[31m+     "leagueTitle": false,[39m
+[31m+     "rating": 7.6,[39m
+[31m+     "redCards": 0,[39m
+[31m+     "tournament": null,[39m
+[31m+     "tournamentResult": null,[39m
+[31m+     "type": "playing",[39m
+[31m+     "worldCup": false,[39m
+[31m+     "year": 2027,[39m
+[31m+     "yellowCards": 3,[39m
+[31m+   },[39m
+[31m+   {[39m
+[31m+     "age": 22,[39m
+[31m+     "apps": 35,[39m
+[31m+     "assists": 11,[39m
+[31m+     "ballonDor": false,[39m
+[31m+     "ballonDorRank": null,[39m
+[31m+     "championsLeague": false,[39m
+[31m+     "cleanSheets": 8,[39m
+[31m+     "club": "Harbour Town",[39m
+[31m+     "clubCountry": "England",[39m
+[31m+     "clubTier": 2,[39m
+[31m+     "domesticCup": false,[39m
+[31m+     "goals": 27,[39m
+[31m+     "intApps": 6,[39m
+[31m+     "intAssists": 2,[39m
+[31m+     "intGoals": 3,[39m
+[31m+     "intRating": 0,[39m
+[2m      "leagueTitle": true,[22m
+[2m      "rating": 7.6,[22m
+[2m      "redCards": 0,[22m
+[2m      "tournament": null,[22m
+[2m      "tournamentResult": null,[22m
+
+[36m [2m❯[22m src/test/trophyCabinet.test.tsx:[2m59:42[22m[39m
+    [90m 57| [39m    [35mconst[39m before [33m=[39m [33mJSON[39m[33m.[39m[34mstringify[39m(source)[33m;[39m
+    [90m 58| [39m    [33mObject[39m[33m.[39m[34mfreeze[39m(source[33m.[39mseasons)[33m;[39m
+    [90m 59| [39m    [34mexpect[39m([34mtrophyWins[39m(source[33m,[39m [32m'league'[39m))[33m.[39m[34mtoEqual[39m([newer[33m,[39m older])[33m;[39m
+    [90m   | [39m                                         [31m^[39m
+    [90m 60| [39m    [34mexpect[39m([34mtrophyWins[39m(source[33m,[39m [32m'league'[39m)[[34m0[39m])[33m.[39m[34mtoBe[39m(newer)[33m;[39m
+    [90m 61| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(source))[33m.[39m[34mtoBe[39m(before)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/trophyCabinet.test.tsx[2m > [22mSoccer Career trophy cabinet records[2m > [22mdoes not grant a win just because a losing season has a cup run, an award or a national winner
+[31m[1mAssertionError[22m: expected [ { year: 2026, age: 22, …(23) } ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   {[39m
+[31m+     "age": 22,[39m
+[31m+     "apps": 35,[39m
+[31m+     "assists": 11,[39m
+[31m+     "ballonDor": false,[39m
+[31m+     "ballonDorRank": null,[39m
+[31m+     "championsLeague": false,[39m
+[31m+     "cleanSheets": 8,[39m
+[31m+     "club": "Harbour Town",[39m
+[31m+     "clubCountry": "England",[39m
+[31m+     "clubTier": 2,[39m
+[31m+     "domesticCup": false,[39m
+[31m+     "goals": 27,[39m
+[31m+     "intApps": 6,[39m
+[31m+     "intAssists": 2,[39m
+[31m+     "intGoals": 3,[39m
+[31m+     "intRating": 0,[39m
+[31m+     "leagueTitle": false,[39m
+[31m+     "rating": 7.6,[39m
+[31m+     "redCards": 0,[39m
+[31m+     "tournament": "World Cup",[39m
+[31m+     "tournamentResult": "Runner-up",[39m
+[31m+     "type": "playing",[39m
+[31m+     "worldCup": false,[39m
+[31m+     "year": 2026,[39m
+[31m+     "yellowCards": 3,[39m
+[31m+   },[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/trophyCabinet.test.tsx:[2m69:41[22m[39m
+    [90m 67| [39m      intlHistory: [{ year: 2026, short: 'World Cup', nation: 'Brazil'…
+    [90m 68| [39m    })[33m;[39m
+    [90m 69| [39m    [34mexpect[39m([34mtrophyWins[39m(source[33m,[39m [32m'world'[39m))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m 70| [39m    const view = render(<TrophyCabinet career={source} category="world…
+    [90m 71| [39m    [34mexpect[39m(view[33m.[39m[34mgetByText[39m([32m'No wins recorded here yet.'[39m))[33m.[39m[34mtoBeVisible[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/trophyCabinet.test.tsx[2m > [22mSoccer Career trophy cabinet records[2m > [22mkeeps old flags without fabricating names or numbers missing from a saved row
+[31m[1mAssertionError[22m: expected [ { year: 1994, age: 22, …(23) } ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   {[39m
+[31m+     "age": 22,[39m
+[31m+     "apps": 0,[39m
+[31m+     "assists": 11,[39m
+[31m+     "ballonDor": false,[39m
+[31m+     "ballonDorRank": null,[39m
+[31m+     "championsLeague": false,[39m
+[31m+     "cleanSheets": 8,[39m
+[31m+     "club": "Harbour Town",[39m
+[31m+     "clubCountry": "England",[39m
+[31m+     "clubTier": 2,[39m
+[31m+     "domesticCup": true,[39m
+[31m+     "goals": 27,[39m
+[31m+     "intApps": 6,[39m
+[31m+     "intAssists": 2,[39m
+[31m+     "intGoals": 3,[39m
+[31m+     "intRating": 0,[39m
+[31m+     "leagueTitle": false,[39m
+[31m+     "rating": 0,[39m
+[31m+     "redCards": 0,[39m
+[31m+     "tournament": null,[39m
+[31m+     "tournamentResult": null,[39m
+[31m+     "type": "playing",[39m
+[31m+     "worldCup": false,[39m
+[31m+     "year": 1994,[39m
+[31m+     "yellowCards": 3,[39m
+[31m+   },[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/trophyCabinet.test.tsx:[2m83:40[22m[39m
+    [90m 81| [39m    [35mconst[39m source [33m=[39m [34mcareer[39m([old])[33m;[39m
+    [90m 82| [39m    [34mexpect[39m([34mtrophyWins[39m(source[33m,[39m [32m'domestic'[39m))[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+    [90m 83| [39m    [34mexpect[39m([34mtrophyWins[39m(source[33m,[39m [32m'club'[39m))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                                       [31m^[39m
+    [90m 84| [39m    [34mexpect[39m([34mtrophyWins[39m(source[33m,[39m [32m'continental'[39m))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m 85| [39m    const view = render(<TrophyCabinet career={source} category="domes…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/trophyCabinet.test.tsx[2m > [22mSoccer Career trophy cabinet panel[2m > [22mopens the recorded year and club, shows full season stats, then returns to the same win list
+[31m[1mAssertionError[22m: expected [ '2028', '2026', '2024' ] to deeply equal [ '2026', '2024' ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[31m+   "2028",[39m
+[2m    "2026",[22m
+[2m    "2024",[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/trophyCabinet.test.tsx:[2m105:69[22m[39m
+    [90m103| [39m    const view = render(<TrophyCabinet career={source} category="leagu…
+    [90m104| [39m    const tiles = [...view.container.querySelectorAll('[data-trophy-wi…
+    [90m105| [39m    expect(tiles.map(tile => tile.getAttribute('data-trophy-win'))).to…
+    [90m   | [39m                                                                    [31m^[39m
+    [90m106| [39m    expect(view.getByText('2 wins. Pick a season to see what you did.'…
+    [90m107| [39m    [34mopenWin[39m(view[33m.[39mcontainer[33m,[39m [34m2026[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+ok copied losing-season defect changed the filter and was caught
+simTrophyCabinet: saved honors green, effective negative control caught

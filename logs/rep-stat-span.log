@@ -1,0 +1,54 @@
+Effective copied control stat-span: exact binding changed once.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps the strongest three and varies five without replacement beyond the old best eight 6ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps used names and wrong positions out while preserving distinct accented names 1ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > uses the same compact variety policy for bonus slots and leaves the shared legends intact 8ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions 10ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path 13ms
+ ✓ src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains what the career span covers before play and in reopened help 236ms
+ × src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > shows the complete career span and franchises under their shipped labels 169ms
+   → expect(received).toHaveTextContent()
+
+received value must be a Node.
+Received has type:  Null
+Received has value: null
+ ✓ src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > captures the exact random case and mode while keeping the answer out of visible play 145ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages the targeted position fallback beyond 12 after an unavailable country read 1205ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > fails closed rather than returning a partial global or country pool after a later page fails 2405ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 9 passed (10)
+   Start at  11:15:39
+   Duration  5.38s (transform 1.16s, setup 88ms, collect 2.30s, tests 4.20s, environment 554ms, prepare 369ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/reported-pools-stat-span.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains what the career span covers before play and in reopened help
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > shows the complete career span and franchises under their shipped labels
+Error: expect(received).toHaveTextContent()
+
+received value must be a Node.
+Received has type:  Null
+Received has value: null
+ ❯ src/test/statDetectiveScope.test.tsx:62:76
+     60|     const view = await ready(); fireEvent.click(view.getByRole('button…
+     61|     for (const profile of wrong) choose(view, profile);
+     62|     expect(view.container.querySelector('[data-stat-clue="Career span"…
+       |                                                                            ^
+     63|     expect(view.container.querySelector('[data-stat-clue="Career franc…
+     64|     expect(view.container.querySelector('[data-stat-profile-scope]')).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+Assertion outcomes stat-span: [{"title":"keeps the strongest three and varies five without replacement beyond the old best eight","status":"passed"},{"title":"keeps used names and wrong positions out while preserving distinct accented names","status":"passed"},{"title":"uses the same compact variety policy for bonus slots and leaves the shared legends intact","status":"passed"},{"title":"reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions","status":"passed"},{"title":"pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path","status":"passed"},{"title":"pages the targeted position fallback beyond 12 after an unavailable country read","status":"passed"},{"title":"fails closed rather than returning a partial global or country pool after a later page fails","status":"passed"},{"title":"explains what the career span covers before play and in reopened help","status":"passed"},{"title":"shows the complete career span and franchises under their shipped labels","status":"failed"},{"title":"captures the exact random case and mode while keeping the answer out of visible play","status":"passed"}]
+simReportedGamePools stat-span: 1 exact intended outcomes failed, all 9 unrelated outcomes passed.

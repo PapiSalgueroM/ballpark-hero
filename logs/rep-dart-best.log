@@ -1,0 +1,79 @@
+Effective copied control dart-best: exact binding changed once.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ × src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps the strongest three and varies five without replacement beyond the old best eight 11ms
+   → expected [ 'Fixture Pro 15', …(2) ] to deeply equal [ 'Fixture Pro 0', …(2) ]
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps used names and wrong positions out while preserving distinct accented names 1ms
+ × src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > uses the same compact variety policy for bonus slots and leaves the shared legends intact 2ms
+   → expected 5 to be 8 // Object.is equality
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions 10ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path 7ms
+ ✓ src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains what the career span covers before play and in reopened help 152ms
+ ✓ src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > shows the complete career span and franchises under their shipped labels 84ms
+ ✓ src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > captures the exact random case and mode while keeping the answer out of visible play 67ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages the targeted position fallback beyond 12 after an unavailable country read 1205ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > fails closed rather than returning a partial global or country pool after a later page fails 2406ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 8 passed (10)
+   Start at  11:15:46
+   Duration  5.23s (transform 801ms, setup 86ms, collect 1.65s, tests 3.95s, environment 716ms, prepare 267ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/reported-pools-dart-best.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains what the career span covers before play and in reopened help
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps the strongest three and varies five without replacement beyond the old best eight
+AssertionError: expected [ 'Fixture Pro 15', …(2) ] to deeply equal [ 'Fixture Pro 0', …(2) ]
+
+- Expected
++ Received
+
+  [
+-   "Fixture Pro 0",
+-   "Fixture Pro 1",
+-   "Fixture Pro 2",
++   "Fixture Pro 15",
++   "Fixture Pro 16",
++   "Fixture Pro 17",
+  ]
+
+ ❯ src/test/dartDraftPools.test.ts:51:38
+     49|     vi.mocked(Math.random).mockReturnValue(0.999999);
+     50|     const second = variedChoices(pool, slot, new Set());
+     51|     expect(names(first).slice(0, 3)).toEqual(['Fixture Pro 0', 'Fixtur…
+       |                                      ^
+     52|     expect(names(second).slice(0, 3)).toEqual(names(first).slice(0, 3)…
+     53|     expect(names(second).slice(3)).not.toEqual(names(first).slice(3));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > uses the same compact variety policy for bonus slots and leaves the shared legends intact
+AssertionError: expected 5 to be 8 // Object.is equality
+
+- Expected
++ Received
+
+- 8
++ 5
+
+ ❯ src/test/dartDraftPools.test.ts:82:75
+     80|     expect(wildcardChoices(pool, slot, new Set())).toHaveLength(8);
+     81|     const legends = legendChoices(slot, new Set([LEGENDS.find(value =>…
+     82|     expect(legends).toHaveLength(8); expect(new Set(names(legends)).si…
+       |                                                                           ^
+     83|     expect(legends.every(pick => LEGENDS.includes(pick.player) && slot…
+     84|     expect(JSON.stringify(LEGENDS)).toBe(before);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+Assertion outcomes dart-best: [{"title":"keeps the strongest three and varies five without replacement beyond the old best eight","status":"failed"},{"title":"keeps used names and wrong positions out while preserving distinct accented names","status":"passed"},{"title":"uses the same compact variety policy for bonus slots and leaves the shared legends intact","status":"failed"},{"title":"reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions","status":"passed"},{"title":"pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path","status":"passed"},{"title":"pages the targeted position fallback beyond 12 after an unavailable country read","status":"passed"},{"title":"fails closed rather than returning a partial global or country pool after a later page fails","status":"passed"},{"title":"explains what the career span covers before play and in reopened help","status":"passed"},{"title":"shows the complete career span and franchises under their shipped labels","status":"passed"},{"title":"captures the exact random case and mode while keeping the answer out of visible play","status":"passed"}]
+simReportedGamePools dart-best: 2 exact intended outcomes failed, all 8 unrelated outcomes passed.

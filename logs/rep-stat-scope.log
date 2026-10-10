@@ -1,0 +1,160 @@
+Effective copied control stat-scope: exact binding changed once.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ × src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains what the career span covers before play and in reopened help 71ms
+   → Unable to find an element with the text: Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<main[39m
+      [33mclass[39m=[32m"min-h-screen bg-background"[39m
+      [33mid[39m=[32m"dukb-main"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"How to play"[39m
+          [33mclass[39m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"max-w-2xl mx-auto px-4 py-6 md:py-10"[39m
+      ...
+ × src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > shows the complete career span and franchises under their shipped labels 88ms
+   → expect(element).toHaveTextContent()
+
+Expected element to have text content:
+  Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.
+Received:
+  Career span and Career franchises count seasons with 500+ minutes only. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.
+ ✓ src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > captures the exact random case and mode while keeping the answer out of visible play 69ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps the strongest three and varies five without replacement beyond the old best eight 4ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps used names and wrong positions out while preserving distinct accented names 1ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > uses the same compact variety policy for bonus slots and leaves the shared legends intact 2ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions 8ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path 6ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages the targeted position fallback beyond 12 after an unavailable country read 1205ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > fails closed rather than returning a partial global or country pool after a later page fails 2404ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 8 passed (10)
+   Start at  11:15:40
+   Duration  5.22s (transform 918ms, setup 84ms, collect 1.67s, tests 3.86s, environment 764ms, prepare 326ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/reported-pools-stat-scope.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains what the career span covers before play and in reopened help
+TestingLibraryElementError: Unable to find an element with the text: Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<main[39m
+      [33mclass[39m=[32m"min-h-screen bg-background"[39m
+      [33mid[39m=[32m"dukb-main"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"How to play"[39m
+          [33mclass[39m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"max-w-2xl mx-auto px-4 py-6 md:py-10"[39m
+      ...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ getByText node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/test/statDetectiveScope.test.tsx:46:17
+     44|   it('explains what the career span covers before play and in reopened…
+     45|     const view = await ready();
+     46|     expect(view.getByText(scope)).toBeVisible();
+       |                 ^
+     47|     const help = view.getByRole('button', { name: 'How to play' });
+     48|     help.focus(); fireEvent.click(help);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > shows the complete career span and franchises under their shipped labels
+Error: expect(element).toHaveTextContent()
+
+Expected element to have text content:
+  Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.
+Received:
+  Career span and Career franchises count seasons with 500+ minutes only. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.
+ ❯ src/test/statDetectiveScope.test.tsx:64:71
+     62|     expect(view.container.querySelector('[data-stat-clue="Career span"…
+     63|     expect(view.container.querySelector('[data-stat-clue="Career franc…
+     64|     expect(view.container.querySelector('[data-stat-profile-scope]')).…
+       |                                                                       ^
+     65|     expect(view.container.querySelector('[data-stat-clue="Recorded sea…
+     66|     expect(view.container.querySelector('[data-stat-clue="Recorded fra…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+Assertion outcomes stat-scope: [{"title":"keeps the strongest three and varies five without replacement beyond the old best eight","status":"passed"},{"title":"keeps used names and wrong positions out while preserving distinct accented names","status":"passed"},{"title":"uses the same compact variety policy for bonus slots and leaves the shared legends intact","status":"passed"},{"title":"reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions","status":"passed"},{"title":"pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path","status":"passed"},{"title":"pages the targeted position fallback beyond 12 after an unavailable country read","status":"passed"},{"title":"fails closed rather than returning a partial global or country pool after a later page fails","status":"passed"},{"title":"explains what the career span covers before play and in reopened help","status":"failed"},{"title":"shows the complete career span and franchises under their shipped labels","status":"failed"},{"title":"captures the exact random case and mode while keeping the answer out of visible play","status":"passed"}]
+simReportedGamePools stat-scope: 2 exact intended outcomes failed, all 8 unrelated outcomes passed.
