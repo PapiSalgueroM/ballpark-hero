@@ -1,0 +1,4 @@
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
