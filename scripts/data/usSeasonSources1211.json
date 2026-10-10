@@ -240,6 +240,117 @@
       "url": "https://www.ticketsinjapan.com/en/articles/introduction_climaxseries/", "read": "2026-10-10",
       "says": ["the top three teams from each regular season in both the Central League and Pacific League participate", "The maximum number of games is three, with the first team to win two games advancing.", "The maximum number of games is six, with the first team to win four games earning the right to advance to the Japan Series.", "the \"one-win advantage\" given to the season's 1st-place team", "played in a best-of-seven format (the Japan Series)"],
       "note": "ONE source, and it gives no season length. Used for nothing in the ledger."
+    },
+    "nhl": {
+      "sport": "nhl", "group": "nhl", "publisher": "National Hockey League, its own standings feed", "title": "Standings on the last day of the regular season (every club's division, conference and games played)",
+      "url": "https://api-web.nhle.com/v1/standings/<last day of the regular season>", "read": "2026-10-10",
+      "years": {
+        "2006": "2007-04-08: 30 clubs, all on 82. Eastern: Northeast, Atlantic, Southeast (ATL, TBL, CAR, FLA, WSH). Western: Central, Pacific (ANA, SJS, DAL, LAK, PHX), Northwest. Overtime losses add up to 281, shootout wins to 164, goals for to 7,246 (NYI 248).",
+        "2007": "2008-04-06: 30 clubs, all on 82; the same six divisions.",
+        "2008": "2009-04-12: 30 clubs, all on 82; the same six divisions.",
+        "2009": "2010-04-11: 30 clubs, all on 82; the same six divisions.",
+        "2010": "2011-04-10: 30 clubs, all on 82; the same six divisions (ATL in the Southeast).",
+        "2011": "2012-04-07: 30 clubs, all on 82; Southeast: FLA, WSH, TBL, WPG, CAR.",
+        "2012": "2013-04-28: 30 clubs, all on 48; the same six divisions (WPG in the Southeast).",
+        "2013": "2014-04-13: 30 clubs, all on 82. Eastern: Atlantic (BOS, TBL, MTL, DET, OTT, TOR, FLA, BUF), Metropolitan (PIT, NYR, PHI, CBJ, WSH, NYI, CAR, NJD). Western: Central (COL, STL, CHI, MIN, DAL, NSH, WPG), Pacific (ANA, SJS, LAK, PHX, VAN, CGY, EDM).",
+        "2014": "2015-04-11: 30 clubs, all on 82; Pacific: ANA, VAN, CGY, LAK, SJS, EDM, ARI.",
+        "2015": "2016-04-10: 30 clubs, all on 82; the same four divisions.",
+        "2016": "2017-04-09: 30 clubs, all on 82; the same four divisions.",
+        "2017": "2018-04-08: 31 clubs, all on 82; Pacific: VGK, ANA, SJS, LAK, CGY, EDM, VAN, ARI. Eastern: Atlantic, Metropolitan. Western: Central, Pacific.",
+        "2018": "2019-04-06: 31 clubs, all on 82; the same four divisions.",
+        "2019": "2020-03-11: 31 clubs on 68 to 71 games (68: 2 clubs, 69: 10, 70: 11, 71: 8), club for club as NHL_2019_CLUB_GAMES.",
+        "2020": "2021-05-19: 31 clubs, all on 56. Four divisions under sponsors' names: Scotia North (TOR, EDM, WPG, MTL, CGY, OTT, VAN), MassMutual East (PIT, WSH, BOS, NYI, NYR, PHI, NJD, BUF), Discover Central (CAR, FLA, TBL, NSH, DAL, CHI, DET, CBJ), Honda West (COL, VGK, MIN, STL, ARI, LAK, SJS, ANA).",
+        "2021": "2022-05-01: 32 clubs, all on 82; Central: COL, MIN, STL, DAL, NSH, WPG, CHI, ARI; Pacific: CGY, EDM, LAK, VGK, VAN, SJS, ANA, SEA. Eastern: Atlantic, Metropolitan. Western: Central, Pacific.",
+        "2022": "2023-04-14: 32 clubs, all on 82; the same four divisions.",
+        "2023": "2024-04-18: 32 clubs, all on 82; the same four divisions.",
+        "2024": "2025-04-17: 32 clubs, all on 82; Central: WPG, DAL, STL, COL, MIN, UTA, NSH, CHI.",
+        "2025": "2026-04-16: 32 clubs, all on 82; the same four divisions. Eastern: Atlantic, Metropolitan. Western: Central, Pacific. Overtime losses add up to 326, shootout wins to 119, goals for to 8,205.",
+        "2026": "2026-10-09 (season 20262027, in progress): 32 clubs in the same four divisions as 2025-26."
+      },
+      "note": "The feed answers with no clubs for a date after the last day of a regular season, so each season was read on its last day."
+    },
+    "hr": {
+      "sport": "nhl", "group": "sportsreference-hockey", "publisher": "Hockey Reference", "title": "<season> NHL Summary (standings by division, games played for every club)",
+      "url": "https://www.hockey-reference.com/leagues/NHL_<year the season ends in>.html", "read": "2026-10-10",
+      "years": {
+        "2006": "30 clubs, all on 82; six divisions (Atlanta Thrashers in the Southeast, Phoenix Coyotes in the Pacific). OL column adds up to 281; GF to 7,246 (New York Islanders 248).",
+        "2007": "30 clubs, all on 82; the same six divisions.", "2008": "30 clubs, all on 82; the same six divisions.",
+        "2009": "30 clubs, all on 82; the same six divisions.", "2010": "30 clubs, all on 82; the same six divisions (Atlanta Thrashers).",
+        "2011": "30 clubs, all on 82; Southeast: Florida, Washington, Tampa Bay, Winnipeg Jets, Carolina.",
+        "2012": "30 clubs, all on 48; the same six divisions (Winnipeg Jets in the Southeast).",
+        "2013": "30 clubs, all on 82; Atlantic 8, Metropolitan 8, Central 7 (with Winnipeg), Pacific 7 (with Phoenix Coyotes).",
+        "2014": "30 clubs, all on 82; Pacific holds Arizona Coyotes.", "2015": "30 clubs, all on 82; the same four divisions.", "2016": "30 clubs, all on 82; the same four divisions.",
+        "2017": "31 clubs, all on 82; Pacific holds Vegas Golden Knights.", "2018": "31 clubs, all on 82; the same four divisions.",
+        "2019": "31 clubs on 68 to 71 games, club for club as the league feed.",
+        "2020": "31 clubs, all on 56; Central, East, North and West Divisions, club for club as the league feed.",
+        "2021": "32 clubs, all on 82; Central holds Arizona Coyotes, Pacific holds Seattle Kraken.", "2022": "32 clubs, all on 82; the same four divisions.", "2023": "32 clubs, all on 82; the same four divisions.",
+        "2024": "32 clubs, all on 82; Central holds Utah Hockey Club.",
+        "2025": "32 clubs, all on 82; Central holds Utah Mammoth. OL column adds up to 326; GF to 8,205.",
+        "2026": "Season in progress: 32 clubs in the same four divisions (Utah Mammoth in the Central)."
+      }
+    },
+    "hr-league": {
+      "sport": "nhl", "group": "sportsreference-hockey", "publisher": "Hockey Reference", "title": "NHL & WHA League Averages (GP: games in the league; G: goals per team game)",
+      "url": "https://www.hockey-reference.com/leagues/stats.html", "read": "2026-10-10",
+      "years": {
+        "2006": "1230 games, 2.88 goals", "2007": "1230, 2.72", "2008": "1230, 2.85", "2009": "1230, 2.77", "2010": "1230, 2.73", "2011": "1230, 2.66", "2012": "720, 2.65",
+        "2013": "1230, 2.67", "2014": "1230, 2.66", "2015": "1230, 2.67", "2016": "1230, 2.73", "2017": "1271, 2.93", "2018": "1271, 2.98", "2019": "1082, 2.98",
+        "2020": "868, 2.90", "2021": "1312, 3.11", "2022": "1312, 3.14", "2023": "1312, 3.08", "2024": "1312, 3.01", "2025": "1312, 3.08"
+      },
+      "note": "Its goals a game leave out the one goal a shootout winner is given on the final score: 2.88 is (7,246 - 164) / 2,460 for 2006-07."
+    },
+    "hr-shootout": {
+      "sport": "nhl", "group": "sportsreference-hockey", "publisher": "Hockey Reference", "title": "<season> NHL Standings (each club's record in shootouts)",
+      "url": "https://www.hockey-reference.com/leagues/NHL_<year the season ends in>_standings.html", "read": "2026-10-10",
+      "years": {
+        "2006": "Shootout wins add up to 164 and losses to 164 (Buffalo 10-4, Detroit 2-8, ...), club for club the league feed's shootout wins.",
+        "2025": "Shootout wins add up to 119 (Philadelphia 10-4, Anaheim 8-0, Utah 0-0, ...), club for club the league feed's shootout wins."
+      }
+    },
+    "espn-nhl": {
+      "sport": "nhl", "group": "espn", "publisher": "ESPN", "title": "NHL Standings <season> (GP for every club; the clubs of each conference)",
+      "url": "https://www.espn.com/nhl/standings/_/season/<year the season ends in>", "read": "2026-10-10",
+      "years": {
+        "2006": "All 30 on 82. Eastern Conference: BUF, NJ, ATL, OTT, PIT, NYR, TB, NYI, TOR, MTL, CAR, FLA, BOS, WSH, PHI; Western: the other 15. Overtime losses club for club as the league feed. Goals for: NYI 247 (the feed and Hockey Reference print 248). Its shootout columns are all 0 for this season.",
+        "2007": "All 30 on 82, by division: the same six divisions.",
+        "2008": "All 30 on 82. Eastern Conference holds ATL and the 14 others of the three eastern divisions.",
+        "2012": "All 30 on 48. Eastern Conference holds WPG; Western holds PHX.",
+        "2013": "All 30 on 82. Eastern: BOS, TB, MTL, DET, OTT, TOR, FLA, BUF, PIT, NYR, PHI, CBJ, WSH, NJ, CAR, NYI. Western: the other 14.",
+        "2017": "All 31 on 82. Eastern: the 16 clubs of the Atlantic and the Metropolitan. Western: 15 with VGK.",
+        "2021": "All 32 on 82. Eastern: the 16 of the Atlantic and the Metropolitan. Western: 16 with ARI and SEA.",
+        "2025": "All 32 on 82. Eastern: the 16 of the Atlantic and the Metropolitan. Western: 16 with UTA."
+      },
+      "note": "Its by division view is by conference only for most old seasons, so it is a source for games played and for conferences, not for divisions."
+    },
+    "nhl-84": {
+      "sport": "nhl", "group": "nhl", "publisher": "NHL.com", "title": "10 things to know about 2026-27 NHL regular season (the page's address calls it the 2026-27 stats pack; the scout read it under \"84-GAME SCHEDULE RETURNS\")", "published": "2026-07-16",
+      "url": "https://www.nhl.com/news/nhl-stats-pack-2026-27-regular-season-schedule", "read": "2026-10-10",
+      "says": ["The 2026-27 campaign marks the third in the NHL's 109-season history where teams will play 84 games", "with the two previous instances occurring in 1993-94 and 1992-93", "Games Within Division - 28 total games for each team.", "7 teams x 2 home / 2 away (Subtotal 14 home / 14 away)", "Games Within Conference (Non-Division) - 24 total games for each team.", "4 teams x 2 home / 1 away (Subtotal 8 home / 4 away)", "4 teams x 1 home / 2 away (Subtotal 4 home / 8 away)", "Non-Conference Games - 32 total games for each team.", "16 teams x 1 home / 1 away (Subtotal 16 home / 16 away)", "Grand Total - 84 Games", "42 home / 42 away", "an all-time high of 1,344 games played across 194 days"]
+    },
+    "espn-84": {
+      "sport": "nhl", "group": "espn", "publisher": "ESPN (Greg Wyshynski)", "title": "NHL releases expanded 84-game schedule for 2026-27 season", "published": "2026-07-16",
+      "url": "https://www.espn.com/nhl/story/_/id/49376073/nhl-releases-expanded-84-game-schedule-2026-27-season", "read": "2026-10-10",
+      "says": ["the league expands its campaign from 82 to 84 games this season.", "The NHL has had an 82-game season since 1995-96.", "Now, each team will play two home and two road games against its seven division rivals.", "Teams will play two home games and one road game against four conference opponents, and one home game and two road games against the other four.", "Teams will then play each opponent in the opposite conference once at home and once on the road for a total of 42 home games and 42 away games."]
+    },
+    "nhl-playoff-format": {
+      "sport": "nhl", "group": "nhl", "publisher": "NHL.com", "title": "Playoff Format",
+      "url": "https://www.nhl.com/info/standings-info/playoff-format", "read": "2026-10-10",
+      "says": ["16 teams will qualify for the Stanley Cup Playoffs.", "The top three teams in each division will make up the first 12 teams in the playoffs.", "Each of the four rounds is a best-of-7; the first team to win four games advances to the next round.", "Section headings: The First Round, The Second Round, Conference Finals & Stanley Cup Final"]
+    },
+    "si-playoff-format": {
+      "sport": "nhl", "group": "si", "publisher": "Sports Illustrated (Joe Lago)", "title": "NHL Stanley Cup Playoffs: Format, Teams, Rules & Changes Through the Years", "published": "2025-04-10",
+      "url": "https://www.si.com/nhl/nhl-stanley-cup-playoffs-format-teams-rules-changes-through-the-years", "read": "2026-10-10",
+      "says": ["Sixteen teams qualify for the Stanley Cup playoffs.", "The Stanley Cup playoffs comprise four rounds with winners determined by best-of-seven game series.", "First-round winners advance to the second round.", "Second-round winners move on to the conference finals.", "The conference champions meet in the Stanley Cup Final.", "Outside of the modified 2020 and 2021 tournaments due to COVID-19."]
+    },
+    "si-overtime": {
+      "sport": "nhl", "group": "si", "publisher": "Sports Illustrated (Karl Rasmussen)", "title": "NHL Overtime Rules Explained: Playoffs and Regular Season", "published": "2025-03-05",
+      "url": "https://www.si.com/nhl/nhl-overtime-rules-explained-playoffs-and-regular-season-01jnm1y8qd0e", "read": "2026-10-10",
+      "says": ["if the game is still tied after the opening three 20-minute periods", "Rather than the usual 5-on-5 format, NHL overtime is played 3-on-3.", "since 2015, the NHL has adopted a 3-on-3 format for the overtime period in the regular season.", "If the game is still tied after five minutes, teams go to a penalty shootout to determine the winner.", "After 2005, the league introduced the shootout to determine a winner and a loser.", "both teams are awarded a single point", "There are no shootouts in playoff hockey.", "a 20-minute, sudden-death overtime period until a winner is determined"]
+    },
+    "nbc-overtime": {
+      "sport": "nhl", "group": "nbc", "publisher": "NBC Chicago (Bryan Murphy)", "title": "Everything to Know About NHL Overtime Rules", "published": "2023-05-19",
+      "url": "https://www.nbcchicago.com/news/sports/a-guide-to-nhl-overtime-rules/2634762/", "read": "2026-10-10",
+      "says": ["remains tied after three periods", "the periods are 20 minutes long like a normal period.", "Overtime is a five-minute period where the first team to score wins the game.", "The overtime period is played three-on-three, with each team having three skaters on the ice.", "there were four skaters on each side, but the NHL adopted the three-on-three format at the start of the 2015-16 season.", "Three rounds will be played to determine a winner.", "Overtime is played at five-on-five.", "There is no shootout, so if the first overtime period ends without a goal, then the game will move to a second overtime"]
     }
   }
 }
