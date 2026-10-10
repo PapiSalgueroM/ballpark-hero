@@ -1,0 +1,21 @@
+rival: node scripts/simUsRivalSense.mjs
+parity: node scripts/simUsBoardParity.mjs
+sense-c: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simCareerHall: node scripts/simCareerHall.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simCareerHub: node scripts/simCareerHub.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
