@@ -1,0 +1,7 @@
+#!serial
+seeds-5to9: bash .rc/x/seedrun.sh seeds
+seeds-10to14: bash .rc/x/seedrun.sh seeds2
+mut-outofturn: bash .rc/x/mutrun.sh outofturn
+mut-seedcount: bash .rc/x/mutrun.sh seedcount
+mut-levelnotbehind: bash .rc/x/mutrun.sh levelnotbehind
+clean-after: git status --porcelain --untracked-files=no | wc -l

@@ -1,0 +1,6 @@
+seeds-5to9 exit=0 13s | SEEDS seeds: harness exit=1, reds 11, of them the fixture's own 11, others 0
+seeds-10to14 exit=0 12s | SEEDS seeds2: harness exit=1, reds 11, of them the fixture's own 11, others 0
+mut-outofturn exit=0 13s | MUT outofturn: harness exit=0 vitest exit=1
+mut-seedcount exit=0 13s | MUT seedcount: harness exit=0 vitest exit=1
+mut-levelnotbehind exit=0 13s | MUT levelnotbehind: harness exit=1 vitest exit=1
+clean-after exit=0 0s | 0
