@@ -1,0 +1,5 @@
+US career save recovery: 33/33 actual mounted and baseline cases passed.
+Retained complete comparisons: 265, across all four actual save keys.
+Copied controls: 23/23 mapped AssertionErrors with unchanged independent baseline.
+Source and fixture holds: 3080; complete reports, transforms, source copies and hashes retained.
+US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes

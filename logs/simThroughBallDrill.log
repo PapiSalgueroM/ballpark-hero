@@ -1,0 +1,31 @@
+ ✓ src/test/throughBallBoard.test.tsx > actual Through Ball board > deals Through Ball to CM and CAM in the training ground, with rules before play 556ms
+ ✓ src/test/throughBallBoard.test.tsx > actual Through Ball board > drags and releases the exact engine pass on the live clock, checkpointing once 60ms
+ ✓ src/test/throughBallBoard.test.tsx > actual Through Ball board > aims from the keyboard on the pitch only, and Space starts and plays 33ms
+ ✓ src/test/throughBallBoard.test.tsx > actual Through Ball board > calls a pass after the line offside, and settles a run nobody played as offside 54ms
+ ✓ src/test/throughBallBoard.test.tsx > actual Through Ball board > freezes the run on Pause, hidden tabs and reopened rules, and needs Resume 134ms
+ ✓ src/test/throughBallBoard.test.tsx > actual Through Ball board > completes ten, blocks a daily replay and banks Passing once before the callback 357ms
+ ✓ src/test/throughBallBoard.test.tsx > actual Through Ball board > keeps practice apart from the saved daily and never banks it 329ms
+ ✓ src/test/throughBallBoard.test.tsx > actual Through Ball board > keeps the live clock on screen from the hold to the line, reduced motion or not 78ms
+ ✓ src/test/throughBallBoard.test.tsx > actual Through Ball board > keeps a reduced motion pitch static while the same clock plays the same pass 20ms
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > deals Through Ball to CM and CAM, keeps every old seed and replays one daily for a seed 4ms
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > scores the stated maximum, 100, for the perfect input on every sampled day 72ms
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > settles every verdict the rules name, and no round is free 3190ms
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > cuts out a pass that crosses the line within reach of a defender, and only that pass 147ms
+stdout | src/test/throughBallDrill.test.ts > seeded Through Ball rules > a better judge of weight outscores a worse one at three skill gaps
+Through Ball weight ladder over 240 paired runs: 100.0 / 89.3 / 55.9 / 30.8 points
+Through Ball best single weight with perfect aim and timing: 66.8 points
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > calls a ball off the side of the pitch out of play, wherever it would have stopped 22ms
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > moves the ball as far as the weight says, at every step of the bar 1ms
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > a better judge of weight outscores a worse one at three skill gaps 77ms
+stdout | src/test/throughBallDrill.test.ts > seeded Through Ball rules > a better all round player outscores a worse one at three skill gaps
+Through Ball all round ladder over 240 paired runs: 99.7 / 88.4 / 67.1 / 34.6 points
+stdout | src/test/throughBallDrill.test.ts > seeded Through Ball rules > reading the round beats every fixed input the sweep can find, and the run gets harder
+Through Ball: all round skill 1 scores 89.0, the best of 729 fixed inputs 9.8
+Through Ball ladder: first three balls 0.736, last three 0.525
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > a better all round player outscores a worse one at three skill gaps 22ms
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > reading the round beats every fixed input the sweep can find, and the run gets harder 93ms
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > banks Passing through the shared season pipeline, once, capped by the ceiling 1ms
+ ✓ src/test/throughBallDrill.test.ts > seeded Through Ball rules > shares First Touch checkpoint validation, so a bad save grants nothing 0ms
+ Test Files  2 passed (2)
+      Tests  20 passed (20)
+simThroughBallDrill: green. Twenty rules and board checks passed: one seed one run, the perfect pass scores 100, skill beats spam at every measured gap, a defender cuts out what touches him and nothing else, wide balls are out, Passing banks once a season, the clock stays on screen, and reduced motion holds still.

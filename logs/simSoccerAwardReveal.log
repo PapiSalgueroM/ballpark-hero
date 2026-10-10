@@ -1,0 +1,352 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerAwardReveal.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 131[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 05:24:03
+[2m   Duration [22m 2.46s[2m (transform 876ms, setup 61ms, collect 1.28s, tests 209ms, environment 453ms, prepare 151ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/award-reveal-tests.json
+ok saved winners, losers, stale saves, ranked countdown and recurring new contenders
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [31m❯[39m src/test/soccerAwardReveal.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 136[2mms[22m[39m
+[31m   [31m×[31m Soccer award reveal boundary[2m > [22mkeeps a saved true outcome out of current-year views until the list without rewriting it[39m[32m 7[2mms[22m[39m
+[31m     → expected true to be false // Object.is equality[39m
+[31m   [31m×[31m Soccer award reveal boundary[2m > [22mkeeps a saved false outcome out of current-year views until the list without rewriting it[39m[32m 1[2mms[22m[39m
+[31m     → expected 3 to be null[39m
+   [32m✓[39m Soccer award reveal boundary[2m > [22mkeeps already announced old saves and a given speech visible[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer ranked list comes before the result[2m > [22mreveals the ranked true result only after the names, with no award confetti or random draw[32m 64[2mms[22m[39m
+   [32m✓[39m Soccer ranked list comes before the result[2m > [22mreveals the ranked false result only after the names, with no award confetti or random draw[32m 36[2mms[22m[39m
+   [32m✓[39m Soccer ranked list comes before the result[2m > [22mcleans up an interrupted countdown and reopens a revealed saved list immediately[32m 26[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 05:24:06
+[2m   Duration [22m 2.91s[2m (transform 1.12s, setup 78ms, collect 1.67s, tests 213ms, environment 451ms, prepare 91ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/award-reveal-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerAwardReveal.test.tsx[2m > [22mSoccer award reveal boundary[2m > [22mkeeps a saved true outcome out of current-year views until the list without rewriting it
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/test/soccerAwardReveal.test.tsx:[2m41:41[22m[39m
+    [90m 39| [39m    [35mconst[39m hidden [33m=[39m [34mcareerBeforeBallonDorReveal[39m(saved)[33m;[39m
+    [90m 40| [39m    [34mexpect[39m(hidden[33m.[39mseasons[[34m0[39m])[33m.[39m[34mtoBe[39m(saved[33m.[39mseasons[[34m0[39m])[33m;[39m
+    [90m 41| [39m    [34mexpect[39m(hidden[33m.[39mseasons[[34m1[39m][33m.[39mballonDor)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m 42| [39m    [34mexpect[39m(hidden[33m.[39mseasons[[34m1[39m][33m.[39mballonDorRank)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 43| [39m    [34mexpect[39m(hidden[33m.[39mpendingSummary[33m?.[39mballonDor)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerAwardReveal.test.tsx[2m > [22mSoccer award reveal boundary[2m > [22mkeeps a saved false outcome out of current-year views until the list without rewriting it
+[31m[1mAssertionError[22m: expected 3 to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+3
+
+[36m [2m❯[22m src/test/soccerAwardReveal.test.tsx:[2m42:45[22m[39m
+    [90m 40| [39m    [34mexpect[39m(hidden[33m.[39mseasons[[34m0[39m])[33m.[39m[34mtoBe[39m(saved[33m.[39mseasons[[34m0[39m])[33m;[39m
+    [90m 41| [39m    [34mexpect[39m(hidden[33m.[39mseasons[[34m1[39m][33m.[39mballonDor)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 42| [39m    [34mexpect[39m(hidden[33m.[39mseasons[[34m1[39m][33m.[39mballonDorRank)[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                            [31m^[39m
+    [90m 43| [39m    [34mexpect[39m(hidden[33m.[39mpendingSummary[33m?.[39mballonDor)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m 44| [39m    expect(ballonDorSeasonForDisplay(saved, saved.seasons[1]).ballonDo…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+ok effective keeps a saved copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerAwardReveal.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 53[2mms[22m[39m
+   [32m✓[39m Soccer award reveal boundary[2m > [22mkeeps a saved true outcome out of current-year views until the list without rewriting it[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer award reveal boundary[2m > [22mkeeps a saved false outcome out of current-year views until the list without rewriting it[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer award reveal boundary[2m > [22mkeeps already announced old saves and a given speech visible[32m 0[2mms[22m[39m
+[31m   [31m×[31m Soccer ranked list comes before the result[2m > [22mreveals the ranked true result only after the names, with no award confetti or random draw[39m[32m 26[2mms[22m[39m
+[31m     → Unable to find an element with the text: Ballon d'Or 2030. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"relative rounded-xl border-2 border-amber-400/60 bg-gradient-to-b from-amber-500/20 to-transparent p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700"[31m
+      [33mdata-award-night[31m=[32m"ballon_dor"[31m
+      [33mdata-award-result[31m=[32m"revealed"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"cm-slam text-center space-y-2"[31m
+        [33mstyle[31m=[32m"animation-delay: 0s;"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"text-5xl animate-trophy-glow"[31m
+        [36m>[31m
+          [0m🏅[0m
+        [36m</div>[31m
+        [36m<h3[31m
+          [33mclass[31m=[32m"text-xl font-black tracking-tight"[31m
+          [33mdata-award-headline[31m=[32m"true"[31m
+        [36m>[31m
+          [0mBALLON D'OR WINNER![0m
+        [36m</h3>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-amber-300 font-bold"[31m
+        [36m>[31m
+          [0mThe best player in the world![0m
+        [36m</p>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"space-y-1"[31m
+      [36m/>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"cm-rise-gated"[31m
+        [33mstyle[31m=[32m"animation-delay: 0s;"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-1.5"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-center text-[11px] font-bold uppercase tracking-wider text-amber-300"[31m
+          [36m>[31m
+            [0mWinner speech[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[31m   [31m×[31m Soccer ranked list comes before the result[2m > [22mreveals the ranked false result only after the names, with no award confetti or random draw[39m[32m 12[2mms[22m[39m
+[31m     → expected <p …(1)></p> to be null[39m
+   [32m✓[39m Soccer ranked list comes before the result[2m > [22mcleans up an interrupted countdown and reopens a revealed saved list immediately[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 05:24:09
+[2m   Duration [22m 2.60s[2m (transform 1.04s, setup 58ms, collect 1.46s, tests 135ms, environment 490ms, prepare 127ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/award-reveal-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerAwardReveal.test.tsx[2m > [22mSoccer ranked list comes before the result[2m > [22mreveals the ranked true result only after the names, with no award confetti or random draw
+[31m[1mTestingLibraryElementError[22m: Unable to find an element with the text: Ballon d'Or 2030. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[31m
+  [36m<div>[31m
+    [36m<div[31m
+      [33mclass[31m=[32m"relative rounded-xl border-2 border-amber-400/60 bg-gradient-to-b from-amber-500/20 to-transparent p-5 space-y-4 animate-in fade-in zoom-in-90 duration-700"[31m
+      [33mdata-award-night[31m=[32m"ballon_dor"[31m
+      [33mdata-award-result[31m=[32m"revealed"[31m
+    [36m>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"cm-slam text-center space-y-2"[31m
+        [33mstyle[31m=[32m"animation-delay: 0s;"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"text-5xl animate-trophy-glow"[31m
+        [36m>[31m
+          [0m🏅[0m
+        [36m</div>[31m
+        [36m<h3[31m
+          [33mclass[31m=[32m"text-xl font-black tracking-tight"[31m
+          [33mdata-award-headline[31m=[32m"true"[31m
+        [36m>[31m
+          [0mBALLON D'OR WINNER![0m
+        [36m</h3>[31m
+        [36m<p[31m
+          [33mclass[31m=[32m"text-sm text-amber-300 font-bold"[31m
+        [36m>[31m
+          [0mThe best player in the world![0m
+        [36m</p>[31m
+      [36m</div>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"space-y-1"[31m
+      [36m/>[31m
+      [36m<div[31m
+        [33mclass[31m=[32m"cm-rise-gated"[31m
+        [33mstyle[31m=[32m"animation-delay: 0s;"[31m
+      [36m>[31m
+        [36m<div[31m
+          [33mclass[31m=[32m"space-y-1.5"[31m
+        [36m>[31m
+          [36m<p[31m
+            [33mclass[31m=[32m"text-center text-[11px] font-bold uppercase tracking-wider text-amber-300"[31m
+          [36m>[31m
+            [0mWinner speech[0m
+          [36m</p>[31m
+        [36m</div>[31m
+      [36m</div>[31m
+    [36m</div>[31m
+  [36m</div>[31m
+[36m</body>[31m[39m
+[90m [2m❯[22m Object.getElementError node_modules/@testing-library/dom/dist/config.js:[2m37:19[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m76:38[22m[39m
+[90m [2m❯[22m node_modules/@testing-library/dom/dist/query-helpers.js:[2m52:17[22m[39m
+[90m [2m❯[22m getByText node_modules/@testing-library/dom/dist/query-helpers.js:[2m95:19[22m[39m
+[36m [2m❯[22m src/test/soccerAwardReveal.test.tsx:[2m91:17[22m[39m
+    [90m 89| [39m    [35mconst[39m revealed [33m=[39m vi[33m.[39m[34mfn[39m()[33m;[39m
+    [90m 90| [39m    [35mconst[39m view [33m=[39m [34mrender[39m([33m<[39m[33mCard[39m [33mwon[39m[33m=[39m[33m{[39mwon[33m}[39m [33monReveal[39m[33m=[39m[33m{[39mrevealed[33m}[39m [33m/[39m[33m>[39m)[33m;[39m
+    [90m 91| [39m    [34mexpect[39m(view[33m.[39m[34mgetByText[39m([32m"Ballon d'Or 2030"[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m   | [39m                [31m^[39m
+    [90m 92| [39m    [34mexpect[39m(view[33m.[39m[34mqueryByText[39m([32m'You'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 93| [39m    [34mexpect[39m(view[33m.[39m[34mqueryByText[39m([32m'Winner speech'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerAwardReveal.test.tsx[2m > [22mSoccer ranked list comes before the result[2m > [22mreveals the ranked false result only after the names, with no award confetti or random draw
+[31m[1mAssertionError[22m: expected <p …(1)></p> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<p
+  class="text-sm text-muted-foreground"
+>
+  You finished 3rd! This snub could follow you into next season
+</p>
+
+[36m [2m❯[22m src/test/soccerAwardReveal.test.tsx:[2m94:65[22m[39m
+    [90m 92| [39m    [34mexpect[39m(view[33m.[39m[34mqueryByText[39m([32m'You'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 93| [39m    [34mexpect[39m(view[33m.[39m[34mqueryByText[39m([32m'Winner speech'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 94| [39m    expect(view.queryByText(/BALLON D'OR WINNER|You finished/)).toBeNu…
+    [90m   | [39m                                                                [31m^[39m
+    [90m 95| [39m    expect(view.container.firstElementChild?.className).not.toContain(…
+    [90m 96| [39m    [34mact[39m(() [33m=>[39m vi[33m.[39m[34madvanceTimersByTime[39m([34m600[39m))[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+ok effective reveals the ranked copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerAwardReveal.test.tsx [2m([22m[2m6 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 77[2mms[22m[39m
+   [32m✓[39m Soccer award reveal boundary[2m > [22mkeeps a saved true outcome out of current-year views until the list without rewriting it[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer award reveal boundary[2m > [22mkeeps a saved false outcome out of current-year views until the list without rewriting it[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer award reveal boundary[2m > [22mkeeps already announced old saves and a given speech visible[32m 0[2mms[22m[39m
+[31m   [31m×[31m Soccer ranked list comes before the result[2m > [22mreveals the ranked true result only after the names, with no award confetti or random draw[39m[32m 45[2mms[22m[39m
+[31m     → expected <div data-testid="confetti"></div> to be null[39m
+   [32m✓[39m Soccer ranked list comes before the result[2m > [22mreveals the ranked false result only after the names, with no award confetti or random draw[32m 17[2mms[22m[39m
+   [32m✓[39m Soccer ranked list comes before the result[2m > [22mcleans up an interrupted countdown and reopens a revealed saved list immediately[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 78[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 05:24:12
+[2m   Duration [22m 2.75s[2m (transform 1.07s, setup 126ms, collect 1.52s, tests 155ms, environment 482ms, prepare 105ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/award-reveal-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerAwardReveal.test.tsx[2m > [22mSoccer ranked list comes before the result[2m > [22mreveals the ranked true result only after the names, with no award confetti or random draw
+[31m[1mAssertionError[22m: expected <div data-testid="confetti"></div> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<div
+  data-testid="confetti"
+/>
+
+[36m [2m❯[22m src/test/soccerAwardReveal.test.tsx:[2m109:44[22m[39m
+    [90m107| [39m      [34mexpect[39m(view[33m.[39m[34mgetByText[39m([32m'Winner speech'[39m))[33m.[39m[34mtoBeInTheDocument[39m()[33m;[39m
+    [90m108| [39m    } else expect(view.getByText(/You finished 3rd/)).toBeInTheDocumen…
+    [90m109| [39m    [34mexpect[39m(view[33m.[39m[34mqueryByTestId[39m([32m'confetti'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                           [31m^[39m
+    [90m110| [39m    [34mexpect[39m(random)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m111| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective reveals the ranked copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerAwardReveal.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 88[2mms[22m[39m
+ [31m❯[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 56[2mms[22m[39m
+[31m   [31m×[31m Soccer award generations[2m > [22mputs known names and guarded new names on the same ranked ballot before the future field takes over[39m[32m 35[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m Soccer award generations[2m > [22mkeeps future contender identities across seasons while preserving ranked, unique ballots[32m 20[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 05:24:15
+[2m   Duration [22m 2.52s[2m (transform 1.01s, setup 69ms, collect 1.38s, tests 144ms, environment 449ms, prepare 165ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/award-reveal-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerAwardGeneration.test.ts[2m > [22mSoccer award generations[2m > [22mputs known names and guarded new names on the same ranked ballot before the future field takes over
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/soccerAwardGeneration.test.ts:[2m28:48[22m[39m
+    [90m 26| [39m    [35mconst[39m mixed [33m=[39m [34mnightIn[39m([34m2031[39m)[33m.[39mnominees[33m.[39m[34mfilter[39m(n [33m=>[39m [33m![39mn[33m.[39misPlayer)[33m;[39m
+    [90m 27| [39m    [34mexpect[39m(mixed[33m.[39m[34msome[39m(n [33m=>[39m real[33m.[39m[34mhas[39m(n[33m.[39mname)))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m 28| [39m    [34mexpect[39m(mixed[33m.[39m[34msome[39m(n [33m=>[39m [33m![39mreal[33m.[39m[34mhas[39m(n[33m.[39mname)))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                               [31m^[39m
+    [90m 29| [39m    [34mexpect[39m([35mnew[39m [33mSet[39m(mixed[33m.[39m[34mmap[39m(n [33m=>[39m n[33m.[39mname))[33m.[39msize)[33m.[39m[34mtoBe[39m(mixed[33m.[39mlength)[33m;[39m
+    [90m 30| [39m    [35mconst[39m future [33m=[39m [34mnightIn[39m([34m2033[39m)[33m.[39mnominees[33m.[39m[34mfilter[39m(n [33m=>[39m [33m![39mn[33m.[39misPlayer)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective puts known names copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerAwardReveal.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 73[2mms[22m[39m
+ [31m❯[39m src/test/soccerAwardGeneration.test.ts [2m([22m[2m2 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 75[2mms[22m[39m
+   [32m✓[39m Soccer award generations[2m > [22mputs known names and guarded new names on the same ranked ballot before the future field takes over[32m 50[2mms[22m[39m
+[31m   [31m×[31m Soccer award generations[2m > [22mkeeps future contender identities across seasons while preserving ranked, unique ballots[39m[32m 24[2mms[22m[39m
+[31m     → expected 0 to be greater than or equal to 5[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 05:24:18
+[2m   Duration [22m 2.73s[2m (transform 949ms, setup 73ms, collect 1.34s, tests 148ms, environment 749ms, prepare 119ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/award-reveal-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerAwardGeneration.test.ts[2m > [22mSoccer award generations[2m > [22mkeeps future contender identities across seasons while preserving ranked, unique ballots
+[31m[1mAssertionError[22m: expected 0 to be greater than or equal to 5[39m
+[36m [2m❯[22m src/test/soccerAwardGeneration.test.ts:[2m38:30[22m[39m
+    [90m 36| [39m    const names = new Set(first.nominees.filter(n => !n.isPlayer).map(…
+    [90m 37| [39m    const recurring = next.nominees.filter(n => !n.isPlayer && names.h…
+    [90m 38| [39m    [34mexpect[39m(recurring[33m.[39mlength)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m5[39m)[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m 39| [39m    [35mfor[39m ([35mconst[39m night [35mof[39m [first[33m,[39m next]) {
+    [90m 40| [39m      expect(new Set(night.nominees.map(n => n.name)).size).toBe(night…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective keeps future contender copied defect caught
+simSoccerAwardReveal: 8 outcome assertions green, 5 effective copied defects caught

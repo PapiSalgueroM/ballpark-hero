@@ -1,0 +1,30 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mkeeps five actual mixed penalty verdicts and the earned one time bank unchanged[32m 166[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mabandons a final penalty before it can hijack the real Through Ball and First Touch boards[33m 329[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mreopens a clean penalty run without an old reveal advancing the new counter[32m 94[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mcancels passing gate deadlines and random draws as soon as Drills is chosen[32m 99[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mcancels keeper setup tell and reveal timers on every route back to Drills[32m 120[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mallows leaving an active sprint and cancels both running stopwatches before reopening[32m 136[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mholds the remaining penalty reveal through blur rules and explicit resume without accepting paused shots[32m 91[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mfreezes a running penalty when rules open and preserves its last seven hundred milliseconds[32m 53[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mpreserves keeper setup tell and reveal remainders then banks the actual five saves[32m 139[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mpreserves gate closing and between pass delays while paused taps cannot earn hits[32m 70[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mexcludes paused wall time and paused cone taps from the real slalom score[32m 123[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mpreserves sprint time and real step score across hidden focus and paused input[32m 208[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mignores paused start buttons until the player explicitly resumes the new run[32m 111[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mcancels pending work on Close and unmount without extra callbacks or random draws[33m 348[2mms[22m[39m
+ [32m✓[39m src/test/soccerPracticeLifecycle.test.tsx[2m > [22mSoccer practice lifecycle[2m > [22mretains the independent engine gain and fresh midfielder drill baseline[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m15 passed[39m[22m[90m (15)[39m
+[2m   Start at [22m 05:20:11
+[2m   Duration [22m 3.76s[2m (transform 919ms, setup 27ms, collect 1.23s, tests 2.09s, environment 167ms, prepare 46ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/career-practice-lifecycle-artifacts/soccer/normal-report.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simSoccerPracticeLifecycle: 15 actual outcomes passed.
