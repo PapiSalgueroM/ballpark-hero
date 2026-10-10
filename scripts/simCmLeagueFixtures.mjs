@@ -148,6 +148,7 @@ const BOUND_KEYS = [
   'seriea-2026-27-v1',
   'bundesliga-2026-27-v1',
   'eredivisie-2026-27-v1',
+  'primeira-2026-27-v1',
 ];
 const EXPECT_BOUND = process.env.CM_LEAGUE_FIXTURES_EXPECT_BOUND || '';
 const CONTROL = process.env.CM_LEAGUE_FIXTURES_CONTROL || '';
