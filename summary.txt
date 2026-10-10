@@ -1,0 +1,2 @@
+realfix-asis exit=0 2s | Node.js v24.21.0
+realfix-patched exit=0 5s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
