@@ -1,0 +1,22 @@
+vitest exit=0 4s |    Duration  3.40s (transform 428ms, setup 208ms, collect 978ms, tests 1.30s, environment 1.29s, prepare 691ms)
+simSaveKeeper exit=0 6s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+ctl-dropkey exit=1 6s | simSaveKeeper control dropkey: FIRED. Section 0 is red.
+ctl-versiontable exit=1 6s | simSaveKeeper control versiontable: FIRED. Section 1 is red (and 2, 5, which the same change reaches).
+ctl-norow exit=1 6s | simSaveKeeper control norow: FIRED. Section 1 is red.
+ctl-onebyte exit=1 6s | simSaveKeeper control onebyte: FIRED. Section 2 is red.
+ctl-bootwrite exit=1 6s | simSaveKeeper control bootwrite: FIRED. Section 2 is red (and 4, 5, which the same change reaches).
+ctl-noaside exit=1 5s | simSaveKeeper control noaside: FIRED. Section 3 is red.
+ctl-journalfirst exit=1 5s | simSaveKeeper control journalfirst: FIRED. Section 3 is red.
+ctl-pileup exit=1 5s | simSaveKeeper control pileup: FIRED. Section 4 is red.
+ctl-unknown exit=2 1s | SIM_SAVE_KEEPER_CONTROL=nosuchcontrol is not a control this harness knows
+simStorageWrites exit=0 3s | simStorageWrites: all green
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simHomeFront exit=0 1s | simHomeFront: green. The home front shows real games, real saves and a sport you can tell apart without colour.
+simErrorBoundary exit=0 0s | simErrorBoundary: all green
+simStaleChunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simHomeCopy exit=0 0s | simHomeCopy: green. The one page a crawler reads first says only true things.
+simAccessibility exit=0 0s | simAccessibility: all green
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 83s | 
