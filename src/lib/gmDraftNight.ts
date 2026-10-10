@@ -12,8 +12,19 @@
    THE SIBLING. The Aussie Rules manager (src/lib/aussieRulesLeague.ts, Round
    1014) already plays an earned draft with a cursor and rivals who pick
    before you: its saved state is { order, pool, made, at }. This block is
-   shaped so that game is a later BIND and not a third copy: ownSlots(order,
-   rounds) is its order, `made` is its `at`, and the pool stays the host's.
+   shaped so that game is a later BIND and not a third copy: a slot list
+   where holder and first owner are one club holds its order, `made` is its
+   `at`, and the pool stays the host's. WHAT THAT BIND STILL WRITES ITSELF,
+   said plainly so nobody walks in with a wrong map:
+   - ITS SLOT LIST. That game's clubs take different numbers of picks: one a
+     pass through the order while a club still has a vacancy. ownSlots gives
+     every club the same number, so ownSlots is NOT that game's order. The
+     slot type and isGmDraftNight hold such a list as it is: a club with no
+     pick in a round is simply absent from it.
+   - ITS RIVALS' RULE, through the host's optional `choose`. That game's
+     clubs fill their biggest hole first and never take a prospect another
+     club still needs, which is not a read plus a weighted need, so
+     rivalChoice is not its rule.
 
    WHAT IS SAVED. One block: the order, the slot list resolved ONCE when the
    night opens, how many slots are used, and whether the lottery card has
@@ -51,6 +62,11 @@ export interface GmDraftHost<L, P> {
   need(league: L, club: string): Record<string, number>;
   /** What one whole point of need is worth beside a read. */
   needWeight: number;
+  /** OPTIONAL: the club's own way of choosing from the men left, for a league
+      whose clubs do not choose by read plus need. It must draw nothing and
+      must answer one of `left`, or null to let the slot pass. Without it the
+      lift's rivalChoice decides, on `read`, `need` and `needWeight`. */
+  choose?(league: L, club: string, left: P[], slot: EarnedSlot): P | null;
   /** What `club` chooses on. */
   read(prospect: P, club: string): number;
   /** What a card prints beside a pick: the watching GM's own scout's read, never an engine's hidden number. */
@@ -139,9 +155,15 @@ function stepOf<L, P>(host: GmDraftHost<L, P>, slot: EarnedSlot, prospect: P, mi
 }
 
 /* The one loop. Resolves slots from the cursor: every club but `stopFor`
-   chooses by the rival rule; it stops when `stopFor` is on the clock, or
-   runs to the end when `stopFor` is null. A slot whose club holds no marker,
-   or that finds the class empty, passes: it is used and no man is signed. */
+   chooses by the rival rule (the host's own `choose` when it has one); it
+   stops when `stopFor` is on the clock, or runs to the end when `stopFor` is
+   null. A slot whose club holds no marker, or that finds the class empty,
+   passes: it is used and no man is signed.
+
+   USED MEANS SPENT. The marker is spent FIRST, so a slot that finds the
+   class dry still costs its club the marker, exactly as a pass does
+   (passDraftPick). A host whose markers carry over a summer would otherwise
+   keep one for every slot that came after the last prospect. */
 function run<L, P>(host: GmDraftHost<L, P>, league: L, night: GmDraftNight, left: P[], stopFor: string | null, me: string): DraftRun<P> {
   let made = night.made;
   let pool = left;
@@ -150,8 +172,12 @@ function run<L, P>(host: GmDraftHost<L, P>, league: L, night: GmDraftNight, left
     const slot = night.slots[made];
     made += 1;
     const club = slot.holder;
-    const choice = rivalChoice(pool, { read: p => host.read(p, club), pos: p => host.pos(p), id: p => host.id(p) }, host.need(league, club), host.needWeight);
-    if (choice === null || !host.consume(league, club, slot)) continue;
+    const spent = host.consume(league, club, slot);
+    const choice = host.choose
+      ? host.choose(league, club, pool, slot)
+      : rivalChoice(pool, { read: p => host.read(p, club), pos: p => host.pos(p), id: p => host.id(p) }, host.need(league, club), host.needWeight);
+    /* No marker, nobody left, or a host that answered a man who is not in the class: the slot passes. */
+    if (!spent || choice === null || choice === undefined || !pool.includes(choice)) continue;
     host.sign(league, club, choice, slot);
     pool = pool.filter(p => p !== choice);
     steps.push(stepOf(host, slot, choice, club === me));
@@ -169,7 +195,10 @@ export function staffDraftNight<L, P>(host: GmDraftHost<L, P>, league: L, night:
   return run(host, league, night, left, null, me);
 }
 
-/** His pick. Null unless the slot on the clock is his, the man is still in the class and the marker is there. */
+/** His pick. Null unless the slot on the clock is his, the man is still in the class and the marker is there.
+    A null while his slot IS on the clock (the engine holds no marker for it, or the class is empty) leaves the
+    night where it is, and advanceDraftNight stops at his slot again: only passDraftPick or staffDraftNight moves
+    it on. So a board that binds this MUST offer one of the two, or that case is a screen with no way forward. */
 export function userDraftPick<L, P>(
   host: GmDraftHost<L, P>, league: L, night: GmDraftNight, me: string, left: P[], prospectId: string,
 ): { night: GmDraftNight; left: P[]; step: RunStep; slot: EarnedSlot } | null {

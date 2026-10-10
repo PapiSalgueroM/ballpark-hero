@@ -215,6 +215,10 @@ describe('the night, played through a host', () => {
     expect(short.done).toBe(true);
     expect(short.steps.length).toBe(5);
     expect(short.left).toEqual([]);
+    /* Used means spent: the 55 slots that found the class dry cost their clubs the marker, as a pass does. */
+    expect(short.night.made).toBe(60);
+    expect(Object.values(b.league.markers).every(m => m.length === 0)).toBe(true);
+    expect(b.league.signed.length).toBe(5);
   });
 
   it('lets the staff make every pick he has left, flags them his, and draws nothing', () => {
@@ -246,14 +250,73 @@ describe('the night, played through a host', () => {
     expect(b.league.signed).toEqual(a.league.signed);
   });
 
-  it('plays a plain list of clubs, the shape a league with no ledger binds through', () => {
-    const clubs = ['C01', 'C02', 'C03'];
-    const slots = ownSlots(clubs, 2);
+  /* A league with no pick ledger and no lottery: four clubs, an order of its own. */
+  const SMALL = ['C01', 'C02', 'C03', 'C04'];
+  const smallOrder = buildDraftOrder(
+    { sport: 'toy', draftYear: 2030, rows: SMALL.map((id, i) => ({ id, wins: 2 + 3 * i, losses: 20 - 3 * i, made: i >= 2 })) },
+    { ...NBA_DRAFT_ORDER_2019, id: 'toy-plain', sport: 'toy', lottery: null, laterRounds: 'first-before-lottery', level: { odds: 'keep', later: 'as-first' } },
+    NBA_PICK_RULES,
+  );
+
+  it('plays a plain list of clubs, the shape a league with no ledger binds through, and the night VALIDATES', () => {
+    expect(smallOrder.first).toEqual(SMALL);
+    expect(smallOrder.later).toEqual(SMALL);
+    const slots = ownSlots(smallOrder.first, 2);
     const toy = toyLeague(slots);
-    const plain = openDraftNight(order, slots, 2026);
+    const plain = openDraftNight(smallOrder, slots, 2026);
+    expect(isGmDraftNight(JSON.parse(JSON.stringify(plain)), SMALL, 2026)).toBe(true);
     const run = advanceDraftNight(host, toy, plain, 'C03', toyClass(10));
     expect(run.steps.map(s => `${s.overall}:${s.team}`)).toEqual(['1:C01', '2:C02']);
     expect(nextSlot(plain.slots, run.night.made)!.holder).toBe('C03');
+    expect(isGmDraftNight(JSON.parse(JSON.stringify(run.night)), SMALL, 2026)).toBe(true);
+    /* A list of clubs that is not the saved order is refused: a night is held to its own order. */
+    expect(isGmDraftNight(openDraftNight(smallOrder, ownSlots(['C02', 'C01', 'C03', 'C04'], 2), 2026), SMALL, 2026)).toBe(false);
+    /* And so is this night read against other clubs. */
+    expect(isGmDraftNight(JSON.parse(JSON.stringify(plain)), CLUBS, 2026)).toBe(false);
+  });
+
+  it('holds a night where clubs take different numbers of picks, played by a rule of the host\'s own', () => {
+    /* The shape of a draft by vacancy: all four in the first pass, two in the second, one in the third.
+       ownSlots cannot build it (it gives every club the same number); the slot type and the validator hold it. */
+    const passes = [SMALL, ['C01', 'C03'], ['C03']];
+    const slots: EarnedSlot[] = [];
+    passes.forEach((clubs, r) => clubs.forEach((club, i) => slots.push({ overall: slots.length + 1, round: r + 1, slot: i + 1, orig: club, holder: club, kind: 'std' })));
+    const night = openDraftNight(smallOrder, slots, 2026);
+    expect(isGmDraftNight(JSON.parse(JSON.stringify(night)), SMALL, 2026)).toBe(true);
+    /* A pass out of the saved order is still refused. */
+    const wrong = JSON.parse(JSON.stringify(night)) as GmDraftNight;
+    [wrong.slots[4].orig, wrong.slots[5].orig] = [wrong.slots[5].orig, wrong.slots[4].orig];
+    [wrong.slots[4].holder, wrong.slots[5].holder] = [wrong.slots[5].holder, wrong.slots[4].holder];
+    expect(isGmDraftNight(wrong, SMALL, 2026)).toBe(false);
+
+    /* This host's clubs do not choose by read plus need: each takes the LAST man left. */
+    const calls: string[] = [];
+    const own: GmDraftHost<Toy, Man> = { ...host, choose: (_league, club, left) => { calls.push(club); return left.length ? left[left.length - 1] : null; } };
+    const toy = toyLeague(slots);
+    const cls = toyClass(6);
+    const spy = vi.spyOn(Math, 'random');
+    const run = staffDraftNight(own, toy, night, 'C04', cls);
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+    expect(calls).toEqual(['C01', 'C02', 'C03', 'C04', 'C01', 'C03', 'C03']);
+    /* Six men for seven slots: the last six in reverse, then the seventh slot passes with its marker spent. */
+    expect(run.steps.map(s => `${s.team}:${s.playerName}`)).toEqual(['C01:Prospect 6', 'C02:Prospect 5', 'C03:Prospect 4', 'C04:Prospect 3', 'C01:Prospect 2', 'C03:Prospect 1']);
+    expect(run.done).toBe(true);
+    expect(run.night.made).toBe(7);
+    expect(Object.values(toy.markers).every(m => m.length === 0)).toBe(true);
+    /* The lift's own rule on the same night takes the best read first: the host's rule really replaced it. */
+    expect(staffDraftNight(host, toyLeague(slots), night, 'C04', cls).steps[0].playerName).toBe('Prospect 1');
+  });
+
+  it('lets a slot pass, and signs nobody, when a host\'s own rule answers a man who is not in the class', () => {
+    const slots = ownSlots(smallOrder.first, 1);
+    const stranger: Man = { id: 'x', name: 'Nobody', pos: 'G', true: 99, scout: 99 };
+    const toy = toyLeague(slots);
+    const run = staffDraftNight({ ...host, choose: () => stranger }, toy, openDraftNight(smallOrder, slots, 2026), 'C04', toyClass(6));
+    expect(run.steps).toEqual([]);
+    expect(toy.signed).toEqual([]);
+    expect(run.left.length).toBe(6);
+    expect(run.night.made).toBe(4);
   });
 });
 

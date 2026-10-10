@@ -163,6 +163,8 @@ const CONTROLS = {
   tableline: { expect: [8], swaps: { lottery: [['  if (drawnAsTable(saved, lottery)) return lotteryRuleLine(lotteryFactsFromWeights(lottery.odds, lottery.draws));', '  if (lottery) return lotteryRuleLine(lotteryFactsFromWeights(lottery.odds, lottery.draws));']] } },
   mounted: { expect: [9] },
   norivals: { expect: [10], swaps: { night: [['  while (made < night.slots.length && night.slots[made].holder !== stopFor) {', '  while (made < 0 && night.slots[made].holder !== stopFor) {']] } },
+  /* a slot that finds the class dry keeps its marker, which is what the loop did before the review */
+  drymarker: { expect: [10], swaps: { night: [['    const spent = host.consume(league, club, slot);', '    const spent = pool.length === 0 ? true : host.consume(league, club, slot);']] } },
   shownread: { expect: [10], swaps: { night: [['    grade: Math.round(host.shown(prospect)), mine,', '    grade: Math.round(host.read(prospect, slot.holder)), mine,']] } },
 };
 
@@ -1166,6 +1168,34 @@ open(10);
   }
   check(seen.traded >= 1000 && seen.tradedMine >= 200 && seen.three >= 100 && seen.none >= 50 && seen.clocks >= 400 && seen.reloads >= 400,
     `the fleet is too tame to trust: ${JSON.stringify(seen)}`);
+
+  /* A class that runs dry. Every slot is still USED, and used means spent: a slot that finds nobody left costs its
+     club the marker exactly as a pass does, so a host whose markers carry over a summer keeps none it did not earn. */
+  {
+    const drySeen = { nights: 0, drySlots: 0 };
+    for (let s = 0; s < 60; s += 1) {
+      const season = randomSeason(rng);
+      const clubs = season.rows.map(r => r.id);
+      const me = clubs[Math.floor(rng() * clubs.length)];
+      const saved = O.buildDraftOrder(season, NBA, NBA_PICKS);
+      const { ledger } = tradedLedger(rng, clubs, me);
+      const held = ledger.picks.filter(p => p.year === YEAR);
+      const slots = O.draftSlots(saved, ledger, YEAR, NBA_PICKS.rounds);
+      const league = { markers: Object.fromEntries(clubs.map(c => [c, []])), rosters: Object.fromEntries(clubs.map(c => [c, []])), signed: [] };
+      for (const p of held) league.markers[p.holder].push(p.round);
+      const men = 3 + Math.floor(rng() * 20);
+      const cls = Array.from({ length: men }, (_, i) => ({ id: `d${i}`, name: `Dry ${s}-${i}`, pos: 'G', true: 90 - i, scout: 80 - i }));
+      const run = N.staffDraftNight(host, league, N.openDraftNight(saved, slots, YEAR), me, cls);
+      const kept = clubs.reduce((sum, c) => sum + league.markers[c].length, 0);
+      drySeen.nights += 1;
+      drySeen.drySlots += slots.length - men;
+      check(run.done && run.night.made === slots.length && run.steps.length === men && run.left.length === 0 && league.signed.length === men,
+        () => `dry night ${s}: ${men} men for ${slots.length} slots, and ${run.steps.length} were signed with ${run.night.made} slots used`);
+      check(kept === 0, () => `dry night ${s}: ${men} men for ${slots.length} slots, and ${kept} markers were never spent though every slot was used`);
+    }
+    check(drySeen.drySlots >= 1000, `only ${drySeen.drySlots} slots found the class dry, so that check is not looking at anything`);
+    console.log(`   ${drySeen.nights} nights with a class that ran dry: ${drySeen.drySlots} slots found nobody left, each still used and its marker spent`);
+  }
   console.log(`   ${seen.nights} nights: ${seen.traded} traded picks used by their holders (${seen.tradedMine} of them his), he was on the clock ${seen.clocks} times (${seen.firstOverall} at the first pick, ${seen.noSlot} nights with no slot at all) and saved and reloaded each time`);
 }
 
