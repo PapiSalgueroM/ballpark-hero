@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+simMobileChrome: node scripts/simMobileChrome.mjs
+simMobileChrome-unpin: SIM_MOBILE_CONTROL=unpin node scripts/simMobileChrome.mjs
+reveal-x6: for i in 1 2 3 4 5 6; do node scripts/playSeasonReveal.mjs > $RC_OUT/reveal-$i.log 2>&1; echo "run $i exit $? | $(grep -c FAIL $RC_OUT/reveal-$i.log) FAIL lines | $(grep 'Rival cards met' $RC_OUT/reveal-$i.log)"; done; n=$(grep -l "ALL SEASON REVEAL WALK CHECKS PASSED" $RC_OUT/reveal-*.log | wc -l); echo "$n of 6 runs green"; [ "$n" -eq 6 ]
+reveal-muted: SEASON_REVEAL_CONTROL=muted node scripts/playSeasonReveal.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
