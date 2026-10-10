@@ -9,8 +9,8 @@ changes, nothing imports the new files yet, and no engine, sport file, board or 
 |---|---|
 | `src/data/usSeasonLedgerMlb.ts` | MLB, 2004 to 2026: every club's games played season by season, the six name spans of the 2004 list, the 2026 divisions, the schedule formulas of 2023 to 2026, the fifteen interleague rival pairs, the postseason format, league scoring for both eras, and `MLB_THIN`. |
 | `src/data/usSeasonLedgerNhl.ts` | The NHL, 2006-07 to 2026-27: every season's length, every club's division in all 21 seasons, the two name spans of the 2006 list, the 84 game formula, the playoff format, league scoring, the games past sixty minutes, the overtime rules, the clock, and `NHL_THIN`. |
-| `scripts/data/usSeasonSources1211.json` | The receipts: 42 of them, each with its publisher, title, address, the date read and what the source literally says. A ledger row names its receipts by key. |
-| `scripts/simUsSeasonLedger.mjs` | The harness: 1,185 checks, 24 negative controls, and a block of notes for the binding rounds that never fails. |
+| `scripts/data/usSeasonSources1211.json` | The receipts: 47 of them (42 from the build, 5 from the fix pass), each with its publisher, title, address, the date read and what the source literally says. A ledger row names its receipts by key. |
+| `scripts/simUsSeasonLedger.mjs` | The harness: 1,389 checks, 38 negative controls, and a block of notes for the binding rounds that never fails. |
 
 The rule the ledgers follow: two independent sources that are not a wiki for every fact, a number only one
 source gave is `null` and named in the THIN list, and where two sources print different things both are
@@ -65,16 +65,22 @@ If the lead would rather hold a disputed club than follow two of three, the two 
 
 MLB (`MLB_THIN`, ten entries): the shares of one run games and extra inning games (ESPN only: 27.5 and 8.6
 percent in 2026, 26.3 and 11.8 in 2004) and of shutouts (nothing read); that a division rival is met in four
-series with 26 of 52 at home (Ticketmaster only); home and away inside the 62 league games and the 81 home
-games (no source); the first year of the extra inning runner and the plain nine innings rule; the 2020 Wild
-Card Series as a best of three and the Division Series as a best of five before 2022; the league and season
-length of the Yomiuri Giants (NPB's own standings only: Central League, 143 games); why each club fell short
-(only 2026 and the two ties were read); that the World Series is the only round against the other league
-(CBS Sports only); the schedule formula before 2023.
+series (Ticketmaster only) and the 26 of 52 division games at home in 2023 and 2024 (Baseball Reference
+only; for 2025 and 2026 the 26 is filled); home and away inside the 62 league games of 2025 and 2026 (31 and
+31 on Baseball Reference only) and the 81 home games (Baseball Reference only; for 2023 and 2024 the 32 of
+64 is filled); the first year of the extra inning runner (the 2023 CBS Sports report only) and the plain
+nine innings rule; the 2020 Wild Card Series as a best of three and the Division Series as a best of five
+before 2022; the league and season length of the Yomiuri Giants (NPB's own standings only: Central League,
+143 games); why each club fell short in the throwback seasons (2026 and the two ties are in their rows);
+that the World Series is the only round against the other league (CBS Sports only); the schedule formula
+before 2023.
 
-NHL (`NHL_THIN`, seven entries): 84 is a published schedule, no club has finished a season on it; the schedule
+NHL (`NHL_THIN`, nine entries): 84 is a published schedule, no club has finished a season on it; the schedule
 formula of any 82 game season; four skaters a side in overtime before 2015-16 (NBC only); how the 2020 and
-2021 playoffs differed; why 2012-13, 2019-20 and 2020-21 were short; the shootout's first season; the one goal.
+2021 playoffs differed (Hockey Reference only); what the playoffs of 2006-07 to 2012-13 were (Hockey
+Reference only, one season read: the same sixteen clubs and four rounds under other round names); that the
+Final is the only round against the other conference (Sports Illustrated in words); why 2012-13, 2019-20
+and 2020-21 were short; the shootout's first season; the one goal.
 
 ## Where the ledgers disagree with what an engine plays today (notes, never a red)
 
@@ -99,10 +105,19 @@ The harness prints these on every run under "NOTES FOR THE BINDING ROUNDS". None
    engine then plays MLB seasons for it. That club is in no MLB standings of any season read. A binding round
    must hold such a row (the critic's correction 1); `MLB_OUTSIDE_CLUBS` carries the fact.
 7. **A name.** The game prints "Sacramento Athletics" for `ATH`; both 2026 standings print "Athletics".
+   The consequence, for the MLB binding brief: an id is listed in a season row only where one of the game's
+   lists holds the club under its real name, so a present day row that names the Athletics would carry no
+   id for them, and a binding that holds clubs by id would open a full view for a club the row lists as
+   short. No such row exists today (2026 lists BAL and NYY). Fix the name, or key such a row by id, before
+   the first one is written.
 8. **Ids that are not a real club that year.** A 2004 throwback career can sit at `MON` (the Expos) from 2005,
    `ANA` from 2005, `TBD` from 2008, `FLA` from 2012, `CLV` from 2022 or `OAK` from 2025; a 2006 NHL throwback
    at `ATL` from 2011-12 or `PHX` from 2014-15. `MLB_NAME_SPANS` and `NHL_NAME_SPANS` give the last real year
    of each. The NHL's 2006 list is the real league only for 2006-07 to 2010-11.
+9. **The NHL playoff path before 2013-14.** The engine writes the same four results in every year.
+   `NHL_PLAYOFF_FORMAT` is two sourced from 2013-14 only (`from: 2013`). What the playoffs of 2006-07 to
+   2012-13 were has one source and is in `NHL_THIN`. A binding round that draws a path for a throwback
+   season before 2013 must source it first or draw none.
 
 ## For the binding rounds
 
@@ -124,9 +139,60 @@ The harness prints these on every run under "NOTES FOR THE BINDING ROUNDS". None
   ever tidied to read a length ledger for all four sports, 84 becomes a target no skater can reach until the
   engine plays 84 (critic 16).
 
+- `MLB_FIRST_ROUND` says `wildCard: false` for a season with no wild card round (2004 to 2011: no `round`,
+  no `series`). Where `wildCard` is true a null `series` is a thin length (2020 only).
+- Each MLB formula row has a `homeSrc` beside its `src`: the receipts for its home and away numbers, which
+  must speak of a season of that row. `NHL_PLAYOFF_FORMAT` has a `from` (2013).
+
+## The fix pass of 2026-10-10 (after the two adversarial reviews)
+
+The reviews found no false number. They found a harness that held counts and not identities, and a handful
+of filled values that rested on one source each. Both are fixed on the branch:
+
+- **Identities.** The harness's own table now types the fifty MLB clubs off their schedule by name and
+  season, the last real year and next name of each 2004 id, the fifteen rival pairs, the first round
+  windows, every NHL alignment division by division, the 31 club games of 2019-20 and the rules after sixty
+  minutes. The reviewer's fifteen single fact mutations of the ledgers' source are all red now (eight were
+  green before).
+- **Second sources, read in the fix pass.** Baseball Reference's schedule pages for seven club seasons
+  (Detroit 2023, Texas 2024, Detroit 2025, and Detroit, Toronto, Texas and Houston 2026): every page adds up
+  to 162 games and 81 at home and shows the formula of its year, home and away included, and the four 2026
+  pages show the four rival pairs that had no 2026 fixture source. Hockey Reference's playoff pages for
+  2007, 2014, 2020 and 2021. The league's own standings feed for the last day of 2025-26 (every club's
+  points are twice its wins plus its overtime losses). Bleacher Report and Field Level Media on the 2026
+  finale.
+- **A source must speak of the season it is cited for.** The harness now counts, for a formula row, its
+  home and away numbers and the 2026 rival pairs, only receipts that speak of one of those seasons, and a
+  dated receipt about another season is red.
+
+Judgment calls in the fix pass, for the lead:
+
+1. **Row level, not season level.** Within each MLB formula row the home and away numbers have an article
+   and the played games for one season and the played games alone for the other (2025 in the first row,
+   2024 in the second). The reviews asked for a second source per row; a lead who wants two per season
+   should null `homeOrAway` and `homeSeries` or find a 2025 and a 2024 article.
+2. **Two numbers were filled** because the second source now exists: 26 division games at home for 2025
+   and 2026 (Ticketmaster and Baseball Reference) and 32 league games at home for 2023 and 2024 (ESPN and
+   Baseball Reference). Their twins stay null: one source each.
+3. **The 2026 finale says "the weather", not "rain".** Rain is the Associated Press alone; the other two
+   reports say inclement weather. "Never made up" rests on Bleacher Report in words and on both final
+   standings.
+4. **`NHL_PLAYOFF_FORMAT` starts in 2013** rather than claiming the throwback seasons on one source.
+5. **Seven clubs were read, not thirty.** The schedule pages are a sample of the games played (four of
+   thirty clubs in 2026, one in each earlier year). They agree with the articles and with one another
+   wherever two of them met.
+
+Seen by the reviewers while playing, on main today and NOT this round's to fix (it may not touch the
+engines or the board): the MLB season card prints a playoff average that is not its own hits over its own
+at bats, with a leading zero the season line does not have (`src/lib/mlbMyCareer.ts`, the postseason line:
+at bats are games times four, the average is drawn, the hits are rounded from it; "4 for 16 (0.225)"). It
+belongs with the MLB playoff games truth round. And after "Enter the draft" the new hub is above the screen
+on the MLB and NHL hubs at both widths (`src/components/us-career/UsCareerBoard.tsx`: the first hub's reveal
+is enabled only for a career that came through the pre draft road). Both are for the lead to pass on.
+
 ## Checks
 
-`node scripts/simUsSeasonLedger.mjs` is green on its closing line with 1,185 checks. `US_LEDGER_CONTROL=list`
-prints the 24 controls; each one changes a single fact in the loaded data, refuses to run when that fact is
+`node scripts/simUsSeasonLedger.mjs` is green on its closing line with 1,389 checks. `US_LEDGER_CONTROL=list`
+prints the 38 controls; each one changes a single fact in the loaded data, refuses to run when that fact is
 not there, and must turn exactly its named labels red (exit 1 and a last line that says FIRED). The runner
-result names are in the closing report of the round.
+result names are in the closing reports of the round and of its fix pass.
