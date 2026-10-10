@@ -1,0 +1,5 @@
+mut-keyindex exit=0 105s | MUT keyindex default=0 full=0 vitest=0 reds: 
+mut-wrongman exit=0 105s | MUT wrongman default=0 full=0 vitest=0 reds: 
+mut-unnamed exit=0 106s | MUT unnamed default=0 full=0 vitest=0 reds: 
+mut-penassistmine exit=0 106s | MUT penassistmine default=0 full=0 vitest=0 reds: 
+mut-cleanmine exit=0 106s | MUT cleanmine default=1 full=1 vitest=0 reds: RED law 9537 checks, 86 failed;RED law 51119 checks, 494 failed;
