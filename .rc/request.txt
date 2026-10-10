@@ -1,0 +1,3 @@
+simNhlCareer: node scripts/simNhlCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
