@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 204s | playDraftNight: ALL GREEN, 48 nights walked
+walk-narrowtile exit=1 8s | playDraftNight [control narrowtile]: 8 FAILURE(S) of its own check (cut), as it must
+walk-cut exit=1 8s | playDraftNight [control cut]: 77 FAILURE(S) of its own check (cut), as it must
