@@ -1,0 +1,8 @@
+#!serial
+legA: mkdir -p /tmp/noBook1229 && git archive HEAD | tar -x -C /tmp/noBook1229 && node .rc/x/bookOut.mjs /tmp/noBook1229 && CM_RULES_ROOT=/tmp/noBook1229 node scripts/simCmLeagueRules.mjs --part=modern,eras,pure 2>&1 | tail -30
+legB: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure 2>&1 | tail -90
+legC: node scripts/simCmLeagueRules.mjs --part=modern,eras,pure --write && cp scripts/data/cmLeagueRulesDigest.json "$RC_OUT/" && node scripts/simCmLeagueRules.mjs; s=$?; git checkout -- scripts/data; exit $s
+shootout: node scripts/simCmShootoutOrder.mjs
+cmvar-patched: node .rc/x/patchSaveCompare.mjs scripts/simCmVar.mjs && node scripts/simCmVar.mjs; s=$?; git checkout -- scripts; exit $s
+realfix-patched: node .rc/x/patchSaveCompare.mjs scripts/simCmRealFixtures.mjs && node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
+customvalues: node scripts/simCustomClubValues.mjs 2>&1 | tail -12
