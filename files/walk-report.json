@@ -1,0 +1,371 @@
+{
+  "base": "http://localhost:4173",
+  "fixtures": {
+    "confirmed": {
+      "seed": 1704,
+      "minute": 29,
+      "side": "me",
+      "who": "Thierno Barry",
+      "review": {
+        "id": "2026:Everton:0:Liverpool:0:45:me:29:0:Thierno Barry:goal",
+        "incident": "goal",
+        "decision": "confirmed",
+        "reason": "clear"
+      },
+      "opponent": "Liverpool"
+    },
+    "disallowed": {
+      "seed": 1888,
+      "minute": 12,
+      "side": "me",
+      "who": "Thierno Barry",
+      "review": {
+        "id": "2026:Everton:0:Liverpool:0:45:me:12:0:Thierno Barry:goal",
+        "incident": "goal",
+        "decision": "disallowed",
+        "reason": "attacking_foul"
+      },
+      "opponent": "Liverpool"
+    },
+    "awarded_scored": {
+      "seed": 1713,
+      "minute": 30,
+      "side": "opp",
+      "who": "Alexander Isak",
+      "review": {
+        "id": "2026:Everton:0:Liverpool:0:45:me:30:0:Hayden Hackney:missed-penalty",
+        "incident": "penalty",
+        "decision": "awarded",
+        "reason": "missed_foul",
+        "trigger": {
+          "side": "me",
+          "who": "Hayden Hackney"
+        }
+      },
+      "opponent": "Liverpool"
+    }
+  },
+  "cases": [
+    {
+      "id": "new-390",
+      "width": 390,
+      "height": 844,
+      "touch": true,
+      "reducedMotion": false,
+      "errors": [],
+      "shots": [
+        "new-390-1-hub.jpg",
+        "new-390-2-calendar.jpg",
+        "new-390-3-help-top.jpg",
+        "new-390-4-help-var.jpg",
+        "new-390-5-first-match-timeline.jpg",
+        "new-390-5-first-match-top.jpg"
+      ],
+      "facts": {
+        "savedKey": "premier-2026-27-v1",
+        "startYear": 2026,
+        "season": 1,
+        "era": "now",
+        "overflowHub": {
+          "scrollW": 390,
+          "innerW": 390,
+          "scrollY": 1341
+        },
+        "coverage": "Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. Sources: Premier League / Sports Illustrated",
+        "coverageRect": {
+          "x": 16,
+          "y": 600,
+          "w": 358,
+          "h": 66
+        },
+        "coverageLinks": [
+          "https://www.premierleague.com/en/news/4675097",
+          "https://www.si.com/soccer/2026-27-premier-league-fixtures-full-schedule-arsenal-defend-title"
+        ],
+        "monthList": "Sat 8 Aug\n⚽\nvs Crystal Palace\nPremier League\nSat 15 Aug\n⚽\nat Bournemouth\nPremier League\nSat 22 Aug\n⚽\nvs Manchester United\nPremier League\nSat 29 Aug\n⚽\nat Tottenham\n🔒 deadline\nPremier League",
+        "overflowCalendar": {
+          "scrollW": 390,
+          "innerW": 390,
+          "scrollY": 0
+        },
+        "helpFixtures": "Real first-season fixtures: 2026/27 Premier League. A new career in the unedited modern Premier League uses the real opponent order and home/away venues. Calendar dates and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Other leagues, custom clubs, edited worlds, older saves and later seasons keep generated fixtures. Sources: Premier League and Sports Illustrated.",
+        "helpVar": "VAR in modern matches. New kickoffs in modern saves from 2026 onwards use simplified game reviews, not a claim about a real competition's coverage. A reviewed goal waits for confirmation. A ruled-out goal adds no score, scorer or shot stats. A missed defensive foul can earn a penalty, and the actual kick can score, be saved or miss. Example: it is 0-0, a goal is ruled out for offside, then an awarded penalty misses. It stays 0-0. Decisions are saved once and the live viewer and full report show the same outcome. Open the match's ? button to read this again.",
+        "matchCentre": "Home\nSquad\nTactics\nTable\nMarket\n☀️ Transfer window open. Tap to do business before your next match\nPREMIER LEAGUE · ROUND 1\nEverton vs Crystal Palace\nHome · their strength ~85 · your XI avg 82\nPlay Live\n⚡ Quick Sim\n\nPlay live to make your calls. Quick Sim handles your subs.\n\n📊 Match Centre: form, head to head, odds, team talk\nClub home\n\nReal 2026/27 Premier League opponent order and home/away ven",
+        "firstMatch": "Skip to main content | DOUKNOWBALL | Back | Track stats | FULL TIME | PREMIER LEAGUE · ROUND 1 | 🏟️ Your ground · crowd 41,272 | 45+3' | ADDED TIME | 90+8' | DRAW | Everton | 1 - 1 | Crystal Palace | EVERTON | ⚽ Jack Grealish 22' · 🅰️ Vitaliy Mykolenko | CRYSTAL PALACE | ⚽ Anan Khalaili 55' | 🟨 Kiernan Dewsbury-Hall 76' | 🟨 Hayden Hackney 87' | CP 🟨 Ismaïla Sarr 67' | CP 🟨 Honest Ahanor 80' | CP ▲ Cheick Doucouré ▼ Adam Wharton 77' | Everton | MATCH STATS | Crystal Palace | 52% | POSSESSION | 48% | 11 | SHOTS | 9 | 4 | ON TARGET | 3 | 1.23 | EXPECTED GOALS | 1.08 | 8 | CORNERS",
+        "varRows": []
+      }
+    },
+    {
+      "id": "live-390-motion-confirmed",
+      "width": 390,
+      "height": 844,
+      "touch": true,
+      "reducedMotion": false,
+      "errors": [],
+      "shots": [
+        "live-390-motion-confirmed-1-checking.jpg",
+        "live-390-motion-confirmed-2-decided.jpg",
+        "live-390-motion-confirmed-3-after-review.jpg",
+        "live-390-motion-confirmed-4-match-help.jpg",
+        "live-390-motion-confirmed-5-interval.jpg",
+        "live-390-motion-confirmed-6-report-timeline.jpg",
+        "live-390-motion-confirmed-6-report-top.jpg"
+      ],
+      "facts": {
+        "checkingText": "VAR: checking goal\n\nEverton, 29'\n\nSimplified review in this game simulation",
+        "card": {
+          "x": 20,
+          "y": 202,
+          "w": 351,
+          "h": 82
+        },
+        "stagebox": {
+          "x": 0,
+          "y": 0,
+          "w": 390,
+          "h": 844
+        },
+        "pitch": {
+          "x": 18,
+          "y": 16,
+          "w": 16,
+          "h": 16
+        },
+        "buttonsInsideCard": 0,
+        "scoreWhileChecking": [
+          "0",
+          "0"
+        ],
+        "overflowChecking": {
+          "scrollW": 390,
+          "innerW": 390,
+          "scrollY": 0
+        },
+        "decidedText": "VAR: goal confirmed\n\nEverton, 29'\n\nSimplified review in this game simulation",
+        "reviewOnScreenMs": 17080,
+        "goalCard": "GOAL! \nThierno Barry\n 29'\nEverton · 1 this season\nTap to carry on",
+        "scoreAfter": [
+          "1",
+          "0"
+        ],
+        "helpMentionsVar": true,
+        "varRows": [
+          "📺 VAR: goal confirmed: Thierno Barry\n29'"
+        ],
+        "goalRows": [
+          "⚽ Goal: Thierno Barry 🅰️ Hayden Hackney\n29'"
+        ]
+      }
+    },
+    {
+      "id": "live-1280-reduced-awarded",
+      "width": 1280,
+      "height": 900,
+      "touch": false,
+      "reducedMotion": true,
+      "errors": [],
+      "shots": [
+        "live-1280-reduced-awarded-1-checking.jpg",
+        "live-1280-reduced-awarded-2-decided.jpg",
+        "live-1280-reduced-awarded-3-after-review.jpg",
+        "live-1280-reduced-awarded-4-match-help.jpg",
+        "live-1280-reduced-awarded-5-interval.jpg",
+        "live-1280-reduced-awarded-6-report-timeline.jpg",
+        "live-1280-reduced-awarded-6-report-top.jpg"
+      ],
+      "facts": {
+        "checkingText": "VAR: checking penalty decision\n\nLiverpool, 30'\n\nSimplified review in this game simulation",
+        "card": {
+          "x": 274,
+          "y": 204,
+          "w": 360,
+          "h": 82
+        },
+        "stagebox": {
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 900
+        },
+        "pitch": {
+          "x": 106,
+          "y": 32,
+          "w": 16,
+          "h": 16
+        },
+        "buttonsInsideCard": 0,
+        "scoreWhileChecking": [
+          "1",
+          "0"
+        ],
+        "overflowChecking": {
+          "scrollW": 1280,
+          "innerW": 1280,
+          "scrollY": 0
+        },
+        "decidedText": "VAR: penalty awarded\n\nLiverpool, 30'\n\nSimplified review in this game simulation",
+        "reviewOnScreenMs": 18307,
+        "goalCard": "GOAL! \nAlexander Isak\n 30'\n (P)\nLiverpool\nTap to carry on",
+        "scoreAfter": [
+          "1",
+          "1"
+        ],
+        "helpMentionsVar": true,
+        "varRows": [
+          "📺 VAR: penalty confirmed: Thierno Barry\n4'",
+          "30'\n📺 VAR: penalty awarded: Alexander Isak",
+          "52'\n📺 VAR: penalty confirmed: Hugo Ekitiké"
+        ],
+        "goalRows": [
+          "⚽ Goal: Thierno Barry\n (P)\n4'",
+          "30'\n⚽ Goal: Alexander Isak\n (P)",
+          "45+4'\n⚽ Goal, free kick: Florian Wirtz"
+        ]
+      }
+    },
+    {
+      "id": "edge-390-leave-during-review",
+      "width": 390,
+      "height": 844,
+      "touch": true,
+      "reducedMotion": false,
+      "errors": [],
+      "shots": [
+        "edge-390-leave-during-review-1-back-on-the-hub.jpg",
+        "edge-390-leave-during-review-2-reopened.jpg",
+        "edge-390-leave-during-review-3-first-thing-after.jpg",
+        "edge-390-leave-during-review-4-after-that.jpg"
+      ],
+      "facts": {
+        "atReview": {
+          "stage": "first",
+          "minute": "28",
+          "score": [
+            "0",
+            "0"
+          ],
+          "varCard": "checking",
+          "goalCard": null
+        },
+        "engineHalfTime": [
+          1,
+          0
+        ],
+        "reopened": {
+          "stage": "first",
+          "minute": "28",
+          "score": [
+            "0",
+            "0"
+          ],
+          "varCard": null,
+          "goalCard": null
+        },
+        "firstThingAfterReopen": {
+          "stage": "first",
+          "minute": "28",
+          "score": [
+            "0",
+            "0"
+          ],
+          "varCard": "checking",
+          "goalCard": null
+        },
+        "afterThat": {
+          "stage": "first",
+          "minute": "29",
+          "score": [
+            "1",
+            "0"
+          ],
+          "varCard": null,
+          "goalCard": "GOAL! Thierno Barry 29'Everton · 1 this seasonTap to carry on"
+        }
+      }
+    },
+    {
+      "id": "edge-390-skip-during-review",
+      "width": 390,
+      "height": 844,
+      "touch": true,
+      "reducedMotion": false,
+      "errors": [],
+      "shots": [
+        "edge-390-skip-during-review-1-interval-after-skip.jpg"
+      ],
+      "facts": {
+        "atReview": {
+          "stage": "first",
+          "minute": "28",
+          "score": [
+            "0",
+            "0"
+          ],
+          "varCard": "checking",
+          "goalCard": null
+        },
+        "engineHalfTime": [
+          1,
+          0
+        ],
+        "intervalText": "PREMIER LEAGUE · ROUND 1 · HALF TIME | 1 - 0 | Everton vs Liverpool | Everton | BALANCE OF PLAY | Liverpool | 42% | 58%",
+        "varCardAtInterval": 0
+      }
+    },
+    {
+      "id": "quick-390-disallowed",
+      "width": 390,
+      "height": 844,
+      "touch": true,
+      "reducedMotion": false,
+      "errors": [],
+      "shots": [
+        "quick-390-disallowed-1-quick-timeline.jpg",
+        "quick-390-disallowed-1-quick-top.jpg"
+      ],
+      "facts": {
+        "varRows": [
+          "📺 VAR: goal ruled out, attacking foul: Thierno Barry\n12'"
+        ],
+        "goalRows": [
+          "⚽ Goal: Thierno Barry\n46'"
+        ],
+        "overflow": {
+          "scrollW": 390,
+          "innerW": 390,
+          "scrollY": 0
+        }
+      }
+    },
+    {
+      "id": "quick-1280-awarded",
+      "width": 1280,
+      "height": 900,
+      "touch": false,
+      "reducedMotion": false,
+      "errors": [],
+      "shots": [
+        "quick-1280-awarded-1-quick-timeline.jpg",
+        "quick-1280-awarded-1-quick-top.jpg"
+      ],
+      "facts": {
+        "varRows": [
+          "📺 VAR: penalty confirmed: Thierno Barry\n4'",
+          "30'\n📺 VAR: penalty awarded: Alexander Isak"
+        ],
+        "goalRows": [
+          "⚽ Goal: Thierno Barry\n (P)\n4'",
+          "30'\n⚽ Goal: Alexander Isak\n (P)",
+          "45+4'\n⚽ Goal, free kick: Florian Wirtz",
+          "⚽ Goal: Thierno Barry 🅰️ Brennan Johnson\n63'",
+          "⚽ Goal: Jack Grealish 🅰️ Brennan Johnson\n65'"
+        ],
+        "overflow": {
+          "scrollW": 1280,
+          "innerW": 1280,
+          "scrollY": 0
+        }
+      }
+    }
+  ]
+}
