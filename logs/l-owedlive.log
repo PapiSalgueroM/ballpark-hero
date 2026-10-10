@@ -1,0 +1,5 @@
+FAIL CM_VAR_LIVE is true while the rates ledger still owes: recent-seasons
+simCmVarLedger: 7 rate rows from 5 publishers, counted by two: goalsRuledOut, penaltiesAwarded, penaltiesCancelled.
+simCmVarLedger: OWED and open, so the switch must stay off: recent-seasons (have 0 of 2).
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, league:ligue1, league:eredivisie, league:primeira, league:scottish, league:superlig, league:proleague, league:bundesliga2, ucl.
+simCmVarLedger control owedlive: FIRED (CM_VAR_LIVE is true while the rates ledger still owes: recent-seasons)

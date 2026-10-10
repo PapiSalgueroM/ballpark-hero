@@ -1,0 +1,22 @@
+ledger exit=0 1s | simCmVarLedger: all 409 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+l-owedlive exit=1 1s | simCmVarLedger control owedlive: FIRED (CM_VAR_LIVE is true while the rates ledger still owes: recent-seasons)
+l-figure exit=1 1s | simCmVarLedger control figure: FIRED (espn-pl-2024-25: goalsRuledOut 48 is not printed in its literals)
+l-onesource exit=1 1s | simCmVarLedger control onesource: FIRED (league:seriea says yes and stands on fewer than two publishers)
+l-thin exit=1 1s | simCmVarLedger control thin: FIRED (goalsRuledOut is modelled but THIN (5 figure(s), none counted by two publishers))
+l-highest exit=1 1s | simCmVarLedger control highest: FIRED (goalReview is not the stricter count of a figure two publishers counted, over the engine figure (0.034141 against 0.031938))
+l-names exit=1 1s | simCmVarLedger control names: FIRED (the help would name Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Li
+l-missing exit=1 1s | simCmVarLedger control missing: FIRED (league:premier is not in the ledger)
+l-extra exit=1 1s | simCmVarLedger control extra: FIRED (league:atlantis is in the ledger and the engine cannot play it)
+l-wiki exit=1 1s | simCmVarLedger control wiki: FIRED (espn-pl-2022-23: https://en.wikipedia.org/wiki/Video_assistant_referee is a wiki)
+l-receipt exit=1 1s | simCmVarLedger control receipt: FIRED (scripts/data/cmVarRates.receipt.json does not carry the hash of scripts/data/cmVarRates.json)
+l-handedit exit=1 1s | simCmVarLedger control handedit: FIRED (src/data/clubManagerVarRates.ts is not what the generator writes (a hand edit, or a ledger changed without the generator))
+cmvar-everywhere exit=0 3s | simCmVar everywhere: actual review outcomes and full prior baseline passed.
+cmvar-historic exit=0 8s | simCmVar historic: actual review outcomes and full prior baseline passed.
+varscreen exit=0 43s |    Duration  43.15s (transform 2.92s, setup 74ms, collect 3.91s, tests 38.00s, environment 522ms, prepare 185ms)
+varlive exit=0 5s |    Duration  4.58s (transform 1.87s, setup 70ms, collect 2.36s, tests 1.18s, environment 426ms, prepare 189ms)
+varlive-on exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+tsc exit=0 86s | 
+simCmVar exit=0 96s | simCmVar normal: actual review outcomes and full prior baseline passed.

@@ -1,0 +1,8 @@
+FAIL goalsRuledOut is modelled but THIN (5 figure(s), none counted by two publishers)
+FAIL penaltiesAwarded is modelled but THIN (6 figure(s), none counted by two publishers)
+FAIL goalReview is not the stricter count of a figure two publishers counted, over the engine figure (0.031938 against Infinity)
+FAIL missedFoulReview is not the stricter count of a figure two publishers counted, over the engine figure (0.004902 against Infinity)
+simCmVarLedger: 6 rate rows from 5 publishers, counted by two: .
+simCmVarLedger: OWED and open, so the switch must stay off: recent-seasons (have 0 of 2).
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, league:ligue1, league:eredivisie, league:primeira, league:scottish, league:superlig, league:proleague, league:bundesliga2, ucl.
+simCmVarLedger control thin: FIRED (goalsRuledOut is modelled but THIN (5 figure(s), none counted by two publishers))
