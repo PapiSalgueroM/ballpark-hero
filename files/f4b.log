@@ -1,0 +1,9 @@
+premier: 6 pairs of 20 seasons, real minus generated: goals a match -0.0014 0.0270 -0.0007 -0.0153 -0.0554 0.0038 (mean -0.0070); home win share -0.0026 0.0053 0.0055 -0.0004 -0.0047 -0.0017 (mean 0.0002)
+premier (Brentford, 20 clubs, 20 of 20 real seasons held the key, 250s): goals a match real 2.6303 generated 2.6317 difference -0.0014 = -0.06 null sd (null sd 0.0258); home win share real 0.4339 generated 0.4366 difference -0.0026 = -0.30 null sd (null sd 0.0087)
+laliga: 6 pairs of 20 seasons, real minus generated: goals a match 0.0046 0.0384 -0.0109 -0.0229 0.0287 0.0233 (mean 0.0102); home win share 0.0180 0.0030 -0.0001 0.0012 0.0086 -0.0026 (mean 0.0047)
+laliga (Espanyol, 20 clubs, 20 of 20 real seasons held the key, 241s): goals a match real 2.6445 generated 2.6399 difference 0.0046 = 0.28 null sd (null sd 0.0165); home win share real 0.4554 generated 0.4374 difference 0.0180 = 3.83 null sd (null sd 0.0047)
+bundesliga: 6 pairs of 20 seasons, real minus generated: goals a match -0.0083 -0.0234 0.0271 0.0670 -0.0152 -0.0137 (mean 0.0056); home win share 0.0193 -0.0026 0.0008 0.0142 -0.0172 -0.0054 (mean 0.0015)
+bundesliga (Hamburg, 18 clubs, 20 of 20 real seasons held the key, 219s): goals a match real 2.6536 generated 2.6619 difference -0.0083 = -0.23 null sd (null sd 0.0357); home win share real 0.4577 generated 0.4384 difference 0.0193 = 1.90 null sd (null sd 0.0101)
+championship: 6 pairs of 20 seasons, real minus generated: goals a match -0.0126 0.0149 0.0101 -0.0149 -0.0181 0.0021 (mean -0.0031); home win share -0.0012 0.0043 0.0088 -0.0019 -0.0074 -0.0103 (mean -0.0013)
+championship (Derby County, 24 clubs, 20 of 20 real seasons held the key, 289s): goals a match real 2.6188 generated 2.6314 difference -0.0126 = -0.92 null sd (null sd 0.0137); home win share real 0.4442 generated 0.4454 difference -0.0012 = -0.20 null sd (null sd 0.0058)
+f4: measured 4 leagues, 32360 real list matches
