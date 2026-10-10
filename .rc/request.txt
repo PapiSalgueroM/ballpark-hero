@@ -1,0 +1,28 @@
+#!serial
+init: git rev-parse HEAD > /tmp/h1229 && echo 'src/pages/WhatsNew.tsx merge=union' >> .git/info/attributes && git fetch -q origin r1218-cm-var-true r1225-cm-fixtures-bind && cat /tmp/h1229 && git rev-parse origin/r1218-cm-var-true origin/r1225-cm-fixtures-bind && git cat-file -t 5e96c4cad0b8483ff2dd31a80db08dde0793b893
+m1225: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1225-cm-fixtures-bind && git log --oneline -1
+a1-realfix-base-book: CM_FIXTURE_BASE=5e96c4cad0b8483ff2dd31a80db08dde0793b893 node scripts/simCmRealFixtures.mjs
+a2-realfix-all-base-book: CM_FIXTURE_BASE=5e96c4cad0b8483ff2dd31a80db08dde0793b893 CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs
+a3-fleet-base-book: CM_FIXTURE_BASE=5e96c4cad0b8483ff2dd31a80db08dde0793b893 node scripts/simCmFixtureFleet.mjs
+a4-fleet-base-old: CM_FIXTURE_BASE=980654fa node scripts/simCmFixtureFleet.mjs
+a5-fleet-prefetch: CM_FIXTURE_BASE=5e96c4cad0b8483ff2dd31a80db08dde0793b893 CM_FIXTURE_FLEET_CONTROL=prefetch node scripts/simCmFixtureFleet.mjs
+a6-fleet-keyless: CM_FIXTURE_BASE=5e96c4cad0b8483ff2dd31a80db08dde0793b893 CM_FIXTURE_FLEET_CONTROL=keyless node scripts/simCmFixtureFleet.mjs
+a7-fleet-nostrip: CM_FIXTURE_FLEET_CONTROL=nostrip node scripts/simCmFixtureFleet.mjs
+a8-realfix-old-base-asis: CM_FIXTURE_BASE=980654fa node scripts/simCmRealFixtures.mjs
+a9-realfix-old-base-block-all: node .rc/x/patchSaveCompare-1229.mjs scripts/simCmRealFixtures.mjs && CM_FIXTURE_BASE=980654fa CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
+a10-book-on-m1225: node scripts/simCmLeagueBook.mjs
+back: git reset -q --hard $(cat /tmp/h1229) && git log --oneline -1
+m1218: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1218-cm-var-true && git rev-parse HEAD > /tmp/m1 && git log --oneline -1
+m1218-m1225: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1225-cm-fixtures-bind && git log --oneline -1 && git status --short | head -5
+b1-3way-realfix-base-m1: CM_FIXTURE_BASE=$(cat /tmp/m1) node scripts/simCmRealFixtures.mjs
+b2-3way-realfix-all-base-m1: CM_FIXTURE_BASE=$(cat /tmp/m1) CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs
+b3-3way-fleet-base-m1: CM_FIXTURE_BASE=$(cat /tmp/m1) node scripts/simCmFixtureFleet.mjs
+b4-3way-realfix-old-base-block: node .rc/x/patchSaveCompare-1229.mjs scripts/simCmRealFixtures.mjs && CM_FIXTURE_BASE=980654fa node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
+b5-3way-cmvar: node scripts/simCmVar.mjs
+b6-3way-cmvar-controls: CM_VAR_CONTROL=all node scripts/simCmVar.mjs
+b7-3way-book: node scripts/simCmLeagueBook.mjs
+b8-3way-tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+b9-3way-pin-asis: node scripts/simManagerAppealIsolation.mjs
+b10-3way-pin-retaken: node .rc/x/repin1081.mjs && node scripts/simManagerAppealIsolation.mjs; s=$?; git diff --stat -- scripts/fixtures | tail -2; git checkout -- scripts; exit $s
+b11-3way-savesize: node scripts/simClubManagerSaveSize.mjs
+end: git reset -q --hard $(cat /tmp/h1229) && git log --oneline -1
