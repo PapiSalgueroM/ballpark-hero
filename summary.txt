@@ -1,0 +1,5 @@
+records exit=1 0s | Node.js v24.21.0
+gm1 exit=0 20s | simGmGameDay: 169 checks, 0 failed
+gm2 exit=0 20s | simGmGameDay: 169 checks, 0 failed
+gm3 exit=0 17s | simGmGameDay: 169 checks, 0 failed
+google exit=0 81s |    8 of 8 rendered checks pass, no dash in the round's files, and all 11 controls turned exactly their own checks red.
