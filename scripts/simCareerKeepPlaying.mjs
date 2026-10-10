@@ -154,9 +154,15 @@ const OLD_DECLINE = 'export function declineRetirementSuggestion(prev: CareerSta
   + '  return s;\n'
   + '}\n';
 const TRIAL_SUMMER = '    runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);\n';
+/* Release AT: Rounds 1179, 1186 and 1187 settle the season target, the preseason plan and the mentor year on every
+   recorded row, and Round 1190 settles the smaller role on the injury row, so those calls now sit inside the rows
+   this harness takes out of the engine and puts back. They go with their row: a row that is never written has
+   nothing to settle, and a career in this harness holds no target, plan, mentor or role for them to act on. */
+const TRIAL_HOOKS = '    settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);\n    settleCareerPreparation(s, s.seasons[s.seasons.length - 1]);\n    Object.assign(s, recordMentorSeason(s, s.seasons[s.seasons.length - 1]));\n';
+const REHAB_HOOKS = '      settleCareerAmbition(s, injuryRow);\n      settleCareerPreparation(s, injuryRow);\n      Object.assign(s, recordMentorSeason(s, injuryRow));\n';
 const ROWS = {
-  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
-  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      simulateSeasonFinances(s, injuryRow);\n      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
+  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + TRIAL_HOOKS + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      settleReducedRole(s, injuryRow);\n      simulateSeasonFinances(s, injuryRow);\n      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n' + REHAB_HOOKS + '      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
   rehabSave: ['  if (lastRow && lastRow.age < s.age) {\n    const row = yearOutRow(s, null);', '  if (false) {\n    const row = yearOutRow(s, null);'],
   newsSave: ['    if (lastRow && lastRow.age < s.age) {\n      s.events = [...s.events];', '    if (false) {\n      s.events = [...s.events];'],
 };
@@ -183,17 +189,17 @@ const CONTROLS = {
   pushtwice: [PUSH_LINE, PUSH_LINE + PUSH_LINE],
   acceptresume: [ACCEPT_HEAD, 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n  const s = { ...playPendingProSeason(repairCareer({ ...prev }), FALLBACK_CLUBS) };'],
   norehabrow: ROWS.rehab,
-  zerorehab: ['      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, domesticCup: false };', '      const injuryRow: SeasonRecord = yearOutRow(s, null);'],
+  zerorehab: ['      const injuryRow: SeasonRecord = { ...season, leagueTitle: false, leagueFinish: undefined, leagueSize: undefined, domesticCup: false };', '      const injuryRow: SeasonRecord = yearOutRow(s, null);'],
   noconvictionrow: ROWS.conviction,
   norehabsave: ROWS.rehabSave,
   rehabtwice: [ROWS.rehabSave[0], '  if (lastRow) {\n    const row = yearOutRow(s, null);'],
   noconvictionsave: ROWS.newsSave,
   convictiontwice: [ROWS.newsSave[0], '    if (lastRow) {\n      s.events = [...s.events];'],
-  nomoney: ['      s.seasons = [...s.seasons, injuryRow];\n      simulateSeasonFinances(s, injuryRow);', '      s.seasons = [...s.seasons, injuryRow];'],
-  nomoneytrial: ['    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + '    s.phase = "newspaper";', TRIAL_SUMMER + '    s.phase = "newspaper";'],
+  nomoney: ['      settleReducedRole(s, injuryRow);\n      simulateSeasonFinances(s, injuryRow);', '      settleReducedRole(s, injuryRow);'],
+  nomoneytrial: ['    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + TRIAL_HOOKS + '    s.phase = "newspaper";', TRIAL_SUMMER + TRIAL_HOOKS + '    s.phase = "newspaper";'],
   nomoneysave: ['    s.seasons = [...s.seasons, row];\n    simulateSeasonFinances(s, row);', '    s.seasons = [...s.seasons, row];'],
   nosummer: ['      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n', ''],
-  nosummertrial: [TRIAL_SUMMER + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  nosummertrial: [TRIAL_SUMMER + TRIAL_HOOKS + '    s.phase = "newspaper";', TRIAL_HOOKS + '    s.phase = "newspaper";'],
   nosummersave: ['    simulateSeasonFinances(s, row);\n    runTournamentSummer(s, row, row.year, true);', '    simulateSeasonFinances(s, row);'],
 };
 /* and one that mutates the page's call instead of the engine */

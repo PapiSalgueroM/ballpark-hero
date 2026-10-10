@@ -210,7 +210,10 @@ function playFleet(mods, size, seed, hooks) {
 
 /* ── the slim save ──────────────────────────────────────────────────────── */
 const SCALARS = ['playerName', 'position', 'overall', 'currentClub', 'currentClubCountry', 'currentClubTier',
-  'frozenOut', 'isClubCaptain', 'phase', 'retired', 'nationality'];
+  'frozenOut', 'isClubCaptain', 'phase', 'retired', 'nationality',
+  /* Release AT: Round 1190's smaller role is read off the save (the plan, and a loan switches it off), so the
+     slim save carries both or it reads four games away from the full one in a season with a role. */
+  'reducedRole', 'loan'];
 const ROW_FIELDS = ['year', 'age', 'club', 'clubCountry', 'clubTier', 'type', 'apps', 'leagueApps', 'ovr',
   'injury', 'injuryWeeks', 'onLoanFrom', 'rating'];
 const pick = (o, keys) => { const out = {}; for (const k of keys) if (o[k] !== undefined) out[k] = o[k]; return out; };
@@ -225,10 +228,15 @@ function rebuild(rec, R) {
 }
 
 /** What the readers say about a save, as plain values. */
+/* Release AT: since Round 1185 the view hands back the previous season's row itself (trust.form.row), all of
+   it. The recording keeps ROW_FIELDS of a row, which is every field the readers use, so the reading holds a
+   row to those same fields on both sides. Before this, the full row was compared with the recorded one and
+   1,481 of 2,215 checks failed on fields no reader looks at. Nothing else in the view is a row. */
+const rowAsRecorded = (key, value) => (key === 'row' && value && typeof value === 'object' && !Array.isArray(value) ? pick(value, ROW_FIELDS) : value);
 function reading(mods, s) {
   const v = mods.lib.squadView(s);
   const last = mods.sheet.lastSeason(s);
-  return JSON.stringify([v, last]);
+  return JSON.stringify([v, last], rowAsRecorded);
 }
 
 function record(mods, size, seed) {
