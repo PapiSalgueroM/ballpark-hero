@@ -1,0 +1,36 @@
+NOTE new-seriea-390-m: HEAD after the start and 1.5 s: scrollY 1742, viewport 844 high, page 22588 high, the Quick Sim button's top at -1300 (OFF screen)
+NOTE new-seriea-390-m: the save's pair ledger after matchday one is exactly the 10 real matchday one pairs
+NOTE new-seriea-390-m: scrollY before Help 0, after closing Help 0
+NOTE new-seriea-1280-rm: HEAD after the start and 1.5 s: scrollY 1253, viewport 900 high, page 13518 high, the Quick Sim button's top at -811 (OFF screen)
+NOTE new-seriea-1280-rm: scrollY before Help 0, after closing Help 0
+NOTE new-eredivisie-390-rm: HEAD after the start and 1.5 s: scrollY 1742, viewport 844 high, page 22588 high, the Quick Sim button's top at -1300 (OFF screen)
+NOTE new-eredivisie-390-rm: this league keeps no pair ledger in the save (no head to head tiebreak), so the neutral results are not read here
+NOTE new-primeira-1280-m: HEAD after the start and 1.5 s: scrollY 1253, viewport 900 high, page 13518 high, the Quick Sim button's top at -811 (OFF screen)
+NOTE new-primeira-1280-m: this league keeps no pair ledger in the save (no head to head tiebreak), so the neutral results are not read here
+NOTE new-superlig-390-m: HEAD after the start and 1.5 s: scrollY 1742, viewport 844 high, page 22588 high, the Quick Sim button's top at -1300 (OFF screen)
+NOTE new-superlig-390-m: this league keeps no pair ledger in the save (no head to head tiebreak), so the neutral results are not read here
+NOTE new-superlig-390-m: scrollY before Help 0, after closing Help 0
+NOTE new-bundesliga2-1280-m: HEAD after the start and 1.5 s: scrollY 1253, viewport 900 high, page 13518 high, the Quick Sim button's top at -811 (OFF screen)
+NOTE new-bundesliga2-1280-m: this league keeps no pair ledger in the save (no head to head tiebreak), so the neutral results are not read here
+NOTE new-bundesliga2-390-rm: HEAD after the start and 1.5 s: scrollY 1742, viewport 844 high, page 22588 high, the Quick Sim button's top at -1300 (OFF screen)
+NOTE new-ligue2-390-m: HEAD after the start and 1.5 s: scrollY 1742, viewport 844 high, page 22588 high, the Quick Sim button's top at -1300 (OFF screen)
+NOTE new-ligue2-390-m: this league keeps no pair ledger in the save (no head to head tiebreak), so the neutral results are not read here
+NOTE new-laliga-390-rm: HEAD after the start and 1.5 s: scrollY 1742, viewport 844 high, page 22588 high, the Quick Sim button's top at -1300 (OFF screen)
+NOTE old-laliga-390-m: BASE after the start and 1.5 s: scrollY 1742, viewport 844 high, page 22588 high, the Quick Sim button's top at -1300 (OFF screen)
+NOTE old-premier-1280-rm: BASE after the start and 1.5 s: scrollY 1253, viewport 900 high, page 13518 high, the Quick Sim button's top at -811 (OFF screen)
+NOTE old-seriea-1280-m: BASE after the start and 1.5 s: scrollY 1253, viewport 900 high, page 13518 high, the Quick Sim button's top at -811 (OFF screen)
+NOTE old-bundesliga2-390-rm: BASE after the start and 1.5 s: scrollY 1742, viewport 844 high, page 22588 high, the Quick Sim button's top at -1300 (OFF screen)
+NOTE start-blocked-390: three seconds after the club tap with its list refused: page loads since the tap 1, "Take the job" on screen 0, the picker's first step on screen 1, stale chunk flag 1
+FAIL start-blocked-390: tapping a club whose list will not load RELOADED the page and sent the picker back to its first step (loads 1)
+NOTE start-blocked-390: second try in the same tab: page loads 1
+NOTE start-blocked-390: hub after 184 ms with the list refused
+NOTE start-blocked-390: console errors: 6 (Failed to load resource: net::ERR_FAILED)
+NOTE start-hung-1280: at 2 s the page reads "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Loading… Club Manager: Free Footb"; Loading element animation under reduce: pulse 1e-06s, the Loading text's top at -1128 in a viewport 900 high (OFF screen); scrollY 1253
+NOTE start-hung-1280: hub after 8458 ms with the list never answering
+NOTE start-hung-390: at 2 s the page reads "Skip to main content DOUKNOWBALL Back Track stats Loading… Club Manager: Free Football Management Game A full club-management sim in your br"; Loading element animation under no-preference: pulse 2s, the Loading text's top at -1629 in a viewport 844 high (OFF screen); scrollY 1742
+NOTE start-hung-390: hub after 8475 ms with the list never answering
+NOTE boot-blocked-390: the notice reads "The 2026-27 fixture list did not load. Check your connection, then try again. Nothing has been lost. Try againBack to your managers"
+NOTE boot-blocked-390: after Resume with the list still refused: hub 0, notice 1, page errors 0, text "Skip to main content DOUKNOWBALL Back Track stats The 2026-27 fixture list did not load. Check your connection, then try"
+NOTE boot-blocked-1280: the notice reads "The 2026-27 fixture list did not load. Check your connection, then try again. Nothing has been lost. Try againBack to your managers"
+NOTE boot-blocked-1280: after Resume with the list still refused: hub 0, notice 1, page errors 0, text "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats The 2026-27 f"
+rwalk: 1 FAIL, 34 NOTE, 16 journey rows
