@@ -29,7 +29,9 @@ const LEAGUE = process.env.CM_REAL_FIXTURE_LEAGUE || 'premier';
 const BASE = process.env.CM_FIXTURE_BASE || '';
 const engineFile = 'src/lib/clubManager.ts', helperFile = 'src/lib/clubManagerFixtures.ts';
 const cardFile = 'src/components/club-manager/CalendarCard.tsx';
-const clone = value => JSON.parse(JSON.stringify(value));
+/* Round 1225 review: the takeover and the job move live here, and the group takeover copies faults into it. */
+const calendarFile = 'src/lib/clubManagerCalendar.ts';
+const clone =value => JSON.parse(JSON.stringify(value));
 const sha = value => createHash('sha256').update(value).digest('hex');
 /* Artifact names. The Premier League keeps Round 1184's plain names: scripts/playCmRealFixtures.mjs reads two of them. */
 const tag = name => (LEAGUE === 'premier' ? name : `${LEAGUE}-${name}`);
@@ -55,6 +57,7 @@ const cases = {
   bye: 'settles a neutral-only league entry through the same real fixture resolver',
   world: 'settles the actual world league round through the same real fixture resolver',
   eligibility: 'binds only a fresh original modern world of this league with exact membership',
+  takeover: 'keeps the key through a mid season takeover, played in the real order before and after the handover, and gives none to a club joined during a season',
   unloaded: 'gives no key while the list is not here, and refuses to read a saved key without its list',
   legacy: 'preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload',
   future: 'refuses stale keys in later seasons, other years and changed league membership',
@@ -84,6 +87,12 @@ const controls = {
   /* Round 1225: a saved key whose list has not arrived reads the generated list instead of stopping. Only a list
      in a file of its own can be absent, so this fault does not apply to the Premier League, which rides with the engine. */
   silent: { file: helperFile, from: 'if (!ledger) throw new Error(', to: 'if (!ledger) return null;\n  if (!ledger) throw new Error(', test: 'unloaded', lazyOnly: true },
+  /* Round 1225 review: the two ways a job is taken part way through a season, each made to do what the other
+     does. handover: the picker's takeover drops the key as it hands the club over, so the dugout screen's season
+     would be finished on a generated list under a Calendar that had been naming the real one. jobmove: a club
+     joined during a season carries the old club's key across, so Help's "keeps generated fixtures" would be false. */
+  handover: { file: calendarFile, from: '    midSeasonStart: entry,', to: '    midSeasonStart: entry,\n    realLeagueFixtures: undefined,', test: 'takeover' },
+  jobmove: { file: calendarFile, from: '    jobHunt: closeOnJoiningNow(', to: '    realLeagueFixtures: career.realLeagueFixtures,\n    jobHunt: closeOnJoiningNow(', test: 'takeover' },
 };
 
 /** The matchdays as the receipt's last source printed them, in the game's spellings. No source is looked up by a role. */
@@ -184,7 +193,7 @@ async function main() {
   if (lines.length !== 1) cannot(`${lines.length} frozen ledgers for the league ${LEAGUE}, wanted exactly one`);
   const [key, line] = lines[0];
   const dataFile = line.file;
-  const files = [engineFile, helperFile, cardFile, dataFile];
+  const files = [engineFile, helperFile, cardFile, calendarFile, dataFile];
   const sourceHashes = new Map(), verifyBytes = [];
   /* Raw bytes feed only the source hash and unchanged-byte checks. The text
      used by every executable anchor is read and normalised separately. */
@@ -218,23 +227,25 @@ async function main() {
     const freshLoaded = async name => { const engine = fresh(name); for (const e of engine.__registry ?? []) await engine.__ensureFixtures(e.key); return engine; };
     async function bundle(name, input) {
       const engine = path.join(folder, `${name}-engine.ts`), helper = path.join(folder, `${name}-helper.ts`), card = path.join(folder, `${name}-card.tsx`);
+      const calendar = path.join(folder, `${name}-calendar.ts`);
       /* Test-only receipt observes genuine syncWorld scores without changing
          state or random draws. It is never included in product source. */
       const anchor = '        const [hg, ag] = simAiMatch(state, h, a);\n        applyResult(w.table, h, a, hg, ag);';
       assert.equal(input[engineFile].split(anchor).length - 1, 1, 'One real world settlement observation anchor');
       const instrumented = input[engineFile].replace(anchor, '        const [hg, ag] = simAiMatch(state, h, a);\n        __fixtureSyncResults.push({ leagueId: lg.id, home: h, away: a, hg, ag });\n        applyResult(w.table, h, a, hg, ag);')
         + '\nexport const __fixtureSyncResults: { leagueId: string; home: string; away: string; hg: number; ag: number }[] = [];\nexport function __fixtureSyncProbe(state: CareerState, rounds: number) { syncWorld(state, rounds); }\n'
-        + `export { REAL_LEAGUE_FIXTURES as __registry, ensureRealLeagueFixtures as __ensureFixtures, canBindRealLeagueFixtures as __canBindLedger, realLeagueFixturePairs as __realPairs, __ledgerOf } from '@/lib/clubManagerFixtures';\nexport { default as __CalendarCard } from ${JSON.stringify(card.replaceAll('\\', '/'))};\n`;
+        + `export { REAL_LEAGUE_FIXTURES as __registry, ensureRealLeagueFixtures as __ensureFixtures, canBindRealLeagueFixtures as __canBindLedger, realLeagueFixturePairs as __realPairs, __ledgerOf } from '@/lib/clubManagerFixtures';\nexport { default as __CalendarCard } from ${JSON.stringify(card.replaceAll('\\', '/'))};\n`
+        + "export { startMidSeason as __startMidSeason, joinClubNow as __joinClubNow } from '@/lib/clubManagerCalendar';\n";
       const byeAnchor = '          const [hg, ag] = simAiMatch(state, h, a);\n          applyResult(state.table, h, a, hg, ag);';
       assert.equal(instrumented.split(byeAnchor).length - 1, 1, 'One real neutral-only settlement observation anchor');
       const observed = instrumented.replace(byeAnchor, '          const [hg, ag] = simAiMatch(state, h, a);\n          __fixtureByeResults.push({ home: h, away: a, hg, ag });\n          applyResult(state.table, h, a, hg, ag);')
         + '\nexport const __fixtureByeResults: { home: string; away: string; hg: number; ag: number }[] = [];\n';
       /* Test-only reader of a list that has arrived, appended to the copy of the helper: the game has no use for one. */
       const helperCopy = input[helperFile] + '\nexport const __ledgerOf = (key: string) => { const entry = REAL_LEAGUE_FIXTURES.find(e => e.key === key); return entry ? ledgerOf(entry) : null; };\n';
-      await writeFile(engine, observed); await writeFile(helper, helperCopy); await writeFile(card, input[cardFile]);
+      await writeFile(engine, observed); await writeFile(helper, helperCopy); await writeFile(card, input[cardFile]); await writeFile(calendar, input[calendarFile]);
       const output = path.join(folder, `${name}.cjs`);
       await build({ entryPoints: [engine], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', jsx: 'automatic', external: ['react', 'react/jsx-runtime'],
-        alias: { '@/lib/clubManager': engine, '@/lib/clubManagerFixtures': helper, '@': path.join(root, 'src') } });
+        alias: { '@/lib/clubManager': engine, '@/lib/clubManagerFixtures': helper, '@/lib/clubManagerCalendar': calendar, '@': path.join(root, 'src') } });
       bundles.set(name, output);
     }
     /* The base engine is the base's whole src tree, bundled on its own: it shares no module with the candidate. */
@@ -450,8 +461,7 @@ async function main() {
         assert.equal(state.realLeagueFixtures, key); assert.equal(coverage?.key, key);
         assert.ok(coverage.label.startsWith(`Real 2026/27 ${leagueName} opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as `), 'The calendar line names the league and says what is real and what is simulated');
         /* The Premier League's sentence is Release AT's, to the letter: the registry builds it now and must not reword it. */
-        if (LEAGUE === 'premier') assert.equal(coverage.label, 'Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.');
-        assert.deepEqual(clone(coverage.sources), data.sources, 'The calendar line links the two sources the ledger ships');
+        if (LEAGUE === 'premier') assert.equal(coverage.label, 'Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.');        assert.deepEqual(clone(coverage.sources), data.sources, 'The calendar line links the two sources the ledger ships');
         for (const altered of [{ ...state, customClub: { name: 'Test custom club' } }, { ...state, leagueOverrides: { [LEAGUE]: [...clubs] } }]) {
           assert.equal(cm.__canBindLedger(altered, data, LEAGUE, [...clubs]), false, 'Custom and edited saves cannot claim untouched real fixtures');
           assert.equal(cm.careerFixtureCoverage(altered), null);
@@ -463,6 +473,51 @@ async function main() {
         const internal = seeded(4107, () => cm.startCareer(myClub, 'now', undefined, undefined, { yearsOn: 1, uclField: null, keepLeagueOverrides: false }));
         assert.equal(internal.realLeagueFixtures, undefined, 'An internal running-world start never binds a fresh season');
         assert.equal(seeded(4107, () => cm.startCareer(outsider)).realLeagueFixtures, undefined, 'A league with no list binds nothing');
+      },
+      async takeover() {
+        /* Round 1225 review. The picker's mid season takeover is startCareer and then startMidSeason. The save
+           keeps its key, so the weeks the manager before you played were the list's matchdays in their order,
+           the first league match you pick a team for is the next real matchday, and the Calendar goes on naming
+           the real list. The dugout screen's note and Help rest on exactly this. */
+        const leagueLog = state => (state.resultLog ?? []).filter(e => e.competition === 'league');
+        for (const [i, when] of ['autumn', 'newYear', 'runIn'].entries()) {
+          const engine = await freshLoaded(candidateName);
+          const start = seeded(4107, () => engine.startCareer(myClub));
+          const handed = seeded(4810 + i, () => engine.__startMidSeason(start, when));
+          assert.equal(handed.midSeasonStart, when, 'The save records the takeover');
+          assert.equal(handed.realLeagueFixtures, key, `A ${when} takeover keeps the key of the list its season is played on`);
+          assert.equal(engine.careerFixtureCoverage(handed)?.key, key, 'And the Calendar goes on naming the real list');
+          const played = leagueLog(handed);
+          assert.ok(played.length >= 1 && played.length < R, `A ${when} takeover hands over part way through the league season`);
+          for (const [round, e] of played.entries()) {
+            const pair = rounds[round].find(p => p.includes(myClub));
+            assert.deepEqual([e.opp, e.home], [pair[0] === myClub ? pair[1] : pair[0], pair[0] === myClub], `${when}: matchday ${round + 1} under the manager before you was the real fixture, at the real ground`);
+          }
+          assert.ok(handed.table.every(r => r.w + r.d + r.l === played.length), 'Every club has played exactly the matchdays played so far');
+          let state = handed, next = null;
+          for (let g = 0; g < 24 && !next; g++) {
+            const run = seeded(4900 + 30 * i + g, () => engine.playNextEntry(state, { skipHalftime: true }));
+            state = run.state;
+            if (run.kind === 'match' && run.report.competition === 'league') next = run.report;
+            else if (run.kind === 'seasonOver') break;
+          }
+          assert.ok(next, `A league match is reached after a ${when} takeover`);
+          assertRound(resultRows(next), rounds[played.length], `the first matchday you play after a ${when} takeover`);
+        }
+        /* The other way to take a job part way through: a club joined DURING a season (joinClubNow) is opened
+           inside the save's running world, so it holds no key and plays the generated list, even when the old
+           club and the new one share a league with a real list. Help says so in as many words. The application
+           is accepted by hand, the way scripts/simClubManagerCalendar.mjs does it: what is checked is the join. */
+        const mover = await freshLoaded(candidateName);
+        let at = seeded(4107, () => mover.startCareer(myClub));
+        for (let k = 0; k < 2; k++) at = seeded(4950 + k, () => mover.playNextEntry(at, { skipHalftime: true })).state;
+        assert.equal(at.realLeagueFixtures, key, 'The career being left holds the key');
+        const open = { club: seasonClub, league: LEAGUE, tier: 1, season: at.season, week: at.week, matchesLeft: 0, roll: 0, status: 'accepted' };
+        const joined = seeded(4960, () => mover.__joinClubNow({ ...at, jobHunt: { open, cooldowns: [], sentSeason: at.season, sent: 1, summerMove: null } }));
+        assert.ok(joined, 'The hand accepted move goes through'); assert.equal(joined.clubName, seasonClub);
+        assert.equal(joined.realLeagueFixtures, undefined, 'A club joined during a season holds no key');
+        assert.equal(mover.careerFixtureCoverage(joined), null, 'And its Calendar claims no real list');
+        for (let round = 0; round < R; round++) assert.deepEqual(mover.careerRoundPairs(joined, round), mover.roundPairs(joined.leagueClubs, round, !!joined.balancedFixtures), 'It reads the generated list');
       },
       async unloaded() {
         /* A copy of the engine into which nothing was fetched: what every caller that awaits no list gets. */

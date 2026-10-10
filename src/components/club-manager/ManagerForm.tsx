@@ -148,10 +148,17 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
             15/16 midway thru". The season is played forward by the engine first
             and handed over where it stands, so the table, the injuries, the
             money and the cup run are real consequences of matches that were
-            really played. It is NOT the real season's run of results: this
-            game's fixture list is a per save shuffle over its own calendar, so
-            the real one cannot be reproduced, and the note below says that
-            rather than letting anybody assume otherwise. */}
+            really played. It is NOT the real season's run of results: every
+            result is the engine's own, and the note below says that rather
+            than letting anybody assume otherwise.
+            Round 1225 review: the note used to give the reason as "this game
+            draws its own fixture list every save". That stopped being true for
+            a 2026/27 takeover in a league with a real fixture list: the save
+            keeps the list's key through startMidSeason, the manager before you
+            plays the real matchdays in their real order and the Calendar says
+            so. So the note now rests on what is true in every league and every
+            era (the results are simulated) and says nothing about the order.
+            scripts/simCmRealFixtures.mjs group takeover holds the code side. */}
         <div className="bg-card border border-border rounded-2xl p-3 md:p-4 space-y-2">
           <div className="text-xs font-bold text-foreground">🗓️ When do you take over</div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
@@ -179,8 +186,8 @@ export function ManagerForm({ clubName, defaultNation, onBack, onConfirm }: Mana
           {entry && (
             <p className="text-[10px] text-muted-foreground">
               The season up to here is played out by the manager before you, so you inherit his table, his
-              injuries and whatever he left in the bank. It is a simulated run-in, not the real one: this
-              game draws its own fixture list every save, so nobody's real results can be replayed here.
+              injuries and whatever he left in the bank. It is a simulated run-in, not the real one: every
+              result up to here is played out by the game, so nobody's real results can be replayed here.
             </p>
           )}
         </div>

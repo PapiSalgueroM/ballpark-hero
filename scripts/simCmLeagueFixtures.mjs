@@ -81,7 +81,12 @@
  *     example is the first two fixtures of that club in the Premier League ledger. And the
  *     What's New entry that announced the lists in files of their own (found by the mark on its
  *     list of leagues, read as code with comments taken out) names exactly those leagues, by
- *     the game's names, and counts them right.
+ *     the game's names, and counts them right. And the two screens that speak about a job
+ *     taken part way through a season say what the engine does (Round 1225 review): Help
+ *     says the weeks before a mid season takeover were played in the real order and that a
+ *     club you move to during a season keeps generated fixtures, and the dugout screen's
+ *     takeover note does not say the game draws its own fixture list
+ *     (scripts/simCmRealFixtures.mjs group takeover is the engine side of both).
  *
  * CONTROLS. Every run ends by proving its own checks: each control below is
  * applied to an in memory copy of each frozen ledger in turn, must first show
@@ -119,6 +124,9 @@
  *                 the order of its list is the order of                H J
  *   helpdrift     the league gone from the Help paragraph              J
  *   helplink      a link planted in the Help paragraph                 J (red for "help", not for a league)
+ *   takeoverform  the dugout note says the game draws its own list     J (red for "help")
+ *   takeoverhelp  Help files a job taken part way through a season
+ *                 under generated fixtures again                       J (red for "help")
  *   newsdrift     the league gone from the What's New entry (the
  *                 leagues whose list is in a file of its own)          J
  * CM_LEAGUE_FIXTURES_CONTROL=<name> leaves that one fault in place instead: the
@@ -449,6 +457,20 @@ function judgeHelp(world, reds) {
   const registry = (world.registry || []).filter(r => !world.only || r.leagueId === world.only);
   if (!help.found) { reds.push({ id: 'help', section: 'J', msg: 'the rendered Help has no paragraph marked data-cm-help="real-fixtures"' }); return; }
   if (help.links) reds.push({ id: 'help', section: 'J', msg: `the fixture paragraph of Help holds ${help.links} link(s): the Calendar names the sources, Help holds none` });
+  /* Round 1225 review: a job taken part way through a season. The picker's takeover (startCareer, then
+     startMidSeason) keeps the list's key, so the manager before you played the real matchdays in their order
+     and the Calendar says so; a club moved to during a season (joinClubNow) plays a generated list.
+     scripts/simCmRealFixtures.mjs group takeover proves both in the engine. These lines hold the two screens
+     that speak about it to that: the reviewed build's dugout note said "this game draws its own fixture list
+     every save" and its Help filed "a job you take part way through a season" under generated fixtures. */
+  if ((world.registry || []).length) {
+    const say = msg => reds.push({ id: 'help', section: 'J', msg });
+    if (/take part way through a season keep generated/i.test(help.text)) say('Help files a job taken part way through a season under generated fixtures, and the picker\'s takeover plays the real list');
+    if (!/Take a club over part way through that first season and the weeks before you were played in the real order too\./.test(help.text)) say('Help does not say that the weeks before a mid season takeover were played in the real order');
+    if (!/a club you move to during a season keep generated fixtures/.test(help.text)) say('Help does not say that a club you move to during a season keeps generated fixtures');
+    if (!help.form) say('the dugout screen (ManagerForm.tsx) could not be read, so its takeover note was not checked');
+    else if (/(draws|shuffles|makes) its own fixture list|own fixture list every save/i.test(help.form)) say('the dugout screen says the game draws its own fixture list every save, and a takeover in a league with a real list plays the real one');
+  }
   for (const r of registry) {
     const red = msg => reds.push({ id: r.leagueId, section: 'J', msg });
     const named = help.leagues.find(l => l.id === r.leagueId);
@@ -529,6 +551,9 @@ async function gameRegistryAndHelp() {
     links: (para.match(/<a[\s>]/g) || []).length + (para.match(/https?:\/\//g) || []).length,
     text: unescape(para.replace(/<[^>]*>/g, '')),
   };
+  /* The dugout screen, where a mid season takeover is picked: read as code with its comments taken out. */
+  const formFile = path.join(ROOT, 'src/components/club-manager/ManagerForm.tsx');
+  help.form = fs.existsSync(formFile) ? fs.readFileSync(formFile, 'utf8').replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\s+/g, ' ') : '';
   /* What's New is read as code with its comments taken out, never as prose: the entry is found by the mark on its list. */
   const page = fs.readFileSync(path.join(ROOT, 'src/pages/WhatsNew.tsx'), 'utf8').replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ');
   const entry = (/<li>((?:(?!<\/li>)[\s\S])*?data-cm-fixture-leagues="([^"]*)">([^<]*)<(?:(?!<\/li>)[\s\S])*?)<\/li>/.exec(page) || []);
@@ -663,6 +688,15 @@ const CONTROLS = {
   },
   helpdrift: { expect: 'J', applies: e => e.bound, apply(w, e) { w.help.leagues = w.help.leagues.filter(l => l.id !== e.ledger.leagueId); } },
   helplink: { expect: 'J', redId: 'help', applies: e => e.bound, apply(w) { w.help.links += 1; } },
+  /* Round 1225 review: the two sentences about a job taken part way through a season, each put back as the
+     reviewed build had it. Both damage the text as read, like the three controls around them. */
+  takeoverform: { expect: 'J', redId: 'help', applies: e => e.bound, apply(w) { w.help.form += ' It is a simulated run-in, not the real one: this game draws its own fixture list every save.'; } },
+  takeoverhelp: {
+    expect: 'J',
+    redId: 'help',
+    applies: e => e.bound,
+    apply(w) { w.help.text = w.help.text.replace('a club you move to during a season keep generated fixtures', 'a job you take part way through a season keep generated fixtures'); },
+  },
   newsdrift: { expect: 'J', applies: e => e.ownFile, apply(w, e) { w.news.ids = w.news.ids.filter(id => id !== e.ledger.leagueId); w.news.count -= 1; } },
 };
 const expectOf = (name, e) => (typeof CONTROLS[name].expect === 'function' ? CONTROLS[name].expect(e) : CONTROLS[name].expect);
