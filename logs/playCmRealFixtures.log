@@ -1,0 +1,15 @@
+node:fs:621
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/cm-real-fixture-artifacts/font-cache/manifest.json'
+    at Object.openSync (node:fs:621:18)
+    at Object.readFileSync (node:fs:487:35)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:35:41 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/home/runner/work/ballpark-hero/ballpark-hero/cm-real-fixture-artifacts/font-cache/manifest.json'
+}
+
+Node.js v24.21.0

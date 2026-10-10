@@ -1,0 +1,11 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playCareerStoryRole exit=1 1s | Node.js v24.21.0
+playCareerTrophyRuns exit=1 1s | Node.js v24.21.0
+playCmRealFixtures exit=1 1s | Node.js v24.21.0
+playCmVar exit=1 1s | Node.js v24.21.0
+playDerbyHistory1195 exit=1 1s | Node.js v24.21.0
+playDraftDetectiveReports exit=1 69s | playDraftDetectiveReports: 22 checks, 4 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots
+playSoccerCareerDepth exit=0 12s | playSoccerCareerDepth: 80 checks, 0 failed
+playSoccerCareerDevelopment exit=1 1s | Node.js v24.21.0
+playSeasonHistory1193 exit=1 1s | Node.js v24.21.0

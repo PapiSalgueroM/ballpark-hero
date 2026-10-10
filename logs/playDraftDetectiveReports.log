@@ -1,0 +1,33 @@
+ok   390x844: turn 1 has eight distinct choices
+ok   390x844: strongest three remain after used-player exclusion
+ok   390x844: every country choice belongs to its recorded nation and CM pool
+ok   390x844: turn 2 has eight distinct choices
+ok   390x844: strongest three remain after used-player exclusion
+ok   390x844: every country choice belongs to its recorded nation and CM pool
+ok   390x844: second throw reaches deeper names with no already drafted player
+FAIL 390x844: actual global request pages beyond 900 and 1000
+ok   390x844: country pages beyond 120 and 1000 with stable id order and 2026 scope
+ok   390x844: Dart Draft has no horizontal overflow
+FAIL 390x844: locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /^Stars/ }) to be visible
+
+    at walk (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playDraftDetectiveReports.mjs:116:56)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playDraftDetectiveReports.mjs:169:66
+ok   1280x900: turn 1 has eight distinct choices
+ok   1280x900: strongest three remain after used-player exclusion
+ok   1280x900: every country choice belongs to its recorded nation and CM pool
+ok   1280x900: turn 2 has eight distinct choices
+ok   1280x900: strongest three remain after used-player exclusion
+ok   1280x900: every country choice belongs to its recorded nation and CM pool
+ok   1280x900: second throw reaches deeper names with no already drafted player
+FAIL 1280x900: actual global request pages beyond 900 and 1000
+ok   1280x900: country pages beyond 120 and 1000 with stable id order and 2026 scope
+ok   1280x900: Dart Draft has no horizontal overflow
+FAIL 1280x900: locator.waitFor: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: /^Stars/ }) to be visible
+
+    at walk (/home/runner/work/ballpark-hero/ballpark-hero/scripts/playDraftDetectiveReports.mjs:116:56)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playDraftDetectiveReports.mjs:169:66
+playDraftDetectiveReports: 22 checks, 4 failed. Screenshots and evidence: /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/draft-detective-shots
