@@ -1,0 +1,3 @@
+anchors exit=0 47s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 80s | 
+rival-p0 exit=0 766s | simUsRivalSense: 47 checks, 0 failed (full size)
