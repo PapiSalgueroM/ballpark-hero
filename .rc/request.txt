@@ -1,0 +1,4 @@
+#!serial
+flags-groups-now: node scripts/simNationalityFlags.mjs | grep -E "groups as placed|simNationalityFlags:"
+flags-groups-base: git show 074a9054:src/lib/confederationGroups.ts > src/lib/confederationGroups.ts; node scripts/simNationalityFlags.mjs 2>&1 | grep -E "groups as placed|simNationalityFlags:"; git checkout -- src/lib/confederationGroups.ts
+flags-after-restore: node scripts/simNationalityFlags.mjs | tail -1
