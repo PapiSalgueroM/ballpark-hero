@@ -1,0 +1,6 @@
+base: 749 files, 21276033 bytes. head: 749 files, 21276033 bytes.
+only in base: 0; only in head: 0; same name and other bytes: 0
+entry: base assets/index-BtFEINEG.js, head assets/index-BtFEINEG.js
+Club Manager chunks: base 13, head 13, same names: true
+built files of head that mention cmAgeRead, levelFrom, readInWorld: 0
+revCmpDist: SAME. base and head are the same 749 files, byte for byte.

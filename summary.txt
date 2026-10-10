@@ -1,0 +1,5 @@
+build-base exit=0 30s | 749
+build-head exit=0 30s | 749
+cmp exit=0 0s | revCmpDist: SAME. base and head are the same 749 files, byte for byte.
+fleet exit=0 2s | revFleet: SAME. The one argument path of the edited library answers as the base's over 2300024 inputs.
+names exit=0 0s |  9 files changed, 3082 insertions(+), 3 deletions(-)

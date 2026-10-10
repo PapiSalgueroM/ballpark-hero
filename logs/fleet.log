@@ -1,0 +1,9 @@
+base exports 8: EUR_USD_RATE, FLOOR_USD, POS_MAP, RATING_CEIL, RATING_FLOOR, gbpM, ratingOf, usdOfEur
+head exports 24; added: AGE_MAX, AGE_MIN, CURVE_VERSION, ENGINE_POSITIONS, LEVEL_MAX, VETERAN_CAP, VETERAN_FROM, VETERAN_POINTS, YOUTH_FROM, YOUTH_MAX, agePoints, ageRead, levelFrom, rateFrom, readInWorld, valueRatingOf
+exports the head lost: 0 ; constants that moved: 0 
+inputs checked 2300024 (2300001 dollar values, 23 odd ones); answers apart: {"ratingOf":0,"gbpM1":0,"gbpM2":0,"usdOfEur":0}; valueRatingOf apart from the base's ratingOf: 0
+   NOTE ratingOf(5000000, undefined): base {"v":73}, head {"threw":"rateFrom: the age must be a whole number from 14 to 45 (got valueRating 73, age "}
+   NOTE ratingOf(5000000, 0): base {"v":73}, head {"threw":"rateFrom: the age must be a whole number from 14 to 45 (got valueRating 73, age "}
+   NOTE ratingOf(5000000, 26): base {"v":73}, head {"threw":"rateFrom: the position must be one of the thirteen engine positions (got valueRa"}
+   NOTE ratingOf(5000000, 26, CB): base {"v":73}, head {"v":73}
+revFleet: SAME. The one argument path of the edited library answers as the base's over 2300024 inputs.
