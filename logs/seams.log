@@ -1,0 +1,7 @@
+H move: 40 plans carried through a permanent move; 40 seasons equal the no plan season at the new club; 0 settled at the wrong club.
+H second position: 36 saves pressed 11 times; learned after one season 0; two played seasons in a row 28, learned 28; with a year's gap 32, learned 0.
+H loan away: 36 players with a learned second position went on loan for a year and came back to the same club and position; 36 of them came back WITHOUT it.
+H invalid plan: 40 saves with an invalid plan state offer no choice at all; 40 still offer none after a played season.
+H ban return: 39 seasons start back at the same club after a year out (ban or prison); "New club adaptation" is on offer in 39 of them.
+H base reload: with no plan, a reload at every step changes the season on the BASE engine in 2 of 40 saves.
+scProbe: 0 failure(s), 0 note(s). Sections run: H.

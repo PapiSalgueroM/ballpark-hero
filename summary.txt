@@ -1,0 +1,3 @@
+base exit=0 1s | base 24f57a98f programme in base: 0
+plans exit=1 99s | scProbe: 11 failure(s), 1 note(s). Sections run: C.
+seams exit=0 92s | scProbe: 0 failure(s), 0 note(s). Sections run: H.
