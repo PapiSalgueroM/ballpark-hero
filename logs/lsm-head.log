@@ -1,0 +1,8 @@
+[22m[39m[1101 material] Aston Villa 15 matches 30 halves, Real Madrid 20 matches 40 halves, Lyon 20 matches 40 halves, Ajax 20 matches 40 halves, Celtic 20 matches 40 halves; frames replayed 160232
+ [31m❯[39m src/test/liveSimMotion.test.tsx [2m([22m[2m55 tests[22m[2m | [22m[31m1 failed[39m[2m | [22m[33m54 skipped[39m[2m)[22m[33m 2593[2mms[22m[39m
+[31m     → expected [ 15, 20, 20, 20, 20 ] to deeply equal [ 20, 20, 20, 20, 20 ][39m
+[31m[1mAssertionError[22m: expected [ 15, 20, 20, 20, 20 ] to deeply equal [ 20, 20, 20, 20, 20 ][39m
+    [90m1035| [39m    console.log(`[1101 material] ${m.seeds.map(t => `${t.club} ${t.mat…
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m54 skipped[39m[90m (55)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > the material is 200 half feeds from five clubs in five leagues,line=1037,column=41::AssertionError: expected [ 15, 20, 20, 20, 20 ] to deeply equal [ 20, 20, 20, 20, 20 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   20,%0A+   15,%0A    20,%0A    20,%0A    20,%0A    20,%0A  ]%0A%0A ❯ src/test/liveSimMotion.test.tsx:1037:41%0A%0A

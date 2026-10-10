@@ -1,0 +1,21 @@
+setup exit=0 3s | dotnet-diagnostic-2149-7824-socket dotnet-diagnostic-2169-7930-socket t-b t-c t-d t-e t-main 
+ms-main exit=0 3s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+ms-b exit=1 3s | simMatchScreen: 1 FAILURES
+ms-c exit=1 3s | simMatchScreen: 1 FAILURES
+ms-main-s1 exit=0 3s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+ms-main-s2 exit=1 3s | simMatchScreen: 2 FAILURES
+ms-main-s3 exit=0 3s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+ms-main-s4 exit=0 3s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+ms-main-s5 exit=0 3s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+ms-head-s1 exit=0 3s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+ms-head-s2 exit=0 4s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+ms-head-s3 exit=0 4s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+ms-head-s4 exit=1 4s | simMatchScreen: 1 FAILURES
+ms-head-s5 exit=0 4s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+lsm-main exit=0 6s |       Tests  1 passed | 54 skipped (55)
+lsm-b exit=0 6s | ::error file=/tmp/t-b/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > the material is 200 half feeds from five club
+lsm-head exit=0 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > the mate
+kp-main exit=0 78s | simCareerKeepPlaying: 1458 checks, 0 failures
+kp-d exit=1 0s |   FAIL: anchor "revert conviction" is in the engine 0 times, it must be exactly once
+kp-e exit=1 0s |   FAIL: anchor "revert conviction" is in the engine 0 times, it must be exactly once
+dart-main exit=0 9s | simDartDraftPool: green. The pool is the top 2,000, the gold zones and the storm give what they gave, the mystery zone pays what it paid and adds a long shot, a country h
