@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
+book-base-full: git worktree add -q /tmp/base1229 980654fa && BOOK_BASE=/tmp/base1229 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
