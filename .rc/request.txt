@@ -1,0 +1,7 @@
+# keeper-libs reviewer, request G: the ordinary boot in a real browser, all 21 real saves, byte for byte
+#!build
+#!playwright
+#!serial
+boot-head-pr216: node .rc/x/klRealFix.mjs both > /dev/null && node .rc/x/klBoot.mjs; s=$?; cp $RC_OUT/kl-boot.txt $RC_OUT/kl-boot-head-pr216.txt; git checkout -- scripts; exit $s
+boot-head-plain: node .rc/x/klBoot.mjs; s=$?; cp $RC_OUT/kl-boot.txt $RC_OUT/kl-boot-head-plain.txt; exit $s
+boot-base-plain: git worktree add -q /tmp/base origin/release-at-gate && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KL_DIST=/tmp/base-dist node .rc/x/klBoot.mjs; s=$?; cp $RC_OUT/kl-boot.txt $RC_OUT/kl-boot-base-plain.txt; exit $s
