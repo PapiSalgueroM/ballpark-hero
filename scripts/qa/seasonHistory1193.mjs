@@ -101,7 +101,7 @@ function campaigns(B, carrier) {
   });
 }
 const CONTROLS = [
-  { name: 'wrong-row', file: HELPER, from: 'rows.find(row => row.index === firstIndex)', to: 'rows.find(row => row.index === secondIndex)', failed: ['comparison'] },
+  { name: 'wrong-row', file: HELPER, from: 'rows.find(row => row.index === firstIndex)', to: 'rows.find(row => row.index === secondIndex)', failed: ['comparison', 'identity rejection'] },
   { name: 'missing-as-zero', file: HELPER, from: 'value: readOvr(row.ovr)', to: 'value: readOvr(row.ovr) ?? 0', failed: ['saved rows', 'comparison'] },
   { name: 'reversed-delta', file: HELPER, from: 'other.value - metric.value', to: 'metric.value - other.value', failed: ['comparison'] },
   { name: 'current-ovr', file: HELPER, from: 'value: readOvr(row.ovr)', to: 'value: readOvr(career.overall)', failed: ['saved rows', 'comparison'] },
