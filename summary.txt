@@ -1,0 +1,5 @@
+digest-head exit=0 20s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /tmp/digest-head.json
+digest-base exit=0 20s | simUsSeasonCentre digest print: 10 digests over 69 bundled files, written to /tmp/digest-base.json
+digest-equal exit=0 0s | US season digests (the NBA and NFL Season Centre seasons and the careers after every season), origin/release-at-gate against the head: EQUAL, 1407 characters of digests, 
+digest-committed exit=1 0s | the committed Round 1221 record against a fresh print on the head: digests DIFFERENT (record made on c211113f9be79e3228a0dfa3793db12e46709092)
+digest-compare-as-shipped exit=3 20s | simUsSeasonCentre digest compare: NOT COMPARED, 8 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)

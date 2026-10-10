@@ -1,0 +1,6 @@
+#!serial
+digest-head: US_SEASON_DIGEST=print US_SEASON_DIGEST_OUT=/tmp/digest-head.json node scripts/simUsSeasonCentre.mjs
+digest-base: git worktree add -q /tmp/base2 24f57a98fa44e280f1c848276a27d86e0a3e2745 && cp scripts/simUsSeasonCentre.mjs /tmp/base2/scripts/simUsSeasonCentre.mjs && ln -s "$PWD/node_modules" /tmp/base2/node_modules && (cd /tmp/base2 && US_SEASON_DIGEST=print US_SEASON_DIGEST_OUT=/tmp/digest-base.json node scripts/simUsSeasonCentre.mjs)
+digest-equal: node -e "const a=require('/tmp/digest-base.json'),b=require('/tmp/digest-head.json');const s=JSON.stringify;const eq=s(a.digests)===s(b.digests);console.log('US season digests (the NBA and NFL Season Centre seasons and the careers after every season), origin/release-at-gate against the head: '+(eq?'EQUAL':'DIFFERENT')+', '+s(b.digests).length+' characters of digests, careers '+b.careers);process.exit(eq?0:1)"
+digest-committed: node -e "const a=require('./scripts/data/usSeasonLawDigest.json'),b=require('/tmp/digest-head.json');const s=JSON.stringify;const eq=s(a.digests)===s(b.digests);console.log('the committed Round 1221 record against a fresh print on the head: digests '+(eq?'EQUAL':'DIFFERENT')+' (record made on '+a.commit+')');process.exit(eq?0:1)"
+digest-compare-as-shipped: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
