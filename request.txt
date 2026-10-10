@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+c-emptytile: SIM_GM_DESK_HOST_CONTROL=emptytile node scripts/simGmDeskHost.mjs
+c-longtile: SIM_GM_DESK_HOST_CONTROL=longtile node scripts/simGmDeskHost.mjs
+c-clubvalue: SIM_GM_DESK_HOST_CONTROL=clubvalue node scripts/simGmDeskHost.mjs

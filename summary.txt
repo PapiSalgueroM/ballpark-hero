@@ -1,0 +1,6 @@
+vitest exit=0 3s |    Duration  2.42s (transform 543ms, setup 141ms, collect 1.03s, tests 1.15s, environment 855ms, prepare 550ms)
+c-emptytile exit=1 48s | simGmDeskHost CONTROL emptytile FIRED: check 10 went red with 4770 failures (red checks 10:4770)
+simGmDeskHost exit=0 53s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 61s | 
+c-longtile exit=1 36s | simGmDeskHost CONTROL longtile FIRED: check 10 went red with 4145 failures (red checks 10:4145)
+c-clubvalue exit=1 34s | simGmDeskHost CONTROL clubvalue FIRED: check 10 went red with 552 failures (red checks 10:552)
