@@ -1,0 +1,11 @@
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[SIM_OFFLINE_BLOCK] external browser route continue https://fonts.googleapis.com
+[{"id":"new-390","error":null,"shots":6,"pageErrors":0},{"id":"new-1280","error":null,"shots":6,"pageErrors":0},{"id":"live-390-motion-confirmed","error":null,"shots":6,"pageErrors":0},{"id":"live-390-reduced-awarded","error":null,"shots":6,"pageErrors":0},{"id":"live-1280-motion-disallowed","error":null,"shots":6,"pageErrors":0},{"id":"live-1280-reduced-awarded","error":null,"shots":6,"pageErrors":0},{"id":"live-390-reduced-disallowed","error":null,"shots":6,"pageErrors":0},{"id":"quick-390-disallowed","error":null,"shots":1,"pageErrors":0},{"id":"quick-1280-awarded","error":null,"shots":1,"pageErrors":0}]
+walkCm: 9 cases, 0 could not be driven to the end, 44 screenshots
