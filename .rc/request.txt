@@ -1,0 +1,8 @@
+simAwardRaces: node scripts/simAwardRaces.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
