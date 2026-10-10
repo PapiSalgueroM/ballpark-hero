@@ -1,0 +1,322 @@
+MUTATION veteran APPLIED to scripts/lib/cmValueCurve.mjs
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mone order in every world: the stretch first, then the age points[2m > [22m[2mover every row of the four past seasons: never more than six down or eight up, nobody past the top
+[22m[39mera2005: 829 of 1727 rows change, swing -6 to 8, on the top of 96: Ronaldinho, Thierry Henry
+era2010: 890 of 1751 rows change, swing -6 to 8, on the top of 97: Cristiano Ronaldo, Lionel Messi
+era2015: 738 of 1659 rows change, swing -6 to 8, on the top of 98: Cristiano Ronaldo, Lionel Messi
+era2020: 862 of 1774 rows change, swing -6 to 8, on the top of 94: Kylian Mbappé, Lionel Messi
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22m[2mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[22m[39m2026 at the flip: 2078 of 4401 ratings change; by points {"0":2323,"1":230,"2":324,"4":186,"5":44,"6":20,"7":11,"8":13,"-1":379,"-2":306,"-3":245,"-4":182,"-6":50,"-5":88}
+
+ [31m❯[39m src/test/cmValueCurve.test.ts [2m([22m[2m51 tests[22m[2m | [22m[31m9 failed[39m[2m)[22m[33m 440[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe fixture is whole, so nothing below can pass empty[32m 2[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe constants and the position map are the recorded ones[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mevery recorded dollar value still gets its recorded value rating[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mratingOf with one argument is still that value rating, so no generator writes a new byte[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe two anchors read as the header says[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mpounds, at one and at two decimals, are the recorded ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22meuros convert at the recorded rate[32m 0[2mms[22m[39m
+[31m   [31m×[31m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe constants are the measured ones[39m[32m 13[2mms[22m[39m
+[31m     → expected { '30': 1, '31': 2, '32': 2, …(5) } to deeply equal { '30': 1, '31': 2, '32': 2, …(5) }[39m
+[31m   [31m×[31m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mevery age from 14 to 45 is the table typed out by hand, at tops 94, 96, 97 and 98[39m[32m 4[2mms[22m[39m
+[31m     → expected [ …(12) ] to deeply equal [][39m
+[31m   [31m×[31m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mwith no top given the top is 94, and rateFrom is that read for a generator[39m[32m 2[2mms[22m[39m
+[31m     → expected 52 to be 51 // Object.is equality[39m
+[31m   [31m×[31m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe age points alone: a point a year under 24, nothing to 29, one at 30 rising to eight[39m[32m 1[2mms[22m[39m
+[31m     → expected [ 1, 2, 2, 4, 4, 5, 6, 7, 8, 8, 8 ] to deeply equal [ 1, 2, 2, 3, 4, 5, 6, 7, 8, 8, 8 ][39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe half distance limit reads the top of the man own world, never the constant 94[32m 75[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe upper clamp reads the same top: nobody passes the best of his world for being old[32m 73[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mposition is checked and changes nothing[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mratingOf with an age and a position is the value rating read with the age[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mfails closed on a bad value rating, age or position, naming the inputs[32m 2[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe three reads throw on anything that is not a whole number, so no NaN reaches a save[32m 2[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22manswers a whole level from 48 to the top for every rating 48 to 99, every age 14 to 45, every top[32m 8[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22mit is the smallest level whose read is at least the rating, and the top when there is none[32m 4[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22mthe ratings the read skips for a young man are the enumerated ones, and each takes the next level up[32m 4[2mms[22m[39m
+[31m   [31m×[31m levelFrom: the age read run backwards, total[2m > [22mit inverts the read wherever no clamp bit, and the clamped cells are counted[39m[32m 2[2mms[22m[39m
+[31m     → expected 300 to be 299 // Object.is equality[39m
+[31m   [31m×[31m one order in every world: the stretch first, then the age points[2m > [22mreadInWorld stretches, then reads the age on the stretched scale and its own top[39m[32m 1[2mms[22m[39m
+[31m     → expected [ 95, 96, 80 ] to deeply equal [ 95, 93, 80 ][39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22meach past season top is the stretch of the highest rating in its file: 96, 97, 98 and 94[32m 1[2mms[22m[39m
+[31m   [31m×[31m one order in every world: the stretch first, then the age points[2m > [22mthe 29 men of the brief table, row for row, from the files main ships[39m[32m 3[2mms[22m[39m
+[31m     → expected [ …(2) ] to deeply equal [][39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mover every row of the four past seasons: never more than six down or eight up, nobody past the top[32m 4[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcounts whole years to a day[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 1, a birth date on file: the exact age, whichever way the table rule would err[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 2, a bulk row: plus one for a 2026 row and plus two for a 2025 row[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 3, a hand written row: the age as written[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 4, no table row: the age as typed, marked unknown[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma ledger row marked thin is left out: the man keeps the table rule and nothing reads his date[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mAllan twice: the Corinthians man gets his date, the Palmeiras namesake keeps the table rule[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma moved man is found by his table club, and by his baked club[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a club matched date more than two years from the table, naming both ages[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a row the rule was never measured on[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mtwo ledgers that disagree about one man are fatal, and a date with no club must have a twin[32m 0[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmValueCurve.mjs has no import, no require, no file, clock, random or network read[32m 1[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmAges.mjs has no import, no require, no file, clock, random or network read[32m 0[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe checker itself fires: two statistics sites, a wiki, a date the page never printed, a thin row with no reason[32m 3[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery one of the 105 rows meets the rule, and none is thin[32m 21[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery bulk table row holds the age on 1 January of its year, which is what the rule stands on[32m 1[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe three ledgers join with no two dates for one man, and every ledger man is in his squad once[32m 5[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mholds exactly the men of the squads file, in its order[32m 1[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating[32m 10[2mms[22m[39m
+[31m   [31m×[31m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mthe eight 2026 men of the brief table come out of the files alone: squads file, basis, ages rule, age read[39m[32m 5[2mms[22m[39m
+[31m     → expected [ 'Harry Kane', 32, 33, 88, 92 ] to deeply equal [ 'Harry Kane', 32, 33, 88, 91 ][39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mthe checker itself fires: one table publisher, a wiki as the second, a thin league with no reason[32m 1[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mall 27 leagues meet the rule, none is thin, and every game club named is a club of the game[32m 10[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22magrees place for place with the final tables the game already ships (Round 612, a separate research run)[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mis the script library itself, not a second implementation[32m 0[2mms[22m[39m
+[31m   [31m×[31m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mreads a man through its types the way the engine will[39m[32m 1[2mms[22m[39m
+[31m     → expected { r: 89, l: 85 } to deeply equal { r: 88, l: 85 }[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mnothing shipped imports it, or either script library, yet (part two deletes this test with its first import)[32m 168[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 9 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager rating: the level plus points for age, on the top of the world[2m > [22mthe constants are the measured ones
+[31m[1mAssertionError[22m: expected { '30': 1, '31': 2, '32': 2, …(5) } to deeply equal { '30': 1, '31': 2, '32': 2, …(5) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "30": 1,[22m
+[2m    "31": 2,[22m
+[2m    "32": 2,[22m
+[32m-   "33": 3,[39m
+[31m+   "33": 4,[39m
+[2m    "34": 4,[22m
+[2m    "35": 5,[22m
+[2m    "36": 6,[22m
+[2m    "37": 7,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m166:28[22m[39m
+    [90m164| [39m    expect([...ENGINE_POSITIONS].sort()).toEqual(['CAM', 'CB', 'CDM', …
+    [90m165| [39m    expect([YOUTH_FROM, YOUTH_MAX, VETERAN_FROM, VETERAN_CAP]).toEqual…
+    [90m166| [39m    expect(VETERAN_POINTS).toEqual({ 30: 1, 31: 2, 32: 2, 33: 3, 34: 4…
+    [90m   | [39m                           [31m^[39m
+    [90m167| [39m  })[33m;[39m
+    [90m168| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager rating: the level plus points for age, on the top of the world[2m > [22mevery age from 14 to 45 is the table typed out by hand, at tops 94, 96, 97 and 98
+[31m[1mAssertionError[22m: expected [ …(12) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "top 94, level 48 at 33: wanted 51, got 52",[39m
+[31m+   "top 94, level 64 at 33: wanted 67, got 68",[39m
+[31m+   "top 94, level 80 at 33: wanted 83, got 84",[39m
+[31m+   "top 94, level 85 at 33: wanted 88, got 89",[39m
+[31m+   "top 94, level 89 at 33: wanted 92, got 93",[39m
+[31m+   "top 96, level 73 at 33: wanted 76, got 77",[39m
+[31m+   "top 96, level 85 at 33: wanted 88, got 89",[39m
+[31m+   "top 96, level 91 at 33: wanted 94, got 95",[39m
+[31m+   "top 97, level 85 at 33: wanted 88, got 89",[39m
+[31m+   "top 97, level 92 at 33: wanted 95, got 96",[39m
+[31m+   "top 98, level 60 at 33: wanted 63, got 64",[39m
+[31m+   "top 98, level 91 at 33: wanted 94, got 95",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m183:19[22m[39m
+    [90m181| [39m    }
+    [90m182| [39m    [34mexpect[39m(checked)[33m.[39m[34mtoBe[39m([34m19[39m [33m*[39m [34m32[39m)[33m;[39m
+    [90m183| [39m    [34mexpect[39m(wrong)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m184| [39m  })[33m;[39m
+    [90m185| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager rating: the level plus points for age, on the top of the world[2m > [22mwith no top given the top is 94, and rateFrom is that read for a generator
+[31m[1mAssertionError[22m: expected 52 to be 51 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 51[39m
+[31m+ 52[39m
+
+[36m [2m❯[22m forEach src/test/cmValueCurve.test.ts:[2m189:45[22m[39m
+    [90m187| [39m    [35mfor[39m ([35mconst[39m [level[33m,[39m row] [35mof[39m [33mObject[39m[33m.[39m[34mentries[39m([33mTABLES[39m[[34m94[39m])) {
+    [90m188| [39m      [33mAGES[39m[33m.[39m[34mforEach[39m((age[33m,[39m i) [33m=>[39m {
+    [90m189| [39m        [34mexpect[39m([34mageRead[39m([33mNumber[39m(level)[33m,[39m age))[33m.[39m[34mtoBe[39m(row[i])[33m;[39m
+    [90m   | [39m                                            [31m^[39m
+    [90m190| [39m        [34mexpect[39m([34mrateFrom[39m([33mNumber[39m(level)[33m,[39m age[33m,[39m [32m'CB'[39m))[33m.[39m[34mtoBe[39m(row[i])[33m;[39m
+    [90m191| [39m      })[33m;[39m
+[90m [2m❯[22m src/test/cmValueCurve.test.ts:[2m188:12[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager rating: the level plus points for age, on the top of the world[2m > [22mthe age points alone: a point a year under 24, nothing to 29, one at 30 rising to eight
+[31m[1mAssertionError[22m: expected [ 1, 2, 2, 4, 4, 5, 6, 7, 8, 8, 8 ] to deeply equal [ 1, 2, 2, 3, 4, 5, 6, 7, 8, 8, 8 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -1,10 +1,10 @@[39m
+[2m  [[22m
+[2m    1,[22m
+[2m    2,[22m
+[2m    2,[22m
+[32m-   3,[39m
+[31m+   4,[39m
+[2m    4,[22m
+[2m    5,[22m
+[2m    6,[22m
+[2m    7,[22m
+[2m    8,[22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m198:85[22m[39m
+    [90m196| [39m    expect([14, 18, 19, 20, 21, 22, 23].map(a => agePoints(70, a))).to…
+    [90m197| [39m    expect([24, 25, 26, 27, 28, 29].map(a => agePoints(70, a))).toEqua…
+    [90m198| [39m    expect([30, 31, 32, 33, 34, 35, 36, 37, 38, 41, 45].map(a => agePo…
+    [90m   | [39m                                                                                    [31m^[39m
+    [90m199| [39m    /* the half distance limit: at 90 a boy gives two back, at 93 noth…
+    [90m200| [39m    expect([agePoints(90, 17), agePoints(91, 17), agePoints(93, 17), a…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mlevelFrom: the age read run backwards, total[2m > [22mit inverts the read wherever no clamp bit, and the clamped cells are counted
+[31m[1mAssertionError[22m: expected 300 to be 299 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 299[39m
+[31m+ 300[39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m397:23[22m[39m
+    [90m395| [39m      [34mexpect[39m(notTheLowest)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m396| [39m      [34mexpect[39m(offALimit)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m397| [39m      [34mexpect[39m(clamped)[33m.[39m[34mtoBe[39m([34m45[39m [33m+[39m [34m30[39m [33m+[39m [34m64[39m [33m+[39m ([34m99[39m [33m-[39m top) [33m*[39m [34m32[39m)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m398| [39m      counts[top] [33m=[39m clamped[33m;[39m
+    [90m399| [39m    }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mone order in every world: the stretch first, then the age points[2m > [22mreadInWorld stretches, then reads the age on the stretched scale and its own top
+[31m[1mAssertionError[22m: expected [ 95, 96, 80 ] to deeply equal [ 95, 93, 80 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    95,[22m
+[32m-   93,[39m
+[31m+   96,[39m
+[2m    80,[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m462:110[22m[39m
+    [90m460| [39m       and 89. */[39m
+    [90m461| [39m    const pointsFirst = (era: string, r: number, a: number) => eraUpli…
+    [90m462| [39m    expect([pointsFirst('era2010', 90, 22), pointsFirst('era2005', 82,…
+    [90m   | [39m                                                                                                             [31m^[39m
+    [90m463| [39m    [34mexpect[39m([
+    [90m464| [39m      [34mreadInWorld[39m([34m90[39m[33m,[39m [34m22[39m[33m,[39m [34meraWorld[39m([32m'era2010'[39m))[33m.[39mrating[33m,[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mone order in every world: the stretch first, then the age points[2m > [22mthe 29 men of the brief table, row for row, from the files main ships
+[31m[1mAssertionError[22m: expected [ …(2) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "era2005 Pavel Nedved: the library gives 89, the table says 88",[39m
+[31m+   "now Harry Kane: the library gives 92, the table says 91",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m493:19[22m[39m
+    [90m491| [39m      if (got.rating !== shown) wrong.push(`${world} ${name}: the libr…
+    [90m492| [39m    }
+    [90m493| [39m    [34mexpect[39m(wrong)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m494| [39m    [34mexpect[39m(checked)[33m.[39m[34mtoBe[39m([34m29[39m)[33m;[39m
+    [90m495| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mthe eight 2026 men of the brief table come out of the files alone: squads file, basis, ages rule, age read
+[31m[1mAssertionError[22m: expected [ 'Harry Kane', 32, 33, 88, 92 ] to deeply equal [ 'Harry Kane', 32, 33, 88, 91 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "Harry Kane",[22m
+[2m    32,[22m
+[2m    33,[22m
+[2m    88,[22m
+[32m-   91,[39m
+[31m+   92,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m874:100[22m[39m
+    [90m872| [39m      [34mexpect[39m([name[33m,[39m august[33m.[39mbasis])[33m.[39m[34mtoEqual[39m([name[33m,[39m [32m'born'[39m])[33m;[39m
+    [90m873| [39m      got.push([name, august.age, list[i].r, rateFrom(list[i].r, augus…
+    [90m874| [39m      expect([name, list[i].a, august.age, list[i].r, rateFrom(list[i]…
+    [90m   | [39m                                                                                                   [31m^[39m
+    [90m875| [39m    }
+    [90m876| [39m    [34mexpect[39m(got[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m8[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mthe typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mreads a man through its types the way the engine will
+[31m[1mAssertionError[22m: expected { r: 89, l: 85 } to deeply equal { r: 88, l: 85 }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "l": 85,[22m
+[32m-   "r": 88,[39m
+[31m+   "r": 89,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m1000:51[22m[39m
+    [90m998| [39m    /* a past season row the way part two will write it: the shown rat…
+    [90m999| [39m    const nedved = door.readInWorld(82, 32, { stretch: r => eraUpliftR…
+    [90m1000| [39m    expect({ r: nedved.rating, l: nedved.level }).toEqual({ r: 88, l: …
+    [90m   | [39m                                                  [31m^[39m
+    [90m1001| [39m    expect(door.levelFrom(nedved.rating, nedved.age, 96)).toBe(nedved.…
+    [90m1002| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m9 failed[39m[22m[2m | [22m[1m[32m42 passed[39m[22m[90m (51)[39m
+[2m   Start at [22m 09:16:00
+[2m   Duration [22m 2.16s[2m (transform 862ms, setup 47ms, collect 1.04s, tests 440ms, environment 266ms, prepare 113ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager rating%3A the level plus points for age%2C on the top of the world > the constants are the measured ones,line=166,column=28::AssertionError: expected { '30': 1, '31': 2, '32': 2, …(5) } to deeply equal { '30': 1, '31': 2, '32': 2, …(5) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "30": 1,%0A    "31": 2,%0A    "32": 2,%0A-   "33": 3,%0A+   "33": 4,%0A    "34": 4,%0A    "35": 5,%0A    "36": 6,%0A    "37": 7,%0A  }%0A%0A ❯ src/test/cmValueCurve.test.ts:166:28%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager rating%3A the level plus points for age%2C on the top of the world > every age from 14 to 45 is the table typed out by hand%2C at tops 94%2C 96%2C 97 and 98,line=183,column=19::AssertionError: expected [ …(12) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "top 94, level 48 at 33: wanted 51, got 52",%0A+   "top 94, level 64 at 33: wanted 67, got 68",%0A+   "top 94, level 80 at 33: wanted 83, got 84",%0A+   "top 94, level 85 at 33: wanted 88, got 89",%0A+   "top 94, level 89 at 33: wanted 92, got 93",%0A+   "top 96, level 73 at 33: wanted 76, got 77",%0A+   "top 96, level 85 at 33: wanted 88, got 89",%0A+   "top 96, level 91 at 33: wanted 94, got 95",%0A+   "top 97, level 85 at 33: wanted 88, got 89",%0A+   "top 97, level 92 at 33: wanted 95, got 96",%0A+   "top 98, level 60 at 33: wanted 63, got 64",%0A+   "top 98, level 91 at 33: wanted 94, got 95",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:183:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager rating%3A the level plus points for age%2C on the top of the world > with no top given the top is 94%2C and rateFrom is that read for a generator,line=189,column=45::AssertionError: expected 52 to be 51 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 51%0A+ 52%0A%0A ❯ forEach src/test/cmValueCurve.test.ts:189:45%0A ❯ src/test/cmValueCurve.test.ts:188:12%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager rating%3A the level plus points for age%2C on the top of the world > the age points alone%3A a point a year under 24%2C nothing to 29%2C one at 30 rising to eight,line=198,column=85::AssertionError: expected [ 1, 2, 2, 4, 4, 5, 6, 7, 8, 8, 8 ] to deeply equal [ 1, 2, 2, 3, 4, 5, 6, 7, 8, 8, 8 ]%0A%0A- Expected%0A+ Received%0A%0A@@ -1,10 +1,10 @@%0A  [%0A    1,%0A    2,%0A    2,%0A-   3,%0A+   4,%0A    4,%0A    5,%0A    6,%0A    7,%0A    8,%0A%0A ❯ src/test/cmValueCurve.test.ts:198:85%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > levelFrom%3A the age read run backwards%2C total > it inverts the read wherever no clamp bit%2C and the clamped cells are counted,line=397,column=23::AssertionError: expected 300 to be 299 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 299%0A+ 300%0A%0A ❯ src/test/cmValueCurve.test.ts:397:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > one order in every world%3A the stretch first%2C then the age points > readInWorld stretches%2C then reads the age on the stretched scale and its own top,line=462,column=110::AssertionError: expected [ 95, 96, 80 ] to deeply equal [ 95, 93, 80 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    95,%0A-   93,%0A+   96,%0A    80,%0A  ]%0A%0A ❯ src/test/cmValueCurve.test.ts:462:110%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > one order in every world%3A the stretch first%2C then the age points > the 29 men of the brief table%2C row for row%2C from the files main ships,line=493,column=19::AssertionError: expected [ …(2) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "era2005 Pavel Nedved: the library gives 89, the table says 88",%0A+   "now Harry Kane: the library gives 92, the table says 91",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:493:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > what every 2026 age will stand on (the basis file)%2C man for man against the squads main ships > the eight 2026 men of the brief table come out of the files alone%3A squads file%2C basis%2C ages rule%2C age read,line=874,column=100::AssertionError: expected [ 'Harry Kane', 32, 33, 88, 92 ] to deeply equal [ 'Harry Kane', 32, 33, 88, 91 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "Harry Kane",%0A    32,%0A    33,%0A    88,%0A-   91,%0A+   92,%0A  ]%0A%0A ❯ src/test/cmValueCurve.test.ts:874:100%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > the typed door the engine will import (src/lib/cmAgeRead.ts) > reads a man through its types the way the engine will,line=1000,column=51::AssertionError: expected { r: 89, l: 85 } to deeply equal { r: 88, l: 85 }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "l": 85,%0A-   "r": 88,%0A+   "r": 89,%0A  }%0A%0A ❯ src/test/cmValueCurve.test.ts:1000:51%0A%0A
+mutation veteran = exit 1 (1 the test went red, 3 the mutation did not apply, 0 the test missed it)

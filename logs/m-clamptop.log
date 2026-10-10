@@ -1,0 +1,1006 @@
+MUTATION clamptop APPLIED to scripts/lib/cmValueCurve.mjs
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22m[2mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[22m[39m2026 at the flip: 2078 of 4401 ratings change; by points {"0":2323,"1":230,"2":324,"3":110,"4":76,"5":44,"6":20,"7":11,"8":13,"-1":379,"-2":306,"-3":245,"-4":182,"-6":50,"-5":88}
+
+ [31m❯[39m src/test/cmValueCurve.test.ts [2m([22m[2m51 tests[22m[2m | [22m[31m9 failed[39m[2m)[22m[33m 315[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe fixture is whole, so nothing below can pass empty[32m 2[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe constants and the position map are the recorded ones[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mevery recorded dollar value still gets its recorded value rating[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mratingOf with one argument is still that value rating, so no generator writes a new byte[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe two anchors read as the header says[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mpounds, at one and at two decimals, are the recorded ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22meuros convert at the recorded rate[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe constants are the measured ones[32m 1[2mms[22m[39m
+[31m   [31m×[31m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mevery age from 14 to 45 is the table typed out by hand, at tops 94, 96, 97 and 98[39m[32m 14[2mms[22m[39m
+[31m     → expected [ …(181) ] to deeply equal [][39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mwith no top given the top is 94, and rateFrom is that read for a generator[32m 7[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe age points alone: a point a year under 24, nothing to 29, one at 30 rising to eight[32m 1[2mms[22m[39m
+[31m   [31m×[31m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe half distance limit reads the top of the man own world, never the constant 94[39m[32m 1[2mms[22m[39m
+[31m     → expected 94 to be 97 // Object.is equality[39m
+[31m   [31m×[31m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe upper clamp reads the same top: nobody passes the best of his world for being old[39m[32m 1[2mms[22m[39m
+[31m     → expected 94 to be 98 // Object.is equality[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mposition is checked and changes nothing[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mratingOf with an age and a position is the value rating read with the age[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mfails closed on a bad value rating, age or position, naming the inputs[32m 3[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe three reads throw on anything that is not a whole number, so no NaN reaches a save[32m 2[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22manswers a whole level from 48 to the top for every rating 48 to 99, every age 14 to 45, every top[32m 6[2mms[22m[39m
+[31m   [31m×[31m levelFrom: the age read run backwards, total[2m > [22mit is the smallest level whose read is at least the rating, and the top when there is none[39m[32m 6[2mms[22m[39m
+[31m     → expected [ …(288) ] to deeply equal [][39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22mthe ratings the read skips for a young man are the enumerated ones, and each takes the next level up[32m 4[2mms[22m[39m
+[31m   [31m×[31m levelFrom: the age read run backwards, total[2m > [22mit inverts the read wherever no clamp bit, and the clamped cells are counted[39m[32m 3[2mms[22m[39m
+[31m     → expected [ …(244) ] to deeply equal [][39m
+[31m   [31m×[31m one order in every world: the stretch first, then the age points[2m > [22mreadInWorld stretches, then reads the age on the stretched scale and its own top[39m[32m 2[2mms[22m[39m
+[31m     → expected { level: 97, age: 23, rating: 94 } to deeply equal { level: 97, age: 23, rating: 97 }[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22meach past season top is the stretch of the highest rating in its file: 96, 97, 98 and 94[32m 1[2mms[22m[39m
+[31m   [31m×[31m one order in every world: the stretch first, then the age points[2m > [22mthe 29 men of the brief table, row for row, from the files main ships[39m[32m 4[2mms[22m[39m
+[31m     → expected [ …(8) ] to deeply equal [][39m
+[31m   [31m×[31m one order in every world: the stretch first, then the age points[2m > [22mover every row of the four past seasons: never more than six down or eight up, nobody past the top[39m[32m 2[2mms[22m[39m
+[31m     → expected [ 'era2005', [] ] to deeply equal [ 'era2005', …(1) ][39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcounts whole years to a day[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 1, a birth date on file: the exact age, whichever way the table rule would err[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 2, a bulk row: plus one for a 2026 row and plus two for a 2025 row[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 3, a hand written row: the age as written[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 4, no table row: the age as typed, marked unknown[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma ledger row marked thin is left out: the man keeps the table rule and nothing reads his date[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mAllan twice: the Corinthians man gets his date, the Palmeiras namesake keeps the table rule[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma moved man is found by his table club, and by his baked club[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a club matched date more than two years from the table, naming both ages[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a row the rule was never measured on[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mtwo ledgers that disagree about one man are fatal, and a date with no club must have a twin[32m 1[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmValueCurve.mjs has no import, no require, no file, clock, random or network read[32m 1[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmAges.mjs has no import, no require, no file, clock, random or network read[32m 0[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe checker itself fires: two statistics sites, a wiki, a date the page never printed, a thin row with no reason[32m 3[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery one of the 105 rows meets the rule, and none is thin[32m 24[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery bulk table row holds the age on 1 January of its year, which is what the rule stands on[32m 1[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe three ledgers join with no two dates for one man, and every ledger man is in his squad once[32m 6[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mholds exactly the men of the squads file, in its order[32m 1[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating[32m 14[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mthe eight 2026 men of the brief table come out of the files alone: squads file, basis, ages rule, age read[32m 5[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mthe checker itself fires: one table publisher, a wiki as the second, a thin league with no reason[32m 2[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mall 27 leagues meet the rule, none is thin, and every game club named is a club of the game[32m 11[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22magrees place for place with the final tables the game already ships (Round 612, a separate research run)[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mis the script library itself, not a second implementation[32m 0[2mms[22m[39m
+[31m   [31m×[31m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mreads a man through its types the way the engine will[39m[32m 1[2mms[22m[39m
+[31m     → expected { level: 97, age: 23, rating: 94 } to deeply equal { level: 97, age: 23, rating: 97 }[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mnothing shipped imports it, or either script library, yet (part two deletes this test with its first import)[32m 175[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 9 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager rating: the level plus points for age, on the top of the world[2m > [22mevery age from 14 to 45 is the table typed out by hand, at tops 94, 96, 97 and 98
+[31m[1mAssertionError[22m: expected [ …(181) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "top 96, level 91 at 34: wanted 95, got 94",[39m
+[31m+   "top 96, level 91 at 35: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 36: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 37: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 38: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 39: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 40: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 41: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 42: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 43: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 44: wanted 96, got 94",[39m
+[31m+   "top 96, level 91 at 45: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 14: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 15: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 16: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 17: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 18: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 19: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 20: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 21: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 22: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 23: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 24: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 25: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 26: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 27: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 28: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 29: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 30: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 31: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 32: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 33: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 34: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 35: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 36: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 37: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 38: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 39: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 40: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 41: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 42: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 43: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 44: wanted 96, got 94",[39m
+[31m+   "top 96, level 96 at 45: wanted 96, got 94",[39m
+[31m+   "top 97, level 92 at 33: wanted 95, got 94",[39m
+[31m+   "top 97, level 92 at 34: wanted 96, got 94",[39m
+[31m+   "top 97, level 92 at 35: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 36: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 37: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 38: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 39: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 40: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 41: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 42: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 43: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 44: wanted 97, got 94",[39m
+[31m+   "top 97, level 92 at 45: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 30: wanted 95, got 94",[39m
+[31m+   "top 97, level 94 at 31: wanted 96, got 94",[39m
+[31m+   "top 97, level 94 at 32: wanted 96, got 94",[39m
+[31m+   "top 97, level 94 at 33: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 34: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 35: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 36: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 37: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 38: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 39: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 40: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 41: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 42: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 43: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 44: wanted 97, got 94",[39m
+[31m+   "top 97, level 94 at 45: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 14: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 15: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 16: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 17: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 18: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 19: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 20: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 21: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 22: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 23: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 24: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 25: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 26: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 27: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 28: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 29: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 30: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 31: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 32: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 33: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 34: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 35: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 36: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 37: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 38: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 39: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 40: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 41: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 42: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 43: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 44: wanted 97, got 94",[39m
+[31m+   "top 97, level 97 at 45: wanted 97, got 94",[39m
+[31m+   "top 98, level 91 at 34: wanted 95, got 94",[39m
+[31m+   "top 98, level 91 at 35: wanted 96, got 94",[39m
+[31m+   "top 98, level 91 at 36: wanted 97, got 94",[39m
+[31m+   "top 98, level 91 at 37: wanted 98, got 94",[39m
+[31m+   "top 98, level 91 at 38: wanted 98, got 94",[39m
+[31m+   "top 98, level 91 at 39: wanted 98, got 94",[39m
+[31m+   "top 98, level 91 at 40: wanted 98, got 94",[39m
+[31m+   "top 98, level 91 at 41: wanted 98, got 94",[39m
+[31m+   "top 98, level 91 at 42: wanted 98, got 94",[39m
+[31m+   "top 98, level 91 at 43: wanted 98, got 94",[39m
+[31m+   "top 98, level 91 at 44: wanted 98, got 94",[39m
+[31m+   "top 98, level 91 at 45: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 14: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 15: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 16: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 17: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 18: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 19: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 20: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 21: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 22: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 23: wanted 95, got 94",[39m
+[31m+   "top 98, level 96 at 24: wanted 96, got 94",[39m
+[31m+   "top 98, level 96 at 25: wanted 96, got 94",[39m
+[31m+   "top 98, level 96 at 26: wanted 96, got 94",[39m
+[31m+   "top 98, level 96 at 27: wanted 96, got 94",[39m
+[31m+   "top 98, level 96 at 28: wanted 96, got 94",[39m
+[31m+   "top 98, level 96 at 29: wanted 96, got 94",[39m
+[31m+   "top 98, level 96 at 30: wanted 97, got 94",[39m
+[31m+   "top 98, level 96 at 31: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 32: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 33: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 34: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 35: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 36: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 37: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 38: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 39: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 40: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 41: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 42: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 43: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 44: wanted 98, got 94",[39m
+[31m+   "top 98, level 96 at 45: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 14: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 15: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 16: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 17: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 18: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 19: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 20: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 21: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 22: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 23: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 24: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 25: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 26: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 27: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 28: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 29: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 30: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 31: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 32: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 33: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 34: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 35: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 36: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 37: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 38: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 39: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 40: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 41: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 42: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 43: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 44: wanted 98, got 94",[39m
+[31m+   "top 98, level 98 at 45: wanted 98, got 94",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m183:19[22m[39m
+    [90m181| [39m    }
+    [90m182| [39m    [34mexpect[39m(checked)[33m.[39m[34mtoBe[39m([34m19[39m [33m*[39m [34m32[39m)[33m;[39m
+    [90m183| [39m    [34mexpect[39m(wrong)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m184| [39m  })[33m;[39m
+    [90m185| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager rating: the level plus points for age, on the top of the world[2m > [22mthe half distance limit reads the top of the man own world, never the constant 94
+[31m[1mAssertionError[22m: expected 94 to be 97 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 97[39m
+[31m+ 94[39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m209:33[22m[39m
+    [90m207| [39m       94 the half distance is under zero and he would be moved; read …
+    [90m208| [39m    [34mexpect[39m([34magePoints[39m([34m97[39m[33m,[39m [34m23[39m[33m,[39m [34m97[39m))[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+    [90m209| [39m    [34mexpect[39m([34mageRead[39m([34m97[39m[33m,[39m [34m23[39m[33m,[39m [34m97[39m))[33m.[39m[34mtoBe[39m([34m97[39m)[33m;[39m
+    [90m   | [39m                                [31m^[39m
+    [90m210| [39m    /* the same man of 20 on 91: two off at a top of 96 (half of five)…
+    [90m211| [39m    expect([agePoints(91, 20, 94), agePoints(91, 20, 96), agePoints(91…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mClub Manager rating: the level plus points for age, on the top of the world[2m > [22mthe upper clamp reads the same top: nobody passes the best of his world for being old
+[31m[1mAssertionError[22m: expected 94 to be 98 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 98[39m
+[31m+ 94[39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m228:33[22m[39m
+    [90m226| [39m  it('the upper clamp reads the same top: nobody passes the best of hi…
+    [90m227| [39m    /* 98 at 30 is 99 before the clamp; the world's top is 98, so 98 (…
+    [90m228| [39m    [34mexpect[39m([34mageRead[39m([34m98[39m[33m,[39m [34m30[39m[33m,[39m [34m98[39m))[33m.[39m[34mtoBe[39m([34m98[39m)[33m;[39m
+    [90m   | [39m                                [31m^[39m
+    [90m229| [39m    [34mexpect[39m([34mageRead[39m([34m92[39m[33m,[39m [34m40[39m[33m,[39m [34m97[39m))[33m.[39m[34mtoBe[39m([34m97[39m)[33m;[39m
+    [90m230| [39m    [34mexpect[39m([34mageRead[39m([34m92[39m[33m,[39m [34m40[39m[33m,[39m [34m96[39m))[33m.[39m[34mtoBe[39m([34m96[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mlevelFrom: the age read run backwards, total[2m > [22mit is the smallest level whose read is at least the rating, and the top when there is none
+[31m[1mAssertionError[22m: expected [ …(288) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "rating 95 at 14, top 96: 96",[39m
+[31m+   "rating 96 at 14, top 96: 96",[39m
+[31m+   "rating 95 at 15, top 96: 96",[39m
+[31m+   "rating 96 at 15, top 96: 96",[39m
+[31m+   "rating 95 at 16, top 96: 96",[39m
+[31m+   "rating 96 at 16, top 96: 96",[39m
+[31m+   "rating 95 at 17, top 96: 96",[39m
+[31m+   "rating 96 at 17, top 96: 96",[39m
+[31m+   "rating 95 at 18, top 96: 96",[39m
+[31m+   "rating 96 at 18, top 96: 96",[39m
+[31m+   "rating 95 at 19, top 96: 96",[39m
+[31m+   "rating 96 at 19, top 96: 96",[39m
+[31m+   "rating 95 at 20, top 96: 96",[39m
+[31m+   "rating 96 at 20, top 96: 96",[39m
+[31m+   "rating 95 at 21, top 96: 96",[39m
+[31m+   "rating 96 at 21, top 96: 96",[39m
+[31m+   "rating 95 at 22, top 96: 96",[39m
+[31m+   "rating 96 at 22, top 96: 96",[39m
+[31m+   "rating 95 at 23, top 96: 96",[39m
+[31m+   "rating 96 at 23, top 96: 96",[39m
+[31m+   "rating 95 at 24, top 96: 96",[39m
+[31m+   "rating 96 at 24, top 96: 96",[39m
+[31m+   "rating 95 at 25, top 96: 96",[39m
+[31m+   "rating 96 at 25, top 96: 96",[39m
+[31m+   "rating 95 at 26, top 96: 96",[39m
+[31m+   "rating 96 at 26, top 96: 96",[39m
+[31m+   "rating 95 at 27, top 96: 96",[39m
+[31m+   "rating 96 at 27, top 96: 96",[39m
+[31m+   "rating 95 at 28, top 96: 96",[39m
+[31m+   "rating 96 at 28, top 96: 96",[39m
+[31m+   "rating 95 at 29, top 96: 96",[39m
+[31m+   "rating 96 at 29, top 96: 96",[39m
+[31m+   "rating 95 at 30, top 96: 96",[39m
+[31m+   "rating 96 at 30, top 96: 96",[39m
+[31m+   "rating 95 at 31, top 96: 96",[39m
+[31m+   "rating 96 at 31, top 96: 96",[39m
+[31m+   "rating 95 at 32, top 96: 96",[39m
+[31m+   "rating 96 at 32, top 96: 96",[39m
+[31m+   "rating 95 at 33, top 96: 96",[39m
+[31m+   "rating 96 at 33, top 96: 96",[39m
+[31m+   "rating 95 at 34, top 96: 96",[39m
+[31m+   "rating 96 at 34, top 96: 96",[39m
+[31m+   "rating 95 at 35, top 96: 96",[39m
+[31m+   "rating 96 at 35, top 96: 96",[39m
+[31m+   "rating 95 at 36, top 96: 96",[39m
+[31m+   "rating 96 at 36, top 96: 96",[39m
+[31m+   "rating 95 at 37, top 96: 96",[39m
+[31m+   "rating 96 at 37, top 96: 96",[39m
+[31m+   "rating 95 at 38, top 96: 96",[39m
+[31m+   "rating 96 at 38, top 96: 96",[39m
+[31m+   "rating 95 at 39, top 96: 96",[39m
+[31m+   "rating 96 at 39, top 96: 96",[39m
+[31m+   "rating 95 at 40, top 96: 96",[39m
+[31m+   "rating 96 at 40, top 96: 96",[39m
+[31m+   "rating 95 at 41, top 96: 96",[39m
+[31m+   "rating 96 at 41, top 96: 96",[39m
+[31m+   "rating 95 at 42, top 96: 96",[39m
+[31m+   "rating 96 at 42, top 96: 96",[39m
+[31m+   "rating 95 at 43, top 96: 96",[39m
+[31m+   "rating 96 at 43, top 96: 96",[39m
+[31m+   "rating 95 at 44, top 96: 96",[39m
+[31m+   "rating 96 at 44, top 96: 96",[39m
+[31m+   "rating 95 at 45, top 96: 96",[39m
+[31m+   "rating 96 at 45, top 96: 96",[39m
+[31m+   "rating 95 at 14, top 97: 97",[39m
+[31m+   "rating 96 at 14, top 97: 97",[39m
+[31m+   "rating 97 at 14, top 97: 97",[39m
+[31m+   "rating 95 at 15, top 97: 97",[39m
+[31m+   "rating 96 at 15, top 97: 97",[39m
+[31m+   "rating 97 at 15, top 97: 97",[39m
+[31m+   "rating 95 at 16, top 97: 97",[39m
+[31m+   "rating 96 at 16, top 97: 97",[39m
+[31m+   "rating 97 at 16, top 97: 97",[39m
+[31m+   "rating 95 at 17, top 97: 97",[39m
+[31m+   "rating 96 at 17, top 97: 97",[39m
+[31m+   "rating 97 at 17, top 97: 97",[39m
+[31m+   "rating 95 at 18, top 97: 97",[39m
+[31m+   "rating 96 at 18, top 97: 97",[39m
+[31m+   "rating 97 at 18, top 97: 97",[39m
+[31m+   "rating 95 at 19, top 97: 97",[39m
+[31m+   "rating 96 at 19, top 97: 97",[39m
+[31m+   "rating 97 at 19, top 97: 97",[39m
+[31m+   "rating 95 at 20, top 97: 97",[39m
+[31m+   "rating 96 at 20, top 97: 97",[39m
+[31m+   "rating 97 at 20, top 97: 97",[39m
+[31m+   "rating 95 at 21, top 97: 97",[39m
+[31m+   "rating 96 at 21, top 97: 97",[39m
+[31m+   "rating 97 at 21, top 97: 97",[39m
+[31m+   "rating 95 at 22, top 97: 97",[39m
+[31m+   "rating 96 at 22, top 97: 97",[39m
+[31m+   "rating 97 at 22, top 97: 97",[39m
+[31m+   "rating 95 at 23, top 97: 97",[39m
+[31m+   "rating 96 at 23, top 97: 97",[39m
+[31m+   "rating 97 at 23, top 97: 97",[39m
+[31m+   "rating 95 at 24, top 97: 97",[39m
+[31m+   "rating 96 at 24, top 97: 97",[39m
+[31m+   "rating 97 at 24, top 97: 97",[39m
+[31m+   "rating 95 at 25, top 97: 97",[39m
+[31m+   "rating 96 at 25, top 97: 97",[39m
+[31m+   "rating 97 at 25, top 97: 97",[39m
+[31m+   "rating 95 at 26, top 97: 97",[39m
+[31m+   "rating 96 at 26, top 97: 97",[39m
+[31m+   "rating 97 at 26, top 97: 97",[39m
+[31m+   "rating 95 at 27, top 97: 97",[39m
+[31m+   "rating 96 at 27, top 97: 97",[39m
+[31m+   "rating 97 at 27, top 97: 97",[39m
+[31m+   "rating 95 at 28, top 97: 97",[39m
+[31m+   "rating 96 at 28, top 97: 97",[39m
+[31m+   "rating 97 at 28, top 97: 97",[39m
+[31m+   "rating 95 at 29, top 97: 97",[39m
+[31m+   "rating 96 at 29, top 97: 97",[39m
+[31m+   "rating 97 at 29, top 97: 97",[39m
+[31m+   "rating 95 at 30, top 97: 97",[39m
+[31m+   "rating 96 at 30, top 97: 97",[39m
+[31m+   "rating 97 at 30, top 97: 97",[39m
+[31m+   "rating 95 at 31, top 97: 97",[39m
+[31m+   "rating 96 at 31, top 97: 97",[39m
+[31m+   "rating 97 at 31, top 97: 97",[39m
+[31m+   "rating 95 at 32, top 97: 97",[39m
+[31m+   "rating 96 at 32, top 97: 97",[39m
+[31m+   "rating 97 at 32, top 97: 97",[39m
+[31m+   "rating 95 at 33, top 97: 97",[39m
+[31m+   "rating 96 at 33, top 97: 97",[39m
+[31m+   "rating 97 at 33, top 97: 97",[39m
+[31m+   "rating 95 at 34, top 97: 97",[39m
+[31m+   "rating 96 at 34, top 97: 97",[39m
+[31m+   "rating 97 at 34, top 97: 97",[39m
+[31m+   "rating 95 at 35, top 97: 97",[39m
+[31m+   "rating 96 at 35, top 97: 97",[39m
+[31m+   "rating 97 at 35, top 97: 97",[39m
+[31m+   "rating 95 at 36, top 97: 97",[39m
+[31m+   "rating 96 at 36, top 97: 97",[39m
+[31m+   "rating 97 at 36, top 97: 97",[39m
+[31m+   "rating 95 at 37, top 97: 97",[39m
+[31m+   "rating 96 at 37, top 97: 97",[39m
+[31m+   "rating 97 at 37, top 97: 97",[39m
+[31m+   "rating 95 at 38, top 97: 97",[39m
+[31m+   "rating 96 at 38, top 97: 97",[39m
+[31m+   "rating 97 at 38, top 97: 97",[39m
+[31m+   "rating 95 at 39, top 97: 97",[39m
+[31m+   "rating 96 at 39, top 97: 97",[39m
+[31m+   "rating 97 at 39, top 97: 97",[39m
+[31m+   "rating 95 at 40, top 97: 97",[39m
+[31m+   "rating 96 at 40, top 97: 97",[39m
+[31m+   "rating 97 at 40, top 97: 97",[39m
+[31m+   "rating 95 at 41, top 97: 97",[39m
+[31m+   "rating 96 at 41, top 97: 97",[39m
+[31m+   "rating 97 at 41, top 97: 97",[39m
+[31m+   "rating 95 at 42, top 97: 97",[39m
+[31m+   "rating 96 at 42, top 97: 97",[39m
+[31m+   "rating 97 at 42, top 97: 97",[39m
+[31m+   "rating 95 at 43, top 97: 97",[39m
+[31m+   "rating 96 at 43, top 97: 97",[39m
+[31m+   "rating 97 at 43, top 97: 97",[39m
+[31m+   "rating 95 at 44, top 97: 97",[39m
+[31m+   "rating 96 at 44, top 97: 97",[39m
+[31m+   "rating 97 at 44, top 97: 97",[39m
+[31m+   "rating 95 at 45, top 97: 97",[39m
+[31m+   "rating 96 at 45, top 97: 97",[39m
+[31m+   "rating 97 at 45, top 97: 97",[39m
+[31m+   "rating 95 at 14, top 98: 98",[39m
+[31m+   "rating 96 at 14, top 98: 98",[39m
+[31m+   "rating 97 at 14, top 98: 98",[39m
+[31m+   "rating 98 at 14, top 98: 98",[39m
+[31m+   "rating 95 at 15, top 98: 98",[39m
+[31m+   "rating 96 at 15, top 98: 98",[39m
+[31m+   "rating 97 at 15, top 98: 98",[39m
+[31m+   "rating 98 at 15, top 98: 98",[39m
+[31m+   "rating 95 at 16, top 98: 98",[39m
+[31m+   "rating 96 at 16, top 98: 98",[39m
+[31m+   "rating 97 at 16, top 98: 98",[39m
+[31m+   "rating 98 at 16, top 98: 98",[39m
+[31m+   "rating 95 at 17, top 98: 98",[39m
+[31m+   "rating 96 at 17, top 98: 98",[39m
+[31m+   "rating 97 at 17, top 98: 98",[39m
+[31m+   "rating 98 at 17, top 98: 98",[39m
+[31m+   "rating 95 at 18, top 98: 98",[39m
+[31m+   "rating 96 at 18, top 98: 98",[39m
+[31m+   "rating 97 at 18, top 98: 98",[39m
+[31m+   "rating 98 at 18, top 98: 98",[39m
+[31m+   "rating 95 at 19, top 98: 98",[39m
+[31m+   "rating 96 at 19, top 98: 98",[39m
+[31m+   "rating 97 at 19, top 98: 98",[39m
+[31m+   "rating 98 at 19, top 98: 98",[39m
+[31m+   "rating 95 at 20, top 98: 98",[39m
+[31m+   "rating 96 at 20, top 98: 98",[39m
+[31m+   "rating 97 at 20, top 98: 98",[39m
+[31m+   "rating 98 at 20, top 98: 98",[39m
+[31m+   "rating 95 at 21, top 98: 98",[39m
+[31m+   "rating 96 at 21, top 98: 98",[39m
+[31m+   "rating 97 at 21, top 98: 98",[39m
+[31m+   "rating 98 at 21, top 98: 98",[39m
+[31m+   "rating 95 at 22, top 98: 98",[39m
+[31m+   "rating 96 at 22, top 98: 98",[39m
+[31m+   "rating 97 at 22, top 98: 98",[39m
+[31m+   "rating 98 at 22, top 98: 98",[39m
+[31m+   "rating 95 at 23, top 98: 98",[39m
+[31m+   "rating 96 at 23, top 98: 98",[39m
+[31m+   "rating 97 at 23, top 98: 98",[39m
+[31m+   "rating 98 at 23, top 98: 98",[39m
+[31m+   "rating 95 at 24, top 98: 98",[39m
+[31m+   "rating 96 at 24, top 98: 98",[39m
+[31m+   "rating 97 at 24, top 98: 98",[39m
+[31m+   "rating 98 at 24, top 98: 98",[39m
+[31m+   "rating 95 at 25, top 98: 98",[39m
+[31m+   "rating 96 at 25, top 98: 98",[39m
+[31m+   "rating 97 at 25, top 98: 98",[39m
+[31m+   "rating 98 at 25, top 98: 98",[39m
+[31m+   "rating 95 at 26, top 98: 98",[39m
+[31m+   "rating 96 at 26, top 98: 98",[39m
+[31m+   "rating 97 at 26, top 98: 98",[39m
+[31m+   "rating 98 at 26, top 98: 98",[39m
+[31m+   "rating 95 at 27, top 98: 98",[39m
+[31m+   "rating 96 at 27, top 98: 98",[39m
+[31m+   "rating 97 at 27, top 98: 98",[39m
+[31m+   "rating 98 at 27, top 98: 98",[39m
+[31m+   "rating 95 at 28, top 98: 98",[39m
+[31m+   "rating 96 at 28, top 98: 98",[39m
+[31m+   "rating 97 at 28, top 98: 98",[39m
+[31m+   "rating 98 at 28, top 98: 98",[39m
+[31m+   "rating 95 at 29, top 98: 98",[39m
+[31m+   "rating 96 at 29, top 98: 98",[39m
+[31m+   "rating 97 at 29, top 98: 98",[39m
+[31m+   "rating 98 at 29, top 98: 98",[39m
+[31m+   "rating 95 at 30, top 98: 98",[39m
+[31m+   "rating 96 at 30, top 98: 98",[39m
+[31m+   "rating 97 at 30, top 98: 98",[39m
+[31m+   "rating 98 at 30, top 98: 98",[39m
+[31m+   "rating 95 at 31, top 98: 98",[39m
+[31m+   "rating 96 at 31, top 98: 98",[39m
+[31m+   "rating 97 at 31, top 98: 98",[39m
+[31m+   "rating 98 at 31, top 98: 98",[39m
+[31m+   "rating 95 at 32, top 98: 98",[39m
+[31m+   "rating 96 at 32, top 98: 98",[39m
+[31m+   "rating 97 at 32, top 98: 98",[39m
+[31m+   "rating 98 at 32, top 98: 98",[39m
+[31m+   "rating 95 at 33, top 98: 98",[39m
+[31m+   "rating 96 at 33, top 98: 98",[39m
+[31m+   "rating 97 at 33, top 98: 98",[39m
+[31m+   "rating 98 at 33, top 98: 98",[39m
+[31m+   "rating 95 at 34, top 98: 98",[39m
+[31m+   "rating 96 at 34, top 98: 98",[39m
+[31m+   "rating 97 at 34, top 98: 98",[39m
+[31m+   "rating 98 at 34, top 98: 98",[39m
+[31m+   "rating 95 at 35, top 98: 98",[39m
+[31m+   "rating 96 at 35, top 98: 98",[39m
+[31m+   "rating 97 at 35, top 98: 98",[39m
+[31m+   "rating 98 at 35, top 98: 98",[39m
+[31m+   "rating 95 at 36, top 98: 98",[39m
+[31m+   "rating 96 at 36, top 98: 98",[39m
+[31m+   "rating 97 at 36, top 98: 98",[39m
+[31m+   "rating 98 at 36, top 98: 98",[39m
+[31m+   "rating 95 at 37, top 98: 98",[39m
+[31m+   "rating 96 at 37, top 98: 98",[39m
+[31m+   "rating 97 at 37, top 98: 98",[39m
+[31m+   "rating 98 at 37, top 98: 98",[39m
+[31m+   "rating 95 at 38, top 98: 98",[39m
+[31m+   "rating 96 at 38, top 98: 98",[39m
+[31m+   "rating 97 at 38, top 98: 98",[39m
+[31m+   "rating 98 at 38, top 98: 98",[39m
+[31m+   "rating 95 at 39, top 98: 98",[39m
+[31m+   "rating 96 at 39, top 98: 98",[39m
+[31m+   "rating 97 at 39, top 98: 98",[39m
+[31m+   "rating 98 at 39, top 98: 98",[39m
+[31m+   "rating 95 at 40, top 98: 98",[39m
+[31m+   "rating 96 at 40, top 98: 98",[39m
+[31m+   "rating 97 at 40, top 98: 98",[39m
+[31m+   "rating 98 at 40, top 98: 98",[39m
+[31m+   "rating 95 at 41, top 98: 98",[39m
+[31m+   "rating 96 at 41, top 98: 98",[39m
+[31m+   "rating 97 at 41, top 98: 98",[39m
+[31m+   "rating 98 at 41, top 98: 98",[39m
+[31m+   "rating 95 at 42, top 98: 98",[39m
+[31m+   "rating 96 at 42, top 98: 98",[39m
+[31m+   "rating 97 at 42, top 98: 98",[39m
+[31m+   "rating 98 at 42, top 98: 98",[39m
+[31m+   "rating 95 at 43, top 98: 98",[39m
+[31m+   "rating 96 at 43, top 98: 98",[39m
+[31m+   "rating 97 at 43, top 98: 98",[39m
+[31m+   "rating 98 at 43, top 98: 98",[39m
+[31m+   "rating 95 at 44, top 98: 98",[39m
+[31m+   "rating 96 at 44, top 98: 98",[39m
+[31m+   "rating 97 at 44, top 98: 98",[39m
+[31m+   "rating 98 at 44, top 98: 98",[39m
+[31m+   "rating 95 at 45, top 98: 98",[39m
+[31m+   "rating 96 at 45, top 98: 98",[39m
+[31m+   "rating 97 at 45, top 98: 98",[39m
+[31m+   "rating 98 at 45, top 98: 98",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m345:19[22m[39m
+    [90m343| [39m      }
+    [90m344| [39m    }
+    [90m345| [39m    [34mexpect[39m(wrong)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m346| [39m  })[33m;[39m
+    [90m347| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mlevelFrom: the age read run backwards, total[2m > [22mit inverts the read wherever no clamp bit, and the clamped cells are counted
+[31m[1mAssertionError[22m: expected [ …(244) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "level 96 at 14, top 96: read 94",[39m
+[31m+   "level 97 at 14, top 96: read 94",[39m
+[31m+   "level 98 at 14, top 96: read 94",[39m
+[31m+   "level 99 at 14, top 96: read 94",[39m
+[31m+   "level 96 at 15, top 96: read 94",[39m
+[31m+   "level 97 at 15, top 96: read 94",[39m
+[31m+   "level 98 at 15, top 96: read 94",[39m
+[31m+   "level 99 at 15, top 96: read 94",[39m
+[31m+   "level 96 at 16, top 96: read 94",[39m
+[31m+   "level 97 at 16, top 96: read 94",[39m
+[31m+   "level 98 at 16, top 96: read 94",[39m
+[31m+   "level 99 at 16, top 96: read 94",[39m
+[31m+   "level 96 at 17, top 96: read 94",[39m
+[31m+   "level 97 at 17, top 96: read 94",[39m
+[31m+   "level 98 at 17, top 96: read 94",[39m
+[31m+   "level 99 at 17, top 96: read 94",[39m
+[31m+   "level 96 at 18, top 96: read 94",[39m
+[31m+   "level 97 at 18, top 96: read 94",[39m
+[31m+   "level 98 at 18, top 96: read 94",[39m
+[31m+   "level 99 at 18, top 96: read 94",[39m
+[31m+   "level 96 at 19, top 96: read 94",[39m
+[31m+   "level 97 at 19, top 96: read 94",[39m
+[31m+   "level 98 at 19, top 96: read 94",[39m
+[31m+   "level 99 at 19, top 96: read 94",[39m
+[31m+   "level 96 at 20, top 96: read 94",[39m
+[31m+   "level 97 at 20, top 96: read 94",[39m
+[31m+   "level 98 at 20, top 96: read 94",[39m
+[31m+   "level 99 at 20, top 96: read 94",[39m
+[31m+   "level 96 at 21, top 96: read 94",[39m
+[31m+   "level 97 at 21, top 96: read 94",[39m
+[31m+   "level 98 at 21, top 96: read 94",[39m
+[31m+   "level 99 at 21, top 96: read 94",[39m
+[31m+   "level 96 at 22, top 96: read 94",[39m
+[31m+   "level 97 at 22, top 96: read 94",[39m
+[31m+   "level 98 at 22, top 96: read 94",[39m
+[31m+   "level 99 at 22, top 96: read 94",[39m
+[31m+   "level 96 at 23, top 96: read 94",[39m
+[31m+   "level 97 at 23, top 96: read 94",[39m
+[31m+   "level 98 at 23, top 96: read 94",[39m
+[31m+   "level 99 at 23, top 96: read 94",[39m
+[31m+   "level 95 at 24, top 96: read 94",[39m
+[31m+   "level 96 at 24, top 96: read 94",[39m
+[31m+   "level 97 at 24, top 96: read 94",[39m
+[31m+   "level 98 at 24, top 96: read 94",[39m
+[31m+   "level 99 at 24, top 96: read 94",[39m
+[31m+   "level 95 at 25, top 96: read 94",[39m
+[31m+   "level 96 at 25, top 96: read 94",[39m
+[31m+   "level 97 at 25, top 96: read 94",[39m
+[31m+   "level 98 at 25, top 96: read 94",[39m
+[31m+   "level 99 at 25, top 96: read 94",[39m
+[31m+   "level 95 at 26, top 96: read 94",[39m
+[31m+   "level 96 at 26, top 96: read 94",[39m
+[31m+   "level 97 at 26, top 96: read 94",[39m
+[31m+   "level 98 at 26, top 96: read 94",[39m
+[31m+   "level 99 at 26, top 96: read 94",[39m
+[31m+   "level 95 at 27, top 96: read 94",[39m
+[31m+   "level 96 at 27, top 96: read 94",[39m
+[31m+   "level 97 at 27, top 96: read 94",[39m
+[31m+   "level 98 at 27, top 96: read 94",[39m
+[31m+   "level 99 at 27, top 96: read 94",[39m
+[31m+   "level 95 at 28, top 96: read 94",[39m
+[31m+   "level 96 at 28, top 96: read 94",[39m
+[31m+   "level 97 at 28, top 96: read 94",[39m
+[31m+   "level 98 at 28, top 96: read 94",[39m
+[31m+   "level 99 at 28, top 96: read 94",[39m
+[31m+   "level 95 at 29, top 96: read 94",[39m
+[31m+   "level 96 at 29, top 96: read 94",[39m
+[31m+   "level 97 at 29, top 96: read 94",[39m
+[31m+   "level 98 at 29, top 96: read 94",[39m
+[31m+   "level 99 at 29, top 96: read 94",[39m
+[31m+   "level 94 at 30, top 96: read 94",[39m
+[31m+   "level 95 at 30, top 96: read 94",[39m
+[31m+   "level 96 at 30, top 96: read 94",[39m
+[31m+   "level 97 at 30, top 96: read 94",[39m
+[31m+   "level 98 at 30, top 96: read 94",[39m
+[31m+   "level 99 at 30, top 96: read 94",[39m
+[31m+   "level 93 at 31, top 96: read 94",[39m
+[31m+   "level 94 at 31, top 96: read 94",[39m
+[31m+   "level 95 at 31, top 96: read 94",[39m
+[31m+   "level 96 at 31, top 96: read 94",[39m
+[31m+   "level 97 at 31, top 96: read 94",[39m
+[31m+   "level 98 at 31, top 96: read 94",[39m
+[31m+   "level 99 at 31, top 96: read 94",[39m
+[31m+   "level 93 at 32, top 96: read 94",[39m
+[31m+   "level 94 at 32, top 96: read 94",[39m
+[31m+   "level 95 at 32, top 96: read 94",[39m
+[31m+   "level 96 at 32, top 96: read 94",[39m
+[31m+   "level 97 at 32, top 96: read 94",[39m
+[31m+   "level 98 at 32, top 96: read 94",[39m
+[31m+   "level 99 at 32, top 96: read 94",[39m
+[31m+   "level 92 at 33, top 96: read 94",[39m
+[31m+   "level 93 at 33, top 96: read 94",[39m
+[31m+   "level 94 at 33, top 96: read 94",[39m
+[31m+   "level 95 at 33, top 96: read 94",[39m
+[31m+   "level 96 at 33, top 96: read 94",[39m
+[31m+   "level 97 at 33, top 96: read 94",[39m
+[31m+   "level 98 at 33, top 96: read 94",[39m
+[31m+   "level 99 at 33, top 96: read 94",[39m
+[31m+   "level 91 at 34, top 96: read 94",[39m
+[31m+   "level 92 at 34, top 96: read 94",[39m
+[31m+   "level 93 at 34, top 96: read 94",[39m
+[31m+   "level 94 at 34, top 96: read 94",[39m
+[31m+   "level 95 at 34, top 96: read 94",[39m
+[31m+   "level 96 at 34, top 96: read 94",[39m
+[31m+   "level 97 at 34, top 96: read 94",[39m
+[31m+   "level 98 at 34, top 96: read 94",[39m
+[31m+   "level 99 at 34, top 96: read 94",[39m
+[31m+   "level 90 at 35, top 96: read 94",[39m
+[31m+   "level 91 at 35, top 96: read 94",[39m
+[31m+   "level 92 at 35, top 96: read 94",[39m
+[31m+   "level 93 at 35, top 96: read 94",[39m
+[31m+   "level 94 at 35, top 96: read 94",[39m
+[31m+   "level 95 at 35, top 96: read 94",[39m
+[31m+   "level 96 at 35, top 96: read 94",[39m
+[31m+   "level 97 at 35, top 96: read 94",[39m
+[31m+   "level 98 at 35, top 96: read 94",[39m
+[31m+   "level 99 at 35, top 96: read 94",[39m
+[31m+   "level 89 at 36, top 96: read 94",[39m
+[31m+   "level 90 at 36, top 96: read 94",[39m
+[31m+   "level 91 at 36, top 96: read 94",[39m
+[31m+   "level 92 at 36, top 96: read 94",[39m
+[31m+   "level 93 at 36, top 96: read 94",[39m
+[31m+   "level 94 at 36, top 96: read 94",[39m
+[31m+   "level 95 at 36, top 96: read 94",[39m
+[31m+   "level 96 at 36, top 96: read 94",[39m
+[31m+   "level 97 at 36, top 96: read 94",[39m
+[31m+   "level 98 at 36, top 96: read 94",[39m
+[31m+   "level 99 at 36, top 96: read 94",[39m
+[31m+   "level 88 at 37, top 96: read 94",[39m
+[31m+   "level 89 at 37, top 96: read 94",[39m
+[31m+   "level 90 at 37, top 96: read 94",[39m
+[31m+   "level 91 at 37, top 96: read 94",[39m
+[31m+   "level 92 at 37, top 96: read 94",[39m
+[31m+   "level 93 at 37, top 96: read 94",[39m
+[31m+   "level 94 at 37, top 96: read 94",[39m
+[31m+   "level 95 at 37, top 96: read 94",[39m
+[31m+   "level 96 at 37, top 96: read 94",[39m
+[31m+   "level 97 at 37, top 96: read 94",[39m
+[31m+   "level 98 at 37, top 96: read 94",[39m
+[31m+   "level 99 at 37, top 96: read 94",[39m
+[31m+   "level 87 at 38, top 96: read 94",[39m
+[31m+   "level 88 at 38, top 96: read 94",[39m
+[31m+   "level 89 at 38, top 96: read 94",[39m
+[31m+   "level 90 at 38, top 96: read 94",[39m
+[31m+   "level 91 at 38, top 96: read 94",[39m
+[31m+   "level 92 at 38, top 96: read 94",[39m
+[31m+   "level 93 at 38, top 96: read 94",[39m
+[31m+   "level 94 at 38, top 96: read 94",[39m
+[31m+   "level 95 at 38, top 96: read 94",[39m
+[31m+   "level 96 at 38, top 96: read 94",[39m
+[31m+   "level 97 at 38, top 96: read 94",[39m
+[31m+   "level 98 at 38, top 96: read 94",[39m
+[31m+   "level 99 at 38, top 96: read 94",[39m
+[31m+   "level 87 at 39, top 96: read 94",[39m
+[31m+   "level 88 at 39, top 96: read 94",[39m
+[31m+   "level 89 at 39, top 96: read 94",[39m
+[31m+   "level 90 at 39, top 96: read 94",[39m
+[31m+   "level 91 at 39, top 96: read 94",[39m
+[31m+   "level 92 at 39, top 96: read 94",[39m
+[31m+   "level 93 at 39, top 96: read 94",[39m
+[31m+   "level 94 at 39, top 96: read 94",[39m
+[31m+   "level 95 at 39, top 96: read 94",[39m
+[31m+   "level 96 at 39, top 96: read 94",[39m
+[31m+   "level 97 at 39, top 96: read 94",[39m
+[31m+   "level 98 at 39, top 96: read 94",[39m
+[31m+   "level 99 at 39, top 96: read 94",[39m
+[31m+   "level 87 at 40, top 96: read 94",[39m
+[31m+   "level 88 at 40, top 96: read 94",[39m
+[31m+   "level 89 at 40, top 96: read 94",[39m
+[31m+   "level 90 at 40, top 96: read 94",[39m
+[31m+   "level 91 at 40, top 96: read 94",[39m
+[31m+   "level 92 at 40, top 96: read 94",[39m
+[31m+   "level 93 at 40, top 96: read 94",[39m
+[31m+   "level 94 at 40, top 96: read 94",[39m
+[31m+   "level 95 at 40, top 96: read 94",[39m
+[31m+   "level 96 at 40, top 96: read 94",[39m
+[31m+   "level 97 at 40, top 96: read 94",[39m
+[31m+   "level 98 at 40, top 96: read 94",[39m
+[31m+   "level 99 at 40, top 96: read 94",[39m
+[31m+   "level 87 at 41, top 96: read 94",[39m
+[31m+   "level 88 at 41, top 96: read 94",[39m
+[31m+   "level 89 at 41, top 96: read 94",[39m
+[31m+   "level 90 at 41, top 96: read 94",[39m
+[31m+   "level 91 at 41, top 96: read 94",[39m
+[31m+   "level 92 at 41, top 96: read 94",[39m
+[31m+   "level 93 at 41, top 96: read 94",[39m
+[31m+   "level 94 at 41, top 96: read 94",[39m
+[31m+   "level 95 at 41, top 96: read 94",[39m
+[31m+   "level 96 at 41, top 96: read 94",[39m
+[31m+   "level 97 at 41, top 96: read 94",[39m
+[31m+   "level 98 at 41, top 96: read 94",[39m
+[31m+   "level 99 at 41, top 96: read 94",[39m
+[31m+   "level 87 at 42, top 96: read 94",[39m
+[31m+   "level 88 at 42, top 96: read 94",[39m
+[31m+   "level 89 at 42, top 96: read 94",[39m
+[31m+   "level 90 at 42, top 96: read 94",[39m
+[31m+   "level 91 at 42, top 96: read 94",[39m
+[31m+   "level 92 at 42, top 96: read 94",[39m
+[31m+   "level 93 at 42, top 96: read 94",[39m
+[31m+   "level 94 at 42, top 96: read 94",[39m
+[31m+   "level 95 at 42, top 96: read 94",[39m
+[31m+   "level 96 at 42, top 96: read 94",[39m
+[31m+   "level 97 at 42, top 96: read 94",[39m
+[31m+   "level 98 at 42, top 96: read 94",[39m
+[31m+   "level 99 at 42, top 96: read 94",[39m
+[31m+   "level 87 at 43, top 96: read 94",[39m
+[31m+   "level 88 at 43, top 96: read 94",[39m
+[31m+   "level 89 at 43, top 96: read 94",[39m
+[31m+   "level 90 at 43, top 96: read 94",[39m
+[31m+   "level 91 at 43, top 96: read 94",[39m
+[31m+   "level 92 at 43, top 96: read 94",[39m
+[31m+   "level 93 at 43, top 96: read 94",[39m
+[31m+   "level 94 at 43, top 96: read 94",[39m
+[31m+   "level 95 at 43, top 96: read 94",[39m
+[31m+   "level 96 at 43, top 96: read 94",[39m
+[31m+   "level 97 at 43, top 96: read 94",[39m
+[31m+   "level 98 at 43, top 96: read 94",[39m
+[31m+   "level 99 at 43, top 96: read 94",[39m
+[31m+   "level 87 at 44, top 96: read 94",[39m
+[31m+   "level 88 at 44, top 96: read 94",[39m
+[31m+   "level 89 at 44, top 96: read 94",[39m
+[31m+   "level 90 at 44, top 96: read 94",[39m
+[31m+   "level 91 at 44, top 96: read 94",[39m
+[31m+   "level 92 at 44, top 96: read 94",[39m
+[31m+   "level 93 at 44, top 96: read 94",[39m
+[31m+   "level 94 at 44, top 96: read 94",[39m
+[31m+   "level 95 at 44, top 96: read 94",[39m
+[31m+   "level 96 at 44, top 96: read 94",[39m
+[31m+   "level 97 at 44, top 96: read 94",[39m
+[31m+   "level 98 at 44, top 96: read 94",[39m
+[31m+   "level 99 at 44, top 96: read 94",[39m
+[31m+   "level 87 at 45, top 96: read 94",[39m
+[31m+   "level 88 at 45, top 96: read 94",[39m
+[31m+   "level 89 at 45, top 96: read 94",[39m
+[31m+   "level 90 at 45, top 96: read 94",[39m
+[31m+   "level 91 at 45, top 96: read 94",[39m
+[31m+   "level 92 at 45, top 96: read 94",[39m
+[31m+   "level 93 at 45, top 96: read 94",[39m
+[31m+   "level 94 at 45, top 96: read 94",[39m
+[31m+   "level 95 at 45, top 96: read 94",[39m
+[31m+   "level 96 at 45, top 96: read 94",[39m
+[31m+   "level 97 at 45, top 96: read 94",[39m
+[31m+   "level 98 at 45, top 96: read 94",[39m
+[31m+   "level 99 at 45, top 96: read 94",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m396:25[22m[39m
+    [90m394| [39m      [34mexpect[39m(notTheSameRead)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m395| [39m      [34mexpect[39m(notTheLowest)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m396| [39m      [34mexpect[39m(offALimit)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                        [31m^[39m
+    [90m397| [39m      [34mexpect[39m(clamped)[33m.[39m[34mtoBe[39m([34m45[39m [33m+[39m [34m30[39m [33m+[39m [34m64[39m [33m+[39m ([34m99[39m [33m-[39m top) [33m*[39m [34m32[39m)[33m;[39m
+    [90m398| [39m      counts[top] [33m=[39m clamped[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mone order in every world: the stretch first, then the age points[2m > [22mreadInWorld stretches, then reads the age on the stretched scale and its own top
+[31m[1mAssertionError[22m: expected { level: 97, age: 23, rating: 94 } to deeply equal { level: 97, age: 23, rating: 97 }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "age": 23,[22m
+[2m    "level": 97,[22m
+[32m-   "rating": 97,[39m
+[31m+   "rating": 94,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m454:54[22m[39m
+    [90m452| [39m    /* 2010 Messi: value rating 90, 22 in the file. The stretch takes …
+    [90m453| [39m       a man on the top gives nothing back. */[39m
+    [90m454| [39m    expect(readInWorld(90, 22, eraWorld('era2010'))).toEqual({ level: …
+    [90m   | [39m                                                     [31m^[39m
+    [90m455| [39m    [90m/* 2026 has no stretch and its files will hold the August age */[39m
+    [90m456| [39m    expect(readInWorld(80, 35)).toEqual({ level: 80, age: 35, rating: …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mone order in every world: the stretch first, then the age points[2m > [22mthe 29 men of the brief table, row for row, from the files main ships
+[31m[1mAssertionError[22m: expected [ …(8) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "era2005 Ronaldinho: the library gives 94, the table says 96",[39m
+[31m+   "era2005 Thierry Henry: the library gives 94, the table says 96",[39m
+[31m+   "era2010 Lionel Messi: the library gives 94, the table says 97",[39m
+[31m+   "era2010 Cristiano Ronaldo: the library gives 94, the table says 97",[39m
+[31m+   "era2010 Xavi: the library gives 94, the table says 95",[39m
+[31m+   "era2015 Cristiano Ronaldo: the library gives 94, the table says 98",[39m
+[31m+   "era2015 Lionel Messi: the library gives 94, the table says 98",[39m
+[31m+   "era2015 Neymar: the library gives 94, the table says 95",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m493:19[22m[39m
+    [90m491| [39m      if (got.rating !== shown) wrong.push(`${world} ${name}: the libr…
+    [90m492| [39m    }
+    [90m493| [39m    [34mexpect[39m(wrong)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m494| [39m    [34mexpect[39m(checked)[33m.[39m[34mtoBe[39m([34m29[39m)[33m;[39m
+    [90m495| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mone order in every world: the stretch first, then the age points[2m > [22mover every row of the four past seasons: never more than six down or eight up, nobody past the top
+[31m[1mAssertionError[22m: expected [ 'era2005', [] ] to deeply equal [ 'era2005', …(1) ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    "era2005",[22m
+[32m-   [[39m
+[32m-     "Ronaldinho",[39m
+[32m-     "Thierry Henry",[39m
+[32m-   ],[39m
+[31m+   [],[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m519:38[22m[39m
+    [90m517| [39m      [34mexpect[39m([era[33m,[39m pastTheTop])[33m.[39m[34mtoEqual[39m([era[33m,[39m []])[33m;[39m
+    [90m518| [39m      [34mexpect[39m([era[33m,[39m low[33m,[39m high])[33m.[39m[34mtoEqual[39m([era[33m,[39m [33m-[39m[34m6[39m[33m,[39m [34m8[39m])[33m;[39m
+    [90m519| [39m      [34mexpect[39m([era[33m,[39m onTheTop[33m.[39m[34msort[39m()])[33m.[39m[34mtoEqual[39m([era[33m,[39m world[33m.[39monTheTop])[33m;[39m
+    [90m   | [39m                                     [31m^[39m
+    [90m520| [39m      /* These two restate the era file itself (how many men it holds …
+    [90m521| [39m         moves). A re-bake of a past season moves them for an honest r…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/9]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mthe typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mreads a man through its types the way the engine will
+[31m[1mAssertionError[22m: expected { level: 97, age: 23, rating: 94 } to deeply equal { level: 97, age: 23, rating: 97 }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "age": 23,[22m
+[2m    "level": 97,[22m
+[32m-   "rating": 97,[39m
+[31m+   "rating": 94,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m993:19[22m[39m
+    [90m991| [39m    const season2010: AgeWorld = { stretch: r => eraUpliftRating('era2…
+    [90m992| [39m    [35mconst[39m messi[33m:[39m [33mAgeReading[39m [33m=[39m door[33m.[39m[34mreadInWorld[39m([34m90[39m[33m,[39m [34m22[39m[33m,[39m season2010)[33m;[39m
+    [90m993| [39m    [34mexpect[39m(messi)[33m.[39m[34mtoEqual[39m({ level[33m:[39m [34m97[39m[33m,[39m age[33m:[39m [34m23[39m[33m,[39m rating[33m:[39m [34m97[39m })[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m994| [39m    [35mconst[39m vanDijk[33m:[39m number [33m=[39m door[33m.[39m[34mageRead[39m([34m80[39m[33m,[39m [34m35[39m)[33m;[39m
+    [90m995| [39m    [35mconst[39m kayodeLevel[33m:[39m number [33m=[39m door[33m.[39m[34mlevelFrom[39m([34m82[39m[33m,[39m [34m22[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/9]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m9 failed[39m[22m[2m | [22m[1m[32m42 passed[39m[22m[90m (51)[39m
+[2m   Start at [22m 09:15:36
+[2m   Duration [22m 2.03s[2m (transform 852ms, setup 48ms, collect 1.03s, tests 315ms, environment 264ms, prepare 148ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager rating%3A the level plus points for age%2C on the top of the world > every age from 14 to 45 is the table typed out by hand%2C at tops 94%2C 96%2C 97 and 98,line=183,column=19::AssertionError: expected [ …(181) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "top 96, level 91 at 34: wanted 95, got 94",%0A+   "top 96, level 91 at 35: wanted 96, got 94",%0A+   "top 96, level 91 at 36: wanted 96, got 94",%0A+   "top 96, level 91 at 37: wanted 96, got 94",%0A+   "top 96, level 91 at 38: wanted 96, got 94",%0A+   "top 96, level 91 at 39: wanted 96, got 94",%0A+   "top 96, level 91 at 40: wanted 96, got 94",%0A+   "top 96, level 91 at 41: wanted 96, got 94",%0A+   "top 96, level 91 at 42: wanted 96, got 94",%0A+   "top 96, level 91 at 43: wanted 96, got 94",%0A+   "top 96, level 91 at 44: wanted 96, got 94",%0A+   "top 96, level 91 at 45: wanted 96, got 94",%0A+   "top 96, level 96 at 14: wanted 96, got 94",%0A+   "top 96, level 96 at 15: wanted 96, got 94",%0A+   "top 96, level 96 at 16: wanted 96, got 94",%0A+   "top 96, level 96 at 17: wanted 96, got 94",%0A+   "top 96, level 96 at 18: wanted 96, got 94",%0A+   "top 96, level 96 at 19: wanted 96, got 94",%0A+   "top 96, level 96 at 20: wanted 96, got 94",%0A+   "top 96, level 96 at 21: wanted 96, got 94",%0A+   "top 96, level 96 at 22: wanted 96, got 94",%0A+   "top 96, level 96 at 23: wanted 96, got 94",%0A+   "top 96, level 96 at 24: wanted 96, got 94",%0A+   "top 96, level 96 at 25: wanted 96, got 94",%0A+   "top 96, level 96 at 26: wanted 96, got 94",%0A+   "top 96, level 96 at 27: wanted 96, got 94",%0A+   "top 96, level 96 at 28: wanted 96, got 94",%0A+   "top 96, level 96 at 29: wanted 96, got 94",%0A+   "top 96, level 96 at 30: wanted 96, got 94",%0A+   "top 96, level 96 at 31: wanted 96, got 94",%0A+   "top 96, level 96 at 32: wanted 96, got 94",%0A+   "top 96, level 96 at 33: wanted 96, got 94",%0A+   "top 96, level 96 at 34: wanted 96, got 94",%0A+   "top 96, level 96 at 35: wanted 96, got 94",%0A+   "top 96, level 96 at 36: wanted 96, got 94",%0A+   "top 96, level 96 at 37: wanted 96, got 94",%0A+   "top 96, level 96 at 38: wanted 96, got 94",%0A+   "top 96, level 96 at 39: wanted 96, got 94",%0A+   "top 96, level 96 at 40: wanted 96, got 94",%0A+   "top 96, level 96 at 41: wanted 96, got 94",%0A+   "top 96, level 96 at 42: wanted 96, got 94",%0A+   "top 96, level 96 at 43: wanted 96, got 94",%0A+   "top 96, level 96 at 44: wanted 96, got 94",%0A+   "top 96, level 96 at 45: wanted 96, got 94",%0A+   "top 97, level 92 at 33: wanted 95, got 94",%0A+   "top 97, level 92 at 34: wanted 96, got 94",%0A+   "top 97, level 92 at 35: wanted 97, got 94",%0A+   "top 97, level 92 at 36: wanted 97, got 94",%0A+   "top 97, level 92 at 37: wanted 97, got 94",%0A+   "top 97, level 92 at 38: wanted 97, got 94",%0A+   "top 97, level 92 at 39: wanted 97, got 94",%0A+   "top 97, level 92 at 40: wanted 97, got 94",%0A+   "top 97, level 92 at 41: wanted 97, got 94",%0A+   "top 97, level 92 at 42: wanted 97, got 94",%0A+   "top 97, level 92 at 43: wanted 97, got 94",%0A+   "top 97, level 92 at 44: wanted 97, got 94",%0A+   "top 97, level 92 at 45: wanted 97, got 94",%0A+   "top 97, level 94 at 30: wanted 95, got 94",%0A+   "top 97, level 94 at 31: wanted 96, got 94",%0A+   "top 97, level 94 at 32: wanted 96, got 94",%0A+   "top 97, level 94 at 33: wanted 97, got 94",%0A+   "top 97, level 94 at 34: wanted 97, got 94",%0A+   "top 97, level 94 at 35: wanted 97, got 94",%0A+   "top 97, level 94 at 36: wanted 97, got 94",%0A+   "top 97, level 94 at 37: wanted 97, got 94",%0A+   "top 97, level 94 at 38: wanted 97, got 94",%0A+   "top 97, level 94 at 39: wanted 97, got 94",%0A+   "top 97, level 94 at 40: wanted 97, got 94",%0A+   "top 97, level 94 at 41: wanted 97, got 94",%0A+   "top 97, level 94 at 42: wanted 97, got 94",%0A+   "top 97, level 94 at 43: wanted 97, got 94",%0A+   "top 97, level 94 at 44: wanted 97, got 94",%0A+   "top 97, level 94 at 45: wanted 97, got 94",%0A+   "top 97, level 97 at 14: wanted 97, got 94",%0A+   "top 97, level 97 at 15: wanted 97, got 94",%0A+   "top 97, level 97 at 16: wanted 97, got 94",%0A+   "top 97, level 97 at 17: wanted 97, got 94",%0A+   "top 97, level 97 at 18: wanted 97, got 94",%0A+   "top 97, level 97 at 19: wanted 97, got 94",%0A+   "top 97, level 97 at 20: wanted 97, got 94",%0A+   "top 97, level 97 at 21: wanted 97, got 94",%0A+   "top 97, level 97 at 22: wanted 97, got 94",%0A+   "top 97, level 97 at 23: wanted 97, got 94",%0A+   "top 97, level 97 at 24: wanted 97, got 94",%0A+   "top 97, level 97 at 25: wanted 97, got 94",%0A+   "top 97, level 97 at 26: wanted 97, got 94",%0A+   "top 97, level 97 at 27: wanted 97, got 94",%0A+   "top 97, level 97 at 28: wanted 97, got 94",%0A+   "top 97, level 97 at 29: wanted 97, got 94",%0A+   "top 97, level 97 at 30: wanted 97, got 94",%0A+   "top 97, level 97 at 31: wanted 97, got 94",%0A+   "top 97, level 97 at 32: wanted 97, got 94",%0A+   "top 97, level 97 at 33: wanted 97, got 94",%0A+   "top 97, level 97 at 34: wanted 97, got 94",%0A+   "top 97, level 97 at 35: wanted 97, got 94",%0A+   "top 97, level 97 at 36: wanted 97, got 94",%0A+   "top 97, level 97 at 37: wanted 97, got 94",%0A+   "top 97, level 97 at 38: wanted 97, got 94",%0A+   "top 97, level 97 at 39: wanted 97, got 94",%0A+   "top 97, level 97 at 40: wanted 97, got 94",%0A+   "top 97, level 97 at 41: wanted 97, got 94",%0A+   "top 97, level 97 at 42: wanted 97, got 94",%0A+   "top 97, level 97 at 43: wanted 97, got 94",%0A+   "top 97, level 97 at 44: wanted 97, got 94",%0A+   "top 97, level 97 at 45: wanted 97, got 94",%0A+   "top 98, level 91 at 34: wanted 95, got 94",%0A+   "top 98, level 91 at 35: wanted 96, got 94",%0A+   "top 98, level 91 at 36: wanted 97, got 94",%0A+   "top 98, level 91 at 37: wanted 98, got 94",%0A+   "top 98, level 91 at 38: wanted 98, got 94",%0A+   "top 98, level 91 at 39: wanted 98, got 94",%0A+   "top 98, level 91 at 40: wanted 98, got 94",%0A+   "top 98, level 91 at 41: wanted 98, got 94",%0A+   "top 98, level 91 at 42: wanted 98, got 94",%0A+   "top 98, level 91 at 43: wanted 98, got 94",%0A+   "top 98, level 91 at 44: wanted 98, got 94",%0A+   "top 98, level 91 at 45: wanted 98, got 94",%0A+   "top 98, level 96 at 14: wanted 95, got 94",%0A+   "top 98, level 96 at 15: wanted 95, got 94",%0A+   "top 98, level 96 at 16: wanted 95, got 94",%0A+   "top 98, level 96 at 17: wanted 95, got 94",%0A+   "top 98, level 96 at 18: wanted 95, got 94",%0A+   "top 98, level 96 at 19: wanted 95, got 94",%0A+   "top 98, level 96 at 20: wanted 95, got 94",%0A+   "top 98, level 96 at 21: wanted 95, got 94",%0A+   "top 98, level 96 at 22: wanted 95, got 94",%0A+   "top 98, level 96 at 23: wanted 95, got 94",%0A+   "top 98, level 96 at 24: wanted 96, got 94",%0A+   "top 98, level 96 at 25: wanted 96, got 94",%0A+   "top 98, level 96 at 26: wanted 96, got 94",%0A+   "top 98, level 96 at 27: wanted 96, got 94",%0A+   "top 98, level 96 at 28: wanted 96, got 94",%0A+   "top 98, level 96 at 29: wanted 96, got 94",%0A+   "top 98, level 96 at 30: wanted 97, got 94",%0A+   "top 98, level 96 at 31: wanted 98, got 94",%0A+   "top 98, level 96 at 32: wanted 98, got 94",%0A+   "top 98, level 96 at 33: wanted 98, got 94",%0A+   "top 98, level 96 at 34: wanted 98, got 94",%0A+   "top 98, level 96 at 35: wanted 98, got 94",%0A+   "top 98, level 96 at 36: wanted 98, got 94",%0A+   "top 98, level 96 at 37: wanted 98, got 94",%0A+   "top 98, level 96 at 38: wanted 98, got 94",%0A+   "top 98, level 96 at 39: wanted 98, got 94",%0A+   "top 98, level 96 at 40: wanted 98, got 94",%0A+   "top 98, level 96 at 41: wanted 98, got 94",%0A+   "top 98, level 96 at 42: wanted 98, got 94",%0A+   "top 98, level 96 at 43: wanted 98, got 94",%0A+   "top 98, level 96 at 44: wanted 98, got 94",%0A+   "top 98, level 96 at 45: wanted 98, got 94",%0A+   "top 98, level 98 at 14: wanted 98, got 94",%0A+   "top 98, level 98 at 15: wanted 98, got 94",%0A+   "top 98, level 98 at 16: wanted 98, got 94",%0A+   "top 98, level 98 at 17: wanted 98, got 94",%0A+   "top 98, level 98 at 18: wanted 98, got 94",%0A+   "top 98, level 98 at 19: wanted 98, got 94",%0A+   "top 98, level 98 at 20: wanted 98, got 94",%0A+   "top 98, level 98 at 21: wanted 98, got 94",%0A+   "top 98, level 98 at 22: wanted 98, got 94",%0A+   "top 98, level 98 at 23: wanted 98, got 94",%0A+   "top 98, level 98 at 24: wanted 98, got 94",%0A+   "top 98, level 98 at 25: wanted 98, got 94",%0A+   "top 98, level 98 at 26: wanted 98, got 94",%0A+   "top 98, level 98 at 27: wanted 98, got 94",%0A+   "top 98, level 98 at 28: wanted 98, got 94",%0A+   "top 98, level 98 at 29: wanted 98, got 94",%0A+   "top 98, level 98 at 30: wanted 98, got 94",%0A+   "top 98, level 98 at 31: wanted 98, got 94",%0A+   "top 98, level 98 at 32: wanted 98, got 94",%0A+   "top 98, level 98 at 33: wanted 98, got 94",%0A+   "top 98, level 98 at 34: wanted 98, got 94",%0A+   "top 98, level 98 at 35: wanted 98, got 94",%0A+   "top 98, level 98 at 36: wanted 98, got 94",%0A+   "top 98, level 98 at 37: wanted 98, got 94",%0A+   "top 98, level 98 at 38: wanted 98, got 94",%0A+   "top 98, level 98 at 39: wanted 98, got 94",%0A+   "top 98, level 98 at 40: wanted 98, got 94",%0A+   "top 98, level 98 at 41: wanted 98, got 94",%0A+   "top 98, level 98 at 42: wanted 98, got 94",%0A+   "top 98, level 98 at 43: wanted 98, got 94",%0A+   "top 98, level 98 at 44: wanted 98, got 94",%0A+   "top 98, level 98 at 45: wanted 98, got 94",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:183:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager rating%3A the level plus points for age%2C on the top of the world > the half distance limit reads the top of the man own world%2C never the constant 94,line=209,column=33::AssertionError: expected 94 to be 97 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 97%0A+ 94%0A%0A ❯ src/test/cmValueCurve.test.ts:209:33%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > Club Manager rating%3A the level plus points for age%2C on the top of the world > the upper clamp reads the same top%3A nobody passes the best of his world for being old,line=228,column=33::AssertionError: expected 94 to be 98 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 98%0A+ 94%0A%0A ❯ src/test/cmValueCurve.test.ts:228:33%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > levelFrom%3A the age read run backwards%2C total > it is the smallest level whose read is at least the rating%2C and the top when there is none,line=345,column=19::AssertionError: expected [ …(288) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "rating 95 at 14, top 96: 96",%0A+   "rating 96 at 14, top 96: 96",%0A+   "rating 95 at 15, top 96: 96",%0A+   "rating 96 at 15, top 96: 96",%0A+   "rating 95 at 16, top 96: 96",%0A+   "rating 96 at 16, top 96: 96",%0A+   "rating 95 at 17, top 96: 96",%0A+   "rating 96 at 17, top 96: 96",%0A+   "rating 95 at 18, top 96: 96",%0A+   "rating 96 at 18, top 96: 96",%0A+   "rating 95 at 19, top 96: 96",%0A+   "rating 96 at 19, top 96: 96",%0A+   "rating 95 at 20, top 96: 96",%0A+   "rating 96 at 20, top 96: 96",%0A+   "rating 95 at 21, top 96: 96",%0A+   "rating 96 at 21, top 96: 96",%0A+   "rating 95 at 22, top 96: 96",%0A+   "rating 96 at 22, top 96: 96",%0A+   "rating 95 at 23, top 96: 96",%0A+   "rating 96 at 23, top 96: 96",%0A+   "rating 95 at 24, top 96: 96",%0A+   "rating 96 at 24, top 96: 96",%0A+   "rating 95 at 25, top 96: 96",%0A+   "rating 96 at 25, top 96: 96",%0A+   "rating 95 at 26, top 96: 96",%0A+   "rating 96 at 26, top 96: 96",%0A+   "rating 95 at 27, top 96: 96",%0A+   "rating 96 at 27, top 96: 96",%0A+   "rating 95 at 28, top 96: 96",%0A+   "rating 96 at 28, top 96: 96",%0A+   "rating 95 at 29, top 96: 96",%0A+   "rating 96 at 29, top 96: 96",%0A+   "rating 95 at 30, top 96: 96",%0A+   "rating 96 at 30, top 96: 96",%0A+   "rating 95 at 31, top 96: 96",%0A+   "rating 96 at 31, top 96: 96",%0A+   "rating 95 at 32, top 96: 96",%0A+   "rating 96 at 32, top 96: 96",%0A+   "rating 95 at 33, top 96: 96",%0A+   "rating 96 at 33, top 96: 96",%0A+   "rating 95 at 34, top 96: 96",%0A+   "rating 96 at 34, top 96: 96",%0A+   "rating 95 at 35, top 96: 96",%0A+   "rating 96 at 35, top 96: 96",%0A+   "rating 95 at 36, top 96: 96",%0A+   "rating 96 at 36, top 96: 96",%0A+   "rating 95 at 37, top 96: 96",%0A+   "rating 96 at 37, top 96: 96",%0A+   "rating 95 at 38, top 96: 96",%0A+   "rating 96 at 38, top 96: 96",%0A+   "rating 95 at 39, top 96: 96",%0A+   "rating 96 at 39, top 96: 96",%0A+   "rating 95 at 40, top 96: 96",%0A+   "rating 96 at 40, top 96: 96",%0A+   "rating 95 at 41, top 96: 96",%0A+   "rating 96 at 41, top 96: 96",%0A+   "rating 95 at 42, top 96: 96",%0A+   "rating 96 at 42, top 96: 96",%0A+   "rating 95 at 43, top 96: 96",%0A+   "rating 96 at 43, top 96: 96",%0A+   "rating 95 at 44, top 96: 96",%0A+   "rating 96 at 44, top 96: 96",%0A+   "rating 95 at 45, top 96: 96",%0A+   "rating 96 at 45, top 96: 96",%0A+   "rating 95 at 14, top 97: 97",%0A+   "rating 96 at 14, top 97: 97",%0A+   "rating 97 at 14, top 97: 97",%0A+   "rating 95 at 15, top 97: 97",%0A+   "rating 96 at 15, top 97: 97",%0A+   "rating 97 at 15, top 97: 97",%0A+   "rating 95 at 16, top 97: 97",%0A+   "rating 96 at 16, top 97: 97",%0A+   "rating 97 at 16, top 97: 97",%0A+   "rating 95 at 17, top 97: 97",%0A+   "rating 96 at 17, top 97: 97",%0A+   "rating 97 at 17, top 97: 97",%0A+   "rating 95 at 18, top 97: 97",%0A+   "rating 96 at 18, top 97: 97",%0A+   "rating 97 at 18, top 97: 97",%0A+   "rating 95 at 19, top 97: 97",%0A+   "rating 96 at 19, top 97: 97",%0A+   "rating 97 at 19, top 97: 97",%0A+   "rating 95 at 20, top 97: 97",%0A+   "rating 96 at 20, top 97: 97",%0A+   "rating 97 at 20, top 97: 97",%0A+   "rating 95 at 21, top 97: 97",%0A+   "rating 96 at 21, top 97: 97",%0A+   "rating 97 at 21, top 97: 97",%0A+   "rating 95 at 22, top 97: 97",%0A+   "rating 96 at 22, top 97: 97",%0A+   "rating 97 at 22, top 97: 97",%0A+   "rating 95 at 23, top 97: 97",%0A+   "rating 96 at 23, top 97: 97",%0A+   "rating 97 at 23, top 97: 97",%0A+   "rating 95 at 24, top 97: 97",%0A+   "rating 96 at 24, top 97: 97",%0A+   "rating 97 at 24, top 97: 97",%0A+   "rating 95 at 25, top 97: 97",%0A+   "rating 96 at 25, top 97: 97",%0A+   "rating 97 at 25, top 97: 97",%0A+   "rating 95 at 26, top 97: 97",%0A+   "rating 96 at 26, top 97: 97",%0A+   "rating 97 at 26, top 97: 97",%0A+   "rating 95 at 27, top 97: 97",%0A+   "rating 96 at 27, top 97: 97",%0A+   "rating 97 at 27, top 97: 97",%0A+   "rating 95 at 28, top 97: 97",%0A+   "rating 96 at 28, top 97: 97",%0A+   "rating 97 at 28, top 97: 97",%0A+   "rating 95 at 29, top 97: 97",%0A+   "rating 96 at 29, top 97: 97",%0A+   "rating 97 at 29, top 97: 97",%0A+   "rating 95 at 30, top 97: 97",%0A+   "rating 96 at 30, top 97: 97",%0A+   "rating 97 at 30, top 97: 97",%0A+   "rating 95 at 31, top 97: 97",%0A+   "rating 96 at 31, top 97: 97",%0A+   "rating 97 at 31, top 97: 97",%0A+   "rating 95 at 32, top 97: 97",%0A+   "rating 96 at 32, top 97: 97",%0A+   "rating 97 at 32, top 97: 97",%0A+   "rating 95 at 33, top 97: 97",%0A+   "rating 96 at 33, top 97: 97",%0A+   "rating 97 at 33, top 97: 97",%0A+   "rating 95 at 34, top 97: 97",%0A+   "rating 96 at 34, top 97: 97",%0A+   "rating 97 at 34, top 97: 97",%0A+   "rating 95 at 35, top 97: 97",%0A+   "rating 96 at 35, top 97: 97",%0A+   "rating 97 at 35, top 97: 97",%0A+   "rating 95 at 36, top 97: 97",%0A+   "rating 96 at 36, top 97: 97",%0A+   "rating 97 at 36, top 97: 97",%0A+   "rating 95 at 37, top 97: 97",%0A+   "rating 96 at 37, top 97: 97",%0A+   "rating 97 at 37, top 97: 97",%0A+   "rating 95 at 38, top 97: 97",%0A+   "rating 96 at 38, top 97: 97",%0A+   "rating 97 at 38, top 97: 97",%0A+   "rating 95 at 39, top 97: 97",%0A+   "rating 96 at 39, top 97: 97",%0A+   "rating 97 at 39, top 97: 97",%0A+   "rating 95 at 40, top 97: 97",%0A+   "rating 96 at 40, top 97: 97",%0A+   "rating 97 at 40, top 97: 97",%0A+   "rating 95 at 41, top 97: 97",%0A+   "rating 96 at 41, top 97: 97",%0A+   "rating 97 at 41, top 97: 97",%0A+   "rating 95 at 42, top 97: 97",%0A+   "rating 96 at 42, top 97: 97",%0A+   "rating 97 at 42, top 97: 97",%0A+   "rating 95 at 43, top 97: 97",%0A+   "rating 96 at 43, top 97: 97",%0A+   "rating 97 at 43, top 97: 97",%0A+   "rating 95 at 44, top 97: 97",%0A+   "rating 96 at 44, top 97: 97",%0A+   "rating 97 at 44, top 97: 97",%0A+   "rating 95 at 45, top 97: 97",%0A+   "rating 96 at 45, top 97: 97",%0A+   "rating 97 at 45, top 97: 97",%0A+   "rating 95 at 14, top 98: 98",%0A+   "rating 96 at 14, top 98: 98",%0A+   "rating 97 at 14, top 98: 98",%0A+   "rating 98 at 14, top 98: 98",%0A+   "rating 95 at 15, top 98: 98",%0A+   "rating 96 at 15, top 98: 98",%0A+   "rating 97 at 15, top 98: 98",%0A+   "rating 98 at 15, top 98: 98",%0A+   "rating 95 at 16, top 98: 98",%0A+   "rating 96 at 16, top 98: 98",%0A+   "rating 97 at 16, top 98: 98",%0A+   "rating 98 at 16, top 98: 98",%0A+   "rating 95 at 17, top 98: 98",%0A+   "rating 96 at 17, top 98: 98",%0A+   "rating 97 at 17, top 98: 98",%0A+   "rating 98 at 17, top 98: 98",%0A+   "rating 95 at 18, top 98: 98",%0A+   "rating 96 at 18, top 98: 98",%0A+   "rating 97 at 18, top 98: 98",%0A+   "rating 98 at 18, top 98: 98",%0A+   "rating 95 at 19, top 98: 98",%0A+   "rating 96 at 19, top 98: 98",%0A+   "rating 97 at 19, top 98: 98",%0A+   "rating 98 at 19, top 98: 98",%0A+   "rating 95 at 20, top 98: 98",%0A+   "rating 96 at 20, top 98: 98",%0A+   "rating 97 at 20, top 98: 98",%0A+   "rating 98 at 20, top 98: 98",%0A+   "rating 95 at 21, top 98: 98",%0A+   "rating 96 at 21, top 98: 98",%0A+   "rating 97 at 21, top 98: 98",%0A+   "rating 98 at 21, top 98: 98",%0A+   "rating 95 at 22, top 98: 98",%0A+   "rating 96 at 22, top 98: 98",%0A+   "rating 97 at 22, top 98: 98",%0A+   "rating 98 at 22, top 98: 98",%0A+   "rating 95 at 23, top 98: 98",%0A+   "rating 96 at 23, top 98: 98",%0A+   "rating 97 at 23, top 98: 98",%0A+   "rating 98 at 23, top 98: 98",%0A+   "rating 95 at 24, top 98: 98",%0A+   "rating 96 at 24, top 98: 98",%0A+   "rating 97 at 24, top 98: 98",%0A+   "rating 98 at 24, top 98: 98",%0A+   "rating 95 at 25, top 98: 98",%0A+   "rating 96 at 25, top 98: 98",%0A+   "rating 97 at 25, top 98: 98",%0A+   "rating 98 at 25, top 98: 98",%0A+   "rating 95 at 26, top 98: 98",%0A+   "rating 96 at 26, top 98: 98",%0A+   "rating 97 at 26, top 98: 98",%0A+   "rating 98 at 26, top 98: 98",%0A+   "rating 95 at 27, top 98: 98",%0A+   "rating 96 at 27, top 98: 98",%0A+   "rating 97 at 27, top 98: 98",%0A+   "rating 98 at 27, top 98: 98",%0A+   "rating 95 at 28, top 98: 98",%0A+   "rating 96 at 28, top 98: 98",%0A+   "rating 97 at 28, top 98: 98",%0A+   "rating 98 at 28, top 98: 98",%0A+   "rating 95 at 29, top 98: 98",%0A+   "rating 96 at 29, top 98: 98",%0A+   "rating 97 at 29, top 98: 98",%0A+   "rating 98 at 29, top 98: 98",%0A+   "rating 95 at 30, top 98: 98",%0A+   "rating 96 at 30, top 98: 98",%0A+   "rating 97 at 30, top 98: 98",%0A+   "rating 98 at 30, top 98: 98",%0A+   "rating 95 at 31, top 98: 98",%0A+   "rating 96 at 31, top 98: 98",%0A+   "rating 97 at 31, top 98: 98",%0A+   "rating 98 at 31, top 98: 98",%0A+   "rating 95 at 32, top 98: 98",%0A+   "rating 96 at 32, top 98: 98",%0A+   "rating 97 at 32, top 98: 98",%0A+   "rating 98 at 32, top 98: 98",%0A+   "rating 95 at 33, top 98: 98",%0A+   "rating 96 at 33, top 98: 98",%0A+   "rating 97 at 33, top 98: 98",%0A+   "rating 98 at 33, top 98: 98",%0A+   "rating 95 at 34, top 98: 98",%0A+   "rating 96 at 34, top 98: 98",%0A+   "rating 97 at 34, top 98: 98",%0A+   "rating 98 at 34, top 98: 98",%0A+   "rating 95 at 35, top 98: 98",%0A+   "rating 96 at 35, top 98: 98",%0A+   "rating 97 at 35, top 98: 98",%0A+   "rating 98 at 35, top 98: 98",%0A+   "rating 95 at 36, top 98: 98",%0A+   "rating 96 at 36, top 98: 98",%0A+   "rating 97 at 36, top 98: 98",%0A+   "rating 98 at 36, top 98: 98",%0A+   "rating 95 at 37, top 98: 98",%0A+   "rating 96 at 37, top 98: 98",%0A+   "rating 97 at 37, top 98: 98",%0A+   "rating 98 at 37, top 98: 98",%0A+   "rating 95 at 38, top 98: 98",%0A+   "rating 96 at 38, top 98: 98",%0A+   "rating 97 at 38, top 98: 98",%0A+   "rating 98 at 38, top 98: 98",%0A+   "rating 95 at 39, top 98: 98",%0A+   "rating 96 at 39, top 98: 98",%0A+   "rating 97 at 39, top 98: 98",%0A+   "rating 98 at 39, top 98: 98",%0A+   "rating 95 at 40, top 98: 98",%0A+   "rating 96 at 40, top 98: 98",%0A+   "rating 97 at 40, top 98: 98",%0A+   "rating 98 at 40, top 98: 98",%0A+   "rating 95 at 41, top 98: 98",%0A+   "rating 96 at 41, top 98: 98",%0A+   "rating 97 at 41, top 98: 98",%0A+   "rating 98 at 41, top 98: 98",%0A+   "rating 95 at 42, top 98: 98",%0A+   "rating 96 at 42, top 98: 98",%0A+   "rating 97 at 42, top 98: 98",%0A+   "rating 98 at 42, top 98: 98",%0A+   "rating 95 at 43, top 98: 98",%0A+   "rating 96 at 43, top 98: 98",%0A+   "rating 97 at 43, top 98: 98",%0A+   "rating 98 at 43, top 98: 98",%0A+   "rating 95 at 44, top 98: 98",%0A+   "rating 96 at 44, top 98: 98",%0A+   "rating 97 at 44, top 98: 98",%0A+   "rating 98 at 44, top 98: 98",%0A+   "rating 95 at 45, top 98: 98",%0A+   "rating 96 at 45, top 98: 98",%0A+   "rating 97 at 45, top 98: 98",%0A+   "rating 98 at 45, top 98: 98",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:345:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > levelFrom%3A the age read run backwards%2C total > it inverts the read wherever no clamp bit%2C and the clamped cells are counted,line=396,column=25::AssertionError: expected [ …(244) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "level 96 at 14, top 96: read 94",%0A+   "level 97 at 14, top 96: read 94",%0A+   "level 98 at 14, top 96: read 94",%0A+   "level 99 at 14, top 96: read 94",%0A+   "level 96 at 15, top 96: read 94",%0A+   "level 97 at 15, top 96: read 94",%0A+   "level 98 at 15, top 96: read 94",%0A+   "level 99 at 15, top 96: read 94",%0A+   "level 96 at 16, top 96: read 94",%0A+   "level 97 at 16, top 96: read 94",%0A+   "level 98 at 16, top 96: read 94",%0A+   "level 99 at 16, top 96: read 94",%0A+   "level 96 at 17, top 96: read 94",%0A+   "level 97 at 17, top 96: read 94",%0A+   "level 98 at 17, top 96: read 94",%0A+   "level 99 at 17, top 96: read 94",%0A+   "level 96 at 18, top 96: read 94",%0A+   "level 97 at 18, top 96: read 94",%0A+   "level 98 at 18, top 96: read 94",%0A+   "level 99 at 18, top 96: read 94",%0A+   "level 96 at 19, top 96: read 94",%0A+   "level 97 at 19, top 96: read 94",%0A+   "level 98 at 19, top 96: read 94",%0A+   "level 99 at 19, top 96: read 94",%0A+   "level 96 at 20, top 96: read 94",%0A+   "level 97 at 20, top 96: read 94",%0A+   "level 98 at 20, top 96: read 94",%0A+   "level 99 at 20, top 96: read 94",%0A+   "level 96 at 21, top 96: read 94",%0A+   "level 97 at 21, top 96: read 94",%0A+   "level 98 at 21, top 96: read 94",%0A+   "level 99 at 21, top 96: read 94",%0A+   "level 96 at 22, top 96: read 94",%0A+   "level 97 at 22, top 96: read 94",%0A+   "level 98 at 22, top 96: read 94",%0A+   "level 99 at 22, top 96: read 94",%0A+   "level 96 at 23, top 96: read 94",%0A+   "level 97 at 23, top 96: read 94",%0A+   "level 98 at 23, top 96: read 94",%0A+   "level 99 at 23, top 96: read 94",%0A+   "level 95 at 24, top 96: read 94",%0A+   "level 96 at 24, top 96: read 94",%0A+   "level 97 at 24, top 96: read 94",%0A+   "level 98 at 24, top 96: read 94",%0A+   "level 99 at 24, top 96: read 94",%0A+   "level 95 at 25, top 96: read 94",%0A+   "level 96 at 25, top 96: read 94",%0A+   "level 97 at 25, top 96: read 94",%0A+   "level 98 at 25, top 96: read 94",%0A+   "level 99 at 25, top 96: read 94",%0A+   "level 95 at 26, top 96: read 94",%0A+   "level 96 at 26, top 96: read 94",%0A+   "level 97 at 26, top 96: read 94",%0A+   "level 98 at 26, top 96: read 94",%0A+   "level 99 at 26, top 96: read 94",%0A+   "level 95 at 27, top 96: read 94",%0A+   "level 96 at 27, top 96: read 94",%0A+   "level 97 at 27, top 96: read 94",%0A+   "level 98 at 27, top 96: read 94",%0A+   "level 99 at 27, top 96: read 94",%0A+   "level 95 at 28, top 96: read 94",%0A+   "level 96 at 28, top 96: read 94",%0A+   "level 97 at 28, top 96: read 94",%0A+   "level 98 at 28, top 96: read 94",%0A+   "level 99 at 28, top 96: read 94",%0A+   "level 95 at 29, top 96: read 94",%0A+   "level 96 at 29, top 96: read 94",%0A+   "level 97 at 29, top 96: read 94",%0A+   "level 98 at 29, top 96: read 94",%0A+   "level 99 at 29, top 96: read 94",%0A+   "level 94 at 30, top 96: read 94",%0A+   "level 95 at 30, top 96: read 94",%0A+   "level 96 at 30, top 96: read 94",%0A+   "level 97 at 30, top 96: read 94",%0A+   "level 98 at 30, top 96: read 94",%0A+   "level 99 at 30, top 96: read 94",%0A+   "level 93 at 31, top 96: read 94",%0A+   "level 94 at 31, top 96: read 94",%0A+   "level 95 at 31, top 96: read 94",%0A+   "level 96 at 31, top 96: read 94",%0A+   "level 97 at 31, top 96: read 94",%0A+   "level 98 at 31, top 96: read 94",%0A+   "level 99 at 31, top 96: read 94",%0A+   "level 93 at 32, top 96: read 94",%0A+   "level 94 at 32, top 96: read 94",%0A+   "level 95 at 32, top 96: read 94",%0A+   "level 96 at 32, top 96: read 94",%0A+   "level 97 at 32, top 96: read 94",%0A+   "level 98 at 32, top 96: read 94",%0A+   "level 99 at 32, top 96: read 94",%0A+   "level 92 at 33, top 96: read 94",%0A+   "level 93 at 33, top 96: read 94",%0A+   "level 94 at 33, top 96: read 94",%0A+   "level 95 at 33, top 96: read 94",%0A+   "level 96 at 33, top 96: read 94",%0A+   "level 97 at 33, top 96: read 94",%0A+   "level 98 at 33, top 96: read 94",%0A+   "level 99 at 33, top 96: read 94",%0A+   "level 91 at 34, top 96: read 94",%0A+   "level 92 at 34, top 96: read 94",%0A+   "level 93 at 34, top 96: read 94",%0A+   "level 94 at 34, top 96: read 94",%0A+   "level 95 at 34, top 96: read 94",%0A+   "level 96 at 34, top 96: read 94",%0A+   "level 97 at 34, top 96: read 94",%0A+   "level 98 at 34, top 96: read 94",%0A+   "level 99 at 34, top 96: read 94",%0A+   "level 90 at 35, top 96: read 94",%0A+   "level 91 at 35, top 96: read 94",%0A+   "level 92 at 35, top 96: read 94",%0A+   "level 93 at 35, top 96: read 94",%0A+   "level 94 at 35, top 96: read 94",%0A+   "level 95 at 35, top 96: read 94",%0A+   "level 96 at 35, top 96: read 94",%0A+   "level 97 at 35, top 96: read 94",%0A+   "level 98 at 35, top 96: read 94",%0A+   "level 99 at 35, top 96: read 94",%0A+   "level 89 at 36, top 96: read 94",%0A+   "level 90 at 36, top 96: read 94",%0A+   "level 91 at 36, top 96: read 94",%0A+   "level 92 at 36, top 96: read 94",%0A+   "level 93 at 36, top 96: read 94",%0A+   "level 94 at 36, top 96: read 94",%0A+   "level 95 at 36, top 96: read 94",%0A+   "level 96 at 36, top 96: read 94",%0A+   "level 97 at 36, top 96: read 94",%0A+   "level 98 at 36, top 96: read 94",%0A+   "level 99 at 36, top 96: read 94",%0A+   "level 88 at 37, top 96: read 94",%0A+   "level 89 at 37, top 96: read 94",%0A+   "level 90 at 37, top 96: read 94",%0A+   "level 91 at 37, top 96: read 94",%0A+   "level 92 at 37, top 96: read 94",%0A+   "level 93 at 37, top 96: read 94",%0A+   "level 94 at 37, top 96: read 94",%0A+   "level 95 at 37, top 96: read 94",%0A+   "level 96 at 37, top 96: read 94",%0A+   "level 97 at 37, top 96: read 94",%0A+   "level 98 at 37, top 96: read 94",%0A+   "level 99 at 37, top 96: read 94",%0A+   "level 87 at 38, top 96: read 94",%0A+   "level 88 at 38, top 96: read 94",%0A+   "level 89 at 38, top 96: read 94",%0A+   "level 90 at 38, top 96: read 94",%0A+   "level 91 at 38, top 96: read 94",%0A+   "level 92 at 38, top 96: read 94",%0A+   "level 93 at 38, top 96: read 94",%0A+   "level 94 at 38, top 96: read 94",%0A+   "level 95 at 38, top 96: read 94",%0A+   "level 96 at 38, top 96: read 94",%0A+   "level 97 at 38, top 96: read 94",%0A+   "level 98 at 38, top 96: read 94",%0A+   "level 99 at 38, top 96: read 94",%0A+   "level 87 at 39, top 96: read 94",%0A+   "level 88 at 39, top 96: read 94",%0A+   "level 89 at 39, top 96: read 94",%0A+   "level 90 at 39, top 96: read 94",%0A+   "level 91 at 39, top 96: read 94",%0A+   "level 92 at 39, top 96: read 94",%0A+   "level 93 at 39, top 96: read 94",%0A+   "level 94 at 39, top 96: read 94",%0A+   "level 95 at 39, top 96: read 94",%0A+   "level 96 at 39, top 96: read 94",%0A+   "level 97 at 39, top 96: read 94",%0A+   "level 98 at 39, top 96: read 94",%0A+   "level 99 at 39, top 96: read 94",%0A+   "level 87 at 40, top 96: read 94",%0A+   "level 88 at 40, top 96: read 94",%0A+   "level 89 at 40, top 96: read 94",%0A+   "level 90 at 40, top 96: read 94",%0A+   "level 91 at 40, top 96: read 94",%0A+   "level 92 at 40, top 96: read 94",%0A+   "level 93 at 40, top 96: read 94",%0A+   "level 94 at 40, top 96: read 94",%0A+   "level 95 at 40, top 96: read 94",%0A+   "level 96 at 40, top 96: read 94",%0A+   "level 97 at 40, top 96: read 94",%0A+   "level 98 at 40, top 96: read 94",%0A+   "level 99 at 40, top 96: read 94",%0A+   "level 87 at 41, top 96: read 94",%0A+   "level 88 at 41, top 96: read 94",%0A+   "level 89 at 41, top 96: read 94",%0A+   "level 90 at 41, top 96: read 94",%0A+   "level 91 at 41, top 96: read 94",%0A+   "level 92 at 41, top 96: read 94",%0A+   "level 93 at 41, top 96: read 94",%0A+   "level 94 at 41, top 96: read 94",%0A+   "level 95 at 41, top 96: read 94",%0A+   "level 96 at 41, top 96: read 94",%0A+   "level 97 at 41, top 96: read 94",%0A+   "level 98 at 41, top 96: read 94",%0A+   "level 99 at 41, top 96: read 94",%0A+   "level 87 at 42, top 96: read 94",%0A+   "level 88 at 42, top 96: read 94",%0A+   "level 89 at 42, top 96: read 94",%0A+   "level 90 at 42, top 96: read 94",%0A+   "level 91 at 42, top 96: read 94",%0A+   "level 92 at 42, top 96: read 94",%0A+   "level 93 at 42, top 96: read 94",%0A+   "level 94 at 42, top 96: read 94",%0A+   "level 95 at 42, top 96: read 94",%0A+   "level 96 at 42, top 96: read 94",%0A+   "level 97 at 42, top 96: read 94",%0A+   "level 98 at 42, top 96: read 94",%0A+   "level 99 at 42, top 96: read 94",%0A+   "level 87 at 43, top 96: read 94",%0A+   "level 88 at 43, top 96: read 94",%0A+   "level 89 at 43, top 96: read 94",%0A+   "level 90 at 43, top 96: read 94",%0A+   "level 91 at 43, top 96: read 94",%0A+   "level 92 at 43, top 96: read 94",%0A+   "level 93 at 43, top 96: read 94",%0A+   "level 94 at 43, top 96: read 94",%0A+   "level 95 at 43, top 96: read 94",%0A+   "level 96 at 43, top 96: read 94",%0A+   "level 97 at 43, top 96: read 94",%0A+   "level 98 at 43, top 96: read 94",%0A+   "level 99 at 43, top 96: read 94",%0A+   "level 87 at 44, top 96: read 94",%0A+   "level 88 at 44, top 96: read 94",%0A+   "level 89 at 44, top 96: read 94",%0A+   "level 90 at 44, top 96: read 94",%0A+   "level 91 at 44, top 96: read 94",%0A+   "level 92 at 44, top 96: read 94",%0A+   "level 93 at 44, top 96: read 94",%0A+   "level 94 at 44, top 96: read 94",%0A+   "level 95 at 44, top 96: read 94",%0A+   "level 96 at 44, top 96: read 94",%0A+   "level 97 at 44, top 96: read 94",%0A+   "level 98 at 44, top 96: read 94",%0A+   "level 99 at 44, top 96: read 94",%0A+   "level 87 at 45, top 96: read 94",%0A+   "level 88 at 45, top 96: read 94",%0A+   "level 89 at 45, top 96: read 94",%0A+   "level 90 at 45, top 96: read 94",%0A+   "level 91 at 45, top 96: read 94",%0A+   "level 92 at 45, top 96: read 94",%0A+   "level 93 at 45, top 96: read 94",%0A+   "level 94 at 45, top 96: read 94",%0A+   "level 95 at 45, top 96: read 94",%0A+   "level 96 at 45, top 96: read 94",%0A+   "level 97 at 45, top 96: read 94",%0A+   "level 98 at 45, top 96: read 94",%0A+   "level 99 at 45, top 96: read 94",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:396:25%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > one order in every world%3A the stretch first%2C then the age points > readInWorld stretches%2C then reads the age on the stretched scale and its own top,line=454,column=54::AssertionError: expected { level: 97, age: 23, rating: 94 } to deeply equal { level: 97, age: 23, rating: 97 }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "age": 23,%0A    "level": 97,%0A-   "rating": 97,%0A+   "rating": 94,%0A  }%0A%0A ❯ src/test/cmValueCurve.test.ts:454:54%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > one order in every world%3A the stretch first%2C then the age points > the 29 men of the brief table%2C row for row%2C from the files main ships,line=493,column=19::AssertionError: expected [ …(8) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "era2005 Ronaldinho: the library gives 94, the table says 96",%0A+   "era2005 Thierry Henry: the library gives 94, the table says 96",%0A+   "era2010 Lionel Messi: the library gives 94, the table says 97",%0A+   "era2010 Cristiano Ronaldo: the library gives 94, the table says 97",%0A+   "era2010 Xavi: the library gives 94, the table says 95",%0A+   "era2015 Cristiano Ronaldo: the library gives 94, the table says 98",%0A+   "era2015 Lionel Messi: the library gives 94, the table says 98",%0A+   "era2015 Neymar: the library gives 94, the table says 95",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:493:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > one order in every world%3A the stretch first%2C then the age points > over every row of the four past seasons%3A never more than six down or eight up%2C nobody past the top,line=519,column=38::AssertionError: expected [ 'era2005', [] ] to deeply equal [ 'era2005', …(1) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    "era2005",%0A-   [%0A-     "Ronaldinho",%0A-     "Thierry Henry",%0A-   ],%0A+   [],%0A  ]%0A%0A ❯ src/test/cmValueCurve.test.ts:519:38%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > the typed door the engine will import (src/lib/cmAgeRead.ts) > reads a man through its types the way the engine will,line=993,column=19::AssertionError: expected { level: 97, age: 23, rating: 94 } to deeply equal { level: 97, age: 23, rating: 97 }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "age": 23,%0A    "level": 97,%0A-   "rating": 97,%0A+   "rating": 94,%0A  }%0A%0A ❯ src/test/cmValueCurve.test.ts:993:19%0A%0A
+mutation clamptop = exit 1 (1 the test went red, 3 the mutation did not apply, 0 the test missed it)
