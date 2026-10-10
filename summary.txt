@@ -1,0 +1,17 @@
+vitest exit=0 3s |    Duration  2.16s (transform 239ms, setup 184ms, collect 321ms, tests 807ms, environment 1.31s, prepare 514ms)
+sim4 exit=0 5s | simCmLeaguePhase: GREEN, 246 checks, 0 failed, sections 4.
+c-const exit=1 0s | simCmLeaguePhase control const: FIRED (1 of its own failures, e.g. ucl.direct is 9 in uclLeaguePhase.ts and 8 in the ledger)
+c-steps exit=1 0s | simCmLeaguePhase control steps: FIRED (4 of its own failures, e.g. table step 3 is wins in the ledger and "Higher number of away goals scored in the league phase" at UEFA
+c-feed exit=1 0s | simCmLeaguePhase control feed: FIRED (2 of its own failures, e.g. 2025-26, UEFA.com, the round of 16, quarter-final and semi-final draw: the two ties of seeds 5 and 6 are
+c-gdonly exit=1 2s | simCmLeaguePhase control gdonly: FIRED (6 of its own failures, e.g. [STEP 3] a pair level on every earlier step is not split by away goals scored)
+c-ninthdirect exit=1 0s | simCmLeaguePhase control ninthdirect: FIRED (2000 of its own failures, e.g. [SEEDS] the seeded clubs are positions 2 9 3 5 1 7 4 6 (draw 0))
+c-flipseed exit=1 0s | simCmLeaguePhase control flipseed: FIRED (12000 of its own failures, e.g. [HOST] the QF second leg is hosted by the side carrying seed 8 against 2 (draw 0))
+c-freebracket exit=1 0s | simCmLeaguePhase control freebracket: FIRED (8000 of its own failures, e.g. [MEETS] a quarter-final pairs lines 1v2 (draw 0))
+sim exit=0 19s | simCmLeaguePhase: GREEN, 6671 checks, 0 failed, sections all.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoInventedQuotes exit=0 25s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simLegalPages exit=0 1s | simLegalPages: all green
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 87s | 
+simNumberFormatting exit=0 122s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
