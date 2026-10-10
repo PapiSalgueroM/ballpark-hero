@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+walk: mkdir -p .tmp-fx/font-cache && export FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; ENGINES=chromium TZ=UTC node scripts/playCmLeagueFixtures.mjs > /tmp/walk.log 2>&1; s=$?; cp /tmp/walk.log "$RC_OUT/walk.log"; grep -E "^FAIL" /tmp/walk.log | head -14 | cut -c1-300; tail -1 /tmp/walk.log | cut -c1-460; exit $s
+oldui-walk-must-fail: git checkout -q f238da12 -- src/hooks/useClubManager.ts src/pages/ClubManager.tsx src/components/club-manager/ManagerForm.tsx src/components/club-manager/ClubManagerHelp.tsx && node_modules/.bin/vite build --outDir /tmp/oldui > /tmp/ob.log 2>&1; b=$?; git checkout -q HEAD -- src; [ $b -eq 0 ] || { tail -5 /tmp/ob.log; exit 9; }; node scripts/lib/hostLikeServer.mjs /tmp/oldui 4311 > /tmp/os.log 2>&1 & p=$!; sleep 3; mkdir -p "$RC_OUT/oldui"; RC_OUT="$RC_OUT/oldui" BASE=http://localhost:4311 ENGINES=chromium TZ=UTC node scripts/playCmLeagueFixtures.mjs > /tmp/ow.log 2>&1; s=$?; kill $p; cp /tmp/ow.log "$RC_OUT/walk-oldui.log"; grep -E "^FAIL" /tmp/ow.log | cut -d: -f1 | sort | uniq -c | tr '\n' '|' | cut -c1-600; tail -1 /tmp/ow.log | cut -c1-200; exit $s
+tree-clean: git status --porcelain -- src scripts | head -5; test -z "$(git status --porcelain -- src scripts)"
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; cp /tmp/w.log "$RC_OUT/weight-fx2.log"; grep -E "FAIL|/club-manager|/manager-hot-seat|/deadline-day|sweepWeight:" /tmp/w.log | cut -c1-220 | head -16; exit $s
