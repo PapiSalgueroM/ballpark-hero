@@ -1,0 +1,4 @@
+simCmVarLedger: 6 rate rows from 4 publishers, counted by two: goalsRuledOut, penaltiesAwarded, penaltiesCancelled.
+simCmVarLedger: OWED and open, so the switch must stay off: recent-seasons (have 0 of 2).
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, ucl.
+simCmVarLedger: all 342 checks passed.

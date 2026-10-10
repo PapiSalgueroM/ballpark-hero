@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+simCmVar: CM_VAR_ARTIFACTS=/tmp/a1 node scripts/simCmVar.mjs
+bands2: CM_VAR_ARTIFACTS=/tmp/a2 CM_VAR_BANDS_SEEDS=41,42,43,44,45,46 node scripts/simCmVar.mjs
+bands3: CM_VAR_ARTIFACTS=/tmp/a3 CM_VAR_BANDS_SEEDS=51,52,53,54,55,56 node scripts/simCmVar.mjs
+bands4: CM_VAR_ARTIFACTS=/tmp/a4 CM_VAR_BANDS_SEEDS=101,102,103,104,105,106 node scripts/simCmVar.mjs
+bands5: CM_VAR_ARTIFACTS=/tmp/a5 CM_VAR_BANDS_SEEDS=201,202,203,204,205,206 node scripts/simCmVar.mjs
+bands6: CM_VAR_ARTIFACTS=/tmp/a6 CM_VAR_BANDS_SEEDS=61,62,63,64,65,66 node scripts/simCmVar.mjs
+bands7: CM_VAR_ARTIFACTS=/tmp/a7 CM_VAR_BANDS_SEEDS=71,72,73,74,75,76 node scripts/simCmVar.mjs

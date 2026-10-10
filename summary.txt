@@ -1,0 +1,10 @@
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+ledger exit=0 1s | simCmVarLedger: all 342 checks passed.
+tsc exit=0 89s | 
+simCmVar exit=0 105s | simCmVar normal: actual review outcomes and full prior baseline passed.
+bands2 exit=0 108s | simCmVar normal: actual review outcomes and full prior baseline passed.
+bands3 exit=0 108s | simCmVar normal: actual review outcomes and full prior baseline passed.
+bands5 exit=0 101s | simCmVar normal: actual review outcomes and full prior baseline passed.
+bands4 exit=0 105s | simCmVar normal: actual review outcomes and full prior baseline passed.
+bands6 exit=0 81s | simCmVar normal: actual review outcomes and full prior baseline passed.
+bands7 exit=0 74s | simCmVar normal: actual review outcomes and full prior baseline passed.

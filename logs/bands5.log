@@ -1,0 +1,3 @@
+simCmVar bands: {"seeds":[201,202,203,204,205,206],"leagueMatches":4054,"ruledOut":296,"ruledOutPerMatch":0.073,"awarded":386,"awardedPerMatch":0.0952,"awardedScored":303,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.7316,"goalsPerMatchOff":2.7296,"goalGap":0.002,"resultMoved":233,"penaltiesPerMatch":0.4613,"matchesWithReview":637,"perSeed":[[652,0.0798,0.0982],[682,0.0821,0.088],[626,0.0719,0.1022],[722,0.0706,0.108],[701,0.0728,0.0899],[671,0.0611,0.0849]]}
+simCmVar coverage: {"outside":48,"abroad":5,"league":7,"cup":1,"europe":2}
+simCmVar normal: actual review outcomes and full prior baseline passed.
