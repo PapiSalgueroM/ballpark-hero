@@ -1,0 +1,56 @@
+rmut: applied ogbefore to src/components/pitch-motion/motion.tsx
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_CONTROL=ogbefore node scripts/playLiveMatchFit.mjs
+9) An own goal, NEGATIVE CONTROL ogbefore: this build is expected to draw the picture from before Round 1216
+  [own goal for me] found by the engine on seed 3208792616 in match 69 of the search: Real Madrid v Manchester United, 9' Senne Lammens (own goal), for me; the man on the page is theirs, number 1
+  [match own-me-390] seed 3208792617, 7 draws at kick off, digest a05944e4 over 5902 characters of drawn match: Real Madrid v Manchester United, goals of the first half 9' Senne Lammens (own goal), 37' Arda Güler, 38' Kylian Mbappé; own goals among them 1
+  own-me-390:
+  the goal watched: 9' Senne Lammens (own goal), for me; own goals in its half 1 of 3 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Senne Lammens 9' (O.G)"
+  FAIL: the pitch did not mark the action as an own goal with its man on 151 of 151 frames
+  FAIL: the last touch: the ball never comes to the man the card names (nearest 10.9 away, and the dot nearest the ball then is one of theirs, 4)
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  FAIL: the ball turns by 2.2 degrees at most in its flight, under the floor of 20: it never goes in OFF anybody
+  FAIL: the man holds his head, and he alone, on 0 of 102 frames of the net
+  [match own-me-1280] seed 3208792617, 7 draws at kick off, digest a05944e4 over 5902 characters of drawn match: Real Madrid v Manchester United, goals of the first half 9' Senne Lammens (own goal), 37' Arda Güler, 38' Kylian Mbappé; own goals among them 1
+  own-me-1280:
+  the goal watched: 9' Senne Lammens (own goal), for me; own goals in its half 1 of 3 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 1 - 0)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Senne Lammens 9' (O.G)"
+  FAIL: the pitch did not mark the action as an own goal with its man on 151 of 151 frames
+  FAIL: the last touch: the ball never comes to the man the card names (nearest 10.9 away, and the dot nearest the ball then is one of theirs, 4)
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  FAIL: the ball turns by 2.2 degrees at most in its flight, under the floor of 20: it never goes in OFF anybody
+  FAIL: the man holds his head, and he alone, on 0 of 102 frames of the net
+  [own goal against me] found by the engine on seed 3208792616 in match 371 of the search: Ajax v PSV, 21' Simon Adingra (own goal), against me; the man on the page is mine, id p-simon-adingra
+  [match own-opp-390] seed 3208792618, 7 draws at kick off, digest a7e3bed6 over 4965 characters of drawn match: Ajax v PSV, goals of the first half 13' Ruben van Bommel, 21' Simon Adingra (own goal); own goals among them 1
+  own-opp-390:
+  the goal watched: 21' Simon Adingra (own goal), against me; own goals in its half 1 of 2 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 1, and the first frame reading 0 - 2 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Simon Adingra 21' (O.G)"
+  FAIL: the pitch did not mark the action as an own goal with its man on 151 of 151 frames
+  FAIL: the last touch: the ball never comes to the man the card names (nearest 13.7 away, and the dot nearest the ball then is one of mine, p-thilo-kehrer)
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  FAIL: the ball turns by 2.1 degrees at most in its flight, under the floor of 20: it never goes in OFF anybody
+  FAIL: the man holds his head, and he alone, on 0 of 102 frames of the net
+  [match own-opp-1280] seed 3208792618, 7 draws at kick off, digest a7e3bed6 over 4965 characters of drawn match: Ajax v PSV, goals of the first half 13' Ruben van Bommel, 21' Simon Adingra (own goal); own goals among them 1
+  own-opp-1280:
+  the goal watched: 21' Simon Adingra (own goal), against me; own goals in its half 1 of 2 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 1, and the first frame reading 0 - 2 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 0 - 2)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+  ok    the card reads "GOAL! Simon Adingra 21' (O.G)"
+  FAIL: the pitch did not mark the action as an own goal with its man on 151 of 151 frames
+  FAIL: the last touch: the ball never comes to the man the card names (nearest 13.7 away, and the dot nearest the ball then is one of mine, p-thilo-kehrer)
+  ok    from the touch to the net no man of the side that got the goal is at the ball
+  FAIL: the ball turns by 2.1 degrees at most in its flight, under the floor of 20: it never goes in OFF anybody
+  FAIL: the man holds his head, and he alone, on 0 of 102 frames of the net
+playLiveMatchFit: control ogbefore turned section 9 red on the lines it must (the last touch is not the man the card names, the ball never turns) with the card reading (O.G) in all four watches, as it must on the picture from before Round 1216.

@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+own: LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs
+own-seed-31337: LIVE_FIT_SEED=31337 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs
+own-seed-2026: LIVE_FIT_SEED=2026 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs
+own-seed-7: LIVE_FIT_SEED=7 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs
+walk: node scripts/playLiveMatchFit.mjs
+replay: LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+noseed: LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs
+badpair: LIVE_FIT_CONTROL=ogbefore node scripts/playLiveMatchFit.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+ogbefore: node .rc/x/rmut.mjs ogbefore && npm run build > /dev/null 2>&1; LIVE_FIT_OWN=1 LIVE_FIT_CONTROL=ogbefore node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- src; exit $s
