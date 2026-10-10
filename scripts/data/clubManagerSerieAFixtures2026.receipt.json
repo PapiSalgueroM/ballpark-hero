@@ -862,5 +862,25 @@
     ],
     "sha256": "1f49177674e198166c600bb9cd1dccc6d9a9654476e1c7601bd9b87219047e25"
   },
-  "recheck": null
+  "recheck": {
+    "on": "2026-10-10",
+    "by": "The run lens adversarial reviewer of Round 1213",
+    "how": "Both sources fetched again into a folder of their own, parsed by the committed parsers, compared with the committed ledger by scripts/genCmLeagueFixtures.mjs check.",
+    "matchdaysCompared": 38,
+    "differences": 0,
+    "sources": [
+      {
+        "label": "TuttoMercatoWeb",
+        "readAtUtc": "2026-10-10T09:54:51.254Z",
+        "bytes": 115215,
+        "sha256": "7b30f7009bc2a3c988b5832e8809404d80c14ca76de3387120829fd0a60adb57"
+      },
+      {
+        "label": "Fixture Download",
+        "readAtUtc": "2026-10-10T09:54:51.610Z",
+        "bytes": 79172,
+        "sha256": "4517866606637363e7467ff88f0b6a691704296b6a981d3a33ffeae2d21016fb"
+      }
+    ]
+  }
 }

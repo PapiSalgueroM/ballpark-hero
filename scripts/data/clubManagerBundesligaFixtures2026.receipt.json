@@ -741,5 +741,25 @@
     ],
     "sha256": "1bf9249ddc4d3f49c4068dbf105c7a6d1ab10177333c023c03712318f5593c99"
   },
-  "recheck": null
+  "recheck": {
+    "on": "2026-10-10",
+    "by": "The run lens adversarial reviewer of Round 1213",
+    "how": "Both sources fetched again into a folder of their own, parsed by the committed parsers, compared with the committed ledger by scripts/genCmLeagueFixtures.mjs check.",
+    "matchdaysCompared": 34,
+    "differences": 0,
+    "sources": [
+      {
+        "label": "DFL",
+        "readAtUtc": "2026-10-10T09:54:52.744Z",
+        "bytes": 631949,
+        "sha256": "7408552a6c3bca91b7ccb1686bf7ea6459c5399a207145d75f4e09a746879144"
+      },
+      {
+        "label": "Fixture Download",
+        "readAtUtc": "2026-10-10T09:54:53.109Z",
+        "bytes": 68680,
+        "sha256": "f47773844254a1ce0b4f55dacbfc30400c437681531c8b2844599b1f5d6f0e52"
+      }
+    ]
+  }
 }

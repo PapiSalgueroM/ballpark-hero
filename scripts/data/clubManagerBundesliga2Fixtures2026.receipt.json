@@ -946,5 +946,25 @@
     ],
     "sha256": "3fabe3f12e5532f913d64edbef7f822c9debe6f78e99a7f1771efad80901e088"
   },
-  "recheck": null
+  "recheck": {
+    "on": "2026-10-10",
+    "by": "The run lens adversarial reviewer of Round 1213",
+    "how": "Both sources fetched again into a folder of their own, parsed by the committed parsers, compared with the committed ledger by scripts/genCmLeagueFixtures.mjs check.",
+    "matchdaysCompared": 34,
+    "differences": 0,
+    "sources": [
+      {
+        "label": "DFL",
+        "readAtUtc": "2026-10-10T09:55:02.071Z",
+        "bytes": 637177,
+        "sha256": "06287b32026d6008b1bf749044833ffd284735fcb3edeb5cbb34ed4d703f49c5"
+      },
+      {
+        "label": "hessenschau",
+        "readAtUtc": "2026-10-10T09:55:19.520Z",
+        "bytes": 10005378,
+        "sha256": "00d9d1ef8babb6fe590967cf435194bd79341a912529e48634389608efcfedf9"
+      }
+    ]
+  }
 }

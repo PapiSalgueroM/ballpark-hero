@@ -879,5 +879,25 @@
     ],
     "sha256": "efbaf18e2e4fe78cedf6e41192d2af64110fa6e06710fb5303ca0e84174074d7"
   },
-  "recheck": null
+  "recheck": {
+    "on": "2026-10-10",
+    "by": "The run lens adversarial reviewer of Round 1213",
+    "how": "Both sources fetched again into a folder of their own, parsed by the committed parsers, compared with the committed ledger by scripts/genCmLeagueFixtures.mjs check.",
+    "matchdaysCompared": 38,
+    "differences": 0,
+    "sources": [
+      {
+        "label": "Fixture Download",
+        "readAtUtc": "2026-10-10T09:54:39.481Z",
+        "bytes": 83963,
+        "sha256": "bc918a15c64469d6a3763fd18331ad60f5add559d4c85f1f568c43e83b6ea930"
+      },
+      {
+        "label": "Maxifoot",
+        "readAtUtc": "2026-10-10T09:54:27.262Z",
+        "bytes": 152716,
+        "sha256": "30b54b1fc3a5062ef3c7611081f0cbea45fbeeb8ce89779042abcf99ae68128c"
+      }
+    ]
+  }
 }

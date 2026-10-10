@@ -88,6 +88,8 @@
  *                 receipt's "as first published" made to agree with it E
  *   latechange    a release day source's bytes say they were changed
  *                 after the list came out (leagues that have one)      E
+ *   badrecheck    the recorded recheck made to report a difference
+ *                 (receipts that hold a recheck)                       E
  *   unfrozen      the ledger's line gone from the frozen file          I
  *   nodigest      the receipt loses the digest it recorded             I
  * CM_LEAGUE_FIXTURES_CONTROL=<name> leaves that one fault in place instead: the
@@ -236,6 +238,13 @@ function judgeReceipt(e, L, clubs, pairs, n, red) {
     /* A receipt may say "the list as first published" only when one of its sources is a release day copy. */
     if (R.asFirstPublished !== sources.some(s => s.listAsOf === 'release day')) red('E', 'the receipt says the list is as first published, and its sources do not bear that out (or the reverse)');
     if (R.readOn !== sources.map(s => String(s.readOn)).sort().at(-1)) red('E', `the receipt's readOn (${R.readOn}) is not the day its later source was read`);
+    /* The recheck is null, or the tool's own record of a SECOND read of both sources that differed nowhere
+       (genCmLeagueFixtures check --record). One that reports a difference, or reuses the first read, is not one. */
+    const K = R.recheck;
+    const whole = K && isStr(K.by) && /^\d{4}-\d{2}-\d{2}$/.test(K.on || '') && K.matchdaysCompared === pairs.length && K.differences === 0
+      && Array.isArray(K.sources) && K.sources.length === sources.length
+      && K.sources.every((k, i) => /^[0-9a-f]{64}$/.test(k.sha256 || '') && k.bytes > 0 && READ_AT.test(k.readAtUtc || '') && k.readAtUtc !== sources[i].readAtUtc);
+    if (K !== null && !whole) red('E', 'the recheck is neither null nor a whole second read of both sources with no difference');
   }
   if (mappedSets.length >= 2) {
     const differ = [...mappedSets[0]].filter(t => !mappedSets[1].has(t)).length + [...mappedSets[1]].filter(t => !mappedSets[0].has(t)).length;
@@ -435,6 +444,7 @@ const CONTROLS = {
       s.modified = `${y + 1}${rest}T09:00:00Z`;
     },
   },
+  badrecheck: { expect: 'E', applies: e => e.tool && !!e.receipt.recheck, apply(w, e) { e.receipt.recheck.differences = 1; } },
   unfrozen: { expect: 'I', applies: e => e.tool, apply(w, e) { delete w.frozen.ledgers[e.ledger.key]; } },
   nodigest: { expect: 'I', applies: e => e.tool, apply(w, e) { delete e.receipt.ledgerDigest; } },
 };

@@ -1210,5 +1210,25 @@
     ],
     "sha256": "a126a434f36d8fd8bd3b4248df5cefccdd3d88e30ca433e6b40e1cd52b34ccfb"
   },
-  "recheck": null
+  "recheck": {
+    "on": "2026-10-10",
+    "by": "The run lens adversarial reviewer of Round 1213",
+    "how": "Both sources fetched again into a folder of their own, parsed by the committed parsers, compared with the committed ledger by scripts/genCmLeagueFixtures.mjs check.",
+    "matchdaysCompared": 46,
+    "differences": 0,
+    "sources": [
+      {
+        "label": "ESPN",
+        "readAtUtc": "2026-10-10T09:55:00.837Z",
+        "bytes": 165243,
+        "sha256": "63bda94bf7cec501bdb103bf6d6de7641d0fe22f2940fd9128a6a3dea965fec3"
+      },
+      {
+        "label": "Fixture Download",
+        "readAtUtc": "2026-10-10T09:55:01.230Z",
+        "bytes": 122462,
+        "sha256": "4f834d4c924d5eb2609d9db69d1a77cefe68c8dc4d65249bfce848e9fd96e527"
+      }
+    ]
+  }
 }
