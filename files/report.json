@@ -1,0 +1,6700 @@
+{
+ "base": "http://localhost:4173",
+ "notes": {
+  "new": {
+   "event": {
+    "title": "The Scan Room",
+    "choice": 1,
+    "label": "Back in training tomorrow",
+    "wheel": "The Scan Room",
+    "chance": 0.3
+   },
+   "planned": {
+    "year": 2030,
+    "club": "Everton",
+    "choices": {
+     "tactics": "finisher",
+     "promise": "starter",
+     "bonuses": "appearances",
+     "set_pieces": "penalties"
+    },
+    "bonusEuros": 19744
+   },
+   "settledReceipt": {
+    "year": 2030,
+    "club": "Everton",
+    "choices": {
+     "tactics": "finisher",
+     "promise": "starter",
+     "bonuses": "appearances",
+     "set_pieces": "penalties"
+    },
+    "status": "completed",
+    "outcomes": {
+     "tactics": "27 recorded club appearances.",
+     "set_pieces": "1 penalty goals and 0 free kick goals, included in your 6 recorded goals. This is the simulation's season duty allocation.",
+     "promise": "The 26-appearance promise was missed: 23 league appearances. You can request a move in the transfer window.",
+     "bonuses": "The recorded target was not met; no bonus was paid."
+    },
+    "bonusEuros": 0,
+    "penaltyGoals": 1,
+    "freeKickGoals": 0,
+    "secondaryPosition": null,
+    "promise": "broken"
+   },
+   "size_plan": 24826,
+   "size_keeper": 22654,
+   "size_real": 15505,
+   "size_roles": 17017,
+   "size_summaryWin": 31231,
+   "size_summaryOut": 27650,
+   "size_summaryEuro": 23791,
+   "size_offerNo": 22638,
+   "size_offerYes": 63851,
+   "size_event": 23324,
+   "size_appeal": 22870,
+   "size_unseenHub": 22184,
+   "size_settledSummary": 34665,
+   "size_settled": 30841,
+   "size_edited": 24939
+  },
+  "old": {
+   "size_plan": 24283,
+   "size_keeper": 22227,
+   "size_real": 15351,
+   "size_roles": 16853,
+   "size_summaryWin": 30761,
+   "size_summaryOut": 27170,
+   "size_summaryEuro": 23545,
+   "size_offerNo": 22402,
+   "size_offerYes": 62609
+  }
+ },
+ "journeys": [
+  {
+   "id": "320-wheel",
+   "facts": [
+    {
+     "label": "the choice as the card words it",
+     "value": "⚡\nBack in training tomorrow\nMorale +5, Pace +1 next season, 30% chance of a nagging issue all year"
+    },
+    {
+     "label": "receipt",
+     "value": {
+      "title": "The Scan Room",
+      "chance": 0.3,
+      "roll": 0.5323006941696815,
+      "hit": "Knee setback",
+      "miss": "No setback",
+      "result": false,
+      "seen": false
+     }
+    },
+    {
+     "label": "open: page",
+     "value": {
+      "before": 548,
+      "after": 387,
+      "locked": "1"
+     }
+    },
+    {
+     "label": "wheel boxes",
+     "value": {
+      "dialog": {
+       "top": 34,
+       "bottom": 534,
+       "h": 500,
+       "w": 296
+      },
+      "vh": 568,
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      },
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "transform": "rotate(0deg)",
+      "transition": "2s transform",
+      "background": "conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ",
+      "buttons": [
+       "Spin the wheel",
+       "Show result",
+       "Close"
+      ],
+      "title": "The Scan Room",
+      "text": "The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"
+     }
+    },
+    {
+     "label": "after reload mid wheel",
+     "value": "Ready to reveal your saved result."
+    },
+    {
+     "label": "spun",
+     "value": {
+      "ms": 2077,
+      "transform": "rotate(1248.37deg)",
+      "text": "No setback",
+      "buttons": [
+       "Continue",
+       "Close"
+      ],
+      "transition": "2s transform"
+     }
+    },
+    {
+     "label": "Continue: page and focus",
+     "value": {
+      "y": 0,
+      "overflow": "",
+      "locked": null,
+      "active": "BODY:Skip to main contentLiveLive scores temp"
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "wheel open: the page moved",
+     "value": {
+      "before": 548,
+      "after": 387
+     }
+    },
+    {
+     "label": "wheel open: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      },
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      }
+     }
+    },
+    {
+     "label": "wheel open: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel open: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel result: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      },
+      "disk": {
+       "top": 284,
+       "bottom": 510,
+       "h": 227,
+       "w": 227
+      },
+      "result": {
+       "top": 533,
+       "bottom": 577,
+       "h": 44,
+       "w": 246,
+       "text": "No setback"
+      }
+     }
+    },
+    {
+     "label": "wheel result: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 284,
+       "bottom": 510,
+       "h": 227,
+       "w": 227
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel result: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 533,
+       "bottom": 577,
+       "h": 44,
+       "w": 246,
+       "text": "No setback"
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel Continue: page not put back",
+     "value": {
+      "before": {
+       "y": 548,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "closed": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      }
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-wheel-event-card.png",
+    "320-wheel-wheel-open.png",
+    "320-wheel-wheel-after-reload.png",
+    "320-wheel-wheel-spinning.png",
+    "320-wheel-wheel-result.png",
+    "320-wheel-after-wheel.png"
+   ]
+  },
+  {
+   "id": "320-wheel-reduced",
+   "facts": [
+    {
+     "label": "the choice as the card words it",
+     "value": "⚡\nBack in training tomorrow\nMorale +5, Pace +1 next season, 30% chance of a nagging issue all year"
+    },
+    {
+     "label": "receipt",
+     "value": {
+      "title": "The Scan Room",
+      "chance": 0.3,
+      "roll": 0.057990954566918385,
+      "hit": "Knee setback",
+      "miss": "No setback",
+      "result": true,
+      "seen": false
+     }
+    },
+    {
+     "label": "open: page",
+     "value": {
+      "before": 548,
+      "after": 387,
+      "locked": "1"
+     }
+    },
+    {
+     "label": "wheel boxes",
+     "value": {
+      "dialog": {
+       "top": 34,
+       "bottom": 534,
+       "h": 500,
+       "w": 296
+      },
+      "vh": 568,
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      },
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "transform": "rotate(0deg)",
+      "transition": "1e-06s none",
+      "background": "conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ",
+      "buttons": [
+       "Spin the wheel",
+       "Show result",
+       "Close"
+      ],
+      "title": "The Scan Room",
+      "text": "The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"
+     }
+    },
+    {
+     "label": "spun",
+     "value": {
+      "ms": 134,
+      "transform": "rotate(1419.12deg)",
+      "text": "Knee setback",
+      "buttons": [
+       "Continue",
+       "Close"
+      ],
+      "transition": "1e-06s none"
+     }
+    },
+    {
+     "label": "Continue: page and focus",
+     "value": {
+      "y": 387,
+      "overflow": "",
+      "locked": null,
+      "active": "BUTTON:🎟️Get them all in free next home game a"
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "wheel open: the page moved",
+     "value": {
+      "before": 548,
+      "after": 387
+     }
+    },
+    {
+     "label": "wheel open: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      },
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      }
+     }
+    },
+    {
+     "label": "wheel open: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel open: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 533,
+       "bottom": 597,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 408,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "reduced motion: the disk still has a transition",
+     "value": "1e-06s none"
+    },
+    {
+     "label": "wheel result: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      },
+      "disk": {
+       "top": 273,
+       "bottom": 521,
+       "h": 248,
+       "w": 248
+      },
+      "result": {
+       "top": 533,
+       "bottom": 577,
+       "h": 44,
+       "w": 246,
+       "text": "Knee setback"
+      }
+     }
+    },
+    {
+     "label": "wheel result: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 273,
+       "bottom": 521,
+       "h": 248,
+       "w": 248
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel result: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 533,
+       "bottom": 577,
+       "h": 44,
+       "w": 246,
+       "text": "Knee setback"
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 388,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel Continue: page not put back",
+     "value": {
+      "before": {
+       "y": 548,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "closed": {
+       "y": 387,
+       "overflow": "",
+       "locked": null,
+       "active": "BUTTON:🎟️Get them all in free next home game a"
+      }
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-wheel-reduced-event-card.png",
+    "320-wheel-reduced-wheel-open.png",
+    "320-wheel-reduced-wheel-spun-reduced.png",
+    "320-wheel-reduced-wheel-result.png",
+    "320-wheel-reduced-after-wheel.png"
+   ]
+  },
+  {
+   "id": "320-wheel-escape",
+   "facts": [
+    {
+     "label": "Escape before the reveal",
+     "value": {
+      "seen": true,
+      "expected": "No setback",
+      "wheelWordsOnPage": false,
+      "lastEvents": [
+       "🧢 Signed with Cousin Ricky. What could go wrong",
+       "🩻 Back in training the next morning like nothing happened. Nothing did happen"
+      ],
+      "phase": "random_events"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-wheel-escape-after-escape.png"
+   ]
+  },
+  {
+   "id": "320-wheel-appeal",
+   "facts": [
+    {
+     "label": "appeal save",
+     "value": {
+      "wheel": {
+       "title": "Red card appeal",
+       "chance": 0.5,
+       "roll": 0.7869630896020681,
+       "hit": "Appeal successful",
+       "miss": "Appeal rejected",
+       "result": false,
+       "seen": false
+      },
+      "pendingAppealResult": {
+       "success": false,
+       "banLength": 4
+      }
+     }
+    },
+    {
+     "label": "the appeal card behind the wheel",
+     "value": {
+      "text": "APPEAL REJECTED",
+      "top": 489,
+      "bottom": 517,
+      "overlay": "rgba(0, 0, 0, 0.8)"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-wheel-appeal-wheel-over-appeal.png",
+    "320-wheel-appeal-wheel-over-appeal-result.png",
+    "320-wheel-appeal-appeal-card.png"
+   ]
+  },
+  {
+   "id": "320-wheel-hub",
+   "facts": [
+    {
+     "label": "unseen receipt on a pre season save",
+     "value": {
+      "title": "The Group Chat Leak",
+      "chance": 0.5,
+      "roll": 0.5090081528760493,
+      "hit": "Leaker found",
+      "miss": "Leaker not found",
+      "result": false,
+      "seen": false
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "wheel on load: the wheel dialog scrolls inside",
+     "value": {
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 424,
+       "at": 0
+      },
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "result": {
+       "top": 549,
+       "bottom": 613,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      }
+     }
+    },
+    {
+     "label": "wheel on load: the disk is partly out of view",
+     "value": {
+      "disk": {
+       "top": 301,
+       "bottom": 493,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 424,
+       "at": 0
+      }
+     }
+    },
+    {
+     "label": "wheel on load: the result line is out of view without scrolling",
+     "value": {
+      "result": {
+       "top": 549,
+       "bottom": 613,
+       "h": 64,
+       "w": 246,
+       "text": "Ready to reveal your saved result."
+      },
+      "scroller": {
+       "top": 189,
+       "bottom": 449,
+       "h": 260,
+       "w": 246,
+       "client": 260,
+       "scroll": 424,
+       "at": 0
+      }
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-wheel-hub-wheel-on-load.png"
+   ]
+  },
+  {
+   "id": "320-squad-real",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 342,
+       "scroll": 687
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "source": "real",
+      "cells": [
+       {
+        "name": "Marcus Rashford",
+        "pos": "LW",
+        "ovr": "89",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Romelu Lukaku",
+        "pos": "ST",
+        "ovr": "89",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Anthony Martial",
+        "pos": "ST",
+        "ovr": "87",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Paul Pogba",
+        "pos": "CM",
+        "ovr": "90",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Jesse Lingard",
+        "pos": "CAM",
+        "ovr": "85",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Fred",
+        "pos": "CM",
+        "ovr": "84",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Luke Shaw",
+        "pos": "LB",
+        "ovr": "83",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Victor Lindelöf",
+        "pos": "CB",
+        "ovr": "84",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eric Bailly",
+        "pos": "CB",
+        "ovr": "82",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Chris Smalling",
+        "pos": "CB",
+        "ovr": "81",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "David de Gea",
+        "pos": "GK",
+        "ovr": "88",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 398,
+       "scroll": 529
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 3,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 245,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "squad help scrolls",
+     "value": {
+      "client": 342,
+      "scroll": 687
+     }
+    },
+    {
+     "label": "starting eleven scrolls inside the sheet",
+     "value": {
+      "client": 398,
+      "scroll": 529
+     }
+    },
+    {
+     "label": "squad Back: the page moved",
+     "value": {
+      "before": 3,
+      "after": 245
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-squad-real-squad-tile.png",
+    "320-squad-real-squad-first.png",
+    "320-squad-real-squad-home.png",
+    "320-squad-real-squad-eleven.png",
+    "320-squad-real-squad-bench.png"
+   ]
+  },
+  {
+   "id": "320-squad-roles",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 342,
+       "scroll": 687
+      },
+      "pageY": 241
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "scope": "There is no checked historical squad for this club and season. Missing teammate names stay as roles.",
+      "source": "roles",
+      "cells": [
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "ST",
+        "ovr": "67",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "Sam Carter",
+        "pos": "ST",
+        "ovr": "64",
+        "src": "you",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "RW",
+        "ovr": "64",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "CM",
+        "ovr": "66",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "CDM",
+        "ovr": "63",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 3rdchoice",
+        "pos": "CM",
+        "ovr": "56",
+        "src": "role",
+        "w": 77,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 4thchoice",
+        "pos": "LB",
+        "ovr": "56",
+        "src": "role",
+        "w": 57,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "CB",
+        "ovr": "69",
+        "src": "role",
+        "w": 57,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "CB",
+        "ovr": "63",
+        "src": "role",
+        "w": 57,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 3rdchoice",
+        "pos": "RB",
+        "ovr": "60",
+        "src": "role",
+        "w": 57,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "GK",
+        "ovr": "56",
+        "src": "role",
+        "w": 104,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 398,
+       "scroll": 552
+      },
+      "pageY": 241
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 241,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "squad help scrolls",
+     "value": {
+      "client": 342,
+      "scroll": 687
+     }
+    },
+    {
+     "label": "starting eleven scrolls inside the sheet",
+     "value": {
+      "client": 398,
+      "scroll": 552
+     }
+    },
+    {
+     "label": "squad Back: the page moved",
+     "value": {
+      "before": 0,
+      "after": 241
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-squad-roles-squad-tile.png",
+    "320-squad-roles-squad-first.png",
+    "320-squad-roles-squad-home.png",
+    "320-squad-roles-squad-eleven.png",
+    "320-squad-roles-squad-bench.png"
+   ]
+  },
+  {
+   "id": "320-squad-invented",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 334,
+       "scroll": 687
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "scope": "Generated teammates are fictional players in your career. These names and ratings belong to your simulated squad.",
+      "source": "invented",
+      "cells": [
+       {
+        "name": "Ross Dunmore",
+        "pos": "ST",
+        "ovr": "69",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Sam Carter",
+        "pos": "ST",
+        "ovr": "65",
+        "src": "you",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Maxi Gorosito",
+        "pos": "RW",
+        "ovr": "62",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Nnamdi Uzoma",
+        "pos": "CM",
+        "ovr": "68",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Shane Ashcroft",
+        "pos": "CDM",
+        "ovr": "64",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Obinna Ikpeba-Ola",
+        "pos": "CM",
+        "ovr": "56",
+        "src": "generated",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Onur Öztürkmen",
+        "pos": "LB",
+        "ovr": "56",
+        "src": "generated",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "Mees Nieuwland",
+        "pos": "CB",
+        "ovr": "68",
+        "src": "generated",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "Eddie Stanhope",
+        "pos": "CB",
+        "ovr": "65",
+        "src": "generated",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "Eivind Nordvik",
+        "pos": "RB",
+        "ovr": "62",
+        "src": "generated",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Juvenal Quaresma",
+        "pos": "GK",
+        "ovr": "56",
+        "src": "generated",
+        "w": 104,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 390,
+       "scroll": 567
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 3,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 245,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "squad help scrolls",
+     "value": {
+      "client": 334,
+      "scroll": 687
+     }
+    },
+    {
+     "label": "starting eleven scrolls inside the sheet",
+     "value": {
+      "client": 390,
+      "scroll": 567
+     }
+    },
+    {
+     "label": "squad Back: the page moved",
+     "value": {
+      "before": 3,
+      "after": 245
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-squad-invented-squad-tile.png",
+    "320-squad-invented-squad-first.png",
+    "320-squad-invented-squad-home.png",
+    "320-squad-invented-squad-eleven.png",
+    "320-squad-invented-squad-bench.png"
+   ]
+  },
+  {
+   "id": "320-squad-old",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 342,
+       "scroll": 687
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "source": "real",
+      "cells": [
+       {
+        "name": "Marcus Rashford",
+        "pos": "LW",
+        "ovr": "89",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Romelu Lukaku",
+        "pos": "ST",
+        "ovr": "89",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Anthony Martial",
+        "pos": "ST",
+        "ovr": "87",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Paul Pogba",
+        "pos": "CM",
+        "ovr": "90",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Jesse Lingard",
+        "pos": "CAM",
+        "ovr": "85",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Fred",
+        "pos": "CM",
+        "ovr": "84",
+        "src": "real",
+        "w": 77,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Luke Shaw",
+        "pos": "LB",
+        "ovr": "83",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Victor Lindelöf",
+        "pos": "CB",
+        "ovr": "84",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eric Bailly",
+        "pos": "CB",
+        "ovr": "82",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Chris Smalling",
+        "pos": "CB",
+        "ovr": "81",
+        "src": "real",
+        "w": 57,
+        "h": 91,
+        "nameLines": 3,
+        "cut": false
+       },
+       {
+        "name": "David de Gea",
+        "pos": "GK",
+        "ovr": "88",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 12,
+       "bottom": 556,
+       "h": 544
+      },
+      "vh": 568,
+      "scrolls": {
+       "client": 398,
+       "scroll": 529
+      },
+      "pageY": 245
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 3,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 245,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "squad help scrolls",
+     "value": {
+      "client": 342,
+      "scroll": 687
+     }
+    },
+    {
+     "label": "starting eleven scrolls inside the sheet",
+     "value": {
+      "client": 398,
+      "scroll": 529
+     }
+    },
+    {
+     "label": "squad Back: the page moved",
+     "value": {
+      "before": 3,
+      "after": 245
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-squad-old-squad-tile.png",
+    "320-squad-old-squad-first.png",
+    "320-squad-old-squad-home.png",
+    "320-squad-old-squad-eleven.png",
+    "320-squad-old-squad-bench.png"
+   ]
+  },
+  {
+   "id": "390-wheel",
+   "facts": [
+    {
+     "label": "the choice as the card words it",
+     "value": "⚡\nBack in training tomorrow\nMorale +5, Pace +1 next season, 30% chance of a nagging issue all year"
+    },
+    {
+     "label": "receipt",
+     "value": {
+      "title": "The Scan Room",
+      "chance": 0.3,
+      "roll": 0.8803345257545466,
+      "hit": "Knee setback",
+      "miss": "No setback",
+      "result": false,
+      "seen": false
+     }
+    },
+    {
+     "label": "open: page",
+     "value": {
+      "before": 2,
+      "after": 2,
+      "locked": "1"
+     }
+    },
+    {
+     "label": "wheel boxes",
+     "value": {
+      "dialog": {
+       "top": 118,
+       "bottom": 726,
+       "h": 608,
+       "w": 366
+      },
+      "vh": 844,
+      "disk": {
+       "top": 365,
+       "bottom": 557,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 253,
+       "bottom": 641,
+       "h": 388,
+       "w": 316,
+       "client": 388,
+       "scroll": 388,
+       "at": 0
+      },
+      "result": {
+       "top": 597,
+       "bottom": 641,
+       "h": 44,
+       "w": 316,
+       "text": "Ready to reveal your saved result."
+      },
+      "transform": "rotate(0deg)",
+      "transition": "2s transform",
+      "background": "conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ",
+      "buttons": [
+       "Spin the wheel",
+       "Show result",
+       "Close"
+      ],
+      "title": "The Scan Room",
+      "text": "The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"
+     }
+    },
+    {
+     "label": "after reload mid wheel",
+     "value": "Ready to reveal your saved result."
+    },
+    {
+     "label": "spun",
+     "value": {
+      "ms": 2071,
+      "transform": "rotate(1123.08deg)",
+      "text": "No setback",
+      "buttons": [
+       "Continue",
+       "Close"
+      ],
+      "transition": "2s transform"
+     }
+    },
+    {
+     "label": "Continue: page and focus",
+     "value": {
+      "y": 0,
+      "overflow": "",
+      "locked": null,
+      "active": "BODY:Skip to main contentLiveLive scores temp"
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "wheel Continue: page not put back",
+     "value": {
+      "before": {
+       "y": 2,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "closed": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      }
+     }
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "390-wheel-event-card.png",
+    "390-wheel-wheel-open.png",
+    "390-wheel-wheel-after-reload.png",
+    "390-wheel-wheel-spinning.png",
+    "390-wheel-wheel-result.png",
+    "390-wheel-after-wheel.png"
+   ]
+  },
+  {
+   "id": "390-wheel-reduced",
+   "facts": [
+    {
+     "label": "the choice as the card words it",
+     "value": "⚡\nBack in training tomorrow\nMorale +5, Pace +1 next season, 30% chance of a nagging issue all year"
+    },
+    {
+     "label": "receipt",
+     "value": {
+      "title": "The Scan Room",
+      "chance": 0.3,
+      "roll": 0.13327292447063455,
+      "hit": "Knee setback",
+      "miss": "No setback",
+      "result": true,
+      "seen": false
+     }
+    },
+    {
+     "label": "open: page",
+     "value": {
+      "before": 2,
+      "after": 2,
+      "locked": "1"
+     }
+    },
+    {
+     "label": "wheel boxes",
+     "value": {
+      "dialog": {
+       "top": 118,
+       "bottom": 726,
+       "h": 608,
+       "w": 366
+      },
+      "vh": 844,
+      "disk": {
+       "top": 365,
+       "bottom": 557,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 253,
+       "bottom": 641,
+       "h": 388,
+       "w": 316,
+       "client": 388,
+       "scroll": 388,
+       "at": 0
+      },
+      "result": {
+       "top": 597,
+       "bottom": 641,
+       "h": 44,
+       "w": 316,
+       "text": "Ready to reveal your saved result."
+      },
+      "transform": "rotate(0deg)",
+      "transition": "1e-06s none",
+      "background": "conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ",
+      "buttons": [
+       "Spin the wheel",
+       "Show result",
+       "Close"
+      ],
+      "title": "The Scan Room",
+      "text": "The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"
+     }
+    },
+    {
+     "label": "spun",
+     "value": {
+      "ms": 127,
+      "transform": "rotate(1392.02deg)",
+      "text": "Knee setback",
+      "buttons": [
+       "Continue",
+       "Close"
+      ],
+      "transition": "1e-06s none"
+     }
+    },
+    {
+     "label": "Continue: page and focus",
+     "value": {
+      "y": 2,
+      "overflow": "",
+      "locked": null,
+      "active": "BUTTON:🎟️Get them all in free next home game a"
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "reduced motion: the disk still has a transition",
+     "value": "1e-06s none"
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "390-wheel-reduced-event-card.png",
+    "390-wheel-reduced-wheel-open.png",
+    "390-wheel-reduced-wheel-spun-reduced.png",
+    "390-wheel-reduced-wheel-result.png",
+    "390-wheel-reduced-after-wheel.png"
+   ]
+  },
+  {
+   "id": "390-wheel-escape",
+   "facts": [
+    {
+     "label": "Escape before the reveal",
+     "value": {
+      "seen": true,
+      "expected": "No setback",
+      "wheelWordsOnPage": false,
+      "lastEvents": [
+       "🧢 Signed with Cousin Ricky. What could go wrong",
+       "🩻 Back in training the next morning like nothing happened. Nothing did happen"
+      ],
+      "phase": "random_events"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "390-wheel-escape-after-escape.png"
+   ]
+  },
+  {
+   "id": "390-wheel-appeal",
+   "facts": [
+    {
+     "label": "appeal save",
+     "value": {
+      "wheel": {
+       "title": "Red card appeal",
+       "chance": 0.5,
+       "roll": 0.7869630896020681,
+       "hit": "Appeal successful",
+       "miss": "Appeal rejected",
+       "result": false,
+       "seen": false
+      },
+      "pendingAppealResult": {
+       "success": false,
+       "banLength": 4
+      }
+     }
+    },
+    {
+     "label": "the appeal card behind the wheel",
+     "value": {
+      "text": "APPEAL REJECTED",
+      "top": 489,
+      "bottom": 517,
+      "overlay": "rgba(0, 0, 0, 0.8)"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "390-wheel-appeal-wheel-over-appeal.png",
+    "390-wheel-appeal-wheel-over-appeal-result.png",
+    "390-wheel-appeal-appeal-card.png"
+   ]
+  },
+  {
+   "id": "390-wheel-hub",
+   "facts": [
+    {
+     "label": "unseen receipt on a pre season save",
+     "value": {
+      "title": "The Group Chat Leak",
+      "chance": 0.5,
+      "roll": 0.5090081528760493,
+      "hit": "Leaker found",
+      "miss": "Leaker not found",
+      "result": false,
+      "seen": false
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "390-wheel-hub-wheel-on-load.png"
+   ]
+  },
+  {
+   "id": "390-squad-real",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 52,
+       "bottom": 792,
+       "h": 740
+      },
+      "vh": 844,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "source": "real",
+      "cells": [
+       {
+        "name": "Marcus Rashford",
+        "pos": "LW",
+        "ovr": "89",
+        "src": "real",
+        "w": 101,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Romelu Lukaku",
+        "pos": "ST",
+        "ovr": "89",
+        "src": "real",
+        "w": 101,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Anthony Martial",
+        "pos": "ST",
+        "ovr": "87",
+        "src": "real",
+        "w": 101,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Paul Pogba",
+        "pos": "CM",
+        "ovr": "90",
+        "src": "real",
+        "w": 101,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Jesse Lingard",
+        "pos": "CAM",
+        "ovr": "85",
+        "src": "real",
+        "w": 101,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Fred",
+        "pos": "CM",
+        "ovr": "84",
+        "src": "real",
+        "w": 101,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Luke Shaw",
+        "pos": "LB",
+        "ovr": "83",
+        "src": "real",
+        "w": 74,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Victor Lindelöf",
+        "pos": "CB",
+        "ovr": "84",
+        "src": "real",
+        "w": 74,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eric Bailly",
+        "pos": "CB",
+        "ovr": "82",
+        "src": "real",
+        "w": 74,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Chris Smalling",
+        "pos": "CB",
+        "ovr": "81",
+        "src": "real",
+        "w": 74,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "David de Gea",
+        "pos": "GK",
+        "ovr": "88",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 118,
+       "bottom": 726,
+       "h": 609
+      },
+      "vh": 844,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "390-squad-real-squad-tile.png",
+    "390-squad-real-squad-first.png",
+    "390-squad-real-squad-home.png",
+    "390-squad-real-squad-eleven.png",
+    "390-squad-real-squad-bench.png"
+   ]
+  },
+  {
+   "id": "390-squad-roles",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 52,
+       "bottom": 792,
+       "h": 740
+      },
+      "vh": 844,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "scope": "There is no checked historical squad for this club and season. Missing teammate names stay as roles.",
+      "source": "roles",
+      "cells": [
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "ST",
+        "ovr": "67",
+        "src": "role",
+        "w": 101,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "Sam Carter",
+        "pos": "ST",
+        "ovr": "64",
+        "src": "you",
+        "w": 101,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "RW",
+        "ovr": "64",
+        "src": "role",
+        "w": 101,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "CM",
+        "ovr": "66",
+        "src": "role",
+        "w": 101,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "CDM",
+        "ovr": "63",
+        "src": "role",
+        "w": 101,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 3rdchoice",
+        "pos": "CM",
+        "ovr": "56",
+        "src": "role",
+        "w": 101,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 4thchoice",
+        "pos": "LB",
+        "ovr": "56",
+        "src": "role",
+        "w": 74,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "CB",
+        "ovr": "69",
+        "src": "role",
+        "w": 74,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "CB",
+        "ovr": "63",
+        "src": "role",
+        "w": 74,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 3rdchoice",
+        "pos": "RB",
+        "ovr": "60",
+        "src": "role",
+        "w": 74,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "GK",
+        "ovr": "56",
+        "src": "role",
+        "w": 104,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 90,
+       "bottom": 754,
+       "h": 665
+      },
+      "vh": 844,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "390-squad-roles-squad-tile.png",
+    "390-squad-roles-squad-first.png",
+    "390-squad-roles-squad-home.png",
+    "390-squad-roles-squad-eleven.png",
+    "390-squad-roles-squad-bench.png"
+   ]
+  },
+  {
+   "id": "390-squad-invented",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 52,
+       "bottom": 792,
+       "h": 740
+      },
+      "vh": 844,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "scope": "Generated teammates are fictional players in your career. These names and ratings belong to your simulated squad.",
+      "source": "invented",
+      "cells": [
+       {
+        "name": "Ross Dunmore",
+        "pos": "ST",
+        "ovr": "69",
+        "src": "generated",
+        "w": 101,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Sam Carter",
+        "pos": "ST",
+        "ovr": "65",
+        "src": "you",
+        "w": 101,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Maxi Gorosito",
+        "pos": "RW",
+        "ovr": "62",
+        "src": "generated",
+        "w": 101,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Nnamdi Uzoma",
+        "pos": "CM",
+        "ovr": "68",
+        "src": "generated",
+        "w": 101,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Shane Ashcroft",
+        "pos": "CDM",
+        "ovr": "64",
+        "src": "generated",
+        "w": 101,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Obinna Ikpeba-Ola",
+        "pos": "CM",
+        "ovr": "56",
+        "src": "generated",
+        "w": 101,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Onur Öztürkmen",
+        "pos": "LB",
+        "ovr": "56",
+        "src": "generated",
+        "w": 74,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Mees Nieuwland",
+        "pos": "CB",
+        "ovr": "68",
+        "src": "generated",
+        "w": 74,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eddie Stanhope",
+        "pos": "CB",
+        "ovr": "65",
+        "src": "generated",
+        "w": 74,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eivind Nordvik",
+        "pos": "RB",
+        "ovr": "62",
+        "src": "generated",
+        "w": 74,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Juvenal Quaresma",
+        "pos": "GK",
+        "ovr": "56",
+        "src": "generated",
+        "w": 104,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 97,
+       "bottom": 747,
+       "h": 650
+      },
+      "vh": 844,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "390-squad-invented-squad-tile.png",
+    "390-squad-invented-squad-first.png",
+    "390-squad-invented-squad-home.png",
+    "390-squad-invented-squad-eleven.png",
+    "390-squad-invented-squad-bench.png"
+   ]
+  },
+  {
+   "id": "390-squad-old",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 52,
+       "bottom": 792,
+       "h": 740
+      },
+      "vh": 844,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "source": "real",
+      "cells": [
+       {
+        "name": "Marcus Rashford",
+        "pos": "LW",
+        "ovr": "89",
+        "src": "real",
+        "w": 101,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Romelu Lukaku",
+        "pos": "ST",
+        "ovr": "89",
+        "src": "real",
+        "w": 101,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Anthony Martial",
+        "pos": "ST",
+        "ovr": "87",
+        "src": "real",
+        "w": 101,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Paul Pogba",
+        "pos": "CM",
+        "ovr": "90",
+        "src": "real",
+        "w": 101,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Jesse Lingard",
+        "pos": "CAM",
+        "ovr": "85",
+        "src": "real",
+        "w": 101,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Fred",
+        "pos": "CM",
+        "ovr": "84",
+        "src": "real",
+        "w": 101,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Luke Shaw",
+        "pos": "LB",
+        "ovr": "83",
+        "src": "real",
+        "w": 74,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Victor Lindelöf",
+        "pos": "CB",
+        "ovr": "84",
+        "src": "real",
+        "w": 74,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eric Bailly",
+        "pos": "CB",
+        "ovr": "82",
+        "src": "real",
+        "w": 74,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Chris Smalling",
+        "pos": "CB",
+        "ovr": "81",
+        "src": "real",
+        "w": 74,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "David de Gea",
+        "pos": "GK",
+        "ovr": "88",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 118,
+       "bottom": 726,
+       "h": 609
+      },
+      "vh": 844,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "390-squad-old-squad-tile.png",
+    "390-squad-old-squad-first.png",
+    "390-squad-old-squad-home.png",
+    "390-squad-old-squad-eleven.png",
+    "390-squad-old-squad-bench.png"
+   ]
+  },
+  {
+   "id": "1280-wheel",
+   "facts": [
+    {
+     "label": "the choice as the card words it",
+     "value": "⚡\nBack in training tomorrow\nMorale +5, Pace +1 next season, 30% chance of a nagging issue all year"
+    },
+    {
+     "label": "receipt",
+     "value": {
+      "title": "The Scan Room",
+      "chance": 0.3,
+      "roll": 0.10701117626990375,
+      "hit": "Knee setback",
+      "miss": "No setback",
+      "result": true,
+      "seen": false
+     }
+    },
+    {
+     "label": "open: page",
+     "value": {
+      "before": 0,
+      "after": 0,
+      "locked": "1"
+     }
+    },
+    {
+     "label": "wheel boxes",
+     "value": {
+      "dialog": {
+       "top": 154,
+       "bottom": 746,
+       "h": 592,
+       "w": 384
+      },
+      "vh": 900,
+      "disk": {
+       "top": 385,
+       "bottom": 577,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 289,
+       "bottom": 661,
+       "h": 372,
+       "w": 334,
+       "client": 372,
+       "scroll": 372,
+       "at": 0
+      },
+      "result": {
+       "top": 617,
+       "bottom": 661,
+       "h": 44,
+       "w": 334,
+       "text": "Ready to reveal your saved result."
+      },
+      "transform": "rotate(0deg)",
+      "transition": "2s transform",
+      "background": "conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ",
+      "buttons": [
+       "Spin the wheel",
+       "Show result",
+       "Close"
+      ],
+      "title": "The Scan Room",
+      "text": "The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"
+     }
+    },
+    {
+     "label": "after reload mid wheel",
+     "value": "Ready to reveal your saved result."
+    },
+    {
+     "label": "spun",
+     "value": {
+      "ms": 2081,
+      "transform": "rotate(1401.48deg)",
+      "text": "Knee setback",
+      "buttons": [
+       "Continue",
+       "Close"
+      ],
+      "transition": "2s transform"
+     }
+    },
+    {
+     "label": "Continue: page and focus",
+     "value": {
+      "y": 0,
+      "overflow": "",
+      "locked": null,
+      "active": "BODY:Skip to main contentLiveLive scores temp"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "1280-wheel-event-card.png",
+    "1280-wheel-wheel-open.png",
+    "1280-wheel-wheel-after-reload.png",
+    "1280-wheel-wheel-spinning.png",
+    "1280-wheel-wheel-result.png",
+    "1280-wheel-after-wheel.png"
+   ]
+  },
+  {
+   "id": "1280-wheel-reduced",
+   "facts": [
+    {
+     "label": "the choice as the card words it",
+     "value": "⚡\nBack in training tomorrow\nMorale +5, Pace +1 next season, 30% chance of a nagging issue all year"
+    },
+    {
+     "label": "receipt",
+     "value": {
+      "title": "The Scan Room",
+      "chance": 0.3,
+      "roll": 0.6408573086946503,
+      "hit": "Knee setback",
+      "miss": "No setback",
+      "result": false,
+      "seen": false
+     }
+    },
+    {
+     "label": "open: page",
+     "value": {
+      "before": 0,
+      "after": 0,
+      "locked": "1"
+     }
+    },
+    {
+     "label": "wheel boxes",
+     "value": {
+      "dialog": {
+       "top": 154,
+       "bottom": 746,
+       "h": 592,
+       "w": 384
+      },
+      "vh": 900,
+      "disk": {
+       "top": 385,
+       "bottom": 577,
+       "h": 192,
+       "w": 192
+      },
+      "scroller": {
+       "top": 289,
+       "bottom": 661,
+       "h": 372,
+       "w": 334,
+       "client": 372,
+       "scroll": 372,
+       "at": 0
+      },
+      "result": {
+       "top": 617,
+       "bottom": 661,
+       "h": 44,
+       "w": 334,
+       "text": "Ready to reveal your saved result."
+      },
+      "transform": "rotate(0deg)",
+      "transition": "1e-06s none",
+      "background": "conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ",
+      "buttons": [
+       "Spin the wheel",
+       "Show result",
+       "Close"
+      ],
+      "title": "The Scan Room",
+      "text": "The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"
+     }
+    },
+    {
+     "label": "spun",
+     "value": {
+      "ms": 162,
+      "transform": "rotate(1209.29deg)",
+      "text": "No setback",
+      "buttons": [
+       "Continue",
+       "Close"
+      ],
+      "transition": "1e-06s none"
+     }
+    },
+    {
+     "label": "Continue: page and focus",
+     "value": {
+      "y": 0,
+      "overflow": "",
+      "locked": null,
+      "active": "BUTTON:🎟️Get them all in free next home game a"
+     }
+    }
+   ],
+   "problems": [
+    {
+     "label": "reduced motion: the disk still has a transition",
+     "value": "1e-06s none"
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "1280-wheel-reduced-event-card.png",
+    "1280-wheel-reduced-wheel-open.png",
+    "1280-wheel-reduced-wheel-spun-reduced.png",
+    "1280-wheel-reduced-wheel-result.png",
+    "1280-wheel-reduced-after-wheel.png"
+   ]
+  },
+  {
+   "id": "1280-wheel-escape",
+   "facts": [
+    {
+     "label": "Escape before the reveal",
+     "value": {
+      "seen": true,
+      "expected": "No setback",
+      "wheelWordsOnPage": false,
+      "lastEvents": [
+       "🧢 Signed with Cousin Ricky. What could go wrong",
+       "🩻 Back in training the next morning like nothing happened. Nothing did happen"
+      ],
+      "phase": "random_events"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "1280-wheel-escape-after-escape.png"
+   ]
+  },
+  {
+   "id": "1280-wheel-appeal",
+   "facts": [
+    {
+     "label": "appeal save",
+     "value": {
+      "wheel": {
+       "title": "Red card appeal",
+       "chance": 0.5,
+       "roll": 0.7869630896020681,
+       "hit": "Appeal successful",
+       "miss": "Appeal rejected",
+       "result": false,
+       "seen": false
+      },
+      "pendingAppealResult": {
+       "success": false,
+       "banLength": 4
+      }
+     }
+    },
+    {
+     "label": "the appeal card behind the wheel",
+     "value": {
+      "text": "APPEAL REJECTED",
+      "top": 353,
+      "bottom": 381,
+      "overlay": "rgba(0, 0, 0, 0.8)"
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "1280-wheel-appeal-wheel-over-appeal.png",
+    "1280-wheel-appeal-wheel-over-appeal-result.png",
+    "1280-wheel-appeal-appeal-card.png"
+   ]
+  },
+  {
+   "id": "1280-wheel-hub",
+   "facts": [
+    {
+     "label": "unseen receipt on a pre season save",
+     "value": {
+      "title": "The Group Chat Leak",
+      "chance": 0.5,
+      "roll": 0.5090081528760493,
+      "hit": "Leaker found",
+      "miss": "Leaker not found",
+      "result": false,
+      "seen": false
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "1280-wheel-hub-wheel-on-load.png"
+   ]
+  },
+  {
+   "id": "1280-squad-real",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 121,
+       "bottom": 779,
+       "h": 658
+      },
+      "vh": 900,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "source": "real",
+      "cells": [
+       {
+        "name": "Marcus Rashford",
+        "pos": "LW",
+        "ovr": "89",
+        "src": "real",
+        "w": 104,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Romelu Lukaku",
+        "pos": "ST",
+        "ovr": "89",
+        "src": "real",
+        "w": 104,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Anthony Martial",
+        "pos": "ST",
+        "ovr": "87",
+        "src": "real",
+        "w": 104,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Paul Pogba",
+        "pos": "CM",
+        "ovr": "90",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Jesse Lingard",
+        "pos": "CAM",
+        "ovr": "85",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Fred",
+        "pos": "CM",
+        "ovr": "84",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Luke Shaw",
+        "pos": "LB",
+        "ovr": "83",
+        "src": "real",
+        "w": 95,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Victor Lindelöf",
+        "pos": "CB",
+        "ovr": "84",
+        "src": "real",
+        "w": 95,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Eric Bailly",
+        "pos": "CB",
+        "ovr": "82",
+        "src": "real",
+        "w": 95,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Chris Smalling",
+        "pos": "CB",
+        "ovr": "81",
+        "src": "real",
+        "w": 95,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "David de Gea",
+        "pos": "GK",
+        "ovr": "88",
+        "src": "real",
+        "w": 104,
+        "h": 60,
+        "nameLines": 1,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 153,
+       "bottom": 747,
+       "h": 594
+      },
+      "vh": 900,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "1280-squad-real-squad-tile.png",
+    "1280-squad-real-squad-first.png",
+    "1280-squad-real-squad-home.png",
+    "1280-squad-real-squad-eleven.png",
+    "1280-squad-real-squad-bench.png"
+   ]
+  },
+  {
+   "id": "1280-squad-roles",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 121,
+       "bottom": 779,
+       "h": 658
+      },
+      "vh": 900,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "scope": "There is no checked historical squad for this club and season. Missing teammate names stay as roles.",
+      "source": "roles",
+      "cells": [
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "ST",
+        "ovr": "67",
+        "src": "role",
+        "w": 104,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "Sam Carter",
+        "pos": "ST",
+        "ovr": "64",
+        "src": "you",
+        "w": 104,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "RW",
+        "ovr": "64",
+        "src": "role",
+        "w": 104,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "CM",
+        "ovr": "66",
+        "src": "role",
+        "w": 104,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "CDM",
+        "ovr": "63",
+        "src": "role",
+        "w": 104,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 3rdchoice",
+        "pos": "CM",
+        "ovr": "56",
+        "src": "role",
+        "w": 104,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 4thchoice",
+        "pos": "LB",
+        "ovr": "56",
+        "src": "role",
+        "w": 95,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "CB",
+        "ovr": "69",
+        "src": "role",
+        "w": 95,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 2ndchoice",
+        "pos": "CB",
+        "ovr": "63",
+        "src": "role",
+        "w": 95,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 3rdchoice",
+        "pos": "RB",
+        "ovr": "60",
+        "src": "role",
+        "w": 95,
+        "h": 76,
+        "nameLines": 0,
+        "cut": false
+       },
+       {
+        "name": "ROLE 1stchoice",
+        "pos": "GK",
+        "ovr": "56",
+        "src": "role",
+        "w": 104,
+        "h": 75,
+        "nameLines": 0,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 118,
+       "bottom": 782,
+       "h": 665
+      },
+      "vh": 900,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "1280-squad-roles-squad-tile.png",
+    "1280-squad-roles-squad-first.png",
+    "1280-squad-roles-squad-home.png",
+    "1280-squad-roles-squad-eleven.png",
+    "1280-squad-roles-squad-bench.png"
+   ]
+  },
+  {
+   "id": "1280-squad-invented",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 121,
+       "bottom": 779,
+       "h": 658
+      },
+      "vh": 900,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "scope": "Generated teammates are fictional players in your career. These names and ratings belong to your simulated squad.",
+      "source": "invented",
+      "cells": [
+       {
+        "name": "Ross Dunmore",
+        "pos": "ST",
+        "ovr": "69",
+        "src": "generated",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Sam Carter",
+        "pos": "ST",
+        "ovr": "65",
+        "src": "you",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Maxi Gorosito",
+        "pos": "RW",
+        "ovr": "62",
+        "src": "generated",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Nnamdi Uzoma",
+        "pos": "CM",
+        "ovr": "68",
+        "src": "generated",
+        "w": 104,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Shane Ashcroft",
+        "pos": "CDM",
+        "ovr": "64",
+        "src": "generated",
+        "w": 104,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Obinna Ikpeba-Ola",
+        "pos": "CM",
+        "ovr": "56",
+        "src": "generated",
+        "w": 104,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Onur Öztürkmen",
+        "pos": "LB",
+        "ovr": "56",
+        "src": "generated",
+        "w": 95,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Mees Nieuwland",
+        "pos": "CB",
+        "ovr": "68",
+        "src": "generated",
+        "w": 95,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eddie Stanhope",
+        "pos": "CB",
+        "ovr": "65",
+        "src": "generated",
+        "w": 95,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Eivind Nordvik",
+        "pos": "RB",
+        "ovr": "62",
+        "src": "generated",
+        "w": 95,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Juvenal Quaresma",
+        "pos": "GK",
+        "ovr": "56",
+        "src": "generated",
+        "w": 104,
+        "h": 75,
+        "nameLines": 2,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 125,
+       "bottom": 775,
+       "h": 650
+      },
+      "vh": 900,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "1280-squad-invented-squad-tile.png",
+    "1280-squad-invented-squad-first.png",
+    "1280-squad-invented-squad-home.png",
+    "1280-squad-invented-squad-eleven.png",
+    "1280-squad-invented-squad-bench.png"
+   ]
+  },
+  {
+   "id": "1280-squad-old",
+   "facts": [
+    {
+     "label": "sheet first screen",
+     "value": {
+      "screen": "help",
+      "dialog": {
+       "top": 121,
+       "bottom": 779,
+       "h": 658
+      },
+      "vh": 900,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "starting eleven",
+     "value": {
+      "heading": "Starting 11 on our ratings",
+      "source": "real",
+      "cells": [
+       {
+        "name": "Marcus Rashford",
+        "pos": "LW",
+        "ovr": "89",
+        "src": "real",
+        "w": 104,
+        "h": 76,
+        "nameLines": 2,
+        "cut": false
+       },
+       {
+        "name": "Romelu Lukaku",
+        "pos": "ST",
+        "ovr": "89",
+        "src": "real",
+        "w": 104,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Anthony Martial",
+        "pos": "ST",
+        "ovr": "87",
+        "src": "real",
+        "w": 104,
+        "h": 76,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Paul Pogba",
+        "pos": "CM",
+        "ovr": "90",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Jesse Lingard",
+        "pos": "CAM",
+        "ovr": "85",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Fred",
+        "pos": "CM",
+        "ovr": "84",
+        "src": "real",
+        "w": 104,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Luke Shaw",
+        "pos": "LB",
+        "ovr": "83",
+        "src": "real",
+        "w": 95,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Victor Lindelöf",
+        "pos": "CB",
+        "ovr": "84",
+        "src": "real",
+        "w": 95,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Eric Bailly",
+        "pos": "CB",
+        "ovr": "82",
+        "src": "real",
+        "w": 95,
+        "h": 61,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "Chris Smalling",
+        "pos": "CB",
+        "ovr": "81",
+        "src": "real",
+        "w": 95,
+        "h": 59,
+        "nameLines": 1,
+        "cut": false
+       },
+       {
+        "name": "David de Gea",
+        "pos": "GK",
+        "ovr": "88",
+        "src": "real",
+        "w": 104,
+        "h": 56,
+        "nameLines": 1,
+        "cut": false
+       }
+      ]
+     }
+    },
+    {
+     "label": "eleven screen",
+     "value": {
+      "screen": "eleven",
+      "dialog": {
+       "top": 153,
+       "bottom": 747,
+       "h": 594
+      },
+      "vh": 900,
+      "scrolls": null,
+      "pageY": 0
+     }
+    },
+    {
+     "label": "squad Back: page and focus",
+     "value": {
+      "before": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "BODY:Skip to main contentLiveLive scores temp"
+      },
+      "after": {
+       "y": 0,
+       "overflow": "",
+       "locked": null,
+       "active": "squad-tile"
+      }
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "1280-squad-old-squad-tile.png",
+    "1280-squad-old-squad-first.png",
+    "1280-squad-old-squad-home.png",
+    "1280-squad-old-squad-eleven.png",
+    "1280-squad-old-squad-bench.png"
+   ]
+  },
+  {
+   "id": "320-cup-win",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": {
+       "opp": "Millwall",
+       "country": "England",
+       "league": "Championship",
+       "won": true,
+       "for": 5,
+       "against": 1,
+       "home": true
+      },
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Millwall | 5-1",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Millwall | 5-1",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nBrighton vs Millwall\n\n5-1\n\nHome\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "8",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "9",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-cup-win-summary-with-watch.png",
+    "320-cup-win-centre-help.png",
+    "320-cup-win-kickoff.png",
+    "320-cup-win-league-five-full-time.png",
+    "320-cup-win-cup-before.png",
+    "320-cup-win-cup-result.png",
+    "320-cup-win-fixtures-with-cup.png",
+    "320-cup-win-bracket.png",
+    "320-cup-win-bracket-tie.png",
+    "320-cup-win-back-on-league.png",
+    "320-cup-win-reopened.png"
+   ]
+  },
+  {
+   "id": "320-cup-out",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": false
+       }
+      ],
+      "opening": {
+       "opp": "Newcastle",
+       "country": "England",
+       "league": "Premier League",
+       "won": false,
+       "for": 1,
+       "against": 3,
+       "home": false
+      },
+      "year": 2029,
+      "club": "Everton",
+      "league": 22
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\n1-3\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Newcastle | 1-3",
+       "h": 58
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Newcastle | 1-3"
+      ],
+      "games": 1
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nEverton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nEverton vs Newcastle\n\n1-3\n\nAway\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "14",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "6",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-cup-out-summary-with-watch.png",
+    "320-cup-out-centre-help.png",
+    "320-cup-out-kickoff.png",
+    "320-cup-out-league-five-full-time.png",
+    "320-cup-out-cup-before.png",
+    "320-cup-out-cup-result.png",
+    "320-cup-out-fixtures-with-cup.png",
+    "320-cup-out-bracket.png",
+    "320-cup-out-bracket-tie.png",
+    "320-cup-out-back-on-league.png",
+    "320-cup-out-reopened.png"
+   ]
+  },
+  {
+   "id": "320-cup-old",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": null,
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Early rounds"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Early rounds | Opponents not recorded | Through",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Early rounds | Early rounds | Opponents not recorded | Through",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nEarly rounds\n\nBrighton vs Opponent not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "8",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "9",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-cup-old-summary-with-watch.png",
+    "320-cup-old-centre-help.png",
+    "320-cup-old-kickoff.png",
+    "320-cup-old-league-five-full-time.png",
+    "320-cup-old-cup-before.png",
+    "320-cup-old-cup-result.png",
+    "320-cup-old-fixtures-with-cup.png",
+    "320-cup-old-bracket.png",
+    "320-cup-old-bracket-tie.png",
+    "320-cup-old-back-on-league.png",
+    "320-cup-old-reopened.png"
+   ]
+  },
+  {
+   "id": "320-euro",
+   "facts": [
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "competition buttons",
+     "value": [
+      {
+       "id": "league",
+       "text": "Premier League",
+       "h": 44,
+       "w": 149
+      },
+      {
+       "id": "domestic",
+       "text": "FA Cup",
+       "h": 44,
+       "w": 149
+      },
+      {
+       "id": "club",
+       "text": "Champions League",
+       "h": 44,
+       "w": 149
+      },
+      {
+       "id": "squad",
+       "text": "Current squad",
+       "h": 44,
+       "w": 149
+      }
+     ]
+    },
+    {
+     "label": "club view",
+     "value": {
+      "tables": [
+       "League phase: 5 of 36 |  | Only your club's row was kept. |  | Club\tP\tW\tD\tL\tGF\tGA\tPts | Chelsea\t8\t5\t2\t1\t15\t8\t17 |  | Level on points splits on goal difference, then goals scored."
+      ],
+      "rounds": [
+       "League phase | League phase, game 1 | Arsenal | 2-0 | League phase, game 2 | Dortmund | 3-1 | League phase, game 3 | Atl",
+       "↓ Round of 16 | Round of 16, leg 1 | Leverkusen | 0-1 | Round of 16, leg 2 | Leverkusen | 0-0"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "320-euro-summary-with-watch.png",
+    "320-euro-centre-help.png",
+    "320-euro-competition-club.png",
+    "320-euro-competition-club-bracket.png",
+    "320-euro-competition-domestic.png",
+    "320-euro-competition-squad.png",
+    "320-euro-competition-help.png"
+   ]
+  },
+  {
+   "id": "320-euro-night",
+   "facts": [
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games before the first cup night",
+     "value": {
+      "reached": 3,
+      "button": "▶ Champions League: League phase, game 1",
+      "id": "club:0"
+     }
+    },
+    {
+     "label": "first cup night",
+     "value": {
+      "id": "club:0",
+      "revealed": "false",
+      "text": "Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen Champions League bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Champions League",
+       "Current squad",
+       "Open Champions League bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "first cup night revealed",
+     "value": {
+      "id": "club:0",
+      "revealed": "true",
+      "text": "Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\n2-0\n\nYou scored 1. Already included in your season totals.\n\nOpen Champions League bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Champions League",
+       "Current squad",
+       "Open Champions League bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 4",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "continue says",
+     "value": "▶ Matchday 4"
+    },
+    {
+     "label": "after the night",
+     "value": "4"
+    }
+   ],
+   "problems": [
+    {
+     "label": "european night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "10",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "7",
+       "size": 11
+      },
+      {
+       "text": "7",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "320-euro-night-summary-with-watch.png",
+    "320-euro-night-centre-help.png",
+    "320-euro-night-before-first-night.png",
+    "320-euro-night-night-before.png",
+    "320-euro-night-night-result.png",
+    "320-euro-night-after-night.png"
+   ]
+  },
+  {
+   "id": "390-cup-win",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": {
+       "opp": "Millwall",
+       "country": "England",
+       "league": "Championship",
+       "won": true,
+       "for": 5,
+       "against": 1,
+       "home": true
+      },
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Millwall | 5-1",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Millwall | 5-1",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nBrighton vs Millwall\n\n5-1\n\nHome\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "8",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "9",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "390-cup-win-summary-with-watch.png",
+    "390-cup-win-centre-help.png",
+    "390-cup-win-kickoff.png",
+    "390-cup-win-league-five-full-time.png",
+    "390-cup-win-cup-before.png",
+    "390-cup-win-cup-result.png",
+    "390-cup-win-fixtures-with-cup.png",
+    "390-cup-win-bracket.png",
+    "390-cup-win-bracket-tie.png",
+    "390-cup-win-back-on-league.png",
+    "390-cup-win-reopened.png"
+   ]
+  },
+  {
+   "id": "390-cup-out",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": false
+       }
+      ],
+      "opening": {
+       "opp": "Newcastle",
+       "country": "England",
+       "league": "Premier League",
+       "won": false,
+       "for": 1,
+       "against": 3,
+       "home": false
+      },
+      "year": 2029,
+      "club": "Everton",
+      "league": 22
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\n1-3\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Newcastle | 1-3",
+       "h": 58
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Newcastle | 1-3"
+      ],
+      "games": 1
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nEverton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nEverton vs Newcastle\n\n1-3\n\nAway\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "14",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "6",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "390-cup-out-summary-with-watch.png",
+    "390-cup-out-centre-help.png",
+    "390-cup-out-kickoff.png",
+    "390-cup-out-league-five-full-time.png",
+    "390-cup-out-cup-before.png",
+    "390-cup-out-cup-result.png",
+    "390-cup-out-fixtures-with-cup.png",
+    "390-cup-out-bracket.png",
+    "390-cup-out-bracket-tie.png",
+    "390-cup-out-back-on-league.png",
+    "390-cup-out-reopened.png"
+   ]
+  },
+  {
+   "id": "390-cup-old",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": null,
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Early rounds"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Early rounds | Opponents not recorded | Through",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Early rounds | Early rounds | Opponents not recorded | Through",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nEarly rounds\n\nBrighton vs Opponent not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "8",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "9",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "390-cup-old-summary-with-watch.png",
+    "390-cup-old-centre-help.png",
+    "390-cup-old-kickoff.png",
+    "390-cup-old-league-five-full-time.png",
+    "390-cup-old-cup-before.png",
+    "390-cup-old-cup-result.png",
+    "390-cup-old-fixtures-with-cup.png",
+    "390-cup-old-bracket.png",
+    "390-cup-old-bracket-tie.png",
+    "390-cup-old-back-on-league.png",
+    "390-cup-old-reopened.png"
+   ]
+  },
+  {
+   "id": "390-euro",
+   "facts": [
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "competition buttons",
+     "value": [
+      {
+       "id": "league",
+       "text": "Premier League",
+       "h": 44,
+       "w": 184
+      },
+      {
+       "id": "domestic",
+       "text": "FA Cup",
+       "h": 44,
+       "w": 184
+      },
+      {
+       "id": "club",
+       "text": "Champions League",
+       "h": 44,
+       "w": 184
+      },
+      {
+       "id": "squad",
+       "text": "Current squad",
+       "h": 44,
+       "w": 184
+      }
+     ]
+    },
+    {
+     "label": "club view",
+     "value": {
+      "tables": [
+       "League phase: 5 of 36 |  | Only your club's row was kept. |  | Club\tP\tW\tD\tL\tGF\tGA\tPts | Chelsea\t8\t5\t2\t1\t15\t8\t17 |  | Level on points splits on goal difference, then goals scored."
+      ],
+      "rounds": [
+       "League phase | League phase, game 1 | Arsenal | 2-0 | League phase, game 2 | Dortmund | 3-1 | League phase, game 3 | Atl",
+       "↓ Round of 16 | Round of 16, leg 1 | Leverkusen | 0-1 | Round of 16, leg 2 | Leverkusen | 0-0"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "390-euro-summary-with-watch.png",
+    "390-euro-centre-help.png",
+    "390-euro-competition-club.png",
+    "390-euro-competition-club-bracket.png",
+    "390-euro-competition-domestic.png",
+    "390-euro-competition-squad.png",
+    "390-euro-competition-help.png"
+   ]
+  },
+  {
+   "id": "390-euro-night",
+   "facts": [
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games before the first cup night",
+     "value": {
+      "reached": 3,
+      "button": "▶ Champions League: League phase, game 1",
+      "id": "club:0"
+     }
+    },
+    {
+     "label": "first cup night",
+     "value": {
+      "id": "club:0",
+      "revealed": "false",
+      "text": "Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen Champions League bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Champions League",
+       "Current squad",
+       "Open Champions League bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "first cup night revealed",
+     "value": {
+      "id": "club:0",
+      "revealed": "true",
+      "text": "Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\n2-0\n\nYou scored 1. Already included in your season totals.\n\nOpen Champions League bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Champions League",
+       "Current squad",
+       "Open Champions League bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 4",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "continue says",
+     "value": "▶ Matchday 4"
+    },
+    {
+     "label": "after the night",
+     "value": "4"
+    }
+   ],
+   "problems": [
+    {
+     "label": "european night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "10",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "7",
+       "size": 11
+      },
+      {
+       "text": "7",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "390-euro-night-summary-with-watch.png",
+    "390-euro-night-centre-help.png",
+    "390-euro-night-before-first-night.png",
+    "390-euro-night-night-before.png",
+    "390-euro-night-night-result.png",
+    "390-euro-night-after-night.png"
+   ]
+  },
+  {
+   "id": "1280-cup-win",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": {
+       "opp": "Millwall",
+       "country": "England",
+       "league": "Championship",
+       "won": true,
+       "for": 5,
+       "against": 1,
+       "home": true
+      },
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "FA Cup · Opening cup tieMillwall",
+       "Open FA Cup bracket",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "FA Cup · Opening cup tieMillwall5-1",
+       "FA Cup · Quarter-finalPortsmouth",
+       "Open FA Cup bracket",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Millwall | 5-1",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Millwall | 5-1",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nBrighton vs Millwall\n\n5-1\n\nHome\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "FA Cup · Opening cup tieMillwall",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "11",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "10",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "1280-cup-win-summary-with-watch.png",
+    "1280-cup-win-centre-help.png",
+    "1280-cup-win-kickoff.png",
+    "1280-cup-win-league-five-full-time.png",
+    "1280-cup-win-cup-before.png",
+    "1280-cup-win-cup-result.png",
+    "1280-cup-win-fixtures-with-cup.png",
+    "1280-cup-win-bracket.png",
+    "1280-cup-win-bracket-tie.png",
+    "1280-cup-win-back-on-league.png",
+    "1280-cup-win-reopened.png"
+   ]
+  },
+  {
+   "id": "1280-cup-out",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": false
+       }
+      ],
+      "opening": {
+       "opp": "Newcastle",
+       "country": "England",
+       "league": "Premier League",
+       "won": false,
+       "for": 1,
+       "against": 3,
+       "home": false
+      },
+      "year": 2029,
+      "club": "Everton",
+      "league": 22
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "FA Cup · Opening cup tieNewcastle",
+       "Open FA Cup bracket",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\n1-3\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "FA Cup · Opening cup tieNewcastle1-3",
+       "Open FA Cup bracket",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Newcastle | 1-3",
+       "h": 58
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Newcastle | 1-3"
+      ],
+      "games": 1
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nEverton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nEverton vs Newcastle\n\n1-3\n\nAway\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "FA Cup · Opening cup tieNewcastle",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "9",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "2",
+       "size": 11
+      },
+      {
+       "text": "14",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "1280-cup-out-summary-with-watch.png",
+    "1280-cup-out-centre-help.png",
+    "1280-cup-out-kickoff.png",
+    "1280-cup-out-league-five-full-time.png",
+    "1280-cup-out-cup-before.png",
+    "1280-cup-out-cup-result.png",
+    "1280-cup-out-fixtures-with-cup.png",
+    "1280-cup-out-bracket.png",
+    "1280-cup-out-bracket-tie.png",
+    "1280-cup-out-back-on-league.png",
+    "1280-cup-out-reopened.png"
+   ]
+  },
+  {
+   "id": "1280-cup-old",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": null,
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Early rounds"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "FA Cup · Early roundsOpponents not recor",
+       "Open FA Cup bracket",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "FA Cup · Early roundsOpponents not recor",
+       "FA Cup · Quarter-finalPortsmouth",
+       "Open FA Cup bracket",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Early rounds | Opponents not recorded | Through",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Early rounds | Early rounds | Opponents not recorded | Through",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nEarly rounds\n\nBrighton vs Opponent not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "FA Cup · Early roundsOpponents not recor",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "11",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "10",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "1280-cup-old-summary-with-watch.png",
+    "1280-cup-old-centre-help.png",
+    "1280-cup-old-kickoff.png",
+    "1280-cup-old-league-five-full-time.png",
+    "1280-cup-old-cup-before.png",
+    "1280-cup-old-cup-result.png",
+    "1280-cup-old-fixtures-with-cup.png",
+    "1280-cup-old-bracket.png",
+    "1280-cup-old-bracket-tie.png",
+    "1280-cup-old-back-on-league.png",
+    "1280-cup-old-reopened.png"
+   ]
+  },
+  {
+   "id": "1280-euro",
+   "facts": [
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "competition buttons",
+     "value": [
+      {
+       "id": "league",
+       "text": "Premier League",
+       "h": 44,
+       "w": 118
+      },
+      {
+       "id": "domestic",
+       "text": "FA Cup",
+       "h": 44,
+       "w": 67
+      },
+      {
+       "id": "club",
+       "text": "Champions League",
+       "h": 44,
+       "w": 137
+      },
+      {
+       "id": "squad",
+       "text": "Current squad",
+       "h": 44,
+       "w": 108
+      }
+     ]
+    },
+    {
+     "label": "club view",
+     "value": {
+      "tables": [
+       "League phase: 5 of 36 |  | Only your club's row was kept. |  | Club\tP\tW\tD\tL\tGF\tGA\tPts | Chelsea\t8\t5\t2\t1\t15\t8\t17 |  | Level on points splits on goal difference, then goals scored."
+      ],
+      "rounds": [
+       "League phase | League phase, game 1 | Arsenal | 2-0 | League phase, game 2 | Dortmund | 3-1 | League phase, game 3 | Atl",
+       "↓ Round of 16 | Round of 16, leg 1 | Leverkusen | 0-1 | Round of 16, leg 2 | Leverkusen | 0-0"
+      ]
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "1280-euro-summary-with-watch.png",
+    "1280-euro-centre-help.png",
+    "1280-euro-competition-club.png",
+    "1280-euro-competition-club-bracket.png",
+    "1280-euro-competition-domestic.png",
+    "1280-euro-competition-squad.png",
+    "1280-euro-competition-help.png"
+   ]
+  },
+  {
+   "id": "1280-euro-night",
+   "facts": [
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games before the first cup night",
+     "value": {
+      "reached": 3,
+      "button": "▶ Champions League: League phase, game 1",
+      "id": "club:0"
+     }
+    },
+    {
+     "label": "first cup night",
+     "value": {
+      "id": "club:0",
+      "revealed": "false",
+      "text": "Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen Champions League bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Champions League",
+       "Current squad",
+       "Champions League · League phase, game 1A",
+       "FA Cup · Opening cup tieBournemouth",
+       "Open Champions League bracket",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "first cup night revealed",
+     "value": {
+      "id": "club:0",
+      "revealed": "true",
+      "text": "Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\n2-0\n\nYou scored 1. Already included in your season totals.\n\nOpen Champions League bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Champions League",
+       "Current squad",
+       "Champions League · League phase, game 1A",
+       "FA Cup · Opening cup tieBournemouth",
+       "Champions League · League phase, game 2D",
+       "Open Champions League bracket",
+       "▶ Matchday 4",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "continue says",
+     "value": "▶ Matchday 4"
+    },
+    {
+     "label": "after the night",
+     "value": "4"
+    }
+   ],
+   "problems": [
+    {
+     "label": "european night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "13",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "9",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "1280-euro-night-summary-with-watch.png",
+    "1280-euro-night-centre-help.png",
+    "1280-euro-night-before-first-night.png",
+    "1280-euro-night-night-before.png",
+    "1280-euro-night-night-result.png",
+    "1280-euro-night-after-night.png"
+   ]
+  },
+  {
+   "id": "430-pinned-bar",
+   "facts": [
+    {
+     "label": "Next Season button at five scroll stops",
+     "value": [
+      {
+       "y": 0,
+       "max": 10937,
+       "top": 866,
+       "bottom": 914,
+       "vh": 932,
+       "hit": true
+      },
+      {
+       "y": 600,
+       "max": 10937,
+       "top": 866,
+       "bottom": 914,
+       "vh": 932,
+       "hit": true
+      },
+      {
+       "y": 1500,
+       "max": 10937,
+       "top": 866,
+       "bottom": 914,
+       "vh": 932,
+       "hit": true
+      },
+      {
+       "y": 3000,
+       "max": 10937,
+       "top": 866,
+       "bottom": 914,
+       "vh": 932,
+       "hit": true
+      },
+      {
+       "y": 10937,
+       "max": 10937,
+       "top": 534,
+       "bottom": 582,
+       "vh": 932,
+       "hit": true
+      }
+     ]
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": [
+    "430-pinned-bar-bar-at-3000.png",
+    "430-pinned-bar-bar-at-bottom.png"
+   ]
+  }
+ ],
+ "fonts": {
+  "status": "loaded",
+  "loaded": [
+   "Inter",
+   "Space Grotesk"
+  ],
+  "body": "Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", san"
+ }
+}

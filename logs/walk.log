@@ -1,0 +1,497 @@
+fonts: {"status":"loaded","loaded":["Inter","Space Grotesk"],"body":"Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", san"}
+  320-wheel the choice as the card words it: ⚡
+Back in training tomorrow
+Morale +5, Pace +1 next season, 30% chance of a nagging issue all year
+  320-wheel receipt: {"title":"The Scan Room","chance":0.3,"roll":0.5323006941696815,"hit":"Knee setback","miss":"No setback","result":false,"seen":false}
+  320-wheel open: page: {"before":548,"after":387,"locked":"1"}
+  PROBLEM 320-wheel wheel open: the page moved: {"before":548,"after":387}
+  320-wheel wheel boxes: {"dialog":{"top":34,"bottom":534,"h":500,"w":296},"vh":568,"disk":{"top":301,"bottom":493,"h":192,"w":192},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":408,"at":0},"result":{"top":533,"bottom":597,"h":64,"w":246,"text":"Ready to reveal your saved result."},"transform":"rotate(0deg)","transition":"2s transform","background":"conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ","buttons":["Spin the wheel","Show result","Close"],"title":"The Scan Room","text":"The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"}
+  PROBLEM 320-wheel wheel open: the wheel dialog scrolls inside: {"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":408,"at":0},"disk":{"top":301,"bottom":493,"h":192,"w":192},"result":{"top":533,"bottom":597,"h":64,"w":246,"text":"Ready to reveal your saved result."}}
+  PROBLEM 320-wheel wheel open: the disk is partly out of view: {"disk":{"top":301,"bottom":493,"h":192,"w":192},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":408,"at":0}}
+  PROBLEM 320-wheel wheel open: the result line is out of view without scrolling: {"result":{"top":533,"bottom":597,"h":64,"w":246,"text":"Ready to reveal your saved result."},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":408,"at":0}}
+  320-wheel after reload mid wheel: Ready to reveal your saved result.
+  320-wheel spun: {"ms":2077,"transform":"rotate(1248.37deg)","text":"No setback","buttons":["Continue","Close"],"transition":"2s transform"}
+  PROBLEM 320-wheel wheel result: the wheel dialog scrolls inside: {"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":388,"at":0},"disk":{"top":284,"bottom":510,"h":227,"w":227},"result":{"top":533,"bottom":577,"h":44,"w":246,"text":"No setback"}}
+  PROBLEM 320-wheel wheel result: the disk is partly out of view: {"disk":{"top":284,"bottom":510,"h":227,"w":227},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":388,"at":0}}
+  PROBLEM 320-wheel wheel result: the result line is out of view without scrolling: {"result":{"top":533,"bottom":577,"h":44,"w":246,"text":"No setback"},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":388,"at":0}}
+  320-wheel Continue: page and focus: {"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"}
+  PROBLEM 320-wheel wheel Continue: page not put back: {"before":{"y":548,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"closed":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"}}
+  320-wheel-reduced the choice as the card words it: ⚡
+Back in training tomorrow
+Morale +5, Pace +1 next season, 30% chance of a nagging issue all year
+  320-wheel-reduced receipt: {"title":"The Scan Room","chance":0.3,"roll":0.057990954566918385,"hit":"Knee setback","miss":"No setback","result":true,"seen":false}
+  320-wheel-reduced open: page: {"before":548,"after":387,"locked":"1"}
+  PROBLEM 320-wheel-reduced wheel open: the page moved: {"before":548,"after":387}
+  320-wheel-reduced wheel boxes: {"dialog":{"top":34,"bottom":534,"h":500,"w":296},"vh":568,"disk":{"top":301,"bottom":493,"h":192,"w":192},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":408,"at":0},"result":{"top":533,"bottom":597,"h":64,"w":246,"text":"Ready to reveal your saved result."},"transform":"rotate(0deg)","transition":"1e-06s none","background":"conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ","buttons":["Spin the wheel","Show result","Close"],"title":"The Scan Room","text":"The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"}
+  PROBLEM 320-wheel-reduced wheel open: the wheel dialog scrolls inside: {"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":408,"at":0},"disk":{"top":301,"bottom":493,"h":192,"w":192},"result":{"top":533,"bottom":597,"h":64,"w":246,"text":"Ready to reveal your saved result."}}
+  PROBLEM 320-wheel-reduced wheel open: the disk is partly out of view: {"disk":{"top":301,"bottom":493,"h":192,"w":192},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":408,"at":0}}
+  PROBLEM 320-wheel-reduced wheel open: the result line is out of view without scrolling: {"result":{"top":533,"bottom":597,"h":64,"w":246,"text":"Ready to reveal your saved result."},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":408,"at":0}}
+  PROBLEM 320-wheel-reduced reduced motion: the disk still has a transition: 1e-06s none
+  320-wheel-reduced spun: {"ms":134,"transform":"rotate(1419.12deg)","text":"Knee setback","buttons":["Continue","Close"],"transition":"1e-06s none"}
+  PROBLEM 320-wheel-reduced wheel result: the wheel dialog scrolls inside: {"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":388,"at":0},"disk":{"top":273,"bottom":521,"h":248,"w":248},"result":{"top":533,"bottom":577,"h":44,"w":246,"text":"Knee setback"}}
+  PROBLEM 320-wheel-reduced wheel result: the disk is partly out of view: {"disk":{"top":273,"bottom":521,"h":248,"w":248},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":388,"at":0}}
+  PROBLEM 320-wheel-reduced wheel result: the result line is out of view without scrolling: {"result":{"top":533,"bottom":577,"h":44,"w":246,"text":"Knee setback"},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":388,"at":0}}
+  320-wheel-reduced Continue: page and focus: {"y":387,"overflow":"","locked":null,"active":"BUTTON:🎟️Get them all in free next home game a"}
+  PROBLEM 320-wheel-reduced wheel Continue: page not put back: {"before":{"y":548,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"closed":{"y":387,"overflow":"","locked":null,"active":"BUTTON:🎟️Get them all in free next home game a"}}
+  320-wheel-escape Escape before the reveal: {"seen":true,"expected":"No setback","wheelWordsOnPage":false,"lastEvents":["🧢 Signed with Cousin Ricky. What could go wrong","🩻 Back in training the next morning like nothing happened. Nothing did happen"],"phase":"random_events"}
+  320-wheel-appeal appeal save: {"wheel":{"title":"Red card appeal","chance":0.5,"roll":0.7869630896020681,"hit":"Appeal successful","miss":"Appeal rejected","result":false,"seen":false},"pendingAppealResult":{"success":false,"banLength":4}}
+  320-wheel-appeal the appeal card behind the wheel: {"text":"APPEAL REJECTED","top":489,"bottom":517,"overlay":"rgba(0, 0, 0, 0.8)"}
+  320-wheel-hub unseen receipt on a pre season save: {"title":"The Group Chat Leak","chance":0.5,"roll":0.5090081528760493,"hit":"Leaker found","miss":"Leaker not found","result":false,"seen":false}
+  PROBLEM 320-wheel-hub wheel on load: the wheel dialog scrolls inside: {"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":424,"at":0},"disk":{"top":301,"bottom":493,"h":192,"w":192},"result":{"top":549,"bottom":613,"h":64,"w":246,"text":"Ready to reveal your saved result."}}
+  PROBLEM 320-wheel-hub wheel on load: the disk is partly out of view: {"disk":{"top":301,"bottom":493,"h":192,"w":192},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":424,"at":0}}
+  PROBLEM 320-wheel-hub wheel on load: the result line is out of view without scrolling: {"result":{"top":549,"bottom":613,"h":64,"w":246,"text":"Ready to reveal your saved result."},"scroller":{"top":189,"bottom":449,"h":260,"w":246,"client":260,"scroll":424,"at":0}}
+  320-squad-real sheet first screen: {"screen":"help","dialog":{"top":12,"bottom":556,"h":544},"vh":568,"scrolls":{"client":342,"scroll":687},"pageY":245}
+  PROBLEM 320-squad-real squad help scrolls: {"client":342,"scroll":687}
+  320-squad-real starting eleven: {"heading":"Starting 11 on our ratings","source":"real","cells":[{"name":"Marcus Rashford","pos":"LW","ovr":"89","src":"real","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Romelu Lukaku","pos":"ST","ovr":"89","src":"real","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Anthony Martial","pos":"ST","ovr":"87","src":"real","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Paul Pogba","pos":"CM","ovr":"90","src":"real","w":77,"h":76,"nameLines":1,"cut":false},{"name":"Jesse Lingard","pos":"CAM","ovr":"85","src":"real","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Fred","pos":"CM","ovr":"84","src":"real","w":77,"h":76,"nameLines":1,"cut":false},{"name":"Luke Shaw","pos":"LB","ovr":"83","src":"real","w":57,"h":91,"nameLines":2,"cut":false},{"name":"Victor Lindelöf","pos":"CB","ovr":"84","src":"real","w":57,"h":91,"nameLines":2,"cut":false},{"name":"Eric Bailly","pos":"CB","ovr":"82","src":"real","w":57,"h":91,"nameLines":2,"cut":false},{"name":"Chris Smalling","pos":"CB","ovr":"81","src":"real","w":57,"h":91,"nameLines":3,"cut":false},{"name":"David de Gea","pos":"GK","ovr":"88","src":"real","w":104,"h":61,"nameLines":1,"cut":false}]}
+  320-squad-real eleven screen: {"screen":"eleven","dialog":{"top":12,"bottom":556,"h":544},"vh":568,"scrolls":{"client":398,"scroll":529},"pageY":245}
+  PROBLEM 320-squad-real starting eleven scrolls inside the sheet: {"client":398,"scroll":529}
+  320-squad-real squad Back: page and focus: {"before":{"y":3,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":245,"overflow":"","locked":null,"active":"squad-tile"}}
+  PROBLEM 320-squad-real squad Back: the page moved: {"before":3,"after":245}
+  320-squad-roles sheet first screen: {"screen":"help","dialog":{"top":12,"bottom":556,"h":544},"vh":568,"scrolls":{"client":342,"scroll":687},"pageY":241}
+  PROBLEM 320-squad-roles squad help scrolls: {"client":342,"scroll":687}
+  320-squad-roles starting eleven: {"heading":"Starting 11 on our ratings","scope":"There is no checked historical squad for this club and season. Missing teammate names stay as roles.","source":"roles","cells":[{"name":"ROLE 1stchoice","pos":"ST","ovr":"67","src":"role","w":77,"h":76,"nameLines":0,"cut":false},{"name":"Sam Carter","pos":"ST","ovr":"64","src":"you","w":77,"h":76,"nameLines":1,"cut":false},{"name":"ROLE 2ndchoice","pos":"RW","ovr":"64","src":"role","w":77,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 1stchoice","pos":"CM","ovr":"66","src":"role","w":77,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 2ndchoice","pos":"CDM","ovr":"63","src":"role","w":77,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 3rdchoice","pos":"CM","ovr":"56","src":"role","w":77,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 4thchoice","pos":"LB","ovr":"56","src":"role","w":57,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 1stchoice","pos":"CB","ovr":"69","src":"role","w":57,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 2ndchoice","pos":"CB","ovr":"63","src":"role","w":57,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 3rdchoice","pos":"RB","ovr":"60","src":"role","w":57,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 1stchoice","pos":"GK","ovr":"56","src":"role","w":104,"h":76,"nameLines":0,"cut":false}]}
+  320-squad-roles eleven screen: {"screen":"eleven","dialog":{"top":12,"bottom":556,"h":544},"vh":568,"scrolls":{"client":398,"scroll":552},"pageY":241}
+  PROBLEM 320-squad-roles starting eleven scrolls inside the sheet: {"client":398,"scroll":552}
+  320-squad-roles squad Back: page and focus: {"before":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":241,"overflow":"","locked":null,"active":"squad-tile"}}
+  PROBLEM 320-squad-roles squad Back: the page moved: {"before":0,"after":241}
+  320-squad-invented sheet first screen: {"screen":"help","dialog":{"top":12,"bottom":556,"h":544},"vh":568,"scrolls":{"client":334,"scroll":687},"pageY":245}
+  PROBLEM 320-squad-invented squad help scrolls: {"client":334,"scroll":687}
+  320-squad-invented starting eleven: {"heading":"Starting 11 on our ratings","scope":"Generated teammates are fictional players in your career. These names and ratings belong to your simulated squad.","source":"invented","cells":[{"name":"Ross Dunmore","pos":"ST","ovr":"69","src":"generated","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Sam Carter","pos":"ST","ovr":"65","src":"you","w":77,"h":76,"nameLines":1,"cut":false},{"name":"Maxi Gorosito","pos":"RW","ovr":"62","src":"generated","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Nnamdi Uzoma","pos":"CM","ovr":"68","src":"generated","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Shane Ashcroft","pos":"CDM","ovr":"64","src":"generated","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Obinna Ikpeba-Ola","pos":"CM","ovr":"56","src":"generated","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Onur Öztürkmen","pos":"LB","ovr":"56","src":"generated","w":57,"h":91,"nameLines":3,"cut":false},{"name":"Mees Nieuwland","pos":"CB","ovr":"68","src":"generated","w":57,"h":91,"nameLines":3,"cut":false},{"name":"Eddie Stanhope","pos":"CB","ovr":"65","src":"generated","w":57,"h":91,"nameLines":3,"cut":false},{"name":"Eivind Nordvik","pos":"RB","ovr":"62","src":"generated","w":57,"h":91,"nameLines":2,"cut":false},{"name":"Juvenal Quaresma","pos":"GK","ovr":"56","src":"generated","w":104,"h":76,"nameLines":2,"cut":false}]}
+  320-squad-invented eleven screen: {"screen":"eleven","dialog":{"top":12,"bottom":556,"h":544},"vh":568,"scrolls":{"client":390,"scroll":567},"pageY":245}
+  PROBLEM 320-squad-invented starting eleven scrolls inside the sheet: {"client":390,"scroll":567}
+  320-squad-invented squad Back: page and focus: {"before":{"y":3,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":245,"overflow":"","locked":null,"active":"squad-tile"}}
+  PROBLEM 320-squad-invented squad Back: the page moved: {"before":3,"after":245}
+  320-squad-old sheet first screen: {"screen":"help","dialog":{"top":12,"bottom":556,"h":544},"vh":568,"scrolls":{"client":342,"scroll":687},"pageY":245}
+  PROBLEM 320-squad-old squad help scrolls: {"client":342,"scroll":687}
+  320-squad-old starting eleven: {"heading":"Starting 11 on our ratings","source":"real","cells":[{"name":"Marcus Rashford","pos":"LW","ovr":"89","src":"real","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Romelu Lukaku","pos":"ST","ovr":"89","src":"real","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Anthony Martial","pos":"ST","ovr":"87","src":"real","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Paul Pogba","pos":"CM","ovr":"90","src":"real","w":77,"h":76,"nameLines":1,"cut":false},{"name":"Jesse Lingard","pos":"CAM","ovr":"85","src":"real","w":77,"h":76,"nameLines":2,"cut":false},{"name":"Fred","pos":"CM","ovr":"84","src":"real","w":77,"h":76,"nameLines":1,"cut":false},{"name":"Luke Shaw","pos":"LB","ovr":"83","src":"real","w":57,"h":91,"nameLines":2,"cut":false},{"name":"Victor Lindelöf","pos":"CB","ovr":"84","src":"real","w":57,"h":91,"nameLines":2,"cut":false},{"name":"Eric Bailly","pos":"CB","ovr":"82","src":"real","w":57,"h":91,"nameLines":2,"cut":false},{"name":"Chris Smalling","pos":"CB","ovr":"81","src":"real","w":57,"h":91,"nameLines":3,"cut":false},{"name":"David de Gea","pos":"GK","ovr":"88","src":"real","w":104,"h":61,"nameLines":1,"cut":false}]}
+  320-squad-old eleven screen: {"screen":"eleven","dialog":{"top":12,"bottom":556,"h":544},"vh":568,"scrolls":{"client":398,"scroll":529},"pageY":245}
+  PROBLEM 320-squad-old starting eleven scrolls inside the sheet: {"client":398,"scroll":529}
+  320-squad-old squad Back: page and focus: {"before":{"y":3,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":245,"overflow":"","locked":null,"active":"squad-tile"}}
+  PROBLEM 320-squad-old squad Back: the page moved: {"before":3,"after":245}
+  390-wheel the choice as the card words it: ⚡
+Back in training tomorrow
+Morale +5, Pace +1 next season, 30% chance of a nagging issue all year
+  390-wheel receipt: {"title":"The Scan Room","chance":0.3,"roll":0.8803345257545466,"hit":"Knee setback","miss":"No setback","result":false,"seen":false}
+  390-wheel open: page: {"before":2,"after":2,"locked":"1"}
+  390-wheel wheel boxes: {"dialog":{"top":118,"bottom":726,"h":608,"w":366},"vh":844,"disk":{"top":365,"bottom":557,"h":192,"w":192},"scroller":{"top":253,"bottom":641,"h":388,"w":316,"client":388,"scroll":388,"at":0},"result":{"top":597,"bottom":641,"h":44,"w":316,"text":"Ready to reveal your saved result."},"transform":"rotate(0deg)","transition":"2s transform","background":"conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ","buttons":["Spin the wheel","Show result","Close"],"title":"The Scan Room","text":"The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"}
+  390-wheel after reload mid wheel: Ready to reveal your saved result.
+  390-wheel spun: {"ms":2071,"transform":"rotate(1123.08deg)","text":"No setback","buttons":["Continue","Close"],"transition":"2s transform"}
+  390-wheel Continue: page and focus: {"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"}
+  PROBLEM 390-wheel wheel Continue: page not put back: {"before":{"y":2,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"closed":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"}}
+  390-wheel-reduced the choice as the card words it: ⚡
+Back in training tomorrow
+Morale +5, Pace +1 next season, 30% chance of a nagging issue all year
+  390-wheel-reduced receipt: {"title":"The Scan Room","chance":0.3,"roll":0.13327292447063455,"hit":"Knee setback","miss":"No setback","result":true,"seen":false}
+  390-wheel-reduced open: page: {"before":2,"after":2,"locked":"1"}
+  390-wheel-reduced wheel boxes: {"dialog":{"top":118,"bottom":726,"h":608,"w":366},"vh":844,"disk":{"top":365,"bottom":557,"h":192,"w":192},"scroller":{"top":253,"bottom":641,"h":388,"w":316,"client":388,"scroll":388,"at":0},"result":{"top":597,"bottom":641,"h":44,"w":316,"text":"Ready to reveal your saved result."},"transform":"rotate(0deg)","transition":"1e-06s none","background":"conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ","buttons":["Spin the wheel","Show result","Close"],"title":"The Scan Room","text":"The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"}
+  PROBLEM 390-wheel-reduced reduced motion: the disk still has a transition: 1e-06s none
+  390-wheel-reduced spun: {"ms":127,"transform":"rotate(1392.02deg)","text":"Knee setback","buttons":["Continue","Close"],"transition":"1e-06s none"}
+  390-wheel-reduced Continue: page and focus: {"y":2,"overflow":"","locked":null,"active":"BUTTON:🎟️Get them all in free next home game a"}
+  390-wheel-escape Escape before the reveal: {"seen":true,"expected":"No setback","wheelWordsOnPage":false,"lastEvents":["🧢 Signed with Cousin Ricky. What could go wrong","🩻 Back in training the next morning like nothing happened. Nothing did happen"],"phase":"random_events"}
+  390-wheel-appeal appeal save: {"wheel":{"title":"Red card appeal","chance":0.5,"roll":0.7869630896020681,"hit":"Appeal successful","miss":"Appeal rejected","result":false,"seen":false},"pendingAppealResult":{"success":false,"banLength":4}}
+  390-wheel-appeal the appeal card behind the wheel: {"text":"APPEAL REJECTED","top":489,"bottom":517,"overlay":"rgba(0, 0, 0, 0.8)"}
+  390-wheel-hub unseen receipt on a pre season save: {"title":"The Group Chat Leak","chance":0.5,"roll":0.5090081528760493,"hit":"Leaker found","miss":"Leaker not found","result":false,"seen":false}
+  390-squad-real sheet first screen: {"screen":"help","dialog":{"top":52,"bottom":792,"h":740},"vh":844,"scrolls":null,"pageY":0}
+  390-squad-real starting eleven: {"heading":"Starting 11 on our ratings","source":"real","cells":[{"name":"Marcus Rashford","pos":"LW","ovr":"89","src":"real","w":101,"h":76,"nameLines":2,"cut":false},{"name":"Romelu Lukaku","pos":"ST","ovr":"89","src":"real","w":101,"h":76,"nameLines":1,"cut":false},{"name":"Anthony Martial","pos":"ST","ovr":"87","src":"real","w":101,"h":76,"nameLines":2,"cut":false},{"name":"Paul Pogba","pos":"CM","ovr":"90","src":"real","w":101,"h":61,"nameLines":1,"cut":false},{"name":"Jesse Lingard","pos":"CAM","ovr":"85","src":"real","w":101,"h":61,"nameLines":1,"cut":false},{"name":"Fred","pos":"CM","ovr":"84","src":"real","w":101,"h":61,"nameLines":1,"cut":false},{"name":"Luke Shaw","pos":"LB","ovr":"83","src":"real","w":74,"h":76,"nameLines":1,"cut":false},{"name":"Victor Lindelöf","pos":"CB","ovr":"84","src":"real","w":74,"h":76,"nameLines":2,"cut":false},{"name":"Eric Bailly","pos":"CB","ovr":"82","src":"real","w":74,"h":76,"nameLines":1,"cut":false},{"name":"Chris Smalling","pos":"CB","ovr":"81","src":"real","w":74,"h":76,"nameLines":2,"cut":false},{"name":"David de Gea","pos":"GK","ovr":"88","src":"real","w":104,"h":61,"nameLines":1,"cut":false}]}
+  390-squad-real eleven screen: {"screen":"eleven","dialog":{"top":118,"bottom":726,"h":609},"vh":844,"scrolls":null,"pageY":0}
+  390-squad-real squad Back: page and focus: {"before":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":0,"overflow":"","locked":null,"active":"squad-tile"}}
+  390-squad-roles sheet first screen: {"screen":"help","dialog":{"top":52,"bottom":792,"h":740},"vh":844,"scrolls":null,"pageY":0}
+  390-squad-roles starting eleven: {"heading":"Starting 11 on our ratings","scope":"There is no checked historical squad for this club and season. Missing teammate names stay as roles.","source":"roles","cells":[{"name":"ROLE 1stchoice","pos":"ST","ovr":"67","src":"role","w":101,"h":76,"nameLines":0,"cut":false},{"name":"Sam Carter","pos":"ST","ovr":"64","src":"you","w":101,"h":76,"nameLines":1,"cut":false},{"name":"ROLE 2ndchoice","pos":"RW","ovr":"64","src":"role","w":101,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 1stchoice","pos":"CM","ovr":"66","src":"role","w":101,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 2ndchoice","pos":"CDM","ovr":"63","src":"role","w":101,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 3rdchoice","pos":"CM","ovr":"56","src":"role","w":101,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 4thchoice","pos":"LB","ovr":"56","src":"role","w":74,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 1stchoice","pos":"CB","ovr":"69","src":"role","w":74,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 2ndchoice","pos":"CB","ovr":"63","src":"role","w":74,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 3rdchoice","pos":"RB","ovr":"60","src":"role","w":74,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 1stchoice","pos":"GK","ovr":"56","src":"role","w":104,"h":76,"nameLines":0,"cut":false}]}
+  390-squad-roles eleven screen: {"screen":"eleven","dialog":{"top":90,"bottom":754,"h":665},"vh":844,"scrolls":null,"pageY":0}
+  390-squad-roles squad Back: page and focus: {"before":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":0,"overflow":"","locked":null,"active":"squad-tile"}}
+  390-squad-invented sheet first screen: {"screen":"help","dialog":{"top":52,"bottom":792,"h":740},"vh":844,"scrolls":null,"pageY":0}
+  390-squad-invented starting eleven: {"heading":"Starting 11 on our ratings","scope":"Generated teammates are fictional players in your career. These names and ratings belong to your simulated squad.","source":"invented","cells":[{"name":"Ross Dunmore","pos":"ST","ovr":"69","src":"generated","w":101,"h":61,"nameLines":1,"cut":false},{"name":"Sam Carter","pos":"ST","ovr":"65","src":"you","w":101,"h":61,"nameLines":1,"cut":false},{"name":"Maxi Gorosito","pos":"RW","ovr":"62","src":"generated","w":101,"h":61,"nameLines":1,"cut":false},{"name":"Nnamdi Uzoma","pos":"CM","ovr":"68","src":"generated","w":101,"h":76,"nameLines":1,"cut":false},{"name":"Shane Ashcroft","pos":"CDM","ovr":"64","src":"generated","w":101,"h":76,"nameLines":1,"cut":false},{"name":"Obinna Ikpeba-Ola","pos":"CM","ovr":"56","src":"generated","w":101,"h":76,"nameLines":2,"cut":false},{"name":"Onur Öztürkmen","pos":"LB","ovr":"56","src":"generated","w":74,"h":76,"nameLines":2,"cut":false},{"name":"Mees Nieuwland","pos":"CB","ovr":"68","src":"generated","w":74,"h":76,"nameLines":2,"cut":false},{"name":"Eddie Stanhope","pos":"CB","ovr":"65","src":"generated","w":74,"h":76,"nameLines":2,"cut":false},{"name":"Eivind Nordvik","pos":"RB","ovr":"62","src":"generated","w":74,"h":76,"nameLines":2,"cut":false},{"name":"Juvenal Quaresma","pos":"GK","ovr":"56","src":"generated","w":104,"h":76,"nameLines":2,"cut":false}]}
+  390-squad-invented eleven screen: {"screen":"eleven","dialog":{"top":97,"bottom":747,"h":650},"vh":844,"scrolls":null,"pageY":0}
+  390-squad-invented squad Back: page and focus: {"before":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":0,"overflow":"","locked":null,"active":"squad-tile"}}
+  390-squad-old sheet first screen: {"screen":"help","dialog":{"top":52,"bottom":792,"h":740},"vh":844,"scrolls":null,"pageY":0}
+  390-squad-old starting eleven: {"heading":"Starting 11 on our ratings","source":"real","cells":[{"name":"Marcus Rashford","pos":"LW","ovr":"89","src":"real","w":101,"h":76,"nameLines":2,"cut":false},{"name":"Romelu Lukaku","pos":"ST","ovr":"89","src":"real","w":101,"h":76,"nameLines":1,"cut":false},{"name":"Anthony Martial","pos":"ST","ovr":"87","src":"real","w":101,"h":76,"nameLines":2,"cut":false},{"name":"Paul Pogba","pos":"CM","ovr":"90","src":"real","w":101,"h":61,"nameLines":1,"cut":false},{"name":"Jesse Lingard","pos":"CAM","ovr":"85","src":"real","w":101,"h":61,"nameLines":1,"cut":false},{"name":"Fred","pos":"CM","ovr":"84","src":"real","w":101,"h":61,"nameLines":1,"cut":false},{"name":"Luke Shaw","pos":"LB","ovr":"83","src":"real","w":74,"h":76,"nameLines":1,"cut":false},{"name":"Victor Lindelöf","pos":"CB","ovr":"84","src":"real","w":74,"h":76,"nameLines":2,"cut":false},{"name":"Eric Bailly","pos":"CB","ovr":"82","src":"real","w":74,"h":76,"nameLines":1,"cut":false},{"name":"Chris Smalling","pos":"CB","ovr":"81","src":"real","w":74,"h":76,"nameLines":2,"cut":false},{"name":"David de Gea","pos":"GK","ovr":"88","src":"real","w":104,"h":61,"nameLines":1,"cut":false}]}
+  390-squad-old eleven screen: {"screen":"eleven","dialog":{"top":118,"bottom":726,"h":609},"vh":844,"scrolls":null,"pageY":0}
+  390-squad-old squad Back: page and focus: {"before":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":0,"overflow":"","locked":null,"active":"squad-tile"}}
+  1280-wheel the choice as the card words it: ⚡
+Back in training tomorrow
+Morale +5, Pace +1 next season, 30% chance of a nagging issue all year
+  1280-wheel receipt: {"title":"The Scan Room","chance":0.3,"roll":0.10701117626990375,"hit":"Knee setback","miss":"No setback","result":true,"seen":false}
+  1280-wheel open: page: {"before":0,"after":0,"locked":"1"}
+  1280-wheel wheel boxes: {"dialog":{"top":154,"bottom":746,"h":592,"w":384},"vh":900,"disk":{"top":385,"bottom":577,"h":192,"w":192},"scroller":{"top":289,"bottom":661,"h":372,"w":334,"client":372,"scroll":372,"at":0},"result":{"top":617,"bottom":661,"h":44,"w":334,"text":"Ready to reveal your saved result."},"transform":"rotate(0deg)","transition":"2s transform","background":"conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ","buttons":["Spin the wheel","Show result","Close"],"title":"The Scan Room","text":"The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"}
+  1280-wheel after reload mid wheel: Ready to reveal your saved result.
+  1280-wheel spun: {"ms":2081,"transform":"rotate(1401.48deg)","text":"Knee setback","buttons":["Continue","Close"],"transition":"2s transform"}
+  1280-wheel Continue: page and focus: {"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"}
+  1280-wheel-reduced the choice as the card words it: ⚡
+Back in training tomorrow
+Morale +5, Pace +1 next season, 30% chance of a nagging issue all year
+  1280-wheel-reduced receipt: {"title":"The Scan Room","chance":0.3,"roll":0.6408573086946503,"hit":"Knee setback","miss":"No setback","result":false,"seen":false}
+  1280-wheel-reduced open: page: {"before":0,"after":0,"locked":"1"}
+  1280-wheel-reduced wheel boxes: {"dialog":{"top":154,"bottom":746,"h":592,"w":384},"vh":900,"disk":{"top":385,"bottom":577,"h":192,"w":192},"scroller":{"top":289,"bottom":661,"h":372,"w":334,"client":372,"scroll":372,"at":0},"result":{"top":617,"bottom":661,"h":44,"w":334,"text":"Ready to reveal your saved result."},"transform":"rotate(0deg)","transition":"1e-06s none","background":"conic-gradient(rgb(245, 158, 11) 0deg, rgb(245, 158, 11) 108deg, rgb(71, 85, 105) 108deg, ","buttons":["Spin the wheel","Show result","Close"],"title":"The Scan Room","text":"The Scan Room\n\nThe wheel shows the chance from your choice. Your result is saved once. Spinning, skipping or reloading cannot change it.\n\n30%: Knee setback\n70%: No setback\n\nExample: a 30% chance uses 30 of 100 equal parts. The pointer lands on the part picked by the game's original roll.\n\n▼\n\nAmber: Knee setback. Slate: No setback.\n\nReady to reveal your saved result.\n\nSpin the wheel\nShow result"}
+  PROBLEM 1280-wheel-reduced reduced motion: the disk still has a transition: 1e-06s none
+  1280-wheel-reduced spun: {"ms":162,"transform":"rotate(1209.29deg)","text":"No setback","buttons":["Continue","Close"],"transition":"1e-06s none"}
+  1280-wheel-reduced Continue: page and focus: {"y":0,"overflow":"","locked":null,"active":"BUTTON:🎟️Get them all in free next home game a"}
+  1280-wheel-escape Escape before the reveal: {"seen":true,"expected":"No setback","wheelWordsOnPage":false,"lastEvents":["🧢 Signed with Cousin Ricky. What could go wrong","🩻 Back in training the next morning like nothing happened. Nothing did happen"],"phase":"random_events"}
+  1280-wheel-appeal appeal save: {"wheel":{"title":"Red card appeal","chance":0.5,"roll":0.7869630896020681,"hit":"Appeal successful","miss":"Appeal rejected","result":false,"seen":false},"pendingAppealResult":{"success":false,"banLength":4}}
+  1280-wheel-appeal the appeal card behind the wheel: {"text":"APPEAL REJECTED","top":353,"bottom":381,"overlay":"rgba(0, 0, 0, 0.8)"}
+  1280-wheel-hub unseen receipt on a pre season save: {"title":"The Group Chat Leak","chance":0.5,"roll":0.5090081528760493,"hit":"Leaker found","miss":"Leaker not found","result":false,"seen":false}
+  1280-squad-real sheet first screen: {"screen":"help","dialog":{"top":121,"bottom":779,"h":658},"vh":900,"scrolls":null,"pageY":0}
+  1280-squad-real starting eleven: {"heading":"Starting 11 on our ratings","source":"real","cells":[{"name":"Marcus Rashford","pos":"LW","ovr":"89","src":"real","w":104,"h":76,"nameLines":2,"cut":false},{"name":"Romelu Lukaku","pos":"ST","ovr":"89","src":"real","w":104,"h":76,"nameLines":1,"cut":false},{"name":"Anthony Martial","pos":"ST","ovr":"87","src":"real","w":104,"h":76,"nameLines":1,"cut":false},{"name":"Paul Pogba","pos":"CM","ovr":"90","src":"real","w":104,"h":61,"nameLines":1,"cut":false},{"name":"Jesse Lingard","pos":"CAM","ovr":"85","src":"real","w":104,"h":61,"nameLines":1,"cut":false},{"name":"Fred","pos":"CM","ovr":"84","src":"real","w":104,"h":61,"nameLines":1,"cut":false},{"name":"Luke Shaw","pos":"LB","ovr":"83","src":"real","w":95,"h":61,"nameLines":1,"cut":false},{"name":"Victor Lindelöf","pos":"CB","ovr":"84","src":"real","w":95,"h":61,"nameLines":1,"cut":false},{"name":"Eric Bailly","pos":"CB","ovr":"82","src":"real","w":95,"h":61,"nameLines":1,"cut":false},{"name":"Chris Smalling","pos":"CB","ovr":"81","src":"real","w":95,"h":61,"nameLines":1,"cut":false},{"name":"David de Gea","pos":"GK","ovr":"88","src":"real","w":104,"h":60,"nameLines":1,"cut":false}]}
+  1280-squad-real eleven screen: {"screen":"eleven","dialog":{"top":153,"bottom":747,"h":594},"vh":900,"scrolls":null,"pageY":0}
+  1280-squad-real squad Back: page and focus: {"before":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":0,"overflow":"","locked":null,"active":"squad-tile"}}
+  1280-squad-roles sheet first screen: {"screen":"help","dialog":{"top":121,"bottom":779,"h":658},"vh":900,"scrolls":null,"pageY":0}
+  1280-squad-roles starting eleven: {"heading":"Starting 11 on our ratings","scope":"There is no checked historical squad for this club and season. Missing teammate names stay as roles.","source":"roles","cells":[{"name":"ROLE 1stchoice","pos":"ST","ovr":"67","src":"role","w":104,"h":76,"nameLines":0,"cut":false},{"name":"Sam Carter","pos":"ST","ovr":"64","src":"you","w":104,"h":76,"nameLines":1,"cut":false},{"name":"ROLE 2ndchoice","pos":"RW","ovr":"64","src":"role","w":104,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 1stchoice","pos":"CM","ovr":"66","src":"role","w":104,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 2ndchoice","pos":"CDM","ovr":"63","src":"role","w":104,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 3rdchoice","pos":"CM","ovr":"56","src":"role","w":104,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 4thchoice","pos":"LB","ovr":"56","src":"role","w":95,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 1stchoice","pos":"CB","ovr":"69","src":"role","w":95,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 2ndchoice","pos":"CB","ovr":"63","src":"role","w":95,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 3rdchoice","pos":"RB","ovr":"60","src":"role","w":95,"h":76,"nameLines":0,"cut":false},{"name":"ROLE 1stchoice","pos":"GK","ovr":"56","src":"role","w":104,"h":75,"nameLines":0,"cut":false}]}
+  1280-squad-roles eleven screen: {"screen":"eleven","dialog":{"top":118,"bottom":782,"h":665},"vh":900,"scrolls":null,"pageY":0}
+  1280-squad-roles squad Back: page and focus: {"before":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":0,"overflow":"","locked":null,"active":"squad-tile"}}
+  1280-squad-invented sheet first screen: {"screen":"help","dialog":{"top":121,"bottom":779,"h":658},"vh":900,"scrolls":null,"pageY":0}
+  1280-squad-invented starting eleven: {"heading":"Starting 11 on our ratings","scope":"Generated teammates are fictional players in your career. These names and ratings belong to your simulated squad.","source":"invented","cells":[{"name":"Ross Dunmore","pos":"ST","ovr":"69","src":"generated","w":104,"h":61,"nameLines":1,"cut":false},{"name":"Sam Carter","pos":"ST","ovr":"65","src":"you","w":104,"h":61,"nameLines":1,"cut":false},{"name":"Maxi Gorosito","pos":"RW","ovr":"62","src":"generated","w":104,"h":61,"nameLines":1,"cut":false},{"name":"Nnamdi Uzoma","pos":"CM","ovr":"68","src":"generated","w":104,"h":76,"nameLines":1,"cut":false},{"name":"Shane Ashcroft","pos":"CDM","ovr":"64","src":"generated","w":104,"h":76,"nameLines":1,"cut":false},{"name":"Obinna Ikpeba-Ola","pos":"CM","ovr":"56","src":"generated","w":104,"h":76,"nameLines":2,"cut":false},{"name":"Onur Öztürkmen","pos":"LB","ovr":"56","src":"generated","w":95,"h":76,"nameLines":2,"cut":false},{"name":"Mees Nieuwland","pos":"CB","ovr":"68","src":"generated","w":95,"h":76,"nameLines":2,"cut":false},{"name":"Eddie Stanhope","pos":"CB","ovr":"65","src":"generated","w":95,"h":76,"nameLines":2,"cut":false},{"name":"Eivind Nordvik","pos":"RB","ovr":"62","src":"generated","w":95,"h":76,"nameLines":1,"cut":false},{"name":"Juvenal Quaresma","pos":"GK","ovr":"56","src":"generated","w":104,"h":75,"nameLines":2,"cut":false}]}
+  1280-squad-invented eleven screen: {"screen":"eleven","dialog":{"top":125,"bottom":775,"h":650},"vh":900,"scrolls":null,"pageY":0}
+  1280-squad-invented squad Back: page and focus: {"before":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":0,"overflow":"","locked":null,"active":"squad-tile"}}
+  1280-squad-old sheet first screen: {"screen":"help","dialog":{"top":121,"bottom":779,"h":658},"vh":900,"scrolls":null,"pageY":0}
+  1280-squad-old starting eleven: {"heading":"Starting 11 on our ratings","source":"real","cells":[{"name":"Marcus Rashford","pos":"LW","ovr":"89","src":"real","w":104,"h":76,"nameLines":2,"cut":false},{"name":"Romelu Lukaku","pos":"ST","ovr":"89","src":"real","w":104,"h":76,"nameLines":1,"cut":false},{"name":"Anthony Martial","pos":"ST","ovr":"87","src":"real","w":104,"h":76,"nameLines":1,"cut":false},{"name":"Paul Pogba","pos":"CM","ovr":"90","src":"real","w":104,"h":61,"nameLines":1,"cut":false},{"name":"Jesse Lingard","pos":"CAM","ovr":"85","src":"real","w":104,"h":61,"nameLines":1,"cut":false},{"name":"Fred","pos":"CM","ovr":"84","src":"real","w":104,"h":61,"nameLines":1,"cut":false},{"name":"Luke Shaw","pos":"LB","ovr":"83","src":"real","w":95,"h":61,"nameLines":1,"cut":false},{"name":"Victor Lindelöf","pos":"CB","ovr":"84","src":"real","w":95,"h":61,"nameLines":1,"cut":false},{"name":"Eric Bailly","pos":"CB","ovr":"82","src":"real","w":95,"h":61,"nameLines":1,"cut":false},{"name":"Chris Smalling","pos":"CB","ovr":"81","src":"real","w":95,"h":59,"nameLines":1,"cut":false},{"name":"David de Gea","pos":"GK","ovr":"88","src":"real","w":104,"h":56,"nameLines":1,"cut":false}]}
+  1280-squad-old eleven screen: {"screen":"eleven","dialog":{"top":153,"bottom":747,"h":594},"vh":900,"scrolls":null,"pageY":0}
+  1280-squad-old squad Back: page and focus: {"before":{"y":0,"overflow":"","locked":null,"active":"BODY:Skip to main contentLiveLive scores temp"},"after":{"y":0,"overflow":"","locked":null,"active":"squad-tile"}}
+  320-cup-win saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":true},{"stage":"QF","opp":"Portsmouth","won":true,"for":1,"against":0,"home":false},{"stage":"SF","opp":"Aston Villa","won":false,"for":0,"against":2}],"opening":{"opp":"Millwall","country":"England","league":"Championship","won":true,"for":5,"against":1,"home":true},"year":2029,"club":"Brighton","league":26}
+  320-cup-win centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 320-cup-win kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  320-cup-win league games played before the cup night: 5
+  320-cup-win the button after league game 5: ▶ FA Cup: Opening cup tie
+  320-cup-win cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 320-cup-win cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"8","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"9","size":11}]
+  320-cup-win cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  320-cup-win cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Opening cup tie | Millwall | 5-1","h":58},{"id":"domestic:1","after":"25","text":"FA Cup · Quarter-final | Portsmouth","h":54}]
+  320-cup-win bracket: {"rounds":["Opening cup tie | Opening cup tie | Millwall | 5-1","↓ Quarter-final | Quarter-final | Portsmouth | 1-0","↓ Semi-final | Semi-final | Aston Villa | 0-2"],"games":3}
+  320-cup-win bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Brighton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Opening cup tie
+
+Brighton vs Millwall
+
+5-1
+
+Home
+
+Through
+
+Simplified simulated opening tie. Other early rounds were not recorded.
+
+‹ Previous game
+› Next game
+  320-cup-win continue button: ▶ Matchday 6
+  320-cup-win reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","▶ Matchday 6","⏭ Straight to the final table","↺ From the start","🗓 Fixtures"]
+  320-cup-out saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":false}],"opening":{"opp":"Newcastle","country":"England","league":"Premier League","won":false,"for":1,"against":3,"home":false},"year":2029,"club":"Everton","league":22}
+  320-cup-out centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 320-cup-out kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  320-cup-out league games played before the cup night: 5
+  320-cup-out the button after league game 5: ▶ FA Cup: Opening cup tie
+  320-cup-out cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 320-cup-out cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"14","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"6","size":11}]
+  320-cup-out cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\n1-3\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  320-cup-out cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Opening cup tie | Newcastle | 1-3","h":58}]
+  320-cup-out bracket: {"rounds":["Opening cup tie | Opening cup tie | Newcastle | 1-3"],"games":1}
+  320-cup-out bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Everton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Opening cup tie
+
+Everton vs Newcastle
+
+1-3
+
+Away
+
+Out
+
+Simplified simulated opening tie. Other early rounds were not recorded.
+
+‹ Previous game
+› Next game
+  320-cup-out continue button: ▶ Matchday 6
+  320-cup-out reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","▶ Matchday 6","⏭ Straight to the final table","↺ From the start","🗓 Fixtures"]
+  320-cup-old saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":true},{"stage":"QF","opp":"Portsmouth","won":true,"for":1,"against":0,"home":false},{"stage":"SF","opp":"Aston Villa","won":false,"for":0,"against":2}],"opening":null,"year":2029,"club":"Brighton","league":26}
+  320-cup-old centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 320-cup-old kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  320-cup-old league games played before the cup night: 5
+  320-cup-old the button after league game 5: ▶ FA Cup: Early rounds
+  320-cup-old cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 320-cup-old cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"8","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"9","size":11}]
+  320-cup-old cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  320-cup-old cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Early rounds | Opponents not recorded | Through","h":58},{"id":"domestic:1","after":"25","text":"FA Cup · Quarter-final | Portsmouth","h":54}]
+  320-cup-old bracket: {"rounds":["Early rounds | Early rounds | Opponents not recorded | Through","↓ Quarter-final | Quarter-final | Portsmouth | 1-0","↓ Semi-final | Semi-final | Aston Villa | 0-2"],"games":3}
+  320-cup-old bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Brighton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Early rounds
+
+Brighton vs Opponent not recorded
+
+Score not recorded
+
+Through
+
+Opponents and scores were not kept for these rounds.
+
+‹ Previous game
+› Next game
+  320-cup-old continue button: ▶ Matchday 6
+  320-cup-old reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","▶ Matchday 6","⏭ Straight to the final table","↺ From the start","🗓 Fixtures"]
+  320-euro centre help on first open: {"cupExample":true,"cupRule":true}
+  320-euro competition buttons: [{"id":"league","text":"Premier League","h":44,"w":149},{"id":"domestic","text":"FA Cup","h":44,"w":149},{"id":"club","text":"Champions League","h":44,"w":149},{"id":"squad","text":"Current squad","h":44,"w":149}]
+  320-euro club view: {"tables":["League phase: 5 of 36 |  | Only your club's row was kept. |  | Club\tP\tW\tD\tL\tGF\tGA\tPts | Chelsea\t8\t5\t2\t1\t15\t8\t17 |  | Level on points splits on goal difference, then goals scored."],"rounds":["League phase | League phase, game 1 | Arsenal | 2-0 | League phase, game 2 | Dortmund | 3-1 | League phase, game 3 | Atl","↓ Round of 16 | Round of 16, leg 1 | Leverkusen | 0-1 | Round of 16, leg 2 | Leverkusen | 0-0"]}
+  320-euro-night centre help on first open: {"cupExample":true,"cupRule":true}
+  320-euro-night league games before the first cup night: {"reached":3,"button":"▶ Champions League: League phase, game 1","id":"club:0"}
+  320-euro-night first cup night: {"id":"club:0","revealed":"false","text":"Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen Champions League bracket","buttons":["?","Back to your career","Premier League","FA Cup","Champions League","Current squad","Open Champions League bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  320-euro-night first cup night revealed: {"id":"club:0","revealed":"true","text":"Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\n2-0\n\nYou scored 1. Already included in your season totals.\n\nOpen Champions League bracket","buttons":["?","Back to your career","Premier League","FA Cup","Champions League","Current squad","Open Champions League bracket","🗓 Fixtures","▶ Matchday 4","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 320-euro-night european night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"10","size":11},{"text":"-","size":11},{"text":"7","size":11},{"text":"7","size":11}]
+  320-euro-night continue says: ▶ Matchday 4
+  320-euro-night after the night: 4
+  390-cup-win saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":true},{"stage":"QF","opp":"Portsmouth","won":true,"for":1,"against":0,"home":false},{"stage":"SF","opp":"Aston Villa","won":false,"for":0,"against":2}],"opening":{"opp":"Millwall","country":"England","league":"Championship","won":true,"for":5,"against":1,"home":true},"year":2029,"club":"Brighton","league":26}
+  390-cup-win centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 390-cup-win kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  390-cup-win league games played before the cup night: 5
+  390-cup-win the button after league game 5: ▶ FA Cup: Opening cup tie
+  390-cup-win cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 390-cup-win cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"8","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"9","size":11}]
+  390-cup-win cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  390-cup-win cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Opening cup tie | Millwall | 5-1","h":58},{"id":"domestic:1","after":"25","text":"FA Cup · Quarter-final | Portsmouth","h":54}]
+  390-cup-win bracket: {"rounds":["Opening cup tie | Opening cup tie | Millwall | 5-1","↓ Quarter-final | Quarter-final | Portsmouth | 1-0","↓ Semi-final | Semi-final | Aston Villa | 0-2"],"games":3}
+  390-cup-win bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Brighton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Opening cup tie
+
+Brighton vs Millwall
+
+5-1
+
+Home
+
+Through
+
+Simplified simulated opening tie. Other early rounds were not recorded.
+
+‹ Previous game
+› Next game
+  390-cup-win continue button: ▶ Matchday 6
+  390-cup-win reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","▶ Matchday 6","⏭ Straight to the final table","↺ From the start","🗓 Fixtures"]
+  390-cup-out saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":false}],"opening":{"opp":"Newcastle","country":"England","league":"Premier League","won":false,"for":1,"against":3,"home":false},"year":2029,"club":"Everton","league":22}
+  390-cup-out centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 390-cup-out kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  390-cup-out league games played before the cup night: 5
+  390-cup-out the button after league game 5: ▶ FA Cup: Opening cup tie
+  390-cup-out cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 390-cup-out cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"14","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"6","size":11}]
+  390-cup-out cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\n1-3\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  390-cup-out cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Opening cup tie | Newcastle | 1-3","h":58}]
+  390-cup-out bracket: {"rounds":["Opening cup tie | Opening cup tie | Newcastle | 1-3"],"games":1}
+  390-cup-out bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Everton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Opening cup tie
+
+Everton vs Newcastle
+
+1-3
+
+Away
+
+Out
+
+Simplified simulated opening tie. Other early rounds were not recorded.
+
+‹ Previous game
+› Next game
+  390-cup-out continue button: ▶ Matchday 6
+  390-cup-out reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","▶ Matchday 6","⏭ Straight to the final table","↺ From the start","🗓 Fixtures"]
+  390-cup-old saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":true},{"stage":"QF","opp":"Portsmouth","won":true,"for":1,"against":0,"home":false},{"stage":"SF","opp":"Aston Villa","won":false,"for":0,"against":2}],"opening":null,"year":2029,"club":"Brighton","league":26}
+  390-cup-old centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 390-cup-old kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  390-cup-old league games played before the cup night: 5
+  390-cup-old the button after league game 5: ▶ FA Cup: Early rounds
+  390-cup-old cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 390-cup-old cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"8","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"9","size":11}]
+  390-cup-old cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  390-cup-old cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Early rounds | Opponents not recorded | Through","h":58},{"id":"domestic:1","after":"25","text":"FA Cup · Quarter-final | Portsmouth","h":54}]
+  390-cup-old bracket: {"rounds":["Early rounds | Early rounds | Opponents not recorded | Through","↓ Quarter-final | Quarter-final | Portsmouth | 1-0","↓ Semi-final | Semi-final | Aston Villa | 0-2"],"games":3}
+  390-cup-old bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Brighton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Early rounds
+
+Brighton vs Opponent not recorded
+
+Score not recorded
+
+Through
+
+Opponents and scores were not kept for these rounds.
+
+‹ Previous game
+› Next game
+  390-cup-old continue button: ▶ Matchday 6
+  390-cup-old reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","▶ Matchday 6","⏭ Straight to the final table","↺ From the start","🗓 Fixtures"]
+  390-euro centre help on first open: {"cupExample":true,"cupRule":true}
+  390-euro competition buttons: [{"id":"league","text":"Premier League","h":44,"w":184},{"id":"domestic","text":"FA Cup","h":44,"w":184},{"id":"club","text":"Champions League","h":44,"w":184},{"id":"squad","text":"Current squad","h":44,"w":184}]
+  390-euro club view: {"tables":["League phase: 5 of 36 |  | Only your club's row was kept. |  | Club\tP\tW\tD\tL\tGF\tGA\tPts | Chelsea\t8\t5\t2\t1\t15\t8\t17 |  | Level on points splits on goal difference, then goals scored."],"rounds":["League phase | League phase, game 1 | Arsenal | 2-0 | League phase, game 2 | Dortmund | 3-1 | League phase, game 3 | Atl","↓ Round of 16 | Round of 16, leg 1 | Leverkusen | 0-1 | Round of 16, leg 2 | Leverkusen | 0-0"]}
+  390-euro-night centre help on first open: {"cupExample":true,"cupRule":true}
+  390-euro-night league games before the first cup night: {"reached":3,"button":"▶ Champions League: League phase, game 1","id":"club:0"}
+  390-euro-night first cup night: {"id":"club:0","revealed":"false","text":"Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen Champions League bracket","buttons":["?","Back to your career","Premier League","FA Cup","Champions League","Current squad","Open Champions League bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  390-euro-night first cup night revealed: {"id":"club:0","revealed":"true","text":"Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\n2-0\n\nYou scored 1. Already included in your season totals.\n\nOpen Champions League bracket","buttons":["?","Back to your career","Premier League","FA Cup","Champions League","Current squad","Open Champions League bracket","🗓 Fixtures","▶ Matchday 4","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 390-euro-night european night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"10","size":11},{"text":"-","size":11},{"text":"7","size":11},{"text":"7","size":11}]
+  390-euro-night continue says: ▶ Matchday 4
+  390-euro-night after the night: 4
+  1280-cup-win saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":true},{"stage":"QF","opp":"Portsmouth","won":true,"for":1,"against":0,"home":false},{"stage":"SF","opp":"Aston Villa","won":false,"for":0,"against":2}],"opening":{"opp":"Millwall","country":"England","league":"Championship","won":true,"for":5,"against":1,"home":true},"year":2029,"club":"Brighton","league":26}
+  1280-cup-win centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 1280-cup-win kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  1280-cup-win league games played before the cup night: 5
+  1280-cup-win the button after league game 5: ▶ FA Cup: Opening cup tie
+  1280-cup-win cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","FA Cup · Opening cup tieMillwall","Open FA Cup bracket","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 1280-cup-win cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"11","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"10","size":11}]
+  1280-cup-win cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","FA Cup · Opening cup tieMillwall5-1","FA Cup · Quarter-finalPortsmouth","Open FA Cup bracket","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  1280-cup-win cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Opening cup tie | Millwall | 5-1","h":58},{"id":"domestic:1","after":"25","text":"FA Cup · Quarter-final | Portsmouth","h":54}]
+  1280-cup-win bracket: {"rounds":["Opening cup tie | Opening cup tie | Millwall | 5-1","↓ Quarter-final | Quarter-final | Portsmouth | 1-0","↓ Semi-final | Semi-final | Aston Villa | 0-2"],"games":3}
+  1280-cup-win bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Brighton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Opening cup tie
+
+Brighton vs Millwall
+
+5-1
+
+Home
+
+Through
+
+Simplified simulated opening tie. Other early rounds were not recorded.
+
+‹ Previous game
+› Next game
+  1280-cup-win continue button: ▶ Matchday 6
+  1280-cup-win reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","FA Cup · Opening cup tieMillwall","▶ Matchday 6","⏭ Straight to the final table","↺ From the start"]
+  1280-cup-out saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":false}],"opening":{"opp":"Newcastle","country":"England","league":"Premier League","won":false,"for":1,"against":3,"home":false},"year":2029,"club":"Everton","league":22}
+  1280-cup-out centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 1280-cup-out kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  1280-cup-out league games played before the cup night: 5
+  1280-cup-out the button after league game 5: ▶ FA Cup: Opening cup tie
+  1280-cup-out cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","FA Cup · Opening cup tieNewcastle","Open FA Cup bracket","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 1280-cup-out cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"9","size":11},{"text":"-","size":11},{"text":"2","size":11},{"text":"14","size":11}]
+  1280-cup-out cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nEverton vs Newcastle\n\nAway\n\n1-3\n\nOut\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","FA Cup · Opening cup tieNewcastle1-3","Open FA Cup bracket","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  1280-cup-out cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Opening cup tie | Newcastle | 1-3","h":58}]
+  1280-cup-out bracket: {"rounds":["Opening cup tie | Opening cup tie | Newcastle | 1-3"],"games":1}
+  1280-cup-out bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Everton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Opening cup tie
+
+Everton vs Newcastle
+
+1-3
+
+Away
+
+Out
+
+Simplified simulated opening tie. Other early rounds were not recorded.
+
+‹ Previous game
+› Next game
+  1280-cup-out continue button: ▶ Matchday 6
+  1280-cup-out reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","FA Cup · Opening cup tieNewcastle","▶ Matchday 6","⏭ Straight to the final table","↺ From the start"]
+  1280-cup-old saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":true},{"stage":"QF","opp":"Portsmouth","won":true,"for":1,"against":0,"home":false},{"stage":"SF","opp":"Aston Villa","won":false,"for":0,"against":2}],"opening":null,"year":2029,"club":"Brighton","league":26}
+  1280-cup-old centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 1280-cup-old kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  1280-cup-old league games played before the cup night: 5
+  1280-cup-old the button after league game 5: ▶ FA Cup: Early rounds
+  1280-cup-old cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","FA Cup · Early roundsOpponents not recor","Open FA Cup bracket","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 1280-cup-old cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"11","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"10","size":11}]
+  1280-cup-old cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Early rounds\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Opponents not recorded\n\nVenue not recorded\n\nScore not recorded\n\nThrough\n\nOpponents and scores were not kept for these rounds.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","FA Cup · Early roundsOpponents not recor","FA Cup · Quarter-finalPortsmouth","Open FA Cup bracket","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  1280-cup-old cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Early rounds | Opponents not recorded | Through","h":58},{"id":"domestic:1","after":"25","text":"FA Cup · Quarter-final | Portsmouth","h":54}]
+  1280-cup-old bracket: {"rounds":["Early rounds | Early rounds | Opponents not recorded | Through","↓ Quarter-final | Quarter-final | Portsmouth | 1-0","↓ Semi-final | Semi-final | Aston Villa | 0-2"],"games":3}
+  1280-cup-old bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Brighton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Early rounds
+
+Brighton vs Opponent not recorded
+
+Score not recorded
+
+Through
+
+Opponents and scores were not kept for these rounds.
+
+‹ Previous game
+› Next game
+  1280-cup-old continue button: ▶ Matchday 6
+  1280-cup-old reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","FA Cup · Early roundsOpponents not recor","▶ Matchday 6","⏭ Straight to the final table","↺ From the start"]
+  1280-euro centre help on first open: {"cupExample":true,"cupRule":true}
+  1280-euro competition buttons: [{"id":"league","text":"Premier League","h":44,"w":118},{"id":"domestic","text":"FA Cup","h":44,"w":67},{"id":"club","text":"Champions League","h":44,"w":137},{"id":"squad","text":"Current squad","h":44,"w":108}]
+  1280-euro club view: {"tables":["League phase: 5 of 36 |  | Only your club's row was kept. |  | Club\tP\tW\tD\tL\tGF\tGA\tPts | Chelsea\t8\t5\t2\t1\t15\t8\t17 |  | Level on points splits on goal difference, then goals scored."],"rounds":["League phase | League phase, game 1 | Arsenal | 2-0 | League phase, game 2 | Dortmund | 3-1 | League phase, game 3 | Atl","↓ Round of 16 | Round of 16, leg 1 | Leverkusen | 0-1 | Round of 16, leg 2 | Leverkusen | 0-0"]}
+  1280-euro-night centre help on first open: {"cupExample":true,"cupRule":true}
+  1280-euro-night league games before the first cup night: {"reached":3,"button":"▶ Champions League: League phase, game 1","id":"club:0"}
+  1280-euro-night first cup night: {"id":"club:0","revealed":"false","text":"Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen Champions League bracket","buttons":["?","Back to your career","Premier League","FA Cup","Champions League","Current squad","Champions League · League phase, game 1A","FA Cup · Opening cup tieBournemouth","Open Champions League bracket","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  1280-euro-night first cup night revealed: {"id":"club:0","revealed":"true","text":"Champions League · League phase, game 1\n\nAfter league game 3. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nChelsea vs Arsenal\n\nHome\n\n2-0\n\nYou scored 1. Already included in your season totals.\n\nOpen Champions League bracket","buttons":["?","Back to your career","Premier League","FA Cup","Champions League","Current squad","Champions League · League phase, game 1A","FA Cup · Opening cup tieBournemouth","Champions League · League phase, game 2D","Open Champions League bracket","▶ Matchday 4","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 1280-euro-night european night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"13","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"9","size":11}]
+  1280-euro-night continue says: ▶ Matchday 4
+  1280-euro-night after the night: 4
+  430-pinned-bar Next Season button at five scroll stops: [{"y":0,"max":10937,"top":866,"bottom":914,"vh":932,"hit":true},{"y":600,"max":10937,"top":866,"bottom":914,"vh":932,"hit":true},{"y":1500,"max":10937,"top":866,"bottom":914,"vh":932,"hit":true},{"y":3000,"max":10937,"top":866,"bottom":914,"vh":932,"hit":true},{"y":10937,"max":10937,"top":534,"bottom":582,"vh":932,"hit":true}]
+review-sc-screens walk: 43 journeys, 0 stopped early, 56 measured problems, 248 shots
