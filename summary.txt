@@ -1,0 +1,10 @@
+headsha exit=0 0s | 1289e05793fd13af9ac8215a8cce9d5f69d65620 6bfd816ae33e7a82ae55660c5edf926daa619a1d 1289e0579_rc request r1225-vfy for 6bfd816ae33e7a82ae55660c5edf926daa619a1d|6bfd816ae_Me
+lf-takeoverform exit=1 1s |   FAIL: help: the dugout screen says the game draws its own fixture list every save, and a takeover in a league with a real list plays the real one|CONTROL takeoverform F
+lf-takeoverhelp exit=1 1s |   FAIL: help: Help does not say that a club you move to during a season keeps generated fixtures|CONTROL takeoverhelp FIRED as expected on bundesliga2: sections J went re
+oldcopy exit=1 2s | simCmLeagueFixtures: FAILED, 4 failure(s): 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 0 of 0 controls fired
+leaguefx exit=0 13s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+tsc exit=0 82s | 
+cmfix-laliga-all exit=0 77s | simCmRealFixtures laliga: 12 actual outcome groups, 760 fixture reads, 760 calendar reads and 11 effective controls passed against the base 980654facb2d41a6c9ddc029c43710
+midseason exit=0 3s | |simMidSeasonStart: all green|
+vitest-startwait exit=0 4s |  Test Files  2 passed (2)       Tests  7 passed (7) 
+cmfix-premier-all exit=0 76s | simCmRealFixtures premier: 13 actual outcome groups, 760 fixture reads, 760 calendar reads and 11 effective controls passed against the base 980654facb2d41a6c9ddc029c4371

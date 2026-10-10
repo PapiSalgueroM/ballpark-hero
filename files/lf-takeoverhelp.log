@@ -1,0 +1,15 @@
+simCmLeagueFixtures: 10 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, premier, primeira, seriea, superlig
+NEGATIVE CONTROL ON: takeoverhelp on a copy of bundesliga2, sections J must go red and nothing else
+A) shape: green for 10 ledger(s)
+B) no club twice in a matchday: green for 10 ledger(s)
+C) each pair once at each ground: green for 10 ledger(s)
+D) the game's own clubs: green for 10 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 10 ledger(s)
+F) two independent sources: green for 10 ledger(s)
+G) nothing excluded got in: green for 10 ledger(s)
+H) the game's registry: green for 10 ledger(s)
+I) frozen: green for 10 ledger(s)
+J) Help tells the truth: RED for help
+  FAIL: help: Help files a job taken part way through a season under generated fixtures, and the picker's takeover plays the real list
+  FAIL: help: Help does not say that a club you move to during a season keeps generated fixtures
+CONTROL takeoverhelp FIRED as expected on bundesliga2: sections J went red for help and nothing else

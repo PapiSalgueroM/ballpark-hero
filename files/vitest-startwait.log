@@ -1,0 +1,12 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerStartWait.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 428[2mms[22m[39m
+ [32m✓[39m src/hooks/useClubManager.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 830[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager completion shape[2m > [22ma finished season records exactly one completion [33m 700[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 16:44:44
+[2m   Duration [22m 3.87s[2m (transform 2.20s, setup 121ms, collect 3.90s, tests 1.26s, environment 878ms, prepare 478ms)[22m
+
