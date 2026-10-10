@@ -1,0 +1,16 @@
+#!serial
+m-corner: node .rc/x/rmut.mjs corner && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-corner.txt 2>&1; s=$?; tail -1 $RC_OUT/m-corner.txt; grep -c "FAIL\|✗\|×" $RC_OUT/m-corner.txt; git checkout -- src scripts; exit $s
+m-band: node .rc/x/rmut.mjs band && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-band.txt 2>&1; s=$?; tail -1 $RC_OUT/m-band.txt; git checkout -- src scripts; exit $s
+m-bandlow: node .rc/x/rmut.mjs bandlow && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-bandlow.txt 2>&1; s=$?; tail -1 $RC_OUT/m-bandlow.txt; git checkout -- src scripts; exit $s
+m-walkers: node .rc/x/rmut.mjs walkers && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-walkers.txt 2>&1; s=$?; tail -1 $RC_OUT/m-walkers.txt; git checkout -- src scripts; exit $s
+m-lateman: node .rc/x/rmut.mjs lateman && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-lateman.txt 2>&1; s=$?; tail -1 $RC_OUT/m-lateman.txt; git checkout -- src scripts; exit $s
+m-nullkey: node .rc/x/rmut.mjs nullkey && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-nullkey.txt 2>&1; s=$?; tail -1 $RC_OUT/m-nullkey.txt; git checkout -- src scripts; exit $s
+m-ogbyorder: node .rc/x/rmut.mjs ogbyorder && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-ogbyorder.txt 2>&1; s=$?; tail -1 $RC_OUT/m-ogbyorder.txt; git checkout -- src scripts; exit $s
+m-surface: node .rc/x/rmut.mjs surface && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-surface.txt 2>&1; s=$?; tail -1 $RC_OUT/m-surface.txt; git checkout -- src scripts; exit $s
+m-ruekeeper: node .rc/x/rmut.mjs ruekeeper && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-ruekeeper.txt 2>&1; s=$?; tail -1 $RC_OUT/m-ruekeeper.txt; git checkout -- src scripts; exit $s
+m-clamp: node .rc/x/rmut.mjs clamp && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-clamp.txt 2>&1; s=$?; tail -1 $RC_OUT/m-clamp.txt; git checkout -- src scripts; exit $s
+m-touchkeeper: node .rc/x/rmut.mjs touchkeeper && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-touchkeeper.txt 2>&1; s=$?; tail -1 $RC_OUT/m-touchkeeper.txt; git checkout -- src scripts; exit $s
+m-celebside: node .rc/x/rmut.mjs celebside && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-celebside.txt 2>&1; s=$?; tail -1 $RC_OUT/m-celebside.txt; git checkout -- src scripts; exit $s
+m-ruefig: node .rc/x/rmut.mjs ruefig && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-ruefig.txt 2>&1; s=$?; tail -1 $RC_OUT/m-ruefig.txt; git checkout -- src scripts; exit $s
+m-kind: node .rc/x/rmut.mjs kind && node scripts/simOwnGoalMotion.mjs > $RC_OUT/m-kind.txt 2>&1; s=$?; tail -1 $RC_OUT/m-kind.txt; git checkout -- src scripts; exit $s
+m-restored: git status --short | head -5; git diff --stat | tail -1; node scripts/simHarnessAnchors.mjs | tail -1
