@@ -1,0 +1,5 @@
+guard-now exit=1 4s | simDailySaveHardening: 1 failure(s)
+guard-attr exit=0 5s | simDailySaveHardening: control guard fired as designed
+stale-now exit=0 4s | simDailySaveHardening: control stale fired as designed
+verdict-now exit=0 4s | simDailySaveHardening: control verdict fired as designed
+clean exit=0 0s | tree back at head
