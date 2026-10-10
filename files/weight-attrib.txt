@@ -1,0 +1,115 @@
+== /club-manager: 577.6K over 39 files on 54e3820a, 581.7K over 39 files on the head, 4.1K more (chunks with no module record: 0 and 0)
+   chunks that moved (gzipped bytes, base to head):
+     +4153  clubManager  249514 to 253667
+     +9  index  239622 to 239631
+     -5  ClubManager  24288 to 24283
+     +4  GameShell  685 to 689
+     -4  guideShape  1691 to 1687
+     -2  star  403 to 401
+     +2  GameHelp  786 to 788
+     -2  HowToPlayPopover  773 to 771
+     -2  ReportQuestion  1327 to 1325
+     +1  tabs  1346 to 1347
+     +1  FlagImg  2977 to 2978
+     +1  medal  387 to 388
+     +1  flag  304 to 305
+     +1  AdBanner  1081 to 1082
+   modules that moved (rendered bytes before minify, 8 modules, 33768 bytes net):
+     +24519  src/data/clubManagerPremierFixtures2026.ts  (new on this route)
+     +4915  src/lib/clubManagerVar.ts  (new on this route)
+     +2984  src/lib/clubManager.ts
+     +1327  src/lib/clubManagerFixtures.ts  (new on this route)
+     +27  src/components/ui/dialog.tsx
+     -23  src/hooks/useClubManager.ts
+     +13  src/lib/clubManagerCalendar.ts
+     +6  node_modules/@radix-ui/react-dialog/dist/index.mjs
+== /soccer-career: 786.3K over 45 files on 54e3820a, 796.4K over 45 files on the head, 10.1K more (chunks with no module record: 0 and 0)
+   chunks that moved (gzipped bytes, base to head):
+     +10309  SoccerCareer  369120 to 379429
+     +16  soccer2  36603 to 36619
+     +9  index  239622 to 239631
+     -4  guideShape  1691 to 1687
+     +4  intlNames  6167 to 6171
+     -2  useGameCompletion  496 to 494
+     -2  star  403 to 401
+     +2  GameHelp  786 to 788
+     -2  HowToPlayPopover  773 to 771
+     -2  select  7407 to 7405
+     -2  Celebration  824 to 822
+     +1  GameSeoContent  2286 to 2287
+     +1  medal  387 to 388
+     -1  VictoryMoment  1297 to 1296
+   modules that moved (rendered bytes before minify, 20 modules, 55529 bytes net):
+     +8315  src/components/soccer-career/CareerMentorTile.tsx  (new on this route)
+     +6286  src/pages/SoccerCareer.tsx
+     +5098  src/lib/soccerCareerMentor.ts  (new on this route)
+     +4904  src/components/soccer-career/SeasonAmbitionTile.tsx  (new on this route)
+     +4535  src/components/soccer-career/PreseasonPlanTile.tsx  (new on this route)
+     +4281  src/lib/soccerCareerAmbitions.ts  (new on this route)
+     +3655  src/lib/soccerCareerEngine.ts
+     +3304  src/components/soccer-career/CareerRecordsTile.tsx  (new on this route)
+     +2770  src/lib/soccerCareerPreparation.ts  (new on this route)
+     +2422  src/components/soccer-career/CareerStory.tsx
+     +2297  src/lib/soccerCareerMilestone.ts  (new on this route)
+     +2262  src/lib/soccerCareerRole.ts  (new on this route)
+     +1958  src/lib/soccerCareerRecords.ts  (new on this route)
+     +1600  src/lib/soccerCareerSelection.ts  (new on this route)
+     +1534  src/components/soccer-career/ReducedRoleNote.tsx  (new on this route)
+     +229  src/lib/soccerClubSquad.ts
+     +42  src/data/gameContent/soccer2.ts
+     +27  src/components/ui/dialog.tsx
+     +6  node_modules/@radix-ui/react-dialog/dist/index.mjs
+     +4  src/lib/soccerClubSquadGen.ts
+== /manager-hot-seat: 595.5K over 41 files on 54e3820a, 599.6K over 41 files on the head, 4.1K more (chunks with no module record: 0 and 0)
+   chunks that moved (gzipped bytes, base to head):
+     +4153  clubManager  249514 to 253667
+     +20  managerHotSeat  6930 to 6950
+     +16  soccer2  36603 to 36619
+     +9  index  239622 to 239631
+     -6  ManagerHotSeat  7107 to 7101
+     -4  guideShape  1691 to 1687
+     -2  star  403 to 401
+     -2  useGameCompletion  496 to 494
+     +1  medal  387 to 388
+     -1  RulesGate  814 to 813
+     +1  GameSeoContent  2286 to 2287
+     +1  ShareButtons  4533 to 4534
+     -1  ResultMoment  1415 to 1414
+     -1  shuffle  347 to 346
+   modules that moved (rendered bytes before minify, 9 modules, 33864 bytes net):
+     +24519  src/data/clubManagerPremierFixtures2026.ts  (new on this route)
+     +4915  src/lib/clubManagerVar.ts  (new on this route)
+     +2984  src/lib/clubManager.ts
+     +1327  src/lib/clubManagerFixtures.ts  (new on this route)
+     +42  src/data/gameContent/soccer2.ts
+     +31  src/lib/managerHotSeat.ts
+     +27  src/components/ui/dialog.tsx
+     +13  src/lib/clubManagerCalendar.ts
+     +6  node_modules/@radix-ui/react-dialog/dist/index.mjs
+== /deadline-day: 605.6K over 45 files on 54e3820a, 609.7K over 45 files on the head, 4.1K more (chunks with no module record: 0 and 0)
+   chunks that moved (gzipped bytes, base to head):
+     +4153  clubManager  249514 to 253667
+     +27  DeadlineDay  14234 to 14261
+     +20  managerHotSeat  6930 to 6950
+     +16  soccer2  36603 to 36619
+     +9  index  239622 to 239631
+     -4  guideShape  1691 to 1687
+     -2  star  403 to 401
+     -2  Celebration  824 to 822
+     -2  useGameCompletion  496 to 494
+     +1  medal  387 to 388
+     -1  RulesGate  814 to 813
+     +1  GameSeoContent  2286 to 2287
+     +1  ShareButtons  4533 to 4534
+     -1  ResultMoment  1415 to 1414
+   modules that moved (rendered bytes before minify, 10 modules, 33902 bytes net):
+     +24519  src/data/clubManagerPremierFixtures2026.ts  (new on this route)
+     +4915  src/lib/clubManagerVar.ts  (new on this route)
+     +2984  src/lib/clubManager.ts
+     +1327  src/lib/clubManagerFixtures.ts  (new on this route)
+     +42  src/data/gameContent/soccer2.ts
+     +38  src/lib/deadlineDay.ts
+     +31  src/lib/managerHotSeat.ts
+     +27  src/components/ui/dialog.tsx
+     +13  src/lib/clubManagerCalendar.ts
+     +6  node_modules/@radix-ui/react-dialog/dist/index.mjs
