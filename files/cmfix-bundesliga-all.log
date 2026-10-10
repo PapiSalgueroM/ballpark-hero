@@ -1,0 +1,26 @@
+PASS real fixtures bundesliga normal
+simCmRealFixtures normal bundesliga: 12 outcome groups passed on 18 clubs, 34 matchdays and 306 fixtures, generated baseline held against the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga venues
+simCmRealFixtures venues bundesliga: the copied fault failed exactly its own outcome (ledger) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga card
+simCmRealFixtures card bundesliga: the copied fault failed exactly its own outcome (calendar) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga settlement
+simCmRealFixtures settlement bundesliga: the copied fault failed exactly its own outcome (settlement) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+SKIP real fixtures bundesliga bye: the neutral-only probe can only stand in the Premier League
+PASS real fixtures bundesliga world
+simCmRealFixtures world bundesliga: the copied fault failed exactly its own outcome (world) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga edited
+simCmRealFixtures edited bundesliga: the copied fault failed exactly its own outcome (eligibility) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga legacy
+simCmRealFixtures legacy bundesliga: the copied fault failed exactly its own outcome (legacy, baseline) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga future
+simCmRealFixtures future bundesliga: the copied fault failed exactly its own outcome (future) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga rollover
+simCmRealFixtures rollover bundesliga: the copied fault failed exactly its own outcome (rollover) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga silent
+simCmRealFixtures silent bundesliga: the copied fault failed exactly its own outcome (unloaded) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga handover
+simCmRealFixtures handover bundesliga: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures bundesliga jobmove
+simCmRealFixtures jobmove bundesliga: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+simCmRealFixtures bundesliga: 12 actual outcome groups, 612 fixture reads, 612 calendar reads and 11 effective controls passed against the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
