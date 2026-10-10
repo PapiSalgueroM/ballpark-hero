@@ -233,3 +233,23 @@ as designed (exit 1; the sense harness would exit 3 had it not).
 | 925a7f12 | sense controls oldgateown, droppedanyyear, lastyearnfl, soldascoin, oldgate306; rivalry controls coin306 (130 failures), oldcard (20), deaf (121), beatlie (8), beatheat (4); simNflCareer control rivalwords (8) | all fired |
 | 925a7f12 | usCareerTruthDigest plain, simUsBoardParity | RED as meant (NFL moved); both recorded again |
 | 925a7f12 | simCareerRivalryEvents, the four career sims, anchors, rival names, quotes | exit 0 each |
+| f85c97e7 (THE MERGED HEAD: every step, the recordings, the What's New entry, origin/main) | tsc | exit 0 |
+| f85c97e7 | vitest: usCareerTruthDigest, usTrophyTile, nbaTrophyTile | exit 0 |
+| f85c97e7 | simNbaAwardsSense full size with SENSE_PROVE_1149=808dbbdc and SENSE_PROVE_OTHERS=1 | 193 checks, 0 failed |
+| f85c97e7 | simUsBoardParity | green, four sports click for click, save for save, screen for screen |
+| f85c97e7 | simCareerRivalryEvents | green |
+| f85c97e7 | sense controls norow, norownfl, norowmlb, norownhl, twicecounted, lastyearmlb, lastyearnhl, tickdraws, nearlie; rivalry controls coin306 (130 failures), oldcard (20), collision (7) | all fired |
+| f85c97e7 | simNflCareer, simMlbCareer, simNhlCareer, simNbaCareer, simUsCareerDeckC, simCareerParity, simAwards, simCareerRealism | exit 0 each |
+| f85c97e7 | simHarnessAnchors, simNoRivalNames (0 findings), simNoInventedQuotes, simNoInventedConduct, simInventedNames, simTrustCopy, simSiteSearch | exit 0 each |
+| f85c97e7 | served build, playGames ONLY=/nfl-my-career, /mlb-my-career, /nhl-my-career, /nba-my-career | 0 findings each |
+| f85c97e7 | the whole vitest suite | NOT BACK when this file was last written: read origin/rc-results/r1149-v |
+| f85c97e7 | simCareerHall | NOT BACK when this file was last written: read origin/rc-results/r1149-v |
+
+The commits after f85c97e7 change this notes file only.
+
+NOT RUN: anything that reads or writes the live Supabase project; `npm run build:seo`, the prerenderer and every
+harness that reads `dist` or the saved pages (the lead's at release); the CRLF gate clone (never touched), so no
+Windows line ending pass; WebKit; the whole `playGames` walk and `sweepGames` (only the four career routes);
+`sweepWeight`; `simUsCareerSummer` (the long kit), `simUsSeasonCentre` and the rest of `runAllSims` beyond the
+list above; the US board parity controls (the harness is unchanged apart from its header); and no adversarial
+review pass (the reviewer after this builder is the check).
