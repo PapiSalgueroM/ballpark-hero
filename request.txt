@@ -1,0 +1,1 @@
+r1210-fence: cp .rc/x/simStorageWrites.r1210.mjs scripts/simStorageWrites.r1210.mjs && node scripts/simStorageWrites.r1210.mjs; s=$?; rm -f scripts/simStorageWrites.r1210.mjs; exit $s

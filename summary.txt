@@ -1,0 +1,1 @@
+r1210-fence exit=1 1s | simStorageWrites: 1 failed (owed: 12)
