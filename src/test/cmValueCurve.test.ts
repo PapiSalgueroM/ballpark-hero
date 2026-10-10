@@ -644,6 +644,18 @@ describe('Club Manager ages for August 2026', () => {
       .toThrow(/Allan at Corinthians is 22 by his table row .* and 29 by the birth date 1997-03-03/);
   });
 
+  it('the namesake guard starts past two years: exactly two apart is the same man, three is not', () => {
+    /* Virgil van Dijk is 35 on the day by his date. A bulk 2026 row of age 32 reads 33 by the table
+       rule: two under, accepted. Age 31 reads 32: three under, refused. */
+    const vanDijk = (age: number) => augustAge2026({ name: 'Virgil van Dijk', club: 'Liverpool', tableClub: 'Liverpool', age, year: 2026, id: 23441 }, births);
+    expect(NAMESAKE_YEARS).toBe(2);
+    expect(vanDijk(32)).toEqual({ age: 35, basis: 'born', born: '1991-07-08' });
+    expect(() => vanDijk(31)).toThrow(/is 32 by his table row .* and 35 by the birth date 1991-07-08 .*: more than 2 years apart/);
+    /* and the same edge from above: a table age two over is accepted, three over is refused */
+    expect(vanDijk(36)).toEqual({ age: 35, basis: 'born', born: '1991-07-08' });
+    expect(() => vanDijk(37)).toThrow(/is 38 by his table row .* and 35 by the birth date 1991-07-08 .*: more than 2 years apart/);
+  });
+
   it('throws on a row the rule was never measured on', () => {
     expect(() => augustAge2026({ name: 'Gap Row', club: 'X', age: 25, year: 2026, id: 167000 }, births)).toThrow(/inside the gap/);
     expect(() => augustAge2026({ name: 'Gap Row', club: 'X', age: 25, year: 2026, id: 176415 }, births)).toThrow(/inside the gap/);
