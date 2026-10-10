@@ -134,7 +134,8 @@
    K   The Trophy Case tile (Round 1112). The hub tile counts the rings plus the sport's honours rows; the case
        behind it lists every award on the seasons. With the row for the lesser awards the two agree on every
        career of the fleet (exact), so the tile reads Empty only over an empty case. The careers the row is for
-       (awards, but no ring, MVP, All-NBA or All-Star) are still there on every seed (a floor).
+       (awards, but no ring, MVP, All-NBA or All-Star) are still there on every seed: 389, 418, 402, 395, 389
+       of 6,000 on 2026-10-09, about one career in fifteen, and the floor of 230 is six tenths of the lowest.
    T   The near tie (Round 1112). The one sentence all four sports share ("Nothing in it again. ...") names the
        leader the tally on the save gives, or says the head to head is level. Every near tie note of the NBA
        fleet and of the other three sports' fleets is read against the rival's tally right after its season
@@ -1096,7 +1097,7 @@ const HELD_TOL = {
 /* R: my share of the head to head years as Round 1112 shipped it, five full size seeds (see the header). */
 const RIVAL_1112 = { myShare: [61.01, 60.83, 61.44, 61.06, 61.09] };
 /* K: careers a full size seed must still find whose only awards are the lesser ones (see the header). */
-const LESSER_ONLY_FLOOR = 1;
+const LESSER_ONLY_FLOOR = 230;
 /* T: how many near tie notes of each kind a full size run must still find in each sport (see the header). */
 const NEAR_TIE_FLOOR = 200;
 /* R4: how often a full size seed must still deal the All-Star beat in each of its three cases (see the header). */
