@@ -93,7 +93,7 @@ describe('draft night on the actual boards', () => {
     // Both ways off are live in the first frame, and there is one way on, not two.
     expect(buttons(view).getAllByRole('button', { name: 'Start your career' })).toHaveLength(1);
     expect(buttons(view).getByRole('button', { name: 'Start your career' })).toBeEnabled();
-    expect(buttons(view).getByRole('button', { name: 'Skip to my pick' })).toBeEnabled();
+    expect(buttons(view).getByRole('button', { name: 'Skip to the end' })).toBeEnabled();
     // Nothing above the board says how it ends: the words wait on the board's clock,
     // and the heading a screen reader lands on is neutral.
     const stage = journey(view).querySelector<HTMLElement>('[data-arrival]')!;
@@ -122,7 +122,7 @@ describe('draft night on the actual boards', () => {
     fireEvent.animationEnd(closingRow(view));
     expect(nightOf(view)).toHaveAttribute('data-night-stage', 'landed');
     for (const el of ending()) expect(el).not.toHaveAttribute('aria-hidden');
-    expect(buttons(view).queryByRole('button', { name: 'Skip to my pick' })).toBeNull();
+    expect(buttons(view).queryByRole('button', { name: 'Skip to the end' })).toBeNull();
     expect(srTitle(view)).toHaveTextContent(out.pick === null ? 'A different way in.' : 'This is your moment.');
     expect(within(nightOf(view)!).getByRole('status')).toHaveTextContent(careerNightResultLine(built.board[built.board.length - 1], desc.teamLabel));
     // Now the file moves on to the numbers the career starts with.
@@ -143,7 +143,7 @@ describe('draft night on the actual boards', () => {
     await nightLoaded();
     fireEvent.click(buttons(view).getByRole('button', { name: 'Draft day' }));
     expect(nightOf(view)).toHaveAttribute('data-night-stage', 'live');
-    fireEvent.click(buttons(view).getByRole('button', { name: 'Skip to my pick' }));
+    fireEvent.click(buttons(view).getByRole('button', { name: 'Skip to the end' }));
     expect(nightOf(view)).toHaveAttribute('data-night-stage', 'skipped');
     for (const r of nightOf(view)!.querySelectorAll<HTMLElement>('[data-night-row]')) expect(r.className).not.toMatch(/cm-(tick-in|slam|rise)/);
     // Nothing of the ending is kept from a screen reader once the skip has landed it.
@@ -201,7 +201,7 @@ describe('draft night on the actual boards', () => {
       expect(closingRow(view)).toHaveAttribute('data-night-row', 'unpicked');
       expect(closingRow(view)).toHaveTextContent(desc.teamLabel(saved(row).prospect!.state!.draft!.team));
       expect(nightOf(view)!.querySelector('.cm-confetti')).toBeNull();
-      expect(buttons(view).queryByRole('button', { name: 'Skip to my pick' })).toBeNull();
+      expect(buttons(view).queryByRole('button', { name: 'Skip to the end' })).toBeNull();
     } finally { window.matchMedia = real; }
   });
 });

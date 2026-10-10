@@ -10,7 +10,7 @@
      row and both buttons, so the card has its final height at once, the page
      never moves while the night plays and a keyboard user is never held.
    - IT DOES NOT BLOCK. "Start your career" is live from the first frame and
-     "Skip to my pick" lands every row at once.
+     "Skip to the end" lands every row at once.
    - THE CLOCK IS HERE, not in the lib: a row arrives on a CSS delay from the
      celebration kit's revealDelay, and careerNightClock is the one place the
      pace is worked out. The whole night lands inside CAREER_NIGHT_CEILING_MS,
@@ -188,7 +188,7 @@ export function DraftNightSequence({
         </div>
       </div>
       <div ref={actionsRef} data-night-actions className={cn('grid scroll-mb-3 gap-2', !over && 'grid-cols-2')}>
-        {!over && <Button variant="outline" className="w-full whitespace-normal" onClick={onSkip}>Skip to my pick</Button>}
+        {!over && <Button variant="outline" className="w-full whitespace-normal" onClick={onSkip}>Skip to the end</Button>}
         {/* The same border box as the outlined skip beside it, so the row keeps its
             height when the skip goes (the walk measured 2 px without this). */}
         {onContinue && <Button className="w-full whitespace-normal border border-transparent" onClick={onContinue}>Start your career</Button>}

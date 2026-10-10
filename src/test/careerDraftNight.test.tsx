@@ -83,7 +83,7 @@ describe('the first frame holds the whole night', () => {
     for (let i = 1; i < delays.length; i += 1) expect(delays[i]).toBeGreaterThan(delays[i - 1]);
     // Both ways off the night are live at once, and neither wears a name the road's other buttons use.
     expect(within(root).getByRole('button', { name: 'Start your career' })).toBeEnabled();
-    expect(within(root).getByRole('button', { name: 'Skip to my pick' })).toBeEnabled();
+    expect(within(root).getByRole('button', { name: 'Skip to the end' })).toBeEnabled();
     for (const b of within(root).getAllByRole('button')) expect(b.textContent).not.toMatch(/Play it safe|Go all out|^Draft day$/);
     // The burst fires on mount, so it may not be here before the closing row has landed.
     expect(root.querySelector('.cm-confetti')).toBeNull();
@@ -114,7 +114,7 @@ describe('the first frame holds the whole night', () => {
     fireEvent.animationEnd(rows[rows.length - 1]);
     expect(onLanded).toHaveBeenCalledTimes(1);
     // Without a way on from the caller there is no second button, and the skip is still there.
-    expect(within(view.container).getAllByRole('button').map(b => b.textContent)).toEqual(['Skip to my pick']);
+    expect(within(view.container).getAllByRole('button').map(b => b.textContent)).toEqual(['Skip to the end']);
   });
 
   /* A screen shorter than the night (a phone on its side): the buttons under the board, and the
@@ -185,14 +185,14 @@ describe('the first frame holds the whole night', () => {
         const night = buildCareerDraftNight(desc, state)!;
         const onSkip = vi.fn();
         const live = render(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="live" onLanded={noop} onSkip={onSkip} onContinue={noop} />);
-        fireEvent.click(within(live.container).getByRole('button', { name: 'Skip to my pick' }));
+        fireEvent.click(within(live.container).getByRole('button', { name: 'Skip to the end' }));
         expect(onSkip).toHaveBeenCalledTimes(1);
         live.unmount();
         const view = render(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="skipped" onLanded={noop} onSkip={noop} onContinue={noop} />);
         const rows = [...view.container.querySelectorAll<HTMLElement>('[data-night-row]')];
         expect(rows.length).toBe(night.board.length);
         for (const r of rows) { expect(r.style.animationDelay).toBe(''); expect(r.className).not.toMatch(/cm-(tick-in|slam|rise)/); expect(r).not.toHaveAttribute('aria-hidden'); }
-        expect(within(view.container).queryByRole('button', { name: 'Skip to my pick' })).toBeNull();
+        expect(within(view.container).queryByRole('button', { name: 'Skip to the end' })).toBeNull();
         expect(within(view.container).getByRole('button', { name: 'Start your career' })).toBeEnabled();
         expect(within(view.container).getByRole('status')).toHaveTextContent(careerNightResultLine(night.board[night.board.length - 1], desc.teamLabel));
         if (desc.lottery) expect(view.container.querySelector('[data-lottery-settled]')).not.toBeNull();

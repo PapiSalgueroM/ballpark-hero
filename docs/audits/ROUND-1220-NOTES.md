@@ -13,7 +13,7 @@ the night. The combine you run (stations, drills, a save field) is Round B, late
   first (the one shared presenter of Round 1222), then the picks ahead of his come off the board,
   then his name is called, or the last pick goes by without it. At most eight board rows and
   twelve rows in all, in every sport and era, MLB's 1,500 pick draft of 2004 included.
-- "Start your career" and "Skip to my pick" are live from the first frame. Nothing is saved, so a
+- "Start your career" and "Skip to the end" are live from the first frame. Nothing is saved, so a
   reload shows the result block the card always showed.
 - The journey's help gained one paragraph (the rule and a worked example built from the function).
 
@@ -117,7 +117,7 @@ undrafted road with less motion). What it measured:
   than its viewport, the save equal to the engine's state after the draft, the career that
   starts at the club the closing row showed, no page error.
 
-THE FIRST RUN OF THE WALK FOUND A REAL JUMP: the outlined "Skip to my pick" is 2 px taller than
+THE FIRST RUN OF THE WALK FOUND A REAL JUMP: the outlined skip button is 2 px taller than
 "Start your career", so the row under the board lost 2 px when the skip went (32 height failures
 and 8 skip failures in 40 nights, `r1220-walk`). Fixed by giving the two buttons the same border
 box. It also showed three of its own controls had changed nothing (a style put in from an init
@@ -190,8 +190,15 @@ the two vitest files, a fresh build and the walk). All ten went red for their ow
   it still cuts its longest club ("Timberwolves", 83 px) and a long seed line ("Seed 1 · Down 3",
   76 px). The walk writes that down at 320 and does not judge it. A two line label or a one column
   grid on a narrow screen belongs in the presenter.
-- "Skip to my pick" is the label on every night, the ones that end without his name too. A
-  different label there would give the ending away in the first frame.
+- "Skip to the end" is the label on every night. It was "Skip to my pick" until the second fix
+  pass: a night that ends without his name has no pick to skip to, and a different label on that
+  night alone would give the ending away in the first frame, so every night wears the one label
+  that is true either way (the site's other skips read the same way: "Skip to the decision",
+  "Skip to the results").
+- Once the night has landed the pick is on screen twice: in the closing row of the board, and in
+  the result block under it (Round 993's block, which is all a reload shows). That is the design
+  the brief asked for, the night above the result, and the block also carries what the row does
+  not (the seasons in the minors, in the sports that have them). Not changed.
 - The NHL and MLB lotteries are real and not modelled by the career engines: no tile, and no
   sentence that says there is none.
 

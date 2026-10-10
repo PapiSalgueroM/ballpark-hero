@@ -349,7 +349,7 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
       /* 8. One press lands everything and the page does not move for it. */
       await page.waitForTimeout(350); await shot('2-live');
       const before = await page.evaluate(CARD);
-      await press('Skip to my pick');
+      await press('Skip to the end');
       await page.waitForTimeout(150);
       const after = await page.evaluate(CARD);
       if (after.stage !== 'skipped') fail(id, 'skip', `the night is ${after.stage} after Skip`);
