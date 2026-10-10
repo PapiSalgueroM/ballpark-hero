@@ -1,0 +1,14 @@
+  FAIL: m390-laliga: did not reach the job (Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of A)
+  FAIL: m390-laliga: no save after taking the job
+  FAIL: m390-laliga: the calendar tile could not be opened
+m390-laliga: in job false, save null, key on save false, calendar opened false, calendar claims real false, help opened true, 41 files fetched, 0 with a ledger key, page errors 0
+m390rm-championship: in job true, save Wrexham, key on save false, calendar opened true, calendar claims real false, help opened true, 52 files fetched, 0 with a ledger key, page errors 0
+  FAIL: d1280-bundesliga: did not reach the job (Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER )
+  FAIL: d1280-bundesliga: no save after taking the job
+  FAIL: d1280-bundesliga: the calendar tile could not be opened
+d1280-bundesliga: in job false, save null, key on save false, calendar opened false, calendar claims real false, help opened true, 41 files fetched, 0 with a ledger key, page errors 0
+  FAIL: d1280rm-laliga: did not reach the job (Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER )
+  FAIL: d1280rm-laliga: no save after taking the job
+  FAIL: d1280rm-laliga: the calendar tile could not be opened
+d1280rm-laliga: in job false, save null, key on save false, calendar opened false, calendar claims real false, help opened true, 41 files fetched, 0 with a ledger key, page errors 0
+r1213 walk: FAILED, 9 failure(s) over 4 journeys

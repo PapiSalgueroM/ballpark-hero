@@ -1,0 +1,152 @@
+{
+  "base": "http://localhost:4173",
+  "cases": [
+    {
+      "tag": "m390-laliga",
+      "steps": [
+        "pressed the 2026-27 season",
+        "pressed the country",
+        "pressed the league",
+        "COULD NOT PRESS Real Madrid",
+        "COULD NOT PRESS the confirm bar",
+        "COULD NOT PRESS skip the dugout form",
+        "COULD NOT PRESS the calendar tile"
+      ],
+      "shots": [
+        "m390-laliga-01-picker.png",
+        "m390-laliga-02-leagues.png",
+        "m390-laliga-03-club.png",
+        "m390-laliga-04-hub.png",
+        "m390-laliga-05-calendar.png",
+        "m390-laliga-06-help.png"
+      ],
+      "inJob": false,
+      "hubHead": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the",
+      "saveClub": null,
+      "saveHasKey": false,
+      "calendarOpened": false,
+      "calendarHead": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026",
+      "calendarClaimsReal": false,
+      "overflowX": 0,
+      "helpOpened": true,
+      "helpNamesRealFixtures": false,
+      "pageErrors": [],
+      "filesFetched": 41,
+      "filesWithLedgerKey": [],
+      "filesWithCoverageSentence": []
+    },
+    {
+      "tag": "m390rm-championship",
+      "steps": [
+        "pressed the 2026-27 season",
+        "pressed the country",
+        "pressed the league",
+        "pressed Wrexham",
+        "pressed the confirm bar",
+        "pressed skip the dugout form",
+        "pressed the calendar tile"
+      ],
+      "shots": [
+        "m390rm-championship-01-picker.png",
+        "m390rm-championship-02-leagues.png",
+        "m390rm-championship-03-club.png",
+        "m390rm-championship-04-hub.png",
+        "m390rm-championship-05-calendar.png",
+        "m390rm-championship-06-help.png"
+      ],
+      "inJob": true,
+      "hubHead": "Skip to main content DOUKNOWBALL Back Track stats Wrexham 2026-27 · Season 1 Season not started £8m No matches yet Managers Board Safe Fans Hopeful Home Squad T",
+      "saveClub": "Wrexham",
+      "saveHasKey": false,
+      "calendarOpened": true,
+      "calendarHead": "Skip to main content DOUKNOWBALL Back Track stats Wrexham 2026-27 · Season 1 Season not started £8m No matches yet Managers Board Safe Fans Hopeful Home Squad Tactics Table Market ☀️ Transfer window open. Tap to do busin",
+      "calendarClaimsReal": false,
+      "overflowX": 0,
+      "helpOpened": true,
+      "helpNamesRealFixtures": false,
+      "pageErrors": [],
+      "filesFetched": 52,
+      "filesWithLedgerKey": [],
+      "filesWithCoverageSentence": []
+    },
+    {
+      "tag": "d1280-bundesliga",
+      "steps": [
+        "pressed the 2026-27 season",
+        "pressed the country",
+        "COULD NOT PRESS the league",
+        "COULD NOT PRESS Bayern Munich",
+        "COULD NOT PRESS the confirm bar",
+        "COULD NOT PRESS skip the dugout form",
+        "COULD NOT PRESS the calendar tile"
+      ],
+      "shots": [
+        "d1280-bundesliga-01-picker.png",
+        "d1280-bundesliga-02-leagues.png",
+        "d1280-bundesliga-03-club.png",
+        "d1280-bundesliga-04-hub.png",
+        "d1280-bundesliga-05-calendar.png",
+        "d1280-bundesliga-06-help.png"
+      ],
+      "inJob": false,
+      "hubHead": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs toda",
+      "saveClub": null,
+      "saveHasKey": false,
+      "calendarOpened": false,
+      "calendarHead": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-",
+      "calendarClaimsReal": false,
+      "overflowX": 0,
+      "helpOpened": true,
+      "helpNamesRealFixtures": false,
+      "pageErrors": [],
+      "filesFetched": 41,
+      "filesWithLedgerKey": [],
+      "filesWithCoverageSentence": []
+    },
+    {
+      "tag": "d1280rm-laliga",
+      "steps": [
+        "pressed the 2026-27 season",
+        "pressed the country",
+        "pressed the league",
+        "COULD NOT PRESS Barcelona",
+        "COULD NOT PRESS the confirm bar",
+        "COULD NOT PRESS skip the dugout form",
+        "COULD NOT PRESS the calendar tile"
+      ],
+      "shots": [
+        "d1280rm-laliga-01-picker.png",
+        "d1280rm-laliga-02-leagues.png",
+        "d1280rm-laliga-03-club.png",
+        "d1280rm-laliga-04-hub.png",
+        "d1280rm-laliga-05-calendar.png",
+        "d1280rm-laliga-06-help.png"
+      ],
+      "inJob": false,
+      "hubHead": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs toda",
+      "saveClub": null,
+      "saveHasKey": false,
+      "calendarOpened": false,
+      "calendarHead": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-",
+      "calendarClaimsReal": false,
+      "overflowX": 0,
+      "helpOpened": true,
+      "helpNamesRealFixtures": false,
+      "pageErrors": [],
+      "filesFetched": 41,
+      "filesWithLedgerKey": [],
+      "filesWithCoverageSentence": []
+    }
+  ],
+  "failures": [
+    "m390-laliga: did not reach the job (Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of A)",
+    "m390-laliga: no save after taking the job",
+    "m390-laliga: the calendar tile could not be opened",
+    "d1280-bundesliga: did not reach the job (Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER )",
+    "d1280-bundesliga: no save after taking the job",
+    "d1280-bundesliga: the calendar tile could not be opened",
+    "d1280rm-laliga: did not reach the job (Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER )",
+    "d1280rm-laliga: no save after taking the job",
+    "d1280rm-laliga: the calendar tile could not be opened"
+  ]
+}

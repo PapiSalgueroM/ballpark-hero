@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/review-run-walk.mjs
+dist-grep: (grep -rl "2026-27-v1" dist | wc -l) && (grep -rl "Real league opponent order" dist | wc -l) && (grep -rl "fixturedownload" dist | wc -l) && ls dist/assets | wc -l
