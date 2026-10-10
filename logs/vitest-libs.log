@@ -1,0 +1,38 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/lib/gmDeskHost.test.ts [2m([22m[2m42 tests[22m[2m)[22m[33m 1501[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 1152[2mms[22m[39m
+ [32m✓[39m src/test/routeErrorRecovery.test.tsx [2m([22m[2m65 tests[22m[2m)[22m[33m 1811[2mms[22m[39m
+ [32m✓[39m src/test/saveKeeper.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m src/lib/gmDraftOrder.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 212[2mms[22m[39m
+ [32m✓[39m src/lib/gmDraftNight.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m src/test/careerDraftNight.test.tsx [2m([22m[2m53 tests[22m[2m)[22m[33m 3404[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mNFL now: every row, both buttons and no spoiler [33m 350[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mskipped is the last frame: no delays, no skip, the result said once [33m 1382[2mms[22m[39m
+ [32m✓[39m src/components/lottery/LotteryReveal.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 504[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1304[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 666[2mms[22m[39m
+ [32m✓[39m src/test/gameLawNfl.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 2130[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL_SCORE_LAW: the law for a game outside the Season Center[2m > [22mnever ends level, stays under the cap, and the home side wins about as often as it was told to [33m 914[2mms[22m[39m
+   [33m[2m✓[22m[39m nflMinutePicker[2m > [22mwhere the hour has room, keeps lines out of back to back minutes and a side's drives three minutes apart [33m 837[2mms[22m[39m
+ [32m✓[39m src/lib/gmLotteryNight.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 191[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmLotteryCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 342[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 2823[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed [33m 807[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NBA' the night plays, holds its ending, lands, and starts the career it showed [33m 368[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'MLB' the night plays, holds its ending, lands, and starts the career it showed [33m 307[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m40 tests[22m[2m)[22m[33m 12002[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 4999[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 1100[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 2795[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 735[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m      Tests [22m [1m[32m362 passed[39m[22m[90m (362)[39m
+[2m   Start at [22m 20:08:35
+[2m   Duration [22m 19.64s[2m (transform 6.66s, setup 1.62s, collect 12.94s, tests 26.41s, environment 9.09s, prepare 1.97s)[22m
+

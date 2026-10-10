@@ -1,0 +1,96 @@
+# keeper-libs reviewer, request A: the libraries' harnesses and every control on the head ca3a2537
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-libs: node_modules/.bin/vitest run src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx src/lib/gmDraftOrder.test.ts src/lib/gmDeskHost.test.ts src/lib/gmLotteryNight.test.ts src/lib/gmDraftNight.test.ts src/components/lottery/LotteryReveal.test.tsx src/components/front-office-shared/GmLotteryCard.test.tsx src/test/gameLawNfl.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-bigkick: US_SEASON_CONTROL=bigkick node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-days: US_SEASON_CONTROL=days node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-flat: US_SEASON_CONTROL=flat node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-forty: US_SEASON_CONTROL=forty node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-kick: US_SEASON_CONTROL=kick node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-lawdrift: US_SEASON_CONTROL=lawdrift node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-level: US_SEASON_CONTROL=level node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-lumpy: US_SEASON_CONTROL=lumpy node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-minutes: US_SEASON_CONTROL=minutes node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-nflformula: US_SEASON_CONTROL=nflformula node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-nflheld: US_SEASON_CONTROL=nflheld node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-nflstage: US_SEASON_CONTROL=nflstage node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-oddsack: US_SEASON_CONTROL=oddsack node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-oddtd: US_SEASON_CONTROL=oddtd node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-order: US_SEASON_CONTROL=order node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-points: US_SEASON_CONTROL=points node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-poscore: US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-sum: US_SEASON_CONTROL=sum node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre-tdform: US_SEASON_CONTROL=tdform node scripts/simUsSeasonCentre.mjs
+digest-compare-expect-exit-3: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+sim: node scripts/simGmDraftOrder.mjs
+controls-0: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=0/3 node scripts/simGmDraftOrder.mjs
+controls-1: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=1/3 node scripts/simGmDraftOrder.mjs
+controls-2: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=2/3 node scripts/simGmDraftOrder.mjs
+c-unknown: SIM_GM_DRAFT_ORDER_CONTROL=nosuchcontrol node scripts/simGmDraftOrder.mjs
+gmpicks: node scripts/simGmPicks.mjs
+where: git log -2 --format='%h %s' | cut -c1-110; git ls-files | grep -i lotteryreveal; n=$(git ls-files src/components/motion | grep -c -i lottery); echo "presenter files in src/components/motion: $n"; test "$n" = "0"
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simGmDeskHost-allfired: SIM_GM_DESK_HOST_CONTROL=allfired node scripts/simGmDeskHost.mjs
+simGmDeskHost-askseason: SIM_GM_DESK_HOST_CONTROL=askseason node scripts/simGmDeskHost.mjs
+simGmDeskHost-awayxp: SIM_GM_DESK_HOST_CONTROL=awayxp node scripts/simGmDeskHost.mjs
+simGmDeskHost-badlyceiling: SIM_GM_DESK_HOST_CONTROL=badlyceiling node scripts/simGmDeskHost.mjs
+simGmDeskHost-canspend: SIM_GM_DESK_HOST_CONTROL=canspend node scripts/simGmDeskHost.mjs
+simGmDeskHost-climbword: SIM_GM_DESK_HOST_CONTROL=climbword node scripts/simGmDeskHost.mjs
+simGmDeskHost-closedquiet: SIM_GM_DESK_HOST_CONTROL=closedquiet node scripts/simGmDeskHost.mjs
+simGmDeskHost-closedsit: SIM_GM_DESK_HOST_CONTROL=closedsit node scripts/simGmDeskHost.mjs
+simGmDeskHost-clubvalue: SIM_GM_DESK_HOST_CONTROL=clubvalue node scripts/simGmDeskHost.mjs
+simGmDeskHost-craftfirst: SIM_GM_DESK_HOST_CONTROL=craftfirst node scripts/simGmDeskHost.mjs
+simGmDeskHost-cushionall: SIM_GM_DESK_HOST_CONTROL=cushionall node scripts/simGmDeskHost.mjs
+simGmDeskHost-dropclub: SIM_GM_DESK_HOST_CONTROL=dropclub node scripts/simGmDeskHost.mjs
+simGmDeskHost-emptytile: SIM_GM_DESK_HOST_CONTROL=emptytile node scripts/simGmDeskHost.mjs
+simGmDeskHost-failopen: SIM_GM_DESK_HOST_CONTROL=failopen node scripts/simGmDeskHost.mjs
+simGmDeskHost-fewseasons: SIM_GM_DESK_HOST_CONTROL=fewseasons node scripts/simGmDeskHost.mjs
+simGmDeskHost-fillmet: SIM_GM_DESK_HOST_CONTROL=fillmet node scripts/simGmDeskHost.mjs
+simGmDeskHost-firedclub: SIM_GM_DESK_HOST_CONTROL=firedclub node scripts/simGmDeskHost.mjs
+simGmDeskHost-fitsave: SIM_GM_DESK_HOST_CONTROL=fitsave node scripts/simGmDeskHost.mjs
+simGmDeskHost-flatask: SIM_GM_DESK_HOST_CONTROL=flatask node scripts/simGmDeskHost.mjs
+simGmDeskHost-flatcut: SIM_GM_DESK_HOST_CONTROL=flatcut node scripts/simGmDeskHost.mjs
+simGmDeskHost-flatlevel: SIM_GM_DESK_HOST_CONTROL=flatlevel node scripts/simGmDeskHost.mjs
+simGmDeskHost-flatmedia: SIM_GM_DESK_HOST_CONTROL=flatmedia node scripts/simGmDeskHost.mjs
+simGmDeskHost-flatowner: SIM_GM_DESK_HOST_CONTROL=flatowner node scripts/simGmDeskHost.mjs
+simGmDeskHost-halfseason: SIM_GM_DESK_HOST_CONTROL=halfseason node scripts/simGmDeskHost.mjs
+simGmDeskHost-halfword: SIM_GM_DESK_HOST_CONTROL=halfword node scripts/simGmDeskHost.mjs
+simGmDeskHost-lastcall: SIM_GM_DESK_HOST_CONTROL=lastcall node scripts/simGmDeskHost.mjs
+simGmDeskHost-lateseat: SIM_GM_DESK_HOST_CONTROL=lateseat node scripts/simGmDeskHost.mjs
+simGmDeskHost-longtile: SIM_GM_DESK_HOST_CONTROL=longtile node scripts/simGmDeskHost.mjs
+simGmDeskHost-mutate: SIM_GM_DESK_HOST_CONTROL=mutate node scripts/simGmDeskHost.mjs
+simGmDeskHost-nhlgames: SIM_GM_DESK_HOST_CONTROL=nhlgames node scripts/simGmDeskHost.mjs
+simGmDeskHost-nhlpct: SIM_GM_DESK_HOST_CONTROL=nhlpct node scripts/simGmDeskHost.mjs
+simGmDeskHost-nhlrecord: SIM_GM_DESK_HOST_CONTROL=nhlrecord node scripts/simGmDeskHost.mjs
+simGmDeskHost-notax: SIM_GM_DESK_HOST_CONTROL=notax node scripts/simGmDeskHost.mjs
+simGmDeskHost-noyear: SIM_GM_DESK_HOST_CONTROL=noyear node scripts/simGmDeskHost.mjs
+simGmDeskHost-openpromise: SIM_GM_DESK_HOST_CONTROL=openpromise node scripts/simGmDeskHost.mjs
+simGmDeskHost-passquiet: SIM_GM_DESK_HOST_CONTROL=passquiet node scripts/simGmDeskHost.mjs
+simGmDeskHost-rankplace: SIM_GM_DESK_HOST_CONTROL=rankplace node scripts/simGmDeskHost.mjs
+simGmDeskHost-readwrites: SIM_GM_DESK_HOST_CONTROL=readwrites node scripts/simGmDeskHost.mjs
+simGmDeskHost-sharedroll: SIM_GM_DESK_HOST_CONTROL=sharedroll node scripts/simGmDeskHost.mjs
+simGmDeskHost-shutbutton: SIM_GM_DESK_HOST_CONTROL=shutbutton node scripts/simGmDeskHost.mjs
+simGmDeskHost-spendany: SIM_GM_DESK_HOST_CONTROL=spendany node scripts/simGmDeskHost.mjs
+simGmDeskHost-stalestaff: SIM_GM_DESK_HOST_CONTROL=stalestaff node scripts/simGmDeskHost.mjs
+simGmDeskHost-tierunknown: SIM_GM_DESK_HOST_CONTROL=tierunknown node scripts/simGmDeskHost.mjs
+simGmDeskHost-tileclimb: SIM_GM_DESK_HOST_CONTROL=tileclimb node scripts/simGmDeskHost.mjs
+simGmDeskHost-twice: SIM_GM_DESK_HOST_CONTROL=twice node scripts/simGmDeskHost.mjs
+simGmDeskHost-unkeyed: SIM_GM_DESK_HOST_CONTROL=unkeyed node scripts/simGmDeskHost.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simSaveKeeper-assign: SIM_SAVE_KEEPER_CONTROL=assign node scripts/simSaveKeeper.mjs
+simSaveKeeper-bootwrite: SIM_SAVE_KEEPER_CONTROL=bootwrite node scripts/simSaveKeeper.mjs
+simSaveKeeper-dropkey: SIM_SAVE_KEEPER_CONTROL=dropkey node scripts/simSaveKeeper.mjs
+simSaveKeeper-hidebehind: SIM_SAVE_KEEPER_CONTROL=hidebehind node scripts/simSaveKeeper.mjs
+simSaveKeeper-journalfirst: SIM_SAVE_KEEPER_CONTROL=journalfirst node scripts/simSaveKeeper.mjs
+simSaveKeeper-noaside: SIM_SAVE_KEEPER_CONTROL=noaside node scripts/simSaveKeeper.mjs
+simSaveKeeper-nocopycheck: SIM_SAVE_KEEPER_CONTROL=nocopycheck node scripts/simSaveKeeper.mjs
+simSaveKeeper-nomaincall: SIM_SAVE_KEEPER_CONTROL=nomaincall node scripts/simSaveKeeper.mjs
+simSaveKeeper-norow: SIM_SAVE_KEEPER_CONTROL=norow node scripts/simSaveKeeper.mjs
+simSaveKeeper-numberonly: SIM_SAVE_KEEPER_CONTROL=numberonly node scripts/simSaveKeeper.mjs
+simSaveKeeper-onebyte: SIM_SAVE_KEEPER_CONTROL=onebyte node scripts/simSaveKeeper.mjs
+simSaveKeeper-pileup: SIM_SAVE_KEEPER_CONTROL=pileup node scripts/simSaveKeeper.mjs
+simSaveKeeper-twins: SIM_SAVE_KEEPER_CONTROL=twins node scripts/simSaveKeeper.mjs
+simSaveKeeper-versiontable: SIM_SAVE_KEEPER_CONTROL=versiontable node scripts/simSaveKeeper.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
