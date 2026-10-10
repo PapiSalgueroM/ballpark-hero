@@ -84,7 +84,11 @@ export interface HostClub extends StandingRow {
   record: string;
   /** 1 = top of the whole league in the engine's own standings order. */
   place: number;
-  /** As the engine counts it against its line, dead money in. */
+  /**
+   * Everything the engine counts against its line: the salaries, this
+   * season's dead money, and whatever else its own room function holds back
+   * (the NBA's last tax cheque). The line less this is the engine's room.
+   */
   payroll: number;
 }
 

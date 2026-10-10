@@ -9,7 +9,9 @@
  * played by its own calls in its board's order, with seeded draws.
  *   1  the four adapters over real leagues (mid season, closed, after a
  *      summer): every club once, strength, payroll and the standings order
- *      are the engine's own, and a read never changes the league
+ *      are the engine's own, the room under the line is the engine's own
+ *      room function (the NBA's holds back the last tax cheque), and a read
+ *      never changes the league
  *   2  the record of a save older than the block: nothing filled in over a
  *      grid, and four real saves a sport pass every read with no throw and
  *      no write
@@ -46,7 +48,7 @@
  *      hold a call; and every hub box fits its box (a value and a sub of one
  *      line each), the Career box under each sport's real club names
  * Negative controls (SIM_GM_DESK_HOST_CONTROL), each must go red in its check:
- *   mutate (1) dropclub (1) fillmet (2) readwrites (2) unkeyed (3)
+ *   mutate (1) dropclub (1) notax (1) fillmet (2) readwrites (2) unkeyed (3)
  *   firedclub (4) badlyceiling (4) askseason (4) closedquiet (5)
  *   twice (6) lateseat (6) failopen (6) cushionall (6)
  *   flatlevel (7) sharedroll (7) flatowner (7) flatmedia (7) flatcut (7) flatask (7)
@@ -123,6 +125,7 @@ const ok = (cond, m) => { if (!cond) fail(typeof m === 'function' ? m() : m); re
 const FILES = {
   host: path.join(ROOT, 'src', 'lib', 'gmDeskHost.ts'),
   nhl: path.join(ROOT, 'src', 'lib', 'gmDeskHostNhl.ts'),
+  nba: path.join(ROOT, 'src', 'lib', 'gmDeskHostNba.ts'),
   seat: path.join(ROOT, 'src', 'lib', 'gmSeat.ts'),
   keyed: path.join(ROOT, 'src', 'lib', 'keyedRng.ts'),
 };
@@ -131,6 +134,7 @@ const EDITS = {
   mutate: ['1', 'nhl', '    const table = nhlFoStandings(league);',
     '    const table = nhlFoStandings(league);\n    for (const t of Object.values(league.teams)) t.players.sort((a, b) => a.ovr - b.ovr);'],
   dropclub: ['1', 'nhl', '    return Object.values(league.teams).map((t): HostClub => {', '    return Object.values(league.teams).slice(1).map((t): HostClub => {'],
+  notax: ['1', 'nba', '      payroll: nbaCapUsed(t) + (t.taxDue ?? 0),', '      payroll: nbaCapUsed(t),'],
   fillmet: ['2', 'host', '  const unknown = seasons - grades.length;',
     "  for (let i = grades.length; i < seasons; i++) grades.push('met');\n  const unknown = seasons - grades.length;"],
   readwrites: ['2', 'host', '  return gmBlock<GmXp>(desk, GM_HOST_KEYS.xp, isValidGmXp, defaultGmXp);',
@@ -376,7 +380,7 @@ const DRIVE = {
   nhl: {
     E: ENhl, host: M.nhlDeskHost, contracts: M.nhlContractHost, team: 'TOR', periods: ENhl.NHL_FO_ROUNDS,
     init: rng => ENhl.initNhlLeague(rng, M.NHL_OPENING_RATINGS), at: lg => lg.round, step: lg => { lg.round += 1; },
-    strength: ENhl.nhlStrength, payroll: ENhl.nhlCapUsed, table: lg => ENhl.nhlFoStandings(lg), value: ENhl.nhlTradeValue, release: ENhl.nhlRelease,
+    strength: ENhl.nhlStrength, payroll: ENhl.nhlCapUsed, room: ENhl.nhlCapRoom, table: lg => ENhl.nhlFoStandings(lg), value: ENhl.nhlTradeValue, release: ENhl.nhlRelease,
     period(lg, team, rng) { ENhl.simNhlRound(lg, team, rng); ENhl.nhlAiMoves(lg, team, rng); },
     close(lg, team, rng) { const po = ENhl.runNhlFoPlayoffs(lg, rng); return { champion: crown(lg, po.champion), post: post(po.series) }; },
     draft: draftNhl, summer(lg, team, rng) { ENhl.nhlOffseason(lg, rng, team); },
@@ -384,7 +388,7 @@ const DRIVE = {
   nba: {
     E: ENba, host: M.nbaDeskHost, contracts: M.nbaContractHost, team: 'BOS', periods: ENba.NBA_ROUNDS,
     init: rng => ENba.initNbaLeague(rng, M.NBA_OPENING_RATINGS), at: lg => lg.round, step: lg => { lg.round += 1; },
-    strength: ENba.nbaStrength, payroll: ENba.nbaCapUsed, table: lg => ENba.nbaStandings(lg), value: ENba.nbaTradeValue, release: ENba.nbaRelease,
+    strength: ENba.nbaStrength, payroll: t => ENba.nbaCapUsed(t) + (t.taxDue ?? 0), room: ENba.nbaCapRoom, table: lg => ENba.nbaStandings(lg), value: ENba.nbaTradeValue, release: ENba.nbaRelease,
     period(lg, team, rng) {
       if (lg.round === 1) { cutDown(lg.teams[team], lg.freeAgents, t => !!ENba.nbaTipOffRefusal(t), p => p.ovr, ENba.nbaRelease); ENba.nbaTipOff(lg, rng, team); }
       ENba.simRound(lg, team, rng);
@@ -399,7 +403,7 @@ const DRIVE = {
   mlb: {
     E: EMlb, host: M.mlbDeskHost, contracts: M.mlbContractHost, team: 'BOS', periods: EMlb.MLB_ROUNDS,
     init: rng => EMlb.initMlbLeague(rng), at: lg => lg.round, step: lg => { lg.round += 1; },
-    strength: EMlb.mlbStrength, payroll: EMlb.mlbCapUsed, table: lg => EMlb.mlbStandings(lg), value: EMlb.mlbTradeValue, release: EMlb.mlbRelease,
+    strength: EMlb.mlbStrength, payroll: EMlb.mlbCapUsed, room: EMlb.mlbCapRoom, table: lg => EMlb.mlbStandings(lg), value: EMlb.mlbTradeValue, release: EMlb.mlbRelease,
     period(lg, team, rng) { EMlb.simMlbRound(lg, team, rng); EMlb.mlbAiMoves(lg, team, rng); },
     close(lg, team, rng) { const po = EMlb.runMlbPlayoffs(lg, rng); return { champion: crown(lg, po.champion), post: post(po.series) }; },
     draft: draftMlb,
@@ -408,7 +412,7 @@ const DRIVE = {
   nfl: {
     E: ENfl, host: M.nflDeskHost, contracts: M.nflContractHost, team: 'KC', periods: ENfl.REGULAR_WEEKS,
     init: rng => ENfl.initLeague(rng, { depth: M.FO_DEPTH, userTeam: 'KC' }), at: lg => lg.week, step: lg => { lg.week += 1; },
-    strength: ENfl.teamStrength, payroll: ENfl.capUsed, table: lg => ENfl.standings(lg.teams), value: ENfl.tradeValue, release: ENfl.releasePlayer,
+    strength: ENfl.teamStrength, payroll: ENfl.capUsed, room: ENfl.capRoom, table: lg => ENfl.standings(lg.teams), value: ENfl.tradeValue, release: ENfl.releasePlayer,
     period(lg, team, rng) { ENfl.injuryPass(lg.teams, rng); ENfl.aiWeeklyMoves(lg, team, rng); lg.schedule[lg.week - 1].map(g => ENfl.simGame(g, lg.teams, rng)); },
     close(lg, team, rng) { const po = ENfl.runPlayoffs(lg.teams, rng); return { champion: crown(lg, po.champion), post: t => FM.nflPostseason(po.rounds, t) }; },
     draft: draftNfl,
@@ -506,7 +510,7 @@ const SAMPLE = {};                     // sport -> state -> one seat and its mar
 
 /* ================================================================== */
 begin('1', 'the four adapters over real leagues: every club once, the engine\'s own numbers, and a read changes nothing');
-let leaguesRead = 0;
+let leaguesRead = 0, taxedClubs = 0;
 for (const sport of SPORTS) {
   const d = DRIVE[sport], F = FLEET[sport];
   for (const snap of [...F.mid, ...F.closed, ...F.open]) {
@@ -520,6 +524,10 @@ for (const sport of SPORTS) {
       if (!t) continue;
       if (c.strength !== d.strength(t)) fail(`${at} ${c.id}: strength ${c.strength}, the engine says ${d.strength(t)}`);
       if (c.payroll !== d.payroll(t)) fail(`${at} ${c.id}: payroll ${c.payroll}, the engine says ${d.payroll(t)}`);
+      /* The room an offer prints is the engine's own room function, whatever it holds back (the NBA's tax cheque). */
+      const room = Math.round((d.host.cap(lg) - c.payroll) * 10) / 10;
+      if (room !== d.room(t, lg.cap)) fail(`${at} ${c.id}: the host reads $${room}M of room, the engine's own room is $${d.room(t, lg.cap)}M`);
+      if ((t.taxDue ?? 0) > 0) taxedClubs++;
       if (c.wins !== t.wins || c.games !== c.wins + c.losses || !c.record.startsWith(`${t.wins}-`)) fail(`${at} ${c.id}: record ${c.record}, ${c.wins} wins in ${c.games} games`);
     }
     ok(d.host.season(lg) === lg.season && d.host.cap(lg) === lg.cap && d.host.sport === sport && d.host.pack === GM_SEAT_PACKS[sport], `${at}: the season, the line or the pack is not the league's`);
@@ -532,7 +540,8 @@ for (const sport of SPORTS) {
   }
 }
 ok(leaguesRead >= T.minLeagues, `only ${leaguesRead} leagues read, the walk measured ${T.minLeagues} or more`);
-console.log(`   ${leaguesRead} real leagues read (${SPORTS.join(', ')}; mid season, closed and after a summer)`);
+ok(taxedClubs > 0, 'no club in the fleet carries a tax cheque, so the room was never read where it differs from the line less the payroll');
+console.log(`   ${leaguesRead} real leagues read (${SPORTS.join(', ')}; mid season, closed and after a summer); ${taxedClubs} club reads carry a tax cheque the room holds back`);
 
 /* ================================================================== */
 begin('2', 'the record of a save older than the block: nothing filled in, and real saves pass every read with no write');

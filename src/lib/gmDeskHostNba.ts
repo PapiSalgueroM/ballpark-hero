@@ -4,9 +4,16 @@
  * league it is handed (scripts/simGmDeskHost.mjs compares the league before
  * and after every read). Nothing imports this file yet; the NBA bind will.
  *
- * What is basketball in here and nowhere else: the payroll is the engine's
- * own count against its room (nbaCapUsed, dead money and the last tax cheque
- * in), read against the cap, the line that stops signings, not the tax line.
+ * What is basketball in here and nowhere else: the payroll is everything the
+ * engine counts against its room, read against the cap (the line that stops
+ * signings, not the tax line). That is nbaCapUsed (the salaries and this
+ * season's dead money) PLUS the tax cheque ownership wrote at the last close
+ * (taxDue), which nbaCapRoom holds back from the room and nbaCapUsed does not
+ * carry. The cheque is written at the season's close, exactly when the job
+ * market is read, so without it the room printed under an offer from a taxed
+ * club is too big by the cheque and does not match the cap panel he meets
+ * after taking the job. scripts/simGmDeskHost.mjs holds the room under every
+ * club to nbaCapRoom itself (control `notax`).
  */
 import { nbaCapUsed, nbaStandings, nbaStrength, type NbaLeague } from '@/lib/nbaFrontOffice';
 import { GM_SEAT_PACKS } from '@/data/gmSeat/packs';
@@ -26,7 +33,7 @@ export const nbaDeskHost: GmDeskHost<NbaLeague> = {
       games: t.wins + t.losses,
       record: `${t.wins}-${t.losses}`,
       place: table.findIndex(x => x.abbr === t.abbr) + 1,
-      payroll: nbaCapUsed(t),
+      payroll: nbaCapUsed(t) + (t.taxDue ?? 0),
     }));
   },
   season: league => league.season,
