@@ -1,0 +1,4 @@
+championship (Derby County, 24 clubs, 20 of 20 real seasons held the key, 173s): goals a match real 2.6188 generated 2.6314 difference -0.0126 = -0.92 null sd (null sd 0.0137); home win share real 0.4442 generated 0.4454 difference -0.0012 = -0.20 null sd (null sd 0.0058)
+laliga (Espanyol, 20 clubs, 20 of 20 real seasons held the key, 145s): goals a match real 2.6445 generated 2.6399 difference 0.0046 = 0.28 null sd (null sd 0.0165); home win share real 0.4554 generated 0.4374 difference 0.0180 = 3.83 null sd (null sd 0.0047)
+bundesliga (Hamburg, 18 clubs, 20 of 20 real seasons held the key, 130s): goals a match real 2.6536 generated 2.6619 difference -0.0083 = -0.23 null sd (null sd 0.0357); home win share real 0.4577 generated 0.4384 difference 0.0193 = 1.90 null sd (null sd 0.0101)
+f4: measured 3 leagues, 24760 real list matches
