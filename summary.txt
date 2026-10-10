@@ -1,0 +1,8 @@
+simStorageWrites exit=0 2s | simStorageWrites: all green
+simLegalPages exit=0 0s | simLegalPages: all green
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simNoInventedQuotes exit=0 29s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+simSiteSearch exit=0 2s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNumberFormatting exit=0 124s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
