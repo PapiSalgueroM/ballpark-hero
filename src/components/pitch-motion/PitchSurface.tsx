@@ -41,6 +41,7 @@ export function PitchSurface<T extends MotionPlayer>({ frame, orientation = 'por
       data-cm-motion={frame.action}
       data-cm-motion-phase={frame.phase}
       data-pm-orient={orientation}
+      data-pm-own-goal={frame.ownGoalBy === undefined ? undefined : frame.ownGoalBy ?? ''}
       className={className ? `pm-surface ${className}` : 'pm-surface'}
       style={{ aspectRatio: land ? '4 / 3' : '3 / 4', ...style }}
     >

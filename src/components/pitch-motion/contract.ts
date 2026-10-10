@@ -26,6 +26,13 @@ export type PitchEventKind = 'goal' | 'shot' | 'save' | 'corner' | 'throwin' | '
 export interface PitchEvent {
   minute: number; plus?: number; side: PitchSide | 'none'; kind: PitchEventKind; text: string;
   flank?: 'left' | 'right'; penalty?: boolean; freeKick?: boolean;
+  /** Round 1216, goals only: an own goal. `side` is the side that GOT the goal. The man who put it in plays
+   *  for the OTHER side: he is the figure of that side with the key in `ogBy`, or else the one whose name is
+   *  `text`. With neither on the grass the ball still turns in front of that goal and no figure is moved to
+   *  it. Ignored on a line with `penalty` or `freeKick`, which is drawn as the set piece it is. */
+  og?: boolean;
+  /** Round 1216: the key of the figure who put it in, for a binder whose figures carry no names. */
+  ogBy?: string;
 }
 export interface PitchKickoff { at: number; side: PitchSide }
 /** One stretch of play (a half, a replayed goal, an idle loop). The part invents no outcome: it only

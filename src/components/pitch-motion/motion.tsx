@@ -8,13 +8,15 @@ export interface MotionPlayer extends Point { key: string; name?: string; keeper
 /** `arc` is optional: a control point, and the ball arrives at this scene along a curve through it. */
 export interface MotionScene<T extends MotionPlayer> { mine: T[]; theirs: T[]; ball: Point; holderKey: string | null; arc?: Point; }
 export interface MotionEvent { event: PitchEvent; key: string; at: number; }
-export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; }
+export interface Pose { kick?: number; dive?: number; catching?: number; celebrate?: number; hop?: number; rue?: number; }
 export interface MotionFrame<T extends MotionPlayer> extends MotionScene<T> {
   poses: Record<string, Pose>;
   action: string;
   net: 'me' | 'opp' | null;
   netPulse: number;
   phase: string;
+  /** Round 1216: on the frames of an own goal only, the key of the figure it goes in off (null when he is not on the grass). */
+  ownGoalBy?: string | null;
 }
 const bounded = (v: number) => Math.max(0, Math.min(1, v));
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -25,6 +27,7 @@ const PLANT_SPAN = .24 * ACTION_SPAN;
 
 /** Coordinates and poses only. All outcomes arrive in the committed feed. */
 export function actionFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: MotionEvent, elapsed: number): MotionFrame<T> {
+  if (action.event.og && action.event.kind === 'goal' && !action.event.penalty && !action.event.freeKick) return ownGoalFrame(scene, action, elapsed);
   const event = action.event;
   const mine = event.side === 'me';
   const attackers = mine ? scene.mine : scene.theirs;
@@ -140,6 +143,62 @@ export function between<T extends MotionPlayer>(from: MotionScene<T>, to: Motion
   return { ...to, mine: players(from.mine, to.mine), theirs: players(from.theirs, to.theirs), ball };
 }
 
+/** Round 1216: how far into the ball's flight an own goal's ball meets the man it goes in off. */
+const OWN_GOAL_TOUCH = .55;
+/** Round 1216: who put an own goal in, among the side that conceded: the key in `ogBy`, else the name in `text`. */
+export function ownGoalFigure<T extends MotionPlayer>(conceding: T[], event: PitchEvent): T | null {
+  return conceding.find(p => p.key === event.ogBy) ?? (event.text ? conceding.find(p => p.name === event.text) : undefined) ?? null;
+}
+
+/** Round 1216: an own goal. It is the goal the same line draws without `og` (the same plant by the man the
+ *  plan led in, the same keeper, the same instants and the same net), with three things changed: the ball
+ *  goes to the man who put it in and off him into the corner on his side, he holds his head once it is in,
+ *  and nobody hops as a scorer or walks to one. The ball comes to the man, not the man to the ball: he meets
+ *  it where he stands, kept 13 to 18 from his own goal line, no wider than 26 from the middle, and 5 off the
+ *  straight line to that corner so the turn can be seen. His keeper goes the other way. When the man IS the
+ *  keeper, the ball goes to where his dive has him and off his gloves into the other corner. A named man who
+ *  is not on the grass moves nobody: the ball turns in front of that goal on its own. */
+function ownGoalFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: MotionEvent, elapsed: number): MotionFrame<T> {
+  const own = action.event;
+  const mine = own.side === 'me';
+  const man = ownGoalFigure(mine ? scene.theirs : scene.mine, own);
+  const flank: PitchEvent['flank'] = man && !man.keeper ? (man.x < 50 ? 'left' : 'right') : own.flank;
+  const at = (t: number) => actionFrame(scene, { ...action, event: { ...own, og: false, text: '', flank } }, t);
+  const whole = at(elapsed);
+  /* Where everybody stands is read no later than net contact: after it a goal walks two men to its scorer. */
+  const stood = elapsed > NET_AT ? at(NET_AT) : whole;
+  const from = at(PLANT_SPAN).ball;
+  const end = at(ACTION_SPAN).ball;
+  const touchAt = PLANT_SPAN + (NET_AT - PLANT_SPAN) * OWN_GOAL_TOUCH;
+  /* How far a point is from the goal line the ball goes over, and back again. */
+  const depth = (y: number) => (mine ? y : 100 - y);
+  let touch: Point;
+  if (man?.keeper) touch = (mine ? at(touchAt).theirs : at(touchAt).mine).find(p => p.key === man.key) ?? man;
+  else {
+    const place = man ?? { x: 50, y: depth(15) };
+    const y = depth(Math.max(13, Math.min(18, depth(place.y))));
+    let x = Math.max(24, Math.min(76, place.x));
+    const straight = from.x + (end.x - from.x) * (y - from.y) / (end.y - from.y);
+    if (Math.abs(x - straight) < 5) x = straight + (x < straight ? -5 : 5);
+    touch = { x, y };
+  }
+  const walked = smooth(elapsed / touchAt);
+  const walk = (players: T[]) => (man && !man.keeper && players.some(p => p.key === man.key)
+    ? passing(players, players.map(p => (p.key === man.key ? { ...p, ...touch } : p)), players.map(p => (p.key === man.key ? { ...p, ...point(p, touch, walked) } : { ...p })), walked)
+    : players);
+  const flight = bounded((elapsed - PLANT_SPAN) / (NET_AT - PLANT_SPAN));
+  const ball = whole.phase !== 'flight' ? whole.ball
+    : flight < OWN_GOAL_TOUCH ? point(from, touch, flight / OWN_GOAL_TOUCH) : point(touch, end, (flight - OWN_GOAL_TOUCH) / (1 - OWN_GOAL_TOUCH));
+  const poses = whole.poses;
+  for (const key in poses) delete poses[key].hop;
+  if (man) {
+    const rue = smooth((elapsed - NET_AT) / (ACTION_SPAN - NET_AT) / .55);
+    const reach = Math.sin(bounded((elapsed - touchAt) / .25 + .5) * Math.PI);
+    poses[man.key] = man.keeper ? { ...poses[man.key], catching: reach * .6, rue } : { kick: reach, rue };
+  }
+  return { ...whole, mine: walk(stood.mine), theirs: walk(stood.theirs), ball, poses, ownGoalBy: man?.key ?? null };
+}
+
 /** Uses the viewer's clock, so pausing freezes players, ball and action poses. */
 export function useLiveSimMotion<T extends MotionPlayer>(scene: MotionScene<T>, event: MotionEvent | null, clock: number, active: boolean, force?: boolean): MotionFrame<T> {
   const [mediaReduced, setReduced] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -198,13 +257,15 @@ export function LivePitchPlayer({ color, keeper, pose, selected }: { color: stri
   const catching = pose?.catching ?? 0;
   const celebrate = pose?.celebrate ?? 0;
   const hop = pose?.hop ?? 0;
+  /* Round 1216: an own goal's man brings both hands up to the sides of his head. At rue 0 every number below is today's. */
+  const rue = pose?.rue ?? 0;
   // At full reach both gloves meet the ball's anchor, at (0, 8) in this view box.
   const reachX = -25 * Math.sin(dive * Math.PI / 180) * catching;
   const reachY = (3 + 25 * Math.cos(dive * Math.PI / 180)) * catching;
-  const handY = dive ? -20 : -3 - celebrate * 19;
-  const handX = dive ? 5 : 11 + celebrate * 2;
-  const armX = dive ? 5 : 10 + celebrate * 3;
-  return <svg className="cm-pitch-player" viewBox="-18 -26 36 44" aria-hidden="true" focusable="false" data-cm-actor-pose={celebrate ? 'celebrate' : dive ? 'dive' : kick ? 'strike' : 'stand'}>
+  const handY = dive ? -20 : -3 - celebrate * 19 - rue * 17;
+  const handX = dive ? 5 : 11 + celebrate * 2 - rue * 5;
+  const armX = dive ? 5 : 10 + celebrate * 3 - rue * 3;
+  return <svg className="cm-pitch-player" viewBox="-18 -26 36 44" aria-hidden="true" focusable="false" data-cm-actor-pose={celebrate ? 'celebrate' : dive ? 'dive' : kick ? 'strike' : 'stand'} data-pm-rue={rue ? '1' : undefined}>
     <ellipse cy="12" rx="10" ry="3" fill="#072d3470" />
     {selected && <ellipse cy="11" rx="14" ry="5" fill="none" stroke="#fff" strokeWidth="1.5" />}
     <g transform={`translate(${reachX} ${reachY - hop}) rotate(${dive} 0 5)`} strokeLinecap="round" strokeLinejoin="round">
