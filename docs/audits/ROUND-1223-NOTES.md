@@ -12,8 +12,8 @@ change, so there is no What's New entry and no guide sentence.
 | `src/lib/gmDeskHostNhl.ts`, `Nba`, `Mlb`, `Nfl` | The four read adapters. Each imports its own engine and the seat packs, nothing else. |
 | `src/components/front-office-shared/gmLazyPanel.tsx` | `lazyGmPanel` and `lazyPart`: a panel that loads on demand, with a fixed height holding box. Generic over the facts, for the two sibling GM lifts to reuse. |
 | `GmJobMarketPanel.tsx`, `GmCareerPanel.tsx`, `GmXpDeskPanel.tsx`, `gmCareerDesk.tsx` | The three panels and the one module level list `GM_CAREER_PANELS` (keys `seat`, `career`, `xp`). The market panel draws its own offer tiles (the brief's B5): `GmSeatCard.tsx` stays unmounted. |
-| `src/lib/gmDeskHost.test.ts` (39 cases), `GmCareerDesk.test.tsx` (13 cases) | Unit proof, the lazy path included (the brief's A8, with its control). |
-| `scripts/simGmDeskHost.mjs` | Ten checks on the four real engines, 26 negative controls. |
+| `src/lib/gmDeskHost.test.ts` (42 cases), `GmCareerDesk.test.tsx` (15 cases) | Unit proof, the lazy path included (the brief's A8, with its control). 39 and 13 before the fix pass. |
+| `scripts/simGmDeskHost.mjs` | Ten checks on the four real engines, 46 negative controls (26 before the fix pass). |
 
 ## The decisions made here (the brief left them to the builder, or the critic bound them)
 
@@ -25,9 +25,13 @@ change, so there is no What's New entry and no guide sentence.
   day he takes a club, knows the tier on arrival. The Career panel leaves the tier off an old save's first box.
 - The market's line is the host's own, `hostMarketLine` (B6). A closed line never says sit, and the season
   count includes the seasons known only as a count.
-- The quiet state is split (B4): `HostMarket.nextYear` is `open`, `climb` (the phone rings next year only if
-  his old club finishes in a better tier, `climbTo` names it) or `shut`. A market that reads `shut` IS closed.
-  Closed is decided on next year's standing with the best pedigree, so it also covers a tier 1 club's fired GM.
+- What a year out leaves is read in every state (B4): `HostMarket.nextYear` is `open`, `climb` (the phone rings
+  next year only if his old club finishes in a better tier, `climbTo` names it) or `shut`. With an empty feed,
+  `shut` is the closed state. With offers on the table `shut` is NOT closed: the state reads `offers` and those
+  are the last calls he gets (corrected in the fix pass; the first version of these notes said a market that
+  reads `shut` is closed, which is false whenever somebody called). The year out is offered and played on
+  `hostCanSitOut` alone, which reads `nextYear` and not the state. `shut` is decided on next year's standing
+  with the best pedigree, so it also covers a tier 1 club's fired GM.
 - `hostTakeSeat` reads the offer off the market by club id and never trusts the screen. Block ownership is a
   declared list (B13): `HOST_BLOCK_RULES` plus the sport's rows, applied by `hostMoveBlocks`. `gm` blocks travel,
   `club` blocks are opened again from `fresh` (or dropped when the rule has none), `league` blocks stay.
@@ -36,7 +40,8 @@ change, so there is no What's New entry and no guide sentence.
 - The year out's order is the host's (`hostSeasonAway` over the write side `GmAwayHost`, B13): draft, summer,
   every period, postseason, then the year on the record. Each step is handed the desk and may hand back the
   next one, because a league owned block rolls in a summer. Refused in a seat, on an open season, on a closed
-  market, and it answers `broken-adapter` when the sport does not leave the league one decided season on.
+  market, on a last call (offers on the table and next year shut, reason `last-call`), and it answers
+  `broken-adapter` when the sport does not leave the league one decided season on.
 - A year out is not a season on his record (B15): `hostSeasonsRecorded` does not move.
 - The sport neutral routes live in the host (B2): `hostPressOption`, `hostCutQuote`, `hostCraftCut` (the LAST
   entry for the id, A4), `hostDeskCases`, `hostSummerMandate`, `hostArriving`, `hostSeasonVerdict`,
@@ -115,4 +120,58 @@ point. The GM level help now says so, computed from gmXp, never typed.
   never empty would be a host rule on top of `hostMarket`.
 - `HostClub.pct` is filled only by the NHL adapter (the points share). The other three leave it out, as
   `StandingRow` allows.
+
+## The fix pass after the two adversarial reviews (2026-10-10, same branch)
+
+Two reviewers read and ran the closed head 6a12b36d and both said FIX. Their reports are
+`C:/Users/antho/dukb-handoff/2026-10-10/results-g/review-run-1223.md` and `review-read-1223.md`; the fixer's full
+report is `fix-1223.md` in the same folder. What changed, one commit a finding:
+
+| Finding | What was wrong | What it is now |
+|---|---|---|
+| Major, both reviews | With an offer on the table and next year shut, Stay out for a year was on the screen, said nothing about next year, and the host played a season that ended the save. | `hostCanSitOut` reads next year alone. The panel draws the button on it and `hostSeasonAway` refuses on it (reason `last-call`). The line says these are the last calls, and on a climb what passing costs; the first tap on stay out is handed the market and says what the year leaves. |
+| Major, the run | The Career box lost the club name at 390 and at 1280; two of three Job market states were cut at 390. | The Career box reads Season N over With the (club). The Job market box reads N offers, Nobody called or No more calls. `HOST_TILE_VALUE_MAX` 17 and `HOST_TILE_SUB_MAX` 32 are the review's browser measurement less a tenth, and the harness holds every box to them under each board's real club names. |
+| Minor | The two tap arm outlived its action, so after a year out one more tap played a second season. | The arm carries the market it was made on and is cleared when the action fires. |
+| Minor | The NBA adapter's header said the tax cheque was in the payroll and it was not. | It is (`nbaCapUsed` plus `taxDue`), and check 1 holds the room under every club to that engine's own room function. |
+| Minor | Next year is still open was read at today's tier and said without a condition. | Every place that says open says as things stand. The rule is unchanged: see the ruling owed below. |
+| Minor | Tier 3 read lower half, so a bottom quarter club was told to climb into the half it is in. | The four words are top, second, third and bottom tier. |
+| Minor | The GM level help typed the 16 a missed season costs. | Read off `gradeSeason`. |
+| Minor | The out of work card and the years out head said let go for every ending. | One wording an ending. |
+| Minor | The GM level help repeated the earn line printed above it. | The help is the four rule lines; the earn line joins it only on a desk that is off. |
+| Minor | A run on one seed was red on its size alone. | The floors are held at the run's own seed count. |
+| Minor | Five plausible regressions passed every gate, and seven more only vitest caught. | Eleven of them are harness rows with a permanent control each (46 controls in all). |
+
+### Owed by Round M1, and a condition of mounting `GM_CAREER_PANELS`
+
+1. **`GmXpPanel` still promises six sources.** `GmXpDeskPanel` prints the honest four source line and, under it,
+   the unedited Round 942 panel prints its own sentence naming six (finishing higher than expected and bringing
+   a prospect through pay nothing on this desk). This round is new files only and could not edit it. The brief's
+   decision 20 gives `GmXpPanel` an optional `earns` prop in M1: pass it and keep ONE copy of the sentence on the
+   screen. Nothing may mount the three boxes before that.
+2. **The GM level screen on a phone.** At 390 wide `GmXpPanel` is seven tree cards in one column (about 1,230 px on
+   an 844 px screen), the two trees a first bind can sell are the last two, and every Spend button is 25 px tall.
+   For M1: live trees first, tiles, a 44 px button. The shared panel header's Hub back button is 67 by 34 px.
+3. **The lazy panel in a real chunk.** The holding box is proven in vitest and under a server render only; the
+   review's stage was one bundle. M1 walks it on a slow phone.
+4. **Real saved JSON.** The saves of harness check 2 are envelopes built around real leagues, not saves that went
+   through a board's writer and `isFrontOfficeSave`. The review read 480 saves made by the base tree's engines
+   through the host with no throw and no write (runner result `r1223-run-o`); M1's own fixtures (the critic's B8)
+   are where a board's saved JSON is first read.
+
+### For the lead
+
+- **THE RELEASE GATE RUNS THREE THINGS FOR THIS ROUND, not one**: `node scripts/simGmDeskHost.mjs`, and the two
+  vitest files `src/lib/gmDeskHost.test.ts` and `src/components/front-office-shared/GmCareerDesk.test.tsx`. The
+  panel's two tap rule can only be judged with a click, so the harness alone does not hold it.
+- **The B4 ruling, with numbers.** On the harness ladder (16,800 careers a seed set, three sets) about one market
+  with offers in eight is one where passing costs next year: 514 / 510 / 499 are last calls (next year shut) and
+  473 / 483 / 479 hang on a climb, of 7,913 / 7,898 / 7,877 markets with offers. The review played the year out
+  on real NHL leagues (runner result `r1223-run-p`): every one of 33 and 34 last call markets read closed a year
+  later, and of 608 and 619 with offers on a climb 559 and 584 did. Of 7,877 quiet markets that read open, 198
+  (2.5 percent) were under the floor a year later because the old club dropped a tier, and 1,084 (13.8 percent)
+  read closed a year later for any reason. This fix pass made the screen honest about all of it and refuses the
+  one year that cannot bring a call; it did not change who gets a call. A host rule on top of the feed (a first
+  feed that is never empty, or reading open at the worst tier) is still yours to rule on.
+- Controls `mutate` and `dropclub` rewrite the NHL adapter, `notax` the NBA one. Check 1 runs the same code for
+  all four sports, so it can fail for each; its firing is proven on two.
 
