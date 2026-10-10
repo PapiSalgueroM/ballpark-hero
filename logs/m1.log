@@ -1,0 +1,31 @@
+MUT APPLIED m1 in src/lib/gameLaws/nfl.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+DEFAULT
+FAIL 3 nfl seasons that cannot be laid out stay under 1.0% (87.4%)
+FAIL 3 nfl a season saved with sacks in tenths still opens: refused stay under 1.0% (86.3%)
+
+simUsSeasonCentre: 95 checks, 2 failed
+COMPARE
+FAIL digest nfl seed set 0: derived 70 now, 500 at the record; season 2df9c7fd8777506137227a23cf1ff15bef05b682 now, 7a20cde138dc6d0945d7b68aa9a105e8126dc9fe at the record
+FAIL digest nfl seed set 1: derived 66 now, 502 at the record; season c4d0cb84a29d52d169433dfb2660d527878af777 now, 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe at the record
+FAIL digest nfl seed set 2: derived 55 now, 505 at the record; season 0902915babc0f619756fb2afcf9aca37265785ca now, 2d9db73e2c744d5d81e7a07eb225a470ffcce222 at the record
+FAIL digest nfl seed set 3: derived 70 now, 500 at the record; season 15b492aca3e86cb3c22557d29a3541914b73807b now, af115f6f56e6d834deafccb72c1d8bc35e6ccdc0 at the record
+FAIL digest nfl seed set 4: derived 57 now, 515 at the record; season 5b140bbf8ebd047044d5ef56c9ff5559b1c84554 now, 6e0f577a8914feef3ee4b3332621a048770a70fb at the record
+simUsSeasonCentre digest compare: 11 digests, 5 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+grep:  FAIL  src/test/gameLawNfl.test.ts > nflMinutePicker > gives the minutes the closure inside the Season Center gave, call for call
+AssertionError: expected [ Array(36) ] to deeply equal [ Array(36) ]
+ FAIL  src/test/gameLawNfl.test.ts > nflMinutePicker > never gives two lines of a game one minute, and fills the whole hour before it would
+AssertionError: game 2: expected [ Array(60) ] to deeply equal [ Array(60) ]
+ FAIL  src/test/gameLawNfl.test.ts > NFL_STORY_LAW.events: the scoring plays of a final > for every final from 0-0 to 70-70: both sides add up, in minute order, one line a minute, club lines only
+AssertionError: expected [ …(762) ] to deeply equal []
+ FAIL  src/test/gameLawNfl.test.ts > NFL_STORY_LAW.events: the scoring plays of a final > tells one final one way for one key, and another key another way
+AssertionError: expected [ { min: 19, kind: 'fg', …(2) }, …(6) ] to deeply equal [ { min: 20, kind: 'fg', …(2) }, …(6) ]
+ FAIL  src/test/usSeasonCentre.test.tsx > the US Season Center with the NFL bound > walks a QB season from the kick off card to the review: drives on the clock, his line, the record and his totals
+ FAIL  src/test/usSeasonCentre.test.tsx > the US Season Center with the NFL bound > walks a K season from the kick off card to the review: drives on the clock, his line, the record and his totals
+AssertionError: expected null not to be null
+ FAIL  src/test/usSeasonCentre.test.tsx > the US Season Center with the NFL bound > prints the NFL playoff sentence as the save holds it, one game as "1 game", and every round with no score
+ FAIL  src/test/usSeasonNfl.test.ts > an NFL season, derived from its saved line > lands every total of every position, game by game, with drives that make each score
+AssertionError: QB KC 17: expected null not to be null
+write error: Broken pipe
+MUT m1 default=1 compare=1 vitest=1

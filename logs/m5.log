@@ -1,0 +1,30 @@
+MUT APPLIED m5 in src/lib/keyedShuffle.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+DEFAULT
+
+simUsSeasonCentre: 98 checks, 0 failed
+COMPARE
+FAIL digest nba seed set 0: season 5237f231326cc96ea7ba91b7a40e216b20421a1b now, 4bdd47afaf16f8f04e8d6d79bf1a6d6425b5e2bc at the record
+FAIL digest nba seed set 1: season 5067f1e78089d09ac8a592c61503dc2a13b36279 now, 97a15a51f854372c4ebb5d273850e9c3e07140a1 at the record
+FAIL digest nba seed set 2: season 8b2d639a801cdb77ad0ca0e919bf393c7ceaabae now, cbae49c9b3cffd59b24c9c6ea62b6dbf6d59c223 at the record
+FAIL digest nba seed set 3: season d97127aa7a23971318244d894a6976831a4d80ec now, 927f1ae499ee3e40cb075ba92a934d902dd0b31f at the record
+FAIL digest nba seed set 4: season 6cca1327c14e1619f040dc66c7bdc02231dde4bf now, daa19f6fd02f7ba7e98265073564cb0d5fc5c168 at the record
+FAIL digest nfl seed set 0: season 0f986567c7e5a57fd3c86d575d081f7301df642c now, 7a20cde138dc6d0945d7b68aa9a105e8126dc9fe at the record
+FAIL digest nfl seed set 1: season 50f270251da4bec0619a9c56c61f1d1cf683f1a5 now, 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe at the record
+FAIL digest nfl seed set 2: season f13daf0c9398fe79ee49f9085f02dbf5f8939af0 now, 2d9db73e2c744d5d81e7a07eb225a470ffcce222 at the record
+FAIL digest nfl seed set 3: season 30aaaebbf232d0390b58c71e99c3a6eed121e83b now, af115f6f56e6d834deafccb72c1d8bc35e6ccdc0 at the record
+FAIL digest nfl seed set 4: season 4e3a7d350403985e85b0e6c51cbb2d62a494e6d2 now, 6e0f577a8914feef3ee4b3332621a048770a70fb at the record
+simUsSeasonCentre digest compare: 11 digests, 10 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+ FAIL  src/test/gameLawNfl.test.ts > the keyed shuffle has one body > gives what the body in the season core gave before the move
+AssertionError: expected [ 1, 2, 3, 9, 5, +0, 4, 8, 6, 7 ] to deeply equal [ 1, 2, 3, 4, 6, +0, 5, 8, 9, 7 ]
+ FAIL  src/test/seasonCentreWords.test.tsx > Season Centre: soccer markup, recorded on the base (Round 1048) > prints the soccer shaped season exactly as the base viewer did, with no new field set
+AssertionError: screens whose soccer markup moved: expected [ 'table|desktop|matchday', …(7) ] to deeply equal []
+ FAIL  src/test/seasonCore.test.ts > season core: the recorded derive snapshot (Round 1048) > derives every toy season exactly as the base recorded it
+AssertionError: toy:mid: expected { key: 'toy||10|4|7|20', …(11) } to deeply equal { key: 'toy||10|4|7|20', …(11) }
+ Test Files  3 failed | 2 passed (5)
+      Tests  3 failed | 85 passed (88)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gameLawNfl.test.ts,title=src/test/gameLawNfl.test.ts > the keyed shuffle has one body > gives what the body in the season core gave before the move,line=32,column
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCentreWords.test.tsx,title=src/test/seasonCentreWords.test.tsx > Season Centre%3A soccer markup%2C recorded on the base (Round 1048) > prints the soccer sha
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/seasonCore.test.ts,title=src/test/seasonCore.test.ts > season core%3A the recorded derive snapshot (Round 1048) > derives every toy season exactly as the base rec
+MUT m5 default=0 compare=1 vitest=1

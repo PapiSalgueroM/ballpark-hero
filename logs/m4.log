@@ -1,0 +1,22 @@
+MUT APPLIED m4 in src/lib/gameLaws/nflScore.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+DEFAULT
+
+simUsSeasonCentre: 98 checks, 0 failed
+COMPARE
+FAIL digest nfl seed set 0: season fab3a3a48f73139bd6ccc8cc2ea9f6240b5ad2c3 now, 7a20cde138dc6d0945d7b68aa9a105e8126dc9fe at the record
+FAIL digest nfl seed set 1: season 672f9aee689e4bfc251eecb761c7b9a9e0a1bde5 now, 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe at the record
+FAIL digest nfl seed set 2: season 99bf8e0f619effdbe3ad9ed83b2b9cc1b98a737e now, 2d9db73e2c744d5d81e7a07eb225a470ffcce222 at the record
+FAIL digest nfl seed set 3: season 85f5d4d6408fc9e2e2957dfb9f9542fc034b3e8d now, af115f6f56e6d834deafccb72c1d8bc35e6ccdc0 at the record
+FAIL digest nfl seed set 4: season 0319c3772cf8a3984036f54821a67ebcfaa98f10 now, 6e0f577a8914feef3ee4b3332621a048770a70fb at the record
+simUsSeasonCentre digest compare: 11 digests, 5 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+ FAIL  src/test/usSeasonNfl.test.ts > the NFL score law > never returns a level game, a 1, a 3 or a 4, and stays under the cap
+AssertionError: expected [ 3, 3, 3, 3, 3, 3, 3, 3, 3, …(3848) ] to deeply equal []
+ FAIL  src/test/usSeasonNfl.test.ts > a kicker and his makes > lays out every total a list of scores can hold, each game a count its score can hold
+AssertionError: expected null not to be null
+ Test Files  1 failed | 4 passed (5)
+      Tests  2 failed | 86 passed (88)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > the NFL score law > never returns a level game%2C a 1%2C a 3 or a 4%2C and stays under the cap,line=94,co
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > a kicker and his makes > lays out every total a list of scores can hold%2C each game a count its score ca
+MUT m4 default=0 compare=1 vitest=1

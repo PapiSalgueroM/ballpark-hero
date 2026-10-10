@@ -1,0 +1,19 @@
+MUT APPLIED m11 in src/lib/gameLaws/nfl.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+DEFAULT
+
+simUsSeasonCentre: 98 checks, 0 failed
+COMPARE
+FAIL digest nfl seed set 0: season 00e36ef5997f76a39ab307e3f2ec5f53c4a4e2f5 now, 7a20cde138dc6d0945d7b68aa9a105e8126dc9fe at the record
+FAIL digest nfl seed set 1: season 7394b26dc0666d4982325e6a773e5356f60a857e now, 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe at the record
+FAIL digest nfl seed set 2: season e78ba46c2191d9f1cf39e3cb7acfa12c457de90d now, 2d9db73e2c744d5d81e7a07eb225a470ffcce222 at the record
+FAIL digest nfl seed set 3: season fd35b2d7ab16eada44edb85764d2a1ddb52a2468 now, af115f6f56e6d834deafccb72c1d8bc35e6ccdc0 at the record
+FAIL digest nfl seed set 4: season 18d105c683b3fa9fc58917d3980d5d2bc3d0026f now, 6e0f577a8914feef3ee4b3332621a048770a70fb at the record
+simUsSeasonCentre digest compare: 11 digests, 5 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+ FAIL  src/test/gameLawNfl.test.ts > nflMinutePicker > gives the minutes the closure inside the Season Center gave, call for call
+AssertionError: expected [ Array(36) ] to deeply equal [ Array(36) ]
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 87 passed (88)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gameLawNfl.test.ts,title=src/test/gameLawNfl.test.ts > nflMinutePicker > gives the minutes the closure inside the Season Center gave%2C call for call,line=182,col
+MUT m11 default=0 compare=1 vitest=1

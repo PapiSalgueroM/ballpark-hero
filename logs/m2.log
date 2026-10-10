@@ -1,0 +1,26 @@
+MUT APPLIED m2 in src/lib/gameLaws/nfl.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+DEFAULT
+FAIL 7 nfl a side's scoring drives one after another are under three minutes apart in under 1.0% of pairs (9.10%)
+
+simUsSeasonCentre: 98 checks, 1 failed
+COMPARE
+FAIL digest nfl seed set 0: season 75921783f61c7664eedede9091c4eac81d4a0ee7 now, 7a20cde138dc6d0945d7b68aa9a105e8126dc9fe at the record
+FAIL digest nfl seed set 1: season 8134e1b73b1b073ff4c264f8c2916aeb24a55c00 now, 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe at the record
+FAIL digest nfl seed set 2: season 0aea999ac5fe8a5e67e265de73750a1922943697 now, 2d9db73e2c744d5d81e7a07eb225a470ffcce222 at the record
+FAIL digest nfl seed set 3: season 0c57342dbf0eb4c0b8c9f01af1d5366f27bfdba2 now, af115f6f56e6d834deafccb72c1d8bc35e6ccdc0 at the record
+FAIL digest nfl seed set 4: season e72acfbf84c54dcb31e7bb33ea0a6d541e831235 now, 6e0f577a8914feef3ee4b3332621a048770a70fb at the record
+simUsSeasonCentre digest compare: 11 digests, 5 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+ FAIL  src/test/gameLawNfl.test.ts > nflMinutePicker > gives the minutes the closure inside the Season Center gave, call for call
+AssertionError: expected [ Array(36) ] to deeply equal [ Array(36) ]
+ FAIL  src/test/gameLawNfl.test.ts > nflMinutePicker > where the hour has room, keeps lines out of back to back minutes and a side's drives three minutes apart
+AssertionError: game 0: one side at 28 and 30: expected 2 to be greater than or equal to 3
+ FAIL  src/test/usSeasonNfl.test.ts > the feed, minute by minute > never puts two lines in back to back minutes, or two scoring drives of one side under three minutes apart, where the hour has room
+AssertionError: QB 0 game 1 us: expected 2 to be greater than or equal to 3
+ Test Files  2 failed | 3 passed (5)
+      Tests  3 failed | 85 passed (88)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gameLawNfl.test.ts,title=src/test/gameLawNfl.test.ts > nflMinutePicker > gives the minutes the closure inside the Season Center gave%2C call for call,line=182,col
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gameLawNfl.test.ts,title=src/test/gameLawNfl.test.ts > nflMinutePicker > where the hour has room%2C keeps lines out of back to back minutes and a side's drives th
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > the feed%2C minute by minute > never puts two lines in back to back minutes%2C or two scoring drives of o
+MUT m2 default=1 compare=1 vitest=1
