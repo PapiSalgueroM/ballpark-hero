@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: a forced red on a SECOND HALF goal, then its file (the builder's own forced.sh),
+# and LIVE_FIT_SAVE on the dumps of seed 636123010 (calm watches 60', wide watches 49', both second halves).
+forced-2nd-half: LIVE_FIT_SEED=636123010 bash .rc/x/forced.sh nocard 4231
+forced-2nd-half-early: LIVE_FIT_SEED=636123010 bash .rc/x/forced.sh earlyscore 4232
+dump-636: bash .rc/x/rdump.sh 636123010 4233
+restored: echo "tracked files that differ: $(git status --short | grep -c -v '^??')"
