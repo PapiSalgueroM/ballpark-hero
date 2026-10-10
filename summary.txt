@@ -1,0 +1,9 @@
+attr-rules-bookoff-olddigest exit=0 40s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+rules-olddigest-noRevert exit=1 40s | simCmLeagueRules: 47 failure(s)
+attr-shootout-bookoff-oldharness exit=0 20s | simCmShootoutOrder: all sections passed
+shootout-oldharness-noRevert exit=1 21s | simCmShootoutOrder: 3 FAILURE(S)
+attr-cmvar-bookoff exit=0 18s | simCmVar normal: actual review outcomes and full prior baseline passed.
+attr-realfixtures-bookoff exit=0 7s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+attr-size-bookoff-oldbudget exit=0 34s | simClubManagerSaveSize: all sections green
+size-oldbudget-noRevert exit=0 35s | simClubManagerSaveSize: all sections green
+leadblock-cmvar-realfixtures exit=0 25s | with the lead's block in: simCmVar=0 simCmRealFixtures=0

@@ -1,0 +1,3 @@
+patchSaveCompare: scripts/simCmVar.mjs now leaves the league book out of its whole save comparisons
+patchSaveCompare: scripts/simCmRealFixtures.mjs now leaves the league book out of its whole save comparisons
+with the lead's block in: simCmVar=0 simCmRealFixtures=0
