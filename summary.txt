@@ -1,0 +1,6 @@
+anchors exit=0 33s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+norival exit=0 12s | No rival product names found. 0 findings.
+quotes exit=0 17s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+conduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+names exit=0 6s | simInventedNames: green. Every invented man on this site is invented all the way down.
+livescores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
