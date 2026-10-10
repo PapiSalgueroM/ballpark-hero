@@ -73,6 +73,7 @@ Not touched: lines 1 to 6, the `realLeagueFixtures` lines of `CareerState`, `kic
   pitch at that minute, then their eleven and bench, then their roster; the outfield man wins a shared
   name; the assist is dealt over the men who were on their pitch at that minute.
 - THE HOT PATH (critic 14): the match week asks `liveBook` (a stamp and three type checks).
+- THE VIDEO REFEREE (critic D10): the harness plays an arm with `varReviews: true` and holds the law on it.
 - NOT TAKEN: the full walk on load. `loadCareer` is on the must not touch list (Round 1225 inserts a
   function directly above it), so a book with one holed row is refused whole by the reader
   (`leagueBookOf`) but still written to in a match week. The engine never makes such a row.
