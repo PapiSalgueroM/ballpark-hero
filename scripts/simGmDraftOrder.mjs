@@ -11,7 +11,9 @@
  *      scripts/data/gmDraftOrderSources.json with two reads on two different
  *      publishers, neither a wiki; a thin fact is marked; no address ships in
  *      src; the spans a sport plays are contiguous from the game's first
- *      draft; the rule set is read against the table the pick rules carry.
+ *      draft; the rule set is read against the table the pick rules carry;
+ *      a thin fact is one a lottery needs (thin stops a lottery and nothing
+ *      else); no two lottery tables share both a name and a size.
  *   2. THE DRAW ADDS NOTHING. The saved lottery equals runLottery run by hand
  *      on the same keyed stream, exactly; a build opens one lottery stream
  *      and draws one number a drawn pick; every later look draws nothing and
@@ -23,19 +25,28 @@
  *      across the line.
  *   4. THE ORDER. Every club is in every round once, each round follows its
  *      rule, a capped climb keeps its cap, the champion is last where a
- *      league orders by class, and one season is one night however its rows
- *      arrive.
+ *      league orders by class, level clubs flip in a later round off the
+ *      lottery where a league says so, and one season is one night however
+ *      its rows arrive. FAIL CLOSED: a fact read once, another table or
+ *      another field size is the plain order with nothing drawn.
  *   5. SLOTS OVER A LEDGER. After random trades every pick is one slot, used
  *      by its holder at the place of its first owner.
- *   6. THE SAVED ORDER AND THE SAVED NIGHT. Every corruption is refused.
- *   7. THE REVEALS. Lottery night is the field, once each; the run shows
- *      true numbers, his own pick always, and counts every pick made; both
- *      fit the house ceiling.
- *   8. THE "?". The worked example's numbers are the table's.
+ *   6. THE SAVED ORDER AND THE SAVED NIGHT. Every corruption is refused,
+ *      an order that contradicts its own saved draw among them.
+ *   7. THE REVEALS. Lottery night is the field, once each, and its closing
+ *      line says which way his club's own pick went; the run shows true
+ *      numbers, his own pick always, and counts every pick made; both fit
+ *      the house ceiling to the END of the last animation, and the
+ *      presenter's CSS takes its two durations from the lib.
+ *   8. THE "?" AND THE LINE UNDER THE HEADING. The worked example's numbers
+ *      are the table's; the line under the heading is true of the night it
+ *      sits on (the night's own chances where level clubs shared theirs);
+ *      nothing is printed twice and no rule id is printed at all.
  *   9. NOTHING MOUNTS IT, and the presenter knows no sport.
  *  10. THE NIGHT, through a toy host: when he is on the clock at N exactly
  *      N minus 1 slots are used, every slot is used once by its holder,
- *      nobody is on two rosters, and every grade shown is his scout's.
+ *      nobody is on two rosters, and every grade shown is his scout's. A
+ *      slot that finds the class dry is used and its marker spent.
  *
  * Controls, through SIM_GM_DRAFT_ORDER_CONTROL. None touches src. Each is
  * listed in CONTROLS with the sections it must turn red. With a control on,
@@ -61,20 +72,40 @@
  *     14,179 across the line. Floors: 50 cases of each kind. A drawing won:
  *     21 shares over 20,000 keys each, median 0.38, 95th percentile 1.04
  *     standard errors from an even chance, band 4.5.
- *   Section 4. Three rule sets, 2,000 leagues each: 8,464 climbs, 245 of them
- *     stopped exactly at the cap (floors 1,000 and 20).
+ *   Section 1. 14 facts, 31 reads. Controls thinoutside and twintable put
+ *     one check each outside.
+ *   Section 4. Four rule sets, 2,000 leagues each: 11,461 climbs, 515 of
+ *     them stopped exactly at the cap (floors 1,000 and 20). Level clubs
+ *     flipped in a later round off the lottery: 5,258 pairs that missed the
+ *     playoffs, 540 of them reordered by the lottery first, and 1,482
+ *     playoff pairs (floors 1,000, 100 and 300); restlevel reddens 1,482
+ *     checks and flipbranchoff 6,200, which is every pair the lottery did
+ *     not reorder. Thirteen refusals, each for its own reason; thinplayed
+ *     reddens 21 checks, anytable 3, anyfield 3.
+ *   Section 6. 29 corruptions refused, 18 of a saved order; winsloose lets
+ *     two of them through.
  *   Section 5. 600 leagues: 8,785 of the year's picks changed hands, 600
  *     leagues hold a club with three or more picks, 351 a club with none, 202
  *     awarded picks (floors 1,000, 100, 100 and 50).
- *   Section 7. A lottery fits 3,750 ms for 1 to 32 tiles (14 clubs take
- *     3,700 ms, 16 take 3,720 ms); the longest run is 3,780 ms against the
- *     house ceiling of 5,000. Those are rules, not readings: the pace is cut
- *     to fit, and the check is three quarters of the ceiling for the lottery
- *     and four fifths for the run.
+ *   Section 7. A lottery fits 3,750 ms TO THE END OF ITS LAST ANIMATION for
+ *     1 to 32 tiles (14 clubs end at 3,720 ms, 16 at 3,700: the closing line
+ *     starts at 3,420 and 3,400 and takes 300 ms to arrive, a tile 320 ms to
+ *     turn); the longest run is 3,780 ms against the house ceiling of 5,000.
+ *     Those are rules, not readings: the pace is cut to fit, and the check
+ *     is three quarters of the ceiling for the lottery and four fifths for
+ *     the run. Before the review the lib reported the moment the closing
+ *     line STARTED (3,700 ms for 14 clubs) while Chromium measured the
+ *     screen at 4,000; shortend puts 32 checks outside and literaltime 2.
+ *     600 lottery nights, 276 with his tile: 60 up, 95 down, 121 held
+ *     (floors 20, 50 and 20); headlineswapped reddens the 155 that moved.
+ *   Section 8. 600 nights: 200 drawn on the table and 400 where level clubs
+ *     shared their chances, 263 of those at the top of the table (floors
+ *     100, 200 and 100); tableline reddens 800 checks.
  *   Section 10. 400 nights: 5,256 traded picks used by their holders, 1,427
  *     of them his; he was on the clock 2,091 times, 39 of them at the first
  *     pick of the draft; one night he held no slot at all (floors 1,000, 200
- *     and 400).
+ *     and 400). 60 nights with a class that ran dry: 2,883 slots found
+ *     nobody left (floor 1,000); drymarker reddens all 60 nights.
  *   The floors are a fraction of the smallest count measured and exist so a
  *   check that has stopped looking at anything cannot stay green.
  *
@@ -176,7 +207,7 @@ const SECTION_NAMES = {
   5: 'slots over a ledger',
   6: 'the saved order and the saved night fail closed',
   7: 'the reveals',
-  8: 'the worked example is the table',
+  8: 'the worked example is the table, and the line under the heading is the night',
   9: 'nothing mounts it, and the presenter knows no sport',
   10: 'the night through a toy host',
 };
