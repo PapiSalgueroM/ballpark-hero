@@ -1,0 +1,4 @@
+1) 78 tables read across 155 chains and 14 search source configs (296 dynamic table names and 0 embedded select parts not probed)
+
+SUPABASE UNREACHABLE (TypeError: fetch failed).
+SUPABASE UNREACHABLE. NOTHING WAS CHECKED.
