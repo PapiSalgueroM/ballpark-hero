@@ -193,3 +193,60 @@ only board does not have that problem and is what the real award is.
 A back four picked by clean sheets + goals + assists (the draft's rule) holds 2.9 to 3.2 men of one club on
 average. Picked by goals + assists, level men split by their club's clean sheets and then its table place
 (the critic's rule): 1.7 men of one club, and 0.0 to 0.04 of the four on no goal and no assist.
+
+### 6. The save and the page weight
+
+The book is about 50 bytes on day one, 6,023 to 7,284 at the end of season one, 1,236 to 6,534 at season 15
+(it is replaced every summer, so it is a level and not a slope). `SIZE_BUDGET` 196,000 to 203,000: healthy
+180,907 to 193,046 over six streams against 179,671 to 186,562 on the base; the `uncapped` control 215,793
+to 226,422 with the book, fired with 33 failures in section 1 and nothing else (remote checks
+`r1229-size-base`, `r1229-size-cand`).
+`scripts/sweepWeight.mjs` on a served build (`r1229-w1`): the three pages that load the engine are each
+about 1.3K over the budget the gate set at its own measurement: /club-manager 583.3K against 582,
+/manager-hot-seat 601.3K against 600, /deadline-day 611.4K against 610. THE ROWS ARE THE LEAD'S TO MOVE.
+
+## What is proven, and where (GitHub runners; `git show origin/rc-results/<name>:summary.txt`)
+
+- THE MATCH STREAM DID NOT MOVE. `r1229-b1` (the weight lift alone, d5dac548): 96 of 96 faces, each the whole
+  save and the count of draws, equal to the base commit's source over 24 careers x 2 seasons, and the
+  control that makes a striker weigh more fired. `r1229-d0` and `r1229-e1` (the binding in): 96 of 96 equal
+  to the base commit on the whole save BUT the book, and 96 of 96 equal to the same source with the book's
+  lines out. Controls `mathrandom` (the scorer pick reads Math.random: 16 of 16 faces move) and `weight`.
+- THE LAW, THE NAMES, THE SHAPES, THE OLD SAVE, THE DOORS, THE DAILIES: `scripts/simCmLeagueBook.mjs`, default
+  and full fleets, five seed sets each, thirteen controls. Its header's MEASURED block has the z values.
+- THE VIDEO REFEREE ON: the law held over 268 to 277 entries a fleet, 162 to 183 reviews in 228 league
+  matches of mine, no report whose lines did not add up to its score.
+- THE DIGEST OF `simCmLeagueRules`: `r1229-rules`, two legs, in that harness's header.
+- THE WHOLE VITEST SUITE: 403 files passed, 2 skipped, 5,732 tests passed (`r1229-h1`, at 1acb1aab).
+- EVERY HARNESS THAT LOADS THE ENGINE: 118 on a runner (`r1229-sweep`, then `r1229-sw00` to `r1229-sw04`).
+- A ROUTE SWEEP in Chromium at three viewports, 183 routes, 549 checks, 0 findings (`r1229-w1`).
+- THE MERGES: this branch with each of r1218-cm-var-true, r1225-cm-fixtures-bind and r1216-own-goal-motion
+  ALONE merges with no conflict; the type gate is at zero and this round's harness is green on each
+  (`r1229-m2`). All three together conflict, between Rounds 1218 and 1225 (their import lines 3 and 4 of
+  `clubManager.ts`, and `ClubManagerHelp.tsx`), in no line this round touches (`r1229-m1`).
+
+## What a later session must not trust
+
+- A read of a save on a copy of the engine that last touched ANOTHER save. The engine keeps one save's
+  league memberships registered at a time (`registerLeagueOverrides`, set by `startCareer`,
+  `startNextSeason` and `loadCareer`). `leagueBookOf(state)` asks which league the club is in, so read on
+  the wrong world it can answer for another league and the book, stamped by its league, reads as none.
+  In the game there is one active save and the question never comes up; in a harness it did, on some seeds
+  and not others, until the harness woke each save first (`wake` in `scripts/simCmLeagueBook.mjs`).
+- "A week is one entry": `playNextEntry` can carry a save across two weeks in one call.
+- The four other leagues' real top scorer means in the brief. Only the Premier League's were re-opened.
+- The assist share over every club (0.601 to 0.610) as a defect: it is the rule (0.614) minus the goals of
+  clubs with no eleven against me.
+
+## Owed
+
+- TO THE LEAD AT THE MERGE: the Round 1081 manifest pin again (three rounds edit the engine file); the
+  three budget rows of `scripts/sweepWeight.mjs`; the block for `scripts/simCmVar.mjs` (and for
+  `scripts/simCmRealFixtures.mjs` only if it is run with a base older than this round); a ruling on clubs
+  with no named eleven before Round B.
+- TO ROUND B: the readers, the Stats card, the awards, the team of the season, What's New, the facts file
+  with two receipts a fact, `simAwardRaces` re-pointed, the browser walk. A sentence for the other lane's
+  guide (`src/data/gameContent/clubManagement.ts`) on the league leaders is owed THEN, not now: nothing a
+  player can see changed in this round.
+- TO THE ROUND THAT STORES A SEED: the assist share (0.7 against a real 0.69 of credited goals on one page
+  means about 0.61 as the engine counts it), and retiring the old race and its draws.
