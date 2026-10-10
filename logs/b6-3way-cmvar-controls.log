@@ -1,0 +1,499 @@
+FAIL VAR normal
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR counted
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR decorative
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR penalty
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR awards
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR resolution
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR past
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR reveal
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR resume
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR announce
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR disabled
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR everywhere
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR historic
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR streamgoal
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR streamfoul
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldgoalreview
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldoverturn
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldpenaltyreview
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldmissedfoul
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldpenaltyscores
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+FAIL VAR oldpenaltyontarget
+
+/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Normal proof and every effective control execute
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:128:12)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:518:46 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

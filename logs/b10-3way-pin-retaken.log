@@ -1,0 +1,24 @@
+repin1081: moved the pin of src/lib/clubManager.ts from c90708979651f54f553d749358123aa214248c08488f4a061594b182c25df2d2 to 680d5e51a3586c70b25454ca6ff90cab90f92cf781e6c0f5da63630bf3817a38
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
+    at failureErrorWithLog (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:1472:15)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:945:25
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:897:52
+    at buildResponseToResult (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:943:7)
+    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:970:16
+    at responseCallbacks.<computed> (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:622:9)
+    at handleIncomingPacket (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:677:12)
+    at Socket.readFromStdout (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/esbuild/lib/main.js:600:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+ scripts/fixtures/managerAppealIsolation1081/manifest.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)

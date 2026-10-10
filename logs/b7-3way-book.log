@@ -1,0 +1,8 @@
+✘ [ERROR] Unexpected "<<"
+
+    src/lib/clubManager.ts:3:0:
+      3 │ <<<<<<< HEAD
+        ╵ ~~
+
+simCmLeagueBook: cannot run: Build failed with 1 error:
+src/lib/clubManager.ts:3:0: ERROR: Unexpected "<<"
