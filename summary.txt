@@ -1,0 +1,10 @@
+head-seed1 exit=0 175s | simCareerSquad: 2191 checks, 1 failed
+head-seed3 exit=0 188s | simCareerSquad: 2189 checks, 1 failed
+head-seed2 exit=0 190s | simCareerSquad: 2191 checks, 0 failed
+head-seed4 exit=0 175s | simCareerSquad: 2187 checks, 0 failed
+main-seed1 exit=0 173s | simCareerSquad: 2181 checks, 0 failed
+head-seed5 exit=0 181s | simCareerSquad: 2191 checks, 1 failed
+main-seed3 exit=0 170s | simCareerSquad: 2186 checks, 0 failed
+main-seed2 exit=0 186s | simCareerSquad: 2184 checks, 0 failed
+main-seed4 exit=0 170s | simCareerSquad: 2177 checks, 1 failed
+main-seed5 exit=0 125s | simCareerSquad: 2186 checks, 0 failed

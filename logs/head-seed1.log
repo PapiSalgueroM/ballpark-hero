@@ -1,0 +1,10 @@
+simCareerSquad: 200 careers an era, seed 1
+   29386 played seasons: league games minus the plan, mean -0.30
+   FAIL [9] mean of league games minus the plan -0.30, the line is 0.3
+   First name on the team sheet   n   2419  mean -0.21
+   In and out of the side         n   3490  mean -0.20
+   Nailed on starter              n  10039  mean -0.20
+   Squad player                   n   3591  mean -0.54
+   Starter most weeks             n   9847  mean -0.39
+FAILED [9] mean of league games minus the plan -0.30, the line is 0.3
+simCareerSquad: 2191 checks, 1 failed
