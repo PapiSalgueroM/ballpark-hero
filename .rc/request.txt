@@ -1,0 +1,8 @@
+# Reviewer cm, Release AU, request 2: the walk at 390 and 1280 on a served build of the head, one at a time
+#!serve
+#!playwright
+#!serial
+walkA: RCM_ONLY=A node .rc/x/review-cm-walk.mjs > $RC_OUT/walkA.txt 2>&1; s=$?; grep -c "^\[A\]" $RC_OUT/walkA.txt; tail -12 $RC_OUT/walkA.txt | cut -c1-330; exit $s
+walkB: RCM_ONLY=B node .rc/x/review-cm-walk.mjs > $RC_OUT/walkB.txt 2>&1; s=$?; tail -14 $RC_OUT/walkB.txt | cut -c1-420; exit $s
+own-86421: LIVE_FIT_SEED=86421 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own-86421.txt 2>&1; s=$?; grep -h "own goal \(for\|against\)\|ends on his feet\|still lying\|turns by" $RC_OUT/own-86421.txt | cut -c1-260; tail -1 $RC_OUT/own-86421.txt | cut -c1-300; exit $s
+sweep: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > $RC_OUT/sweep.txt 2>&1; s=$?; grep -E "club-manager|manager-hot-seat|deadline-day" $RC_OUT/sweep.txt | cut -c1-220 | head -12; tail -1 $RC_OUT/sweep.txt | cut -c1-200; exit $s
