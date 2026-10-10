@@ -212,3 +212,28 @@ only, and which season the counts are from.
 - `scripts/playCmRealFixtures.mjs` plays its oracle without reviews and needs the opt in when the switch moves.
 - The What's New entry. It is written when the switch moves, and must say: goals and penalties only, in which
   competitions, a modern save from its next kickoff, rare, and that it changes results.
+
+## 9. The closing fix (2026-10-10, after the closing check). The switch has still NOT moved.
+
+**The rates.** A fourth reader looked for a second publisher's own count of a season from 2022-23 on (Premier
+League, La Liga, Serie A, Bundesliga, Ligue 1) and found none. What the pages give is one more count by one
+publisher, now a row of `scripts/data/cmVarRates.json`: the French league's own review of Ligue 1 2023-24
+(`lfp-ligue1-2023-24`, https://ligue1.com/fr/articles/l1_article_35- , 19 June 2024): 23 goals ruled out and
+23 penalties given thanks to the video assistant in 306 matches, 0.075 a match each. One publisher, so the row
+is on file and read by nothing: no rate moved. It changes what the owed entry can honestly say. The used
+figure for goals (29 in 380, Serie A 2017-18, 0.076 a match) is where that recent official count sits, and it
+is below the three Premier League seasons one outlet counted (0.124 to 0.145). For penalties the used figure
+(0.089) is above the French count and inside the range of the recent counts (0.066 to 0.131).
+The owed entry `recent-seasons` is still open, so the switch is still held. Closing it is the lead's ruling.
+
+**The coverage.** Thirteen of the 48 competitions say yes, each on two publishers on two hosts that speak of
+2026-27, every line read on its page on 2026-10-10: the six of the review fix, and Ligue 1, the Primeira
+Liga, the Scottish Premiership, the Super Lig, the Belgian Pro League, the Swiss Super League and the
+2. Bundesliga. The Danish Superliga is on file with one source and stays unknown, as does the Championship
+(one source, which says no). Thirteen leagues and all twenty domestic cups are unread. A cup needs a source
+that speaks of 2026-27 and names the round its reviews start at, and the FA Cup pages a search gives in
+October 2026 speak of 2025-26, so the cups were not filed.
+
+**What it took.** Data alone: the two ledgers, the generator, and one comment in `scripts/simCmVar.mjs`. The
+fleet the bands are measured on is a fixed list of clubs, so its numbers did not move (seeds 31 to 36: goals
+ruled out 0.0704 a match, penalties given 0.0873).
