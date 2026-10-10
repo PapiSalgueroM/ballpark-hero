@@ -1,0 +1,8 @@
+#!build
+#!playwright
+#!serial
+toggle: PARTS=toggle,cross node scripts/playSaveKeeper.mjs
+walk-answered: KEEPER_CONTROL=answered ONLY=/fight-gym,/club-manager,/idle-arena node scripts/playSaveKeeper.mjs
+walk-assignload: KEEPER_CONTROL=assignload node scripts/playSaveKeeper.mjs
+walk-nobase: ONLY=/fight-gym PARTS=planted node scripts/playSaveKeeper.mjs
+walk-nobase-said: KEEPER_NO_BASE=1 ONLY=/fight-gym PARTS=planted node scripts/playSaveKeeper.mjs

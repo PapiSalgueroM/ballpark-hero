@@ -1,0 +1,6 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+toggle exit=0 202s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
+walk-answered exit=1 18s | playSaveKeeper control answered: FIRED. 3 of 3 route(s) stopped at "the card offers NOTHING" after the first press.
+walk-assignload exit=1 28s | playSaveKeeper control assignload: FIRED. 2 of 2 walk(s) saw the history grow by one entry, the old page a Back press away.
+walk-nobase exit=2 0s | playSaveKeeper: REFUSED. Give it that build (the header says which), or set KEEPER_NO_BASE=1 to walk the branch arm alone; the closing line then says the control was not 
+walk-nobase-said exit=0 8s | playSaveKeeper: green on the BRANCH ARM ONLY (KEEPER_NO_BASE=1). The base arm and journey K were NOT run, so this run carries no loss control and says nothing about the k

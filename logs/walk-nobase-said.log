@@ -1,0 +1,12 @@
+playSaveKeeper: mode assert, parts planted, 1 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+Journey L, the planted flow, on the branch: real engine saves on 1 route(s)
+  SURVIVED  [branch] planted /fight-gym 390: A (1572 chars) is in fight-gym-save-v1.broken-2026-01-02T03-04-05, fight-gym-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+  SURVIVED  [branch] planted /fight-gym 1280: A (1572 chars) is in fight-gym-save-v1.broken-2026-01-02T03-04-05, fight-gym-save-v1; A is the game on screen: true; the game he had is kept aside: true; writes to the key: A; backups 2; the button under a pointer: yes
+
+playSaveKeeper, branch: 2 walk(s) judged (0 fresh, 2 planted, 0 cross): 0 LOST the save that was put back, 0 partly, 2 survived; 0 not judged
+playSaveKeeper, journey L's own presses (made in the page, see pressAndJudge): the button was under a pointer in 2 of 2 walk(s)
+playSaveKeeper: the planted flow judged 1 of 1 route(s)
+playSaveKeeper: green on the BRANCH ARM ONLY (KEEPER_NO_BASE=1). The base arm and journey K were NOT run, so this run carries no loss control and says nothing about the keys an ordinary visit stores.

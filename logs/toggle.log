@@ -1,0 +1,34 @@
+playSaveKeeper: mode assert, parts toggle cross, 21 route(s), widths 390 and 1280
+  branch build /home/runner/work/ballpark-hero/ballpark-hero/dist
+  no build of origin/main was given, so the base arm and journey K are not run
+
+Journey L, the cross flow: an academy backup put back from /stadium-tycoon with the Academy tab open
+  SURVIVED  [branch] cross /wonderkid-factory from /stadium-tycoon 390: A (335 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; history entries 5 then 5
+  SURVIVED  [branch] cross /wonderkid-factory from /stadium-tycoon 1280: A (335 chars) is in wonderkidFactoryV1, wonderkidFactoryV1.broken-2026-01-02T03-04-05; A is the game on screen: true; the game he had is kept aside: true; writes to the key: x' x' x' A; backups 2; history entries 5 then 5
+
+Journey T, the toggle, on the branch: 3 presses in a row with a real pointer on 21 route(s) at 390, the card's OK pressed after each
+  HELD        toggle /soccer-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /club-manager 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /stadium-tycoon 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /wonderkid-factory 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /rebuild 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /front-office 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nfl-my-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /cfb-dynasty 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /cbb-dynasty 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nba-front-office 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nba-my-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /mlb-my-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /mlb-front-office 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nhl-my-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /nhl-front-office 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /aussie-rules-manager 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /fight-career 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /fight-promoter 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /fight-gym 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /hall-of-champions 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+  HELD        toggle /idle-arena 390: 3 of 3 presses, each put back the save asked for, kept the game he had and left the card offering it; the history told a replace from an assign on 1 of them
+
+playSaveKeeper, branch: 2 walk(s) judged (0 fresh, 0 planted, 2 cross): 0 LOST the save that was put back, 0 partly, 2 survived; 0 not judged
+playSaveKeeper, the toggle: 21 of 21 route(s) held through 3 presses with a real pointer; the history told a replace from an assign on 21 of them
+playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
