@@ -157,6 +157,12 @@ holds this one to a real save.
   (596), `/deadline-day` 605.6 to 607.1 (606), `/transfer-path` 373.6 to 375.2 (374).
   `/leaderboard` stays inside (248.3 to 249.8 against 266). Remote checks `r1219-fin` and
   `r1219-attr`. The budgets are yours.
+  AFTER THE REVIEW'S FIXES (head `96481295`, remote check `r1219-fxR`) the same thirteen rows are
+  over and each is 0.2K to 0.3K higher than the numbers above: `/` 242.0, `/club-manager` 579.4,
+  `/soccer-career` 788.1, `/stadium-tycoon` 299.1, `/wonderkid-factory` 272.9, `/minefield` 290.8,
+  `/footle` 346.8, `/nfl-my-career` 469.9, `/front-office` 361.1, `/soccer-grid` 314.9,
+  `/manager-hot-seat` 597.3, `/deadline-day` 607.4, `/transfer-path` 375.4; `/leaderboard` 250.1.
+  With `src/main.tsx` and the card reverted the sweep is green again, so the cause is unchanged.
 - When this round and Round 1210 are both merged, Round 1210's `simStorageWrites.mjs` section 7
   needs two rows under NOTHING_HELD (measured, remote check `r1219-r1210`): the
   `brokenSaveRecovery.ts` entry's `write:moveAside` becomes `write:copyAside`, and a new entry
@@ -208,6 +214,29 @@ copy, the undo, the twin and the wiring (`runSaveKeeper()` in `src/main.tsx` bef
 `createRoot`), with six new controls; the walk gained journey T (the toggle, three presses in a
 row with a real pointer on every route), the history count where the address changes, and no
 longer closes green without its loss control.
+
+The proof of the fixes (GitHub runner results, head `96481295` unless said):
+- `r1219-fxA`: the type gate, the whole unit suite (388 files, 5367 cases passed), `simSaveKeeper`
+  all green and its fourteen controls each FIRED for its own section, eleven fences.
+- `r1219-fxw2`: the whole walk with its base arm (a build of `09df145a`). Branch 52 of 52 walks
+  survived; the build before this round lost the save again on the five routes (9 walks);
+  journey T held on 21 of 21 routes through three presses with a real pointer, and the history
+  told a replace from an assign on all 21; journey K 27 keys on both builds, none added; the
+  five walk controls FIRED (`inplace`, `tamper`, `extrakey`, `answered`, `assignload`) and the
+  walk REFUSED to start without its base build.
+- `r1219-fxB`: the browser harnesses that read the card, the boundary and the storage a page
+  load writes (`playCorruptSaves` with the same counts as before the fixes, `playStorageBlocked`,
+  `playUsCareerSaveSeam`, `sweepSaves` and six more), all green.
+- `r1219-fxM`: four source changes, each killed by the unit case written for it (`STAGED_FOR_MS`
+  at five hours, the blocked storage refusal deleted, the age asked before "already applied",
+  the cap's drop not counted).
+- `r1219-fxR`: the two recordings the lead takes again at release, each replayed green with its
+  one cause reverted (the saved What's New page, the weight budgets).
+- Measured by the walk, NOT changed: in journey L's planted flow the button was under a pointer
+  in 40 of 50 walks. On the four US My Careers and Aussie Rules Manager, at both widths, the
+  game's own "How to play" dialog is over the card for a profile that never closed it. Journey T
+  closes that dialog first, as a player would, and then pressed with a pointer on 21 of 21
+  routes. The card sits where Round 958 put it.
 
 Not fixed, on purpose:
 - The quiet copy has no bound of its own (it is exempt from the cap, the critic's correction 6
