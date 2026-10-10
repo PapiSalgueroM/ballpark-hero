@@ -147,11 +147,17 @@ write whose catch calls a state setter, or a useState pair whose name says a sav
 write whose catch does anything else at all (`write:<owner>`); and, one hop on, a call that keeps the answer of a
 function whose catch answers false, or of `safeSetItem` (`keeps:<callee>`). A write with an empty catch remembers
 nothing and is not a site.
-Measured: 124 writes, 122 guarded, 85 with an empty catch, 37 that do something; 55 keys in 32 files. Every key is on
-exactly one list: 1 NAMED (the US career board, held to it per site: a function that calls holdPendingSave must read
-the state or a const made from it), 38 NOTHING_HELD in 25 entries, each with the line that shows it, and 16 OWED in
+Measured: 124 writes, 122 guarded, 85 with an empty catch, 37 that do something; 56 keys in 32 files (55 before the
+review's fix pass gave a function's second write a key of its own, `write:switchSlot#2`). Every key is on exactly one
+list: 1 NAMED (the US career board), 39 NOTHING_HELD in 25 entries, each with the line that shows it, and 16 OWED in
 12 entries. A key on no list fails. An OWED entry whose file now names that save fails as stale and the message spells
 out the entry to delete. The summary line ends "(owed: 12)".
+
+NAMED is judged at the hold, one key at a time (the fix pass, see the last section): the function that calls
+`holdPendingSave`, the innermost one, must read the state or a const made from it, in its body or in its hook's
+dependency list. As first built the check climbed through every enclosing function, and the outermost is the component
+or hook that declares the state, so one hold anywhere in a hook passed for every save the hook keeps. Both reviewers
+found it; the first cut's sentence "held to it per site" was not true of the code.
 
 Sites only the write could find, which no name pattern would: `useAussieRulesLeague.ts` and
 `useAussieRulesManager.ts` (the state is `storageNotice`), `useMmaPromotion.ts` (a ref, `blocked.current`) and
@@ -173,8 +179,14 @@ To the other lane:
    whether the write went through, the write goes through `safeSetItem(SAVE_KEY, ...)`, and one effect names the save
    while `saveFailed` is true, the shape of `UsCareerBoard.tsx` lines 370 to 374:
    `useEffect(() => { if (!saveFailed) return; return holdPendingSave(() => saveCurrentCareer()); }, [saveFailed, saveCurrentCareer]);`
-   Its test is shaped like `src/test/usCareerSaveRetry.test.tsx`. Then its OWED entry in
-   `scripts/simStorageWrites.mjs` moves to NAMED (the fence goes red as stale until it does).
+   Its test is shaped like `src/test/usSeasonCentreEntry.test.tsx` ("the tile stays and says why when its Reload
+   would lose a save the device refused"): that is the file that goes red when the board's hold is removed, moved or
+   turned round (the reviewer's runs `r1210-run-hold`); `src/test/usCareerSaveRetry.test.tsx` stays green under all
+   three and is NOT the worked example the brief took it for. Then its OWED entry in
+   `scripts/simStorageWrites.mjs` moves to NAMED (the fence goes red as stale until it does). The hold must sit in a
+   function that itself reads `saveFailed` (the effect above does); a hold that reads nothing is not counted.
+   A hook that keeps two saves and names one (Footle's `useGame.ts` is the live candidate) is told "partly stale":
+   only the named key moves to NAMED, the other stays owed.
 3. The same for Footle's practice run and unlimited session (`src/hooks/useGame.ts`) and Rank Em's circuit
    (`src/pages/RankEm.tsx`).
 4. Footle keeps its three FlagImg in its next round. Two places still print a country with no flag where the fence

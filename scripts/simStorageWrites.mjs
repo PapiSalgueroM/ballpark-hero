@@ -104,17 +104,28 @@
  *                       pair whose name says a save failed;
  *        write:<owner>  a guarded storage write whose catch does anything
  *                       else at all (answers false, sets a flag or a ref,
- *                       returns a word), by the function it runs in;
+ *                       returns a word), by the function it runs in. A
+ *                       function's second such write is write:<owner>#2, a
+ *                       key of its own, so a new refusal in a function that
+ *                       is already listed has to be answered for too;
  *        keeps:<callee> one hop on: a call that keeps the answer of a
  *                       function whose catch answers false (and of
  *                       safeSetItem, which answers the same question).
  *      A write whose catch is empty remembers nothing and is not a site.
  *      Every key is covered by exactly one entry of three lists, each entry
  *      with a reason a reader can check:
- *        NAMED         the save is named to the seam. Held to it per site: a
- *                      function that calls holdPendingSave must read the
- *                      state (or a const derived from it), so one hold in a
- *                      file cannot pass for three refused saves.
+ *        NAMED         the save is named to the seam. Judged at the hold, one
+ *                      key at a time: the function that calls
+ *                      holdPendingSave (the innermost one, an effect's own
+ *                      callback) must read the state or a const made from
+ *                      it, in its body or in its hook's dependency list; for
+ *                      an entry with no state, the save function by name.
+ *                      The enclosing component or hook does not count (it
+ *                      declares every state, so it "reads" them all), so one
+ *                      hold cannot pass for three refused saves. What this
+ *                      cannot see is whether the hold's condition is the
+ *                      right way round: src/test/usSeasonCentreEntry.test.tsx
+ *                      holds that for the US board.
  *        NOTHING_HELD  the game refused the action, or the write is not game
  *                      progress, so a reload loses nothing: the line that
  *                      shows it is in the entry.
@@ -124,8 +135,10 @@
  *      refused save cannot ship without an answer. OWED is a ratchet like
  *      RAW_RANDOM_BASELINE: the summary prints "owed: N" on every run, and an
  *      entry whose file now names that save fails as stale, with the entry
- *      to delete spelled out. An entry whose key the scan no longer finds is
- *      stale the same way.
+ *      to delete spelled out. An entry that keeps two saves and has one of
+ *      them named is PARTLY stale: the message says which key moves to NAMED
+ *      and which stays owed, never "move the entry". An entry whose key the
+ *      scan no longer finds is stale the same way.
  *      MEASURED (Round 1210, origin/main 074a9054 plus this round): 122
  *      guarded writes, 85 with an empty catch, 37 that do something; the
  *      union is in the summary line. Fewer keys than SITE_FLOOR means the
@@ -142,8 +155,35 @@
  *                                        that reads the state of the first
  *                                        OWED entry: section 7 must call that
  *                                        entry stale.
- *      Each of the three prints FIRED or DID NOT FIRE on the last line, since
- *      a control that aborts exits red just like one that fires.
+ *   The six below came out of the review of Round 1210 (2026-10-10), which
+ *   moved a hold into a function that reads nothing and stayed green:
+ *   SIM_STORAGE_WRITES_CONTROL=deadhold moves the US board's hold into a
+ *                                        nested function of the same effect
+ *                                        that reads nothing: section 7 must
+ *                                        say NAMED names nothing although
+ *                                        the file still has a hold.
+ *   SIM_STORAGE_WRITES_CONTROL=partial  plants a hook that keeps two refused
+ *                                        saves and holds one, with one OWED
+ *                                        entry for both: section 7 must call
+ *                                        it PARTLY stale, the first key
+ *                                        named and the second still owed.
+ *   SIM_STORAGE_WRITES_CONTROL=second   plants a function with two guarded
+ *                                        writes and an entry for the first:
+ *                                        the second, write:<owner>#2, must
+ *                                        be named as on no list.
+ *   SIM_STORAGE_WRITES_CONTROL=twolists puts the first NAMED key on OWED as
+ *                                        well: "on two lists".
+ *   SIM_STORAGE_WRITES_CONTROL=gone     lists a key no write gives: the
+ *                                        entry must be called stale.
+ *   SIM_STORAGE_WRITES_CONTROL=floor    narrows the scan to src/lib: the
+ *                                        floor must refuse the count.
+ *      Each of the nine prints FIRED or DID NOT FIRE on the last line, since
+ *      a control that aborts exits red just like one that fires (exit 1 is a
+ *      control that fired, 2 a refusal to run, 3 one that did not fire).
+ *      Shown once on 2026-10-10 with the old judgement put back in a copy:
+ *      the climb through every enclosing function leaves deadhold and
+ *      partial at DID NOT FIRE, "any state of the entry" leaves partial
+ *      there, and one key a function leaves second there.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -182,7 +222,8 @@ else if (CONTROL === 'once') control('src/lib/safeStorage.ts', 'if (!probedWrite
 else if (CONTROL === 'unlearn') control('src/lib/safeStorage.ts', 'localStorage.setItem(key, value);', 'localStorage.setItem(key, value); setRefusedWrite(false);');
 else if (CONTROL === 'held') control('src/lib/safeStorage.ts', 'if (pendingSaves.size > 0) return getStorageTrouble();', '');
 else if (CONTROL === 'unnamed') control('src/components/us-career/UsCareerBoard.tsx', 'return holdPendingSave(() => { retrySave(); return pendingSave.current === null; });', 'return undefined;');
-else if (CONTROL === 'newsite' || CONTROL === 'stale') { /* planted in section 7, once the scan knows where */ }
+else if (CONTROL === 'deadhold') control('src/components/us-career/UsCareerBoard.tsx', 'return holdPendingSave(() => { retrySave(); return pendingSave.current === null; });', 'const dead = () => holdPendingSave(() => true); void dead; return undefined;');
+else if (['newsite', 'stale', 'partial', 'second', 'twolists', 'gone', 'floor'].includes(CONTROL)) { /* set up in section 7, once the scan knows where */ }
 else if (CONTROL) { console.error(`unknown SIM_STORAGE_WRITES_CONTROL=${CONTROL}`); process.exit(2); }
 /** Section 7's planted controls add text at the end of a file, in memory only. */
 function plant(file, addition) {
@@ -233,6 +274,15 @@ function calls(sf, test) {
   return found;
 }
 const lineOf = (sf, n) => sf.getLineAndCharacterOfPosition(n.getStart(sf)).line + 1;
+/** Every file under src that ships: no test, no spec, no outcomes file and
+ *  nothing under a test folder. A path is put on forward slashes before the
+ *  filter reads it, so this PC and the Linux runner scan the same files
+ *  (review of Round 1210: the folder test asked for a forward slash on both
+ *  sides, so it never matched src/test itself and never matched on Windows).
+ *  Sections 1 and 7 both read this one list. */
+const sourceFiles = () => fs.readdirSync(SRC, { recursive: true }).map(f => String(f).replace(/\\/g, '/'))
+  .filter(f => /\.(ts|tsx)$/.test(f) && !/\.test\.|\.spec\.|(^|\/)test\/|\.outcomes\.|\.d\.ts$|__control_/.test(f))
+  .map(f => path.join(SRC, f)).sort();
 
 /**
  * The writes that may stay bare, each with why, and a check that the why
@@ -266,9 +316,7 @@ const ALLOWED = [
 
 console.log('1. every storage write is inside a try of its own function, or allowed with a reason that still holds');
 {
-  const files = fs.readdirSync(SRC, { recursive: true }).map(String)
-    .filter(f => /\.(ts|tsx)$/.test(f) && !/\.test\.|\.spec\.|[\/]test[\/]|\.outcomes\.|\.d\.ts$|__control_/.test(f))
-    .map(f => path.join(SRC, f));
+  const files = sourceFiles();
   let total = 0;
   let inTry = 0;
   let allowed = 0;
@@ -427,8 +475,8 @@ const NOTHING_HELD = [
   { file: 'src/components/soccer-career/SquadSheet.tsx', keys: ['write:helpSeen', 'keeps:helpSeen'],
     why: 'the help seen flag: a browser that refuses storage sees the help again' },
   /* the game refused the action instead of keeping it */
-  { file: 'src/lib/clubManagerSlots.ts', keys: ['write:switchSlot'],
-    why: 'a refused switch is rolled back step by step and answers false; the outgoing career never left its key' },
+  { file: 'src/lib/clubManagerSlots.ts', keys: ['write:switchSlot', 'write:switchSlot#2'],
+    why: 'a refused switch is rolled back step by step and answers false (step 1 parks the outgoing career, step 3 seats the incoming one, each write with its own undo); the outgoing career never left its key' },
   { file: 'src/lib/clubManager.ts', keys: ['write:saveCareer'],
     why: 'answers false and holds nothing itself; the callers that keep the answer are listed under keeps:saveCareer' },
   { file: 'src/lib/managerHotSeat.ts', keys: ['keeps:saveCareer'],
@@ -489,8 +537,8 @@ const OWED = [
   { file: 'src/hooks/useGamePicks.ts', keys: ['write:toggle'], owner: 'to be named by the lead (low: a list of pinned games, not a game)', listed: '2026-10-10',
     why: 'pinned games are kept for the visit when their write is refused' },
 ];
-/* Measured on 2026-10-10: 55 keys in 32 files (1 named, 38 with nothing held,
-   16 owed). Well under that and the scan is not reading the tree it thinks
+/* Measured on 2026-10-10: 56 keys in 32 files (1 named, 39 with nothing held,
+   16 owed; 55 before a function's second write got a key of its own). Well under that and the scan is not reading the tree it thinks
    it is. */
 const SITE_FLOOR = 45;
 
@@ -498,9 +546,6 @@ console.log('7. a save a game remembers was refused is named to the seam, or lis
 let owedTotal = 0;
 {
   const each = (root, visit) => { const walk = n => { visit(n); ts.forEachChild(n, walk); }; walk(root); };
-  const sourceFiles = () => fs.readdirSync(SRC, { recursive: true }).map(String)
-    .filter(f => /\.(ts|tsx)$/.test(f) && !/\.test\.|\.spec\.|[\/]test[\/]|\.outcomes\.|\.d\.ts$|__control_/.test(f))
-    .map(f => path.join(SRC, f)).sort();
   /** The function a node runs in, through useCallback and its like, or where it is otherwise. */
   const siteOwner = node => {
     for (let n = node.parent; n; n = n.parent) {
@@ -540,14 +585,54 @@ let owedTotal = 0;
     plant(entry.file, `function plantedHold() { if (!${state}) return undefined; return holdPendingSave(() => true); }`);
     aim.what = `${entry.file} ${entry.keys.join(' + ')}`;
   }
-  if (CONTROL === 'unnamed') aim.what = `${NAMED[0].file} ${NAMED[0].keys.join(' + ')}`;
+  if (CONTROL === 'unnamed' || CONTROL === 'deadhold') aim.what = `${NAMED[0].file} ${NAMED[0].keys.join(' + ')}`;
+  /* The controls below bring their own file and their own list entry, so
+     they keep working whatever the lists hold on the day. */
+  const plantFile = () => {
+    const bare = sourceFiles().find(f => !read(f).includes('.setItem(') && !read(f).includes('useState'));
+    if (!bare) { console.error(`REFUSING TO RUN: control ${CONTROL} found no file without a storage write to plant in.`); process.exit(2); }
+    return rel(bare);
+  };
+  if (CONTROL === 'partial') {
+    const file = plantFile();
+    plant(file, "function usePlantedTwoSaves() { const [plantedOneBlocked, setPlantedOneBlocked] = useState(false); const [plantedTwoBlocked, setPlantedTwoBlocked] = useState(false); const saveOne = () => { try { localStorage.setItem('planted-one', '1'); } catch { setPlantedOneBlocked(true); } }; const saveTwo = () => { try { localStorage.setItem('planted-two', '1'); } catch { setPlantedTwoBlocked(true); } }; useEffect(() => { if (!plantedOneBlocked) return undefined; return holdPendingSave(() => true); }, [plantedOneBlocked]); return { saveOne, saveTwo, plantedTwoBlocked }; }");
+    OWED.push({ file, keys: ['state:plantedOneBlocked', 'state:plantedTwoBlocked'], owner: 'the control', listed: 'in memory', why: 'two refused saves in one hook, one of them held' });
+    aim.what = `${file} partly: state:plantedOneBlocked named, state:plantedTwoBlocked still owed`;
+  }
+  if (CONTROL === 'second') {
+    const file = plantFile();
+    plant(file, "function plantedTwoRefusals() { try { localStorage.setItem('planted-a', '1'); } catch { return false; } try { localStorage.setItem('planted-b', '1'); } catch { return false; } return true; }");
+    NOTHING_HELD.push({ file, keys: ['write:plantedTwoRefusals'], why: 'the control: an entry written when the function had one write' });
+    aim.what = `${file} write:plantedTwoRefusals#2`;
+  }
+  if (CONTROL === 'twolists') {
+    OWED.push({ file: NAMED[0].file, keys: [NAMED[0].keys[0]], owner: 'the control', listed: 'in memory', why: 'the same key as the first NAMED entry' });
+    aim.what = `${NAMED[0].file} ${NAMED[0].keys[0]} twice`;
+  }
+  if (CONTROL === 'gone') {
+    NOTHING_HELD.push({ file: NOTHING_HELD[0].file, keys: ['write:plantedNeverWritten'], why: 'the control: a key no write gives' });
+    aim.what = `${NOTHING_HELD[0].file} write:plantedNeverWritten gone`;
+  }
+  if (CONTROL === 'floor') aim.what = 'the floor';
 
-  const files = sourceFiles();
+  const files = CONTROL === 'floor' ? sourceFiles().filter(f => rel(f).startsWith('src/lib/')) : sourceFiles();
+  if (CONTROL === 'floor') console.log(`   control floor: the scan reads src/lib alone, ${files.length} of ${sourceFiles().length} files, in memory`);
   /** file -> key -> the first line that gave it */
   const sites = new Map();
   const add = (file, key, line) => {
     if (!sites.has(file)) sites.set(file, new Map());
     if (!sites.get(file).has(key)) sites.get(file).set(key, line);
+  };
+  /** A function's second remembered refusal is a refusal of its own:
+   *  write:step, then write:step#2, in the order the file has them (review of
+   *  Round 1210: with one key a function, a new one rode on the old entry and
+   *  nobody had to answer for it). */
+  const writesIn = new Map();
+  const addWrite = (file, owner, line) => {
+    const id = `${file} ${owner}`;
+    const nth = (writesIn.get(id) ?? 0) + 1;
+    writesIn.set(id, nth);
+    add(file, nth === 1 ? `write:${owner}` : `write:${owner}#${nth}`, line);
   };
   const parsed = new Map();
   const tree = full => { if (!parsed.has(full)) parsed.set(full, parse(full)); return parsed.get(full); };
@@ -573,7 +658,7 @@ let owedTotal = 0;
         const owner = siteOwner(w);
         if (answersFalse && owner !== '(anonymous)' && owner !== '(module)') answers.add(owner);
         if (setters.size) for (const s of setters) add(rel(full), `state:${stateOf(s)}`, lineOf(sf, w));
-        else add(rel(full), `write:${owner}`, lineOf(sf, w));
+        else addWrite(rel(full), owner, lineOf(sf, w));
       }
     }
     if (text.includes('useState') && /save/i.test(text)) {
@@ -598,48 +683,80 @@ let owedTotal = 0;
     }
   }
 
-  /** Does a function that calls holdPendingSave read one of these states, or a const made from one? */
-  const namesToSeam = (file, states) => {
-    const sf = tree(path.join(ROOT, file));
-    const holds = calls(sf, n => ts.isIdentifier(n.expression) && n.expression.text === 'holdPendingSave');
-    if (!holds.length) return false;
-    if (!states.length) return true;
-    const tainted = new Set(states);
+  const holdsIn = file => calls(tree(path.join(ROOT, file)), n => ts.isIdentifier(n.expression) && n.expression.text === 'holdPendingSave');
+  /** The names that tie a hold to a key. For state:<name> the state and every
+   *  const made from it; for write:<owner> and keeps:<callee> the function's
+   *  own name (a retry calls the save again). A key with no name of its own,
+   *  write:(anonymous) or write:(module), cannot be tied to a hold. */
+  const spellings = (sf, key) => {
+    const base = key.replace(/#\d+$/, '');
+    const name = base.slice(base.indexOf(':') + 1);
+    if (name.startsWith('(')) return null;
+    const names = new Set([name]);
+    if (!base.startsWith('state:')) return names;
     for (let grew = true; grew;) {
       grew = false;
       each(sf, n => {
-        if (!ts.isVariableDeclaration(n) || !ts.isIdentifier(n.name) || !n.initializer || tainted.has(n.name.text)) return;
+        if (!ts.isVariableDeclaration(n) || !ts.isIdentifier(n.name) || !n.initializer || names.has(n.name.text)) return;
         let reads = false;
         let makesFunction = false;
-        each(n.initializer, c => { if (ts.isIdentifier(c) && tainted.has(c.text)) reads = true; if (isFunction(c)) makesFunction = true; });
-        if (reads && !makesFunction) { tainted.add(n.name.text); grew = true; }
+        each(n.initializer, c => { if (ts.isIdentifier(c) && names.has(c.text)) reads = true; if (isFunction(c)) makesFunction = true; });
+        if (reads && !makesFunction) { names.add(n.name.text); grew = true; }
       });
     }
-    return holds.some(h => {
-      for (let n = h.parent; n; n = n.parent) {
-        if (!isFunction(n)) continue;
-        let reads = false;
-        each(n, c => { if (ts.isIdentifier(c) && tainted.has(c.text)) reads = true; });
-        if (reads) return true;
-      }
-      return false;
+    return names;
+  };
+  /** Is THIS key named to the seam? Judged at the hold, one key at a time:
+   *  the function that calls holdPendingSave (the innermost one, an effect's
+   *  own callback, with the retry it hands over) must spell one of the key's
+   *  names, or the hook call it is handed to must list one in its
+   *  dependencies. The climb stops there. It used to go on through every
+   *  enclosing function, and the outermost is the component or hook that
+   *  declares the state, so one hold anywhere in a hook passed for every save
+   *  the hook keeps (review of Round 1210, both reviewers; the controls
+   *  deadhold and partial hold this). */
+  const holdsKey = (file, key) => {
+    const sf = tree(path.join(ROOT, file));
+    const names = spellings(sf, key);
+    if (!names) return false;
+    const spells = node => { let found = false; each(node, c => { if (ts.isIdentifier(c) && names.has(c.text)) found = true; }); return found; };
+    return holdsIn(file).some(h => {
+      let fn = h.parent;
+      while (fn && !isFunction(fn)) fn = fn.parent;
+      if (!fn) return false;
+      if (spells(fn)) return true;
+      const hook = fn.parent;
+      return !!hook && ts.isCallExpression(hook) && hook.arguments.some(a => a !== fn && ts.isArrayLiteralExpression(a) && spells(a));
     });
   };
-  const statesOf = entry => entry.keys.filter(k => k.startsWith('state:')).map(k => k.slice('state:'.length));
+  /** The keys of an entry that are judged at the hold: its states, one by
+   *  one. The write: and keeps: keys of an entry that has a state are the
+   *  same refusal seen from the write and ride with the states; an entry with
+   *  no state is judged by those keys, one by one. */
+  const judged = entry => { const states = entry.keys.filter(k => k.startsWith('state:')); return states.length ? states : entry.keys; };
   const spell = entry => `{ file: '${entry.file}', keys: [${entry.keys.map(k => `'${k}'`).join(', ')}] }`;
 
   const bad = [];
   const total = [...sites.values()].reduce((s, m) => s + m.size, 0);
-  if (total < SITE_FLOOR) bad.push(`only ${total} keys found, under the floor of ${SITE_FLOOR}: the scan is not reading the tree it thinks it is`);
+  if (total < SITE_FLOOR) {
+    bad.push(`only ${total} keys found, under the floor of ${SITE_FLOOR}: the scan is not reading the tree it thinks it is`);
+    if (aim.what === 'the floor') aim.fired = true;
+  }
   const lists = [['NAMED', NAMED], ['NOTHING_HELD', NOTHING_HELD], ['OWED', OWED]];
   const covered = new Map();
   for (const [listName, list] of lists) {
     for (const entry of list) {
       for (const key of entry.keys) {
         const id = `${entry.file} ${key}`;
-        if (covered.has(id)) bad.push(`${id} is on two lists (${covered.get(id)} and ${listName}): one refusal, one answer`);
+        if (covered.has(id)) {
+          bad.push(`${id} is on two lists (${covered.get(id)} and ${listName}): one refusal, one answer`);
+          if (aim.what === `${id} twice`) aim.fired = true;
+        }
         covered.set(id, listName);
-        if (!sites.get(entry.file)?.has(key)) bad.push(`${listName} is stale: the scan no longer finds ${key} in ${entry.file}. Delete or correct the entry ${spell(entry)} in scripts/simStorageWrites.mjs`);
+        if (!sites.get(entry.file)?.has(key)) {
+          bad.push(`${listName} is stale: the scan no longer finds ${key} in ${entry.file}. Delete or correct the entry ${spell(entry)} in scripts/simStorageWrites.mjs`);
+          if (aim.what === `${id} gone`) aim.fired = true;
+        }
       }
     }
   }
@@ -651,14 +768,25 @@ let owedTotal = 0;
     }
   }
   for (const entry of NAMED) {
-    if (namesToSeam(entry.file, statesOf(entry))) continue;
-    bad.push(`NAMED names nothing: no function in ${entry.file} that calls holdPendingSave reads ${statesOf(entry).join(' or ') || 'its save'}, so a reload would throw the refused save away`);
-    if (aim.what === `${entry.file} ${entry.keys.join(' + ')}`) aim.fired = true;
+    const unheld = judged(entry).filter(k => !holdsKey(entry.file, k));
+    if (!unheld.length) continue;
+    const holds = holdsIn(entry.file).length;
+    bad.push(`NAMED names nothing for ${unheld.join(' and ')}: ${entry.file} has ${holds} holdPendingSave call(s) and none sits in a function that reads it (the state or a const made from it, or the save function by name, in the function's own body or its hook's dependency list), so a reload would throw the refused save away. A hold answers for the save its own function reads, never for the whole file`);
+    if (aim.what === `${entry.file} ${entry.keys.join(' + ')}` && (CONTROL !== 'deadhold' || holds > 0)) aim.fired = true;
   }
   for (const entry of OWED) {
-    if (!sites.has(entry.file) || !namesToSeam(entry.file, statesOf(entry))) continue;
-    bad.push(`OWED is stale: ${entry.file} now names this save to the seam. Delete the entry ${spell(entry)} from OWED in scripts/simStorageWrites.mjs and add it to NAMED (the fix is good, the list is behind)`);
-    if (aim.what === `${entry.file} ${entry.keys.join(' + ')}`) aim.fired = true;
+    if (!sites.has(entry.file)) continue;
+    const keys = judged(entry);
+    const held = keys.filter(k => holdsKey(entry.file, k));
+    if (!held.length) continue;
+    if (held.length === keys.length) {
+      bad.push(`OWED is stale: ${entry.file} now names this save to the seam. Delete the entry ${spell(entry)} from OWED in scripts/simStorageWrites.mjs and add it to NAMED (the fix is good, the list is behind)`);
+      if (aim.what === `${entry.file} ${entry.keys.join(' + ')}`) aim.fired = true;
+      continue;
+    }
+    const rest = keys.filter(k => !held.includes(k));
+    bad.push(`OWED is partly stale: ${entry.file} now names ${held.join(' and ')} to the seam and still does not name ${rest.join(' and ')}. In scripts/simStorageWrites.mjs take only ${held.join(' and ')} out of the entry ${spell(entry)} and give it a NAMED entry of its own; ${rest.join(' and ')} stays in OWED (a hold answers for the save its own function reads, not for the others in the file)`);
+    if (aim.what === `${entry.file} partly: ${held.join(' + ')} named, ${rest.join(' + ')} still owed`) aim.fired = true;
   }
   owedTotal = OWED.length;
   const count = list => list.reduce((s, e) => s + e.keys.length, 0);
@@ -667,7 +795,7 @@ let owedTotal = 0;
   for (const entry of OWED) console.log(`           owed: ${entry.file} [${entry.keys.join(', ')}], owner ${entry.owner}, listed ${entry.listed}`);
 }
 
-const AIMED = ['unnamed', 'newsite', 'stale'].includes(CONTROL);
+const AIMED = ['unnamed', 'newsite', 'stale', 'deadhold', 'partial', 'second', 'twolists', 'gone', 'floor'].includes(CONTROL);
 if (AIMED && !aim.fired) {
   console.log(`\nsimStorageWrites (control ${CONTROL}): DID NOT FIRE. Section 7 never named ${aim.what}, so its green proves nothing (${failures} failed for another reason)`);
   process.exit(3);
