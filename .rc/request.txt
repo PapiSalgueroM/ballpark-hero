@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+cmfix-nobase: TZ=UTC node scripts/simCmRealFixtures.mjs > /tmp/n.log 2>&1; s=$?; tail -2 /tmp/n.log | cut -c1-260; exit $s
+cmfix-all: TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs > /tmp/ca.log 2>&1; s=$?; cp /tmp/ca.log "$RC_OUT/cmfix-premier-all.log"; grep -E "^(PASS|FAIL|SKIP) real fixtures" /tmp/ca.log | tr '\n' ';' | cut -c1-600; tail -1 /tmp/ca.log | cut -c1-300; exit $s
+cmfix-oldbase: TZ=UTC CM_FIXTURE_BASE=79c729cdc2943cf444c3384ce0cffb3ca87d2e1d node scripts/simCmRealFixtures.mjs > /tmp/o.log 2>&1; s=$?; tail -1 /tmp/o.log | cut -c1-300; exit $s
+cmfix-badbase-exit2: TZ=UTC CM_FIXTURE_BASE=0000000000000000000000000000000000000000 node scripts/simCmRealFixtures.mjs 2>&1 | tail -1 | cut -c1-260; exit ${PIPESTATUS[0]}
+cmfix-control-nobase-exit2: TZ=UTC CM_REAL_FIXTURE_CONTROL=venues node scripts/simCmRealFixtures.mjs 2>&1 | tail -1 | cut -c1-260; exit ${PIPESTATUS[0]}
+cmfix-noleague-exit2: TZ=UTC CM_REAL_FIXTURE_LEAGUE=laliga node scripts/simCmRealFixtures.mjs 2>&1 | tail -1 | cut -c1-260; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+cmfix-base-and-walk: export SIM_NETWORK=offline ENGINES=chromium TZ=UTC NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"; CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 node scripts/simCmRealFixtures.mjs > /tmp/b.log 2>&1; s1=$?; cp /tmp/b.log "$RC_OUT/cmfix-premier-base.log"; tail -1 /tmp/b.log | cut -c1-260; node scripts/playCmRealFixtures.mjs > /tmp/walk.log 2>&1; s2=$?; cp /tmp/walk.log "$RC_OUT/walk-premier.log"; grep -E "^FAIL|AssertionError|Error:" /tmp/walk.log | head -6 | cut -c1-260; tail -1 /tmp/walk.log | cut -c1-260; echo "RESULT sim=$s1 walk=$s2"; [ $s1 -eq 0 ] && [ $s2 -eq 0 ]
