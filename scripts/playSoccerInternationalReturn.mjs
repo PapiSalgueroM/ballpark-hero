@@ -48,6 +48,7 @@ try{for(const width of [320,390,1280])for(const fixture of fixtures){const id=wi
   return{trigger,before,dialog};
  }
  async function closeComeback(opened,escape=false){
+  await measure('close-ready',opened.dialog,['[data-international-return-cancel]','[data-international-return-help-open]','[data-international-return-dialog] > button:last-child']);
   if(escape)await page.keyboard.press('Escape');else await activate(opened.dialog.locator('[data-international-return-cancel]'));
   await opened.dialog.waitFor({state:'hidden'});await page.waitForFunction(()=>document.querySelector('[data-international-return-open]')===document.activeElement,null,{timeout:2000});
   const value={before:opened.before,after:await bodyState(),focus:await opened.trigger.evaluate(e=>e===document.activeElement)};row.restorations.push(value);
