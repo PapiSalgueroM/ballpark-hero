@@ -1,0 +1,37 @@
+nfl seed base exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 1 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+nfl seed 2 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 3 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+nfl seed 4 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+nfl seed 5 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nba seed base exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nba seed 1 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nba seed 2 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+nba seed 3 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+nba seed 4 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nba seed 5 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+mlb seed base exit 3 | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+mlb seed 1 exit 3 | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+mlb seed 2 exit 3 | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+mlb seed 3 exit 3 | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+mlb seed 4 exit 3 | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+mlb seed 5 exit 3 | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed base exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed 1 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed 2 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed 3 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed 4 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nhl seed 5 exit 3 | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+1. the base's generator, full path: exit 0
+1. this head's generator, full path: exit 0
+1. FULL PATH EQUAL: both write the same ledger, 56193 bytes
+1. the printed lines are equal too (165 lines)
+
+== nhl: THE MARKS KEPT, the bands measured again on 12000 careers (2000, 2000, 2000, 2000, 2000, 2000)
+  bands at 2000 careers: a cell's share at or over from 8.5 to 18.3 percent over 72 cell runs (band 6.1 to 20.7); pooled from 12.08 13.44 12.81 11.54 12.23 12.35 (band 10.59 to 14.39); pooled to 1.21 1.27 1.21 1.06 1.46 1.48 (band 0.85 to 1.69)
+  they replace: a cell 6.1 to 14.4; pooled from 8.59 to 11.89; pooled to 0.27 to 1.69
+
+genCareerHallMarks: wrote ../../../../../tmp/keep.json
+2. KEEP MODE EQUAL: MARKS_KEEP=nhl writes the committed ledger byte for byte
+3. REFUSED: MARKS_KEEP=mlb exits 2 and writes nothing (MARKS_KEEP=mlb: not a sport of KEPT, so its bands cannot be measured again with the marks kept)
+gencheck: green, 3 of 3

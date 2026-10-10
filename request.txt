@@ -1,0 +1,3 @@
+#!serial
+gencheck: bash .rc/x/gencheck.sh 980654facb2d41a6c9ddc029c43710178b9d49b8
+hall-nhl-full: node scripts/simCareerHall.mjs nhl 2000

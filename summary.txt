@@ -1,0 +1,2 @@
+gencheck exit=0 92s | gencheck: green, 3 of 3
+hall-nhl-full exit=0 306s | simCareerHall nhl: all 34 checks green
