@@ -1,0 +1,9 @@
+ledger exit=0 1s | simCmVarLedger: all 316 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+vitests exit=0 8s |    Duration  6.96s (transform 3.44s, setup 174ms, collect 7.52s, tests 3.32s, environment 1.23s, prepare 645ms)
+dailydeals exit=0 5s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+norival exit=0 19s | No rival product names found. 0 findings.
+livescores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+anchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 92s | 
+simCmVar exit=0 101s | simCmVar normal: actual review outcomes and full prior baseline passed.

@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmVar: node scripts/simCmVar.mjs
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+vitests: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+dailydeals: node scripts/simDailyDeals.mjs
+norival: node scripts/simNoRivalNames.mjs
+livescores: node scripts/simLiveScores.mjs
+anchors: node scripts/simHarnessAnchors.mjs
