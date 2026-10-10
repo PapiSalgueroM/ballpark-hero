@@ -1,0 +1,8 @@
+rmut reducedNoLand: applied to src/components/motion/LotteryReveal.tsx
+simGmDraftOrder: green. 512050 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+[41m[1m FAIL [22m[49m src/components/motion/LotteryReveal.test.tsx[2m > [22mLotteryReveal[2m > [22mnames every class it animates inside its reduced motion rule, so less motion ends on the last frame
+[31m[1mAssertionError[22m: expected '@media (prefers-reduced-motion: reduc…' to match /opacity:\s*1/[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/LotteryReveal.test.tsx,title=src/components/motion/LotteryReveal.test.tsx > LotteryReveal > names every class it animates inside its reduced motion rule%2C so less motion ends on the last frame,line=174,column=21::AssertionError: expected '@media (prefers-reduced-motion: reduc…' to match /opacity:\s*1/%0A%0A- Expected: %0A/opacity:\s*1/%0A%0A+ Received: %0A"@media (prefers-reduced-motion: reduce) {%0A          .lr-face, .lr-after, .lr-settled .lr-face, .lr-settled .lr-after {%0A            animation: none;%0A            transform: none;%0A          }%0A        }%0A      "%0A%0A ❯ src/components/motion/LotteryReveal.test.tsx:174:21%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, ev
+MUT reducedNoLand sim=0 vitest=1 revealMoments=0 KILLED

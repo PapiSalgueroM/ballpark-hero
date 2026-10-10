@@ -1,0 +1,15 @@
+rmut mineNotMarked: applied to src/lib/gmLotteryNight.ts
+  FAIL: league 2: his tile is not flagged exactly once
+  FAIL: league 3: his tile is not flagged exactly once
+  FAIL: league 5: his tile is not flagged exactly once
+  FAIL: league 6: his tile is not flagged exactly once
+simGmDraftOrder: 276 FAILURES, by section 7: 276.
+[41m[1m FAIL [22m[49m src/lib/gmLotteryNight.test.ts[2m > [22mlottery night[2m > [22mturns over every lottery club once, the last slot first and the first pick last
+[31m[1mAssertionError[22m: expected [] to deeply equal [ 'The C05' ][39m
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmLotteryCard.test.tsx[2m > [22mGmLotteryCard[2m > [22mdraws the saved night: fourteen tiles, his marked, the rule line off the table, where his club landed
+[31m[1mAssertionError[22m: expected +0 to be 1 // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmLotteryNight.test.ts,title=src/lib/gmLotteryNight.test.ts > lottery night > turns over every lottery club once%2C the last slot first and the first pick last,line=37,column=63::AssertionError: expected [] to deeply equal [ 'The C05' ]%0A%0A- Expected%0A+ Received%0A%0A- [%0A-   "The C05",%0A- ]%0A+ []%0A%0A ❯ src/lib/gmLotteryNight.test.ts:37:63%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmLotteryCard.test.tsx,title=src/components/front-office-shared/GmLotteryCard.test.tsx > GmLotteryCard > draws the saved night%3A fourteen tiles%2C his marked%2C the rule line off the table%2C where his club landed,line=29,column=25::AssertionError: expected +0 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 0%0A%0A ❯ src/components/front-office-shared/GmLotteryCard.test.tsx:29:25%0A%0A
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m66 passed[39m[22m[90m (68)[39m
+simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, ev
+MUT mineNotMarked sim=1 vitest=1 revealMoments=0 KILLED

@@ -1,0 +1,11 @@
+rmut earlyNoSettle: applied to src/components/motion/LotteryReveal.tsx
+simGmDraftOrder: green. 512050 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmLotteryCard.test.tsx[2m > [22mGmLotteryCard[2m > [22mhas a live button from the first frame, with a label the site walker presses
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/components/motion/LotteryReveal.test.tsx[2m > [22mLotteryReveal[2m > [22mkeeps the button live from the first frame; pressed early every tile lands at once and the caller moves on
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmLotteryCard.test.tsx,title=src/components/front-office-shared/GmLotteryCard.test.tsx > GmLotteryCard > has a live button from the first frame%2C with a label the site walker presses,line=64,column=100::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/components/front-office-shared/GmLotteryCard.test.tsx:64:100%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/motion/LotteryReveal.test.tsx,title=src/components/motion/LotteryReveal.test.tsx > LotteryReveal > keeps the button live from the first frame; pressed early every tile lands at once and the caller moves on,line=130,column=54::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/components/motion/LotteryReveal.test.tsx:130:54%0A%0A
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m66 passed[39m[22m[90m (68)[39m
+simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, ev
+MUT earlyNoSettle sim=0 vitest=1 revealMoments=0 KILLED

@@ -1,0 +1,8 @@
+rmut seenRestaged: applied to src/components/front-office-shared/GmLotteryCard.tsx
+simGmDraftOrder: green. 512050 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmLotteryCard.test.tsx[2m > [22mGmLotteryCard[2m > [22mrenders on the server in both modes: a night to watch, and a night already watched
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmLotteryCard.test.tsx,title=src/components/front-office-shared/GmLotteryCard.test.tsx > GmLotteryCard > renders on the server in both modes%3A a night to watch%2C and a night already watched,line=74,column=53::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/components/front-office-shared/GmLotteryCard.test.tsx:74:53%0A%0A
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m67 passed[39m[22m[90m (68)[39m
+simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, ev
+MUT seenRestaged sim=0 vitest=1 revealMoments=0 KILLED

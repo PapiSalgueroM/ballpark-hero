@@ -1,0 +1,5 @@
+rmut flipBranchDead: applied to src/lib/gmDraftOrder.ts
+simGmDraftOrder: green. 512050 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+[2m      Tests [22m [1m[32m68 passed[39m[22m[90m (68)[39m
+simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, ev
+MUT flipBranchDead sim=0 vitest=0 revealMoments=0 SURVIVED

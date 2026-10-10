@@ -1,0 +1,20 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/tradeTalksMotion.test.tsx > trade talks motion > reveals the exact engine-authored 'agreed' reply and immediate actions 66ms
+ ✓ src/test/tradeTalksMotion.test.tsx > trade talks motion > reveals the exact engine-authored 'counter' reply and immediate actions 18ms
+ ✓ src/test/tradeTalksMotion.test.tsx > trade talks motion > reveals the exact engine-authored 'dead' reply and immediate actions 11ms
+ ✓ src/test/tradeTalksMotion.test.tsx > trade talks motion > reveals appended replies without replaying old lines or replacing focused controls 25ms
+ ✓ src/test/tradeTalksMotion.test.tsx > trade talks motion > keeps the accept button and focus when a real push reaches an agreement 19ms
+ ✓ src/test/tradeTalksMotion.test.tsx > trade talks motion > keeps the walk-away button and focus when a real push ends the call 14ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  13:52:39
+   Duration  972ms (transform 185ms, setup 38ms, collect 255ms, tests 155ms, environment 216ms, prepare 47ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simTradeTalksMotion: six actual-card engine-text, appended-reply, immediate-action, focus and one-shot checks passed.

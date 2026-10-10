@@ -1,0 +1,13 @@
+m-base exit=0 13s | MUT NONE sim=0 vitest=0 revealMoments=0 SURVIVED
+m-flipBranchDead exit=0 12s | MUT flipBranchDead sim=0 vitest=0 revealMoments=0 SURVIVED
+m-reducedNoLand exit=0 12s | MUT reducedNoLand sim=0 vitest=1 revealMoments=0 KILLED
+m-seenRestaged exit=0 12s | MUT seenRestaged sim=0 vitest=1 revealMoments=0 KILLED
+m-earlyNoSettle exit=0 12s | MUT earlyNoSettle sim=0 vitest=1 revealMoments=0 KILLED
+m-mineNotMarked exit=0 12s | MUT mineNotMarked sim=1 vitest=1 revealMoments=0 KILLED
+clean exit=0 0s | tracked changes above (none expected)
+simStorageWrites exit=0 0s | simStorageWrites: all green
+simOwnerMandateMotion exit=0 1s | Seven actual ownership-card text, trust, boundary and stable-identity checks passed.
+simSeasonCentreMotion exit=1 8s | simSeasonCentreMotion: 17 checks, 3 failed
+simTradeTalksMotion exit=0 1s | simTradeTalksMotion: six actual-card engine-text, appended-reply, immediate-action, focus and one-shot checks passed.
+simNbaDraftCapital exit=0 1s | NBA draft-capital actual29 outcomes, independent baselines, CRLF controls, source holds and owned cleanup completed.
+simGmDesk exit=0 0s | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and 
