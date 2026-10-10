@@ -1,0 +1,21 @@
+ledger exit=0 0s | simCmVarLedger: all 424 checks passed.
+l-thin exit=1 0s | simCmVarLedger control thin: FIRED (goalsRuledOut is modelled but THIN (5 figure(s), none counted by two publishers))
+l-wiki exit=1 0s | simCmVarLedger control wiki: FIRED (espn-pl-2022-23: https://en.wikipedia.org/wiki/Video_assistant_referee is a wiki)
+l-figure exit=1 0s | simCmVarLedger control figure: FIRED (espn-pl-2024-25: goalsRuledOut 48 is not printed in its literals)
+l-extra exit=1 0s | simCmVarLedger control extra: FIRED (league:atlantis is in the ledger and the engine cannot play it)
+l-missing exit=1 0s | simCmVarLedger control missing: FIRED (league:premier is not in the ledger)
+l-onesource exit=1 0s | simCmVarLedger control onesource: FIRED (league:seriea says yes and stands on fewer than two publishers)
+l-receipt exit=1 0s | simCmVarLedger control receipt: FIRED (scripts/data/cmVarRates.receipt.json does not carry the hash of scripts/data/cmVarRates.json)
+l-highest exit=1 0s | simCmVarLedger control highest: FIRED (goalReview is not the stricter count of a figure two publishers counted, over the engine figure (0.034141 against 0.031938))
+l-handedit exit=1 0s | simCmVarLedger control handedit: FIRED (src/data/clubManagerVarRates.ts is not what the generator writes (a hand edit, or a ledger changed without the generator))
+l-owedlive exit=1 0s | simCmVarLedger control owedlive: FIRED (CM_VAR_LIVE is true while the rates ledger still owes: recent-seasons)
+l-names exit=1 0s | simCmVarLedger control names: FIRED (the help would name Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Li
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+varlive exit=0 4s |    Duration  3.55s (transform 1.36s, setup 45ms, collect 1.79s, tests 1.00s, environment 272ms, prepare 157ms)
+varlive-on exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+varscreen exit=0 24s |    Duration  23.17s (transform 1.68s, setup 42ms, collect 2.33s, tests 20.28s, environment 243ms, prepare 60ms)
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+simDailyDeals-bind exit=1 3s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+simDailyDeals-binddeadline exit=1 3s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+save10 exit=0 33s | clubManagerSave alone, reviews off: 0 of 10 runs red
+cmvar-all exit=0 197s | simCmVar: 12 actual outcomes and 20 effective controls passed.
