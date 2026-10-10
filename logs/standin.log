@@ -1,0 +1,4 @@
+standin: owed recent-seasons set to accepted with a stand-in ruling (runner only)
+genCmVarRates: wrote scripts/data/cmVarRates.receipt.json
+genCmVarRates: wrote src/data/clubManagerVarRates.ts
+genCmVarRates: 3 file(s) in step with the ledgers.

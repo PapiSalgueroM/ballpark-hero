@@ -1,0 +1,3 @@
+simCmVarLedger: 7 rate rows from 5 publishers, counted by two: goalsRuledOut, penaltiesAwarded, penaltiesCancelled.
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, league:ligue1, league:eredivisie, league:primeira, league:scottish, league:superlig, league:proleague, league:switzerland, league:austria, league:croatia, league:saudi, league:bundesliga2, ucl.
+simCmVarLedger: all 452 checks passed.

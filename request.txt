@@ -1,0 +1,20 @@
+#!serial
+# Round 1218 closing fix, the SWITCH commit (786c2cac, the final head of the switch branch): the ledger gates with a stand-in ruling applied on the runner only.
+raw-ledger: node scripts/simCmVarLedger.mjs
+standin: node .rc/x/standin.mjs
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+diffstat: git status --short | head -8; git diff --stat | tail -5
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
