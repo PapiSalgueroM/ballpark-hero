@@ -1,0 +1,19 @@
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerAwardsNight-reorderdraw: SIM_AWARDS_NIGHT_CONTROL=reorderdraw node scripts/simCareerAwardsNight.mjs
+simCareerDerbies: node scripts/simCareerDerbies.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-stream: SIM_LEAGUE_FINISH_CONTROL=stream node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueFinish-train1178: SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simCareerLeagueSeasons-future: SIM_LEAGUE_SEASONS_CONTROL=future node scripts/simCareerLeagueSeasons.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerSocialBrands-reorder: SOCIAL_BRANDS_CONTROL=reorder node scripts/simCareerSocialBrands.mjs
+simCareerStoryRole-all: CAREER_STORY_ROLE_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns-all: CAREER_TROPHY_RUNS_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerCareerAmbitions-all: SIM_CAREER_AMBITION_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerAmbitions.mjs
+simSoccerCareerDevelopment-all: CAREER_DEVELOPMENT_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simSoccerCareerRecords: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRecords.mjs
+simSoccerDerbyHistory-all: DERBY_HISTORY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+simSoccerSeasonHistory-all: SEASON_HISTORY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simGuideHeadings-traininglocation: GUIDE_HEADINGS_CONTROL=traininglocation node scripts/simGuideHeadings.mjs
