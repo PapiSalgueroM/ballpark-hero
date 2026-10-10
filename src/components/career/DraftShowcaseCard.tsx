@@ -28,9 +28,11 @@ export function approachPromise(id: PreDraftApproach["id"], stock: number): stri
    is draft night itself (DraftNightSequence, handed in by the journey only
    in the mount that pressed "Draft day"): it goes above the result, brings
    its own "Start your career" beside its skip button, and `nightHold` is the
-   delay the result block waits so it cannot give the pick away early. */
+   delay the result block waits so it cannot give the pick away early.
+   `nightHeld` is true while the rows are still arriving: the result block is
+   then out of a screen reader's tree as well as out of sight. */
 export function DraftShowcaseCard({
-  desc, state, onShowcase, onRunDraft, onContinue, showRange, night, nightHold,
+  desc, state, onShowcase, onRunDraft, onContinue, showRange, night, nightHold, nightHeld,
 }: {
   desc: PreDraftDescriptor;
   state: PreDraftState;
@@ -40,6 +42,7 @@ export function DraftShowcaseCard({
   showRange?: boolean;
   night?: ReactNode;
   nightHold?: string;
+  nightHeld?: boolean;
 }) {
   const sc = state.showcase;
   const out = state.draft;
@@ -81,7 +84,7 @@ export function DraftShowcaseCard({
       {out && night}
 
       {out && (
-        <div className={nightHold ? "space-y-2 cm-rise" : "space-y-2"} style={nightHold ? { animationDelay: nightHold } : undefined} data-testid="draft-result">
+        <div className={nightHold ? "space-y-2 cm-rise" : "space-y-2"} style={nightHold ? { animationDelay: nightHold } : undefined} aria-hidden={nightHeld || undefined} data-testid="draft-result">
           {out.pick !== null ? (
             <>
               <div className="text-xs uppercase text-muted-foreground">{out.draftYear} draft</div>

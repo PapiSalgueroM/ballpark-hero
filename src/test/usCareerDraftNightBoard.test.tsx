@@ -109,6 +109,9 @@ describe('draft night on the actual boards', () => {
     expect(result.className).toContain('cm-rise');
     expect(result.style.animationDelay).toBe(journey(view).style.getPropertyValue('--night-hold'));
     expect(within(result).queryByRole('button')).toBeNull();
+    // A screen reader reads through opacity, so the ending is out of its tree as well until the row lands.
+    const ending = () => [journey(view).querySelector('[data-arrival] h2')!, journey(view).querySelector('[data-arrival] h2 + p')!, buttons(view).getByTestId('draft-result'), closingRow(view)];
+    for (const el of ending()) expect(el).toHaveAttribute('aria-hidden', 'true');
     // The closing row is the saved outcome, and the rows are the builder's.
     const built = buildCareerDraftNight(desc, done.state)!;
     expect([...night.querySelectorAll<HTMLElement>('[data-night-row]')].map(r => r.dataset.nightRow)).toEqual(built.board.map(r => r.kind));
@@ -118,6 +121,7 @@ describe('draft night on the actual boards', () => {
     // The row lands: the skip goes, the words are said, the save has not moved.
     fireEvent.animationEnd(closingRow(view));
     expect(nightOf(view)).toHaveAttribute('data-night-stage', 'landed');
+    for (const el of ending()) expect(el).not.toHaveAttribute('aria-hidden');
     expect(buttons(view).queryByRole('button', { name: 'Skip to my pick' })).toBeNull();
     expect(srTitle(view)).toHaveTextContent(out.pick === null ? 'A different way in.' : 'This is your moment.');
     expect(within(nightOf(view)!).getByRole('status')).toHaveTextContent(careerNightResultLine(built.board[built.board.length - 1], desc.teamLabel));
@@ -142,6 +146,8 @@ describe('draft night on the actual boards', () => {
     fireEvent.click(buttons(view).getByRole('button', { name: 'Skip to my pick' }));
     expect(nightOf(view)).toHaveAttribute('data-night-stage', 'skipped');
     for (const r of nightOf(view)!.querySelectorAll<HTMLElement>('[data-night-row]')) expect(r.className).not.toMatch(/cm-(tick-in|slam|rise)/);
+    // Nothing of the ending is kept from a screen reader once the skip has landed it.
+    for (const el of [closingRow(view), buttons(view).getByTestId('draft-result'), journey(view).querySelector('[data-arrival] h2')!]) expect(el).not.toHaveAttribute('aria-hidden');
     expect(journey(view).querySelector('[data-night-hold]')).toBeNull();
     expect(journey(view).style.getPropertyValue('--night-hold')).toBe('');
     expect(buttons(view).getByTestId('draft-result').className).toBe('space-y-2');

@@ -17,7 +17,9 @@
      the bound the front offices' night answers to, with a tenth in hand.
    - NO SPOILER BEFORE THE CLOSING ROW. Confetti only mounts once the row has
      landed (the kit's burst fires on mount), and the caller holds its own
-     result words on the same clock (see ProspectJourney).
+     result words on the same clock (see ProspectJourney). The closing row is
+     in the DOM from the first frame, so until it lands it is aria-hidden: a
+     screen reader hears the ending from the status line, when it happens.
    - REDUCED MOTION ENDS ON THE FINAL FRAME: the kit's classes land visible,
      and the caller starts the night already skipped.
    - No other prospect is ever named. A pick is a number and a club.
@@ -156,6 +158,7 @@ export function DraftNightSequence({
                 closing.kind === 'you' ? 'border-gold/50 bg-gold/10' : 'border-border bg-secondary/40',
               )}
               style={moving ? { animationDelay: `${clock.closeAt}s` } : undefined}
+              aria-hidden={stage === 'live' || undefined}
               onAnimationEnd={e => { if (e.target === e.currentTarget) onLanded(); }}
             >
               {closing.kind === 'you' && (

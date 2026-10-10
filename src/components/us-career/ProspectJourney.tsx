@@ -53,7 +53,9 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
     [nightOn, nightKit, state, sport, prospect.eraId],
   );
   /* While the rows are still arriving, nothing above the board may say how
-     the night ends: the words and the club are held on the board's clock. */
+     the night ends: the words and the club are held on the board's clock,
+     and for a screen reader, which reads through opacity, they are out of
+     the tree (aria-hidden) until the closing row has landed. */
   const nightHold = night && nightKit && nightStage !== 'skipped' ? `${nightKit.careerNightClock(night).closeAt}s` : undefined;
   const held = !!night && nightStage === 'live';
   const out = state?.draft;
@@ -83,8 +85,8 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
         <div className={styles.stadium} aria-hidden="true"><i /><i /><i /><i /><i /></div>
         <div className={styles.stageCopy}>
           <p className={styles.chapter}>{sport.label} Road to the Draft</p>
-          <h2 ref={titleRef} tabIndex={-1}>{title}</h2>
-          <p>{out ? desc.teamLabel(out.team) : state ? desc.routes.find(r => r.id === state.routeId)?.label : 'Choose the road. Build your stock. Find your team.'}</p>
+          <h2 ref={titleRef} tabIndex={-1} aria-hidden={held || undefined}>{title}</h2>
+          <p aria-hidden={held || undefined}>{out ? desc.teamLabel(out.team) : state ? desc.routes.find(r => r.id === state.routeId)?.label : 'Choose the road. Build your stock. Find your team.'}</p>
         </div>
         <div className={styles.portrait} aria-hidden="true"><PlayerAvatar appearance={prospect.appearance} clubColor={sport.create.clubColor} size={130} /></div>
       </div>
@@ -116,7 +118,7 @@ export default function ProspectJourney({ sport, prospect, onChange, onJoin, onB
         </div> : act === 1 ? <PreDraftSeasonCard desc={desc} state={state} choiceRef={actionRef} onPlaySeason={() => onChange(preDraftPlaySeason(desc, state))} onChoose={i => onChange(preDraftChoose(desc, state, i))} />
           : <DraftShowcaseCard desc={{ ...desc, bonusLine: undefined }} state={state} onShowcase={approach => onChange(preDraftShowcase(desc, state, approach))}
               onRunDraft={() => { setNightStage(!nightKit ? 'off' : lessMotion() ? 'skipped' : 'live'); onChange(preDraftRunDraft(desc, state)); }} onContinue={onJoin}
-              showRange nightHold={nightHold}
+              showRange nightHold={nightHold} nightHeld={held}
               night={night && nightKit && out ? <nightKit.DraftNightSequence night={night} desc={desc} draftYear={out.draftYear} stage={nightStage === 'live' ? 'live' : nightStage === 'landed' ? 'landed' : 'skipped'}
                 onLanded={() => setNightStage(s => (s === 'live' ? 'landed' : s))} onSkip={() => setNightStage('skipped')} onContinue={onJoin} /> : undefined} />}
       </div>

@@ -94,6 +94,8 @@ describe('the first frame holds the whole night', () => {
     const out = state.draft!;
     expect(rows[rows.length - 1]).toHaveTextContent(`Pick ${out.pick}: ${desc.teamLabel(out.team)}`);
     expect(rows[rows.length - 1]).toHaveTextContent(`Round ${out.round}, pick ${out.pickInRound}.`);
+    // It is in the DOM from the first frame, so until it lands it is kept out of a screen reader's tree. The rows above it are not.
+    expect(rows.map(r => r.getAttribute('aria-hidden'))).toEqual([...rows.slice(0, -1).map(() => null), 'true']);
     // The lottery tile is there exactly where the engine has a lottery, one tile a drawn pick.
     const tiles = root.querySelectorAll('[data-lottery-slot]');
     expect(tiles.length).toBe(desc.lottery ? desc.lottery.drawn : 0);
@@ -128,7 +130,7 @@ describe('the first frame holds the whole night', () => {
         const view = render(<DraftNightSequence night={night} desc={desc} draftYear={2026} stage="skipped" onLanded={noop} onSkip={noop} onContinue={noop} />);
         const rows = [...view.container.querySelectorAll<HTMLElement>('[data-night-row]')];
         expect(rows.length).toBe(night.board.length);
-        for (const r of rows) { expect(r.style.animationDelay).toBe(''); expect(r.className).not.toMatch(/cm-(tick-in|slam|rise)/); }
+        for (const r of rows) { expect(r.style.animationDelay).toBe(''); expect(r.className).not.toMatch(/cm-(tick-in|slam|rise)/); expect(r).not.toHaveAttribute('aria-hidden'); }
         expect(within(view.container).queryByRole('button', { name: 'Skip to my pick' })).toBeNull();
         expect(within(view.container).getByRole('button', { name: 'Start your career' })).toBeEnabled();
         expect(within(view.container).getByRole('status')).toHaveTextContent(careerNightResultLine(night.board[night.board.length - 1], desc.teamLabel));
