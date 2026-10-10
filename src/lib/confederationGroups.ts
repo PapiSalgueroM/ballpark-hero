@@ -56,6 +56,34 @@ export const DISPLAY_CONFED: Record<string, Confederation> = {
   // inside.fifa.com/associations/BAN (confederation AFC) and saffederation.org
   // (Bangladesh founded SAFF, which is part of the AFC).
   Bangladesh: 'AFC',
+  // Round 1210: six nations the market maps carry and no table placed, so Club
+  // Manager's nationality filter drew them under "Elsewhere". Each row is keyed
+  // the way the data spells it and was read on 2026-10-10 on two pages that are
+  // not a wiki. Display only, like every row here: none reaches a qualifying draw.
+  // Niger, Namibia, Mauritius: inside.fifa.com/associations/NIG, /NAM and /MRI
+  // each print Confederation CAF, and cafonline.com/member-associations lists
+  // all three among its 54 (Niger under WAFU B, Namibia and Mauritius under COSAFA).
+  Niger: 'CAF', Namibia: 'CAF', Mauritius: 'CAF',
+  // 'Southern Sudan' is how the A-League map spells South Sudan (Ajak Riak).
+  // inside.fifa.com/associations/SSD (South Sudan Football Federation) prints
+  // Confederation CAF, and cafonline.com/member-associations lists South Sudan
+  // under CECAFA.
+  'Southern Sudan': 'CAF',
+  // Turkmenistan (the Russian Premier League map, Denis Titov):
+  // inside.fifa.com/associations/TKM prints Confederation AFC, and the-cafa.com
+  // names the Football Federation of Turkmenistan among its six members and
+  // calls CAFA one of the five regional associations of the AFC.
+  Turkmenistan: 'AFC',
+  // French Guiana is marked the way Guadeloupe, Martinique and Saint-Martin are
+  // above: a Concacaf member that plays its competitions and is never handed to
+  // a World Cup qualifying draw. concacaf.com/inside-concacaf/member-associations/
+  // french-guiana says it became a full member of Concacaf in 2013 after more
+  // than two decades as an associate, and nbclosangeles.com (its report on
+  // Greenland's application to Concacaf) names French Guiana with Martinique,
+  // Guadeloupe, Bonaire and Saint Martin as Concacaf members the world body
+  // does not recognise. No page of the world body's own was found that states
+  // the absence in words, so none is cited for it.
+  'French Guiana': 'CONCACAF',
 };
 
 /** The confederation a nationality string belongs to, or null if the site

@@ -7,6 +7,7 @@ import { useGame } from '@/hooks/useGame';
 import { createPracticeRun, FOOTLE_PRACTICE_KEY, parsePracticeRun } from '@/lib/footlePracticeRun';
 import { dailyIndex, getDailyTier, getTodayET } from '@/lib/dateUtils';
 import { practicePlayers } from '@/test/fixtures/footlePracticePlayers';
+import { FLAG_CODES } from '@/components/FlagImg';
 
 const fixture = vi.hoisted(() => ({ pool: [] as Player[], fetch: vi.fn(), completion: vi.fn() }));
 vi.mock('@/lib/fetchFootlePlayerPool', () => ({ fetchFootlePlayerPool: () => fixture.fetch() }));
@@ -269,6 +270,60 @@ describe('Footle practice mounted outcomes', () => {
     expect(view.queryByRole('alert')).toHaveTextContent('could not save your run');
     expect(view.getByRole('combobox')).toBeEnabled();
     expect(localStorage.getItem(FOOTLE_PRACTICE_KEY)).toBeNull();
+  });
+
+  /* Round 1210: the owner's rule of 2026-08-28 is a flag beside every
+     nationality the site prints. Footle printed three bare (the how to play
+     example, the practice feedback line and the Nation row of the player
+     details). The cells are read one at a time and never as a whole sentence:
+     a flagged name carries a hidden emoji span beside its label, so the text
+     of a line reads flag emoji, then name. */
+  const nationCells = (view: ReturnType<typeof render>) => {
+    const feedback = view.getByTestId('practice-feedback');
+    const line = feedback.querySelector('p[role="status"] + p') as HTMLElement;
+    const term = Array.from(feedback.querySelectorAll('dt')).find(dt => dt.textContent === 'Nation');
+    return { line, row: term!.nextElementSibling as HTMLElement };
+  };
+
+  it('prints the answer nationality with its flag in the feedback line, the Nation row and the example', async () => {
+    const view = await page();
+    await start(view);
+    const run = savedRun();
+    const target = run.pool.find(player => player.name === run.targets[0])!;
+    expect(FLAG_CODES[target.nationality], 'the fixture nation must have a flag code for this case to mean anything').toBeTruthy();
+    submit(view, target.name);
+    const { line, row } = nationCells(view);
+    for (const [where, cell] of [['feedback line', line], ['Nation row', row]] as const) {
+      const flags = cell.querySelectorAll('img');
+      expect(flags, `${where}: one flag`).toHaveLength(1);
+      expect(flags[0], `${where}: the flag is the answer's`).toHaveAttribute('alt', target.nationality);
+      expect(flags[0].getAttribute('src'), `${where}: the flag comes from the one permitted image host`).toContain('https://flagcdn.com/');
+      expect(cell, `${where}: the name stays beside the flag`).toHaveTextContent(target.nationality);
+    }
+    fireEvent.click(view.getByRole('button', { name: 'How to play' }));
+    const example = Array.from(view.getByRole('dialog').querySelectorAll('p')).find(p => p.textContent?.startsWith('From this puzzle pool:')) as HTMLElement;
+    const exampleFlags = example.querySelectorAll('img');
+    expect(exampleFlags, 'the example: one flag').toHaveLength(1);
+    const exampleNation = exampleFlags[0].getAttribute('alt')!;
+    expect(fixture.pool.map(player => player.nationality), 'the example flag is a pool nationality').toContain(exampleNation);
+    expect(example, 'the example: the name stays beside the flag').toHaveTextContent(exampleNation);
+  });
+
+  it('prints a nationality with no flag code as its bare name, never a wrong flag', async () => {
+    const noFlag = 'Fixture nation with no flag';
+    expect(FLAG_CODES[noFlag]).toBeUndefined();
+    fixture.pool = fixture.pool.map(player => ({ ...player, nationality: noFlag }));
+    const view = await page();
+    await start(view);
+    const run = savedRun();
+    submit(view, run.targets[0]);
+    const { line, row } = nationCells(view);
+    for (const cell of [line, row]) {
+      expect(cell.querySelectorAll('img')).toHaveLength(0);
+      expect(cell.querySelectorAll('svg')).toHaveLength(0);
+      expect(cell).toHaveTextContent(noFlag);
+    }
+    expect(row.textContent).toBe(noFlag);
   });
 
   it('disables a short practice tier rather than starting fewer puzzles', async () => {
