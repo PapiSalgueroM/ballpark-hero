@@ -1,0 +1,13 @@
+vitest exit=0 5s |    Duration  4.24s (transform 657ms, setup 596ms, collect 2.18s, tests 2.83s, environment 3.40s, prepare 834ms)
+c-lastcall exit=1 44s | simGmDeskHost CONTROL lastcall FIRED: check 9 went red with 13 failures (red checks 9:13)
+h-123 exit=0 59s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 77s | 
+c-shutbutton exit=1 57s | simGmDeskHost CONTROL shutbutton FIRED: check 10 went red with 4 failures (red checks 5:514 9:13 10:4)
+c-passquiet exit=1 54s | simGmDeskHost CONTROL passquiet FIRED: check 10 went red with 946 failures (red checks 10:946)
+anchors exit=0 0s | simGmDeskHost anchors: 49 rewrites of 46 controls checked, 0 cannot run
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+c-longtile exit=1 50s | simGmDeskHost CONTROL longtile FIRED: check 10 went red with 4145 failures (red checks 10:4145)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+head exit=0 0s | e510cabc3 Round 1223: the notes say what shut means with an offer on the table, what the fix pass changed, and what Round M1 owes before anything mounts the three boxes
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+c-clubvalue exit=1 48s | simGmDeskHost CONTROL clubvalue FIRED: check 10 went red with 552 failures (red checks 10:552)

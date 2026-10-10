@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDeskHost.test.ts src/components/front-office-shared/GmCareerDesk.test.tsx src/components/front-office-shared/GmDeskMount.test.tsx src/components/front-office-shared/GmSeatCard.test.tsx src/lib/gmSeat.test.ts src/lib/gmXp.test.ts --testTimeout=300000 --hookTimeout=120000
+h-123: node scripts/simGmDeskHost.mjs
+c-lastcall: SIM_GM_DESK_HOST_CONTROL=lastcall node scripts/simGmDeskHost.mjs
+c-shutbutton: SIM_GM_DESK_HOST_CONTROL=shutbutton node scripts/simGmDeskHost.mjs
+c-passquiet: SIM_GM_DESK_HOST_CONTROL=passquiet node scripts/simGmDeskHost.mjs
+c-longtile: SIM_GM_DESK_HOST_CONTROL=longtile node scripts/simGmDeskHost.mjs
+c-clubvalue: SIM_GM_DESK_HOST_CONTROL=clubvalue node scripts/simGmDeskHost.mjs
+anchors: SIM_GM_DESK_HOST_ANCHORS=1 node scripts/simGmDeskHost.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+head: git log --oneline -3 | cat
