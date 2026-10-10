@@ -1,0 +1,5 @@
+[31m     → the viewer never got going, so this proves nothing: expected 2 to be greater than 10[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerSave.test.tsx[2m > [22mClub Manager: the save[2m > [22mleaving the site mid match keeps the clock where it stood
+[31m[1mAssertionError[22m: the viewer never got going, so this proves nothing: expected 2 to be greater than 10[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerSave.test.tsx,title=src/test/clubManagerSave.test.tsx > Club Manager%3A the save > leaving the site mid match keeps the clock where it stood,line=198,column=76::AssertionError: the viewer never got going, so this proves nothing: expected 2 to be greater than 10%0A ❯ src/test/clubManagerSave.test.tsx:198:76%0A%0A
+clubManagerSave.test.tsx alone: 1 of 6 runs red

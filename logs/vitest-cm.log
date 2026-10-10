@@ -1,0 +1,40 @@
+[41m[1m FAIL [22m[49m src/test/liveSimMotion.test.tsx[2m > [22mThe pitch part on real feeds[2m > [22mR7: every dead ball is taken by the right side from the right place
+[31m[1mAssertionError[22m: expected 190 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 190[39m
+
+[36m [2m❯[22m src/test/liveSimMotion.test.tsx:[2m1139:30[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/liveSimMotion.test.tsx[2m > [22mThe pitch part on real feeds[2m > [22mR8: the pitch is handed the right kick off and the right share of the ball
+[31m[1mAssertionError[22m: expected 190 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 190[39m
+
+[36m [2m❯[22m src/test/liveSimMotion.test.tsx:[2m1151:34[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m173 passed[39m[22m[90m (176)[39m
+[2m   Start at [22m 09:15:55
+[2m   Duration [22m 64.61s[2m (transform 5.05s, setup 1.34s, collect 13.92s, tests 70.01s, environment 8.27s, prepare 1.86s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > the material is 200 half feeds from five clubs in five leagues,line=1037,column=41::AssertionError: expected [ 15, 20, 20, 20, 20 ] to deeply equal [ 20, 20, 20, 20, 20 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   20,%0A+   15,%0A    20,%0A    20,%0A    20,%0A    20,%0A  ]%0A%0A ❯ src/test/liveSimMotion.test.tsx:1037:41%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R7%3A every dead ball is taken by the right side from the right place,line=1139,column=30::AssertionError: expected 190 to be 200 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 200%0A+ 190%0A%0A ❯ src/test/liveSimMotion.test.tsx:1139:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R8%3A the pitch is handed the right kick off and the right share of the ball,line=1151,column=34::AssertionError: expected 190 to be 200 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 200%0A+ 190%0A%0A ❯ src/test/liveSimMotion.test.tsx:1151:34%0A%0A

@@ -1,0 +1,3 @@
+save-flake exit=0 44s | clubManagerSave.test.tsx alone: 1 of 6 runs red
+save-flake-base exit=0 44s | clubManagerSave.test.tsx alone on 54e3820a: 0 of 6 runs red
+vitest-cm exit=0 65s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/liveSimMotion.test.tsx,title=src/test/liveSimMotion.test.tsx > The pitch part on real feeds > R8%3A th
