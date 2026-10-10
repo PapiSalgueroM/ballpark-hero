@@ -1,0 +1,6 @@
+#!serial
+# Round 1218 review (run lens), request C: the default path over a fleet against the base, old saves made by the base, where a match is lit.
+armC-fleet: git worktree add -q /tmp/base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && PROBE_ENTRIES=50 node "$OLDPWD/.rc/x/r1218probe.mjs" fleet | tee /tmp/base-fleet.txt); PROBE_ENTRIES=50 node .rc/x/r1218probe.mjs fleet | tee /tmp/here-fleet.txt; a=$(grep '^FLEET digest' /tmp/base-fleet.txt); b=$(grep '^FLEET digest' /tmp/here-fleet.txt); test -n "$a" && test "$a" = "$b" && echo "ARM C HOLDS over the fleet: $a on both trees"
+old-saves: (cd /tmp/base && node "$OLDPWD/.rc/x/r1218probe.mjs" make /tmp/saves.json && node "$OLDPWD/.rc/x/r1218probe.mjs" load /tmp/saves.json | grep '^D ' > /tmp/base-d.txt); node .rc/x/r1218probe.mjs load /tmp/saves.json > /tmp/here-load.txt; echo "load exit $?"; grep -v '^D ' /tmp/here-load.txt; grep '^D ' /tmp/here-load.txt > /tmp/here-d.txt; cat /tmp/here-d.txt; diff /tmp/base-d.txt /tmp/here-d.txt && test -s /tmp/here-d.txt && echo "OLD SAVES HOLD: $(wc -l < /tmp/here-d.txt) digest lines equal on both trees"
+asked: PROBE_ENTRIES=40 node .rc/x/r1218probe.mjs asked
+probe-full: node .rc/x/varProbe.mjs full
