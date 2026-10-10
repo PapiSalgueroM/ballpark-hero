@@ -1,0 +1,5 @@
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simLiveScores-citedespn exit=1 1s | simLiveScores: 1 failure
+simLiveScores-feedhost exit=1 1s | simLiveScores: 2 failures
+vitest exit=0 4s |    Duration  3.24s (transform 1.22s, setup 96ms, collect 1.54s, tests 534ms, environment 456ms, prepare 181ms)
+tsc exit=0 57s | 

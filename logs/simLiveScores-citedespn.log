@@ -1,0 +1,10 @@
+1) the shaping says what a fan says and puts now first
+   14 names, the sort, 5 showability cases, the window, the labels, hostile rows
+2) the feed stays server side
+   NEGATIVE CONTROL ON: an espn.com string outside a cited source url, this section must go red
+  FAIL: espn.com is named outside a cited source url in the browser bundle: lib/leagueCaps.ts
+   1833 browser files, none name the feed; the poller reads its secrets from the database and checks the caller
+3) no secret in the repo
+   3 files scanned for key shaped literals, 0 found
+
+simLiveScores: 1 failure
