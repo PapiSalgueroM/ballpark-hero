@@ -1,0 +1,7 @@
+merged: round head 682711e2b with origin/codex/manager-ucl-league-phase 4477e8038
+pr223 sim exit=1 20s | simCmLeaguePhase: RED, 6711 checks, 1 failed, sections all.
+pr223 vitest exit=0 2s |    Duration  1.44s (transform 144ms, setup 126ms, collect 234ms, tests 589ms, environment 798ms, prepare 325ms)
+pr223 tsc exit=0 70s | 
+pr223 anchors exit=0 41s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+pr223 theirs exit=0 38s | PASS four healthy outcome groups, four effective copied-source controls and source-held receipts.
+pr223: A CHECK IS RED

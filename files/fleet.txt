@@ -1,0 +1,18 @@
+rfleet: base bundle 2070143 bytes 67e0e9bd23d3d4d6, head bundle 2068618 bytes 6f96bb1f63d0d4a2
+  Real Madrid seed 41: in the Champions League, saved at week 22; base 3f71e4ad8ca7aa46 a0278e9449e80c17 fd23d208fac840e5 (field 32); head 3f71e4ad8ca7aa46 73ad92287df25288 44b572a4f2224ab3 (field 32) DIFFERENT
+  Real Madrid seed 97: in the Champions League, saved at week 22; base 5828c77d75618dc1 84372bff7f06c466 62fa35b34ca81e32 (field 32); head 5828c77d75618dc1 87249ba0d4b7e4f0 d8061d75de0c0555 (field 32) DIFFERENT
+  Arsenal seed 41: in the Champions League, saved at week 22; base 1c1c3516a85360e6 7db74cad5c20d798 485fe7f19f5d8587 (field 32); head 1c1c3516a85360e6 0d828bc928587448 987ba7e2bc2dee3e (field 32) DIFFERENT
+  Arsenal seed 97: in the Champions League, saved at week 22; base b733fc4afc7fa640 8aa384c3a9f56a8a 68eafe863b56f615 (field 32); head b733fc4afc7fa640 4881b60387d89049 0b661b905772bad8 (field 32) DIFFERENT
+  Bayern Munich seed 41: in the Champions League, saved at week 22; base b28e1349d9df9528 85ecca08c800bff9 b2fab70fe4560d77 (field 32); head b28e1349d9df9528 828b1dc57ae14943 f4f875953362b241 (field 32) DIFFERENT
+  Bayern Munich seed 97: in the Champions League, saved at week 22; base 4856de54b4096f62 1f1e5bce18056fca 4b8acbd31fc0d0f2 (field 32); head 4856de54b4096f62 f9299e54df511a4a e455b37396c8000d (field 32) DIFFERENT
+  Inter Milan seed 41: in the Champions League, saved at week 23; base d17e432b11513908 1e05a61308914c40 ec2e2b04735c83f7 (field 32); head d17e432b11513908 48e4e5b2b55a5e07 b1751499f3e5c6e2 (field 32) DIFFERENT
+  Inter Milan seed 97: in the Champions League, saved at week 22; base c9c64d55fe74ccce ea5205ed48e27e6c a3d28056e3776f7a (field 32); head c9c64d55fe74ccce 004adf4f1f45aaad 75b55220a9815d91 (field 32) DIFFERENT
+  Everton seed 41: not in it, saved at week 28; base c1529e850a0c5934 c1ada8232036b35a 981ca5d608dc8f5c (field 32); head c1529e850a0c5934 8457e4f883bde47d a7ac4a604d9dbcdf (field 32) DIFFERENT
+  Everton seed 97: not in it, saved at week 28; base 686ea8389e098e6a 4fa0faf1df222499 0c0956cdb91f1a81 (field 32); head 686ea8389e098e6a 4607f4ff2568973f a3fedab81fa79966 (field 32) DIFFERENT
+  Sevilla seed 41: not in it, saved at week 28; base 5145b0ed027c15f4 e7da9e4d5afa9500 0d1b7e252ac661a2 (field 32); head 5145b0ed027c15f4 9cdbff9e68183bc8 5054ced9d50684ad (field 32) DIFFERENT
+  Sevilla seed 97: not in it, saved at week 28; base 38a9df880f9ddba2 9bb5e82ad0afdf96 61cbca7f3897afb2 (field 32); head 38a9df880f9ddba2 b5597a714a156523 a449a7f66fbd5a45 (field 32) DIFFERENT
+  Lyon seed 41: not in it, saved at week 28; base 4f2922ee10e3a59b 5b4223d80214d139 19fd817012d5ca3a (field 32); head 4f2922ee10e3a59b 13902b9756f34e51 8ff14ee3f30b1b94 (field 32) DIFFERENT
+  Lyon seed 97: not in it, saved at week 28; base a89acfa71573fb75 b7a0e1cb4d89ad3b ff9fe6fef77fedc4 (field 32); head a89acfa71573fb75 10fec98696ac55e8 cace65fa81bb8976 (field 32) DIFFERENT
+  Fulham seed 41: not in it, saved at week 28; base 524eabaf20569fdc 0e33b696073da15f ee3d2c03a2f7ce1d (field 32); head 524eabaf20569fdc 98edfe740530a23a ec6494ac27673013 (field 32) DIFFERENT
+  Fulham seed 97: not in it, saved at week 28; base 9d5e3dcbfa540af4 48cf189c366d8129 d0c33760ffc58f20 (field 32); head 9d5e3dcbfa540af4 921b1e0a3312cdfd 20ad4d33e3400a45 (field 32) DIFFERENT
+rfleet: DIFFERENT, 16 old saves (8 in the Champions League) made by the base, loaded and played on by both engines, 16 differ.

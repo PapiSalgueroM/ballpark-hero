@@ -1,0 +1,10 @@
+merged: round head 682711e2b with origin/release-at-gate 24f57a98f
+at sim exit=0 14s | simCmLeaguePhase: GREEN, 6711 checks, 0 failed, sections all.
+at vitest exit=0 2s |    Duration  1.48s (transform 181ms, setup 113ms, collect 240ms, tests 598ms, environment 786ms, prepare 180ms)
+at tsc exit=0 68s | 
+at anchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+at rivals exit=0 10s | No rival product names found. 0 findings.
+at scores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+at quotes exit=0 20s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+at dailies exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture key.
+at: ALL GREEN

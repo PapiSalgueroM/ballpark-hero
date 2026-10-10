@@ -1,0 +1,29 @@
+B. drawUclLeaguePhase on 14 seeds of every kind: 6 different slates. Seeds that share a slate: 4294967295 draws what -1 draws; 4294967296 draws what 0 draws; 4294967297 draws what 1 draws; 9007199254740992 draws what 0 draws; 1.5 draws what 1 draws; 0.25 draws what 0 draws; NaN draws what 0 draws; Infinity draws what 0 draws
+B. saved slates of 18 clubs of one association: 41 were past the search's budget, 41 of those say fallback. Worst draw through the wrapper 288 ms.
+A. swissSlate on fields of the reviewer's own: n | null | pattern | inside both rules | at its floor | over its floor (searched) | lied | mean ms | worst ms | mean breaks | mean over cap | mean tries
+   real mix, even strength                   1500 | 0 |   0 |  1481 |  1500 |    0 | 0 |     2.8 |     41 | 0.01 | 0.00 | 1.1
+   real mix, big five far stronger           1500 | 0 |   0 |  1460 |  1500 |    0 | 0 |     2.8 |     30 | 0.03 | 0.00 | 1.1
+   one association of 06                       24 | 0 |   0 |    21 |    24 |    0 | 0 |     1.8 |      7 | 0.00 | 0.25 | 1.0
+   one association of 07                       24 | 0 |   0 |     6 |    24 |    0 | 0 |     3.3 |     16 | 0.00 | 2.33 | 1.5
+   one association of 08                       24 | 0 |   0 |     0 |    24 |    0 | 0 |     3.6 |     15 | 0.08 | 8.17 | 2.2
+   one association of 09                       24 | 0 |   0 |     0 |    24 |    0 | 0 |     4.9 |     18 | 0.13 | 17.75 | 1.5
+   one association of 10                       24 | 0 |   0 |     0 |    22 |    2 | 0 |     6.0 |     40 | 0.17 | 27.67 | 4.4
+   one association of 11                       24 | 0 |   0 |     0 |    22 |    2 | 0 |    14.1 |    143 | 0.21 | 37.58 | 9.4
+   one association of 12                       24 | 0 |   2 |     0 |    19 |    3 | 0 |    46.5 |    323 | 1.50 | 45.17 | 36.0
+   one association of 14                       24 | 0 |   1 |     0 |    19 |    4 | 0 |    21.0 |    272 | 2.38 | 63.29 | 20.5
+   one association of 16                       24 | 0 |   5 |     0 |     8 |   11 | 0 |    59.1 |    188 | 8.38 | 71.25 | 95.0
+   one association of 18                       24 | 0 |  20 |     0 |     0 |    4 | 0 |    81.5 |    224 | 24.79 | 58.46 | 168.2
+   one association of 20                       24 | 0 |  23 |     0 |     1 |    0 | 0 |   119.3 |    244 | 36.75 | 54.50 | 173.4
+   one association of 24                       24 | 0 |  24 |     0 |     0 |    0 | 0 |   241.8 |    386 | 57.46 | 53.08 | 180.0
+   one association of 27                       24 | 0 |  24 |     0 |     0 |    0 | 0 |   248.1 |    563 | 75.79 | 46.42 | 180.0
+   one association of 30                       24 | 0 |  18 |     0 |     9 |    6 | 0 |   410.2 |    666 | 96.75 | 34.50 | 162.5
+   one association of 36                       24 | 0 |   0 |     0 |    24 |    0 | 0 |     2.9 |     13 | 144.00 | 0.00 | 1.1
+   pot one all one association                 12 | 0 |   0 |     0 |    12 |    0 | 0 |     2.7 |      6 | 9.00 | 0.00 | 1.0
+   pots one and two, one association each      12 | 0 |   0 |     0 |    12 |    0 | 0 |     2.0 |      7 | 18.00 | 0.00 | 1.0
+   two associations of 18, by pot              12 | 0 |  12 |     0 |     0 |    0 | 0 |    46.8 |     64 | 72.00 | 72.00 | 180.0
+   two associations of 18, alternating         12 | 0 |  12 |     0 |     0 |    0 | 0 |   141.9 |    167 | 56.83 | 102.33 | 180.0
+   four associations of 9, one a pot           12 | 0 |   0 |     0 |    12 |    0 | 0 |     2.0 |      4 | 36.00 | 0.00 | 1.0
+   nine associations of 4                      12 | 0 |   0 |    12 |    12 |    0 | 0 |     3.4 |      7 | 0.00 | 0.00 | 1.0
+C. 300 tables at every matchday from 0 to 8: 0 out of order; neighbours left to the name 2069 times. The name step is localeCompare: of 36 names with accents, 34 sit somewhere else than in plain code order (locale en-US).
+D. 4000 knockout draws played to a final under Articles 19.01 to 19.04: the eight ways the three tosses of a line can land each came up (least to most, expected 500): line 1/2 441 to 523, 3/4 481 to 534, 5/6 467 to 535, 7/8 450 to 538. Slots moved by a change that is not theirs: 0.
+rprobe: NO FAULT (scale 1).
