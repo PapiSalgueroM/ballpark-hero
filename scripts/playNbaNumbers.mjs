@@ -20,6 +20,11 @@
              pointed at it: the check must go red (it reads the row, not the page).
      wide    the Career Log tile's second line is handed the six part line the round first drew, which does not
              fit: the cut off check must go red (it measures the tile).
+     rivalflip  (Round 1112) the rival's note is judged with the two printed lines the wrong way round: the
+             check that the note agrees with the lines must go red on a card where one of them clearly won.
+
+   Round 1112 added the rival's note to every season card the walk plays: his line is in the player's own shape
+   and what the note says about the year is what the two printed lines say.
 
    Measured 2026-10-08 on the build of 94286364: 68 checks, 0 failed. The Career Log tile's second line has 149
    pixels at 390 wide and 182 at 1280, and the three part line needs exactly that or less; the six part line the
@@ -37,14 +42,18 @@ const KEY = 'nba-my-career-save-v1';
 const CONTROL = process.env.PLAY_NBA_NUMBERS_CONTROL || '';
 /* The oldrow control is about stretch old alone, so it runs that one. */
 const STRETCH = CONTROL === 'oldrow' ? 'old' : process.env.STRETCH || 'all';
-if (CONTROL && !['oldrow', 'wide'].includes(CONTROL)) { console.error(`PLAY_NBA_NUMBERS_CONTROL=${CONTROL} is not a control this walk knows`); process.exit(2); }
+if (CONTROL && !['oldrow', 'wide', 'rivalflip'].includes(CONTROL)) { console.error(`PLAY_NBA_NUMBERS_CONTROL=${CONTROL} is not a control this walk knows`); process.exit(2); }
 const NEW_LINE = /^\d+\.\d ppg, \d+\.\d rpg, \d+\.\d apg$/;
 const NOTE = /\d+\.\d mpg, \d+\.\d spg, \d+\.\d bpg/;
+const RIVAL_LINE = /went (\d+\.\d) ppg, (\d+\.\d) rpg, (\d+\.\d) apg/;
 const WIDE = '17.0 ppg, 5.1 rpg, 3.2 apg, 1.1 spg, 0.6 bpg, 31.4 mpg';
 const fixture = JSON.parse(readFileSync(new URL('../src/test/fixtures/nbaOldSaves1103.json', import.meta.url), 'utf8'));
 const old = fixture.entries.find(e => e.key === 'board:mid');
 
 let checks = 0; let failed = 0; const controlRed = [];
+/* Eight seasons are played over the two stretches and a rival is 20 or so when the walk meets him, so every
+   card should carry his note; six leaves room for a save whose rival has retired. */
+const RIVAL_NOTES_FLOOR = 6;
 function say(ok, msg, tag = '') {
   checks++;
   if (ok) console.log(`  ok   ${msg}`);
@@ -114,6 +123,31 @@ async function playOne(page, what) {
   const lines = card.split('\n').map(s => s.trim()).filter(Boolean);
   say(lines.some(l => NEW_LINE.test(l)), `${what}: the season card prints three averages to one decimal (${lines.find(l => / ppg/.test(l)) ?? 'no line'})`);
   say(NOTE.test(card), `${what}: the season card says the minutes, steals and blocks (${(card.match(NOTE) ?? ['no note'])[0]})`);
+  rivalOnCard(lines, what);
+}
+/* Round 1112: the rival's note on the same card. His line is in the player's own shape, and what the note says
+   about the year is what the two printed lines say, scored the way the game scores a season (points 1.6,
+   rebounds 1.4, assists 1.7). A near tie is inside six percent of his score and names the leader its own
+   tally gives. The rivalflip control reads the two lines the wrong way round. */
+let rivalNotes = 0;
+function rivalOnCard(lines, what) {
+  const mineText = lines.find(l => NEW_LINE.test(l));
+  const note = lines.find(l => / went .* ppg/.test(l));
+  if (!note) { console.log(`  note ${what}: no rival note on this card (he has retired, or the save has none)`); return; }
+  rivalNotes++;
+  const his = RIVAL_LINE.exec(note);
+  say(!!his, `${what}: the rival's line is in the player's own shape, three averages to one decimal ("${note.slice(0, 110)}")`);
+  const mine = RIVAL_LINE.exec(`went ${mineText ?? ''}`);
+  if (!his || !mine) return;
+  const score = x => Number(x[1]) * 1.6 + Number(x[2]) * 1.4 + Number(x[3]) * 1.7;
+  const [a, b] = CONTROL === 'rivalflip' ? [score(his), score(mine)] : [score(mine), score(his)];
+  const tie = /Nothing in it again[.] (?:You lead the head to head (\d+)-(\d+)|He leads the head to head (\d+)-(\d+)|The head to head is level at (\d+)-(\d+))[.]/.exec(note);
+  let ok; let says;
+  if (/Nothing in it/.test(note)) { says = 'a near tie'; ok = !!tie && Math.abs(a - b) < b * 0.06 && (tie[1] ? Number(tie[1]) > Number(tie[2]) : tie[3] ? Number(tie[3]) > Number(tie[4]) : tie[5] === tie[6]); }
+  else if (/You had the better year/.test(note)) { says = 'the player had the better year'; ok = a > b; }
+  else if (/had the better year of the two of you/.test(note)) { says = 'the rival had the better year'; ok = !(a > b); }
+  else { says = 'nothing this walk can read'; ok = false; }
+  say(ok, `${what}: the note says ${says}, and the two printed lines agree (mine ${mineText}, his ${his[0].slice(5)})`, 'rivalflip');
 }
 async function close(w, what) {
   const real = w.seen.errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
@@ -180,6 +214,8 @@ if (STRETCH === 'all' || STRETCH === 'new' || STRETCH === 'case') {
   }
 }
 await browser.close();
+/* Round 1112: the rival check means something only when the walk met rival notes (8 seasons are played). */
+if (CONTROL !== 'oldrow' && STRETCH !== 'case') say(rivalNotes >= RIVAL_NOTES_FLOOR, `the walk read the rival's note on ${rivalNotes} season cards (floor ${RIVAL_NOTES_FLOOR})`);
 
 if (CONTROL) {
   const fired = failed > 0 && controlRed.length === failed && controlRed.every(t => t === CONTROL);
