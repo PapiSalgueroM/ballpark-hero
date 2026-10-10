@@ -1,0 +1,9 @@
+#!serial
+realfix-leadblock: node .rc/x/patchSaveCompare-1229.mjs scripts/simCmRealFixtures.mjs && node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
+init: git rev-parse HEAD > /tmp/h1229 && echo "src/pages/WhatsNew.tsx merge=union" >> .git/info/attributes && git fetch -q origin r1218-cm-var-true r1225-cm-fixtures-bind && cat /tmp/h1229 && git rev-parse origin/r1218-cm-var-true origin/r1225-cm-fixtures-bind
+m1218: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1218-cm-var-true && git log --oneline -1
+m1218-cmvar: node scripts/simCmVar.mjs
+m1218-cmvar-controls: CM_VAR_CONTROL=all node scripts/simCmVar.mjs
+m1225: git reset -q --hard $(cat /tmp/h1229) && git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1225-cm-fixtures-bind && git log --oneline -1
+m1225-realfix: node scripts/simCmRealFixtures.mjs
+back: git reset -q --hard $(cat /tmp/h1229) && git log --oneline -1
