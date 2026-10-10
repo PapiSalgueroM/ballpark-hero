@@ -1,0 +1,5 @@
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+cmvar-lit: node scripts/qa/cmVarLit.mjs on && node_modules/.bin/vite build > /tmp/build-lit.log 2>&1 && SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs > /tmp/cmvar-lit.log 2>&1; s=$?; grep -E "AssertionError|Error:" /tmp/cmvar-lit.log | head -8 | cut -c1-300; tail -1 /tmp/cmvar-lit.log | cut -c1-320; node scripts/qa/cmVarLit.mjs off; exit $s
+restored: node scripts/qa/cmVarLit.mjs status; git status --short | grep -v "^??" | wc -l
