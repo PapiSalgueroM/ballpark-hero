@@ -1,0 +1,30 @@
+
+=== ROUND 59 NHL MY CAREER PLAYTEST ===
+careers            : 400  (100 in the 2006-07 era, 1768 seasons down the lineup, 2976 free agent signings)
+crashes            : 0
+NaN values         : 0
+empty stat lines   : 0  (must be 0, every position needs real stats)
+avg peak OVR       : 85.6  (min 77, median 85, max 98)
+peak 95+ rate      : 1%  (should be rare)
+suspensions served : 6
+distinct events    : 158
+  lifeA fired      : 42/45
+  lifeB fired      : 45/45
+  lifeC fired      : 36/36  (floor 34; rarest card drawn 4 times, median 15)
+    rarest three   : nhlC_rule_offer_sheet 4 (eligible in 142 offseasons), nhlC_bench_backup_goalie 5 (eligible in 395 offseasons), nhlC_c_matchup 6 (eligible in 1068 offseasons)
+  corruption fired : 28
+shop items usable  : 57/57
+C1e era leaks      : 0  (dated rule cards drawn before their season in a 2006-07 career, must be 0)
+C1e probe          : 7 dated cards, 0 gates not opening exactly in their rule's first season
+C2 words vs effect : 72000 draws, 0 mismatches, 0 outcomes never seen, 0 cards with no eligible save
+T  life cards drawn: 4615, without tags: 0
+T  static pass     : deck A 45/45 and deck B 45/45 built on the fleet's saves and fresh starts, deck C 36 from the catalog, 0 without tags
+
+sample stat lines by position:
+  C   53G 50A 103P in 82
+  LW  14G 16A 30P in 82
+  RW  29G 33A 62P in 82
+  D   10G 33A 43P in 82
+  G   40 wins, 0.938 SV%
+
+PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
