@@ -1,0 +1,26 @@
+PASS real fixtures ligue2 normal
+simCmRealFixtures normal ligue2: 12 outcome groups passed on 18 clubs, 34 matchdays and 306 fixtures, generated baseline held against the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 venues
+simCmRealFixtures venues ligue2: the copied fault failed exactly its own outcome (ledger) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 card
+simCmRealFixtures card ligue2: the copied fault failed exactly its own outcome (calendar) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 settlement
+simCmRealFixtures settlement ligue2: the copied fault failed exactly its own outcome (settlement) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+SKIP real fixtures ligue2 bye: the neutral-only probe can only stand in the Premier League
+PASS real fixtures ligue2 world
+simCmRealFixtures world ligue2: the copied fault failed exactly its own outcome (world) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 edited
+simCmRealFixtures edited ligue2: the copied fault failed exactly its own outcome (eligibility) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 legacy
+simCmRealFixtures legacy ligue2: the copied fault failed exactly its own outcome (legacy, baseline) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 future
+simCmRealFixtures future ligue2: the copied fault failed exactly its own outcome (future) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 rollover
+simCmRealFixtures rollover ligue2: the copied fault failed exactly its own outcome (rollover) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 silent
+simCmRealFixtures silent ligue2: the copied fault failed exactly its own outcome (unloaded) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 handover
+simCmRealFixtures handover ligue2: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures ligue2 jobmove
+simCmRealFixtures jobmove ligue2: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+simCmRealFixtures ligue2: 12 actual outcome groups, 612 fixture reads, 612 calendar reads and 11 effective controls passed against the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.

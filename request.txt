@@ -1,0 +1,43 @@
+# Reviewer cm, Release AU, request 1: my probes against the two bases, and the Club Manager family on the head
+#!build
+#!playwright
+daily60: mkdir -p /tmp/as /tmp/rcm && git archive 54e3820a2deb6ecb5ad7ba11a27455742e19ed93 src | tar -x -C /tmp/as && node .rc/x/review-cm-daily.mjs --root /tmp/as --out /tmp/rcm/as.json && node .rc/x/review-cm-daily.mjs --root . --out /tmp/rcm/head.json && node .rc/x/review-cm-daily.mjs --root . --out /tmp/rcm/head-fetched.json --fetch && echo "== AS against the head, nothing fetched" && node .rc/x/review-cm-daily.mjs --compare /tmp/rcm/as.json /tmp/rcm/head.json; a=$?; echo "== AS against the head, every list fetched"; node .rc/x/review-cm-daily.mjs --compare /tmp/rcm/as.json /tmp/rcm/head-fetched.json; b=$?; echo "daily60: nothing fetched exit $a, every list fetched exit $b"; exit $((a+b))
+bind: mkdir -p /tmp/base /tmp/rcb && git archive 24f57a98fa44e280f1c848276a27d86e0a3e2745 src | tar -x -C /tmp/base && node .rc/x/review-cm-bind.mjs --root /tmp/base --out /tmp/rcb/base.json --fetch && node .rc/x/review-cm-bind.mjs --root . --out /tmp/rcb/head.json && node .rc/x/review-cm-bind.mjs --root . --out /tmp/rcb/head-fetched.json --fetch && echo "== base against the head, nothing fetched" && node .rc/x/review-cm-bind.mjs --compare /tmp/rcb/base.json /tmp/rcb/head.json && echo "== base against the head, every list fetched" && node .rc/x/review-cm-bind.mjs --compare /tmp/rcb/base.json /tmp/rcb/head-fetched.json
+fleet-atgate: export TMPDIR=$(mktemp -d); TZ=UTC CM_FIXTURE_BASE=24f57a98fa44e280f1c848276a27d86e0a3e2745 node scripts/simCmFixtureFleet.mjs > "$RC_OUT/fleet-atgate.log" 2>&1; s=$?; tail -1 "$RC_OUT/fleet-atgate.log" | cut -c1-420; exit $s
+cmfix-eredivisie-all: export TMPDIR=$(mktemp -d); TZ=UTC CM_FIXTURE_BASE=24f57a98fa44e280f1c848276a27d86e0a3e2745 CM_REAL_FIXTURE_LEAGUE=eredivisie CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs > "$RC_OUT/cmfix-eredivisie-all.log" 2>&1; s=$?; tail -1 "$RC_OUT/cmfix-eredivisie-all.log" | cut -c1-300; exit $s
+cmfix-superlig-all: export TMPDIR=$(mktemp -d); TZ=UTC CM_FIXTURE_BASE=24f57a98fa44e280f1c848276a27d86e0a3e2745 CM_REAL_FIXTURE_LEAGUE=superlig CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs > "$RC_OUT/cmfix-superlig-all.log" 2>&1; s=$?; tail -1 "$RC_OUT/cmfix-superlig-all.log" | cut -c1-300; exit $s
+cmfix-ligue2-all: export TMPDIR=$(mktemp -d); TZ=UTC CM_FIXTURE_BASE=24f57a98fa44e280f1c848276a27d86e0a3e2745 CM_REAL_FIXTURE_LEAGUE=ligue2 CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs > "$RC_OUT/cmfix-ligue2-all.log" 2>&1; s=$?; tail -1 "$RC_OUT/cmfix-ligue2-all.log" | cut -c1-300; exit $s
+cmfix-premier-all: export TMPDIR=$(mktemp -d); TZ=UTC CM_FIXTURE_BASE=24f57a98fa44e280f1c848276a27d86e0a3e2745 CM_REAL_FIXTURE_LEAGUE=premier CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs > "$RC_OUT/cmfix-premier-all.log" 2>&1; s=$?; tail -1 "$RC_OUT/cmfix-premier-all.log" | cut -c1-300; exit $s
+leaguefx: export TMPDIR=$(mktemp -d); CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs 2>&1 | tail -1 | cut -c1-330; exit ${PIPESTATUS[0]}
+daily: export TMPDIR=$(mktemp -d); node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+daily-bind: export TMPDIR=$(mktemp -d); DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+daily-binddeadline: export TMPDIR=$(mktemp -d); DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+cmunits: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx src/test/clubManagerStartWait.test.tsx src/test/clubManagerSave.test.tsx src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000
+cmvar: export TMPDIR=$(mktemp -d); NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+cmvarledger: node scripts/simCmVarLedger.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+gencheck: node scripts/genCmVarRates.mjs --check 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+og: export TMPDIR=$(mktemp -d); node scripts/simOwnGoalMotion.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+og-castnow: export TMPDIR=$(mktemp -d); OWN_GOAL_CONTROL=castnow node scripts/simOwnGoalMotion.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+livemotion: export TMPDIR=$(mktemp -d); node scripts/simLiveSimMotion.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+livemotion-castnow: export TMPDIR=$(mktemp -d); LIVE_MOTION_CONTROL=castnow node scripts/simLiveSimMotion.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+celebration: export TMPDIR=$(mktemp -d); node scripts/simLiveSimCelebration.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simClubManager: export TMPDIR=$(mktemp -d); node scripts/simClubManager.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simClubManagerSave: export TMPDIR=$(mktemp -d); node scripts/simClubManagerSave.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simClubManagerCalendar: export TMPDIR=$(mktemp -d); node scripts/simClubManagerCalendar.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simClubManagerSlots: export TMPDIR=$(mktemp -d); node scripts/simClubManagerSlots.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simLiveMatch: export TMPDIR=$(mktemp -d); node scripts/simLiveMatch.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simMatchScreen: export TMPDIR=$(mktemp -d); node scripts/simMatchScreen.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simCmOwnGoals: export TMPDIR=$(mktemp -d); node scripts/simCmOwnGoals.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simCmQuickSubs: export TMPDIR=$(mktemp -d); node scripts/simCmQuickSubs.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simCmQuickLegs: export TMPDIR=$(mktemp -d); node scripts/simCmQuickLegs.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simCmMatchCentre: export TMPDIR=$(mktemp -d); node scripts/simCmMatchCentre.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simManagerHotSeat: export TMPDIR=$(mktemp -d); node scripts/simManagerHotSeat.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simDeadlineDay: export TMPDIR=$(mktemp -d); node scripts/simDeadlineDay.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simManagerAppealIsolation: export TMPDIR=$(mktemp -d); node scripts/simManagerAppealIsolation.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simMidSeasonStart: export TMPDIR=$(mktemp -d); node scripts/simMidSeasonStart.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simFixtureBalance: export TMPDIR=$(mktemp -d); node scripts/simFixtureBalance.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simCmLeagueRules: export TMPDIR=$(mktemp -d); node scripts/simCmLeagueRules.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simClubManagerDecisions: export TMPDIR=$(mktemp -d); node scripts/simClubManagerDecisions.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+simCmStoppageTime: export TMPDIR=$(mktemp -d); node scripts/simCmStoppageTime.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}

@@ -1,0 +1,83 @@
+row: {"leagues":0,"clubs":0,"keyed":0,"fixtures":0,"mismatches":0,"pairRows":0,"pairMismatch":0}
+later: {"premier":{"had":"premier-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"championship":{"had":"premier-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"laliga":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"seriea":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"bundesliga":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"eredivisie":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"primeira":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"superlig":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"bundesliga2":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"ligue2":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6}}
+takeover keyed: premier/autumn premier/newYear premier/runIn
+founded/edited/era keyed: none
+review-cm-bind base.json: fetch true, 178 cases, plain keyed leagues [premier], review lines seen 0, throws 0
+row: {"leagues":10,"clubs":192,"keyed":20,"fixtures":7056,"mismatches":6122,"pairRows":364,"pairMismatch":326}
+  premier: Arsenal key premier-2026-27-v1 first H Coventry City | A Aston Villa | H Chelsea (38 rounds) :: Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.
+  championship: Birmingham City key null first A Swansea City | H Lincoln City | A Stoke City (46 rounds) :: null
+  laliga: Alavés key null first A Deportivo La Coruña | H Elche | A Racing Santander (38 rounds) :: null
+  seriea: AC Milan key null first A Genoa | H Parma | A Monza (38 rounds) :: null
+  bundesliga: Augsburg key null first A Paderborn | A Bayern Munich | H Elversberg (34 rounds) :: null
+  eredivisie: ADO Den Haag key null first A Sparta Rotterdam | H Groningen | A AZ Alkmaar (34 rounds) :: null
+  primeira: Académico de Viseu key null first A Marítimo | H Santa Clara | A Famalicão (34 rounds) :: null
+  superlig: Alanyaspor key null first H Trabzonspor | A Amedspor | H Çorum FK (34 rounds) :: null
+  bundesliga2: Arminia Bielefeld key null first A St. Pauli | H Hertha BSC | A Osnabrück (34 rounds) :: null
+  ligue2: Annecy key null first A Dunkerque | H Rodez | A Nancy (34 rounds) :: null
+later: {"premier":{"had":"premier-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"championship":{"had":"premier-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"laliga":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"seriea":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"bundesliga":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"eredivisie":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"primeira":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"superlig":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"bundesliga2":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6},"ligue2":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6}}
+takeover keyed: premier/autumn premier/newYear premier/runIn
+founded/edited/era keyed: none
+review-cm-bind head.json: fetch false, 178 cases, plain keyed leagues [premier], review lines seen 0, throws 0
+row: {"leagues":10,"clubs":192,"keyed":192,"fixtures":7056,"mismatches":0,"pairRows":364,"pairMismatch":0}
+  premier: Arsenal key premier-2026-27-v1 first H Coventry City | A Aston Villa | H Chelsea (38 rounds) :: Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.
+  championship: Birmingham City key championship-2026-27-v1 first A Sheffield United | H Bristol City | A Wrexham (46 rounds) :: Real 2026/27 EFL Championship opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.
+  laliga: Alavés key laliga-2026-27-v1 first H Getafe | A Rayo Vallecano | H Villarreal (38 rounds) :: Real 2026/27 La Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026.
+  seriea: AC Milan key seriea-2026-27-v1 first A Torino | H Venezia | A Juventus (38 rounds) :: Real 2026/27 Serie A opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.
+  bundesliga: Augsburg key bundesliga-2026-27-v1 first H Schalke 04 | A Eintracht Frankfurt | H Bayer Leverkusen (34 rounds) :: Real 2026/27 Bundesliga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in July 2026.
+  eredivisie: ADO Den Haag key eredivisie-2026-27-v1 first A AZ Alkmaar | H Groningen | A Go Ahead Eagles (34 rounds) :: Real 2026/27 Eredivisie opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026.
+  primeira: Académico de Viseu key primeira-2026-27-v1 first A Benfica | H Santa Clara | A Marítimo (34 rounds) :: Real 2026/27 Primeira Liga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026.
+  superlig: Alanyaspor key superlig-2026-27-v1 first A Gaziantep FK | H Beşiktaş | A Eyüpspor (34 rounds) :: Real 2026/27 Süper Lig opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026.
+  bundesliga2: Arminia Bielefeld key bundesliga2-2026-27-v1 first A Karlsruhe | H Energie Cottbus | A Nürnberg (34 rounds) :: Real 2026/27 2. Bundesliga opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in July 2026.
+  ligue2: Annecy key ligue2-2026-27-v1 first A Pau | H Rodez | A Reims (34 rounds) :: Real 2026/27 Ligue 2 opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026.
+later: {"premier":{"had":"premier-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"championship":{"had":"premier-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"laliga":{"had":"laliga-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"seriea":{"had":"seriea-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"bundesliga":{"had":"bundesliga-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"eredivisie":{"had":"eredivisie-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"primeira":{"had":"primeira-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"superlig":{"had":"superlig-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"bundesliga2":{"had":"bundesliga-2026-27-v1","season":2,"keyed":false,"coverage":null,"generatedRounds":6},"ligue2":{"had":null,"season":2,"keyed":false,"coverage":null,"generatedRounds":6}}
+takeover keyed: premier/autumn premier/newYear premier/runIn championship/autumn championship/newYear championship/runIn laliga/autumn laliga/newYear laliga/runIn seriea/autumn seriea/newYear seriea/runIn bundesliga/autumn bundesliga/newYear bundesliga/runIn eredivisie/autumn eredivisie/newYear eredivisie/runIn primeira/autumn primeira/newYear primeira/runIn superlig/autumn superlig/newYear superlig/runIn bundesliga2/autumn bundesliga2/newYear bundesliga2/runIn ligue2/autumn ligue2/newYear ligue2/runIn
+founded/edited/era keyed: none
+review-cm-bind head-fetched.json: fetch true, 178 cases, plain keyed leagues [premier championship laliga seriea bundesliga eredivisie primeira superlig bundesliga2 ligue2], review lines seen 0, throws 0
+== base against the head, nothing fetched
+edited: 5 equal, 7 different, leagues bundesliga2 championship laliga ligue1 ligue2 seriea superlig
+     edited/bundesliga2
+     edited/championship
+     edited/laliga
+     edited/ligue1
+era: 8 equal, 2 different, leagues bundesliga2010 laliga2010
+     era/bundesliga2010/era2010/Bayern Munich
+     era/laliga2010/era2010/Barcelona
+founded: 12 equal, 0 different
+plain: 26 equal, 82 different, leagues austria brasileirao bundesliga bundesliga2 championship croatia denmark eredivisie greece laliga ligamx ligue1 ligue2 mlsEast mlsWest primeira proleague saudi scottish segunda seriea serieb superlig switzerland
+     plain/austria/RB Salzburg/1717
+     plain/austria/RB Salzburg/2828
+     plain/austria/WSG Tirol/1717
+     plain/austria/WSG Tirol/2828
+takeover: 24 equal, 12 different, leagues bundesliga2 ligue2 scottish superlig
+     takeover/bundesliga2/autumn
+     takeover/bundesliga2/newYear
+     takeover/bundesliga2/runIn
+     takeover/ligue2/autumn
+review-cm-bind compare base.json vs head.json: 103 case(s) different
+== base against the head, every list fetched
+edited: 0 equal, 12 different, leagues bundesliga bundesliga2 championship eredivisie laliga ligue1 ligue2 premier primeira scottish seriea superlig
+     edited/bundesliga
+     edited/bundesliga2
+     edited/championship
+     edited/eredivisie
+era: 0 equal, 10 different, leagues bundesliga2010 bundesliga2020 laliga2010 laliga2020 ligue12010 ligue12020 premier2010 premier2020 seriea2010 seriea2020
+     era/bundesliga2010/era2010/Bayern Munich
+     era/bundesliga2020/era2020/Bayern Munich
+     era/laliga2010/era2010/Barcelona
+     era/laliga2020/era2020/Barcelona
+founded: 0 equal, 12 different, leagues bundesliga bundesliga2 championship eredivisie laliga ligue1 ligue2 premier primeira scottish seriea superlig
+     founded/bundesliga
+     founded/bundesliga2
+     founded/championship
+     founded/eredivisie
+plain: 4 equal, 104 different, leagues aleague austria brasileirao bundesliga bundesliga2 championship croatia denmark eredivisie greece laliga ligamx ligue1 ligue2 mlsEast mlsWest primeira proleague russia saudi scottish segunda seriea serieb superlig switzerland
+     plain/aleague/Adelaide United/1717
+     plain/aleague/Adelaide United/2828
+     plain/aleague/Central Coast Mariners/1717
+     plain/aleague/Central Coast Mariners/2828
+takeover: 0 equal, 36 different, leagues bundesliga bundesliga2 championship eredivisie laliga ligue1 ligue2 premier primeira scottish seriea superlig
+     takeover/bundesliga/autumn (B keyed)
+     takeover/bundesliga/newYear (B keyed)
+     takeover/bundesliga/runIn (B keyed)
+     takeover/bundesliga2/autumn (B keyed)
+review-cm-bind compare base.json vs head-fetched.json: 174 case(s) different

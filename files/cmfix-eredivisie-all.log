@@ -1,0 +1,26 @@
+PASS real fixtures eredivisie normal
+simCmRealFixtures normal eredivisie: 12 outcome groups passed on 18 clubs, 34 matchdays and 306 fixtures, generated baseline held against the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie venues
+simCmRealFixtures venues eredivisie: the copied fault failed exactly its own outcome (ledger) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie card
+simCmRealFixtures card eredivisie: the copied fault failed exactly its own outcome (calendar) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie settlement
+simCmRealFixtures settlement eredivisie: the copied fault failed exactly its own outcome (settlement) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+SKIP real fixtures eredivisie bye: the neutral-only probe can only stand in the Premier League
+PASS real fixtures eredivisie world
+simCmRealFixtures world eredivisie: the copied fault failed exactly its own outcome (world) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie edited
+simCmRealFixtures edited eredivisie: the copied fault failed exactly its own outcome (eligibility) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie legacy
+simCmRealFixtures legacy eredivisie: the copied fault failed exactly its own outcome (legacy, baseline) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie future
+simCmRealFixtures future eredivisie: the copied fault failed exactly its own outcome (future) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie rollover
+simCmRealFixtures rollover eredivisie: the copied fault failed exactly its own outcome (rollover) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie silent
+simCmRealFixtures silent eredivisie: the copied fault failed exactly its own outcome (unloaded) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie handover
+simCmRealFixtures handover eredivisie: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+PASS real fixtures eredivisie jobmove
+simCmRealFixtures jobmove eredivisie: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
+simCmRealFixtures eredivisie: 12 actual outcome groups, 612 fixture reads, 612 calendar reads and 11 effective controls passed against the base 24f57a98fa44e280f1c848276a27d86e0a3e2745.
