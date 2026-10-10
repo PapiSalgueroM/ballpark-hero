@@ -1,0 +1,38 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/leagueSlate.test.ts src/lib/uclLeaguePhase.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simCmLeaguePhase.mjs > $RC_OUT/sim-all.txt; s=$?; tail -1 $RC_OUT/sim-all.txt; exit $s
+newfiles: changed="$(git diff --name-only --diff-filter=MDRT origin/main...HEAD)"; echo "existing files this branch changes: [$changed]"; git diff --name-only origin/main...HEAD | tr '\n' ' '; test -z "$changed"
+coreuntouched: git diff --quiet origin/main...HEAD -- src/lib/leagueCore.ts src/lib/clubManager.ts src/lib/clubManagerUclGroups.ts src/lib/soccerCareerContinental.ts && echo "leagueCore, clubManager, clubManagerUclGroups, soccerCareerContinental: byte equal to origin/main"
+c-onesource: CM_LEAGUE_PHASE_CONTROL=onesource node scripts/simCmLeaguePhase.mjs
+c-wiki: CM_LEAGUE_PHASE_CONTROL=wiki node scripts/simCmLeaguePhase.mjs
+c-thinused: CM_LEAGUE_PHASE_CONTROL=thinused node scripts/simCmLeaguePhase.mjs
+c-figure: CM_LEAGUE_PHASE_CONTROL=figure node scripts/simCmLeaguePhase.mjs
+c-receipt: CM_LEAGUE_PHASE_CONTROL=receipt node scripts/simCmLeaguePhase.mjs
+c-steps: CM_LEAGUE_PHASE_CONTROL=steps node scripts/simCmLeaguePhase.mjs
+c-feed: CM_LEAGUE_PHASE_CONTROL=feed node scripts/simCmLeaguePhase.mjs
+c-points: CM_LEAGUE_PHASE_CONTROL=points node scripts/simCmLeaguePhase.mjs
+c-const: CM_LEAGUE_PHASE_CONTROL=const node scripts/simCmLeaguePhase.mjs
+c-ninth: CM_LEAGUE_PHASE_CONTROL=ninth node scripts/simCmLeaguePhase.mjs
+c-sameassoc: CM_LEAGUE_PHASE_CONTROL=sameassoc node scripts/simCmLeaguePhase.mjs
+c-cap: CM_LEAGUE_PHASE_CONTROL=cap node scripts/simCmLeaguePhase.mjs
+c-twoaday: CM_LEAGUE_PHASE_CONTROL=twoaday node scripts/simCmLeaguePhase.mjs
+c-pot: CM_LEAGUE_PHASE_CONTROL=pot node scripts/simCmLeaguePhase.mjs
+c-lie: CM_LEAGUE_PHASE_CONTROL=lie node scripts/simCmLeaguePhase.mjs
+c-nosearch: CM_LEAGUE_PHASE_CONTROL=nosearch node scripts/simCmLeaguePhase.mjs
+c-gdonly: CM_LEAGUE_PHASE_CONTROL=gdonly node scripts/simCmLeaguePhase.mjs
+c-ninthdirect: CM_LEAGUE_PHASE_CONTROL=ninthdirect node scripts/simCmLeaguePhase.mjs
+c-flipseed: CM_LEAGUE_PHASE_CONTROL=flipseed node scripts/simCmLeaguePhase.mjs
+c-freebracket: CM_LEAGUE_PHASE_CONTROL=freebracket node scripts/simCmLeaguePhase.mjs
+c-unknown: CM_LEAGUE_PHASE_CONTROL=nosuchcontrol node scripts/simCmLeaguePhase.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simUclFormatHistory: node scripts/simUclFormatHistory.mjs
+simUclSeasonOne: node scripts/simUclSeasonOne.mjs
+simUclField: node scripts/simUclField.mjs
+simCareerContinental: node scripts/simCareerContinental.mjs
