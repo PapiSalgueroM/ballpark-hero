@@ -1,0 +1,25 @@
+--- run 1 (LIVE_FIT_SEED=3208792607), exit 0
+  [match phone] seed 3208792607, 1869 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  the goal watched: 28' Diego Gómez, against me; own goals in its half 0 of 2 goals
+  [match calm] seed 3208792608, 1799 draws at kick off, digest e14582e9 over 4503 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  the goal watched: 57' João Pedro, against me; own goals in its half 0 of 2 goals
+  [match wide] seed 3208792609, 1829 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+playLiveMatchFit: seed 3208792607. Replay this run with: LIVE_FIT_SEED=3208792607 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 28, the clock is at 2
+      a goal is coming at 57, the clock is at 46
+      a goal is coming at 5, the clock is at 2
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- run 2 (LIVE_FIT_SEED=3208792607), exit 0
+  [match phone] seed 3208792607, 1869 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  the goal watched: 28' Diego Gómez, against me; own goals in its half 0 of 2 goals
+  [match calm] seed 3208792608, 1799 draws at kick off, digest e14582e9 over 4503 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  the goal watched: 57' João Pedro, against me; own goals in its half 0 of 2 goals
+  [match wide] seed 3208792609, 1829 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+playLiveMatchFit: seed 3208792607. Replay this run with: LIVE_FIT_SEED=3208792607 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 28, the clock is at 2
+      a goal is coming at 57, the clock is at 46
+      a goal is coming at 5, the clock is at 2
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+SAME WALK TWICE: seed 3208792607 opened the same three matches and watched the same three goals (exits 0 and 0)

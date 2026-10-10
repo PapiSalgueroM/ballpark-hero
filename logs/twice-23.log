@@ -1,0 +1,25 @@
+--- run 1 (LIVE_FIT_SEED=23), exit 0
+  [match phone] seed 23, 1808 draws at kick off, digest fdd07c37 over 5140 characters of drawn match: Crystal Palace v Everton, goals of the first half 1' Brennan Johnson, 22' Daichi Kamada; own goals among them 0
+  the goal watched: 22' Daichi Kamada, for me; own goals in its half 0 of 2 goals
+  [match calm] seed 24, 1829 draws at kick off, digest 0552cf81 over 5858 characters of drawn match: Crystal Palace v Arsenal, goals of the first half 29' Bukayo Saka, 38' Viktor Gyökeres, 45+3' Martin Ødegaard; own goals among them 0
+  the goal watched: 29' Bukayo Saka, against me; own goals in its half 0 of 3 goals
+  [match wide] seed 25, 1782 draws at kick off, digest 229b9cb5 over 4200 characters of drawn match: Crystal Palace v Brighton, goals of the first half none; own goals among them 0
+  the goal watched: 71' Mamadou Sangaré, against me; own goals in its half 0 of 1 goals
+playLiveMatchFit: seed 23. Replay this run with: LIVE_FIT_SEED=23 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 22, the clock is at 1
+      a goal is coming at 29, the clock is at 0
+      a goal is coming at 71, the clock is at 46
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+--- run 2 (LIVE_FIT_SEED=23), exit 0
+  [match phone] seed 23, 1808 draws at kick off, digest fdd07c37 over 5140 characters of drawn match: Crystal Palace v Everton, goals of the first half 1' Brennan Johnson, 22' Daichi Kamada; own goals among them 0
+  the goal watched: 22' Daichi Kamada, for me; own goals in its half 0 of 2 goals
+  [match calm] seed 24, 1829 draws at kick off, digest 0552cf81 over 5858 characters of drawn match: Crystal Palace v Arsenal, goals of the first half 29' Bukayo Saka, 38' Viktor Gyökeres, 45+3' Martin Ødegaard; own goals among them 0
+  the goal watched: 29' Bukayo Saka, against me; own goals in its half 0 of 3 goals
+  [match wide] seed 25, 1782 draws at kick off, digest 229b9cb5 over 4200 characters of drawn match: Crystal Palace v Brighton, goals of the first half none; own goals among them 0
+  the goal watched: 71' Mamadou Sangaré, against me; own goals in its half 0 of 1 goals
+playLiveMatchFit: seed 23. Replay this run with: LIVE_FIT_SEED=23 node scripts/playLiveMatchFit.mjs
+      a goal is coming at 22, the clock is at 1
+      a goal is coming at 29, the clock is at 0
+      a goal is coming at 71, the clock is at 46
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+SAME WALK TWICE: seed 23 opened the same three matches and watched the same three goals (exits 0 and 0)

@@ -1,0 +1,54 @@
+playLiveMatchFit: seed 4242. Replay this run with: LIVE_FIT_SEED=4242 node scripts/playLiveMatchFit.mjs
+In the job at Crystal Palace.
+1) The goal in order
+  [match phone] seed 4242, 1843 draws at kick off, digest 216ebd5b over 5766 characters of drawn match: Crystal Palace v Everton, goals of the first half 5' Daichi Kamada, 9' Dwight McNeil; own goals among them 0
+      a goal is coming at 5, the clock is at 2
+  the goal watched: 5' Daichi Kamada, for me; own goals in its half 0 of 2 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 30 frames it was up
+  ok    a tap on the card ended the hold (42 frames after it, none with the card)
+      what was drawn: pass/pass 0 - 0 3' e882 x46 | pass/pass 0 - 0 4' e882 x60 | goal/plant 0 - 0 5' e882 x16 | goal/flight 0 - 0 5' e882 x30 | goal/net 1 - 0 card 5' e882 x25 | TAP | goal/net 1 - 0 card 5' e882 x5 | pass/pass 1 - 0 6' e882 x5 | pass/pass 1 - 0 6' e693 x1 | pass/pass 1 - 0 6' e882 x50 | pass/pass 1 - 0 7' e387 x1
+      the list at the end: 7'Injury: Ismaïla Sarr / 7'Throw in, Crystal Palace / 5'GOAL! Daichi Kamada / 5'Save! Jordan Pickford / 5'Save! Jordan Pickford
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 239 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 0.70 over 10 frames of 21 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.29 over 24 frames of 21 labels; before match mode 1.63 at 6b1caa20, ratio 0.18
+  ok    name labels overlap 0.29 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 1.20 over 10 frames of 21 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.10 over 10 frames of 21 labels
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+  [labels 844 by 390] mean overlapping name labels a frame 1.10 over 10 frames of 21 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace2 - 0EvertonPaused at 30'Back to", and the clock held at 30' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (30' to 31')
+5) The reload
+  ok    reload: left at 31', the save holds 31, the match came back at 31'
+  ok    close: left at 33', the save holds 33, the match came back at 33'
+  ok    hidden tab: the clock read 35' and the save holds 35
+2) Reduced motion
+  [match calm] seed 4243, 1820 draws at kick off, digest 057ca5cd over 4862 characters of drawn match: Crystal Palace v Bournemouth, goals of the first half 14' António Silva (own goal); own goals among them 1
+      a goal is coming at 14, the clock is at 0
+  the goal watched: 14' António Silva (own goal), for me; own goals in its half 1 of 1 goals
+  ok    under reduced motion the score reads 1 - 0 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 154 frames it was up
+      what was drawn: pass/pass 0 - 0 12' e766 x50 | shot/wide 0 - 0 13' e766 x60 | shot/wide 0 - 0 14' e766 x4 | pass/pass 0 - 0 14' e766 x14 | goal/net 1 - 0 card 14' e766 x132 | goal/net 1 - 0 card 15' e766 x22 | pass/pass 1 - 0 15' e766 x32 | save/caught 1 - 0 15' e766 x6 | save/caught 1 - 0 16' e766 x3
+      the list at the end: 16'Foul by Justin Kluivert / 15'Save! Dean Henderson / 15'Throw in, Bournemouth / 14'GOAL! Own goal, António Silva (O.G) / 13'Shot: Jørgen Strand Larsen
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  [match wide] seed 4244, 1800 draws at kick off, digest d3a27e0b over 4139 characters of drawn match: Crystal Palace v Brentford, goals of the first half none; own goals among them 0
+      a goal is coming at 4, the clock is at 0
+  the goal watched: 4' Nobel Mendy, against me; own goals in its half 0 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 0 - 1)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+      what was drawn: pass/pass 0 - 0 2' e815 x3 | pass/pass 0 - 0 2' e061 x13 | pass/pass 0 - 0 2' e815 x4 | pass/pass 0 - 0 2' e770 x35 | pass/pass 0 - 0 3' e770 x47 | pass/pass 0 - 0 3' e936 x2 | pass/pass 0 - 0 3' e770 x11 | goal/plant 0 - 0 4' e770 x16 | goal/flight 0 - 0 4' e770 x22 | goal/flight 0 - 0 4' e201 x8 | goal/net 0 - 1 card 4' e201 x28 | goal/net 0 - 1 card 4' e770 x52 | goal/net 0 - 1 card 5' e770 x25 | pass/pass 0 - 1 5' e770 x5 | pass/pass 0 - 1 5' e423 x1 | pass/pass 0 - 1 5' e770 x50 | pass/pass 0 - 1 6' e770 x2
+      the list at the end: 4'GOAL! Nobel Mendy / 4'Corner, right, Dwight McNeil / 4'Throw in, Hull City / 4'Throw in, Hull City
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.

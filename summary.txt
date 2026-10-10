@@ -1,0 +1,5 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+twice-own exit=0 194s | SAME WALK TWICE: seed 3208792607 opened the same three matches and watched the same three goals (exits 0 and 0)
+twice-23 exit=0 243s | SAME WALK TWICE: seed 23 opened the same three matches and watched the same three goals (exits 0 and 0)
+twice-4242 exit=0 171s | SAME WALK TWICE: seed 4242 opened the same three matches and watched the same three goals (exits 0 and 0)
+trim exit=0 0s | tw-4242-2.log
