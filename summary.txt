@@ -1,0 +1,11 @@
+hall-nhl-s2 exit=3 6s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+hall-nhl-s1 exit=3 6s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+hall-nhl-s3 exit=3 6s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+hall-nhl-s5 exit=3 6s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+hall-nhl-s4 exit=3 6s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+hall-mlb-s1 exit=3 9s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-mlb-s2 exit=3 8s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-mlb-s3 exit=3 9s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-mlb-s4 exit=3 9s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-mlb-s5 exit=3 7s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+simAwards exit=0 7s | PASS: ALL AWARD SCARCITY CHECKS PASSED

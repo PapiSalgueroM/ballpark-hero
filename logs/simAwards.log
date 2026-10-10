@@ -1,0 +1,77 @@
+Running 260 careers per position per arm, seeded and paired
+
+1) The median career wins nothing, and most careers win nothing at all
+   NFL 2080 careers, median 17 seasons, peak p50 80
+        major MVP/Defensive Player of the Year: median 0, mean 0.02, p95 0, max 3, ever won 2.2%
+        All-Pro : median 0, mean 0.19, p95 1, max 4, ever won 14.6%
+        80% of careers finished with an empty trophy case
+   NBA 1300 careers, median 19 seasons, peak p50 84
+        major MVP: median 0, mean 0.08, p95 1, max 6, ever won 6.2%
+        All-NBA : median 0, mean 1.16, p95 5, max 11, ever won 47.5%
+        17% of careers finished with an empty trophy case
+   MLB 2860 careers, median 19 seasons, peak p50 80
+        major MVP/Cy Young: median 0, mean 0.01, p95 0, max 2, ever won 1.1%
+        All-Star: median 0, mean 0.81, p95 3, max 11, ever won 41.5%
+        52% of careers finished with an empty trophy case
+   NHL 1300 careers, median 21 seasons, peak p50 84
+        major Hart/Norris/Vezina: median 0, mean 0.06, p95 1, max 3, ever won 5.4%
+        All-Star: median 0, mean 1.04, p95 4, max 10, ever won 46.8%
+        48% of careers finished with an empty trophy case
+
+2) An elite career can actually win the big one (and 5, the awards are not switched off)
+   NFL 90-ceiling careers: major median 0, mean 0.70, won at least one 37.4% | All-Pro mean 2.34
+   NBA 90-ceiling careers: major median 0, mean 0.64, won at least one 38.4% | All-NBA mean 4.44
+   MLB 90-ceiling careers: major median 1, mean 1.21, won at least one 59.6% | All-Star mean 7.56
+   NHL 90-ceiling careers: major median 0, mean 0.59, won at least one 40.2% | All-Star mean 5.03
+
+3) No career beats the real all-time record
+   NFL All-Pro                        best career  4 vs record 10 (Jerry Rice and Jim Otto), elite median 2
+   NFL MVP                            best career  2 vs record  5 (Peyton Manning), elite median 0
+   NFL Defensive Player of the Year   best career  3 vs record  3 (Lawrence Taylor), elite median 0
+   NBA All-NBA                        best career 11 vs record 21 (LeBron James), elite median 4
+   NBA MVP                            best career  6 vs record  6 (Kareem Abdul-Jabbar), elite median 0
+   NBA Defensive Player of the Year   best career  2 vs record  4 (Dikembe Mutombo), elite median 0
+   NBA Finals MVP                     best career  4 vs record  6 (Michael Jordan), elite median 0
+   NBA Scoring Champion               best career  4 vs record 10 (Michael Jordan), elite median 0
+   MLB All-Star                       best career 11 vs record 25 (Hank Aaron), elite median 8
+   MLB MVP                            best career  2 vs record  7 (Barry Bonds), elite median 0
+   MLB Cy Young                       best career  2 vs record  7 (Roger Clemens), elite median 0
+   NHL All-Star                       best career 10 vs record 23 (Gordie Howe), elite median 5
+   NHL Hart                           best career  3 vs record  9 (Wayne Gretzky), elite median 0
+   NHL Norris                         best career  2 vs record  8 (Bobby Orr), elite median 0
+   NHL Vezina                         best career  2 vs record  7 (Jacques Plante), elite median 0
+   NHL Conn Smythe                    best career  3 vs record  3 (Patrick Roy), elite median 0
+   NHL Art Ross                       best career  5 vs record 10 (Wayne Gretzky), elite median 0
+
+4) Awards track ability: the same seeds, two different ceilings
+   NFL ceiling 90: 2.34 All-Pro, 0.70 major, 3.44 trophies of any kind
+        ceiling 74: 0.00 All-Pro, 0.00 major, 0.01 trophies of any kind
+   NBA ceiling 90: 4.44 All-NBA, 0.64 major, 16.66 trophies of any kind
+        ceiling 74: 0.00 All-NBA, 0.00 major, 0.10 trophies of any kind
+   MLB ceiling 90: 7.56 All-Star, 1.21 major, 18.72 trophies of any kind
+        ceiling 74: 0.04 All-Star, 0.00 major, 0.07 trophies of any kind
+   NHL ceiling 90: 5.03 All-Star, 0.59 major, 12.32 trophies of any kind
+        ceiling 74: 0.00 All-Star, 0.00 major, 0.00 trophies of any kind
+
+6) A seeded career replays exactly
+   12 seeded careers replayed identically
+
+7) Copy check
+   32 distinct award names across all four sports, all clean
+
+8) Where the bar actually sits, in each engine's own scoring units
+   nfl allPro      QB  typical winning season needs about 189.4
+   nfl nflMvp      QB  typical winning season needs about 200.6
+   nfl allPro      TE  typical winning season needs about 120.8
+   nfl nflDpoy     EDGE typical winning season needs about 220.0
+   nba allNba      SF  typical winning season needs about 62.3
+   nba nbaMvp      SF  typical winning season needs about 76.4
+   mlb mlbAllStar  1B  typical winning season needs about 115.6
+   mlb mlbMvp      1B  typical winning season needs about 140.6
+   mlb mlbCy       SP  typical winning season needs about 92.1
+   nhl nhlAllStar  C   typical winning season needs about 105.9
+   nhl nhlMajor    C   typical winning season needs about 123.3
+   nhl nhlMajor    G   typical winning season needs about 164.7
+   kickers and defenders are still locked out of MVP, defenders still chase DPOY
+
+PASS: ALL AWARD SCARCITY CHECKS PASSED
