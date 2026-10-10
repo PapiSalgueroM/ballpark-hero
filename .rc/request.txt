@@ -1,0 +1,16 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rival: node scripts/simUsRivalSense.mjs
+c-oneslotsite: US_RIVAL_CONTROL=oneslotsite node scripts/simUsRivalSense.mjs
+c-nofloor: US_RIVAL_CONTROL=nofloor node scripts/simUsRivalSense.mjs
+c-impure: US_RIVAL_CONTROL=impure node scripts/simUsRivalSense.mjs
+c-oneslot: US_RIVAL_CONTROL=oneslot node scripts/simUsRivalSense.mjs
+c-workload17: US_RIVAL_CONTROL=workload17 node scripts/simUsRivalSense.mjs
+vitest: node_modules/.bin/vitest run src/test/usRivalLine.test.ts src/test/usRivalOldSaves.test.ts src/test/usCareerTruthDigest.test.ts src/test/nflTruthRules1104.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+simCareerBanking: node scripts/simCareerBanking.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simAwards: node scripts/simAwards.mjs
