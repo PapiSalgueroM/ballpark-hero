@@ -1,0 +1,45 @@
+simCmLeagueBook: 5 careers x 2 seasons (default fleet, seed set 0), CONTROL keyindex
+stream  20 of 20 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 5.5s with the book and this harness watching every entry, 4.0s with the book out and nothing watching
+        the book's own cost: 4 careers x 2 seasons took 4246ms with the book and 4395ms with it out (-3.4% more)
+stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit
+shapes  credited rival goals 6000: forwards 57.1%, midfielders 32.1%, defenders 10.8%, keepers 0 goals
+        between other clubs (5792 goals), dealt against the weight: ATT 3245 vs 3235.4 (z 0.25), MID 1773 vs 1848.2 (z -2.12), DEF 610 vs 549.1 (z 2.73)
+        clubs with an eleven: assists 3578 on 5880 credited goals = 0.609 a goal (the rule 0.614, z -0.81); own goals 170 of 6050 = 2.81% (the rule 2.75%, z 0.28); every club: 3578 assists on 6000 credited goals = 0.596 a goal
+        every goal its own roll: one man took every goal in 1525 of 1651 matches a club with an eleven scored two or more in = 92.4% (the weight says 12.9%, z 99.12)
+        unnamed goals 2829 (club weeks with no named eleven: 2478); my league matches 368, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 828 of 2116 club weeks, 9 of 26 rival clubs seen (Blackburn Rovers 7 men, 1 keepers; Bolton Wanderers 3 men, 0 keepers; Cardiff City 4 men, 1 keepers; Charlton Athletic 8 men, 1 keepers; Lincoln City 2 men, 0 keepers; Millwall 11 men, 0 keepers; ...)
+        no named eleven in bundesliga2: 1088 of 1156 club weeks, 17 of 19 rival clubs seen (Arminia Bielefeld 3 men, 1 keepers; Bochum 4 men, 0 keepers; Braunschweig 2 men, 1 keepers; Darmstadt 4 men, 0 keepers; Dynamo Dresden 1 men, 0 keepers; Elversberg 10 men, 1 keepers; ...)
+        no named eleven in laliga2010: 76 of 1444 club weeks, 1 of 19 rival clubs seen (Levante 10 men, 1 keepers)
+        no named eleven in mlsEast: 486 of 758 club weeks, 9 of 14 rival clubs seen (Atlanta United 11 men, 0 keepers; CF Montréal 7 men, 1 keepers; Charlotte FC 10 men, 1 keepers; D.C. United 6 men, 0 keepers; FC Cincinnati 6 men, 1 keepers; Nashville SC 7 men, 0 keepers; ...)
+        top ten of the Goals board held by forwards and wingers: 8.90 on the book, 5.90 on the old race, rise 3.00 (floor 1.5) over 10 seasons
+names   18238 checks; 4 purchases probed of 4 saves kept (the best scorer of the rivals signed at week 22, twelve entries played on)
+        the book against the report of 366 league matches of mine: 403 goal lines, 371 naming a man of that club's roster (each on his row), 21 naming nobody its roster holds, 51 from the spot or a free kick, 153 assists (each by a man on their pitch); 2 matches not judged, the opponent played twice in the entry
+oldsave 766 checks: 4 saves with no book finished on the candidate and on the book out engine, the season after each, and six unreadable books
+doors   2439 checks: three takeovers and two joined jobs (season one and season three), the law at the handover and after every entry to the end of the season
+dailies 50 checks: 4 Hot Seat dates played to a verdict, handed over and played on, 3 Deadline Day dates, each state byte equal to the book out engine's
+boards  by league, the book against the old race on the same seasons (penalties and free kicks to the taker)
+        premier      20 clubs,  2 seasons: top scorer mean 32.0 (32 32), old race mean 30.0, most assists mean 13.5, leading keeper's clean sheets mean 16.0
+        championship 24 clubs,  2 seasons: top scorer mean 38.5 (39 38), old race mean 36.0, most assists mean 15.5, leading keeper's clean sheets mean 26.0
+        bundesliga2  18 clubs,  2 seasons: top scorer mean 28.0 (20 36), old race mean 27.5, most assists mean 15.5, leading keeper's clean sheets mean 17.0
+        laliga2010   20 clubs,  2 seasons: top scorer mean 32.0 (33 31), old race mean 35.5, most assists mean 17.5, leading keeper's clean sheets mean 22.0
+        mlsEast      15 clubs,  2 seasons: top scorer mean 19.5 (19 20), old race mean 21.5, most assists mean 11.5, leading keeper's clean sheets mean 10.0
+        38 game leagues: 4 seasons, top scorer mean 32.00, standard deviation 0.71, standard error 0.35; old race mean 32.75
+        34 game leagues: 2 seasons, top scorer mean 28.00, standard deviation 8.00, standard error 5.66; old race mean 27.50
+        46 game leagues: 2 seasons, top scorer mean 38.50, standard deviation 0.50, standard error 0.35; old race mean 36.00
+        28 game leagues (15 clubs): 2 seasons, top scorer mean 19.50, standard deviation 0.50, standard error 0.35; old race mean 21.50
+        the top scorer was a: ATT 9, MID 1, DEF 0 (of 10 seasons)
+        the old race on the same seasons: 5647 of 9004 rival goals given to anybody (62.7%), of those forwards 54.2%, midfielders 45.8%; the book names a man for 66.6% and marks 175 own goals and 2829 unnamed
+        a Clean sheets board of every man (keepers and defenders): its top ten holds men of 2.50 clubs and 2.30 keepers on average
+        a back four picked by clean sheets + goals + assists: 2.60 men of one club on average; by goals + assists (club clean sheets, then table place, to split): 1.60, with 0.00 of the four on no goal and no assist
+law     4 weeks I did not play in which the rest of the round did (a league with an odd number of clubs), 26 club entries holding two matches of one club, 4 club seasons whose clean sheets are judged on a range for it
+law     10516 checks over 403 entries of 5 careers, and 91 entries of 2 seasons with the video referee on (84 league matches of mine, 55 reviews, 0 reports whose lines did not add up to the score)
+green stream   20 checks
+green law      10516 checks
+green names    18238 checks
+RED   shapes   8 checks, 1 failed
+        one man took every goal in 1525 of 1651 matches a club scored two or more in, the weight says 213.2 (z 99.12)
+green oldsave  766 checks
+green doors    2439 checks
+green dailies  50 checks
+simCmLeagueBook: CONTROL keyindex FIRED: section shapes went red (1 failures) and no other section did (33s)

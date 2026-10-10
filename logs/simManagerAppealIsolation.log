@@ -1,0 +1,8 @@
+Appeal characterization integrity passed: 24 complete actual pairs.
+Existing-card compatibility: 6 save/load and empty-slot round trips, every appeal option.
+Effective copied controls: mislink, effect, story, verdict; independent baseline passed in each.
+Historical baseline: 6 preserved differing pairs, separate from current product parity.
+Compatibility: 13 outcome groups, 16 effective mapped controls.
+Whole-source holds: 3196 exact files; 24 executed bundles retained.
+Product correctness: true; differing pairs: 0.
+Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
