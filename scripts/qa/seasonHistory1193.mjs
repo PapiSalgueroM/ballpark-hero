@@ -11,7 +11,9 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 assert(process.env.CI, 'Season history proof runs only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const BASE = 'fa24b3848d99e29367486489b081a483dc544206', BASE_TREE = 'd9175fa74fc5784ba6acfd1a62f4592cb106f22f';
+/* Release AT: the base is the tree just before this round's own merge on the release line (f57763a6, Round 1192
+   merged), not Release AR. */
+const BASE = 'f57763a68d304f52fb7f5f5df7e0eef457be74e4', BASE_TREE = '6d7c9a8bc09eabb7f09af75a9e73247bea433291';
 const OUT = path.resolve(ROOT, process.env.SEASON_HISTORY_ARTIFACTS || '.tmp-fx/season-history/outcomes');
 const HELPER = 'src/lib/soccerCareerSeasonHistory.ts';
 const copy = value => JSON.parse(JSON.stringify(value)), sha = value => createHash('sha256').update(value).digest('hex');

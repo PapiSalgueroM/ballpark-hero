@@ -14,8 +14,8 @@ import { gzipSync } from 'node:zlib';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SELF = fileURLToPath(import.meta.url);
-export const STORY_ROLE_BASE = 'fa24b3848d99e29367486489b081a483dc544206';
-const BASE_TREE = 'd9175fa74fc5784ba6acfd1a62f4592cb106f22f';
+/* Release AT: the base is the tree just before Rounds 1188 to 1191 were merged on the release line (de39ef18, Rounds 1185 to 1187 merged), not Release AR, which has no form swing. */ export const STORY_ROLE_BASE = 'de39ef18d2187ca98ccc57d4ef7ebc33c0f6bd6a';
+const BASE_TREE = '487b8f9274808bd3d2a7990b2172035989b1fdee';
 const ENGINE = 'src/lib/soccerCareerEngine.ts';
 const sha = value => createHash('sha256').update(value).digest('hex');
 const textAt = file => fs.readFileSync(path.join(ROOT, file), 'utf8').replaceAll('\r\n', '\n');

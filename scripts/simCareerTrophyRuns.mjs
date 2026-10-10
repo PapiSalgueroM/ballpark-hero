@@ -12,7 +12,9 @@ import { build } from 'esbuild';
 import { JSDOM } from 'jsdom';
 assert(process.env.CI, 'Run this proof only in remote CI');
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const BASE = 'fa24b3848d99e29367486489b081a483dc544206', BASE_TREE = 'd9175fa74fc5784ba6acfd1a62f4592cb106f22f';
+/* Release AT: the base is the tree just before this round's own merge on the release line (2ee41bd6, Rounds 1188 to
+   1191 merged), not Release AR: the release line gained Round 1185's form swing before this round met it. */
+const BASE = '2ee41bd6de85e07161522e83b7249a7fe071d58c', BASE_TREE = 'bc65f852d6f069c8c6ea0d6b999e40454432205b';
 const OUT = path.resolve(ROOT, process.env.CAREER_TROPHY_RUNS_ARTIFACTS || '.tmp-fx/career-trophy-runs/outcomes');
 const CABINET = 'src/components/soccer-career/TrophyCabinet.tsx', READER = 'src/lib/soccerSeasonCompetitions.ts';
 const sha = value => createHash('sha256').update(value).digest('hex'), copy = value => JSON.parse(JSON.stringify(value));

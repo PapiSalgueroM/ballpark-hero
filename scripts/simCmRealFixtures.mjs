@@ -11,7 +11,9 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const self = fileURLToPath(import.meta.url), base = 'bfc6197f';
+/* Release AT: the base is the tree just before this round's own merge on the release line (79c729cd), not Release AP:
+   Releases AQ, AR and AS changed the engine after the branch was cut. */
+const self = fileURLToPath(import.meta.url), base = '79c729cdc2943cf444c3384ce0cffb3ca87d2e1d';
 const engineFile = 'src/lib/clubManager.ts', helperFile = 'src/lib/clubManagerFixtures.ts';
 const cardFile = 'src/components/club-manager/CalendarCard.tsx';
 const dataFile = 'src/data/clubManagerPremierFixtures2026.ts';

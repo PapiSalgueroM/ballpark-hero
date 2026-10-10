@@ -11,7 +11,9 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 assert(process.env.CI, 'Derby history proof runs only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const BASE = '48790763e65446b75c7699498b806637dc5c0111', BASE_TREE = '24c2d492736512dce864095bf763be208516caa6';
+/* Release AT: the base is the tree just before this round's own merge on the release line (3df03db1, Rounds 1193 and
+   1194 merged), not the branch's own cut. */
+const BASE = '3df03db11f3d3415a938f9dadabf8a6130e88c2f', BASE_TREE = '9020b1e50d91bea18ea730d40cb617c1c6f49f8c';
 const OUT = path.resolve(ROOT, process.env.DERBY_HISTORY_ARTIFACTS || '.tmp-fx/derby-history/outcomes');
 const HELPER = 'src/lib/soccerCareerDerbyHistory.ts';
 const copy = value => JSON.parse(JSON.stringify(value)), sha = value => createHash('sha256').update(value).digest('hex');
