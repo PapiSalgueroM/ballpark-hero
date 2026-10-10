@@ -1,0 +1,6 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000
+book-default-s0: node scripts/simCmLeagueBook.mjs
+c-keyindex-s0: BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+mut-keyindex-vitest: node .rc/x/mut1229.mjs keyindex && { node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s; }
