@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render } from '@testing-library/react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import GmLotteryCard from './GmLotteryCard';
 import { buildDraftOrder, type DraftSeason, type SavedDraftOrder } from '@/lib/gmDraftOrder';
-import { lotteryNight } from '@/lib/gmLotteryNight';
+import { PLAIN_ORDER_LINE, PLAIN_ORDER_WORDS, lotteryNight } from '@/lib/gmLotteryNight';
 import { NBA_PICK_RULES } from '@/lib/gmPicks';
 import { NBA_DRAFT_ORDER_2019 as NBA } from '@/data/gmDraftOrder/rules';
 
@@ -28,6 +28,9 @@ describe('GmLotteryCard', () => {
     const mine = container.querySelectorAll('[data-lottery-mine]');
     expect(mine.length).toBe(1);
     expect(mine[0].getAttribute('data-lottery-slot')).toBe(String(order.first.indexOf('C05') + 1));
+    /* The mark is about his CLUB, whose record earned the pick: the card is never told who holds it tonight. */
+    expect(mine[0].querySelector('[data-lottery-under]')!.textContent).toMatch(/^Seed 5 · (Up \d+|Down \d+|Held) · your club$/);
+    expect(container.textContent).not.toContain('yours');
     expect(container.querySelector('[data-lottery-rule]')!.textContent)
       .toBe('14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.');
     expect(container.querySelector('[data-lottery-headline]')!.textContent).toBe(lotteryNight(order, 'C05', label).headline);
@@ -51,6 +54,11 @@ describe('GmLotteryCard', () => {
     for (const words of ["The league's rule", "This game's own", 'A worked example', 'picks no lower than 5th', 'from its 2019 draft to its 2026 draft', '2027']) {
       expect(panel.textContent, words).toContain(words);
     }
+    /* The line under the heading stays on screen beside the panel, so the panel does not print it again. */
+    const rule = container.querySelector('[data-lottery-rule]')!.textContent!;
+    expect(rule.length).toBeGreaterThan(20);
+    expect(panel.textContent).not.toContain(rule);
+    expect(container.textContent!.split(rule).length - 1).toBe(1);
   });
 
   it('has a live button from the first frame, with a label the site walker presses', () => {
@@ -64,7 +72,7 @@ describe('GmLotteryCard', () => {
     expect(container.querySelector('[data-lottery-reveal]')!.hasAttribute('data-lottery-settled')).toBe(true);
     /* A playoff club: no tile is his, and the line says where he picks. */
     expect(container.querySelector('[data-lottery-mine]')).toBeNull();
-    expect(container.querySelector('[data-lottery-headline]')!.textContent).toBe('Your club is not in the lottery. Its round one slot is 22nd.');
+    expect(container.querySelector('[data-lottery-headline]')!.textContent).toBe('Your club is not in the lottery. Its own round one pick is 22nd.');
   });
 
   it('renders on the server in both modes: a night to watch, and a night already watched', () => {
@@ -83,10 +91,19 @@ describe('GmLotteryCard', () => {
     const { container } = render(<GmLotteryCard order={plain} myClub="C22" labelOf={label} rules={NBA} lottery={null} onContinue={() => {}} />);
     expect(container.querySelector('[data-gm-lottery]')!.getAttribute('data-gm-lottery')).toBe('plain');
     expect(container.querySelector('[data-lottery-reveal]')!.hasAttribute('data-lottery-settled')).toBe(true);
-    expect(container.querySelector('[data-lottery-rule]')!.textContent).toBe('Round one, worst record first.');
+    /* The reason, once, under the heading; his club's own pick as the closing line; how the order runs behind the "?". */
+    expect(container.querySelector('[data-lottery-rule]')!.textContent).toBe(PLAIN_ORDER_WORDS.table);
     expect(container.querySelectorAll('[data-lottery-slot]').length).toBe(9);
     expect(container.querySelector('[data-lottery-mine]')!.getAttribute('data-lottery-slot')).toBe('22');
-    expect(container.querySelector('[data-lottery-headline]')!.textContent).toContain('No lottery was drawn');
+    expect(container.querySelector('[data-lottery-headline]')!.textContent).toBe("Your club's own pick is 22nd in round one.");
+    expect(container.textContent!.split('No lottery was drawn').length - 1).toBe(1);
+    /* Nothing was seeded and nothing moved, so no tile says Seed or Held. */
+    expect(container.textContent).not.toMatch(/Seed \d|Held/);
+    expect([...container.querySelectorAll('[data-lottery-under]')].map(u => u.textContent)).toEqual(['your club']);
+    fireEvent.click(container.querySelector('[data-lottery-help]')!);
+    const panel = container.querySelector('[data-lottery-help-panel]')!;
+    expect(panel.textContent).toContain(PLAIN_ORDER_LINE);
+    expect(panel.textContent).not.toContain('No lottery was drawn');
   });
 
   it('still reads a night drawn under a rule this build no longer carries', () => {
@@ -96,6 +113,9 @@ describe('GmLotteryCard', () => {
     expect(container.querySelector('[data-lottery-rule]')!.textContent).toContain('14 clubs are in the lottery');
     expect(container.querySelector('[data-lottery-continue]')).toBeNull();
     fireEvent.click(container.querySelector('[data-lottery-help]')!);
-    expect(container.querySelector('[data-lottery-help-panel]')!.textContent).toContain('an earlier rule of this game (nba-1990)');
+    const panel = container.querySelector('[data-lottery-help-panel]')!;
+    expect(panel.textContent).toContain('an earlier rule of this game, on the odds table of the 2026 draft');
+    /* An id is this code's name for a rule. It is not printed anywhere on the card. */
+    expect(container.textContent).not.toContain('nba-1990');
   });
 });

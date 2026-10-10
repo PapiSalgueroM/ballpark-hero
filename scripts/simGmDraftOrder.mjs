@@ -138,7 +138,14 @@ const CONTROLS = {
   ghostrow: { expect: [7], swaps: { night: [["        overall: s.overall, team: s.team, playerName: s.playerName.trim(), pos: typeof s.pos === 'string' ? s.pos : '',", "        overall: s.overall + 1, team: s.team, playerName: s.playerName.trim(), pos: typeof s.pos === 'string' ? s.pos : '',"]] } },
   hidemine: { expect: [7], swaps: { night: [['  const keep = new Set<RunStep>(made.filter(s => s.mine).slice(-MAX_REVEALED));', '  const keep = new Set<RunStep>();']] } },
   slowcards: { expect: [7], swaps: { reveal: [['  const step = Math.max(0.01, Math.min(LOTTERY_REVEAL_MAX_STEP_S, fit));', '  const step = Math.max(0.01, Math.min(LOTTERY_REVEAL_MAX_STEP_S, fit)) * 10;']] } },
-  staleexample: { expect: [8], swaps: { lottery: [["  const lines = [`The worst record's chance at the first pick is ${facts.worstPct}%. The best record in the lottery gets ${lastPct}%.`];", "  const lines = [`The worst record's chance at the first pick is 25%. The best record in the lottery gets ${lastPct}%.`];"]] } },
+  /* the pace reports the moment the closing line STARTS, which is what it did before the review measured the screen */
+  shortend: { expect: [7], swaps: { reveal: [['  return { start: LOTTERY_REVEAL_LEAD_S, step, closingMs: Math.round(closing * 1000), totalMs: Math.round(end * 1000) };', '  return { start: LOTTERY_REVEAL_LEAD_S, step, closingMs: Math.round(closing * 1000), totalMs: Math.round(closing * 1000) };']] } },
+  /* a duration typed into the presenter's CSS (in memory): the lib's pace can no longer see it */
+  literaltime: { expect: [7] },
+  headlineswapped: { expect: [7], swaps: { lottery: [["    if (moved > 0) headline = `Your club's own pick lands ${ordinal(mineSlot)}, up ${places(moved)}.`;", "    if (moved < 0) headline = `Your club's own pick lands ${ordinal(mineSlot)}, up ${places(moved)}.`;"]] } },
+  staleexample: { expect: [8], swaps: { lottery: [["  const lines = [`By the table, the worst record's chance at the first pick is ${facts.worstPct}%. The best record in the lottery gets ${lastPct}%.`];", "  const lines = [`By the table, the worst record's chance at the first pick is 25%. The best record in the lottery gets ${lastPct}%.`];"]] } },
+  /* the card prints the table's line on every night, also where level clubs shared their chances */
+  tableline: { expect: [8], swaps: { lottery: [['  if (drawnAsTable(saved, lottery)) return lotteryRuleLine(lotteryFactsFromWeights(lottery.odds, lottery.draws));', '  if (lottery) return lotteryRuleLine(lotteryFactsFromWeights(lottery.odds, lottery.draws));']] } },
   mounted: { expect: [9] },
   norivals: { expect: [10], swaps: { night: [['  while (made < night.slots.length && night.slots[made].holder !== stopFor) {', '  while (made < 0 && night.slots[made].holder !== stopFor) {']] } },
   shownread: { expect: [10], swaps: { night: [['    grade: Math.round(host.shown(prospect)), mine,', '    grade: Math.round(host.read(prospect, slot.holder)), mine,']] } },
@@ -257,6 +264,9 @@ const DRAWN_TYPED = 4;
 const GAME_FIRST_DRAFT = { nba: 2027 }; // the NBA engine opens in 2026 and its board prints season + 1
 const HOUSE_CEILING_MS = 5000; // scripts/simDraftNight.mjs holds a draft run to the same number
 const LOTTERY_USE = 0.75;
+const TURN_TYPED_S = 0.32; // one tile's turn
+const CLOSE_TYPED_S = 0.3; // the closing line's arrival
+const PRESENTER_UI = 'src/components/lottery/LotteryReveal.tsx';
 const MAX_ROWS = 9;
 const BAND = 4.5; // standard errors, the band scripts/simGmPicks.mjs section 2 uses for the same draw
 const SEEDS = [11, 23, 37, 59, 71];
@@ -742,9 +752,27 @@ open(7);
   for (let n = 1; n <= 2 * largest; n += 1) {
     const pace = R.lotteryRevealPace(n);
     check(pace.totalMs <= allowedMs && pace.step > 0 && pace.totalMs > pace.start * 1000, `a lottery of ${n} tiles takes ${pace.totalMs} ms; the rule is ${allowedMs} ms, three quarters of the house ceiling of ${HOUSE_CEILING_MS}`);
+    /* totalMs is the END on screen: the last tile has turned and the closing line, which starts one step after it, is in.
+       The two durations are typed here from the Chromium measurement of the review (a 14 tile night ran 300 ms past the old number). */
+    const lastTurned = Math.round((pace.start + (n - 1) * pace.step + TURN_TYPED_S) * 1000);
+    const closingIn = Math.round((pace.start + n * pace.step + CLOSE_TYPED_S) * 1000);
+    check(pace.totalMs >= lastTurned && pace.totalMs >= closingIn, `a lottery of ${n} tiles reports ${pace.totalMs} ms, but its last tile has turned at ${lastTurned} and its closing line is in at ${closingIn}`);
+    check(pace.closingMs === Math.round((pace.start + n * pace.step) * 1000), `a lottery of ${n} tiles starts its closing line at ${pace.closingMs} ms, which is not one step after its last tile`);
+  }
+  check(R.LOTTERY_REVEAL_TURN_S === TURN_TYPED_S && R.LOTTERY_REVEAL_CLOSE_S === CLOSE_TYPED_S, `the lib times a turn at ${R.LOTTERY_REVEAL_TURN_S} s and the closing line at ${R.LOTTERY_REVEAL_CLOSE_S} s; this harness was written for ${TURN_TYPED_S} and ${CLOSE_TYPED_S}`);
+  /* The presenter's CSS takes both durations from the lib. A number typed in the style block is one the pace cannot see. */
+  {
+    let ui = readRepo(PRESENTER_UI).replace(/\/\*[\s\S]*?\*\//g, '');
+    if (CONTROL === 'literaltime') {
+      if (!ui.includes('animation: lrTurn var(--lr-turn)')) { console.error('control cannot run: the presenter does not time its turn off --lr-turn'); process.exit(3); }
+      ui = ui.split('animation: lrTurn var(--lr-turn)').join('animation: lrTurn 0.5s');
+    }
+    check(/animation:\s*lrTurn var\(--lr-turn\)/.test(ui) && /animation:\s*lrAfter var\(--lr-close\)/.test(ui), 'the presenter does not take its two durations from --lr-turn and --lr-close');
+    check(/'--lr-turn':\s*`\$\{LOTTERY_REVEAL_TURN_S\}s`/.test(ui) && /'--lr-close':\s*`\$\{LOTTERY_REVEAL_CLOSE_S\}s`/.test(ui), 'the presenter does not set --lr-turn and --lr-close from the lib\'s constants');
+    check(!/animation:[^;}]*\d(\.\d+)?m?s\b/.test(ui), 'the presenter types a duration into an animation, where the lib\'s pace cannot see it');
   }
   /* lottery night: the field, once each, the last slot first */
-  const seen = { mine: 0, notMine: 0, runsWithMine: 0, longAfterMine: 0, capped: 0 };
+  const seen = { mine: 0, notMine: 0, runsWithMine: 0, longAfterMine: 0, capped: 0, up: 0, down: 0, held: 0 };
   let longestNight = 0;
   for (let s = 0; s < 600; s += 1) {
     const season = randomSeason(rng);
@@ -763,6 +791,13 @@ open(7);
     check(view.rows.filter(r => r.mine).length === (inField ? 1 : 0) && view.rows.every(r => !r.mine || r.label === label(club)), () => `league ${s}: ${inField ? 'his tile is not flagged exactly once' : 'a tile is flagged his and he is not in the lottery'}`);
     check(view.totalMs <= allowedMs && view.reveal === true, () => `league ${s}: lottery night takes ${view.totalMs} ms against ${allowedMs}`);
     check(view.mineSlot === saved.first.indexOf(club) + 1 && view.headline.includes(L.ordinal(view.mineSlot)), () => `league ${s}: the headline does not say his club's slot`);
+    /* and which way it went, worked out here from the saved order */
+    if (inField) {
+      const moved = field.find(f => f.club === club).seed - view.mineSlot;
+      if (moved > 0) seen.up += 1; else if (moved < 0) seen.down += 1; else seen.held += 1;
+      const want = moved > 0 ? `, up ${moved} place` : moved < 0 ? `, down ${-moved} place` : ` stays ${L.ordinal(view.mineSlot)}.`;
+      check(view.headline.includes(want) && view.headline.includes("own pick"), () => `league ${s}: his club was seeded ${view.mineSlot + moved} and picks ${view.mineSlot}, and the closing line says "${view.headline}"`);
+    }
   }
   /* the run: true numbers, at most nine rows, his own pick always, and a headline that counts every pick made */
   let longestRun = 0;
@@ -793,7 +828,8 @@ open(7);
   }
   check(seen.mine >= 100 && seen.notMine >= 100 && seen.runsWithMine >= 500 && seen.longAfterMine >= 200 && seen.capped >= 500, `the sample is too thin: ${JSON.stringify(seen)}`);
   check(DN.MAX_REVEALED === MAX_ROWS, `a run shows ${DN.MAX_REVEALED} rows at most, and this harness was written for ${MAX_ROWS}`);
-  console.log(`   lottery pace fits ${allowedMs} ms for 1 to ${2 * largest} tiles (largest real field ${largest}); 600 lottery nights (${seen.mine} with his tile), longest ${longestNight} ms`);
+  check(seen.up >= 20 && seen.down >= 50 && seen.held >= 20, `the closing line's direction was not looked at enough: ${seen.up} up, ${seen.down} down, ${seen.held} held`);
+  console.log(`   lottery pace fits ${allowedMs} ms to the END of the run for 1 to ${2 * largest} tiles (largest real field ${largest}: 14 tiles end at ${R.lotteryRevealPace(14).totalMs} ms, 16 at ${R.lotteryRevealPace(16).totalMs}); 600 lottery nights (${seen.mine} with his tile: ${seen.up} up, ${seen.down} down, ${seen.held} held), longest ${longestNight} ms`);
   console.log(`   3000 runs: ${seen.capped} longer than ${MAX_ROWS} rows, ${seen.longAfterMine} of those after his own pick and it is always a row; longest run ${longestRun} ms against ${HOUSE_CEILING_MS}`);
 }
 
@@ -819,14 +855,62 @@ open(8);
   const game = blocks.find(b => b.heading === "This game's own");
   const example = blocks.find(b => b.heading === 'A worked example');
   check(!!league && !!game && !!example, 'the "?" does not hold the league\'s rule, the game\'s own and a worked example');
-  check(!!league && league.lines[0].includes(`${TABLE_TYPED.length} clubs`) && league.lines[0].includes(`top ${DRAWN_TYPED} picks`) && league.lines[0].includes(`${TABLE_TYPED[0]}%`), 'the rule line is not built from the table');
+  /* The line under the heading. On a night drawn on the table it is the table's, typed here. */
+  const TABLE_LINE = `${TABLE_TYPED.length} clubs are in the lottery and the top ${DRAWN_TYPED} picks are drawn. The 3 worst records share the best chance at the first pick, ${TABLE_TYPED[0]}% each.`;
+  const line = L.lotteryNightRule(saved, TABLE);
+  check(line === TABLE_LINE, `the line under the heading of a night drawn on the table is not the table's ("${line}")`);
+  check(blocks.every(b => !b.lines.includes(line)), 'the "?" prints the line under the heading a second time; the card shows both at once');
+  /* ON A NIGHT WHERE LEVEL CLUBS SHARED THEIR CHANCES THE LINE IS THAT NIGHT'S. Worked out here from the saved field:
+     the best chance and how many clubs held it. The table's line would say three clubs hold 14% each on a night
+     drawn on 14, 14, 13.3 and 13.2. */
+  {
+    const rng = makeRng(808);
+    const seenLine = { asTable: 0, shared: 0, sharedTop: 0 };
+    for (let s = 0; s < 600; s += 1) {
+      /* every third league has no level records, so both kinds of night are in the sample */
+      const night = O.buildDraftOrder(s % 3 === 0 ? ladder(30, 14, 2027 + s) : randomSeason(rng, 30, 16, 12), NBA, NBA_PICKS);
+      if (!night.lottery) { fail(`league ${s}: no lottery was drawn (${night.plain})`); continue; }
+      const pcts = night.lottery.field.map(f => f.pct);
+      const got = L.lotteryNightRule(night, TABLE);
+      if (pcts.every((p, i) => Math.abs(p - TABLE_TYPED[i]) < 1e-9)) {
+        seenLine.asTable += 1;
+        check(got === TABLE_LINE, () => `league ${s}: drawn on the table, and the line is "${got}"`);
+        continue;
+      }
+      seenLine.shared += 1;
+      const best = Math.max(...pcts);
+      const holders = pcts.filter(p => Math.abs(p - best) < 1e-9).length;
+      if (Math.abs(best - TABLE_TYPED[0]) > 1e-9 || holders !== 3) seenLine.sharedTop += 1;
+      const want = holders > 1 ? `${holders} clubs shared the best chance at the first pick, ${say(best)}% each.` : `the best chance at the first pick was ${say(best)}%.`;
+      check(got.endsWith(want) && got.startsWith(`${pcts.length} clubs are in the lottery and the top ${night.lottery.wins.length} picks are drawn.`),
+        () => `league ${s}: the night was drawn on ${pcts.slice(0, 5).map(say).join(', ')}... and the line says "${got}"`);
+      check(got !== TABLE_LINE, () => `league ${s}: level clubs shared their chances and the card still prints the table's line`);
+      const ex = L.lotteryHelp(night, NBA, TABLE).find(b => b.heading === 'A worked example');
+      check(!!ex && ex.lines[0].startsWith('By the table, ') && ex.lines[ex.lines.length - 1].includes(`the best chance was ${say(best)}%`), () => `league ${s}: the worked example does not say it is the table's, or does not give this night's own best chance`);
+    }
+    check(seenLine.asTable >= 100 && seenLine.shared >= 200 && seenLine.sharedTop >= 100, `the sample is too thin: ${JSON.stringify(seenLine)}`);
+    console.log(`   600 nights: ${seenLine.asTable} drawn on the table and ${seenLine.shared} where level clubs shared their chances (${seenLine.sharedTop} of them at the top of the table); the line under the heading is the night's own every time`);
+  }
   check(!!league && league.lines.some(l => l.includes('2019') && l.includes('2026')), 'the "?" does not say which of the league\'s drafts used this rule');
   check(!!game && game.lines.some(l => l.includes('2027')), 'the "?" does not say the league changed its lottery and the game did not');
   check(!!example && example.lines.join(' ').includes('14%') && example.lines.join(' ').includes('5th'), 'the worked example on the card is not the NBA table\'s');
   /* a night drawn under a rule this build does not carry: the saved table's own words, and no other rule's */
   const old = L.lotteryHelp({ ...saved, rulesId: 'a-rule-this-build-never-had' }, NBA, TABLE);
-  check(old.length === 1 && old[0].lines.join(' ').includes('a-rule-this-build-never-had') && old[0].lines.join(' ').includes(`${TABLE_TYPED.length} clubs`) && !old[0].lines.includes(NBA.leagueSays[0]),
+  check(old.length === 1 && old[0].lines.join(' ').includes(saved.lottery.table) && !old[0].lines.includes(NBA.leagueSays[0]),
     'an order drawn under an unknown rule does not degrade to its own saved table');
+  check(!old[0].lines.join(' ').includes('a-rule-this-build-never-had'), 'the "?" prints a rule id, which is this code\'s name for a rule and not a word for a player');
+  /* and with no table on hand the line under the heading is still the saved night's own */
+  check(L.lotteryNightRule({ ...saved, rulesId: 'a-rule-this-build-never-had' }, null).startsWith(`${TABLE_TYPED.length} clubs are in the lottery and the top ${DRAWN_TYPED} picks are drawn.`), 'a night whose table this build does not carry has no line of its own');
+  /* an order nobody drew: the reason under the heading, how round one runs behind the "?", and no reason that claims an order */
+  {
+    const plainOrder = O.buildDraftOrder(ladder(30, 14), NBA, { ...NBA_PICKS, lottery: null });
+    const help = L.lotteryHelp(plainOrder, NBA, null);
+    check(plainOrder.plain === 'table' && L.lotteryNightRule(plainOrder, null) === L.PLAIN_ORDER_WORDS.table, 'an order nobody drew does not say why under its heading');
+    check(help[0]?.lines.length === 1 && help[0].lines[0] === L.PLAIN_ORDER_LINE && /missed the playoffs pick first/.test(L.PLAIN_ORDER_LINE), 'the "?" of an order nobody drew does not say how round one runs');
+    for (const [why, words] of Object.entries(L.PLAIN_ORDER_WORDS)) check(!/standings|worst record/.test(words), `the reason "${why}" claims an order; the clubs that missed pick ahead of every playoff club whatever the records`);
+    const view = L.lotteryNight(plainOrder, 'T22');
+    check(view.headline === "Your club's own pick is 22nd in round one." && view.reveal === false, `an order nobody drew closes with "${view.headline}"`);
+  }
   console.log(`   the worked example is computed for every lottery table on the pick rules; the card's three blocks hold the table's own numbers`);
 }
 
