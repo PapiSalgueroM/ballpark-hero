@@ -1,0 +1,39 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmGameScore.test.ts src/lib/gmGameDay.test.ts src/lib/gmBracket.test.ts src/test/gameLawNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simGmGameDay.mjs
+ctl-winner: GM_GAMEDAY_CONTROL=winner node scripts/simGmGameDay.mjs
+ctl-level: GM_GAMEDAY_CONTROL=level node scripts/simGmGameDay.mjs
+ctl-refuse: GM_GAMEDAY_CONTROL=refuse node scripts/simGmGameDay.mjs
+ctl-lowmax: GM_GAMEDAY_CONTROL=lowmax node scripts/simGmGameDay.mjs
+ctl-twopaths: GM_GAMEDAY_CONTROL=twopaths node scripts/simGmGameDay.mjs
+ctl-tries: GM_GAMEDAY_CONTROL=tries node scripts/simGmGameDay.mjs
+ctl-offbyone: GM_GAMEDAY_CONTROL=offbyone node scripts/simGmGameDay.mjs
+ctl-olddraw: GM_GAMEDAY_CONTROL=olddraw node scripts/simGmGameDay.mjs
+ctl-pairing: GM_GAMEDAY_CONTROL=pairing node scripts/simGmGameDay.mjs
+ctl-validator: GM_GAMEDAY_CONTROL=validator node scripts/simGmGameDay.mjs
+ctl-strict: GM_GAMEDAY_CONTROL=strict node scripts/simGmGameDay.mjs
+ctl-outofturn: GM_GAMEDAY_CONTROL=outofturn node scripts/simGmGameDay.mjs
+ctl-enginedrift: GM_GAMEDAY_CONTROL=enginedrift node scripts/simGmGameDay.mjs
+ctl-random: GM_GAMEDAY_CONTROL=random node scripts/simGmGameDay.mjs
+ctl-stream: GM_GAMEDAY_CONTROL=stream node scripts/simGmGameDay.mjs
+ctl-unkeyed: GM_GAMEDAY_CONTROL=unkeyed node scripts/simGmGameDay.mjs
+ctl-ceiling: GM_GAMEDAY_CONTROL=ceiling node scripts/simGmGameDay.mjs
+ctl-lawmax: GM_GAMEDAY_CONTROL=lawmax node scripts/simGmGameDay.mjs
+ctl-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs
+ctl-unknown: GM_GAMEDAY_CONTROL=nosuch node scripts/simGmGameDay.mjs
+record-head: GM_BRACKET_FIXTURE_OUT=$RC_OUT/gmBracketFixture.head.json GM_BRACKET_FIXTURE_COMMIT=5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 node scripts/recordGmBracketFixture.mjs && cmp $RC_OUT/gmBracketFixture.head.json scripts/data/gmBracketFixture.json && echo HEAD-RECORD-IS-THE-COMMITTED-FILE
+record-base: git worktree add -q /tmp/base 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 && cp scripts/recordGmBracketFixture.mjs /tmp/base/scripts/ && cp scripts/lib/gmGameDayFleet.mjs /tmp/base/scripts/lib/ && ln -s $PWD/node_modules /tmp/base/node_modules && (cd /tmp/base && git rev-parse HEAD && ls src/lib/gmBracket.ts 2>&1 | tail -1; GM_BRACKET_FIXTURE_OUT=$RC_OUT/gmBracketFixture.base.json node scripts/recordGmBracketFixture.mjs) && cmp $RC_OUT/gmBracketFixture.base.json scripts/data/gmBracketFixture.json && echo BASE-RECORD-IS-THE-COMMITTED-FILE
+fixture-sets: git show bf6d9696c2c99920de2974f27365c3333601f882:scripts/data/gmBracketFixture.json > /tmp/fixture-before.json && node .rc/x/fix-fixture-compare.mjs /tmp/fixture-before.json scripts/data/gmBracketFixture.json
+newonly: git diff --name-status 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 HEAD && test "$(git diff --name-status 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 HEAD | grep -vc "^A")" = 0 && echo EVERY-CHANGED-FILE-IS-NEW
+bigscore: node .rc/x/fix-bigscore.mjs
+dashes: node .rc/x/fix-syntax.mjs $(git diff --name-only 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 HEAD -- src scripts docs)
+norival: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+storage: node scripts/simStorageWrites.mjs
+livescores: node scripts/simLiveScores.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+names: node scripts/simInventedNames.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+legal: node scripts/simLegalPages.mjs
+trust: node scripts/simTrustCopy.mjs
+numbers: node scripts/simNumberFormatting.mjs
