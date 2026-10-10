@@ -1,0 +1,4 @@
+rmut deadlinestrip: applied (1 edit(s))
+  daily: FAIL deadline 2026-10-18 (Nottingham Forest): the state carries the real fixture key
+  fleet:   dailies premier Arsenal: RED
+MUT deadlinestrip: leaguefx=0 cmfix-premier=0 cmfix-laliga=0 cmfix-bundesliga=0 cmfix-championship=0 fleet=1 daily=1 fixbal=0

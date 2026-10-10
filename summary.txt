@@ -1,0 +1,8 @@
+mA-lastround exit=1 38s | MUT lastround: leaguefx=0 cmfix-premier=1 cmfix-laliga=1 cmfix-bundesliga=1 cmfix-championship=1 daily=0 fixbal=0
+mF-lazyvenues exit=1 33s | MUT lazyvenues: leaguefx=0 cmfix-premier=0 cmfix-laliga=1 cmfix-bundesliga=1 cmfix-championship=1 daily=0 fixbal=0
+mC-swaploaders exit=1 8s | MUT swaploaders: leaguefx=1 cmfix-premier=1 cmfix-laliga=1 cmfix-bundesliga=1 cmfix-championship=1 daily=0 fixbal=0
+mH-alwayspublished exit=1 36s | MUT alwayspublished: leaguefx=1 cmfix-premier=0 cmfix-laliga=0 cmfix-bundesliga=0 cmfix-championship=0 daily=0 fixbal=0
+mD-keynolist exit=1 129s | MUT keynolist: leaguefx=0 cmfix-premier=0 cmfix-laliga=1 cmfix-bundesliga=1 cmfix-championship=1 fleet=1 daily=0 fixbal=0
+mE-deadlinestrip exit=1 142s | MUT deadlinestrip: leaguefx=0 cmfix-premier=0 cmfix-laliga=0 cmfix-bundesliga=0 cmfix-championship=0 fleet=1 daily=1 fixbal=0
+mB-noworldguard exit=1 180s | MUT noworldguard: leaguefx=0 cmfix-premier=1 cmfix-laliga=1 cmfix-bundesliga=1 cmfix-championship=1 fleet=0 daily=0 fixbal=0 simMidSeasonStart=0 simClubManagerCalendar=0 
+tree-clean exit=0 0s | src and scripts are as committed

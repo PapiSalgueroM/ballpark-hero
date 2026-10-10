@@ -1,0 +1,6 @@
+rmut keynolist: applied (1 edit(s))
+  cmfix-bundesliga:   RED  bundesliga unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  cmfix-championship:   RED  championship unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  cmfix-laliga:   RED  laliga unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  fleet:   nofetch championship: RED (West Ham, Lincoln City; 3 seeds each, twelve entries, saved bytes)
+MUT keynolist: leaguefx=0 cmfix-premier=0 cmfix-laliga=1 cmfix-bundesliga=1 cmfix-championship=1 fleet=1 daily=0 fixbal=0

@@ -1,0 +1,11 @@
+/home/runner/work/ballpark-hero/ballpark-hero/.sim-control/cm-real-fixtures-KDUKPo/original.cjs:37267
+      throw new Error(`Club Manager: the file fetched for ${entry.key} holds another fixture list`);
+            ^
+
+Error: Club Manager: the file fetched for bundesliga-2026-27-v1 holds another fixture list
+    at /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/cm-real-fixtures-KDUKPo/original.cjs:37267:13
+    at async freshLoaded (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:218:110)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:257:22)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+
+Node.js v24.21.0

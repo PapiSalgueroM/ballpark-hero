@@ -1,0 +1,18 @@
+simCmLeagueFixtures: 10 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, premier, primeira, seriea, superlig
+A) shape: green for 10 ledger(s)
+B) no club twice in a matchday: green for 10 ledger(s)
+C) each pair once at each ground: green for 10 ledger(s)
+D) the game's own clubs: green for 10 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 10 ledger(s)
+F) two independent sources: green for 10 ledger(s)
+G) nothing excluded got in: green for 10 ledger(s)
+H) the game's registry: green for 10 ledger(s)
+I) frozen: green for 10 ledger(s)
+J) Help tells the truth: green for 10 ledger(s)
+K) the controls: 231 of 236 fired exactly as written (25 of the 25 controls ran, each on every one of the 10 frozen ledger(s) it applies to)
+  FAIL: control wrongasof on eredivisie: sections H went red, wanted exactly HJ
+  FAIL: control wrongasof on laliga: sections H went red, wanted exactly HJ
+  FAIL: control wrongasof on ligue2: sections H went red, wanted exactly HJ
+  FAIL: control wrongasof on primeira: sections H went red, wanted exactly HJ
+  FAIL: control wrongasof on superlig: sections H went red, wanted exactly HJ
+simCmLeagueFixtures: FAILED, 5 failure(s): 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 231 of 236 controls fired

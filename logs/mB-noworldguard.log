@@ -1,0 +1,6 @@
+rmut noworldguard: applied (1 edit(s))
+  cmfix-bundesliga:   RED  bundesliga eligibility: binds only a fresh original modern world of this league with exact membership
+  cmfix-championship:   RED  championship eligibility: binds only a fresh original modern world of this league with exact membership
+  cmfix-laliga:   RED  laliga eligibility: binds only a fresh original modern world of this league with exact membership
+  cmfix-premier:   RED  premier eligibility: binds only a fresh original modern world of this league with exact membership
+MUT noworldguard: leaguefx=0 cmfix-premier=1 cmfix-laliga=1 cmfix-bundesliga=1 cmfix-championship=1 fleet=0 daily=0 fixbal=0 simMidSeasonStart=0 simClubManagerCalendar=0 simWorldEditor=0

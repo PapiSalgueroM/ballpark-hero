@@ -1,0 +1,310 @@
+  RED  championship ledger: reads every fixture of the list with the exact two-source round order and venues
+  RED  championship calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  RED  championship settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  n/a  championship bye: the neutral-only probe can only stand in the Premier League
+  RED  championship world: settles the actual world league round through the same real fixture resolver
+  ok   championship eligibility: binds only a fresh original modern world of this league with exact membership
+  RED  championship unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  ok   championship legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   championship future: refuses stale keys in later seasons, other years and changed league membership
+  RED  championship rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   championship baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   championship uncopied: passes the whole base comparison with untouched current source under every copied fault
+FAIL championship: reads every fixture of the list with the exact two-source round order and venues
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+true !== false
+
+    at Object.ledger (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:384:100)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+FAIL championship: renders every CalendarCard opponent and venue reading from the same schedule
+AssertionError [ERR_ASSERTION]: Birmingham City, round 1: actual card has the exact opponent and venue
+    at Object.calendar (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:400:18)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+FAIL championship: settles the actual human fixture and every neutral result with conserved table and scorer credits
+AssertionError [ERR_ASSERTION]: The first match is the real opening fixture, at the real ground
++ actual - expected
+
+  [
++   'Birmingham City',
+    'Sheffield United',
+-   'Birmingham City'
+  ]
+
+    at Object.settlement (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:407:49)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+FAIL championship: settles the actual world league round through the same real fixture resolver
+AssertionError [ERR_ASSERTION]: actual world round 1: exact saved opponent order and home/away pairs
++ actual - expected
+
+  [
+    [
++     'Birmingham City',
++     'Sheffield United'
+-     'Bolton Wanderers',
+-     'Preston North End'
+    ],
+    [
++     'Blackburn Rovers',
++     'Wolves'
+-     'Bristol City',
+-     'Millwall'
+    ],
+    [
++     'Derby County',
++     'Charlton Athletic'
+-     'Burnley',
+-     'West Ham'
+    ],
+    [
++     'Lincoln City',
++     'Middlesbrough'
+-     'Cardiff City',
+-     'Wrexham'
+    ],
+    [
++     'Millwall',
++     'Bristol City'
+-     'Charlton Athletic',
+-     'Derby County'
+    ],
+    [
++     'Preston North End',
++     'Bolton Wanderers'
+-     'Middlesbrough',
+-     'Lincoln City'
+    ],
+    [
++     'QPR',
+-     'Norwich City',
+-     'West Brom'
+-   ],
+-   [
+      'Portsmouth',
+-     'QPR'
+    ],
+    [
++     'Southampton',
++     'Watford'
+-     'Sheffield United',
+-     'Birmingham City'
+    ],
+    [
++     'Swansea City',
+      'Stoke City',
+-     'Swansea City'
+    ],
+    [
++     'West Brom',
++     'Norwich City'
+-     'Watford',
+-     'Southampton'
+    ],
+    [
++     'West Ham',
++     'Burnley'
+-     'Wolves',
+-     'Blackburn Rovers'
+    ],
++   [
++     'Wrexham',
++     'Cardiff City'
++   ]
+  ]
+
+    at assertRound (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:122:10)
+    at Object.world (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:444:55)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+FAIL championship: gives no key while the list is not here, and refuses to read a saved key without its list
+AssertionError [ERR_ASSERTION]: Once fetched, the saved key reads its list
++ actual - expected
+
+  [
+    [
++     'Blackburn Rovers',
+      'Wolves',
+-     'Blackburn Rovers'
+    ],
+    [
++     'Preston North End',
+      'Bolton Wanderers',
+-     'Preston North End'
+    ],
+    [
++     'Millwall',
+      'Bristol City',
+-     'Millwall'
+    ],
+    [
++     'Derby County',
+      'Charlton Athletic',
+-     'Derby County'
+    ],
+    [
++     'Lincoln City',
+      'Middlesbrough',
+-     'Lincoln City'
+    ],
+    [
++     'West Brom',
+      'Norwich City',
+-     'West Brom'
+    ],
+    [
++     'QPR',
+      'Portsmouth',
+-     'QPR'
+    ],
+    [
++     'Swansea City',
+      'Stoke City',
+-     'Swansea City'
+    ],
+    [
++     'Birmingham City',
+      'Sheffield United',
+-     'Birmingham City'
+    ],
+    [
++     'Southampton',
+      'Watford',
+-     'Southampton'
+    ],
+    [
++     'West Ham',
+      'Burnley',
+-     'West Ham'
+    ],
+    [
++     'Wrexham',
+      'Cardiff City',
+-     'Wrexham'
+    ]
+  ]
+
+    at Object.unloaded (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:487:16)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:13)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+FAIL championship: clears the real fixture key after a fully played season before generating the next season
+AssertionError [ERR_ASSERTION]: natural round 1: exact saved opponent order and home/away pairs
++ actual - expected
+
+  [
+    [
++     'Birmingham City',
++     'Sheffield United'
+-     'Bolton Wanderers',
+-     'Preston North End'
+    ],
+    [
++     'Blackburn Rovers',
++     'Wolves'
+-     'Bristol City',
+-     'Millwall'
+    ],
+    [
++     'Derby County',
++     'Charlton Athletic'
+-     'Burnley',
+-     'West Ham'
+    ],
+    [
++     'Lincoln City',
++     'Middlesbrough'
+-     'Cardiff City',
+-     'Wrexham'
+    ],
+    [
++     'Millwall',
++     'Bristol City'
+-     'Charlton Athletic',
+-     'Derby County'
+    ],
+    [
++     'Preston North End',
++     'Bolton Wanderers'
+-     'Middlesbrough',
+-     'Lincoln City'
+    ],
+    [
++     'QPR',
+-     'Norwich City',
+-     'West Brom'
+-   ],
+-   [
+      'Portsmouth',
+-     'QPR'
+    ],
+    [
++     'Southampton',
++     'Watford'
+-     'Sheffield United',
+-     'Birmingham City'
+    ],
+    [
++     'Swansea City',
+      'Stoke City',
+-     'Swansea City'
+    ],
+    [
++     'West Brom',
++     'Norwich City'
+-     'Watford',
+-     'Southampton'
+    ],
+    [
++     'West Ham',
++     'Burnley'
+-     'Wolves',
+-     'Blackburn Rovers'
+    ],
++   [
++     'Wrexham',
++     'Cardiff City'
++   ]
+  ]
+
+    at assertRound (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:122:10)
+    at fullSeason (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:299:48)
+    at async Object.rollover (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:531:26)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:13)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'reads every fixture of the list with the exact two-source round order and venues',
++   'renders every CalendarCard opponent and venue reading from the same schedule',
++   'settles the actual human fixture and every neutral result with conserved table and scorer credits',
++   'settles the actual world league round through the same real fixture resolver',
++   'gives no key while the list is not here, and refuses to read a saved key without its list',
++   'clears the real fixture key after a fully played season before generating the next season'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:577:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'reads every fixture of the list with the exact two-source round order and venues',
+    'renders every CalendarCard opponent and venue reading from the same schedule',
+    'settles the actual human fixture and every neutral result with conserved table and scorer credits',
+    'settles the actual world league round through the same real fixture resolver',
+    'gives no key while the list is not here, and refuses to read a saved key without its list',
+    'clears the real fixture key after a fully played season before generating the next season'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

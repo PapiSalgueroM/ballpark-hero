@@ -1,0 +1,13 @@
+  ok   bundesliga ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   bundesliga calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   bundesliga settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  n/a  bundesliga bye: the neutral-only probe can only stand in the Premier League
+  ok   bundesliga world: settles the actual world league round through the same real fixture resolver
+  ok   bundesliga eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   bundesliga unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  ok   bundesliga legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   bundesliga future: refuses stale keys in later seasons, other years and changed league membership
+  ok   bundesliga rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   bundesliga baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   bundesliga uncopied: passes the whole base comparison with untouched current source under every copied fault
+simCmRealFixtures normal bundesliga: 11 outcome groups passed on 18 clubs, 34 matchdays and 306 fixtures, generated baseline held against the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.

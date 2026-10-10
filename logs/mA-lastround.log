@@ -1,0 +1,6 @@
+rmut lastround: applied (1 edit(s))
+  cmfix-bundesliga:   RED  bundesliga ledger: reads every fixture of the list with the exact two-source round order and venues
+  cmfix-championship:   RED  championship ledger: reads every fixture of the list with the exact two-source round order and venues
+  cmfix-laliga:   RED  laliga ledger: reads every fixture of the list with the exact two-source round order and venues
+  cmfix-premier:   RED  premier ledger: reads every fixture of the list with the exact two-source round order and venues
+MUT lastround: leaguefx=0 cmfix-premier=1 cmfix-laliga=1 cmfix-bundesliga=1 cmfix-championship=1 daily=0 fixbal=0

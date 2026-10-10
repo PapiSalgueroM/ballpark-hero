@@ -1,0 +1,47 @@
+  ok   bundesliga ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   bundesliga calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   bundesliga settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  n/a  bundesliga bye: the neutral-only probe can only stand in the Premier League
+  ok   bundesliga world: settles the actual world league round through the same real fixture resolver
+  ok   bundesliga eligibility: binds only a fresh original modern world of this league with exact membership
+  RED  bundesliga unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  ok   bundesliga legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   bundesliga future: refuses stale keys in later seasons, other years and changed league membership
+  ok   bundesliga rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   bundesliga baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   bundesliga uncopied: passes the whole base comparison with untouched current source under every copied fault
+FAIL bundesliga: gives no key while the list is not here, and refuses to read a saved key without its list
+AssertionError [ERR_ASSERTION]: No key is given while the list is not here
++ actual - expected
+
++ 'bundesliga-2026-27-v1'
+- undefined
+
+    at Object.unloaded (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:472:16)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'gives no key while the list is not here, and refuses to read a saved key without its list'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:577:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'gives no key while the list is not here, and refuses to read a saved key without its list'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

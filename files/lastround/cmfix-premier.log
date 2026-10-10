@@ -1,0 +1,192 @@
+  RED  premier ledger: reads every fixture of the list with the exact two-source round order and venues
+  RED  premier calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  RED  premier settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  ok   premier bye: settles a neutral-only league entry through the same real fixture resolver
+  ok   premier world: settles the actual world league round through the same real fixture resolver
+  ok   premier eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   premier unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  ok   premier legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   premier future: refuses stale keys in later seasons, other years and changed league membership
+  RED  premier rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   premier baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   premier uncopied: passes the whole base comparison with untouched current source under every copied fault
+FAIL premier: reads every fixture of the list with the exact two-source round order and venues
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ 'Tottenham'
+- 'Brighton'
+
+    at Object.ledger (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:384:35)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+FAIL premier: renders every CalendarCard opponent and venue reading from the same schedule
+AssertionError [ERR_ASSERTION]: Arsenal, round 38: actual card has the exact opponent and venue
+    at Object.calendar (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:400:18)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+FAIL premier: settles the actual human fixture and every neutral result with conserved table and scorer credits
+AssertionError [ERR_ASSERTION]: natural round 38: exact saved opponent order and home/away pairs
++ actual - expected
+
+  [
+    [
+      'Arsenal',
+-     'Brighton'
+-   ],
+-   [
+-     'Aston Villa',
+      'Tottenham'
+    ],
+    [
+      'Chelsea',
++     'Brighton'
+-     'Brentford'
+    ],
+    [
+      'Coventry City',
++     'Sunderland'
+-     'Nottingham Forest'
+    ],
+    [
+      'Crystal Palace',
++     'Manchester United'
+-     'Leeds United'
+    ],
+    [
++     'Everton',
++     'Brentford'
+-     'Hull City',
+-     'Newcastle'
+    ],
+    [
++     'Fulham',
++     'Bournemouth'
+-     'Ipswich Town',
+-     'Everton'
+    ],
+    [
++     'Hull City',
+      'Liverpool',
+-     'Bournemouth'
+    ],
+    [
++     'Ipswich Town',
++     'Aston Villa'
+-     'Manchester United',
+-     'Fulham'
+    ],
+    [
++     'Leeds United',
++     'Newcastle'
++   ],
++   [
++     'Nottingham Forest',
+-     'Sunderland',
+      'Manchester City'
+    ]
+  ]
+
+    at assertRound (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:122:10)
+    at fullSeason (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:299:48)
+    at async Object.settlement (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:416:115)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:13)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+FAIL premier: clears the real fixture key after a fully played season before generating the next season
+AssertionError [ERR_ASSERTION]: natural round 38: exact saved opponent order and home/away pairs
++ actual - expected
+
+  [
+    [
+      'Arsenal',
+-     'Brighton'
+-   ],
+-   [
+-     'Aston Villa',
+      'Tottenham'
+    ],
+    [
+      'Chelsea',
++     'Brighton'
+-     'Brentford'
+    ],
+    [
+      'Coventry City',
++     'Sunderland'
+-     'Nottingham Forest'
+    ],
+    [
+      'Crystal Palace',
++     'Manchester United'
+-     'Leeds United'
+    ],
+    [
++     'Everton',
++     'Brentford'
+-     'Hull City',
+-     'Newcastle'
+    ],
+    [
++     'Fulham',
++     'Bournemouth'
+-     'Ipswich Town',
+-     'Everton'
+    ],
+    [
++     'Hull City',
+      'Liverpool',
+-     'Bournemouth'
+    ],
+    [
++     'Ipswich Town',
++     'Aston Villa'
+-     'Manchester United',
+-     'Fulham'
+    ],
+    [
++     'Leeds United',
++     'Newcastle'
++   ],
++   [
++     'Nottingham Forest',
+-     'Sunderland',
+      'Manchester City'
+    ]
+  ]
+
+    at assertRound (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:122:10)
+    at fullSeason (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:299:48)
+    at async Object.rollover (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:531:26)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:13)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'reads every fixture of the list with the exact two-source round order and venues',
++   'renders every CalendarCard opponent and venue reading from the same schedule',
++   'settles the actual human fixture and every neutral result with conserved table and scorer credits',
++   'clears the real fixture key after a fully played season before generating the next season'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:577:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'reads every fixture of the list with the exact two-source round order and venues',
+    'renders every CalendarCard opponent and venue reading from the same schedule',
+    'settles the actual human fixture and every neutral result with conserved table and scorer credits',
+    'clears the real fixture key after a fully played season before generating the next season'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

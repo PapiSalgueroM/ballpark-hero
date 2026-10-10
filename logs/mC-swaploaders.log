@@ -1,0 +1,7 @@
+rmut swaploaders: applied (1 edit(s))
+  cmfix-bundesliga:       throw new Error(`Club Manager: the file fetched for ${entry.key} holds another fixture list`);
+  cmfix-championship:       throw new Error(`Club Manager: the file fetched for ${entry.key} holds another fixture list`);
+  cmfix-laliga:       throw new Error(`Club Manager: the file fetched for ${entry.key} holds another fixture list`);
+  cmfix-premier:       throw new Error(`Club Manager: the file fetched for ${entry.key} holds another fixture list`);
+  leaguefx: H) the game's registry: RED for bundesliga
+MUT swaploaders: leaguefx=1 cmfix-premier=1 cmfix-laliga=1 cmfix-bundesliga=1 cmfix-championship=1 daily=0 fixbal=0

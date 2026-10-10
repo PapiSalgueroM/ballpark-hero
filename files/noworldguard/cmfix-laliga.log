@@ -1,0 +1,71 @@
+  ok   laliga ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   laliga calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   laliga settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  n/a  laliga bye: the neutral-only probe can only stand in the Premier League
+  ok   laliga world: settles the actual world league round through the same real fixture resolver
+  RED  laliga eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   laliga unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  RED  laliga legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   laliga future: refuses stale keys in later seasons, other years and changed league membership
+  ok   laliga rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   laliga baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   laliga uncopied: passes the whole base comparison with untouched current source under every copied fault
+FAIL laliga: binds only a fresh original modern world of this league with exact membership
+AssertionError [ERR_ASSERTION]: An internal running-world start never binds a fresh season
++ actual - expected
+
++ 'laliga-2026-27-v1'
+- undefined
+
+    at Object.eligibility (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:464:16)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+FAIL laliga: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+AssertionError [ERR_ASSERTION]: Internal future-world starts preserve the entire old generated save
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 3,
+...
+    promisedStarts: [],
++   realLeagueFixtures: 'laliga-2026-27-v1',
+    resultLog: [],
+    retiredLastSummer: [],
+    retiredNames: [],
+    sacked: false,
+    saveVersion: 3,
+
+    at Object.legacy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:515:48)
+    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:560:13)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'binds only a fresh original modern world of this league with exact membership',
++   'preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:577:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:591:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'binds only a fresh original modern world of this league with exact membership',
+    'preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

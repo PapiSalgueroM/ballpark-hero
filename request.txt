@@ -1,0 +1,9 @@
+#!serial
+mA-lastround: node .rc/x/rmut.mjs lastround && bash .rc/x/rgate.sh lastround nofleet; s=$?; git checkout -q -- src scripts; exit $s
+mF-lazyvenues: node .rc/x/rmut.mjs lazyvenues && bash .rc/x/rgate.sh lazyvenues nofleet; s=$?; git checkout -q -- src scripts; exit $s
+mC-swaploaders: node .rc/x/rmut.mjs swaploaders && bash .rc/x/rgate.sh swaploaders nofleet; s=$?; git checkout -q -- src scripts; exit $s
+mH-alwayspublished: node .rc/x/rmut.mjs alwayspublished && bash .rc/x/rgate.sh alwayspublished nofleet; s=$?; git checkout -q -- src scripts; exit $s
+mD-keynolist: node .rc/x/rmut.mjs keynolist && bash .rc/x/rgate.sh keynolist fleet; s=$?; git checkout -q -- src scripts; exit $s
+mE-deadlinestrip: node .rc/x/rmut.mjs deadlinestrip && bash .rc/x/rgate.sh deadlinestrip fleet; s=$?; git checkout -q -- src scripts; exit $s
+mB-noworldguard: node .rc/x/rmut.mjs noworldguard && bash .rc/x/rgate.sh noworldguard fleet simMidSeasonStart simClubManagerCalendar simWorldEditor; s=$?; git checkout -q -- src scripts; exit $s
+tree-clean: test -z "$(git status --porcelain -- src scripts)" && echo "src and scripts are as committed"
