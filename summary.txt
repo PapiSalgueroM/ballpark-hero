@@ -1,0 +1,6 @@
+digest-head exit=0 20s | 11
+digest-base exit=0 19s | 11
+digest-e0 exit=0 19s | 11
+digest-a exit=0 19s | 11
+digest-drift exit=0 19s | 11
+verdict exit=0 0s | digest stray draws (Math.random calls while a season was derived): 0

@@ -1,0 +1,15 @@
+EQUAL head base
+EQUAL a e0
+DIFFER head drift: 5 lines
+EQUAL head a
+digest nba seed set 0: 904 seasons, 812 derived, season 4bdd47afaf16f8f04e8d6d79bf1a6d6425b5e2bc, careers 1a511c865af817c60f642c3a793414aaa1055d73
+digest nba seed set 1: 900 seasons, 809 derived, season 97a15a51f854372c4ebb5d273850e9c3e07140a1, careers 6c40d9a97274f344b3c1b7f83d1ed9f6967321f5
+digest nba seed set 2: 902 seasons, 810 derived, season cbae49c9b3cffd59b24c9c6ea62b6dbf6d59c223, careers f5f417f43ab5ff32999435dabf431321a40c0ecc
+digest nba seed set 3: 890 seasons, 802 derived, season 927f1ae499ee3e40cb075ba92a934d902dd0b31f, careers 09f295da3e2813b491009494b3e0943c067defde
+digest nba seed set 4: 897 seasons, 809 derived, season daa19f6fd02f7ba7e98265073564cb0d5fc5c168, careers 63600159e862f8f6d7f288f2560c6802c8604864
+digest nfl seed set 0: 786 seasons, 500 derived, season 7a20cde138dc6d0945d7b68aa9a105e8126dc9fe, careers a47f4a712ae0b44ac1dc81b2bd8c65b0b098aeed
+digest nfl seed set 1: 787 seasons, 502 derived, season 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe, careers 0c5a8fe472c0180abe0fd6ea013d42ba21abd37c
+digest nfl seed set 2: 790 seasons, 505 derived, season 2d9db73e2c744d5d81e7a07eb225a470ffcce222, careers fdac81661ec9f9ceb77ab1e7b7ca7c6eeddc5fe8
+digest nfl seed set 3: 781 seasons, 500 derived, season af115f6f56e6d834deafccb72c1d8bc35e6ccdc0, careers b5e14a4026330b370445f9430b1d93f279176f44
+digest nfl seed set 4: 799 seasons, 515 derived, season 6e0f577a8914feef3ee4b3332621a048770a70fb, careers 995844e6a51660d41c61ef841ff93b948f84237b
+digest stray draws (Math.random calls while a season was derived): 0

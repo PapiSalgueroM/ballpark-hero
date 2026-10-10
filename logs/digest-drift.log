@@ -1,0 +1,4 @@
+klLaw: FG_A_DRIVE 0.1445 -> 0.1545 in src/lib/gameLaws/nflScore.ts
+digest stray draws (Math.random calls while a season was derived): 0
+simUsSeasonCentre digest print: 10 digests over 72 bundled files, printed only (US_SEASON_DIGEST_OUT=<file> writes the record)
+11
