@@ -18,7 +18,7 @@ import { MLB_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, MlbBadgeFacts } from './careerBadges';
 import { fanComments, followersFromFanbase, fmtFollowers, mlbSeasonHeadlines } from './careerSocial';
 import { mlbMoneyWealth } from './mlbCareerMoney';
-import { US_ENGINE_SEASON, slateOf, toSlate } from './usSeasonShape';
+import { US_ENGINE_SEASON, fullSeasonOf, slateOf, toSlate } from './usSeasonShape';
 
 /** The schedule this job works when nothing goes wrong. An injured season is
  *  dealt at 35 to 75 percent of it, so these numbers sit clear of both. */
@@ -46,8 +46,12 @@ export function mlbBadgeFacts(c: MlbCareerState): MlbBadgeFacts {
   const slate = mlbFullSlate(c.pos);
   return {
     pos: c.pos,
+    /* Round 1226: a badge that asks for a full year (120 games for the .330
+       season, 20 starts for the sub 2.00 one) reads a season's games as the
+       full season they stand for, so all 60 games of 2020 count as one. A
+       line with no slate is read as it always was. */
     seasons: c.seasons.map(s => ({
-      games: s.games, awards: s.awards ?? [], teamResult: s.teamResult,
+      games: fullSeasonOf('mlb', s.games, mlbWorkSlate(c.pos, slateOf('mlb', s))), awards: s.awards ?? [], teamResult: s.teamResult,
       avg: s.avg, hr: s.hr, sb: s.sb, era: s.era,
     })),
     rings: c.rings,

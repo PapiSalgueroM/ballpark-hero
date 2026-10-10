@@ -16,7 +16,7 @@ import { NHL_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, NhlBadgeFacts } from './careerBadges';
 import { fanComments, followersFromFanbase, fmtFollowers, nhlSeasonHeadlines } from './careerSocial';
 import { nhlMoneyWealth } from './nhlCareerMoney';
-import { US_ENGINE_SEASON, slateOf, toSlate } from './usSeasonShape';
+import { US_ENGINE_SEASON, fullSeasonOf, slateOf, toSlate } from './usSeasonShape';
 
 /** The schedule this job plays when nothing goes wrong. An injured season is
  *  dealt at 45 to 80 percent of it, so these numbers sit clear of both. */
@@ -38,8 +38,12 @@ export function nhlBadgeFacts(c: NhlCareerState): NhlBadgeFacts {
   const t = nhlCareerTotals(c);
   return {
     pos: c.pos,
+    /* Round 1226: the .930 season asks for 40 games in the crease, a full
+       year's worth. A season's games are read as the full season they stand
+       for, so a goalie's 36 starts of the 48 game 2012-13 count as one. A
+       line with no slate is read as it always was. */
     seasons: c.seasons.map(s => ({
-      games: s.games, awards: s.awards ?? [], teamResult: s.teamResult,
+      games: fullSeasonOf('nhl', s.games, nhlWorkSlate(c.pos, slateOf('nhl', s))), awards: s.awards ?? [], teamResult: s.teamResult,
       goals: s.goals, points: s.points, wins: s.wins, svpct: s.svpct,
     })),
     cups: c.cups,

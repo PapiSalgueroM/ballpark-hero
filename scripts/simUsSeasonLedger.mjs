@@ -76,7 +76,10 @@ await build({
       "export * as nhlEngine from './src/lib/nhlMyCareer.ts';",
       "export * as mlbEngine from './src/lib/mlbMyCareer.ts';",
       "export { nhlFullSlateOf, nhlHeadlinesFor } from './src/lib/nhlCareerLoop.ts';",
-      "export { mlbSlateMark } from './src/lib/mlbCareerLoop.ts';",
+      "export { mlbSlateMark, mlbEarnedBadges } from './src/lib/mlbCareerLoop.ts';",
+      "export { nhlEarnedBadges } from './src/lib/nhlCareerLoop.ts';",
+      "export { MLB_CAREER_SPORT } from './src/lib/mlbCareerSport.ts';",
+      "export { NHL_CAREER_SPORT } from './src/lib/nhlCareerSport.ts';",
     ].join('\n'),
     resolveDir: ROOT, loader: 'ts',
   },
@@ -101,6 +104,10 @@ const ENGINE_CONTROLS = {
   mlbfold: { expect: ['E4'], from: 'if (known.length === 0) return playoffGames(Math.max(0, stage - skip), draw, sport);', to: 'if (known.length === 0) return playoffGames(stage, draw, sport);' },
   mlbpartial: { expect: ['E4'], from: 'const rest = playoffGames(Math.max(0, stage - skip - known.length), draw, sport);', to: 'const rest = playoffGames(Math.max(0, stage - skip), draw, sport);' },
   mlblostfinal: { expect: ['E4'], from: 'if (known.length < played.length && stage === ENGINE_ROUNDS - 1) return playoffGames(stage, draw, sport);', to: '' },
+  /* The fix pass, E9. A badge that asks for a full year reads raw games again; a suspended season forgets its length. */
+  mlbbadge: { expect: ['E9a'], from: 'games: fullSeasonOf("mlb", s.games, mlbWorkSlate(c.pos, slateOf("mlb", s))),', to: 'games: s.games,' },
+  nhlbadge: { expect: ['E9a'], from: 'games: fullSeasonOf("nhl", s.games, nhlWorkSlate(c.pos, slateOf("nhl", s))),', to: 'games: s.games,' },
+  suspslate: { expect: ['E9b'], from: '...slateField("nhl", c.year, c.team)', to: '' },
   /* The fix pass, E8. The award score read off the saved (short) line again, not off the full draw. */
   nhlawards: { expect: ['E8a'], from: 'const statScore = nhlSeasonScore(c.pos, full);', to: 'const statScore = nhlSeasonScore(c.pos, line);' },
   mlbawards: { expect: ['E8a'], from: 'const statScore = mlbSeasonScore(c.pos, full);', to: 'const statScore = mlbSeasonScore(c.pos, line);' },
@@ -996,6 +1003,45 @@ const MLB_OWN = 162;
     if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE E8c ${sp.key}: ${after} seasons after the short ${cb.year}, ${wrong} wrong comebacks, ${lostYears} lost years before, ${lostWon} comebacks off them`);
     check('E8c', after === 6000 && wrong === 0, `${wrong} of ${after} ${U} seasons after the short ${cb.year} one won the comeback award although the season before was no lost year (more than ${cb.lost} games of ${sp.own} as a full season)`);
     check('E8c', lostYears >= cb.lostYears && lostWon >= cb.lostWon, `only ${lostWon} comebacks off ${lostYears} lost ${U} seasons of ${cb.year}: the gate no longer opens for a lost short season (floors ${cb.lostWon} and ${cb.lostYears})`);
+  }
+}
+
+/* ===== Round 1226 (the fix pass), E9: a saved short season is read as the full season it stands for. =====
+   E9a  the three badges that ask for a full year (a .330 season: 120 games;
+        a sub 2.00 season: 20 starts; a .930 season: 40 games in the crease)
+        can be earned in a short season, are not handed to a part of one, and
+        a line with no slate is judged as it always was. Twelve typed cases,
+        each a single saved line.
+   E9b  a season sat out on the suspended list is saved with the season's
+        length when it is not the engine's own, and with none when it is.
+   Controls: mlbbadge, nhlbadge (E9a), suspslate (E9b). */
+{
+  const M = game.mlbEngine; const N = game.nhlEngine; const S = game.shape;
+  const mlbWith = (pos, line) => { const c = M.startMlbCareer('Ledger Check', pos, M.MLB_ARCHETYPES[pos][0], mulberry(77), null, 'y2004'); c.seasons = [{ year: 2020, team: 'BOS', age: 24, ovr: 80, awards: [], teamResult: 'Missed October', salary: 1, ...line }]; return game.mlbEarnedBadges(c).map(b => b.id); };
+  const nhlWith = (pos, line) => { const c = N.startNhlCareer('Ledger Check', pos, N.NHL_ARCHETYPES[pos][0], mulberry(78), null, 'y2006'); c.seasons = [{ year: 2012, team: 'BOS', age: 24, ovr: 80, awards: [], teamResult: 'Missed the playoffs', salary: 1, ...line }]; return game.nhlEarnedBadges(c).map(b => b.id); };
+  const CASES = [
+    ['a .340 hitter over all 60 games of 2020', mlbWith('CF', { games: 60, slate: 60, avg: 0.34 }), 'avg_330', true],
+    ['a .340 hitter over 40 of the 60 games of 2020', mlbWith('CF', { games: 40, slate: 60, avg: 0.34 }), 'avg_330', false],
+    ['a .340 hitter over 120 games of a line with no slate', mlbWith('CF', { games: 120, avg: 0.34 }), 'avg_330', true],
+    ['a .340 hitter over 119 games of a line with no slate', mlbWith('CF', { games: 119, avg: 0.34 }), 'avg_330', false],
+    ['a starter on 1.90 over 12 starts of 2020', mlbWith('SP', { games: 12, slate: 60, era: 1.9 }), 'era_200', true],
+    ['a starter on 1.90 over 7 starts of 2020', mlbWith('SP', { games: 7, slate: 60, era: 1.9 }), 'era_200', false],
+    ['a starter on 1.90 over 19 starts of a line with no slate', mlbWith('SP', { games: 19, era: 1.9 }), 'era_200', false],
+    ['a starter on 1.90 over 20 starts of a 163 game season', mlbWith('SP', { games: 20, slate: 163, era: 1.9 }), 'era_200', true],
+    ['a .931 goalie over 30 games of the 48 of 2012-13', nhlWith('G', { games: 30, slate: 48, svpct: 0.931 }), 'svpct_930', true],
+    ['a .931 goalie over 23 games of the 48 of 2012-13', nhlWith('G', { games: 23, slate: 48, svpct: 0.931 }), 'svpct_930', false],
+    ['a .931 goalie over 39 games of an 84 game season', nhlWith('G', { games: 39, slate: 84, svpct: 0.931 }), 'svpct_930', false],
+    ['a .931 goalie over 40 games of a line with no slate', nhlWith('G', { games: 40, svpct: 0.931 }), 'svpct_930', true],
+  ];
+  for (const [what, ids, id, want] of CASES) check('E9a', ids.includes(id) === want, `${what} ${want ? 'does not earn' : 'earns'} the badge ${id}`);
+
+  const SUSPENDED = [['mlb', 2020, 'BOS', 60], ['mlb', 2020, 'DET', 58], ['mlb', 2026, 'NYY', 161], ['mlb', 2026, 'BOS', undefined], ['mlb', 2019, 'BOS', undefined], ['nhl', 2026, 'BOS', 84], ['nhl', 2031, 'BOS', 84], ['nhl', 2012, 'BOS', 48], ['nhl', 2011, 'BOS', undefined], ['nhl', 2019, 'ATL', undefined]];
+  for (const [sport, year, team, want] of SUSPENDED) {
+    const c = sport === 'mlb' ? M.startMlbCareer('Ledger Check', 'CF', M.MLB_ARCHETYPES.CF[0], mulberry(79), null, year < 2026 ? 'y2004' : undefined) : N.startNhlCareer('Ledger Check', 'C', N.NHL_ARCHETYPES.C[0], mulberry(79), null, year < 2026 ? 'y2006' : undefined);
+    c.year = year; c.team = team;
+    const line = (sport === 'mlb' ? game.MLB_CAREER_SPORT : game.NHL_CAREER_SPORT).suspendedLine(c);
+    check('E9b', line.games === 0 && line.teamResult === 'SUSPENDED' && line.slate === want && ('slate' in line) === (want !== undefined) && S.slateOf(sport, line) === (want ?? S.US_ENGINE_SEASON[sport]),
+      `the suspended ${sport.toUpperCase()} ${year} season of ${team} is saved with the length ${line.slate}; ${want ?? 'none (the engine own season)'} expected`);
   }
 }
 
