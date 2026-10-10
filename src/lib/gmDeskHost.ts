@@ -625,16 +625,22 @@ export function hostArriving(seat: GmSeatBlock, leagueSeason: number): boolean {
  *           where the market stops looking, even with the best pedigree the
  *           engine can give him, and every further year out only lowers it.
  * Closed says so plainly and offers only a new front office. There is never
- * a button that plays a season for nothing.
+ * a button that plays a season for nothing: the year out is offered on
+ * hostCanSitOut alone, which reads what next year holds and not the state,
+ * because somebody can call this year (offers) while next year is shut.
  */
 export type HostMarketState = 'offers' | 'quiet' | 'closed';
 
 /**
- * What a quiet year leaves for the next one.
- *   open    still above the floor next year as things stand.
+ * What a year out leaves for the next one, read in every state.
+ *   open    still above the floor next year as things stand: his old club's
+ *           tier is read today, and the year out is a real season that can
+ *           move it, so the screen says "as things stand" and never more.
  *   climb   above it next year only if his old club finishes the year in a
  *           better tier than it is in today (its tier is his pedigree).
- *   shut    under it whatever happens. A market that reads shut is closed.
+ *   shut    under it whatever happens. With an empty feed that is the closed
+ *           state. With offers on the table they are the last calls he gets:
+ *           the line says so, and no year out is offered or played.
  */
 export type HostNextYear = 'open' | 'climb' | 'shut';
 
@@ -650,7 +656,7 @@ export interface HostOfferFacts {
 
 export interface HostMarket {
   state: HostMarketState;
-  /** Read while the feed is empty: what a year out leaves. With offers on the table it still says what next year would hold. */
+  /** What a year out leaves, whether or not somebody called this year. The line, the stay out button and hostSeasonAway all read it. */
   nextYear: HostNextYear;
   /** On 'climb', the tier his old club must have reached by next summer. Null otherwise. */
   climbTo: ClubTier | null;
@@ -691,6 +697,17 @@ export function hostNextYear(seat: GmSeatBlock, tiers: Map<string, ClubTier>): {
   return { nextYear: 'shut', climbTo: null };
 }
 
+/**
+ * Whether a year out is on offer: only while next year can still hold a call.
+ * Never when next year is shut, which is the closed market (nobody called)
+ * and also the last calls (somebody did, and nobody will after them). The
+ * panel draws its button on this and hostSeasonAway refuses on it, so the
+ * screen and the rule cannot disagree.
+ */
+export function hostCanSitOut(market: Pick<HostMarket, 'nextYear'> | null): boolean {
+  return !!market && market.nextYear !== 'shut';
+}
+
 const seasonsAndTitles = (seasons: number, titles: number): string =>
   `${plural(seasons, 'season')} and ${titles === 0 ? 'no titles' : plural(titles, 'title')}`;
 
@@ -700,9 +717,14 @@ const seasonsAndTitles = (seasons: number, titles: number): string =>
  * closed state is a hope the market does not hold, and it counts a stint's
  * grades as its seasons, which on a record built from an old save states
  * fewer seasons than he played.
+ *
+ * With offers on the table the line also says what passing on them costs
+ * whenever next year is not open: on a climb it names the tier, and when next
+ * year is shut it says these are the last calls (no year out is offered then).
  */
 export function hostMarketLine(
-  pack: GmSeatPack, seat: GmSeatBlock, state: HostMarketState, climbTo: ClubTier | null,
+  pack: GmSeatPack, seat: GmSeatBlock, state: HostMarketState,
+  next: { nextYear: HostNextYear; climbTo: ClubTier | null },
   offerCount: number, oldClubName: string,
 ): string {
   const index = seat.career.stints.length - 1;
@@ -714,10 +736,17 @@ export function hostMarketLine(
     : s.ended === 'expired' ? `Your deal with the ${oldClubName} ran out after ${record}.`
     : s.ended === 'poached' ? `You took the buyout and left the ${oldClubName} after ${record}.`
     : `${capWord(pack.upstairs)} made the call: you are out after ${record} with the ${oldClubName}.`;
-  if (state === 'offers') return `${head} ${plural(offerCount, pack.seat, pack.seats)} called.`;
+  const climb = next.climbTo !== null
+    ? `the phone rings only if the ${oldClubName} have climbed into the ${HOST_TIER_WORDS[next.climbTo]} of the league by then.`
+    : null;
+  if (state === 'offers') {
+    const called = `${head} ${plural(offerCount, pack.seat, pack.seats)} called.`;
+    if (next.nextYear === 'shut') return `${called} ${offerCount === 1 ? 'It is the last call' : 'They are the last calls'} you will get: pass, and the phone stops for good.`;
+    return climb !== null ? `${called} Pass, and next year ${climb}` : called;
+  }
   if (state === 'closed') return `${head} Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.`;
-  return climbTo !== null
-    ? `${head} Nobody called this year. Next year the phone rings only if the ${oldClubName} have climbed into the ${HOST_TIER_WORDS[climbTo]} of the league by then.`
+  return climb !== null
+    ? `${head} Nobody called this year. Next year ${climb}`
     : `${head} Nobody called this year. Next year is still open, and every year out makes the phone quieter.`;
 }
 
@@ -752,7 +781,7 @@ export function hostMarket<L>(
   }
   return {
     state, nextYear, climbTo, seasonsOut: seat.career.seasonsOut, season: season + 1, offers, facts,
-    line: hostMarketLine(host.pack, seat, state, climbTo, offers.length, nameOf(last.team)),
+    line: hostMarketLine(host.pack, seat, state, { nextYear, climbTo }, offers.length, nameOf(last.team)),
   };
 }
 
@@ -842,7 +871,12 @@ export interface HostAwayReport {
   oldClub: { id: string; record: string; place: number } | null;
 }
 
-export type HostAwayRefusal = 'in-seat' | 'season-open' | 'market-closed' | 'broken-adapter';
+/*
+ * 'market-closed': nobody called and nobody will. 'last-call': somebody
+ * called, and next year is shut, so the year out would end the save. Both are
+ * hostCanSitOut saying no.
+ */
+export type HostAwayRefusal = 'in-seat' | 'season-open' | 'market-closed' | 'last-call' | 'broken-adapter';
 
 /* Narrow it with `=== false` (or `=== true`): this app compiles without strict
    null checks, where a bare `!r.ok` does not tell the two halves apart. */
@@ -872,8 +906,11 @@ export interface HostSeasonAwayInput<L> {
  *
  * REFUSED, with the league untouched: while he holds a seat; while the
  * league's season is not decided (a year out starts from a closed season);
- * and when the market is closed, because a year that cannot bring a call is a
- * season played for nothing. If the sport's calls do not leave the league one
+ * and whenever next year is shut (hostCanSitOut), because a year that cannot
+ * bring a call is a season played for nothing. That is the closed market,
+ * and it is also a market with offers on the table that are the last calls he
+ * will get: passing on them through a year out would end the save a season
+ * later with nothing said. If the sport's calls do not leave the league one
  * decided season on, the answer is 'broken-adapter' and the caller throws its
  * copy of the league away.
  *
@@ -888,6 +925,7 @@ export function hostSeasonAway<L>(a: HostSeasonAwayInput<L>): HostAwayResult {
   if (a.host.champion(a.league, before) === null) return { ok: false, reason: 'season-open' };
   const market = hostMarket(a.host, a.league, seat, sameId);
   if (!market || market.state === 'closed') return { ok: false, reason: 'market-closed' };
+  if (!hostCanSitOut(market)) return { ok: false, reason: 'last-call' };
 
   /* A step that hands nothing back changed no block. */
   const kept = (next: GmDesk | void, was: GmDesk): GmDesk => (next as GmDesk | undefined) ?? was;
@@ -1125,8 +1163,19 @@ export function hostTakeArmLine(pack: GmSeatPack, offer: SeatOffer, deskOn: bool
   return `Tap again to take it. You become the ${offer.teamName} ${pack.role} and it cannot be undone.${deskOn ? '' : ' It also opens your GM desk for good.'}`;
 }
 
-export function hostSitArmLine(deskOn: boolean): string {
-  return `Tap again to stay out. The league plays a whole season without you and it cannot be undone.${deskOn ? '' : ' It also opens your GM desk for good.'}`;
+/**
+ * The stay out line is handed the market, so the first tap says what the year
+ * costs: the offers he turns down to do it, and what next year holds. It is
+ * never drawn when next year is shut (hostCanSitOut); the words for that
+ * state are here so the function has an honest answer for every market.
+ */
+export function hostSitArmLine(market: Pick<HostMarket, 'nextYear' | 'offers'>, deskOn: boolean): string {
+  const n = market.offers.length;
+  const pass = n > 0 ? ` You turn down ${plural(n, 'offer')} to do it.` : '';
+  const next = market.nextYear === 'shut' ? ' Nobody would call after it: the phone stops for good.'
+    : market.nextYear === 'climb' ? ' Next year the phone rings only if your old club has climbed the league by then.'
+    : ' As things stand the phone can still ring next year.';
+  return `Tap again to stay out.${pass} The league plays a whole season without you and it cannot be undone.${next}${deskOn ? '' : ' It also opens your GM desk for good.'}`;
 }
 
 /** How a stint ended, for the Career box. An open one says he is still there. */
@@ -1187,7 +1236,7 @@ export function hostMarketHelp(pack: GmSeatPack): string[] {
   return [
     `When ${pack.upstairs} lets you go, the ${pack.seats} that rate your record can call. The ${pack.seat} that let you go never does.`,
     `Each offer shows what that ${pack.seat} asks of your first season there. That is the ask you are graded on.`,
-    'No call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. When it has stopped for good the screen says so.',
+    'No call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. The screen says when the offers in front of you are the last ones and when the phone has stopped for good, and then there is no year out to take.',
     `Worked example: leave straight after a season graded nowhere near the ask and no ${HOST_TIER_WORDS[BADLY_FIRED_CEILING - 1]} ${pack.seat} calls, whatever you won before. The best that can ring is rated ${HOST_TIER_WORDS[BADLY_FIRED_CEILING]}.`,
   ];
 }

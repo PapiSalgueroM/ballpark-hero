@@ -55,8 +55,8 @@ const HOST: GmDeskHost<TLeague> = {
   season: l => l.season, cap: l => l.cap, champion: (l, s) => (s === l.season ? l.champion : null),
 };
 const BOTTOM = idOf(31);
-const firedFrom = (grades: FoGradeResult[]): GmSeatBlock => ({
-  v: 1, career: { version: 1, stints: [{ team: BOTTOM, tier: 4, from: 2026, grades, ended: 'fired' }], seasonsOut: 0 },
+const firedFrom = (grades: FoGradeResult[], team = BOTTOM, from = 2026): GmSeatBlock => ({
+  v: 1, career: { version: 1, stints: [{ team, tier: 4, from, grades, ended: 'fired' }], seasonsOut: 0 },
 });
 /* Strong enough that the engine's own count is never zero, weak enough to be shut for good, and one in between. */
 const WINNER = firedFrom(['title', 'title', 'title', 'title', 'title', 'overachieved', 'overachieved', 'overachieved', 'missed']);
@@ -126,11 +126,30 @@ describe('the job market panel', () => {
     const button = container.querySelector('[data-gm-sit-out]')!;
     fireEvent.click(button);
     expect(career.sitOut).not.toHaveBeenCalled();
-    expect(container.querySelector('[data-gm-arm="sit"]')!.textContent).toBe(hostSitArmLine(false));
-    expect(hostSitArmLine(false)).toContain('opens your GM desk');
-    expect(hostSitArmLine(true)).not.toContain('opens your GM desk');
+    /* The first tap says what the year costs: here next year hangs on his old club. */
+    expect(container.querySelector('[data-gm-arm="sit"]')!.textContent).toBe(hostSitArmLine(career.market!, false));
+    expect(hostSitArmLine(career.market!, false)).toContain('only if your old club has climbed the league by then');
+    expect(hostSitArmLine(career.market!, false)).toContain('opens your GM desk');
+    expect(hostSitArmLine(career.market!, true)).not.toContain('opens your GM desk');
     fireEvent.click(button);
     expect(career.sitOut).toHaveBeenCalledTimes(1);
+  });
+  it('offers no year out when the calls on the table are the last ones, and the line says so', () => {
+    /* A top tier club's wreck: over the floor today, under it next year whatever
+       happens. Read off many keys, some feeds hold the one offer. */
+    let seat: GmSeatBlock | null = null;
+    for (let from = 1990; from < 2027 && !seat; from++) {
+      const s = firedFrom(['badly', 'badly', 'badly'], idOf(0), from);
+      if (hostMarket(HOST, LEAGUE, s, nameOf)!.state === 'offers') seat = s;
+    }
+    expect(seat).not.toBeNull();
+    const career = binding(seat!);
+    expect(career.market).toMatchObject({ state: 'offers', nextYear: 'shut' });
+    const { container } = render(<GmJobMarketPanel {...panelProps(career)} />);
+    expect(container.querySelectorAll('[data-gm-offer]')).toHaveLength(career.market!.offers.length);
+    expect(container.querySelector('[data-gm-sit-out]')).toBeNull();
+    expect(container.querySelector('[data-gm-market-line]')!.textContent).toContain('you will get: pass, and the phone stops for good.');
+    expect(/stay out/i.test(container.textContent ?? '')).toBe(false);
   });
   it('offers no year out on a closed market, and its "?" opens the rules', () => {
     const career = binding(WRECK);

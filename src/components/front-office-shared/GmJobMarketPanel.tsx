@@ -10,8 +10,10 @@
  *
  * The two actions that cannot be undone, taking a job and staying out a year,
  * each take two taps: the first shows what will happen, the second does it.
- * A closed market has no stay out button, because a year that cannot bring a
- * call is a season played for nothing.
+ * There is no stay out button whenever next year is shut (hostCanSitOut): on
+ * a closed market, and on a market whose offers are the last calls he will
+ * get, because a year that cannot bring a call is a season played for
+ * nothing. The first tap on stay out says what the year costs and leaves.
  *
  * The panel only reports the choice (facts.career.take, facts.career.sitOut).
  * The board that binds it applies it. Not mounted by this round.
@@ -20,7 +22,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { GmPanelProps } from '@/lib/gmDesk';
 import {
-  HOST_TIER_WORDS, hostMarketHelp, hostOfferFactsLine, hostSitArmLine, hostTakeArmLine,
+  HOST_TIER_WORDS, hostCanSitOut, hostMarketHelp, hostOfferFactsLine, hostSitArmLine, hostTakeArmLine,
   type GmCareerFacts,
 } from '@/lib/gmDeskHost';
 
@@ -119,10 +121,10 @@ export default function GmJobMarketPanel({ sport, facts }: GmPanelProps<GmCareer
         </div>
       ) : null}
 
-      {market.state !== 'closed' && !offer && (
+      {hostCanSitOut(market) && !offer && (
         <div className="rounded-2xl border border-border bg-card p-3" data-gm-sit>
           {armed === 'sit' && (
-            <p className="mb-2 text-[10px] font-semibold text-gold" data-gm-arm="sit">{hostSitArmLine(deskOn)}</p>
+            <p className="mb-2 text-[10px] font-semibold text-gold" data-gm-arm="sit">{hostSitArmLine(market, deskOn)}</p>
           )}
           <button
             type="button"

@@ -3,10 +3,10 @@
    scripts/simGmDeskHost.mjs. This file holds the same properties small. */
 import { describe, expect, it } from 'vitest';
 import {
-  GM_HOST_KEYS, HOST_BLOCK_RULES, hostArriving, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
+  GM_HOST_KEYS, HOST_BLOCK_RULES, hostArriving, hostCanSitOut, hostCanSpend, hostCareerHelp, hostCareerTile, hostCloseSeason,
   hostCraftCut, hostCutQuote, hostDeskCases, hostEarnsLine, hostFeedKey, hostKey, hostLastGrade, hostLegacy,
   hostLegacySeat, hostMarket, hostMarketHelp, hostMarketTile, hostMoveBlocks, hostNewSeat, hostOutOfWorkCard,
-  hostPressOption, hostSeasonAway, hostSeasonVerdict, hostSeasonsRecorded, hostSeatOf, hostSitOut, hostSpendPoint,
+  hostPressOption, hostSeasonAway, hostSeasonVerdict, hostSeasonsRecorded, hostSeatOf, hostSitArmLine, hostSitOut, hostSpendPoint,
   hostSummerMandate, hostTakeSeat, hostXpEffects, hostXpHelp, hostXpOf, hostXpRecapLine, hostXpRollKey, hostXpTile,
   isGmSeatBlock,
   type GmAwayHost, type GmDeskHost, type GmSeatBlock, type HostBlockRule, type HostClub, type HostLegacy,
@@ -425,6 +425,53 @@ describe('the job market', () => {
     }
     expect(topClosed).toBeGreaterThan(5);
     expect(quiet).toBeGreaterThan(5);
+  });
+  it('with offers on the table says what passing costs, and takes the year out away when they are the last calls', () => {
+    let last = 0;
+    let hangs = 0;
+    for (let from = 1990; from < 2027; from++) {
+      /* A top tier club's wreck: over the floor today, under it next year whatever
+         happens. Read off many keys, some feeds hold the one offer. */
+      const seat = firedFrom(TOP, WRECK, from);
+      const m = hostMarket(host, lg, seat, nameOf)!;
+      expect(m.nextYear).toBe('shut');
+      expect(hostCanSitOut(m)).toBe(false);
+      if (m.state === 'offers') {
+        last += 1;
+        expect(m.line).toMatch(/called\. (It is the last call|They are the last calls) you will get: pass, and the phone stops for good\.$/);
+        /* The host refuses the year whatever a screen allows, before the league is touched. */
+        const copy = league();
+        const snap = JSON.stringify(copy);
+        const log: string[] = [];
+        const l = legacy({ team: TOP, tier: 1, seasonsPlayed: 3, fired: true });
+        expect(hostSeasonAway({ host, away: awayHost(log), league: copy, desk: deskWith(seat), legacy: l, rng: keyedRng('x') })).toEqual({ ok: false, reason: 'last-call' });
+        expect(log).toEqual([]);
+        expect(JSON.stringify(copy)).toBe(snap);
+      }
+      /* A bottom club, two seasons nowhere near the ask and one short of it: over
+         the floor today, and next year hangs on the old club reaching the third tier. */
+      const hang = hostMarket(host, lg, firedFrom(BOTTOM, ['badly', 'badly', 'missed'], from), nameOf)!;
+      expect(hang).toMatchObject({ nextYear: 'climb', climbTo: 3 });
+      expect(hostCanSitOut(hang)).toBe(true);
+      expect(hostSitArmLine(hang, true)).toContain('only if your old club has climbed the league by then');
+      if (hang.state === 'offers') {
+        hangs += 1;
+        expect(hang.line).toContain(`called. Pass, and next year the phone rings only if the ${nameOf(BOTTOM)} have climbed into the`);
+        expect(hostSitArmLine(hang, true)).toContain(`You turn down ${hang.offers.length} offer`);
+      } else {
+        expect(hostSitArmLine(hang, true)).not.toContain('turn down');
+      }
+    }
+    expect(last).toBeGreaterThan(5);
+    expect(hangs).toBeGreaterThan(5);
+    expect(hostCanSitOut(null)).toBe(false);
+    /* An open next year says no more than "as things stand", and the desk line rides on every one. */
+    const open = hostMarket(host, lg, firedFrom(BOTTOM, WINNER), nameOf)!;
+    expect(open).toMatchObject({ state: 'offers', nextYear: 'open' });
+    expect(open.line).toMatch(/called\.$/);
+    expect(hostSitArmLine(open, true)).toContain('As things stand the phone can still ring next year.');
+    expect(hostSitArmLine(open, false)).toContain('opens your GM desk');
+    expect(hostSitArmLine(open, true)).not.toContain('opens your GM desk');
   });
   it('counts the seasons known only as a count in the line (B6)', () => {
     const l = legacy({ seasonsPlayed: 9, titles: 2, fired: true });

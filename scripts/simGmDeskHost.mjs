@@ -20,8 +20,10 @@
  *      club that let him go, nothing above tier 2 after a 'badly' season
  *      (also read six real clubs at a time, where the top tier is in reach),
  *      every ask built for the season after the league's
- *   5  closed means closed: no tier his old club can reach and no year out
- *      reopens a market that reads closed, and a quiet one is never in that set
+ *   5  shut means shut: no tier his old club can reach and no year out reopens
+ *      a market whose next year reads shut, closed (nobody called) or on a
+ *      last call (somebody did); a quiet one is never in that set; and the
+ *      year out is on offer exactly while next year can hold a call
  *   6  the close on every club's real season: with no desk it is the two
  *      engine calls a board makes today; with one it records once, pays what
  *      gmSeasonXp pays, starts a new save's stint in the season he started,
@@ -33,17 +35,22 @@
  *   8  spending: refused off the live list, with no point and past five; 35
  *      spends fill the board
  *   9  taking a seat and a year out on real leagues: what moves and what
- *      does not, who owns each block, the three refusals with the league
- *      untouched, and a played year that is not a season on his record
+ *      does not, who owns each block, the refusals with the league untouched
+ *      (in a seat, an open season, a closed market, and a last call: offers
+ *      on the table with next year shut), and a played year that is not a
+ *      season on his record
  *  10  the words: never empty, no dash, no quote, no placeholder; a closed
- *      line never says sit; no line states fewer seasons than he played
+ *      line never says sit; no line states fewer seasons than he played;
+ *      with offers on the table the line and the stay out line say what
+ *      passing costs; the stay out button is drawn only while next year can
+ *      hold a call
  * Negative controls (SIM_GM_DESK_HOST_CONTROL), each must go red in its check:
  *   mutate (1) dropclub (1) fillmet (2) readwrites (2) unkeyed (3)
  *   firedclub (4) badlyceiling (4) askseason (4) closedquiet (5)
  *   twice (6) lateseat (6) failopen (6) cushionall (6)
  *   flatlevel (7) sharedroll (7) flatowner (7) flatmedia (7) flatcut (7) flatask (7)
- *   spendany (8) stalestaff (9) halfseason (9) noyear (9)
- *   emptytile (10) closedsit (10) fewseasons (10)
+ *   spendany (8) stalestaff (9) halfseason (9) noyear (9) lastcall (9)
+ *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
  * SIM_GM_DESK_HOST_ANCHORS=1 checks every control's anchor and stops (light).
  *
  * THE YEAR OUT HERE IS NOT THE BIND'S. Section 9 plays it with each engine's
@@ -145,6 +152,9 @@ const EDITS = {
   stalestaff: ['9', 'host', '    if (r.fresh) blocks[r.key] = r.fresh(league, team);', '    if (r.fresh) blocks[r.key] = desk.blocks[r.key];'],
   halfseason: ['9', 'host', '  for (let i = 0; i < periods; i++) desk = kept(', '  for (let i = 0; i < periods / 2; i++) desk = kept('],
   noyear: ['9', 'host', '    desk: hostSitOut({ v: desk.v, blocks }, seat),', '    desk: { v: desk.v, blocks },'],
+  lastcall: ['9', 'host', "  if (!hostCanSitOut(market)) return { ok: false, reason: 'last-call' };", "  if (false) return { ok: false, reason: 'last-call' };"],
+  shutbutton: ['10', 'host', "  return !!market && market.nextYear !== 'shut';", "  return !!market && (market as HostMarket).state !== 'closed';"],
+  passquiet: ['10', 'host', "    return climb !== null ? `${called} Pass, and next year ${climb}` : called;", '    return called;'],
   emptytile: ['10', 'host', "value: 'The phone has stopped',", "value: '',"],
   closedsit: ['10', 'host', 'Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.',
     'Nobody has called yet. Sit the year out and see who remembers you.'],
@@ -545,7 +555,7 @@ function readAll(d, save, desk, counted, outcome) {
       word(H.hostOfferFactsLine(market.facts[o.teamId], M.GM_SPORTS[d.host.sport].cap.line), `${where} offer`);
       word(H.hostTakeArmLine(d.host.pack, o, !!desk), `${where} offer`); word(o.reason, `${where} offer`); word(o.ask.text, `${where} offer`);
     }
-    word(H.hostSitArmLine(!!desk), `${where} sit`);
+    word(H.hostSitArmLine(market, !!desk), `${where} sit`);
   }
   for (const v of H.hostStintViews(seat, nameOf)) { word(v.arrival, `${where} stint`); word(v.ended, `${where} stint`); if (v.earlier !== null) word(v.earlier, `${where} stint`); }
   word(H.hostCareerTotalsLine(seat), `${where} totals`);
@@ -617,8 +627,8 @@ begin('4', 'the market rules on real tiers: never the club that let him go, a ce
    without which no career reads closed and check 5 would be empty. */
 const TAILS = [['title'], ['overachieved'], ['met'], ['missed'], ['badly'], ['badly', 'badly'], ['badly', 'badly', 'badly'],
   ['badly', 'badly', 'missed'], ['badly', 'missed', 'missed'], ['missed', 'missed', 'missed', 'missed']];
-const M4 = { markets: 0, offers: 0, withOffers: 0, badlyOffers: 0, quietOpen: 0, climb: 0, closed: 0, most: 0 };
-const closedCareers = [], quietCareers = [];
+const M4 = { markets: 0, offers: 0, withOffers: 0, badlyOffers: 0, quietOpen: 0, climb: 0, closed: 0, most: 0, lastCalls: 0, passClimb: 0 };
+const closedCareers = [], quietCareers = [], lastCallCareers = [];
 for (const sport of SPORTS) {
   const d = DRIVE[sport], pack = d.host.pack;
   for (const snap of FLEET[sport].closed.filter(x => x.s === 0)) {
@@ -645,9 +655,12 @@ for (const sport of SPORTS) {
       if (m.offers.length) { M4.withOffers++; if (lastBadly) M4.badlyOffers += m.offers.length; }
       if (m.state === 'closed') { M4.closed++; closedCareers.push({ sport, lg, seat, old, at }); }
       if (m.state === 'quiet') { if (m.nextYear === 'climb') M4.climb++; else M4.quietOpen++; quietCareers.push({ sport, lg, seat, old, at, m }); }
+      /* Somebody called, and next year is not open: the last calls, or a year that hangs on a climb. */
+      if (m.state === 'offers' && m.nextYear === 'shut') { M4.lastCalls++; lastCallCareers.push({ sport, lg, seat, old, at, m }); }
+      if (m.state === 'offers' && m.nextYear === 'climb') M4.passClimb++;
       const tile = H.hostMarketTile(m, pack);
-      LINES.push({ at, state: m.state, out, line: m.line, value: tile.value, sub: tile.sub, seasons: H.hostStintSeasons(seat, 0) });
-      const kind = m.state === 'quiet' && m.nextYear === 'climb' ? 'climb' : m.state;
+      LINES.push({ at, state: m.state, out, line: m.line, value: tile.value, sub: tile.sub, seasons: H.hostStintSeasons(seat, 0), m, pack, seat, oldName: nameOf(old) });
+      const kind = m.state === 'quiet' && m.nextYear === 'climb' ? 'climb' : m.state === 'offers' && m.nextYear === 'shut' ? 'last' : m.state === 'offers' && m.nextYear === 'climb' ? 'pass' : m.state;
       (SAMPLE[sport] ??= {})[kind] ??= { seat, m, lg };
     }
     ok(J(lg) === before, `${sport} seed ${snap.seed}: reading the market changed the league`);
@@ -676,6 +689,7 @@ ok(reach >= T.minReach, `only ${reach} offers in the six club view, too few to h
 ok(M4.offers >= T.minOffers && M4.badlyOffers >= T.minBadlyOffers, `${M4.offers} offers and ${M4.badlyOffers} after a badly season: too few to hold the rules`);
 ok(M4.climb >= T.minClimb && M4.closed >= T.minClosed && M4.quietOpen >= T.minQuietOpen, `the ladder holds ${M4.quietOpen} quiet, ${M4.climb} quiet on a climb and ${M4.closed} closed careers: a state is missing`);
 console.log(`   ${M4.markets} markets: ${M4.withOffers} with offers (${M4.offers} offers, ${M4.badlyOffers} after a badly season, at most ${M4.most} a feed), ${M4.quietOpen} quiet, ${M4.climb} quiet on a climb, ${M4.closed} closed`);
+console.log(`   with offers on the table and next year not open: ${M4.lastCalls} are the last calls (next year shut), ${M4.passClimb} hang on a climb`);
 console.log(`   the ceiling six clubs at a time: ${reach} offers in ${reachFeeds} feeds of the most decorated careers, none from the top tier`);
 
 /* ================================================================== */
@@ -692,18 +706,25 @@ function placeInTier(teams, id, t) {
 }
 const later = (career, years) => { let c = career; for (let i = 0; i < years; i++) c = SEAT.sitOutYear(c); return c; };
 let reopenChecks = 0, quietChecks = 0;
-for (const k of closedCareers) {
+/* Shut is shut with or without a call today: the last call careers (offers on the table, next year shut) are held
+   to the same proof as the closed ones, since the year out is refused on the same word. */
+for (const k of [...closedCareers, ...lastCallCareers]) {
   const d = DRIVE[k.sport], teams0 = H.hostSeatTeams(d.host, k.lg, sameId);
   for (const t of [1, 2, 3, 4]) {
     const teams = placeInTier(teams0, k.old, t), tiers = SEAT.leagueTiers(teams);
     for (let y = 1; y <= 10; y++) {
       const c = later(k.seat.career, y);
       reopenChecks++;
-      if (MO.bestTierAvailable(SEAT.careerProfile(c, tiers)) !== null) { fail(`${k.at}: reads closed, yet ${y} more year(s) out with the old club in tier ${t} the market looks again`); break; }
-      if (SEAT.seatOffers(d.host.pack, teams, c, k.lg.season + 1 + y, K.keyedRng(`closed|${k.at}|${t}|${y}`), null).length) { fail(`${k.at}: reads closed, yet a feed ${y} year(s) on holds an offer`); break; }
+      if (MO.bestTierAvailable(SEAT.careerProfile(c, tiers)) !== null) { fail(`${k.at}: next year reads shut, yet ${y} more year(s) out with the old club in tier ${t} the market looks again`); break; }
+      if (SEAT.seatOffers(d.host.pack, teams, c, k.lg.season + 1 + y, K.keyedRng(`closed|${k.at}|${t}|${y}`), null).length) { fail(`${k.at}: next year reads shut, yet a feed ${y} year(s) on holds an offer`); break; }
     }
   }
 }
+/* The year out is on offer exactly while next year can hold a call, whatever the state says today. */
+for (const k of LINES) {
+  if (H.hostCanSitOut(k.m) !== (k.m.nextYear !== 'shut')) fail(`${k.at}: state ${k.m.state}, next year ${k.m.nextYear}, and the year out is ${H.hostCanSitOut(k.m) ? 'offered' : 'not offered'}`);
+}
+ok(H.hostCanSitOut(null) === false, 'a year out is offered to a man who holds a seat');
 for (const k of quietCareers) {
   const d = DRIVE[k.sport], teams0 = H.hostSeatTeams(d.host, k.lg, sameId), next = later(k.seat.career, 1);
   const open = t => MO.bestTierAvailable(SEAT.careerProfile(next, SEAT.leagueTiers(t === 0 ? teams0 : placeInTier(teams0, k.old, t)))) !== null;
@@ -711,7 +732,7 @@ for (const k of quietCareers) {
   if (k.m.nextYear === 'open' ? !open(0) : !(k.m.climbTo !== null && !open(0) && open(k.m.climbTo))) fail(`${k.at}: reads quiet (${k.m.nextYear}${k.m.climbTo ? ` to tier ${k.m.climbTo}` : ''}), and next year does not hold what it says`);
   if (k.m.nextYear === 'climb' && k.m.climbTo < 3 && tiersOf(d, k.lg).get(k.old) > k.m.climbTo + 1 && open(k.m.climbTo + 1)) fail(`${k.at}: a smaller climb than tier ${k.m.climbTo} already reopens it`);
 }
-console.log(`   ${closedCareers.length} closed careers held shut over ${reopenChecks} tier and year checks; ${quietCareers.length} quiet careers each still open as they say`);
+console.log(`   ${closedCareers.length} closed careers and ${lastCallCareers.length} last call careers held shut over ${reopenChecks} tier and year checks; ${quietCareers.length} quiet careers each still open as they say`);
 
 /* ================================================================== */
 begin('6', 'the close on every club\'s real season: today\'s two calls with no desk, and with one the record, the XP and the order');
@@ -999,7 +1020,7 @@ begin('8', 'spending: refused off the live list, with no point and past five, an
 
 /* ================================================================== */
 begin('9', 'taking a seat and a year out on real leagues: what moves, who owns a block, the refusals, and a year that is not a season');
-const C9 = { seats: 0, years: 0, refusals: 0 };
+const C9 = { seats: 0, years: 0, refusals: 0, lastCalls: 0 };
 /* A sport's own rows, the way a bind will spread them after the host's: the staff is the club's and opened again, the books are the club's and dropped, the picks are the league's. */
 const RULES = [...H.HOST_BLOCK_RULES, { key: 'staff', owner: 'club', fresh: (league, team) => ({ club: team }) }, { key: 'books', owner: 'club' }, { key: 'picks', owner: 'league' }];
 const boom = () => { throw new Error('the league was touched'); };
@@ -1060,6 +1081,27 @@ for (const sport of SPORTS) {
         C9.refusals++;
       }
       C9.refusals += 2;
+      /* Offers on the table that are the last calls. The top tier club's wreck is over the floor today and under it
+         next year whatever happens, and somebody calls on about one key in three. Read off as many keys as it takes
+         (the key holds the season he took the club), then the year out must be refused before the league is touched. */
+      const topOld = Object.keys(lg.teams).sort().find(id => tiers.get(id) === 1);
+      let lastCall = null;
+      for (let j = 0; j < 80 && !lastCall; j++) {
+        const base = firedSeat(topOld, 1, season, ['badly', 'badly', 'badly']);
+        const s = { ...base, career: { ...base.career, stints: [{ ...base.career.stints[0], from: base.career.stints[0].from - j }] } };
+        const mk = H.hostMarket(d.host, copy, s, nameOf);
+        if (mk && mk.state === 'offers' && mk.nextYear === 'shut') lastCall = { seat: s, m: mk };
+      }
+      if (!lastCall) fail(`${at}: no key in 80 brings the top tier club's wreck a call, so the last call refusal was never tried`);
+      else {
+        (SAMPLE[sport] ??= {}).last ??= { seat: lastCall.seat, m: lastCall.m, lg };
+        const t = SEAT.careerTotals(lastCall.seat.career);
+        const no = away({ desk: { v: 1, blocks: { seat: lastCall.seat } }, legacy: H.hostLegacy(d.host, copy, { team: topOld, seasonsPlayed: t.seasons, titles: t.titles, fired: true, seasonCounted: true }) });
+        ok(no.ok === false && no.reason === 'last-call', `${at}: a year out was played with ${lastCall.m.offers.length} offer(s) on the table and next year shut (${J(no).slice(0, 60)})`);
+        ok(H.hostCanSitOut(lastCall.m) === false && H.hostTakeSeat({ host: d.host, league: copy, desk: { v: 1, blocks: { seat: lastCall.seat } }, save: { ...save, myTeam: topOld }, legacy: H.hostLegacy(d.host, copy, { team: topOld, seasonsPlayed: t.seasons, titles: t.titles, fired: true, seasonCounted: true }), teamId: lastCall.m.offers[0].teamId, nameOf, blocks: RULES }) !== null,
+          `${at}: on the last call the year out is offered, or the offer itself cannot be taken`);
+        C9.lastCalls++;
+      }
     } catch (e) { fail(`${at}: a refused year out touched the league (${String(e && e.message).slice(0, 80)})`); }
     ok(J(copy) === frozen, `${at}: a refused year out changed the league`);
 
@@ -1091,8 +1133,8 @@ for (const sport of SPORTS) {
     if (card) { word(card.title, `${at} card`); card.lines.forEach(l => word(l, `${at} card`)); }
   }
 }
-ok(C9.seats >= SPORTS.length && C9.years >= SPORTS.length && C9.refusals >= SPORTS.length * 2, `only ${C9.seats} seats taken, ${C9.years} years out played and ${C9.refusals} refusals`);
-console.log(`   ${C9.seats} seats taken, ${C9.refusals} years out refused with the league untouched, ${C9.years} played by the engines in the host's order`);
+ok(C9.seats >= SPORTS.length && C9.years >= SPORTS.length && C9.refusals >= SPORTS.length * 2 && C9.lastCalls >= SPORTS.length, `only ${C9.seats} seats taken, ${C9.years} years out played, ${C9.refusals} refusals and ${C9.lastCalls} last calls`);
+console.log(`   ${C9.seats} seats taken, ${C9.refusals} years out refused with the league untouched (and ${C9.lastCalls} more on a last call, offers on the table), ${C9.years} played by the engines in the host's order`);
 
 /* ================================================================== */
 begin('10', 'the words: never empty, no dash, no quote, no placeholder; a closed line never says sit; no line states fewer seasons than he played');
@@ -1110,18 +1152,34 @@ const judge = (s, where) => {
   if (RAW.test(s)) fail(`an unfilled value on ${where}: ${s.slice(0, 80)}`);
 };
 for (const [s, where] of WORDS) judge(s, where);
+const ARMS = {};
 for (const k of LINES) {
   judge(k.line, `${k.at} line`); judge(k.value, `${k.at} box`); judge(k.sub, `${k.at} box`);
   if (k.state === 'closed' && SIT.test(`${k.line} ${k.value} ${k.sub}`)) fail(`${k.at}: a closed market tells him to sit (${k.line.slice(-70)})`);
   const told = /after (\d+) seasons?/.exec(k.line);
   if (k.out === 0 && (!told || Number(told[1]) !== k.seasons)) fail(`${k.at}: the line states ${told ? told[1] : 'no'} seasons, he ran the club for ${k.seasons}`);
+  /* Somebody called: the line says what passing costs whenever next year is not open, and nothing more when it is.
+     Judged against the line the same market prints with next year open, so no wording is pinned here. */
+  if (k.state === 'offers') {
+    const plain = H.hostMarketLine(k.pack, k.seat, 'offers', { nextYear: 'open', climbTo: null }, k.m.offers.length, k.oldName);
+    if (k.m.nextYear === 'open' ? k.line !== plain : !(k.line.startsWith(plain) && k.line.length > plain.length + 20)) fail(`${k.at}: ${k.m.offers.length} called and next year is ${k.m.nextYear}, and the line reads: ${k.line.slice(-90)}`);
+    if (k.m.nextYear === 'shut' && SIT.test(k.line)) fail(`${k.at}: the last calls, and the line tells him to sit`);
+  }
+  /* The stay out line: what he turns down, and a sentence for next year that an open year and a climb do not share. */
+  if (H.hostCanSitOut(k.m)) {
+    const arm = H.hostSitArmLine(k.m, true), turned = /turn down (\d+) offers?/.exec(arm);
+    judge(arm, `${k.at} stay out line`);
+    if (k.m.offers.length ? !turned || Number(turned[1]) !== k.m.offers.length : !!turned) fail(`${k.at}: ${k.m.offers.length} on the table, and the stay out line says: ${arm.slice(0, 90)}`);
+    (ARMS[k.m.nextYear] ??= new Set()).add(arm.replace(/ You turn down \d+ offers? to do it\./, ''));
+  }
 }
+ok(ARMS.open && ARMS.climb && ![...ARMS.open].some(a => ARMS.climb.has(a)), 'the stay out line reads the same whether next year is open or hangs on a climb');
 /* A record older than the block: the line counts the seasons known only as a count. */
 let legacyLines = 0;
 for (const sport of SPORTS) for (let sp = 1; sp <= 15; sp++) for (let ti = 0; ti <= Math.min(2, sp); ti++) for (const state of ['offers', 'quiet', 'closed']) {
   const pack = DRIVE[sport].host.pack;
   const b = H.hostLegacySeat({ team: 'AAA', tier: 3, season: 2030, seasonCounted: true, seasonsPlayed: sp, titles: ti, fired: true, lastGrade: null });
-  const line = H.hostMarketLine(pack, b, state, null, state === 'offers' ? 2 : 0, nameOf('AAA'));
+  const line = H.hostMarketLine(pack, b, state, { nextYear: state === 'closed' ? 'shut' : 'open', climbTo: null }, state === 'offers' ? 2 : 0, nameOf('AAA'));
   const told = /after (\d+) seasons?/.exec(line);
   legacyLines++;
   judge(line, `${sport} legacy line`);
@@ -1132,7 +1190,8 @@ for (const sport of SPORTS) for (let sp = 1; sp <= 15; sp++) for (let ti = 0; ti
 for (const sport of SPORTS) {
   const pack = DRIVE[sport].host.pack, earns = H.hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate']);
   for (const s of [...H.hostMarketHelp(pack), ...H.hostCareerHelp(pack), ...H.hostXpHelp(earns), earns, H.hostEarnsLine([]), H.hostEarnsLine(['wins']),
-    H.hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate', 'overperformance', 'prospects']), H.hostSitArmLine(true), H.hostSitArmLine(false)]) judge(s, `${sport} help`);
+    H.hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate', 'overperformance', 'prospects']),
+    ...['open', 'climb', 'shut'].flatMap(nextYear => [0, 1, 3].flatMap(n => [true, false].map(on => H.hostSitArmLine({ nextYear, offers: Array(n).fill(null) }, on))))]) judge(s, `${sport} help`);
   for (const [desk, live, on] of [[null, LIVE, false], [deskWith({}), LIVE, true], [deskWith({}), [], true], [G.freshGmDesk(), LIVE, true], [deskWith(Object.fromEntries(LIVE.map(t => [t, 5]))), LIVE, true]]) {
     const t = H.hostXpTile(desk, live, on);
     judge(t.value, `${sport} GM level box`); judge(t.sub, `${sport} GM level box`);
@@ -1162,6 +1221,13 @@ for (const sport of SPORTS) {
     const text = draw(M.MarketPanel, G.freshGmDesk(), facts(k.seat, k.m, 'fired', true), `${sport} job market panel (${kind})`);
     if (!text.includes(k.m.line)) fail(`${sport} job market panel (${kind}): the market's line is not on the screen`);
     if (kind === 'closed' && SIT.test(text)) fail(`${sport} job market panel: a closed market offers a year out`);
+    /* The stay out button is on the screen exactly while next year can hold a call. */
+    if (/stay out/i.test(text) !== (k.m.nextYear !== 'shut')) fail(`${sport} job market panel (${kind}): next year is ${k.m.nextYear} and the year out is ${/stay out/i.test(text) ? 'on' : 'not on'} the screen`);
+    if (kind === 'last') {
+      const plain = H.hostMarketLine(pack, k.seat, 'offers', { nextYear: 'open', climbTo: null }, k.m.offers.length, nameOf(SEAT.currentStint(k.seat.career).team));
+      judge(k.m.line, `${sport} last call line`);
+      if (!(k.m.line.startsWith(plain) && k.m.line.length > plain.length + 20) || SIT.test(k.m.line)) fail(`${sport}: the last calls, and the line does not say what passing costs (${k.m.line.slice(-90)})`);
+    }
     draw(M.CareerPanel, G.freshGmDesk(), facts(k.seat, k.m, 'fired', true), `${sport} career panel (${kind})`);
     const tiles = PANELS.map(p => p.tile({ sport: gm, desk: G.freshGmDesk(), facts: facts(k.seat, k.m, 'fired', true) }));
     if (tiles.some(t => !t)) fail(`${sport} (${kind}): a career box is missing between seats`);
@@ -1175,7 +1241,7 @@ for (const sport of SPORTS) {
   const lazy = M.render(PANELS[1].Panel, { sport: gm, desk: G.freshGmDesk(), facts: facts(held, null, 'hub', true), onDesk() {}, onBack() {} });
   if (!lazy.includes('data-gm-panel-loading')) fail(`${sport}: a panel that loads on demand drew no holding box under a server render`);
 }
-ok(SPORTS.every(s => ['offers', 'quiet', 'closed'].every(k => SAMPLE[s] && SAMPLE[s][k])), 'a sport reached no career in one of the three market states, so its panel was not drawn');
+ok(SPORTS.every(s => ['offers', 'quiet', 'closed', 'last'].every(k => SAMPLE[s] && SAMPLE[s][k])), 'a sport reached no career in one of the three market states or on a last call, so its panel was not drawn');
 console.log(`   ${wordsRead} strings read (${LINES.length} market lines, ${legacyLines} lines of an older record), ${panelsDrawn} panels drawn`);
 
 /* ================================================================== */
