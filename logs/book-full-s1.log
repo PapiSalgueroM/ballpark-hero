@@ -1,0 +1,48 @@
+simCmLeagueBook: 24 careers x 2 seasons (full fleet, seed set 1)
+stream  96 of 96 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 28.4s with the book and this harness watching every entry, 24.3s with the book out and nothing watching
+stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit
+shapes  credited rival goals 33888: forwards 55.6%, midfielders 34.7%, defenders 9.7%, keepers 0 goals
+        between other clubs (33106 goals), dealt against the weight: ATT 18006 vs 18029.0 (z -0.25), MID 11058 vs 10963.2 (z 1.11), DEF 3146 vs 3203.3 (z -1.07)
+        clubs with an eleven: assists 20566 on 33616 credited goals = 0.612 a goal (the rule 0.614, z -0.69); own goals 932 of 34548 = 2.70% (the rule 2.75%, z -0.59); every club: 20566 assists on 33888 credited goals = 0.607 a goal
+        unnamed goals 9072 (club weeks with no named eleven: 8612); my league matches 1792, reports whose lines did not add up to the score: 0
+        no named eleven in championship: 2070 of 5290 club weeks, 9 of 28 rival clubs seen (Blackburn Rovers 7 men, 1 keepers; Bolton Wanderers 3 men, 0 keepers; Cardiff City 4 men, 1 keepers; Charlton Athletic 8 men, 1 keepers; Lincoln City 2 men, 0 keepers; Millwall 11 men, 0 keepers; ...)
+        no named eleven in bundesliga: 476 of 4046 club weeks, 4 of 21 rival clubs seen (Elversberg 10 men, 1 keepers; Heidenheim 10 men, 0 keepers; Kaiserslautern 7 men, 1 keepers; Schalke 04 16 men, 0 keepers)
+        no named eleven in bundesliga2: 2720 of 2890 club weeks, 17 of 19 rival clubs seen (Arminia Bielefeld 3 men, 1 keepers; Bochum 4 men, 0 keepers; Braunschweig 2 men, 1 keepers; Darmstadt 4 men, 0 keepers; Dynamo Dresden 1 men, 0 keepers; Elversberg 10 men, 1 keepers; ...)
+        no named eleven in laliga: 874 of 4332 club weeks, 8 of 24 rival clubs seen (Almería 5 men, 0 keepers; Ceuta 0 men, 0 keepers; Espanyol 14 men, 0 keepers; Girona 10 men, 1 keepers; Mallorca 8 men, 1 keepers; Málaga 5 men, 0 keepers; ...)
+        no named eleven in eredivisie: 2244 of 3468 club weeks, 11 of 17 rival clubs seen (ADO Den Haag 0 men, 0 keepers; Cambuur 0 men, 0 keepers; Excelsior 1 men, 0 keepers; Fortuna Sittard 3 men, 0 keepers; Go Ahead Eagles 5 men, 1 keepers; Groningen 6 men, 1 keepers; ...)
+        no named eleven in laliga2010: 228 of 4332 club weeks, 1 of 19 rival clubs seen (Levante 10 men, 1 keepers)
+        top ten of the Goals board held by forwards and wingers: 9.23 on the book, 5.21 on the old race, rise 4.02 (floor 2) over 48 seasons
+names   94230 checks; 4 purchases probed (the best scorer of the rivals signed at week 22, twelve entries played on)
+oldsave 579 checks: 4 saves with no book finished on the candidate and on the book out engine, the season after each, and five unreadable books
+doors   2439 checks: three takeovers and two joined jobs (season one and season three), the law at the handover and after every entry to the end of the season
+dailies 50 checks: 4 Hot Seat dates played to a verdict, handed over and played on, 3 Deadline Day dates, each state byte equal to the book out engine's
+boards  by league, the book against the old race on the same seasons (penalties and free kicks to the taker)
+        premier      20 clubs, 13 seasons: top scorer mean 27.9 (27 26 29 24 28 30 27 28 30 29 29 28 28), old race mean 30.7, most assists mean 11.9, leading keeper's clean sheets mean 17.2
+        championship 24 clubs,  5 seasons: top scorer mean 36.8 (31 41 32 38 42), old race mean 39.4, most assists mean 14.0, leading keeper's clean sheets mean 24.6
+        bundesliga   18 clubs,  7 seasons: top scorer mean 26.4 (22 32 25 28 23 29 26), old race mean 30.9, most assists mean 11.6, leading keeper's clean sheets mean 17.9
+        bundesliga2  18 clubs,  5 seasons: top scorer mean 21.8 (32 17 27 19 14), old race mean 29.0, most assists mean 9.4, leading keeper's clean sheets mean 16.6
+        laliga       20 clubs,  6 seasons: top scorer mean 30.0 (31 27 24 29 39 30), old race mean 33.3, most assists mean 13.5, leading keeper's clean sheets mean 24.2
+        eredivisie   18 clubs,  6 seasons: top scorer mean 24.2 (28 22 22 23 25 25), old race mean 30.0, most assists mean 9.7, leading keeper's clean sheets mean 19.2
+        laliga2010   20 clubs,  6 seasons: top scorer mean 29.5 (32 28 27 33 31 26), old race mean 30.2, most assists mean 12.0, leading keeper's clean sheets mean 22.2
+        38 game leagues: 25 seasons, top scorer mean 28.80, standard deviation 2.99, standard error 0.60; old race mean 31.20
+        34 game leagues: 18 seasons, top scorer mean 24.39, standard deviation 4.63, standard error 1.09; old race mean 30.06
+        46 game leagues: 5 seasons, top scorer mean 36.80, standard deviation 4.53, standard error 2.03; old race mean 39.40
+        the top scorer was a: ATT 48, MID 0, DEF 0 (of 48 seasons)
+        the old race on the same seasons: 27557 of 43903 rival goals given to anybody (62.8%), of those forwards 49.7%, midfielders 50.3%; the book names a man for 77.2% and marks 943 own goals and 9072 unnamed
+        a Clean sheets board of every man (keepers and defenders): its top ten holds men of 2.54 clubs and 2.08 keepers on average
+        a back four picked by clean sheets + goals + assists: 2.92 men of one club on average; by goals + assists (club clean sheets, then table place, to split): 1.69, with 0.00 of the four on no goal and no assist
+law     50627 checks over 2169 entries of 24 careers, and 277 entries of 6 seasons with the video referee on (228 league matches of mine, 162 reviews, 0 reports whose lines did not add up to the score)
+green stream   96 checks
+green law      50627 checks
+green names    94230 checks
+green shapes   7 checks
+RED   oldsave  579 checks, 9 failed
+        Southampton, twenty entries in, written by the book out engine: the next season did not open with an empty book
+        Southampton, twenty entries in, written by the book out engine next season, entry 1: the save has no readable book
+        Southampton, twenty entries in, written by the book out engine next season, entry 2: the save has no readable book
+        Southampton, twenty entries in, written by the book out engine next season, entry 3: the save has no readable book
+        Southampton, twenty entries in, written by the book out engine next season, entry 4: the save has no readable book
+green doors    2439 checks
+green dailies  50 checks
+simCmLeagueBook: 9 FAILURE(S) (68s)
