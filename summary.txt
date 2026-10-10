@@ -1,0 +1,15 @@
+cmvar exit=0 16s | simCmVar normal: actual review outcomes and full prior baseline passed.
+cmvar-controls exit=0 37s | simCmVar: 9 actual outcomes and 10 effective controls passed.
+appeal exit=0 24s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+realfix-as-is exit=1 2s | Node.js v24.21.0
+realfix-leadblock exit=0 5s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+init exit=0 0s | fd981e93cda3bdccaa360cee3eb3ae81a65cacb8
+m1218 exit=0 0s | b69fbd19a Merge remote-tracking branch 'origin/r1218-cm-var-true' into rc/r1229-fx8
+m1218-cmvar exit=0 59s | simCmVar normal: actual review outcomes and full prior baseline passed.
+m1218-cmvar-controls exit=0 256s | simCmVar: 12 actual outcomes and 20 effective controls passed.
+m1218-book exit=0 25s | simCmLeagueBook: green, 7 sections, 5 careers x 2 seasons (24s)
+m1225 exit=0 0s | 0533a8f7a Merge remote-tracking branch 'origin/r1225-cm-fixtures-bind' into rc/r1229-fx8
+m1225-realfix exit=0 2s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+m1225-book exit=0 25s | simCmLeagueBook: green, 7 sections, 5 careers x 2 seasons (25s)
+m1225-tsc exit=0 45s | 
+back exit=0 0s | fd981e93c rc request r1229-fx8 for 61ee53ddba722fa123adb559e2c87af54438a5fb
