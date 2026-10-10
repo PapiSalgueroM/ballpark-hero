@@ -269,3 +269,14 @@ and the generator check exit 0, the three ledger controls fire, the type gate is
 and its control fails three cases, every test file that drives the hook, the help or the live screen is green,
 and the walk is green on the plain build at 390 and 1280 (21 cases, two help views). The runner names and the
 numbers are in the closing report of the fix.
+
+**Coverage after the same pass: 16 of 48.** Three more leagues say yes on two publishers on two hosts, each line
+read on its page on 2026-10-10: the Austrian Bundesliga (a news site and the federation's own circular for
+2026-27), the SuperSport HNL (a news site's report of the referees' seminar and the announced agreement for the
+video system from 2026/27) and the Saudi Pro League (the referees' camp for 2026-27 and a report of a review in
+the opening round; that second page does not print the season, and the row's note says so). Not filed, with the
+reason in the ledger's `notRead.why`: the A-League Men (two pages that could not be opened), Super League
+Greece (one undated page), the Segunda (the federation's pages refuse a reader, one undated club page), Ligue 2
+(one newspaper's report, and it says no), MLS (a calendar year season the rule does not settle), Liga MX and
+Serie B (nothing that names the league and its video assistant in 2026-27). Ten leagues and all twenty domestic
+cups remain unread or unfiled, the Championship and the Danish Superliga stand on one source each.
