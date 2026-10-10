@@ -1,0 +1,10 @@
+gen-freeagents exit=0 1s | genClubManagerFreeAgents --check: up to date, 7 men
+gen-russia exit=0 0s | src/data/clubManagerRussia2026.ts is a fresh generation from scripts/data/gatheredSquads/russia2026/research.json (sha256 ccbb26127e4609f743ef07593f186efa36ebed6f6c163622
+gen-aleague exit=0 0s | A-League file unchanged by a fresh generation
+vitest exit=0 4s |    Duration  2.75s (transform 1.17s, setup 65ms, collect 1.38s, tests 270ms, environment 467ms, prepare 149ms)
+simClubManagerALeague exit=0 10s | simClubManagerALeague: all checks passed
+simClubManagerGathered exit=0 1s | simClubManagerGathered: all checks passed (1 gathered league(s), 403 men, 1436 printed squad entries accounted for, 83 addresses, 5 cited facts, the old save)
+simEraBakeExtend exit=0 0s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simFreeAgents exit=0 20s | simFreeAgents: all sections passed
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
+tsc exit=0 66s | 
