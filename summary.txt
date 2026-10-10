@@ -1,0 +1,2 @@
+flags-six exit=1 1s | simNationalityFlags: 7 failures
+tsc exit=0 44s | 

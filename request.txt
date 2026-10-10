@@ -1,0 +1,2 @@
+flags-six: node scripts/simNationalityFlags.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

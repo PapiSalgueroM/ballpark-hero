@@ -1,0 +1,13 @@
+simNationalityFlags
+   OWED (a bare print this harness knows about and does not fail on): src/components/soccer-career/TrophyCabinet.tsx:135 {career.nationality}, owner the other lane (Soccer Career), listed 2026-10-10
+1. Flags: 72 print sites across 36 files, every one with a flag on its line or the line before, bar 1 owed (16 Round 453 sites pinned)
+2. Codes: 3118 nationality literals in src/data and src/lib, none a three letter code; WEDGES (5 three letter shorts) stays inside dartDraft.ts, unreferenced by any page or component
+  FAIL: market nationalities: 6 with no confederation, which would shove them into an "Elsewhere" group: Niger, Namibia, French Guiana, Mauritius, Southern Sudan, Turkmenistan
+  FAIL: market nationalities: Niger has no confederation
+  FAIL: market nationalities: Namibia has no confederation
+  FAIL: market nationalities: French Guiana has no confederation
+  FAIL: market nationalities: Mauritius has no confederation
+  FAIL: market nationalities: Southern Sudan has no confederation
+  FAIL: market nationalities: Turkmenistan has no confederation
+
+simNationalityFlags: 7 failures
