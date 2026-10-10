@@ -842,7 +842,10 @@ const whole = s => sha(JSON.stringify(s));
       if (text === good) cannot(`the damage "${what}" changed nothing`);
       if (maker.cm.leagueBookOf(v) !== null) fail('oldsave', `a save whose book is ${what} reads as having a book`);
       const on = fourOn(await candidate.again(), v);
-      const off = fourOn(await candidate.again(), JSON.parse(JSON.stringify(plain)));
+      /* A book the match week cannot read is played as the save with no book at all. The holed one it can
+         read and does write to, so it is played beside the same save with its book whole: the rest of the
+         save must not know the difference (and the two sides then deal alike, whatever a control does). */
+      const off = fourOn(await candidate.again(), JSON.parse(JSON.stringify(weekSeesIt ? plain : made.next)));
       if (withoutBook(on) !== withoutBook(off)) fail('oldsave', `a save whose book is ${what} does not play the four entries the same save with no book plays`);
       if (weekSeesIt && JSON.stringify(on.leagueBook) !== text) fail('oldsave', `a save whose book is ${what} had it written into: ${String(JSON.stringify(on.leagueBook)).slice(0, 80)}`);
     }
