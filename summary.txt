@@ -1,0 +1,15 @@
+vitest exit=0 6s |    Duration  4.76s (transform 640ms, setup 397ms, collect 2.58s, tests 3.01s, environment 3.30s, prepare 1.27s)
+simGmDeskHost-again exit=0 54s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simGmDeskHost exit=0 61s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 76s | 
+anchors exit=0 0s | simGmDeskHost anchors: 27 rewrites checked, 0 cannot run
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simGmDeskHost-789 exit=0 55s | simGmDeskHost: all 10 checks passed on seeds 7,8,9 (4 engines, 3 seasons a seed)
+simGmDeskHost-456 exit=0 60s | simGmDeskHost: all 10 checks passed on seeds 4,5,6 (4 engines, 3 seasons a seed)
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 1s | simStorageWrites: all green
+simNoRivalNames exit=0 15s | No rival product names found. 0 findings.
+simGmDesk exit=0 0s | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and 
+simNoInventedQuotes exit=0 23s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simDailySaveHardening-alone exit=0 59s | simDailySaveHardening: part all green
+simGmSeat exit=0 76s | simGmSeat: all checks passed
