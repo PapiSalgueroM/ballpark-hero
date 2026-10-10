@@ -1,0 +1,98 @@
+Saves found by the engine of /tmp/base on seed 20261010: 920 matches searched, 25 own goals seen in the minutes wanted; meBack match 76, oppBack match 256, keeper match 920, h2 match 185, plain match 2
+meBack-390: Barcelona v Villarreal, Renato Veiga 13' (O.G) for me; 390 by 844, motion on, speed 1x
+  info  meBack-390: 607 frames, 240 of the goal (plant 31, flight 60, net 149), the pitch is portrait
+  ok    meBack-390: the card reads "GOAL! Renato Veiga 13' (O.G)"
+  ok    meBack-390: the surface marks all 240 frames of the own goal and none outside it
+  ok    meBack-390: the score goes 0 - 0 to 1 - 0, never before the net
+  ok    meBack-390: the ball comes within 0.2 of the man the card names (dot "3 Veiga", pose strike) and nobody is nearer
+  info  meBack-390: at the touch his dot reads "3 Veiga" (his name is on it); he stands 40.3, 16.3
+  info  meBack-390: the biggest move of a figure between two frames: inside the action 0.18 (mine p-gabriel-jesus, plant, 17 ms apart), across its end 0.09 (mine p-lamine-yamal), in the 40 frames after 1.81; the ball's biggest step inside the action 0.58
+  ok    meBack-390: in the net he alone carries the head in hands mark (146 frames; his figure's pose attribute reads strike), nobody of his side cheers, 3 of the other side raise their arms
+  info  meBack-390: the list beside the pitch says (no line with his name on screen at this size)
+meBack-1280: Barcelona v Villarreal, Renato Veiga 13' (O.G) for me; 1280 by 900, motion on, speed 2x
+  info  meBack-1280: 373 frames, 151 of the goal (plant 16, flight 30, net 105), the pitch is portrait
+  ok    meBack-1280: the card reads "GOAL! Renato Veiga 13' (O.G)"
+  ok    meBack-1280: the surface marks all 151 frames of the own goal and none outside it
+  ok    meBack-1280: the score goes 0 - 0 to 1 - 0, never before the net
+  ok    meBack-1280: the ball comes within 0.3 of the man the card names (dot "3 Veiga", pose strike) and nobody is nearer
+  info  meBack-1280: at the touch his dot reads "3 Veiga" (his name is on it); he stands 40.3, 16.3
+  info  meBack-1280: the biggest move of a figure between two frames: inside the action 0.36 (mine p-gabriel-jesus, plant, 17 ms apart), across its end 0.37 (mine p-lamine-yamal), in the 40 frames after 4.11; the ball's biggest step inside the action 1.15
+  ok    meBack-1280: in the net he alone carries the head in hands mark (102 frames; his figure's pose attribute reads strike), nobody of his side cheers, 3 of the other side raise their arms
+  info  meBack-1280: the list beside the pitch says ["13'GOAL! Own goal, Renato Veiga (O.G)"]
+meBack-390-reduced: Barcelona v Villarreal, Renato Veiga 13' (O.G) for me; 390 by 844, reduced motion, speed 2x
+  info  meBack-390-reduced: 376 frames, 155 of the goal (plant 0, flight 0, net 155), the pitch is portrait
+  ok    meBack-390-reduced: the card reads "GOAL! Renato Veiga 13' (O.G)"
+  ok    meBack-390-reduced: the surface marks all 155 frames of the own goal and none outside it
+  ok    meBack-390-reduced: the score goes 0 - 0 to 1 - 0, never before the net
+  ok    meBack-390-reduced: reduced motion shows one still picture for all 155 frames of the action, in the net at once
+  ok    meBack-390-reduced: in the net he alone carries the head in hands mark (152 frames; his figure's pose attribute reads strike), nobody of his side cheers, 3 of the other side raise their arms
+  info  meBack-390-reduced: the list beside the pitch says (no line with his name on screen at this size)
+meBack-844side: Barcelona v Villarreal, Renato Veiga 13' (O.G) for me; 844 by 390, motion on, speed 1x
+  info  meBack-844side: 610 frames, 240 of the goal (plant 31, flight 60, net 149), the pitch is landscape
+  ok    meBack-844side: the card reads "GOAL! Renato Veiga 13' (O.G)"
+  ok    meBack-844side: the surface marks all 240 frames of the own goal and none outside it
+  ok    meBack-844side: the score goes 0 - 0 to 1 - 0, never before the net
+  ok    meBack-844side: the ball comes within 0.2 of the man the card names (dot "3 Veiga", pose strike) and nobody is nearer
+  info  meBack-844side: at the touch his dot reads "3 Veiga" (his name is on it); he stands 40.3, 16.3
+  info  meBack-844side: the biggest move of a figure between two frames: inside the action 0.18 (mine p-gabriel-jesus, plant, 17 ms apart), across its end 0.09 (mine p-lamine-yamal), in the 40 frames after 1.81; the ball's biggest step inside the action 0.58
+  ok    meBack-844side: in the net he alone carries the head in hands mark (146 frames; his figure's pose attribute reads strike), nobody of his side cheers, 3 of the other side raise their arms
+  info  meBack-844side: the list beside the pitch says (no line with his name on screen at this size)
+oppBack-390: Arsenal v Chelsea, Riccardo Calafiori 32' (O.G) against me; 390 by 844, motion on, speed 0.5x
+  info  oppBack-390: 957 frames, 226 of the goal (plant 61, flight 121, net 44), the pitch is portrait
+  ok    oppBack-390: the card reads "GOAL! Riccardo Calafiori 32' (O.G)"
+  ok    oppBack-390: the surface marks all 226 frames of the own goal and none outside it
+  ok    oppBack-390: the score goes 1 - 1 to 1 - 2, never before the net
+  ok    oppBack-390: the ball comes within 0.0 of the man the card names (dot "5 Calafiori", pose strike) and nobody is nearer
+  info  oppBack-390: at the touch his dot reads "5 Calafiori" (his name is on it); he stands 24.0, 82.1
+  info  oppBack-390: the biggest move of a figure between two frames: inside the action 0.10 (mine p-david-raya, flight, 17 ms apart), across its end 7.53 (mine p-david-raya), in the 40 frames after 7.52; the ball's biggest step inside the action 0.47
+  ok    oppBack-390: in the net he alone carries the head in hands mark (41 frames; his figure's pose attribute reads strike), nobody of his side cheers, 3 of the other side raise their arms
+  info  oppBack-390: the list beside the pitch says (no line with his name on screen at this size)
+oppBack-1280-reduced: Arsenal v Chelsea, Riccardo Calafiori 32' (O.G) against me; 1280 by 900, reduced motion, speed 2x
+  info  oppBack-1280-reduced: 359 frames, 155 of the goal (plant 0, flight 0, net 155), the pitch is portrait
+  ok    oppBack-1280-reduced: the card reads "GOAL! Riccardo Calafiori 32' (O.G)"
+  ok    oppBack-1280-reduced: the surface marks all 155 frames of the own goal and none outside it
+  ok    oppBack-1280-reduced: the score goes 1 - 1 to 1 - 2, never before the net
+  ok    oppBack-1280-reduced: reduced motion shows one still picture for all 155 frames of the action, in the net at once
+  ok    oppBack-1280-reduced: in the net he alone carries the head in hands mark (152 frames; his figure's pose attribute reads strike), nobody of his side cheers, 3 of the other side raise their arms
+  info  oppBack-1280-reduced: the list beside the pitch says ["32'GOAL! Own goal, Riccardo Calafiori (O.G)"]
+keeper-390: Barcelona v Real Madrid, Joan García 11' (O.G) against me, off the keeper; 390 by 844, motion on, speed 1x
+  info  keeper-390: 608 frames, 240 of the goal (plant 31, flight 60, net 149), the pitch is portrait
+  ok    keeper-390: the card reads "GOAL! Joan García 11' (O.G)"
+  ok    keeper-390: the surface marks all 240 frames of the own goal and none outside it
+  ok    keeper-390: the score goes 0 - 0 to 0 - 1, never before the net
+  ok    keeper-390: the ball comes within 0.3 of the man the card names (dot "1 García", pose dive) and nobody is nearer
+  info  keeper-390: at the touch his dot reads "1 García" (his name is on it); he stands 46.7, 91.1
+  info  keeper-390: the biggest move of a figure between two frames: inside the action 0.17 (theirs 10, plant, 17 ms apart), across its end 0.09 (theirs 11), in the 40 frames after 1.87; the ball's biggest step inside the action 0.55
+  ok    keeper-390: in the net he alone carries the head in hands mark (146 frames; his figure's pose attribute reads dive), nobody of his side cheers, 3 of the other side raise their arms
+  info  keeper-390: the list beside the pitch says (no line with his name on screen at this size)
+keeper-1280: Barcelona v Real Madrid, Joan García 11' (O.G) against me, off the keeper; 1280 by 900, motion on, speed 1x
+  info  keeper-1280: 610 frames, 240 of the goal (plant 31, flight 60, net 149), the pitch is portrait
+  ok    keeper-1280: the card reads "GOAL! Joan García 11' (O.G)"
+  ok    keeper-1280: the surface marks all 240 frames of the own goal and none outside it
+  ok    keeper-1280: the score goes 0 - 0 to 0 - 1, never before the net
+  ok    keeper-1280: the ball comes within 0.3 of the man the card names (dot "1 García", pose dive) and nobody is nearer
+  info  keeper-1280: at the touch his dot reads "1 García" (his name is on it); he stands 46.7, 91.1
+  info  keeper-1280: the biggest move of a figure between two frames: inside the action 0.17 (theirs 10, plant, 17 ms apart), across its end 0.09 (theirs 11), in the 40 frames after 1.87; the ball's biggest step inside the action 0.55
+  ok    keeper-1280: in the net he alone carries the head in hands mark (146 frames; his figure's pose attribute reads dive), nobody of his side cheers, 3 of the other side raise their arms
+  info  keeper-1280: the list beside the pitch says ["11'GOAL! Own goal, Joan García (O.G)"]
+h2-390: Everton v Liverpool, Jarrad Branthwaite 67' (O.G) against me, second half; 390 by 844, motion on, speed 2x
+  info  h2-390: 357 frames, 151 of the goal (plant 16, flight 30, net 105), the pitch is portrait
+  ok    h2-390: the card reads "GOAL! Jarrad Branthwaite 67' (O.G)"
+  ok    h2-390: the surface marks all 151 frames of the own goal and none outside it
+  ok    h2-390: the score goes 1 - 0 to 1 - 1, never before the net
+  ok    h2-390: the ball comes within 0.5 of the man the card names (dot "2 Branthwaite", pose strike) and nobody is nearer
+  info  h2-390: at the touch his dot reads "2 Branthwaite" (his name is on it); he stands 75.0, 82.1
+  info  h2-390: the biggest move of a figure between two frames: inside the action 0.31 (theirs 10, plant, 16 ms apart), across its end 0.38 (theirs 11), in the 40 frames after 3.72; the ball's biggest step inside the action 1.91
+  ok    h2-390: in the net he alone carries the head in hands mark (102 frames; his figure's pose attribute reads strike), nobody of his side cheers, 3 of the other side raise their arms
+  info  h2-390: the list beside the pitch says (no line with his name on screen at this size)
+plain-390: Everton v Bournemouth, Brennan Johnson 33' for me; 390 by 844, motion on, speed 1x
+  info  plain-390: 607 frames, 240 of the goal (plant 31, flight 60, net 149), the pitch is portrait
+  ok    plain-390: the card reads "GOAL! Brennan Johnson 33'"
+  ok    plain-390: the score goes 0 - 1 to 1 - 1, never before the net
+  info  plain-390: the biggest move of a figure between two frames: inside the action 0.24 (theirs 1, flight, 17 ms apart), across its end 0.10 (mine p-thierno-barry), in the 40 frames after 2.06; the ball's biggest step inside the action 0.56
+  ok    help: the (O.G) bullet reads "A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head."
+  info  help: the panel is 10, 370, 380, 786 on a 390 by 844 screen, content 414 tall in 414
+  info  What's New entry (611 characters): Club Manager: an own goal looks like one on the pitch. A player told us an own goal in a live match still played like any other goal, and he was right. In Club Manager the card said (O.G) while the pitch showed a striker scoring and celebrating. Now the ball goes in off the man the card names, a defender or the keeper of the side that conceded, and he puts his hands to his head. Nobody jumps about as the scorer: the side that got it just raise their arms where they stand. The score, the net and the card still change at the same instant as for any goal, and no result moves. The ? on the match says so too.
+  ok    What's New: the entry is there, with no dash in it
+  info  What's New: the first list item on the page starts "Club Manager: an own goal looks like one on the pitch. A pla"
+runWalk: green. Every watch held what a player is promised.
