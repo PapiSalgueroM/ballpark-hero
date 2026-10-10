@@ -1,0 +1,28 @@
+simUsSeasonCentre-days exit=1 23s | simUsSeasonCentre: 98 checks, 1 failed (control days)
+simUsSeasonCentre exit=0 28s | simUsSeasonCentre: 98 checks, 0 failed
+simUsSeasonCentre-bigkick exit=1 31s | simUsSeasonCentre: 98 checks, 1 failed (control bigkick)
+simUsSeasonCentre-flat exit=1 29s | simUsSeasonCentre: 98 checks, 1 failed (control flat)
+simUsSeasonCentre-lawdrift exit=2 0s | the digest mode has one control and that control has one mode: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare, refusing to run
+simUsSeasonCentre-forty exit=1 24s | simUsSeasonCentre: 98 checks, 10 failed (control forty)
+simUsSeasonCentre-kick exit=1 31s | simUsSeasonCentre: 98 checks, 1 failed (control kick)
+simUsSeasonCentre-lumpy exit=1 25s | simUsSeasonCentre: 98 checks, 3 failed (control lumpy)
+simUsSeasonCentre-level exit=1 30s | simUsSeasonCentre: 98 checks, 1 failed (control level)
+simUsSeasonCentre-minutes exit=1 29s | simUsSeasonCentre: 98 checks, 1 failed (control minutes)
+simUsSeasonCentre-nflformula exit=1 27s | simUsSeasonCentre: 98 checks, 1 failed (control nflformula)
+simUsSeasonCentre-nflheld exit=1 30s | simUsSeasonCentre: 98 checks, 2 failed (control nflheld)
+simUsSeasonCentre-nflstage exit=1 25s | simUsSeasonCentre: 93 checks, 3 failed (control nflstage)
+simUsSeasonCentre-oddsack exit=1 28s | simUsSeasonCentre: 98 checks, 1 failed (control oddsack)
+simUsSeasonCentre-order exit=1 25s | simUsSeasonCentre: 98 checks, 1 failed (control order)
+simUsSeasonCentre-oddtd exit=1 29s | simUsSeasonCentre: 98 checks, 1 failed (control oddtd)
+simUsSeasonCentre-points exit=1 27s | simUsSeasonCentre: 98 checks, 3 failed (control points)
+simUsSeasonCentre-sum exit=1 28s | simUsSeasonCentre: 98 checks, 1 failed (control sum)
+simUsSeasonCentre-poscore exit=1 31s | simUsSeasonCentre: 98 checks, 1 failed (control poscore)
+sim exit=0 8s | simGmDraftOrder: green. 603089 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+simUsSeasonCentre-tdform exit=1 30s | simUsSeasonCentre: 98 checks, 1 failed (control tdform)
+digest-compare-expect-exit-3 exit=3 32s | simUsSeasonCentre digest compare: NOT COMPARED, 8 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+controls-0 exit=0 147s | simGmDraftOrder controls (shard 0/3 of 40): all 14 fired, each in exactly its own sections.
+c-unknown exit=3 0s | SIM_GM_DRAFT_ORDER_CONTROL=nosuchcontrol is not a control this harness knows (onesource, thinoutside, twintable, closespan, flat, oddsrow, extradraw, seconddraw, mathrand
+controls-1 exit=0 138s | simGmDraftOrder controls (shard 1/3 of 40): all 13 fired, each in exactly its own sections.
+where exit=0 0s | presenter files in src/components/motion: 0
+gmpicks exit=0 9s | simGmPicks: 1199 checks passed over 4 leagues, 5 seeds and 10 seasons each. The lottery tables are the published ones and the draws sit inside their bands, an old save ke
+controls-2 exit=0 137s | simGmDraftOrder controls (shard 2/3 of 40): all 13 fired, each in exactly its own sections.

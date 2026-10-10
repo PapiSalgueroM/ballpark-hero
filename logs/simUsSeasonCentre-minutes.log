@@ -1,0 +1,167 @@
+bundled in 171 ms; sports nba, nfl; 40 careers a sport and a seed set; seed sets 0, 1, 2, 3, 4; CONTROL minutes
+played 480 careers twice in 27762 ms; 8436 seasons observed
+
+===== NBA: 4493 seasons (743 targeted), 4493 played =====
+ok   1 nba every team result is the engine's missed word or one of its five (4493 checked)
+ok   1 nba games played sit in the engine's ranges (4493 checked)
+ok   1 nba short seasons (66 or 72 games) are in the population (219, floor 100: 20 a seed set, 41 to 45 measured)
+     by result: missed 2282, 1095 / 530 / 272 / 143 / 171 (depth 0 to title)
+ok   1 nba every playoff depth and a title are in the population
+ok   1 nba an injury season is in the population, among the seasons the viewer opens (358, 306 of them open)
+ok   1 nba a backup season is in the population (1000)
+ok   1 nba every position is in the population
+ok   1 nba both eras are in the population
+ok   2 nba the hub's held line is there exactly when the binding holds the season (4493 checked)
+ok   2 nba the line the binding hands the hub is the ledger's own line for this sport (4493 checked)
+ok   2 nba no held season yields a derived season (451 checked)
+     2011: 99 seasons (99 organic, 0 targeted), 99 held
+ok   2 nba 2011 is in the population and every one is held
+     2012: 99 seasons (99 organic, 0 targeted), 99 held
+ok   2 nba 2012 is in the population and every one is held
+     2019: 133 seasons (93 organic, 40 targeted), 133 held
+ok   2 nba 2019 is in the population and every one is held
+     2020: 120 seasons (80 organic, 40 targeted), 120 held
+ok   2 nba 2020 is in the population and every one is held
+ok   2 nba the targeted careers reach held seasons (80)
+     open 4042, derived 4042, refused 0 (0.0%) {}
+ok   3 nba enough open seasons to mean anything (4042)
+ok   7 nba has measured bands (five seed sets, written above REFUSED_MAX)
+ok   3 nba seasons that cannot be laid out stay under 1.0% (0.0%)
+ok   3 nba the season shown is the season saved (independent checker) (4042 checked)
+     takeover lines: 14176 in 316281 games he played (4.5%), in 2132 of 4042 seasons
+ok   3 nba the feed's takeover line is in the population (14176)
+ok   4 nba the playoff path follows the saved result, the playoff games and the bracket's conferences (4042 checked)
+ok   4 nba named playoff rounds were checked for their conference (1593 before the last round, 129 in it)
+     paths shown: 2001; playoff seasons 2001
+ok   5 nba the schedule follows the formula and every name is the game's own (4042 checked)
+     named 1865, unnamed 2177 (organic unnamed 1514, targeted unnamed 663)
+ok   5 nba named and unnamed seasons are both in the population
+ok   5 nba the ledger's ids for era now are exactly the game's list (30 against 30)
+ok   5 nba a throwback season never names an opponent (2177 checked)
+ok   6 nba deriving twice, from a JSON round trip, gives the same season, path and totals (4042 checked)
+     repairs: none in 88.9%, median 0, p90 1; attempts after the first in 0.0%
+       seed set 0: 812 derived, no repair 88.7%, refused 0.0%
+       seed set 1: 809 derived, no repair 89.2%, refused 0.0%
+       seed set 2: 810 derived, no repair 89.0%, refused 0.0%
+       seed set 3: 802 derived, no repair 87.4%, refused 0.0%
+       seed set 4: 809 derived, no repair 90.1%, refused 0.0%
+ok   7 nba at least 80% of seasons need no repair (88.9%)
+     wins for "Missed the playoffs": n 2041, median 30, p10 23, p90 37 (band 17 to 40, middle half 22.75 to 34.25)
+ok   7 nba the median record for "Missed the playoffs" sits in the middle half of its band
+     wins for "Lost in the first round": n 999, median 46, p10 41, p90 52 (band 41 to 52, middle half 43.75 to 49.25)
+ok   7 nba the median record for "Lost in the first round" sits in the middle half of its band
+     wins for "Lost in the conference semis": n 476, median 49, p10 45, p90 56 (band 45 to 57, middle half 48 to 54)
+ok   7 nba the median record for "Lost in the conference semis" sits in the middle half of its band
+     wins for "Lost the Conference Finals": n 245, median 54, p10 48, p90 60 (band 48 to 61, middle half 51.25 to 57.75)
+ok   7 nba the median record for "Lost the Conference Finals" sits in the middle half of its band
+     wins for "Lost the NBA Finals": n 122, median 56, p10 50, p90 61 (band 50 to 64, middle half 53.5 to 60.5)
+ok   7 nba the median record for "Lost the NBA Finals" sits in the middle half of its band
+     wins for "WON THE NBA FINALS": n 159, median 58, p10 52, p90 64 (band 52 to 67, middle half 55.75 to 63.25)
+ok   7 nba the median record for "WON THE NBA FINALS" sits in the middle half of its band
+     points a team game, era now: 115.76 over 152930 games (league mean 115.6)
+ok   7 nba points a team game in era now within 1 of the league mean (115.76 against 115.6)
+     points a team game, era y2004: 93.58 over 178514 games (league mean 93.4)
+ok   7 nba points a team game in era y2004 within 1 of the league mean (93.58 against 93.4)
+     his share of his team's points: median 0.125, p99 0.391 over 316281 games
+ok   7 nba his share of his team's points at the 99th percentile stays under 0.5 (0.391)
+
+===== NFL: 3943 seasons (658 targeted), 3943 played =====
+ok   1 nfl every team result is the engine's missed word or one of its five (3943 checked)
+ok   1 nfl games played sit in the engine's ranges (3943 checked)
+     by result: missed 2006, 943 / 455 / 257 / 128 / 154 (depth 0 to title)
+ok   1 nfl every playoff depth and a title are in the population
+ok   1 nfl an injury season is in the population, among the seasons the viewer opens (253, 162 of them open)
+ok   1 nfl a backup season is in the population (1126)
+ok   1 nfl every position is in the population
+ok   1 nfl both eras are in the population
+ok   2 nfl the hub's held line is there exactly when the binding holds the season (3943 checked)
+ok   2 nfl the line the binding hands the hub is the ledger's own line for this sport (3943 checked)
+ok   2 nfl no held season yields a derived season (1421 checked)
+     2005: 80 seasons (80 organic, 0 targeted), 80 held
+ok   2 nfl 2005 is in the population and every one is held
+     2012: 80 seasons (80 organic, 0 targeted), 80 held
+ok   2 nfl 2012 is in the population and every one is held
+     2020: 102 seasons (62 organic, 40 targeted), 102 held
+ok   2 nfl 2020 is in the population and every one is held
+     2022: 80 seasons (40 organic, 40 targeted), 80 held
+ok   2 nfl 2022 is in the population and every one is held
+ok   2 nfl the targeted careers reach held seasons (160)
+     open 2522, derived 2522, refused 0 (0.0%) {}
+ok   3 nfl enough open seasons to mean anything (2522)
+ok   7 nfl has measured bands (five seed sets, written above REFUSED_MAX)
+ok   3 nfl seasons that cannot be laid out stay under 1.0% (0.0%)
+ok   3 nfl the season shown is the season saved (independent checker) (2522 checked)
+     saves from before Round 1104: 659 seasons with sacks in tenths (324 an odd tenth alone, 335 a half and an odd tenth), refused 0, shown 659
+ok   3 nfl seasons saved with sacks in tenths are in the population, both arms (324 and 335, at least 25 each)
+ok   3 nfl a season saved with sacks in tenths still opens: refused stay under 1.0% (0.0%)
+ok   3 nfl a season saved with sacks in tenths shows the sacks the save holds (659 checked)
+ok   4 nfl the playoff path follows the saved result, the playoff games and the bracket's conferences (2522 checked)
+ok   4 nfl named playoff rounds were checked for their conference (1673 before the last round, 135 in it)
+     paths shown: 1220; playoff seasons 1220
+ok   5 nfl the schedule follows the formula and every name is the game's own (2522 checked)
+     named 1973, unnamed 549 (organic unnamed 51, targeted unnamed 498)
+ok   5 nfl named and unnamed seasons are both in the population
+ok   5 nfl the ledger's ids for era now are exactly the game's list (32 against 32)
+ok   5 nfl the ledger's eight divisions equal the Front Office table division by division
+ok   5 nfl a throwback season never names an opponent (549 checked)
+ok   6 nfl deriving twice, from a JSON round trip, gives the same season, path and totals (2522 checked)
+     repairs: none in 81.7%, median 0, p90 1; attempts after the first in 0.0%
+       seed set 0: 500 derived, no repair 78.6%, refused 0.0%
+       seed set 1: 502 derived, no repair 84.1%, refused 0.0%
+       seed set 2: 505 derived, no repair 79.2%, refused 0.0%
+       seed set 3: 500 derived, no repair 85.8%, refused 0.0%
+       seed set 4: 515 derived, no repair 80.8%, refused 0.0%
+ok   7 nfl at least 70% of seasons need no repair (81.7%)
+     wins for "Missed the playoffs": n 1302, median 6, p10 3, p90 9 (band 2 to 9, middle half 3.75 to 7.25)
+ok   7 nfl the median record for "Missed the playoffs" sits in the middle half of its band
+     wins for "Lost in the Wild Card round": n 593, median 10, p10 9, p90 12 (band 9 to 12, middle half 9.75 to 11.25)
+ok   7 nfl the median record for "Lost in the Wild Card round" sits in the middle half of its band
+     wins for "Lost in the Divisional round": n 283, median 11, p10 10, p90 13 (band 10 to 13, middle half 10.75 to 12.25)
+ok   7 nfl the median record for "Lost in the Divisional round" sits in the middle half of its band
+     wins for "Lost the Conference Championship": n 165, median 13, p10 11, p90 14 (band 11 to 14, middle half 11.75 to 13.25)
+ok   7 nfl the median record for "Lost the Conference Championship" sits in the middle half of its band
+     wins for "Lost the Super Bowl": n 83, median 13, p10 11, p90 15 (band 11 to 15, middle half 12 to 14)
+ok   7 nfl the median record for "Lost the Super Bowl" sits in the middle half of its band
+     wins for "WON THE SUPER BOWL": n 96, median 13, p10 11, p90 15 (band 11 to 15, middle half 12 to 14)
+ok   7 nfl the median record for "WON THE SUPER BOWL" sits in the middle half of its band
+     points a team game, era now: 22.90 over 33541 games
+ok   7 nfl points a team game in era now inside 21 to 24.5 (22.90)
+     points a team game, era y2005: 22.82 over 9333 games
+ok   7 nfl points a team game in era y2005 inside 21 to 24.5 (22.82)
+     level games: 58 of 42874 (0.1%); touchdowns not worth seven: 1.7% of 226080; safeties 177
+     his touchdowns are his team's whole score in 1.5% of the 35700 games he played
+     a kicker's makes a game (0 to 6): 0: 19.0%, 1: 30.3%, 2: 29.4%, 3: 15.3%, 4: 4.4%, 5: 1.2%, 6: 0.4% over 5845 games
+     a side on 40 or more: 5.4% of team games; on 49 or more: 0.7%; shut out: 0.6%
+     his team's points a game by his touchdowns that day: none 18.9 (7986 games), one 24.6 (5176), two 27.0 (2118), three or more 31.2 (1193)
+ok   7 nfl his two touchdown days are at least 4.5 points a game better for his team than his blank days (8.1)
+ok   7 nfl a side scores 40 or more in under 7% of team games (5.4%)
+ok   7 nfl level games stay under 0.6% (0.14%)
+ok   7 nfl touchdowns not worth seven stay under 3% (1.7%)
+ok   7 nfl a kicker makes five or six in under 6% of his games (1.6% of 5845)
+     his headline number in a full season (14 or more games; 1370 seasons, 23200 games): a laid number on its per game cap in 0.00%; more than twice his season's average in 0.49%
+     its spread game to game (standard deviation over his average): the middle season 0.377, p10 0.268, p90 0.503; by number: passYds 0.268 (236), rushYds 0.332 (132), rec 0.455 (402), tackles 0.383 (600)
+ok   7 nfl his yards, catches and tackles sit on a per game cap in under 0.5% of a full season's games (0.00%)
+ok   7 nfl his headline number is more than twice his season's average in under 2.0% of those games (0.49%)
+ok   7 nfl the middle full season's game to game spread sits inside 0.25 to 0.46 (0.377): his games differ and none runs away
+     a quarterback's touchdown passes in a full season (3948 games): scatter over a plain count 1.032; on the cap of six in 0.91% of them
+ok   7 nfl a quarterback's touchdown passes scatter no more than 1.13 times a plain count (1.032 over 3948 games)
+     the feed: one side's scoring drives one after another under three minutes apart in 18.87% of 267524 pairs; two lines in back to back minutes in 21.28% of 320646
+FAIL 7 nfl a side's scoring drives one after another are under three minutes apart in under 1.0% of pairs (18.87%)
+ok   7 nfl the order of the games reads oddly (a rival twice running, four straight at home or away) in under 2% of seasons (0.00% of 2522)
+
+===== 6: nothing moves =====
+ok   6 Math.random is never drawn while a season is derived (trap 0)
+ok   6 every career saved the same bytes with and without the viewer (8567 season hashes, 0 differ)
+
+===== 8: lazy by source =====
+ok   8 the static closure of the two routes was walked (132 files)
+ok   8 the walk reaches src/components/us-career/season/UsSeasonCentreHost.tsx
+ok   8 no eager file of the two routes statically imports the season modules, the viewer or the league shape (132 checked)
+ok   8 a planted static import of the viewer in UsSeasonCentreHost.tsx is named (11 files)
+ok   8 the same text in a comment is spared
+ok   8 src/lib/season/us.ts holds no Math.random and no new Rng(
+ok   8 src/lib/season/nba.ts holds no Math.random and no new Rng(
+ok   8 src/lib/season/nfl.ts holds no Math.random and no new Rng(
+
+control minutes: RED AT THE NAMED CHECK (section 7); sections red: 7; its named check "under three minutes apart" is among the reds
+simUsSeasonCentre: 98 checks, 1 failed (control minutes)

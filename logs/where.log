@@ -1,0 +1,6 @@
+abf55902b rc request rAU-K1 for 75e6a9af7afc2a1055436f120e59203511e22fdd
+75e6a9af7 Release AU: merge Release AT's gate branch again (65ef7639, the squad help fits a phone again)
+src/components/lottery/LotteryReveal.test.tsx
+src/components/lottery/LotteryReveal.tsx
+src/lib/lotteryReveal.ts
+presenter files in src/components/motion: 0
