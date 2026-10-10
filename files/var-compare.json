@@ -1,0 +1,218 @@
+{
+  "clubs": 21,
+  "matches": 680,
+  "walkSteps": 701,
+  "walkEqual": 701,
+  "walkDiffer": 0,
+  "firstWalkDifference": null,
+  "offQuick": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 0,
+      "result": 0,
+      "scorers": 0,
+      "cards": 0,
+      "subs": 0,
+      "draws": 0,
+      "next": 0,
+      "report": 0,
+      "state": 0
+    },
+    "first": null
+  },
+  "offLive": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 0,
+      "result": 0,
+      "scorers": 0,
+      "cards": 0,
+      "subs": 0,
+      "draws": 0,
+      "next": 0,
+      "report": 0,
+      "state": 0
+    },
+    "first": null
+  },
+  "onQuick": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 196,
+      "result": 85,
+      "scorers": 240,
+      "cards": 139,
+      "subs": 174,
+      "draws": 207,
+      "next": 207,
+      "report": 385
+    },
+    "first": {
+      "club": "Arsenal",
+      "entry": 1,
+      "seed": 907920,
+      "field": "score",
+      "as": "[\"Ipswich Town\",\"Arsenal\",0,2,\"regular\",null]",
+      "head": "[\"Ipswich Town\",\"Arsenal\",1,2,\"regular\",null]",
+      "asDraws": 1327,
+      "headDraws": 1327
+    }
+  },
+  "onLive": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 157,
+      "result": 64,
+      "scorers": 162,
+      "cards": 32,
+      "subs": 19,
+      "draws": 120,
+      "next": 120,
+      "report": 356
+    },
+    "first": {
+      "club": "Arsenal",
+      "entry": 3,
+      "seed": 923758,
+      "field": "report",
+      "as": "[\"Arsenal\",\"Dinamo Zagreb\",3,0,\"regular\",null]",
+      "head": "[\"Arsenal\",\"Dinamo Zagreb\",3,0,\"regular\",null]",
+      "asDraws": 290,
+      "headDraws": 290
+    }
+  },
+  "shownVsSkipped": {
+    "compared": 680,
+    "notCompared": 0,
+    "differs": {
+      "score": 0,
+      "result": 0,
+      "scorers": 0,
+      "cards": 0,
+      "subs": 0,
+      "draws": 0,
+      "next": 0,
+      "report": 0
+    },
+    "first": null
+  },
+  "on": {
+    "matchesWithReview": 345,
+    "reviews": 469,
+    "disallowed": 76,
+    "confirmed": 166,
+    "penaltyConfirmed": 104,
+    "penaltyAwarded": 123,
+    "matchesWithAwardedPenalty": 116,
+    "goalsAS": 1722,
+    "goalsOn": 1758,
+    "byComp": {
+      "league": 308,
+      "uclGroup": 11,
+      "cup": 24,
+      "uclKo": 2
+    },
+    "matchesByComp": {
+      "league": 602,
+      "uclGroup": 24,
+      "cup": 50,
+      "uclKo": 4
+    },
+    "confirmedGoalIsOwnGoalOnSheet": 3,
+    "confirmedGoalMissingFromSheet": 0,
+    "confirmedGoalOtherName": 0,
+    "disallowedGoalStillOnSheet": 0,
+    "awardedPenaltyWithoutPenaltyRow": 0,
+    "scoreSheetMismatch": 0,
+    "examples": [
+      {
+        "what": "VAR confirmed a goal for one man and the sheet gives it as an own goal by another",
+        "club": "Arsenal",
+        "entry": 7,
+        "seed": 955434,
+        "match": "Roma 0-1 Arsenal",
+        "review": {
+          "minute": 17,
+          "side": "me",
+          "kind": "var",
+          "text": "Christos Tzolis",
+          "review": {
+            "id": "2026:Arsenal:7:Roma:0:45:me:17:0:Christos Tzolis:goal",
+            "incident": "goal",
+            "decision": "confirmed",
+            "reason": "clear"
+          }
+        },
+        "goalsHere": [
+          {
+            "minute": 17,
+            "side": "me",
+            "kind": "goal",
+            "text": "Mile Svilar",
+            "og": true
+          }
+        ]
+      },
+      {
+        "what": "VAR confirmed a goal for one man and the sheet gives it as an own goal by another",
+        "club": "Southampton",
+        "entry": 24,
+        "seed": 1190060,
+        "match": "Southampton 1-1 Stoke City",
+        "review": {
+          "minute": 49,
+          "side": "opp",
+          "kind": "var",
+          "text": "Divin Mubama",
+          "review": {
+            "id": "2026:Southampton:30:Stoke City:45:90:opp:49:0:Divin Mubama:goal",
+            "incident": "goal",
+            "decision": "confirmed",
+            "reason": "clear"
+          }
+        },
+        "goalsHere": [
+          {
+            "minute": 49,
+            "side": "opp",
+            "kind": "goal",
+            "text": "Nathan Wood",
+            "og": true
+          }
+        ]
+      },
+      {
+        "what": "VAR confirmed a goal for one man and the sheet gives it as an own goal by another",
+        "club": "Olympiacos",
+        "entry": 26,
+        "seed": 2705943,
+        "match": "Panathinaikos 2-1 Olympiacos",
+        "review": {
+          "minute": 4,
+          "side": "opp",
+          "kind": "var",
+          "text": "Nemanja Maksimovic",
+          "review": {
+            "id": "2026:Olympiacos:36:Panathinaikos:0:45:opp:4:0:Nemanja Maksimovic:goal",
+            "incident": "goal",
+            "decision": "confirmed",
+            "reason": "clear"
+          }
+        },
+        "goalsHere": [
+          {
+            "minute": 4,
+            "side": "opp",
+            "kind": "goal",
+            "text": "Panagiotis Retsos",
+            "og": true
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+cmVar starts: 21 careers started by this tree: Arsenal, Southampton, Real Sociedad, Bologna, Köln, Le Havre, Twente, Al-Hilal, Atlanta United, Minnesota United, Vitória Guimarães, Celtic, Galatasaray, Holstein Kiel, Union Saint-Gilloise, RB Salzburg, Olympiacos, FC Nordsjælland, Young Boys, Dinamo Zagreb, Everton
+cmVar mk: 680 matches recorded over 21 careers
+cmVar cmp: 680 matches over 21 careers started by Release AS code; walk steps 701, state after equal 701, different 0; first difference null
+reviews OFF, Quick Sim, head against AS: 680 compared (0 not), differs in score 0, result 0, scorers 0, cards 0, subs 0, draws 0, next 0, report 0, state 0
+reviews OFF, live path, head against AS: 680 compared (0 not), differs in score 0, result 0, scorers 0, cards 0, subs 0, draws 0, next 0, report 0, state 0
+reviews ON (what the hook passes), Quick Sim, head against AS: 680 compared (0 not), differs in score 196, result 85, scorers 240, cards 139, subs 174, draws 207, next 207, report 385
+reviews ON (what the hook passes), live path, head against AS: 680 compared (0 not), differs in score 157, result 64, scorers 162, cards 32, subs 19, draws 120, next 120, report 356
+reviews ON, stopped at the break against played through, nobody coaching, head only: 680 compared (0 not), differs in score 0, result 0, scorers 0, cards 0, subs 0, draws 0, next 0, report 0
+reviews ON: {"matchesWithReview":345,"reviews":469,"disallowed":76,"confirmed":166,"penaltyConfirmed":104,"penaltyAwarded":123,"matchesWithAwardedPenalty":116,"goalsAS":1722,"goalsOn":1758,"byComp":{"league":308,"uclGroup":11,"cup":24,"uclKo":2},"matchesByComp":{"league":602,"uclGroup":24,"cup":50,"uclKo":4},"confirmedGoalIsOwnGoalOnSheet":3,"confirmedGoalMissingFromSheet":0,"confirmedGoalOtherName":0,"disallowedGoalStillOnSheet":0,"awardedPenaltyWithoutPenaltyRow":0,"scoreSheetMismatch":0,"examples":3}
+cmVar: default path byte equal to AS: YES; the lead's rule (a review never moves a result): BROKEN; at least 500 matches

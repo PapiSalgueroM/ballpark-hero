@@ -1,0 +1,64 @@
+cmDaily base: 120 dates dealt, 0 hot seat errors, 0 deadline errors
+cmDaily head: 120 dates dealt, 0 hot seat errors, 0 deadline errors
+2026-10-10 HOT Athletic Club (La Liga) bound=no SAME | DEADLINE Rangers bound=no SAME
+2026-10-11 HOT Young Boys (Swiss Super League) bound=no SAME | DEADLINE Borussia Dortmund bound=no SAME
+2026-10-12 HOT Westerlo (Belgian Pro League) bound=no SAME | DEADLINE Atalanta bound=no SAME
+2026-10-13 HOT Celta Vigo (La Liga) bound=no SAME | DEADLINE Trabzonspor bound=no SAME
+2026-10-14 HOT Monza (Serie A) bound=no SAME | DEADLINE PAOK bound=no SAME
+2026-10-15 HOT Osasuna (La Liga) bound=no SAME | DEADLINE St. Pauli bound=no SAME
+2026-10-16 HOT Cruz Azul (Liga MX) bound=no SAME | DEADLINE Nice bound=no SAME
+2026-10-17 HOT Trabzonspor (Süper Lig) bound=no SAME | DEADLINE Valencia bound=no SAME
+2026-10-18 HOT Al-Ahli (Saudi Pro League) bound=no SAME | DEADLINE Nottingham Forest bound=yes SAME
+2026-10-19 HOT Hamburg (Bundesliga) bound=no SAME | DEADLINE Cruzeiro bound=no SAME
+2026-10-20 HOT Toulouse (Ligue 1) bound=no SAME | DEADLINE Monterrey bound=no SAME
+2026-10-21 HOT Anderlecht (Belgian Pro League) bound=no SAME | DEADLINE Como bound=no SAME
+2026-10-22 HOT León (Liga MX) bound=no SAME | DEADLINE Auxerre bound=no SAME
+2026-10-23 HOT Elche (La Liga) bound=no SAME | DEADLINE Heidenheim bound=no SAME
+2026-10-24 HOT Athletico Paranaense (Brasileirão Série A) bound=no SAME | DEADLINE Monaco bound=no SAME
+2026-10-25 HOT Samsunspor (Süper Lig) bound=no SAME | DEADLINE Deportivo La Coruña bound=no SAME
+2026-10-26 HOT Le Havre (Ligue 1) bound=no SAME | DEADLINE FC Juárez bound=no SAME
+2026-10-27 HOT Nottingham Forest (Premier League) bound=yes DIFFERENT | DEADLINE Al-Hilal bound=no SAME
+    AS   opened: 6/20 P11 19pts wk11 target 6 next {"kind":"match","competition":"league","compLabel":"Premier League · Round 12","opponent":
+    head opened: 12/20 P6 7pts wk6 target 4 next {"kind":"match","competition":"league","compLabel":"Premier League · Round 7","opponent":"
+    AS   played: Newcastle 2-0, Leeds United 1-0 => ["survived",6]
+    head played: Arsenal 1-2, Chelsea 1-2, Ipswich Town 0-1, Brentford 2-2, Manchester City 1-2 => ["boardSacked",1]
+2026-10-28 HOT PSG (Ligue 1) bound=no SAME | DEADLINE Red Bull Bragantino bound=no SAME
+2026-10-29 HOT FC Midtjylland (Danish Superliga) bound=no SAME | DEADLINE Lecce bound=no SAME
+2026-10-30 HOT Sturm Graz (Austrian Bundesliga) bound=no SAME | DEADLINE Sassuolo bound=no SAME
+2026-10-31 HOT Deportivo La Coruña (La Liga) bound=no SAME | DEADLINE Göztepe bound=no SAME
+2026-11-01 HOT Utrecht (Eredivisie) bound=no SAME | DEADLINE Manchester United bound=yes SAME
+2026-11-02 HOT RB Salzburg (Austrian Bundesliga) bound=no SAME | DEADLINE Torino bound=no SAME
+2026-11-03 HOT Real Betis (La Liga) bound=no SAME | DEADLINE Celtic bound=no SAME
+2026-11-04 HOT Flamengo (Brasileirão Série A) bound=no SAME | DEADLINE Hoffenheim bound=no SAME
+2026-11-05 HOT AZ Alkmaar (Eredivisie) bound=no SAME | DEADLINE Wellington Phoenix bound=no SAME
+2026-11-06 HOT QPR (EFL Championship) bound=no SAME | DEADLINE Rio Ave bound=no SAME
+2026-11-07 HOT Fenerbahçe (Süper Lig) bound=no SAME | DEADLINE Stoke City bound=no SAME
+2026-11-08 HOT Hoffenheim (Bundesliga) bound=no SAME | DEADLINE Toluca bound=no SAME
+2026-11-09 HOT Minnesota United (MLS Western Conference) bound=no SAME | DEADLINE Sunderland bound=yes SAME
+2026-11-10 HOT Dynamo Makhachkala (Russian Premier League) bound=no SAME | DEADLINE New York City FC bound=no SAME
+2026-11-11 HOT Swansea City (EFL Championship) bound=no SAME | DEADLINE Rangers bound=no SAME
+2026-11-12 HOT Derby County (EFL Championship) bound=no SAME | DEADLINE Başakşehir bound=no SAME
+2026-11-13 HOT Başakşehir (Süper Lig) bound=no SAME | DEADLINE Derby County bound=no SAME
+2026-11-14 HOT Sunderland (Premier League) bound=yes DIFFERENT | DEADLINE Minnesota United bound=no SAME
+    AS   opened: 18/20 P7 6pts wk7 target 3 next {"kind":"match","competition":"cup","compLabel":"FA Cup · Round of 16","opponent":"Coventr
+    head opened: 19/20 P14 7pts wk14 target 3 next {"kind":"match","competition":"league","compLabel":"Premier League · Round 15","opponent":
+    AS   played: Coventry City 0-2, Ipswich Town 2-3, Hull City 1-1, Fulham 1-2, Arsenal 2-2, Brentford 0-2 => ["sacked",2]
+    head played: Nottingham Forest 1-0 => ["survived",3]
+2026-11-15 HOT León (Liga MX) bound=no SAME | DEADLINE Köln bound=no SAME
+2026-11-16 HOT Portland Timbers (MLS Western Conference) bound=no SAME | DEADLINE Crystal Palace bound=yes SAME
+2026-11-17 HOT West Ham (EFL Championship) bound=no SAME | DEADLINE Sporting CP bound=no SAME
+2026-11-18 HOT Guadalajara (Liga MX) bound=no SAME | DEADLINE Freiburg bound=no SAME
+2026-11-19 HOT Saint-Étienne (Ligue 2) bound=no SAME | DEADLINE Brest bound=no SAME
+2026-11-20 HOT St. Louis City (MLS Western Conference) bound=no SAME | DEADLINE Ipswich Town bound=yes SAME
+2026-11-21 HOT Birmingham City (EFL Championship) bound=no SAME | DEADLINE Celtic bound=no SAME
+2026-11-22 HOT Internacional (Brasileirão Série A) bound=no SAME | DEADLINE RB Leipzig bound=no SAME
+2026-11-23 HOT Rennes (Ligue 1) bound=no SAME | DEADLINE Melbourne Victory bound=no SAME
+2026-11-24 HOT Monaco (Ligue 1) bound=no SAME | DEADLINE Newcastle Jets bound=no SAME
+2026-11-25 HOT Mallorca (Segunda División) bound=no SAME | DEADLINE Ajax bound=no SAME
+2026-11-26 HOT Sheffield United (EFL Championship) bound=no SAME | DEADLINE Rio Ave bound=no SAME
+2026-11-27 HOT Palmeiras (Brasileirão Série A) bound=no SAME | DEADLINE Torino bound=no SAME
+2026-11-28 HOT Verona (Serie B) bound=no SAME | DEADLINE Auxerre bound=no SAME
+2026-11-29 HOT Twente (Eredivisie) bound=no SAME | DEADLINE Dynamo Moscow bound=no SAME
+2026-11-30 HOT Auckland FC (A-League Men) bound=no SAME | DEADLINE Lyon bound=no SAME
+{"dates":120,"first14":{"hotSame":14,"hotDiffer":0,"ddSame":14,"ddDiffer":0},"all":{"hotSame":115,"hotDiffer":5,"ddSame":120,"ddDiffer":0},"hotBoundDays":5,"hotBoundDiffer":5,"hotUnboundDiffer":0,"ddBoundDays":11,"ddBoundDiffer":0,"pickDiffers":0,"replayBroken":120,"hotVisibleDiffer":5,"hotVisibleDates":["2026-10-27 Nottingham Forest","2026-11-14 Sunderland","2027-01-19 Fulham","2027-01-30 Everton","2027-02-06 Bournemouth"]}
+cmDaily: RE-DEAL. Hot Seat differs on 5 of 120 dates (0 of the first 14), Deadline Day on 0 (0 of the first 14); bound days 5, of which 5 differ; unbound days that differ 0
