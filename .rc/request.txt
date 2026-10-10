@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+simMobileChrome: node scripts/simMobileChrome.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+playHomeFold: node scripts/playHomeFold.mjs
+playSoftFourOhFour: node scripts/playSoftFourOhFour.mjs
+playTranslatedPage: node scripts/playTranslatedPage.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+playFlagshipLazy: node scripts/playFlagshipLazy.mjs
+playReducedMotion: node scripts/playReducedMotion.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
