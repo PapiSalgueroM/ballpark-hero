@@ -1,0 +1,45 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [2m[90m↓[39m[22m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m
+ [32m✓[39m src/test/usSeasonNfl.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 3156[2mms[22m[39m
+   [33m[2m✓[22m[39m nflDrives[2m > [22mmakes every score from 0 to 70, with 0 to 5 touchdowns of his and every exact field goal count [33m 583[2mms[22m[39m
+   [33m[2m✓[22m[39m an NFL season, derived from its saved line[2m > [22mlands every total of every position, game by game, with drives that make each score [33m 534[2mms[22m[39m
+   [33m[2m✓[22m[39m his line, game by game[2m > [22mkeeps an everyday season off the per game caps and near his average, while his games still differ [33m 323[2mms[22m[39m
+   [33m[2m✓[22m[39m the feed, minute by minute[2m > [22mnever puts two lines in back to back minutes, or two scoring drives of one side under three minutes apart, where the hour has room [33m 613[2mms[22m[39m
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 1436[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: an NBA career plays the season the ledger holds[2m > [22mplays the ledger length in every year the ledger holds one, and 82 in a year it holds none for [33m 900[2mms[22m[39m
+ [32m✓[39m src/test/seasonCore.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 146[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 1312[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 578[2mms[22m[39m
+ [32m✓[39m src/test/usPlayoffs.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 3717[2mms[22m[39m
+   [33m[2m✓[22m[39m usSeriesOrder[2m > [22mputs the clincher last and lets nobody clinch early, for every length and 200 seeds [33m 2052[2mms[22m[39m
+   [33m[2m✓[22m[39m usPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit [33m 1277[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreWords.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1188[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: soccer markup, recorded on the base (Round 1048)[2m > [22mprints the soccer shaped season exactly as the base viewer did, with no new field set [33m 592[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: a sport that brings its own words (Round 1048)[2m > [22mprints the US words, the record panel and the playoff path on the true layout (desktop) [33m 411[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreScreens.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 3875[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mdraws every screen exactly as the base did [33m 1156[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: a group label changed moves a recorded screen [33m 778[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the halfway line changed moves a recorded screen [33m 455[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the first tile's label changed moves a recorded screen [33m 576[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: a review note changed moves a recorded screen [33m 479[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the help's footnote changed moves a recorded screen [33m 425[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m42 tests[22m[2m)[22m[33m 13028[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 4901[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 1106[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 2975[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 1039[2mms[22m[39m
+ [32m✓[39m src/test/usPostseasonFormat.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonSlate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 53686[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 53684[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (12)[39m
+[2m      Tests [22m [1m[32m180 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (184)[39m
+[2m   Start at [22m 23:53:37
+[2m   Duration [22m 71.13s[2m (transform 5.34s, setup 971ms, collect 14.28s, tests 81.61s, environment 8.34s, prepare 1.94s)[22m
+
