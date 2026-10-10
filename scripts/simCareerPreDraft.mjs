@@ -58,6 +58,36 @@
  *      the engine FUNCTIONS; that the three buttons still call them is Round
  *      993's test (src/test/usCareerProspect.test.tsx), which this round does
  *      not edit.                        Controls `gradeshift` and `extradraw`.
+ *  13. Round 1220: DRAFT NIGHT SHOWS WHAT THE ENGINE DID, AND NEVER DRAWS
+ *      (src/lib/careerDraftNight.ts; the numbers 10 to 12 are kept for the
+ *      combine a later round builds on this head). On every finished road:
+ *      the closing row is the SAVED pick, round and club (the saved outcome
+ *      is the witness, not the order worked out again); every pick row's
+ *      club is the holder in the order the harness works out itself; picks
+ *      rise; every pick called before the closing row is shown exactly once
+ *      (on the lottery tile, as a row or inside a gap) and none at or past
+ *      it; a gap covers at least two picks; lottery rows exist exactly where
+ *      the descriptor has a lottery and are the drawn clubs with their seeds;
+ *      the range the card quotes before the draft is the range the night
+ *      recalls and the drawn pick is inside it (an undrafted road always had
+ *      "undrafted" in its range); at most 8 board rows and 12 rows in all.
+ *      The edges live at picks the fleet rarely reaches, so they are BUILT:
+ *      every pick from 1 to 12, the last four picks and an undrafted ending,
+ *      in all eight pairs. An outcome the order does not back (another club,
+ *      a shifted pick, a wrong round) builds nothing: fail closed. And the
+ *      whole pass runs with Math.random made to throw, leaves every saved
+ *      state byte equal, and builds the same night twice.
+ *      Controls `nightoffbyone`, `nightlottery`, `nightopen`, `nightdedup`,
+ *      `nightdraw` and `projection`.
+ *      Measured on seed set a, 2026-10-10, each exit 1 with failures in
+ *      section 13 only: nightoffbyone 8 pairs (every pick row shows the next
+ *      holder), nightlottery the 2 NBA pairs (rows read the standings),
+ *      nightopen 8 pairs (216 to 228 unbacked outcomes built a night),
+ *      nightdedup 8 pairs (a gap of -1 picks, a pick shown twice, picks past
+ *      the closing row), nightdraw 1 (Math.random was called), projection 8
+ *      pairs (pick 19 outside the quoted 21 to 27). gradeshift and extradraw:
+ *      the 8 lines of section 9 and nothing else. squeeze: 24 (sections 2, 3
+ *      and 9), where it used to exit 2.
  *
  * Bands, measured over five seed sets (SEEDSET=a..e, 2,000 careers per sport
  * and era each, 20,000 lottery draws per era each), 2026-10-03, on the tree
@@ -153,6 +183,12 @@ const CONTROLS = {
   loadershallow: ['src/lib/careerPreDraft.ts', 'if (!Array.isArray(r.lines) || !r.lines.every(isSeasonRecord)) return null;', 'if (!Array.isArray(r.lines)) return null;'],
   gradeshift: ['src/lib/careerPreDraft.ts', "return roll > 0.8 ? 'A' : roll > 0.5 ? 'B' : roll > 0.2 ? 'C' : 'D';", "return roll > 0.79 ? 'A' : roll > 0.5 ? 'B' : roll > 0.2 ? 'C' : 'D';"],
   extradraw: ['src/lib/careerPreDraft.ts', 'const grade = preDraftShowcaseGrade(s, rng);', 'rng(); const grade = preDraftShowcaseGrade(s, rng);'],
+  nightoffbyone: ['src/lib/careerDraftNight.ts', "const pickRow = (pick: number): CareerNightRow => ({ kind: 'pick', pick, round: roundOf(pick), team: o.order[pick - 1] });", "const pickRow = (pick: number): CareerNightRow => ({ kind: 'pick', pick, round: roundOf(pick), team: o.order[pick] });"],
+  nightlottery: ['src/lib/careerDraftNight.ts', 'const team = o.lotteryWinners[slot - 1];', 'const team = o.standings[slot - 1];'],
+  nightopen: ['src/lib/careerDraftNight.ts', '|| o.order[d.pick - 1] !== d.team', ''],
+  nightdedup: ['src/lib/careerDraftNight.ts', 'if (span <= head + tail + 1) {', 'if (span <= 0) {'],
+  nightdraw: ['src/lib/careerDraftNight.ts', 'const o = preDraftOrder(desc, s.seed);', "const o = preDraftOrder(desc, s.seed + (Math.random() < 2 ? '' : 'x'));"],
+  projection: ['src/lib/careerPreDraft.ts', 'return { lo: preDraftBoardRankAt(s.stock, total, 0) + off, hi: preDraftBoardRankAt(s.stock, total, 1) + off, total };', 'return { lo: preDraftBoardRankAt(s.stock, total, 0.25) + off, hi: preDraftBoardRankAt(s.stock, total, 0.75) + off, total };'],
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 if (CONTROL && RECORD) { console.error('A recording is never written from a mutated engine. Refusing to run.'); process.exit(2); }
@@ -163,6 +199,7 @@ const BUNDLE = path.join(TMP, 'bundle.mjs');
 const lib = f => path.join(ROOT, 'src/lib', f).replace(/\\/g, '/');
 fs.writeFileSync(ENTRY, [
   `export * from '${lib('careerPreDraft.ts')}';`,
+  `export * from '${lib('careerDraftNight.ts')}';`,
   `export { keyedRng } from '${lib('keyedRng.ts')}';`,
   `export { nflPreDraftDescriptor } from '${lib('nflCareerPreDraft.ts')}';`,
   `export { nbaPreDraftDescriptor, NBA_LOTTERY_NOW, NBA_LOTTERY_2003 } from '${lib('nbaCareerPreDraft.ts')}';`,
@@ -178,7 +215,7 @@ const controlPlugin = {
     const abs = path.join(ROOT, file).replace(/\\/g, '/');
     const src = fs.readFileSync(abs, 'utf-8');
     if (!src.includes(needle)) { console.error(`Control ${CONTROL}: needle not found in ${file}. Refusing to run.`); process.exit(2); }
-    b.onLoad({ filter: /PreDraft\.ts$/ }, args => {
+    b.onLoad({ filter: /(PreDraft|careerDraftNight)\.ts$/ }, args => {
       if (args.path.replace(/\\/g, '/') !== abs) return undefined;
       const out = src.replace(needle, repl);
       if (out === src) { console.error(`Control ${CONTROL} changed nothing. Refusing to run.`); process.exit(2); }
@@ -231,8 +268,14 @@ function road(desc, i) {
 console.log('\n5. Every draw comes from keyedRng');
 const stripComments = src => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`])\/\/.*$/gm, '$1');
 const FILES = ['careerPreDraft.ts', 'nflCareerPreDraft.ts', 'nbaCareerPreDraft.ts', 'mlbCareerPreDraft.ts', 'nhlCareerPreDraft.ts'];
-const inCode = FILES.filter(f => /Math\.random/.test(stripComments(fs.readFileSync(path.join(ROOT, 'src/lib', f), 'utf-8'))));
-if (inCode.length) fail(`Math.random in the code of ${inCode.join(', ')}`); else ok('no Math.random in the code of the five files');
+/* Round 1220: the night builder is held to the same rule and to a harder one.
+   It may not even reach for a keyed stream of its own: the only draws behind
+   a night are the ones preDraftOrder makes, the same call the draft made. */
+const NIGHT_FILE = 'careerDraftNight.ts';
+const nightCode = stripComments(fs.readFileSync(path.join(ROOT, 'src/lib', NIGHT_FILE), 'utf-8'));
+const inCode = [...FILES, NIGHT_FILE].filter(f => /Math\.random/.test(stripComments(fs.readFileSync(path.join(ROOT, 'src/lib', f), 'utf-8'))));
+if (inCode.length) fail(`Math.random in the code of ${inCode.join(', ')}`); else ok('no Math.random in the code of the five files or of the night builder');
+if (/keyedRng|\brng\s*\(|Date\.now|new Date/.test(nightCode)) fail(`${NIGHT_FILE} reaches for a stream or a clock of its own`); else ok('the night builder holds no stream and no clock of its own');
 const realRandom = Math.random;
 let RUNS = null;
 Math.random = () => { throw new Error('Math.random was called'); };
@@ -562,6 +605,132 @@ console.log('\n9. The scouts path is byte equal to its recording');
       if (!moved) ok(`all ${DESCS.length * 2} digests of seed set ${SEEDSET} equal the recording (${DESCS.length * N} roads, recorded on ${rec.node} at ${String(rec.base).slice(0, 8)})`);
     }
   }
+}
+
+/* ─── Section 13: the night shows what the engine did ─── */
+console.log('\n13. Draft night shows what the engine did, and never draws');
+const NIGHT_BOARD_MAX = 8;
+const NIGHT_ROWS_MAX = 12;
+{
+  const anyDash = new RegExp(`[${String.fromCharCode(0x2013)}${String.fromCharCode(0x2014)}]`);
+  /* One night, held to the saved outcome (the witness) and to the order the
+     harness works out itself. Returns what is wrong with it, in words. */
+  const audit = (d, s, o, teams) => {
+    const night = M.buildCareerDraftNight(d, s);
+    if (!night) return { bad: ['built nothing'], night: null };
+    const bad = [];
+    const total = o.order.length, out = s.draft;
+    const { board, lottery } = night;
+    const last = board[board.length - 1];
+    const body = board.slice(0, -1);
+    if (out.pick === null) {
+      if (!last || last.kind !== 'unpicked' || last.lastPick !== total || last.team !== out.team) bad.push('the closing row is not the saved undrafted outcome');
+      const before = body[body.length - 1];
+      if (!before || before.kind !== 'pick' || before.pick !== total) bad.push('an undrafted night does not end on the last pick of the draft');
+    } else if (!last || last.kind !== 'you' || last.pick !== out.pick || last.round !== out.round || last.pickInRound !== out.pickInRound || last.team !== out.team) bad.push('the closing row is not the saved pick and club');
+    if (body.some(r => r.kind === 'you' || r.kind === 'unpicked')) bad.push('a closing row sits in the middle of the board');
+    /* Every pick called before the closing row is shown exactly once: on the
+       lottery tile, as a row, or inside a gap. */
+    const limit = out.pick === null ? total : out.pick - 1;
+    const shown = new Map();
+    const mark = (p, what) => { shown.set(p, (shown.get(p) ?? 0) + 1); if (p < 1 || p > limit) bad.push(`${what} ${p} is at or past the row that ends the night`); };
+    let prev = 0;
+    for (const r of body) {
+      if (r.kind === 'pick') {
+        if (r.team !== o.order[r.pick - 1]) bad.push(`pick ${r.pick} shows a club that does not hold it`);
+        if (r.round !== Math.ceil(r.pick / teams.length)) bad.push(`pick ${r.pick} is in the wrong round`);
+        if (r.pick <= prev) bad.push('the picks do not rise');
+        prev = r.pick; mark(r.pick, 'pick');
+      } else if (r.kind === 'gap') {
+        if (r.to - r.from + 1 < 2) bad.push(`a gap of ${r.to - r.from + 1} pick(s), ${r.from} to ${r.to}`);
+        if (r.from <= prev) bad.push('a gap does not rise');
+        prev = r.to;
+        if (r.rounds[0] !== Math.ceil(r.from / teams.length) || r.rounds[1] !== Math.ceil(r.to / teams.length)) bad.push('a gap names the wrong rounds');
+        for (let p = r.from; p <= r.to; p += 1) mark(p, 'a gap pick');
+        const words = M.careerNightGapLine(r);
+        if (!words.includes(`Picks ${r.from} to ${r.to} `) || anyDash.test(words)) bad.push('the gap line lost its numbers');
+      }
+    }
+    const L = d.lottery;
+    if (lottery.length !== (L ? L.drawn : 0)) bad.push(`${lottery.length} lottery rows, the descriptor draws ${L ? L.drawn : 0}`);
+    lottery.forEach((r, i) => {
+      if (r.slot !== lottery.length - i) bad.push('the lottery rows are not last drawn pick first');
+      if (r.team !== o.lotteryWinners[r.slot - 1] || r.team !== o.order[r.slot - 1]) bad.push(`lottery pick ${r.slot} shows a club that did not win it`);
+      if (r.seed !== o.standings.indexOf(r.team) + 1) bad.push(`lottery pick ${r.slot} has the wrong seed`);
+      if (r.slot <= limit) shown.set(r.slot, (shown.get(r.slot) ?? 0) + 1);
+    });
+    for (let p = 1; p <= limit; p += 1) if (shown.get(p) !== 1) { bad.push(`pick ${p} is shown ${shown.get(p) ?? 0} times`); break; }
+    if (board.length > NIGHT_BOARD_MAX || board.length + lottery.length > NIGHT_ROWS_MAX) bad.push(`${board.length} board rows and ${lottery.length} lottery rows`);
+    const said = M.careerNightResultLine(last, d.teamLabel);
+    if (!said.includes(d.teamLabel(out.team)) || !said.includes(String(out.pick ?? total)) || anyDash.test(said)) bad.push('the result line does not say the saved outcome');
+    return { bad, night };
+  };
+  const realRandom13 = Math.random;
+  Math.random = () => { throw new Error('Math.random was called'); };
+  try {
+    for (const d of DESCS) {
+      const rs = RUNS.get(tag(d));
+      const teams = d.teamIds();
+      const total = teams.length * d.rounds;
+      const before = JSON.stringify(rs.map(r => r.s));
+      const wrong = [];
+      const note = (i, msgs) => { for (const m of msgs) if (wrong.length < 400) wrong.push(`road ${i}: ${m}`); };
+      let drafted = 0, mostBoard = 0, outside = 0;
+      for (let i = 0; i < rs.length; i += 1) {
+        const { s, shown } = rs[i];
+        const o = M.preDraftOrder(d, s.seed);
+        const { bad, night } = audit(d, s, o, teams);
+        note(i, bad);
+        if (!night) continue;
+        if (s.draft.pick !== null) drafted += 1;
+        mostBoard = Math.max(mostBoard, night.board.length);
+        /* The range the card quotes BEFORE the draft (from the state at phase
+           draft) is the one the night recalls, and the pick the draft drew
+           sits inside it. An undrafted road was always a possible ending. */
+        const p = night.projection, quoted = M.preDraftProjection(d, shown);
+        if (JSON.stringify(p) !== JSON.stringify(quoted)) note(i, ['the night recalls another range than the card quoted']);
+        const inside = s.draft.pick === null ? p.hi > total : s.draft.pick >= p.lo && s.draft.pick <= p.hi;
+        if (!inside) { outside += 1; note(i, [`pick ${s.draft.pick} is outside the quoted range ${p.lo} to ${p.hi} of ${p.total}`]); }
+        for (const tense of ['have', 'had']) {
+          const line = M.careerNightProjectionLine(p, tense);
+          const nums = p.lo > p.total ? [p.total] : p.hi > p.total ? [p.lo, p.total] : [p.lo, p.hi, p.total];
+          if (!line.includes(` ${tense} you `) || nums.some(n => !line.includes(String(n))) || anyDash.test(line)) note(i, [`the range line "${line}" lost a number`]);
+        }
+        if (JSON.stringify(M.buildCareerDraftNight(d, s)) !== JSON.stringify(night)) note(i, ['a second build gave another night']);
+        if (M.buildCareerDraftNight(d, shown) !== null) note(i, ['a night was built before the draft was run']);
+      }
+      if (JSON.stringify(rs.map(r => r.s)) !== before) note(-1, ['building the nights changed a saved state']);
+      /* Fail closed: an outcome the order does not back builds nothing. */
+      let closed = 0;
+      for (let i = 0; i < 300; i += 1) {
+        const { s } = rs[i];
+        const o = M.preDraftOrder(d, s.seed);
+        const out = s.draft;
+        const swaps = out.pick === null
+          ? [{ ...out, team: 'no such club' }]
+          : [{ ...out, team: teams.find(t => t !== out.team) },
+            { ...out, pick: o.order[out.pick] === out.team ? out.pick + teams.length + 1 : out.pick + 1 },
+            { ...out, round: out.round + 1 }, { ...out, pickInRound: out.pickInRound + 1 }, { ...out, pick: total + 1 }];
+        for (const draft of swaps) { closed += 1; if (M.buildCareerDraftNight(d, { ...s, draft }) !== null) note(i, [`an outcome the order does not back built a night: ${JSON.stringify({ pick: draft.pick, round: draft.round, pickInRound: draft.pickInRound, team: draft.team })}`]); }
+      }
+      /* The edges live at picks the fleet rarely reaches, so they are built:
+         every pick from 1 to 12, the last four of the draft, and undrafted. */
+      const base = rs[0].s;
+      const o0 = M.preDraftOrder(d, base.seed);
+      const picks = [...Array.from({ length: 12 }, (_, k) => k + 1), total - 3, total - 2, total - 1, total];
+      let built = 0;
+      for (const pick of picks) {
+        const round = Math.ceil(pick / teams.length);
+        const state = { ...base, draft: { ...base.draft, pick, round, pickInRound: pick - (round - 1) * teams.length, team: o0.order[pick - 1] } };
+        built += 1; note(-pick, audit(d, state, o0, teams).bad);
+      }
+      built += 1; note(0, audit(d, { ...base, draft: { ...base.draft, pick: null, round: null, pickInRound: null, team: teams[0] } }, o0, teams).bad);
+      if (wrong.length) { fail(`${tag(d)}: ${wrong.length} thing(s) wrong with the nights, first: ${wrong.slice(0, 3).join(' | ')}`); continue; }
+      ok(`${tag(d)}: ${rs.length} nights are the saved outcome over the engine's order (${drafted} drafted, ${rs.length - drafted} undrafted), every pick inside the quoted range, ${built} built nights (picks 1 to 12, the last four, undrafted) show every pick once, ${closed} unbacked outcomes built nothing, at most ${mostBoard} board rows${d.lottery ? ` and ${d.lottery.drawn} lottery rows` : ''}`);
+    }
+  } catch (e) {
+    fail(`a night could not be built without a draw of its own: ${e.message}`);
+  } finally { Math.random = realRandom13; }
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });

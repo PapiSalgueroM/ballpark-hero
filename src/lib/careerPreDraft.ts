@@ -296,9 +296,34 @@ export function preDraftOrder(desc: PreDraftDescriptor, seed: string): PreDraftO
 /** Where the scouts have you on the board: stock 100 is the first name
  *  called, and a low stock can fall past the last pick. */
 export function preDraftBoardRank(stock: number, totalPicks: number, rng: () => number): number {
+  return preDraftBoardRankAt(stock, totalPicks, rng());
+}
+
+/** Round 1220: the same arithmetic with the draw handed in (u from 0 to 1),
+ *  so the range the scouts quote before the draft and the rank the draft
+ *  draws are one formula and can never disagree. One draw, as before. */
+export function preDraftBoardRankAt(stock: number, totalPicks: number, u: number): number {
   const z = (100 - clampMeter(stock)) / 100;
-  const spread = 0.75 + 0.5 * rng();
+  const spread = 0.75 + 0.5 * u;
   return Math.max(1, Math.round(1 + Math.pow(z, 1.6) * totalPicks * 1.25 * spread));
+}
+
+export interface PreDraftProjection {
+  /** The earliest pick this stock can land on. */
+  lo: number;
+  /** The latest. Past `total` means the board can run out before his name. */
+  hi: number;
+  /** Every pick of this draft. */
+  total: number;
+}
+
+/** Round 1220: where this stock can land. The rank the draft draws is always
+ *  inside, by construction: it is preDraftBoardRankAt at a draw between the
+ *  two ends, plus the same position offset. It draws nothing. */
+export function preDraftProjection(desc: PreDraftDescriptor, s: Pick<PreDraftState, 'stock' | 'pos'>): PreDraftProjection {
+  const total = desc.teamIds().length * desc.rounds;
+  const off = desc.pickOffset?.(s.pos) ?? 0;
+  return { lo: preDraftBoardRankAt(s.stock, total, 0) + off, hi: preDraftBoardRankAt(s.stock, total, 1) + off, total };
 }
 
 export function preDraftRoute(desc: PreDraftDescriptor, routeId: string): PreDraftRoute {
