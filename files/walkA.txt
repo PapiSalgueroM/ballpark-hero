@@ -1,0 +1,25 @@
+[A] premier-390 (Everton): 1 bad of 14
+     BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.
+[A] premier-1280 (Everton): 1 bad of 14
+     BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.
+[A] championship-390 (Portsmouth): 1 bad of 14
+     BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.
+[A] championship-1280 (Portsmouth): 1 bad of 14
+     BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.
+[A] seriea-390 (Lazio): 1 bad of 14
+     BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.
+[A] seriea-1280 (Lazio): 1 bad of 14
+     BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.
+[A] eredivisie-390 (Heerenveen): 1 bad of 14
+     BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.
+[A] eredivisie-1280 (Heerenveen): 1 bad of 14
+     BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.
+review-cm-walk: 8 career journeys, 0 own goal watches, 8 thing(s) to look at
+  LOOK premier-390: step live threw (locator.waitFor: Timeout 20000ms exceeded.)
+  LOOK premier-1280: step live threw (locator.waitFor: Timeout 20000ms exceeded.)
+  LOOK championship-390: step live threw (locator.waitFor: Timeout 20000ms exceeded.)
+  LOOK championship-1280: step live threw (locator.waitFor: Timeout 20000ms exceeded.)
+  LOOK seriea-390: step live threw (locator.waitFor: Timeout 20000ms exceeded.)
+  LOOK seriea-1280: step live threw (locator.waitFor: Timeout 20000ms exceeded.)
+  LOOK eredivisie-390: step live threw (locator.waitFor: Timeout 20000ms exceeded.)
+  LOOK eredivisie-1280: step live threw (locator.waitFor: Timeout 20000ms exceeded.)

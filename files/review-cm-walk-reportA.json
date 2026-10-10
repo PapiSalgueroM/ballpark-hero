@@ -1,0 +1,329 @@
+{
+ "base": "http://localhost:4173",
+ "seed": 86421,
+ "journeys": [
+  {
+   "id": "premier-390",
+   "notes": [
+    "ok the save holds the key of its league",
+    "ok the page fetched only its own league list",
+    "ok hub shows the real first fixture (Everton vs Crystal Palace Home)",
+    "ok hub no wider than the screen",
+    "ok the Calendar line says what is real and what is simulated, with its as of words",
+    "ok the Calendar grid holds the real first fixture as a day",
+    "ok calendar no wider than the screen",
+    "ok Help does not mention VAR while the switch is off",
+    "ok help no wider than the screen",
+    "ok Quick Sim report names the real first opponent",
+    "ok Quick Sim report shows no review line",
+    "ok after matchday one the hub shows the real second fixture (Everton vs Bournemouth Away) unless a cup tie comes first",
+    "BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.",
+    "ok no page error"
+   ],
+   "texts": {
+    "dugout": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout Everton Who is in the dugout? Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the Manager panel. MANAGER NAME LOOK Roll one SKIN Olive HAIR Side Part COLOUR Dark Brown BEARD Stubble OUTFIT Tracksuit AGE 40s KIT HOMELAND Any nation in the game's international football, all six confederations. Your federation for the national team call, and the leagues that know your name. England BACKGROUND 🥾 Ex player Hung the boots up and walked straight into the dugout. +1 Man Management 📋 Career coach Twenty years of badges and touchline rain. +1 Tactics 📊 Analyst Came up through the data department with a laptop and a plan. +1 Recruitment 🌱 Youth coach Raised half an academy before the first team called. +1 Youth 💼 Ex agent Ten years on the other side of the table. Knows every trick. +1 Negotiation 💰 Boardroom Ran the money at a club before running the team. +1 Finance 🎙️ TV pundit Talked about it on telly for years. Now he has to",
+    "calendarLine": "Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026. Sources: Premier League / Sports Illustrated",
+    "calendarLinks": [
+     "Premier League -> https://www.premierleague.com/en/news/4675097",
+     "Sports Illustrated -> https://www.si.com/soccer/2026-27-premier-league-fixtures-full-schedule-arsenal-defend-title"
+    ],
+    "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league.",
+    "helpChars": 35833,
+    "quickReport": "Skip to main content DOUKNOWBALL Back Track stats FULL TIME PREMIER LEAGUE · ROUND 1 🏟️ Your ground · crowd 52,983 45+3' ADDED TIME 90+6' VICTORY Everton 1 - 0 Crystal Palace EVERTON ⚽ Thierno Barry 19' · 🅰️ James Garner CRYSTAL PALACE - 🟨 Vitaliy Mykolenko 47' 🟨 Jarrad Branthwaite 65' CP 🟨 Chris Richards 49' CP 🟨 Ismaïla Sarr 77' CP ▲ Jean-Philippe Mateta ▼ Adam Wharton 69' CP ▲ Yéremy Pino ▼ Honest Ahanor 79' Everton MATCH STATS Crystal Palace 52% POSSESSION 48% 9 SHOTS 7 3 ON TARGET 3 1.21 EXPECTED GOALS 0.43 7 CORNERS 4 9 FOULS 13 3 KEEPER SAVES 2 2 YELLOW CARDS 2 0 RED CARDS 0 0 SUBSTITUTIONS 2 52% BALANCE OF PLAY 48% ▲ EVERTON ▼ CRYSTAL PALACE 0' 45' 90' 9 (3) SHOTS (ON TARGET) 7 (3) Everton TIMELINE Crystal Palace 0' ⏱️ KICK OFF 🧤 Shot saved: Kiernan Dewsbury-Hall 6' 15' 🧤 Shot saved: Daichi Kamada ⚽ Goal: Thierno Barry 🅰️ James Garner 19' 45+3' ⏸️ HALF TIME 🟨 Booked: Vi",
+    "hubAfterQuick": "Everton vs Bournemouth Away · their strength ~83 · your XI avg 82 Play Live ⚡ Qu",
+    "failed-live": "Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE ? Everton 0 - 0 Bournemouth PREMIER LEAGUE · ROUND 2 LIVE 20' Stats 1 Petrovic 2 Diakité 3 Silva 4 Truffert 5 Milosavljevic 6 Scott 7 Kluivert 8 Adams 9 Tavernier 10 Kroupi 11 Rayan 1 Pickford 2 Branthwaite 3 Tarkowski 4 Keane 5 Mykolenko 6 Garner 8 Hackney 9 Johnson 10 Barry 11 GrealishC 🩹 Kiernan Dewsbury-Hall is down. Tap to bring somebody on. Balance of play: Poss 47% 53% Shots 3 (1) 1 (0) xG 0.10 0.11 Shot: Marcus Tavernier 0.5x "
+   },
+   "club": "Everton",
+   "cutCalendar": [],
+   "quickScroll": {
+    "before": 0,
+    "after": 0
+   },
+   "liveTaps": 1
+  },
+  {
+   "id": "premier-1280",
+   "notes": [
+    "ok the save holds the key of its league",
+    "ok the page fetched only its own league list",
+    "ok hub shows the real first fixture (Everton vs Crystal Palace Home)",
+    "ok hub no wider than the screen",
+    "ok the Calendar line says what is real and what is simulated, with its as of words",
+    "ok the Calendar grid holds the real first fixture as a day",
+    "ok calendar no wider than the screen",
+    "ok Help does not mention VAR while the switch is off",
+    "ok help no wider than the screen",
+    "ok Quick Sim report names the real first opponent",
+    "ok Quick Sim report shows no review line",
+    "ok after matchday one the hub shows the real second fixture (Everton vs Bournemouth Away) unless a cup tie comes first",
+    "BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.",
+    "ok no page error"
+   ],
+   "texts": {
+    "dugout": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout Everton Who is in the dugout? Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the Manager panel. MANAGER NAME LOOK Roll one SKIN Olive HAIR Side Part COLOUR Dark Brown BEARD Stubble OUTFIT Tracksuit AGE 40s KIT HOMELAND Any nation in the game's international football, all six confederations. Your federation for the national team call, and the leagues that know your name. England BACKGROUND 🥾 Ex player Hung the boots up and walked straight into the dugout. +1 Man Management 📋 Career coach Twenty years of badges and touchline rain. +1 Tactics 📊 Analyst Came up through the data department with a laptop and a plan. +1 Recruitment 🌱 Youth coach Raised half an academy before the first team called. +1 Youth 💼 Ex agent Ten years on the other side of the table. Knows every trick. +1 Negotiation 💰 Boardroom Ran the money at a club before running the team. +1 Finance 🎙️ TV",
+    "calendarLine": "Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026. Sources: Premier League / Sports Illustrated",
+    "calendarLinks": [
+     "Premier League -> https://www.premierleague.com/en/news/4675097",
+     "Sports Illustrated -> https://www.si.com/soccer/2026-27-premier-league-fixtures-full-schedule-arsenal-defend-title"
+    ],
+    "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league.",
+    "helpChars": 35833,
+    "quickReport": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats FULL TIME PREMIER LEAGUE · ROUND 1 🏟️ Your ground · crowd 52,983 45+3' ADDED TIME 90+6' VICTORY Everton 1 - 0 Crystal Palace EVERTON ⚽ Thierno Barry 19' · 🅰️ James Garner CRYSTAL PALACE - 🟨 Vitaliy Mykolenko 47' 🟨 Jarrad Branthwaite 65' CP 🟨 Chris Richards 49' CP 🟨 Ismaïla Sarr 77' CP ▲ Jean-Philippe Mateta ▼ Adam Wharton 69' CP ▲ Yéremy Pino ▼ Honest Ahanor 79' Everton MATCH STATS Crystal Palace 52% POSSESSION 48% 9 SHOTS 7 3 ON TARGET 3 1.21 EXPECTED GOALS 0.43 7 CORNERS 4 9 FOULS 13 3 KEEPER SAVES 2 2 YELLOW CARDS 2 0 RED CARDS 0 0 SUBSTITUTIONS 2 52% BALANCE OF PLAY 48% ▲ EVERTON ▼ CRYSTAL PALACE 0' 45' 90' 9 (3) SHOTS (ON TARGET) 7 (3) Everton TIMELINE Crystal Palace 0' ⏱️ KICK OFF 🧤 Shot saved: Kiernan Dewsbury-Hall 6' 15' 🧤 Shot saved: Daichi Kamada ⚽ Goal: Thierno Ba",
+    "hubAfterQuick": "Everton vs Bournemouth Away · their strength ~83 · your XI avg 82 Play Live ⚡ Qu",
+    "failed-live": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats MATCH LIVE ? Everton 0 - 0 Bournemouth PREMIER LEAGUE · ROUND 2 LIVE 20' 1 Petrovic 2 Diakité 3 Silva 4 Truffert 5 Milosavljevic 6 Scott 7 Kluivert 8 Adams 9 Tavernier 10 Kroupi 11 Rayan 1 Pickford 2 Branthwaite 3 Tarkowski 4 Keane 5 Mykolenko 6 Garner 8 Hackney 9 Johnson 10 Barry 11 GrealishC 🩹 Kiernan Dewsbury-Hall is down. Tap to bring somebody on. Shot: Marcus Tavernier 0.5x 1x 2x 4x S"
+   },
+   "club": "Everton",
+   "cutCalendar": [],
+   "quickScroll": {
+    "before": 0,
+    "after": 0
+   },
+   "liveTaps": 1
+  },
+  {
+   "id": "championship-390",
+   "notes": [
+    "ok the save holds the key of its league",
+    "ok the page fetched only its own league list",
+    "ok hub shows the real first fixture (Portsmouth vs QPR Home)",
+    "ok hub no wider than the screen",
+    "ok the Calendar line says what is real and what is simulated, with its as of words",
+    "ok the Calendar grid holds the real first fixture as a day",
+    "ok calendar no wider than the screen",
+    "ok Help does not mention VAR while the switch is off",
+    "ok help no wider than the screen",
+    "ok Quick Sim report names the real first opponent",
+    "ok Quick Sim report shows no review line",
+    "ok after matchday one the hub shows the real second fixture (Portsmouth vs Lincoln City Away) unless a cup tie comes first",
+    "BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.",
+    "ok no page error"
+   ],
+   "texts": {
+    "dugout": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout Portsmouth Who is in the dugout? Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the Manager panel. MANAGER NAME LOOK Roll one SKIN Olive HAIR Side Part COLOUR Dark Brown BEARD Stubble OUTFIT Tracksuit AGE 40s KIT HOMELAND Any nation in the game's international football, all six confederations. Your federation for the national team call, and the leagues that know your name. England BACKGROUND 🥾 Ex player Hung the boots up and walked straight into the dugout. +1 Man Management 📋 Career coach Twenty years of badges and touchline rain. +1 Tactics 📊 Analyst Came up through the data department with a laptop and a plan. +1 Recruitment 🌱 Youth coach Raised half an academy before the first team called. +1 Youth 💼 Ex agent Ten years on the other side of the table. Knows every trick. +1 Negotiation 💰 Boardroom Ran the money at a club before running the team. +1 Finance 🎙️ TV pundit Talked about it on telly for years. Now he has",
+    "calendarLine": "Real 2026/27 EFL Championship opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026. Sources: ESPN / Fixture Download",
+    "calendarLinks": [
+     "ESPN -> https://www.espn.com/soccer/story/_/id/49173379/efl-championship-fixtures-schedule-2026-27-full",
+     "Fixture Download -> https://fixturedownload.com/results/championship-2026"
+    ],
+    "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league.",
+    "helpChars": 35833,
+    "quickReport": "Skip to main content DOUKNOWBALL Back Track stats FULL TIME EFL CHAMPIONSHIP · ROUND 1 🏟️ Your ground · crowd 17,285 45+3' ADDED TIME 90+7' DEFEAT Portsmouth 0 - 1 QPR PORTSMOUTH - QPR ⚽ Richard Kone 49' (P) 🟨 Dimitri Reyes (Youth) 51' 🟨 Terry Devlin 53' QPR 🟨 Esquerdinha 35' QPR ▲ Harvey Vale ▼ Glen Kamara 76' QPR ▲ Koki Saito ▼ Richard Kone 80' QPR ▲ Kenneth Paal ▼ Dennis Cirkin 87' Portsmouth MATCH STATS QPR 53% POSSESSION 47% 8 SHOTS 10 3 ON TARGET 4 0.93 EXPECTED GOALS 1.09 3 CORNERS 6 7 FOULS 13 3 KEEPER SAVES 3 2 YELLOW CARDS 1 0 RED CARDS 0 0 SUBSTITUTIONS 3 53% BALANCE OF PLAY 47% ▲ PORTSMOUTH ▼ QPR 0' 45' 90' 8 (3) SHOTS (ON TARGET) 10 (4) Portsmouth TIMELINE QPR 0' ⏱️ KICK OFF 32' 🧤 Shot saved: Dennis Cirkin 35' 🟨 Booked: Esquerdinha 🧤 Shot saved: Soren Petrov (Youth) 38' 45+3' ⏸️ HALF TIME 49' 🎯 Penalty: Richard Kone 49' ⚽ Goal: Richard Kone (P) 🟨 Booked: Dimitri Rey",
+    "hubAfterQuick": "Portsmouth vs Lincoln City Away · their strength ~62 · your XI avg 65 Play Live ",
+    "failed-live": "Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE ? Portsmouth 0 - 1 Lincoln City EFL CHAMPIONSHIP · ROUND 2 LIVE 19' Stats 1 2 3 4 5 6 7 8 9 10 11 1 Schmid 2 Devlin 3 Diallo 4 Ferreiro 5 Meghoma 6 SwiftC 7 Reyes 8 Novak 9 Kamara 10 Petrov 11 Murphy Balance of play: Poss 50% 50% Shots 2 (1) 2 (2) xG 0.27 0.45 Foul by Lincoln City 0.5x 1x 2x 4x Skip Club Manager: Free Football Management Game A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier"
+   },
+   "club": "Portsmouth",
+   "cutCalendar": [],
+   "quickScroll": {
+    "before": 0,
+    "after": 0
+   },
+   "liveTaps": 1
+  },
+  {
+   "id": "championship-1280",
+   "notes": [
+    "ok the save holds the key of its league",
+    "ok the page fetched only its own league list",
+    "ok hub shows the real first fixture (Portsmouth vs QPR Home)",
+    "ok hub no wider than the screen",
+    "ok the Calendar line says what is real and what is simulated, with its as of words",
+    "ok the Calendar grid holds the real first fixture as a day",
+    "ok calendar no wider than the screen",
+    "ok Help does not mention VAR while the switch is off",
+    "ok help no wider than the screen",
+    "ok Quick Sim report names the real first opponent",
+    "ok Quick Sim report shows no review line",
+    "ok after matchday one the hub shows the real second fixture (Portsmouth vs Lincoln City Away) unless a cup tie comes first",
+    "BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.",
+    "ok no page error"
+   ],
+   "texts": {
+    "dugout": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout Portsmouth Who is in the dugout? Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the Manager panel. MANAGER NAME LOOK Roll one SKIN Olive HAIR Side Part COLOUR Dark Brown BEARD Stubble OUTFIT Tracksuit AGE 40s KIT HOMELAND Any nation in the game's international football, all six confederations. Your federation for the national team call, and the leagues that know your name. England BACKGROUND 🥾 Ex player Hung the boots up and walked straight into the dugout. +1 Man Management 📋 Career coach Twenty years of badges and touchline rain. +1 Tactics 📊 Analyst Came up through the data department with a laptop and a plan. +1 Recruitment 🌱 Youth coach Raised half an academy before the first team called. +1 Youth 💼 Ex agent Ten years on the other side of the table. Knows every trick. +1 Negotiation 💰 Boardroom Ran the money at a club before running the team. +1 Finance 🎙️",
+    "calendarLine": "Real 2026/27 EFL Championship opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026. Sources: ESPN / Fixture Download",
+    "calendarLinks": [
+     "ESPN -> https://www.espn.com/soccer/story/_/id/49173379/efl-championship-fixtures-schedule-2026-27-full",
+     "Fixture Download -> https://fixturedownload.com/results/championship-2026"
+    ],
+    "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league.",
+    "helpChars": 35833,
+    "quickReport": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats FULL TIME EFL CHAMPIONSHIP · ROUND 1 🏟️ Your ground · crowd 17,285 45+3' ADDED TIME 90+7' DEFEAT Portsmouth 0 - 1 QPR PORTSMOUTH - QPR ⚽ Richard Kone 49' (P) 🟨 Dimitri Reyes (Youth) 51' 🟨 Terry Devlin 53' QPR 🟨 Esquerdinha 35' QPR ▲ Harvey Vale ▼ Glen Kamara 76' QPR ▲ Koki Saito ▼ Richard Kone 80' QPR ▲ Kenneth Paal ▼ Dennis Cirkin 87' Portsmouth MATCH STATS QPR 53% POSSESSION 47% 8 SHOTS 10 3 ON TARGET 4 0.93 EXPECTED GOALS 1.09 3 CORNERS 6 7 FOULS 13 3 KEEPER SAVES 3 2 YELLOW CARDS 1 0 RED CARDS 0 0 SUBSTITUTIONS 3 53% BALANCE OF PLAY 47% ▲ PORTSMOUTH ▼ QPR 0' 45' 90' 8 (3) SHOTS (ON TARGET) 10 (4) Portsmouth TIMELINE QPR 0' ⏱️ KICK OFF 32' 🧤 Shot saved: Dennis Cirkin 35' 🟨 Booked: Esquerdinha 🧤 Shot saved: Soren Petrov (Youth) 38' 45+3' ⏸️ HALF TIME 49' 🎯 Penalty: Richard",
+    "hubAfterQuick": "Portsmouth vs Lincoln City Away · their strength ~62 · your XI avg 65 Play Live ",
+    "failed-live": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats MATCH LIVE ? Portsmouth 0 - 1 Lincoln City EFL CHAMPIONSHIP · ROUND 2 LIVE 19' 1 2 3 4 5 6 7 8 9 10 11 1 Schmid 2 Devlin 3 Diallo 4 Ferreiro 5 Meghoma 6 SwiftC 7 Reyes 8 Novak 9 Kamara 10 Petrov 11 Murphy Foul by Lincoln City 0.5x 1x 2x 4x Skip AS IT HAPPENS 18' Foul by Lincoln City 17' Save! Nicolas Schmid 17' Shot: Theo Novak (Youth) 17' Throw in, Lincoln City 16' GOAL! Dom Jefferies Port"
+   },
+   "club": "Portsmouth",
+   "cutCalendar": [],
+   "quickScroll": {
+    "before": 0,
+    "after": 0
+   },
+   "liveTaps": 1
+  },
+  {
+   "id": "seriea-390",
+   "notes": [
+    "ok the save holds the key of its league",
+    "ok the page fetched only its own league list",
+    "ok hub shows the real first fixture (Lazio vs Bologna Away)",
+    "ok hub no wider than the screen",
+    "ok the Calendar line says what is real and what is simulated, with its as of words",
+    "ok the Calendar grid holds the real first fixture as a day",
+    "ok calendar no wider than the screen",
+    "ok Help does not mention VAR while the switch is off",
+    "ok help no wider than the screen",
+    "ok Quick Sim report names the real first opponent",
+    "ok Quick Sim report shows no review line",
+    "ok after matchday one the hub shows the real second fixture (Lazio vs Genoa Home) unless a cup tie comes first",
+    "BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.",
+    "ok no page error"
+   ],
+   "texts": {
+    "dugout": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout Lazio Who is in the dugout? Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the Manager panel. MANAGER NAME LOOK Roll one SKIN Olive HAIR Side Part COLOUR Dark Brown BEARD Stubble OUTFIT Tracksuit AGE 40s KIT HOMELAND Any nation in the game's international football, all six confederations. Your federation for the national team call, and the leagues that know your name. Italy BACKGROUND 🥾 Ex player Hung the boots up and walked straight into the dugout. +1 Man Management 📋 Career coach Twenty years of badges and touchline rain. +1 Tactics 📊 Analyst Came up through the data department with a laptop and a plan. +1 Recruitment 🌱 Youth coach Raised half an academy before the first team called. +1 Youth 💼 Ex agent Ten years on the other side of the table. Knows every trick. +1 Negotiation 💰 Boardroom Ran the money at a club before running the team. +1 Finance 🎙️ TV pundit Talked about it on telly for years. Now he has to do ",
+    "calendarLine": "Real 2026/27 Serie A opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026. Sources: TuttoMercatoWeb / Fixture Download",
+    "calendarLinks": [
+     "TuttoMercatoWeb -> https://www.tuttomercatoweb.com/serie-a/serie-a-2026-2027-ecco-il-nuovo-calendario-completo-con-le-38-giornate-2241512",
+     "Fixture Download -> https://fixturedownload.com/results/serie-a-2026"
+    ],
+    "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league.",
+    "helpChars": 35833,
+    "quickReport": "Skip to main content DOUKNOWBALL Back Track stats FULL TIME SERIE A · ROUND 1 🏟️ Away day · crowd 28,376 45+3' ADDED TIME 90+7' DRAW Bologna 1 - 1 Lazio LAZIO ⚽ Albert Gudmundsson 19' · 🅰️ Josip Sutalo BOLOGNA ⚽ Lewis Ferguson 89' 🟨 Josip Sutalo 88' BOLOGNA 🟨 Lewis Ferguson 48' BOLOGNA 🟨 Arthur Theate 90+3' BOLOGNA ▲ Roberto Piccoli ▼ Torbjørn Heggem 79' BOLOGNA ▲ Artem Dovbyk ▼ Jens Odgaard 81' Lazio MATCH STATS Bologna 46% POSSESSION 54% 10 SHOTS 10 4 ON TARGET 4 1.06 EXPECTED GOALS 1.46 6 CORNERS 4 9 FOULS 12 3 KEEPER SAVES 3 1 YELLOW CARDS 2 0 RED CARDS 0 0 SUBSTITUTIONS 2 46% BALANCE OF PLAY 54% ▲ LAZIO ▼ BOLOGNA 0' 45' 90' 10 (4) SHOTS (ON TARGET) 10 (4) Lazio TIMELINE Bologna 0' ⏱️ KICK OFF 🧤 Shot saved: Kenneth Taylor 6' 12' 🧤 Shot saved: Juan Miranda ⚽ Goal: Albert Gudmundsson 🅰️ Josip Sutalo 19' 45+3' ⏸️ HALF TIME 48' 🟨 Booked: Lewis Ferguson 🧤 Shot saved: Albert Gudm",
+    "hubAfterQuick": "Lazio vs Genoa Home · their strength ~77 · your XI avg 79 Play Live ⚡ Quick Sim ",
+    "failed-live": "Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE ? Lazio 0 - 0 Genoa SERIE A · ROUND 2 LIVE 20' Stats 1 Bijlow 2 Vásquez 3 Østigård 4 Martín 5 Marcandalli 6 Frendrup 7 Baldanzi 8 Sow 9 Amorim 10 Traoré 11 Colombo 1 Mandas 2 Sutalo 3 Doekhi 4 Leite 5 Tavares 7 Taylor 8 Przyborek 9 Isaksen 10 GudmundssonC 11 Zaccagni 🩹 Davide Frattesi is down. Tap to bring somebody on. Balance of play: Poss 58% 42% Shots 4 (1) 3 (1) xG 0.32 0.25 Foul by Alessandro Marcandalli 0.5x 1x 2x 4x Skip Club M"
+   },
+   "club": "Lazio",
+   "cutCalendar": [],
+   "quickScroll": {
+    "before": 0,
+    "after": 0
+   },
+   "liveTaps": 1
+  },
+  {
+   "id": "seriea-1280",
+   "notes": [
+    "ok the save holds the key of its league",
+    "ok the page fetched only its own league list",
+    "ok hub shows the real first fixture (Lazio vs Bologna Away)",
+    "ok hub no wider than the screen",
+    "ok the Calendar line says what is real and what is simulated, with its as of words",
+    "ok the Calendar grid holds the real first fixture as a day",
+    "ok calendar no wider than the screen",
+    "ok Help does not mention VAR while the switch is off",
+    "ok help no wider than the screen",
+    "ok Quick Sim report names the real first opponent",
+    "ok Quick Sim report shows no review line",
+    "ok after matchday one the hub shows the real second fixture (Lazio vs Genoa Home) unless a cup tie comes first",
+    "BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.",
+    "ok no page error"
+   ],
+   "texts": {
+    "dugout": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout Lazio Who is in the dugout? Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the Manager panel. MANAGER NAME LOOK Roll one SKIN Olive HAIR Side Part COLOUR Dark Brown BEARD Stubble OUTFIT Tracksuit AGE 40s KIT HOMELAND Any nation in the game's international football, all six confederations. Your federation for the national team call, and the leagues that know your name. Italy BACKGROUND 🥾 Ex player Hung the boots up and walked straight into the dugout. +1 Man Management 📋 Career coach Twenty years of badges and touchline rain. +1 Tactics 📊 Analyst Came up through the data department with a laptop and a plan. +1 Recruitment 🌱 Youth coach Raised half an academy before the first team called. +1 Youth 💼 Ex agent Ten years on the other side of the table. Knows every trick. +1 Negotiation 💰 Boardroom Ran the money at a club before running the team. +1 Finance 🎙️ TV pun",
+    "calendarLine": "Real 2026/27 Serie A opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026. Sources: TuttoMercatoWeb / Fixture Download",
+    "calendarLinks": [
+     "TuttoMercatoWeb -> https://www.tuttomercatoweb.com/serie-a/serie-a-2026-2027-ecco-il-nuovo-calendario-completo-con-le-38-giornate-2241512",
+     "Fixture Download -> https://fixturedownload.com/results/serie-a-2026"
+    ],
+    "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league.",
+    "helpChars": 35833,
+    "quickReport": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats FULL TIME SERIE A · ROUND 1 🏟️ Away day · crowd 28,376 45+3' ADDED TIME 90+7' DRAW Bologna 1 - 1 Lazio LAZIO ⚽ Albert Gudmundsson 19' · 🅰️ Josip Sutalo BOLOGNA ⚽ Lewis Ferguson 89' 🟨 Josip Sutalo 88' BOLOGNA 🟨 Lewis Ferguson 48' BOLOGNA 🟨 Arthur Theate 90+3' BOLOGNA ▲ Roberto Piccoli ▼ Torbjørn Heggem 79' BOLOGNA ▲ Artem Dovbyk ▼ Jens Odgaard 81' Lazio MATCH STATS Bologna 46% POSSESSION 54% 10 SHOTS 10 4 ON TARGET 4 1.06 EXPECTED GOALS 1.46 6 CORNERS 4 9 FOULS 12 3 KEEPER SAVES 3 1 YELLOW CARDS 2 0 RED CARDS 0 0 SUBSTITUTIONS 2 46% BALANCE OF PLAY 54% ▲ LAZIO ▼ BOLOGNA 0' 45' 90' 10 (4) SHOTS (ON TARGET) 10 (4) Lazio TIMELINE Bologna 0' ⏱️ KICK OFF 🧤 Shot saved: Kenneth Taylor 6' 12' 🧤 Shot saved: Juan Miranda ⚽ Goal: Albert Gudmundsson 🅰️ Josip Sutalo 19' 45+3' ⏸️ HALF TIME",
+    "hubAfterQuick": "Lazio vs Genoa Home · their strength ~77 · your XI avg 79 Play Live ⚡ Quick Sim ",
+    "failed-live": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats MATCH LIVE ? Lazio 0 - 0 Genoa SERIE A · ROUND 2 LIVE 20' 1 Bijlow 2 Vásquez 3 Østigård 4 Martín 5 Marcandalli 6 Frendrup 7 Baldanzi 8 Sow 9 Amorim 10 Traoré 11 Colombo 1 Mandas 2 Sutalo 3 Doekhi 4 Leite 5 Tavares 7 Taylor 8 Przyborek 9 Isaksen 10 GudmundssonC 11 Zaccagni 🩹 Davide Frattesi is down. Tap to bring somebody on. Foul by Alessandro Marcandalli 0.5x 1x 2x 4x Skip AS IT HAPPENS 18"
+   },
+   "club": "Lazio",
+   "cutCalendar": [],
+   "quickScroll": {
+    "before": 0,
+    "after": 0
+   },
+   "liveTaps": 1
+  },
+  {
+   "id": "eredivisie-390",
+   "notes": [
+    "ok the save holds the key of its league",
+    "ok the page fetched only its own league list",
+    "ok hub shows the real first fixture (Heerenveen vs Twente Home)",
+    "ok hub no wider than the screen",
+    "ok the Calendar line says what is real and what is simulated, with its as of words",
+    "ok the Calendar grid holds the real first fixture as a day",
+    "ok calendar no wider than the screen",
+    "ok Help does not mention VAR while the switch is off",
+    "ok help no wider than the screen",
+    "ok Quick Sim report names the real first opponent",
+    "ok Quick Sim report shows no review line",
+    "ok after matchday one the hub shows the real second fixture (Heerenveen vs Ajax Away) unless a cup tie comes first",
+    "BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.",
+    "ok no page error"
+   ],
+   "texts": {
+    "dugout": "Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout Heerenveen Who is in the dugout? Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the Manager panel. MANAGER NAME LOOK Roll one SKIN Olive HAIR Side Part COLOUR Dark Brown BEARD Stubble OUTFIT Tracksuit AGE 40s KIT HOMELAND Any nation in the game's international football, all six confederations. Your federation for the national team call, and the leagues that know your name. Netherlands BACKGROUND 🥾 Ex player Hung the boots up and walked straight into the dugout. +1 Man Management 📋 Career coach Twenty years of badges and touchline rain. +1 Tactics 📊 Analyst Came up through the data department with a laptop and a plan. +1 Recruitment 🌱 Youth coach Raised half an academy before the first team called. +1 Youth 💼 Ex agent Ten years on the other side of the table. Knows every trick. +1 Negotiation 💰 Boardroom Ran the money at a club before running the team. +1 Finance 🎙️ TV pundit Talked about it on telly for years. Now he",
+    "calendarLine": "Real 2026/27 Eredivisie opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026. Sources: Fixture Download / Maxifoot",
+    "calendarLinks": [
+     "Fixture Download -> https://fixturedownload.com/results/eredivisie-2026",
+     "Maxifoot -> https://www.maxifoot.fr/calendrier-pays-bas-2026-2027.htm"
+    ],
+    "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league.",
+    "helpChars": 35833,
+    "quickReport": "Skip to main content DOUKNOWBALL Back Track stats FULL TIME EREDIVISIE · ROUND 1 🏟️ Your ground · crowd 19,268 45+3' ADDED TIME 90+3' DEFEAT Heerenveen 0 - 1 Twente HEERENVEEN - TWENTE ⚽ Michal Sadílek 80' 🟨 Matteo Ferreira (Youth) 29' TWENTE 🟨 Kristian Hlynsson 5' TWENTE ▲ Taylor Booth ▼ Daan Rots 69' TWENTE ▲ Sayfallah Ltaief ▼ Bart van Rooij 70' Heerenveen MATCH STATS Twente 51% POSSESSION 49% 10 SHOTS 10 3 ON TARGET 4 0.72 EXPECTED GOALS 1.23 4 CORNERS 6 13 FOULS 7 3 KEEPER SAVES 3 1 YELLOW CARDS 1 0 RED CARDS 0 0 SUBSTITUTIONS 2 51% BALANCE OF PLAY 49% ▲ HEERENVEEN ▼ TWENTE 0' 45' 90' 10 (3) SHOTS (ON TARGET) 10 (4) Heerenveen TIMELINE Twente 0' ⏱️ KICK OFF 5' 🟨 Booked: Kristian Hlynsson 🧤 Shot saved: Marko Farji 17' 🟨 Booked: Matteo Ferreira (Youth) 29' 35' 🧤 Shot saved: Sondre Ørjasæter 45+3' ⏸️ HALF TIME 🧤 Shot saved: Jacob Trenskow 49' 58' 🧤 Shot saved: Virgil Misidjan ",
+    "hubAfterQuick": "Heerenveen vs Ajax Away · their strength ~81 · your XI avg 67 Play Live ⚡ Quick ",
+    "failed-live": "Skip to main content DOUKNOWBALL Back Track stats MATCH LIVE ? Heerenveen 0 - 0 Ajax EREDIVISIE · ROUND 2 LIVE 20' Stats 1 Jaros 2 Baas 3 Henrique 4 Kehrer 5 Zinchenko 6 Brandt 7 Mokio 8 Gloukh 9 Bissouma 10 Adingra 11 Arokodare 1 Klaverboer 2 Hilgers 3 Diallo 4 Ferreiro 5 Zagaritis 6 Linday 7 Meerveld 8 Proper 9 TrenskowC 10 Ferreira 11 Farji Balance of play: Poss 33% 67% Shots 3 (1) 1 (0) xG 0.20 0.10 Throw in, Ajax 0.5x 1x 2x 4x Skip Club Manager: Free Football Management Game A full club-man"
+   },
+   "club": "Heerenveen",
+   "cutCalendar": [],
+   "quickScroll": {
+    "before": 0,
+    "after": 0
+   },
+   "liveTaps": 1
+  },
+  {
+   "id": "eredivisie-1280",
+   "notes": [
+    "ok the save holds the key of its league",
+    "ok the page fetched only its own league list",
+    "ok hub shows the real first fixture (Heerenveen vs Twente Home)",
+    "ok hub no wider than the screen",
+    "ok the Calendar line says what is real and what is simulated, with its as of words",
+    "ok the Calendar grid holds the real first fixture as a day",
+    "ok calendar no wider than the screen",
+    "ok Help does not mention VAR while the switch is off",
+    "ok help no wider than the screen",
+    "ok Quick Sim report names the real first opponent",
+    "ok Quick Sim report shows no review line",
+    "ok after matchday one the hub shows the real second fixture (Heerenveen vs Ajax Away) unless a cup tie comes first",
+    "BAD step live threw: locator.waitFor: Timeout 20000ms exceeded.",
+    "ok no page error"
+   ],
+   "texts": {
+    "dugout": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats CLUB MANAGER 27 real league tables and 454 clubs today, squads as of August 2026, after the summer window (the A-League Men and the Russian Premier League in October 2026), plus four real past seasons: 2020-21, 2015-16, 2010-11 and 2005-06. Pick when you start, then your nation, your league, your club. 1. When 2. Nation 3. League 4. Team 5. Dugout Heerenveen Who is in the dugout? Name your manager, give him a face, or skip it and just manage. His background starts him with one skill point in its own tree; his style sets your day one shape. Skip now and you can still name him later from the Manager panel. MANAGER NAME LOOK Roll one SKIN Olive HAIR Side Part COLOUR Dark Brown BEARD Stubble OUTFIT Tracksuit AGE 40s KIT HOMELAND Any nation in the game's international football, all six confederations. Your federation for the national team call, and the leagues that know your name. Netherlands BACKGROUND 🥾 Ex player Hung the boots up and walked straight into the dugout. +1 Man Management 📋 Career coach Twenty years of badges and touchline rain. +1 Tactics 📊 Analyst Came up through the data department with a laptop and a plan. +1 Recruitment 🌱 Youth coach Raised half an academy before the first team called. +1 Youth 💼 Ex agent Ten years on the other side of the table. Knows every trick. +1 Negotiation 💰 Boardroom Ran the money at a club before running the team. +1 Finance",
+    "calendarLine": "Real 2026/27 Eredivisie opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as it stood on 10 October 2026. Sources: Fixture Download / Maxifoot",
+    "calendarLinks": [
+     "Fixture Download -> https://fixturedownload.com/results/eredivisie-2026",
+     "Maxifoot -> https://www.maxifoot.fr/calendrier-pays-bas-2026-2027.htm"
+    ],
+    "help": "📋 Real first-season fixtures in 10 leagues. A new 2026/27 career in one of these leagues, in the unedited modern world, uses the real opponent order and home/away venues: Premier League, EFL Championship and Serie A (the list as first published in June 2026); La Liga, Eredivisie, Primeira Liga, Süper Lig and Ligue 2 (the list as it stood on 10 October 2026); Bundesliga and 2. Bundesliga (the list as first published in July 2026). A match moved after that is not followed. Calendar dates, kick off times and every match result are simulated. Example: Everton start at home to Crystal Palace, then visit Bournemouth. Take a club over part way through that first season and the weeks before you were played in the real order too. Other leagues, custom clubs, edited worlds, older saves, later seasons and a club you move to during a season keep generated fixtures. Your Calendar names the two sources for your league.",
+    "helpChars": 35833,
+    "quickReport": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats FULL TIME EREDIVISIE · ROUND 1 🏟️ Your ground · crowd 19,268 45+3' ADDED TIME 90+3' DEFEAT Heerenveen 0 - 1 Twente HEERENVEEN - TWENTE ⚽ Michal Sadílek 80' 🟨 Matteo Ferreira (Youth) 29' TWENTE 🟨 Kristian Hlynsson 5' TWENTE ▲ Taylor Booth ▼ Daan Rots 69' TWENTE ▲ Sayfallah Ltaief ▼ Bart van Rooij 70' Heerenveen MATCH STATS Twente 51% POSSESSION 49% 10 SHOTS 10 3 ON TARGET 4 0.72 EXPECTED GOALS 1.23 4 CORNERS 6 13 FOULS 7 3 KEEPER SAVES 3 1 YELLOW CARDS 1 0 RED CARDS 0 0 SUBSTITUTIONS 2 51% BALANCE OF PLAY 49% ▲ HEERENVEEN ▼ TWENTE 0' 45' 90' 10 (3) SHOTS (ON TARGET) 10 (4) Heerenveen TIMELINE Twente 0' ⏱️ KICK OFF 5' 🟨 Booked: Kristian Hlynsson 🧤 Shot saved: Marko Farji 17' 🟨 Booked: Matteo Ferreira (Youth) 29' 35' 🧤 Shot saved: Sondre Ørjasæter 45+3' ⏸️ HALF TIME 🧤 Shot save",
+    "hubAfterQuick": "Heerenveen vs Ajax Away · their strength ~81 · your XI avg 67 Play Live ⚡ Quick ",
+    "failed-live": "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats MATCH LIVE ? Heerenveen 0 - 0 Ajax EREDIVISIE · ROUND 2 LIVE 20' 1 Jaros 2 Baas 3 Henrique 4 Kehrer 5 Zinchenko 6 Brandt 7 Mokio 8 Gloukh 9 Bissouma 10 Adingra 11 Arokodare 1 Klaverboer 2 Hilgers 3 Diallo 4 Ferreiro 5 Zagaritis 6 Linday 7 Meerveld 8 Proper 9 TrenskowC 10 Ferreira 11 Farji Throw in, Ajax 0.5x 1x 2x 4x Skip AS IT HAPPENS 20' Throw in, Ajax 14' Shot: Matteo Ferreira (Youth) 14"
+   },
+   "club": "Heerenveen",
+   "cutCalendar": [],
+   "quickScroll": {
+    "before": 0,
+    "after": 0
+   },
+   "liveTaps": 1
+  }
+ ],
+ "own": [],
+ "shots": {
+  "count": 64,
+  "bytes": 22690204,
+  "dropped": [
+   "championship-1280-dugout.jpg",
+   "premier-1280-dugout.jpg",
+   "eredivisie-1280-dugout.jpg",
+   "seriea-1280-dugout.jpg"
+  ]
+ }
+}
