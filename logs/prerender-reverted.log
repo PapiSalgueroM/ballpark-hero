@@ -1,0 +1,8 @@
+   the snapshot write holds: it replaces, it rides out a transient hold, it throws rather than
+   damage the old page, it does not retry a genuine error, and it leaves no litter
+16) no random pick seeds React state directly
+   1832 source files scanned, 23 raw random initialiser(s), 22 file(s) on the frozen baseline, 0 new
+17) no saved page opens on a frozen loading line
+   171 documents read, 0 waiting lines found
+
+simPrerender: green. Every page answers with its own words, no JavaScript required.

@@ -1,0 +1,6 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight-branch exit=1 27s | sweepWeight: 13 failures
+weight-reverted exit=0 57s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weight-reverted3 exit=0 58s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+prerender-branch exit=1 29s |    171 documents read, 0 waiting lines found
+prerender-reverted exit=0 30s | simPrerender: green. Every page answers with its own words, no JavaScript required.
