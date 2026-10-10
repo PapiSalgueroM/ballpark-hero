@@ -930,8 +930,10 @@ export function LiveSimScreen({
     const staged = ruledOutAt.get(r.review!.id);
     const playing = liveAction && liveAction.key === nextRuledOutKey ? liveAction.at : null;
     let t: number;
-    /* A hair past NET_AT: the clock is a float, and a hair short of it the ball would stop on the line, not in the net. */
-    if (staged !== undefined) t = (playing ?? Math.max(staged, floor)) + (reducedMotion ? 0 : NET_AT + 0.004);
+    /* A hair past NET_AT: the clock is a float, and a hair short of it the ball would stop on the line, not in the net.
+       Under reduced motion the last picture shows at once, so the review opens a hair after its goal starts: after,
+       never on the same instant, so the goal is on the pitch (and its minute on the clock) when the card comes. */
+    if (staged !== undefined) t = (playing ?? Math.max(staged, floor)) + (reducedMotion ? 0.01 : NET_AT + 0.004);
     else {
       t = placeOf(r);
       /* The last kick of a period is wound up ACTION_SPAN before the whistle. A review at the whistle's own place
@@ -949,7 +951,10 @@ export function LiveSimScreen({
     return Math.max(floor, Math.min(t, stageStop - 0.05));
   };
   reviewCap.current = nextReview ? reviewOpensAt(nextReview) : Infinity;
-  const reviewDue = !!nextReview && clock >= reviewCap.current - 0.001;
+  /* No slack here: the clock is set to exactly this value when it would pass it (see the clock's own step). With
+     a thousandth of slack a frame that landed just short of a whole minute opened the review one minute early on
+     the clock, before the foul was told. The walk met that on a phone. */
+  const reviewDue = !!nextReview && clock >= reviewCap.current;
   useEffect(() => {
     if (running && !finished && !reviewEvent && nextReview && reviewDue) setReviewEvent(nextReview);
   }, [running, finished, reviewEvent, nextReview, reviewDue]);
@@ -958,8 +963,7 @@ export function LiveSimScreen({
   useEffect(() => {
     if (!running || finished || !nextReview || !nextRuledOutKey || (reviewEvent && reviewEvent !== nextReview)) return;
     const at = ruledOutAt.get(nextReview.review!.id);
-    /* The hair of slack is for reduced motion, where the review opens on the very tick its goal starts. */
-    if (at === undefined || at > clock + 0.002 || firedRef.current.has(nextRuledOutKey)) return;
+    if (at === undefined || at > clock || firedRef.current.has(nextRuledOutKey)) return;
     firedRef.current.add(nextRuledOutKey);
     setMotionEvent({ event: { minute: nextReview.minute, ...(nextReview.plus ? { plus: nextReview.plus } : {}), side: nextReview.side, kind: 'goal', text: nextReview.text }, key: nextRuledOutKey, at: clock });
     // firedRef is a ref; the clock, the plan and the review are the inputs.
