@@ -1,0 +1,6 @@
+simUsBoardParity exit=0 100s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simCareerRivalryEvents exit=0 14s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+tsc exit=0 138s | 
+simSoccerCareer exit=0 9s | PASS: no crashes, no snubs, homegrown path live
+vitest-all exit=0 684s |       Tests  5717 passed | 55 skipped (5772)
+simCareerSquad exit=0 574s | simCareerSquad: 2215 checks, 0 failed
