@@ -20219,6 +20219,22 @@ export function savedCareerEraId(): string | null {
   }
 }
 
+/**
+ * Round 1225: the real fixture list the saved career's first season plays,
+ * read without opening it, so the page can fetch that list before anything
+ * reads a fixture off the save. Null when there is no save or it holds no key.
+ */
+export function savedCareerFixtureKey(): string | null {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { realLeagueFixtures?: unknown } | null;
+    return parsed && typeof parsed.realLeagueFixtures === 'string' ? parsed.realLeagueFixtures : null;
+  } catch {
+    return null;
+  }
+}
+
 export function loadCareer(): CareerState | null {
   try {
     const raw = localStorage.getItem(SAVE_KEY);

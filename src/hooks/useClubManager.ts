@@ -5,7 +5,7 @@ import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
-  leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId,
+  leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId, savedCareerFixtureKey, leagueOf,
   startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
@@ -29,7 +29,8 @@ import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, D
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec, ManagerEdit } from '@/lib/clubManager';
 import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
 import { CM_VAR_LIVE } from '@/lib/clubManagerVarLive';
-import { eraById, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
+import { eraById, eraRostersLoaded, ensureEraRosters, isHistoricEra } from '@/lib/clubManagerEras';
+import { ensureRealLeagueFixtures, realLeagueFixturesLoaded, realLeagueFixtureKeyFor } from '@/lib/clubManagerFixtures';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { readSlots, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
@@ -112,6 +113,11 @@ function carryAcross(state: CareerState, from: Formation, to: Formation): { xiId
   return { xiIds, xiDuties };
 }
 
+/** Round 1225: the key of the real fixture list a new career at this club would open on, or null. */
+function startFixtureKey(clubName: string, eraId: string): string | null {
+  return isHistoricEra(eraId) ? null : realLeagueFixtureKeyFor(leagueOf(clubName).id, eraById(eraId).startYear);
+}
+
 export function useClubManager() {
   const [phase, setPhase] = useState<CMPhase>('boot');
   const [career, setCareer] = useState<CareerState | null>(null);
@@ -130,6 +136,8 @@ export function useClubManager() {
      instead of a crash or a fresh start over the career. */
   const [bootError, setBootError] = useState<string | null>(null);
   const [bootTry, setBootTry] = useState(0);
+  /* Round 1225: what would not load, the season's squads or its real fixture list. */
+  const [bootNoun, setBootNoun] = useState<'squads' | 'fixture list'>('squads');
   const retryBoot = useCallback(() => setBootTry(n => n + 1), []);
 
   /* Round 928: the three manager slots, as read off the store without opening
@@ -185,12 +193,16 @@ export function useClubManager() {
     /* Round 832: an era save fetches its era's squads first. Today's world
        and an era already here open exactly as before, in this same pass. */
     const eraId = savedCareerEraId() ?? undefined;
-    if (eraRostersLoaded(eraId)) {
+    /* Round 1225: and a save whose first season plays a real fixture list
+       fetches that list first, in the same wait. The Premier League's list
+       rides with the engine, so nothing changes for it. */
+    const fixtureKey = savedCareerFixtureKey();
+    if (eraRostersLoaded(eraId) && realLeagueFixturesLoaded(fixtureKey)) {
       open();
       return;
     }
     setBootError(null);
-    ensureEraRosters(eraId).then(
+    Promise.all([ensureEraRosters(eraId), ensureRealLeagueFixtures(fixtureKey)]).then(
       () => { if (alive) open(); },
       () => {
         if (!alive) return;
@@ -199,6 +211,7 @@ export function useClubManager() {
            page (see reloadToRetryChunk). The first failure only shows the
            notice; offline, the notice stays. */
         if (bootTry > 0 && reloadToRetryChunk()) return;
+        setBootNoun(eraRostersLoaded(eraId) ? 'fixture list' : 'squads');
         setBootError(eraById(eraId).label);
       },
     );
@@ -452,8 +465,12 @@ export function useClubManager() {
     setSlotNote('All three slots hold a career. Delete one you are done with to make room for a new manager.');
   }, [newInSlot, showSlots]);
 
-  const chooseClub = useCallback((clubName: string) => {
+  /* Round 1225: a league with a real first season fixture list keeps it in a
+     small file of its own. It is fetched when a club is tapped, while the dugout
+     step is on screen, so the career starts on it without a wait. */
+  const chooseClub = useCallback((clubName: string, eraId?: string) => {
     setPendingClub(clubName);
+    if (clubName && eraId) ensureRealLeagueFixtures(startFixtureKey(clubName, eraId)).catch(() => undefined);
   }, []);
 
   /* Round 132: the era rides in from the picker. Nothing passed means the
@@ -466,13 +483,24 @@ export function useClubManager() {
      real world rather than a broken one. */
   const confirmClub = useCallback((eraId?: string, manager?: ManagerSpec, entry?: MidSeasonEntry, worldEdit?: Record<string, string[]> | null) => {
     if (!pendingClub) return;
-    const fresh = startCareer(pendingClub, eraId ?? DEFAULT_ERA_ID, undefined, manager, undefined, validWorldEdit(worldEdit ?? null));
-    /* Round 549: a mid season takeover plays the run-in first, under the
-       manager before you, and hands the club over where it stands. */
-    const s = entry ? startMidSeason(fresh, entry) : fresh;
-    setCareer(s);
-    setActiveTab('overview');
-    setPhase('hub');
+    const club = pendingClub, era = eraId ?? DEFAULT_ERA_ID, edit = validWorldEdit(worldEdit ?? null);
+    const begin = () => {
+      const fresh = startCareer(club, era, undefined, manager, undefined, edit);
+      /* Round 549: a mid season takeover plays the run-in first, under the
+         manager before you, and hands the club over where it stands. */
+      const s = entry ? startMidSeason(fresh, entry) : fresh;
+      setCareer(s);
+      setActiveTab('overview');
+      setPhase('hub');
+    };
+    /* Round 1225: startCareer opens a career on its league's real list only
+       when that list is here. It nearly always is (chooseClub fetched it); when
+       it is not, wait for it on the loading screen. A fetch that fails starts
+       the career on generated fixtures, which is what the calendar then says. */
+    const fixtureKey = edit ? null : startFixtureKey(club, era);
+    if (realLeagueFixturesLoaded(fixtureKey)) { begin(); return; }
+    setPhase('boot');
+    ensureRealLeagueFixtures(fixtureKey).then(begin, begin);
   }, [pendingClub]);
 
   /* Round 154: founding your own club skips the pending-club dance, because
@@ -1058,7 +1086,7 @@ export function useClubManager() {
   return {
     simToWeek,
     saveFailed, deskNote, clearDeskNote: () => setDeskNote(null),
-    bootError, retryBoot,
+    bootError, bootNoun, retryBoot,
     slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
