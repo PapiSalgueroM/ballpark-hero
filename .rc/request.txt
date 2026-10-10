@@ -1,0 +1,17 @@
+#!build
+#!playwright
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simGuideHeadings-traininglocation: GUIDE_HEADINGS_CONTROL=traininglocation node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+genkw-noop: node scripts/genSearchKeywords.mjs && git diff --stat --exit-code -- src/data/searchKeywords.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
