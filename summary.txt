@@ -1,0 +1,6 @@
+simCareerAwardsNight-event12 exit=1 68s | simCareerAwardsNight: 2 FAILURES
+simCareerLeagueFinish-event12 exit=1 14s | simCareerLeagueFinish: 1 failure(s) in section(s) 4
+simCareerSocialBrands-event12 exit=1 24s | 1 FAILURE
+simCareerAwardsNight-news exit=1 67s | simCareerAwardsNight: 7 FAILURES
+simCareerLeagueFinish-news exit=1 14s | simCareerLeagueFinish: 3 failure(s) in section(s) 4
+simCareerSocialBrands-news exit=1 25s | 1 FAILURE

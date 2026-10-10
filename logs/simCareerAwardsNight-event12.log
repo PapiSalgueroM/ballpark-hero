@@ -1,0 +1,57 @@
+inv3 (event12): src/lib/soccerCareerEngine.ts put back to Release AS's text for the New Manager event only (90 characters shorter).
+1) Soccer Career replays the pre-lift fixture byte for byte
+   Round 1172 attribution: exact copied new-generation, newspaper and ceremony changes restored for the old fixture; current outcomes still checked in sections 2 to 7 and simSoccerAwardReveal
+  FAIL: every complete attributed per-step save must match the independent original
+   current fixture changed; actual original identical; 1185 form plus 1187 whole Youth Mentor catalog inverse replay DIFFERS
+   14 winner and podium cards left out of the replay (changed on purpose, section 6)
+   103 tournament cards left out of the replay (Round 926 changed the card on purpose, tournamentCardMoment.test.tsx), 103 drawn now
+   fixture: 48 careers, 10553 saves, 853 nights (32 won), 413 tournaments, 216 speeches, 8 kept cards
+   recorded from 9899d95144731339848abdfba3285dbe4ac8939d
+   names        identical
+  FAIL: career 3 parts at step 128 of 220: fixture pl29c019d590 (phase pl), now pl3997906a42; the step before matched twbd697db899
+   nights       identical
+   tournaments  identical
+   speeches     identical
+   markup       identical
+
+2) The shared contract, on a synthetic sport
+   2000 nights: 1537 fields offered a repeated name, 402 short fields topped up, 1007 rules moved a name, player on the list 1233, placed in the wider ranking 624
+   3,000 speeches: 1000 gambles, 338 came up (33.8% on a stated 35%)
+
+3) Soccer Career speeches: 2,000 draws on a real save
+   Ballon d'Or thank_rival        moves popularity, integrityBonus, rivalryIntensity
+   Ballon d'Or family_on_stage    moves popularity, morale
+   Ballon d'Or tears              moves popularity, morale
+   Ballon d'Or greatest_ever      moves morale, popularity, rivalryIntensity, came up 103 of 250 on a stated 35%
+   tournament  for_the_country    moves popularity, morale, socialMediaFollowers
+   tournament  shirt_to_the_fans  moves popularity, morale, integrityBonus
+   tournament  call_out_doubters  moves morale, socialMediaFollowers, popularity, came up 104 of 250 on a stated 40%
+   tournament  quiet_lap          moves morale, integrityBonus, popularity
+   2000 speeches, 603 numbers in the lines checked against what the speech did
+   at the caps: 24 gamble lines, 15 coin steps cut by a cap, 0 lines untrue
+
+4) Only the Soccer engine may rank real people
+   1863 source files scanned, declared in: src/lib/soccerCareerEngine.ts
+
+5) One awards night: no second copy beside the shared one
+   8 old copies absent, 12 shared calls present
+
+6) The ceremony card says what the night does, and a win offers the speech once
+   winner    at popularity 50  says Popularity 20, Market Value 15; the night moved Popularity 20, Market Value 15
+   2nd place at popularity 50  says Popularity 5; the night moved Popularity 5
+   3rd place at popularity 50  says Popularity 5; the night moved Popularity 5
+   winner    at popularity 95  says Popularity 5, Market Value 15; the night moved Popularity 5, Market Value 15
+   2nd place at popularity 95  says Popularity 5; the night moved Popularity 5
+   3rd place at popularity 95  says Popularity 5; the night moved Popularity 5
+   winner    at popularity 100 says Market Value 15; the night moved Market Value 15
+   2nd place at popularity 100 says nothing; the night moved nothing
+   3rd place at popularity 100 says nothing; the night moved nothing
+   given: Popularity +10, Morale +8
+   replay: 28 won ceremonies, speech offered on 28, offered on a lost one 0 times
+   replay: 30 win and podium nights carry their measured move (0 nights wrong), 25 of 28 wins cut short of Popularity +20 by the cap
+   real winners: 87 speeches given, 79 cut short by a cap (15 of them a gamble's coin step), the log line's own number untrue on 0; the card untrue on 0
+
+7) A won tournament: the speech is given on the card, once, and the card shows what it did
+   65 real won tournaments, 260 speeches given on the card, 226 cut short by a cap, 130 naming a follower move; 0 problems
+
+simCareerAwardsNight: 2 FAILURES

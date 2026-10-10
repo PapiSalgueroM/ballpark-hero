@@ -1,0 +1,18 @@
+inv3 (event12): src/lib/soccerCareerEngine.ts put back to Release AS's text for the New Manager event only (90 characters shorter).
+pool: 756 careers, 6048 playing seasons, 4809 in a league with a verified size, 937 titles
+1) finish is 1 exactly when leagueTitle is true
+   937 title seasons, 0 of them without a 1st; 0 seasons 1st without the title
+2) never above the league size, never below 1, and a verified league always carries both
+   over 0, under 0, verified without a finish 0, wrong size 0, a claim in an unverified league 0; 165 seasons cut short by a severe injury carry none, by design
+3) the tier ladder of mean finish, as a share of the table, every step
+   elite: 0.087 over 425, tier 1: 0.186 over 428, tier 2: 0.409 over 2083, tier 3: 0.655 over 1686, tier 4: 0.742 over 251
+4) the unchanged historical digests hold directly or after guarded development attribution
+   1 direct matches; 16 of 16 careers match the unchanged main digest after attribution; 16 original hashes match the list before the train, 15 match it with the train and the development edits out, and 16 complete draw vectors match; 156 of their 160 current playing seasons carry a finish
+  FAIL: 1 careers moved with the train and the development edits both taken out: something other than those rounds changed a career
+5) the elite boost reads the era: forced first seasons over many seeds
+   Man City, first pro season 1992: title rate 3.8% over 240 seasons, expected the tier rate
+   Man City, first pro season 2022: title rate 67.9% over 240 seasons, expected the elite rate
+   Real Madrid, first pro season 1992: title rate 67.1% over 240 seasons, expected the elite rate
+   PSG, first pro season 2002: title rate 6.7% over 240 seasons, expected the tier rate
+
+simCareerLeagueFinish: 1 failure(s) in section(s) 4

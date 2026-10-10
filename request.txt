@@ -1,0 +1,7 @@
+#!serial
+simCareerAwardsNight-event12: INV3_ONLY=event12 node .rc/x/inv3b.mjs && node scripts/simCareerAwardsNight.mjs; s=$?; git checkout -- src scripts; exit $s
+simCareerLeagueFinish-event12: INV3_ONLY=event12 node .rc/x/inv3b.mjs && node scripts/simCareerLeagueFinish.mjs; s=$?; git checkout -- src scripts; exit $s
+simCareerSocialBrands-event12: INV3_ONLY=event12 node .rc/x/inv3b.mjs && node scripts/simCareerSocialBrands.mjs; s=$?; git checkout -- src scripts; exit $s
+simCareerAwardsNight-news: INV3_ONLY=news node .rc/x/inv3b.mjs && node scripts/simCareerAwardsNight.mjs; s=$?; git checkout -- src scripts; exit $s
+simCareerLeagueFinish-news: INV3_ONLY=news node .rc/x/inv3b.mjs && node scripts/simCareerLeagueFinish.mjs; s=$?; git checkout -- src scripts; exit $s
+simCareerSocialBrands-news: INV3_ONLY=news node .rc/x/inv3b.mjs && node scripts/simCareerSocialBrands.mjs; s=$?; git checkout -- src scripts; exit $s
