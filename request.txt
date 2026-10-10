@@ -1,0 +1,7 @@
+#!serial
+mut-none: node .rc/x/fxmut.mjs none
+mut-staleconst: node .rc/x/fxmut.mjs staleconst
+mut-noblocked: node .rc/x/fxmut.mjs noblocked
+mut-lateorder: node .rc/x/fxmut.mjs lateorder
+mut-nodropcount: node .rc/x/fxmut.mjs nodropcount
+after: git status --short | head -5; git diff --stat | tail -1; echo clean-check-done

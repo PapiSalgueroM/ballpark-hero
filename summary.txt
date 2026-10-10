@@ -1,0 +1,6 @@
+mut-none exit=0 2s | MUT none: SURVIVED (vitest exit 0)
+mut-staleconst exit=1 2s | MUT staleconst: KILLED (vitest exit 1)
+mut-noblocked exit=1 2s | MUT noblocked: KILLED (vitest exit 1)
+mut-lateorder exit=1 2s | MUT lateorder: KILLED (vitest exit 1)
+mut-nodropcount exit=1 2s | MUT nodropcount: KILLED (vitest exit 1)
+after exit=0 1s | clean-check-done

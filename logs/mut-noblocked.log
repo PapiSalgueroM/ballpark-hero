@@ -1,0 +1,4 @@
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > restoreNow and the boot call%2C in the browser's own storage (Round 1219) > r
+   [41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mrestoreNow and the boot call, in the browser's own storage (Round 1219)[2m > [22mrefuses under blocked storage before anything is sta
+   [31m[1mAssertionError[22m: expected { ok: true } to deeply equal { ok: false, why: 'blocked' }[39m
+MUT noblocked: KILLED (vitest exit 1)

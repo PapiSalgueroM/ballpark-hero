@@ -1,0 +1,7 @@
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the apply%2C before any game is in memory (Round 1219) > says how many kept a
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the apply%2C before any game is in memory (Round 1219) > past the cap it drop
+   [41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe apply, before any game is in memory (Round 1219)[2m > [22msays how many kept aside saves the cap dropped, on the second put back 
+   [31m[1mAssertionError[22m: expected { path: '/fight-gym', ok: true, …(1) } to deeply equal { path: '/fight-gym', ok: true, …(2) }[39m
+   [41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe apply, before any game is in memory (Round 1219)[2m > [22mpast the cap it drops the oldest, never the copy it just made and never
+   [31m[1mAssertionError[22m: expected { path: '/fight-gym', ok: true, …(1) } to deeply equal { path: '/fight-gym', ok: true, …(2) }[39m
+MUT nodropcount: KILLED (vitest exit 1)

@@ -1,0 +1,4 @@
+   ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the apply%2C before any game is in memory (Round 1219) > a staged put back is
+   [41m[1m FAIL [22m[49m src/test/saveKeeper.test.ts[2m > [22mthe apply, before any game is in memory (Round 1219)[2m > [22ma staged put back is good for a few minutes and no longer, in minutes w
+   [31m[1mAssertionError[22m: expected { path: '/fight-gym', ok: true, …(1) } to deeply equal { path: '/fight-gym', ok: false, …(1) }[39m
+MUT staleconst: KILLED (vitest exit 1)
