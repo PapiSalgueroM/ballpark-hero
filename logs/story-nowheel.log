@@ -1,0 +1,49 @@
+mutAU nowheel: applied to src/lib/careerChanceWheel.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 27 season rows, 26 story seasons, story 15443 bytes, save 121915 bytes, save without story 106472
+[save parts] seed 9748: rest 64112 bytes, cup games 41658 bytes over 22 seasons, division 11063 bytes over 18 seasons, ten divisions 4489 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 28 season rows, 27 story seasons, story 17699 bytes, save 105446 bytes, save without story 87747
+[save parts] seed 9749: rest 76693 bytes, cup games 12274 bytes over 8 seasons, division 11566 bytes over 19 seasons, ten divisions 4501 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 29 season rows, 28 story seasons, story 21062 bytes, save 144136 bytes, save without story 123074
+[save parts] seed 9750: rest 81992 bytes, cup games 43473 bytes over 23 seasons, division 13504 bytes over 22 seasons, ten divisions 4500 bytes
+
+ [31m❯[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2659[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9741: every line kept, in order, once[32m 113[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9742: every line kept, in order, once[32m 65[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9743: every line kept, in order, once[32m 53[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps every season[2m > [22mthe story draws nothing: the same seed without it plays the same career[32m 88[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps every season[2m > [22ma signing and a loan add to the season log instead of writing over it[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer Career: old and damaged stories[2m > [22ma save with no story loads empty, shows this season only, and starts its story here[32m 18[2mms[22m[39m
+   [32m✓[39m Soccer Career: old and damaged stories[2m > [22ma damaged story resets alone[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer Career: old and damaged stories[2m > [22ma season longer than the cap keeps the cap and counts the rest[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9748 plus ten dugout seasons stays under the bound[32m 109[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9749 plus ten dugout seasons stays under the bound[32m 96[2mms[22m[39m
+[31m   [31m×[31m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound[39m[32m 110[2mms[22m[39m
+[31m     → what the save held before the train still fits the bound it had then: expected 81992 to be less than 80000[39m
+   [32m✓[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it[32m 254[2mms[22m[39m
+   [32m✓[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included[32m 242[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/careerStory.test.tsx[2m > [22mSoccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[31m[1mAssertionError[22m: what the save held before the train still fits the bound it had then: expected 81992 to be less than 80000[39m
+[36m [2m❯[22m src/test/careerStory.test.tsx:[2m299:92[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m12 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 19:23:57
+[2m   Duration [22m 4.75s[2m (transform 1.21s, setup 27ms, collect 1.64s, tests 2.66s, environment 159ms, prepare 39ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save small > the longest career on seed 9750 plus ten dugout seasons stays under the bound,line=299,column=92::AssertionError: what the save held before the train still fits the bound it had then: expected 81992 to be less than 80000%0A ❯ src/test/careerStory.test.tsx:299:92%0A%0A

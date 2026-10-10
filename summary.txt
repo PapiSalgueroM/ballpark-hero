@@ -1,0 +1,9 @@
+awards-head exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerAwardsNightCard.test.tsx,title=src/test/careerAwardsNightCard.test.tsx > Soccer Career%3A the Ba
+awards-nowheel exit=0 5s |    Duration  4.88s (transform 1.08s, setup 27ms, collect 1.48s, tests 2.97s, environment 159ms, prepare 71ms)
+story-head exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save s
+story-noopening exit=0 5s |    Duration  4.66s (transform 1.08s, setup 27ms, collect 1.51s, tests 2.73s, environment 157ms, prepare 64ms)
+story-nowheel exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerStory.test.tsx,title=src/test/careerStory.test.tsx > Soccer Career%3A the story keeps the save s
+story-noadd exit=0 5s |    Duration  4.65s (transform 1.09s, setup 27ms, collect 1.52s, tests 2.70s, environment 152ms, prepare 37ms)
+daily-alone-1 exit=0 14s |    Duration  14.01s (transform 1.59s, setup 27ms, collect 172ms, tests 13.39s, environment 155ms, prepare 74ms)
+daily-alone-2 exit=0 14s |    Duration  13.53s (transform 1.62s, setup 27ms, collect 170ms, tests 12.90s, environment 154ms, prepare 39ms)
+base-three exit=0 16s |    Duration  15.04s (transform 2.98s, setup 139ms, collect 3.74s, tests 20.67s, environment 891ms, prepare 242ms)

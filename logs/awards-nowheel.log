@@ -1,0 +1,12 @@
+mutAU nowheel: applied to src/lib/careerChanceWheel.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/careerAwardsNightCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2975[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual true ballot out of newspaper, summary, timeline and cabinet until its list [33m 451[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[90m (7)[39m
+[2m   Start at [22m 19:23:40
+[2m   Duration [22m 4.88s[2m (transform 1.08s, setup 27ms, collect 1.48s, tests 2.97s, environment 159ms, prepare 71ms)[22m
+

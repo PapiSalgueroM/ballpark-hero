@@ -1,0 +1,11 @@
+# Release AU: the three unit reds of the whole suite, each alone, each with PR216's additive field off, and on origin/release-at-gate (73516206de4142362147fd6617c7abedc4159864)
+#!serial
+awards-head: node_modules/.bin/vitest run src/test/careerAwardsNightCard.test.tsx --testTimeout=300000 --hookTimeout=300000
+awards-nowheel: node .rc/x/mutAU.mjs nowheel && node_modules/.bin/vitest run src/test/careerAwardsNightCard.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout HEAD -- src; exit $s
+story-head: node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=300000
+story-noopening: node .rc/x/mutAU.mjs noopening && node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout HEAD -- src; exit $s
+story-nowheel: node .rc/x/mutAU.mjs nowheel && node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout HEAD -- src; exit $s
+story-noadd: node .rc/x/mutAU.mjs noopening nowheel && node_modules/.bin/vitest run src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=300000; s=$?; git checkout HEAD -- src; exit $s
+daily-alone-1: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=300000
+daily-alone-2: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=300000
+base-three: git worktree add -f /tmp/atg2 73516206de4142362147fd6617c7abedc4159864 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/atg2/node_modules; cd /tmp/atg2 && git rev-parse --short HEAD && node_modules/.bin/vitest run src/test/careerAwardsNightCard.test.tsx src/test/careerStory.test.tsx src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=300000

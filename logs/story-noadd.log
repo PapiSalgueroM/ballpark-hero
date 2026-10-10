@@ -1,0 +1,24 @@
+mutAU noopening: applied to src/lib/soccerCareerEngine.ts
+mutAU nowheel: applied to src/lib/careerChanceWheel.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 27 season rows, 26 story seasons, story 15443 bytes, save 119739 bytes, save without story 104296
+[save parts] seed 9748: rest 61936 bytes, cup games 41658 bytes over 22 seasons, division 11063 bytes over 18 seasons, ten divisions 4489 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 28 season rows, 27 story seasons, story 17699 bytes, save 103281 bytes, save without story 85582
+[save parts] seed 9749: rest 74528 bytes, cup games 12274 bytes over 8 seasons, division 11566 bytes over 19 seasons, ten divisions 4501 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 29 season rows, 28 story seasons, story 21062 bytes, save 141629 bytes, save without story 120567
+[save parts] seed 9750: rest 79485 bytes, cup games 43473 bytes over 23 seasons, division 13504 bytes over 22 seasons, ten divisions 4500 bytes
+
+ [32m✓[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 2699[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 19:24:03
+[2m   Duration [22m 4.65s[2m (transform 1.09s, setup 27ms, collect 1.52s, tests 2.70s, environment 152ms, prepare 37ms)[22m
+
