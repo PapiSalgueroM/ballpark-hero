@@ -1,0 +1,2 @@
+before-mine exit=0 4s | mine exit=1
+before-base exit=0 5s | 1

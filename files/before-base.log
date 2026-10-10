@@ -1,0 +1,22 @@
+Practice evidence: /home/runner/work/_temp/t-before-base/dukb-practice992-esMwo2
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: before: exactly four named sport outcomes must fail
+
+7 !== 4
+
+    at file:///tmp/base/scripts/simUsCareerPractice.mjs:113:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 7,
+  expected: 4,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

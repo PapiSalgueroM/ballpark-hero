@@ -1,0 +1,3 @@
+#!serial
+before-mine: US_CAREER_PRACTICE_CONTROL=before node scripts/simUsCareerPractice.mjs > "$RC_OUT/before-mine.log" 2>&1; echo "mine exit=$?"; grep -E "✓|×|FAIL|passed|failed" "$RC_OUT/before-mine.log" | cut -c1-200 | tail -30
+before-base: git worktree add -q /tmp/base 09df145abfb241679022b41903d2f19bc254ebf9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && US_CAREER_PRACTICE_CONTROL=before node scripts/simUsCareerPractice.mjs > "$RC_OUT/before-base.log" 2>&1; echo "base exit=$?"; grep -E "✓|×|FAIL|passed|failed" "$RC_OUT/before-base.log" | cut -c1-200 | tail -30; grep -c "7 !== 4" "$RC_OUT/before-base.log"
