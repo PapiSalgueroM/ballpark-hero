@@ -1,0 +1,26 @@
+PASS real fixtures premier normal
+simCmRealFixtures normal premier: 13 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier venues
+simCmRealFixtures venues premier: the copied fault failed exactly its own outcome (ledger) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier card
+simCmRealFixtures card premier: the copied fault failed exactly its own outcome (calendar) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier settlement
+simCmRealFixtures settlement premier: the copied fault failed exactly its own outcome (settlement) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier bye
+simCmRealFixtures bye premier: the copied fault failed exactly its own outcome (bye) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier world
+simCmRealFixtures world premier: the copied fault failed exactly its own outcome (world) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier edited
+simCmRealFixtures edited premier: the copied fault failed exactly its own outcome (eligibility) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier legacy
+simCmRealFixtures legacy premier: the copied fault failed exactly its own outcome (legacy, baseline) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier future
+simCmRealFixtures future premier: the copied fault failed exactly its own outcome (future) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier rollover
+simCmRealFixtures rollover premier: the copied fault failed exactly its own outcome (rollover) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+SKIP real fixtures premier silent: this list rides with the engine, so it is never absent
+PASS real fixtures premier handover
+simCmRealFixtures handover premier: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+PASS real fixtures premier jobmove
+simCmRealFixtures jobmove premier: the copied fault failed exactly its own outcome (takeover) and nothing else, beside the base 093ab14e34d3746aca06e060f21debb78c61b1b6.
+simCmRealFixtures premier: 13 actual outcome groups, 760 fixture reads, 760 calendar reads and 11 effective controls passed against the base 093ab14e34d3746aca06e060f21debb78c61b1b6.

@@ -1,0 +1,10 @@
+Auto-merging scripts/simCmRealFixtures.mjs
+Auto-merging src/components/club-manager/ClubManagerHelp.tsx
+CONFLICT (content): Merge conflict in src/components/club-manager/ClubManagerHelp.tsx
+Auto-merging src/lib/clubManager.ts
+CONFLICT (content): Merge conflict in src/lib/clubManager.ts
+Automatic merge failed; fix conflicts and then commit the result.
+resolve3way: src/lib/clubManager.ts resolved (2 lines of ours, 2 of theirs)
+resolve3way: src/components/club-manager/ClubManagerHelp.tsx resolved (1 lines of ours, 17 of theirs)
+0340bea68 Merge remote-tracking branch 'origin/r1225-cm-fixtures-bind' into rc/r1229-f2d
+0

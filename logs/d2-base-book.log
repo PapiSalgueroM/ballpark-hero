@@ -1,0 +1,14 @@
+  ok   premier ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   premier calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   premier settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  ok   premier bye: settles a neutral-only league entry through the same real fixture resolver
+  ok   premier world: settles the actual world league round through the same real fixture resolver
+  ok   premier eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   premier takeover: keeps the key through a mid season takeover, played in the real order before and after the handover, and gives none to a club joined during a season
+  ok   premier unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  ok   premier legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   premier future: refuses stale keys in later seasons, other years and changed league membership
+  ok   premier rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   premier baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   premier uncopied: passes the whole base comparison with untouched current source under every copied fault
+simCmRealFixtures normal premier: 13 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base c0db41a840680789f06078d3fcdd3dc5da984590.
