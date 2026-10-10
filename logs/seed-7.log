@@ -1,0 +1,45 @@
+playLiveMatchFit: seed 7. Replay this run with: LIVE_FIT_SEED=7 node scripts/playLiveMatchFit.mjs
+In the job at Crystal Palace.
+1) The goal in order
+  [match phone] seed 7, 1823 draws at kick off, digest 8ef206aa over 5393 characters of drawn match: Crystal Palace v Fulham, goals of the first half 18' Antonee Robinson (own goal), 45+4' Jørgen Strand Larsen; own goals among them 1
+  the goal watched: 18' Antonee Robinson (own goal), for me; own goals in its half 1 of 2 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 1 - 0 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the scorer card was inside the pitch on all 29 frames it was up
+  ok    a tap on the card ended the hold (42 frames after it, none with the card)
+4) Nothing moves the page
+  ok    window.scrollY stayed at 0 through 240 frames before, during and after a goal
+  ok    window.scrollY stayed at 0 with the change sheet, the squad panel, the help panel, the stats panel open
+3) The fit
+  ok    320 by 568: the stage is the window, strip at 0, pitch 320 by 392 (69 percent of the height), control row ends at 568 of 568, 7 controls all 44 px and none covered
+  [labels 320 by 568] mean overlapping name labels a frame 3.80 over 10 frames of 22 labels
+  ok    390 by 844: the stage is the window, strip at 0, pitch 390 by 668 (79.1 percent of the height), control row ends at 844 of 844, 7 controls all 44 px and none covered
+  [labels 390] mean overlapping name labels a frame 0.21 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.13
+  ok    name labels overlap 0.21 a frame, fewer than the 1.63 before match mode
+  ok    768 by 1024: the stage is the window, strip at 12, pitch 372 by 651 (63.6 percent of the height), control row ends at 1012 of 1024, 7 controls all 44 px and none covered
+  [labels 768 by 1024] mean overlapping name labels a frame 0.50 over 10 frames of 22 labels
+  ok    1280 by 900: the stage is the window, strip at 12, pitch 541.5 by 722 (80.2 percent of the height), control row ends at 888 of 900, 7 controls all 44 px and none covered
+  [labels 1280 by 900] mean overlapping name labels a frame 0.00 over 10 frames of 21 labels
+  ok    844 by 390: the stage is the window, strip at 0, pitch 518 by 388.5 (99.6 percent of the height), control row ends at 390 of 390, 7 controls all 44 px and none covered
+  [labels 844 by 390] mean overlapping name labels a frame 0.60 over 10 frames of 21 labels
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace2 - 0FulhamPaused at 46'Back to ", and the clock held at 46' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (46' to 47')
+5) The reload
+  ok    reload: left at 66', the save holds 66, the match came back at 66'
+  ok    close: left at 68', the save holds 68, the match came back at 68'
+  ok    hidden tab: the clock read 70' and the save holds 70
+2) Reduced motion
+  [match calm] seed 8, 1867 draws at kick off, digest d319e98e over 5668 characters of drawn match: Crystal Palace v Sunderland, goals of the first half 5' Ismaïla Sarr, 7' Trai Hume (own goal), 15' Jørgen Strand Larsen; own goals among them 1
+  the goal watched: 15' Jørgen Strand Larsen, for me; own goals in its half 1 of 3 goals
+  ok    under reduced motion the score reads 3 - 0 on a frame in phase net
+  ok    the scorer card was inside the pitch on all 154 frames it was up
+  ok    nothing under the pitch or the card was animating in open play, inside a goal, after the goal
+7) A wide screen
+  [match wide] seed 9, 1804 draws at kick off, digest 92caa5c6 over 4805 characters of drawn match: Crystal Palace v Bournemouth, goals of the first half 15' Rayan; own goals among them 0
+  the goal watched: 15' Rayan, against me; own goals in its half 0 of 1 goals
+  ok    the goal in order: 46 frames of wind up and flight all read 0 - 0, and the first frame reading 0 - 1 is in phase net with the net marked
+  ok    the line under the pitch never read GOAL! while the ball was on its way (46 frames)
+  ok    the list beside the pitch said GOAL! only once the ball was in (first on a frame reading goal/net, score 0 - 1)
+  ok    the scorer card was inside the pitch on all 105 frames it was up
+playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
