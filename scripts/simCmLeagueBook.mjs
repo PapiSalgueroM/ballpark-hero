@@ -38,8 +38,10 @@
  *            written in the run twenty entries into a season) finish their season on the candidate
  *            exactly as on the reference engines, entry by entry, with the same board and summary, and
  *            never gain a book; the season after opens one that obeys the law from its first round; a
- *            book that is a string, an array, a number, holed, or last season's own reads as no book, is
- *            never written into, and the save plays the entries the engine with the book out plays
+ *            book that is a string, an array, a number, or last season's own reads as no book, is never
+ *            written into, and the save plays the entries the same save with no book at all plays; a
+ *            book with one holed row is refused whole by the reader and plays the same entries too, but
+ *            the match week (a stamp and a type check, on purpose) still writes to it
  *   doors    the takeover from the picker at its three entries and the job joined today in season one
  *            and in season three: a whole book at the handover and the law after every entry to the end
  *   dailies  Manager Hot Seat (four dates, played to a verdict, handed over to Club Manager and played
@@ -48,17 +50,21 @@
  * Outside section stream "the reference engines" are the engine with the book out and, with BOOK_BASE,
  * the base commit; each pair is played on two FRESH copies of the bundles asked the same things in the
  * same order, because the engine numbers its youth players, press questions and messages as it goes.
+ * And a save that is not the one a copy touched last is WOKEN first (wake below): the engine keeps one
+ * save's league memberships registered at a time, the way loadCareer leaves them.
  *
  * NEGATIVE CONTROLS. BOOK_CONTROL=<name> patches the bundle's copy of the source (never a file on disk;
  * the anchor must occur exactly as often as stated or the run refuses) and the run then exits 1 with
- * FIRED only if the named section went red and no other did:
- *   weight        a striker weighs 8, not 5 (needs BOOK_BASE)         -> stream
+ * FIRED only if the named section went red and no other did (two controls name the sections that go red
+ * with theirs for the same reason, and say so on their last line):
+ *   weight        a striker weighs 8, not 5 (needs BOOK_BASE)         -> stream, and shapes with it
  *   mathrandom    the scorer pick reads Math.random                  -> stream
- *   dropmine      my own league match is not noted                   -> law
+ *   dropmine      my own league match is not noted                   -> law, and with it the three other
+ *                 sections that check the law (names, oldsave, doors)
  *   cleanside     the clean sheet goes to the side that did not score -> law
  *   bought        the book's eleven keeps a man now in my squad      -> names
  *   twoman        the deal is the old race's: 42 and 26 in a hundred to the two best rated forwards or
- *                 midfielders, the rest to nobody                    -> shapes
+ *                 midfielders, the rest to nobody, and no taker      -> shapes
  *   flat          every outfield man weighs the same                 -> shapes
  *   penassist     a penalty or a free kick is paid an assist         -> shapes
  *   noog          no goal is ever an own goal                        -> shapes
@@ -196,8 +202,38 @@ async function engine(label, root, patches = []) {
   return { cm: mod.cm, cal: mod.cal, hs: mod.hs, dd: mod.dd, book: mod.book, again };
 }
 
-/** The gate of section shapes (ii), set from measured headroom: see the header. */
-const PURPOSE_FLOOR = 2;
+/*
+ * MEASURED on GitHub runners, 2026-10-10, five seed sets each (SEEDSET 0 to 4), the engine as at 4ab6e246
+ * (remote checks r1229-g1, r1229-g3, r1229-g2, r1229-g6; docs/audits/ROUND-1229-NOTES.md has the boards).
+ * The full fleet is 24 careers x 2 seasons (48 seasons, about 44,000 rival goals), the default 4 x 2.
+ *   stream   96 of 96 faces equal with the book out on every set, and 96 of 96 equal to the base commit
+ *            (980654fa, seed set 0). Controls: mathrandom moved 16 of 16 default faces, weight 11 of 16.
+ *   shapes (i)   the three lines against the harness's own table, z: full fleets within -1.83 to 1.71,
+ *            default fleets within -2.27 to 2.60 (gate 4). Controls: twoman, forwards at z -36 and no
+ *            defender scoring at all; flat, forwards at z -37 and defenders at z +58.
+ *   shapes (ii)  forwards and wingers in the top ten of the Goals board, book minus old race: full fleets
+ *            3.85 4.02 4.40 4.19 4.00, default fleets 3.50 3.63 3.13 3.88 4.50. Under the twoman control
+ *            (the book dealing as the old race did, no taker) the default fleets read 0.00 -1.00 -0.63
+ *            -0.38 -0.38. PURPOSE_FLOOR 1.5 sits 1.63 under the lowest healthy fleet and 1.50 over the
+ *            highest control, about three of either's standard deviations (0.5 and 0.4) from each.
+ *   shapes (iii) assists a credited goal of a club with an eleven, against 0.614, z: full 0.70 -0.69 -2.93
+ *            -0.47 -0.50, default 0.37 -1.25 -0.87 -0.34 0.53 (gate 4; control penassist z 11.4). Read
+ *            over EVERY club the same fleets gave 0.601 to 0.610, all ten under the rule: a club with no
+ *            eleven can have a goal against me on a row, with nobody on its pitch to set it up, and the
+ *            first cut of this check counted those. Own goals of a club with an eleven against 2.75 in a
+ *            hundred, z: full 0.16 -0.59 0.66 -1.10 -2.00, default 0.42 -1.12 1.12 -0.82 0.73 (gate 4;
+ *            control noog z -12.0).
+ *   law      45,366 checks over 2,185 entries on the full fleet, none red; with the video referee on, 268
+ *            to 277 entries, 162 to 183 reviews in 228 league matches of mine, no report whose lines did
+ *            not add up to its score. Controls: dropmine 3,434 failures, cleanside 96.
+ *   names    about 80,000 credits on the full fleet, each on its club's roster and not in my squad; the
+ *            purchase probe fires on 3 of 3 purchases under the bought control.
+ *   oldsave, doors, dailies   exact comparisons, no band: redeal 4 failures, seasonstamp 32, strip 8,
+ *            stripdeadline 6.
+ * Wall time, full fleet with BOOK_BASE and BOOK_MEASURE: about 130 seconds; default fleet about 25.
+ */
+/** The gate of section shapes (ii): see MEASURED above. */
+const PURPOSE_FLOOR = 1.5;
 
 /* ---------- the seeded stream, counted ---------- */
 function seeded(seed) {
@@ -238,6 +274,15 @@ const P_OPEN = 1 - P_SET - P_OG;
 const P_ASSIST = ASSIST * P_OPEN / (P_OPEN + P_SET);
 const sd = (n, p) => Math.sqrt(Math.max(0, n * p * (1 - p)));
 const EMPTY = new Set();
+/**
+ * A save put down and picked up again. The engine keeps ONE save's world registered at a time (its league
+ * memberships after promotions and relegations, its created club): startCareer, startNextSeason and loadCareer
+ * register it, playNextEntry and every reader assume it. So a save that is not the one this copy of the engine
+ * touched last is woken first, the way loadCareer wakes it. Without this the league of a save read after
+ * another career had run could be another league (Everton, relegated in the career before), and its book,
+ * stamped by its league, read as nobody's.
+ */
+const wake = (mod, s) => { mod.cm.registerCustomClub(s.customClub ?? null, s.eraId); mod.cm.registerLeagueOverrides(s.leagueOverrides ?? null); return s; };
 const mean = xs => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
 const fmt = (x, d = 1) => (Number.isFinite(x) ? x.toFixed(d) : 'n/a');
 
@@ -571,6 +616,15 @@ const compareFaces = (name, faces) => {
   console.log(`stream  ${compareFaces('book out', offFaces)} of ${n} faces (the whole save but the book, and the count of draws) equal with the book taken out`);
   console.log(`        wall time of the fleet: ${(tCand / 1000).toFixed(1)}s with the book and this harness watching every entry, ${(tOff / 1000).toFixed(1)}s with the book out and nothing watching`);
 }
+{
+  /* What the book costs a season with nothing watching: the first careers of the fleet once more on two fresh
+     copies, one after the other. Printed, never gated: a shared runner's clock is not a measuring instrument. */
+  const sample = fleet.slice(0, 4);
+  const timeOn = async mod => { const copy = await mod.again(); const t = Date.now(); sample.forEach(f => playCareer(copy, f.club, f.era, f.seed)); return Date.now() - t; };
+  const off = await timeOn(nobook);
+  const on = await timeOn(candidate);
+  console.log(`        the book's own cost: ${sample.length} careers x ${SEASONS} seasons took ${on}ms with the book and ${off}ms with it out (${fmt(100 * (on - off) / Math.max(1, off))}% more)`);
+}
 let base = null;
 if (BASE) {
   try { base = await engine('base', BASE); } catch (e) { cannot(`the base tree at ${BASE} did not build: ${String(e?.message ?? e)}`); }
@@ -631,14 +685,14 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
   const skipped = [];
   for (const { f, state } of midSaves) {
     const { cm } = candidate;
-    const book = cm.leagueBookOf(state);
+    const book = cm.leagueBookOf(wake(candidate, state));
     if (!book) { skipped.push(`${f.club}: no book`); continue; }
     const mine = cm.mySquadNames(state);
     const target = candidate.book.bookRows(book).filter(r => !mine.has(r.name) && r.pos !== 'GK').sort(byGoals)[0];
     const like = target && (state.squad.find(p => p.position === target.pos && !state.xiIds.includes(p.id)) ?? state.squad.find(p => !state.xiIds.includes(p.id)));
     if (!target || target.goals < 3 || !like) { skipped.push(`${f.club}: ${!target ? 'no rival row' : target.goals < 3 ? `the best rival is on ${target.goals}` : 'no reserve to copy'}`); continue; }
     probes += 1;
-    const s0 = JSON.parse(JSON.stringify(state));
+    const s0 = wake(candidate, JSON.parse(JSON.stringify(state)));
     /* He signs: a man of that name is in my squad from now on (a copy of one of my reserves under his name). */
     s0.squad.push({ ...JSON.parse(JSON.stringify(like)), id: 'p-probe-1229', name: target.name });
     const key = `${target.name}|${target.pos}`;
@@ -689,7 +743,7 @@ const whole = s => sha(JSON.stringify(s));
   /** A save played to the end of its season on one engine: a face after every entry, the board, the summary, the next season. */
   const finishOn = (mod, raw, seed, viaLoad) => onStream(seed, draw => {
     let s;
-    if (viaLoad) { store.clear(); store.set(mod.cm.SAVE_KEY, raw); s = mod.cm.loadCareer(); } else s = JSON.parse(raw);
+    if (viaLoad) { store.clear(); store.set(mod.cm.SAVE_KEY, raw); s = mod.cm.loadCareer(); } else s = wake(mod, JSON.parse(raw));
     if (!s) return null;
     const faces = [whole(s)];
     let sawBook = 'leagueBook' in s;
@@ -742,7 +796,7 @@ const whole = s => sha(JSON.stringify(s));
   /* The season after: a book from its first round, and it obeys the law. */
   for (const { save, next } of followUps) {
     onStream(save.seed + 99, () => {
-      let s = next;
+      let s = wake(candidate, next);
       const opened = candidate.cm.leagueBookOf(s);
       tick('oldsave');
       if (!opened || Object.keys(opened.c).length) fail('oldsave', `${save.name}: the next season did not open with an empty book`);
@@ -779,7 +833,7 @@ const whole = s => sha(JSON.stringify(s));
        written to in a match week. The READER refuses it whole, which is what a screen will ask, and the
        engine never makes such a row itself: a row is four numbers from the moment it exists. */
     const damaged = [['a string', 'the book', true], ['an array', [made.next.leagueBook], true], ["last season's own", made.last, true], ['a row with a hole', holed, false], ['a number', 7, true]];
-    const fourOn = (mod, from) => onStream(0x7011, () => { let s = from; for (let k = 0; k < 4; k++) s = mod.cm.playNextEntry(s, { skipHalftime: true }).state; return s; });
+    const fourOn = (mod, from) => onStream(0x7011, () => { let s = wake(mod, from); for (let k = 0; k < 4; k++) s = mod.cm.playNextEntry(s, { skipHalftime: true }).state; return s; });
     for (const [what, value, weekSeesIt] of damaged) {
       const v = JSON.parse(JSON.stringify(made.next));
       v.leagueBook = value;
@@ -841,7 +895,7 @@ const whole = s => sha(JSON.stringify(s));
     tick('doors');
     if (!raw) { fail('doors', `no career at ${from} reached week 16 of season ${seasonsFirst + 1} in the job on four seeds`); continue; }
     onStream(seed + 0x100, () => {
-      const s = JSON.parse(raw);
+      const s = wake(candidate, JSON.parse(raw));
       const label = `the job at ${to} joined from ${from} in season ${s.season}`;
       s.jobHunt = { open: { club: to, league: '', tier: 1, season: s.season, week: s.week, matchesLeft: 0, roll: 0, status: 'accepted' }, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null };
       const joined = cal.joinClubNow(s);
@@ -874,7 +928,7 @@ const whole = s => sha(JSON.stringify(s));
       see(`after step ${guard}`, run.state);
     }
     /* Handed over to Club Manager: a season in flight with no book, played on. */
-    let s = hs.handoverState(run);
+    let s = wake(mod, hs.handoverState(run));
     see('handed over', s);
     for (let k = 0; k < 3 && s.week < s.calendar.length; k++) { s = cm.playNextEntry(s, { skipHalftime: true }).state; see(`handed over, entry ${k + 1}`, s); }
     return { club: setup.club, seen, booked };
