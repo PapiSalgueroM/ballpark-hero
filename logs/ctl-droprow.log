@@ -1,0 +1,21 @@
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+NEGATIVE CONTROL ON: droprow on a copy of championship, sections ABCEI must go red and nothing else
+A) shape: RED for championship
+  FAIL: championship: 1 matchday(s) do not hold 12 matches, the first is matchday 5 with 11
+B) no club twice in a matchday: RED for championship
+  FAIL: championship: 1 matchday(s) do not hold every club exactly once, the first is matchday 5
+C) each pair once at each ground: RED for championship
+  FAIL: championship: 1 ordered pair(s) never meet and 0 meet more than once
+  FAIL: championship: 2 club(s) do not have 23 home and 23 away games, the first is Blackburn Rovers
+D) the game's own clubs: green for 9 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: RED for championship
+  FAIL: championship: source 1: 0 ledger fixture(s) are not in its rows and 1 of its rows are not in the ledger
+  FAIL: championship: source 2: 0 ledger fixture(s) are not in its rows and 1 of its rows are not in the ledger
+  FAIL: championship: source 2 gives the order of matches and the ledger's order differs from it
+  FAIL: championship: the receipt's counts are not the ledger's: matches 552 not 551
+F) two independent sources: green for 9 ledger(s)
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: RED for championship
+  FAIL: championship: the ledger's digest is not the frozen a126a434f36d8fd8: a frozen ledger never changes, a correction ships under a new key
+  FAIL: championship: the digest the receipt recorded is not the ledger's
+CONTROL droprow FIRED as expected on championship: sections ABCEI went red for championship and nothing else

@@ -1,0 +1,12 @@
+simCmLeagueFixtures: 9 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, primeira, seriea, superlig
+NEGATIVE CONTROL ON: latechange on a copy of bundesliga2, sections E must go red and nothing else
+A) shape: green for 9 ledger(s)
+B) no club twice in a matchday: green for 9 ledger(s)
+C) each pair once at each ground: green for 9 ledger(s)
+D) the game's own clubs: green for 9 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: RED for bundesliga2
+  FAIL: bundesliga2: source 1 says it is a release day copy of the list, and its parser and the stamps it recorded do not bear that out (came out 2026-07-02, last changed 2027-07-02T09:00:00Z)
+F) two independent sources: green for 9 ledger(s)
+G) nothing excluded got in: green for 9 ledger(s)
+I) frozen: green for 9 ledger(s)
+CONTROL latechange FIRED as expected on bundesliga2: sections E went red for bundesliga2 and nothing else
