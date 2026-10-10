@@ -1,0 +1,18 @@
+oldsaves: base 73516206de4142362147fd6617c7abedc4159864, 13 src files differ, 8 read at the base: src/lib/nflMyCareer.ts, src/lib/careerAwards.ts, src/lib/usCareerStatLine.ts, src/lib/nflCareerRivalryEvents.ts, src/lib/nbaCareerRivalryEvents.ts, src/lib/nbaMyCareer.ts, src/lib/careerRival.ts, src/lib/careerRivalryEvents.ts
+1) 22479 saves sitting on a rivalry card the base code dealt (22 kinds), 8375 on a rival choice
+     beat 206: 206 "Morale -5" 56 of 56 equal; 206 "Morale +5" 54 of 54 equal
+     beat 221: 221 "Fanbase +4, the feud softens" 97 of 97 equal
+     by kind, not equal on the two trees: none
+   ok   a card the base code dealt is answered the same on both trees, state and feed (22479 of 22479 byte equal)
+   ok   the base fleet did sit on both own roster cards and on the old 221
+   ok   a rival choice the base code dealt is resolved the same on both trees (8375 of 8375)
+2) 2348 mid career saves built by the base code (1 to 13 seasons in), played on for up to 25 seasons on both trees
+     at load: 1854 carry a rival line that is not his position's shape; 38 have a rival already retired, 24 of them with an old shape line that will never be replaced
+   ok   the player's own season lines and counters are byte equal on both trees from an old save (0 saves with a differing line, 0 with differing counters, of 2348)
+   ok   every judged season on this tree leaves his line in his position's shape, the season's year, a roster fact and a tally one longer (17849 judged; off shape 0, wrong year 0, no roster fact 0, bad tally 0)
+   ok   the verdict on the save agrees with the two printed lines and the note carries his line (0 disagree, 0 notes without his line)
+   ok   no season at a one place position has both men on the first team (0)
+3) 2348 old saves played on through the board's loop on this tree: 23016 seasons, 9635 rivalry cards answered, 26 of them All-Pro cards (Morale +5: 23, Morale -5: 2, Fanbase +3: 1)
+   ok   no old save throws when it is played on (0 threw)
+   ok   every All-Pro card dealt to an old save says what the two seasons support and pays its chip, and none is an own card of Round 1149 (0 wrong, 0 own cards, of 26)
+oldsaves: 9 checks, 0 failed

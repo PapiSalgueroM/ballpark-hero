@@ -1,0 +1,3 @@
+probe1 exit=0 1s | probe1: HELD, the rule holds at the real call site
+old-as exit=0 113s | oldsaves: 5 checks, 0 failed
+old-at exit=0 211s | oldsaves: 9 checks, 0 failed

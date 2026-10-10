@@ -1,0 +1,15 @@
+oldsaves: base 09df145abfb241679022b41903d2f19bc254ebf9, 104 src files differ, 16 read at the base: src/lib/nflCareerSport.ts, src/lib/nbaCareerSport.ts, src/lib/mlbCareerSport.ts, src/lib/nhlCareerSport.ts, src/lib/nflMyCareer.ts, src/lib/careerAwards.ts, src/lib/usCareerStatLine.ts, src/lib/nflCareerRivalryEvents.ts, src/lib/mlbMyCareer.ts, src/lib/mlbCareerRivalryEvents.ts, src/lib/nhlCareerRivalryEvents.ts, src/lib/nhlMyCareer.ts, src/lib/nbaMyCareer.ts, src/lib/nbaCareerRivalryEvents.ts, src/lib/careerRival.ts, src/lib/careerRivalryEvents.ts
+1) 9012 saves sitting on a rivalry card the base code dealt (21 kinds), 3344 on a rival choice
+     beat 206: 206 "50/50 outcome" 0 of 136 equal
+     beat 221: 221 "Fanbase +4, the feud softens" 34 of 34 equal
+     by kind, not equal on the two trees: 219 "50/50 outcome" 369 of 369; 206 "50/50 outcome" 136 of 136
+2) 1566 mid career saves built by the base code (1 to 13 seasons in), played on for up to 25 seasons on both trees
+     at load: 1241 carry a rival line that is not his position's shape; 30 have a rival already retired, 18 of them with an old shape line that will never be replaced
+     (not judged against this base) saves with a differing player line 0, with differing counters 0, of 1566
+   ok   every judged season on this tree leaves his line in his position's shape, the season's year, a roster fact and a tally one longer (11880 judged; off shape 0, wrong year 0, no roster fact 0, bad tally 0)
+   ok   the verdict on the save agrees with the two printed lines and the note carries his line (0 disagree, 0 notes without his line)
+   ok   no season at a one place position has both men on the first team (0)
+3) 1566 old saves played on through the board's loop on this tree: 15343 seasons, 6398 rivalry cards answered, 15 of them All-Pro cards (Morale +5: 13, Morale -5: 2)
+   ok   no old save throws when it is played on (0 threw)
+   ok   every All-Pro card dealt to an old save says what the two seasons support and pays its chip, and none is an own card of Round 1149 (0 wrong, 0 own cards, of 15)
+oldsaves: 5 checks, 0 failed
