@@ -86,6 +86,14 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   (`https://www.maxifoot.fr/calendrier-pays-bas-2026-2027.htm`, the season stamped address, 110,826 bytes, sha256
   `46a0df585d9d...`). Both read 2026-10-10. Zero tuple differences in 306. Name table: 8 lines for the feed, 12
   for Maxifoot. Data file `src/data/clubManagerEredivisieFixtures2026.ts` 10,465 bytes; receipt 64,512 bytes.
+- **primeira: IN.** 18 clubs, 34 matchdays, 306 fixtures. Sources: the feed
+  (`https://fixturedownload.com/feed/json/primeira-liga-2026`, 70,041 bytes, sha256 `85df04dc94b1...`) and
+  Maxifoot (`https://www.maxifoot.fr/calendrier-portugal-2026-2027.htm`, 108,804 bytes, sha256
+  `a2278a6ba8f0...`). Both read 2026-10-10. Zero tuple differences in 306. Name table: 15 lines for the feed, 10
+  for Maxifoot. The feed prints the promoted club as plain "Académico"; Maxifoot prints "Academico Viseu"; both
+  land on the game's `Académico de Viseu` and the two lists then agree on all 34 of its rows, which is what
+  checks that line. "Sporting Lisbo." is `Sporting CP` and "Sporting Braga" is `Braga`. Data file
+  `src/data/clubManagerPrimeiraFixtures2026.ts` 10,638 bytes; receipt 64,893 bytes.
 
 ## Runner results
 
