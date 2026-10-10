@@ -201,7 +201,7 @@ describe('Soccer Career shows every season\'s rating in the history', () => {
     await act(async () => { fireEvent.click(open as Element); });
     /* Round 1045: the dialog is lazy now, so it is found once it has loaded */
     const dialog = await waitFor(() => {
-      const d = view.container.querySelector('[data-season-ratings="dialog"]');
+      const d = view.baseElement.querySelector('[data-season-ratings="dialog"]');
       expect(d, 'the Ratings dialog did not open').not.toBeNull();
       return d;
     });
@@ -268,7 +268,7 @@ describe('Soccer Career shows every season\'s rating in the history', () => {
     const stripped = career.seasons.map(r => { const { ovr: _drop, ...rest } = r; return rest as SeasonRecord; });
     const caption = (c: Parameters<typeof SeasonRatings>[0]['career']) => {
       const view = render(<SeasonRatings career={c} onClose={() => undefined} />);
-      const el = view.container.querySelector('[data-ovr-tracked-from]');
+      const el = view.baseElement.querySelector('[data-ovr-tracked-from]');
       const out = el ? { at: el.getAttribute('data-ovr-tracked-from'), text: el.textContent ?? '' } : null;
       view.unmount();
       return out;

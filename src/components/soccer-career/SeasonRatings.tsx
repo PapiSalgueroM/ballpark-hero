@@ -9,7 +9,10 @@
    never a 0.0, and a season saved before the overall was kept shows a dash
    for it rather than a guess. Opened from Latest Events, in the same shell as
    the Career Story, so the page under it never moves. */
-import { focusDialogOnMount, escapeCloses } from "@/lib/dialogA11y";
+import { useLayoutEffect, useRef, useState } from "react";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { defaultSeasonComparison, seasonHistoryRows } from "@/lib/soccerCareerSeasonHistory";
+import SoccerSeasonHistory from "./SoccerSeasonHistory";
 import type { CareerState } from "@/lib/soccerCareerEngine";
 import {
   soccerRatingRows, ratingSeries, careerAverageRating, ovrTrackedFrom, ovrNotYetTracked, ratingBand,
@@ -142,18 +145,78 @@ function RatingsBody({ career }: { career: RatingsSource }) {
 
 /** A dialog over the page, opened from Latest Events. */
 export default function SeasonRatings({ career, onClose }: { career: RatingsSource; onClose: () => void }) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 bg-black/70 backdrop-blur-sm animate-fade-in" onClick={onClose}>
-      <div role="dialog" aria-modal="true" aria-label="Season Ratings" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(onClose)} data-season-ratings="dialog"
-        className="w-full max-w-md max-h-[88vh] overflow-y-auto rounded-2xl border border-border bg-card shadow-2xl" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-4 py-3 border-b border-border sticky top-0 bg-card z-10">
-          <h2 className="text-base font-black">📈 Season Ratings</h2>
-          <button type="button" onClick={onClose} className="text-xs font-bold text-muted-foreground hover:text-foreground px-2 py-1 rounded bg-muted/30">Close</button>
-        </div>
-        <div className="p-4">
-          <RatingsBody career={career} />
+  const rows = seasonHistoryRows(career);
+  const defaults = defaultSeasonComparison(rows);
+  const [mode, setMode] = useState<"ratings" | "compare" | "availability" | "help">("ratings");
+  const [first, setFirst] = useState(defaults?.[0] ?? -1);
+  const [second, setSecond] = useState(defaults?.[1] ?? -1);
+  const [availability, setAvailability] = useState(rows[rows.length - 1]?.index ?? -1);
+  const opener = useRef<HTMLElement | null>(typeof document === "undefined" ? null : document.activeElement as HTMLElement);
+  const scroll = useRef<HTMLDivElement>(null);
+  const title = useRef<HTMLHeadingElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const compareButton = useRef<HTMLButtonElement>(null);
+  const availabilityButton = useRef<HTMLButtonElement>(null);
+  const helpButton = useRef<HTMLButtonElement>(null);
+  const offsets = useRef({ ratings: 0, compare: 0, availability: 0, help: 0 });
+  const helpFrom = useRef<"ratings" | "compare" | "availability">("ratings");
+  const returnFocus = useRef<"compare" | "availability" | "help" | null>(null);
+  const control = "min-h-11 rounded-xl border border-border px-3 py-2 text-xs font-bold hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+
+  const changeMode = (next: typeof mode, focus: "compare" | "availability" | "help" | null = null) => {
+    offsets.current[mode] = scroll.current?.scrollTop ?? 0;
+    returnFocus.current = focus;
+    setMode(next);
+  };
+  useLayoutEffect(() => {
+    if (scroll.current) scroll.current.scrollTop = offsets.current[mode];
+    const launchers = { compare: compareButton.current, availability: availabilityButton.current, help: helpButton.current };
+    const target = returnFocus.current ? launchers[returnFocus.current] : mode === "ratings" ? title.current : heading.current;
+    target?.focus({ preventScroll: true });
+    returnFocus.current = null;
+  }, [mode]);
+  const showHelp = () => {
+    if (mode === "help") return;
+    helpFrom.current = mode;
+    offsets.current.help = 0;
+    changeMode("help");
+  };
+  const backToRatings = () => changeMode("ratings", mode === "compare" ? "compare" : "availability");
+
+  return <Dialog open onOpenChange={open => { if (!open) onClose(); }}>
+    <DialogContent data-season-ratings="dialog" className="flex w-[calc(100%-1.5rem)] max-w-md max-h-[88dvh] flex-col gap-0 rounded-2xl border-border bg-card p-0 [&>button]:hidden"
+      onOpenAutoFocus={event => { event.preventDefault(); title.current?.focus({ preventScroll: true }); }}
+      onCloseAutoFocus={event => { event.preventDefault(); opener.current?.focus({ preventScroll: true }); }}>
+      <div className="flex shrink-0 items-center justify-between gap-2 border-b border-border px-4 py-3">
+        <DialogTitle ref={title} tabIndex={-1} className="min-w-0 text-base font-black"><span aria-hidden="true">📈</span> Season Ratings</DialogTitle>
+        <div className="flex shrink-0 gap-2">
+          <button ref={helpButton} type="button" data-season-history-help aria-label="Season history help" className={`${control} min-w-11`} onClick={showHelp} disabled={mode === "help"}>?</button>
+          <DialogClose asChild><button type="button" data-season-history-close className={control}>Close</button></DialogClose>
         </div>
       </div>
-    </div>
-  );
+      <DialogDescription className="sr-only">Read your saved season ratings, compare two seasons or check recorded availability.</DialogDescription>
+      <div ref={scroll} data-season-history-scroll data-season-history-mode={mode} className="min-h-0 overflow-y-auto p-4">
+        {mode === "ratings" ? <>
+          <div className="mb-3 grid grid-cols-2 gap-2">
+            <button ref={compareButton} type="button" data-season-history-open="compare" className={control} disabled={rows.length < 2} onClick={() => changeMode("compare")}>Compare seasons</button>
+            <button ref={availabilityButton} type="button" data-season-history-open="availability" className={control} onClick={() => changeMode("availability")}>Availability</button>
+          </div>
+          {rows.length < 2 && <p className="mb-3 text-xs text-muted-foreground">Two saved senior seasons unlock comparison.</p>}
+          <RatingsBody career={career} />
+        </> : mode === "help" ? <div className="space-y-3 text-sm" data-season-history-help-body>
+          <button type="button" data-season-history-back="help" className={control} onClick={() => changeMode(helpFrom.current, "help")}>Back to {helpFrom.current === "ratings" ? "Ratings" : helpFrom.current === "compare" ? "comparison" : "Availability"}</button>
+          <h3 ref={heading} tabIndex={-1} data-season-history-heading className="font-bold">Your season history</h3>
+          <p>This reads your saved simulated senior seasons. Academy years and jobs after retirement stay out. You can choose a season with no appearances, or two records from the same year.</p>
+          <p>Comparison shows the second season minus the first. Season OVR is the overall you played at, not your current overall. Apps and position stats cover all club competitions. Missing numbers stay not recorded; they never become zero.</p>
+          <p>Example: 12 goals in the first season and 15 in the second gives a change of +3. If the first season never kept OVR, its OVR and the change both say not recorded.</p>
+          <p>Availability only shows injuries, weeks, severity and club matches missed through suspension that the save kept. Weeks are not converted to matches. A recorded injury does not prove why you missed every game.</p>
+          <p>Example: a saved 4-week injury and 2 club matches missed through suspension stay separate. An older season without a saved suspension count says not recorded.</p>
+        </div> : <div className="space-y-3">
+          <button type="button" data-season-history-back="ratings" className={control} onClick={backToRatings}>Back to Ratings</button>
+          <h3 ref={heading} tabIndex={-1} data-season-history-heading className="text-base font-bold">{mode === "compare" ? "Compare seasons" : "Availability"}</h3>
+          <SoccerSeasonHistory career={career} mode={mode} first={first} second={second} availability={availability} onFirst={setFirst} onSecond={setSecond} onAvailability={setAvailability} />
+        </div>}
+      </div>
+    </DialogContent>
+  </Dialog>;
 }

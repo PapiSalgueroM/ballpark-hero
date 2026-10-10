@@ -4570,14 +4570,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       </div>
 
       {/* Events log */}
-      {(visibleCareer.events.length > 0 || (visibleCareer.story?.length ?? 0) > 0) && (
+      {(visibleCareer.events.length > 0 || (visibleCareer.story?.length ?? 0) > 0 || visibleCareer.seasons.some(r => r.type === "playing")) && (
         <div className="bg-card border border-border rounded-xl p-3">
           {/* Round 974: the whole career, season by season, one tap away */}
           <div className="flex items-center justify-between gap-2">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Latest Events</span>
             <div className="flex flex-wrap items-center justify-end gap-1">
               <button type="button" onClick={() => setRatingsOpen(true)} data-open-season-ratings
-                className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5">📈 Ratings</button>
+                className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📈 Ratings</button>
               <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
                 className="min-h-11 text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
               {career.seasons.some(r => r.type === "playing" && r.apps > 0) && <button type="button" onClick={() => setReplaysOpen(true)} data-open-season-replays
@@ -4596,7 +4596,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
       )}
       {storyOpen && <CareerStory career={visibleCareer} onClose={() => setStoryOpen(false)} />}
       {trophyCategory && <CentreMountBoundary what="trophy cabinet" onClose={() => setTrophyCategory(null)}><Suspense fallback={<div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80" data-trophy-loading><div className="rounded-2xl border border-border bg-card px-5 py-4 text-sm">Opening your trophies...</div></div>}><TrophyCabinet career={visibleCareer} category={trophyCategory} onClose={() => setTrophyCategory(null)} /></Suspense></CentreMountBoundary>}
-      {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={career} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
+      {ratingsOpen && <CentreMountBoundary what="season ratings" onClose={() => setRatingsOpen(false)}><Suspense fallback={null}><SeasonRatings career={visibleCareer} onClose={() => setRatingsOpen(false)} /></Suspense></CentreMountBoundary>}
       {(() => {
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
         /* Round 1046: moments are offered only while the season's own screens are up; a way back in later is a way to watch */
