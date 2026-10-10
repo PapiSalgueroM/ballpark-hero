@@ -1,0 +1,29 @@
+http://localhost:4173: sitemap lists 171 routes; 341 URLs in this selection (desktop, forms both); auditing 0 to 24.
+  [2] /leaderboard/                              200 mounted  5432ms  saved   2627 -> settled   2670 chars, lost 0, guide 0w, links 17, errors 5
+  [1] /leaderboard                               200 mounted  5508ms  saved   2627 -> settled   2670 chars, lost 0, guide 0w, links 18, errors 5
+  [0] /                                          200 mounted  5850ms  saved   5647 -> settled  19776 chars, lost 0, guide 0w, links 149, errors 3
+  [3] /college                                   200 mounted  5298ms  saved   7611 -> settled   7611 chars, lost 0, guide 0w, links 27, errors 1
+  [4] /college/                                  200 mounted  5455ms  saved   7611 -> settled   7611 chars, lost 0, guide 0w, links 27, errors 1
+  [5] /soccer                                    200 mounted  5210ms  saved  10870 -> settled  10870 chars, lost 0, guide 0w, links 55, errors 1
+  [6] /soccer/                                   200 mounted  5224ms  saved  10870 -> settled  10870 chars, lost 0, guide 0w, links 55, errors 1
+  [7] /pro-basketball                            200 mounted  5252ms  saved   8621 -> settled   8621 chars, lost 0, guide 0w, links 37, errors 1
+  [8] /pro-basketball/                           200 mounted  5277ms  saved   8621 -> settled   8621 chars, lost 0, guide 0w, links 37, errors 1
+  [9] /pro-football                              200 mounted  5201ms  saved   7646 -> settled   7646 chars, lost 0, guide 0w, links 29, errors 1
+  [10] /pro-football/                             200 mounted  5261ms  saved   7646 -> settled   7646 chars, lost 0, guide 0w, links 29, errors 1
+  [11] /baseball                                  200 mounted  5251ms  saved   7982 -> settled   7982 chars, lost 0, guide 0w, links 30, errors 1
+  [12] /baseball/                                 200 mounted  5213ms  saved   7982 -> settled   7982 chars, lost 0, guide 0w, links 30, errors 1
+  [13] /hockey                                    200 mounted  5211ms  saved   8096 -> settled   8096 chars, lost 0, guide 0w, links 31, errors 1
+  [14] /hockey/                                   200 mounted  5232ms  saved   8096 -> settled   8096 chars, lost 0, guide 0w, links 31, errors 1
+  [15] /whats-new                                 200 mounted  5441ms  saved 269713 -> settled 269713 chars, lost 0, guide 0w, links 92, errors 1
+  [16] /whats-new/                                200 mounted  5397ms  saved 269713 -> settled 269713 chars, lost 0, guide 0w, links 92, errors 1
+  [17] /records                                   200 mounted  5359ms  saved  11057 -> settled  11474 chars, lost 0, guide 0w, links 40, errors 1
+  [18] /records/                                  200 mounted  5306ms  saved  11057 -> settled  11474 chars, lost 0, guide 0w, links 40, errors 1
+  [19] /records/super-bowl-winners                200 mounted  5358ms  saved   8820 -> settled   8820 chars, lost 0, guide 0w, links 32, errors 1
+  [20] /records/super-bowl-winners/               200 mounted  5371ms  saved   8820 -> settled   8820 chars, lost 0, guide 0w, links 32, errors 1
+  [21] /records/nba-champions                     200 mounted  5220ms  saved   7901 -> settled   7901 chars, lost 0, guide 0w, links 32, errors 1
+  [22] /records/nba-champions/                    200 mounted  5263ms  saved   7901 -> settled   7901 chars, lost 0, guide 0w, links 32, errors 1
+  [23] /records/world-series-winners              200 mounted  5246ms  saved   8808 -> settled   8808 chars, lost 0, guide 0w, links 32, errors 1
+  [24] /records/world-series-winners/             200 mounted  5209ms  saved   8808 -> settled   8808 chars, lost 0, guide 0w, links 32, errors 1
+25 URL(s) merged into .tmp-fx/live-rendered/results.json (25 records in it).
+25 audited: 0 lose content on mount, 0 could not be audited.
+[draws] total 145 in 25 page loads of 26 contexts, walk exit 0; by path: /leaderboard 7, /leaderboard/ 7, / 7, /college 7, /college/ 7, /soccer 7

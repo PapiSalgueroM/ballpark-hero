@@ -1,0 +1,52 @@
+playLiveTicker: the cable wire, driven like a viewer
+1) the chip leads, the boxes group by sport, soccer opens first in fan order
+  PASS  the strip is on the page
+  PASS  the chip says Live and nothing else ("LIVE")
+  PASS  the chip carries the little red circle
+  PASS  the circle pulses while a game is genuinely live
+  PASS  one box per sport with games, soccer first: SOCCER,MLB,NFL
+  PASS  2 cards visible: only the open sport's games are on the wire
+  PASS  the live game leads its sport, home v away with scores: Valencia 1 v Real Betis 2 SECOND HALF
+  PASS  the kickoff follows: Borussia Monchengl. v Bayern Munich 8:00 AM
+  PASS  every open card links to its sport hub
+  PASS  every card has a sentence for a screen reader: "Valencia 1 v Real Betis 2, Second Half"
+2) the loop hands the wire to the next sport on its own
+  PASS  the mlb box opened by itself within one dwell
+  PASS  American sports read away at home: Astros @ Yankees 7:05 AM
+  PASS  a fixture shows its start time in the visitor's own zone: Astros @ Yankees 7:05 AM
+  PASS  the final closes the box with its score: Cubs 6 @ Pirates 3 FINAL
+3) every word on every visible card clears the contrast bar
+  PASS  13 text runs measured on the open box
+  PASS  lowest ratio 6.22 to 1
+4) the cards never reach a snapshot
+  PASS  2 of 2 score cards carry data-no-prerender
+5) a dead feed degrades honestly: chip, the line that fits, and nothing about the site
+  PASS  the strip is still on the page with the feed dead
+  PASS  0 score cards (none, the request failed)
+  PASS  a failed read says unavailable, never "no games": "LIVE Live scores temporarily unavailable"
+  PASS  a failed read does not claim there are no games
+  PASS  no site promo fills the gap
+  PASS  the strip is on the page with an empty slate
+  PASS  0 score cards (none, the slate is empty)
+  PASS  an answered empty read says no games: "LIVE No games on the board right now"
+  PASS  an answered empty read does not claim the feed is down
+6) reduced motion gets every box open at once, no cycling
+  PASS  3 boxes and all 5 cards mounted at once
+7) a full slate GLIDES: the wire moves, every card passes, then hands off
+  PASS  the fat box and its viewport were found
+  PASS  the slate genuinely overflows the screen (398px hidden)
+  PASS  the wire is MOVING: scroll 0 to 38 to 158px across 4s
+8) clicking pause stops the wire, clicking resume RESUMES it
+  PASS  pause parks the wire (163 to 163px over 2.5s)
+  PASS  the resume click left no sticky focus inside the strip
+  PASS  resume actually resumes (path 163 > 169 > 196 > 223 > 250 > 277 > 304 > 331 > 358, biggest step 27px against a bar of 8.4px at the shipped 75 px/s)
+9) on a PHONE, touching the strip never parks the wire
+  PASS  the strip and its viewport were found on the phone
+  PASS  a finger tap leaves the wire MOVING (0 to 157px over 4s)
+  FAIL  the phone wire holds a whole card: viewport 247px, widest card 281px
+  PASS  the feed stamp stays off the phone strip (filter button reads "ALL
+▾")
+  FAIL  a real mouse hover still parks it, so the detector reads both states (0 to 94px over 2.5s)
+
+playLiveTicker: 2 failures
+[draws] total 35 in 5 page loads of 6 contexts, walk exit 1; by path: / 35

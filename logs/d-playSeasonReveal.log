@@ -1,0 +1,26 @@
+1) Play opens the curtain, not the crossroads
+  PASS  the season reveal card is up
+  PASS  the header names the year (CSS uppercases it, so match case-blind)
+  PASS  the sub header carries the age line
+  PASS  the true stat line is on the card from frame one
+  PASS  the Continue button is on the card
+2) Continue hands over to the crossroads
+  PASS  the curtain came down
+  FAIL  the rivalry card, the crossroads or the hub is on screen behind it
+3) A reload mid-curtain lands on the real screen
+  PASS  every card of the summer answered, and the hub came back
+[draws] total 46 in 1 page loads of 1 contexts, walk exit 1; by path: /nfl-my-career 46
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('button:has-text("Play the")').first()
+
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playSeasonReveal.mjs:123:61 {
+  log: [ `  - waiting for locator('button:has-text("Play the")').first()` ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0

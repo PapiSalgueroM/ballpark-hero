@@ -1,0 +1,16 @@
+1) A big-category page carries six real tiles
+  PASS  the related block is on the page
+  PASS  the block introduces itself
+  PASS  six tiles on a big-category page (saw 6)
+  PASS  no page links to itself
+  PASS  no duplicate tiles
+2) A tiny-category page still fills the block
+  PASS  a two-game category still offers 6 tiles (floor 4)
+  PASS  the golf sibling is in the ring
+3) A tile is a real navigation
+  PASS  clicking the first tile landed on /guess-the-golfer
+  PASS  the destination page carries its own block
+  PASS  no page errors on the walk (clean)
+
+ALL RELATED GAMES WALK CHECKS PASSED
+[draws] total 14 in 2 page loads of 1 contexts, walk exit 0; by path: /footle 7, /golf-higher-lower 5, /guess-the-golfer 2

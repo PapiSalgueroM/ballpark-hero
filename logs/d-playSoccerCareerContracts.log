@@ -1,0 +1,203 @@
+ok   age 38: declining form quotes a pay cut while sustained elite form earns a smaller raise, both for one year
+ok   320x844 declining: actual screen prints the exact wage, term and reason
+ok   320x844 declining: displaying the quote preserves the complete save
+ok   320x844 declining quote: no page errors or horizontal overflow
+ok   320x844 declining quote: contract terms fit their boxes and move buttons meet the tap target floor
+ok   320x844 declining: one click saves the quoted deal and exactly one signing event
+ok   320x844 declining: signed slip uses the saved wage
+ok   320x844 declining: reload retains the exact terms and one event without opening another negotiation
+ok   320x844 declining signed reload: no page errors or horizontal overflow
+ok   320x844 declining signed reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   320x844 declining expired renewal: an expired deal is preserved until the stay action
+ok   320x844 declining expired renewal: actual stay action renews at the veteran wage for one year and logs once
+ok   320x844 declining expired renewal: reload never repeats the renewal or changes its terms
+ok   320x844 declining expired renewal: no page errors or horizontal overflow
+ok   320x844 declining expired renewal: contract terms fit their boxes and move buttons meet the tap target floor
+ok   320x844 elite: actual screen prints the exact wage, term and reason
+ok   320x844 elite: displaying the quote preserves the complete save
+ok   320x844 elite quote: no page errors or horizontal overflow
+ok   320x844 elite quote: contract terms fit their boxes and move buttons meet the tap target floor
+ok   320x844 elite: one click saves the quoted deal and exactly one signing event
+ok   320x844 elite: signed slip uses the saved wage
+ok   320x844 elite: reload retains the exact terms and one event without opening another negotiation
+ok   320x844 elite signed reload: no page errors or horizontal overflow
+ok   320x844 elite signed reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   320x844 elite expired renewal: an expired deal is preserved until the stay action
+ok   320x844 elite expired renewal: actual stay action renews at the veteran wage for one year and logs once
+ok   320x844 elite expired renewal: reload never repeats the renewal or changes its terms
+ok   320x844 elite expired renewal: no page errors or horizontal overflow
+ok   320x844 elite expired renewal: contract terms fit their boxes and move buttons meet the tap target floor
+ok   320x844 sale: screen describes the already completed source and destination with actual saved terms
+ok   320x844 sale: the club decision has one acknowledgement and no refusal or destination chooser
+ok   320x844 sale: saved loan parent terms or paid sale fee match the actual move
+ok   320x844 sale: displaying the completed move does not apply it again
+ok   320x844 sale notification: no page errors or horizontal overflow
+ok   320x844 sale notification: contract terms fit their boxes and move buttons meet the tap target floor
+ok   320x844 sale: reload preserves every byte of the completed move
+ok   320x844 sale: Continue clears the notice with no second fee, signing, contract change or loan change
+ok   320x844 sale: acknowledged move stays consumed after reload
+ok   320x844 sale playing reload: no page errors or horizontal overflow
+ok   320x844 sale playing reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   320x844 loan: screen describes the already completed source and destination with actual saved terms
+ok   320x844 loan: the club decision has one acknowledgement and no refusal or destination chooser
+ok   320x844 loan: saved loan parent terms or paid sale fee match the actual move
+ok   320x844 loan: displaying the completed move does not apply it again
+ok   320x844 loan notification: no page errors or horizontal overflow
+ok   320x844 loan notification: contract terms fit their boxes and move buttons meet the tap target floor
+ok   320x844 loan: reload preserves every byte of the completed move
+ok   320x844 loan: Continue clears the notice with no second fee, signing, contract change or loan change
+ok   320x844 loan: acknowledged move stays consumed after reload
+ok   320x844 loan playing reload: no page errors or horizontal overflow
+ok   320x844 loan playing reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 declining: actual screen prints the exact wage, term and reason
+ok   390x844 declining: displaying the quote preserves the complete save
+ok   390x844 declining quote: no page errors or horizontal overflow
+ok   390x844 declining quote: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 declining: one click saves the quoted deal and exactly one signing event
+ok   390x844 declining: signed slip uses the saved wage
+ok   390x844 declining: reload retains the exact terms and one event without opening another negotiation
+ok   390x844 declining signed reload: no page errors or horizontal overflow
+ok   390x844 declining signed reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 declining expired renewal: an expired deal is preserved until the stay action
+ok   390x844 declining expired renewal: actual stay action renews at the veteran wage for one year and logs once
+ok   390x844 declining expired renewal: reload never repeats the renewal or changes its terms
+ok   390x844 declining expired renewal: no page errors or horizontal overflow
+ok   390x844 declining expired renewal: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 elite: actual screen prints the exact wage, term and reason
+ok   390x844 elite: displaying the quote preserves the complete save
+ok   390x844 elite quote: no page errors or horizontal overflow
+ok   390x844 elite quote: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 elite: one click saves the quoted deal and exactly one signing event
+ok   390x844 elite: signed slip uses the saved wage
+ok   390x844 elite: reload retains the exact terms and one event without opening another negotiation
+ok   390x844 elite signed reload: no page errors or horizontal overflow
+ok   390x844 elite signed reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 elite expired renewal: an expired deal is preserved until the stay action
+ok   390x844 elite expired renewal: actual stay action renews at the veteran wage for one year and logs once
+ok   390x844 elite expired renewal: reload never repeats the renewal or changes its terms
+ok   390x844 elite expired renewal: no page errors or horizontal overflow
+ok   390x844 elite expired renewal: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 sale: screen describes the already completed source and destination with actual saved terms
+ok   390x844 sale: the club decision has one acknowledgement and no refusal or destination chooser
+ok   390x844 sale: saved loan parent terms or paid sale fee match the actual move
+ok   390x844 sale: displaying the completed move does not apply it again
+ok   390x844 sale notification: no page errors or horizontal overflow
+ok   390x844 sale notification: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 sale: reload preserves every byte of the completed move
+ok   390x844 sale: Continue clears the notice with no second fee, signing, contract change or loan change
+ok   390x844 sale: acknowledged move stays consumed after reload
+ok   390x844 sale playing reload: no page errors or horizontal overflow
+ok   390x844 sale playing reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 loan: screen describes the already completed source and destination with actual saved terms
+ok   390x844 loan: the club decision has one acknowledgement and no refusal or destination chooser
+ok   390x844 loan: saved loan parent terms or paid sale fee match the actual move
+ok   390x844 loan: displaying the completed move does not apply it again
+ok   390x844 loan notification: no page errors or horizontal overflow
+ok   390x844 loan notification: contract terms fit their boxes and move buttons meet the tap target floor
+ok   390x844 loan: reload preserves every byte of the completed move
+ok   390x844 loan: Continue clears the notice with no second fee, signing, contract change or loan change
+ok   390x844 loan: acknowledged move stays consumed after reload
+ok   390x844 loan playing reload: no page errors or horizontal overflow
+ok   390x844 loan playing reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 declining: actual screen prints the exact wage, term and reason
+ok   430x900 declining: displaying the quote preserves the complete save
+ok   430x900 declining quote: no page errors or horizontal overflow
+ok   430x900 declining quote: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 declining: one click saves the quoted deal and exactly one signing event
+ok   430x900 declining: signed slip uses the saved wage
+ok   430x900 declining: reload retains the exact terms and one event without opening another negotiation
+ok   430x900 declining signed reload: no page errors or horizontal overflow
+ok   430x900 declining signed reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 declining expired renewal: an expired deal is preserved until the stay action
+ok   430x900 declining expired renewal: actual stay action renews at the veteran wage for one year and logs once
+ok   430x900 declining expired renewal: reload never repeats the renewal or changes its terms
+ok   430x900 declining expired renewal: no page errors or horizontal overflow
+ok   430x900 declining expired renewal: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 elite: actual screen prints the exact wage, term and reason
+ok   430x900 elite: displaying the quote preserves the complete save
+ok   430x900 elite quote: no page errors or horizontal overflow
+ok   430x900 elite quote: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 elite: one click saves the quoted deal and exactly one signing event
+ok   430x900 elite: signed slip uses the saved wage
+ok   430x900 elite: reload retains the exact terms and one event without opening another negotiation
+ok   430x900 elite signed reload: no page errors or horizontal overflow
+ok   430x900 elite signed reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 elite expired renewal: an expired deal is preserved until the stay action
+ok   430x900 elite expired renewal: actual stay action renews at the veteran wage for one year and logs once
+ok   430x900 elite expired renewal: reload never repeats the renewal or changes its terms
+ok   430x900 elite expired renewal: no page errors or horizontal overflow
+ok   430x900 elite expired renewal: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 sale: screen describes the already completed source and destination with actual saved terms
+ok   430x900 sale: the club decision has one acknowledgement and no refusal or destination chooser
+ok   430x900 sale: saved loan parent terms or paid sale fee match the actual move
+ok   430x900 sale: displaying the completed move does not apply it again
+ok   430x900 sale notification: no page errors or horizontal overflow
+ok   430x900 sale notification: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 sale: reload preserves every byte of the completed move
+ok   430x900 sale: Continue clears the notice with no second fee, signing, contract change or loan change
+ok   430x900 sale: acknowledged move stays consumed after reload
+ok   430x900 sale playing reload: no page errors or horizontal overflow
+ok   430x900 sale playing reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 loan: screen describes the already completed source and destination with actual saved terms
+ok   430x900 loan: the club decision has one acknowledgement and no refusal or destination chooser
+ok   430x900 loan: saved loan parent terms or paid sale fee match the actual move
+ok   430x900 loan: displaying the completed move does not apply it again
+ok   430x900 loan notification: no page errors or horizontal overflow
+ok   430x900 loan notification: contract terms fit their boxes and move buttons meet the tap target floor
+ok   430x900 loan: reload preserves every byte of the completed move
+ok   430x900 loan: Continue clears the notice with no second fee, signing, contract change or loan change
+ok   430x900 loan: acknowledged move stays consumed after reload
+ok   430x900 loan playing reload: no page errors or horizontal overflow
+ok   430x900 loan playing reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 declining: actual screen prints the exact wage, term and reason
+ok   1440x900 declining: displaying the quote preserves the complete save
+ok   1440x900 declining quote: no page errors or horizontal overflow
+ok   1440x900 declining quote: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 declining: one click saves the quoted deal and exactly one signing event
+ok   1440x900 declining: signed slip uses the saved wage
+ok   1440x900 declining: reload retains the exact terms and one event without opening another negotiation
+ok   1440x900 declining signed reload: no page errors or horizontal overflow
+ok   1440x900 declining signed reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 declining expired renewal: an expired deal is preserved until the stay action
+ok   1440x900 declining expired renewal: actual stay action renews at the veteran wage for one year and logs once
+ok   1440x900 declining expired renewal: reload never repeats the renewal or changes its terms
+ok   1440x900 declining expired renewal: no page errors or horizontal overflow
+ok   1440x900 declining expired renewal: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 elite: actual screen prints the exact wage, term and reason
+ok   1440x900 elite: displaying the quote preserves the complete save
+ok   1440x900 elite quote: no page errors or horizontal overflow
+ok   1440x900 elite quote: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 elite: one click saves the quoted deal and exactly one signing event
+ok   1440x900 elite: signed slip uses the saved wage
+ok   1440x900 elite: reload retains the exact terms and one event without opening another negotiation
+ok   1440x900 elite signed reload: no page errors or horizontal overflow
+ok   1440x900 elite signed reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 elite expired renewal: an expired deal is preserved until the stay action
+ok   1440x900 elite expired renewal: actual stay action renews at the veteran wage for one year and logs once
+ok   1440x900 elite expired renewal: reload never repeats the renewal or changes its terms
+ok   1440x900 elite expired renewal: no page errors or horizontal overflow
+ok   1440x900 elite expired renewal: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 sale: screen describes the already completed source and destination with actual saved terms
+ok   1440x900 sale: the club decision has one acknowledgement and no refusal or destination chooser
+ok   1440x900 sale: saved loan parent terms or paid sale fee match the actual move
+ok   1440x900 sale: displaying the completed move does not apply it again
+ok   1440x900 sale notification: no page errors or horizontal overflow
+ok   1440x900 sale notification: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 sale: reload preserves every byte of the completed move
+ok   1440x900 sale: Continue clears the notice with no second fee, signing, contract change or loan change
+ok   1440x900 sale: acknowledged move stays consumed after reload
+ok   1440x900 sale playing reload: no page errors or horizontal overflow
+ok   1440x900 sale playing reload: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 loan: screen describes the already completed source and destination with actual saved terms
+ok   1440x900 loan: the club decision has one acknowledgement and no refusal or destination chooser
+ok   1440x900 loan: saved loan parent terms or paid sale fee match the actual move
+ok   1440x900 loan: displaying the completed move does not apply it again
+ok   1440x900 loan notification: no page errors or horizontal overflow
+ok   1440x900 loan notification: contract terms fit their boxes and move buttons meet the tap target floor
+ok   1440x900 loan: reload preserves every byte of the completed move
+ok   1440x900 loan: Continue clears the notice with no second fee, signing, contract change or loan change
+ok   1440x900 loan: acknowledged move stays consumed after reload
+ok   1440x900 loan playing reload: no page errors or horizontal overflow
+ok   1440x900 loan playing reload: contract terms fit their boxes and move buttons meet the tap target floor
+playSoccerCareerContracts: 201 checks, 0 failed
+[draws] total 56 in 8 page loads of 24 contexts, walk exit 0; by path: /soccer-career 56

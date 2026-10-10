@@ -1,0 +1,15 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+d-playLiveRenderedAudit exit=0 50s | [draws] total 145 in 25 page loads of 26 contexts, walk exit 0; by path: /leaderboard 7, /leaderboard/ 7, / 7, /college 7, /college/ 7, /soccer 7
+d-playLiveTicker exit=1 37s | [draws] total 35 in 5 page loads of 6 contexts, walk exit 1; by path: / 35
+d-playNationJob exit=1 36s | Node.js v24.21.0
+d-playNationalities exit=1 35s | Node.js v24.21.0
+d-playNbaNumbers exit=0 61s | [draws] total 395 in 6 page loads of 4 contexts, walk exit 0; by path: /nba-my-career 395
+d-playNflTruth exit=0 102s | [draws] total 526 in 20 page loads of 8 contexts, walk exit 0; by path: /nfl-my-career 526
+d-playOwnerMandate exit=0 24s | [draws] total 30896 in 6 page loads of 2 contexts, walk exit 0; by path: /front-office 30030, /nba-front-office 475, /mlb-front-office 218, /nhl-front-office 173
+d-playRelatedGames exit=0 5s | [draws] total 14 in 2 page loads of 1 contexts, walk exit 0; by path: /footle 7, /golf-higher-lower 5, /guess-the-golfer 2
+d-playReleaseClause exit=1 35s | Node.js v24.21.0
+d-playSeasonReveal exit=1 35s | Node.js v24.21.0
+d-playSessionMarks exit=0 17s | [draws] total 4756 in 4 page loads of 3 contexts, walk exit 0; by path: /front-office 4658, /stadium-tycoon 52, /nfl-my-career 46
+d-playSoccerCareerAwardReveal exit=0 12s | [draws] total 22 in 4 page loads of 2 contexts, walk exit 0; by path: /soccer-career 22
+d-playSoccerCareerCompetitions exit=0 9s | [draws] total 14 in 2 page loads of 2 contexts, walk exit 0; by path: /soccer-career 14
+d-playSoccerCareerContracts exit=0 22s | [draws] total 56 in 8 page loads of 24 contexts, walk exit 0; by path: /soccer-career 56

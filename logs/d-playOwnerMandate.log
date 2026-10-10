@@ -1,0 +1,32 @@
+1) Taking the job comes with an ask
+  PASS  the ownership card is on the hub
+  PASS  a fresh job starts at Trust 60 (card says: 🏛️ OWNERSHIP...)
+  PASS  the feed announces the mandate
+2) Low trust reads as a hot seat
+  PASS  the card survives a reload
+  PASS  the patched trust renders
+  PASS  trust at 5 shows the hot seat warning
+  PASS  the title-or-bust mandate renders
+3) The doomed season ends in a firing, not a draft
+  PASS  the ownership verdict is on the recap
+  PASS  the firing block replaced the draft path
+  PASS  a fired GM gets no draft button
+  PASS  the way out is another job
+  PASS  the recap is the staged verdict card
+  PASS  a firing gets no confetti, the rule holds in the DOM
+4) A reload after the firing stays fired
+  PASS  the fired screen renders from the save
+  PASS  no way to keep playing a job you lost
+  PASS  taking another job returns to the picker
+  PASS  no page errors on the NFL walk (clean)
+5) The NBA, NHL and MLB owners exist too
+  PASS  /nba-front-office: the ownership card is on the hub
+  PASS  /nba-front-office: fresh trust renders
+  PASS  /nhl-front-office: the ownership card is on the hub
+  PASS  /nhl-front-office: fresh trust renders
+  PASS  /mlb-front-office: the ownership card is on the hub
+  PASS  /mlb-front-office: fresh trust renders
+  PASS  no page errors on the tri-sport walk (clean)
+
+ALL OWNER MANDATE WALK CHECKS PASSED
+[draws] total 30896 in 6 page loads of 2 contexts, walk exit 0; by path: /front-office 30030, /nba-front-office 475, /mlb-front-office 218, /nhl-front-office 173

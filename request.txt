@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+#!serial
+# Round 1215: draws counted (nothing seeded) on the pages of unedited walks, part 4.
+d-playLiveRenderedAudit: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playLiveRenderedAudit.mjs
+d-playLiveTicker: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playLiveTicker.mjs
+d-playNationJob: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playNationJob.mjs
+d-playNationalities: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playNationalities.mjs
+d-playNbaNumbers: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playNbaNumbers.mjs
+d-playNflTruth: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playNflTruth.mjs
+d-playOwnerMandate: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playOwnerMandate.mjs
+d-playRelatedGames: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playRelatedGames.mjs
+d-playReleaseClause: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playReleaseClause.mjs
+d-playSeasonReveal: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSeasonReveal.mjs
+d-playSessionMarks: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSessionMarks.mjs
+d-playSoccerCareerAwardReveal: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSoccerCareerAwardReveal.mjs
+d-playSoccerCareerCompetitions: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSoccerCareerCompetitions.mjs
+d-playSoccerCareerContracts: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSoccerCareerContracts.mjs
