@@ -113,8 +113,9 @@ main): main's squads file, this round's basis file and the two libraries give th
 `origin/r1102-cm-ratings:src/data/clubManagerRosters.ts`. So the bake of part four has nothing new
 to discover in the 2026 file.
 
-FINAL TABLES. 27 leagues, 2 to 5 table publishers each (97 table pages, 5 results files, 34 detail
-pages). The fold agrees with `src/data/clubManagerFinalTables2025_26.ts` (Round 612, a separate
+FINAL TABLES. 27 leagues, 2 to 5 table publishers each (96 table pages, 5 results files, 35 detail
+pages; a page that prints only one half of a split table, or the order with no points, is a detail,
+and a publisher cited on two pages counts once). The fold agrees with `src/data/clubManagerFinalTables2025_26.ts` (Round 612, a separate
 research run read on 2026-09-15) on 145 of 145 places across its 15 leagues.
 
 ## Sources read in this round (2026-10-10)
@@ -147,6 +148,11 @@ research run read on 2026-09-15) on 145 of 145 places across its 15 leagues.
 | 4 the door | d6924122 | r1214-s4 | tsc 0; vitest 0 (51 tests); bundle 0; simNoRivalNames 0; simNoInventedQuotes 0; simCmDataOnDemand 0; simHarnessAnchors 0 |
 | mutations | d6924122 | r1214-mut | clean-before 0; twenty mutations, each exit 1; clean-after 0 |
 | inert | d6924122 | r1214-inert | build-base 0; build-head 0; build-head2 0; compare 0 |
+
+After those, two commits that change no library and no shipped file: these notes (3a2f99a9), and one
+cited page of the Swiss table moved from table to detail with the test that holds it (a wire report
+that prints only the championship group; the league keeps four table publishers). The whole set was
+run once more on the head that carries both; the closing report names that runner result.
 
 INERT, three ways.
 1. The base (faf0a5f3) and the head (d6924122) were built the same way on one runner, the head

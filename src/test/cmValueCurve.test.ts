@@ -948,7 +948,10 @@ describe('the folded final tables: two table publishers a league, neither a wiki
     expect(strangers).toEqual([]);
     const roles: Record<string, number> = {};
     for (const [, league] of leagues) for (const s of league.sources) roles[s.role] = (roles[s.role] ?? 0) + 1;
-    expect(roles).toEqual({ table: 97, results: 5, detail: 34 });
+    expect(roles).toEqual({ table: 96, results: 5, detail: 35 });
+    /* a page that prints only one half of a split table is a detail, however good it is */
+    const half = finalTables.leagues.switzerland.sources.find((s: any) => /plattformj/.test(s.url));
+    expect(half.role).toBe('detail');
   });
 
   it('agrees place for place with the final tables the game already ships (Round 612, a separate research run)', () => {
