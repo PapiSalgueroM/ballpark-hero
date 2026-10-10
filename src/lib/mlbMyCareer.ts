@@ -613,10 +613,15 @@ export function simMlbSeason(
       line.poLine = `${starts} appearance${starts === 1 ? '' : 's'}, ${era.toFixed(2)} ERA, ${k} K`;
     } else {
       const ab = Math.max(1, poG * 4);
-      const avg = Math.min(0.5, Math.max(0.0, Math.round((0.216 + (pf - 62) * 0.0028 * prof.contact + rng() * 0.03) * 1000) / 1000));
-      const hits = Math.round(ab * avg);
+      const drawn = Math.min(0.5, Math.max(0.0, Math.round((0.216 + (pf - 62) * 0.0028 * prof.contact + rng() * 0.03) * 1000) / 1000));
       const hr = Math.max(0, Math.round((4 + (pf - 62) * 0.85) * prof.power * (poG / 160) + (rng() < 0.35 ? 1 : 0)));
-      line.poLine = `${hits} for ${ab} (${avg.toFixed(3)}), ${hr} HR`;
+      /* Round 1226: the average printed is his own hits over his own at bats,
+         in the shape the season line prints one (.250, no leading zero). It
+         used to be the number the hits were rounded from, so "4 for 16" could
+         read .225. A home run is a hit, so he has at least as many hits. */
+      const hits = Math.max(hr, Math.round(ab * drawn));
+      const shown = hits / ab;
+      line.poLine = `${hits} for ${ab} (.${String(Math.round(shown * 1000)).padStart(3, '0')}), ${hr} HR`;
     }
     notes.push(`📊 Postseason: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
     const cn = clutchNote(clutch, depth, 'mlb');

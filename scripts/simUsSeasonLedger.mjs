@@ -89,6 +89,8 @@ await build({
    line they change is not there. */
 const ENGINE_CONTROLS = {
   nhltyped: { expect: ['E2'], from: 'const slate = seasonLength("nhl", c.year, c.team);', to: 'const slate = 82;' },
+  /* The average of an October printed from the draw again, not from his hits over his at bats. */
+  mlbavg: { expect: ['E7'], from: 'const shown = hits / ab;', to: 'const shown = drawn;' },
   mlbtyped: { expect: ['E6'], from: 'const slate = seasonLength("mlb", c.year, c.team);', to: 'const slate = 162;' },
   /* The engine's old law for the games of an October, for every year. */
   mlbrounds: { expect: ['E4'], from: 'const poG = playoffRunGames("mlb", c.year, depth, rng);', to: 'const poG = playoffGames(depth, rng, "mlb");' },
@@ -783,7 +785,7 @@ const MLB_OWN = 162;
   }
   /* 42 of the 50 club lines: six are clubs under a name no list of the game holds that year, and two played the whole schedule with a tie inside it. */
   check('E5', off === 42, `${off} year and id pairs are off their schedule's length by this file's own table; 42 expected`);
-  check('E5', S.seasonLength('mlb', 2026) === MLB_OWN && S.seasonLength('mlb', 2020) === OWN.mlbSchedule[2020] && S.seasonLength('mlb', 2026, 'Yomiuri Giants') === MLB_OWN, 'a season asked for with no club, or for a club outside the league, is not the schedule of that year');
+  check('E5', S.seasonLength('mlb', 2026) === MLB_OWN && S.seasonLength('mlb', 2020) === OWN.mlbSchedule[2020] && S.seasonLength('mlb', 2026, 'Yomiuri Giants') === MLB_OWN && S.seasonLengthRow('mlb', 2020, 'Yomiuri Giants').from === 'engine' && S.seasonLengthRow('mlb', 2020, 'Yomiuri Giants').games === MLB_OWN, 'a season asked for with no club is not the schedule of that year, or a club outside the league is read as a row of the ledger');
 
   const CELLS = [[2004, 'BOS', 162], [2004, 'PIT', 161], [2005, 'CIN', 163], [2008, 'MON', 162], [2016, 'CHC', 162], [2020, 'BOS', 60], [2020, 'DET', 58], [2026, 'NYY', 161], [2026, 'BOS', 162], [2027, 'NYY', 162]];
   for (const [year, team, want] of CELLS) {
@@ -816,6 +818,28 @@ const MLB_OWN = 162;
   }
   check('E6', game.mlbSlateMark('CF', 150, {}) === 150 && game.mlbSlateMark('CF', 150, { slate: 60 }) === 56 && game.mlbSlateMark('SP', 30, { slate: 60 }) === 11 && game.mlbSlateMark('SP', 30, { slate: 163 }) === 30,
     `the full season mark does not follow the saved length: ${game.mlbSlateMark('CF', 150, {})}, ${game.mlbSlateMark('CF', 150, { slate: 60 })}, ${game.mlbSlateMark('SP', 30, { slate: 60 })}, ${game.mlbSlateMark('SP', 30, { slate: 163 })} (150, 56, 11 and 30 expected)`);
+}
+
+/* ===== Round 1226, E7: a hitter's October line is his own arithmetic. =====
+   "4 for 16 (.250), 1 HR": the average is his hits over his at bats in the
+   season line's shape (three places, no leading zero), his at bats are four
+   a game, and a home run is a hit. 3,000 seasons in each of four years;
+   every hitter who reached October is read. Control: mlbavg. */
+{
+  const M = game.mlbEngine; let read = 0; let bad = 0; let first = '';
+  for (const year of [2008, 2014, 2026, 2030]) for (let i = 0; i < 3000; i++) {
+    const rng = mulberry(year * 911 + i);
+    const pos = ['CF', 'SS', '1B', 'C', 'DH', '3B'][i % 6];
+    const c = M.startMlbCareer('Ledger Check', pos, M.MLB_ARCHETYPES[pos][0], rng, null, year < 2026 ? 'y2004' : undefined);
+    c.year = year;
+    const { line } = M.simMlbSeason(c, 90, rng);
+    if (line.poLine === undefined) continue;
+    read++;
+    const m = line.poLine.match(/^(\d+) for (\d+) \((\.\d{3})\), (\d+) HR$/);
+    const ok = m && Number(m[2]) === 4 * line.poGames && Number(m[4]) <= Number(m[1]) && Number(m[1]) <= Number(m[2]) && m[3] === `.${String(Math.round(1000 * Number(m[1]) / Number(m[2]))).padStart(3, '0')}`;
+    if (!ok) { bad++; if (!first) first = `${line.poLine} in ${line.poGames} games`; }
+  }
+  check('E7', read > 2000 && bad === 0, `${bad} of ${read} October lines of a hitter are not his hits over his at bats in the season line's shape (the first: "${first}")`);
 }
 
 /* ===== NOTES FOR THE BINDING ROUNDS: where an engine plays something the ledger does not say. Never a red. ===== */

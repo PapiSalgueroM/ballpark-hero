@@ -15,7 +15,7 @@
    present day league carried forward (the NHL's 84 games "from 2026-27" by
    NHL_FORMULA_84), never a new fact about a season nobody has played. */
 
-import { MLB_SEASONS, MLB_PLAYOFF_FORMAT, MLB_FIRST_ROUND } from '@/data/usSeasonLedgerMlb';
+import { MLB_SEASONS, MLB_PLAYOFF_FORMAT, MLB_FIRST_ROUND, MLB_OUTSIDE_CLUBS } from '@/data/usSeasonLedgerMlb';
 import { NHL_SEASONS, NHL_2019_CLUB_GAMES, NHL_PLAYOFF_FORMAT } from '@/data/usSeasonLedgerNhl';
 import { playoffGames } from './careerVariance';
 
@@ -53,6 +53,9 @@ export function seasonLengthRow(sport: ShapeSport, year: number, club?: string):
       ? NHL_2019_CLUB_GAMES[club] : undefined;
     return own === undefined ? engine : { games: own, from: 'ledger' };
   }
+  /* A club outside the league (the ledger names it) has no MLB season at all:
+     how long its own season is has one source, so the engine's stands. */
+  if (club !== undefined && MLB_OUTSIDE_CLUBS.some(o => o.team === club)) return engine;
   const last = MLB_SEASONS[MLB_SEASONS.length - 1];
   if (year > last.year) return { games: last.games, from: 'carried' };
   const row = MLB_SEASONS.find(r => r.year === year);
