@@ -1,0 +1,15 @@
+#!serial
+setup: bash .rc/x/follow.sh setup
+base-scm: cd /tmp/r1220 && node scripts/simSeasonCentreMotion.mjs
+base-vitest: cd /tmp/r1220 && node_modules/.bin/vitest run src/components/motion/LotteryReveal.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+base-predraft: cd /tmp/r1220 && node scripts/simCareerPreDraft.mjs
+base-prospect: cd /tmp/r1220 && node scripts/simUsCareerProspect.mjs
+move: bash .rc/x/follow.sh move
+after-tsc: cd /tmp/r1220 && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+after-scm: cd /tmp/r1220 && node scripts/simSeasonCentreMotion.mjs
+after-vitest: cd /tmp/r1220 && node_modules/.bin/vitest run src/components/lottery/LotteryReveal.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+after-predraft: cd /tmp/r1220 && node scripts/simCareerPreDraft.mjs
+after-prospect: cd /tmp/r1220 && node scripts/simUsCareerProspect.mjs
+after-anchors: cd /tmp/r1220 && node scripts/simHarnessAnchors.mjs
+after-rivals: cd /tmp/r1220 && node scripts/simNoRivalNames.mjs
+after-reveal: cd /tmp/r1220 && node scripts/simRevealMoments.mjs

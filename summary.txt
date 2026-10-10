@@ -1,0 +1,14 @@
+setup exit=0 1s | src/lib/lotteryReveal.ts
+base-scm exit=1 7s | simSeasonCentreMotion: 17 checks, 3 failed
+base-vitest exit=0 3s |    Duration  3.15s (transform 1.79s, setup 109ms, collect 3.29s, tests 2.03s, environment 864ms, prepare 276ms)
+base-predraft exit=0 1s | simCareerPreDraft [seed set a]: ALL GREEN
+base-prospect exit=0 7s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+move exit=0 0s | presenter files left in src/components/motion: 0
+after-tsc exit=0 39s | 
+after-scm exit=0 7s | simSeasonCentreMotion: 17 checks, 0 failed
+after-vitest exit=0 3s |    Duration  3.12s (transform 1.76s, setup 121ms, collect 3.06s, tests 2.19s, environment 814ms, prepare 340ms)
+after-predraft exit=0 1s | simCareerPreDraft [seed set a]: ALL GREEN
+after-prospect exit=0 7s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+after-anchors exit=0 23s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+after-rivals exit=0 8s | No rival product names found. 0 findings.
+after-reveal exit=0 5s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
