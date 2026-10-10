@@ -224,10 +224,12 @@ and what was done, each its own pushed commit:
 7. **What's New says what the code does** (896de1c8): the two clubs of 2019-20 that play 82, a club that
    went by another name, the best of three of 2020, and "judged at a full season's pace".
 
-Not done, and why: the Hall marks (the lead's ruling, above); the Thrashers and Phoenix Coyotes of 2019-20
-and the six MLB club seasons under an older name are NOT bound (the ledger harness forbids writing a real
-club's row onto the game's old id, checks M3 and `mlbid`; the words carry the exception instead); the rest
-is under "Owed to others".
+Not done, and why: the Hall marks (the lead's ruling, above); the six MLB club seasons under an older name
+are NOT bound (the ledger harness forbids it: a club season carries the game's id only where the game's
+list holds the club under that name that year, check M3 and its control `mlbid`); the Thrashers and Phoenix
+Coyotes of 2019-20 are NOT bound either (following `NHL_NAME_SPANS` onto the Jets' 71 and Arizona's 70 would
+map a club across a move or a rename, which the round does nowhere, and is the lead's call); the words
+carry both exceptions instead; the rest is under "Owed to others".
 
 Proof on the fixed head. The reviewer's own probes, run again: a lost World Series reads 13 to 19 games in
 2005, 2008, 2015 and 2021 (12,000 seasons a year); the awards table above; and its old save probe is green
