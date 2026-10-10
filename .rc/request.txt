@@ -1,0 +1,14 @@
+# Release AU, attribution arms: PR216's two additive save fields taken out one line each, in this checkout only
+#!serial
+dev-noadd: node .rc/x/mutAU.mjs noopening nowheel && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs; s=$?; git checkout HEAD -- src; exit $s
+trophy-noadd: node .rc/x/mutAU.mjs noopening nowheel && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs; s=$?; git checkout HEAD -- src; exit $s
+story-noadd: node .rc/x/mutAU.mjs noopening nowheel && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs; s=$?; git checkout HEAD -- src; exit $s
+history-noadd: node .rc/x/mutAU.mjs noopening nowheel && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs; s=$?; git checkout HEAD -- src; exit $s
+derby-noadd: node .rc/x/mutAU.mjs noopening nowheel && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs; s=$?; git checkout HEAD -- src; exit $s
+brands-noadd: node .rc/x/mutAU.mjs noopening nowheel && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerSocialBrands.mjs; s=$?; git checkout HEAD -- src; exit $s
+finish-noadd: node .rc/x/mutAU.mjs noopening nowheel && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueFinish.mjs; s=$?; git checkout HEAD -- src; exit $s
+awards-noadd: node .rc/x/mutAU.mjs noopening nowheel && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerAwardsNight.mjs; s=$?; git checkout HEAD -- src; exit $s
+seasons-noadd: node .rc/x/mutAU.mjs noopening nowheel && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerLeagueSeasons.mjs; s=$?; git checkout HEAD -- src; exit $s
+brands-nowheel: node .rc/x/mutAU.mjs nowheel && node scripts/simCareerSocialBrands.mjs; s=$?; git checkout HEAD -- src; exit $s
+brands-noopening: node .rc/x/mutAU.mjs noopening && node scripts/simCareerSocialBrands.mjs; s=$?; git checkout HEAD -- src; exit $s
+held: git status --short | head -5; echo "src differs from the head in $(git diff --name-only HEAD -- src | wc -l) file(s)"
