@@ -1,0 +1,6 @@
+vitest exit=0 4s |    Duration  2.40s (transform 415ms, setup 341ms, collect 883ms, tests 749ms, environment 1.98s, prepare 748ms)
+simGmPicks exit=0 15s | simGmPicks: 1199 checks passed over 4 leagues, 5 seeds and 10 seasons each. The lottery tables are the published ones and the draws sit inside their bands, an old save ke
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoRivalNames exit=0 19s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 73s | 
