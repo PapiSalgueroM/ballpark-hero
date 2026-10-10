@@ -1,0 +1,17 @@
+plain-before exit=0 0s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+mutA exit=0 1s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+mutB exit=0 0s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+mutC exit=1 0s | simUsSeasonLedger: RED at N2 N7 (4 failed, 1181 passed)
+mutD exit=0 0s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+mutE exit=0 0s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+mutG exit=0 0s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+mutH exit=0 0s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+mutJ exit=1 0s | simUsSeasonLedger: RED at M10 (2 failed, 1183 passed)
+mutK exit=1 0s | simUsSeasonLedger: RED at M2 M5 (3 failed, 1182 passed)
+mutN exit=0 0s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+mutO exit=0 0s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+mutP exit=1 0s | simUsSeasonLedger: RED at M2 M5 (3 failed, 1182 passed)
+mutQ exit=1 0s | simUsSeasonLedger: RED at M2 M5 (3 failed, 1182 passed)
+mutR exit=1 0s | simUsSeasonLedger: RED at N5 (1 failed, 1184 passed)
+mutS exit=1 0s | simUsSeasonLedger: RED at N4 (1 failed, 1184 passed)
+plain-after exit=0 0s | simUsSeasonLedger: green. 1185 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
