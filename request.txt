@@ -1,0 +1,2 @@
+fleet: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && git -C /tmp/base rev-parse HEAD && BASE_ROOT=/tmp/base HEAD_ROOT="$PWD" node .rc/x/review-run-fleet.mjs
+src-diff: git diff --name-status origin/main...HEAD | grep -v "^A" | wc -l && git diff --name-status origin/main...HEAD | grep -c "^A" && (grep -rIl "Fixtures2026" src --include=*.ts --include=*.tsx | grep -v "^src/data/clubManager" | wc -l)
