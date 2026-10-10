@@ -1,0 +1,45 @@
+#!build
+#!playwright
+simLiveScores: node scripts/simLiveScores.mjs > /tmp/simLiveScores.log 2>&1; s=$?; tail -1 /tmp/simLiveScores.log | cut -c1-200; exit $s
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs > /tmp/simHarnessAnchors.log 2>&1; s=$?; tail -1 /tmp/simHarnessAnchors.log | cut -c1-200; exit $s
+simNoRivalNames: node scripts/simNoRivalNames.mjs > /tmp/simNoRivalNames.log 2>&1; s=$?; tail -1 /tmp/simNoRivalNames.log | cut -c1-200; exit $s
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs > /tmp/simNoInventedQuotes.log 2>&1; s=$?; tail -1 /tmp/simNoInventedQuotes.log | cut -c1-200; exit $s
+simInventedNames: node scripts/simInventedNames.mjs > /tmp/simInventedNames.log 2>&1; s=$?; tail -1 /tmp/simInventedNames.log | cut -c1-200; exit $s
+simLegalPages: node scripts/simLegalPages.mjs > /tmp/simLegalPages.log 2>&1; s=$?; tail -1 /tmp/simLegalPages.log | cut -c1-200; exit $s
+simNumberFormatting: node scripts/simNumberFormatting.mjs > /tmp/simNumberFormatting.log 2>&1; s=$?; tail -1 /tmp/simNumberFormatting.log | cut -c1-200; exit $s
+simStorageWrites: node scripts/simStorageWrites.mjs > /tmp/simStorageWrites.log 2>&1; s=$?; tail -1 /tmp/simStorageWrites.log | cut -c1-200; exit $s
+simTrustCopy: node scripts/simTrustCopy.mjs > /tmp/simTrustCopy.log 2>&1; s=$?; tail -1 /tmp/simTrustCopy.log | cut -c1-200; exit $s
+simEarlyReturnScope: node scripts/simEarlyReturnScope.mjs > /tmp/simEarlyReturnScope.log 2>&1; s=$?; tail -1 /tmp/simEarlyReturnScope.log | cut -c1-200; exit $s
+simActivityNotCompletion: node scripts/simActivityNotCompletion.mjs > /tmp/simActivityNotCompletion.log 2>&1; s=$?; tail -1 /tmp/simActivityNotCompletion.log | cut -c1-200; exit $s
+simSessionMarks: node scripts/simSessionMarks.mjs > /tmp/simSessionMarks.log 2>&1; s=$?; tail -1 /tmp/simSessionMarks.log | cut -c1-200; exit $s
+simManagerHotSeat: node scripts/simManagerHotSeat.mjs > /tmp/simManagerHotSeat.log 2>&1; s=$?; tail -1 /tmp/simManagerHotSeat.log | cut -c1-200; exit $s
+simDeadlineDay: node scripts/simDeadlineDay.mjs > /tmp/simDeadlineDay.log 2>&1; s=$?; tail -1 /tmp/simDeadlineDay.log | cut -c1-200; exit $s
+simLiveMatch: node scripts/simLiveMatch.mjs > /tmp/simLiveMatch.log 2>&1; s=$?; tail -1 /tmp/simLiveMatch.log | cut -c1-200; exit $s
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs > /tmp/simClubManagerSlots.log 2>&1; s=$?; tail -1 /tmp/simClubManagerSlots.log | cut -c1-200; exit $s
+simWorldEditor: node scripts/simWorldEditor.mjs > /tmp/simWorldEditor.log 2>&1; s=$?; tail -1 /tmp/simWorldEditor.log | cut -c1-200; exit $s
+simCmVar: node scripts/simCmVar.mjs > /tmp/simCmVar.log 2>&1; s=$?; tail -1 /tmp/simCmVar.log | cut -c1-200; exit $s
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs > /tmp/simCmLeagueRules.log 2>&1; s=$?; tail -1 /tmp/simCmLeagueRules.log | cut -c1-200; exit $s
+simClubManagerSave: node scripts/simClubManagerSave.mjs > /tmp/simClubManagerSave.log 2>&1; s=$?; tail -1 /tmp/simClubManagerSave.log | cut -c1-200; exit $s
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs > /tmp/simClubManagerSaveSize.log 2>&1; s=$?; tail -1 /tmp/simClubManagerSaveSize.log | cut -c1-200; exit $s
+simClubManagerClubList: node scripts/simClubManagerClubList.mjs > /tmp/simClubManagerClubList.log 2>&1; s=$?; tail -1 /tmp/simClubManagerClubList.log | cut -c1-200; exit $s
+simClubManagerStart: node scripts/simClubManagerStart.mjs > /tmp/simClubManagerStart.log 2>&1; s=$?; tail -1 /tmp/simClubManagerStart.log | cut -c1-200; exit $s
+simClubManagerCalendar: node scripts/simClubManagerCalendar.mjs > /tmp/simClubManagerCalendar.log 2>&1; s=$?; tail -1 /tmp/simClubManagerCalendar.log | cut -c1-200; exit $s
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs > /tmp/simManagerMatchPlans.log 2>&1; s=$?; tail -1 /tmp/simManagerMatchPlans.log | cut -c1-200; exit $s
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs > /tmp/simLiveSimMotion.log 2>&1; s=$?; tail -1 /tmp/simLiveSimMotion.log | cut -c1-200; exit $s
+simMidSeasonStart: node scripts/simMidSeasonStart.mjs > /tmp/simMidSeasonStart.log 2>&1; s=$?; tail -1 /tmp/simMidSeasonStart.log | cut -c1-200; exit $s
+simFreeAgents: node scripts/simFreeAgents.mjs > /tmp/simFreeAgents.log 2>&1; s=$?; tail -1 /tmp/simFreeAgents.log | cut -c1-200; exit $s
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs > /tmp/simMissingElevenSources.log 2>&1; s=$?; tail -1 /tmp/simMissingElevenSources.log | cut -c1-200; exit $s
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs > /tmp/simNbaLuxuryTax.log 2>&1; s=$?; tail -1 /tmp/simNbaLuxuryTax.log | cut -c1-200; exit $s
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs > /tmp/simNbaSeasonStats.log 2>&1; s=$?; tail -1 /tmp/simNbaSeasonStats.log | cut -c1-200; exit $s
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs > /tmp/simPerfectSeasonOdds.log 2>&1; s=$?; tail -1 /tmp/simPerfectSeasonOdds.log | cut -c1-200; exit $s
+simClubManagerALeague: node scripts/simClubManagerALeague.mjs > /tmp/simClubManagerALeague.log 2>&1; s=$?; tail -1 /tmp/simClubManagerALeague.log | cut -c1-200; exit $s
+simClubManagerBudget: node scripts/simClubManagerBudget.mjs > /tmp/simClubManagerBudget.log 2>&1; s=$?; tail -1 /tmp/simClubManagerBudget.log | cut -c1-200; exit $s
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs > /tmp/simClubManagerMeters.log 2>&1; s=$?; tail -1 /tmp/simClubManagerMeters.log | cut -c1-200; exit $s
+simClubManagerScore: node scripts/simClubManagerScore.mjs > /tmp/simClubManagerScore.log 2>&1; s=$?; tail -1 /tmp/simClubManagerScore.log | cut -c1-200; exit $s
+simAcademy: node scripts/simAcademy.mjs > /tmp/simAcademy.log 2>&1; s=$?; tail -1 /tmp/simAcademy.log | cut -c1-200; exit $s
+simPress: node scripts/simPress.mjs > /tmp/simPress.log 2>&1; s=$?; tail -1 /tmp/simPress.log | cut -c1-200; exit $s
+simRoles: node scripts/simRoles.mjs > /tmp/simRoles.log 2>&1; s=$?; tail -1 /tmp/simRoles.log | cut -c1-200; exit $s
+simWilderness: node scripts/simWilderness.mjs > /tmp/simWilderness.log 2>&1; s=$?; tail -1 /tmp/simWilderness.log | cut -c1-200; exit $s
+simEras: node scripts/simEras.mjs > /tmp/simEras.log 2>&1; s=$?; tail -1 /tmp/simEras.log | cut -c1-200; exit $s
+simClubManager: node scripts/simClubManager.mjs > /tmp/simClubManager.log 2>&1; s=$?; tail -1 /tmp/simClubManager.log | cut -c1-200; exit $s
+vitest-cm: node_modules/.bin/vitest run src/test/clubManagerSlots.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerEraPicker.test.tsx src/test/clubManagerSave.test.tsx src/test/clubManagerSaveSize.test.tsx src/test/clubManagerWorldEditor.test.tsx src/test/clubManagerWorldEditorPage.test.tsx src/test/liveSimMotion.test.tsx src/test/managerMatchPlans.test.tsx src/test/managerWorldBrowser.test.tsx src/test/managerHotSeatCarryOn.test.ts src/test/managerHotSeatCarryOnCard.test.tsx src/test/clubManagerJobHunt.test.ts src/test/clubManagerDecisions.test.tsx src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/vt.log 2>&1; s=$?; tail -8 /tmp/vt.log | cut -c1-200; exit $s
