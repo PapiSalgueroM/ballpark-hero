@@ -15,10 +15,11 @@
       in a league with a verified size always carries both fields;
    3. the tier ordering of mean finish holds over pooled seeds (elite, then
       tier 1, 2, 3, 4), each step of the ladder, not only its two ends;
-   4. the current era digest: seeded careers starting in 2020 produce a state
-      byte identical to the one recorded from main before this round, once the
-      two new fields are taken out, so the main Math.random stream did not move
-      (Round 974's story list is taken out too, see LATER_FIELDS below);
+   4. the historical digest: the unchanged sixteen main hashes are checked
+      against current careers, with an optional copied inverse of Round 1185's
+      form adjustment and Youth Mentor catalog. Full current, attributed and
+      actual frozen original states and random draw vectors are retained. The
+      existing digest field exclusions below are unchanged;
    5. the elite boost is era aware: a season played at Man City in 1995 wins
       the title at its tier's rate, at Man City in 2020 at the elite rate, and
       Real Madrid in 1995 at the elite rate (forced seasons over many seeds).
@@ -53,12 +54,14 @@
 
    Run: node scripts/simCareerLeagueFinish.mjs [careersPerTier] */
 import { build } from 'esbuild';
+import assert from 'node:assert/strict';
+import { inverseCareerDevelopment, careerDevelopmentOriginalPlugin, careerDevelopmentBaseReceipt } from './lib/careerDevelopmentAttribution1185.mjs';
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
-import { soccerTrainOutPlugin, withoutTrainFields } from './lib/soccerTrain1178.mjs';
+import { soccerTrainOut, SOCCER_TRAIN_FILES, withoutTrainFields } from './lib/soccerTrain1178.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_LEAGUE_FINISH_CONTROL || '';
@@ -80,13 +83,21 @@ const RECORD = process.argv.includes('--record');
    checked again; it runs section 4 alone and no control beside it. */
 const ATTRIBUTION = process.env.SIM_LEAGUE_FINISH_ATTRIBUTION || '';
 if (ATTRIBUTION && (ATTRIBUTION !== 'train1178' || CONTROL || RECORD)) { console.error('SIM_LEAGUE_FINISH_ATTRIBUTION knows train1178 only, with no control and no --record beside it'); process.exit(2); }
-const trainOut = ATTRIBUTION ? soccerTrainOutPlugin(ROOT, path, fs) : null;
+const ENGINE_REL = 'src/lib/soccerCareerEngine.ts';
+const trainOut = ATTRIBUTION ? bothOutPlugin() : null;
 const TMP = process.env.TEMP || process.env.TMP || os.tmpdir();
 const WORK = path.join(TMP, `sc-leaguefinish-${process.pid}`);
 fs.mkdirSync(WORK, { recursive: true });
 const OUT = path.join(WORK, 'bundle.mjs');
 const ENTRY = path.join(WORK, 'entry.mjs');
 const lib = `${ROOT}/src/lib/`.replaceAll('\\', '/');
+const ARTIFACTS = path.resolve(ROOT, process.env.SIM_LEAGUE_FINISH_ARTIFACTS || '.tmp-fx/career-league-finish', CONTROL || 'healthy');
+const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLeague.ts', 'src/lib/careerEras.ts',
+  'src/lib/soccerCareerSelection.ts', 'src/lib/soccerCareerPreparation.ts', 'src/lib/soccerCareerMentor.ts',
+  'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/simCareerLeagueFinish.mjs'];
+const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file,
+  crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
+const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], originalSources: [], careers: [] };
 
 /* A control edits a COPY. The copies live outside src/lib, so their relative
    imports are pointed back at the real files, except the engine's import of
@@ -137,7 +148,70 @@ export const world = await import('${lib}soccerCareerLeagueWorld.ts');
 `);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: trainOut ? [trainOut.plugin] : [] });
 const { engine, league, eras, world } = await import(pathToFileURL(OUT).href);
-try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
+/* An independent original replay uses the actual certified src tree. Its
+   entry never points at the copied control engine or league. */
+async function originalEngine() {
+  const entry = path.join(WORK, 'originalEntry.mjs'), out = path.join(WORK, 'originalBundle.mjs');
+  fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${lib}soccerCareerEngine.ts';\n`);
+  await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [careerDevelopmentOriginalPlugin(proof.originalSources)] });
+  proof.base = careerDevelopmentBaseReceipt();
+  return import(pathToFileURL(out).href);
+}
+/* The optional attribution bundle shares the same copied league, including a
+   stream defect. Only the two guarded development edits are reversed. */
+async function attributionEngine() {
+  const before = fs.readFileSync(enginePath, 'utf8').replaceAll('\r\n', '\n');
+  const attributed = inverseCareerDevelopment(before, proof.attribution);
+  assert.notEqual(attributed, before, 'Historical attribution changes its copied engine');
+  const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs');
+  fs.writeFileSync(file, relocate(attributed, CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : ''));
+  fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${file.replaceAll('\\', '/')}';\n`);
+  await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT });
+  const attributedEngine = await import(pathToFileURL(out).href);
+  assert.equal(JSON.stringify(attributedEngine.FALLBACK_CLUBS), JSON.stringify(engine.FALLBACK_CLUBS), 'Attribution keeps the complete club pool');
+  fs.mkdirSync(ARTIFACTS, { recursive: true });
+  fs.writeFileSync(path.join(ARTIFACTS, 'currentEngine.ts'), before);
+  fs.writeFileSync(path.join(ARTIFACTS, 'attributedEngine.ts'), attributed);
+  return attributedEngine;
+}
+/* Release AT: two attributions meet in this file. Release AQ recorded BASELINE with the Soccer Career
+   train (Rounds 1169 to 1178) in, and kept the list before it as BEFORE_TRAIN_1178. Rounds 1185 and 1187
+   compare against the actual tree they were cut from, which is older than the train: its digests are that
+   older list and its draws are the draws from before the train. So the merged tree asks three questions:
+   with only the development edits reversed, is Release AQ's BASELINE reproduced; does the independent
+   original record BEFORE_TRAIN_1178; and with the train AND the development edits both out, are the old
+   list and the original's complete draw vectors reproduced. This plugin is that third bundle, and it is
+   what SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 bundles too, since the train alone no longer explains
+   the whole move. */
+function bothOutPlugin() {
+  const out = soccerTrainOut();
+  const base = path.resolve(ROOT).split(path.sep).join('/').toLowerCase();
+  return { seen: out.seen, plugin: { name: 'soccer-train-and-development-out', setup(b) {
+    b.onLoad({ filter: /\.(ts|tsx)$/ }, args => {
+      const full = path.resolve(args.path).split(path.sep).join('/');
+      if (!full.toLowerCase().startsWith(`${base}/`)) return undefined;
+      const rel = full.slice(base.length + 1);
+      if (rel !== ENGINE_REL && !SOCCER_TRAIN_FILES.includes(rel)) return undefined;
+      let text = out.rewrite(rel, fs.readFileSync(args.path, 'utf8')).split('\r\n').join('\n');
+      if (rel === ENGINE_REL) text = inverseCareerDevelopment(text, proof.attribution);
+      return { contents: text, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts' };
+    });
+  } } };
+}
+/* The real src tree with both taken out. Never the copied control engine or league. */
+async function bothOutEngine() {
+  const entry = path.join(WORK, 'bothOutEntry.mjs'), out = path.join(WORK, 'bothOutBundle.mjs');
+  fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${lib}soccerCareerEngine.ts';\n`);
+  const both = bothOutPlugin();
+  await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [both.plugin] });
+  const mod = await import(pathToFileURL(out).href);
+  assert(both.seen().includes(ENGINE_REL), 'The train was taken out of the engine the bundle loaded');
+  assert.equal(JSON.stringify(mod.FALLBACK_CLUBS), JSON.stringify(engine.FALLBACK_CLUBS), 'Taking the train and the development edits out keeps the complete club pool');
+  return mod;
+}
 const NEED = ['initCareer', 'advanceYouthYear', 'acceptOffer', 'advanceProSeason', 'dismissSummary', 'dismissNewspaper', 'dismissDebut', 'dismissWorldCup', 'dismissRivalryEvent', 'dismissBallonDor', 'applyEventChoice', 'dismissMoralDilemma', 'dismissSocialMediaPhase', 'dismissAppealResult', 'applyBdorSpeech', 'applyWorldCupSpeech', 'acceptRetirementSuggestion', 'stayAtClub', 'applyRehabChoice', 'FALLBACK_CLUBS'];
 for (const k of NEED) if (!engine[k]) { console.error('engine export missing: ' + k + ', so nothing below measures anything'); process.exit(1); }
 const clubs = engine.FALLBACK_CLUBS;
@@ -150,8 +224,7 @@ const POSITIONS = ['ST', 'CM', 'CB', 'GK', 'LW', 'CAM', 'RB', 'CDM'];
 
 /* simCareerCleanSheets' full phase switch: every pause the engine can raise
    between seasons is answered, an unknown one is nudged once. */
-function step(s) {
-  const e = engine;
+function step(s, e = engine) {
   switch (s.phase) {
     case 'youth': return e.advanceYouthYear(s, clubs);
     case 'contract_offer': { const offers = s.pendingOffers || []; return offers.length ? e.acceptOffer(s, offers[0]) : { ...s, phase: 'playing' }; }
@@ -180,17 +253,17 @@ function step(s) {
   }
 }
 
-function runCareer(seed, { era = '2020-24', startYear = 2020, proSeasons = 10, ovr = 64, nation = 'England', until = null } = {}) {
-  const realRandom = Math.random;
-  Math.random = seeded(seed * 7919 + 13);
+function runCareer(seed, { era = '2020-24', startYear = 2020, proSeasons = 10, ovr = 64, nation = 'England', until = null, engineModule = engine, draws = null } = {}) {
+  const realRandom = Math.random, random = seeded(seed * 7919 + 13);
+  Math.random = draws ? () => { const value = random(); draws.push(value); return value; } : random;
   try {
     const position = POSITIONS[seed % POSITIONS.length];
-    let s = engine.initCareer(`Sim ${seed}`, nation, position, era, stats(ovr), ovr, startYear, clubs, null, 82);
+    let s = engineModule.initCareer(`Sim ${seed}`, nation, position, era, stats(ovr), ovr, startYear, clubs, null, 82);
     let guard = 0;
     const played = () => (s.seasons || []).filter(r => r.type === 'playing').length;
     while (!s.retired && guard++ < 500 && played() < proSeasons) {
       if (until && until(s)) return s;
-      s = step(s);
+      s = step(s, engineModule);
     }
     return s;
   } finally {
@@ -231,9 +304,9 @@ const LATER_FIELDS = ['story'];
    every row field but cupRun equal. It leaves the digest the same way. */
 const SEASON_ROW_FIELDS = ['ovr', 'cupRun'];
 const isSeasonRow = o => o && typeof o === 'object' && 'rating' in o && 'leagueTitle' in o;
-function digest(state) {
+function digest(state, trainOutToo = !!ATTRIBUTION) {
   /* with the train out, the two things it writes that no patch takes back (they draw nothing) leave the hash too */
-  const s = ATTRIBUTION ? JSON.parse(JSON.stringify(state, withoutTrainFields)) : state;
+  const s = trainOutToo ? JSON.parse(JSON.stringify(state, withoutTrainFields)) : state;
   const json = JSON.stringify(s, function (k, v) { return NEW_FIELDS.includes(k) || (this === s && LATER_FIELDS.includes(k)) || (SEASON_ROW_FIELDS.includes(k) && isSeasonRow(this)) ? undefined : v; });
   return crypto.createHash('sha256').update(json).digest('hex').slice(0, 16);
 }
@@ -376,7 +449,8 @@ if (ATTRIBUTION) {
   let same = 0;
   const moved = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) { if (digest(runCareer(i)) === BEFORE_TRAIN_1178[i - 1]) same += 1; else moved.push(i); }
-  console.log(`ATTRIBUTION ${ATTRIBUTION}: ${trainOut.seen().join(', ')} bundled with the train taken out; ${same} of ${DIGEST_SEEDS} careers record the digest the list held before the train${moved.length ? ` (moved: ${moved.join(', ')})` : ''}`);
+  console.log(`ATTRIBUTION ${ATTRIBUTION}: ${trainOut.seen().join(', ')} bundled with the train taken out and Rounds 1185 and 1187 reversed; ${same} of ${DIGEST_SEEDS} careers record the digest the list held before the train${moved.length ? ` (moved: ${moved.join(', ')})` : ''}`);
+  try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
   process.exit(same === DIGEST_SEEDS ? 0 : 1);
 }
 if (RECORD) {
@@ -508,18 +582,51 @@ for (let i = 1; i < LADDER.length; i++) {
 }
 
 section = 4;
-console.log('4) a current era career is byte identical to main once the two new fields are out');
+console.log('4) the unchanged historical digests hold directly or after guarded development attribution');
 {
-  let same = 0, withFinish = 0, totalSeasons = 0;
+  let same = 0, originalSame = 0, drawPairs = 0, withFinish = 0, totalSeasons = 0;
+  fs.mkdirSync(ARTIFACTS, { recursive: true });
+  const write = (name, value) => fs.writeFileSync(path.join(ARTIFACTS, name), JSON.stringify(value, null, 2));
+  const current = [];
   for (let i = 1; i <= DIGEST_SEEDS; i++) {
-    const s = runCareer(i);
-    if (digest(s) === BASELINE[i - 1]) same += 1;
-    for (const r of s.seasons || []) if (r.type === 'playing') { totalSeasons += 1; if (r.leagueFinish !== undefined) withFinish += 1; }
+    const draws = [], state = runCareer(i, { draws }), hash = digest(state);
+    current.push({ state, draws, digest: hash });
+    write(`${i}-current-state.json`, state); write(`${i}-current-draws.json`, draws);
+    for (const r of state.seasons || []) if (r.type === 'playing') { totalSeasons += 1; if (r.leagueFinish !== undefined) withFinish += 1; }
   }
-  console.log(`   ${same} of ${DIGEST_SEEDS} careers match the main digest; ${withFinish} of their ${totalSeasons} playing seasons carry a finish`);
-  if (same !== DIGEST_SEEDS) fail(`${DIGEST_SEEDS - same} careers moved: the main Math.random stream or something else in the state changed`);
+  const direct = current.filter((row, i) => row.digest === BASELINE[i]).length;
+  const inverse = direct === DIGEST_SEEDS ? null : await attributionEngine();
+  const original = await originalEngine();
+  /* Release AT: the original is older than the train, so its list is BEFORE_TRAIN_1178 and its draws
+     are held against this tree with the train and the development edits both out (bothOutEngine). */
+  const historical = await bothOutEngine();
+  let historicalSame = 0;
+  for (let i = 1; i <= DIGEST_SEEDS; i++) {
+    const row = current[i - 1], draws = [], originalDraws = [], historicalDraws = [];
+    const state = inverse ? runCareer(i, { engineModule: inverse, draws }) : null;
+    const oldState = runCareer(i, { engineModule: original, draws: originalDraws }), oldHash = digest(oldState);
+    const hash = inverse ? digest(state) : row.digest;
+    const oldTree = runCareer(i, { engineModule: historical, draws: historicalDraws }), oldTreeHash = digest(oldTree, true);
+    const drawEqual = JSON.stringify(historicalDraws) === JSON.stringify(originalDraws);
+    if (oldHash === BEFORE_TRAIN_1178[i - 1]) originalSame += 1;
+    if (oldTreeHash === BEFORE_TRAIN_1178[i - 1]) historicalSame += 1;
+    if (drawEqual) drawPairs += 1;
+    if (hash === BASELINE[i - 1]) same += 1;
+    if (inverse) { write(`${i}-attributed-state.json`, state); write(`${i}-attributed-draws.json`, draws); }
+    write(`${i}-original-state.json`, oldState); write(`${i}-original-draws.json`, originalDraws);
+    write(`${i}-historical-state.json`, oldTree); write(`${i}-historical-draws.json`, historicalDraws);
+    proof.careers.push({ seed: i, baseline: BASELINE[i - 1], originalDigest: oldHash, currentDigest: row.digest,
+      attributedDigest: inverse ? hash : null, historicalDigest: oldTreeHash, beforeTrain: BEFORE_TRAIN_1178[i - 1], originalMatches: oldHash === BEFORE_TRAIN_1178[i - 1], historicalMatches: oldTreeHash === BEFORE_TRAIN_1178[i - 1], matches: hash === BASELINE[i - 1], drawEqual,
+      currentDraws: row.draws.length, attributedDraws: inverse ? draws.length : null, historicalDraws: historicalDraws.length, originalDraws: originalDraws.length });
+  }
+  console.log(`   ${direct} direct matches; ${same} of ${DIGEST_SEEDS} careers match the unchanged main digest${inverse ? ' after attribution' : ''}; ${originalSame} original hashes match the list before the train, ${historicalSame} match it with the train and the development edits out, and ${drawPairs} complete draw vectors match; ${withFinish} of their ${totalSeasons} current playing seasons carry a finish`);
+  if (originalSame !== DIGEST_SEEDS) fail(`${DIGEST_SEEDS - originalSame} independent original careers differ from the unchanged baseline (the list before the train)`);
+  if (historicalSame !== DIGEST_SEEDS) fail(`${DIGEST_SEEDS - historicalSame} careers moved with the train and the development edits both taken out: something other than those rounds changed a career`);
+  if (same !== DIGEST_SEEDS) fail(`${DIGEST_SEEDS - same} careers moved after guarded attribution: the main Math.random stream or another complete state field changed`);
+  if (drawPairs !== DIGEST_SEEDS) fail(`${DIGEST_SEEDS - drawPairs} complete random draw vectors differ from the independent original`);
   if (withFinish === 0) fail('no digest season carries a finish, so the match above proves nothing about the new fields');
 }
+try { fs.rmSync(WORK, { recursive: true, force: true }); } catch { /* temp only */ }
 
 section = 5;
 console.log('5) the elite boost reads the era: forced first seasons over many seeds');
@@ -533,6 +640,12 @@ for (const [club, , , want] of CASES) {
   if (want === 'tier' && r.rate > TIER_MAX) fail(`${club} ${r.year}: ${(r.rate * 100).toFixed(1)}% is over the era tier ceiling ${TIER_MAX * 100}%, the era blind boost is back`);
 }
 
+proof.sourceAfter = sourceHashes();
+proof.sourceHeld = JSON.stringify(proof.sourceBefore) === JSON.stringify(proof.sourceAfter);
+assert(proof.sourceHeld, 'Current and attribution arms leave authored source bytes unchanged');
+assert.equal(proof.careers.length, DIGEST_SEEDS, 'All sixteen historical digest careers are retained');
+proof.red = [...red].sort();
+fs.writeFileSync(path.join(ARTIFACTS, 'report.json'), JSON.stringify(proof, null, 2));
 console.log('');
 if (CONTROL) {
   const want = CONTROLS[CONTROL];
@@ -543,4 +656,4 @@ if (CONTROL) {
   process.exit(2);
 }
 if (failures) { console.error(`simCareerLeagueFinish: ${failures} failure(s) in section(s) ${[...red].sort().join(', ')}`); process.exit(1); }
-console.log(`simCareerLeagueFinish: green. ${careers} careers, ${seasons.length} seasons, ${sized.length} in a verified league; finish and title agree, the ladder holds, main's stream is untouched and the elite boost reads the era.`);
+console.log(`simCareerLeagueFinish: green. ${careers} careers, ${seasons.length} seasons, ${sized.length} in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented attribution and the elite boost reads the era.`);

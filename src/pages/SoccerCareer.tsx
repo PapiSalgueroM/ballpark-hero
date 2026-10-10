@@ -72,6 +72,8 @@ import { SquadTile } from "@/components/soccer-career/SquadTile";
 import type { TrophyCategory } from "@/components/soccer-career/TrophyCabinet";
 import { CareerRecordsTile } from '@/components/soccer-career/CareerRecordsTile';
 import { SeasonAmbitionTile, SeasonAmbitionResult } from '@/components/soccer-career/SeasonAmbitionTile';
+import { PreseasonPlanTile, PreseasonPlanResult } from '@/components/soccer-career/PreseasonPlanTile';
+import { CareerMentorTile } from '@/components/soccer-career/CareerMentorTile';
 import type { MoneyAction } from "@/lib/soccerMoney";
 import { bankSummary } from "@/lib/soccerMoney";
 import PhonePanel from "@/components/soccer-career/PhonePanel";
@@ -758,6 +760,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
       {/* Round 1041: a cup run that ended early, one line; nothing on old saves. */}
       <SeasonCupExitLine season={season} />
       <SeasonAmbitionResult season={season} />
+      <PreseasonPlanResult season={season} />
 
       {season.injury && (
         /* Round 530: one shake as it lands, nothing more. */
@@ -1386,7 +1389,11 @@ export default function SoccerCareer() {
           the lift measurement. */}
       <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={DERBY_HELP_RULES} /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={[...DERBY_HELP_RULES,
+          'Recent club form: last season at the same club needs 10 to 38 recorded league appearances. A rating of 7.6 or more adds two to next year\'s selection draw; 6.4 or less takes two away. Phone effects and frozen-out limits still apply. Example: a 24-game draw becomes 26 after a qualifying 7.8 season.',
+          'Preseason plan: choose development (+1 position skill after growth, 3 percentage points more injury risk), recovery (-1 skill, 4 points less risk), or balanced. Example: 20% injury risk becomes 23% or 16%, within existing limits. A serious injury or no appearances interrupts development; a move cancels the plan.',
+          'Academy mentoring: the Youth Mentor event starts one generated player. Ten senior appearances at your shared club adds one mentoring year. Example: 12 appearances moves 0/3 to 1/3; six appearances pauses it. Three qualifying years complete it, a move ends it, and its history stays in the mentor tile.',
+        ]} /></div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {career && saveFailed && (
             <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">
@@ -4334,6 +4341,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               year, and it says whether the squad is real, by role or invented. */}
           {career.phase === "playing" && <SquadTile career={career} />}
           {career.phase === "playing" && onCareerPatch && <SeasonAmbitionTile career={career} onCareer={onCareerPatch} />}
+          {career.phase === "playing" && onCareerPatch && <PreseasonPlanTile career={career} onCareer={onCareerPatch} />}
+          {(career.phase === "playing" || career.phase === "retired") && <CareerMentorTile career={career} />}
           {(career.phase === "playing" || career.phase === "retired") && <CareerRecordsTile career={career} />}
 
           {/* Financial & Lifestyle Panel */}

@@ -134,19 +134,73 @@
  *      SECTIONS=2,3 node scripts/simCareerSocialBrands.mjs   (skips the replay)
  *      SOCIAL_BRANDS_CONTROL=payoff node scripts/simCareerSocialBrands.mjs
  */
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadSoccerBrand, probeSoccerBrand, driveToPlaying, POST_IDS, LEGACY_TIERS } from './lib/soccerBrandProbe835.mjs';
 import { soccerTrainOut } from './lib/soccerTrain1178.mjs';
+import { careerDevelopmentBaseReceipt, careerDevelopmentOriginalPlugin, inverseCareerDevelopment } from './lib/careerDevelopmentAttribution1185.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'soccerBrandFixture835.json');
 const CONTROL = process.env.SOCIAL_BRANDS_CONTROL || '';
 const SECTIONS = (process.env.SECTIONS || '1,2,3').split(',').map(x => x.trim());
 
+const ARTIFACTS = process.env.SOCIAL_BRANDS_ARTIFACTS ? path.resolve(process.env.SOCIAL_BRANDS_ARTIFACTS) : null;
+const sha = value => createHash('sha256').update(value).digest('hex');
+const heldPaths = [
+  'scripts/simCareerSocialBrands.mjs', 'scripts/lib/soccerBrandProbe835.mjs',
+  'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/data/soccerBrandFixture835.json',
+  'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerSelection.ts',
+  'src/lib/soccerCareerPreparation.ts', 'src/lib/soccerCareerMentor.ts',
+  'src/lib/soccerCareerLife.ts', 'src/lib/soccerCareerBrand.ts',
+  'src/lib/careerSocial.ts', 'src/lib/careerBrand.ts', 'src/lib/careerIdentity.ts',
+];
+const sourceBefore = {};
+for (const relative of heldPaths) {
+  const bytes = fs.readFileSync(path.join(ROOT, relative));
+  sourceBefore[relative] = sha(bytes);
+}
+const report = { control: CONTROL || null, sections: SECTIONS, sourceBefore, failedLabels: [], originalSources: [], inverses: [] };
+function retain(name, value) {
+  if (!ARTIFACTS) return;
+  fs.mkdirSync(ARTIFACTS, { recursive: true });
+  fs.writeFileSync(path.join(ARTIFACTS, name), JSON.stringify(value, null, 2) + '\n');
+}
+
+async function loadOriginal() {
+  const { build } = await import('esbuild');
+  const tmp = fs.mkdtempSync(path.join(process.env.TEMP || os.tmpdir(), 'socialbrand-original-1185-'));
+  const out = path.join(tmp, 'bundle.mjs'), tree = ROOT.replaceAll('\\', '/');
+  const nodePaths = [];
+  for (let dir = path.dirname(fileURLToPath(import.meta.url)); ; dir = path.dirname(dir)) {
+    const modules = path.join(dir, 'node_modules');
+    if (fs.existsSync(modules)) nodePaths.push(modules);
+    if (path.dirname(dir) === dir) break;
+  }
+  try {
+    await build({
+      stdin: { contents: `
+globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+export const soccer = await import('${tree}/src/lib/soccerCareerEngine.ts');
+export const life = await import('${tree}/src/lib/soccerCareerLife.ts');
+`, resolveDir: ROOT, sourcefile: 'socialbrand-original-entry.mjs', loader: 'js' },
+      bundle: true, format: 'esm', platform: 'node', outfile: out, logLevel: 'error',
+      alias: { '@': path.join(ROOT, 'src') }, absWorkingDir: ROOT, nodePaths,
+      plugins: [careerDevelopmentOriginalPlugin(report.originalSources)],
+    });
+    return await import(pathToFileURL(out).href);
+  } finally {
+    fs.rmSync(tmp, { recursive: true, force: true });
+  }
+}
+
 let failures = 0;
-const fail = m => { failures += 1; console.log(`  FAIL ${m}`); };
+const fail = m => { failures += 1; report.failedLabels.push(m); console.log(`  FAIL ${m}`); };
 const ok = m => console.log(`  ok   ${m}`);
 const check = (cond, m) => (cond ? ok(m) : fail(m));
 
@@ -252,7 +306,9 @@ if (SECTIONS.includes('1')) {
   console.log('\n1. Soccer Career replays the pre lift fixture byte for byte');
   /* The header says which main the fixture is a photograph of. It is set
      aside before the comparison and has to be a real sha. */
-  const { recordedFrom, ...rec } = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
+  const fixture = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
+  retain('fixture.json', fixture);
+  const { recordedFrom, ...rec } = fixture;
   check(/^[0-9a-f]{40}$/.test(recordedFrom?.main || ''), `the fixture names the main it was recorded from (${String(recordedFrom?.main || 'nothing').slice(0, 8)})`);
   /* DELIBERATE COPY CHANGES since that main. Words on a card only: a post's
      definition is never written into a save, so no hash moves and every one
@@ -275,8 +331,41 @@ if (SECTIONS.includes('1')) {
   const gotText = JSON.stringify(got);
   console.log(`     probe ran in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
   const steps = rec.careers.reduce((n, c) => n + c.steps.split(' ').length, 0);
-  if (gotText === want) {
-    ok(`all ${rec.careers.length} careers (${steps} hashed steps), ${rec.oldSaves.length} old saves and every unit probe match`);
+  retain('current.json', got);
+  report.fixture = { recordedFrom, careers: rec.careers.length, oldSaves: rec.oldSaves.length, hashedSteps: steps, expectedSha256: sha(want) };
+  report.current = { matches: gotText === want, sha256: sha(gotText) };
+  const originalControlCount = controlFired;
+  const originalBundle = await loadOriginal();
+  const original = probeSoccerBrand(originalBundle), originalText = JSON.stringify(original);
+  retain('original.json', original);
+  report.base = careerDevelopmentBaseReceipt();
+  /* Release AT: the original is the tree Rounds 1185 to 1187 were cut from, which is older than the
+     Soccer Career train, and Release AQ re-recorded this fixture with the train in. So the original is
+     held to the fixture as its own tree shipped it, read from that commit, never to the newer file. */
+  const { recordedFrom: originalRecordedFrom, ...originalRec } = JSON.parse(execFileSync('git', ['show', `${report.base.head}:scripts/data/soccerBrandFixture835.json`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
+  const originalWant = JSON.stringify(originalRec);
+  report.original = { matches: originalText === originalWant, sha256: sha(originalText), fixtureRecordedFrom: originalRecordedFrom, fixtureSha256: sha(originalWant) };
+  assert.equal(controlFired, originalControlCount, 'The independent original replay never applies a current copied fault');
+  check(originalText === originalWant, `actual 4ab original source independently replays all ${originalRec.careers.length} careers, ${originalRec.oldSaves.length} old saves and every unit probe of the fixture its own tree held`);
+
+  let compared = got;
+  if (gotText !== want) {
+    const beforeControlCount = controlFired;
+    const historical = await loadSoccerBrand(ROOT, (relative, source) => {
+      /* Release AT: under SOCIAL_BRANDS_ATTRIBUTION=train1178 this bundle keeps the train out too, so the
+         fixture from before the train is asked of a tree with both taken out. */
+      const controlled = trainOut ? trainOut.rewrite(relative, source) : rewrite(relative, source);
+      return relative === 'src/lib/soccerCareerEngine.ts' ? inverseCareerDevelopment(controlled, report.inverses) : controlled;
+    });
+    assert.equal(controlFired - beforeControlCount, CONTROL ? 1 : 0, 'The additional historical bundle retains exactly the same effective copied fault');
+    assert.equal(report.inverses.length, 1, 'One copied engine receives the bounded historical inverse');
+    compared = probeSoccerBrand(historical);
+    const inverseText = JSON.stringify(compared);
+    retain('inverse.json', compared);
+    report.attributed = { matches: inverseText === want, sha256: sha(inverseText) };
+  }
+  if (JSON.stringify(compared) === want) {
+    ok(`all ${rec.careers.length} careers (${steps} hashed steps), ${rec.oldSaves.length} old saves and every unit probe match${gotText === want ? '' : ' after the copied form and Youth Mentor catalog inverse'}`);
   } else {
     fail('the probe output differs from the fixture');
     /* Point at the first difference, for whoever reads the failure. */
@@ -285,7 +374,7 @@ if (SECTIONS.includes('1')) {
     for (const [key, stepsOf] of parts) {
       for (let i = 0; i < rec[key].length && shown < 3; i += 1) {
         const a = stepsOf(rec[key][i]).split(' ');
-        const b = stepsOf(got[key][i] ?? { steps: '' }).split(' ');
+        const b = stepsOf(compared[key][i] ?? { steps: '' }).split(' ');
         const at = a.findIndex((x, j) => x !== b[j]);
         if (at >= 0 || a.length !== b.length) {
           const j = at >= 0 ? at : Math.min(a.length, b.length);
@@ -295,7 +384,7 @@ if (SECTIONS.includes('1')) {
       }
     }
     for (const k of Object.keys(rec.units)) {
-      if (JSON.stringify(rec.units[k]) !== JSON.stringify(got.units[k])) console.log(`       units.${k} differs`);
+      if (JSON.stringify(rec.units[k]) !== JSON.stringify(compared.units[k])) console.log(`       units.${k} differs`);
     }
   }
 
@@ -869,6 +958,19 @@ if (SECTIONS.includes('3')) {
     check(brandLines.length === 0, `none of the ${printed.length} lines the soccer binding prints names a real brand`);
   }
 }
+
+const sourceAfter = {};
+for (const relative of heldPaths) {
+  const bytes = fs.readFileSync(path.join(ROOT, relative));
+  sourceAfter[relative] = sha(bytes);
+}
+report.sourceAfter = sourceAfter;
+report.sourceHeld = JSON.stringify(sourceBefore) === JSON.stringify(sourceAfter);
+report.controlApplications = controlFired;
+check(report.sourceHeld, 'every held product, probe, fixture and copied-bundle source remains byte-identical');
+report.failures = failures;
+report.status = failures === 0 ? 'passed' : 'failed';
+retain('report.json', report);
 
 console.log(failures === 0 ? '\nALL SOCIAL AND BRAND CHECKS PASSED' : `\n${failures} FAILURE${failures === 1 ? '' : 'S'}`);
 process.exit(failures === 0 ? 0 : 1);
