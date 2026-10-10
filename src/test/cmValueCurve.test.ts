@@ -845,7 +845,13 @@ describe('the birth date ledger: two publishers of two kinds a man, neither a wi
 });
 
 /* The basis file: one line a club, one entry a man in squad order,
-   [table age, table year, table id, basis, (the birth date for born), value rating]. */
+   [table age, table year, table id, basis, (the birth date for born), value rating].
+   A RED HERE AFTER A SQUADS CHANGE IS NOT A DEFECT OF THE ROUND THAT MADE IT. Until the bake owns
+   the basis file, a round that moves, adds, drops or re-orders a 2026 squad man, or adds a birth
+   date to a ledger, runs
+     node scripts/genCmAgesBasis2026.mjs --from <the commit before the change> --write
+   commits scripts/data/cmAgesBasis2026.json, and sets the three counts below to what the script
+   prints. A man new to the squads file needs his table row passed with --rows (the script says so). */
 describe('what every 2026 age will stand on (the basis file), man for man against the squads main ships', () => {
   const stocked = Object.entries(CM_ROSTERS).filter(([, list]) => list.length > 0);
 
@@ -892,7 +898,8 @@ describe('what every 2026 age will stand on (the basis file), man for man agains
     }
     expect(wrong).toEqual([]);
     /* These restate the value table as the lead pulled it (2026-10-07): how each age is known, and
-       how far the August age sits from the age main ships today. A new pull recounts them. */
+       how far the August age sits from the age main ships today. A new pull recounts them, and
+       scripts/genCmAgesBasis2026.mjs prints all three. */
     expect(basisCount).toEqual({ born: 423, moved: 3974, written: 4 });
     expect(againstShipped).toEqual({ '1': 4221, '0': 176, '-1': 4 });
     expect(changed).toBe(2078);
