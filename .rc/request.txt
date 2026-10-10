@@ -1,0 +1,7 @@
+#!serial
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+names: node scripts/simInventedNames.mjs
+livescores: node scripts/simLiveScores.mjs
