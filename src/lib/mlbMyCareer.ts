@@ -9,7 +9,8 @@ import type { CareerDraftEntry, PreDraftState } from './careerPreDraft';
  */
 
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
-import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
+import { seasonSwing, swingNote, playoffDepthOf, clutchSwing, clutchNote } from './careerVariance';
+import { postseasonRounds, postseasonRung, playoffRunGames } from './usSeasonShape';
 import { mlbSeasonScore, wonAward } from './careerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
 import type { CareerRival } from './careerRival';
@@ -547,11 +548,22 @@ export function simMlbSeason(
   let result = 'Missed October';
   let poStage = -1;
   if (rng() < playoffOdds) {
-    const stages = ['Lost the Wild Card series', 'Lost the Division Series', 'Lost the Championship Series', 'Lost the World Series', 'WON THE WORLD SERIES'];
+    /* Round 1226: what October was that year comes from the sourced ledger
+       (src/data/usSeasonLedgerMlb.ts), never from one ladder typed for every
+       year. No wild card round from 2004 to 2011, so a first exit there is
+       the Division Series; one game from 2012 to 2019 and in 2021; a series
+       in 2020 and from 2022. The draw below is the one this engine always
+       made, so the odds of a ring did not move: `stage` still counts 0 for a
+       first exit and 4 for the title, and postseasonRung reads it on that
+       year's ladder. */
+    const ladder = ['Lost the Wild Card series', 'Lost the Division Series', 'Lost the Championship Series', 'Lost the World Series', 'WON THE WORLD SERIES'];
+    const rounds = postseasonRounds('mlb', c.year);
+    const stages = ladder.slice(ladder.length - 1 - rounds.length);
+    if (stages.length === ladder.length && rounds[0].series?.[1] === 1) stages[0] = 'Lost the Wild Card Game';
     let stage = 0;
     while (stage < 4 && rng() < 0.42 + (strength - 78) / 85) stage++;
     poStage = stage;
-    result = stages[stage];
+    result = stages[postseasonRung('mlb', c.year, stage)];
     if (result === 'WON THE WORLD SERIES') { c.rings += 1; c.fanbase = Math.min(100, c.fanbase + 14); notes.push('💍 A RING. The parade is downtown.'); }
   }
   line.teamResult = result;
@@ -560,7 +572,11 @@ export function simMlbSeason(
   // hitter sees all year, so this is a total for the run, not an average.
   const depth = playoffDepthOf(poStage >= 0, poStage);
   if (depth >= 0) {
-    const poG = playoffGames(depth, rng, 'mlb');
+    /* Round 1226: the games of the run are held to the rounds the ledger
+       gives that year (a best of three, five, seven and seven from 2022, one
+       game for the wild card of 2012 to 2019 and 2021). A count those rounds
+       can hold is this engine's own, as it always was. */
+    const poG = playoffRunGames('mlb', c.year, depth, rng);
     const clutch = clutchSwing(rng);
     const pf = form + clutch - 2;     // you face nothing but their best arms
     line.poGames = poG;

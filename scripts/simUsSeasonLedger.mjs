@@ -74,6 +74,7 @@ await build({
       "export { playoffGames } from './src/lib/careerVariance.ts';",
       "export * as shape from './src/lib/usSeasonShape.ts';",
       "export * as nhlEngine from './src/lib/nhlMyCareer.ts';",
+      "export * as mlbEngine from './src/lib/mlbMyCareer.ts';",
       "export { nhlFullSlateOf, nhlHeadlinesFor } from './src/lib/nhlCareerLoop.ts';",
     ].join('\n'),
     resolveDir: ROOT, loader: 'ts',
@@ -87,6 +88,10 @@ await build({
    line they change is not there. */
 const ENGINE_CONTROLS = {
   nhltyped: { expect: ['E2'], from: 'const slate = seasonLength("nhl", c.year, c.team);', to: 'const slate = 82;' },
+  /* The engine's old law for the games of an October, for every year. */
+  mlbrounds: { expect: ['E4'], from: 'const poG = playoffRunGames("mlb", c.year, depth, rng);', to: 'const poG = playoffGames(depth, rng, "mlb");' },
+  /* One ladder for every year again: a Wild Card series in 2004 and in 2012. */
+  mlbladder: { expect: ['E4'], from: 'result = stages[postseasonRung("mlb", c.year, stage)];', to: 'result = ladder[stage];' },
 };
 if (ENGINE_CONTROLS[CONTROL]) {
   const k = ENGINE_CONTROLS[CONTROL]; const text = readFileSync(OUT, 'utf8');
@@ -674,6 +679,74 @@ const ENGINE_OWN = 82;
     `the full season mark does not follow the saved length: ${[{}, { slate: 84 }, { slate: 48 }].map(l => game.nhlFullSlateOf('C', l)).join(', ')} for a skater (78, 80, 46 expected), ${game.nhlFullSlateOf('G', { slate: 84 })} and ${game.nhlFullSlateOf('G', { slate: 48 })} for a goalie (55 and 32)`);
 }
 
+/* ===== Round 1226, the reverse check for October (MLB). =====
+   E3  the reader hands back the ledger's rounds for every MLB season, held to
+       THIS FILE'S OWN TABLE: no wild card round to 2011 (three rounds), one
+       game in 2012 to 2019 and 2021, a series of a thin length in 2020, and
+       the best of three, five, seven and seven from 2022.
+   E4  the MLB engine plays it: no Wild Card result in a year with no wild
+       card round, a Wild Card Game that is one game, and from 2022 every run
+       inside the rounds it went through, with a swept Wild Card Series among
+       them (measured: 43.3 to 44.2 percent of Wild Card exits are two games,
+       over three years of 6,000 seasons each and about 1,900 exits a year;
+       the law makes it 42.4; the band is 34 to 51). Controls: mlbrounds,
+       mlbladder. */
+const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championship Series', 'World Series'], series: [[2, 3], [3, 5], [4, 7], [4, 7]], from: 2022, game: [1, 1] };
+{
+  const S = game.shape; const M = game.mlbEngine;
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const open = n => Array.from({ length: n }, () => ({ name: null, series: null }));
+  const wantRounds = y => {
+    if (y >= OWN_OCTOBER.from) return OWN_OCTOBER.names.map((name, i) => ({ name, series: OWN_OCTOBER.series[i] }));
+    const w = OWN.mlbFirstRound.find(x => y >= x[0] && (x[1] === null || y <= x[1]));
+    if (!w) return open(4);
+    if (w[2] === null) return open(3);
+    return [{ name: w[2], series: w[2] === 'Wild Card Game' ? OWN_OCTOBER.game : null }, ...open(3)];
+  };
+  for (const y of rangeOf(2000, 2040)) check('E3', same(S.postseasonRounds('mlb', y), wantRounds(y)), `the reader's rounds for the MLB ${y} postseason are ${JSON.stringify(S.postseasonRounds('mlb', y))}; this file's own table says ${JSON.stringify(wantRounds(y))}`);
+  for (const y of rangeOf(2000, 2040)) {
+    const p = OWN.nhlPlayoff; const bound = y >= p.from && !p.modified.includes(y);
+    const want = bound ? p.rounds.map(name => ({ name, series: [4, 7] })) : open(4);
+    check('E3', same(S.postseasonRounds('nhl', y), want), `the reader's rounds for the NHL playoffs of the season that started in ${y} are not this file's own (${bound ? 'four best of sevens' : 'four open rounds'})`);
+  }
+
+  const RESULTS = { wcs: 'Lost the Wild Card series', wcg: 'Lost the Wild Card Game', ds: 'Lost the Division Series', cs: 'Lost the Championship Series', ws: 'Lost the World Series', won: 'WON THE WORLD SERIES' };
+  const play = (year, n) => {
+    const by = new Map();
+    for (let i = 0; i < n; i++) {
+      const rng = mulberry(year * 7919 + i);
+      const pos = ['CF', 'SS', '1B', 'SP', 'RP', 'DH'][i % 6];
+      const c = M.startMlbCareer('Ledger Check', pos, M.MLB_ARCHETYPES[pos][0], rng, null, year < 2026 ? 'y2004' : undefined);
+      c.year = year; c.health = 100;
+      const { line } = M.simMlbSeason(c, 90, rng);
+      if (line.poGames === undefined) continue;
+      if (!by.has(line.teamResult)) by.set(line.teamResult, []);
+      by.get(line.teamResult).push(line.poGames);
+    }
+    return by;
+  };
+  const outside = (list, lo, hi) => (list ?? []).filter(g => g < lo || g > hi).length;
+  for (const year of [2004, 2011, 2012, 2019, 2020, 2021, 2022, 2026, 2033]) {
+    const by = play(year, 6000); const w = OWN.mlbFirstRound.find(x => year >= x[0] && (x[1] === null || year <= x[1]));
+    const seen = [...by.keys()]; const n = k => (by.get(RESULTS[k]) ?? []).length;
+    check('E4', seen.every(r => Object.values(RESULTS).includes(r)) && n('ds') > 100 && n('won') > 10, `the ${year} postseason wrote a result outside the ladder, or too few runs to judge (${seen.join(' | ')})`);
+    if (w[2] === null) check('E4', n('wcs') === 0 && n('wcg') === 0, `${n('wcs') + n('wcg')} seasons of ${year} ended in a wild card round; the ledger says that year had none`);
+    else if (w[2] === 'Wild Card Game') check('E4', n('wcs') === 0 && n('wcg') > 100 && outside(by.get(RESULTS.wcg), 1, 1) === 0, `in ${year} the wild card was one game: ${n('wcs')} seasons read as a series, ${n('wcg')} as the game, ${outside(by.get(RESULTS.wcg), 1, 1)} of those not one game long`);
+    else check('E4', n('wcg') === 0 && n('wcs') > 100, `in ${year} the wild card was a series: ${n('wcg')} seasons read as a single game, ${n('wcs')} as the series`);
+    if (year >= OWN_OCTOBER.from) {
+      const sum = (k, upTo) => OWN_OCTOBER.series.slice(0, upTo).reduce((t, x) => t + x[k], 0);
+      const bad = outside(by.get(RESULTS.wcs), sum(0, 1), sum(1, 1)) + outside(by.get(RESULTS.ds), sum(0, 2), sum(1, 2)) + outside(by.get(RESULTS.cs), sum(0, 3), sum(1, 3)) + outside(by.get(RESULTS.ws), sum(0, 4), sum(1, 4)) + outside(by.get(RESULTS.won), sum(0, 4), sum(1, 4));
+      check('E4', bad === 0, `${bad} runs of ${year} hold a count of games their rounds cannot (a best of three, five, seven and seven)`);
+      const swept = 100 * (by.get(RESULTS.wcs) ?? []).filter(g => g === 2).length / Math.max(1, n('wcs'));
+      if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE mlb ${year}: ${swept.toFixed(1)} percent of ${n('wcs')} Wild Card exits are two games; Division Series exits by games 5 to 8: ${[5, 6, 7, 8].map(g => (by.get(RESULTS.ds) ?? []).filter(x => x === g).length).join(' ')}`);
+      check('E4', swept >= 34 && swept <= 51, `${swept.toFixed(1)} percent of the Wild Card exits of ${year} are two games; the law makes it 42.4 (band 34 to 51)`);
+    }
+  }
+  const stripC = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const mlbCode = stripC(readFileSync(path.join(ROOT, 'src/lib/mlbMyCareer.ts'), 'utf8'));
+  check('E4', !mlbCode.includes('playoffGames(') && mlbCode.includes("playoffRunGames('mlb', c.year, depth, rng)") && mlbCode.includes("stages[postseasonRung('mlb', c.year, stage)]"), 'src/lib/mlbMyCareer.ts no longer asks src/lib/usSeasonShape.ts for the rounds and the games of its October');
+}
+
 /* ===== NOTES FOR THE BINDING ROUNDS: where an engine plays something the ledger does not say. Never a red. ===== */
 {
   const strip = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -706,15 +779,17 @@ const ENGINE_OWN = 82;
     }
     return out;
   };
+  /* The years are read from the windows, never typed: a note may not contradict the data it describes. */
+  const yearsOf = round => mlb.MLB_FIRST_ROUND.filter(w => w.round === round).map(w => (w.to === null ? `from ${w.from}` : w.from === w.to ? `${w.from}` : `${w.from} to ${w.to}`)).join(' and ');
   const mlbWords = (mlbSrc.match(/const stages = \[([^\]]*)\]/) ?? [])[1] ?? '';
   const nhlWords = (nhlSrc.match(/const stages = \[([^\]]*)\]/) ?? [])[1] ?? '';
   const say = (sport, words, rows) => rows.map(r => `stage ${r.stage} saves ${r.counts[0]} to ${r.counts[r.counts.length - 1]} games, the real rounds hold ${r.lo} to ${r.hi}: ${r.bad} percent cannot fit`).join('; ');
-  notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
+  const mlbAsks = mlbSrc.includes("playoffRunGames('mlb', c.year, depth, rng)");
+  if (mlbAsks) notes.push(`MLB engine: the games of an October are held to the ledger's rounds (Round 1226, src/lib/usSeasonShape.ts): from ${mlb.MLB_PLAYOFF_FORMAT.from} every run fits its rounds, the wild card of ${yearsOf('Wild Card Game')} is one game, and no Wild Card result is written in ${yearsOf(null)}. What it still plays by its own law, because the ledger does not hold the length: every round after the first before ${mlb.MLB_PLAYOFF_FORMAT.from}, and the Wild Card Series of ${mlb.MLB_FIRST_ROUND.filter(w => w.wildCard && w.series === null).map(w => w.from).join(', ')} (MLB_THIN). It models no first round bye (MLB_PLAYOFF_FORMAT.byesPerLeague): a career's club always plays the first round.`);
+  else notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
   notes.push(`NHL playoff games (the same law against four best of sevens): ${say('nhl', nhlWords, fits('nhl', nhl.NHL_PLAYOFF_FORMAT.series))}. Stages: ${nhlWords}.`);
   const npf = nhl.NHL_PLAYOFF_FORMAT;
   notes.push(`NHL engine: it writes the same four results in every year. The ledger: NHL_PLAYOFF_FORMAT is two sourced from ${npf.from}-${String(npf.from + 1).slice(2)} only; what the playoffs of ${nhl.NHL_SEASONS[0].year} to ${npf.from - 1} were has one source (NHL_THIN: the same sixteen clubs and four rounds, under other round names), and the tournaments of the seasons that started in ${npf.modified.join(' and ')} were modified. A binding round that draws a path before ${npf.from} must source it first or draw none.`);
-  /* The years are read from the windows, never typed: a note may not contradict the data it describes. */
-  const yearsOf = round => mlb.MLB_FIRST_ROUND.filter(w => w.round === round).map(w => (w.to === null ? `from ${w.from}` : w.from === w.to ? `${w.from}` : `${w.from} to ${w.to}`)).join(' and ');
   if (mlbWords.includes('Wild Card')) notes.push(`MLB engine: it writes a Wild Card result in every year. The ledger: no wild card round in ${yearsOf(null)}, one game in ${yearsOf('Wild Card Game')}, a series only in ${yearsOf('Wild Card Series')}; and the engine models no first round bye.`);
 
   /* The club outside the league. */
