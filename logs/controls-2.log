@@ -1,0 +1,10 @@
+   fired  exit 1  flat               simGmDraftOrder: CONTROL flat FIRED. Red by section 2: 5065, 3: 17793; every other section green.
+   NOT OK exit 2  seconddraw         simGmDraftOrder: CONTROL seconddraw DID NOT FIRE AS EXPECTED. Red: 2: 9999, 4: 3535; it must turn exactly section(s) 2 red.
+   fired  exit 1  tiebyid            simGmDraftOrder: CONTROL tiebyid FIRED. Red by section 3: 21; every other section green.
+   fired  exit 1  acrossbyfield      simGmDraftOrder: CONTROL acrossbyfield FIRED. Red by section 3: 28358; every other section green.
+   fired  exit 1  rowkey             simGmDraftOrder: CONTROL rowkey FIRED. Red by section 4: 5627; every other section green.
+   fired  exit 1  trustall           simGmDraftOrder: CONTROL trustall FIRED. Red by section 6: 17; every other section green.
+   fired  exit 1  ghostrow           simGmDraftOrder: CONTROL ghostrow FIRED. Red by section 7: 4601; every other section green.
+   fired  exit 1  staleexample       simGmDraftOrder: CONTROL staleexample FIRED. Red by section 8: 3; every other section green.
+   fired  exit 1  shownread          simGmDraftOrder: CONTROL shownread FIRED. Red by section 10: 400; every other section green.
+simGmDraftOrder controls (shard 2/3 of 27): 1 of 9 DID NOT FIRE as expected.
