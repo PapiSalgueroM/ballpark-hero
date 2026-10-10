@@ -1,0 +1,4 @@
+save10 exit=0 59s | clubManagerSave alone, reviews off: 0 of 10 runs red
+save10lit exit=0 60s | clubManagerSave alone, reviews ON for this file: 0 of 10 runs red
+varlive exit=0 4s |    Duration  2.86s (transform 1.36s, setup 42ms, collect 1.68s, tests 442ms, environment 281ms, prepare 125ms)
+tsc exit=0 79s | 
