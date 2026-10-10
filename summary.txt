@@ -1,0 +1,5 @@
+tsc exit=0 60s | 
+vitest exit=0 3s |    Duration  1.93s (transform 99ms, setup 120ms, collect 138ms, tests 1.07s, environment 709ms, prepare 325ms)
+book-default-s0 exit=0 30s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (29s)
+c-keyindex-s0 exit=1 30s | simCmLeagueBook: CONTROL keyindex FIRED: section shapes went red (1 failures) and no other section did (29s)
+mut-keyindex-vitest exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/clubManagerLeagueBook.test.ts,title=src/lib/clubManagerLeagueBook.test.ts > dealGoals > rolls every goa
