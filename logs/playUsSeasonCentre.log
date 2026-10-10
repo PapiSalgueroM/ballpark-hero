@@ -1,0 +1,157 @@
+viewer chunk UsSeasonCentre-D6HrIJBt.js (6.2K raw); the cover lives in usCareerSeasonReview-BcykrBuo.js
+ok   [lazy] nba 390x844: the viewer chunk is not requested on load or on the hub (48 chunks)
+ok   [lazy] nba 390x844: no chunk the page loads holds "Tip off"
+ok   [layout] nba 390x844: the entry is at least 44 px tall and fully visible (44 px)
+ok   [load first] nba 390x844: two frames after the press nothing is played while the viewer loads (curtain false, season on the save false, button loading true)
+ok   [cover] nba 390x844: on every frame from the press to the viewer the curtain is never on screen without the opaque cover (33 frames in 542 ms, 0 bare; at the end curtain true, covered true)
+ok   [lazy] nba 390x844: the viewer chunk is requested after the press
+     the first press downloads 13 chunks, 108.5K gz: UsSeasonCentre 2.8K, core 7.5K, leagueCore 0.4K, us 3.7K, SeasonCentre 11.8K, LeagueTableCard 1.1K, VictoryMoment 1.3K, useCareerMoment 64.8K, clubRivalries 10.3K, dialogA11y 0.1K, ArcadeShotFeedback 0.9K, useBodyLock 0.3K, nba 3.6K
+ok   [same press] nba 390x844: Play and Week by week saved the same bytes
+ok   [agreement] nba 390x844: the first card offers "Tip off"
+ok   [clock] nba 390x844: the score bug equals the feed on every sample (168 samples, 5 scores)
+ok   [agreement] nba 390x844: the scoreboard shows the game's own ids, none cut off (GSW v LAL)
+ok   [column] nba 390x844: the feed's time column fits its label and never overlaps its words, over seven games (56 lines, 0 bad, the longest label "Q1")
+ok   [agreement] nba 390x844: the record 3-4 equals the game log's 3 W and 4 L over 7 games
+ok   [layout] nba 390x844: no game log row wraps (0 of 7)
+ok   [layout] nba 390x844: the game log opens and Back returns with nothing moved
+ok   [layout] nba 390x844: no sideways scroll, the bar inside the viewport, one column
+ok   [layout] nba 390x844: no game log row wraps over the whole season (0 of 82)
+ok   [agreement] nba 390x844: no game log row prints his headline number twice (0 of 82)
+ok   [same press] nba 390x844: after watching to the review and closing, the save is still the bytes Play saved
+ok   [same press] nba 390x844: the curtain is on screen as Play shows it, focus on Continue, scrollY 0 against 0 (overlay false, curtain true, same words true, focus true on BUTTON "Continue")
+ok   [agreement] nba 390x844: the review's tiles are the curtain's numbers (Games 82, PPG 3.5, RPG 1, APG 0.5)
+ok   [errors] nba 390x844: no page error and no console error
+ok   [motion] nba 390x844: reduced motion shows the game at once with nothing animating (0 and 0 animations, 8 lines)
+ok   [errors] nba 390x844: reduced motion, no page error and no console error
+ok   [held] nba 390x844: the held year 2011 shows its line and no button ("📺 No week by week this season: the real 2011-12 season had 66 games a")
+ok   [full storage] nba 390x844: with storage full the press played its season in memory: 2 write(s) refused, the curtain is there and the save is untouched (curtain true, save unchanged true)
+ok   [full storage] nba 390x844: with storage full the press still opens the season it played, under the cover (viewer true, cover true)
+ok   [retry in view] nba 390x844: with the viewer open over a refused save, a Retry button is on the screen with nothing over it and a thumb can hit it, 44 px each way ("Retry" 670..714 64x44 on top; "Retry save" 257..301 96x44 covered; toasts at 635..748)
+ok   [retry in view] nba 390x844: once the browser takes writes again, a press on that Retry puts the season on the store with the viewer still open (seasons on the store 1, notice gone)
+ok   [reload holds] nba 390x844: a stale chunk does not reload the page over a save the browser still refuses (the save was refused; the event was left alone; page loads 1 then 1; Retry notice still up; the store untouched)
+ok   [reload holds] nba 390x844: once the browser takes writes again the next stale chunk saves first and then reloads (reloaded true, seasons on the store after it 1)
+ok   [errors] nba 390x844: the held stale chunk reload, no page error and no console error
+ok   [reload holds] nba 390x844: the tile's Reload does not reload over a save the browser still refuses, and says why (tile true, save refused true; page loads 1 then 1; Retry notice still up; the store untouched; the tile says "📺 Season CenterYour latest progress has not been saved yet, so the page was not reloaded: a reload would lose it. Go ba")
+ok   [reload holds] nba 390x844: once the browser takes writes again the tile's Reload saves first and then reloads (pressed true, reloaded true, seasons on the store after it 1)
+ok   [load first] nba 390x844: a viewer chunk that is gone reloads the page with no season played (page loads 2, save untouched true, hub true, entry true, curtain false, failed tile false)
+     the gone chunk was asked for 2 time(s) on that press before the page reloaded (1: the preload and the import are one fetch; 2: the import asked again)
+     the generator had been drawn 7 times at the press on a first visit, 4 on a page loaded twice, 4 after the stale chunk reload
+ok   [load first] nba 390x844: after that reload the next press opens the viewer on the season Play saves on a page loaded twice (viewer true, same bytes true, same as a first visit false)
+ok   [errors] nba 390x844: the stale chunk walk, no page error and no console error
+ok   [load first] nba 390x844: with the reload spent the tile says it could not be loaded and no season is played (tile true, save untouched true, curtain false, page loads 1)
+ok   [load first] nba 390x844: Back closes the tile on the hub with the focus on Week by week (tile false, hub true, focus true)
+ok   [load first] nba 390x844: a second press with the chunk still gone shows the tile again and plays nothing (tile true, save untouched true, viewer false, page loads 1)
+     the viewer chunk was asked for 3 time(s) over two presses before the Reload (1: this browser keeps a failed import failed; 2 or 3: it asks again), 4 with the press after it
+ok   [load first] nba 390x844: Reload gets a new page with no season played, and its next press opens the viewer on the season Play saves on a page loaded twice (page loads 2, save untouched true, viewer true, same bytes true)
+ok   [errors] nba 390x844: the spent reload walk, no page error and no console error
+ok   [lazy] nba 1280x800: the viewer chunk is not requested on load or on the hub (48 chunks)
+ok   [lazy] nba 1280x800: no chunk the page loads holds "Tip off"
+ok   [layout] nba 1280x800: the entry is at least 44 px tall and fully visible (44 px)
+ok   [load first] nba 1280x800: two frames after the press nothing is played while the viewer loads (curtain false, season on the save false, button loading true)
+ok   [cover] nba 1280x800: on every frame from the press to the viewer the curtain is never on screen without the opaque cover (33 frames in 540 ms, 0 bare; at the end curtain true, covered true)
+ok   [lazy] nba 1280x800: the viewer chunk is requested after the press
+     the first press downloads 13 chunks, 108.5K gz: UsSeasonCentre 2.8K, core 7.5K, leagueCore 0.4K, us 3.7K, SeasonCentre 11.8K, LeagueTableCard 1.1K, VictoryMoment 1.3K, useCareerMoment 64.8K, clubRivalries 10.3K, dialogA11y 0.1K, ArcadeShotFeedback 0.9K, useBodyLock 0.3K, nba 3.6K
+ok   [same press] nba 1280x800: Play and Week by week saved the same bytes
+ok   [agreement] nba 1280x800: the first card offers "Tip off"
+ok   [clock] nba 1280x800: the score bug equals the feed on every sample (168 samples, 5 scores)
+ok   [agreement] nba 1280x800: the scoreboard shows the game's own ids, none cut off (GSW v LAL)
+ok   [column] nba 1280x800: the feed's time column fits its label and never overlaps its words, over seven games (56 lines, 0 bad, the longest label "Q1")
+ok   [agreement] nba 1280x800: the record 3-4 equals the game log's 3 W and 4 L over 7 games
+ok   [layout] nba 1280x800: no game log row wraps (0 of 7)
+ok   [layout] nba 1280x800: three columns and the page behind locked
+ok   [layout] nba 1280x800: no name in the Schedule column is cut off (82 rows)
+ok   [layout] nba 1280x800: no game log row wraps over the whole season (0 of 82)
+ok   [agreement] nba 1280x800: no game log row prints his headline number twice (0 of 82)
+ok   [same press] nba 1280x800: after watching to the review and closing, the save is still the bytes Play saved
+ok   [same press] nba 1280x800: the curtain is on screen as Play shows it, focus on Continue, scrollY 0 against 0 (overlay false, curtain true, same words true, focus true on BUTTON "Continue")
+ok   [agreement] nba 1280x800: the review's tiles are the curtain's numbers (Games 82, PPG 3.5, RPG 1, APG 0.5)
+ok   [errors] nba 1280x800: no page error and no console error
+ok   [motion] nba 1280x800: reduced motion shows the game at once with nothing animating (0 and 0 animations, 8 lines)
+ok   [errors] nba 1280x800: reduced motion, no page error and no console error
+ok   [lazy] nfl 390x844: the viewer chunk is not requested on load or on the hub (47 chunks)
+ok   [lazy] nfl 390x844: no chunk the page loads holds "The kick after is no good."
+ok   [layout] nfl 390x844: the entry is at least 44 px tall and fully visible (44 px)
+ok   [load first] nfl 390x844: two frames after the press nothing is played while the viewer loads (curtain false, season on the save false, button loading true)
+ok   [cover] nfl 390x844: on every frame from the press to the viewer the curtain is never on screen without the opaque cover (32 frames in 533 ms, 0 bare; at the end curtain true, covered true)
+ok   [lazy] nfl 390x844: the viewer chunk is requested after the press
+     the first press downloads 13 chunks, 113.1K gz: UsSeasonCentre 2.8K, core 7.5K, leagueCore 0.4K, us 3.7K, SeasonCentre 11.8K, LeagueTableCard 1.1K, VictoryMoment 1.3K, useCareerMoment 64.8K, clubRivalries 10.3K, dialogA11y 0.1K, ArcadeShotFeedback 0.9K, useBodyLock 0.3K, nfl 8.2K
+ok   [same press] nfl 390x844: Play and Week by week saved the same bytes
+ok   [agreement] nfl 390x844: the first card offers "Kick off"
+ok   [clock] nfl 390x844: the score bug equals the feed on every sample (168 samples, 6 scores)
+ok   [agreement] nfl 390x844: the scoreboard shows the game's own ids, none cut off (NO v TEN)
+ok   [column] nfl 390x844: the feed's time column fits its label and never overlaps its words, over seven games (68 lines, 0 bad, the longest label "Q2 13:00")
+ok   [agreement] nfl 390x844: the record 3-4 equals the game log's 3 W and 4 L over 7 games
+ok   [layout] nfl 390x844: no game log row wraps (0 of 7)
+ok   [layout] nfl 390x844: the game log opens and Back returns with nothing moved
+ok   [layout] nfl 390x844: no sideways scroll, the bar inside the viewport, one column
+ok   [layout] nfl 390x844: no game log row wraps over the whole season (0 of 17)
+ok   [agreement] nfl 390x844: no game log row prints his headline number twice (0 of 17)
+ok   [same press] nfl 390x844: after watching to the review and closing, the save is still the bytes Play saved
+ok   [same press] nfl 390x844: the curtain is on screen as Play shows it, focus on Continue, scrollY 0 against 0 (overlay false, curtain true, same words true, focus true on BUTTON "Continue")
+ok   [agreement] nfl 390x844: the review's tiles are the curtain's numbers (Games 17, Pass yds 2,793, Pass TD 19, INT 17)
+ok   [errors] nfl 390x844: no page error and no console error
+ok   [motion] nfl 390x844: reduced motion shows the game at once with nothing animating (0 and 0 animations, 7 lines)
+ok   [errors] nfl 390x844: reduced motion, no page error and no console error
+ok   [held] nfl 390x844: the held year 2005 shows its line and no button ("📺 Week by week starts with the 2021 season: the real 2005 season had ")
+ok   [full storage] nfl 390x844: with storage full the press played its season in memory: 2 write(s) refused, the curtain is there and the save is untouched (curtain true, save unchanged true)
+ok   [full storage] nfl 390x844: with storage full the press still opens the season it played, under the cover (viewer true, cover true)
+ok   [retry in view] nfl 390x844: with the viewer open over a refused save, a Retry button is on the screen with nothing over it and a thumb can hit it, 44 px each way ("Retry" 670..714 64x44 on top; "Retry save" 257..301 96x44 covered; toasts at 635..748)
+ok   [retry in view] nfl 390x844: once the browser takes writes again, a press on that Retry puts the season on the store with the viewer still open (seasons on the store 1, notice gone)
+ok   [reload holds] nfl 390x844: a stale chunk does not reload the page over a save the browser still refuses (the save was refused; the event was left alone; page loads 1 then 1; Retry notice still up; the store untouched)
+ok   [reload holds] nfl 390x844: once the browser takes writes again the next stale chunk saves first and then reloads (reloaded true, seasons on the store after it 1)
+ok   [errors] nfl 390x844: the held stale chunk reload, no page error and no console error
+ok   [reload holds] nfl 390x844: the tile's Reload does not reload over a save the browser still refuses, and says why (tile true, save refused true; page loads 1 then 1; Retry notice still up; the store untouched; the tile says "📺 Season CenterYour latest progress has not been saved yet, so the page was not reloaded: a reload would lose it. Go ba")
+ok   [reload holds] nfl 390x844: once the browser takes writes again the tile's Reload saves first and then reloads (pressed true, reloaded true, seasons on the store after it 1)
+ok   [load first] nfl 390x844: a viewer chunk that is gone reloads the page with no season played (page loads 2, save untouched true, hub true, entry true, curtain false, failed tile false)
+     the gone chunk was asked for 2 time(s) on that press before the page reloaded (1: the preload and the import are one fetch; 2: the import asked again)
+     the generator had been drawn 7 times at the press on a first visit, 4 on a page loaded twice, 4 after the stale chunk reload
+ok   [load first] nfl 390x844: after that reload the next press opens the viewer on the season Play saves on a page loaded twice (viewer true, same bytes true, same as a first visit false)
+ok   [errors] nfl 390x844: the stale chunk walk, no page error and no console error
+ok   [load first] nfl 390x844: with the reload spent the tile says it could not be loaded and no season is played (tile true, save untouched true, curtain false, page loads 1)
+ok   [load first] nfl 390x844: Back closes the tile on the hub with the focus on Week by week (tile false, hub true, focus true)
+ok   [load first] nfl 390x844: a second press with the chunk still gone shows the tile again and plays nothing (tile true, save untouched true, viewer false, page loads 1)
+     the viewer chunk was asked for 3 time(s) over two presses before the Reload (1: this browser keeps a failed import failed; 2 or 3: it asks again), 4 with the press after it
+ok   [load first] nfl 390x844: Reload gets a new page with no season played, and its next press opens the viewer on the season Play saves on a page loaded twice (page loads 2, save untouched true, viewer true, same bytes true)
+ok   [errors] nfl 390x844: the spent reload walk, no page error and no console error
+ok   [agreement] nfl 390x844 QB: the score bug equals the drives in the feed in every game (7 games, 68 lines)
+ok   [agreement] nfl 390x844 QB: his line reads as a QB's in every game he played (7 games, 0 not played)
+ok   [column] nfl 390x844 QB: the feed's time column fits in every game (68 lines, 0 bad)
+ok   [agreement] nfl 390x844 QB: the review's tiles are the curtain's numbers (Games 17, Pass yds 2,793, Pass TD 19, INT 17)
+ok   [errors] nfl 390x844 QB: no page error and no console error
+ok   [agreement] nfl 390x844 K: the score bug equals the drives in the feed in every game (7 games, 59 lines)
+ok   [agreement] nfl 390x844 K: his line reads as a K's in every game he played (7 games, 0 not played)
+ok   [agreement] nfl 390x844 K: every field goal his team kicks is his, and his makes are the ones in the feed
+ok   [column] nfl 390x844 K: the feed's time column fits in every game (59 lines, 0 bad)
+ok   [agreement] nfl 390x844 K: the review's tiles are the curtain's numbers (Games 17, FG made 21, FG tries 26, Long FG 64)
+ok   [errors] nfl 390x844 K: no page error and no console error
+ok   [agreement] nfl 390x844 LB: the score bug equals the drives in the feed in every game (7 games, 66 lines)
+ok   [agreement] nfl 390x844 LB: his line reads as a LB's in every game he played (7 games, 0 not played)
+ok   [column] nfl 390x844 LB: the feed's time column fits in every game (66 lines, 0 bad)
+ok   [agreement] nfl 390x844 LB: the review's tiles are the curtain's numbers (Games 17, Tackles 127, Sacks 5.5, INT 1)
+ok   [errors] nfl 390x844 LB: no page error and no console error
+ok   [lazy] nfl 1280x800: the viewer chunk is not requested on load or on the hub (47 chunks)
+ok   [lazy] nfl 1280x800: no chunk the page loads holds "The kick after is no good."
+ok   [layout] nfl 1280x800: the entry is at least 44 px tall and fully visible (44 px)
+ok   [load first] nfl 1280x800: two frames after the press nothing is played while the viewer loads (curtain false, season on the save false, button loading true)
+ok   [cover] nfl 1280x800: on every frame from the press to the viewer the curtain is never on screen without the opaque cover (32 frames in 537 ms, 0 bare; at the end curtain true, covered true)
+ok   [lazy] nfl 1280x800: the viewer chunk is requested after the press
+     the first press downloads 13 chunks, 113.1K gz: UsSeasonCentre 2.8K, core 7.5K, leagueCore 0.4K, us 3.7K, SeasonCentre 11.8K, LeagueTableCard 1.1K, VictoryMoment 1.3K, useCareerMoment 64.8K, clubRivalries 10.3K, dialogA11y 0.1K, ArcadeShotFeedback 0.9K, useBodyLock 0.3K, nfl 8.2K
+ok   [same press] nfl 1280x800: Play and Week by week saved the same bytes
+ok   [agreement] nfl 1280x800: the first card offers "Kick off"
+ok   [clock] nfl 1280x800: the score bug equals the feed on every sample (168 samples, 6 scores)
+ok   [agreement] nfl 1280x800: the scoreboard shows the game's own ids, none cut off (NO v TEN)
+ok   [column] nfl 1280x800: the feed's time column fits its label and never overlaps its words, over seven games (68 lines, 0 bad, the longest label "Q2 13:00")
+ok   [agreement] nfl 1280x800: the record 3-4 equals the game log's 3 W and 4 L over 7 games
+ok   [layout] nfl 1280x800: no game log row wraps (0 of 7)
+ok   [layout] nfl 1280x800: three columns and the page behind locked
+ok   [layout] nfl 1280x800: no name in the Schedule column is cut off (17 rows)
+ok   [layout] nfl 1280x800: no game log row wraps over the whole season (0 of 17)
+ok   [agreement] nfl 1280x800: no game log row prints his headline number twice (0 of 17)
+ok   [same press] nfl 1280x800: after watching to the review and closing, the save is still the bytes Play saved
+ok   [same press] nfl 1280x800: the curtain is on screen as Play shows it, focus on Continue, scrollY 0 against 0 (overlay false, curtain true, same words true, focus true on BUTTON "Continue")
+ok   [agreement] nfl 1280x800: the review's tiles are the curtain's numbers (Games 17, Pass yds 2,793, Pass TD 19, INT 17)
+ok   [errors] nfl 1280x800: no page error and no console error
+ok   [motion] nfl 1280x800: reduced motion shows the game at once with nothing animating (0 and 0 animations, 7 lines)
+ok   [errors] nfl 1280x800: reduced motion, no page error and no console error
+supabase requests aborted: 66
+playUsSeasonCentre: 144 checks, 0 failed
