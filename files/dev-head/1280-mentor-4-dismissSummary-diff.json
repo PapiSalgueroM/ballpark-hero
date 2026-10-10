@@ -1,0 +1,25 @@
+[
+  {
+    "at": "$.pendingBallonDor.[keys]",
+    "expected": [
+      "year",
+      "nominees",
+      "playerRank",
+      "playerPoints",
+      "playerNominated"
+    ],
+    "actual": [
+      "year",
+      "nominees",
+      "playerRank",
+      "playerPoints",
+      "playerNominated",
+      "revealed"
+    ]
+  },
+  {
+    "at": "$.pendingBallonDor.revealed",
+    "expected": "<absent>",
+    "actual": true
+  }
+]

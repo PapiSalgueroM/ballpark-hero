@@ -1,0 +1,44 @@
+tree 484ee1d34 (484ee1d3), walk cm
+repinned scripts/simCmRealFixtures.mjs (cm, 1 edit(s))
+sim exit=0: simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+playCmRealFixtures: 2 viewports, 6 real/legacy/later-season calendar and actual Quick Sim journeys, 18 neutral real-opening results, 2 effective controls; full saved states and source bytes held.
+      "id": "390-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "390-legacy",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "390-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-legacy",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+1280-later-settlement-diff.json
+1280-legacy-oracle-query-diff.json
+1280-legacy-settlement-diff.json
+1280-real-oracle-settlement-diff.json
+1280-real-settlement-diff.json
+390-legacy-settlement-diff.json
+report-cases.txt
+RESULT cm-after-pr209 cm walk=0

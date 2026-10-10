@@ -1,0 +1,12 @@
+tree d90e0e26a (d90e0e26), walk dev
+CONTROL FIRED(native full-save): full-save
+CONTROL FIRED(native readable-capture): opacity, painted-controls
+CONTROL FIRED(native focus-body): focus, computed-overflow
+ok lines: 301  FAIL lines: 0
+1280-mentor-4-dismissSummary-diff.json
+1280-mentor-created-escape-restoration.json
+1280-mentor-credited-escape-restoration.json
+390-mentor-4-dismissSummary-diff.json
+390-mentor-created-escape-restoration.json
+390-mentor-credited-escape-restoration.json
+RESULT dev-pr210-own dev walk=0

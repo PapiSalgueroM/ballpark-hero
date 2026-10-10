@@ -1,0 +1,42 @@
+tree 15380015d (inplace), walk cm
+repinned scripts/simCmRealFixtures.mjs (cm, 1 edit(s))
+sim exit=0: simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+}
+
+Node.js v24.21.0
+      "id": "390-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "error": "AssertionError [ERR_ASSERTION]: Actual Quick Sim writes the complete unchanged engine result\n+ actual - expected\n... Skipped lines\n\n  {\n    academy: {\n      candidates: [\n        {\n          fee: 5,\n...\n        awayTrips: 0,\n+       concessions: 0.32,\n-       concessions: 0.41,\n        homeGames: 1,\n        playerWages: 0.533,\n        sponsor: 0,\n        staffWages: 0.167,\n+       tickets: 1.34,\n-       tickets: 1.67,\n        travel: 0,\n        weeks: 1\n      },\n      v: 1,\n      walked: []\n    },\n+   budget: 55.66,\n-   budget: 56.08,\n    calendar: [\
+      "id": "390-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-legacy",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+1280-later-settlement-diff.json
+1280-legacy-oracle-query-diff.json
+1280-legacy-oracle-settlement-diff.json
+1280-legacy-settlement-diff.json
+1280-real-oracle-settlement-diff.json
+1280-real-settlement-diff.json
+390-real-failure.png
+report-cases.txt
+RESULT cm-head-2 cm walk=1

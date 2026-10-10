@@ -1,0 +1,43 @@
+tree 15380015d (inplace), walk cm
+repinned scripts/simCmRealFixtures.mjs (cm, 1 edit(s))
+sim exit=0: simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+}
+
+Node.js v24.21.0
+      "id": "390-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "error": "AssertionError [ERR_ASSERTION]: Actual Quick Sim writes the complete unchanged engine result\n+ actual - expected\n... Skipped lines\n\n  {\n    academy: {\n      candidates: [\n        {\n          fee: 3,\n...\n        opp: 'Crystal Palace',\n+       score: '4-1'\n-       score: '4-0'\n      },\n      clubsManaged: [\n        'Everton'\n      ],\n      draws: 0,\n...\n        res: 'W',\n+       score: '4-1',\n-       score: '4-0',\n        season: 1\n      }\n    ],\n    history: [],\n    inbox: [\n...\n          4,\n+         1\n-         0\n        ],\n        'Fulham|Chels
+      "id": "390-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-legacy",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "error": "AssertionError [ERR_ASSERTION]: Actual Quick Sim writes the complete unchanged engine result\n+ actual - expected\n... Skipped lines\n\n  {\n    academy: {\n      candidates: [\n        {\n          fee: 4,\n...\n        opp: 'Coventry City',\n+       score: '5-2'\n-       score: '5-1'\n      },\n      clubsManaged: [\n        'Everton'\n      ],\n      draws: 0,\n...\n        res: 'W',\n+       score: '5-2',\n-       score: '5-1',\n        season: 1\n      }\n    ],\n    history: [],\n    inbox: [\n...\n          5,\n+         2\n-         1\n        ],\n        'Hull City|Not
+      "id": "1280-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+1280-later-settlement-diff.json
+1280-legacy-failure.png
+1280-legacy-oracle-query-diff.json
+1280-legacy-oracle-settlement-diff.json
+1280-legacy-settlement-diff.json
+1280-real-oracle-settlement-diff.json
+1280-real-settlement-diff.json
+390-real-failure.png
+report-cases.txt
+RESULT cm-head-1 cm walk=1

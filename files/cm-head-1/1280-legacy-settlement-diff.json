@@ -1,0 +1,32 @@
+[
+  {
+    "path": "$.table.4.ga",
+    "actual": 2,
+    "expected": 1
+  },
+  {
+    "path": "$.table.15.gf",
+    "actual": 2,
+    "expected": 1
+  },
+  {
+    "path": "$.careerStats.biggestWin.score",
+    "actual": "5-2",
+    "expected": "5-1"
+  },
+  {
+    "path": "$.resultLog.0.score",
+    "actual": "5-2",
+    "expected": "5-1"
+  },
+  {
+    "path": "$.pairResults.premier.Everton|Coventry City.1",
+    "actual": 2,
+    "expected": 1
+  },
+  {
+    "path": "$.h2h.0.score",
+    "actual": "5-2",
+    "expected": "5-1"
+  }
+]

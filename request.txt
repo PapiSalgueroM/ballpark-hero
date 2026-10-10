@@ -1,0 +1,11 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+dev-head: bash .rc/x/review-fences-walk.sh inplace dev-head dev
+dev-after-pr210: bash .rc/x/review-fences-walk.sh de39ef18 dev-after-pr210 dev
+dev-pr210-own-head: bash .rc/x/review-fences-walk.sh d90e0e26 dev-pr210-own dev
+cm-head-1: bash .rc/x/review-fences-walk.sh inplace cm-head-1 cm
+cm-head-2: bash .rc/x/review-fences-walk.sh inplace cm-head-2 cm
+cm-after-pr209: bash .rc/x/review-fences-walk.sh 484ee1d3 cm-after-pr209 cm
+cm-after-pr208: bash .rc/x/review-fences-walk.sh 5d31eaa6 cm-after-pr208 cm

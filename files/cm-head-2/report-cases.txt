@@ -1,0 +1,27 @@
+      "id": "390-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "error": "AssertionError [ERR_ASSERTION]: Actual Quick Sim writes the complete unchanged engine result\n+ actual - expected\n... Skipped lines\n\n  {\n    academy: {\n      candidates: [\n        {\n          fee: 5,\n...\n        awayTrips: 0,\n+       concessions: 0.32,\n-       concessions: 0.41,\n        homeGames: 1,\n        playerWages: 0.533,\n        sponsor: 0,\n        staffWages: 0.167,\n+       tickets: 1.34,\n-       tickets: 1.67,\n        travel: 0,\n        weeks: 1\n      },\n      v: 1,\n      walked: []\n    },\n+   budget: 55.66,\n-   budget: 56.08,\n    calendar: [\n      {\n        round: 0,\n        type: 'league'\n      },\n...\n      'Coventry City': [\n+       'W'\n-       'L'\n      ],\n      'Cruz Azul': [\n        'W'\n      ],\n      'Crystal Palace': [\n...\n      'Hull City': [\n+       'L'\n-       'D'\n      ],\n      'Inter Miami': [\n        'W'
+      "id": "390-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-legacy",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true

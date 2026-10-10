@@ -1,0 +1,27 @@
+      "id": "390-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "error": "AssertionError [ERR_ASSERTION]: Actual Quick Sim writes the complete unchanged engine result\n+ actual - expected\n... Skipped lines\n\n  {\n    academy: {\n      candidates: [\n        {\n          fee: 3,\n...\n        opp: 'Crystal Palace',\n+       score: '4-1'\n-       score: '4-0'\n      },\n      clubsManaged: [\n        'Everton'\n      ],\n      draws: 0,\n...\n        res: 'W',\n+       score: '4-1',\n-       score: '4-0',\n        season: 1\n      }\n    ],\n    history: [],\n    inbox: [],\n...\n          4,\n+         1\n-         0\n        ],\n        'Fulham|Chelsea': [\n          0,\n          1\n        ],\n...\n        res: 'W',\n+       score: '4-1',\n-       score: '4-0',\n        week: 0\n      }\n    ],\n    retiredLastSummer: [],\n    retiredNames: [],\n...\n        apps: 1,\n+       cleanSheets: 0,\n-       cleanSheets: 1,\n        comp: {\n      
+      "id": "390-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-real",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-legacy",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
+      "id": "1280-later",
+          "passed": true,
+          "passed": true,
+          "passed": true,
+      "passed": true
