@@ -1,0 +1,22 @@
+A) the fixture is whole
+   recorded from 435da300a9bca61682c3c247a3d7bf679b78fbe0 (not main: src differs from 09df145abfb241679022b41903d2f19bc254ebf9)
+   nfl: 459 clicks, 24 seasons, 15 fixed saves, 685 screen steps
+   nba: 507 clicks, 24 seasons, 15 fixed saves, 705 screen steps
+   mlb: 449 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+   nhl: 415 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [nfl, nba], failed [mlb, nhl]
+   mlb click path step 292 (after "hub: Play the 2004 season"): the save differs first in c.seasons, c.headlines; the screen reads "The 2004 seasonMilwaukee Brewers · age 21 · LFMissed October.257, 20 HR, 81 RBI🚀 You hit your way onto the lineup card. Everyday job, yours", fixture "The 2004 seasonMilwaukee Brewers · age 21 · LFMissed October.257, 20 HR, 82 RBI🚀 You hit your way onto the lineup card
+   mlb click path step 293 (after "curtain: Continue"): the save differs
+   mlb click path step 294 (after "rival beat: Continue"): the save differs; the markup differs under the same words ("Ace Diamond · LFMilwaukee Brewers2005 · age 22OVR 71$0.3M x5")
+   nhl click path step 12 (after "hub: Play the 2026 season"): the save differs first in c.seasons, c.headlines; the screen reads "The 2026 seasonCarolina Hurricanes · age 19 · DMissed the playoffs8 G, 18 A, 26 P🪑 Another camp down the lineup. The gap is closing.🪑 Four", fixture "The 2026 seasonCarolina Hurricanes · age 19 · DMissed the playoffs8 G, 19 A, 27 P🪑 Another camp down the lineup. The ga
+   nhl click path step 13 (after "curtain: Continue"): the save differs
+   nhl click path step 14 (after "rival beat: Continue"): the save differs; the markup differs under the same words ("Gordie Blaze · DCarolina Hurricanes2027 · age 20OVR 72$0.9M ")
+  FAIL: the replay exited 1
+  FAIL: the replay passed [nfl, nba], not all four sports
+  FAIL: 52 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

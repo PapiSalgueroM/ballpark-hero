@@ -1,0 +1,7 @@
+1ed3806d25f32c2b87be1e3eea32af47055006be
+recording from 1ed3806d25f32c2b87be1e3eea32af47055006be (not main: src differs from f78037dcddea12c1a02586c7d5c0e185efb86121)
+  nfl: 459 clicks on the path, 24 seasons, 15 fixed saves, 685 screen steps
+  nba: 507 clicks on the path, 24 seasons, 15 fixed saves, 705 screen steps
+  mlb: 449 clicks on the path, 24 seasons, 15 fixed saves, 688 screen steps
+  nhl: 415 clicks on the path, 24 seasons, 15 fixed saves, 688 screen steps
+recordUsBoardFixture: wrote scripts/data/usBoardFixture.json (1870148 bytes)
