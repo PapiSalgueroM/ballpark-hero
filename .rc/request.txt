@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+ctl-hidebehind: SIM_SAVE_KEEPER_CONTROL=hidebehind node scripts/simSaveKeeper.mjs
+ctl-twins: SIM_SAVE_KEEPER_CONTROL=twins node scripts/simSaveKeeper.mjs
+probe: node .rc/x/rrun-probe.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+headis: git log --format=%H -3 | cut -c1-40; git diff --stat f6bb60106c881e6fda9f214b41c6da8ba2bacba9 HEAD -- src scripts docs | tail -2
