@@ -348,6 +348,15 @@ describe('spending a point', () => {
     expect(hostXpTile(one, [], true).accent).toBe(false);
     expect(hostXpTile(one, ['media'], false).accent).toBe(false);
     expect(hostXpTile(null, GM_TREES, true).sub).toBe(`${xpForLevel(2)} XP to level 2`);
+    /* A full tree takes no point: with every tree the desk routes full, nothing pulses and nothing says spend,
+       however many points he holds. One routed tree with room brings it back. */
+    const full = deskWith(null, xpWith('media', 5));
+    expect(hostSpendPoint(full, 'ownership', GM_TREES)).not.toBeNull();
+    expect(hostCanSpend(full, ['media'])).toBe(false);
+    expect(hostXpTile(full, ['media'], true).accent).toBe(false);
+    expect(hostXpTile(full, ['media'], true).sub).not.toContain('to spend');
+    expect(hostCanSpend(full, ['media', 'ownership'])).toBe(true);
+    expect(hostXpTile(full, ['media', 'ownership'], true)).toMatchObject({ accent: true });
   });
 });
 
@@ -425,6 +434,7 @@ describe('the job market', () => {
       const climb = hostMarket(host, lg, firedFrom(BOTTOM, ['badly', 'badly'], from), nameOf)!;
       expect(climb).toMatchObject({ state: 'quiet', nextYear: 'climb', climbTo: 1, offers: [] });
       expect(climb.line).toContain('climbed into the top tier of the league');
+      expect(hostMarketTile(climb)).toMatchObject({ value: 'Nobody called', sub: 'Next year hangs on your old club' });
     }
     expect(topClosed).toBeGreaterThan(5);
     expect(quiet).toBeGreaterThan(5);

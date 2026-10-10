@@ -10,8 +10,9 @@
  *   1  the four adapters over real leagues (mid season, closed, after a
  *      summer): every club once, strength, payroll and the standings order
  *      are the engine's own, the room under the line is the engine's own
- *      room function (the NBA's holds back the last tax cheque), and a read
- *      never changes the league
+ *      room function (the NBA's holds back the last tax cheque), the record,
+ *      the games and hockey's points share are the engine's own counts, every
+ *      game has one winner, and a read never changes the league
  *   2  the record of a save older than the block: nothing filled in over a
  *      grid, and four real saves a sport pass every read with no throw and
  *      no write
@@ -48,13 +49,21 @@
  *      hold a call; and every hub box fits its box (a value and a sub of one
  *      line each), the Career box under each sport's real club names
  * Negative controls (SIM_GM_DESK_HOST_CONTROL), each must go red in its check:
- *   mutate (1) dropclub (1) notax (1) fillmet (2) readwrites (2) unkeyed (3)
- *   firedclub (4) badlyceiling (4) askseason (4) closedquiet (5)
- *   twice (6) lateseat (6) failopen (6) cushionall (6)
- *   flatlevel (7) sharedroll (7) flatowner (7) flatmedia (7) flatcut (7) flatask (7)
- *   spendany (8) stalestaff (9) halfseason (9) noyear (9) lastcall (9)
+ *   mutate (1) dropclub (1) notax (1) nhlrecord (1) nhlpct (1) nhlgames (1)
+ *   fillmet (2) readwrites (2) tierunknown (2) unkeyed (3)
+ *   firedclub (4) badlyceiling (4) askseason (4) rankplace (4) closedquiet (5)
+ *   twice (6) lateseat (6) failopen (6) fitsave (6) cushionall (6)
+ *   flatlevel (7) sharedroll (7) flatowner (7) flatmedia (7) flatcut (7) craftfirst (7) flatask (7)
+ *   spendany (8) canspend (8) stalestaff (9) halfseason (9) noyear (9) awayxp (9) lastcall (9)
  *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
  *   longtile (10) clubvalue (10) openpromise (10) halfword (10) allfired (10)
+ *   tileclimb (10) climbword (10)
+ * Eleven of them are the review's own mutants made permanent (2026-10-10): five that passed every gate of the round
+ * (nhlrecord, nhlpct, rankplace, canspend, tileclimb), hockey read without its overtime losses (nhlgames, which
+ * only check 9 caught), and five the two vitest files alone caught (tierunknown, fitsave, craftfirst, awayxp,
+ * climbword). The panel's two tap rule (the review's onetap) cannot be judged without a click, so it stays with
+ * src/components/front-office-shared/GmCareerDesk.test.tsx: THE RELEASE GATE RUNS THE TWO VITEST FILES
+ * (that one and src/lib/gmDeskHost.test.ts) BESIDE THIS HARNESS, never this harness alone.
  * SIM_GM_DESK_HOST_ANCHORS=1 checks every control's anchor and stops (light).
  *
  * THE YEAR OUT HERE IS NOT THE BIND'S. Section 9 plays it with each engine's
@@ -129,35 +138,47 @@ const FILES = {
   seat: path.join(ROOT, 'src', 'lib', 'gmSeat.ts'),
   keyed: path.join(ROOT, 'src', 'lib', 'keyedRng.ts'),
 };
-/* name: [check, file, the one line it rewrites, what it becomes] */
+/* name: [check, file, the one line it rewrites, what it becomes]; an idea that takes two lines carries a second pair */
 const EDITS = {
   mutate: ['1', 'nhl', '    const table = nhlFoStandings(league);',
     '    const table = nhlFoStandings(league);\n    for (const t of Object.values(league.teams)) t.players.sort((a, b) => a.ovr - b.ovr);'],
   dropclub: ['1', 'nhl', '    return Object.values(league.teams).map((t): HostClub => {', '    return Object.values(league.teams).slice(1).map((t): HostClub => {'],
   notax: ['1', 'nba', '      payroll: nbaCapUsed(t) + (t.taxDue ?? 0),', '      payroll: nbaCapUsed(t),'],
+  nhlrecord: ['1', 'nhl', '        record: `${t.wins}-${t.losses}-${t.otLosses}`,', '        record: `${t.wins}-${t.otLosses}-${t.losses}`,'],
+  nhlpct: ['1', 'nhl', 'pct: (t.wins * 2 + t.otLosses) / (games * 2)', 'pct: (t.wins * 2 + t.losses) / (games * 2)'],
+  /* Hockey read as if an overtime loss were not a game played: two lines, one idea. */
+  nhlgames: ['1', 'nhl', '      const games = t.wins + t.losses + t.otLosses;', '      const games = t.wins + t.losses;', '        losses: t.losses + t.otLosses,', '        losses: t.losses,'],
   fillmet: ['2', 'host', '  const unknown = seasons - grades.length;',
     "  for (let i = grades.length; i < seasons; i++) grades.push('met');\n  const unknown = seasons - grades.length;"],
   readwrites: ['2', 'host', '  return gmBlock<GmXp>(desk, GM_HOST_KEYS.xp, isValidGmXp, defaultGmXp);',
     '  if (!(GM_HOST_KEYS.xp in desk.blocks)) desk.blocks[GM_HOST_KEYS.xp] = defaultGmXp();\n  return gmBlock<GmXp>(desk, GM_HOST_KEYS.xp, isValidGmXp, defaultGmXp);'],
+  tierunknown: ['2', 'host', '    const unknown = i === 0 && seat.before?.tierUnknown === true;', '    const unknown = false;'],
   unkeyed: ['3', 'host', '    keyedRng(hostFeedKey(host.sport, seat, season)), host.champion(league, season),', '    Math.random, host.champion(league, season),'],
   firedclub: ['4', 'seat', '.filter(t => t.id !== last.team)', '.filter(t => true)'],
   badlyceiling: ['4', 'seat', "lastGradeOf(last) === 'badly' ? BADLY_FIRED_CEILING : 1", 'false ? BADLY_FIRED_CEILING : 1'],
   askseason: ['4', 'host', '    host.pack, teams, seat.career, season + 1,', '    host.pack, teams, seat.career, season,'],
+  rankplace: ['4', 'host', 'facts[o.teamId] = { strengthRank: strengthRank(strengths, c.id), record:', 'facts[o.teamId] = { strengthRank: c.place, record:'],
   closedquiet: ['5', 'host', '  for (let t = p.lastTier - 1; t >= 1; t--) {', '  for (let t = 0; t >= 1; t--) {'],
   twice: ['6', 'host', '  if (seat.last !== undefined && f.season <= seat.last) return same;', '  if (false) return same;'],
   lateseat: ['6', 'host', 'titles: i.titles, fired: i.fired, seasonCounted: false,', 'titles: i.titles, fired: i.fired, seasonCounted: true,'],
   failopen: ['6', 'host', 'v => isGmSeatBlock(v) && seatFitsSave(v, l)', 'v => !!v'],
+  fitsave: ['6', 'host', '  return s.team === l.team && (s.ended !== undefined) === l.fired;', '  return s.team === l.team;'],
   cushionall: ['6', 'host', '  const trustDelta = fx.trustDelta(grade.trustDelta) + movers;', '  const trustDelta = fx.trustDelta(grade.trustDelta + movers);'],
   flatlevel: ['7', 'host', '  for (const t of GM_TREES) points[t] = gmTreePoints(block, t);', '  for (const t of GM_TREES) points[t] = Math.min(1, gmTreePoints(block, t));'],
   sharedroll: ['7', 'host', 'keyedRng(hostXpRollKey(sport, tree, key))();', "keyedRng(hostXpRollKey(sport, 'scouting', key))();"],
   flatowner: ['7', 'host', '  const trustDelta = fx.trustDelta(grade.trustDelta) + movers;', '  const trustDelta = grade.trustDelta + movers;'],
   flatmedia: ['7', 'host', '  if (!g || fx.points.media <= 0) return opt;', '  if (!g || fx.points.media <= 9) return opt;'],
   flatcut: ['7', 'host', '  if (fx.points.capCraft <= 0) return base;', '  if (fx.points.capCraft <= 9) return base;'],
+  craftfirst: ['7', 'host', 'for (let i = list.length - 1; i >= 0; i--) if (list[i].playerId === playerId) { at = i; break; }', 'for (let i = 0; i < list.length; i++) if (list[i].playerId === playerId) { at = i; break; }'],
   flatask: ['7', 'host', '  if (fx.points.negotiation <= 0) return cases;', '  if (fx.points.negotiation <= 9) return cases;'],
   spendany: ['8', 'host', '  if (!(live as readonly string[]).includes(tree)) return null;', '  if (false) return null;'],
+  canspend: ['8', 'host', 'live.some(t => gmTreePoints(xp, t) < GM_MAX_TREE_POINTS);', 'live.some(t => gmTreePoints(xp, t) <= GM_MAX_TREE_POINTS);'],
   stalestaff: ['9', 'host', '    if (r.fresh) blocks[r.key] = r.fresh(league, team);', '    if (r.fresh) blocks[r.key] = desk.blocks[r.key];'],
   halfseason: ['9', 'host', '  for (let i = 0; i < periods; i++) desk = kept(', '  for (let i = 0; i < periods / 2; i++) desk = kept('],
   noyear: ['9', 'host', '    desk: hostSitOut({ v: desk.v, blocks }, seat),', '    desk: { v: desk.v, blocks },'],
+  /* The year out no longer keeps his XP block out of a step's reach: two lines, one idea. */
+  awayxp: ['9', 'host', '  delete blocks[GM_HOST_KEYS.xp];', '  /* gone */',
+    '  if (Object.prototype.hasOwnProperty.call(a.desk.blocks, GM_HOST_KEYS.xp)) blocks[GM_HOST_KEYS.xp] = a.desk.blocks[GM_HOST_KEYS.xp];', '  /* gone too */'],
   lastcall: ['9', 'host', "  if (!hostCanSitOut(market)) return { ok: false, reason: 'last-call' };", "  if (false) return { ok: false, reason: 'last-call' };"],
   shutbutton: ['10', 'host', "  return !!market && market.nextYear !== 'shut';", "  return !!market && (market as HostMarket).state !== 'closed';"],
   passquiet: ['10', 'host', "    return climb !== null ? `${called} Pass, and next year ${climb}` : called;", '    return called;'],
@@ -165,6 +186,8 @@ const EDITS = {
   openpromise: ['10', 'host', 'As things stand next year is still open, and every year out', 'Next year is still open, and every year out'],
   halfword: ['10', 'host', "'second tier', 'third tier', 'bottom tier'] as const;", "'second tier', 'lower half', 'bottom tier'] as const;"],
   allfired: ['10', 'host', "  return s.ended === 'walked' ? { since:", "  return s.ended === 'nobody' ? { since:"],
+  tileclimb: ['10', 'host', "    sub: market.nextYear === 'climb' ? hangs : 'Next year open, as things stand',", "    sub: market.nextYear === 'climb' ? 'Next year open, as things stand' : hangs,"],
+  climbword: ['10', 'host', 'have climbed into the ${HOST_TIER_WORDS[next.climbTo]} of the league by then.', 'have climbed into the ${HOST_TIER_WORDS[next.climbTo - 1]} of the league by then.'],
   longtile: ['10', 'host', "value: 'Nobody called',", "value: 'Nobody called this year',"],
   clubvalue: ['10', 'host', 'value: `Season ${hostStintSeasons(seat, index) + 1}`,', 'value: `Season ${hostStintSeasons(seat, index) + 1} with the ${name}`,'],
   closedsit: ['10', 'host', 'Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.',
@@ -189,9 +212,10 @@ function rewrite(name, which, from, to) {
 const COUNTING = ['count', 'keyed', 'export function keyedRng(key: string): () => number {',
   'export const keyedCalls: string[] = [];\nexport function keyedRng(key: string): () => number {\n  keyedCalls.push(key);'];
 if (process.env.SIM_GM_DESK_HOST_ANCHORS) {
-  const bad = [rewrite(...COUNTING), ...Object.entries(EDITS).map(([n, [, which, from, to]]) => rewrite(n, which, from, to))].filter(Boolean);
+  const all = Object.entries(EDITS).flatMap(([n, [, which, ...pairs]]) => pairs.flatMap((from, i) => (i % 2 ? [] : [rewrite(n, which, from, pairs[i + 1])])));
+  const bad = [rewrite(...COUNTING), ...all].filter(Boolean);
   for (const b of bad) console.error(`  ANCHOR ${b}`);
-  console.log(`simGmDeskHost anchors: ${Object.keys(EDITS).length + 1} rewrites checked, ${bad.length} cannot run`);
+  console.log(`simGmDeskHost anchors: ${all.length + 1} rewrites of ${Object.keys(EDITS).length} controls checked, ${bad.length} cannot run`);
   process.exit(bad.length ? 1 : 0);
 }
 const overrides = new Map();
@@ -203,8 +227,8 @@ const apply = (name, which, from, to) => {
 };
 apply(...COUNTING);
 if (CONTROL) {
-  const [section, which, from, to] = EDITS[CONTROL];
-  apply(CONTROL, which, from, to);
+  const [section, which, ...pairs] = EDITS[CONTROL];
+  for (let i = 0; i < pairs.length; i += 2) apply(CONTROL, which, pairs[i], pairs[i + 1]);
   console.log(`NEGATIVE CONTROL ON: ${CONTROL}; check ${section} must go red`);
 }
 
@@ -433,6 +457,7 @@ const SPORTS = Object.keys(DRIVE);
 const PER3 = {
   minLeagues: 58, minRealSaves: 168, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
   minReach: 455, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minYoung: 7600, minPairs: 730000,
+  minLastCalls: 350, minPassClimb: 330, minRankApart: 3,
 };
 const FIXED = { minFeedsWithOffers: 23, minMen: 2290, minCuts: 200 };
 const T = { ...FIXED, ...Object.fromEntries(Object.entries(PER3).map(([k, v]) => [k, Math.floor((v * SEEDS.length) / 3)])) };
@@ -521,12 +546,13 @@ const SAMPLE = {};                     // sport -> state -> one seat and its mar
 
 /* ================================================================== */
 begin('1', 'the four adapters over real leagues: every club once, the engine\'s own numbers, and a read changes nothing');
-let leaguesRead = 0, taxedClubs = 0;
+let leaguesRead = 0, taxedClubs = 0, gamesProven = 0;
 for (const sport of SPORTS) {
   const d = DRIVE[sport], F = FLEET[sport];
   for (const snap of [...F.mid, ...F.closed, ...F.open]) {
     const lg = snap.lg, before = J(lg), ids = Object.keys(lg.teams), at = `${sport} seed ${snap.seed} season ${snap.s + 1}`;
     const clubs = d.host.clubs(lg);
+    let won = 0, notWon = 0;
     ok(clubs.length === ids.length && new Set(clubs.map(c => c.id)).size === ids.length && clubs.every(c => ids.includes(c.id)), `${at}: ${clubs.length} clubs read, the league holds ${ids.length}`);
     ok(J([...clubs].sort((x, y) => x.place - y.place).map(c => c.id)) === J(d.table(lg).map(t => t.abbr)), `${at}: the places are not the engine's standings order`);
     ok(J(clubs.map(c => c.place).sort((x, y) => x - y)) === J(clubs.map((_, i) => i + 1)), `${at}: the places are not 1 to ${clubs.length}`);
@@ -540,7 +566,21 @@ for (const sport of SPORTS) {
       if (room !== d.room(t, lg.cap)) fail(`${at} ${c.id}: the host reads $${room}M of room, the engine's own room is $${d.room(t, lg.cap)}M`);
       if ((t.taxDue ?? 0) > 0) taxedClubs++;
       if (c.wins !== t.wins || c.games !== c.wins + c.losses || !c.record.startsWith(`${t.wins}-`)) fail(`${at} ${c.id}: record ${c.record}, ${c.wins} wins in ${c.games} games`);
+      /* The record as the sport prints it and the games behind it, against the engine's own three counts and not
+         against the adapter's other fields: in hockey wins, losses, overtime losses in that order, and an overtime
+         loss is a game played and a game not won. */
+      const otl = sport === 'nhl' ? t.otLosses : 0;
+      if (c.record !== (sport === 'nhl' ? `${t.wins}-${t.losses}-${otl}` : `${t.wins}-${t.losses}`) || c.games !== t.wins + t.losses + otl || c.losses !== t.losses + otl) {
+        fail(`${at} ${c.id}: record ${c.record}, ${c.losses} losses in ${c.games} games; the engine holds ${t.wins} wins, ${t.losses} losses${sport === 'nhl' ? ` and ${otl} overtime losses` : ''}`);
+      }
+      /* The winning share handed to the shared systems. Hockey's is its points share: the engine's own points over
+         two a game. The other three hand none in, and are read as wins over games. */
+      if (sport === 'nhl' && c.games > 0 ? !(Math.abs(c.pct * 2 * c.games - ENhl.nhlPoints(t)) < 1e-9) : c.pct !== undefined) fail(`${at} ${c.id}: a winning share of ${c.pct} in ${c.games} games${sport === 'nhl' ? `, the engine counts ${ENhl.nhlPoints(t)} points` : ''}`);
+      won += c.wins; notWon += c.games - c.wins;
     }
+    /* True of any league whatever the adapter believes: every game played has one winner and one club that did not win it. */
+    ok(won === notWon, `${at}: ${won} wins against ${notWon} games not won across the league`);
+    if (won > 0) gamesProven++;
     ok(d.host.season(lg) === lg.season && d.host.cap(lg) === lg.cap && d.host.sport === sport && d.host.pack === GM_SEAT_PACKS[sport], `${at}: the season, the line or the pack is not the league's`);
     for (const c of lg.champions) ok(d.host.champion(lg, c.season) === c.team, `${at}: the champion of ${c.season} is not the league's`);
     ok(d.host.champion(lg, lg.season + 9) === null, `${at}: a champion for a season not played`);
@@ -552,6 +592,7 @@ for (const sport of SPORTS) {
 }
 ok(leaguesRead >= T.minLeagues, `only ${leaguesRead} leagues read, the walk measured ${T.minLeagues} or more`);
 ok(taxedClubs > 0, 'no club in the fleet carries a tax cheque, so the room was never read where it differs from the line less the payroll');
+ok(gamesProven >= SPORTS.length * 2, `only ${gamesProven} leagues had played a game when their wins were set against their games`);
 console.log(`   ${leaguesRead} real leagues read (${SPORTS.join(', ')}; mid season, closed and after a summer); ${taxedClubs} club reads carry a tax cheque the room holds back`);
 
 /* ================================================================== */
@@ -593,7 +634,10 @@ function readAll(d, save, desk, counted, outcome) {
     }
     word(H.hostSitArmLine(market, !!desk), `${where} sit`);
   }
-  for (const v of H.hostStintViews(seat, nameOf)) { word(v.arrival, `${where} stint`); word(v.ended, `${where} stint`); if (v.earlier !== null) word(v.earlier, `${where} stint`); }
+  const views = H.hostStintViews(seat, nameOf);
+  for (const v of views) { word(v.arrival, `${where} stint`); word(v.ended, `${where} stint`); if (v.earlier !== null) word(v.earlier, `${where} stint`); }
+  /* B14: a record older than the block does not know the tier he arrived in, so the screen leaves the tier off. */
+  if (seat.before && seat.before.tierUnknown && [1, 2, 3, 4].some(t => views[0].arrival.includes(H.HOST_TIER_WORDS[t]))) fail(`${where}: the record does not know his arrival tier, and the screen prints one (${views[0].arrival})`);
   word(H.hostCareerTotalsLine(seat), `${where} totals`);
   H.hostXpEffects(desk, d.host.sport); H.hostCanSpend(desk, LIVE); H.hostArriving(seat, lg.season);
   return { legacy, seat, xp, market };
@@ -628,6 +672,11 @@ for (const sport of SPORTS) {
   }
 }
 ok(realSaves >= T.minRealSaves, `only ${realSaves} real saves read`);
+/* And a record that does know it (a new save, written the day he takes the club) prints it. */
+for (const t of [1, 2, 3, 4]) {
+  const arrival = H.hostStintViews(H.hostNewSeat('AAA', t, 2030), nameOf)[0].arrival;
+  ok(arrival.includes(H.HOST_TIER_WORDS[t]) && arrival.includes('2030'), `a new save took a tier ${t} club in 2030 and the screen reads: ${arrival}`);
+}
 console.log(`   ${gridRows} grid records, ${realSaves} real saves read with and without a desk`);
 
 /* ================================================================== */
@@ -663,7 +712,7 @@ begin('4', 'the market rules on real tiers: never the club that let him go, a ce
    without which no career reads closed and check 5 would be empty. */
 const TAILS = [['title'], ['overachieved'], ['met'], ['missed'], ['badly'], ['badly', 'badly'], ['badly', 'badly', 'badly'],
   ['badly', 'badly', 'missed'], ['badly', 'missed', 'missed'], ['missed', 'missed', 'missed', 'missed']];
-const M4 = { markets: 0, offers: 0, withOffers: 0, badlyOffers: 0, quietOpen: 0, climb: 0, closed: 0, most: 0, lastCalls: 0, passClimb: 0 };
+const M4 = { markets: 0, offers: 0, withOffers: 0, badlyOffers: 0, quietOpen: 0, climb: 0, closed: 0, most: 0, lastCalls: 0, passClimb: 0, rankApart: 0 };
 const closedCareers = [], quietCareers = [], lastCallCareers = [];
 for (const sport of SPORTS) {
   const d = DRIVE[sport], pack = d.host.pack;
@@ -684,6 +733,12 @@ for (const sport of SPORTS) {
         if (o.ask.season !== season + 1) fail(`${at}: the ask is for ${o.ask.season}, he would first be graded in ${season + 1}`);
         if (!c || o.tier !== tiers.get(o.teamId)) fail(`${at}: an offer from a club or a tier the league does not hold`);
         else if (!f || f.record !== c.record || f.place !== c.place || f.room !== Math.round((lg.cap - c.payroll) * 10) / 10) fail(`${at}: the facts under ${o.teamId} are not that club's`);
+        /* "Roster ranked Nth" is the rank by the engine's strength, which is not the standings place. */
+        else {
+          const rank = 1 + clubs.filter(x => x.strength > c.strength).length;
+          if (f.strengthRank !== rank) fail(`${at}: the roster of ${o.teamId} reads ${f.strengthRank}th, it ranks ${rank}th by strength (and stands ${c.place}th)`);
+          if (rank !== c.place) M4.rankApart++;
+        }
       }
       if ((m.offers.length > 0) !== (m.state === 'offers') || (m.state === 'closed') !== (m.offers.length === 0 && m.nextYear === 'shut')
         || (m.nextYear === 'climb') !== (m.climbTo !== null)) fail(`${at}: state ${m.state} with ${m.offers.length} offers and next year ${m.nextYear}`);
@@ -725,7 +780,9 @@ ok(reach >= T.minReach, `only ${reach} offers in the six club view, too few to h
 ok(M4.offers >= T.minOffers && M4.badlyOffers >= T.minBadlyOffers, `${M4.offers} offers and ${M4.badlyOffers} after a badly season: too few to hold the rules`);
 ok(M4.climb >= T.minClimb && M4.closed >= T.minClosed && M4.quietOpen >= T.minQuietOpen, `the ladder holds ${M4.quietOpen} quiet, ${M4.climb} quiet on a climb and ${M4.closed} closed careers: a state is missing`);
 console.log(`   ${M4.markets} markets: ${M4.withOffers} with offers (${M4.offers} offers, ${M4.badlyOffers} after a badly season, at most ${M4.most} a feed), ${M4.quietOpen} quiet, ${M4.climb} quiet on a climb, ${M4.closed} closed`);
-console.log(`   with offers on the table and next year not open: ${M4.lastCalls} are the last calls (next year shut), ${M4.passClimb} hang on a climb`);
+ok(M4.lastCalls >= T.minLastCalls && M4.passClimb >= T.minPassClimb, `the ladder holds ${M4.lastCalls} last call careers and ${M4.passClimb} with offers on a climb: too few to hold what the screen says about passing`);
+ok(M4.rankApart >= T.minRankApart, `only ${M4.rankApart} of ${M4.offers} offers come from a club whose strength rank is not its standings place, too few to tell the two apart`);
+console.log(`   with offers on the table and next year not open: ${M4.lastCalls} are the last calls (next year shut), ${M4.passClimb} hang on a climb; ${M4.rankApart} offers from a club whose roster rank is not its place`);
 console.log(`   the ceiling six clubs at a time: ${reach} offers in ${reachFeeds} feeds of the most decorated careers, none from the top tier`);
 
 /* ================================================================== */
@@ -772,7 +829,7 @@ console.log(`   ${closedCareers.length} closed careers and ${lastCallCareers.len
 
 /* ================================================================== */
 begin('6', 'the close on every club\'s real season: today\'s two calls with no desk, and with one the record, the XP and the order');
-const C6 = { verdicts: 0, losing: 0, firedCloses: 0, cushioned: 0 };
+const C6 = { verdicts: 0, losing: 0, firedCloses: 0, cushioned: 0, misfits: 0 };
 const pace = {};                       // sport -> { awards: [], reached: [per season counts], clubs }
 const clampTrust = n => Math.max(0, Math.min(100, n));
 for (const sport of SPORTS) {
@@ -824,6 +881,15 @@ for (const sport of SPORTS) {
       const badSeat = { v: 1, blocks: { ...v.desk.blocks, seat: { v: 1, career: { stints: 'x' } } } };
       const badXp = { v: 1, blocks: { ...v.desk.blocks, xp: { xp: 'lots' } } };
       if (J(H.hostSeatOf(badSeat, legacy)) !== J(H.hostLegacySeat(legacy)) || J(H.hostXpOf(badSeat)) !== J(v.desk.blocks.xp)) fail(`${at}: a corrupt record was read as stored, or took the XP with it`);
+      /* A sound record that does not fit the save beside it fails closed too (the brief's A6): his stint is still
+         open while the save says he was fired, or it is at a club the save does not name. */
+      {
+        const firedSave = H.hostLegacy(d.host, lg, { team: c.id, seasonsPlayed: k + 1, titles: 0, fired: true, seasonCounted: true });
+        const elsewhere = H.hostLegacy(d.host, lg, { team: clubs.find(x => x.id !== c.id).id, seasonsPlayed: k + 1, titles: 0, fired: false, seasonCounted: true });
+        if (J(H.hostSeatOf(v.desk, firedSave)) !== J(H.hostLegacySeat(firedSave))) fail(`${at}: the save is fired, its stored record is still open, and the record was read as stored`);
+        if (J(H.hostSeatOf(v.desk, elsewhere)) !== J(H.hostLegacySeat(elsewhere))) fail(`${at}: the stored record is at another club than the save's, and it was read as stored`);
+        C6.misfits++;
+      }
       if (J(H.hostSeatOf(badXp, legacy)) !== J(seat) || J(H.hostXpOf(badXp)) !== J(XP.defaultGmXp())) fail(`${at}: corrupt XP was read as stored, or took the record with it`);
       /* The last grade, worked out again from the save, and only from this season. */
       if (H.hostLastGrade(d.host, lg, mandate, outcome) !== grade.result || H.hostLastGrade(d.host, lg, { ...mandate, season: lg.season - 1 }, outcome) !== null
@@ -845,6 +911,7 @@ for (const sport of SPORTS) {
   for (const m of F.mid) ok(H.hostLastGrade(d.host, m.lg, m.mandates[m.team], { wins: 1, madePlayoffs: false, roundsWon: 0, reachedFinal: false, wonTitle: false }) === null, `${sport}: a last grade on a season still being played`);
 }
 ok(C6.verdicts >= T.minVerdicts && C6.losing >= T.minLosing && C6.firedCloses >= T.minFiredCloses, `${C6.verdicts} verdicts, ${C6.losing} short of the ask, ${C6.firedCloses} firings: the walk shrank`);
+ok(C6.misfits === C6.verdicts, `only ${C6.misfits} of ${C6.verdicts} records were read against a save they do not fit`);
 console.log(`   ${C6.verdicts} real seasons graded: ${C6.losing} short of the ask (${C6.cushioned} cushioned), ${C6.firedCloses} firings from trust 12`);
 const median = a => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };
 for (const sport of SPORTS) {
@@ -868,7 +935,7 @@ const KLASS = {
   nhl: (lg, rng) => ENhl.nhlDraftClass(rng, 24, leagueNames(lg)), nba: (lg, rng) => ENba.nbaDraftClass(rng, 24, leagueNames(lg)),
   mlb: (lg, rng) => EMlb.mlbDraftClass(rng, 24, leagueNames(lg)), nfl: (lg, rng) => ENfl.generateDraftClass(rng, 40, leagueNames(lg)),
 };
-const C7 = { men: 0, young: 0, cases: 0, pairs: 0, cuts: 0, prospects: 0, gambles: 0, exact: 0, lost: 0, underMin: 0 };
+const C7 = { men: 0, young: 0, cases: 0, pairs: 0, cuts: 0, retained: 0, prospects: 0, gambles: 0, exact: 0, lost: 0, underMin: 0 };
 const LADDER = {};
 for (const sport of SPORTS) {
   const d = DRIVE[sport], pack = d.host.pack, lg = FLEET[sport].closed[0].lg, season = lg.season, before = J(lg);
@@ -943,10 +1010,20 @@ function consume(sport, lg, nth, row) {
       const t = lgc.teams[club];
       for (const p of [...t.players].sort((a, b) => b.salary - a.salary || a.id.localeCompare(b.id)).slice(0, 2)) {
         const quote = H.hostCutQuote(p, fx, club, season);
+        /* Every other man already has a retained salary row under his id (a club's list holds those too, and the
+           cut engine appends), so the charge must land on the LAST entry for him and leave the retained row alone
+           (the brief's A4). */
+        const retained = C7.cuts % 2 === 0 ? { playerId: p.id, name: p.name, amount: 0.3, seasonsLeft: 2 } : null;
+        if (retained) t.deadCap = [retained, ...(t.deadCap ?? [])];
         if (!d.release(t, lgc.freeAgents, p.id)) continue;
         const charged = H.hostCraftCut(t, p.id, fx, club, season);
         const entry = [...(t.deadCap ?? [])].reverse().find(e => e.playerId === p.id);
         if (charged !== quote.now || !entry || entry.amount !== quote.now) fail(`${sport} ${club} level ${L}: quoted ${quote.now}, charged ${charged}, stored ${entry ? entry.amount : 'nothing'}`);
+        if (retained) {
+          const rows = (t.deadCap ?? []).filter(e => e.playerId === p.id);
+          if (rows.length !== 2 || rows[0].amount !== 0.3) fail(`${sport} ${club} level ${L}: ${p.id} had a retained row of 0.3 before the cut, and his rows now read ${rows.map(e => e.amount).join(', ')}`);
+          C7.retained++;
+        }
         C7.cuts++;
       }
     }
@@ -1028,9 +1105,9 @@ for (const sport of SPORTS) {
   LADDER[sport].media = landedAll;
   steps(`${sport} media, gambles landed`, landedAll, 1);
 }
-ok(C7.men >= T.minMen && C7.young >= T.minYoung && C7.cases >= T.minCases && C7.pairs >= T.minPairs && C7.cuts >= T.minCuts && C7.lost >= T.minLosing && C7.gambles >= 24,
+ok(C7.men >= T.minMen && C7.young >= T.minYoung && C7.cases >= T.minCases && C7.pairs >= T.minPairs && C7.cuts >= T.minCuts && C7.retained * 3 >= C7.cuts && C7.lost >= T.minLosing && C7.gambles >= 24,
   `the tree walks shrank: ${J(C7)}`);
-console.log(`   ${C7.men} men, ${C7.young} with room to grow, ${C7.cases} asks, ${C7.prospects} prospects, ${C7.pairs} trade pairs, ${C7.cuts} cuts charged as quoted, ${C7.lost} losing seasons, ${C7.gambles} gambles`);
+console.log(`   ${C7.men} men, ${C7.young} with room to grow, ${C7.cases} asks, ${C7.prospects} prospects, ${C7.pairs} trade pairs, ${C7.cuts} cuts charged as quoted (${C7.retained} past a retained row under the same man), ${C7.lost} losing seasons, ${C7.gambles} gambles`);
 if (C7.underMin) console.log(`   NOTE: ${C7.underMin} eased asks sit a tenth under the sport's minimum deal (gmXp rounds to tenths; reported, not this round's file)`);
 for (const sport of SPORTS) for (const tree of XP.GM_TREES) console.log(`   ${sport} ${tree}: ${(LADDER[sport][tree] ?? []).map(r2).join(' / ')}`);
 
@@ -1051,6 +1128,16 @@ begin('8', 'spending: refused off the live list, with no point and past five, an
   ok(spends === XP.GM_TREES.length * XP.GM_MAX_TREE_POINTS, `${spends} spends accepted, the board holds ${XP.GM_TREES.length * XP.GM_MAX_TREE_POINTS}`);
   for (const tree of XP.GM_TREES) ok(H.hostSpendPoint(desk, tree, LIVE) === null, `a sixth point was sold in ${tree}`);
   ok(J(rich.blocks.xp.points) === J(XP.defaultGmXp().points), 'spending changed the desk it was handed');
+  /* A full tree takes no point. With every tree this desk routes full, the GM level box does not pulse and no line
+     says there is a point to spend, however many he holds; give him one tree with room and all of it comes back. */
+  const fullOwner = deskWith({ ownership: XP.GM_MAX_TREE_POINTS }), free = XP.gmPointsFree(fullOwner.blocks.xp);
+  const boxFull = H.hostXpTile(fullOwner, ['ownership'], true), boxRoom = H.hostXpTile(fullOwner, ['ownership', 'media'], true);
+  const recap = live => H.hostXpRecapLine({ award: { total: 50 }, levelAfter: 3, desk: fullOwner }, live);
+  ok(free > 0, 'harness: the desk with a full tree holds no free point');
+  ok(H.hostCanSpend(fullOwner, ['ownership']) === false && boxFull.accent === false && !/to spend/.test(boxFull.sub) && !/to spend/.test(recap(['ownership'])) && H.hostSpendPoint(fullOwner, 'ownership', ['ownership']) === null,
+    `every tree this desk routes is full, and the GM level box still reads: ${boxFull.sub}${boxFull.accent ? ' (pulsing)' : ''}`);
+  ok(H.hostCanSpend(fullOwner, ['ownership', 'media']) === true && boxRoom.accent === true && boxRoom.sub.startsWith(`${free} `) && /to spend/.test(boxRoom.sub) && /to spend/.test(recap(['ownership', 'media'])),
+    `a routed tree has room and he holds ${free} points, and the GM level box reads: ${boxRoom.sub}`);
   console.log(`   ${spends} spends accepted, every refusal held`);
 }
 
@@ -1145,7 +1232,8 @@ for (const sport of SPORTS) {
     const calls = [];
     const real = {
       awayDraft: (l, r) => { calls.push('draft'); d.draft(l, old, r); },
-      awaySummer: (l, r) => { calls.push('summer'); d.summer(l, old, r); },
+      /* The summer rolls a league owned block and also tries to hand back another XP block: the first is kept, the second never reaches his. */
+      awaySummer: (l, r, dk) => { calls.push('summer'); d.summer(l, old, r); return { v: dk.v, blocks: { ...dk.blocks, picks: { ledger: 2 }, xp: XP.defaultGmXp() } }; },
       periods: () => d.periods,
       playRound: (l, r) => { calls.push('round'); d.period(l, old, r); if (d.at(l) < d.periods) d.step(l); },
       playoffs: (l, r) => { calls.push('playoffs'); return d.close(l, old, r).champion; },
@@ -1162,6 +1250,7 @@ for (const sport of SPORTS) {
     ok(H.isGmSeatBlock(ys) && ys.career.seasonsOut === seat.career.seasonsOut + 1, `${at}: the year out is not on the record`);
     ok(H.hostSeasonsRecorded(ys) === H.hostSeasonsRecorded(seat) && SEAT.currentStint(ys.career).ended === 'fired', `${at}: a year out counted as a season he ran a club`);
     ok(J(res.desk.blocks.xp) === J(xp) && J(res.desk.blocks.later) === J(desk.blocks.later), `${at}: the year out moved his XP or a block it does not know`);
+    ok(J(res.desk.blocks.picks) === J({ ledger: 2 }) && J(desk.blocks.picks) === J({ ledger: 1 }), `${at}: the league's own block did not roll with the summer, or the desk handed in was changed`);
     ok(H.hostFeedKey(sport, ys, season + 1) !== H.hostFeedKey(sport, seat, season), `${at}: next summer reads the feed he already saw`);
     ok(res.report.oldClub && res.report.oldClub.id === old && J(desk.blocks.seat) === J(seat), `${at}: the report has no old club, or the desk handed in was changed`);
     const m2 = H.hostMarket(d.host, copy, ys, nameOf), card = m2 && H.hostOutOfWorkCard(d.host, copy, ys, m2, nameOf);
@@ -1230,6 +1319,13 @@ for (const k of LINES) {
   if (k.m.nextYear === 'open') {
     const said = [k.state === 'quiet' ? k.line : null, k.state === 'quiet' ? k.sub : null, H.hostSitArmLine(k.m, true)].filter(s => s !== null);
     if (said.some(s => !/as things stand/i.test(s))) fail(`${k.at}: next year reads open with no "as things stand" (${said.find(s => !/as things stand/i.test(s)).slice(-70)})`);
+  }
+  /* And where next year is not open, nothing on the box or the line says it is. */
+  if (k.m.nextYear !== 'open' && /\bopen\b/i.test(`${k.sub} ${k.line}`)) fail(`${k.at}: next year is ${k.m.nextYear}, and the screen says open (${k.sub})`);
+  /* A climb names the one tier his old club must reach, on the line, whether or not somebody called. */
+  if (k.m.nextYear === 'climb') {
+    const named = [1, 2, 3, 4].filter(t => k.line.includes(H.HOST_TIER_WORDS[t]));
+    if (J(named) !== J([k.m.climbTo])) fail(`${k.at}: next year hangs on tier ${k.m.climbTo}, and the line names ${named.length ? named.map(t => H.HOST_TIER_WORDS[t]).join(' and ') : 'no tier'}`);
   }
   /* Somebody called: the line says what passing costs whenever next year is not open, and nothing more when it is.
      Judged against the line the same market prints with next year open, so no wording is pinned here. */
