@@ -1,0 +1,3 @@
+rival-base: node scripts/simUsRivalSense.mjs
+sense-c-base: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+nfltruth-base: node scripts/simNflTruth.mjs
