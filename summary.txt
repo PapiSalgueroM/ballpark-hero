@@ -1,0 +1,16 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSeasonReveal exit=0 21s | ALL SEASON REVEAL WALK CHECKS PASSED
+playSeasonReveal-muted exit=0 20s | playSeasonReveal control muted: all 1 guarded checks fired (mutations landed: {"mutedLine":3})
+playUsSeasonCentre exit=0 151s | playUsSeasonCentre: 144 checks, 0 failed
+playCareerPress exit=0 17s | ALL CAREER PRESS WALK CHECKS PASSED
+playCareerHub exit=0 47s | playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.
+playNflTruth exit=0 104s | playNflTruth: green. A kicker goes late and is paid his slot, throwback seasons are 16 games, the bank stops at zero on load, and sacks come in halves.
+playNbaNumbers exit=0 66s | playNbaNumbers: 85 checks, 0 failed
+playDraftNight exit=0 212s | playDraftNight: ALL GREEN, 49 nights walked
+playDraftNight-late exit=1 7s | playDraftNight [control late]: 1 FAILURE(S) of its own check (height), as it must
+playDraftNight-spoiler exit=1 7s | playDraftNight [control spoiler]: 4 FAILURE(S) of its own check (spoiler), as it must
+playDraftNight-fold exit=1 7s | playDraftNight [control fold]: 2 FAILURE(S) of its own check (fold), as it must
+playDraftNight-hidden exit=1 2s | playDraftNight [control hidden]: 2 FAILURE(S) of its own check (reduced), as it must
+playDraftNight-cut exit=1 7s | playDraftNight [control cut]: 17 FAILURE(S) of its own check (cut), as it must
+playDraftNight-again exit=1 7s | playDraftNight [control again]: 1 FAILURE(S) of its own check (scroll), as it must
+playUsCareerSaveSeam exit=0 32s | playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed

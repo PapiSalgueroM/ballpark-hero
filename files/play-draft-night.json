@@ -1,0 +1,53 @@
+{
+  "control": "again",
+  "results": [
+    {
+      "id": "mlb-390-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 432,
+      "team": "TEX",
+      "closeAtS": 3.5,
+      "frames": 332,
+      "cardHeight": [
+        744.1875,
+        744.1875
+      ],
+      "journeyHeight": [
+        1230.1875,
+        1230.1875
+      ],
+      "scroll": [
+        0,
+        288
+      ],
+      "nightHeight": 441,
+      "viewport": [
+        390,
+        844
+      ],
+      "scrollSettledMs": 283,
+      "heldFrames": 199,
+      "landing": {
+        "ms": 3583,
+        "top": 741,
+        "bottom": 795,
+        "vh": 844
+      },
+      "rows": 8,
+      "tiles": 0,
+      "closing": [
+        767,
+        821
+      ],
+      "nightRect": 441
+    }
+  ],
+  "failures": [
+    {
+      "id": "mlb-390-late-watch",
+      "check": "scroll",
+      "message": "the page stood still at 288 from 283 ms and then moved between 228 and 288"
+    }
+  ]
+}
