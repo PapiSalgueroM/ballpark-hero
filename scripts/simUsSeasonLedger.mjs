@@ -20,8 +20,17 @@
    - Engines against the ledger (notes): the playoff game law fits every NHL
      count; for MLB 84.7 percent of Wild Card exits and 32.6 percent of
      Division Series exits save a count the real rounds cannot hold.
-   1,185 checks in all. No band here was set by feel: every check is an
+   1,243 checks in all. No band here was set by feel: every check is an
    equality, a sum or a set.
+
+   IDENTITIES, NOT ONLY COUNTS (the fix pass of 2026-10-10). A count cannot
+   tell which club, which year or which partner, so this file's own table
+   (OWN, OWN_NHL_ALIGN) types them: the fifty MLB clubs off their schedule by
+   name and season, the last real year of each 2004 id, the fifteen rival
+   pairs, the first round windows, every NHL alignment division by division,
+   the 31 club games of 2019-20 and the rules after sixty minutes. A single
+   changed fact in a ledger's source is red here (the review's mutations A,
+   B, D, E, G, H and O, each green before this pass).
 
    CONTROLS (US_LEDGER_CONTROL=<name>): each changes one fact in the loaded
    data, refuses to run (exit 2, "CONTROL ... ABORTED") when the thing it
@@ -81,18 +90,69 @@ const NHL_LISTS = [
    control that changes a ledger cannot change both sides at once. */
 const OWN = {
   mlbYears: [2004, 2026],
-  /* year: how many clubs on each count that is not the plain schedule length. */
-  mlbOff: {
-    2004: { 161: 4 }, 2005: { 163: 2 }, 2006: { 161: 2 }, 2007: { 163: 2 }, 2008: { 161: 6, 163: 2 }, 2009: { 161: 2, 163: 2 },
-    2011: { 161: 2 }, 2013: { 163: 2 }, 2015: { 161: 2 }, 2016: { 161: 4, 162: 2 }, 2018: { 161: 2, 163: 4 }, 2019: { 161: 2 },
-    2020: { 58: 2 }, 2021: { 161: 2 }, 2024: { 161: 2 }, 2026: { 161: 2 },
+  /* year: WHICH clubs sat on each count that is not the plain schedule length
+     (or held a tie inside it), by the name each carried that season. Fifty
+     club lines over sixteen seasons. A count alone cannot tell the Dodgers
+     from the Giants; a name can. */
+  mlbOffClubs: {
+    2004: { 161: 'Milwaukee Brewers|Pittsburgh Pirates|Tampa Bay Devil Rays|Toronto Blue Jays' },
+    2005: { 163: 'Cincinnati Reds|Houston Astros' },
+    2006: { 161: 'San Francisco Giants|St. Louis Cardinals' },
+    2007: { 163: 'Colorado Rockies|San Diego Padres' },
+    2008: { 161: 'Baltimore Orioles|Chicago Cubs|Florida Marlins|Houston Astros|Oakland Athletics|Washington Nationals', 163: 'Chicago White Sox|Minnesota Twins' },
+    2009: { 161: 'Chicago Cubs|Pittsburgh Pirates', 163: 'Detroit Tigers|Minnesota Twins' },
+    2011: { 161: 'Los Angeles Dodgers|Washington Nationals' },
+    2013: { 163: 'Tampa Bay Rays|Texas Rangers' },
+    2015: { 161: 'Cleveland Indians|Detroit Tigers' },
+    2016: { 161: 'Atlanta Braves|Cleveland Indians|Detroit Tigers|Miami Marlins', 162: 'Chicago Cubs|Pittsburgh Pirates' },
+    2018: { 161: 'Miami Marlins|Pittsburgh Pirates', 163: 'Chicago Cubs|Colorado Rockies|Los Angeles Dodgers|Milwaukee Brewers' },
+    2019: { 161: 'Chicago White Sox|Detroit Tigers' },
+    2020: { 58: 'Detroit Tigers|St. Louis Cardinals' },
+    2021: { 161: 'Atlanta Braves|Colorado Rockies' },
+    2024: { 161: 'Cleveland Guardians|Houston Astros' },
+    2026: { 161: 'Baltimore Orioles|New York Yankees' },
   },
   mlb2026Short: ['BAL', 'NYY'],
   mlbSchedule: { 2020: 60 },
+  /* id of the 2004 list: the last season it is a real club under that name, and its next name. */
+  mlbSpans: {
+    MON: [2004, 'Washington Nationals'], ANA: [2004, 'Los Angeles Angels of Anaheim'], TBD: [2007, 'Tampa Bay Rays'],
+    FLA: [2011, 'Miami Marlins'], CLV: [2021, 'Cleveland Guardians'], OAK: [2024, 'Athletics'],
+  },
+  /* The fifteen interleague rival pairs, American League id first. */
+  mlbRivals: 'NYY-NYM CHW-CHC LAA-LAD ATH-SFG CLE-CIN TBR-MIA BAL-WSN KCR-STL MIN-MIL BOS-ATL DET-PIT TOR-PHI TEX-ARI HOU-COL SEA-SDP',
+  /* The first round, window by window: [from, to, its name or null for no wild card round, clubs in the field]. */
+  mlbFirstRound: [[2004, 2011, null, 8], [2012, 2019, 'Wild Card Game', 10], [2020, 2020, 'Wild Card Series', 16], [2021, 2021, 'Wild Card Game', 10], [2022, null, 'Wild Card Series', 12]],
   nhlYears: [2006, 2026],
   nhlGames: { 2012: 48, 2019: null, 2020: 56, 2026: 84 },
   nhlTeams: { 2006: 30, 2017: 31, 2021: 32 },
   nhl84: { leagueGames: 1344, home: 42 },
+  /* Games each club had played when 2019-20 stopped, club for club. */
+  nhl2019: 'BOS 70 TBL 70 TOR 70 FLA 69 BUF 69 OTT 71 DET 71 MTL 71 WSH 69 PHI 69 PIT 69 CAR 68 NYI 68 CBJ 70 NYR 70 NJD 69 '
+    + 'STL 71 COL 70 DAL 69 NSH 69 WPG 71 MIN 69 CHI 70 VGK 71 EDM 71 VAN 69 CGY 70 ARI 70 LAK 70 SJS 70 ANA 71',
+  /* The rules after sixty minutes. */
+  nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
+  /* How many entries each THIN list holds: one cannot quietly lose a line. */
+  thin: { mlb: 10, nhl: 7 },
+};
+
+/* EVERY NHL ALIGNMENT, typed here division by division: key: [from, to, { division: [conference, its clubs] }]. */
+const E = 'Eastern'; const W = 'Western';
+const OWN_ATL8 = 'BOS BUF DET FLA MTL OTT TBL TOR'; const OWN_MET8 = 'CAR CBJ NJD NYI NYR PHI PIT WSH';
+const ownSix = southeast => ({
+  Atlantic: [E, 'NJD NYI NYR PHI PIT'], Northeast: [E, 'BOS BUF MTL OTT TOR'], Southeast: [E, southeast],
+  Central: [W, 'CBJ CHI DET NSH STL'], Northwest: [W, 'CGY COL EDM MIN VAN'], Pacific: [W, 'ANA DAL LAK PHX SJS'],
+});
+const ownFour = (central, pacific) => ({ Atlantic: [E, OWN_ATL8], Metropolitan: [E, OWN_MET8], Central: [W, central], Pacific: [W, pacific] });
+const OWN_NHL_ALIGN = {
+  'six-2006': [2006, 2010, ownSix('ATL CAR FLA TBL WSH')],
+  'six-2011': [2011, 2012, ownSix('CAR FLA TBL WPG WSH')],
+  'four-2013': [2013, 2013, ownFour('CHI COL DAL MIN NSH STL WPG', 'ANA CGY EDM LAK PHX SJS VAN')],
+  'four-2014': [2014, 2016, ownFour('CHI COL DAL MIN NSH STL WPG', 'ANA ARI CGY EDM LAK SJS VAN')],
+  'four-2017': [2017, 2019, ownFour('CHI COL DAL MIN NSH STL WPG', 'ANA ARI CGY EDM LAK SJS VAN VGK')],
+  'four-2020': [2020, 2020, { North: [null, 'CGY EDM MTL OTT TOR VAN WPG'], East: [null, 'BOS BUF NJD NYI NYR PHI PIT WSH'], Central: [null, 'CAR CBJ CHI DAL DET FLA NSH TBL'], West: [null, 'ANA ARI COL LAK MIN SJS STL VGK'] }],
+  'four-2021': [2021, 2023, ownFour('ARI CHI COL DAL MIN NSH STL WPG', 'ANA CGY EDM LAK SEA SJS VAN VGK')],
+  'four-2024': [2024, null, ownFour('CHI COL DAL MIN NSH STL UTA WPG', 'ANA CGY EDM LAK SEA SJS VAN VGK')],
 };
 
 /* ---------- the controls: one changed fact each ---------- */
@@ -108,6 +168,14 @@ const CONTROLS = {
   /* The critic's own fear: the real 2008 Nationals written onto the game's Expos. */
   mlbid: { expect: ['M3'], run() { const g = mlbRow(2008).clubs.find(x => x.clubs.includes('Washington Nationals')); must(g && !g.ids.includes('MON'), 'the 2008 Nationals with no id'); g.ids.push('MON'); } },
   mlbspan: { expect: ['M4'], run() { const i = mlb.MLB_NAME_SPANS.findIndex(x => x.id === 'TBD'); must(i >= 0, 'the Devil Rays span'); mlb.MLB_NAME_SPANS.splice(i, 1); } },
+  /* The right count, the wrong club: a throwback row names the Giants where the Dodgers fell short, id and all. */
+  mlbclub: { expect: ['M5'], run() { const g = mlbRow(2011).clubs[0]; must(g && g.clubs.includes('Los Angeles Dodgers') && g.ids.includes('LAD'), 'the 2011 Dodgers on 161'); g.clubs = g.clubs.map(c => (c === 'Los Angeles Dodgers' ? 'San Francisco Giants' : c)); g.ids = g.ids.map(i => (i === 'LAD' ? 'SFG' : i)); } },
+  /* A span that ends a year late: the Devil Rays a real club in 2008. */
+  mlbspanyear: { expect: ['M4'], run() { const s = mlb.MLB_NAME_SPANS.find(x => x.id === 'TBD'); must(s && s.to === 2007, 'the Devil Rays span ending in 2007'); s.to = 2008; } },
+  /* Still fifteen pairs, every club once, each an AL club with an NL club: only the partners are wrong. */
+  mlbrivalswap: { expect: ['M8'], run() { const b = mlb.MLB_RIVALS.find(x => x[0] === 'BOS'); const t = mlb.MLB_RIVALS.find(x => x[0] === 'TOR'); must(b && t && b[1] === 'ATL' && t[1] === 'PHI', 'Boston with Atlanta and Toronto with Philadelphia'); b[1] = 'PHI'; t[1] = 'ATL'; } },
+  /* The windows still touch and still end in the format: only the middle years moved. */
+  mlbfirstround: { expect: ['M9'], run() { const g = mlb.MLB_FIRST_ROUND.find(x => x.from === 2012); const s = mlb.MLB_FIRST_ROUND.find(x => x.from === 2020); must(g && s && g.to === 2019 && s.to === 2020, 'the Wild Card Game of 2012 to 2019 and the series of 2020'); g.to = 2018; s.from = 2019; } },
   mlbown: { expect: ['M5'], run() { const g = mlbRow(2026).clubs[0]; must(g && g.ids.includes('NYY'), 'the 2026 Yankees on 161'); g.clubs = g.clubs.filter(c => c !== 'New York Yankees'); g.ids = g.ids.filter(i => i !== 'NYY'); g.clubs.push('Boston Red Sox'); g.ids.push('BOS'); } },
   mlbdiv: { expect: ['M6'], run() { const w = mlb.MLB_DIVISIONS_2026.find(x => x.name === 'AL West'); const c = mlb.MLB_DIVISIONS_2026.find(x => x.name === 'AL Central'); must(w && c && w.teams.includes('HOU') && c.teams.includes('MIN'), 'Houston in the AL West and Minnesota in the AL Central'); w.teams = w.teams.map(t => (t === 'HOU' ? 'MIN' : t)); c.teams = c.teams.map(t => (t === 'MIN' ? 'HOU' : t)); } },
   mlbformula: { expect: ['M7'], run() { const f = mlb.MLB_FORMULAS.find(x => x.from === 2025); must(f && f.division.games === 13, 'the 13 division games'); f.division.games = 14; } },
@@ -125,7 +193,15 @@ const CONTROLS = {
   /* The 2026 window back on 82: the length and the formula both say so. */
   nhl84: { expect: ['N2', 'N5'], run() { const r = nhlRow(2026); must(r.games === 84, 'the 84'); r.games = 82; } },
   nhlalign: { expect: ['N3'], run() { const d = nhlAlign('four-2017').divisions.find(x => x.name === 'Pacific'); must(d && d.teams.includes('VGK'), 'Vegas in the Pacific'); d.teams = d.teams.filter(t => t !== 'VGK'); } },
-  nhllist: { expect: ['N4'], run() { const d = nhlAlign('six-2006').divisions.find(x => x.name === 'Southeast'); must(d && d.teams.includes('ATL'), 'Atlanta in the Southeast'); d.teams = d.teams.map(t => (t === 'ATL' ? 'WPG' : t)); } },
+  /* Two clubs in each other's division in the six division years: the same clubs, the same counts. */
+  nhlaligndiv: { expect: ['N3'], run() { for (const k of ['six-2006', 'six-2011']) { const c = nhlAlign(k).divisions.find(x => x.name === 'Central'); const n = nhlAlign(k).divisions.find(x => x.name === 'Northwest'); must(c && n && c.teams.includes('DET') && n.teams.includes('COL'), `Detroit in the Central and Colorado in the Northwest of ${k}`); c.teams = c.teams.map(t => (t === 'DET' ? 'COL' : t)); n.teams = n.teams.map(t => (t === 'COL' ? 'DET' : t)); } } },
+  /* Two clubs of 2019-20 moved by one game each way: the count, the least, the most and the sum all hold. */
+  nhlclubgames: { expect: ['N2'], run() { const g = nhl.NHL_2019_CLUB_GAMES; must(g.OTT === 71 && g.WSH === 69, 'Ottawa on 71 and Washington on 69'); g.OTT = 70; g.WSH = 70; } },
+  /* The GAME's 2006 list loses Atlanta (the harness's copy of it), so the ledger's league is no longer that list. */
+  nhllist: { expect: ['N4'], run() { const l = NHL_LISTS[0]; must(l.teams.some(t => t.id === 'ATL'), 'Atlanta in the 2006 list of the game'); l.teams = l.teams.map(t => (t.id === 'ATL' ? { ...t, id: 'WPG' } : t)); } },
+  nhlrules: { expect: ['N8'], run() { must(nhl.NHL_OVERTIME_RULES.minutes === 5, 'the five minutes of overtime'); nhl.NHL_OVERTIME_RULES.minutes = 10; } },
+  /* A THIN line dropped: the list is still long, and one fact is no longer named as thin. */
+  thinlost: { expect: ['R5'], run() { must(mlb.MLB_THIN.length > 1, 'the MLB THIN list'); mlb.MLB_THIN.pop(); } },
   nhlformula: { expect: ['N5'], run() { must(nhl.NHL_FORMULA_84.division.games === 4, 'the four division games'); nhl.NHL_FORMULA_84.division.games = 3; } },
   nhlplayoff: { expect: ['N6'], run() { must(nhl.NHL_PLAYOFF_FORMAT.series[0][1] === 7, 'the best of seven'); nhl.NHL_PLAYOFF_FORMAT.series[0] = [3, 5]; } },
   nhlscore: { expect: ['N7'], run() { must(nhl.NHL_OVERTIME.now.shootouts === 119, 'the 119 shootouts'); nhl.NHL_OVERTIME.now.shootouts = 0; } },
@@ -180,11 +256,10 @@ const OWN_MLB_DIVISIONS = {
       check('M3', sameSet(g.ids, expected), `${r.year}, ${g.games} games: ids ${g.ids.join(' ') || '(none)'} but the game's lists hold ${expected.join(' ') || '(none)'} under those names that year`);
     }
 
-    /* M5: this file's own count of the clubs off the schedule. */
-    const mine = OWN.mlbOff[r.year] ?? {};
-    const theirs = Object.fromEntries(r.clubs.map(g => [g.games, g.clubs.length]));
-    check('M5', JSON.stringify(Object.entries(mine).sort()) === JSON.stringify(Object.entries(theirs).map(([k, v]) => [String(k), v]).sort()),
-      `${r.year}: the row holds ${JSON.stringify(theirs)}, this harness's own table ${JSON.stringify(mine)}`);
+    /* M5: this file's own table of the clubs off the schedule, club by club and by name. */
+    const mine = Object.entries(OWN.mlbOffClubs[r.year] ?? {}).map(([g, names]) => `${g}: ${names.split('|').sort().join(', ')}`).sort().join('; ');
+    const theirs = r.clubs.map(g => `${g.games}: ${[...g.clubs].sort().join(', ')}`).sort().join('; ');
+    check('M5', mine === theirs, `${r.year}: the row holds [${theirs || 'no club'}], this harness's own table [${mine || 'no club'}]`);
     check('M5', r.games === (OWN.mlbSchedule[r.year] ?? 162), `${r.year}: the schedule is ${r.games}, this harness's own table says ${OWN.mlbSchedule[r.year] ?? 162}`);
     if (r.year === 2026) check('M5', sameSet(r.clubs.flatMap(g => g.ids), OWN.mlb2026Short), `2026: the listed ids are ${r.clubs.flatMap(g => g.ids).join(' ')}, this harness's own table says ${OWN.mlb2026Short.join(' ')}`);
   }
@@ -197,6 +272,9 @@ const OWN_MLB_DIVISIONS = {
   for (const s of mlb.MLB_NAME_SPANS) {
     const t = game.MLB_TEAMS_2004.find(x => x.id === s.id);
     check('M4', !!t && label(t) === s.club && s.from === MLB_LISTS[0].from && s.to >= s.from && s.to < OWN.mlbYears[1] && s.next !== s.club, `the span of ${s.id} does not match the 2004 list (${t ? label(t) : 'no such id'})`);
+    /* WHICH year: this file's own last season and next name for that id. */
+    const [to, next] = OWN.mlbSpans[s.id] ?? [];
+    check('M4', s.to === to && s.next === next, `the span of ${s.id} ends in ${s.to} as "${s.next}" next, this harness's own table says ${to} and "${next}"`);
   }
   for (const t of game.MLB_TEAMS_2004) {
     const n = game.MLB_TEAMS.find(x => x.id === t.id);
@@ -225,6 +303,9 @@ const OWN_MLB_DIVISIONS = {
   const paired = mlb.MLB_RIVALS.flat();
   check('M8', mlb.MLB_RIVALS.length === 15 && sameSet(paired, game.MLB_TEAMS.map(t => t.id)), 'the rival pairs do not hold every one of the 30 clubs exactly once');
   for (const [a, n] of mlb.MLB_RIVALS) check('M8', leagueOf[a] === 'AL' && leagueOf[n] === 'NL', `the pair ${a} and ${n} is not an AL club with an NL club`);
+  /* WHO with whom: this file's own fifteen pairs. */
+  const pairs = mlb.MLB_RIVALS.map(([a, n]) => `${a}-${n}`);
+  check('M8', sameSet(pairs, OWN.mlbRivals.split(' ')), `the rival pairs are ${[...pairs].sort().join(' ')}, this harness's own table says ${OWN.mlbRivals.split(' ').sort().join(' ')}`);
 
   /* M9: the rounds and their lengths, and a first round for every season from 2004. */
   const pf = mlb.MLB_PLAYOFF_FORMAT;
@@ -232,6 +313,9 @@ const OWN_MLB_DIVISIONS = {
   check('M9', pf.clubs === 12 && pf.byesPerLeague === 2 && pf.from === 2022, 'the MLB field is not twelve with two byes a league from 2022');
   const fr = mlb.MLB_FIRST_ROUND;
   check('M9', fr[0].from === OWN.mlbYears[0] && fr[fr.length - 1].to === null && fr.every((w, i) => i === 0 || w.from === fr[i - 1].to + 1), 'the first round windows leave a gap or overlap');
+  /* WHICH years: this file's own windows, the middle ones too. */
+  const windows = JSON.stringify(fr.map(w => [w.from, w.to, w.round, w.clubs]));
+  check('M9', windows === JSON.stringify(OWN.mlbFirstRound), `the first round windows are ${windows}, this harness's own table says ${JSON.stringify(OWN.mlbFirstRound)}`);
   const cur = fr[fr.length - 1];
   check('M9', cur.from === pf.from && cur.round === pf.rounds[0] && JSON.stringify(cur.series) === JSON.stringify(pf.series[0]) && cur.clubs === pf.clubs, 'the last first round window is not the format');
   check('M9', mlb.MLB_NO_TIEBREAKER_GAME_FROM === pf.from, 'the tiebreaker game did not end with the format');
@@ -253,7 +337,6 @@ const OWN_MLB_DIVISIONS = {
 }
 
 /* ===== NHL ===== */
-const OWN_NHL_TODAY = { Atlantic: 'BOS BUF DET FLA MTL OTT TBL TOR', Metropolitan: 'CAR CBJ NJD NYI NYR PHI PIT WSH', Central: 'CHI COL DAL MIN NSH STL UTA WPG', Pacific: 'ANA CGY EDM LAK SEA SJS VAN VGK' };
 {
   const rows = nhl.NHL_SEASONS;
   const aligns = nhl.NHL_ALIGNMENTS;
@@ -275,7 +358,14 @@ const OWN_NHL_TODAY = { Atlantic: 'BOS BUF DET FLA MTL OTT TBL TOR', Metropolita
     const mine = r.year in OWN.nhlGames ? OWN.nhlGames[r.year] : 82;
     check('N2', r.games === mine, `${r.year}: the row says ${r.games} games, the own table of this harness says ${mine}`);
     check('N2', (r.games === null) === (typeof r.why === 'string'), `${r.year}: a season with no single length needs its why, and only such a season`);
-    if (r.games === null) check('N2', clubGames.length === r.teams && Math.min(...clubGames) === 68 && Math.max(...clubGames) === 71 && r.why.includes('68 to 71'), `${r.year}: the club games are not ${r.teams} clubs on 68 to 71`);
+    if (r.games === null) {
+      check('N2', clubGames.length === r.teams && Math.min(...clubGames) === 68 && Math.max(...clubGames) === 71 && r.why.includes('68 to 71'), `${r.year}: the club games are not ${r.teams} clubs on 68 to 71`);
+      /* WHICH club on which count: this file's own table, club for club. */
+      const own = OWN.nhl2019.split(' '); const mineByClub = {};
+      for (let i = 0; i < own.length; i += 2) mineByClub[own[i]] = Number(own[i + 1]);
+      const wrong = [...new Set([...Object.keys(mineByClub), ...Object.keys(nhl.NHL_2019_CLUB_GAMES)])].filter(id => mineByClub[id] !== nhl.NHL_2019_CLUB_GAMES[id]);
+      check('N2', wrong.length === 0, `${r.year}: the club games of ${wrong.join(' ')} are ${wrong.map(id => nhl.NHL_2019_CLUB_GAMES[id]).join(' ')}, this harness's own table says ${wrong.map(id => mineByClub[id]).join(' ')}`);
+    }
     teamsWant = OWN.nhlTeams[r.year] ?? teamsWant;
     check('N2', r.teams === teamsWant, `${r.year}: ${r.teams} clubs, the own table of this harness says ${teamsWant}`);
     check('N2', r.finished === (r.year <= nhl.NHL_LENGTHS_VERIFIED_TO), `${r.year}: finished is ${r.finished}`);
@@ -293,8 +383,16 @@ const OWN_NHL_TODAY = { Atlantic: 'BOS BUF DET FLA MTL OTT TBL TOR', Metropolita
     for (const s of nhl.NHL_NAME_SPANS) check('N4', clubs.includes(s.id) === (r.year >= s.from && r.year <= s.to), `${r.year}: ${s.id} (${s.club}) is ${clubs.includes(s.id) ? 'in' : 'not in'} the league, its span is ${s.from} to ${s.to}`);
   }
   check('N3', aligns[0].from === OWN.nhlYears[0] && aligns[aligns.length - 1].to === null && aligns.every((a, i) => i === 0 || a.from === aligns[i - 1].to + 1), 'the NHL alignments leave a gap or overlap');
-  const today = aligns[aligns.length - 1];
-  for (const d of today.divisions) check('N3', OWN_NHL_TODAY[d.name] === [...d.teams].sort().join(' '), `the ${d.name} of today is ${[...d.teams].sort().join(' ')}, the own table of this harness says ${OWN_NHL_TODAY[d.name]}`);
+  /* WHICH club in which division, in every alignment and not only today's: this file's own table. */
+  check('N3', sameSet(aligns.map(a => a.key), Object.keys(OWN_NHL_ALIGN)), `the alignments are ${aligns.map(a => a.key).join(' ')}, this harness's own table holds ${Object.keys(OWN_NHL_ALIGN).join(' ')}`);
+  for (const a of aligns) {
+    const [from, to, mine] = OWN_NHL_ALIGN[a.key] ?? [null, null, {}];
+    check('N3', a.from === from && a.to === to && sameSet(a.divisions.map(d => d.name), Object.keys(mine)), `${a.key} runs ${a.from} to ${a.to} in ${a.divisions.map(d => d.name).join(', ')}; this harness's own table says ${from} to ${to} in ${Object.keys(mine).join(', ')}`);
+    for (const d of a.divisions) {
+      const [conf, teams] = mine[d.name] ?? [undefined, ''];
+      check('N3', d.conf === conf && [...d.teams].sort().join(' ') === teams, `${a.key}, ${d.name} (${d.conf}): ${[...d.teams].sort().join(' ')}; this harness's own table says (${conf}) ${teams}`);
+    }
+  }
   const nowIds = new Set(game.NHL_TEAMS.map(t => t.id));
   const eraOnly = game.NHL_TEAMS_2006.filter(t => !nowIds.has(t.id));
   check('N4', sameSet(nhl.NHL_NAME_SPANS.map(s => s.id), eraOnly.map(t => t.id)), `the NHL spans name ${nhl.NHL_NAME_SPANS.map(s => s.id).join(' ')}, the ids only the 2006 list holds are ${eraOnly.map(t => t.id).join(' ')}`);
@@ -332,6 +430,10 @@ const OWN_NHL_TODAY = { Atlantic: 'BOS BUF DET FLA MTL OTT TBL TOR', Metropolita
     check('N7', s.inPlay === SRC['hr-league']?.values?.goalsPerGame?.[y] && Math.abs((gf - o.shootouts) / tg - s.inPlay) < 0.005, `${era.id}: goals in play are ${s.inPlay}; the receipts say ${SRC['hr-league']?.values?.goalsPerGame?.[y]} and ${((gf - o.shootouts) / tg).toFixed(3)}`);
   }
   check('N7', nhl.NHL_CLOCK.periods * nhl.NHL_CLOCK.minutes === 60, 'the NHL clock is not sixty minutes');
+
+  /* N8: the rules after sixty minutes, value for value, against this file's own table. */
+  for (const [k, v] of Object.entries(OWN.nhlRules)) check('N8', nhl.NHL_OVERTIME_RULES[k] === v, `NHL_OVERTIME_RULES.${k} is ${nhl.NHL_OVERTIME_RULES[k]}, this harness's own table says ${v}`);
+  check('N8', sameSet(Object.keys(nhl.NHL_OVERTIME_RULES), [...Object.keys(OWN.nhlRules), 'skatersBefore2015']), `NHL_OVERTIME_RULES holds ${Object.keys(nhl.NHL_OVERTIME_RULES).join(', ')}`);
 }
 
 /* ===== THE RECEIPTS ===== */
@@ -380,11 +482,11 @@ const OWN_NHL_TODAY = { Atlantic: 'BOS BUF DET FLA MTL OTT TBL TOR', Metropolita
   ];
   check('R5', empty.every(v => v === null), 'a number only one source gave has been filled');
   for (const t of [...mlb.MLB_THIN, ...nhl.NHL_THIN]) check('R5', [t.what, t.oneSource, t.tried].every(x => typeof x === 'string' && x.length > 8), 'a THIN entry is not whole');
-  check('R5', mlb.MLB_THIN.length >= 5 && nhl.NHL_THIN.length >= 3, 'a THIN list has been emptied');
+  check('R5', mlb.MLB_THIN.length === OWN.thin.mlb && nhl.NHL_THIN.length === OWN.thin.nhl, `the THIN lists hold ${mlb.MLB_THIN.length} and ${nhl.NHL_THIN.length} entries, this harness's own table says ${OWN.thin.mlb} and ${OWN.thin.nhl}`);
 
-  /* D1: no en dash and no em dash in the ledgers, the receipts or this file. */
+  /* D1: no en dash and no em dash in the ledgers, the receipts, this file or the round's notes. */
   const dashes = [String.fromCharCode(0x2013), String.fromCharCode(0x2014)];
-  for (const f of ['src/data/usSeasonLedgerMlb.ts', 'src/data/usSeasonLedgerNhl.ts', 'scripts/data/usSeasonSources1211.json', 'scripts/simUsSeasonLedger.mjs']) {
+  for (const f of ['src/data/usSeasonLedgerMlb.ts', 'src/data/usSeasonLedgerNhl.ts', 'scripts/data/usSeasonSources1211.json', 'scripts/simUsSeasonLedger.mjs', 'docs/audits/ROUND-1211-NOTES.md']) {
     const text = readFileSync(path.join(ROOT, f), 'utf8') + EXTRA.text;
     check('D1', !dashes.some(d => text.includes(d)), `${f} holds an en dash or an em dash`);
   }
@@ -426,7 +528,9 @@ const OWN_NHL_TODAY = { Atlantic: 'BOS BUF DET FLA MTL OTT TBL TOR', Metropolita
   const say = (sport, words, rows) => rows.map(r => `stage ${r.stage} saves ${r.counts[0]} to ${r.counts[r.counts.length - 1]} games, the real rounds hold ${r.lo} to ${r.hi}: ${r.bad} percent cannot fit`).join('; ');
   notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
   notes.push(`NHL playoff games (the same law against four best of sevens): ${say('nhl', nhlWords, fits('nhl', nhl.NHL_PLAYOFF_FORMAT.series))}. Stages: ${nhlWords}.`);
-  if (mlbWords.includes('Wild Card')) notes.push(`MLB engine: it writes a Wild Card result in every year. The ledger: no wild card round from ${mlb.MLB_FIRST_ROUND[0].from} to ${mlb.MLB_FIRST_ROUND[0].to}, one game in 2012 to 2019 and 2021, a series only in 2020 and from ${mlb.MLB_PLAYOFF_FORMAT.from}; and the engine models no first round bye.`);
+  /* The years are read from the windows, never typed: a note may not contradict the data it describes. */
+  const yearsOf = round => mlb.MLB_FIRST_ROUND.filter(w => w.round === round).map(w => (w.to === null ? `from ${w.from}` : w.from === w.to ? `${w.from}` : `${w.from} to ${w.to}`)).join(' and ');
+  if (mlbWords.includes('Wild Card')) notes.push(`MLB engine: it writes a Wild Card result in every year. The ledger: no wild card round in ${yearsOf(null)}, one game in ${yearsOf('Wild Card Game')}, a series only in ${yearsOf('Wild Card Series')}; and the engine models no first round bye.`);
 
   /* The club outside the league. */
   for (const o of mlb.MLB_OUTSIDE_CLUBS) {
@@ -434,7 +538,7 @@ const OWN_NHL_TODAY = { Atlantic: 'BOS BUF DET FLA MTL OTT TBL TOR', Metropolita
     notes.push(inEngine ? `MLB engine: src/lib/mlbCareerLifeB.ts writes cc.team = '${o.team}', which is in neither MLB list of the game, and then plays MLB seasons for it. A binding round must hold such a row.` : `MLB engine: no line writes cc.team = '${o.team}' any more; MLB_OUTSIDE_CLUBS may be stale.`);
   }
   const ath = game.MLB_TEAMS.find(t => t.id === 'ATH');
-  if (ath && label(ath) !== 'Athletics') notes.push(`The game prints "${label(ath)}" for ATH; both 2026 standings read for the ledger print "Athletics" with no city.`);
+  if (ath && label(ath) !== 'Athletics') notes.push(`The game prints "${label(ath)}" for ATH; both 2026 standings read for the ledger print "Athletics" with no city. CONSEQUENCE for the binding round: an id is listed only where a list's own name is the club's real name, so a present day season row that names the Athletics would carry NO id for them, and a binding that holds clubs by id would open a full view for a club the row lists as short. No such row exists today (2026 lists BAL and NYY). Fix the name or key such a row by id before the first one is written.`);
 }
 
 /* ===== the verdict ===== */
