@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walkUsRev: node .rc/x/walkUsRev.mjs
