@@ -1,0 +1,7 @@
+#!serial
+practice995: node scripts/simFootlePractice995.mjs
+practice995-all: FOOTLE_PRACTICE_CONTROL=all node scripts/simFootlePractice995.mjs
+mut-s1: node .rc/x/reviewMut.mjs s1 && node scripts/simStorageWrites.mjs > /tmp/s1.log 2>&1; a=$?; grep -E "NAMED|stale|no list" /tmp/s1.log | cut -c1-330 | tail -3; tail -1 /tmp/s1.log; git checkout -q HEAD -- src scripts; exit $a
+mut-s5b: node .rc/x/reviewMut.mjs s5b && node scripts/simStorageWrites.mjs > /tmp/s5b.log 2>&1; a=$?; grep -E "NAMED|stale|no list" /tmp/s5b.log | cut -c1-330 | tail -3; tail -1 /tmp/s5b.log; git checkout -q HEAD -- src scripts; exit $a
+mut-s9: node .rc/x/reviewMut.mjs s9 && node scripts/simStorageWrites.mjs > /tmp/s9.log 2>&1; a=$?; grep -E "NAMED|stale|no list" /tmp/s9.log | cut -c1-330 | tail -3; tail -1 /tmp/s9.log; git checkout -q HEAD -- src scripts; exit $a
+clean: git diff --quiet HEAD -- src scripts && node scripts/simStorageWrites.mjs

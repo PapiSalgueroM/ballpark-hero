@@ -1,0 +1,4 @@
+MUT s9 applied to src/hooks/useGame.ts: "  const [practiceSaveFailed, setPracticeSaveFailed] = useState(false);" is now "  const [practiceSaveFailed, setPracticeSaveFailed] = useState(false);"
+MUT s9 applied to scripts/simStorageWrites.mjs: "  { file: 'src/hooks/useGame.ts', keys: ['state:practiceSaveFailed', '" is now "  { file: 'src/hooks/useGame.ts', keys: ['state:unlimitedSaveFailed'],"
+MUT s9 applied to scripts/simStorageWrites.mjs: "const NOTHING_HELD = [" is now "NAMED.push({ file: 'src/hooks/useGame.ts', keys: ['state:practiceSaveF"
+simStorageWrites: all green (owed: 12)

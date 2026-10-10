@@ -1,0 +1,6 @@
+practice995 exit=0 7s | Footle practice: 3 modes completed, every expected case executed and exact controls verified.
+practice995-all exit=0 59s | Footle practice: 28 modes completed, every expected case executed and exact controls verified.
+mut-s1 exit=1 3s | simStorageWrites: 1 failed (owed: 12)
+mut-s5b exit=1 3s | simStorageWrites: 1 failed (owed: 12)
+mut-s9 exit=0 3s | simStorageWrites: all green (owed: 12)
+clean exit=0 3s | simStorageWrites: all green (owed: 12)
