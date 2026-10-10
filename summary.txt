@@ -1,0 +1,11 @@
+vitest exit=0 62s |    Duration  61.24s (transform 2.42s, setup 370ms, collect 4.68s, tests 58.90s, environment 2.06s, prepare 648ms)
+tsc exit=2 87s |     Type '{ year: number; }' has no properties in common with type 'Pick<NbaSeasonLine, "allStar">'.
+sense-c exit=0 161s | simNbaAwardsSense: 174 checks, 0 failed (full size), 161s
+parity exit=0 55s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simNflCareer exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+simNflTruth exit=0 73s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+simCareerRealism exit=0 7s | ALL CAREER REALISM CHECKS PASSED
+simAwards exit=0 9s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+anchors exit=0 56s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+rival-p exit=0 899s | simUsRivalSense: 33 checks, 0 failed (full size)
+rival-cutdraw exit=1 868s | simUsRivalSense: 33 checks, 7 failed (full size), red sections: P1, P2
