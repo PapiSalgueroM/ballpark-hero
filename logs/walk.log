@@ -1,0 +1,105 @@
+     mlb-390-rm0: pressed "Enter the draft" at scrollY 1090; the page rests at scrollY 1090 of 11703; the play button is at y -555 (OFF SCREEN)
+ok   mlb-390-rm0: the hub shows one "Play the season" button (saw 1)
+ok   mlb-390-rm0: no week by week entry on a sport that is not bound
+ok   mlb-390-rm0: the hub does not say "week by week"
+ok   mlb-390-rm0: the hub fits the width (0px of overflow)
+ok   mlb-390-rm0: one press put a season on the save (1 season(s))
+     mlb-390-rm0: the season line reads {"year":2026,"team":"SEA","games":75,"result":"Missed October","pos":"CF"}
+ok   mlb-390-rm0: the save is byte equal after a reload (3664 characters)
+FAIL mlb-390-rm0: the hub is back after the reload and its Career Log box counts 1 season
+     mlb-390-rm0: answered 0 offseason card(s); the next season is not offered yet
+ok   mlb-390-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-390-rm0: no page error
+     mlb-390-rm0: 3 request(s) to the live database were refused by the walk
+     mlb-390-rm1: pressed "Enter the draft" at scrollY 1090; the page rests at scrollY 1090 of 11703; the play button is at y -555 (OFF SCREEN)
+ok   mlb-390-rm1: the hub shows one "Play the season" button (saw 1)
+ok   mlb-390-rm1: no week by week entry on a sport that is not bound
+ok   mlb-390-rm1: the hub does not say "week by week"
+ok   mlb-390-rm1: the hub fits the width (0px of overflow)
+ok   mlb-390-rm1: one press put a season on the save (1 season(s))
+     mlb-390-rm1: the season line reads {"year":2026,"team":"ATL","games":86,"result":"WON THE WORLD SERIES","pos":"CF"}
+ok   mlb-390-rm1: the save is byte equal after a reload (4188 characters)
+FAIL mlb-390-rm1: the hub is back after the reload and its Career Log box counts 1 season
+     mlb-390-rm1: answered 0 offseason card(s); the next season is not offered yet
+ok   mlb-390-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-390-rm1: no page error
+     mlb-390-rm1: 3 request(s) to the live database were refused by the walk
+     mlb-1280-rm0: pressed "Enter the draft" at scrollY 946; the page rests at scrollY 946 of 7824; the play button is at y -506 (OFF SCREEN)
+ok   mlb-1280-rm0: the hub shows one "Play the season" button (saw 1)
+ok   mlb-1280-rm0: no week by week entry on a sport that is not bound
+ok   mlb-1280-rm0: the hub does not say "week by week"
+ok   mlb-1280-rm0: the hub fits the width (0px of overflow)
+ok   mlb-1280-rm0: one press put a season on the save (1 season(s))
+     mlb-1280-rm0: the season line reads {"year":2026,"team":"TOR","games":85,"result":"Missed October","pos":"CF"}
+ok   mlb-1280-rm0: the save is byte equal after a reload (4098 characters)
+FAIL mlb-1280-rm0: the hub is back after the reload and its Career Log box counts 1 season
+     mlb-1280-rm0: answered 0 offseason card(s); the next season is not offered yet
+ok   mlb-1280-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-1280-rm0: no page error
+     mlb-1280-rm0: 3 request(s) to the live database were refused by the walk
+     mlb-1280-rm1: pressed "Enter the draft" at scrollY 946; the page rests at scrollY 946 of 7824; the play button is at y -506 (OFF SCREEN)
+ok   mlb-1280-rm1: the hub shows one "Play the season" button (saw 1)
+ok   mlb-1280-rm1: no week by week entry on a sport that is not bound
+ok   mlb-1280-rm1: the hub does not say "week by week"
+ok   mlb-1280-rm1: the hub fits the width (0px of overflow)
+ok   mlb-1280-rm1: one press put a season on the save (1 season(s))
+     mlb-1280-rm1: the season line reads {"year":2026,"team":"TBR","games":162,"result":"Missed October","pos":"CF"}
+ok   mlb-1280-rm1: the save is byte equal after a reload (4073 characters)
+FAIL mlb-1280-rm1: the hub is back after the reload and its Career Log box counts 1 season
+     mlb-1280-rm1: answered 0 offseason card(s); the next season is not offered yet
+ok   mlb-1280-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   mlb-1280-rm1: no page error
+     mlb-1280-rm1: 3 request(s) to the live database were refused by the walk
+     nhl-390-rm0: pressed "Enter the draft" at scrollY 1145; the page rests at scrollY 1145 of 11186; the play button is at y -610 (OFF SCREEN)
+ok   nhl-390-rm0: the hub shows one "Play the season" button (saw 1)
+ok   nhl-390-rm0: no week by week entry on a sport that is not bound
+ok   nhl-390-rm0: the hub does not say "week by week"
+ok   nhl-390-rm0: the hub fits the width (0px of overflow)
+ok   nhl-390-rm0: one press put a season on the save (1 season(s))
+     nhl-390-rm0: the season line reads {"year":2026,"team":"ANA","games":82,"result":"Lost in Round 2","pos":"C"}
+ok   nhl-390-rm0: the save is byte equal after a reload (3378 characters)
+ok   nhl-390-rm0: the hub is back after the reload and its Career Log box counts 1 season
+     nhl-390-rm0: answered 3 offseason card(s); the next season is offered
+ok   nhl-390-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-390-rm0: no page error
+     nhl-390-rm0: 3 request(s) to the live database were refused by the walk
+     nhl-390-rm1: pressed "Enter the draft" at scrollY 1145; the page rests at scrollY 1145 of 11186; the play button is at y -610 (OFF SCREEN)
+ok   nhl-390-rm1: the hub shows one "Play the season" button (saw 1)
+ok   nhl-390-rm1: no week by week entry on a sport that is not bound
+ok   nhl-390-rm1: the hub does not say "week by week"
+ok   nhl-390-rm1: the hub fits the width (0px of overflow)
+ok   nhl-390-rm1: one press put a season on the save (1 season(s))
+     nhl-390-rm1: the season line reads {"year":2026,"team":"STL","games":80,"result":"Missed the playoffs","pos":"C"}
+ok   nhl-390-rm1: the save is byte equal after a reload (3528 characters)
+FAIL nhl-390-rm1: the hub is back after the reload and its Career Log box counts 1 season
+     nhl-390-rm1: answered 0 offseason card(s); the next season is not offered yet
+ok   nhl-390-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-390-rm1: no page error
+     nhl-390-rm1: 3 request(s) to the live database were refused by the walk
+     nhl-1280-rm0: pressed "Enter the draft" at scrollY 997; the page rests at scrollY 997 of 7519; the play button is at y -557 (OFF SCREEN)
+ok   nhl-1280-rm0: the hub shows one "Play the season" button (saw 1)
+ok   nhl-1280-rm0: no week by week entry on a sport that is not bound
+ok   nhl-1280-rm0: the hub does not say "week by week"
+ok   nhl-1280-rm0: the hub fits the width (0px of overflow)
+ok   nhl-1280-rm0: one press put a season on the save (1 season(s))
+     nhl-1280-rm0: the season line reads {"year":2026,"team":"OTT","games":80,"result":"Lost in Round 1","pos":"C"}
+ok   nhl-1280-rm0: the save is byte equal after a reload (3830 characters)
+FAIL nhl-1280-rm0: the hub is back after the reload and its Career Log box counts 1 season
+     nhl-1280-rm0: answered 0 offseason card(s); the next season is not offered yet
+ok   nhl-1280-rm0: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-1280-rm0: no page error
+     nhl-1280-rm0: 3 request(s) to the live database were refused by the walk
+     nhl-1280-rm1: pressed "Enter the draft" at scrollY 997; the page rests at scrollY 997 of 7519; the play button is at y -557 (OFF SCREEN)
+ok   nhl-1280-rm1: the hub shows one "Play the season" button (saw 1)
+ok   nhl-1280-rm1: no week by week entry on a sport that is not bound
+ok   nhl-1280-rm1: the hub does not say "week by week"
+ok   nhl-1280-rm1: the hub fits the width (0px of overflow)
+ok   nhl-1280-rm1: one press put a season on the save (1 season(s))
+     nhl-1280-rm1: the season line reads {"year":2026,"team":"DAL","games":81,"result":"Missed the playoffs","pos":"C"}
+ok   nhl-1280-rm1: the save is byte equal after a reload (3592 characters)
+FAIL nhl-1280-rm1: the hub is back after the reload and its Career Log box counts 1 season
+     nhl-1280-rm1: answered 0 offseason card(s); the next season is not offered yet
+ok   nhl-1280-rm1: none of the 96 scripts the page loaded holds a ledger sentence
+ok   nhl-1280-rm1: no page error
+     nhl-1280-rm1: 3 request(s) to the live database were refused by the walk
+walk1211: RED. 7 failed, 65 passed.
