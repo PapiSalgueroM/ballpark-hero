@@ -475,15 +475,22 @@ const PER3 = {
 const FIXED = { minFeedsWithOffers: 23, minMen: 2290, minCuts: 200 };
 const T = { ...FIXED, ...Object.fromEntries(Object.entries(PER3).map(([k, v]) => [k, Math.floor((v * SEEDS.length) / 3)])) };
 if (!SEEDS.length || SEEDS.some(s => !Number.isInteger(s))) { console.error(`SIM_GM_DESK_HOST_SEEDS must be whole numbers, read ${process.env.SIM_GM_DESK_HOST_SEEDS}`); process.exit(2); }
-/* CONTROL COUNTS, measured 2026-10-10 on a GitHub runner, seeds 1,2,3, each control run alone. Every one fired in
-   its own check; the failures counted there, then any other check it also turned red:
-     mutate 21 in 1          dropclub 63 in 1        fillmet 2640 in 2       readwrites 120 in 2 (and 6)
-     unkeyed 48 in 3 (and 9) firedclub 504 in 4      badlyceiling 102 in 4   askseason 12057 in 4 (and 9)
-     closedquiet 1311 in 5 (and the climb floor of 4)                        twice 1116 in 6
-     lateseat 744 in 6       failopen 1116 in 6      cushionall 498 in 6     flatlevel 4272 in 7 (and 6)
-     sharedroll 20 in 7      flatowner 5000 in 7 (and 6)                     flatmedia 140 in 7
-     flatcut 260 in 7        flatask 20 in 7         spendany 1 in 8         stalestaff 12 in 9
-     halfseason 24 in 9      noyear 24 in 9          emptytile 4770 in 10    closedsit 4946 in 10
+/* CONTROL COUNTS, measured 2026-10-10 on a GitHub runner (results r1223-fc1 and r1223-fc2, after the review's fix
+   pass), seeds 1,2,3, each of the 46 controls run alone. Every one fired in its own check; the failures counted
+   there, then any other check it also turned red. A control name the harness does not know exits 2.
+     mutate 21 in 1            dropclub 75 in 1          notax 136 in 1            nhlrecord 381 in 1
+     nhlpct 381 in 1           nhlgames 392 in 1 (and 9) fillmet 2640 in 2         readwrites 120 in 2 (and 6)
+     tierunknown 240 in 2      unkeyed 48 in 3 (and 9)   firedclub 504 in 4        badlyceiling 102 in 4
+     askseason 12057 in 4 (and 9)                        rankplace 10466 in 4
+     closedquiet 2076 in 5 (and the climb floors of 4, and 10)                     twice 1116 in 6
+     lateseat 744 in 6         failopen 3348 in 6        fitsave 1116 in 6         cushionall 498 in 6
+     flatlevel 4272 in 7 (and 6)                         sharedroll 20 in 7        flatowner 5000 in 7 (and 6)
+     flatmedia 140 in 7        flatcut 260 in 7          craftfirst 184 in 7       flatask 20 in 7
+     spendany 1 in 8           canspend 1 in 8           stalestaff 12 in 9        halfseason 24 in 9
+     noyear 24 in 9            awayxp 12 in 9            lastcall 13 in 9
+     shutbutton 4 in 10 (and 514 in 5, 13 in 9)          passquiet 946 in 10       emptytile 4770 in 10
+     openpromise 3310 in 10    halfword 1 in 10          allfired 12 in 10         tileclimb 4121 in 10
+     climbword 1284 in 10      longtile 4145 in 10       clubvalue 552 in 10       closedsit 4946 in 10
      fewseasons 504 in 10
    badlyceiling did NOT fire on the full leagues alone (0 failures in 2,260 offers after a badly season): the
    engine's own ceiling hides the rule there, which is why check 4 also reads six real clubs at a time
@@ -749,7 +756,7 @@ for (const sport of SPORTS) {
         /* "Roster ranked Nth" is the rank by the engine's strength, which is not the standings place. */
         else {
           const rank = 1 + clubs.filter(x => x.strength > c.strength).length;
-          if (f.strengthRank !== rank) fail(`${at}: the roster of ${o.teamId} reads ${f.strengthRank}th, it ranks ${rank}th by strength (and stands ${c.place}th)`);
+          if (f.strengthRank !== rank) fail(`${at}: the roster of ${o.teamId} reads rank ${f.strengthRank}, its rank by strength is ${rank} (its place in the standings is ${c.place})`);
           if (rank !== c.place) M4.rankApart++;
         }
       }

@@ -172,6 +172,22 @@ report is `fix-1223.md` in the same folder. What changed, one commit a finding:
   read closed a year later for any reason. This fix pass made the screen honest about all of it and refuses the
   one year that cannot bring a call; it did not change who gets a call. A host rule on top of the feed (a first
   feed that is never empty, or reading open at the worst tier) is still yours to rule on.
-- Controls `mutate` and `dropclub` rewrite the NHL adapter, `notax` the NBA one. Check 1 runs the same code for
-  all four sports, so it can fail for each; its firing is proven on two.
+- Controls `mutate`, `dropclub`, `nhlrecord`, `nhlpct` and `nhlgames` rewrite the NHL adapter, `notax` the NBA
+  one. Check 1 runs the same code for all four sports, so it can fail for each; its firing is proven on two.
+- What a taxed NBA club's offer now prints is the engine's own room, cheque in. On the harness's leagues that is
+  a big number (Denver, seed 1: $299.2M over the cap, of which the cheque is $189.6M), because the engine's tax
+  bills are that size. The host prints what `nbaCapRoom` says; whether an offer should show the cheque apart from
+  the payroll is a wording question for the NBA bind.
+
+### Proof of the fix pass
+
+Everything heavy ran on GitHub runners (branch `rc-results/<name>`); the closing head's own results are in the
+fixer's report (`fix-1223.md`). Before the closing head, on the heads named:
+
+| Check | Result name, head | Exit | What it printed |
+|---|---|---|---|
+| Type gate, vitest (6 files, 107 tests: gmDeskHost 42, GmCareerDesk 15, GmDeskMount 16, GmSeatCard 4, gmSeat 18, gmXp 12) | r1223-m1, c1a0b024 | 0, 0 | no errors; all passed |
+| `simGmDeskHost` on seeds 1,2,3 / 4,5,6 / 7,8,9 | r1223-m1, c1a0b024 | 0 each | all 10 checks passed |
+| `simGmDeskHost` on one seed (77, and 5), two (13,14) and six (21 to 26) | r1223-m1, c1a0b024 | 0 each | all 10 checks passed; seed 77 alone was exit 1 before the fix pass |
+| 46 negative controls, each alone | r1223-fc1 and r1223-fc2, d1121eb8 | 1 each | every one FIRED in its own check (counts in the harness, under T); a name the harness does not know exits 2 |
 
