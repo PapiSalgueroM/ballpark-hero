@@ -1,0 +1,54 @@
+1) the four adapters over real leagues: every club once, the engine's own numbers, and a read changes nothing
+   84 real leagues read (nhl, nba, mlb, nfl; mid season, closed and after a summer)
+2) the record of a save older than the block: nothing filled in, and real saves pass every read with no write
+   3264 grid records, 240 real saves read with and without a desk
+3) the feed is keyed: the same save reads the same feed every time, and a year or a season on reads a new one
+   48 feeds read 201 times each, 38 of them with offers; feed digest 76de59f14b21f8e8b288830cca4e7ef4a2efa9e7
+4) the market rules on real tiers: never the club that let him go, a ceiling after a badly season, the ask is next season's
+   16800 markets: 7873 with offers (11986 offers, 2237 after a badly season, at most 4 a feed), 3343 quiet, 807 quiet on a climb, 4777 closed
+   the ceiling six clubs at a time: 656 offers in 216 feeds of the most decorated careers, none from the top tier
+5) closed means closed: no tier his old club can reach and no year out reopens it, and a quiet market is never in that set
+   4777 closed careers held shut over 191080 tier and year checks; 4150 quiet careers each still open as they say
+6) the close on every club's real season: today's two calls with no desk, and with one the record, the XP and the order
+   1116 real seasons graded: 518 short of the ask (518 cushioned), 518 firings from trust 12
+   nhl pace on four sources: median 104 XP a season; clubs at the first point (400 XP) after 1, 2, 3 seasons: 3, 10, 27 percent; median seasons to it: more than 3
+   nba pace on four sources: median 104 XP a season; clubs at the first point (400 XP) after 1, 2, 3 seasons: 3, 9, 27 percent; median seasons to it: more than 3
+   mlb pace on four sources: median 103 XP a season; clubs at the first point (400 XP) after 1, 2, 3 seasons: 3, 9, 18 percent; median seasons to it: more than 3
+   nfl pace on four sources: median 95 XP a season; clubs at the first point (400 XP) after 1, 2, 3 seasons: 3, 5, 25 percent; median seasons to it: more than 3
+7) every level of every tree, through its consumer, on real engine inputs
+   3273 men, 10965 with room to grow, 8840 asks, 1008 prospects, 1046910 trade pairs, 288 cuts charged as quoted, 518 losing seasons, 24 gambles
+   nhl scouting: 31104 / 28394 / 25714 / 23014 / 20754 / 18044
+   nhl negotiation: 6850.8 / 6714 / 6580.4 / 6445.4 / 6307.3 / 6172.5
+   nhl capCraft: 12374.6 / 11881.5 / 11385.2 / 10888.3 / 10396.2 / 9900.9
+   nhl development: 1321 / 1447 / 1585 / 1726 / 1851 / 1998
+   nhl trading: 19699 / 19959 / 20238 / 20486 / 20748 / 21024
+   nhl ownership: 2524 / 2357 / 2190 / 2023 / 1856 / 1596
+   nhl media: 3500 / 3680 / 3860 / 4040 / 4220 / 4400
+   nba scouting: 31104 / 28424 / 25994 / 23404 / 20714 / 18004
+   nba negotiation: 17756.4 / 17412.6 / 17065.1 / 16724.7 / 16389.5 / 16050.1
+   nba capCraft: 26778 / 25705 / 24635.8 / 23565.1 / 22492.2 / 21420.2
+   nba development: 925 / 1034 / 1124 / 1216 / 1301 / 1399
+   nba trading: 25111 / 25392 / 25724 / 26092 / 26441 / 26833
+   nba ownership: 2048 / 1914 / 1780 / 1646 / 1512 / 1292
+   nba media: 3500 / 3680 / 3860 / 4040 / 4220 / 4400
+   mlb scouting: 31104 / 28404 / 25674 / 23144 / 20344 / 17834
+   mlb negotiation: 14438.5 / 14159 / 13878.3 / 13598.1 / 13318.6 / 13041.3
+   mlb capCraft: 23584.3 / 22640.7 / 21698.1 / 20753 / 19810.9 / 18869.2
+   mlb development: 1666 / 1836 / 1998 / 2157 / 2321 / 2501
+   mlb trading: 82233 / 83455 / 84584 / 85790 / 86944 / 87997
+   mlb ownership: 2292 / 2142 / 1992 / 1842 / 1692 / 1446
+   mlb media: 3500 / 3680 / 3860 / 4040 / 4220 / 4400
+   nfl scouting: 51840 / 47330 / 43310 / 39180 / 34940 / 30320
+   nfl negotiation: 20618.1 / 20218.3 / 19820.5 / 19424.3 / 19025.6 / 18639.3
+   nfl capCraft: 25166.6 / 24159.5 / 23153 / 22146.3 / 21134.9 / 20132
+   nfl development: 7053 / 7772 / 8466 / 9211 / 9931 / 10656
+   nfl trading: 325766 / 333368 / 340836 / 348391 / 355859 / 364233
+   nfl ownership: 3296 / 3073 / 2850 / 2627 / 2404 / 2094
+   nfl media: 3500 / 3680 / 3860 / 4040 / 4220 / 4400
+8) spending: refused off the live list, with no point and past five, and 35 spends fill the board
+   35 spends accepted, every refusal held
+9) taking a seat and a year out on real leagues: what moves, who owns a block, the refusals, and a year that is not a season
+   12 seats taken, 36 years out refused with the league untouched, 12 played by the engines in the host's order
+10) the words: never empty, no dash, no quote, no placeholder; a closed line never says sit; no line states fewer seasons than he played
+   54913 strings read (16800 market lines, 528 lines of an older record), 52 panels drawn
+simGmDeskHost: all 10 checks passed on seeds 10,11,12 (4 engines, 3 seasons a seed)

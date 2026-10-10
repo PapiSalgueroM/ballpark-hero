@@ -1,0 +1,16 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmSeat.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 352[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 303[2mms[22m[39m
+ [32m✓[39m src/lib/gmDeskHost.test.ts [2m([22m[2m39 tests[22m[2m)[22m[33m 1012[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 893[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmDeskMount.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 310[2mms[22m[39m
+ [32m✓[39m src/lib/gmXp.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 326[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmSeatCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m102 passed[39m[22m[90m (102)[39m
+[2m   Start at [22m 14:04:16
+[2m   Duration [22m 3.96s[2m (transform 718ms, setup 505ms, collect 2.22s, tests 2.37s, environment 3.30s, prepare 1.12s)[22m
+

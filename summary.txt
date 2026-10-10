@@ -1,0 +1,18 @@
+vitest exit=0 5s |    Duration  3.96s (transform 718ms, setup 505ms, collect 2.22s, tests 2.37s, environment 3.30s, prepare 1.12s)
+simGmDeskHost exit=0 50s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simGmDeskHost-again exit=0 46s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 71s | 
+simGmDeskHost-101112 exit=0 41s | simGmDeskHost: all 10 checks passed on seeds 10,11,12 (4 engines, 3 seasons a seed)
+anchors exit=0 0s | simGmDeskHost anchors: 27 rewrites checked, 0 cannot run
+bogus-control exit=2 0s | SIM_GM_DESK_HOST_CONTROL=nosuchcontrol is not a control this harness knows (mutate, dropclub, fillmet, readwrites, unkeyed, firedclub, badlyceiling, askseason, closedquie
+simGmDeskHost-one exit=1 22s | simGmDeskHost: FAILED, red checks 1:1 2:1 4:3 6:1 7:1
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+simGmDeskHost-big exit=0 80s | simGmDeskHost: all 10 checks passed on seeds 21,22,23,24,25,26 (4 engines, 3 seasons a seed)
+simHarnessAnchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoInventedQuotes exit=0 22s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simStorageWrites exit=0 1s | simStorageWrites: all green
+simGmDesk exit=0 0s | simGmDesk: PASS. Four sports declare one descriptor that matches their engines and boards, a corrupt block costs that block alone, an old save opens on a fresh desk, and 
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simInventedNames exit=0 5s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simGmSeat exit=0 54s | simGmSeat: all checks passed
