@@ -1,0 +1,6 @@
+dumps-head exit=0 17s | dumps: 6 row files in /tmp/rows-head
+derive-head exit=0 0s | deriveBands: wrote /home/runner/work/_temp/rc-out/files/derive-head.json
+dumps-base exit=0 18s | dumps: 6 row files in /tmp/rows-base
+derive-base exit=0 0s | deriveBands: wrote /home/runner/work/_temp/rc-out/files/derive-base.json
+dumps-mut exit=0 17s | dumps: 6 row files in /tmp/rows-mut
+compare exit=0 0s | compare: the head with the one number put back equals the base on 6 of 6 seeds; the head itself on 0 of 6

@@ -1,0 +1,7 @@
+#!serial
+dumps-head: bash .rc/x/dumps.sh . /tmp/rows-head
+derive-head: node .rc/x/deriveBands.mjs /tmp/rows-head $RC_OUT/derive-head.json . | tee $RC_OUT/derive-head.txt
+dumps-base: git worktree add -q /tmp/base 980654facb2d41a6c9ddc029c43710178b9d49b8 && ln -s "$PWD/node_modules" /tmp/base/node_modules && bash .rc/x/dumps.sh /tmp/base /tmp/rows-base
+derive-base: node .rc/x/deriveBands.mjs /tmp/rows-base $RC_OUT/derive-base.json . | tee $RC_OUT/derive-base.txt
+dumps-mut: node .rc/x/mut84.mjs && bash .rc/x/dumps.sh . /tmp/rows-mut; s=$?; git checkout -- src; git status --short | head -5; exit $s
+compare: bash .rc/x/compare.sh /tmp/rows-base /tmp/rows-mut /tmp/rows-head | tee $RC_OUT/compare.txt

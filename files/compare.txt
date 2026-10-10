@@ -1,0 +1,7 @@
+seed base: base 65ca0b97c9d3d244, head with 82 put back 65ca0b97c9d3d244 (EQUAL), head 40b1a416edbd4335
+seed 1: base 562d7151ec120dc3, head with 82 put back 562d7151ec120dc3 (EQUAL), head 01e2ec94a478c130
+seed 2: base 7b15a32670d91835, head with 82 put back 7b15a32670d91835 (EQUAL), head 8a9b028fa4d4078a
+seed 3: base 1835358b9165e786, head with 82 put back 1835358b9165e786 (EQUAL), head 6dd3d1d1479d63aa
+seed 4: base 52d8c7363b1a3c2b, head with 82 put back 52d8c7363b1a3c2b (EQUAL), head f03a16e7d3c56f71
+seed 5: base 1916905e745aaea5, head with 82 put back 1916905e745aaea5 (EQUAL), head bf91449f055080ee
+compare: the head with the one number put back equals the base on 6 of 6 seeds; the head itself on 0 of 6

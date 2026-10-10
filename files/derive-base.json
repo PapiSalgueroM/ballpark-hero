@@ -1,0 +1,223 @@
+{
+ "sport": "nhl",
+ "bands": {
+  "defaultCareers": 2000,
+  "fromCell": {
+   "lo": 0.045,
+   "hi": 0.165,
+   "measuredLo": 0.065,
+   "measuredHi": 0.145,
+   "cells": 72
+  },
+  "fromPooled": {
+   "lo": 0.0857,
+   "hi": 0.1161,
+   "measured": [
+    0.1035,
+    0.1017,
+    0.0933,
+    0.0958,
+    0.1085,
+    0.0973
+   ]
+  },
+  "toPooled": {
+   "lo": 0.0055,
+   "hi": 0.0109,
+   "measured": [
+    0.0088,
+    0.0096,
+    0.0069,
+    0.0079,
+    0.009,
+    0.0094
+   ]
+  }
+ },
+ "perRun": [
+  {
+   "seed": "base",
+   "careers": 2000,
+   "fromPooled": 0.10354166666666667,
+   "toPooled": 0.00875,
+   "cellsOutOfCommittedBand": [],
+   "hall1": 0.2975,
+   "hall2": 0.31,
+   "newlyIn": 25
+  },
+  {
+   "seed": "1",
+   "careers": 2000,
+   "fromPooled": 0.10166666666666667,
+   "toPooled": 0.009583333333333333,
+   "cellsOutOfCommittedBand": [],
+   "hall1": 0.3025,
+   "hall2": 0.3185,
+   "newlyIn": 32
+  },
+  {
+   "seed": "2",
+   "careers": 2000,
+   "fromPooled": 0.09333333333333334,
+   "toPooled": 0.006875,
+   "cellsOutOfCommittedBand": [],
+   "hall1": 0.3025,
+   "hall2": 0.311,
+   "newlyIn": 17
+  },
+  {
+   "seed": "3",
+   "careers": 2000,
+   "fromPooled": 0.09583333333333334,
+   "toPooled": 0.007916666666666667,
+   "cellsOutOfCommittedBand": [],
+   "hall1": 0.2995,
+   "hall2": 0.3145,
+   "newlyIn": 30
+  },
+  {
+   "seed": "4",
+   "careers": 2000,
+   "fromPooled": 0.10854166666666666,
+   "toPooled": 0.008958333333333334,
+   "cellsOutOfCommittedBand": [
+    "RW points 14.5"
+   ],
+   "hall1": 0.32,
+   "hall2": 0.333,
+   "newlyIn": 26
+  },
+  {
+   "seed": "5",
+   "careers": 2000,
+   "fromPooled": 0.09729166666666667,
+   "toPooled": 0.009375,
+   "cellsOutOfCommittedBand": [],
+   "hall1": 0.294,
+   "hall2": 0.308,
+   "newlyIn": 28
+  }
+ ],
+ "cal3": [
+  {
+   "pos": "C",
+   "stat": "goals",
+   "from2": 923,
+   "to2": 1110,
+   "from3": 922,
+   "to3": 1110,
+   "n": 2400,
+   "overFrom2UnderFrom3": 0
+  },
+  {
+   "pos": "C",
+   "stat": "assists",
+   "from2": 991,
+   "to2": 1130,
+   "from3": 988,
+   "to3": 1130,
+   "n": 2400,
+   "overFrom2UnderFrom3": 0
+  },
+  {
+   "pos": "C",
+   "stat": "points",
+   "from2": 1810,
+   "to2": 2110,
+   "from3": 1810,
+   "to3": 2100,
+   "n": 2400,
+   "overFrom2UnderFrom3": 0
+  },
+  {
+   "pos": "LW",
+   "stat": "goals",
+   "from2": 872,
+   "to2": 1040,
+   "from3": 869,
+   "to3": 1030,
+   "n": 2400,
+   "overFrom2UnderFrom3": 0
+  },
+  {
+   "pos": "LW",
+   "stat": "assists",
+   "from2": 940,
+   "to2": 1100,
+   "from3": 939,
+   "to3": 1100,
+   "n": 2400,
+   "overFrom2UnderFrom3": 0
+  },
+  {
+   "pos": "LW",
+   "stat": "points",
+   "from2": 1730,
+   "to2": 1970,
+   "from3": 1730,
+   "to3": 1970,
+   "n": 2400,
+   "overFrom2UnderFrom3": 0
+  },
+  {
+   "pos": "RW",
+   "stat": "goals",
+   "from2": 840,
+   "to2": 979,
+   "from3": 843,
+   "to3": 972,
+   "n": 2400,
+   "overFrom2UnderFrom3": 5
+  },
+  {
+   "pos": "RW",
+   "stat": "assists",
+   "from2": 935,
+   "to2": 1060,
+   "from3": 937,
+   "to3": 1060,
+   "n": 2400,
+   "overFrom2UnderFrom3": 5
+  },
+  {
+   "pos": "RW",
+   "stat": "points",
+   "from2": 1760,
+   "to2": 2020,
+   "from3": 1770,
+   "to3": 2000,
+   "n": 2400,
+   "overFrom2UnderFrom3": 15
+  },
+  {
+   "pos": "D",
+   "stat": "assists",
+   "from2": 1100,
+   "to2": 1240,
+   "from3": 1100,
+   "to3": 1240,
+   "n": 2400,
+   "overFrom2UnderFrom3": 0
+  },
+  {
+   "pos": "D",
+   "stat": "points",
+   "from2": 1450,
+   "to2": 1640,
+   "from3": 1450,
+   "to3": 1630,
+   "n": 2400,
+   "overFrom2UnderFrom3": 0
+  },
+  {
+   "pos": "G",
+   "stat": "wins",
+   "from2": 721,
+   "to2": 794,
+   "from3": 721,
+   "to3": 794,
+   "n": 2400,
+   "overFrom2UnderFrom3": 0
+  }
+ ]
+}

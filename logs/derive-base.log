@@ -1,0 +1,27 @@
+A. bands against the ledger's own marks, 12 cells, six runs of 2000:
+   seed base: from 10.35 to 0.88; cells out of the committed 6.1 to 14.4: []
+   seed 1: from 10.17 to 0.96; cells out of the committed 6.1 to 14.4: []
+   seed 2: from 9.33 to 0.69; cells out of the committed 6.1 to 14.4: []
+   seed 3: from 9.58 to 0.79; cells out of the committed 6.1 to 14.4: []
+   seed 4: from 10.85 to 0.90; cells out of the committed 6.1 to 14.4: [RW points 14.5]
+   seed 5: from 9.73 to 0.94; cells out of the committed 6.1 to 14.4: []
+   fromCell   committed 6.13 to 14.38 (measured 7.5 to 13.0) -> derived 4.50 to 16.50 (measured 6.5 to 14.5)
+   fromPooled committed 8.59 to 11.89 -> derived 8.57 to 11.61
+   toPooled   committed 0.27 to 1.69 -> derived 0.55 to 1.09
+B. Hall share on 1: 29.8 30.3 30.3 29.9 32.0 29.4 (ledger 29.6 31.8 30.7 29.3 31.7 29.9)
+   Hall share on 2: 31.0 31.9 31.1 31.4 33.3 30.8 (ledger 30.7 33.1 31.6 30.3 32.9 31.1; ceiling 35.9)
+   newly in on 2:   25 32 17 30 26 28 (ledger 21 27 19 19 24 22)
+C. marks on this engine (12000 careers pooled) beside calibration 2's:
+   C goals: from 923 -> 922 (-0.1 percent), to 1110 -> 1110 (0.0 percent); 0 of 2400 careers are over the old from and under the new
+   C assists: from 991 -> 988 (-0.3 percent), to 1130 -> 1130 (0.0 percent); 0 of 2400 careers are over the old from and under the new
+   C points: from 1810 -> 1810 (0.0 percent), to 2110 -> 2100 (-0.5 percent); 0 of 2400 careers are over the old from and under the new
+   LW goals: from 872 -> 869 (-0.3 percent), to 1040 -> 1030 (-1.0 percent); 0 of 2400 careers are over the old from and under the new
+   LW assists: from 940 -> 939 (-0.1 percent), to 1100 -> 1100 (0.0 percent); 0 of 2400 careers are over the old from and under the new
+   LW points: from 1730 -> 1730 (0.0 percent), to 1970 -> 1970 (0.0 percent); 0 of 2400 careers are over the old from and under the new
+   RW goals: from 840 -> 843 (0.4 percent), to 979 -> 972 (-0.7 percent); 5 of 2400 careers are over the old from and under the new
+   RW assists: from 935 -> 937 (0.2 percent), to 1060 -> 1060 (0.0 percent); 5 of 2400 careers are over the old from and under the new
+   RW points: from 1760 -> 1770 (0.6 percent), to 2020 -> 2000 (-1.0 percent); 15 of 2400 careers are over the old from and under the new
+   D assists: from 1100 -> 1100 (0.0 percent), to 1240 -> 1240 (0.0 percent); 0 of 2400 careers are over the old from and under the new
+   D points: from 1450 -> 1450 (0.0 percent), to 1640 -> 1630 (-0.6 percent); 0 of 2400 careers are over the old from and under the new
+   G wins: from 721 -> 721 (0.0 percent), to 794 -> 794 (0.0 percent); 0 of 2400 careers are over the old from and under the new
+deriveBands: wrote /home/runner/work/_temp/rc-out/files/derive-base.json
