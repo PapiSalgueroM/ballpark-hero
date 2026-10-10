@@ -587,7 +587,11 @@ describe('Round 1216: an own goal on scenes made by hand', () => {
 
 /* ---- the record. A small FNV-1a hash over JSON with numbers rounded to four places, as in
    liveSimCelebration.test.tsx, whose three digests (every frame that is NOT an own goal, and the figure in every
-   pose it had) this round does not edit. These two are new: recorded once, in the commit that drew the own goal. */
+   pose it had) this round does not edit. These two are new: recorded in the commit that drew the own goal.
+   OWN was taken again once, in the review fix pass, and RUE was not. What moved OWN is the keeper's own goal alone
+   (4 of the 16 variants below, 88 of 352 frames): his corner is the one on the side the ball came from, and he
+   gets up as it goes in. Proof, remote check r1216-fx-p: with those two lines of motion.tsx put back the first
+   recording, 669ef935, replays green; with either one put back alone it does not (0e31fa9b, eddb7f1d). */
 const fnv = (text: string) => {
   let hash = 0x811c9dc5;
   for (let i = 0; i < text.length; i++) { hash ^= text.charCodeAt(i); hash = Math.imul(hash, 0x01000193); }
@@ -596,7 +600,7 @@ const fnv = (text: string) => {
 const FRAME_FIELDS = ['mine', 'theirs', 'ball', 'holderKey', 'poses', 'action', 'net', 'netPulse', 'phase', 'ownGoalBy'] as const;
 const digest = (value: unknown) => fnv(JSON.stringify(value, (_key, v) => (typeof v === 'number' ? Math.round(v * 1e4) / 1e4 : v)));
 const SAMPLES = Array.from({ length: 22 }, (_unused, i) => i * .05);
-const OWN_DIGEST = '669ef935';
+const OWN_DIGEST = 'c648618c';
 const RUE_DIGEST = 'c9817b1a';
 
 describe('Round 1216: the recorded own goal', () => {
