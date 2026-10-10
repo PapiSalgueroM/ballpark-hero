@@ -1,0 +1,8 @@
+build exit=0 32s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+vitest exit=0 4s |    Duration  3.27s (transform 657ms, setup 178ms, collect 1.22s, tests 1.35s, environment 1.14s, prepare 348ms)
+simStaleChunk exit=0 0s | simStaleChunk: green. A tab left open across a deploy reloads once for a missing chunk instead of painting the broken page.
+simErrorBoundary exit=0 1s | simErrorBoundary: all green
+simStorageWrites exit=0 2s | simStorageWrites: all green
+simHomeCopy exit=0 1s | simHomeCopy: green. The one page a crawler reads first says only true things.
+tsc exit=0 69s | 
+walkL exit=0 254s | playSaveKeeper: green. A save put back with a game in memory survives the load.
