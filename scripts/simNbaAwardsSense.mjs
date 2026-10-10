@@ -169,18 +169,28 @@
        a seed) is held to the seasons it was dealt on (exact): the card for making the roster only in a
        season that holds the award word the engine writes, the card for dropping off it only in a season
        that does not right after one that did, the promise the one that card makes, and never a word on the
-       rival's roster. Both cards still turn up on every seed (floors near six tenths of the lowest seed).
-       Measured 2026-10-10 on seeds 1 to 5, none wrong in either sport:
+       rival's roster. Both cards still turn up over the run (a floor on the run's total, six tenths of the
+       measured mean a seed times the seeds played: the NFL's counts are too small to floor seed by seed).
+       Measured 2026-10-10 on seeds 1 to 5, none wrong in any sport:
        MLB, beat 206 on "All-Star": dealt 28, 24, 24, 29, 30 times a seed, he made it 16, 15, 13, 11, 15
-       and he dropped off 12, 9, 11, 18, 15 (floors 6 and 5); 4.1 to 5.0 percent of judged seasons hold an
-       All-Star and 3.4 to 3.9 percent do not, right after one that did.
+       and he dropped off 12, 9, 11, 18, 15 (70 and 65 over the run, floors 42 and 39); 4.1 to 5.0 percent
+       of judged seasons hold an All-Star and 3.4 to 3.9 percent do not, right after one that did.
        NHL, beat 306 on "All-Star": dealt 42, 30, 34, 35, 35 times a seed, he made it 29, 19, 15, 21, 20
-       and he dropped off 13, 11, 19, 14, 15 (floors 9 and 6); 5.1 to 5.8 and 3.8 to 4.4 percent.
+       and he dropped off 13, 11, 19, 14, 15 (104 and 72, floors 62 and 43); 5.1 to 5.8 and 3.8 to 4.4
+       percent.
+       NFL, beat 206 on "All-Pro" (the engine picks no Pro Bowl, so the beat left its ballot for the first
+       team the engine does pick): dealt 5, 8, 9, 5, 10 times a seed, he made it 1, 4, 6, 3, 7 and he
+       dropped off 4, 4, 3, 2, 3 (21 and 16, floors 12.5 and 9.5); 1.3 to 1.5 and 1.1 to 1.3 percent.
+       And no beat dealt in the three fleets promises a "50/50 outcome" (exact, 82,278 beats on 2026-10-10).
+       The NFL's joint practice (219) was the last coin: this fleet cannot deal it, because it never changes
+       clubs and the rival is drafted onto the player's, so its proof is simCareerRivalryEvents section 4
+       and simNflCareer.
        WHY NOT THE COIN BEAT'S GATE for the miss (both rated 80 or better, the first draft of this round):
        measured the same way it dealt the miss 35 to 55 times a seed in MLB against 11 to 16 for making it,
        and 145 to 167 against 15 to 29 in the NHL, a morale tax on being ordinary sold as a snub.
-       Against the tree before (section Q) 941 of 28,193 MLB beats and 2,833 of 31,055 NHL beats read
-       differently: the pool is another pool in some seasons, so the same draw picks another card.
+       Against the tree before (section Q) 941 of 28,193 MLB beats, 2,833 of 31,055 NHL beats and 783 of
+       23,030 NFL beats read differently: the pool is another pool in some seasons, so the same draw picks
+       another card.
    R, H and B6 compare the mean over the run's seeds with the mean over main's, within a FIXED width typed in
    HELD_TOL (heldAt below says why a seed by seed band was thrown away, and why the width is no longer worked
    out from the spread of the run being judged). Each width is what three standard errors came to at full
@@ -228,6 +238,8 @@
      lastyearmlb      the MLB tick rolling on the bare save, so the    S red
                       beat reads the season before the one just played
      lastyearnhl      the same swap in the NHL tick                    S red
+     lastyearnfl      the same swap in the NFL tick                    S red
+     soldascoin       one NHL beat promising "50/50 outcome" again     S red
    With SENSE_PROVE_AGAINST=<commit> set, rivaldraws must also turn P red (the player's digest moves).
      noscale          the legacy constant back to 1                    H red (refuses when it is 1)
      nomvpworth       an MVP worth nothing to the legacy score         H red
@@ -389,6 +401,9 @@ const CONTROLS = {
   /* S: the MLB tick rolling on the bare save, so the beat reads the season BEFORE the one just played. */
   lastyearmlb: { file: 'src/lib/mlbCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
   lastyearnhl: { file: 'src/lib/nhlCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
+  lastyearnfl: { file: 'src/lib/nflCareerRivalryEvents.ts', find: '  const p = withSeasonPlayed(c, season);', put: '  const p = withSeasonPlayed(c, undefined);', needs: 'S' },
+  /* S: one beat sold as a coin again (the NHL's head to head win promising "50/50 outcome" in place of what it does). */
+  soldascoin: { file: 'src/lib/nhlCareerRivalryEvents.ts', find: '    consequence: "Fanbase +5, confidence boost",', put: '    consequence: "50/50 outcome",', needs: 'S' },
   /* R: the rival's season taking a second draw of the season's stream (every draw of the player's after it moves). */
   rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);", put: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng() + rng()}`);", needs: PROVE_AGAINST ? 'R,P' : 'R' },
   /* K: the Trophy Case tile's row for the lesser awards taken out. */
@@ -1193,14 +1208,17 @@ const RIVAL_1112 = { myShare: [61.01, 60.83, 61.44, 61.06, 61.09] };
 /* K: careers a full size seed must still find whose only awards are the lesser ones (see the header). */
 const LESSER_ONLY_FLOOR = 230;
 /* S, Round 1149: each sport's roster beat, the award word its engine writes on the season, how its two cards
-   open, and how often a seed of 500 careers must still deal each (see the header for the measured counts). */
+   open, and how often the run must still deal each: a mean a seed of 500 careers, six tenths of the measured
+   mean (see the header for the counts). A mean over the run and not a floor on every seed, because the NFL's
+   first team All-Pro beat is dealt 5 to 10 times a seed and one of its cards once on the thinnest seed. */
 const S_BEAT = {
-  mlb: { id: 206, award: 'All-Star', made: /^The All-Star rosters are out and you are on one\./, dropped: /^The All-Star rosters are out and you are not on one, a year after you were\./, floor: { made: 6, dropped: 5 } },
-  nhl: { id: 306, award: 'All-Star', made: /^The All-Star rosters are out and you are on one\./, dropped: /^The All-Star rosters are out and you are not on one, a year after you were\./, floor: { made: 9, dropped: 6 } },
+  mlb: { id: 206, award: 'All-Star', made: /^The All-Star rosters are out and you are on one\./, dropped: /^The All-Star rosters are out and you are not on one, a year after you were\./, floor: { made: 8.4, dropped: 7.8 } },
+  nhl: { id: 306, award: 'All-Star', made: /^The All-Star rosters are out and you are on one\./, dropped: /^The All-Star rosters are out and you are not on one, a year after you were\./, floor: { made: 12.4, dropped: 8.6 } },
+  nfl: { id: 206, award: 'All-Pro', made: /^The All-Pro team is out and you are on the first team\./, dropped: /^The All-Pro team is out and you are not on the first team, a year after you were\./, floor: { made: 2.5, dropped: 1.9 } },
 };
 /* Q, Round 1149: the sports whose roster beat the round has taken off its coin so far. In those the cards must
    differ between the two trees; in the others every card must be the same. */
-const Q_MOVED = { nfl: false, mlb: true, nhl: true };
+const Q_MOVED = { nfl: true, mlb: true, nhl: true };
 /* K, Round 1149: the same floor for the other three careers, a seed of 500 (see the header). */
 const OTHER_LESSER_ONLY_FLOOR = { nfl: 7, mlb: 7, nhl: 3 };
 /* T: how many near tie notes of each kind a full size run must still find in each sport (see the header). */
@@ -1730,8 +1748,19 @@ for (const sp of Object.keys(OTHER).filter(k => Q_MOVED[k])) {
   });
   const wrong = perSeed.flatMap(x => x.wrong);
   exact('S', perSeed.every(x => x.dealt > 0) && wrong.length === 0, `${S}: beat ${B.id} never contradicts the seasons it is dealt on: dealt ${perSeed.map(x => x.dealt).join(', ')} times a seed (he made it ${perSeed.map(x => x.made).join(', ')}; he dropped off ${perSeed.map(x => x.dropped).join(', ')}), cards that say or promise something else ${wrong.length}${wrong.length ? `; the first: "${wrong[0].says}" (${wrong[0].does}) in a season with [${wrong[0].awards.join(', ')}] after one with [${(wrong[0].awardsBefore ?? ['no season']).join(', ')}], rated ${wrong[0].ovr} against ${wrong[0].rivalOvr}` : ''}`);
-  banded('S', perSeed.every(x => x.made >= B.floor.made && x.dropped >= B.floor.dropped), `${S}: both cards of beat ${B.id} still turn up on every seed (floors ${B.floor.made} and ${B.floor.dropped}, each near six tenths of its lowest seed)`);
+  const sumOf = k => perSeed.reduce((n, x) => n + x[k], 0);
+  banded('S', sumOf('made') >= B.floor.made * SEEDS.length && sumOf('dropped') >= B.floor.dropped * SEEDS.length, `${S}: both cards of beat ${B.id} still turn up over the run: ${sumOf('made')} and ${sumOf('dropped')} on ${SEEDS.length} seeds (floors ${r1(B.floor.made * SEEDS.length)} and ${r1(B.floor.dropped * SEEDS.length)}, six tenths of the measured means)`);
   console.log(`  note [S, printed] ${S}: judged seasons that hold "${B.award}": ${perSeed.map(x => r2(x.mine)).join(', ')} percent a seed; that do not, a year after one that did: ${perSeed.map(x => r2(x.off)).join(', ')} percent`);
+}
+
+/* S, no beat of the three careers is sold as a coin any more (Round 1149: NFL 219, the joint practice, was the
+   last). The fleet cannot deal 219 itself: it never changes clubs and the rival is drafted onto the player's,
+   so that beat's own proof is scripts/simCareerRivalryEvents.mjs section 4 and scripts/simNflCareer.mjs. What
+   the fleet can hold is every card it does deal. */
+{
+  const dealt = Object.keys(OTHER).flatMap(sp => others[sp].flatMap(o => o.beats.filter(x => x.id !== null).map(x => ({ sp, ...x }))));
+  const coin = dealt.filter(x => Q_MOVED[x.sp] && /50\/50/.test(`${x.says} ${x.does}`));
+  exact('S', dealt.length > 0 && coin.length === 0, `no rivalry beat dealt in a sport the round has moved promises a "50/50 outcome": ${coin.length} of ${dealt.length} beats${coin.length ? `; the first: ${coin[0].sp.toUpperCase()} ${coin[0].id} "${coin[0].says}"` : ''}`);
 }
 
 /* P, the proof of Round 1112 (judged only when asked, like C): the player's own path did not move, and neither

@@ -42,10 +42,10 @@
    scripts/simCareerRivalryEvents.mjs re-proves that as its own explicit
    section rather than trusting the existing green run. */
 
-import type { CareerState } from "./nflMyCareer";
+import type { CareerState, SeasonLine } from "./nflMyCareer";
 import type { CareerRival } from "./careerRival";
 import {
-  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
+  rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor, factBeat, withSeasonPlayed, ownRosterBeat,
 } from "./careerRivalryEvents";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
 import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
@@ -55,6 +55,8 @@ const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v
 
 /** The beat that fires forced, once, the season the rival retires. */
 export const NFL_RIVAL_RETIRE_ID = 205;
+/** Round 1149: the award word simSeason writes on a first team All-Pro season. Beat 206 reads it. */
+export const NFL_ROSTER_AWARD = 'All-Pro';
 
 /* Twenty three beats (seventeen, plus Round 917's six at the end), gated on
    what an NFL rival's save actually tracks:
@@ -99,16 +101,24 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
     when: (_s, r) => r.retired,
     apply: s => { s.fanbase = clamp(s.fanbase + 10, 0, 100); },
   },
-  {
-    id: 206, emoji: "🗳️", title: "Ballot Squeeze",
-    description: (_s, r) => `Only one of you is making the Pro Bowl ballot at the position this year, and it comes down to ${r.name}.`,
-    consequence: "50/50 outcome",
-    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,
-    apply: (s, r, rng, pushLine) => {
-      if (rng() < 0.5) { s.morale = clamp(s.morale + 5, 0, 100); pushLine(`🗳️ You made the ballot over ${r.name}!`); }
-      else { s.morale = clamp(s.morale - 5, 0, 100); pushLine(`🗳️ ${r.name} made the ballot over you.`); }
+  /* Round 1149: no coin, and no ballot the game never holds. The beat flipped a coin for which of you made
+     "the Pro Bowl ballot". simSeason picks no Pro Bowl: the one all league honour it decides is the first team
+     All-Pro (allPro in careerAwards.ts), which is on your season card and in your Trophy Case. So the beat is
+     about that team now, read off your own record on the builder MLB's 206 and the NHL's 306 use
+     (ownRosterBeat in careerRivalryEvents.ts, where the rule is written): you made the first team, or you are
+     off it a year after you were on it. The NFL rival's season is not on your stat line yet, so nothing here
+     says whether HE made a team. */
+  ownRosterBeat<CareerState, CareerRival>({
+    id: 206, emoji: "🗳️", title: "All-Pro Team", award: NFL_ROSTER_AWARD,
+    made: {
+      description: r => `The All-Pro team is out and you are on the first team. It goes down as one more line in the argument between you and ${r.name}.`,
+      line: "🗳️ You were named first team All-Pro.",
     },
-  },
+    dropped: {
+      description: r => `The All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in the argument between you and ${r.name}.`,
+      line: "🗳️ You were left off the All-Pro first team.",
+    },
+  }),
   {
     id: 207, emoji: "⭐", title: "Rival's Ring",
     description: (_s, r) => `${r.name}'s team wins it all. Yours came up short.`,
@@ -236,16 +246,26 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
       s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
     },
   },
-  {
+  /* Round 1149: no coin. The beat flipped one for who got the better of the joint practices, a result the
+     game plays nowhere and records nowhere, so there is no fact to read it off. The card's own words say there
+     is no scoreboard, and now nothing claims a winner: the week sharpens you and heats the rivalry, the shape
+     the NBA's summer pickup run (321) already has. It is built on factBeat with its one card so a save
+     sitting on the old "50/50 outcome" card resolves with no effect, like every beat that left its coin. */
+  factBeat<CareerState, CareerRival>({
     id: 219, emoji: "🥊", title: "Joint Practice",
-    description: (_s, r) => `Your team and ${r.name}'s team share a field for joint practices in camp. No scoreboard, and everybody keeps score.`,
-    consequence: "50/50 outcome",
-    when: (s, r) => !r.retired && r.team !== s.team,
-    apply: (s, r, rng, pushLine) => {
-      if (rng() < 0.5) { s.morale = clamp(s.morale + 5, 0, 100); pushLine(`🥊 You got the better of ${r.name} in the joint practices. Morale +5.`); }
-      else { s.morale = clamp(s.morale - 4, 0, 100); pushLine(`🥊 ${r.name} got the better of you in the joint practices. Morale -4.`); }
-    },
-  },
+    cards: [
+      {
+        when: (s, r) => !r.retired && r.team !== s.team,
+        description: (_s, r) => `Your team and ${r.name}'s team share a field for joint practices in camp. No scoreboard, and everybody keeps score.`,
+        consequence: "Morale +3, rivalry intensifies",
+        move: s => {
+          s.morale = clamp(s.morale + 3, 0, 100);
+          s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 10, 0, 100);
+        },
+        line: (_s, r) => `🥊 A week of joint practices against ${r.name}'s team, and neither of you gave an inch. Morale +3.`,
+      },
+    ],
+  }),
   {
     id: 220, emoji: "💰", title: "Rival Resets the Market",
     description: (_s, r) => `${r.name} just signed the biggest deal anyone at the position has seen. Every story about it mentions your name in the second paragraph.`,
@@ -294,12 +314,16 @@ export const NFL_RIVALRY_EVENTS: RivalryEventDef<CareerState, CareerRival>[] = [
  * simSeason right after judgeRivalSeason, the same point in the loop the
  * flagship rolls its own. Returns null on a season with nothing to show.
  */
-export function nflRivalryTick(c: CareerState, rng: () => number = Math.random): RivalryEvent | null {
+export function nflRivalryTick(c: CareerState, rng: () => number, season: SeasonLine): RivalryEvent | null {
   if (!c.rival) return null;
+  /* Round 1149: simSeason rolls this before the season is on the save, and beat 206 reads the season, so the
+     gates and the words see the save as it stands once the season is on it (the season is required: a roll
+     without it would read last year's). Nothing is drawn for it and nothing is written. */
+  const p = withSeasonPlayed(c, season);
   const lastId = c.lastRivalryEventId ?? null;
-  const rolled = rollRivalryEvent(c, c.rival, lastId, NFL_RIVALRY_EVENTS, rng);
+  const rolled = rollRivalryEvent(p, c.rival, lastId, NFL_RIVALRY_EVENTS, rng);
   if (rolled) return rolled;
-  return forcedRetirementEvent(c, c.rival, lastId, NFL_RIVALRY_EVENTS, NFL_RIVAL_RETIRE_ID);
+  return forcedRetirementEvent(p, c.rival, lastId, NFL_RIVALRY_EVENTS, NFL_RIVAL_RETIRE_ID);
 }
 
 /**

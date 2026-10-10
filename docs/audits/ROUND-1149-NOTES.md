@@ -9,10 +9,10 @@ step, so a later session can finish from it. What is not listed under DONE is no
 | Step | What | State |
 |---|---|---|
 | a | The Trophy Case tile row for every award, NFL, MLB and NHL, with its test and harness section | DONE, green on runners at 8da17c5f |
-| b | The shared lift: one fact beat builder in `careerRivalryEvents.ts`, the NBA's beat 306 moved onto it | BUILT at aea08239, see below |
+| b | The shared lift: one fact beat builder in `careerRivalryEvents.ts`, the NBA's beat 306 moved onto it | DONE at aea08239 and green on runners |
 | c | MLB beat 206 read off the season, no coin | DONE at e2dd37a9 and green on runners; recordings 3f52f0de and 53d241a2. Its second card was REWRITTEN in step d, see there |
-| d | NHL beat 306 read off the season, no coin; the beat lifted into `ownRosterBeat`; the second card reads the season before, not the ratings | BUILT, see below; recordings follow |
-| e | NFL beats 206 and 219, no coin | not started |
+| d | NHL beat 306 read off the season, no coin; the beat lifted into `ownRosterBeat`; the second card reads the season before, not the ratings | DONE at e5105752 and green on runners; recordings 3b473626 and 9597ce5d |
+| e | NFL beats 206 and 219, no coin | BUILT, see below; recordings follow |
 | f | One What's New entry, the merge of origin/main, the last gates | not started |
 
 ## Step a, the tile (DONE in code, proof listed below)
@@ -119,6 +119,33 @@ rival and note byte equal.
 Controls: `oldgateown` (the shared builder back on the ratings) replaces `oldgate206mlb`; `droppedanyyear`,
 `lastyearnhl` are new; all S red.
 
+## Step e, the NFL's two beats (built)
+
+THE BRIEF'S PREMISE DOES NOT HOLD FOR THE NFL, on two points, and both are decided here:
+
+1. Beat 206 (Ballot Squeeze) flipped a coin for "the Pro Bowl ballot". `simSeason` picks NO Pro Bowl. The one all
+   league honour the NFL engine decides is the first team All-Pro (`allPro` in careerAwards.ts), which is on the
+   season card and in the Trophy Case. So the beat reads that: it is `ownRosterBeat` with the award word
+   `All-Pro`, titled "All-Pro Team". He made the first team (Morale +5), or he is off it a year after he was on it
+   (Morale -5). Nothing about the rival's team.
+2. The "second 50/50 beat near line 242" is beat 219, Joint Practice. It is not an All-Star beat: it flipped a
+   coin for who got the better of camp practices, a result the game plays and records nowhere, so there is no
+   fact to read it off. The lead's rule is no coin anywhere, so the card now names no winner: Morale +3 and the
+   rivalry intensifies, the shape the NBA's summer pickup run (321) has. It is a one card `factBeat`, so a save on
+   the old "50/50 outcome" card resolves with no effect.
+
+`nflRivalryTick` requires the season just played. Measured (500 careers a seed, seeds 1 to 5): 206 dealt 5, 8, 9,
+5, 10 times a seed (made 1, 4, 6, 3, 7; dropped off 4, 4, 3, 2, 3); 1.3 to 1.5 percent of judged NFL seasons hold
+a first team All-Pro. Against 808dbbdc 783 of 23,030 NFL beats read differently, players, rivals and notes byte
+equal. The engine fleet never deals 219 (it never changes clubs and the rival is drafted onto the player's), so
+219's proof is the rivalry harness (section 4) and simNflCareer, which both now also assert that four different
+rolls land one end for every one of the 24 newer beats (no coin left in the four US tables).
+
+LEFT ALONE, FOR A RULING: NFL beat 221 (All Star Week) says "You and (rival) both make the all star roster" on
+the two ratings (82 or better each, two teams). The NFL engine picks no such roster for anybody, so the card
+contradicts nothing the game prints, and it is not a coin. It is still a claim with no fact behind it. Not in
+the brief, not touched.
+
 ## Decisions taken (the lead may overrule)
 
 1. The tap finds its card by the promise printed on the pending card (not by a new save field and not by a new
@@ -128,7 +155,10 @@ Controls: `oldgateown` (the shared builder back on the ratings) replaces `oldgat
    player's own record: he made it, and he is off it a year after he was on it. Neither says a word about the
    rival's roster, and no rating is read. Morale +5 and -5, the coin's own two ends. The beat is in the pool
    far less often than the coin beat was (it was there whenever both were rated 80 or better).
-3. The title becomes "All-Star Rosters" in MLB and the NHL, the NBA's title since Round 1112.
+3. The title becomes "All-Star Rosters" in MLB and the NHL, the NBA's title since Round 1112, and "All-Pro Team"
+   in the NFL.
+4. NFL 206 reads the first team All-Pro, because the engine holds no Pro Bowl.
+5. NFL 219 names no winner (Morale +3, rivalry intensifies) instead of reading a rating or the head to head.
 
 ## Owed to the other lane (guide sentences that become false)
 

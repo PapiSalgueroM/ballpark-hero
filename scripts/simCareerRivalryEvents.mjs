@@ -172,6 +172,9 @@ function beatWords(label, defs, gates) {
         ends.push(beatKey(moved));
       }
       if (typeof def.consequence === 'string' && /50\/50/.test(def.consequence) && ends[1] === ends[2]) fail(`${label} beat ${id}: sold as 50/50 and rolls of 0.4999 and 0.5001 land the same end`);
+      /* Round 1149: none of these 24 beats flips a coin any more (NFL 219 was the last), so the roll can never
+         choose the end. */
+      if (new Set(ends).size !== 1) fail(`${label} beat ${id}: four different rolls landed ${new Set(ends).size} different ends, so something is still drawn`);
     }
     if (applies < 4) fail(`${label} beat ${id}: only ${applies} applies made`);
   }
@@ -653,8 +656,9 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
   /* 4a. Every id in the table, exercised against a fixture built to satisfy
      its gate, the same badge-style reachability proof simCareerParity.mjs
      uses for careerBadges.ts: a beat nobody can trigger is dead words. */
+  /* seasons: every NFL save carries the list, and since Round 1149 beat 206 reads its last two entries. */
   const nflFixture = over => ({
-    ovr: 80, age: 25, rings: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, ...over,
+    ovr: 80, age: 25, rings: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, seasons: [], ...over,
   });
   const rivalFixture = over => ({
     name: 'Rival NFL', pos: 'QB', team: 'KC', ovr: 80, pot: 90, age: 25, rings: 0,
@@ -666,7 +670,8 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
     203: [nflFixture(), rivalFixture()],
     204: [nflFixture(), rivalFixture()],
     205: [nflFixture(), rivalFixture({ retired: true })],
-    206: [nflFixture({ ovr: 85 }), rivalFixture({ ovr: 85 })],
+    /* Round 1149: 206 is dealt on the season's own first team All-Pro fact, never on a coin. */
+    206: [nflFixture({ seasons: [{ year: 2030, awards: ['All-Pro'] }] }), rivalFixture()],
     207: [nflFixture({ rings: 0 }), rivalFixture({ rings: 2 })],
     208: [nflFixture({ ovr: 90 }), rivalFixture({ ovr: 85 })],
     209: [nflFixture({ team: 'DAL' }), rivalFixture({ team: 'DAL' })],
@@ -696,6 +701,27 @@ console.log('4) The NFL binding: every beat reachable and correct, and the tick 
     else if (def.when({ ...p, team: r.team }, r)) fail(`beat ${id} (${def.title}) fires while the rival is your teammate`);
   }
   beatWords('NFL', nflRivalry.NFL_RIVALRY_EVENTS, gates); /* Round 988, before the loop below mutates the fixtures */
+  /* Round 1149: the All-Pro beat, read off the player's own record (see ownRosterBeatCheck). The engine picks
+     no Pro Bowl, so the beat no longer speaks of a ballot: its fact is the first team All-Pro on the season. */
+  ownRosterBeatCheck('NFL', nflRivalry.NFL_RIVALRY_EVENTS, 206, {
+    p: nflFixture, r: rivalFixture, award: nflRivalry.NFL_ROSTER_AWARD, rivalName: 'Rival NFL',
+    made: { says: /^The All-Pro team is out and you are on the first team\./, told: /You were named first team All-Pro\./ },
+    dropped: { says: /^The All-Pro team is out and you are not on the first team, a year after you were\./, told: /You were left off the All-Pro first team\./ },
+  });
+  /* Round 1149: the joint practice. It flipped a coin for a winner the game plays nowhere; now it names none. */
+  {
+    const dealt = factBeatCheck('NFL', nflRivalry.NFL_RIVALRY_EVENTS, 219, {
+      never: [
+        { name: 'while the rival is your teammate', p: nflFixture({ team: 'KC' }), r: rivalFixture() },
+        { name: 'after the rival has retired', p: nflFixture({ team: 'DAL' }), r: rivalFixture({ retired: true }) },
+      ],
+      deal: [
+        { name: 'on two teams', p: nflFixture({ team: 'DAL' }), r: rivalFixture(), says: /share a field for joint practices in camp\. No scoreboard/, silent: /got the better of/, reads: 'Morale +3, rivalry intensifies', move: { morale: 3 }, told: /joint practices against Rival NFL's team, and neither of you gave an inch\. Morale \+3\./ },
+      ],
+    });
+    console.log(`   the joint practice (219): ${dealt} of 1 card dealt and applied at 4 rolls, no winner named and no coin, and a card from the old coin resolves with no effect`);
+    if (dealt < 1) fail('NFL beat 219 was not dealt on two teams');
+  }
   let reachable = 0, correct = 0;
   const total = nflRivalry.NFL_RIVALRY_EVENTS.length;
   for (const def of nflRivalry.NFL_RIVALRY_EVENTS) {
