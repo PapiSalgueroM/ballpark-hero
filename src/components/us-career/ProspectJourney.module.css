@@ -70,7 +70,7 @@
 .playArea [data-night-row='unpicked'] { border-color: #b7cadc; background: #e6edf3; }
 .playArea [data-lottery-slot] { border-color: #d5e0ea; background: #e6edf3; }
 .playArea [data-lottery-slot] > span[aria-hidden] { color: #4b647b; }
-.playArea [data-lottery-face] { background: #f2f6fa; color: var(--ink); }
+.playArea [data-lottery-face] { background: #f2f6fa; color: var(--ink); padding-inline: 6px; gap: 6px; }
 @media (min-width: 540px) { .routes { grid-template-columns: repeat(2, minmax(0, 1fr)); } .route:last-child:nth-child(3) { grid-column: 1 / -1; } .stageCopy { padding-right: 20px; width: 74%; } .portrait { right: 24px; width: 145px; } .acts li { font-size: 12px; } }
 @media (max-width: 359px) { .stageCopy { padding-left: 16px; width: 82%; padding-right: 48px; } .portrait { width: 106px; right: -7px; opacity: .75; } .portrait svg { width: 106px; height: 106px; } .acts { gap: 5px; padding-inline: 10px; } .acts li { font-size: 10px; gap: 4px; } .playArea { padding: 14px; } .playArea [data-night-actions] button { padding-inline: 4px; font-size: 12px; } }
 @media (prefers-reduced-motion: reduce) { .journey *, .journey *::before, .journey *::after { animation: none !important; transition: none !important; } }
