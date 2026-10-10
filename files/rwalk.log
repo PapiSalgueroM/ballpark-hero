@@ -1,0 +1,20 @@
+NOTE new-seriea-390-m: scrollY before Help 0, after closing Help 0
+NOTE new-seriea-1280-rm: scrollY before Help 0, after closing Help 0
+FAIL new-eredivisie-390-rm: the league results after matchday one are not exactly the real matchday one pairs (0 pairs, first undefined)
+FAIL new-primeira-1280-m: the league results after matchday one are not exactly the real matchday one pairs (0 pairs, first undefined)
+FAIL new-superlig-390-m: the league results after matchday one are not exactly the real matchday one pairs (0 pairs, first undefined)
+NOTE new-superlig-390-m: scrollY before Help 0, after closing Help 0
+FAIL new-bundesliga2-1280-m: the league results after matchday one are not exactly the real matchday one pairs (0 pairs, first undefined)
+FAIL new-ligue2-390-m: the league results after matchday one are not exactly the real matchday one pairs (0 pairs, first undefined)
+FAIL start-blocked-390: stopped (locator.tap: Timeout 30000ms exceeded.)
+NOTE start-hung-1280: at 2 s the page reads "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats Loading… Club Manager: Free Footb"; Loading element animation under reduce: pulse 1e-06s; scrollY 1253
+NOTE start-hung-1280: hub after 8456 ms with the list never answering
+NOTE start-hung-390: at 2 s the page reads "Skip to main content DOUKNOWBALL Back Track stats Loading… Club Manager: Free Football Management Game A full club-management sim in your br"; Loading element animation under no-preference: pulse 2s; scrollY 1742
+NOTE start-hung-390: hub after 8470 ms with the list never answering
+NOTE boot-blocked-390: the notice reads "The 2026-27 fixture list did not load. Check your connection, then try again. Nothing has been lost. Try againBack to your managers"
+NOTE boot-blocked-390: after Resume with the list still refused: hub 0, notice 1, page errors 0, text "Skip to main content DOUKNOWBALL Back Track stats The 2026-27 fixture list did not load. Check your connection, then try"
+NOTE boot-blocked-1280: the notice reads "The 2026-27 fixture list did not load. Check your connection, then try again. Nothing has been lost. Try againBack to your managers"
+NOTE boot-blocked-1280: after Resume with the list still refused: hub 0, notice 1, page errors 0, text "Skip to main content LIVE Live scores temporarily unavailable DOUKNOWBALL Back Sign up to track your stats The 2026-27 f"
+NOTE slots-1280: /manager-hot-seat in the same visit after a list was fetched: 7542 chars, the same text as a fresh visit; "Manager Hot Seat Five games. One target. The board are watching. TODAY'S HOT SEAT Newcastle Premier League. Sa"
+NOTE slots-1280: /deadline-day in the same visit after a list was fetched: 10383 chars, the same text as a fresh visit; "Deadline Day Twelve hours. One budget. The window shuts at 11pm. TODAY'S DEADLINE DAY Heerenveen Eredivisie. S"
+rwalk: 6 FAIL, 13 NOTE, 18 journey rows

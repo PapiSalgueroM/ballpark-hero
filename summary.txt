@@ -1,0 +1,7 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+basebuild exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+rwalk exit=1 126s | rwalk: 6 FAIL, 13 NOTE, 18 journey rows
+builderwalk exit=0 30s | playCmLeagueFixtures: green. 6 journeys (EFL Championship, La Liga, Bundesliga at 390 and 1280) and one with its list three seconds late, 93 checks, and 3 pages that fetc
+ondemand exit=0 8s | simCmDataOnDemand: green. No page downloads data it never reads, and a past season brings its own.
+weight exit=1 27s |    /club-manager       583K gz over  39 files (budget 578K, 583.0K to the tenth)|   /manager-hot-seat   601K gz over  41 files (budget 596K, 600.6K to the tenth)|   /dead
+tree-clean exit=0 1s | src and scripts are as committed
