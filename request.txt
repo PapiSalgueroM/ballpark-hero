@@ -1,0 +1,31 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simOwnGoalMotion: node scripts/simOwnGoalMotion.mjs
+og-plain: OWN_GOAL_CONTROL=plain node scripts/simOwnGoalMotion.mjs
+og-side: OWN_GOAL_CONTROL=side node scripts/simOwnGoalMotion.mjs
+og-crowded: OWN_GOAL_CONTROL=crowded node scripts/simOwnGoalMotion.mjs
+og-late: OWN_GOAL_CONTROL=late node scripts/simOwnGoalMotion.mjs
+og-cheer: OWN_GOAL_CONTROL=cheer node scripts/simOwnGoalMotion.mjs
+og-through: OWN_GOAL_CONTROL=through node scripts/simOwnGoalMotion.mjs
+og-straight: OWN_GOAL_CONTROL=straight node scripts/simOwnGoalMotion.mjs
+og-absent: OWN_GOAL_CONTROL=absent node scripts/simOwnGoalMotion.mjs
+og-reducedog: OWN_GOAL_CONTROL=reducedog node scripts/simOwnGoalMotion.mjs
+og-setpiece: OWN_GOAL_CONTROL=setpiece node scripts/simOwnGoalMotion.mjs
+og-touchmoved: OWN_GOAL_CONTROL=touchmoved node scripts/simOwnGoalMotion.mjs
+og-ruemoved: OWN_GOAL_CONTROL=ruemoved node scripts/simOwnGoalMotion.mjs
+og-viewerplain: OWN_GOAL_CONTROL=viewerplain node scripts/simOwnGoalMotion.mjs
+og-castnow: OWN_GOAL_CONTROL=castnow node scripts/simOwnGoalMotion.mjs
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+lm-save: LIVE_MOTION_CONTROL=save node scripts/simLiveSimMotion.mjs
+lm-lineup: LIVE_MOTION_CONTROL=lineup node scripts/simLiveSimMotion.mjs
+lm-reduced: LIVE_MOTION_CONTROL=reduced node scripts/simLiveSimMotion.mjs
+lm-mouth: LIVE_MOTION_CONTROL=mouth node scripts/simLiveSimMotion.mjs
+lm-takenback: LIVE_MOTION_CONTROL=takenback node scripts/simLiveSimMotion.mjs
+lm-samecommit: LIVE_MOTION_CONTROL=samecommit node scripts/simLiveSimMotion.mjs
+simLiveSimCelebration: node scripts/simLiveSimCelebration.mjs
+lc-missing: LIVE_CELEBRATION_CONTROL=missing node scripts/simLiveSimCelebration.mjs
+lc-figure: LIVE_CELEBRATION_CONTROL=figure node scripts/simLiveSimCelebration.mjs
+lc-expiry: LIVE_CELEBRATION_CONTROL=expiry node scripts/simLiveSimCelebration.mjs
+lc-reduced: LIVE_CELEBRATION_CONTROL=reduced node scripts/simLiveSimCelebration.mjs
+lc-ballstep: LIVE_CELEBRATION_CONTROL=ballstep node scripts/simLiveSimCelebration.mjs
+lc-window: LIVE_CELEBRATION_CONTROL=window node scripts/simLiveSimCelebration.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs

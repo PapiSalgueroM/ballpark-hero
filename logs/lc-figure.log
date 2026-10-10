@@ -1,0 +1,5 @@
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/live-celebration-eWFfgi/result.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simLiveSimCelebration: figure changed source, intended assertion failed, independent destinations stayed green.

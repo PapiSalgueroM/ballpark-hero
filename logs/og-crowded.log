@@ -1,0 +1,55 @@
+Negative control changed temporary source: crowded (src/components/pitch-motion/motion.tsx)
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it
+[1216 material] 100 matches, 200 half feeds; own goals staged 163 (goals left as they were: 118), for me 79, against me 84; the named man on the viewer's cast 163, not on it 0; by a back 139, by the keeper 24; actions that start outside the goal's own minute 0, wound up as a last kick 0
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG9: from the touch to the net the ball passes nobody else
+[1216 OG9] own goals whose ball comes within 2 of another figure between the touch and the net: 13 of 163 (a keeper 0, a man of the side that got it 12) | Aston Villa 45+2' opp Pau Torres passes o10; Aston Villa 46' opp Pau Torres passes o10; Aston Villa 84' opp Pau Torres passes o10; Aston Villa 83' me James Hill passes o2; the man placed on that line by hand is never nearer the ball than 0.12
+
+ ❯ src/test/pitchOwnGoal.test.tsx (15 tests | 1 failed | 13 skipped) 2546ms
+   ✓ Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it  2015ms
+   ↓ Round 1216: an own goal on real feeds > OG1: the ball goes in off the man the line names
+   × Round 1216: an own goal on real feeds > OG9: from the touch to the net the ball passes nobody else 527ms
+     → expected 13 to be +0 // Object.is equality
+   ↓ Round 1216: an own goal on real feeds > OG2: the instants are the goal it always was
+   ↓ Round 1216: an own goal on real feeds > OG3: nobody is the scorer, and the man holds his head
+   ↓ Round 1216: an own goal on real feeds > OG4: nobody stands on a team mate while it plays
+   ↓ Round 1216: an own goal on real feeds > OG5: the turn can be seen, and the ball comes to the man
+   ↓ Round 1216: an own goal on scenes made by hand > OG6: who it goes in off, and a man who is not there moves nobody
+   ↓ Round 1216: an own goal on scenes made by hand > OG7: reduced motion shows the last frame at once, the man with his head in his hands
+   ↓ Round 1216: an own goal on scenes made by hand > OG8: a goal from the spot or from a direct free kick is never drawn as an own goal
+   ↓ Round 1216: the recorded own goal > OWN: every own goal frame of the hand made scenes is the recorded one
+   ↓ Round 1216: the recorded own goal > RUE: the figure with his head in his hands is the recorded one, and at rue 0 it is the figure it was
+   ↓ Round 1216: an own goal in the live match > the live match draws an own goal for me off the man on its card
+   ↓ Round 1216: an own goal in the live match > the live match draws an own goal for opp off the man on its card
+   ↓ Round 1216: an own goal and a change of line up off the clock > an own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 13 skipped (15)
+   Start at  12:57:07
+   Duration  7.00s (transform 2.69s, setup 84ms, collect 3.45s, tests 2.55s, environment 468ms, prepare 135ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/own-goal-cuprjz/result.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG9: from the touch to the net the ball passes nobody else
+AssertionError: expected 13 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 13
+
+ ❯ src/test/pitchOwnGoal.test.tsx:232:23
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simOwnGoalMotion: control crowded turned "OG9: from the touch to the net the ball passes nobody else" red on an assertion (1 failed) and the material stayed green, as it must.
