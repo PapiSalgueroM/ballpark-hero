@@ -1,0 +1,4 @@
+nobind-liveSimMotion exit=0 46s |       Tests  55 passed (55)
+nobind-simMatchScreen exit=0 3s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+hotstrip-daily exit=0 76s | cmDaily: SAME DEAL on all 120 dates, both dailies
+hotstrip-simManagerHotSeat exit=0 52s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 

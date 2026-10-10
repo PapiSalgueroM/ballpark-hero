@@ -1,0 +1,5 @@
+#!serial
+nobind-liveSimMotion: node .rc/x/mut2.mjs NOBIND && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | grep -E "EDITED|Test Files|Tests |FAIL" ; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s
+nobind-simMatchScreen: node .rc/x/mut2.mjs NOBIND && node scripts/simMatchScreen.mjs; s=$?; git checkout -- src scripts; exit $s
+hotstrip-daily: git worktree add -f /tmp/base-h 54e3820a >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base-h/node_modules; W="$PWD"; (cd /tmp/base-h && DAILY_DATES=120 node "$W/.rc/x/cmDaily2.mjs" base /tmp/cmrev-h) && node .rc/x/mut2.mjs HOTSTRIP && DAILY_DATES=120 node .rc/x/cmDaily2.mjs head /tmp/cmrev-h | tail -3; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s
+hotstrip-simManagerHotSeat: node .rc/x/mut2.mjs HOTSTRIP && node scripts/simManagerHotSeat.mjs | tail -2; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s
