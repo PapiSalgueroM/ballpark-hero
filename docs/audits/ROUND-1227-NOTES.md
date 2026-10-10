@@ -97,17 +97,20 @@ The player ages on his position (a back falls off at 28, a kicker at 39) and eve
 - THE OTHER LANE'S GUIDE (src/data/gameContent/football.ts, about line 562): "He plays his own seasons on the same
   scale you do" is TRUE for the NFL from this round on. Nothing must be written for the round to be true. A
   sentence that would help a player and is NOT written anywhere yet: how "the better year" is decided (the season
-  score of the parts the two lines print; a back's catches at eight yards each; forced fumbles for linebackers
-  and corners and a kicker's misses do not count).
+  score of the parts the two lines print; a back's catches at eight yards each; a receiver's or a tight end's
+  catches and a kicker's attempts are printed and do not count; a linebacker's and a corner's forced fumbles are
+  not printed and do not count).
 - THE RULES AND A WORKED EXAMPLE BEHIND A "?" ON THE RIVAL CARD are owed by the house rule and were ruled out of
   this round (they need src/components/us-career/SocialPanel.tsx, the other lane's ground). The NFL's sentences,
   for the round that builds it: "Who had the better year is read off the two season lines you can see. A
   quarterback is read on yards, touchdowns and interceptions. A back on rushing yards, touchdowns and catches,
-  each catch counted as eight yards. A receiver or a tight end on catches, yards and touchdowns. A linebacker on
-  tackles, sacks and interceptions. A corner on interceptions, passes defended and tackles. An edge rusher on
-  sacks, tackles and forced fumbles. A kicker on his makes and his longest. Inside six percent of his number it is
-  a near tie, and a dead heat is his year." Worked example: "You: 3,654 yds, 22 TD, 14 INT. Him: 2,664 yds, 12 TD,
-  21 INT. Yours is the better year."
+  each catch counted as eight yards. A receiver or a tight end on yards and touchdowns (his catches are on the
+  line and do not count). A linebacker on tackles, sacks and interceptions. A corner on interceptions, passes
+  defended and tackles. An edge rusher on sacks, tackles and forced fumbles. A kicker on his makes and his longest
+  (his attempts are on the line and do not count). Inside six percent of his number it is a near tie, and a dead
+  heat is his year." Worked example: "You: 3,654 yds, 22 TD, 14 INT. Him: 2,664 yds, 12 TD, 21 INT. Yours is the
+  better year." (Corrected by the fixer on 2026-10-10: the first writing said a receiver is read on his catches.
+  The code is src/lib/careerAwards.ts nflSeasonScore, which reads a receiver's yards and touchdowns only.)
 - A RIVAL WHO HAD ALREADY RETIRED ON AN OLD SAVE keeps his old shape last line for good (the critic's advice 16):
   he is never judged again, and the Rival screen prints the line the save holds. Known leftover; the "?" step can
   hide a last line that has no lastYear.

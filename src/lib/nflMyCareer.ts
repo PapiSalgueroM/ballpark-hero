@@ -826,9 +826,12 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
    exactly the parts the season line prints (nflLineAsPrinted in
    usCareerStatLine.ts). So the head to head can never say what the two
    printed lines do not. What that leaves out, on purpose: a back's catches
-   count at eight yards each and not at his real receiving yards, a
-   linebacker's and a corner's forced fumbles and a kicker's misses do not
-   count. The player's AWARDS still read his whole line (statScore).
+   count at eight yards each and not at his real receiving yards; a
+   linebacker's and a corner's forced fumbles are not printed, so they do
+   not count; a receiver's or a tight end's catches and a kicker's attempts
+   ARE printed and no season score reads them (a receiver is read on yards
+   and touchdowns, a kicker on his makes and his long), so they do not count
+   either. The player's AWARDS still read his whole line (statScore).
 
    THE STREAM. The built in line took three draws of the season's stream
    after the swing, or one for a kicker (rivalSeasonDraws). This takes
