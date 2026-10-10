@@ -1,0 +1,4 @@
+simHarnessAnchors exit=0 50s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+ctl-stalefield exit=1 128s | simNbaAwardsSense: 158 checks, 2 failed (full size, control stalefield), 127s
+sense-full exit=0 154s | simNbaAwardsSense: 173 checks, 0 failed (full size), 154s
