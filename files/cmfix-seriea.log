@@ -1,0 +1,57 @@
+FAIL seriea: gives no key while the list is not here, and refuses to read a saved key without its list
+AssertionError [ERR_ASSERTION]: Fetching the list changes exactly one field of a fresh save
++ actual - expected
+... Skipped lines
+
+  {
+    academy: {
+      candidates: [
+        {
+          fee: 5,
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-13-490',
+-       id: 'youth-muwv75s0-1-490',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Kwame Sundgren (Youth)',
+...
+        fitness: 100,
++       id: 'youth-muwv75s0-14-756',
+-       id: 'youth-muwv75s0-2-756',
+        injuryWeeks: 0,
+        isYouth: true,
+        lastTen: [],
+        morale: 72,
+        name: 'Ravi Calvet (Youth)',
+
+    at Object.unloaded (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:474:16)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:555:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:584:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'gives no key while the list is not here, and refuses to read a saved key without its list'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:570:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:584:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'gives no key while the list is not here, and refuses to read a saved key without its list'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
