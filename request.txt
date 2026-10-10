@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/saveKeeper.test.ts src/test/routeErrorRecovery.test.tsx --testTimeout=300000 --hookTimeout=120000
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simLiveScores: node scripts/simLiveScores.mjs

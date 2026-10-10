@@ -1,0 +1,6 @@
+simStorageWrites exit=0 2s | simStorageWrites: all green
+vitest exit=0 4s |    Duration  3.19s (transform 386ms, setup 179ms, collect 834ms, tests 1.15s, environment 1.39s, prepare 716ms)
+simNoRivalNames exit=0 22s | No rival product names found. 0 findings.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 73s | 
