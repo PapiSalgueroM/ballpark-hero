@@ -455,13 +455,19 @@ async function main() {
         for (let round = 0; round < settled; round++) assertRound(rows.slice(round * perRound, (round + 1) * perRound), rounds[round], `actual world round ${round + 1}`);
         assert.deepEqual(actualTable(state.world[LEAGUE].table), tableFrom(rows, clubs));
       },
-      eligibility() {
+      async eligibility() {
         const state = seeded(4107, () => cm.startCareer(myClub));
         const coverage = cm.careerFixtureCoverage(state);
         assert.equal(state.realLeagueFixtures, key); assert.equal(coverage?.key, key);
         assert.ok(coverage.label.startsWith(`Real 2026/27 ${leagueName} opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as `), 'The calendar line names the league and says what is real and what is simulated');
         /* The Premier League's sentence is Release AT's, to the letter: the registry builds it now and must not reword it. */
-        if (LEAGUE === 'premier') assert.equal(coverage.label, 'Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.');        assert.deepEqual(clone(coverage.sources), data.sources, 'The calendar line links the two sources the ledger ships');
+        if (LEAGUE === 'premier') assert.equal(coverage.label, 'Real 2026/27 Premier League opponent order and home/away venues. Calendar dates and results are simulated. The order is the list as first published in June 2026.');
+        /* Round 1225 review: and every league's sentence, to the letter, in words written out here a second time
+           on purpose. The registry line says what the order is the order OF (scripts/simCmLeagueFixtures.mjs
+           section H holds that value to the receipt); this holds the words the Calendar prints to that value, so
+           a list read on one day can never be shown as the list as first published, or the other way round. */
+        const orderWords = 'published' in entry.asOf ? `the list as first published in ${entry.asOf.published}` : `the list as it stood on ${entry.asOf.stoodOn}`;
+        assert.equal(coverage.label, `Real 2026/27 ${leagueName} opponent order and home/away venues. Calendar dates and results are simulated. The order is ${orderWords}.`, 'The calendar line says what its registry line says about the order, word for word');        assert.deepEqual(clone(coverage.sources), data.sources, 'The calendar line links the two sources the ledger ships');
         for (const altered of [{ ...state, customClub: { name: 'Test custom club' } }, { ...state, leagueOverrides: { [LEAGUE]: [...clubs] } }]) {
           assert.equal(cm.__canBindLedger(altered, data, LEAGUE, [...clubs]), false, 'Custom and edited saves cannot claim untouched real fixtures');
           assert.equal(cm.careerFixtureCoverage(altered), null);
@@ -473,6 +479,16 @@ async function main() {
         const internal = seeded(4107, () => cm.startCareer(myClub, 'now', undefined, undefined, { yearsOn: 1, uclField: null, keepLeagueOverrides: false }));
         assert.equal(internal.realLeagueFixtures, undefined, 'An internal running-world start never binds a fresh season');
         assert.equal(seeded(4107, () => cm.startCareer(outsider)).realLeagueFixtures, undefined, 'A league with no list binds nothing');
+        /* Round 1225 review: a past season started in the same visit, after this league's list was fetched (the
+           fleet starts its past seasons with nothing fetched, where a lazy list could not bind anyway). */
+        if (eraClub) {
+          const later = await freshLoaded(candidateName);
+          assert.equal(seeded(4107, () => later.startCareer(myClub)).realLeagueFixtures, key, 'The list is here in this copy of the engine');
+          await later.ensureEraRosters('era2010');
+          const past = seeded(4107, () => later.startCareer(eraClub, 'era2010'));
+          assert.equal(past.realLeagueFixtures, undefined, 'A past season binds nothing, even with the list of its league here');
+          assert.equal(later.careerFixtureCoverage(past), null);
+        }
       },
       async takeover() {
         /* Round 1225 review. The picker's mid season takeover is startCareer and then startMidSeason. The save

@@ -72,7 +72,12 @@
  *     that list has the digest of its frozen line, keys are unique, a league and start year
  *     with two lists names the newer first, and what the line says the order is the order
  *     OF (first published in a month, or as it stood on a day) is what the receipt bears
- *     out. A ledger on disk that the game does not read is UNBOUND: named on the summary
+ *     out; and the words the game prints for that value are the words written out a second
+ *     time in this file (wordsOfAsOf), so a list read on one day cannot be shown as the list
+ *     as first published, or the other way round, by rewording one function (section J
+ *     holds Help's rendered words the same way, and scripts/simCmRealFixtures.mjs group
+ *     eligibility holds the Calendar's whole sentence, league by league).
+ *     A ledger on disk that the game does not read is UNBOUND: named on the summary
  *     line, counted for the gate (CM_LEAGUE_FIXTURES_EXPECT_BOUND), and green.
  *  J. Help tells the truth. The fixture paragraph of the rendered Help names exactly the
  *     registered leagues, each under the words the registry gives its list, by the game's
@@ -124,6 +129,8 @@
  *   unlisted      the league's key gone from BOUND_KEYS                H
  *   wrongasof     the registry line says the other thing about what
  *                 the order of its list is the order of                H J
+ *   falsewords    the registry value right and the printed words wrong
+ *                 (a reworded realFixtureListAsOfText)                 H J
  *   helpdrift     the league gone from the Help paragraph              J
  *   helplink      a link planted in the Help paragraph                 J (red for "help", not for a league)
  *   takeoverform  the dugout note says the game draws its own list     J (red for "help")
@@ -423,6 +430,12 @@ function asOfFromReceipt(R) {
   const months = new Set(sources.map(s => monthOf(s.published)));
   return months.size === 1 && !months.has(null) ? { published: [...months][0] } : null;
 }
+/** Round 1225 review: the words a registry value must print, written out here a SECOND time on purpose. The game's
+ *  own are realFixtureListAsOfText in src/lib/clubManagerFixtures.ts, and the Calendar and Help both print through
+ *  it, so comparing one of them with the other proves nothing: the review's mutation made that function say
+ *  "first published in June 2026" for the five lists read on 10 October 2026 and sections H and J stayed green.
+ *  Section H holds the value to the receipt; these words hold what a player reads to the value. */
+const wordsOfAsOf = asOf => (!asOf ? null : 'published' in asOf ? `the list as first published in ${asOf.published}` : `the list as it stood on ${asOf.stoodOn}`);
 function judgeRegistry(world, reds) {
   const registry = world.registry || [];
   const bound = world.bound || [];
@@ -447,6 +460,7 @@ function judgeRegistry(world, reds) {
       const want = asOfFromReceipt(e.receipt);
       if (JSON.stringify(want) !== JSON.stringify(r.asOf)) red(`the registry says the order is ${JSON.stringify(r.asOf)} and the receipt bears out ${JSON.stringify(want)}`);
     }
+    if (r.asOfText !== wordsOfAsOf(r.asOf)) red(`the game prints "${r.asOfText}" for the order of ${r.key}, and its registry line ${JSON.stringify(r.asOf)} reads "${wordsOfAsOf(r.asOf)}"`);
   }
   for (const key of bound) {
     if (!inScope(leagueOfKey(key)) || registry.some(r => r.key === key)) continue;
@@ -483,6 +497,7 @@ function judgeHelp(world, reds) {
     if (!row || named.name !== row.name) red(`Help calls the league "${named.name}", the game calls it "${row ? row.name : 'nothing'}"`);
     const group = help.groups.find(g => g.ids.includes(r.leagueId));
     if (!group || group.text !== r.asOfText) red(`Help files the league under "${group ? group.text : 'nothing'}", the registry says "${r.asOfText}"`);
+    else if (group.text !== wordsOfAsOf(r.asOf)) red(`Help prints "${group.text}" for the league, and its registry line ${JSON.stringify(r.asOf)} reads "${wordsOfAsOf(r.asOf)}"`);
   }
   for (const l of help.leagues) {
     if (world.only && l.id !== world.only) continue;
@@ -706,6 +721,20 @@ const CONTROLS = {
       const r = w.registry.find(x => x.key === e.ledger.key);
       r.asOf = 'published' in r.asOf ? { stoodOn: '10 October 2026' } : { published: 'June 2026' };
       r.asOfText = 'published' in r.asOf ? 'the list as first published in June 2026' : 'the list as it stood on 10 October 2026';
+    },
+  },
+  /* Round 1225 review: what a reworded realFixtureListAsOfText would do. The registry's value stays right and
+     every screen prints the other thing for this league: the words the game hands out, and Help, which prints
+     through the same function (the league is moved into a group of its own so no other league's words move). */
+  falsewords: {
+    expect: 'HJ',
+    applies: e => e.bound,
+    apply(w, e) {
+      const r = w.registry.find(x => x.key === e.ledger.key);
+      const lie = 'published' in r.asOf ? 'the list as it stood on 10 October 2026' : 'the list as first published in June 2026';
+      r.asOfText = lie;
+      for (const g of w.help.groups) g.ids = g.ids.filter(id => id !== e.ledger.leagueId);
+      w.help.groups.push({ ids: [e.ledger.leagueId], text: lie });
     },
   },
   helpdrift: { expect: 'J', applies: e => e.bound, apply(w, e) { w.help.leagues = w.help.leagues.filter(l => l.id !== e.ledger.leagueId); } },
