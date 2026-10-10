@@ -5,7 +5,7 @@
    first try, one that never gives the engine's winner, one that gives it on
    its fourth try, and ones that hand back something that is not a score. */
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { SCORE_TRIES, decidedScore, quickGame, toldWinner } from '@/lib/gmGameScore';
+import { GM_SCORE_CEILING, SCORE_TRIES, decidedScore, isGmScore, quickGame, toldWinner } from '@/lib/gmGameScore';
 import { NFL_SCORE_LAW } from '@/lib/gameLaws/nflScore';
 import type { DecidedGame, ScoreLaw } from '@/lib/gameLaws/types';
 
@@ -52,13 +52,20 @@ describe('decidedScore, with laws written for the test', () => {
   });
 
   it('refuses whatever is not two whole scores, one damaged answer at a time', () => {
-    for (const bad of [null, undefined, 7, 'x', [], [7], [7.5, 3], [-1, 3], [Number.NaN, 3], [Number.POSITIVE_INFINITY, 3], ['7', 3], { 0: 7, 1: 3 }]) {
+    /* the last three: a score above the ceiling is not a score */
+    for (const bad of [null, undefined, 7, 'x', [], [7], [7.5, 3], [-1, 3], [Number.NaN, 3], [Number.POSITIVE_INFINITY, 3], ['7', 3], { 0: 7, 1: 3 }, [GM_SCORE_CEILING + 1, 3], [250000, 3], [3, 1e21]]) {
       expect(decidedScore(scripted([bad]), home, 'k'), JSON.stringify(bad) ?? String(bad)).toBeNull();
       /* a damaged first try does not stop a sound later one from being kept */
       expect(decidedScore(scripted([bad, [21, 20]]), home, 'k')).toEqual({ home: 21, away: 20, tries: 2, swapped: false });
       /* and a damaged LATER try is only a miss */
       expect(decidedScore(scripted([[3, 20], bad]), home, 'k')).toEqual({ home: 20, away: 3, tries: SCORE_TRIES, swapped: true });
     }
+  });
+
+  it('calls a whole number from 0 to the ceiling a score, and nothing else', () => {
+    for (const ok of [0, 1, 69, GM_SCORE_CEILING]) expect(isGmScore(ok), String(ok)).toBe(true);
+    for (const bad of [-1, 0.5, GM_SCORE_CEILING + 1, 250000, 1e21, Number.MAX_VALUE, Number.NaN, Number.POSITIVE_INFINITY, '7', null, undefined, [7]]) expect(isGmScore(bad), String(bad)).toBe(false);
+    expect(decidedScore(scripted([[GM_SCORE_CEILING, 3]]), home, 'k')).toEqual({ home: GM_SCORE_CEILING, away: 3, tries: 1, swapped: false });
   });
 
   it('refuses a decided game that does not read as one, without asking the law', () => {

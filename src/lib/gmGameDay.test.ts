@@ -7,10 +7,11 @@
    is damaged one field at a time. */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { decidingPlays, gameStory, makeGmLastGame, readGmLastGame, tellGame, type GameDayLaw, type GmLastGame } from '@/lib/gmGameDay';
-import { quickGame, type ToldGame } from '@/lib/gmGameScore';
-import { NFL_COMEBACK, NFL_GAME_DAY, NFL_GAME_DAY_HELP, NFL_QUARTERS, NFL_ROUT, nflShapeWords } from '@/lib/gameLaws/nflGameDay';
+import { GM_SCORE_CEILING, quickGame, type ToldGame } from '@/lib/gmGameScore';
+import { NFL_COMEBACK, NFL_GAME_DAY, NFL_GAME_DAY_HELP, NFL_MAX_SCORE, NFL_QUARTERS, NFL_ROUT, nflShapeWords } from '@/lib/gameLaws/nflGameDay';
 import { NFL_GAME_MINUTES, nflClockLabel } from '@/lib/gameLaws/nfl';
-import { NFL_SCORE_LAW } from '@/lib/gameLaws/nflScore';
+import { DRIVES, FG_A_DRIVE, NFL_SCORE_LAW, TD_A_GAME } from '@/lib/gameLaws/nflScore';
+import { keyedRng } from '@/lib/keyedRng';
 import { NFL_CLOCK } from '@/data/usLeagueShape';
 import type { SeasonEvent } from '@/lib/season/core';
 
@@ -189,6 +190,43 @@ describe('gameStory fails closed', () => {
     const badPeriods: GameDayLaw = { ...fixed(sound), periods: { ...NFL_GAME_DAY.periods, of: () => NFL_QUARTERS } };
     expect(gameStory(badPeriods, told(7, 3), 'home')).toBeNull();
   });
+
+  it('for a final above the ceiling, without ever asking the law', () => {
+    /* a law that would tell anything, and counts how often it is asked */
+    let asked = 0;
+    const anything: GameDayLaw = { ...NFL_GAME_DAY, maxScore: Number.POSITIVE_INFINITY, story: { ...NFL_GAME_DAY.story, events: (h, a, rng) => { asked += 1; return NFL_GAME_DAY.story.events(h, a, rng); } } };
+    expect(gameStory(anything, told(GM_SCORE_CEILING, 17), 'home')).not.toBeNull();
+    expect(asked).toBe(1);
+    /* 1000 first: with no ceiling the NFL's story law answers it at once with a list (a fast red), where 250000 threw and 1e21 never came back */
+    for (const big of [GM_SCORE_CEILING + 1, 250000, 1e21, Number.MAX_SAFE_INTEGER, Number.MAX_VALUE]) {
+      expect(gameStory(anything, told(big, 17), 'home'), `home on ${big}`).toBeNull();
+      expect(gameStory(anything, told(17, big), 'away'), `away on ${big}`).toBeNull();
+      expect(gameStory(NFL_GAME_DAY, told(big, 17), 'home'), `the NFL, home on ${big}`).toBeNull();
+    }
+    expect(asked).toBe(1);
+  });
+
+  it('for a final above what the sport says its score law can give, and for a sport that says nothing', () => {
+    expect(NFL_GAME_DAY.maxScore).toBe(NFL_MAX_SCORE);
+    expect(NFL_MAX_SCORE).toBe(7 * DRIVES + 3);
+    expect(gameStory(NFL_GAME_DAY, told(NFL_MAX_SCORE, 0), 'home')).not.toBeNull();
+    expect(gameStory(NFL_GAME_DAY, told(0, NFL_MAX_SCORE), 'home')).not.toBeNull();
+    expect(gameStory(NFL_GAME_DAY, told(NFL_MAX_SCORE + 1, 0), 'home')).toBeNull();
+    expect(gameStory(NFL_GAME_DAY, told(0, NFL_MAX_SCORE + 1), 'away')).toBeNull();
+    for (const none of [undefined, Number.NaN, null, '73']) expect(gameStory({ ...NFL_GAME_DAY, maxScore: none as never }, told(7, 3), 'home'), String(none)).toBeNull();
+  });
+
+  it('never has to refuse a final of the NFL score law: no side of one is above the number', () => {
+    /* every drive a touchdown but each side's last, a field goal: 66 each, and the three a level game adds. The law's own top. */
+    let i = 0;
+    const top = NFL_SCORE_LAW.score(0.5, () => { i += 1; return i % DRIVES === 0 ? TD_A_GAME / DRIVES + FG_A_DRIVE / 2 : 0; });
+    expect(top).toEqual([69, 66]);
+    expect(gameStory(NFL_GAME_DAY, told(top[0], top[1]), 'home')).not.toBeNull();
+    for (let k = 0; k < 4000; k += 1) {
+      const [h, a] = NFL_SCORE_LAW.score(0.02 + (k % 49) * 0.02, keyedRng(`ceiling|${k}`));
+      expect(h <= NFL_MAX_SCORE && a <= NFL_MAX_SCORE, `${h}-${a}`).toBe(true);
+    }
+  });
 });
 
 describe('tellGame: one law, two paths', () => {
@@ -252,6 +290,15 @@ describe('the save field: the last told game', () => {
       }
     }
     expect(cases).toBe(48);
+    /* a score above the ceiling, on the winner's side, so nothing else about the block is wrong: with no ceiling these were read,
+       and the story of the block then threw (250000) or never came back (1e21) */
+    const top = { ...sound, homeScore: GM_SCORE_CEILING };
+    expect(readGmLastGame(top, isClub)).toEqual(top);
+    for (const big of [GM_SCORE_CEILING + 1, 250000, 1e21, Number.MAX_SAFE_INTEGER, Number.MAX_VALUE]) {
+      expect(readGmLastGame({ ...sound, homeScore: big }, isClub), `home on ${big}`).toBeNull();
+      expect(readGmLastGame({ ...sound, awayScore: big, winner: 'BBB' }, isClub), `away on ${big}`).toBeNull();
+      expect(readGmLastGame(JSON.parse(JSON.stringify({ ...sound, homeScore: big })), isClub), `home on ${big}, through JSON`).toBeNull();
+    }
     const thrower = Object.defineProperty({ ...sound }, 'home', { get() { throw new Error('boom'); } });
     for (const v of [undefined, null, 0, 'x', [], [sound], () => sound, thrower]) expect(readGmLastGame(v, isClub)).toBeNull();
     expect(readGmLastGame(sound, () => { throw new Error('boom'); })).toBeNull();

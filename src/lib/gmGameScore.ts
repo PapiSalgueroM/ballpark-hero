@@ -15,12 +15,25 @@
 
    FAILS CLOSED: a law that hands back something that is not two whole
    scores, or a level game on its first try and no winner in the tries after
-   it, gets null, and the caller keeps the engine's own score. */
+   it, gets null, and the caller keeps the engine's own score.
+
+   THE CEILING. A score is a whole number from 0 to GM_SCORE_CEILING, here
+   and in everything that reads one off a save (src/lib/gmGameDay.ts,
+   src/lib/gmBracket.ts). A story law's work grows with the score it is
+   handed, so one damaged number in a save must never reach a law: with no
+   ceiling a saved 250000 threw out of the NFL's story law and a saved 1e21
+   never came back at all. */
 import { keyedRng } from './keyedRng';
 import type { DecidedGame, ScoreLaw } from './gameLaws/types';
 
 /** How many times the law is asked for a final the engine's winner wins. */
 export const SCORE_TRIES = 24;
+
+/** THIS SIM'S OWN: no side of a front office game is ever on four figures (see THE CEILING above). */
+export const GM_SCORE_CEILING = 999;
+
+/** A score a game can have: a whole number from 0 to the ceiling. */
+export const isGmScore = (n: unknown): n is number => typeof n === 'number' && Number.isInteger(n) && n >= 0 && n <= GM_SCORE_CEILING;
 
 /** A final told by a law. `tries`: how many it took; `swapped`: no try gave
  *  the winner, so the first try's two scores were handed to the winner's side. */
@@ -34,8 +47,6 @@ export interface GameDayFixture { key: string; home: string; away: string; decid
 /** A final that has been told: the fixture's key and clubs with the law's score. */
 export interface ToldGame { key: string; home: string; away: string; homeScore: number; awayScore: number }
 
-const whole = (n: unknown): n is number => typeof n === 'number' && Number.isInteger(n) && n >= 0;
-
 /** The law's score for a game whose winner is already known: the law's own
  *  score GIVEN that this side won, which is what makes an upset read like an
  *  upset and not like the favourite's score with the names swapped. Try t
@@ -46,7 +57,7 @@ export function decidedScore(law: ScoreLaw, d: DecidedGame, key: string): ToldSc
   let first: [number, number] | null = null;
   for (let t = 0; t < SCORE_TRIES; t += 1) {
     const s = law.score(d.pHome, keyedRng(`${key}|score|${t}`), d);
-    const ok = Array.isArray(s) && whole(s[0]) && whole(s[1]);
+    const ok = Array.isArray(s) && isGmScore(s[0]) && isGmScore(s[1]);
     if (t === 0) first = ok ? [s[0], s[1]] : null;
     if (!ok || s[0] === s[1]) continue;
     if ((s[0] > s[1]) === d.homeWon) return { home: s[0], away: s[1], tries: t + 1, swapped: false };

@@ -14,6 +14,7 @@ import {
   isGmBracketSave, openBracket, playBracketAll, playBracketGame, playBracketWeek, repairGmBracket,
   type BracketFormat, type GmBracketSave, type PlayTie,
 } from '@/lib/gmBracket';
+import { GM_SCORE_CEILING } from '@/lib/gmGameScore';
 import { NFL_BRACKET, NFL_BRACKET_HELP, NFL_BRACKET_SEASONS, NFL_TITLE_GAME_LEAN, nflBracketFor } from '@/data/gmBrackets/nfl';
 import { NFL_PLAYOFF_PERIODS, periodFor } from '@/lib/nflPlayoffFormatHistory';
 import { initLeague, winProb } from '@/lib/frontOffice';
@@ -214,8 +215,9 @@ describe('the saved bracket: optional, guarded and repairable', () => {
       games: [undefined, null, {}, 'x', [null], [7]],
     };
     const game: Record<string, unknown[]> = {
-      homeScore: [undefined, '17', 17.5, -1, Number.NaN, null],
-      awayScore: [undefined, '24', 24.5, -1, Number.POSITIVE_INFINITY, null],
+      /* the last three: a score above the ceiling (with none, a saved 250000 threw out of a story law and 1e21 never came back) */
+      homeScore: [undefined, '17', 17.5, -1, Number.NaN, null, GM_SCORE_CEILING + 1, 250000, 1e21],
+      awayScore: [undefined, '24', 24.5, -1, Number.POSITIVE_INFINITY, null, GM_SCORE_CEILING + 1, 250000, 1e21],
       winner: [undefined, '', 'ZZZ', 7, null],
     };
     let cases = 0;
@@ -233,7 +235,11 @@ describe('the saved bracket: optional, guarded and repairable', () => {
     damaged((s, v, f) => put(s, v, f), outer);
     damaged((s, v, f) => put(s.played[0], v, f), tie);
     damaged((s, v, f) => put(s.played[0].games[0], v, f), game);
-    expect(cases).toBe(5 + 4 + 6 + 8 + 7 + 4 + 6 + 6 + 6 + 6 + 6 + 5);
+    expect(cases).toBe(5 + 4 + 6 + 8 + 7 + 4 + 6 + 6 + 6 + 9 + 9 + 5);
+    /* the ceiling itself is a score: only what is above it is refused */
+    const top = copy(sound);
+    top.played[0].games[0].awayScore = GM_SCORE_CEILING;
+    expect(isGmBracketSave(top, isClub)).toBe(true);
     for (const v of [undefined, null, 0, 'x', [], [sound], () => sound, thrower()]) expect(isGmBracketSave(v, isClub)).toBe(false);
     expect(isGmBracketSave(sound, () => { throw new Error('boom'); })).toBe(false);
     expect(isGmBracketSave(sound, (() => 1) as never)).toBe(false);

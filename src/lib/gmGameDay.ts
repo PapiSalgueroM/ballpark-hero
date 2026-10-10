@@ -18,16 +18,18 @@
    and nothing but the final has to be saved. TEAM LEVEL ONLY: a line names a
    club, never a man, and there is no speaker.
 
-   FAILS CLOSED: a final with no winner, a final the law has no list for, a
-   list that does not add up to the final, or a minute outside the clock gives
-   null, and a card then shows the final alone.
+   FAILS CLOSED: a final with no winner, a final with a side above the
+   sport's own `maxScore` or above GM_SCORE_CEILING (src/lib/gmGameScore.ts
+   says why: such a final is refused BEFORE the law is asked), a final the law
+   has no list for, a list that does not add up to the final, or a minute
+   outside the clock gives null, and a card then shows the final alone.
 
    THE SAVE FIELD (`GmLastGame`) is the one shape all four boards save for
    Game Day: the GM club's last told game. It is optional, absent on a bye
    and on every older save, and `readGmLastGame` answers null for anything
    that does not read as one (mark, never fill). It never throws. */
 import { keyedRng } from './keyedRng';
-import { quickGame, toldWinner, type GameDayFixture, type ToldGame } from './gmGameScore';
+import { isGmScore, quickGame, toldWinner, type GameDayFixture, type ToldGame } from './gmGameScore';
 import type { DerivedGame, SeasonEvent } from './season/core';
 import type { ScoreLaw, StoryLaw } from './gameLaws/types';
 
@@ -36,6 +38,8 @@ export type StoryShape = 'rout' | 'comeback' | 'late' | 'wire' | 'trade';
 /** What a sport hands Game Day to tell a final. */
 export interface GameDayLaw {
   story: StoryLaw;
+  /** The highest score a side can have in a final this sport's score law gives. A final above it was never told by that law, and `gameStory` refuses it without asking the story law. */
+  maxScore: number;
   /** How the law's clock is cut: `count` periods, the one (0 based) a minute falls in, and its short name. */
   periods: { count: number; of(minute: number): number; name(i: number): string };
   /** THIS SIM'S OWN: the margin that makes a rout, the deficit that makes a comeback, and the sentence for each shape. */
@@ -84,7 +88,9 @@ export function decidingPlays(events: readonly SeasonEvent[], winner: 'us' | 'th
 
 /** The story of a told final from one club's side. Null: see FAILS CLOSED above. */
 export function gameStory(law: GameDayLaw, g: ToldGame, viewAs: 'home' | 'away', md = 1): GameStory | null {
-  if (!g || typeof g.key !== 'string' || !Number.isInteger(g.homeScore) || !Number.isInteger(g.awayScore) || g.homeScore < 0 || g.awayScore < 0 || g.homeScore === g.awayScore) return null;
+  if (!g || typeof g.key !== 'string' || !isGmScore(g.homeScore) || !isGmScore(g.awayScore) || g.homeScore === g.awayScore) return null;
+  /* written so that a law with no number here (or one that is not a number) is told nothing */
+  if (typeof law.maxScore !== 'number' || !(g.homeScore <= law.maxScore) || !(g.awayScore <= law.maxScore)) return null;
   const raw = law.story.events(g.homeScore, g.awayScore, keyedRng(`${g.key}|story|${g.homeScore}-${g.awayScore}`));
   if (!Array.isArray(raw)) return null;
   const length = law.story.clock.length;
@@ -142,10 +148,9 @@ export function readGmLastGame(value: unknown, isClub: (id: string) => boolean):
     if (typeof value !== 'object' || value === null || Array.isArray(value)) return null;
     const o = value as Record<string, unknown>;
     const text = (x: unknown): x is string => typeof x === 'string' && x !== '';
-    const count = (x: unknown): x is number => typeof x === 'number' && Number.isInteger(x) && x >= 0;
     if (o.v !== 1 || !text(o.key) || !text(o.where) || !text(o.home) || !text(o.away) || !text(o.winner)) return null;
     if (o.home === o.away || isClub(o.home) !== true || isClub(o.away) !== true) return null;
-    if (!count(o.homeScore) || !count(o.awayScore) || o.homeScore === o.awayScore) return null;
+    if (!isGmScore(o.homeScore) || !isGmScore(o.awayScore) || o.homeScore === o.awayScore) return null;
     if (o.winner !== (o.homeScore > o.awayScore ? o.home : o.away)) return null;
     return { v: 1, key: o.key, where: o.where, home: o.home, away: o.away, homeScore: o.homeScore, awayScore: o.awayScore, winner: o.winner };
   } catch {

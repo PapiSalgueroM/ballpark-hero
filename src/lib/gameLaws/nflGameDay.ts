@@ -15,6 +15,7 @@
    It imports ./nfl (the story half of the law), so it rides with a card and
    never with a board's press. */
 import { NFL_GAME_MINUTES, NFL_STORY_LAW } from './nfl';
+import { DRIVES } from './nflScore';
 import type { GameDayLaw, StoryShape } from '../gmGameDay';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 
@@ -25,6 +26,12 @@ const QUARTER_MINUTES = NFL_GAME_MINUTES / NFL_QUARTERS;
 /** THIS SIM'S OWN: a win by this many or more is a rout, and a win after being this many or more behind is a comeback. */
 export const NFL_ROUT = 21;
 export const NFL_COMEBACK = 10;
+
+/** No final of the NFL's score law (./nflScore.ts) has a side above this:
+ *  ten drives of seven, and the three a level game adds. (The law's own cap
+ *  on touchdowns keeps a side at 69 or under; this bound needs only the
+ *  number of drives.) Game Day tells no final above it. */
+export const NFL_MAX_SCORE = 7 * DRIVES + 3;
 
 /** One sentence for the shape of a game. Every verb reads the same for a club named in the singular or the plural. */
 export function nflShapeWords(shape: StoryShape, winner: string, loser: string): string {
@@ -39,6 +46,7 @@ export function nflShapeWords(shape: StoryShape, winner: string, loser: string):
 
 export const NFL_GAME_DAY: GameDayLaw = {
   story: NFL_STORY_LAW,
+  maxScore: NFL_MAX_SCORE,
   periods: {
     count: NFL_QUARTERS,
     /* minute 15 is the last minute of the first quarter (the clock reads Q1 0:00), minute 16 is Q2 14:00 */

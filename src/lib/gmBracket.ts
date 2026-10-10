@@ -24,6 +24,7 @@
    league as it found it and no title is counted until the last one, so a
    round played again double counts nothing. */
 import { eliminated, finalsWeeks, premierOf, resolveSlot, type FinalsTie, type Pairing, type TieOutcome } from './finalsBracket';
+import { isGmScore } from './gmGameScore';
 
 /** A tie with the name of its round. `neutral` is for a card's words only: the first slot is still the one a `play` treats as home. */
 export interface BracketTie extends FinalsTie { round: string; neutral?: boolean }
@@ -185,8 +186,9 @@ const isRecord = (x: unknown): x is Record<string, unknown> => typeof x === 'obj
 
 /** The outer shape of a saved bracket: version 1, a format id, a season, a
  *  list of distinct club ids, and a list of played ties whose games hold two
- *  counts and a club id. It does not replay the bracket (`bracketProblems`
- *  does) and it never throws. */
+ *  scores (whole, from 0 to the ceiling src/lib/gmGameScore.ts sets, so a
+ *  damaged number never reaches a story law) and a club id. It does not
+ *  replay the bracket (`bracketProblems` does) and it never throws. */
 export function isGmBracketSave(value: unknown, isClub: (id: string) => boolean): value is GmBracketSave {
   try {
     if (!isRecord(value) || value.v !== 1 || !isText(value.format) || !isCount(value.season)) return false;
@@ -194,7 +196,7 @@ export function isGmBracketSave(value: unknown, isClub: (id: string) => boolean)
     if (!Array.isArray(value.seeds) || !value.seeds.every(club) || new Set(value.seeds).size !== value.seeds.length) return false;
     if (!Array.isArray(value.played)) return false;
     return value.played.every(p => isRecord(p) && isText(p.id) && club(p.home) && club(p.away) && p.home !== p.away && Array.isArray(p.games)
-      && p.games.every(g => isRecord(g) && isCount(g.homeScore) && isCount(g.awayScore) && club(g.winner)));
+      && p.games.every(g => isRecord(g) && isGmScore(g.homeScore) && isGmScore(g.awayScore) && club(g.winner)));
   } catch {
     return false;
   }
