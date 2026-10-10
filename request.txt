@@ -1,0 +1,12 @@
+# Release AS, the lead's one live pass (the database host is reachable here), sent after 01:15 Eastern, clear of the midnight rollover
+#!serve
+#!playwright
+#!serial
+simSchemaNames: node scripts/simSchemaNames.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+playSoccerCareer: node scripts/playSoccerCareer.mjs
+playGames-nba-my-career: ONLY=/nba-my-career node scripts/playGames.mjs
+playGames-nfl-my-career: ONLY=/nfl-my-career node scripts/playGames.mjs
