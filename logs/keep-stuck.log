@@ -1,0 +1,60 @@
+CONTROL stuck: the current engine is mutated, this run must go red
+1) 60 careers, policy accept
+   lived years with no row: now 0, pre-850 31 (decline 0, rehab 24, conviction 7, other 0)
+   pre-850 stops: 24 rehab, 7 convictions; declines now 0
+   never stopped 37, of them byte identical 37; stopped 23, identical up to the first stop 23
+1) 60 careers, policy decline
+  FAIL: decline (now) career 0: career 0 never finished (stuck on retirement_suggestion at 30)
+  FAIL: decline (now) career 1: career 1 never finished (stuck on retirement_suggestion at 30)
+  FAIL: decline (now) career 2: career 2 never finished (stuck on retirement_suggestion at 37)
+  FAIL: decline (now) career 3: career 3 never finished (stuck on retirement_suggestion at 34)
+  FAIL: decline (now) career 4: career 4 never finished (stuck on retirement_suggestion at 34)
+  FAIL: decline (now) career 5: career 5 never finished (stuck on retirement_suggestion at 30)
+  FAIL: decline (now) career 6: career 6 never finished (stuck on retirement_suggestion at 37)
+  FAIL: decline (now) career 7: career 7 never finished (stuck on retirement_suggestion at 36)
+  FAIL: decline (now) career 8: career 8 never finished (stuck on retirement_suggestion at 30)
+  FAIL: decline (now) career 9: career 9 never finished (stuck on retirement_suggestion at 34)
+  FAIL: decline (now) career 10: career 10 never finished (stuck on retirement_suggestion at 30)
+  FAIL: decline (now) career 11: career 11 never finished (stuck on retirement_suggestion at 30)
+  FAIL: decline (now) career 12: career 12 never finished (stuck on retirement_suggestion at 33)
+  FAIL: decline (now) career 13: career 13 never finished (stuck on retirement_suggestion at 33)
+  FAIL: decline (now) career 14: career 14 never finished (stuck on retirement_suggestion at 36)
+  FAIL: decline (now) career 15: career 15 never finished (stuck on retirement_suggestion at 33)
+  FAIL: decline (now) career 16: career 16 never finished (stuck on retirement_suggestion at 36)
+  FAIL: decline (now) career 17: career 17 never finished (stuck on retirement_suggestion at 37)
+  FAIL: decline (now) career 18: career 18 never finished (stuck on retirement_suggestion at 36)
+  FAIL: decline (now) career 19: career 19 never finished (stuck on retirement_suggestion at 30)
+  FAIL: decline (now) career 20: career 20 never finished (stuck on retirement_suggestion at 33)
+  FAIL: decline (now) career 21: career 21 never finished (stuck on retirement_suggestion at 33)
+  FAIL: decline (now) career 22: career 22 never finished (stuck on retirement_suggestion at 30)
+  FAIL: decline (now) career 23: career 23 never finished (stuck on retirement_suggestion at 33)
+  FAIL: decline (now) career 24: career 24 never finished (stuck on retirement_suggestion at 33)
+   lived years with no row: now 0, pre-850 0 (decline 0, rehab 0, conviction 0, other 0)
+   pre-850 stops: 0 rehab, 0 convictions; declines now 0
+   never stopped 0, of them byte identical 0; stopped 0, identical up to the first stop 0
+1) 60 careers, policy worst
+   lived years with no row: now 0, pre-850 0 (decline 0, rehab 0, conviction 0, other 0)
+   pre-850 stops: 0 rehab, 0 convictions; declines now 0
+   never stopped 0, of them byte identical 0; stopped 0, identical up to the first stop 0
+2) Keep Playing steps wrong 0, push on line not once 0; injury rows 25, wrong 0; careers where the market and the record disagree 0; careers with a tournament summer never played 0 (pre-850 engine, same rule: 0)
+   Keep Playing off the suggestion screen: 12 tried, 0 played something
+3) careers that retire at 29: 23 of 40 never stopped, 23 of them byte identical (0 saw a suggestion)
+4) saves on the three screens
+   pre-850 on the suggestion: 24/24 play that season once here (the pre-850 decline lost it on 24)
+   pre-850 on the rehab choice: 24/24 get one empty injured row (the pre-850 choice wrote none on 24)
+   this engine on the rehab choice, reloaded: 24/24 keep one row for the year
+   pre-850 on the conviction paper: 24/24 get one CONVICTED row, then prison (the pre-850 paper wrote none on 24)
+   this engine on the conviction paper, reloaded: 24/24 keep one row for the year
+   already lost years: 2/20 kept every row and lost no more (2 carry their old gaps, nothing invented to fill them)
+6) the page calls Keep Playing 1 time(s), with its clubs 1
+5) balance against the pre-850 engine (printed, not asserted)
+   accept: 23 careers moved after their first stop, +18 rows between them; 37 untouched and identical
+     pre-850  retire age 33.12, rows 17.60, playing rows 14.48, goals 65.4, net worth 59.3M, legacy 54.4; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+     now      retire age 32.90, rows 17.90, playing rows 14.73, goals 64.0, net worth 63.3M, legacy 56.9; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+   decline: 0 careers moved after their first stop, +0 rows between them; 0 untouched and identical
+     pre-850  retire age 0.00, rows 0.00, playing rows 0.00, goals 0.0, net worth 0.0M, legacy 0.0; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+     now      retire age 0.00, rows 0.00, playing rows 0.00, goals 0.0, net worth 0.0M, legacy 0.0; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+   worst: 0 careers moved after their first stop, +0 rows between them; 0 untouched and identical
+     pre-850  retire age 0.00, rows 0.00, playing rows 0.00, goals 0.0, net worth 0.0M, legacy 0.0; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+     now      retire age 0.00, rows 0.00, playing rows 0.00, goals 0.0, net worth 0.0M, legacy 0.0; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+simCareerKeepPlaying: 404 checks, 143 failures (control stuck, red expected)

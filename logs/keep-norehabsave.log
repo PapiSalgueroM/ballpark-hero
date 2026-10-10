@@ -1,0 +1,59 @@
+CONTROL norehabsave: the current engine is mutated, this run must go red
+1) 60 careers, policy accept
+   lived years with no row: now 0, pre-850 31 (decline 0, rehab 24, conviction 7, other 0)
+   pre-850 stops: 24 rehab, 7 convictions; declines now 0
+   never stopped 37, of them byte identical 37; stopped 23, identical up to the first stop 23
+1) 60 careers, policy decline
+   lived years with no row: now 0, pre-850 247 (decline 187, rehab 37, conviction 23, other 0)
+   pre-850 stops: 37 rehab, 23 convictions; declines now 150
+   never stopped 0, of them byte identical 0; stopped 60, identical up to the first stop 60
+1) 60 careers, policy worst
+   lived years with no row: now 0, pre-850 234 (decline 175, rehab 41, conviction 18, other 0)
+   pre-850 stops: 41 rehab, 18 convictions; declines now 144
+   never stopped 0, of them byte identical 0; stopped 60, identical up to the first stop 60
+2) Keep Playing steps wrong 0, push on line not once 0; injury rows 100, wrong 0; careers where the market and the record disagree 0; careers with a tournament summer never played 0 (pre-850 engine, same rule: 0)
+   Keep Playing off the suggestion screen: 12 tried, 0 played something
+3) careers that retire at 29: 23 of 40 never stopped, 23 of them byte identical (0 saw a suggestion)
+4) saves on the three screens
+  FAIL: old rehab save 0: answering the rehab choice at 33 did not write exactly one empty injured row
+  FAIL: old rehab save 1: answering the rehab choice at 27 did not write exactly one empty injured row
+  FAIL: old rehab save 2: answering the rehab choice at 26 did not write exactly one empty injured row
+  FAIL: old rehab save 3: answering the rehab choice at 26 did not write exactly one empty injured row
+  FAIL: old rehab save 4: answering the rehab choice at 23 did not write exactly one empty injured row
+  FAIL: old rehab save 5: answering the rehab choice at 22 did not write exactly one empty injured row
+  FAIL: old rehab save 6: answering the rehab choice at 19 did not write exactly one empty injured row
+  FAIL: old rehab save 7: answering the rehab choice at 31 did not write exactly one empty injured row
+  FAIL: old rehab save 8: answering the rehab choice at 27 did not write exactly one empty injured row
+  FAIL: old rehab save 9: answering the rehab choice at 25 did not write exactly one empty injured row
+  FAIL: old rehab save 10: answering the rehab choice at 23 did not write exactly one empty injured row
+  FAIL: old rehab save 11: answering the rehab choice at 18 did not write exactly one empty injured row
+  FAIL: old rehab save 12: answering the rehab choice at 24 did not write exactly one empty injured row
+  FAIL: old rehab save 13: answering the rehab choice at 24 did not write exactly one empty injured row
+  FAIL: old rehab save 14: answering the rehab choice at 20 did not write exactly one empty injured row
+  FAIL: old rehab save 15: answering the rehab choice at 26 did not write exactly one empty injured row
+  FAIL: old rehab save 16: answering the rehab choice at 22 did not write exactly one empty injured row
+  FAIL: old rehab save 17: answering the rehab choice at 18 did not write exactly one empty injured row
+  FAIL: old rehab save 18: answering the rehab choice at 20 did not write exactly one empty injured row
+  FAIL: old rehab save 19: answering the rehab choice at 31 did not write exactly one empty injured row
+  FAIL: old rehab save 20: answering the rehab choice at 25 did not write exactly one empty injured row
+  FAIL: old rehab save 21: answering the rehab choice at 26 did not write exactly one empty injured row
+  FAIL: old rehab save 22: answering the rehab choice at 18 did not write exactly one empty injured row
+  FAIL: old rehab save 23: answering the rehab choice at 23 did not write exactly one empty injured row
+   pre-850 on the suggestion: 24/24 play that season once here (the pre-850 decline lost it on 24)
+   pre-850 on the rehab choice: 0/24 get one empty injured row (the pre-850 choice wrote none on 24)
+   this engine on the rehab choice, reloaded: 24/24 keep one row for the year
+   pre-850 on the conviction paper: 24/24 get one CONVICTED row, then prison (the pre-850 paper wrote none on 24)
+   this engine on the conviction paper, reloaded: 24/24 keep one row for the year
+   already lost years: 20/20 kept every row and lost no more (20 carry their old gaps, nothing invented to fill them)
+6) the page calls Keep Playing 1 time(s), with its clubs 1
+5) balance against the pre-850 engine (printed, not asserted)
+   accept: 23 careers moved after their first stop, +18 rows between them; 37 untouched and identical
+     pre-850  retire age 33.12, rows 17.60, playing rows 14.48, goals 65.4, net worth 59.3M, legacy 54.4; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+     now      retire age 32.90, rows 17.90, playing rows 14.73, goals 64.0, net worth 63.3M, legacy 56.9; 40+ seasons 0, goals mean 0.00 p90 0, 20+ goal seasons 0
+   decline: 60 careers moved after their first stop, +118 rows between them; 0 untouched and identical
+     pre-850  retire age 43.13, rows 24.02, playing rows 20.63, goals 82.1, net worth 96.5M, legacy 58.6; 40+ seasons 100, goals mean 1.90 p90 5, 20+ goal seasons 0
+     now      retire age 40.98, rows 25.98, playing rows 22.48, goals 84.9, net worth 113.2M, legacy 64.9; 40+ seasons 65, goals mean 1.86 p90 4, 20+ goal seasons 0
+   worst: 60 careers moved after their first stop, +108 rows between them; 0 untouched and identical
+     pre-850  retire age 43.37, rows 24.47, playing rows 20.72, goals 81.8, net worth 94.5M, legacy 55.2; 40+ seasons 114, goals mean 1.94 p90 4, 20+ goal seasons 0
+     now      retire age 41.27, rows 26.27, playing rows 22.52, goals 88.1, net worth 116.2M, legacy 65.5; 40+ seasons 80, goals mean 1.95 p90 5, 20+ goal seasons 0
+simCareerKeepPlaying: 1463 checks, 24 failures (control norehabsave, red expected)

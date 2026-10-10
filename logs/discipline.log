@@ -1,0 +1,582 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [32m✓[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 169[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:17
+[2m   Duration [22m 3.43s[2m (transform 1.87s, setup 81ms, collect 2.25s, tests 169ms, environment 449ms, prepare 180ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+ok saved cards, real bans, appeal result ordering, injury boundaries and stat headroom
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 161[2mms[22m[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched[39m[32m 30[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw[32m 35[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons[32m 3[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save[32m 25[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save[32m 6[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false[32m 9[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true[32m 4[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact[32m 4[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten[32m 38[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:21
+[2m   Duration [22m 3.78s[2m (transform 2.23s, setup 86ms, collect 2.68s, tests 161ms, environment 358ms, prepare 184ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched
+[31m[1mAssertionError[22m: expected undefined to be 3 // Object.is equality[39m
+
+[32m- Expected:[39m 
+3
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m32:47[22m[39m
+    [90m 30| [39m    [35mconst[39m rows [33m=[39m [33mJSON[39m[33m.[39m[34mstringify[39m(before[33m.[39mseasons)[33m;[39m
+    [90m 31| [39m    [35mconst[39m accepted [33m=[39m [34mapplyEventChoice[39m(before[33m,[39m [34m0[39m[33m,[39m [33mFALLBACK_CLUBS[39m)[33m;[39m
+    [90m 32| [39m    [34mexpect[39m(accepted[33m.[39mpendingSuspensionMatches)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m   | [39m                                              [31m^[39m
+    [90m 33| [39m    [34mexpect[39m(accepted[33m.[39mpopularity)[33m.[39m[34mtoBe[39m(before[33m.[39mpopularity [33m-[39m [34m5[39m)[33m;[39m
+    [90m 34| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(before[33m.[39mseasons))[33m.[39m[34mtoBe[39m(rows)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective accepts the existing copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 169[2mms[22m[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched[39m[32m 103[2mms[22m[39m
+[31m     → expected 51 to be 48 // Object.is equality[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play[32m 4[2mms[22m[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters[39m[32m 4[2mms[22m[39m
+[31m     → expected { apps: 2, leagueApps: 2, …(2) } to deeply equal { apps: +0, leagueApps: +0, …(2) }[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw[39m[32m 8[2mms[22m[39m
+[31m     → expected { year: 2021, age: 26, …(31) } to match object { apps: +0, leagueApps: +0, …(6) }
+(26 matching properties omitted from actual)[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons[39m[32m 3[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save[32m 19[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save[32m 4[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false[32m 8[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true[32m 4[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact[32m 3[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten[32m 8[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m7 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:26
+[2m   Duration [22m 3.41s[2m (transform 1.87s, setup 82ms, collect 2.26s, tests 169ms, environment 439ms, prepare 168ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched
+[31m[1mAssertionError[22m: expected 51 to be 48 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 48[39m
+[31m+ 51[39m
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m42:28[22m[39m
+    [90m 40| [39m    [35mconst[39m normalRow [33m=[39m [34mlast[39m(normal)[33m;[39m
+    [90m 41| [39m    [35mconst[39m bannedRow [33m=[39m [34mlast[39m(banned)[33m;[39m
+    [90m 42| [39m    [34mexpect[39m(bannedRow[33m.[39mapps)[33m.[39m[34mtoBe[39m(normalRow[33m.[39mapps [33m-[39m [34m3[39m)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m 43| [39m    [34mexpect[39m(bannedRow[33m.[39mleagueApps)[33m.[39m[34mtoBe[39m(normalRow[33m.[39mleagueApps[33m![39m [33m-[39m [34m3[39m)[33m;[39m
+    [90m 44| [39m    [34mexpect[39m(bannedRow[33m.[39msuspensionMatches)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters
+[31m[1mAssertionError[22m: expected { apps: 2, leagueApps: 2, …(2) } to deeply equal { apps: +0, leagueApps: +0, …(2) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "apps": 0,[39m
+[32m-   "leagueApps": 0,[39m
+[32m-   "remaining": 1,[39m
+[32m-   "served": 2,[39m
+[31m+   "apps": 2,[39m
+[31m+   "leagueApps": 2,[39m
+[31m+   "remaining": 3,[39m
+[31m+   "served": 0,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m69:42[22m[39m
+    [90m 67| [39m
+    [90m 68| [39m  it('serves only actual club appearances and carries the rest without…
+    [90m 69| [39m    expect(serveClubSuspension(2, 2, 3)).toEqual({ apps: 0, leagueApps…
+    [90m   | [39m                                         [31m^[39m
+    [90m 70| [39m    for (const invalid of [undefined, -3, Number.NaN, Number.POSITIVE_…
+    [90m 71| [39m      expect(serveClubSuspension(30, 26, invalid)).toEqual({ apps: 30,…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw
+[31m[1mAssertionError[22m: expected { year: 2021, age: 26, …(31) } to match object { apps: +0, leagueApps: +0, …(6) }
+(26 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "apps": 0,[39m
+[32m-   "assists": 0,[39m
+[31m+   "apps": 6,[39m
+[31m+   "assists": 1,[39m
+[2m    "cleanSheets": 0,[22m
+[32m-   "goals": 0,[39m
+[32m-   "leagueApps": 0,[39m
+[32m-   "redCards": 0,[39m
+[32m-   "suspensionMatches": 6,[39m
+[31m+   "goals": 2,[39m
+[31m+   "leagueApps": 2,[39m
+[31m+   "redCards": 1,[39m
+[2m    "yellowCards": 0,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m94:23[22m[39m
+    [90m 92| [39m    [35mconst[39m bannedRow [33m=[39m [34mlast[39m(next)[33m;[39m
+    [90m 93| [39m    [34mexpect[39m(next[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'rehab_choice'[39m)[33m;[39m
+    [90m 94| [39m    expect(bannedRow).toMatchObject({ apps: 0, leagueApps: 0, goals: 0…
+    [90m   | [39m                      [31m^[39m
+    [90m 95| [39m      cleanSheets: 0, yellowCards: 0, redCards: 0, suspensionMatches: …
+    [90m 96| [39m    [34mexpect[39m(next[33m.[39mpendingSuspensionMatches)[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons
+[31m[1mAssertionError[22m: expected undefined to be 3 // Object.is equality[39m
+
+[32m- Expected:[39m 
+3
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m109:42[22m[39m
+    [90m107| [39m    [34mexpect[39m(next[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'rehab_choice'[39m)[33m;[39m
+    [90m108| [39m    [34mexpect[39m([34mlast[39m(next)[33m.[39minjurySevere)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m109| [39m    [34mexpect[39m([34mlast[39m(next)[33m.[39msuspensionMatches)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m   | [39m                                         [31m^[39m
+    [90m110| [39m    [34mexpect[39m(next[33m.[39mpendingSuspensionMatches)[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+    [90m111| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(next[33m.[39mseasons[33m.[39m[34mslice[39m([34m0[39m[33m,[39m [33m-[39m[34m1[39m)))[33m.[39m[34mtoBe[39m(rows)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+ok effective accepts the existing copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 162[2mms[22m[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched[39m[32m 87[2mms[22m[39m
+[31m     → expected 3 to be undefined[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw[32m 6[2mms[22m[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons[39m[32m 3[2mms[22m[39m
+[31m     → expected 3 to be undefined[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save[32m 27[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save[32m 5[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false[32m 8[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true[32m 5[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact[32m 3[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten[32m 10[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:30
+[2m   Duration [22m 3.28s[2m (transform 1.76s, setup 82ms, collect 2.10s, tests 162ms, environment 445ms, prepare 184ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched
+[31m[1mAssertionError[22m: expected 3 to be undefined[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+3
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m45:45[22m[39m
+    [90m 43| [39m    [34mexpect[39m(bannedRow[33m.[39mleagueApps)[33m.[39m[34mtoBe[39m(normalRow[33m.[39mleagueApps[33m![39m [33m-[39m [34m3[39m)[33m;[39m
+    [90m 44| [39m    [34mexpect[39m(bannedRow[33m.[39msuspensionMatches)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m 45| [39m    [34mexpect[39m(banned[33m.[39mpendingSuspensionMatches)[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+    [90m   | [39m                                            [31m^[39m
+    [90m 46| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(banned[33m.[39mseasons[33m.[39m[34mslice[39m([34m0[39m[33m,[39m [33m-[39m[34m1[39m)))[33m.[39m[34mtoBe[39m(rows)[33m;[39m
+    [90m 47| [39m    const next = advanceProSeason({ ...banned, phase: 'playing', pendi…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons
+[31m[1mAssertionError[22m: expected 3 to be undefined[39m
+
+[32m- Expected:[39m 
+undefined
+
+[31m+ Received:[39m 
+3
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m110:43[22m[39m
+    [90m108| [39m    [34mexpect[39m([34mlast[39m(next)[33m.[39minjurySevere)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m109| [39m    [34mexpect[39m([34mlast[39m(next)[33m.[39msuspensionMatches)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m110| [39m    [34mexpect[39m(next[33m.[39mpendingSuspensionMatches)[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m111| [39m    [34mexpect[39m([33mJSON[39m[33m.[39m[34mstringify[39m(next[33m.[39mseasons[33m.[39m[34mslice[39m([34m0[39m[33m,[39m [33m-[39m[34m1[39m)))[33m.[39m[34mtoBe[39m(rows)[33m;[39m
+    [90m112| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+ok effective accepts the existing copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 184[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched[32m 98[2mms[22m[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play[39m[32m 17[2mms[22m[39m
+[31m     → expected 'random_events' to be 'red_card_appeal_result' // Object.is equality[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw[32m 7[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons[32m 2[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save[32m 25[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save[32m 5[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false[32m 8[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true[32m 5[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact[32m 3[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten[32m 11[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:34
+[2m   Duration [22m 3.71s[2m (transform 2.25s, setup 56ms, collect 2.69s, tests 184ms, environment 339ms, prepare 106ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play
+[31m[1mAssertionError[22m: expected 'random_events' to be 'red_card_appeal_result' // Object.is equality[39m
+
+Expected: [32m"r[7med_card_appeal_result[27m"[39m
+Received: [31m"r[7mandom_events[27m"[39m
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m54:28[22m[39m
+    [90m 52| [39m    vi[33m.[39m[34mspyOn[39m([33mMath[39m[33m,[39m [32m'random'[39m)[33m.[39m[34mmockReturnValue[39m([34m0.7[39m)[33m;[39m
+    [90m 53| [39m    [35mconst[39m rejected [33m=[39m [34mapplyEventChoice[39m([34meventState[39m()[33m,[39m [34m1[39m[33m,[39m [33mFALLBACK_CLUBS[39m)[33m;[39m
+    [90m 54| [39m    [34mexpect[39m(rejected[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'red_card_appeal_result'[39m)[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m 55| [39m    [34mexpect[39m(rejected[33m.[39mpendingEvents)[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+    [90m 56| [39m    [34mexpect[39m(rejected[33m.[39mpendingSuspensionMatches)[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective shows an appeal copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 131[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched[32m 64[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters[32m 1[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons[32m 2[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save[32m 20[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save[32m 4[2mms[22m[39m
+[31m   [31m×[31m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false[39m[32m 14[2mms[22m[39m
+[31m     → expected null not to be null[39m
+[31m   [31m×[31m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true[39m[32m 6[2mms[22m[39m
+[31m     → expected null not to be null[39m
+[31m   [31m×[31m Saved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact[39m[32m 3[2mms[22m[39m
+[31m     → expected null not to be null[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten[32m 8[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m8 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:38
+[2m   Duration [22m 2.94s[2m (transform 1.50s, setup 79ms, collect 1.86s, tests 131ms, environment 398ms, prepare 159ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSaved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSaved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true
+[31m[1mAssertionError[22m: expected null not to be null[39m
+[36m [2m❯[22m derive src/test/soccerDiscipline.test.ts:[2m127:22[22m[39m
+    [90m125| [39m  [35mconst[39m ctx [33m=[39m [34mbuildSoccerSeasonCtx[39m(state[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m saved)[33m;[39m
+    [90m126| [39m  [35mconst[39m result [33m=[39m [34mderiveSeason[39m([33mSOCCER[39m[33m,[39m saved[33m,[39m ctx)[33m;[39m
+    [90m127| [39m  [34mexpect[39m(result)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m128| [39m  [34mexpect[39m([34mdisagreements[39m([33mSOCCER[39m[33m,[39m saved[33m,[39m ctx[33m,[39m result[33m![39m))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m129| [39m  [35mreturn[39m { result[33m:[39m result[33m![39m[33m,[39m ctx }[33m;[39m
+[90m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m156:29[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSaved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact
+[31m[1mAssertionError[22m: expected null not to be null[39m
+[36m [2m❯[22m derive src/test/soccerDiscipline.test.ts:[2m127:22[22m[39m
+    [90m125| [39m  [35mconst[39m ctx [33m=[39m [34mbuildSoccerSeasonCtx[39m(state[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m saved)[33m;[39m
+    [90m126| [39m  [35mconst[39m result [33m=[39m [34mderiveSeason[39m([33mSOCCER[39m[33m,[39m saved[33m,[39m ctx)[33m;[39m
+    [90m127| [39m  [34mexpect[39m(result)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m128| [39m  [34mexpect[39m([34mdisagreements[39m([33mSOCCER[39m[33m,[39m saved[33m,[39m ctx[33m,[39m result[33m![39m))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m129| [39m  [35mreturn[39m { result[33m:[39m result[33m![39m[33m,[39m ctx }[33m;[39m
+[90m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m172:24[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+ok effective places served bans copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 176[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched[32m 98[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters[32m 2[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw[32m 6[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons[32m 2[2mms[22m[39m
+[31m   [31m×[31m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save[39m[32m 28[2mms[22m[39m
+[31m     → expected null not to be null[39m
+[31m   [31m×[31m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save[39m[32m 7[2mms[22m[39m
+[31m     → expected null not to be null[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false[32m 8[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true[32m 5[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact[32m 3[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten[32m 10[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:42
+[2m   Duration [22m 2.94s[2m (transform 1.57s, setup 56ms, collect 1.90s, tests 176ms, environment 353ms, prepare 150ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSaved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSaved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save
+[31m[1mAssertionError[22m: expected null not to be null[39m
+[36m [2m❯[22m derive src/test/soccerDiscipline.test.ts:[2m127:22[22m[39m
+    [90m125| [39m  [35mconst[39m ctx [33m=[39m [34mbuildSoccerSeasonCtx[39m(state[33m,[39m [33mFALLBACK_CLUBS[39m[33m,[39m saved)[33m;[39m
+    [90m126| [39m  [35mconst[39m result [33m=[39m [34mderiveSeason[39m([33mSOCCER[39m[33m,[39m saved[33m,[39m ctx)[33m;[39m
+    [90m127| [39m  [34mexpect[39m(result)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m128| [39m  [34mexpect[39m([34mdisagreements[39m([33mSOCCER[39m[33m,[39m saved[33m,[39m ctx[33m,[39m result[33m![39m))[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m129| [39m  [35mreturn[39m { result[33m:[39m result[33m![39m[33m,[39m ctx }[33m;[39m
+[90m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m136:24[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+ok effective shows recorded send-offs copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 130[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched[32m 64[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play[32m 3[2mms[22m[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters[39m[32m 9[2mms[22m[39m
+[31m     → expected '🟨 4 yellow cards' to be '🟨 4 yellow cards · 🟥 2 red cards' // Object.is equality[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw[32m 5[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons[32m 2[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save[32m 18[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save[32m 4[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false[32m 8[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true[32m 4[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact[32m 3[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten[32m 8[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:46
+[2m   Duration [22m 3.41s[2m (transform 1.85s, setup 76ms, collect 2.31s, tests 130ms, environment 436ms, prepare 179ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters
+[31m[1mAssertionError[22m: expected '🟨 4 yellow cards' to be '🟨 4 yellow cards · 🟥 2 red cards' // Object.is equality[39m
+
+Expected: [32m"🟨 4 yellow cards[7m · 🟥 2 red cards[27m"[39m
+Received: [31m"🟨 4 yellow cards"[39m
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m74:34[22m[39m
+    [90m 72| [39m    }
+    [90m 73| [39m    expect(serveClubSuspension(40, 34, 3)).toEqual({ apps: 37, leagueA…
+    [90m 74| [39m    expect(soccerCardLine(4, 2)).toBe('🟨 4 yellow cards · 🟥 2 red ca…
+    [90m   | [39m                                 [31m^[39m
+    [90m 75| [39m    [34mexpect[39m([34msoccerCardLine[39m([34m0[39m[33m,[39m [34m1[39m))[33m.[39m[34mtoBe[39m([32m'🟥 1 red card'[39m)[33m;[39m
+    [90m 76| [39m    [34mexpect[39m([34msoccerCardLine[39m([34m0[39m[33m,[39m [34m0[39m))[33m.[39m[34mtoBe[39m([32m''[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective serves only actual copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 187[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched[32m 98[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play[32m 4[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters[32m 2[2mms[22m[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw[39m[32m 20[2mms[22m[39m
+[31m     → expected { year: 2021, age: 26, …(32) } to match object { apps: +0, leagueApps: +0, …(6) }
+(26 matching properties omitted from actual)[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons[32m 3[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save[32m 25[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save[32m 5[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false[32m 10[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true[32m 5[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact[32m 3[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten[32m 10[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:50
+[2m   Duration [22m 3.33s[2m (transform 1.92s, setup 56ms, collect 2.30s, tests 187ms, environment 335ms, prepare 145ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw
+[31m[1mAssertionError[22m: expected { year: 2021, age: 26, …(32) } to match object { apps: +0, leagueApps: +0, …(6) }
+(26 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "apps": 0,[22m
+[2m    "assists": 0,[22m
+[2m    "cleanSheets": 0,[22m
+[32m-   "goals": 0,[39m
+[31m+   "goals": 2,[39m
+[2m    "leagueApps": 0,[22m
+[2m    "redCards": 0,[22m
+[2m    "suspensionMatches": 6,[22m
+[2m    "yellowCards": 0,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m94:23[22m[39m
+    [90m 92| [39m    [35mconst[39m bannedRow [33m=[39m [34mlast[39m(next)[33m;[39m
+    [90m 93| [39m    [34mexpect[39m(next[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'rehab_choice'[39m)[33m;[39m
+    [90m 94| [39m    expect(bannedRow).toMatchObject({ apps: 0, leagueApps: 0, goals: 0…
+    [90m   | [39m                      [31m^[39m
+    [90m 95| [39m      cleanSheets: 0, yellowCards: 0, redCards: 0, suspensionMatches: …
+    [90m 96| [39m    [34mexpect[39m(next[33m.[39mpendingSuspensionMatches)[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective keeps all appearances suspended copied defect caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/soccerDiscipline.test.ts[2m > [22m[2mSaved soccer cards and bans in the season[2m > [22m[2mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten
+[22m[39mSoccer stat headroom example: {"apps":52,"goals":57,"assists":15,"rating":10,"ovr":99}
+
+ [31m❯[39m src/test/soccerDiscipline.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 134[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22maccepts the existing three-match ban, reloads it, serves it once and keeps completed rows untouched[32m 66[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mshows an appeal before remaining events, queues a rejected ban once and leaves a won appeal free to play[32m 3[2mms[22m[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mserves only actual club appearances and carries the rest without negative or invalid counters[32m 1[2mms[22m[39m
+[31m   [31m×[31m Soccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw[39m[32m 15[2mms[22m[39m
+[31m     → expected { year: 2021, age: 26, …(32) } to match object { apps: +0, leagueApps: +0, …(6) }
+(26 matching properties omitted from actual)[39m
+   [32m✓[39m Soccer discipline consequences[2m > [22mconsumes a served ban on the severe injury branch without editing completed seasons[32m 2[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode false without rewriting the save[32m 18[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mshows recorded send-offs and their next suspension in results mode true without rewriting the save[32m 4[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury false[32m 7[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mplaces served bans outside injury and protects saved played derbies, severe injury true[32m 4[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mkeeps a sparse severe injury season at one appearance with its three served ban gaps intact[32m 3[2mms[22m[39m
+   [32m✓[39m Saved soccer cards and bans in the season[2m > [22mdemonstrates peak season headroom using legal 99 attributes while rating remains capped at ten[32m 8[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 19:06:54
+[2m   Duration [22m 4.00s[2m (transform 2.25s, setup 79ms, collect 2.80s, tests 134ms, environment 450ms, prepare 102ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/soccer-discipline-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerDiscipline.test.ts[2m > [22mSoccer discipline consequences[2m > [22mkeeps all appearances suspended at zero goals and cards, including diving, without losing the existing card draw
+[31m[1mAssertionError[22m: expected { year: 2021, age: 26, …(32) } to match object { apps: +0, leagueApps: +0, …(6) }
+(26 matching properties omitted from actual)[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -2,9 +2,9 @@[39m
+[2m    "apps": 0,[22m
+[2m    "assists": 0,[22m
+[2m    "cleanSheets": 0,[22m
+[2m    "goals": 0,[22m
+[2m    "leagueApps": 0,[22m
+[32m-   "redCards": 0,[39m
+[31m+   "redCards": 1,[39m
+[2m    "suspensionMatches": 6,[22m
+[2m    "yellowCards": 0,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerDiscipline.test.ts:[2m94:23[22m[39m
+    [90m 92| [39m    [35mconst[39m bannedRow [33m=[39m [34mlast[39m(next)[33m;[39m
+    [90m 93| [39m    [34mexpect[39m(next[33m.[39mphase)[33m.[39m[34mtoBe[39m([32m'rehab_choice'[39m)[33m;[39m
+    [90m 94| [39m    expect(bannedRow).toMatchObject({ apps: 0, leagueApps: 0, goals: 0…
+    [90m   | [39m                      [31m^[39m
+    [90m 95| [39m      cleanSheets: 0, yellowCards: 0, redCards: 0, suspensionMatches: …
+    [90m 96| [39m    [34mexpect[39m(next[33m.[39mpendingSuspensionMatches)[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+ok effective keeps all appearances suspended copied defect caught
+simSoccerDiscipline: 11 outcome assertions green, 9 effective copied defects caught
