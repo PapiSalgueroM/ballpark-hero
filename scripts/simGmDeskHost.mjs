@@ -50,7 +50,24 @@
  * the engine option that plays a league with nobody in the chair belongs to
  * the bind. What it proves is the host's order and its bookkeeping.
  *
- * MEASURED: see the block above T below.
+ * MEASURED 2026-10-10 on a GitHub runner, three seed sets of three (1,2,3 /
+ * 4,5,6 / 7,8,9), three seasons a seed a sport. Every count is exact for its
+ * seeds; all three sets pass every check.
+ *   real leagues read        84 each       real saves read        240 each
+ *   keyed feeds with offers  34 / 38 / 37 of 48
+ *   markets on the ladder    16800 each: offers 12057 / 12052 / 12045, after a badly season 2260 / 2245 / 2262,
+ *                            quiet 3310 / 3331 / 3337, quiet on a climb 811 / 801 / 805, closed 4766 / 4770 / 4781
+ *   real seasons graded      1116 each: short of the ask 498 / 511 / 507, every one a firing from trust 12
+ *   men / room to grow       3281 / 3275 / 3276 in the first league a sport; 10995 / 11049 / 10964 over nine leagues
+ *   asks on the re-sign desk 8824 / 8868 / 8838     trade pairs 1045286 / 1047531 / 1047082
+ *   cuts charged as quoted   288 each      gambles 24 each (six answers a sport, each exactly 30 more landings a point)
+ *   seats taken 12, years out refused 36, years out played 12, each set
+ *   pace on the four fed sources (wins, titles, playoff rounds, the ask): the median club earns 101 to 106 XP a
+ *   season in every sport, and 20 to 37 percent of clubs hold the first point (400 XP) after three seasons, so
+ *   the median GM is about four seasons from it. The GM level help says so (hostXpHelp computes it).
+ * Every floor in T sits near 70 percent of the lowest set. The two processes of one seed set print one feed
+ * digest (seeds 1,2,3: 4639809b50a97cedd2ac870d05cfdb6d59a4b6e4).
+ * CONTROLS, each run alone on seeds 1,2,3, failures counted in its own check: see CONTROL COUNTS below T.
  */
 import './lib/seedRandom.mjs';
 import fs from 'node:fs';
@@ -383,8 +400,8 @@ const SPORTS = Object.keys(DRIVE);
 
 /* Floors: the measured size of each walk on seeds 1,2,3 (see MEASURED). A walk that shrinks under its floor proves nothing. */
 const T = {
-  minLeagues: 30, minRealSaves: 90, minOffers: 1, minBadlyOffers: 1, minClimb: 1, minClosed: 1, minQuietOpen: 1,
-  minVerdicts: 900, minLosing: 200, minFiredCloses: 20, minCases: 40, minMen: 1500, minYoung: 300, minPairs: 5000, minCuts: 30,
+  minLeagues: 58, minRealSaves: 168, minFeedsWithOffers: 23, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
+  minReach: 150, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minMen: 2290, minYoung: 7600, minPairs: 730000, minCuts: 200,
 };
 
 const nameOf = id => `${id} club`;
@@ -576,7 +593,7 @@ for (const sport of SPORTS) {
     if (key !== H.hostFeedKey(sport, clone(seat), lg.season)) fail(`${sport} ${old}: the same record reads two keys`);
   }
 }
-ok(feedsWithOffers >= 8, `only ${feedsWithOffers} of ${feedsRead} feeds held an offer, too few to tell a keyed feed from an empty one`);
+ok(feedsWithOffers >= T.minFeedsWithOffers, `only ${feedsWithOffers} of ${feedsRead} feeds held an offer, too few to tell a keyed feed from an empty one`);
 console.log(`   ${feedsRead} feeds read 201 times each, ${feedsWithOffers} of them with offers; feed digest ${sha(digest.join('|'))}`);
 
 /* ================================================================== */
@@ -622,9 +639,30 @@ for (const sport of SPORTS) {
     ok(J(lg) === before, `${sport} seed ${snap.seed}: reading the market changed the league`);
   }
 }
+/* The ceiling again, where it bites. In a full league the engine's own ceiling hides the rule (scripts/simGmSeat.mjs
+   measured a top tier call after a badly season about once in 2,800 offers), so the same real clubs are read six at
+   a time through the same adapter, where the one other top tier club is always in reach, for the decorated careers
+   the rule exists for: three seasons over the ask, 5 to 10 titles, then four badly seasons and the sack. */
+let reach = 0, reachFeeds = 0;
+for (const sport of SPORTS) {
+  const d = DRIVE[sport];
+  for (const snap of FLEET[sport].closed) {
+    const lg = snap.lg, six = [...d.host.clubs(lg)].sort((a, b) => b.strength - a.strength || a.id.localeCompare(b.id)).slice(0, 6).map(c => c.id);
+    const small = { ...d.host, clubs: l => d.host.clubs(l).filter(c => six.includes(c.id)) };
+    for (let k = 5; k <= 10; k++) {
+      const seat = firedSeat(six[0], 1, lg.season, [...Array(3).fill('overachieved'), ...Array(k).fill('title'), ...Array(4).fill('badly')]);
+      const m = H.hostMarket(small, lg, seat, nameOf);
+      reachFeeds++;
+      reach += m.offers.length;
+      for (const o of m.offers) if (o.tier < SEAT.BADLY_FIRED_CEILING) fail(`${sport} seed ${snap.seed} season ${snap.s + 1}, six clubs, ${k} titles then four badly seasons: a tier ${o.tier} club calls`);
+    }
+  }
+}
+ok(reach >= T.minReach, `only ${reach} offers in the six club view, too few to hold the ceiling`);
 ok(M4.offers >= T.minOffers && M4.badlyOffers >= T.minBadlyOffers, `${M4.offers} offers and ${M4.badlyOffers} after a badly season: too few to hold the rules`);
 ok(M4.climb >= T.minClimb && M4.closed >= T.minClosed && M4.quietOpen >= T.minQuietOpen, `the ladder holds ${M4.quietOpen} quiet, ${M4.climb} quiet on a climb and ${M4.closed} closed careers: a state is missing`);
 console.log(`   ${M4.markets} markets: ${M4.withOffers} with offers (${M4.offers} offers, ${M4.badlyOffers} after a badly season, at most ${M4.most} a feed), ${M4.quietOpen} quiet, ${M4.climb} quiet on a climb, ${M4.closed} closed`);
+console.log(`   the ceiling six clubs at a time: ${reach} offers in ${reachFeeds} feeds of the most decorated careers, none from the top tier`);
 
 /* ================================================================== */
 begin('5', 'closed means closed: no tier his old club can reach and no year out reopens it, and a quiet market is never in that set');

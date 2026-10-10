@@ -193,7 +193,7 @@ describe('the GM level panel', () => {
     expect(career.spend).toHaveBeenCalledTimes(1);
     expect(container.querySelector('[data-gm-xp-earns]')!.textContent).toBe(career.earns);
     fireEvent.click(screen.getByLabelText('How GM XP works'));
-    expect(container.querySelectorAll('[data-gm-xp-help] p')).toHaveLength(4);
+    expect(container.querySelectorAll('[data-gm-xp-help] p')).toHaveLength(5);
   });
   it('says XP has not started on a save whose desk is off', () => {
     const { container } = render(<GmXpDeskPanel {...panelProps(binding(HELD, { deskOn: false }))} />);
