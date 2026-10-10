@@ -1,0 +1,13 @@
+hall-nhl exit=3 4s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+hall-mlb exit=3 6s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nfl exit=3 5s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+hall-nba exit=3 4s | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+ledger exit=0 3s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+digest exit=0 40s |    Duration  39.70s (transform 1.76s, setup 152ms, collect 2.91s, tests 37.16s, environment 794ms, prepare 244ms)
+parity exit=0 43s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 69s | 
+rivalnames exit=0 15s | No rival product names found. 0 findings.
+storage exit=0 2s | simStorageWrites: all green (owed: 12)
+livescores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+hallfiles exit=0 0s | 0
+anchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

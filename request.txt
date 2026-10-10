@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+hall-nhl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000
+hall-mlb: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000
+hall-nfl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl 2000
+hall-nba: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba 2000
+ledger: node scripts/simUsSeasonLedger.mjs
+parity: node scripts/simUsBoardParity.mjs
+digest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeasonSlate.test.ts --testTimeout=300000 --hookTimeout=120000
+anchors: node scripts/simHarnessAnchors.mjs
+rivalnames: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+livescores: node scripts/simLiveScores.mjs
+hallfiles: git diff --stat 980654facb2d41a6c9ddc029c43710178b9d49b8 HEAD~1 -- scripts/data/careerHallMarks.json src/lib/careerHallOfFame.ts scripts/data/careerHallV2.json scripts/simCareerHall.mjs scripts/genCareerHallMarks.mjs | wc -l
