@@ -1,0 +1,10 @@
+book-default-s0: node scripts/simCmLeagueBook.mjs
+book-full-base-s0: git worktree add -q /tmp/base1229 980654fa && BOOK_BASE=/tmp/base1229 BOOK_FLEET=full BOOK_MEASURE=1 node scripts/simCmLeagueBook.mjs
+book-full-s1: SEEDSET=1 BOOK_FLEET=full BOOK_MEASURE=1 node scripts/simCmLeagueBook.mjs
+book-default-s1: SEEDSET=1 node scripts/simCmLeagueBook.mjs
+book-full-s2: SEEDSET=2 BOOK_FLEET=full BOOK_MEASURE=1 node scripts/simCmLeagueBook.mjs
+book-default-s2: SEEDSET=2 node scripts/simCmLeagueBook.mjs
+book-full-s3: SEEDSET=3 BOOK_FLEET=full BOOK_MEASURE=1 node scripts/simCmLeagueBook.mjs
+book-default-s3: SEEDSET=3 node scripts/simCmLeagueBook.mjs
+book-full-s4: SEEDSET=4 BOOK_FLEET=full BOOK_MEASURE=1 node scripts/simCmLeagueBook.mjs
+book-default-s4: SEEDSET=4 node scripts/simCmLeagueBook.mjs
