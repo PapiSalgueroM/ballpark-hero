@@ -93,3 +93,65 @@ A screen reader: focus lands on the hidden heading, which reads "Draft night." w
 arrive; every row is in the DOM and can be read ahead (the same final frame less motion gets);
 when the closing row lands a `role="status"` line says the result in one sentence.
 With less motion the night starts on its last frame and nothing is held.
+
+## The walk (scripts/playDraftNight.mjs), measured on a GitHub runner
+
+Remote check `r1220-walk2` at head fcbf417d: ALL GREEN, 40 nights (4 sports, 390 by 844 with touch
+and 1280 by 800; a first pick, a late pick and an undrafted road watched, a late pick skipped, an
+undrafted road with less motion). What it measured:
+
+- The card and the journey keep one height from the first frame of the night to the last
+  (for example MLB's late pick, 8 rows: 764 px at every one of its frames).
+- The press reveals the board once (the page moved 22 to 442 px inside the first second and a
+  half, never after) and the closing row landed wholly on screen every time: at 707 to 761 of 844
+  on the phone and 663 to 717 of 800 on the desktop, with the two buttons right under it.
+- Until the closing row starts to land (0.7 s for a first pick, 3.5 s for an 8 row board, 4.1 s
+  for the NBA with its lottery), the title, the club line, the result block and the closing row
+  were at opacity 0 on every recorded frame (31 to 235 frames a night).
+- No enabled button inside anything at opacity 0, every button at least 44 by 44, no frame wider
+  than its viewport, the save equal to the engine's state after the draft, the career that
+  starts at the club the closing row showed, no page error.
+
+THE FIRST RUN OF THE WALK FOUND A REAL JUMP: the outlined "Skip to my pick" is 2 px taller than
+"Start your career", so the row under the board lost 2 px when the skip went (32 height failures
+and 8 skip failures in 40 nights, `r1220-walk`). Fixed by giving the two buttons the same border
+box. It also showed three of its own controls had changed nothing (a style put in from an init
+script, before the document has a root element) and refused them with exit 2, which is what that
+refusal is for; the styles now go in after load.
+
+| Control | What it breaks | Its own check, red (exit 1) |
+|---|---|---|
+| `late` | rows take their room only when they arrive | height: the card went from 490 to 765 |
+| `spoiler` | the hold is taken off | spoiler: at 0 ms of 3500 the title, the club and the result are at 1 |
+| `fold` | the press reveals nothing | fold: the closing row landed at 995 to 1049 in an 844 high viewport |
+| `hidden` | a row left invisible with less motion | reduced: the first frame has a row at 0 |
+
+`fold` is also the proof the reveal is needed: without it the name is called below the screen.
+
+## Residual, known and written down
+
+- The night plays once. There is no "watch it again" after a reload.
+- If the chunk has not arrived when "Draft day" is pressed (a slow connection, a press in the same
+  frame as the mount), there is no night, only the result block. Nothing is lost.
+- The reveal is one `useRevealScroll` on the row of buttons, aligned to the bottom of the screen.
+  On a viewport shorter than the card itself (the NBA's, with its lottery, measured 810 px on a 390
+  wide phone) the top of the lottery tile is above the screen when the name is called. The closing
+  row and the buttons are in view either way.
+- The NHL and MLB lotteries are real and not modelled by the career engines: no tile, and no
+  sentence that says there is none.
+
+## Owed, not done here
+
+- `/nfl-my-career` weighs 469.0K gz against a budget of 468K (468.1K on the base, measured on the
+  same runner): this round adds 0.9K to the first chunk of the four career pages (the range line,
+  the journey's night state and help paragraph, the hold's CSS). The budget number is the lead's.
+- `scripts/qa/career993.mjs` (the other lane's walk) fails on `origin/main` itself: its expected
+  career lacks `summerSalt` (Round 1038), in all six journeys at the "joined" step. On this head it
+  walks through the live night (its 44 px and overflow checks pass at 390, 320 and 1440) and then
+  fails at that same step. `scripts/simDraftNight.mjs` is red on main too (the NBA front office
+  board does not hand its rivals to `buildDraftNight`). Neither is this round's file.
+- One sentence in each of the four career guides (src/data/gameContent, the other lane's files):
+  draft night is watched. No guide sentence became false.
+- `/whats-new` is the one saved page that changes (one entry).
+- Round B, the combine you run, builds on this head (sections 10 to 12 of the harness are kept
+  free for it).
