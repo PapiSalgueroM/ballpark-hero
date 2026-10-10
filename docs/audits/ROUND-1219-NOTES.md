@@ -49,18 +49,23 @@ walk's verdict says so.)
 
 1. **The outcome is held in memory, not in storage.** The card that shows it mounts in the same
    page load that applied the journal, so there is no outcome key and one write fewer.
-2. **The backup a put back came from is never removed** (the critic's correction 15). So that a
-   put back at the cap still deletes nothing, a backup that is byte equal to the save now at the
-   key does not count toward the three a game keeps, and the copy just made is never dropped. A
-   game can therefore hold four: three and the one that equals the save being played.
-3. **The card stays quiet about the game already being played.** When the newest backup IS the
-   save now at the key, the apply marks it answered, and the card also skips any backup equal to
-   the save at the key.
+2. **The backup a put back came from is never removed** (the critic's correction 15). A backup
+   that is byte equal to the save now at the key does not count toward the three a game keeps,
+   and the copy just made is never dropped, so a FIRST put back at the cap deletes nothing. A
+   game can therefore hold four: three and the one that equals the save being played. Several
+   put backs with play between them can still leave more than three other saves kept aside; the
+   oldest then goes (review fix: the card names the cap before the press whenever more than
+   three are held, and the outcome says when one was dropped, see the review section below).
+3. **The card passes over the game already being played, and nothing else** (changed by the
+   review, see below). It offers the newest backup that the player has not waved off and that
+   is not byte equal to the save at the key. A put back marks nothing as answered.
 4. **The quiet copy at boot** is made for any version that is not the current one (older, and
-   newer too: a tab on an older cached build meets a newer save and would start over), only on the
-   six games that act on their version. It never prunes (it is exempt from the cap: nobody
-   pressed anything), and it is marked answered so the card does not offer back a save this build
-   would refuse again.
+   newer too: a tab on an older cached build meets a newer save and would start over; since the
+   review also a save with NO whole number there, which every one of the six games refuses just
+   the same), only on the six games that act on their version. It never prunes (it is exempt
+   from the cap: nobody pressed anything), and it is marked answered so the card does not offer
+   back a save this build would refuse again. When it will not fit, the save is left as it was
+   and the card on that game's page says so once.
 5. **A journal is good for five minutes.** Older, or stamped more than a minute in the future,
    and it is removed with nothing changed; the card says the page took too long.
 6. **One crash point answers "nothing changed" and is applied by the next load anyway**: the
@@ -81,8 +86,10 @@ walk's verdict says so.)
   backup it came from is kept for exactly that reason.
 - Two tabs booting in the same moment can both apply one journal and leave two copies of the
   same save. Storage has no lock that can be taken before React mounts. Known, not fixed.
-- Headless Chromium does not exercise the back and forward cache, so "replace, not assign" is
-  held by reading the code only. Only Chromium was walked.
+- Headless Chromium does not exercise the back and forward cache, so what a browser that keeps
+  a left page alive would do with it is not measured. That the load is a replace IS held since
+  the review: a unit case, `simSaveKeeper` section 6 (control `assign`), and the walk's history
+  count where the address changes (control `assignload`). Only Chromium was walked.
 
 ## The version table, and what "no number" means
 
@@ -104,8 +111,11 @@ against each game's own loader where one is exported:
 | Fight Promoter | `st.version` | 1 | 1 | ignores (by reading) |
 
 The boot copy means something on the first six only, so only those six keys are read at boot.
-A save with NO whole number at its path (older than the field, or damaged) is left alone: the
-keeper cannot tell what it is, and the game's own loader decides. The other eleven games hold no
+A save with NO whole number at its path (older than the field, damaged at that field, or not
+JSON at all) gets its copy too since the review: `simSaveKeeper` section 4 hands a real save with
+the number removed, and with it written as text, to each of the six games' own loaders, and all
+twelve are refused, so the game will not open it and three of them write a fresh game over it.
+The first build of this round left such a save alone. The other eleven games hold no
 version at the top level or one level down; the harness fails the day one of them grows one, or
 one of the ten changes its number, until the table says so. Club Manager's number now lives in
 three places (`clubManager.ts` SAVE_VERSION, `clubManagerSlots.ts`, this table); the harness
@@ -152,14 +162,63 @@ holds this one to a real save.
   `brokenSaveRecovery.ts` entry's `write:moveAside` becomes `write:copyAside`, and a new entry
   for `src/lib/saveKeeper.ts` with `write:stageRestore` and `write:applyPending` (a put back that
   cannot be staged or applied changes nothing and holds nothing in the page).
-- Gate lists: add `scripts/simSaveKeeper.mjs` (with its eight controls) and
+- Gate lists: add `scripts/simSaveKeeper.mjs` (with its fourteen controls) and
   `scripts/playSaveKeeper.mjs` (it needs a build, Chromium, and for its base arm and journey K a
-  build of origin/main: `KEEPER_BASE_DIST`; controls `inplace`, `tamper`, `extrakey`). After this
-  round is on main the base arm has nothing to lose any more: point it at the commit before the
-  merge, or run the walk without it.
+  build of the tree BEFORE this round: `KEEPER_BASE_DIST`; controls `inplace`, `tamper`,
+  `extrakey`, `answered`, `assignload`). After this round is on main a build of main's head has
+  nothing to lose any more: the base arm must be given a build of `09df145a`
+  (`git worktree add /tmp/base 09df145a`, `vite build`). Since the review the walk refuses to
+  start in assert mode without that build; `KEEPER_NO_BASE=1` walks the branch arm alone and the
+  closing line then says the loss control was not run, which is not a gate result.
 - Owed to the other lane, listed and not written: no guide sentence is needed for this round
   (nothing a player does changed, the button is the same button). For Round B: a version field
   in Soccer Career's save.
+
+## The review's fixes (2026-10-10, after the first build)
+
+Two adversarial reviews of the first build (head `fece05a2`) found two majors, both regressions
+against origin/main and both born of the same decision (the backup a put back came from stays),
+whose consequences for the card and the cap had not been thought through.
+
+- **An undo stranded the career.** Put the old save back, press OK, put the other one back,
+  press OK: the card was gone and the old career sat in storage with no screen that offered it
+  (on Club Manager and Soccer Career one press later). The card only ever looked at the newest
+  backup, and the keeper marked that one answered when it was the save being played.
+  Fix: `offeredBackup` answers the newest backup that the player has not waved off and that is
+  not byte equal to the save at the key; `tidy()` marks nothing. The waved off memory
+  (`dukb-set-aside-seen`) is a LIST per game now; a lone string written before is read as a list
+  of one. One thing a player can notice: after "Leave it aside" on the newest kept aside save,
+  an older one he never answered is offered on a later visit (each is asked about once). That
+  is the price of every kept aside save having a door, and the card is the only door until
+  Round B's panel.
+- **A put back that still broke the page cost a slot at every try.** "Start a fresh game" set
+  the same bytes aside a second and a third time and the cap then dropped the career the player
+  had been playing. Fix: `pruneBackups` first removes an older backup with the very same bytes
+  as the save just set aside (nothing is lost with it), then applies the cap. The count is
+  conserved, as it was on main.
+
+Minors fixed in the same pass: the card no longer says "nothing was deleted" over a put back
+that dropped the oldest kept aside save (the outcome carries `dropped`, and the offer names the
+cap when more than three are held); "already applied" is answered before the journal's age; a
+save with no version number gets its copy; a copy that will not fit is said on the card once;
+What's New says "Rebuild Challenge" and "as long as it has room"; unit cases for the few
+minutes a journal is good for (written out), for the blocked storage refusal and for the
+replace; `simSaveKeeper` holds the copy rule on a store with room for the save and none for its
+copy, the undo, the twin and the wiring (`runSaveKeeper()` in `src/main.tsx` before
+`createRoot`), with six new controls; the walk gained journey T (the toggle, three presses in a
+row with a real pointer on every route), the history count where the address changes, and no
+longer closes green without its loss control.
+
+Not fixed, on purpose:
+- The quiet copy has no bound of its own (it is exempt from the cap, the critic's correction 6
+  gave "exempt, or skipped when three are held" as an either/or and the builder chose exempt). A
+  tab on an older build that keeps meeting a newer, changing save copies it on every load. It
+  needs two builds alternating over a version step. The lead's call.
+- "Each game keeps its three newest backups" on the error screen is left as it is: it is true of
+  what that button does (after a fresh start at most three are held, quiet copies counted).
+- After a put back and some play, the backup the put back came from is an older snapshot of the
+  career being played, and the card offers it once like any other kept aside save. It cannot be
+  told from a different career without tracking descent; "Leave it aside" answers it for good.
 
 ## Things a later reader must not trust without checking
 
@@ -174,6 +233,7 @@ holds this one to a real save.
   purpose, Round 117). At 390 the card's buttons are hidden behind it and the shorter outcome
   card is hidden whole; at 1280 the card's lower half is. The outcome has no timer, so it is
   there once the banner is answered. This was already true of Round 958's card.
-- What the card offers after a quiet copy: nothing. The quiet copy is the newest backup and is
-  marked answered, and the card only ever offers the newest, so an older backup the player never
-  answered is held but no longer offered. The harness prints this in section 4.
+- What the card offers after a quiet copy (changed by the review): the newest OLDER backup the
+  player never answered. The quiet copy is marked answered and passed over; the first build
+  offered nothing there, because the card only ever looked at the newest backup. `simSaveKeeper`
+  section 4 asserts it.
