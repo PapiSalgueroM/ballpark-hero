@@ -48,7 +48,7 @@ describe('Soccer Career press room', () => {
     const next = row({ year: 2031, goals: 16 }); c.seasons.push(next); settleSoccerPress(c, next);
     render(<Harness initial={c} />); start(); fireEvent.click(screen.getByRole('button', { name: 'Your past answers' })); fireEvent.click(document.querySelector('[data-press-history="0"]')!);
     expect(screen.getByText('Promise kept')).toBeInTheDocument();
-    expect(screen.getByText(/At least 15 goals/)).toBeInTheDocument();
+    expect(document.querySelector('[data-press-promise="met"]')?.textContent).toContain('At least 15 goals');
     expect(screen.getByText(/Recorded: 16/)).toBeInTheDocument();
     expect(saved()).toEqual(c);
   });
@@ -60,7 +60,7 @@ describe('Soccer Career press room', () => {
     expect(document.querySelector('[data-press-promise]')?.textContent).toContain('clean sheets');
   });
   it('keeps the pending award out of the question and history', () => {
-    const original = career({ pendingBallonDor: { year: 2030, winner: true, revealed: false } as CareerState['pendingBallonDor'] });
+    const original = career({ pendingBallonDor: { year: 2030, nominees: [{ name: 'Ari Lane', points: 90, isPlayer: true, club: 'Arsenal', nationality: 'England', position: 'ST', goals: 12, trophies: [] }], playerRank: 1, playerPoints: 90, playerNominated: true, revealed: false } });
     render(<Harness initial={original} />); start();
     const question = document.querySelector('[data-press-screen="question"]')!.textContent!;
     expect(question).not.toMatch(/Ballon|golden ball|best player in the world/i);

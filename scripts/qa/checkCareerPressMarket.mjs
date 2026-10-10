@@ -6,7 +6,7 @@ import {OUT,sha} from './careerPressMarketKit.mjs';
 assert(process.env.CI,'Artifact checker runs remotely');
 const mode=process.argv[2],read=file=>JSON.parse(fs.readFileSync(path.join(OUT,file),'utf8'));
 if(mode==='units'){
- const report=read('units.json'),files=['src/lib/soccerCareerPress.test.ts','src/test/soccerPressRoomUi.test.tsx','src/lib/usCareerMarket.test.ts','src/test/usCareerMarketUi.test.tsx','src/test/usCareerMarketBoard.test.tsx','src/test/usCareerSummer.test.tsx','src/test/usBoardFixture.test.tsx'];
+ const report=read('units.json'),files=['src/lib/soccerCareerPress.test.ts','src/test/soccerPressRoomUi.test.tsx','src/lib/usCareerMarket.test.ts','src/test/usCareerMarketUi.test.tsx','src/test/usCareerMarketBoard.test.tsx','src/test/usCareerSummer.test.tsx','src/test/usCareerSaveRetry.test.tsx'];
  assert.equal(report.success,true);assert.equal(report.numFailedTests,0);assert.equal(report.numPendingTests,0);const observed=[];
  for(const file of files){const suite=report.testResults.find(v=>v.name.replaceAll('\\','/').endsWith('/'+file));assert(suite,'Expected actual unit file '+file);assert(suite.assertionResults.length>0,'Nonempty actual tests '+file);assert(suite.assertionResults.every(v=>v.status==='passed'),'Every actual assertion passed '+file);observed.push({file,passed:suite.assertionResults.length});}
  assert.equal(report.numPassedTests,report.testResults.flatMap(v=>v.assertionResults).filter(v=>v.status==='passed').length);fs.writeFileSync(path.join(OUT,'units-receipt.json'),JSON.stringify({observed,passed:report.numPassedTests,failed:0},null,2));console.log('Units: '+report.numPassedTests+' actual passed assertions in all7 required files.');

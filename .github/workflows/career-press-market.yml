@@ -66,7 +66,7 @@ jobs:
       - name: Actual focused helpers and UI tests
         if: ${{ !cancelled() }}
         run: |
-          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerPress.test.ts src/test/soccerPressRoomUi.test.tsx src/lib/usCareerMarket.test.ts src/test/usCareerMarketUi.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerSummer.test.tsx src/test/usBoardFixture.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-press-market-artifacts/units.json 2>&1 | tee career-press-market-artifacts/units.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerPress.test.ts src/test/soccerPressRoomUi.test.tsx src/lib/usCareerMarket.test.ts src/test/usCareerMarketUi.test.tsx src/test/usCareerMarketBoard.test.tsx src/test/usCareerSummer.test.tsx src/test/usCareerSaveRetry.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-press-market-artifacts/units.json 2>&1 | tee career-press-market-artifacts/units.log
           node scripts/qa/checkCareerPressMarket.mjs units
       - name: Actual outcomes and effective copied source controls
         id: outcomes
