@@ -1,0 +1,10 @@
+   NOT OK exit 1  closespan            FAIL: nba: no rule set plays the 2036 draft
+   NOT OK exit 1  extradraw            FAIL: key exact|2: a build opened 1 stream(s) and drew 5 number(s); one stream and 4 numbers is the whole draw
+   NOT OK exit 1  nosplit              FAIL: league 2: level seeds 3 to 8 were not split evenly (140, 125, 105, 90, 75, 60)
+   NOT OK exit 1  flipbeforelottery    FAIL: league 0: T20 and T25 are level (inside the lottery field) and round two is not the reverse of round one
+   NOT OK exit 1  laterasfirst         FAIL: the NBA rule set, league 5: round two is not every club by record
+   NOT OK exit 1  skipslot             FAIL: night 0: the night does not survive a save while he is on the clock
+   NOT OK exit 1  capcount             FAIL: run 8: the headline does not count the 19 picks made ("Picks 30 to 38 are in. Every pick of the draft is in.")
+   NOT OK exit 1  slowcards            FAIL: a lottery of 6 tiles takes 27200 ms; the rule is 3750 ms, three quarters of the house ceiling of 5000
+   NOT OK exit 1  norivals             FAIL: night 0: the picks flagged his are not exactly his
+simGmDraftOrder controls (shard 1/3 of 27): 9 of 9 DID NOT FIRE as expected.

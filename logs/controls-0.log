@@ -1,0 +1,10 @@
+   NOT OK exit 1  onesource            FAIL: nba-2019.field has 1 publisher(s) and is not marked thin, so the lift would play a rule read once
+   NOT OK exit 1  oddsrow              FAIL: league 0: level seeds 6 to 13 were not split evenly (43, 43, 43, 43.99999999999999, 115, 115, 140.00000000000003, 140.00000000000003)
+   NOT OK exit 1  mathrandom           FAIL: the NBA rule set, league 5: the same season drew a different night when its rows came in another order
+   NOT OK exit 1  noflip               FAIL: league 0: T03 and T06 are level (inside the lottery field) and round two is not the reverse of round one
+   NOT OK exit 1  champfirst           FAIL: a league by class with a capped climb, league 2: the champion does not pick last in every round
+   NOT OK exit 1  origpicks            FAIL: night 0: a club did not sign one man a pick it held
+   NOT OK exit 1  trustnight           FAIL: a saved night with the rounds out of order was accepted
+   NOT OK exit 1  hidemine             FAIL: run 11: his own pick at 18 is not a row
+   NOT OK exit 1  mounted              FAIL: src/components/nba-front-office/NbaFrontOfficeBoard.tsx names the lift and is not on the allowlist. A bind adds its files to MOUNT_ALLOW in th
+simGmDraftOrder controls (shard 0/3 of 27): 9 of 9 DID NOT FIRE as expected.

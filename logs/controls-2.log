@@ -1,0 +1,10 @@
+   NOT OK exit 1  flat                 FAIL: league 1: seeds 4 to 8 hold 357 combinations between them, not the 455 of the seeds they span
+   NOT OK exit 2  seconddraw           FAIL: the NBA rule set, league 6: the clubs that were not drawn are not worst record first
+   NOT OK exit 1  tiebyid              FAIL: a pair in the field, seed 37: T05 won the drawing 0.00% of the time against 50.00% (-141.4 standard errors)
+   NOT OK exit 1  acrossbyfield        FAIL: league 0: level across the line, and the lottery club T06 is ahead of the playoff club T05 in round two
+   NOT OK exit 1  rowkey               FAIL: the NBA rule set, league 5: the same season drew a different night when its rows came in another order
+   NOT OK exit 1  trustall             FAIL: a saved order with a win with the wrong seed was accepted
+   NOT OK exit 1  ghostrow             FAIL: run 3: a row is not a pick that was made, with its true number
+   NOT OK exit 1  staleexample         FAIL: the worked example on the card is not the NBA table's
+   NOT OK exit 1  shownread            FAIL: night 5: a grade on the run is not his scout's read
+simGmDraftOrder controls (shard 2/3 of 27): 9 of 9 DID NOT FIRE as expected.
