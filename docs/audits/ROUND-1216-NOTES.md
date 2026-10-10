@@ -181,3 +181,50 @@ Result names are branches `rc-results/<name>` on origin; a log is `git show orig
 In the browser the engine search found, on seed 3208792616 (the walk's seed plus nine): an own goal for me in match
 69 of the search (Real Madrid v Manchester United, 9', their keeper, number 1) and one against me in match 371 (Ajax
 v PSV, 21', one of my backs). So section 9 watches a keeper's own goal and a back's.
+
+And on the later heads:
+
+| What | Result (head) | Exit | What it printed |
+|---|---|---|---|
+| Type gate, the WHOLE vitest suite, simOwnGoalMotion, simHarnessAnchors, simNoRivalNames | r1216-all (5cb45fe8) | 0 each | 402 test files passed, 2 skipped, of 404, in 568 s |
+| Section 9 alone, then the whole walk | r1216-walk2 (48b31bcb), own and walk | 0, 0 | green, 43 s and 140 s |
+| The replay mode and its control | r1216-walk2, replay and noseed | 0, 1 | digest d3b0b2c5 three times with 1864 draws; noseed "as it must" |
+| The walk's four older controls | r1216-walk2, bar, silentlist, earlyscore, nocard | 1 each | each "as it must": section 9 does not run under a control, so their "nothing else is red" still means what it meant |
+| Section 9 on the mutated build, again | r1216-ogbefore2 (48b31bcb) | 1 | "as it must" |
+| The weight sweep, this round and the base | r1216-walk2, sweepWeight and sweep-base | 1, and the base's own sweep exits 1 | the same six rows over budget on both, see below |
+
+## The weight sweep
+
+`SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs` is red on this branch and on its base, on the same six rows, with
+the same sizes to the tenth of a kilobyte or one tenth apart (a build is not byte stable):
+
+| Row | Budget | This round (48b31bcb) | The base (46e4231c) |
+|---|---|---|---|
+| /club-manager | 578K | 581.7K | 581.7K |
+| /soccer-career | 786K | 796.9K | 797.0K |
+| /footle | 345K | 348.0K | 348.1K |
+| /nfl-my-career | 468K | 468.7K | 468.8K |
+| /manager-hot-seat | 596K | 599.6K | 599.6K |
+| /deadline-day | 606K | 609.7K | 609.7K |
+
+So none of it is this round's: the live match viewer and the pitch part are not in what a page downloads when it
+opens, and the part's own 707 gzipped bytes show in none of these rows. The budget numbers are the lead's.
+
+## The screenshots, looked at
+
+From r1216-walk2 (`git show origin/rc-results/r1216-walk2:files/own-<me|opp>-<390|1280>-<flight-a|flight-b|card>.png`)
+and, for the picture before this round, from r1216-ogbefore2 (`files/ogbefore-own-...png`).
+
+- Against me, a back (Ajax v PSV, 21', number 4), at 390 and at 1280: the card reads "GOAL! Simon Adingra 21'
+  (O.G)" under PSV; he stands where he met it with both hands at his head; the ball is in the corner of my net on
+  his side and the net bulges there; my keeper lies the other way; nobody of mine has his arms up; three of theirs
+  raise their arms where they stood during the flight. At 1280 the list beside the pitch reads "21' GOAL! Own goal,
+  Simon Adingra (O.G)".
+- For me, their keeper (Real Madrid v Manchester United, 9', number 1), at 390: the card reads "GOAL! Senne Lammens
+  9' (O.G)" under Real Madrid, the ball is in the far corner of their net, three of mine raise their arms where
+  they stand and nobody of theirs does.
+- The same goal on the build with the entry line out (the live site today): the same card, and on the grass their
+  number 10 with his arms up, two team mates walked over to him, the ball in the other corner, and the man the card
+  names standing by.
+- One thing seen that is not this round's: a booking in the goal's own minute ("Booked: ... 9'") puts its pill
+  across the top of that penalty area, and in the keeper's own goal it lies over the keeper while he dives.
