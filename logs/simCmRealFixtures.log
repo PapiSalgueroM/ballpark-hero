@@ -1,0 +1,669 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Expected values to be strictly deep-equal:\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'match',\n" +
++       '    report: {\n' +
++       "      away: 'Everton',\n" +
++       '      awayGoals: 0,\n' +
++       '...\n' +
++       '          lastTen: [\n' +
++       '+           0.81\n' +
++       '-           1\n' +
++       '          ],\n' +
++       '          morale: 64.6,\n' +
++       "          name: 'Tyler Dibling',\n" +
++       "          position: 'RW',\n" +
++       '          potential: 91,\n' +
++       '...\n' +
++       '          lastTen: [\n' +
++       '+           0.54\n' +
++       '-           1\n' +
++       '          ],\n' +
++       '          morale: 65.4,\n' +
++       `          name: "Jake O'Brien",\n` +
++       "          position: 'RB',\n" +
++       '          potential: 82,\n',
++     stack: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'match',\n" +
++       '    report: {\n' +
++       "      away: 'Everton',\n" +
++       '      awayGoals: 0,\n' +
++       '...\n' +
++       '          lastTen: [\n' +
++       '+           0.81\n' +
++       '-           1\n' +
++       '          ],\n' +
++       '          morale: 64.6,\n' +
++       "          name: 'Tyler Dibling',\n" +
++       "          position: 'RW',\n" +
++       '          potential: 91,\n' +
++       '...\n' +
++       '          lastTen: [\n' +
++       '+           0.54\n' +
++       '-           1\n' +
++       '          ],\n' +
++       '          morale: 65.4,\n' +
++       `          name: "Jake O'Brien",\n` +
++       "          position: 'RB',\n" +
++       '          potential: 82,\n' +
++       '\n' +
++       '    at Object.legacy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:383:48)\n' +
++       '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:421:13)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54',
++     status: 'failed',
++     title: 'preserves the whole generated old save, random draws, match outcome and reload bytes'
++   },
++   {
++     errorName: 'AssertionError',
++     message: 'Unsupported actual match preserves every recorded field and random draw\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'match',\n" +
++       '    report: {\n' +
++       "      away: 'Eintracht Frankfurt',\n" +
++       '      awayGoals: 1,\n' +
++       '...\n' +
++       '            assists: 0,\n' +
++       '-           goals: 1,\n' +
++       "-           name: 'Jonathan Burkardt',\n" +
++       "-           pos: 'ST',\n" +
++       '-           rating: 7\n' +
++       '-         },\n' +
++       '-         {\n' +
++       '-           assists: 0,\n' +
++       '            goals: 0,\n' +
++       "            name: 'Can Uzun',\n" +
++       "            pos: 'CAM',\n" +
++       '            rating: 6.8\n' +
++       '          },\n' +
++       '...\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jonathan Burkardt',\n" +
++       "+           pos: 'ST',\n" +
++       '+           rating: 6.1\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "            name: 'Nnamdi Collins',\n" +
++       "            pos: 'CB',\n" +
++       '            rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '...\n' +
++       '            minute: 89,\n' +
++       '+           og: true,\n' +
++       "            side: 'opp',\n" +
++       "+           text: 'Jonathan Tah'\n" +
++       "-           text: 'Jonathan Burkardt'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'corner',\n" +
++       '            minute: 90,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       '        {\n' +
++       "+         drawn: 'Jonathan Burkardt',\n" +
++       '          minute: 89,\n' +
++       "+         name: 'Jonathan Tah',\n" +
++       '+         og: true\n' +
++       "-         name: 'Jonathan Burkardt'\n" +
++       '        }\n' +
++       '      ],\n' +
++       '      otherResults: [\n' +
++       '        {\n' +
++       '          ag: 1,\n',
++     stack: 'AssertionError [ERR_ASSERTION]: Unsupported actual match preserves every recorded field and random draw\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'match',\n" +
++       '    report: {\n' +
++       "      away: 'Eintracht Frankfurt',\n" +
++       '      awayGoals: 1,\n' +
++       '...\n' +
++       '            assists: 0,\n' +
++       '-           goals: 1,\n' +
++       "-           name: 'Jonathan Burkardt',\n" +
++       "-           pos: 'ST',\n" +
++       '-           rating: 7\n' +
++       '-         },\n' +
++       '-         {\n' +
++       '-           assists: 0,\n' +
++       '            goals: 0,\n' +
++       "            name: 'Can Uzun',\n" +
++       "            pos: 'CAM',\n" +
++       '            rating: 6.8\n' +
++       '          },\n' +
++       '...\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jonathan Burkardt',\n" +
++       "+           pos: 'ST',\n" +
++       '+           rating: 6.1\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "            name: 'Nnamdi Collins',\n" +
++       "            pos: 'CB',\n" +
++       '            rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '...\n' +
++       '            minute: 89,\n' +
++       '+           og: true,\n' +
++       "            side: 'opp',\n" +
++       "+           text: 'Jonathan Tah'\n" +
++       "-           text: 'Jonathan Burkardt'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'corner',\n" +
++       '            minute: 90,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       '        {\n' +
++       "+         drawn: 'Jonathan Burkardt',\n" +
++       '          minute: 89,\n' +
++       "+         name: 'Jonathan Tah',\n" +
++       '+         og: true\n' +
++       "-         name: 'Jonathan Burkardt'\n" +
++       '        }\n' +
++       '      ],\n' +
++       '      otherResults: [\n' +
++       '        {\n' +
++       '          ag: 1,\n' +
++       '\n' +
++       '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:272:48)\n' +
++       '    at async Object.baseline (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:412:9)\n' +
++       '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:421:13)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54',
++     status: 'failed',
++     title: 'matches the independent pre-change engine for unsupported starts and genuine match outcomes'
++   },
++   {
++     errorName: 'AssertionError',
++     message: 'Unsupported actual match preserves every recorded field and random draw\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'match',\n" +
++       '    report: {\n' +
++       "      away: 'Eintracht Frankfurt',\n" +
++       '      awayGoals: 1,\n' +
++       '...\n' +
++       '            assists: 0,\n' +
++       '-           goals: 1,\n' +
++       "-           name: 'Jonathan Burkardt',\n" +
++       "-           pos: 'ST',\n" +
++       '-           rating: 7\n' +
++       '-         },\n' +
++       '-         {\n' +
++       '-           assists: 0,\n' +
++       '            goals: 0,\n' +
++       "            name: 'Can Uzun',\n" +
++       "            pos: 'CAM',\n" +
++       '            rating: 6.8\n' +
++       '          },\n' +
++       '...\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jonathan Burkardt',\n" +
++       "+           pos: 'ST',\n" +
++       '+           rating: 6.1\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "            name: 'Nnamdi Collins',\n" +
++       "            pos: 'CB',\n" +
++       '            rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '...\n' +
++       '            minute: 89,\n' +
++       '+           og: true,\n' +
++       "            side: 'opp',\n" +
++       "+           text: 'Jonathan Tah'\n" +
++       "-           text: 'Jonathan Burkardt'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'corner',\n" +
++       '            minute: 90,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       '        {\n' +
++       "+         drawn: 'Jonathan Burkardt',\n" +
++       '          minute: 89,\n' +
++       "+         name: 'Jonathan Tah',\n" +
++       '+         og: true\n' +
++       "-         name: 'Jonathan Burkardt'\n" +
++       '        }\n' +
++       '      ],\n' +
++       '      otherResults: [\n' +
++       '        {\n' +
++       '          ag: 1,\n',
++     stack: 'AssertionError [ERR_ASSERTION]: Unsupported actual match preserves every recorded field and random draw\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'match',\n" +
++       '    report: {\n' +
++       "      away: 'Eintracht Frankfurt',\n" +
++       '      awayGoals: 1,\n' +
++       '...\n' +
++       '            assists: 0,\n' +
++       '-           goals: 1,\n' +
++       "-           name: 'Jonathan Burkardt',\n" +
++       "-           pos: 'ST',\n" +
++       '-           rating: 7\n' +
++       '-         },\n' +
++       '-         {\n' +
++       '-           assists: 0,\n' +
++       '            goals: 0,\n' +
++       "            name: 'Can Uzun',\n" +
++       "            pos: 'CAM',\n" +
++       '            rating: 6.8\n' +
++       '          },\n' +
++       '...\n' +
++       '            goals: 0,\n' +
++       "+           name: 'Jonathan Burkardt',\n" +
++       "+           pos: 'ST',\n" +
++       '+           rating: 6.1\n' +
++       '+         },\n' +
++       '+         {\n' +
++       '+           assists: 0,\n' +
++       '+           goals: 0,\n' +
++       "            name: 'Nnamdi Collins',\n" +
++       "            pos: 'CB',\n" +
++       '            rating: 6\n' +
++       '          },\n' +
++       '          {\n' +
++       '...\n' +
++       '            minute: 89,\n' +
++       '+           og: true,\n' +
++       "            side: 'opp',\n" +
++       "+           text: 'Jonathan Tah'\n" +
++       "-           text: 'Jonathan Burkardt'\n" +
++       '          },\n' +
++       '          {\n' +
++       "            kind: 'corner',\n" +
++       '            minute: 90,\n' +
++       "            side: 'me',\n" +
++       '...\n' +
++       '        {\n' +
++       "+         drawn: 'Jonathan Burkardt',\n" +
++       '          minute: 89,\n' +
++       "+         name: 'Jonathan Tah',\n" +
++       '+         og: true\n' +
++       "-         name: 'Jonathan Burkardt'\n" +
++       '        }\n' +
++       '      ],\n' +
++       '      otherResults: [\n' +
++       '        {\n' +
++       '          ag: 1,\n' +
++       '\n' +
++       '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:272:48)\n' +
++       '    at async Object.uncopied (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:415:9)\n' +
++       '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:421:13)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54',
++     status: 'failed',
++     title: 'passes the whole independent generated baseline with untouched current source under every copied fault'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:432:21)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'preserves the whole generated old save, random draws, match outcome and reload bytes',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Expected values to be strictly deep-equal:\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Everton',\n" +
+        '      awayGoals: 0,\n' +
+        '...\n' +
+        '          lastTen: [\n' +
+        '+           0.81\n' +
+        '-           1\n' +
+        '          ],\n' +
+        '          morale: 64.6,\n' +
+        "          name: 'Tyler Dibling',\n" +
+        "          position: 'RW',\n" +
+        '          potential: 91,\n' +
+        '...\n' +
+        '          lastTen: [\n' +
+        '+           0.54\n' +
+        '-           1\n' +
+        '          ],\n' +
+        '          morale: 65.4,\n' +
+        `          name: "Jake O'Brien",\n` +
+        "          position: 'RB',\n" +
+        '          potential: 82,\n',
+      stack: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Everton',\n" +
+        '      awayGoals: 0,\n' +
+        '...\n' +
+        '          lastTen: [\n' +
+        '+           0.81\n' +
+        '-           1\n' +
+        '          ],\n' +
+        '          morale: 64.6,\n' +
+        "          name: 'Tyler Dibling',\n" +
+        "          position: 'RW',\n" +
+        '          potential: 91,\n' +
+        '...\n' +
+        '          lastTen: [\n' +
+        '+           0.54\n' +
+        '-           1\n' +
+        '          ],\n' +
+        '          morale: 65.4,\n' +
+        `          name: "Jake O'Brien",\n` +
+        "          position: 'RB',\n" +
+        '          potential: 82,\n' +
+        '\n' +
+        '    at Object.legacy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:383:48)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:421:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54'
+    },
+    {
+      title: 'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Unsupported actual match preserves every recorded field and random draw\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Eintracht Frankfurt',\n" +
+        '      awayGoals: 1,\n' +
+        '...\n' +
+        '            assists: 0,\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Jonathan Burkardt',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '            goals: 0,\n' +
+        "            name: 'Can Uzun',\n" +
+        "            pos: 'CAM',\n" +
+        '            rating: 6.8\n' +
+        '          },\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jonathan Burkardt',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 6.1\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Nnamdi Collins',\n" +
+        "            pos: 'CB',\n" +
+        '            rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '...\n' +
+        '            minute: 89,\n' +
+        '+           og: true,\n' +
+        "            side: 'opp',\n" +
+        "+           text: 'Jonathan Tah'\n" +
+        "-           text: 'Jonathan Burkardt'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'corner',\n" +
+        '            minute: 90,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        '        {\n' +
+        "+         drawn: 'Jonathan Burkardt',\n" +
+        '          minute: 89,\n' +
+        "+         name: 'Jonathan Tah',\n" +
+        '+         og: true\n' +
+        "-         name: 'Jonathan Burkardt'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      otherResults: [\n' +
+        '        {\n' +
+        '          ag: 1,\n',
+      stack: 'AssertionError [ERR_ASSERTION]: Unsupported actual match preserves every recorded field and random draw\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Eintracht Frankfurt',\n" +
+        '      awayGoals: 1,\n' +
+        '...\n' +
+        '            assists: 0,\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Jonathan Burkardt',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '            goals: 0,\n' +
+        "            name: 'Can Uzun',\n" +
+        "            pos: 'CAM',\n" +
+        '            rating: 6.8\n' +
+        '          },\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jonathan Burkardt',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 6.1\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Nnamdi Collins',\n" +
+        "            pos: 'CB',\n" +
+        '            rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '...\n' +
+        '            minute: 89,\n' +
+        '+           og: true,\n' +
+        "            side: 'opp',\n" +
+        "+           text: 'Jonathan Tah'\n" +
+        "-           text: 'Jonathan Burkardt'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'corner',\n" +
+        '            minute: 90,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        '        {\n' +
+        "+         drawn: 'Jonathan Burkardt',\n" +
+        '          minute: 89,\n' +
+        "+         name: 'Jonathan Tah',\n" +
+        '+         og: true\n' +
+        "-         name: 'Jonathan Burkardt'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      otherResults: [\n' +
+        '        {\n' +
+        '          ag: 1,\n' +
+        '\n' +
+        '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:272:48)\n' +
+        '    at async Object.baseline (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:412:9)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:421:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54'
+    },
+    {
+      title: 'passes the whole independent generated baseline with untouched current source under every copied fault',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Unsupported actual match preserves every recorded field and random draw\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Eintracht Frankfurt',\n" +
+        '      awayGoals: 1,\n' +
+        '...\n' +
+        '            assists: 0,\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Jonathan Burkardt',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '            goals: 0,\n' +
+        "            name: 'Can Uzun',\n" +
+        "            pos: 'CAM',\n" +
+        '            rating: 6.8\n' +
+        '          },\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jonathan Burkardt',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 6.1\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Nnamdi Collins',\n" +
+        "            pos: 'CB',\n" +
+        '            rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '...\n' +
+        '            minute: 89,\n' +
+        '+           og: true,\n' +
+        "            side: 'opp',\n" +
+        "+           text: 'Jonathan Tah'\n" +
+        "-           text: 'Jonathan Burkardt'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'corner',\n" +
+        '            minute: 90,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        '        {\n' +
+        "+         drawn: 'Jonathan Burkardt',\n" +
+        '          minute: 89,\n' +
+        "+         name: 'Jonathan Tah',\n" +
+        '+         og: true\n' +
+        "-         name: 'Jonathan Burkardt'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      otherResults: [\n' +
+        '        {\n' +
+        '          ag: 1,\n',
+      stack: 'AssertionError [ERR_ASSERTION]: Unsupported actual match preserves every recorded field and random draw\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Eintracht Frankfurt',\n" +
+        '      awayGoals: 1,\n' +
+        '...\n' +
+        '            assists: 0,\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Jonathan Burkardt',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '            goals: 0,\n' +
+        "            name: 'Can Uzun',\n" +
+        "            pos: 'CAM',\n" +
+        '            rating: 6.8\n' +
+        '          },\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jonathan Burkardt',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 6.1\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Nnamdi Collins',\n" +
+        "            pos: 'CB',\n" +
+        '            rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '...\n' +
+        '            minute: 89,\n' +
+        '+           og: true,\n' +
+        "            side: 'opp',\n" +
+        "+           text: 'Jonathan Tah'\n" +
+        "-           text: 'Jonathan Burkardt'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'corner',\n" +
+        '            minute: 90,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        '        {\n' +
+        "+         drawn: 'Jonathan Burkardt',\n" +
+        '          minute: 89,\n' +
+        "+         name: 'Jonathan Tah',\n" +
+        '+         og: true\n' +
+        "-         name: 'Jonathan Burkardt'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      otherResults: [\n' +
+        '        {\n' +
+        '          ag: 1,\n' +
+        '\n' +
+        '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:272:48)\n' +
+        '    at async Object.uncopied (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:415:9)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:421:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
