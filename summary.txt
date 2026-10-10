@@ -1,0 +1,8 @@
+vitest-new exit=0 8s |    Duration  7.36s (transform 3.44s, setup 283ms, collect 6.94s, tests 4.69s, environment 1.94s, prepare 458ms)
+seed-a exit=0 3s | simCareerPreDraft [seed set a]: ALL GREEN
+anchors exit=0 37s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+vitest-old exit=0 50s |    Duration  49.60s (transform 3.29s, setup 572ms, collect 11.90s, tests 69.61s, environment 3.17s, prepare 842ms)
+storage exit=0 1s | simStorageWrites: all green
+livescores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+rivals exit=0 9s | No rival product names found. 0 findings.
+tsc exit=0 63s | 

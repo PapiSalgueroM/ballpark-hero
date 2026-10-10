@@ -1,0 +1,18 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/components/motion/LotteryReveal.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 276[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/careerDraftNight.test.tsx [2m([22m[2m48 tests[22m[2m)[22m[33m 1922[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mskipped is the last frame: no delays, no skip, the result said once [33m 748[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 2493[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed [33m 430[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NBA' the night plays, holds its ending, lands, and starts the career it showed [33m 335[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[32m78 passed[39m[22m[90m (78)[39m
+[2m   Start at [22m 16:04:17
+[2m   Duration [22m 7.36s[2m (transform 3.44s, setup 283ms, collect 6.94s, tests 4.69s, environment 1.94s, prepare 458ms)[22m
+

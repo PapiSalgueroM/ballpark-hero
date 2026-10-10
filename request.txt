@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-new: node_modules/.bin/vitest run src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx src/components/motion/LotteryReveal.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-old: node_modules/.bin/vitest run src/test/careerPreDraft.test.tsx src/test/usCareerProspect.test.tsx src/test/usCareerSaveRetry.test.tsx src/test/usBoardFixture.test.tsx src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+seed-a: SEEDSET=a node scripts/simCareerPreDraft.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+livescores: node scripts/simLiveScores.mjs
