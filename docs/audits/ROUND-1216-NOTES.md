@@ -152,7 +152,13 @@ on the turn. Section 8 is the replay mode since Round 1215, so the brief's "sect
   line near it, so they are written to neither behaviour.
 - `castnow` in `scripts/simOwnGoalMotion.mjs` anchors on the viewer's `castFrom` line, the same line
   `scripts/simLiveSimMotion.mjs` anchors on. A round that edits that line (Round 1218 works beside this one in
-  LiveSimScreen.tsx) must carry both anchors, and `simHarnessAnchors` will say so.
+  LiveSimScreen.tsx) must carry both anchors. NOTHING GOES RED BY ITSELF WHEN IT DOES NOT (corrected in the review
+  fix pass: an earlier version of this note said `simHarnessAnchors` would say so, and it will not. That fence
+  checks that every harness parses and that every MULTI line anchor is read with line endings normalised; a
+  single line anchor that no longer matches is seen only when its control is run, which then ends with
+  "ABORTED" and exit 3). So after any merge that touches LiveSimScreen.tsx, run both controls and read their
+  last lines: `OWN_GOAL_CONTROL=castnow node scripts/simOwnGoalMotion.mjs` and
+  `LIVE_MOTION_CONTROL=castnow node scripts/simLiveSimMotion.mjs`, exit 1 each with "as it must".
 - No guide sentence in `src/data/gameContent` became false. The Club Manager guide's own goal sentence
   (clubManagement.ts) says nothing about the pitch.
 - `scripts/simOwnGoalMotion.mjs` is a new `sim*.mjs`, so `runAllSims` discovers it. The release gate's list of rule
