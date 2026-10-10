@@ -1,0 +1,15 @@
+#!build
+#!playwright
+practice: st=0; node scripts/simUsCareerPractice.mjs > "$RC_OUT/practice.log" 2>&1 || st=1; echo "plain exit=$st $(tail -1 "$RC_OUT/practice.log" | cut -c1-140)"; for c in before gain cap once save receipt renew rules abort pending reset carry; do US_CAREER_PRACTICE_CONTROL=$c node scripts/simUsCareerPractice.mjs > "$RC_OUT/practice-$c.log" 2>&1; x=$?; echo "$c exit=$x $(tail -1 "$RC_OUT/practice-$c.log" | cut -c1-120)"; [ $x -eq 0 ] || st=1; done; exit $st
+parity: st=0; node scripts/simUsBoardParity.mjs > "$RC_OUT/parity.log" 2>&1 || st=1; echo "plain exit=$st $(tail -1 "$RC_OUT/parity.log" | cut -c1-140)"; for c in label draw binding restore era fixture; do US_BOARD_PARITY_CONTROL=$c node scripts/simUsBoardParity.mjs > "$RC_OUT/parity-$c.log" 2>&1; echo "$c exit=$? $(tail -1 "$RC_OUT/parity-$c.log" | cut -c1-120)"; done; exit $st
+training: st=0; node scripts/simCareerTraining.mjs > "$RC_OUT/training.log" 2>&1 || st=1; echo "plain exit=$st $(tail -1 "$RC_OUT/training.log" | cut -c1-140)"; for c in tier overcap promise skinstat tell miss window slip; do CAREER_TRAINING_CONTROL=$c node scripts/simCareerTraining.mjs > "$RC_OUT/training-$c.log" 2>&1; echo "$c exit=$? $(tail -1 "$RC_OUT/training-$c.log" | cut -c1-120)"; done; exit $st
+lifecycle: CAREER_PRACTICE_LIFECYCLE_CONTROL=all node scripts/simCareerPracticeLifecycle.mjs
+families: st=0; for h in simCareerHub simCareerInbox simCareerInboxBeats simCareerParity simCareerRivalryEvents simExtension simHomeFront simNoDoubleRecord simSessionMarks simUsCareerActionConfirm simUsCoachCareer simUsCareerWeight; do ONLY=$h node scripts/runAllSims.mjs --browser > "$RC_OUT/fam-$h.log" 2>&1; x=$?; echo "$h exit=$x $(tail -1 "$RC_OUT/fam-$h.log" | cut -c1-110)"; [ $x -eq 0 ] || st=1; done; exit $st
+career992: ENGINES=chromium node scripts/qa/career992.mjs
+nflcareer: node scripts/simNflCareer.mjs
+nbacareer: node scripts/simNbaCareer.mjs
+mlbcareer: node scripts/simMlbCareer.mjs
+nhlcareer: node scripts/simNhlCareer.mjs
+guides: node scripts/simGuideHeadings.mjs
+search: node scripts/simSiteSearch.mjs
+storage: node scripts/simStorageWrites.mjs
