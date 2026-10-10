@@ -1,3 +1,6 @@
+## Codex1235-1237 IN PROGRESS, 2026-10-10: agent destination briefs
+
+Isolated codex/career-coach-desk from09df145abfb241679022b41903d2f19bc254ebf9. Voluntary Soccer Career transfer requests can target minutes, eligible club level or home-country return, with a bound saved response and honest no-match result. No new trust meter, duplicate appearance promise, fabricated destination or consent override. Full design/proof contract: docs/ROUND1235-1237.md. G owns integration/main/publish; PR216 and PR217 remain frozen. No runtime has run and no READY/live claim exists. Root source, index and project state stay held. Details below retain their original bytes.
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,

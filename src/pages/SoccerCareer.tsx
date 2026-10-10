@@ -32,7 +32,7 @@ import {
   type SocialMediaAction, type SponsorshipTier,
   type MoralDilemma, type MoralDilemmaChoice,
   initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
-  dismissSummary, stayAtClub, signExtension, requestTransfer, applyEventChoice,
+  dismissSummary, stayAtClub, signExtension, requestTransferDecision, applyEventChoice,
   dismissDebut, dismissWorldCup, retireFromInternational, dismissRivalryEvent,
   dismissBallonDor, giveBdorSpeech, bdorSpeechOpen, type BdorSpeechChoice, SOCCER_BALLON_DOR, SOCCER_BDOR_SPEECHES, SOCCER_WORLD_CUP_SPEECHES,
   giveWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
@@ -59,6 +59,8 @@ import type { FirstStageStage } from "@/lib/soccerCareerContinental";
 import { careerBeforeBallonDorReveal, revealBallonDorResult } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
+import AgentBrief from '@/components/soccer-career/AgentBrief';
+import { readTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransferBrief';
 /* Round 258, his ask alongside the net worth bug: "depending where u live
    ur currency will be diffrent". `money` rewrites the euro amounts inside
    any line the game draws, so a wage slip, an event consequence and a
@@ -922,6 +924,7 @@ export default function SoccerCareer() {
      out of the academy byte for byte the save it always was. */
   const [academyReport, setAcademyReport] = useState<AcademyReport | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const transferRequestInFlight = useRef<CareerState | null>(null);
   /* Round 129: the training and phone buttons are pinned to the bottom right on
      every screen of this game, so they were sitting over the footer's Privacy
      and Terms links at the end of the page in exactly the way the action bar
@@ -1128,14 +1131,15 @@ export default function SoccerCareer() {
 
   const handleRequestTransfer = () => {
     if (!career) return;
-    const result = requestTransfer(career, clubs);
-    const s = { ...career, transferSituation: result };
-    if (result.type === "request_result" && !result.offer) {
-      toast.error("No clubs are interested right now. You must stay.");
-      s.phase = "playing" as const;
-      s.transferSituation = null;
+    if (readTransferBrief(career, projectLeagueApps)) {
+      if (transferRequestInFlight.current === career) return;
+      transferRequestInFlight.current = career;
     }
-    setCareer(s);
+    const next = requestTransferDecision(career, clubs);
+    if (next.phase === "playing" && !next.transferSituation) {
+      toast.error("No clubs are interested right now. You must stay.");
+    }
+    setCareer(next);
   };
 
   const handleEventChoice = (choiceIndex: number) => {
@@ -2243,9 +2247,11 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
 }
 
 /* ─── Transfer Window Card ─── */
-function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignExtension, onRequestTransfer, onAcceptLoan }: {
+function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer, onStay, onSignExtension, onRequestTransfer, onAcceptLoan }: {
   situation: TransferSituation;
   career: CareerState;
+  clubs: ClubData[];
+  onCareer?: (fn: (previous: CareerState) => CareerState) => void;
   onAcceptOffer: (offer: ContractOffer) => void;
   onStay: () => void;
   onSignExtension: () => void;
@@ -2258,6 +2264,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
   const seasonsHere = career.seasons.filter(ss => ss.club === career.currentClub && ss.type === "playing").length;
   const projHere = projectLeagueApps(career.overall, career.currentClubTier, career.currentClub, seasonsHere);
   const extension = soccerExtensionQuote(career);
+  const briefResult = transferBriefResult(career, projectLeagueApps);
   if (situation.type === "club_move") return <div data-club-move data-club-move-mode={situation.mode} className="space-y-3 rounded-xl border border-border bg-card p-4">
     <h3 className="text-lg font-black">{situation.mode === "loan" ? "🛫 Your club arranged a loan" : "📤 Your club sold you"}</h3>
     <p className="text-sm font-semibold">{situation.fromClub} → {situation.toClub}</p>
@@ -2284,6 +2291,21 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
           Projected at {career.currentClub} next season: <span className="font-bold text-foreground">about {projHere.min} to {projHere.max} league games</span>
         </p>
       </div>
+
+      {onCareer && <AgentBrief career={career} clubs={clubs} onCareer={onCareer} />}
+      {briefResult && <div data-transfer-brief-result={briefResult.status} className="space-y-2 rounded-xl border border-border bg-card p-3 text-xs">
+        <p className="font-bold">{briefResult.status === 'offered' ? 'Your agent found a match' : briefResult.status === 'no_match' ? 'No clubs matched your brief' : 'No response this window'}</p>
+        <p className="text-muted-foreground">{briefResult.status === 'offered'
+          ? `${briefResult.offer?.club.name}${briefResult.projection ? ` projects about ${briefResult.projection.min} to ${briefResult.projection.max} league games` : ''}. Review the actual contract before signing.`
+          : briefResult.status === 'no_match' ? 'Your priority found no destination among the eligible clubs. You are staying for now.'
+            : 'The transfer request did not bring an offer. You are staying for now.'}</p>
+        <p className="text-muted-foreground">Your agent's response is fixed for this window.</p>
+        {briefResult.status !== 'offered' && <Button data-transfer-brief-stay onClick={onStay} className="min-h-11 w-full whitespace-normal text-xs">Stay at {career.currentClub}</Button>}
+      </div>}
+      {situation.type === 'request_result' && !situation.offer && !briefResult && <div className="space-y-2 rounded-xl border border-border bg-card p-3 text-xs">
+        <p>No offer is available in this saved window.</p>
+        <Button data-transfer-brief-stay onClick={onStay} className="min-h-11 w-full whitespace-normal text-xs">Stay at {career.currentClub}</Button>
+      </div>}
 
       {/* Round 217: the loan window. Only appears when the projection above
           says fringe and the player is young with contract to run. */}
@@ -2426,10 +2448,10 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
         <div className="bg-card border border-border rounded-xl p-4 space-y-3">
           <p className="text-sm text-center">No clubs have made an offer. Your club wants to keep you.</p>
           <div className="flex gap-2">
-            <Button onClick={onStay} className="flex-1 h-9 text-sm bg-emerald-600 hover:bg-emerald-500 text-black">
+            <Button onClick={onStay} className="min-h-11 h-auto flex-1 whitespace-normal px-2 text-sm bg-emerald-600 hover:bg-emerald-500 text-black">
               Stay and fight for place 💪
             </Button>
-            <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
+            <Button data-request-transfer variant="outline" onClick={onRequestTransfer} className="min-h-11 h-auto flex-1 whitespace-normal px-2 text-sm">
               Request transfer 📤
             </Button>
           </div>
@@ -2441,10 +2463,10 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
         <div className="space-y-3">
           <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} career={career} />
           <div className="flex gap-2">
-            <Button variant="outline" onClick={onStay} className="flex-1 h-9 text-sm">
+            <Button variant="outline" onClick={onStay} className="min-h-11 h-auto flex-1 whitespace-normal px-2 text-sm">
               Reject & Stay
             </Button>
-            <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
+            <Button data-request-transfer variant="outline" onClick={onRequestTransfer} className="min-h-11 h-auto flex-1 whitespace-normal px-2 text-sm">
               Reject & Request Transfer 📤
             </Button>
           </div>
@@ -2477,7 +2499,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             <Button variant="outline" onClick={onStay} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Stay at your club
             </Button>
-            <Button variant="outline" onClick={onRequestTransfer} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
+            <Button data-request-transfer variant="outline" onClick={onRequestTransfer} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Wait for better offer 🔍
             </Button>
           </div>
@@ -2511,7 +2533,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
             <span className="text-sm font-bold">📩 A club has responded to your transfer request!</span>
           </div>
           <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} career={career} />
-          <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
+          <Button data-transfer-brief-stay variant="outline" onClick={onStay} className="min-h-11 h-auto w-full whitespace-normal text-sm">
             Changed my mind, stay at {career.currentClub}
           </Button>
         </div>
@@ -4292,6 +4314,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             <TransferWindowCard
               situation={career.transferSituation}
               career={career}
+              clubs={clubs}
+              onCareer={onCareerPatch}
               onAcceptOffer={onAcceptOffer}
               onStay={onStay}
               onSignExtension={onSignExtension}
