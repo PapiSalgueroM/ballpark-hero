@@ -1,0 +1,23 @@
+A) the fixture is whole
+   recorded from 5320efca45b4b324e3122b6c90ac516bf121f181 (not main: src differs from 834e764acf6a4218242f626a701708a79cfffe48)
+   nfl: 468 clicks, 24 seasons, 15 fixed saves, 685 screen steps
+   nba: 540 clicks, 24 seasons, 15 fixed saves, 705 screen steps
+   mlb: 449 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+   nhl: 415 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [mlb], failed [nfl, nba, nhl]
+   nfl click path step 345 (after "hub: Play the 2011 season"): the markup differs under the same words ("The 2011 seasonSan Francisco 49ers · age 28 · QBMissed the p")
+   nba click path step 20 (after "hub: Play the 2026 season"): the save differs first in c.rival; the markup differs under the same words ("The 2026 seasonGolden State Warriors · age 21 · SGLost in th")
+   nba click path step 21 (after "curtain: Continue"): the save differs
+   nba click path step 22 (after "rival beat: Continue"): the save differs
+   nhl click path step 57 (after "hub: Play the 2034 season"): the markup differs under the same words ("The 2034 seasonMontreal Canadiens · age 27 · DLost in Round ")
+   nhl save "ext" step 28 (after "extension: Play the year out"): the screen reads "The 2031 seasonVancouver Canucks · age 24 · DMissed the playoffs15 G, 40 A, 55 P🪞 Jonah Whitaker went 23G 31A 54P. Nothing in it again. He ", fixture "The 2031 seasonVancouver Canucks · age 24 · DMissed the playoffs15 G, 40 A, 55 P🪞 Jonah Whitaker went 23G 31A 54P. Nothing in it again. You"
+   nhl save "ext" step 29 (after "curtain: Continue"): the markup differs under the same words ("Gordie Blaze · DVancouver Canucks2032 · age 25OVR 79$5.1M x0")
+  FAIL: the replay exited 1
+  FAIL: the replay passed [mlb], not all four sports
+  FAIL: 65 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

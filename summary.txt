@@ -1,0 +1,8 @@
+rivalry exit=1 10s | Node.js v24.21.0
+rivalry-coin306 exit=1 9s | Node.js v24.21.0
+simUsBoardParity exit=1 59s | simUsBoardParity: 3 failures
+tsc exit=0 84s | 
+simNbaCareer exit=0 22s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+simHarnessAnchors exit=0 43s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simUsCareerDeckC exit=0 74s | simUsCareerDeckC: all checks passed
+sense-full-prove exit=0 188s | simNbaAwardsSense: 168 checks, 0 failed (full size), 188s
