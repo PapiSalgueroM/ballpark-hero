@@ -36,11 +36,20 @@ import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
  *     timer can write over the key after the swap, and the backup is then the
  *     only copy of the career that was asked for. A backup that is byte equal
  *     to the save now at the key does not count toward the three a game keeps,
- *     so a put back at the cap still drops nothing.
+ *     so a first put back at the cap drops nothing. Several put backs with
+ *     play between them can still leave more than three OTHER saves kept
+ *     aside; the oldest then goes, the card names the cap before the press
+ *     whenever the game holds more than three, and the outcome says how many
+ *     went (KeeperOutcome.dropped).
+ *   - Nothing is marked as answered by a put back. The card passes over a
+ *     backup that is the save being played by comparing bytes (offeredBackup
+ *     in src/lib/brokenSaveRecovery.ts), so every other kept aside save stays
+ *     on offer: put a save back, put the other one back again, and the card
+ *     still offers the first.
  *   - "Already done" is answered from the journal alone (it carries the
- *     length and a sum of the save it stages), so a crash after the write and
- *     before the tidy up is finished on the next load, not reported as a
- *     failure.
+ *     length and a sum of the save it stages) and before the journal's age is
+ *     asked, so a crash after the write and before the tidy up is finished on
+ *     the next load, whenever that is, and not reported as a failure.
  *   - A journal that waited is never applied. A record older than
  *     STAGED_FOR_MS, or stamped in the future, is removed and nothing is
  *     changed: a put back landing over days of newer play is not what was
@@ -50,7 +59,8 @@ import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
  * number inside the save (SAVE_VERSIONS below says where, and what the game
  * does with another number). At boot, a held save of a game that REFUSES or
  * MIGRATES another version, whose own number is not the one this build
- * writes, is copied aside once before any game code reads it. Three of those
+ * writes, is copied aside once before any game code reads it (a save with no
+ * whole number there counts: those games refuse it just the same). Three of those
  * games then write a fresh game over a save they refused, with no press, so
  * without the copy the old bytes were gone five seconds after the page
  * opened. What this does NOT cover, said plainly: the eleven games with no
@@ -77,8 +87,13 @@ export const STAGED_FOR_MS = 5 * 60 * 1000;
 const CLOCK_SLACK_MS = 60 * 1000;
 
 export type KeeperRefusal = 'blocked' | 'no-room' | 'gone' | 'stale';
-/** What the last staged put back did, for the card on that game's page. */
-export interface KeeperOutcome { path: string; ok: boolean; why?: KeeperRefusal; kept?: boolean }
+/**
+ * What the last staged put back did, for the card on that game's page. `kept`
+ * says the save he had was kept aside; `dropped` is how many older kept aside
+ * saves the cap removed (absent when none), so the card never says "nothing
+ * was deleted" over a put back that dropped one.
+ */
+export interface KeeperOutcome { path: string; ok: boolean; why?: KeeperRefusal; kept?: boolean; dropped?: number }
 
 /**
  * What a game does when its save holds a version number other than the one
@@ -196,27 +211,25 @@ export function stageRestore(entry: ContinueSave, backupKey: string, storage: Li
 }
 
 /**
- * After the key has read back: the cap, and the card's quiet. A backup that
- * is byte equal to the save now at the key is not counted and never dropped
- * here, and neither is the copy this swap just made, so a put back deletes
- * nothing it was not told to. When the newest backup IS the save now being
- * played, the card is told it was answered, or it would offer the player the
- * game he is already in on every visit.
+ * After the key has read back: the cap. A backup that is byte equal to the
+ * save now at the key is not counted and never dropped here, and neither is
+ * the copy this swap just made. Returns how many older backups the cap
+ * dropped, so the card can say so. Nothing is marked as answered: the card
+ * passes over the save being played by comparing bytes, which leaves every
+ * other kept aside save on offer.
  */
-function tidy(entry: ContinueSave, storage: ListableStorage, made: string | null, playing: string): void {
+function tidy(entry: ContinueSave, storage: ListableStorage, made: string | null, playing: string): number {
   const counted: string[] = [];
-  let newestIsPlaying = false;
-  const keys = backupKeysOf(entry, storage);
-  for (let i = 0; i < keys.length; i += 1) {
+  for (const k of backupKeysOf(entry, storage)) {
     let text: string | null;
-    try { text = storage.getItem(keys[i]); } catch { return; }
-    if (text === playing) { if (i === 0) newestIsPlaying = true; continue; }
-    if (keys[i] !== made) counted.push(keys[i]);
+    try { text = storage.getItem(k); } catch { return 0; }
+    if (text !== playing && k !== made) counted.push(k);
   }
+  let dropped = 0;
   for (const k of counted.slice(BACKUPS_KEPT - (made ? 1 : 0))) {
-    try { storage.removeItem(k); } catch { /* left in place, harmless */ }
+    try { storage.removeItem(k); dropped += 1; } catch { /* left in place, harmless */ }
   }
-  if (newestIsPlaying) dismissBackup(entry, keys[0], storage);
+  return dropped;
 }
 
 /**
@@ -234,9 +247,6 @@ export function applyPending(storage: ListableStorage | null, now: Date = new Da
     forget(storage);
     return { path: entry.path, ok, ...extra };
   };
-  const age = now.getTime() - rec.at;
-  if (age > STAGED_FOR_MS || age < -CLOCK_SLACK_MS) return done(false, { why: 'stale' });
-
   const isStaged = (t: string): boolean => t.length === rec.len && sumOf(t) === rec.sum;
   let cur: string | null;
   let incoming: string | null;
@@ -247,11 +257,15 @@ export function applyPending(storage: ListableStorage | null, now: Date = new Da
     /* A store that stopped answering: nothing is removed on a read failure. */
     return { path: entry.path, ok: false, why: 'blocked' };
   }
-  /* Already done, answered from the journal alone: a crash after the write. */
+  /* Already done, answered from the journal alone: a crash after the write.
+     Asked BEFORE the journal's age, or a load that comes back late would say
+     the save was not put back while the key holds it. */
   if (cur !== null && isStaged(cur)) {
-    tidy(entry, storage, null, cur);
-    return done(true);
+    const dropped = tidy(entry, storage, null, cur);
+    return done(true, dropped ? { dropped } : {});
   }
+  const age = now.getTime() - rec.at;
+  if (age > STAGED_FOR_MS || age < -CLOCK_SLACK_MS) return done(false, { why: 'stale' });
   if (incoming === null || !isStaged(incoming)) return done(false, { why: 'gone' });
 
   let made: string | null = null;
@@ -279,17 +293,24 @@ export function applyPending(storage: ListableStorage | null, now: Date = new Da
     if (made && still === cur) { try { storage.removeItem(made); } catch { /* a spare copy is harmless */ } }
     return done(false, { why: 'no-room' });
   }
-  tidy(entry, storage, made, incoming);
-  return done(true, { kept });
+  const dropped = tidy(entry, storage, made, incoming);
+  return done(true, dropped ? { kept, dropped } : { kept });
 }
+
+/* The games whose save from another version could NOT be copied aside on
+   this load. Held in memory like the outcome further down, for the same
+   reason: the card that says so mounts in the same page load. */
+const uncopied = new Set<string>();
 
 /**
  * The copy before a version step (see the header). For every game that acts
  * on its save's version: a held save whose number is not the one this build
- * writes is copied aside once, unless a backup already holds the same bytes.
+ * writes (no number at all included) is copied aside once, unless a backup
+ * already holds the same bytes.
  * Nothing is pruned (no press asked for this) and the copy is marked as
  * answered, so the card does not offer back a save this build would refuse
- * again. Returns how many copies were made. Never throws.
+ * again. A copy that will not fit changes nothing, and the game's page says
+ * so once (takeCopyTrouble). Returns how many copies were made. Never throws.
  */
 export function keepUpdateCopies(storage: ListableStorage | null, now: Date = new Date()): number {
   if (!storage) return 0;
@@ -300,16 +321,32 @@ export function keepUpdateCopies(storage: ListableStorage | null, now: Date = ne
     let raw: string | null;
     try { raw = storage.getItem(entry.saveKey); } catch { continue; }
     if (raw === null) continue;
-    const held = versionIn(raw, row.at);
-    if (held === null || held === row.current) continue;
+    /* Anything but exactly the number this build writes. A save with no whole
+       number there (or a text one, or one that does not parse) is refused by
+       every one of these games as well, so it gets its copy too. */
+    if (versionIn(raw, row.at) === row.current) continue;
     if (heldAside(entry, storage, raw)) continue;
     const copied = copyAside(entry, storage, now);
     if (copied.ok && copied.backupKey) {
       dismissBackup(entry, copied.backupKey, storage);
       made += 1;
+    } else if (!copied.ok) {
+      /* No room for the copy. The save is left exactly as it was, and the
+         card on that game's page says so once (takeCopyTrouble). */
+      uncopied.add(entry.path);
     }
   }
   return made;
+}
+
+/** One route form: no query, no hash, no trailing slash. */
+function routeOf(pathname: string): string {
+  return (pathname.split(/[?#]/)[0] || '/').replace(/\/+$/, '') || '/';
+}
+
+/** True, once, when this route's game holds a save from another version that could not be copied aside on this load. */
+export function takeCopyTrouble(pathname: string): boolean {
+  return uncopied.delete(routeOf(pathname));
 }
 
 /* What the last staged put back did. Held in memory, not in storage: the card
@@ -331,8 +368,7 @@ export function runSaveKeeper(): void {
 
 /** The outcome of a put back for the game on this route, once. */
 export function takeOutcome(pathname: string): KeeperOutcome | null {
-  const route = (pathname.split(/[?#]/)[0] || '/').replace(/\/+$/, '') || '/';
-  if (!lastOutcome || lastOutcome.path !== route) return null;
+  if (!lastOutcome || lastOutcome.path !== routeOf(pathname)) return null;
   const out = lastOutcome;
   lastOutcome = null;
   return out;

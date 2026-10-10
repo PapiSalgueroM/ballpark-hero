@@ -350,6 +350,89 @@ describe('BrokenSaveRestore, the way back (Round 958 review)', () => {
     expect(screen.getByRole('button', { name: 'Put that save back' })).toBeInTheDocument();
   });
 
+  /* Round 1219 review, the major, through the card's own buttons: put the old
+     save back, press OK, put the other one back again (the undo), press OK,
+     and the card must still offer the old save. It used to show nothing, with
+     the old career in storage and no door to it. */
+  it('after a put back and its undo the card still offers the first save, press after press', () => {
+    localStorage.setItem(backup, OLD);
+    localStorage.setItem('fight-gym-save-v1', 'new gym');
+    let asked = OLD;
+    for (let press = 1; press <= 5; press += 1) {
+      const card = render(<BrokenSaveRestore pathname="/fight-gym" />);
+      if (press > 1) fireEvent.click(screen.getByRole('button', { name: 'OK' }));
+      fireEvent.click(screen.getByRole('button', { name: 'Put that save back' }));
+      card.unmount();
+      runSaveKeeper();
+      expect(localStorage.getItem('fight-gym-save-v1'), `after press ${press}`).toBe(asked);
+      /* Nothing was played between, so the two saves are each kept once and neither is lost. */
+      expect(backupsOf('fight-gym-save-v1').map(k => localStorage.getItem(k)).sort(), `after press ${press}`).toEqual([OLD, 'new gym'].sort());
+      asked = asked === OLD ? 'new gym' : OLD;
+    }
+    render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(screen.getByRole('status')).toHaveTextContent(/kept aside in this browser, so nothing was deleted/);
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }));
+    expect(screen.getByRole('button', { name: 'Put that save back' })).toBeInTheDocument();
+  });
+
+  /* Round 1219 review: the card promised "nothing is deleted" over a put back
+     that dropped the oldest kept aside save. */
+  it('names the cap before the press when more than three are kept aside, and says when one was dropped', () => {
+    const older = ['2026-10-01T09-00-00', '2026-10-02T09-00-00', '2026-10-03T09-00-00'].map(s => `fight-gym-save-v1${BROKEN_SAVE_MARK}${s}`);
+    older.forEach((k, i) => localStorage.setItem(k, `kept ${i + 1}`));
+    localStorage.setItem(backup, OLD);
+    localStorage.setItem('fight-gym-save-v1', 'new gym');
+    const card = render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(screen.queryByText(/nothing is deleted/)).toBeNull();
+    expect(screen.getByText(/keeps its three newest kept aside saves, so putting this one back may drop the oldest/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Put that save back' }));
+    card.unmount();
+    runSaveKeeper();
+    expect(localStorage.getItem('fight-gym-save-v1')).toBe(OLD);
+    expect(localStorage.getItem(older[0])).toBeNull();
+    expect(backupsOf('fight-gym-save-v1').map(k => localStorage.getItem(k)).sort()).toEqual([OLD, 'kept 2', 'kept 3', 'new gym'].sort());
+    render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(screen.getByRole('status')).toHaveTextContent('The game you had before is kept aside in this browser. Each game keeps its three newest kept aside saves, so the oldest one was dropped.');
+    expect(screen.getByRole('status')).not.toHaveTextContent(/nothing was deleted/);
+  });
+
+  it('with three or fewer kept aside the offer still says nothing is deleted, and nothing is', () => {
+    localStorage.setItem(`fight-gym-save-v1${BROKEN_SAVE_MARK}2026-10-01T09-00-00`, 'kept 1');
+    localStorage.setItem(`fight-gym-save-v1${BROKEN_SAVE_MARK}2026-10-02T09-00-00`, 'kept 2');
+    localStorage.setItem(backup, OLD);
+    localStorage.setItem('fight-gym-save-v1', 'new gym');
+    const card = render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(screen.getByText(/nothing is deleted/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Put that save back' }));
+    card.unmount();
+    runSaveKeeper();
+    expect(backupsOf('fight-gym-save-v1').map(k => localStorage.getItem(k)).sort()).toEqual([OLD, 'kept 1', 'kept 2', 'new gym'].sort());
+    render(<BrokenSaveRestore pathname="/fight-gym" />);
+    expect(screen.getByRole('status')).toHaveTextContent(/so nothing was deleted/);
+  });
+
+  /* Round 1219 review: the copy before a version step failed in silence when
+     the browser had no room, and the game then refused the save anyway. */
+  it('says so once when a save from another version could not be copied aside for want of room', () => {
+    const old = '{"saveVersion":2,"clubName":"Brentford"}';
+    localStorage.setItem('dukb-club-manager-save', old);
+    const full = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('full', 'QuotaExceededError');
+    });
+    runSaveKeeper();
+    full.mockRestore();
+    expect(localStorage.getItem('dukb-club-manager-save')).toBe(old);
+    expect(backupsOf('dukb-club-manager-save')).toHaveLength(0);
+    const card = render(<BrokenSaveRestore pathname="/club-manager" />);
+    expect(screen.getByText('No room to keep a copy')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(/out of room, so we could not keep a copy of it aside/);
+    fireEvent.click(screen.getByRole('button', { name: 'OK' }));
+    expect(card.container).toBeEmptyDOMElement();
+    card.unmount();
+    const again = render(<BrokenSaveRestore pathname="/club-manager" />);
+    expect(again.container).toBeEmptyDOMElement();
+  });
+
   it('does not offer back a backup that is exactly the save being played', () => {
     localStorage.setItem(backup, OLD);
     localStorage.setItem('fight-gym-save-v1', OLD);
@@ -470,6 +553,44 @@ describe('backups are capped, and one can be waved off or deleted (Round 958 clo
     expect(offeredBackup(entry, s)).toBe(key(stamp(2)));
     expect(m.get(key(stamp(1)))).toBe('one');
     expect(backupKeysOf(entry, s)).not.toContain(SET_ASIDE_SEEN_KEY);
+  });
+
+  /* Round 1219 review: the card used to look at the newest backup only, so an
+     older kept aside save behind one that was waved off (or behind the save
+     being played) could never be reached. Each one is now asked about once. */
+  it('every kept aside save is offered until it is answered, newest first, and the save being played is passed over', () => {
+    const { m, s } = fakeStorage();
+    m.set(key(stamp(1)), 'one');
+    m.set(key(stamp(2)), 'two');
+    expect(offeredBackup(entry, s)).toBe(key(stamp(2)));
+    expect(dismissBackup(entry, key(stamp(2)), s)).toBe(true);
+    expect(offeredBackup(entry, s)).toBe(key(stamp(1)));
+    expect(dismissBackup(entry, key(stamp(1)), s)).toBe(true);
+    expect(offeredBackup(entry, s)).toBeNull();
+    expect(JSON.parse(m.get(SET_ASIDE_SEEN_KEY)!)).toEqual({ [entry.saveKey]: [key(stamp(2)), key(stamp(1))] });
+    /* Waving one off twice does not list it twice, and a newer one is still offered. */
+    dismissBackup(entry, key(stamp(2)), s);
+    expect(JSON.parse(m.get(SET_ASIDE_SEEN_KEY)!)[entry.saveKey]).toHaveLength(2);
+    m.set(key(stamp(3)), 'three');
+    expect(offeredBackup(entry, s)).toBe(key(stamp(3)));
+    /* The save being played is passed over, never the ones behind it. */
+    m.delete(SET_ASIDE_SEEN_KEY);
+    m.set(entry.saveKey, 'three');
+    expect(offeredBackup(entry, s)).toBe(key(stamp(2)));
+    m.set(entry.saveKey, 'something else');
+    expect(offeredBackup(entry, s)).toBe(key(stamp(3)));
+  });
+
+  it('reads a waved off record written before the list (one key a game), and forgets backups that are gone', () => {
+    const { m, s } = fakeStorage();
+    m.set(key(stamp(1)), 'one');
+    m.set(key(stamp(2)), 'two');
+    m.set(SET_ASIDE_SEEN_KEY, JSON.stringify({ [entry.saveKey]: key(stamp(2)), [other.saveKey]: 'kept as it was' }));
+    expect(offeredBackup(entry, s)).toBe(key(stamp(1)));
+    m.delete(key(stamp(2)));
+    expect(dismissBackup(entry, key(stamp(1)), s)).toBe(true);
+    expect(JSON.parse(m.get(SET_ASIDE_SEEN_KEY)!)).toEqual({ [entry.saveKey]: [key(stamp(1))], [other.saveKey]: ['kept as it was'] });
+    expect(offeredBackup(entry, s)).toBeNull();
   });
 
   it('a damaged waved-off record means nothing was waved off', () => {

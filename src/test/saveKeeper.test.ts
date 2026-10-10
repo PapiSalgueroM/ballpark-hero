@@ -16,14 +16,30 @@
  *  6. The copy before a version step: once, never pruning, never on a game
  *     that ignores its version, and an ordinary boot writes nothing.
  *  7. restoreNow retries a waiting save first and only ever stages.
+ *  8. Round 1219 review: a put back and its undo leave the other save on
+ *     offer for ever; the outcome says when the cap dropped a save; a put
+ *     back that already landed is done however late the load; the few
+ *     minutes a journal is good for are written out; a save with no version
+ *     number gets its copy; a copy that will not fit is remembered for the
+ *     card; restoreNow refuses under blocked storage; the load is a replace.
  */
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+/* Round 1219 review: what the seam says about the browser's storage can be
+   set for one case (a browser that blocks site data). Left at null the real
+   answer goes through, so every other case runs on the real seam. */
+const seam = vi.hoisted(() => ({ trouble: null as null | 'blocked' | 'full' }));
+vi.mock('@/lib/safeStorage', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/safeStorage')>();
+  return { ...real, getStorageTrouble: () => seam.trouble ?? real.getStorageTrouble() };
+});
+
 import { CONTINUE_SAVES } from '@/data/continueSaves';
 import { BROKEN_SAVE_MARK, SET_ASIDE_SEEN_KEY, backupKeysOf, offeredBackup, type ListableStorage } from '@/lib/brokenSaveRecovery';
 import { holdPendingSave } from '@/lib/safeStorage';
 import {
-  PENDING_RESTORE_KEY, SAVE_VERSIONS, STAGED_FOR_MS, applyPending, keepUpdateCopies, restoreNow, runSaveKeeper,
-  stageRestore, sumOf, takeOutcome, versionIn,
+  PENDING_RESTORE_KEY, SAVE_VERSIONS, STAGED_FOR_MS, applyPending, keepUpdateCopies, reopenGame, restoreNow, runSaveKeeper,
+  stageRestore, sumOf, takeCopyTrouble, takeOutcome, versionIn,
 } from '@/lib/saveKeeper';
 
 const gym = CONTINUE_SAVES.find(e => e.path === '/fight-gym')!;
@@ -103,6 +119,43 @@ describe('the apply, before any game is in memory (Round 1219)', () => {
     expect(offeredBackup(gym, api)).toBe(copies[0]);
   });
 
+  /* Round 1219 review, the major: put a save back, then put the other one
+     back again without playing, and the first career was kept in storage with
+     no screen that offered it. Round 958's swap offered the other save after
+     every press, for ever. */
+  it('after a put back and its undo the card still offers the other save, however often the two are swapped', () => {
+    const { m, api } = staged({ [gym.saveKey]: B });
+    expect(applyPending(api, later(2000))).toMatchObject({ ok: true, kept: true });
+    let offered = offeredBackup(gym, api);
+    for (let press = 2; press <= 6; press += 1) {
+      expect(offered, `before press ${press}`).not.toBeNull();
+      const asked = m.get(offered!)!;
+      expect(asked, `before press ${press}`).toBe(press % 2 === 0 ? B : A);
+      expect(stageRestore(gym, offered!, api, later(press * 10000))).toEqual({ ok: true });
+      expect(applyPending(api, later(press * 10000 + 2000))).toEqual({ path: '/fight-gym', ok: true, kept: true });
+      expect(m.get(gym.saveKey), `after press ${press}`).toBe(asked);
+      /* Nothing was played between, so no second copy is stacked: one backup of each save. */
+      expect(backups(m, gym.saveKey).map(k => m.get(k)).sort(), `after press ${press}`).toEqual([A, B].sort());
+      offered = offeredBackup(gym, api);
+    }
+    expect(offered).not.toBeNull();
+    /* A put back answers nothing on the player's behalf. */
+    expect(m.has(SET_ASIDE_SEEN_KEY)).toBe(false);
+  });
+
+  it('with play between the presses the card offers the game just put down, and both careers stay in a key', () => {
+    const { m, api } = staged({ [gym.saveKey]: B });
+    expect(applyPending(api, later(2000))).toMatchObject({ ok: true, kept: true });
+    m.set(gym.saveKey, 'A, played on');
+    const copyOfB = offeredBackup(gym, api)!;
+    expect(m.get(copyOfB)).toBe(B);
+    expect(stageRestore(gym, copyOfB, api, later(60000))).toEqual({ ok: true });
+    expect(applyPending(api, later(62000))).toEqual({ path: '/fight-gym', ok: true, kept: true });
+    expect(m.get(gym.saveKey)).toBe(B);
+    expect(m.get(offeredBackup(gym, api)!)).toBe('A, played on');
+    expect(backups(m, gym.saveKey).map(k => m.get(k)).sort()).toEqual([A, B, 'A, played on'].sort());
+  });
+
   it('with no save at the key, the backup stays and the card stops offering the game already being played', () => {
     const { m, api } = staged({});
     expect(applyPending(api, later(2000))).toEqual({ path: '/fight-gym', ok: true, kept: false });
@@ -115,8 +168,23 @@ describe('the apply, before any game is in memory (Round 1219)', () => {
     const { m, api } = staged({
       [gym.saveKey]: B, [bk(gym.saveKey, '2026-10-01T09-00-00')]: 'kept 1', [bk(gym.saveKey, '2026-10-02T09-00-00')]: 'kept 2',
     });
-    expect(applyPending(api, later(2000))).toMatchObject({ ok: true, kept: true });
+    /* toEqual: no `dropped` is reported when nothing was dropped. */
+    expect(applyPending(api, later(2000))).toEqual({ path: '/fight-gym', ok: true, kept: true });
     expect(backups(m, gym.saveKey).map(k => m.get(k)).sort()).toEqual([A, B, 'kept 1', 'kept 2'].sort());
+  });
+
+  /* Round 1219 review: the card said "nothing was deleted" over a put back
+     that dropped the oldest kept aside save. The outcome now carries the count. */
+  it('says how many kept aside saves the cap dropped, on the second put back with play between', () => {
+    const { m, api } = staged({
+      [gym.saveKey]: B, [bk(gym.saveKey, '2026-10-01T09-00-00')]: 'kept 1', [bk(gym.saveKey, '2026-10-02T09-00-00')]: 'kept 2',
+    });
+    expect(applyPending(api, later(2000))).toEqual({ path: '/fight-gym', ok: true, kept: true });
+    m.set(gym.saveKey, 'A, played on');
+    const copyOfB = backups(m, gym.saveKey).find(k => m.get(k) === B)!;
+    expect(stageRestore(gym, copyOfB, api, later(60000))).toEqual({ ok: true });
+    expect(applyPending(api, later(62000))).toEqual({ path: '/fight-gym', ok: true, kept: true, dropped: 1 });
+    expect(backups(m, gym.saveKey).map(k => m.get(k)).sort()).toEqual([A, B, 'A, played on', 'kept 2'].sort());
   });
 
   it('past the cap it drops the oldest, never the copy it just made and never the save now being played', () => {
@@ -127,7 +195,7 @@ describe('the apply, before any game is in memory (Round 1219)', () => {
     /* A clock set back: the copy's stamp is the oldest of all, and it still stays. */
     const early = new Date('2026-09-01T00:00:00Z');
     expect(stageRestore(gym, src, api, early)).toEqual({ ok: true });
-    expect(applyPending(api, early)).toMatchObject({ ok: true, kept: true });
+    expect(applyPending(api, early)).toEqual({ path: '/fight-gym', ok: true, kept: true, dropped: 1 });
     expect(backups(m, gym.saveKey).map(k => m.get(k)).sort()).toEqual([A, B, 'kept 2', 'kept 3'].sort());
   });
 
@@ -154,6 +222,31 @@ describe('the apply, before any game is in memory (Round 1219)', () => {
     const { m, api } = staged({ [gym.saveKey]: B });
     expect(applyPending(api, later(STAGED_FOR_MS))).toMatchObject({ ok: true });
     expect(m.get(gym.saveKey)).toBe(A);
+  });
+
+  /* Round 1219 review: the case above builds its times from the constant, so
+     a constant of five hours passed it. The numbers here are written out. */
+  it('a staged put back is good for a few minutes and no longer, in minutes written out', () => {
+    const soon = staged({ [gym.saveKey]: B });
+    expect(applyPending(soon.api, later(60 * 1000))).toMatchObject({ ok: true });
+    expect(soon.m.get(gym.saveKey)).toBe(A);
+    const waited = staged({ [gym.saveKey]: B });
+    expect(applyPending(waited.api, later(10 * 60 * 1000))).toEqual({ path: '/fight-gym', ok: false, why: 'stale' });
+    expect(waited.m.get(gym.saveKey)).toBe(B);
+    const days = staged({ [gym.saveKey]: B });
+    expect(applyPending(days.api, later(3 * 24 * 60 * 60 * 1000))).toEqual({ path: '/fight-gym', ok: false, why: 'stale' });
+    expect(days.m.get(gym.saveKey)).toBe(B);
+  });
+
+  /* Round 1219 review: the age used to be asked first, so a crash after the
+     key was written, met by a load that came late, said the save was not put
+     back while the key held it. */
+  it('a put back that already landed is answered as done however late the next load comes', () => {
+    const { m, api } = staged({ [gym.saveKey]: A });
+    expect(applyPending(api, later(60 * 60 * 1000))).toEqual({ path: '/fight-gym', ok: true });
+    expect(m.get(gym.saveKey)).toBe(A);
+    expect(m.get(src)).toBe(A);
+    expect(m.has(PENDING_RESTORE_KEY)).toBe(false);
   });
 
   it('removes a journal it cannot read and changes nothing', () => {
@@ -300,27 +393,86 @@ describe('the copy before a version step (Round 1219)', () => {
     expect(backups(m, cm.saveKey).map(k => m.get(k)).sort()).toEqual(['one', 'two', 'three', cmSave(2)].sort());
   });
 
-  it('leaves alone a game that ignores its version, a save with no number, and a save that does not parse', () => {
-    const { m, s, api } = store({ 'dukb-idle-arena-v1': '{"v":0}', 'fight-gym-save-v1': '{"g":{"version":0}}', [cm.saveKey]: '{"clubName":"x"}', stadiumTycoonSaveV1: 'not json' });
+  it('leaves alone a game that ignores its version, and does not even read its save', () => {
+    const { m, s, api } = store({ 'dukb-idle-arena-v1': '{"v":0}', 'fight-gym-save-v1': '{"g":{"version":0}}' });
     expect(keepUpdateCopies(api, T0)).toBe(0);
     expect(s.sets + s.removes).toBe(0);
-    expect(m.size).toBe(4);
+    expect(m.size).toBe(2);
     expect(s.read.has('dukb-idle-arena-v1')).toBe(false);
     expect(s.read.has('fight-gym-save-v1')).toBe(false);
   });
 
-  it('changes nothing when the copy will not fit', () => {
+  /* Round 1219 review: these got no copy, and every one of the six games
+     refuses a save with no whole number there just as it refuses another
+     number (three of them then write a fresh game over it with no press). */
+  it('copies a save with no number, a text number, and one that does not parse, once each', () => {
+    const seed = { [cm.saveKey]: '{"clubName":"x"}', stadiumTycoonSaveV1: 'not json', hallOfChampionsV1: '{"v":"1"}' };
+    const { m, s, api } = store(seed);
+    expect(keepUpdateCopies(api, T0)).toBe(3);
+    for (const [key, text] of Object.entries(seed)) {
+      expect(m.get(key), key).toBe(text);
+      expect(backups(m, key).map(k => m.get(k)), key).toEqual([text]);
+    }
+    /* Quiet: none of them is offered back, and a second boot writes nothing. */
+    expect(offeredBackup(cm, api)).toBeNull();
+    s.sets = 0; s.removes = 0;
+    expect(keepUpdateCopies(api, later(60000))).toBe(0);
+    expect(s.sets + s.removes).toBe(0);
+  });
+
+  it('changes nothing when the copy will not fit, and remembers it for that game\'s page, once', () => {
     const { m, s, api } = store({ [cm.saveKey]: cmSave(2) });
     s.refuse = () => true;
     expect(keepUpdateCopies(api, T0)).toBe(0);
     expect([...m.entries()]).toEqual([[cm.saveKey, cmSave(2)]]);
+    /* Round 1219 review: this used to fail in silence. */
+    expect(takeCopyTrouble('/fight-gym')).toBe(false);
+    expect(takeCopyTrouble('/club-manager/')).toBe(true);
+    expect(takeCopyTrouble('/club-manager')).toBe(false);
+  });
+
+  it('a copy that fits is no trouble to report', () => {
+    const { api } = store({ [cm.saveKey]: cmSave(2) });
+    expect(keepUpdateCopies(api, T0)).toBe(1);
+    expect(takeCopyTrouble('/club-manager')).toBe(false);
   });
 });
 
 describe('restoreNow and the boot call, in the browser\'s own storage (Round 1219)', () => {
   const src = bk(gym.saveKey, '2026-10-04T09-00-00');
   beforeEach(() => { localStorage.clear(); });
-  afterEach(() => { localStorage.clear(); });
+  afterEach(() => { seam.trouble = null; vi.unstubAllGlobals(); localStorage.clear(); });
+
+  /* Round 1219 review: this refusal could be deleted with every check green.
+     Under blocked storage the store dies with the page, so a put back staged
+     there would reload into nothing. */
+  it('refuses under blocked storage before anything is staged, and a boot there applies nothing', () => {
+    localStorage.setItem(src, A);
+    localStorage.setItem(gym.saveKey, B);
+    seam.trouble = 'blocked';
+    expect(restoreNow(gym, src)).toEqual({ ok: false, why: 'blocked' });
+    expect(localStorage.getItem(PENDING_RESTORE_KEY)).toBeNull();
+    /* The same press with the seam's own answer stages, so the refusal above was the guard's. */
+    seam.trouble = null;
+    expect(restoreNow(gym, src)).toEqual({ ok: true });
+    expect(localStorage.getItem(PENDING_RESTORE_KEY)).not.toBeNull();
+    seam.trouble = 'blocked';
+    runSaveKeeper();
+    expect(localStorage.getItem(gym.saveKey)).toBe(B);
+    expect(takeOutcome('/fight-gym')).toBeNull();
+  });
+
+  /* Round 1219 review: replace, not assign, was held by reading alone. With
+     assign the page that held the old game is one Back press away. */
+  it('reopens the game with location.replace, never assign, so no way back into the old page is left', () => {
+    const replace = vi.fn();
+    const assign = vi.fn();
+    vi.stubGlobal('location', { ...window.location, replace, assign });
+    reopenGame('/fight-gym');
+    expect(replace).toHaveBeenCalledTimes(1);
+    expect(replace).toHaveBeenCalledWith('/fight-gym');
+    expect(assign).not.toHaveBeenCalled();
+  });
 
   it('only ever stages: the key is untouched until the next load applies it', () => {
     localStorage.setItem(src, A);

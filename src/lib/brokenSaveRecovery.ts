@@ -280,36 +280,68 @@ export function deleteBackup(entry: ContinueSave, backupKey: string, storage: Sa
 
 /**
  * Where "Leave it aside" is remembered: one key for the whole site holding, per
- * game's save key, the backup the player last waved off. Its name does not
- * start with any game's key, so no backup listing ever picks it up.
+ * game's save key, the backups the player waved off. Its name does not start
+ * with any game's key, so no backup listing ever picks it up.
+ *
+ * Round 1219 review: a LIST per game. It used to be the one backup last waved
+ * off, which only worked while the card looked at nothing but the newest
+ * backup. A lone string (written before that round, or by an older cached
+ * build) is read as a list of one.
  */
 export const SET_ASIDE_SEEN_KEY = 'dukb-set-aside-seen';
 
-function seenMap(storage: SaveStorage): Record<string, string> {
+function seenMap(storage: SaveStorage): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
   try {
     const parsed: unknown = JSON.parse(storage.getItem(SET_ASIDE_SEEN_KEY) ?? '{}');
-    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, string>) : {};
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return out;
+    for (const [k, v] of Object.entries(parsed)) {
+      if (typeof v === 'string') out[k] = [v];
+      else if (Array.isArray(v)) out[k] = v.filter((x): x is string => typeof x === 'string');
+    }
   } catch {
     return {};
   }
+  return out;
 }
 
 /**
- * The backup the restore card should offer on this game: the newest one,
- * unless the player already said "Leave it aside" to that very backup. A newer one
- * (the next fresh start, or the save set aside by a swap) is offered again.
+ * The backup the restore card should offer on this game: the newest one the
+ * player has not said "Leave it aside" to and that is not, byte for byte, the
+ * save he is playing right now (there would be nothing to put back).
+ *
+ * Round 1219 review: it used to look at the newest backup only and answer null
+ * when that one was waved off or was the save being played. Since a put back
+ * keeps the backup it came from, that hid every older kept aside save behind
+ * it: put a save back, put the other one back again, and the first career was
+ * in storage with no screen that offered it. The card is the only door to a
+ * kept aside save, so each one is passed over only for its own reason.
  */
 export function offeredBackup(entry: ContinueSave, storage: ListableStorage | null): string | null {
-  const newest = backupKeysOf(entry, storage)[0];
-  if (!newest || !storage) return null;
-  return seenMap(storage)[entry.saveKey] === newest ? null : newest;
+  if (!storage) return null;
+  const waved = seenMap(storage)[entry.saveKey] ?? [];
+  try {
+    const playing = storage.getItem(entry.saveKey);
+    for (const k of backupKeysOf(entry, storage)) {
+      if (waved.includes(k)) continue;
+      if (playing !== null && storage.getItem(k) === playing) continue;
+      return k;
+    }
+  } catch {
+    /* A store that stopped answering offers nothing. */
+  }
+  return null;
 }
 
 /** Remembers "Leave it aside" for this backup. Never throws; false if not stored. */
 export function dismissBackup(entry: ContinueSave, backupKey: string, storage: SaveStorage | null): boolean {
   if (!storage) return false;
   try {
-    storage.setItem(SET_ASIDE_SEEN_KEY, JSON.stringify({ ...seenMap(storage), [entry.saveKey]: backupKey }));
+    const map = seenMap(storage);
+    /* Backups that are gone (the cap, a delete) drop off the list, so it never grows past what is held. */
+    const held = typeof (storage as ListableStorage).key === 'function' ? backupKeysOf(entry, storage as ListableStorage) : [];
+    const before = (map[entry.saveKey] ?? []).filter(k => k !== backupKey && (held.length === 0 || held.includes(k)));
+    storage.setItem(SET_ASIDE_SEEN_KEY, JSON.stringify({ ...map, [entry.saveKey]: [...before, backupKey] }));
     return true;
   } catch {
     return false;

@@ -499,13 +499,15 @@ console.log('\n4. the copy before a version step, on real saves one version down
     page.reset();
     K.runSaveKeeper();
     const secondQuiet = page.sets === 0 && page.removes === 0;
-    const good = copies.length === 1 && all.length === 4 && olderKept && removes === 0 && page.m.get(e.saveKey) === lowered && secondQuiet && offered === null;
+    /* Round 1219 review: the quiet copy is marked answered and is the save at
+       the key, so the card passes over it and still offers the newest of the
+       three older ones the player never answered. It used to offer nothing. */
+    const newestOlder = three[2][0];
+    const good = copies.length === 1 && all.length === 4 && olderKept && removes === 0 && page.m.get(e.saveKey) === lowered && secondQuiet && offered === newestOlder;
     if (good) held += 1;
-    else fail(`${e.path}: copies of the old save ${copies.length} (want 1), backups ${all.length} (want 4), the three older ones kept ${olderKept}, removes ${removes}, a second boot quiet ${secondQuiet}, the card offers ${offered ?? 'nothing'}`);
+    else fail(`${e.path}: copies of the old save ${copies.length} (want 1), backups ${all.length} (want 4), the three older ones kept ${olderKept}, removes ${removes}, a second boot quiet ${secondQuiet}, the card offers ${offered ?? 'nothing'} (want ${newestOlder})`);
   }
-  check(held === acting.length, `${held} of ${acting.length} games that act on a version: one byte equal copy, the three older backups untouched (nothing is pruned without a press), a second boot writes nothing`);
-  console.log('         what the card then offers on that game: nothing. The quiet copy is the newest backup and is marked answered, so the three');
-  console.log('         older backups are held but not offered (the card only ever offers the newest). A decision for the lead, see the notes.');
+  check(held === acting.length, `${held} of ${acting.length} games that act on a version: one byte equal copy, the three older backups untouched (nothing is pruned without a press), a second boot writes nothing, and the card still offers the newest older backup the player never answered`);
   const ignoring = ENTRIES.filter(e => V[e.path] && V[e.path].other === 'ignores');
   page.m = new Map(ignoring.map(e => [e.saveKey, withVersion(fleet[e.path][0], V[e.path].at, V[e.path].current - 1)]));
   page.reset();

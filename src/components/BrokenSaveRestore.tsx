@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ContinueSave } from '@/data/continueSaves';
 import {
-  backupDate, browserStorage, deleteBackup, dismissBackup, offeredBackup, routeSaveEntry,
+  BACKUPS_KEPT, backupDate, backupKeysOf, browserStorage, deleteBackup, dismissBackup, offeredBackup, routeSaveEntry,
 } from '@/lib/brokenSaveRecovery';
-import { reopenGame, restoreNow, takeOutcome, type KeeperOutcome } from '@/lib/saveKeeper';
+import { reopenGame, restoreNow, takeCopyTrouble, takeOutcome, type KeeperOutcome } from '@/lib/saveKeeper';
 
 /**
  * Round 958 review: the way back from a fresh start.
@@ -16,14 +16,16 @@ import { reopenGame, restoreNow, takeOutcome, type KeeperOutcome } from '@/lib/s
  * bug lost it for good.
  *
  * On the game's own page, while a backup of its save exists, a small card
- * offers to put the newest one back. A save the player has now is set aside
- * the same way first (restoreBackup), so the swap never deletes anything.
- * That set-aside save is then the newest backup, which is why the copy says
- * "kept aside" and never "when this game broke": after a swap it is the game
- * the player just put down, not a broken one.
+ * offers to put the newest one back. A save the player has now is kept aside
+ * first (since Round 1219 by the save keeper's copy as the next page loads),
+ * so the swap never deletes the game he had. That kept aside save is then the
+ * newest backup, which is why the copy says "kept aside" and never "when
+ * this game broke": after a swap it is the game the player just put down,
+ * not a broken one.
  *
- * "Leave it aside" is remembered for that backup (dismissBackup), so the card stays
- * away until a newer backup exists instead of coming back on every visit.
+ * "Leave it aside" is remembered for that backup (dismissBackup), so it is
+ * not offered again on every visit. Another kept aside save he never
+ * answered is offered on a later visit: the card is the only door to them.
  * "Delete it" asks once more and then removes that backup for good, the only
  * way a backup goes on the player's word.
  *
@@ -39,17 +41,24 @@ import { reopenGame, restoreNow, takeOutcome, type KeeperOutcome } from '@/lib/s
  * button now only STAGES the put back (src/lib/saveKeeper.ts), the page is
  * replaced by a full load of the game, and the swap is made while that load
  * starts, before any game is in memory. This card then says, once, what
- * happened. A backup that is exactly the save now being played is not
- * offered: there would be nothing to put back.
+ * happened. A backup that is exactly the save now being played is passed
+ * over (there would be nothing to put back) and the next one is offered.
+ *
+ * Round 1219 review: "nothing is deleted" is only said when it is true. A
+ * game keeps its three newest kept aside saves, so with more than three held
+ * a put back can drop the oldest: the offer names the cap before the press,
+ * and the outcome says when one was dropped. And when a save from another
+ * version of its game could not be copied aside for want of room, the card
+ * says that once too.
  */
-type Offer = { entry: ContinueSave; backupKey: string; hasSave: boolean; when: string | null };
+type Offer = { entry: ContinueSave; backupKey: string; hasSave: boolean; when: string | null; crowded: boolean };
 
 /** What the load did with a put back, in plain words. */
 function outcomeWords(o: KeeperOutcome): string {
   if (o.ok) {
-    return o.kept
-      ? 'The game you had before is kept aside in this browser, so nothing was deleted.'
-      : 'This is the save that was kept aside.';
+    const first = o.kept ? 'The game you had before is kept aside in this browser' : 'This is the save that was kept aside';
+    if (o.dropped) return `${first}. Each game keeps its three newest kept aside saves, so the oldest one was dropped.`;
+    return o.kept ? `${first}, so nothing was deleted.` : `${first}.`;
   }
   if (o.why === 'no-room') return 'Your browser is out of room, so the save could not be put back. It is still kept aside.';
   if (o.why === 'gone') return 'That kept aside save is not in this browser any more, so nothing was put back.';
@@ -62,6 +71,8 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
   const [failed, setFailed] = useState<'swap' | 'delete' | null>(null);
   const [confirming, setConfirming] = useState(false);
   const [outcome, setOutcome] = useState<KeeperOutcome | null>(null);
+  /* The route whose save from another version could not be copied aside on this load. */
+  const [uncopied, setUncopied] = useState<string | null>(null);
   /* Holds "Leave it aside" for this visit even where storage refuses to remember it. */
   const hidden = useRef(new Set<string>());
 
@@ -72,20 +83,20 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
     /* Asked once per load: what a staged put back did on the way in. */
     const told = takeOutcome(pathname);
     setOutcome(prev => told ?? (prev && entry && prev.path === entry.path ? prev : null));
+    const noCopy = takeCopyTrouble(pathname);
+    setUncopied(prev => (entry && (noCopy || prev === entry.path) ? entry.path : null));
     const storage = browserStorage();
+    /* The newest kept aside save he has not answered and is not playing right now. */
     const backupKey = entry ? offeredBackup(entry, storage) : null;
     if (!entry || !storage || !backupKey || hidden.current.has(backupKey)) { setOffer(null); return; }
     let hasSave = false;
-    let playing = false;
-    try {
-      const current = storage.getItem(entry.saveKey);
-      hasSave = current !== null;
-      playing = hasSave && storage.getItem(backupKey) === current;
-    } catch { /* treat as no save */ }
-    if (playing) { setOffer(null); return; }
+    try { hasSave = storage.getItem(entry.saveKey) !== null; } catch { /* treat as no save */ }
     const made = backupDate(backupKey);
     const when = made ? made.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) : null;
-    setOffer({ entry, backupKey, hasSave, when });
+    /* With at most BACKUPS_KEPT held before the press, the put back cannot
+       drop one (the backup it comes from is never counted). */
+    const crowded = backupKeysOf(entry, storage).length > BACKUPS_KEPT;
+    setOffer({ entry, backupKey, hasSave, when, crowded });
   }, [pathname]);
 
   const primary = 'px-4 py-2 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:opacity-90 transition-opacity';
@@ -99,6 +110,20 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
         <p role="status" className="mb-3">{outcomeWords(outcome)}</p>
         <div className="flex flex-wrap gap-2">
           <button type="button" onClick={() => setOutcome(null)} className={primary}>OK</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (uncopied) {
+    return (
+      <div data-dukb-set-aside="" data-dukb-no-copy="" role="region" aria-label="Your save of this game" className={shell}>
+        <p className="font-semibold text-foreground mb-1">No room to keep a copy</p>
+        <p role="status" className="mb-3">
+          Your save of this game is from a different version of the game, so it may not open. Your browser is out of room, so we could not keep a copy of it aside first.
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" onClick={() => setUncopied(null)} className={primary}>OK</button>
         </div>
       </div>
     );
@@ -133,7 +158,8 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
       ) : (
         <p className="mb-3">
           There's a save of this game kept aside in this browser{offer.when ? ` from ${offer.when}` : ''}. Want it back?
-          {offer.hasSave && ' The game you have now gets kept aside in its place, so nothing is deleted.'}
+          {offer.hasSave && ` The game you have now gets kept aside in its place${offer.crowded ? '.' : ', so nothing is deleted.'}`}
+          {offer.crowded && ' Each game keeps its three newest kept aside saves, so putting this one back may drop the oldest.'}
         </p>
       )}
       {failed && (
