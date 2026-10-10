@@ -1,0 +1,12 @@
+vitest exit=0 4s |    Duration  3.37s (transform 146ms, setup 256ms, collect 166ms, tests 1.71s, environment 1.29s, prepare 639ms)
+book-default-s0 exit=0 43s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (43s)
+tsc exit=0 88s | 
+book-default-s1 exit=0 43s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (43s)
+book-default-s2 exit=0 41s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (40s)
+book-default-s3 exit=0 43s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (43s)
+book-default-s4 exit=0 42s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (43s)
+book-full-base-s0 exit=0 188s | simCmLeagueBook: green, 7 sections, 24 careers x 2 seasons (187s)
+book-full-s1 exit=0 103s | simCmLeagueBook: green, 7 sections, 24 careers x 2 seasons (103s)
+book-full-s2 exit=0 102s | simCmLeagueBook: green, 7 sections, 24 careers x 2 seasons (102s)
+book-full-s3 exit=0 102s | simCmLeagueBook: green, 7 sections, 24 careers x 2 seasons (102s)
+book-full-s4 exit=0 88s | simCmLeagueBook: green, 7 sections, 24 careers x 2 seasons (87s)
