@@ -1,0 +1,14 @@
+#!serial
+mut-periods: bash .rc/x/mutrun.sh periods
+mut-home: bash .rc/x/mutrun.sh home
+mut-filter: bash .rc/x/mutrun.sh filter
+mut-trykey: bash .rc/x/mutrun.sh trykey
+mut-fallback: bash .rc/x/mutrun.sh fallback
+mut-season: bash .rc/x/mutrun.sh season
+mut-lowscore: bash .rc/x/mutrun.sh lowscore
+mut-afterdecided: bash .rc/x/mutrun.sh afterdecided
+mut-lastwinner: bash .rc/x/mutrun.sh lastwinner
+mut-cchost: bash .rc/x/mutrun.sh cchost
+mut-dupseeds: bash .rc/x/mutrun.sh dupseeds
+mut-shapeorder: bash .rc/x/mutrun.sh shapeorder
+clean-after: git status --porcelain --untracked-files=no | wc -l && node scripts/simGmGameDay.mjs | tail -1
