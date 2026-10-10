@@ -1,0 +1,2 @@
+# Round 1215 probe: the own goal share of first half goals in first matches, through the engine in node.
+ograte: node .rc/x/ograte.mjs
