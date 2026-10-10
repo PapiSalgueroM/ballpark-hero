@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
+cand-default: node scripts/simClubManagerSaveSize.mjs
+cand-s1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+cand-s2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+cand-s3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+cand-s4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+cand-s5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+cand-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+simCmRealFixtures: node scripts/simCmRealFixtures.mjs
