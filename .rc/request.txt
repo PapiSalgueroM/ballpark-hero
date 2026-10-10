@@ -1,0 +1,9 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+lay-control: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+default: node scripts/simUsSeasonCentre.mjs
+conf: US_SEASON_CONTROL=conf node scripts/simUsSeasonCentre.mjs
+poscore: US_SEASON_CONTROL=poscore node scripts/simUsSeasonCentre.mjs
+law-compare-now: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+vitest: node_modules/.bin/vitest run src/test/usSeason.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usPostseasonFormat.test.ts --testTimeout=300000 --hookTimeout=120000
+anchors: node scripts/simHarnessAnchors.mjs
