@@ -1,0 +1,21 @@
+# Release AU proof, lane C, part 3 of 3: a plain build, three at a time
+#!build
+#!playwright
+simCareerStory: node scripts/simCareerStory.mjs
+simClubVerdict: node scripts/simClubVerdict.mjs
+simLoanSpell: node scripts/simLoanSpell.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simCmQuickLegs: node scripts/simCmQuickLegs.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simPress: node scripts/simPress.mjs
+simClubManagerEraUcl: node scripts/simClubManagerEraUcl.mjs
+simLiveSim: node scripts/simLiveSim.mjs
+simClubManagerStaff: node scripts/simClubManagerStaff.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+simFixtureBalance: node scripts/simFixtureBalance.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs
+simNbaAwardsSense: SENSE_PROVE_1149=808dbbdc SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
