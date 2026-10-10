@@ -198,6 +198,27 @@ describe('the row that ends the night, word for word', () => {
   });
 });
 
+/* Two sentences built from numbers, typed out here so a swapped number or a
+   boundary one pick off cannot pass: the harness only checks that the numbers
+   are somewhere in the line. */
+describe('two sentences, typed out', () => {
+  it('the range line changes its words exactly where the range passes the last pick', () => {
+    expect(preDraftProjectionLine({ lo: 200, hi: 223, total: 224 }, 'had')).toBe('The scouts had you between pick 200 and pick 223 of 224.');
+    // A range that ends ON the last pick is still a range of picks: he cannot go undrafted.
+    expect(preDraftProjectionLine({ lo: 200, hi: 224, total: 224 }, 'had')).toBe('The scouts had you between pick 200 and pick 224 of 224.');
+    expect(preDraftProjectionLine({ lo: 200, hi: 225, total: 224 }, 'had')).toBe('The scouts had you between pick 200 and undrafted. This draft has 224 picks.');
+    expect(preDraftProjectionLine({ lo: 224, hi: 224, total: 224 }, 'have')).toBe('The scouts have you at pick 224 of 224.');
+    expect(preDraftProjectionLine({ lo: 224, hi: 300, total: 224 }, 'have')).toBe('The scouts have you between pick 224 and undrafted. This draft has 224 picks.');
+    expect(preDraftProjectionLine({ lo: 225, hi: 300, total: 224 }, 'have')).toBe('The scouts have you outside the 224 picks of this draft.');
+  });
+
+  it('what a screen reader hears puts the round, the pick in it and the overall pick in their places', () => {
+    expect(careerNightResultLine({ kind: 'you', pick: 85, round: 3, pickInRound: 21, team: 'x' }, () => 'The Club')).toBe('Round 3, pick 21, 85 overall. The Club take you.');
+    expect(careerNightResultLine({ kind: 'unpicked', lastPick: 224, team: 'x' }, () => 'The Club')).toBe('Pick 224 is the last one, and your name was not called. Your first club: The Club.');
+    expect(careerNightResultLine({ kind: 'pick', pick: 3, round: 1, team: 'x' }, () => 'The Club')).toBe('');
+  });
+});
+
 /* The lottery tile is two to a row, about a hundred pixels for a club on a
    390 wide phone, and the full NBA names were cut off there. The mount hands
    it the club's own name; the walk measures the pixels of every club. */
