@@ -1,0 +1,55 @@
+bundled in 125 ms; sports nba; 40 careers a seed set; seed sets 0, 1, 2, 3, 4; PO_TRIES 12; CONTROL thin
+played 240 careers in 3425 ms; 369 seasons observed
+info P nba seed set 0: the careers are the lay receipt's, career for career
+info P nba seed set 1: the careers are the lay receipt's, career for career
+info P nba seed set 2: the careers are the lay receipt's, career for career
+info P nba seed set 3: the careers are the lay receipt's, career for career
+info P nba seed set 4: the careers are the lay receipt's, career for career
+ok   D every fact of every format row stands on two publishers, the rounds are the one typed copy, the accessor refuses what no row holds (3 checked)
+ok   S nba: the games laid out are the playoff line the save holds, game for game and series for series (independent checker) (168 checked)
+ok   S nba: his side is first in every other playoff game, so no run is scored as all home games (168 checked)
+ok   C nba: a season with no postseason on the save lays nothing out and prints no list (181 checked)
+ok   C nba: a line with no games count gives no postseason, and the list is what it was (168 checked)
+ok   C nba: a line with a count under the rounds gives no postseason, and the list is what it was (168 checked)
+ok   C nba: a line with a count over the rounds gives no postseason, and the list is what it was (168 checked)
+ok   C nba: a line with no playoff number gives no postseason, and the list is what it was (168 checked)
+ok   C nba: a line with a season the format file does not hold gives no postseason, and the list is what it was (168 checked)
+ok   C nba: a line with a season played to another format gives no postseason, and the list is what it was (168 checked)
+ok   C nba: laying a postseason out never moves the list of the saved line (168 checked)
+ok   F nba: not one playoff season the Season Center opens fails closed (168 checked)
+     seed set | playoff seasons laid | playoff games | repaired games (share) | one point: playoffs | regular, every season of the same careers | regular, the playoff seasons | their first G games
+            0 |                   32 |           300 |              2 (0.67%) |          17 (5.67%) |                       335 of 5986 (5.60%) |                        5.75% |               8.33%
+            1 |                   44 |           470 |              1 (0.21%) |          22 (4.68%) |                       300 of 5576 (5.38%) |                        5.96% |               5.32%
+            2 |                   29 |           345 |              1 (0.29%) |          16 (4.64%) |                       349 of 5904 (5.91%) |                        6.73% |               6.96%
+            3 |                   33 |           324 |              2 (0.62%) |          18 (5.56%) |                       306 of 5412 (5.65%) |                        6.36% |               6.17%
+            4 |                   30 |           321 |              2 (0.62%) |          17 (5.30%) |                       291 of 5740 (5.07%) |                        5.73% |               6.23%
+          all |                  168 |          1760 |              8 (0.45%) |          90 (5.11%) |                     1581 of 28618 (5.52%) |                        6.09% |               6.48%
+     the try taken (0 is the first): 0:59 1:36 2:22 3:16 4:8 5:10 6:3 7:2 8:3 9:5 10:2 11:2
+     repairs a laid out run needed: 0:160 1:8 2:0 3+:0; the regular season's repairs a season, for scale: 0.26
+     by depth | seasons | failed closed | games | repaired (share) | one point (share)
+     Lost in the first round      |    89 |    0 |    497 |      2 (0.40%) |     21 (4.23%)
+     Lost in the conference semis |    42 |    0 |    471 |      3 (0.64%) |     28 (5.94%)
+     Lost the Conference Finals   |    16 |    0 |    279 |      1 (0.36%) |     11 (3.94%)
+     Lost the NBA Finals          |     9 |    0 |    189 |      1 (0.53%) |     11 (5.82%)
+     WON THE NBA FINALS           |    12 |    0 |    324 |      1 (0.31%) |     19 (5.86%)
+     margins: playoff games 17.39% decided by 20 or more, won by 12.0 and lost by 11.7 on average; the regular season of the same careers 19.27% decided by 20 or more, won by 11.8 and lost by 12.4 on average
+     series lost in four straight: 14; those games were lost by 12.1 on average, 19.64% of them by 20 or more
+     his lowest game as a share of his average game: playoffs p10 0.38, median 0.64, p90 0.80 over 168 runs of four games or more; the first G games he played of the same regular seasons p10 0.50, median 0.63, p90 0.78 over 168
+     the repaired share is not judged on 1760 playoff games (it wants 2000); section K is what says a run is too thin
+ACCEPTANCE one point playoff games 5.11% against the regular season's spread over the seed sets 5.07% to 5.91%: INSIDE
+FAIL K nba: "Lost in the first round": 19, 24, 13, 17, 16 runs laid out by seed set (at least 90 in each)
+FAIL K nba: "Lost in the conference semis": 8, 10, 6, 12, 6 runs laid out by seed set (at least 35 in each)
+FAIL K nba: "Lost the Conference Finals": 3, 3, 6, 1, 3 runs laid out by seed set (at least 20 in each)
+FAIL K nba: "Lost the NBA Finals": 1, 2, 2, 1, 3 runs laid out by seed set (at least 9 in each)
+FAIL K nba: "WON THE NBA FINALS": 1, 5, 2, 2, 2 runs laid out by seed set (at least 13 in each)
+FAIL K nba: runs under ten games: 20, 25, 13, 17, 16 runs laid out by seed set (at least 95 in each)
+FAIL K nba: runs of ten games or more: 12, 19, 16, 16, 14 runs laid out by seed set (at least 80 in each)
+FAIL K nba: the present day era: 8, 25, 8, 13, 22 runs laid out by seed set (at least 75 in each)
+FAIL K nba: the throwback era: 24, 19, 21, 20, 8 runs laid out by seed set (at least 100 in each)
+FAIL K nba: named opponents: 8, 25, 8, 13, 22 runs laid out by seed set (at least 75 in each)
+FAIL K nba: unnamed opponents: 24, 19, 21, 20, 8 runs laid out by seed set (at least 100 in each)
+ok   X nba: a postseason derived twice, and from a JSON round trip of the career and the row, is the same (168 checked)
+ok   X no call reaches Math.random while a season is observed (0 calls)
+
+control thin: RED AT THE NAMED CHECK (section K); sections red: K
+simUsPostseason: 25 checks, 11 failed, 0 findings for the lead (control thin)
