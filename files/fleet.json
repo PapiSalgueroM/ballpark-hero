@@ -1,0 +1,27 @@
+{
+ "count": {
+  "roads": 6960,
+  "states": 45202,
+  "loads": 52162,
+  "continued": 6960,
+  "nights": 6960,
+  "drafted": 6880,
+  "undrafted": 80,
+  "prospects": 6960
+ },
+ "bad": 0,
+ "firsts": [],
+ "edge": {
+  "lines": 5858,
+  "saysUndraftedButCannot": [],
+  "saysDraftedButCanMiss": [],
+  "saysOutsideButCanBePicked": [],
+  "oneNumberButTwo": [],
+  "kinds": {
+   "toUndrafted": 1440,
+   "between": 4193,
+   "single": 171,
+   "outside": 54
+  }
+ }
+}

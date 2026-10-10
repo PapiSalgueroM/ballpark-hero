@@ -1,0 +1,15 @@
+nfl:now: 8 positions x 120 roads, 224 picks, 0 difference(s)
+nfl:y2005: 8 positions x 120 roads, 224 picks, 0 difference(s)
+nba:now: 5 positions x 120 roads, 60 picks, 0 difference(s)
+nba:y2004: 5 positions x 120 roads, 58 picks, 0 difference(s)
+mlb:now: 11 positions x 120 roads, 600 picks, 0 difference(s)
+mlb:y2004: 11 positions x 120 roads, 1500 picks, 0 difference(s)
+nhl:now: 5 positions x 120 roads, 224 picks, 0 difference(s)
+nhl:y2006: 5 positions x 120 roads, 210 picks, 0 difference(s)
+range line saysUndraftedButCannot: 0
+range line saysDraftedButCanMiss: 0
+range line saysOutsideButCanBePicked: 0
+range line oneNumberButTwo: 0
+range lines read: 5858 {"toUndrafted":1440,"between":4193,"single":171,"outside":54}
+rank checks 267066; counts {"roads":6960,"states":45202,"loads":52162,"continued":6960,"nights":6960,"drafted":6880,"undrafted":80,"prospects":6960}
+fleet: NO DIFFERENCE between the base engine and the head

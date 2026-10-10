@@ -1,0 +1,18 @@
+simCareerPreDraft [seed set a]: ALL GREEN
+simCareerPreDraft [seed set b]: ALL GREEN
+simCareerPreDraft [seed set c]: ALL GREEN
+simCareerPreDraft [seed set d]: ALL GREEN
+simCareerPreDraft [seed set e]: ALL GREEN
+equal: base sha (09df145abfb241679022b41903d2f19bc254ebf9)
+equal: node major (fresh v24.21.0, committed v24.21.0)
+equal: roads per pair (2000)
+equal: the engine file hashes the recording names
+sets a,b,c,d,e; 80 digests compared
+equal: the whole sets block, first roads included
+equal: hash of careerPreDraft.ts on the base checkout
+equal: hash of nflCareerPreDraft.ts on the base checkout
+equal: hash of nbaCareerPreDraft.ts on the base checkout
+equal: hash of mlbCareerPreDraft.ts on the base checkout
+equal: hash of nhlCareerPreDraft.ts on the base checkout
+equal: hash of keyedRng.ts on the base checkout
+digestcmp: THE COMMITTED RECORDING IS WHAT THE BASE ENGINE GIVES

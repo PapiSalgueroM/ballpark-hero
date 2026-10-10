@@ -1,0 +1,3 @@
+step0-src exit=0 0s | 
+fleet exit=0 7s | fleet: NO DIFFERENCE between the base engine and the head
+rerecord exit=0 7s | digestcmp: THE COMMITTED RECORDING IS WHAT THE BASE ENGINE GIVES
