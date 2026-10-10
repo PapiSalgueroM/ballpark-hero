@@ -1,0 +1,43 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDraftOrder.test.ts src/lib/gmDraftNight.test.ts src/lib/gmLotteryNight.test.ts src/lib/gmPicks.test.ts src/components/motion/LotteryReveal.test.tsx src/components/front-office-shared/GmLotteryCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simGmDraftOrder.mjs
+sim-again: node scripts/simGmDraftOrder.mjs
+c-unknown: SIM_GM_DRAFT_ORDER_CONTROL=nosuchcontrol node scripts/simGmDraftOrder.mjs
+c-onesource: SIM_GM_DRAFT_ORDER_CONTROL=onesource node scripts/simGmDraftOrder.mjs
+c-closespan: SIM_GM_DRAFT_ORDER_CONTROL=closespan node scripts/simGmDraftOrder.mjs
+c-flat: SIM_GM_DRAFT_ORDER_CONTROL=flat node scripts/simGmDraftOrder.mjs
+c-oddsrow: SIM_GM_DRAFT_ORDER_CONTROL=oddsrow node scripts/simGmDraftOrder.mjs
+c-extradraw: SIM_GM_DRAFT_ORDER_CONTROL=extradraw node scripts/simGmDraftOrder.mjs
+c-seconddraw: SIM_GM_DRAFT_ORDER_CONTROL=seconddraw node scripts/simGmDraftOrder.mjs
+c-mathrandom: SIM_GM_DRAFT_ORDER_CONTROL=mathrandom node scripts/simGmDraftOrder.mjs
+c-nosplit: SIM_GM_DRAFT_ORDER_CONTROL=nosplit node scripts/simGmDraftOrder.mjs
+c-tiebyid: SIM_GM_DRAFT_ORDER_CONTROL=tiebyid node scripts/simGmDraftOrder.mjs
+c-noflip: SIM_GM_DRAFT_ORDER_CONTROL=noflip node scripts/simGmDraftOrder.mjs
+c-flipbeforelottery: SIM_GM_DRAFT_ORDER_CONTROL=flipbeforelottery node scripts/simGmDraftOrder.mjs
+c-acrossbyfield: SIM_GM_DRAFT_ORDER_CONTROL=acrossbyfield node scripts/simGmDraftOrder.mjs
+c-champfirst: SIM_GM_DRAFT_ORDER_CONTROL=champfirst node scripts/simGmDraftOrder.mjs
+c-laterasfirst: SIM_GM_DRAFT_ORDER_CONTROL=laterasfirst node scripts/simGmDraftOrder.mjs
+c-rowkey: SIM_GM_DRAFT_ORDER_CONTROL=rowkey node scripts/simGmDraftOrder.mjs
+c-origpicks: SIM_GM_DRAFT_ORDER_CONTROL=origpicks node scripts/simGmDraftOrder.mjs
+c-skipslot: SIM_GM_DRAFT_ORDER_CONTROL=skipslot node scripts/simGmDraftOrder.mjs
+c-trustall: SIM_GM_DRAFT_ORDER_CONTROL=trustall node scripts/simGmDraftOrder.mjs
+c-trustnight: SIM_GM_DRAFT_ORDER_CONTROL=trustnight node scripts/simGmDraftOrder.mjs
+c-capcount: SIM_GM_DRAFT_ORDER_CONTROL=capcount node scripts/simGmDraftOrder.mjs
+c-ghostrow: SIM_GM_DRAFT_ORDER_CONTROL=ghostrow node scripts/simGmDraftOrder.mjs
+c-hidemine: SIM_GM_DRAFT_ORDER_CONTROL=hidemine node scripts/simGmDraftOrder.mjs
+c-slowcards: SIM_GM_DRAFT_ORDER_CONTROL=slowcards node scripts/simGmDraftOrder.mjs
+c-staleexample: SIM_GM_DRAFT_ORDER_CONTROL=staleexample node scripts/simGmDraftOrder.mjs
+c-mounted: SIM_GM_DRAFT_ORDER_CONTROL=mounted node scripts/simGmDraftOrder.mjs
+c-norivals: SIM_GM_DRAFT_ORDER_CONTROL=norivals node scripts/simGmDraftOrder.mjs
+c-shownread: SIM_GM_DRAFT_ORDER_CONTROL=shownread node scripts/simGmDraftOrder.mjs
+simGmPicks: node scripts/simGmPicks.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+added-only: git diff --name-status origin/main...HEAD | grep -v '^A' ; echo "non-added lines above (none expected); total files: $(git diff --name-only origin/main...HEAD | wc -l)"
+head-sha: git log -2 --format='%H %s' | cut -c1-120
