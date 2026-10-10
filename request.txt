@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
