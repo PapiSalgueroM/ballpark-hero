@@ -1,0 +1,10 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=1 28s | sweepWeight: 6 failures
+daily exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+daily-bind exit=1 3s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+daily-binddeadline exit=1 3s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+cmfix exit=0 7s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+cmfix-all exit=0 50s | simCmRealFixtures: 11 actual outcome groups, 760 fixture reads, 760 calendar reads and 9 effective controls passed.
+fixbal exit=0 2s | simFixtureBalance: PASS. Generated schedules keep the run-of-two contract at every league size, old saves keep their generated list, rollovers converge the flag, the AI w
+leaguefx exit=0 5s | simCmLeagueFixtures: OK, sections A to G and I green: 10 ledger(s), 9 frozen, 1 pending (premier), 3528 fixtures, 166 of 166 controls fired
+tsc exit=0 58s | 
