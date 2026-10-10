@@ -561,14 +561,18 @@ export function InternationalHistoryTile({
         <div className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Every tournament</div>
         <div className="space-y-1 max-h-[260px] overflow-y-auto scrollbar-thin">
           {[...history].reverse().map((h, i) => (
-            <div key={`${h.year}-${i}`} className="flex items-center gap-2 bg-muted/20 rounded-md px-2 py-1 text-[11px]">
-              <span className="text-muted-foreground w-9 shrink-0 tabular-nums">{h.year}</span>
-              <span className="flex-1 min-w-0 truncate font-semibold">{h.short}</span>
-              <span className="flex items-center gap-1 shrink-0 min-w-0">
-                <FlagImg name={h.champion} size={13} />
-                <span className="truncate max-w-[70px]">{h.champion}</span>
-              </span>
-              <ResultPill result={h.myResult} />
+            <div key={`${h.year}-${i}`} className="space-y-1 bg-muted/20 rounded-md px-2 py-1 text-[11px]">
+              <div className="flex items-start gap-2">
+                <span className="text-muted-foreground shrink-0 tabular-nums">{h.year}</span>
+                <span className="flex-1 min-w-0 break-words font-semibold">{h.short}</span>
+              </div>
+              <div className="flex items-start justify-between gap-2">
+                <span className="flex flex-1 items-center gap-1 min-w-0">
+                  <FlagImg name={h.champion} size={13} />
+                  <span className="min-w-0 break-words">{h.champion}</span>
+                </span>
+                <span className="shrink-0"><ResultPill result={h.myResult} /></span>
+              </div>
             </div>
           ))}
         </div>

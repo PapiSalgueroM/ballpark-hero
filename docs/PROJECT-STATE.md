@@ -1,3 +1,11 @@
+## Codex 1247-1249 CLAIMED: Soccer Career result layouts, 2026-10-10
+
+Isolated attached WT C:/Users/antho/.codex/worktrees/career-results-layout/ballpark-hero, branch codex/career-results-layout, base 09df145abfb241679022b41903d2f19bc254ebf9. Mobile phone/training utilities will sit after result content in newspaper, season_summary, world_cup and transfer_window; desktop fixed position, footer lift, button size, badges and handlers stay effective. InternationalHistoryTile will show full saved competition names in two-line rows. No engine, saved schema, gameplay odds, football data or package changes.
+
+Scope: src/pages/SoccerCareer.tsx (utility layout only), src/components/soccer-career/InternationalPanel.tsx (history row only), scripts/playSoccerResultsLayout.mjs, narrowly needed scripts/qa support, .github/workflows/soccer-results-layout.yml, docs/ROUND1247-1249.md and own isolated PROJECT-STATE/WORKBOARD prefixes. Native text/Git edits only. All site runtime on remote Actions: actual callbacks, mobile geometry/paint, saved-state/RNG neutrality, desktop footer behavior and effective original-layout controls, real app types/build and required scoped readers. Proof remains proportional to these two UI bugs.
+
+G owns integration/main/merge/publish. PR216 through221 remain frozen. No ROOT app/index/stash/PROJECT-STATE changes; only this own board prefix is added atomically with every peer byte preserved. No all-CI, combined release, live DB, full-site, merge or publication claim.
+
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,
