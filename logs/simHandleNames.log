@@ -1,0 +1,14 @@
+1) a legacy Baller-NNNN handle regenerates and the regeneration persists
+   Baller-4821 became BoldDime-12, stored, and stayed put on the second read
+2) a stored word pool handle is returned byte for byte
+   IcyKeeper-42 in, IcyKeeper-42 out
+3) minted handles never double a word
+   400 mints, zero doubled words, every one pool shaped
+4) publicName: clean passes through, dirty substitutes stably
+   clean names untouched; the dirty fixture rendered as PrimeHatty-19, same on every call, clean itself
+5) the blocklist blocks words, not letters (the kkk/xxx collapse bug)
+   Mark, Luka, Xavi, Max Parker all pass; kkk, xxx, padded and leet evasions all refused
+6) the leaderboard actually uses the fence
+   board rows and the own displayed handle both pass through publicName, read from code not prose
+
+simHandleNames: green. Legacy handles regenerate, and nothing blocklisted reaches a shared surface.

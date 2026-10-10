@@ -1,0 +1,26 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > keeps unavailable legacy drills and the opening menu quiet with unchanged close controls 368ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'goal' penalty and its real zones without replacing controls 232ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'saved' penalty and its real zones without replacing controls 241ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'over-bar' penalty and its real zones without replacing controls 156ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'saved' keeper outcome after the existing tell and shot timing 132ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'wrong-way' keeper outcome after the existing tell and shot timing 138ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'Cone Slalom' 60 result and banks it once with immediate stable controls 569ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'Sprint Burst' 96 result and banks it once with immediate stable controls 923ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'Penalty Placement' 60 result and banks it once with immediate stable controls 185ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'Shot Stopping' 80 result and banks it once with immediate stable controls 225ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'Passing Gates' 75 result and banks it once with immediate stable controls 484ms
+ ✓ src/test/trainingFeedbackMotion.test.tsx > Soccer Career training feedback > reveals the exact 'Sprint Burst' +0 result and banks it once with immediate stable controls 281ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  18:27:30
+   Duration  8.76s (transform 2.70s, setup 78ms, collect 3.54s, tests 3.94s, environment 535ms, prepare 222ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simTrainingFeedbackMotion: twelve actual-panel menu, penalty, keeper timing, marker, exact-score/tier, stable-node/focus and one-bank outcomes passed.

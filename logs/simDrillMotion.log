@@ -1,0 +1,14 @@
+DRILL_PROJECTION| Six engine outcomes x full/reduced/midflight switch: boot, wall depth/time, contact, endpoint and settlement passed
+DRILL_MOTION| wallshot full: 1489 points, 6/10, +1, identical saved result
+DRILL_MOTION| wallshot reduced: 1489 points, 6/10, +1, identical saved result
+DRILL_MOTION| wallshot hidden: 1489 points, 6/10, +1, identical saved result
+DRILL_MOTION| wallshot switch: 1489 points, 6/10, +1, identical saved result
+DRILL_MOTION| tackle full: 2417 points, 10/10, +2, identical saved result
+DRILL_MOTION| tackle reduced: 2417 points, 10/10, +2, identical saved result
+DRILL_MOTION| tackle hidden: 2417 points, 10/10, +2, identical saved result
+DRILL_MOTION| tackle switch: 2417 points, 10/10, +2, identical saved result
+DRILL_MOTION| gloves full: 2209 points, 10/10, +2, identical saved result
+DRILL_MOTION| gloves reduced: 2209 points, 10/10, +2, identical saved result
+DRILL_MOTION| gloves hidden: 2209 points, 10/10, +2, identical saved result
+DRILL_MOTION| gloves switch: 2209 points, 10/10, +2, identical saved result
+simDrillMotion: PASS. Evidence: /home/runner/work/_temp/t-simDrillMotion/dukb-drill-motion-SkJIoo
