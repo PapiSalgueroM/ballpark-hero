@@ -1,0 +1,24 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+og-clean: node scripts/simOwnGoalMotion.mjs
+og-plain: OWN_GOAL_CONTROL=plain node scripts/simOwnGoalMotion.mjs
+og-side: OWN_GOAL_CONTROL=side node scripts/simOwnGoalMotion.mjs
+og-crowded: OWN_GOAL_CONTROL=crowded node scripts/simOwnGoalMotion.mjs
+og-late: OWN_GOAL_CONTROL=late node scripts/simOwnGoalMotion.mjs
+og-cheer: OWN_GOAL_CONTROL=cheer node scripts/simOwnGoalMotion.mjs
+og-through: OWN_GOAL_CONTROL=through node scripts/simOwnGoalMotion.mjs
+og-straight: OWN_GOAL_CONTROL=straight node scripts/simOwnGoalMotion.mjs
+og-absent: OWN_GOAL_CONTROL=absent node scripts/simOwnGoalMotion.mjs
+og-reducedog: OWN_GOAL_CONTROL=reducedog node scripts/simOwnGoalMotion.mjs
+og-setpiece: OWN_GOAL_CONTROL=setpiece node scripts/simOwnGoalMotion.mjs
+og-touchmoved: OWN_GOAL_CONTROL=touchmoved node scripts/simOwnGoalMotion.mjs
+og-ruemoved: OWN_GOAL_CONTROL=ruemoved node scripts/simOwnGoalMotion.mjs
+og-viewerplain: OWN_GOAL_CONTROL=viewerplain node scripts/simOwnGoalMotion.mjs
+og-castnow: OWN_GOAL_CONTROL=castnow node scripts/simOwnGoalMotion.mjs
+og-unknown: OWN_GOAL_CONTROL=nosuchcontrol node scripts/simOwnGoalMotion.mjs
+lm-clean: node scripts/simLiveSimMotion.mjs
+lc-clean: node scripts/simLiveSimCelebration.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+liveScores: node scripts/simLiveScores.mjs
+rival: node scripts/simNoRivalNames.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+numfmt: node scripts/simNumberFormatting.mjs
