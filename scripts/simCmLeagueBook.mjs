@@ -52,7 +52,9 @@
  *            book that is a string, an array, a number, or last season's own reads as no book, is never
  *            written into, and the save plays the entries the same save with no book at all plays; a
  *            book with one holed row is refused whole by the reader and plays the same entries too, but
- *            the match week (a stamp and a type check, on purpose) still writes to it
+ *            the match week (a stamp and a type check, on purpose) still writes to it; a book in which
+ *            one club's entry has no rows map is refused by the reader, never thrown on by the match
+ *            week, and that entry is left as it was found
  *   doors    the takeover from the picker at its three entries and the job joined today in season one
  *            and in season three: a whole book at the handover and the law after every entry to the end
  *   dailies  Manager Hot Seat (four dates, played to a verdict, handed over to Club Manager and played
@@ -66,8 +68,8 @@
  *
  * NEGATIVE CONTROLS. BOOK_CONTROL=<name> patches the bundle's copy of the source (never a file on disk;
  * the anchor must occur exactly as often as stated or the run refuses) and the run then exits 1 with
- * FIRED only if the named section went red and no other did (two controls name the sections that go red
- * with theirs for the same reason, and say so on their last line):
+ * FIRED only if the named section went red and no other did (four controls name the sections that go red,
+ * or may, with theirs for the same reason, and say so on their last line when one did):
  *   weight        a striker weighs 8, not 5 (needs BOOK_BASE)         -> stream, and shapes with it
  *   mathrandom    the scorer pick reads Math.random                  -> stream
  *   dropmine      my own league match is not noted                   -> law, and with it the three other
@@ -86,14 +88,16 @@
  *                 the same assists are in the share section shapes judges)
  *   assistbench   the assist in my match is dealt over their eleven and bench, not the men on the pitch
  *                 at that minute                                     -> names
- *   twoman       the deal is the old race's: 42 and 26 in a hundred to the two best rated forwards or
+ *   twoman        the deal is the old race's: 42 and 26 in a hundred to the two best rated forwards or
  *                 midfielders, the rest to nobody, and no taker      -> shapes
  *   flat          every outfield man weighs the same                 -> shapes
  *   penassist     a penalty or a free kick is paid an assist         -> shapes
  *   noog          no goal is ever an own goal                        -> shapes
  *   keyindex      the goal's own index is dropped from the deal key, so every goal of a side in one
  *                 match is the same roll: one man's brace every time  -> shapes
- *   redeal       loadCareer opens a book for a save that has none   -> oldsave
+ *   redeal        loadCareer opens a book for a save that has none   -> oldsave
+ *   hurtentry     a club entry with no rows map (a save edited by hand) is handed to the match week as
+ *                 it is, and the week throws on it                   -> oldsave
  *   seasonstamp   the season's number is put back into the stamp     -> doors
  *   strip         the Hot Seat's strip of the book is taken out      -> dailies
  *   stripdeadline Deadline Day's strip is taken out                  -> dailies
@@ -171,6 +175,7 @@ const CONTROLS = {
   penassist: { patch: [{ file: BOOK, from: "assistFrom(rng, kind === 'open' ? scorer : null, outfield, rules);", to: "assistFrom(rng, kind === 'og' ? null : scorer, outfield, rules);" }], red: 'shapes' },
   noog: { patch: [{ file: BOOK, from: ": ownGoalTagged(`${key}|${i}|og`, rules.ownGoalOneIn) ? 'og' : 'open';", to: ": 'open';" }], red: 'shapes' },
   keyindex: { patch: [{ file: BOOK, from: '    const rng = keyedRng(`${key}|${i}`);', to: '    const rng = keyedRng(key);' }], red: 'shapes' },
+  hurtentry: { patch: [{ file: BOOK, from: '  return isRecord(have) && isRecord(have.m) ? (have as unknown as BookClub) : null;', to: '  return have as unknown as BookClub;' }], red: 'oldsave' },
   redeal: { patch: [{ file: ENGINE, from: '    ensureRoles(parsed);', to: '    ensureRoles(parsed);\n    if (!parsed.leagueBook) openLeagueBook(parsed);' }], red: 'oldsave' },
   seasonstamp: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${state.season}|${leagueId}|${bookSalt(state.leagueClubs)}`;' }], red: 'doors' },
   strip: { patch: [{ file: HOT, from: '  delete s.leagueBook;', to: '' }], red: 'dailies' },
@@ -1049,25 +1054,40 @@ const whole = s => sha(JSON.stringify(s));
        on every result was measured at 60 percent of a season once), so a book with one holed row is still
        written to in a match week. The READER refuses it whole, which is what a screen will ask, and the
        engine never makes such a row itself: a row is four numbers from the moment it exists. */
-    const damaged = [['a string', 'the book', true], ['an array', [made.next.leagueBook], true], ["last season's own", made.last, true], ['a row with a hole', holed, false], ['a number', 7, true]];
+    /* And one a hand could make and JSON cannot: the stamp is right, one club's entry has no rows map. The
+       match week reads that book (a stamp and a type), so it must step over that entry, never throw on it
+       and never write to it, while the rest of the save plays as it would have. */
+    const noRows = JSON.parse(good);
+    const hurtClub = Object.keys(noRows.c)[0];
+    if (!hurtClub) cannot('four entries into the season the book made for the unreadable books is still empty');
+    noRows.c[hurtClub] = { m: null, og: 0, u: 0 };
+    const damaged = [['a string', 'the book', true], ['an array', [made.next.leagueBook], true], ["last season's own", made.last, true], ['a row with a hole', holed, false], ['a number', 7, true], ['a club entry with no rows', noRows, false, hurtClub]];
     const fourOn = (mod, from) => onStream(0x7011, () => { let s = wake(mod, from); for (let k = 0; k < 4; k++) s = mod.cm.playNextEntry(s, { skipHalftime: true }).state; return s; });
-    for (const [what, value, weekSeesIt] of damaged) {
+    for (const [what, value, weekSeesIt, untouched] of damaged) {
       const v = JSON.parse(JSON.stringify(made.next));
       v.leagueBook = value;
       const text = JSON.stringify(value);
-      tick('oldsave', weekSeesIt ? 3 : 2);
+      tick('oldsave', (weekSeesIt ? 3 : 2) + (untouched ? 1 : 0));
       if (text === good) cannot(`the damage "${what}" changed nothing`);
       if (maker.cm.leagueBookOf(v) !== null) fail('oldsave', `a save whose book is ${what} reads as having a book`);
-      const on = fourOn(await candidate.again(), v);
       /* A book the match week cannot read is played as the save with no book at all. The holed one it can
          read and does write to, so it is played beside the same save with its book whole: the rest of the
          save must not know the difference (and the two sides then deal alike, whatever a control does). */
-      const off = fourOn(await candidate.again(), JSON.parse(JSON.stringify(weekSeesIt ? plain : made.next)));
+      let on;
+      let off;
+      try {
+        on = fourOn(await candidate.again(), v);
+        off = fourOn(await candidate.again(), JSON.parse(JSON.stringify(weekSeesIt ? plain : made.next)));
+      } catch (e) {
+        fail('oldsave', `a save whose book is ${what} threw in a match week: ${String(e?.message ?? e).slice(0, 120)}`);
+        continue;
+      }
       if (withoutBook(on) !== withoutBook(off)) fail('oldsave', `a save whose book is ${what} does not play the four entries the same save with no book plays`);
       if (weekSeesIt && JSON.stringify(on.leagueBook) !== text) fail('oldsave', `a save whose book is ${what} had it written into: ${String(JSON.stringify(on.leagueBook)).slice(0, 80)}`);
+      if (untouched && JSON.stringify(on.leagueBook?.c?.[untouched]) !== JSON.stringify(value.c[untouched])) fail('oldsave', `a save whose book is ${what} had that entry (${untouched}) written into: ${String(JSON.stringify(on.leagueBook?.c?.[untouched])).slice(0, 80)}`);
     }
   }
-  console.log(`oldsave ${checked.get('oldsave')} checks: ${saves.length} saves with no book finished on the candidate and on ${refs.map(r => `the ${r[0]} engine`).join(' and ')}, the season after each, and five unreadable books`);
+  console.log(`oldsave ${checked.get('oldsave')} checks: ${saves.length} saves with no book finished on the candidate and on ${refs.map(r => `the ${r[0]} engine`).join(' and ')}, the season after each, and six unreadable books`);
 }
 
 /* ---------- section doors: the two ways into a season that is already running ---------- */

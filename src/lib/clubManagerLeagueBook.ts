@@ -208,15 +208,26 @@ export function dealAssist(key: string, scorer: BookMan, onPitch: readonly BookM
   return assistFrom(keyedRng(key), scorer, onPitch, rules);
 }
 
-function clubOf(book: LeagueBook, club: string): BookClub {
-  return book.c[club] ?? (book.c[club] = { m: {}, og: 0, u: 0 });
+/**
+ * The entry of a club, made on its first credit. Null when the save holds something under that name that
+ * is not an entry (no rows map): the engine never writes one and JSON parses whole or not at all, so only
+ * a save edited by hand can, and the match week (liveBook, a stamp and a type check on purpose) would
+ * otherwise throw on it. Such an entry is left exactly as it was found, never repaired: readBook refuses
+ * the whole book, which is what a screen will ask.
+ */
+function clubOf(book: LeagueBook, club: string): BookClub | null {
+  const have = book.c[club] as unknown;
+  if (have === undefined) return (book.c[club] = { m: {}, og: 0, u: 0 });
+  return isRecord(have) && isRecord(have.m) ? (have as unknown as BookClub) : null;
 }
 
-/** The row of a man, made on his first credit. Null at the row cap, unless he is exempt (a keeper always gets his). */
+/** The row of a man, made on his first credit. Null at the row cap, unless he is exempt (a keeper always
+ *  gets his), and null when the save holds something under his key that is not a row (see clubOf). */
 function rowOf(entry: BookClub, man: BookMan, exempt = false): BookRow | null {
   const key = rowKey(man);
-  const have = entry.m[key];
-  if (have) return have;
+  const have = entry.m[key] as unknown;
+  if (Array.isArray(have)) return have as BookRow;
+  if (have !== undefined && have !== null) return null;
   if (!exempt && Object.keys(entry.m).length >= BOOK_ROWS_PER_CLUB) return null;
   const row: BookRow = [0, 0, 0, man.g ? 1 : 0];
   entry.m[key] = row;
@@ -226,6 +237,7 @@ function rowOf(entry: BookClub, man: BookMan, exempt = false): BookRow | null {
 /** One goal for `club` by `man`. With nobody to name, or no room for a new row, it is counted in `u`. True when a row took it. */
 export function creditGoal(book: LeagueBook, club: string, man: BookMan | null): boolean {
   const entry = clubOf(book, club);
+  if (!entry) return false;
   const row = man ? rowOf(entry, man) : null;
   if (!row) { entry.u += 1; return false; }
   row[0] += 1;
@@ -234,12 +246,14 @@ export function creditGoal(book: LeagueBook, club: string, man: BookMan | null):
 
 /** One goal for `club` that was an own goal: nobody is credited. */
 export function creditOwnGoal(book: LeagueBook, club: string): void {
-  clubOf(book, club).og += 1;
+  const entry = clubOf(book, club);
+  if (entry) entry.og += 1;
 }
 
 /** One assist. Dropped, never counted elsewhere, when the row cap leaves him no row. */
 export function creditAssist(book: LeagueBook, club: string, man: BookMan): void {
-  const row = rowOf(clubOf(book, club), man);
+  const entry = clubOf(book, club);
+  const row = entry ? rowOf(entry, man) : null;
   if (row) row[1] += 1;
 }
 
@@ -254,6 +268,7 @@ export function creditDeal(book: LeagueBook, club: string, deal: readonly BookGo
 /** A clean sheet: one to the keeper (always, cap or no cap) and one to each defender handed in. */
 export function creditCleanSheet(book: LeagueBook, club: string, keeper: BookMan | null, defenders: readonly BookMan[]): void {
   const entry = clubOf(book, club);
+  if (!entry) return;
   const keeperRow = keeper ? rowOf(entry, keeper, true) : null;
   if (keeperRow) keeperRow[2] += 1;
   for (const d of defenders) {

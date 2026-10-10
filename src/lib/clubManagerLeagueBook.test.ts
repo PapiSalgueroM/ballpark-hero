@@ -242,6 +242,41 @@ describe('the book', () => {
     expect(readBook(broken(b => { delete b.my; }), STAMP)).toBeNull();
   });
 
+  it('never throws in a match week on a club entry or a row that is not one, and leaves it as it found it', () => {
+    /* Only a save edited by hand can hold these: the stamp is right, so the week (liveBook) reads the book. */
+    const hurt = JSON.parse(JSON.stringify(fresh()));
+    creditGoal(hurt, 'Rivals', XI[10]);
+    hurt.c['No Rows'] = { m: null, og: 0, u: 0 };
+    hurt.c['A String'] = 'gone';
+    hurt.c['A List'] = [];
+    hurt.c.Rivals.m[rowKey(XI[9])] = 'three';
+    hurt.c.Rivals.m[rowKey(XI[7])] = 5;
+    expect(liveBook(hurt, STAMP)).toBe(hurt);
+    expect(readBook(hurt, STAMP)).toBeNull();
+    for (const club of ['No Rows', 'A String', 'A List']) {
+      const asFound = JSON.stringify(hurt.c[club]);
+      expect(creditGoal(hurt, club, XI[10])).toBe(false);
+      expect(creditGoal(hurt, club, null)).toBe(false);
+      creditOwnGoal(hurt, club);
+      creditAssist(hurt, club, XI[7]);
+      creditCleanSheet(hurt, club, XI[0], XI.slice(1, 5));
+      creditDeal(hurt, club, dealGoals(`hurt|${club}`, 5, XI, RULES));
+      expect(JSON.stringify(hurt.c[club])).toBe(asFound);
+    }
+    /* A row that is not a row takes nothing (the goal is counted unnamed), and the sound rows beside it still do. */
+    expect(creditGoal(hurt, 'Rivals', XI[9])).toBe(false);
+    creditAssist(hurt, 'Rivals', XI[7]);
+    expect(hurt.c.Rivals.m[rowKey(XI[9])]).toBe('three');
+    expect(hurt.c.Rivals.m[rowKey(XI[7])]).toBe(5);
+    expect(hurt.c.Rivals.u).toBe(1);
+    expect(creditGoal(hurt, 'Rivals', XI[10])).toBe(true);
+    expect(hurt.c.Rivals.m[rowKey(XI[10])]).toEqual([2, 0, 0, 1]);
+    /* A row left as null is made again, as it always was. */
+    hurt.c.Rivals.m[rowKey(XI[6])] = null;
+    expect(creditGoal(hurt, 'Rivals', XI[6])).toBe(true);
+    expect(hurt.c.Rivals.m[rowKey(XI[6])]).toEqual([1, 0, 0, 0]);
+  });
+
   it('salts by the order of the league, so two orders of the same clubs deal apart', () => {
     expect(bookSalt(['A', 'B', 'C'])).toBe(bookSalt(['A', 'B', 'C']));
     expect(bookSalt(['A', 'B', 'C'])).not.toBe(bookSalt(['B', 'A', 'C']));
