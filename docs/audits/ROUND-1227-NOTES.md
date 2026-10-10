@@ -122,6 +122,52 @@ The player ages on his position (a back falls off at 28, a kicker at 39) and eve
   sections of simUsRivalSense; deletes ownRosterBeat and the three built in lines of simRivalSeason when its last
   caller goes; moves the anchors of oldgateown and droppedanyyear with them.
 
+## The fix pass after the two reviews (2026-10-10, the fixer)
+The reviews are review-run-1227.md and review-read-1227.md, the closing report is fix-1227.md, all in
+C:/Users/antho/dukb-handoff/2026-10-10/results-g/. What changed on the branch after 32b58c72:
+- origin/main at f78037dc merged (Release AT live; no file of this round, no conflict).
+- WHAT'S NEW TOLD THE RULE WRONGLY TWICE. A receiver or a tight end is read on yards and touchdowns (his catches
+  are printed and carry no weight), and a kicker on his makes and his long (his attempts are printed and not
+  read). The entry, the rule text above and the comment over `nflHeadToHeadScore` now say so.
+- THE ONE PLACE RULE IS THE GAME'S TABLE, NOT A CLAIM ABOUT A REAL SEASON. The award table is the first team as
+  it is picked today (the 2025 team: NFL.com, and the AP roster as Fox Sports carried it) and the engine uses it
+  in every era. The real 2005 and 2015 first teams named two running backs, and the AP's 2016 revamp left one
+  and added a flex. The sources are in the comment above `NFL_ALL_PRO` in src/lib/careerAwards.ts. What's New
+  now says "the way the real one is picked today, in every era". A slot count that knows its year would move
+  the player's own award odds in every 2005 career: a round of its own, NOT done.
+- THE HARNESS (scripts/simUsRivalSense.mjs, 14 checks now): N.U6 plays the real `simSeason` on boosted careers
+  and holds the one place rule at its call site (control `oneslotsite`); N.F5 judges the fleet's own count of
+  both seasons at a one place position; N.U7 holds the floor at zero on a grid (control `nofloor`); N.U3 has a
+  control (`impure`). A note beside `HELD_TOL`: when a later round moves an NFL draw, measure and retype, never
+  widen.
+- THE WALK (scripts/playUsRivalLines.mjs) plays seasons at all four size and motion pairs, and walks the old
+  saves and the roster cards at 390 with motion on and at 1280 with reduced motion.
+- THE STEP h RECORDINGS HAVE THEIR SINGLE INPUT NOW. On 55339449 alone (the floor) step c's recordings replay
+  green and the digest passes plain; on 5bdd0a9c (the cards) both are red, the board at fixed save "negNet"
+  steps 52 to 54. Runners r1227-x1 and r1227-x2; written in the header of scripts/simUsBoardParity.mjs.
+- SEEN WHILE PROVING IT, not this round's: the board replay's screen read at NFL fixed save "noCoachKey" step 38
+  races the lazy farewell banner. One replay of six was red there with the save equal. Reported to the lead.
+
+NOT FIXED, and why (each is in the closing report for the lead):
+- A kicker's long field goal has no cap (older than this round; the rival prints one now). A cap needs the real
+  record sourced twice and moves the player's own line and the recordings: a small round of its own.
+- Beat 204 ("you had the better box score", dealt in any year), THE BALLOT CAMPAIGN choice card, the dead NFL
+  lines inside `simRivalSeason`, and the old shape line of a rival who had already retired on an old save: each
+  deferred by the critic or by the lead's decision 1, each still open.
+- The weight row: /nfl-my-career measures just over its budget in scripts/sweepWeight.mjs (the closing report
+  has the measured size). The budget number is the lead's.
+- A slot count that knows its year (two running backs through the 2015 season), as said above.
+
+THE RECORDINGS AFTER THE FIX PASS: the board recording was taken again from 4c010129 on runner r1227-x6 and came
+back byte equal in all four sports (only `recordedFrom` moved, commit a727c460); the truth digest taken again
+with the nfl keys allowed came back byte equal and has no commit.
+
+FOR WHOEVER MERGES ROUND 1226 WITH THIS ROUND (read only trial, `git merge-tree`, against 4bcfa116): the only
+conflicts are scripts/data/usBoardFixture.json and src/pages/WhatsNew.tsx. src/lib/careerRival.ts and the truth
+digest merge by themselves, and that is exactly why the second lander must still run the type gate, P1, the
+board replay and the digest plain on the merged tree, and take the NFL section of both recordings again from the
+merged head: a recording that merged without a conflict is still a recording nobody took.
+
 ## What a later session must not trust
 - Anything below marked NOT RUN.
 - The AFTER numbers move if the rival's aging, his job or his form is ever changed: they are the baseline for
