@@ -1,0 +1,6 @@
+repinned scripts/simCmRealFixtures.mjs (cm, 1 edit(s))
+simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+cm-real-fixtures-artifacts
+Error: ENOENT: no such file or directory, open '/home/runner/work/ballpark-hero/ballpark-hero/cm-real-fixture-artifacts/outcomes/native-later-season.json'
+  code: 'ENOENT',
+RESULT with default folders sim=0 walk=1

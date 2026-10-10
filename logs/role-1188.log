@@ -1,0 +1,19 @@
+repinned scripts/simCareerStoryRole.mjs (role, 2 edit(s))
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+PASS [uncopied full AR baseline]
+PASS [candidate full AR baseline]
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+RESULT sim=0

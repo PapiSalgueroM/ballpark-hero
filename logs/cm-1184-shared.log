@@ -1,0 +1,21 @@
+repinned scripts/simCmRealFixtures.mjs (cm, 1 edit(s))
+simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: All three save kinds are reached at both widths
+
+5 !== 6
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmRealFixtures.mjs:279:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 5,
+  expected: 6,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+RESULT sim=0 walk=1
