@@ -1,0 +1,271 @@
+CONTROL: unpinning the Soccer Career action bar, this run must go red
+
+Mobile chrome, base http://localhost:4173
+Top bar measured at 320, 390, 430, 1024, 1440 wide across 5 routes, signed out and signed in.
+Signed in means 98,765 points, rank #12345, a 365 day streak and 106 games played.
+
+Top bar, child boxes measured in the browser
+   320  signed out  /soccer-career  bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed out  /club-manager   bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed out  /dart-draft     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed out  /cfb-dynasty    bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed out  /squad-deal     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   320  signed in   /soccer-career  bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   320  signed in   /club-manager   bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   320  signed in   /dart-draft     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   320  signed in   /cfb-dynasty    bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   320  signed in   /squad-deal     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed out  /soccer-career  bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed out  /club-manager   bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed out  /dart-draft     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed out  /cfb-dynasty    bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed out  /squad-deal     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   390  signed in   /soccer-career  bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed in   /club-manager   bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed in   /dart-draft     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed in   /cfb-dynasty    bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   390  signed in   /squad-deal     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed out  /soccer-career  bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed out  /club-manager   bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed out  /dart-draft     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed out  /cfb-dynasty    bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed out  /squad-deal     bar    89px tall   "DOUKNOWBALL Back Track stats"
+   430  signed in   /soccer-career  bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed in   /club-manager   bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed in   /dart-draft     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed in   /cfb-dynasty    bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+   430  signed in   /squad-deal     bar    75px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+  1024  signed out  /soccer-career  bar    53px tall   "DOUKNOWBALL Back Sign up to track your stats"
+  1024  signed in   /soccer-career  bar    53px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+  1440  signed out  /soccer-career  bar    53px tall   "DOUKNOWBALL Back Sign up to track your stats"
+  1440  signed in   /soccer-career  bar    53px tall   "DOUKNOWBALL Back Games completed today: 106/133 Poin"
+
+Soccer Career action bar, scrolled top to bottom
+   320  scrollY     0  static   bar  2434 to  2519  next  2453 to  2501  UNREACHABLE  footer top 13209  bar covers   0px, floating buttons cover   0px
+   320  scrollY   300  static   bar  2134 to  2219  next  2153 to  2201  UNREACHABLE  footer top 12909  bar covers   0px, floating buttons cover   0px
+   320  scrollY   600  static   bar  1834 to  1919  next  1853 to  1901  UNREACHABLE  footer top 12609  bar covers   0px, floating buttons cover   0px
+   320  scrollY   900  static   bar  1534 to  1619  next  1553 to  1601  UNREACHABLE  footer top 12309  bar covers   0px, floating buttons cover   0px
+   320  scrollY  1200  static   bar  1234 to  1319  next  1253 to  1301  UNREACHABLE  footer top 12009  bar covers   0px, floating buttons cover   0px
+   320  scrollY  1500  static   bar   934 to  1019  next   953 to  1001  UNREACHABLE  footer top 11709  bar covers   0px, floating buttons cover   0px
+   320  scrollY  2700  static   bar  -266 to  -181  next  -247 to  -199  UNREACHABLE  footer top 10509  bar covers   0px, floating buttons cover   0px
+   320  scrollY  3000  static   bar  -566 to  -481  next  -547 to  -499  UNREACHABLE  footer top 10209  bar covers   0px, floating buttons cover   0px
+   320  scrollY  3300  static   bar  -866 to  -781  next  -847 to  -799  UNREACHABLE  footer top  9909  bar covers   0px, floating buttons cover   0px
+   320  scrollY  3600  static   bar -1166 to -1081  next -1147 to -1099  UNREACHABLE  footer top  9609  bar covers   0px, floating buttons cover   0px
+   320  scrollY  3900  static   bar -1466 to -1381  next -1447 to -1399  UNREACHABLE  footer top  9309  bar covers   0px, floating buttons cover   0px
+   320  scrollY  4200  static   bar -1766 to -1681  next -1747 to -1699  UNREACHABLE  footer top  9009  bar covers   0px, floating buttons cover   0px
+   320  scrollY  4500  static   bar -2066 to -1981  next -2047 to -1999  UNREACHABLE  footer top  8709  bar covers   0px, floating buttons cover   0px
+   320  scrollY  4800  static   bar -2366 to -2281  next -2347 to -2299  UNREACHABLE  footer top  8409  bar covers   0px, floating buttons cover   0px
+   320  scrollY  5100  static   bar -2666 to -2581  next -2647 to -2599  UNREACHABLE  footer top  8109  bar covers   0px, floating buttons cover   0px
+   320  scrollY  5400  static   bar -2966 to -2881  next -2947 to -2899  UNREACHABLE  footer top  7809  bar covers   0px, floating buttons cover   0px
+   320  scrollY  5700  static   bar -3266 to -3181  next -3247 to -3199  UNREACHABLE  footer top  7509  bar covers   0px, floating buttons cover   0px
+   320  scrollY  6000  static   bar -3566 to -3481  next -3547 to -3499  UNREACHABLE  footer top  7209  bar covers   0px, floating buttons cover   0px
+   320  scrollY  6300  static   bar -3866 to -3781  next -3847 to -3799  UNREACHABLE  footer top  6909  bar covers   0px, floating buttons cover   0px
+   320  scrollY  6600  static   bar -4166 to -4081  next -4147 to -4099  UNREACHABLE  footer top  6609  bar covers   0px, floating buttons cover   0px
+   320  scrollY  6900  static   bar -4466 to -4381  next -4447 to -4399  UNREACHABLE  footer top  6309  bar covers   0px, floating buttons cover   0px
+   320  scrollY  7200  static   bar -4766 to -4681  next -4747 to -4699  UNREACHABLE  footer top  6009  bar covers   0px, floating buttons cover   0px
+   320  scrollY  7500  static   bar -5066 to -4981  next -5047 to -4999  UNREACHABLE  footer top  5709  bar covers   0px, floating buttons cover   0px
+   320  scrollY  7800  static   bar -5366 to -5281  next -5347 to -5299  UNREACHABLE  footer top  5409  bar covers   0px, floating buttons cover   0px
+   320  scrollY  8100  static   bar -5666 to -5581  next -5647 to -5599  UNREACHABLE  footer top  5109  bar covers   0px, floating buttons cover   0px
+   320  scrollY  8400  static   bar -5966 to -5881  next -5947 to -5899  UNREACHABLE  footer top  4809  bar covers   0px, floating buttons cover   0px
+   320  scrollY  8700  static   bar -6266 to -6181  next -6247 to -6199  UNREACHABLE  footer top  4509  bar covers   0px, floating buttons cover   0px
+   320  scrollY  9000  static   bar -6566 to -6481  next -6547 to -6499  UNREACHABLE  footer top  4209  bar covers   0px, floating buttons cover   0px
+   320  scrollY  9300  static   bar -6866 to -6781  next -6847 to -6799  UNREACHABLE  footer top  3909  bar covers   0px, floating buttons cover   0px
+   320  scrollY  9600  static   bar -7166 to -7081  next -7147 to -7099  UNREACHABLE  footer top  3609  bar covers   0px, floating buttons cover   0px
+   320  scrollY  9900  static   bar -7466 to -7381  next -7447 to -7399  UNREACHABLE  footer top  3309  bar covers   0px, floating buttons cover   0px
+   320  scrollY 10200  static   bar -7766 to -7681  next -7747 to -7699  UNREACHABLE  footer top  3009  bar covers   0px, floating buttons cover   0px
+   320  scrollY 10500  static   bar -8066 to -7981  next -8047 to -7999  UNREACHABLE  footer top  2709  bar covers   0px, floating buttons cover   0px
+   320  scrollY 10800  static   bar -8366 to -8281  next -8347 to -8299  UNREACHABLE  footer top  2409  bar covers   0px, floating buttons cover   0px
+   320  scrollY 11100  static   bar -8666 to -8581  next -8647 to -8599  UNREACHABLE  footer top  2109  bar covers   0px, floating buttons cover   0px
+   320  scrollY 11400  static   bar -8966 to -8881  next -8947 to -8899  UNREACHABLE  footer top  1809  bar covers   0px, floating buttons cover   0px
+   320  scrollY 11700  static   bar -9266 to -9181  next -9247 to -9199  UNREACHABLE  footer top  1509  bar covers   0px, floating buttons cover   0px
+   320  scrollY 12000  static   bar -9566 to -9481  next -9547 to -9499  UNREACHABLE  footer top  1209  bar covers   0px, floating buttons cover   0px
+   320  scrollY 12300  static   bar -9866 to -9781  next -9847 to -9799  UNREACHABLE  footer top   909  bar covers   0px, floating buttons cover   0px
+   320  scrollY 12600  static   bar -10166 to -10081  next -10147 to -10099  UNREACHABLE  footer top   609  bar covers   0px, floating buttons cover   0px
+   320  scrollY 12804  static   bar -10370 to -10285  next -10351 to -10303  UNREACHABLE  footer top   405  bar covers   0px, floating buttons cover   0px
+   390  scrollY     0  static   bar  2340 to  2425  next  2359 to  2407  UNREACHABLE  footer top 11414  bar covers   0px, floating buttons cover   0px
+   390  scrollY   300  static   bar  2040 to  2125  next  2059 to  2107  UNREACHABLE  footer top 11114  bar covers   0px, floating buttons cover   0px
+   390  scrollY   600  static   bar  1740 to  1825  next  1759 to  1807  UNREACHABLE  footer top 10814  bar covers   0px, floating buttons cover   0px
+   390  scrollY   900  static   bar  1440 to  1525  next  1459 to  1507  UNREACHABLE  footer top 10514  bar covers   0px, floating buttons cover   0px
+   390  scrollY  1200  static   bar  1140 to  1225  next  1159 to  1207  UNREACHABLE  footer top 10214  bar covers   0px, floating buttons cover   0px
+   390  scrollY  1500  static   bar   840 to   925  next   859 to   907  UNREACHABLE  footer top  9914  bar covers   0px, floating buttons cover   0px
+   390  scrollY  2400  static   bar   -60 to    25  next   -41 to     7  UNREACHABLE  footer top  9014  bar covers   0px, floating buttons cover   0px
+   390  scrollY  2700  static   bar  -360 to  -275  next  -341 to  -293  UNREACHABLE  footer top  8714  bar covers   0px, floating buttons cover   0px
+   390  scrollY  3000  static   bar  -660 to  -575  next  -641 to  -593  UNREACHABLE  footer top  8414  bar covers   0px, floating buttons cover   0px
+   390  scrollY  3300  static   bar  -960 to  -875  next  -941 to  -893  UNREACHABLE  footer top  8114  bar covers   0px, floating buttons cover   0px
+   390  scrollY  3600  static   bar -1260 to -1175  next -1241 to -1193  UNREACHABLE  footer top  7814  bar covers   0px, floating buttons cover   0px
+   390  scrollY  3900  static   bar -1560 to -1475  next -1541 to -1493  UNREACHABLE  footer top  7514  bar covers   0px, floating buttons cover   0px
+   390  scrollY  4200  static   bar -1860 to -1775  next -1841 to -1793  UNREACHABLE  footer top  7214  bar covers   0px, floating buttons cover   0px
+   390  scrollY  4500  static   bar -2160 to -2075  next -2141 to -2093  UNREACHABLE  footer top  6914  bar covers   0px, floating buttons cover   0px
+   390  scrollY  4800  static   bar -2460 to -2375  next -2441 to -2393  UNREACHABLE  footer top  6614  bar covers   0px, floating buttons cover   0px
+   390  scrollY  5100  static   bar -2760 to -2675  next -2741 to -2693  UNREACHABLE  footer top  6314  bar covers   0px, floating buttons cover   0px
+   390  scrollY  5400  static   bar -3060 to -2975  next -3041 to -2993  UNREACHABLE  footer top  6014  bar covers   0px, floating buttons cover   0px
+   390  scrollY  5700  static   bar -3360 to -3275  next -3341 to -3293  UNREACHABLE  footer top  5714  bar covers   0px, floating buttons cover   0px
+   390  scrollY  6000  static   bar -3660 to -3575  next -3641 to -3593  UNREACHABLE  footer top  5414  bar covers   0px, floating buttons cover   0px
+   390  scrollY  6300  static   bar -3960 to -3875  next -3941 to -3893  UNREACHABLE  footer top  5114  bar covers   0px, floating buttons cover   0px
+   390  scrollY  6600  static   bar -4260 to -4175  next -4241 to -4193  UNREACHABLE  footer top  4814  bar covers   0px, floating buttons cover   0px
+   390  scrollY  6900  static   bar -4560 to -4475  next -4541 to -4493  UNREACHABLE  footer top  4514  bar covers   0px, floating buttons cover   0px
+   390  scrollY  7200  static   bar -4860 to -4775  next -4841 to -4793  UNREACHABLE  footer top  4214  bar covers   0px, floating buttons cover   0px
+   390  scrollY  7500  static   bar -5160 to -5075  next -5141 to -5093  UNREACHABLE  footer top  3914  bar covers   0px, floating buttons cover   0px
+   390  scrollY  7800  static   bar -5460 to -5375  next -5441 to -5393  UNREACHABLE  footer top  3614  bar covers   0px, floating buttons cover   0px
+   390  scrollY  8100  static   bar -5760 to -5675  next -5741 to -5693  UNREACHABLE  footer top  3314  bar covers   0px, floating buttons cover   0px
+   390  scrollY  8400  static   bar -6060 to -5975  next -6041 to -5993  UNREACHABLE  footer top  3014  bar covers   0px, floating buttons cover   0px
+   390  scrollY  8700  static   bar -6360 to -6275  next -6341 to -6293  UNREACHABLE  footer top  2714  bar covers   0px, floating buttons cover   0px
+   390  scrollY  9000  static   bar -6660 to -6575  next -6641 to -6593  UNREACHABLE  footer top  2414  bar covers   0px, floating buttons cover   0px
+   390  scrollY  9300  static   bar -6960 to -6875  next -6941 to -6893  UNREACHABLE  footer top  2114  bar covers   0px, floating buttons cover   0px
+   390  scrollY  9600  static   bar -7260 to -7175  next -7241 to -7193  UNREACHABLE  footer top  1814  bar covers   0px, floating buttons cover   0px
+   390  scrollY  9900  static   bar -7560 to -7475  next -7541 to -7493  UNREACHABLE  footer top  1514  bar covers   0px, floating buttons cover   0px
+   390  scrollY 10200  static   bar -7860 to -7775  next -7841 to -7793  UNREACHABLE  footer top  1214  bar covers   0px, floating buttons cover   0px
+   390  scrollY 10500  static   bar -8160 to -8075  next -8141 to -8093  UNREACHABLE  footer top   914  bar covers   0px, floating buttons cover   0px
+   390  scrollY 10800  static   bar -8460 to -8375  next -8441 to -8393  UNREACHABLE  footer top   614  bar covers   0px, floating buttons cover   0px
+   390  scrollY 10922  static   bar -8582 to -8497  next -8563 to -8515  UNREACHABLE  footer top   492  bar covers   0px, floating buttons cover   0px
+   430  scrollY     0  static   bar  2336 to  2421  next  2355 to  2403  UNREACHABLE  footer top 10654  bar covers   0px, floating buttons cover   0px
+   430  scrollY   300  static   bar  2036 to  2121  next  2055 to  2103  UNREACHABLE  footer top 10354  bar covers   0px, floating buttons cover   0px
+   430  scrollY   600  static   bar  1736 to  1821  next  1755 to  1803  UNREACHABLE  footer top 10054  bar covers   0px, floating buttons cover   0px
+   430  scrollY   900  static   bar  1436 to  1521  next  1455 to  1503  UNREACHABLE  footer top  9754  bar covers   0px, floating buttons cover   0px
+   430  scrollY  1200  static   bar  1136 to  1221  next  1155 to  1203  UNREACHABLE  footer top  9454  bar covers   0px, floating buttons cover   0px
+   430  scrollY  1500  static   bar   836 to   921  next   855 to   903  UNREACHABLE  footer top  9154  bar covers   0px, floating buttons cover   0px
+   430  scrollY  2400  static   bar   -64 to    21  next   -45 to     3  UNREACHABLE  footer top  8254  bar covers   0px, floating buttons cover   0px
+   430  scrollY  2700  static   bar  -364 to  -279  next  -345 to  -297  UNREACHABLE  footer top  7954  bar covers   0px, floating buttons cover   0px
+   430  scrollY  3000  static   bar  -664 to  -579  next  -645 to  -597  UNREACHABLE  footer top  7654  bar covers   0px, floating buttons cover   0px
+   430  scrollY  3300  static   bar  -964 to  -879  next  -945 to  -897  UNREACHABLE  footer top  7354  bar covers   0px, floating buttons cover   0px
+   430  scrollY  3600  static   bar -1264 to -1179  next -1245 to -1197  UNREACHABLE  footer top  7054  bar covers   0px, floating buttons cover   0px
+   430  scrollY  3900  static   bar -1564 to -1479  next -1545 to -1497  UNREACHABLE  footer top  6754  bar covers   0px, floating buttons cover   0px
+   430  scrollY  4200  static   bar -1864 to -1779  next -1845 to -1797  UNREACHABLE  footer top  6454  bar covers   0px, floating buttons cover   0px
+   430  scrollY  4500  static   bar -2164 to -2079  next -2145 to -2097  UNREACHABLE  footer top  6154  bar covers   0px, floating buttons cover   0px
+   430  scrollY  4800  static   bar -2464 to -2379  next -2445 to -2397  UNREACHABLE  footer top  5854  bar covers   0px, floating buttons cover   0px
+   430  scrollY  5100  static   bar -2764 to -2679  next -2745 to -2697  UNREACHABLE  footer top  5554  bar covers   0px, floating buttons cover   0px
+   430  scrollY  5400  static   bar -3064 to -2979  next -3045 to -2997  UNREACHABLE  footer top  5254  bar covers   0px, floating buttons cover   0px
+   430  scrollY  5700  static   bar -3364 to -3279  next -3345 to -3297  UNREACHABLE  footer top  4954  bar covers   0px, floating buttons cover   0px
+   430  scrollY  6000  static   bar -3664 to -3579  next -3645 to -3597  UNREACHABLE  footer top  4654  bar covers   0px, floating buttons cover   0px
+   430  scrollY  6300  static   bar -3964 to -3879  next -3945 to -3897  UNREACHABLE  footer top  4354  bar covers   0px, floating buttons cover   0px
+   430  scrollY  6600  static   bar -4264 to -4179  next -4245 to -4197  UNREACHABLE  footer top  4054  bar covers   0px, floating buttons cover   0px
+   430  scrollY  6900  static   bar -4564 to -4479  next -4545 to -4497  UNREACHABLE  footer top  3754  bar covers   0px, floating buttons cover   0px
+   430  scrollY  7200  static   bar -4864 to -4779  next -4845 to -4797  UNREACHABLE  footer top  3454  bar covers   0px, floating buttons cover   0px
+   430  scrollY  7500  static   bar -5164 to -5079  next -5145 to -5097  UNREACHABLE  footer top  3154  bar covers   0px, floating buttons cover   0px
+   430  scrollY  7800  static   bar -5464 to -5379  next -5445 to -5397  UNREACHABLE  footer top  2854  bar covers   0px, floating buttons cover   0px
+   430  scrollY  8100  static   bar -5764 to -5679  next -5745 to -5697  UNREACHABLE  footer top  2554  bar covers   0px, floating buttons cover   0px
+   430  scrollY  8400  static   bar -6064 to -5979  next -6045 to -5997  UNREACHABLE  footer top  2254  bar covers   0px, floating buttons cover   0px
+   430  scrollY  8700  static   bar -6364 to -6279  next -6345 to -6297  UNREACHABLE  footer top  1954  bar covers   0px, floating buttons cover   0px
+   430  scrollY  9000  static   bar -6664 to -6579  next -6645 to -6597  UNREACHABLE  footer top  1654  bar covers   0px, floating buttons cover   0px
+   430  scrollY  9300  static   bar -6964 to -6879  next -6945 to -6897  UNREACHABLE  footer top  1354  bar covers   0px, floating buttons cover   0px
+   430  scrollY  9600  static   bar -7264 to -7179  next -7245 to -7197  UNREACHABLE  footer top  1054  bar covers   0px, floating buttons cover   0px
+   430  scrollY  9900  static   bar -7564 to -7479  next -7545 to -7497  UNREACHABLE  footer top   754  bar covers   0px, floating buttons cover   0px
+   430  scrollY 10142  static   bar -7806 to -7721  next -7787 to -7739  UNREACHABLE  footer top   512  bar covers   0px, floating buttons cover   0px
+   320   44 scroll stops, bar 85px tall, page 13648px, controls unreachable at 41 of them, covering the footer at 0, 1 other button on the page mention next season and was not taken for the bar
+   390   38 scroll stops, bar 85px tall, page 11766px, controls unreachable at 36 of them, covering the footer at 0, 1 other button on the page mention next season and was not taken for the bar
+   430   35 scroll stops, bar 85px tall, page 10986px, controls unreachable at 33 of them, covering the footer at 0, 1 other button on the page mention next season and was not taken for the bar
+  7 of 117 scroll stops had the controls on screen and hit testable. 6 of them had the footer showing at the same time with zero pixels of overlap.
+
+RED: 111 findings
+  - action bar @320: at scrollY 0 of 12804 the Next Season button is not reachable (its box sits at 2453 to 2501 on an 844px screen)
+  - action bar @320: at scrollY 300 of 12804 the Next Season button is not reachable (its box sits at 2153 to 2201 on an 844px screen)
+  - action bar @320: at scrollY 600 of 12804 the Next Season button is not reachable (its box sits at 1853 to 1901 on an 844px screen)
+  - action bar @320: at scrollY 900 of 12804 the Next Season button is not reachable (its box sits at 1553 to 1601 on an 844px screen)
+  - action bar @320: at scrollY 1200 of 12804 the Next Season button is not reachable (its box sits at 1253 to 1301 on an 844px screen)
+  - action bar @320: at scrollY 1500 of 12804 the Next Season button is not reachable (its box sits at 953 to 1001 on an 844px screen)
+  - action bar @320: at scrollY 2700 of 12804 the Next Season button is not reachable (its box sits at -247 to -199 on an 844px screen)
+  - action bar @320: at scrollY 3000 of 12804 the Next Season button is not reachable (its box sits at -547 to -499 on an 844px screen)
+  - action bar @320: at scrollY 3300 of 12804 the Next Season button is not reachable (its box sits at -847 to -799 on an 844px screen)
+  - action bar @320: at scrollY 3600 of 12804 the Next Season button is not reachable (its box sits at -1147 to -1099 on an 844px screen)
+  - action bar @320: at scrollY 3900 of 12804 the Next Season button is not reachable (its box sits at -1447 to -1399 on an 844px screen)
+  - action bar @320: at scrollY 4200 of 12804 the Next Season button is not reachable (its box sits at -1747 to -1699 on an 844px screen)
+  - action bar @320: at scrollY 4500 of 12804 the Next Season button is not reachable (its box sits at -2047 to -1999 on an 844px screen)
+  - action bar @320: at scrollY 4800 of 12804 the Next Season button is not reachable (its box sits at -2347 to -2299 on an 844px screen)
+  - action bar @320: at scrollY 5100 of 12804 the Next Season button is not reachable (its box sits at -2647 to -2599 on an 844px screen)
+  - action bar @320: at scrollY 5400 of 12804 the Next Season button is not reachable (its box sits at -2947 to -2899 on an 844px screen)
+  - action bar @320: at scrollY 5700 of 12804 the Next Season button is not reachable (its box sits at -3247 to -3199 on an 844px screen)
+  - action bar @320: at scrollY 6000 of 12804 the Next Season button is not reachable (its box sits at -3547 to -3499 on an 844px screen)
+  - action bar @320: at scrollY 6300 of 12804 the Next Season button is not reachable (its box sits at -3847 to -3799 on an 844px screen)
+  - action bar @320: at scrollY 6600 of 12804 the Next Season button is not reachable (its box sits at -4147 to -4099 on an 844px screen)
+  - action bar @320: at scrollY 6900 of 12804 the Next Season button is not reachable (its box sits at -4447 to -4399 on an 844px screen)
+  - action bar @320: at scrollY 7200 of 12804 the Next Season button is not reachable (its box sits at -4747 to -4699 on an 844px screen)
+  - action bar @320: at scrollY 7500 of 12804 the Next Season button is not reachable (its box sits at -5047 to -4999 on an 844px screen)
+  - action bar @320: at scrollY 7800 of 12804 the Next Season button is not reachable (its box sits at -5347 to -5299 on an 844px screen)
+  - action bar @320: at scrollY 8100 of 12804 the Next Season button is not reachable (its box sits at -5647 to -5599 on an 844px screen)
+  - action bar @320: at scrollY 8400 of 12804 the Next Season button is not reachable (its box sits at -5947 to -5899 on an 844px screen)
+  - action bar @320: at scrollY 8700 of 12804 the Next Season button is not reachable (its box sits at -6247 to -6199 on an 844px screen)
+  - action bar @320: at scrollY 9000 of 12804 the Next Season button is not reachable (its box sits at -6547 to -6499 on an 844px screen)
+  - action bar @320: at scrollY 9300 of 12804 the Next Season button is not reachable (its box sits at -6847 to -6799 on an 844px screen)
+  - action bar @320: at scrollY 9600 of 12804 the Next Season button is not reachable (its box sits at -7147 to -7099 on an 844px screen)
+  - action bar @320: at scrollY 9900 of 12804 the Next Season button is not reachable (its box sits at -7447 to -7399 on an 844px screen)
+  - action bar @320: at scrollY 10200 of 12804 the Next Season button is not reachable (its box sits at -7747 to -7699 on an 844px screen)
+  - action bar @320: at scrollY 10500 of 12804 the Next Season button is not reachable (its box sits at -8047 to -7999 on an 844px screen)
+  - action bar @320: at scrollY 10800 of 12804 the Next Season button is not reachable (its box sits at -8347 to -8299 on an 844px screen)
+  - action bar @320: at scrollY 11100 of 12804 the Next Season button is not reachable (its box sits at -8647 to -8599 on an 844px screen)
+  - action bar @320: at scrollY 11400 of 12804 the Next Season button is not reachable (its box sits at -8947 to -8899 on an 844px screen)
+  - action bar @320: at scrollY 11700 of 12804 the Next Season button is not reachable (its box sits at -9247 to -9199 on an 844px screen)
+  - action bar @320: at scrollY 12000 of 12804 the Next Season button is not reachable (its box sits at -9547 to -9499 on an 844px screen)
+  - action bar @320: at scrollY 12300 of 12804 the Next Season button is not reachable (its box sits at -9847 to -9799 on an 844px screen)
+  - action bar @320: at scrollY 12600 of 12804 the Next Season button is not reachable (its box sits at -10147 to -10099 on an 844px screen)
+  - action bar @320: at scrollY 12804 of 12804 the Next Season button is not reachable (its box sits at -10351 to -10303 on an 844px screen)
+  - action bar @390: at scrollY 0 of 10922 the Next Season button is not reachable (its box sits at 2359 to 2407 on an 844px screen)
+  - action bar @390: at scrollY 300 of 10922 the Next Season button is not reachable (its box sits at 2059 to 2107 on an 844px screen)
+  - action bar @390: at scrollY 600 of 10922 the Next Season button is not reachable (its box sits at 1759 to 1807 on an 844px screen)
+  - action bar @390: at scrollY 900 of 10922 the Next Season button is not reachable (its box sits at 1459 to 1507 on an 844px screen)
+  - action bar @390: at scrollY 1200 of 10922 the Next Season button is not reachable (its box sits at 1159 to 1207 on an 844px screen)
+  - action bar @390: at scrollY 1500 of 10922 the Next Season button is not reachable (its box sits at 859 to 907 on an 844px screen)
+  - action bar @390: at scrollY 2400 of 10922 the Next Season button is not reachable (its box sits at -41 to 7 on an 844px screen)
+  - action bar @390: at scrollY 2700 of 10922 the Next Season button is not reachable (its box sits at -341 to -293 on an 844px screen)
+  - action bar @390: at scrollY 3000 of 10922 the Next Season button is not reachable (its box sits at -641 to -593 on an 844px screen)
+  - action bar @390: at scrollY 3300 of 10922 the Next Season button is not reachable (its box sits at -941 to -893 on an 844px screen)
+  - action bar @390: at scrollY 3600 of 10922 the Next Season button is not reachable (its box sits at -1241 to -1193 on an 844px screen)
+  - action bar @390: at scrollY 3900 of 10922 the Next Season button is not reachable (its box sits at -1541 to -1493 on an 844px screen)
+  - action bar @390: at scrollY 4200 of 10922 the Next Season button is not reachable (its box sits at -1841 to -1793 on an 844px screen)
+  - action bar @390: at scrollY 4500 of 10922 the Next Season button is not reachable (its box sits at -2141 to -2093 on an 844px screen)
+  - action bar @390: at scrollY 4800 of 10922 the Next Season button is not reachable (its box sits at -2441 to -2393 on an 844px screen)
+  - action bar @390: at scrollY 5100 of 10922 the Next Season button is not reachable (its box sits at -2741 to -2693 on an 844px screen)
+  - action bar @390: at scrollY 5400 of 10922 the Next Season button is not reachable (its box sits at -3041 to -2993 on an 844px screen)
+  - action bar @390: at scrollY 5700 of 10922 the Next Season button is not reachable (its box sits at -3341 to -3293 on an 844px screen)
+  - action bar @390: at scrollY 6000 of 10922 the Next Season button is not reachable (its box sits at -3641 to -3593 on an 844px screen)
+  - action bar @390: at scrollY 6300 of 10922 the Next Season button is not reachable (its box sits at -3941 to -3893 on an 844px screen)
+  - action bar @390: at scrollY 6600 of 10922 the Next Season button is not reachable (its box sits at -4241 to -4193 on an 844px screen)
+  - action bar @390: at scrollY 6900 of 10922 the Next Season button is not reachable (its box sits at -4541 to -4493 on an 844px screen)
+  - action bar @390: at scrollY 7200 of 10922 the Next Season button is not reachable (its box sits at -4841 to -4793 on an 844px screen)
+  - action bar @390: at scrollY 7500 of 10922 the Next Season button is not reachable (its box sits at -5141 to -5093 on an 844px screen)
+  - action bar @390: at scrollY 7800 of 10922 the Next Season button is not reachable (its box sits at -5441 to -5393 on an 844px screen)
+  - action bar @390: at scrollY 8100 of 10922 the Next Season button is not reachable (its box sits at -5741 to -5693 on an 844px screen)
+  - action bar @390: at scrollY 8400 of 10922 the Next Season button is not reachable (its box sits at -6041 to -5993 on an 844px screen)
+  - action bar @390: at scrollY 8700 of 10922 the Next Season button is not reachable (its box sits at -6341 to -6293 on an 844px screen)
+  - action bar @390: at scrollY 9000 of 10922 the Next Season button is not reachable (its box sits at -6641 to -6593 on an 844px screen)
+  - action bar @390: at scrollY 9300 of 10922 the Next Season button is not reachable (its box sits at -6941 to -6893 on an 844px screen)
+  - action bar @390: at scrollY 9600 of 10922 the Next Season button is not reachable (its box sits at -7241 to -7193 on an 844px screen)
+  - action bar @390: at scrollY 9900 of 10922 the Next Season button is not reachable (its box sits at -7541 to -7493 on an 844px screen)
+  - action bar @390: at scrollY 10200 of 10922 the Next Season button is not reachable (its box sits at -7841 to -7793 on an 844px screen)
+  - action bar @390: at scrollY 10500 of 10922 the Next Season button is not reachable (its box sits at -8141 to -8093 on an 844px screen)
+  - action bar @390: at scrollY 10800 of 10922 the Next Season button is not reachable (its box sits at -8441 to -8393 on an 844px screen)
+  - action bar @390: at scrollY 10922 of 10922 the Next Season button is not reachable (its box sits at -8563 to -8515 on an 844px screen)
+  - action bar @430: at scrollY 0 of 10142 the Next Season button is not reachable (its box sits at 2355 to 2403 on an 844px screen)
+  - action bar @430: at scrollY 300 of 10142 the Next Season button is not reachable (its box sits at 2055 to 2103 on an 844px screen)
+  - action bar @430: at scrollY 600 of 10142 the Next Season button is not reachable (its box sits at 1755 to 1803 on an 844px screen)
+  - action bar @430: at scrollY 900 of 10142 the Next Season button is not reachable (its box sits at 1455 to 1503 on an 844px screen)
+  - action bar @430: at scrollY 1200 of 10142 the Next Season button is not reachable (its box sits at 1155 to 1203 on an 844px screen)
+  - action bar @430: at scrollY 1500 of 10142 the Next Season button is not reachable (its box sits at 855 to 903 on an 844px screen)
+  - action bar @430: at scrollY 2400 of 10142 the Next Season button is not reachable (its box sits at -45 to 3 on an 844px screen)
+  - action bar @430: at scrollY 2700 of 10142 the Next Season button is not reachable (its box sits at -345 to -297 on an 844px screen)
+  - action bar @430: at scrollY 3000 of 10142 the Next Season button is not reachable (its box sits at -645 to -597 on an 844px screen)
+  - action bar @430: at scrollY 3300 of 10142 the Next Season button is not reachable (its box sits at -945 to -897 on an 844px screen)
+  - action bar @430: at scrollY 3600 of 10142 the Next Season button is not reachable (its box sits at -1245 to -1197 on an 844px screen)
+  - action bar @430: at scrollY 3900 of 10142 the Next Season button is not reachable (its box sits at -1545 to -1497 on an 844px screen)
+  - action bar @430: at scrollY 4200 of 10142 the Next Season button is not reachable (its box sits at -1845 to -1797 on an 844px screen)
+  - action bar @430: at scrollY 4500 of 10142 the Next Season button is not reachable (its box sits at -2145 to -2097 on an 844px screen)
+  - action bar @430: at scrollY 4800 of 10142 the Next Season button is not reachable (its box sits at -2445 to -2397 on an 844px screen)
+  - action bar @430: at scrollY 5100 of 10142 the Next Season button is not reachable (its box sits at -2745 to -2697 on an 844px screen)
+  - action bar @430: at scrollY 5400 of 10142 the Next Season button is not reachable (its box sits at -3045 to -2997 on an 844px screen)
+  - action bar @430: at scrollY 5700 of 10142 the Next Season button is not reachable (its box sits at -3345 to -3297 on an 844px screen)
+  - action bar @430: at scrollY 6000 of 10142 the Next Season button is not reachable (its box sits at -3645 to -3597 on an 844px screen)
+  - action bar @430: at scrollY 6300 of 10142 the Next Season button is not reachable (its box sits at -3945 to -3897 on an 844px screen)
+  - action bar @430: at scrollY 6600 of 10142 the Next Season button is not reachable (its box sits at -4245 to -4197 on an 844px screen)
+  - action bar @430: at scrollY 6900 of 10142 the Next Season button is not reachable (its box sits at -4545 to -4497 on an 844px screen)
+  - action bar @430: at scrollY 7200 of 10142 the Next Season button is not reachable (its box sits at -4845 to -4797 on an 844px screen)
+  - action bar @430: at scrollY 7500 of 10142 the Next Season button is not reachable (its box sits at -5145 to -5097 on an 844px screen)
+  - action bar @430: at scrollY 7800 of 10142 the Next Season button is not reachable (its box sits at -5445 to -5397 on an 844px screen)
+  - action bar @430: at scrollY 8100 of 10142 the Next Season button is not reachable (its box sits at -5745 to -5697 on an 844px screen)
+  - action bar @430: at scrollY 8400 of 10142 the Next Season button is not reachable (its box sits at -6045 to -5997 on an 844px screen)
+  - action bar @430: at scrollY 8700 of 10142 the Next Season button is not reachable (its box sits at -6345 to -6297 on an 844px screen)
+  - action bar @430: at scrollY 9000 of 10142 the Next Season button is not reachable (its box sits at -6645 to -6597 on an 844px screen)
+  - action bar @430: at scrollY 9300 of 10142 the Next Season button is not reachable (its box sits at -6945 to -6897 on an 844px screen)
+  - action bar @430: at scrollY 9600 of 10142 the Next Season button is not reachable (its box sits at -7245 to -7197 on an 844px screen)
+  - action bar @430: at scrollY 9900 of 10142 the Next Season button is not reachable (its box sits at -7545 to -7497 on an 844px screen)
+  - action bar @430: at scrollY 10142 of 10142 the Next Season button is not reachable (its box sits at -7787 to -7739 on an 844px screen)
+  - the action bar was never seen pinned and reachable more than 3000px down the page, so this run cannot tell the difference between a fixed bar and a deleted one
+CONTROL unpin FIRED: the bar was unpinned at 117 scroll stops, 110 of them could not reach Next Season, and the pinned proof went red

@@ -1,0 +1,21 @@
+main build exit 0 at 09df145ab
+[bar main @430] buttons whose words contain "next season" or "next year": 1
+    top 778 height 48 inBar true marks "" text "Next Season"
+[bar main @430] 3000px down: {"mode":"floating","position":"fixed","top":760,"bottom":844,"scrollY":3000,"vh":844,"nextTop":778,"nextBottom":826,"reachable":true,"docH":10631}
+[bar main @390] buttons whose words contain "next season" or "next year": 1
+    top 778 height 48 inBar true marks "" text "Next Season"
+[bar main @390] 3000px down: {"mode":"floating","position":"fixed","top":760,"bottom":844,"scrollY":3000,"vh":844,"nextTop":778,"nextBottom":826,"reachable":true,"docH":11411}
+[reveal main] 20 rookie NFL careers named Curtain Probe, three seasons each
+[reveal main] first screen behind the curtain: {"decision":21,"beat":29,"choice":10}
+[reveal main] {"seasons":60,"hubBack":60,"stuck":0,"choiceAsked":10,"choiceAnswered":10,"beats":29,"pageErrors":0}
+[reveal main] verdict: the hub came back after every curtain
+atgProbe main parts bar,reveal finished, exit 0
+unchanged walk on the origin/main build, run 1: exit 0, 0 FAIL lines
+unchanged walk on the origin/main build, run 2: exit 1, 1 FAIL lines
+unchanged walk on the origin/main build, run 3: exit 1, 1 FAIL lines
+unchanged walk on the origin/main build, run 4: exit 0, 0 FAIL lines
+unchanged walk on the origin/main build, run 5: exit 1, 1 FAIL lines
+unchanged walk on the origin/main build, run 6: exit 0, 0 FAIL lines
+unchanged walk on the origin/main build, run 7: exit 1, 1 FAIL lines
+unchanged walk on the origin/main build, run 8: exit 0, 0 FAIL lines
+main line done

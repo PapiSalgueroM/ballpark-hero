@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+main: git fetch -q origin +refs/heads/main:refs/remotes/origin/main || true; git worktree add -f --detach base-main origin/main > /dev/null 2>&1; cd base-main && node ../node_modules/vite/bin/vite.js build > ../base-build.log 2>&1; echo "main build exit $? at $(git rev-parse --short HEAD)"; cd .. && (node scripts/lib/hostLikeServer.mjs base-main/dist 4174 > base-server.log 2>&1 &) ; sleep 4; PROBE_LABEL=main PROBE_ROOT=base-main PROBE_BASE=http://localhost:4174 PROBE_PARTS=bar,reveal PROBE_CAREERS=20 node .rc/x/atgProbe.mjs; for i in 1 2 3 4 5 6 7 8; do BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 node base-main/scripts/playSeasonReveal.mjs > $RC_OUT/oldwalk-main-$i.log 2>&1; echo "unchanged walk on the origin/main build, run $i: exit $?, $(grep -c 'FAIL' $RC_OUT/oldwalk-main-$i.log) FAIL lines"; done; echo "main line done"
+headprobe: PROBE_LABEL=head PROBE_PARTS=bar,help,reveal PROBE_CAREERS=20 node .rc/x/atgProbe.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+simMobileChrome-unpin: SIM_MOBILE_CONTROL=unpin node scripts/simMobileChrome.mjs
+simMobileChrome-nowrap: SIM_MOBILE_CONTROL=nowrap node scripts/simMobileChrome.mjs
+reveal-x6: for i in 1 2 3 4 5 6; do node scripts/playSeasonReveal.mjs > $RC_OUT/reveal-$i.log 2>&1; echo "run $i exit $? | $(grep -c FAIL $RC_OUT/reveal-$i.log) FAIL lines | $(grep 'Rival cards met' $RC_OUT/reveal-$i.log)"; done; n=$(grep -l "ALL SEASON REVEAL WALK CHECKS PASSED" $RC_OUT/reveal-*.log | wc -l); echo "$n of 6 runs green"; [ "$n" -eq 6 ]
+reveal-muted: SEASON_REVEAL_CONTROL=muted node scripts/playSeasonReveal.mjs

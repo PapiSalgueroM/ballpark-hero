@@ -1,0 +1,29 @@
+[bar head @430] buttons whose words contain "next season" or "next year": 2
+    top 568 height 64 inBar false marks "data-season-ambition" text "🎯 Season target Choose a personal challenge for next season"
+    top 778 height 48 inBar true marks "" text "Next Season"
+[bar head @430] 3000px down: {"mode":"floating","position":"fixed","top":760,"bottom":844,"scrollY":3000,"vh":844,"nextTop":778,"nextBottom":826,"reachable":true,"docH":10890}
+[bar head @390] buttons whose words contain "next season" or "next year": 2
+    top 572 height 64 inBar false marks "data-season-ambition" text "🎯 Season target Choose a personal challenge for next season"
+    top 778 height 48 inBar true marks "" text "Next Season"
+[bar head @390] 3000px down: {"mode":"floating","position":"fixed","top":760,"bottom":844,"scrollY":3000,"vh":844,"nextTop":778,"nextBottom":826,"reachable":true,"docH":11669}
+[help head] as served at 390 by 844: {"panelH":806,"maxH":820,"bodyScroll":604,"bodyClient":604,"over":0,"lineHeight":16.5,"fontSize":"12px","textWidth":312,"inter":true,"family":"Inter, system-ui, \"Apple Color Emoji\", \"","lines":32,"lis":[{"chars":94,"h":33,"lines":2},{"chars":188,"h":66,"lines":4},{"chars":168,"h":49.5,"lines":3},{"chars":405,"h":132,"lines":8},{"chars":376,"h":132,"lines":8},{"chars":341,"h":115.5,"lines":7}]}
+[help head] single R2a: 147 chars, 3 lines
+[help head] single R2b: 142 chars, 3 lines
+[help head] single R3a: 147 chars, 3 lines
+[help head] single R4a: 352 chars, 7 lines
+[help head] single R4b: 348 chars, 7 lines
+[help head] single R4c: 350 chars, 7 lines
+[help head] single R4d: 380 chars, 8 lines
+[help head] single R4e: 328 chars, 7 lines
+[help head] single R5a: 357 chars, 7 lines
+[help head] single R6a: 277 chars, 5 lines
+[help head] single R6b: 247 chars, 5 lines
+[help head] single R6c: 326 chars, 6 lines
+[help head] single R6d: 244 chars, 5 lines
+[help head] set abfea79c: lines 30 per rule 2,4,3,6,8,7 panel 773 of 820 over 0 spare 47
+[help head] set candidate1: lines 28 per rule 2,3,3,7,8,5 panel 740 of 820 over 0 spare 80
+[reveal head] 20 rookie NFL careers named Curtain Probe, three seasons each
+[reveal head] first screen behind the curtain: {"beat":38,"choice":7,"decision":15}
+[reveal head] {"seasons":60,"hubBack":60,"stuck":0,"choiceAsked":7,"choiceAnswered":7,"beats":38,"pageErrors":0}
+[reveal head] verdict: the hub came back after every curtain
+atgProbe head parts bar,help,reveal finished, exit 0
