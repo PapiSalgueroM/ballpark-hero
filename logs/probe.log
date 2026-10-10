@@ -1,0 +1,9 @@
+A  49 careers: every league of every era, and two created clubs
+   FAIL Minnesota United (now, mlsWest) season 1 entry 22: 0 named goals of Houston Dynamo are on no row, the book counted 1 unnamed
+A  stream: 147 of 147 faces equal to the base commit's source, over 49 careers
+A  law: 40405 checks; leagues with an odd number of clubs: now mlsEast 15, now mlsWest 15; league weeks of mine with no match (a bye): 1
+A  report against book: 1952 league matches of mine, 2781 rival goal lines, 77 own goal lines, 111 named by the report and on no row, 350 from the spot or a free kick, 1173 assists on 2354 lines that may carry one (0.498), 80 matches whose only rival goal was a set piece
+A  share of rival goals with nobody named, by league (highest first): now segunda 97%, now croatia 92%, now ligue2 91%, now bundesliga2 89%, now mlsWest 86%, now serieb 81%, now greece 71%, now switzerland 70%, now austria 70%, now denmark 69%, now proleague 68%, now scottish 67%, now ligamx 66%, now saudi 62%
+A  leagues at 0 to 5 percent unnamed: 15 of 49; over 25 percent: 21
+B  36 of 36 saves written by the base engine play out byte equal on the candidate (1421 faces: every entry to the season's end, the summary, the summer, six entries on); 6 of them were paused at half time
+probeOld1229: 1 FAILURE(S) (74s)
