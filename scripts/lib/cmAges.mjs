@@ -28,9 +28,9 @@
  *   - bulk ids run 1 to 166,766 and hand written ids start at 176,416, with nothing between. A row
  *     inside that gap means the table changed shape, so the boundary is measured again and never
  *     guessed: the function throws.
- *   - scripts/data/defensiveMidfield2026.json (Round 669) holds a birth date for 413 men and says its
- *     366 written rows carry the age on 2026-01-01; 257 of them (70.2 percent) are a year older on
- *     2026-08-01.
+ *   - scripts/data/defensiveMidfield2026.json (Round 669) holds 413 rows with a birth date, for 412
+ *     men (one man is in two of its parts), and says its 366 written rows carry the age on
+ *     2026-01-01; 257 of them (70.2 percent) are a year older on 2026-08-01.
  *
  * The birth dates come from three committed ledgers, read where they lie and never copied:
  * scripts/data/cmBirthDates2026.json (two publishers of two different kinds a man, neither a
