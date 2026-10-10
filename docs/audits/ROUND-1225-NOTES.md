@@ -126,12 +126,21 @@ Read a log with `git show origin/rc-results/<name>:logs/<label>.log | tail -60`;
 - `r1225-confirm` (`03160800`): the type gate 0; the three league walk green, 6 journeys, 90 checks, 3 pages
   that fetch no list; the suite runner calls all five fixture harnesses green; no en or em dash on any line
   the round added.
+- `r1225-final-b2` (`fd9cbc9b`): 42 harnesses that read the files this round touched, and the Club Manager
+  tests. 37 green. Three reds and half of a fourth were MINE (the start waited for a list nobody had asked
+  for, so the hook's own tests never reached the hub): fixed in `f60820ce`. The rest is the base's: simEras
+  (3 failures) and two Soccer Career anchors of simActivityNotCompletion are red on `46e4231c` itself, line
+  for line (`r1225-eras`, `r1225-plwalk`).
+- `r1225-fix` (`f60820ce`): the type gate 0; 16 test files, 188 tests; simClubManagerSave and
+  simClubManagerSaveSize green; the walk green with its seventh journey (a list three seconds late still
+  opens the career on it); three mutated builds whose walk must fail and does (a start that does not wait
+  fails that seventh journey alone, a club tap that asks for no list, a boot that does not wait).
 
 ## Weight (gzipped JavaScript, `SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs` on a served build)
 
 | route | before (base) | after | budget row today |
 |---|---|---|---|
-| /club-manager | 581.7K | 582.9K | 578 |
+| /club-manager | 581.7K | 583.0K | 578 |
 | /manager-hot-seat | 599.6K | 600.6K | 596 |
 | /deadline-day | 609.7K | 610.7K | 606 |
 
