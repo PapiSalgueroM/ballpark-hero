@@ -1,0 +1,8 @@
+# Release AU, the final head: what reads the squad help (the one src file the last merge of the gate branch changed)
+#!serve
+#!playwright
+#!serial
+simCareerSquad: node scripts/simCareerSquad.mjs
+simClubSquads: node scripts/simClubSquads.mjs
+playCareerSquad: node scripts/playCareerSquad.mjs
+playCareerSquad-nowheel: node .rc/x/mutAU.mjs nowheel && npm run build > /tmp/b1.log 2>&1; node scripts/playCareerSquad.mjs; s=$?; git checkout HEAD -- src; exit $s
