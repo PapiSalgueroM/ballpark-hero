@@ -1,0 +1,3 @@
+cmfix-premier-all: TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+cmfix-superlig: TZ=UTC CM_FIXTURE_BASE=46e4231cc82b6c047da6e0b4bdb5dfae5628a928 CM_REAL_FIXTURE_LEAGUE=superlig node scripts/simCmRealFixtures.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}

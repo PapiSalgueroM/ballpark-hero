@@ -1,0 +1,3 @@
+cmfix-superlig exit=0 10s | simCmRealFixtures normal superlig: 11 outcome groups passed on 18 clubs, 34 matchdays and 306 fixtures, generated baseline held against the base 46e4231cc82b6c047da6e0b4b
+simHarnessAnchors exit=0 30s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+cmfix-premier-all exit=0 37s | simCmRealFixtures premier: 12 actual outcome groups, 760 fixture reads, 760 calendar reads and 9 effective controls passed against the base 46e4231cc82b6c047da6e0b4bdb5df
