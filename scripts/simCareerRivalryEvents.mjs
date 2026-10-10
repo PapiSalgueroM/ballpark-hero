@@ -866,8 +866,9 @@ console.log('7) The NBA binding: every beat reachable and correct, and the tick 
   /* 6a. Every id in the table, exercised against a fixture built to satisfy
      its gate, the same badge-style reachability proof section 4 ran for the
      NFL table: a beat nobody can trigger is dead words. */
+  /* seasons: every NBA save carries the list, and since Round 1112 beat 306 reads its last entry. */
   const nbaFixture = over => ({
-    ovr: 80, age: 25, rings: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, ...over,
+    ovr: 80, age: 25, rings: 0, morale: 60, fanbase: 50, netWorth: 5, rivalryIntensity: 30, seasons: [], ...over,
   });
   const rivalFixture = over => ({
     name: 'Rival NBA', pos: 'PG', team: 'LAL', ovr: 80, pot: 90, age: 25, rings: 0,
