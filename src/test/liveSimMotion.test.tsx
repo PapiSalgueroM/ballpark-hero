@@ -906,6 +906,13 @@ function walkClub(seed: number, club: string, onHalf: ((career: CareerState, sta
   vi.mocked(Math.random).mockImplementation(() => { if (replaying) draws++; return draw(); });
   const half = (career: CareerState, stage: 'first' | 'second') => { if (!onHalf) return; replaying = true; try { onHalf(career, stage); } finally { replaying = false; } };
   let career = startCareer(club);
+  /* Release AT: this material is 200 seeded half feeds, twenty matches from each of five clubs, and it was
+     taken on the generated fixture list. Round 1184 binds the real 2026/27 list to a new Premier League
+     career, and on that season the seeded Aston Villa walk ends in a sacking after 15 matches (190 feeds).
+     The walk takes only the opt in key off, as simLiveMatch, simClubManagerSlots and simCmVar do for their
+     generated cohorts, so the material is the one this file was written against. Proof that the binding
+     and nothing else moved it: with the binding made a no-op the file is 55 of 55 (rAT-cm-n). */
+  delete career.realLeagueFixtures;
   const lines: string[] = [];
   let matches = 0;
   for (let guard = 0; guard < 400 && matches < MATCHES_EACH; guard++) {
