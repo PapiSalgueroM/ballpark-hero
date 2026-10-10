@@ -1,0 +1,23 @@
+# Release AT gate branch, the lead's check of the merged head before the gate: budgets and the seams between the train and the six rounds
+#!serve
+#!playwright
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simFootlePractice995: node scripts/simFootlePractice995.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simNbaAwardsSense: SENSE_PROVE_1149=808dbbdc SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+playLiveMatchFit: node scripts/playLiveMatchFit.mjs
+playLiveMatchFit-fresh: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
