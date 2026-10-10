@@ -1,0 +1,19 @@
+slots: node scripts/simClubManagerSlots.mjs
+leaguerules: node scripts/simCmLeagueRules.mjs
+realfixtures-all: CM_REAL_FIXTURE_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+cmvar-all: CM_VAR_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+fixturebalance: node scripts/simFixtureBalance.mjs
+livematch: node scripts/simLiveMatch.mjs
+matchdetail: node scripts/simMatchDetail.mjs
+matchscreen: node scripts/simMatchScreen.mjs
+matchscreen-twoengines: MATCH_SCREEN_CONTROL=twoengines node scripts/simMatchScreen.mjs
+worldeditor: node scripts/simWorldEditor.mjs
+worldeditor-observer: SIM_WORLD_EDITOR_CONTROL=observer node scripts/simWorldEditor.mjs
+reportedpools: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportedGamePools.mjs
+dartpool: node scripts/simDartDraftPool.mjs
+statmotion: node scripts/simStatDetectiveMotion.mjs
+cmquicksubs-all: CM_QUICK_SUBS_CONTROL=all node scripts/simCmQuickSubs.mjs
+cmowngoals: node scripts/simCmOwnGoals.mjs
+livesim: node scripts/simLiveSim.mjs
+livesimmotion: node scripts/simLiveSimMotion.mjs
+cmmatchcentre: node scripts/simCmMatchCentre.mjs
