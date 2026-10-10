@@ -1,0 +1,15 @@
+MUTATION m7 applied to src/lib/season/usPlayoffs.ts
+ src/lib/season/usPlayoffs.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines
+--- harness ACCEPTANCE and tail
+     the try taken (0 is the first): 0:594 1:436 2:278 3:190 4:144 5:92 6:61 7:64 8:63 9:32 10:26 11:21
+     repairs a laid out run needed: 0:1925 1:76 2:0 3+:0; the regular season's repairs a season, for scale: 0.30
+ACCEPTANCE one point playoff games 5.61% against the regular season's spread over the seed sets 5.61% to 5.73%: INSIDE
+ok   X no call reaches Math.random while a season is observed (0 calls)
+
+simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+--- vitest
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m29 passed[39m[22m[90m (29)[39m
+MUT m7 harness=0 vitest=0 laycompare=- centre=- dirty=0

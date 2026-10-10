@@ -1,0 +1,22 @@
+MUTATION m3 applied to src/data/usPostseasonFormat.ts
+ src/data/usPostseasonFormat.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines
+FAIL D every fact of every format row stands on two publishers, the rounds are the one typed copy, the accessor refuses what no row holds: 3 of 3; nba 2003: its first season does not read its own row || nba 2020: its first season does not read its own row || nfl 2020: its first season does not read its own row
+FAIL F nba: not one playoff season the Season Center opens fails closed: 38 of 2001; nba week 0.5 2003: format || nba week 0.6 2003: format || nba week 0.8 2003: format
+--- harness ACCEPTANCE and tail
+     the try taken (0 is the first): 0:581 1:428 2:275 3:187 4:138 5:92 6:61 7:62 8:61 9:31 10:26 11:21
+     repairs a laid out run needed: 0:1888 1:75 2:0 3+:0; the regular season's repairs a season, for scale: 0.30
+ACCEPTANCE one point playoff games 5.62% against the regular season's spread over the seed sets 5.61% to 5.73%: INSIDE
+ok   X no call reaches Math.random while a season is observed (0 calls)
+
+simUsPostseason: 26 checks, 2 failed, 0 findings for the lead
+--- vitest
+[31m     → expected undefined to deeply equal { name: 'Play-In Tournament', …(1) }[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usPostseasonFormat.test.ts[2m > [22musPostseasonFormat[2m > [22manswers a season inside a window with its row and its rounds
+[31m[1mAssertionError[22m: expected undefined to deeply equal { name: 'Play-In Tournament', …(1) }[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (29)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPostseasonFormat.test.ts,title=src/test/usPostseasonFormat.test.ts > usPostseasonFormat > answers a season inside a window with its row and its rounds,line=109,column=53::AssertionError: expected undefined to deeply equal { name: 
+MUT m3 harness=1 vitest=1 laycompare=- centre=- dirty=0

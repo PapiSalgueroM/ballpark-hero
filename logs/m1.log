@@ -1,0 +1,21 @@
+MUTATION m1 applied to src/lib/season/usPlayoffs.ts
+ src/lib/season/usPlayoffs.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines
+FAIL S nba: the games laid out are the playoff line the save holds, game for game and series for series (independent checker): 6 of 2001; nba week 0.26 2022: pts 102 != 103 (4.1 a game over 25) || nba week 3.2 2032: ast 127 != 128 (5.1 a game over 25) || nba week 3.11 2030: pts 253 != 254 (16.9 a game over 15)
+--- harness ACCEPTANCE and tail
+     the try taken (0 is the first): 0:594 1:436 2:278 3:190 4:144 5:92 6:61 7:64 8:63 9:32 10:26 11:21
+     repairs a laid out run needed: 0:1925 1:76 2:0 3+:0; the regular season's repairs a season, for scale: 0.30
+ACCEPTANCE one point playoff games 5.61% against the regular season's spread over the seed sets 5.61% to 5.73%: INSIDE
+ok   X no call reaches Math.random while a season is observed (0 calls)
+
+simUsPostseason: 26 checks, 1 failed, 0 findings for the lead
+--- vitest
+[31m     → expected { key: 'pts', kind: 'sum', …(3) } to match object { total: 62 }
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usPlayoffs.test.ts[2m > [22musPostTotals[2m > [22mkeeps a sum and turns a mean of whole numbers into the nearest whole total, worked in tenths
+[31m[1mAssertionError[22m: expected { key: 'pts', kind: 'sum', …(3) } to match object { total: 62 }
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (29)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPlayoffs.test.ts,title=src/test/usPlayoffs.test.ts > usPostTotals > keeps a sum and turns a mean of whole numbers into the nearest whole total%2C worked in tenths,line=105,column=47::AssertionError: expected { key: 'pts', kind: 's
+MUT m1 harness=1 vitest=1 laycompare=- centre=- dirty=0

@@ -1,0 +1,21 @@
+MUTATION m11 applied to src/lib/season/usPlayoffs.ts
+ src/lib/season/usPlayoffs.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines
+FAIL S nba: the games laid out are the playoff line the save holds, game for game and series for series (independent checker): 445 of 2001; nba week 0.0 2040: series 2: the opponent is not the list's || nba week 0.1 2034: series 2: the opponent is not the list's || nba week 0.1 2036: series 2: the opponent is not the list's
+--- harness ACCEPTANCE and tail
+     the try taken (0 is the first): 0:594 1:436 2:278 3:190 4:144 5:92 6:61 7:64 8:63 9:32 10:26 11:21
+     repairs a laid out run needed: 0:1925 1:76 2:0 3+:0; the regular season's repairs a season, for scale: 0.30
+ACCEPTANCE one point playoff games 5.61% against the regular season's spread over the seed sets 5.61% to 5.73%: INSIDE
+ok   X no call reaches Math.random while a season is observed (0 calls)
+
+simUsPostseason: 26 checks, 1 failed, 0 findings for the lead
+--- vitest
+[31m     → expected 'Toronto Raptors' to be 'Brooklyn Nets' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usPlayoffs.test.ts[2m > [22musPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit
+[31m[1mAssertionError[22m: expected 'Toronto Raptors' to be 'Brooklyn Nets' // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (29)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPlayoffs.test.ts,title=src/test/usPlayoffs.test.ts > usPostseason%2C the NBA > lays every run out game by game%2C on the saved playoff line to the unit,line=249,column=45::AssertionError: expected 'Toronto Raptors' to be 'Brooklyn
+MUT m11 harness=1 vitest=1 laycompare=- centre=- dirty=0

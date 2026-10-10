@@ -1,0 +1,26 @@
+MUTATION m2 applied to src/data/usPostseasonFormat.ts
+ src/data/usPostseasonFormat.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines
+FAIL D every fact of every format row stands on two publishers, the rounds are the one typed copy, the accessor refuses what no row holds: 1 of 3; nba 2003: the modified season 2019 still has a format
+FAIL C nba: a line with a season played to another format gives no postseason, and the list is what it was: 2001 of 2001; nba week 0.0 2029: a season played to another format: a postseason was laid out || nba week 0.0 2039: a season played to another format: a postseason was laid out || nba week 0.0 2040: a season played to another format: a postseason was laid out
+--- harness ACCEPTANCE and tail
+     the try taken (0 is the first): 0:594 1:436 2:278 3:190 4:144 5:92 6:61 7:64 8:63 9:32 10:26 11:21
+     repairs a laid out run needed: 0:1925 1:76 2:0 3+:0; the regular season's repairs a season, for scale: 0.30
+ACCEPTANCE one point playoff games 5.61% against the regular season's spread over the seed sets 5.61% to 5.73%: INSIDE
+ok   X no call reaches Math.random while a season is observed (0 calls)
+
+simUsPostseason: 26 checks, 2 failed, 0 findings for the lead
+--- vitest
+[31m     → expected { sport: 'nba', from: 2003, …(8) } to be null[39m
+[31m     → expected { …(7) } to be 'format' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usPlayoffs.test.ts[2m > [22musPostseason, the NBA[2m > [22mfails closed, each case for its own reason, and never with a made up game
+[31m[1mAssertionError[22m: expected { …(7) } to be 'format' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/usPostseasonFormat.test.ts[2m > [22musPostseasonFormat[2m > [22mrefuses a season no row holds, a season played to another format, and a sport it does not hold
+[31m[1mAssertionError[22m: expected { sport: 'nba', from: 2003, …(8) } to be null[39m
+[2m Test Files [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (29)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPlayoffs.test.ts,title=src/test/usPlayoffs.test.ts > usPostseason%2C the NBA > fails closed%2C each case for its own reason%2C and never with a made up game,line=296,column=41::AssertionError: expected { …(7) } to be 'format' //
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPostseasonFormat.test.ts,title=src/test/usPostseasonFormat.test.ts > usPostseasonFormat > refuses a season no row holds%2C a season played to another format%2C and a sport it does not hold,line=119,column=45::AssertionError: expec
+MUT m2 harness=1 vitest=1 laycompare=- centre=- dirty=0

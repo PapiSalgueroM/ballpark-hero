@@ -1,0 +1,12 @@
+m1 exit=0 18s | MUT m1 harness=1 vitest=1 laycompare=- centre=- dirty=0
+m2 exit=0 20s | MUT m2 harness=1 vitest=1 laycompare=- centre=- dirty=0
+m3 exit=0 18s | MUT m3 harness=1 vitest=1 laycompare=- centre=- dirty=0
+m4 exit=0 18s | MUT m4 harness=0 vitest=0 laycompare=- centre=- dirty=0
+m5 exit=0 17s | MUT m5 harness=0 vitest=1 laycompare=- centre=- dirty=0
+m6 exit=0 53s | MUT m6 harness=1 vitest=1 laycompare=1 centre=1 dirty=0
+m7 exit=0 17s | MUT m7 harness=0 vitest=0 laycompare=- centre=- dirty=0
+m9 exit=0 17s | MUT m9 harness=0 vitest=0 laycompare=- centre=- dirty=0
+m10 exit=0 17s | MUT m10 harness=0 vitest=1 laycompare=- centre=- dirty=0
+m11 exit=0 17s | MUT m11 harness=1 vitest=1 laycompare=- centre=- dirty=0
+m8 exit=0 14s | MUT m8 control-sum-exit=1 plain-exit=0
+clean exit=0 14s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead

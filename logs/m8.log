@@ -1,0 +1,9 @@
+MUTATION m8 applied to src/lib/season/usPlayoffs.ts
+    at addChunk (node:internal/streams/readable:568:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.21.0
+simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+MUT m8 control-sum-exit=1 plain-exit=0

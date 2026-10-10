@@ -1,0 +1,35 @@
+MUTATION m6 applied to src/lib/season/us.ts
+ src/lib/season/us.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines
+FAIL F nba: not one playoff season the Season Center opens fails closed: 275 of 2001; nba week 0.1 2039: tries: place || nba week 0.4 2028: tries: place || nba week 0.5 2003: tries: place
+FAIL K nba: "WON THE NBA FINALS": 2, 5, 5, 3, 4 runs laid out by seed set (at least 13 in each)
+--- harness ACCEPTANCE and tail
+     the try taken (0 is the first): 0:536 1:381 2:245 3:170 4:115 5:76 6:46 7:53 8:45 9:22 10:21 11:16
+     repairs a laid out run needed: 0:1680 1:46 2:0 3+:0; the regular season's repairs a season, for scale: 0.30
+ACCEPTANCE one point playoff games 5.52% against the regular season's spread over the seed sets 5.61% to 5.73%: OUTSIDE, below it. A FINDING for the lead (the repaired share above is how much of it a repair made)
+ok   X no call reaches Math.random while a season is observed (0 calls)
+
+simUsPostseason: 26 checks, 2 failed, 1 findings for the lead
+--- vitest
+[31m     → expected 8 to be less than or equal to 7[39m
+[31m     → Post One, result 2, 20 games: tries: place: expected 'string' to be 'object' // Object.is equality[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usPlayoffs.test.ts[2m > [22musPlayoffLay[2m > [22mholds the path as numbers: the same rounds, the same opponents, the same scores
+[31m[1mAssertionError[22m: expected 8 to be less than or equal to 7[39m
+[41m[1m FAIL [22m[49m src/test/usPlayoffs.test.ts[2m > [22musPostseason, the NBA[2m > [22mlays every run out game by game, on the saved playoff line to the unit
+[31m[1mAssertionError[22m: Post One, result 2, 20 games: tries: place: expected 'string' to be 'object' // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (29)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPlayoffs.test.ts,title=src/test/usPlayoffs.test.ts > usPlayoffLay > holds the path as numbers%3A the same rounds%2C the same opponents%2C the same scores,line=173,column=26::AssertionError: expected 8 to be less than or equal to 7
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPlayoffs.test.ts,title=src/test/usPlayoffs.test.ts > usPostseason%2C the NBA > lays every run out game by game%2C on the saved playoff line to the unit,line=227,column=79::AssertionError: Post One, result 2, 20 games: tries: place
+--- lay compare tail
+ok   digest nfl seed set 3 is the record's (781 seasons, 500 derived)
+ok   digest nfl seed set 4 is the record's (799 seasons, 515 derived)
+ok   digest stray draws are the record's (0)
+simUsSeasonCentre digest compare: 11 digests, 5 moved (a receipt of Round 1300's playoff lay, in no gate)
+--- centre FAIL lines
+FAIL 4 nba the playoff path follows the saved result, the playoff games and the bracket's conferences: 275 of 4042; 2039 "WON THE NBA FINALS": series 4-4 || 2028 "Lost in the conference semis": series 4-4 || 2003 "Lost the NBA Finals": series 4-4
+
+simUsSeasonCentre: 98 checks, 1 failed
+MUT m6 harness=1 vitest=1 laycompare=1 centre=1 dirty=0
