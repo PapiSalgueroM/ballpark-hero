@@ -313,7 +313,7 @@ const newAcc = () => ({
   byLine: { ATT: 0, MID: 0, DEF: 0, GK: 0 }, rowGoals: 0, assists: 0, og: 0, u: 0, noXiClubWeeks: 0,
   aiObs: { ATT: 0, MID: 0, DEF: 0 }, aiExp: { ATT: 0, MID: 0, DEF: 0 }, aiGoals: 0,
   seasons: [], shortLines: 0, myLeagueMatches: 0, entries: 0,
-  race: { ATT: 0, MID: 0, DEF: 0, GK: 0, rivalGoals: 0 },
+  race: { ATT: 0, MID: 0, DEF: 0, GK: 0, rivalGoals: 0 }, thin: {},
 });
 const played = r => r.w + r.d + r.l;
 const rivalsOf = s => s.leagueClubs.filter(c => c !== s.clubName);
@@ -349,10 +349,12 @@ function watcher(mod, label, acc, opts = {}) {
   const { cm } = mod;
   let keptByClub = new Map();
   let myKept = 0;
+  let leagueId = '';
   const hooks = {
     opened(s, seasonIndex) {
       keptByClub = new Map();
       myKept = 0;
+      leagueId = cm.careerLeagueOf(s).id;
       tick('law');
       const book = cm.leagueBookOf(s);
       if (!book) fail('law', `${label}: no readable book at the start of season ${seasonIndex + 1}`);
@@ -386,7 +388,10 @@ function watcher(mod, label, acc, opts = {}) {
         const xi = before.xi.get(club);
         const scored = now.gf - was.gf;
         if (now.ga === was.ga && xi) keptByClub.set(club, (keptByClub.get(club) ?? 0) + 1);
-        if (!xi) acc.noXiClubWeeks += 1;
+        const lg = (acc.thin[leagueId] ??= { weeks: 0, bare: 0, clubs: new Set(), rivals: new Set() });
+        lg.weeks += 1;
+        lg.rivals.add(club);
+        if (!xi) { acc.noXiClubWeeks += 1; lg.bare += 1; lg.clubs.add(club); }
         const entry = book.c[club] ?? { m: {}, og: 0, u: 0 };
         const prior = before.book.c[club] ?? { m: {}, og: 0, u: 0 };
         acc.og += entry.og - prior.og;
@@ -585,6 +590,9 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
   console.log(`        between other clubs (${n} goals), dealt against the weight: ${LINES.map(l => `${l} ${acc.aiObs[l]} vs ${fmt(acc.aiExp[l])} (z ${fmt((acc.aiObs[l] - acc.aiExp[l]) / Math.max(1e-9, sd(n, acc.aiExp[l] / Math.max(1, n))), 2)})`).join(', ')}`);
   console.log(`        assists ${acc.assists} on ${acc.rowGoals} credited goals = ${fmt(acc.assists / Math.max(1, acc.rowGoals), 3)} a goal (the rule ${fmt(P_ASSIST, 3)}, z ${fmt(za, 2)}); own goals ${acc.og} of ${named} = ${fmt(100 * acc.og / Math.max(1, named), 2)}% (the rule ${fmt(100 * P_OG, 2)}%, z ${fmt(zo, 2)})`);
   console.log(`        unnamed goals ${acc.u} (club weeks with no named eleven: ${acc.noXiClubWeeks}); my league matches ${acc.myLeagueMatches}, reports whose lines did not add up to the score: ${acc.shortLines}`);
+  for (const [league, t] of Object.entries(acc.thin)) {
+    if (t.bare) console.log(`        no named eleven in ${league}: ${t.bare} of ${t.weeks} club weeks, ${t.clubs.size} of ${t.rivals.size} rival clubs seen (${[...t.clubs].sort().slice(0, 8).join(', ')}${t.clubs.size > 8 ? ', ...' : ''})`);
+  }
   console.log(`        top ten of the Goals board held by forwards and wingers: ${fmt(mean(acc.seasons.map(x => x.bookAtt)), 2)} on the book, ${fmt(mean(acc.seasons.map(x => x.raceAtt)), 2)} on the old race, rise ${fmt(purposeRise, 2)} (floor ${PURPOSE_FLOOR}) over ${acc.seasons.length} seasons`);
 }
 
@@ -735,19 +743,23 @@ const whole = s => sha(JSON.stringify(s));
     if (plain.leagueBook !== undefined || withoutBook(made.next) !== withoutBook(plain)) cannot('the two copies did not make the same save to damage');
     const good = JSON.stringify(made.next.leagueBook);
     const holed = JSON.parse(good.replace(/\[(\d+),(\d+),(\d+),(\d+)\]/, '[$1,$2,null,$4]'));
-    const damaged = [['a string', 'the book'], ['an array', [made.next.leagueBook]], ["last season's own", made.last], ['a row with a hole', holed], ['a number', 7]];
+    /* The third entry: can the match week tell? It asks a stamp and a type and nothing more (the full walk
+       on every result was measured at 60 percent of a season once), so a book with one holed row is still
+       written to in a match week. The READER refuses it whole, which is what a screen will ask, and the
+       engine never makes such a row itself: a row is four numbers from the moment it exists. */
+    const damaged = [['a string', 'the book', true], ['an array', [made.next.leagueBook], true], ["last season's own", made.last, true], ['a row with a hole', holed, false], ['a number', 7, true]];
     const fourOn = (mod, from) => onStream(0x7011, () => { let s = from; for (let k = 0; k < 4; k++) s = mod.cm.playNextEntry(s, { skipHalftime: true }).state; return s; });
-    for (const [what, value] of damaged) {
+    for (const [what, value, weekSeesIt] of damaged) {
       const v = JSON.parse(JSON.stringify(made.next));
       v.leagueBook = value;
       const text = JSON.stringify(value);
-      tick('oldsave', 3);
+      tick('oldsave', weekSeesIt ? 3 : 2);
       if (text === good) cannot(`the damage "${what}" changed nothing`);
       if (withBook.cm.leagueBookOf(v) !== null) fail('oldsave', `a save whose book is ${what} reads as having a book`);
       const on = fourOn(withBook, v);
       const off = fourOn(without, JSON.parse(JSON.stringify(plain)));
       if (withoutBook(on) !== withoutBook(off)) fail('oldsave', `a save whose book is ${what} does not play the four entries the engine with the book out plays`);
-      if (JSON.stringify(on.leagueBook) !== text) fail('oldsave', `a save whose book is ${what} had it written into: ${String(JSON.stringify(on.leagueBook)).slice(0, 80)}`);
+      if (weekSeesIt && JSON.stringify(on.leagueBook) !== text) fail('oldsave', `a save whose book is ${what} had it written into: ${String(JSON.stringify(on.leagueBook)).slice(0, 80)}`);
     }
   }
   console.log(`oldsave ${checked.get('oldsave')} checks: ${saves.length} saves with no book finished on the candidate and on ${refs.map(r => `the ${r[0]} engine`).join(' and ')}, the season after each, and five unreadable books`);
@@ -780,18 +792,26 @@ const whole = s => sha(JSON.stringify(s));
   }));
   /* The job you applied for, joined today (joinClubNow), in season one and in season three: the new club's
      run-in is played as a fresh season one career and then takes the number of the season you were in. */
-  for (const [seasonsFirst, to] of [[0, 'Ajax'], [2, 'Real Madrid']]) {
-    onStream(0x7200 + seasonsFirst, () => {
-      let s = cm.startCareer('Everton');
-      for (let k = 0; k < seasonsFirst; k++) {
+  for (const [seasonsFirst, from, to] of [[0, 'Everton', 'Ajax'], [2, 'Bayern Munich', 'Arsenal']]) {
+    /* The manager has to still be in the job when the letter comes: the first of four seeds that gets there. */
+    const reach = seed => onStream(seed, () => {
+      let s = cm.startCareer(from);
+      for (let k = 0; k < seasonsFirst && !s.sacked; k++) {
         let guard = 0;
         while (s.week < s.calendar.length && guard++ < 220) { const r = cm.playNextEntry(s, { skipHalftime: true }); s = r.state; if (r.kind === 'seasonOver') break; }
-        s = cm.startNextSeason(cm.finishSeason(s).state);
+        if (!s.sacked) s = cm.startNextSeason(cm.finishSeason(s).state);
       }
-      for (let k = 0; k < 16; k++) s = cm.playNextEntry(s, { skipHalftime: true }).state;
-      const label = `the job at ${to} joined in season ${s.season}`;
-      tick('doors');
-      if (s.sacked || s.clubName !== 'Everton') { fail('doors', `${label}: the career did not reach the join as Everton's manager (sacked ${!!s.sacked}, at ${s.clubName})`); return; }
+      for (let k = 0; k < 16 && !s.sacked; k++) s = cm.playNextEntry(s, { skipHalftime: true }).state;
+      return s.sacked || s.clubName !== from || s.season !== seasonsFirst + 1 ? null : JSON.stringify(s);
+    });
+    let raw = null;
+    let seed = 0x7200 + seasonsFirst * 16;
+    for (let tries = 0; tries < 4 && !raw; tries++) raw = reach(seed += 1);
+    tick('doors');
+    if (!raw) { fail('doors', `no career at ${from} reached week 16 of season ${seasonsFirst + 1} in the job on four seeds`); continue; }
+    onStream(seed + 0x100, () => {
+      const s = JSON.parse(raw);
+      const label = `the job at ${to} joined from ${from} in season ${s.season}`;
       s.jobHunt = { open: { club: to, league: '', tier: 1, season: s.season, week: s.week, matchesLeft: 0, roll: 0, status: 'accepted' }, cooldowns: [], sentSeason: s.season, sent: 1, summerMove: null };
       const joined = cal.joinClubNow(s);
       tick('doors', 2);
