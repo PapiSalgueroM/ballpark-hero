@@ -1,0 +1,10 @@
+overlay exit=0 0s | dfe9f2c1bc7f52164507eab08d467e793a510cdd
+build-at exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+clean-at exit=0 100s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+clean-at-2 exit=0 100s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+replay-at exit=0 41s | playLiveMatchFit: the replay is green. Seed 3208792607 opened one match three times (digest 8cc933c5, 1864 draws at kick off) and seed 3208792608 opened another (digest 5
+replay-at-2 exit=0 41s | playLiveMatchFit: the replay is green. Seed 3208792607 opened one match three times (digest 8cc933c5, 1864 draws at kick off) and seed 3208792608 opened another (digest 5
+noseed-at exit=1 30s | playLiveMatchFit: control noseed turned the replay red on the line it must (with no seed, three contexts opened three different matches: 831e5b12, 814ea4d2, ebd48748).
+forced-at exit=0 125s | FORCED RED REPLAYED: control nocard went red twice on one goal of one match (exits 1 and 1)
+oldsave-at exit=0 75s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+fresh-at exit=0 114s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
