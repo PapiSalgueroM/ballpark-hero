@@ -1,0 +1,3 @@
+tsc exit=0 58s | 
+simSeasonCentreMotion exit=0 11s | simSeasonCentreMotion: 17 checks, 0 failed
+vitest-c exit=0 7s |    Duration  6.08s (transform 2.84s, setup 475ms, collect 4.98s, tests 4.76s, environment 3.15s, prepare 885ms)
