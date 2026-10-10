@@ -4,12 +4,17 @@
  * 1280 by 800, on /nfl-my-career, /nba-my-career, /mlb-my-career and
  * /nhl-my-career, for three prospects the bundled engine built for each sport
  * (a first round pick, which for the NBA is a lottery pick; a late pick; an
- * undrafted one), watched, skipped and with less motion:
+ * undrafted one), watched, skipped and with less motion. Then a late pick in
+ * the OTHER era of each sport at 390 (the 2003 NBA lottery is three tiles,
+ * MLB's 2004 draft is 1,500 picks), and the NBA's night watched and skipped
+ * at 360 by 740 and 320 by 640. 48 nights in all.
  *   1. The range the card prints before the press is the engine's own line.
  *   2. NOTHING JUMPS. From the frame the night is on screen to the last one,
- *      the card and the journey keep their height, and once the press's own
- *      reveal has settled the page does not scroll again. No frame overflows
- *      sideways.                                            Control `late`.
+ *      the card and the journey keep their height (down to 320 wide, where
+ *      the two buttons once wrapped and the card lost 20 px when the skip
+ *      went), and once the page has been SEEN standing still after the
+ *      press's own reveal it does not move again. No frame overflows
+ *      sideways.                               Controls `late` and `again`.
  *   3. NO SPOILER. Until the closing row starts to land, the title, the club
  *      line, the result block and the closing row itself are at opacity 0,
  *      and the file under the stage (age, rating, health) reads exactly as
@@ -45,7 +50,7 @@
  * scripts/lib/hostLikeServer.mjs. ENGINES=chromium is the only engine.
  *
  * Run:      node scripts/playDraftNight.mjs
- * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden|cut> node scripts/playDraftNight.mjs
+ * Control:  PLAY_DRAFT_NIGHT_CONTROL=<late|spoiler|fold|hidden|cut|again> node scripts/playDraftNight.mjs
  *           (must exit 1 on its own check, and exits 2 if it changed nothing)
  * Output:   screenshots and measurements in $RC_OUT, or .tmp-fx/play-draft-night.
  */
@@ -62,7 +67,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.PLAY_DRAFT_NIGHT_CONTROL || '';
-const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced', cut: 'cut' };
+const CONTROLS = { late: 'height', spoiler: 'spoiler', fold: 'fold', hidden: 'reduced', cut: 'cut', again: 'scroll' };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`Unknown control ${CONTROL}`); process.exit(2); }
 const OUT = path.resolve(process.env.RC_OUT || path.join(ROOT, '.tmp-fx/play-draft-night'));
 fs.mkdirSync(OUT, { recursive: true });
@@ -88,9 +93,10 @@ if (/supabase\.co/.test(fs.readFileSync(bundle, 'utf-8'))) { console.error('The 
 const M = createRequire(import.meta.url)(bundle);
 
 /** A prospect the engine walked to the "Draft day" button. */
-function atDraft(sport, seedId, rating) {
+function atDraft(sport, seedId, rating, eraId) {
   const pos = sport.create.defaultPos;
-  const made = M.createUsCareerProspect(sport, { name: 'Night Prospect', pos, archetypeId: sport.create.archetypes[pos][0].id, eraId: 'now', appearance: M.defaultAppearance(), seed: `${sport.slug}:${seedId}` });
+  const made = M.createUsCareerProspect(sport, { name: 'Night Prospect', pos, archetypeId: sport.create.archetypes[pos][0].id, eraId, appearance: M.defaultAppearance(), seed: `${sport.slug}:${seedId}` });
+  assert.equal(made.eraId, eraId, `${sport.slug}: the prospect was made in ${made.eraId}, not ${eraId}`);
   const p = rating ? { ...made, rating, pot: Math.max(made.pot, rating) } : made;
   const desc = sport.preDraft(p.eraId);
   let state = M.preDraftStart(desc, { ...p, routeId: desc.routes[0].id });
@@ -98,8 +104,8 @@ function atDraft(sport, seedId, rating) {
   return { ...p, state: M.preDraftShowcase(desc, state, 'steady') };
 }
 /** The first seed whose real draft ends the way this case needs. */
-function find(sport, kind) {
-  const desc = sport.preDraft('now');
+function find(sport, kind, eraId = 'now') {
+  const desc = sport.preDraft(eraId);
   const teams = desc.teamIds().length, total = teams * desc.rounds;
   const wants = {
     first: out => out.pick !== null && out.pick <= (desc.lottery ? desc.lottery.drawn : teams),
@@ -108,11 +114,11 @@ function find(sport, kind) {
   }[kind];
   const ratings = { first: [96, 92, 88], late: [undefined, 62, 58, 66], undrafted: [40, 45] }[kind];
   for (const rating of ratings) for (let n = 0; n < 300; n += 1) {
-    const p = atDraft(sport, `${kind}-${n}`, rating);
+    const p = atDraft(sport, `${kind}-${n}`, rating, eraId);
     const done = M.preDraftRunDraft(desc, p.state);
-    if (wants(done.draft)) return { p, done, desc, kind };
+    if (wants(done.draft)) return { p, done, desc, kind, eraId };
   }
-  throw new Error(`no ${kind} prospect found for ${sport.slug}`);
+  throw new Error(`no ${kind} prospect found for ${sport.slug} in ${eraId}`);
 }
 
 const port = await new Promise((resolve, reject) => {
@@ -131,7 +137,15 @@ await new Promise((resolve, reject) => {
   server.stdout.on('data', data => { if (String(data).includes('host-like server:')) { clearTimeout(timer); resolve(); } });
 });
 
-const SIZES = [{ width: 390, height: 844, touch: true }, { width: 1280, height: 800, touch: false }];const results = [];
+const SIZES = [{ width: 390, height: 844, touch: true }, { width: 1280, height: 800, touch: false }];
+/* Two narrower phones, for the NBA's night (the tallest card, and the one with tiles): 360 by 740,
+   a common Android size, and 320 by 640, the narrowest the journey lays out for. At 320 the
+   lottery tile (the shared presenter, not this round's file) cuts its seed line and its longest
+   club, so the fit of its words is written down there and not judged; everything else is. */
+const NARROW = [{ width: 360, height: 740, touch: true }, { width: 320, height: 640, touch: true, fitJudged: false }];
+/* The other era of each sport: the 2003 NBA lottery is three tiles in a two column grid, and
+   MLB's 2004 draft is 1,500 picks. */
+const THROWBACK = { nfl: 'y2005', nba: 'y2004', mlb: 'y2004', nhl: 'y2006' };const results = [];
 const failures = [];
 const fail = (id, check, message) => { failures.push({ id, check, message }); console.error(`  FAIL [${check}] ${id}: ${message}`); };
 
@@ -153,6 +167,11 @@ const CONTROL_STYLE = {
 const CONTROL_INIT = {
   /* The press reveals nothing: the board stays wherever the page happened to be. */
   fold: () => { Element.prototype.scrollIntoView = function () {}; },
+  /* The page moves a second time, two seconds after the reveal, while the picks are coming in. */
+  again: () => {
+    const real = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (...args) { real.apply(this, args); setTimeout(() => window.scrollBy(0, -60), 2000); };
+  },
 };
 
 /* The frame by frame record, started before the press so the first frame of the night is in it. */
@@ -248,8 +267,8 @@ async function open(browser, sport, size, p, mode) {
 }
 
 async function run(browser, sport, size, found, mode, { startCareer = false, shots = false } = {}) {
-  const { p, done, desc, kind } = found;
-  const id = `${sport.slug}-${size.width}-${kind}-${mode}`;
+  const { p, done, desc, kind, eraId } = found;
+  const id = `${sport.slug}${eraId === 'now' ? '' : `-${eraId}`}-${size.width}-${kind}-${mode}`;
   const out = done.draft;
   const row = { id, mode, kind, pick: out.pick, team: out.team };
   results.push(row);
@@ -316,8 +335,22 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     const [cMin, cMax] = span('card'), [jMin, jMax] = span('journey');
     Object.assign(row, { frames: samples.length, cardHeight: [cMin, cMax], journeyHeight: [jMin, jMax], scroll: [samples[0].y, last.y] });
     if (cMax - cMin > 1 || jMax - jMin > 1) fail(id, 'height', `the card went from ${cMin} to ${cMax} and the journey from ${jMin} to ${jMax} while the night played`);
-    const ys = samples.filter(s => s.t - t0 > 1500).map(s => s.y);
-    if (ys.length && Math.max(...ys) - Math.min(...ys) > 1) fail(id, 'scroll', `the page scrolled from ${Math.min(...ys)} to ${Math.max(...ys)} after the reveal had settled`);
+    /* The page moves once, for the press's own reveal, and never again. "Settled" is seen, not
+       assumed (this check used to start a fixed 1,500 ms in, a figure nobody had measured): the
+       first stretch of five frames or more, across 300 ms or more, in which the page stood still.
+       No frame after it may sit anywhere else. Frames a slow machine never drew are not a
+       standstill, so a reveal that ends late cannot turn this red; only a second move can. */
+    let still = null;
+    for (let i = 1, from = 0; i < samples.length && !still; i += 1) {
+      if (Math.abs(samples[i].y - samples[from].y) > 0.5) from = i;
+      else if (i - from >= 4 && samples[i].t - samples[from].t >= 300) still = samples[from];
+    }
+    row.scrollSettledMs = still ? Math.round(still.t - t0) : null;
+    if (!still) fail(id, 'scroll', 'the page was never seen standing still');
+    else {
+      const ys = samples.filter(s => s.t >= still.t).map(s => s.y);
+      if (Math.max(...ys) - Math.min(...ys) > 1) fail(id, 'scroll', `the page stood still at ${Math.round(still.y)} from ${Math.round(still.t - t0)} ms and then moved between ${Math.round(Math.min(...ys))} and ${Math.round(Math.max(...ys))}`);
+    }
     const wide = samples.find(s => s.sw > s.vw + 1);
     if (wide) fail(id, 'overflow', `a frame is ${wide.sw} wide in a ${wide.vw} viewport`);
     if (mode === 'watch') {
@@ -371,10 +404,13 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     /* 9. The words on a lottery tile fit the tile, in the site's own typeface. */
     if (end.tiles) {
       const fit = await page.evaluate(FIT, desc.teamIds().map(team => (desc.teamShort ?? desc.teamLabel)(team)));
-      row.tileFit = { room: fit.room, widest: fit.widest, font: fit.font, inter, cut: fit.cut, clubs: fit.clubs };
+      const judged = size.fitJudged !== false;
+      row.tileFit = { judged, room: fit.room, widest: fit.widest, font: fit.font, inter, cut: fit.cut, clubs: fit.clubs };
       if (!inter) fail(id, 'cut', `the site's typeface did not load (the tile is in ${fit.font}), so the fit of its words was not measured`);
-      for (const c of fit.cut) fail(id, 'cut', `a lottery tile cuts "${c.text}": ${c.need} px of words in ${c.room} px`);
-      for (const c of fit.clubs) fail(id, 'cut', `"${c.text}" would be cut on a lottery tile: ${c.need} px of words in ${c.room} px`);
+      if (judged) {
+        for (const c of fit.cut) fail(id, 'cut', `a lottery tile cuts "${c.text}": ${c.need} px of words in ${c.room} px`);
+        for (const c of fit.clubs) fail(id, 'cut', `"${c.text}" would be cut on a lottery tile: ${c.need} px of words in ${c.room} px`);
+      } else console.log(`  noted ${id}: the tile has ${fit.room} px for a club, ${fit.cut.length} line(s) on screen and ${fit.clubs.length} of ${desc.teamIds().length} clubs do not fit (not judged at this width)`);
     }
     const save = JSON.parse(await page.evaluate(k => localStorage.getItem(k), sport.saveKey));
     try { assert.deepEqual(save, JSON.parse(JSON.stringify({ c: null, phase: 'prospect', teamQuality: null, coach: null, prospect: { ...p, state: done } }))); } catch { fail(id, 'save', 'the save is not the engine state after the draft'); }
@@ -416,6 +452,13 @@ try {
       await run(browser, c.sport, size, c.undrafted, 'watch', { shots: c.sport.slug === 'nba' });
       await run(browser, c.sport, size, c.late, 'skip', { shots: c.sport.slug === 'nfl' });
       await run(browser, c.sport, size, c.undrafted, 'reduced', { shots: c.sport.slug === 'nhl' });
+    }
+    /* The other era of each sport, a late pick on the phone. */
+    for (const sport of M.sports) await run(browser, sport, SIZES[0], find(sport, 'late', THROWBACK[sport.slug]), 'watch', { shots: sport.slug === 'nba' });
+    /* Narrower phones: the NBA's night, watched and skipped. */
+    for (const size of NARROW) {
+      await run(browser, cases[1].sport, size, cases[1].late, 'watch', { shots: true });
+      await run(browser, cases[1].sport, size, cases[1].late, 'skip');
     }
     fs.writeFileSync(path.join(OUT, 'play-draft-night.json'), JSON.stringify({ results, failures }, null, 2));
     console.log(`\nplayDraftNight: ${failures.length === 0 ? `ALL GREEN, ${results.length} nights walked` : `${failures.length} FAILURE(S) in ${results.length} nights`}`);
