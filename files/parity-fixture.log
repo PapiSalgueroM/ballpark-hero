@@ -1,0 +1,4 @@
+control fixture: Vitest exit 1, passed [nfl, nba, nhl], failed [mlb]
+   mlb click path step 40 (after "hub: 📰News2 headlines🎙️ Costs you, buys respect."): the save differs
+  CONTROL FIRED: [mlb] red on "mlb click path step 40", the rest green
+simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.

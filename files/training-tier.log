@@ -1,0 +1,16 @@
+1) trainingTier equals what Soccer Career pays, every score from -10 to 110 in quarter steps
+  FAIL: ST dribbling at 79.5: the engine paid 2, the rule says 1
+  FAIL: ST dribbling at 79.75: the engine paid 2, the rule says 1
+  FAIL: ST dribbling at 80: the engine paid 2, the rule says 1
+  FAIL: ST dribbling at 80.25: the engine paid 2, the rule says 1
+  FAIL: ST dribbling at 80.5: the engine paid 2, the rule says 1
+  FAIL: ST dribbling at 80.75: the engine paid 2, the rule says 1
+   19241 checks, 2 positions x 4 drills x 481 scores; one banks from 50, two from 80
+2) bankTrainingRating, every rating 40 to 99 against every potential 40 to 99, every score 0 to 100
+   363600 cells: 89326 paid the whole tier, 94274 were cut at the ceiling
+3) the rule line, the tier lines and the banked note against the bank
+   43211 checks
+4) the NFL, NBA, MLB and NHL skins, every position
+   29 positions, 97 drill tiles, 1631 checks
+5) not run under the tier control, which only touches section 1
+simCareerTraining control tier: section 1 went red as it must, every other section it ran stayed green (2245683 checks)

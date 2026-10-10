@@ -1,0 +1,9 @@
+plain exit=0 simCareerTraining: all five sections green (2245687 checks)
+tier exit=0 simCareerTraining control tier: section 1 went red as it must, every other section it ran stayed green (2245683 checks)
+overcap exit=0 simCareerTraining control overcap: section 2 went red as it must, every other section it ran stayed green (2245683 check
+promise exit=0 simCareerTraining control promise: section 3 went red as it must, every other section it ran stayed green (2245683 check
+skinstat exit=0 simCareerTraining control skinstat: section 4 went red as it must, every other section it ran stayed green (2245683 chec
+tell exit=0 simCareerTraining control tell: section 5 went red as it must, every other section it ran stayed green (2245687 checks)
+miss exit=0 simCareerTraining control miss: section 5 went red as it must, every other section it ran stayed green (2245687 checks)
+window exit=0 simCareerTraining control window: section 5 went red as it must, every other section it ran stayed green (2245687 checks
+slip exit=0 simCareerTraining control slip: section 5 went red as it must, every other section it ran stayed green (2245687 checks)

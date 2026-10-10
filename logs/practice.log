@@ -1,0 +1,13 @@
+plain exit=0 simUsCareerPractice: 32 actual-board outcomes passed across NFL, NBA, MLB and NHL
+before exit=1 Node.js v24.21.0
+gain exit=0 simUsCareerPractice control gain: all four named outcomes rejected the defect, all four quiet restores passed
+cap exit=0 simUsCareerPractice control cap: all four named outcomes rejected the defect, all four quiet restores passed
+once exit=0 simUsCareerPractice control once: all four named outcomes rejected the defect, all four quiet restores passed
+save exit=0 simUsCareerPractice control save: all four named outcomes rejected the defect, all four quiet restores passed
+receipt exit=0 simUsCareerPractice control receipt: all four named outcomes rejected the defect, all four quiet restores passed
+renew exit=0 simUsCareerPractice control renew: all four named outcomes rejected the defect, all four quiet restores passed
+rules exit=0 simUsCareerPractice control rules: all four named outcomes rejected the defect, all four quiet restores passed
+abort exit=0 simUsCareerPractice control abort: all four named outcomes rejected the defect, all four quiet restores passed
+pending exit=0 simUsCareerPractice control pending: all four named outcomes rejected the defect, all four quiet restores passed
+reset exit=0 simUsCareerPractice control reset: all four named outcomes rejected the defect, all four quiet restores passed
+carry exit=0 simUsCareerPractice control carry: all four named outcomes rejected the defect, all four quiet restores passed

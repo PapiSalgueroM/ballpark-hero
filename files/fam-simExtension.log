@@ -1,0 +1,5 @@
+Network mode: offline, loopback only, no production probe or database retries.
+Running 1 node harness
+  PASS  simExtension.mjs                0.8s
+
+All 1 harnesses green.

@@ -1,0 +1,7 @@
+plain exit=0 simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+label exit=0 simUsBoardParity control label: green. The control turned its own sports red for its own reason.
+draw exit=0 simUsBoardParity control draw: green. The control turned its own sports red for its own reason.
+binding exit=0 simUsBoardParity control binding: green. The control turned its own sports red for its own reason.
+restore exit=0 simUsBoardParity control restore: green. The control turned its own sports red for its own reason.
+era exit=0 simUsBoardParity control era: green. The control turned its own sports red for its own reason.
+fixture exit=0 simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.

@@ -1,0 +1,16 @@
+1) trainingTier equals what Soccer Career pays, every score from -10 to 110 in quarter steps
+   19241 checks, 2 positions x 4 drills x 481 scores; one banks from 50, two from 80
+2) bankTrainingRating, every rating 40 to 99 against every potential 40 to 99, every score 0 to 100
+  FAIL: 40/40 at 50: the rating went to 41, past the ceiling 40
+  FAIL: 40/40 at 50: the rating went to 41, it should be 40
+  FAIL: 40/40 at 51: the rating went to 41, past the ceiling 40
+  FAIL: 40/40 at 51: the rating went to 41, it should be 40
+  FAIL: 40/40 at 52: the rating went to 41, past the ceiling 40
+  FAIL: 40/40 at 52: the rating went to 41, it should be 40
+   363600 cells: 179280 paid the whole tier, 4320 were cut at the ceiling
+3) the rule line, the tier lines and the banked note against the bank
+   43211 checks
+4) the NFL, NBA, MLB and NHL skins, every position
+   29 positions, 97 drill tiles, 1631 checks
+5) not run under the overcap control, which only touches section 2
+simCareerTraining control overcap: section 2 went red as it must, every other section it ran stayed green (2245683 checks)

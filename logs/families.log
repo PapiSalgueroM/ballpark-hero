@@ -1,0 +1,12 @@
+simCareerHub exit=0 All 1 harnesses green.
+simCareerInbox exit=0 All 1 harnesses green.
+simCareerInboxBeats exit=0 All 1 harnesses green.
+simCareerParity exit=0 All 1 harnesses green.
+simCareerRivalryEvents exit=0 All 1 harnesses green.
+simExtension exit=0 All 1 harnesses green.
+simHomeFront exit=0 All 1 harnesses green.
+simNoDoubleRecord exit=0 All 1 harnesses green.
+simSessionMarks exit=0 All 1 harnesses green.
+simUsCareerActionConfirm exit=0 All 1 harnesses green.
+simUsCoachCareer exit=0 All 1 harnesses green.
+simUsCareerWeight exit=0 All 1 harnesses green.

@@ -1,0 +1,24 @@
+shared practice control stale_pick: intended assertion failed, 17 other outcomes passed
+shared practice control gate_abandon: intended assertion failed, 21 other outcomes passed
+shared practice control keeper_initial: intended assertion failed, 22 other outcomes passed
+shared practice control cone_input: intended assertion failed, 21 other outcomes passed
+shared practice control burst_start: intended assertion failed, 22 other outcomes passed
+shared practice control burst_input: intended assertion failed, 22 other outcomes passed
+shared practice control pick_input: intended assertion failed, 22 other outcomes passed
+shared practice control keeper_input: intended assertion failed, 22 other outcomes passed
+shared practice control gate_start: intended assertion failed, 22 other outcomes passed
+shared practice control gate_input: intended assertion failed, 22 other outcomes passed
+shared practice control help: intended assertion failed, 22 other outcomes passed
+shared practice control blur: intended assertion failed, 20 other outcomes passed
+shared practice control hidden: intended assertion failed, 22 other outcomes passed
+shared practice control elapsed: intended assertion failed, 15 other outcomes passed
+shared practice control remainder: intended assertion failed, 17 other outcomes passed
+shared practice control unmount: intended assertion failed, 22 other outcomes passed
+shared practice control inactive: intended assertion failed, 22 other outcomes passed
+shared practice control close: intended assertion failed, 22 other outcomes passed
+shared practice control burst_back: intended assertion failed, 22 other outcomes passed
+shared practice control burst_boundary: intended assertion failed, 22 other outcomes passed
+shared practice control resume_label: intended assertion failed, 15 other outcomes passed
+shared practice control score: intended assertion failed, 15 other outcomes passed
+shared practice control gate_gap: intended assertion failed, 22 other outcomes passed
+simCareerPracticeLifecycle: 22 mounted outcomes and the independent bank baseline passed; 23 copied faults rejected; source hold passed.

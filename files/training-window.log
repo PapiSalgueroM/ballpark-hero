@@ -1,0 +1,13 @@
+1) trainingTier equals what Soccer Career pays, every score from -10 to 110 in quarter steps
+   19241 checks, 2 positions x 4 drills x 481 scores; one banks from 50, two from 80
+2) bankTrainingRating, every rating 40 to 99 against every potential 40 to 99, every score 0 to 100
+   363600 cells: 89031 paid the whole tier, 94569 were cut at the ceiling
+3) the rule line, the tier lines and the banked note against the bank
+   43211 checks
+4) the NFL, NBA, MLB and NHL skins, every position
+   29 positions, 97 drill tiles, 1631 checks
+5) the recorded training ground replays, and the American skins play, under vitest
+  FAIL: vitest exit 1, 5 failed: × src/test/careerTrainingGround.test.tsx > the training ground plays the way it was recorded > gates hmhthhmh seed 43 CM 231ms | × src/test/careerTrainingGround.test.tsx > the training ground plays the way it was recorded > gates thhhmhth seed 44 ST 233ms | × src/test/careerTrainingGround.test.tsx > the training ground plays the way it was recorded > gates mmttmhtm seed 45 GK 311ms
+  FAIL: only 34 normal replay checks passed; four historical lifecycle defects are covered by simCareerPracticeLifecycle
+   vitest exit 1: 39 passed (34 replays), 5 failed
+simCareerTraining control window: section 5 went red as it must, every other section it ran stayed green (2245687 checks)

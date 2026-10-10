@@ -1,0 +1,14 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+training exit=0 77s | slip exit=0 simCareerTraining control slip: section 5 went red as it must, every other section it ran stayed green (2245687 checks)
+practice exit=1 135s | carry exit=0 simUsCareerPractice control carry: all four named outcomes rejected the defect, all four quiet restores passed
+lifecycle exit=0 108s | simCareerPracticeLifecycle: 22 mounted outcomes and the independent bank baseline passed; 23 copied faults rejected; source hold passed.
+career992 exit=0 52s | Native career practice evidence: /home/runner/work/ballpark-hero/ballpark-hero/career-practice-artifacts/native
+nflcareer exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+nbacareer exit=0 21s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged, rivalry beats honest
+families exit=0 149s | simUsCareerWeight exit=0 All 1 harnesses green.
+mlbcareer exit=0 24s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+guides exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+search exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+storage exit=0 2s | simStorageWrites: all green
+nhlcareer exit=0 16s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+parity exit=0 375s | fixture exit=0 simUsBoardParity control fixture: green. The control turned its own sports red for its own reason.

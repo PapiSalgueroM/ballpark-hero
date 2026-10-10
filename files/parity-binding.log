@@ -1,0 +1,5 @@
+control binding: Vitest exit 1, passed [nfl, nba, mlb], failed [nhl]
+   nhl click path step 28 (after "free agency: Sign"): the screen reads "Gordie Blaze · DTampa Bay Lightning2029 · age 22OVR 74$5.1M x5⭐ Top lineLast season: 6 G, 10 A, 16 P · Missed the playoffs Play the 2029 sea", fixture "Gordie Blaze · DTampa Bay Lightning2029 · age 22OVR 74$5.1M x5⭐ Top of the lin
+   nhl click path step 30 (after "box: Hub"): the screen reads "Gordie Blaze · DTampa Bay Lightning2029 · age 22OVR 74$5.1M x5⭐ Top lineLast season: 6 G, 10 A, 16 P · Missed the playoffs Play the 2029 sea", fixture "Gordie Blaze · DTampa Bay Lightning2029 · age 22OVR 74$5.1M x5⭐ Top of the lineupLast s
+  CONTROL FIRED: [nhl] red on "the screen reads", the rest green
+simUsBoardParity control binding: green. The control turned its own sports red for its own reason.
