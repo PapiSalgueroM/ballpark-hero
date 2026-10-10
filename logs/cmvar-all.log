@@ -1,0 +1,797 @@
+FAIL VAR normal
+           rating: 5.6\n' +
+        "-           name: 'James Tarkowski',\n" +
+        "-           pos: 'CB',\n" +
+        '-           rating: 5.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'James Garner',\n" +
+        "-           name: 'Hayden Hackney',\n" +
+        "            pos: 'CDM',\n" +
+        '            rating: 5.5\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Hayden Hackney',\n" +
+        "+           pos: 'CDM',\n" +
+        '+           rating: 5.3\n' +
+        "-           name: 'Brennan Johnson',\n" +
+        "-           pos: 'RW',\n" +
+        '-           rating: 5.2\n' +
+        '          },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '-           goals: 0,\n' +
+        "-           name: 'Jordan Pickford',\n" +
+        "-           pos: 'GK',\n" +
+        '-           rating: 5.2\n' +
+        '-         }\n' +
+        '        ],\n' +
+        "+       oppBest: 'Jørgen Strand Larsen',\n" +
+        "-       oppBest: 'Jeremie Frimpong',\n" +
+        '        oppCards: [\n' +
+        '          {\n' +
+        "            kind: 'yellow',\n" +
+        '            minute: 34,\n' +
+        "+           name: 'Jaydee Canvot'\n" +
+        "-           name: 'Conor Bradley'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'yellow',\n" +
+        '            minute: 75,\n' +
+        "+           name: 'Chris Richards'\n" +
+        "-           name: 'Jérémy Jacquet'\n" +
+        '          }\n' +
+        '        ],\n' +
+        '        oppFormationIndex: 1,\n' +
+        '        oppRatings: [\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 1,\n' +
+        "+           name: 'Jørgen Strand Larsen',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 8.5\n' +
+        "-           name: 'Jeremie Frimpong',\n" +
+        "-           pos: 'RB',\n" +
+        '-           rating: 8.8\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Chris Richards',\n" +
+        "-           name: 'Giovanni Leoni',\n" +
+        "            pos: 'CB',\n" +
+        '+           rating: 7.9\n' +
+        '-           rating: 8.1\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '+           goals: 1,\n' +
+        "+           name: 'Tyrick Mitchell',\n" +
+        "+           pos: 'LB',\n" +
+        '+           rating: 7.9\n' +
+        '-           goals: 0,\n' +
+        "-           name: 'Ronald Araujo',\n" +
+        "-           pos: 'CB',\n" +
+        '-           rating: 7.7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Dean Henderson',\n" +
+        "+           pos: 'GK',\n" +
+        '+           rating: 7.7\n' +
+        "-           name: 'Dominik Szoboszlai',\n" +
+        "-           pos: 'CAM',\n" +
+        '-           rating: 7.5\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "+           name: 'Óscar Mingueza',\n" +
+        "+           pos: 'RB',\n" +
+        '+           rating: 7.7\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Alexander Isak',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7.5\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Axel Disasi',\n" +
+        "+           pos: 'CB',\n" +
+        '+           rating: 7.7\n' +
+        "-           name: 'Giorgi Mamardashvili',\n" +
+        "-           pos: 'GK',\n" +
+        '-           rating: 7.4\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "+           name: 'Jaydee Canvot',\n" +
+        "+           pos: 'CB',\n" +
+        '+           rating: 7.6\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Ryan Gravenberch',\n" +
+        "-           pos: 'CDM',\n" +
+        '-           rating: 7.4\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Honest Ahanor',\n" +
+        "+           pos: 'CB',\n" +
+        '+           rating: 7.4\n' +
+        "-           name: 'Conor Bradley',\n" +
+        "-           pos: 'RB',\n" +
+        '-           rating: 7.1\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Anan Khalaili',\n" +
+        "+           pos: 'RM',\n" +
+        '+           rating: 7.4\n' +
+        "-           name: 'Jérémy Jacquet',\n" +
+        "-           pos: 'CB',\n" +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Quinten Timber',\n" +
+        "+           pos: 'CM',\n" +
+        "-           name: 'Milos Kerkez',\n" +
+        "-           pos: 'LB',\n" +
+        '            rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Ismaïla Sarr',\n" +
+        "+           pos: 'RW',\n" +
+        "-           name: 'Florian Wirtz',\n" +
+        "-           pos: 'CAM',\n" +
+        '            rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Adam Wharton',\n" +
+        "+           pos: 'CDM',\n" +
+        '+           rating: 6.9\n' +
+        "-           name: 'Hugo Ekitiké',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '          },\n' +
+        '          {\n' +
+        '            assists: 0,\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Daichi Kamada',\n" +
+        "+           pos: 'CAM',\n" +
+        '+           rating: 6.9\n' +
+        "-           name: 'Alexis Mac Allister',\n" +
+        "-           pos: 'CM',\n" +
+        '-           rating: 6.7\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        oppSubs: [\n' +
+        '          {\n' +
+        '            minute: 69,\n' +
+        "+           off: 'Jaydee Canvot',\n" +
+        "+           on: 'Óscar Mingueza'\n" +
+        "-           off: 'Conor Bradley',\n" +
+        "-           on: 'Giovanni Leoni'\n" +
+        '          },\n' +
+        '          {\n' +
+        '            minute: 79,\n' +
+        "+           off: 'Ismaïla Sarr',\n" +
+        "+           on: 'Axel Disasi'\n" +
+        "-           off: 'Hugo Ekitiké',\n" +
+        "-           on: 'Ronald Araujo'\n" +
+        '          }\n' +
+        '        ],\n' +
+        '        oppXi: [\n' +
+        '          {\n' +
+        "+           n: 'Dean Henderson',\n" +
+        "-           n: 'Giorgi Mamardashvili',\n" +
+        "            p: 'GK',\n" +
+        '            r: 83\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Chris Richards',\n" +
+        "-           n: 'Jérémy Jacquet',\n" +
+        "            p: 'CB',\n" +
+        '+           r: 82\n' +
+        '-           r: 87\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Honest Ahanor',\n" +
+        "+           p: 'CB',\n" +
+        '+           r: 82\n' +
+        "-           n: 'Milos Kerkez',\n" +
+        "-           p: 'LB',\n" +
+        '-           r: 85\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Tyrick Mitchell',\n" +
+        "+           p: 'LB',\n" +
+        '+           r: 82\n' +
+        "-           n: 'Jeremie Frimpong',\n" +
+        "-           p: 'RB',\n" +
+        '-           r: 84\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Jaydee Canvot',\n" +
+        "+           p: 'CB',\n" +
+        '+           r: 81\n' +
+        "-           n: 'Conor Bradley',\n" +
+        "-           p: 'RB',\n" +
+        '-           r: 83\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Adam Wharton',\n" +
+        "+           p: 'CDM',\n" +
+        '+           r: 88\n' +
+        "-           n: 'Florian Wirtz',\n" +
+        "-           p: 'CAM',\n" +
+        '-           r: 91\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Quinten Timber',\n" +
+        "+           p: 'CM',\n" +
+        '+           r: 82\n' +
+        "-           n: 'Dominik Szoboszlai',\n" +
+        "-           p: 'CAM',\n" +
+        '-           r: 90\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Anan Khalaili',\n" +
+        "+           p: 'RM',\n" +
+        '+           r: 80\n' +
+        "-           n: 'Ryan Gravenberch',\n" +
+        "-           p: 'CDM',\n" +
+        '-           r: 89\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Daichi Kamada',\n" +
+        "+           p: 'CAM',\n" +
+        '+           r: 78\n' +
+        "-           n: 'Alexis Mac Allister',\n" +
+        "-           p: 'CM',\n" +
+        '-           r: 89\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Jørgen Strand Larsen',\n" +
+        "-           n: 'Alexander Isak',\n" +
+        "            p: 'ST',\n" +
+        '+           r: 86\n' +
+        '-           r: 90\n' +
+        '          },\n' +
+        '          {\n' +
+        "+           n: 'Ismaïla Sarr',\n" +
+        "+           p: 'RW',\n" +
+        '+           r: 84\n' +
+        "-           n: 'Hugo Ekitiké',\n" +
+        "-           p: 'ST',\n" +
+        '-           r: 90\n' +
+        '          }\n' +
+        '        ],\n' +
+        '        play: [\n' +
+        '          {\n' +
+        "            kind: 'foul',\n" +
+        '            minute: 1,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Tyrick Mitchell'\n" +
+        "-           who: 'Jeremie Frimpong'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'foul',\n" +
+        '            minute: 2,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Jørgen Strand Larsen'\n" +
+        "-           who: 'Alexander Isak'\n" +
+        '          },\n' +
+        '          {\n' +
+        '            goal: true,\n' +
+        "            kind: 'shot',\n" +
+        '            minute: 2,\n' +
+        '            on: true,\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Jørgen Strand Larsen',\n" +
+        '+           xg: 0.26\n' +
+        "-           who: 'Alexander Isak',\n" +
+        '-           xg: 0.28\n' +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'throwin',\n" +
+        '            minute: 3,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        "            side: 'opp',\n" +
+        "+           who: 'Chris Richards'\n" +
+        "-           who: 'Jérémy Jacquet'\n" +
+        '          },\n' +
+        '          {\n' +
+        "+           kind: 'shot',\n" +
+        '+           minute: 5,\n' +
+        '+           on: false,\n' +
+        '+           s'... 44182 more characters
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR counted
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'overturns an actual drawn goal before scorer credit and goal-shot commitment',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'overturns an actual drawn goal before scorer credit and goal-shot commitment',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'overturns an actual drawn goal before scorer credit and goal-shot commitment',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR decorative
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'overturns an actual drawn goal before scorer credit and goal-shot commitment',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'overturns an actual drawn goal before scorer credit and goal-shot commitment',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'overturns an actual drawn goal before scorer credit and goal-shot commitment',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR penalty
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'links every reviewed penalty to one actual penalty resolution without extra shots',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'links every reviewed penalty to one actual penalty resolution without extra shots',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'links every reviewed penalty to one actual penalty resolution without extra shots',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR awards
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'awards actual penalties from saved defensive foul incidents and resolves scored and missed kicks once',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'awards actual penalties from saved defensive foul incidents and resolves scored and missed kicks once',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'awards actual penalties from saved defensive foul incidents and resolves scored and missed kicks once',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR resolution
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'awards actual penalties from saved defensive foul incidents and resolves scored and missed kicks once',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'awards actual penalties from saved defensive foul incidents and resolves scored and missed kicks once',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'awards actual penalties from saved defensive foul incidents and resolves scored and missed kicks once',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR past
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'keeps played reviews and scores while only the future is recut after a tactical change',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'keeps played reviews and scores while only the future is recut after a tactical change',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'keeps played reviews and scores while only the future is recut after a tactical change',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR reveal
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'holds the accepted goal and penalty shot until its own saved decision is shown',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'holds the accepted goal and penalty shot until its own saved decision is shown',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'holds the accepted goal and penalty shot until its own saved decision is shown',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR resume
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'shows already played reviewed goals and added-time events when a saved later period opens',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'shows already played reviewed goals and added-time events when a saved later period opens',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'shows already played reviewed goals and added-time events when a saved later period opens',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR announce
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'holds the accepted goal and penalty shot until its own saved decision is shown',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'holds the accepted goal and penalty shot until its own saved decision is shown',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'holds the accepted goal and penalty shot until its own saved decision is shown',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL VAR disabled
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'uses stated game rates with bilateral outcomes and reports the enabled baseline delta',
+      'AssertionError'
+    ],
++   [
++     'preserves the full prior default match and old live or historical kickoff behavior',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:284:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'uses stated game rates with bilateral outcomes and reports the enabled baseline delta',
+      'AssertionError'
+    ],
+    [
+      'preserves the full prior default match and old live or historical kickoff behavior',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'uses stated game rates with bilateral outcomes and reports the enabled baseline delta',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Normal proof and every effective control execute
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:81:12)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:299:46 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

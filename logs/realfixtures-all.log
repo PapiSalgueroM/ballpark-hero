@@ -1,0 +1,817 @@
+FAIL real fixtures normal
+      '    report: {\n' +
+        "      away: 'Everton',\n" +
+        '      awayGoals: 0,\n' +
+        '...\n' +
+        '          lastTen: [\n' +
+        '+           0.81\n' +
+        '-           1\n' +
+        '          ],\n' +
+        '          morale: 64.6,\n' +
+        "          name: 'Tyler Dibling',\n" +
+        "          position: 'RW',\n" +
+        '          potential: 91,\n' +
+        '...\n' +
+        '          lastTen: [\n' +
+        '+           0.54\n' +
+        '-           1\n' +
+        '          ],\n' +
+        '          morale: 65.4,\n' +
+        `          name: "Jake O'Brien",\n` +
+        "          position: 'RB',\n" +
+        '          potential: 82,\n',
+      stack: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Everton',\n" +
+        '      awayGoals: 0,\n' +
+        '...\n' +
+        '          lastTen: [\n' +
+        '+           0.81\n' +
+        '-           1\n' +
+        '          ],\n' +
+        '          morale: 64.6,\n' +
+        "          name: 'Tyler Dibling',\n" +
+        "          position: 'RW',\n" +
+        '          potential: 91,\n' +
+        '...\n' +
+        '          lastTen: [\n' +
+        '+           0.54\n' +
+        '-           1\n' +
+        '          ],\n' +
+        '          morale: 65.4,\n' +
+        `          name: "Jake O'Brien",\n` +
+        "          position: 'RB',\n" +
+        '          potential: 82,\n' +
+        '\n' +
+        '    at Object.legacy (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:383:48)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:421:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54'
+    },
+    {
+      title: 'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Unsupported actual match preserves every recorded field and random draw\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Eintracht Frankfurt',\n" +
+        '      awayGoals: 1,\n' +
+        '...\n' +
+        '            assists: 0,\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Jonathan Burkardt',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '            goals: 0,\n' +
+        "            name: 'Can Uzun',\n" +
+        "            pos: 'CAM',\n" +
+        '            rating: 6.8\n' +
+        '          },\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jonathan Burkardt',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 6.1\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Nnamdi Collins',\n" +
+        "            pos: 'CB',\n" +
+        '            rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '...\n' +
+        '            minute: 89,\n' +
+        '+           og: true,\n' +
+        "            side: 'opp',\n" +
+        "+           text: 'Jonathan Tah'\n" +
+        "-           text: 'Jonathan Burkardt'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'corner',\n" +
+        '            minute: 90,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        '        {\n' +
+        "+         drawn: 'Jonathan Burkardt',\n" +
+        '          minute: 89,\n' +
+        "+         name: 'Jonathan Tah',\n" +
+        '+         og: true\n' +
+        "-         name: 'Jonathan Burkardt'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      otherResults: [\n' +
+        '        {\n' +
+        '          ag: 1,\n',
+      stack: 'AssertionError [ERR_ASSERTION]: Unsupported actual match preserves every recorded field and random draw\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Eintracht Frankfurt',\n" +
+        '      awayGoals: 1,\n' +
+        '...\n' +
+        '            assists: 0,\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Jonathan Burkardt',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '            goals: 0,\n' +
+        "            name: 'Can Uzun',\n" +
+        "            pos: 'CAM',\n" +
+        '            rating: 6.8\n' +
+        '          },\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jonathan Burkardt',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 6.1\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Nnamdi Collins',\n" +
+        "            pos: 'CB',\n" +
+        '            rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '...\n' +
+        '            minute: 89,\n' +
+        '+           og: true,\n' +
+        "            side: 'opp',\n" +
+        "+           text: 'Jonathan Tah'\n" +
+        "-           text: 'Jonathan Burkardt'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'corner',\n" +
+        '            minute: 90,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        '        {\n' +
+        "+         drawn: 'Jonathan Burkardt',\n" +
+        '          minute: 89,\n' +
+        "+         name: 'Jonathan Tah',\n" +
+        '+         og: true\n' +
+        "-         name: 'Jonathan Burkardt'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      otherResults: [\n' +
+        '        {\n' +
+        '          ag: 1,\n' +
+        '\n' +
+        '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:272:48)\n' +
+        '    at async Object.baseline (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:412:9)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:421:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54'
+    },
+    {
+      title: 'passes the whole independent generated baseline with untouched current source under every copied fault',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Unsupported actual match preserves every recorded field and random draw\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Eintracht Frankfurt',\n" +
+        '      awayGoals: 1,\n' +
+        '...\n' +
+        '            assists: 0,\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Jonathan Burkardt',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '            goals: 0,\n' +
+        "            name: 'Can Uzun',\n" +
+        "            pos: 'CAM',\n" +
+        '            rating: 6.8\n' +
+        '          },\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jonathan Burkardt',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 6.1\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Nnamdi Collins',\n" +
+        "            pos: 'CB',\n" +
+        '            rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '...\n' +
+        '            minute: 89,\n' +
+        '+           og: true,\n' +
+        "            side: 'opp',\n" +
+        "+           text: 'Jonathan Tah'\n" +
+        "-           text: 'Jonathan Burkardt'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'corner',\n" +
+        '            minute: 90,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        '        {\n' +
+        "+         drawn: 'Jonathan Burkardt',\n" +
+        '          minute: 89,\n' +
+        "+         name: 'Jonathan Tah',\n" +
+        '+         og: true\n' +
+        "-         name: 'Jonathan Burkardt'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      otherResults: [\n' +
+        '        {\n' +
+        '          ag: 1,\n',
+      stack: 'AssertionError [ERR_ASSERTION]: Unsupported actual match preserves every recorded field and random draw\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'match',\n" +
+        '    report: {\n' +
+        "      away: 'Eintracht Frankfurt',\n" +
+        '      awayGoals: 1,\n' +
+        '...\n' +
+        '            assists: 0,\n' +
+        '-           goals: 1,\n' +
+        "-           name: 'Jonathan Burkardt',\n" +
+        "-           pos: 'ST',\n" +
+        '-           rating: 7\n' +
+        '-         },\n' +
+        '-         {\n' +
+        '-           assists: 0,\n' +
+        '            goals: 0,\n' +
+        "            name: 'Can Uzun',\n" +
+        "            pos: 'CAM',\n" +
+        '            rating: 6.8\n' +
+        '          },\n' +
+        '...\n' +
+        '            goals: 0,\n' +
+        "+           name: 'Jonathan Burkardt',\n" +
+        "+           pos: 'ST',\n" +
+        '+           rating: 6.1\n' +
+        '+         },\n' +
+        '+         {\n' +
+        '+           assists: 0,\n' +
+        '+           goals: 0,\n' +
+        "            name: 'Nnamdi Collins',\n" +
+        "            pos: 'CB',\n" +
+        '            rating: 6\n' +
+        '          },\n' +
+        '          {\n' +
+        '...\n' +
+        '            minute: 89,\n' +
+        '+           og: true,\n' +
+        "            side: 'opp',\n" +
+        "+           text: 'Jonathan Tah'\n" +
+        "-           text: 'Jonathan Burkardt'\n" +
+        '          },\n' +
+        '          {\n' +
+        "            kind: 'corner',\n" +
+        '            minute: 90,\n' +
+        "            side: 'me',\n" +
+        '...\n' +
+        '        {\n' +
+        "+         drawn: 'Jonathan Burkardt',\n" +
+        '          minute: 89,\n' +
+        "+         name: 'Jonathan Tah',\n" +
+        '+         og: true\n' +
+        "-         name: 'Jonathan Burkardt'\n" +
+        '        }\n' +
+        '      ],\n' +
+        '      otherResults: [\n' +
+        '        {\n' +
+        '          ag: 1,\n' +
+        '\n' +
+        '    at baselineFor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:272:48)\n' +
+        '    at async Object.uncopied (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:415:9)\n' +
+        '    at async main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:421:13)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL real fixtures venues
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'reads all 760 fixtures with the exact two-source round order and venues',
+      'AssertionError'
+    ],
++   [
++     'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
++     'AssertionError'
++   ],
++   [
++     'passes the whole independent generated baseline with untouched current source under every copied fault',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:429:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'reads all 760 fixtures with the exact two-source round order and venues',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ],
+    [
+      'passes the whole independent generated baseline with untouched current source under every copied fault',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'reads all 760 fixtures with the exact two-source round order and venues',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL real fixtures card
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'renders all 760 CalendarCard opponent and venue readings from the same schedule',
+      'AssertionError'
+    ],
++   [
++     'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
++     'AssertionError'
++   ],
++   [
++     'passes the whole independent generated baseline with untouched current source under every copied fault',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:429:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'renders all 760 CalendarCard opponent and venue readings from the same schedule',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ],
+    [
+      'passes the whole independent generated baseline with untouched current source under every copied fault',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'renders all 760 CalendarCard opponent and venue readings from the same schedule',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL real fixtures settlement
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'settles the actual human fixture and every neutral result with conserved table and scorer credits',
+      'AssertionError'
+    ],
++   [
++     'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
++     'AssertionError'
++   ],
++   [
++     'passes the whole independent generated baseline with untouched current source under every copied fault',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:429:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'settles the actual human fixture and every neutral result with conserved table and scorer credits',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ],
+    [
+      'passes the whole independent generated baseline with untouched current source under every copied fault',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'settles the actual human fixture and every neutral result with conserved table and scorer credits',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL real fixtures bye
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'settles a neutral-only league entry through the same real fixture resolver',
+      'AssertionError'
+    ],
++   [
++     'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
++     'AssertionError'
++   ],
++   [
++     'passes the whole independent generated baseline with untouched current source under every copied fault',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:429:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'settles a neutral-only league entry through the same real fixture resolver',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ],
+    [
+      'passes the whole independent generated baseline with untouched current source under every copied fault',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'settles a neutral-only league entry through the same real fixture resolver',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL real fixtures world
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'settles the actual world league round through the same real fixture resolver',
+      'AssertionError'
+    ],
++   [
++     'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
++     'AssertionError'
++   ],
++   [
++     'passes the whole independent generated baseline with untouched current source under every copied fault',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:429:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'settles the actual world league round through the same real fixture resolver',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ],
+    [
+      'passes the whole independent generated baseline with untouched current source under every copied fault',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'settles the actual world league round through the same real fixture resolver',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL real fixtures edited
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'binds only a fresh original modern Premier League world with exact membership',
+      'AssertionError'
+    ],
++   [
++     'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
++     'AssertionError'
++   ],
++   [
++     'passes the whole independent generated baseline with untouched current source under every copied fault',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:429:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'binds only a fresh original modern Premier League world with exact membership',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ],
+    [
+      'passes the whole independent generated baseline with untouched current source under every copied fault',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'binds only a fresh original modern Premier League world with exact membership',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL real fixtures legacy
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    [
+      'preserves the whole generated old save, random draws, match outcome and reload bytes',
+      'AssertionError'
+    ],
+...
+    ],
++   [
++     'passes the whole independent generated baseline with untouched current source under every copied fault',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:429:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'preserves the whole generated old save, random draws, match outcome and reload bytes',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ],
+    [
+      'passes the whole independent generated baseline with untouched current source under every copied fault',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'preserves the whole generated old save, random draws, match outcome and reload bytes',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL real fixtures future
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'refuses stale keys in later seasons, other years and changed league membership',
+      'AssertionError'
+    ],
++   [
++     'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
++     'AssertionError'
++   ],
++   [
++     'passes the whole independent generated baseline with untouched current source under every copied fault',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:429:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'refuses stale keys in later seasons, other years and changed league membership',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ],
+    [
+      'passes the whole independent generated baseline with untouched current source under every copied fault',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'refuses stale keys in later seasons, other years and changed league membership',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAIL real fixtures rollover
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
+  [
+    [
+      'clears the real fixture key after a fully played season before generating the next season',
+      'AssertionError'
+    ],
++   [
++     'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
++     'AssertionError'
++   ],
++   [
++     'passes the whole independent generated baseline with untouched current source under every copied fault',
++     'AssertionError'
++   ]
+  ]
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:429:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    [
+      'clears the real fixture key after a fully played season before generating the next season',
+      'AssertionError'
+    ],
+    [
+      'matches the independent pre-change engine for unsupported starts and genuine match outcomes',
+      'AssertionError'
+    ],
+    [
+      'passes the whole independent generated baseline with untouched current source under every copied fault',
+      'AssertionError'
+    ]
+  ],
+  expected: [
+    [
+      'clears the real fixture key after a fully played season before generating the next season',
+      'AssertionError'
+    ]
+  ],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Normal and all nine effective copied controls execute their exact assertions
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:133:12)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:441:54 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
