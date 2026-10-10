@@ -1,0 +1,22 @@
+all: node scripts/simDailySaveHardening.mjs
+shapes: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+c-stale: R848_CONTROL=stale node scripts/simDailySaveHardening.mjs
+c-guard: R848_CONTROL=guard node scripts/simDailySaveHardening.mjs
+c-turn: R848_CONTROL=turn node scripts/simDailySaveHardening.mjs
+c-verdict: R848_CONTROL=verdict node scripts/simDailySaveHardening.mjs
+c-event: R848_CONTROL=event node scripts/simDailySaveHardening.mjs
+c-mark: R848_CONTROL=mark node scripts/simDailySaveHardening.mjs
+c-finished: R848_CONTROL=finished node scripts/simDailySaveHardening.mjs
+c-decided: R848_CONTROL=decided node scripts/simDailySaveHardening.mjs
+c-strict: R848_CONTROL=strict node scripts/simDailySaveHardening.mjs
+c-single: R848_CONTROL=single node scripts/simDailySaveHardening.mjs
+c-empty: R848_CONTROL=empty node scripts/simDailySaveHardening.mjs
+c-shape: R848_CONTROL=shape node scripts/simDailySaveHardening.mjs
+c-skip: R848_CONTROL=skip node scripts/simDailySaveHardening.mjs
+c-skipdiv: R848_CONTROL=skipdiv node scripts/simDailySaveHardening.mjs
+c-guideslow: R848_CONTROL=guideslow node scripts/simDailySaveHardening.mjs
+c-guidelate: R848_CONTROL=guidelate node scripts/simDailySaveHardening.mjs
+c-guideheld: R848_CONTROL=guideheld node scripts/simDailySaveHardening.mjs
+vitest-shapes-raw: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx src/test/dailySaveHardening.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-shapes-alone-1: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000
+vitest-shapes-alone-2: node_modules/.bin/vitest run src/test/dailySaveShapes.test.tsx --testTimeout=300000 --hookTimeout=120000

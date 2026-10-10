@@ -1,0 +1,844 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/afl-higher-lower
+[22m[39mR848_SHAPES {"route":"/afl-higher-lower","slugs":[{"s":"afl-hl","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/baseball-career
+[22m[39mR848_SHAPES {"route":"/baseball-career","slugs":[{"s":"baseball-career","i":58,"id":"bc-062"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/baseball-connections
+[22m[39mR848_SHAPES {"route":"/baseball-connections","slugs":[{"s":"baseball-connections","i":58,"id":"bconn-059"}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career
+[22m[39mR848_SHAPES {"route":"/career","slugs":[{"s":"career-path","i":2,"id":"Alan Shearer"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/cfb-higher-lower
+[22m[39mR848_SHAPES {"route":"/cfb-higher-lower","slugs":[{"s":"cfb-hl","i":0,"id":null}],"guide":"ready","failures":[]}
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/college-grid
+[22m[39mR848_SHAPES {"route":"/college-grid","slugs":[{"s":"college-grid","i":35,"id":null}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Each child in a list should have a unique "key" prop.
+
+Check the render method of `Connections`. See https://reactjs.org/link/warning-keys for more information.
+    at div
+    at Connections (/home/runner/work/ballpark-hero/ballpark-hero/src/pages/Connections.tsx:42:320)
+    at Router (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7134:13)
+    at MemoryRouter (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-router/dist/development/chunk-BV7QT456.mjs:7044:3)
+    at Provider (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@radix-ui/react-context/dist/index.mjs:27:15)
+    at TooltipProvider (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@radix-ui/react-tooltip/dist/index.mjs:29:5)
+    at QueryClientProvider (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@tanstack/react-query/build/modern/QueryClientProvider.js:20:3)
+    at _HelmetProvider (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react-helmet-async/lib/index.esm.js:460:5)
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/connections
+[22m[39mR848_SHAPES {"route":"/connections","slugs":[{"s":"connections","i":136,"id":"puzzle-137"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/f1-higher-lower
+[22m[39mR848_SHAPES {"route":"/f1-higher-lower","slugs":[{"s":"f1-hl","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/football-connect-4
+[22m[39mR848_SHAPES {"route":"/football-connect-4","slugs":[{"s":"football-connect4","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/football-grid
+[22m[39mR848_SHAPES {"route":"/football-grid","slugs":[{"s":"football-grid","i":0,"id":"grid-20261001"}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39m[fetchFootlePlayerPool] Supabase returned empty or errored, using fallback
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/footle
+[22m[39mR848_SHAPES {"route":"/footle","slugs":[{"s":"footle","i":58,"id":"Jérémy Doku"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/golf-higher-lower
+[22m[39mR848_SHAPES {"route":"/golf-higher-lower","slugs":[{"s":"golf-hl","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-college
+[22m[39mR848_SHAPES {"route":"/guess-the-college","slugs":[{"s":"guess-the-college","i":44,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/hockey-career
+[22m[39mR848_SHAPES {"route":"/hockey-career","slugs":[{"s":"hockey-career","i":58,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/hockey-higher-lower
+[22m[39mR848_SHAPES {"route":"/hockey-higher-lower","slugs":[{"s":"hockey-hl","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/mlb-higher-lower
+[22m[39mR848_SHAPES {"route":"/mlb-higher-lower","slugs":[{"s":"mlb-hl","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/nba-career
+[22m[39mR848_SHAPES {"route":"/nba-career","slugs":[{"s":"nba-career","i":24,"id":"nbac-042"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/nba-connections
+[22m[39mR848_SHAPES {"route":"/nba-connections","slugs":[{"s":"nba-connections","i":1,"id":"nbaconn-002"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/nba-higher-lower
+[22m[39mR848_SHAPES {"route":"/nba-higher-lower","slugs":[{"s":"nba-hl","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/nfl-connections
+[22m[39mR848_SHAPES {"route":"/nfl-connections","slugs":[{"s":"nfl-connections","i":1,"id":"nflconn-002"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/nfl-higher-lower
+[22m[39mR848_SHAPES {"route":"/nfl-higher-lower","slugs":[{"s":"nfl-hl","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/nhl-connections
+[22m[39mR848_SHAPES {"route":"/nhl-connections","slugs":[{"s":"nhl-connections","i":1,"id":"nhlconn-002"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/olympics
+[22m[39mR848_SHAPES {"route":"/olympics","slugs":[{"s":"olympics","i":28,"id":null}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39m[fetchShirtNumberPuzzles] Supabase returned empty or errored, using fallback
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/shirt-number
+[22m[39mR848_SHAPES {"route":"/shirt-number","slugs":[{"s":"shirt-number","i":9,"id":"Lamine Yamal"}],"guide":"none","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/soccer-grid
+[22m[39mR848_SHAPES {"route":"/soccer-grid","slugs":[{"s":"soccer-grid","i":6,"id":"sg-007"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/tennis-higher-lower
+[22m[39mR848_SHAPES {"route":"/tennis-higher-lower","slugs":[{"s":"tennis-hl","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchTransferPathPuzzles] query failed or empty: [1mnull[22m
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39m[fetchCareerPlayers] career_players query failed or returned empty: [1mnull[22m
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/transfer-path
+[22m[39mR848_SHAPES {"route":"/transfer-path","slugs":[{"s":"transfer-path","i":1,"id":"tp-2"}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/ufc
+[22m[39mR848_SHAPES {"route":"/ufc","slugs":[{"s":"ufc-game","i":64,"id":null}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/career-ladder
+[22m[39mR848_SHAPES {"route":"/career-ladder","slugs":[{"s":"career-ladder","i":0,"id":"p09"}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/guess-the-golfer
+[22m[39mR848_SHAPES {"route":"/guess-the-golfer","slugs":[{"s":"guess-the-golfer","i":25,"id":"Jim Barnes"}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-eleven
+[22m[39mR848_SHAPES {"route":"/missing-eleven","slugs":[{"s":"missing-eleven","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-five
+[22m[39mR848_SHAPES {"route":"/missing-five","slugs":[{"s":"missing-five","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-nine
+[22m[39mR848_SHAPES {"route":"/missing-nine","slugs":[{"s":"missing-nine","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/missing-xi
+[22m[39mR848_SHAPES {"route":"/missing-xi","slugs":[{"s":"missing-xi","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/puck-detective
+[22m[39mR848_SHAPES {"route":"/puck-detective","slugs":[{"s":"puck-detective","i":0,"id":null}],"guide":"ready","failures":[]}
+
+[90mstdout[2m | src/test/dailySaveShapes.test.tsx[2m > [22m[2ma damaged daily save resets itself[2m > [22m[2m/rank-em
+[22m[39mR848_SHAPES {"route":"/rank-em","slugs":[{"s":"rank-em","i":0,"id":null}],"guide":"ready","failures":[]}
+
+ [32m✓[39m src/test/dailySaveShapes.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 26968[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/afl-higher-lower [33m 1344[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/baseball-career [33m 884[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/baseball-connections [33m 862[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/career [33m 2289[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/cfb-higher-lower [33m 568[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/college-grid [33m 1370[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/connections [33m 1204[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/f1-higher-lower [33m 524[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/football-connect-4 [33m 588[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/football-grid [33m 971[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/footle [33m 1283[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/golf-higher-lower [33m 585[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/guess-the-college [33m 614[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/hockey-career [33m 806[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/hockey-higher-lower [33m 748[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/mlb-higher-lower [33m 453[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/nba-career [33m 792[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/nba-connections [33m 870[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/nba-higher-lower [33m 358[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/nfl-connections [33m 655[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/nfl-higher-lower [33m 405[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/nhl-connections [33m 770[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/olympics [33m 496[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/soccer-grid [33m 798[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/tennis-higher-lower [33m 381[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/transfer-path [33m 691[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/ufc [33m 703[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/career-ladder [33m 856[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/guess-the-golfer [33m 523[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/missing-eleven [33m 432[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/missing-five [33m 415[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/missing-nine [33m 464[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/missing-xi [33m 858[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/puck-detective [33m 617[2mms[22m[39m
+   [33m[2m✓[22m[39m a damaged daily save resets itself[2m > [22m/rank-em [33m 521[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m36 passed[39m[22m[90m (36)[39m
+[2m   Start at [22m 09:24:10
+[2m   Duration [22m 28.30s[2m (transform 3.64s, setup 70ms, collect 383ms, tests 26.97s, environment 351ms, prepare 164ms)[22m
+

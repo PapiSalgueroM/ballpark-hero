@@ -1,0 +1,4 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+R848 skipdiv control: /free-kick drew 1 target(s) and went red, 173 other rows green
+simDailySaveHardening: control skipdiv fired as designed

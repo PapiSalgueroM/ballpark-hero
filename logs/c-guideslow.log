@@ -1,0 +1,4 @@
+0) every useDailyPuzzle consumer is mounted by one of the two tests
+   39 consumers: 36 routes in the shapes test, 3 unrouted (useFootballDraft.ts, useGuessTransferValue.ts, useWorldCup.ts) in the hardening test; 19 hand in their own check
+R848 guideslow control: 36 of 36 rows green with the loader 300 ms late (9 loads waited), 35 ready, 1 none
+simDailySaveHardening: control guideslow fired as designed
