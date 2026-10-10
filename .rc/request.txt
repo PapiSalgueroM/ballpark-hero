@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+# Round 1215 step (b), head 33efc2ce: the clean walk twice on its own seed, once on another, once fresh.
+clean-1: node scripts/playLiveMatchFit.mjs
+clean-2: node scripts/playLiveMatchFit.mjs
+seed-7: LIVE_FIT_SEED=7 node scripts/playLiveMatchFit.mjs
+fresh: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
+badseed: LIVE_FIT_SEED= node scripts/playLiveMatchFit.mjs
