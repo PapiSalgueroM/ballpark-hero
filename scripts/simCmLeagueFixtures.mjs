@@ -78,7 +78,10 @@
  *     registered leagues, each under the words the registry gives its list, by the game's
  *     own league names; it holds no link (a publisher's address in a .tsx fails
  *     simLiveScores, and the Calendar already names the sources); and its one worked
- *     example is the first two fixtures of that club in the Premier League ledger.
+ *     example is the first two fixtures of that club in the Premier League ledger. And the
+ *     What's New entry that announced the lists in files of their own (found by the mark on its
+ *     list of leagues, read as code with comments taken out) names exactly those leagues, by
+ *     the game's names, and counts them right.
  *
  * CONTROLS. Every run ends by proving its own checks: each control below is
  * applied to an in memory copy of each frozen ledger in turn, must first show
@@ -116,6 +119,8 @@
  *                 the order of its list is the order of                H J
  *   helpdrift     the league gone from the Help paragraph              J
  *   helplink      a link planted in the Help paragraph                 J (red for "help", not for a league)
+ *   newsdrift     the league gone from the What's New entry (the
+ *                 leagues whose list is in a file of its own)          J
  * CM_LEAGUE_FIXTURES_CONTROL=<name> leaves that one fault in place instead: the
  * run then exits 1 with a last line that says the control FIRED as expected, or
  * exits 3 with a last line that says it MISFIRED or could not run.
@@ -457,6 +462,26 @@ function judgeHelp(world, reds) {
     if (world.only && l.id !== world.only) continue;
     if (!(world.registry || []).some(r => r.leagueId === l.id)) reds.push({ id: l.id, section: 'J', msg: `Help names ${l.name} and the game binds no list for it` });
   }
+  /* What's New. The entry that announced the lists in files of their own (the Premier League had its own entry
+     a release earlier) names exactly those leagues, by the game's names, and counts them right. */
+  const news = world.news;
+  const own = (world.registry || []).filter(r => r.rides === 'file');
+  if (news && (own.length || news.found)) {
+    if (!news.found) reds.push({ id: 'help', section: 'J', msg: "What's New has no entry marked data-cm-fixture-leagues, and the game binds lists it never announced" });
+    else {
+      for (const r of own) {
+        if (world.only && r.leagueId !== world.only) continue;
+        const row = world.leagues.find(l => l.id === r.leagueId);
+        if (!news.ids.includes(r.leagueId)) reds.push({ id: r.leagueId, section: 'J', msg: `the game binds ${r.key} and What's New does not list the league` });
+        else if (!row || !news.text.includes(row.name)) reds.push({ id: r.leagueId, section: 'J', msg: `What's New lists ${r.leagueId} and does not print the game's name for it` });
+      }
+      for (const id of news.ids) {
+        if (world.only && id !== world.only) continue;
+        if (!own.some(r => r.leagueId === id)) reds.push({ id, section: 'J', msg: `What's New says ${id} plays its real list and the game binds none for it` });
+      }
+      if (!world.only && news.count !== news.ids.length) reds.push({ id: 'help', section: 'J', msg: `What's New says "${news.countWord} more leagues" and lists ${news.ids.length}` });
+    }
+  }
   /* The one worked example, worked out again from the ledger it is about. */
   const premier = world.entries.find(x => x.ledger && x.ledger.leagueId === 'premier');
   const told = /Example: ([^.]+?) start (at home to|away at) ([^,]+), then (visit|host) ([^.]+)\./.exec(help.text);
@@ -504,7 +529,14 @@ async function gameRegistryAndHelp() {
     links: (para.match(/<a[\s>]/g) || []).length + (para.match(/https?:\/\//g) || []).length,
     text: unescape(para.replace(/<[^>]*>/g, '')),
   };
-  return { registry, help };
+  /* What's New is read as code with its comments taken out, never as prose: the entry is found by the mark on its list. */
+  const page = fs.readFileSync(path.join(ROOT, 'src/pages/WhatsNew.tsx'), 'utf8').replace(/\{\/\*[\s\S]*?\*\/\}/g, ' ').replace(/\/\*[\s\S]*?\*\//g, ' ');
+  const entry = (/<li>((?:(?!<\/li>)[\s\S])*?data-cm-fixture-leagues="([^"]*)">([^<]*)<(?:(?!<\/li>)[\s\S])*?)<\/li>/.exec(page) || []);
+  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
+  const countWord = entry[1] ? ((/fixture list in (\w+) more leagues?/.exec(entry[1]) || [])[1] || '') : '';
+  const news = entry[1] === undefined ? { found: false, ids: [], text: '', count: 0, countWord: '' }
+    : { found: true, ids: entry[2].split(' ').filter(Boolean), text: entry[3], count: WORDS.indexOf(countWord), countWord };
+  return { registry, help, news };
 }
 
 /* ---- load what is on disk ---- */
@@ -522,9 +554,10 @@ const allEntries = loaded.map(l => ({
   frozen: !!(l.ledger && frozenKeys.has(l.ledger.key)),
   tool: !(l.ledger && PRE_TOOL_KEYS.includes(l.ledger.key)),
   bound: !!(l.ledger && registeredKeys.has(l.ledger.key)),
+  ownFile: !!(l.ledger && game.registry.some(r => r.key === l.ledger.key && r.rides === 'file')),
 }));
 const entries = ONLY ? allEntries.filter(e => e.ledger && e.ledger.leagueId === ONLY) : allEntries;
-const world = { leagues, entries, frozen: frozenOnDisk, only: ONLY, registry: game.registry, bound: [...BOUND_KEYS], help: game.help };
+const world = { leagues, entries, frozen: frozenOnDisk, only: ONLY, registry: game.registry, bound: [...BOUND_KEYS], help: game.help, news: game.news };
 const idOf = e => (e.ledger && e.ledger.leagueId) || e.file;
 
 /* ---- the controls: each damages a copy of the world for one league and names the sections that must go red ---- */
@@ -630,6 +663,7 @@ const CONTROLS = {
   },
   helpdrift: { expect: 'J', applies: e => e.bound, apply(w, e) { w.help.leagues = w.help.leagues.filter(l => l.id !== e.ledger.leagueId); } },
   helplink: { expect: 'J', redId: 'help', applies: e => e.bound, apply(w) { w.help.links += 1; } },
+  newsdrift: { expect: 'J', applies: e => e.ownFile, apply(w, e) { w.news.ids = w.news.ids.filter(id => id !== e.ledger.leagueId); w.news.count -= 1; } },
 };
 const expectOf = (name, e) => (typeof CONTROLS[name].expect === 'function' ? CONTROLS[name].expect(e) : CONTROLS[name].expect);
 const appliesTo = (name, e) => !CONTROLS[name].applies || CONTROLS[name].applies(e);
