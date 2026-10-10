@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+#!serial
+# Round 1215: draws counted (nothing seeded) on the pages of unedited walks, part 5.
+d-playSoccerCareerDiscipline: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSoccerCareerDiscipline.mjs
+d-playSoccerCareerFamily: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSoccerCareerFamily.mjs
+d-playSoccerCareerLeagueWorld: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSoccerCareerLeagueWorld.mjs
+d-playSoccerCareerOpponents: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSoccerCareerOpponents.mjs
+d-playSoftFourOhFour: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSoftFourOhFour.mjs
+d-playSponsors: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playSponsors.mjs
+d-playStartingXi: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playStartingXi.mjs
+d-playStorageBlocked: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playStorageBlocked.mjs
+d-playTradeTalks: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playTradeTalks.mjs
+d-playTycoonGearFit: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playTycoonGearFit.mjs
+d-playUsCareerSaveSeam: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playUsCareerSaveSeam.mjs
+d-playWc2026Reset: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playWc2026Reset.mjs
+d-playWilderness: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playWilderness.mjs
+d-playWorldXiReportFit: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playWorldXiReportFit.mjs
