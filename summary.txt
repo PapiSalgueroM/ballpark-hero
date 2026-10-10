@@ -1,0 +1,5 @@
+build exit=0 20s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCareerSquad exit=0 153s | simCareerSquad: 2215 checks, 0 failed
+simClubSquads exit=0 2s | simClubSquads: green. The squad is the real one, you are in the right place in it, and the game never noticed.
+playCareerSquad exit=1 158s | playCareerSquad: 154 checks, 1 failed
+playCareerSquad-nowheel exit=0 156s | playCareerSquad: 170 checks, 0 failed
