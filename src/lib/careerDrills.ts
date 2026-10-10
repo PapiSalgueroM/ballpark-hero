@@ -200,8 +200,8 @@ export function buildWallShotRun(seed: number): WallShotSetup[] {
   return buildLadder(seed, ROUNDS_PER_RUN, (t, rng) => {
     const distance = Math.round((16 + t * 8) * 10) / 10;
     const gapCentre = Math.round((rng() * 2 - 1) * 80) / 100;
-    const gapMax = Math.round((0.30 - t * 0.17) * 100) / 100;
-    const period = Math.round((2.4 - t * 1.1) * 100) / 100;
+    const gapMax = Math.round((0.34 - t * 0.16) * 100) / 100;
+    const period = Math.round((2.8 - t * 0.95) * 100) / 100;
     const phase = Math.round(rng() * 100) / 100;
     const keeperSkill = clamp(0.3 + t * 0.45 + (rng() - 0.5) * 0.12, 0.2, 0.82);
     /* He knows which side the gap is on, and mostly leans that way. */

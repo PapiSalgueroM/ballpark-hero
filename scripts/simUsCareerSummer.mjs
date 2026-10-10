@@ -253,14 +253,20 @@ const CONTROLS = {
       { file: SUMMER, from: '[e] = takeFresh(deck, 1, knob.cooldowns ? ledger : null, year, knob.fallbackCooldown, passed, r, outsideLedger);', to: "e = deck.find(x => x.id === 'training'); break;" },
       /* Since the show time check, a later rating card is skipped when shown,
          so the forced card would never be answered without this. */
-      { file: SUMMER, from: 'if (card && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;', to: 'if (card) return card;' },
+      /* Round 1039 put the board's held out check in front of this line and the
+         anchor went stale (the control refused to run from then until Release
+         AP's gate read it on 2026-10-09). The held out check stays. */
+      { file: SUMMER, from: 'if (card && !(exclude && exclude(card)) && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;', to: 'if (card && !(exclude && exclude(card))) return card;' },
     ],
   },
   probe: {
     section: '10', note: 'later cards are never checked for the rating, at the deal or when shown',
     edits: [
       { file: SUMMER, from: 'if (moraleLiftOf(c, e, snapshot) <= LATER_CARD_MORALE_LIFT && !movesRating(c, e, snapshot)) break;', to: 'if (moraleLiftOf(c, e, snapshot) <= LATER_CARD_MORALE_LIFT) break;' },
-      { file: SUMMER, from: 'if (card && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;', to: 'if (card) return card;' },
+      /* Round 1039 put the board's held out check in front of this line and the
+         anchor went stale (the control refused to run from then until Release
+         AP's gate read it on 2026-10-09). The held out check stays. */
+      { file: SUMMER, from: 'if (card && !(exclude && exclude(card)) && (s.at === 0 || !laterAnswerMovesRating(c, sport, card, s.at))) return card;', to: 'if (card && !(exclude && exclude(card))) return card;' },
     ],
   },
   latercorrupt: { section: '11', note: 'the later slots may deal the corruption deck', edits: [{ file: SUMMER, from: ".filter(e => e.press !== 'big' && !e.corruption);", to: ".filter(e => e.press !== 'big');" }] },

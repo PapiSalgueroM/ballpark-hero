@@ -380,7 +380,9 @@ begin(1, 'Kick off commits the first half');
   const counts = [];
   let goals = 0;
   let bookings = 0;
-  const goalLines = xs => xs.map(l => `${l.name}@${l.minute}`).sort();
+  /* Round 1146: an own goal against me is listed under MY defender and keeps the man of theirs it was drawn for
+     (drawn), who is the man on the ball of that shot. Seeds 1 to 8 of this harness hold one; the default seed holds none. */
+  const goalLines = xs => xs.map(l => `${l.drawn ?? l.name}@${l.minute}`).sort();
   for (const f of fixtures) {
     const live = f.ht.live;
     const ctx = ctxOf(f);
@@ -556,14 +558,16 @@ begin(3, 'The opposition eleven, their bench and their substitutions');
        on at 61 can score at 62, and a man hooked at 62 can score at 62. */
     for (const sc of r.oppScorers) {
       scorersChecked += 1;
-      if (!oppOnPitchAt(withSubs, sc.minute).some(p => p.n === sc.name)) fail(`${ctx}: ${sc.name} scored at ${sc.minute} without being on the pitch`);
+      /* Round 1146: an own goal against me names my defender; the man of theirs it was drawn for is the one who must be on their pitch. */
+      const their = sc.drawn ?? sc.name;
+      if (!oppOnPitchAt(withSubs, sc.minute).some(p => p.n === their)) fail(`${ctx}: ${their} scored at ${sc.minute} without being on the pitch`);
     }
     const sheet = (d.oppRatings ?? []).map(p => p.name).sort();
     const expected = [...new Set([...names, ...subs.map(s => s.on)])].sort();
     if (J(sheet) !== J(expected)) fail(`${ctx}: the ratings sheet names [${sheet.join(', ')}], the eleven plus the men who came on are [${expected.join(', ')}]`);
     if (!inRange(subs.length, 0, MAX_SUBS)) fail(`${ctx}: ${subs.length} opposition subs`);
     const lastGoal = new Map();
-    for (const sc of r.oppScorers) lastGoal.set(sc.name, Math.max(lastGoal.get(sc.name) ?? 0, sc.minute));
+    for (const sc of r.oppScorers) lastGoal.set(sc.drawn ?? sc.name, Math.max(lastGoal.get(sc.drawn ?? sc.name) ?? 0, sc.minute));
     for (const s of subs) {
       subsSeen += 1;
       if (!inRange(s.minute, 56, 88)) fail(`${ctx}: an opposition sub at ${s.minute}`);
@@ -584,7 +588,7 @@ begin(3, 'The opposition eleven, their bench and their substitutions');
          (a throw in, a foul, a corner, a shot) or on the scoresheet after his
          minute. Before the reorder that share was exactly zero. */
       const touched = d.play.some(e => e.side === 'opp' && e.minute > s.minute && e.who === s.on)
-        || r.oppScorers.some(sc => sc.minute > s.minute && sc.name === s.on);
+        || r.oppScorers.some(sc => sc.minute > s.minute && (sc.drawn ?? sc.name) === s.on);
       if (touched) subOnTouched += 1;
       /* And the booking a man took after he had gone: their cards are drawn
          off the pitch at each minute before their subs, and a booked man is
@@ -594,7 +598,7 @@ begin(3, 'The opposition eleven, their bench and their substitutions');
     if (subs.some(s => d.play.some(e => e.side === 'opp' && e.minute > s.minute && e.who === s.off))) offStillOnBallMatches += 1;
     for (const c of d.oppCards ?? []) {
       if (c.kind !== 'red') continue;
-      if (r.oppScorers.some(sc => sc.name === c.name && sc.minute > c.minute)) redThenGoal += 1;
+      if (r.oppScorers.some(sc => (sc.drawn ?? sc.name) === c.name && sc.minute > c.minute)) redThenGoal += 1;
     }
   }
   if (named < 10) fail(`only ${named} matches had a named opposition eleven`);
@@ -704,7 +708,8 @@ function checkChange(ctx, before, after, keys, m, half, outMan, inMan) {
          halves in order, the scorers by name and minute, and the subs the
          manager made. The whistle settles what was drawn; it draws nothing. */
       const al = after.live;
-      const lines = xs => xs.map(l => `${l.name}@${l.minute}`);
+      /* Round 1146: an own goal of theirs for me is committed under the man it was drawn for with the man who put it in beside him (og.n), and reported under the man who put it in. */
+      const lines = xs => xs.map(l => `${(l.og && l.og.n) || l.name}@${l.minute}`);
       const trio = xs => xs.map(s => ({ off: s.off, on: s.on, minute: s.minute }));
       if (J(d.play) !== J([...(al.h1Play ?? []), ...(al.h2Play ?? [])])) fail(`${ctx}: the report's play (${d.play.length} events) is not h1Play plus h2Play (${(al.h1Play ?? []).length} plus ${(al.h2Play ?? []).length}) the viewer walked`);
       if (J(lines(fin.report.myScorers)) !== J(lines([...(al.h1My ?? []), ...(al.h2My ?? [])]))) fail(`${ctx}: the report's scorers [${lines(fin.report.myScorers)}] are not h1My plus h2My [${lines([...(al.h1My ?? []), ...(al.h2My ?? [])])}]`);
@@ -905,7 +910,8 @@ begin(8, 'A paused save is picked back up, never kicked off a second time');
     else if (again.live !== again.state.live) fail(`${ctx}: the result's live is not the save's live`);
     const fin = withSeed(f.seed + 601, () => noCoach.playNextEntry(f.ht, { skipHalftime: true }));
     if (fin.kind !== 'match' || !fin.report?.detail) { fail(`${ctx}: the quick sim of a paused save came back "${fin.kind}"`); continue; }
-    const lines = xs => xs.map(l => `${l.name}@${l.minute}`);
+    /* Round 1146: as in section 5, an own goal for me is committed under the man it was drawn for with the man who put it in beside him (og.n), and reported under the man who put it in. SIM_SEED=2 holds one. */
+    const lines = xs => xs.map(l => `${(l.og && l.og.n) || l.name}@${l.minute}`);
     const gotMy = lines(fin.report.myScorers.filter(s => s.minute <= 45));
     const gotOpp = lines(fin.report.oppScorers.filter(s => s.minute <= 45));
     if (J(gotMy) !== J(lines(f.ht.live.h1My))) fail(`${ctx}: the report's first half [${gotMy}] is not the paused one [${lines(f.ht.live.h1My)}]`);
@@ -1028,7 +1034,8 @@ begin(10, 'A man in my squad never turns out for the club he left, real or gener
     if (live.oppXi) namedElevens += 1;
     theirs('the eleven at kick off', namesIn(live.oppXi, 'n'));
     theirs('the bench at kick off', namesIn(live.oppBench, 'n'));
-    theirs('the first half scorers', namesIn(live.h1Opp, 'name'));
+    /* Round 1146: the man of THEIRS behind each goal (an own goal against me is listed under my own defender). */
+    theirs('the first half scorers', (live.h1Opp ?? []).map(l => l.drawn ?? l.name));
     const s2 = withSeed(f.seed + 802, () => startSecondHalf(ht.state));
     if (!s2) { fail(`${ctx}: startSecondHalf returned null`); continue; }
     const fin = withSeed(f.seed + 803, () => resumeMatch(s2));
@@ -1038,7 +1045,7 @@ begin(10, 'A man in my squad never turns out for the club he left, real or gener
       if (res.kind !== 'match' || !res.report?.detail) { fail(`${ctx}: the ${pathName} path came back "${res.kind}"`); continue; }
       const r = res.report;
       const d = r.detail;
-      theirs(`the ${pathName} path's scorers`, namesIn(r.oppScorers, 'name'));
+      theirs(`the ${pathName} path's scorers`, (r.oppScorers ?? []).map(l => l.drawn ?? l.name));
       theirs(`the ${pathName} path's eleven`, namesIn(d.oppXi, 'n'));
       theirs(`the ${pathName} path's subs`, [...namesIn(d.oppSubs, 'on'), ...namesIn(d.oppSubs, 'off')]);
       theirs(`the ${pathName} path's ratings sheet`, namesIn(d.oppRatings, 'name'));

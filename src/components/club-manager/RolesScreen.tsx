@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Users } from 'lucide-react';
 import {
-  ROLE_INFO, ROLE_LADDER, roleOf, playingShare, promiseGap, promiseMood,
+  ROLE_INFO, ROLE_LADDER, roleOf, playingShare, promiseGap, promiseMood, windowWords,
   deservedRole, standingGap, roleChangeCost, squadByRole, brokenPromises, money, moneyIn,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, SquadRole } from '@/lib/clubManager';
@@ -29,7 +29,8 @@ function LastTen({ p }: { p: CMPlayer }) {
       {w.map((v, i) => (
         <span
           key={i}
-          className={cn('w-1.5 h-1.5 rounded-full shrink-0', v ? 'bg-emerald-500' : 'bg-secondary border border-border')}
+          /* Round 1146: a full dot is a start, a faint one a match he came on in. */
+          className={cn('w-1.5 h-1.5 rounded-full shrink-0', v >= 1 ? 'bg-emerald-500' : v > 0 ? 'bg-emerald-500/40' : 'bg-secondary border border-border')}
         />
       ))}
     </span>
@@ -39,7 +40,7 @@ function LastTen({ p }: { p: CMPlayer }) {
 function PlayerRow({ p, onOpen, showRole }: { p: CMPlayer; onOpen: () => void; showRole?: boolean }) {
   const mood = promiseMood(p);
   const share = playingShare(p);
-  const played = (p.lastTen ?? []).reduce((s, x) => s + x, 0);
+  const played = windowWords(p);
   const of = (p.lastTen ?? []).length;
   return (
     <button
@@ -57,7 +58,7 @@ function PlayerRow({ p, onOpen, showRole }: { p: CMPlayer; onOpen: () => void; s
         <div className="flex items-center gap-1.5 mt-0.5 min-w-0">
           <LastTen p={p} />
           <span className="text-[9px] text-muted-foreground truncate">
-            {of ? `${played} of last ${of}` : ''}{showRole ? ` · ${ROLE_INFO[roleOf(p)].label.toLowerCase()}` : ''}
+            {of ? `${played} in last ${of}` : ''}{showRole ? ` · ${ROLE_INFO[roleOf(p)].label.toLowerCase()}` : ''}
           </span>
         </div>
       </div>
@@ -95,7 +96,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
   if (open) {
     const current = roleOf(open);
     const mood = promiseMood(open);
-    const played = (open.lastTen ?? []).reduce((s, x) => s + x, 0);
+    const played = windowWords(open);
     const of = (open.lastTen ?? []).length;
     const deserved = deservedRole(career, open);
     const insulted = standingGap(career, open) >= 2;
@@ -119,7 +120,7 @@ export function RolesScreen({ career, onSetRole }: RolesScreenProps) {
             </div>
             <div className="shrink-0 text-right">
               <div className={cn('text-xs font-bold', TONE[mood.tone])}>{mood.text}</div>
-              <div className="text-[9px] text-muted-foreground">{of ? `${played} of his last ${of}` : 'No games yet'}</div>
+              <div className="text-[9px] text-muted-foreground">{of ? `${played} in his last ${of}` : 'No games yet'}</div>
             </div>
           </div>
           <div className="mt-2"><LastTen p={open} /></div>

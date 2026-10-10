@@ -37,12 +37,23 @@ const {
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
-function runSeason(s) {
+/* Round 1146: an appearance is a start or coming on. Since Round 1072 the quick sim's coach makes changes (and
+   since Round 1146 about one more a match, for legs), so "eleven apps a match" stopped being true the day he
+   first brought a man on, and the six checks that multiplied matches by eleven had been red on main ever since.
+   The books are right; the sum was. What a match is worth is its eleven starters plus every man its own report
+   says came on, counted here off the report, bucket by bucket. */
+const cameOn = { league: 0, cup: 0, ucl: 0 };
+const countSubs = (r, into) => {
+  if (r.kind !== 'match') return;
+  into[compBucketOf(r.report.competition)] += r.report.detail.subs.length;
+};
+function runSeason(s, into) {
   let guard = 0;
   while (s.week < s.calendar.length && guard < 140) {
     guard++;
     const r = playNextEntry(s, { skipHalftime: true });
     s = r.state;
+    if (into) countSubs(r, into);
     if (r.kind === 'seasonOver') break;
   }
   return s;
@@ -54,7 +65,7 @@ const compSum = (p, field) => BUCKETS.reduce((n, b) => n + (p.comp?.[b]?.[field]
 /* ---------- 1. Splits reconcile with season totals, player by player ---------- */
 console.log('1) Every split sums back to the season line');
 {
-  const s = runSeason(startCareer('Real Madrid'));
+  const s = runSeason(startCareer('Real Madrid'), cameOn);
   let checked = 0;
   let worstDrift = 0;
   for (const p of s.squad) {
@@ -75,16 +86,18 @@ console.log('1) Every split sums back to the season line');
   }
   console.log(`   ${checked} players reconciled, worst rating drift ${worstDrift.toFixed(2)}`);
 
-  // Eleven men get an app every match, in every competition bucket.
+  // Eleven starters get an app every match and so does every man who came on, in every competition bucket.
   const myMatches = (s.resultLog ?? []).length;
   const totalApps = s.squad.reduce((n, p) => n + (p.apps ?? 0), 0);
-  if (totalApps !== myMatches * 11) fail(`${totalApps} total apps across ${myMatches} matches, expected ${myMatches * 11}`);
+  const allOn = BUCKETS.reduce((n, b) => n + cameOn[b], 0);
+  if (totalApps !== myMatches * 11 + allOn) fail(`${totalApps} total apps across ${myMatches} matches with ${allOn} men coming on, expected ${myMatches * 11 + allOn}`);
   for (const b of BUCKETS) {
     const bucketMatches = (s.resultLog ?? []).filter(e => compBucketOf(e.competition) === b).length;
     const bucketApps = s.squad.reduce((n, p) => n + (p.comp?.[b]?.apps ?? 0), 0);
-    if (bucketApps !== bucketMatches * 11) fail(`${b}: ${bucketApps} apps for ${bucketMatches} matches`);
+    if (bucketApps !== bucketMatches * 11 + cameOn[b]) fail(`${b}: ${bucketApps} apps for ${bucketMatches} matches and ${cameOn[b]} men coming on`);
   }
-  console.log(`   ${myMatches} matches -> ${totalApps} appearances, 11 per match in every bucket`);
+  if (allOn === 0) fail('nobody came on all season, so the appearances of a substitute were never counted');
+  console.log(`   ${myMatches} matches -> ${totalApps} appearances: 11 starters a match plus ${allOn} men who came on, in every bucket`);
 
   // Averages live where football ratings live.
   for (const p of s.squad) {
@@ -149,21 +162,24 @@ console.log('3) An old save grows splits without corrupting totals');
   const appsBefore = s.squad.reduce((n, p) => n + (p.apps ?? 0), 0);
   const playedBefore = (s.resultLog ?? []).length;
 
+  const newOn = { league: 0, cup: 0, ucl: 0 };
   for (let i = 0; i < 6; i++) {
     const r = playNextEntry(s, { skipHalftime: true });
     s = r.state;
+    countSubs(r, newOn);
   }
+  const newCameOn = BUCKETS.reduce((n, b) => n + newOn[b], 0);
   const playedAfter = (s.resultLog ?? []).length;
   const newMatches = playedAfter - playedBefore;
   if (newMatches < 1) fail('the continuation never played a match');
   // Season totals kept counting from where they were.
   const appsAfter = s.squad.reduce((n, p) => n + (p.apps ?? 0), 0);
-  if (appsAfter !== appsBefore + newMatches * 11) fail('season apps went wrong after the strip');
+  if (appsAfter !== appsBefore + newMatches * 11 + newCameOn) fail('season apps went wrong after the strip');
   const goalsAfter = s.squad.reduce((n, p) => n + p.seasonGoals, 0);
   if (goalsAfter < seasonGoalsBefore) fail('season goals went backwards');
   // The splits exist only for the new football, and say so by summing short.
   const splitApps = s.squad.reduce((n, p) => n + compSum(p, 'apps'), 0);
-  if (splitApps !== newMatches * 11) fail(`splits hold ${splitApps} apps, expected ${newMatches * 11} (post-update matches only)`);
+  if (splitApps !== newMatches * 11 + newCameOn) fail(`splits hold ${splitApps} apps, expected ${newMatches * 11 + newCameOn} (post-update matches only, their ${newCameOn} substitutes included)`);
   // And the team record still buckets the old label-only entries.
   const team = teamCompRecord(s, careerLeagueOf(s).cupName);
   if (team.all.p !== playedAfter) fail('label fallback dropped fixtures from the team record');

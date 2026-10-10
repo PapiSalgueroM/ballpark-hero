@@ -63,8 +63,15 @@ export interface FixedGame {
   decisive?: boolean;
 }
 
+/** Release AQ: places `from` to `to` of the final table (1 based, both ends
+ *  in) and, for each fixed opponent named, whether its club ends inside them.
+ *  Soccer hands this over for a season whose promotion and relegation are
+ *  already saved, so a derby rival can never be drawn into, or out of, the
+ *  places the save says changed hands. Absent everywhere else. */
+export interface TableZone { from: number; to: number; fixed: [key: string, inside: boolean][] }
+
 export type TeamTarget =
-  | { kind: 'finish'; finish: number; title: boolean; champion: 'mine' | 'other' | { key: string } }
+  | { kind: 'finish'; finish: number; title: boolean; champion: 'mine' | 'other' | { key: string }; zone?: TableZone }
   | { kind: 'record'; winsMin: number; winsMax: number }
   | { kind: 'band'; ppgMin: number; ppgMax: number }
   | { kind: 'none' };
@@ -76,6 +83,8 @@ export interface Availability {
   block: number;
   /** A severe injury ends his season: nothing he plays comes after it. */
   severe: boolean;
+  /** Already served bans, placed outside injuries and protected fixed games. */
+  suspended?: number;
 }
 
 /** `teamFor`: each unit of this stat is also his club's score, so the club
@@ -376,17 +385,22 @@ function chooseAvailability(p: Placed, a: Availability, rng: Rng): Avail | null 
   if (need < 0 || a.played > M) return null;
   const played = fixedPlayed.slice();
   const why: Avail['why'] = p.mine.map(() => undefined);
+  let suspended = Math.max(0, a.suspended ?? 0);
+  for (let i = 0; i < M && suspended > 0; i += 1) {
+    if (!p.fixedAt[i]) { why[i] = 'suspended'; suspended -= 1; }
+  }
   const free = (i: number) => !p.fixedAt[i];
+  const available = (i: number) => free(i) && why[i] !== 'suspended';
   if (a.severe) {
     let lastFixed = -1;
     fixedPlayed.forEach((x, i) => { if (x) lastFixed = i; });
     let W = lastFixed + 1;
     let avail = 0;
-    for (let i = 0; i < W; i += 1) if (free(i)) avail += 1;
-    while (avail < need && W < M) { if (free(W)) avail += 1; W += 1; }
+    for (let i = 0; i < W; i += 1) if (available(i)) avail += 1;
+    while (avail < need && W < M) { if (available(W)) avail += 1; W += 1; }
     if (avail < need) return null;
     const pool = [] as number[];
-    for (let i = 0; i < W; i += 1) if (free(i)) pool.push(i);
+    for (let i = 0; i < W; i += 1) if (available(i)) pool.push(i);
     const lastFree = pool.length ? pool[pool.length - 1] : -1;
     const mustLast = need > 0 && lastFree === W - 1 && lastFixed < W - 1;
     const rest = shuffled(pool.filter(i => !(mustLast && i === lastFree)), rng).slice(0, need - (mustLast ? 1 : 0));
@@ -394,25 +408,25 @@ function chooseAvailability(p: Placed, a: Availability, rng: Rng): Avail | null 
     for (const i of rest) played[i] = true;
     let last = -1;
     played.forEach((x, i) => { if (x) last = i; });
-    for (let i = last + 1; i < M; i += 1) why[i] = i <= last + a.block ? 'injured' : 'rested';
-    for (let i = 0; i <= last; i += 1) if (!played[i]) why[i] = 'rested';
+    for (let i = last + 1; i < M; i += 1) if (why[i] !== 'suspended') why[i] = i <= last + a.block ? 'injured' : 'rested';
+    for (let i = 0; i <= last; i += 1) if (!played[i] && !why[i]) why[i] = 'rested';
     return { played, why };
   }
   if (a.block > 0) {
     const starts: number[] = [];
     for (let s = 0; s + a.block <= M; s += 1) {
       let ok = true;
-      for (let i = s; i < s + a.block; i += 1) if (fixedPlayed[i]) { ok = false; break; }
+      for (let i = s; i < s + a.block; i += 1) if (fixedPlayed[i] || why[i] === 'suspended') { ok = false; break; }
       if (!ok) continue;
       let room = 0;
-      for (let i = 0; i < M; i += 1) if (free(i) && (i < s || i >= s + a.block)) room += 1;
+      for (let i = 0; i < M; i += 1) if (available(i) && (i < s || i >= s + a.block)) room += 1;
       if (room >= need) starts.push(s);
     }
     if (starts.length === 0) return null;
     const s = starts[Math.floor(rng() * starts.length)];
     for (let i = s; i < s + a.block; i += 1) why[i] = 'injured';
   }
-  const pool = p.mine.map((_, i) => i).filter(i => free(i) && why[i] !== 'injured');
+  const pool = p.mine.map((_, i) => i).filter(i => available(i) && why[i] !== 'injured');
   if (pool.length < need) return null;
   for (const i of shuffled(pool, rng).slice(0, need)) played[i] = true;
   for (let i = 0; i < M; i += 1) if (!played[i] && !why[i]) why[i] = 'rested';
@@ -600,7 +614,7 @@ function violation(board: Board, frame: Frame, target: TeamTarget, slotOf: Map<s
   if (pos < f) return { slot: 0, dir: -1, alt: { slot: rows[pos].slot, dir: 1 } };
   if (f > 1 && rows[f - 2].pts === rows[f - 1].pts) return { slot: rows[f - 2].slot, dir: 1 };
   if (f < rows.length && rows[f].pts === rows[f - 1].pts) return { slot: rows[f].slot, dir: -1 };
-  if (f === 1) return null;
+  if (f === 1) return zoneViolation(rows, target.zone, slotOf);
   if (rows[0].pts === rows[1].pts) return { slot: rows[0].slot, dir: 1, alt: rows[1].slot !== 0 ? { slot: rows[1].slot, dir: -1 } : undefined };
   const fixedSlots = new Set(slotOf.values());
   const ch = target.champion;
@@ -610,6 +624,29 @@ function violation(board: Board, frame: Frame, target: TeamTarget, slotOf: Map<s
     if (rows[0].slot !== ks) return { slot: ks, dir: 1, alt: { slot: rows[0].slot, dir: -1 } };
   } else if (ch === 'other' && fixedSlots.has(rows[0].slot)) {
     return { slot: rows[0].slot, dir: -1 };
+  }
+  return zoneViolation(rows, target.zone, slotOf);
+}
+
+/** Release AQ: the first fixed opponent on the wrong side of a saved zone,
+ *  and which way its club has to move. The other club of the fix is the one
+ *  standing at the zone's edge, when that club is free to move (not his, not
+ *  another fixed opponent). Null with no zone, which is every season that
+ *  saved no promotion or relegation. */
+function zoneViolation(rows: StandingRow[], zone: TableZone | undefined, slotOf: Map<string, number>): Fix | null {
+  if (!zone) return null;
+  const fixedSlots = new Set(slotOf.values());
+  const free = (slot: number | undefined) => slot !== undefined && slot !== 0 && !fixedSlots.has(slot);
+  for (const [key, inside] of zone.fixed) {
+    const ks = slotOf.get(key);
+    if (ks === undefined) continue;
+    const at = rows.findIndex(x => x.slot === ks) + 1;
+    if ((at >= zone.from && at <= zone.to) === inside) continue;
+    /* a zone at the foot of the table is left by climbing, one at the head by dropping */
+    const foot = zone.from > 1;
+    const dir: 1 | -1 = inside === foot ? -1 : 1;
+    const edge = foot ? (inside ? rows[zone.from - 1]?.slot : rows[zone.from - 2]?.slot) : (inside ? rows[zone.to - 1]?.slot : rows[zone.to]?.slot);
+    return { slot: ks, dir, ...(free(edge) ? { alt: { slot: edge as number, dir: (dir === 1 ? -1 : 1) as 1 | -1 } } : {}) };
   }
   return null;
 }
@@ -823,6 +860,7 @@ export function disagreements<R, C>(sport: SeasonSport<R, C>, row: R, ctx: C, s:
     if (first >= 0 && first !== last + 1) out.push('severe injury does not follow his last game');
   } else if (run !== a.block) out.push(`injury run ${run} != ${a.block}`);
   const redKey = sport.totals(row, ctx).find(t => t.kind === 'sum' && t.suspends)?.key;
+  if (s.games.filter(g => g.why === 'suspended').length < (a.suspended ?? 0)) out.push('served bans missing from availability');
   for (const [i, g] of s.games.entries()) {
     const red = !!redKey && (g.line[redKey] ?? 0) > 0;
     if (red && s.games[i + 1]?.why !== 'suspended' && s.games.slice(i + 1).some(x => x.played)) out.push(`md ${g.md}: a red with no suspension`);

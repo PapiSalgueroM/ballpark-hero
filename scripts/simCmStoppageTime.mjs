@@ -679,7 +679,14 @@ function walk(arm, cm, club, era, ci, onStep) {
   if (!s || s.clubName !== club) return false;
   for (let g = 0; g < 200; g++) {
     const pre = s;
-    const res = withSeed(52000 + ci * 997 + g, () => cm.playNextEntry(s, { skipHalftime: true }));
+    /* Round 1146: the two arms' careers are walked without the quick sim's coach. Since that round he makes a
+       change in nine quick sims in ten and decides it off the score at a minute, and a goal's minute is the
+       one thing the two arms place differently, so with him in the dugout the arms stop being the same
+       careers after a match or two and section 1's gap (near zero by construction, tolerance 0.05) turns
+       into the noise of two separate samples: -0.134 on the default seed the day the round landed. The
+       coach in a board is held by simCmQuickSubs (its clock case) and simCmQuickLegs; the deciders, the old
+       saves and the live path below still play with him. */
+    const res = withSeed(52000 + ci * 997 + g, () => cm.playNextEntry(s, { skipHalftime: true, noCoach: true }));
     if (!res || !res.state) break;
     if (res.report) { countGoals(arm, res.report); onStep(pre, res, g); }
     s = res.state;

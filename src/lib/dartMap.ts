@@ -467,6 +467,23 @@ function countryLegends(country: GeoCountry, slot: FormationSlot, usedNames: Set
     .sort((a, b) => playerRating(b) - playerRating(a));
 }
 
+/* Round 1145, a player's report asking for more variety: a country hit used to show the eight
+   best it had at the slot, so the same dart always showed the same eight names however deep the
+   country ran. It still shows eight. The best COUNTRY_KEEP_BEST are always among them, so the
+   strongest pick a country can give is exactly what it was; the other tiles are drawn from
+   everyone else the country has at the slot. A country with eight or fewer shows them all, as
+   before. `ranked` arrives best first and the tiles go back out best first. */
+export const COUNTRY_TILES = 8;
+export const COUNTRY_KEEP_BEST = 4;
+
+export function countryTiles(ranked: Player[], keepBest = COUNTRY_KEEP_BEST, random: () => number = Math.random): Player[] {
+  if (ranked.length <= COUNTRY_TILES) return ranked;
+  const kept = ranked.slice(0, keepBest);
+  const rest = ranked.slice(keepBest);
+  while (kept.length < COUNTRY_TILES) kept.push(rest.splice(Math.floor(random() * rest.length), 1)[0]);
+  return kept.sort((a, b) => playerRating(b) - playerRating(a));
+}
+
 /**
  * What the hit country offers for the called position. Real players at the
  * position always surface (general pool first, then a targeted position
@@ -478,7 +495,9 @@ export async function countryChoices(
   country: GeoCountry,
   slot: FormationSlot,
   usedNames: Set<string>,
-  opts: { alltime?: boolean } = {},
+  /* keepBest is how many of the best at the slot are always among the tiles. The page never sets
+     it; scripts/simDartDraftPool.mjs passes COUNTRY_TILES to measure the old "best eight" rule. */
+  opts: { alltime?: boolean; keepBest?: number } = {},
 ): Promise<DraftChoice[]> {
   const pool = await fetchCountryPool(country);
   const fresh = pool.filter(p => !usedNames.has(p.name));
@@ -489,10 +508,8 @@ export async function countryChoices(
     atPos = targeted.filter(p => !usedNames.has(p.name));
   }
   if (legends.length > 0 || atPos.length > 0) {
-    const merged = [...legends, ...atPos]
-      .sort((a, b) => playerRating(b) - playerRating(a))
-      .slice(0, 8);
-    return merged.map(player => ({ player, outOfPosition: false }));
+    const ranked = [...legends, ...atPos].sort((a, b) => playerRating(b) - playerRating(a));
+    return countryTiles(ranked, opts.keepBest).map(player => ({ player, outOfPosition: false }));
   }
   const prospect: DraftChoice = { player: academyProspect(country, slot, pool.length), outOfPosition: false };
   const backups = fresh.slice(0, 4).map(player => ({ player, outOfPosition: true }));
@@ -521,9 +538,12 @@ export function wildcardChoices(prefetch: Player[], slot: FormationSlot, usedNam
     .map(player => ({ player, outOfPosition: false }));
 }
 
-/** Storm zone: blown into the bargain bin. Five picks from the cheap end of the pool. */
-export function stormChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
-  const fits = prefetch.filter(p => !usedNames.has(p.name) && fitsSlot(p, slot));
+/** Storm zone: blown into the bargain bin. Five picks from the cheap end of the pool.
+ *  Round 1145: the pool went from 900 rows to 2,000, and its cheap end went with it. The storm
+ *  is a punishment that was sized against the old pool, so it stops at minValue (the pool's
+ *  stormFloor, what the 900th row is worth): nobody it offers is worth less than that. */
+export function stormChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>, minValue = 0): DraftChoice[] {
+  const fits = prefetch.filter(p => !usedNames.has(p.name) && fitsSlot(p, slot) && p.marketValue >= minValue);
   if (fits.length === 0) return [];
   const bin = fits.slice(-Math.min(20, fits.length));
   const step = Math.max(1, Math.floor(bin.length / 5));
@@ -532,13 +552,27 @@ export function stormChoices(prefetch: Player[], slot: FormationSlot, usedNames:
   return picks.map(player => ({ player, outOfPosition: false }));
 }
 
-/** Mystery zone: three random fitting players from anywhere in the pool. Could be anyone. */
-export function mysteryChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>): DraftChoice[] {
+/** Mystery zone: three random fitting players. Could be anyone.
+ *  Round 1145: the pool went from 900 rows to 2,000. Three at random from all of it paid less than
+ *  three from the old 900 did (the best of the three fell about two rating points on the saved
+ *  table), and a gold zone must not pay less because the roster grew. So the three still come from
+ *  the old pool's range, the men worth at least minValue (the pool's stormFloor, what the 900th row
+ *  is worth), and the deeper pool shows as a fourth tile: one long shot from below that line. The
+ *  best tile is never worse than it was and every mystery hit shows a name the old pool never held.
+ *  With no floor (a pool that is not 900 deep) it is the three from anywhere it always was. */
+export const MYSTERY_TILES = 3;
+export function mysteryChoices(prefetch: Player[], slot: FormationSlot, usedNames: Set<string>, minValue = 0): DraftChoice[] {
   const fits = prefetch.filter(p => !usedNames.has(p.name) && fitsSlot(p, slot));
   if (fits.length === 0) return [];
+  const top = fits.filter(p => p.marketValue >= minValue);
+  const deep = fits.filter(p => p.marketValue < minValue);
+  // Nobody left above the line at this slot: the gamble is whoever is left, as before.
+  const main = top.length > 0 ? top : fits;
   const picks = new Set<number>();
-  while (picks.size < Math.min(3, fits.length)) picks.add(Math.floor(Math.random() * fits.length));
-  return [...picks].map(i => ({ player: fits[i], outOfPosition: false }));
+  while (picks.size < Math.min(MYSTERY_TILES, main.length)) picks.add(Math.floor(Math.random() * main.length));
+  const tiles = [...picks].map(i => ({ player: main[i], outOfPosition: false }));
+  if (top.length > 0 && deep.length > 0) tiles.push({ player: deep[Math.floor(Math.random() * deep.length)], outOfPosition: false });
+  return tiles;
 }
 
 /** The Machine drafts its XI from the same prefetch pool, tier-random. */

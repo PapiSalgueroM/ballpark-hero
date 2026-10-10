@@ -24,22 +24,54 @@
  *
  * Run: node scripts/simRoles.mjs
  */
-import { execSync } from 'node:child_process';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = path.join(os.tmpdir(), 'rolesEntry.mjs');
-const BUNDLE = path.join(os.tmpdir(), 'roles.bundle.mjs');
+/* Round 1146: a folder of this run's own. The entry and the bundle used to
+   carry fixed names in the shared temp folder, so the harness and one of its
+   controls run side by side could read each other's engine. */
+const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'cm-roles-'));
+const ENTRY = path.join(TMP, 'rolesEntry.mjs');
+const BUNDLE = path.join(TMP, 'roles.bundle.mjs');
+const ENGINE_FILE = path.join(ROOT, 'src/lib/clubManager.ts');
+
+/* Round 1146, NEGATIVE CONTROL: SIM_ROLES_CONTROL=cameofull puts the window
+   back to what it was before the round (anyone who set foot on the pitch holds
+   a 1) in the bundle's copy of the engine, and section 3c must go red. The
+   anchor has to be in the source exactly once or the run refuses. */
+const SOURCE_CONTROLS = {
+  cameofull: {
+    from: '? windowEntry(startedIds.has(id), cameOnAt.get(id) ?? 46, lastMinute)',
+    to: '? 1',
+  },
+};
+const SOURCE_CONTROL = SOURCE_CONTROLS[process.env.SIM_ROLES_CONTROL || ''] ?? null;
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
 export const cm = mod;
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+let patched = 0;
+await build({
+  entryPoints: [ENTRY], outfile: BUNDLE, bundle: true, format: 'esm', platform: 'node', logLevel: 'error',
+  absWorkingDir: ROOT, alias: { '@': path.join(ROOT, 'src') },
+  plugins: SOURCE_CONTROL ? [{ name: 'roles-control', setup(b) {
+    b.onLoad({ filter: /clubManager\.ts$/ }, args => {
+      if (path.resolve(args.path) !== path.resolve(ENGINE_FILE)) return undefined;
+      const text = fs.readFileSync(args.path, 'utf8');
+      const n = text.split(SOURCE_CONTROL.from).length - 1;
+      if (n !== 1) throw new Error(`control anchor occurs ${n} times, not once: ${SOURCE_CONTROL.from}`);
+      patched += 1;
+      return { contents: text.replace(SOURCE_CONTROL.from, SOURCE_CONTROL.to), loader: 'ts', resolveDir: path.dirname(args.path) };
+    });
+  } }] : [],
+});
+if (SOURCE_CONTROL && patched !== 1) { console.error('simRoles: the control never met the engine file'); process.exit(1); }
 
 const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
@@ -48,7 +80,7 @@ const {
   ensureRoles, roleOf, ROLE_INFO, ROLE_LADDER, deservedRole, standingGap,
   playingShare, promiseGap, promiseMood, setSquadRole, roleChangeCost,
   squadByRole, brokenPromises, PROMISE_WINDOW, PROMISE_WINDOW_MIN,
-  answerMessage,
+  answerMessage, windowEntry, windowCounts, windowWords,
 } = cm;
 
 let failures = 0;
@@ -136,8 +168,8 @@ console.log('3) His last ten counts games he could have played, and only those')
   const a = s.squad.find(p => p.id === starter.id);
   const b = s.squad.find(p => p.id === bench.id);
   const c = s.squad.find(p => p.id === crocked.id);
-  console.log(`   ${a.name} (played): window ${a.lastTen.length} long, ${a.lastTen.reduce((x, y) => x + y, 0)} involved, share ${playingShare(a)}`);
-  console.log(`   ${b.name} (benched): window ${b.lastTen.length} long, ${b.lastTen.reduce((x, y) => x + y, 0)} involved, share ${playingShare(b)}`);
+  console.log(`   ${a.name} (played): window ${a.lastTen.length} long, ${a.lastTen.reduce((x, y) => x + y, 0).toFixed(2)} involved, share ${playingShare(a).toFixed(3)}`);
+  console.log(`   ${b.name} (benched): window ${b.lastTen.length} long, ${b.lastTen.reduce((x, y) => x + y, 0).toFixed(2)} involved, share ${playingShare(b).toFixed(3)}`);
   console.log(`   ${c.name} (injured throughout): window ${c.lastTen.length} long, gap ${promiseGap(c).toFixed(2)}`);
   if (a.lastTen.length > PROMISE_WINDOW) fail(`the window grew past ${PROMISE_WINDOW}`);
   if (playingShare(a) < 0.9) fail('a man who started every match does not read as a starter');
@@ -179,7 +211,7 @@ console.log('3) His last ten counts games he could have played, and only those')
 console.log('3b) A benched man reads as benched, measured over a run of them');
 {
   const CONTROL = process.env.SIM_ROLES_CONTROL || '';
-  if (CONTROL && CONTROL !== 'benchplays') { console.error(`SIM_ROLES_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+  if (CONTROL && CONTROL !== 'benchplays' && !SOURCE_CONTROL) { console.error(`SIM_ROLES_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
   const REPS = 25;
   /*
    * Round 519: both ceilings re-derived, because the first pair sat INSIDE
@@ -204,6 +236,11 @@ console.log('3b) A benched man reads as benched, measured over a run of them');
    * near 1 and the healthy one near 0.32. The new ceilings sit above everything
    * ever measured and still leave the real failure a long way outside.
    */
+  /* Round 1146: re-read after the window stopped counting a cameo as a game (section 3c). With the quick sim's
+     coach using his bench in nine matches in ten and a cameo worth a whole game, this read 0.576 and 48% and went
+     red, rightly. With a man who came on holding the share of the match he played, three runs on a GitHub runner
+     (2026-10-09) read mean 0.311, 0.264 and 0.252 with 8%, 0% and 4% over a half: where it stood before the round
+     (seven earlier runs: 0.280 to 0.348, 4% to 16%). The ceilings are unchanged. */
   const MEAN_CEILING = 0.55;   // measured max 0.364 over 20 batches; a benched man playing like a starter reads 1.0
   const OVER_HALF_CEILING = 0.50; // measured max 20% over 20 batches; the broken shape is ~100%
   const shares = [];
@@ -237,6 +274,82 @@ console.log('3b) A benched man reads as benched, measured over a run of them');
   if (CONTROL === 'benchplays') {
     if (failures > 0) { console.log('simRoles control: green. Feeding the starter through the bench check turned it red, so the ceilings can see a regression.'); process.exit(0); }
     console.error('simRoles control: RED. The bench check passed a man who played every match.');
+    process.exit(1);
+  }
+}
+
+/* ---------- 3c. Round 1146: a start is a game, coming on is the minutes ----------
+ *
+ * The quick sim's coach uses his bench in nine matches in ten since this
+ * round, and the window used to hold a 1 for anyone who set foot on the
+ * pitch. So a man the manager had dropped came on for the last quarter of an
+ * hour most weeks and read as playing every week: section 3b's benched share
+ * went from about 0.3 to 0.576 (red), the paired cost of three benched stars
+ * in section 8 from 5.26 morale to 2.03, and section 10's transfer requests
+ * from 1.27 a season to 0.33. Being dropped had stopped showing.
+ *
+ * The rule now (windowEntry in the engine): a start is 1, a man who came on
+ * holds the share of the match he was out there for. This reads it off real
+ * quick sims: the report says who came on and when, the save says what went
+ * into his window.
+ *
+ * NEGATIVE CONTROL: SIM_ROLES_CONTROL=cameofull patches the bundle's copy of
+ * the engine back to "anyone who played holds a 1" and this section must go
+ * red.
+ */
+console.log('3c) A start is a game, and coming on is worth the minutes he got');
+{
+  const before = failures;
+  const rule = [
+    [true, null, 90, 1], [true, 60, 90, 1], [false, null, 90, 0],
+    [false, 46, 90, 0.5], [false, 63, 90, 0.31], [false, 77, 90, 0.16], [false, 90, 90, 0.01],
+    [false, 106, 120, 0.13],
+  ];
+  for (const [started, at, len, want] of rule) {
+    const got = windowEntry(started, at, len);
+    if (got !== want) fail(`windowEntry(${started}, ${at}, ${len}) is ${got}, and the rule says ${want}`);
+  }
+  let cameos = 0, starters = 0, cameoSum = 0, wrongCameo = 0, wrongStart = 0, matches = 0;
+  for (const club of ['Everton', 'Ajax', 'Aston Villa']) {
+    let s = startCareer(club);
+    s.xiIds = autoPickXI(s.squad, FORMATIONS[s.formationIndex] ?? FORMATIONS[0]);
+    ensureRoles(s);
+    for (let i = 0; i < 30 && s.week < s.calendar.length; i++) {
+      const r = playNextEntry(s, { skipHalftime: true });
+      s = r.state;
+      if (r.kind === 'seasonOver') break;
+      if (r.kind !== 'match') continue;
+      matches += 1;
+      const d = r.report.detail;
+      const len = d.et ? d.et.to : 90;
+      const cameOn = new Map(d.subs.map(x => [x.on, x.minute]));
+      for (const line of d.myRatings) {
+        const man = s.squad.find(p => p.name === line.name);
+        const newest = man?.lastTen?.at(-1);
+        if (newest === undefined) continue;
+        if (cameOn.has(line.name)) {
+          cameos += 1; cameoSum += newest;
+          if (newest !== windowEntry(false, cameOn.get(line.name), len)) wrongCameo += 1;
+        } else {
+          starters += 1;
+          if (newest !== 1) wrongStart += 1;
+        }
+      }
+    }
+  }
+  console.log(`   ${matches} quick sims: ${starters} starts each worth 1, ${cameos} men came on and their match is worth ${cameos ? (cameoSum / cameos).toFixed(2) : 'n/a'} on average`);
+  if (cameos < 30) fail(`only ${cameos} men came on in ${matches} quick sims, too few to read the rule on`);
+  if (wrongCameo > 0) fail(`${wrongCameo} of ${cameos} men who came on hold something other than the share of the match they played`);
+  if (wrongStart > 0) fail(`${wrongStart} of ${starters} starters do not hold a full game`);
+  /* and the words a screen prints count starts, not the sum */
+  const mixed = { lastTen: [1, 0.16, 0, 0.5, 1, 0, 0.31] };
+  const c = windowCounts(mixed);
+  if (c.starts !== 2 || c.offBench !== 3 || c.of !== 7) fail(`windowCounts reads ${JSON.stringify(c)} off two starts and three matches off the bench in seven`);
+  if (windowWords(mixed) !== '2 starts, 3 off the bench') fail(`windowWords prints "${windowWords(mixed)}"`);
+  if (windowWords({ lastTen: [1, 0, 0, 0] }) !== '1 start') fail(`windowWords prints "${windowWords({ lastTen: [1, 0, 0, 0] })}" for one start`);
+  if (process.env.SIM_ROLES_CONTROL === 'cameofull') {
+    if (failures > before) { console.log('simRoles control: green. With a cameo worth a whole game again, section 3c went red.'); fs.rmSync(TMP, { recursive: true, force: true }); process.exit(0); }
+    console.error('simRoles control: RED. A cameo counted as a whole game and section 3c did not see it.');
     process.exit(1);
   }
 }
@@ -666,4 +779,5 @@ console.log('11) Copy check');
 }
 
 console.log(failures === 0 ? '\nALL ROLE CHECKS PASSED' : `\n${failures} FAILURES`);
+fs.rmSync(TMP, { recursive: true, force: true });
 process.exit(failures === 0 ? 0 : 1);

@@ -57,6 +57,12 @@
  *   kickoffcut   the next shooter's lead comes before the kick off again           R9 (a goal gets its kick off)
  *   kickoffwait  a chance waits for a beat of kick off only, as it did             R9 (a goal gets its kick off)
  *   kickoffturn  the same change as kickoffcut, read on the 200 half feeds         R6 (the share of kick offs held, and the reason rule: its log must show both)
+ * Release AR (2026-10-09), after the browser walk met a goal at 79' whose score changed with the ball in the air:
+ *   castnow      a change off the clock comes onto the grass at its minute again,   a goal still on its way when the line up changes off the clock
+ *                whatever is playing
+ * And boardgoal is anchored on goalSegs now. Round 1146 moved the goal's line there (one function for the pill, the
+ * card and the list), the old anchor could never match again, and the control aborted instead of running: a sweep
+ * of all 53 controls on a runner found it (52 fired on their own test, this one stopped on its anchor).
  * restartbeat takes out both lengths of a kick off now (the beat and the whole of it), which is what its line above says.
  * cmimport now trips the import specifier scan as well as the marker check, and is accepted only on both.
  * And one old control has a new test to turn red: lineup takes the hook's own guard out (an action is dropped
@@ -87,7 +93,9 @@ const NEW = ['block', 'kickoff', 'overlap', 'mouth', 'draw', 'approach', 'lag', 
 /* The review of 2026-10-08: six swapped argument mutations of the dead ball rules and six of the viewer left every test green.
    Each of these has a test that reads it now. */
 const REVIEW = ['scorelead', 'samecommit', 'crowd', 'turns', 'restartbeat', 'kickoffside', 'throwside', 'foulside', 'cornerflank', 'goalkickside', 'secondkick', 'possession', 'etclear', 'reducedhold', 'flash', 'lastkick', 'dropped', 'logearly', 'nth', 'cardside', 'bigpart', 'kickoffcut', 'kickoffwait', 'kickoffturn'];
-assert.ok(['', ...OLD, ...NEW, ...REVIEW].includes(control), 'Unknown live motion control');
+/* Release AR: the cast a chance started with is held while it plays. */
+const HELD = ['castnow'];
+assert.ok(['', ...OLD, ...NEW, ...REVIEW, ...HELD].includes(control), 'Unknown live motion control');
 assert.ok(['', 'bundle'].includes(only), 'Unknown LIVE_MOTION_ONLY');
 /* Minified bytes and gzip bytes of the part alone, and the ceiling: each plus a fifth. */
 const BUNDLE_MEASURED = { min: 19277, gzip: 8077 };
@@ -121,7 +129,9 @@ try {
       viewer = replace(viewer, '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,\n', '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds, isExtraTimeDue,\n');
     }
     if (control === 'banner') viewer = replace(viewer, "club: extraTimeCall(career, liveNow), tone: 'none'", "club: 'Level after 90 minutes', tone: 'none'");
-    if (control === 'boardgoal') viewer = replace(viewer, "'GOAL! ' }, who, { t: ` ${minuteLabel(e)}` }]", "'GOAL! ' }, who, { t: ` ${e.minute}'` }]");
+    /* Release AR: Round 1146 moved the goal's line into goalSegs (one function for the pill, the card and the
+       list), and this control's old anchor on the pill's own line could never match again: it aborted. */
+    if (control === 'boardgoal') viewer = replace(viewer, 'return [{ t: lead }, who, { t: ` ${minuteLabel(at)}` }, ...(mark ? [{ t: mark }] : [])];', "return [{ t: lead }, who, { t: ` ${at.minute}'` }, ...(mark ? [{ t: mark }] : [])];");
     if (control === 'etclock') viewer = replace(viewer, "stage === 'extra' ? `ET ${minuteLabel({ minute, plus })}`", "stage === 'extra' ? `ET ${minute}'`");
     /* ---- Round 1101 ---- */
     if (control === 'block') {
@@ -173,6 +183,8 @@ try {
     if (control === 'nth') viewer = replace(viewer, '(upTo < 0 || i <= upTo)', 'true');
     if (control === 'cardside') viewer = replace(viewer, "const player = goal.side === 'me' ? career.squad.find(p => p.name === goal.text) : undefined;", 'const player = career.squad.find(p => p.name === goal.text);');
     if (control === 'stalejoin') viewer = replace(viewer, 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);', 'const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), []);');
+    /* ---- Release AR ---- */
+    if (control === 'castnow') viewer = replace(viewer, 'const castFrom = liveAction && clock >= liveAction.at && clock - liveAction.at <= ACTION_SPAN ? Math.max(liveAction.at, openedAt.current) : null;', 'const castFrom = null as number | null;');
     const componentPath = path.join(folder, 'LiveSimMotion.tsx').replaceAll('\\', '/');
     viewer = replace(viewer, "import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';", "import { LivePitchPlayer, useLiveSimMotion } from './LiveSimMotion';");
     viewer = replace(viewer, "import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';", "import type { MotionEvent } from './LiveSimMotion';");
@@ -214,6 +226,7 @@ try {
     etclear: 'a line fired late by Skip is not played again', reducedhold: 'under reduced motion the card is held', flash: 'no frame draws the new score',
     lastkick: 'a goal with the last kick of a period takes nothing off', dropped: 'a substitution in a goal', logearly: 'nothing says GOAL before the ball is in',
     nth: 'a scorer card counts his goals', cardside: 'a scorer card counts his goals',
+    castnow: 'a goal still on its way when the line up changes off the clock',
   };
   let passed = 0;
   if (only !== 'bundle' && control !== 'cmimport' && control !== 'bigpart') {

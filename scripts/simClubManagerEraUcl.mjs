@@ -1311,17 +1311,23 @@ function checkEraNights(tally) {
           break;
         }
         tally.eraNights += 1;
+        /* Round 1146: an own goal against me is listed under them and names one of MINE; the man the engine
+           first drew the goal for is kept beside it (`drawn`). The era rule this section holds is about him:
+           he is on their era roster, or is the neutral shirt number line. The man named must be in my squad. */
+        const mySquad = new Set(c.squad.map(p => p.name));
         for (const sc of rep.oppScorers) {
+          const who = sc.og ? String(sc.drawn ?? '') : sc.name;
+          if (sc.og && !mySquad.has(sc.name)) note('eranames', `${eraId} at ${opp}: ${sc.name} (O.G) is listed under them and is not in my ${eraId} squad`);
           tally.eraGoals += 1;
           if (exposed) tally.exposedGoals += 1;
           if (rosterKey !== opp) tally.longNameGoals += 1;
           if (roster.size) {
-            if (roster.has(sc.name)) tally.rosterGoals += 1;
-            else note('eranames', `${eraId} at ${opp}: ${sc.name} scored, and he is not in the ${eraId} ${rosterKey} roster`);
-          } else if (sc.name.startsWith(`${opp} No. `) && [7, 8, 9, 10, 11].includes(Number(sc.name.slice(opp.length + 5)))) {
+            if (roster.has(who)) tally.rosterGoals += 1;
+            else note('eranames', `${eraId} at ${opp}: ${who} scored, and he is not in the ${eraId} ${rosterKey} roster`);
+          } else if (who.startsWith(`${opp} No. `) && [7, 8, 9, 10, 11].includes(Number(who.slice(opp.length + 5)))) {
             tally.numberGoals += 1;
           } else {
-            note('eranames', `${eraId} at ${opp}: ${sc.name} scored for a club with no ${eraId} roster, where the neutral shirt number line belongs`);
+            note('eranames', `${eraId} at ${opp}: ${who} scored for a club with no ${eraId} roster, where the neutral shirt number line belongs`);
           }
         }
         const text = JSON.stringify(rep);
@@ -1443,8 +1449,18 @@ section('7) An era European night names only men of that era, at every club of e
      at the exposed clubs, 15 to 24 at the long names, and 80 danger men every
      run (two at each of the 40 clubs with an era roster). The exposed and long
      name floors are what keep the two controls able to fire: below them the
-     check is reading too few goals at the clubs it exists for. */
-  if (tally.exposedGoals < 40) note('eranames', `only ${tally.exposedGoals} goals at the exposed clubs (floor 40, measured 82 to 95)`);
+     check is reading too few goals at the clubs it exists for.
+     Round 1146: the exposed floor re-derived, because it had come to sit
+     INSIDE its own distribution. The 82 to 95 was Round 1028's, when more
+     clubs were exposed; later data rounds gave most of them era rosters and
+     the list this harness prints is down to five clubs, sixty nights. On
+     those five it read 48 on the tree before this round, 55 and 55 on the
+     round's first head, and 38, 54 and 47 (its own seed, SIM_SEED 1 and 2)
+     after the round's review moved every quick sim, so a floor of 40 was a
+     coin toss and it duly fired at 38 on healthy code. The floor is 20, about
+     half the lowest of those six, and both controls of this section
+     (poolnames, oldname) were run on the 38 goal sample and still fire. */
+  if (tally.exposedGoals < 20) note('eranames', `only ${tally.exposedGoals} goals at the exposed clubs (floor 20, measured 38 to 55 on the five clubs still exposed)`);
   if (tally.longNameGoals < 6) note('eranames', `only ${tally.longNameGoals} goals at the long names (floor 6, measured 15 to 24)`);
   if (tally.dangerMen < 40) note('eranames', `only ${tally.dangerMen} danger men read (floor 40, measured 80)`);
 });

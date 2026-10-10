@@ -382,7 +382,20 @@ if (!WRITE_FIXTURE) {
   const source = readLF(enginePath);
   const header = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
   if (source.split(header).length - 1 !== 1) abort('Historical no-coach arm needs one executable coach header');
-  fs.writeFileSync(historicalPath, source.replace(header, header + '  return career;\n'));
+  /* Round 1146: and with no own goals. Since that round the engine now and
+     then re-labels a goal the match already had as an own goal (a keyed tag,
+     no draw), which moves who is credited and nothing else. The comparison
+     below is against an engine from before own goals, so the arm that walks
+     its path leaves the one tagging call out. What that buys: every row of
+     sections 4 and 5 still has to equal pre-1072 main in result, next draw
+     AND full content, so every other edit that round made to the engine is
+     held to changing nothing at all while no goal is tagged. The other half
+     (the tag itself moves no result and no draw) is scripts/simCmOwnGoals.mjs
+     section 1. */
+  const ownGoalCall = '  tagOwnGoals(state, live, fx, half, me.goals, oppGoals);\n';
+  if (source.split(ownGoalCall).length - 1 !== 1) abort('Historical arm needs the one own goal call to take out');
+  const coachless = source.replace(header, header + '  return career;\n').replace(ownGoalCall, '');
+  fs.writeFileSync(historicalPath, coachless);
   historicalEnginePath = historicalPath;
   const baselineSource = execFileSync('git', ['show', '5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f:src/lib/clubManager.ts'], { cwd: ROOT, encoding: 'utf8' });
   fs.writeFileSync(baselinePath, baselineSource);
@@ -409,7 +422,7 @@ if (!WRITE_FIXTURE) {
   const armNeeded = R1052_LEAGUES.some(id => !baselineSource.includes(`    id: '${id}',`));
   if (CONTROL === 'keepleague' && !armNeeded) { console.error('control cannot run: the pinned engine already holds the league, so there is no arm to take away'); process.exit(2); }
   if (armNeeded && CONTROL !== 'keepleague') {
-    let out = source.replace(header, header + '  return career;\n');
+    let out = coachless;
     const cut = (start, end, what) => {
       const a = out.indexOf(start);
       const z = a < 0 ? -1 : out.indexOf(end, a);

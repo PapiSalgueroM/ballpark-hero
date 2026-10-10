@@ -1602,6 +1602,8 @@ export function worldSeasonTick(
     year: number; playerLeagueTitle: boolean; playerUcl: boolean; playerCup?: boolean;
     /** Round 1041: the association whose cup the player's club played. */
     playerCupAssociation?: string;
+    /** Saved simulated league champions. Existing world RNG draws stay put. */
+    leagueChampions?: Record<string, string>;
     /** Round 1041: the association a club of the era lists plays its cup in,
      *  or null when the club is not in the pool (it keeps its league's). */
     cupAssociationOf?: (club: string) => string | null;
@@ -1727,6 +1729,7 @@ export function worldSeasonTick(
     ? { name: t.name, champion: t.champion }
     : null;
 
+  if (opts.leagueChampions) Object.assign(leagueWinners, opts.leagueChampions);
   const world: WorldSeason = { year, ucl, leagues: leagueWinners, cups: cupWinners, moves, topScorer, intl };
   p.world = world;
 

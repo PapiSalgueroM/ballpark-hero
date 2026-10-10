@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Pause, Play, FastForward, Users, ArrowLeft, ArrowLeftRight, Gauge, X } from 'lucide-react';
 import {
@@ -27,6 +27,9 @@ import { goalWindow } from '@/components/pitch-motion/motion';
 import { PitchSurface, pitchSpot } from '@/components/pitch-motion/PitchSurface';
 import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
 import { pitchPlan, pitchScene, pitchSceneKey } from '@/components/pitch-motion/scene';
+/* Round 1146: the mark after a goal, the report's own. */
+import { scorerMark } from '@/lib/clubManagerScorerLine';
+import type { GoalMarks } from '@/lib/clubManagerScorerLine';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -149,6 +152,32 @@ const placeOf = (e: { minute: number; plus?: number }) => e.minute + (e.plus ?? 
 const isChance = (e: { kind: string }) => e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save';
 /** One line's key: what the banner effect remembers it by, and what the plan's start times are looked up by. */
 const lineKey = (e: { kind: string; side: string; minute: number; plus?: number; text: string }) => `${e.kind}:${e.side}:${e.minute}${e.plus ? `+${e.plus}` : ''}:${e.text}`;
+/**
+ * Round 1146: a goal as this screen announces it (the pill, the goal card and the list beside the pitch all
+ * print these runs): the lead words, the scorer, the minute, then the mark a match report prints after it,
+ * from the report's own function, so a penalty reads (P) here exactly where the full time report has it.
+ */
+export function goalSegs(lead: string, who: Seg, at: { minute: number; plus?: number }, marks: GoalMarks): Seg[] {
+  const mark = scorerMark(marks);
+  return [{ t: lead }, who, { t: ` ${minuteLabel(at)}` }, ...(mark ? [{ t: mark }] : [])];
+}
+/**
+ * Round 1146: the goal card's own line. The card holds 296 px of text at every width, and "GOAL! Own goal, "
+ * or "GOAL! Penalty, " in front of an ordinary name with its minute and its mark ran to 320 to 355, so the
+ * ellipsis ate the mark and often the minute. On the card a goal that wears a mark therefore drops the words
+ * the mark already says. The pill and the list beside the pitch have the room and keep the long form.
+ */
+export function cardSegs(segs: Seg[]): Seg[] {
+  return segs.length > 3 ? [{ t: 'GOAL! ' }, ...segs.slice(1)] : segs;
+}
+/**
+ * Round 1146: who a goal line names. An own goal names the man who put it in, and he plays for the OTHER
+ * side, so that is the side his name is looked up on (`named` tags a made up man of the opposition). Kept
+ * out of the component so a test can hold which side is asked: nothing else on the screen would notice.
+ */
+export function goalScorerSeg(e: { og?: boolean; text: string }, side: Side, who: Seg, named: (side: Side, name: string) => Seg): Seg {
+  return e.og && e.text ? named(side === 'me' ? 'opp' : 'me', e.text) : who;
+}
 const ordinal = (n: number) => `${n}${n % 10 === 1 && n % 100 !== 11 ? 'st' : n % 10 === 2 && n % 100 !== 12 ? 'nd' : n % 10 === 3 && n % 100 !== 13 ? 'rd' : 'th'}`;
 /** The shape a nameless opposition lines up in: 4-4-2. */
 const DEFAULT_OPP_FORMATION = 1;
@@ -170,8 +199,11 @@ function initialStage(live: LiveMatch | null, report: MatchWeekReport | null): S
  * off, or down injured and not yet replaced, is not on it. After a sub the
  * new man is (that was the bug this round fixed: the dots never changed).
  */
-function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekReport | null, minute: number, plus?: number): { mine: Man[]; theirs: Man[] } {
+function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekReport | null, minute: number, plus?: number, mineAt: number = minute): { mine: Man[]; theirs: Man[] } {
   /* Round 781: a red or an injury in the board takes its man off at its own plus, not at the minute's start. */
+  /* Release AR: `minute` and `plus` are where the changes that come off the clock are read (their
+     substitutions, a red card, a man going down), and the viewer holds them while a chance is playing.
+     `mineAt` is the minute on the clock itself, for my own substitutions, which are on the grass at once. */
   const gone = playedBy(minute, plus);
   const mine: Man[] = [];
   const theirs: Man[] = [];
@@ -187,7 +219,7 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
        them, so nothing beyond the current minute exists, while the opponent's
        half is drawn ahead and reading theirs inclusively would show their
        change a minute before it happens. */
-    const ids = myOnPitchAt(live, minute + 1);
+    const ids = myOnPitchAt(live, mineAt + 1);
     const numbers = squadNumbers(career, live);
     const goneIds = new Set<string>();
     for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id && gone(c)) goneIds.add(c.id);
@@ -238,8 +270,10 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
  * season up to kick off and the feed holds the rest). Null when the scorer is not in my squad by name.
  */
 export function goalCardCount(career: CareerState, feed: LiveFeedEvent[], goal: LiveFeedEvent): { nth: number; season: number | null } {
+  /* Round 1146: an own goal is nobody's goal, so its card counts nothing: no "2nd of the match", no season. */
+  if (goal.og) return { nth: 1, season: null };
   const upTo = feed.indexOf(goal);
-  const nth = feed.filter((e, i) => e.kind === 'goal' && e.side === goal.side && e.text === goal.text && (upTo < 0 || i <= upTo)).length;
+  const nth = feed.filter((e, i) => e.kind === 'goal' && !e.og && e.side === goal.side && e.text === goal.text && (upTo < 0 || i <= upTo)).length;
   const player = goal.side === 'me' ? career.squad.find(p => p.name === goal.text) : undefined;
   return { nth, season: player ? (player.seasonGoals ?? 0) + nth : null };
 }
@@ -323,9 +357,9 @@ function seedOf(text: string): number {
  */
 export function stagePitchInput(
   career: CareerState, live: LiveMatch | null, report: MatchWeekReport | null, stage: Stage, minute: number, plus: number | undefined, stageStop: number,
-  openedAt = 0,
+  openedAt = 0, mineAt: number = minute,
 ): PitchInput {
-  const men = menAt(career, live, report, minute, plus);
+  const men = menAt(career, live, report, minute, plus, mineAt);
   const mentality: Mentality = live?.mentality ?? career.mentality;
   const figure = (m: Man): PitchFigure => {
     const f: PitchFigure = { key: m.key, line: pitchLineOf(m.slot), slot: slotPosition(m.slot, m.side === 'me' ? mentality : 'balanced') };
@@ -372,6 +406,7 @@ function LiveMatchHelp({ onClose }: { onClose: () => void }) {
         <li>The half you are watching has already been played by the game. You are seeing it back minute by minute.</li>
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
         <li>The score changes when the ball is in the net, not before.</li>
+        <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.</li>
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
         <li>Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on.</li>
       </ul>
@@ -766,7 +801,27 @@ export function LiveSimScreen({
   }, [live]);
 
   /* ---- who is on the grass at this minute ---- */
-  const men = useMemo(() => menAt(career, liveNow, report, minute, plus), [career, liveNow, report, minute, plus]);
+  /* Release AR: a chance is played out by the men it started with. A change that comes off the clock (the
+     other dugout's substitution, a red card, a man going down) used to come onto the grass at its whole
+     minute whatever was playing, and the part drops an action when the line up under it changes. So a goal
+     still on its way at that minute lost its net and its card and the score changed with the ball in the
+     air: every goal that waited its turn behind the chance of the minute before (it starts 0.3 into its
+     minute behind a shot or a save and later behind a goal, so its ball is in just past the next whole
+     minute) when their change was made in the goal's own minute, or a man was sent off or went down in the
+     one after. The browser walk met exactly that at 79'. And any goal with such a change lost the end of
+     its card. The change now waits for the action to end, ACTION_SPAN at most. Its line under the pitch
+     and on the list is told at its own minute as before, and a change of mine is still on the grass at once
+     (the rest of the half is drawn again then, and an action under it is rightly dropped). */
+  // A tactics change can replace a future terminal chance during its wind-up.
+  // Round 781: "already happened" reads the board too, so a chance at 45+3 is still future at 45+2.
+  const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event);
+  const liveAction = running && !finished && motionStillCommitted ? motionEvent : null;
+  /* Never from before the viewer opened: a last kick's wind up starts 1.05 before the whistle whenever the
+     screen opens, and a match opened again inside it shows the men of the minute it opened at. */
+  const castFrom = liveAction && clock >= liveAction.at && clock - liveAction.at <= ACTION_SPAN ? Math.max(liveAction.at, openedAt.current) : null;
+  const castMinute = castFrom === null ? minute : Math.min(stageEnd, Math.floor(castFrom));
+  const castPlus = castFrom === null ? plus : Math.max(0, Math.min(stageStop, Math.floor(castFrom)) - stageEnd);
+  const men = useMemo(() => menAt(career, liveNow, report, castMinute, castPlus, minute), [career, liveNow, report, castMinute, castPlus, minute]);
 
   /* The keeper of a side at a minute, for the save line. */
   const keeperOf = (side: Side, m: number): Seg => {
@@ -794,8 +849,8 @@ export function LiveSimScreen({
      ball of the feed. It is rebuilt only when what it reads changes (a sub, a red card, a redraw), never
      on a tick, and the scene only when the clock crosses into the plan's next stretch. */
   const pitchInput = useMemo(
-    () => stagePitchInput(career, liveNow, report, stage, minute, plus, stageStop, openedAt.current),
-    [career, liveNow, report, stage, minute, plus, stageStop],
+    () => stagePitchInput(career, liveNow, report, stage, castMinute, castPlus, stageStop, openedAt.current, minute),
+    [career, liveNow, report, stage, castMinute, castPlus, stageStop, minute],
   );
   const pitchKey = useMemo(() => JSON.stringify(pitchInput), [pitchInput]);
   // The key is the input's whole content, so the plan survives a minute tick that changed nothing.
@@ -848,14 +903,19 @@ export function LiveSimScreen({
       const bigBefore = big as Banner | null;
       const smallBefore = small as Seg[] | null;
       switch (e.kind) {
-        case 'goal':
+        case 'goal': {
+          /* Round 1146: an own goal names the man who put it in. He plays for the other side, so that is
+             the side his MADE UP tag is read on; the club under the line is still the club that got the goal. */
+          const scorer: Seg = goalScorerSeg(e, side, who, named);
           big = {
-            segs: [{ t: x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ' }, who, { t: ` ${minuteLabel(e)}` }],
+            /* Round 1146: the mark the report prints, from the same function, after the minute as the report has it. */
+            segs: goalSegs(e.og ? 'GOAL! Own goal, ' : x?.penalty ? 'GOAL! Penalty, ' : x?.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ', scorer, e, { penalty: x?.penalty, og: e.og }),
             club,
             tone: e.side === 'me' ? 'me' : 'opp',
           };
           scored = { e, key, banner: big };
           break;
+        }
         case 'yellow': big = { segs: [{ t: 'Booked: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
         case 'red': big = { segs: [{ t: 'RED CARD! ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
         case 'injury': big = { segs: [{ t: 'Injury: ' }, who, { t: ` ${minuteLabel(e)}` }], club, tone: 'none' }; break;
@@ -927,13 +987,9 @@ export function LiveSimScreen({
   const scene = useMemo(() => pitchScene(plan, clock), [plan, sceneKey]);
   /* The part places roles; who each one is (his name, number, id, armband) is this screen's own. */
   const manOf = useMemo(() => new Map([...men.mine, ...men.theirs].map(m => [m.key, m])), [men]);
-  // A tactics change can replace a future terminal chance during its wind-up.
-  // Round 781: "already happened" reads the board too, so a chance at 45+3 is still future at 45+2.
-  const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event);
   const motion = useLiveSimMotion(scene, motionEvent, clock, running && !finished && motionStillCommitted);
 
   /* ---- the goal sequence (Round 1101), derived in render and never from effect state ---- */
-  const liveAction = running && !finished && motionStillCommitted ? motionEvent : null;
   const goalPhase = goalWindow(liveAction, clock, reducedMotion);
   /* An action the pitch has shown and then stopped showing before its time is one the part dropped (the line
      up changed under it: a substitution in a goal's wind up). The goal it was has nothing left to wait for. */
@@ -1363,9 +1419,14 @@ export function LiveSimScreen({
                         gm.side === 'me' ? 'bg-emerald-500 text-black' : 'bg-red-500 text-black',
                       )}
                     >
-                      <div className="truncate text-sm font-bold">
-                        {gm.segs.map((sg, i) => (
-                          <span key={i}>{sg.t}{sg.gen && <MadeUpTag className="ml-1" />}</span>
+                      {/* Round 1146: only the name gives way on a narrow card. The words before it and the
+                          minute and mark after it are never clipped (whitespace-pre keeps their spaces). */}
+                      <div className="flex min-w-0 items-baseline justify-center truncate text-sm font-bold" data-cm-goal-card-line="1">
+                        {cardSegs(gm.segs).map((sg, i) => (
+                          <Fragment key={i}>
+                            <span className={i === 1 ? 'min-w-0 truncate' : 'shrink-0 whitespace-pre'}>{sg.t}</span>
+                            {sg.gen && <MadeUpTag className="ml-1 shrink-0" />}
+                          </Fragment>
                         ))}
                       </div>
                       <div className="truncate text-[11px] leading-tight text-black/75">

@@ -3,11 +3,12 @@ import { useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { startCareer, playNextEntry, resumeMatch, startSecondHalf, liveFeed, changeLive, benchFor, isExtraTimeDue, startExtraTime, uclLegsFor } from '@/lib/clubManager';
 import type { CareerState, LiveFeedEvent } from '@/lib/clubManager';
-import { ACTION_SPAN, BEAT_SPAN, GOAL_MOUTH } from '@/components/pitch-motion/contract';
+import { ACTION_SPAN, BEAT_SPAN, GOAL_MOUTH, NET_AT } from '@/components/pitch-motion/contract';
 import type { PitchFigure, PitchInput } from '@/components/pitch-motion/contract';
 import type { MotionScene } from '@/components/pitch-motion/motion';
 import { pitchBeatAt, pitchPlan, pitchScene, pitchSceneKey, PITCH_HELD, PITCH_KICKOFF, PITCH_LATE, PITCH_LEAD, PITCH_RESTART, PITCH_SQUEEZE } from '@/components/pitch-motion/scene';
 import type { PitchBeat, PitchPlaced, PitchPlan } from '@/components/pitch-motion/scene';
+import { scorerMark } from '@/lib/clubManagerScorerLine';
 const motionPath = process.env.LIVE_MOTION_COMPONENT;
 /* Round 1101: the part lives in src/components/pitch-motion now, and `between` is exported there. */
 const { actionFrame, between, useLiveSimMotion } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/pitch-motion/motion');
@@ -88,7 +89,10 @@ function findTerminalFixtures() {
          half the viewer shows pass, pass through the last minute and the whistle at 3-3; on the next three 90
          goals the seeds find (no change of cast in the last minute) it shows plant, flight and net before the
          whistle, as asserted. So such a half is skipped here, the same way a chance still in the air is skipped
-         above, and the gap is reported to the viewer's owner rather than hidden. */
+         above, and the gap is reported to the viewer's owner rather than hidden.
+         Release AR: that gap is closed in the viewer (a change off the clock waits for the action in flight,
+         see 'a goal still on its way when the line up changes off the clock' below, which holds it on a goal in
+         open play). The skip stays, so the four halves these tests were written against do not move. */
       if (feed.some(e => ['injury', 'red', 'sub'].includes(e.kind) && clockPos(e) > cap + board - 2 && clockPos(e) < cap + board)) continue;
       const key = `${cap}:${event.kind}`;
       if (terminalFixtures.has(key)) continue;
@@ -573,7 +577,8 @@ describe('Live simcast motion', () => {
     const banner = announced();
     expect(banner, 'no goal banner on screen at the goal').toBeTruthy();
     expect(banner!.textContent).toContain(goal!.text);
-    expect(banner!.textContent!.endsWith(` 90+${plus}'`), `the banner reads "${banner!.textContent}"`).toBe(true);
+    /* Round 1146: the report's mark follows the minute on a goal that carries one (a penalty reads 90+N' (P)). */
+    expect(banner!.textContent!.endsWith(` 90+${plus}'${scorerMark(goal!)}`), `the banner reads "${banner!.textContent}"`).toBe(true);
   }, 30000);
 
   /* Round 781 review: extra time has its own board at 120, and the clock in
@@ -1566,6 +1571,94 @@ describe('The goal sequence', () => {
       expect(readScore(mounted.container)).toBe(after);
     }
   }, 60000);
+
+  /* Release AR. The browser walk met this one at 79' on the release gate: a goal that waited its turn behind a
+     save in the minute before it, with the other dugout's substitution made in the goal's own minute. Their man
+     came onto the grass at the next whole minute whatever was playing, the part drops an action when the line
+     up under it changes, and that minute fell 0.056 before the ball was in. So the score changed with the ball
+     in the air and no card ever rose. A change that comes off the clock now waits for the action to end. The
+     half is a real one of the engine's, found by search: nothing about it is typed here. */
+  it('a goal still on its way when the line up changes off the clock keeps its net, its card and its men', async () => {
+    const base = fixtures.get('goal')!.career;
+    const eleven = (input: PitchInput) => JSON.stringify([input.mine, input.theirs].map(list => list.map(f => [f.key, f.name ?? ''])));
+    let found: { career: CareerState; goal: LiveFeedEvent; at: number; attempt: number; behind: string } | null = null;
+    for (let attempt = 0; attempt < 4000 && !found; attempt++) {
+      vi.mocked(Math.random).mockImplementation(seeded(11460077 + attempt * 104729));
+      const first = changeLive(base, 0, { kind: 'shape', mentality: 'balanced' })!;
+      const second = startSecondHalf(structuredClone(first))!;
+      for (const [cap, stage, career] of [[45, 'first', first], [90, 'second', second]] as const) {
+        const stop = cap + boardAt(career, cap);
+        const feed = liveFeed(career.live!).filter(e => e.minute > cap - 45 && e.minute <= cap);
+        for (const goal of feed) {
+          const m = goal.minute;
+          if (goal.kind !== 'goal' || goal.side === 'none' || goal.plus || m < cap - 40 || m > cap - 4) continue;
+          /* One goal on its own, so the score has one step to take in the stretch watched. */
+          if (feed.some(e => e !== goal && e.kind === 'goal' && Math.abs(clockPos(e) - m) <= 2)) continue;
+          /* The viewer opens a little before the minute before it, so the chance it waits behind is played. */
+          const opened = m - 1.2;
+          const cast = (minute: number) => stagePitchInput(career, career.live!, null, stage, minute, 0, stop, opened);
+          /* The same men from where the viewer opens to the goal's minute, and other men the minute after. */
+          if (eleven(cast(m - 2)) !== eleven(cast(m)) || eleven(cast(m)) === eleven(cast(m + 1))) continue;
+          /* And the goal waits: its action starts inside its own minute, so late that the next minute comes
+             while its ball is still on its way (by two frames of this test's clock at least), and early
+             enough that it is over with a third of a minute of the stretch watched still to run. */
+          const staged = pitchPlan(cast(m)).actions.find(a => a.event.kind === 'goal' && a.event.side === goal.side && a.event.minute === m && !a.event.plus);
+          if (!staged || staged.at > m + 0.6 || staged.at + NET_AT < m + 1.04) continue;
+          const copy = structuredClone(career);
+          copy.live!.minute = opened;
+          const behind = feed.filter(e => ['goal', 'save', 'shot'].includes(e.kind) && clockPos(e) >= opened && clockPos(e) < m).map(e => `${e.kind} at ${clockPos(e)}`).join(', ');
+          found = { career: copy, goal, at: staged.at, attempt, behind };
+          break;
+        }
+        if (found) break;
+      }
+    }
+    expect(found, 'no half held a goal still on its way when the line up changes off the clock').not.toBeNull();
+    const { career, goal } = found!;
+    const m = goal.minute;
+    const before = scoreBy(career, m - 1), after = scoreBy(career, m);
+    expect(after).not.toBe(before);
+    console.log(`[AR held cast] the half found on attempt ${found!.attempt}: a goal at ${m} for ${goal.side}, its action staged at ${found!.at.toFixed(3)} behind ${found!.behind || 'nothing'}, the ball in at ${(found!.at + NET_AT).toFixed(3)}, and the line up changes at ${m + 1}`);
+    const mounted = mount(career);
+    const read = () => {
+      const pitch = mounted.container.querySelector('[data-cm-live-pitch]')!;
+      return {
+        motion: pitch.getAttribute('data-cm-motion'), phase: pitch.getAttribute('data-cm-motion-phase'),
+        score: readScore(mounted.container), card: !!mounted.container.querySelector('[data-cm-goal-card]'),
+        minute: Number(mounted.container.querySelector('[data-cm-live-minute]')!.getAttribute('data-cm-live-minute')),
+        /* Who is on the grass: my men by id, theirs by the number on their backs (a man off the bench wears 12 or more). */
+        cast: [...mounted.container.querySelectorAll<HTMLElement>('[data-cm-dot]')].map(d => d.dataset.cmDot).join(',')
+          + ' | ' + [...mounted.container.querySelectorAll<HTMLElement>('[data-cm-dot-opp]')].map(d => d.dataset.cmDotOpp).join(','),
+      };
+    };
+    const frames: ReturnType<typeof read>[] = [];
+    for (let i = 0; i < 900; i++) {
+      await step(16);
+      frames.push(read());
+      if (frames[frames.length - 1].minute >= m + 2) break;
+    }
+    const playing = frames.filter(f => f.motion === 'goal');
+    const windup = playing.filter(f => f.phase === 'plant' || f.phase === 'flight');
+    /* The score waits for the ball on every frame of the wind up and the flight, */
+    expect(windup.length).toBeGreaterThan(20);
+    expect(windup.filter(f => f.score !== before).length).toBe(0);
+    /* and the first frame that reads the new score is the ball in the net. */
+    const changed = frames.find(f => f.score !== before);
+    expect(changed && { score: changed.score, motion: changed.motion, phase: changed.phase }).toEqual({ score: after, motion: 'goal', phase: 'net' });
+    /* The stretch watched is the one the search promised: the next minute came with the ball on its way. */
+    expect(windup.some(f => f.minute === m + 1)).toBe(true);
+    /* The card rises with it, and is held as any goal's is (1.8 real seconds at this speed: over a hundred frames). */
+    const carded = frames.filter(f => f.card);
+    expect(carded.length).toBeGreaterThan(60);
+    expect(carded.every(f => f.motion === 'goal' && f.phase === 'net' && f.score === after)).toBe(true);
+    /* The goal is played out by the men it started with, */
+    expect(new Set(playing.map(f => f.cast)).size).toBe(1);
+    /* and the change comes onto the grass as soon as it has been seen, and stays. */
+    const since = frames.slice(frames.lastIndexOf(playing[playing.length - 1]) + 1);
+    expect(since.length).toBeGreaterThan(10);
+    expect(since.every(f => f.cast !== playing[0].cast && f.score === after && !f.card)).toBe(true);
+    expect(frames[frames.length - 1].minute).toBe(m + 2);
+  }, 120000);
 
   it('a scorer card counts his goals up to this one, and gives a season count only to one of mine', () => {
     /* An invented feed on a real squad: one of my players twice, an opponent who happens to share his name

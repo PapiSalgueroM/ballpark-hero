@@ -1,0 +1,130 @@
+name: Club Manager penalty scorer markers
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/cm-penalty-markers-1163]
+
+permissions:
+  contents: read
+concurrency:
+  group: cm-penalty-markers-${{ github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      SIM_NETWORK: offline
+      SEO_SPLIT_BASE_REF: HEAD
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain source and install locked dependencies
+        run: |
+          mkdir -p penalty-proof
+          git rev-parse HEAD > penalty-proof/head.txt
+          git rev-parse 'HEAD^{tree}' > penalty-proof/tree.txt
+          git archive HEAD | gzip > penalty-proof/source.tar.gz
+          sha256sum package.json package-lock.json src/components/club-manager/MatchReportCard.tsx src/test/managerPenaltyMarkers.test.tsx > penalty-proof/source-before.sha256
+          npm ci
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > penalty-proof/app-dependencies-before.sha256
+          browser_runtime="$RUNNER_TEMP/cm-penalty-browser"
+          npm install --prefix "$browser_runtime" --no-package-lock --no-audit --no-fund playwright@1.63.0
+          ln -s "$browser_runtime/node_modules/playwright" node_modules/playwright
+          ln -s "$browser_runtime/node_modules/playwright-core" node_modules/playwright-core
+          "$browser_runtime/node_modules/.bin/playwright" install --with-deps chromium
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > penalty-proof/app-dependencies-prepared.sha256
+          cmp penalty-proof/app-dependencies-before.sha256 penalty-proof/app-dependencies-prepared.sha256
+          readlink node_modules/playwright > penalty-proof/browser-link.txt
+          readlink node_modules/playwright-core > penalty-proof/browser-core-link.txt
+          python -m pip install fonttools pillow
+      - name: Actual app type gate
+        run: |
+          set -o pipefail
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee penalty-proof/types.log
+      - name: Actual scorer list outcomes
+        id: cases
+        run: |
+          set -o pipefail
+          node_modules/.bin/vitest run src/test/managerPenaltyMarkers.test.tsx --cache=false --maxWorkers=1 --minWorkers=1 --reporter=verbose 2>&1 | tee penalty-proof/cases.log
+      - name: Effective missing-marker and false-marker controls
+        if: ${{ !cancelled() && steps.cases.outcome == 'success' }}
+        run: |
+          set -o pipefail
+          node --input-type=module <<'NODE' 2>&1 | tee penalty-proof/controls.log
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { spawnSync } from 'node:child_process';
+          const file = 'src/components/club-manager/MatchReportCard.tsx';
+          const source = fs.readFileSync(file, 'utf8');
+          const marker = "{sc.penalty && ' (P)'}";
+          assert.equal(source.split(marker).length - 1, 2);
+          const first = source.indexOf(marker), last = source.lastIndexOf(marker);
+          const controls = [
+            ['mine-missing', source.slice(0, first) + source.slice(first + marker.length), 'marks recorded penalties'],
+            ['opponent-missing', source.slice(0, last) + source.slice(last + marker.length), 'marks recorded penalties'],
+            ['all-goals', source.replaceAll(marker, "{' (P)'}"), 'does not infer a scorer penalty'],
+          ];
+          fs.mkdirSync('penalty-proof/controls', { recursive: true });
+          for (const [name, altered, expected] of controls) {
+            assert.notEqual(altered, source);
+            const target = path.resolve('penalty-proof/controls', name + '.tsx');
+            fs.writeFileSync(target, altered);
+            const run = spawnSync('node_modules/.bin/vitest', ['run', 'src/test/managerPenaltyMarkers.test.tsx', '--cache=false', '--maxWorkers=1', '--minWorkers=1', '--reporter=verbose'], {
+              env: { ...process.env, NO_DOUBLE_SWAP: JSON.stringify({ '@/components/club-manager/MatchReportCard': target }) }, encoding: 'utf8', timeout: 120000,
+            });
+            const output = (run.stdout ?? '') + (run.stderr ?? '');
+            fs.writeFileSync('penalty-proof/controls/' + name + '.log', output);
+            assert.equal(run.error, undefined);
+            assert.notEqual(run.status, null);
+            assert.notEqual(run.status, 0);
+            assert.match(output, /AssertionError/);
+            assert(output.includes(expected));
+            console.log(name + ': effective copied component rejected by actual scorer tests');
+          }
+          assert.equal(fs.readFileSync(file, 'utf8'), source);
+          console.log('3/3 effective controls passed; actual source unchanged');
+          NODE
+      - name: Actual production build
+        id: build
+        if: ${{ !cancelled() }}
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee penalty-proof/build.log
+      - name: All required built readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            set -o pipefail
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "penalty-proof/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Closing source and engine holds
+        if: ${{ !cancelled() }}
+        run: |
+          sha256sum --check penalty-proof/source-before.sha256
+          git diff --exit-code HEAD -- src package.json package-lock.json .github/workflows/cm-penalty-markers.yml
+          git diff --exit-code 68064f38c0a69b5d3903241e435c8706571f9878 HEAD -- src/lib src/hooks src/data src/integrations src/types public package.json package-lock.json
+          find node_modules -type f -print0 | sort -z | xargs -0 sha256sum > penalty-proof/app-dependencies-after.sha256
+          cmp penalty-proof/app-dependencies-before.sha256 penalty-proof/app-dependencies-after.sha256
+          test "$(readlink node_modules/playwright)" = "$(cat penalty-proof/browser-link.txt)"
+          test "$(readlink node_modules/playwright-core)" = "$(cat penalty-proof/browser-core-link.txt)"
+          if test -d dist; then tar -czf penalty-proof/dist.tar.gz dist; fi
+      - name: Retain actual proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cm-penalty-markers-${{ github.run_id }}-${{ github.run_attempt }}
+          path: penalty-proof/
+          retention-days: 5
+          if-no-files-found: error

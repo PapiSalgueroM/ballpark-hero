@@ -591,7 +591,17 @@ function drive(seed, mode) {
     let midSave = null;
 
     while (!s.retired && guard++ < 400) {
-      if (s.phase === 'random_events' && prevPhase !== 'random_events') {
+      /* Release AQ: Round 1176 shows a red card appeal's result before the
+         cards still queued behind it, so the phase leaves random_events for
+         that one card and comes back to the SAME queue. Counting the return
+         as a new batch read the rest of the queue twice: 176 events "fired
+         again inside their cooldown" on the merged train, every pair in the
+         same year, 0 on the base, and no card was ever shown twice (22,553
+         cards over 300 careers, none answered twice in a season). A batch
+         opens when the queue is entered from anywhere else; the whole queue
+         is on the batch from its first card, so a repeat inside one season
+         is still read by the check that holds a batch to itself. */
+      if (s.phase === 'random_events' && prevPhase !== 'random_events' && prevPhase !== 'red_card_appeal_result') {
         const injuryYears = (s.seriousInjuries || []).map(i => i.year).filter(y => Number.isFinite(y));
         batches.push({
           season: seasonOf(s),

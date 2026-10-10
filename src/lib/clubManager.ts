@@ -39,6 +39,11 @@ import type { Formation, FormationSlot } from '@/lib/squadShape';
    position man here is graded by the same family table World XI uses.
    positionFit imports nothing but types, so there is no cycle. */
 import { ALL_POSITIONS, eligiblePositions, FIT_PENALTY, gradeFit, type FitGrade } from '@/lib/positionFit';
+/* Round 1146: the own goal rule the Soccer Career Season Centre reads too.
+   It imports only the keyed generator, so there is no cycle. */
+import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
+/* Round 1146: a roll keyed on a match (the quick sim coach's two minutes), never the seeded stream. */
+import { keyedRng } from '@/lib/keyedRng';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -606,6 +611,10 @@ export interface CMPlayer {
    * means he was involved, a 0 means he watched it. Newest last. Matches he
    * was injured, banned or out on loan for never go in, because a player does
    * not sulk about a game he could not have played in.
+   * Round 1146: a 1 is a START. A man who came on holds the share of the
+   * match he was out there for (windowEntry), a number between 0 and 1, so a
+   * late cameo is not a game. Saves from before the round hold only 0 and 1
+   * and read the way they always did.
    */
   lastTen?: number[];
   /** Round 127: he has asked to leave, and the papers know about it. */
@@ -1059,6 +1068,20 @@ export interface ScorerLine {
    *  (45+3' is minute 45, plus 3). Absent on every line in regular time and
    *  on every line written before this round. */
   plus?: number;
+  /** Round 1146: an own goal. `name` is then the man who put it into his own
+   *  net, a defender or the keeper of the side that CONCEDED it: on my list
+   *  he is one of theirs, on their list he is one of mine. Nobody is credited
+   *  with the goal and it has no assist. Absent on every other goal and on
+   *  every line written before this round. */
+  og?: boolean;
+  /** Round 1146, own goals only: the man the engine first drew the goal for.
+   *  Never shown. Their ratings sheet is built off it, so every draw after
+   *  the goal reads the match it read before own goals existed. */
+  drawn?: string;
+  /** Round 1146, own goals on MY list only: the man who put it in is one the
+   *  game made up (a projected world). The report card's scorer list prints
+   *  his MADE UP tag off this; the timeline tags him off their eleven. */
+  gen?: boolean;
 }
 
 /* Round 781: the clock with the board in it (minuteLabel, clockOrder,
@@ -1138,6 +1161,11 @@ export interface MyGoalLine {
   freeKick?: boolean;
   /** Round 781: into the board of `minute`, see ScorerLine. */
   plus?: number;
+  /** Round 1146: this goal was an own goal, and this is the man of THEIRS
+   *  who put it in (`g` when the game made him up). `id` and `name` stay the
+   *  man of mine the engine drew the goal for: he keeps the lift and loses
+   *  the goal, and every draw that reads the line reads what it always did. */
+  og?: { n: string; g?: boolean };
 }
 
 /** Round 504: one opposition player on the day, from the era roster. */
@@ -1176,6 +1204,10 @@ export interface TimelineEvent {
   /** Round 714: a goal or a save from the spot, a goal from a direct free kick. */
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 1146, goals only: an own goal. `text` is the man who put it in,
+   *  who plays for the side that conceded it (`side` is the side that got
+   *  the goal, as on every goal row). */
+  og?: boolean;
   /** Round 781: into the board of `minute` (45+2'). A clock row (half time,
    *  the whistle, extra time) carries the board itself, so it sorts after
    *  everything that happened in it. */
@@ -7367,6 +7399,41 @@ export function playingShare(p: CMPlayer): number | null {
 }
 
 /**
+ * Round 1146: what one match is worth in his last ten. A start is a game,
+ * whatever minute he came off. A man who came on is worth the share of the
+ * match he was out there for: on at the break is half a game, on for the last
+ * quarter of an hour is about a sixth of one.
+ *
+ * Before this the window held a 1 for anyone who set foot on the pitch. That
+ * was honest while a bench man only came on for an injury, and it stopped
+ * being honest the day the quick sim's coach started using his bench: a man
+ * the manager had dropped came on late in nine quick sims in ten and read as
+ * playing every week, so being dropped stopped showing (scripts/simRoles.mjs
+ * section 3b went from about 0.3 of the football to 0.58).
+ */
+export function windowEntry(started: boolean, cameOnAt: number | null, lastMinute = 90): number {
+  if (started) return 1;
+  if (cameOnAt === null) return 0;
+  return Math.round(clamp((lastMinute - cameOnAt + 1) / lastMinute, 0, 1) * 100) / 100;
+}
+
+/**
+ * Round 1146: his last ten in the words a screen prints. `starts` is the
+ * matches he started, `offBench` the ones he came on in, `of` how many the
+ * window holds. playingShare stays the number his mood is judged on.
+ */
+export function windowCounts(p: CMPlayer): { starts: number; offBench: number; of: number } {
+  const w = p.lastTen ?? [];
+  return { starts: w.filter(x => x >= 1).length, offBench: w.filter(x => x > 0 && x < 1).length, of: w.length };
+}
+
+/** "3 starts, 2 off the bench", the count every squad screen prints. */
+export function windowWords(p: CMPlayer): string {
+  const { starts, offBench } = windowCounts(p);
+  return `${starts} ${starts === 1 ? 'start' : 'starts'}${offBench ? `, ${offBench} off the bench` : ''}`;
+}
+
+/**
  * Promise minus reality. Positive means he is playing more than he was
  * told he would, negative means you are not keeping your end of it.
  */
@@ -8348,8 +8415,7 @@ function buildPressQuestion(state: CareerState): PressQuestion | null {
     .filter(p => isAvailable(p) && (p.lastTen ?? []).length >= 5 && promiseGap(p) <= -0.25)
     .sort((a, b) => promiseGap(a) - promiseGap(b))[0];
   if (dropped) {
-    const played = (dropped.lastTen ?? []).reduce((s, x) => s + x, 0);
-    const of = (dropped.lastTen ?? []).length;
+    const { starts: played, of } = windowCounts(dropped);
     return mk({
       kind: 'dropped', playerId: dropped.id, playerName: dropped.name,
       text: `${dropped.name} has started ${played} of the last ${of}. Is he finished at this club?`,
@@ -9057,8 +9123,7 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
     if (letDown) {
       const rung = ROLE_LADDER.indexOf(roleOf(letDown));
       const honest = ROLE_LADDER[Math.min(rung + 1, ROLE_LADDER.length - 1)];
-      const played = (letDown.lastTen ?? []).reduce((s, x) => s + x, 0);
-      const of = (letDown.lastTen ?? []).length;
+      const { starts: played, of } = windowCounts(letDown);
       const options: { label: string; effect: MessageEffect }[] = [
         { label: 'Promise him a start', effect: 'promise' },
         { label: 'Hear him out', effect: 'listen' },
@@ -13346,10 +13411,17 @@ function creditMyScorers(
      report's timeline can print the assist the season stats were paid for. */
   const assistNames: (string | null)[] = [];
   for (const line of lines) {
-    goalCounts.set(line.id, (goalCounts.get(line.id) ?? 0) + 1);
+    /* Round 1146: an own goal is nobody's goal. The man the engine drew it
+       for loses it from his match count and his season, and it has no
+       assist. Two things stay exactly as they were so that not one later
+       result moves: the lift (he was in the box when it went in, and morale
+       feeds the strength every later match is drawn from), and every draw
+       below, taken as before and then not paid out. */
+    const own = !!line.og;
+    if (!own) goalCounts.set(line.id, (goalCounts.get(line.id) ?? 0) + 1);
     const sq = state.squad.find(p => p.id === line.id);
     if (sq) {
-      sq.seasonGoals += 1;
+      if (!own) sq.seasonGoals += 1;
       sq.morale = clamp(sq.morale + 3, 5, 99);
     }
     let assistedBy: string | null = null;
@@ -13359,7 +13431,7 @@ function creditMyScorers(
       const there = onPitchAt ? onPitchAt(line.minute) : xi;
       const others = (there.length ? there : xi).filter(p => p.id !== line.id && p.position !== 'GK');
       const assister = weightedPick(others, p => (scorerWeight(p) * 0.6 + 0.5) * dutyAssistMult(dutyAt?.(line.minute, p)));
-      if (assister) {
+      if (assister && !own) {
         assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
         const aq = state.squad.find(p => p.id === assister.id);
         if (aq) aq.seasonAssists += 1;
@@ -14568,6 +14640,93 @@ function foldBoard(to: number, ...lists: { minute: number; plus?: number }[][]):
   return maxPlus;
 }
 
+/* ---------- Round 1146: own goals ---------- */
+/**
+ * A player's report, 2026-10-09: "make it so a player can score an own goal.
+ * it'll show (O.G) next to the goal."
+ *
+ * An own goal here is a goal the match ALREADY HAD, re-labelled. The score,
+ * the result, the table and every draw of the seeded stream are what they
+ * were: the tag and the man are two rolls keyed on the goal itself (the
+ * shared rule, src/lib/ownGoalRule.ts, the one the Soccer Career Season
+ * Centre reads), and nothing here calls Math.random. What changes is who is
+ * credited. The man the engine drew the goal for loses it, nobody gains it,
+ * and the scorer list prints the man who put it in with (O.G) after his name,
+ * under the club that got the goal.
+ *
+ * Club Manager's own binding, and all of it:
+ *  - the odds, one eligible goal in CM_OWN_GOAL_ONE_IN (32, against the
+ *    Season Centre's provisional 64). Penalties (8 in 100 goals) and direct
+ *    free kicks (4 in 100) are never own goals, so that comes to 2.0 to 2.7
+ *    own goals in 100 goals, two and a half to three a season in my own
+ *    matches, where the real game runs near 3 in 100. Measured by
+ *    scripts/simCmOwnGoals.mjs over ten fleets of 36 seasons; the numbers
+ *    are in its header;
+ *  - the man. Both sides have real squads, so he is a NAMED defender or the
+ *    keeper of the side that conceded, out of the men on the pitch at that
+ *    minute, a defender twice as likely as the keeper. One of mine is read
+ *    in the slot he is standing in (the back line or in goal by pitchLineOf),
+ *    one of theirs off the position on their line. A goal of mine against a
+ *    side with no named eleven has nobody to name and stays the goal it was;
+ *  - the key: the club, the season, the week, the opponent, the half, the
+ *    goal's place on the clock, the side and the man it was drawn for. A
+ *    match is never played twice in one save, and no two goals of a match
+ *    share a place on the clock.
+ *
+ * It runs once, as the last thing a stretch does (drawSegment), on the goals
+ * that stretch just placed. A goal recorded before this round is never
+ * visited, so a match in flight and every saved report keep the goals they
+ * had. A change in the dugout redraws the stretches after it and those goals
+ * are new goals, tagged when they are drawn; nothing before the change moves.
+ */
+export const CM_OWN_GOAL_ONE_IN = 32;
+
+/** The man who put it in: every defender holds two places and the keeper one. Null when there is nobody to name.
+ *  Exported for scripts/simCmOwnGoals.mjs, which holds the two places to one on its own keys. */
+export function ownGoalMan<T>(key: string, defenders: T[], keeper: T | null): T | null {
+  const places = [...defenders, ...defenders, ...(keeper ? [keeper] : [])];
+  return places.length ? places[ownGoalRole(key, places.length)] : null;
+}
+
+function tagOwnGoals(state: CareerState, live: LiveMatch, fx: MyFixture, half: 1 | 2, mine: MyGoalLine[], theirs: ScorerLine[]): void {
+  const match = `cm|${state.clubName}|${state.season}|${live.week}|${fx.opponent}|${half}`;
+  const keyOf = (g: { minute: number; plus?: number; name: string }, side: 'me' | 'opp'): string =>
+    `${match}|${g.minute + (g.plus ?? 0)}|${side}|${g.name}`;
+  /* Never a goal from the spot or a direct free kick, and never a goal already tagged. */
+  const eligible = (g: { og?: unknown; penalty?: boolean; freeKick?: boolean }): boolean => !g.og && !g.penalty && !g.freeKick;
+  for (const g of mine) {
+    if (!eligible(g)) continue;
+    const key = keyOf(g, 'me');
+    if (!ownGoalTagged(key, CM_OWN_GOAL_ONE_IN)) continue;
+    /* Theirs on the pitch at that minute, minus anyone they have lost to a red. */
+    const there = oppAt(live, g.minute) ?? [];
+    const who = ownGoalMan(key, there.filter(p => groupOf(p.p) === 'DEF'), there.find(p => p.p === 'GK') ?? null);
+    if (who) g.og = { n: who.n, ...(who.g ? { g: true } : {}) };
+  }
+  for (const g of theirs) {
+    if (!eligible(g)) continue;
+    const key = keyOf(g, 'opp');
+    if (!ownGoalTagged(key, CM_OWN_GOAL_ONE_IN)) continue;
+    /* Mine on the pitch when it went in: nobody taken off, sent off or down
+       injured before it. In a board that is "before this point of the board". */
+    const gone = g.plus ? liveGoneIds(live, g.minute, g.plus - 1) : liveGoneIds(live, g.minute - 1);
+    /* Each man is read in the slot he is standing in, the way the engine reads
+       him everywhere else, not by the position on his card: a centre back sent
+       up front is not at the back today, and a midfielder filling in at full
+       back is. Theirs are read the same way (p.p is the slot of their line). */
+    const shape = liveFormationOf(state, live);
+    const lineAt = new Map<string, PitchLine>();
+    myOnPitchAt(live, g.minute).forEach((id, i) => { const slot = shape.slots[i]; if (slot) lineAt.set(id, pitchLineOf(slot)); });
+    const there = squadByIds(state, myOnPitchAt(live, g.minute)).filter(p => !gone.has(p.id));
+    const who = ownGoalMan(key, there.filter(p => lineAt.get(p.id) === 'defence'), there.find(p => lineAt.get(p.id) === 'keeper') ?? null);
+    if (who) {
+      g.drawn = g.name;
+      g.name = who.name;
+      g.og = true;
+    }
+  }
+}
+
 /**
  * One stretch of a half, (from, to], drawn in the order the football
  * needs: my goals, cards and injury; their goals off the eleven they start
@@ -14687,6 +14846,9 @@ function drawSegment(
       live.h2Play = [...(live.h2Play ?? [])].sort((a, b) => clockOrder(a, b) || PLAY_ORDER[a.kind] - PLAY_ORDER[b.kind]);
     }
   }
+  /* Round 1146: own goals, last, on the goals this stretch placed. A keyed
+     re-label and no draw, so everything above read the stream it always read. */
+  tagOwnGoals(state, live, fx, half, me.goals, oppGoals);
 }
 
 /**
@@ -15003,6 +15165,9 @@ export interface LiveFeedEvent {
   flank?: 'left' | 'right';
   penalty?: boolean;
   freeKick?: boolean;
+  /** Round 1146, goals only: an own goal. `text` is the man who put it in,
+   *  who plays for the OTHER side; `side` is the side that got the goal. */
+  og?: boolean;
   /** Round 781: into the board of `minute` (90+3' is minute 90, plus 3). */
   plus?: number;
 }
@@ -15021,8 +15186,9 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
   const flags = (g: { penalty?: boolean; freeKick?: boolean }): Partial<LiveFeedEvent> => ({
     ...(g.penalty ? { penalty: true } : {}), ...(g.freeKick ? { freeKick: true } : {}),
   });
-  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.name, ...flags(g), ...plusOf(g) });
-  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g), ...plusOf(g) });
+  /* Round 1146: an own goal's line names the man who put it in (one of the other side's), and says so. */
+  for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.og ? g.og.n : g.name, ...flags(g), ...(g.og ? { og: true } : {}), ...plusOf(g) });
+  for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g), ...(g.og ? { og: true } : {}), ...plusOf(g) });
   for (const e of [...(live.h1Play ?? []), ...(live.h2Play ?? [])]) {
     if (e.goal) continue;
     out.push({
@@ -15395,7 +15561,9 @@ function buildMatchDetail(args: {
   timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
   /* Round 714: a goal row says when it came from the spot or a free kick, off its own scorer line. */
   const setPiece = (sc: ScorerLine): Partial<TimelineEvent> => ({
-    ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}), ...plusOf(sc),
+    ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}),
+    /* Round 1146: an own goal row says so, off its own scorer line. */
+    ...(sc.og ? { og: true } : {}), ...plusOf(sc),
   });
   for (const sc of args.myScorers) {
     timeline.push({ minute: sc.minute, side: 'me', kind: 'goal', text: sc.assist ? `${sc.name} (assist: ${sc.assist})` : sc.name, ...setPiece(sc) });
@@ -15498,7 +15666,12 @@ function buildMatchDetail(args: {
      roster cannot field one gets no invented sheet. */
   let oppRatings: PlayerRatingLine[] | undefined;
   {
-    const scorerNames = new Set(args.oppScorers.map(s => s.name));
+    /* Round 1146: an own goal against me is listed under them but was put in
+       by one of mine, so the sheet is built off the man the goal was first
+       drawn for (he is one of theirs and was on their pitch), exactly the
+       names it was built off before, and he is not given the goal below.
+       The sheet's draws are therefore the draws it always made. */
+    const scorerNames = new Set(args.oppScorers.map(s => (s.og ? s.drawn ?? s.name : s.name)));
     let xi: { n: string; p: Position; g?: boolean }[] = [];
     const taken = new Set<string>();
     if (args.oppXi) {
@@ -15535,7 +15708,7 @@ function buildMatchDetail(args: {
     const allScorersIn = [...scorerNames].every(n => taken.has(n));
     if (xi.length >= 11 && allScorersIn && xi.some(p => p.p === 'GK')) {
       const theirGoalsBy = new Map<string, number>();
-      for (const sc of args.oppScorers) theirGoalsBy.set(sc.name, (theirGoalsBy.get(sc.name) ?? 0) + 1);
+      for (const sc of args.oppScorers) if (!sc.og) theirGoalsBy.set(sc.name, (theirGoalsBy.get(sc.name) ?? 0) + 1);
       const theyWon = oppGoals > myGoals && args.decidedBy === 'regular' ? true : args.decidedBy === 'pens' ? !(args.shootoutWon ?? args.won) : oppGoals > myGoals;
       const theyDrew = myGoals === oppGoals && args.decidedBy !== 'pens';
       const base = theyWon ? 7.0 : theyDrew ? 6.4 : 5.7;
@@ -15556,9 +15729,11 @@ function buildMatchDetail(args: {
   /* Their best on the day: the top of the ratings sheet when one exists,
      else whoever hurt you most (the pre-178 fallback for thin worlds). */
   let oppBest: string | null = oppRatings?.[0]?.name ?? null;
-  if (!oppBest && args.oppScorers.length) {
+  /* Round 1146: a man of mine who put one in his own net is not their best. */
+  const theirOwn = args.oppScorers.filter(sc => !sc.og);
+  if (!oppBest && theirOwn.length) {
     const tally = new Map<string, number>();
-    for (const sc of args.oppScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
+    for (const sc of theirOwn) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
     oppBest = [...tally.entries()].sort((a, b) => b[1] - a[1])[0][0];
   }
 
@@ -15822,13 +15997,17 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       return i >= 0 ? liveDutyAt(state, live, i) : null;
     },
   );
-  const myScorers: ScorerLine[] = myLines.map((l, i) => ({
-    name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined,
-    ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}), ...plusOf(l),
-  }));
+  /* Round 1146: an own goal goes on my list under the man of theirs who put
+     it in, marked, with no assist; the man it was drawn for is not named. */
+  const myScorers: ScorerLine[] = myLines.map((l, i) => (l.og
+    ? { name: l.og.n, minute: l.minute, og: true, ...(l.og.g ? { gen: true } : {}), ...plusOf(l) }
+    : {
+        name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined,
+        ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}), ...plusOf(l),
+      }));
   const oppScorers: ScorerLine[] = [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])];
   const tally = new Map<string, number>();
-  for (const sc of myScorers) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
+  for (const sc of myScorers) if (!sc.og) tally.set(sc.name, (tally.get(sc.name) ?? 0) + 1);
   tally.forEach((count, name) => {
     if (count >= 3) events.push(`⚽ ${name} bagged a hat-trick!`);
   });
@@ -16131,9 +16310,18 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     return ROLE_LADDER.indexOf(roleOf(p))
       - ROLE_LADDER.indexOf(deservedFromRank(rank === undefined ? 99 : rank, p));
   };
+  /* Round 1146: a start is a game and a man who came on gets the share of the
+     match he played (windowEntry). A man on the pitch with no line saying when
+     he came on is a match from before the list existed, changed at the break. */
+  const startedIds = new Set(live.startXi);
+  const cameOnAt = new Map<string, number>();
+  for (const sb of live.subs ?? []) if (sb.onId && !cameOnAt.has(sb.onId)) cameOnAt.set(sb.onId, sb.minute);
+  const windowOf = (id: string): number => (xiIdSet.has(id)
+    ? windowEntry(startedIds.has(id), cameOnAt.get(id) ?? 46, lastMinute)
+    : 0);
   state.squad = state.squad.map(p => {
     const lastTen = fitAtKickoff.has(p.id)
-      ? [...(p.lastTen ?? []), xiIdSet.has(p.id) ? 1 : 0].slice(-PROMISE_WINDOW)
+      ? [...(p.lastTen ?? []), windowOf(p.id)].slice(-PROMISE_WINDOW)
       : (p.lastTen ?? []);
     const withWindow = { ...p, lastTen };
     return {
@@ -16220,7 +16408,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
         /* Round 137: the request is a real squad event and keeps his name.
            The reasoning behind it is narrated from his minutes instead of
            being written as something he said. */
-        ? `${p.name} put it in writing. He is down as a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} and he has started ${(p.lastTen ?? []).reduce((s, x) => s + x, 0)} of the last ${(p.lastTen ?? []).length}, so he wants to leave.`
+        ? `${p.name} put it in writing. He is down as a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} and he has started ${windowCounts(p).starts} of the last ${windowCounts(p).of}, so he wants to leave.`
         : `${p.name} put it in writing. Being listed as a ${ROLE_INFO[roleOf(p)].label.toLowerCase()} is the part he cannot get past, and he reckons somewhere else rates him higher.`,
       options: [
         { label: 'You are going nowhere', effect: 'refuse' },
@@ -17816,6 +18004,78 @@ export function setHalftimeMentality(career: CareerState, mentality: Mentality):
   return state;
 }
 
+/* ---------- Round 1146: the quick sim's coach uses his bench after the break ---------- */
+/**
+ * A player's report, 2026-10-08: "if i quick sim a game then it should
+ * automatically make subs". Since Round 1072 the coach replaced an injured
+ * man and, at the break, took off up to two who were already spent (fitness
+ * under 68 or morale under 45). A fit eleven therefore played ninety minutes
+ * unchanged: scripts/simCmQuickLegs.mjs measured the bench coming on in 47
+ * in 100 quick sims before this round and 89 in 100 after it, about one
+ * change for legs a match (the numbers are in its header).
+ *
+ * So the same coach, with the same bench list (benchFor), the same fit rule
+ * and the same test for fresher legs he uses at the break, now looks at his
+ * bench twice more: once around the hour and once in the run in. Each look
+ * is at most one change:
+ *  - off comes a man on a yellow first, then whoever has the least left in
+ *    his legs. Never the keeper, never a man who has just come on;
+ *  - on comes the first man on the bench who plays there (natural or the
+ *    same family) and is fresher, the break's own test;
+ *  - and only if the eleven is NO WEAKER for it by the engine's own strength
+ *    (myMatchStrength, the number the rest of the half is drawn from), or
+ *    the match is won, two goals clear, when the bench gets its minutes
+ *    whatever it costs. Two behind is not settled: he still only makes a
+ *    change that keeps the side as strong;
+ *  - one change is always kept back for an injury, as at the break, and one
+ *    fit man stays on the bench with it.
+ *
+ * The two minutes are keyed on the match (the fixture and how the first half
+ * went), never drawn from the seeded stream. That keeps the one property the
+ * coach has always had: he is exactly a manager making the same changes by
+ * hand at the same minutes. Each change goes through changeLive, so the rest
+ * of the half is drawn again off the new eleven, and the report lists it with
+ * the others. Manager Hot Seat plays without the coach (`noCoach`) and is
+ * untouched.
+ *
+ * What a change does NOT do, said plainly because the first draft of this
+ * comment claimed otherwise: it saves nobody's legs for next week. By the
+ * engine's existing rule (tickWeek) every man who played pays the match's
+ * fitness cost, ninety minutes or ten, so the man taken off and the man who
+ * replaced him both pay it. And since this round a man who came on holds only
+ * the share of the match he played in his last ten (windowEntry), so a late
+ * cameo is not a game to a man who was promised football.
+ */
+export const QUICK_LEGS_WINDOWS: readonly (readonly [number, number])[] = [[58, 68], [72, 82]];
+/** The lead at which the coach rests legs whatever it costs. */
+export const QUICK_LEGS_SETTLED = 2;
+
+/**
+ * The strength the eleven on the pitch plays at, at a minute, by the engine's
+ * own rule (myMatchStrength, each man read in his slot), optionally with one
+ * of them swapped for a man off the bench. The coach asks it before a change
+ * and scripts/simCmQuickLegs.mjs asks it again to hold him to his rule. No
+ * draw, nothing changed. Null with no match on.
+ */
+export function liveElevenStrength(career: CareerState, at: number, swap?: { outId: string; inId: string }): number | null {
+  const live = career.live;
+  if (!live) return null;
+  const gone = liveGoneIds(live, at);
+  const coming = swap ? career.squad.find(p => p.id === swap.inId) : undefined;
+  const pairs = livePairs(career, live)
+    .filter(x => !gone.has(x.p.id))
+    .map(x => (coming && swap && x.p.id === swap.outId ? { ...x, p: coming } : x));
+  return myMatchStrength(career, pairs);
+}
+
+/** The two minutes he looks at, for this match. Exported for the harness. */
+export function quickLegsMinutes(state: CareerState, live: LiveMatch): number[] {
+  const entry = state.calendar[live.week];
+  const opponent = entry ? fixtureFor(state, entry)?.opponent ?? '' : '';
+  const key = `cm|legs|${state.clubName}|${state.season}|${live.week}|${opponent}|${live.myGoals}|${live.oppGoals}|${(live.h1Play ?? []).length}`;
+  return QUICK_LEGS_WINDOWS.map(([lo, hi], i) => lo + Math.floor(keyedRng(`${key}|${i}`)() * (hi - lo + 1)));
+}
+
 /** Quick sim coaching uses the real clock and changes, without settling the match. */
 export function coachQuickMatch(career: CareerState): CareerState {
   if (!career.live) return career;
@@ -17859,6 +18119,36 @@ export function coachQuickMatch(career: CareerState): CareerState {
       state = changeLive(state, minute, { kind: 'sub', outId: injury.id, inId: coming.id }, plus) ?? state;
     }
   };
+  /* Round 1146: legs, after the break. See QUICK_LEGS_WINDOWS for the rule. */
+  const restLegs = (at: number) => {
+    const live = state.live!;
+    /* One change stays back for an injury, as at the break, and so does one
+       man: he never spends his last fit bench player on legs. */
+    if (live.subsUsed >= MAX_SUBS - 1 || (live.minute ?? 0) > at || benchFor(state).length < 2) return;
+    const gone = liveGoneIds(live, at);
+    const cameOn = new Set((live.subs ?? []).map(s => s.onId));
+    const booked = new Set([...(live.h1Cards ?? []), ...(live.h2Cards ?? [])].filter(c => c.kind === 'yellow' && c.minute <= at).map(c => c.id));
+    const pairs = livePairs(state, live).filter(x => !gone.has(x.p.id));
+    const scored = (lines: { minute: number }[] | undefined): number => (lines ?? []).filter(g => g.minute <= at).length;
+    const settled = scored(live.h1My) + scored(live.h2My) - scored(live.h1Opp) - scored(live.h2Opp) >= QUICK_LEGS_SETTLED;
+    const now = liveElevenStrength(state, at) ?? 0;
+    /* A man on a yellow first, then the legs with the least left in them.
+       Never the keeper, never a man who has only just come on. */
+    const order = pairs
+      .filter(x => !x.slot?.allowed.includes('GK') && x.p.position !== 'GK' && !cameOn.has(x.p.id))
+      .sort((a, b) => Number(booked.has(b.p.id)) - Number(booked.has(a.p.id)) || a.p.fitness - b.p.fitness);
+    for (const out of order) {
+      const outFit = gradeFor(out.p.id);
+      const options = benchFor(state, out.p.id).filter(p => (outFit(p) === 'natural' || outFit(p) === 'family')
+        && (p.fitness > out.p.fitness || (p.fitness === out.p.fitness && p.morale > out.p.morale)));
+      /* The engine's own strength with him in that slot: no weaker, unless the match is won. */
+      const noWeaker = (p: CMPlayer): boolean => (liveElevenStrength(state, at, { outId: out.p.id, inId: p.id }) ?? 0) >= now;
+      const coming = options.find(p => settled || noWeaker(p));
+      if (!coming) continue;
+      state = changeLive(state, at, { kind: 'sub', outId: out.p.id, inId: coming.id }) ?? state;
+      return;
+    }
+  };
   ensureFirstHalf(state, entry, state.live!);
   injuriesThrough(45);
   if (!state.live!.h2Drawn) {
@@ -17872,6 +18162,12 @@ export function coachQuickMatch(career: CareerState): CareerState {
       if (coming) state = changeLive(state, Math.max(46, state.live!.minute ?? 46), { kind: 'sub', outId: out.id, inId: coming.id }) ?? state;
     }
     drawSecondHalf(state, entry, state.live!);
+  }
+  /* Round 1146: twice after the break he looks at his bench. Whatever happens
+     before each look (an injury) is dealt with first, in clock order. */
+  for (const at of quickLegsMinutes(state, state.live!)) {
+    injuriesThrough(at);
+    restLegs(at);
   }
   injuriesThrough(90);
   if (extraTimeDue(state, entry, state.live!)) drawExtraTime(state, entry, state.live!);

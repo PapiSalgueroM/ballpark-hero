@@ -58,3 +58,23 @@ describe('Club Manager: the dressing room and its broken promises', () => {
     expect(container.querySelector('[data-broken-more]')).toBeNull();
   });
 });
+
+/* Round 1146: a start is a game in his last ten, and a man who came on holds the share of the match he played.
+   The screens print the two apart, and the dots show a match off the bench as a faint dot, so "he came on for ten
+   minutes most weeks" does not read as "he played". */
+describe('Club Manager: the last ten on the roles screen', () => {
+  it('counts starts and matches off the bench apart, and draws a match off the bench as a faint dot', () => {
+    const squad = base.squad.map((p, i) => (i === 0
+      ? { ...p, role: 'star' as const, onLoan: undefined, lastTen: [1, 0.16, 0, 0.5, 0, 0] }
+      : { ...p, lastTen: [] as number[] }));
+    const career = { ...base, squad } as CareerState;
+    expect(brokenPromises(career).map(p => p.id)).toEqual([squad[0].id]);
+    const { container } = render(<RolesScreen career={career} onSetRole={() => {}} />);
+    const row = card(container)!.querySelector('button')!;
+    expect(row.textContent).toContain('1 start, 2 off the bench in last 6');
+    const dots = [...row.querySelectorAll('span.rounded-full')].map(d => d.className);
+    expect(dots).toHaveLength(6);
+    expect(dots.filter(c => c.includes('bg-emerald-500/40'))).toHaveLength(2);
+    expect(dots.filter(c => c.includes('bg-emerald-500') && !c.includes('bg-emerald-500/40'))).toHaveLength(1);
+  });
+});

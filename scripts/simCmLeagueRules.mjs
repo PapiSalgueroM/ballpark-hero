@@ -261,6 +261,54 @@
       board objective is the one it was, and what moved is only the hash of
       the whole state after a summer. Written with --part=modern --write
       there, then run green whole and green again on modern alone.
+      Round 1146 (2026-10-09) re-took modern and eras for two things three
+      players asked for in Club Manager: own goals, and a quick sim coach
+      who uses his bench after the break. A ladder of throwaway copies of
+      src on a GitHub runner at b6fea5b7 (this harness's root override; one
+      call patched out of the copy's clubManager.ts a leg) says which did
+      what. Leg 1, both calls out (the own goal tag at the end of
+      drawSegment and the coach's restLegs): the file as it stood, byte for
+      byte (modern 27/0, eras 20/0, pure 48/0), so everything else the
+      round touched in the engine is inert. Leg 2, own goals in and the
+      coach as he was: 27 saves move (13 modern, 14 eras) in "whole" (24),
+      "summary" (10) and "s2_whole" (4) and in nothing else. Start, table,
+      results, world, cup, europe, trophies, objectives, promotions and
+      every next season view held in all 47: an own goal re-labels a goal
+      the match already had, so who is credited moves (the squad's season
+      lines, the season summary's top scorer) and no result does. Leg 3,
+      the coach in and own goals out: all 47 saves move in table, results,
+      world, summary, whole and wholeNext (cup and cupDrawNext in 46,
+      europeNext in 39, objectivesNext and promotions in 27, start in 24,
+      europe in 19, trophies in 13, and the second season views of the ten
+      pyramid saves), the footprint Release AL's coach left for the same
+      reason: every season here is quick simmed, and he now makes a change
+      in nine matches in ten where he made one in under half (measured by
+      scripts/simCmQuickLegs.mjs; wins and points do not move by anything
+      its fleets can see, every seeded match is a different match). Pure
+      held 48/0 on every leg. Written with --part=modern,eras,pure --write
+      on the tree itself, then run green whole.
+      The round's review then re-took it once more (2026-10-09, at 1cb6fdc1)
+      for one fix: what a substitute's match is worth in a player's last
+      ten. The window held a 1 for anyone who set foot on the pitch, so the
+      coach's late cameos made a man the manager had dropped read as playing
+      every week (scripts/simRoles.mjs section 3b went red at 0.576 of the
+      football). A start is still a game; coming on is now the share of the
+      match he played (windowEntry). That moves morale, and morale moves
+      results. A second ladder on a GitHub runner: leg A, the window back to
+      a 1 for anyone who played AND my own goal man read off his card again
+      (the review's other engine fix reads him in the slot he stands in):
+      the file as it stood, byte for byte, so nothing else in the fix pass
+      or in the merge of Release AQ moved a hash. Leg B, the slot read in and
+      the window out: the file as it stood again, so none of the 47 saves
+      holds an own goal by a man standing off his card's line. Leg C, the
+      window in: all 47 saves move (whole in 47, wholeNext in 46, table,
+      results, world and summary in 39, cupDrawNext in 38, cup in 37,
+      europeNext in 28, start in 27, objectivesNext in 22, promotions in 21,
+      europe in 17, trophies in 13, and the second season views of the ten
+      pyramid saves); eight move in nothing but the hash of the whole state,
+      which holds the windows themselves. Pure held 48/0. Written with
+      --part=modern,eras,pure --write on the tree itself, then run green
+      whole.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,

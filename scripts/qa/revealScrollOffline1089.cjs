@@ -51,7 +51,8 @@ function responseFor(u, method, body, rows, contracts) {
   const q = u.searchParams, select = q.get('select');
   let selected = rows, rule;
   if (select === DART && q.has('age')) {
-    keys(u, ['select', 'year', 'age', 'order', 'limit']); assert.equal(q.get('year'), 'eq.2026'); assert.equal(q.get('age'), 'not.is.null'); assert.equal(q.get('order'), 'market_value_usd.desc,player_name.asc'); assert.equal(q.get('limit'), '900');
+    /* Round 1145: the pool is the top 2,000 in two pages of 1000 by the same order (it was one request of 900). */
+    keys(u, ['select', 'year', 'age', 'order', 'offset', 'limit']); assert.equal(q.get('year'), 'eq.2026'); assert.equal(q.get('age'), 'not.is.null'); assert.equal(q.get('order'), 'market_value_usd.desc,player_name.asc'); assert(['0', '1000'].includes(q.get('offset'))); assert.equal(q.get('limit'), '1000');
     rule = 'baked-current-dart-pool';
   } else if (select === DART && q.has('nationality')) {
     keys(u, ['select', 'year', 'nationality', 'order', 'limit', ...(q.has('position') ? ['position'] : [])]);
@@ -71,7 +72,7 @@ function responseFor(u, method, body, rows, contracts) {
     const names = list(q.get('player_name')); assert(names.every(name => rows.some(r => r.player_name === name)), 'History only names from this fixture');
     selected = selected.filter(r => names.includes(r.player_name)); rule = 'baked-current-club-only-history';
   }
-  selected = [...selected].sort((a, b) => q.get('order') === 'id.asc' ? a.id - b.id : b.market_value_usd - a.market_value_usd || a.player_name.localeCompare(b.player_name, 'en') || a.id - b.id).slice(0, Number(q.get('limit')));
+  selected = [...selected].sort((a, b) => q.get('order') === 'id.asc' ? a.id - b.id : b.market_value_usd - a.market_value_usd || a.player_name.localeCompare(b.player_name, 'en') || a.id - b.id).slice(Number(q.get('offset') || 0), Number(q.get('offset') || 0) + Number(q.get('limit')));
   const columns = select.split(',');
   return { rule, status: 200, value: selected.map(row => Object.fromEntries(columns.map(column => { const [alias, field = alias] = column.split(':'); return [alias, row[field]]; }))) };
 }
@@ -79,7 +80,9 @@ function responseFor(u, method, body, rows, contracts) {
 function checkContracts(rows, contracts) {
   const member = values => `in.(${values.map(value => /[,()]/.test(value) ? JSON.stringify(value) : value).join(',')})`;
   const url = (table, query) => { const u = new URL(`/rest/v1/${table}`, origin()); for (const [key, value] of query) u.searchParams.append(key, value); return u; };
-  const dart = url('player_market_values', Object.entries({ select: DART, year: 'eq.2026', age: 'not.is.null', order: 'market_value_usd.desc,player_name.asc', limit: '900' }));
+  const dart = url('player_market_values', Object.entries({ select: DART, year: 'eq.2026', age: 'not.is.null', order: 'market_value_usd.desc,player_name.asc', offset: '0', limit: '1000' }));
+  const dartSecond = new URL(dart); dartSecond.searchParams.set('offset', '1000');
+  assert.deepEqual(responseFor(dartSecond, 'GET', null, rows, contracts).value, [], 'The second pool page is past the end of this fixture');
   const current = url('player_market_values', Object.entries({ select: POOL, year: 'eq.2026', age: 'gt.0', market_value_usd: 'gt.0', order: ORDER, offset: '0', limit: '1000' }));
   const carried = new URL(current); carried.searchParams.set('year', 'eq.2025'); carried.searchParams.set('market_value_usd', 'gte.0');
   const countryNames = contracts.countries.find(values => values.includes(rows[0].nationality)), slotPositions = contracts.positions.find(values => values.includes(rows[0].position)); assert(countryNames && slotPositions);

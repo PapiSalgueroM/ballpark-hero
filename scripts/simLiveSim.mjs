@@ -71,7 +71,8 @@ while (checked < 8 && state.week < state.calendar.length && guard < 40) {
 
   /* ---------- 2. Full time reuses the committed lines ---------- */
   const before = seasonGoalsOf(state);
-  const preMy = live.h1My.map(l => `${l.name}@${l.minute}`);
+  /* Round 1146: an own goal for me is reported under the man of theirs who put it in (og.n on the committed line). */
+  const preMy = live.h1My.map(l => `${(l.og && l.og.n) || l.name}@${l.minute}`);
   const preOpp = live.h1Opp.map(l => `${l.name}@${l.minute}`);
   const done = resumeMatch(state);
   state = done.state;
@@ -93,8 +94,10 @@ while (checked < 8 && state.week < state.calendar.length && guard < 40) {
 
   /* ---------- 3. Stats credited exactly once ---------- */
   const after = seasonGoalsOf(state);
-  if (after - before !== myGoals) {
-    fail(`a ${myGoals} goal match moved seasonGoals by ${after - before}`);
+  /* Round 1146: an own goal is nobody's goal, so it is the one goal of mine no season line moves for. */
+  const ownFor = rep.myScorers.filter(sc => sc.og).length;
+  if (after - before !== myGoals - ownFor) {
+    fail(`a ${myGoals} goal match (${ownFor} of them own goals) moved seasonGoals by ${after - before}`);
   }
   checked += 1;
 }
