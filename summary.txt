@@ -1,0 +1,3 @@
+ledger exit=0 4s | simUsSeasonLedger: green. 2967 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+anchors exit=0 38s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+summer-rest exit=0 195s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
