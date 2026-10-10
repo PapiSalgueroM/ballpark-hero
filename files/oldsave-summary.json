@@ -1,0 +1,20 @@
+{
+ "made": "edac00dfa2c5",
+ "baseA": [
+  "75d9ad5d4a9e",
+  "82df551ea911"
+ ],
+ "baseB": [
+  "75d9ad5d4a9e",
+  "82df551ea911"
+ ],
+ "head": [
+  "75d9ad5d4a9e",
+  "82df551ea911"
+ ],
+ "other": [
+  "27e3b001b449",
+  "e034ace48027"
+ ],
+ "keys": "draftClass,fired,gm,league,mandate,myTeam,phase,picksLeft,postseason,pressTilt,seasonTradeLine,seasonsPlayed,titles,trust"
+}
