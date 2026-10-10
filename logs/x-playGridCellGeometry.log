@@ -1,0 +1,17 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: football/320/all-tiers: rarity or badge clipped
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playGridCellGeometry.mjs:167:32
+    at Array.forEach (<anonymous>)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playGridCellGeometry.mjs:163:24 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

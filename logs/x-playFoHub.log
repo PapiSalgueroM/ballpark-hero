@@ -1,0 +1,146 @@
+NFL front office
+  FAIL  NFL: the hub opens on five boxes (saw 9)
+  PASS  NFL: the hub names "Roster"
+  PASS  NFL: the hub names "Free agency"
+  PASS  NFL: the hub names "Trades"
+  PASS  NFL: the hub names "Standings"
+  PASS  NFL: the hub names "This week"
+  FAIL  NFL: every box carries a fact, not just a label (Roster:4 Free agency:4 Trades:4 This week:4 Standings:4 Staff:4 Re-sign desk:4 Draft picks:4 Trade desk:4)
+  PASS  NFL: the hub fits the phone (0px of horizontal overflow)
+  PASS  NFL: "Roster" opened the screen it names
+  PASS  NFL: opening "Roster" replaced the grid (0 boxes still up)
+  PASS  NFL: "Roster" has a way back
+  PASS  NFL: the back control is thumb sized (34px)
+  FAIL  NFL: back returned to all five boxes
+  PASS  NFL: "Free agency" opened the screen it names
+  PASS  NFL: opening "Free agency" replaced the grid (0 boxes still up)
+  PASS  NFL: "Free agency" has a way back
+  PASS  NFL: the back control is thumb sized (34px)
+  FAIL  NFL: back returned to all five boxes
+  PASS  NFL: "Trades" opened the screen it names
+  PASS  NFL: opening "Trades" replaced the grid (0 boxes still up)
+  PASS  NFL: "Trades" has a way back
+  PASS  NFL: the back control is thumb sized (34px)
+  FAIL  NFL: back returned to all five boxes
+  PASS  NFL: "Standings" opened the screen it names
+  PASS  NFL: opening "Standings" replaced the grid (0 boxes still up)
+  PASS  NFL: "Standings" has a way back
+  PASS  NFL: the back control is thumb sized (34px)
+  FAIL  NFL: back returned to all five boxes
+  PASS  NFL: the play box reaches the play button
+  PASS  NFL: the roster box counted the injury (reads "👔 / ROSTER / 1 unavailable / Trey McBride is out 3 weeks")
+  PASS  NFL: the roster box names Trey McBride
+  PASS  NFL: an injury lights the box (1 dots)
+  PASS  NFL: a fit squad puts the dot out
+  PASS  NFL: a fit squad counts the contracts instead
+  PASS  NFL: no page errors on the walk (clean)
+MLB front office
+  FAIL  MLB: the hub opens on five boxes (saw 9)
+  PASS  MLB: the hub names "Roster"
+  PASS  MLB: the hub names "Free agency"
+  PASS  MLB: the hub names "Trades"
+  PASS  MLB: the hub names "Standings"
+  PASS  MLB: the hub names "Play"
+  FAIL  MLB: every box carries a fact, not just a label (Roster:4 Free agency:4 Trades:4 Play:4 Standings:4 Staff:4 Re-sign desk:4 Draft picks:4 Trade desk:4)
+  PASS  MLB: the hub fits the phone (0px of horizontal overflow)
+  PASS  MLB: "Roster" opened the screen it names
+  PASS  MLB: opening "Roster" replaced the grid (0 boxes still up)
+  PASS  MLB: "Roster" has a way back
+  PASS  MLB: the back control is thumb sized (34px)
+  FAIL  MLB: back returned to all five boxes
+  PASS  MLB: "Free agency" opened the screen it names
+  PASS  MLB: opening "Free agency" replaced the grid (0 boxes still up)
+  PASS  MLB: "Free agency" has a way back
+  PASS  MLB: the back control is thumb sized (34px)
+  FAIL  MLB: back returned to all five boxes
+  PASS  MLB: "Trades" opened the screen it names
+  PASS  MLB: opening "Trades" replaced the grid (0 boxes still up)
+  PASS  MLB: "Trades" has a way back
+  PASS  MLB: the back control is thumb sized (34px)
+  FAIL  MLB: back returned to all five boxes
+  PASS  MLB: "Standings" opened the screen it names
+  PASS  MLB: opening "Standings" replaced the grid (0 boxes still up)
+  PASS  MLB: "Standings" has a way back
+  PASS  MLB: the back control is thumb sized (34px)
+  FAIL  MLB: back returned to all five boxes
+  PASS  MLB: the play box reaches the play button
+  PASS  MLB: the roster box counted the injury (reads "👔 / ROSTER / 1 unavailable / Ben Rice is out 3 rounds")
+  PASS  MLB: the roster box names Ben Rice
+  PASS  MLB: an injury lights the box (1 dots)
+  PASS  MLB: a fit squad puts the dot out
+  PASS  MLB: a fit squad counts the contracts instead
+  PASS  MLB: no page errors on the walk (clean)
+NBA front office
+  FAIL  NBA: the hub opens on five boxes (saw 9)
+  PASS  NBA: the hub names "Roster"
+  PASS  NBA: the hub names "Free agency"
+  PASS  NBA: the hub names "Trades"
+  PASS  NBA: the hub names "Standings"
+  PASS  NBA: the hub names "Play"
+  FAIL  NBA: every box carries a fact, not just a label (Roster:4 Free agency:4 Trades:4 Play:4 Standings:4 Staff:4 Re-sign desk:4 Draft picks:4 Trade desk:4)
+  PASS  NBA: the hub fits the phone (0px of horizontal overflow)
+  PASS  NBA: "Roster" opened the screen it names
+  PASS  NBA: opening "Roster" replaced the grid (0 boxes still up)
+  PASS  NBA: "Roster" has a way back
+  PASS  NBA: the back control is thumb sized (34px)
+  FAIL  NBA: back returned to all five boxes
+  PASS  NBA: "Free agency" opened the screen it names
+  PASS  NBA: opening "Free agency" replaced the grid (0 boxes still up)
+  PASS  NBA: "Free agency" has a way back
+  PASS  NBA: the back control is thumb sized (34px)
+  FAIL  NBA: back returned to all five boxes
+  PASS  NBA: "Trades" opened the screen it names
+  PASS  NBA: opening "Trades" replaced the grid (0 boxes still up)
+  PASS  NBA: "Trades" has a way back
+  PASS  NBA: the back control is thumb sized (34px)
+  FAIL  NBA: back returned to all five boxes
+  PASS  NBA: "Standings" opened the screen it names
+  PASS  NBA: opening "Standings" replaced the grid (0 boxes still up)
+  PASS  NBA: "Standings" has a way back
+  PASS  NBA: the back control is thumb sized (34px)
+  FAIL  NBA: back returned to all five boxes
+  PASS  NBA: the play box reaches the play button
+  PASS  NBA: the roster box counted the injury (reads "👔 / ROSTER / 1 unavailable / 4 short of the 14 man floor. Filled on minimum deals at tip off.")
+  FAIL  NBA: the roster box names Nikola Jokic
+  PASS  NBA: an injury lights the box (1 dots)
+  FAIL  NBA: a fit squad puts the dot out
+  PASS  NBA: a fit squad counts the contracts instead
+  PASS  NBA: no page errors on the walk (clean)
+NHL front office
+  FAIL  NHL: the hub opens on five boxes (saw 9)
+  PASS  NHL: the hub names "Roster"
+  PASS  NHL: the hub names "Free agency"
+  PASS  NHL: the hub names "Trades"
+  PASS  NHL: the hub names "Standings"
+  PASS  NHL: the hub names "Play"
+  FAIL  NHL: every box carries a fact, not just a label (Roster:4 Free agency:4 Trades:4 Play:4 Standings:4 Staff:4 Re-sign desk:4 Draft picks:4 Trade desk:4)
+  PASS  NHL: the hub fits the phone (0px of horizontal overflow)
+  PASS  NHL: "Roster" opened the screen it names
+  PASS  NHL: opening "Roster" replaced the grid (0 boxes still up)
+  PASS  NHL: "Roster" has a way back
+  PASS  NHL: the back control is thumb sized (34px)
+  FAIL  NHL: back returned to all five boxes
+  PASS  NHL: "Free agency" opened the screen it names
+  PASS  NHL: opening "Free agency" replaced the grid (0 boxes still up)
+  PASS  NHL: "Free agency" has a way back
+  PASS  NHL: the back control is thumb sized (34px)
+  FAIL  NHL: back returned to all five boxes
+  PASS  NHL: "Trades" opened the screen it names
+  PASS  NHL: opening "Trades" replaced the grid (0 boxes still up)
+  PASS  NHL: "Trades" has a way back
+  PASS  NHL: the back control is thumb sized (34px)
+  FAIL  NHL: back returned to all five boxes
+  PASS  NHL: "Standings" opened the screen it names
+  PASS  NHL: opening "Standings" replaced the grid (0 boxes still up)
+  PASS  NHL: "Standings" has a way back
+  PASS  NHL: the back control is thumb sized (34px)
+  FAIL  NHL: back returned to all five boxes
+  PASS  NHL: the play box reaches the play button
+  PASS  NHL: the roster box counted the injury (reads "👔 / ROSTER / 1 unavailable / David Pastrnak is out 3 rounds")
+  PASS  NHL: the roster box names David Pastrnak
+  PASS  NHL: an injury lights the box (1 dots)
+  PASS  NHL: a fit squad puts the dot out
+  PASS  NHL: a fit squad counts the contracts instead
+  PASS  NHL: no page errors on the walk (clean)
+
+playFoHub: 26 failures

@@ -1,0 +1,29 @@
+1) The era step
+  PASS  the 2010-11 era tile is on the menu
+  PASS  both eras carry the REAL DATA badge
+2) Nations shrink to the era
+  PASS  England and Spain offered in 2010
+  FAIL  Germany correctly absent from 2010
+3) The 2010 league and clubs
+  PASS  the 2010 Premier League is offered
+  FAIL  2010 Blackpool is a pickable club
+  PASS  Barcelona is not in the English league
+  PASS  the thin-squad marker shows
+  FAIL  the United tile demands the title
+  PASS  no Top N phrasing on any part of the tile
+4) Into the 2010 dressing room
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('text=Take the job')
+
+    at enterSquad (/home/runner/work/ballpark-hero/ballpark-hero/scripts/lib/eraDressingRoom.mjs:87:43)
+    at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playEra2010.mjs:84:20 {
+  log: [ "  - waiting for locator('text=Take the job')" ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.21.0
