@@ -138,7 +138,7 @@ const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPane
 const STORY_ROLE_HELP_RULES = [
   'Phone and Training sit above your player on a phone. Career Story opens your saved chapters; Previous and Next move between them, and All seasons returns to the tile you opened.',
   `Accepting a smaller role from a new manager means ${REDUCED_ROLE_GAMES} fewer planned league games next season at that club. It lasts one recorded season; a move, loan or retirement clears it. Example: a selection of 30 becomes ${30 - REDUCED_ROLE_GAMES} before existing selection limits, injuries and bans.`,
-  'Personal goal milestones count your recorded senior club games, excluding academy and international goals. Example: 99 senior club goals plus 2 this season takes you past 100, with a new total of 101. The summary shows that crossing.',
+  'Personal goal milestones count the goals of your recorded senior club seasons, excluding academy and international goals. Example: 99 senior club goals plus 2 this season takes you past 100, with a new total of 101. The summary shows that crossing.',
 ];
 /* Round 1045: a boundary inside the lazy chunk cannot catch the chunk failing
    to load (a deploy swapped the files), so the mount carries its own: the

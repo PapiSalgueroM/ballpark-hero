@@ -4,7 +4,11 @@ import { compareSavedSeasons, seasonHistoryRows, type SeasonHistoryRow } from "@
 type Source = Pick<CareerState, "seasons" | "position">;
 const selectClass = "min-h-11 w-full min-w-0 rounded-xl border border-border bg-card px-2 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
 const yearLabel = (year: number | null) => year === null ? "Year not recorded" : `${year}/${String((year + 1) % 100).padStart(2, "0")}`;
-const optionLabel = (row: SeasonHistoryRow) => `${yearLabel(row.year)} · ${row.club ?? "Club not recorded"} (record ${row.index + 1})`;
+/* Release AT: the record number shows only where two options would otherwise read the same (the same year and
+   club twice). It used to trail every option and pushed the club name out of the select on a phone. */
+const plainLabel = (row: SeasonHistoryRow) => `${yearLabel(row.year)} · ${row.club ?? "Club not recorded"}`;
+const optionLabel = (row: SeasonHistoryRow, all: SeasonHistoryRow[]) => all.some(other => other.index !== row.index && plainLabel(other) === plainLabel(row))
+  ? `${plainLabel(row)} (record ${row.index + 1})` : plainLabel(row);
 const numberLabel = (value: number | null, digits = 0, signed = false) => value === null ? "Not recorded" : `${signed && value > 0 ? "+" : ""}${value.toFixed(digits)}`;
 
 function SeasonIdentity({ row, side }: { row: SeasonHistoryRow; side: "first" | "second" }) {
@@ -52,7 +56,7 @@ export default function SoccerSeasonHistory({ career, mode, first, second, avail
         {([{ side: "first", label: "First season", value: first, other: second, change: onFirst }, { side: "second", label: "Second season", value: second, other: first, change: onSecond }] as const).map(choice => <label key={choice.side} className="min-w-0 space-y-1 text-xs font-semibold">
           <span className="block">{choice.label}</span>
           <select aria-label={choice.label} data-season-history-select={choice.side} className={selectClass} value={choice.value} onChange={event => choice.change(Number(event.target.value))}>
-            {choices.filter(row => row.index !== choice.other).map(row => <option key={row.index} value={row.index}>{optionLabel(row)}</option>)}
+            {choices.filter(row => row.index !== choice.other).map(row => <option key={row.index} value={row.index}>{optionLabel(row, choices)}</option>)}
           </select>
         </label>)}
       </div>
@@ -85,7 +89,7 @@ export default function SoccerSeasonHistory({ career, mode, first, second, avail
   return <div className="space-y-3" data-season-availability={selected.index}>
     <label className="block space-y-1 text-xs font-semibold"><span className="block">Availability season</span>
       <select aria-label="Availability season" data-season-history-select="availability" className={selectClass} value={availability} onChange={event => onAvailability(Number(event.target.value))}>
-        {choices.map(row => <option key={row.index} value={row.index}>{optionLabel(row)}</option>)}
+        {choices.map(row => <option key={row.index} value={row.index}>{optionLabel(row, choices)}</option>)}
       </select>
     </label>
     <p className="text-sm font-bold break-words">{yearLabel(selected.year)} · {selected.club ?? "Club not recorded"}</p>

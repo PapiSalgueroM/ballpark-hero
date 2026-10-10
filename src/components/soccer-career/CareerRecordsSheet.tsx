@@ -43,7 +43,7 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
     <div ref={panel} tabIndex={-1} role="dialog" aria-modal="true" aria-label="Your career record book" className="flex max-h-[85dvh] w-full max-w-lg flex-col rounded-2xl border border-border bg-card outline-none">
       <div className="flex items-center justify-between gap-2 border-b border-border p-4">
         <h2 className="text-lg font-bold">📖 Your record book</h2>
-        <button type="button" aria-label="Record book help" className={button} onClick={() => { setSelected(null); setScreen('help'); }}>?</button>
+        <button type="button" aria-label="Record book help" className={`${button} min-w-11`} onClick={() => { setSelected(null); setScreen('help'); }}>?</button>
       </div>
       <div className="min-h-0 overflow-y-auto p-4 space-y-3">
         {detail ? <ul className="space-y-2">{detail.map(r => <SeasonLine key={r.index} season={r.season} />)}</ul> : screen === 'help' ? <>
@@ -55,7 +55,7 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
           <div className="grid grid-cols-3 gap-2 text-center text-sm" data-record-totals>
             {(['apps', career.position === 'GK' ? 'cleanSheets' : 'goals', 'assists'] as const).map(stat => <div key={stat} className="rounded-xl bg-muted/25 p-3"><p className="font-bold">{formatNumber(book.totals[stat])}</p><p className="text-xs text-muted-foreground">{stat === 'apps' ? 'Appearances' : stat === 'cleanSheets' ? 'Clean sheets' : stat === 'goals' ? 'Goals' : 'Assists'}</p></div>)}
           </div>
-          <p className="text-xs text-muted-foreground">Personal bests across all club competitions. Tap one for its season.</p>
+          <p className="text-xs text-muted-foreground">Senior club seasons only, so these totals leave out academy years that Career Stats counts. Personal bests across all club competitions. Tap one for its season.</p>
           {book.bests.length ? book.bests.map(best => <button key={best.label} type="button" data-career-best={best.label} className={`${button} w-full text-left`} onClick={() => setSelected(best.index)}>
             <span className="flex justify-between gap-3"><span>{best.label}</span><span>{best.label === 'Best season rating' ? best.value.toFixed(1) : formatNumber(best.value)}</span></span>
             <span className="block text-xs font-normal text-muted-foreground">{yearLabel(best.season.year)} · {best.season.club}{best.ties > 1 ? ` · tied in ${best.ties} seasons` : ''}</span>
@@ -71,8 +71,8 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
       </div>
       <div className="shrink-0 flex flex-wrap gap-2 border-t border-border p-3">
         {selected !== null ? <button type="button" className={button} onClick={back}>← Back</button> : <>
-          <button type="button" className={button} aria-pressed={screen === 'records'} onClick={() => setScreen('records')}>Personal bests</button>
-          <button type="button" className={button} aria-pressed={screen === 'clubs'} onClick={() => setScreen('clubs')}>Club history</button>
+          <button type="button" className={`${button} ${screen === 'records' ? 'border-primary bg-primary/15 text-primary' : ''}`} aria-pressed={screen === 'records'} onClick={() => setScreen('records')}>Personal bests</button>
+          <button type="button" className={`${button} ${screen === 'clubs' ? 'border-primary bg-primary/15 text-primary' : ''}`} aria-pressed={screen === 'clubs'} onClick={() => setScreen('clubs')}>Club history</button>
         </>}
         <button type="button" className={`${button} ml-auto`} onClick={onClose}>Close</button>
       </div>

@@ -18,10 +18,10 @@ export function SeasonAmbitionTile({ career, onCareer }: { career: CareerState; 
       {held && <span className="block text-xs font-bold mt-1">{held.year}/{String((held.year + 1) % 100).padStart(2, '0')} · {held.club}</span>}
     </button>
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-[85dvh] overflow-y-auto" onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
+      <DialogContent className="max-h-[85dvh] overflow-y-auto [&>button]:min-h-11 [&>button]:min-w-11" onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
         <DialogHeader><DialogTitle>Your season target</DialogTitle><DialogDescription>A personal best to chase at {career.currentClub}.</DialogDescription></DialogHeader>
         <p className="text-sm">Choose one before you play. Beat your saved best to bank +1 training with next season's growth. It doesn't change this season's selection or stats.</p>
-        <p className="text-xs text-muted-foreground">Example: your best is 12 goals, so the next target is 13. A serious injury or a year without appearances interrupts it. Moving clubs cancels it.</p>
+        <p className="text-xs text-muted-foreground">Example: your best is 12 {career.position === 'GK' ? 'clean sheets' : 'goals'}, so the next target is 13. A serious injury or a year without appearances interrupts it. Moving clubs cancels it.</p>
         <div className="space-y-2">
           {options.map(option => <button key={option.id} type="button" data-ambition-option={option.id} aria-pressed={held?.id === option.id} className="min-h-11 w-full rounded-xl border border-border p-3 text-left text-sm" onClick={() => choose(option.id)}>
             <span className="block font-semibold">{option.label}</span>
@@ -29,6 +29,8 @@ export function SeasonAmbitionTile({ career, onCareer }: { career: CareerState; 
           </button>)}
         </div>
         <button type="button" className="min-h-11 rounded-xl border border-border px-3 text-sm" onClick={() => choose(null)}>{held ? 'Clear this target' : 'Play without a target'}</button>
+        {/* Release AT: a way out that changes nothing. With a target held the only big button cleared it, and the X was 32 by 32. */}
+        <button type="button" data-ambition-back className="min-h-11 rounded-xl border border-border px-3 text-sm" onClick={() => setOpen(false)}>Back to your career</button>
       </DialogContent>
     </Dialog>
   </>;

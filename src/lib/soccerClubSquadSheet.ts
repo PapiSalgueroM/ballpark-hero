@@ -19,6 +19,7 @@
 import type { CareerState } from './soccerCareerEngine';
 import { projectLeagueApps, ELITE_CLUBS } from './soccerCareerEngine';
 import { ordinal } from './soccerCareerLeague';
+import { REDUCED_ROLE_GAMES } from './soccerCareerRole';
 import { squadCentre } from './soccerClubSquadGen';
 import {
   chartFrom, squadView, realSeasons, GROUP_LABEL,
@@ -306,7 +307,9 @@ export function squadHelp(): SquadHelp {
       'This screen shows what the game already decided. Nothing here changes how many games you play.',
       'Your rank is where your rating puts you among the players in your position group at the club. A teammate on the same rating counts as ahead of you: to pass him you have to be rated higher.',
       'The eleven is the highest rated keeper, four defenders, three midfielders and three forwards on our ratings. It is a picture of the squad, not the manager\'s team sheet.',
-      'Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form in the previous club season, and how the dressing room feels about you. The dressing room part is your phone.',
+      'Trust is how much of the league season the manager plans to give you. It comes from your rating against the level the squad expects, how long you have been at the club, your form in the previous club season, and how the dressing room feels about you. The dressing room part is your phone.'
+        /* Release AT: the smaller role moves the same two printed numbers, so the rules say so too. */
+        + ` A smaller role you accepted from a new manager takes ${REDUCED_ROLE_GAMES} planned league games off on top, for one season at that club.`,
       `Real, roles or invented: from ${seasonLabel(real.first)} to ${seasonLabel(real.last)} you see the club's real squad of that season where we have it. A real past season with no checked squad list shows roles, ages and ratings, and no names. From ${seasonLabel(real.last + 1)} the world is your career's own: the last real squad carries on, players leave, and every new face is invented. Invented teammates get a year older every summer.`,
       'Form is a small simulation adjustment: at least 10 recorded league games at this club last season, with a rating of 7.6 or more, adds up to 2 league games to the plan. A rating of 6.4 or less takes away up to 2. Other ratings leave it alone. A move, a gap or an unplayed season carries no form adjustment. The frozen-out limit still applies.',
     ],
