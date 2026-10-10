@@ -1,0 +1,4 @@
+# Round 1212 step 0a: record the seam receipt on the base's bundle (only the harness differs from 60188732)
+seam-print: US_SEASON_DIGEST=print US_SEASON_DIGEST_RECEIPT=seam US_SEASON_DIGEST_COMMIT=60188732 US_SEASON_DIGEST_OUT=$RC_OUT/usSeasonSeamDigest.json node scripts/simUsSeasonCentre.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
