@@ -334,7 +334,8 @@ describe('Round 1216: an own goal on real feeds', () => {
     }
     console.log(`[1216 OG5] the sharpest turn of the ball in flight, degrees: own goal arm ${spreadOf(ownTurns)}; baseline arm ${spreadOf(plainTurns)}; the floor is 20`);
     console.log(`[1216 OG5 walk] how far the man goes to meet it: ${spreadOf(walks)}; from his own third (${homeWalks.length} of ${present.length}): ${spreadOf(homeWalks)}; standing further up when it starts ${away}; shown by his number alone at the touch ${short}`);
-    /* Measured: the own goal arm never under 36 and the baseline arm never over 4. The floor sits between them. */
+    /* Measured on 163 own goals: the own goal arm never under 34.1 (median 63.6) and the baseline arm never over
+       3.3. The floor of 20 sits between them, a bound of the geometry on every own goal and not a statistic. */
     expect(ownTurns.filter(turn => turn < 20).length).toBe(0);
     expect(plainTurns.filter(turn => turn >= 20).length).toBe(0);
     /* Bounds of the geometry, on every own goal: a back in his own third is moved into a band and off a line, never across the box. */
@@ -456,8 +457,8 @@ const fnv = (text: string) => {
 const FRAME_FIELDS = ['mine', 'theirs', 'ball', 'holderKey', 'poses', 'action', 'net', 'netPulse', 'phase', 'ownGoalBy'] as const;
 const digest = (value: unknown) => fnv(JSON.stringify(value, (_key, v) => (typeof v === 'number' ? Math.round(v * 1e4) / 1e4 : v)));
 const SAMPLES = Array.from({ length: 22 }, (_unused, i) => i * .05);
-const OWN_DIGEST = 'pending';
-const RUE_DIGEST = 'pending';
+const OWN_DIGEST = '669ef935';
+const RUE_DIGEST = 'c9817b1a';
 
 describe('Round 1216: the recorded own goal', () => {
   it('OWN: every own goal frame of the hand made scenes is the recorded one', () => {
@@ -569,7 +570,8 @@ function expectOwnGoalOnPage(frames: PageFrame[], career: CareerState, goal: Liv
 }
 
 describe('Round 1216: an own goal in the live match', () => {
-  /** The first own goal for each side that stands alone in a first half of the search. */
+  /** The first own goal for each side that stands alone in a first half of the search. When this was written
+   *  they were in matches 3 (for me) and 17 (against me): the cap is two hundred turns, over ten times that. */
   function findOwnGoals() {
     vi.mocked(Math.random).mockImplementation(seeded(121601));
     const found = new Map<string, { career: CareerState; goal: LiveFeedEvent; match: number }>();
@@ -631,6 +633,8 @@ describe('Round 1216: an own goal in the live match', () => {
    behind a chance, with the line up changing in the next minute while its ball is in the air, is an OWN goal.
    And, where the bounded search meets one, the case where the man who put it in is the one who leaves. */
 describe('Round 1216: an own goal and a change of line up off the clock', () => {
+  /* Measured: the half was found on attempt 274 and the one whose man leaves on attempt 325. The cap is over ten
+     times that, because a round that re-bakes the squads moves what these searches walk. */
   const SEARCH_CAP = 4000;
   type Held = { career: CareerState; goal: LiveFeedEvent; at: number; attempt: number; leaves: boolean };
   function findHeld(): { held: Held | null; leaving: Held | null; attempts: number } {
