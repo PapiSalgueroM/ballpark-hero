@@ -1,0 +1,1 @@
+fix: git worktree add -f /tmp/base-f 54e3820a >/dev/null 2>&1 || (sleep 6; git worktree add -f /tmp/base-f 54e3820a >/dev/null 2>&1); ln -s "$PWD/node_modules" /tmp/base-f/node_modules; W="$PWD"; (cd /tmp/base-f && node "$W/.rc/x/cmFix.mjs" mk /tmp/cmrev-f) && node .rc/x/cmFix.mjs cmp /tmp/cmrev-f
