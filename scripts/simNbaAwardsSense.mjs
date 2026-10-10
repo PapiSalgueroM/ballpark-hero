@@ -126,6 +126,10 @@
        against the real numbers typed in this file (never against the rule table the help is built from: the
        two agreeing is one mistake said twice), the badge count on the page against NBA_BADGES.
    C   The NFL, MLB and NHL careers hash equal to the baseline (under SENSE_PROVE_OTHERS=1 only).
+   K   The Trophy Case tile (Round 1112). The hub tile counts the rings plus the sport's honours rows; the case
+       behind it lists every award on the seasons. With the row for the lesser awards the two agree on every
+       career of the fleet (exact), so the tile reads Empty only over an empty case. The careers the row is for
+       (awards, but no ring, MVP, All-NBA or All-Star) are still there on every seed (a floor).
    T   The near tie (Round 1112). The one sentence all four sports share ("Nothing in it again. ...") names the
        leader the tally on the save gives, or says the head to head is level. Every near tie note of the NBA
        fleet and of the other three sports' fleets is read against the rival's tally right after its season
@@ -170,6 +174,7 @@
      rivaldraws       the rival's season taking a second draw          R red
      oldgate306       the All-Star beat dealt on the two ratings again R red
      nearlie          the near tie saying "You lead" whoever leads     T red
+     norow            the tile's row for the lesser awards taken out   K red
    With SENSE_PROVE_AGAINST=<commit> set, rivaldraws must also turn P red (the player's digest moves).
      noscale          the legacy constant back to 1                    H red (refuses when it is 1)
      nomvpworth       an MVP worth nothing to the legacy score         H red
@@ -316,6 +321,8 @@ const CONTROLS = {
   oldgate306: { file: 'src/lib/nbaCareerRivalryEvents.ts', find: '    when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && (f.mine || f.his); },', put: '    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,', needs: 'R' },
   /* R: the rival's season taking a second draw of the season's stream (every draw of the player's after it moves). */
   rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);", put: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng() + rng()}`);", needs: PROVE_AGAINST ? 'R,P' : 'R' },
+  /* K: the Trophy Case tile's row for the lesser awards taken out. */
+  norow: { file: 'src/lib/nbaCareerSport.ts', find: "    { label: 'in other awards', n: c.seasons.reduce((n, s) => n + (s.awards ?? []).filter(a => !NBA_TILE_NAMED.includes(a)).length, 0) },", put: "    { label: 'in other awards', n: 0 },", needs: 'K' },
   /* T: the near tie saying "You lead" whoever leads, as it did in all four sports. */
   nearlie: { file: 'src/lib/careerRival.ts', find: 'Nothing in it again. ${rivalLeadLine(r)}`);', put: 'Nothing in it again. You lead the head to head ${head}.`);', needs: 'T' },
   /* H: the legacy constant back to 1. Refuses when it already is 1 (then nomvpworth is the control H has). */
@@ -466,6 +473,8 @@ const BUNDLE = {
       "export { seasonSwing } from './src/lib/careerVariance.ts';",
       "export * as nbaAwards from './src/lib/nbaCareerAwards.ts';",
       "export { keyedRng } from './src/lib/keyedRng.ts';",
+      "export { NBA_CAREER_SPORT } from './src/lib/nbaCareerSport.ts';",
+      "export { honoursTotal } from './src/lib/careerHub.ts';",
       "export { nbaStatLine } from './src/lib/usCareerStatLine.ts';",
       "export * as decision from './src/lib/awardDecision.ts';",
       "export { NBA_BADGES } from './src/lib/careerBadges.ts';",
@@ -558,7 +567,10 @@ function playFleet(seed, careers, M = E, digest = false) {
     const hall = M.hallRecordFor(M.NBA_CAREER_HALL, c);
     const tot = nba.nbaCareerTotals(c);
     out.push({ i, pos, arch: arch.id, era, seasons: c.seasons.length, mvps: c.mvps, allNbas: c.allNbas, allStars: c.allStars ?? 0, rings: c.rings, finalsMvps: c.finalsMvps,
-      score: leg.score, inducted: hall.outcome === 'inducted', firstBallot: !!hall.firstBallot, my: c.rival?.myYears ?? 0, his: c.rival?.hisYears ?? 0, pts: tot.pts });
+      score: leg.score, inducted: hall.outcome === 'inducted', firstBallot: !!hall.firstBallot, my: c.rival?.myYears ?? 0, his: c.rival?.hisYears ?? 0, pts: tot.pts,
+      /* K: what the hub's Trophy Case tile counts (rings plus the sport's honours rows) against the awards on the seasons. */
+      tile: M.honoursTotal({ rings: c.rings, honours: M.NBA_CAREER_SPORT.honours(c) }), awardsHeld: c.seasons.reduce((n, s) => n + (s.awards ?? []).length, 0),
+      named: c.mvps + c.allNbas + (c.allStars ?? 0) });
   }
   return { seasons, careers: out, nearTies, digest: h ? h.digest('hex') : null };
 }
@@ -1076,6 +1088,8 @@ const HELD_TOL = {
 };
 /* R: my share of the head to head years as Round 1112 shipped it, five full size seeds (see the header). */
 const RIVAL_1112 = { myShare: [61.01, 60.83, 61.44, 61.06, 61.09] };
+/* K: careers a full size seed must still find whose only awards are the lesser ones (see the header). */
+const LESSER_ONLY_FLOOR = 1;
 /* T: how many near tie notes of each kind a full size run must still find in each sport (see the header). */
 const NEAR_TIE_FLOOR = 1;
 /* R4: how often a full size seed must still deal the All-Star beat in each of its three cases (see the header). */
@@ -1100,6 +1114,7 @@ const t0 = Date.now();
 console.log(`simNbaAwardsSense: ${CAREERS} careers a seed, seeds ${SEEDS.join(', ')}${CONTROL ? `, control ${CONTROL}` : ''}${TRY_SCALE ? `, TRIAL legacy scale ${TRY_SCALE}` : ''}${FULL ? '' : JUDGE ? ` (shrunk run, judged at its own size)` : ' (quick run, bands not judged)'}`);
 const per = [];
 const nbaNearTies = [];
+const fleets = [];
 const aStats = [];
 const fields = [];
 const anchors = [];
@@ -1114,6 +1129,7 @@ for (const seed of SEEDS) {
   const m = measure(f);
   per.push(m);
   nbaNearTies.push(f.nearTies);
+  fleets.push(f.careers);
   if (HAS_LINE) aStats.push(lineStats(f, seed));
   fields.push(fieldOf(f));
   if (mainGates) anchors.push(reanchor(f, mainGates));
@@ -1544,6 +1560,15 @@ if (HAS_PASS() && typeof E.nbaAwards.nbaAwardHelpRules === 'function') {
   /* The guide file is not this round's (its owner holds it). What it still says is printed for the lead. */
   const guide = srcOf('src/data/gameContent/basketball.ts');
   console.log(`  note [F] the guide for /nba-my-career still says, and its owner owes the change: ${[/62 games/.test(guide) ? '"62 games"' : null, /21 of them/.test(guide) ? '"21 of them"' : null, /Each of the 21 badges/.test(guide) ? '"Each of the 21 badges"' : null].filter(Boolean).join(', ') || 'nothing stale'}`);
+}
+
+/* K, the Trophy Case tile (Round 1112): it counts every award the case behind it lists. */
+{
+  const all = fleets.flat();
+  const off = all.filter(c => c.tile !== c.rings + c.awardsHeld);
+  const lesserOnly = fleets.map(f => f.filter(c => c.awardsHeld > 0 && c.rings + c.named === 0).length);
+  exact('K', all.length > 0 && off.length === 0, `the Trophy Case tile counts the rings plus every award on the seasons, so it reads Empty only over an empty case: ${off.length} of ${all.length} careers off${off.length ? ` (the first: tile ${off[0].tile}, rings ${off[0].rings}, awards ${off[0].awardsHeld})` : ''}`);
+  banded('K', lesserOnly.every(n => n >= LESSER_ONLY_FLOOR), `careers whose only awards are the lesser ones (no ring, MVP, All-NBA or All-Star), the ones the tile read Empty for: ${lesserOnly.join(', ')} a seed (floor ${LESSER_ONLY_FLOOR})`);
 }
 
 /* T, the near tie (Round 1112): the one sentence all four sports share names the leader the tally gives. */
