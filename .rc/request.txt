@@ -1,0 +1,5 @@
+# Release AS: simDailySaveHardening named /nba-career beside the known /olympics flake: three runs alone, to tell a flake from a break
+#!serial
+dsh-1: node scripts/simDailySaveHardening.mjs
+dsh-2: node scripts/simDailySaveHardening.mjs
+dsh-3: node scripts/simDailySaveHardening.mjs
