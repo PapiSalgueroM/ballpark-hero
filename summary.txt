@@ -1,0 +1,9 @@
+headis exit=0 0s | round head 441f040b8449ef79de4b3794b39af573b025e3c0 | main 09df145abfb241679022b41903d2f19bc254ebf9 | files changed since f7d996f7: docs/audits/ROUND-1228-NOTES.md 
+vitest exit=0 3s |    Duration  2.64s (transform 277ms, setup 176ms, collect 405ms, tests 1.83s, environment 1.31s, prepare 509ms)
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+sim exit=0 38s | simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+simStorageWrites exit=0 2s | simStorageWrites: all green
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoInventedQuotes exit=0 22s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 81s | 
