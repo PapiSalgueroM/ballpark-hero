@@ -1,0 +1,26 @@
+simCmVar: CM_VAR_ARTIFACTS=/tmp/n node scripts/simCmVar.mjs
+c-historic: CM_VAR_ARTIFACTS=/tmp/c-historic CM_VAR_CONTROL=historic node scripts/simCmVar.mjs
+c-streamgoal: CM_VAR_ARTIFACTS=/tmp/c-streamgoal CM_VAR_CONTROL=streamgoal node scripts/simCmVar.mjs
+c-streamfoul: CM_VAR_ARTIFACTS=/tmp/c-streamfoul CM_VAR_CONTROL=streamfoul node scripts/simCmVar.mjs
+c-oldpenaltyontarget: CM_VAR_ARTIFACTS=/tmp/c-oldpenaltyontarget CM_VAR_CONTROL=oldpenaltyontarget node scripts/simCmVar.mjs
+c-everywhere: CM_VAR_ARTIFACTS=/tmp/c-everywhere CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs
+c-disabled: CM_VAR_ARTIFACTS=/tmp/c-disabled CM_VAR_CONTROL=disabled node scripts/simCmVar.mjs
+c-oldgoalreview: CM_VAR_ARTIFACTS=/tmp/c-oldgoalreview CM_VAR_CONTROL=oldgoalreview node scripts/simCmVar.mjs
+c-oldoverturn: CM_VAR_ARTIFACTS=/tmp/c-oldoverturn CM_VAR_CONTROL=oldoverturn node scripts/simCmVar.mjs
+c-oldpenaltyreview: CM_VAR_ARTIFACTS=/tmp/c-oldpenaltyreview CM_VAR_CONTROL=oldpenaltyreview node scripts/simCmVar.mjs
+c-oldmissedfoul: CM_VAR_ARTIFACTS=/tmp/c-oldmissedfoul CM_VAR_CONTROL=oldmissedfoul node scripts/simCmVar.mjs
+c-oldpenaltyscores: CM_VAR_ARTIFACTS=/tmp/c-oldpenaltyscores CM_VAR_CONTROL=oldpenaltyscores node scripts/simCmVar.mjs
+ledger: node scripts/simCmVarLedger.mjs
+l-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+l-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+l-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+l-missing: CM_VAR_LEDGER_CONTROL=missing node scripts/simCmVarLedger.mjs
+l-extra: CM_VAR_LEDGER_CONTROL=extra node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+l-highest: CM_VAR_LEDGER_CONTROL=highest node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
