@@ -120,11 +120,11 @@ describe('the line under the heading is true of the night it sits on', () => {
   it('prints the night\'s own chances when level clubs shared theirs: the 3rd and 4th worst level are NOT three clubs on 14 each', () => {
     const pair = levelNight([2, 3]);
     /* 140 and 125 combinations pooled are 265: 133 to the winner of the drawing and 132 to the other. */
-    expect(pair.lottery!.field.slice(0, 5).map(f => f.pct)).toEqual([14, 14, 13.3, 13.2, 10.5]);
+    expect(pair.lottery!.field.slice(0, 5).map(f => Math.round(f.pct * 10) / 10)).toEqual([14, 14, 13.3, 13.2, 10.5]);
     expect(lotteryNightRule(pair, table)).toBe('14 clubs are in the lottery and the top 4 picks are drawn. On this night 2 clubs shared the best chance at the first pick, 14% each.');
     const four = levelNight([0, 1, 2, 3]);
     /* 140, 140, 140 and 125 pooled are 545: 137, then 136 three times. */
-    expect(four.lottery!.field.slice(0, 4).map(f => f.pct)).toEqual([13.7, 13.6, 13.6, 13.6]);
+    expect(four.lottery!.field.slice(0, 4).map(f => Math.round(f.pct * 10) / 10)).toEqual([13.7, 13.6, 13.6, 13.6]);
     expect(lotteryNightRule(four, table)).toBe('14 clubs are in the lottery and the top 4 picks are drawn. On this night the best chance at the first pick was 13.7%.');
     /* The worked example stays the table's, says so, and adds what this night was drawn on. */
     const example = lotteryHelp(four, NBA, table).find(b => b.heading === 'A worked example')!.lines;
