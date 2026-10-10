@@ -1,0 +1,5 @@
+#!serial
+m1225: echo 'src/pages/WhatsNew.tsx merge=union' >> .git/info/attributes && git fetch -q origin r1225-cm-fixtures-bind r1218-cm-var-true && git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1225-cm-fixtures-bind && git log --oneline -1
+m1225-realfix-base-block: node .rc/x/patchSaveCompare.mjs scripts/simCmRealFixtures.mjs && CM_FIXTURE_BASE=980654fa node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
+m1225-realfix-default: node scripts/simCmRealFixtures.mjs
+m1225-book: node scripts/simCmLeagueBook.mjs

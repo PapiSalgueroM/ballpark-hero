@@ -1,0 +1,4 @@
+m1225 exit=0 1s | 037f7c696 Merge remote-tracking branch 'origin/r1225-cm-fixtures-bind' into rc/r1229-fin7
+m1225-realfix-base-block exit=0 6s | simCmRealFixtures normal premier: 13 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 980654facb2d41a6c9ddc029c4
+m1225-realfix-default exit=0 2s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+m1225-book exit=0 21s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (21s)
