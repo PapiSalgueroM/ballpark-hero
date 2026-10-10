@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/components/motion/LotteryReveal.test.tsx --testTimeout=300000 --hookTimeout=120000
+simRevealMoments: node scripts/simRevealMoments.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simResultMoment: node scripts/simResultMoment.mjs

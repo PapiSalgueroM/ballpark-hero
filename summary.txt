@@ -1,0 +1,10 @@
+vitest exit=0 3s |    Duration  2.31s (transform 180ms, setup 88ms, collect 343ms, tests 461ms, environment 604ms, prepare 248ms)
+simRevealMoments exit=0 12s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simNoRivalNames exit=0 23s | No rival product names found. 0 findings.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNoInventedQuotes exit=0 29s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simHarnessAnchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simResultMoment exit=1 0s | Node.js v24.21.0
+simNoInventedConduct exit=0 0s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+tsc exit=0 81s | 
