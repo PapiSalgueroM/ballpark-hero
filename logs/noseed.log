@@ -1,0 +1,6 @@
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs
+8) The replay, NEGATIVE CONTROL noseed: the first match in three fresh contexts with no seed at all
+  [match replay A] seed none, draws not counted, digest 3dfc0f4c over 4686 characters of drawn match: Crystal Palace v Leeds United, goals of the first half 28' Dwight McNeil; own goals among them 0
+  [match replay B] seed none, draws not counted, digest 5cde36c4 over 4948 characters of drawn match: Crystal Palace v Brighton, goals of the first half none; own goals among them 0
+  [match replay C] seed none, draws not counted, digest 2c9b785c over 5192 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 43' Lewis Hall; own goals among them 0
+playLiveMatchFit: control noseed turned the replay red on the line it must (with no seed, three contexts opened three different matches: 3dfc0f4c, 5cde36c4, 2c9b785c).

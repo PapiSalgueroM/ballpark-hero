@@ -1,0 +1,2 @@
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_SAVE=/nowhere/at/all.json node scripts/playLiveMatchFit.mjs
+LIVE_FIT_SAVE /nowhere/at/all.json: ENOENT: no such file or directory, open '/nowhere/at/all.json'

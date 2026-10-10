@@ -1,0 +1,60 @@
+/home/runner/work/_temp/rc-out/files:
+total 1084
+drwxr-xr-x 2 runner runner   4096 Oct 10 10:44 bar
+drwxr-xr-x 2 runner runner   4096 Oct 10 10:47 earlyscore
+-rw-r--r-- 1 runner runner 106254 Oct 10 10:41 fit-1280.png
+-rw-r--r-- 1 runner runner  60979 Oct 10 10:41 fit-320.png
+-rw-r--r-- 1 runner runner  65690 Oct 10 10:41 fit-390.png
+-rw-r--r-- 1 runner runner  92093 Oct 10 10:41 fit-768.png
+-rw-r--r-- 1 runner runner 145912 Oct 10 10:41 fit-844.png
+drwxr-xr-x 2 runner runner   4096 Oct 10 10:48 nocard
+-rw-r--r-- 1 runner runner  66294 Oct 10 10:41 panel-change.png
+-rw-r--r-- 1 runner runner  70845 Oct 10 10:41 panel-help.png
+-rw-r--r-- 1 runner runner  67673 Oct 10 10:41 panel-squad.png
+-rw-r--r-- 1 runner runner  60966 Oct 10 10:41 panel-stats.png
+-rw-r--r-- 1 runner runner  70291 Oct 10 10:41 phone-goal-card.png
+-rw-r--r-- 1 runner runner  63406 Oct 10 10:41 phone-goal-windup.png
+drwxr-xr-x 2 runner runner   4096 Oct 10 10:48 report
+drwxr-xr-x 2 runner runner   4096 Oct 10 10:45 silentlist
+-rw-r--r-- 1 runner runner 102212 Oct 10 10:42 wide-goal-card.png
+-rw-r--r-- 1 runner runner  93968 Oct 10 10:42 wide-goal-windup.png
+
+/home/runner/work/_temp/rc-out/files/bar:
+total 852
+-rw-r--r-- 1 runner runner  96475 Oct 10 10:44 bar-fit-1280.png
+-rw-r--r-- 1 runner runner  57076 Oct 10 10:44 bar-fit-320.png
+-rw-r--r-- 1 runner runner  66864 Oct 10 10:44 bar-fit-390.png
+-rw-r--r-- 1 runner runner  86148 Oct 10 10:44 bar-fit-768.png
+-rw-r--r-- 1 runner runner 141531 Oct 10 10:44 bar-fit-844.png
+-rw-r--r-- 1 runner runner  66283 Oct 10 10:44 bar-panel-change.png
+-rw-r--r-- 1 runner runner  70858 Oct 10 10:44 bar-panel-help.png
+-rw-r--r-- 1 runner runner  67673 Oct 10 10:44 bar-panel-squad.png
+-rw-r--r-- 1 runner runner  60940 Oct 10 10:44 bar-panel-stats.png
+-rw-r--r-- 1 runner runner  69762 Oct 10 10:44 bar-phone-goal-card.png
+-rw-r--r-- 1 runner runner  63231 Oct 10 10:44 bar-phone-goal-windup.png
+
+/home/runner/work/_temp/rc-out/files/earlyscore:
+total 1144
+-rw-r--r-- 1 runner runner 100751 Oct 10 10:46 earlyscore-fit-1280.png
+-rw-r--r-- 1 runner runner  61046 Oct 10 10:46 earlyscore-fit-320.png
+-rw-r--r-- 1 runner runner  70910 Oct 10 10:46 earlyscore-fit-390.png
+-rw-r--r-- 1 runner runner  90289 Oct 10 10:46 earlyscore-fit-768.png
+-rw-r--r-- 1 runner runner 146487 Oct 10 10:46 earlyscore-fit-844.png
+-rw-r--r-- 1 runner runner  85514 Oct 10 10:47 earlyscore-live-fit-save-wide.json
+-rw-r--r-- 1 runner runner  66283 Oct 10 10:46 earlyscore-panel-change.png
+-rw-r--r-- 1 runner runner  70841 Oct 10 10:46 earlyscore-panel-help.png
+-rw-r--r-- 1 runner runner  67674 Oct 10 10:46 earlyscore-panel-squad.png
+-rw-r--r-- 1 runner runner  60966 Oct 10 10:46 earlyscore-panel-stats.png
+-rw-r--r-- 1 runner runner  64896 Oct 10 10:46 earlyscore-phone-goal-card.png
+-rw-r--r-- 1 runner runner  63374 Oct 10 10:46 earlyscore-phone-goal-windup.png
+-rw-r--r-- 1 runner runner 101099 Oct 10 10:47 earlyscore-wide-goal-card.png
+-rw-r--r-- 1 runner runner  94211 Oct 10 10:47 earlyscore-wide-goal-windup.png
+
+/home/runner/work/_temp/rc-out/files/nocard:
+total 1044
+-rw-r--r-- 1 runner runner 100973 Oct 10 10:47 nocard-fit-1280.png
+-rw-r--r-- 1 runner runner  60995 Oct 10 10:47 nocard-fit-320.png
+-rw-r--r-- 1 runner runner  70879 Oct 10 10:47 nocard-fit-390.png
+-rw-r--r-- 1 runner runner  90205 Oct 10 10:47 nocard-fit-768.png
+-rw-r--r-- 1 runner runner 146498 Oct 10 10:47 nocard-fit-844.png
+-rw-r--r-- 1 runner runner  85510 Oct 10 10:48 nocard-live-fit-save-wide.json

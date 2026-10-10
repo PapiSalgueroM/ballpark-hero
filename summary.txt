@@ -1,0 +1,16 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+clean exit=0 97s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+replay exit=0 41s | playLiveMatchFit: the replay is green. Seed 3208792607 opened one match three times (digest 421656fa, 1869 draws at kick off) and seed 3208792608 opened another (digest e
+noseed exit=1 31s | playLiveMatchFit: control noseed turned the replay red on the line it must (with no seed, three contexts opened three different matches: 3dfc0f4c, 5cde36c4, 2c9b785c).
+bar exit=1 59s | playLiveMatchFit: control bar turned section 3 red and left sections 1, 2 and 4 green, as it must.
+silentlist exit=1 70s | playLiveMatchFit: control silentlist turned section 7 red on the line it must (the list never said this goal, 2 GOAL! rewritten) and left the rest green.
+earlyscore exit=1 71s | playLiveMatchFit: control earlyscore turned section 7 red on the line it must (the score changed before the ball was in, 1 node touched) and left the rest green.
+nocard exit=1 70s | playLiveMatchFit: control nocard turned section 7 red on the line it must (no scorer card was ever on screen, 1 node touched) and left the rest green.
+report exit=0 74s | playLiveMatchFit: measuring pass done, sections 1, 2, 4 and 5 green, section 3 printed and not asserted.
+badseed-empty exit=2 0s | LIVE_FIT_SEED: a page seed must be a whole number from 0 to 4294967295 or the word fresh, and this one reads ""
+badseed-word exit=2 0s | LIVE_FIT_SEED: a page seed must be a whole number from 0 to 4294967295 or the word fresh, and this one reads "Fresh"
+noseed-alone exit=2 0s | LIVE_FIT_CONTROL=noseed is the replay mode's control and its only one: set LIVE_FIT_REPLAY=1 with it, and no other control with LIVE_FIT_REPLAY
+replay-with-control exit=2 0s | LIVE_FIT_CONTROL=noseed is the replay mode's control and its only one: set LIVE_FIT_REPLAY=1 with it, and no other control with LIVE_FIT_REPLAY
+replay-with-save exit=2 0s | LIVE_FIT_SAVE starts from a match already drawn, so the replay mode has nothing to prove with it: set one or the other
+save-missing exit=2 0s | LIVE_FIT_SAVE /nowhere/at/all.json: ENOENT: no such file or directory, open '/nowhere/at/all.json'
+sizes exit=0 0s | -rw-r--r-- 1 runner runner  85510 Oct 10 10:48 nocard-live-fit-save-wide.json

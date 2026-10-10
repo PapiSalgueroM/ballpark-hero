@@ -1,0 +1,19 @@
+#!build
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: the round's harness and every negative control, each its own line.
+clean: node scripts/playLiveMatchFit.mjs
+replay: LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+noseed: LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs
+bar: LIVE_FIT_CONTROL=bar LIVE_FIT_SHOTS=$RC_OUT/bar node scripts/playLiveMatchFit.mjs
+silentlist: LIVE_FIT_CONTROL=silentlist LIVE_FIT_SHOTS=$RC_OUT/silentlist node scripts/playLiveMatchFit.mjs
+earlyscore: LIVE_FIT_CONTROL=earlyscore LIVE_FIT_SHOTS=$RC_OUT/earlyscore node scripts/playLiveMatchFit.mjs
+nocard: LIVE_FIT_CONTROL=nocard LIVE_FIT_SHOTS=$RC_OUT/nocard node scripts/playLiveMatchFit.mjs
+report: LIVE_FIT_REPORT=1 LIVE_FIT_SHOTS=$RC_OUT/report node scripts/playLiveMatchFit.mjs
+badseed-empty: LIVE_FIT_SEED= node scripts/playLiveMatchFit.mjs
+badseed-word: LIVE_FIT_SEED=Fresh node scripts/playLiveMatchFit.mjs
+noseed-alone: LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs
+replay-with-control: LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+replay-with-save: LIVE_FIT_REPLAY=1 LIVE_FIT_SAVE=$RC_OUT/nocard/nocard-live-fit-save-wide.json node scripts/playLiveMatchFit.mjs
+save-missing: LIVE_FIT_SAVE=/nowhere/at/all.json node scripts/playLiveMatchFit.mjs
+sizes: ls -lR "$RC_OUT" | cut -c1-150 | head -60
