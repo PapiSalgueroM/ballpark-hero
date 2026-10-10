@@ -1,0 +1,45 @@
+PASS [uncopied AR parity]
+PASS [attribution boundaries]
+FAIL [uncopied full AR baseline] AssertionError: AR full career119101 every global draw
+FAIL [candidate full AR baseline] AssertionError: all twelve independent original careers are held
+
+1 !== 12
+
+PASS [candidate AR parity]
+PASS [role event]
+PASS [role selection]
+PASS [role scope]
+PASS [role recorded year]
+PASS [role interruptions]
+PASS [role moves and retirement]
+PASS [role squad display]
+PASS [milestone saved tally]
+PASS [milestone protected news]
+PASS [milestone engine news]
+PASS [source held]
+simCareerStoryRole: 16 groups, 2 failed, 48 full AR pairs
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: healthy outcome groups all pass before copied defects
++ actual - expected
+
++ [
++   'uncopied full AR baseline',
++   'candidate full AR baseline'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerStoryRole.mjs:579:10)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCareerStoryRole.mjs:604:56 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [ 'uncopied full AR baseline', 'candidate full AR baseline' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

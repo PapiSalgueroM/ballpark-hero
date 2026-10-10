@@ -1,0 +1,89 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerCareerLeague.test.ts [2m([22m[2m37 tests[22m[2m)[22m[32m 120[2mms[22m[39m
+ [32m✓[39m src/lib/soccerClubSquad.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 1951[2mms[22m[39m
+   [33m[2m✓[22m[39m the living squad[2m > [22mnames the right man as the last one in ahead of him: never himself, always the lowest of his line in the eleven [33m 818[2mms[22m[39m
+   [33m[2m✓[22m[39m the sheet does not argue with itself[2m > [22mnumbers his own line with him counted on a sheet by role [33m 305[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerLeagueWorld.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 5303[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22msettles the season a severe injury cut short and writes his club's move on the row [33m 520[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mopens the season after a year out with the line when his club moved without him [33m 433[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mdraws a settled season's table with the saved clubs in the places that changed hands [33m 353[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career simulated promotion and relegation[2m > [22mholds each division's count and each second division's clubs to Club Manager's own rows [33m 3378[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerDebutLegacy.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 2274[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 985: through the real page, the moment plays when the state flips[2m > [22mContinue off the season summary onto the call-up plays the debut card [33m 313[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 985: through the real page, the moment plays when the state flips[2m > [22mRetire and Enjoy Life off the ceremony plays the legacy card, even from a save reloaded on the ceremony [33m 441[2mms[22m[39m
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 27 season rows, 26 story seasons, story 15443 bytes, save 119739 bytes, save without story 104296
+[save parts] seed 9748: rest 61936 bytes, cup games 41658 bytes over 22 seasons, division 11063 bytes over 18 seasons, ten divisions 4489 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 28 season rows, 27 story seasons, story 17699 bytes, save 103281 bytes, save without story 85582
+[save parts] seed 9749: rest 74528 bytes, cup games 12274 bytes over 8 seasons, division 11566 bytes over 19 seasons, ten divisions 4501 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 29 season rows, 28 story seasons, story 21062 bytes, save 141629 bytes, save without story 120567
+[save parts] seed 9750: rest 79485 bytes, cup games 43473 bytes over 23 seasons, division 13504 bytes over 22 seasons, ten divisions 4500 bytes
+
+ [32m✓[39m src/test/careerSeasonRatings.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 2462[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career shows every season's rating in the history[2m > [22ma CB timeline row carries the stored rating, the overall it was played at and clean sheets [33m 787[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career shows every season's rating in the history[2m > [22man old save shows real ratings, a dash for the overall it never kept, and a blank for clean sheets never drawn [33m 878[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career shows every season's rating in the history[2m > [22ma banned season summary says there is no rating instead of 0.0, and a played one shows the overall [33m 533[2mms[22m[39m
+ [32m✓[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 6262[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9741: every line kept, in order, once [33m 407[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9743: every line kept, in order, once [33m 377[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mthe story draws nothing: the same seed without it plays the same career [33m 375[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9748 plus ten dugout seasons stays under the bound [33m 550[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9749 plus ten dugout seasons stays under the bound [33m 535[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound [33m 541[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 752[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included [33m 853[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerDerbyHistory.test.ts [2m([22m[2m63 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerCareerDevelopment.test.ts [2m([22m[2m36 tests[22m[2m)[22m[32m 203[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRecovery.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 8138[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores current progress synchronously and advances the same career once [33m 452[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrestores a decided moral dilemma and keeps its consequence after Continue [33m 335[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrehydrates a serialized random event and applies its catalog outcome [33m 300[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrecords a newly finished ceremony once and does not replay it on the next mount [33m 385[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects missing seasons before render, retains raw bytes and deletes only its own key on request [33m 314[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects null pending events before render, retains raw bytes and deletes only its own key on request [33m 303[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mrejects object contract offers before render, retains raw bytes and deletes only its own key on request [33m 301[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career actual save recovery[2m > [22mallows an explicit new career to replace damaged bytes without touching another save [33m 485[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerStoryRole.test.ts [2m([22m[2m40 tests[22m[2m)[22m[33m 339[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerSeasonHistory.test.ts [2m([22m[2m73 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerAmbitions.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 279[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 166[2mms[22m[39m
+[90mstdout[2m | src/test/careerMilestones.test.ts[2m > [22m[2mRound 1107: the growth note is the difference between two saves, nothing else[2m > [22m[2mholds at every season step of 24 seeded careers, and the sample is not vacuous
+[22m[39mcareerMilestones: {"careers":24,"seasons":591,"rises":42,"falls":248,"flat":301,"clubArmbands":16,"intlArmbands":23,"debuts":23,"ticks":2608,"longestRun":3}; 7.1 percent of played seasons rise by 3 or more
+
+ [32m✓[39m src/test/careerMilestones.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 8648[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1107: the growth note is the difference between two saves, nothing else[2m > [22mholds at every season step of 24 seeded careers, and the sample is not vacuous [33m 8642[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerRecords.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 758[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career record book[2m > [22mopens the actual best season and leaves an old unknown overall unstated [33m 533[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerSaveRetry.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 15119[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps the restored career and old bytes while showing a persistent save warning and one toast [33m 913[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mkeeps repeated refused retries visible without replaying progress or repeating the toast [33m 361[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the actually earned training result exactly once and restores it on the next mount [33m 4871[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mretries the latest earned season after more than one failed career change without rerunning its engine [33m 4260[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears a failed save on the next successful automatic save and alerts again on a later refusal [33m 3507[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mclears the old failure after explicit reset and saves the replacement career without old progress [33m 877[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career failed write recovery[2m > [22mpersists the finished retirement on retry without recording its completion a second time [33m 317[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerLeagueSeasons.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+[90mstdout[2m | src/test/soccerCareerWorldSettle.test.ts[2m > [22m[2mSoccer Career: every season of the league world is settled and shown as saved[2m > [22m[2msettles the injury years too, and next season plays in the field the moves left
+[22m[39m[world settle] 421 world seasons, 10 cut short by a severe injury, his club moved 25 times (0 of them in an injury year)
+
+[90mstdout[2m | src/test/soccerCareerWorldSettle.test.ts[2m > [22m[2mSoccer Career: every season of the league world is settled and shown as saved[2m > [22m[2mdraws each settled table with the saved clubs in the places that changed hands
+[22m[39m[world settle] 121 table seasons, 121 drawn, 92 of them with a derby rival in the table
+
+ [32m✓[39m src/test/soccerCareerWorldSettle.test.ts [2m([22m[2m2 tests[22m[2m)[22m[33m 15960[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: every season of the league world is settled and shown as saved[2m > [22msettles the injury years too, and next season plays in the field the moves left [33m 12522[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: every season of the league world is settled and shown as saved[2m > [22mdraws each settled table with the saved clubs in the places that changed hands [33m 3436[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m18 passed[39m[22m[90m (18)[39m
+[2m      Tests [22m [1m[32m440 passed[39m[22m[90m (440)[39m
+[2m   Start at [22m 08:41:58
+[2m   Duration [22m 45.27s[2m (transform 9.72s, setup 2.11s, collect 23.51s, tests 68.13s, environment 12.98s, prepare 3.25s)[22m
+

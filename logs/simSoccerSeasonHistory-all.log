@@ -1,0 +1,136 @@
+FAIL engine baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    draws: [
+      0.171478500822559,
+      0.22020065295509994,
+      0.5847681371960789,
+...
+        {
++         body: '5 goals and 7 assists in 36 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out.',
+-         body: '5 goals and 7 assists in 34 games. Prudence Stallybrass called it the best season anybody at the club has had in years, and he does not hand those out.',
+          headline: 'THE COLUMN: Prudence Stallybrass Has Seen Enough, And He Is Saying So',
+          newspaper: 'The Beautiful Game Report',
+          type: 'positive'
+        },
+        {
+...
+        age: 20,
++       apps: 36,
+-       apps: 34,
+        assists: 7,
+        ballonDor: false,
+        ballonDorRank: null,
+        championsLeague: false,
+        cleanSheets: 0,
+...
+            {
++             against: 4,
++             for: 0,
++             home: true,
++             opp: 'Groningen',
+-             against: 0,
+-             for: 1,
+-             home: false,
+-             opp: 'Cambuur',
+              stage: 'QF',
+-             won: true
+-           },
+-           {
+-             against: 2,
+-             for: 1,
+-             opp: 'NEC Nijmegen',
+-             stage: 'SF',
+              won: false
+            }
+          ]
+        },
+        domesticCup: false,
+...
+        intRating: 6.7,
++       leagueApps: 32,
++       leagueFinish: 6,
+-       leagueApps: 30,
+-       leagueFinish: 2,
+        leagueSize: 18,
+        leagueTitle: false,
+        ovr: 75,
+        rating: 8.2,
+        redCards: 0,
+...
+          age: 20,
++         apps: 36,
+-         apps: 34,
+          assists: 7,
+          ballonDor: false,
+          ballonDorRank: null,
+          championsLeague: false,
+          cleanSheets: 0,
+...
+              {
++               against: 4,
++               for: 0,
++               home: true,
++               opp: 'Groningen',
+-               against: 0,
+-               for: 1,
+-               home: false,
+-               opp: 'Cambuur',
+                stage: 'QF',
+-               won: true
+-             },
+-             {
+-               against: 2,
+-               for: 1,
+-               opp: 'NEC Nijmegen',
+-               stage: 'SF',
+                won: false
+              }
+            ]
+          },
+          domesticCup: false,
+...
+          intRating: 6.7,
++         leagueApps: 32,
++         leagueFinish: 6,
+-         leagueApps: 30,
+-         leagueFinish: 2,
+          leagueSize: 18,
+          leagueTitle: false,
+          ovr: 75,
+          rating: 8.2,
+          redCards: 0,
+
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+PASS comparison
+PASS availability
+PASS defaults
+PASS identity rejection
+PASS read boundary
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'engine baseline'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/seasonHistory1193.mjs:140:48
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [ 'engine baseline' ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

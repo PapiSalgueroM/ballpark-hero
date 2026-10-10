@@ -1,0 +1,15 @@
+ok   clubManager simScore scores with clamp(1.25 + edge * 0.055 + boost, 0.12, 4.2)
+ok   clubManager poisson is the Knuth loop capped at 7
+ok   clubManager simAiMatch gives home 0.2 and away -0.08
+ok   law.ts LAW.base is 1.25 (read 1.25)
+ok   law.ts LAW.perPoint is 0.055 (read 0.055)
+ok   law.ts LAW.min is 0.12 (read 0.12)
+ok   law.ts LAW.max is 4.2 (read 4.2)
+ok   law.ts LAW.cap is 7 (read 7)
+ok   law.ts LAW.home is 0.2 (read 0.2)
+ok   law.ts LAW.away is -0.08 (read -0.08)
+ok   law.ts imports nothing
+ok   poissonDraw equals clubManager's poisson on 10000 of 10000 lambdas
+ok   the same number of draws on 10000 of 10000
+ok   goalLambda equals the clamp formula on 4000 of 4000 edges and venues
+simSeasonLaw: 14 checks, 0 failed

@@ -1,0 +1,91 @@
+
+1. Soccer Career replays the pre lift fixture byte for byte
+  ok   the fixture names the main it was recorded from (a2a999a1)
+     probe ran in 10.9s
+  ok   actual 4ab original source independently replays all 48 careers, 35 old saves and every unit probe of the fixture its own tree held
+  FAIL the probe output differs from the fixture
+       careers[2] first differs at step 163: fixture X:2a443d4a95e06cc6 now X:b859ffc3f702f8d7 (after M2:ba7c73160d5ee281)
+       careers[3] first differs at step 180: fixture P:cd2d8361e971a509 now P:5852aafc5c33ab42 (after t:fd956b5cb3efa8c2)
+       careers[4] first differs at step 11: fixture X:6cb4128cb1ac8976 now X:7f612fbd880fd1e8 (after M2:e5260cd7098df09f)
+  ok   every post was made at least 50 times (112, 118, 124, 115, 105, 121, 118)
+  ok   every personality was chosen in at least 3 careers (7, 12, 10, 9, 10)
+  ok   every agent was signed in at least 3 careers (7, 6, 10, 25)
+  ok   the cover offer was taken 5 times and turned down 8
+  ok   old saves carried the stored boot deal id, the renamed cover value and no tier at all
+
+2a. A post moves exactly the meters it names
+  ok   1974 posts applied and 126 refused on Testball, every one moved only what it names
+  ok   every post that names a meter moved it at least once (clip, fixed, good, bad, quiet, jab)
+  ok   a post with no gain and no standing names nothing
+  ok   an unknown post is refused and uses up nothing
+  ok   a banked focus boost is paid once, by the sport's own raise and nothing else, over 40 Testball saves
+  ok   Testball's raise was held to the player's ceiling: gains of 1, 2, 3 were all seen
+  ok   careerSocial.ts still carries the Round 835 section marker this check reads from
+  ok   src/lib/careerSocial.ts names no attribute and no attribute ceiling in its code
+  ok   src/lib/careerBrand.ts names no attribute and no attribute ceiling in its code
+  ok   src/lib/careerIdentity.ts names no attribute and no attribute ceiling in its code
+  ok   payFocusBoost calls the sport's raise once and does no arithmetic of its own
+  ok   soccer's raise is in soccer's binding: +2 on each of its attributes, held inside 20 to 99
+  ok   soccer's 7 posts, 84 applications on real saves, moved only what they name
+  ok   every one of soccer's 7 post cards says what its post does, with no exceptions list
+  ok   the rival post gains its 0.8M and moves nothing else, the rivalry meter included, with a rival playing, retired or absent
+
+2b. A deal pays what its card prints
+  ok   every Testball rung pays exactly its card (5 of 5)
+  ok   no rung, and a stored id the sport never wrote, pay nothing
+  ok   a season's brand money never goes below zero
+  ok   fame, followers, the legacy term, the bonus and the rung add up (5)
+  ok   soccer's five deals pay exactly what the card prints
+  ok   the cover offer is staged once and cleared by the answer
+  ok   taking the cover pays exactly its cash and followers and records the award
+  ok   a cover already taken is never offered again
+  ok   turning it down earns standing, capped at 100, and pays nothing
+  ok   soccer's cover lines print the terms the offer pays (€25M, 5M followers, reputation +5)
+
+2c. A rung cannot be stepped over
+  ok   the Testball ladder is sound
+  ok   soccer's ladder is sound (no problems)
+  ok   a rung whose line is not above the one before is named
+  ok   a rung that pays less than the one below is named
+  ok   a rung id outside the shared ladder is named
+  ok   two rungs stored under one id are named
+  ok   Testball: rising through 5 rungs, every rung is held for a range of its own and holding one means every line below is met
+  ok   soccer: rising through 5 rungs, every rung is held for a range of its own and holding one means every line below is met
+  ok   a following climbing in small steps signs the rungs in order, once each (local_deal > kit_deal > global_ambassador > own_line > game_cover)
+
+2d. A personality never moves the odds past the stated bound
+  ok   data asking for 3 and 0.1 is held to 0.75 to 1.75 where it is read
+  ok   a personality inside the bound is read as written, and nobody is neutral
+  ok   the data check names both of loud's out of bound multipliers
+  ok   soccer's personalities and agents are inside every bound (no problems)
+  ok   over 400 seasons the loudest personality multiplied growth by at most 1.755, the calmest by at least 0.897
+  ok   a season with no viral moment draws exactly one random number (1)
+
+2e. The agent and the beats
+  ok   no agent, and an agent the sport does not know, pay the old flat transfer cut; a real one pays its own
+  ok   an agent you do not have takes nothing and adds nothing
+  ok   the beats come due at their ages, personality first, never after retiring
+  ok   beats that would land in the same season are named
+
+3. Old saves keep their stored tier ids, and no real brand spreads
+  ok   a save holding nike_adidas loads with it untouched
+  ok   the stored id still reads as the boot deal, the shared kit deal rung
+  ok   and pays the boot deal's 3 a season
+  ok   a post that does not move the rung keeps the stored id and signs nothing new
+  ok   crossing the next line moves it to the ambassador id
+  ok   a fresh boot deal is stored under the id every live save uses, never the neutral rung id
+  ok   the renamed cover value still maps on load
+
+3b. Every stored tier id loads, is not re-signed by loading, and is paid once a season
+  ok   the five ids live saves hold and the pre rename cover value are all tried
+  ok   72 loads and 72 seasons over 4 careers, 6 stored values and 3 followings: every id loaded as itself, loading signed and moved nothing, and the deal was paid once
+  ok   all 72 cases ran (72 loads, 72 seasons)
+     agent cut in play on 18 of 72 seasons
+  ok   src/lib/careerSocial.ts names no real brand
+  ok   src/lib/careerBrand.ts names no real brand
+  ok   src/lib/careerIdentity.ts names no real brand
+  ok   soccerCareerBrand.ts holds the stored id in exactly its type and its alias, nowhere else (2 lines)
+  ok   none of the 39 lines the soccer binding prints names a real brand
+  ok   every held product, probe, fixture and copied-bundle source remains byte-identical
+
+1 FAILURE
