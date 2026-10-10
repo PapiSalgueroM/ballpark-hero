@@ -1,0 +1,45 @@
+bundled in 146 ms; seed sets 0, 1, 2, 3, 4; 40 seasons a league kind a set; CONTROL random
+  FAIL (section 5): set 0: telling a season leaves the engine's generator where it was (80 looked at): 80 broke it, the first: set 0 fifteen 0
+  FAIL (section 5): set 0: telling a season takes no draw from Math.random (80 looked at): 80 broke it, the first: set 0 fifteen 0: 10616 draws with the games told, 9798 without
+  FAIL (section 5): set 0: telling a season moves none of its 272 winners (80 looked at): 80 broke it, the first: set 0 fifteen 0
+  FAIL (section 5): set 0: telling a season moves none of its 32 records (80 looked at): 80 broke it, the first: set 0 fifteen 0
+  FAIL (section 5): set 0: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 0 fifteen 0
+set 0: 80 seasons, 22800 games told in 5944 ms; points a team game 22.67 (free 22.65); losers on 15 or fewer 0.4309 (free 0.4288); shutouts 0.0132 (free 0.0142); sides on 40 or more 0.0518 (free 0.0526); swapped 0.00039; the AFC champion won 38 of 80 title games
+  FAIL (section 5): set 1: telling a season leaves the engine's generator where it was (80 looked at): 80 broke it, the first: set 1 fifteen 0
+  FAIL (section 5): set 1: telling a season takes no draw from Math.random (80 looked at): 80 broke it, the first: set 1 fifteen 0: 10592 draws with the games told, 9788 without
+  FAIL (section 5): set 1: telling a season moves none of its 272 winners (80 looked at): 80 broke it, the first: set 1 fifteen 0
+  FAIL (section 5): set 1: telling a season moves none of its 32 records (80 looked at): 80 broke it, the first: set 1 fifteen 0
+  FAIL (section 5): set 1: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 1 fifteen 0
+set 1: 80 seasons, 22800 games told in 5636 ms; points a team game 22.65 (free 22.70); losers on 15 or fewer 0.4329 (free 0.4279); shutouts 0.0143 (free 0.0129); sides on 40 or more 0.0519 (free 0.0527); swapped 0.00048; the AFC champion won 46 of 80 title games
+  FAIL (section 5): set 2: telling a season leaves the engine's generator where it was (80 looked at): 80 broke it, the first: set 2 fifteen 0
+  FAIL (section 5): set 2: telling a season takes no draw from Math.random (80 looked at): 80 broke it, the first: set 2 fifteen 0: 10631 draws with the games told, 9840 without
+  FAIL (section 5): set 2: telling a season moves none of its 272 winners (80 looked at): 80 broke it, the first: set 2 fifteen 0
+  FAIL (section 5): set 2: telling a season moves none of its 32 records (80 looked at): 80 broke it, the first: set 2 fifteen 0
+  FAIL (section 5): set 2: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 2 fifteen 0
+set 2: 80 seasons, 22800 games told in 6357 ms; points a team game 22.61 (free 22.68); losers on 15 or fewer 0.4366 (free 0.4335); shutouts 0.0152 (free 0.0136); sides on 40 or more 0.0522 (free 0.0521); swapped 0.00061; the AFC champion won 47 of 80 title games
+  FAIL (section 5): set 3: telling a season leaves the engine's generator where it was (80 looked at): 80 broke it, the first: set 3 fifteen 0
+  FAIL (section 5): set 3: telling a season takes no draw from Math.random (80 looked at): 80 broke it, the first: set 3 fifteen 0: 10618 draws with the games told, 9806 without
+  FAIL (section 5): set 3: telling a season moves none of its 272 winners (80 looked at): 80 broke it, the first: set 3 fifteen 0
+  FAIL (section 5): set 3: telling a season moves none of its 32 records (80 looked at): 80 broke it, the first: set 3 fifteen 0
+  FAIL (section 5): set 3: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 3 fifteen 0
+set 3: 80 seasons, 22800 games told in 6112 ms; points a team game 22.68 (free 22.63); losers on 15 or fewer 0.4290 (free 0.4341); shutouts 0.0142 (free 0.0136); sides on 40 or more 0.0524 (free 0.0516); swapped 0.00035; the AFC champion won 43 of 80 title games
+  FAIL (section 5): set 4: telling a season leaves the engine's generator where it was (80 looked at): 80 broke it, the first: set 4 fifteen 0
+  FAIL (section 5): set 4: telling a season takes no draw from Math.random (80 looked at): 80 broke it, the first: set 4 fifteen 0: 10576 draws with the games told, 9797 without
+  FAIL (section 5): set 4: telling a season moves none of its 272 winners (80 looked at): 80 broke it, the first: set 4 fifteen 0
+  FAIL (section 5): set 4: telling a season moves none of its 32 records (80 looked at): 80 broke it, the first: set 4 fifteen 0
+  FAIL (section 5): set 4: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 4 fifteen 0
+set 4: 80 seasons, 22800 games told in 4900 ms; points a team game 22.61 (free 22.75); losers on 15 or fewer 0.4363 (free 0.4257); shutouts 0.0142 (free 0.0139); sides on 40 or more 0.0519 (free 0.0530); swapped 0.00053; the AFC champion won 47 of 80 title games
+  FAIL (section 5): src/lib/gmGameDay.ts holds no Math.random
+
+MEASURED over seed sets 0, 1, 2, 3, 4 (114000 games):
+  points: told 22.6063 to 22.6765, free 22.6268 to 22.7455, told less free -0.1380 to 0.0497 (band 0.25 either side)
+  losers15: told 0.4290 to 0.4366, free 0.4257 to 0.4341, told less free -0.0050 to 0.0106 (band 0.02 either side)
+  shutouts: told 0.0132 to 0.0152, free 0.0129 to 0.0142, told less free -0.0010 to 0.0015 (band 0.005 either side)
+  forty: told 0.0518 to 0.0524, free 0.0516 to 0.0530, told less free -0.0011 to 0.0008 (band 0.006 either side)
+  swapped share 0.0004 to 0.0006 (band: under 0.002)
+  tries a game by decile of the home chance (games, mean tries, swapped): 0: 1, 1.00, 0 | 0.1: 681, 1.83, 1 | 0.2: 5474, 1.88, 1 | 0.3: 11700, 1.95, 0 | 0.4: 19012, 1.99, 0 | 0.5: 24329, 2.00, 0 | 0.6: 25538, 2.04, 1 | 0.7: 19149, 2.04, 9 | 0.8: 7844, 2.12, 36 | 0.9: 272, 2.05, 6
+  shapes of 114000 stories: trade 0.299, wire 0.221, rout 0.171, late 0.168, comeback 0.141
+  the AFC champion's share of title games 0.4750 to 0.5875 a set (a level title game is 0.582 by the engine's arithmetic; printed, never asserted)
+
+control random: RED AT THE NAMED CHECK (section 5); its named checks red: 2 of 2 ("holds no Math.random", "takes no draw from Math.random"); sections red: 5
+simGmGameDay: 169 checks, 26 failed (control random)

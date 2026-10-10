@@ -1,0 +1,18 @@
+A	.github/workflows/lane-remote-check.yml
+A	.rc/request.txt
+A	.rc/run.sh
+A	.rc/x/dashscan.mjs
+A	docs/audits/ROUND-1224-NOTES.md
+A	scripts/data/gmBracketFixture.json
+A	scripts/lib/gmGameDayFleet.mjs
+A	scripts/recordGmBracketFixture.mjs
+A	scripts/simGmGameDay.mjs
+A	src/data/gmBrackets/nfl.ts
+A	src/lib/gameLaws/nflGameDay.ts
+A	src/lib/gmBracket.test.ts
+A	src/lib/gmBracket.ts
+A	src/lib/gmGameDay.test.ts
+A	src/lib/gmGameDay.ts
+A	src/lib/gmGameScore.test.ts
+A	src/lib/gmGameScore.ts
+EVERY-CHANGED-FILE-IS-NEW

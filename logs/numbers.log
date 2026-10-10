@@ -1,0 +1,5 @@
+Number display: 13/13 actual helper/component and baseline cases passed.
+Retained complete comparisons: 43, including input and storage holds.
+Copied controls: 28/28 actual mapped AssertionErrors with unchanged independent baseline.
+Source and fixture holds: 3098; complete reports, actual transforms, source copies and hashes retained.
+Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes

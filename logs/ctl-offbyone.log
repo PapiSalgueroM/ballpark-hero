@@ -1,0 +1,29 @@
+bundled in 108 ms; seed sets 0, 1, 2, 3, 4; 40 seasons a league kind a set; CONTROL offbyone
+  FAIL (section 2): set 0: every told final has a story (22800 looked at): 1075 broke it, the first: set 0 fifteen 0 2026|w1|PIT|CLE|31-29: no story for 28-26
+  FAIL (section 2): set 0: every story adds up by the independent checker (21725 looked at): 20905 broke it, the first: set 0 fifteen 0 2026|w1|IND|JAX|29-42 (14-19): a fg worth 4
+set 0: 80 seasons, 22800 games told in 6847 ms; points a team game 22.65 (free 22.64); losers on 15 or fewer 0.4301 (free 0.4297); shutouts 0.0137 (free 0.0148); sides on 40 or more 0.0523 (free 0.0517); swapped 0.00039; the AFC champion won 38 of 80 title games
+  FAIL (section 2): set 1: every told final has a story (22800 looked at): 1045 broke it, the first: set 1 fifteen 0 2026|w1|MIN|CHI|19-33: no story for 20-21
+  FAIL (section 2): set 1: every story adds up by the independent checker (21755 looked at): 20900 broke it, the first: set 1 fifteen 0 2026|w1|BAL|CIN|30-43 (16-27): a fg worth 4
+set 1: 80 seasons, 22800 games told in 7108 ms; points a team game 22.74 (free 22.73); losers on 15 or fewer 0.4232 (free 0.4303); shutouts 0.0129 (free 0.0156); sides on 40 or more 0.0531 (free 0.0535); swapped 0.00061; the AFC champion won 46 of 80 title games
+  FAIL (section 2): set 2: every told final has a story (22800 looked at): 1032 broke it, the first: set 2 fifteen 0 2026|w1|TB|ATL|19-22: no story for 13-14
+  FAIL (section 2): set 2: every story adds up by the independent checker (21768 looked at): 20949 broke it, the first: set 2 fifteen 0 2026|w1|KC|LV|33-25 (31-16): a fg worth 4
+set 2: 80 seasons, 22800 games told in 6042 ms; points a team game 22.68 (free 22.61); losers on 15 or fewer 0.4297 (free 0.4351); shutouts 0.0150 (free 0.0137); sides on 40 or more 0.0538 (free 0.0505); swapped 0.00066; the AFC champion won 47 of 80 title games
+  FAIL (section 2): set 3: every told final has a story (22800 looked at): 1017 broke it, the first: set 3 fifteen 0 2026|w1|PIT|BAL|33-30: no story for 17-16
+  FAIL (section 2): set 3: every story adds up by the independent checker (21783 looked at): 20989 broke it, the first: set 3 fifteen 0 2026|w1|TB|CAR|16-20 (17-34): a fg worth 4
+set 3: 80 seasons, 22800 games told in 6080 ms; points a team game 22.63 (free 22.73); losers on 15 or fewer 0.4336 (free 0.4263); shutouts 0.0137 (free 0.0146); sides on 40 or more 0.0518 (free 0.0523); swapped 0.00061; the AFC champion won 43 of 80 title games
+  FAIL (section 2): set 4: every told final has a story (22800 looked at): 1059 broke it, the first: set 4 fifteen 0 2026|w2|DEN|LV|23-32: no story for 26-27
+  FAIL (section 2): set 4: every story adds up by the independent checker (21741 looked at): 20914 broke it, the first: set 4 fifteen 0 2026|w1|LAC|KC|28-37 (27-34): a fg worth 4
+set 4: 80 seasons, 22800 games told in 6977 ms; points a team game 22.63 (free 22.73); losers on 15 or fewer 0.4317 (free 0.4244); shutouts 0.0150 (free 0.0139); sides on 40 or more 0.0510 (free 0.0520); swapped 0.00048; the AFC champion won 47 of 80 title games
+
+MEASURED over seed sets 0, 1, 2, 3, 4 (114000 games):
+  points: told 22.6273 to 22.7401, free 22.6099 to 22.7328, told less free -0.1054 to 0.0685 (band 0.25 either side)
+  losers15: told 0.4232 to 0.4336, free 0.4244 to 0.4351, told less free -0.0071 to 0.0074 (band 0.02 either side)
+  shutouts: told 0.0129 to 0.0150, free 0.0137 to 0.0156, told less free -0.0028 to 0.0013 (band 0.005 either side)
+  forty: told 0.0510 to 0.0538, free 0.0505 to 0.0535, told less free -0.0010 to 0.0033 (band 0.006 either side)
+  swapped share 0.0004 to 0.0007 (band: under 0.002)
+  tries a game by decile of the home chance (games, mean tries, swapped): 0: 0, none, 0 | 0.1: 633, 1.93, 3 | 0.2: 5384, 1.94, 2 | 0.3: 11548, 1.98, 0 | 0.4: 19174, 1.99, 0 | 0.5: 24477, 2.02, 0 | 0.6: 25576, 2.02, 0 | 0.7: 19186, 2.03, 9 | 0.8: 7775, 2.14, 45 | 0.9: 247, 1.97, 4
+  shapes of 108772 stories: trade 0.296, wire 0.220, rout 0.178, late 0.168, comeback 0.139
+  the AFC champion's share of title games 0.4750 to 0.5875 a set (a level title game is 0.582 by the engine's arithmetic; printed, never asserted)
+
+control offbyone: RED AT THE NAMED CHECK (section 2); its named checks red: 1 of 1 ("adds up by the independent checker"); sections red: 2
+simGmGameDay: 169 checks, 10 failed (control offbyone)
