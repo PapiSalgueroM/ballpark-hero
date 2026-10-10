@@ -136,9 +136,17 @@ holds this one to a real save.
 
 - Redraw the saved page for `/whats-new` (`simPrerender` is red on this branch for exactly that:
   the saved page does not carry the new entry).
-- `sweepWeight`: thirteen rows are 1K to 2K over budget because the entry chunk every page loads
-  grew by the keeper and the card. The measured sizes are in the closing report; the budgets are
-  yours.
+- `sweepWeight`: this round adds 1.5K to 1.6K of gzipped JavaScript to the entry every page
+  loads (the keeper and the card; the swap must run before React mounts, so it cannot be a lazy
+  chunk as it stands). On origin/main `09df145ab` the sweep is green with every row exactly on
+  its budget, so thirteen rows cross by 1K or 2K: `/` 240.2 to 241.7 (budget 240),
+  `/club-manager` 577.6 to 579.2 (578), `/soccer-career` 786.3 to 787.9 (786), `/stadium-tycoon`
+  297.3 to 298.8 (297), `/wonderkid-factory` 271.1 to 272.6 (271), `/minefield` 289.0 to 290.5
+  (289), `/footle` 345.1 to 346.6 (345), `/nfl-my-career` 468.1 to 469.6 (468), `/front-office`
+  359.3 to 360.9 (359), `/soccer-grid` 313.1 to 314.7 (313), `/manager-hot-seat` 595.5 to 597.0
+  (596), `/deadline-day` 605.6 to 607.1 (606), `/transfer-path` 373.6 to 375.2 (374).
+  `/leaderboard` stays inside (248.3 to 249.8 against 266). Remote checks `r1219-fin` and
+  `r1219-attr`. The budgets are yours.
 - When this round and Round 1210 are both merged, Round 1210's `simStorageWrites.mjs` section 7
   needs two rows under NOTHING_HELD (measured, remote check `r1219-r1210`): the
   `brokenSaveRecovery.ts` entry's `write:moveAside` becomes `write:copyAside`, and a new entry
