@@ -1,0 +1,12 @@
+#!serial
+merge: echo "src/pages/WhatsNew.tsx merge=union" >> .git/info/attributes && git fetch -q origin r1218-cm-var-true r1225-cm-fixtures-bind r1216-own-goal-motion && for b in r1218-cm-var-true r1225-cm-fixtures-bind r1216-own-goal-motion; do git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/$b || { git status --short | grep -v "^[AM] " | head -20; exit 1; }; done; git log --oneline -1
+merged-tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+merged-book: node scripts/simCmLeagueBook.mjs
+merged-realfix: node scripts/simCmRealFixtures.mjs
+merged-realfix-base: node .rc/x/patchRealFixtures.mjs && CM_FIXTURE_BASE=980654fa node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
+merged-cmvar: node scripts/simCmVar.mjs
+merged-dailydeals: node scripts/simDailyDeals.mjs
+merged-owngoals: node scripts/simCmOwnGoals.mjs
+merged-livematch: node scripts/simLiveMatch.mjs
+merged-savesize: node scripts/simClubManagerSaveSize.mjs
+merged-anchors: node scripts/simHarnessAnchors.mjs
