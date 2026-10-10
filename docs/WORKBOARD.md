@@ -1,3 +1,10 @@
+## Codex 1193-1194 IN PROGRESS, 2026-10-09
+
+Soccer Career only: Compare seasons and Availability inside Ratings.
+Independent AR branch codex/career-season-history at fa24b3848d99e29367486489b081a483dc544206.
+Design contract: docs/ROUND1193-1194.md. Remote-only verification pending.
+No engine/save changes or award results. F owns release integration and publication.
+
 ## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
 
 Claude lane (session F). main 8c5ce655, deployment 468b616a-f984-4af9-959d-12f584834eaa, entry index-DNvMbg1w.js (was index-DBSXBErW.js, Release AQ,

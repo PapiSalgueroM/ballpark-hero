@@ -1,0 +1,171 @@
+name: Soccer Career saved season history
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-season-history.yml
+      - src/pages/SoccerCareer.tsx
+      - src/components/soccer-career/SeasonRatings.tsx
+      - src/components/soccer-career/SoccerSeasonHistory.tsx
+      - src/lib/soccerCareerSeasonHistory.ts
+      - src/lib/soccerCareerSeasonHistory.test.ts
+      - src/lib/careerSeasonRatings.ts
+      - src/test/careerSeasonRatings.test.tsx
+      - src/test/soccerSeasonHistoryUi.test.tsx
+      - scripts/qa/seasonHistory1193.mjs
+      - scripts/qa/playSeasonHistory1193.mjs
+      - scripts/simSoccerSeasonHistory.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: read
+concurrency:
+  group: career-season-history-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEASON_HISTORY_ARTIFACTS: career-season-history-artifacts/outcomes
+      SHOTS: career-season-history-artifacts/native
+      FREE_KICK_FONT_CACHE: career-season-history-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare exact-head remote checks
+        run: |
+          mkdir -p career-season-history-artifacts
+          git rev-parse HEAD > career-season-history-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-season-history-artifacts/source-tree.txt
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          test "$(git rev-parse fa24b3848d99e29367486489b081a483dc544206^{tree})" = d9175fa74fc5784ba6acfd1a62f4592cb106f22f
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee career-season-history-artifacts/fonts.log
+      - name: Actual app types then production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-season-history-artifacts/types.log
+          npm run build 2>&1 | tee career-season-history-artifacts/build.log
+      - name: Focused units and complete unchanged AR outcome proof
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerSeasonHistory.test.ts src/test/soccerSeasonHistoryUi.test.tsx src/test/careerSeasonRatings.test.tsx src/test/careerStory.test.tsx src/test/seasonCentreWords.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-season-history-artifacts/focused-unit.json 2>&1 | tee career-season-history-artifacts/focused-unit.log || failed=1
+          SEASON_HISTORY_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs 2>&1 | tee career-season-history-artifacts/simSoccerSeasonHistory.log || failed=1
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHarnessAnchors.mjs 2>&1 | tee career-season-history-artifacts/simHarnessAnchors.log || failed=1
+          node --input-type=module - <<'JS' || failed=1
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const root='career-season-history-artifacts',read=file=>JSON.parse(fs.readFileSync(root+'/'+file,'utf8'));
+          const units=read('focused-unit.json'),report=read('outcomes/healthy/report.json'),controls=read('outcomes/controls.json');
+          assert.equal(units.success,true);assert.equal(units.numFailedTests,0);
+          for(const [file,count]of[['/src/lib/soccerCareerSeasonHistory.test.ts',73],['/src/test/soccerSeasonHistoryUi.test.tsx',19]]){const suite=units.testResults.find(row=>row.name.replaceAll('\\','/').endsWith(file));assert(suite,file);assert.equal(suite.assertionResults.length,count);assert(suite.assertionResults.every(row=>row.status==='passed'));}
+          const head=fs.readFileSync(root+'/source-head.txt','utf8').trim(),tree=fs.readFileSync(root+'/source-tree.txt','utf8').trim();
+          assert.equal(report.head,head);assert.equal(report.tree,tree);assert.equal(report.baseHead,'fa24b3848d99e29367486489b081a483dc544206');assert.equal(report.baseTree,'d9175fa74fc5784ba6acfd1a62f4592cb106f22f');
+          assert.equal(report.status,'passed');assert.deepEqual(report.failed,[]);assert.equal(report.cases.length,9);assert(report.cases.every(row=>row.passed));assert.equal(report.sourceHeld,true);assert.deepEqual(report.sourceBefore,report.sourceAfter);
+          for(const [key,count]of Object.entries({enginePairs:24,campaignPairs:192,readerPairs:90,historyRows:84,comparisons:12,availabilityRows:90}))assert.equal(report.counts[key],count,key);
+          assert(report.originalLoaded.length>0);assert(report.originalLoaded.every(row=>!row.changed&&row.beforeSha256===row.compiledSha256));
+          assert.equal(controls.head,head);assert.equal(controls.tree,tree);assert.equal(controls.sourceHeld,true);assert.equal(controls.controls.length,8);assert(controls.controls.every(row=>row.effective&&row.failed.length>0&&row.receipts.length===1));
+          console.log('Receipt:73 reader cases,19 UI cases,9 outcome groups,24 full AR season/RNG pairs,192 full campaign/RNG pairs,8 effective loaded controls.');
+          JS
+          exit "$failed"
+      - name: Effective copied product scroll and focus controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module - <<'JS' 2>&1 | tee career-season-history-artifacts/ui-controls.log
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          import {createHash} from 'node:crypto';
+          import {spawnSync} from 'node:child_process';
+          const root=process.cwd(),out=path.join(root,'career-season-history-artifacts'),file=path.join(root,'src/components/soccer-career/SeasonRatings.tsx'),raw=fs.readFileSync(file),source=raw.toString('utf8').replaceAll('\r\n','\n'),sha=value=>createHash('sha256').update(value).digest('hex');
+          const faults=[
+            {name:'scroll',from:'if (scroll.current) scroll.current.scrollTop = offsets.current[mode];',to:'if (scroll.current) scroll.current.scrollTop = mode === "ratings" ? 0 : offsets.current[mode];'},
+            {name:'focus',from:'const target = returnFocus.current ? launchers[returnFocus.current] : mode === "ratings" ? title.current : heading.current;',to:'const target = mode === "ratings" && returnFocus.current === "compare" ? title.current : returnFocus.current ? launchers[returnFocus.current] : mode === "ratings" ? title.current : heading.current;'},
+          ],receipts=[];
+          const tempRoot=path.join(root,'.sim-control');fs.mkdirSync(tempRoot,{recursive:true});
+          for(const fault of faults){
+            assert.equal(source.split(fault.from).length-1,1,fault.name+': unique live product anchor');const faulty=source.replace(fault.from,fault.to);assert.notEqual(sha(faulty),sha(source));const temp=fs.mkdtempSync(path.join(tempRoot,'season-history-'+fault.name+'-'));assert.equal(path.dirname(temp),tempRoot);
+            try{
+              const copied=path.join(temp,'SeasonRatings.tsx');fs.writeFileSync(copied,faulty);fs.symlinkSync(path.join(root,'src/components/soccer-career/SoccerSeasonHistory.tsx'),path.join(temp,'SoccerSeasonHistory.tsx'));
+              const output=path.join(out,'ui-control-'+fault.name+'.json'),log=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run','src/test/soccerSeasonHistoryUi.test.tsx','--maxWorkers=1','--minWorkers=1','--reporter=json','--outputFile='+output],{cwd:root,env:{...process.env,NO_DOUBLE_SWAP:JSON.stringify({'@/components/soccer-career/SeasonRatings':copied})},encoding:'utf8',maxBuffer:8*1024*1024});
+              process.stdout.write(log.stdout);process.stderr.write(log.stderr);assert.equal(log.status,1,'Copied real product must fail an assertion');
+              const result=JSON.parse(fs.readFileSync(output,'utf8')),assertions=result.testResults.flatMap(row=>row.assertionResults),failed=assertions.filter(row=>row.status==='failed');
+              assert.equal(result.numTotalTests,19);assert.equal(result.numFailedTests,1);assert.equal(assertions.length,19);assert.deepEqual(failed.map(row=>row.fullName),['Soccer Career season history UI restores Ratings scroll and original launcher focus after comparison']);assert.equal(assertions.filter(row=>row.status==='passed').length,18);assert(failed[0].failureMessages.some(message=>/AssertionError|expected/.test(message)),'Assertion outcome, not an import error');
+              receipts.push({name:fault.name,effective:true,from:fault.from,to:fault.to,originalSha256:sha(source),copiedSha256:sha(faulty),rawHeldSha256:sha(raw),failed:failed.map(row=>row.fullName),unrelatedPassed:18});fs.writeFileSync(path.join(out,'ui-control-'+fault.name+'-source.tsx'),faulty);assert.deepEqual(fs.readFileSync(file),raw);console.log('CONTROL FIRED(UI '+fault.name+'): exact restoration assertion only;18 unrelated cases passed.');
+            }finally{assert.equal(path.dirname(path.resolve(temp)),path.resolve(tempRoot));assert(path.basename(temp).startsWith('season-history-'));fs.rmSync(temp,{recursive:true,force:true});assert.deepEqual(fs.readFileSync(file),raw);}
+          }
+          fs.writeFileSync(path.join(out,'ui-controls-receipt.json'),JSON.stringify({receipts,sourceHeld:true},null,2));
+          JS
+      - name: Actual native saved season history journeys
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSeasonHistory1193.mjs 2>&1 | tee career-season-history-artifacts/playSeasonHistory1193.log
+          node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const root='career-season-history-artifacts',report=JSON.parse(fs.readFileSync(root+'/native/report.json','utf8'));
+          assert.equal(report.head,fs.readFileSync(root+'/source-head.txt','utf8').trim());assert.equal(report.tree,fs.readFileSync(root+'/source-tree.txt','utf8').trim());assert.equal(report.cases.length,9);assert(report.cases.every(row=>row.ok));assert.equal(report.failed,0);assert(report.checks>0);
+          assert.equal(report.controls.length,4);assert(report.controls.every(row=>row.changed&&row.restored&&row.failed.length>0));assert.equal(report.forwardedExternalRequests,0);assert(report.fontManifestEntries>0);assert.deepEqual(report.sourceBefore,report.sourceAfter);
+          assert(report.cases.every(row=>row.layouts.length===6&&row.readings.length>0&&row.readings.every(read=>read.expectedSha256===read.actualSha256&&read.drawCount===0)&&row.reloads.length===2&&row.reloads.every(reload=>reload.equal)&&row.restorations.length===6&&row.selections.length===2));
+          console.log('Receipt:'+report.checks+' actual native checks,9 journeys,54 readable captures,4 copied detectors,all complete career bytes and reading draws held.');
+          JS
+      - name: Upload early proof and browser evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-season-history-early-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-season-history-artifacts/
+          retention-days: 5
+      - name: Existing Ratings Stats Story and Season Centre outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerSeasonRatings simCareerPositionRatings simCareerRecordedStats simCareerStory simSeasonCentreAgreement simSeasonCentreNeutral simSeasonCentreTable simSoccerSeasonCompetitions simNoInventedQuotes simCareerSeasonTruth; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-season-history-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: All fifteen built-output readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-season-history-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Source and exact head held
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows 2>&1 | tee career-season-history-artifacts/source-held.log
+          test "$(git rev-parse HEAD)" = "$(cat career-season-history-artifacts/source-head.txt)"
+          test "$(git rev-parse HEAD^{tree})" = "$(cat career-season-history-artifacts/source-tree.txt)"
+          du -sb career-season-history-artifacts | tee career-season-history-artifacts/artifact-size.log
+          test "$(du -sb career-season-history-artifacts | cut -f1)" -lt 500000000
+      - name: Upload complete exact-head evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-season-history-final-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-season-history-artifacts/
+          retention-days: 5
