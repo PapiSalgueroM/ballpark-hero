@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+old: git worktree add -f /tmp/base 54e3820a >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; W="$PWD"; cd /tmp/base && git rev-parse --short HEAD && node "$W/.rc/x/scMake.mjs" old /tmp/sc-old.json
+new: node .rc/x/scMake.mjs new /tmp/sc-new.json
+squad: node .rc/x/scSquad.mjs /tmp/sc-old.json /tmp/sc-new.json

@@ -1,0 +1,26 @@
+squad-new-role-plan-390 save :: {"club":"Lyon","reducedRole":{"club":"Lyon","year":2039},"lastSeason":{"year":2038,"club":"Lyon","rating":7.4,"apps":31,"leagueApps":25}}
+squad-new-role-plan-390 tile :: ["👥 Squad Your teammates The plan: Starter most weeks On our ratings 1st of 6 forwards"]
+squad-new-role-plan-390 role note on home :: ["Your role next season You accepted a smaller role at Lyon for 2039/40: 4 fewer planned league games. Selection limits, injuries and bans still apply. It lasts one recorded season. A move or loan clears the plan."]
+squad-new-role-plan-390 ERROR :: "page.waitForSelector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locator('[data-squad-screen=\"home\"]') to be visible\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/scSquad.mjs:41:16"
+squad-new-role-plan-390 page errors :: []
+squad-new-role-plan-1280 save :: {"club":"Lyon","reducedRole":{"club":"Lyon","year":2039},"lastSeason":{"year":2038,"club":"Lyon","rating":7.4,"apps":31,"leagueApps":25}}
+squad-new-role-plan-1280 tile :: ["👥 Squad Your teammates The plan: Starter most weeks On our ratings 1st of 6 forwards"]
+squad-new-role-plan-1280 role note on home :: ["Your role next season You accepted a smaller role at Lyon for 2039/40: 4 fewer planned league games. Selection limits, injuries and bans still apply. It lasts one recorded season. A move or loan clears the plan."]
+squad-new-role-plan-1280 ERROR :: "page.waitForSelector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locator('[data-squad-screen=\"home\"]') to be visible\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/scSquad.mjs:41:16"
+squad-new-role-plan-1280 page errors :: []
+squad-new-gk-390 save :: {"club":"Bayern Munich","reducedRole":null,"lastSeason":{"year":2030,"club":"Bayern Munich","rating":7.9,"apps":50,"leagueApps":34}}
+squad-new-gk-390 tile :: ["👥 Squad Your teammates The plan: First name on the team sheet On our ratings 1st of 4 goalkeepers"]
+squad-new-gk-390 role note on home :: []
+squad-new-gk-390 ERROR :: "page.waitForSelector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locator('[data-squad-screen=\"home\"]') to be visible\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/scSquad.mjs:41:16"
+squad-new-gk-390 page errors :: []
+squad-new-home-390 save :: {"club":"Bayern Munich","reducedRole":null,"lastSeason":{"year":2039,"club":"Bayern Munich","rating":7.3,"apps":42,"leagueApps":27}}
+squad-new-home-390 tile :: ["👥 Squad Your teammates The plan: Starter most weeks On our ratings 4th of 6 forwards"]
+squad-new-home-390 role note on home :: []
+squad-new-home-390 ERROR :: "page.waitForSelector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locator('[data-squad-screen=\"home\"]') to be visible\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/scSquad.mjs:41:16"
+squad-new-home-390 page errors :: []
+squad-old-home-390 save :: {"club":"Liverpool","reducedRole":null,"lastSeason":{"year":2033,"club":"Liverpool","rating":8.4,"apps":50,"leagueApps":33}}
+squad-old-home-390 tile :: ["👥 Squad Your teammates The plan: First name on the team sheet On our ratings 1st of 6 forwards"]
+squad-old-home-390 role note on home :: []
+squad-old-home-390 ERROR :: "page.waitForSelector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locator('[data-squad-screen=\"home\"]') to be visible\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/scSquad.mjs:41:16"
+squad-old-home-390 page errors :: []
+scSquad: done
