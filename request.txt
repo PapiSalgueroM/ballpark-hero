@@ -1,0 +1,7 @@
+# Release AU proof, Round 1225's walks: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+walk: mkdir -p .tmp-fx/font-cache && export FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; ENGINES=chromium TZ=UTC node scripts/playCmLeagueFixtures.mjs > /tmp/walk.log 2>&1; s=$?; cp /tmp/walk.log "$RC_OUT/walk.log"; grep -E "^FAIL" /tmp/walk.log | head -14 | cut -c1-300; tail -1 /tmp/walk.log | cut -c1-460; exit $s
+cmfix-premier-and-walk: mkdir -p .tmp-fx/font-cache && export FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" && node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only > /tmp/fonts.log 2>&1; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"; CM_FIXTURE_BASE=980654facb2d41a6c9ddc029c43710178b9d49b8 node scripts/simCmRealFixtures.mjs > /tmp/b.log 2>&1; s1=$?; tail -1 /tmp/b.log | cut -c1-200; node scripts/playCmRealFixtures.mjs > /tmp/plwalk.log 2>&1; s2=$?; cp /tmp/plwalk.log "$RC_OUT/walk-premier.log"; grep -E "^FAIL|AssertionError|Error:" /tmp/plwalk.log | head -6 | cut -c1-260; tail -1 /tmp/plwalk.log | cut -c1-260; echo "RESULT sim=$s1 walk=$s2"; [ $s1 -eq 0 ] && [ $s2 -eq 0 ]
+dataondemand: node scripts/simCmDataOnDemand.mjs 2>&1 | tail -1 | cut -c1-260; exit ${PIPESTATUS[0]}

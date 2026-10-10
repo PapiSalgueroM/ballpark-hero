@@ -1,0 +1,4 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=0 93s | playCmLeagueFixtures: green. 6 journeys (EFL Championship, La Liga, Bundesliga at 390 and 1280), one with its list three seconds late and 7 of the review's (two takeovers
+cmfix-premier-and-walk exit=0 30s | RESULT sim=0 walk=0
+dataondemand exit=0 9s | simCmDataOnDemand: green. No page downloads data it never reads, and a past season brings its own.
