@@ -1,0 +1,1 @@
+stale: git worktree add -q /tmp/base1229s 24f57a98 && PROBE_BASE=/tmp/base1229s node .rc/x/probeStale1229.mjs

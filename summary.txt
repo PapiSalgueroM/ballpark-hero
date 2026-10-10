@@ -1,0 +1,1 @@
+stale exit=0 1s | probeStale1229: done (a measurement, never a gate)
