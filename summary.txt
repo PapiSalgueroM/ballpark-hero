@@ -1,0 +1,21 @@
+tsc exit=0 55s | 
+ledger exit=0 0s | simCmVarLedger: all 451 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+l-owedlive exit=1 0s | simCmVarLedger control owedlive: FIRED (CM_VAR_LIVE is true while the rates ledger still owes: recent-seasons)
+l-names exit=1 0s | simCmVarLedger control names: FIRED (the help would name Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Li
+l-onesource exit=1 0s | simCmVarLedger control onesource: FIRED (league:seriea says yes and stands on fewer than two publishers)
+l-handedit exit=1 0s | simCmVarLedger control handedit: FIRED (src/data/clubManagerVarRates.ts is not what the generator writes (a hand edit, or a ledger changed without the generator))
+l-receipt exit=1 0s | simCmVarLedger control receipt: FIRED (scripts/data/cmVarRates.receipt.json does not carry the hash of scripts/data/cmVarRates.json)
+simCmVar exit=0 66s | simCmVar normal: actual review outcomes and full prior baseline passed.
+cmvar-everywhere exit=0 2s | simCmVar everywhere: actual review outcomes and full prior baseline passed.
+cmvar-historic exit=0 4s | simCmVar historic: actual review outcomes and full prior baseline passed.
+varlive exit=0 4s |    Duration  3.10s (transform 1.17s, setup 53ms, collect 1.46s, tests 900ms, environment 299ms, prepare 133ms)
+varlive-on exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+varscreen exit=0 25s |    Duration  24.56s (transform 1.51s, setup 48ms, collect 1.92s, tests 21.91s, environment 279ms, prepare 127ms)
+save exit=0 4s |    Duration  3.21s (transform 1.48s, setup 49ms, collect 1.88s, tests 582ms, environment 283ms, prepare 68ms)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 34s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simNoInventedQuotes exit=0 17s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simDailyDeals exit=0 2s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
