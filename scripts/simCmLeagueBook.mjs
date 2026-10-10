@@ -33,7 +33,10 @@
  *            deviations, forwards above midfielders above defenders; (ii) the point of the round, paired
  *            on the same seasons of the same saves: the forwards and wingers in the top ten of the Goals
  *            board, book against old race, rise by at least PURPOSE_FLOOR; (iii) assists and own goals
- *            inside four binomial standard deviations of the rule's share of the run's own counts
+ *            inside four binomial standard deviations of the rule's share of the run's own counts; (iv)
+ *            every goal is its own roll: of the matches a club with an eleven scored two or more in
+ *            against another club, how often every goal went to one man, against what the harness's own
+ *            table says for that eleven and that score, inside four standard deviations
  *   oldsave  four saves with no book (the two committed fixtures, loaded through loadCareer, and two
  *            written in the run twenty entries into a season) finish their season on the candidate
  *            exactly as on the reference engines, entry by entry, with the same board and summary, and
@@ -68,7 +71,9 @@
  *   flat          every outfield man weighs the same                 -> shapes
  *   penassist     a penalty or a free kick is paid an assist         -> shapes
  *   noog          no goal is ever an own goal                        -> shapes
- *   redeal        loadCareer opens a book for a save that has none   -> oldsave
+ *   keyindex      the goal's own index is dropped from the deal key, so every goal of a side in one
+ *                 match is the same roll: one man's brace every time  -> shapes
+ *   redeal       loadCareer opens a book for a save that has none   -> oldsave
  *   seasonstamp   the season's number is put back into the stamp     -> doors
  *   strip         the Hot Seat's strip of the book is taken out      -> dailies
  *   stripdeadline Deadline Day's strip is taken out                  -> dailies
@@ -134,6 +139,7 @@ const CONTROLS = {
   flat: { patch: [{ file: BOOK, from: SCORER_PICK, to: ': pickWeighted(outfield, () => 1, scorerRoll);' }], red: 'shapes' },
   penassist: { patch: [{ file: BOOK, from: "assistFrom(rng, kind === 'open' ? scorer : null, outfield, rules);", to: "assistFrom(rng, kind === 'og' ? null : scorer, outfield, rules);" }], red: 'shapes' },
   noog: { patch: [{ file: BOOK, from: ": ownGoalTagged(`${key}|${i}|og`, rules.ownGoalOneIn) ? 'og' : 'open';", to: ": 'open';" }], red: 'shapes' },
+  keyindex: { patch: [{ file: BOOK, from: '    const rng = keyedRng(`${key}|${i}`);', to: '    const rng = keyedRng(key);' }], red: 'shapes' },
   redeal: { patch: [{ file: ENGINE, from: '    ensureRoles(parsed);', to: '    ensureRoles(parsed);\n    if (!parsed.leagueBook) openLeagueBook(parsed);' }], red: 'oldsave' },
   seasonstamp: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${state.season}|${leagueId}|${bookSalt(state.leagueClubs)}`;' }], red: 'doors' },
   strip: { patch: [{ file: HOT, from: '  delete s.leagueBook;', to: '' }], red: 'dailies' },
@@ -234,6 +240,8 @@ async function engine(label, root, patches = []) {
  */
 /** The gate of section shapes (ii): see MEASURED above. */
 const PURPOSE_FLOOR = 1.5;
+/** Section shapes (iv) is judged on at least this many matches: see MEASURED above. */
+const MULTI_FLOOR = 400;
 
 /* ---------- the seeded stream, counted ---------- */
 function seeded(seed) {
@@ -287,13 +295,28 @@ const mean = xs => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
 const fmt = (x, d = 1) => (Number.isFinite(x) ? x.toFixed(d) : 'n/a');
 
 /** The taker of an eleven as the harness reads the rule: the heaviest outfield man, the name as the tie break. */
-function takerLine(xi) {
+function takerMan(xi) {
   let best = null;
   for (const m of xi) {
     if (m.p === 'GK') continue;
     if (!best || W(m) > W(best) || (W(m) === W(best) && m.n < best.n)) best = m;
   }
-  return best ? lineOf(best.p) : null;
+  return best;
+}
+const takerLine = xi => { const t = takerMan(xi); return t ? lineOf(t.p) : null; };
+
+/**
+ * How often ALL of `k` goals of this eleven in one match go to one man, when every goal is its own roll
+ * (taker rule on): a man takes a goal with the open play share of his weight, plus the set piece share
+ * when he is the taker, so k goals are all his with that chance to the power k, summed over the men.
+ */
+function allToOneMan(xi, k) {
+  const outfield = xi.filter(m => m.p !== 'GK');
+  const total = outfield.reduce((s, m) => s + W(m), 0);
+  const taker = takerMan(xi);
+  let p = 0;
+  for (const m of outfield) p += Math.pow(P_OPEN * W(m) / total + (m === taker ? P_SET : 0), k);
+  return p;
 }
 
 /** What one goal of this eleven is expected to be, by line of the man credited (taker rule on). */
@@ -361,6 +384,9 @@ const newAcc = () => ({
   aiObs: { ATT: 0, MID: 0, DEF: 0 }, aiExp: { ATT: 0, MID: 0, DEF: 0 }, aiGoals: 0,
   seasons: [], shortLines: 0, myLeagueMatches: 0, entries: 0, reviews: 0, xiRows: 0, xiAssists: 0, xiOg: 0,
   race: { ATT: 0, MID: 0, DEF: 0, GK: 0, rivalGoals: 0 }, thin: {},
+  /* Matches a club with an eleven scored two or more in against another club: how many, in how many every
+     goal went to one man, what the harness's own table expects of that, and the variance of that sum. */
+  multi: { n: 0, one: 0, exp: 0, vr: 0 },
 });
 const played = r => r.w + r.d + r.l;
 const rivalsOf = s => s.leagueClubs.filter(c => c !== s.clubName);
@@ -455,6 +481,8 @@ function watcher(mod, label, acc, opts = {}) {
         acc.u += entry.u - prior.u;
         let roster = null;
         const got = { ATT: 0, MID: 0, DEF: 0, GK: 0 };
+        /* The most goals one row gained in this entry. */
+        let mostOnOneRow = 0;
         for (const [key, row] of Object.entries(entry.m)) {
           const old = prior.m[key] ?? [0, 0, 0, 0];
           if (row[0] === old[0] && row[1] === old[1] && row[2] === old[2]) continue;
@@ -468,6 +496,7 @@ function watcher(mod, label, acc, opts = {}) {
           /* ... and he was not one of mine when it was written. */
           if (before.mine.has(name) && mineNow.has(name)) fail('names', `${label} ${where}: ${name} is in my squad and was credited for ${club}`);
           got[lineOf(pos)] += row[0] - old[0];
+          mostOnOneRow = Math.max(mostOnOneRow, row[0] - old[0]);
           acc.byLine[lineOf(pos)] += row[0] - old[0];
           acc.rowGoals += row[0] - old[0];
           acc.assists += row[1] - old[1];
@@ -478,6 +507,15 @@ function watcher(mod, label, acc, opts = {}) {
           const exp = expectedByLine(xi);
           for (const line of LINES) { acc.aiObs[line] += got[line]; acc.aiExp[line] += scored * exp[line]; }
           acc.aiGoals += scored;
+          /* Every goal is its own roll: when the club scored two or more in this ONE match, did one man take
+             them all, and how often should he by the harness's own table for this eleven and this score. */
+          if (scored >= 2 && played(now) - was.p === 1) {
+            const p = allToOneMan(xi, scored);
+            acc.multi.n += 1;
+            acc.multi.exp += p;
+            acc.multi.vr += p * (1 - p);
+            if (mostOnOneRow === scored) acc.multi.one += 1;
+          }
         }
       }
       opts.onEntry?.(after, r, season);
@@ -667,11 +705,20 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
   const zo = (acc.xiOg - P_OG * named) / Math.max(1e-9, sd(named, P_OG));
   if (Math.abs(zo) > 4) fail('shapes', `${acc.xiOg} own goals in ${named} goals of clubs with an eleven, the rule says ${fmt(P_OG * named)} (z ${fmt(zo, 2)})`);
   if (acc.rowGoals < 1500) fail('shapes', `only ${acc.rowGoals} credited goals: too few to judge a share on`);
+  /* (iv) EVERY GOAL IS ITS OWN ROLL. Of the matches a club with an eleven scored two or more in against
+     another club, the count in which one man took every goal, against the sum of what the harness's own
+     table gives each of those elevens and scores (a sum of unlike chances, so its own variance). With the
+     goal's index out of the deal key every goal of a side is the same roll and nearly all of them are. */
+  tick('shapes');
+  const zm = (acc.multi.one - acc.multi.exp) / Math.max(1e-9, Math.sqrt(acc.multi.vr));
+  if (Math.abs(zm) > 4) fail('shapes', `one man took every goal in ${acc.multi.one} of ${acc.multi.n} matches a club scored two or more in, the weight says ${fmt(acc.multi.exp)} (z ${fmt(zm, 2)})`);
+  if (acc.multi.n < MULTI_FLOOR) fail('shapes', `only ${acc.multi.n} matches with two or more goals by a club with an eleven: too few to judge on (floor ${MULTI_FLOOR})`);
   const all = acc.byLine.ATT + acc.byLine.MID + acc.byLine.DEF + acc.byLine.GK;
   const pct = x => fmt(100 * x / Math.max(1, all));
   console.log(`shapes  credited rival goals ${all}: forwards ${pct(acc.byLine.ATT)}%, midfielders ${pct(acc.byLine.MID)}%, defenders ${pct(acc.byLine.DEF)}%, keepers ${acc.byLine.GK} goals`);
   console.log(`        between other clubs (${n} goals), dealt against the weight: ${LINES.map(l => `${l} ${acc.aiObs[l]} vs ${fmt(acc.aiExp[l])} (z ${fmt((acc.aiObs[l] - acc.aiExp[l]) / Math.max(1e-9, sd(n, acc.aiExp[l] / Math.max(1, n))), 2)})`).join(', ')}`);
   console.log(`        clubs with an eleven: assists ${acc.xiAssists} on ${acc.xiRows} credited goals = ${fmt(acc.xiAssists / Math.max(1, acc.xiRows), 3)} a goal (the rule ${fmt(P_ASSIST, 3)}, z ${fmt(za, 2)}); own goals ${acc.xiOg} of ${named} = ${fmt(100 * acc.xiOg / Math.max(1, named), 2)}% (the rule ${fmt(100 * P_OG, 2)}%, z ${fmt(zo, 2)}); every club: ${acc.assists} assists on ${acc.rowGoals} credited goals = ${fmt(acc.assists / Math.max(1, acc.rowGoals), 3)} a goal`);
+  console.log(`        every goal its own roll: one man took every goal in ${acc.multi.one} of ${acc.multi.n} matches a club with an eleven scored two or more in = ${fmt(100 * acc.multi.one / Math.max(1, acc.multi.n))}% (the weight says ${fmt(100 * acc.multi.exp / Math.max(1, acc.multi.n))}%, z ${fmt(zm, 2)})`);
   console.log(`        unnamed goals ${acc.u} (club weeks with no named eleven: ${acc.noXiClubWeeks}); my league matches ${acc.myLeagueMatches}, reports whose lines did not add up to the score: ${acc.shortLines}`);
   for (const [league, t] of Object.entries(acc.thin)) {
     if (t.bare) console.log(`        no named eleven in ${league}: ${t.bare} of ${t.weeks} club weeks, ${t.clubs.size} of ${t.rivals.size} rival clubs seen (${[...t.clubs.values()].sort().slice(0, 6).join('; ')}${t.clubs.size > 6 ? '; ...' : ''})`);
