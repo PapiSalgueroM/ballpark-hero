@@ -1,0 +1,8 @@
+squad-seed1 exit=1 243s | simCareerSquad: 2191 checks, 1 failed
+squad-seed2 exit=0 252s | simCareerSquad: 2191 checks, 0 failed
+squad-seed3 exit=1 254s | simCareerSquad: 2189 checks, 1 failed
+appeal exit=0 51s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+vitest-sc exit=0 42s |    Duration  41.47s (transform 8.10s, setup 1.81s, collect 18.18s, tests 54.58s, environment 12.92s, prepare 2.92s)
+tsc exit=0 91s | 
+squad-seed4 exit=0 229s | simCareerSquad: 2187 checks, 0 failed
+squad-seed5 exit=1 247s | simCareerSquad: 2191 checks, 1 failed

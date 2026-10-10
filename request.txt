@@ -1,0 +1,8 @@
+squad-seed1: export TMPDIR=/tmp/t-sq1 TEMP=/tmp/t-sq1 TMP=/tmp/t-sq1; mkdir -p $TMPDIR; SEED=1 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs 2>&1 | grep -E "league games minus the plan|^simCareerSquad|FAIL" | head -12; exit ${PIPESTATUS[0]}
+squad-seed2: export TMPDIR=/tmp/t-sq2 TEMP=/tmp/t-sq2 TMP=/tmp/t-sq2; mkdir -p $TMPDIR; SEED=2 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs 2>&1 | grep -E "league games minus the plan|^simCareerSquad|FAIL" | head -12; exit ${PIPESTATUS[0]}
+squad-seed3: export TMPDIR=/tmp/t-sq3 TEMP=/tmp/t-sq3 TMP=/tmp/t-sq3; mkdir -p $TMPDIR; SEED=3 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs 2>&1 | grep -E "league games minus the plan|^simCareerSquad|FAIL" | head -12; exit ${PIPESTATUS[0]}
+squad-seed4: export TMPDIR=/tmp/t-sq4 TEMP=/tmp/t-sq4 TMP=/tmp/t-sq4; mkdir -p $TMPDIR; SEED=4 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs 2>&1 | grep -E "league games minus the plan|^simCareerSquad|FAIL" | head -12; exit ${PIPESTATUS[0]}
+squad-seed5: export TMPDIR=/tmp/t-sq5 TEMP=/tmp/t-sq5 TMP=/tmp/t-sq5; mkdir -p $TMPDIR; SEED=5 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs 2>&1 | grep -E "league games minus the plan|^simCareerSquad|FAIL" | head -12; exit ${PIPESTATUS[0]}
+appeal: node scripts/simManagerAppealIsolation.mjs
+vitest-sc: node_modules/.bin/vitest run src/test/soccerCareer src/test/soccerSeasonHistory src/test/soccerClub src/lib/soccerCareer src/lib/soccerClub --testTimeout=300000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
