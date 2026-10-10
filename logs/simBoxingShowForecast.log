@@ -1,0 +1,5 @@
+Boxing cash: 13/13 actual Board/component and unchanged baseline cases passed.
+Retained complete comparisons: 92, including full engine show/save and preview input holds.
+Copied controls: 27/27 actual mapped AssertionErrors with unchanged independent baseline.
+Source and fixture holds: 3275; raw reports, copied sources and actual executable transforms retained.
+Boxing show forecast: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/boxing-show-forecast-artifacts/outcomes

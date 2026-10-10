@@ -1,0 +1,289 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerSeasonOpponents.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 167[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 18:33:26
+[2m   Duration [22m 3.49s[2m (transform 1.95s, setup 67ms, collect 2.37s, tests 167ms, environment 437ms, prepare 171ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/opponents-tests.json
+ok current results-only opponents and saved season agreement
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerSeasonOpponents.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[32m 165[2mms[22m[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mnames every Anderlecht opponent on an old save without a league finish or size[39m[32m 29[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mkeeps real opponent names when a severe injury removes the final table[39m[32m 7[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mnames real opponents in a conference league without claiming a full table[39m[32m 7[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22muses the known split-league clubs without inventing additional real members[39m[32m 7[2mms[22m[39m
+[31m     → expected [] to have a length of 11 but got +0[39m
+   [32m✓[39m Soccer Career Season Centre opponent names[2m > [22mkeeps a table season on its saved finish while naming its complete league[32m 61[2mms[22m[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mnames only the historical members when a past season has no saved finish[39m[32m 31[2mms[22m[39m
+[31m     → expected 0 to be greater than 0[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mrecognises an existing club spelling without making that club its own opponent[39m[32m 8[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m Soccer Career Season Centre opponent names[2m > [22mdoes not backfill current Belgian members into an unverified historical season[32m 11[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 18:33:30
+[2m   Duration [22m 3.34s[2m (transform 1.72s, setup 84ms, collect 2.13s, tests 165ms, environment 361ms, prepare 265ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/opponents-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mnames every Anderlecht opponent on an old save without a league finish or size
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m expectBelgianNames src/test/soccerSeasonOpponents.test.ts:[2m60:41[22m[39m
+    [90m 58| [39m  [34mexpect[39m(season[33m.[39mlabels[[34m0[39m][33m.[39mname)[33m.[39m[34mtoBe[39m([32m'Anderlecht'[39m)[33m;[39m
+    [90m 59| [39m  [34mexpect[39m(opponents)[33m.[39m[34mtoHaveLength[39m([34m17[39m)[33m;[39m
+    [90m 60| [39m  [34mexpect[39m(opponents[33m.[39m[34mevery[39m(l [33m=>[39m l[33m.[39mnamed))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m 61| [39m  expect(new Set(opponents.map(l => l.name))).toEqual(new Set(leagueOp…
+    [90m 62| [39m  [35mfor[39m ([35mconst[39m label [35mof[39m opponents) {
+[90m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m78:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mkeeps real opponent names when a severe injury removes the final table
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m expectBelgianNames src/test/soccerSeasonOpponents.test.ts:[2m60:41[22m[39m
+    [90m 58| [39m  [34mexpect[39m(season[33m.[39mlabels[[34m0[39m][33m.[39mname)[33m.[39m[34mtoBe[39m([32m'Anderlecht'[39m)[33m;[39m
+    [90m 59| [39m  [34mexpect[39m(opponents)[33m.[39m[34mtoHaveLength[39m([34m17[39m)[33m;[39m
+    [90m 60| [39m  [34mexpect[39m(opponents[33m.[39m[34mevery[39m(l [33m=>[39m l[33m.[39mnamed))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m 61| [39m  expect(new Set(opponents.map(l => l.name))).toEqual(new Set(leagueOp…
+    [90m 62| [39m  [35mfor[39m ([35mconst[39m label [35mof[39m opponents) {
+[90m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m89:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mnames real opponents in a conference league without claiming a full table
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m103:66[22m[39m
+    [90m101| [39m    [35mconst[39m opponents [33m=[39m season[33m.[39mlabels[33m.[39m[34mslice[39m([34m1[39m)[33m;[39m
+    [90m102| [39m    [34mexpect[39m(opponents)[33m.[39m[34mtoHaveLength[39m([34m19[39m)[33m;[39m
+    [90m103| [39m    expect(opponents.every(l => l.named && allowed.has(l.name))).toBe(…
+    [90m   | [39m                                                                 [31m^[39m
+    [90m104| [39m    expect(new Set(opponents.map(l => l.name)).size).toBe(opponents.le…
+    [90m105| [39m    [34mexpectNamesOnly[39m(row[33m,[39m ctx[33m,[39m season)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22muses the known split-league clubs without inventing additional real members
+[31m[1mAssertionError[22m: expected [] to have a length of 11 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 11[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m115:19[22m[39m
+    [90m113| [39m    const allowed = new Set(leagueOpponents('Austrian Bundesliga', row…
+    [90m114| [39m    [35mconst[39m named [33m=[39m season[33m.[39mlabels[33m.[39m[34mslice[39m([34m1[39m)[33m.[39m[34mfilter[39m(l [33m=>[39m l[33m.[39mnamed)[33m;[39m
+    [90m115| [39m    [34mexpect[39m(named)[33m.[39m[34mtoHaveLength[39m([34m11[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m116| [39m    [34mexpect[39m([35mnew[39m [33mSet[39m(named[33m.[39m[34mmap[39m(l [33m=>[39m l[33m.[39mname)))[33m.[39m[34mtoEqual[39m(allowed)[33m;[39m
+    [90m117| [39m    [34mexpectNamesOnly[39m(row[33m,[39m ctx[33m,[39m season)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mnames only the historical members when a past season has no saved finish
+[31m[1mAssertionError[22m: expected 0 to be greater than 0[39m
+[36m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m135:26[22m[39m
+    [90m133| [39m    const allowed = new Set(CAREER_LEAGUE_SEASONS['Premier League'][20…
+    [90m134| [39m    [35mconst[39m named [33m=[39m season[33m.[39mlabels[33m.[39m[34mslice[39m([34m1[39m)[33m.[39m[34mfilter[39m(l [33m=>[39m l[33m.[39mnamed)[33m;[39m
+    [90m135| [39m    [34mexpect[39m(named[33m.[39mlength)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m136| [39m    expect(named.every(l => allowed.has(l.name) && l.name !== row.club…
+    [90m137| [39m    [34mexpect[39m(named[33m.[39m[34mmap[39m(l [33m=>[39m l[33m.[39mname))[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'Sunderland'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mrecognises an existing club spelling without making that club its own opponent
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m150:43[22m[39m
+    [90m148| [39m    [35mconst[39m opponents [33m=[39m season[33m.[39mlabels[33m.[39m[34mslice[39m([34m1[39m)[33m;[39m
+    [90m149| [39m    [34mexpect[39m(opponents)[33m.[39m[34mtoHaveLength[39m([34m19[39m)[33m;[39m
+    [90m150| [39m    [34mexpect[39m(opponents[33m.[39m[34mevery[39m(l [33m=>[39m l[33m.[39mnamed))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m151| [39m    expect(new Set(opponents.map(l => l.name))).toEqual(new Set(league…
+    [90m152| [39m    [34mexpect[39m(opponents[33m.[39m[34mmap[39m(l [33m=>[39m l[33m.[39mname))[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'Man City'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯[22m[39m
+
+ok copied table-only opponent-pool defect was caught
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerSeasonOpponents.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[32m 127[2mms[22m[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mnames every Anderlecht opponent on an old save without a league finish or size[39m[32m 32[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mkeeps real opponent names when a severe injury removes the final table[39m[32m 7[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mnames real opponents in a conference league without claiming a full table[39m[32m 6[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22muses the known split-league clubs without inventing additional real members[39m[32m 6[2mms[22m[39m
+[31m     → expected [] to have a length of 11 but got +0[39m
+   [32m✓[39m Soccer Career Season Centre opponent names[2m > [22mkeeps a table season on its saved finish while naming its complete league[32m 40[2mms[22m[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mnames only the historical members when a past season has no saved finish[39m[32m 22[2mms[22m[39m
+[31m     → expected 0 to be greater than 0[39m
+[31m   [31m×[31m Soccer Career Season Centre opponent names[2m > [22mrecognises an existing club spelling without making that club its own opponent[39m[32m 8[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m Soccer Career Season Centre opponent names[2m > [22mdoes not backfill current Belgian members into an unverified historical season[32m 4[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 18:33:34
+[2m   Duration [22m 3.31s[2m (transform 1.71s, setup 64ms, collect 2.15s, tests 127ms, environment 478ms, prepare 114ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/opponents-tests.json
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mnames every Anderlecht opponent on an old save without a league finish or size
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m expectBelgianNames src/test/soccerSeasonOpponents.test.ts:[2m60:41[22m[39m
+    [90m 58| [39m  [34mexpect[39m(season[33m.[39mlabels[[34m0[39m][33m.[39mname)[33m.[39m[34mtoBe[39m([32m'Anderlecht'[39m)[33m;[39m
+    [90m 59| [39m  [34mexpect[39m(opponents)[33m.[39m[34mtoHaveLength[39m([34m17[39m)[33m;[39m
+    [90m 60| [39m  [34mexpect[39m(opponents[33m.[39m[34mevery[39m(l [33m=>[39m l[33m.[39mnamed))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m 61| [39m  expect(new Set(opponents.map(l => l.name))).toEqual(new Set(leagueOp…
+    [90m 62| [39m  [35mfor[39m ([35mconst[39m label [35mof[39m opponents) {
+[90m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m78:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mkeeps real opponent names when a severe injury removes the final table
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m expectBelgianNames src/test/soccerSeasonOpponents.test.ts:[2m60:41[22m[39m
+    [90m 58| [39m  [34mexpect[39m(season[33m.[39mlabels[[34m0[39m][33m.[39mname)[33m.[39m[34mtoBe[39m([32m'Anderlecht'[39m)[33m;[39m
+    [90m 59| [39m  [34mexpect[39m(opponents)[33m.[39m[34mtoHaveLength[39m([34m17[39m)[33m;[39m
+    [90m 60| [39m  [34mexpect[39m(opponents[33m.[39m[34mevery[39m(l [33m=>[39m l[33m.[39mnamed))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                        [31m^[39m
+    [90m 61| [39m  expect(new Set(opponents.map(l => l.name))).toEqual(new Set(leagueOp…
+    [90m 62| [39m  [35mfor[39m ([35mconst[39m label [35mof[39m opponents) {
+[90m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m89:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mnames real opponents in a conference league without claiming a full table
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m103:66[22m[39m
+    [90m101| [39m    [35mconst[39m opponents [33m=[39m season[33m.[39mlabels[33m.[39m[34mslice[39m([34m1[39m)[33m;[39m
+    [90m102| [39m    [34mexpect[39m(opponents)[33m.[39m[34mtoHaveLength[39m([34m19[39m)[33m;[39m
+    [90m103| [39m    expect(opponents.every(l => l.named && allowed.has(l.name))).toBe(…
+    [90m   | [39m                                                                 [31m^[39m
+    [90m104| [39m    expect(new Set(opponents.map(l => l.name)).size).toBe(opponents.le…
+    [90m105| [39m    [34mexpectNamesOnly[39m(row[33m,[39m ctx[33m,[39m season)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22muses the known split-league clubs without inventing additional real members
+[31m[1mAssertionError[22m: expected [] to have a length of 11 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 11[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m115:19[22m[39m
+    [90m113| [39m    const allowed = new Set(leagueOpponents('Austrian Bundesliga', row…
+    [90m114| [39m    [35mconst[39m named [33m=[39m season[33m.[39mlabels[33m.[39m[34mslice[39m([34m1[39m)[33m.[39m[34mfilter[39m(l [33m=>[39m l[33m.[39mnamed)[33m;[39m
+    [90m115| [39m    [34mexpect[39m(named)[33m.[39m[34mtoHaveLength[39m([34m11[39m)[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m116| [39m    [34mexpect[39m([35mnew[39m [33mSet[39m(named[33m.[39m[34mmap[39m(l [33m=>[39m l[33m.[39mname)))[33m.[39m[34mtoEqual[39m(allowed)[33m;[39m
+    [90m117| [39m    [34mexpectNamesOnly[39m(row[33m,[39m ctx[33m,[39m season)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mnames only the historical members when a past season has no saved finish
+[31m[1mAssertionError[22m: expected 0 to be greater than 0[39m
+[36m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m135:26[22m[39m
+    [90m133| [39m    const allowed = new Set(CAREER_LEAGUE_SEASONS['Premier League'][20…
+    [90m134| [39m    [35mconst[39m named [33m=[39m season[33m.[39mlabels[33m.[39m[34mslice[39m([34m1[39m)[33m.[39m[34mfilter[39m(l [33m=>[39m l[33m.[39mnamed)[33m;[39m
+    [90m135| [39m    [34mexpect[39m(named[33m.[39mlength)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+    [90m   | [39m                         [31m^[39m
+    [90m136| [39m    expect(named.every(l => allowed.has(l.name) && l.name !== row.club…
+    [90m137| [39m    [34mexpect[39m(named[33m.[39m[34mmap[39m(l [33m=>[39m l[33m.[39mname))[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'Sunderland'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerSeasonOpponents.test.ts[2m > [22mSoccer Career Season Centre opponent names[2m > [22mrecognises an existing club spelling without making that club its own opponent
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/test/soccerSeasonOpponents.test.ts:[2m150:43[22m[39m
+    [90m148| [39m    [35mconst[39m opponents [33m=[39m season[33m.[39mlabels[33m.[39m[34mslice[39m([34m1[39m)[33m;[39m
+    [90m149| [39m    [34mexpect[39m(opponents)[33m.[39m[34mtoHaveLength[39m([34m19[39m)[33m;[39m
+    [90m150| [39m    [34mexpect[39m(opponents[33m.[39m[34mevery[39m(l [33m=>[39m l[33m.[39mnamed))[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                                          [31m^[39m
+    [90m151| [39m    expect(new Set(opponents.map(l => l.name))).toEqual(new Set(league…
+    [90m152| [39m    [34mexpect[39m(opponents[33m.[39m[34mmap[39m(l [33m=>[39m l[33m.[39mname))[33m.[39mnot[33m.[39m[34mtoContain[39m([32m'Man City'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯[22m[39m
+
+ok copied results-only label defect was caught
+simSoccerCareerOpponents: current behavior green, 2 effective negative controls caught

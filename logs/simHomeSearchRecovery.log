@@ -1,0 +1,5 @@
+Home search recovery: 10/10 actual page/engine cases passed.
+Controlled import boundary: pending, unchanged engine resolution, rejection and terminal failure retained.
+Copied controls: 19/19, one mapped assertion and unchanged catalog/ranking baseline each.
+Source holds: 3275; raw observations, transformed code and exact copies retained.
+Home search recovery: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/home-search-recovery-artifacts/outcomes
