@@ -1,0 +1,2 @@
+patchSaveCompare: scripts/simCmRealFixtures.mjs now leaves the league book out of its whole save comparisons
+simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.

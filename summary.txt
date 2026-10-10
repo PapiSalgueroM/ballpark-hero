@@ -1,0 +1,8 @@
+realfix-leadblock exit=0 7s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+init exit=0 0s | 6bfd816ae33e7a82ae55660c5edf926daa619a1d
+m1218 exit=0 0s | 801f860e0 Merge remote-tracking branch 'origin/r1218-cm-var-true' into rc/r1229-vfy-c
+m1218-cmvar exit=0 74s | simCmVar normal: actual review outcomes and full prior baseline passed.
+m1218-cmvar-controls exit=0 314s | simCmVar: 12 actual outcomes and 20 effective controls passed.
+m1225 exit=0 0s | accb8b063 Merge remote-tracking branch 'origin/r1225-cm-fixtures-bind' into rc/r1229-vfy-c
+m1225-realfix exit=0 2s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+back exit=0 0s | f93d40bcf rc request r1229-vfy-c for 5e96c4cad0b8483ff2dd31a80db08dde0793b893

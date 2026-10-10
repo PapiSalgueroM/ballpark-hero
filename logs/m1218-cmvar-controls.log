@@ -1,0 +1,70 @@
+PASS VAR normal
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4007,"ruledOut":282,"ruledOutPerMatch":0.0704,"awarded":350,"awardedPerMatch":0.0873,"awardedScored":271,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.6658,"goalsPerMatchOff":2.6666,"goalGap":-0.0007,"resultMoved":221,"penaltiesPerMatch":0.4515,"matchesWithReview":598,"perSeed":[[638,0.0737,0.1113],[688,0.0712,0.0843],[669,0.0703,0.0717],[633,0.0679,0.0806],[698,0.0731,0.0903],[681,0.0661,0.0866]],"awardedScoredShare":0.7743}
+simCmVar coverage: {"met":{"league":{"lit":36,"dark":11},"cup":{"lit":0,"dark":5},"europe":{"lit":6,"dark":0}},"leavesOut":["league:championship","cup:FA Cup"],"historicKey":"league:premier2010"}
+simCmVar stream: {"goal":77,"foul":21,"kick":100}
+simCmVar normal: actual review outcomes and full prior baseline passed.
+PASS VAR counted
+simCmVar counted: CAUGHT by "A ruled-out candidate is not committed as a scorer"
+simCmVar counted: actual review outcomes and full prior baseline passed.
+PASS VAR decorative
+simCmVar decorative: CAUGHT by "A ruled-out candidate is not committed as a scorer"
+simCmVar decorative: actual review outcomes and full prior baseline passed.
+PASS VAR penalty
+simCmVar penalty: CAUGHT by "A reviewed penalty links to exactly one existing actual penalty shot"
+simCmVar penalty: actual review outcomes and full prior baseline passed.
+PASS VAR awards
+simCmVar awards: CAUGHT by "The actual missed-foul review awards a penalty"
+simCmVar awards: actual review outcomes and full prior baseline passed.
+PASS VAR resolution
+simCmVar resolution: CAUGHT by "The saved actual kick can score or miss"
+simCmVar resolution: actual review outcomes and full prior baseline passed.
+PASS VAR past
+simCmVar past: CAUGHT by "Played review decisions and all played football survive the recut"
+simCmVar past: actual review outcomes and full prior baseline passed.
+PASS VAR reveal
+simCmVar reveal: CAUGHT by "An unresolved review withholds its own accepted resolution"
+simCmVar reveal: actual review outcomes and full prior baseline passed.
+PASS VAR resume
+simCmVar resume: CAUGHT by "A previously played reviewed goal is settled on resume"
+simCmVar resume: actual review outcomes and full prior baseline passed.
+PASS VAR announce
+simCmVar announce: CAUGHT by "A 46th-minute accepted resolution cannot announce during its review"
+simCmVar announce: actual review outcomes and full prior baseline passed.
+PASS VAR disabled
+simCmVar disabled: CAUGHT by "Enabled actual matches draw reviewed goals, overturned goals and reviewed penalties"
+simCmVar disabled: actual review outcomes and full prior baseline passed.
+PASS VAR everywhere
+simCmVar everywhere: CAUGHT by "Wolves, EFL Championship · Round 1: a match in a competition without reviews carries no opt in"
+simCmVar everywhere: actual review outcomes and full prior baseline passed.
+PASS VAR historic
+simCmVar historic: CAUGHT by "A historic era save carries no opt in, on a 2026 clock in a covered competition"
+simCmVar historic: actual review outcomes and full prior baseline passed.
+PASS VAR streamgoal
+simCmVar streamgoal: CAUGHT by "Dealing reviews draws nothing from the match stream"
+simCmVar streamgoal: actual review outcomes and full prior baseline passed.
+PASS VAR streamfoul
+simCmVar streamfoul: CAUGHT by "Dealing reviews draws nothing from the match stream"
+simCmVar streamfoul: actual review outcomes and full prior baseline passed.
+PASS VAR oldgoalreview
+simCmVar oldgoalreview: CAUGHT by "Goals ruled out a match 0.3903 is outside real football's 0.0763 to 0.0816 (headroom 0.2)"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4043,"ruledOut":1578,"ruledOutPerMatch":0.3903,"awarded":384,"awardedPerMatch":0.095,"awardedScored":307,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.3584,"goalsPerMatchOff":2.6651,"goalGap":-0.3067,"resultMoved":672,"penaltiesPerMatch":0.4536,"matchesWithReview":1573,"perSeed":[[659,0.4249,0.1077],[685,0.4336,0.0891],[654,0.3471,0.0795],[632,0.3877,0.0981],[717,0.3794,0.1018],[696,0.3693,0.0934]]}
+simCmVar oldgoalreview: actual review outcomes and full prior baseline passed.
+PASS VAR oldoverturn
+simCmVar oldoverturn: CAUGHT by "Goals ruled out a match 0.0182 is outside real football's 0.0763 to 0.0816 (headroom 0.2)"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4011,"ruledOut":73,"ruledOutPerMatch":0.0182,"awarded":362,"awardedPerMatch":0.0903,"awardedScored":278,"goalConfirmed":207,"penaltyConfirmed":0,"goalsPerMatchOn":2.7203,"goalsPerMatchOff":2.6684,"goalGap":0.0519,"resultMoved":144,"penaltiesPerMatch":0.463,"matchesWithReview":602,"perSeed":[[637,0.022,0.113],[681,0.0176,0.0881],[658,0.0152,0.0669],[637,0.011,0.0895],[695,0.0201,0.0921],[703,0.0228,0.0925]]}
+simCmVar oldoverturn: actual review outcomes and full prior baseline passed.
+PASS VAR oldpenaltyreview
+simCmVar oldpenaltyreview: CAUGHT by "The game showed 0 goal and 624 penalty reviews that ended with the call standing, and no publisher counts those by kind of call"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4007,"ruledOut":282,"ruledOutPerMatch":0.0704,"awarded":350,"awardedPerMatch":0.0873,"awardedScored":271,"goalConfirmed":0,"penaltyConfirmed":624,"goalsPerMatchOn":2.6658,"goalsPerMatchOff":2.6666,"goalGap":-0.0007,"resultMoved":221,"penaltiesPerMatch":0.4515,"matchesWithReview":1097,"perSeed":[[638,0.0737,0.1113],[688,0.0712,0.0843],[669,0.0703,0.0717],[633,0.0679,0.0806],[698,0.0731,0.0903],[681,0.0661,0.0866]]}
+simCmVar oldpenaltyreview: actual review outcomes and full prior baseline passed.
+PASS VAR oldmissedfoul
+simCmVar oldmissedfoul: CAUGHT by "Penalties awarded a match 0.2631 is outside real football's 0.0895 to 0.0921 (headroom 0.2)"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4003,"ruledOut":282,"ruledOutPerMatch":0.0704,"awarded":1053,"awardedPerMatch":0.2631,"awardedScored":787,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.8146,"goalsPerMatchOff":2.6845,"goalGap":0.1302,"resultMoved":391,"penaltiesPerMatch":0.6235,"matchesWithReview":1160,"perSeed":[[633,0.0727,0.2654],[676,0.0814,0.2618],[663,0.0603,0.2443],[643,0.0607,0.2706],[710,0.0803,0.2789],[678,0.0664,0.2566]]}
+simCmVar oldmissedfoul: actual review outcomes and full prior baseline passed.
+PASS VAR oldpenaltyscores
+simCmVar oldpenaltyscores: CAUGHT by "A penalty a review awards is taken under the engine penalty law, not under a rate of its own"
+simCmVar oldpenaltyscores: actual review outcomes and full prior baseline passed.
+PASS VAR oldpenaltyontarget
+simCmVar oldpenaltyontarget: CAUGHT by "A missed review penalty is on target as often as the engine penalty law says"
+simCmVar oldpenaltyontarget: actual review outcomes and full prior baseline passed.
+simCmVar: 12 actual outcomes and 20 effective controls passed.
