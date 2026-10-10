@@ -1,0 +1,22 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mreports literal contextual costs including each sides first and continuing submission[32m 6[2mms[22m[39m
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mprioritizes legal position before gas cooldown and range for either corner[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mmatches strike and clinch reach at literal standing edges without applying range on the mat[32m 2[2mms[22m[39m
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mmatches exact gas and cooldown recovery with actual attacks on the following tick[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mkeeps every seeded combat state identical to the accepted engine before helper extraction[33m 788[2mms[22m[39m
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mdescribes all six real action buttons with visible hints and unchanged accessible names[33m 413[2mms[22m[39m
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mkeeps a held button active through recovering hints and lands the next actual strike[32m 180[2mms[22m[39m
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mshows drill restrictions and paused hints before ordinary readiness without advancing play[32m 112[2mms[22m[39m
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mcalculates repeated hints without editing resources scores or either fighter[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/cageReadiness.test.tsx[2m > [22mCage action readiness outcomes[2m > [22mpreserves the accepted promotion world independently of readiness changes[32m 5[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 18:27:56
+[2m   Duration [22m 3.14s[2m (transform 307ms, setup 98ms, collect 494ms, tests 1.51s, environment 486ms, prepare 207ms)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/cage-readiness-artifacts/mounted/normal-report.json
+
+simCageReadiness normal: actual readiness outcomes and independent promotion baseline passed.

@@ -1,0 +1,56 @@
+1) Soccer unchanged: the inbox and the four rival dilemmas against the pre-lift fixture
+  FAIL: Soccer Career changed: rivalDilemmas.48.next.chanceWheel: fixture undefined but now {"title":"Derby revenge","chance":0.3,"roll":0.7598011719528586,"hit":"Red card","miss":"Escaped a card","result":false,"seen":false}
+   60 careers and 360 inbox seasons (540 texts delivered), 192 rival dilemma resolutions and the 28 dilemma order, compared whole
+1b) The soccer trigger gate for the four rival dilemmas, against the lines it replaced
+   16000 gate checks, 8010 open, 0 disagreed with the lines they replaced
+2) Source: one home for each rule, every binding imported
+   8 rule fingerprints, 36 bindings checked
+3) The NFL inbox: every text on a beat its season really had
+   40 careers, 40 draft nights with exactly one draft text, 1094 season texts over 547 career-seasons (rate 2.000 against a want of 3)
+   by beat: draft 40 (3.5%), camp 198 (17.5%), bye 173 (15.3%), deadline 169 (14.9%), playoffs 219 (19.3%), offseason 180 (15.9%), contract 155 (13.7%)
+   290 playoff seasons carried 219 playoff texts, 155 contract summers carried 155 contract texts; 0 off-beat, 0 untagged, 0 mistagged, 0 doubled, 0 over the want, 0 one-offs skipped
+   3c: 120 careers played to retirement, 240 texts in their final seasons, 57 of them ending the summer before a contract year, 120 with an ahead text still unsent; 0 final seasons carried a forward looking text (careers that go on received 735)
+4) Speakers: roles only, and no real player anywhere in a delivered text
+   19514 real names harvested, 41 senders in the bank, 0 real, 0 shaped like a name, 0 real full names inside 32848 delivered strings
+5) Rival choices: reachable, honest to the number, and they move the season
+   5a: 6 of 6 choices reachable, each naming the rival
+   5b: 18 options, 14 exact to the number on every draw, 4 gambles within 0.189 of their promise on average and 0.0145 of their printed odds; 36000 draws held against the card's own words, 26 other save fields watched for a stat no button names
+   5c: 300 paired seasons, "Say nothing, watch the film" (morale +6 over "Shake it off on camera") came out ahead in 290, 0.382 stat score per morale point
+   5d: 40 careers, 92 rival choices over 548 career-seasons (rate 0.168), 92 answered, 92 double taps refused, 92 bad options refused, 0 stacked with a beat, 0 early repeats
+6) Old saves: a pre-521 and a pre-796 NFL save play on
+   20 of 20 old saves played five more seasons, 30 old texts answered after loading, 120 new texts carrying a beat
+7) The NBA, MLB and NHL rival choices: the shared engine, each sport's own table
+   NBA: 6 of 6 choices reachable; 18 options, 14 exact, 4 gambles within 0.189 of their promise and 0.0145 of their odds, 36000 draws against the words, 27 other fields watched; morale lever 0.098 a point, ahead in 300 of 300; 123 choices over 560 career-seasons (rate 0.220), 123 answered, 123 double taps and 123 bad options refused, 0 stacked, 0 early repeats; 10 of 10 pre-796 saves played on with 15 choices after loading
+   MLB: 6 of 6 choices reachable; 18 options, 14 exact, 4 gambles within 0.156 of their promise and 0.0120 of their odds, 36000 draws against the words, 26 other fields watched; morale lever 0.203 a point, ahead in 252 of 300; 111 choices over 560 career-seasons (rate 0.198), 111 answered, 111 double taps and 111 bad options refused, 0 stacked, 0 early repeats; 10 of 10 pre-796 saves played on with 15 choices after loading
+   NHL: 6 of 6 choices reachable; 18 options, 14 exact, 4 gambles within 0.162 of their promise and 0.0125 of their odds, 36000 draws against the words, 27 other fields watched; morale lever 0.251 a point, ahead in 258 of 300; 117 choices over 560 career-seasons (rate 0.209), 117 answered, 117 double taps and 117 bad options refused, 0 stacked, 0 early repeats; 10 of 10 pre-796 saves played on with 17 choices after loading
+8) The season stream: every career plays the same seasons whether the choice roll runs or not
+   NFL: 20 of 20 careers played identical seasons with the roll on and off, the roll fired 52 times along the way
+   NBA: 20 of 20 careers played identical seasons with the roll on and off, the roll fired 56 times along the way
+   MLB: 20 of 20 careers played identical seasons with the roll on and off, the roll fired 59 times along the way
+   NHL: 20 of 20 careers played identical seasons with the roll on and off, the roll fired 63 times along the way
+9) The inbox stream: every NFL career plays the same seasons whether its inbox delivers or not
+   20 of 20 careers played identical seasons with the inbox open and shut; the open inbox delivered 779 texts along the way, the shut one 0
+10) The NBA, MLB and NHL inboxes: each on its own calendar, held to the NFL's rules
+   NBA: 40 careers, 40 draft nights on draft and summer, 1240 season texts over 640 career-seasons (rate 1.938 against a want of 3)
+   NBA by beat: draft 0 (0.0%, had 0), camp 203 (16.4%, had 640), deadline 209 (16.9%, had 640), allstar 203 (16.4%, had 640), playoffs 184 (14.8%, had 286), offseason 218 (17.6%, had 640), summer 23 (1.9%, had 40), contract 200 (16.1%, had 200)
+   NBA: 0 off-beat, 0 untagged, 0 mistagged, 0 doubled, 0 over the want, 0 seasons off the delivery rule, 0 out of order
+   NBA final seasons: 120 careers played to retirement, 239 texts in their final seasons, 44 ending where a forward beat would have come, 120 with a forward text still unsent; 0 carried a forward looking text (careers that go on received 959)
+   NBA speakers: 39 senders in a bank of 75, 0 real, 0 shaped like a name, 0 real full names inside 37408 delivered strings
+   NBA stream: 20 of 20 careers played identical seasons with the inbox open and shut; the open inbox delivered 777 texts, the shut one 0
+   NBA old saves: 20 of 20 played five more seasons, 20 old texts answered after loading, 40 old texts drawn with no beat line, 120 new texts carrying a beat, 0 templates sent twice
+   MLB: 40 careers, 40 draft nights on draft, 1280 season texts over 640 career-seasons (rate 2.000 against a want of 3)
+   MLB by beat: draft 0 (0.0%, had 0), spring 164 (12.8%, had 640), allstar 132 (10.3%, had 640), deadline 157 (12.3%, had 640), september 148 (11.6%, had 640), october 230 (18.0%, had 248), offseason 169 (13.2%, had 640), arbitration 120 (9.4%, had 120), freeagency 160 (12.5%, had 160)
+   MLB: 0 off-beat, 0 untagged, 0 mistagged, 0 doubled, 0 over the want, 0 seasons off the delivery rule, 0 out of order
+   MLB final seasons: 120 careers played to retirement, 240 texts in their final seasons, 63 ending where a forward beat would have come, 120 with a forward text still unsent; 0 carried a forward looking text (careers that go on received 1039)
+   MLB speakers: 48 senders in a bank of 78, 0 real, 0 shaped like a name, 0 real full names inside 37150 delivered strings
+   MLB stream: 20 of 20 careers played identical seasons with the inbox open and shut; the open inbox delivered 818 texts, the shut one 0
+   MLB old saves: 20 of 20 played five more seasons, 20 old texts answered after loading, 40 old texts drawn with no beat line, 120 new texts carrying a beat, 0 templates sent twice
+   NHL: 40 careers, 40 draft nights on draft, 1280 season texts over 640 career-seasons (rate 2.000 against a want of 3)
+   NHL by beat: draft 0 (0.0%, had 0), camp 170 (13.3%, had 640), juniors 58 (4.5%, had 58), allstar 195 (15.2%, had 640), deadline 205 (16.0%, had 640), playoffs 222 (17.3%, had 338), offseason 198 (15.5%, had 640), contract 232 (18.1%, had 240)
+   NHL: 0 off-beat, 0 untagged, 0 mistagged, 0 doubled, 0 over the want, 0 seasons off the delivery rule, 0 out of order
+   NHL final seasons: 120 careers played to retirement, 239 texts in their final seasons, 78 ending where a forward beat would have come, 120 with a forward text still unsent; 0 carried a forward looking text (careers that go on received 977)
+   NHL speakers: 46 senders in a bank of 72, 0 real, 0 shaped like a name, 0 real full names inside 41722 delivered strings
+   NHL stream: 20 of 20 careers played identical seasons with the inbox open and shut; the open inbox delivered 819 texts, the shut one 0
+   NHL old saves: 20 of 20 played five more seasons, 20 old texts answered after loading, 40 old texts drawn with no beat line, 120 new texts carrying a beat, 0 templates sent twice
+
+simCareerInboxBeats: 1 failure
