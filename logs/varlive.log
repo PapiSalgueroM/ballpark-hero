@@ -1,0 +1,11 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/clubManagerVarLive.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 611[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: VAR ships dark[2m > [22ma Quick Sim through the hook is the match the engine plays without reviews [33m 314[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 11:30:43
+[2m   Duration [22m 3.86s[2m (transform 1.77s, setup 82ms, collect 2.21s, tests 611ms, environment 354ms, prepare 220ms)[22m
+

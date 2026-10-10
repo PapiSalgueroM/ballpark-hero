@@ -1,0 +1,27 @@
+dev exit=0 6s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+dev-mentorValid exit=1 7s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 1 failed
+dev-mentorRepair exit=1 6s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 1 failed
+role exit=0 54s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+tsc exit=0 98s | 
+trophy exit=0 3s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+trophy-all exit=0 15s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 7 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+season exit=0 3s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+season-all exit=0 16s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,8 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+derby exit=0 3s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+dev-all exit=0 146s | simSoccerCareerDevelopment: healthy outcomes passed, 27 effective controls caught
+cmfix exit=0 11s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+derby-all exit=0 17s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,10 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derb
+dailydeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+dailydeals-bind exit=1 4s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+dailydeals-binddeadline exit=1 4s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+dailydeals-verify-as exit=0 5s | simDailyDeals: the recorded deals ARE the deals of the source at /tmp/base (12 Hot Seat dates, 6 Deadline Day dates)
+cmfix-all exit=0 75s | simCmRealFixtures: 11 actual outcome groups, 760 fixture reads, 760 calendar reads and 9 effective controls passed.
+simDeadlineDay exit=0 4s | simDeadlineDay: green. The brief is real, the desk pays, the clock binds, the daily is one window a day, the budget holds, a Club Manager save keeps its registrations, ri
+varlive exit=0 4s |    Duration  3.86s (transform 1.77s, setup 82ms, collect 2.21s, tests 611ms, environment 354ms, prepare 220ms)
+varlive-control exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+dartpools exit=0 6s |    Duration  5.79s (transform 901ms, setup 180ms, collect 1.87s, tests 6.56s, environment 1.04s, prepare 451ms)
+simManagerHotSeat exit=0 79s | simManagerHotSeat: green. The target is the club's, reading the room pays, outcomes replay, a Club Manager save keeps its registrations and a survivor carries on in Club 
+rep exit=0 7s | simReportedGamePools: ten offline actual-page and real-pool outcomes passed.
+rep-dart-year exit=0 7s | simReportedGamePools dart-year: 1 exact intended outcomes failed, all 9 unrelated outcomes passed.
+liveSimMotion exit=0 45s |    Duration  45.05s (transform 2.03s, setup 62ms, collect 2.59s, tests 41.39s, environment 362ms, prepare 230ms)
+role-all exit=0 879s | simCareerStoryRole: 16 healthy groups, 17 effective copied controls caught;12 complete AR careers and48 neutral pairs held

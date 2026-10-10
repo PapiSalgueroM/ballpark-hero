@@ -1,0 +1,26 @@
+ok   uncopied complete PR208 baseline
+ok   form boundaries
+ok   form eligibility
+ok   form purity and chronology
+ok   form projections and actual draws
+ok   neutral complete saves and RNG against actual PR208
+ok   plan choice binding and risk
+ok   plan skill caps and once-only settlement
+ok   plan interruptions and foreign targets
+FAIL mentor deterministic creation and saved rows: AssertionError [ERR_ASSERTION]: A damaged mentor is dropped when the save loads: 7
+
+true !== false
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDevelopment.mjs:335:14
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDevelopment.mjs:175:17)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerCareerDevelopment.mjs:306:9
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ok   mentor pauses graduation and moves
+ok   mentor retirement
+ok   actual injury risk
+ok   actual recorded plan growth and mentor credit
+ok   actual interruption paths
+ok   actual moves and retirement
+ok   actual Youth Mentor choice keeps old effects and RNG
+ok   repeated Youth Mentor event preserves every saved spell
+simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 1 failed

@@ -1,0 +1,12 @@
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarLive.test.tsx[2m > [22mClub Manager: VAR ships dark[2m > [22ma live kick off through the hook asks for no review
+[31m[1mAssertionError[22m: the saved match carries the review opt in: expected true to be false // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarLive.test.tsx[2m > [22mClub Manager: VAR ships dark[2m > [22ma Quick Sim through the hook is the match the engine plays without reviews
+[31m[1mAssertionError[22m: match 2 shows a review: expected 2 to be +0 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarLive.test.tsx[2m > [22mClub Manager: VAR ships dark[2m > [22mthe fast forward is the engine run without reviews
+[31m[1mAssertionError[22m: the results of the run differ from the engine without reviews: expected [ { week: +0, …(6) }, …(4) ] to deeply equal [ { week: +0, …(6) }, …(4) ][39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (4)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dark > a live kick off through the hook asks for no review,line=97,column
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dark > a Quick Sim through the hook is the match the engine plays without
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dark > the fast forward is the engine run without reviews,line=127,column
