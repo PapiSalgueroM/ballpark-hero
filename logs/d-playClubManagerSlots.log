@@ -1,0 +1,17 @@
+1) The first manager takes a job
+  ok    manager 1 at Chelsea
+2) Managers, then a new manager in slot 2
+  ok    manager 2 at Aston Villa
+3) Leave the page, come back
+  ok    slot 1 still Chelsea
+  ok    slot 2 still Aston Villa
+4) Resume Career on slot 1
+  ok    slot 1 opened on Chelsea's hub
+  ok    Aston Villa parked in slot 2
+5) A 2010-11 manager in slot 3, opened from a fresh page after another slot
+  ok    manager 3 at Everton, 2010-11
+  ok    slot 3 opened on Everton's 2010-11 hub, squads fetched by the boot
+   database requests blocked: 5
+
+playClubManagerSlots: green
+[draws] total 1913 in 3 page loads of 1 contexts, walk exit 0; by path: /club-manager 1909, / 4

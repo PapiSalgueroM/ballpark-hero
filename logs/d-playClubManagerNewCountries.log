@@ -1,0 +1,8 @@
+   390x844 Russia: 1 league(s), 16 club tiles, hub on Zenit, 16 table rows, live match full time, table then "RUSSIAN PREMIER LEAGUE · ROUND 1 OF 30"
+   390x844 old save, resumed on Sevilla: browser says "27 leagues in this save"; Russian Premier League draws 16 rows under "RUSSIAN PREMIER LEAGUE · PRE-SEASON, ALPHABETICAL ORDER"
+   1280x800 Russia: 1 league(s), 16 club tiles, hub on Zenit, 16 table rows, live match full time, table then "RUSSIAN PREMIER LEAGUE · ROUND 1 OF 30"
+   1280x800 old save, resumed on Sevilla: browser says "27 leagues in this save"; Russian Premier League draws 16 rows under "RUSSIAN PREMIER LEAGUE · PRE-SEASON, ALPHABETICAL ORDER"
+   390x844 reduced motion Russia: 1 league(s), 16 club tiles, hub on Zenit, 16 table rows, live match full time, table then "RUSSIAN PREMIER LEAGUE · ROUND 1 OF 30"
+   8 requests to the database host aborted
+playClubManagerNewCountries: green. Russia can be picked, started, played live and found in an old save's world (3 runs: 390x844, 1280x800, 390x844 reduced motion).
+[draws] total 6223 in 5 page loads of 5 contexts, walk exit 0; by path: /club-manager 6223

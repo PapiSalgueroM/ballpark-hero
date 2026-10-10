@@ -1,0 +1,22 @@
+1) Taking a job
+  ok    in the job at Crystal Palace, save on disk, week 0, squad 27
+2) Buying one player through a release clause
+  ok    signed Dmitriy Chistyakov, saved squad 28
+2b) The loan desk: send a man out, recall him, and his button says he has had his loan this season
+  ok    Adam Wharton out and back, net 0.9m; his button now reads "Loaned out once this season" and is disabled
+3) Playing two weeks with the quick sim
+  ok    week 2 on disk, 2 results logged
+4) Leaving the page by navigating away, with the save deleted and the tab pinned visible, so only the pagehide write can restore it
+  ok    under the visible pin a visibilitychange writes nothing, so what follows is pagehide alone
+  ok    after leaving: week 2, squad 28, Dmitriy Chistyakov present
+5) Reloading /club-manager: the resume screen and the save after the load repairs
+  ok    the resume screen says Week 3
+  ok    resumed at week 2 with Dmitriy Chistyakov on the books
+5b) The tab going hidden writes the save on its own, with no pagehide and no navigation
+  ok    the hidden-tab write alone restored the save at week 2
+6) The banner: on when the store throws at a pagehide, gone after a reload with the store working
+  ok    the banner appeared: "Your career is not being saved right now. This browser has no storage left for douknowball..."
+  ok    after a reload with the store working, no banner
+
+playClubManagerSaveLeave: green, the career survived leaving the page and the banner behaves
+[draws] total 3408 in 4 page loads of 1 contexts, walk exit 0; by path: /club-manager 3404, / 4

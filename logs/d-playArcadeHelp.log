@@ -1,0 +1,10 @@
+PASS /free-kick 320px: 44px help, exact rules, pointer and keyboard, focus restored
+PASS /free-kick 390px: 44px help, exact rules, pointer and keyboard, focus restored
+PASS /free-kick 430px: 44px help, exact rules, pointer and keyboard, focus restored
+PASS /free-kick 1440px: 44px help, exact rules, pointer and keyboard, focus restored
+PASS /buzzer-beater 320px: 44px help, exact rules, pointer and keyboard, focus restored
+PASS /buzzer-beater 390px: 44px help, exact rules, pointer and keyboard, focus restored
+PASS /buzzer-beater 430px: 44px help, exact rules, pointer and keyboard, focus restored
+PASS /buzzer-beater 1440px: 44px help, exact rules, pointer and keyboard, focus restored
+playArcadeHelp: 8 route/width checks green, no overflow or page errors.
+[draws] total 56 in 8 page loads of 8 contexts, walk exit 0; by path: /free-kick 28, /buzzer-beater 28

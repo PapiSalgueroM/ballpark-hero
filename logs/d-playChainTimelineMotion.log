@@ -1,0 +1,5 @@
+playChainTimelineMotion: 24 actual timeline viewport/motion combinations passed.
+Empty/seed states stayed quiet; newest link and committed connection effects finished without replay.
+Earlier nodes, names, records, star, bonuses, ended colors, lengths and multiplier thresholds were preserved.
+Spaced and unbroken names/connections fit at 320, 390, 430 and 1440px without clipping or overflow.
+[draws] total 48 in 24 page loads of 24 contexts, walk exit 0; by path: / 48

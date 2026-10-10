@@ -1,0 +1,16 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+d-calibrate exit=1 33s | [draws] total 5498 in 3 page loads of 3 contexts, walk exit 1; by path: /club-manager 5498
+d-playAdRoutes exit=0 48s | [draws] total 173 in 29 page loads of 27 contexts, walk exit 0; by path: /footle 64, / 15, /football-timeline 11, /admin/login 9, /about 8, /guess-nfl-team 7
+d-playArcadeHelp exit=0 20s | [draws] total 56 in 8 page loads of 8 contexts, walk exit 0; by path: /free-kick 28, /buzzer-beater 28
+d-playAutocompleteRace exit=0 149s | [draws] total 652 in 26 page loads of 6 contexts, walk exit 0; by path: /build-your-xi 500, /football-connect-4 138, /missing-xi 14
+d-playBootShift exit=0 30s | [draws] total 32 in 5 page loads of 5 contexts, walk exit 0; by path: /football-grid 7, /nba-grid 7, /pro-football 7, /soccer-career 7, /about 4
+d-playCareerHub exit=1 38s | Node.js v24.21.0
+d-playCareerMoments exit=0 60s | [draws] total 44 in 8 page loads of 4 contexts, walk exit 0; by path: /soccer-career 44
+d-playCareerPress exit=0 17s | [draws] total 70 in 2 page loads of 1 contexts, walk exit 0; by path: /nfl-my-career 70
+d-playChainTimelineMotion exit=0 39s | [draws] total 48 in 24 page loads of 24 contexts, walk exit 0; by path: / 48
+d-playClubManager exit=1 99s | [draws] total 16949 in 1 page loads of 1 contexts, walk exit 1; by path: /club-manager 16949
+d-playClubManagerNewCountries exit=0 55s | [draws] total 6223 in 5 page loads of 5 contexts, walk exit 0; by path: /club-manager 6223
+d-playClubManagerSaveLeave exit=0 21s | [draws] total 3408 in 4 page loads of 1 contexts, walk exit 0; by path: /club-manager 3404, / 4
+d-playClubManagerSlots exit=0 10s | [draws] total 1913 in 3 page loads of 1 contexts, walk exit 0; by path: /club-manager 1909, / 4
+d-playCmDataOnDemand exit=0 28s | [draws] total 105 in 15 page loads of 15 contexts, walk exit 0; by path: /club-manager 56, /manager-hot-seat 14, /deadline-day 14, /transfer-path 14, /soccer-career 7
+d-playCollegeGridFirstTap exit=0 30s | [draws] total 83 in 14 page loads of 16 contexts, walk exit 0; by path: /college-grid 83

@@ -1,0 +1,111 @@
+1) a stored Accept starts exactly one deliberate game ad
+  PASS  /footle made exactly one AdSense request (1)
+  PASS  /footle kept exactly one AdSense script (1)
+  PASS  /footle queued exactly one manual slot (1)
+  PASS  /footle reserved a usable mobile slot width (358px)
+  PASS  /footle reserved a usable desktop slot width (864px)
+
+2) screens without deliberate inventory make no ad request
+  PASS  /about (trust page) made zero requests (0)
+  PASS  /about kept the AdSense script out (0)
+  PASS  /privacy (legal) made zero requests (0)
+  PASS  /privacy kept the AdSense script out (0)
+  PASS  /terms (legal) made zero requests (0)
+  PASS  /terms kept the AdSense script out (0)
+  PASS  /accessibility (legal) made zero requests (0)
+  PASS  /accessibility kept the AdSense script out (0)
+  PASS  /contact (legal) made zero requests (0)
+  PASS  /contact kept the AdSense script out (0)
+  PASS  /reset-password (private reset) made zero requests (0)
+  PASS  /reset-password kept the AdSense script out (0)
+  PASS  /admin/login (private admin) made zero requests (0)
+  PASS  /admin/login kept the AdSense script out (0)
+  PASS  /admin/reports (private admin) made zero requests (0)
+  PASS  /admin/reports kept the AdSense script out (0)
+  PASS  /profile/test-user (private account) made zero requests (0)
+  PASS  /profile/test-user kept the AdSense script out (0)
+  PASS  /football-timeline (retired game) made zero requests (0)
+  PASS  /football-timeline kept the AdSense script out (0)
+  PASS  /guess-nfl-team (retired game) made zero requests (0)
+  PASS  /guess-nfl-team kept the AdSense script out (0)
+  PASS  /higher-lower-transfers (retired game) made zero requests (0)
+  PASS  /higher-lower-transfers kept the AdSense script out (0)
+  PASS  /pack-battle (retired game) made zero requests (0)
+  PASS  /pack-battle kept the AdSense script out (0)
+  PASS  /shirt-number (retired game) made zero requests (0)
+  PASS  /shirt-number kept the AdSense script out (0)
+  PASS  /world-cup (redirect stub) made zero requests (0)
+  PASS  /world-cup kept the AdSense script out (0)
+  PASS  /this-address-does-not-exist-ad-routes (fallback 404) made zero requests (0)
+  PASS  /this-address-does-not-exist-ad-routes kept the AdSense script out (0)
+
+3) Accept still wakes the slot after more than eight seconds
+  PASS  before delayed Accept made zero AdSense requests (0)
+  PASS  before delayed Accept kept the AdSense script out (0)
+  PASS  before delayed Accept queued no manual slot (0)
+  PASS  before delayed Accept rendered no manual slot (0)
+  PASS  fresh choice stored accepted (accepted)
+  PASS  delayed Accept made exactly one AdSense request (1)
+  PASS  delayed Accept kept exactly one AdSense script (1)
+  PASS  delayed Accept queued exactly one manual slot (1)
+
+4) Essential only never starts ads
+  PASS  fresh choice stored essential (essential)
+  PASS  Essential only made zero AdSense requests (0)
+  PASS  Essential only kept the AdSense script out (0)
+  PASS  Essential only queued no manual slot (0)
+
+5) SPA transitions create no new ad inventory
+  PASS  game to legal to noindex made no extra AdSense request (1)
+  PASS  privacy rendered no manual slot (0)
+  PASS  privacy left the manual queue unchanged (1)
+  PASS  reset-password rendered no manual slot (0)
+  PASS  reset-password left the manual queue unchanged (1)
+
+6) withdrawing consent reloads another open tab clean
+  PASS  cross-tab withdrawal made no new AdSense request (1)
+  PASS  cross-tab withdrawal cleared stored consent (null)
+  PASS  cross-tab withdrawal removed the AdSense script (0)
+  PASS  cross-tab withdrawal cleared the manual queue (0)
+  PASS  cross-tab withdrawal rendered no manual slot (0)
+  PASS  cross-tab withdrawal restored one accessible cookie banner (1)
+
+7) a fallback 404 cannot leave noindex on a game
+  PASS  fallback began noindexed (1)
+  PASS  fallback kept the AdSense script out (0)
+  PASS  fallback rendered no manual slot (0)
+  PASS  fallback to /footle cleared every noindex (0)
+  PASS  fallback to /footle made exactly one AdSense request (1)
+  PASS  fallback to /footle kept exactly one AdSense script (1)
+  PASS  fallback to /footle queued exactly one manual slot (1)
+  PASS  fallback to /footle rendered exactly one manual slot (1)
+
+8) accepting in another tab preserves an active game
+  PASS  cross-tab Accept preserved the active game document (1 to 1 loads)
+  PASS  cross-tab Accept made exactly one AdSense request (1)
+  PASS  cross-tab Accept stored accepted (accepted)
+  PASS  cross-tab Accept kept exactly one AdSense script (1)
+  PASS  cross-tab Accept queued exactly one manual slot (1)
+  PASS  cross-tab Accept rendered exactly one manual slot (1)
+  PASS  cross-tab Accept hid the cookie banner (0)
+
+9) a private noindex route can safely lead into a game
+  PASS  private route began noindexed (1)
+  PASS  private route kept the AdSense script out (0)
+  PASS  private route rendered no manual slot (0)
+  PASS  private route to /footle cleared every noindex (0)
+  PASS  private route to /footle made exactly one AdSense request (1)
+  PASS  private route to /footle kept exactly one AdSense script (1)
+  PASS  private route to /footle queued exactly one manual slot (1)
+  PASS  private route to /footle rendered exactly one manual slot (1)
+
+10) the slot sits clear of the controls a player is tapping
+  PASS  /club-manager rendered its manual slot to measure against
+  PASS  /club-manager left 182px between the nearest control and the ad (floor 150px)
+  PASS  /squad-deal rendered its manual slot to measure against
+  PASS  /squad-deal left 182px between the nearest control and the ad (floor 150px)
+  PASS  /footle rendered its manual slot to measure against
+  PASS  /footle left 432px between the nearest control and the ad (floor 150px)
+
+playAdRoutes: green. One deliberate game route requested one ad, 16 policy-risk routes requested none, delayed Accept worked, and Essential only stayed off.
+[draws] total 173 in 29 page loads of 27 contexts, walk exit 0; by path: /footle 64, / 15, /football-timeline 11, /admin/login 9, /about 8, /guess-nfl-team 7

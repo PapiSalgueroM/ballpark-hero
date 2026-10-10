@@ -1,0 +1,12 @@
+route chunks held back 2500ms so the fallback state is certain
+1) nothing renders under the route fallback
+2) and the page does not shift past the ceiling
+
+   ok   /football-grid   cls=0.105  footers after load=1
+   ok   /nba-grid        cls=0.028  footers after load=1
+   ok   /pro-football    cls=0  footers after load=1
+   ok   /about           cls=0  footers after load=1
+   ok   /soccer-career   cls=0  footers after load=1
+
+playBootShift: green. The footer waits for the page it sits under.
+[draws] total 32 in 5 page loads of 5 contexts, walk exit 0; by path: /football-grid 7, /nba-grid 7, /pro-football 7, /soccer-career 7, /about 4
