@@ -1,0 +1,20 @@
+mut shapeorder: applied
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness reds
+5
+  FAIL (section 2): set 0: every story adds up by the independent checker (22800 looked at): 1223 broke it, the first: set 0 fifteen 0 2026|w2|GB|DET|29-31 (10-17): shape late, the rule says comeback
+  FAIL (section 2): set 1: every story adds up by the independent checker (22800 looked at): 1316 broke it, the first: set 1 fifteen 0 2026|w6|HOU|JAX|32-18 (17-10): shape late, the rule says comeback
+  FAIL (section 2): set 2: every story adds up by the independent checker (22800 looked at): 1273 broke it, the first: set 2 fifteen 0 2026|w2|DET|MIN|28-20 (13-10): shape late, the rule says comeback
+  FAIL (section 2): set 3: every story adds up by the independent checker (22800 looked at): 1258 broke it, the first: set 3 fifteen 0 2026|w7|NO|CHI|34-25 (28-24): shape trade, the rule says comeback
+simGmGameDay: 169 checks, 5 failed
+--- vitest
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 214[2mms[22m[39m
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mnames the go ahead that stood, the score it answered and the last score of the winner[32m 3[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mis one play when the winner scored first, was never caught and never scored again[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mmeasures the deepest hole the winner was in[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22manswers null when the side named as the winner is not ahead at the end[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mleaves the game level or the loser ahead after play (2), on every final the NFL law can tell[32m 273[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mrout: the margin is the number or more, whatever else happened[32m 0[2mms[22m[39m
+tree restored
+MUT shapeorder: harness exit=1 vitest exit=1

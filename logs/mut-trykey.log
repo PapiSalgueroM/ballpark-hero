@@ -1,0 +1,20 @@
+mut trykey: applied
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness reds
+5
+  FAIL (section 1): set 0: the swapped share 0.43487 is under 0.002
+  FAIL (section 1): set 1: the swapped share 0.43724 is under 0.002
+  FAIL (section 1): set 2: the swapped share 0.43636 is under 0.002
+  FAIL (section 1): set 3: the swapped share 0.43430 is under 0.002
+simGmGameDay: 169 checks, 5 failed
+--- vitest
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mkeeps the first try that is not level and has the winner ahead[32m 3[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mwalks past a level first try to a later one[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mhands the first try to the winner after every try has missed, and says so[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a law that is level on its first try and never gives the winner[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses whatever is not two whole scores, one damaged answer at a time[32m 4[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a decided game that does not read as one, without asking the law[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mhands the law the decided game itself, so an engine that draws overtime can say so[32m 0[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with the NFL law[2m > [22mnever names another winner, is never level, and takes no draw from Math.random[39m[32m 158[2mms[22m[39m
+tree restored
+MUT trykey: harness exit=1 vitest exit=1

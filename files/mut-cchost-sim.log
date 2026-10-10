@@ -1,0 +1,33 @@
+bundled in 79 ms; seed sets 0, 1, 2, 3, 4; 40 seasons a league kind a set
+  FAIL (section 4): set 0: playBracketAll gives the engine's thirteen games, champion, next 64 draws and records (80 looked at): 80 broke it, the first: set 0 fifteen 0: AFC Championship|BUF|NE|40|25|BUF
+  FAIL (section 4): set 0: four presses of playBracketWeek, the save through JSON between them, give the same (80 looked at): 80 broke it, the first: set 0 fifteen 0: AFC Championship|BUF|NE|40|25|BUF
+  FAIL (section 5): set 0: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 0 fifteen 0
+set 0: 80 seasons, 22800 games told in 4510 ms; points a team game 22.64 (free 22.64); losers on 15 or fewer 0.4300 (free 0.4298); shutouts 0.0137 (free 0.0147); sides on 40 or more 0.0524 (free 0.0517); swapped 0.00039; the AFC champion won 38 of 80 title games
+  FAIL (section 4): set 1: playBracketAll gives the engine's thirteen games, champion, next 64 draws and records (80 looked at): 80 broke it, the first: set 1 fifteen 0: AFC Championship|DEN|NE|41|27|DEN
+  FAIL (section 4): set 1: four presses of playBracketWeek, the save through JSON between them, give the same (80 looked at): 80 broke it, the first: set 1 fifteen 0: AFC Championship|DEN|NE|41|27|DEN
+  FAIL (section 5): set 1: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 1 fifteen 0
+set 1: 80 seasons, 22800 games told in 4190 ms; points a team game 22.74 (free 22.74); losers on 15 or fewer 0.4236 (free 0.4300); shutouts 0.0129 (free 0.0156); sides on 40 or more 0.0529 (free 0.0536); swapped 0.00061; the AFC champion won 46 of 80 title games
+  FAIL (section 4): set 2: playBracketAll gives the engine's thirteen games, champion, next 64 draws and records (80 looked at): 80 broke it, the first: set 2 fifteen 0: AFC Championship|BAL|JAX|28|45|JAX
+  FAIL (section 4): set 2: four presses of playBracketWeek, the save through JSON between them, give the same (80 looked at): 80 broke it, the first: set 2 fifteen 0: AFC Championship|BAL|JAX|28|45|JAX
+  FAIL (section 5): set 2: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 2 fifteen 0
+set 2: 80 seasons, 22800 games told in 4162 ms; points a team game 22.68 (free 22.61); losers on 15 or fewer 0.4290 (free 0.4354); shutouts 0.0150 (free 0.0139); sides on 40 or more 0.0538 (free 0.0506); swapped 0.00066; the AFC champion won 47 of 80 title games
+  FAIL (section 4): set 3: playBracketAll gives the engine's thirteen games, champion, next 64 draws and records (80 looked at): 80 broke it, the first: set 3 fifteen 0: AFC Championship|BAL|NE|35|19|BAL
+  FAIL (section 4): set 3: four presses of playBracketWeek, the save through JSON between them, give the same (80 looked at): 80 broke it, the first: set 3 fifteen 0: AFC Championship|BAL|NE|35|19|BAL
+  FAIL (section 5): set 3: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 3 fifteen 0
+set 3: 80 seasons, 22800 games told in 4132 ms; points a team game 22.63 (free 22.72); losers on 15 or fewer 0.4342 (free 0.4265); shutouts 0.0136 (free 0.0147); sides on 40 or more 0.0519 (free 0.0521); swapped 0.00061; the AFC champion won 43 of 80 title games
+  FAIL (section 4): set 4: playBracketAll gives the engine's thirteen games, champion, next 64 draws and records (80 looked at): 80 broke it, the first: set 4 fifteen 0: AFC Championship|BAL|DEN|18|24|DEN
+  FAIL (section 4): set 4: four presses of playBracketWeek, the save through JSON between them, give the same (80 looked at): 80 broke it, the first: set 4 fifteen 0: AFC Championship|BAL|DEN|18|24|DEN
+  FAIL (section 5): set 4: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 4 fifteen 0
+set 4: 80 seasons, 22800 games told in 4151 ms; points a team game 22.63 (free 22.74); losers on 15 or fewer 0.4320 (free 0.4243); shutouts 0.0150 (free 0.0137); sides on 40 or more 0.0509 (free 0.0521); swapped 0.00048; the AFC champion won 47 of 80 title games
+
+MEASURED over seed sets 0, 1, 2, 3, 4 (114000 games):
+  points: told 22.6251 to 22.7401, free 22.6056 to 22.7399, told less free -0.1147 to 0.0728 (band 0.25 either side)
+  losers15: told 0.4236 to 0.4342, free 0.4243 to 0.4354, told less free -0.0064 to 0.0077 (band 0.02 either side)
+  shutouts: told 0.0129 to 0.0150, free 0.0137 to 0.0156, told less free -0.0027 to 0.0013 (band 0.005 either side)
+  forty: told 0.0509 to 0.0538, free 0.0506 to 0.0536, told less free -0.0012 to 0.0032 (band 0.006 either side)
+  swapped share 0.0004 to 0.0007 (band: under 0.002)
+  tries a game by decile of the home chance (games, mean tries, swapped): 0: 0, none, 0 | 0.1: 633, 1.93, 3 | 0.2: 5387, 1.94, 2 | 0.3: 11568, 1.98, 0 | 0.4: 19289, 1.99, 0 | 0.5: 24535, 2.02, 0 | 0.6: 25426, 2.02, 0 | 0.7: 19141, 2.03, 9 | 0.8: 7774, 2.14, 45 | 0.9: 247, 1.97, 4
+  shapes of 114000 stories: trade 0.299, wire 0.218, late 0.170, rout 0.169, comeback 0.143
+  the AFC champion's share of title games 0.4750 to 0.5875 a set (a level title game is 0.582 by the engine's arithmetic; printed, never asserted)
+
+simGmGameDay: 169 checks, 15 failed

@@ -1,0 +1,13 @@
+mut-periods exit=0 25s | MUT periods: harness exit=1 vitest exit=1
+mut-home exit=0 25s | MUT home: harness exit=1 vitest exit=1
+mut-filter exit=0 24s | MUT filter: harness exit=1 vitest exit=1
+mut-trykey exit=0 25s | MUT trykey: harness exit=1 vitest exit=1
+mut-fallback exit=0 24s | MUT fallback: harness exit=1 vitest exit=1
+mut-season exit=0 24s | MUT season: harness exit=0 vitest exit=1
+mut-lowscore exit=0 24s | MUT lowscore: harness exit=0 vitest exit=1
+mut-afterdecided exit=0 24s | MUT afterdecided: harness exit=0 vitest exit=1
+mut-lastwinner exit=0 24s | MUT lastwinner: harness exit=0 vitest exit=1
+mut-cchost exit=0 24s | MUT cchost: harness exit=1 vitest exit=0
+mut-dupseeds exit=0 25s | MUT dupseeds: harness exit=0 vitest exit=1
+mut-shapeorder exit=0 25s | MUT shapeorder: harness exit=1 vitest exit=1
+clean-after exit=0 22s | simGmGameDay: 169 checks, 0 failed

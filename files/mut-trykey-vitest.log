@@ -1,0 +1,41 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/gmGameScore.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 181[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mkeeps the first try that is not level and has the winner ahead[32m 3[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mwalks past a level first try to a later one[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mhands the first try to the winner after every try has missed, and says so[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a law that is level on its first try and never gives the winner[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses whatever is not two whole scores, one damaged answer at a time[32m 4[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a decided game that does not read as one, without asking the law[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mhands the law the decided game itself, so an engine that draws overtime can say so[32m 0[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with the NFL law[2m > [22mnever names another winner, is never level, and takes no draw from Math.random[39m[32m 158[2mms[22m[39m
+[31m     → expected 1001 to be less than 400[39m
+   [32m✓[39m decidedScore, with the NFL law[2m > [22mtells the same final for the same key, and another for another key[32m 11[2mms[22m[39m
+   [32m✓[39m quickGame and toldWinner[2m > [22mcarries the key and the clubs with the told final[32m 1[2mms[22m[39m
+   [32m✓[39m quickGame and toldWinner[2m > [22mrefuses a fixture that does not read as one, one damaged field at a time[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameDay.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 540[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameScore.test.ts[2m > [22mdecidedScore, with the NFL law[2m > [22mnever names another winner, is never level, and takes no draw from Math.random
+[31m[1mAssertionError[22m: expected 1001 to be less than 400[39m
+[36m [2m❯[22m src/lib/gmGameScore.test.ts:[2m96:21[22m[39m
+    [90m 94| [39m    [34mexpect[39m(spy)[33m.[39mnot[33m.[39m[34mtoHaveBeenCalled[39m()[33m;[39m
+    [90m 95| [39m    /* a swap needs 24 misses in a row: it is the rare way out, not th…
+    [90m 96| [39m    [34mexpect[39m(swapped)[33m.[39m[34mtoBeLessThan[39m([34m400[39m)[33m;[39m
+    [90m   | [39m                    [31m^[39m
+    [90m 97| [39m  })[33m;[39m
+    [90m 98| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m44 passed[39m[22m[90m (45)[39m
+[2m   Start at [22m 17:44:26
+[2m   Duration [22m 1.56s[2m (transform 342ms, setup 205ms, collect 470ms, tests 780ms, environment 1.29s, prepare 271ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameScore.test.ts,title=src/lib/gmGameScore.test.ts > decidedScore%2C with the NFL law > never names another winner%2C is never level%2C and takes no draw from Math.random,line=96,column=21::AssertionError: expected 1001 to be less than 400%0A ❯ src/lib/gmGameScore.test.ts:96:21%0A%0A

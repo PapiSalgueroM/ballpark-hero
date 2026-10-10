@@ -1,0 +1,21 @@
+mut fallback: applied
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness reds
+5
+  FAIL (section 1): set 0: a told final never names another winner than the engine's (22800 looked at): 9 broke it, the first: set 0 fifteen 3 2026|w9|SF|NYG|19-35: told 31-17, the engine's winner is NYG
+  FAIL (section 1): set 1: a told final never names another winner than the engine's (22800 looked at): 14 broke it, the first: set 1 fifteen 0 2026|w14|CLE|SF|27-22: told 10-28, the engine's winner is CLE
+  FAIL (section 1): set 2: a told final never names another winner than the engine's (22800 looked at): 15 broke it, the first: set 2 fifteen 7 2026|w2|NE|NYJ|29-42: told 35-7, the engine's winner is NYJ
+  FAIL (section 1): set 3: a told final never names another winner than the engine's (22800 looked at): 14 broke it, the first: set 3 fifteen 1 2026|w4|BUF|MIA|24-36: told 31-14, the engine's winner is MIA
+simGmGameDay: 169 checks, 5 failed
+--- vitest
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mkeeps the first try that is not level and has the winner ahead[32m 3[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mwalks past a level first try to a later one[32m 0[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with laws written for the test[2m > [22mhands the first try to the winner after every try has missed, and says so[39m[32m 11[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a law that is level on its first try and never gives the winner[32m 1[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with laws written for the test[2m > [22mrefuses whatever is not two whole scores, one damaged answer at a time[39m[32m 2[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a decided game that does not read as one, without asking the law[32m 1[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mhands the law the decided game itself, so an engine that draws overtime can say so[32m 0[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with the NFL law[2m > [22mnever names another winner, is never level, and takes no draw from Math.random[39m[32m 5[2mms[22m[39m
+grep: write error: Broken pipe
+tree restored
+MUT fallback: harness exit=1 vitest exit=1

@@ -1,0 +1,148 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/gmGameScore.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 41[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mkeeps the first try that is not level and has the winner ahead[32m 3[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mwalks past a level first try to a later one[32m 0[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with laws written for the test[2m > [22mhands the first try to the winner after every try has missed, and says so[39m[32m 11[2mms[22m[39m
+[31m     → expected { home: 31, away: 13, tries: 24, …(1) } to deeply equal { home: 13, away: 31, tries: 24, …(1) }[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a law that is level on its first try and never gives the winner[32m 1[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with laws written for the test[2m > [22mrefuses whatever is not two whole scores, one damaged answer at a time[39m[32m 2[2mms[22m[39m
+[31m     → expected { home: 3, away: 20, tries: 24, …(1) } to deeply equal { home: 20, away: 3, tries: 24, …(1) }[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a decided game that does not read as one, without asking the law[32m 1[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mhands the law the decided game itself, so an engine that draws overtime can say so[32m 0[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with the NFL law[2m > [22mnever names another winner, is never level, and takes no draw from Math.random[39m[32m 5[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m decidedScore, with the NFL law[2m > [22mtells the same final for the same key, and another for another key[32m 15[2mms[22m[39m
+   [32m✓[39m quickGame and toldWinner[2m > [22mcarries the key and the clubs with the told final[32m 1[2mms[22m[39m
+   [32m✓[39m quickGame and toldWinner[2m > [22mrefuses a fixture that does not read as one, one damaged field at a time[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [31m❯[39m src/lib/gmGameDay.test.ts [2m([22m[2m22 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 475[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mnames the go ahead that stood, the score it answered and the last score of the winner[32m 3[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mis one play when the winner scored first, was never caught and never scored again[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mmeasures the deepest hole the winner was in[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22manswers null when the side named as the winner is not ahead at the end[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mleaves the game level or the loser ahead after play (2), on every final the NFL law can tell[32m 249[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mrout: the margin is the number or more, whatever else happened[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mcomeback: the winner was that far behind[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mlate: the go ahead that stood came in the last period[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mwire: the winner scored first and was never level or behind again[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mtrade: anything else[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mone under each number is not that shape[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22madds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random[32m 200[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcuts the hour where the clock label does, and as the ledger says[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22msays each shape in one sentence that names the winner, with the numbers the law holds[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcarries a "?" that marks the clock thin and whose worked example is a game the rules tell that way[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final with no winner, a final no drive list makes, and a told game that does not read as one[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a list that is not the final, one damaged thing at a time[32m 1[2mms[22m[39m
+[31m   [31m×[31m tellGame: one law, two paths[2m > [22mtells the final the quick path gives, and a story of that final[39m[32m 12[2mms[22m[39m
+[31m     → expected false to be true // Object.is equality[39m
+   [32m✓[39m tellGame: one law, two paths[2m > [22mrefuses exactly when the quick path does[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mis made from a told game and read back as it was, through JSON[32m 1[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mhands back a fresh object of the known fields only[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22manswers null for every field damaged, one at a time, and never throws[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22mtellGame: one law, two paths[2m > [22mtells the final the quick path gives, and a story of that final
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m201:49[22m[39m
+    [90m199| [39m      const t = tellGame(NFL_SCORE_LAW, NFL_GAME_DAY, f, i % 2 ? 'away…
+    [90m200| [39m      [34mexpect[39m(t[33m.[39mtold)[33m.[39m[34mtoEqual[39m(quick)[33m;[39m
+    [90m201| [39m      expect(quick.homeScore > quick.awayScore).toBe(f.decided.homeWon…
+    [90m   | [39m                                                [31m^[39m
+    [90m202| [39m      [35mconst[39m s [33m=[39m t[33m.[39mstory[33m![39m[33m;[39m
+    [90m203| [39m      [34mexpect[39m(s)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameScore.test.ts[2m > [22mdecidedScore, with laws written for the test[2m > [22mhands the first try to the winner after every try has missed, and says so
+[31m[1mAssertionError[22m: expected { home: 31, away: 13, tries: 24, …(1) } to deeply equal { home: 13, away: 31, tries: 24, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "away": 31,[39m
+[32m-   "home": 13,[39m
+[31m+   "away": 13,[39m
+[31m+   "home": 31,[39m
+[2m    "swapped": true,[22m
+[2m    "tries": 24,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/gmGameScore.test.ts:[2m45:42[22m[39m
+    [90m 43| [39m  it('hands the first try to the winner after every try has missed, an…
+    [90m 44| [39m    [35mconst[39m law [33m=[39m [34mscripted[39m([[[34m31[39m[33m,[39m [34m13[39m][33m,[39m [[34m24[39m[33m,[39m [34m10[39m]])[33m;[39m
+    [90m 45| [39m    expect(decidedScore(law, away, 'k')).toEqual({ home: 13, away: 31,…
+    [90m   | [39m                                         [31m^[39m
+    [90m 46| [39m    [34mexpect[39m(law[33m.[39mcalls)[33m.[39m[34mtoBe[39m([33mSCORE_TRIES[39m)[33m;[39m
+    [90m 47| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameScore.test.ts[2m > [22mdecidedScore, with laws written for the test[2m > [22mrefuses whatever is not two whole scores, one damaged answer at a time
+[31m[1mAssertionError[22m: expected { home: 3, away: 20, tries: 24, …(1) } to deeply equal { home: 20, away: 3, tries: 24, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[32m-   "away": 3,[39m
+[32m-   "home": 20,[39m
+[31m+   "away": 20,[39m
+[31m+   "home": 3,[39m
+[2m    "swapped": true,[22m
+[2m    "tries": 24,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/gmGameScore.test.ts:[2m60:65[22m[39m
+    [90m 58| [39m      expect(decidedScore(scripted([bad, [21, 20]]), home, 'k')).toEqu…
+    [90m 59| [39m      [90m/* and a damaged LATER try is only a miss */[39m
+    [90m 60| [39m      expect(decidedScore(scripted([[3, 20], bad]), home, 'k')).toEqua…
+    [90m   | [39m                                                                [31m^[39m
+    [90m 61| [39m    }
+    [90m 62| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameScore.test.ts[2m > [22mdecidedScore, with the NFL law[2m > [22mnever names another winner, is never level, and takes no draw from Math.random
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/gmGameScore.test.ts:[2m90:35[22m[39m
+    [90m 88| [39m        [34mexpect[39m(s)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m 89| [39m        [34mexpect[39m(s[33m![39m[33m.[39mhome)[33m.[39mnot[33m.[39m[34mtoBe[39m(s[33m![39m[33m.[39maway)[33m;[39m
+    [90m 90| [39m        [34mexpect[39m(s[33m![39m[33m.[39mhome [33m>[39m s[33m![39m[33m.[39maway)[33m.[39m[34mtoBe[39m(homeWon)[33m;[39m
+    [90m   | [39m                                  [31m^[39m
+    [90m 91| [39m        [35mif[39m (s[33m![39m[33m.[39mswapped) swapped [33m+=[39m [34m1[39m[33m;[39m
+    [90m 92| [39m      }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m41 passed[39m[22m[90m (45)[39m
+[2m   Start at [22m 17:44:51
+[2m   Duration [22m 1.56s[2m (transform 376ms, setup 195ms, collect 578ms, tests 582ms, environment 1.30s, prepare 437ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > tellGame%3A one law%2C two paths > tells the final the quick path gives%2C and a story of that final,line=201,column=49::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/gmGameDay.test.ts:201:49%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameScore.test.ts,title=src/lib/gmGameScore.test.ts > decidedScore%2C with laws written for the test > hands the first try to the winner after every try has missed%2C and says so,line=45,column=42::AssertionError: expected { home: 31, away: 13, tries: 24, …(1) } to deeply equal { home: 13, away: 31, tries: 24, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "away": 31,%0A-   "home": 13,%0A+   "away": 13,%0A+   "home": 31,%0A    "swapped": true,%0A    "tries": 24,%0A  }%0A%0A ❯ src/lib/gmGameScore.test.ts:45:42%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameScore.test.ts,title=src/lib/gmGameScore.test.ts > decidedScore%2C with laws written for the test > refuses whatever is not two whole scores%2C one damaged answer at a time,line=60,column=65::AssertionError: expected { home: 3, away: 20, tries: 24, …(1) } to deeply equal { home: 20, away: 3, tries: 24, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "away": 3,%0A-   "home": 20,%0A+   "away": 20,%0A+   "home": 3,%0A    "swapped": true,%0A    "tries": 24,%0A  }%0A%0A ❯ src/lib/gmGameScore.test.ts:60:65%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameScore.test.ts,title=src/lib/gmGameScore.test.ts > decidedScore%2C with the NFL law > never names another winner%2C is never level%2C and takes no draw from Math.random,line=90,column=35::AssertionError: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/gmGameScore.test.ts:90:35%0A%0A

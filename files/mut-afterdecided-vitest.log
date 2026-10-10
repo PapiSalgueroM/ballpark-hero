@@ -1,0 +1,49 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 181[2mms[22m[39m
+ [31m❯[39m src/lib/gmBracket.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 65[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mis the fourteen club format of the two sourced ledger, for the seasons that ledger gives it[32m 2[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mgives each conference one bye, to its top seed, and thirteen single games[32m 2[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mplays the worked example of the "?" the way the "?" tells it[32m 1[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mpairs the top seed with the lowest seed left whoever came through, and the better seed hosts[32m 3[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mis the same bracket all at once and a round a press, and never touches the save it is handed[32m 5[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22msays in its "?" what is dated and what is this sim own lean, and the lean is the engine arithmetic[32m 6[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays a play in and best of seven rounds, a game at a time or a round at a time[32m 3[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays a format with an order of its own in that order, and still a round at a time[32m 1[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mrefuses a game whose winner is neither side, and plays nothing for a tie it cannot name[32m 1[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mreads a sound save and refuses every field damaged, one at a time, without ever throwing[32m 14[2mms[22m[39m
+[31m   [31m×[31m the saved bracket: optional, guarded and repairable[2m > [22mnames what is wrong with a save that reads but does not replay[39m[32m 19[2mms[22m[39m
+[31m     → a game after the tie was decided: no problem named: expected false to be true // Object.is equality[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mhands a sound save back untouched, rebuilds from the same seeds when they still read, and from fresh ones when they do not[32m 7[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameDay.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 534[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmBracket.test.ts[2m > [22mthe saved bracket: optional, guarded and repairable[2m > [22mnames what is wrong with a save that reads but does not replay
+[31m[1mAssertionError[22m: a game after the tie was decided: no problem named: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/lib/gmBracket.test.ts:[2m264:106[22m[39m
+    [90m262| [39m      [34medit[39m(bad)[33m;[39m
+    [90m263| [39m      [35mconst[39m problems [33m=[39m [34mbracketProblems[39m([33mNFL_BRACKET[39m[33m,[39m bad[33m,[39m isClub)[33m;[39m
+    [90m264| [39m      expect(problems.some(p => says.test(p)), `${name}: ${problems.jo…
+    [90m   | [39m                                                                                                         [31m^[39m
+    [90m265| [39m      const fixed = repairGmBracket(NFL_BRACKET, bad, 2026, () => SEED…
+    [90m266| [39m      [34mexpect[39m(fixed[33m.[39msave[33m.[39mplayed[33m,[39m name)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m44 passed[39m[22m[90m (45)[39m
+[2m   Start at [22m 17:46:06
+[2m   Duration [22m 1.57s[2m (transform 363ms, setup 196ms, collect 519ms, tests 780ms, environment 1.27s, prepare 439ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the saved bracket%3A optional%2C guarded and repairable > names what is wrong with a save that reads but does not replay,line=264,column=106::AssertionError: a game after the tie was decided: no problem named: expected false to be true // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- true%0A+ false%0A%0A ❯ src/lib/gmBracket.test.ts:264:106%0A%0A

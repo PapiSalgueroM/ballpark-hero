@@ -1,0 +1,16 @@
+mut lastwinner: applied
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness reds
+0
+simGmGameDay: 169 checks, 0 failed
+--- vitest
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 175[2mms[22m[39m
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mnames the go ahead that stood, the score it answered and the last score of the winner[32m 3[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mis one play when the winner scored first, was never caught and never scored again[32m 1[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mmeasures the deepest hole the winner was in[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22manswers null when the side named as the winner is not ahead at the end[32m 0[2mms[22m[39m
+   [33m[2m✓[22m[39m decidingPlays[2m > [22mleaves the game level or the loser ahead after play (2), on every final the NFL law can tell [33m 303[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mrout: the margin is the number or more, whatever else happened[32m 0[2mms[22m[39m
+tree restored
+MUT lastwinner: harness exit=0 vitest exit=1

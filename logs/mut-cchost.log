@@ -1,0 +1,16 @@
+mut cchost: applied
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness reds
+15
+  FAIL (section 4): set 0: playBracketAll gives the engine's thirteen games, champion, next 64 draws and records (80 looked at): 80 broke it, the first: set 0 fifteen 0: AFC Championship|BUF|NE|40|25|BUF
+  FAIL (section 4): set 0: four presses of playBracketWeek, the save through JSON between them, give the same (80 looked at): 80 broke it, the first: set 0 fifteen 0: AFC Championship|BUF|NE|40|25|BUF
+  FAIL (section 5): set 0: a postseason told inside the press is the engine's postseason, draw for draw (80 looked at): 80 broke it, the first: set 0 fifteen 0
+  FAIL (section 4): set 1: playBracketAll gives the engine's thirteen games, champion, next 64 draws and records (80 looked at): 80 broke it, the first: set 1 fifteen 0: AFC Championship|DEN|NE|41|27|DEN
+simGmGameDay: 169 checks, 15 failed
+--- vitest
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 197[2mms[22m[39m
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameDay.test.ts [2m([22m[2m22 tests[22m[2m)[22m[33m 532[2mms[22m[39m
+[2m      Tests [22m [1m[32m45 passed[39m[22m[90m (45)[39m
+tree restored
+MUT cchost: harness exit=1 vitest exit=0

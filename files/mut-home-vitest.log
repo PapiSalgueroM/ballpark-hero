@@ -1,0 +1,89 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 198[2mms[22m[39m
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [31m❯[39m src/lib/gmGameDay.test.ts [2m([22m[2m22 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 289[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mnames the go ahead that stood, the score it answered and the last score of the winner[32m 3[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mis one play when the winner scored first, was never caught and never scored again[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mmeasures the deepest hole the winner was in[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22manswers null when the side named as the winner is not ahead at the end[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mleaves the game level or the loser ahead after play (2), on every final the NFL law can tell[32m 253[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mrout: the margin is the number or more, whatever else happened[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mcomeback: the winner was that far behind[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mlate: the go ahead that stood came in the last period[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mwire: the winner scored first and was never level or behind again[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mtrade: anything else[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mone under each number is not that shape[32m 0[2mms[22m[39m
+[31m   [31m×[31m gameStory, with the NFL law[2m > [22madds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random[39m[32m 18[2mms[22m[39m
+[31m     → expected [ 13, 17, false, 4 ] to deeply equal [ 13, 17, true, 4 ][39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcuts the hour where the clock label does, and as the ledger says[32m 2[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22msays each shape in one sentence that names the winner, with the numbers the law holds[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcarries a "?" that marks the clock thin and whose worked example is a game the rules tell that way[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final with no winner, a final no drive list makes, and a told game that does not read as one[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a list that is not the final, one damaged thing at a time[32m 1[2mms[22m[39m
+[31m   [31m×[31m tellGame: one law, two paths[2m > [22mtells the final the quick path gives, and a story of that final[39m[32m 2[2mms[22m[39m
+[31m     → expected [ 14, 20 ] to deeply equal [ 20, 14 ][39m
+   [32m✓[39m tellGame: one law, two paths[2m > [22mrefuses exactly when the quick path does[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mis made from a told game and read back as it was, through JSON[32m 1[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mhands back a fresh object of the known fields only[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22manswers null for every field damaged, one at a time, and never throws[32m 2[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22mgameStory, with the NFL law[2m > [22madds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random
+[31m[1mAssertionError[22m: expected [ 13, 17, false, 4 ] to deeply equal [ 13, 17, true, 4 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    13,[22m
+[2m    17,[22m
+[32m-   true,[39m
+[31m+   false,[39m
+[2m    4,[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m112:64[22m[39m
+    [90m110| [39m      [35mconst[39m a [33m=[39m [34mgameStory[39m([33mNFL_GAME_DAY[39m[33m,[39m g[33m,[39m [32m'away'[39m[33m,[39m [34m4[39m)[33m![39m[33m;[39m
+    [90m111| [39m      [34mexpect[39m(h)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m112| [39m      expect([h.game.us, h.game.them, h.game.home, h.game.md]).toEqual…
+    [90m   | [39m                                                               [31m^[39m
+    [90m113| [39m      expect([a.game.us, a.game.them, a.game.home]).toEqual([g.awaySco…
+    [90m114| [39m      [35mfor[39m ([35mconst[39m s [35mof[39m [h[33m,[39m a]) {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22mtellGame: one law, two paths[2m > [22mtells the final the quick path gives, and a story of that final
+[31m[1mAssertionError[22m: expected [ 14, 20 ] to deeply equal [ 20, 14 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   20,[39m
+[2m    14,[22m
+[31m+   20,[39m
+[2m  ][22m
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m204:81[22m[39m
+    [90m202| [39m      [35mconst[39m s [33m=[39m t[33m.[39mstory[33m![39m[33m;[39m
+    [90m203| [39m      [34mexpect[39m(s)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m204| [39m      expect(s.game.home ? [s.game.us, s.game.them] : [s.game.them, s.…
+    [90m   | [39m                                                                                [31m^[39m
+    [90m205| [39m    }
+    [90m206| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m43 passed[39m[22m[90m (45)[39m
+[2m   Start at [22m 17:43:35
+[2m   Duration [22m 1.37s[2m (transform 329ms, setup 183ms, collect 559ms, tests 536ms, environment 1.27s, prepare 482ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > gameStory%2C with the NFL law > adds up by side and by quarter%2C mirrors for the away club%2C and tells the same story twice without Math.random,line=112,column=64::AssertionError: expected [ 13, 17, false, 4 ] to deeply equal [ 13, 17, true, 4 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    13,%0A    17,%0A-   true,%0A+   false,%0A    4,%0A  ]%0A%0A ❯ src/lib/gmGameDay.test.ts:112:64%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > tellGame%3A one law%2C two paths > tells the final the quick path gives%2C and a story of that final,line=204,column=81::AssertionError: expected [ 14, 20 ] to deeply equal [ 20, 14 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   20,%0A    14,%0A+   20,%0A  ]%0A%0A ❯ src/lib/gmGameDay.test.ts:204:81%0A%0A

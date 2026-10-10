@@ -1,0 +1,20 @@
+mut periods: applied
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness reds
+5
+  FAIL (section 2): set 0: every story adds up by the independent checker (22800 looked at): 8007 broke it, the first: set 0 fifteen 0 2026|w1|IND|JAX|29-42 (14-19): the quarters read {"us":[7,0,0,7],"them":[3,13,3,0]}, the plays make {"us":[7,0,0,7],"them":[6
+  FAIL (section 2): set 1: every story adds up by the independent checker (22800 looked at): 8072 broke it, the first: set 1 fifteen 0 2026|w1|BAL|CIN|30-43 (16-27): the quarters read {"us":[7,0,0,9],"them":[10,0,17,0]}, the plays make {"us":[7,0,3,6],"them":[
+  FAIL (section 2): set 2: every story adds up by the independent checker (22800 looked at): 8125 broke it, the first: set 2 fifteen 0 2026|w1|KC|LV|33-25 (31-16): the quarters read {"us":[7,7,14,3],"them":[0,3,3,10]}, the plays make {"us":[7,7,17,0],"them":[0
+  FAIL (section 2): set 3: every story adds up by the independent checker (22800 looked at): 8216 broke it, the first: set 3 fifteen 0 2026|w1|TB|CAR|16-20 (17-34): the quarters read {"us":[7,0,3,7],"them":[14,6,7,7]}, the plays make {"us":[7,3,0,7],"them":[14
+simGmGameDay: 169 checks, 5 failed
+--- vitest
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mnames the go ahead that stood, the score it answered and the last score of the winner[32m 3[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mis one play when the winner scored first, was never caught and never scored again[32m 1[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mmeasures the deepest hole the winner was in[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22manswers null when the side named as the winner is not ahead at the end[32m 1[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mleaves the game level or the loser ahead after play (2), on every final the NFL law can tell[32m 279[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mrout: the margin is the number or more, whatever else happened[32m 0[2mms[22m[39m
+tree restored
+MUT periods: harness exit=1 vitest exit=1
