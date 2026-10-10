@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+awards: node scripts/simCareerAwardsNight.mjs
+finish: node scripts/simCareerLeagueFinish.mjs
+finish-train1178: SIM_LEAGUE_FINISH_ATTRIBUTION=train1178 node scripts/simCareerLeagueFinish.mjs
+finish-stream: SIM_LEAGUE_FINISH_CONTROL=stream node scripts/simCareerLeagueFinish.mjs
+seasons: node scripts/simCareerLeagueSeasons.mjs
+social: node scripts/simCareerSocialBrands.mjs
