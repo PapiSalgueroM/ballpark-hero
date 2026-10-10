@@ -1,0 +1,62 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmSeat.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 499[2mms[22m[39m
+ [31m❯[39m src/components/front-office-shared/GmCareerDesk.test.tsx [2m([22m[2m13 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 470[2mms[22m[39m
+   [32m✓[39m the three boxes[2m > [22mare one module level list, and the Job market box shows only between seats[32m 23[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws one tile an offer and takes a job on the second tap only[32m 183[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mstays out a year on the second tap only, and says when that opens the desk[32m 15[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22moffers no year out on a closed market, and its "?" opens the rules[32m 16[2mms[22m[39m
+   [32m✓[39m the job market panel[2m > [22mdraws something sane while he holds a seat[32m 6[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mdraws a box a stint with a mark a graded season[32m 12[2mms[22m[39m
+   [32m✓[39m the career panel[2m > [22mleaves the tier off a record older than the block and counts the seasons it cannot grade[32m 14[2mms[22m[39m
+[31m   [31m×[31m the GM level panel[2m > [22msells a point only in a tree this desk routes[39m[32m 79[2mms[22m[39m
+[31m     → expected <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p> to have a length of 4 but got 5[39m
+   [32m✓[39m the GM level panel[2m > [22msays XP has not started on a save whose desk is off[32m 21[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mshows a fixed height box first, then the panel, and keeps the panel across a save[32m 57[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mcontrol: built inside a render, the open panel is remounted by a save and loses what it held[32m 30[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mdraws its fallback under a server render and never throws[32m 10[2mms[22m[39m
+   [32m✓[39m a panel that loads on demand[2m > [22mevery loader resolves to a component[32m 0[2mms[22m[39m
+ [32m✓[39m src/lib/gmDeskHost.test.ts [2m([22m[2m39 tests[22m[2m)[22m[33m 1380[2mms[22m[39m
+   [33m[2m✓[22m[39m the record of a save older than the block[2m > [22mfills nothing in: titles out are titles in, the rest is a count, and it passes the career validator [33m 1221[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmDeskMount.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 293[2mms[22m[39m
+ [32m✓[39m src/lib/gmXp.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 365[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmSeatCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 153[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/components/front-office-shared/GmCareerDesk.test.tsx[2m > [22mthe GM level panel[2m > [22msells a point only in a tree this desk routes
+[31m[1mAssertionError[22m: expected <p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p> to have a length of 4 but got 5[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 4[39m
+[31m+ 5[39m
+
+[36m [2m❯[22m src/components/front-office-shared/GmCareerDesk.test.tsx:[2m196:63[22m[39m
+    [90m194| [39m    expect(container.querySelector('[data-gm-xp-earns]')!.textContent)…
+    [90m195| [39m    fireEvent[33m.[39m[34mclick[39m(screen[33m.[39m[34mgetByLabelText[39m([32m'How GM XP works'[39m))[33m;[39m
+    [90m196| [39m    expect(container.querySelectorAll('[data-gm-xp-help] p')).toHaveLe…
+    [90m   | [39m                                                              [31m^[39m
+    [90m197| [39m  })[33m;[39m
+    [90m198| [39m  [34mit[39m([32m'says XP has not started on a save whose desk is off'[39m[33m,[39m () [33m=>[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m101 passed[39m[22m[90m (102)[39m
+[2m   Start at [22m 13:27:06
+[2m   Duration [22m 4.97s[2m (transform 909ms, setup 566ms, collect 2.74s, tests 3.16s, environment 3.80s, prepare 1.33s)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/components/front-office-shared/GmCareerDesk.test.tsx,title=src/components/front-office-shared/GmCareerDesk.test.tsx > the GM level panel > sells a point only in a tree this desk routes,line=196,column=63::AssertionError: expected <p></p>%0A<p></p>%0A<p></p>%0A<p></p>%0A<p></p> to have a length of 4 but got 5%0A%0A- Expected%0A+ Received%0A%0A- 4%0A+ 5%0A%0A ❯ src/components/front-office-shared/GmCareerDesk.test.tsx:196:63%0A%0A
