@@ -1,0 +1,23 @@
+1) Footle practice run, made on the base build
+   base build, puzzle 1: {"name":"The answer was Murillo","line":"Nottingham Forest · Brazil · CB","flag":false}
+  PASS  the base build prints the feedback line bare ("Nottingham Forest · Brazil · CB"): this is the page the round changed
+  PASS  the base build wrote a practice save (footle-practice-run-v1); 4 keys copied
+  PASS  the branch build opens the base save on its run, at "Puzzle 2 of 5"
+  PASS  loading left the saved run byte for byte as the base wrote it
+   branch build, puzzle 2: {"name":"The answer was Raphinha","line":"FC Barcelona · 🇧🇷Brazil · LW","flag":true}
+  PASS  puzzle 2 of the old run shows its feedback line with a flag on the branch
+  PASS  the answer is the one the base save dealt (Raphinha)
+  PASS  no page error ()
+2) Club Manager career, made on the base build
+   base build groups: Europe (UEFA) 48 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 17 | Africa (CAF) 35 | Asia (AFC) 14 | Oceania (OFC) 3 | Elsewhere 3
+  PASS  the base build draws an Elsewhere group (Niger, Southern Sudan, Turkmenistan): this is what the round removes
+   keys the base build wrote: cookie-consent (9), dukb-guest-handle (16), dukb-club-manager-save (54681), rules-gate-seen:/club-manager (1)
+   base build with the base save, first screen: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Newcastle 2026-27 · Season 1 Week 1 of 54 · Board 60/100 🏆 0 trophies Resume CareerDelete SLO
+   base build reopening its own save: hub reached true, after 1 click(s)
+   branch build with the base save, first screen: Skip to main content DOUKNOWBALL Back Track stats CLUB MANAGER Your managers on this device. Up to three careers, each one saved on its own. SLOT 1 · LAST PLAYED You Newcastle 2026-27 · Season 1 Week 1 of 54 · Board 60/100 🏆 0 trophies Resume CareerDelete SLO
+  PASS  the branch build reopens the base career the way the base build does (hub reached true after 1 click(s); base: true after 1)
+   branch build groups: Europe (UEFA) 48 | South America (CONMEBOL) 10 | North and Central America, Caribbean (CONCACAF) 17 | Africa (CAF) 37 | Asia (AFC) 15 | Oceania (OFC) 3
+  PASS  the old career has no Elsewhere group on the branch
+  PASS  the old career's market still lists its nations (130)
+  PASS  no page error ()
+reviewOldSaves: 0 problems
