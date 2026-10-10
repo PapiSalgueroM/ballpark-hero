@@ -25,6 +25,7 @@ import { NHL_BADGES } from '@/lib/careerBadges';
 import { nhlUnreadInboxCount, answerNhlInboxMessage, nhlDraftNightInbox, NHL_CALENDAR } from '@/lib/nhlCareerInbox';
 import { dismissNhlRivalryEvent, resolveNhlRivalryChoice } from '@/lib/nhlCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { slateField } from '@/lib/usSeasonShape';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NHL_CAREER_HALL } from '@/lib/nhlCareerHall';
 import { nhlSeasonReview } from '@/lib/usCareerSeasonReview';
@@ -86,6 +87,8 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = wi
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     awards: [], teamResult: 'SUSPENDED', salary: 0,
+    /* Round 1226: a season sat out still says how long it was (84 from 2026-27). */
+    ...slateField('nhl', c.year, c.team),
   }),
   suspendedNote: '🚫 Season served on the suspended list. No hockey, no money, no going back.',
 

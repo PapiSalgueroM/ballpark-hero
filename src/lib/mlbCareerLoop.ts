@@ -13,11 +13,12 @@
    the position first. */
 
 import type { MlbCareerState, MlbSeasonLine } from './mlbMyCareer';
-import { mlbCareerTotals, mlbLegacyOf, mlbTeamLabelOf } from './mlbMyCareer';
+import { mlbCareerTotals, mlbLegacyOf, mlbTeamLabelOf, mlbWorkSlate } from './mlbMyCareer';
 import { MLB_BADGES, earnedBadges } from './careerBadges';
 import type { BadgeDef, MlbBadgeFacts } from './careerBadges';
 import { fanComments, followersFromFanbase, fmtFollowers, mlbSeasonHeadlines } from './careerSocial';
 import { mlbMoneyWealth } from './mlbCareerMoney';
+import { US_ENGINE_SEASON, fullSeasonOf, slateOf, toSlate } from './usSeasonShape';
 
 /** The schedule this job works when nothing goes wrong. An injured season is
  *  dealt at 35 to 75 percent of it, so these numbers sit clear of both. */
@@ -25,6 +26,16 @@ export function mlbFullSlate(pos: string): number {
   if (pos === 'SP') return 30;
   if (pos === 'RP') return 60;
   return 150;
+}
+
+/** Round 1226: a mark of this job carried to the games one saved season held
+ *  (60 in 2020, 161 or 163 for a club off its schedule). A line saved before
+ *  the engine read the season ledger carries no `slate` and is judged on the
+ *  engine's own season, as it was played. A pitcher's workload only gives way
+ *  to a season too short to hold it, the engine's own rule (mlbWorkSlate). */
+export function mlbSlateMark(pos: string, mark: number, line: { slate?: number }): number {
+  const slate = slateOf('mlb', line);
+  return toSlate('mlb', mark, mlbWorkSlate(pos, slate));
 }
 
 /** Everything the badge table reads, off the save and the legacy verdict. */
@@ -35,15 +46,19 @@ export function mlbBadgeFacts(c: MlbCareerState): MlbBadgeFacts {
   const slate = mlbFullSlate(c.pos);
   return {
     pos: c.pos,
+    /* Round 1226: a badge that asks for a full year (120 games for the .330
+       season, 20 starts for the sub 2.00 one) reads a season's games as the
+       full season they stand for, so all 60 games of 2020 count as one. A
+       line with no slate is read as it always was. */
     seasons: c.seasons.map(s => ({
-      games: s.games, awards: s.awards ?? [], teamResult: s.teamResult,
+      games: fullSeasonOf('mlb', s.games, mlbWorkSlate(c.pos, slateOf('mlb', s))), awards: s.awards ?? [], teamResult: s.teamResult,
       avg: s.avg, hr: s.hr, sb: s.sb, era: s.era,
     })),
     rings: c.rings,
     mvpCys: c.mvpCys,
     allStars: c.allStars,
     totals: { hr: t.hr, rbi: t.rbi, sb: t.sb, wins: t.wins, so: t.so, saves },
-    fullSeasons: c.seasons.filter(s => s.games >= slate).length,
+    fullSeasons: c.seasons.filter(s => s.games >= mlbSlateMark(c.pos, slate, s)).length,
     wealth: Math.round(((c.netWorth ?? 0) + mlbMoneyWealth(c)) * 100) / 100,
     retired: c.retired,
     hof: c.retired && mlbLegacyOf(c).hof,
@@ -76,7 +91,10 @@ export function mlbFanComments(c: MlbCareerState): string[] {
 
 /** The paper for the season just played. */
 export function mlbHeadlinesFor(c: MlbCareerState, line: MlbSeasonLine): string[] {
-  const slate = c.pos === 'SP' ? 32 : c.pos === 'RP' ? 62 : 155;
+  /* Round 1226: missed games are counted from the season this line was played
+     on (its own `slate`), so a 60 game season does not read as a hundred
+     games lost. */
+  const slate = mlbSlateMark(c.pos, c.pos === 'SP' ? 32 : c.pos === 'RP' ? 62 : US_ENGINE_SEASON.mlb - 7, line);
   return mlbSeasonHeadlines({
     name: c.name,
     team: mlbTeamLabelOf(line.team, c.eraId),
