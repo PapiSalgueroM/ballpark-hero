@@ -1,0 +1,13 @@
+#!build
+#!playwright
+#!serial
+# Round 1215: the merged head 4bdb64f3 (origin/main faf0a5f3 merged in).
+clean: node scripts/playLiveMatchFit.mjs
+replay: LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+noseed: LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node scripts/playLiveMatchFit.mjs
+forced-nocard: bash .rc/x/forced.sh nocard 4211
+bar: LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+silentlist: LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
