@@ -1,0 +1,4 @@
+simMissingElevenSources exit=0 0s | simMissingElevenSources: green. 40 sheets, 39 of them row for row against the record.
+simPerfectSeasonOdds exit=0 7s | simPerfectSeasonOdds: green. In all four sports the odds on the card are the odds in the sim, the copy agrees with both, and the best record keeps.
+simNbaSeasonStats exit=0 13s | simNbaSeasonStats: 72 checks passed over 10 seeded franchises and 3 seasons each. Every game adds up, the box takes nothing from the league, the awards follow their rules
+simNbaLuxuryTax exit=0 17s | simNbaLuxuryTax: 347 checks passed over 10 seeded franchises and 5 seasons each. The bill is the published formula, a dollar over pays, every season tips off on fourteen 
