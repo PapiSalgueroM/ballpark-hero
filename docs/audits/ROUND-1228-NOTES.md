@@ -119,6 +119,34 @@ would make every one of these fields drawable inside both rules; that rule is no
   section 4 green, the seven new or changed controls fired, six fences green.
 The closing run on the merged head is named in the round's finish report.
 
+## The fix pass (2026-10-10, after two adversarial reviews)
+
+One major and ten minors, all in this round's own eight files. Nothing a player can reach moved.
+- The cap of two for the Europa League and the Conference League stood on the regulations alone. goal.com (30
+  August 2024) and premierleague.com (15 June 2026) are the second publishers now, every number of all three
+  shapes is a figure of a verified row, and section 0 only counts a figure for a publisher when one quoted line
+  prints it in words about that figure. Controls `capsource` and `shapefigure`.
+- A publisher's wrong score is cut from a quoted line (SuperSport, the Barcelona second leg); F12 quotes lines
+  that say 2024-25 was the first season; the receipt names two blocks that stand on ESPN alone; F18 is new.
+- The counting floor now counts an association with NO club in a pot (it pays its 2K visits there too). An
+  association of eleven or more clubs missing from a pot was being drawn with a same association match the
+  field did not force. Both writings of the floor shared the gap, so the harness gained a check that shares no
+  line with either: [CLIMB], a copy of the bundle with a longer climb must never find fewer same association
+  matches. Control `absentpot` fires on 16 of 24 fields. No field the shipped game makes moved.
+- The order of the escape (the cap gives way before the ban) is held on every slate of section 1 ([ORDER]), with
+  200 fields of two or three swollen associations that really climb: the cap gave way in 70, the ban after the
+  cap's budgets in 29, 4 ended on the pattern. Control `order` fires on 114 slates.
+- A plain field and each of the 240 season one fields is held one by one ([EXACT]), not by a band.
+- Tests hold the three readers of a slate to one story about who is at home, the saved slate to saying it is
+  the recorded pattern, and the wrapper to the cap of two.
+- STILL TRUE AND WORTH KNOWING: the counting floor is a lower bound, not the true minimum, for fields only a
+  world editor can make (13 clubs of one association with none in a pot: 3 of 8 at the floor; 14: none). Every
+  such slate reports its true counts.
+Proof at f7d996f7: `r1228-fix-a` (type gate 0, vitest 36 of 36, the harness GREEN at 7,021 checks, 24 controls
+fired and an unknown one refused, seven fences green, the reviewer's own second writing found no fault, and the
+branch merged with Release AT and with PR223 is green on both) and `r1228-fix-m` (the three mutations that had
+survived every gate, the wrapper's cap at three and the floor taken back out: all five caught).
+
 ## Before anybody builds Round B: the other lane has the bind in a draft
 
 Found on 2026-10-10 at 19:00 UTC, after this round's code was closed. Draft PR223, branch
