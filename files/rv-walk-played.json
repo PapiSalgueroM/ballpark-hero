@@ -1,0 +1,364 @@
+[
+ {
+  "ctx": "390m",
+  "key": "star",
+  "season": 1,
+  "mineText": "25.1 ppg, 14.9 rpg, 3.2 apg",
+  "rival": "🪞 Jonah Moreau went 19.0 ppg, 11.1 rpg, 2.1 apg. You had the better year. Head to head 7-3.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "390m",
+  "key": "star",
+  "season": 2,
+  "mineText": "27.8 ppg, 15.2 rpg, 3.1 apg",
+  "rival": "🪞 Jonah Moreau went 13.1 ppg, 9.1 rpg, 1.5 apg. You had the better year. Head to head 8-3.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "390m",
+  "key": "star",
+  "rivalryCard": "🪞 RIVALRY 🐐 The Debate Every pregame show runs the same segment this week: you or Jonah Moreau. Fanbase +5, the era has a name now Sim 129 91 VS Jonah Moreau 89 Continue",
+  "afterSeason": 2,
+  "lastNote": "🪞 Jonah Moreau went 13.1 ppg, 9.1 rpg, 1.5 apg. You had the better year. Head to head 8-3.",
+  "lastAllStar": true
+ },
+ {
+  "ctx": "390m",
+  "key": "star",
+  "season": 3,
+  "mineText": "24.5 ppg, 12.0 rpg, 2.4 apg",
+  "rival": "🪞 Jonah Moreau went 23.0 ppg, 12.6 rpg, 2.5 apg. Nothing in it again. You lead the head to head 9-3.",
+  "allStar": true,
+  "verdict": "tie"
+ },
+ {
+  "ctx": "390m",
+  "key": "star",
+  "season": 4,
+  "mineText": "25.3 ppg, 14.2 rpg, 2.9 apg",
+  "rival": "🪞 Jonah Moreau went 20.1 ppg, 12.8 rpg, 2.5 apg. You had the better year. Head to head 10-3.",
+  "allStar": false,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "390m",
+  "key": "star",
+  "rivalryCard": "🪞 RIVALRY 📋 Cap Squeeze Word around the building is the front office is choosing between you and Jonah Moreau for the same cap space. Morale -5 Sim 129 90 VS Jonah Moreau 86 Continue",
+  "afterSeason": 4,
+  "lastNote": "🪞 Jonah Moreau went 20.1 ppg, 12.8 rpg, 2.5 apg. You had the better year. Head to head 10-3.",
+  "lastAllStar": false
+ },
+ {
+  "ctx": "390m",
+  "key": "star",
+  "season": 5,
+  "mineText": "19.5 ppg, 10.3 rpg, 2.2 apg",
+  "rival": "🪞 Jonah Moreau went 18.2 ppg, 10.7 rpg, 2.1 apg. Nothing in it again. You lead the head to head 11-3.",
+  "allStar": true,
+  "verdict": "tie"
+ },
+ {
+  "ctx": "390m",
+  "key": "star",
+  "rivalryCard": "🪞 RIVALRY 🤝 Rival Shows Respect Jonah Moreau tells reporters you are the best in the league at your position. Fanbase +5, Morale +5 Sim 129 86 VS Jonah Moreau 84 Continue",
+  "afterSeason": 5,
+  "lastNote": "🪞 Jonah Moreau went 18.2 ppg, 10.7 rpg, 2.1 apg. Nothing in it again. You lead the head to head 11-3.",
+  "lastAllStar": true
+ },
+ {
+  "ctx": "390m",
+  "key": "star",
+  "season": 6,
+  "mineText": "19.2 ppg, 11.7 rpg, 2.3 apg",
+  "rival": "🪞 Jonah Moreau went 20.1 ppg, 12.1 rpg, 2.3 apg. Nothing in it again. You lead the head to head 11-4.",
+  "allStar": false,
+  "verdict": "tie"
+ },
+ {
+  "ctx": "390m",
+  "key": "star",
+  "rivalryCard": "🪞 RIVALRY 📈 Surpassed Your Rival! For the first time, your rating (86) has pulled ahead of Jonah Moreau's (81). Morale +10 Sim 129 84 VS Jonah Moreau 81 Continue",
+  "afterSeason": 6,
+  "lastNote": "🪞 Jonah Moreau went 20.1 ppg, 12.1 rpg, 2.3 apg. Nothing in it again. You lead the head to head 11-4.",
+  "lastAllStar": false
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "season": 1,
+  "mineText": "26.9 ppg, 15.7 rpg, 3.3 apg",
+  "rival": "🪞 Jonah Moreau went 16.8 ppg, 10.8 rpg, 2.0 apg. You had the better year. Head to head 7-3.",
+  "allStar": false,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "rivalryCard": "🪞 RIVALRY 💍 Count the Rings You and Jonah Moreau both have rings now, so the argument has moved on to who has more. Fanbase +4, the rivalry heats up Sim 129 92 VS Jonah Moreau 89 Continue",
+  "afterSeason": 1,
+  "lastNote": "🪞 Jonah Moreau went 16.8 ppg, 10.8 rpg, 2.0 apg. You had the better year. Head to head 7-3.",
+  "lastAllStar": false
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "season": 2,
+  "mineText": "21.6 ppg, 13.6 rpg, 2.7 apg",
+  "rival": "🪞 Jonah Moreau went 18.4 ppg, 11.5 rpg, 2.0 apg. You had the better year. Head to head 8-3.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "rivalryCard": "🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out. You are on one and Jonah Moreau is not. Morale +5 Sim 129 92 VS Jonah Moreau 89 Continue",
+  "afterSeason": 2,
+  "lastNote": "🪞 Jonah Moreau went 18.4 ppg, 11.5 rpg, 2.0 apg. You had the better year. Head to head 8-3.",
+  "lastAllStar": true
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "season": 3,
+  "mineText": "27.0 ppg, 16.0 rpg, 2.9 apg",
+  "rival": "🪞 Jonah Moreau went 19.6 ppg, 12.6 rpg, 2.4 apg. You had the better year. Head to head 9-3.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "season": 4,
+  "mineText": "25.5 ppg, 14.4 rpg, 3.0 apg",
+  "rival": "🪞 Jonah Moreau went 22.9 ppg, 13.1 rpg, 2.5 apg. You had the better year. Head to head 10-3.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "rivalryCard": "🪞 RIVALRY 🏀 Head to Head Win Your team beat Jonah Moreau's team this season, and you had the better box score. Fanbase +5, confidence boost Sim 129 90 VS Jonah Moreau 88 Continue",
+  "afterSeason": 4,
+  "lastNote": "🪞 Jonah Moreau went 22.9 ppg, 13.1 rpg, 2.5 apg. You had the better year. Head to head 10-3.",
+  "lastAllStar": true
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "season": 5,
+  "mineText": "22.3 ppg, 13.9 rpg, 2.7 apg",
+  "rival": "🪞 Jonah Moreau went 19.5 ppg, 12.1 rpg, 2.4 apg. You had the better year. Head to head 11-3.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "rivalryCard": "🪞 RIVALRY 🤬 Courtside Scuffle Cameras catch you and Jonah Moreau jawing at midcourt after a hard foul. It is the only clip anybody is talking about Monday. Rivalry intensifies, Fanbase +3 Sim 129 87 VS Jonah Moreau 85 Continue",
+  "afterSeason": 5,
+  "lastNote": "🪞 Jonah Moreau went 19.5 ppg, 12.1 rpg, 2.4 apg. You had the better year. Head to head 11-3.",
+  "lastAllStar": true
+ },
+ {
+  "ctx": "1280r",
+  "key": "star",
+  "season": 6,
+  "mineText": "27.0 ppg, 15.8 rpg, 2.9 apg",
+  "rival": "🪞 Jonah Moreau went 22.2 ppg, 12.7 rpg, 2.8 apg. You had the better year. Head to head 12-3.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "rivalryCard": "🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out, and you and Reese Moreau are both on them. Fanbase +3 Sim 1164 85 VS Reese Moreau 89 Continue",
+  "afterSeason": 0,
+  "lastNote": null,
+  "lastAllStar": null
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "season": 1,
+  "mineText": "28.3 ppg, 15.4 rpg, 3.0 apg",
+  "rival": "🪞 Reese Moreau went 17.5 ppg, 12.3 rpg, 2.9 apg. You had the better year. Head to head 8-2.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "season": 2,
+  "mineText": "18.9 ppg, 12.7 rpg, 2.3 apg",
+  "rival": "🪞 Reese Moreau went 17.8 ppg, 11.0 rpg, 2.5 apg. You had the better year. Head to head 9-2.",
+  "allStar": false,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "rivalryCard": "🪞 RIVALRY ⭐ Rival's Ring Reese Moreau's team wins it all. Yours came up short. Morale -5, motivation boost Sim 1164 85 VS Reese Moreau 89 Continue",
+  "afterSeason": 2,
+  "lastNote": "🪞 Reese Moreau went 17.8 ppg, 11.0 rpg, 2.5 apg. You had the better year. Head to head 9-2.",
+  "lastAllStar": false
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "season": 3,
+  "mineText": "18.6 ppg, 11.9 rpg, 1.9 apg",
+  "rival": "🪞 Reese Moreau went 20.5 ppg, 12.4 rpg, 3.2 apg and had the better year of the two of you. Head to head 9-3.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "season": 4,
+  "mineText": "18.6 ppg, 11.2 rpg, 2.2 apg",
+  "rival": "🪞 Reese Moreau went 15.5 ppg, 9.9 rpg, 2.2 apg. You had the better year. Head to head 10-3.",
+  "allStar": false,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "season": 5,
+  "mineText": "13.4 ppg, 9.3 rpg, 1.6 apg",
+  "rival": "🪞 Reese Moreau went 12.3 ppg, 8.8 rpg, 2.3 apg. Nothing in it again. You lead the head to head 11-3.",
+  "allStar": false,
+  "verdict": "tie"
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "rivalryCard": "🪞 RIVALRY 🤬 Courtside Scuffle Cameras catch you and Reese Moreau jawing at midcourt after a hard foul. It is the only clip anybody is talking about Monday. Rivalry intensifies, Fanbase +3 Sim 1164 78 VS Reese Moreau 83 Continue",
+  "afterSeason": 5,
+  "lastNote": "🪞 Reese Moreau went 12.3 ppg, 8.8 rpg, 2.3 apg. Nothing in it again. You lead the head to head 11-3.",
+  "lastAllStar": false
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "season": 6,
+  "mineText": "12.3 ppg, 9.1 rpg, 1.6 apg",
+  "rival": "🪞 Reese Moreau went 13.0 ppg, 8.6 rpg, 2.3 apg. Nothing in it again. You lead the head to head 11-4.",
+  "allStar": true,
+  "verdict": "tie"
+ },
+ {
+  "ctx": "390r",
+  "key": "k306_both",
+  "rivalryCard": "🪞 RIVALRY 🪞 Same Spot, Same Night Reese Moreau plays your position, and the schedule has the two of you guarding each other on opening night. Morale +4, the rivalry heats up Sim 1164 77 VS Reese Moreau 81 Continue",
+  "afterSeason": 6,
+  "lastNote": "🪞 Reese Moreau went 13.0 ppg, 8.6 rpg, 2.3 apg. Nothing in it again. You lead the head to head 11-4.",
+  "lastAllStar": true
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "rivalryCard": "🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out. You are on one and Theo Hendricks is not. Morale +5 Sim 62 88 VS Theo Hendricks 87 Continue",
+  "afterSeason": 0,
+  "lastNote": null,
+  "lastAllStar": null
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "season": 1,
+  "mineText": "17.6 ppg, 6.8 rpg, 6.1 apg",
+  "rival": "🪞 Theo Hendricks went 18.4 ppg, 5.5 rpg, 4.2 apg. You had the better year. Head to head 4-3.",
+  "allStar": false,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "rivalryCard": "🪞 RIVALRY 📊 Winning the Head to Head You are pulling away in the head to head against Theo Hendricks, and the league has noticed. Fanbase +5 Sim 62 89 VS Theo Hendricks 88 Continue",
+  "afterSeason": 1,
+  "lastNote": "🪞 Theo Hendricks went 18.4 ppg, 5.5 rpg, 4.2 apg. You had the better year. Head to head 4-3.",
+  "lastAllStar": false
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "season": 2,
+  "mineText": "22.7 ppg, 7.8 rpg, 7.3 apg",
+  "rival": "🪞 Theo Hendricks went 21.7 ppg, 6.2 rpg, 4.0 apg. You had the better year. Head to head 5-3.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "season": 3,
+  "mineText": "23.0 ppg, 7.6 rpg, 7.8 apg",
+  "rival": "🪞 Theo Hendricks went 18.2 ppg, 5.3 rpg, 3.3 apg. You had the better year. Head to head 6-3.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "rivalryCard": "🪞 RIVALRY 🤝 The Postgame Handshake After a hard fought game, you and Theo Hendricks find each other at half court for a long handshake. The photo is everywhere by Monday morning. Fanbase +8, the feud softens Sim 62 91 VS Theo Hendricks 88",
+  "afterSeason": 3,
+  "lastNote": "🪞 Theo Hendricks went 18.2 ppg, 5.3 rpg, 3.3 apg. You had the better year. Head to head 6-3.",
+  "lastAllStar": true
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "season": 4,
+  "mineText": "22.7 ppg, 7.9 rpg, 6.9 apg",
+  "rival": "🪞 Theo Hendricks went 28.7 ppg, 6.8 rpg, 5.0 apg and had the better year of the two of you. Head to head 6-4.",
+  "allStar": true,
+  "verdict": "his"
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "rivalryCard": "🪞 RIVALRY 🎬 The Documentary A streaming service wants to film a season long documentary on you and Theo Hendricks. Net worth +2M, Fanbase +8 Sim 62 91 VS Theo Hendricks 88 Continue",
+  "afterSeason": 4,
+  "lastNote": "🪞 Theo Hendricks went 28.7 ppg, 6.8 rpg, 5.0 apg and had the better year of the two of you. Head to head 6-4.",
+  "lastAllStar": true
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "season": 5,
+  "mineText": "21.3 ppg, 7.6 rpg, 6.8 apg",
+  "rival": "🪞 Theo Hendricks went 22.5 ppg, 5.9 rpg, 4.1 apg. You had the better year. Head to head 7-4.",
+  "allStar": false,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "season": 6,
+  "mineText": "31.9 ppg, 10.0 rpg, 9.2 apg",
+  "rival": "🪞 Theo Hendricks went 25.2 ppg, 7.3 rpg, 5.1 apg. You had the better year. Head to head 8-4.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "season": 7,
+  "mineText": "24.3 ppg, 8.4 rpg, 7.4 apg",
+  "rival": "🪞 Theo Hendricks went 15.0 ppg, 5.1 rpg, 3.1 apg. You had the better year. Head to head 9-4.",
+  "allStar": true,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280m",
+  "key": "k306_mine",
+  "season": 8,
+  "mineText": "28.2 ppg, 9.7 rpg, 9.7 apg",
+  "rival": "🪞 Theo Hendricks went 17.1 ppg, 4.8 rpg, 3.1 apg. You had the better year. Head to head 10-4.",
+  "allStar": true,
+  "verdict": "mine"
+ }
+]
