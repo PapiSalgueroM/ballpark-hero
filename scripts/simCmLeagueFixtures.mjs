@@ -3,7 +3,9 @@
  * game's own clubs, and are what two independent sources printed.
  *
  *   node scripts/simCmLeagueFixtures.mjs
- *   ONLY=<leagueId> node scripts/simCmLeagueFixtures.mjs                 one league
+ *   CM_LEAGUE_FIXTURES_ONLY=<leagueId> node scripts/simCmLeagueFixtures.mjs   one league (not ONLY: the suite
+ *       runner passes ONLY=<harness name> down to every harness, and a league filter that read it would match
+ *       no ledger and call nothing green; a filter that matches no ledger is a failure here for the same reason)
  *   CM_LEAGUE_FIXTURES_EXPECT=<n> node scripts/simCmLeagueFixtures.mjs   the gate's own count of ledgers
  *   CM_LEAGUE_FIXTURES_CONTROL=<name> [CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=<leagueId>] node scripts/simCmLeagueFixtures.mjs
  *
@@ -74,7 +76,7 @@ import path from 'node:path';
 import { ROOT, gameLeagues, ledgerFilesOnDisk, loadLedgers } from './lib/cmFixtureSources/gameBundle.mjs';
 import { ledgerDigest } from './lib/cmFixtureSources/build.mjs';
 
-const ONLY = process.env.ONLY || process.env.CM_LEAGUE_FIXTURES_ONLY || '';
+const ONLY = process.env.CM_LEAGUE_FIXTURES_ONLY || '';
 const EXPECT = process.env.CM_LEAGUE_FIXTURES_EXPECT || '';
 const CONTROL = process.env.CM_LEAGUE_FIXTURES_CONTROL || '';
 const CONTROL_LEAGUE = process.env.CM_LEAGUE_FIXTURES_CONTROL_LEAGUE || '';
@@ -397,6 +399,10 @@ let failures = reds.length;
 if (EXPECT && Number(EXPECT) !== entries.length) {
   failures += 1;
   console.error(`  FAIL: the gate expects ${EXPECT} ledger(s) and ${entries.length} are on disk`);
+}
+if (ONLY && !entries.length) {
+  failures += 1;
+  console.error(`  FAIL: CM_LEAGUE_FIXTURES_ONLY=${ONLY} matches no ledger on disk, so nothing was checked`);
 }
 
 /* K. the controls prove the sections above can fail, on every frozen ledger, on every run. */
