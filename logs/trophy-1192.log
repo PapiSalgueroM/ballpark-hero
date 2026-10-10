@@ -1,0 +1,423 @@
+repinned scripts/simCareerTrophyRuns.mjs: base fa24b384 -> 2ee41bd6, tree d9175fa7 -> bc65f852
+PASS engine baseline
+PASS reader baseline
+PASS saved markup
+PASS missing markup
+PASS actual campaign baseline
+PASS actual campaign markup
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/outcomes
+ok   320-modern-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   320-modern-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   320-modern-europe: Opening the real cabinet locks body scrolling
+ok   320-modern-europe: Actual category lists exactly the saved 12 winning rows
+ok   320-modern-europe: Short phone actually scrolls the winning-season list
+ok   320-modern-europe: Selected winning season places focus on its heading
+ok   320-modern-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   320-modern-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   320-modern-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   320-modern-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   320-modern-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   320-modern-europe: selected-campaign: every complete saved byte is held
+ok   320-modern-europe: selected-campaign: reading draws no global random values
+ok   320-modern-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   320-modern-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   320-modern-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   320-modern-europe: rules: every visible cabinet button has a 44 pixel target
+ok   320-modern-europe: Help also restores the winning list offset
+ok   320-modern-europe: Tab: focus stays in the cabinet
+ok   320-modern-europe: Tab: focus stays in the cabinet
+ok   320-modern-europe: Shift+Tab: focus stays in the cabinet
+ok   320-modern-europe: Shift+Tab: focus stays in the cabinet
+ok   320-modern-europe: Back restores exact page position, body styles and the actual category opener
+ok   320-modern-europe: cabinet-back: every complete saved byte is held
+ok   320-modern-europe: cabinet-back: reading draws no global random values
+ok   320-modern-europe: Escape restores exact opener focus, body styles and page position
+ok   320-modern-europe: cabinet-escape: every complete saved byte is held
+ok   320-modern-europe: cabinet-escape: reading draws no global random values
+ok   320-modern-europe: completed-read-only: reload keeps every complete raw save byte
+ok   320-modern-europe: Reload retains the same selected saved campaign details
+ok   320-modern-europe: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   320-modern-europe: reloaded-campaign: every complete saved byte is held
+ok   320-modern-europe: reloaded-campaign: reading draws no global random values
+CONTROL FIRED(native wrong-score): saved-campaign
+CONTROL FIRED(native paint): opacity
+CONTROL FIRED(native return): focus, list-position, inline-overflow, computed-overflow, page-position
+ok   320-modern-europe: Copied observation controls leave the actual saved career unchanged
+ok   320-modern-europe: No page or owned asset errors
+ok   320-modern-europe: All external write attempts are blocked with zero forwarding
+ok   320-historical-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   320-historical-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   320-historical-europe: Opening the real cabinet locks body scrolling
+ok   320-historical-europe: Actual category lists exactly the saved 12 winning rows
+ok   320-historical-europe: Short phone actually scrolls the winning-season list
+ok   320-historical-europe: Selected winning season places focus on its heading
+ok   320-historical-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   320-historical-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   320-historical-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   320-historical-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   320-historical-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   320-historical-europe: selected-campaign: every complete saved byte is held
+ok   320-historical-europe: selected-campaign: reading draws no global random values
+ok   320-historical-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   320-historical-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   320-historical-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   320-historical-europe: rules: every visible cabinet button has a 44 pixel target
+ok   320-historical-europe: Help also restores the winning list offset
+ok   320-historical-europe: Tab: focus stays in the cabinet
+ok   320-historical-europe: Tab: focus stays in the cabinet
+ok   320-historical-europe: Shift+Tab: focus stays in the cabinet
+ok   320-historical-europe: Shift+Tab: focus stays in the cabinet
+ok   320-historical-europe: Back restores exact page position, body styles and the actual category opener
+ok   320-historical-europe: cabinet-back: every complete saved byte is held
+ok   320-historical-europe: cabinet-back: reading draws no global random values
+ok   320-historical-europe: Escape restores exact opener focus, body styles and page position
+ok   320-historical-europe: cabinet-escape: every complete saved byte is held
+ok   320-historical-europe: cabinet-escape: reading draws no global random values
+ok   320-historical-europe: completed-read-only: reload keeps every complete raw save byte
+ok   320-historical-europe: Reload retains the same selected saved campaign details
+ok   320-historical-europe: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   320-historical-europe: reloaded-campaign: every complete saved byte is held
+ok   320-historical-europe: reloaded-campaign: reading draws no global random values
+ok   320-historical-europe: No page or owned asset errors
+ok   320-historical-europe: All external write attempts are blocked with zero forwarding
+ok   320-caf: Independent unchanged Chromium loader matches every first-load field and key
+ok   320-caf: canonical-second-load: reload keeps every complete raw save byte
+ok   320-caf: Opening the real cabinet locks body scrolling
+ok   320-caf: Actual category lists exactly the saved 12 winning rows
+ok   320-caf: Short phone actually scrolls the winning-season list
+ok   320-caf: Selected winning season places focus on its heading
+ok   320-caf: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   320-caf: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   320-caf: campaign-top: every visible cabinet button has a 44 pixel target
+ok   320-caf: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   320-caf: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   320-caf: selected-campaign: every complete saved byte is held
+ok   320-caf: selected-campaign: reading draws no global random values
+ok   320-caf: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   320-caf: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   320-caf: rules: painted and stable for four frames without overflow or finite animation
+ok   320-caf: rules: every visible cabinet button has a 44 pixel target
+ok   320-caf: Help also restores the winning list offset
+ok   320-caf: Tab: focus stays in the cabinet
+ok   320-caf: Tab: focus stays in the cabinet
+ok   320-caf: Shift+Tab: focus stays in the cabinet
+ok   320-caf: Shift+Tab: focus stays in the cabinet
+ok   320-caf: Back restores exact page position, body styles and the actual category opener
+ok   320-caf: cabinet-back: every complete saved byte is held
+ok   320-caf: cabinet-back: reading draws no global random values
+ok   320-caf: Escape restores exact opener focus, body styles and page position
+ok   320-caf: cabinet-escape: every complete saved byte is held
+ok   320-caf: cabinet-escape: reading draws no global random values
+ok   320-caf: completed-read-only: reload keeps every complete raw save byte
+ok   320-caf: Reload retains the same selected saved campaign details
+ok   320-caf: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   320-caf: reloaded-campaign: every complete saved byte is held
+ok   320-caf: reloaded-campaign: reading draws no global random values
+ok   320-caf: No page or owned asset errors
+ok   320-caf: All external write attempts are blocked with zero forwarding
+ok   320-older-missing: Independent unchanged Chromium loader matches every first-load field and key
+ok   320-older-missing: canonical-second-load: reload keeps every complete raw save byte
+ok   320-older-missing: Opening the real cabinet locks body scrolling
+ok   320-older-missing: Actual category lists exactly the saved 12 winning rows
+ok   320-older-missing: Short phone actually scrolls the winning-season list
+ok   320-older-missing: Selected winning season places focus on its heading
+ok   320-older-missing: Older trophy save independently shows missing details, no games and no borrowed campaign goals
+ok   320-older-missing: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   320-older-missing: campaign-top: every visible cabinet button has a 44 pixel target
+ok   320-older-missing: selected-campaign: every complete saved byte is held
+ok   320-older-missing: selected-campaign: reading draws no global random values
+ok   320-older-missing: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   320-older-missing: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   320-older-missing: rules: painted and stable for four frames without overflow or finite animation
+ok   320-older-missing: rules: every visible cabinet button has a 44 pixel target
+ok   320-older-missing: Help also restores the winning list offset
+ok   320-older-missing: Tab: focus stays in the cabinet
+ok   320-older-missing: Tab: focus stays in the cabinet
+ok   320-older-missing: Shift+Tab: focus stays in the cabinet
+ok   320-older-missing: Shift+Tab: focus stays in the cabinet
+ok   320-older-missing: Back restores exact page position, body styles and the actual category opener
+ok   320-older-missing: cabinet-back: every complete saved byte is held
+ok   320-older-missing: cabinet-back: reading draws no global random values
+ok   320-older-missing: Escape restores exact opener focus, body styles and page position
+ok   320-older-missing: cabinet-escape: every complete saved byte is held
+ok   320-older-missing: cabinet-escape: reading draws no global random values
+ok   320-older-missing: completed-read-only: reload keeps every complete raw save byte
+ok   320-older-missing: Reload retains the same selected saved campaign details
+ok   320-older-missing: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   320-older-missing: reloaded-campaign: every complete saved byte is held
+ok   320-older-missing: reloaded-campaign: reading draws no global random values
+ok   320-older-missing: No page or owned asset errors
+ok   320-older-missing: All external write attempts are blocked with zero forwarding
+ok   390-modern-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   390-modern-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   390-modern-europe: Opening the real cabinet locks body scrolling
+ok   390-modern-europe: Actual category lists exactly the saved 12 winning rows
+ok   390-modern-europe: Selected winning season places focus on its heading
+ok   390-modern-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   390-modern-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   390-modern-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   390-modern-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   390-modern-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   390-modern-europe: selected-campaign: every complete saved byte is held
+ok   390-modern-europe: selected-campaign: reading draws no global random values
+ok   390-modern-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   390-modern-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   390-modern-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   390-modern-europe: rules: every visible cabinet button has a 44 pixel target
+ok   390-modern-europe: Help also restores the winning list offset
+ok   390-modern-europe: Tab: focus stays in the cabinet
+ok   390-modern-europe: Tab: focus stays in the cabinet
+ok   390-modern-europe: Shift+Tab: focus stays in the cabinet
+ok   390-modern-europe: Shift+Tab: focus stays in the cabinet
+ok   390-modern-europe: Back restores exact page position, body styles and the actual category opener
+ok   390-modern-europe: cabinet-back: every complete saved byte is held
+ok   390-modern-europe: cabinet-back: reading draws no global random values
+ok   390-modern-europe: Escape restores exact opener focus, body styles and page position
+ok   390-modern-europe: cabinet-escape: every complete saved byte is held
+ok   390-modern-europe: cabinet-escape: reading draws no global random values
+ok   390-modern-europe: completed-read-only: reload keeps every complete raw save byte
+ok   390-modern-europe: Reload retains the same selected saved campaign details
+ok   390-modern-europe: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   390-modern-europe: reloaded-campaign: every complete saved byte is held
+ok   390-modern-europe: reloaded-campaign: reading draws no global random values
+ok   390-modern-europe: No page or owned asset errors
+ok   390-modern-europe: All external write attempts are blocked with zero forwarding
+ok   390-historical-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   390-historical-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   390-historical-europe: Opening the real cabinet locks body scrolling
+ok   390-historical-europe: Actual category lists exactly the saved 12 winning rows
+ok   390-historical-europe: Selected winning season places focus on its heading
+ok   390-historical-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   390-historical-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   390-historical-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   390-historical-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   390-historical-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   390-historical-europe: selected-campaign: every complete saved byte is held
+ok   390-historical-europe: selected-campaign: reading draws no global random values
+ok   390-historical-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   390-historical-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   390-historical-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   390-historical-europe: rules: every visible cabinet button has a 44 pixel target
+ok   390-historical-europe: Help also restores the winning list offset
+ok   390-historical-europe: Tab: focus stays in the cabinet
+ok   390-historical-europe: Tab: focus stays in the cabinet
+ok   390-historical-europe: Shift+Tab: focus stays in the cabinet
+ok   390-historical-europe: Shift+Tab: focus stays in the cabinet
+ok   390-historical-europe: Back restores exact page position, body styles and the actual category opener
+ok   390-historical-europe: cabinet-back: every complete saved byte is held
+ok   390-historical-europe: cabinet-back: reading draws no global random values
+ok   390-historical-europe: Escape restores exact opener focus, body styles and page position
+ok   390-historical-europe: cabinet-escape: every complete saved byte is held
+ok   390-historical-europe: cabinet-escape: reading draws no global random values
+ok   390-historical-europe: completed-read-only: reload keeps every complete raw save byte
+ok   390-historical-europe: Reload retains the same selected saved campaign details
+ok   390-historical-europe: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   390-historical-europe: reloaded-campaign: every complete saved byte is held
+ok   390-historical-europe: reloaded-campaign: reading draws no global random values
+ok   390-historical-europe: No page or owned asset errors
+ok   390-historical-europe: All external write attempts are blocked with zero forwarding
+ok   390-caf: Independent unchanged Chromium loader matches every first-load field and key
+ok   390-caf: canonical-second-load: reload keeps every complete raw save byte
+ok   390-caf: Opening the real cabinet locks body scrolling
+ok   390-caf: Actual category lists exactly the saved 12 winning rows
+ok   390-caf: Selected winning season places focus on its heading
+ok   390-caf: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   390-caf: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   390-caf: campaign-top: every visible cabinet button has a 44 pixel target
+ok   390-caf: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   390-caf: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   390-caf: selected-campaign: every complete saved byte is held
+ok   390-caf: selected-campaign: reading draws no global random values
+ok   390-caf: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   390-caf: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   390-caf: rules: painted and stable for four frames without overflow or finite animation
+ok   390-caf: rules: every visible cabinet button has a 44 pixel target
+ok   390-caf: Help also restores the winning list offset
+ok   390-caf: Tab: focus stays in the cabinet
+ok   390-caf: Tab: focus stays in the cabinet
+ok   390-caf: Shift+Tab: focus stays in the cabinet
+ok   390-caf: Shift+Tab: focus stays in the cabinet
+ok   390-caf: Back restores exact page position, body styles and the actual category opener
+ok   390-caf: cabinet-back: every complete saved byte is held
+ok   390-caf: cabinet-back: reading draws no global random values
+ok   390-caf: Escape restores exact opener focus, body styles and page position
+ok   390-caf: cabinet-escape: every complete saved byte is held
+ok   390-caf: cabinet-escape: reading draws no global random values
+ok   390-caf: completed-read-only: reload keeps every complete raw save byte
+ok   390-caf: Reload retains the same selected saved campaign details
+ok   390-caf: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   390-caf: reloaded-campaign: every complete saved byte is held
+ok   390-caf: reloaded-campaign: reading draws no global random values
+ok   390-caf: No page or owned asset errors
+ok   390-caf: All external write attempts are blocked with zero forwarding
+ok   390-older-missing: Independent unchanged Chromium loader matches every first-load field and key
+ok   390-older-missing: canonical-second-load: reload keeps every complete raw save byte
+ok   390-older-missing: Opening the real cabinet locks body scrolling
+ok   390-older-missing: Actual category lists exactly the saved 12 winning rows
+ok   390-older-missing: Selected winning season places focus on its heading
+ok   390-older-missing: Older trophy save independently shows missing details, no games and no borrowed campaign goals
+ok   390-older-missing: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   390-older-missing: campaign-top: every visible cabinet button has a 44 pixel target
+ok   390-older-missing: selected-campaign: every complete saved byte is held
+ok   390-older-missing: selected-campaign: reading draws no global random values
+ok   390-older-missing: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   390-older-missing: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   390-older-missing: rules: painted and stable for four frames without overflow or finite animation
+ok   390-older-missing: rules: every visible cabinet button has a 44 pixel target
+ok   390-older-missing: Help also restores the winning list offset
+ok   390-older-missing: Tab: focus stays in the cabinet
+ok   390-older-missing: Tab: focus stays in the cabinet
+ok   390-older-missing: Shift+Tab: focus stays in the cabinet
+ok   390-older-missing: Shift+Tab: focus stays in the cabinet
+ok   390-older-missing: Back restores exact page position, body styles and the actual category opener
+ok   390-older-missing: cabinet-back: every complete saved byte is held
+ok   390-older-missing: cabinet-back: reading draws no global random values
+ok   390-older-missing: Escape restores exact opener focus, body styles and page position
+ok   390-older-missing: cabinet-escape: every complete saved byte is held
+ok   390-older-missing: cabinet-escape: reading draws no global random values
+ok   390-older-missing: completed-read-only: reload keeps every complete raw save byte
+ok   390-older-missing: Reload retains the same selected saved campaign details
+ok   390-older-missing: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   390-older-missing: reloaded-campaign: every complete saved byte is held
+ok   390-older-missing: reloaded-campaign: reading draws no global random values
+ok   390-older-missing: No page or owned asset errors
+ok   390-older-missing: All external write attempts are blocked with zero forwarding
+ok   1280-modern-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   1280-modern-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   1280-modern-europe: Opening the real cabinet locks body scrolling
+ok   1280-modern-europe: Actual category lists exactly the saved 12 winning rows
+ok   1280-modern-europe: Selected winning season places focus on its heading
+ok   1280-modern-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   1280-modern-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   1280-modern-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   1280-modern-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   1280-modern-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   1280-modern-europe: selected-campaign: every complete saved byte is held
+ok   1280-modern-europe: selected-campaign: reading draws no global random values
+ok   1280-modern-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   1280-modern-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   1280-modern-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   1280-modern-europe: rules: every visible cabinet button has a 44 pixel target
+ok   1280-modern-europe: Help also restores the winning list offset
+ok   1280-modern-europe: Tab: focus stays in the cabinet
+ok   1280-modern-europe: Tab: focus stays in the cabinet
+ok   1280-modern-europe: Shift+Tab: focus stays in the cabinet
+ok   1280-modern-europe: Shift+Tab: focus stays in the cabinet
+ok   1280-modern-europe: Back restores exact page position, body styles and the actual category opener
+ok   1280-modern-europe: cabinet-back: every complete saved byte is held
+ok   1280-modern-europe: cabinet-back: reading draws no global random values
+ok   1280-modern-europe: Escape restores exact opener focus, body styles and page position
+ok   1280-modern-europe: cabinet-escape: every complete saved byte is held
+ok   1280-modern-europe: cabinet-escape: reading draws no global random values
+ok   1280-modern-europe: completed-read-only: reload keeps every complete raw save byte
+ok   1280-modern-europe: Reload retains the same selected saved campaign details
+ok   1280-modern-europe: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   1280-modern-europe: reloaded-campaign: every complete saved byte is held
+ok   1280-modern-europe: reloaded-campaign: reading draws no global random values
+ok   1280-modern-europe: No page or owned asset errors
+ok   1280-modern-europe: All external write attempts are blocked with zero forwarding
+ok   1280-historical-europe: Independent unchanged Chromium loader matches every first-load field and key
+ok   1280-historical-europe: canonical-second-load: reload keeps every complete raw save byte
+ok   1280-historical-europe: Opening the real cabinet locks body scrolling
+ok   1280-historical-europe: Actual category lists exactly the saved 12 winning rows
+ok   1280-historical-europe: Selected winning season places focus on its heading
+ok   1280-historical-europe: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   1280-historical-europe: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   1280-historical-europe: campaign-top: every visible cabinet button has a 44 pixel target
+ok   1280-historical-europe: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   1280-historical-europe: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   1280-historical-europe: selected-campaign: every complete saved byte is held
+ok   1280-historical-europe: selected-campaign: reading draws no global random values
+ok   1280-historical-europe: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   1280-historical-europe: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   1280-historical-europe: rules: painted and stable for four frames without overflow or finite animation
+ok   1280-historical-europe: rules: every visible cabinet button has a 44 pixel target
+ok   1280-historical-europe: Help also restores the winning list offset
+ok   1280-historical-europe: Tab: focus stays in the cabinet
+ok   1280-historical-europe: Tab: focus stays in the cabinet
+ok   1280-historical-europe: Shift+Tab: focus stays in the cabinet
+ok   1280-historical-europe: Shift+Tab: focus stays in the cabinet
+ok   1280-historical-europe: Back restores exact page position, body styles and the actual category opener
+ok   1280-historical-europe: cabinet-back: every complete saved byte is held
+ok   1280-historical-europe: cabinet-back: reading draws no global random values
+ok   1280-historical-europe: Escape restores exact opener focus, body styles and page position
+ok   1280-historical-europe: cabinet-escape: every complete saved byte is held
+ok   1280-historical-europe: cabinet-escape: reading draws no global random values
+ok   1280-historical-europe: completed-read-only: reload keeps every complete raw save byte
+ok   1280-historical-europe: Reload retains the same selected saved campaign details
+ok   1280-historical-europe: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   1280-historical-europe: reloaded-campaign: every complete saved byte is held
+ok   1280-historical-europe: reloaded-campaign: reading draws no global random values
+ok   1280-historical-europe: No page or owned asset errors
+ok   1280-historical-europe: All external write attempts are blocked with zero forwarding
+ok   1280-caf: Independent unchanged Chromium loader matches every first-load field and key
+ok   1280-caf: canonical-second-load: reload keeps every complete raw save byte
+ok   1280-caf: Opening the real cabinet locks body scrolling
+ok   1280-caf: Actual category lists exactly the saved 12 winning rows
+ok   1280-caf: Selected winning season places focus on its heading
+ok   1280-caf: Every actual first-stage game and knockout leg shows its exact saved opponent, score, venue, player goals and settlement facts
+ok   1280-caf: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   1280-caf: campaign-top: every visible cabinet button has a 44 pixel target
+ok   1280-caf: campaign-last-game: painted and stable for four frames without overflow or finite animation
+ok   1280-caf: campaign-last-game: every visible cabinet button has a 44 pixel target
+ok   1280-caf: selected-campaign: every complete saved byte is held
+ok   1280-caf: selected-campaign: reading draws no global random values
+ok   1280-caf: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   1280-caf: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   1280-caf: rules: painted and stable for four frames without overflow or finite animation
+ok   1280-caf: rules: every visible cabinet button has a 44 pixel target
+ok   1280-caf: Help also restores the winning list offset
+ok   1280-caf: Tab: focus stays in the cabinet
+ok   1280-caf: Tab: focus stays in the cabinet
+ok   1280-caf: Shift+Tab: focus stays in the cabinet
+ok   1280-caf: Shift+Tab: focus stays in the cabinet
+ok   1280-caf: Back restores exact page position, body styles and the actual category opener
+ok   1280-caf: cabinet-back: every complete saved byte is held
+ok   1280-caf: cabinet-back: reading draws no global random values
+ok   1280-caf: Escape restores exact opener focus, body styles and page position
+ok   1280-caf: cabinet-escape: every complete saved byte is held
+ok   1280-caf: cabinet-escape: reading draws no global random values
+ok   1280-caf: completed-read-only: reload keeps every complete raw save byte
+ok   1280-caf: Reload retains the same selected saved campaign details
+ok   1280-caf: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   1280-caf: reloaded-campaign: every complete saved byte is held
+ok   1280-caf: reloaded-campaign: reading draws no global random values
+ok   1280-caf: No page or owned asset errors
+ok   1280-caf: All external write attempts are blocked with zero forwarding
+ok   1280-older-missing: Independent unchanged Chromium loader matches every first-load field and key
+ok   1280-older-missing: canonical-second-load: reload keeps every complete raw save byte
+ok   1280-older-missing: Opening the real cabinet locks body scrolling
+ok   1280-older-missing: Actual category lists exactly the saved 12 winning rows
+ok   1280-older-missing: Selected winning season places focus on its heading
+ok   1280-older-missing: Older trophy save independently shows missing details, no games and no borrowed campaign goals
+ok   1280-older-missing: campaign-top: painted and stable for four frames without overflow or finite animation
+ok   1280-older-missing: campaign-top: every visible cabinet button has a 44 pixel target
+ok   1280-older-missing: selected-campaign: every complete saved byte is held
+ok   1280-older-missing: selected-campaign: reading draws no global random values
+ok   1280-older-missing: All wins restores exact selected tile focus, list offset, body lock and page position
+ok   1280-older-missing: Reopenable cabinet help explains saved simulated campaigns and settlement facts
+ok   1280-older-missing: rules: painted and stable for four frames without overflow or finite animation
+ok   1280-older-missing: rules: every visible cabinet button has a 44 pixel target
+ok   1280-older-missing: Help also restores the winning list offset
+ok   1280-older-missing: Tab: focus stays in the cabinet
+ok   1280-older-missing: Tab: focus stays in the cabinet
+ok   1280-older-missing: Shift+Tab: focus stays in the cabinet
+ok   1280-older-missing: Shift+Tab: focus stays in the cabinet
+ok   1280-older-missing: Back restores exact page position, body styles and the actual category opener
+ok   1280-older-missing: cabinet-back: every complete saved byte is held
+ok   1280-older-missing: cabinet-back: reading draws no global random values
+ok   1280-older-missing: Escape restores exact opener focus, body styles and page position
+ok   1280-older-missing: cabinet-escape: every complete saved byte is held
+ok   1280-older-missing: cabinet-escape: reading draws no global random values
+ok   1280-older-missing: completed-read-only: reload keeps every complete raw save byte
+ok   1280-older-missing: Reload retains the same selected saved campaign details
+ok   1280-older-missing: Reloaded detail Escape restores exact opener focus, body styles and page position
+ok   1280-older-missing: reloaded-campaign: every complete saved byte is held
+ok   1280-older-missing: reloaded-campaign: reading draws no global random values
+ok   1280-older-missing: No page or owned asset errors
+ok   1280-older-missing: All external write attempts are blocked with zero forwarding
+Trophy Cabinet native: 407 checks,0 failed,12/12 journeys,3 copied detector controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/native
+RESULT sim=0 walk=0

@@ -1,0 +1,615 @@
+repinned scripts/qa/seasonHistory1193.mjs: base fa24b384 -> f57763a6, tree d9175fa7 -> 6d7c9a8b
+PASS engine baseline
+PASS campaign baseline
+PASS existing readers
+PASS saved rows
+PASS comparison
+PASS availability
+PASS defaults
+PASS identity rejection
+PASS read boundary
+Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-history/outcomes
+ok   320-playing-empty-events: Independent unchanged Chromium loader matches every first-load field
+ok   320-playing-empty-events: canonical-second-load: strict complete serialized reload equality
+ok   320-playing-empty-events: Actual Ratings page opener is a fully painted 44 pixel target
+ok   320-playing-empty-events: Shared dialog locks body scroll
+ok   320-playing-empty-events: Existing Ratings still lists every saved senior row only
+ok   320-playing-empty-events: Reopenable help explains saved values and worked comparison/availability examples
+ok   320-playing-empty-events: ratings-rules: four stable readable painted frames without overflow
+ok   320-playing-empty-events: ratings-rules: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: ratings: Help Back restores exact focus, scroll, body and page
+ok   320-playing-empty-events: ratings-help: every complete saved byte held
+ok   320-playing-empty-events: ratings-help: no global random draws
+ok   320-playing-empty-events: Saved long history naturally overflows Ratings at this viewport
+ok   320-playing-empty-events: Real wheel input establishes a nonzero Ratings offset while Compare stays fully visible
+ok   320-playing-empty-events: Comparison opens with the actual latest two original indices
+ok   320-playing-empty-events: Same-year loan records and every position metric equal independent original-index raw-save values
+ok   320-playing-empty-events: Swap atomically reverses the two original saved indices
+ok   320-playing-empty-events: Swap renders every reversed saved value and signed delta
+ok   320-playing-empty-events: Selectors reject choosing the same original row twice
+ok   320-playing-empty-events: Older missing OVR never borrows current overall or becomes zero
+ok   320-playing-empty-events: comparison-top: four stable readable painted frames without overflow
+ok   320-playing-empty-events: comparison-top: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: Reopenable help explains saved values and worked comparison/availability examples
+ok   320-playing-empty-events: compare-rules: four stable readable painted frames without overflow
+ok   320-playing-empty-events: compare-rules: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: compare: Help Back restores exact focus, scroll, body and page
+ok   320-playing-empty-events: Help preserves both indexed comparison choices
+ok   320-playing-empty-events: compare-help: every complete saved byte held
+ok   320-playing-empty-events: compare-help: no global random draws
+ok   320-playing-empty-events: Compare Back restores the Ratings offset and exact launcher focus
+ok   320-playing-empty-events: Availability launcher also starts at the reachable nonzero saved Ratings offset
+ok   320-playing-empty-events: Zero-app injury weeks, severity and actual suspension matches remain separate saved facts
+ok   320-playing-empty-events: availability-top: four stable readable painted frames without overflow
+ok   320-playing-empty-events: availability-top: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: Whole-career Availability includes every indexed senior row latest first without guessing missing fields
+ok   320-playing-empty-events: availability-oldest: four stable readable painted frames without overflow
+ok   320-playing-empty-events: availability-oldest: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: Reopenable help explains saved values and worked comparison/availability examples
+ok   320-playing-empty-events: availability-rules: four stable readable painted frames without overflow
+ok   320-playing-empty-events: availability-rules: every visible history control has a 44 pixel target
+ok   320-playing-empty-events: availability: Help Back restores exact focus, scroll, body and page
+ok   320-playing-empty-events: Help preserves indexed availability choice
+ok   320-playing-empty-events: availability-help: every complete saved byte held
+ok   320-playing-empty-events: availability-help: no global random draws
+ok   320-playing-empty-events: Older missing suspension count stays unknown
+ok   320-playing-empty-events: Recorded zero-app ban remains a saved status, not an injury inference
+ok   320-playing-empty-events: Availability Back restores the exact nonzero Ratings offset and its own launcher
+ok   320-playing-empty-events: Comparison and Availability reveal no pending award result
+ok   320-playing-empty-events: both-history-modes: every complete saved byte held
+ok   320-playing-empty-events: both-history-modes: no global random draws
+ok   320-playing-empty-events: Tab: shared dialog focus remains trapped
+ok   320-playing-empty-events: Tab: shared dialog focus remains trapped
+ok   320-playing-empty-events: Shift+Tab: shared dialog focus remains trapped
+ok   320-playing-empty-events: Shift+Tab: shared dialog focus remains trapped
+ok   320-playing-empty-events: close: exact opener, body and page restoration
+ok   320-playing-empty-events: close: every complete saved byte held
+ok   320-playing-empty-events: close: no global random draws
+ok   320-playing-empty-events: escape: exact opener, body and page restoration
+ok   320-playing-empty-events: escape: every complete saved byte held
+ok   320-playing-empty-events: escape: no global random draws
+ok   320-playing-empty-events: completed-read-only: strict complete serialized reload equality
+ok   320-playing-empty-events: Reload keeps the same original saved loan record available
+ok   320-playing-empty-events: reloaded-escape: exact opener, body and page restoration
+ok   320-playing-empty-events: reloaded-escape: every complete saved byte held
+ok   320-playing-empty-events: reloaded-escape: no global random draws
+CONTROL FIRED(native wrong-value): saved-values
+CONTROL FIRED(native paint): opacity
+CONTROL FIRED(native geometry): clipped-controls, required-targets, touch-target
+CONTROL FIRED(native return): focus, mode-position, inline-overflow, computed-overflow, page-position
+ok   320-playing-empty-events: Copied observation detectors do not alter the actual saved career
+ok   320-playing-empty-events: No page or owned asset errors
+ok   320-playing-empty-events: All external write attempts blocked with zero forwarding
+ok   320-retired-defender: Independent unchanged Chromium loader matches every first-load field
+ok   320-retired-defender: canonical-second-load: strict complete serialized reload equality
+ok   320-retired-defender: Actual Ratings page opener is a fully painted 44 pixel target
+ok   320-retired-defender: Shared dialog locks body scroll
+ok   320-retired-defender: Existing Ratings still lists every saved senior row only
+ok   320-retired-defender: Reopenable help explains saved values and worked comparison/availability examples
+ok   320-retired-defender: ratings-rules: four stable readable painted frames without overflow
+ok   320-retired-defender: ratings-rules: every visible history control has a 44 pixel target
+ok   320-retired-defender: ratings: Help Back restores exact focus, scroll, body and page
+ok   320-retired-defender: ratings-help: every complete saved byte held
+ok   320-retired-defender: ratings-help: no global random draws
+ok   320-retired-defender: Saved long history naturally overflows Ratings at this viewport
+ok   320-retired-defender: Real wheel input establishes a nonzero Ratings offset while Compare stays fully visible
+ok   320-retired-defender: Comparison opens with the actual latest two original indices
+ok   320-retired-defender: Same-year loan records and every position metric equal independent original-index raw-save values
+ok   320-retired-defender: Swap atomically reverses the two original saved indices
+ok   320-retired-defender: Swap renders every reversed saved value and signed delta
+ok   320-retired-defender: Selectors reject choosing the same original row twice
+ok   320-retired-defender: Older missing OVR never borrows current overall or becomes zero
+ok   320-retired-defender: comparison-top: four stable readable painted frames without overflow
+ok   320-retired-defender: comparison-top: every visible history control has a 44 pixel target
+ok   320-retired-defender: Reopenable help explains saved values and worked comparison/availability examples
+ok   320-retired-defender: compare-rules: four stable readable painted frames without overflow
+ok   320-retired-defender: compare-rules: every visible history control has a 44 pixel target
+ok   320-retired-defender: compare: Help Back restores exact focus, scroll, body and page
+ok   320-retired-defender: Help preserves both indexed comparison choices
+ok   320-retired-defender: compare-help: every complete saved byte held
+ok   320-retired-defender: compare-help: no global random draws
+ok   320-retired-defender: Compare Back restores the Ratings offset and exact launcher focus
+ok   320-retired-defender: Availability launcher also starts at the reachable nonzero saved Ratings offset
+ok   320-retired-defender: Zero-app injury weeks, severity and actual suspension matches remain separate saved facts
+ok   320-retired-defender: availability-top: four stable readable painted frames without overflow
+ok   320-retired-defender: availability-top: every visible history control has a 44 pixel target
+ok   320-retired-defender: Whole-career Availability includes every indexed senior row latest first without guessing missing fields
+ok   320-retired-defender: availability-oldest: four stable readable painted frames without overflow
+ok   320-retired-defender: availability-oldest: every visible history control has a 44 pixel target
+ok   320-retired-defender: Reopenable help explains saved values and worked comparison/availability examples
+ok   320-retired-defender: availability-rules: four stable readable painted frames without overflow
+ok   320-retired-defender: availability-rules: every visible history control has a 44 pixel target
+ok   320-retired-defender: availability: Help Back restores exact focus, scroll, body and page
+ok   320-retired-defender: Help preserves indexed availability choice
+ok   320-retired-defender: availability-help: every complete saved byte held
+ok   320-retired-defender: availability-help: no global random draws
+ok   320-retired-defender: Older missing suspension count stays unknown
+ok   320-retired-defender: Recorded zero-app ban remains a saved status, not an injury inference
+ok   320-retired-defender: Availability Back restores the exact nonzero Ratings offset and its own launcher
+ok   320-retired-defender: Comparison and Availability reveal no pending award result
+ok   320-retired-defender: both-history-modes: every complete saved byte held
+ok   320-retired-defender: both-history-modes: no global random draws
+ok   320-retired-defender: Tab: shared dialog focus remains trapped
+ok   320-retired-defender: Tab: shared dialog focus remains trapped
+ok   320-retired-defender: Shift+Tab: shared dialog focus remains trapped
+ok   320-retired-defender: Shift+Tab: shared dialog focus remains trapped
+ok   320-retired-defender: close: exact opener, body and page restoration
+ok   320-retired-defender: close: every complete saved byte held
+ok   320-retired-defender: close: no global random draws
+ok   320-retired-defender: escape: exact opener, body and page restoration
+ok   320-retired-defender: escape: every complete saved byte held
+ok   320-retired-defender: escape: no global random draws
+ok   320-retired-defender: completed-read-only: strict complete serialized reload equality
+ok   320-retired-defender: Reload keeps the same original saved loan record available
+ok   320-retired-defender: reloaded-escape: exact opener, body and page restoration
+ok   320-retired-defender: reloaded-escape: every complete saved byte held
+ok   320-retired-defender: reloaded-escape: no global random draws
+ok   320-retired-defender: No page or owned asset errors
+ok   320-retired-defender: All external write attempts blocked with zero forwarding
+ok   320-pending-keeper: Independent unchanged Chromium loader matches every first-load field
+ok   320-pending-keeper: canonical-second-load: strict complete serialized reload equality
+ok   320-pending-keeper: Actual Ratings page opener is a fully painted 44 pixel target
+ok   320-pending-keeper: Shared dialog locks body scroll
+ok   320-pending-keeper: Existing Ratings still lists every saved senior row only
+ok   320-pending-keeper: Reopenable help explains saved values and worked comparison/availability examples
+ok   320-pending-keeper: ratings-rules: four stable readable painted frames without overflow
+ok   320-pending-keeper: ratings-rules: every visible history control has a 44 pixel target
+ok   320-pending-keeper: ratings: Help Back restores exact focus, scroll, body and page
+ok   320-pending-keeper: ratings-help: every complete saved byte held
+ok   320-pending-keeper: ratings-help: no global random draws
+ok   320-pending-keeper: Saved long history naturally overflows Ratings at this viewport
+ok   320-pending-keeper: Real wheel input establishes a nonzero Ratings offset while Compare stays fully visible
+ok   320-pending-keeper: Comparison opens with the actual latest two original indices
+ok   320-pending-keeper: Same-year loan records and every position metric equal independent original-index raw-save values
+ok   320-pending-keeper: Swap atomically reverses the two original saved indices
+ok   320-pending-keeper: Swap renders every reversed saved value and signed delta
+ok   320-pending-keeper: Selectors reject choosing the same original row twice
+ok   320-pending-keeper: Older missing OVR never borrows current overall or becomes zero
+ok   320-pending-keeper: comparison-top: four stable readable painted frames without overflow
+ok   320-pending-keeper: comparison-top: every visible history control has a 44 pixel target
+ok   320-pending-keeper: Reopenable help explains saved values and worked comparison/availability examples
+ok   320-pending-keeper: compare-rules: four stable readable painted frames without overflow
+ok   320-pending-keeper: compare-rules: every visible history control has a 44 pixel target
+ok   320-pending-keeper: compare: Help Back restores exact focus, scroll, body and page
+ok   320-pending-keeper: Help preserves both indexed comparison choices
+ok   320-pending-keeper: compare-help: every complete saved byte held
+ok   320-pending-keeper: compare-help: no global random draws
+ok   320-pending-keeper: Compare Back restores the Ratings offset and exact launcher focus
+ok   320-pending-keeper: Availability launcher also starts at the reachable nonzero saved Ratings offset
+ok   320-pending-keeper: Zero-app injury weeks, severity and actual suspension matches remain separate saved facts
+ok   320-pending-keeper: availability-top: four stable readable painted frames without overflow
+ok   320-pending-keeper: availability-top: every visible history control has a 44 pixel target
+ok   320-pending-keeper: Whole-career Availability includes every indexed senior row latest first without guessing missing fields
+ok   320-pending-keeper: availability-oldest: four stable readable painted frames without overflow
+ok   320-pending-keeper: availability-oldest: every visible history control has a 44 pixel target
+ok   320-pending-keeper: Reopenable help explains saved values and worked comparison/availability examples
+ok   320-pending-keeper: availability-rules: four stable readable painted frames without overflow
+ok   320-pending-keeper: availability-rules: every visible history control has a 44 pixel target
+ok   320-pending-keeper: availability: Help Back restores exact focus, scroll, body and page
+ok   320-pending-keeper: Help preserves indexed availability choice
+ok   320-pending-keeper: availability-help: every complete saved byte held
+ok   320-pending-keeper: availability-help: no global random draws
+ok   320-pending-keeper: Older missing suspension count stays unknown
+ok   320-pending-keeper: Recorded zero-app ban remains a saved status, not an injury inference
+ok   320-pending-keeper: Availability Back restores the exact nonzero Ratings offset and its own launcher
+ok   320-pending-keeper: Comparison and Availability reveal no pending award result
+ok   320-pending-keeper: Natural newspaper-phase pending ballot stays unrevealed while history is read
+ok   320-pending-keeper: both-history-modes: every complete saved byte held
+ok   320-pending-keeper: both-history-modes: no global random draws
+ok   320-pending-keeper: Tab: shared dialog focus remains trapped
+ok   320-pending-keeper: Tab: shared dialog focus remains trapped
+ok   320-pending-keeper: Shift+Tab: shared dialog focus remains trapped
+ok   320-pending-keeper: Shift+Tab: shared dialog focus remains trapped
+ok   320-pending-keeper: close: exact opener, body and page restoration
+ok   320-pending-keeper: close: every complete saved byte held
+ok   320-pending-keeper: close: no global random draws
+ok   320-pending-keeper: escape: exact opener, body and page restoration
+ok   320-pending-keeper: escape: every complete saved byte held
+ok   320-pending-keeper: escape: no global random draws
+ok   320-pending-keeper: completed-read-only: strict complete serialized reload equality
+ok   320-pending-keeper: Reload keeps the same original saved loan record available
+ok   320-pending-keeper: reloaded-escape: exact opener, body and page restoration
+ok   320-pending-keeper: reloaded-escape: every complete saved byte held
+ok   320-pending-keeper: reloaded-escape: no global random draws
+ok   320-pending-keeper: No page or owned asset errors
+ok   320-pending-keeper: All external write attempts blocked with zero forwarding
+ok   390-playing-empty-events: Independent unchanged Chromium loader matches every first-load field
+ok   390-playing-empty-events: canonical-second-load: strict complete serialized reload equality
+ok   390-playing-empty-events: Actual Ratings page opener is a fully painted 44 pixel target
+ok   390-playing-empty-events: Shared dialog locks body scroll
+ok   390-playing-empty-events: Existing Ratings still lists every saved senior row only
+ok   390-playing-empty-events: Reopenable help explains saved values and worked comparison/availability examples
+ok   390-playing-empty-events: ratings-rules: four stable readable painted frames without overflow
+ok   390-playing-empty-events: ratings-rules: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: ratings: Help Back restores exact focus, scroll, body and page
+ok   390-playing-empty-events: ratings-help: every complete saved byte held
+ok   390-playing-empty-events: ratings-help: no global random draws
+ok   390-playing-empty-events: Saved long history naturally overflows Ratings at this viewport
+ok   390-playing-empty-events: Real wheel input establishes a nonzero Ratings offset while Compare stays fully visible
+ok   390-playing-empty-events: Comparison opens with the actual latest two original indices
+ok   390-playing-empty-events: Same-year loan records and every position metric equal independent original-index raw-save values
+ok   390-playing-empty-events: Swap atomically reverses the two original saved indices
+ok   390-playing-empty-events: Swap renders every reversed saved value and signed delta
+ok   390-playing-empty-events: Selectors reject choosing the same original row twice
+ok   390-playing-empty-events: Older missing OVR never borrows current overall or becomes zero
+ok   390-playing-empty-events: comparison-top: four stable readable painted frames without overflow
+ok   390-playing-empty-events: comparison-top: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: Reopenable help explains saved values and worked comparison/availability examples
+ok   390-playing-empty-events: compare-rules: four stable readable painted frames without overflow
+ok   390-playing-empty-events: compare-rules: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: compare: Help Back restores exact focus, scroll, body and page
+ok   390-playing-empty-events: Help preserves both indexed comparison choices
+ok   390-playing-empty-events: compare-help: every complete saved byte held
+ok   390-playing-empty-events: compare-help: no global random draws
+ok   390-playing-empty-events: Compare Back restores the Ratings offset and exact launcher focus
+ok   390-playing-empty-events: Availability launcher also starts at the reachable nonzero saved Ratings offset
+ok   390-playing-empty-events: Zero-app injury weeks, severity and actual suspension matches remain separate saved facts
+ok   390-playing-empty-events: availability-top: four stable readable painted frames without overflow
+ok   390-playing-empty-events: availability-top: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: Whole-career Availability includes every indexed senior row latest first without guessing missing fields
+ok   390-playing-empty-events: availability-oldest: four stable readable painted frames without overflow
+ok   390-playing-empty-events: availability-oldest: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: Reopenable help explains saved values and worked comparison/availability examples
+ok   390-playing-empty-events: availability-rules: four stable readable painted frames without overflow
+ok   390-playing-empty-events: availability-rules: every visible history control has a 44 pixel target
+ok   390-playing-empty-events: availability: Help Back restores exact focus, scroll, body and page
+ok   390-playing-empty-events: Help preserves indexed availability choice
+ok   390-playing-empty-events: availability-help: every complete saved byte held
+ok   390-playing-empty-events: availability-help: no global random draws
+ok   390-playing-empty-events: Older missing suspension count stays unknown
+ok   390-playing-empty-events: Recorded zero-app ban remains a saved status, not an injury inference
+ok   390-playing-empty-events: Availability Back restores the exact nonzero Ratings offset and its own launcher
+ok   390-playing-empty-events: Comparison and Availability reveal no pending award result
+ok   390-playing-empty-events: both-history-modes: every complete saved byte held
+ok   390-playing-empty-events: both-history-modes: no global random draws
+ok   390-playing-empty-events: Tab: shared dialog focus remains trapped
+ok   390-playing-empty-events: Tab: shared dialog focus remains trapped
+ok   390-playing-empty-events: Shift+Tab: shared dialog focus remains trapped
+ok   390-playing-empty-events: Shift+Tab: shared dialog focus remains trapped
+ok   390-playing-empty-events: close: exact opener, body and page restoration
+ok   390-playing-empty-events: close: every complete saved byte held
+ok   390-playing-empty-events: close: no global random draws
+ok   390-playing-empty-events: escape: exact opener, body and page restoration
+ok   390-playing-empty-events: escape: every complete saved byte held
+ok   390-playing-empty-events: escape: no global random draws
+ok   390-playing-empty-events: completed-read-only: strict complete serialized reload equality
+ok   390-playing-empty-events: Reload keeps the same original saved loan record available
+ok   390-playing-empty-events: reloaded-escape: exact opener, body and page restoration
+ok   390-playing-empty-events: reloaded-escape: every complete saved byte held
+ok   390-playing-empty-events: reloaded-escape: no global random draws
+ok   390-playing-empty-events: No page or owned asset errors
+ok   390-playing-empty-events: All external write attempts blocked with zero forwarding
+ok   390-retired-defender: Independent unchanged Chromium loader matches every first-load field
+ok   390-retired-defender: canonical-second-load: strict complete serialized reload equality
+ok   390-retired-defender: Actual Ratings page opener is a fully painted 44 pixel target
+ok   390-retired-defender: Shared dialog locks body scroll
+ok   390-retired-defender: Existing Ratings still lists every saved senior row only
+ok   390-retired-defender: Reopenable help explains saved values and worked comparison/availability examples
+ok   390-retired-defender: ratings-rules: four stable readable painted frames without overflow
+ok   390-retired-defender: ratings-rules: every visible history control has a 44 pixel target
+ok   390-retired-defender: ratings: Help Back restores exact focus, scroll, body and page
+ok   390-retired-defender: ratings-help: every complete saved byte held
+ok   390-retired-defender: ratings-help: no global random draws
+ok   390-retired-defender: Saved long history naturally overflows Ratings at this viewport
+ok   390-retired-defender: Real wheel input establishes a nonzero Ratings offset while Compare stays fully visible
+ok   390-retired-defender: Comparison opens with the actual latest two original indices
+ok   390-retired-defender: Same-year loan records and every position metric equal independent original-index raw-save values
+ok   390-retired-defender: Swap atomically reverses the two original saved indices
+ok   390-retired-defender: Swap renders every reversed saved value and signed delta
+ok   390-retired-defender: Selectors reject choosing the same original row twice
+ok   390-retired-defender: Older missing OVR never borrows current overall or becomes zero
+ok   390-retired-defender: comparison-top: four stable readable painted frames without overflow
+ok   390-retired-defender: comparison-top: every visible history control has a 44 pixel target
+ok   390-retired-defender: Reopenable help explains saved values and worked comparison/availability examples
+ok   390-retired-defender: compare-rules: four stable readable painted frames without overflow
+ok   390-retired-defender: compare-rules: every visible history control has a 44 pixel target
+ok   390-retired-defender: compare: Help Back restores exact focus, scroll, body and page
+ok   390-retired-defender: Help preserves both indexed comparison choices
+ok   390-retired-defender: compare-help: every complete saved byte held
+ok   390-retired-defender: compare-help: no global random draws
+ok   390-retired-defender: Compare Back restores the Ratings offset and exact launcher focus
+ok   390-retired-defender: Availability launcher also starts at the reachable nonzero saved Ratings offset
+ok   390-retired-defender: Zero-app injury weeks, severity and actual suspension matches remain separate saved facts
+ok   390-retired-defender: availability-top: four stable readable painted frames without overflow
+ok   390-retired-defender: availability-top: every visible history control has a 44 pixel target
+ok   390-retired-defender: Whole-career Availability includes every indexed senior row latest first without guessing missing fields
+ok   390-retired-defender: availability-oldest: four stable readable painted frames without overflow
+ok   390-retired-defender: availability-oldest: every visible history control has a 44 pixel target
+ok   390-retired-defender: Reopenable help explains saved values and worked comparison/availability examples
+ok   390-retired-defender: availability-rules: four stable readable painted frames without overflow
+ok   390-retired-defender: availability-rules: every visible history control has a 44 pixel target
+ok   390-retired-defender: availability: Help Back restores exact focus, scroll, body and page
+ok   390-retired-defender: Help preserves indexed availability choice
+ok   390-retired-defender: availability-help: every complete saved byte held
+ok   390-retired-defender: availability-help: no global random draws
+ok   390-retired-defender: Older missing suspension count stays unknown
+ok   390-retired-defender: Recorded zero-app ban remains a saved status, not an injury inference
+ok   390-retired-defender: Availability Back restores the exact nonzero Ratings offset and its own launcher
+ok   390-retired-defender: Comparison and Availability reveal no pending award result
+ok   390-retired-defender: both-history-modes: every complete saved byte held
+ok   390-retired-defender: both-history-modes: no global random draws
+ok   390-retired-defender: Tab: shared dialog focus remains trapped
+ok   390-retired-defender: Tab: shared dialog focus remains trapped
+ok   390-retired-defender: Shift+Tab: shared dialog focus remains trapped
+ok   390-retired-defender: Shift+Tab: shared dialog focus remains trapped
+ok   390-retired-defender: close: exact opener, body and page restoration
+ok   390-retired-defender: close: every complete saved byte held
+ok   390-retired-defender: close: no global random draws
+ok   390-retired-defender: escape: exact opener, body and page restoration
+ok   390-retired-defender: escape: every complete saved byte held
+ok   390-retired-defender: escape: no global random draws
+ok   390-retired-defender: completed-read-only: strict complete serialized reload equality
+ok   390-retired-defender: Reload keeps the same original saved loan record available
+ok   390-retired-defender: reloaded-escape: exact opener, body and page restoration
+ok   390-retired-defender: reloaded-escape: every complete saved byte held
+ok   390-retired-defender: reloaded-escape: no global random draws
+ok   390-retired-defender: No page or owned asset errors
+ok   390-retired-defender: All external write attempts blocked with zero forwarding
+ok   390-pending-keeper: Independent unchanged Chromium loader matches every first-load field
+ok   390-pending-keeper: canonical-second-load: strict complete serialized reload equality
+ok   390-pending-keeper: Actual Ratings page opener is a fully painted 44 pixel target
+ok   390-pending-keeper: Shared dialog locks body scroll
+ok   390-pending-keeper: Existing Ratings still lists every saved senior row only
+ok   390-pending-keeper: Reopenable help explains saved values and worked comparison/availability examples
+ok   390-pending-keeper: ratings-rules: four stable readable painted frames without overflow
+ok   390-pending-keeper: ratings-rules: every visible history control has a 44 pixel target
+ok   390-pending-keeper: ratings: Help Back restores exact focus, scroll, body and page
+ok   390-pending-keeper: ratings-help: every complete saved byte held
+ok   390-pending-keeper: ratings-help: no global random draws
+ok   390-pending-keeper: Saved long history naturally overflows Ratings at this viewport
+ok   390-pending-keeper: Real wheel input establishes a nonzero Ratings offset while Compare stays fully visible
+ok   390-pending-keeper: Comparison opens with the actual latest two original indices
+ok   390-pending-keeper: Same-year loan records and every position metric equal independent original-index raw-save values
+ok   390-pending-keeper: Swap atomically reverses the two original saved indices
+ok   390-pending-keeper: Swap renders every reversed saved value and signed delta
+ok   390-pending-keeper: Selectors reject choosing the same original row twice
+ok   390-pending-keeper: Older missing OVR never borrows current overall or becomes zero
+ok   390-pending-keeper: comparison-top: four stable readable painted frames without overflow
+ok   390-pending-keeper: comparison-top: every visible history control has a 44 pixel target
+ok   390-pending-keeper: Reopenable help explains saved values and worked comparison/availability examples
+ok   390-pending-keeper: compare-rules: four stable readable painted frames without overflow
+ok   390-pending-keeper: compare-rules: every visible history control has a 44 pixel target
+ok   390-pending-keeper: compare: Help Back restores exact focus, scroll, body and page
+ok   390-pending-keeper: Help preserves both indexed comparison choices
+ok   390-pending-keeper: compare-help: every complete saved byte held
+ok   390-pending-keeper: compare-help: no global random draws
+ok   390-pending-keeper: Compare Back restores the Ratings offset and exact launcher focus
+ok   390-pending-keeper: Availability launcher also starts at the reachable nonzero saved Ratings offset
+ok   390-pending-keeper: Zero-app injury weeks, severity and actual suspension matches remain separate saved facts
+ok   390-pending-keeper: availability-top: four stable readable painted frames without overflow
+ok   390-pending-keeper: availability-top: every visible history control has a 44 pixel target
+ok   390-pending-keeper: Whole-career Availability includes every indexed senior row latest first without guessing missing fields
+ok   390-pending-keeper: availability-oldest: four stable readable painted frames without overflow
+ok   390-pending-keeper: availability-oldest: every visible history control has a 44 pixel target
+ok   390-pending-keeper: Reopenable help explains saved values and worked comparison/availability examples
+ok   390-pending-keeper: availability-rules: four stable readable painted frames without overflow
+ok   390-pending-keeper: availability-rules: every visible history control has a 44 pixel target
+ok   390-pending-keeper: availability: Help Back restores exact focus, scroll, body and page
+ok   390-pending-keeper: Help preserves indexed availability choice
+ok   390-pending-keeper: availability-help: every complete saved byte held
+ok   390-pending-keeper: availability-help: no global random draws
+ok   390-pending-keeper: Older missing suspension count stays unknown
+ok   390-pending-keeper: Recorded zero-app ban remains a saved status, not an injury inference
+ok   390-pending-keeper: Availability Back restores the exact nonzero Ratings offset and its own launcher
+ok   390-pending-keeper: Comparison and Availability reveal no pending award result
+ok   390-pending-keeper: Natural newspaper-phase pending ballot stays unrevealed while history is read
+ok   390-pending-keeper: both-history-modes: every complete saved byte held
+ok   390-pending-keeper: both-history-modes: no global random draws
+ok   390-pending-keeper: Tab: shared dialog focus remains trapped
+ok   390-pending-keeper: Tab: shared dialog focus remains trapped
+ok   390-pending-keeper: Shift+Tab: shared dialog focus remains trapped
+ok   390-pending-keeper: Shift+Tab: shared dialog focus remains trapped
+ok   390-pending-keeper: close: exact opener, body and page restoration
+ok   390-pending-keeper: close: every complete saved byte held
+ok   390-pending-keeper: close: no global random draws
+ok   390-pending-keeper: escape: exact opener, body and page restoration
+ok   390-pending-keeper: escape: every complete saved byte held
+ok   390-pending-keeper: escape: no global random draws
+ok   390-pending-keeper: completed-read-only: strict complete serialized reload equality
+ok   390-pending-keeper: Reload keeps the same original saved loan record available
+ok   390-pending-keeper: reloaded-escape: exact opener, body and page restoration
+ok   390-pending-keeper: reloaded-escape: every complete saved byte held
+ok   390-pending-keeper: reloaded-escape: no global random draws
+ok   390-pending-keeper: No page or owned asset errors
+ok   390-pending-keeper: All external write attempts blocked with zero forwarding
+ok   1280-playing-empty-events: Independent unchanged Chromium loader matches every first-load field
+ok   1280-playing-empty-events: canonical-second-load: strict complete serialized reload equality
+ok   1280-playing-empty-events: Actual Ratings page opener is a fully painted 44 pixel target
+ok   1280-playing-empty-events: Shared dialog locks body scroll
+ok   1280-playing-empty-events: Existing Ratings still lists every saved senior row only
+ok   1280-playing-empty-events: Reopenable help explains saved values and worked comparison/availability examples
+ok   1280-playing-empty-events: ratings-rules: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: ratings-rules: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: ratings: Help Back restores exact focus, scroll, body and page
+ok   1280-playing-empty-events: ratings-help: every complete saved byte held
+ok   1280-playing-empty-events: ratings-help: no global random draws
+ok   1280-playing-empty-events: Saved long history naturally overflows Ratings at this viewport
+ok   1280-playing-empty-events: Real wheel input establishes a nonzero Ratings offset while Compare stays fully visible
+ok   1280-playing-empty-events: Comparison opens with the actual latest two original indices
+ok   1280-playing-empty-events: Same-year loan records and every position metric equal independent original-index raw-save values
+ok   1280-playing-empty-events: Swap atomically reverses the two original saved indices
+ok   1280-playing-empty-events: Swap renders every reversed saved value and signed delta
+ok   1280-playing-empty-events: Selectors reject choosing the same original row twice
+ok   1280-playing-empty-events: Older missing OVR never borrows current overall or becomes zero
+ok   1280-playing-empty-events: comparison-top: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: comparison-top: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: Reopenable help explains saved values and worked comparison/availability examples
+ok   1280-playing-empty-events: compare-rules: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: compare-rules: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: compare: Help Back restores exact focus, scroll, body and page
+ok   1280-playing-empty-events: Help preserves both indexed comparison choices
+ok   1280-playing-empty-events: compare-help: every complete saved byte held
+ok   1280-playing-empty-events: compare-help: no global random draws
+ok   1280-playing-empty-events: Compare Back restores the Ratings offset and exact launcher focus
+ok   1280-playing-empty-events: Availability launcher also starts at the reachable nonzero saved Ratings offset
+ok   1280-playing-empty-events: Zero-app injury weeks, severity and actual suspension matches remain separate saved facts
+ok   1280-playing-empty-events: availability-top: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: availability-top: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: Whole-career Availability includes every indexed senior row latest first without guessing missing fields
+ok   1280-playing-empty-events: availability-oldest: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: availability-oldest: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: Reopenable help explains saved values and worked comparison/availability examples
+ok   1280-playing-empty-events: availability-rules: four stable readable painted frames without overflow
+ok   1280-playing-empty-events: availability-rules: every visible history control has a 44 pixel target
+ok   1280-playing-empty-events: availability: Help Back restores exact focus, scroll, body and page
+ok   1280-playing-empty-events: Help preserves indexed availability choice
+ok   1280-playing-empty-events: availability-help: every complete saved byte held
+ok   1280-playing-empty-events: availability-help: no global random draws
+ok   1280-playing-empty-events: Older missing suspension count stays unknown
+ok   1280-playing-empty-events: Recorded zero-app ban remains a saved status, not an injury inference
+ok   1280-playing-empty-events: Availability Back restores the exact nonzero Ratings offset and its own launcher
+ok   1280-playing-empty-events: Comparison and Availability reveal no pending award result
+ok   1280-playing-empty-events: both-history-modes: every complete saved byte held
+ok   1280-playing-empty-events: both-history-modes: no global random draws
+ok   1280-playing-empty-events: Tab: shared dialog focus remains trapped
+ok   1280-playing-empty-events: Tab: shared dialog focus remains trapped
+ok   1280-playing-empty-events: Shift+Tab: shared dialog focus remains trapped
+ok   1280-playing-empty-events: Shift+Tab: shared dialog focus remains trapped
+ok   1280-playing-empty-events: close: exact opener, body and page restoration
+ok   1280-playing-empty-events: close: every complete saved byte held
+ok   1280-playing-empty-events: close: no global random draws
+ok   1280-playing-empty-events: escape: exact opener, body and page restoration
+ok   1280-playing-empty-events: escape: every complete saved byte held
+ok   1280-playing-empty-events: escape: no global random draws
+ok   1280-playing-empty-events: completed-read-only: strict complete serialized reload equality
+ok   1280-playing-empty-events: Reload keeps the same original saved loan record available
+ok   1280-playing-empty-events: reloaded-escape: exact opener, body and page restoration
+ok   1280-playing-empty-events: reloaded-escape: every complete saved byte held
+ok   1280-playing-empty-events: reloaded-escape: no global random draws
+ok   1280-playing-empty-events: No page or owned asset errors
+ok   1280-playing-empty-events: All external write attempts blocked with zero forwarding
+ok   1280-retired-defender: Independent unchanged Chromium loader matches every first-load field
+ok   1280-retired-defender: canonical-second-load: strict complete serialized reload equality
+ok   1280-retired-defender: Actual Ratings page opener is a fully painted 44 pixel target
+ok   1280-retired-defender: Shared dialog locks body scroll
+ok   1280-retired-defender: Existing Ratings still lists every saved senior row only
+ok   1280-retired-defender: Reopenable help explains saved values and worked comparison/availability examples
+ok   1280-retired-defender: ratings-rules: four stable readable painted frames without overflow
+ok   1280-retired-defender: ratings-rules: every visible history control has a 44 pixel target
+ok   1280-retired-defender: ratings: Help Back restores exact focus, scroll, body and page
+ok   1280-retired-defender: ratings-help: every complete saved byte held
+ok   1280-retired-defender: ratings-help: no global random draws
+ok   1280-retired-defender: Saved long history naturally overflows Ratings at this viewport
+ok   1280-retired-defender: Real wheel input establishes a nonzero Ratings offset while Compare stays fully visible
+ok   1280-retired-defender: Comparison opens with the actual latest two original indices
+ok   1280-retired-defender: Same-year loan records and every position metric equal independent original-index raw-save values
+ok   1280-retired-defender: Swap atomically reverses the two original saved indices
+ok   1280-retired-defender: Swap renders every reversed saved value and signed delta
+ok   1280-retired-defender: Selectors reject choosing the same original row twice
+ok   1280-retired-defender: Older missing OVR never borrows current overall or becomes zero
+ok   1280-retired-defender: comparison-top: four stable readable painted frames without overflow
+ok   1280-retired-defender: comparison-top: every visible history control has a 44 pixel target
+ok   1280-retired-defender: Reopenable help explains saved values and worked comparison/availability examples
+ok   1280-retired-defender: compare-rules: four stable readable painted frames without overflow
+ok   1280-retired-defender: compare-rules: every visible history control has a 44 pixel target
+ok   1280-retired-defender: compare: Help Back restores exact focus, scroll, body and page
+ok   1280-retired-defender: Help preserves both indexed comparison choices
+ok   1280-retired-defender: compare-help: every complete saved byte held
+ok   1280-retired-defender: compare-help: no global random draws
+ok   1280-retired-defender: Compare Back restores the Ratings offset and exact launcher focus
+ok   1280-retired-defender: Availability launcher also starts at the reachable nonzero saved Ratings offset
+ok   1280-retired-defender: Zero-app injury weeks, severity and actual suspension matches remain separate saved facts
+ok   1280-retired-defender: availability-top: four stable readable painted frames without overflow
+ok   1280-retired-defender: availability-top: every visible history control has a 44 pixel target
+ok   1280-retired-defender: Whole-career Availability includes every indexed senior row latest first without guessing missing fields
+ok   1280-retired-defender: availability-oldest: four stable readable painted frames without overflow
+ok   1280-retired-defender: availability-oldest: every visible history control has a 44 pixel target
+ok   1280-retired-defender: Reopenable help explains saved values and worked comparison/availability examples
+ok   1280-retired-defender: availability-rules: four stable readable painted frames without overflow
+ok   1280-retired-defender: availability-rules: every visible history control has a 44 pixel target
+ok   1280-retired-defender: availability: Help Back restores exact focus, scroll, body and page
+ok   1280-retired-defender: Help preserves indexed availability choice
+ok   1280-retired-defender: availability-help: every complete saved byte held
+ok   1280-retired-defender: availability-help: no global random draws
+ok   1280-retired-defender: Older missing suspension count stays unknown
+ok   1280-retired-defender: Recorded zero-app ban remains a saved status, not an injury inference
+ok   1280-retired-defender: Availability Back restores the exact nonzero Ratings offset and its own launcher
+ok   1280-retired-defender: Comparison and Availability reveal no pending award result
+ok   1280-retired-defender: both-history-modes: every complete saved byte held
+ok   1280-retired-defender: both-history-modes: no global random draws
+ok   1280-retired-defender: Tab: shared dialog focus remains trapped
+ok   1280-retired-defender: Tab: shared dialog focus remains trapped
+ok   1280-retired-defender: Shift+Tab: shared dialog focus remains trapped
+ok   1280-retired-defender: Shift+Tab: shared dialog focus remains trapped
+ok   1280-retired-defender: close: exact opener, body and page restoration
+ok   1280-retired-defender: close: every complete saved byte held
+ok   1280-retired-defender: close: no global random draws
+ok   1280-retired-defender: escape: exact opener, body and page restoration
+ok   1280-retired-defender: escape: every complete saved byte held
+ok   1280-retired-defender: escape: no global random draws
+ok   1280-retired-defender: completed-read-only: strict complete serialized reload equality
+ok   1280-retired-defender: Reload keeps the same original saved loan record available
+ok   1280-retired-defender: reloaded-escape: exact opener, body and page restoration
+ok   1280-retired-defender: reloaded-escape: every complete saved byte held
+ok   1280-retired-defender: reloaded-escape: no global random draws
+ok   1280-retired-defender: No page or owned asset errors
+ok   1280-retired-defender: All external write attempts blocked with zero forwarding
+ok   1280-pending-keeper: Independent unchanged Chromium loader matches every first-load field
+ok   1280-pending-keeper: canonical-second-load: strict complete serialized reload equality
+ok   1280-pending-keeper: Actual Ratings page opener is a fully painted 44 pixel target
+ok   1280-pending-keeper: Shared dialog locks body scroll
+ok   1280-pending-keeper: Existing Ratings still lists every saved senior row only
+ok   1280-pending-keeper: Reopenable help explains saved values and worked comparison/availability examples
+ok   1280-pending-keeper: ratings-rules: four stable readable painted frames without overflow
+ok   1280-pending-keeper: ratings-rules: every visible history control has a 44 pixel target
+ok   1280-pending-keeper: ratings: Help Back restores exact focus, scroll, body and page
+ok   1280-pending-keeper: ratings-help: every complete saved byte held
+ok   1280-pending-keeper: ratings-help: no global random draws
+ok   1280-pending-keeper: Saved long history naturally overflows Ratings at this viewport
+ok   1280-pending-keeper: Real wheel input establishes a nonzero Ratings offset while Compare stays fully visible
+ok   1280-pending-keeper: Comparison opens with the actual latest two original indices
+ok   1280-pending-keeper: Same-year loan records and every position metric equal independent original-index raw-save values
+ok   1280-pending-keeper: Swap atomically reverses the two original saved indices
+ok   1280-pending-keeper: Swap renders every reversed saved value and signed delta
+ok   1280-pending-keeper: Selectors reject choosing the same original row twice
+ok   1280-pending-keeper: Older missing OVR never borrows current overall or becomes zero
+ok   1280-pending-keeper: comparison-top: four stable readable painted frames without overflow
+ok   1280-pending-keeper: comparison-top: every visible history control has a 44 pixel target
+ok   1280-pending-keeper: Reopenable help explains saved values and worked comparison/availability examples
+ok   1280-pending-keeper: compare-rules: four stable readable painted frames without overflow
+ok   1280-pending-keeper: compare-rules: every visible history control has a 44 pixel target
+ok   1280-pending-keeper: compare: Help Back restores exact focus, scroll, body and page
+ok   1280-pending-keeper: Help preserves both indexed comparison choices
+ok   1280-pending-keeper: compare-help: every complete saved byte held
+ok   1280-pending-keeper: compare-help: no global random draws
+ok   1280-pending-keeper: Compare Back restores the Ratings offset and exact launcher focus
+ok   1280-pending-keeper: Availability launcher also starts at the reachable nonzero saved Ratings offset
+ok   1280-pending-keeper: Zero-app injury weeks, severity and actual suspension matches remain separate saved facts
+ok   1280-pending-keeper: availability-top: four stable readable painted frames without overflow
+ok   1280-pending-keeper: availability-top: every visible history control has a 44 pixel target
+ok   1280-pending-keeper: Whole-career Availability includes every indexed senior row latest first without guessing missing fields
+ok   1280-pending-keeper: availability-oldest: four stable readable painted frames without overflow
+ok   1280-pending-keeper: availability-oldest: every visible history control has a 44 pixel target
+ok   1280-pending-keeper: Reopenable help explains saved values and worked comparison/availability examples
+ok   1280-pending-keeper: availability-rules: four stable readable painted frames without overflow
+ok   1280-pending-keeper: availability-rules: every visible history control has a 44 pixel target
+ok   1280-pending-keeper: availability: Help Back restores exact focus, scroll, body and page
+ok   1280-pending-keeper: Help preserves indexed availability choice
+ok   1280-pending-keeper: availability-help: every complete saved byte held
+ok   1280-pending-keeper: availability-help: no global random draws
+ok   1280-pending-keeper: Older missing suspension count stays unknown
+ok   1280-pending-keeper: Recorded zero-app ban remains a saved status, not an injury inference
+ok   1280-pending-keeper: Availability Back restores the exact nonzero Ratings offset and its own launcher
+ok   1280-pending-keeper: Comparison and Availability reveal no pending award result
+ok   1280-pending-keeper: Natural newspaper-phase pending ballot stays unrevealed while history is read
+ok   1280-pending-keeper: both-history-modes: every complete saved byte held
+ok   1280-pending-keeper: both-history-modes: no global random draws
+ok   1280-pending-keeper: Tab: shared dialog focus remains trapped
+ok   1280-pending-keeper: Tab: shared dialog focus remains trapped
+ok   1280-pending-keeper: Shift+Tab: shared dialog focus remains trapped
+ok   1280-pending-keeper: Shift+Tab: shared dialog focus remains trapped
+ok   1280-pending-keeper: close: exact opener, body and page restoration
+ok   1280-pending-keeper: close: every complete saved byte held
+ok   1280-pending-keeper: close: no global random draws
+ok   1280-pending-keeper: escape: exact opener, body and page restoration
+ok   1280-pending-keeper: escape: every complete saved byte held
+ok   1280-pending-keeper: escape: no global random draws
+ok   1280-pending-keeper: completed-read-only: strict complete serialized reload equality
+ok   1280-pending-keeper: Reload keeps the same original saved loan record available
+ok   1280-pending-keeper: reloaded-escape: exact opener, body and page restoration
+ok   1280-pending-keeper: reloaded-escape: every complete saved byte held
+ok   1280-pending-keeper: reloaded-escape: no global random draws
+ok   1280-pending-keeper: No page or owned asset errors
+ok   1280-pending-keeper: All external write attempts blocked with zero forwarding
+Season history native: 598 checks,0 failed,9/9 journeys,4 copied observation controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-history/native
+RESULT sim=0 walk=0
