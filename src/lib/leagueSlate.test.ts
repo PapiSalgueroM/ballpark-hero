@@ -93,6 +93,22 @@ describe('swissSlate', () => {
     }
   });
 
+  it('counts an association with no club in a pot, and spends the cap there before the ban', () => {
+    /* Eleven clubs of one association, none in pot one. They pay 22 visits to pot one, whose nine clubs have
+       room for two each: four over the cap in a pot the association is not even in. Pots two and three
+       give 22 less 10, pot four 22 less 12. Nothing forces a same association match, so none is drawn.
+       (The first writing of the floor skipped pot one, said 34, and the search then spent the ban.) */
+    const spec = field(['.........', 'EEEE.....', 'EEEE.....', 'EEE......']);
+    expect(slateFloor(spec)).toEqual({ breaks: 0, overCap: 4 + 12 + 12 + 10 });
+    for (let seed = 1; seed <= 10; seed += 1) {
+      const slate = swissSlate(spec, mulberry32(seed));
+      expect(slate && faults(spec, slate.matches)).toEqual([]);
+      expect(slate).toMatchObject({ breaks: 0, overCap: 38, fallback: false });
+    }
+    /* Nine or fewer cost nothing in a pot they are not in: 18 visits, room for 18. */
+    expect(slateFloor(field(['.........', 'EEE......', 'EEE......', 'EEE......']))).toEqual({ breaks: 0, overCap: 3 * (18 - 12) });
+  });
+
   it('counts a field of one association as every match a break and nobody over the cap', () => {
     const spec = { pots: POTS, assoc: new Array(36).fill(7) };
     expect(slateFloor(spec)).toEqual({ breaks: 144, overCap: 0 });

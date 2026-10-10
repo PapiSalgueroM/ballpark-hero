@@ -25,7 +25,15 @@
  *      0; fields with at most four of one association in a pot and five in an association, drawn inside both
  *      rules: 445 of 445, 449 of 449, 453 of 453. The bands (no more than 5 in 1,000 falling back, at least
  *      990 in 1,000 at the floor) sit that far from a measurement that never moved; if one goes red the
- *      answer is more fields and a look at the search, never a wider band.
+ *      answer is more fields and a look at the search, never a wider band. A PLAIN field (at most four in a
+ *      pot, five in an association) is held one by one, not by a band: each must be drawn inside both rules
+ *      ([EXACT]), since every one of 1,347 here and 2,223 more on five other seed sets was.
+ *      Then three families no shipped game makes and a world editor can: one association swollen to 8 to 36
+ *      clubs (printed); one association with NO club in one pot, where a copy of the bundle with a longer
+ *      climb must never find fewer same association matches than the shipped search ([CLIMB], the check
+ *      that shares no line with either writing of the floor); and two or three swollen associations at
+ *      once, where the search really climbs and the order of the escape shows: the cap gives way before
+ *      the ban ([ORDER], held on every slate of the section by the number of whole draws it took).
  *   2  the table. A crafted pair for each of the eight steps, level on every earlier step, handed in three
  *      orders and named so the name alone would get it wrong; 400 whole league phases with random scores,
  *      at every matchday, against the order written a second time from the results; the two real tables.
@@ -36,7 +44,8 @@
  *      round of 16 tie the two real seasons played is one the draw can make.
  *   4  the real season one field, MEASURED and printed for the lead (step A5 of the round). The engine is
  *      bundled as it is and never edited; the field of 36 is its own rule read at the league phase's size.
- *      240 seeded saves: the pots of three by name, the fullest pot, what each draw had to give up.
+ *      240 seeded saves: the pots of three by name, the fullest pot, what each draw had to give up. Each of
+ *      the 240 must be drawn exactly at its counting floor ([EXACT]).
  *      THE BINDING ROUND MUST CHANGE section 4 when it makes the field size an argument: see FIELD_LINE.
  *
  * Exit 0 green, 1 red or a control that fired, 2 could not run, 3 a control that did not fire.
@@ -47,6 +56,8 @@
  *              number of a shape listed under no row's figures);
  *              the library edited in the bundle: const (a direct place too many)
  *   section 1, src/lib/leagueSlate.ts edited in the bundle: ninth sameassoc cap twoaday pot lie nosearch
+ *              order (the two budgets swapped: the ban gives way before the cap) absentpot (the floor as
+ *              first written, blind to an association with no club in a pot)
  *   section 2: gdonly (the stand in order: steps 3 to 8 go red, 1 and 2 stay green)
  *   section 3: ninthdirect (9th straight to the round of 16), flipseed (the second leg handed to the lower
  *              seed), freebracket (the slots in table order, so the wrong lines meet)
@@ -78,10 +89,11 @@ const CONTROLS = {
   capsource: [0, /^F15[ab]: capPerAssociation 2 is not printed by two publishers/, /^F15[ab]: capPerAssociation 2 is not printed by two publishers|^F15a: potSize 9 is not printed by two publishers/],
   shapefigure: [0, /^LEAGUE_PHASE_SHAPES\.uecl\.capPerAssociation is a figure of no verified row/],
   /* Section 1. These edit the bundled source of src/lib/leagueSlate.ts: see EDITS. */
-  ninth: [1, /^\[EIGHT\]/, /^\[(EIGHT|COUNT|HOMEAWAY|POT|DAY|BUDGET|RATE)\]/], sameassoc: [1, /^\[BUDGET\].*breaks/, /^\[(BUDGET|RATE)\]/],
-  cap: [1, /^\[BUDGET\].*over the cap/, /^\[(BUDGET|RATE)\]/], twoaday: [1, /^\[DAY\]/, /^\[(DAY|COUNT)\]/],
+  ninth: [1, /^\[EIGHT\]/, /^\[(EIGHT|COUNT|HOMEAWAY|POT|DAY|BUDGET|RATE|EXACT|ORDER)\]/], sameassoc: [1, /^\[BUDGET\].*breaks/, /^\[(BUDGET|RATE|EXACT|ORDER|ORDERFIELDS)\]/],
+  cap: [1, /^\[BUDGET\].*over the cap/, /^\[(BUDGET|RATE|EXACT)\]/], twoaday: [1, /^\[DAY\]/, /^\[(DAY|COUNT)\]/],
   pot: [1, /^\[POT\]/, /^\[(POT|HOMEAWAY)\]/], lie: [1, /^\[COST\]/, /^\[(COST|FLOOR|BUDGET|RATE)\]/],
-  nosearch: [1, /^\[RATE\].*recorded pattern/, /^\[RATE\]/],
+  nosearch: [1, /^\[RATE\].*recorded pattern/, /^\[(RATE|EXACT|ORDERFIELDS)\]/],
+  order: [1, /^\[ORDER\]/, /^\[(ORDER|ORDERFIELDS)\]/], absentpot: [1, /^\[CLIMB\]/, /^\[(CLIMB|FLOOR)\]/],
   /* Sections 2 and 3: edits of src/lib/uclLeaguePhase.ts. gdonly is the stand in order the game sorts by
      today (goal difference, goals, the name): steps 3 to 8 must go red and steps 1 and 2 must not. */
   gdonly: [2, /^\[STEP [3-8]\]/, /^\[(STEP [3-8]|FLEET)\]/],
@@ -103,6 +115,10 @@ const EDITS = {
   pot: [SLATE, '    for (let i = 0; i < s; i += 1) out.push([hosts[i], guests[guestOf[i]]]);', '    for (let i = 0; i < s; i += 1) out.push(a === 0 && b === 1 ? [guests[guestOf[i]], hosts[i]] : [hosts[i], guests[guestOf[i]]]);'],
   lie: [SLATE, '    if (spec.assoc[h] === spec.assoc[a]) { breaks += 1; continue; }', '    if (spec.assoc[h] === spec.assoc[a]) { continue; }'],
   nosearch: [SLATE, '  const tries = spec.tries ?? 20;', '  const tries = 0;'],
+  /* order: the two budgets swapped, so a same association match is spent before the cap has given way.
+     absentpot: the floor as it was first written, blind to an association with no club in a pot. */
+  order: [SLATE, '  for (let db = 0; db <= CLIMB; db += 1) for (let dc = 0; dc <= CLIMB; dc += 1) {', '  for (let dc = 0; dc <= CLIMB; dc += 1) for (let db = 0; db <= CLIMB; db += 1) {'],
+  absentpot: [SLATE, '      const k = m.get(x) ?? 0;', '      if (!m.has(x)) continue; const k = m.get(x) ?? 0;'],
   const: [UCL_FILE, '  ucl: { clubs: 36, pots: 4, potSize: 9, perPot: 2, games: 8, home: 4, away: 4, direct: 8, playoffTo: 24, capPerAssociation: 2 },', '  ucl: { clubs: 36, pots: 4, potSize: 9, perPot: 2, games: 8, home: 4, away: 4, direct: 9, playoffTo: 24, capPerAssociation: 2 },'],
   gdonly: [UCL_FILE, '    for (const step of LEAGUE_PHASE_STEPS) {', '    for (const step of LEAGUE_PHASE_STEPS.slice(0, 2)) {'],
   ninthdirect: [UCL_FILE, '  const at = (position: number) => order[position - 1];', '  const at = (position: number) => order[position === 8 ? 8 : position === 9 ? 7 : position - 1];'],
@@ -131,9 +147,31 @@ async function bundle(name, entries, extra = []) {
   const P = f => JSON.stringify(path.join(ROOT, f).split(path.sep).join('/'));
   fs.writeFileSync(entry, Object.entries(entries).map(([as, f]) => `export * as ${as} from ${P(f)};`).join('\n'));
   const out = path.join(work, 'bundle.mjs');
-  await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'esm', outfile: out, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') }, plugins: [editPlugin, ...extra] });
+  /* An extra plugin comes first: the first plugin to answer for a file is the one esbuild listens to, and
+     longPlugin applies a control's own edit of that file itself. */
+  await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'esm', outfile: out, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') }, plugins: [...extra, editPlugin] });
   return import(pathToFileURL(out).href);
 }
+/** A second copy of the BUNDLE (never of the source) whose search may climb eight above the counting floor
+ *  where the shipped one stops at two. Read by [CLIMB] in section 1 and by nothing else. */
+const CLIMB_LINE = 'const CLIMB = 2;';
+const longPlugin = {
+  name: 'cm-league-phase-long-climb',
+  setup(b) {
+    b.onLoad({ filter: /leagueSlate[.]ts$/ }, async args => {
+      let source = (await fs.promises.readFile(args.path, 'utf8')).replaceAll('\r\n', '\n');
+      const edit = EDITS[CONTROL];
+      if (edit && edit[0] === SLATE) {
+        const count = source.split(edit[1]).length - 1;
+        if (count !== 1) cannot(`control ${CONTROL}: its line is in ${SLATE} ${count} times, it must be exactly once`);
+        source = source.replace(edit[1], edit[2]);
+      }
+      const count = source.split(CLIMB_LINE).length - 1;
+      if (count !== 1) cannot(`section 1: "${CLIMB_LINE}" is in ${SLATE} ${count} times, it must be exactly once`);
+      return { contents: source.replace(CLIMB_LINE, 'const CLIMB = 8;'), loader: 'ts' };
+    });
+  },
+};
 
 const fails = [];
 let checks = 0;
@@ -323,7 +361,12 @@ function floorOf(assoc) {
   let breaks = 0;
   let overCap = 0;
   let most = [0, 0]; // [most of one association in a pot, the size of that association]
-  for (let a = 0; a < 4; a += 1) for (const [x, n] of Object.entries(k[a])) {
+  /* Every association of the field, for every pot: one with no club in a pot (n = 0) still pays its 2K
+     visits there. The first writing walked only the associations a pot holds, exactly as the library's
+     did, so the two agreed on a floor that was too low (the review of Round 1228). Two writings that
+     share a line of reasoning cannot check each other: [CLIMB] below is the check that shares none. */
+  for (let a = 0; a < 4; a += 1) for (const x of Object.keys(total)) {
+    const n = k[a][x] ?? 0;
     const inside = Math.max(0, 2 * n - 9);
     /* Matches the ban cannot avoid between this pot's clubs of the association and another pot's: one in
        each direction for every club the two pots hold past nine between them. */
@@ -374,8 +417,14 @@ function slateFaults(assoc, slate) {
   if (slate.breaks < floor.breaks || (slate.breaks === floor.breaks && slate.overCap < floor.overCap)) out.push(`[FLOOR] a slate under the counting floor: ${slate.breaks}/${slate.overCap} against ${floor.breaks}/${floor.overCap}`);
   if (!slate.fallback && breaks > floor.breaks + 2) out.push(`[BUDGET] ${breaks} breaks, more than its budget of ${floor.breaks + 2}`);
   if (!slate.fallback && overCap > floor.overCap + 2) out.push(`[BUDGET] ${overCap} over the cap, more than its budget of ${floor.overCap + 2}`);
+  /* The cap gives way before the ban. A slate with more same association matches than the floor may only
+     be found after every budget on the cap has had its whole draws: (climb + 1) budgets of `tries` each. */
+  if (!slate.fallback && typeof slate.tries === 'number' && breaks > floor.breaks && slate.tries <= ORDER_TRIES) out.push(`[ORDER] ${breaks} same association matches against a floor of ${floor.breaks} after ${slate.tries} whole draws: the ban gave way before the cap had its ${ORDER_TRIES}`);
   return out;
 }
+/** The search's two numbers, as src/lib/leagueSlate.ts states them (section 1 refuses to run if it no longer does). */
+const SEARCH_LINES = [CLIMB_LINE, '  const tries = spec.tries ?? 20;'];
+const ORDER_TRIES = (2 + 1) * 20;
 /** Three kinds of field, each on a keyed stream: the big five and the rest; the same with a sixth club in one
  *  association; and a field whose fullest pot is forced to three, four or five of one association. */
 function makeField(kind, rnd) {
@@ -424,14 +473,17 @@ async function section1() {
       const exact = !slate.fallback && slate.breaks === floor.breaks && slate.overCap === floor.overCap;
       if (slate.fallback) fallbacks += 1;
       if (exact) atFloor += 1;
-      if (floor.most[0] <= 4 && floor.largest <= 5) { plain += 1; if (exact) plainAtFloor += 1; }
+      /* A plain field can be drawn inside both rules (its floor is 0 and 0), and every one measured was:
+         held on each field, not as a rate, so ten in a thousand playing a needless same country match
+         can no longer hide under a band. */
+      if (floor.most[0] <= 4 && floor.largest <= 5) { plain += 1; if (exact) plainAtFloor += 1; else fails.push(`[EXACT] a field with at most four in a pot and five in an association was drawn ${slate.breaks}/${slate.overCap}${slate.fallback ? ' on the recorded pattern' : ''}, not inside both rules (set ${set}, field ${i})`); }
       const key = `${floor.most[1]} clubs, ${floor.most[0]} in a pot`;
       const row = (table[key] ??= { n: 0, exact: 0, fallback: 0, tries: 0, floorB: new Set(), floorC: new Set() });
       row.n += 1; row.exact += exact ? 1 : 0; row.fallback += slate.fallback ? 1 : 0; row.tries += slate.tries; row.floorB.add(floor.breaks); row.floorC.add(floor.overCap);
     }
     ok(fallbacks / PER_SET <= BANDS.fallbackMost, `[RATE] set ${set}: ${fallbacks} of ${PER_SET} fields fell back to the recorded pattern, the band is ${BANDS.fallbackMost}`);
     ok(atFloor / PER_SET >= BANDS.atFloorLeast, `[RATE] set ${set}: ${atFloor} of ${PER_SET} fields were drawn exactly at the counting floor, the band is ${BANDS.atFloorLeast}`);
-    ok(plain > 200 && plainAtFloor / plain >= BANDS.atFloorLeast, `[RATE] set ${set}: ${plainAtFloor} of ${plain} fields with at most four in a pot and five in an association drew inside both rules`);
+    ok(plain > 200, `[COUNT] set ${set}: only ${plain} fields with at most four in a pot and five in an association, too few to say anything`);
     console.log(`  1 set ${set}: ${PER_SET} fields, at the floor ${atFloor}, fell back ${fallbacks}, plain fields strict ${plainAtFloor} of ${plain}`);
   }
   console.log('  1 by (clubs of the association with most in one pot, most in one pot): fields | at the floor | fell back | mean tries | floors seen (breaks ; over the cap)');
@@ -459,6 +511,73 @@ async function section1() {
     swollen.push(`${big} clubs: ${exact} of 8 at the floor, ${fell} on the pattern`);
   }
   console.log(`  1 one association swollen past anything the game ships: ${swollen.join(' | ')}`);
+  ok(SEARCH_LINES.every(line => text(SLATE).split(line).length === 2), `[ORDER] ${SLATE} no longer states a climb of two and 20 whole draws a budget: ORDER_TRIES and [CLIMB] must follow it`);
+  /* [CLIMB] An association with NO club in one pot (a world editor's field): 10 to 14 clubs, eight fields
+     each, the empty pot turning. Both writings of the floor once left such a pot out, so they agreed on a
+     floor that was too low and the search spent the ban where a dearer cap would have done. The check that
+     shares no line with either writing: the same field on the same stream, drawn by a copy of the bundle
+     whose search may climb EIGHT above the floor, must never come back with FEWER same association matches
+     than the shipped search. Held for 10, 11 and 12 clubs, where the fault showed; 13 and 14 are printed.
+     MEASURED 2026-10-10: 10, 11 and 12 clubs, 24 of 24 at the floor in both copies; under the control
+     absentpot (the first writing of the floor) the longer climb finds fewer in 16 of the 24. */
+  const { slate: longLib } = await bundle('slate-long', { slate: SLATE }, [longPlugin]);
+  const absent = [];
+  for (const big of [10, 11, 12, 13, 14]) {
+    let exact = 0;
+    let fell = 0;
+    let fewer = 0;
+    for (let t = 0; t < 8; t += 1) {
+      const rnd = mulberry(6000 + big * 10 + t);
+      const seats = Array.from({ length: 36 }, (_, c) => c).filter(c => potOf(c) !== t % 4);
+      for (let i = seats.length - 1; i > 0; i -= 1) { const j = Math.floor(rnd() * (i + 1)); [seats[i], seats[j]] = [seats[j], seats[i]]; }
+      const own = new Set(seats.slice(0, big));
+      const assoc = Array.from({ length: 36 }, (_, c) => (own.has(c) ? 0 : 100 + c));
+      const slate = lib.swissSlate({ pots: POTS, assoc }, mulberry(6500 + big * 10 + t));
+      const long = longLib.swissSlate({ pots: POTS, assoc }, mulberry(6500 + big * 10 + t));
+      checks += 1;
+      for (const f of slateFaults(assoc, slate)) fails.push(`${f} (one association of ${big} clubs with none in pot ${t % 4 + 1}, field ${t})`);
+      if (!slate || !long) continue;
+      const floor = floorOf(assoc);
+      if (slate.fallback) fell += 1; else if (slate.breaks === floor.breaks && slate.overCap === floor.overCap) exact += 1;
+      if (!slate.fallback && !long.fallback && long.breaks < slate.breaks) {
+        fewer += 1;
+        if (big <= 12) fails.push(`[CLIMB] a longer climb drew ${long.breaks} same association matches (${long.overCap} over the cap) where the shipped search drew ${slate.breaks} (${slate.overCap}): the floor ${slate.floor.breaks}/${slate.floor.overCap} is too low (one association of ${big} clubs with none in pot ${t % 4 + 1}, field ${t})`);
+      }
+    }
+    absent.push(`${big} clubs: ${exact} of 8 at the floor, ${fell} on the pattern, ${fewer} fewer on a longer climb`);
+  }
+  console.log(`  1 one association with no club in one pot: ${absent.join(' | ')}`);
+  /* [ORDER] The cap gives way before the ban. Two or three swollen associations at once make fields whose
+     counting floor the search cannot always reach, so here it really climbs (no field the game ships makes
+     it: every one of those is drawn at its floor). slateFaults holds the order on every slate; this block
+     is what gives it slates to hold it on, and says how many there were.
+     MEASURED 2026-10-10 over these 200 fields: the cap gave way with the ban held in 70, the ban gave way
+     after the cap's budgets in 29, 4 ended on the pattern. The line under it asks for a tenth of the 200,
+     so the block cannot go quiet; the seeds are fixed, so 70 is a count and not a rate. Under the control
+     order (the two budgets swapped) 114 slates break the order, some of them in the 3,000 above. */
+  let capClimbed = 0;
+  let banClimbed = 0;
+  let multiFell = 0;
+  const MULTI = 200;
+  for (let i = 0; i < MULTI; i += 1) {
+    const rnd = mulberry(90000 + i);
+    const sizes = [6 + Math.floor(rnd() * 9), 4 + Math.floor(rnd() * 8), 2 + Math.floor(rnd() * 5)];
+    const seats = Array.from({ length: 36 }, (_, c) => c);
+    for (let k = 35; k > 0; k -= 1) { const j = Math.floor(rnd() * (k + 1)); [seats[k], seats[j]] = [seats[j], seats[k]]; }
+    const assoc = Array.from({ length: 36 }, (_, c) => 100 + c);
+    let at = 0;
+    sizes.forEach((n, a) => { for (let k = 0; k < n; k += 1) { assoc[seats[at]] = a; at += 1; } });
+    const slate = lib.swissSlate({ pots: POTS, assoc }, mulberry(95000 + i));
+    checks += 1;
+    for (const f of slateFaults(assoc, slate)) fails.push(`${f} (associations of ${sizes.join(', ')} clubs, field ${i})`);
+    if (!slate) continue;
+    const floor = floorOf(assoc);
+    if (slate.fallback) multiFell += 1;
+    else if (slate.breaks > floor.breaks) banClimbed += 1;
+    else if (slate.overCap > floor.overCap) capClimbed += 1;
+  }
+  console.log(`  1 two or three swollen associations, ${MULTI} fields: the cap gave way and the ban held in ${capClimbed}, the ban gave way after the cap's budgets in ${banClimbed}, on the pattern ${multiFell}`);
+  ok(capClimbed >= MULTI / 10, `[ORDERFIELDS] the cap gave way in only ${capClimbed} of ${MULTI} fields: too few slates for [ORDER] to be held on`);
   /* The recorded pattern is itself a legal slate, and a search given no tries seats it and says so. */
   const pattern = lib.PATTERN_4X9.map(code => [Math.floor(code / 36) % 36, code % 36, Math.floor(code / 1296)]);
   const distinct = Array.from({ length: 36 }, (_, i) => i);
@@ -666,9 +785,9 @@ const widePlugin = {
 const SAVES = 240;
 async function section4() {
   const { engine } = await bundle('engine', { engine: ENGINE });
-  const { engine: wide } = await bundle('engine36', { engine: ENGINE }, [widePlugin]);
   const { ucl: lib } = await bundle('ucl4', { ucl: UCL });
   const field32 = engine.seasonOneUclField('now') ?? [];
+  const { engine: wide } = await bundle('engine36', { engine: ENGINE }, [widePlugin]);
   const field = wide.seasonOneUclField('now') ?? [];
   const holder = engine.CM_FINAL_TABLES_2025_26.holders;
   ok(field32.length === 32 && field.length === 36 && new Set(field).size === 36, `[FIELD] the season one field is ${field32.length} clubs today and ${field.length} at the league phase's size`);
@@ -704,7 +823,10 @@ async function section4() {
       for (const f of slateFaults(assoc, { matches, breaks: slate.breaks, overCap: slate.overCap, floor, fallback: slate.fallback === true })) fails.push(`${f} (save ${i})`);
       const key = `${slate.breaks} same association, ${slate.overCap} over the cap${slate.fallback ? ', the recorded pattern' : ''}`;
       escape[key] = (escape[key] ?? 0) + 1;
+      /* Every real season one field measured was drawn exactly at its counting floor (240 here, 960 more on
+         two other seed families at the review). Held on each one, never as a rate. */
       if (!slate.fallback && slate.breaks === floor.breaks && slate.overCap === floor.overCap) atFloor += 1;
+      else fails.push(`[EXACT] the season one field was drawn ${slate.breaks}/${slate.overCap}${slate.fallback ? ' on the recorded pattern' : ''} against a counting floor of ${floor.breaks}/${floor.overCap} (save ${i})`);
       fullest[floor.most[0]] = (fullest[floor.most[0]] ?? 0) + 1;
       const pots = [0, 1, 2, 3].map(p => slate.clubs.slice(p * 9, p * 9 + 9));
       const who = new Set();
@@ -714,7 +836,6 @@ async function section4() {
     }
   } finally { Math.random = realRandom; Date.now = realNow; }
   ok(drawn >= 200, `[FIELD] only ${drawn} season one fields were drawn`);
-  ok(drawn > 0 && atFloor / drawn >= BANDS.atFloorLeast, `[RATE] ${atFloor} of ${drawn} season one fields were drawn exactly at the counting floor`);
   const share = n => `${n} of ${drawn} (${(100 * n / Math.max(1, drawn)).toFixed(1)}%)`;
   console.log(`  4 the season one field at 36: ${Object.entries(nations ?? {}).sort((a, b) => b[1] - a[1]).map(([a, n]) => `${a} ${n}`).join(', ')}`);
   console.log(`  4 the 36 add to today's 32: ${added.join(', ')}. Holders: ${holder}.`);
@@ -738,6 +859,9 @@ if (CONTROL) {
   const hit = fails.filter(f => want.test(f));
   const other = fails.filter(f => !may.test(f));
   for (const f of other.slice(0, 5)) console.log(`  other: ${f}`);
+  const tags = {};
+  for (const f of fails) { const tag = (/^\[[A-Z0-9 ]+\]/.exec(f) ?? ['untagged'])[0]; tags[tag] = (tags[tag] ?? 0) + 1; }
+  console.log(`  control ${CONTROL} turned red: ${Object.entries(tags).map(([t, n]) => `${t} ${n}`).join(', ') || 'nothing'}`);
   if (hit.length > 0 && other.length === 0) { console.log(`simCmLeaguePhase control ${CONTROL}: FIRED (${hit.length} of its own failures, e.g. ${hit[0]})`); process.exit(1); }
   console.log(`simCmLeaguePhase control ${CONTROL}: DID NOT FIRE CLEANLY (${hit.length} of its own failures, ${other.length} others).`); process.exit(3);
 }

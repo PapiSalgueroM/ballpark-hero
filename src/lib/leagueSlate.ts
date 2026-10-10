@@ -67,7 +67,10 @@ function shape(spec: SlateSpec): { n: number; p: number; s: number } | null {
  *  k clubs of one association in a pot of s play 2k matches inside the pot against s - k others who have
  *  2(s - k) to give: past half the pot the rest must meet each other. And every club of an association
  *  plays two clubs of each pot, so the pot's other clubs take 2K such opponents between them, with room
- *  for `cap` each. */
+ *  for `cap` each. That holds for a pot the association has NO club in as well, so every association of
+ *  the field is walked for every pot: with k = 0 the pot's s clubs take all 2K visits. (The first writing
+ *  walked only the associations a pot holds, and an association of eleven clubs missing from a pot was
+ *  then drawn with a same association match the field did not force: the review of Round 1228.) */
 export function slateFloor(spec: SlateSpec): { breaks: number; overCap: number } {
   const sh = shape(spec);
   if (!sh) return { breaks: 0, overCap: 0 };
@@ -78,7 +81,8 @@ export function slateFloor(spec: SlateSpec): { breaks: number; overCap: number }
   let breaks = 0;
   let overCap = 0;
   inPot.forEach((m, a) => {
-    for (const [x, k] of m) {
+    for (const x of total.keys()) {
+      const k = m.get(x) ?? 0;
       const inside = Math.max(0, 2 * k - sh.s);
       let across = 0;
       for (let b = 0; b < inPot.length; b += 1) if (b !== a) across += Math.max(0, k + (inPot[b].get(x) ?? 0) - sh.s);
@@ -184,7 +188,10 @@ function drawPairs(spec: SlateSpec, n: number, cap: number, maxBreaks: number, m
 
 /** Lay the matches on `days` matchdays, one match a club a matchday. A colour free at both ends is taken;
  *  failing that the two colour chain from one end is flipped (Kempe), and where the chain closes on the
- *  other end one neighbouring match is lifted and laid again. Bounded: null when the budget runs out. */
+ *  other end one neighbouring match is lifted and laid again. Bounded: null when the budget runs out.
+ *  NOT DONE HERE: the order of a club's home and away nights. The real schedule allows no more than two
+ *  home or two away nights in a row and one of each across the first two and the last two matchdays
+ *  (ledger row F18, one publisher). This layer ignores venue, so no screen may call the order real. */
 function layMatchdays(n: number, pairs: readonly [number, number][], days: number, rand: () => number): Int16Array | null {
   const at = new Int32Array(n * days).fill(-1); // at[club * days + day]: the match that club plays that day
   const day = new Int16Array(pairs.length).fill(-1);
