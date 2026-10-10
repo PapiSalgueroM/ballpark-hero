@@ -1,0 +1,4 @@
+simLiveSimCelebration exit=0 2s | simLiveSimCelebration: 17 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part beh
+simHarnessAnchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simLiveSimMotion exit=0 40s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 47s | 

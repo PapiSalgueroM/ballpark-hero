@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simLiveSimCelebration: node scripts/simLiveSimCelebration.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
