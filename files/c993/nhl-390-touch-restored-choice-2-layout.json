@@ -1,0 +1,52 @@
+{
+  "width": 390,
+  "scrollWidth": 390,
+  "scrollY": 484,
+  "headings": [
+    {
+      "text": "Scouts are watching.",
+      "top": -126.890625,
+      "bottom": -68.109375,
+      "height": 58.78125
+    },
+    {
+      "text": "A new billet familyYour billet family is moving. The team can find you a new one",
+      "top": 286,
+      "bottom": 522,
+      "height": 236
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_xof9u_17",
+      "text": "",
+      "width": 356,
+      "scrollWidth": 468
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "Scouts are watching.",
+      "width": 1,
+      "scrollWidth": 167
+    }
+  ],
+  "controls": [
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "New billet familyNo change",
+      "width": 324,
+      "height": 66
+    },
+    {
+      "text": "Room with a teammateRating +1, Health -5",
+      "width": 324,
+      "height": 66
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+base build exit=0
+base weight exit=0
+   /nfl-my-career      468K gz over  47 files (budget 468K, 468.1K to the tenth)
+sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+base career993 exit=1
+6
+nfl-390-touch passed=false steps=11 AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+nba-390-touch passed=false steps=7 AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+mlb-390-touch passed=false steps=7 AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+nhl-390-touch passed=false steps=9 AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+nba-320-touch-reduced passed=false steps=7 AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition
+nba-1440-keyboard passed=false steps=7 AssertionError [ERR_ASSERTION]: Whole save differs from the expected transition

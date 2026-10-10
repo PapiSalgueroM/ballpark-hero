@@ -1,0 +1,41 @@
+{
+  "width": 390,
+  "scrollWidth": 390,
+  "scrollY": 0,
+  "headings": [
+    {
+      "text": "This is your moment.",
+      "top": 357.109375,
+      "bottom": 415.890625,
+      "height": 58.78125
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_rzt4b_17",
+      "text": "",
+      "width": 356,
+      "scrollWidth": 468
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "This is your moment.",
+      "width": 1,
+      "scrollWidth": 169
+    }
+  ],
+  "controls": [
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Start your career",
+      "width": 324,
+      "height": 44
+    }
+  ]
+}

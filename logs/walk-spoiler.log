@@ -1,0 +1,3 @@
+  FAIL [spoiler] mlb-390-late-watch: at 0 ms of 3500 the title is at 1, the club at 1, the result at 1, the closing row at 0
+  walked mlb-390-late-watch: pick 432, 8 rows, card 764 high, 332 frames
+playDraftNight [control spoiler]: 1 FAILURE(S) of its own check (spoiler), as it must

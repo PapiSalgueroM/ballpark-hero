@@ -1,0 +1,51 @@
+{
+  "width": 1440,
+  "scrollWidth": 1440,
+  "scrollY": 0,
+  "headings": [
+    {
+      "text": "One last look.",
+      "top": 336.4375,
+      "bottom": 378.5625,
+      "height": 42.125
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_rzt4b_17",
+      "text": "",
+      "width": 638,
+      "scrollWidth": 750
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "One last look.",
+      "width": 1,
+      "scrollWidth": 110
+    }
+  ],
+  "controls": [
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Go all outPush every drill to the limit.Grade A +10, B +4, C -3, D -8",
+      "width": 606,
+      "height": 94
+    },
+    {
+      "text": "Play it safeStay within yourself.Grade A +5, B +2, C -1, D -3",
+      "width": 606,
+      "height": 94
+    },
+    {
+      "text": "Skip itNo drill and no grade. The scouts notice.Draft stock -2",
+      "width": 606,
+      "height": 94
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+#!build
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playDraftNight.mjs
+walk-late: PLAY_DRAFT_NIGHT_CONTROL=late RC_OUT="$RC_OUT/c-late" node scripts/playDraftNight.mjs
+walk-spoiler: PLAY_DRAFT_NIGHT_CONTROL=spoiler RC_OUT="$RC_OUT/c-spoiler" node scripts/playDraftNight.mjs
+walk-fold: PLAY_DRAFT_NIGHT_CONTROL=fold RC_OUT="$RC_OUT/c-fold" node scripts/playDraftNight.mjs
+walk-hidden: PLAY_DRAFT_NIGHT_CONTROL=hidden RC_OUT="$RC_OUT/c-hidden" node scripts/playDraftNight.mjs
+career993: ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993" node scripts/qa/career993.mjs; code=$?; node -e "const r=require('$RC_OUT/c993/report.json'); for (const c of r.cases) console.log(c.id, 'passed=' + c.passed, 'steps=' + c.steps.map(s=>s.stage).join(','), (c.error||'').split('\n')[0].slice(0,90))"; exit $code
+base: git worktree add -q /tmp/base 09df145abfb241679022b41903d2f19bc254ebf9 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vite build > /tmp/base-build.log 2>&1; echo "base build exit=$?"; (node scripts/lib/hostLikeServer.mjs dist 4199 > /dev/null 2>&1 &); sleep 3; BASE=http://127.0.0.1:4199 SWEEP_BASE=http://127.0.0.1:4199 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > "$RC_OUT/weight-base.log" 2>&1; echo "base weight exit=$?"; grep -E "my-career|sweepWeight" "$RC_OUT/weight-base.log"; ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993-base" node scripts/qa/career993.mjs > "$RC_OUT/c993-base.log" 2>&1; echo "base career993 exit=$?"; grep -c "summerSalt" "$RC_OUT/c993-base.log"; node -e "const r=require('$RC_OUT/c993-base/report.json'); for (const c of r.cases) console.log(c.id, 'passed=' + c.passed, 'steps=' + c.steps.length, (c.error||'').split('\n')[0].slice(0,90))"
