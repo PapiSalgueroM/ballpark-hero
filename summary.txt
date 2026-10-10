@@ -1,0 +1,4 @@
+book-default exit=1 28s | simCmLeagueBook: 2 FAILURE(S) (28s)
+vitest exit=0 3s |    Duration  2.64s (transform 158ms, setup 157ms, collect 189ms, tests 1.39s, environment 1.10s, prepare 305ms)
+tsc exit=0 73s | 
+book-full-base exit=1 129s | simCmLeagueBook: 2 FAILURE(S) (128s)
