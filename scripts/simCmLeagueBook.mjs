@@ -252,39 +252,59 @@ async function engine(label, root, patches = []) {
 }
 
 /*
- * MEASURED on GitHub runners, 2026-10-10, five seed sets each (SEEDSET 0 to 4), the engine as at 4ab6e246
- * (remote checks r1229-g1, r1229-g3, r1229-g2, r1229-g6; docs/audits/ROUND-1229-NOTES.md has the boards).
- * The full fleet is 24 careers x 2 seasons (48 seasons, about 44,000 rival goals), the default 4 x 2.
- *   stream   96 of 96 faces equal with the book out on every set, and 96 of 96 equal to the base commit
- *            (980654fa, seed set 0). Controls: mathrandom moved 16 of 16 default faces, weight 11 of 16.
- *   shapes (i)   the three lines against the harness's own table, z: full fleets within -1.83 to 1.71,
- *            default fleets within -2.27 to 2.60 (gate 4). Controls: twoman, forwards at z -36 and no
- *            defender scoring at all; flat, forwards at z -37 and defenders at z +58.
+ * MEASURED on GitHub runners, 2026-10-10, five seed sets each (SEEDSET 0 to 4), the tree as at 332c8ce7
+ * (remote checks r1229-fx4 and r1229-fx5; docs/audits/ROUND-1229-NOTES.md has the boards). The fleet as it
+ * is since the review: the full one is 27 careers x 2 seasons (54 seasons, about 47,000 rival goals), the
+ * default 5 x 2, each with one career in a league of fifteen clubs.
+ *   stream   108 of 108 faces equal with the book out on every full set and 20 of 20 on every default one,
+ *            and 108 of 108 equal to the base commit (f78037dc, seed set 0). Controls: mathrandom moved 20
+ *            of 20 default faces, weight 15 of 20.
+ *   shapes (i)   the three lines against the harness's own table, z: full fleets within -2.02 to 1.40,
+ *            default fleets within -1.83 to 2.26 (gate 4). Controls: twoman, forwards at z -37 and
+ *            defenders at z -25 (none scores at all); flat, forwards at z -39 and defenders at z +60.
  *   shapes (ii)  forwards and wingers in the top ten of the Goals board, book minus old race: full fleets
- *            3.85 4.02 4.40 4.19 4.00, default fleets 3.50 3.63 3.13 3.88 4.50. Under the twoman control
- *            (the book dealing as the old race did, no taker) the default fleets read 0.00 -1.00 -0.63
- *            -0.38 -0.38. PURPOSE_FLOOR 1.5 sits 1.63 under the lowest healthy fleet and 1.50 over the
- *            highest control, about three of either's standard deviations (0.5 and 0.4) from each.
- *   shapes (iii) assists a credited goal of a club with an eleven, against 0.614, z: full 0.70 -0.69 -2.93
- *            -0.47 -0.50, default 0.37 -1.25 -0.87 -0.34 0.53 (gate 4; control penassist z 11.4). Read
- *            over EVERY club the same fleets gave 0.601 to 0.610, all ten under the rule: a club with no
- *            eleven can have a goal against me on a row, with nobody on its pitch to set it up, and the
- *            first cut of this check counted those. Own goals of a club with an eleven against 2.75 in a
- *            hundred, z: full 0.16 -0.59 0.66 -1.10 -2.00, default 0.42 -1.12 1.12 -0.82 0.73 (gate 4;
- *            control noog z -12.0).
- *   law      45,366 checks over 2,185 entries on the full fleet, none red; with the video referee on, 268
- *            to 277 entries, 162 to 183 reviews in 228 league matches of mine, no report whose lines did
- *            not add up to its score. Controls: dropmine 3,434 failures, cleanside 96.
- *   names    about 80,000 credits on the full fleet, each on its club's roster and not in my squad; the
- *            purchase probe fires on 3 of 3 purchases under the bought control.
- *   oldsave, doors, dailies   exact comparisons, no band: redeal 4 failures, seasonstamp 32, strip 8,
- *            stripdeadline 6.
- * Wall time, full fleet with BOOK_BASE and BOOK_MEASURE: about 130 seconds; default fleet about 25.
+ *            3.74 3.85 4.15 4.04 3.89, default fleets 3.30 3.60 3.20 3.60 3.90. Under the twoman control
+ *            (the book dealing as the old race did, no taker) the default fleets read 0.00 -0.60 -0.10
+ *            -0.20 -0.60. PURPOSE_FLOOR 1.5 sits 1.70 under the lowest healthy fleet and 1.50 over the
+ *            highest control, about five of either's standard deviations (0.3 each) from each.
+ *   shapes (iii) assists a credited goal of a club with an eleven, against 0.614, z: full 0.54 -0.58 -2.71
+ *            -0.75 -0.74, default 0.53 -1.45 -1.15 -0.47 0.84 (gate 4; control penassist z 13.3). Read
+ *            over EVERY club the same fleets gave 0.593 to 0.609, all ten under the rule: a club with no eleven
+ *            can have a goal against me on a row, with nobody on its pitch to set it up, and the first
+ *            cut of this check counted those. Own goals of a club with an eleven against 2.75 in a
+ *            hundred, z: full 0.12 -0.73 0.60 -1.36 -2.04, default 0.68 -1.24 1.23 -1.08 0.29 (gate 4;
+ *            control noog z -12.6).
+ *   shapes (iv)  matches a club with an eleven scored two or more in against another club: 9,626 to 9,732
+ *            a full fleet, 1,651 to 1,865 a default one; one man took every goal in 12.0 to 13.8 in a
+ *            hundred of them where the harness's own table says 12.4 to 13.1, z: full -0.09 -0.36 0.70
+ *            -0.70 0.76, default 0.29 0.10 -1.34 0.50 1.09 (gate 4). Control keyindex: about 92 in a
+ *            hundred, z 99.1 102.4 99.4 101.3 105.4 on the five default sets. MULTI_FLOOR 1,000 is six
+ *            tenths of the lowest default fleet; at that count the control would still stand near z 75.
+ *   law      53,592 to 54,080 checks over 2,354 to 2,381 entries on the full fleet, none red; with the
+ *            video referee on, 268 to 277 entries, 162 to 183 reviews in 228 league matches of mine, no
+ *            report whose lines did not add up to its score. The league of fifteen clubs: 12 weeks I did
+ *            not play in which the rest of the round did on a full fleet (4 on a default one), 130 club
+ *            entries holding two matches of one club (26), 22 club seasons whose clean sheets are judged
+ *            on a range (4). Controls: dropmine 5,055 failures, cleanside 132, byeweek 365 411 505 502
+ *            325 on the five default sets.
+ *   names    about 107,000 checks on the full fleet, each credit on its club's roster and not in my squad;
+ *            the purchase probe fires on 4 of 4 purchases under the bought control. The book against the
+ *            report, full fleet, seed set 0: 1,958 league matches of mine, 1,871 goal lines, 1,755 naming
+ *            a man of that club's roster and every one of them on his row, 62 naming nobody its roster
+ *            holds, 233 from the spot or a free kick, 827 assists, 10 matches not judged (the opponent
+ *            played twice in the entry); a default fleet holds 366 matches and about 400 lines. Controls
+ *            on the five default sets, failures: wrongman 654 to 825, unnamed 402 to 476, offbyone 278 to
+ *            299, penassistmine 34 to 46, assistbench 69 to 89.
+ *   oldsave, doors, dailies   exact comparisons, no band: redeal 4 failures, hurtentry 1 (the match week
+ *            throws on the entry with no rows map), seasonstamp 32, strip 8, stripdeadline 6.
+ * Every one of the 21 controls FIRED for its own section and no other on seed set 0 (r1229-fx4), and the
+ * nine that are new or re-measured since the review on seed sets 1 to 4 as well (r1229-fx5).
+ * Wall time: full fleet about 118 seconds, with BOOK_BASE and BOOK_MEASURE about 195; default fleet about 45.
  */
 /** The gate of section shapes (ii): see MEASURED above. */
 const PURPOSE_FLOOR = 1.5;
 /** Section shapes (iv) is judged on at least this many matches: see MEASURED above. */
-const MULTI_FLOOR = 400;
+const MULTI_FLOOR = 1000;
 
 /* ---------- the seeded stream, counted ---------- */
 function seeded(seed) {
