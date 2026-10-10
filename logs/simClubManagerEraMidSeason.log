@@ -1,0 +1,258 @@
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at LinkWithRef (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:29217:9)
+    at p
+    at div
+    at UclGroupsCard (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:110384:26)
+    at Router (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24588:13)
+    at MemoryRouter (/home/runner/work/_temp/t-simClubManagerEraMidSeason/clubManagerEraMidSeason.bundle.cjs:24498:3)
+1) His save, his week: 2005/06 Barcelona, three matches through the dressing room, then the window, round 19 and the final whistle
+   55 world checkpoints over 11 era careers (11 of them his three match week): 6468 table rows across 220 other league tables checked, 0 still reading pre-season
+   44 world leagues zeroed the way the old engine left them and put through the engine to its next league round
+   final tables: 30 of 209 neighbouring pairs level on points (Spain and Italy split those on head to head since Round 462, held by simClubManagerEraUcl)
+2) The modern world still advances (the control the fix must not break)
+   8 checkpoints over Arsenal and an odd sized MLS conference: 4086 rows across 208 other league tables, 0 frozen
+3) The Cups tab data agrees with the bracket at every step
+   670 steps checked: the cup read alive on 469, out on 164, won on 37; 1172 looks at a cup round whose week had passed found it settled with the next round drawn
+4) The Cups tab rendered: the cup card is the cup, the UCL card is Europe
+   44 cards rendered through react-dom/server on day one and three match states
+5) The projected quarter finals follow the group table, and the real draw agrees
+   60 group matchdays checked, my club second in 17 of them; 12 real draws checked against the final group position
+6) Source shape: the cups panel order, the era aware loop, the era aware picker
+   cups panel, syncWorld and WorldTablesCard read on the comment stripped source
+
+simClubManagerEraMidSeason: PASS. His 2005 save plays every league, the picker lists one La Liga, and the Cups tab shows the cup it names.
