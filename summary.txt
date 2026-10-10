@@ -1,0 +1,8 @@
+own exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/pitchOwnGoal.test.tsx,title=src/test/pitchOwnGoal.test.tsx > Round 1216%3A the recorded own goal > RUE
+simLiveSimMotion exit=0 67s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simHarnessAnchors exit=0 52s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-plain exit=1 6s | simOwnGoalMotion: control plain turned "OG1: the ball goes in off the man the line names" red on an assertion (1 failed) and the material stayed green, as it must.
+ctl-crowded exit=1 7s | simOwnGoalMotion: control crowded turned "OG9: from the touch to the net the ball passes nobody else" red on an assertion (1 failed) and the material stayed green, as it 
+ctl-castnow exit=1 10s | simOwnGoalMotion: control castnow turned "an own goal still on its way when the line up changes off the clock" red on an assertion (1 failed) and the material stayed gree
+tsc exit=0 82s | 
+ctl-through exit=1 4s | simOwnGoalMotion: control through turned "OG4: nobody stands on a team mate" red on an assertion (1 failed) and the material stayed green, as it must.

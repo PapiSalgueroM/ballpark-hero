@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+own: node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+ctl-plain: OWN_GOAL_CONTROL=plain node scripts/simOwnGoalMotion.mjs
+ctl-castnow: OWN_GOAL_CONTROL=castnow node scripts/simOwnGoalMotion.mjs
+ctl-crowded: OWN_GOAL_CONTROL=crowded node scripts/simOwnGoalMotion.mjs
+ctl-through: OWN_GOAL_CONTROL=through node scripts/simOwnGoalMotion.mjs
