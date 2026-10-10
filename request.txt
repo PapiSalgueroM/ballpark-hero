@@ -1,0 +1,34 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rival: node scripts/simUsRivalSense.mjs
+c-verdictswap: US_RIVAL_CONTROL=verdictswap node scripts/simUsRivalSense.mjs
+c-oldscalenfl: US_RIVAL_CONTROL=oldscalenfl node scripts/simUsRivalSense.mjs
+c-fullscorenfl: US_RIVAL_CONTROL=fullscorenfl node scripts/simUsRivalSense.mjs
+c-offshapenfl: US_RIVAL_CONTROL=offshapenfl node scripts/simUsRivalSense.mjs
+c-drawsnfl: US_RIVAL_CONTROL=drawsnfl node scripts/simUsRivalSense.mjs
+c-bridge: US_RIVAL_CONTROL=bridge node scripts/simUsRivalSense.mjs
+c-oneslot: US_RIVAL_CONTROL=oneslot node scripts/simUsRivalSense.mjs
+c-workload17: US_RIVAL_CONTROL=workload17 node scripts/simUsRivalSense.mjs
+c-rostergate: US_RIVAL_CONTROL=rostergate node scripts/simUsRivalSense.mjs
+c-owndealt: US_RIVAL_CONTROL=owndealt node scripts/simUsRivalSense.mjs
+c-owndead: US_RIVAL_CONTROL=owndead node scripts/simUsRivalSense.mjs
+c-lastyearnfl: US_RIVAL_CONTROL=lastyearnfl node scripts/simUsRivalSense.mjs
+c-noprove-refuses: US_RIVAL_CONTROL=cutdraw node scripts/simUsRivalSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+rivalry-allstar221: RIVALRY_CONTROL=allstar221 node scripts/simCareerRivalryEvents.mjs
+rivalry-owndealt206: RIVALRY_CONTROL=owndealt206 node scripts/simCareerRivalryEvents.mjs
+rivalry-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+rivalry-oldcard: RIVALRY_CONTROL=oldcard node scripts/simCareerRivalryEvents.mjs
+sense-c: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-rivaldraws: SIM_NBA_SENSE_CONTROL=rivaldraws node scripts/simNbaAwardsSense.mjs
+sense-oldgate306: SIM_NBA_SENSE_CONTROL=oldgate306 node scripts/simNbaAwardsSense.mjs
+sense-oldgateown: SIM_NBA_SENSE_CONTROL=oldgateown node scripts/simNbaAwardsSense.mjs
+sense-droppedanyyear: SIM_NBA_SENSE_CONTROL=droppedanyyear node scripts/simNbaAwardsSense.mjs
+parity: node scripts/simUsBoardParity.mjs
+vitest: node_modules/.bin/vitest run src/test/usRivalLine.test.ts src/test/usRivalOldSaves.test.ts src/test/usCareerTruthDigest.test.ts src/test/nflTruthRules1104.test.ts src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+simNflTruth: node scripts/simNflTruth.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+livescores: node scripts/simLiveScores.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
