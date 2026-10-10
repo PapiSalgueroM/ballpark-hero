@@ -1,0 +1,9 @@
+#!serve
+#!playwright
+playCareerSquad: SHOTS="$PWD/.tmp-fx/shots" node scripts/playCareerSquad.mjs > /tmp/squad.log 2>&1; s=$?; cp .tmp-fx/shots/A-help-390.png "$RC_OUT/squad-A-help-390-after.png" 2>/dev/null; cp .tmp-fx/shots/A-examples-390.png "$RC_OUT/squad-A-examples-390-after.png" 2>/dev/null; grep -E "^FAIL" /tmp/squad.log | head -12 | cut -c1-300; grep "no sideways scroll" /tmp/squad.log | cut -c1-320; tail -1 /tmp/squad.log; exit $s
+simMobileChrome: node scripts/simMobileChrome.mjs
+headprobe: PROBE_LABEL=head PROBE_PARTS=bar,help PROBE_NOFONTS=1 node .rc/x/atgProbe.mjs
+simMobileChrome-unpin: SIM_MOBILE_CONTROL=unpin node scripts/simMobileChrome.mjs
+simMobileChrome-nowrap: SIM_MOBILE_CONTROL=nowrap node scripts/simMobileChrome.mjs
+reveal-x6: for i in 1 2 3 4 5 6; do node scripts/playSeasonReveal.mjs > $RC_OUT/reveal-$i.log 2>&1; echo "run $i exit $? | $(grep -c FAIL $RC_OUT/reveal-$i.log) FAIL lines | $(grep 'Rival cards met' $RC_OUT/reveal-$i.log)"; done; n=$(grep -l "ALL SEASON REVEAL WALK CHECKS PASSED" $RC_OUT/reveal-*.log | wc -l); echo "$n of 6 runs green"; [ "$n" -eq 6 ]
+reveal-muted: SEASON_REVEAL_CONTROL=muted node scripts/playSeasonReveal.mjs
