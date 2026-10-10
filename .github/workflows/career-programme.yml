@@ -1,0 +1,139 @@
+name: Career gameplay programmes
+on:
+  pull_request:
+    paths:
+      - .github/workflows/career-programme.yml
+      - src/lib/soccerCareerProgramme*
+      - src/lib/soccerCareerEngine.ts
+      - src/pages/SoccerCareer.tsx
+      - src/components/soccer-career/SoccerCareerProgramme.tsx
+      - src/test/soccerCareerProgrammeUi.test.tsx
+      - src/test/careerChanceWheelUi.test.tsx
+      - src/lib/soccerSeasonCalendar*
+      - src/lib/soccerCareerCup.ts
+      - src/lib/soccerCupOpening.test.ts
+      - src/lib/soccerSeasonCompetitions.ts
+      - src/components/soccer-career/SoccerSeasonCentre.tsx
+      - src/components/soccer-career/SeasonCompetitionPanel.tsx
+      - src/components/season-centre/SeasonCentre.tsx
+      - src/lib/careerChanceWheel*
+      - src/components/soccer-career/CareerChanceWheel.tsx
+      - src/test/usCareerProgrammeUi.test.tsx
+      - src/lib/usCareerProgramme*
+      - src/components/us-career/UsCareerProgramme.tsx
+      - src/components/us-career/UsCareerBoard.tsx
+      - scripts/*CareerProgramme*
+      - scripts/playSoccerSeasonCalendar.mjs
+      - scripts/data/careerChanceActions1197.json
+      - scripts/checkCareerProgrammeUnits.mjs
+      - src/components/soccer-career/SquadSheet.tsx
+      - src/lib/careerEras.ts
+      - src/lib/soccerCareerLife.ts
+      - src/lib/soccerCareerBoot.ts
+      - src/lib/soccerCareerCritic.ts
+      - src/lib/soccerCareerCorruption.ts
+      - src/lib/soccerCareerRealismA.ts
+      - src/lib/soccerCareerRealismB.ts
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: career-programme-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      FREE_KICK_FONT_CACHE: career-programme-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Remote setup
+        run: |
+          mkdir -p career-programme-artifacts
+          git rev-parse HEAD > career-programme-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-programme-artifacts/source-tree.txt
+          npm ci
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tee career-programme-artifacts/fonts.log
+      - name: Actual app types and production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee career-programme-artifacts/types.log
+          npm run build 2>&1 | tee career-programme-artifacts/build.log
+      - name: Gameplay units and effective controls
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/soccerCareerProgramme.test.ts src/test/soccerCareerProgrammeUi.test.tsx src/lib/usCareerProgramme.test.ts src/test/usCareerProgrammeUi.test.tsx src/lib/careerChanceWheel.test.ts src/test/careerChanceWheelUi.test.tsx src/lib/soccerSeasonCalendar.test.ts src/test/soccerSeasonCalendarUi.test.tsx src/lib/soccerCupOpening.test.ts src/test/soccerClubStartingElevenUi.test.tsx src/lib/soccerClubSquad.test.ts src/test/soccerSeasonCompetitions.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=career-programme-artifacts/units.json 2>&1 | tee career-programme-artifacts/units.log
+          node scripts/checkCareerProgrammeUnits.mjs 2>&1 | tee career-programme-artifacts/units-actual.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs 2>&1 | tee career-programme-artifacts/sim.log
+      - name: Actual career browser decisions and reloads
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs 2>&1 | tee career-programme-artifacts/native.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerSeasonCalendar.mjs 2>&1 | tee career-programme-artifacts/calendar-native.log
+      - name: Upload early gameplay evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-programme-early-${{ github.run_id }}
+          path: career-programme-artifacts/
+          retention-days: 5
+      - name: Related gameplay regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerDomesticCup simCareerDerbies simCareerSeasonRatings simCareerPositionRatings simCareerRecordedStats simCareerStory simSeasonCentreAgreement simSeasonCentreNeutral simSeasonCentreTable simSoccerSeasonCompetitions simNoInventedQuotes simUsCareerWeight simCareerHub; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-programme-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Existing cup draw negative control
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          set +e
+          CUP_CONTROL=stream NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerDomesticCup.mjs > career-programme-artifacts/cup-stream-control.log 2>&1
+          status=$?
+          set -e
+          cat career-programme-artifacts/cup-stream-control.log
+          test "$status" = 1
+          grep -F 'control stream fired: sections 1 red, as it must' career-programme-artifacts/cup-stream-control.log
+      - name: All fifteen built readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-programme-artifacts/$harness.log" || failed=1
+          done
+          exit "$failed"
+      - name: Source held and outcome receipts
+        if: ${{ !cancelled() }}
+        run: |
+          git diff --exit-code HEAD -- src scripts .github/workflows 2>&1 | tee career-programme-artifacts/source-held.log
+          test "$(git rev-parse HEAD)" = "$(cat career-programme-artifacts/source-head.txt)"
+          test "$(git rev-parse HEAD^{tree})" = "$(cat career-programme-artifacts/source-tree.txt)"
+      - name: Complete evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-programme-final-${{ github.run_id }}
+          path: career-programme-artifacts/
+          retention-days: 5

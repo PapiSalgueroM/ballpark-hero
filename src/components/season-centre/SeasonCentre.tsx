@@ -15,7 +15,7 @@
    writes nothing; taking it goes through the model's CentreMoments (the
    sport's board, the ledger, the bank). The season on screen is always the
    model's, so a decision shows the moment the model is rebuilt. */
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { soFar, tableAt, type DerivedGame, type DerivedSeason, type SeasonWords } from '@/lib/season/core';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { RankShiftTable } from '@/components/motion/RankShiftTable';
@@ -31,6 +31,7 @@ import { MomentHost, type CentreMoment, type CentreMoments } from './MomentHost'
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from './SeasonCentreHelp';
 import { RecordPanel } from './RecordPanel';
 import { useBodyLock } from './useBodyLock';
+import { nextCupGame, visibleCupGames, type CalendarCupGame } from '@/lib/soccerSeasonCalendar';
 
 export interface CentreReview {
   /** The review's tiles, all competitions, labelled in the sport's words
@@ -114,6 +115,8 @@ export interface CentreModel {
   momentKey: string;
   /** Round 1047: the moments he may play this season; null or absent: none. */
   moments?: CentreMoments | null;
+  /** Optional saved cup nights; positions are the game's order, not real dates. */
+  calendar?: { games: CalendarCupGame[]; note: string; onCompetition: (id: 'domestic' | 'club') => void };
 }
 
 /** The sport's side of the viewer: its clock, its words for a fixed game,
@@ -149,7 +152,7 @@ export interface CentreSport {
   pitch?: (g: DerivedGame, at: ClockStageAt) => ReactNode;
 }
 
-type Stage = { kind: 'kickoff' } | { kind: 'poster'; md: number } | { kind: 'match'; md: number } | { kind: 'review' };
+type Stage = { kind: 'kickoff' } | { kind: 'poster'; md: number } | { kind: 'match'; md: number } | { kind: 'cup'; id: string; revealed: boolean } | { kind: 'review' };
 
 /** What makes matchday `md` a big game (posters before it). */
 export function postersFor(s: DerivedSeason, md: number): string[] {
@@ -187,7 +190,7 @@ function useReducedMotion(): boolean {
   return reduced;
 }
 
-function FixtureList({ model, played, current, short }: { model: CentreModel; played: number; current: number | null; short?: (name: string) => string }) {
+function FixtureList({ model, played, current, short, cupSeen = new Set<string>(), cupCurrent = null }: { model: CentreModel; played: number; current: number | null; short?: (name: string) => string; cupSeen?: ReadonlySet<string>; cupCurrent?: string | null }) {
   const { season: s, names, words } = model;
   const copy = copyOf(model);
   const yours = new Set((model.moments?.list ?? []).map(m => m.md));
@@ -198,7 +201,7 @@ function FixtureList({ model, played, current, short }: { model: CentreModel; pl
         const r = resultOf(g);
         const on = current === g.md;
         return (
-          <li key={g.md} className={`flex flex-wrap items-center gap-x-1.5 gap-y-0.5 rounded-lg px-2 py-1 text-xs ${on ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`} aria-current={on ? 'true' : undefined} data-fixture-row={g.md}>
+          <Fragment key={g.md}><li className={`flex flex-wrap items-center gap-x-1.5 gap-y-0.5 rounded-lg px-2 py-1 text-xs ${on ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`} aria-current={on ? 'true' : undefined} data-fixture-row={g.md}>
             <span className="w-6 shrink-0 tabular-nums text-muted-foreground">{g.md}</span>
             <span className="w-4 shrink-0 text-xs text-muted-foreground">{g.home ? 'H' : 'A'}</span>
             <span className={`min-w-[4.5rem] flex-1 truncate ${done ? '' : 'text-muted-foreground'} ${names[g.opp] === words.unnamed ? 'italic' : ''}`} data-fixture-name>{short ? short(names[g.opp]) : names[g.opp]}</span>
@@ -206,7 +209,13 @@ function FixtureList({ model, played, current, short }: { model: CentreModel; pl
             {yours.has(g.md) && <span className="shrink-0 text-xs" title="One of your moments" data-fixture-moment>🎯</span>}
             {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-xs font-bold text-sky-400">{copy.lastBadge}</span>}
             {done && <span className={`ml-auto shrink-0 rounded px-1.5 text-xs font-bold tabular-nums ${PILL[r]}`}>{r === 'D' ? copy.tie : r} {g.us}-{g.them}</span>}
-          </li>
+          </li>{visibleCupGames(model.calendar?.games ?? [], cupSeen).filter(cup => cup.afterLeague === g.md).map(cup => <li key={cup.id} data-fixture-cup={cup.id} data-cup-after-league={cup.afterLeague} aria-current={cupCurrent === cup.id ? 'true' : undefined} className={`rounded-lg border border-sky-500/30 px-2 py-1 text-xs ${cupCurrent === cup.id ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`}>
+            <button type="button" className="min-h-11 w-full min-w-0 text-left" onClick={() => model.calendar?.onCompetition(cup.competition)}>
+              <span className="block font-bold text-sky-400">{cup.name} · {cup.match.round}</span>
+              <span className="block break-words" data-fixture-cup-opponent>{cup.match.opponent ?? 'Opponents not recorded'}</span>
+              {cupSeen.has(cup.id) && <span className="block font-bold tabular-nums" data-fixture-cup-result>{cup.match.goalsFor === null || cup.match.goalsAgainst === null ? cup.match.result ?? 'Score not recorded' : `${cup.match.goalsFor}-${cup.match.goalsAgainst}`}</span>}
+            </button>
+          </li>)}</Fragment>
         );
       })}
     </ol>
@@ -512,6 +521,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
   const wide = useWide();
   const [stage, setStage] = useState<Stage>({ kind: 'kickoff' });
   const [played, setPlayed] = useState(() => start?.md ?? 0);
+  const [cupSeen, setCupSeen] = useState<Set<string>>(() => new Set((model.calendar?.games ?? []).filter(game => game.afterLeague < (start?.md ?? 0)).map(game => game.id)));
   const [speed, setSpeed] = useState<ClockSpeed>(() => start?.speed ?? 1);
   const [paused, setPaused] = useState(false);
   const [ft, setFt] = useState(false);
@@ -541,7 +551,14 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
     if (postersFor(s, md).length > 0 && !postersSeen.has(md)) { postersSeen.add(md); setStage({ kind: 'poster', md }); }
     else setStage({ kind: 'match', md });
   }, [s, postersSeen]);
-  const toEnd = useCallback(() => { setHosting(null); setPlayed(M); setFt(true); setStage({ kind: 'review' }); }, [M]);
+  const toEnd = useCallback(() => { setHosting(null); setCupSeen(new Set((model.calendar?.games ?? []).map(game => game.id))); setPlayed(M); setFt(true); setStage({ kind: 'review' }); }, [M, model.calendar]);
+  const nextCup = nextCupGame(model.calendar?.games ?? [], played, cupSeen);
+  const continueAfter = (md: number) => {
+    const cup = nextCupGame(model.calendar?.games ?? [], md, cupSeen);
+    if (cup) { setHosting(null); setFixturesOpen(false); setStage({ kind: 'cup', id: cup.id, revealed: false }); }
+    else if (md >= M) setStage({ kind: 'review' });
+    else go(md + 1);
+  };
   /* the season's stars bank at the review, once, or on the way out when no moment is left to play (a season with no moment taken banks nothing) */
   const bankRef = useRef(moments?.bank);
   bankRef.current = moments?.bank;
@@ -555,7 +572,8 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
   const current = stage.kind === 'match' || stage.kind === 'poster' ? stage.md : null;
   /* Round 1046: every new screen of the stage starts at its top (the table may have pulled the stage down at full time) */
   const stageRef = useRef<HTMLElement | null>(null);
-  useEffect(() => { if (stageRef.current) stageRef.current.scrollTop = 0; }, [stage.kind, current]);
+  const stageIdentity = stage.kind === 'cup' ? stage.id : current;
+  useEffect(() => { if (stageRef.current) stageRef.current.scrollTop = 0; }, [stage.kind, stageIdentity]);
   const onFullTime = useCallback(() => { if (current !== null) { setPlayed(p => Math.max(p, current)); setFt(true); } }, [current]);
   /* the next big game from the very next matchday on; when that next one is
      the big game the ▶ button already plays it (poster first), so ⏩ only
@@ -582,9 +600,29 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
   const fixturesShown = fixturesOpen && hosting === null;
 
   const stageBody = (() => {
-    if (stage.kind === 'kickoff') return <KickOff model={model} from={played} roundWord={roundWord} onKick={() => go(played + 1)} onStraight={toEnd} onRestart={() => { setPlayed(0); progressRef.current?.(null); }} />;
+    if (stage.kind === 'kickoff') return <KickOff model={model} from={played} roundWord={roundWord} onKick={() => continueAfter(played)} onStraight={toEnd} onRestart={() => { setPlayed(0); setCupSeen(new Set()); progressRef.current?.(null); }} />;
     if (stage.kind === 'review') return <Review model={model} reduced={reduced} />;
     if (stage.kind === 'poster') return <Poster key={`p${stage.md}`} model={model} md={stage.md} reduced={reduced} />;
+    if (stage.kind === 'cup') {
+      const cup = model.calendar?.games.find(game => game.id === stage.id);
+      if (!cup) return <p>Saved cup game unavailable.</p>;
+      const match = cup.match;
+      return <div className="space-y-3" data-centre-calendar-cup={cup.id} data-cup-revealed={stage.revealed ? 'true' : 'false'}>
+        <h3 className="text-sm font-black">{cup.name} · {match.round}</h3>
+        <p className="text-xs text-muted-foreground">After league game {cup.afterLeague}. {model.calendar?.note}</p>
+        <div className="rounded-xl bg-muted/30 p-4 text-center">
+          <p className="font-bold" data-calendar-cup-opponent>{model.header.club} vs {match.opponent ?? 'Opponents not recorded'}</p>
+          <p className="mt-1 text-xs">{match.home === undefined ? 'Venue not recorded' : match.home ? 'Home' : 'Away'}</p>
+          {stage.revealed ? <>
+            <p className="my-2 text-3xl font-black tabular-nums" data-calendar-cup-score>{match.goalsFor === null || match.goalsAgainst === null ? 'Score not recorded' : `${match.goalsFor}-${match.goalsAgainst}`}</p>
+            {match.result && <p className="text-sm font-bold" data-calendar-cup-verdict>{match.result}</p>}
+            {match.note && <p className="mt-1 text-xs">{match.note}</p>}
+            {match.playerGoals !== undefined && <p className="mt-1 text-xs">You scored {match.playerGoals}. Already included in your season totals.</p>}
+          </> : <p className="mt-3 text-xs text-muted-foreground">This is the result already kept in your career. Watching it does not replay the simulation.</p>}
+        </div>
+        <button type="button" className="min-h-11 w-full rounded-lg border border-border px-3 text-xs font-bold" onClick={() => model.calendar?.onCompetition(cup.competition)} data-calendar-cup-competition>Open {cup.name} bracket</button>
+      </div>;
+    }
     const g = s.games[stage.md - 1];
     const pending = openMoment(stage.md);
     const host = hosting !== null ? (moments?.list ?? []).find(m => momentKeyOf(m) === hosting && m.md === stage.md) ?? null : null;
@@ -631,13 +669,13 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
         {active && hosting === null && navigation}
         <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[260px_1fr_380px]">
           <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label={copy.list}>
-            <FixtureList model={model} played={played} current={current} short={model.sport.clock.short} />
+            <FixtureList model={model} played={played} current={current} short={model.sport.clock.short} cupSeen={cupSeen} cupCurrent={stage.kind === 'cup' ? stage.id : null} />
           </aside>
           <main ref={stageRef} className="min-h-0 overflow-y-auto p-3 md:p-4" data-centre-stage>
             {fixturesShown ? (
               <div className="space-y-2">
                 <button type="button" onClick={() => setFixturesOpen(false)} className="h-11 rounded-lg border border-border px-3 text-xs font-semibold">← Back</button>
-                <FixtureList model={model} played={played} current={current} />
+                <FixtureList model={model} played={played} current={current} cupSeen={cupSeen} cupCurrent={stage.kind === 'cup' ? stage.id : null} />
               </div>
             ) : stageBody}
             {!fixturesShown && (
@@ -670,12 +708,14 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
           {stage.kind === 'match' && !ft && (
             <button type="button" className={`${btn} flex-1 basis-full border border-border sm:basis-0`} onClick={() => setPaused(p => !p)}>{paused ? '▶ Resume' : '⏸ Pause'}</button>
           )}
-          {stage.kind === 'match' && ft && stage.md < M && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => go(stage.md + 1)}>▶ {roundWord} {stage.md + 1}</button>}
-          {stage.kind === 'match' && ft && stage.md === M && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => setStage({ kind: 'review' })}>📋 Season review</button>}
+          {stage.kind === 'match' && ft && (stage.md < M || nextCup) && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => continueAfter(stage.md)} data-centre-next-cup={nextCup?.id}>▶ {nextCup ? `${nextCup.name}: ${nextCup.match.round}` : `${roundWord} ${stage.md + 1}`}</button>}
+          {stage.kind === 'match' && ft && stage.md === M && !nextCup && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => continueAfter(M)}>📋 Season review</button>}
+          {stage.kind === 'cup' && !stage.revealed && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => { setCupSeen(seen => new Set([...seen, stage.id])); setStage({ ...stage, revealed: true }); }} data-calendar-cup-reveal>▶ Show saved cup result</button>}
+          {stage.kind === 'cup' && stage.revealed && <button type="button" className={`${btn} flex-1 basis-full bg-emerald-600 text-black sm:basis-0`} onClick={() => continueAfter(played)} data-calendar-cup-continue>▶ {nextCup ? `${nextCup.name}: ${nextCup.match.round}` : played < M ? `${roundWord} ${played + 1}` : 'Season review'}</button>}
           {(stage.kind === 'match' || stage.kind === 'poster') && nextBig !== null && ft && (
-            <button type="button" className={`${btn} border border-border`} onClick={() => { setPlayed(nextBig! - 1); go(nextBig!); }}>⏩ To the next big game</button>
+            <button type="button" className={`${btn} border border-border`} onClick={() => { setCupSeen(new Set((model.calendar?.games ?? []).filter(game => game.afterLeague < nextBig!).map(game => game.id))); setPlayed(nextBig! - 1); go(nextBig!); }}>⏩ To the next big game</button>
           )}
-          {(stage.kind === 'match' || stage.kind === 'poster') && <button type="button" className={`${btn} border border-border`} onClick={toEnd}>⏭ Sim the rest</button>}
+          {(stage.kind === 'match' || stage.kind === 'poster' || stage.kind === 'cup') && <button type="button" className={`${btn} border border-border`} onClick={toEnd}>⏭ Sim the rest</button>}
           {stage.kind !== 'review' && (
             <div className="ml-auto flex shrink-0 gap-1" role="group" aria-label="Clock speed">
               {([1, 3, 'results'] as ClockSpeed[]).map(v => (

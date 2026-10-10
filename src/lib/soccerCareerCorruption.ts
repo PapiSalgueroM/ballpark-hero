@@ -1,3 +1,4 @@
+import { rollCareerChance } from "./careerChanceWheel";
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerCorruption.ts, the dirty side of Soccer Career (Round 54)
    Owner brief: take everything a full life sim does, make it ten times
@@ -137,7 +138,7 @@ export function getCorruptionEvents(state: CareerState): RandomEvent[] {
       description: "She is under investigation, and she is not the loyal type. Eleven voters have been suspended. Journalists have your bank transfer, labelled, humiliatingly, 'brand consultancy'.",
       category: "negative", choices: [
         { label: "Fight it: €5M in legal fees", emoji: "⚖️", color: "bg-blue-600", consequence: "50/50: cleared and Heat -25, or convicted and stripped of an award",
-          apply: s => { s.netWorth = Math.round((s.netWorth - 5) * 100) / 100; if (Math.random() < 0.5) { heat(s, -25); s.events = [...s.events, "⚖️ Cleared on a technicality nobody understood. Your lawyers earned every cent"]; } else { s.awards = s.awards.slice(0, Math.max(0, s.awards.length - 1)); heat(s, 15); s.popularity = clamp(s.popularity - 20, 0, 100); s.events = [...s.events, "⚖️ Convicted of vote buying. An award was stripped and the asterisk is permanent"]; } setFlag(s, "voteArc", 2); return s; } },
+          apply: s => { s.netWorth = Math.round((s.netWorth - 5) * 100) / 100; if (rollCareerChance(s, 0.5, "The Vote Broker Kept Receipts", "Cleared of vote buying", "Convicted of vote buying")) { heat(s, -25); s.events = [...s.events, "⚖️ Cleared on a technicality nobody understood. Your lawyers earned every cent"]; } else { s.awards = s.awards.slice(0, Math.max(0, s.awards.length - 1)); heat(s, 15); s.popularity = clamp(s.popularity - 20, 0, 100); s.events = [...s.events, "⚖️ Convicted of vote buying. An award was stripped and the asterisk is permanent"]; } setFlag(s, "voteArc", 2); return s; } },
         { label: "Admit it and hand the trophy back", emoji: "🕊️", color: "bg-emerald-600", consequence: "Lose an award, Heat -50, Integrity +15. Strangely, respect grows",
           apply: s => { s.awards = s.awards.slice(0, Math.max(0, s.awards.length - 1)); heat(s, -50); s.integrityBonus += 15; s.popularity = clamp(s.popularity - 8, 0, 100); s.morale = clamp(s.morale + 6, 0, 100); setFlag(s, "voteArc", 3); s.events = [...s.events, "🕊️ Gave the trophy back yourself, on camera, no lawyer. Half the world hated it. The other half never forgot it"]; return s; } },
       ] });

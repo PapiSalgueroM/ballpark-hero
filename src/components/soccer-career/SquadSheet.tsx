@@ -54,12 +54,6 @@ function helpSeen(): boolean {
 
 const seasonOf = (year: number) => `${year}/${String((year + 1) % 100).padStart(2, '0')}`;
 
-/** A man's surname: everything after the first space, or the whole name. */
-function surname(m: SquadMan): string {
-  const cut = m.name.indexOf(' ');
-  return cut < 0 ? m.name : m.name.slice(cut + 1);
-}
-
 /** Release AN: a long word in a cell of the eleven gets one soft break in its
     middle. A four man line on a phone has room for about eight letters, and
     the browser used to break a longer surname wherever the line ran out,
@@ -166,7 +160,7 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
 
   const planWord = view.trust.frozen ? 'Frozen out' : view.trust.inPlans ? 'In the plans' : 'Cover for now';
   const tiles: { id: SquadScreen; label: string; value: string }[] = [
-    { id: 'eleven', label: 'The eleven', value: planWord },
+    { id: 'eleven', label: 'Starting 11', value: planWord },
     { id: 'bench', label: 'The bench', value: `${view.bench.length} players` },
     { id: 'place', label: 'Your place', value: `${ordinal(view.rank)} in line` },
   ];
@@ -198,6 +192,7 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
               key={t.id}
               type="button"
               data-squad-open={t.id}
+              aria-label={t.id === 'eleven' ? 'Starting 11' : undefined}
               onClick={() => setScreen(t.id)}
               className={`min-h-[56px] rounded-xl border border-border bg-background/40 p-2 text-left ${t.id === 'place' && !last ? 'col-span-2' : ''}`}
             >
@@ -213,16 +208,12 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
   if (screen === 'eleven') {
     const lines: SquadGroup[] = ['ATT', 'MID', 'DEF', 'GK'];
     let cell = 0;
-    /* Two men of the eleven with one surname each get their initial, so the
-       sheet never shows the same word in two cells. */
-    const surnames = new Map<string, number>();
-    for (const g of lines) for (const m of view.eleven[g]) if (!m.role) surnames.set(surname(m), (surnames.get(surname(m)) ?? 0) + 1);
-    const cellName = (m: SquadMan) => {
-      const s = surname(m);
-      return (surnames.get(s) ?? 0) > 1 && s !== m.name ? `${m.name.charAt(0)}. ${s}` : s;
-    };
+    const cellName = (m: SquadMan) => m.name;
+
     body = (
       <div data-squad-screen="eleven" className="flex flex-col gap-3">
+        <h3 data-squad-xi-heading className="text-sm font-bold text-foreground">Starting 11 on our ratings</h3>
+        {view.source === 'invented' ? <p data-squad-xi-scope className="text-xs leading-snug text-muted-foreground">Generated teammates are fictional players in your career. {mixed ? 'Players marked REAL come from the last checked squad.' : 'These names and ratings belong to your simulated squad.'}</p> : view.source === 'roles' ? <p data-squad-xi-scope className="text-xs leading-snug text-muted-foreground">There is no checked historical squad for this club and season. Missing teammate names stay as roles.</p> : null}
         <div data-squad-xi className="flex flex-col gap-2 rounded-xl border border-border bg-emerald-950/30 p-2">
           {lines.map(g => (
             <div key={g} className="flex justify-center gap-1.5">
@@ -234,21 +225,23 @@ export default function SquadSheet({ career, view, onClose, initialScreen }: Pro
                     key={m.me ? 'me' : m.id ?? m.name}
                     data-squad-man={m.me ? 'me' : 'other'}
                     title={m.name}
+                    aria-label={`${m.name}, ${m.pos}, rating ${m.ovr}`}
+                    data-squad-cell-source={m.me ? 'you' : m.role ? 'role' : m.id !== undefined ? 'generated' : 'real'}
                     style={style}
                     className={`animate-cell-reveal flex min-w-0 max-w-[104px] flex-1 basis-0 flex-col items-center justify-center rounded-lg border px-1 py-1 text-center ${m.me ? GOLD : 'border-border/60 bg-card text-foreground'}`}
                   >
-                    <span className="text-xs text-muted-foreground">{m.pos}{m.me && captain ? ' ©' : ''}</span>
+                    <span data-squad-cell-position className="text-xs text-muted-foreground">{m.pos}{m.me && captain ? ' ©' : ''}</span>
                     {m.role ? (
                       <span className="text-xs font-semibold leading-tight" data-squad-role-cell>
                         <span className="block">{choiceOf(m.role)}</span>
                         <span className="block font-normal text-muted-foreground">choice</span>
                       </span>
                     ) : (
-                      /* a long surname goes onto a second line, never under an ellipsis */
+                      /* The whole saved name wraps, with no hover needed to read it. */
                       <span className="w-full text-xs font-semibold leading-tight [overflow-wrap:anywhere]" data-squad-cell-name>{softBreaks(cellName(m))}</span>
                     )}
                     {realAmongInvented(view, m) ? <span data-squad-real className="text-xs font-bold leading-tight text-muted-foreground">REAL</span> : null}
-                    <span className="text-sm font-bold tabular-nums">{m.ovr}</span>
+                    <span data-squad-cell-rating className="text-sm font-bold tabular-nums">{m.ovr}</span>
                   </div>
                 );
               })}

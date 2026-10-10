@@ -1,3 +1,4 @@
+import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';
 import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -124,6 +125,8 @@ import { readSeasonMoments } from '@/lib/season/momentsSave';
 const SoccerSeasonCentre = lazy(() => import("@/components/soccer-career/SoccerSeasonCentre"));
 const TrophyCabinet = lazy(() => import("@/components/soccer-career/TrophyCabinet"));
 const SeasonRatings = lazy(() => import("@/components/soccer-career/SeasonRatings"));
+const CareerChanceWheel = lazy(() => import('@/components/soccer-career/CareerChanceWheel'));
+const SoccerCareerProgramme = lazy(() => import("@/components/soccer-career/SoccerCareerProgramme"));
 /* Round 1047: the training ground (its drills and its boards) loads when it
    is opened, not with the page; the page's budget came down by what it weighed. */
 const TrainingPanel = lazy(() => import("@/components/soccer-career/TrainingPanel"));
@@ -3761,6 +3764,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const [showRetireConfirm, setShowRetireConfirm] = useState(false);
   // Round 974: the career story, every season kept, opened from Latest Events
   const [storyOpen, setStoryOpen] = useState(false);
+  const [programmeOpen, setProgrammeOpen] = useState(false);
   // Round 1011: every season's rating and the overall it was played at
   const [ratingsOpen, setRatingsOpen] = useState(false);
   const [trophyCategory, setTrophyCategory] = useState<TrophyCategory | null>(null);
@@ -4330,6 +4334,26 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               at a club. Round 1115: the Squad tile, every club and every
               year, and it says whether the squad is real, by role or invented. */}
           {career.phase === "playing" && <SquadTile career={career} />}
+          {(career.phase === "playing" || career.phase === "transfer_window" || career.phase === "contract_offer") && onCareerPatch && (
+            <button type="button" data-soccer-programme-open onClick={() => setProgrammeOpen(true)} className="min-h-[44px] w-full rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3 text-left">
+              <span className="block text-sm font-bold">Your next season</span>
+              <span className="block text-xs text-muted-foreground">Roles, contracts, playing time and your comeback</span>
+            </button>
+          )}
+          {validChanceWheel(career.chanceWheel) && !career.chanceWheel.seen && onCareerPatch && (
+            <CentreMountBoundary what="chance wheel" onClose={() => onCareerPatch(acknowledgeChanceWheel)}>
+              <Suspense fallback={null}>
+                <CareerChanceWheel key={`${career.chanceWheel.title}:${career.chanceWheel.roll}`} receipt={career.chanceWheel} onClose={() => onCareerPatch(acknowledgeChanceWheel)} />
+              </Suspense>
+            </CentreMountBoundary>
+          )}
+          {programmeOpen && onCareerPatch && (
+            <CentreMountBoundary what="season plans" onClose={() => setProgrammeOpen(false)}>
+              <Suspense fallback={<p role="status" className="text-sm">Opening your season plans...</p>}>
+                <SoccerCareerProgramme career={career} onChange={next => onCareerPatch(prev => prev === career ? next : prev)} onClose={() => setProgrammeOpen(false)} />
+              </Suspense>
+            </CentreMountBoundary>
+          )}
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (

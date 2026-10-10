@@ -1,3 +1,10 @@
+## Codex prepared: ten Soccer gameplay systems, four sport careers, cups, Starting 11 and chance wheels, 2026-10-10
+
+Isolated branch codex/career-next-ten, base a131ed713d65e844aa8d86c92dbb8be396ba55af.
+Product and remote-only acceptance are in docs/ROUND1197-1208.md. Runtime proof is pending.
+F owns train integration, merge and publication. Root dirty checkout and prior READY branches are held.
+This prefix is a proposal receipt, with no live or acceptance claim.
+
 ## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
 
 Claude lane (session F). main 8c5ce655, deployment 468b616a-f984-4af9-959d-12f584834eaa, entry index-DNvMbg1w.js (was index-DBSXBErW.js, Release AQ,
