@@ -145,6 +145,21 @@ reviewer has done this; whoever does it records `{ on, by, rounds compared, diff
   not 1 to 288 without a hole`). It now takes the two column starts from the rows themselves, and the
   Bundesliga's ledger was rebuilt with it byte for byte the same (`check bundesliga`: 34 matchdays compared, 0
   tuple differences, digest equal; `write bundesliga`: no diff).
+- **championship: IN, and no longer the least verified.** 24 clubs, 46 matchdays, 552 fixtures. Sources: ESPN's
+  release day article (`https://www.espn.com/soccer/story/_/id/49173379/efl-championship-fixtures-schedule-2026-27-full`,
+  164,365 bytes, sha256 `cdfa77885a46...`, published 2026-06-25 by the page's own stamp, parser `espnByDate`)
+  and the feed (`https://fixturedownload.com/feed/json/championship-2026`, 122,462 bytes, sha256
+  `4f834d4c924d...`). Both read 2026-10-10. The article prints NO matchday number, so its `roundBasis` is
+  `ordinal`: reading it top to bottom, a match is the nth game of its home club and the nth game of its away
+  club, and the parser throws if those two counts ever differ. They never do across 552 lines, and every
+  counted matchday then EQUALS the feed's labelled `RoundNumber`: zero tuple differences in 552. That is the
+  whole list compared tuple for tuple, not the opening game. Two things the parser had to learn, both guarded
+  now: one date's paragraph sits behind an advert block (the first draft read 540 rows in 45 matchdays with no
+  count disagreeing, which is exactly the silent failure counting can have), so the parser now also requires
+  that the rows kept equal the number of " vs. " the article prints (552). Name table: four lines, the same for
+  both sources (QPR, West Brom, West Ham, Wolves). The order of matches inside a matchday is the feed's. The
+  ledger ships the article's address as `url: "https://www.espn.com/..."` and `scripts/simLiveScores.mjs`
+  passes untouched. Data file `src/data/clubManagerChampionshipFixtures2026.ts` 19,737 bytes; receipt 118,283.
 - **proleague: OUT of this round (held), one source is one row short.** Both sources were fetched and parsed.
   Maxifoot (`https://www.maxifoot.fr/calendrier-belgique-2026-2027.htm`, 109,946 bytes, sha256
   `54e47a7245e1...`): 306 rows, 34 matchdays of 9, 18 clubs that map onto the game's row, a whole double round

@@ -33,6 +33,15 @@
       "fixtures": 306,
       "sha256": "3fabe3f12e5532f913d64edbef7f822c9debe6f78e99a7f1771efad80901e088"
     },
+    "championship-2026-27-v1": {
+      "leagueId": "championship",
+      "file": "src/data/clubManagerChampionshipFixtures2026.ts",
+      "receipt": "scripts/data/clubManagerChampionshipFixtures2026.receipt.json",
+      "clubs": 24,
+      "rounds": 46,
+      "fixtures": 552,
+      "sha256": "a126a434f36d8fd8bd3b4248df5cefccdd3d88e30ca433e6b40e1cd52b34ccfb"
+    },
     "eredivisie-2026-27-v1": {
       "leagueId": "eredivisie",
       "file": "src/data/clubManagerEredivisieFixtures2026.ts",

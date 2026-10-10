@@ -46,6 +46,10 @@ const BUNDESLIGA_NAMES = {
   'Hamburger SV': 'Hamburg', 'SC Paderborn 07': 'Paderborn', 'SV Elversberg': 'Elversberg', 'SV Werder Bremen': 'Werder Bremen',
   'Sport-Club Freiburg': 'Freiburg', 'TSG Hoffenheim': 'Hoffenheim', 'VfB Stuttgart': 'Stuttgart',
 };
+/* Both Championship sources print the same four long names. */
+const CHAMPIONSHIP_NAMES = {
+  'Queens Park Rangers': 'QPR', 'West Bromwich Albion': 'West Brom', 'West Ham United': 'West Ham', 'Wolverhampton Wanderers': 'Wolves',
+};
 
 export const CM_FIXTURE_LEAGUES = [
   {
@@ -242,7 +246,7 @@ export const CM_FIXTURE_LEAGUES = [
       },
       FEED('championship-2026'),
     ],
-    names: [{}, {}],
+    names: [CHAMPIONSHIP_NAMES, CHAMPIONSHIP_NAMES],
   },
 ];
 

@@ -15,8 +15,9 @@ import * as dflPdf from './dflPdf.mjs';
 import * as tff from './tff.mjs';
 import * as walfoot from './walfoot.mjs';
 import * as hessenschau from './hessenschau.mjs';
+import * as espnByDate from './espnByDate.mjs';
 
-export const PARSERS = { feedJson, maxifoot, tuttomercatoweb, dflPdf, tff, walfoot, hessenschau };
+export const PARSERS = { feedJson, maxifoot, tuttomercatoweb, dflPdf, tff, walfoot, hessenschau, espnByDate };
 
 export const COVERAGE = 'Real league opponent order and home/away venues only. Calendar dates and match results are simulated.';
 export const DIGEST_FIELDS = ['key', 'leagueId', 'seasonStartYear', 'clubs', 'rounds'];
@@ -207,7 +208,7 @@ export function buildLedger(league, gameLeague, dir) {
         ...(s.citedNote ? { citedNote: s.citedNote } : {}),
         title,
         ...(s.titleNote ? { titleNote: s.titleNote } : {}),
-        ...(s.published ? { published: s.published } : {}),
+        ...(s.published || r.parsed.published ? { published: s.published || r.parsed.published } : {}),
         parser: `scripts/lib/cmFixtureSources/${s.parser}.mjs`,
         roundBasis: r.roundBasis,
         snapshot: aggregateSnapshot(r.pages),
