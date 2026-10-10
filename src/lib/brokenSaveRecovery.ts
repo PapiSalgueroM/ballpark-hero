@@ -133,8 +133,16 @@ function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: st
   }
 }
 
-/** setAsideSave without the pruning, for restoreBackup's swap. */
-function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date): SetAsideResult {
+/**
+ * Round 1219: the copy on its own. The save is copied to a fresh dated key and
+ * the copy is read back; the original STAYS where it is, and nothing is
+ * pruned (a copy made with no press must never drop a backup the player was
+ * told is kept). backupKey is null when there was no save to copy. This is
+ * the first half of moveAside, split out for src/lib/saveKeeper.ts, which
+ * copies a save before it is replaced or refused instead of moving it: a key
+ * that is never emptied is never lost to a crash between two writes.
+ */
+export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date()): SetAsideResult {
   if (!storage) return { ok: false };
   let raw: string | null;
   try {
@@ -160,17 +168,23 @@ function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date):
     try { storage.removeItem(backupKey); } catch { /* nothing more to do */ }
     return { ok: false };
   }
+  return { ok: true, backupKey };
+}
 
+/** setAsideSave without the pruning, for restoreBackup's swap: copyAside, then the original goes. */
+function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date): SetAsideResult {
+  const copied = copyAside(entry, storage, now);
+  if (!storage || !copied.ok || copied.backupKey === null) return copied;
   try {
     storage.removeItem(entry.saveKey);
   } catch {
     /* The copy landed but the original would not go. Take the copy back out,
        so the screen's "left it where it was" stays true and a retry does not
        stack up backups of the same save. */
-    try { storage.removeItem(backupKey); } catch { /* a duplicate copy is harmless */ }
+    try { storage.removeItem(copied.backupKey); } catch { /* a duplicate copy is harmless */ }
     return { ok: false };
   }
-  return { ok: true, backupKey };
+  return copied;
 }
 
 export type ListableStorage = SaveStorage & Pick<Storage, 'length' | 'key'>;
