@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+own: LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs
+walk: node scripts/playLiveMatchFit.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
