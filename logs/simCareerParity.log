@@ -1,0 +1,25 @@
+1) Source: the shared modules are imported by every career and copied by none
+   1881 source files scanned, 14 rule fingerprints each found once at home, 0 private copies, 24 imports held
+2) Money: every tap balances, every season pays the rate, in all five careers
+   soccer: 40 careers, 1494 taps (1368 accepted, 126 refused), 879 market seasons over 1034 steps, savings paid 543 times, bills covered 0 times, 40 retired, 0 careers where the market count and the seasons played disagree
+   nfl: 40 careers, 1228 taps (1177 accepted, 51 refused), 638 market seasons over 638 steps, savings paid 557 times, bills covered 0 times, 40 retired, 0 careers where the market count and the seasons played disagree
+   nba: 40 careers, 1481 taps (1420 accepted, 61 refused), 745 market seasons over 745 steps, savings paid 668 times, bills covered 0 times, 40 retired, 0 careers where the market count and the seasons played disagree
+   mlb: 40 careers, 1566 taps (1513 accepted, 53 refused), 758 market seasons over 758 steps, savings paid 712 times, bills covered 0 times, 40 retired, 0 careers where the market count and the seasons played disagree
+   nhl: 40 careers, 1763 taps (1709 accepted, 54 refused), 848 market seasons over 848 steps, savings paid 802 times, bills covered 0 times, 40 retired, 0 careers where the market count and the seasons played disagree
+   seam: 160 of 160 prices identical across the five sports on one seed, savings 2.44 in all of them, total 6.66 in all of them
+3) Social: the fans and the paper never ask a position for the wrong stat
+   soccer 1205, nfl 3212, nba 3499, mlb 3935, nhl 3907 lines checked across 42 positions
+   3b: 29 engine positions and 54 position tokens in careerSocial.ts, 0 without a forbidden list
+4) Rival: a generated rival exists in every career and moves season on season
+   nfl: rival on 40 of 40 saves, 40 named at my position, 40 changed rating, 40 on the head to head, 40 aged or retired
+   nba: rival on 40 of 40 saves, 40 named at my position, 40 changed rating, 40 on the head to head, 40 aged or retired
+   mlb: rival on 40 of 40 saves, 40 named at my position, 40 changed rating, 40 on the head to head, 40 aged or retired
+   nhl: rival on 40 of 40 saves, 40 named at my position, 40 changed rating, 40 on the head to head, 40 aged or retired
+   soccer: rival on 40 of 40 saves (40 reached 22), 40 named with a nationality, 40 with a career line, 12 of 12 watched rivals aged and played over three seasons
+5) Badges: every badge in all four cases is reachable and none is handed out for nothing
+   nfl: 25 badges, 40 ordinary and 48 elite careers, 25 earned at least once
+   nba: 23 badges, 40 ordinary and 30 elite careers, 23 earned at least once, rare: triple_double:2
+   mlb: 26 badges, 40 ordinary and 66 elite careers, 26 earned at least once
+   nhl: 23 badges, 40 ordinary and 36 elite careers, 23 earned at least once
+
+simCareerParity: green. One money app, one fan rule, one rival shape, one badge case, in all five careers.
