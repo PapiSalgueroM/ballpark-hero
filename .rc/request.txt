@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+#!serial
+# Round 1215: draws counted (nothing seeded) on the pages of unedited walks, part 2.
+d-playConquestScenes: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playConquestScenes.mjs
+d-playCorruptSaves: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playCorruptSaves.mjs
+d-playDealDesk: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playDealDesk.mjs
+d-playDepthChart: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playDepthChart.mjs
+d-playEra2005: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playEra2005.mjs
+d-playEra2010: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playEra2010.mjs
+d-playEra2015: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playEra2015.mjs
+d-playEra2020: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playEra2020.mjs
+d-playExtension: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playExtension.mjs
+d-playFirstTeamFit: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playFirstTeamFit.mjs
+d-playFlagshipLazy: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playFlagshipLazy.mjs
+d-playFoHub: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playFoHub.mjs
+d-playFoOneRating: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playFoOneRating.mjs
+d-playFootballConnect4Failures: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playFootballConnect4Failures.mjs
