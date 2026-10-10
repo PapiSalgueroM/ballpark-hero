@@ -1,0 +1,7 @@
+vitest exit=0 4s |    Duration  3.21s (transform 557ms, setup 351ms, collect 1.66s, tests 1.80s, environment 2.62s, prepare 979ms)
+simGmDeskHost exit=0 39s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+simGmDeskHost-again exit=0 38s | simGmDeskHost: all 10 checks passed on seeds 1,2,3 (4 engines, 3 seasons a seed)
+tsc exit=0 52s | 
+anchors exit=0 0s | simGmDeskHost anchors: 27 rewrites checked, 0 cannot run
+simGmDeskHost-456 exit=0 28s | simGmDeskHost: all 10 checks passed on seeds 4,5,6 (4 engines, 3 seasons a seed)
+simGmDeskHost-789 exit=0 26s | simGmDeskHost: all 10 checks passed on seeds 7,8,9 (4 engines, 3 seasons a seed)
