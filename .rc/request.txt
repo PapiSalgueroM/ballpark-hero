@@ -1,0 +1,9 @@
+# Release AU review, lens sc-engine: two engines in one process (origin/release-at-gate 24f57a98 against the head)
+#!serial
+base: git worktree add -f /tmp/base 24f57a98fa44e280f1c848276a27d86e0a3e2745 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; echo "base $(git -C /tmp/base rev-parse --short HEAD) head $(git rev-parse --short HEAD) programme in base: $(ls /tmp/base/src/lib/soccerCareerProgramme.ts 2>/dev/null | wc -l)"
+fleet: BASE_ROOT=/tmp/base FLEET=140 SEASONS=16 node .rc/x/scProbe.mjs A B > "$RC_OUT/fleet.log" 2>&1; s=$?; grep -E "^(A|B):" "$RC_OUT/fleet.log" | cut -c1-600; tail -1 "$RC_OUT/fleet.log" | cut -c1-300; exit $s
+plans: BASE_ROOT=/tmp/base FLEET=100 SEASONS=14 C_SAVES=22 PLAN_SEEDS=5 node .rc/x/scProbe.mjs C > "$RC_OUT/plans.log" 2>&1; s=$?; grep -E "^C:" "$RC_OUT/plans.log" | cut -c1-700; tail -1 "$RC_OUT/plans.log" | cut -c1-300; exit $s
+compose: BASE_ROOT=/tmp/base FLEET=100 SEASONS=14 D_SAVES=18 D_SEEDS=60 node .rc/x/scProbe.mjs D > "$RC_OUT/compose.log" 2>&1; s=$?; grep -E "^D" "$RC_OUT/compose.log" | cut -c1-500; tail -1 "$RC_OUT/compose.log" | cut -c1-300; exit $s
+damaged: BASE_ROOT=/tmp/base FLEET=100 SEASONS=14 E_SAVES=4 node .rc/x/scProbe.mjs E > "$RC_OUT/damaged.log" 2>&1; s=$?; grep -E "^E:" "$RC_OUT/damaged.log" | cut -c1-700; tail -1 "$RC_OUT/damaged.log" | cut -c1-300; exit $s
+wheel: BASE_ROOT=/tmp/base FLEET=140 SEASONS=14 node .rc/x/scProbe.mjs F > "$RC_OUT/wheel.log" 2>&1; s=$?; grep -E "^F:" "$RC_OUT/wheel.log" | cut -c1-900; tail -1 "$RC_OUT/wheel.log" | cut -c1-300; exit $s
+loan: BASE_ROOT=/tmp/base FLEET=100 SEASONS=14 G_SAVES=10 G_SEEDS=14 node .rc/x/scProbe.mjs G > "$RC_OUT/loan.log" 2>&1; s=$?; grep -E "^G:" "$RC_OUT/loan.log" | cut -c1-700; tail -1 "$RC_OUT/loan.log" | cut -c1-300; exit $s
