@@ -1,0 +1,3 @@
+simCmVar oldgoalreview: CAUGHT by "Goals ruled out a match 0.3916 is outside real football's 0.0763 to 0.1447 (headroom 0.2)"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":4045,"ruledOut":1584,"ruledOutPerMatch":0.3916,"awarded":279,"awardedPerMatch":0.069,"awardedScored":220,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.3422,"goalsPerMatchOff":2.6734,"goalGap":-0.3313,"resultMoved":649,"penaltiesPerMatch":0.4269,"matchesWithReview":1508,"perSeed":[[660,0.4288,0.0742],[690,0.4319,0.071],[646,0.3514,0.0573],[632,0.3877,0.0696],[718,0.3788,0.0808],[699,0.3705,0.0601]]}
+simCmVar oldgoalreview: actual review outcomes and full prior baseline passed.

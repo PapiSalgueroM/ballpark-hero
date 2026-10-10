@@ -1,0 +1,46 @@
+# Round 1218 review (run lens), request A: harness honesty, every control its own line, the type gate, fences.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmVar: node scripts/simCmVar.mjs
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+vitest: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+c-counted: CM_VAR_CONTROL=counted node scripts/simCmVar.mjs
+c-decorative: CM_VAR_CONTROL=decorative node scripts/simCmVar.mjs
+c-penalty: CM_VAR_CONTROL=penalty node scripts/simCmVar.mjs
+c-awards: CM_VAR_CONTROL=awards node scripts/simCmVar.mjs
+c-resolution: CM_VAR_CONTROL=resolution node scripts/simCmVar.mjs
+c-past: CM_VAR_CONTROL=past node scripts/simCmVar.mjs
+c-reveal: CM_VAR_CONTROL=reveal node scripts/simCmVar.mjs
+c-resume: CM_VAR_CONTROL=resume node scripts/simCmVar.mjs
+c-announce: CM_VAR_CONTROL=announce node scripts/simCmVar.mjs
+c-disabled: CM_VAR_CONTROL=disabled node scripts/simCmVar.mjs
+c-everywhere: CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs
+c-oldgoalreview: CM_VAR_CONTROL=oldgoalreview node scripts/simCmVar.mjs
+c-oldoverturn: CM_VAR_CONTROL=oldoverturn node scripts/simCmVar.mjs
+c-oldpenaltyreview: CM_VAR_CONTROL=oldpenaltyreview node scripts/simCmVar.mjs
+c-oldmissedfoul: CM_VAR_CONTROL=oldmissedfoul node scripts/simCmVar.mjs
+c-oldpenaltyscores: CM_VAR_CONTROL=oldpenaltyscores node scripts/simCmVar.mjs
+l-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+l-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+l-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+l-missing: CM_VAR_LEDGER_CONTROL=missing node scripts/simCmVarLedger.mjs
+l-extra: CM_VAR_LEDGER_CONTROL=extra node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+l-bogus: CM_VAR_LEDGER_CONTROL=nosuchcontrol node scripts/simCmVarLedger.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+appeal: node scripts/simManagerAppealIsolation.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+bands-seeds2: CM_VAR_BANDS_SEEDS=101,102,103,104,105,106 node scripts/simCmVar.mjs
+bands-seeds3: CM_VAR_BANDS_SEEDS=201,202,203,204,205,206 node scripts/simCmVar.mjs
