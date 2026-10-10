@@ -35,8 +35,12 @@ import {
   AGES_AS_OF, HAND_WRITTEN_FROM_ID, ID_GAP_FROM, ID_GAP_TO, NAMESAKE_YEARS, ERA_RATING_AGE_SHIFT,
   ageOn, buildBirths, tableAugustAge, augustAge2026,
 } from '../../scripts/lib/cmAges.mjs';
+import { DB_TO_ENGINE } from '../../scripts/lib/dbClubNames.mjs';
 import { eraUpliftRating } from '../lib/clubManagerEras';
-import { CM_ROSTERS } from '../data/clubManagerRosters';
+import { CM_ROSTERS, CM_ROSTER_META } from '../data/clubManagerRosters';
+import { CM_ALEAGUE_ROSTERS } from '../data/clubManagerALeague2026';
+import { CM_RUSSIA_ROSTERS } from '../data/clubManagerRussia2026';
+import { CM_FINAL_TABLES_2025_26 } from '../data/clubManagerFinalTables2025_26';
 import { ERA2005_ROSTERS } from '../data/clubManagerEra2005';
 import { ERA2010_ROSTERS } from '../data/clubManagerEra2010';
 import { ERA2015_ROSTERS } from '../data/clubManagerEra2015';
@@ -669,4 +673,295 @@ describe('the two script libraries stay pure, because the app imports them', () 
       expect(found).toEqual([]);
     });
   }
+});
+
+/* THE LEDGERS. Three committed files that nothing shipped reads yet. Each real fact in them stands on
+   two publishers that are independent of each other and neither is a wiki, or it is marked thin and
+   left out of what a later part reads. */
+const readJson = (file: string): any => JSON.parse(fs.readFileSync(path.resolve(process.cwd(), file), 'utf8'));
+const birthLedger = readJson('scripts/data/cmBirthDates2026.json');
+const agesBasis = readJson('scripts/data/cmAgesBasis2026.json');
+const finalTables = readJson('scripts/data/finalTables2025.json');
+const ISO_DAY = /^\d{4}-\d{2}-\d{2}$/;
+const WIKI = /wiki|fandom/i;
+const FAMILIES = ['club', 'league', 'competition', 'stats'];
+const MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+const hostOf = (url: string) => new URL(url).hostname.replace(/^www\./, '');
+
+/** Does the text a page printed show this birth date: its day, its month (a number or a name) and
+ *  its year (four digits or two)? */
+const printedShows = (printed: string, born: string) => {
+  const [year, month, day] = born.split('-').map(Number);
+  const text = printed.toLowerCase();
+  const numbers = (text.match(/\d+/g) ?? []).map(Number);
+  return (numbers.includes(year) || numbers.includes(year % 100)) && numbers.includes(day)
+    && (numbers.includes(month) || text.includes(MONTHS[month - 1]));
+};
+
+/** Everything wrong with one row of the birth date ledger. A thin row is excused the two kinds rule
+ *  and nothing else. */
+const birthRowProblems = (row: any): string[] => {
+  const out: string[] = [];
+  const who = `${row.name} at ${row.club}`;
+  if (!row.name || !row.club) out.push(`${who}: no name or no club`);
+  if (!ISO_DAY.test(String(row.born))) out.push(`${who}: born is not YYYY-MM-DD`);
+  const sources: any[] = row.sources ?? [];
+  for (const s of sources) {
+    if (!FAMILIES.includes(s.family)) out.push(`${who}: ${s.publisher} has the family ${s.family}`);
+    if (WIKI.test(`${s.publisher} ${s.url}`)) out.push(`${who}: ${s.publisher} is a wiki`);
+    if (!/^https:\/\//.test(String(s.url)) || !hostOf(s.url).endsWith(s.publisher)) out.push(`${who}: the url of ${s.publisher} is not on that publisher`);
+    if (!ISO_DAY.test(String(s.readOn))) out.push(`${who}: ${s.publisher} has no day it was read`);
+    if (!s.printed || !printedShows(String(s.printed), String(row.born))) out.push(`${who}: what ${s.publisher} printed does not show ${row.born}`);
+  }
+  if (row.thin) {
+    if (typeof row.thin !== 'string' || row.thin.length < 12) out.push(`${who}: thin has to say why`);
+    return out;
+  }
+  if (new Set(sources.map(s => s.publisher)).size < 2) out.push(`${who}: under two publishers`);
+  if (new Set(sources.map(s => s.family)).size < 2) out.push(`${who}: two publishers of one kind (${sources.map(s => s.family).join(', ')})`);
+  return out;
+};
+
+const realBirths = () => buildBirths({
+  ledgerRows: birthLedger.rows,
+  round669: readJson('scripts/data/defensiveMidfield2026.json'),
+  missing: readJson('scripts/data/window2026/missingPlayers.json'),
+  dbToEngine: DB_TO_ENGINE,
+});
+
+describe('the birth date ledger: two publishers of two kinds a man, neither a wiki', () => {
+  it('the checker itself fires: two statistics sites, a wiki, a date the page never printed, a thin row with no reason', () => {
+    const good = {
+      name: 'Good Row', club: 'Everton', born: '1999-09-09',
+      sources: [
+        { publisher: 'espn.com', family: 'stats', url: 'https://www.espn.com/x', printed: 'Birthdate 9/9/1999 (26), month first', readOn: '2026-10-09' },
+        { publisher: 'laliga.com', family: 'league', url: 'https://www.laliga.com/x', printed: 'DATE OF BIRTH 09-09-1999, day first', readOn: '2026-10-09' },
+      ],
+    };
+    expect(birthRowProblems(good)).toEqual([]);
+    const oneKind = { ...good, sources: [good.sources[0], { ...good.sources[0], publisher: 'soccerbase.com', url: 'https://www.soccerbase.com/x' }] };
+    expect(birthRowProblems(oneKind).join(' | ')).toMatch(/two publishers of one kind/);
+    /* the same row marked thin is excused that rule, and only that rule */
+    expect(birthRowProblems({ ...oneKind, thin: 'both publishers are statistics sites' })).toEqual([]);
+    expect(birthRowProblems({ ...oneKind, thin: true }).join(' | ')).toMatch(/thin has to say why/);
+    const wiki = { ...good, sources: [good.sources[0], { ...good.sources[1], publisher: 'en.wikipedia.org', url: 'https://en.wikipedia.org/wiki/X' }] };
+    expect(birthRowProblems(wiki).join(' | ')).toMatch(/is a wiki/);
+    const neverPrinted = { ...good, born: '1999-09-10' };
+    expect(birthRowProblems(neverPrinted).join(' | ')).toMatch(/does not show 1999-09-10/);
+    const elsewhere = { ...good, sources: [good.sources[0], { ...good.sources[1], url: 'https://example.com/laliga.com/x' }] };
+    expect(birthRowProblems(elsewhere).join(' | ')).toMatch(/not on that publisher/);
+    expect(birthRowProblems({ ...good, sources: [good.sources[0]] }).join(' | ')).toMatch(/under two publishers/);
+  });
+
+  it('every one of the 105 rows meets the rule, and none is thin', () => {
+    expect(birthLedger.asOf).toBe(AGES_AS_OF);
+    expect(birthLedger.rows.length).toBe(105);
+    const problems = birthLedger.rows.flatMap(birthRowProblems);
+    expect(problems).toEqual([]);
+    expect(birthLedger.rows.filter((r: any) => r.thin).map((r: any) => r.name)).toEqual([]);
+    /* one man a row, and a publisher is one kind of publisher everywhere in the file */
+    const keys = birthLedger.rows.map((r: any) => `${r.name}|${r.club}`);
+    expect(new Set(keys).size).toBe(105);
+    const kind = new Map<string, Set<string>>();
+    for (const r of birthLedger.rows) for (const s of r.sources) kind.set(s.publisher, (kind.get(s.publisher) ?? new Set()).add(s.family));
+    expect([...kind.entries()].filter(([, set]) => set.size !== 1).map(([p]) => p)).toEqual([]);
+    /* the two rows Round 1102 left on two statistics sites each have a third publisher of another kind */
+    const kindsOf = (name: string) => birthLedger.rows.find((r: any) => r.name === name).sources.map((s: any) => `${s.publisher} ${s.family}`);
+    expect(kindsOf('Mohamed Salah')).toEqual(['espn.com stats', 'soccerbase.com stats', 'bundesliga.com league']);
+    expect(kindsOf('João Pedro')).toEqual(['soccerbase.com stats', 'espn.com stats', 'chelseafc.com club']);
+  });
+
+  it('every bulk table row holds the age on 1 January of its year, which is what the rule stands on', () => {
+    let bulk = 0;
+    let written = 0;
+    const off: string[] = [];
+    for (const r of birthLedger.rows) {
+      const table = tableAugustAge({ name: r.name, ...r.table });
+      if (table.basis === 'written') { written += 1; continue; }
+      bulk += 1;
+      const onNewYear = ageOn(r.born, `${r.table.year}-01-01`);
+      if (onNewYear !== r.table.age) off.push(`${r.name}: the table says ${r.table.age} in ${r.table.year}, his date gives ${onNewYear}`);
+      /* so the moved rule is never more than a year over, and never under */
+      const exact = ageOn(r.born, AGES_AS_OF);
+      if (table.age !== exact && table.age !== exact + 1) off.push(`${r.name}: moved to ${table.age}, exact ${exact}`);
+    }
+    expect(off).toEqual([]);
+    expect([bulk, written]).toEqual([82, 23]);
+  });
+
+  it('the three ledgers join with no two dates for one man, and every ledger man is in his squad once', () => {
+    const births = realBirths();
+    expect(births.size).toBe(521);
+    const lost: string[] = [];
+    for (const r of birthLedger.rows) {
+      const rows = (CM_ROSTERS[r.club] ?? []).filter(p => p.n === r.name);
+      if (rows.length !== 1) { lost.push(`${r.name} at ${r.club}: ${rows.length} rows`); continue; }
+      const got = augustAge2026({ name: r.name, club: r.club, ...r.table }, births);
+      if (got.basis !== 'born' || got.born !== r.born || got.age !== ageOn(r.born, AGES_AS_OF)) lost.push(`${r.name}: ${JSON.stringify(got)}`);
+    }
+    expect(lost).toEqual([]);
+  });
+});
+
+/* The basis file: one line a club, one entry a man in squad order,
+   [table age, table year, table id, basis, (the birth date for born), value rating]. */
+describe('what every 2026 age will stand on (the basis file), man for man against the squads main ships', () => {
+  const stocked = Object.entries(CM_ROSTERS).filter(([, list]) => list.length > 0);
+
+  it('holds exactly the men of the squads file, in its order', () => {
+    expect(agesBasis.asOf).toBe(AGES_AS_OF);
+    expect(Object.keys(agesBasis.clubs)).toEqual(stocked.map(([club]) => club));
+    expect(stocked.length).toBe(384);
+    const uneven = stocked.filter(([club, list]) => agesBasis.clubs[club].length !== list.length).map(([club]) => club);
+    expect(uneven).toEqual([]);
+    const men = stocked.reduce((sum, [, list]) => sum + list.length, 0);
+    expect([agesBasis.players, men, CM_ROSTER_META.players]).toEqual([4401, 4401, 4401]);
+  });
+
+  it('every line is what the ages rule resolves from the committed ledgers, and its last item is the value rating', () => {
+    /* While the squads file is on curve 1 its rating IS the value rating. The round that re-rates the
+       file changes this one comparison to the level (levelFrom of the shipped rating and age). */
+    expect((CM_ROSTER_META as any).curve ?? 1).toBe(1);
+    const births = realBirths();
+    const wrong: string[] = [];
+    const basisCount: Record<string, number> = {};
+    const againstShipped: Record<string, number> = {};
+    const swing: Record<string, number> = {};
+    let changed = 0;
+    for (const [club, list] of stocked) {
+      list.forEach((row, i) => {
+        const entry: any[] = agesBasis.clubs[club][i];
+        const [age, year, id, basis] = entry;
+        const born = basis === 'born' ? entry[4] : undefined;
+        if (entry.length !== (basis === 'born' ? 6 : 5)) wrong.push(`${row.n} at ${club}: ${entry.length} items for a ${basis} line`);
+        const got = augustAge2026({ name: row.n, club, age, year, id }, births);
+        if (got.basis !== basis || got.born !== born) wrong.push(`${row.n} at ${club}: the file says ${basis} ${born ?? ''}, the rule says ${got.basis} ${got.born ?? ''}`);
+        if (basis === 'unknown') wrong.push(`${row.n} at ${club}: a man with no table row may not ship`);
+        if (entry[entry.length - 1] !== row.r) wrong.push(`${row.n} at ${club}: value rating ${entry[entry.length - 1]}, the squads file ${row.r}`);
+        basisCount[basis] = (basisCount[basis] ?? 0) + 1;
+        const step = String(got.age - row.a);
+        againstShipped[step] = (againstShipped[step] ?? 0) + 1;
+        /* and the whole chain runs for him: the value rating, his August age and his position rate */
+        const shown = rateFrom(row.r, got.age, row.p);
+        const move = shown - row.r;
+        swing[String(move)] = (swing[String(move)] ?? 0) + 1;
+        if (move !== 0) changed += 1;
+        if (move < -6 || move > 8) wrong.push(`${row.n} at ${club}: ${row.r} would become ${shown}`);
+      });
+    }
+    expect(wrong).toEqual([]);
+    /* These restate the value table as the lead pulled it (2026-10-07): how each age is known, and
+       how far the August age sits from the age main ships today. A new pull recounts them. */
+    expect(basisCount).toEqual({ born: 423, moved: 3974, written: 4 });
+    expect(againstShipped).toEqual({ '1': 4221, '0': 176, '-1': 4 });
+    expect(changed).toBe(2078);
+    console.log(`2026 at the flip: ${changed} of 4401 ratings change; by points ${JSON.stringify(swing)}`);
+  });
+
+  it('the eight 2026 men of the brief table come out of the files alone: squads file, basis, ages rule, age read', () => {
+    const births = realBirths();
+    const got: [string, number, number, number][] = [];
+    for (const [world, name, fileAge, ratedAt, mainShows, shown] of BRIEF_TABLE) {
+      if (world !== 'now') continue;
+      const [club, list] = stocked.find(([, l]) => l.some(p => p.n === name))!;
+      const i = list.findIndex(p => p.n === name);
+      const [age, year, id] = agesBasis.clubs[club][i];
+      const august = augustAge2026({ name, club, age, year, id }, births);
+      expect([name, august.basis]).toEqual([name, 'born']);
+      got.push([name, august.age, list[i].r, rateFrom(list[i].r, august.age, list[i].p)]);
+      expect([name, list[i].a, august.age, list[i].r, rateFrom(list[i].r, august.age, list[i].p)]).toEqual([name, fileAge, ratedAt, mainShows, shown]);
+    }
+    expect(got.length).toBe(8);
+  });
+});
+
+/* The folded final tables. A table is one fact, so the rule is a league: two different publishers
+   printed the whole table and neither is a wiki, or the league is marked thin and a reader skips it. */
+const ROLES = ['table', 'results', 'detail'];
+const CROWD = /wiki|fandom|thesportsdb/i;
+const publisherSite = (url: string) => new URL(url).hostname.replace(/^(www|us|site\.api|en|sport|sports)\./, '');
+const leagueProblems = (id: string, league: any): string[] => {
+  const out: string[] = [];
+  const tableSites = new Set<string>();
+  for (const s of league.sources ?? []) {
+    if (!ROLES.includes(s.role)) out.push(`${id}: ${s.publisher} has the role ${s.role}`);
+    if (!/^https:\/\//.test(String(s.url))) out.push(`${id}: ${s.publisher} has no https url`);
+    if (!ISO_DAY.test(String(s.readOn))) out.push(`${id}: ${s.publisher} has no day it was read`);
+    if (s.role === 'table') {
+      if (CROWD.test(`${s.publisher} ${s.url}`)) out.push(`${id}: ${s.publisher} is a wiki or a crowd database and may not stand as a table publisher`);
+      else tableSites.add(publisherSite(s.url));
+    }
+  }
+  if (league.thin) {
+    if (typeof league.thin !== 'string' || league.thin.length < 12) out.push(`${id}: thin has to say why`);
+  } else if (tableSites.size < 2) out.push(`${id}: ${tableSites.size} table publisher(s), the rule is two`);
+  const rows: any[] = league.rows ?? [];
+  rows.forEach((r, i) => {
+    if (r.pos !== i + 1) out.push(`${id}: row ${i + 1} is numbered ${r.pos}`);
+    if (!Number.isInteger(r.played) || !Number.isInteger(r.points) || r.played < 1) out.push(`${id} ${r.pos}: played ${r.played}, points ${r.points}`);
+    if (typeof r.source !== 'string' || !r.source) out.push(`${id} ${r.pos}: no publisher spelling`);
+    if (r.club !== null && typeof r.club !== 'string') out.push(`${id} ${r.pos}: club is neither a game club nor null`);
+  });
+  const clubs = rows.filter(r => r.club).map(r => r.club);
+  if (new Set(clubs).size !== clubs.length) out.push(`${id}: one game club on two rows`);
+  if (clubs.length !== league.clubsInBothSeasons) out.push(`${id}: ${clubs.length} rows carry a game club, clubsInBothSeasons says ${league.clubsInBothSeasons}`);
+  const away = rows.filter(r => !r.club).map(r => r.source).sort();
+  if (JSON.stringify(away) !== JSON.stringify([...(league.notInTheGameLeague ?? [])].sort())) out.push(`${id}: notInTheGameLeague is not the rows without a game club`);
+  return out;
+};
+
+describe('the folded final tables: two table publishers a league, neither a wiki', () => {
+  const leagues: [string, any][] = Object.entries(finalTables.leagues);
+
+  it('the checker itself fires: one table publisher, a wiki as the second, a thin league with no reason', () => {
+    const row = (pos: number, club: string | null, source: string) => ({ pos, club, source, played: 2, points: 3 - pos });
+    const good = {
+      sources: [
+        { url: 'https://www.espn.com/t', publisher: 'ESPN', role: 'table', readOn: '2026-10-07' },
+        { url: 'https://rsssf.org/t', publisher: 'RSSSF', role: 'table', readOn: '2026-10-07' },
+        { url: 'https://www.example.org/n', publisher: 'A report, one note', role: 'detail', readOn: '2026-10-07' },
+      ],
+      clubsInBothSeasons: 1, notInTheGameLeague: ['Gone FC'],
+      rows: [row(1, 'Everton', 'Everton FC'), row(2, null, 'Gone FC')],
+    };
+    expect(leagueProblems('x', good)).toEqual([]);
+    const one = { ...good, sources: [good.sources[0], good.sources[2]] };
+    expect(leagueProblems('x', one).join(' | ')).toMatch(/1 table publisher\(s\), the rule is two/);
+    /* the same publisher twice is one publisher */
+    expect(leagueProblems('x', { ...good, sources: [good.sources[0], { ...good.sources[0], url: 'https://www.espn.com/other' }] }).join(' | ')).toMatch(/1 table publisher/);
+    expect(leagueProblems('x', { ...one, thin: 'only one publisher printed the whole table' })).toEqual([]);
+    expect(leagueProblems('x', { ...one, thin: true }).join(' | ')).toMatch(/thin has to say why/);
+    const wiki = { ...good, sources: [good.sources[0], { ...good.sources[1], url: 'https://en.wikipedia.org/wiki/T', publisher: 'Wikipedia' }] };
+    expect(leagueProblems('x', wiki).join(' | ')).toMatch(/is a wiki or a crowd database/);
+    expect(leagueProblems('x', { ...good, rows: [row(1, 'Everton', 'Everton FC'), row(3, null, 'Gone FC')] }).join(' | ')).toMatch(/row 2 is numbered 3/);
+    expect(leagueProblems('x', { ...good, clubsInBothSeasons: 2 }).join(' | ')).toMatch(/clubsInBothSeasons says 2/);
+  });
+
+  it('all 27 leagues meet the rule, none is thin, and every game club named is a club of the game', () => {
+    expect(leagues.length).toBe(27);
+    expect(leagues.flatMap(([id, league]) => leagueProblems(id, league))).toEqual([]);
+    expect(leagues.filter(([, league]) => league.thin).map(([id]) => id)).toEqual([]);
+    const gameClubs = new Set([...Object.keys(CM_ROSTERS), ...Object.keys(CM_ALEAGUE_ROSTERS), ...Object.keys(CM_RUSSIA_ROSTERS)]);
+    const strangers = leagues.flatMap(([id, league]) => league.rows.filter((r: any) => r.club && !gameClubs.has(r.club)).map((r: any) => `${id}: ${r.club}`));
+    expect(strangers).toEqual([]);
+    const roles: Record<string, number> = {};
+    for (const [, league] of leagues) for (const s of league.sources) roles[s.role] = (roles[s.role] ?? 0) + 1;
+    expect(roles).toEqual({ table: 97, results: 5, detail: 34 });
+  });
+
+  it('agrees place for place with the final tables the game already ships (Round 612, a separate research run)', () => {
+    const shipped: [string, { table: string[] }][] = Object.entries(CM_FINAL_TABLES_2025_26.leagues);
+    let places = 0;
+    const apart: string[] = [];
+    for (const [id, { table }] of shipped) {
+      const league = finalTables.leagues[id];
+      if (!league) { apart.push(`${id}: not folded`); continue; }
+      table.forEach((club, i) => {
+        places += 1;
+        if (league.rows[i]?.club !== club) apart.push(`${id} ${i + 1}: the game ships ${club}, the fold has ${league.rows[i]?.club} (${league.rows[i]?.source})`);
+      });
+    }
+    expect(apart).toEqual([]);
+    expect([shipped.length, places]).toEqual([15, 145]);
+  });
 });
