@@ -1,0 +1,14 @@
+flags: node scripts/simNationalityFlags.mjs
+flags-bare: NATIONALITY_FLAGS_CONTROL=bare node scripts/simNationalityFlags.mjs
+flags-code: NATIONALITY_FLAGS_CONTROL=code node scripts/simNationalityFlags.mjs
+flags-confed: NATIONALITY_FLAGS_CONTROL=confed node scripts/simNationalityFlags.mjs
+flags-league: NATIONALITY_FLAGS_CONTROL=league node scripts/simNationalityFlags.mjs
+flags-owedstale: NATIONALITY_FLAGS_CONTROL=owedstale node scripts/simNationalityFlags.mjs
+flags-owedsecond: NATIONALITY_FLAGS_CONTROL=owedsecond node scripts/simNationalityFlags.mjs
+flags-unknown: NATIONALITY_FLAGS_CONTROL=nonsense node scripts/simNationalityFlags.mjs
+shapes: R848_PART=shapes node scripts/simDailySaveHardening.mjs
+c-guidepart: R848_CONTROL=guidepart node scripts/simDailySaveHardening.mjs
+c-guideslow: R848_CONTROL=guideslow node scripts/simDailySaveHardening.mjs
+c-guidelate: R848_CONTROL=guidelate node scripts/simDailySaveHardening.mjs
+c-guideheld: R848_CONTROL=guideheld node scripts/simDailySaveHardening.mjs
+c-shape: R848_CONTROL=shape node scripts/simDailySaveHardening.mjs
