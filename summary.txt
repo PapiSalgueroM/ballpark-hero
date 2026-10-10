@@ -1,0 +1,3 @@
+seam-print exit=0 31s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/usSeasonSeamDigest.json
+simUsSeasonCentre exit=0 33s | simUsSeasonCentre: 98 checks, 0 failed
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
