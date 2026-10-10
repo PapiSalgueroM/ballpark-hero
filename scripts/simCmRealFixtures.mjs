@@ -469,7 +469,10 @@ async function main() {
         if (!lazy) { assert.equal(start.value.realLeagueFixtures, key, 'A list that rides with the engine is always here'); return; }
         assert.equal(start.value.realLeagueFixtures, undefined, 'No key is given while the list is not here');
         assert.equal(bare.careerFixtureCoverage(start.value), null, 'And the calendar claims nothing');
-        const fetched = withRealFixtureSeed(4107, () => cm.startCareer(myClub));
+        /* Beside a copy that is just as fresh and has every list: the engine keeps counters in its module. */
+        const withLists = await freshLoaded(candidateName);
+        const fetched = withRealFixtureSeed(4107, () => withLists.startCareer(myClub));
+        assert.equal(fetched.value.realLeagueFixtures, key, 'With the list fetched the same start holds the key');
         assert.equal(fetched.draws, start.draws, 'Binding consumes no random draws');
         assert.deepEqual(stripped(fetched.value), start.value, 'Fetching the list changes exactly one field of a fresh save');
         for (let round = 0; round < R; round++) assert.deepEqual(bare.careerRoundPairs(start.value, round), bare.roundPairs(start.value.leagueClubs, round, true), 'With no key the generated list is read');
