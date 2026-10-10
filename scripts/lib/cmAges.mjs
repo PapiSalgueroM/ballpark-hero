@@ -58,18 +58,29 @@ export const ERA_RATING_AGE_SHIFT = 1;
 
 const ISO = /^(\d{4})-(\d{2})-(\d{2})$/;
 
-/** Whole years between a birth date and a day, both 'YYYY-MM-DD'. Throws on anything else. */
+/** The days a month holds, worked out by hand: this file may not read a clock or build a Date. */
+function daysIn(year, month) {
+  if (month === 2) return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0 ? 29 : 28;
+  return month === 4 || month === 6 || month === 9 || month === 11 ? 30 : 31;
+}
+const onCalendar = (year, month, day) => year >= 1 && month >= 1 && month <= 12 && day >= 1 && day <= daysIn(year, month);
+
+/** Whole years between a birth date and a day, both 'YYYY-MM-DD'. Throws on anything else: a text
+ *  that is not that shape, a day no calendar holds (30 February, 31 April, 29 February of a year
+ *  that has none) and a birth date AFTER the day it is asked about. buildBirths runs every ledger
+ *  date through here, so a typing slip in a ledger stops the join instead of being read. */
 export function ageOn(born, isoDate) {
   const b = ISO.exec(String(born));
   const d = ISO.exec(String(isoDate));
   if (!b || !d) throw new Error(`ageOn: both dates must read YYYY-MM-DD (got born ${born}, day ${isoDate})`);
   const [by, bm, bd] = [Number(b[1]), Number(b[2]), Number(b[3])];
   const [y, m, day] = [Number(d[1]), Number(d[2]), Number(d[3])];
-  if (bm < 1 || bm > 12 || bd < 1 || bd > 31 || m < 1 || m > 12 || day < 1 || day > 31) {
+  if (!onCalendar(by, bm, bd) || !onCalendar(y, m, day)) {
     throw new Error(`ageOn: not a calendar date (got born ${born}, day ${isoDate})`);
   }
   let age = y - by;
   if (m < bm || (m === bm && day < bd)) age -= 1;
+  if (age < 0) throw new Error(`ageOn: the birth date is after the day (got born ${born}, day ${isoDate})`);
   return age;
 }
 
@@ -89,7 +100,7 @@ export function buildBirths({ ledgerRows = [], round669 = null, missing = [], db
     const key = String(name ?? '').trim();
     if (!key) throw new Error(`buildBirths: a ${from} row has no name`);
     if (!ISO.test(String(born))) throw new Error(`buildBirths: ${key} (${from}) has a birth date that is not YYYY-MM-DD: ${born}`);
-    ageOn(born, AGES_AS_OF);
+    try { ageOn(born, AGES_AS_OF); } catch (slip) { throw new Error(`buildBirths: ${key} (${from}): ${slip.message}`); }
     const set = new Set(clubs.filter(Boolean));
     const list = births.get(key) ?? [];
     for (const other of list) {

@@ -589,6 +589,31 @@ describe('Club Manager ages for August 2026', () => {
     expect(() => ageOn('20 Dec 2001', '2026-08-01')).toThrow(/YYYY-MM-DD/);
     expect(() => ageOn('2001-13-01', '2026-08-01')).toThrow(/calendar/);
     expect(AGES_AS_OF).toBe('2026-08-01');
+  });
+
+  it('a day no calendar holds, and a birth date after the day, are refused (a typing slip in a ledger is never read)', () => {
+    /* the last day of each kind of month is a date, the day after it is not */
+    const real = ['2001-01-31', '2001-04-30', '2001-06-30', '2001-09-30', '2001-11-30', '2001-12-31', '2001-02-28', '2004-02-29', '2000-02-29'];
+    const unreal = ['2001-02-30', '2001-02-29', '1900-02-29', '2001-04-31', '2001-06-31', '2001-09-31', '2001-11-31', '2001-01-32', '2001-00-10', '2001-05-00', '0000-05-10'];
+    expect(real.map(day => ageOn(day, '2026-08-01'))).toEqual([25, 25, 25, 24, 24, 24, 25, 22, 26]);
+    for (const day of unreal) {
+      expect(() => ageOn(day, '2026-08-01'), day).toThrow(/not a calendar date/);
+      expect(() => ageOn('1990-01-01', day), day).toThrow(/not a calendar date/);
+    }
+    /* born on 29 February: not yet a year older on 28 February, a year older on 1 March */
+    expect([ageOn('2004-02-29', '2026-02-28'), ageOn('2004-02-29', '2026-03-01')]).toEqual([21, 22]);
+    /* a birth date after the day used to answer a negative age */
+    expect(() => ageOn('2030-01-01', '2026-08-01')).toThrow(/the birth date is after the day/);
+    expect(() => ageOn('2026-08-02', '2026-08-01')).toThrow(/the birth date is after the day/);
+    expect(ageOn('2026-08-01', '2026-08-01')).toBe(0);
+    /* and the join runs every ledger date through it, naming the man and the ledger */
+    const slip = (born: string) => () => buildBirths({ ledgerRows: [{ name: 'Typing Slip', club: 'Everton', born }] });
+    expect(slip('1999-02-31')).toThrow(/buildBirths: Typing Slip \(the birth date ledger\): ageOn: not a calendar date/);
+    expect(slip('2027-01-01')).toThrow(/buildBirths: Typing Slip \(the birth date ledger\): ageOn: the birth date is after the day/);
+    expect(slip('1999-02-28')).not.toThrow();
+  });
+
+  it('the constants of the rule are the measured ones', () => {
     expect([HAND_WRITTEN_FROM_ID, ID_GAP_FROM, ID_GAP_TO, NAMESAKE_YEARS]).toEqual([170000, 167000, 176415, 2]);
     expect(ERA_RATING_AGE_SHIFT).toBe(1);
   });
