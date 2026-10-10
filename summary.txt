@@ -1,0 +1,6 @@
+simCmVar exit=1 30s | Node.js v24.21.0
+ledger exit=0 0s | simCmVarLedger: all 314 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+varlive exit=0 5s |    Duration  4.51s (transform 2.12s, setup 89ms, collect 2.66s, tests 665ms, environment 449ms, prepare 258ms)
+measure exit=0 55s | CMVAR_ENGINE {"seeds":[11,12,13,14,15,16,17,18,19,20],"leagueMatches":6780,"reviewableGoalsPerMatch":2.3895,"foulsPerMatch":20.14,"probeRate":0.004,"awardsAtProbeRate":49
+tsc exit=0 73s | 

@@ -1,0 +1,55 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'The engine figures the rates are derived from are measured, not provisional\n' +
++       '\n' +
++       'true !== false\n',
++     stack: 'AssertionError [ERR_ASSERTION]: The engine figures the rates are derived from are measured, not provisional\n' +
++       '\n' +
++       'true !== false\n' +
++       '\n' +
++       '    at Object.bands (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:306:16)\n' +
++       '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:331:33)\n' +
++       '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:355:46',
++     status: 'failed',
++     title: 'holds every review outcome a match inside the range real football gives, on the generated rates'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:342:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:355:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'holds every review outcome a match inside the range real football gives, on the generated rates',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'The engine figures the rates are derived from are measured, not provisional\n' +
+        '\n' +
+        'true !== false\n',
+      stack: 'AssertionError [ERR_ASSERTION]: The engine figures the rates are derived from are measured, not provisional\n' +
+        '\n' +
+        'true !== false\n' +
+        '\n' +
+        '    at Object.bands (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:306:16)\n' +
+        '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:331:33)\n' +
+        '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:355:46'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

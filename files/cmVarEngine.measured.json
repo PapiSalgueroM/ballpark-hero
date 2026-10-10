@@ -1,0 +1,20 @@
+{
+  "seeds": [
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "leagueMatches": 6780,
+  "reviewableGoalsPerMatch": 2.3895,
+  "foulsPerMatch": 20.14,
+  "probeRate": 0.004,
+  "awardsAtProbeRate": 495,
+  "awardsPerMatchPerUnitRate": 18.252
+}

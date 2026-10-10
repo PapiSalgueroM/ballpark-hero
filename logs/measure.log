@@ -1,0 +1,3 @@
+measureCmVarEngine: 200 careers, 6780 league matches, 401 cup, 505 Champions League, 55 s.
+measureCmVarEngine: goals 2.77 a match, 2.3895 of them reviewable; fouls 20.14; penalties 0.4382; awards at the probe rate 495 (385 scored).
+CMVAR_ENGINE {"seeds":[11,12,13,14,15,16,17,18,19,20],"leagueMatches":6780,"reviewableGoalsPerMatch":2.3895,"foulsPerMatch":20.14,"probeRate":0.004,"awardsAtProbeRate":495,"awardsPerMatchPerUnitRate":18.252}
