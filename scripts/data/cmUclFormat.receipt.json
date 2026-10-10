@@ -8,7 +8,7 @@
   "limits": [
     "No copy of a page was kept, so there is no snapshot hash.",
     "The scout of this round named two pages this builder did not open (Tottenham Hotspur's two news pages) and one it could not find under the number given (a Sky Sports article): the Sky Sports page read here is article 13576602 of 27 August 2026.",
-    "F4 (the draw's escape clause) stands on the regulations alone. F13 (the 2026/27 dates) stands on Sky Sports alone here. F14 (who is in, and the two European Performance Spots) was not read. F17 (a five step table in the middle of the phase) has no text behind it and is not built.",
+    "F4 (the draw's escape clause) stands on the regulations alone. F13 (the 2026/27 dates) stands on Sky Sports alone here. F14 (who is in, and the two European Performance Spots) was not read. F17 (a five step table in the middle of the phase) has no text behind it and is not built. F18 (the order of the home and away nights, Article 17.02) stands on the regulations alone and is not built: the slate's matchdays ignore venue.",
     "Annex B of the regulations, the bracket drawing, could not be opened. The bracket rule is derived instead from the two league phase seasons that have been played, each read on at least two publishers, and both seasons give the same rule.",
     "The final tables are ESPN's, with TNT Sports agreeing on the top 24 clubs and their points. Places 25 to 36 stand on ESPN alone and nothing reads them but the arithmetic checks.",
     "Two blocks of 2024-25 under asPlayed stand on ESPN alone: the eight play-off ties (story 43637045) and the two semi-final lines (story 43935236). The play-off ties are only checked to sit inside the real pairings; the semi-final lines are one of three readings of the semi-final rule, the other two being 2025-26 on UEFA.com and SuperSport, and all three must agree. The round of 16 and the quarter-finals of 2024-25 are on ESPN and CBS Sports.",
@@ -16,5 +16,5 @@
     "A PUBLISHER'S ERROR, NOT REPEATED. SuperSport's page of 18 March 2026 prints a second leg score for Barcelona against Newcastle that nufc.com's match page of that night and Flashscore's match report both give differently (found by the adversarial review of Round 1228, read again by the fixer on 2026-10-10). The ledger quotes that line only as far as the two clubs and holds no score of any knockout match: nothing reads one."
   ],
   "checkedBy": "scripts/simCmLeaguePhase.mjs",
-  "sha256": "f3ad55e67e4d95ab2a4ab8d4ca625f8c9934436d0d62d23c578647e9a7852495"
+  "sha256": "a977e0512a475b137f5bb1d77ec93a80749d49b25bb3c4755e641fff4c44a1a3"
 }
