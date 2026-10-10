@@ -226,10 +226,17 @@ about 1.3K over the budget the gate set at its own measurement: /club-manager 58
   to the base commit on the whole save BUT the book, and 96 of 96 equal to the same source with the book's
   lines out. Controls `mathrandom` (the scorer pick reads Math.random: 16 of 16 faces move) and `weight`.
 - THE LAW, THE NAMES, THE SHAPES, THE OLD SAVE, THE DOORS, THE DAILIES: `scripts/simCmLeagueBook.mjs`, default
-  and full fleets, five seed sets each, thirteen controls. Its header's MEASURED block has the z values.
+  and full fleets, five seed sets each, all ten green, and thirteen controls that each FIRED on the final
+  shape of the book (`r1229-fin5`, at 852b05fc). Its header's MEASURED block has the z values.
 - THE VIDEO REFEREE ON: the law held over 268 to 277 entries a fleet, 162 to 183 reviews in 228 league
   matches of mine, no report whose lines did not add up to its score.
-- THE DIGEST OF `simCmLeagueRules`: `r1229-rules`, two legs, in that harness's header.
+- THE DIGEST OF `simCmLeagueRules`: `r1229-rules` and `r1229-rules2` (taken twice: the book's list of my own men
+  changed shape in between), two legs each, in that harness's header.
+- WHICH REDS OF THE SWEEP WERE THIS ROUND'S: the sixteen that were not green were run on a worktree of the base
+  commit on the same kind of runner (`r1229-basered`). Five were green there and so were this round's (all
+  five accounted for above); nine are red at the base too (simEra2005, simEra2010, simEra2015, simEra2020,
+  simEras, simGmCalendar, simGmDealTableFixture, simGmStaff, simSoccerConquest) and are nobody's here; one
+  needs the live database.
 - THE WHOLE VITEST SUITE: 403 files passed, 2 skipped, 5,732 tests passed (`r1229-h1`, at 1acb1aab).
 - EVERY HARNESS THAT LOADS THE ENGINE: 118 on a runner (`r1229-sweep`, then `r1229-sw00` to `r1229-sw04`).
 - A ROUTE SWEEP in Chromium at three viewports, 183 routes, 549 checks, 0 findings (`r1229-w1`).
@@ -237,6 +244,9 @@ about 1.3K over the budget the gate set at its own measurement: /club-manager 58
   ALONE merges with no conflict; the type gate is at zero and this round's harness is green on each
   (`r1229-m2`). All three together conflict, between Rounds 1218 and 1225 (their import lines 3 and 4 of
   `clubManager.ts`, and `ClubManagerHelp.tsx`), in no line this round touches (`r1229-m1`).
+
+THE BASE MOVED: the gate branch gained five fix commits while this was built (980654fa to 24f57a98, nothing of
+Club Manager). They are merged in (a658174a) and the gates were run once more on that head (`r1229-fin8`).
 
 ## What a later session must not trust
 
