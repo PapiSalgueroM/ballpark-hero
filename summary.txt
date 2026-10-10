@@ -1,0 +1,3 @@
+before exit=0 5s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 166 of 166 controls fired
+mut-noreadat exit=1 1s | simCmLeagueFixtures: FAILED, 1 failure(s): 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 0 of 0 controls fired
+after-restore exit=0 4s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 166 of 166 controls fired
