@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+walk-nfl: SWEEP_BASE=http://localhost:4173 ONLY=/nfl-my-career node scripts/playGames.mjs
+walk-mlb: SWEEP_BASE=http://localhost:4173 ONLY=/mlb-my-career node scripts/playGames.mjs
+walk-nhl: SWEEP_BASE=http://localhost:4173 ONLY=/nhl-my-career node scripts/playGames.mjs
+walk-nba: SWEEP_BASE=http://localhost:4173 ONLY=/nba-my-career node scripts/playGames.mjs
