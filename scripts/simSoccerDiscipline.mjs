@@ -55,7 +55,7 @@ try {
   fault('src/lib/soccerCareerEngine.ts', '@/lib/soccerCareerEngine',
     'if (apps > 0 && state.divingActive && !isGK) goals += 2;', 'if (state.divingActive && !isGK) goals += 2;', 'keeps all appearances suspended');
   fault('src/lib/soccerCareerEngine.ts', '@/lib/soccerCareerEngine',
-    'const redCards = Math.random() < 0.08 && apps > 0 ? 1 : 0;', 'const redCards = Math.random() < 0.08 ? 1 : 0;', 'keeps all appearances suspended');
+    'const redCards = Math.random() < 0.08 * programme.redCardMult && apps > 0 ? 1 : 0;', 'const redCards = Math.random() < 0.08 * programme.redCardMult ? 1 : 0;', 'keeps all appearances suspended');
   console.log('simSoccerDiscipline: 11 outcome assertions green, 9 effective copied defects caught');
 } finally {
   for (const copy of copies) if (fs.existsSync(copy)) fs.unlinkSync(copy);

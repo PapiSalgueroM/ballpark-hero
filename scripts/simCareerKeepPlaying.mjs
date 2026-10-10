@@ -162,7 +162,10 @@ const TRIAL_HOOKS = '    settleCareerAmbition(s, s.seasons[s.seasons.length - 1]
 const REHAB_HOOKS = '      settleCareerAmbition(s, injuryRow);\n      settleCareerPreparation(s, injuryRow);\n      Object.assign(s, recordMentorSeason(s, injuryRow));\n';
 const ROWS = {
   conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + TRIAL_HOOKS + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
-  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      settleReducedRole(s, injuryRow);\n      simulateSeasonFinances(s, injuryRow);\n      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n' + REHAB_HOOKS + '      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
+  /* Release AU: PR216 (Rounds 1197 to 1208) settles the season plan on the injury row, between the money and the summer, so
+     that call sits inside this row as well and goes with it, for the reason written above: a career in this harness
+     holds no plan for it to act on. */
+  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      settleReducedRole(s, injuryRow);\n      simulateSeasonFinances(s, injuryRow);\n      settleSoccerProgramme(s, injuryRow);\n      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n' + REHAB_HOOKS + '      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
   rehabSave: ['  if (lastRow && lastRow.age < s.age) {\n    const row = yearOutRow(s, null);', '  if (false) {\n    const row = yearOutRow(s, null);'],
   newsSave: ['    if (lastRow && lastRow.age < s.age) {\n      s.events = [...s.events];', '    if (false) {\n      s.events = [...s.events];'],
 };

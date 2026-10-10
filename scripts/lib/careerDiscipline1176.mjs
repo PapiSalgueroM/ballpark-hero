@@ -3,7 +3,7 @@
    apps, goals, score and state field under the existing whole-save check. */
 export const careerDiscipline1176Attribution = [
   { file: 'src/lib/soccerCareerEngine.ts', from: 'if (apps > 0 && state.divingActive && !isGK) goals += 2;', to: 'if (state.divingActive && !isGK) goals += 2;' },
-  { file: 'src/lib/soccerCareerEngine.ts', from: 'const redCards = Math.random() < 0.08 && apps > 0 ? 1 : 0;', to: 'const redCards = Math.random() < 0.08 ? 1 : 0;' },
+  { file: 'src/lib/soccerCareerEngine.ts', from: 'const redCards = Math.random() < 0.08 * programme.redCardMult && apps > 0 ? 1 : 0;', to: 'const redCards = Math.random() < 0.08 * programme.redCardMult ? 1 : 0;' },
   { file: 'src/lib/soccerCareerEngine.ts', from: `  const appearance = calcAppearances(overall, currentClubTier, age, state, fx);
   const { apps, leagueApps, served } = serveClubSuspension(appearance.apps, appearance.leagueApps, state.pendingSuspensionMatches);
   const { injured, injuryWeeks, injuryName, injurySevere } = appearance;`, to: '  const { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere } = calcAppearances(overall, currentClubTier, age, state, fx);' },
