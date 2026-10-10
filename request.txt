@@ -1,0 +1,6 @@
+p-fresh: RIVAL_SEEDS=11,12,13,14,15 RIVAL_PROVE=73516206 RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+p-std: RIVAL_PROVE=73516206 RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+p-cutdraw: US_RIVAL_CONTROL=cutdraw RIVAL_PROVE=73516206 RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+p-liftkey: US_RIVAL_CONTROL=liftkey RIVAL_PROVE=73516206 RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+p-liftcard: US_RIVAL_CONTROL=liftcard RIVAL_PROVE=73516206 RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+p-tickdraws: US_RIVAL_CONTROL=tickdraws RIVAL_PROVE=73516206 RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs

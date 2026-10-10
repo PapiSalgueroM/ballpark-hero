@@ -1,0 +1,6 @@
+p-std exit=0 1093s | simUsRivalSense: 44 checks, 0 failed (full size)
+p-cutdraw exit=1 1236s | simUsRivalSense: 44 checks, 4 failed (full size), red sections: P1, P2
+p-fresh exit=0 1251s | simUsRivalSense: 44 checks, 0 failed (full size)
+p-liftkey exit=1 1196s | simUsRivalSense: 44 checks, 5 failed (full size), red sections: N.U2, P1, L, P2
+p-tickdraws exit=1 1076s | simUsRivalSense: 44 checks, 7 failed (full size), red sections: P1, P2
+p-liftcard exit=1 1170s | simUsRivalSense: 44 checks, 1 failed (full size), red sections: L
