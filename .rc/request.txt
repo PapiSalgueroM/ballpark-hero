@@ -1,0 +1,6 @@
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+controls-0: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=0/3 node scripts/simGmDraftOrder.mjs
+controls-1: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=1/3 node scripts/simGmDraftOrder.mjs
+controls-2: SIM_GM_DRAFT_ORDER_CONTROL=all SIM_GM_DRAFT_ORDER_SHARD=2/3 node scripts/simGmDraftOrder.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
