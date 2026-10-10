@@ -1,0 +1,11 @@
+#!build
+#!serial
+mine-1: node scripts/simDailySaveHardening.mjs
+base-prep: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && git log --oneline -1 && node_modules/.bin/vite build > /tmp/base-build.log 2>&1; echo "build exit $?"
+base-1: cd /tmp/base && node scripts/simDailySaveHardening.mjs
+mine-2: node scripts/simDailySaveHardening.mjs
+base-2: cd /tmp/base && node scripts/simDailySaveHardening.mjs
+mine-3: node scripts/simDailySaveHardening.mjs
+base-3: cd /tmp/base && node scripts/simDailySaveHardening.mjs
+mine-4: node scripts/simDailySaveHardening.mjs
+base-4: cd /tmp/base && node scripts/simDailySaveHardening.mjs
