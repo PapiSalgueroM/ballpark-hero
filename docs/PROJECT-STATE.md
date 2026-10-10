@@ -1,3 +1,17 @@
+## Codex 1247-1249 READY (qualified source): Soccer Career result layouts, 2026-10-10
+
+Draft PR222: https://github.com/PapiSalgueroM/ballpark-hero/pull/222. Isolated attached WT C:/Users/antho/.codex/worktrees/career-results-layout/ballpark-hero, branch codex/career-results-layout. Accepted runtime source 0018d9163376eeb4c0ae7decbd2c4b9136c725a5, tree af7d7ac9110c464ca46b34032f102457953c1160, base 09df145abfb241679022b41903d2f19bc254ebf9. Subsequent handoff commit is docs only.
+
+Mobile phone/training utilities sit after result content in newspaper, season_summary, world_cup and transfer_window. Desktop fixed positioning, measured hover/footer lift, button size, badges and handlers remain effective. International history rows show the full saved competition, year, champion and result. Product scope is only SoccerCareer.tsx utility layout and InternationalPanel.tsx history row. No engine, save schema, gameplay odds, real football data or dependency changes.
+
+Exact-head dedicated Actions run 38069016031/job114262435007 is SUCCESS: actual app types/build, twenty existing RecordedFacts/PhoneRestoration unit outcomes, three healthy native profiles (320x568, 390x844, 1280x900), two effective original-source controls, three effective copied observation controls, seven related simulations and all fifteen built readers. Native output: 271 healthy checks; 447 including the two controls with precisely 18 result-layout reds and two history-name reds. Independent audit held 56 whole save/byte pairs, 41 exact post-startup RNG vectors (zero draws), twenty raw reloads, 119 strict layout records, ten exact restores, 2,840 canonical loaded-source records and both 96-file oracle inventories. All 36 original PNGs were individually inspected, including the five current/control profiles. Exact source/dependency hold passes.
+
+Final artifact 11675364842: 495 unique safe members, 9,949,174 bytes, SHA256 8BE830B550D4DD62F6758FCFBD77376E9FB1BF851B45CFB37C640FC4C322642F, expires 2026-10-15T16:53:45Z. Early 11675419481: all 472 members are byte-identical in final. Independent final receipt SHA256 E7FEC855E752A6CEDCDF29C8C39E45906FDA2A1FF31812ADF6F08EF6020274D4. Evidence is under this WT's ignored .tmp-fx/results-repaired-38069016031-final. Details and first failed-run classification in docs/ROUND1247-1249.md.
+
+Qualified: unchanged legacy Back/Continue are 32px/40px, while new utility controls are 56px. Training has no existing opener focus restoration claim. Actual newspaper Continue was clicked; World Cup/transfer states use real engine continuations. No startup-zero-draw, full-suite, full-site or combined release credit. All five fresh shared offer/save/number/practice/hub workflows on 0018 are failure. Their failures remain separately recorded rather than inherited from prior heads or waived.
+
+G owns integration/main/merge/publish, after Release AT and PR216 as already ordered. PR216 through221 remain frozen. This source is ready for G's combined review, not merged or published. ROOT app/index/stash/PROJECT-STATE remain untouched; this own WORKBOARD block was replaced atomically preserving every peer byte.
+
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,

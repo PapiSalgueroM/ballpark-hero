@@ -1,4 +1,4 @@
-import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode } from "react";
+import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode, type CSSProperties } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { useGameCompletion } from "@/hooks/useGameCompletion";
@@ -927,6 +927,10 @@ export default function SoccerCareer() {
      and Terms links at the end of the page in exactly the way the action bar
      was. Same lift, same reason. */
   const floatingButtonLift = useFooterLift(!!career);
+  const mobileUtilitiesInline = !!career && ["newspaper", "season_summary", "world_cup", "transfer_window"].includes(career.phase);
+  const utilityButtonStyle: CSSProperties | undefined = mobileUtilitiesInline
+    ? { "--career-utility-lift": `-${floatingButtonLift}px` } as CSSProperties
+    : floatingButtonLift ? { translate: `0 -${floatingButtonLift}px` } : undefined;
 
   /* Score tracking on retirement. Round 644: the record is the legacy score
      the retirement screen and the share card show, out of 100. It used to be
@@ -1470,6 +1474,7 @@ export default function SoccerCareer() {
             Round 81: the training ground button stacks above it. */}
         {career && (
           <>
+            <div className={mobileUtilitiesInline ? "mx-auto flex max-w-5xl justify-end gap-3 px-4 pb-4 sm:p-0" : undefined}>
             {!career.retired && (
               <button
                 onClick={() => setTrainingOpen(true)}
@@ -1479,8 +1484,8 @@ export default function SoccerCareer() {
                    active:scale-95, which Tailwind writes into `transform`, so an
                    inline transform here would silently delete the press
                    animation. `translate` composes with it instead. */
-                style={floatingButtonLift ? { translate: `0 -${floatingButtonLift}px` } : undefined}
-                className="fixed bottom-[5.5rem] right-4 z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform"
+                style={utilityButtonStyle}
+                className={`${mobileUtilitiesInline ? "relative sm:fixed sm:bottom-[5.5rem] sm:right-4 sm:[translate:0_var(--career-utility-lift)]" : "fixed bottom-[5.5rem] right-4"} z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform`}
               >
                 🏋️
                 {trainingAvailable(career) && (
@@ -1491,8 +1496,8 @@ export default function SoccerCareer() {
             <button
               onClick={() => setPhoneOpen(true)}
               aria-label="Open your phone"
-              style={floatingButtonLift ? { translate: `0 -${floatingButtonLift}px` } : undefined}
-              className="fixed bottom-5 right-4 z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform"
+              style={utilityButtonStyle}
+              className={`${mobileUtilitiesInline ? "relative sm:fixed sm:bottom-5 sm:right-4 sm:[translate:0_var(--career-utility-lift)]" : "fixed bottom-5 right-4"} z-40 w-14 h-14 rounded-2xl bg-zinc-900 border-2 border-zinc-700 shadow-xl flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-transform`}
             >
               📱
               {unreadPhoneCount(career) > 0 && (
@@ -1501,6 +1506,7 @@ export default function SoccerCareer() {
                 </span>
               )}
             </button>
+            </div>
             {phoneOpen && (
               <PhonePanel
                 career={career}
