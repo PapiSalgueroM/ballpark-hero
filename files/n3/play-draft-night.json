@@ -1,0 +1,78 @@
+{
+  "control": "nottall",
+  "results": [
+    {
+      "id": "nba-844-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 35,
+      "team": "DEN",
+      "closeAtS": 4.1,
+      "frames": 367,
+      "cardHeight": [
+        694.59375,
+        694.59375
+      ],
+      "journeyHeight": [
+        1171.59375,
+        1171.59375
+      ],
+      "scroll": [
+        529,
+        839
+      ],
+      "nightHeight": 547,
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollSettledMs": 300,
+      "nightTopAtRest": -169,
+      "endingMovedPx": 0,
+      "heldFrames": 235,
+      "landing": {
+        "ms": 4183,
+        "top": 253,
+        "bottom": 307,
+        "vh": 390
+      },
+      "shown": {
+        "ms": 5200,
+        "top": 253,
+        "bottom": 307,
+        "vh": 390
+      },
+      "rows": 5,
+      "tiles": 4,
+      "closing": [
+        253,
+        307
+      ],
+      "nightRect": 0,
+      "tileFit": {
+        "room": 247,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "seedRoom": 247,
+        "widestSeed": {
+          "text": "Seed 2 · Down 2",
+          "need": 78
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": [],
+        "seeds": []
+      }
+    }
+  ],
+  "failures": [
+    {
+      "id": "nba-844-late-watch",
+      "check": "fold",
+      "message": "the night starts off screen: once the page is at rest its top is at -169 in a 390 high viewport"
+    }
+  ]
+}
