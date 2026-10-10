@@ -172,7 +172,8 @@ const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
    season button and every existing parent still changes the hash. */
 const legacyScreen = () => {
   const copy = document.body.cloneNode(true) as HTMLElement;
-  copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener], [data-season-centre-entry]').forEach(el => el.remove());
+  // The additive programme has separate live choice, save and outcome proofs.
+  copy.querySelectorAll('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener], [data-season-centre-entry], section[data-us-programme-panel]').forEach(el => el.remove());
   copy.querySelectorAll('[data-career-hub-buttons]').forEach(el => el.replaceWith(...el.childNodes));
   for (const attribute of ['data-career-event', 'data-career-decision-event', 'data-career-decision-option']) {
     copy.querySelectorAll(`[${attribute}]`).forEach(el => el.removeAttribute(attribute));
@@ -231,7 +232,7 @@ function fieldHashes(save: Save | null): Record<string, string> {
 /* ------------------------------ the walker ------------------------------ */
 
 const enabledButtons = (root: ParentNode): HTMLButtonElement[] =>
-  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener], [data-season-centre-entry]')) as HTMLButtonElement[];
+  [...root.querySelectorAll('button')].filter(b => !b.disabled && !b.closest('section[data-career-practice], section[data-career-prospect-entry], [data-career-review-opener], [data-season-centre-entry], section[data-us-programme-panel]')) as HTMLButtonElement[];
 const labelOf = (b: Element) => squash(b.textContent ?? '').slice(0, 60) || `(${b.getAttribute('aria-label') ?? 'button'})`;
 const byText = (root: ParentNode, re: RegExp) => enabledButtons(root).find(b => re.test(squash(b.textContent ?? '')));
 

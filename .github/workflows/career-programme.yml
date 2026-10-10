@@ -19,6 +19,7 @@ on:
       - src/lib/careerChanceWheel*
       - src/components/soccer-career/CareerChanceWheel.tsx
       - src/test/usCareerProgrammeUi.test.tsx
+      - src/test/usBoardFixture.test.tsx
       - src/lib/usCareerProgramme*
       - src/components/us-career/UsCareerProgramme.tsx
       - src/components/us-career/UsCareerBoard.tsx

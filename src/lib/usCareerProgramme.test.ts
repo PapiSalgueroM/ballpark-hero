@@ -143,7 +143,7 @@ it('rejects retired, suspended, wrong-year and unavailable veteran choices', () 
 it('clamps short-season targets to the existing sourced calendar instead of inventing one', () => {
   const c = fixture(NFL_CAREER_SPORT); c.year = 2005;
   expect(usProgrammeMenus(c, 'nfl').find(m => m.id === 'expectation')?.options[2].effect).toContain('12 games');
-  const nba = fixture(NBA_CAREER_SPORT); nba.year = 2011; nba.seasons = [heldLine(nba, { games: 82 })];
+  const nba: ProgrammeCareer = fixture(NBA_CAREER_SPORT); nba.year = 2011; nba.seasons = [heldLine(nba, { games: 82 })];
   expect(usProgrammeMenus(nba, 'nba').find(m => m.id === 'expectation')?.options[2].effect).toContain('66 games');
 });
 it('restores clamped temporary inputs while retaining actual losses', () => {
