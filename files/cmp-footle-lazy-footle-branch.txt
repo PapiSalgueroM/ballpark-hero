@@ -1,0 +1,31 @@
+footle-lazy: 40 files, 348.2K gzipped. footle-branch: 40 files, 348.1K gzipped. Difference 162 bytes (0.16K).
+MOVED: AdBanner 1 file(s) 1083 bytes on footle-branch, 1 file(s) 1081 bytes on footle-lazy: -2 bytes
+MOVED: Celebration 1 file(s) 823 bytes on footle-branch, 1 file(s) 820 bytes on footle-lazy: -3 bytes
+MOVED: CelebrationStyles 1 file(s) 726 bytes on footle-branch, 1 file(s) 724 bytes on footle-lazy: -2 bytes
+MOVED: FlagImg 1 file(s) 2976 bytes on footle-branch, 1 file(s) 3087 bytes on footle-lazy: +111 bytes
+MOVED: Footle 1 file(s) 17200 bytes on footle-branch, 1 file(s) 17341 bytes on footle-lazy: +141 bytes
+MOVED: GameHelp 1 file(s) 788 bytes on footle-branch, 1 file(s) 787 bytes on footle-lazy: -1 bytes
+MOVED: GameNav 1 file(s) 1724 bytes on footle-branch, 1 file(s) 1721 bytes on footle-lazy: -3 bytes
+MOVED: GameNavbar 1 file(s) 3796 bytes on footle-branch, 1 file(s) 3793 bytes on footle-lazy: -3 bytes
+MOVED: GameSeoContent 1 file(s) 2287 bytes on footle-branch, 1 file(s) 2284 bytes on footle-lazy: -3 bytes
+MOVED: GameShell 1 file(s) 687 bytes on footle-branch, 1 file(s) 686 bytes on footle-lazy: -1 bytes
+MOVED: GiveUpButton 1 file(s) 547 bytes on footle-branch, 1 file(s) 543 bytes on footle-lazy: -4 bytes
+MOVED: HowToPlayPopover 1 file(s) 774 bytes on footle-branch, 1 file(s) 771 bytes on footle-lazy: -3 bytes
+MOVED: PostGameStats 1 file(s) 1177 bytes on footle-branch, 1 file(s) 1174 bytes on footle-lazy: -3 bytes
+MOVED: ReportQuestion 1 file(s) 1330 bytes on footle-branch, 1 file(s) 1326 bytes on footle-lazy: -4 bytes
+MOVED: ResultMoment 1 file(s) 1416 bytes on footle-branch, 1 file(s) 1413 bytes on footle-lazy: -3 bytes
+MOVED: ResultScreen 1 file(s) 1149 bytes on footle-branch, 1 file(s) 1145 bytes on footle-lazy: -4 bytes
+MOVED: ShareButtons 1 file(s) 4535 bytes on footle-branch, 1 file(s) 4532 bytes on footle-lazy: -3 bytes
+MOVED: arrow-left 1 file(s) 265 bytes on footle-branch, 1 file(s) 264 bytes on footle-lazy: -1 bytes
+MOVED: badges 1 file(s) 2293 bytes on footle-branch, 1 file(s) 2291 bytes on footle-lazy: -2 bytes
+MOVED: circle-help 1 file(s) 305 bytes on footle-branch, 1 file(s) 302 bytes on footle-lazy: -3 bytes
+MOVED: copy 1 file(s) 309 bytes on footle-branch, 1 file(s) 307 bytes on footle-lazy: -2 bytes
+MOVED: flag 1 file(s) 306 bytes on footle-branch, 1 file(s) 305 bytes on footle-lazy: -1 bytes
+MOVED: guideShape 1 file(s) 1691 bytes on footle-branch, 1 file(s) 1688 bytes on footle-lazy: -3 bytes
+MOVED: index 1 file(s) 239633 bytes on footle-branch, 1 file(s) 239612 bytes on footle-lazy: -21 bytes
+MOVED: medal 1 file(s) 389 bytes on footle-branch, 1 file(s) 386 bytes on footle-lazy: -3 bytes
+MOVED: star 1 file(s) 404 bytes on footle-branch, 1 file(s) 400 bytes on footle-lazy: -4 bytes
+MOVED: useDailyPuzzle 1 file(s) 1373 bytes on footle-branch, 1 file(s) 1371 bytes on footle-lazy: -2 bytes
+MOVED: useGameCompletion 1 file(s) 497 bytes on footle-branch, 1 file(s) 492 bytes on footle-lazy: -5 bytes
+MOVED: useRevealScroll 1 file(s) 798 bytes on footle-branch, 1 file(s) 797 bytes on footle-lazy: -1 bytes
+11 of 40 stems weigh the same on both sides; the lines above add up to 162 bytes.

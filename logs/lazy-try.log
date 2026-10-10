@@ -1,0 +1,7 @@
+lazyFlag: src/pages/Footle.tsx rewritten, 3 prints wait on a late import
+footle-lazy /footle: 40 files, 356577 bytes gzipped, 348.2K, rounds to 348K; the page drew 5472 characters
+footleFiles: footle-lazy written, 40 files in the window and 0 after it
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+  FAIL: /footle: 348K of gzipped JavaScript against a budget of 345K
+   /footle             348K gz over  40 files (budget 345K, 348.2K to the tenth)
+sweepWeight: 1 failure

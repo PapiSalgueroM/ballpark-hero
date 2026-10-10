@@ -1,0 +1,24 @@
+footle-lazy: 40 files, 348.2K gzipped. footle-attr: 39 files, 345.0K gzipped. Difference 3272 bytes (3.20K).
+MOVED: Celebration 1 file(s) 822 bytes on footle-attr, 1 file(s) 820 bytes on footle-lazy: -2 bytes
+ONLY ON footle-lazy: FlagImg-CTeISdfb.js 3087 bytes (3.01K)
+MOVED: Footle 1 file(s) 17150 bytes on footle-attr, 1 file(s) 17341 bytes on footle-lazy: +191 bytes
+MOVED: GameNav 1 file(s) 1720 bytes on footle-attr, 1 file(s) 1721 bytes on footle-lazy: +1 bytes
+MOVED: GameNavbar 1 file(s) 3792 bytes on footle-attr, 1 file(s) 3793 bytes on footle-lazy: +1 bytes
+MOVED: GameShell 1 file(s) 687 bytes on footle-attr, 1 file(s) 686 bytes on footle-lazy: -1 bytes
+MOVED: HowToPlayPopover 1 file(s) 772 bytes on footle-attr, 1 file(s) 771 bytes on footle-lazy: -1 bytes
+MOVED: ReportQuestion 1 file(s) 1325 bytes on footle-attr, 1 file(s) 1326 bytes on footle-lazy: +1 bytes
+MOVED: ResultMoment 1 file(s) 1412 bytes on footle-attr, 1 file(s) 1413 bytes on footle-lazy: +1 bytes
+MOVED: ResultScreen 1 file(s) 1146 bytes on footle-attr, 1 file(s) 1145 bytes on footle-lazy: -1 bytes
+MOVED: ShareButtons 1 file(s) 4533 bytes on footle-attr, 1 file(s) 4532 bytes on footle-lazy: -1 bytes
+MOVED: badges 1 file(s) 2292 bytes on footle-attr, 1 file(s) 2291 bytes on footle-lazy: -1 bytes
+MOVED: circle-help 1 file(s) 303 bytes on footle-attr, 1 file(s) 302 bytes on footle-lazy: -1 bytes
+MOVED: copy 1 file(s) 308 bytes on footle-attr, 1 file(s) 307 bytes on footle-lazy: -1 bytes
+MOVED: flag 1 file(s) 304 bytes on footle-attr, 1 file(s) 305 bytes on footle-lazy: +1 bytes
+MOVED: guideShape 1 file(s) 1690 bytes on footle-attr, 1 file(s) 1688 bytes on footle-lazy: -2 bytes
+MOVED: index 1 file(s) 239607 bytes on footle-attr, 1 file(s) 239612 bytes on footle-lazy: +5 bytes
+MOVED: medal 1 file(s) 388 bytes on footle-attr, 1 file(s) 386 bytes on footle-lazy: -2 bytes
+MOVED: star 1 file(s) 403 bytes on footle-attr, 1 file(s) 400 bytes on footle-lazy: -3 bytes
+MOVED: useDailyPuzzle 1 file(s) 1370 bytes on footle-attr, 1 file(s) 1371 bytes on footle-lazy: +1 bytes
+MOVED: useGameCompletion 1 file(s) 494 bytes on footle-attr, 1 file(s) 492 bytes on footle-lazy: -2 bytes
+MOVED: useRevealScroll 1 file(s) 796 bytes on footle-attr, 1 file(s) 797 bytes on footle-lazy: +1 bytes
+18 of 40 stems weigh the same on both sides; the lines above add up to 3272 bytes.

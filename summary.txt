@@ -1,0 +1,7 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+files-branch exit=0 5s | footleFiles: footle-branch written, 40 files in the window and 0 after it
+lazy-try exit=1 61s | sweepWeight: 1 failure
+files-attr exit=0 33s | footleFiles: footle-attr written, 39 files in the window and 0 after it
+cmp-lazy-attr exit=0 0s | 18 of 40 stems weigh the same on both sides; the lines above add up to 3272 bytes.
+cmp-lazy-branch exit=0 0s | 11 of 40 stems weigh the same on both sides; the lines above add up to 162 bytes.
+clean exit=0 0s | tree back at head
