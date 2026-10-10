@@ -1,0 +1,17 @@
+cmvar-historic exit=0 6s | simCmVar historic: actual review outcomes and full prior baseline passed.
+ledger exit=0 0s | simCmVarLedger: all 351 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+l-owedlive exit=1 0s | simCmVarLedger control owedlive: FIRED (CM_VAR_LIVE is true while the rates ledger still owes: recent-seasons)
+l-figure exit=1 0s | simCmVarLedger control figure: FIRED (espn-pl-2024-25: goalsRuledOut 48 is not printed in its literals)
+l-onesource exit=1 0s | simCmVarLedger control onesource: FIRED (league:seriea says yes and stands on fewer than two publishers)
+l-thin exit=1 0s | simCmVarLedger control thin: FIRED (goalsRuledOut is modelled but THIN (4 figure(s), none counted by two publishers))
+l-highest exit=1 0s | simCmVarLedger control highest: FIRED (goalReview is not the stricter count of a figure two publishers counted, over the engine figure (0.034141 against 0.031938))
+varscreen exit=0 28s |    Duration  27.82s (transform 1.93s, setup 70ms, collect 2.60s, tests 24.41s, environment 363ms, prepare 86ms)
+varlive exit=0 4s |    Duration  3.56s (transform 1.19s, setup 63ms, collect 1.50s, tests 1.19s, environment 346ms, prepare 147ms)
+varlive-on exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+tsc exit=0 69s | 
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simCmVar exit=0 80s | simCmVar normal: actual review outcomes and full prior baseline passed.
+simNoRivalNames exit=0 14s | No rival product names found. 0 findings.
+livemotion exit=0 46s |    Duration  46.11s (transform 1.93s, setup 130ms, collect 4.05s, tests 43.23s, environment 786ms, prepare 376ms)
+simHarnessAnchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
