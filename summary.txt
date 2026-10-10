@@ -1,0 +1,6 @@
+c-byeweek exit=1 34s | simCmLeagueBook: CONTROL byeweek FIRED: section law went red (365 failures) and no other section did (34s)
+book-default-s0 exit=0 34s | simCmLeagueBook: green, 7 sections, 5 careers x 2 seasons (34s)
+c-dropmine exit=1 33s | simCmLeagueBook: CONTROL dropmine FIRED: section law went red (5055 failures), with names, oldsave, doors as it must and no other section did (33s)
+c-twoman exit=1 34s | simCmLeagueBook: CONTROL twoman FIRED: section shapes went red (6 failures) and no other section did (35s)
+c-cleanside exit=1 25s | simCmLeagueBook: CONTROL cleanside FIRED: section law went red (130 failures) and no other section did (25s)
+book-full-base-s0 exit=0 109s | simCmLeagueBook: green, 7 sections, 27 careers x 2 seasons (108s)

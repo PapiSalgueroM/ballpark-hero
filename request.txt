@@ -1,0 +1,6 @@
+book-default-s0: node scripts/simCmLeagueBook.mjs
+c-byeweek: BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+book-full-base-s0: git worktree add -q /tmp/base1229 24f57a98 && BOOK_BASE=/tmp/base1229 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+c-dropmine: BOOK_CONTROL=dropmine node scripts/simCmLeagueBook.mjs
+c-twoman: BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-cleanside: BOOK_CONTROL=cleanside node scripts/simCmLeagueBook.mjs
