@@ -1,0 +1,31 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ledger: node scripts/simUsSeasonLedger.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+ctl-mlbyear: US_LEDGER_CONTROL=mlbyear node scripts/simUsSeasonLedger.mjs
+ctl-mlbsum: US_LEDGER_CONTROL=mlbsum node scripts/simUsSeasonLedger.mjs
+ctl-mlbid: US_LEDGER_CONTROL=mlbid node scripts/simUsSeasonLedger.mjs
+ctl-mlbspan: US_LEDGER_CONTROL=mlbspan node scripts/simUsSeasonLedger.mjs
+ctl-mlbown: US_LEDGER_CONTROL=mlbown node scripts/simUsSeasonLedger.mjs
+ctl-mlbdiv: US_LEDGER_CONTROL=mlbdiv node scripts/simUsSeasonLedger.mjs
+ctl-mlbformula: US_LEDGER_CONTROL=mlbformula node scripts/simUsSeasonLedger.mjs
+ctl-mlbrival: US_LEDGER_CONTROL=mlbrival node scripts/simUsSeasonLedger.mjs
+ctl-mlbplayoff: US_LEDGER_CONTROL=mlbplayoff node scripts/simUsSeasonLedger.mjs
+ctl-mlbscore: US_LEDGER_CONTROL=mlbscore node scripts/simUsSeasonLedger.mjs
+ctl-dash: US_LEDGER_CONTROL=dash node scripts/simUsSeasonLedger.mjs
+ctl-nosource: US_LEDGER_CONTROL=nosource node scripts/simUsSeasonLedger.mjs
+ctl-onesource: US_LEDGER_CONTROL=onesource node scripts/simUsSeasonLedger.mjs
+ctl-wiki: US_LEDGER_CONTROL=wiki node scripts/simUsSeasonLedger.mjs
+ctl-thincited: US_LEDGER_CONTROL=thincited node scripts/simUsSeasonLedger.mjs
+ctl-filled: US_LEDGER_CONTROL=filled node scripts/simUsSeasonLedger.mjs
+ctl-nhlyear: US_LEDGER_CONTROL=nhlyear node scripts/simUsSeasonLedger.mjs
+ctl-nhlgames: US_LEDGER_CONTROL=nhlgames node scripts/simUsSeasonLedger.mjs
+ctl-nhl84: US_LEDGER_CONTROL=nhl84 node scripts/simUsSeasonLedger.mjs
+ctl-nhlalign: US_LEDGER_CONTROL=nhlalign node scripts/simUsSeasonLedger.mjs
+ctl-nhllist: US_LEDGER_CONTROL=nhllist node scripts/simUsSeasonLedger.mjs
+ctl-nhlformula: US_LEDGER_CONTROL=nhlformula node scripts/simUsSeasonLedger.mjs
+ctl-nhlplayoff: US_LEDGER_CONTROL=nhlplayoff node scripts/simUsSeasonLedger.mjs
+ctl-nhlscore: US_LEDGER_CONTROL=nhlscore node scripts/simUsSeasonLedger.mjs
