@@ -1,0 +1,10 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDraftOrder.test.ts src/lib/gmDraftNight.test.ts src/lib/gmLotteryNight.test.ts src/lib/gmPicks.test.ts src/components/motion/LotteryReveal.test.tsx src/components/front-office-shared/GmLotteryCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+simRevealMoments: node scripts/simRevealMoments.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simInventedNames: node scripts/simInventedNames.mjs
