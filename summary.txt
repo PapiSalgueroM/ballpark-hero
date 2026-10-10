@@ -1,0 +1,1 @@
+simCareerHall exit=1 869s | simCareerHall: RED
