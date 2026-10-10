@@ -1,0 +1,11 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight exit=1 29s | sweepWeight: 1 failure
+vitest-new exit=0 5s |    Duration  4.69s (transform 2.25s, setup 209ms, collect 4.36s, tests 2.72s, environment 1.90s, prepare 350ms)
+tsc exit=0 66s | 
+seeds exit=0 9s | seed e exit=0 simCareerPreDraft [seed set e]: ALL GREEN
+reveal exit=0 7s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+vitest-old exit=0 55s |    Duration  54.13s (transform 4.33s, setup 410ms, collect 11.50s, tests 71.75s, environment 3.11s, prepare 713ms)
+rivals exit=0 11s | No rival product names found. 0 findings.
+livescores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+anchors exit=0 32s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+sweepgames exit=0 302s | Swept 183 routes across 1 engines and 1 viewports (183 checks). 0 findings.
