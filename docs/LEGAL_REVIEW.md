@@ -100,3 +100,38 @@ browser removes the local half.
 
 The other standing promise, access requests ("what do you have on me"): steps 1, 2 and the
 selects in 3 and 4 answer it, pasted into the reply.
+
+## Real fixture lists in Club Manager (added 2026-10-10, Release AT and Rounds 1184, 1213, 1225)
+
+What ships. From Release AT a new original Premier League career in Club Manager opens on the real 2026/27
+fixture list: which club plays which, home or away, in which matchday (the other lane's Round 1184,
+`src/data/clubManagerPremierFixtures2026.ts`). Round 1213 added the same for nine more leagues as data files with
+a receipt each under `scripts/data/` (Championship, La Liga, Ligue 2, Eredivisie, Primeira Liga, Serie A,
+Bundesliga, 2. Bundesliga, Super Lig); Round 1225 binds them to the game. Each list was read on two independent
+sources that agree row for row, and each receipt records both addresses and when they were read. Dates, kick
+off times and results are NOT copied: the game simulates them and says so on the calendar.
+
+What it is and is not. It is a list of facts: the order of matches of a public competition, the same kind of
+fact as a league table or a result. It carries no logo, crest, kit, photo, broadcast listing, ticket data or
+league artwork, and none of a publisher's text or layout: only club pairs by matchday, mapped to the names the
+game already uses. The site says nowhere that a league endorses it; the footer disclaimer stands.
+
+The working position (this is the lane lead's reasoning, not legal advice, and it is the owner's to overrule).
+Facts as such are not protected by copyright in the United States. In the European Union the Court of Justice
+held in Football Dataco v Yahoo (C-604/10, 2012) that a football fixture list is not protected by database
+copyright unless its selection or arrangement is its author's own intellectual creation, which the work of
+scheduling is not, and in the 2004 Fixtures Marketing and British Horseracing Board cases that the separate
+database right does not cover the investment in CREATING the data. Two leagues still print a rights notice on
+their published lists (both German lists read by Round 1213 say all rights to the list lie with the league
+body), and a league can always ask.
+
+The rule for the repo.
+1. Only the matchday order of club pairs is taken, from two sources, with a receipt. Never a publisher's page,
+   file, wording, dates grid or artwork, and never a list that only one source carries.
+2. The game says what is real (who plays whom in which matchday) and what is simulated (dates, times, results).
+3. If a league or a rights body asks for its list to be removed, it is removed the same day: each league is one
+   line in the registry of `src/lib/clubManagerFixtures.ts` and one data file, and a career that already opened
+   on a list keeps playing it from its own save (nothing is fetched at play time).
+4. OWNER DECISION OPEN, raised 2026-10-10: ship the two German lists with the others (the lead's default, on
+   the reasoning above), or hold those two until he says so. Until he answers they ship; the hold is one
+   registry line each.
