@@ -1,0 +1,25 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 41918[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net [33m 3007[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed') [33m 4113[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded') [33m 3138[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it [33m 2912[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 2544[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 9666[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 1411[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty [33m 3796[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion [33m 873[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 5313[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the whistle: its review opens and closes before the half ends [33m 1844[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 3298[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m12 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 16:41:04
+[2m   Duration [22m 47.32s[2m (transform 2.98s, setup 71ms, collect 3.79s, tests 41.92s, environment 598ms, prepare 194ms)[22m
+
