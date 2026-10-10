@@ -1,3 +1,4 @@
+import { rollCareerChance } from "./careerChanceWheel";
 /* ────────────────────────────────────────────────────────────────────────────
    soccerCareerLife.ts, the life layer for Soccer Career (Round 49)
    Personalities, agents, and the expanded off-pitch event catalog (ids 200+).
@@ -263,7 +264,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "The warm-up DJ plays your song at halftime. The crowd starts chanting for the backflip you posted last summer.",
       category: "life", choices: [
         { label: "Give the people the flip", emoji: "🤸", color: "bg-pink-600", consequence: "Followers +1.5M, 15% chance of a tweaked hamstring (Pace -1)",
-          apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 1.5) * 100) / 100; if (Math.random() < 0.15) { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "🤸 Backflip landed. Hamstring did not. Pace -1"]; } else { s.events = [...s.events, "🤸 Halftime backflip. The clip hit every platform"]; } return s; } },
+          apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 1.5) * 100) / 100; if (rollCareerChance(s, 0.15, "The Halftime Backflip", "Hamstring tweaked", "Backflip lands safely")) { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "🤸 Backflip landed. Hamstring did not. Pace -1"]; } else { s.events = [...s.events, "🤸 Halftime backflip. The clip hit every platform"]; } return s; } },
         { label: "Point at the scoreboard instead", emoji: "🧠", color: "bg-muted", consequence: "Professional. Boring. Safe",
           apply: s => { s.events = [...s.events, "🤸 Declined the backflip. The crowd booed lovingly"]; return s; } },
       ] });
@@ -343,7 +344,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "You spent the entire offseason at a mountain monastery. No phone. No boots. Nobody knew where you were, including your club.",
       category: "life", choices: [
         { label: "Return enlightened", emoji: "🧘", color: "bg-purple-600", consequence: "60%: all stats +1 next season. 40%: Pace -1, you mostly learned soup",
-          apply: s => { if (Math.random() < 0.6) { s.statBoostNextSeason = { pace: 1, shooting: 1, passing: 1, dribbling: 1, defending: 1, physical: 1 }; s.events = [...s.events, "⛰️ Came back from the monastery visibly sharper. Spooky"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "⛰️ The monastery taught you inner peace and excellent soup. Pace -1"]; } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.6, "The Monastery Offseason", "Sharper after the retreat", "Pace drops by 1")) { s.statBoostNextSeason = { pace: 1, shooting: 1, passing: 1, dribbling: 1, defending: 1, physical: 1 }; s.events = [...s.events, "⛰️ Came back from the monastery visibly sharper. Spooky"]; } else { s.pace = clamp(s.pace - 1, 20, 99); s.events = [...s.events, "⛰️ The monastery taught you inner peace and excellent soup. Pace -1"]; } return s; } },
         { label: "Leave after a week, the silence was loud", emoji: "🔔", color: "bg-muted", consequence: "Morale +3, nothing else changes, the monks send a card",
           apply: s => { s.morale = clamp(s.morale + 3, 0, 100); log(s, "🔔 Lasted a week at the monastery. The card they sent is on your fridge"); return s; } },
       ] });
@@ -353,7 +354,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "You arrived at training in a full-length cape. When asked why, you said 'the wind'. You have worn it every day since.",
       category: "life", choices: [
         { label: "Commit to the cape", emoji: "🦇", color: "bg-purple-600", consequence: "Followers +800k, coin flip on public opinion",
-          apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.8) * 100) / 100; if (Math.random() < 0.5) { s.popularity = clamp(s.popularity + 6, 0, 100); s.events = [...s.events, "🦇 The cape era is beloved. Fans wear them to matches"]; } else { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "🦇 The cape era divides the nation. You do not care"]; } return s; } },
+          apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.8) * 100) / 100; if (rollCareerChance(s, 0.5, "The Cape Era", "The cape is loved", "The cape divides opinion")) { s.popularity = clamp(s.popularity + 6, 0, 100); s.events = [...s.events, "🦇 The cape era is beloved. Fans wear them to matches"]; } else { s.popularity = clamp(s.popularity - 3, 0, 100); s.events = [...s.events, "🦇 The cape era divides the nation. You do not care"]; } return s; } },
         { label: "Retire the cape", emoji: "🧥", color: "bg-muted", consequence: "The mystery deepens",
           apply: s => { s.events = [...s.events, "🧥 The cape vanished as suddenly as it appeared"]; return s; } },
       ] });
@@ -371,7 +372,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       { label: "Apologize with a gift", emoji: "🎁", color: "bg-blue-600", consequence: "A luxury barber voucher: -€20k, Morale +3",
         apply: s => { s.netWorth = Math.round((s.netWorth - 0.02) * 100) / 100; s.morale = clamp(s.morale + 3, 0, 100); s.events = [...s.events, "🎁 Apologized for the haircut text with a barber voucher. He used it"]; return s; } },
       { label: "Hunt the leaker", emoji: "🕵️", color: "bg-red-600", consequence: "50%: find them (Morale +6). 50%: paranoia (Morale -6)",
-        apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "🕵️ Found the group chat leaker. It was the physio"]; } else { s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "🕵️ Never found the leaker. You trust no one now"]; } return s; } },
+        apply: s => { if (rollCareerChance(s, 0.5, "The Group Chat Leak", "Leaker found", "Leaker not found")) { s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "🕵️ Found the group chat leaker. It was the physio"]; } else { s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "🕵️ Never found the leaker. You trust no one now"]; } return s; } },
     ] });
 
   push({ id: 221, cooldown: COOLDOWN.once, emoji: "🎤", title: "Karaoke Night Leak",
@@ -407,7 +408,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     description: "The club mascot challenged you to a race at halftime and has been talking trash on the club's official account all week.",
     category: "life", choices: [
       { label: "Race the mascot", emoji: "🏃", color: "bg-amber-600", consequence: "70%: win, +400k followers. 30%: lose to a person in a giant bird suit",
-        apply: s => { if (Math.random() < 0.7) { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.4) * 100) / 100; s.events = [...s.events, "🏃 Beat the mascot in the halftime race. Order restored"]; } else { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.8) * 100) / 100; s.popularity = clamp(s.popularity - 2, 0, 100); s.events = [...s.events, "🦅 Lost a footrace to the mascot. The internet will never let go"]; } return s; } },
+        apply: s => { if (rollCareerChance(s, 0.7, "Mascot Beef", "You win the race", "The mascot wins")) { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.4) * 100) / 100; s.events = [...s.events, "🏃 Beat the mascot in the halftime race. Order restored"]; } else { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.8) * 100) / 100; s.popularity = clamp(s.popularity - 2, 0, 100); s.events = [...s.events, "🦅 Lost a footrace to the mascot. The internet will never let go"]; } return s; } },
       { label: "Ignore the bird", emoji: "🙄", color: "bg-muted", consequence: "The mascot declares victory by forfeit",
         apply: s => { s.events = [...s.events, "🙄 Refused the mascot race. It did a victory lap anyway"]; return s; } },
     ] });
@@ -438,7 +439,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "Your esports team's season just wrapped. The group chat has been suspiciously quiet.",
       category: "life", choices: [
         { label: "Check the standings", emoji: "📊", color: "bg-purple-600", consequence: "40%: they won it all (+€2M). 60%: they folded (-€300k more)",
-          apply: s => { setFlag(s, "esports", 2); if (Math.random() < 0.4) { s.netWorth = Math.round((s.netWorth + 2) * 100) / 100; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.events = [...s.events, "🏆 Your esports team won the whole thing! +€2M"]; } else { s.netWorth = Math.round((s.netWorth - 0.3) * 100) / 100; s.events = [...s.events, "📉 The esports org folded. The jerseys are collectors items now"]; } return s; } },
+          apply: s => { setFlag(s, "esports", 2); if (rollCareerChance(s, 0.4, "Esports Season Results", "Your team wins", "The organisation folds")) { s.netWorth = Math.round((s.netWorth + 2) * 100) / 100; s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 0.5) * 100) / 100; s.events = [...s.events, "🏆 Your esports team won the whole thing! +€2M"]; } else { s.netWorth = Math.round((s.netWorth - 0.3) * 100) / 100; s.events = [...s.events, "📉 The esports org folded. The jerseys are collectors items now"]; } return s; } },
         { label: "Sell your stake before the results post", emoji: "💸", color: "bg-muted", consequence: "Net worth +€500k back, you never find out how they did",
           apply: s => { setFlag(s, "esports", 2); money(s, 0.5); log(s, "💸 Sold the esports org the night before the final. You have never checked the score"); return s; } },
       ] });
@@ -457,7 +458,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
     description: "A wellness influencer convinces half the squad that an all-dairy recovery protocol is the future. There is a group discount.",
     category: "life", choices: [
       { label: "Try the protocol", emoji: "🥛", color: "bg-amber-600", consequence: "50%: Physical +1 next season somehow. 50%: catastrophic gut week, Morale -6",
-        apply: s => { if (Math.random() < 0.5) { s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.events = [...s.events, "🥛 The milk protocol worked?? Nutritionists are furious"]; } else { s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "🥛 The milk protocol was a war crime against your stomach"]; } return s; } },
+        apply: s => { if (rollCareerChance(s, 0.5, "The Milk Protocol", "The protocol works", "The protocol goes badly")) { s.statBoostNextSeason = { ...s.statBoostNextSeason, physical: (s.statBoostNextSeason.physical || 0) + 1 }; s.events = [...s.events, "🥛 The milk protocol worked?? Nutritionists are furious"]; } else { s.morale = clamp(s.morale - 6, 0, 100); s.events = [...s.events, "🥛 The milk protocol was a war crime against your stomach"]; } return s; } },
       { label: "Trust the club nutritionist", emoji: "🥗", color: "bg-emerald-600", consequence: "Sensible: Morale +2",
         apply: s => { s.morale = clamp(s.morale + 2, 0, 100); s.events = [...s.events, "🥗 Declined the milk protocol. The nutritionist wept with joy"]; return s; } },
     ] });
@@ -488,7 +489,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "Your hometown council is voting on a statue of you outside the stadium where you played as a kid.",
       category: "life", choices: [
         { label: "Attend the vote", emoji: "🗿", color: "bg-amber-600", consequence: "60%: it passes, Legacy +8. 40%: rejected 5 votes to 4, ouch",
-          apply: s => { if (Math.random() < 0.6) { s.integrityBonus += 8; s.morale = clamp(s.morale + 8, 0, 100); s.events = [...s.events, "🗿 The statue vote passed! Bronze you goes up next spring"]; } else { s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🗿 The statue vote failed 5 to 4. Councilman Dave will be hearing about this"]; } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.6, "The Statue Vote", "Statue vote passes", "Statue vote fails")) { s.integrityBonus += 8; s.morale = clamp(s.morale + 8, 0, 100); s.events = [...s.events, "🗿 The statue vote passed! Bronze you goes up next spring"]; } else { s.morale = clamp(s.morale - 5, 0, 100); s.events = [...s.events, "🗿 The statue vote failed 5 to 4. Councilman Dave will be hearing about this"]; } return s; } },
         { label: "Ask them to fund youth pitches instead", emoji: "⚽", color: "bg-emerald-600", consequence: "Integrity +10, the real legacy",
           apply: s => { s.integrityBonus += 10; s.events = [...s.events, "⚽ Redirected the statue budget to youth pitches. Better than bronze"]; return s; } },
       ] });
@@ -541,7 +542,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "An envelope appears in your locker from the teammate you helped.",
       category: "life", choices: [
         { label: "Open it", emoji: "✉️", color: "bg-blue-600", consequence: "65%: €400k and a thank you letter. 35%: a signed shirt and an apology",
-          apply: s => { setFlag(s, "teammateLoan", 2); if (Math.random() < 0.65) { s.netWorth = Math.round((s.netWorth + 0.4) * 100) / 100; s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "💌 He paid back double with a handwritten letter. Faith in people: restored"]; } else { s.morale = clamp(s.morale - 4, 0, 100); s.integrityBonus += 2; s.events = [...s.events, "💌 He could not pay it back. The signed shirt hangs in your gym anyway"]; } return s; } },
+          apply: s => { setFlag(s, "teammateLoan", 2); if (rollCareerChance(s, 0.65, "The Repayment", "Repaid with a letter", "No repayment")) { s.netWorth = Math.round((s.netWorth + 0.4) * 100) / 100; s.morale = clamp(s.morale + 6, 0, 100); s.events = [...s.events, "💌 He paid back double with a handwritten letter. Faith in people: restored"]; } else { s.morale = clamp(s.morale - 4, 0, 100); s.integrityBonus += 2; s.events = [...s.events, "💌 He could not pay it back. The signed shirt hangs in your gym anyway"]; } return s; } },
         { label: "Hand it back unopened, call it a gift", emoji: "🎁", color: "bg-emerald-600", consequence: "Integrity +4, Morale +3, he has a quiet moment in the car park",
           apply: s => { setFlag(s, "teammateLoan", 2); s.integrityBonus += 4; s.morale = clamp(s.morale + 3, 0, 100); log(s, "🎁 Gave the envelope back unopened. He did not say anything. He did not need to"); return s; } },
       ] });
@@ -601,7 +602,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "A massive reality dating show wants you as the celebrity single next season. Filming is during the offseason. Your agent has opinions. Everyone has opinions.",
       category: "life", choices: [
         { label: "Do the show", emoji: "🌹", color: "bg-pink-600", consequence: "Followers +2M, Popularity +8, 50/50 you leave with a relationship",
-          apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 2) * 100) / 100; s.popularity = clamp(s.popularity + 8, 0, 100); if (Math.random() < 0.5) { s.hasRelationship = true; s.morale = clamp(s.morale + 8, 0, 100); s.events = [...s.events, "🌹 Went on the dating show and actually found someone. Plot twist"]; } else { s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "🌹 The dating show ended in a spectacular finale argument. Great TV"]; } return s; } },
+          apply: s => { s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 2) * 100) / 100; s.popularity = clamp(s.popularity + 8, 0, 100); if (rollCareerChance(s, 0.5, "Reality Dating Show Invite", "You find a relationship", "Finale argument")) { s.hasRelationship = true; s.morale = clamp(s.morale + 8, 0, 100); s.events = [...s.events, "🌹 Went on the dating show and actually found someone. Plot twist"]; } else { s.morale = clamp(s.morale - 3, 0, 100); s.events = [...s.events, "🌹 The dating show ended in a spectacular finale argument. Great TV"]; } return s; } },
         { label: "Hard pass", emoji: "🚫", color: "bg-muted", consequence: "Your love life stays off the air",
           apply: s => { s.events = [...s.events, "🚫 Declined the dating show. The producers still email monthly"]; return s; } },
       ] });
@@ -673,7 +674,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "A teammate launches his own cryptocurrency and corners you at lunch about getting in early. His pitch deck is a napkin.",
       category: "life", choices: [
         { label: "Put in €500k", emoji: "🪙", color: "bg-red-600", consequence: "25%: it 3x somehow. 75%: the napkin was the whole plan",
-          apply: s => { if (Math.random() < 0.25) { s.netWorth = Math.round((s.netWorth + 1) * 100) / 100; s.events = [...s.events, "🪙 The teammate coin 3x'd. Nobody understands why, including him"]; } else { s.netWorth = Math.round((s.netWorth - 0.5) * 100) / 100; s.events = [...s.events, "🪙 The teammate coin vanished along with the napkin. -€500k"]; } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.25, "The Teammate Coin", "Coin pays out", "Coin loses the investment")) { s.netWorth = Math.round((s.netWorth + 1) * 100) / 100; s.events = [...s.events, "🪙 The teammate coin 3x'd. Nobody understands why, including him"]; } else { s.netWorth = Math.round((s.netWorth - 0.5) * 100) / 100; s.events = [...s.events, "🪙 The teammate coin vanished along with the napkin. -€500k"]; } return s; } },
         { label: "Decline, gently", emoji: "🧠", color: "bg-emerald-600", consequence: "Integrity +2, he still calls you 'paper hands' at training",
           apply: s => { s.integrityBonus += 2; s.events = [...s.events, "🧠 Passed on the teammate coin. Your accountant sends a fruit basket"]; return s; } },
       ] });
@@ -703,7 +704,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         { label: "Ask her, gently, to stop", emoji: "🙏", color: "bg-muted", consequence: "Morale -3, she posts about that too",
           apply: s => { s.morale = clamp(s.morale - 3, 0, 100); followers(s, 0.1); log(s, "🙏 Asked your mum to log off. Her post about it did numbers"); return s; } },
         { label: "Hand her the account for a week", emoji: "🔑", color: "bg-pink-600", consequence: "Coin flip: the internet falls in love (Followers +1M, Popularity +3) or she replies to a sponsor (Sponsorship -€100k/yr, Morale -2)",
-          apply: s => { if (Math.random() < 0.5) { followers(s, 1); s.popularity = clamp(s.popularity + 3, 0, 100); log(s, "🔑 Mum week on the account. Best engagement of your career"); } else { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) - 0.1) * 100) / 100; s.morale = clamp(s.morale - 2, 0, 100); log(s, "🔑 Mum told a sponsor their boots looked cheap. They agreed, then left"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, "Your Mum Is In The Comments", "Fans love the account takeover", "Sponsor leaves")) { followers(s, 1); s.popularity = clamp(s.popularity + 3, 0, 100); log(s, "🔑 Mum week on the account. Best engagement of your career"); } else { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) - 0.1) * 100) / 100; s.morale = clamp(s.morale - 2, 0, 100); log(s, "🔑 Mum told a sponsor their boots looked cheap. They agreed, then left"); } return s; } },
       ] });
   }
 
@@ -712,7 +713,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "Your younger brother has a trial at your club's academy on Tuesday. Nobody at the club has said the word nepotism out loud. Everybody at the club is thinking it.",
       category: "life", choices: [
         { label: "Stay completely out of it", emoji: "🤐", color: "bg-blue-600", consequence: "Integrity +3. 50%: he earns it himself (Morale +6). 50%: he does not, and blames you anyway (Morale -3)",
-          apply: s => { setFlag(s, "siblingTrial", 1); s.integrityBonus += 3; if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); log(s, "🤐 Your brother earned his academy place with nobody's help. Family dinner was loud"); } else { s.morale = clamp(s.morale - 3, 0, 100); log(s, "🤐 Your brother missed out at the trial. He has decided it was your fault"); } return s; } },
+          apply: s => { setFlag(s, "siblingTrial", 1); s.integrityBonus += 3; if (rollCareerChance(s, 0.5, "The Sibling Trial", "Your brother earns a place", "Your brother misses out")) { s.morale = clamp(s.morale + 6, 0, 100); log(s, "🤐 Your brother earned his academy place with nobody's help. Family dinner was loud"); } else { s.morale = clamp(s.morale - 3, 0, 100); log(s, "🤐 Your brother missed out at the trial. He has decided it was your fault"); } return s; } },
         { label: "Put in a quiet word with the academy head", emoji: "🗣️", color: "bg-amber-600", consequence: "He gets a contract, Integrity -3, Morale -2, the dressing room has a new nickname for you",
           apply: s => { setFlag(s, "siblingTrial", 1); s.integrityBonus -= 3; s.morale = clamp(s.morale - 2, 0, 100); s.popularity = clamp(s.popularity - 1, 0, 100); log(s, "🗣️ Your brother got his contract. The squad calls you Mr Agent now"); return s; } },
         { label: "Tell him to trial somewhere else", emoji: "🚗", color: "bg-muted", consequence: "Integrity +2, Morale -4, he thrives two towns over and your mum takes his side",
@@ -725,7 +726,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "Your grandad has sat in the same seat at his club for forty one years. You play them on Saturday. He has made it very clear whose scarf he is wearing, and it is not yours.",
       category: "life", choices: [
         { label: "Score and go find him in the crowd", emoji: "🎯", color: "bg-emerald-600", consequence: "50%: you score and the clip is everywhere (Followers +600k, Morale +6). 50%: you do not, and he brings it up every Christmas (Morale -3)",
-          apply: s => { if (Math.random() < 0.5) { followers(s, 0.6); s.morale = clamp(s.morale + 6, 0, 100); log(s, "🎯 Scored against grandad's club and ran straight to his seat. He pretended not to smile"); } else { s.morale = clamp(s.morale - 3, 0, 100); log(s, "🎯 Did not score against grandad's club. He has mentioned it four times already"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, "Grandad's Club", "You score against the club", "You do not score")) { followers(s, 0.6); s.morale = clamp(s.morale + 6, 0, 100); log(s, "🎯 Scored against grandad's club and ran straight to his seat. He pretended not to smile"); } else { s.morale = clamp(s.morale - 3, 0, 100); log(s, "🎯 Did not score against grandad's club. He has mentioned it four times already"); } return s; } },
         { label: "Get him a seat in the family box", emoji: "🎟️", color: "bg-blue-600", consequence: "He refuses, politely. Integrity +1, Morale +2",
           apply: s => { s.integrityBonus += 1; s.morale = clamp(s.morale + 2, 0, 100); log(s, "🎟️ Offered grandad the family box. He stayed in his seat with his flask"); return s; } },
         { label: "Sign a shirt for his whole pub", emoji: "✍️", color: "bg-amber-600", consequence: "Popularity +3, Followers +200k, the pub still sings against you",
@@ -753,7 +754,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "A drinks brand wants your face on a can. The flavour is called Blue. Not blueberry. Blue. The money is very real.",
       category: "life", choices: [
         { label: "Sign the deal", emoji: "🥤", color: "bg-emerald-600", consequence: "Sponsorship +€250k/yr. 25%: a product recall (Popularity -5, Morale -3, no deal)",
-          apply: s => { setFlag(s, "energyDrink", 1); if (Math.random() < 0.25) { s.popularity = clamp(s.popularity - 5, 0, 100); s.morale = clamp(s.morale - 3, 0, 100); log(s, "🥤 Blue was recalled in nine countries. Your face was on every can"); } else { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 0.25) * 100) / 100; log(s, "🥤 Signed the Blue deal. You still do not know what it tastes of"); } return s; } },
+          apply: s => { setFlag(s, "energyDrink", 1); if (rollCareerChance(s, 0.25, "The Energy Drink Pitch", "Product recall", "Sponsorship succeeds")) { s.popularity = clamp(s.popularity - 5, 0, 100); s.morale = clamp(s.morale - 3, 0, 100); log(s, "🥤 Blue was recalled in nine countries. Your face was on every can"); } else { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 0.25) * 100) / 100; log(s, "🥤 Signed the Blue deal. You still do not know what it tastes of"); } return s; } },
         { label: "Counter with a water brand instead", emoji: "💧", color: "bg-blue-600", consequence: "Sponsorship +€100k/yr, Integrity +2, the nutritionist frames the contract",
           apply: s => { setFlag(s, "energyDrink", 1); s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) + 0.1) * 100) / 100; s.integrityBonus += 2; log(s, "💧 Turned Blue into a water deal. Less money, more teeth"); return s; } },
         { label: "Pass", emoji: "✋", color: "bg-muted", consequence: "Blue stays unexplained",
@@ -766,7 +767,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "Your bank has frozen your card over €80k spent at a garden centre at three on a Tuesday afternoon. You were at training. Your dad has gone very quiet in the family chat.",
       category: "life", choices: [
         { label: "Report it as fraud", emoji: "🏦", color: "bg-blue-600", consequence: "50%: a real fraud, refunded in full (Morale +2). 50%: it was your dad, and now the bank wants a word with him (Net worth -€80k, Morale -5)",
-          apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 2, 0, 100); log(s, "🏦 The garden centre charge was a cloned card. Refunded by Friday"); } else { money(s, -0.08); s.morale = clamp(s.morale - 5, 0, 100); log(s, "🏦 Reported the garden centre charge as fraud. It was your dad. The bank rang him at dinner"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, "The Garden Centre Charge", "Fraud charge refunded", "The charge was your dad")) { s.morale = clamp(s.morale + 2, 0, 100); log(s, "🏦 The garden centre charge was a cloned card. Refunded by Friday"); } else { money(s, -0.08); s.morale = clamp(s.morale - 5, 0, 100); log(s, "🏦 Reported the garden centre charge as fraud. It was your dad. The bank rang him at dinner"); } return s; } },
         { label: "Call home first", emoji: "📞", color: "bg-emerald-600", consequence: "Net worth -€80k, Morale +3, there is a pond now and one of the fish has your name",
           apply: s => { money(s, -0.08); s.morale = clamp(s.morale + 3, 0, 100); log(s, "📞 Called home about the garden centre. Your dad built a pond. The biggest fish has your name"); return s; } },
         { label: "Unfreeze the card and never mention it", emoji: "🤐", color: "bg-muted", consequence: "Net worth -€80k, Integrity +1, the pond goes in and nobody says a word",
@@ -781,7 +782,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         { label: "Fire him, hire the teammate's", emoji: "🧮", color: "bg-emerald-600", consequence: "Net worth +€200k (the overcharge clawed back), Morale +3",
           apply: s => { money(s, 0.2); s.morale = clamp(s.morale + 3, 0, 100); log(s, "🧮 Fired the accountant and clawed back the retainer. The new one charges in actual money"); return s; } },
         { label: "Confront him and renegotiate", emoji: "🗣️", color: "bg-amber-600", consequence: "50%: he refunds €100k. 50%: he quits in tax season (Net worth -€100k, Morale -5)",
-          apply: s => { if (Math.random() < 0.5) { money(s, 0.1); log(s, "🗣️ The accountant refunded a year of the retainer and found a new word for it"); } else { money(s, -0.1); s.morale = clamp(s.morale - 5, 0, 100); log(s, "🗣️ The accountant quit in March with your paperwork in his boot. The fine was yours"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, "The Accountant's Spreadsheet", "Accountant refunds the retainer", "Accountant quits")) { money(s, 0.1); log(s, "🗣️ The accountant refunded a year of the retainer and found a new word for it"); } else { money(s, -0.1); s.morale = clamp(s.morale - 5, 0, 100); log(s, "🗣️ The accountant quit in March with your paperwork in his boot. The fine was yours"); } return s; } },
         { label: "Leave it, he knows where everything is", emoji: "🤷", color: "bg-muted", consequence: "Morale -2, the retainer stays unexplained",
           apply: s => { s.morale = clamp(s.morale - 2, 0, 100); log(s, "🤷 Kept the expensive accountant. The strategy remains a mystery"); return s; } },
       ] });
@@ -795,7 +796,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         { label: "Come off and do the full protocol", emoji: "🩺", color: "bg-blue-600", consequence: "Morale -1, Integrity +2, back in a week with a clear head",
           apply: s => { s.morale = clamp(s.morale - 1, 0, 100); s.integrityBonus += 2; log(s, "🩺 Came off and did the full head injury protocol. Back a week later, clear as a bell"); return s; } },
         { label: "Talk your way into the second half", emoji: "🤕", color: "bg-red-600", consequence: "65%: you were fine (Morale +2). 35%: the fog lasts a month (Passing -1, Morale -6)",
-          apply: s => { if (Math.random() < 0.65) { s.morale = clamp(s.morale + 2, 0, 100); log(s, "🤕 Talked the doctor round and played the second half. Got away with it this time"); } else { s.passing = clamp(s.passing - 1, 20, 99); s.morale = clamp(s.morale - 6, 0, 100); log(s, "🤕 Played on after the head knock. The fog took a month to lift. Passing -1"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.65, "The Head Knock", "You play without a setback", "The head knock has a cost")) { s.morale = clamp(s.morale + 2, 0, 100); log(s, "🤕 Talked the doctor round and played the second half. Got away with it this time"); } else { s.passing = clamp(s.passing - 1, 20, 99); s.morale = clamp(s.morale - 6, 0, 100); log(s, "🤕 Played on after the head knock. The fog took a month to lift. Passing -1"); } return s; } },
         { label: "Come off, then talk about it publicly", emoji: "📣", color: "bg-emerald-600", consequence: "Morale -4 (a month of interviews about it), Integrity +3, Followers +200k",
           apply: s => { s.morale = clamp(s.morale - 4, 0, 100); s.integrityBonus += 3; followers(s, 0.2); log(s, "📣 Came off with the head knock and said why on camera. Youth coaches keep sending you thank yous"); return s; } },
       ] });
@@ -808,9 +809,9 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         { label: "Tell the physio today", emoji: "🏥", color: "bg-blue-600", consequence: "Two weeks out: Morale -3, nothing lasting",
           apply: s => { s.morale = clamp(s.morale - 3, 0, 100); log(s, "🏥 Owned up to the hamstring. Two weeks on the bike, and the physio's look"); return s; } },
         { label: "Play through it", emoji: "🏃", color: "bg-amber-600", consequence: "60%: it settles (Morale +3). 40%: it goes (Pace -1, Morale -6)",
-          apply: s => { if (Math.random() < 0.6) { s.morale = clamp(s.morale + 3, 0, 100); log(s, "🏃 Played through the niggle and it faded. Nobody ever knew"); } else { s.pace = clamp(s.pace - 1, 20, 99); s.morale = clamp(s.morale - 6, 0, 100); log(s, "🏃 The hamstring went at full sprint in front of everyone. Pace -1"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.6, "The Niggle", "The niggle settles", "The hamstring goes")) { s.morale = clamp(s.morale + 3, 0, 100); log(s, "🏃 Played through the niggle and it faded. Nobody ever knew"); } else { s.pace = clamp(s.pace - 1, 20, 99); s.morale = clamp(s.morale - 6, 0, 100); log(s, "🏃 The hamstring went at full sprint in front of everyone. Pace -1"); } return s; } },
         { label: "Tape it and tell nobody, including yourself", emoji: "🩹", color: "bg-red-600", consequence: "70%: fine (Morale +2). 30%: it tears (Pace -1, Physical -1)",
-          apply: s => { if (Math.random() < 0.7) { s.morale = clamp(s.morale + 2, 0, 100); log(s, "🩹 Taped the hamstring for a month and got away with it. Denial is a tactic"); } else { s.pace = clamp(s.pace - 1, 20, 99); s.physical = clamp(s.physical - 1, 20, 99); log(s, "🩹 The taped hamstring tore properly. The physio did not say I told you so. He did not have to"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.7, "The Niggle", "The tape holds", "The hamstring tears")) { s.morale = clamp(s.morale + 2, 0, 100); log(s, "🩹 Taped the hamstring for a month and got away with it. Denial is a tactic"); } else { s.pace = clamp(s.pace - 1, 20, 99); s.physical = clamp(s.physical - 1, 20, 99); log(s, "🩹 The taped hamstring tore properly. The physio did not say I told you so. He did not have to"); } return s; } },
       ] });
   }
 
@@ -821,7 +822,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         { label: "Play it safe, get through ninety", emoji: "🧘", color: "bg-blue-600", consequence: "Morale +4, Integrity +1",
           apply: s => { s.morale = clamp(s.morale + 4, 0, 100); s.integrityBonus += 1; log(s, "🧘 Ninety careful minutes on the comeback. The leg held and so did you"); return s; } },
         { label: "Go full throttle from the first whistle", emoji: "⚡", color: "bg-red-600", consequence: "65%: Morale +8, Shooting +1 and Pace +1 next season. 35%: the leg says no (Pace -1, Morale -6)",
-          apply: s => { if (Math.random() < 0.65) { s.morale = clamp(s.morale + 8, 0, 100); bump(s, "shooting", 1); bump(s, "pace", 1); log(s, "⚡ Came back like you had never left. The physio watched through his fingers"); } else { s.pace = clamp(s.pace - 1, 20, 99); s.morale = clamp(s.morale - 6, 0, 100); log(s, "⚡ Went full throttle on the comeback and the leg said no. Pace -1"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.65, "The Comeback Game", "Comeback goes well", "The leg says no")) { s.morale = clamp(s.morale + 8, 0, 100); bump(s, "shooting", 1); bump(s, "pace", 1); log(s, "⚡ Came back like you had never left. The physio watched through his fingers"); } else { s.pace = clamp(s.pace - 1, 20, 99); s.morale = clamp(s.morale - 6, 0, 100); log(s, "⚡ Went full throttle on the comeback and the leg said no. Pace -1"); } return s; } },
         { label: "Dedicate the night to the medical team", emoji: "🩺", color: "bg-emerald-600", consequence: "Integrity +3, Morale +5, the physios get a standing ovation",
           apply: s => { s.integrityBonus += 3; s.morale = clamp(s.morale + 5, 0, 100); log(s, "🩺 Brought the physios out at the end. The stadium clapped them longer than you"); return s; } },
       ] });
@@ -833,9 +834,9 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "The squad Secret Santa has a €20 limit, and you have drawn the one teammate who has not spoken to you since a training ground tackle in August.",
       category: "life", choices: [
         { label: "Find him something genuinely thoughtful", emoji: "🎁", color: "bg-emerald-600", consequence: "Morale +4. 60%: he thaws (Integrity +2)",
-          apply: s => { s.morale = clamp(s.morale + 4, 0, 100); if (Math.random() < 0.6) { s.integrityBonus += 2; log(s, "🎁 Got him a framed photo from his first club. He shook your hand at the Christmas do"); } else { log(s, "🎁 Got him something thoughtful. He said thanks. Just thanks"); } return s; } },
+          apply: s => { s.morale = clamp(s.morale + 4, 0, 100); if (rollCareerChance(s, 0.6, "Secret Santa", "The thoughtful gift helps", "A quiet thanks")) { s.integrityBonus += 2; log(s, "🎁 Got him a framed photo from his first club. He shook your hand at the Christmas do"); } else { log(s, "🎁 Got him something thoughtful. He said thanks. Just thanks"); } return s; } },
         { label: "A joke gift about the tackle", emoji: "😂", color: "bg-amber-600", consequence: "50%: the room loses it (Morale +6). 50%: he does not laugh (Morale -4)",
-          apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); log(s, "😂 Gave him shin pads with August's date on them. Even he laughed"); } else { s.morale = clamp(s.morale - 4, 0, 100); log(s, "😂 Gave him shin pads with August's date on them. He did not laugh. Nobody did after that"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, "Secret Santa", "The joke lands", "The joke does not land")) { s.morale = clamp(s.morale + 6, 0, 100); log(s, "😂 Gave him shin pads with August's date on them. Even he laughed"); } else { s.morale = clamp(s.morale - 4, 0, 100); log(s, "😂 Gave him shin pads with August's date on them. He did not laugh. Nobody did after that"); } return s; } },
         { label: "Ignore the limit and buy him a watch", emoji: "⌚", color: "bg-red-600", consequence: "Net worth -€20k, Popularity +1, Integrity -1, every other €20 gift now looks worse",
           apply: s => { money(s, -0.02); s.popularity = clamp(s.popularity + 1, 0, 100); s.integrityBonus -= 1; log(s, "⌚ Bought your Secret Santa a watch. The other nineteen gifts were socks"); return s; } },
       ] });
@@ -846,11 +847,11 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "The eighteen year old who made his debut last month has just parked a car worth more than his contract in the space next to yours. It is matte gold. It has a name.",
       category: "life", choices: [
         { label: "Take him aside, talk money", emoji: "🧠", color: "bg-emerald-600", consequence: "Integrity +3, Morale +2. 60%: he listens and sells it",
-          apply: s => { s.integrityBonus += 3; s.morale = clamp(s.morale + 2, 0, 100); if (Math.random() < 0.6) { log(s, "🧠 Talked the rookie through his finances. The gold car is gone. He bought a sensible one in gold"); } else { log(s, "🧠 Talked the rookie through his finances. He nodded a lot and kept the car"); } return s; } },
+          apply: s => { s.integrityBonus += 3; s.morale = clamp(s.morale + 2, 0, 100); if (rollCareerChance(s, 0.6, "The Rookie's First Car", "The rookie listens", "The rookie keeps the car")) { log(s, "🧠 Talked the rookie through his finances. The gold car is gone. He bought a sensible one in gold"); } else { log(s, "🧠 Talked the rookie through his finances. He nodded a lot and kept the car"); } return s; } },
         { label: "Roast him in the group chat", emoji: "😂", color: "bg-amber-600", consequence: "Morale +4, Followers +200k when it leaks, Integrity -1",
           apply: s => { s.morale = clamp(s.morale + 4, 0, 100); followers(s, 0.2); s.integrityBonus -= 1; log(s, "😂 Roasted the gold car in the group chat. The screenshots leaked by lunch"); return s; } },
         { label: "Say nothing, it is his money", emoji: "🤷", color: "bg-muted", consequence: "25%: he scrapes it on the gate and needs lifts for a month (Morale -3)",
-          apply: s => { if (Math.random() < 0.25) { s.morale = clamp(s.morale - 3, 0, 100); log(s, "🤷 The rookie scraped the gold car on the gate. You drove him to training for a month"); } else { log(s, "🤷 Said nothing about the gold car. It is still there. It is still gold"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.25, "The Rookie's First Car", "The rookie scrapes the car", "The car stays fine")) { s.morale = clamp(s.morale - 3, 0, 100); log(s, "🤷 The rookie scraped the gold car on the gate. You drove him to training for a month"); } else { log(s, "🤷 Said nothing about the gold car. It is still there. It is still gold"); } return s; } },
       ] });
   }
 
@@ -860,7 +861,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "A rival agent corners you at a teammate's wedding with a napkin full of numbers. He reckons your representation is leaving money on the table and he can prove it before the speeches.",
       category: "life", choices: [
         { label: "Stay loyal, tell your agent about it", emoji: "🤝", color: "bg-blue-600", consequence: "Integrity +2. 50%: your agent works harder (Market value +€2M). 50%: it gets awkward (Morale -3)",
-          apply: s => { s.integrityBonus += 2; if (Math.random() < 0.5) { s.marketValue += 2; log(s, "🤝 Told your agent about the napkin. Three clubs called the next week. Funny that"); } else { s.morale = clamp(s.morale - 3, 0, 100); log(s, "🤝 Told your agent about the napkin. The silence on the phone lasted a while"); } return s; } },
+          apply: s => { s.integrityBonus += 2; if (rollCareerChance(s, 0.5, "The Agent Poach", "Your agent finds interest", "Your agent goes quiet")) { s.marketValue += 2; log(s, "🤝 Told your agent about the napkin. Three clubs called the next week. Funny that"); } else { s.morale = clamp(s.morale - 3, 0, 100); log(s, "🤝 Told your agent about the napkin. The silence on the phone lasted a while"); } return s; } },
         { label: "Go it alone from here", emoji: "🧍", color: "bg-emerald-600", consequence: "You now represent yourself: no cuts, no wage boost, your old agent keeps the wedding favour",
           apply: s => { s.agentId = "self"; log(s, "🧍 Left your agent at the wedding and now read every contract yourself"); return s; } },
         { label: "Take the napkin, give nothing back", emoji: "📝", color: "bg-muted", consequence: "Market value +€1M, Integrity -1, Morale -2, your agent hears about it anyway",
@@ -873,7 +874,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "A back page has printed your release clause. It is wrong by forty million, in the direction that makes three clubs call your agent before breakfast.",
       category: "life", choices: [
         { label: "Say nothing and let it ride", emoji: "😶", color: "bg-amber-600", consequence: "Market value +€3M. 30%: your club is furious (Morale -5)",
-          apply: s => { s.marketValue += 3; if (Math.random() < 0.3) { s.morale = clamp(s.morale - 5, 0, 100); log(s, "😶 Let the fake clause ride. The chairman's text was two words long"); } else { log(s, "😶 Let the fake clause ride. The market believed it and so, briefly, did you"); } return s; } },
+          apply: s => { s.marketValue += 3; if (rollCareerChance(s, 0.3, "The Release Clause Rumour", "Club is furious", "The rumour boosts your value")) { s.morale = clamp(s.morale - 5, 0, 100); log(s, "😶 Let the fake clause ride. The chairman's text was two words long"); } else { log(s, "😶 Let the fake clause ride. The market believed it and so, briefly, did you"); } return s; } },
         { label: "Correct it publicly", emoji: "📣", color: "bg-blue-600", consequence: "Integrity +2, Popularity +1, the paper prints a correction in very small letters",
           apply: s => { s.integrityBonus += 2; s.popularity = clamp(s.popularity + 1, 0, 100); log(s, "📣 Corrected the release clause story yourself. The correction ran under the crossword"); return s; } },
         { label: "Have your agent leak the real one", emoji: "🕵️", color: "bg-red-600", consequence: "Market value +€1M, Integrity -2",
@@ -891,7 +892,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         { label: "Ask the kit man for a room change", emoji: "🚪", color: "bg-muted", consequence: "Morale -2, Popularity -1, the whole squad knows within the hour",
           apply: s => { s.morale = clamp(s.morale - 2, 0, 100); s.popularity = clamp(s.popularity - 1, 0, 100); log(s, "🚪 Asked to change rooms at camp. The squad chat had a poll on it by dinner"); return s; } },
         { label: "Start a prank war", emoji: "🪥", color: "bg-amber-600", consequence: "50%: the best camp in years (Morale +6, Followers +300k). 50%: the national coach is not amused (Popularity -3)",
-          apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); followers(s, 0.3); log(s, "🪥 The camp prank war became the squad's favourite week in years. The clips did numbers"); } else { s.popularity = clamp(s.popularity - 3, 0, 100); log(s, "🪥 The camp prank war ended with the national coach's shoes in the hotel pool"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, "The Camp Roommate", "The prank war is loved", "The coach is unimpressed")) { s.morale = clamp(s.morale + 6, 0, 100); followers(s, 0.3); log(s, "🪥 The camp prank war became the squad's favourite week in years. The clips did numbers"); } else { s.popularity = clamp(s.popularity - 3, 0, 100); log(s, "🪥 The camp prank war ended with the national coach's shoes in the hotel pool"); } return s; } },
       ] });
   }
 
@@ -901,11 +902,11 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "A local under nines team has written, in crayon, asking you to hand out their end of season medals. It is the same evening as a sponsor dinner you already said yes to.",
       category: "life", choices: [
         { label: "Do the medals, apologise to the sponsor", emoji: "🏅", color: "bg-emerald-600", consequence: "Integrity +4, Morale +6. 20%: the sponsor sulks (Sponsorship -€50k/yr)",
-          apply: s => { s.integrityBonus += 4; s.morale = clamp(s.morale + 6, 0, 100); if (Math.random() < 0.2) { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) - 0.05) * 100) / 100; log(s, "🏅 Handed out forty tiny medals. The sponsor trimmed the deal. Worth it"); } else { log(s, "🏅 Handed out forty tiny medals and got forty tiny hugs. The sponsor rescheduled"); } return s; } },
+          apply: s => { s.integrityBonus += 4; s.morale = clamp(s.morale + 6, 0, 100); if (rollCareerChance(s, 0.2, "The Under Nines' Medal Night", "Sponsor trims the deal", "Sponsor reschedules")) { s.sponsorBonus = Math.round(((s.sponsorBonus ?? 0) - 0.05) * 100) / 100; log(s, "🏅 Handed out forty tiny medals. The sponsor trimmed the deal. Worth it"); } else { log(s, "🏅 Handed out forty tiny medals and got forty tiny hugs. The sponsor rescheduled"); } return s; } },
         { label: "Do the dinner, send the kids a video", emoji: "📹", color: "bg-muted", consequence: "Followers +200k, Integrity -1, the crayon letter stays on your fridge",
           apply: s => { followers(s, 0.2); s.integrityBonus -= 1; log(s, "📹 Sent the under nines a video from the sponsor dinner. They played it on a phone in the car park"); return s; } },
         { label: "Do both and sprint between them", emoji: "🏃", color: "bg-amber-600", consequence: "Morale +3. 30%: you are late to both (Popularity -2)",
-          apply: s => { s.morale = clamp(s.morale + 3, 0, 100); if (Math.random() < 0.3) { s.popularity = clamp(s.popularity - 2, 0, 100); log(s, "🏃 Tried to do the medals and the dinner. Late to both, in a tracksuit, at a black tie event"); } else { log(s, "🏃 Medals at six, dinner at eight, still in the same shoes. Nobody noticed the mud"); } return s; } },
+          apply: s => { s.morale = clamp(s.morale + 3, 0, 100); if (rollCareerChance(s, 0.3, "The Under Nines' Medal Night", "Late to both events", "You make both events")) { s.popularity = clamp(s.popularity - 2, 0, 100); log(s, "🏃 Tried to do the medals and the dinner. Late to both, in a tracksuit, at a black tie event"); } else { log(s, "🏃 Medals at six, dinner at eight, still in the same shoes. Nobody noticed the mud"); } return s; } },
       ] });
   }
 
@@ -918,7 +919,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
         { label: "Pay for the fix yourself", emoji: "🎨", color: "bg-blue-600", consequence: "Net worth -€20k, Popularity +2, Morale +2",
           apply: s => { money(s, -0.02); s.popularity = clamp(s.popularity + 2, 0, 100); s.morale = clamp(s.morale + 2, 0, 100); log(s, "🎨 Quietly paid to fix the banner. The fans noticed the new letter and cheered it"); return s; } },
         { label: "Pretend not to notice", emoji: "🙈", color: "bg-muted", consequence: "50%: it trends anyway (Followers +300k)",
-          apply: s => { if (Math.random() < 0.5) { followers(s, 0.3); log(s, "🙈 Said nothing about the banner. The internet said everything"); } else { log(s, "🙈 Said nothing about the banner. It is still up. It is still wrong"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, "Forty Feet, One Typo", "The typo trends", "The typo stays on the banner")) { followers(s, 0.3); log(s, "🙈 Said nothing about the banner. The internet said everything"); } else { log(s, "🙈 Said nothing about the banner. It is still up. It is still wrong"); } return s; } },
       ] });
   }
 
@@ -941,7 +942,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       description: "A broadcaster wants you to do a punditry screen test, for when the time comes. They keep saying 'when the time comes' in a very gentle voice.",
       category: "life", choices: [
         { label: "Do the screen test", emoji: "🎙️", color: "bg-emerald-600", consequence: "60%: a natural (Popularity +3, Followers +300k, Morale +3). 40%: you freeze on camera (Morale -4)",
-          apply: s => { setFlag(s, "screenTest", 1); if (Math.random() < 0.6) { s.popularity = clamp(s.popularity + 3, 0, 100); followers(s, 0.3); s.morale = clamp(s.morale + 3, 0, 100); log(s, "🎙️ Nailed the punditry screen test. The producer asked if you had done it before"); } else { s.morale = clamp(s.morale - 4, 0, 100); log(s, "🎙️ Froze on the punditry screen test. Eleven seconds of silence and one very long blink"); } return s; } },
+          apply: s => { setFlag(s, "screenTest", 1); if (rollCareerChance(s, 0.6, "The Screen Test", "Screen test goes well", "Screen test goes badly")) { s.popularity = clamp(s.popularity + 3, 0, 100); followers(s, 0.3); s.morale = clamp(s.morale + 3, 0, 100); log(s, "🎙️ Nailed the punditry screen test. The producer asked if you had done it before"); } else { s.morale = clamp(s.morale - 4, 0, 100); log(s, "🎙️ Froze on the punditry screen test. Eleven seconds of silence and one very long blink"); } return s; } },
         { label: "Do it, but only talk tactics", emoji: "📋", color: "bg-blue-600", consequence: "Integrity +2, Passing +1 next season, the producer calls it very detailed",
           apply: s => { setFlag(s, "screenTest", 1); s.integrityBonus += 2; bump(s, "passing", 1); log(s, "📋 Spent the whole screen test on pressing triggers. The producer called it very detailed"); return s; } },
         { label: "Not yet, you are still a player", emoji: "⚽", color: "bg-muted", consequence: "Morale +2, they say they will ask again in a couple of years",
@@ -962,9 +963,9 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
           : { label: "Hire a private physio", emoji: "🧑‍⚕️", color: "bg-emerald-600", consequence: "Yearly costs +€150k, Physical +1 next season, Morale +3",
             apply: s => { s.customYearlyCosts = Math.round(((s.customYearlyCosts || 0) + 0.15) * 1000) / 1000; setFlag(s, "privatePhysio", 1); bump(s, "physical", 1); s.morale = clamp(s.morale + 3, 0, 100); log(s, "🧑‍⚕️ Hired a private physio. The stairs are back to one minute"); return s; } },
         { label: "Try the sports scientist's morning routine", emoji: "🧘", color: "bg-blue-600", consequence: "50%: Physical +1 next season. 50%: nothing, but the chair is comfortable",
-          apply: s => { if (Math.random() < 0.5) { bump(s, "physical", 1); log(s, "🧘 The morning routine works. Forty minutes of stretching and a very smug sports scientist"); } else { log(s, "🧘 The morning routine is forty minutes you will not get back. The chair remains"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.5, "The Body Talks", "Morning routine works", "Morning routine changes nothing")) { bump(s, "physical", 1); log(s, "🧘 The morning routine works. Forty minutes of stretching and a very smug sports scientist"); } else { log(s, "🧘 The morning routine is forty minutes you will not get back. The chair remains"); } return s; } },
         { label: "Ignore it, you have always been fine", emoji: "🤷", color: "bg-muted", consequence: "20%: a yard goes (Pace -1)",
-          apply: s => { if (Math.random() < 0.2) { s.pace = clamp(s.pace - 1, 20, 99); log(s, "🤷 Ignored the stiffness. The yard you had went somewhere in February. Pace -1"); } else { log(s, "🤷 Ignored the stiffness. Still fine. Still a very specific chair"); } return s; } },
+          apply: s => { if (rollCareerChance(s, 0.2, "The Body Talks", "Pace drops by 1", "No setback")) { s.pace = clamp(s.pace - 1, 20, 99); log(s, "🤷 Ignored the stiffness. The yard you had went somewhere in February. Pace -1"); } else { log(s, "🤷 Ignored the stiffness. Still fine. Still a very specific chair"); } return s; } },
       ] });
   }
 

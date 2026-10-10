@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import type { SavedSeasonCompetition } from '@/lib/soccerSeasonCompetitions';
+import { savedClubCampaign } from '@/lib/soccerSeasonCompetitions';
 import { focusDialogOnMount } from '@/lib/dialogA11y';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { squadNow } from '@/lib/soccerClubSquad';
@@ -46,6 +47,14 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
   const match = picked === null ? null : competition?.matches[picked];
   const currentSquad = !competition && !leagueUnavailable ? squadNow(career) : null;
   const title = leagueUnavailable ? 'League replay unavailable' : competition?.name ?? 'Current squad';
+  const stages = competition?.id === 'club' ? savedClubCampaign(career, row)?.firstStage?.stages ?? [] : [];
+  const rounds: { name: string; games: { index: number; game: SavedSeasonCompetition['matches'][number] }[] }[] = [];
+  for (const [index, game] of (competition?.matches ?? []).entries()) {
+    const name = game.round.replace(/, (?:leg|game) \d+$/, '');
+    const previous = rounds[rounds.length - 1];
+    if (previous?.name === name) previous.games.push({ index, game });
+    else rounds.push({ name, games: [{ index, game }] });
+  }
   const context = !competition && !leagueUnavailable
     ? currentSquad ? `${currentSquad.club} · Current squad · ${currentSquad.year}/${String(currentSquad.year + 1).slice(-2)}` : 'Current squad unavailable'
     : `${row.club} · ${row.year}/${String(row.year + 1).slice(-2)}`;
@@ -64,6 +73,7 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
           <h3 ref={heading} tabIndex={-1} className="font-bold outline-none">Your saved competitions</h3>
           <p>Pick a competition, then a game. These are the opponents and scores your career kept. Missing scores and early-round opponents stay marked as missing.</p>
           <p>The score is always shown from your club's side. An aggregate score covers the whole tie. Your league season keeps its place when you switch back.</p>
+          <p>The bracket is your club's saved route. Other knockout ties were not kept. A recorded group table is shown whole; a league phase with only your club's row stays one row. Cup placement between league games is simulated, without invented calendar dates.</p>
           <p>Current squad opens the same eleven, bench and selection plan as the Squad tile on your career page. It is the current squad on our ratings, not a saved matchday lineup.</p>
           <p>Example: a saved first-leg win of 2-1 and second-leg draw of 1-1 stay separate games. The deciding leg shows 3-2 on aggregate when the save kept it.</p>
           <button type="button" onClick={() => setHelp(false)} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold">‹ Back</button>
@@ -94,12 +104,24 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
           <h3 ref={heading} tabIndex={-1} className="text-sm font-bold outline-none">{competition.result}</h3>
           <p className="text-xs text-muted-foreground">Scores are from {row.club}'s side. Your season totals include all competitions.</p>
           {competition.note && <p className="text-xs text-muted-foreground">{competition.note}</p>}
-          {competition.matches.length === 0 ? <p className="text-sm" data-centre-cup-missing>No match details recorded.</p> : <div className="grid grid-cols-2 gap-2" data-centre-cup-games>
-            {competition.matches.map((game, index) => <button key={index} type="button" onClick={() => setPicked(index)} data-centre-cup-open={index} className="min-h-20 min-w-0 rounded-xl border border-border bg-muted/20 p-3 text-left">
-              <span className="block text-xs font-bold">{game.round}</span>
-              <span className="block break-words text-xs">{game.opponent ?? 'Opponents not recorded'}</span>
-              <span className="block text-sm font-black tabular-nums">{game.goalsFor === null || game.goalsAgainst === null ? game.result ?? 'Score not recorded' : `${game.goalsFor}-${game.goalsAgainst}`}</span>
-            </button>)}
+          {stages.map((stage, stageIndex) => <section key={stageIndex} className="space-y-2 rounded-xl border border-border p-2" data-centre-cup-table={stageIndex}>
+            <h4 className="text-xs font-bold">{stage.label}: {stage.position} of {stage.of}</h4>
+            {!stage.table && <p className="text-xs text-muted-foreground">Only your club's row was kept.</p>}
+            <div className="overflow-x-auto"><table className="w-full text-xs tabular-nums"><thead><tr><th className="text-left">Club</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>Pts</th></tr></thead><tbody>
+              {(stage.table ?? [stage.myRow]).map((team, index) => <tr key={index} className={team.club === row.club ? 'font-bold text-primary' : ''}><td className="min-w-24 break-words py-1 text-left">{team.club}</td><td className="text-center">{team.w + team.d + team.l}</td><td className="text-center">{team.w}</td><td className="text-center">{team.d}</td><td className="text-center">{team.l}</td><td className="text-center">{team.gf}</td><td className="text-center">{team.ga}</td><td className="text-center">{team.pts}</td></tr>)}
+            </tbody></table></div><p className="text-xs text-muted-foreground">{stage.footnote}</p>
+          </section>)}
+          {competition.matches.length === 0 ? <p className="text-sm" data-centre-cup-missing>No match details recorded.</p> : <div className="space-y-2" data-centre-cup-games data-centre-cup-bracket>
+            <h4 className="text-xs font-bold">Recorded bracket: your club's path</h4>
+            <p className="text-xs text-muted-foreground">Other knockout ties were not kept.</p>
+            {rounds.map((round, roundIndex) => <section key={roundIndex} data-centre-cup-round={roundIndex} className="rounded-xl border border-border p-2">
+              <h5 className="mb-2 text-xs font-bold">{roundIndex > 0 ? '↓ ' : ''}{round.name}</h5>
+              <div className="grid grid-cols-2 gap-2">{round.games.map(({ game, index }) => <button key={index} type="button" onClick={() => setPicked(index)} data-centre-cup-open={index} className="min-h-20 min-w-0 rounded-xl border border-border bg-muted/20 p-3 text-left">
+                <span className="block text-xs font-bold">{game.round}</span>
+                <span className="block break-words text-xs">{game.opponent ?? 'Opponents not recorded'}</span>
+                <span className="block text-sm font-black tabular-nums">{game.goalsFor === null || game.goalsAgainst === null ? game.result ?? 'Score not recorded' : `${game.goalsFor}-${game.goalsAgainst}`}</span>
+              </button>)}</div>
+            </section>)}
           </div>}
         </div>}
       </div>

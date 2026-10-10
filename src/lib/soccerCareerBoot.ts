@@ -1,3 +1,4 @@
+import { rollCareerChance } from "./careerChanceWheel";
 /* ─── Round 473: the signature boot, the top of the branding line ───────────
 
    His list: "social media and branding with a shoe deal as a long earned
@@ -86,7 +87,7 @@ export function getBootEvents(state: CareerState, ambassadorFollowers: number): 
         consequence: "50%: the boot sells and it is worth €9M a year plus 2M followers. 50%: it does not and you are on €1.5M",
         apply: s => {
           setFlag(s, BOOT_FLAG, 2);
-          if (Math.random() < 0.5) {
+          if (rollCareerChance(s, 0.5, "Your Own Boot", "Boot sells out", "Boot stays on the shelves")) {
             bump(s, 9);
             s.socialMediaFollowers = Math.round((s.socialMediaFollowers + 2) * 100) / 100;
             s.popularity = clamp(s.popularity + 8, 0, 100);

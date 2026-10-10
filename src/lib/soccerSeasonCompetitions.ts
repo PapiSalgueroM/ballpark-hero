@@ -44,10 +44,15 @@ export function savedSeasonCompetitions(career: Pick<CareerState, 'lastUCLResult
     competitions.push({
       id: 'domestic', name: cup.cup ?? 'Domestic cup', result: end.stage === 'F' && end.won ? 'Winners' : end.won ? 'Through' : 'Knocked out',
       matches: cup.stages.map(tie => {
+        if (tie.stage === 'early' && cup.opening) return {
+          round: 'Opening cup tie', opponent: cup.opening.opp, goalsFor: cup.opening.for, goalsAgainst: cup.opening.against, home: cup.opening.home,
+          result: cup.opening.won ? 'Through' : 'Out', note: 'Simplified simulated opening tie. Other early rounds were not recorded.',
+        };
         const final = tie.stage === 'F' ? cup.final : undefined;
         return {
           round: { early: 'Early rounds', QF: 'Quarter-final', SF: 'Semi-final', F: 'Final' }[tie.stage],
           opponent: tie.opp ?? null, goalsFor: final?.for ?? tie.for ?? null, goalsAgainst: final?.against ?? tie.against ?? null,
+          ...(tie.home !== undefined && !final ? { home: tie.home } : {}),
           result: tie.won ? tie.stage === 'F' ? 'Winners' : 'Through' : 'Out',
           note: final?.decidedBy === 'penalties' ? `${final.pensFor}-${final.pensAgainst} on penalties`
             : final?.legs === 2 ? 'Final score on aggregate' : tie.stage === 'early' ? 'Opponents and scores were not kept for these rounds.' : undefined,

@@ -33,6 +33,7 @@ import type { CentreMoments } from '@/components/season-centre/MomentHost';
 import { useSoccerMoments } from './useSoccerMoments';
 import SeasonCompetitionPanel, { CompetitionNavigation, type CentreScreen } from './SeasonCompetitionPanel';
 import { savedSeasonCompetitions } from '@/lib/soccerSeasonCompetitions';
+import { cupCalendar, CUP_CALENDAR_NOTE } from '@/lib/soccerSeasonCalendar';
 import { ballonDorSeasonForDisplay } from '@/lib/soccerAwardReveal';
 import { soccerCardLine } from '@/lib/soccerDiscipline';
 import { readLeagueWorldSeason } from '@/lib/soccerCareerLeagueWorld';
@@ -86,6 +87,7 @@ const HELP: HelpWords = {
     "Earlier-season tables use verified league membership and competition rules. From 2026-27, saved league worlds use your career's simulated clubs and direct promotion and relegation between two divisions. The review marks the available Spanish lower-division club pool. Every score, every other club's result and every minute are your career's own.",
     'When the table changes, each club slides from where it was to where it is now. The little pitch shows who scored and when. The ring is you, whenever you are in the move: scoring it, setting it up, or up there with the attack if you play in midfield or up front, and at the back when one goes in past you as a keeper or a defender. ⚽ Yours or 🅰️ Your assist under the pitch tells you when the goal or the assist was yours. How the move looked is the game\'s own drawing.',
     'Now and then a goal in your season is an own goal, marked (O.G). It is always one of the goals your season already had, never an extra one, and it never touches your goals or assists. Who put it in (you, a teammate or one of theirs) is made up by the game. The pitch still plays it as a goal for the side that got it and says Own goal underneath, and when it was yours the ring is on you at the back.',
+    'Saved cup games appear between league games. Their placement is the simulation\'s own order, not a real calendar. New modern named cups keep a simplified opening tie, not every early round. Reveal one saved result to add its next recorded round. A deciding loss ends that cup run. Missing early-round opponents and scores stay marked. Closing at a cup night can show that same saved result again; it never rerolls.',
   ],
   controls: '▶ plays the next matchday. ⏩ jumps to the next big game (a derby, halfway, the title or the final day). ⏭ goes straight to the end. 1x and 3x set the clock, Results shows each match at full time. After a jump the table slides from the last matchday you saw; the ▲ and ▼ beside your place always compare with the matchday before. Close it whenever you like: the 📺 Resume chip on your career page takes you back to the same matchday. 📺 Season replays, next to Ratings, opens seasons with a saved league world, seasons you won and results only seasons. An older season without a saved league world still opens when your save kept cup games from it, for those cups and the current squad, and stays locked when it kept none; its league replay stays unavailable when the game did not keep who won it.',
   moments: [
@@ -104,6 +106,7 @@ const HELP: HelpWords = {
     { head: 'An injury', body: 'Out for five weeks with a hamstring in a 38 game season: five weeks out of a 46 week year is four matchdays, so the club plays matchdays 14 to 17 without you. Your games played do not move. The table does.' },
     { head: 'A whole league', body: 'Sign for Twente in 2027 and Week by week is the whole Eredivisie: 18 clubs, 34 matchdays, every club named. Sign for Hearts and you get your games with no table, because the Scottish Premiership splits in two late in the season and the game will not draw a table it cannot stand behind.' },
     { head: 'Results only', body: 'A season the game has no verified table for (before 1995-96, a league that is not one plain home and away table, a league the game does not know whole, or a season cut short) shows your league games with no table. If your season summary has a finish, the review still prints it.' },
+    { head: 'A cup night', body: 'After five league games, the saved domestic cup entry appears. Show its result: a win reveals the next recorded opponent, while a deciding loss ends the cup route. The competition button opens your recorded bracket. Early rounds that were kept only as Through or Out have no invented opponent or score.' },
   ],
   footnote: 'The competition buttons open the cup games your save kept, with their real competition names where recorded. Missing match details stay marked. Current squad opens your current eleven and bench on our ratings, not a past matchday lineup. Clubs level on points are split by goal difference, then goals scored: this game\'s rule.',
 };
@@ -324,17 +327,22 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   const moments = useSoccerMoments({ career, row, ctx, plan, key, offered, entriesKey, banked: !!ledger?.banked && ledger.key === key, onCareer: canPlay ? onCareer : undefined });
   /* his club's flat colour, the one the career already wears; the other side is always the same pale one */
   const color = clubs.find(c => c.name === row.club)?.color ?? '#10B981';
-  const model = useMemo(() => (season ? buildModel(ballonDorSeasonForDisplay(career, row), ctx, season, moments, color) : null), [season, career, row, ctx, moments, color]);
+  const [screen, setScreen] = useState<CentreScreen>('league');
+  const competitions = useMemo(() => savedSeasonCompetitions(career, row), [career, row]);
+  const select = useCallback((next: CentreScreen) => setScreen(next), []);
+  const calendar = useMemo(() => season ? cupCalendar(competitions, season.games.length) : [], [competitions, season]);
+  const model = useMemo(() => {
+    if (!season) return null;
+    const base = buildModel(ballonDorSeasonForDisplay(career, row), ctx, season, moments, color);
+    return calendar.length ? { ...base, calendar: { games: calendar, note: CUP_CALENDAR_NOTE, onCompetition: select } } : base;
+  }, [season, career, row, ctx, moments, color, calendar, select]);
   /* Round 1046: his place in this season. Read once when the season opens; a
      table season he did not win replays the same only while the save still
      holds that year's league (the record says so with `stable`). */
   const [stored] = useState(() => readResume(RESUME_GAME));
-  const [screen, setScreen] = useState<CentreScreen>('league');
-  const competitions = useMemo(() => savedSeasonCompetitions(career, row), [career, row]);
   useEffect(() => {
     document.querySelector<HTMLButtonElement>('[data-season-centre]:not([aria-hidden="true"]) [data-centre-competition][aria-pressed="true"]')?.focus({ preventScroll: true });
   }, [screen]);
-  const select = (next: CentreScreen) => setScreen(next);
   const stable = seasonStable(ctx.mode, ctx.finish?.finish);
   const onProgress = useCallback((at: CentrePlace | null) => {
     if (!key) return;

@@ -14,14 +14,14 @@ import { clubCampaign, competitionCareer, cupSeason, firstStageCampaign, neutral
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 describe('saved Soccer Career competitions', () => {
-  it('copies the named cup, known scores and penalties without inventing early fixtures or grounds', () => {
+  it('copies the named cup, known scores, recorded ground and penalties without inventing early fixtures', () => {
     const before = JSON.stringify(cupSeason);
     const cup = savedSeasonCompetitions(competitionCareer, cupSeason)[0];
     expect(cup.name).toBe('FA Cup');
     expect(cup.result).toBe('Winners');
     expect(cup.matches.map(m => m.opponent)).toEqual([null, 'Chelsea', 'Liverpool', 'Newcastle']);
     expect(cup.matches.map(m => [m.goalsFor, m.goalsAgainst])).toEqual([[null, null], [2, 1], [1, 0], [1, 1]]);
-    expect(cup.matches.every(m => m.home === undefined)).toBe(true);
+    expect(cup.matches.map(m => m.home)).toEqual([undefined, false, undefined, undefined]);
     expect(cup.matches[3].note).toBe('5-4 on penalties');
     expect(cup.matches[3].result).toBe('Winners');
     expect(JSON.stringify(cupSeason)).toBe(before);
