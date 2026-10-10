@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usPlayoffs.test.ts src/test/usPostseasonFormat.test.ts src/test/usSeason.test.ts src/test/usSeasonNfl.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/gameLawNfl.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsPostseason: node scripts/simUsPostseason.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+lay-control: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+simLiveScores: node scripts/simLiveScores.mjs
