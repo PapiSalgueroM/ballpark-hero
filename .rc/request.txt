@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+fonts: node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+playCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerStoryRole.mjs
+playCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerTrophyRuns.mjs
+playCmRealFixtures: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs
+playCmVar: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs
+playDerbyHistory1195: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDerbyHistory1195.mjs
+playDraftDetectiveReports: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playDraftDetectiveReports.mjs
+playSoccerCareerDepth: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDepth.mjs
+playSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDevelopment.mjs
+playSeasonHistory1193: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/playSeasonHistory1193.mjs
