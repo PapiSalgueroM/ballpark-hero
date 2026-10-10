@@ -1,0 +1,2 @@
+vitest-night exit=0 6s |    Duration  5.90s (transform 3.02s, setup 274ms, collect 5.66s, tests 4.12s, environment 1.76s, prepare 662ms)
+tsc exit=0 59s | 
