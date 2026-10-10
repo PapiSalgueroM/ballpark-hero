@@ -176,6 +176,13 @@
  * save was equal, and the five replays after it on the same commit were
  * green. If this harness is ever red at that one step alone, rerun it once
  * before reading it as a change.
+ * Taken once more from 4c010129, the head after the review's fix pass
+ * (words, comments, harness checks and the merge of Release AT's main; no
+ * engine line), on runner r1227-x6: all four sports byte for byte the
+ * recording of 5bdd0a9c, 1,869,465 bytes again. Only recordedFrom moved,
+ * and that is the whole of the commit. The truth digest taken again from
+ * the same head with the nfl keys allowed came back byte equal, so it has
+ * no commit.
  * Round 1149 (the other three careers get what the NBA rival got)
  * re-recorded it on purpose on 2026-10-10, on a GitHub runner, once a step,
  * each from the branch commit its header names.

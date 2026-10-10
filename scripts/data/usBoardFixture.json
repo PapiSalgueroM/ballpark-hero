@@ -1,5 +1,5 @@
 {
- "header": {"what":"Round 900: the four US career boards, every click and every save. First recorded before they became one board; re-recorded on purpose since (Round 988, the career content packs), so recordedFrom names the tree and scripts/simUsBoardParity.mjs says what moved","recordedFrom":"5bdd0a9c21f2bfd1e893cbfe1ef32f12c83228e4 (not main: src differs from 09df145abfb241679022b41903d2f19bc254ebf9)","clock":"2026-10-02T12:00:00Z","rerecord":"node scripts/recordUsBoardFixture.mjs"},
+ "header": {"what":"Round 900: the four US career boards, every click and every save. First recorded before they became one board; re-recorded on purpose since (Round 988, the career content packs), so recordedFrom names the tree and scripts/simUsBoardParity.mjs says what moved","recordedFrom":"4c01012914f1b5f0869dbcbc22a816f053f44710 (not main: src differs from f78037dcddea12c1a02586c7d5c0e185efb86121)","clock":"2026-10-02T12:00:00Z","rerecord":"node scripts/recordUsBoardFixture.mjs"},
  "sports": {
   "nfl": {
    "coverage": {"seasons":24,"event":20,"extension":11,"freeagency":13,"rivalryBeat":10,"rivalryChoice":5,"retireCancel":1,"retireConfirm":1,"restartCancel":2,"restartConfirm":2,"retired":2,"coach":8,"coachSeasons":11,"panels":26,"remounts":7,"throwback":1},
