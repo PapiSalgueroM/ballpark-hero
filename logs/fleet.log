@@ -1,0 +1,14 @@
+1. 196 names read from the flag table, both confederation tables, every nationality map and the picker
+   moved: French Guiana null -> CONCACAF; Mauritius null -> CAF; Namibia null -> CAF; Niger null -> CAF; Southern Sudan null -> CAF; Turkmenistan null -> AFC
+  PASS  exactly the six nations changed their answer (6 moved)
+  PASS  each of the six had no confederation on the base (nothing was re-homed)
+  PASS  NATION_CONFED is identical (146 rows)
+  PASS  none of the six sits in NATION_CONFED (none can reach a qualifying draw)
+  PASS  the UEFA code set Transfer Path builds is identical (56 codes)
+  PASS  the Soccer Career picker groups identically (134 nations)
+  PASS  a list of every NATION_CONFED key groups identically (the homeland select reads those keys)
+5. Elsewhere on the base: Cote d\'Ivoire, French Guiana, Mauritius, Namibia, Niger, Southern Sudan, Turkmenistan; on the branch: Cote d\'Ivoire
+  FAIL  the base put exactly the six under Elsewhere
+  FAIL  the branch puts nothing under Elsewhere
+  PASS  each of the six has a flag code (French Guiana gf, Mauritius mu, Namibia na, Niger ne, Southern Sudan ss, Turkmenistan tm)
+reviewFleet: 2 problems

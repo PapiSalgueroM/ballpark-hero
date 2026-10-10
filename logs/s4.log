@@ -1,0 +1,6 @@
+MUT s4 appended to src/components/FlagImg.tsx: import { safeSetItem } from '@/lib/safeStorage';
+export function plantedKeeps(setBanner: (v: boolean) => void)
+   FAIL  1 remembered refusal(s) without a true answer:
+           src/components/FlagImg.tsx:266 keeps:safeSetItem is on no list: a refused save is remembered here. Name it to the seam (holdPendingSave, see UsCareerBoard.tsx) and add it to NAMED, or add it to NOTHING_HELD or OWED with the reason
+simStorageWrites: 1 failed (owed: 12)
+MUT s4 a kept safeSetItem answer sets a banner in a new file: storage=1

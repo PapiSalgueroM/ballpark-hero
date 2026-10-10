@@ -1,0 +1,6 @@
+MUT s6 applied to src/pages/SoccerCareer.tsx: "  const [saveFailed, setSaveFailed] = useState(false);" is now "  const [saveFailed, setSaveFailed] = useState(false);
+  useEffect(() "
+   FAIL  1 remembered refusal(s) without a true answer:
+           OWED is stale: src/pages/SoccerCareer.tsx now names this save to the seam. Delete the entry { file: 'src/pages/SoccerCareer.tsx', keys: ['state:saveFailed'] } from OWED in scripts/simStorageWrites.mjs and add it to NAMED (the fix is good, the list is behind)
+simStorageWrites: 1 failed (owed: 12)
+MUT s6 Soccer Career names its save inside the component: storage=1

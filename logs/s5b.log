@@ -1,0 +1,12 @@
+MUT s5b applied to src/components/us-career/UsCareerBoard.tsx: "  const saveFailed = saveFailure !== null;" is now "  const saveFailed = saveFailure !== null;
+  const [draftSaveBlocked, "
+MUT s5b applied to scripts/simStorageWrites.mjs: "const NOTHING_HELD = [" is now "NAMED.push({ file: 'src/components/us-career/UsCareerBoard.tsx', keys:"
+           owed: src/hooks/useAussieRulesLeague.ts [state:storageNotice], owner this lane, listed 2026-10-10
+           owed: src/hooks/useAussieRulesManager.ts [state:storageNotice], owner this lane, listed 2026-10-10
+           owed: src/hooks/useStadiumTycoon.ts [state:ticketSaveFailed, keeps:saveTicketState], owner to be named by the lead, listed 2026-10-10
+           owed: src/hooks/useMmaPromotion.ts [write:change], owner to be named by the lead, listed 2026-10-10
+           owed: src/hooks/useNbaConnections.ts [state:notesWarning], owner to be named by the lead (low: scratch notes, the daily result has its own save), listed 2026-10-10
+           owed: src/hooks/useNhlConnections.ts [state:notesWarning], owner to be named by the lead (low: scratch notes, the daily result has its own save), listed 2026-10-10
+           owed: src/hooks/useGamePicks.ts [write:toggle], owner to be named by the lead (low: a list of pinned games, not a game), listed 2026-10-10
+simStorageWrites: all green (owed: 12)
+MUT s5b the same second save claimed NAMED with nothing holding it: storage=0

@@ -1,0 +1,28 @@
+base-practice995 exit=0 4s | Footle practice: 3 modes completed, every expected case executed and exact controls verified.
+attr-practice995 exit=0 4s | ATTR practice995 with only footlePractice.test.tsx from origin/main: exit=0
+branch-practice995 exit=1 4s | Node.js v24.21.0
+fleet exit=1 0s | reviewFleet: 2 problems
+base-guard-1 exit=1 3s | simDailySaveHardening: 1 failure(s)
+base-guard-2 exit=1 3s | simDailySaveHardening: 1 failure(s)
+branch-guard-1 exit=1 3s | simDailySaveHardening: 1 failure(s)
+branch-guard-2 exit=1 3s | simDailySaveHardening: 1 failure(s)
+branch-guard-3 exit=1 3s | simDailySaveHardening: 1 failure(s)
+base-flags exit=1 1s | simNationalityFlags: 8 failures
+base-storage exit=0 1s | simStorageWrites: all green
+f1 exit=0 3s | MUT f1 feedback line bare: flags=1 vitest=1
+f2 exit=0 3s | MUT f2 Nation row bare: flags=0 vitest=1
+f3 exit=0 2s | MUT f3 example bare: flags=1 vitest=1
+f4 exit=0 0s | MUT f4 Turkmenistan row dropped: flags=1
+f5 exit=0 0s | MUT f5 a league map row names an unknown nation: flags=1 nationalities=0
+f6 exit=0 0s | MUT f6 a second bare print in the owed file: flags=1
+f7 exit=0 0s | MUT f7 French Guiana row dropped (a past world only): flags=1
+f8 exit=0 0s | MUT f8 Mauritius dropped (era2015 only): flags=1
+s1 exit=0 1s | MUT s1 the hold moved to an effect that never reads the save state: storage=0
+s2 exit=0 1s | MUT s2 a second refused save with a new state in a listed file: storage=1
+s3 exit=0 1s | MUT s3 a helper writes bare and its caller's catch sets state: storage=1
+s4 exit=0 1s | MUT s4 a kept safeSetItem answer sets a banner in a new file: storage=1
+s5a exit=0 1s | MUT s5a a second refused save in the NAMED board, on no list: storage=1
+s5b exit=0 1s | MUT s5b the same second save claimed NAMED with nothing holding it: storage=0
+s6 exit=0 1s | MUT s6 Soccer Career names its save inside the component: storage=1
+s7 exit=0 1s | MUT s7 a catch that only shows a toast, new file: storage=1
+clean exit=0 1s | simNationalityFlags: green. Every nationality the site prints wears its flag (owed: 1), no code stands in for a name, and the long lists sit under their confederation.

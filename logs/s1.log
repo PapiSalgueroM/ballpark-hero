@@ -1,0 +1,6 @@
+MUT s1 applied to src/components/us-career/UsCareerBoard.tsx: "return holdPendingSave(() => { retrySave(); return pendingSave.current" is now "return undefined;"
+MUT s1 applied to src/components/us-career/UsCareerBoard.tsx: "  }, [saveFailed, retrySave]);" is now "  }, [saveFailed, retrySave]);
+  useEffect(() => { if (sport.saveKey ="
+7. a save a game remembers was refused is named to the seam, or listed with the reason it need not be
+simStorageWrites: all green (owed: 12)
+MUT s1 the hold moved to an effect that never reads the save state: storage=0

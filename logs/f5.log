@@ -1,0 +1,13 @@
+MUT f5 applied to src/data/clubManagerALeague2026.ts: "'Ajak Riak': 'Southern Sudan'," is now "'Ajak Riak': 'Zubrowka',"
+   OWED (a bare print this harness knows about and does not fail on): src/components/soccer-career/TrophyCabinet.tsx:135 {career.nationality}, owner the other lane (Soccer Career), listed 2026-10-10
+1. Flags: 72 print sites across 36 files, every one with a flag on its line or the line before, bar 1 owed (16 Round 453 sites pinned)
+2. Codes: 3118 nationality literals in src/data and src/lib, none a three letter code; WEDGES (5 three letter shorts) stays inside dartDraft.ts, unreferenced by any page or component
+  FAIL: market nationalities: 1 with no confederation, which would shove them into an "Elsewhere" group: Zubrowka
+  FAIL: market nationalities: Zubrowka has no confederation
+   groups as placed: picker UEFA 52, CONMEBOL 10, CONCACAF 15, CAF 34, AFC 22, OFC 1; market UEFA 49, CONMEBOL 10, CONCACAF 22, CAF 40, AFC 19, OFC 4, other 1
+
+simNationalityFlags: 2 failures
+6) No em or en dash anywhere in the shipped map
+
+simNationalities: green. Every real player carries his real flag, and no name wears the wrong one.
+MUT f5 a league map row names an unknown nation: flags=1 nationalities=0

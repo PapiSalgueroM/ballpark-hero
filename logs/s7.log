@@ -1,0 +1,5 @@
+MUT s7 appended to src/components/FlagImg.tsx: export function plantedToast(toast: { error: (m: string) => void }) { try { localStorage.setItem('planted-7', 
+   FAIL  1 remembered refusal(s) without a true answer:
+           src/components/FlagImg.tsx:265 write:plantedToast is on no list: a refused save is remembered here. Name it to the seam (holdPendingSave, see UsCareerBoard.tsx) and add it to NAMED, or add it to NOTHING_HELD or OWED with the reason
+simStorageWrites: 1 failed (owed: 12)
+MUT s7 a catch that only shows a toast, new file: storage=1

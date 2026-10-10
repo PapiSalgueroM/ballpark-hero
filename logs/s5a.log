@@ -1,0 +1,6 @@
+MUT s5a applied to src/components/us-career/UsCareerBoard.tsx: "  const saveFailed = saveFailure !== null;" is now "  const saveFailed = saveFailure !== null;
+  const [draftSaveBlocked, "
+   FAIL  1 remembered refusal(s) without a true answer:
+           src/components/us-career/UsCareerBoard.tsx:118 state:draftSaveBlocked is on no list: a refused save is remembered here. Name it to the seam (holdPendingSave, see UsCareerBoard.tsx) and add it to NAMED, or add it to NOTHING_HELD or OWED with the reason
+simStorageWrites: 1 failed (owed: 12)
+MUT s5a a second refused save in the NAMED board, on no list: storage=1

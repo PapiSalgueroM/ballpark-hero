@@ -1,0 +1,7 @@
+MUT f3 applied to src/pages/Footle.tsx: "<FlagImg name={examplePlayer.nationality} size={12} showLabel />" is now "{examplePlayer.nationality}"
+  FAIL: src/pages/Footle.tsx:191 prints {examplePlayer.nationality} with no flag beside it
+simNationalityFlags: 1 failure
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/footlePractice.test.tsx[2m > [22mFootle practice mounted outcomes[2m > [22mprints the answer nationality with its flag in the feedback line, the Nation row and the example
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m10 passed[39m[22m[90m (11)[39m
+MUT f3 example bare: flags=1 vitest=1

@@ -1,0 +1,27 @@
+normal-model PASSED: selects five distinct easy answers excluding the daily
+normal-model PASSED: selects five distinct hard answers excluding the daily
+normal-model PASSED: selects five distinct insane answers excluding the daily
+normal-model PASSED: refuses a short tier instead of borrowing another difficulty
+normal-model PASSED: treats accent aliases as one identity for daily exclusion and distinct answers
+normal-model PASSED: caps misses and makes duplicate guesses and next inputs inert
+normal-model PASSED: round trips a frozen pool and preserves null versus measured zero
+normal-model PASSED: rejects corrupt nested snapshots and impossible progress
+normal-model PASSED: finishes only after five outcomes and retains real attempt totals
+normal-model PASSED: compares known leagues and keeps either unknown league neutral
+normal-model PASSED: places Guinea-Bissau with Africa rather than European nationality clues
+normal-model PASSED: keeps unknown goals and assists neutral while real zero still compares
+normal-mounted PASSED: finishes five puzzles with the exact receipt and untouched daily record
+normal-mounted PASSED: starts the first Unlimited puzzle from the resolved pool
+normal-mounted PASSED: ignores duplicate guesses and double next inputs at the hook boundary
+normal-mounted PASSED: keeps practice difficulty separate from a played Unlimited puzzle
+normal-mounted PASSED: offers practice from the daily result without resetting that result
+normal-mounted PASSED: shows worked rules and derives examples from a loaded non-answer player
+normal-mounted PASSED: rejects a corrupt saved run and permits a clean replacement
+normal-mounted PASSED: reports a failed save while keeping the current run playable
+normal-mounted PASSED: disables a short practice tier rather than starting fewer puzzles
+normal-fetch PASSED: returns an empty pool when either obscure query fails
+normal-fetch PASSED: keeps the famous and obscure tiers on a complete successful fetch
+normal-fetch PASSED: keeps the empty fallback behavior when the famous query fails
+normal-fetch PASSED: preserves unknown counts and real zero in both fetched tiers
+Footle practice: 3 modes completed, every expected case executed and exact controls verified.
+ATTR practice995 with only footlePractice.test.tsx from origin/main: exit=0

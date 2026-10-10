@@ -1,0 +1,5 @@
+MUT s3 appended to src/components/FlagImg.tsx: function plantedWrite(v: string) { localStorage.setItem('planted-3', v); }
+export function plantedCaller(setSt
+   FAIL  1 storage write(s) that can throw into a render, an effect or a handler:
+simStorageWrites: 1 failed (owed: 12)
+MUT s3 a helper writes bare and its caller's catch sets state: storage=1
