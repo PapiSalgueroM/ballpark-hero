@@ -1,0 +1,12 @@
+file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:40
+  throw new Error(`No actual ${kind} review in the bounded engine fixture search`);
+        ^
+
+Error: No actual awarded_missed review in the bounded engine fixture search
+    at findCmVarFixture (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:40:9)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmVar.mjs:45:35
+    at fixedDate (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmVar.mjs:33:16)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playCmVar.mjs:45:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0

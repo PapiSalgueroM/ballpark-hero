@@ -1,0 +1,218 @@
+ok   390-push: initial-repair: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-push: Rules and both exact tradeoffs precede the preseason choice
+ok   390-push: All preseason dialog controls are at least 44 pixels
+ok   390-push: Tab remains inside preseason dialog
+ok   390-push: Tab remains inside preseason dialog
+ok   390-push: Shift+Tab remains inside preseason dialog
+ok   390-push: Shift+Tab remains inside preseason dialog
+ok   390-push: preseason-rules: screenshot target is visible, painted and stable with no horizontal overflow
+ok   390-push: preseason-rules: every actual visible dialog control is painted without an overlapping toast
+ok   390-push: preseason-escape: exact tile focus, body scrolling and page position restore
+ok   390-push: Reading and closing rules preserves the full career
+ok   390-push: 0-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-push: 0-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   390-push: preseason-choice: exact tile focus, body scrolling and page position restore
+ok   390-push: Reopened dialog marks the exact saved choice
+ok   390-push: 1-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-push: 1-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   390-push: balanced-choice: exact tile focus, body scrolling and page position restore
+ok   390-push: 2-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-push: 2-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   390-push: restored-choice: exact tile focus, body scrolling and page position restore
+ok   390-push: chosen-plan: reload preserves the complete saved bytes
+ok   390-push: 3-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-push: 3-advanceProSeason: the actual click consumes exactly the unchanged engine random draws
+ok   390-push: Next Season records one actual senior year at the shared club
+ok   390-push: The chosen plan settles once with its exact skill modifier and is consumed
+ok   390-push: recorded-season: reload preserves the complete saved bytes
+ok   390-push: 4-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-push: 4-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws
+ok   390-push: Actual intervening newspaper reaches the mandatory saved season summary
+ok   390-push: Season summary shows the exact recorded plan outcome and modifier
+ok   390-push: preseason-outcome: screenshot target is visible, painted and stable with no horizontal overflow
+ok   390-push: summary-plan: reload preserves the complete saved bytes
+ok   390-push: Actual route has no horizontal overflow
+ok   390-push: No page or served asset errors
+ok   390-push: All external write attempts are intercepted locally with no forwarded external requests
+CONTROL FIRED(native full-save): full-save
+CONTROL FIRED(native readable-capture): opacity, painted-controls
+CONTROL FIRED(native focus-body): focus, computed-overflow
+ok   390-push: Native copied detector controls preserve the entire actual saved career
+ok   390-recovery: initial-repair: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-recovery: Rules and both exact tradeoffs precede the preseason choice
+ok   390-recovery: All preseason dialog controls are at least 44 pixels
+ok   390-recovery: Tab remains inside preseason dialog
+ok   390-recovery: Tab remains inside preseason dialog
+ok   390-recovery: Shift+Tab remains inside preseason dialog
+ok   390-recovery: Shift+Tab remains inside preseason dialog
+ok   390-recovery: preseason-rules: screenshot target is visible, painted and stable with no horizontal overflow
+ok   390-recovery: preseason-rules: every actual visible dialog control is painted without an overlapping toast
+ok   390-recovery: preseason-escape: exact tile focus, body scrolling and page position restore
+ok   390-recovery: Reading and closing rules preserves the full career
+ok   390-recovery: 0-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-recovery: 0-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   390-recovery: preseason-choice: exact tile focus, body scrolling and page position restore
+ok   390-recovery: Reopened dialog marks the exact saved choice
+ok   390-recovery: 1-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-recovery: 1-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   390-recovery: balanced-choice: exact tile focus, body scrolling and page position restore
+ok   390-recovery: 2-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-recovery: 2-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   390-recovery: restored-choice: exact tile focus, body scrolling and page position restore
+ok   390-recovery: chosen-plan: reload preserves the complete saved bytes
+ok   390-recovery: 3-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-recovery: 3-advanceProSeason: the actual click consumes exactly the unchanged engine random draws
+ok   390-recovery: Next Season records one actual senior year at the shared club
+ok   390-recovery: The chosen plan settles once with its exact skill modifier and is consumed
+ok   390-recovery: recorded-season: reload preserves the complete saved bytes
+ok   390-recovery: 4-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-recovery: 4-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws
+ok   390-recovery: Actual intervening newspaper reaches the mandatory saved season summary
+ok   390-recovery: Season summary shows the exact recorded plan outcome and modifier
+ok   390-recovery: preseason-outcome: screenshot target is visible, painted and stable with no horizontal overflow
+ok   390-recovery: summary-plan: reload preserves the complete saved bytes
+ok   390-recovery: Actual route has no horizontal overflow
+ok   390-recovery: No page or served asset errors
+ok   390-recovery: All external write attempts are intercepted locally with no forwarded external requests
+ok   390-mentor: initial-repair: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-mentor: The actual event explains generated scope and qualifying progress before acceptance
+ok   390-mentor: mentor-event: screenshot target is visible, painted and stable with no horizontal overflow
+ok   390-mentor: 0-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-mentor: 0-applyEventChoice: the actual click consumes exactly the unchanged engine random draws
+ok   390-mentor: 1-stayAtClub: every serialized saved field and key matches the unchanged Chromium engine
+ok   390-mentor: 1-stayAtClub: the actual click consumes exactly the unchanged engine random draws
+ok   390-mentor: Accepted event creates one saved fictional protege without fabricated appearances
+ok   390-mentor: created: tile identifies the saved generated academy player
+ok   390-mentor: created: fictional scope and recorded age are explicit
+ok   390-mentor: created: history contains exactly the recorded mentoring seasons
+ok   390-mentor: created: help is reopenable and gives the qualifying and interrupted worked example
+ok   390-mentor: created: dialog controls are at least 44 pixels
+ok   390-mentor: created: Tab stays inside the dialog
+ok   390-mentor: created: Tab stays inside the dialog
+ok   390-mentor: created: Shift+Tab stays inside the dialog
+ok   390-mentor: created: Shift+Tab stays inside the dialog
+ok   390-mentor: created-help: screenshot target is visible, painted and stable with no horizontal overflow
+ok   390-mentor: created-help: every actual visible dialog control is painted without an overlapping toast
+ok   390-mentor: created-history: screenshot target is visible, painted and stable with no horizontal overflow
+ok   390-mentor: created-history: every actual visible dialog control is painted without an overlapping toast
+FAIL 390-mentor: created-escape: exact tile focus, body scrolling and page position restore
+390-mentor: AssertionError [ERR_ASSERTION]: 390-mentor: created-escape: exact tile focus, body scrolling and page position restore
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:82:175)
+    at restored (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:148:107)
+    at async openMentor (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:193:89)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:232:11
+ok   1280-push: initial-repair: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-push: Rules and both exact tradeoffs precede the preseason choice
+ok   1280-push: All preseason dialog controls are at least 44 pixels
+ok   1280-push: Tab remains inside preseason dialog
+ok   1280-push: Tab remains inside preseason dialog
+ok   1280-push: Shift+Tab remains inside preseason dialog
+ok   1280-push: Shift+Tab remains inside preseason dialog
+ok   1280-push: preseason-rules: screenshot target is visible, painted and stable with no horizontal overflow
+ok   1280-push: preseason-rules: every actual visible dialog control is painted without an overlapping toast
+ok   1280-push: preseason-escape: exact tile focus, body scrolling and page position restore
+ok   1280-push: Reading and closing rules preserves the full career
+ok   1280-push: 0-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-push: 0-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   1280-push: preseason-choice: exact tile focus, body scrolling and page position restore
+ok   1280-push: Reopened dialog marks the exact saved choice
+ok   1280-push: 1-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-push: 1-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   1280-push: balanced-choice: exact tile focus, body scrolling and page position restore
+ok   1280-push: 2-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-push: 2-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   1280-push: restored-choice: exact tile focus, body scrolling and page position restore
+ok   1280-push: chosen-plan: reload preserves the complete saved bytes
+ok   1280-push: 3-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-push: 3-advanceProSeason: the actual click consumes exactly the unchanged engine random draws
+ok   1280-push: Next Season records one actual senior year at the shared club
+ok   1280-push: The chosen plan settles once with its exact skill modifier and is consumed
+ok   1280-push: recorded-season: reload preserves the complete saved bytes
+ok   1280-push: 4-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-push: 4-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws
+ok   1280-push: Actual intervening newspaper reaches the mandatory saved season summary
+ok   1280-push: Season summary shows the exact recorded plan outcome and modifier
+ok   1280-push: preseason-outcome: screenshot target is visible, painted and stable with no horizontal overflow
+ok   1280-push: summary-plan: reload preserves the complete saved bytes
+ok   1280-push: Actual route has no horizontal overflow
+ok   1280-push: No page or served asset errors
+ok   1280-push: All external write attempts are intercepted locally with no forwarded external requests
+ok   1280-recovery: initial-repair: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-recovery: Rules and both exact tradeoffs precede the preseason choice
+ok   1280-recovery: All preseason dialog controls are at least 44 pixels
+ok   1280-recovery: Tab remains inside preseason dialog
+ok   1280-recovery: Tab remains inside preseason dialog
+ok   1280-recovery: Shift+Tab remains inside preseason dialog
+ok   1280-recovery: Shift+Tab remains inside preseason dialog
+ok   1280-recovery: preseason-rules: screenshot target is visible, painted and stable with no horizontal overflow
+ok   1280-recovery: preseason-rules: every actual visible dialog control is painted without an overlapping toast
+ok   1280-recovery: preseason-escape: exact tile focus, body scrolling and page position restore
+ok   1280-recovery: Reading and closing rules preserves the full career
+ok   1280-recovery: 0-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-recovery: 0-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   1280-recovery: preseason-choice: exact tile focus, body scrolling and page position restore
+ok   1280-recovery: Reopened dialog marks the exact saved choice
+ok   1280-recovery: 1-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-recovery: 1-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   1280-recovery: balanced-choice: exact tile focus, body scrolling and page position restore
+ok   1280-recovery: 2-pickCareerPreparation: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-recovery: 2-pickCareerPreparation: the actual click consumes exactly the unchanged engine random draws
+ok   1280-recovery: restored-choice: exact tile focus, body scrolling and page position restore
+ok   1280-recovery: chosen-plan: reload preserves the complete saved bytes
+ok   1280-recovery: 3-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-recovery: 3-advanceProSeason: the actual click consumes exactly the unchanged engine random draws
+ok   1280-recovery: Next Season records one actual senior year at the shared club
+ok   1280-recovery: The chosen plan settles once with its exact skill modifier and is consumed
+ok   1280-recovery: recorded-season: reload preserves the complete saved bytes
+ok   1280-recovery: 4-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-recovery: 4-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws
+ok   1280-recovery: Actual intervening newspaper reaches the mandatory saved season summary
+ok   1280-recovery: Season summary shows the exact recorded plan outcome and modifier
+ok   1280-recovery: preseason-outcome: screenshot target is visible, painted and stable with no horizontal overflow
+ok   1280-recovery: summary-plan: reload preserves the complete saved bytes
+ok   1280-recovery: Actual route has no horizontal overflow
+ok   1280-recovery: No page or served asset errors
+ok   1280-recovery: All external write attempts are intercepted locally with no forwarded external requests
+ok   1280-mentor: initial-repair: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-mentor: The actual event explains generated scope and qualifying progress before acceptance
+ok   1280-mentor: mentor-event: screenshot target is visible, painted and stable with no horizontal overflow
+ok   1280-mentor: 0-applyEventChoice: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-mentor: 0-applyEventChoice: the actual click consumes exactly the unchanged engine random draws
+ok   1280-mentor: 1-stayAtClub: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-mentor: 1-stayAtClub: the actual click consumes exactly the unchanged engine random draws
+ok   1280-mentor: Accepted event creates one saved fictional protege without fabricated appearances
+ok   1280-mentor: created: tile identifies the saved generated academy player
+ok   1280-mentor: created: fictional scope and recorded age are explicit
+ok   1280-mentor: created: history contains exactly the recorded mentoring seasons
+ok   1280-mentor: created: help is reopenable and gives the qualifying and interrupted worked example
+ok   1280-mentor: created: dialog controls are at least 44 pixels
+ok   1280-mentor: created: Tab stays inside the dialog
+ok   1280-mentor: created: Tab stays inside the dialog
+ok   1280-mentor: created: Shift+Tab stays inside the dialog
+ok   1280-mentor: created: Shift+Tab stays inside the dialog
+ok   1280-mentor: created-help: screenshot target is visible, painted and stable with no horizontal overflow
+ok   1280-mentor: created-help: every actual visible dialog control is painted without an overlapping toast
+ok   1280-mentor: created-history: screenshot target is visible, painted and stable with no horizontal overflow
+ok   1280-mentor: created-history: every actual visible dialog control is painted without an overlapping toast
+ok   1280-mentor: created-escape: exact tile focus, body scrolling and page position restore
+ok   1280-mentor: created: reading mentor details changes no saved bytes
+ok   1280-mentor: created-back: exact tile focus, body scrolling and page position restore
+ok   1280-mentor: created: Back preserves the complete career
+ok   1280-mentor: created-mentor: reload preserves the complete saved bytes
+ok   1280-mentor: 2-advanceProSeason: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-mentor: 2-advanceProSeason: the actual click consumes exactly the unchanged engine random draws
+ok   1280-mentor: Next Season records one actual senior year at the shared club
+ok   1280-mentor: One qualifying recorded season credits exactly one mentoring year and age
+ok   1280-mentor: recorded-season: reload preserves the complete saved bytes
+ok   1280-mentor: 3-dismissNewspaper: every serialized saved field and key matches the unchanged Chromium engine
+ok   1280-mentor: 3-dismissNewspaper: the actual click consumes exactly the unchanged engine random draws
+ok   1280-mentor: Actual intervening newspaper reaches the mandatory saved season summary
+FAIL 1280-mentor: 4-dismissSummary: every serialized saved field and key matches the unchanged Chromium engine
+1280-mentor: AssertionError [ERR_ASSERTION]: 1280-mentor: 4-dismissSummary: every serialized saved field and key matches the unchanged Chromium engine
+    at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:82:175)
+    at compare (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:117:242)
+    at action (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:134:39)
+    at async summer (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:219:11)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:262:18
+AssertionError [ERR_ASSERTION]: Every phone and desktop development journey must complete
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:278:41
