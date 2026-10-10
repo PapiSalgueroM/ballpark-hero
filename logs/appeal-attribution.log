@@ -1,0 +1,5 @@
+Whole-source holds: 3201 exact files; 24 executed bundles retained.
+Product correctness: true; differing pairs: 0.
+Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+RESULT appeal-with-the-base-engine=0
+restored

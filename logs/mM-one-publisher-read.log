@@ -1,0 +1,10 @@
+MUTATED M: scripts/genCmVarRates.mjs, 1 place(s)
+
+Node.js v24.21.0
+RESULT gen=1
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVarLedger.mjs:207:64
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0
+RESULT ledger=1
+restored
