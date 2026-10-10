@@ -1,0 +1,3 @@
+  FAIL: /footle: 348K of gzipped JavaScript against a budget of 345K
+   /footle             348K gz over  40 files (budget 345K, 348.1K to the tenth)
+sweepWeight: 1 failure
