@@ -1,0 +1,11 @@
+Checked 81 product names against 3459 files
+  scanned: src, public, supabase, scripts, index.html
+  skipped: node_modules, dist, dist-ssr, .git, .playwright-mcp, coverage, .cache, and docs/ on purpose (see the note above)
+  FIFA is allowlisted in 27 shapes, so the governing body, its
+    rankings and its World Cup all pass while the video game does not
+  6 live identifiers are left alone because renaming them is a
+    data migration, not a copy edit: routes, save keys and one Supabase table
+  lines ending in "rival-names-allow" are skipped, for the sims that carry
+    a banned-name list of their own because checking for them IS their job
+
+No rival product names found. 0 findings.
