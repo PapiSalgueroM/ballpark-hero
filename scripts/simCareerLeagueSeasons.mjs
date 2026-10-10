@@ -174,8 +174,9 @@ const CONTROLS = {
   unheld: ['a', 'src/lib/soccerCareerLeague.ts', swap('"Hertha Berlin": "Bundesliga", ', '')],
   phonemine: ['b', 'src/lib/soccerPhone.ts', swap('const mine = name === myLeague;', 'const mine = name === s.currentLeague;')],
   future: ['c', 'src/lib/soccerCareerEngine.ts', s => {
-    const from = 'apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating,';
-    const to = 'apps, leagueApps, goals, assists, cleanSheets, yellowCards, redCards, rating: lastYear + 1 >= 2026 ? rating + 0.125 : rating,';
+    /* Release AT: Release AQ's served ban writes this row as leagueApps: leagueGames, so the anchor is that line. */
+    const from = 'apps, leagueApps: leagueGames, goals, assists, cleanSheets, yellowCards, redCards, rating,';
+    const to = 'apps, leagueApps: leagueGames, goals, assists, cleanSheets, yellowCards, redCards, rating: lastYear + 1 >= 2026 ? rating + 0.125 : rating,';
     if (s.split(from).length !== 2) { console.error('control future: the actual season row anchor is not unique'); process.exit(2); }
     const changed = s.replace(from, to);
     if (changed === s) { console.error('control future: the copied source did not change'); process.exit(2); }
