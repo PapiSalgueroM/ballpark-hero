@@ -1,0 +1,8 @@
+ctl-nhltyped exit=1 1s | simUsSeasonLedger: CONTROL nhltyped FIRED, red at exactly E2
+ledger exit=0 1s | simUsSeasonLedger: green. 1518 checks passed over 23 MLB and 21 NHL seasons; 8 notes for the binding rounds.
+ctl-nhl84 exit=1 1s | simUsSeasonLedger: CONTROL nhl84 FIRED, red at exactly N2 and N5
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simNhlCareer exit=0 26s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+tsc exit=0 87s | 
+simUsBoardParity exit=1 60s | simUsBoardParity: 3 failures
+simCareerHall exit=1 899s | simCareerHall: RED
