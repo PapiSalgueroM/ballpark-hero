@@ -4,15 +4,16 @@
   "dataFile": "scripts/data/cmUclFormat.json",
   "readOn": "2026-10-10",
   "readBy": "the builder of Round 1228, desktop Claude lane",
-  "method": "Each page was opened on the read day through a page reader that answers with lines quoted from the page. Every literal in the ledger is a line that reader quoted, with two exceptions that are written down here: a table row is written as place, club and points (the reader printed the tables as rows of cells), and a dash of the two kinds this repo bans is written as a hyphen (one line, SuperSport's 7-0). The regulations are the 2026/27 editions on documents.uefa.com; the reader would not copy an article whole, so each literal from them is one sentence or one list item.",
+  "method": "Each page was opened on the read day through a page reader that answers with lines quoted from the page. Every literal in the ledger is a line that reader quoted, with two exceptions that are written down here: a table row is written as place, club and points (the reader printed the tables as rows of cells), and a dash of the two kinds this repo bans is written as a hyphen, or the line is cut at it and quoted as two (goal.com's and the Premier League's lines on the opponents from each pot). The regulations are the 2026/27 editions on documents.uefa.com; the reader would not copy an article whole, so each literal from them is one sentence or one list item.",
   "limits": [
     "No copy of a page was kept, so there is no snapshot hash.",
     "The scout of this round named two pages this builder did not open (Tottenham Hotspur's two news pages) and one it could not find under the number given (a Sky Sports article): the Sky Sports page read here is article 13576602 of 27 August 2026.",
     "F4 (the draw's escape clause) stands on the regulations alone. F13 (the 2026/27 dates) stands on Sky Sports alone here. F14 (who is in, and the two European Performance Spots) was not read. F17 (a five step table in the middle of the phase) has no text behind it and is not built.",
     "Annex B of the regulations, the bracket drawing, could not be opened. The bracket rule is derived instead from the two league phase seasons that have been played, each read on at least two publishers, and both seasons give the same rule.",
     "The final tables are ESPN's, with TNT Sports agreeing on the top 24 clubs and their points. Places 25 to 36 stand on ESPN alone and nothing reads them but the arithmetic checks.",
-    "Real Madrid and Bayern Munich finished 2024-25 level on points, goal difference and goals scored. Which later step split them is not in either table, so that pair is recorded as level on two steps and nothing is claimed about it."
+    "Real Madrid and Bayern Munich finished 2024-25 level on points, goal difference and goals scored. Which later step split them is not in either table, so that pair is recorded as level on two steps and nothing is claimed about it.",
+    "A PUBLISHER'S ERROR, NOT REPEATED. SuperSport's page of 18 March 2026 prints a second leg score for Barcelona against Newcastle that nufc.com's match page of that night and Flashscore's match report both give differently (found by the adversarial review of Round 1228, read again by the fixer on 2026-10-10). The ledger quotes that line only as far as the two clubs and holds no score of any knockout match: nothing reads one."
   ],
   "checkedBy": "scripts/simCmLeaguePhase.mjs",
-  "sha256": "09311ffc14e430feab21ea2a0ebc3ee08222d2cd02803798c7ae891f4fdfacdd"
+  "sha256": "e5daa535e1a73a580ec6d46d2bcceb690b8e3758b88187f9e475a2836fbdef81"
 }
