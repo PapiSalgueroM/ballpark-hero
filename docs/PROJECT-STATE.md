@@ -1,3 +1,16 @@
+## AR maintenance follow-up: retire the obsolete Round1163 candidate workflow, pending integration
+
+Branch codex/retire-penalty-proof removes only .github/workflows/cm-penalty-markers.yml.
+Round1146 replaced the report card's inline marker expressions with clubManagerScorerLine;
+the old driver requires those two expressions and an unchanged engine against68064f38.
+It is tied to the frozen1163 branch and cannot validate the published AR implementation.
+Its accepted historical source/proof remain at f280dc76 and run37860304738.
+Scorer tests and all current general/release gates remain unchanged. Application,
+scripts, dependencies and public files match ARfa24b384 exactly, so accepted AR release
+evidence is reused without repeated runtime. Native Git diff and independent static
+review verify the deletion's scope. This maintenance branch grants no new live acceptance.
+F retains integration/main/publication; PR208/209/210 and held1168 remain separate.
+
 ## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
 
 Claude lane (session F). main 8c5ce655, deployment 468b616a-f984-4af9-959d-12f584834eaa, entry index-DNvMbg1w.js (was index-DBSXBErW.js, Release AQ,
