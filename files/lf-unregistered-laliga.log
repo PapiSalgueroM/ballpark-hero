@@ -1,0 +1,17 @@
+simCmLeagueFixtures: 10 ledger(s) on disk: bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, premier, primeira, seriea, superlig
+NEGATIVE CONTROL ON: unregistered on a copy of laliga, sections HJ must go red and nothing else
+A) shape: green for 10 ledger(s)
+B) no club twice in a matchday: green for 10 ledger(s)
+C) each pair once at each ground: green for 10 ledger(s)
+D) the game's own clubs: green for 10 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 10 ledger(s)
+F) two independent sources: green for 10 ledger(s)
+G) nothing excluded got in: green for 10 ledger(s)
+H) the game's registry: RED for laliga
+  FAIL: laliga: laliga-2026-27-v1 was bound and has left the registry: a save that holds it would read a generated season
+I) frozen: green for 10 ledger(s)
+J) Help tells the truth: RED for laliga
+  FAIL: laliga: Help names La Liga and the game binds no list for it
+  FAIL: laliga: What's New says laliga plays its real list and the game binds none for it
+  FAIL: laliga: What's New gives an example from laliga and the game binds no list in a file of its own for it
+CONTROL unregistered FIRED as expected on laliga: sections HJ went red for laliga and nothing else

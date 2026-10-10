@@ -1,0 +1,14 @@
+  ok   eredivisie ledger: reads every fixture of the list with the exact two-source round order and venues
+  ok   eredivisie calendar: renders every CalendarCard opponent and venue reading from the same schedule
+  ok   eredivisie settlement: settles the actual human fixture and every neutral result with conserved table and scorer credits
+  n/a  eredivisie bye: the neutral-only probe can only stand in the Premier League
+  ok   eredivisie world: settles the actual world league round through the same real fixture resolver
+  ok   eredivisie eligibility: binds only a fresh original modern world of this league with exact membership
+  ok   eredivisie takeover: keeps the key through a mid season takeover, played in the real order before and after the handover, and gives none to a club joined during a season
+  ok   eredivisie unloaded: gives no key while the list is not here, and refuses to read a saved key without its list
+  ok   eredivisie legacy: preserves the whole generated save with the key taken out: random draws, twelve entries, saved bytes, reload
+  ok   eredivisie future: refuses stale keys in later seasons, other years and changed league membership
+  ok   eredivisie rollover: clears the real fixture key after a fully played season before generating the next season
+  ok   eredivisie baseline: matches the base engine for unsupported starts and genuine match outcomes
+  ok   eredivisie uncopied: passes the whole base comparison with untouched current source under every copied fault
+simCmRealFixtures normal eredivisie: 12 outcome groups passed on 18 clubs, 34 matchdays and 306 fixtures, generated baseline held against the base 980654facb2d41a6c9ddc029c43710178b9d49b8.
