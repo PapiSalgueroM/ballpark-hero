@@ -1,0 +1,11 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+dumps: bash .rc/x/dumps.sh . /tmp/rows nhl 2000 base 1 2 3 4 5
+gen-guard: node scripts/genCareerHallMarks.mjs /tmp/rows; s=$?; git status --short | head -3; test $s -eq 2
+gen: set -o pipefail; MARKS_CALIBRATION=3 node scripts/genCareerHallMarks.mjs /tmp/rows | tee $RC_OUT/gen.txt && cp scripts/data/careerHallMarks.json $RC_OUT/careerHallMarks.json && git diff --stat -- scripts/data/careerHallMarks.json | tail -1
+record: for s in nfl nba mlb nhl; do SIM_SKIP_BOARD=1 SIM_RECORD_V3=1 node scripts/simCareerHall.mjs $s 2000 | tail -1; done; cp scripts/data/careerHallV3.json $RC_OUT/careerHallV3.json; ls -la scripts/data/careerHallV3.json
+hall-nhl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000 > $RC_OUT/hall-nhl.log 2>&1; s=$?; grep -c "^  ok" $RC_OUT/hall-nhl.log; grep "FAIL\|17 (a)\|15 (d)\|15 (e)\|19 (b)" $RC_OUT/hall-nhl.log | cut -c1-330; tail -1 $RC_OUT/hall-nhl.log; exit $s
+hall-nfl: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nfl 2000 > $RC_OUT/hall-nfl.log 2>&1; s=$?; grep -c "^  ok" $RC_OUT/hall-nfl.log; grep "FAIL\|17 (a)\|15 (d)\|15 (e)" $RC_OUT/hall-nfl.log | cut -c1-330; tail -1 $RC_OUT/hall-nfl.log; exit $s
+hall-nba: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nba 2000 > $RC_OUT/hall-nba.log 2>&1; s=$?; grep -c "^  ok" $RC_OUT/hall-nba.log; grep "FAIL\|17 (a)\|15 (d)\|15 (e)" $RC_OUT/hall-nba.log | cut -c1-330; tail -1 $RC_OUT/hall-nba.log; exit $s
+hall-mlb: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs mlb 2000 > $RC_OUT/hall-mlb.log 2>&1; s=$?; grep -c "^  ok" $RC_OUT/hall-mlb.log; grep "FAIL\|17 (a)\|15 (d)\|15 (e)" $RC_OUT/hall-mlb.log | cut -c1-330; tail -1 $RC_OUT/hall-mlb.log; exit $s
+vitest: node_modules/.bin/vitest run src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usCareerActionConfirm.test.tsx src/test/nbaOldSaveLines.test.ts src/test/careerHallV1Replay.test.ts src/test/usCareerTruthDigest.test.ts src/test/usBoardFixture.test.tsx src/test/usSeasonSlate.test.ts --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -40
