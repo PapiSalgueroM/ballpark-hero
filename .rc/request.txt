@@ -1,0 +1,7 @@
+sha: git log --format='%H %s' -3 | cut -c1-120
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000 --hookTimeout=120000
+simLiveScores: node scripts/simLiveScores.mjs
+simLiveScores-citedespn: LIVE_CONTROL=citedespn node scripts/simLiveScores.mjs
+simLiveScores-feedhost: LIVE_CONTROL=feedhost node scripts/simLiveScores.mjs
+gen-basis-instep: node scripts/genCmAgesBasis2026.mjs --from HEAD
