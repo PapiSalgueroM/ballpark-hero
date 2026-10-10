@@ -1,0 +1,2 @@
+#!serial
+record: for s in a b c d e; do SIM_PRE_DRAFT_RECORD=1 SIM_PRE_DRAFT_BASE=09df145abfb241679022b41903d2f19bc254ebf9 SEEDSET=$s node scripts/simCareerPreDraft.mjs > "$RC_OUT/record-$s.log" 2>&1 || { tail -5 "$RC_OUT/record-$s.log"; exit 1; }; done; cp scripts/data/careerPreDraftDigest.json "$RC_OUT/careerPreDraftDigest.json"; node --version; git diff --stat HEAD -- src | tail -1; for s in a b c d e; do SEEDSET=$s node scripts/simCareerPreDraft.mjs > "$RC_OUT/check-$s.log" 2>&1; echo "check $s exit=$? $(tail -1 "$RC_OUT/check-$s.log")"; done
