@@ -1,0 +1,6 @@
+e2cab96b3d0d6db0b720299f39542099252ada13
+LotteryReveal.test.tsx
+LotteryReveal.tsx
+RankShiftTable.tsx
+33:import { LotteryReveal } from '@/components/motion/LotteryReveal';
+presenter files in src/components/motion on r1220: 2

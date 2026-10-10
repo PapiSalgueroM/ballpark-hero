@@ -1,0 +1,8 @@
+#!serial
+head: git rev-parse HEAD~1; git log --oneline -3 | cut -c1-90; n=$(ls src/components/motion | grep -c LotteryReveal); echo "presenter files in src/components/motion on this head: $n"; test "$n" = "0" && test -e src/components/lottery/LotteryReveal.tsx && test -e src/components/lottery/LotteryReveal.test.tsx && test -e src/lib/lotteryReveal.ts && echo "presenter is in src/components/lottery only"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+scm: node scripts/simSeasonCentreMotion.mjs
+r1220-scm: git fetch -q origin r1220-draft-night; git worktree add -q /tmp/r1220 FETCH_HEAD && ln -s "$PWD/node_modules" /tmp/r1220/node_modules && cd /tmp/r1220 && git log -1 --format='r1220 head %h %s' | cut -c1-120 && node scripts/simSeasonCentreMotion.mjs
+r1220-where: cd /tmp/r1220 && git rev-parse HEAD && ls src/components/motion && grep -n "LotteryReveal'" src/components/career/DraftNightSequence.tsx; n=$(ls src/components/motion | grep -c LotteryReveal); echo "presenter files in src/components/motion on r1220: $n"
+vitest: node_modules/.bin/vitest run src/components/lottery/LotteryReveal.test.tsx src/components/front-office-shared/GmLotteryCard.test.tsx src/lib/gmLotteryNight.test.ts src/lib/gmDraftOrder.test.ts src/lib/gmDraftNight.test.ts src/lib/gmPicks.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simGmDraftOrder.mjs

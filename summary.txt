@@ -1,0 +1,7 @@
+head exit=0 0s | presenter is in src/components/lottery only
+tsc exit=0 56s | 
+scm exit=0 10s | simSeasonCentreMotion: 17 checks, 0 failed
+r1220-scm exit=1 11s | simSeasonCentreMotion: 17 checks, 3 failed
+r1220-where exit=0 0s | presenter files in src/components/motion on r1220: 2
+vitest exit=0 3s |    Duration  2.50s (transform 360ms, setup 333ms, collect 865ms, tests 906ms, environment 2.56s, prepare 799ms)
+sim exit=0 7s | simGmDraftOrder: green. 602997 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
