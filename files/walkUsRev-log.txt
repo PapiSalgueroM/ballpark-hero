@@ -1,0 +1,498 @@
+  ok   nfl-390: quick start reaches the hub
+  ..   nfl-390 hub layout (page px): play 501..545, programme panel 637..775, practice 791..947, hub tiles 980..1285, page 12601 high, screen 844
+  ok   nfl-390: the season programme panel is on the hub
+  ..   nfl-390 page at 318 with the Plan button 400 px down the screen; after the tap the page reads 318
+  ok   nfl-390: Plan your season opens the dialog
+  ok   nfl-390: it opens on its rules first
+  ..   nfl-390 help view: box [12,115,366,614] of 390x844, body scrolls 275 px, cut [], small []
+  ok   nfl-390: the help view is inside the screen
+  ok   nfl-390: six plans on the menu (6)
+  ok   nfl-390: nothing cut on the menu []
+  ok   nfl-390: every menu button is a full touch target []
+  ..   nfl-390 workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   nfl-390 workload: no long dash in the copy
+  ok   nfl-390 workload: nothing cut []
+  ..   nfl-390 tactics: Tactical approach Your usual approach Keep your current style. Big-play preparation Season morale +6, durability -0.06. More form, more injury risk. Controlled preparation Season morale -3, durability +0.06. Less form, less injury risk. Each choice saves immediately. You can change it before playing.
+  ok   nfl-390 tactics: no long dash in the copy
+  ok   nfl-390 tactics: nothing cut []
+  ok   nfl-390: the ? opens the rules from inside a plan
+  ok   nfl-390: Back from the rules returns to the same plan
+  ..   nfl-390 expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 10 games: morale +3. Miss it: morale -3. Earn a bigger role Play 12 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   nfl-390 expectation: no long dash in the copy
+  ok   nfl-390 expectation: nothing cut []
+  ..   nfl-390 partnership: Teammate partnership Keep your own routine No extra partnership input. Work with your receivers A role-based teammate partnership, with no invented player. At least 10 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   nfl-390 partnership: no long dash in the copy
+  ok   nfl-390 partnership: nothing cut []
+  ..   nfl-390 bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 20 passing touchdowns and 10 games: 2% of season salary as a gross bonus. Stretch the benchmark 24 passing touchdowns and 10 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   nfl-390 bonus: no long dash in the copy
+  ok   nfl-390 bonus: nothing cut []
+  ..   nfl-390 reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   nfl-390 reinvention: no long dash in the copy
+  ok   nfl-390 reinvention: nothing cut []
+  ok   nfl-390: workload:recover shows as chosen
+  ok   nfl-390: tactics:support shows as chosen
+  ok   nfl-390: expectation:steady shows as chosen
+  ok   nfl-390: bonus:steady shows as chosen
+  ok   nfl-390: the page did not move across the dialog (318 then 318)
+  ok   nfl-390: the hub says the programme is saved: Your season programme Programme saved for 2026 at SF. Plan your season
+  ok   nfl-390: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nfl","year":2026,"team":"SF"}
+  ok   nfl-390: Play raises the season reveal
+  ..   nfl-390 reveal: 3 animation(s) running 0.9 s after the press
+  ok   nfl-390: the curtain, the rivalry card and the summer all lead back to the hub (4 presses)
+  ..   nfl-390 save before the season {"health":100,"morale":70,"dur":0.9,"year":2026,"arch":"cannon","pos":"QB","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nfl","year":2026,"team":"SF"},"results":null,"partner":null,"net":0.1,"earn":0} and after {"health":100,"morale":76,"dur":0.9,"year":2027,"arch":"cannon","pos":"QB","plan":null,"results":[{"sport":"nfl","year":2026,"team":"SF","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Controlled preparation","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"completed","target":10,"actual":17,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"missed","target":20,"actual":11,"unit":"passing touchdowns"}],"bonusGross":0,"bonusNet":0,"partnershipProgress":0}],"partner":null,"net":1.3,"earn":3}
+  ok   nfl-390: one result row, the plan is off the save
+  ok   nfl-390: durability is back to 0.9 after the season
+  ..   nfl-390 result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Controlled preparation: completed. Steady availability: completed (17/10 games). Match the benchmark: missed (11/20 passing touchdowns). Plan your season
+  ok   nfl-390: the Trophy Case opens from its tile
+  ok   nfl-390: Back from the Trophy Case returns to the hub
+  ..   nfl-390 a paid bonus reads: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Steady availability: completed (16/10 games). Match the benchmark: completed (24/20 passing touchdowns). Work with your receivers: completed (16/10 games). Bonus: $ 0.0165M gross, $ 0.0074M banked. Partnership progress: 1/3. Plan your season
+  ok   nfl-390: a save with a damaged programme record still opens on the hub
+  ..   nfl-390 damaged record: 3 choices disabled; the dialog ends: ale -6. Less injury risk, less form. Choices are unavailable while retired, suspended or when the saved programme record is incomplete. Each choice saves immediately. You can change it before playing.
+  ok   nfl-390: and the next season still plays with the damaged record on the save
+  ok   nfl-390: no page error ()
+  ok   nfl-1280: quick start reaches the hub
+  ..   nfl-1280 hub layout (page px): play 440..484, programme panel 527..649, practice 665..821, hub tiles 854..1055, page 8301 high, screen 900
+  ok   nfl-1280: the season programme panel is on the hub
+  ..   nfl-1280 page at 164 with the Plan button 428 px down the screen; after the tap the page reads 164
+  ok   nfl-1280: Plan your season opens the dialog
+  ok   nfl-1280: it opens on its rules first
+  ..   nfl-1280 help view: box [384,116,512,669] of 1280x900, body scrolls 0 px, cut [], small []
+  ok   nfl-1280: the help view is inside the screen
+  ok   nfl-1280: six plans on the menu (6)
+  ok   nfl-1280: nothing cut on the menu []
+  ok   nfl-1280: every menu button is a full touch target []
+  ..   nfl-1280 workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280 workload: no long dash in the copy
+  ok   nfl-1280 workload: nothing cut []
+  ..   nfl-1280 tactics: Tactical approach Your usual approach Keep your current style. Big-play preparation Season morale +6, durability -0.06. More form, more injury risk. Controlled preparation Season morale -3, durability +0.06. Less form, less injury risk. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280 tactics: no long dash in the copy
+  ok   nfl-1280 tactics: nothing cut []
+  ok   nfl-1280: the ? opens the rules from inside a plan
+  ok   nfl-1280: Back from the rules returns to the same plan
+  ..   nfl-1280 expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 10 games: morale +3. Miss it: morale -3. Earn a bigger role Play 12 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280 expectation: no long dash in the copy
+  ok   nfl-1280 expectation: nothing cut []
+  ..   nfl-1280 partnership: Teammate partnership Keep your own routine No extra partnership input. Work with your receivers A role-based teammate partnership, with no invented player. At least 10 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280 partnership: no long dash in the copy
+  ok   nfl-1280 partnership: nothing cut []
+  ..   nfl-1280 bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 20 passing touchdowns and 10 games: 2% of season salary as a gross bonus. Stretch the benchmark 24 passing touchdowns and 10 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280 bonus: no long dash in the copy
+  ok   nfl-1280 bonus: nothing cut []
+  ..   nfl-1280 reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280 reinvention: no long dash in the copy
+  ok   nfl-1280 reinvention: nothing cut []
+  ok   nfl-1280: workload:recover shows as chosen
+  ok   nfl-1280: tactics:support shows as chosen
+  ok   nfl-1280: expectation:steady shows as chosen
+  ok   nfl-1280: bonus:steady shows as chosen
+  ok   nfl-1280: the page did not move across the dialog (164 then 164)
+  ok   nfl-1280: the hub says the programme is saved: Your season programme Programme saved for 2026 at TB. Plan your season
+  ok   nfl-1280: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nfl","year":2026,"team":"TB"}
+  ok   nfl-1280: Play raises the season reveal
+  ..   nfl-1280 reveal: 5 animation(s) running 0.9 s after the press
+  ok   nfl-1280: the curtain, the rivalry card and the summer all lead back to the hub (4 presses)
+  ..   nfl-1280 save before the season {"health":100,"morale":70,"dur":0.9,"year":2026,"arch":"cannon","pos":"QB","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nfl","year":2026,"team":"TB"},"results":null,"partner":null,"net":0.1,"earn":0} and after {"health":98,"morale":59,"dur":0.9,"year":2027,"arch":"cannon","pos":"QB","plan":null,"results":[{"sport":"nfl","year":2026,"team":"TB","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Controlled preparation","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"missed","target":10,"actual":5,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"missed","target":20,"actual":4,"unit":"passing touchdowns"}],"bonusGross":0,"bonusNet":0,"partnershipProgress":0}],"partner":null,"net":1.5,"earn":3.1}
+  ok   nfl-1280: one result row, the plan is off the save
+  ok   nfl-1280: durability is back to 0.9 after the season
+  ..   nfl-1280 result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Controlled preparation: completed. Steady availability: missed (5/10 games). Match the benchmark: missed (4/20 passing touchdowns). Plan your season
+  ok   nfl-1280: the Trophy Case opens from its tile
+  ok   nfl-1280: Back from the Trophy Case returns to the hub
+  ok   nfl-1280: no page error ()
+  ok   nba-390: quick start reaches the hub
+  ..   nba-390 hub layout (page px): play 535..579, programme panel 687..825, practice 841..997, hub tiles 1030..1335, page 12407 high, screen 844
+  ok   nba-390: the season programme panel is on the hub
+  ..   nba-390 page at 368 with the Plan button 400 px down the screen; after the tap the page reads 368
+  ok   nba-390: Plan your season opens the dialog
+  ok   nba-390: it opens on its rules first
+  ..   nba-390 help view: box [12,115,366,614] of 390x844, body scrolls 275 px, cut [], small []
+  ok   nba-390: the help view is inside the screen
+  ok   nba-390: six plans on the menu (6)
+  ok   nba-390: nothing cut on the menu []
+  ok   nba-390: every menu button is a full touch target []
+  ..   nba-390 workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   nba-390 workload: no long dash in the copy
+  ok   nba-390 workload: nothing cut []
+  ..   nba-390 tactics: Tactical approach Your usual approach Keep your current style. Scoring focus Season scoring multiplier +8%, playmaking multiplier -8%. Your position stays the same. Playmaking focus Season playmaking multiplier +8%, scoring multiplier -8%. Your position stays the same. Each choice saves immediately. You can change it before playing.
+  ok   nba-390 tactics: no long dash in the copy
+  ok   nba-390 tactics: nothing cut []
+  ok   nba-390: the ? opens the rules from inside a plan
+  ok   nba-390: Back from the rules returns to the same plan
+  ..   nba-390 expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 55 games: morale +3. Miss it: morale -3. Earn a bigger role Play 65 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   nba-390 expectation: no long dash in the copy
+  ok   nba-390 expectation: nothing cut []
+  ..   nba-390 partnership: Teammate partnership Keep your own routine No extra partnership input. Build a two-player rhythm A role-based teammate partnership, with no invented player. At least 55 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   nba-390 partnership: no long dash in the copy
+  ok   nba-390 partnership: nothing cut []
+  ..   nba-390 bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 4 assists per game and 55 games: 2% of season salary as a gross bonus. Stretch the benchmark 5 assists per game and 55 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   nba-390 bonus: no long dash in the copy
+  ok   nba-390 bonus: nothing cut []
+  ..   nba-390 reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   nba-390 reinvention: no long dash in the copy
+  ok   nba-390 reinvention: nothing cut []
+  ok   nba-390: workload:recover shows as chosen
+  ok   nba-390: tactics:support shows as chosen
+  ok   nba-390: expectation:steady shows as chosen
+  ok   nba-390: bonus:steady shows as chosen
+  ok   nba-390: the page did not move across the dialog (368 then 368)
+  ok   nba-390: the hub says the programme is saved: Your season programme Programme saved for 2026 at PHI. Plan your season
+  ok   nba-390: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nba","year":2026,"team":"PHI"}
+  ok   nba-390: Play raises the season reveal
+  ..   nba-390 reveal: 5 animation(s) running 0.9 s after the press
+  ok   nba-390: the curtain, the rivalry card and the summer all lead back to the hub (4 presses)
+  ..   nba-390 save before the season {"health":100,"morale":70,"dur":0.95,"year":2026,"arch":"pointgod","pos":"PG","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nba","year":2026,"team":"PHI"},"results":null,"partner":null,"net":0.3,"earn":0} and after {"health":100,"morale":77,"dur":0.95,"year":2027,"arch":"pointgod","pos":"PG","plan":null,"results":[{"sport":"nba","year":2026,"team":"PHI","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Playmaking focus","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"completed","target":55,"actual":81,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"missed","target":4,"actual":1.2,"unit":"assists per game"}],"bonusGross":0,"bonusNet":0,"partnershipProgress":0}],"partner":null,"net":1.6,"earn":2.5}
+  ok   nba-390: one result row, the plan is off the save
+  ok   nba-390: durability is back to 0.95 after the season
+  ..   nba-390 result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Playmaking focus: completed. Steady availability: completed (81/55 games). Match the benchmark: missed (1.2/4 assists per game). Plan your season
+  ok   nba-390: the Trophy Case opens from its tile
+  ok   nba-390: Back from the Trophy Case returns to the hub
+  ..   nba-390 a paid bonus reads: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Steady availability: completed (16/10 games). Match the benchmark: completed (24/20 passing touchdowns). Work with your receivers: completed (16/10 games). Bonus: $ 0.0165M gross, $ 0.0074M banked. Partnership progress: 1/3. Plan your season
+  ok   nba-390: a save with a damaged programme record still opens on the hub
+  ..   nba-390 damaged record: 3 choices disabled; the dialog ends: ale -6. Less injury risk, less form. Choices are unavailable while retired, suspended or when the saved programme record is incomplete. Each choice saves immediately. You can change it before playing.
+  ok   nba-390: and the next season still plays with the damaged record on the save
+  ok   nba-390: no page error ()
+  ok   nba-1280: quick start reaches the hub
+  ..   nba-1280 hub layout (page px): play 440..484, programme panel 527..649, practice 665..821, hub tiles 854..1055, page 8201 high, screen 900
+  ok   nba-1280: the season programme panel is on the hub
+  ..   nba-1280 page at 164 with the Plan button 428 px down the screen; after the tap the page reads 164
+  ok   nba-1280: Plan your season opens the dialog
+  ok   nba-1280: it opens on its rules first
+  ..   nba-1280 help view: box [384,116,512,669] of 1280x900, body scrolls 0 px, cut [], small []
+  ok   nba-1280: the help view is inside the screen
+  ok   nba-1280: six plans on the menu (6)
+  ok   nba-1280: nothing cut on the menu []
+  ok   nba-1280: every menu button is a full touch target []
+  ..   nba-1280 workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   nba-1280 workload: no long dash in the copy
+  ok   nba-1280 workload: nothing cut []
+  ..   nba-1280 tactics: Tactical approach Your usual approach Keep your current style. Scoring focus Season scoring multiplier +8%, playmaking multiplier -8%. Your position stays the same. Playmaking focus Season playmaking multiplier +8%, scoring multiplier -8%. Your position stays the same. Each choice saves immediately. You can change it before playing.
+  ok   nba-1280 tactics: no long dash in the copy
+  ok   nba-1280 tactics: nothing cut []
+  ok   nba-1280: the ? opens the rules from inside a plan
+  ok   nba-1280: Back from the rules returns to the same plan
+  ..   nba-1280 expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 55 games: morale +3. Miss it: morale -3. Earn a bigger role Play 65 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   nba-1280 expectation: no long dash in the copy
+  ok   nba-1280 expectation: nothing cut []
+  ..   nba-1280 partnership: Teammate partnership Keep your own routine No extra partnership input. Build a two-player rhythm A role-based teammate partnership, with no invented player. At least 55 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   nba-1280 partnership: no long dash in the copy
+  ok   nba-1280 partnership: nothing cut []
+  ..   nba-1280 bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 4 assists per game and 55 games: 2% of season salary as a gross bonus. Stretch the benchmark 5 assists per game and 55 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   nba-1280 bonus: no long dash in the copy
+  ok   nba-1280 bonus: nothing cut []
+  ..   nba-1280 reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   nba-1280 reinvention: no long dash in the copy
+  ok   nba-1280 reinvention: nothing cut []
+  ok   nba-1280: workload:recover shows as chosen
+  ok   nba-1280: tactics:support shows as chosen
+  ok   nba-1280: expectation:steady shows as chosen
+  ok   nba-1280: bonus:steady shows as chosen
+  ok   nba-1280: the page did not move across the dialog (164 then 164)
+  ok   nba-1280: the hub says the programme is saved: Your season programme Programme saved for 2026 at IND. Plan your season
+  ok   nba-1280: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nba","year":2026,"team":"IND"}
+  ok   nba-1280: Play raises the season reveal
+  ..   nba-1280 reveal: 5 animation(s) running 0.9 s after the press
+  ok   nba-1280: the curtain, the rivalry card and the summer all lead back to the hub (3 presses)
+  ..   nba-1280 save before the season {"health":100,"morale":70,"dur":0.95,"year":2026,"arch":"pointgod","pos":"PG","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nba","year":2026,"team":"IND"},"results":null,"partner":null,"net":0.3,"earn":0} and after {"health":100,"morale":93,"dur":0.95,"year":2027,"arch":"pointgod","pos":"PG","plan":null,"results":[{"sport":"nba","year":2026,"team":"IND","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Playmaking focus","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"completed","target":55,"actual":79,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"completed","target":4,"actual":4.2,"unit":"assists per game"}],"bonusGross":0.05,"bonusNet":0.0225,"partnershipProgress":0}],"partner":null,"net":1.4,"earn":2.55}
+  ok   nba-1280: one result row, the plan is off the save
+  ok   nba-1280: durability is back to 0.95 after the season
+  ..   nba-1280 result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Playmaking focus: completed. Steady availability: completed (79/55 games). Match the benchmark: completed (4.2/4 assists per game). Bonus: $ 0.0500M gross, $ 0.0225M banked. Plan your season
+  ok   nba-1280: the Trophy Case opens from its tile
+  ok   nba-1280: Back from the Trophy Case returns to the hub
+  ok   nba-1280: no page error ()
+  ok   mlb-390: quick start reaches the hub
+  ..   mlb-390 hub layout (page px): play 535..579, programme panel 635..773, practice 789..945, hub tiles 978..1283, page 11857 high, screen 844
+  ok   mlb-390: the season programme panel is on the hub
+  ..   mlb-390 page at 316 with the Plan button 400 px down the screen; after the tap the page reads 316
+  ok   mlb-390: Plan your season opens the dialog
+  ok   mlb-390: it opens on its rules first
+  ..   mlb-390 help view: box [12,115,366,614] of 390x844, body scrolls 275 px, cut [], small []
+  ok   mlb-390: the help view is inside the screen
+  ok   mlb-390: six plans on the menu (6)
+  ok   mlb-390: nothing cut on the menu []
+  ok   mlb-390: every menu button is a full touch target []
+  ..   mlb-390 workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   mlb-390 workload: no long dash in the copy
+  ok   mlb-390 workload: nothing cut []
+  ..   mlb-390 tactics: Tactical approach Your usual approach Keep your current style. Attack at the plate Season morale +6, durability -0.06. More form, more injury risk. Patient preparation Season morale -3, durability +0.06. Less form, less injury risk. Each choice saves immediately. You can change it before playing.
+  ok   mlb-390 tactics: no long dash in the copy
+  ok   mlb-390 tactics: nothing cut []
+  ok   mlb-390: the ? opens the rules from inside a plan
+  ok   mlb-390: Back from the rules returns to the same plan
+  ..   mlb-390 expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 100 games: morale +3. Miss it: morale -3. Earn a bigger role Play 110 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   mlb-390 expectation: no long dash in the copy
+  ok   mlb-390 expectation: nothing cut []
+  ..   mlb-390 partnership: Teammate partnership Keep your own routine No extra partnership input. Build a lineup partnership A role-based teammate partnership, with no invented player. At least 100 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   mlb-390 partnership: no long dash in the copy
+  ok   mlb-390 partnership: nothing cut []
+  ..   mlb-390 bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 15 home runs and 100 games: 2% of season salary as a gross bonus. Stretch the benchmark 19 home runs and 100 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   mlb-390 bonus: no long dash in the copy
+  ok   mlb-390 bonus: nothing cut []
+  ..   mlb-390 reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   mlb-390 reinvention: no long dash in the copy
+  ok   mlb-390 reinvention: nothing cut []
+  ok   mlb-390: workload:recover shows as chosen
+  ok   mlb-390: tactics:support shows as chosen
+  ok   mlb-390: expectation:steady shows as chosen
+  ok   mlb-390: bonus:steady shows as chosen
+  ok   mlb-390: the page did not move across the dialog (316 then 316)
+  ok   mlb-390: the hub says the programme is saved: Your season programme Programme saved for 2026 at ARI. Plan your season
+  ok   mlb-390: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"mlb","year":2026,"team":"ARI"}
+  ok   mlb-390: Play raises the season reveal
+  ..   mlb-390 reveal: 6 animation(s) running 0.9 s after the press
+  ok   mlb-390: the curtain, the rivalry card and the summer all lead back to the hub (6 presses)
+  ..   mlb-390 save before the season {"health":100,"morale":70,"dur":0.9,"year":2026,"arch":"fivetool","pos":"CF","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"mlb","year":2026,"team":"ARI"},"results":null,"partner":null,"net":0.4,"earn":0} and after {"health":89,"morale":80,"dur":0.9,"year":2027,"arch":"fivetool","pos":"CF","plan":null,"results":[{"sport":"mlb","year":2026,"team":"ARI","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Patient preparation","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"missed","target":100,"actual":76,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"missed","target":15,"actual":5,"unit":"home runs"}],"bonusGross":0,"bonusNet":0,"partnershipProgress":0}],"partner":null,"net":0,"earn":0.8}
+  ok   mlb-390: one result row, the plan is off the save
+  ok   mlb-390: durability is back to 0.9 after the season
+  ..   mlb-390 result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Patient preparation: completed. Steady availability: missed (76/100 games). Match the benchmark: missed (5/15 home runs). Plan your season
+  ok   mlb-390: the Trophy Case opens from its tile
+  ok   mlb-390: Back from the Trophy Case returns to the hub
+  ..   mlb-390 a paid bonus reads: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Steady availability: completed (16/10 games). Match the benchmark: completed (24/20 passing touchdowns). Work with your receivers: completed (16/10 games). Bonus: $ 0.0165M gross, $ 0.0074M banked. Partnership progress: 1/3. Plan your season
+  ok   mlb-390: a save with a damaged programme record still opens on the hub
+  ..   mlb-390 damaged record: 3 choices disabled; the dialog ends: ale -6. Less injury risk, less form. Choices are unavailable while retired, suspended or when the saved programme record is incomplete. Each choice saves immediately. You can change it before playing.
+  ok   mlb-390: and the next season still plays with the damaged record on the save
+  ok   mlb-390: no page error ()
+  ok   mlb-1280: quick start reaches the hub
+  ..   mlb-1280 hub layout (page px): play 440..484, programme panel 524..646, practice 662..818, hub tiles 851..1052, page 7962 high, screen 900
+  ok   mlb-1280: the season programme panel is on the hub
+  ..   mlb-1280 page at 161 with the Plan button 428 px down the screen; after the tap the page reads 161
+  ok   mlb-1280: Plan your season opens the dialog
+  ok   mlb-1280: it opens on its rules first
+  ..   mlb-1280 help view: box [384,116,512,669] of 1280x900, body scrolls 0 px, cut [], small []
+  ok   mlb-1280: the help view is inside the screen
+  ok   mlb-1280: six plans on the menu (6)
+  ok   mlb-1280: nothing cut on the menu []
+  ok   mlb-1280: every menu button is a full touch target []
+  ..   mlb-1280 workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   mlb-1280 workload: no long dash in the copy
+  ok   mlb-1280 workload: nothing cut []
+  ..   mlb-1280 tactics: Tactical approach Your usual approach Keep your current style. Attack at the plate Season morale +6, durability -0.06. More form, more injury risk. Patient preparation Season morale -3, durability +0.06. Less form, less injury risk. Each choice saves immediately. You can change it before playing.
+  ok   mlb-1280 tactics: no long dash in the copy
+  ok   mlb-1280 tactics: nothing cut []
+  ok   mlb-1280: the ? opens the rules from inside a plan
+  ok   mlb-1280: Back from the rules returns to the same plan
+  ..   mlb-1280 expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 100 games: morale +3. Miss it: morale -3. Earn a bigger role Play 110 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   mlb-1280 expectation: no long dash in the copy
+  ok   mlb-1280 expectation: nothing cut []
+  ..   mlb-1280 partnership: Teammate partnership Keep your own routine No extra partnership input. Build a lineup partnership A role-based teammate partnership, with no invented player. At least 100 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   mlb-1280 partnership: no long dash in the copy
+  ok   mlb-1280 partnership: nothing cut []
+  ..   mlb-1280 bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 15 home runs and 100 games: 2% of season salary as a gross bonus. Stretch the benchmark 19 home runs and 100 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   mlb-1280 bonus: no long dash in the copy
+  ok   mlb-1280 bonus: nothing cut []
+  ..   mlb-1280 reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   mlb-1280 reinvention: no long dash in the copy
+  ok   mlb-1280 reinvention: nothing cut []
+  ok   mlb-1280: workload:recover shows as chosen
+  ok   mlb-1280: tactics:support shows as chosen
+  ok   mlb-1280: expectation:steady shows as chosen
+  ok   mlb-1280: bonus:steady shows as chosen
+  ok   mlb-1280: the page did not move across the dialog (161 then 161)
+  ok   mlb-1280: the hub says the programme is saved: Your season programme Programme saved for 2026 at CHC. Plan your season
+  ok   mlb-1280: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"mlb","year":2026,"team":"CHC"}
+  ok   mlb-1280: Play raises the season reveal
+  ..   mlb-1280 reveal: 4 animation(s) running 0.9 s after the press
+  ok   mlb-1280: the curtain, the rivalry card and the summer all lead back to the hub (6 presses)
+  ..   mlb-1280 save before the season {"health":100,"morale":70,"dur":0.9,"year":2026,"arch":"fivetool","pos":"CF","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"mlb","year":2026,"team":"CHC"},"results":null,"partner":null,"net":0.4,"earn":0} and after {"health":97,"morale":97,"dur":0.9,"year":2027,"arch":"fivetool","pos":"CF","plan":null,"results":[{"sport":"mlb","year":2026,"team":"CHC","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Patient preparation","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"completed","target":100,"actual":157,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"missed","target":15,"actual":9,"unit":"home runs"}],"bonusGross":0,"bonusNet":0,"partnershipProgress":0}],"partner":null,"net":0.8,"earn":0.8}
+  ok   mlb-1280: one result row, the plan is off the save
+  ok   mlb-1280: durability is back to 0.9 after the season
+  ..   mlb-1280 result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Patient preparation: completed. Steady availability: completed (157/100 games). Match the benchmark: missed (9/15 home runs). Plan your season
+  ok   mlb-1280: the Trophy Case opens from its tile
+  ok   mlb-1280: Back from the Trophy Case returns to the hub
+  ok   mlb-1280: no page error ()
+  ok   nhl-390: quick start reaches the hub
+  ..   nhl-390 hub layout (page px): play 535..579, programme panel 635..773, practice 789..945, hub tiles 978..1283, page 11340 high, screen 844
+  ok   nhl-390: the season programme panel is on the hub
+  ..   nhl-390 page at 316 with the Plan button 400 px down the screen; after the tap the page reads 316
+  ok   nhl-390: Plan your season opens the dialog
+  ok   nhl-390: it opens on its rules first
+  ..   nhl-390 help view: box [12,115,366,614] of 390x844, body scrolls 275 px, cut [], small []
+  ok   nhl-390: the help view is inside the screen
+  ok   nhl-390: six plans on the menu (6)
+  ok   nhl-390: nothing cut on the menu []
+  ok   nhl-390: every menu button is a full touch target []
+  ..   nhl-390 workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   nhl-390 workload: no long dash in the copy
+  ok   nhl-390 workload: nothing cut []
+  ..   nhl-390 tactics: Tactical approach Your usual approach Keep your current style. Finishing focus Season scoring multiplier +0.08, favoring goals over assists. Playmaking focus Season scoring multiplier -0.08 (minimum 0.4), favoring assists over goals. Each choice saves immediately. You can change it before playing.
+  ok   nhl-390 tactics: no long dash in the copy
+  ok   nhl-390 tactics: nothing cut []
+  ok   nhl-390: the ? opens the rules from inside a plan
+  ok   nhl-390: Back from the rules returns to the same plan
+  ..   nhl-390 expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 55 games: morale +3. Miss it: morale -3. Earn a bigger role Play 65 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   nhl-390 expectation: no long dash in the copy
+  ok   nhl-390 expectation: nothing cut []
+  ..   nhl-390 partnership: Teammate partnership Keep your own routine No extra partnership input. Build line chemistry A role-based teammate partnership, with no invented player. At least 55 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   nhl-390 partnership: no long dash in the copy
+  ok   nhl-390 partnership: nothing cut []
+  ..   nhl-390 bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 20 goals and 55 games: 2% of season salary as a gross bonus. Stretch the benchmark 24 goals and 55 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   nhl-390 bonus: no long dash in the copy
+  ok   nhl-390 bonus: nothing cut []
+  ..   nhl-390 reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   nhl-390 reinvention: no long dash in the copy
+  ok   nhl-390 reinvention: nothing cut []
+  ok   nhl-390: workload:recover shows as chosen
+  ok   nhl-390: tactics:support shows as chosen
+  ok   nhl-390: expectation:steady shows as chosen
+  ok   nhl-390: bonus:steady shows as chosen
+  ok   nhl-390: the page did not move across the dialog (316 then 316)
+  ok   nhl-390: the hub says the programme is saved: Your season programme Programme saved for 2026 at DAL. Plan your season
+  ok   nhl-390: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nhl","year":2026,"team":"DAL"}
+  ok   nhl-390: Play raises the season reveal
+  ..   nhl-390 reveal: 3 animation(s) running 0.9 s after the press
+  ok   nhl-390: the curtain, the rivalry card and the summer all lead back to the hub (7 presses)
+  ..   nhl-390 save before the season {"health":100,"morale":70,"dur":0.9,"year":2026,"arch":"generational","pos":"C","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nhl","year":2026,"team":"DAL"},"results":null,"partner":null,"net":0.5,"earn":0} and after {"health":100,"morale":73,"dur":0.9,"year":2027,"arch":"generational","pos":"C","plan":null,"results":[{"sport":"nhl","year":2026,"team":"DAL","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Playmaking focus","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"completed","target":55,"actual":80,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"completed","target":20,"actual":28,"unit":"goals"}],"bonusGross":0.018,"bonusNet":0.0081,"partnershipProgress":0}],"partner":null,"net":0.9081,"earn":0.918}
+  ok   nhl-390: one result row, the plan is off the save
+  ok   nhl-390: durability is back to 0.9 after the season
+  ..   nhl-390 result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Playmaking focus: completed. Steady availability: completed (80/55 games). Match the benchmark: completed (28/20 goals). Bonus: $ 0.0180M gross, $ 0.0081M banked. Plan your season
+  ok   nhl-390: the Trophy Case opens from its tile
+  ok   nhl-390: Back from the Trophy Case returns to the hub
+  ..   nhl-390 a paid bonus reads: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Steady availability: completed (16/10 games). Match the benchmark: completed (24/20 passing touchdowns). Work with your receivers: completed (16/10 games). Bonus: $ 0.0165M gross, $ 0.0074M banked. Partnership progress: 1/3. Plan your season
+  ok   nhl-390: a save with a damaged programme record still opens on the hub
+  ..   nhl-390 damaged record: 3 choices disabled; the dialog ends: ale -6. Less injury risk, less form. Choices are unavailable while retired, suspended or when the saved programme record is incomplete. Each choice saves immediately. You can change it before playing.
+  ok   nhl-390: and the next season still plays with the damaged record on the save
+  ok   nhl-390: no page error ()
+  ok   nhl-1280: quick start reaches the hub
+  ..   nhl-1280 hub layout (page px): play 440..484, programme panel 524..646, practice 662..818, hub tiles 851..1052, page 7657 high, screen 900
+  ok   nhl-1280: the season programme panel is on the hub
+  ..   nhl-1280 page at 161 with the Plan button 428 px down the screen; after the tap the page reads 161
+  ok   nhl-1280: Plan your season opens the dialog
+  ok   nhl-1280: it opens on its rules first
+  ..   nhl-1280 help view: box [384,116,512,669] of 1280x900, body scrolls 0 px, cut [], small []
+  ok   nhl-1280: the help view is inside the screen
+  ok   nhl-1280: six plans on the menu (6)
+  ok   nhl-1280: nothing cut on the menu []
+  ok   nhl-1280: every menu button is a full touch target []
+  ..   nhl-1280 workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   nhl-1280 workload: no long dash in the copy
+  ok   nhl-1280 workload: nothing cut []
+  ..   nhl-1280 tactics: Tactical approach Your usual approach Keep your current style. Finishing focus Season scoring multiplier +0.08, favoring goals over assists. Playmaking focus Season scoring multiplier -0.08 (minimum 0.4), favoring assists over goals. Each choice saves immediately. You can change it before playing.
+  ok   nhl-1280 tactics: no long dash in the copy
+  ok   nhl-1280 tactics: nothing cut []
+  ok   nhl-1280: the ? opens the rules from inside a plan
+  ok   nhl-1280: Back from the rules returns to the same plan
+  ..   nhl-1280 expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 55 games: morale +3. Miss it: morale -3. Earn a bigger role Play 65 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   nhl-1280 expectation: no long dash in the copy
+  ok   nhl-1280 expectation: nothing cut []
+  ..   nhl-1280 partnership: Teammate partnership Keep your own routine No extra partnership input. Build line chemistry A role-based teammate partnership, with no invented player. At least 55 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   nhl-1280 partnership: no long dash in the copy
+  ok   nhl-1280 partnership: nothing cut []
+  ..   nhl-1280 bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 20 goals and 55 games: 2% of season salary as a gross bonus. Stretch the benchmark 24 goals and 55 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   nhl-1280 bonus: no long dash in the copy
+  ok   nhl-1280 bonus: nothing cut []
+  ..   nhl-1280 reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   nhl-1280 reinvention: no long dash in the copy
+  ok   nhl-1280 reinvention: nothing cut []
+  ok   nhl-1280: workload:recover shows as chosen
+  ok   nhl-1280: tactics:support shows as chosen
+  ok   nhl-1280: expectation:steady shows as chosen
+  ok   nhl-1280: bonus:steady shows as chosen
+  ok   nhl-1280: the page did not move across the dialog (161 then 161)
+  ok   nhl-1280: the hub says the programme is saved: Your season programme Programme saved for 2026 at TBL. Plan your season
+  ok   nhl-1280: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nhl","year":2026,"team":"TBL"}
+  ok   nhl-1280: Play raises the season reveal
+  ..   nhl-1280 reveal: 5 animation(s) running 0.9 s after the press
+  ok   nhl-1280: the curtain, the rivalry card and the summer all lead back to the hub (5 presses)
+  ..   nhl-1280 save before the season {"health":100,"morale":70,"dur":0.9,"year":2026,"arch":"generational","pos":"C","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nhl","year":2026,"team":"TBL"},"results":null,"partner":null,"net":0.5,"earn":0} and after {"health":100,"morale":49,"dur":0.9,"year":2027,"arch":"generational","pos":"C","plan":null,"results":[{"sport":"nhl","year":2026,"team":"TBL","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Playmaking focus","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"completed","target":55,"actual":80,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"missed","target":20,"actual":16,"unit":"goals"}],"bonusGross":0,"bonusNet":0,"partnershipProgress":0}],"partner":null,"net":2.1,"earn":3.5}
+  ok   nhl-1280: one result row, the plan is off the save
+  ok   nhl-1280: durability is back to 0.9 after the season
+  ..   nhl-1280 result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Playmaking focus: completed. Steady availability: completed (80/55 games). Match the benchmark: missed (16/20 goals). Plan your season
+  ok   nhl-1280: the Trophy Case opens from its tile
+  ok   nhl-1280: Back from the Trophy Case returns to the hub
+  ok   nhl-1280: no page error ()
+  ok   nba-390-reduced: quick start reaches the hub
+  ..   nba-390-reduced hub layout (page px): play 535..579, programme panel 687..825, practice 841..997, hub tiles 1030..1335, page 12407 high, screen 844
+  ok   nba-390-reduced: the season programme panel is on the hub
+  ..   nba-390-reduced page at 368 with the Plan button 400 px down the screen; after the tap the page reads 368
+  ok   nba-390-reduced: Plan your season opens the dialog
+  ok   nba-390-reduced: it opens on its rules first
+  ..   nba-390-reduced help view: box [12,115,366,614] of 390x844, body scrolls 275 px, cut [], small []
+  ok   nba-390-reduced: the help view is inside the screen
+  ok   nba-390-reduced: six plans on the menu (6)
+  ok   nba-390-reduced: nothing cut on the menu []
+  ok   nba-390-reduced: every menu button is a full touch target []
+  ..   nba-390-reduced workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   nba-390-reduced workload: no long dash in the copy
+  ok   nba-390-reduced workload: nothing cut []
+  ..   nba-390-reduced tactics: Tactical approach Your usual approach Keep your current style. Scoring focus Season scoring multiplier +8%, playmaking multiplier -8%. Your position stays the same. Playmaking focus Season playmaking multiplier +8%, scoring multiplier -8%. Your position stays the same. Each choice saves immediately. You can change it before playing.
+  ok   nba-390-reduced tactics: no long dash in the copy
+  ok   nba-390-reduced tactics: nothing cut []
+  ok   nba-390-reduced: the ? opens the rules from inside a plan
+  ok   nba-390-reduced: Back from the rules returns to the same plan
+  ..   nba-390-reduced expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 55 games: morale +3. Miss it: morale -3. Earn a bigger role Play 65 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   nba-390-reduced expectation: no long dash in the copy
+  ok   nba-390-reduced expectation: nothing cut []
+  ..   nba-390-reduced partnership: Teammate partnership Keep your own routine No extra partnership input. Build a two-player rhythm A role-based teammate partnership, with no invented player. At least 55 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   nba-390-reduced partnership: no long dash in the copy
+  ok   nba-390-reduced partnership: nothing cut []
+  ..   nba-390-reduced bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 4 assists per game and 55 games: 2% of season salary as a gross bonus. Stretch the benchmark 5 assists per game and 55 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   nba-390-reduced bonus: no long dash in the copy
+  ok   nba-390-reduced bonus: nothing cut []
+  ..   nba-390-reduced reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   nba-390-reduced reinvention: no long dash in the copy
+  ok   nba-390-reduced reinvention: nothing cut []
+  ok   nba-390-reduced: workload:recover shows as chosen
+  ok   nba-390-reduced: tactics:support shows as chosen
+  ok   nba-390-reduced: expectation:steady shows as chosen
+  ok   nba-390-reduced: bonus:steady shows as chosen
+  ok   nba-390-reduced: the page did not move across the dialog (368 then 368)
+  ok   nba-390-reduced: the hub says the programme is saved: Your season programme Programme saved for 2026 at NOP. Plan your season
+  ok   nba-390-reduced: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nba","year":2026,"team":"NOP"}
+  ok   nba-390-reduced: Play raises the season reveal
+  ..   nba-390-reduced reveal: 0 animation(s) running 0.9 s after the press (reduced motion asked)
+  ok   nba-390-reduced: with reduced motion asked nothing is still moving on the reveal
+  ok   nba-390-reduced: the curtain, the rivalry card and the summer all lead back to the hub (3 presses)
+  ..   nba-390-reduced save before the season {"health":100,"morale":70,"dur":0.95,"year":2026,"arch":"pointgod","pos":"PG","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nba","year":2026,"team":"NOP"},"results":null,"partner":null,"net":0.3,"earn":0} and after {"health":100,"morale":71,"dur":0.95,"year":2027,"arch":"pointgod","pos":"PG","plan":null,"results":[{"sport":"nba","year":2026,"team":"NOP","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Playmaking focus","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"completed","target":55,"actual":82,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"missed","target":4,"actual":2.3,"unit":"assists per game"}],"bonusGross":0,"bonusNet":0,"partnershipProgress":0}],"partner":null,"net":1.4,"earn":2.5}
+  ok   nba-390-reduced: one result row, the plan is off the save
+  ok   nba-390-reduced: durability is back to 0.95 after the season
+  ..   nba-390-reduced result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Playmaking focus: completed. Steady availability: completed (82/55 games). Match the benchmark: missed (2.3/4 assists per game). Plan your season
+  ok   nba-390-reduced: the Trophy Case opens from its tile
+  ok   nba-390-reduced: Back from the Trophy Case returns to the hub
+  ok   nba-390-reduced: no page error ()
+  ok   nfl-1280-reduced: quick start reaches the hub
+  ..   nfl-1280-reduced hub layout (page px): play 440..484, programme panel 527..649, practice 665..821, hub tiles 854..1055, page 8301 high, screen 900
+  ok   nfl-1280-reduced: the season programme panel is on the hub
+  ..   nfl-1280-reduced page at 164 with the Plan button 428 px down the screen; after the tap the page reads 164
+  ok   nfl-1280-reduced: Plan your season opens the dialog
+  ok   nfl-1280-reduced: it opens on its rules first
+  ..   nfl-1280-reduced help view: box [384,116,512,669] of 1280x900, body scrolls 0 px, cut [], small []
+  ok   nfl-1280-reduced: the help view is inside the screen
+  ok   nfl-1280-reduced: six plans on the menu (6)
+  ok   nfl-1280-reduced: nothing cut on the menu []
+  ok   nfl-1280-reduced: every menu button is a full touch target []
+  ..   nfl-1280-reduced workload: Workload and recovery Usual routine Keep your current inputs. Push the workload Season health -8, morale +6. More form, more injury risk. Prioritize recovery Season health +8, morale -6. Less injury risk, less form. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280-reduced workload: no long dash in the copy
+  ok   nfl-1280-reduced workload: nothing cut []
+  ..   nfl-1280-reduced tactics: Tactical approach Your usual approach Keep your current style. Big-play preparation Season morale +6, durability -0.06. More form, more injury risk. Controlled preparation Season morale -3, durability +0.06. Less form, less injury risk. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280-reduced tactics: no long dash in the copy
+  ok   nfl-1280-reduced tactics: nothing cut []
+  ok   nfl-1280-reduced: the ? opens the rules from inside a plan
+  ok   nfl-1280-reduced: Back from the rules returns to the same plan
+  ..   nfl-1280-reduced expectation: Coach expectations No extra target Keep the normal season. Steady availability Play 10 games: morale +3. Miss it: morale -3. Earn a bigger role Play 12 games: morale +6. Miss it: morale -5. This does not guarantee a starting spot. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280-reduced expectation: no long dash in the copy
+  ok   nfl-1280-reduced expectation: nothing cut []
+  ..   nfl-1280-reduced partnership: Teammate partnership Keep your own routine No extra partnership input. Work with your receivers A role-based teammate partnership, with no invented player. At least 10 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280-reduced partnership: no long dash in the copy
+  ok   nfl-1280-reduced partnership: nothing cut []
+  ..   nfl-1280-reduced bonus: Performance bonus No bonus challenge Keep the normal pay. Match the benchmark 20 passing touchdowns and 10 games: 2% of season salary as a gross bonus. Stretch the benchmark 24 passing touchdowns and 10 games: 5% of season salary as a gross bonus. 45% reaches the bank. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280-reduced bonus: no long dash in the copy
+  ok   nfl-1280-reduced bonus: nothing cut []
+  ..   nfl-1280-reduced reinvention: Veteran reinvention Keep your usual routine No extra veteran input. Each choice saves immediately. You can change it before playing.
+  ok   nfl-1280-reduced reinvention: no long dash in the copy
+  ok   nfl-1280-reduced reinvention: nothing cut []
+  ok   nfl-1280-reduced: workload:recover shows as chosen
+  ok   nfl-1280-reduced: tactics:support shows as chosen
+  ok   nfl-1280-reduced: expectation:steady shows as chosen
+  ok   nfl-1280-reduced: bonus:steady shows as chosen
+  ok   nfl-1280-reduced: the page did not move across the dialog (164 then 164)
+  ok   nfl-1280-reduced: the hub says the programme is saved: Your season programme Programme saved for 2026 at PIT. Plan your season
+  ok   nfl-1280-reduced: the plan survives a reload: {"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nfl","year":2026,"team":"PIT"}
+  ok   nfl-1280-reduced: Play raises the season reveal
+  ..   nfl-1280-reduced reveal: 0 animation(s) running 0.9 s after the press (reduced motion asked)
+  ok   nfl-1280-reduced: with reduced motion asked nothing is still moving on the reveal
+  ok   nfl-1280-reduced: the curtain, the rivalry card and the summer all lead back to the hub (4 presses)
+  ..   nfl-1280-reduced save before the season {"health":100,"morale":70,"dur":0.9,"year":2026,"arch":"cannon","pos":"QB","plan":{"workload":"recover","tactics":"support","expectation":"steady","partnership":"normal","bonus":"steady","reinvention":"normal","sport":"nfl","year":2026,"team":"PIT"},"results":null,"partner":null,"net":0.6,"earn":0} and after {"health":100,"morale":87,"dur":0.9,"year":2027,"arch":"cannon","pos":"QB","plan":null,"results":[{"sport":"nfl","year":2026,"team":"PIT","outcome":"completed","decisions":[{"section":"workload","label":"Prioritize recovery","outcome":"completed"},{"section":"tactics","label":"Controlled preparation","outcome":"completed"},{"section":"expectation","label":"Steady availability","outcome":"completed","target":10,"actual":17,"unit":"games"},{"section":"bonus","label":"Match the benchmark","outcome":"missed","target":20,"actual":14,"unit":"passing touchdowns"}],"bonusGross":0,"bonusNet":0,"partnershipProgress":0}],"partner":null,"net":3.4,"earn":6.5}
+  ok   nfl-1280-reduced: one result row, the plan is off the save
+  ok   nfl-1280-reduced: durability is back to 0.9 after the season
+  ..   nfl-1280-reduced result block: Your season programme Choose how to approach the season. Your usual routine stays available. 2026: Programme completed Prioritize recovery: completed. Controlled preparation: completed. Steady availability: completed (17/10 games). Match the benchmark: missed (14/20 passing touchdowns). Plan your season
+  ok   nfl-1280-reduced: the Trophy Case opens from its tile
+  ok   nfl-1280-reduced: Back from the Trophy Case returns to the hub
+  ok   nfl-1280-reduced: no page error ()
