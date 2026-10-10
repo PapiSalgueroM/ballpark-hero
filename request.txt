@@ -1,0 +1,12 @@
+#!serial
+mut-none: bash .rc/x/rrun-mut.sh none
+mut-nocopycheck: bash .rc/x/rrun-mut.sh nocopycheck
+mut-newerskip: bash .rc/x/rrun-mut.sh newerskip
+mut-nostale: bash .rc/x/rrun-mut.sh nostale
+mut-staleconst: bash .rc/x/rrun-mut.sh staleconst
+mut-aussieignores: bash .rc/x/rrun-mut.sh aussieignores
+mut-assign: bash .rc/x/rrun-mut.sh assign
+mut-playingcounted: bash .rc/x/rrun-mut.sh playingcounted
+mut-noblocked: bash .rc/x/rrun-mut.sh noblocked
+mut-nomaincall: bash .rc/x/rrun-mut.sh nomaincall
+mut-offerplaying: bash .rc/x/rrun-mut.sh offerplaying

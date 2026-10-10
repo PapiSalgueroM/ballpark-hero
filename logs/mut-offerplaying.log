@@ -1,0 +1,10 @@
+rrun-mut offerplaying: applied to src/components/BrokenSaveRestore.tsx
+ src/components/BrokenSaveRestore.tsx | 1 -
+ 1 file changed, 1 deletion(-)
+--- vitest (exit 1), failing cases:
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/routeErrorRecovery.test.tsx > BrokenSaveRestore, the way back (Round 958 review) > does not offer back a backup that is exactly the save being played
+      Tests  1 failed | 82 passed (83)
+--- simSaveKeeper (exit 0):
+simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+MUT offerplaying: KILLED (vitest=1 sim=0)

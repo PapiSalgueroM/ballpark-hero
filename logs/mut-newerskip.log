@@ -1,0 +1,12 @@
+rrun-mut newerskip: applied to src/lib/saveKeeper.ts
+ src/lib/saveKeeper.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest (exit 1), failing cases:
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/saveKeeper.test.ts > the copy before a version step (Round 1219) > copies a NEWER save too (an older cached build would refuse it and start over)
+AssertionError: expected +0 to be 1 // Object.is equality
+      Tests  1 failed | 82 passed (83)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the copy before a version step (Round 1219) > copies a NEWER save too (an older cached build would refuse it and start over),line=291,column=39::AssertionError: expected +0 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 0%0A%0A ❯ src/test/saveKeeper.test.ts:291:39%0A%0A
+--- simSaveKeeper (exit 0):
+simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+MUT newerskip: KILLED (vitest=1 sim=0)

@@ -1,0 +1,12 @@
+rrun-mut nostale: applied to src/lib/saveKeeper.ts
+ src/lib/saveKeeper.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest (exit 1), failing cases:
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/saveKeeper.test.ts > the apply, before any game is in memory (Round 1219) > never applies a journal that waited, or one stamped in the future
+AssertionError: expected { path: '/fight-gym', ok: true, …(1) } to deeply equal { path: '/fight-gym', ok: false, …(1) }
+      Tests  1 failed | 82 passed (83)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the apply%2C before any game is in memory (Round 1219) > never applies a journal that waited%2C or one stamped in the future,line=151,column=39::AssertionError: expected { path: '/fight-gym', ok: true, …(1) } to deeply equal { path: '/fight-gym', ok: false, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A-   "ok": false,%0A+   "kept": true,%0A+   "ok": true,%0A    "path": "/fight-gym",%0A-   "why": "stale",%0A  }%0A%0A ❯ src/test/saveKeeper.test.ts:151:39%0A%0A
+--- simSaveKeeper (exit 0):
+simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+MUT nostale: KILLED (vitest=1 sim=0)

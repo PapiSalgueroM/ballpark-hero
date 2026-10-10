@@ -1,0 +1,17 @@
+rrun-mut playingcounted: applied to src/lib/saveKeeper.ts
+ src/lib/saveKeeper.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest (exit 1), failing cases:
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/saveKeeper.test.ts > the apply, before any game is in memory (Round 1219) > a put back at the cap drops nothing
+AssertionError: expected [ 'kept 2', …(2) ] to deeply equal [ 'kept 1', 'kept 2', …(2) ]
+ FAIL  src/test/saveKeeper.test.ts > the apply, before any game is in memory (Round 1219) > past the cap it drops the oldest, never the copy it just made and never the save now being played
+AssertionError: expected [ 'kept 3', …(2) ] to deeply equal [ 'kept 2', 'kept 3', …(2) ]
+ FAIL  src/test/saveKeeper.test.ts > the crash loop: the store dies at every storage call in turn (Round 1219) > at the cap: nothing is lost at any crash point, and every staged put back ends applied
+AssertionError: died at call 3 of 45: expected undefined to be 'kept 1' // Object.is equality
+      Tests  3 failed | 80 passed (83)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the apply%2C before any game is in memory (Round 1219) > a put back at the cap drops nothing,line=119,column=63::AssertionError: expected [ 'kept 2', …(2) ] to deeply equal [ 'kept 1', 'kept 2', …(2) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "kept 1",%0A    "kept 2",%0A    "{\"g\":{\"name\":\"New Gym\",\"week\":1,\"version\":1}}",%0A    "{\"g\":{\"name\":\"Old Gym\",\"week\":40,\"version\":1}}",%0A  ]%0A%0A ❯ src/test/saveKeeper.test.ts:119:63%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the apply%2C before any game is in memory (Round 1219) > past the cap it drops the oldest%2C never the copy it just made and never the save now being played,line=131,column=63::AssertionError: expected [ 'kept 3', …(2) ] to deeply equal [ 'kept 2', 'kept 3', …(2) ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   "kept 2",%0A    "kept 3",%0A    "{\"g\":{\"name\":\"New Gym\",\"week\":1,\"version\":1}}",%0A    "{\"g\":{\"name\":\"Old Gym\",\"week\":40,\"version\":1}}",%0A  ]%0A%0A ❯ src/test/saveKeeper.test.ts:131:63%0A%0A
+--- simSaveKeeper (exit 0):
+simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+MUT playingcounted: KILLED (vitest=1 sim=0)

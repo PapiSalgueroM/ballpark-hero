@@ -1,0 +1,8 @@
+rrun-mut assign: applied to src/lib/saveKeeper.ts
+ src/lib/saveKeeper.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest (exit 0), failing cases:
+      Tests  83 passed (83)
+--- simSaveKeeper (exit 0):
+simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+MUT assign: SURVIVED (vitest=0 sim=0)

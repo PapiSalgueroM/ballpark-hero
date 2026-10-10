@@ -1,0 +1,14 @@
+rrun-mut aussieignores: applied to src/lib/saveKeeper.ts
+ src/lib/saveKeeper.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- vitest (exit 1), failing cases:
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  src/test/saveKeeper.test.ts > the copy before a version step (Round 1219) > an ordinary boot writes nothing and reads exactly the journal and the games that act on a version
+AssertionError: expected [ 'dukb-club-manager-save', …(4) ] to have a length of 6 but got 5
+      Tests  1 failed | 82 passed (83)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/saveKeeper.test.ts,title=src/test/saveKeeper.test.ts > the copy before a version step (Round 1219) > an ordinary boot writes nothing and reads exactly the journal and the games that act on a version,line=272,column=20::AssertionError: expected [ 'dukb-club-manager-save', …(4) ] to have a length of 6 but got 5%0A%0A- Expected%0A+ Received%0A%0A- 6%0A+ 5%0A%0A ❯ src/test/saveKeeper.test.ts:272:20%0A%0A
+--- simSaveKeeper (exit 1):
+   FAIL  /aussie-rules-manager: the row says ignores with oldest 2, but its loader answered: written again at current true, one down false, one up false
+   FAIL  the 5 games that ignore their version (/aussie-rules-manager, /fight-career, /fight-promoter, /fight-gym, /idle-arena) get no copy and are not even read
+simSaveKeeper: RED in section(s) 1, 4.
+MUT aussieignores: KILLED (vitest=1 sim=1)
