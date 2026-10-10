@@ -458,7 +458,11 @@ function checkGrouping(label, names) {
 const pickerGroups = checkGrouping('Soccer Career picker', picker);
 const missingConf = M.CONFEDERATION_ORDER.filter(c => !pickerGroups.some(g => g.conf === c));
 if (missingConf.length) fail(`the picker has no nation under ${missingConf.join(', ')}`);
-checkGrouping('market nationalities', market);
+const marketGroups = checkGrouping('market nationalities', market);
+/* Printed on a red run too, so a round that adds rows can show the picker did
+   not move: these counts before the rows and after them. */
+const counts = groups => groups.map(g => `${g.conf} ${g.items.length}`).join(', ');
+console.log(`   groups as placed: picker ${counts(pickerGroups)}; market ${counts(marketGroups)}`);
 
 if (!/groupByConfederation\(NATIONALITIES/.test(sc) || !/<SelectGroup\b/.test(sc)) fail('SoccerCareer.tsx no longer renders the picker in confederation groups');
 const ts = stripComments(read('src/components/club-manager/TransferScreen.tsx'));
