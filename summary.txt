@@ -1,0 +1,3 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+c-noscroll exit=1 149s | playCareerSquad (control noscroll, 35 edits served): 170 checks, 8 failed
+playCareerSquad exit=0 167s | playCareerSquad: 170 checks, 0 failed

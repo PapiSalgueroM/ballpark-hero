@@ -1,0 +1,4 @@
+#!build
+#!playwright
+playCareerSquad: PORT=4577 SHOTS="$PWD/.tmp-fx/shots" node scripts/playCareerSquad.mjs > /tmp/squad.log 2>&1; s=$?; grep -E "^FAIL" /tmp/squad.log | head -12 | cut -c1-300; grep "no sideways scroll" /tmp/squad.log | grep -o 'save . at [0-9]* by [0-9]*\|"help":[0-9]*' | paste - - | sort | uniq -c; tail -1 /tmp/squad.log; exit $s
+c-noscroll: PORT=4660 CAREER_SQUAD_PLAY_CONTROL=noscroll node scripts/playCareerSquad.mjs > /tmp/ns.log 2>&1; s=$?; grep -E "^FAIL" /tmp/ns.log | cut -c1-260; tail -1 /tmp/ns.log; exit $s
