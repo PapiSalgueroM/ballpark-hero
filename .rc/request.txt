@@ -1,0 +1,3 @@
+#!build
+#!playwright
+walk: node scripts/playUsSeasonCentre.mjs
