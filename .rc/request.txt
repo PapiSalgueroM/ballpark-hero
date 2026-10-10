@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000 > /tmp/vitest-all.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests " /tmp/vitest-all.log | tail -30 | cut -c1-260; exit $s
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
