@@ -1,0 +1,4 @@
+FAIL league:premier is not in the ledger
+simCmVarLedger: 5 rate rows from 3 publishers, used: goalsRuledOut, penaltiesAwarded, penaltiesCancelled, goalsAwarded.
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:laliga, league:seriea, league:bundesliga, ucl.
+simCmVarLedger control missing: FIRED (league:premier is not in the ledger)

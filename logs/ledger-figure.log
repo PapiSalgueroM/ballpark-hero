@@ -1,0 +1,4 @@
+FAIL espn-pl-2024-25: goalsRuledOut 48 is not printed in its literals
+simCmVarLedger: 5 rate rows from 3 publishers, used: goalsRuledOut, penaltiesAwarded, penaltiesCancelled, goalsAwarded.
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, ucl.
+simCmVarLedger control figure: FIRED (espn-pl-2024-25: goalsRuledOut 48 is not printed in its literals)

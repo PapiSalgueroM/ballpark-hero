@@ -1,0 +1,2 @@
+simCmVar bands: {"seeds":[41,42,43,44,45,46],"leagueMatches":4077,"ruledOut":319,"ruledOutPerMatch":0.0782,"awarded":280,"awardedPerMatch":0.0687,"awardedScored":210,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.6775,"goalsPerMatchOff":2.7003,"goalGap":-0.0228,"resultMoved":212,"penaltiesPerMatch":0.4297,"matchesWithReview":549,"perSeed":[[672,0.0699,0.0699],[692,0.0838,0.0708],[677,0.0783,0.0591],[663,0.083,0.0814],[690,0.0725,0.0638],[683,0.082,0.0673]]}
+simCmVar normal: actual review outcomes and full prior baseline passed.

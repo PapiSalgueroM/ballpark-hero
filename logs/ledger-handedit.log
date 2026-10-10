@@ -1,0 +1,4 @@
+FAIL src/data/clubManagerVarRates.ts is not what the generator writes (a hand edit, or a ledger changed without the generator)
+simCmVarLedger: 5 rate rows from 3 publishers, used: goalsRuledOut, penaltiesAwarded, penaltiesCancelled, goalsAwarded.
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, ucl.
+simCmVarLedger control handedit: FIRED (src/data/clubManagerVarRates.ts is not what the generator writes (a hand edit, or a ledger changed without the generator))

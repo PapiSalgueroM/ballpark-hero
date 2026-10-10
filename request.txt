@@ -1,0 +1,19 @@
+simCmVar: node scripts/simCmVar.mjs
+bands-41: CM_VAR_BANDS_SEEDS=41,42,43,44,45,46 node scripts/simCmVar.mjs
+bands-51: CM_VAR_BANDS_SEEDS=51,52,53,54,55,56 node scripts/simCmVar.mjs
+bands-61: CM_VAR_BANDS_SEEDS=61,62,63,64,65,66 node scripts/simCmVar.mjs
+bands-71: CM_VAR_BANDS_SEEDS=71,72,73,74,75,76 node scripts/simCmVar.mjs
+ctl-oldgoalreview: CM_VAR_CONTROL=oldgoalreview node scripts/simCmVar.mjs
+ctl-oldoverturn: CM_VAR_CONTROL=oldoverturn node scripts/simCmVar.mjs
+ctl-oldpenaltyreview: CM_VAR_CONTROL=oldpenaltyreview node scripts/simCmVar.mjs
+ctl-oldmissedfoul: CM_VAR_CONTROL=oldmissedfoul node scripts/simCmVar.mjs
+ctl-oldpenaltyscores: CM_VAR_CONTROL=oldpenaltyscores node scripts/simCmVar.mjs
+ledger: node scripts/simCmVarLedger.mjs
+ledger-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+ledger-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+ledger-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+ledger-missing: CM_VAR_LEDGER_CONTROL=missing node scripts/simCmVarLedger.mjs
+ledger-extra: CM_VAR_LEDGER_CONTROL=extra node scripts/simCmVarLedger.mjs
+ledger-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+ledger-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+ledger-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs

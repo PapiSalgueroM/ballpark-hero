@@ -1,0 +1,3 @@
+simCmVar oldpenaltyreview: CAUGHT by "The game showed 0 goal and 622 penalty reviews that ended with the call standing, and no publisher counts those by kind of call"
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":3999,"ruledOut":284,"ruledOutPerMatch":0.071,"awarded":257,"awardedPerMatch":0.0643,"awardedScored":202,"goalConfirmed":0,"penaltyConfirmed":622,"goalsPerMatchOn":2.6384,"goalsPerMatchOff":2.6572,"goalGap":-0.0188,"resultMoved":195,"penaltiesPerMatch":0.4241,"matchesWithReview":1027,"perSeed":[[640,0.0719,0.0813],[684,0.0702,0.0643],[666,0.0736,0.0541],[633,0.0695,0.0585],[702,0.0783,0.0698],[674,0.0623,0.0579]]}
+simCmVar oldpenaltyreview: actual review outcomes and full prior baseline passed.
