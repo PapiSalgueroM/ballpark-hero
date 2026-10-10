@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+own: LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own.txt 2>&1; s=$?; grep -h -F -e 'turns by' -e 'ends on his feet' -e 'still lying' $RC_OUT/own.txt | cut -c1-260; tail -1 $RC_OUT/own.txt; exit $s
+own-seed-31337: LIVE_FIT_SEED=31337 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own-31337.txt 2>&1; s=$?; grep -h -F -e 'turns by' $RC_OUT/own-31337.txt | cut -c1-260; tail -1 $RC_OUT/own-31337.txt; exit $s
+own-seed-2026: LIVE_FIT_SEED=2026 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own-2026.txt 2>&1; s=$?; grep -h -F -e 'turns by' $RC_OUT/own-2026.txt | cut -c1-260; tail -1 $RC_OUT/own-2026.txt; exit $s
+own-seed-7: LIVE_FIT_SEED=7 LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs > $RC_OUT/own-7.txt 2>&1; s=$?; grep -h -F -e 'turns by' $RC_OUT/own-7.txt | cut -c1-260; tail -1 $RC_OUT/own-7.txt; exit $s
+walk: node scripts/playLiveMatchFit.mjs > $RC_OUT/walk.txt 2>&1; s=$?; tail -1 $RC_OUT/walk.txt; exit $s
