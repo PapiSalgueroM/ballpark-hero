@@ -1,21 +1,28 @@
-## Codex1195-1196 IN PROGRESS: Soccer Career season and rival derby history, 2026-10-10
+## Codex1195-1196 READY: Soccer Career season and rival derby history, 2026-10-10
 
-Branch codex/career-derby-history, base48790763e65446b75c7699498b806637dc5c0111.
-This is current main's AR product tree plus two F handoff documentation commits.
-No queued READY draft is merged here. The new read-only rivalry history retains
-original saved season, rival and meeting indices, including duplicate years,
-loans and zero appearances. Club fixture results and the player's appearances
-have separate totals. Old missing or invalid data is identified honestly.
-1196 adds whole-career records against exact saved rival names, keeping the
-original season, club and meeting identity in the rival details.
-Design: docs/ROUND1195.md. Runtime verification is remote-only and pending.
-F owns integration, combined release gates, merge and publication.
+Draft PR215: https://github.com/PapiSalgueroM/ballpark-hero/pull/215.
+Branch codex/career-derby-history, independent base48790763/tree24c2d492.
+Accepted source25da50289a38730a841e43b439ec2a064bf575d8,
+tree1ec6fa1f435e6021ab5e1008233329ecdd81c646. The freeze is documentation only.
+1195 keeps every readable saved derby by original season, rival and meeting.
+1196 adds whole-career records against each exact saved rival name. Loans,
+duplicate years, all-missed seasons and old absent/corrupt records stay distinct.
+Club fixtures and player appearances have separate totals. No engine/save changes.
 
-Previous1193-1194 Hub run38023406154 has now finished: 35/36 unchanged
-regressions passed, only LeagueSeasons fails under its historical baseline;
-all20 built/source readers passed. The workflow remains red on that baseline
-and the fixed6f57ce78 source fence. This supplies no combined release waiver.
-PR214 stays frozen at217b10b0. No source changes in that worktree.
+Remote run38027263850/job114140645785 SUCCESS: actual app types/build,
+114 focused units,11 complete outcome groups,10 loaded helper controls,
+2 copied product controls,904 native checks across9 journeys,81 reviewed PNGs,
+10 related sims andall15 rebuilt-site readers PASS. SeasonTruth explicitly SKIP,
+zero DB credit. Final artifact11660732990,30,994,668 bytes, SHA256
+411c8bf2ed58a4cfbd935162d77ae57ed1b4da9338b3a66b8d51759e0466a08a.
+All603 early evidence files held in final. Three independent data/visual audits
+accepted current source. See docs/ROUND1195-1196-RECEIPT.md for exact scope.
+Inherited historical pins/fences remain unwaived; this is independent readiness.
+F owns integration, combined release gates, merge and publication. Not live.
+
+Prior PR214 stays frozen at217b10b0. Its Hub38023406154 finished35/36 unchanged
+regressions andall20 readers; only historical LeagueSeasons andfixed6f57 source
+fence fail. That older receipt supplies no combined release waiver either.
 
 ## Release AR LIVE, 2026-10-09 20:14 EDT: Club Manager match day from players' reports: (P) and (O.G) beside a goal, Quick Sim that makes its subs, and a goal that keeps its net when the other side changes a man
 

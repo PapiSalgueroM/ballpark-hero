@@ -36,3 +36,6 @@ check actual displayed scores, Help and Back, focus and scroll restoration,
 reload identity, whole-save bytes, zero random reads and phone geometry.
 Types, build, relevant sims and every rebuilt-site reader run on remote CI.
 Root F docs and existing READY drafts stay frozen. F integrates and publishes.
+
+Verification accepted on source25da5028. Full scope and exact artifacts:
+docs/ROUND1195-1196-RECEIPT.md. Documentation freeze only, publication pending.
