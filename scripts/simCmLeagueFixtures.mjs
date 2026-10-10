@@ -80,7 +80,8 @@ const CONTROL = process.env.CM_LEAGUE_FIXTURES_CONTROL || '';
 const CONTROL_LEAGUE = process.env.CM_LEAGUE_FIXTURES_CONTROL_LEAGUE || '';
 const FROZEN_REL = 'scripts/data/cmLeagueFixtures.frozen.json';
 const KNOWN_FIELDS = ['schemaVersion', 'key', 'leagueId', 'seasonStartYear', 'coverage', 'clubs', 'rounds', 'sources'];
-const ROW_FIELDS = ['sourceLine', 'ref', 'round', 'home', 'away'];
+/* duplicate is the mark Round 1184's receipt puts on the one row its official source prints twice. */
+const ROW_FIELDS = ['sourceLine', 'ref', 'round', 'home', 'away', 'duplicate'];
 const WIKI_HOST = /(^|\.)(wikipedia|wikimedia|wikidata|fandom)\./i;
 const SECTIONS = { A: 'shape', B: 'no club twice in a matchday', C: 'each pair once at each ground', D: "the game's own clubs", E: 'the drift guard: ledger equals each source in the receipt', F: 'two independent sources', G: 'nothing excluded got in', I: 'frozen' };
 
