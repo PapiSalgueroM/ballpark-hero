@@ -17,7 +17,7 @@ const OUT = path.resolve(ROOT, process.env.SHOTS || '.tmp-fx/career-story-role/n
 const CACHE = path.resolve(ROOT, process.env.FREE_KICK_FONT_CACHE || '.tmp-fx/career-story-role/font-cache');
 const KEY = 'soccerCareerSave', NOW = 1791586800000, copy = value => JSON.parse(JSON.stringify(value));
 const sha = value => createHash('sha256').update(value).digest('hex');
-const files = ['src/components/soccer-career/CareerStory.tsx', 'src/pages/SoccerCareer.tsx', 'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerRole.ts', 'src/lib/soccerCareerMilestone.ts', 'src/components/soccer-career/ReducedRoleNote.tsx', 'scripts/playCareerStoryRole.mjs'];
+const files = ['src/components/soccer-career/CareerStory.tsx', 'src/pages/SoccerCareer.tsx', 'src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerRole.ts', 'src/lib/soccerCareerMilestone.ts', 'src/components/soccer-career/ReducedRoleNote.tsx', 'src/data/gameContent/soccer2.ts', 'scripts/playCareerStoryRole.mjs'];
 function sourceHashes() {
   const hashes = {};
   for (const file of files) { const bytes = fs.readFileSync(path.join(ROOT, file)); hashes[file] = sha(bytes); }
@@ -86,6 +86,11 @@ function differences(expected, actual, at = '$', rows = []) {
 const layoutFailures = o => [o.stable < 4 && 'stable-frames', !o.inside && 'viewport', !o.painted && 'painted-center', Number(o.opacity) !== 1 && 'opacity', o.finite !== 0 && 'animations', o.overflow && 'horizontal-overflow', o.controls.some(c => c.points.some(p => !p.painted)) && 'overlap'].filter(Boolean);
 const restorationFailures = o => [!o.actual.activeMatches && 'focus', o.actual.inline !== o.expected.inline && 'inline-overflow', o.actual.computed !== o.expected.computed && 'computed-overflow', o.actual.y !== o.expected.y && 'page-position'].filter(Boolean);
 const chapterFailures = o => [JSON.stringify(o.expected) !== JSON.stringify(o.actual) && 'wrong-chapter'].filter(Boolean);
+const rectanglesOverlap = (a, b) => a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height;
+const helpUtilityFailures = o => [o.mobile && (o.help.width < 44 || o.help.height < 44) && 'help-target', o.utilities.some(button => rectanglesOverlap(o.help, button.rect)) && 'help-overlap'].filter(Boolean);
+const TRAINING_GUIDE_FRAGMENT = 'the dumbbell button, above your player on phones or bottom right on desktop';
+const trainingGuideFailures = o => [!o.guide.includes(TRAINING_GUIDE_FRAGMENT) && 'guide-training'].filter(Boolean);
+const helpUtilityGuideFailures = o => [...helpUtilityFailures(o), ...trainingGuideFailures(o)];
 function detectorControl(name, before, mutate, detector, expectedFailures) {
   assert.deepEqual(detector(before), [], `${name}: actual baseline passes`);
   const faulty = copy(before); const undo = mutate(faulty); assert.equal(typeof undo, 'function', `${name}: the copied defect provides an exact undo`); assert.notDeepEqual(faulty, before, `${name}: the copied defect changes the actual observation`);
@@ -183,10 +188,19 @@ try {
         const initial = await oracle.evaluate(input => { const E = window.__storyRoleOracle; const state = E.soccer.repairCareer(structuredClone(input)); E.moments.settleLoadedMoments(state); return JSON.parse(JSON.stringify(state)); }, fixture);
         await page.goto(`${BASE}/soccer-career`, { waitUntil: 'domcontentloaded' }); await page.getByRole('button', { name: 'How to play', exact: true }).waitFor({ timeout: 45000 }); await page.locator('[data-career-utilities]').waitFor({ state: 'attached' }); await page.locator('[data-career-utility="phone"]').waitFor(); await page.evaluate(() => document.fonts.ready);
         canonical = await saved(); compare(initial, canonical, 'initial-current-Chromium-loader'); canonicalBytes = await bytes(); await reload('canonical-second-load');
+        const utilityHelp = await page.evaluate(mobile => {
+          const rect = element => { const r = element.getBoundingClientRect(); return { x: r.x, y: r.y, width: r.width, height: r.height }; };
+          const help = document.querySelector('button[aria-label="How to play"]');
+          return { mobile, viewport: [innerWidth, innerHeight], pageY: scrollY, help: rect(help), wrapper: rect(help.parentElement), utilities: [...document.querySelectorAll('[data-career-utility]')].map(button => ({ id: button.getAttribute('data-career-utility'), rect: rect(button) })) };
+        }, profile.touch);
+        row.utilityHelp = utilityHelp; write(`${id}-help-utility-rectangles`, utilityHelp);
+        check(utilityHelp.utilities.length > 0 && helpUtilityFailures(utilityHelp).length === 0, 'Before utility scrolling, the mobile Help target is at least 44 pixels and every utility rectangle is disjoint from Help');
         const help = page.getByRole('button', { name: 'How to play', exact: true }); await help.scrollIntoViewIfNeeded(); await help.focus(); const beforeHelp = await body();
         await activate(help); const helpDialog = page.getByRole('dialog', { name: 'How to play', exact: true }); await helpDialog.waitFor();
         await page.waitForFunction(() => { const dialog = document.querySelector('[role="dialog"]'); return dialog && dialog.contains(document.activeElement); }, undefined, { timeout: 2000 });
         const rules = await helpDialog.innerText(); check(rules.includes('All seasons returns to the tile you opened') && rules.includes('a selection of 30 becomes 26') && rules.includes('99 senior club goals plus 2 this season'), 'Reopenable help explains chapter navigation, the four-game role and the personal goal example');
+        utilityHelp.guide = rules; write(`${id}-help-utility-guide-observed`, utilityHelp);
+        check(trainingGuideFailures(utilityHelp).length === 0, 'The actual loaded guide states both the mobile and desktop Training positions');
         await capture(helpDialog, 'rules'); await page.keyboard.press('Escape'); await helpDialog.waitFor({ state: 'hidden' }); await restored('button[aria-label="How to play"]', beforeHelp, 'rules-escape'); await unchanged('rules-readonly');
         const tiles = await oracle.evaluate(input => { const E = window.__storyRoleOracle; return E.story.storyTiles(E.reveal.careerBeforeBallonDorReveal(input)).map(tile => ({ ...tile, textLines: tile.lines.map(line => E.flags.splitFlagSegments(E.currency.localizeMoney(line)).filter(segment => 'text' in segment).map(segment => segment.text).join('')) })); }, canonical);
         write(`${id}-chapter-oracle`, tiles); check(tiles.length >= 12, 'Recorded chapter oracle contains the actual saved years and lines');
@@ -245,6 +259,12 @@ try {
           detectorControl('overlap', overlapControl, outcome => { const point = outcome.controls[0].points[0], old = point.painted; point.painted = false; return () => { point.painted = old; }; }, layoutFailures, ['overlap']);
           detectorControl('wrong-chapter', chapterControl, outcome => { const old = outcome.actual.identity; outcome.actual.identity += ' at an incorrect club'; return () => { outcome.actual.identity = old; }; }, chapterFailures, ['wrong-chapter']);
           detectorControl('focus-body', restorationControl, outcome => { const old = { ...outcome.actual }; outcome.actual.activeMatches = false; outcome.actual.computed = 'hidden'; return () => { outcome.actual = old; }; }, restorationFailures, ['focus', 'computed-overflow']);
+          detectorControl('help-utilities', utilityHelp, outcome => {
+            const oldHelp = { ...outcome.help }, oldRect = { ...outcome.utilities[0].rect }, oldGuide = outcome.guide;
+            outcome.help.width = 43; outcome.utilities[0].rect.x = outcome.help.x; outcome.utilities[0].rect.y = outcome.help.y;
+            outcome.guide = outcome.guide.replace(TRAINING_GUIDE_FRAGMENT, 'the dumbbell button, bottom right');
+            return () => { outcome.help = oldHelp; outcome.utilities[0].rect = oldRect; outcome.guide = oldGuide; };
+          }, helpUtilityGuideFailures, ['help-target', 'help-overlap', 'guide-training']);
           check(await bytes() === before, 'All copied detector controls leave the actual complete save unchanged');
         }
         check(row.errors.length === 0 && row.assetErrors.length === 0, 'Actual page and owned assets report no errors'); check(row.writes.every(write => write.blocked) && report.forwardedExternalRequests === 0, 'Every external write attempt is intercepted locally, with zero forwarding'); row.ok = true;
@@ -255,4 +275,4 @@ try {
   report.sourceAfter = sourceHashes(); assert.deepEqual(report.sourceAfter, report.sourceBefore, 'Product and driver source bytes are held throughout native proof'); report.fontManifestEntries = fonts.size;
 } finally { await browser?.close(); server.kill(); write('report', report); }
 console.log(`Career Story native: ${report.checks} checks, ${report.failed} failed, ${report.cases.filter(row => row.ok).length}/${report.cases.length} journeys; artifacts ${OUT}`);
-assert.equal(report.cases.length, 9); assert.equal(report.controls.length, 3); assert.equal(report.failed, 0); assert(report.cases.every(row => row.ok));
+assert.equal(report.cases.length, 9); assert.equal(report.controls.length, 4); assert.equal(report.failed, 0); assert(report.cases.every(row => row.ok));

@@ -1398,7 +1398,9 @@ export default function SoccerCareer() {
           the lift measurement. */}
       <div className={`min-h-screen bg-background text-foreground flex flex-col ${career ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={[...DERBY_HELP_RULES, ...STORY_ROLE_HELP_RULES]} /></div>
+        <div className={`relative z-10 mx-auto w-full max-w-4xl ${career ? "h-11 sm:h-0" : ""}`}>
+          <GameHelp extraRules={[...DERBY_HELP_RULES, ...STORY_ROLE_HELP_RULES]} className={career ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
+        </div>
         <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {career && saveFailed && (
             <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">

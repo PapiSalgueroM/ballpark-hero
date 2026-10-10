@@ -5,6 +5,7 @@ on:
     paths:
       - .github/workflows/career-story-role.yml
       - src/pages/SoccerCareer.tsx
+      - src/data/gameContent/soccer2.ts
       - src/components/soccer-career/CareerStory.tsx
       - src/lib/soccerCareerEngine.ts
       - src/lib/soccerCareerRole.ts
@@ -106,9 +107,9 @@ jobs:
           import fs from 'node:fs';
           const report = JSON.parse(fs.readFileSync('career-story-role-artifacts/native/report.json', 'utf8'));
           assert.equal(report.cases.length, 9); assert(report.cases.every(row => row.ok)); assert.equal(report.failed, 0); assert(report.checks > 0);
-          assert.equal(report.controls.length, 3); assert(report.controls.every(row => row.changed && row.restored && row.failures.length > 0));
+          assert.equal(report.controls.length, 4); assert(report.controls.every(row => row.changed && row.restored && row.failures.length > 0));
           assert.equal(report.forwardedExternalRequests, 0); assert(report.fontManifestEntries > 0); assert.deepEqual(report.sourceAfter, report.sourceBefore);
-          console.log(`Receipt: ${report.checks} native checks,9 actual journeys,3 effective detector controls,0 external requests forwarded.`);
+          console.log(`Receipt: ${report.checks} native checks,9 actual journeys,4 effective detector controls,0 external requests forwarded.`);
           JS
       - name: Upload early outcome and browser evidence
         if: ${{ !cancelled() }}
