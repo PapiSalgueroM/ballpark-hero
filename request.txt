@@ -1,0 +1,22 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/leagueSlate.test.ts --testTimeout=300000 --hookTimeout=120000
+sim: node scripts/simCmLeaguePhase.mjs
+c-onesource: CM_LEAGUE_PHASE_CONTROL=onesource node scripts/simCmLeaguePhase.mjs
+c-wiki: CM_LEAGUE_PHASE_CONTROL=wiki node scripts/simCmLeaguePhase.mjs
+c-thinused: CM_LEAGUE_PHASE_CONTROL=thinused node scripts/simCmLeaguePhase.mjs
+c-figure: CM_LEAGUE_PHASE_CONTROL=figure node scripts/simCmLeaguePhase.mjs
+c-receipt: CM_LEAGUE_PHASE_CONTROL=receipt node scripts/simCmLeaguePhase.mjs
+c-steps: CM_LEAGUE_PHASE_CONTROL=steps node scripts/simCmLeaguePhase.mjs
+c-feed: CM_LEAGUE_PHASE_CONTROL=feed node scripts/simCmLeaguePhase.mjs
+c-points: CM_LEAGUE_PHASE_CONTROL=points node scripts/simCmLeaguePhase.mjs
+c-ninth: CM_LEAGUE_PHASE_CONTROL=ninth node scripts/simCmLeaguePhase.mjs
+c-sameassoc: CM_LEAGUE_PHASE_CONTROL=sameassoc node scripts/simCmLeaguePhase.mjs
+c-cap: CM_LEAGUE_PHASE_CONTROL=cap node scripts/simCmLeaguePhase.mjs
+c-twoaday: CM_LEAGUE_PHASE_CONTROL=twoaday node scripts/simCmLeaguePhase.mjs
+c-pot: CM_LEAGUE_PHASE_CONTROL=pot node scripts/simCmLeaguePhase.mjs
+c-lie: CM_LEAGUE_PHASE_CONTROL=lie node scripts/simCmLeaguePhase.mjs
+c-nosearch: CM_LEAGUE_PHASE_CONTROL=nosearch node scripts/simCmLeaguePhase.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs

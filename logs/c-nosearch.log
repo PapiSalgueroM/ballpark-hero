@@ -1,0 +1,16 @@
+  1 set 11: 1000 fields, at the floor 0, fell back 1000, plain fields strict 0 of 445
+  1 set 23: 1000 fields, at the floor 0, fell back 1000, plain fields strict 0 of 449
+  1 set 37: 1000 fields, at the floor 0, fell back 1000, plain fields strict 0 of 453
+  1 by (clubs of the association with most in one pot, most in one pot): fields | at the floor | fell back | mean tries | floors seen (breaks ; over the cap)
+    4 clubs, 3 in a pot         20 |     0 |  20 | 0.00 | 0 ; 0
+    4 clubs, 4 in a pot         30 |     0 |  30 | 0.00 | 0 ; 0
+    5 clubs, 2 in a pot         54 |     0 |  54 | 0.00 | 0 ; 0
+    5 clubs, 3 in a pot        992 |     0 | 992 | 0.00 | 0 ; 0
+    5 clubs, 4 in a pot        608 |     0 | 608 | 0.00 | 0 ; 0
+    5 clubs, 5 in a pot        183 |     0 | 183 | 0.00 | 1,2 ; 0
+    6 clubs, 2 in a pot         29 |     0 |  29 | 0.00 | 0 ; 0
+    6 clubs, 3 in a pot        604 |     0 | 604 | 0.00 | 0 ; 0
+    6 clubs, 4 in a pot        313 |     0 | 313 | 0.00 | 0 ; 2
+    6 clubs, 5 in a pot        165 |     0 | 165 | 0.00 | 1,2 ; 2
+    6 clubs, 6 in a pot          2 |     0 |   2 | 0.00 | 3 ; 0
+simCmLeaguePhase control nosearch: FIRED (3 of its own failures, e.g. [RATE] set 11: 1000 of 1000 fields fell back to the recorded pattern, the band is 0.005)
