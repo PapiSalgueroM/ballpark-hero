@@ -1,0 +1,3 @@
+mlb-bal-s7: SIM_SECTIONS=6 SIM_SPORTS=mlb SIM_SEED=7 node scripts/simUsCareerSummer.mjs
+mlb-bal-s11: SIM_SECTIONS=6 SIM_SPORTS=mlb SIM_SEED=11 node scripts/simUsCareerSummer.mjs
+mlb-bal-s13: SIM_SECTIONS=6 SIM_SPORTS=mlb SIM_SEED=13 node scripts/simUsCareerSummer.mjs
