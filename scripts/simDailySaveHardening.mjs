@@ -44,9 +44,13 @@
  *           takeNewerSave): exactly the 30 stale tab rows of sections 1, 1b, 2,
  *           2b and the four click rows of 7 must fail on an assertion,
  *           everything else pass.
- *   guard   (review) only the addGuess guard removed: exactly the nine rows no
- *           takeNewerSave covers (the shared hook, 1b, Shirt Number, three
- *           click rows of 7). The Higher or Lower rows hold on takeNewerSave.
+ *   guard   (review) only the addGuess guard removed: exactly the eight rows no
+ *           takeNewerSave covers (the shared hook, 1b, Shirt Number, two
+ *           click rows of 7). The Higher or Lower rows hold on takeNewerSave,
+ *           and since Round 1003 so does NBA Connections' click row of 7 (its
+ *           submit asks takeNewerSave first): nine rows until then, eight
+ *           now, re-recorded in Round 1210's fix pass with the proof in the
+ *           commit. The stale control still turns that row.
  *   turn    (review) only the rest-of-turn drop removed: exactly the three
  *           section 1b rows, where a stale Transfer Path tab used to record a
  *           win for a chain that never reached the target.
@@ -275,11 +279,18 @@ try {
        verdict ask takeNewerSave first. The nine Higher or Lower audit rows
        (and the Higher or Lower click row of section 7) hold while either
        layer stands, so only stale (both removed) turns them. */
-    const guardRows = /a tab behind the stored log takes it over|a finish taken over from another tab|1b\) a handler whose first answer is dropped|Shirt Number: a stale tab cannot drop|7\) .*(Connections|Transfer Path|Footle).*its own next click/;
+    const guardRows = /a tab behind the stored log takes it over|a finish taken over from another tab|1b\) a handler whose first answer is dropped|Shirt Number: a stale tab cannot drop|7\) .*(Transfer Path|Footle).*its own next click/;
     const hlRows = /: the stale tab cannot drop a decided round|7\) .*Higher or Lower: taken over through its own next click/;
     const verdictRows = /2b\) a dropped answer shows no verdict/;
+    /* Round 1003 (758c1b72) gave NBA Connections the second layer: its
+       submit asks takeNewerSave before its own click. Its click row of
+       section 7 was a guard row until then (nine of them) and holds on
+       either layer now, so only stale turns it. Proven on a runner before
+       this list moved (r1210-fix-guard): guard as it stood, 8 of 9 red;
+       with that one line taken out of the hook, 9 of 9. */
+    const connRows = /7\) .*Connections.*its own next click/;
     const want = {
-      stale: (t) => guardRows.test(t) || hlRows.test(t) || verdictRows.test(t),
+      stale: (t) => guardRows.test(t) || connRows.test(t) || hlRows.test(t) || verdictRows.test(t),
       guard: (t) => guardRows.test(t),
       turn: (t) => /1b\) a handler whose first answer is dropped/.test(t),
       verdict: (t) => verdictRows.test(t) || /7\) .*Higher or Lower: taken over through its own next click/.test(t),
@@ -288,7 +299,7 @@ try {
       finished: (t) => /7b\) /.test(t),
       decided: (t) => /8\) .*a finished tab is never sent back to playing/.test(t),
     }[CONTROL];
-    const expected = { stale: 30, guard: 9, turn: 3, verdict: 12, event: 18, mark: 12, finished: 2, decided: 1 }[CONTROL];
+    const expected = { stale: 30, guard: 8, turn: 3, verdict: 12, event: 18, mark: 12, finished: 2, decided: 1 }[CONTROL];
     const failed = run.rows.filter((r) => r.status === 'failed');
     const intended = run.rows.filter((r) => want(r.title));
     assert.equal(intended.length, expected, `the control's ${expected} target rows exist`);
