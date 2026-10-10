@@ -1,0 +1,6 @@
+vitest exit=0 5s |    Duration  3.96s (transform 587ms, setup 696ms, collect 1.52s, tests 1.45s, environment 4.12s, prepare 1.27s)
+simGmDraftOrder exit=0 12s | simGmDraftOrder: green. 512050 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+docs-only-since-e6b0fe07 exit=0 0s | docs/audits/ROUND-1222-NOTES.md
+added-only exit=0 0s | 16
+control-tiebyid exit=1 11s | simGmDraftOrder: CONTROL tiebyid FIRED. Red by section 3: 21; every other section green.
+tsc exit=0 62s | 

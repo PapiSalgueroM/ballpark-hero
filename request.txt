@@ -1,0 +1,6 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/gmDraftOrder.test.ts src/lib/gmDraftNight.test.ts src/lib/gmLotteryNight.test.ts src/lib/gmPicks.test.ts src/components/motion/LotteryReveal.test.tsx src/components/front-office-shared/GmLotteryCard.test.tsx --testTimeout=300000 --hookTimeout=120000
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+control-tiebyid: SIM_GM_DRAFT_ORDER_CONTROL=tiebyid node scripts/simGmDraftOrder.mjs
+docs-only-since-e6b0fe07: git diff --name-only e6b0fe07 HEAD -- . ':(exclude).rc' ':(exclude).github'
+added-only: test -z "$(git diff --name-status 09df145a...HEAD -- . ':(exclude).rc' ':(exclude).github' | grep -v '^A')" && git diff --name-status 09df145a...HEAD -- . ':(exclude).rc' ':(exclude).github' | wc -l
