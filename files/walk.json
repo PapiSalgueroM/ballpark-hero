@@ -1,0 +1,664 @@
+[
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: the review of the old 2028 season prints 82 games, the save holds 82"
+ },
+ {
+  "note": "nhl-old-nhl-390: the deal had run out, the market opened; signed the first offer"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "nhl-old-nhl-390: reveal says: THE 2029 SEASON New Jersey Devils · age 22 · C Lost in Round 2 15 G, 23 A, 38 P 🪑 Another camp down the lineup. The gap is closing. 🪑 Fourth-line minutes: every night, none of the power play. 📊 Playoffs: 11 games, 5G 6A 11P. 🪞 Nico Bergeron went 9G 11A 20P. You had the better year. Head to head 3-1. Continue"
+ },
+ {
+  "note": "nhl-old-nhl-390: new line: 2029 NJD: 84 games, slate 84, Lost in Round 2, October 11 games \"undefined\""
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: after playing on, the 3 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: the new 2029 line carries slate 84 (expected one of 84)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: the new line holds 84 games, no more than 84"
+ },
+ {
+  "note": "nhl-old-nhl-390: the Career Log tiles read: 2029 New Jersey Devils || 2028 New Jersey Devils || 2027 New Jersey Devils || 2026 New Jersey Devils"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: the review of the new season prints 84 games, the save holds 84"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: the review of the old 2028 season prints 82 games, the save holds 82"
+ },
+ {
+  "note": "nhl-old-nhl-390-rm: the deal had run out, the market opened; signed the first offer"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "nhl-old-nhl-390-rm: reveal says: THE 2029 SEASON New Jersey Devils · age 22 · C Lost in Round 2 13 G, 22 A, 35 P 🪑 Bumped down the lineup. The new arrival took your minutes in camp. 🪑 Fourth-line minutes: every night, none of the power play. 📊 Playoffs: 10 games, 3G 3A 6P. 🪞 Nico Bergeron went 25G 32A 57P and had the better year of the two of you. Head to head 2-2. Continue"
+ },
+ {
+  "note": "nhl-old-nhl-390-rm: new line: 2029 NJD: 84 games, slate 84, Lost in Round 2, October 10 games \"undefined\""
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: after playing on, the 3 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: the new 2029 line carries slate 84 (expected one of 84)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: the new line holds 84 games, no more than 84"
+ },
+ {
+  "note": "nhl-old-nhl-390-rm: the Career Log tiles read: 2029 New Jersey Devils || 2028 New Jersey Devils || 2027 New Jersey Devils || 2026 New Jersey Devils"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: the review of the new season prints 84 games, the save holds 84"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-390-rm: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: the review of the old 2028 season prints 82 games, the save holds 82"
+ },
+ {
+  "note": "nhl-old-nhl-1280: the deal had run out, the market opened; signed the first offer"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "nhl-old-nhl-1280: reveal says: THE 2029 SEASON New Jersey Devils · age 22 · C Lost in Round 1 18 G, 30 A, 48 P 🪑 Another camp down the lineup. The gap is closing. 🪑 Fourth-line minutes: every night, none of the power play. 📊 Playoffs: 5 games, 4G 4A 8P. 🔥 The puck followed you around all season. 🪞 Nico Bergeron went 18G 25A 43P. You had the better year. Head to head 3-1. Continue"
+ },
+ {
+  "note": "nhl-old-nhl-1280: new line: 2029 NJD: 81 games, slate 84, Lost in Round 1, October 5 games \"undefined\""
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: after playing on, the 3 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: the new 2029 line carries slate 84 (expected one of 84)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: the new line holds 81 games, no more than 84"
+ },
+ {
+  "note": "nhl-old-nhl-1280: the Career Log tiles read: 2029 New Jersey Devils || 2028 New Jersey Devils || 2027 New Jersey Devils || 2026 New Jersey Devils"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: the review of the new season prints 81 games, the save holds 81"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: the review of the old 2028 season prints 82 games, the save holds 82"
+ },
+ {
+  "note": "nhl-old-nhl-1280-rm: the deal had run out, the market opened; signed the first offer"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "nhl-old-nhl-1280-rm: reveal says: THE 2029 SEASON New Jersey Devils · age 22 · C Missed the playoffs 11 G, 16 A, 27 P 🪑 Another camp down the lineup. The gap is closing. 🪑 Fourth-line minutes: every night, none of the power play. 🥶 Ice cold. The bounces went the other way every night. 🪞 Nico Bergeron went 18G 24A 42P and had the better year of the two of you. Head to head 2-2. Continue"
+ },
+ {
+  "note": "nhl-old-nhl-1280-rm: new line: 2029 NJD: 83 games, slate 84, Missed the playoffs"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: after playing on, the 3 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: the new 2029 line carries slate 84 (expected one of 84)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: the new line holds 83 games, no more than 84"
+ },
+ {
+  "note": "nhl-old-nhl-1280-rm: the Career Log tiles read: 2029 New Jersey Devils || 2028 New Jersey Devils || 2027 New Jersey Devils || 2026 New Jersey Devils"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: the review of the new season prints 83 games, the save holds 83"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-1280-rm: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: the review of the old 2028 season prints 83 games, the save holds 83"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-old-mlb-390: reveal says: THE 2029 SEASON Milwaukee Brewers · age 24 · CF Missed October .276, 8 HR, 21 RBI 🪑 Another spring on the bench. The gap is closing. 🪑 A bench season: 73 games of pinch hits and spot starts. 🪞 Tyrell Novak went 0.264, 16 HR and had the better year of the two of you. Head to head 1-3. Continue"
+ },
+ {
+  "note": "mlb-old-mlb-390: new line: 2029 MIL: 73 games, slate none, Missed October"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: after playing on, the 3 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: the new 2029 line carries slate undefined (expected one of , 161)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: the new line holds 73 games, no more than 162"
+ },
+ {
+  "note": "mlb-old-mlb-390: the Career Log tiles read: 2029 Milwaukee Brewers || 2028 Milwaukee Brewers || 2027 Milwaukee Brewers || 2026 Milwaukee Brewers"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: the review of the new season prints 73 games, the save holds 73"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-390: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: loading did not touch the 3 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: the review of the old 2028 season prints 83 games, the save holds 83"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-old-mlb-1280: reveal says: THE 2029 SEASON Milwaukee Brewers · age 24 · CF Missed October .267, 13 HR, 28 RBI 🪑 Another spring on the bench. The gap is closing. 🪑 A bench season: 74 games of pinch hits and spot starts. 🪞 Tyrell Novak went 0.249, 12 HR. You had the better year. Head to head 2-2. Continue"
+ },
+ {
+  "note": "mlb-old-mlb-1280: new line: 2029 MIL: 74 games, slate none, Missed October"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: after playing on, the 3 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: the new 2029 line carries slate undefined (expected one of , 161)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: the new line holds 74 games, no more than 162"
+ },
+ {
+  "note": "mlb-old-mlb-1280: the Career Log tiles read: 2029 Milwaukee Brewers || 2028 Milwaukee Brewers || 2027 Milwaukee Brewers || 2026 Milwaukee Brewers"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: the review of the new season prints 74 games, the save holds 74"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-1280: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: loading did not touch the 6 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: the review of the old 2011 season prints 82 games, the save holds 82"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "nhl-old-nhl-2012-390: reveal says: THE 2012 SEASON Montreal Canadiens · age 24 · C Missed the playoffs 29 G, 27 A, 56 P 🎖️ Masterton nomination for perseverance. 🪞 Brody Marchetti went 34G 44A 78P and had the better year of the two of you. Head to head 5-2. Continue"
+ },
+ {
+  "note": "nhl-old-nhl-2012-390: new line: 2012 MTL: 47 games, slate 48, Missed the playoffs"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: after playing on, the 6 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: the new 2012 line carries slate 48 (expected one of 48)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: the new line holds 47 games, no more than 48"
+ },
+ {
+  "note": "nhl-old-nhl-2012-390: the Career Log tiles read: 2009 Minnesota Wild || 2008 Minnesota Wild || 2007 Minnesota Wild || 2006 Minnesota Wild"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: the review of the new season prints 47 games, the save holds 47"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-390: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: loading did not touch the 6 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: the review of the old 2011 season prints 82 games, the save holds 82"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "nhl-old-nhl-2012-1280-rm: reveal says: THE 2012 SEASON Montreal Canadiens · age 24 · C Lost in Round 2 17 G, 17 A, 34 P 🪑 Bumped down the lineup. The new arrival took your minutes in camp. 🪑 Fourth-line minutes: every night, none of the power play. 📊 Playoffs: 10 games, 6G 5A 11P. 🪞 Brody Marchetti went 22G 30A 52P and had the better year of the two of you. Head to head 5-2. Continue"
+ },
+ {
+  "note": "nhl-old-nhl-2012-1280-rm: new line: 2012 MTL: 48 games, slate 48, Lost in Round 2, October 10 games \"undefined\""
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: after playing on, the 6 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: the new 2012 line carries slate 48 (expected one of 48)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: the new line holds 48 games, no more than 48"
+ },
+ {
+  "note": "nhl-old-nhl-2012-1280-rm: the Career Log tiles read: 2009 Minnesota Wild || 2008 Minnesota Wild || 2007 Minnesota Wild || 2006 Minnesota Wild"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: the review of the new season prints 48 games, the save holds 48"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "nhl-old-nhl-2012-1280-rm: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: loading did not touch the 16 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: the review of the old 2019 season prints 158 games, the save holds 158"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-old-mlb-2020-390: reveal says: THE 2020 SEASON Atlanta Braves · age 37 · CF Lost the World Series .289, 7 HR, 11 RBI 🚑 Injured list stints ate the season. 📊 Postseason: 15 games, 18 for 60 (.300), 2 HR. 🪞 Cole Fitzgerald went 0.247, 13 HR. You had the better year. Head to head 12-5. 📉 The bat speed goes quietly: 74 to 69. Continue"
+ },
+ {
+  "note": "mlb-old-mlb-2020-390: new line: 2020 ATL: 38 games, slate 60, Lost the World Series, October 15 games \"18 for 60 (.300), 2 HR\""
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: after playing on, the 16 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: the new 2020 line carries slate 60 (expected one of 60, 58)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: the new line holds 38 games, no more than 60"
+ },
+ {
+  "note": "mlb-old-mlb-2020-390: the Career Log tiles read: 2007 Kansas City Royals || 2006 Kansas City Royals || 2005 Kansas City Royals || 2004 Kansas City Royals"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: the review of the new season prints 38 games, the save holds 38"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-390: no page errors (clean)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: the old save opens on the hub"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm-1-hub: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: loading did not touch the 16 saved lines"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm-2-old-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: the review of the old 2019 season prints 158 games, the save holds 158"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm-3-next-reveal: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "note": "mlb-old-mlb-2020-1280-rm: reveal says: THE 2020 SEASON Atlanta Braves · age 37 · CF Lost the Wild Card series .255, 9 HR, 23 RBI 📊 Postseason: 3 games, 3 for 12 (.250), 1 HR. 🪞 Cole Fitzgerald went 0.263, 11 HR and had the better year of the two of you. Head to head 11-6. 📉 The bat speed goes quietly: 74 to 68. Continue"
+ },
+ {
+  "note": "mlb-old-mlb-2020-1280-rm: new line: 2020 ATL: 60 games, slate 60, Lost the Wild Card series, October 3 games \"3 for 12 (.250), 1 HR\""
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: after playing on, the 16 old lines are byte for byte what the base engine saved"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: one new line was added"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: the new 2020 line carries slate 60 (expected one of 60, 58)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: the new line holds 60 games, no more than 60"
+ },
+ {
+  "note": "mlb-old-mlb-2020-1280-rm: the Career Log tiles read: 2007 Kansas City Royals || 2006 Kansas City Royals || 2005 Kansas City Royals || 2004 Kansas City Royals"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm-4-new-review: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: the review of the new season prints 60 games, the save holds 60"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm-5-hub-after: no sideways scroll (the page is 0 px wider than the window)"
+ },
+ {
+  "ok": true,
+  "what": "mlb-old-mlb-2020-1280-rm: no page errors (clean)"
+ }
+]
