@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+old: git worktree add -f /tmp/base 54e3820a >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; W="$PWD"; cd /tmp/base && git rev-parse --short HEAD && node "$W/.rc/x/scMake.mjs" old /tmp/sc-old.json
+new: node .rc/x/scMake.mjs new /tmp/sc-new.json
+basebuild: cd /tmp/base && npm run build 2>&1 | tail -4; ls dist | head -3; test -f dist/index.html
+walk: (cd /tmp/base && node scripts/lib/hostLikeServer.mjs dist 4174 > /tmp/base-server.log 2>&1 &) ; sleep 4; BASE_MAIN=http://localhost:4174 node .rc/x/scWalk.mjs /tmp/sc-old.json /tmp/sc-new.json

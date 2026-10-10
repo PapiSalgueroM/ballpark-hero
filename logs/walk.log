@@ -1,0 +1,2284 @@
+saves: old-first, old-event-mentor, old-home, old-one-season, old-summary, old-ceremony, old-retired, old-gk, old-news-milestone, old-event-manager, new-first, new-summary, new-home, new-one-season, new-summary-milestone, new-ceremony, new-retired, new-news-milestone, new-event-mentor, new-gk, new-event-manager, new-role-plan, new-summary-role, old-1100
+info home-new-home-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":{"l":12,"t":778,"w":169,"h":48,"pos":"static"},"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-new-home-p390: page height 13543px = 16.0 screens, sideways scroll false
+ok   home-new-home-p390: the page has no sideways scroll
+info home-new-home-p390: tiles :: ["🏋️ Training Drill ready 📱 Phone 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","🤝 Academy mentor GENERATED academy player Marius Hollerbach · RB 0/3 mentoring seasons · Mentoring together","📖 Record book Your best seasons and every club spell 618 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 641 Apps 258 Goals 94 Assists 22 Trophies 🔥 Derbies: 20 played, 10 W 8 D 2 L, 13 goals 🔥 Derby history"]
+ok   home-new-home-p390: Help is at least 44 by 44 on a phone
+ok   home-new-home-p390: Help does not sit on Phone or Training
+ok   home-new-home-p390: Phone is in the page on a phone, not floating
+ok   home-new-home-p390: no new tile or opener is covered by something floating
+ok   home-new-home-p390-target: its trigger can be pressed
+ok   home-new-home-p390-target: opens
+ok   home-new-home-p390-target: the page did not move when it opened
+ok   home-new-home-p390-target: the dialog is inside the viewport
+FAIL home-new-home-p390-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p390-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-home-p390-target: help button inside :: false
+ok   home-new-home-p390-target: closes with Escape
+ok   home-new-home-p390-target: the page is where it was after Escape
+ok   home-new-home-p390-target: focus is back on its trigger after Escape
+ok   home-new-home-p390-target: body lock released after Escape
+ok   home-new-home-p390-target-x: its trigger can be pressed
+ok   home-new-home-p390-target-x: opens
+ok   home-new-home-p390-target-x: the page did not move when it opened
+ok   home-new-home-p390-target-x: the dialog is inside the viewport
+FAIL home-new-home-p390-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p390-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-home-p390-target-x: help button inside :: false
+ok   home-new-home-p390-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p390-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p390-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p390-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p390-target: the tile shows the saved target
+ok   home-new-home-p390-preseason: its trigger can be pressed
+ok   home-new-home-p390-preseason: opens
+ok   home-new-home-p390-preseason: the page did not move when it opened
+ok   home-new-home-p390-preseason: the dialog is inside the viewport
+FAIL home-new-home-p390-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p390-preseason: help button inside :: false
+ok   home-new-home-p390-preseason: closes with Escape
+ok   home-new-home-p390-preseason: the page is where it was after Escape
+ok   home-new-home-p390-preseason: focus is back on its trigger after Escape
+ok   home-new-home-p390-preseason: body lock released after Escape
+ok   home-new-home-p390-preseason-x: its trigger can be pressed
+ok   home-new-home-p390-preseason-x: opens
+ok   home-new-home-p390-preseason-x: the page did not move when it opened
+ok   home-new-home-p390-preseason-x: the dialog is inside the viewport
+FAIL home-new-home-p390-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p390-preseason-x: help button inside :: false
+ok   home-new-home-p390-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p390-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p390-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p390-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p390-preseason: the tile shows the saved plan
+ok   home-new-home-p390-mentor: its trigger can be pressed
+ok   home-new-home-p390-mentor: opens
+ok   home-new-home-p390-mentor: the page did not move when it opened
+ok   home-new-home-p390-mentor: the dialog is inside the viewport
+FAIL home-new-home-p390-mentor: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p390-mentor: help button inside :: true
+ok   home-new-home-p390-mentor: the ? shows the rules and an example
+ok   home-new-home-p390-mentor: closes with Escape
+ok   home-new-home-p390-mentor: the page is where it was after Escape
+ok   home-new-home-p390-mentor: focus is back on its trigger after Escape
+ok   home-new-home-p390-mentor: body lock released after Escape
+ok   home-new-home-p390-mentor-back: its trigger can be pressed
+ok   home-new-home-p390-mentor-back: opens
+ok   home-new-home-p390-mentor-back: the page did not move when it opened
+ok   home-new-home-p390-mentor-back: the dialog is inside the viewport
+FAIL home-new-home-p390-mentor-back: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p390-mentor-back: help button inside :: true
+ok   home-new-home-p390-mentor-back: closes with [data-career-mentor-back]
+ok   home-new-home-p390-mentor-back: the page is where it was after [data-career-mentor-back]
+ok   home-new-home-p390-mentor-back: focus is back on its trigger after [data-career-mentor-back]
+ok   home-new-home-p390-mentor-back: body lock released after [data-career-mentor-back]
+ok   home-new-home-p390-records: its trigger can be pressed
+ok   home-new-home-p390-records: opens
+ok   home-new-home-p390-records: the page did not move when it opened
+ok   home-new-home-p390-records: the dialog is inside the viewport
+ok   home-new-home-p390-records: nothing cut off sideways
+info home-new-home-p390-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-home-p390-records: help button inside :: true
+ok   home-new-home-p390-records: Escape on a season goes back one step, not out
+ok   home-new-home-p390-records: closes with [data-career-records] button:has-text("Close")
+ok   home-new-home-p390-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-new-home-p390-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-new-home-p390-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-new-home-p390-records-esc: its trigger can be pressed
+ok   home-new-home-p390-records-esc: opens
+ok   home-new-home-p390-records-esc: the page did not move when it opened
+ok   home-new-home-p390-records-esc: the dialog is inside the viewport
+ok   home-new-home-p390-records-esc: nothing cut off sideways
+info home-new-home-p390-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-home-p390-records-esc: help button inside :: true
+ok   home-new-home-p390-records-esc: closes with Escape
+ok   home-new-home-p390-records-esc: the page is where it was after Escape
+ok   home-new-home-p390-records-esc: focus is back on its trigger after Escape
+ok   home-new-home-p390-records-esc: body lock released after Escape
+ok   home-new-home-p390-derby: its trigger can be pressed
+ok   home-new-home-p390-derby: opens
+ok   home-new-home-p390-derby: the page did not move when it opened
+ok   home-new-home-p390-derby: the dialog is inside the viewport
+ok   home-new-home-p390-derby: nothing cut off sideways
+info home-new-home-p390-derby: help button inside :: true
+ok   home-new-home-p390-derby: Back puts focus on the season tile it came from
+ok   home-new-home-p390-derby: the ? shows the rules and an example
+ok   home-new-home-p390-derby: closes with [data-derby-close]
+ok   home-new-home-p390-derby: the page is where it was after [data-derby-close]
+ok   home-new-home-p390-derby: focus is back on its trigger after [data-derby-close]
+ok   home-new-home-p390-derby: body lock released after [data-derby-close]
+ok   home-new-home-p390-derby-esc: its trigger can be pressed
+ok   home-new-home-p390-derby-esc: opens
+ok   home-new-home-p390-derby-esc: the page did not move when it opened
+ok   home-new-home-p390-derby-esc: the dialog is inside the viewport
+ok   home-new-home-p390-derby-esc: nothing cut off sideways
+info home-new-home-p390-derby-esc: help button inside :: true
+ok   home-new-home-p390-derby-esc: closes with Escape
+ok   home-new-home-p390-derby-esc: the page is where it was after Escape
+ok   home-new-home-p390-derby-esc: focus is back on its trigger after Escape
+ok   home-new-home-p390-derby-esc: body lock released after Escape
+ok   home-new-home-p390-ratings: its trigger can be pressed
+ok   home-new-home-p390-ratings: opens
+ok   home-new-home-p390-ratings: the page did not move when it opened
+ok   home-new-home-p390-ratings: the dialog is inside the viewport
+FAIL home-new-home-p390-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-home-p390-ratings: help button inside :: true
+info home-new-home-p390-ratings: compare enabled :: 1
+ok   home-new-home-p390-compare: Swap seasons swaps the two sides
+ok   home-new-home-p390-ratings: the ? shows the rules and an example
+ok   home-new-home-p390-ratings: closes with [data-season-history-close]
+ok   home-new-home-p390-ratings: the page is where it was after [data-season-history-close]
+ok   home-new-home-p390-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-new-home-p390-ratings: body lock released after [data-season-history-close]
+ok   home-new-home-p390-ratings-esc: its trigger can be pressed
+ok   home-new-home-p390-ratings-esc: opens
+ok   home-new-home-p390-ratings-esc: the page did not move when it opened
+ok   home-new-home-p390-ratings-esc: the dialog is inside the viewport
+FAIL home-new-home-p390-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-home-p390-ratings-esc: help button inside :: true
+ok   home-new-home-p390-ratings-esc: closes with Escape
+ok   home-new-home-p390-ratings-esc: the page is where it was after Escape
+ok   home-new-home-p390-ratings-esc: focus is back on its trigger after Escape
+ok   home-new-home-p390-ratings-esc: body lock released after Escape
+ok   home-new-home-p390-story: its trigger can be pressed
+ok   home-new-home-p390-story: opens
+ok   home-new-home-p390-story: the page did not move when it opened
+ok   home-new-home-p390-story: the dialog is inside the viewport
+FAIL home-new-home-p390-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Close"],"outside":[]}
+info home-new-home-p390-story: help button inside :: false
+info home-new-home-p390-story: chapters :: 20
+ok   home-new-home-p390-story: Next then Previous lands on the chapter it left
+ok   home-new-home-p390-story: All seasons puts focus on the tile it opened
+ok   home-new-home-p390-story: closes with [data-story-close]
+ok   home-new-home-p390-story: the page is where it was after [data-story-close]
+ok   home-new-home-p390-story: focus is back on its trigger after [data-story-close]
+ok   home-new-home-p390-story: body lock released after [data-story-close]
+ok   home-new-home-p390-story-esc: its trigger can be pressed
+ok   home-new-home-p390-story-esc: opens
+ok   home-new-home-p390-story-esc: the page did not move when it opened
+ok   home-new-home-p390-story-esc: the dialog is inside the viewport
+FAIL home-new-home-p390-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Close"],"outside":[]}
+info home-new-home-p390-story-esc: help button inside :: false
+ok   home-new-home-p390-story-esc: closes with Escape
+ok   home-new-home-p390-story-esc: the page is where it was after Escape
+ok   home-new-home-p390-story-esc: focus is back on its trigger after Escape
+ok   home-new-home-p390-story-esc: body lock released after Escape
+info home-new-home-p390: trophy categories :: [{"c":"league","label":"Leagues: 12. View winning seasons"},{"c":"domestic","label":"DFB-Pokal: 6. View winning seasons"},{"c":"ucl","label":"UCL: 3. View winning seasons"},{"c":"world","label":"World Cup: 1. View winning seasons"},{"c":"continental","label":"Continental: 0. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 1. View winning seasons"}]
+ok   home-new-home-p390-trophy-ucl: its trigger can be pressed
+ok   home-new-home-p390-trophy-ucl: opens
+ok   home-new-home-p390-trophy-ucl: the page did not move when it opened
+ok   home-new-home-p390-trophy-ucl: the dialog is inside the viewport
+ok   home-new-home-p390-trophy-ucl: nothing cut off sideways
+info home-new-home-p390-trophy-ucl: help button inside :: true
+ok   home-new-home-p390-trophy-ucl: closes with [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-ucl: the page is where it was after [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-ucl: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-ucl: body lock released after [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-ucl-esc: its trigger can be pressed
+ok   home-new-home-p390-trophy-ucl-esc: opens
+ok   home-new-home-p390-trophy-ucl-esc: the page did not move when it opened
+ok   home-new-home-p390-trophy-ucl-esc: the dialog is inside the viewport
+ok   home-new-home-p390-trophy-ucl-esc: nothing cut off sideways
+info home-new-home-p390-trophy-ucl-esc: help button inside :: true
+ok   home-new-home-p390-trophy-ucl-esc: closes with Escape
+ok   home-new-home-p390-trophy-ucl-esc: the page is where it was after Escape
+ok   home-new-home-p390-trophy-ucl-esc: focus is back on its trigger after Escape
+ok   home-new-home-p390-trophy-ucl-esc: body lock released after Escape
+ok   home-new-home-p390-trophy-domestic: its trigger can be pressed
+ok   home-new-home-p390-trophy-domestic: opens
+ok   home-new-home-p390-trophy-domestic: the page did not move when it opened
+ok   home-new-home-p390-trophy-domestic: the dialog is inside the viewport
+ok   home-new-home-p390-trophy-domestic: nothing cut off sideways
+info home-new-home-p390-trophy-domestic: help button inside :: true
+ok   home-new-home-p390-trophy-domestic: closes with [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-domestic: the page is where it was after [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-domestic: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-domestic: body lock released after [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-domestic-esc: its trigger can be pressed
+ok   home-new-home-p390-trophy-domestic-esc: opens
+ok   home-new-home-p390-trophy-domestic-esc: the page did not move when it opened
+ok   home-new-home-p390-trophy-domestic-esc: the dialog is inside the viewport
+ok   home-new-home-p390-trophy-domestic-esc: nothing cut off sideways
+info home-new-home-p390-trophy-domestic-esc: help button inside :: true
+ok   home-new-home-p390-trophy-domestic-esc: closes with Escape
+ok   home-new-home-p390-trophy-domestic-esc: the page is where it was after Escape
+ok   home-new-home-p390-trophy-domestic-esc: focus is back on its trigger after Escape
+ok   home-new-home-p390-trophy-domestic-esc: body lock released after Escape
+ok   home-new-home-p390-trophy-league: its trigger can be pressed
+ok   home-new-home-p390-trophy-league: opens
+ok   home-new-home-p390-trophy-league: the page did not move when it opened
+ok   home-new-home-p390-trophy-league: the dialog is inside the viewport
+ok   home-new-home-p390-trophy-league: nothing cut off sideways
+info home-new-home-p390-trophy-league: help button inside :: true
+ok   home-new-home-p390-trophy-league: closes with [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-league: the page is where it was after [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-league: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-league: body lock released after [data-trophy-back="career"]
+ok   home-new-home-p390-trophy-league-esc: its trigger can be pressed
+ok   home-new-home-p390-trophy-league-esc: opens
+ok   home-new-home-p390-trophy-league-esc: the page did not move when it opened
+ok   home-new-home-p390-trophy-league-esc: the dialog is inside the viewport
+ok   home-new-home-p390-trophy-league-esc: nothing cut off sideways
+info home-new-home-p390-trophy-league-esc: help button inside :: true
+ok   home-new-home-p390-trophy-league-esc: closes with Escape
+ok   home-new-home-p390-trophy-league-esc: the page is where it was after Escape
+ok   home-new-home-p390-trophy-league-esc: focus is back on its trigger after Escape
+ok   home-new-home-p390-trophy-league-esc: body lock released after Escape
+ok   home-new-home-p390: the tiles read the same after a reload
+ok   home-new-home-p390: no page or console error
+scene new-home-p390 done in 50s, 46 shots, 1.8 MB so far
+info home-new-home-d1280: top facts :: {"help":{"l":192,"t":85,"w":40,"h":40,"pos":"absolute"},"training":{"l":1208,"t":756,"w":56,"h":56,"pos":"fixed"},"phone":{"l":1208,"t":824,"w":56,"h":56,"pos":"fixed"},"nav":{"l":0,"t":32,"w":1280,"h":53,"pos":"static"},"next":{"l":144,"t":834,"w":658,"h":48,"pos":"static"},"floaters":[{"what":"ol:","box":{"l":860,"t":868,"w":420,"h":32,"pos":"fixed"}},{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}},{"what":"button:Open the training ground","box":{"l":1208,"t":756,"w":56,"h":56,"pos":"fixed"}},{"what":"button:Open your phone","box":{"l":1208,"t":824,"w":56,"h":56,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-new-home-d1280: page height 9693px = 10.8 screens, sideways scroll false
+ok   home-new-home-d1280: the page has no sideways scroll
+info home-new-home-d1280: tiles :: ["🏋️ Drill ready 📱 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","🤝 Academy mentor GENERATED academy player Marius Hollerbach · RB 0/3 mentoring seasons · Mentoring together","📖 Record book Your best seasons and every club spell 618 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 641 Apps 258 Goals 94 Assists 22 Trophies 🔥 Derbies: 20 played, 10 W 8 D 2 L, 13 goals 🔥 Derby history"]
+ok   home-new-home-d1280: no new tile or opener is covered by something floating
+ok   home-new-home-d1280-target: its trigger can be pressed
+ok   home-new-home-d1280-target: opens
+ok   home-new-home-d1280-target: the page did not move when it opened
+ok   home-new-home-d1280-target: the dialog is inside the viewport
+FAIL home-new-home-d1280-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-d1280-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-home-d1280-target: help button inside :: false
+ok   home-new-home-d1280-target: closes with Escape
+ok   home-new-home-d1280-target: the page is where it was after Escape
+ok   home-new-home-d1280-target: focus is back on its trigger after Escape
+ok   home-new-home-d1280-target: body lock released after Escape
+ok   home-new-home-d1280-target-x: its trigger can be pressed
+ok   home-new-home-d1280-target-x: opens
+ok   home-new-home-d1280-target-x: the page did not move when it opened
+ok   home-new-home-d1280-target-x: the dialog is inside the viewport
+FAIL home-new-home-d1280-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-d1280-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-home-d1280-target-x: help button inside :: false
+ok   home-new-home-d1280-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-d1280-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-d1280-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-d1280-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-d1280-target: the tile shows the saved target
+ok   home-new-home-d1280-preseason: its trigger can be pressed
+ok   home-new-home-d1280-preseason: opens
+ok   home-new-home-d1280-preseason: the page did not move when it opened
+ok   home-new-home-d1280-preseason: the dialog is inside the viewport
+FAIL home-new-home-d1280-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-d1280-preseason: help button inside :: false
+ok   home-new-home-d1280-preseason: closes with Escape
+ok   home-new-home-d1280-preseason: the page is where it was after Escape
+ok   home-new-home-d1280-preseason: focus is back on its trigger after Escape
+ok   home-new-home-d1280-preseason: body lock released after Escape
+ok   home-new-home-d1280-preseason-x: its trigger can be pressed
+ok   home-new-home-d1280-preseason-x: opens
+ok   home-new-home-d1280-preseason-x: the page did not move when it opened
+ok   home-new-home-d1280-preseason-x: the dialog is inside the viewport
+FAIL home-new-home-d1280-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-d1280-preseason-x: help button inside :: false
+ok   home-new-home-d1280-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-d1280-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-d1280-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-d1280-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-d1280-preseason: the tile shows the saved plan
+ok   home-new-home-d1280-mentor: its trigger can be pressed
+ok   home-new-home-d1280-mentor: opens
+ok   home-new-home-d1280-mentor: the page did not move when it opened
+ok   home-new-home-d1280-mentor: the dialog is inside the viewport
+FAIL home-new-home-d1280-mentor: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-d1280-mentor: help button inside :: true
+ok   home-new-home-d1280-mentor: the ? shows the rules and an example
+ok   home-new-home-d1280-mentor: closes with Escape
+ok   home-new-home-d1280-mentor: the page is where it was after Escape
+ok   home-new-home-d1280-mentor: focus is back on its trigger after Escape
+ok   home-new-home-d1280-mentor: body lock released after Escape
+ok   home-new-home-d1280-mentor-back: its trigger can be pressed
+ok   home-new-home-d1280-mentor-back: opens
+ok   home-new-home-d1280-mentor-back: the page did not move when it opened
+ok   home-new-home-d1280-mentor-back: the dialog is inside the viewport
+FAIL home-new-home-d1280-mentor-back: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-d1280-mentor-back: help button inside :: true
+ok   home-new-home-d1280-mentor-back: closes with [data-career-mentor-back]
+ok   home-new-home-d1280-mentor-back: the page is where it was after [data-career-mentor-back]
+ok   home-new-home-d1280-mentor-back: focus is back on its trigger after [data-career-mentor-back]
+ok   home-new-home-d1280-mentor-back: body lock released after [data-career-mentor-back]
+ok   home-new-home-d1280-records: its trigger can be pressed
+ok   home-new-home-d1280-records: opens
+ok   home-new-home-d1280-records: the page did not move when it opened
+ok   home-new-home-d1280-records: the dialog is inside the viewport
+ok   home-new-home-d1280-records: nothing cut off sideways
+info home-new-home-d1280-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-home-d1280-records: help button inside :: true
+ok   home-new-home-d1280-records: Escape on a season goes back one step, not out
+ok   home-new-home-d1280-records: closes with [data-career-records] button:has-text("Close")
+ok   home-new-home-d1280-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-new-home-d1280-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-new-home-d1280-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-new-home-d1280-records-esc: its trigger can be pressed
+ok   home-new-home-d1280-records-esc: opens
+ok   home-new-home-d1280-records-esc: the page did not move when it opened
+ok   home-new-home-d1280-records-esc: the dialog is inside the viewport
+ok   home-new-home-d1280-records-esc: nothing cut off sideways
+info home-new-home-d1280-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-home-d1280-records-esc: help button inside :: true
+ok   home-new-home-d1280-records-esc: closes with Escape
+ok   home-new-home-d1280-records-esc: the page is where it was after Escape
+ok   home-new-home-d1280-records-esc: focus is back on its trigger after Escape
+ok   home-new-home-d1280-records-esc: body lock released after Escape
+ok   home-new-home-d1280-derby: its trigger can be pressed
+ok   home-new-home-d1280-derby: opens
+ok   home-new-home-d1280-derby: the page did not move when it opened
+ok   home-new-home-d1280-derby: the dialog is inside the viewport
+ok   home-new-home-d1280-derby: nothing cut off sideways
+info home-new-home-d1280-derby: help button inside :: true
+ok   home-new-home-d1280-derby: Back puts focus on the season tile it came from
+ok   home-new-home-d1280-derby: the ? shows the rules and an example
+ok   home-new-home-d1280-derby: closes with [data-derby-close]
+ok   home-new-home-d1280-derby: the page is where it was after [data-derby-close]
+ok   home-new-home-d1280-derby: focus is back on its trigger after [data-derby-close]
+ok   home-new-home-d1280-derby: body lock released after [data-derby-close]
+ok   home-new-home-d1280-derby-esc: its trigger can be pressed
+ok   home-new-home-d1280-derby-esc: opens
+ok   home-new-home-d1280-derby-esc: the page did not move when it opened
+ok   home-new-home-d1280-derby-esc: the dialog is inside the viewport
+ok   home-new-home-d1280-derby-esc: nothing cut off sideways
+info home-new-home-d1280-derby-esc: help button inside :: true
+ok   home-new-home-d1280-derby-esc: closes with Escape
+ok   home-new-home-d1280-derby-esc: the page is where it was after Escape
+ok   home-new-home-d1280-derby-esc: focus is back on its trigger after Escape
+ok   home-new-home-d1280-derby-esc: body lock released after Escape
+ok   home-new-home-d1280-ratings: its trigger can be pressed
+ok   home-new-home-d1280-ratings: opens
+ok   home-new-home-d1280-ratings: the page did not move when it opened
+ok   home-new-home-d1280-ratings: the dialog is inside the viewport
+FAIL home-new-home-d1280-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-home-d1280-ratings: help button inside :: true
+info home-new-home-d1280-ratings: compare enabled :: 1
+ok   home-new-home-d1280-compare: Swap seasons swaps the two sides
+ok   home-new-home-d1280-ratings: the ? shows the rules and an example
+ok   home-new-home-d1280-ratings: closes with [data-season-history-close]
+ok   home-new-home-d1280-ratings: the page is where it was after [data-season-history-close]
+ok   home-new-home-d1280-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-new-home-d1280-ratings: body lock released after [data-season-history-close]
+ok   home-new-home-d1280-ratings-esc: its trigger can be pressed
+ok   home-new-home-d1280-ratings-esc: opens
+ok   home-new-home-d1280-ratings-esc: the page did not move when it opened
+ok   home-new-home-d1280-ratings-esc: the dialog is inside the viewport
+FAIL home-new-home-d1280-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-home-d1280-ratings-esc: help button inside :: true
+ok   home-new-home-d1280-ratings-esc: closes with Escape
+ok   home-new-home-d1280-ratings-esc: the page is where it was after Escape
+ok   home-new-home-d1280-ratings-esc: focus is back on its trigger after Escape
+ok   home-new-home-d1280-ratings-esc: body lock released after Escape
+ok   home-new-home-d1280-story: its trigger can be pressed
+ok   home-new-home-d1280-story: opens
+ok   home-new-home-d1280-story: the page did not move when it opened
+ok   home-new-home-d1280-story: the dialog is inside the viewport
+FAIL home-new-home-d1280-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Close"],"outside":[]}
+info home-new-home-d1280-story: help button inside :: false
+info home-new-home-d1280-story: chapters :: 20
+ok   home-new-home-d1280-story: Next then Previous lands on the chapter it left
+ok   home-new-home-d1280-story: All seasons puts focus on the tile it opened
+ok   home-new-home-d1280-story: closes with [data-story-close]
+ok   home-new-home-d1280-story: the page is where it was after [data-story-close]
+ok   home-new-home-d1280-story: focus is back on its trigger after [data-story-close]
+ok   home-new-home-d1280-story: body lock released after [data-story-close]
+ok   home-new-home-d1280-story-esc: its trigger can be pressed
+ok   home-new-home-d1280-story-esc: opens
+ok   home-new-home-d1280-story-esc: the page did not move when it opened
+ok   home-new-home-d1280-story-esc: the dialog is inside the viewport
+FAIL home-new-home-d1280-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Close"],"outside":[]}
+info home-new-home-d1280-story-esc: help button inside :: false
+ok   home-new-home-d1280-story-esc: closes with Escape
+ok   home-new-home-d1280-story-esc: the page is where it was after Escape
+ok   home-new-home-d1280-story-esc: focus is back on its trigger after Escape
+ok   home-new-home-d1280-story-esc: body lock released after Escape
+info home-new-home-d1280: trophy categories :: [{"c":"league","label":"Leagues: 12. View winning seasons"},{"c":"domestic","label":"DFB-Pokal: 6. View winning seasons"},{"c":"ucl","label":"UCL: 3. View winning seasons"},{"c":"world","label":"World Cup: 1. View winning seasons"},{"c":"continental","label":"Continental: 0. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 1. View winning seasons"}]
+ok   home-new-home-d1280-trophy-ucl: its trigger can be pressed
+ok   home-new-home-d1280-trophy-ucl: opens
+ok   home-new-home-d1280-trophy-ucl: the page did not move when it opened
+ok   home-new-home-d1280-trophy-ucl: the dialog is inside the viewport
+ok   home-new-home-d1280-trophy-ucl: nothing cut off sideways
+info home-new-home-d1280-trophy-ucl: help button inside :: true
+ok   home-new-home-d1280-trophy-ucl: closes with [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-ucl: the page is where it was after [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-ucl: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-ucl: body lock released after [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-ucl-esc: its trigger can be pressed
+ok   home-new-home-d1280-trophy-ucl-esc: opens
+ok   home-new-home-d1280-trophy-ucl-esc: the page did not move when it opened
+ok   home-new-home-d1280-trophy-ucl-esc: the dialog is inside the viewport
+ok   home-new-home-d1280-trophy-ucl-esc: nothing cut off sideways
+info home-new-home-d1280-trophy-ucl-esc: help button inside :: true
+ok   home-new-home-d1280-trophy-ucl-esc: closes with Escape
+ok   home-new-home-d1280-trophy-ucl-esc: the page is where it was after Escape
+ok   home-new-home-d1280-trophy-ucl-esc: focus is back on its trigger after Escape
+ok   home-new-home-d1280-trophy-ucl-esc: body lock released after Escape
+ok   home-new-home-d1280-trophy-domestic: its trigger can be pressed
+ok   home-new-home-d1280-trophy-domestic: opens
+ok   home-new-home-d1280-trophy-domestic: the page did not move when it opened
+ok   home-new-home-d1280-trophy-domestic: the dialog is inside the viewport
+ok   home-new-home-d1280-trophy-domestic: nothing cut off sideways
+info home-new-home-d1280-trophy-domestic: help button inside :: true
+ok   home-new-home-d1280-trophy-domestic: closes with [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-domestic: the page is where it was after [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-domestic: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-domestic: body lock released after [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-domestic-esc: its trigger can be pressed
+ok   home-new-home-d1280-trophy-domestic-esc: opens
+ok   home-new-home-d1280-trophy-domestic-esc: the page did not move when it opened
+ok   home-new-home-d1280-trophy-domestic-esc: the dialog is inside the viewport
+ok   home-new-home-d1280-trophy-domestic-esc: nothing cut off sideways
+info home-new-home-d1280-trophy-domestic-esc: help button inside :: true
+ok   home-new-home-d1280-trophy-domestic-esc: closes with Escape
+ok   home-new-home-d1280-trophy-domestic-esc: the page is where it was after Escape
+ok   home-new-home-d1280-trophy-domestic-esc: focus is back on its trigger after Escape
+ok   home-new-home-d1280-trophy-domestic-esc: body lock released after Escape
+ok   home-new-home-d1280-trophy-league: its trigger can be pressed
+ok   home-new-home-d1280-trophy-league: opens
+ok   home-new-home-d1280-trophy-league: the page did not move when it opened
+ok   home-new-home-d1280-trophy-league: the dialog is inside the viewport
+ok   home-new-home-d1280-trophy-league: nothing cut off sideways
+info home-new-home-d1280-trophy-league: help button inside :: true
+ok   home-new-home-d1280-trophy-league: closes with [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-league: the page is where it was after [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-league: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-league: body lock released after [data-trophy-back="career"]
+ok   home-new-home-d1280-trophy-league-esc: its trigger can be pressed
+ok   home-new-home-d1280-trophy-league-esc: opens
+ok   home-new-home-d1280-trophy-league-esc: the page did not move when it opened
+ok   home-new-home-d1280-trophy-league-esc: the dialog is inside the viewport
+ok   home-new-home-d1280-trophy-league-esc: nothing cut off sideways
+info home-new-home-d1280-trophy-league-esc: help button inside :: true
+ok   home-new-home-d1280-trophy-league-esc: closes with Escape
+ok   home-new-home-d1280-trophy-league-esc: the page is where it was after Escape
+ok   home-new-home-d1280-trophy-league-esc: focus is back on its trigger after Escape
+ok   home-new-home-d1280-trophy-league-esc: body lock released after Escape
+ok   home-new-home-d1280: the tiles read the same after a reload
+ok   home-new-home-d1280: no page or console error
+scene new-home-d1280 done in 48s, 61 shots, 3.1 MB so far
+info home-new-home-p320: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":144,"h":44,"pos":"relative"},"phone":{"l":164,"t":149,"w":144,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":320,"h":89,"pos":"static"},"next":{"l":12,"t":574,"w":155,"h":48,"pos":"static"},"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-new-home-p320: page height 15478px = 24.2 screens, sideways scroll false
+ok   home-new-home-p320: the page has no sideways scroll
+info home-new-home-p320: tiles :: ["🏋️ Training Drill ready 📱 Phone 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","🤝 Academy mentor GENERATED academy player Marius Hollerbach · RB 0/3 mentoring seasons · Mentoring together","📖 Record book Your best seasons and every club spell 618 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 641 Apps 258 Goals 94 Assists 22 Trophies 🔥 Derbies: 20 played, 10 W 8 D 2 L, 13 goals 🔥 Derby history"]
+ok   home-new-home-p320: Help is at least 44 by 44 on a phone
+ok   home-new-home-p320: Help does not sit on Phone or Training
+ok   home-new-home-p320: Phone is in the page on a phone, not floating
+ok   home-new-home-p320: no new tile or opener is covered by something floating
+ok   home-new-home-p320-target: its trigger can be pressed
+ok   home-new-home-p320-target: opens
+ok   home-new-home-p320-target: the page did not move when it opened
+ok   home-new-home-p320-target: the dialog is inside the viewport
+FAIL home-new-home-p320-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p320-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-home-p320-target: help button inside :: false
+ok   home-new-home-p320-target: closes with Escape
+ok   home-new-home-p320-target: the page is where it was after Escape
+ok   home-new-home-p320-target: focus is back on its trigger after Escape
+ok   home-new-home-p320-target: body lock released after Escape
+ok   home-new-home-p320-target-x: its trigger can be pressed
+ok   home-new-home-p320-target-x: opens
+ok   home-new-home-p320-target-x: the page did not move when it opened
+ok   home-new-home-p320-target-x: the dialog is inside the viewport
+FAIL home-new-home-p320-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p320-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-home-p320-target-x: help button inside :: false
+ok   home-new-home-p320-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p320-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p320-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p320-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p320-target: the tile shows the saved target
+ok   home-new-home-p320-preseason: its trigger can be pressed
+ok   home-new-home-p320-preseason: opens
+ok   home-new-home-p320-preseason: the page did not move when it opened
+ok   home-new-home-p320-preseason: the dialog is inside the viewport
+FAIL home-new-home-p320-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p320-preseason: help button inside :: false
+ok   home-new-home-p320-preseason: closes with Escape
+ok   home-new-home-p320-preseason: the page is where it was after Escape
+ok   home-new-home-p320-preseason: focus is back on its trigger after Escape
+ok   home-new-home-p320-preseason: body lock released after Escape
+ok   home-new-home-p320-preseason-x: its trigger can be pressed
+ok   home-new-home-p320-preseason-x: opens
+ok   home-new-home-p320-preseason-x: the page did not move when it opened
+ok   home-new-home-p320-preseason-x: the dialog is inside the viewport
+FAIL home-new-home-p320-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p320-preseason-x: help button inside :: false
+ok   home-new-home-p320-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p320-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p320-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p320-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-home-p320-preseason: the tile shows the saved plan
+ok   home-new-home-p320-mentor: its trigger can be pressed
+ok   home-new-home-p320-mentor: opens
+ok   home-new-home-p320-mentor: the page did not move when it opened
+ok   home-new-home-p320-mentor: the dialog is inside the viewport
+FAIL home-new-home-p320-mentor: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p320-mentor: help button inside :: true
+ok   home-new-home-p320-mentor: the ? shows the rules and an example
+ok   home-new-home-p320-mentor: closes with Escape
+ok   home-new-home-p320-mentor: the page is where it was after Escape
+ok   home-new-home-p320-mentor: focus is back on its trigger after Escape
+ok   home-new-home-p320-mentor: body lock released after Escape
+ok   home-new-home-p320-mentor-back: its trigger can be pressed
+ok   home-new-home-p320-mentor-back: opens
+ok   home-new-home-p320-mentor-back: the page did not move when it opened
+ok   home-new-home-p320-mentor-back: the dialog is inside the viewport
+FAIL home-new-home-p320-mentor-back: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-home-p320-mentor-back: help button inside :: true
+ok   home-new-home-p320-mentor-back: closes with [data-career-mentor-back]
+ok   home-new-home-p320-mentor-back: the page is where it was after [data-career-mentor-back]
+ok   home-new-home-p320-mentor-back: focus is back on its trigger after [data-career-mentor-back]
+ok   home-new-home-p320-mentor-back: body lock released after [data-career-mentor-back]
+ok   home-new-home-p320-records: its trigger can be pressed
+ok   home-new-home-p320-records: opens
+ok   home-new-home-p320-records: the page did not move when it opened
+ok   home-new-home-p320-records: the dialog is inside the viewport
+ok   home-new-home-p320-records: nothing cut off sideways
+info home-new-home-p320-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-home-p320-records: help button inside :: true
+ok   home-new-home-p320-records: Escape on a season goes back one step, not out
+ok   home-new-home-p320-records: closes with [data-career-records] button:has-text("Close")
+ok   home-new-home-p320-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-new-home-p320-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-new-home-p320-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-new-home-p320-records-esc: its trigger can be pressed
+ok   home-new-home-p320-records-esc: opens
+ok   home-new-home-p320-records-esc: the page did not move when it opened
+ok   home-new-home-p320-records-esc: the dialog is inside the viewport
+ok   home-new-home-p320-records-esc: nothing cut off sideways
+info home-new-home-p320-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-home-p320-records-esc: help button inside :: true
+ok   home-new-home-p320-records-esc: closes with Escape
+ok   home-new-home-p320-records-esc: the page is where it was after Escape
+ok   home-new-home-p320-records-esc: focus is back on its trigger after Escape
+ok   home-new-home-p320-records-esc: body lock released after Escape
+ok   home-new-home-p320-derby: its trigger can be pressed
+ok   home-new-home-p320-derby: opens
+ok   home-new-home-p320-derby: the page did not move when it opened
+ok   home-new-home-p320-derby: the dialog is inside the viewport
+ok   home-new-home-p320-derby: nothing cut off sideways
+info home-new-home-p320-derby: help button inside :: true
+ok   home-new-home-p320-derby: Back puts focus on the season tile it came from
+ok   home-new-home-p320-derby: the ? shows the rules and an example
+ok   home-new-home-p320-derby: closes with [data-derby-close]
+ok   home-new-home-p320-derby: the page is where it was after [data-derby-close]
+ok   home-new-home-p320-derby: focus is back on its trigger after [data-derby-close]
+ok   home-new-home-p320-derby: body lock released after [data-derby-close]
+ok   home-new-home-p320-derby-esc: its trigger can be pressed
+ok   home-new-home-p320-derby-esc: opens
+ok   home-new-home-p320-derby-esc: the page did not move when it opened
+ok   home-new-home-p320-derby-esc: the dialog is inside the viewport
+ok   home-new-home-p320-derby-esc: nothing cut off sideways
+info home-new-home-p320-derby-esc: help button inside :: true
+ok   home-new-home-p320-derby-esc: closes with Escape
+ok   home-new-home-p320-derby-esc: the page is where it was after Escape
+ok   home-new-home-p320-derby-esc: focus is back on its trigger after Escape
+ok   home-new-home-p320-derby-esc: body lock released after Escape
+ok   home-new-home-p320-ratings: its trigger can be pressed
+ok   home-new-home-p320-ratings: opens
+ok   home-new-home-p320-ratings: the page did not move when it opened
+ok   home-new-home-p320-ratings: the dialog is inside the viewport
+FAIL home-new-home-p320-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare ","Bayern Munich","Bayern Munich","Bayern Munich"],"outside":[]}
+info home-new-home-p320-ratings: help button inside :: true
+info home-new-home-p320-ratings: compare enabled :: 1
+ok   home-new-home-p320-compare: Swap seasons swaps the two sides
+ok   home-new-home-p320-ratings: the ? shows the rules and an example
+ok   home-new-home-p320-ratings: closes with [data-season-history-close]
+ok   home-new-home-p320-ratings: the page is where it was after [data-season-history-close]
+ok   home-new-home-p320-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-new-home-p320-ratings: body lock released after [data-season-history-close]
+ok   home-new-home-p320-ratings-esc: its trigger can be pressed
+ok   home-new-home-p320-ratings-esc: opens
+ok   home-new-home-p320-ratings-esc: the page did not move when it opened
+ok   home-new-home-p320-ratings-esc: the dialog is inside the viewport
+FAIL home-new-home-p320-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare ","Bayern Munich","Bayern Munich","Bayern Munich"],"outside":[]}
+info home-new-home-p320-ratings-esc: help button inside :: true
+ok   home-new-home-p320-ratings-esc: closes with Escape
+ok   home-new-home-p320-ratings-esc: the page is where it was after Escape
+ok   home-new-home-p320-ratings-esc: focus is back on its trigger after Escape
+ok   home-new-home-p320-ratings-esc: body lock released after Escape
+ok   home-new-home-p320-story: its trigger can be pressed
+ok   home-new-home-p320-story: opens
+ok   home-new-home-p320-story: the page did not move when it opened
+ok   home-new-home-p320-story: the dialog is inside the viewport
+FAIL home-new-home-p320-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Bayern Munich","Bayern Munich","Bayern Munich","Bayern Munich"],"outside":[]}
+info home-new-home-p320-story: help button inside :: false
+info home-new-home-p320-story: chapters :: 20
+ok   home-new-home-p320-story: Next then Previous lands on the chapter it left
+ok   home-new-home-p320-story: All seasons puts focus on the tile it opened
+ok   home-new-home-p320-story: closes with [data-story-close]
+ok   home-new-home-p320-story: the page is where it was after [data-story-close]
+ok   home-new-home-p320-story: focus is back on its trigger after [data-story-close]
+ok   home-new-home-p320-story: body lock released after [data-story-close]
+ok   home-new-home-p320-story-esc: its trigger can be pressed
+ok   home-new-home-p320-story-esc: opens
+ok   home-new-home-p320-story-esc: the page did not move when it opened
+ok   home-new-home-p320-story-esc: the dialog is inside the viewport
+FAIL home-new-home-p320-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Bayern Munich","Bayern Munich","Bayern Munich","Bayern Munich"],"outside":[]}
+info home-new-home-p320-story-esc: help button inside :: false
+ok   home-new-home-p320-story-esc: closes with Escape
+ok   home-new-home-p320-story-esc: the page is where it was after Escape
+ok   home-new-home-p320-story-esc: focus is back on its trigger after Escape
+ok   home-new-home-p320-story-esc: body lock released after Escape
+info home-new-home-p320: trophy categories :: [{"c":"league","label":"Leagues: 12. View winning seasons"},{"c":"domestic","label":"DFB-Pokal: 6. View winning seasons"},{"c":"ucl","label":"UCL: 3. View winning seasons"},{"c":"world","label":"World Cup: 1. View winning seasons"},{"c":"continental","label":"Continental: 0. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 1. View winning seasons"}]
+ok   home-new-home-p320-trophy-ucl: its trigger can be pressed
+ok   home-new-home-p320-trophy-ucl: opens
+ok   home-new-home-p320-trophy-ucl: the page did not move when it opened
+ok   home-new-home-p320-trophy-ucl: the dialog is inside the viewport
+ok   home-new-home-p320-trophy-ucl: nothing cut off sideways
+info home-new-home-p320-trophy-ucl: help button inside :: true
+ok   home-new-home-p320-trophy-ucl: closes with [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-ucl: the page is where it was after [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-ucl: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-ucl: body lock released after [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-ucl-esc: its trigger can be pressed
+ok   home-new-home-p320-trophy-ucl-esc: opens
+ok   home-new-home-p320-trophy-ucl-esc: the page did not move when it opened
+ok   home-new-home-p320-trophy-ucl-esc: the dialog is inside the viewport
+ok   home-new-home-p320-trophy-ucl-esc: nothing cut off sideways
+info home-new-home-p320-trophy-ucl-esc: help button inside :: true
+ok   home-new-home-p320-trophy-ucl-esc: closes with Escape
+ok   home-new-home-p320-trophy-ucl-esc: the page is where it was after Escape
+ok   home-new-home-p320-trophy-ucl-esc: focus is back on its trigger after Escape
+ok   home-new-home-p320-trophy-ucl-esc: body lock released after Escape
+ok   home-new-home-p320-trophy-domestic: its trigger can be pressed
+ok   home-new-home-p320-trophy-domestic: opens
+ok   home-new-home-p320-trophy-domestic: the page did not move when it opened
+ok   home-new-home-p320-trophy-domestic: the dialog is inside the viewport
+ok   home-new-home-p320-trophy-domestic: nothing cut off sideways
+info home-new-home-p320-trophy-domestic: help button inside :: true
+ok   home-new-home-p320-trophy-domestic: closes with [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-domestic: the page is where it was after [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-domestic: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-domestic: body lock released after [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-domestic-esc: its trigger can be pressed
+ok   home-new-home-p320-trophy-domestic-esc: opens
+ok   home-new-home-p320-trophy-domestic-esc: the page did not move when it opened
+ok   home-new-home-p320-trophy-domestic-esc: the dialog is inside the viewport
+ok   home-new-home-p320-trophy-domestic-esc: nothing cut off sideways
+info home-new-home-p320-trophy-domestic-esc: help button inside :: true
+ok   home-new-home-p320-trophy-domestic-esc: closes with Escape
+ok   home-new-home-p320-trophy-domestic-esc: the page is where it was after Escape
+ok   home-new-home-p320-trophy-domestic-esc: focus is back on its trigger after Escape
+ok   home-new-home-p320-trophy-domestic-esc: body lock released after Escape
+ok   home-new-home-p320-trophy-league: its trigger can be pressed
+ok   home-new-home-p320-trophy-league: opens
+ok   home-new-home-p320-trophy-league: the page did not move when it opened
+ok   home-new-home-p320-trophy-league: the dialog is inside the viewport
+ok   home-new-home-p320-trophy-league: nothing cut off sideways
+info home-new-home-p320-trophy-league: help button inside :: true
+ok   home-new-home-p320-trophy-league: closes with [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-league: the page is where it was after [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-league: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-league: body lock released after [data-trophy-back="career"]
+ok   home-new-home-p320-trophy-league-esc: its trigger can be pressed
+ok   home-new-home-p320-trophy-league-esc: opens
+ok   home-new-home-p320-trophy-league-esc: the page did not move when it opened
+ok   home-new-home-p320-trophy-league-esc: the dialog is inside the viewport
+ok   home-new-home-p320-trophy-league-esc: nothing cut off sideways
+info home-new-home-p320-trophy-league-esc: help button inside :: true
+ok   home-new-home-p320-trophy-league-esc: closes with Escape
+ok   home-new-home-p320-trophy-league-esc: the page is where it was after Escape
+ok   home-new-home-p320-trophy-league-esc: focus is back on its trigger after Escape
+ok   home-new-home-p320-trophy-league-esc: body lock released after Escape
+ok   home-new-home-p320: the tiles read the same after a reload
+ok   home-new-home-p320: no page or console error
+scene new-home-p320 done in 48s, 75 shots, 3.9 MB so far
+info home-new-gk-p390-reduce: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":{"l":12,"t":778,"w":169,"h":48,"pos":"static"},"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-new-gk-p390-reduce: page height 12996px = 15.4 screens, sideways scroll false
+ok   home-new-gk-p390-reduce: the page has no sideways scroll
+info home-new-gk-p390-reduce: tiles :: ["🏋️ Training Drill ready 📱 Phone 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","🤝 Academy mentor GENERATED academy player Hendrik Reinhardt · CM 3/3 mentoring seasons · Mentorship completed","📖 Record book Your best seasons and every club spell 427 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 437 Apps 146 Clean Sheets 10 Trophies 🔥 Derbies: 15 played, 6 W 8 D 1 L, 0 goals 🔥 Derby history"]
+ok   home-new-gk-p390-reduce: Help is at least 44 by 44 on a phone
+ok   home-new-gk-p390-reduce: Help does not sit on Phone or Training
+ok   home-new-gk-p390-reduce: Phone is in the page on a phone, not floating
+ok   home-new-gk-p390-reduce: no new tile or opener is covered by something floating
+ok   home-new-gk-p390-reduce-target: its trigger can be pressed
+ok   home-new-gk-p390-reduce-target: opens
+ok   home-new-gk-p390-reduce-target: the page did not move when it opened
+ok   home-new-gk-p390-reduce-target: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-gk-p390-reduce-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-gk-p390-reduce-target: help button inside :: false
+ok   home-new-gk-p390-reduce-target: closes with Escape
+ok   home-new-gk-p390-reduce-target: the page is where it was after Escape
+ok   home-new-gk-p390-reduce-target: focus is back on its trigger after Escape
+ok   home-new-gk-p390-reduce-target: body lock released after Escape
+ok   home-new-gk-p390-reduce-target-x: its trigger can be pressed
+ok   home-new-gk-p390-reduce-target-x: opens
+ok   home-new-gk-p390-reduce-target-x: the page did not move when it opened
+ok   home-new-gk-p390-reduce-target-x: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-gk-p390-reduce-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-gk-p390-reduce-target-x: help button inside :: false
+ok   home-new-gk-p390-reduce-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-gk-p390-reduce-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-gk-p390-reduce-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-gk-p390-reduce-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-gk-p390-reduce-target: the tile shows the saved target
+ok   home-new-gk-p390-reduce-preseason: its trigger can be pressed
+ok   home-new-gk-p390-reduce-preseason: opens
+ok   home-new-gk-p390-reduce-preseason: the page did not move when it opened
+ok   home-new-gk-p390-reduce-preseason: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-gk-p390-reduce-preseason: help button inside :: false
+ok   home-new-gk-p390-reduce-preseason: closes with Escape
+ok   home-new-gk-p390-reduce-preseason: the page is where it was after Escape
+ok   home-new-gk-p390-reduce-preseason: focus is back on its trigger after Escape
+ok   home-new-gk-p390-reduce-preseason: body lock released after Escape
+ok   home-new-gk-p390-reduce-preseason-x: its trigger can be pressed
+ok   home-new-gk-p390-reduce-preseason-x: opens
+ok   home-new-gk-p390-reduce-preseason-x: the page did not move when it opened
+ok   home-new-gk-p390-reduce-preseason-x: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-gk-p390-reduce-preseason-x: help button inside :: false
+ok   home-new-gk-p390-reduce-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-gk-p390-reduce-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-gk-p390-reduce-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-gk-p390-reduce-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-gk-p390-reduce-preseason: the tile shows the saved plan
+ok   home-new-gk-p390-reduce-mentor: its trigger can be pressed
+ok   home-new-gk-p390-reduce-mentor: opens
+ok   home-new-gk-p390-reduce-mentor: the page did not move when it opened
+ok   home-new-gk-p390-reduce-mentor: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-mentor: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-gk-p390-reduce-mentor: help button inside :: true
+ok   home-new-gk-p390-reduce-mentor: the ? shows the rules and an example
+ok   home-new-gk-p390-reduce-mentor: closes with Escape
+ok   home-new-gk-p390-reduce-mentor: the page is where it was after Escape
+ok   home-new-gk-p390-reduce-mentor: focus is back on its trigger after Escape
+ok   home-new-gk-p390-reduce-mentor: body lock released after Escape
+ok   home-new-gk-p390-reduce-mentor-back: its trigger can be pressed
+ok   home-new-gk-p390-reduce-mentor-back: opens
+ok   home-new-gk-p390-reduce-mentor-back: the page did not move when it opened
+ok   home-new-gk-p390-reduce-mentor-back: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-mentor-back: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-gk-p390-reduce-mentor-back: help button inside :: true
+ok   home-new-gk-p390-reduce-mentor-back: closes with [data-career-mentor-back]
+ok   home-new-gk-p390-reduce-mentor-back: the page is where it was after [data-career-mentor-back]
+ok   home-new-gk-p390-reduce-mentor-back: focus is back on its trigger after [data-career-mentor-back]
+ok   home-new-gk-p390-reduce-mentor-back: body lock released after [data-career-mentor-back]
+ok   home-new-gk-p390-reduce-records: its trigger can be pressed
+ok   home-new-gk-p390-reduce-records: opens
+ok   home-new-gk-p390-reduce-records: the page did not move when it opened
+ok   home-new-gk-p390-reduce-records: the dialog is inside the viewport
+ok   home-new-gk-p390-reduce-records: nothing cut off sideways
+info home-new-gk-p390-reduce-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-gk-p390-reduce-records: help button inside :: true
+ok   home-new-gk-p390-reduce-records: Escape on a season goes back one step, not out
+ok   home-new-gk-p390-reduce-records: closes with [data-career-records] button:has-text("Close")
+ok   home-new-gk-p390-reduce-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-new-gk-p390-reduce-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-new-gk-p390-reduce-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-new-gk-p390-reduce-records-esc: its trigger can be pressed
+ok   home-new-gk-p390-reduce-records-esc: opens
+ok   home-new-gk-p390-reduce-records-esc: the page did not move when it opened
+ok   home-new-gk-p390-reduce-records-esc: the dialog is inside the viewport
+ok   home-new-gk-p390-reduce-records-esc: nothing cut off sideways
+info home-new-gk-p390-reduce-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-gk-p390-reduce-records-esc: help button inside :: true
+ok   home-new-gk-p390-reduce-records-esc: closes with Escape
+ok   home-new-gk-p390-reduce-records-esc: the page is where it was after Escape
+ok   home-new-gk-p390-reduce-records-esc: focus is back on its trigger after Escape
+ok   home-new-gk-p390-reduce-records-esc: body lock released after Escape
+ok   home-new-gk-p390-reduce-derby: its trigger can be pressed
+ok   home-new-gk-p390-reduce-derby: opens
+ok   home-new-gk-p390-reduce-derby: the page did not move when it opened
+ok   home-new-gk-p390-reduce-derby: the dialog is inside the viewport
+ok   home-new-gk-p390-reduce-derby: nothing cut off sideways
+info home-new-gk-p390-reduce-derby: help button inside :: true
+ok   home-new-gk-p390-reduce-derby: Back puts focus on the season tile it came from
+ok   home-new-gk-p390-reduce-derby: the ? shows the rules and an example
+ok   home-new-gk-p390-reduce-derby: closes with [data-derby-close]
+ok   home-new-gk-p390-reduce-derby: the page is where it was after [data-derby-close]
+ok   home-new-gk-p390-reduce-derby: focus is back on its trigger after [data-derby-close]
+ok   home-new-gk-p390-reduce-derby: body lock released after [data-derby-close]
+ok   home-new-gk-p390-reduce-derby-esc: its trigger can be pressed
+ok   home-new-gk-p390-reduce-derby-esc: opens
+ok   home-new-gk-p390-reduce-derby-esc: the page did not move when it opened
+ok   home-new-gk-p390-reduce-derby-esc: the dialog is inside the viewport
+ok   home-new-gk-p390-reduce-derby-esc: nothing cut off sideways
+info home-new-gk-p390-reduce-derby-esc: help button inside :: true
+ok   home-new-gk-p390-reduce-derby-esc: closes with Escape
+ok   home-new-gk-p390-reduce-derby-esc: the page is where it was after Escape
+ok   home-new-gk-p390-reduce-derby-esc: focus is back on its trigger after Escape
+ok   home-new-gk-p390-reduce-derby-esc: body lock released after Escape
+ok   home-new-gk-p390-reduce-ratings: its trigger can be pressed
+ok   home-new-gk-p390-reduce-ratings: opens
+ok   home-new-gk-p390-reduce-ratings: the page did not move when it opened
+ok   home-new-gk-p390-reduce-ratings: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-gk-p390-reduce-ratings: help button inside :: true
+info home-new-gk-p390-reduce-ratings: compare enabled :: 1
+ok   home-new-gk-p390-reduce-compare: Swap seasons swaps the two sides
+ok   home-new-gk-p390-reduce-ratings: the ? shows the rules and an example
+ok   home-new-gk-p390-reduce-ratings: closes with [data-season-history-close]
+ok   home-new-gk-p390-reduce-ratings: the page is where it was after [data-season-history-close]
+ok   home-new-gk-p390-reduce-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-new-gk-p390-reduce-ratings: body lock released after [data-season-history-close]
+ok   home-new-gk-p390-reduce-ratings-esc: its trigger can be pressed
+ok   home-new-gk-p390-reduce-ratings-esc: opens
+ok   home-new-gk-p390-reduce-ratings-esc: the page did not move when it opened
+ok   home-new-gk-p390-reduce-ratings-esc: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-gk-p390-reduce-ratings-esc: help button inside :: true
+ok   home-new-gk-p390-reduce-ratings-esc: closes with Escape
+ok   home-new-gk-p390-reduce-ratings-esc: the page is where it was after Escape
+ok   home-new-gk-p390-reduce-ratings-esc: focus is back on its trigger after Escape
+ok   home-new-gk-p390-reduce-ratings-esc: body lock released after Escape
+ok   home-new-gk-p390-reduce-story: its trigger can be pressed
+ok   home-new-gk-p390-reduce-story: opens
+ok   home-new-gk-p390-reduce-story: the page did not move when it opened
+ok   home-new-gk-p390-reduce-story: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Close"],"outside":[]}
+info home-new-gk-p390-reduce-story: help button inside :: false
+info home-new-gk-p390-reduce-story: chapters :: 11
+ok   home-new-gk-p390-reduce-story: Next then Previous lands on the chapter it left
+ok   home-new-gk-p390-reduce-story: All seasons puts focus on the tile it opened
+ok   home-new-gk-p390-reduce-story: closes with [data-story-close]
+ok   home-new-gk-p390-reduce-story: the page is where it was after [data-story-close]
+ok   home-new-gk-p390-reduce-story: focus is back on its trigger after [data-story-close]
+ok   home-new-gk-p390-reduce-story: body lock released after [data-story-close]
+ok   home-new-gk-p390-reduce-story-esc: its trigger can be pressed
+ok   home-new-gk-p390-reduce-story-esc: opens
+ok   home-new-gk-p390-reduce-story-esc: the page did not move when it opened
+ok   home-new-gk-p390-reduce-story-esc: the dialog is inside the viewport
+FAIL home-new-gk-p390-reduce-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Close"],"outside":[]}
+info home-new-gk-p390-reduce-story-esc: help button inside :: false
+ok   home-new-gk-p390-reduce-story-esc: closes with Escape
+ok   home-new-gk-p390-reduce-story-esc: the page is where it was after Escape
+ok   home-new-gk-p390-reduce-story-esc: focus is back on its trigger after Escape
+ok   home-new-gk-p390-reduce-story-esc: body lock released after Escape
+info home-new-gk-p390-reduce: trophy categories :: [{"c":"league","label":"Leagues: 8. View winning seasons"},{"c":"domestic","label":"DFB-Pokal: 2. View winning seasons"},{"c":"ucl","label":"UCL: 0. View winning seasons"},{"c":"world","label":"World Cup: 0. View winning seasons"},{"c":"continental","label":"Continental: 0. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 0. View winning seasons"}]
+ok   home-new-gk-p390-reduce-trophy-domestic: its trigger can be pressed
+ok   home-new-gk-p390-reduce-trophy-domestic: opens
+ok   home-new-gk-p390-reduce-trophy-domestic: the page did not move when it opened
+ok   home-new-gk-p390-reduce-trophy-domestic: the dialog is inside the viewport
+ok   home-new-gk-p390-reduce-trophy-domestic: nothing cut off sideways
+info home-new-gk-p390-reduce-trophy-domestic: help button inside :: true
+ok   home-new-gk-p390-reduce-trophy-domestic: closes with [data-trophy-back="career"]
+ok   home-new-gk-p390-reduce-trophy-domestic: the page is where it was after [data-trophy-back="career"]
+ok   home-new-gk-p390-reduce-trophy-domestic: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-gk-p390-reduce-trophy-domestic: body lock released after [data-trophy-back="career"]
+ok   home-new-gk-p390-reduce-trophy-domestic-esc: its trigger can be pressed
+ok   home-new-gk-p390-reduce-trophy-domestic-esc: opens
+ok   home-new-gk-p390-reduce-trophy-domestic-esc: the page did not move when it opened
+ok   home-new-gk-p390-reduce-trophy-domestic-esc: the dialog is inside the viewport
+ok   home-new-gk-p390-reduce-trophy-domestic-esc: nothing cut off sideways
+info home-new-gk-p390-reduce-trophy-domestic-esc: help button inside :: true
+ok   home-new-gk-p390-reduce-trophy-domestic-esc: closes with Escape
+ok   home-new-gk-p390-reduce-trophy-domestic-esc: the page is where it was after Escape
+ok   home-new-gk-p390-reduce-trophy-domestic-esc: focus is back on its trigger after Escape
+ok   home-new-gk-p390-reduce-trophy-domestic-esc: body lock released after Escape
+ok   home-new-gk-p390-reduce-trophy-league: its trigger can be pressed
+ok   home-new-gk-p390-reduce-trophy-league: opens
+ok   home-new-gk-p390-reduce-trophy-league: the page did not move when it opened
+ok   home-new-gk-p390-reduce-trophy-league: the dialog is inside the viewport
+ok   home-new-gk-p390-reduce-trophy-league: nothing cut off sideways
+info home-new-gk-p390-reduce-trophy-league: help button inside :: true
+ok   home-new-gk-p390-reduce-trophy-league: closes with [data-trophy-back="career"]
+ok   home-new-gk-p390-reduce-trophy-league: the page is where it was after [data-trophy-back="career"]
+ok   home-new-gk-p390-reduce-trophy-league: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-gk-p390-reduce-trophy-league: body lock released after [data-trophy-back="career"]
+ok   home-new-gk-p390-reduce-trophy-league-esc: its trigger can be pressed
+ok   home-new-gk-p390-reduce-trophy-league-esc: opens
+ok   home-new-gk-p390-reduce-trophy-league-esc: the page did not move when it opened
+ok   home-new-gk-p390-reduce-trophy-league-esc: the dialog is inside the viewport
+ok   home-new-gk-p390-reduce-trophy-league-esc: nothing cut off sideways
+info home-new-gk-p390-reduce-trophy-league-esc: help button inside :: true
+ok   home-new-gk-p390-reduce-trophy-league-esc: closes with Escape
+ok   home-new-gk-p390-reduce-trophy-league-esc: the page is where it was after Escape
+ok   home-new-gk-p390-reduce-trophy-league-esc: focus is back on its trigger after Escape
+ok   home-new-gk-p390-reduce-trophy-league-esc: body lock released after Escape
+ok   home-new-gk-p390-reduce: the tiles read the same after a reload
+ok   home-new-gk-p390-reduce: no page or console error
+scene new-gk-p390-reduce done in 44s, 82 shots, 4.1 MB so far
+info home-new-role-plan-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":{"l":12,"t":778,"w":168,"h":48,"pos":"static"},"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-new-role-plan-p390: page height 13149px = 15.6 screens, sideways scroll false
+ok   home-new-role-plan-p390: the page has no sideways scroll
+info home-new-role-plan-p390: tiles :: ["🏋️ Training Drill ready 📱 Phone 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","📖 Record book Your best seasons and every club spell 590 senior appearances · 1 club spell","Your role next season You accepted a smaller role at Lyon for 2039/40: 4 fewer planned league games. Selection limits, injuries and bans still apply. It lasts one recorded season. A move or loan clears the plan.","CAREER STATS Only stats kept in your season records are shown. 603 Apps 248 Goals 83 Assists 6 Trophies 🔥 Derbies: 27 played, 11 W 5 D 11 L, 12 goals 🔥 Derby history"]
+ok   home-new-role-plan-p390: Help is at least 44 by 44 on a phone
+ok   home-new-role-plan-p390: Help does not sit on Phone or Training
+ok   home-new-role-plan-p390: Phone is in the page on a phone, not floating
+ok   home-new-role-plan-p390: no new tile or opener is covered by something floating
+ok   home-new-role-plan-p390-target: its trigger can be pressed
+ok   home-new-role-plan-p390-target: opens
+ok   home-new-role-plan-p390-target: the page did not move when it opened
+ok   home-new-role-plan-p390-target: the dialog is inside the viewport
+FAIL home-new-role-plan-p390-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-role-plan-p390-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-role-plan-p390-target: help button inside :: false
+ok   home-new-role-plan-p390-target: closes with Escape
+ok   home-new-role-plan-p390-target: the page is where it was after Escape
+ok   home-new-role-plan-p390-target: focus is back on its trigger after Escape
+ok   home-new-role-plan-p390-target: body lock released after Escape
+ok   home-new-role-plan-p390-target-x: its trigger can be pressed
+ok   home-new-role-plan-p390-target-x: opens
+ok   home-new-role-plan-p390-target-x: the page did not move when it opened
+ok   home-new-role-plan-p390-target-x: the dialog is inside the viewport
+FAIL home-new-role-plan-p390-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-role-plan-p390-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-role-plan-p390-target-x: help button inside :: false
+ok   home-new-role-plan-p390-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-role-plan-p390-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-role-plan-p390-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-role-plan-p390-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-role-plan-p390-target: the tile shows the saved target
+ok   home-new-role-plan-p390-preseason: its trigger can be pressed
+ok   home-new-role-plan-p390-preseason: opens
+ok   home-new-role-plan-p390-preseason: the page did not move when it opened
+ok   home-new-role-plan-p390-preseason: the dialog is inside the viewport
+FAIL home-new-role-plan-p390-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-role-plan-p390-preseason: help button inside :: false
+ok   home-new-role-plan-p390-preseason: closes with Escape
+ok   home-new-role-plan-p390-preseason: the page is where it was after Escape
+ok   home-new-role-plan-p390-preseason: focus is back on its trigger after Escape
+ok   home-new-role-plan-p390-preseason: body lock released after Escape
+ok   home-new-role-plan-p390-preseason-x: its trigger can be pressed
+ok   home-new-role-plan-p390-preseason-x: opens
+ok   home-new-role-plan-p390-preseason-x: the page did not move when it opened
+ok   home-new-role-plan-p390-preseason-x: the dialog is inside the viewport
+FAIL home-new-role-plan-p390-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-role-plan-p390-preseason-x: help button inside :: false
+ok   home-new-role-plan-p390-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-role-plan-p390-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-role-plan-p390-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-role-plan-p390-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-role-plan-p390-preseason: the tile shows the saved plan
+info home-new-role-plan-p390: no mentor tile
+ok   home-new-role-plan-p390-records: its trigger can be pressed
+ok   home-new-role-plan-p390-records: opens
+ok   home-new-role-plan-p390-records: the page did not move when it opened
+ok   home-new-role-plan-p390-records: the dialog is inside the viewport
+ok   home-new-role-plan-p390-records: nothing cut off sideways
+info home-new-role-plan-p390-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-role-plan-p390-records: help button inside :: true
+ok   home-new-role-plan-p390-records: Escape on a season goes back one step, not out
+ok   home-new-role-plan-p390-records: closes with [data-career-records] button:has-text("Close")
+ok   home-new-role-plan-p390-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-new-role-plan-p390-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-new-role-plan-p390-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-new-role-plan-p390-records-esc: its trigger can be pressed
+ok   home-new-role-plan-p390-records-esc: opens
+ok   home-new-role-plan-p390-records-esc: the page did not move when it opened
+ok   home-new-role-plan-p390-records-esc: the dialog is inside the viewport
+ok   home-new-role-plan-p390-records-esc: nothing cut off sideways
+info home-new-role-plan-p390-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-role-plan-p390-records-esc: help button inside :: true
+ok   home-new-role-plan-p390-records-esc: closes with Escape
+ok   home-new-role-plan-p390-records-esc: the page is where it was after Escape
+ok   home-new-role-plan-p390-records-esc: focus is back on its trigger after Escape
+ok   home-new-role-plan-p390-records-esc: body lock released after Escape
+ok   home-new-role-plan-p390: no page or console error
+scene new-role-plan-p390 done in 15s, 84 shots, 4.7 MB so far
+info home-new-retired-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":null,"phone":{"l":12,"t":149,"w":366,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-new-retired-p390: page height 15068px = 17.9 screens, sideways scroll false
+ok   home-new-retired-p390: the page has no sideways scroll
+info home-new-retired-p390: tiles :: ["📱 Phone 3 unread","🤝 Academy mentor GENERATED academy player Marius Hollerbach · RB 0/3 mentoring seasons · Mentorship ended","📖 Record book Your best seasons and every club spell 618 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 641 Apps 258 Goals 94 Assists 22 Trophies 🔥 Derbies: 20 played, 10 W 8 D 2 L, 13 goals 🔥 Derby history"]
+ok   home-new-retired-p390: Help is at least 44 by 44 on a phone
+ok   home-new-retired-p390: Help does not sit on Phone or Training
+ok   home-new-retired-p390: Phone is in the page on a phone, not floating
+ok   home-new-retired-p390: no new tile or opener is covered by something floating
+info home-new-retired-p390: no season target tile
+info home-new-retired-p390: no preseason tile
+ok   home-new-retired-p390-mentor: its trigger can be pressed
+ok   home-new-retired-p390-mentor: opens
+ok   home-new-retired-p390-mentor: the page did not move when it opened
+ok   home-new-retired-p390-mentor: the dialog is inside the viewport
+FAIL home-new-retired-p390-mentor: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-retired-p390-mentor: help button inside :: true
+ok   home-new-retired-p390-mentor: the ? shows the rules and an example
+ok   home-new-retired-p390-mentor: closes with Escape
+ok   home-new-retired-p390-mentor: the page is where it was after Escape
+ok   home-new-retired-p390-mentor: focus is back on its trigger after Escape
+ok   home-new-retired-p390-mentor: body lock released after Escape
+ok   home-new-retired-p390-mentor-back: its trigger can be pressed
+ok   home-new-retired-p390-mentor-back: opens
+ok   home-new-retired-p390-mentor-back: the page did not move when it opened
+ok   home-new-retired-p390-mentor-back: the dialog is inside the viewport
+FAIL home-new-retired-p390-mentor-back: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-retired-p390-mentor-back: help button inside :: true
+ok   home-new-retired-p390-mentor-back: closes with [data-career-mentor-back]
+ok   home-new-retired-p390-mentor-back: the page is where it was after [data-career-mentor-back]
+ok   home-new-retired-p390-mentor-back: focus is back on its trigger after [data-career-mentor-back]
+ok   home-new-retired-p390-mentor-back: body lock released after [data-career-mentor-back]
+ok   home-new-retired-p390-records: its trigger can be pressed
+ok   home-new-retired-p390-records: opens
+ok   home-new-retired-p390-records: the page did not move when it opened
+ok   home-new-retired-p390-records: the dialog is inside the viewport
+ok   home-new-retired-p390-records: nothing cut off sideways
+info home-new-retired-p390-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-retired-p390-records: help button inside :: true
+ok   home-new-retired-p390-records: Escape on a season goes back one step, not out
+ok   home-new-retired-p390-records: closes with [data-career-records] button:has-text("Close")
+ok   home-new-retired-p390-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-new-retired-p390-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-new-retired-p390-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-new-retired-p390-records-esc: its trigger can be pressed
+ok   home-new-retired-p390-records-esc: opens
+ok   home-new-retired-p390-records-esc: the page did not move when it opened
+ok   home-new-retired-p390-records-esc: the dialog is inside the viewport
+ok   home-new-retired-p390-records-esc: nothing cut off sideways
+info home-new-retired-p390-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-retired-p390-records-esc: help button inside :: true
+ok   home-new-retired-p390-records-esc: closes with Escape
+ok   home-new-retired-p390-records-esc: the page is where it was after Escape
+ok   home-new-retired-p390-records-esc: focus is back on its trigger after Escape
+ok   home-new-retired-p390-records-esc: body lock released after Escape
+ok   home-new-retired-p390-derby: its trigger can be pressed
+ok   home-new-retired-p390-derby: opens
+ok   home-new-retired-p390-derby: the page did not move when it opened
+ok   home-new-retired-p390-derby: the dialog is inside the viewport
+ok   home-new-retired-p390-derby: nothing cut off sideways
+info home-new-retired-p390-derby: help button inside :: true
+ok   home-new-retired-p390-derby: Back puts focus on the season tile it came from
+ok   home-new-retired-p390-derby: the ? shows the rules and an example
+ok   home-new-retired-p390-derby: closes with [data-derby-close]
+ok   home-new-retired-p390-derby: the page is where it was after [data-derby-close]
+ok   home-new-retired-p390-derby: focus is back on its trigger after [data-derby-close]
+ok   home-new-retired-p390-derby: body lock released after [data-derby-close]
+ok   home-new-retired-p390-derby-esc: its trigger can be pressed
+ok   home-new-retired-p390-derby-esc: opens
+ok   home-new-retired-p390-derby-esc: the page did not move when it opened
+ok   home-new-retired-p390-derby-esc: the dialog is inside the viewport
+ok   home-new-retired-p390-derby-esc: nothing cut off sideways
+info home-new-retired-p390-derby-esc: help button inside :: true
+ok   home-new-retired-p390-derby-esc: closes with Escape
+ok   home-new-retired-p390-derby-esc: the page is where it was after Escape
+ok   home-new-retired-p390-derby-esc: focus is back on its trigger after Escape
+ok   home-new-retired-p390-derby-esc: body lock released after Escape
+ok   home-new-retired-p390-ratings: its trigger can be pressed
+ok   home-new-retired-p390-ratings: opens
+ok   home-new-retired-p390-ratings: the page did not move when it opened
+ok   home-new-retired-p390-ratings: the dialog is inside the viewport
+FAIL home-new-retired-p390-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-retired-p390-ratings: help button inside :: true
+info home-new-retired-p390-ratings: compare enabled :: 1
+ok   home-new-retired-p390-compare: Swap seasons swaps the two sides
+ok   home-new-retired-p390-ratings: the ? shows the rules and an example
+ok   home-new-retired-p390-ratings: closes with [data-season-history-close]
+ok   home-new-retired-p390-ratings: the page is where it was after [data-season-history-close]
+ok   home-new-retired-p390-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-new-retired-p390-ratings: body lock released after [data-season-history-close]
+ok   home-new-retired-p390-ratings-esc: its trigger can be pressed
+ok   home-new-retired-p390-ratings-esc: opens
+ok   home-new-retired-p390-ratings-esc: the page did not move when it opened
+ok   home-new-retired-p390-ratings-esc: the dialog is inside the viewport
+FAIL home-new-retired-p390-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-retired-p390-ratings-esc: help button inside :: true
+ok   home-new-retired-p390-ratings-esc: closes with Escape
+ok   home-new-retired-p390-ratings-esc: the page is where it was after Escape
+ok   home-new-retired-p390-ratings-esc: focus is back on its trigger after Escape
+ok   home-new-retired-p390-ratings-esc: body lock released after Escape
+ok   home-new-retired-p390-story: its trigger can be pressed
+ok   home-new-retired-p390-story: opens
+ok   home-new-retired-p390-story: the page did not move when it opened
+ok   home-new-retired-p390-story: the dialog is inside the viewport
+FAIL home-new-retired-p390-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Close"],"outside":[]}
+info home-new-retired-p390-story: help button inside :: false
+info home-new-retired-p390-story: chapters :: 42
+ok   home-new-retired-p390-story: Next then Previous lands on the chapter it left
+ok   home-new-retired-p390-story: All seasons puts focus on the tile it opened
+ok   home-new-retired-p390-story: closes with [data-story-close]
+ok   home-new-retired-p390-story: the page is where it was after [data-story-close]
+ok   home-new-retired-p390-story: focus is back on its trigger after [data-story-close]
+ok   home-new-retired-p390-story: body lock released after [data-story-close]
+ok   home-new-retired-p390-story-esc: its trigger can be pressed
+ok   home-new-retired-p390-story-esc: opens
+ok   home-new-retired-p390-story-esc: the page did not move when it opened
+ok   home-new-retired-p390-story-esc: the dialog is inside the viewport
+FAIL home-new-retired-p390-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Bayern Munich Youth","Bayern Munich Youth","Close"],"outside":[]}
+info home-new-retired-p390-story-esc: help button inside :: false
+ok   home-new-retired-p390-story-esc: closes with Escape
+ok   home-new-retired-p390-story-esc: the page is where it was after Escape
+ok   home-new-retired-p390-story-esc: focus is back on its trigger after Escape
+ok   home-new-retired-p390-story-esc: body lock released after Escape
+info home-new-retired-p390: trophy categories :: [{"c":"league","label":"Leagues: 12. View winning seasons"},{"c":"domestic","label":"DFB-Pokal: 6. View winning seasons"},{"c":"ucl","label":"UCL: 3. View winning seasons"},{"c":"world","label":"World Cup: 1. View winning seasons"},{"c":"continental","label":"Continental: 0. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 1. View winning seasons"}]
+ok   home-new-retired-p390-trophy-ucl: its trigger can be pressed
+ok   home-new-retired-p390-trophy-ucl: opens
+ok   home-new-retired-p390-trophy-ucl: the page did not move when it opened
+ok   home-new-retired-p390-trophy-ucl: the dialog is inside the viewport
+ok   home-new-retired-p390-trophy-ucl: nothing cut off sideways
+info home-new-retired-p390-trophy-ucl: help button inside :: true
+ok   home-new-retired-p390-trophy-ucl: closes with [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-ucl: the page is where it was after [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-ucl: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-ucl: body lock released after [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-ucl-esc: its trigger can be pressed
+ok   home-new-retired-p390-trophy-ucl-esc: opens
+ok   home-new-retired-p390-trophy-ucl-esc: the page did not move when it opened
+ok   home-new-retired-p390-trophy-ucl-esc: the dialog is inside the viewport
+ok   home-new-retired-p390-trophy-ucl-esc: nothing cut off sideways
+info home-new-retired-p390-trophy-ucl-esc: help button inside :: true
+ok   home-new-retired-p390-trophy-ucl-esc: closes with Escape
+ok   home-new-retired-p390-trophy-ucl-esc: the page is where it was after Escape
+ok   home-new-retired-p390-trophy-ucl-esc: focus is back on its trigger after Escape
+ok   home-new-retired-p390-trophy-ucl-esc: body lock released after Escape
+ok   home-new-retired-p390-trophy-domestic: its trigger can be pressed
+ok   home-new-retired-p390-trophy-domestic: opens
+ok   home-new-retired-p390-trophy-domestic: the page did not move when it opened
+ok   home-new-retired-p390-trophy-domestic: the dialog is inside the viewport
+ok   home-new-retired-p390-trophy-domestic: nothing cut off sideways
+info home-new-retired-p390-trophy-domestic: help button inside :: true
+ok   home-new-retired-p390-trophy-domestic: closes with [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-domestic: the page is where it was after [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-domestic: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-domestic: body lock released after [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-domestic-esc: its trigger can be pressed
+ok   home-new-retired-p390-trophy-domestic-esc: opens
+ok   home-new-retired-p390-trophy-domestic-esc: the page did not move when it opened
+ok   home-new-retired-p390-trophy-domestic-esc: the dialog is inside the viewport
+ok   home-new-retired-p390-trophy-domestic-esc: nothing cut off sideways
+info home-new-retired-p390-trophy-domestic-esc: help button inside :: true
+ok   home-new-retired-p390-trophy-domestic-esc: closes with Escape
+ok   home-new-retired-p390-trophy-domestic-esc: the page is where it was after Escape
+ok   home-new-retired-p390-trophy-domestic-esc: focus is back on its trigger after Escape
+ok   home-new-retired-p390-trophy-domestic-esc: body lock released after Escape
+ok   home-new-retired-p390-trophy-league: its trigger can be pressed
+ok   home-new-retired-p390-trophy-league: opens
+ok   home-new-retired-p390-trophy-league: the page did not move when it opened
+ok   home-new-retired-p390-trophy-league: the dialog is inside the viewport
+ok   home-new-retired-p390-trophy-league: nothing cut off sideways
+info home-new-retired-p390-trophy-league: help button inside :: true
+ok   home-new-retired-p390-trophy-league: closes with [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-league: the page is where it was after [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-league: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-league: body lock released after [data-trophy-back="career"]
+ok   home-new-retired-p390-trophy-league-esc: its trigger can be pressed
+ok   home-new-retired-p390-trophy-league-esc: opens
+ok   home-new-retired-p390-trophy-league-esc: the page did not move when it opened
+ok   home-new-retired-p390-trophy-league-esc: the dialog is inside the viewport
+ok   home-new-retired-p390-trophy-league-esc: nothing cut off sideways
+info home-new-retired-p390-trophy-league-esc: help button inside :: true
+ok   home-new-retired-p390-trophy-league-esc: closes with Escape
+ok   home-new-retired-p390-trophy-league-esc: the page is where it was after Escape
+ok   home-new-retired-p390-trophy-league-esc: focus is back on its trigger after Escape
+ok   home-new-retired-p390-trophy-league-esc: body lock released after Escape
+ok   home-new-retired-p390: the tiles read the same after a reload
+ok   home-new-retired-p390: no page or console error
+scene new-retired-p390 done in 41s, 91 shots, 5.5 MB so far
+info home-new-first-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":{"l":12,"t":778,"w":174,"h":48,"pos":"static"},"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-new-first-p390: page height 11665px = 13.8 screens, sideways scroll false
+ok   home-new-first-p390: the page has no sideways scroll
+info home-new-first-p390: tiles :: ["🏋️ Training Drill ready 📱 Phone 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","CAREER STATS Only stats kept in your season records are shown. 18 Apps 3 Goals 2 Assists 0 Trophies"]
+ok   home-new-first-p390: Help is at least 44 by 44 on a phone
+ok   home-new-first-p390: Help does not sit on Phone or Training
+ok   home-new-first-p390: Phone is in the page on a phone, not floating
+ok   home-new-first-p390: no new tile or opener is covered by something floating
+ok   home-new-first-p390-target: its trigger can be pressed
+ok   home-new-first-p390-target: opens
+ok   home-new-first-p390-target: the page did not move when it opened
+ok   home-new-first-p390-target: the dialog is inside the viewport
+FAIL home-new-first-p390-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-first-p390-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-first-p390-target: help button inside :: false
+ok   home-new-first-p390-target: closes with Escape
+ok   home-new-first-p390-target: the page is where it was after Escape
+ok   home-new-first-p390-target: focus is back on its trigger after Escape
+ok   home-new-first-p390-target: body lock released after Escape
+ok   home-new-first-p390-target-x: its trigger can be pressed
+ok   home-new-first-p390-target-x: opens
+ok   home-new-first-p390-target-x: the page did not move when it opened
+ok   home-new-first-p390-target-x: the dialog is inside the viewport
+FAIL home-new-first-p390-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-first-p390-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-first-p390-target-x: help button inside :: false
+ok   home-new-first-p390-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-first-p390-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-first-p390-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-first-p390-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-first-p390-target: the tile shows the saved target
+ok   home-new-first-p390-preseason: its trigger can be pressed
+ok   home-new-first-p390-preseason: opens
+ok   home-new-first-p390-preseason: the page did not move when it opened
+ok   home-new-first-p390-preseason: the dialog is inside the viewport
+FAIL home-new-first-p390-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-first-p390-preseason: help button inside :: false
+ok   home-new-first-p390-preseason: closes with Escape
+ok   home-new-first-p390-preseason: the page is where it was after Escape
+ok   home-new-first-p390-preseason: focus is back on its trigger after Escape
+ok   home-new-first-p390-preseason: body lock released after Escape
+ok   home-new-first-p390-preseason-x: its trigger can be pressed
+ok   home-new-first-p390-preseason-x: opens
+ok   home-new-first-p390-preseason-x: the page did not move when it opened
+ok   home-new-first-p390-preseason-x: the dialog is inside the viewport
+FAIL home-new-first-p390-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-first-p390-preseason-x: help button inside :: false
+ok   home-new-first-p390-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-first-p390-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-first-p390-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-first-p390-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-first-p390-preseason: the tile shows the saved plan
+info home-new-first-p390: no mentor tile
+info home-new-first-p390: no record book tile
+info home-new-first-p390: no derby history opener
+ok   home-new-first-p390-ratings: its trigger can be pressed
+ok   home-new-first-p390-ratings: opens
+ok   home-new-first-p390-ratings: the page did not move when it opened
+ok   home-new-first-p390-ratings: the dialog is inside the viewport
+FAIL home-new-first-p390-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-first-p390-ratings: help button inside :: true
+info home-new-first-p390-ratings: compare enabled :: 0
+ok   home-new-first-p390-ratings: the ? shows the rules and an example
+ok   home-new-first-p390-ratings: closes with [data-season-history-close]
+ok   home-new-first-p390-ratings: the page is where it was after [data-season-history-close]
+ok   home-new-first-p390-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-new-first-p390-ratings: body lock released after [data-season-history-close]
+ok   home-new-first-p390-ratings-esc: its trigger can be pressed
+ok   home-new-first-p390-ratings-esc: opens
+ok   home-new-first-p390-ratings-esc: the page did not move when it opened
+ok   home-new-first-p390-ratings-esc: the dialog is inside the viewport
+FAIL home-new-first-p390-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-first-p390-ratings-esc: help button inside :: true
+ok   home-new-first-p390-ratings-esc: closes with Escape
+ok   home-new-first-p390-ratings-esc: the page is where it was after Escape
+ok   home-new-first-p390-ratings-esc: focus is back on its trigger after Escape
+ok   home-new-first-p390-ratings-esc: body lock released after Escape
+ok   home-new-first-p390-story: its trigger can be pressed
+ok   home-new-first-p390-story: opens
+ok   home-new-first-p390-story: the page did not move when it opened
+ok   home-new-first-p390-story: the dialog is inside the viewport
+FAIL home-new-first-p390-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-first-p390-story: help button inside :: false
+info home-new-first-p390-story: chapters :: 2
+ok   home-new-first-p390-story: All seasons puts focus on the tile it opened
+ok   home-new-first-p390-story: closes with [data-story-close]
+ok   home-new-first-p390-story: the page is where it was after [data-story-close]
+ok   home-new-first-p390-story: focus is back on its trigger after [data-story-close]
+ok   home-new-first-p390-story: body lock released after [data-story-close]
+ok   home-new-first-p390-story-esc: its trigger can be pressed
+ok   home-new-first-p390-story-esc: opens
+ok   home-new-first-p390-story-esc: the page did not move when it opened
+ok   home-new-first-p390-story-esc: the dialog is inside the viewport
+FAIL home-new-first-p390-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-first-p390-story-esc: help button inside :: false
+ok   home-new-first-p390-story-esc: closes with Escape
+ok   home-new-first-p390-story-esc: the page is where it was after Escape
+ok   home-new-first-p390-story-esc: focus is back on its trigger after Escape
+ok   home-new-first-p390-story-esc: body lock released after Escape
+info home-new-first-p390: trophy categories :: [{"c":"league","label":"Leagues: 0. View winning seasons"},{"c":"domestic","label":"Cups: 0. View winning seasons"},{"c":"ucl","label":"UCL: 0. View winning seasons"},{"c":"world","label":"World Cup: 0. View winning seasons"},{"c":"continental","label":"Continental: 0. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 0. View winning seasons"}]
+ok   home-new-first-p390: the tiles read the same after a reload
+ok   home-new-first-p390: no page or console error
+scene new-first-p390 done in 20s, 99 shots, 6.2 MB so far
+info home-new-one-season-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":{"l":12,"t":778,"w":172,"h":48,"pos":"static"},"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-new-one-season-p390: page height 12722px = 15.1 screens, sideways scroll false
+ok   home-new-one-season-p390: the page has no sideways scroll
+info home-new-one-season-p390: tiles :: ["🏋️ Training Drill ready 📱 Phone 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","📖 Record book Your best seasons and every club spell 24 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 42 Apps 12 Goals 5 Assists 2 Trophies 🔥 Derbies: 3 played, 0 W 1 D 2 L, 0 goals 🔥 Derby history"]
+ok   home-new-one-season-p390: Help is at least 44 by 44 on a phone
+ok   home-new-one-season-p390: Help does not sit on Phone or Training
+ok   home-new-one-season-p390: Phone is in the page on a phone, not floating
+ok   home-new-one-season-p390: no new tile or opener is covered by something floating
+ok   home-new-one-season-p390-target: its trigger can be pressed
+ok   home-new-one-season-p390-target: opens
+ok   home-new-one-season-p390-target: the page did not move when it opened
+ok   home-new-one-season-p390-target: the dialog is inside the viewport
+FAIL home-new-one-season-p390-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-one-season-p390-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-one-season-p390-target: help button inside :: false
+ok   home-new-one-season-p390-target: closes with Escape
+ok   home-new-one-season-p390-target: the page is where it was after Escape
+ok   home-new-one-season-p390-target: focus is back on its trigger after Escape
+ok   home-new-one-season-p390-target: body lock released after Escape
+ok   home-new-one-season-p390-target-x: its trigger can be pressed
+ok   home-new-one-season-p390-target-x: opens
+ok   home-new-one-season-p390-target-x: the page did not move when it opened
+ok   home-new-one-season-p390-target-x: the dialog is inside the viewport
+FAIL home-new-one-season-p390-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-one-season-p390-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-new-one-season-p390-target-x: help button inside :: false
+ok   home-new-one-season-p390-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-one-season-p390-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-one-season-p390-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-one-season-p390-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-one-season-p390-target: the tile shows the saved target
+ok   home-new-one-season-p390-preseason: its trigger can be pressed
+ok   home-new-one-season-p390-preseason: opens
+ok   home-new-one-season-p390-preseason: the page did not move when it opened
+ok   home-new-one-season-p390-preseason: the dialog is inside the viewport
+FAIL home-new-one-season-p390-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-one-season-p390-preseason: help button inside :: false
+ok   home-new-one-season-p390-preseason: closes with Escape
+ok   home-new-one-season-p390-preseason: the page is where it was after Escape
+ok   home-new-one-season-p390-preseason: focus is back on its trigger after Escape
+ok   home-new-one-season-p390-preseason: body lock released after Escape
+ok   home-new-one-season-p390-preseason-x: its trigger can be pressed
+ok   home-new-one-season-p390-preseason-x: opens
+ok   home-new-one-season-p390-preseason-x: the page did not move when it opened
+ok   home-new-one-season-p390-preseason-x: the dialog is inside the viewport
+FAIL home-new-one-season-p390-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-one-season-p390-preseason-x: help button inside :: false
+ok   home-new-one-season-p390-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-new-one-season-p390-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-new-one-season-p390-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-new-one-season-p390-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-new-one-season-p390-preseason: the tile shows the saved plan
+info home-new-one-season-p390: no mentor tile
+ok   home-new-one-season-p390-records: its trigger can be pressed
+ok   home-new-one-season-p390-records: opens
+ok   home-new-one-season-p390-records: the page did not move when it opened
+ok   home-new-one-season-p390-records: the dialog is inside the viewport
+ok   home-new-one-season-p390-records: nothing cut off sideways
+info home-new-one-season-p390-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-one-season-p390-records: help button inside :: true
+ok   home-new-one-season-p390-records: Escape on a season goes back one step, not out
+ok   home-new-one-season-p390-records: closes with [data-career-records] button:has-text("Close")
+ok   home-new-one-season-p390-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-new-one-season-p390-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-new-one-season-p390-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-new-one-season-p390-records-esc: its trigger can be pressed
+ok   home-new-one-season-p390-records-esc: opens
+ok   home-new-one-season-p390-records-esc: the page did not move when it opened
+ok   home-new-one-season-p390-records-esc: the dialog is inside the viewport
+ok   home-new-one-season-p390-records-esc: nothing cut off sideways
+info home-new-one-season-p390-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-new-one-season-p390-records-esc: help button inside :: true
+ok   home-new-one-season-p390-records-esc: closes with Escape
+ok   home-new-one-season-p390-records-esc: the page is where it was after Escape
+ok   home-new-one-season-p390-records-esc: focus is back on its trigger after Escape
+ok   home-new-one-season-p390-records-esc: body lock released after Escape
+ok   home-new-one-season-p390-derby: its trigger can be pressed
+ok   home-new-one-season-p390-derby: opens
+ok   home-new-one-season-p390-derby: the page did not move when it opened
+ok   home-new-one-season-p390-derby: the dialog is inside the viewport
+ok   home-new-one-season-p390-derby: nothing cut off sideways
+info home-new-one-season-p390-derby: help button inside :: true
+ok   home-new-one-season-p390-derby: Back puts focus on the season tile it came from
+ok   home-new-one-season-p390-derby: the ? shows the rules and an example
+ok   home-new-one-season-p390-derby: closes with [data-derby-close]
+ok   home-new-one-season-p390-derby: the page is where it was after [data-derby-close]
+ok   home-new-one-season-p390-derby: focus is back on its trigger after [data-derby-close]
+ok   home-new-one-season-p390-derby: body lock released after [data-derby-close]
+ok   home-new-one-season-p390-derby-esc: its trigger can be pressed
+ok   home-new-one-season-p390-derby-esc: opens
+ok   home-new-one-season-p390-derby-esc: the page did not move when it opened
+ok   home-new-one-season-p390-derby-esc: the dialog is inside the viewport
+ok   home-new-one-season-p390-derby-esc: nothing cut off sideways
+info home-new-one-season-p390-derby-esc: help button inside :: true
+ok   home-new-one-season-p390-derby-esc: closes with Escape
+ok   home-new-one-season-p390-derby-esc: the page is where it was after Escape
+ok   home-new-one-season-p390-derby-esc: focus is back on its trigger after Escape
+ok   home-new-one-season-p390-derby-esc: body lock released after Escape
+ok   home-new-one-season-p390-ratings: its trigger can be pressed
+ok   home-new-one-season-p390-ratings: opens
+ok   home-new-one-season-p390-ratings: the page did not move when it opened
+ok   home-new-one-season-p390-ratings: the dialog is inside the viewport
+FAIL home-new-one-season-p390-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-one-season-p390-ratings: help button inside :: true
+info home-new-one-season-p390-ratings: compare enabled :: 0
+ok   home-new-one-season-p390-ratings: the ? shows the rules and an example
+ok   home-new-one-season-p390-ratings: closes with [data-season-history-close]
+ok   home-new-one-season-p390-ratings: the page is where it was after [data-season-history-close]
+ok   home-new-one-season-p390-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-new-one-season-p390-ratings: body lock released after [data-season-history-close]
+ok   home-new-one-season-p390-ratings-esc: its trigger can be pressed
+ok   home-new-one-season-p390-ratings-esc: opens
+ok   home-new-one-season-p390-ratings-esc: the page did not move when it opened
+ok   home-new-one-season-p390-ratings-esc: the dialog is inside the viewport
+FAIL home-new-one-season-p390-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-new-one-season-p390-ratings-esc: help button inside :: true
+ok   home-new-one-season-p390-ratings-esc: closes with Escape
+ok   home-new-one-season-p390-ratings-esc: the page is where it was after Escape
+ok   home-new-one-season-p390-ratings-esc: focus is back on its trigger after Escape
+ok   home-new-one-season-p390-ratings-esc: body lock released after Escape
+ok   home-new-one-season-p390-story: its trigger can be pressed
+ok   home-new-one-season-p390-story: opens
+ok   home-new-one-season-p390-story: the page did not move when it opened
+ok   home-new-one-season-p390-story: the dialog is inside the viewport
+FAIL home-new-one-season-p390-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-one-season-p390-story: help button inside :: false
+info home-new-one-season-p390-story: chapters :: 3
+ok   home-new-one-season-p390-story: Next then Previous lands on the chapter it left
+ok   home-new-one-season-p390-story: All seasons puts focus on the tile it opened
+ok   home-new-one-season-p390-story: closes with [data-story-close]
+ok   home-new-one-season-p390-story: the page is where it was after [data-story-close]
+ok   home-new-one-season-p390-story: focus is back on its trigger after [data-story-close]
+ok   home-new-one-season-p390-story: body lock released after [data-story-close]
+ok   home-new-one-season-p390-story-esc: its trigger can be pressed
+ok   home-new-one-season-p390-story-esc: opens
+ok   home-new-one-season-p390-story-esc: the page did not move when it opened
+ok   home-new-one-season-p390-story-esc: the dialog is inside the viewport
+FAIL home-new-one-season-p390-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-new-one-season-p390-story-esc: help button inside :: false
+ok   home-new-one-season-p390-story-esc: closes with Escape
+ok   home-new-one-season-p390-story-esc: the page is where it was after Escape
+ok   home-new-one-season-p390-story-esc: focus is back on its trigger after Escape
+ok   home-new-one-season-p390-story-esc: body lock released after Escape
+info home-new-one-season-p390: trophy categories :: [{"c":"league","label":"Leagues: 1. View winning seasons"},{"c":"domestic","label":"Copa del Rey: 1. View winning seasons"},{"c":"ucl","label":"UCL: 0. View winning seasons"},{"c":"world","label":"World Cup: 0. View winning seasons"},{"c":"continental","label":"Continental: 0. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 0. View winning seasons"}]
+ok   home-new-one-season-p390-trophy-domestic: its trigger can be pressed
+ok   home-new-one-season-p390-trophy-domestic: opens
+ok   home-new-one-season-p390-trophy-domestic: the page did not move when it opened
+ok   home-new-one-season-p390-trophy-domestic: the dialog is inside the viewport
+ok   home-new-one-season-p390-trophy-domestic: nothing cut off sideways
+info home-new-one-season-p390-trophy-domestic: help button inside :: true
+ok   home-new-one-season-p390-trophy-domestic: closes with [data-trophy-back="career"]
+ok   home-new-one-season-p390-trophy-domestic: the page is where it was after [data-trophy-back="career"]
+ok   home-new-one-season-p390-trophy-domestic: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-one-season-p390-trophy-domestic: body lock released after [data-trophy-back="career"]
+ok   home-new-one-season-p390-trophy-domestic-esc: its trigger can be pressed
+ok   home-new-one-season-p390-trophy-domestic-esc: opens
+ok   home-new-one-season-p390-trophy-domestic-esc: the page did not move when it opened
+ok   home-new-one-season-p390-trophy-domestic-esc: the dialog is inside the viewport
+ok   home-new-one-season-p390-trophy-domestic-esc: nothing cut off sideways
+info home-new-one-season-p390-trophy-domestic-esc: help button inside :: true
+ok   home-new-one-season-p390-trophy-domestic-esc: closes with Escape
+ok   home-new-one-season-p390-trophy-domestic-esc: the page is where it was after Escape
+ok   home-new-one-season-p390-trophy-domestic-esc: focus is back on its trigger after Escape
+ok   home-new-one-season-p390-trophy-domestic-esc: body lock released after Escape
+ok   home-new-one-season-p390-trophy-league: its trigger can be pressed
+ok   home-new-one-season-p390-trophy-league: opens
+ok   home-new-one-season-p390-trophy-league: the page did not move when it opened
+ok   home-new-one-season-p390-trophy-league: the dialog is inside the viewport
+ok   home-new-one-season-p390-trophy-league: nothing cut off sideways
+info home-new-one-season-p390-trophy-league: help button inside :: true
+ok   home-new-one-season-p390-trophy-league: closes with [data-trophy-back="career"]
+ok   home-new-one-season-p390-trophy-league: the page is where it was after [data-trophy-back="career"]
+ok   home-new-one-season-p390-trophy-league: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-new-one-season-p390-trophy-league: body lock released after [data-trophy-back="career"]
+ok   home-new-one-season-p390-trophy-league-esc: its trigger can be pressed
+ok   home-new-one-season-p390-trophy-league-esc: opens
+ok   home-new-one-season-p390-trophy-league-esc: the page did not move when it opened
+ok   home-new-one-season-p390-trophy-league-esc: the dialog is inside the viewport
+ok   home-new-one-season-p390-trophy-league-esc: nothing cut off sideways
+info home-new-one-season-p390-trophy-league-esc: help button inside :: true
+ok   home-new-one-season-p390-trophy-league-esc: closes with Escape
+ok   home-new-one-season-p390-trophy-league-esc: the page is where it was after Escape
+ok   home-new-one-season-p390-trophy-league-esc: focus is back on its trigger after Escape
+ok   home-new-one-season-p390-trophy-league-esc: body lock released after Escape
+ok   home-new-one-season-p390: the tiles read the same after a reload
+ok   home-new-one-season-p390: no page or console error
+scene new-one-season-p390 done in 38s, 106 shots, 6.3 MB so far
+info home-old-home-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":{"l":12,"t":778,"w":169,"h":48,"pos":"static"},"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-old-home-p390: page height 13300px = 15.8 screens, sideways scroll false
+ok   home-old-home-p390: the page has no sideways scroll
+info home-old-home-p390: tiles :: ["🏋️ Training Drill ready 📱 Phone 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","📖 Record book Your best seasons and every club spell 508 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 527 Apps 279 Goals 81 Assists 17 Trophies 🔥 Derbies: 37 played, 22 W 10 D 5 L, 21 goals 🔥 Derby history"]
+ok   home-old-home-p390: Help is at least 44 by 44 on a phone
+ok   home-old-home-p390: Help does not sit on Phone or Training
+ok   home-old-home-p390: Phone is in the page on a phone, not floating
+ok   home-old-home-p390: no new tile or opener is covered by something floating
+ok   home-old-home-p390-target: its trigger can be pressed
+ok   home-old-home-p390-target: opens
+ok   home-old-home-p390-target: the page did not move when it opened
+ok   home-old-home-p390-target: the dialog is inside the viewport
+FAIL home-old-home-p390-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-p390-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-old-home-p390-target: help button inside :: false
+ok   home-old-home-p390-target: closes with Escape
+ok   home-old-home-p390-target: the page is where it was after Escape
+ok   home-old-home-p390-target: focus is back on its trigger after Escape
+ok   home-old-home-p390-target: body lock released after Escape
+ok   home-old-home-p390-target-x: its trigger can be pressed
+ok   home-old-home-p390-target-x: opens
+ok   home-old-home-p390-target-x: the page did not move when it opened
+ok   home-old-home-p390-target-x: the dialog is inside the viewport
+FAIL home-old-home-p390-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-p390-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-old-home-p390-target-x: help button inside :: false
+ok   home-old-home-p390-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-p390-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-p390-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-p390-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-p390-target: the tile shows the saved target
+ok   home-old-home-p390-preseason: its trigger can be pressed
+ok   home-old-home-p390-preseason: opens
+ok   home-old-home-p390-preseason: the page did not move when it opened
+ok   home-old-home-p390-preseason: the dialog is inside the viewport
+FAIL home-old-home-p390-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-p390-preseason: help button inside :: false
+ok   home-old-home-p390-preseason: closes with Escape
+ok   home-old-home-p390-preseason: the page is where it was after Escape
+ok   home-old-home-p390-preseason: focus is back on its trigger after Escape
+ok   home-old-home-p390-preseason: body lock released after Escape
+ok   home-old-home-p390-preseason-x: its trigger can be pressed
+ok   home-old-home-p390-preseason-x: opens
+ok   home-old-home-p390-preseason-x: the page did not move when it opened
+ok   home-old-home-p390-preseason-x: the dialog is inside the viewport
+FAIL home-old-home-p390-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-p390-preseason-x: help button inside :: false
+ok   home-old-home-p390-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-p390-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-p390-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-p390-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-p390-preseason: the tile shows the saved plan
+info home-old-home-p390: no mentor tile
+ok   home-old-home-p390-records: its trigger can be pressed
+ok   home-old-home-p390-records: opens
+ok   home-old-home-p390-records: the page did not move when it opened
+ok   home-old-home-p390-records: the dialog is inside the viewport
+ok   home-old-home-p390-records: nothing cut off sideways
+info home-old-home-p390-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-old-home-p390-records: help button inside :: true
+ok   home-old-home-p390-records: Escape on a season goes back one step, not out
+ok   home-old-home-p390-records: closes with [data-career-records] button:has-text("Close")
+ok   home-old-home-p390-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-old-home-p390-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-old-home-p390-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-old-home-p390-records-esc: its trigger can be pressed
+ok   home-old-home-p390-records-esc: opens
+ok   home-old-home-p390-records-esc: the page did not move when it opened
+ok   home-old-home-p390-records-esc: the dialog is inside the viewport
+ok   home-old-home-p390-records-esc: nothing cut off sideways
+info home-old-home-p390-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-old-home-p390-records-esc: help button inside :: true
+ok   home-old-home-p390-records-esc: closes with Escape
+ok   home-old-home-p390-records-esc: the page is where it was after Escape
+ok   home-old-home-p390-records-esc: focus is back on its trigger after Escape
+ok   home-old-home-p390-records-esc: body lock released after Escape
+ok   home-old-home-p390-derby: its trigger can be pressed
+ok   home-old-home-p390-derby: opens
+ok   home-old-home-p390-derby: the page did not move when it opened
+ok   home-old-home-p390-derby: the dialog is inside the viewport
+ok   home-old-home-p390-derby: nothing cut off sideways
+info home-old-home-p390-derby: help button inside :: true
+ok   home-old-home-p390-derby: Back puts focus on the season tile it came from
+ok   home-old-home-p390-derby: the ? shows the rules and an example
+ok   home-old-home-p390-derby: closes with [data-derby-close]
+ok   home-old-home-p390-derby: the page is where it was after [data-derby-close]
+ok   home-old-home-p390-derby: focus is back on its trigger after [data-derby-close]
+ok   home-old-home-p390-derby: body lock released after [data-derby-close]
+ok   home-old-home-p390-derby-esc: its trigger can be pressed
+ok   home-old-home-p390-derby-esc: opens
+ok   home-old-home-p390-derby-esc: the page did not move when it opened
+ok   home-old-home-p390-derby-esc: the dialog is inside the viewport
+ok   home-old-home-p390-derby-esc: nothing cut off sideways
+info home-old-home-p390-derby-esc: help button inside :: true
+ok   home-old-home-p390-derby-esc: closes with Escape
+ok   home-old-home-p390-derby-esc: the page is where it was after Escape
+ok   home-old-home-p390-derby-esc: focus is back on its trigger after Escape
+ok   home-old-home-p390-derby-esc: body lock released after Escape
+ok   home-old-home-p390-ratings: its trigger can be pressed
+ok   home-old-home-p390-ratings: opens
+ok   home-old-home-p390-ratings: the page did not move when it opened
+ok   home-old-home-p390-ratings: the dialog is inside the viewport
+FAIL home-old-home-p390-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-old-home-p390-ratings: help button inside :: true
+info home-old-home-p390-ratings: compare enabled :: 1
+ok   home-old-home-p390-compare: Swap seasons swaps the two sides
+ok   home-old-home-p390-ratings: the ? shows the rules and an example
+ok   home-old-home-p390-ratings: closes with [data-season-history-close]
+ok   home-old-home-p390-ratings: the page is where it was after [data-season-history-close]
+ok   home-old-home-p390-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-old-home-p390-ratings: body lock released after [data-season-history-close]
+ok   home-old-home-p390-ratings-esc: its trigger can be pressed
+ok   home-old-home-p390-ratings-esc: opens
+ok   home-old-home-p390-ratings-esc: the page did not move when it opened
+ok   home-old-home-p390-ratings-esc: the dialog is inside the viewport
+FAIL home-old-home-p390-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-old-home-p390-ratings-esc: help button inside :: true
+ok   home-old-home-p390-ratings-esc: closes with Escape
+ok   home-old-home-p390-ratings-esc: the page is where it was after Escape
+ok   home-old-home-p390-ratings-esc: focus is back on its trigger after Escape
+ok   home-old-home-p390-ratings-esc: body lock released after Escape
+ok   home-old-home-p390-story: its trigger can be pressed
+ok   home-old-home-p390-story: opens
+ok   home-old-home-p390-story: the page did not move when it opened
+ok   home-old-home-p390-story: the dialog is inside the viewport
+FAIL home-old-home-p390-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-p390-story: help button inside :: false
+info home-old-home-p390-story: chapters :: 14
+ok   home-old-home-p390-story: Next then Previous lands on the chapter it left
+ok   home-old-home-p390-story: All seasons puts focus on the tile it opened
+ok   home-old-home-p390-story: closes with [data-story-close]
+ok   home-old-home-p390-story: the page is where it was after [data-story-close]
+ok   home-old-home-p390-story: focus is back on its trigger after [data-story-close]
+ok   home-old-home-p390-story: body lock released after [data-story-close]
+ok   home-old-home-p390-story-esc: its trigger can be pressed
+ok   home-old-home-p390-story-esc: opens
+ok   home-old-home-p390-story-esc: the page did not move when it opened
+ok   home-old-home-p390-story-esc: the dialog is inside the viewport
+FAIL home-old-home-p390-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-p390-story-esc: help button inside :: false
+ok   home-old-home-p390-story-esc: closes with Escape
+ok   home-old-home-p390-story-esc: the page is where it was after Escape
+ok   home-old-home-p390-story-esc: focus is back on its trigger after Escape
+ok   home-old-home-p390-story-esc: body lock released after Escape
+info home-old-home-p390: trophy categories :: [{"c":"league","label":"Leagues: 11. View winning seasons"},{"c":"domestic","label":"FA Cup: 3. View winning seasons"},{"c":"ucl","label":"UCL: 2. View winning seasons"},{"c":"world","label":"World Cup: 0. View winning seasons"},{"c":"continental","label":"Continental: 1. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 1. View winning seasons"}]
+ok   home-old-home-p390-trophy-ucl: its trigger can be pressed
+ok   home-old-home-p390-trophy-ucl: opens
+ok   home-old-home-p390-trophy-ucl: the page did not move when it opened
+ok   home-old-home-p390-trophy-ucl: the dialog is inside the viewport
+ok   home-old-home-p390-trophy-ucl: nothing cut off sideways
+info home-old-home-p390-trophy-ucl: help button inside :: true
+ok   home-old-home-p390-trophy-ucl: closes with [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-ucl: the page is where it was after [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-ucl: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-ucl: body lock released after [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-ucl-esc: its trigger can be pressed
+ok   home-old-home-p390-trophy-ucl-esc: opens
+ok   home-old-home-p390-trophy-ucl-esc: the page did not move when it opened
+ok   home-old-home-p390-trophy-ucl-esc: the dialog is inside the viewport
+ok   home-old-home-p390-trophy-ucl-esc: nothing cut off sideways
+info home-old-home-p390-trophy-ucl-esc: help button inside :: true
+ok   home-old-home-p390-trophy-ucl-esc: closes with Escape
+ok   home-old-home-p390-trophy-ucl-esc: the page is where it was after Escape
+ok   home-old-home-p390-trophy-ucl-esc: focus is back on its trigger after Escape
+ok   home-old-home-p390-trophy-ucl-esc: body lock released after Escape
+ok   home-old-home-p390-trophy-domestic: its trigger can be pressed
+ok   home-old-home-p390-trophy-domestic: opens
+ok   home-old-home-p390-trophy-domestic: the page did not move when it opened
+ok   home-old-home-p390-trophy-domestic: the dialog is inside the viewport
+ok   home-old-home-p390-trophy-domestic: nothing cut off sideways
+info home-old-home-p390-trophy-domestic: help button inside :: true
+ok   home-old-home-p390-trophy-domestic: closes with [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-domestic: the page is where it was after [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-domestic: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-domestic: body lock released after [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-domestic-esc: its trigger can be pressed
+ok   home-old-home-p390-trophy-domestic-esc: opens
+ok   home-old-home-p390-trophy-domestic-esc: the page did not move when it opened
+ok   home-old-home-p390-trophy-domestic-esc: the dialog is inside the viewport
+ok   home-old-home-p390-trophy-domestic-esc: nothing cut off sideways
+info home-old-home-p390-trophy-domestic-esc: help button inside :: true
+ok   home-old-home-p390-trophy-domestic-esc: closes with Escape
+ok   home-old-home-p390-trophy-domestic-esc: the page is where it was after Escape
+ok   home-old-home-p390-trophy-domestic-esc: focus is back on its trigger after Escape
+ok   home-old-home-p390-trophy-domestic-esc: body lock released after Escape
+ok   home-old-home-p390-trophy-league: its trigger can be pressed
+ok   home-old-home-p390-trophy-league: opens
+ok   home-old-home-p390-trophy-league: the page did not move when it opened
+ok   home-old-home-p390-trophy-league: the dialog is inside the viewport
+ok   home-old-home-p390-trophy-league: nothing cut off sideways
+info home-old-home-p390-trophy-league: help button inside :: true
+ok   home-old-home-p390-trophy-league: closes with [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-league: the page is where it was after [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-league: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-league: body lock released after [data-trophy-back="career"]
+ok   home-old-home-p390-trophy-league-esc: its trigger can be pressed
+ok   home-old-home-p390-trophy-league-esc: opens
+ok   home-old-home-p390-trophy-league-esc: the page did not move when it opened
+ok   home-old-home-p390-trophy-league-esc: the dialog is inside the viewport
+ok   home-old-home-p390-trophy-league-esc: nothing cut off sideways
+info home-old-home-p390-trophy-league-esc: help button inside :: true
+ok   home-old-home-p390-trophy-league-esc: closes with Escape
+ok   home-old-home-p390-trophy-league-esc: the page is where it was after Escape
+ok   home-old-home-p390-trophy-league-esc: focus is back on its trigger after Escape
+ok   home-old-home-p390-trophy-league-esc: body lock released after Escape
+ok   home-old-home-p390: the tiles read the same after a reload
+ok   home-old-home-p390: no page or console error
+scene old-home-p390 done in 46s, 127 shots, 7.4 MB so far
+info home-old-home-d1280: top facts :: {"help":{"l":192,"t":85,"w":40,"h":40,"pos":"absolute"},"training":{"l":1208,"t":756,"w":56,"h":56,"pos":"fixed"},"phone":{"l":1208,"t":824,"w":56,"h":56,"pos":"fixed"},"nav":{"l":0,"t":32,"w":1280,"h":53,"pos":"static"},"next":{"l":144,"t":834,"w":658,"h":48,"pos":"static"},"floaters":[{"what":"ol:","box":{"l":860,"t":868,"w":420,"h":32,"pos":"fixed"}},{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}},{"what":"button:Open the training ground","box":{"l":1208,"t":756,"w":56,"h":56,"pos":"fixed"}},{"what":"button:Open your phone","box":{"l":1208,"t":824,"w":56,"h":56,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-old-home-d1280: page height 9492px = 10.5 screens, sideways scroll false
+ok   home-old-home-d1280: the page has no sideways scroll
+info home-old-home-d1280: tiles :: ["🏋️ Drill ready 📱 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","📖 Record book Your best seasons and every club spell 508 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 527 Apps 279 Goals 81 Assists 17 Trophies 🔥 Derbies: 37 played, 22 W 10 D 5 L, 21 goals 🔥 Derby history"]
+ok   home-old-home-d1280: no new tile or opener is covered by something floating
+ok   home-old-home-d1280-target: its trigger can be pressed
+ok   home-old-home-d1280-target: opens
+ok   home-old-home-d1280-target: the page did not move when it opened
+ok   home-old-home-d1280-target: the dialog is inside the viewport
+FAIL home-old-home-d1280-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-d1280-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-old-home-d1280-target: help button inside :: false
+ok   home-old-home-d1280-target: closes with Escape
+ok   home-old-home-d1280-target: the page is where it was after Escape
+ok   home-old-home-d1280-target: focus is back on its trigger after Escape
+ok   home-old-home-d1280-target: body lock released after Escape
+ok   home-old-home-d1280-target-x: its trigger can be pressed
+ok   home-old-home-d1280-target-x: opens
+ok   home-old-home-d1280-target-x: the page did not move when it opened
+ok   home-old-home-d1280-target-x: the dialog is inside the viewport
+FAIL home-old-home-d1280-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-d1280-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-old-home-d1280-target-x: help button inside :: false
+ok   home-old-home-d1280-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-d1280-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-d1280-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-d1280-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-d1280-target: the tile shows the saved target
+ok   home-old-home-d1280-preseason: its trigger can be pressed
+ok   home-old-home-d1280-preseason: opens
+ok   home-old-home-d1280-preseason: the page did not move when it opened
+ok   home-old-home-d1280-preseason: the dialog is inside the viewport
+FAIL home-old-home-d1280-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-d1280-preseason: help button inside :: false
+ok   home-old-home-d1280-preseason: closes with Escape
+ok   home-old-home-d1280-preseason: the page is where it was after Escape
+ok   home-old-home-d1280-preseason: focus is back on its trigger after Escape
+ok   home-old-home-d1280-preseason: body lock released after Escape
+ok   home-old-home-d1280-preseason-x: its trigger can be pressed
+ok   home-old-home-d1280-preseason-x: opens
+ok   home-old-home-d1280-preseason-x: the page did not move when it opened
+ok   home-old-home-d1280-preseason-x: the dialog is inside the viewport
+FAIL home-old-home-d1280-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-d1280-preseason-x: help button inside :: false
+ok   home-old-home-d1280-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-d1280-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-d1280-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-d1280-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-old-home-d1280-preseason: the tile shows the saved plan
+info home-old-home-d1280: no mentor tile
+ok   home-old-home-d1280-records: its trigger can be pressed
+ok   home-old-home-d1280-records: opens
+ok   home-old-home-d1280-records: the page did not move when it opened
+ok   home-old-home-d1280-records: the dialog is inside the viewport
+ok   home-old-home-d1280-records: nothing cut off sideways
+info home-old-home-d1280-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-old-home-d1280-records: help button inside :: true
+ok   home-old-home-d1280-records: Escape on a season goes back one step, not out
+ok   home-old-home-d1280-records: closes with [data-career-records] button:has-text("Close")
+ok   home-old-home-d1280-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-old-home-d1280-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-old-home-d1280-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-old-home-d1280-records-esc: its trigger can be pressed
+ok   home-old-home-d1280-records-esc: opens
+ok   home-old-home-d1280-records-esc: the page did not move when it opened
+ok   home-old-home-d1280-records-esc: the dialog is inside the viewport
+ok   home-old-home-d1280-records-esc: nothing cut off sideways
+info home-old-home-d1280-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-old-home-d1280-records-esc: help button inside :: true
+ok   home-old-home-d1280-records-esc: closes with Escape
+ok   home-old-home-d1280-records-esc: the page is where it was after Escape
+ok   home-old-home-d1280-records-esc: focus is back on its trigger after Escape
+ok   home-old-home-d1280-records-esc: body lock released after Escape
+ok   home-old-home-d1280-derby: its trigger can be pressed
+ok   home-old-home-d1280-derby: opens
+ok   home-old-home-d1280-derby: the page did not move when it opened
+ok   home-old-home-d1280-derby: the dialog is inside the viewport
+ok   home-old-home-d1280-derby: nothing cut off sideways
+info home-old-home-d1280-derby: help button inside :: true
+ok   home-old-home-d1280-derby: Back puts focus on the season tile it came from
+ok   home-old-home-d1280-derby: the ? shows the rules and an example
+ok   home-old-home-d1280-derby: closes with [data-derby-close]
+ok   home-old-home-d1280-derby: the page is where it was after [data-derby-close]
+ok   home-old-home-d1280-derby: focus is back on its trigger after [data-derby-close]
+ok   home-old-home-d1280-derby: body lock released after [data-derby-close]
+ok   home-old-home-d1280-derby-esc: its trigger can be pressed
+ok   home-old-home-d1280-derby-esc: opens
+ok   home-old-home-d1280-derby-esc: the page did not move when it opened
+ok   home-old-home-d1280-derby-esc: the dialog is inside the viewport
+ok   home-old-home-d1280-derby-esc: nothing cut off sideways
+info home-old-home-d1280-derby-esc: help button inside :: true
+ok   home-old-home-d1280-derby-esc: closes with Escape
+ok   home-old-home-d1280-derby-esc: the page is where it was after Escape
+ok   home-old-home-d1280-derby-esc: focus is back on its trigger after Escape
+ok   home-old-home-d1280-derby-esc: body lock released after Escape
+ok   home-old-home-d1280-ratings: its trigger can be pressed
+ok   home-old-home-d1280-ratings: opens
+ok   home-old-home-d1280-ratings: the page did not move when it opened
+ok   home-old-home-d1280-ratings: the dialog is inside the viewport
+FAIL home-old-home-d1280-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-old-home-d1280-ratings: help button inside :: true
+info home-old-home-d1280-ratings: compare enabled :: 1
+ok   home-old-home-d1280-compare: Swap seasons swaps the two sides
+ok   home-old-home-d1280-ratings: the ? shows the rules and an example
+ok   home-old-home-d1280-ratings: closes with [data-season-history-close]
+ok   home-old-home-d1280-ratings: the page is where it was after [data-season-history-close]
+ok   home-old-home-d1280-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-old-home-d1280-ratings: body lock released after [data-season-history-close]
+ok   home-old-home-d1280-ratings-esc: its trigger can be pressed
+ok   home-old-home-d1280-ratings-esc: opens
+ok   home-old-home-d1280-ratings-esc: the page did not move when it opened
+ok   home-old-home-d1280-ratings-esc: the dialog is inside the viewport
+FAIL home-old-home-d1280-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-old-home-d1280-ratings-esc: help button inside :: true
+ok   home-old-home-d1280-ratings-esc: closes with Escape
+ok   home-old-home-d1280-ratings-esc: the page is where it was after Escape
+ok   home-old-home-d1280-ratings-esc: focus is back on its trigger after Escape
+ok   home-old-home-d1280-ratings-esc: body lock released after Escape
+ok   home-old-home-d1280-story: its trigger can be pressed
+ok   home-old-home-d1280-story: opens
+ok   home-old-home-d1280-story: the page did not move when it opened
+ok   home-old-home-d1280-story: the dialog is inside the viewport
+FAIL home-old-home-d1280-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-d1280-story: help button inside :: false
+info home-old-home-d1280-story: chapters :: 14
+ok   home-old-home-d1280-story: Next then Previous lands on the chapter it left
+ok   home-old-home-d1280-story: All seasons puts focus on the tile it opened
+ok   home-old-home-d1280-story: closes with [data-story-close]
+ok   home-old-home-d1280-story: the page is where it was after [data-story-close]
+ok   home-old-home-d1280-story: focus is back on its trigger after [data-story-close]
+ok   home-old-home-d1280-story: body lock released after [data-story-close]
+ok   home-old-home-d1280-story-esc: its trigger can be pressed
+ok   home-old-home-d1280-story-esc: opens
+ok   home-old-home-d1280-story-esc: the page did not move when it opened
+ok   home-old-home-d1280-story-esc: the dialog is inside the viewport
+FAIL home-old-home-d1280-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-home-d1280-story-esc: help button inside :: false
+ok   home-old-home-d1280-story-esc: closes with Escape
+ok   home-old-home-d1280-story-esc: the page is where it was after Escape
+ok   home-old-home-d1280-story-esc: focus is back on its trigger after Escape
+ok   home-old-home-d1280-story-esc: body lock released after Escape
+info home-old-home-d1280: trophy categories :: [{"c":"league","label":"Leagues: 11. View winning seasons"},{"c":"domestic","label":"FA Cup: 3. View winning seasons"},{"c":"ucl","label":"UCL: 2. View winning seasons"},{"c":"world","label":"World Cup: 0. View winning seasons"},{"c":"continental","label":"Continental: 1. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 1. View winning seasons"}]
+ok   home-old-home-d1280-trophy-ucl: its trigger can be pressed
+ok   home-old-home-d1280-trophy-ucl: opens
+ok   home-old-home-d1280-trophy-ucl: the page did not move when it opened
+ok   home-old-home-d1280-trophy-ucl: the dialog is inside the viewport
+ok   home-old-home-d1280-trophy-ucl: nothing cut off sideways
+info home-old-home-d1280-trophy-ucl: help button inside :: true
+ok   home-old-home-d1280-trophy-ucl: closes with [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-ucl: the page is where it was after [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-ucl: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-ucl: body lock released after [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-ucl-esc: its trigger can be pressed
+ok   home-old-home-d1280-trophy-ucl-esc: opens
+ok   home-old-home-d1280-trophy-ucl-esc: the page did not move when it opened
+ok   home-old-home-d1280-trophy-ucl-esc: the dialog is inside the viewport
+ok   home-old-home-d1280-trophy-ucl-esc: nothing cut off sideways
+info home-old-home-d1280-trophy-ucl-esc: help button inside :: true
+ok   home-old-home-d1280-trophy-ucl-esc: closes with Escape
+ok   home-old-home-d1280-trophy-ucl-esc: the page is where it was after Escape
+ok   home-old-home-d1280-trophy-ucl-esc: focus is back on its trigger after Escape
+ok   home-old-home-d1280-trophy-ucl-esc: body lock released after Escape
+ok   home-old-home-d1280-trophy-domestic: its trigger can be pressed
+ok   home-old-home-d1280-trophy-domestic: opens
+ok   home-old-home-d1280-trophy-domestic: the page did not move when it opened
+ok   home-old-home-d1280-trophy-domestic: the dialog is inside the viewport
+ok   home-old-home-d1280-trophy-domestic: nothing cut off sideways
+info home-old-home-d1280-trophy-domestic: help button inside :: true
+ok   home-old-home-d1280-trophy-domestic: closes with [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-domestic: the page is where it was after [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-domestic: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-domestic: body lock released after [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-domestic-esc: its trigger can be pressed
+ok   home-old-home-d1280-trophy-domestic-esc: opens
+ok   home-old-home-d1280-trophy-domestic-esc: the page did not move when it opened
+ok   home-old-home-d1280-trophy-domestic-esc: the dialog is inside the viewport
+ok   home-old-home-d1280-trophy-domestic-esc: nothing cut off sideways
+info home-old-home-d1280-trophy-domestic-esc: help button inside :: true
+ok   home-old-home-d1280-trophy-domestic-esc: closes with Escape
+ok   home-old-home-d1280-trophy-domestic-esc: the page is where it was after Escape
+ok   home-old-home-d1280-trophy-domestic-esc: focus is back on its trigger after Escape
+ok   home-old-home-d1280-trophy-domestic-esc: body lock released after Escape
+ok   home-old-home-d1280-trophy-league: its trigger can be pressed
+ok   home-old-home-d1280-trophy-league: opens
+ok   home-old-home-d1280-trophy-league: the page did not move when it opened
+ok   home-old-home-d1280-trophy-league: the dialog is inside the viewport
+ok   home-old-home-d1280-trophy-league: nothing cut off sideways
+info home-old-home-d1280-trophy-league: help button inside :: true
+ok   home-old-home-d1280-trophy-league: closes with [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-league: the page is where it was after [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-league: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-league: body lock released after [data-trophy-back="career"]
+ok   home-old-home-d1280-trophy-league-esc: its trigger can be pressed
+ok   home-old-home-d1280-trophy-league-esc: opens
+ok   home-old-home-d1280-trophy-league-esc: the page did not move when it opened
+ok   home-old-home-d1280-trophy-league-esc: the dialog is inside the viewport
+ok   home-old-home-d1280-trophy-league-esc: nothing cut off sideways
+info home-old-home-d1280-trophy-league-esc: help button inside :: true
+ok   home-old-home-d1280-trophy-league-esc: closes with Escape
+ok   home-old-home-d1280-trophy-league-esc: the page is where it was after Escape
+ok   home-old-home-d1280-trophy-league-esc: focus is back on its trigger after Escape
+ok   home-old-home-d1280-trophy-league-esc: body lock released after Escape
+ok   home-old-home-d1280: the tiles read the same after a reload
+ok   home-old-home-d1280: no page or console error
+scene old-home-d1280 done in 44s, 130 shots, 8.2 MB so far
+info home-old-1100-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":{"l":12,"t":778,"w":172,"h":48,"pos":"static"},"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-old-1100-p390: page height 12748px = 15.1 screens, sideways scroll false
+ok   home-old-1100-p390: the page has no sideways scroll
+info home-old-1100-p390: tiles :: ["🏋️ Training Drill ready 📱 Phone 3 unread","🎯 Season target Choose a personal challenge for next season","🏃 Preseason plan Balanced, or choose your next-season workload","📖 Record book Your best seasons and every club spell 65 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 85 Apps 10 Goals 13 Assists 1 Trophies 🔥 Derby history"]
+ok   home-old-1100-p390: Help is at least 44 by 44 on a phone
+ok   home-old-1100-p390: Help does not sit on Phone or Training
+ok   home-old-1100-p390: Phone is in the page on a phone, not floating
+ok   home-old-1100-p390: no new tile or opener is covered by something floating
+ok   home-old-1100-p390-target: its trigger can be pressed
+ok   home-old-1100-p390-target: opens
+ok   home-old-1100-p390-target: the page did not move when it opened
+ok   home-old-1100-p390-target: the dialog is inside the viewport
+FAIL home-old-1100-p390-target: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-1100-p390-target: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-old-1100-p390-target: help button inside :: false
+ok   home-old-1100-p390-target: closes with Escape
+ok   home-old-1100-p390-target: the page is where it was after Escape
+ok   home-old-1100-p390-target: focus is back on its trigger after Escape
+ok   home-old-1100-p390-target: body lock released after Escape
+ok   home-old-1100-p390-target-x: its trigger can be pressed
+ok   home-old-1100-p390-target-x: opens
+ok   home-old-1100-p390-target-x: the page did not move when it opened
+ok   home-old-1100-p390-target-x: the dialog is inside the viewport
+FAIL home-old-1100-p390-target-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-1100-p390-target-x: targets under 44px :: [{"t":"Close","w":32,"h":32}]
+info home-old-1100-p390-target-x: help button inside :: false
+ok   home-old-1100-p390-target-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-old-1100-p390-target-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-old-1100-p390-target-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-old-1100-p390-target-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-old-1100-p390-target: the tile shows the saved target
+ok   home-old-1100-p390-preseason: its trigger can be pressed
+ok   home-old-1100-p390-preseason: opens
+ok   home-old-1100-p390-preseason: the page did not move when it opened
+ok   home-old-1100-p390-preseason: the dialog is inside the viewport
+FAIL home-old-1100-p390-preseason: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-1100-p390-preseason: help button inside :: false
+ok   home-old-1100-p390-preseason: closes with Escape
+ok   home-old-1100-p390-preseason: the page is where it was after Escape
+ok   home-old-1100-p390-preseason: focus is back on its trigger after Escape
+ok   home-old-1100-p390-preseason: body lock released after Escape
+ok   home-old-1100-p390-preseason-x: its trigger can be pressed
+ok   home-old-1100-p390-preseason-x: opens
+ok   home-old-1100-p390-preseason-x: the page did not move when it opened
+ok   home-old-1100-p390-preseason-x: the dialog is inside the viewport
+FAIL home-old-1100-p390-preseason-x: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-1100-p390-preseason-x: help button inside :: false
+ok   home-old-1100-p390-preseason-x: closes with [role="dialog"] button:has(span.sr-only)
+ok   home-old-1100-p390-preseason-x: the page is where it was after [role="dialog"] button:has(span.sr-only)
+ok   home-old-1100-p390-preseason-x: focus is back on its trigger after [role="dialog"] button:has(span.sr-only)
+ok   home-old-1100-p390-preseason-x: body lock released after [role="dialog"] button:has(span.sr-only)
+ok   home-old-1100-p390-preseason: the tile shows the saved plan
+info home-old-1100-p390: no mentor tile
+ok   home-old-1100-p390-records: its trigger can be pressed
+ok   home-old-1100-p390-records: opens
+ok   home-old-1100-p390-records: the page did not move when it opened
+ok   home-old-1100-p390-records: the dialog is inside the viewport
+ok   home-old-1100-p390-records: nothing cut off sideways
+info home-old-1100-p390-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-old-1100-p390-records: help button inside :: true
+ok   home-old-1100-p390-records: Escape on a season goes back one step, not out
+ok   home-old-1100-p390-records: closes with [data-career-records] button:has-text("Close")
+ok   home-old-1100-p390-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-old-1100-p390-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-old-1100-p390-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-old-1100-p390-records-esc: its trigger can be pressed
+ok   home-old-1100-p390-records-esc: opens
+ok   home-old-1100-p390-records-esc: the page did not move when it opened
+ok   home-old-1100-p390-records-esc: the dialog is inside the viewport
+ok   home-old-1100-p390-records-esc: nothing cut off sideways
+info home-old-1100-p390-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-old-1100-p390-records-esc: help button inside :: true
+ok   home-old-1100-p390-records-esc: closes with Escape
+ok   home-old-1100-p390-records-esc: the page is where it was after Escape
+ok   home-old-1100-p390-records-esc: focus is back on its trigger after Escape
+ok   home-old-1100-p390-records-esc: body lock released after Escape
+ok   home-old-1100-p390-derby: its trigger can be pressed
+ok   home-old-1100-p390-derby: opens
+ok   home-old-1100-p390-derby: the page did not move when it opened
+ok   home-old-1100-p390-derby: the dialog is inside the viewport
+ok   home-old-1100-p390-derby: nothing cut off sideways
+info home-old-1100-p390-derby: help button inside :: true
+ok   home-old-1100-p390-derby: the ? shows the rules and an example
+ok   home-old-1100-p390-derby: closes with [data-derby-close]
+ok   home-old-1100-p390-derby: the page is where it was after [data-derby-close]
+ok   home-old-1100-p390-derby: focus is back on its trigger after [data-derby-close]
+ok   home-old-1100-p390-derby: body lock released after [data-derby-close]
+ok   home-old-1100-p390-derby-esc: its trigger can be pressed
+ok   home-old-1100-p390-derby-esc: opens
+ok   home-old-1100-p390-derby-esc: the page did not move when it opened
+ok   home-old-1100-p390-derby-esc: the dialog is inside the viewport
+ok   home-old-1100-p390-derby-esc: nothing cut off sideways
+info home-old-1100-p390-derby-esc: help button inside :: true
+ok   home-old-1100-p390-derby-esc: closes with Escape
+ok   home-old-1100-p390-derby-esc: the page is where it was after Escape
+ok   home-old-1100-p390-derby-esc: focus is back on its trigger after Escape
+ok   home-old-1100-p390-derby-esc: body lock released after Escape
+ok   home-old-1100-p390-ratings: its trigger can be pressed
+ok   home-old-1100-p390-ratings: opens
+ok   home-old-1100-p390-ratings: the page did not move when it opened
+ok   home-old-1100-p390-ratings: the dialog is inside the viewport
+FAIL home-old-1100-p390-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-old-1100-p390-ratings: help button inside :: true
+info home-old-1100-p390-ratings: compare enabled :: 1
+ok   home-old-1100-p390-compare: Swap seasons swaps the two sides
+ok   home-old-1100-p390-ratings: the ? shows the rules and an example
+ok   home-old-1100-p390-ratings: closes with [data-season-history-close]
+ok   home-old-1100-p390-ratings: the page is where it was after [data-season-history-close]
+ok   home-old-1100-p390-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-old-1100-p390-ratings: body lock released after [data-season-history-close]
+ok   home-old-1100-p390-ratings-esc: its trigger can be pressed
+ok   home-old-1100-p390-ratings-esc: opens
+ok   home-old-1100-p390-ratings-esc: the page did not move when it opened
+ok   home-old-1100-p390-ratings-esc: the dialog is inside the viewport
+FAIL home-old-1100-p390-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-old-1100-p390-ratings-esc: help button inside :: true
+ok   home-old-1100-p390-ratings-esc: closes with Escape
+ok   home-old-1100-p390-ratings-esc: the page is where it was after Escape
+ok   home-old-1100-p390-ratings-esc: focus is back on its trigger after Escape
+ok   home-old-1100-p390-ratings-esc: body lock released after Escape
+ok   home-old-1100-p390-story: its trigger can be pressed
+ok   home-old-1100-p390-story: opens
+ok   home-old-1100-p390-story: the page did not move when it opened
+ok   home-old-1100-p390-story: the dialog is inside the viewport
+FAIL home-old-1100-p390-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-1100-p390-story: help button inside :: false
+info home-old-1100-p390-story: chapters :: 4
+ok   home-old-1100-p390-story: Next then Previous lands on the chapter it left
+ok   home-old-1100-p390-story: All seasons puts focus on the tile it opened
+ok   home-old-1100-p390-story: closes with [data-story-close]
+ok   home-old-1100-p390-story: the page is where it was after [data-story-close]
+ok   home-old-1100-p390-story: focus is back on its trigger after [data-story-close]
+ok   home-old-1100-p390-story: body lock released after [data-story-close]
+ok   home-old-1100-p390-story-esc: its trigger can be pressed
+ok   home-old-1100-p390-story-esc: opens
+ok   home-old-1100-p390-story-esc: the page did not move when it opened
+ok   home-old-1100-p390-story-esc: the dialog is inside the viewport
+FAIL home-old-1100-p390-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-1100-p390-story-esc: help button inside :: false
+ok   home-old-1100-p390-story-esc: closes with Escape
+ok   home-old-1100-p390-story-esc: the page is where it was after Escape
+ok   home-old-1100-p390-story-esc: focus is back on its trigger after Escape
+ok   home-old-1100-p390-story-esc: body lock released after Escape
+info home-old-1100-p390: trophy categories :: [{"c":"league","label":"Leagues: 0. View winning seasons"},{"c":"domestic","label":"Cups: 0. View winning seasons"},{"c":"ucl","label":"UCL: 0. View winning seasons"},{"c":"world","label":"World Cup: 0. View winning seasons"},{"c":"continental","label":"Continental: 1. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 0. View winning seasons"}]
+ok   home-old-1100-p390: the tiles read the same after a reload
+ok   home-old-1100-p390: no page or console error
+scene old-1100-p390 done in 31s, 136 shots, 8.9 MB so far
+info home-old-retired-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":null,"phone":{"l":12,"t":149,"w":366,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-old-retired-p390: page height 14722px = 17.4 screens, sideways scroll false
+ok   home-old-retired-p390: the page has no sideways scroll
+info home-old-retired-p390: tiles :: ["📱 Phone 3 unread","📖 Record book Your best seasons and every club spell 786 senior appearances · 1 club spell","CAREER STATS Only stats kept in your season records are shown. 801 Apps 279 Clean Sheets 17 Trophies 🔥 Derby history"]
+ok   home-old-retired-p390: Help is at least 44 by 44 on a phone
+ok   home-old-retired-p390: Help does not sit on Phone or Training
+ok   home-old-retired-p390: Phone is in the page on a phone, not floating
+ok   home-old-retired-p390: no new tile or opener is covered by something floating
+info home-old-retired-p390: no season target tile
+info home-old-retired-p390: no preseason tile
+info home-old-retired-p390: no mentor tile
+ok   home-old-retired-p390-records: its trigger can be pressed
+ok   home-old-retired-p390-records: opens
+ok   home-old-retired-p390-records: the page did not move when it opened
+ok   home-old-retired-p390-records: the dialog is inside the viewport
+ok   home-old-retired-p390-records: nothing cut off sideways
+info home-old-retired-p390-records: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-old-retired-p390-records: help button inside :: true
+ok   home-old-retired-p390-records: Escape on a season goes back one step, not out
+ok   home-old-retired-p390-records: closes with [data-career-records] button:has-text("Close")
+ok   home-old-retired-p390-records: the page is where it was after [data-career-records] button:has-text("Close")
+ok   home-old-retired-p390-records: focus is back on its trigger after [data-career-records] button:has-text("Close")
+ok   home-old-retired-p390-records: body lock released after [data-career-records] button:has-text("Close")
+ok   home-old-retired-p390-records-esc: its trigger can be pressed
+ok   home-old-retired-p390-records-esc: opens
+ok   home-old-retired-p390-records-esc: the page did not move when it opened
+ok   home-old-retired-p390-records-esc: the dialog is inside the viewport
+ok   home-old-retired-p390-records-esc: nothing cut off sideways
+info home-old-retired-p390-records-esc: targets under 44px :: [{"t":"Record book help","w":34,"h":44}]
+info home-old-retired-p390-records-esc: help button inside :: true
+ok   home-old-retired-p390-records-esc: closes with Escape
+ok   home-old-retired-p390-records-esc: the page is where it was after Escape
+ok   home-old-retired-p390-records-esc: focus is back on its trigger after Escape
+ok   home-old-retired-p390-records-esc: body lock released after Escape
+ok   home-old-retired-p390-derby: its trigger can be pressed
+ok   home-old-retired-p390-derby: opens
+ok   home-old-retired-p390-derby: the page did not move when it opened
+ok   home-old-retired-p390-derby: the dialog is inside the viewport
+ok   home-old-retired-p390-derby: nothing cut off sideways
+info home-old-retired-p390-derby: help button inside :: true
+ok   home-old-retired-p390-derby: the ? shows the rules and an example
+ok   home-old-retired-p390-derby: closes with [data-derby-close]
+ok   home-old-retired-p390-derby: the page is where it was after [data-derby-close]
+ok   home-old-retired-p390-derby: focus is back on its trigger after [data-derby-close]
+ok   home-old-retired-p390-derby: body lock released after [data-derby-close]
+ok   home-old-retired-p390-derby-esc: its trigger can be pressed
+ok   home-old-retired-p390-derby-esc: opens
+ok   home-old-retired-p390-derby-esc: the page did not move when it opened
+ok   home-old-retired-p390-derby-esc: the dialog is inside the viewport
+ok   home-old-retired-p390-derby-esc: nothing cut off sideways
+info home-old-retired-p390-derby-esc: help button inside :: true
+ok   home-old-retired-p390-derby-esc: closes with Escape
+ok   home-old-retired-p390-derby-esc: the page is where it was after Escape
+ok   home-old-retired-p390-derby-esc: focus is back on its trigger after Escape
+ok   home-old-retired-p390-derby-esc: body lock released after Escape
+ok   home-old-retired-p390-ratings: its trigger can be pressed
+ok   home-old-retired-p390-ratings: opens
+ok   home-old-retired-p390-ratings: the page did not move when it opened
+ok   home-old-retired-p390-ratings: the dialog is inside the viewport
+FAIL home-old-retired-p390-ratings: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-old-retired-p390-ratings: help button inside :: true
+info home-old-retired-p390-ratings: compare enabled :: 1
+ok   home-old-retired-p390-compare: Swap seasons swaps the two sides
+ok   home-old-retired-p390-ratings: the ? shows the rules and an example
+ok   home-old-retired-p390-ratings: closes with [data-season-history-close]
+ok   home-old-retired-p390-ratings: the page is where it was after [data-season-history-close]
+ok   home-old-retired-p390-ratings: focus is back on its trigger after [data-season-history-close]
+ok   home-old-retired-p390-ratings: body lock released after [data-season-history-close]
+ok   home-old-retired-p390-ratings-esc: its trigger can be pressed
+ok   home-old-retired-p390-ratings-esc: opens
+ok   home-old-retired-p390-ratings-esc: the page did not move when it opened
+ok   home-old-retired-p390-ratings-esc: the dialog is inside the viewport
+FAIL home-old-retired-p390-ratings-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Read your saved season ratings, compare "],"outside":[]}
+info home-old-retired-p390-ratings-esc: help button inside :: true
+ok   home-old-retired-p390-ratings-esc: closes with Escape
+ok   home-old-retired-p390-ratings-esc: the page is where it was after Escape
+ok   home-old-retired-p390-ratings-esc: focus is back on its trigger after Escape
+ok   home-old-retired-p390-ratings-esc: body lock released after Escape
+ok   home-old-retired-p390-story: its trigger can be pressed
+ok   home-old-retired-p390-story: opens
+ok   home-old-retired-p390-story: the page did not move when it opened
+ok   home-old-retired-p390-story: the dialog is inside the viewport
+FAIL home-old-retired-p390-story: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-retired-p390-story: help button inside :: false
+info home-old-retired-p390-story: chapters :: 42
+ok   home-old-retired-p390-story: Next then Previous lands on the chapter it left
+ok   home-old-retired-p390-story: All seasons puts focus on the tile it opened
+ok   home-old-retired-p390-story: closes with [data-story-close]
+ok   home-old-retired-p390-story: the page is where it was after [data-story-close]
+ok   home-old-retired-p390-story: focus is back on its trigger after [data-story-close]
+ok   home-old-retired-p390-story: body lock released after [data-story-close]
+ok   home-old-retired-p390-story-esc: its trigger can be pressed
+ok   home-old-retired-p390-story-esc: opens
+ok   home-old-retired-p390-story-esc: the page did not move when it opened
+ok   home-old-retired-p390-story-esc: the dialog is inside the viewport
+FAIL home-old-retired-p390-story-esc: nothing cut off sideways :: {"hScroll":false,"clipped":["Close"],"outside":[]}
+info home-old-retired-p390-story-esc: help button inside :: false
+ok   home-old-retired-p390-story-esc: closes with Escape
+ok   home-old-retired-p390-story-esc: the page is where it was after Escape
+ok   home-old-retired-p390-story-esc: focus is back on its trigger after Escape
+ok   home-old-retired-p390-story-esc: body lock released after Escape
+info home-old-retired-p390: trophy categories :: [{"c":"league","label":"Leagues: 6. View winning seasons"},{"c":"domestic","label":"Cups: 4. View winning seasons"},{"c":"ucl","label":"UCL: 0. View winning seasons"},{"c":"club","label":"Copa Libertadores: 4. View winning seasons"},{"c":"world","label":"World Cup: 2. View winning seasons"},{"c":"continental","label":"Continental: 1. View winning seasons"},{"c":"ballon","label":"Ballon d'Or: 0. View winning seasons"}]
+ok   home-old-retired-p390-trophy-club: its trigger can be pressed
+ok   home-old-retired-p390-trophy-club: opens
+ok   home-old-retired-p390-trophy-club: the page did not move when it opened
+ok   home-old-retired-p390-trophy-club: the dialog is inside the viewport
+ok   home-old-retired-p390-trophy-club: nothing cut off sideways
+info home-old-retired-p390-trophy-club: help button inside :: true
+ok   home-old-retired-p390-trophy-club: closes with [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-club: the page is where it was after [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-club: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-club: body lock released after [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-club-esc: its trigger can be pressed
+ok   home-old-retired-p390-trophy-club-esc: opens
+ok   home-old-retired-p390-trophy-club-esc: the page did not move when it opened
+ok   home-old-retired-p390-trophy-club-esc: the dialog is inside the viewport
+ok   home-old-retired-p390-trophy-club-esc: nothing cut off sideways
+info home-old-retired-p390-trophy-club-esc: help button inside :: true
+ok   home-old-retired-p390-trophy-club-esc: closes with Escape
+ok   home-old-retired-p390-trophy-club-esc: the page is where it was after Escape
+ok   home-old-retired-p390-trophy-club-esc: focus is back on its trigger after Escape
+ok   home-old-retired-p390-trophy-club-esc: body lock released after Escape
+ok   home-old-retired-p390-trophy-domestic: its trigger can be pressed
+ok   home-old-retired-p390-trophy-domestic: opens
+ok   home-old-retired-p390-trophy-domestic: the page did not move when it opened
+ok   home-old-retired-p390-trophy-domestic: the dialog is inside the viewport
+ok   home-old-retired-p390-trophy-domestic: nothing cut off sideways
+info home-old-retired-p390-trophy-domestic: help button inside :: true
+ok   home-old-retired-p390-trophy-domestic: closes with [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-domestic: the page is where it was after [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-domestic: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-domestic: body lock released after [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-domestic-esc: its trigger can be pressed
+ok   home-old-retired-p390-trophy-domestic-esc: opens
+ok   home-old-retired-p390-trophy-domestic-esc: the page did not move when it opened
+ok   home-old-retired-p390-trophy-domestic-esc: the dialog is inside the viewport
+ok   home-old-retired-p390-trophy-domestic-esc: nothing cut off sideways
+info home-old-retired-p390-trophy-domestic-esc: help button inside :: true
+ok   home-old-retired-p390-trophy-domestic-esc: closes with Escape
+ok   home-old-retired-p390-trophy-domestic-esc: the page is where it was after Escape
+ok   home-old-retired-p390-trophy-domestic-esc: focus is back on its trigger after Escape
+ok   home-old-retired-p390-trophy-domestic-esc: body lock released after Escape
+ok   home-old-retired-p390-trophy-league: its trigger can be pressed
+ok   home-old-retired-p390-trophy-league: opens
+ok   home-old-retired-p390-trophy-league: the page did not move when it opened
+ok   home-old-retired-p390-trophy-league: the dialog is inside the viewport
+ok   home-old-retired-p390-trophy-league: nothing cut off sideways
+info home-old-retired-p390-trophy-league: help button inside :: true
+ok   home-old-retired-p390-trophy-league: closes with [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-league: the page is where it was after [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-league: focus is back on its trigger after [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-league: body lock released after [data-trophy-back="career"]
+ok   home-old-retired-p390-trophy-league-esc: its trigger can be pressed
+ok   home-old-retired-p390-trophy-league-esc: opens
+ok   home-old-retired-p390-trophy-league-esc: the page did not move when it opened
+ok   home-old-retired-p390-trophy-league-esc: the dialog is inside the viewport
+ok   home-old-retired-p390-trophy-league-esc: nothing cut off sideways
+info home-old-retired-p390-trophy-league-esc: help button inside :: true
+ok   home-old-retired-p390-trophy-league-esc: closes with Escape
+ok   home-old-retired-p390-trophy-league-esc: the page is where it was after Escape
+ok   home-old-retired-p390-trophy-league-esc: focus is back on its trigger after Escape
+ok   home-old-retired-p390-trophy-league-esc: body lock released after Escape
+ok   home-old-retired-p390: the tiles read the same after a reload
+ok   home-old-retired-p390: no page or console error
+scene old-retired-p390 done in 36s, 140 shots, 9.0 MB so far
+info home-old-home-p390-MAIN: top facts :: {"help":{"l":0,"t":89,"w":36,"h":36,"pos":"absolute"},"training":null,"phone":null,"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":{"l":12,"t":778,"w":169,"h":48,"pos":"static"},"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}},{"what":"button:Open the training ground","box":{"l":318,"t":700,"w":56,"h":56,"pos":"fixed"}},{"what":"button:Open your phone","box":{"l":318,"t":768,"w":56,"h":56,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-old-home-p390-MAIN: page height 12908px = 15.3 screens, sideways scroll false
+ok   home-old-home-p390-MAIN: the page has no sideways scroll
+info home-old-home-p390-MAIN: tiles :: ["CAREER STATS Only stats kept in your season records are shown. 527 Apps 279 Goals 81 Assists 17 Trophies 🔥 Derbies: 37 played, 22 W 10 D 5 L, 21 goals"]
+info home-old-home-p390-MAIN: errors on main :: []
+scene main-old-home-p390 done in 2s, 142 shots, 9.5 MB so far
+info home-old-home-d1280-MAIN: top facts :: {"help":{"l":192,"t":85,"w":40,"h":40,"pos":"absolute"},"training":null,"phone":null,"nav":{"l":0,"t":32,"w":1280,"h":53,"pos":"static"},"next":{"l":144,"t":834,"w":658,"h":48,"pos":"static"},"floaters":[{"what":"ol:","box":{"l":860,"t":868,"w":420,"h":32,"pos":"fixed"}},{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}},{"what":"button:Open the training ground","box":{"l":1208,"t":756,"w":56,"h":56,"pos":"fixed"}},{"what":"button:Open your phone","box":{"l":1208,"t":824,"w":56,"h":56,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info home-old-home-d1280-MAIN: page height 9207px = 10.2 screens, sideways scroll false
+ok   home-old-home-d1280-MAIN: the page has no sideways scroll
+info home-old-home-d1280-MAIN: tiles :: ["CAREER STATS Only stats kept in your season records are shown. 527 Apps 279 Goals 81 Assists 17 Trophies 🔥 Derbies: 37 played, 22 W 10 D 5 L, 21 goals"]
+info home-old-home-d1280-MAIN: errors on main :: []
+scene main-old-home-d1280 done in 2s, 144 shots, 10.2 MB so far
+ok   screen-old-summary-p390-MAIN: no sideways scroll
+info screen-old-summary-p390-MAIN: result lines :: []
+info screen-old-summary-p390-MAIN: top facts :: {"help":{"l":0,"t":89,"w":36,"h":36,"pos":"absolute"},"training":null,"phone":null,"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}},{"what":"button:Open the training ground","box":{"l":318,"t":700,"w":56,"h":56,"pos":"fixed"}},{"what":"button:Open your phone","box":{"l":318,"t":768,"w":56,"h":56,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-old-summary-p390-MAIN: buttons a player needs :: ["button:Continue → [34,402,322,40]"]
+ok   screen-old-summary-p390-MAIN: nothing floats over the button a player needs
+ok   screen-old-summary-p390-MAIN: no page or console error
+scene main-old-summary-p390 done in 2s, 146 shots, 10.8 MB so far
+ok   screen-new-summary-p390: no sideways scroll
+info screen-new-summary-p390: result lines :: ["🎯 Target missed Make 8 club assists. Finished on 5.","🏃 Development push completed +1 shooting after natural growth.","Your smaller role at Liverpool was applied to this season's selection plan (4 fewer league games before limits, injuries and bans). That plan is now finished.","You reached 100 senior club goals this season. Your recorded tally went from 90 to 112."]
+info screen-new-summary-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-summary-p390: buttons a player needs :: ["button:Continue → [34,400,322,44]"]
+ok   screen-new-summary-p390: nothing floats over the button a player needs
+info screen-new-summary-p390: after "Continue" the save is on phase ballon_dor, mentor none, role plan null
+ok   screen-new-summary-p390: no page or console error
+scene summary-p390 done in 4s, 149 shots, 11.5 MB so far
+ok   screen-new-summary-d1280: no sideways scroll
+info screen-new-summary-d1280: result lines :: ["🎯 Target missed Make 8 club assists. Finished on 5.","🏃 Development push completed +1 shooting after natural growth.","Your smaller role at Liverpool was applied to this season's selection plan (4 fewer league games before limits, injuries and bans). That plan is now finished.","You reached 100 senior club goals this season. Your recorded tally went from 90 to 112."]
+info screen-new-summary-d1280: top facts :: {"help":{"l":192,"t":85,"w":40,"h":40,"pos":"absolute"},"training":{"l":1208,"t":756,"w":56,"h":56,"pos":"fixed"},"phone":{"l":1208,"t":824,"w":56,"h":56,"pos":"fixed"},"nav":{"l":0,"t":32,"w":1280,"h":53,"pos":"static"},"next":null,"floaters":[{"what":"ol:","box":{"l":860,"t":868,"w":420,"h":32,"pos":"fixed"}},{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}},{"what":"button:Open the training ground","box":{"l":1208,"t":756,"w":56,"h":56,"pos":"fixed"}},{"what":"button:Open your phone","box":{"l":1208,"t":824,"w":56,"h":56,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-summary-d1280: buttons a player needs :: ["button:Continue → [438,428,676,44]"]
+ok   screen-new-summary-d1280: nothing floats over the button a player needs
+ok   screen-new-summary-d1280: no page or console error
+scene summary-d1280 done in 2s, 151 shots, 12.2 MB so far
+ok   screen-new-summary-t768: no sideways scroll
+info screen-new-summary-t768: result lines :: ["🎯 Target missed Make 8 club assists. Finished on 5.","🏃 Development push completed +1 shooting after natural growth.","Your smaller role at Liverpool was applied to this season's selection plan (4 fewer league games before limits, injuries and bans). That plan is now finished.","You reached 100 senior club goals this season. Your recorded tally went from 90 to 112."]
+info screen-new-summary-t768: top facts :: {"help":{"l":0,"t":125,"w":40,"h":40,"pos":"absolute"},"training":{"l":696,"t":880,"w":56,"h":56,"pos":"fixed"},"phone":{"l":696,"t":948,"w":56,"h":56,"pos":"fixed"},"nav":{"l":0,"t":32,"w":768,"h":93,"pos":"static"},"next":null,"floaters":[{"what":"ol:","box":{"l":348,"t":992,"w":420,"h":32,"pos":"fixed"}},{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}},{"what":"button:Open the training ground","box":{"l":696,"t":880,"w":56,"h":56,"pos":"fixed"}},{"what":"button:Open your phone","box":{"l":696,"t":948,"w":56,"h":56,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-summary-t768: buttons a player needs :: ["button:Continue → [310,490,420,44]"]
+ok   screen-new-summary-t768: nothing floats over the button a player needs
+ok   screen-new-summary-t768: no page or console error
+scene summary-t768 done in 2s, 152 shots, 12.3 MB so far
+ok   screen-new-summary-milestone-p390: no sideways scroll
+info screen-new-summary-milestone-p390: result lines :: ["🎯 Target missed Earn a 7.2 club season rating over 10+ appearances. Finished on 7.1.","🏃 Recovery focus completed -1 shooting after natural growth.","You reached 100 senior club goals this season. Your recorded tally went from 91 to 104."]
+info screen-new-summary-milestone-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-summary-milestone-p390: buttons a player needs :: ["button:Continue → [34,400,322,44]"]
+ok   screen-new-summary-milestone-p390: nothing floats over the button a player needs
+ok   screen-new-summary-milestone-p390: no page or console error
+scene summary-milestone-p390 done in 2s, 154 shots, 12.9 MB so far
+ok   screen-new-summary-milestone-p320: no sideways scroll
+info screen-new-summary-milestone-p320: result lines :: ["🎯 Target missed Earn a 7.2 club season rating over 10+ appearances. Finished on 7.1.","🏃 Recovery focus completed -1 shooting after natural growth.","You reached 100 senior club goals this season. Your recorded tally went from 91 to 104."]
+info screen-new-summary-milestone-p320: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":144,"h":44,"pos":"relative"},"phone":{"l":164,"t":149,"w":144,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":320,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-summary-milestone-p320: buttons a player needs :: ["button:Continue → [34,298,252,44]"]
+ok   screen-new-summary-milestone-p320: nothing floats over the button a player needs
+ok   screen-new-summary-milestone-p320: no page or console error
+scene summary-milestone-p320 done in 2s, 155 shots, 13.4 MB so far
+ok   screen-new-summary-role-p390: no sideways scroll
+info screen-new-summary-role-p390: result lines :: ["🎯 Target missed Keep 21 club clean sheets. Finished on 13.","🏃 Development push completed +1 reflexes after natural growth.","Your smaller role at Bayern Munich was applied to this season's selection plan (4 fewer league games before limits, injuries and bans). That plan is now finished."]
+info screen-new-summary-role-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-summary-role-p390: buttons a player needs :: ["button:Continue → [34,400,322,44]"]
+ok   screen-new-summary-role-p390: nothing floats over the button a player needs
+ok   screen-new-summary-role-p390: no page or console error
+scene summary-role-p390 done in 2s, 157 shots, 14.0 MB so far
+ok   screen-new-news-milestone-p390: no sideways scroll
+info screen-new-news-milestone-p390: result lines :: []
+info screen-new-news-milestone-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-news-milestone-p390: buttons a player needs :: ["button:Continue to Season Summa [12,400,366,44]"]
+ok   screen-new-news-milestone-p390: nothing floats over the button a player needs
+info screen-new-news-milestone-p390: after "Continue to Season Summary" the save is on phase season_summary, mentor none, role plan null
+ok   screen-new-news-milestone-p390: no page or console error
+scene news-milestone-p390 done in 4s, 160 shots, 14.6 MB so far
+ok   screen-new-event-mentor-p390: no sideways scroll
+info screen-new-event-mentor-p390: result lines :: []
+info screen-new-event-mentor-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-event-mentor-p390: buttons a player needs :: ["button:🤝Take them under your w [34,377,322,91]"]
+ok   screen-new-event-mentor-p390: nothing floats over the button a player needs
+info screen-new-event-mentor-p390: after "Take them under your wing" the save is on phase random_events, mentor Juvenal Paiva, role plan null
+ok   screen-new-event-mentor-p390: no page or console error
+scene event-mentor-p390 done in 4s, 163 shots, 15.2 MB so far
+ok   screen-new-event-manager-p390: no sideways scroll
+info screen-new-event-manager-p390: result lines :: []
+info screen-new-event-manager-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-event-manager-p390: buttons a player needs :: ["button:💪Prove yourself in trai [34,385,322,75]","button:😔Accept reduced roleMor [34,376,322,91]"]
+ok   screen-new-event-manager-p390: nothing floats over the button a player needs
+info screen-new-event-manager-p390: after "Accept reduced role" the save is on phase random_events, mentor Hendrik Reinhardt, role plan {"club":"Bayern Munich","year":2028}
+ok   screen-new-event-manager-p390: no page or console error
+scene event-manager-p390 done in 4s, 166 shots, 15.8 MB so far
+ok   screen-old-summary-p390: no sideways scroll
+info screen-old-summary-p390: result lines :: ["You reached 100 senior club goals this season. Your recorded tally went from 88 to 101."]
+info screen-old-summary-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":{"l":12,"t":149,"w":179,"h":44,"pos":"relative"},"phone":{"l":199,"t":149,"w":179,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-old-summary-p390: buttons a player needs :: ["button:Continue → [34,400,322,44]"]
+ok   screen-old-summary-p390: nothing floats over the button a player needs
+info screen-old-summary-p390: after "Continue" the save is on phase ballon_dor, mentor none, role plan null
+ok   screen-old-summary-p390: no page or console error
+scene old-summary-p390 done in 4s, 168 shots, 16.4 MB so far
+ok   screen-new-ceremony-p390: no sideways scroll
+info screen-new-ceremony-p390: result lines :: []
+info screen-new-ceremony-p390: top facts :: {"help":{"l":0,"t":89,"w":44,"h":44,"pos":"absolute"},"training":null,"phone":{"l":12,"t":149,"w":366,"h":44,"pos":"relative"},"nav":{"l":0,"t":0,"w":390,"h":89,"pos":"static"},"next":null,"floaters":[{"what":"a:Skip to main content","box":{"l":8,"t":-100,"w":190,"h":44,"pos":"fixed"}}],"helpCutsTraining":false,"helpCutsPhone":false,"phoneCutsNext":false,"trainingCutsNext":false}
+info screen-new-ceremony-p390: buttons a player needs :: []
+ok   screen-new-ceremony-p390: nothing floats over the button a player needs
+ok   screen-new-ceremony-p390: no page or console error
+scene ceremony-p390 done in 2s, 169 shots, 16.4 MB so far
+info play-new-home-p390: chosen :: {"ambition":{"id":"goals","label":"Score 19 club goals","stat":"goals","target":19,"rewardStat":"shooting","year":2040,"club":"Bayern Munich"},"preparation":{"id":"push","year":2040,"club":"Bayern Munich"}}
+FAIL play-new-home-p390: walk :: "page.waitForFunction: Timeout 60000ms exceeded.\n    at playOne (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/scWalk.mjs:364:16)\n    at async scene (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/scWalk.mjs:400:9)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/scWalk.mjs:440:1"
+ok   play-new-home-p390: no page or console error
+scene play-p390 done in 64s, 170 shots, 16.4 MB so far
+info play-new-one-season-d1280: chosen :: {"ambition":{"id":"goals","label":"Score 10 club goals","stat":"goals","target":10,"rewardStat":"shooting","year":2023,"club":"Real Madrid"},"preparation":{"id":"push","year":2023,"club":"Real Madrid"}}
+info play-new-one-season-d1280: step 0 phase newspaper :: []
+info play-new-one-season-d1280: pressed :: "Continue to Season Summary →"
+info play-new-one-season-d1280: step 1 phase season_summary :: ["🎯 Target met Score 10 club goals. Finished on 10. +1 Shooting queued for next season's growth.","🏃 Development push completed +1 shooting after natural growth."]
+ok   play-new-one-season-d1280: the summary prints the saved target result
+ok   play-new-one-season-d1280: the summary prints the saved preseason result
+ok   play-new-one-season-d1280: Continue is not covered
+ok   play-new-one-season-d1280: no page or console error
+scene play-d1280 done in 7s, 172 shots, 17.1 MB so far
+sc-screens walk: 1890 checks, 95 failed, 172 shots, 17.1 MB

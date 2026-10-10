@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+old exit=0 3s | scMake old: 10 saves from 16 careers and 277 senior seasons, by the code in /tmp/base
+new exit=0 5s | scMake new: 13 saves from 40 careers and 687 senior seasons, by the code in /home/runner/work/ballpark-hero/ballpark-hero
+basebuild exit=0 29s | about
+walk exit=1 579s | sc-screens walk: 1890 checks, 95 failed, 172 shots, 17.1 MB
