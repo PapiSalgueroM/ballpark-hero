@@ -1,6 +1,7 @@
 // Soccer Career Simulation Engine v2, Youth Academy + Pro System
 
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
+import type { SoccerAgentReview } from './soccerAgentReview';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
 import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
@@ -1064,6 +1065,7 @@ export interface CareerState {
   /** Round 49 life layer. Optional so pre-R49 saves keep loading. */
   personality?: string | null; // showman | iceman | hothead | professor | enigma
   agentId?: string | null;     // cousin | shark | super | self
+  agentReview?: SoccerAgentReview;
   lifeFlags?: Record<string, number>; // chained life-event arcs
   /** Round 54 realism layer. All optional so pre-R54 saves keep loading. */
   appearance?: PlayerAppearance | null; // create-your-look, rendered by PlayerAvatar

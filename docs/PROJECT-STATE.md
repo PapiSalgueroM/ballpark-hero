@@ -1,3 +1,7 @@
+## Codex rounds1244-1246 in progress: deliberate agent review (2026-10-10)
+
+Branch codex/career-agent-review starts from main09df145abfb241679022b41903d2f19bc254ebf9. Existing chosen Soccer agents already alter wages, commissions and offer chances; this round adds an intentional reviewed switch using the same catalog. Once per real recorded season, no instant economics or draws, strict optional save receipt and stale/duplicate action guards. Only fully verified isolated draft source may become READY. G owns integration/main/merge/publish, combined seams remain unclaimed. Contract docs/ROUND1244-1246.md. All runtime remote-only. No ROOT PROJECT-STATE write.
+
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,
