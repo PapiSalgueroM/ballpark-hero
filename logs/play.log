@@ -1,0 +1,3 @@
+{"soccer":36,"seasonsPlayed":72,"retired":0,"readers":36,"newFieldsOnLoad":0,"manager":19,"entriesPlayed":674,"matches":643,"realFixturesOnOld":0,"varOnOldLive":0}
+oldSaveProbe play: 36 Soccer Career saves made by /tmp/base loaded, 36 read by every new reader, 72 more seasons played (0 retired on the way); 19 Club Manager saves loaded, 674 entries and 643 matches played on with reviews on
+oldSaveProbe: green. Every save made by the old code loads, is read by the new screens and plays on.

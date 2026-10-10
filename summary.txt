@@ -1,0 +1,2 @@
+make exit=0 3s | oldSaveProbe make: 36 Soccer Career saves (35 not at a season start, 20 with seven or more recorded rows), 19 Club Manager saves (1 at half time); sha e801ba98497ea298
+play exit=0 8s | oldSaveProbe: green. Every save made by the old code loads, is read by the new screens and plays on.
