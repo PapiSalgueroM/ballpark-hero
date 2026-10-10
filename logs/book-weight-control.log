@@ -1,0 +1,10 @@
+simCmLeagueBook: 4 careers x 2 seasons (default fleet, seed set 0), CONTROL weight
+stream  base arm: 5 of 16 faces (the whole save but the book, and the count of draws) equal to the base commit's source
+RED   stream   16 checks, 11 failed
+        Everton (now, seed 4649) at the end of season 1: base 8c3a7863b5496792a1c6b0ca|48956, candidate a57d4de1adaecf170edf518b|50187
+        Everton (now, seed 4649) after the summer of season 1: base d796550475df3d4991e7bb7d|49765, candidate 9fd56c3b40d3f202cb34ac2f|51025
+        Everton (now, seed 4649) at the end of season 2: base c42afc1f1355c19057435f99|101722, candidate 4e08be2a21e329de4e7bdd60|98989
+        Everton (now, seed 4649) after the summer of season 2: base c4f3a5c0f85f804cd9a11f5a|102554, candidate 52806f9877f5bf4f80d71f19|99817
+        Southampton (now, seed 4780) at the end of season 1: base 28b04ac891d01ec6e062bce7|54459, candidate 6b657188ef51ebc759548f90|54459
+        Southampton (now, seed 4780) at the end of season 2: base 8e482922a470af6ee7f34789|102761, candidate b107da69785bb66c92c95fb8|102761
+simCmLeagueBook: CONTROL weight FIRED: section stream went red (11 failures) and no other section did (10s)

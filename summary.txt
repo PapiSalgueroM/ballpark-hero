@@ -1,0 +1,4 @@
+vitest exit=0 3s |    Duration  1.89s (transform 105ms, setup 128ms, collect 146ms, tests 928ms, environment 900ms, prepare 278ms)
+book-weight-control exit=1 12s | simCmLeagueBook: CONTROL weight FIRED: section stream went red (11 failures) and no other section did (10s)
+simHarnessAnchors exit=0 27s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 42s | 
