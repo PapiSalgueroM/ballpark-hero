@@ -1,4 +1,8 @@
-/** Release AT: VAR ships dark.
+/** Round 1218: VAR is switched on. (Release AT shipped it dark: the history is below.)
+ *
+ * THIS LINE MAY ONLY READ TRUE WHILE NOTHING IS OWED in scripts/data/cmVarRates.json:
+ * scripts/simCmVarLedger.mjs fails otherwise (an owed entry is closed by the count it asks for, or by a ruling
+ * of the lead written into the entry, and then node scripts/genCmVarRates.mjs).
  *
  * Round 1181 built a review rule inside the match (src/lib/clubManagerVar.ts). Measured on the integrated
  * tree over 680 seeded matches, asking for reviews changed the score in 196 and the result in 85, and a
@@ -26,7 +30,13 @@
  * into the entry), then this line, the What's New entry and the cases of the unit file follow.
  * docs/audits/ROUND-1218-NOTES.md has the whole list.
  *
+ * The switch commit is that last step: this line reads true, What's New carries the entry, the unit file
+ * asserts the lit rule and the two Quick Sim browser proofs (scripts/playCmQuickSubs.mjs,
+ * scripts/playCmRealFixtures.mjs) ask the engine what the hook asks.
+ *
  * Kept in its own file with no import so the help text, which several harnesses render with a plain
- * bundler, can read it without pulling the hook in. src/test/clubManagerVarLive.test.tsx holds it.
+ * bundler, can read it without pulling the hook in. src/test/clubManagerVarLive.test.tsx holds it:
+ * since the switch moved that file asserts the lit rule, and its control CM_VAR_LIVE_CONTROL=off puts the
+ * dark build back for that file only and must go red.
  */
-export const CM_VAR_LIVE: boolean = false;
+export const CM_VAR_LIVE: boolean = true;
