@@ -1,0 +1,7 @@
+base exit=0 1s | base 24f57a98f head 2dc7a69a5 programme in base: 0
+fleet exit=0 75s | scProbe: 0 failure(s), 0 note(s). Sections run: A B.
+plans exit=1 98s | (57 more failures not printed)
+compose exit=0 84s | scProbe: 0 failure(s), 0 note(s). Sections run: D.
+damaged exit=0 68s | scProbe: 0 failure(s), 16 note(s). Sections run: E.
+wheel exit=0 60s | scProbe: 0 failure(s), 0 note(s). Sections run: F.
+loan exit=0 49s | scProbe: 0 failure(s), 7 note(s). Sections run: G.
