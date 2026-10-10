@@ -1,0 +1,3 @@
+dsh-1 exit=0 35s | simDailySaveHardening: part all green
+dsh-2 exit=1 35s | simDailySaveHardening: 2 failure(s)
+dsh-3 exit=0 34s | simDailySaveHardening: part all green
