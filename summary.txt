@@ -1,0 +1,4 @@
+build exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+c-1 exit=0 279s | [draws] total 48082 in 1 page loads of 1 contexts, walk exit 0; by path: /club-manager 48082
+c-2 exit=0 158s | [draws] total 26546 in 1 page loads of 1 contexts, walk exit 0; by path: /club-manager 26546
+c-3 exit=0 231s | [draws] total 41097 in 1 page loads of 1 contexts, walk exit 0; by path: /club-manager 41097
