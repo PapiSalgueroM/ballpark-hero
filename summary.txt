@@ -1,0 +1,9 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+cmfix-nobase exit=1 2s | Node.js v24.21.0
+cmfix-all exit=1 43s | Node.js v24.21.0
+cmfix-oldbase exit=1 7s | Node.js v24.21.0
+cmfix-badbase-exit2 exit=2 1s | simCmRealFixtures: cannot run: the base 0000000000000000000000000000000000000000 is not a commit this clone has (fatal: Needed a single revision)
+cmfix-control-nobase-exit2 exit=2 1s | simCmRealFixtures: cannot run: a control is judged beside the base comparison, so it needs CM_FIXTURE_BASE=<commit>
+cmfix-noleague-exit2 exit=2 1s | simCmRealFixtures: cannot run: the game's registry has no list for the league laliga
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+cmfix-base-and-walk exit=1 6s | RESULT sim=1 walk=1

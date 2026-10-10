@@ -1,0 +1,71 @@
+FAIL real fixtures premier normal
+
+FAIL premier: settles the actual world league round through the same real fixture resolver
+AssertionError [ERR_ASSERTION]: actual world round: every match of the matchday settled
+
+20 !== 10
+
+    at assertRound (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:117:10)
+    at Object.world (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:434:9)
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:544:33)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:572:54
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   'settles the actual world league round through the same real fixture resolver'
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:558:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:572:54 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'settles the actual world league round through the same real fixture resolver'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+PASS real fixtures premier venues
+simCmRealFixtures venues premier: the copied fault failed exactly its own outcome (ledger) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures premier card
+simCmRealFixtures card premier: the copied fault failed exactly its own outcome (calendar) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures premier settlement
+simCmRealFixtures settlement premier: the copied fault failed exactly its own outcome (settlement) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures premier bye
+simCmRealFixtures bye premier: the copied fault failed exactly its own outcome (bye) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures premier world
+simCmRealFixtures world premier: the copied fault failed exactly its own outcome (world) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures premier edited
+simCmRealFixtures edited premier: the copied fault failed exactly its own outcome (eligibility) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures premier legacy
+simCmRealFixtures legacy premier: the copied fault failed exactly its own outcome (legacy, baseline) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures premier future
+simCmRealFixtures future premier: the copied fault failed exactly its own outcome (future) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+PASS real fixtures premier rollover
+simCmRealFixtures rollover premier: the copied fault failed exactly its own outcome (rollover) and nothing else, beside the base 46e4231cc82b6c047da6e0b4bdb5dfae5628a928.
+SKIP real fixtures premier silent: this list rides with the engine, so it is never absent
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Normal and every effective copied control execute their exact assertions
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:173:12)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmRealFixtures.mjs:572:54 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
