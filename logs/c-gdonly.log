@@ -1,0 +1,3 @@
+  2 400 random tables agree with the second writing of the order. Neighbours split by: points 3328, goal difference 5007, goals 2644, away goals 948, wins 12, away wins 26, opponents' points 742, their goal difference 116, their goals 41, the name 1136
+  control gdonly turned red: [STEP 3] 1, [STEP 4] 1, [STEP 5] 1, [STEP 6] 1, [STEP 7] 1, [STEP 8] 1, [FLEET] 320
+simCmLeaguePhase control gdonly: FIRED (6 of its own failures, e.g. [STEP 3] a pair level on every earlier step is not split by away goals scored)

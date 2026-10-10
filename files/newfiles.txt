@@ -1,0 +1,8 @@
+A	docs/audits/ROUND-1228-NOTES.md
+A	scripts/data/cmUclFormat.json
+A	scripts/data/cmUclFormat.receipt.json
+A	scripts/simCmLeaguePhase.mjs
+A	src/lib/leagueSlate.test.ts
+A	src/lib/leagueSlate.ts
+A	src/lib/uclLeaguePhase.test.ts
+A	src/lib/uclLeaguePhase.ts

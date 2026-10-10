@@ -1,0 +1,7 @@
+CONTROL FIRED(duplicate-opponents) draw-conservation
+CONTROL FIRED(home-imbalance) draw-conservation
+CONTROL FIRED(wrong-r16-route) sporting-paths
+CONTROL FIRED(matchday-double) actual-matchday-commit
+PASS 60 complete original/current historical and old-save callbacks with exact draw vectors.
+PASS three complete modern seasons, all36 rows/144 games and every knockout round finish.
+PASS four healthy outcome groups, four effective copied-source controls and source-held receipts.

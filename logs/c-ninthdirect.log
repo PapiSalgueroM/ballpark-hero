@@ -1,0 +1,5 @@
+  0 ledger: verified F1 F2 F3 F5 F6 F7 F8 F9 F10 F12 F15a F15b F15c F16 | one publisher F4 F13 F18 | to verify F14 F17
+  0 bracket rule from 10 readings of two seasons: seeded lines 1/2, 3/4, 5/6, 7/8 are fed by play-off pairings 15,16,17,18 | 13,14,19,20 | 11,12,21,22 | 9,10,23,24; quarter-finals 1v4 2v3 (lines), the two meet in one semi-final, 1st and 2nd in opposite halves
+  3 2000 draws: 1st in half one 1012, 9th's tie in half one 2000, 9th drawn against 23rd 0
+  control ninthdirect turned red: [SEEDS] 2000, [OUT] 2000, [PLAYOFF] 3005, [MEETS] 2000, [TOSS] 2, [REAL] 1
+simCmLeaguePhase control ninthdirect: FIRED (2000 of its own failures, e.g. [SEEDS] the seeded clubs are positions 2 9 3 5 1 7 4 6 (draw 0))

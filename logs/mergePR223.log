@@ -1,0 +1,7 @@
+merged: round head f7d996f7a with origin/codex/manager-ucl-league-phase 4477e8038
+pr223 sim exit=0 33s | simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+pr223 vitest exit=0 3s |    Duration  2.43s (transform 230ms, setup 174ms, collect 295ms, tests 1.77s, environment 1.04s, prepare 507ms)
+pr223 tsc exit=0 92s | 
+pr223 anchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+pr223 theirs exit=0 39s | PASS four healthy outcome groups, four effective copied-source controls and source-held receipts.
+pr223: ALL GREEN
