@@ -1,0 +1,8 @@
+tsc exit=0 57s | 
+vitest exit=0 3s |    Duration  2.17s (transform 823ms, setup 54ms, collect 1.01s, tests 414ms, environment 304ms, prepare 148ms)
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+gen-instep exit=0 0s | genCmAgesBasis2026: in step, nothing to write
+gen-instep-from-before exit=0 0s | genCmAgesBasis2026: in step, nothing to write
+gen-remedy exit=0 6s | remedy: vitest after the squads change exit 1 (want 1), the generator exit 0 (want 0), vitest after it exit 0 (want 0)
+gen-newman exit=1 0s | the generator on a man with no table row = exit 1 (want 1, a refusal)
+clean-after exit=0 0s | genCmAgesBasis2026: in step, nothing to write

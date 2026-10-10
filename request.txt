@@ -1,0 +1,9 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000
+simLiveScores: node scripts/simLiveScores.mjs
+gen-instep: node scripts/genCmAgesBasis2026.mjs --from HEAD
+gen-instep-from-before: node scripts/genCmAgesBasis2026.mjs --from a54591da
+gen-remedy: node .rc/x/fxGenProof.mjs move && node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000 > $RC_OUT/remedy-before.log 2>&1; a=$?; node scripts/genCmAgesBasis2026.mjs --from HEAD --write; b=$?; node_modules/.bin/vitest run src/test/cmValueCurve.test.ts --testTimeout=300000; c=$?; git checkout -q -- src scripts; echo "remedy: vitest after the squads change exit $a (want 1), the generator exit $b (want 0), vitest after it exit $c (want 0)"; test $a -eq 1 -a $b -eq 0 -a $c -eq 0
+gen-newman: node .rc/x/fxGenProof.mjs newman && node scripts/genCmAgesBasis2026.mjs --from HEAD --write; s=$?; git checkout -q -- src scripts; echo "the generator on a man with no table row = exit $s (want 1, a refusal)"; exit $s
+clean-after: git diff --quiet -- src scripts && echo "the tree is restored" && node scripts/genCmAgesBasis2026.mjs --from HEAD

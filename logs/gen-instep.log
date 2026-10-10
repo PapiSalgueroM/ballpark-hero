@@ -1,0 +1,5 @@
+genCmAgesBasis2026: 4401 men at 384 clubs, carried from HEAD; 0 found at another club, 0 rows given, 0 table rows no longer used
+  1 men share a name with a dated man at another club and keep the table's age
+    a birth date is on file for the name Allan at Corinthians, not at Manchester City: another man's, so the table's age stands
+  the test's three counts: basisCount {"moved":3974,"born":427}, againstShipped {"0":176,"1":4221,"-1":4}, changed 2078
+genCmAgesBasis2026: in step, nothing to write

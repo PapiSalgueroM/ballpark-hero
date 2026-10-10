@@ -1,0 +1,4 @@
+fxGenProof: MUTATION newman APPLIED, a man with no table row was added to AC Milan
+genCmAgesBasis2026: 1 squad men have no table row to carry (new to the squads file, or one of two namesakes who both moved). Read each man's row in the value table and pass it with --rows:
+  Nobody Fix Probe at AC Milan
+the generator on a man with no table row = exit 1 (want 1, a refusal)
