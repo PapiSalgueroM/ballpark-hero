@@ -1,0 +1,103 @@
+   AC Milan man 1: table age now 28
+REV MUTATION basisage APPLIED
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mlevelFrom: the age read run backwards, total[2m > [22m[2mit inverts the read wherever no clamp bit, and the clamped cells are counted
+[22m[39mlevelFrom: clamped cells of 1,664 a top (52 levels by 32 ages): {"94":299,"96":235,"97":203,"98":171}
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mone order in every world: the stretch first, then the age points[2m > [22m[2mover every row of the four past seasons: never more than six down or eight up, nobody past the top
+[22m[39mera2005: 829 of 1727 rows change, swing -6 to 8, on the top of 96: Ronaldinho, Thierry Henry
+era2010: 890 of 1751 rows change, swing -6 to 8, on the top of 97: Cristiano Ronaldo, Lionel Messi
+era2015: 738 of 1659 rows change, swing -6 to 8, on the top of 98: Cristiano Ronaldo, Lionel Messi
+era2020: 862 of 1774 rows change, swing -6 to 8, on the top of 94: Kylian Mbappé, Lionel Messi
+
+ [31m❯[39m src/test/cmValueCurve.test.ts [2m([22m[2m51 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 417[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe fixture is whole, so nothing below can pass empty[32m 2[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe constants and the position map are the recorded ones[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mevery recorded dollar value still gets its recorded value rating[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mratingOf with one argument is still that value rating, so no generator writes a new byte[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe two anchors read as the header says[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mpounds, at one and at two decimals, are the recorded ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22meuros convert at the recorded rate[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe constants are the measured ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mevery age from 14 to 45 is the table typed out by hand, at tops 94, 96, 97 and 98[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mwith no top given the top is 94, and rateFrom is that read for a generator[32m 7[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe age points alone: a point a year under 24, nothing to 29, one at 30 rising to eight[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe half distance limit reads the top of the man own world, never the constant 94[32m 77[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe upper clamp reads the same top: nobody passes the best of his world for being old[32m 70[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mposition is checked and changes nothing[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mratingOf with an age and a position is the value rating read with the age[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mfails closed on a bad value rating, age or position, naming the inputs[32m 4[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe three reads throw on anything that is not a whole number, so no NaN reaches a save[32m 2[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22manswers a whole level from 48 to the top for every rating 48 to 99, every age 14 to 45, every top[32m 8[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22mit is the smallest level whose read is at least the rating, and the top when there is none[32m 3[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22mthe ratings the read skips for a young man are the enumerated ones, and each takes the next level up[32m 3[2mms[22m[39m
+   [32m✓[39m levelFrom: the age read run backwards, total[2m > [22mit inverts the read wherever no clamp bit, and the clamped cells are counted[32m 4[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mreadInWorld stretches, then reads the age on the stretched scale and its own top[32m 1[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22meach past season top is the stretch of the highest rating in its file: 96, 97, 98 and 94[32m 1[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mthe 29 men of the brief table, row for row, from the files main ships[32m 2[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mover every row of the four past seasons: never more than six down or eight up, nobody past the top[32m 3[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcounts whole years to a day[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 1, a birth date on file: the exact age, whichever way the table rule would err[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 2, a bulk row: plus one for a 2026 row and plus two for a 2025 row[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 3, a hand written row: the age as written[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 4, no table row: the age as typed, marked unknown[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma ledger row marked thin is left out: the man keeps the table rule and nothing reads his date[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mAllan twice: the Corinthians man gets his date, the Palmeiras namesake keeps the table rule[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma moved man is found by his table club, and by his baked club[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a club matched date more than two years from the table, naming both ages[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a row the rule was never measured on[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mtwo ledgers that disagree about one man are fatal, and a date with no club must have a twin[32m 1[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmValueCurve.mjs has no import, no require, no file, clock, random or network read[32m 1[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmAges.mjs has no import, no require, no file, clock, random or network read[32m 0[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe checker itself fires: two statistics sites, a wiki, a date the page never printed, a thin row with no reason[32m 3[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery one of the 105 rows meets the rule, and none is thin[32m 21[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery bulk table row holds the age on 1 January of its year, which is what the rule stands on[32m 1[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe three ledgers join with no two dates for one man, and every ledger man is in his squad once[32m 5[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mholds exactly the men of the squads file, in its order[32m 1[2mms[22m[39m
+[31m   [31m×[31m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating[39m[32m 21[2mms[22m[39m
+[31m     → expected { Object (0, 1, ...) } to deeply equal { '0': 176, '1': 4221, '-1': 4 }[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mthe eight 2026 men of the brief table come out of the files alone: squads file, basis, ages rule, age read[32m 5[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mthe checker itself fires: one table publisher, a wiki as the second, a thin league with no reason[32m 2[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mall 27 leagues meet the rule, none is thin, and every game club named is a club of the game[32m 11[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22magrees place for place with the final tables the game already ships (Round 612, a separate research run)[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mis the script library itself, not a second implementation[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mreads a man through its types the way the engine will[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mnothing shipped imports it, or either script library, yet (part two deletes this test with its first import)[32m 145[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[31m[1mAssertionError[22m: expected { Object (0, 1, ...) } to deeply equal { '0': 176, '1': 4221, '-1': 4 }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "-1": 4,[22m
+[2m    "0": 176,[22m
+[32m-   "1": 4221,[39m
+[31m+   "1": 4220,[39m
+[31m+   "2": 1,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m858:28[22m[39m
+    [90m856| [39m       how far the August age sits from the age main ships today. A ne…
+    [90m857| [39m    [34mexpect[39m(basisCount)[33m.[39m[34mtoEqual[39m({ born[33m:[39m [34m423[39m[33m,[39m moved[33m:[39m [34m3974[39m[33m,[39m written[33m:[39m [34m4[39m })[33m;[39m
+    [90m858| [39m    [34mexpect[39m(againstShipped)[33m.[39m[34mtoEqual[39m({ [32m'1'[39m[33m:[39m [34m4221[39m[33m,[39m [32m'0'[39m[33m:[39m [34m176[39m[33m,[39m [32m'-1'[39m[33m:[39m [34m4[39m })[33m;[39m
+    [90m   | [39m                           [31m^[39m
+    [90m859| [39m    [34mexpect[39m(changed)[33m.[39m[34mtoBe[39m([34m2078[39m)[33m;[39m
+    [90m860| [39m    console.log(`2026 at the flip: ${changed} of 4401 ratings change; …
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m50 passed[39m[22m[90m (51)[39m
+[2m   Start at [22m 09:43:32
+[2m   Duration [22m 2.14s[2m (transform 805ms, setup 51ms, collect 976ms, tests 417ms, environment 290ms, prepare 65ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > what every 2026 age will stand on (the basis file)%2C man for man against the squads main ships > every line is what the ages rule resolves from the committed ledgers%2C and its last item is the value rating,line=858,column=28::AssertionError: expected { Object (0, 1, ...) } to deeply equal { '0': 176, '1': 4221, '-1': 4 }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "-1": 4,%0A    "0": 176,%0A-   "1": 4221,%0A+   "1": 4220,%0A+   "2": 1,%0A  }%0A%0A ❯ src/test/cmValueCurve.test.ts:858:28%0A%0A
+rev mutation basisage = exit 1 (1 the test went red, 3 the mutation did not apply, 0 the test missed it)

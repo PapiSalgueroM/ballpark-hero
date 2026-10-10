@@ -1,0 +1,696 @@
+REV MUTATION levelfloor APPLIED
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mone order in every world: the stretch first, then the age points[2m > [22m[2mover every row of the four past seasons: never more than six down or eight up, nobody past the top
+[22m[39mera2005: 829 of 1727 rows change, swing -6 to 8, on the top of 96: Ronaldinho, Thierry Henry
+era2010: 890 of 1751 rows change, swing -6 to 8, on the top of 97: Cristiano Ronaldo, Lionel Messi
+era2015: 738 of 1659 rows change, swing -6 to 8, on the top of 98: Cristiano Ronaldo, Lionel Messi
+era2020: 862 of 1774 rows change, swing -6 to 8, on the top of 94: Kylian Mbappé, Lionel Messi
+
+[90mstdout[2m | src/test/cmValueCurve.test.ts[2m > [22m[2mwhat every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22m[2mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating
+[22m[39m2026 at the flip: 2078 of 4401 ratings change; by points {"0":2323,"1":230,"2":324,"3":110,"4":76,"5":44,"6":20,"7":11,"8":13,"-1":379,"-2":306,"-3":245,"-4":182,"-6":50,"-5":88}
+
+ [31m❯[39m src/test/cmValueCurve.test.ts [2m([22m[2m51 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 430[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe fixture is whole, so nothing below can pass empty[32m 2[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe constants and the position map are the recorded ones[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mevery recorded dollar value still gets its recorded value rating[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mratingOf with one argument is still that value rating, so no generator writes a new byte[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mthe two anchors read as the header says[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22mpounds, at one and at two decimals, are the recorded ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager value curve (recorded before any age read)[2m > [22meuros convert at the recorded rate[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe constants are the measured ones[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mevery age from 14 to 45 is the table typed out by hand, at tops 94, 96, 97 and 98[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mwith no top given the top is 94, and rateFrom is that read for a generator[32m 6[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe age points alone: a point a year under 24, nothing to 29, one at 30 rising to eight[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe half distance limit reads the top of the man own world, never the constant 94[32m 79[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe upper clamp reads the same top: nobody passes the best of his world for being old[32m 69[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mposition is checked and changes nothing[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mratingOf with an age and a position is the value rating read with the age[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mfails closed on a bad value rating, age or position, naming the inputs[32m 4[2mms[22m[39m
+   [32m✓[39m Club Manager rating: the level plus points for age, on the top of the world[2m > [22mthe three reads throw on anything that is not a whole number, so no NaN reaches a save[32m 2[2mms[22m[39m
+[31m   [31m×[31m levelFrom: the age read run backwards, total[2m > [22manswers a whole level from 48 to the top for every rating 48 to 99, every age 14 to 45, every top[39m[32m 18[2mms[22m[39m
+[31m     → expected [ 49, 94, 85, 72 ] to deeply equal [ 48, 94, 85, 72 ][39m
+[31m   [31m×[31m levelFrom: the age read run backwards, total[2m > [22mit is the smallest level whose read is at least the rating, and the top when there is none[39m[32m 10[2mms[22m[39m
+[31m     → expected [ …(504) ] to deeply equal [][39m
+[31m   [31m×[31m levelFrom: the age read run backwards, total[2m > [22mthe ratings the read skips for a young man are the enumerated ones, and each takes the next level up[39m[32m 2[2mms[22m[39m
+[31m     → expected 49 to be 48 // Object.is equality[39m
+[31m   [31m×[31m levelFrom: the age read run backwards, total[2m > [22mit inverts the read wherever no clamp bit, and the clamped cells are counted[39m[32m 2[2mms[22m[39m
+[31m     → expected [ 'level 48 at 24, top 94', …(21) ] to deeply equal [][39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mreadInWorld stretches, then reads the age on the stretched scale and its own top[32m 0[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22meach past season top is the stretch of the highest rating in its file: 96, 97, 98 and 94[32m 1[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mthe 29 men of the brief table, row for row, from the files main ships[32m 3[2mms[22m[39m
+   [32m✓[39m one order in every world: the stretch first, then the age points[2m > [22mover every row of the four past seasons: never more than six down or eight up, nobody past the top[32m 5[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcounts whole years to a day[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 1, a birth date on file: the exact age, whichever way the table rule would err[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 2, a bulk row: plus one for a 2026 row and plus two for a 2025 row[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 3, a hand written row: the age as written[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mcase 4, no table row: the age as typed, marked unknown[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma ledger row marked thin is left out: the man keeps the table rule and nothing reads his date[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mAllan twice: the Corinthians man gets his date, the Palmeiras namesake keeps the table rule[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22ma moved man is found by his table club, and by his baked club[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a club matched date more than two years from the table, naming both ages[32m 0[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mthrows on a row the rule was never measured on[32m 1[2mms[22m[39m
+   [32m✓[39m Club Manager ages for August 2026[2m > [22mtwo ledgers that disagree about one man are fatal, and a date with no club must have a twin[32m 1[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmValueCurve.mjs has no import, no require, no file, clock, random or network read[32m 1[2mms[22m[39m
+   [32m✓[39m the two script libraries stay pure, because the app imports them[2m > [22mscripts/lib/cmAges.mjs has no import, no require, no file, clock, random or network read[32m 0[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe checker itself fires: two statistics sites, a wiki, a date the page never printed, a thin row with no reason[32m 4[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery one of the 105 rows meets the rule, and none is thin[32m 23[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mevery bulk table row holds the age on 1 January of its year, which is what the rule stands on[32m 1[2mms[22m[39m
+   [32m✓[39m the birth date ledger: two publishers of two kinds a man, neither a wiki[2m > [22mthe three ledgers join with no two dates for one man, and every ledger man is in his squad once[32m 5[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mholds exactly the men of the squads file, in its order[32m 1[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mevery line is what the ages rule resolves from the committed ledgers, and its last item is the value rating[32m 10[2mms[22m[39m
+   [32m✓[39m what every 2026 age will stand on (the basis file), man for man against the squads main ships[2m > [22mthe eight 2026 men of the brief table come out of the files alone: squads file, basis, ages rule, age read[32m 4[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mthe checker itself fires: one table publisher, a wiki as the second, a thin league with no reason[32m 2[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22mall 27 leagues meet the rule, none is thin, and every game club named is a club of the game[32m 11[2mms[22m[39m
+   [32m✓[39m the folded final tables: two table publishers a league, neither a wiki[2m > [22magrees place for place with the final tables the game already ships (Round 612, a separate research run)[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mis the script library itself, not a second implementation[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mreads a man through its types the way the engine will[32m 0[2mms[22m[39m
+   [32m✓[39m the typed door the engine will import (src/lib/cmAgeRead.ts)[2m > [22mnothing shipped imports it, or either script library, yet (part two deletes this test with its first import)[32m 147[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mlevelFrom: the age read run backwards, total[2m > [22manswers a whole level from 48 to the top for every rating 48 to 99, every age 14 to 45, every top
+[31m[1mAssertionError[22m: expected [ 49, 94, 85, 72 ] to deeply equal [ 48, 94, 85, 72 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[32m-   48,[39m
+[31m+   49,[39m
+[2m    94,[22m
+[2m    85,[22m
+[2m    72,[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m330:90[22m[39m
+    [90m328| [39m    [34mexpect[39m(bad)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m329| [39m    /* and outside that grid: under the floor, over the cap, a boy, an…
+    [90m330| [39m    expect([levelFrom(40, 20), levelFrom(120, 20), levelFrom(80, 9), l…
+    [90m   | [39m                                                                                         [31m^[39m
+    [90m331| [39m  })[33m;[39m
+    [90m332| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mlevelFrom: the age read run backwards, total[2m > [22mit is the smallest level whose read is at least the rating, and the top when there is none
+[31m[1mAssertionError[22m: expected [ …(504) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "rating 48 at 14, top 94: 49",[39m
+[31m+   "rating 48 at 15, top 94: 49",[39m
+[31m+   "rating 48 at 16, top 94: 49",[39m
+[31m+   "rating 48 at 17, top 94: 49",[39m
+[31m+   "rating 48 at 18, top 94: 49",[39m
+[31m+   "rating 48 at 19, top 94: 49",[39m
+[31m+   "rating 48 at 20, top 94: 49",[39m
+[31m+   "rating 48 at 21, top 94: 49",[39m
+[31m+   "rating 48 at 22, top 94: 49",[39m
+[31m+   "rating 48 at 23, top 94: 49",[39m
+[31m+   "rating 48 at 24, top 94: 49",[39m
+[31m+   "rating 48 at 25, top 94: 49",[39m
+[31m+   "rating 48 at 26, top 94: 49",[39m
+[31m+   "rating 48 at 27, top 94: 49",[39m
+[31m+   "rating 48 at 28, top 94: 49",[39m
+[31m+   "rating 48 at 29, top 94: 49",[39m
+[31m+   "rating 48 at 30, top 94: 49",[39m
+[31m+   "rating 49 at 30, top 94: 49",[39m
+[31m+   "rating 48 at 31, top 94: 49",[39m
+[31m+   "rating 49 at 31, top 94: 49",[39m
+[31m+   "rating 50 at 31, top 94: 49",[39m
+[31m+   "rating 48 at 32, top 94: 49",[39m
+[31m+   "rating 49 at 32, top 94: 49",[39m
+[31m+   "rating 50 at 32, top 94: 49",[39m
+[31m+   "rating 48 at 33, top 94: 49",[39m
+[31m+   "rating 49 at 33, top 94: 49",[39m
+[31m+   "rating 50 at 33, top 94: 49",[39m
+[31m+   "rating 51 at 33, top 94: 49",[39m
+[31m+   "rating 48 at 34, top 94: 49",[39m
+[31m+   "rating 49 at 34, top 94: 49",[39m
+[31m+   "rating 50 at 34, top 94: 49",[39m
+[31m+   "rating 51 at 34, top 94: 49",[39m
+[31m+   "rating 52 at 34, top 94: 49",[39m
+[31m+   "rating 48 at 35, top 94: 49",[39m
+[31m+   "rating 49 at 35, top 94: 49",[39m
+[31m+   "rating 50 at 35, top 94: 49",[39m
+[31m+   "rating 51 at 35, top 94: 49",[39m
+[31m+   "rating 52 at 35, top 94: 49",[39m
+[31m+   "rating 53 at 35, top 94: 49",[39m
+[31m+   "rating 48 at 36, top 94: 49",[39m
+[31m+   "rating 49 at 36, top 94: 49",[39m
+[31m+   "rating 50 at 36, top 94: 49",[39m
+[31m+   "rating 51 at 36, top 94: 49",[39m
+[31m+   "rating 52 at 36, top 94: 49",[39m
+[31m+   "rating 53 at 36, top 94: 49",[39m
+[31m+   "rating 54 at 36, top 94: 49",[39m
+[31m+   "rating 48 at 37, top 94: 49",[39m
+[31m+   "rating 49 at 37, top 94: 49",[39m
+[31m+   "rating 50 at 37, top 94: 49",[39m
+[31m+   "rating 51 at 37, top 94: 49",[39m
+[31m+   "rating 52 at 37, top 94: 49",[39m
+[31m+   "rating 53 at 37, top 94: 49",[39m
+[31m+   "rating 54 at 37, top 94: 49",[39m
+[31m+   "rating 55 at 37, top 94: 49",[39m
+[31m+   "rating 48 at 38, top 94: 49",[39m
+[31m+   "rating 49 at 38, top 94: 49",[39m
+[31m+   "rating 50 at 38, top 94: 49",[39m
+[31m+   "rating 51 at 38, top 94: 49",[39m
+[31m+   "rating 52 at 38, top 94: 49",[39m
+[31m+   "rating 53 at 38, top 94: 49",[39m
+[31m+   "rating 54 at 38, top 94: 49",[39m
+[31m+   "rating 55 at 38, top 94: 49",[39m
+[31m+   "rating 56 at 38, top 94: 49",[39m
+[31m+   "rating 48 at 39, top 94: 49",[39m
+[31m+   "rating 49 at 39, top 94: 49",[39m
+[31m+   "rating 50 at 39, top 94: 49",[39m
+[31m+   "rating 51 at 39, top 94: 49",[39m
+[31m+   "rating 52 at 39, top 94: 49",[39m
+[31m+   "rating 53 at 39, top 94: 49",[39m
+[31m+   "rating 54 at 39, top 94: 49",[39m
+[31m+   "rating 55 at 39, top 94: 49",[39m
+[31m+   "rating 56 at 39, top 94: 49",[39m
+[31m+   "rating 48 at 40, top 94: 49",[39m
+[31m+   "rating 49 at 40, top 94: 49",[39m
+[31m+   "rating 50 at 40, top 94: 49",[39m
+[31m+   "rating 51 at 40, top 94: 49",[39m
+[31m+   "rating 52 at 40, top 94: 49",[39m
+[31m+   "rating 53 at 40, top 94: 49",[39m
+[31m+   "rating 54 at 40, top 94: 49",[39m
+[31m+   "rating 55 at 40, top 94: 49",[39m
+[31m+   "rating 56 at 40, top 94: 49",[39m
+[31m+   "rating 48 at 41, top 94: 49",[39m
+[31m+   "rating 49 at 41, top 94: 49",[39m
+[31m+   "rating 50 at 41, top 94: 49",[39m
+[31m+   "rating 51 at 41, top 94: 49",[39m
+[31m+   "rating 52 at 41, top 94: 49",[39m
+[31m+   "rating 53 at 41, top 94: 49",[39m
+[31m+   "rating 54 at 41, top 94: 49",[39m
+[31m+   "rating 55 at 41, top 94: 49",[39m
+[31m+   "rating 56 at 41, top 94: 49",[39m
+[31m+   "rating 48 at 42, top 94: 49",[39m
+[31m+   "rating 49 at 42, top 94: 49",[39m
+[31m+   "rating 50 at 42, top 94: 49",[39m
+[31m+   "rating 51 at 42, top 94: 49",[39m
+[31m+   "rating 52 at 42, top 94: 49",[39m
+[31m+   "rating 53 at 42, top 94: 49",[39m
+[31m+   "rating 54 at 42, top 94: 49",[39m
+[31m+   "rating 55 at 42, top 94: 49",[39m
+[31m+   "rating 56 at 42, top 94: 49",[39m
+[31m+   "rating 48 at 43, top 94: 49",[39m
+[31m+   "rating 49 at 43, top 94: 49",[39m
+[31m+   "rating 50 at 43, top 94: 49",[39m
+[31m+   "rating 51 at 43, top 94: 49",[39m
+[31m+   "rating 52 at 43, top 94: 49",[39m
+[31m+   "rating 53 at 43, top 94: 49",[39m
+[31m+   "rating 54 at 43, top 94: 49",[39m
+[31m+   "rating 55 at 43, top 94: 49",[39m
+[31m+   "rating 56 at 43, top 94: 49",[39m
+[31m+   "rating 48 at 44, top 94: 49",[39m
+[31m+   "rating 49 at 44, top 94: 49",[39m
+[31m+   "rating 50 at 44, top 94: 49",[39m
+[31m+   "rating 51 at 44, top 94: 49",[39m
+[31m+   "rating 52 at 44, top 94: 49",[39m
+[31m+   "rating 53 at 44, top 94: 49",[39m
+[31m+   "rating 54 at 44, top 94: 49",[39m
+[31m+   "rating 55 at 44, top 94: 49",[39m
+[31m+   "rating 56 at 44, top 94: 49",[39m
+[31m+   "rating 48 at 45, top 94: 49",[39m
+[31m+   "rating 49 at 45, top 94: 49",[39m
+[31m+   "rating 50 at 45, top 94: 49",[39m
+[31m+   "rating 51 at 45, top 94: 49",[39m
+[31m+   "rating 52 at 45, top 94: 49",[39m
+[31m+   "rating 53 at 45, top 94: 49",[39m
+[31m+   "rating 54 at 45, top 94: 49",[39m
+[31m+   "rating 55 at 45, top 94: 49",[39m
+[31m+   "rating 56 at 45, top 94: 49",[39m
+[31m+   "rating 48 at 14, top 96: 49",[39m
+[31m+   "rating 48 at 15, top 96: 49",[39m
+[31m+   "rating 48 at 16, top 96: 49",[39m
+[31m+   "rating 48 at 17, top 96: 49",[39m
+[31m+   "rating 48 at 18, top 96: 49",[39m
+[31m+   "rating 48 at 19, top 96: 49",[39m
+[31m+   "rating 48 at 20, top 96: 49",[39m
+[31m+   "rating 48 at 21, top 96: 49",[39m
+[31m+   "rating 48 at 22, top 96: 49",[39m
+[31m+   "rating 48 at 23, top 96: 49",[39m
+[31m+   "rating 48 at 24, top 96: 49",[39m
+[31m+   "rating 48 at 25, top 96: 49",[39m
+[31m+   "rating 48 at 26, top 96: 49",[39m
+[31m+   "rating 48 at 27, top 96: 49",[39m
+[31m+   "rating 48 at 28, top 96: 49",[39m
+[31m+   "rating 48 at 29, top 96: 49",[39m
+[31m+   "rating 48 at 30, top 96: 49",[39m
+[31m+   "rating 49 at 30, top 96: 49",[39m
+[31m+   "rating 48 at 31, top 96: 49",[39m
+[31m+   "rating 49 at 31, top 96: 49",[39m
+[31m+   "rating 50 at 31, top 96: 49",[39m
+[31m+   "rating 48 at 32, top 96: 49",[39m
+[31m+   "rating 49 at 32, top 96: 49",[39m
+[31m+   "rating 50 at 32, top 96: 49",[39m
+[31m+   "rating 48 at 33, top 96: 49",[39m
+[31m+   "rating 49 at 33, top 96: 49",[39m
+[31m+   "rating 50 at 33, top 96: 49",[39m
+[31m+   "rating 51 at 33, top 96: 49",[39m
+[31m+   "rating 48 at 34, top 96: 49",[39m
+[31m+   "rating 49 at 34, top 96: 49",[39m
+[31m+   "rating 50 at 34, top 96: 49",[39m
+[31m+   "rating 51 at 34, top 96: 49",[39m
+[31m+   "rating 52 at 34, top 96: 49",[39m
+[31m+   "rating 48 at 35, top 96: 49",[39m
+[31m+   "rating 49 at 35, top 96: 49",[39m
+[31m+   "rating 50 at 35, top 96: 49",[39m
+[31m+   "rating 51 at 35, top 96: 49",[39m
+[31m+   "rating 52 at 35, top 96: 49",[39m
+[31m+   "rating 53 at 35, top 96: 49",[39m
+[31m+   "rating 48 at 36, top 96: 49",[39m
+[31m+   "rating 49 at 36, top 96: 49",[39m
+[31m+   "rating 50 at 36, top 96: 49",[39m
+[31m+   "rating 51 at 36, top 96: 49",[39m
+[31m+   "rating 52 at 36, top 96: 49",[39m
+[31m+   "rating 53 at 36, top 96: 49",[39m
+[31m+   "rating 54 at 36, top 96: 49",[39m
+[31m+   "rating 48 at 37, top 96: 49",[39m
+[31m+   "rating 49 at 37, top 96: 49",[39m
+[31m+   "rating 50 at 37, top 96: 49",[39m
+[31m+   "rating 51 at 37, top 96: 49",[39m
+[31m+   "rating 52 at 37, top 96: 49",[39m
+[31m+   "rating 53 at 37, top 96: 49",[39m
+[31m+   "rating 54 at 37, top 96: 49",[39m
+[31m+   "rating 55 at 37, top 96: 49",[39m
+[31m+   "rating 48 at 38, top 96: 49",[39m
+[31m+   "rating 49 at 38, top 96: 49",[39m
+[31m+   "rating 50 at 38, top 96: 49",[39m
+[31m+   "rating 51 at 38, top 96: 49",[39m
+[31m+   "rating 52 at 38, top 96: 49",[39m
+[31m+   "rating 53 at 38, top 96: 49",[39m
+[31m+   "rating 54 at 38, top 96: 49",[39m
+[31m+   "rating 55 at 38, top 96: 49",[39m
+[31m+   "rating 56 at 38, top 96: 49",[39m
+[31m+   "rating 48 at 39, top 96: 49",[39m
+[31m+   "rating 49 at 39, top 96: 49",[39m
+[31m+   "rating 50 at 39, top 96: 49",[39m
+[31m+   "rating 51 at 39, top 96: 49",[39m
+[31m+   "rating 52 at 39, top 96: 49",[39m
+[31m+   "rating 53 at 39, top 96: 49",[39m
+[31m+   "rating 54 at 39, top 96: 49",[39m
+[31m+   "rating 55 at 39, top 96: 49",[39m
+[31m+   "rating 56 at 39, top 96: 49",[39m
+[31m+   "rating 48 at 40, top 96: 49",[39m
+[31m+   "rating 49 at 40, top 96: 49",[39m
+[31m+   "rating 50 at 40, top 96: 49",[39m
+[31m+   "rating 51 at 40, top 96: 49",[39m
+[31m+   "rating 52 at 40, top 96: 49",[39m
+[31m+   "rating 53 at 40, top 96: 49",[39m
+[31m+   "rating 54 at 40, top 96: 49",[39m
+[31m+   "rating 55 at 40, top 96: 49",[39m
+[31m+   "rating 56 at 40, top 96: 49",[39m
+[31m+   "rating 48 at 41, top 96: 49",[39m
+[31m+   "rating 49 at 41, top 96: 49",[39m
+[31m+   "rating 50 at 41, top 96: 49",[39m
+[31m+   "rating 51 at 41, top 96: 49",[39m
+[31m+   "rating 52 at 41, top 96: 49",[39m
+[31m+   "rating 53 at 41, top 96: 49",[39m
+[31m+   "rating 54 at 41, top 96: 49",[39m
+[31m+   "rating 55 at 41, top 96: 49",[39m
+[31m+   "rating 56 at 41, top 96: 49",[39m
+[31m+   "rating 48 at 42, top 96: 49",[39m
+[31m+   "rating 49 at 42, top 96: 49",[39m
+[31m+   "rating 50 at 42, top 96: 49",[39m
+[31m+   "rating 51 at 42, top 96: 49",[39m
+[31m+   "rating 52 at 42, top 96: 49",[39m
+[31m+   "rating 53 at 42, top 96: 49",[39m
+[31m+   "rating 54 at 42, top 96: 49",[39m
+[31m+   "rating 55 at 42, top 96: 49",[39m
+[31m+   "rating 56 at 42, top 96: 49",[39m
+[31m+   "rating 48 at 43, top 96: 49",[39m
+[31m+   "rating 49 at 43, top 96: 49",[39m
+[31m+   "rating 50 at 43, top 96: 49",[39m
+[31m+   "rating 51 at 43, top 96: 49",[39m
+[31m+   "rating 52 at 43, top 96: 49",[39m
+[31m+   "rating 53 at 43, top 96: 49",[39m
+[31m+   "rating 54 at 43, top 96: 49",[39m
+[31m+   "rating 55 at 43, top 96: 49",[39m
+[31m+   "rating 56 at 43, top 96: 49",[39m
+[31m+   "rating 48 at 44, top 96: 49",[39m
+[31m+   "rating 49 at 44, top 96: 49",[39m
+[31m+   "rating 50 at 44, top 96: 49",[39m
+[31m+   "rating 51 at 44, top 96: 49",[39m
+[31m+   "rating 52 at 44, top 96: 49",[39m
+[31m+   "rating 53 at 44, top 96: 49",[39m
+[31m+   "rating 54 at 44, top 96: 49",[39m
+[31m+   "rating 55 at 44, top 96: 49",[39m
+[31m+   "rating 56 at 44, top 96: 49",[39m
+[31m+   "rating 48 at 45, top 96: 49",[39m
+[31m+   "rating 49 at 45, top 96: 49",[39m
+[31m+   "rating 50 at 45, top 96: 49",[39m
+[31m+   "rating 51 at 45, top 96: 49",[39m
+[31m+   "rating 52 at 45, top 96: 49",[39m
+[31m+   "rating 53 at 45, top 96: 49",[39m
+[31m+   "rating 54 at 45, top 96: 49",[39m
+[31m+   "rating 55 at 45, top 96: 49",[39m
+[31m+   "rating 56 at 45, top 96: 49",[39m
+[31m+   "rating 48 at 14, top 97: 49",[39m
+[31m+   "rating 48 at 15, top 97: 49",[39m
+[31m+   "rating 48 at 16, top 97: 49",[39m
+[31m+   "rating 48 at 17, top 97: 49",[39m
+[31m+   "rating 48 at 18, top 97: 49",[39m
+[31m+   "rating 48 at 19, top 97: 49",[39m
+[31m+   "rating 48 at 20, top 97: 49",[39m
+[31m+   "rating 48 at 21, top 97: 49",[39m
+[31m+   "rating 48 at 22, top 97: 49",[39m
+[31m+   "rating 48 at 23, top 97: 49",[39m
+[31m+   "rating 48 at 24, top 97: 49",[39m
+[31m+   "rating 48 at 25, top 97: 49",[39m
+[31m+   "rating 48 at 26, top 97: 49",[39m
+[31m+   "rating 48 at 27, top 97: 49",[39m
+[31m+   "rating 48 at 28, top 97: 49",[39m
+[31m+   "rating 48 at 29, top 97: 49",[39m
+[31m+   "rating 48 at 30, top 97: 49",[39m
+[31m+   "rating 49 at 30, top 97: 49",[39m
+[31m+   "rating 48 at 31, top 97: 49",[39m
+[31m+   "rating 49 at 31, top 97: 49",[39m
+[31m+   "rating 50 at 31, top 97: 49",[39m
+[31m+   "rating 48 at 32, top 97: 49",[39m
+[31m+   "rating 49 at 32, top 97: 49",[39m
+[31m+   "rating 50 at 32, top 97: 49",[39m
+[31m+   "rating 48 at 33, top 97: 49",[39m
+[31m+   "rating 49 at 33, top 97: 49",[39m
+[31m+   "rating 50 at 33, top 97: 49",[39m
+[31m+   "rating 51 at 33, top 97: 49",[39m
+[31m+   "rating 48 at 34, top 97: 49",[39m
+[31m+   "rating 49 at 34, top 97: 49",[39m
+[31m+   "rating 50 at 34, top 97: 49",[39m
+[31m+   "rating 51 at 34, top 97: 49",[39m
+[31m+   "rating 52 at 34, top 97: 49",[39m
+[31m+   "rating 48 at 35, top 97: 49",[39m
+[31m+   "rating 49 at 35, top 97: 49",[39m
+[31m+   "rating 50 at 35, top 97: 49",[39m
+[31m+   "rating 51 at 35, top 97: 49",[39m
+[31m+   "rating 52 at 35, top 97: 49",[39m
+[31m+   "rating 53 at 35, top 97: 49",[39m
+[31m+   "rating 48 at 36, top 97: 49",[39m
+[31m+   "rating 49 at 36, top 97: 49",[39m
+[31m+   "rating 50 at 36, top 97: 49",[39m
+[31m+   "rating 51 at 36, top 97: 49",[39m
+[31m+   "rating 52 at 36, top 97: 49",[39m
+[31m+   "rating 53 at 36, top 97: 49",[39m
+[31m+   "rating 54 at 36, top 97: 49",[39m
+[31m+   "rating 48 at 37, top 97: 49",[39m
+[31m+   "rating 49 at 37, top 97: 49",[39m
+[31m+   "rating 50 at 37, top 97: 49",[39m
+[31m+   "rating 51 at 37, top 97: 49",[39m
+[31m+   "rating 52 at 37, top 97: 49",[39m
+[31m+   "rating 53 at 37, top 97: 49",[39m
+[31m+   "rating 54 at 37, top 97: 49",[39m
+[31m+   "rating 55 at 37, top 97: 49",[39m
+[31m+   "rating 48 at 38, top 97: 49",[39m
+[31m+   "rating 49 at 38, top 97: 49",[39m
+[31m+   "rating 50 at 38, top 97: 49",[39m
+[31m+   "rating 51 at 38, top 97: 49",[39m
+[31m+   "rating 52 at 38, top 97: 49",[39m
+[31m+   "rating 53 at 38, top 97: 49",[39m
+[31m+   "rating 54 at 38, top 97: 49",[39m
+[31m+   "rating 55 at 38, top 97: 49",[39m
+[31m+   "rating 56 at 38, top 97: 49",[39m
+[31m+   "rating 48 at 39, top 97: 49",[39m
+[31m+   "rating 49 at 39, top 97: 49",[39m
+[31m+   "rating 50 at 39, top 97: 49",[39m
+[31m+   "rating 51 at 39, top 97: 49",[39m
+[31m+   "rating 52 at 39, top 97: 49",[39m
+[31m+   "rating 53 at 39, top 97: 49",[39m
+[31m+   "rating 54 at 39, top 97: 49",[39m
+[31m+   "rating 55 at 39, top 97: 49",[39m
+[31m+   "rating 56 at 39, top 97: 49",[39m
+[31m+   "rating 48 at 40, top 97: 49",[39m
+[31m+   "rating 49 at 40, top 97: 49",[39m
+[31m+   "rating 50 at 40, top 97: 49",[39m
+[31m+   "rating 51 at 40, top 97: 49",[39m
+[31m+   "rating 52 at 40, top 97: 49",[39m
+[31m+   "rating 53 at 40, top 97: 49",[39m
+[31m+   "rating 54 at 40, top 97: 49",[39m
+[31m+   "rating 55 at 40, top 97: 49",[39m
+[31m+   "rating 56 at 40, top 97: 49",[39m
+[31m+   "rating 48 at 41, top 97: 49",[39m
+[31m+   "rating 49 at 41, top 97: 49",[39m
+[31m+   "rating 50 at 41, top 97: 49",[39m
+[31m+   "rating 51 at 41, top 97: 49",[39m
+[31m+   "rating 52 at 41, top 97: 49",[39m
+[31m+   "rating 53 at 41, top 97: 49",[39m
+[31m+   "rating 54 at 41, top 97: 49",[39m
+[31m+   "rating 55 at 41, top 97: 49",[39m
+[31m+   "rating 56 at 41, top 97: 49",[39m
+[31m+   "rating 48 at 42, top 97: 49",[39m
+[31m+   "rating 49 at 42, top 97: 49",[39m
+[31m+   "rating 50 at 42, top 97: 49",[39m
+[31m+   "rating 51 at 42, top 97: 49",[39m
+[31m+   "rating 52 at 42, top 97: 49",[39m
+[31m+   "rating 53 at 42, top 97: 49",[39m
+[31m+   "rating 54 at 42, top 97: 49",[39m
+[31m+   "rating 55 at 42, top 97: 49",[39m
+[31m+   "rating 56 at 42, top 97: 49",[39m
+[31m+   "rating 48 at 43, top 97: 49",[39m
+[31m+   "rating 49 at 43, top 97: 49",[39m
+[31m+   "rating 50 at 43, top 97: 49",[39m
+[31m+   "rating 51 at 43, top 97: 49",[39m
+[31m+   "rating 52 at 43, top 97: 49",[39m
+[31m+   "rating 53 at 43, top 97: 49",[39m
+[31m+   "rating 54 at 43, top 97: 49",[39m
+[31m+   "rating 55 at 43, top 97: 49",[39m
+[31m+   "rating 56 at 43, top 97: 49",[39m
+[31m+   "rating 48 at 44, top 97: 49",[39m
+[31m+   "rating 49 at 44, top 97: 49",[39m
+[31m+   "rating 50 at 44, top 97: 49",[39m
+[31m+   "rating 51 at 44, top 97: 49",[39m
+[31m+   "rating 52 at 44, top 97: 49",[39m
+[31m+   "rating 53 at 44, top 97: 49",[39m
+[31m+   "rating 54 at 44, top 97: 49",[39m
+[31m+   "rating 55 at 44, top 97: 49",[39m
+[31m+   "rating 56 at 44, top 97: 49",[39m
+[31m+   "rating 48 at 45, top 97: 49",[39m
+[31m+   "rating 49 at 45, top 97: 49",[39m
+[31m+   "rating 50 at 45, top 97: 49",[39m
+[31m+   "rating 51 at 45, top 97: 49",[39m
+[31m+   "rating 52 at 45, top 97: 49",[39m
+[31m+   "rating 53 at 45, top 97: 49",[39m
+[31m+   "rating 54 at 45, top 97: 49",[39m
+[31m+   "rating 55 at 45, top 97: 49",[39m
+[31m+   "rating 56 at 45, top 97: 49",[39m
+[31m+   "rating 48 at 14, top 98: 49",[39m
+[31m+   "rating 48 at 15, top 98: 49",[39m
+[31m+   "rating 48 at 16, top 98: 49",[39m
+[31m+   "rating 48 at 17, top 98: 49",[39m
+[31m+   "rating 48 at 18, top 98: 49",[39m
+[31m+   "rating 48 at 19, top 98: 49",[39m
+[31m+   "rating 48 at 20, top 98: 49",[39m
+[31m+   "rating 48 at 21, top 98: 49",[39m
+[31m+   "rating 48 at 22, top 98: 49",[39m
+[31m+   "rating 48 at 23, top 98: 49",[39m
+[31m+   "rating 48 at 24, top 98: 49",[39m
+[31m+   "rating 48 at 25, top 98: 49",[39m
+[31m+   "rating 48 at 26, top 98: 49",[39m
+[31m+   "rating 48 at 27, top 98: 49",[39m
+[31m+   "rating 48 at 28, top 98: 49",[39m
+[31m+   "rating 48 at 29, top 98: 49",[39m
+[31m+   "rating 48 at 30, top 98: 49",[39m
+[31m+   "rating 49 at 30, top 98: 49",[39m
+[31m+   "rating 48 at 31, top 98: 49",[39m
+[31m+   "rating 49 at 31, top 98: 49",[39m
+[31m+   "rating 50 at 31, top 98: 49",[39m
+[31m+   "rating 48 at 32, top 98: 49",[39m
+[31m+   "rating 49 at 32, top 98: 49",[39m
+[31m+   "rating 50 at 32, top 98: 49",[39m
+[31m+   "rating 48 at 33, top 98: 49",[39m
+[31m+   "rating 49 at 33, top 98: 49",[39m
+[31m+   "rating 50 at 33, top 98: 49",[39m
+[31m+   "rating 51 at 33, top 98: 49",[39m
+[31m+   "rating 48 at 34, top 98: 49",[39m
+[31m+   "rating 49 at 34, top 98: 49",[39m
+[31m+   "rating 50 at 34, top 98: 49",[39m
+[31m+   "rating 51 at 34, top 98: 49",[39m
+[31m+   "rating 52 at 34, top 98: 49",[39m
+[31m+   "rating 48 at 35, top 98: 49",[39m
+[31m+   "rating 49 at 35, top 98: 49",[39m
+[31m+   "rating 50 at 35, top 98: 49",[39m
+[31m+   "rating 51 at 35, top 98: 49",[39m
+[31m+   "rating 52 at 35, top 98: 49",[39m
+[31m+   "rating 53 at 35, top 98: 49",[39m
+[31m+   "rating 48 at 36, top 98: 49",[39m
+[31m+   "rating 49 at 36, top 98: 49",[39m
+[31m+   "rating 50 at 36, top 98: 49",[39m
+[31m+   "rating 51 at 36, top 98: 49",[39m
+[31m+   "rating 52 at 36, top 98: 49",[39m
+[31m+   "rating 53 at 36, top 98: 49",[39m
+[31m+   "rating 54 at 36, top 98: 49",[39m
+[31m+   "rating 48 at 37, top 98: 49",[39m
+[31m+   "rating 49 at 37, top 98: 49",[39m
+[31m+   "rating 50 at 37, top 98: 49",[39m
+[31m+   "rating 51 at 37, top 98: 49",[39m
+[31m+   "rating 52 at 37, top 98: 49",[39m
+[31m+   "rating 53 at 37, top 98: 49",[39m
+[31m+   "rating 54 at 37, top 98: 49",[39m
+[31m+   "rating 55 at 37, top 98: 49",[39m
+[31m+   "rating 48 at 38, top 98: 49",[39m
+[31m+   "rating 49 at 38, top 98: 49",[39m
+[31m+   "rating 50 at 38, top 98: 49",[39m
+[31m+   "rating 51 at 38, top 98: 49",[39m
+[31m+   "rating 52 at 38, top 98: 49",[39m
+[31m+   "rating 53 at 38, top 98: 49",[39m
+[31m+   "rating 54 at 38, top 98: 49",[39m
+[31m+   "rating 55 at 38, top 98: 49",[39m
+[31m+   "rating 56 at 38, top 98: 49",[39m
+[31m+   "rating 48 at 39, top 98: 49",[39m
+[31m+   "rating 49 at 39, top 98: 49",[39m
+[31m+   "rating 50 at 39, top 98: 49",[39m
+[31m+   "rating 51 at 39, top 98: 49",[39m
+[31m+   "rating 52 at 39, top 98: 49",[39m
+[31m+   "rating 53 at 39, top 98: 49",[39m
+[31m+   "rating 54 at 39, top 98: 49",[39m
+[31m+   "rating 55 at 39, top 98: 49",[39m
+[31m+   "rating 56 at 39, top 98: 49",[39m
+[31m+   "rating 48 at 40, top 98: 49",[39m
+[31m+   "rating 49 at 40, top 98: 49",[39m
+[31m+   "rating 50 at 40, top 98: 49",[39m
+[31m+   "rating 51 at 40, top 98: 49",[39m
+[31m+   "rating 52 at 40, top 98: 49",[39m
+[31m+   "rating 53 at 40, top 98: 49",[39m
+[31m+   "rating 54 at 40, top 98: 49",[39m
+[31m+   "rating 55 at 40, top 98: 49",[39m
+[31m+   "rating 56 at 40, top 98: 49",[39m
+[31m+   "rating 48 at 41, top 98: 49",[39m
+[31m+   "rating 49 at 41, top 98: 49",[39m
+[31m+   "rating 50 at 41, top 98: 49",[39m
+[31m+   "rating 51 at 41, top 98: 49",[39m
+[31m+   "rating 52 at 41, top 98: 49",[39m
+[31m+   "rating 53 at 41, top 98: 49",[39m
+[31m+   "rating 54 at 41, top 98: 49",[39m
+[31m+   "rating 55 at 41, top 98: 49",[39m
+[31m+   "rating 56 at 41, top 98: 49",[39m
+[31m+   "rating 48 at 42, top 98: 49",[39m
+[31m+   "rating 49 at 42, top 98: 49",[39m
+[31m+   "rating 50 at 42, top 98: 49",[39m
+[31m+   "rating 51 at 42, top 98: 49",[39m
+[31m+   "rating 52 at 42, top 98: 49",[39m
+[31m+   "rating 53 at 42, top 98: 49",[39m
+[31m+   "rating 54 at 42, top 98: 49",[39m
+[31m+   "rating 55 at 42, top 98: 49",[39m
+[31m+   "rating 56 at 42, top 98: 49",[39m
+[31m+   "rating 48 at 43, top 98: 49",[39m
+[31m+   "rating 49 at 43, top 98: 49",[39m
+[31m+   "rating 50 at 43, top 98: 49",[39m
+[31m+   "rating 51 at 43, top 98: 49",[39m
+[31m+   "rating 52 at 43, top 98: 49",[39m
+[31m+   "rating 53 at 43, top 98: 49",[39m
+[31m+   "rating 54 at 43, top 98: 49",[39m
+[31m+   "rating 55 at 43, top 98: 49",[39m
+[31m+   "rating 56 at 43, top 98: 49",[39m
+[31m+   "rating 48 at 44, top 98: 49",[39m
+[31m+   "rating 49 at 44, top 98: 49",[39m
+[31m+   "rating 50 at 44, top 98: 49",[39m
+[31m+   "rating 51 at 44, top 98: 49",[39m
+[31m+   "rating 52 at 44, top 98: 49",[39m
+[31m+   "rating 53 at 44, top 98: 49",[39m
+[31m+   "rating 54 at 44, top 98: 49",[39m
+[31m+   "rating 55 at 44, top 98: 49",[39m
+[31m+   "rating 56 at 44, top 98: 49",[39m
+[31m+   "rating 48 at 45, top 98: 49",[39m
+[31m+   "rating 49 at 45, top 98: 49",[39m
+[31m+   "rating 50 at 45, top 98: 49",[39m
+[31m+   "rating 51 at 45, top 98: 49",[39m
+[31m+   "rating 52 at 45, top 98: 49",[39m
+[31m+   "rating 53 at 45, top 98: 49",[39m
+[31m+   "rating 54 at 45, top 98: 49",[39m
+[31m+   "rating 55 at 45, top 98: 49",[39m
+[31m+   "rating 56 at 45, top 98: 49",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m345:19[22m[39m
+    [90m343| [39m      }
+    [90m344| [39m    }
+    [90m345| [39m    [34mexpect[39m(wrong)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                  [31m^[39m
+    [90m346| [39m  })[33m;[39m
+    [90m347| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mlevelFrom: the age read run backwards, total[2m > [22mthe ratings the read skips for a young man are the enumerated ones, and each takes the next level up
+[31m[1mAssertionError[22m: expected 49 to be 48 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 48[39m
+[31m+ 49[39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m365:70[22m[39m
+    [90m363| [39m        [34mexpect[39m([34mageRead[39m(level [33m-[39m [34m1[39m[33m,[39m age))[33m.[39m[34mtoBe[39m(hole [33m-[39m [34m1[39m)[33m;[39m
+    [90m364| [39m      }
+    [90m365| [39m      for (const hole of underHisFloor) expect(levelFrom(hole, age)).t…
+    [90m   | [39m                                                                     [31m^[39m
+    [90m366| [39m    }
+    [90m367| [39m    /* the founder the critic worked: a rotation man of 21 to 23 rated…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/cmValueCurve.test.ts[2m > [22mlevelFrom: the age read run backwards, total[2m > [22mit inverts the read wherever no clamp bit, and the clamped cells are counted
+[31m[1mAssertionError[22m: expected [ 'level 48 at 24, top 94', …(21) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "level 48 at 24, top 94",[39m
+[31m+   "level 48 at 25, top 94",[39m
+[31m+   "level 48 at 26, top 94",[39m
+[31m+   "level 48 at 27, top 94",[39m
+[31m+   "level 48 at 28, top 94",[39m
+[31m+   "level 48 at 29, top 94",[39m
+[31m+   "level 48 at 30, top 94",[39m
+[31m+   "level 48 at 31, top 94",[39m
+[31m+   "level 48 at 32, top 94",[39m
+[31m+   "level 48 at 33, top 94",[39m
+[31m+   "level 48 at 34, top 94",[39m
+[31m+   "level 48 at 35, top 94",[39m
+[31m+   "level 48 at 36, top 94",[39m
+[31m+   "level 48 at 37, top 94",[39m
+[31m+   "level 48 at 38, top 94",[39m
+[31m+   "level 48 at 39, top 94",[39m
+[31m+   "level 48 at 40, top 94",[39m
+[31m+   "level 48 at 41, top 94",[39m
+[31m+   "level 48 at 42, top 94",[39m
+[31m+   "level 48 at 43, top 94",[39m
+[31m+   "level 48 at 44, top 94",[39m
+[31m+   "level 48 at 45, top 94",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/test/cmValueCurve.test.ts:[2m394:30[22m[39m
+    [90m392| [39m        }
+    [90m393| [39m      }
+    [90m394| [39m      [34mexpect[39m(notTheSameRead)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m   | [39m                             [31m^[39m
+    [90m395| [39m      [34mexpect[39m(notTheLowest)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+    [90m396| [39m      [34mexpect[39m(offALimit)[33m.[39m[34mtoEqual[39m([])[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m47 passed[39m[22m[90m (51)[39m
+[2m   Start at [22m 09:43:20
+[2m   Duration [22m 2.29s[2m (transform 891ms, setup 52ms, collect 1.09s, tests 430ms, environment 292ms, prepare 67ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > levelFrom%3A the age read run backwards%2C total > answers a whole level from 48 to the top for every rating 48 to 99%2C every age 14 to 45%2C every top,line=330,column=90::AssertionError: expected [ 49, 94, 85, 72 ] to deeply equal [ 48, 94, 85, 72 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A-   48,%0A+   49,%0A    94,%0A    85,%0A    72,%0A  ]%0A%0A ❯ src/test/cmValueCurve.test.ts:330:90%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > levelFrom%3A the age read run backwards%2C total > it is the smallest level whose read is at least the rating%2C and the top when there is none,line=345,column=19::AssertionError: expected [ …(504) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "rating 48 at 14, top 94: 49",%0A+   "rating 48 at 15, top 94: 49",%0A+   "rating 48 at 16, top 94: 49",%0A+   "rating 48 at 17, top 94: 49",%0A+   "rating 48 at 18, top 94: 49",%0A+   "rating 48 at 19, top 94: 49",%0A+   "rating 48 at 20, top 94: 49",%0A+   "rating 48 at 21, top 94: 49",%0A+   "rating 48 at 22, top 94: 49",%0A+   "rating 48 at 23, top 94: 49",%0A+   "rating 48 at 24, top 94: 49",%0A+   "rating 48 at 25, top 94: 49",%0A+   "rating 48 at 26, top 94: 49",%0A+   "rating 48 at 27, top 94: 49",%0A+   "rating 48 at 28, top 94: 49",%0A+   "rating 48 at 29, top 94: 49",%0A+   "rating 48 at 30, top 94: 49",%0A+   "rating 49 at 30, top 94: 49",%0A+   "rating 48 at 31, top 94: 49",%0A+   "rating 49 at 31, top 94: 49",%0A+   "rating 50 at 31, top 94: 49",%0A+   "rating 48 at 32, top 94: 49",%0A+   "rating 49 at 32, top 94: 49",%0A+   "rating 50 at 32, top 94: 49",%0A+   "rating 48 at 33, top 94: 49",%0A+   "rating 49 at 33, top 94: 49",%0A+   "rating 50 at 33, top 94: 49",%0A+   "rating 51 at 33, top 94: 49",%0A+   "rating 48 at 34, top 94: 49",%0A+   "rating 49 at 34, top 94: 49",%0A+   "rating 50 at 34, top 94: 49",%0A+   "rating 51 at 34, top 94: 49",%0A+   "rating 52 at 34, top 94: 49",%0A+   "rating 48 at 35, top 94: 49",%0A+   "rating 49 at 35, top 94: 49",%0A+   "rating 50 at 35, top 94: 49",%0A+   "rating 51 at 35, top 94: 49",%0A+   "rating 52 at 35, top 94: 49",%0A+   "rating 53 at 35, top 94: 49",%0A+   "rating 48 at 36, top 94: 49",%0A+   "rating 49 at 36, top 94: 49",%0A+   "rating 50 at 36, top 94: 49",%0A+   "rating 51 at 36, top 94: 49",%0A+   "rating 52 at 36, top 94: 49",%0A+   "rating 53 at 36, top 94: 49",%0A+   "rating 54 at 36, top 94: 49",%0A+   "rating 48 at 37, top 94: 49",%0A+   "rating 49 at 37, top 94: 49",%0A+   "rating 50 at 37, top 94: 49",%0A+   "rating 51 at 37, top 94: 49",%0A+   "rating 52 at 37, top 94: 49",%0A+   "rating 53 at 37, top 94: 49",%0A+   "rating 54 at 37, top 94: 49",%0A+   "rating 55 at 37, top 94: 49",%0A+   "rating 48 at 38, top 94: 49",%0A+   "rating 49 at 38, top 94: 49",%0A+   "rating 50 at 38, top 94: 49",%0A+   "rating 51 at 38, top 94: 49",%0A+   "rating 52 at 38, top 94: 49",%0A+   "rating 53 at 38, top 94: 49",%0A+   "rating 54 at 38, top 94: 49",%0A+   "rating 55 at 38, top 94: 49",%0A+   "rating 56 at 38, top 94: 49",%0A+   "rating 48 at 39, top 94: 49",%0A+   "rating 49 at 39, top 94: 49",%0A+   "rating 50 at 39, top 94: 49",%0A+   "rating 51 at 39, top 94: 49",%0A+   "rating 52 at 39, top 94: 49",%0A+   "rating 53 at 39, top 94: 49",%0A+   "rating 54 at 39, top 94: 49",%0A+   "rating 55 at 39, top 94: 49",%0A+   "rating 56 at 39, top 94: 49",%0A+   "rating 48 at 40, top 94: 49",%0A+   "rating 49 at 40, top 94: 49",%0A+   "rating 50 at 40, top 94: 49",%0A+   "rating 51 at 40, top 94: 49",%0A+   "rating 52 at 40, top 94: 49",%0A+   "rating 53 at 40, top 94: 49",%0A+   "rating 54 at 40, top 94: 49",%0A+   "rating 55 at 40, top 94: 49",%0A+   "rating 56 at 40, top 94: 49",%0A+   "rating 48 at 41, top 94: 49",%0A+   "rating 49 at 41, top 94: 49",%0A+   "rating 50 at 41, top 94: 49",%0A+   "rating 51 at 41, top 94: 49",%0A+   "rating 52 at 41, top 94: 49",%0A+   "rating 53 at 41, top 94: 49",%0A+   "rating 54 at 41, top 94: 49",%0A+   "rating 55 at 41, top 94: 49",%0A+   "rating 56 at 41, top 94: 49",%0A+   "rating 48 at 42, top 94: 49",%0A+   "rating 49 at 42, top 94: 49",%0A+   "rating 50 at 42, top 94: 49",%0A+   "rating 51 at 42, top 94: 49",%0A+   "rating 52 at 42, top 94: 49",%0A+   "rating 53 at 42, top 94: 49",%0A+   "rating 54 at 42, top 94: 49",%0A+   "rating 55 at 42, top 94: 49",%0A+   "rating 56 at 42, top 94: 49",%0A+   "rating 48 at 43, top 94: 49",%0A+   "rating 49 at 43, top 94: 49",%0A+   "rating 50 at 43, top 94: 49",%0A+   "rating 51 at 43, top 94: 49",%0A+   "rating 52 at 43, top 94: 49",%0A+   "rating 53 at 43, top 94: 49",%0A+   "rating 54 at 43, top 94: 49",%0A+   "rating 55 at 43, top 94: 49",%0A+   "rating 56 at 43, top 94: 49",%0A+   "rating 48 at 44, top 94: 49",%0A+   "rating 49 at 44, top 94: 49",%0A+   "rating 50 at 44, top 94: 49",%0A+   "rating 51 at 44, top 94: 49",%0A+   "rating 52 at 44, top 94: 49",%0A+   "rating 53 at 44, top 94: 49",%0A+   "rating 54 at 44, top 94: 49",%0A+   "rating 55 at 44, top 94: 49",%0A+   "rating 56 at 44, top 94: 49",%0A+   "rating 48 at 45, top 94: 49",%0A+   "rating 49 at 45, top 94: 49",%0A+   "rating 50 at 45, top 94: 49",%0A+   "rating 51 at 45, top 94: 49",%0A+   "rating 52 at 45, top 94: 49",%0A+   "rating 53 at 45, top 94: 49",%0A+   "rating 54 at 45, top 94: 49",%0A+   "rating 55 at 45, top 94: 49",%0A+   "rating 56 at 45, top 94: 49",%0A+   "rating 48 at 14, top 96: 49",%0A+   "rating 48 at 15, top 96: 49",%0A+   "rating 48 at 16, top 96: 49",%0A+   "rating 48 at 17, top 96: 49",%0A+   "rating 48 at 18, top 96: 49",%0A+   "rating 48 at 19, top 96: 49",%0A+   "rating 48 at 20, top 96: 49",%0A+   "rating 48 at 21, top 96: 49",%0A+   "rating 48 at 22, top 96: 49",%0A+   "rating 48 at 23, top 96: 49",%0A+   "rating 48 at 24, top 96: 49",%0A+   "rating 48 at 25, top 96: 49",%0A+   "rating 48 at 26, top 96: 49",%0A+   "rating 48 at 27, top 96: 49",%0A+   "rating 48 at 28, top 96: 49",%0A+   "rating 48 at 29, top 96: 49",%0A+   "rating 48 at 30, top 96: 49",%0A+   "rating 49 at 30, top 96: 49",%0A+   "rating 48 at 31, top 96: 49",%0A+   "rating 49 at 31, top 96: 49",%0A+   "rating 50 at 31, top 96: 49",%0A+   "rating 48 at 32, top 96: 49",%0A+   "rating 49 at 32, top 96: 49",%0A+   "rating 50 at 32, top 96: 49",%0A+   "rating 48 at 33, top 96: 49",%0A+   "rating 49 at 33, top 96: 49",%0A+   "rating 50 at 33, top 96: 49",%0A+   "rating 51 at 33, top 96: 49",%0A+   "rating 48 at 34, top 96: 49",%0A+   "rating 49 at 34, top 96: 49",%0A+   "rating 50 at 34, top 96: 49",%0A+   "rating 51 at 34, top 96: 49",%0A+   "rating 52 at 34, top 96: 49",%0A+   "rating 48 at 35, top 96: 49",%0A+   "rating 49 at 35, top 96: 49",%0A+   "rating 50 at 35, top 96: 49",%0A+   "rating 51 at 35, top 96: 49",%0A+   "rating 52 at 35, top 96: 49",%0A+   "rating 53 at 35, top 96: 49",%0A+   "rating 48 at 36, top 96: 49",%0A+   "rating 49 at 36, top 96: 49",%0A+   "rating 50 at 36, top 96: 49",%0A+   "rating 51 at 36, top 96: 49",%0A+   "rating 52 at 36, top 96: 49",%0A+   "rating 53 at 36, top 96: 49",%0A+   "rating 54 at 36, top 96: 49",%0A+   "rating 48 at 37, top 96: 49",%0A+   "rating 49 at 37, top 96: 49",%0A+   "rating 50 at 37, top 96: 49",%0A+   "rating 51 at 37, top 96: 49",%0A+   "rating 52 at 37, top 96: 49",%0A+   "rating 53 at 37, top 96: 49",%0A+   "rating 54 at 37, top 96: 49",%0A+   "rating 55 at 37, top 96: 49",%0A+   "rating 48 at 38, top 96: 49",%0A+   "rating 49 at 38, top 96: 49",%0A+   "rating 50 at 38, top 96: 49",%0A+   "rating 51 at 38, top 96: 49",%0A+   "rating 52 at 38, top 96: 49",%0A+   "rating 53 at 38, top 96: 49",%0A+   "rating 54 at 38, top 96: 49",%0A+   "rating 55 at 38, top 96: 49",%0A+   "rating 56 at 38, top 96: 49",%0A+   "rating 48 at 39, top 96: 49",%0A+   "rating 49 at 39, top 96: 49",%0A+   "rating 50 at 39, top 96: 49",%0A+   "rating 51 at 39, top 96: 49",%0A+   "rating 52 at 39, top 96: 49",%0A+   "rating 53 at 39, top 96: 49",%0A+   "rating 54 at 39, top 96: 49",%0A+   "rating 55 at 39, top 96: 49",%0A+   "rating 56 at 39, top 96: 49",%0A+   "rating 48 at 40, top 96: 49",%0A+   "rating 49 at 40, top 96: 49",%0A+   "rating 50 at 40, top 96: 49",%0A+   "rating 51 at 40, top 96: 49",%0A+   "rating 52 at 40, top 96: 49",%0A+   "rating 53 at 40, top 96: 49",%0A+   "rating 54 at 40, top 96: 49",%0A+   "rating 55 at 40, top 96: 49",%0A+   "rating 56 at 40, top 96: 49",%0A+   "rating 48 at 41, top 96: 49",%0A+   "rating 49 at 41, top 96: 49",%0A+   "rating 50 at 41, top 96: 49",%0A+   "rating 51 at 41, top 96: 49",%0A+   "rating 52 at 41, top 96: 49",%0A+   "rating 53 at 41, top 96: 49",%0A+   "rating 54 at 41, top 96: 49",%0A+   "rating 55 at 41, top 96: 49",%0A+   "rating 56 at 41, top 96: 49",%0A+   "rating 48 at 42, top 96: 49",%0A+   "rating 49 at 42, top 96: 49",%0A+   "rating 50 at 42, top 96: 49",%0A+   "rating 51 at 42, top 96: 49",%0A+   "rating 52 at 42, top 96: 49",%0A+   "rating 53 at 42, top 96: 49",%0A+   "rating 54 at 42, top 96: 49",%0A+   "rating 55 at 42, top 96: 49",%0A+   "rating 56 at 42, top 96: 49",%0A+   "rating 48 at 43, top 96: 49",%0A+   "rating 49 at 43, top 96: 49",%0A+   "rating 50 at 43, top 96: 49",%0A+   "rating 51 at 43, top 96: 49",%0A+   "rating 52 at 43, top 96: 49",%0A+   "rating 53 at 43, top 96: 49",%0A+   "rating 54 at 43, top 96: 49",%0A+   "rating 55 at 43, top 96: 49",%0A+   "rating 56 at 43, top 96: 49",%0A+   "rating 48 at 44, top 96: 49",%0A+   "rating 49 at 44, top 96: 49",%0A+   "rating 50 at 44, top 96: 49",%0A+   "rating 51 at 44, top 96: 49",%0A+   "rating 52 at 44, top 96: 49",%0A+   "rating 53 at 44, top 96: 49",%0A+   "rating 54 at 44, top 96: 49",%0A+   "rating 55 at 44, top 96: 49",%0A+   "rating 56 at 44, top 96: 49",%0A+   "rating 48 at 45, top 96: 49",%0A+   "rating 49 at 45, top 96: 49",%0A+   "rating 50 at 45, top 96: 49",%0A+   "rating 51 at 45, top 96: 49",%0A+   "rating 52 at 45, top 96: 49",%0A+   "rating 53 at 45, top 96: 49",%0A+   "rating 54 at 45, top 96: 49",%0A+   "rating 55 at 45, top 96: 49",%0A+   "rating 56 at 45, top 96: 49",%0A+   "rating 48 at 14, top 97: 49",%0A+   "rating 48 at 15, top 97: 49",%0A+   "rating 48 at 16, top 97: 49",%0A+   "rating 48 at 17, top 97: 49",%0A+   "rating 48 at 18, top 97: 49",%0A+   "rating 48 at 19, top 97: 49",%0A+   "rating 48 at 20, top 97: 49",%0A+   "rating 48 at 21, top 97: 49",%0A+   "rating 48 at 22, top 97: 49",%0A+   "rating 48 at 23, top 97: 49",%0A+   "rating 48 at 24, top 97: 49",%0A+   "rating 48 at 25, top 97: 49",%0A+   "rating 48 at 26, top 97: 49",%0A+   "rating 48 at 27, top 97: 49",%0A+   "rating 48 at 28, top 97: 49",%0A+   "rating 48 at 29, top 97: 49",%0A+   "rating 48 at 30, top 97: 49",%0A+   "rating 49 at 30, top 97: 49",%0A+   "rating 48 at 31, top 97: 49",%0A+   "rating 49 at 31, top 97: 49",%0A+   "rating 50 at 31, top 97: 49",%0A+   "rating 48 at 32, top 97: 49",%0A+   "rating 49 at 32, top 97: 49",%0A+   "rating 50 at 32, top 97: 49",%0A+   "rating 48 at 33, top 97: 49",%0A+   "rating 49 at 33, top 97: 49",%0A+   "rating 50 at 33, top 97: 49",%0A+   "rating 51 at 33, top 97: 49",%0A+   "rating 48 at 34, top 97: 49",%0A+   "rating 49 at 34, top 97: 49",%0A+   "rating 50 at 34, top 97: 49",%0A+   "rating 51 at 34, top 97: 49",%0A+   "rating 52 at 34, top 97: 49",%0A+   "rating 48 at 35, top 97: 49",%0A+   "rating 49 at 35, top 97: 49",%0A+   "rating 50 at 35, top 97: 49",%0A+   "rating 51 at 35, top 97: 49",%0A+   "rating 52 at 35, top 97: 49",%0A+   "rating 53 at 35, top 97: 49",%0A+   "rating 48 at 36, top 97: 49",%0A+   "rating 49 at 36, top 97: 49",%0A+   "rating 50 at 36, top 97: 49",%0A+   "rating 51 at 36, top 97: 49",%0A+   "rating 52 at 36, top 97: 49",%0A+   "rating 53 at 36, top 97: 49",%0A+   "rating 54 at 36, top 97: 49",%0A+   "rating 48 at 37, top 97: 49",%0A+   "rating 49 at 37, top 97: 49",%0A+   "rating 50 at 37, top 97: 49",%0A+   "rating 51 at 37, top 97: 49",%0A+   "rating 52 at 37, top 97: 49",%0A+   "rating 53 at 37, top 97: 49",%0A+   "rating 54 at 37, top 97: 49",%0A+   "rating 55 at 37, top 97: 49",%0A+   "rating 48 at 38, top 97: 49",%0A+   "rating 49 at 38, top 97: 49",%0A+   "rating 50 at 38, top 97: 49",%0A+   "rating 51 at 38, top 97: 49",%0A+   "rating 52 at 38, top 97: 49",%0A+   "rating 53 at 38, top 97: 49",%0A+   "rating 54 at 38, top 97: 49",%0A+   "rating 55 at 38, top 97: 49",%0A+   "rating 56 at 38, top 97: 49",%0A+   "rating 48 at 39, top 97: 49",%0A+   "rating 49 at 39, top 97: 49",%0A+   "rating 50 at 39, top 97: 49",%0A+   "rating 51 at 39, top 97: 49",%0A+   "rating 52 at 39, top 97: 49",%0A+   "rating 53 at 39, top 97: 49",%0A+   "rating 54 at 39, top 97: 49",%0A+   "rating 55 at 39, top 97: 49",%0A+   "rating 56 at 39, top 97: 49",%0A+   "rating 48 at 40, top 97: 49",%0A+   "rating 49 at 40, top 97: 49",%0A+   "rating 50 at 40, top 97: 49",%0A+   "rating 51 at 40, top 97: 49",%0A+   "rating 52 at 40, top 97: 49",%0A+   "rating 53 at 40, top 97: 49",%0A+   "rating 54 at 40, top 97: 49",%0A+   "rating 55 at 40, top 97: 49",%0A+   "rating 56 at 40, top 97: 49",%0A+   "rating 48 at 41, top 97: 49",%0A+   "rating 49 at 41, top 97: 49",%0A+   "rating 50 at 41, top 97: 49",%0A+   "rating 51 at 41, top 97: 49",%0A+   "rating 52 at 41, top 97: 49",%0A+   "rating 53 at 41, top 97: 49",%0A+   "rating 54 at 41, top 97: 49",%0A+   "rating 55 at 41, top 97: 49",%0A+   "rating 56 at 41, top 97: 49",%0A+   "rating 48 at 42, top 97: 49",%0A+   "rating 49 at 42, top 97: 49",%0A+   "rating 50 at 42, top 97: 49",%0A+   "rating 51 at 42, top 97: 49",%0A+   "rating 52 at 42, top 97: 49",%0A+   "rating 53 at 42, top 97: 49",%0A+   "rating 54 at 42, top 97: 49",%0A+   "rating 55 at 42, top 97: 49",%0A+   "rating 56 at 42, top 97: 49",%0A+   "rating 48 at 43, top 97: 49",%0A+   "rating 49 at 43, top 97: 49",%0A+   "rating 50 at 43, top 97: 49",%0A+   "rating 51 at 43, top 97: 49",%0A+   "rating 52 at 43, top 97: 49",%0A+   "rating 53 at 43, top 97: 49",%0A+   "rating 54 at 43, top 97: 49",%0A+   "rating 55 at 43, top 97: 49",%0A+   "rating 56 at 43, top 97: 49",%0A+   "rating 48 at 44, top 97: 49",%0A+   "rating 49 at 44, top 97: 49",%0A+   "rating 50 at 44, top 97: 49",%0A+   "rating 51 at 44, top 97: 49",%0A+   "rating 52 at 44, top 97: 49",%0A+   "rating 53 at 44, top 97: 49",%0A+   "rating 54 at 44, top 97: 49",%0A+   "rating 55 at 44, top 97: 49",%0A+   "rating 56 at 44, top 97: 49",%0A+   "rating 48 at 45, top 97: 49",%0A+   "rating 49 at 45, top 97: 49",%0A+   "rating 50 at 45, top 97: 49",%0A+   "rating 51 at 45, top 97: 49",%0A+   "rating 52 at 45, top 97: 49",%0A+   "rating 53 at 45, top 97: 49",%0A+   "rating 54 at 45, top 97: 49",%0A+   "rating 55 at 45, top 97: 49",%0A+   "rating 56 at 45, top 97: 49",%0A+   "rating 48 at 14, top 98: 49",%0A+   "rating 48 at 15, top 98: 49",%0A+   "rating 48 at 16, top 98: 49",%0A+   "rating 48 at 17, top 98: 49",%0A+   "rating 48 at 18, top 98: 49",%0A+   "rating 48 at 19, top 98: 49",%0A+   "rating 48 at 20, top 98: 49",%0A+   "rating 48 at 21, top 98: 49",%0A+   "rating 48 at 22, top 98: 49",%0A+   "rating 48 at 23, top 98: 49",%0A+   "rating 48 at 24, top 98: 49",%0A+   "rating 48 at 25, top 98: 49",%0A+   "rating 48 at 26, top 98: 49",%0A+   "rating 48 at 27, top 98: 49",%0A+   "rating 48 at 28, top 98: 49",%0A+   "rating 48 at 29, top 98: 49",%0A+   "rating 48 at 30, top 98: 49",%0A+   "rating 49 at 30, top 98: 49",%0A+   "rating 48 at 31, top 98: 49",%0A+   "rating 49 at 31, top 98: 49",%0A+   "rating 50 at 31, top 98: 49",%0A+   "rating 48 at 32, top 98: 49",%0A+   "rating 49 at 32, top 98: 49",%0A+   "rating 50 at 32, top 98: 49",%0A+   "rating 48 at 33, top 98: 49",%0A+   "rating 49 at 33, top 98: 49",%0A+   "rating 50 at 33, top 98: 49",%0A+   "rating 51 at 33, top 98: 49",%0A+   "rating 48 at 34, top 98: 49",%0A+   "rating 49 at 34, top 98: 49",%0A+   "rating 50 at 34, top 98: 49",%0A+   "rating 51 at 34, top 98: 49",%0A+   "rating 52 at 34, top 98: 49",%0A+   "rating 48 at 35, top 98: 49",%0A+   "rating 49 at 35, top 98: 49",%0A+   "rating 50 at 35, top 98: 49",%0A+   "rating 51 at 35, top 98: 49",%0A+   "rating 52 at 35, top 98: 49",%0A+   "rating 53 at 35, top 98: 49",%0A+   "rating 48 at 36, top 98: 49",%0A+   "rating 49 at 36, top 98: 49",%0A+   "rating 50 at 36, top 98: 49",%0A+   "rating 51 at 36, top 98: 49",%0A+   "rating 52 at 36, top 98: 49",%0A+   "rating 53 at 36, top 98: 49",%0A+   "rating 54 at 36, top 98: 49",%0A+   "rating 48 at 37, top 98: 49",%0A+   "rating 49 at 37, top 98: 49",%0A+   "rating 50 at 37, top 98: 49",%0A+   "rating 51 at 37, top 98: 49",%0A+   "rating 52 at 37, top 98: 49",%0A+   "rating 53 at 37, top 98: 49",%0A+   "rating 54 at 37, top 98: 49",%0A+   "rating 55 at 37, top 98: 49",%0A+   "rating 48 at 38, top 98: 49",%0A+   "rating 49 at 38, top 98: 49",%0A+   "rating 50 at 38, top 98: 49",%0A+   "rating 51 at 38, top 98: 49",%0A+   "rating 52 at 38, top 98: 49",%0A+   "rating 53 at 38, top 98: 49",%0A+   "rating 54 at 38, top 98: 49",%0A+   "rating 55 at 38, top 98: 49",%0A+   "rating 56 at 38, top 98: 49",%0A+   "rating 48 at 39, top 98: 49",%0A+   "rating 49 at 39, top 98: 49",%0A+   "rating 50 at 39, top 98: 49",%0A+   "rating 51 at 39, top 98: 49",%0A+   "rating 52 at 39, top 98: 49",%0A+   "rating 53 at 39, top 98: 49",%0A+   "rating 54 at 39, top 98: 49",%0A+   "rating 55 at 39, top 98: 49",%0A+   "rating 56 at 39, top 98: 49",%0A+   "rating 48 at 40, top 98: 49",%0A+   "rating 49 at 40, top 98: 49",%0A+   "rating 50 at 40, top 98: 49",%0A+   "rating 51 at 40, top 98: 49",%0A+   "rating 52 at 40, top 98: 49",%0A+   "rating 53 at 40, top 98: 49",%0A+   "rating 54 at 40, top 98: 49",%0A+   "rating 55 at 40, top 98: 49",%0A+   "rating 56 at 40, top 98: 49",%0A+   "rating 48 at 41, top 98: 49",%0A+   "rating 49 at 41, top 98: 49",%0A+   "rating 50 at 41, top 98: 49",%0A+   "rating 51 at 41, top 98: 49",%0A+   "rating 52 at 41, top 98: 49",%0A+   "rating 53 at 41, top 98: 49",%0A+   "rating 54 at 41, top 98: 49",%0A+   "rating 55 at 41, top 98: 49",%0A+   "rating 56 at 41, top 98: 49",%0A+   "rating 48 at 42, top 98: 49",%0A+   "rating 49 at 42, top 98: 49",%0A+   "rating 50 at 42, top 98: 49",%0A+   "rating 51 at 42, top 98: 49",%0A+   "rating 52 at 42, top 98: 49",%0A+   "rating 53 at 42, top 98: 49",%0A+   "rating 54 at 42, top 98: 49",%0A+   "rating 55 at 42, top 98: 49",%0A+   "rating 56 at 42, top 98: 49",%0A+   "rating 48 at 43, top 98: 49",%0A+   "rating 49 at 43, top 98: 49",%0A+   "rating 50 at 43, top 98: 49",%0A+   "rating 51 at 43, top 98: 49",%0A+   "rating 52 at 43, top 98: 49",%0A+   "rating 53 at 43, top 98: 49",%0A+   "rating 54 at 43, top 98: 49",%0A+   "rating 55 at 43, top 98: 49",%0A+   "rating 56 at 43, top 98: 49",%0A+   "rating 48 at 44, top 98: 49",%0A+   "rating 49 at 44, top 98: 49",%0A+   "rating 50 at 44, top 98: 49",%0A+   "rating 51 at 44, top 98: 49",%0A+   "rating 52 at 44, top 98: 49",%0A+   "rating 53 at 44, top 98: 49",%0A+   "rating 54 at 44, top 98: 49",%0A+   "rating 55 at 44, top 98: 49",%0A+   "rating 56 at 44, top 98: 49",%0A+   "rating 48 at 45, top 98: 49",%0A+   "rating 49 at 45, top 98: 49",%0A+   "rating 50 at 45, top 98: 49",%0A+   "rating 51 at 45, top 98: 49",%0A+   "rating 52 at 45, top 98: 49",%0A+   "rating 53 at 45, top 98: 49",%0A+   "rating 54 at 45, top 98: 49",%0A+   "rating 55 at 45, top 98: 49",%0A+   "rating 56 at 45, top 98: 49",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:345:19%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > levelFrom%3A the age read run backwards%2C total > the ratings the read skips for a young man are the enumerated ones%2C and each takes the next level up,line=365,column=70::AssertionError: expected 49 to be 48 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 48%0A+ 49%0A%0A ❯ src/test/cmValueCurve.test.ts:365:70%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/cmValueCurve.test.ts,title=src/test/cmValueCurve.test.ts > levelFrom%3A the age read run backwards%2C total > it inverts the read wherever no clamp bit%2C and the clamped cells are counted,line=394,column=30::AssertionError: expected [ 'level 48 at 24, top 94', …(21) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "level 48 at 24, top 94",%0A+   "level 48 at 25, top 94",%0A+   "level 48 at 26, top 94",%0A+   "level 48 at 27, top 94",%0A+   "level 48 at 28, top 94",%0A+   "level 48 at 29, top 94",%0A+   "level 48 at 30, top 94",%0A+   "level 48 at 31, top 94",%0A+   "level 48 at 32, top 94",%0A+   "level 48 at 33, top 94",%0A+   "level 48 at 34, top 94",%0A+   "level 48 at 35, top 94",%0A+   "level 48 at 36, top 94",%0A+   "level 48 at 37, top 94",%0A+   "level 48 at 38, top 94",%0A+   "level 48 at 39, top 94",%0A+   "level 48 at 40, top 94",%0A+   "level 48 at 41, top 94",%0A+   "level 48 at 42, top 94",%0A+   "level 48 at 43, top 94",%0A+   "level 48 at 44, top 94",%0A+   "level 48 at 45, top 94",%0A+ ]%0A%0A ❯ src/test/cmValueCurve.test.ts:394:30%0A%0A
+rev mutation levelfloor = exit 1 (1 the test went red, 3 the mutation did not apply, 0 the test missed it)
