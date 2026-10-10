@@ -38,6 +38,8 @@ export type StoryShape = 'rout' | 'comeback' | 'late' | 'wire' | 'trade';
 /** What a sport hands Game Day to tell a final. */
 export interface GameDayLaw {
   story: StoryLaw;
+  /** For a sport whose engine draws whether a game went past regulation: the scoring plays of a final that DID (the contract of `story.events`, which then tells the games that did not). A told game marked `beyond` is told by this; in a sport without it there is no such game, and one marked so is told nothing. */
+  storyBeyond?: StoryLaw['events'];
   /** The highest score a side can have in a final this sport's score law gives. A final above it was never told by that law, and `gameStory` refuses it without asking the story law. */
   maxScore: number;
   /** How the law's clock is cut: `count` periods, the one (0 based) a minute falls in, and its short name. */
@@ -91,7 +93,10 @@ export function gameStory(law: GameDayLaw, g: ToldGame, viewAs: 'home' | 'away',
   if (!g || typeof g.key !== 'string' || !isGmScore(g.homeScore) || !isGmScore(g.awayScore) || g.homeScore === g.awayScore) return null;
   /* written so that a law with no number here (or one that is not a number) is told nothing */
   if (typeof law.maxScore !== 'number' || !(g.homeScore <= law.maxScore) || !(g.awayScore <= law.maxScore)) return null;
-  const raw = law.story.events(g.homeScore, g.awayScore, keyedRng(`${g.key}|story|${g.homeScore}-${g.awayScore}`));
+  const past = g.beyond === true;
+  if (past && typeof law.storyBeyond !== 'function') return null;
+  const rng = keyedRng(`${g.key}|story|${g.homeScore}-${g.awayScore}`);
+  const raw = past ? law.storyBeyond!(g.homeScore, g.awayScore, rng) : law.story.events(g.homeScore, g.awayScore, rng);
   if (!Array.isArray(raw)) return null;
   const length = law.story.clock.length;
   const count = law.periods.count;
@@ -139,10 +144,14 @@ export interface GmLastGame extends ToldGame { v: 1; where: string; winner: stri
 /** What a board saves after a press. `where` says when it was played, in the bind's own words ("w6", a round's name). */
 export function makeGmLastGame(told: ToldGame, where: string): GmLastGame | null {
   const winner = toldWinner(told);
-  return winner === null ? null : { v: 1, key: told.key, where, home: told.home, away: told.away, homeScore: told.homeScore, awayScore: told.awayScore, winner };
+  return winner === null ? null : { v: 1, key: told.key, where, home: told.home, away: told.away, homeScore: told.homeScore, awayScore: told.awayScore, winner, ...(told.beyond === true ? { beyond: true } : {}) };
 }
 
-/** A saved last game, or null for anything that does not read as one. Never throws; hands back a fresh object of the known fields only. */
+/** A saved last game, or null for anything that does not read as one. Never
+ *  throws; hands back a fresh object of the known fields only (`beyond` is
+ *  one of them, kept when it is true). `isClub` must be a real membership
+ *  test (a Set, or Object.hasOwn): a bare object lookup such as
+ *  `id => !!teams[id]` says yes to `constructor`. */
 export function readGmLastGame(value: unknown, isClub: (id: string) => boolean): GmLastGame | null {
   try {
     if (typeof value !== 'object' || value === null || Array.isArray(value)) return null;
@@ -152,7 +161,8 @@ export function readGmLastGame(value: unknown, isClub: (id: string) => boolean):
     if (o.home === o.away || isClub(o.home) !== true || isClub(o.away) !== true) return null;
     if (!isGmScore(o.homeScore) || !isGmScore(o.awayScore) || o.homeScore === o.awayScore) return null;
     if (o.winner !== (o.homeScore > o.awayScore ? o.home : o.away)) return null;
-    return { v: 1, key: o.key, where: o.where, home: o.home, away: o.away, homeScore: o.homeScore, awayScore: o.awayScore, winner: o.winner };
+    if (o.beyond !== undefined && typeof o.beyond !== 'boolean') return null;
+    return { v: 1, key: o.key, where: o.where, home: o.home, away: o.away, homeScore: o.homeScore, awayScore: o.awayScore, winner: o.winner, ...(o.beyond === true ? { beyond: true } : {}) };
   } catch {
     return null;
   }

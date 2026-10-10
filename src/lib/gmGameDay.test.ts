@@ -14,6 +14,7 @@ import { DRIVES, FG_A_DRIVE, NFL_SCORE_LAW, TD_A_GAME } from '@/lib/gameLaws/nfl
 import { keyedRng } from '@/lib/keyedRng';
 import { NFL_CLOCK } from '@/data/usLeagueShape';
 import type { SeasonEvent } from '@/lib/season/core';
+import type { ScoreLaw } from '@/lib/gameLaws/types';
 
 type Play = [min: number, side: 'us' | 'them', pts: number];
 const plays = (list: Play[]): SeasonEvent[] => list.map(([min, side, pts]) => ({ min, kind: pts === 3 ? 'fg' : pts === 2 ? 'safety' : 'td', side, pts }));
@@ -246,6 +247,68 @@ describe('tellGame: one law, two paths', () => {
   it('refuses exactly when the quick path does', () => {
     const level = { id: 'level', score: (): [number, number] => [14, 14] };
     expect(tellGame(level, NFL_GAME_DAY, { key: 'k', home: 'AAA', away: 'BBB', decided: { homeWon: true, pHome: 0.5 } }, 'home')).toBeNull();
+  });
+});
+
+/* A sport with an extra period, written for the test: three periods of 20 minutes and a fourth of 5 that only a game past
+   regulation reaches, one point a score. What a hockey front office brings: its engine draws `beyond`, the final alone cannot say it. */
+const goals = (n: number, side: 'us' | 'them', from: number): SeasonEvent[] => Array.from({ length: n }, (_, i) => ({ min: from + i, kind: 'goal', side, pts: 1 }));
+const ICE: GameDayLaw = {
+  story: {
+    id: 'ice',
+    events: (h, a) => [...goals(h, 'us', 1), ...goals(a, 'them', 30)],
+    clock: { length: 65, label: m => `${m}`, start: 'Puck drop.', end: 'Final', endShort: 'FINAL' },
+    line: (_e, club) => `Goal, ${club}.`,
+  },
+  /* past regulation: level after sixty minutes, and the winner's last goal in the extra period */
+  storyBeyond: (h, a) => (Math.abs(h - a) !== 1 ? null : [...goals(Math.min(h, a), 'us', 1), ...goals(Math.min(h, a), 'them', 30), { min: 63, kind: 'goal', side: h > a ? 'us' : 'them', pts: 1 }]),
+  maxScore: 20,
+  periods: { count: 4, of: m => (m > 60 ? 3 : Math.min(2, Math.max(0, Math.ceil(m / 20) - 1))), name: i => (i === 3 ? 'OT' : `P${i + 1}`) },
+  shape: { rout: 4, comeback: 2, say: (shape, winner) => `${winner}: ${shape}.` },
+};
+const ICE_SCORE: ScoreLaw = { id: 'ice', score: (_p, _rng, d) => (d?.homeWon ? [3, 2] : [2, 3]) };
+
+describe('a game that went past regulation', () => {
+  const isClub = (id: string) => id === 'AAA' || id === 'BBB';
+  const fixture = (beyond?: boolean) => ({ key: '2026|r4|AAA|BBB', home: 'AAA', away: 'BBB', decided: { homeWon: true, pHome: 0.5, ...(beyond === undefined ? {} : { beyond }) } });
+
+  it('is told by the sport as one, and the same final in sixty minutes is told as the other', () => {
+    const past = tellGame(ICE_SCORE, ICE, fixture(true), 'home')!;
+    const inTime = tellGame(ICE_SCORE, ICE, fixture(), 'home')!;
+    expect(past.told).toEqual({ key: '2026|r4|AAA|BBB', home: 'AAA', away: 'BBB', homeScore: 3, awayScore: 2, beyond: true });
+    expect(inTime.told).toEqual({ key: '2026|r4|AAA|BBB', home: 'AAA', away: 'BBB', homeScore: 3, awayScore: 2 });
+    expect('beyond' in tellGame(ICE_SCORE, ICE, fixture(false), 'home')!.told).toBe(false);
+    expect(past.story!.periods).toEqual({ us: [2, 0, 0, 1], them: [0, 2, 0, 0] });
+    expect(inTime.story!.periods).toEqual({ us: [3, 0, 0, 0], them: [0, 2, 0, 0] });
+    expect(ICE.periods.name(ICE.periods.of(past.story!.game.events[past.story!.game.events.length - 1].min))).toBe('OT');
+    expect(inTime.story!.game.events.every(e => e.min <= 60)).toBe(true);
+    /* from the away club's side it is the same game */
+    expect(gameStory(ICE, past.told, 'away')!.periods).toEqual({ us: [0, 2, 0, 0], them: [2, 0, 0, 1] });
+  });
+
+  it('is still that game after a save and a reload: the save field keeps the mark', () => {
+    const past = quickGame(ICE_SCORE, fixture(true))!;
+    const saved = makeGmLastGame(past, 'r4')!;
+    expect(saved.beyond).toBe(true);
+    const back = readGmLastGame(JSON.parse(JSON.stringify(saved)), isClub)!;
+    expect(back).toEqual(saved);
+    expect(gameStory(ICE, back, 'home')).toEqual(gameStory(ICE, past, 'home'));
+    expect(gameStory(ICE, back, 'home')).not.toEqual(gameStory(ICE, quickGame(ICE_SCORE, fixture())!, 'home'));
+    /* a game in sixty minutes saves no such key, so a sport that draws none saves what it saved before */
+    const plain = makeGmLastGame(quickGame(ICE_SCORE, fixture())!, 'r4')!;
+    expect('beyond' in plain).toBe(false);
+    expect('beyond' in readGmLastGame({ ...plain, beyond: false }, isClub)!).toBe(false);
+    for (const bad of ['yes', 1, 0, null, {}, []]) expect(readGmLastGame({ ...saved, beyond: bad }, isClub), JSON.stringify(bad)).toBeNull();
+  });
+
+  it('is told nothing by a sport that has no such game, or when the sport has no list for it', () => {
+    const past = quickGame(ICE_SCORE, fixture(true))!;
+    expect(gameStory({ ...ICE, storyBeyond: undefined }, past, 'home')).toBeNull();
+    expect(gameStory(NFL_GAME_DAY, { ...told(24, 17), beyond: true }, 'home')).toBeNull();
+    expect(gameStory(NFL_GAME_DAY, { ...told(24, 17), beyond: false }, 'home')).toEqual(gameStory(NFL_GAME_DAY, told(24, 17), 'home'));
+    /* a two goal game cannot have ended in the extra period: the sport's list for it is null */
+    expect(gameStory(ICE, { ...told(4, 2), beyond: true }, 'home')).toBeNull();
+    expect(gameStory(ICE, told(4, 2), 'home')).not.toBeNull();
   });
 });
 

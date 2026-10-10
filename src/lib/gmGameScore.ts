@@ -44,8 +44,14 @@ export interface ToldScore { home: number; away: number; tries: number; swapped:
  *  the caller has that two saves would not share). */
 export interface GameDayFixture { key: string; home: string; away: string; decided: DecidedGame }
 
-/** A final that has been told: the fixture's key and clubs with the law's score. */
-export interface ToldGame { key: string; home: string; away: string; homeScore: number; awayScore: number }
+/** A final that has been told: the fixture's key and clubs with the law's
+ *  score. `beyond`: the engine said this game went past regulation
+ *  (`DecidedGame.beyond`). It is carried here, and into the save field, so
+ *  the story of the game can be told that way after a reload too: the final
+ *  alone cannot say it (a one goal game ends in sixty minutes or in the
+ *  extra period). Absent on every other game, so a sport whose engine draws
+ *  no such thing saves what it saved before. */
+export interface ToldGame { key: string; home: string; away: string; homeScore: number; awayScore: number; beyond?: boolean }
 
 /** The law's score for a game whose winner is already known: the law's own
  *  score GIVEN that this side won, which is what makes an upset read like an
@@ -73,7 +79,7 @@ export function decidedScore(law: ScoreLaw, d: DecidedGame, key: string): ToldSc
 export function quickGame(law: ScoreLaw, f: GameDayFixture): ToldGame | null {
   if (!f || typeof f.key !== 'string' || f.key === '' || typeof f.home !== 'string' || typeof f.away !== 'string' || f.home === f.away) return null;
   const s = decidedScore(law, f.decided, f.key);
-  return s ? { key: f.key, home: f.home, away: f.away, homeScore: s.home, awayScore: s.away } : null;
+  return s ? { key: f.key, home: f.home, away: f.away, homeScore: s.home, awayScore: s.away, ...(f.decided.beyond === true ? { beyond: true } : {}) } : null;
 }
 
 /** Who won a told final: the club on the higher score, or null for a level one. */

@@ -124,6 +124,14 @@ describe('quickGame and toldWinner', () => {
     expect(toldWinner({ ...g!, homeScore: 9, awayScore: 9 })).toBeNull();
   });
 
+  it('carries the mark of a game past regulation when the engine drew one, and no such key otherwise', () => {
+    const sound = { key: 'k', home: 'AAA', away: 'BBB' };
+    expect(quickGame(scripted([[3, 2]]), { ...sound, decided: { ...home, beyond: true } })).toEqual({ ...sound, homeScore: 3, awayScore: 2, beyond: true });
+    expect('beyond' in quickGame(scripted([[3, 2]]), { ...sound, decided: { ...home, beyond: false } })!).toBe(false);
+    expect('beyond' in quickGame(scripted([[3, 2]]), { ...sound, decided: home })!).toBe(false);
+    expect('beyond' in quickGame(scripted([[3, 2]]), { ...sound, decided: { ...home, beyond: 'yes' as never } })!).toBe(false);
+  });
+
   it('refuses a fixture that does not read as one, one damaged field at a time', () => {
     const sound = { key: 'k', home: 'AAA', away: 'BBB', decided: home };
     const law = scripted([[20, 17]]);
