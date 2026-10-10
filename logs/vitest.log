@@ -1,0 +1,17 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 314[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameDay.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 868[2mms[22m[39m
+   [33m[2m✓[22m[39m decidingPlays[2m > [22mleaves the game level or the loser ahead after play (2), on every final the NFL law can tell [33m 362[2mms[22m[39m
+   [33m[2m✓[22m[39m gameStory, with the NFL law[2m > [22madds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random [33m 385[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 194[2mms[22m[39m
+ [32m✓[39m src/test/gameLawNfl.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 1093[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL_SCORE_LAW: the law for a game outside the Season Center[2m > [22mnever ends level, stays under the cap, and the home side wins about as often as it was told to [33m 456[2mms[22m[39m
+   [33m[2m✓[22m[39m nflMinutePicker[2m > [22mwhere the hour has room, keeps lines out of back to back minutes and a side's drives three minutes apart [33m 411[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m78 passed[39m[22m[90m (78)[39m
+[2m   Start at [22m 19:00:25
+[2m   Duration [22m 3.64s[2m (transform 1.23s, setup 366ms, collect 2.16s, tests 2.47s, environment 1.99s, prepare 799ms)[22m
+
