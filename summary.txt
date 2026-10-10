@@ -1,0 +1,9 @@
+ledger exit=0 2s | simUsSeasonLedger: green. 2967 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+slate exit=0 3s |    Duration  1.80s (transform 705ms, setup 63ms, collect 940ms, tests 40ms, environment 298ms, prepare 183ms)
+digest exit=0 34s |  ❯ src/test/usCareerTruthDigest.test.ts (1 test | 1 failed) 30801ms     → keys that moved against the committed fixture: expected [ 'mlb|now|2B', 'mlb|now|SS', …(23
+ctl-all exit=0 45s | controls fired: 43 of 43
+simNhlCareer exit=0 10s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
+tsc exit=0 55s | 
+simLiveScores exit=0 0s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simMlbCareer exit=0 10s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+simNbaAwardsSense exit=0 64s | simNbaAwardsSense: 171 checks, 0 failed (full size), 64s
