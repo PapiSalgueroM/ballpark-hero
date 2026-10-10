@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+u-1 exit=0 280s | Played Club Manager through its own screens. 0 findings.
+u-2 exit=0 294s | Played Club Manager through its own screens. 0 findings.
+u-3 exit=0 279s | Played Club Manager through its own screens. 0 findings.

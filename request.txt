@@ -1,0 +1,7 @@
+#!serve
+#!playwright
+#!serial
+# Round 1215: playClubManager three times as it stands, no counter.
+u-1: timeout -k 5 420 node scripts/playClubManager.mjs
+u-2: timeout -k 5 420 node scripts/playClubManager.mjs
+u-3: timeout -k 5 420 node scripts/playClubManager.mjs
