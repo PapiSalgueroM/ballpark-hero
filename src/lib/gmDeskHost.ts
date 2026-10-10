@@ -1066,8 +1066,14 @@ export interface GmCareerFacts extends GmFacts {
   career: GmCareerBinding;
 }
 
-/** How a tier reads on a box, lower case. Index 0 is unused. */
-export const HOST_TIER_WORDS = ['', 'top tier', 'upper half', 'lower half', 'bottom tier'] as const;
+/**
+ * How a tier reads on a box, lower case. Index 0 is unused. Tiers are quarters
+ * of the league by strength (gmSeat.leagueTiers), so each word names a
+ * quarter and nothing wider: with 'lower half' for tier 3, the climb line
+ * told the GM of a bottom quarter club that the phone rings only if they
+ * climb into the lower half of the league, where they already are.
+ */
+export const HOST_TIER_WORDS = ['', 'top tier', 'second tier', 'third tier', 'bottom tier'] as const;
 
 /** One mark a graded season, for the Career box. */
 export const HOST_GRADE_MARKS: Record<FoGradeResult, { mark: string; word: string }> = {
@@ -1277,7 +1283,7 @@ export function hostMarketHelp(pack: GmSeatPack): string[] {
     `When ${pack.upstairs} lets you go, the ${pack.seats} that rate your record can call. The ${pack.seat} that let you go never does.`,
     `Each offer shows what that ${pack.seat} asks of your first season there. That is the ask you are graded on.`,
     'No call this year? A year out lets the league play a season without you and the phone can ring next summer, but every year out makes it quieter. The screen says when the offers in front of you are the last ones and when the phone has stopped for good, and then there is no year out to take.',
-    `Worked example: leave straight after a season graded nowhere near the ask and no ${HOST_TIER_WORDS[BADLY_FIRED_CEILING - 1]} ${pack.seat} calls, whatever you won before. The best that can ring is rated ${HOST_TIER_WORDS[BADLY_FIRED_CEILING]}.`,
+    `Worked example: leave straight after a season graded nowhere near the ask and no ${HOST_TIER_WORDS[BADLY_FIRED_CEILING - 1]} ${pack.seat} calls, whatever you won before. The best that can ring is rated ${HOST_TIER_WORDS[BADLY_FIRED_CEILING]}. The tiers are the four quarters of the league by strength.`,
   ];
 }
 

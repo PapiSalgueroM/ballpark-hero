@@ -54,7 +54,7 @@
  *   flatlevel (7) sharedroll (7) flatowner (7) flatmedia (7) flatcut (7) flatask (7)
  *   spendany (8) stalestaff (9) halfseason (9) noyear (9) lastcall (9)
  *   emptytile (10) closedsit (10) fewseasons (10) shutbutton (10) passquiet (10)
- *   longtile (10) clubvalue (10) openpromise (10)
+ *   longtile (10) clubvalue (10) openpromise (10) halfword (10)
  * SIM_GM_DESK_HOST_ANCHORS=1 checks every control's anchor and stops (light).
  *
  * THE YEAR OUT HERE IS NOT THE BIND'S. Section 9 plays it with each engine's
@@ -163,6 +163,7 @@ const EDITS = {
   passquiet: ['10', 'host', "    return climb !== null ? `${called} Pass, and next year ${climb}` : called;", '    return called;'],
   emptytile: ['10', 'host', "value: 'No more calls',", "value: '',"],
   openpromise: ['10', 'host', 'As things stand next year is still open, and every year out', 'Next year is still open, and every year out'],
+  halfword: ['10', 'host', "'second tier', 'third tier', 'bottom tier'] as const;", "'second tier', 'lower half', 'bottom tier'] as const;"],
   longtile: ['10', 'host', "value: 'Nobody called',", "value: 'Nobody called this year',"],
   clubvalue: ['10', 'host', 'value: `Season ${hostStintSeasons(seat, index) + 1}`,', 'value: `Season ${hostStintSeasons(seat, index) + 1} with the ${name}`,'],
   closedsit: ['10', 'host', 'Nobody called, and nobody will: the phone has stopped. A new front office is the way back in.',
@@ -1262,6 +1263,13 @@ for (const sport of SPORTS) {
 for (const e of ['fired', 'walked', 'poached', 'expired', undefined]) judge(H.hostStintEndWords({ team: 'AAA', tier: 1, from: 2030, grades: [], ended: e }), 'a stint ending');
 for (const g of GRADES) { judge(H.HOST_GRADE_MARKS[g].word, 'a grade word'); judge(H.HOST_GRADE_MARKS[g].mark, 'a grade mark'); }
 for (const t of [1, 2, 3, 4]) judge(H.HOST_TIER_WORDS[t], 'a tier word');
+/* Tiers are quarters of the league (four of them, checked on a real league), so a word that names a half says a
+   club is somewhere wider than it is: the climb line would name a place the club already stands in. */
+{
+  const tiers = tiersOf(DRIVE.nhl, FLEET.nhl.closed[0].lg), sizes = [1, 2, 3, 4].map(t => [...tiers.values()].filter(v => v === t).length);
+  ok(sizes.every(n => n >= 7 && n <= 8), `the league's tiers hold ${sizes.join(', ')} clubs, not a quarter each`);
+  ok(new Set([1, 2, 3, 4].map(t => H.HOST_TIER_WORDS[t])).size === 4 && ![1, 2, 3, 4].some(t => /half/i.test(H.HOST_TIER_WORDS[t])), `a tier word is shared or names a half (${H.HOST_TIER_WORDS.slice(1).join(', ')})`);
+}
 /* The three panels, drawn for every market state a sport's ladder reached, and the list they hang on. */
 const strip = html => html.replace(/<[^>]*>/g, ' ').replaceAll('&#x27;', "'").replaceAll('&amp;', '&').replaceAll('&quot;', '"');
 let panelsDrawn = 0;

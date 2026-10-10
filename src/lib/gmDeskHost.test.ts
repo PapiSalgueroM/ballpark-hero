@@ -455,6 +455,8 @@ describe('the job market', () => {
          the floor today, and next year hangs on the old club reaching the third tier. */
       const hang = hostMarket(host, lg, firedFrom(BOTTOM, ['badly', 'badly', 'missed'], from), nameOf)!;
       expect(hang).toMatchObject({ nextYear: 'climb', climbTo: 3 });
+      /* Tiers are quarters: a bottom quarter club is told to reach the third tier, never a half it is already in. */
+      expect(hang.line).toContain(`the ${nameOf(BOTTOM)} have climbed into the third tier of the league by then.`);
       expect(hostCanSitOut(hang)).toBe(true);
       expect(hostSitArmLine(hang, true)).toContain('only if your old club has climbed the league by then');
       if (hang.state === 'offers') {
