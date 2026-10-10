@@ -1,0 +1,6 @@
+14:   FAIL  4 remembered refusal(s) without a true answer:
+15:           NOTHING_HELD is stale: the scan no longer finds write:moveAside in src/lib/brokenSaveRecovery.ts. Delete or correct the entry { file: 'src/lib/brokenSaveRecovery.ts', keys: ['write:moveAside', 'write:restoreBackup', 'write:dismissBackup'] } in scripts/simStorageWrites.mjs
+16:           src/lib/brokenSaveRecovery.ts:187 write:copyAside is on no list: a refused save is remembered here. Name it to the seam (holdPendingSave, see UsCareerBoard.tsx) and add it to NAMED, or add it to NOTHING_HELD or OWED with the reason
+17:           src/lib/saveKeeper.ts:204 write:stageRestore is on no list: a refused save is remembered here. Name it to the seam (holdPendingSave, see UsCareerBoard.tsx) and add it to NAMED, or add it to NOTHING_HELD or OWED with the reason
+18:           src/lib/saveKeeper.ts:286 write:applyPending is on no list: a refused save is remembered here. Name it to the seam (holdPendingSave, see UsCareerBoard.tsx) and add it to NAMED, or add it to NOTHING_HELD or OWED with the reason
+simStorageWrites: 1 failed (owed: 12)
