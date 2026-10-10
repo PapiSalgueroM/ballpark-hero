@@ -21,7 +21,8 @@ season, What's New) starts after the lead has ruled on the numbers at the end of
    `CM_BOOK_TAKER`. `CareerState.leagueBook?` sits after `resultLog?`.
 4. `src/lib/managerHotSeat.ts` and `src/lib/deadlineDay.ts`: one `delete ...leagueBook` each, beside the
    strip of the fixture key Release AT put there.
-5. `scripts/simCmLeagueBook.mjs`: seven sections, thirteen controls (its header says what each holds).
+5. `scripts/simCmLeagueBook.mjs`: seven sections and, since the review fixes, 21 controls (its header says
+   what each holds; the section "After the adversarial reviews" below says what was added and why).
 6. `scripts/simClubManagerSaveSize.mjs`: `SIZE_BUDGET` 196,000 to 203,000, with the measurement in its header.
 
 The old race (`initScorerRace`, `ensureScorerRace`, `creditRaceGoals`, lines 273 to 309 of the base) is not
@@ -97,16 +98,21 @@ by reading. What each one does and what this round did about it:
 | `scripts/simCmShootoutOrder.mjs` | the report and the whole save against the engine at 5b70b05f | one line in `compareContent`: the field is left out on both sides (it already drops a null `live` there) |
 | `scripts/simCmLeagueRules.mjs` | hashes of whole saves in `scripts/data/cmLeagueRulesDigest.json` | the digest is taken again in its own commit, after the attribution legs its header describes (see below) |
 | `scripts/simManagerAppealIsolation.mjs` | the sha256 of `src/lib/clubManager.ts` in `scripts/fixtures/managerAppealIsolation1081/manifest.json` | the one pin follows the file, in its own commit, as Round 1146 did. IT MUST BE TAKEN AGAIN AT THE MERGE: Rounds 1218 and 1225 edit the same file |
-| `scripts/simCmVar.mjs` | `playNextEntry` on a fresh save against the engine at c33d0139 ("Default callers retain every prior report, stat, player credit and save byte") | NOT EDITED: Round 1218 rewrites this file. A block for the lead is proven on a runner (below) |
+| `scripts/simCmVar.mjs` | `playNextEntry` on a fresh save against the engine at c33d0139 ("Default callers retain every prior report, stat, player credit and save byte") | EDITED BY THE FIXER (61ee53dd): the two comparisons with the prior engine, and no other, leave the field out on both sides. Round 1218 keeps both lines and the file merges with its branches cleanly (see "After the adversarial reviews") |
 | `scripts/simCmRealFixtures.mjs` | fresh saves and played entries against the engine at 79c729cd | NOT EDITED: on the brief's must not touch list and rewritten by Round 1225, whose version takes its base from `CM_FIXTURE_BASE` and so pins nothing by default |
 
 THE BLOCK FOR THE LEAD (not committed anywhere in the repo; it is in the closing report and at
 `C:/Users/antho/dukb-handoff/2026-10-10/results-g/patchSaveCompare-1229.mjs`): fourteen lines under
 `import assert from 'node:assert/strict';` that wrap `assert.deepEqual` so a save, or a play result holding
-one, is compared without its `leagueBook`. `node patchSaveCompare-1229.mjs scripts/simCmVar.mjs` inserts it.
+one, is compared without its `leagueBook`. SINCE THE REVIEW FIXES IT IS NO LONGER WANTED FOR `simCmVar.mjs`
+AND MUST NOT BE RUN ON IT: that file carries a narrower fix now. The block wraps `assert.deepEqual` for the
+whole process, so it would also take the book out of every comparison of today's engine with itself, and
+out of `scripts/playCmVar.mjs`, which imports `simCmVar.mjs` and shares the same assert object.
 
-So on THIS BRANCH ALONE two harnesses are red and stay red until the lead acts: `simCmVar` and
-`simCmRealFixtures`. Both are red for one reason, the new field, and both are green with the block in.
+So on THIS BRANCH ALONE one harness is still red: `simCmRealFixtures`, for one reason, the new field. It is
+on the brief's must not touch list and Round 1225 rewrites it; Round 1225's version is green beside this
+round as the suite runs it. The block is still the remedy for the gate's version of THAT file, and only if
+this round reaches a gate without Round 1225.
 
 ## THE NUMBERS, for the lead's rulings before the round that reads the book
 
@@ -140,13 +146,24 @@ and the receipts are Round B's. No real number is a constant or a gate in this r
 
 So the critic's estimate held: without the taker the 38 game mean is 23.5 to 24.8 (it said 22 to 24), under
 every real mean; with the taker it is 28.5 to 29.4 (it said 26 to 28), inside the real 26.9 to 30.7.
+WHAT THAT LAST RANGE RESTS ON (corrected after the review): the 26.9 is the Premier League's, re-opened on
+two pages by the builder. The 30.7 is La Liga's, which the builder did NOT re-open. The reviewer who reads
+checked all four on 2026-10-10, by search summaries of two sites each and not by opened pages: La Liga 40
+37 34 36 25 30 27 23 24 31 (top-scorers.com, sillyseason.com), mean 30.7; Bundesliga 30 31 29 22 34 41 35
+16 36 26 (bundesliga.com news 19353, 90min.com), mean 30.0; Serie A 36 29 29 26 36 29 27 26 24 25
+(top-scorers.com, sportskeeda.com), mean 28.7; Ligue 1 38 35 28 33 18 27 28 29 27 21 (balliq.app,
+worldfootball.net), mean 28.4. They agree with the brief, they are still not opened pages with a receipt,
+and they stay a printed reference: Round B's facts file opens them.
 
 ### 2. Who scores
 
 Of 33,081 to 33,888 credited rival goals a seed set: forwards and wingers 55.3 to 55.7 in a hundred,
 midfielders 34.4 to 34.9, defenders 9.6 to 10.1, keepers none. The one top division page the scout found
-(2012-13, strikers 47, midfielders 37, defenders 11, own goals 5) counts own goals in and wingers as
-midfielders; it is one source and gates nothing. What gates is that the deal follows the engine's own
+(2012-13, strikers 47, midfielders 37, defenders 11, own goals 5) counts own goals in; it is one source and
+gates nothing. (Corrected after the review: an earlier cut of this sentence said the page counts wingers as
+midfielders. The page, eplindex.com/29868, never mentions wingers or wide players. It says Opta has one
+named forward down as a midfielder and that another man's 17 goals came from midfield; how it would count
+a winger was the builder's reading of that line, not the page's statement.) What gates is that the deal follows the engine's own
 table (the three lines sat within 1.9 binomial standard deviations of the harness's own expectation on
 all five sets) and that forwards hold 9.1 to 9.5 of the top ten places of the Goals board where the old
 race gave them 5.0 to 5.4: a rise of 3.85, 4.02, 4.40, 4.19, 4.00.
@@ -184,6 +201,17 @@ stands. The choices, none taken here: deal a thin club's goals over the men its 
 real names, but their totals would then carry the goals of men the data does not have); keep the old race
 as the board of a league under some share of named clubs; or fill the rosters (data work, proposal P4).
 
+IT IS WIDER THAN THE FLEET SHOWS (added after the review). The table above is the seven leagues of the
+builder's fleet. The reviewer who runs things played one career in every league of every era (49, remote
+check `r1229-run-o`): in 21 of the 49 more than a quarter of the rivals' goals have nobody named, and only
+15 sit at 0 to 5 in a hundred. The current leagues where it is most of them, share of rival goals unnamed,
+by the engine's league ids: segunda 97, croatia 92, ligue2 91, bundesliga2 89, mlsWest 86, serieb 81,
+greece 71, switzerland 70, austria 70, denmark 69, proleague 68, scottish 67, ligamx 66, saudi 62. The
+harness's own new arm agrees for the league it plays: in the MLS Eastern Conference 9 of 14 rival clubs
+have no named eleven (1,428 of 2,222 club weeks on the full fleet, `r1229-fx4`). The old race names two men
+for every one of those clubs today. So a Round B that switched the Goals board to the book as it stands
+would empty the board in about half the game: the ruling on clubs with no eleven comes before that brief.
+
 ### 4. Assists, own goals
 
 Rival assists a credited goal: 0.601 to 0.610 over every club. The rule (0.7 of the goals that are not from
@@ -203,6 +231,16 @@ Eredivisie 21.8, Championship 24.0 over 46 games, 2. Bundesliga 14.8.
 THE CRITIC'S POINT 8, MEASURED. A Clean sheets board of every man with one (keepers and defenders) has men
 of 2.4 to 2.5 clubs in its top ten, 2.1 of them keepers: it is one club's back five twice over. A keepers
 only board does not have that problem and is what the real award is.
+BUT THE NUMBER ON THAT BOARD IS ONLY SHOWN TO BE RIGHT IN ENGLAND (corrected after the review; the builder's
+report called the keepers' board sound on the Premier League line alone). The Premier League's second
+source, found by the reviewer who reads: givemesport.com/premier-league-golden-glove-winners-list agrees
+with the league's own page on 2015-16 to 2023-24, and two more sites give 13 for 2024-25 (search
+summaries). Outside England no real number stands beside the engine's: La Liga 23.7 and 24.7 over 38 games
+and the Eredivisie 21.8 over 34 are the same log's lines, and the reviewer's search summaries (pages not
+opened) put La Liga's leading keeper on 15 in 2024-25 and 16 in 2023-24, with 24 and 26 named as record
+seasons. So the engine's AVERAGE leader in Spain sits where the real game's record does. That is the match
+engine's number (how often a top side concedes nothing), not the book's, and nothing in this round moves
+it; but a keepers' board in Round B would print it, so it needs a sourced number a league and a ruling.
 A back four picked by clean sheets + goals + assists (the draft's rule) holds 2.9 to 3.2 men of one club on
 average. Picked by goals + assists, level men split by their club's clean sheets and then its table place
 (the critic's rule): 1.7 men of one club, and 0.0 to 0.04 of the four on no goal and no assist.
@@ -248,7 +286,64 @@ about 1.3K over the budget the gate set at its own measurement: /club-manager 58
 THE BASE MOVED: the gate branch gained five fix commits while this was built (980654fa to 24f57a98, nothing of
 Club Manager). They are merged in (a658174a) and the gates were run once more on that head (`r1229-fin8`).
 
+## After the adversarial reviews (the fixer, 2026-10-10)
+
+Two reviewers read and ran the round at d2055c81. Neither found a defect in the engine binding or the pure
+module. What they found was in the PROOF: seven of ten small mutations of the book's core path left the
+harness and both test files green. What changed, each in a commit of its own, nothing of it a player sees:
+
+- EVERY GOAL IS ITS OWN ROLL. With the goal's index dropped from the deal key every goal of a side in one
+  match was the same roll (one man's brace every time) and everything stayed green. Now a test case deals
+  three goals on 6,000 keys and holds how often two, and three, are one man's against the weights, and
+  harness section shapes (iv) holds the same over the fleet: one man took every goal in 12.0 to 13.8 in a
+  hundred of the matches a club scored two or more in, where the harness's own table says 12.4 to 13.1.
+  Control `keyindex`: 92 in a hundred, z 99 to 105.
+- THE BOOK AGAINST THE REPORT of every league match of mine (section names, `reportAgainstBook`): an own
+  goal line is an own goal of the book, no man gains more than the report names him for, a line whose name
+  is on that club's roster is on his row (so only a name the roster does not hold may be unnamed), no
+  assist from the spot or a free kick, every assister on their pitch for a goal he did not score. Controls
+  `wrongman`, `unnamed`, `offbyone`, `penassistmine`, `assistbench`: the reviewer's five surviving mutations.
+- THE WEEK I DO NOT PLAY. `playNextEntry` notes a league round I am not part of at a call of its own, and
+  only a league with an odd number of clubs reaches it: none was in the fleet. New England Revolution (MLS
+  Eastern Conference, fifteen clubs) is in the full fleet and the default one now, and control `byeweek`
+  takes that call out (325 to 505 failures of the law). One thing it taught the harness: one call can play
+  that week and then my own match, so a club can play twice in an entry; clean sheets are counted from the
+  table a match at a time, and on a range where the table cannot tell which of two was the clean sheet.
+- A HAND DAMAGED CLUB ENTRY NEVER THROWS. A book with the right stamp and a club entry with no rows map
+  (only an edited save can hold one) threw in a match week. The module now steps over such an entry and
+  leaves it as found; the reader still refuses the whole book. A test case, a sixth unreadable book in
+  section oldsave, control `hurtentry`.
+- ONE ASSIST WEIGHT. `creditMyScorers` calls `assistWeight` (it typed the same expression out before); the
+  same arithmetic in the same order, and section stream holds 108 of 108 faces equal to main at f78037dc.
+  The comment on `CM_BOOK_TAKER` says the taker rule is for a rival's matches against other clubs: in its
+  match against me the book credits the report's own lines.
+- THE HARNESS ITSELF: it removes its temp folder on exit; a fleet that no longer plays leagues of 15, 18,
+  20 and 24 clubs and both ledger cases exits 2 and names the arm; the season three join tries twelve seeds
+  and exits 2 (cannot run), where it failed section doors, when none reaches the letter.
+- `scripts/simCmVar.mjs`: see the table above. The Round 1081 manifest pin was taken again for the engine
+  edit (0fc7b35a), with the proof on a runner first (`r1229-fx6`).
+
+Measured again on the fleet as it is now (27 careers full, 5 default; `r1229-fx4`, `r1229-fx5`, at
+332c8ce7): ten fleets green, the 38 game top scorer means unchanged to the hundredth (28.75, 28.80, 28.52,
+28.77, 29.35), the rise of forwards in the top ten 3.74 to 4.15 (full) and 3.20 to 3.90 (default) against
+0.00 to minus 0.60 under `twoman`, and every one of the 21 controls FIRED for its own section and no other.
+The new league on the boards: MLS Eastern Conference, 28 games, top scorer mean 20.3 over six seasons with
+the taker (15.8 by the weight, 20.5 on the old race), leading keeper's clean sheets 12.2. No real number
+was looked up for it: it is printed, never gated.
+
 ## What a later session must not trust
+
+- A BOOK'S STAMP SAYS WHICH SEASON IT BELONGS TO, NEVER HOW MUCH OF THE SEASON IT HAS SEEN (both reviewers).
+  An engine from before this round carries `leagueBook` through its JSON clone and writes nothing into it.
+  So a save played for some weeks on an older bundle (a tab left open across the deploy, a second device
+  with a cached build, a rollback of the published site) comes back with a valid stamp and rows that are
+  weeks short of the table, and `liveBook` and `readBook` both accept it. Measured (`r1229-run-s`): after
+  three entries on the base engine an Arsenal save read "readable" with 16 rival clubs whose rows no longer
+  added up and 44 goals on no line; a Bayern Munich one 14 clubs and 39 goals; and it stays short for the
+  season. Nothing reads the book in this round, so nobody sees it. THE ROUND THAT READS THE BOOK MUST hold
+  the first law against `state.table` for every rival (rows + own goals + unnamed = goals for) in its
+  reader and read a book that fails as no book, which falls back to the old race exactly as a hot seat
+  handover does. "A rollback is five lines" is true of the code and not of the saves written in between.
 
 - A read of a save on a copy of the engine that last touched ANOTHER save. The engine keeps one save's
   league memberships registered at a time (`registerLeagueOverrides`, set by `startCareer`,
@@ -264,9 +359,12 @@ Club Manager). They are merged in (a658174a) and the gates were run once more on
 ## Owed
 
 - TO THE LEAD AT THE MERGE: the Round 1081 manifest pin again (three rounds edit the engine file); the
-  three budget rows of `scripts/sweepWeight.mjs`; the block for `scripts/simCmVar.mjs` (and for
-  `scripts/simCmRealFixtures.mjs` only if it is run with a base older than this round); a ruling on clubs
-  with no named eleven before Round B.
+  three budget rows of `scripts/sweepWeight.mjs`; NOTHING for `scripts/simCmVar.mjs` any more (do not run
+  the block on it); the block for `scripts/simCmRealFixtures.mjs` only if this round reaches a gate without
+  Round 1225, or if Round 1225's version is run with a base older than this round; a ruling on clubs with
+  no named eleven before Round B, and a sourced number a league before a keepers' board.
+- TO ROUND B, FROM THE REVIEWS: the reader holds the first law against the table before it trusts a book
+  (see "must not trust"); the facts file carries the second sources named in this file, each opened.
 - TO ROUND B: the readers, the Stats card, the awards, the team of the season, What's New, the facts file
   with two receipts a fact, `simAwardRaces` re-pointed, the browser walk. A sentence for the other lane's
   guide (`src/data/gameContent/clubManagement.ts`) on the league leaders is owed THEN, not now: nothing a
