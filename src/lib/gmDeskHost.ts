@@ -1314,7 +1314,12 @@ export function hostCareerHelp(pack: GmSeatPack): string[] {
   ];
 }
 
-export function hostXpHelp(earns: string): string[] {
+/*
+ * The earn sentence (hostEarnsLine) is not one of these lines: the GM level
+ * screen prints it above the "?", and a help that opened with it said the
+ * same sentence twice, word for word.
+ */
+export function hostXpHelp(): string[] {
   /* What a season one step short of the ask costs, read off gradeSeason itself (it exports no constant): an owner
      who asks for the postseason and a season that misses it. */
   const missed = gradeSeason(
@@ -1328,7 +1333,6 @@ export function hostXpHelp(earns: string): string[] {
   /* The honest pace (scripts/simGmDeskHost.mjs measures it on the four engines: the median club is near this). */
   const even = gmSeasonXp({ winPct: 0.5, titles: 0, playoffRoundsWon: 0, mandateSteps: mandateSteps('met'), placesAboveExpectation: 0, prospectsGraduated: 0 });
   return [
-    earns,
     `Level 2 costs ${XP_FIRST_LEVEL} XP and every level after it costs a little more. Each level is one point, and ${GM_MAX_TREE_POINTS} points fill a tree.`,
     `A .500 season that meets the ask pays ${even.total} XP, so at that pace the first point is about ${plural(Math.ceil(XP_FIRST_LEVEL / even.total), 'season')} away. Playoff rounds, a title and beating the ask bring it sooner.`,
     'A tree marked Not here yet takes no points on this desk, so a point is never spent where it moves nothing.',

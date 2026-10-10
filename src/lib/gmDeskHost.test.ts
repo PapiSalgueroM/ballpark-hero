@@ -742,7 +742,7 @@ describe('the words on the boxes', () => {
     const lg = league();
     const seats = [firedFrom(BOTTOM, WINNER), firedFrom(BOTTOM, WRECK), firedFrom(BOTTOM, ['badly', 'badly']), firedFrom(TOP, ['met'], 2026, 2)];
     for (const pack of [GM_SEAT_PACKS.nfl, GM_SEAT_PACKS.nba, GM_SEAT_PACKS.mlb, GM_SEAT_PACKS.nhl]) {
-      [...hostMarketHelp(pack), ...hostCareerHelp(pack), ...hostXpHelp(hostEarnsLine(['wins', 'titles', 'playoffs', 'mandate']))].forEach(clean);
+      [...hostMarketHelp(pack), ...hostCareerHelp(pack), ...hostXpHelp()].forEach(clean);
       for (const seat of seats) {
         const m = hostMarket({ ...host, pack }, lg, seat, nameOf)!;
         clean(m.line);
@@ -795,7 +795,7 @@ describe('the words on the boxes', () => {
     expect(hostEarnsLine([])).toBe('This desk does not pay XP yet.');
   });
   it('compute the worked examples from the lib they describe', () => {
-    const help = hostXpHelp('x').join(' ');
+    const help = hostXpHelp().join(' ');
     expect(help).toContain('pays 170 XP');
     expect(help).toContain('pays 110 XP, so at that pace the first point is about 4 seasons away');
     expect(help).toContain('costs 14, not 16, so you keep the job on trust 2');

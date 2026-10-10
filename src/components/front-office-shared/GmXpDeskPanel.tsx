@@ -5,8 +5,20 @@
  * that is not routed sells nothing, and the host refuses the spend as well,
  * whatever this screen allows.
  *
- * The "?" says what THIS desk pays XP for (facts.career.earns), so the screen
- * promises no more than the save can feed. Not mounted by this round.
+ * The line at the top says what THIS desk pays XP for (facts.career.earns),
+ * and the "?" under it holds the rules, without saying that line a second
+ * time.
+ *
+ * OWED BY THE BIND (Round M1), AND A CONDITION OF MOUNTING THIS PANEL: the
+ * wrapped GmXpPanel (Round 942, not a file of this round, which is new files
+ * only) still prints its own fixed sentence, which names six sources of XP.
+ * A desk that feeds four therefore shows the honest line above and, right
+ * under it, a sentence that promises two sources that pay nothing. The brief
+ * gives GmXpPanel an optional `earns` prop in M1: pass it, and keep one copy
+ * of the sentence on the screen. On a phone the same panel is seven tree
+ * cards in one column with the live trees last and 25 px buttons; M1 owns
+ * that layout too. Nothing may mount GM_CAREER_PANELS before both are done.
+ * Not mounted by this round.
  */
 import { useState } from 'react';
 import type { GmPanelProps } from '@/lib/gmDesk';
@@ -36,7 +48,8 @@ export default function GmXpDeskPanel({ desk, facts }: GmPanelProps<GmCareerFact
         </div>
         {help && (
           <div className="mt-2 space-y-1 rounded-lg border border-border bg-secondary/30 p-2 text-[10px] text-muted-foreground" data-gm-xp-help>
-            {hostXpHelp(earns).map(line => <p key={line}>{line}</p>)}
+            {/* The earn line is already on the screen above while the desk is on: the help adds it only when it is not. */}
+            {(deskOn ? hostXpHelp() : [earns, ...hostXpHelp()]).map(line => <p key={line}>{line}</p>)}
           </div>
         )}
       </div>

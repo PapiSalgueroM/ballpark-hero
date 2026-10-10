@@ -238,11 +238,19 @@ describe('the GM level panel', () => {
     expect(career.spend).toHaveBeenCalledTimes(1);
     expect(container.querySelector('[data-gm-xp-earns]')!.textContent).toBe(career.earns);
     fireEvent.click(screen.getByLabelText('How GM XP works'));
-    expect(container.querySelectorAll('[data-gm-xp-help] p')).toHaveLength(5);
+    expect(container.querySelectorAll('[data-gm-xp-help] p')).toHaveLength(4);
+    /* The earn line is on the screen once: above the "?", never a second time inside it. */
+    expect(container.textContent!.split(career.earns)).toHaveLength(2);
   });
-  it('says XP has not started on a save whose desk is off', () => {
-    const { container } = render(<GmXpDeskPanel {...panelProps(binding(HELD, { deskOn: false }))} />);
+  it('says XP has not started on a save whose desk is off, and the "?" then carries the earn line', () => {
+    const career = binding(HELD, { deskOn: false });
+    const { container } = render(<GmXpDeskPanel {...panelProps(career)} />);
     expect(container.querySelector('[data-gm-xp-earns]')!.textContent).toBe('XP starts once your GM desk is open.');
+    fireEvent.click(screen.getByLabelText('How GM XP works'));
+    const lines = container.querySelectorAll('[data-gm-xp-help] p');
+    expect(lines).toHaveLength(5);
+    expect(lines[0].textContent).toBe(career.earns);
+    expect(container.textContent!.split(career.earns)).toHaveLength(2);
   });
 });
 
