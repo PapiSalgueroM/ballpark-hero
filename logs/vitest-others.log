@@ -1,0 +1,62 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/liveSimCelebration.test.tsx [2m([22m[2m17 tests[22m[2m)[22m[33m 483[2mms[22m[39m
+ [32m✓[39m src/test/miniPitchScene.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 198[2mms[22m[39m
+ [32m✓[39m src/test/managerScorerMarks.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[32m 185[2mms[22m[39m
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mtwo real players whose names slug to one string stay two men
+[22m[39m  the pair: Éderson CM @Atalanta 35.5 | Ederson GK @Fenerbahçe 9.5
+  squad [33m26[39m -> [33m28[39m duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Hertha BSC: 16 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  AC Milan: 21 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: one of him[2m > [22m[2mno club starts a career with two players under one id
+[22m[39m  Real Madrid: 26 players, duplicate ids: []
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  a shape: on disk, 53988 bytes, week 0
+  a mentality: on disk, 53989 bytes, week 0
+  an XI change: on disk, 53991 bytes, week 0
+  a training plan: on disk, 53988 bytes, week 0
+  a squad role: on disk, 53995 bytes, week 0
+  a transfer status: on disk, 54021 bytes, week 0
+  a signing: on disk, 54458 bytes, week 0
+  kick off: on disk, 70604 bytes, week 0
+  the second half: on disk, 68192 bytes, week 1
+  leaving the report: on disk, 68192 bytes, week 1
+  a quick sim: on disk, 72287 bytes, week 2
+  leaving that report: on disk, 72287 bytes, week 2
+  a run of weeks: on disk, 85360 bytes, week 8
+  leaving that report too: on disk, 85360 bytes, week 8
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mevery transition is on disk, and a reload loses nothing
+[22m[39m  reloaded: identical, 85360 bytes
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving the site mid match keeps the clock where it stood
+[22m[39m  on screen 19', save at 0'
+  after leaving, save at 19'
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mleaving only the viewer, with the page still up, keeps it too
+[22m[39m  on screen 19', page still up, the match finished at week 1 and the save matches memory
+
+[90mstdout[2m | src/test/clubManagerSave.test.tsx[2m > [22m[2mClub Manager: the save[2m > [22m[2mStart Fresh is not undone by leaving straight afterwards
+[22m[39m  after Start Fresh and leaving, the slot is empty
+
+ [32m✓[39m src/test/clubManagerSave.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 1321[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the save[2m > [22mevery transition is on disk, and a reload loses nothing [33m 502[2mms[22m[39m
+ [32m✓[39m src/test/seasonCentreOwnGoals.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 1946[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "us" with who did it and the club that got it, the same live, held and replayed [33m 676[2mms[22m[39m
+   [33m[2m✓[22m[39m Season Centre: own goals on the page (Round 1167, read after the Release AP merge)[2m > [22mprints an own goal for side "them" with who did it and the club that got it, the same live, held and replayed [33m 441[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m68 passed[39m[22m[90m (68)[39m
+[2m   Start at [22m 13:01:54
+[2m   Duration [22m 8.58s[2m (transform 7.02s, setup 399ms, collect 12.65s, tests 4.13s, environment 3.15s, prepare 868ms)[22m
+

@@ -1,0 +1,18 @@
+vitest-others: node_modules/.bin/vitest run src/test/managerScorerMarks.test.tsx src/test/miniPitchScene.test.ts src/test/seasonCentreOwnGoals.test.tsx src/test/clubManagerSave.test.tsx src/test/liveSimCelebration.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveSim: node scripts/simLiveSim.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
