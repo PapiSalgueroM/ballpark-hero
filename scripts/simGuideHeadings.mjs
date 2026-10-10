@@ -38,6 +38,7 @@
  *   nokeyword  the Club Manager rules h2 loses the game's name                 section 1
  *   lostline   one Club Manager rule sentence is dropped from the sections     section 1
  *   careerline one explicitly reviewed career instruction is dropped          section 1
+ *   traininglocation the reviewed phone training location is reverted          section 1
  *   unconvert  the Stadium Tycoon guide goes back to flat lists                section 3
  *   snapdrift  a Club Manager snapshot carries one stale h3                    section 4
  * Under a control the harness exits 1 when exactly the predicted section is
@@ -79,7 +80,7 @@ const CAREER_GUIDE_ADDITIONS = {
   ],
   example: ['Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.'],
 };
-const CONTROLS = { skiplevel: 2, nokeyword: 1, lostline: 1, careerline: 1, unconvert: 3, snapdrift: 4 };
+const CONTROLS = { skiplevel: 2, nokeyword: 1, lostline: 1, careerline: 1, traininglocation: 1, unconvert: 3, snapdrift: 4 };
 const CONTROL = process.env.GUIDE_HEADINGS_CONTROL || '';
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`GUIDE_HEADINGS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -154,6 +155,18 @@ const games = ALL_GAMES.filter((g, i, a) => a.findIndex(x => x.path === g.path) 
 const content = new Map();
 for (const g of games) content.set(g.path, await loadGameContent(g.path));
 const fixture = JSON.parse(fs.readFileSync(FIXTURE, 'utf8'));
+/* Round 1188: only the training button location changed. The remaining frozen
+   sentence, every other sentence, all parts and the conversion floor stay held. */
+const SOCCER_TRAINING_LOCATION = {
+  before: 'Open the training ground (the dumbbell button, bottom right)',
+  after: 'Open the training ground (the dumbbell button, above your player on phones or bottom right on desktop)',
+};
+function reviewedGuideSentences(route, part, sentences) {
+  if (route !== '/soccer-career' || part !== 'howToPlay') return sentences;
+  const originals = sentences.filter(line => line.startsWith(`${SOCCER_TRAINING_LOCATION.before} once a season.`));
+  if (originals.length !== 1) abort('Reviewed training location requires exactly one original frozen instruction');
+  return sentences.map(line => line === originals[0] ? line.replace(SOCCER_TRAINING_LOCATION.before, SOCCER_TRAINING_LOCATION.after) : line);
+}
 
 /* ---- freeze mode ---- */
 const freezeAt = process.argv.indexOf('--freeze');
@@ -218,6 +231,17 @@ if (CONTROL === 'careerline') {
   console.log('CONTROL careerline: the reviewed NBA decision instruction was removed; section 1 must go red');
 }
 
+if (CONTROL === 'traininglocation') {
+  const sections = content.get('/soccer-career')?.howToPlaySections ?? [];
+  const matches = sections.flatMap(section => [section, ...(section.subsections ?? [])])
+    .flatMap(section => section.items.map((line, index) => ({ section, line, index })))
+    .filter(row => row.line.startsWith(`${SOCCER_TRAINING_LOCATION.after} once a season.`));
+  if (matches.length !== 1) abort('control traininglocation: exactly one reviewed Soccer Career instruction must exist');
+  const { section, line, index } = matches[0];
+  section.items[index] = line.replace(SOCCER_TRAINING_LOCATION.after, SOCCER_TRAINING_LOCATION.before);
+  if (section.items[index] === line) abort('control traininglocation: the copied instruction did not change');
+  console.log('CONTROL traininglocation: only the training button location reverted to the stale desktop-only wording; section 1 must go red');
+}
 /* ---- helpers ---- */
 const decode = s => s
   .replace(/<[^>]+>/g, '')
@@ -325,7 +349,7 @@ const notes = { 1: '', 2: '', 3: '', 4: '' };
     if (!c) { f.push(`${route}: frozen in the fixture but no game with a guide lives there any more`); continue; }
     const flat = flatGuide(c);
     for (const p of PARTS) {
-      const was = [...frozen[p], ...(CAREER_GUIDE_ROUTES.has(route) ? CAREER_GUIDE_ADDITIONS[p] ?? [] : [])];
+      const was = reviewedGuideSentences(route, p, [...frozen[p], ...(CAREER_GUIDE_ROUTES.has(route) ? CAREER_GUIDE_ADDITIONS[p] ?? [] : [])]);
       const now = flat[p] ?? [];
       for (const s of was) {
         sentences += 1;

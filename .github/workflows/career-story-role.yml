@@ -6,6 +6,11 @@ on:
       - .github/workflows/career-story-role.yml
       - src/pages/SoccerCareer.tsx
       - src/data/gameContent/soccer2.ts
+      - src/data/searchKeywords.json
+      - scripts/genSearchKeywords.mjs
+      - scripts/simGuideHeadings.mjs
+      - scripts/simSiteSearch.mjs
+      - scripts/data/guideHeadingsFrozen.json
       - src/components/soccer-career/CareerStory.tsx
       - src/lib/soccerCareerEngine.ts
       - src/lib/soccerCareerRole.ts
@@ -28,7 +33,61 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  guide-index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Derive and verify the actual guide search index
+        run: |
+          mkdir -p career-guide-index-artifacts
+          git rev-parse HEAD > career-guide-index-artifacts/source-head.txt
+          git rev-parse HEAD^{tree} > career-guide-index-artifacts/source-tree.txt
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha || github.sha }}"
+          npm ci
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node --input-type=module - <<'JS'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          import { createHash } from 'node:crypto';
+          import { spawnSync } from 'node:child_process';
+          const out = 'career-guide-index-artifacts', file = 'src/data/searchKeywords.json', before = fs.readFileSync(file);
+          const sha = value => createHash('sha256').update(value).digest('hex');
+          let generated, result;
+          try {
+            result = spawnSync(process.execPath, ['scripts/genSearchKeywords.mjs'], { encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 });
+            fs.writeFileSync(`${out}/generator.log`, (result.stdout ?? '') + (result.stderr ?? ''));
+            process.stdout.write(result.stdout ?? ''); process.stderr.write(result.stderr ?? '');
+            generated = fs.readFileSync(file); fs.writeFileSync(`${out}/searchKeywords.json`, generated);
+          } finally { fs.writeFileSync(file, before); }
+          const sourceHeld = fs.readFileSync(file).equals(before), matches = generated.equals(before);
+          fs.writeFileSync(`${out}/receipt.json`, JSON.stringify({ head: fs.readFileSync(`${out}/source-head.txt`, 'utf8').trim(), tree: fs.readFileSync(`${out}/source-tree.txt`, 'utf8').trim(), generatorSha256: sha(fs.readFileSync('scripts/genSearchKeywords.mjs')), originalSha256: sha(before), generatedSha256: sha(generated), sourceHeld, matches, exit: result.status }, null, 2));
+          assert.equal(sourceHeld, true, 'Generator preparation restores the checked-in index byte-exact');
+          assert.equal(result.status, 0, 'Actual generator completes');
+          assert.equal(matches, true, 'Checked-in search index equals the complete actual generator output');
+          JS
+      - name: Hold all checked-in source after preparation
+        if: always()
+        run: git diff --exit-code HEAD
+      - name: Retain the small actual generator output and receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: career-guide-index-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-guide-index-artifacts/
+          retention-days: 5
   verify:
+    needs: guide-index
     runs-on: ubuntu-latest
     timeout-minutes: 65
     defaults:
@@ -118,6 +177,19 @@ jobs:
           name: career-story-role-early-${{ github.run_id }}-${{ github.run_attempt }}
           path: career-story-role-artifacts/
           retention-days: 5
+      - name: Exact reviewed guide migration and current search outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          git diff --exit-code fa24b3848d99e29367486489b081a483dc544206 -- scripts/data/guideHeadingsFrozen.json
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs 2>&1 | tee career-story-role-artifacts/simGuideHeadings.log
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSiteSearch.mjs 2>&1 | tee career-story-role-artifacts/simSiteSearch.log
+          set +e
+          GUIDE_HEADINGS_CONTROL=traininglocation NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simGuideHeadings.mjs 2>&1 | tee career-story-role-artifacts/guide-traininglocation-control.log
+          control_status=${PIPESTATUS[0]}
+          set -e
+          test "$control_status" = 1
+          grep -F 'CONTROL traininglocation: only the training button location reverted to the stale desktop-only wording; section 1 must go red' career-story-role-artifacts/guide-traininglocation-control.log
+          grep -F 'simGuideHeadings control traininglocation: section 1 red and every other section green, the break was caught where it should be (exit 1)' career-story-role-artifacts/guide-traininglocation-control.log
       - name: Related Soccer Career outcomes
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
