@@ -1,0 +1,3 @@
+vitest-1 exit=0 259s |    Duration  257.92s (transform 30.89s, setup 12.06s, collect 110.02s, tests 475.53s, environment 95.39s, prepare 19.95s)
+vitest-3 exit=1 283s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/dailySaveShapes.test.tsx,title=src/test/dailySaveShapes.test.tsx > a damaged daily save resets itself 
+vitest-2 exit=0 312s |    Duration  311.78s (transform 32.99s, setup 9.20s, collect 90.14s, tests 711.06s, environment 66.92s, prepare 14.14s)

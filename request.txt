@@ -1,0 +1,3 @@
+vitest-1: node_modules/.bin/vitest run --shard=1/3 --testTimeout=300000 --hookTimeout=120000
+vitest-2: node_modules/.bin/vitest run --shard=2/3 --testTimeout=300000 --hookTimeout=120000
+vitest-3: node_modules/.bin/vitest run --shard=3/3 --testTimeout=300000 --hookTimeout=120000
