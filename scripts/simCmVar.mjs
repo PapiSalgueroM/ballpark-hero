@@ -67,6 +67,7 @@ const titles = {
   rates: 'uses stated game rates with bilateral outcomes and reports the enabled baseline delta',
   baseline: 'preserves the full prior default match and old live or historical kickoff behavior',
   bands: 'holds every review outcome a match inside the range real football gives, on the generated rates',
+  coverage: 'asks for reviews only where the competition uses them and plays the same match everywhere else',
 };
 const controls = {
   counted: { file: engine, from: '  if (myReview) me.goals = myReview.goals;', to: '  if (false) me.goals = myReview!.goals;', test: 'goal' },
@@ -79,6 +80,7 @@ const controls = {
   resume: { file: helper, from: 'return new Set(feed.filter(event => {', to: 'return new Set([]); return new Set(feed.filter(event => {', test: 'resume' },
   announce: { file: helper, from: "  if (event.kind === 'var' && event.review) return settled.has(event.review.id);", to: '  return true;', test: 'reveal' },
   disabled: { file: engine, from: "...(varReviews && worldYear(state) >= 2026", to: "...(false && worldYear(state) >= 2026", test: 'rates' },
+  everywhere: { file: helper, from: '  if (!from) return false;', to: '  if (!from) return true;', test: 'coverage' },
   /* Round 1218: each rate Round 1181 typed, put back into the generated module. Each must leave the range for its own reason. */
   oldgoalreview: { file: rates, from: /goalReview: [0-9.]+/, to: 'goalReview: 0.16', test: 'bands' },
   oldoverturn: { file: rates, from: /overturn: [0-9.]+/, to: 'overturn: 0.32', test: 'bands' },
@@ -116,7 +118,7 @@ async function main() {
     async function bundle(source, varSource, name, ratesSource = withFixtureRates(sources[rates])) {
       const entry = path.join(folder, `${name}.ts`), leaf = path.join(folder, `${name}-var.ts`), ratesLeaf = path.join(folder, `${name}-rates.ts`), output = path.join(folder, `${name}.cjs`);
       await writeFile(ratesLeaf, ratesSource);
-      await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce } from '@/lib/clubManagerVar';\n`);
+      await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce, cmVarCovers } from '@/lib/clubManagerVar';\n`);
       await writeFile(leaf, varSource);
       await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': entry, '@/lib/clubManagerVar': leaf, '@/data/clubManagerVarRates': ratesLeaf, '@': path.join(root, 'src') } });
       return () => { delete require.cache[require.resolve(output)]; return require(output); };
@@ -295,6 +297,55 @@ async function main() {
         const enabled = withCmVarSeed(7115, () => candidateFactory().playNextEntry(oldLive.state, { skipHalftime: true, varReviews: true }));
         assert.deepEqual(enabled, plain); assert.deepEqual(oldLive.state.live, before);
         assert.ok(!enabled.report.detail.play.some(e => e.kind === 'var'), 'A loaded legacy live match is never opted in retrospectively');
+      },
+      /* Round 1218: only where VAR is used. On fixture rates, so a review that slipped into a competition without
+         them would show at once. A match whose competition has no row that says yes (Championship, Eredivisie,
+         Ligue 1, the Scottish Premiership here, and a covered club's domestic cup) is the same match, and leaves
+         the random stream in the same place, whether reviews are asked for or not, and its saved live match
+         carries no opt in. A league match in a league that says yes carries it. */
+      async coverage() {
+        const both = (state, seed, opts) => withCmVarSeed(seed, () => { const result = cm.playNextEntry(state, opts); return { result, next: Math.random() }; });
+        const optIn = (state, seed) => { const stop = withCmVarSeed(seed, () => cm.playNextEntry(state, { noCoach: true, varReviews: true })); return stop.kind === 'halftime' ? stop.state.live.varReviews === true : null; };
+        let outside = 0;
+        for (const [c, club] of ['Wolves', 'Ajax', 'Lyon', 'Celtic'].entries()) {
+          let state = withCmVarSeed(4200 + c, () => cm.startCareer(club)), matches = 0;
+          for (let i = 0; i < 60 && matches < 12; i++) {
+            const seed = 8100 + c * 101 + i;
+            const lit = optIn(state, seed);
+            if (lit !== null) assert.equal(lit, false, `${club}: a match in a competition without reviews carries no opt in`);
+            const asked = both(state, seed, { skipHalftime: true, noCoach: true, varReviews: true }), plain = both(state, seed, { skipHalftime: true, noCoach: true });
+            assert.deepEqual(asked, plain, `${club}: where the competition has no reviews, asking for them plays the same match and leaves the stream where it was`);
+            if (asked.result.kind === 'seasonOver' || asked.result.state?.sacked) break;
+            if (asked.result.kind === 'match') { matches += 1; outside += 1; assert.ok(!asked.result.report.detail.play.some(e => e.kind === 'var')); }
+            state = asked.result.state;
+          }
+          assert.ok(matches >= 10, `${club} played ${matches} matches`);
+        }
+        let state = withCmVarSeed(4107, () => cm.startCareer('Arsenal')), league = 0, cup = 0, europe = 0;
+        for (let i = 0; i < 120 && (league < 3 || cup < 1 || europe < 1); i++) {
+          const seed = 8600 + i;
+          const stop = withCmVarSeed(seed, () => cm.playNextEntry(state, { noCoach: true, varReviews: true }));
+          if (stop.kind === 'halftime') {
+            const comp = stop.state.live.compLabel;
+            if (comp.startsWith('Premier League')) { league += 1; assert.equal(stop.state.live.varReviews, true, `${comp}: a league whose row says yes carries the opt in`); }
+            else if (comp.startsWith('Champions League')) { europe += 1; assert.equal(stop.state.live.varReviews, true, `${comp}: the Champions League carries the opt in`); }
+            else if (comp.startsWith('FA Cup')) {
+              cup += 1; assert.equal(stop.state.live.varReviews, undefined, `${comp}: a cup with no row that says yes carries no opt in`);
+              assert.deepEqual(both(state, seed, { skipHalftime: true, noCoach: true, varReviews: true }), both(state, seed, { skipHalftime: true, noCoach: true }));
+            }
+          }
+          const next = withCmVarSeed(seed, () => cm.playNextEntry(state, { skipHalftime: true, noCoach: true }));
+          if (next.kind === 'seasonOver' || next.state?.sacked) break;
+          state = next.state;
+        }
+        assert.ok(league >= 3 && cup >= 1 && europe >= 1, `Arsenal met ${league} league, ${cup} cup and ${europe} Champions League kickoffs`);
+        const stagedSource = withFixtureRates(sources[rates]).replace("Readonly<Record<string, string>> = { ", "Readonly<Record<string, string>> = { 'cup:FA Cup': 'QF', ");
+        assert.ok(stagedSource.includes("'cup:FA Cup': 'QF'"), 'The staged coverage reached the module');
+        const staged = (await bundle(changed[engine], changed[helper], 'staged', stagedSource))();
+        assert.deepEqual(['R16', 'QF', 'SF', 'F'].map(s => staged.cmVarCovers('cup:FA Cup', s)), [false, true, true, true], 'A cup is covered from its first stage with reviews on');
+        assert.deepEqual(['group', 'R16', 'QF', 'SF', 'F'].map(s => staged.cmVarCovers('ucl', s)), [true, true, true, true, true]);
+        assert.deepEqual([staged.cmVarCovers('league:premier'), staged.cmVarCovers('league:championship'), staged.cmVarCovers('cup:FA Cup'), staged.cmVarCovers('toString'), staged.cmVarCovers('league:atlantis')], [true, false, false, false, false]);
+        metrics.coverage = { outside, league, cup, europe };
       },
       /* Round 1218. The generated rates themselves, on a fleet of league matches in the leagues whose row says
          yes (scripts/lib/cmVarFleet.mjs: 20 clubs, one season a seed). Each outcome a match must sit inside the
