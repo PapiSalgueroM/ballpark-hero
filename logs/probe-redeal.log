@@ -1,0 +1,2 @@
+mut1229: redeal applied to src/lib/clubManager.ts
+PROBE under redeal: exit 1; 41 FAIL lines; first:    FAIL Minnesota United (now, mlsWest) season 1 entry 22: 0 named goals of Houston Dynamo are on no row, the book counted 1 unnamed; last: probeOld1229: 73 FAILURE(S) (44s)

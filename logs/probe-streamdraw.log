@@ -1,0 +1,2 @@
+mut1229: streamdraw applied to src/lib/clubManagerLeagueBook.ts
+PROBE under streamdraw: exit 1; 41 FAIL lines; first:    FAIL New England Revolution (now, mlsEast) season 2 entry 1: 0 named goals of Philadelphia Union are on no row, the book counted 1 unnamed; last: probeOld1229: 148 FAILURE(S) (21s)

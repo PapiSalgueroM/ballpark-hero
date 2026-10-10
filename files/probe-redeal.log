@@ -1,0 +1,50 @@
+A  49 careers: every league of every era, and two created clubs
+   FAIL Minnesota United (now, mlsWest) season 1 entry 22: 0 named goals of Houston Dynamo are on no row, the book counted 1 unnamed
+      DETAIL report Houston Dynamo 0-0 Minnesota United; their lines []; Houston Dynamo goals for in the table 28 -> 29; book rows gained []; og 0 -> 0; u 28 -> 29; decided by regular; eleven named: see next
+A  stream: 147 of 147 faces equal to the base commit's source, over 49 careers
+A  reports whose lines are not as many as the goals: 0; matches where the opponent's goals for moved by another number than the report's: 1
+A  law: 40405 checks; leagues with an odd number of clubs: now mlsEast 15, now mlsWest 15; league weeks of mine with no match (a bye): 1
+A  report against book: 1952 league matches of mine, 2781 rival goal lines, 77 own goal lines, 111 named by the report and on no row, 350 from the spot or a free kick, 1173 assists on 2354 lines that may carry one (0.498), 80 matches whose only rival goal was a set piece
+A  share of rival goals with nobody named, by league (highest first): now segunda 97%, now croatia 92%, now ligue2 91%, now bundesliga2 89%, now mlsWest 86%, now serieb 81%, now greece 71%, now switzerland 70%, now austria 70%, now denmark 69%, now proleague 68%, now scottish 67%, now ligamx 66%, now saudi 62%
+A  leagues at 0 to 5 percent unnamed: 15 of 49; over 25 percent: 21
+   FAIL Arsenal (now) saved by the base engine at stop 0, week 0: a league book appeared in a season that began without one
+   FAIL Arsenal (now) saved by the base engine at stop 0, week 0: differs from the base engine at face 0 of 58 (loaded d2f63e1dff39e2a55ca3 against loaded 00ee2a3ed48904df5209)
+   FAIL Arsenal (now) saved by the base engine at stop 3, week 3: a league book appeared in a season that began without one
+   FAIL Arsenal (now) saved by the base engine at stop 3, week 3: differs from the base engine at face 0 of 57 (loaded 1ffdbf9a5963aa84dc9b against loaded 5fc0db605e557b817ae8)
+   FAIL Arsenal (now) saved by the base engine at stop 11, week 11: a league book appeared in a season that began without one
+   FAIL Arsenal (now) saved by the base engine at stop 11, week 11: differs from the base engine at face 0 of 50 (loaded 67793a291fe631824df9 against loaded 7ddfc9df32c6253df206)
+   FAIL Arsenal (now) saved by the base engine at stop 27, week 28: a league book appeared in a season that began without one
+   FAIL Arsenal (now) saved by the base engine at stop 27, week 28: differs from the base engine at face 0 of 32 (loaded a960948f3bb407eae3b6 against loaded c1c4bba31bf8776d0645)
+   FAIL Arsenal (now) saved by the base engine at stop half, week 7, paused at half time: a league book appeared in a season that began without one
+   FAIL Arsenal (now) saved by the base engine at stop half, week 7, paused at half time: differs from the base engine at face 0 of 51 (loaded 9d0bc3db83621dd4fc2e against loaded d44f82038628d68cb0b8)
+   FAIL Arsenal (now) saved by the base engine at stop end, week 54, sacked: a league book appeared in a season that began without one
+   FAIL Arsenal (now) saved by the base engine at stop end, week 54, sacked: differs from the base engine at face 0 of 9 (loaded 39ad6b29fa4ad9a54300 against loaded d4416320859411e6f7ba)
+   FAIL Southampton (now) saved by the base engine at stop 0, week 0: a league book appeared in a season that began without one
+   FAIL Southampton (now) saved by the base engine at stop 0, week 0: differs from the base engine at face 0 of 58 (loaded bd3b67d0eb628af14db6 against loaded 43ba32b0a418c86c6b89)
+   FAIL Southampton (now) saved by the base engine at stop 3, week 3: a league book appeared in a season that began without one
+   FAIL Southampton (now) saved by the base engine at stop 3, week 3: differs from the base engine at face 0 of 55 (loaded 982b11b9cab029d65f80 against loaded 8a66dadaf08ce2f57e00)
+   FAIL Southampton (now) saved by the base engine at stop 11, week 13: a league book appeared in a season that began without one
+   FAIL Southampton (now) saved by the base engine at stop 11, week 13: differs from the base engine at face 0 of 46 (loaded fe38c2a2b79db95b4680 against loaded 3ff5f32067a6daf05961)
+   FAIL Southampton (now) saved by the base engine at stop 27, week 33: a league book appeared in a season that began without one
+   FAIL Southampton (now) saved by the base engine at stop 27, week 33: differs from the base engine at face 0 of 32 (loaded f0da2f1bcf924e4a22a3 against loaded d695a4823250ac57397f)
+   FAIL Southampton (now) saved by the base engine at stop half, week 9, paused at half time: a league book appeared in a season that began without one
+   FAIL Southampton (now) saved by the base engine at stop half, week 9, paused at half time: differs from the base engine at face 0 of 50 (loaded 820d157fa653f9d14bd8 against loaded 0a95a19c2d11f58126fd)
+   FAIL Southampton (now) saved by the base engine at stop end, week 62: a league book appeared in a season that began without one
+   FAIL Southampton (now) saved by the base engine at stop end, week 62: differs from the base engine at face 0 of 9 (loaded adcf4b2147b5bf084691 against loaded 8e099065359bd0ac3e8b)
+   FAIL Hertha BSC (now) saved by the base engine at stop 0, week 0: a league book appeared in a season that began without one
+   FAIL Hertha BSC (now) saved by the base engine at stop 0, week 0: differs from the base engine at face 0 of 45 (loaded 4cd577e635341f3551b3 against loaded e7880581d4ec745ccc5a)
+   FAIL Hertha BSC (now) saved by the base engine at stop 3, week 3: a league book appeared in a season that began without one
+   FAIL Hertha BSC (now) saved by the base engine at stop 3, week 3: differs from the base engine at face 0 of 43 (loaded c60c89b08f6cda6e341f against loaded 7b347e1981fd7c455e30)
+   FAIL Hertha BSC (now) saved by the base engine at stop 11, week 14: a league book appeared in a season that began without one
+   FAIL Hertha BSC (now) saved by the base engine at stop 11, week 14: differs from the base engine at face 0 of 34 (loaded f85b61514233e99d9f83 against loaded 9568034fc8e17a567856)
+   FAIL Hertha BSC (now) saved by the base engine at stop 27, week 37: a league book appeared in a season that began without one
+   FAIL Hertha BSC (now) saved by the base engine at stop 27, week 37: differs from the base engine at face 0 of 18 (loaded e8f0c45ecdd3327ddded against loaded d42271cf372673feabea)
+   FAIL Hertha BSC (now) saved by the base engine at stop half, week 9, paused at half time: a league book appeared in a season that began without one
+   FAIL Hertha BSC (now) saved by the base engine at stop half, week 9, paused at half time: differs from the base engine at face 0 of 38 (loaded 16e18ae465d6f286e552 against loaded ff36a745321739c0ba8a)
+   FAIL Hertha BSC (now) saved by the base engine at stop end, week 50, sacked: a league book appeared in a season that began without one
+   FAIL Hertha BSC (now) saved by the base engine at stop end, week 50, sacked: differs from the base engine at face 0 of 9 (loaded eb9aa96e57e7a1423990 against loaded 397eddd614e83156c2f5)
+   FAIL Real Madrid (now) saved by the base engine at stop 0, week 0: a league book appeared in a season that began without one
+   FAIL Real Madrid (now) saved by the base engine at stop 0, week 0: differs from the base engine at face 0 of 60 (loaded 91b609a3d0654b7fcd6e against loaded fda13dd807077ae10acd)
+   FAIL Real Madrid (now) saved by the base engine at stop 3, week 3: a league book appeared in a season that began without one
+B  0 of 36 saves written by the base engine play out byte equal on the candidate (1421 faces: every entry to the season's end, the summary, the summer, six entries on); 6 of them were paused at half time
+probeOld1229: 73 FAILURE(S) (44s)

@@ -1,0 +1,8 @@
+base exit=0 1s | base ready
+probe-byeweek exit=0 22s | PROBE under byeweek: exit 1; 41 FAIL lines; first:    FAIL New England Revolution (now, mlsEast) season 1 entry 16: Columbus Crew 19+0+0 on the book, 21 in the table; las
+probe-wrongman exit=0 22s | PROBE under wrongman: exit 1; 41 FAIL lines; first:    FAIL Brentford (now, premier) season 1 entry 1: the book gave 1 to Micky van de Ven of Tottenham, the report does n
+probe-unnamed exit=0 22s | PROBE under unnamed: exit 1; 2 FAIL lines; first:    FAIL Minnesota United (now, mlsWest) season 1 entry 22: 0 named goals of Houston Dynamo are on no row, the book count
+probe-offbyone exit=0 22s | PROBE under offbyone: exit 1; 41 FAIL lines; first:    FAIL Brentford (now, premier) season 1 entry 13: 1 own goal lines for Manchester United, the book added 0; last: pr
+probe-penassistmine exit=0 22s | PROBE under penassistmine: exit 1; 41 FAIL lines; first:    FAIL Brentford (now, premier) season 1 entry 25: 1 assists for Everton on 0 goals that may carry one (1 from t
+probe-streamdraw exit=0 22s | PROBE under streamdraw: exit 1; 41 FAIL lines; first:    FAIL New England Revolution (now, mlsEast) season 2 entry 1: 0 named goals of Philadelphia Union are on no row, t
+probe-redeal exit=0 44s | PROBE under redeal: exit 1; 41 FAIL lines; first:    FAIL Minnesota United (now, mlsWest) season 1 entry 22: 0 named goals of Houston Dynamo are on no row, the book count

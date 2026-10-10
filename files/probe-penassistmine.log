@@ -1,0 +1,49 @@
+A  49 careers: every league of every era, and two created clubs
+   FAIL Brentford (now, premier) season 1 entry 25: 1 assists for Everton on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Derby County (now, championship) season 1 entry 2: 1 assists for Bristol City on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Derby County (now, championship) season 1 entry 5: 3 assists for West Ham on 1 goals that may carry one (2 from the spot or a free kick)
+   FAIL Derby County (now, championship) season 1 entry 27: 2 assists for Bristol City on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Derby County (now, championship) season 1 entry 37: 3 assists for Norwich City on 2 goals that may carry one (1 from the spot or a free kick)
+   FAIL Derby County (now, championship) season 1 entry 48: 2 assists for Burnley on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Espanyol (now, laliga) season 1 entry 27: 1 assists for Rayo Vallecano on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Torino (now, seriea) season 1 entry 3: 1 assists for Venezia on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Torino (now, seriea) season 1 entry 10: 1 assists for Fiorentina on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Hamburg (now, bundesliga) season 1 entry 15: 2 assists for Hoffenheim on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Hamburg (now, bundesliga) season 1 entry 33: 1 assists for Hoffenheim on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Hamburg (now, bundesliga) season 2 entry 6: 1 assists for Eintracht Frankfurt on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Lorient (now, ligue1) season 2 entry 2: 3 assists for Brest on 2 goals that may carry one (1 from the spot or a free kick)
+   FAIL Sparta Rotterdam (now, eredivisie) season 1 entry 10: 1 assists for Heerenveen on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Sparta Rotterdam (now, eredivisie) season 2 entry 4: 3 assists for PSV on 2 goals that may carry one (1 from the spot or a free kick)
+   FAIL Minnesota United (now, mlsWest) season 1 entry 4: 1 assists for Portland Timbers on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Minnesota United (now, mlsWest) season 1 entry 22: 0 named goals of Houston Dynamo are on no row, the book counted 1 unnamed
+      DETAIL report Houston Dynamo 0-0 Minnesota United; their lines []; Houston Dynamo goals for in the table 28 -> 29; book rows gained []; og 0 -> 0; u 28 -> 29; decided by regular; eleven named: see next
+   FAIL Santa Clara (now, primeira) season 1 entry 9: 3 assists for Porto on 2 goals that may carry one (2 from the spot or a free kick)
+   FAIL Santa Clara (now, primeira) season 1 entry 36: 2 assists for Benfica on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Motherwell (now, scottish) season 1 entry 4: 2 assists for Celtic on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Konyaspor (now, superlig) season 1 entry 21: 2 assists for Galatasaray on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Grêmio (now, brasileirao) season 1 entry 37: 4 assists for Atlético Mineiro on 3 goals that may carry one (1 from the spot or a free kick)
+   FAIL Grêmio (now, brasileirao) season 1 entry 38: 2 assists for Botafogo on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Grêmio (now, brasileirao) season 1 entry 41: 1 assists for Vasco da Gama on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Atlético San Luis (now, ligamx) season 2 entry 1: 2 assists for Guadalajara on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Melbourne Victory (now, aleague) season 1 entry 14: 2 assists for Melbourne City on 1 goals that may carry one (2 from the spot or a free kick)
+   FAIL Melbourne Victory (now, aleague) season 1 entry 15: 1 assists for Brisbane Roar on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Akhmat Grozny (now, russia) season 1 entry 10: 2 assists for Fakel Voronezh on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Akhmat Grozny (now, russia) season 1 entry 14: 2 assists for CSKA Moscow on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Aston Villa (era2020, premier2020) season 1 entry 14: 1 assists for Leicester City on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Aston Villa (era2020, premier2020) season 1 entry 18: 2 assists for Leeds United on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Aston Villa (era2020, premier2020) season 1 entry 27: 2 assists for Southampton on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Celta Vigo (era2020, laliga2020) season 1 entry 5: 1 assists for Real Madrid on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Celta Vigo (era2020, laliga2020) season 1 entry 16: 1 assists for Getafe on 0 goals that may carry one (1 from the spot or a free kick)
+   FAIL Celta Vigo (era2020, laliga2020) season 1 entry 27: 2 assists for Real Betis on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Torino (era2020, seriea2020) season 1 entry 20: 3 assists for Juventus on 0 goals that may carry one (3 from the spot or a free kick)
+   FAIL Torino (era2020, seriea2020) season 1 entry 22: 2 assists for Parma on 1 goals that may carry one (1 from the spot or a free kick)
+   FAIL Torino (era2020, seriea2020) season 1 entry 24: 3 assists for Verona on 2 goals that may carry one (1 from the spot or a free kick)
+   FAIL Torino (era2020, seriea2020) season 1 entry 37: 4 assists for Atalanta on 3 goals that may carry one (1 from the spot or a free kick)
+   FAIL Schalke 04 (era2020, bundesliga2020) season 1 entry 13: 3 assists for RB Leipzig on 2 goals that may carry one (1 from the spot or a free kick)
+A  stream: 147 of 147 faces equal to the base commit's source, over 49 careers
+A  reports whose lines are not as many as the goals: 0; matches where the opponent's goals for moved by another number than the report's: 1
+A  law: 40405 checks; leagues with an odd number of clubs: now mlsEast 15, now mlsWest 15; league weeks of mine with no match (a bye): 1
+A  report against book: 1952 league matches of mine, 2781 rival goal lines, 77 own goal lines, 111 named by the report and on no row, 350 from the spot or a free kick, 1338 assists on 2354 lines that may carry one (0.568), 80 matches whose only rival goal was a set piece
+A  share of rival goals with nobody named, by league (highest first): now segunda 97%, now croatia 92%, now ligue2 91%, now bundesliga2 89%, now mlsWest 86%, now serieb 81%, now greece 71%, now switzerland 70%, now austria 70%, now denmark 69%, now proleague 68%, now scottish 67%, now ligamx 66%, now saudi 62%
+A  leagues at 0 to 5 percent unnamed: 15 of 49; over 25 percent: 21
+probeOld1229: 106 FAILURE(S) (21s)

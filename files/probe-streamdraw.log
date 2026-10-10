@@ -1,0 +1,50 @@
+A  49 careers: every league of every era, and two created clubs
+   FAIL New England Revolution (now, mlsEast) season 2 entry 1: 0 named goals of Philadelphia Union are on no row, the book counted 1 unnamed
+      DETAIL report Philadelphia Union 1-0 New England Revolution; their lines [{"n":"Danley Jean Jacques","m":90,"og":false,"pen":false,"fk":false}]; Philadelphia Union goals for in the table 0 -> 2; book rows gained [["Danley Jean Jacques",1]]; og 0 -> 0; u 0 -> 1; decided by regular; eleven named: see next
+   FAIL Minnesota United (now, mlsWest) season 1 entry 23: 0 named goals of Houston Dynamo are on no row, the book counted 3 unnamed
+      DETAIL report Houston Dynamo 1-0 Minnesota United; their lines [{"n":"Duncan McGuire","m":46,"og":false,"pen":false,"fk":false}]; Houston Dynamo goals for in the table 26 -> 30; book rows gained [["Duncan McGuire",1]]; og 0 -> 0; u 25 -> 28; decided by regular; eleven named: see next
+   FAIL Brentford (now, premier): face 0 differs from the base commit's (a59301c186218d7ef851|49469 against dd6498a289aba846af3f|51453)
+   FAIL Brentford (now, premier): face 1 differs from the base commit's (181af554c192c0389b04|50250 against d873460d4f1abf1ad088|52256)
+   FAIL Brentford (now, premier): face 2 differs from the base commit's (d262ebf2d7f0bc987fa8|57996 against a7115662a395010b0780|59828)
+   FAIL Derby County (now, championship): face 0 differs from the base commit's (75a3e439b313763f5695|53093 against 9ea8940202e59bec4e40|51437)
+   FAIL Derby County (now, championship): face 1 differs from the base commit's (f14222009ffedaffc33a|53883 against c71e08281ec2946feac4|52226)
+   FAIL Derby County (now, championship): face 2 differs from the base commit's (1bbe511fcebe70bcb253|60657 against abe02e7282c0f3a8cb32|58702)
+   FAIL Espanyol (now, laliga): face 0 differs from the base commit's (eb64d9485cfc2777b171|49872 against a3d2efe71e9b3d678ca4|48613)
+   FAIL Espanyol (now, laliga): face 1 differs from the base commit's (b5d404cc53228f15e526|50717 against f20c59608f1fb2283f5c|49385)
+   FAIL Espanyol (now, laliga): face 2 differs from the base commit's (a02c6a4fb825564f6943|58643 against d38f666c17c2a90820d2|56939)
+   FAIL Torino (now, seriea): face 0 differs from the base commit's (58d4344d5115ffd2707f|51258 against 33c991ac73488e8ebd05|50368)
+   FAIL Torino (now, seriea): face 1 differs from the base commit's (58de4fc72ba0d0084700|52119 against b7080ef486728ac12a19|51230)
+   FAIL Torino (now, seriea): face 2 differs from the base commit's (2523efdb770176fb685a|60010 against a482af755116e2607858|58890)
+   FAIL Hamburg (now, bundesliga): face 0 differs from the base commit's (da2f0f9e8c308e7c92f6|49772 against e33833bfebb2880d7929|46807)
+   FAIL Hamburg (now, bundesliga): face 1 differs from the base commit's (c19adbe8ad03d5a6dae8|50613 against d749caa84eac2af2cf42|47591)
+   FAIL Hamburg (now, bundesliga): face 2 differs from the base commit's (607e3b18c387bdf3b848|59317 against 30349c99a664602fff9b|55651)
+   FAIL Lorient (now, ligue1): face 0 differs from the base commit's (86cd2eab50ad594b82c2|48128 against 33cec9c2efeb1bd3e477|46938)
+   FAIL Lorient (now, ligue1): face 1 differs from the base commit's (bf55b2c2b183eed3fd2d|48971 against 457e62ac7b45daca3f10|47721)
+   FAIL Lorient (now, ligue1): face 2 differs from the base commit's (abe820ad59be03a9f7fd|57375 against 5e495bbb3ea139ab52df|55848)
+   FAIL Sparta Rotterdam (now, eredivisie): face 0 differs from the base commit's (22aebdae2d321a8fb355|46582 against 8e7c6d8fe0b44bfc44ce|45864)
+   FAIL Sparta Rotterdam (now, eredivisie): face 1 differs from the base commit's (c1adbb01498bcabf6719|47377 against a1dd7e88a2f381d3cb6a|46599)
+   FAIL Sparta Rotterdam (now, eredivisie): face 2 differs from the base commit's (d3009951e302e295954b|55311 against 92d83ebaba779afeca92|55045)
+   FAIL Al-Khaleej (now, saudi): face 0 differs from the base commit's (742cb51fe07b45d06afa|47184 against a034a1388be912644d9f|45911)
+   FAIL Al-Khaleej (now, saudi): face 1 differs from the base commit's (8e2c5e39a9d2ecad0383|48006 against 8628b1d2b7387fe6eac6|46669)
+   FAIL Al-Khaleej (now, saudi): face 2 differs from the base commit's (64d4c3206f54eff20445|56322 against 54bfb1a78eaca8de3dc9|54811)
+   FAIL New England Revolution (now, mlsEast): face 0 differs from the base commit's (7ac18e2437ba2d392ea8|44281 against 50ec44570f24773b0f7a|43833)
+   FAIL New England Revolution (now, mlsEast): face 1 differs from the base commit's (24698292c15e720423d7|45114 against 447d6c611932fa6cf3e3|44659)
+   FAIL New England Revolution (now, mlsEast): face 2 differs from the base commit's (b00e00d199d9dd7a54d9|54193 against 59858040a342abf2e27b|53827)
+   FAIL Minnesota United (now, mlsWest): face 0 differs from the base commit's (354c9fa4f990cb9a575d|44104 against 6980888d8b1e38a6f3a4|43532)
+   FAIL Minnesota United (now, mlsWest): face 1 differs from the base commit's (c14cd1cb41413f900452|44924 against dde61ba80bda9f53da58|44282)
+   FAIL Minnesota United (now, mlsWest): face 2 differs from the base commit's (2b5ad9b3bd8b5051b3b9|53862 against e6018a4ccce79dce6e25|53294)
+   FAIL Santa Clara (now, primeira): face 0 differs from the base commit's (fcb809520dd7c4b8e501|47105 against 3b42569af56675e1def9|46441)
+   FAIL Santa Clara (now, primeira): face 1 differs from the base commit's (83df16ee069bcb256081|47887 against fa04ffd839bd614f190d|47159)
+   FAIL Santa Clara (now, primeira): face 2 differs from the base commit's (1970bc1822f7db890d0f|55859 against 3b14460cff2981f023d0|55137)
+   FAIL Motherwell (now, scottish): face 0 differs from the base commit's (86324e4bac159e0c962c|41709 against 88f585254ab263af97cb|41649)
+   FAIL Motherwell (now, scottish): face 1 differs from the base commit's (41d4c3be75053b28364c|42519 against ad99c896128a16f6ecf8|42397)
+   FAIL Motherwell (now, scottish): face 2 differs from the base commit's (52572f3a6c01c9a29881|52272 against 8fcd5eef1847ea60896b|52323)
+   FAIL Konyaspor (now, superlig): face 0 differs from the base commit's (33413fa662974f343203|46575 against 0514c074771ea676f06e|47438)
+   FAIL Konyaspor (now, superlig): face 1 differs from the base commit's (0a4b9a8cd9e223ace75f|47398 against c74b112b2904a7093168|48189)
+A  stream: 1 of 147 faces equal to the base commit's source, over 49 careers
+A  reports whose lines are not as many as the goals: 0; matches where the opponent's goals for moved by another number than the report's: 2
+A  law: 40695 checks; leagues with an odd number of clubs: now mlsEast 15, now mlsWest 15; league weeks of mine with no match (a bye): 1
+A  report against book: 1952 league matches of mine, 2597 rival goal lines, 72 own goal lines, 125 named by the report and on no row, 309 from the spot or a free kick, 1093 assists on 2216 lines that may carry one (0.493), 83 matches whose only rival goal was a set piece
+A  share of rival goals with nobody named, by league (highest first): now segunda 97%, now croatia 92%, now ligue2 89%, now mlsWest 87%, now bundesliga2 87%, now serieb 81%, now austria 74%, now greece 73%, now denmark 71%, now switzerland 68%, now ligamx 68%, now scottish 68%, now proleague 67%, now saudi 63%
+A  leagues at 0 to 5 percent unnamed: 15 of 49; over 25 percent: 21
+probeOld1229: 148 FAILURE(S) (21s)

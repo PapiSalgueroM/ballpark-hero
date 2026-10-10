@@ -1,0 +1,2 @@
+mut1229: byeweek applied to src/lib/clubManager.ts
+PROBE under byeweek: exit 1; 41 FAIL lines; first:    FAIL New England Revolution (now, mlsEast) season 1 entry 16: Columbus Crew 19+0+0 on the book, 21 in the table; last: probeOld1229: 448 FAILURE(S) (21s)
