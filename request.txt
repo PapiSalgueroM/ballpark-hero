@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+leaguefx: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=1 node scripts/simCmLeagueFixtures.mjs 2>&1 | tail -1 | cut -c1-320; exit ${PIPESTATUS[0]}
+leaguefx-bound2-must-fail: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=2 node scripts/simCmLeagueFixtures.mjs 2>&1 | tail -1 | cut -c1-320; exit ${PIPESTATUS[0]}
+leaguefx-new-controls: bad=0; for c in unregistered unlisted wrongasof helpdrift helplink unfrozen falseasof; do CM_LEAGUE_FIXTURES_CONTROL=$c node scripts/simCmLeagueFixtures.mjs > /tmp/lf-$c.log 2>&1; s=$?; echo "$c exit=$s $(tail -1 /tmp/lf-$c.log | cut -c1-150)"; [ $s -eq 1 ] || bad=1; done; exit $bad
+suite-runner: ONLY=simCmLeagueFixtures node scripts/runAllSims.mjs 2>&1 | tail -1 | cut -c1-200; exit ${PIPESTATUS[0]}
+cmfix: TZ=UTC node scripts/simCmRealFixtures.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+help-readers: bad=0; for h in simAcademy simClubManagerALeague simClubManagerBudget simClubManagerMeters simClubManagerScore simEras simPress simRoles simWilderness; do node scripts/$h.mjs > /tmp/h-$h.log 2>&1; s=$?; echo "$h exit=$s $(tail -1 /tmp/h-$h.log | cut -c1-110)"; [ $s -eq 0 ] || bad=1; done; exit $bad
+simLiveScores: node scripts/simLiveScores.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simNoRivalNames: node scripts/simNoRivalNames.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simTrustCopy: node scripts/simTrustCopy.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+simNumberFormatting: node scripts/simNumberFormatting.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+vitest-cm: node_modules/.bin/vitest run src/test/clubManagerSlots.test.tsx src/test/clubManagerEraLoad.test.tsx src/test/clubManagerEraPicker.test.tsx --testTimeout=300000 --hookTimeout=120000 2>&1 | tail -6 | cut -c1-200; exit ${PIPESTATUS[0]}

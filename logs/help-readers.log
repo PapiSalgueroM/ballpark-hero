@@ -1,0 +1,9 @@
+simAcademy exit=0 ALL ACADEMY CHECKS PASSED
+simClubManagerALeague exit=0 simClubManagerALeague: all checks passed
+simClubManagerBudget exit=0 simClubManagerBudget: PASS
+simClubManagerMeters exit=0 simClubManagerMeters: PASS. The board meter is the sack race, the fans move with results, and every table prin
+simClubManagerScore exit=0 ALL SEASON SCORE CHECKS PASSED
+simEras exit=1 3 FAILURES
+simPress exit=0 ALL PRESS AND TEAM TALK CHECKS PASSED
+simRoles exit=0 ALL ROLE CHECKS PASSED
+simWilderness exit=0 simWilderness: green. The sack is the start of something now, and the phone always rings in the end.

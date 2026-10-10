@@ -1,0 +1,13 @@
+leaguefx exit=0 10s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 1 bound, 9 unbound (bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2,
+leaguefx-bound2-must-fail exit=1 10s | simCmLeagueFixtures: FAILED, 1 failure(s): 10 ledger(s), 10 frozen, 0 pending, 1 bound, 9 unbound (bundesliga2, bundesliga, championship, eredivisie, laliga, ligue2, prim
+leaguefx-new-controls exit=0 5s | falseasof exit=1 CONTROL falseasof FIRED as expected on bundesliga2: sections E went red for bundesliga2 and nothing else
+suite-runner exit=0 11s | All 1 harnesses green.
+cmfix exit=0 11s | simCmRealFixtures normal: real fixture outcomes and independent generated baseline passed.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simHarnessAnchors exit=0 53s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 94s | 
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNoRivalNames exit=0 16s | No rival product names found. 0 findings.
+vitest-cm exit=0 6s |    Duration  5.90s (transform 2.91s, setup 253ms, collect 3.30s, tests 9.22s, environment 1.76s, prepare 649ms)
+simNumberFormatting exit=0 139s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes
+help-readers exit=1 3832s | simWilderness exit=0 simWilderness: green. The sack is the start of something now, and the phone always rings in the end.

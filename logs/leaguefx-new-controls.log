@@ -1,0 +1,7 @@
+unregistered exit=1 CONTROL unregistered FIRED as expected on premier: sections HJ went red for premier and nothing else
+unlisted exit=1 CONTROL unlisted FIRED as expected on premier: sections H went red for premier and nothing else
+wrongasof exit=1 CONTROL wrongasof FIRED as expected on premier: sections HJ went red for premier and nothing else
+helpdrift exit=1 CONTROL helpdrift FIRED as expected on premier: sections J went red for premier and nothing else
+helplink exit=1 CONTROL helplink FIRED as expected on premier: sections J went red for help and nothing else
+unfrozen exit=1 CONTROL unfrozen FIRED as expected on bundesliga2: sections I went red for bundesliga2 and nothing else
+falseasof exit=1 CONTROL falseasof FIRED as expected on bundesliga2: sections E went red for bundesliga2 and nothing else
