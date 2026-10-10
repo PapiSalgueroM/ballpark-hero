@@ -1,0 +1,1 @@
+mlb-bal-8000: SIM_SECTIONS=6 SIM_SPORTS=mlb SIM_BALANCE_CAREERS=8000 node scripts/simUsCareerSummer.mjs
