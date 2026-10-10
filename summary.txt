@@ -1,0 +1,13 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+playSoccerCareerDepth exit=0 11s | playSoccerCareerDepth: 80 checks, 0 failed
+playCareerStoryRole exit=0 40s | Career Story native: 554 checks, 0 failed, 9/9 journeys; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-story-role/native
+playSoccerCareerDevelopment exit=1 35s |     at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerCareerDevelopment.mjs:278:41
+repin exit=0 1s | ?? .tmp-fx/
+simCareerTrophyRuns-repinned exit=0 3s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+playCareerTrophyRuns exit=0 39s | Trophy Cabinet native: 407 checks,0 failed,12/12 journeys,3 copied detector controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/n
+simSoccerSeasonHistory-repinned exit=0 2s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+playSeasonHistory1193 exit=0 43s | Season history native: 598 checks,0 failed,9/9 journeys,4 copied observation controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-history/nati
+simSoccerDerbyHistory-repinned exit=0 2s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+playDerbyHistory1195 exit=0 53s | Derby history native: 904 checks,0 failed,9/9 journeys,4 copied observation controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby-history/native
+shots exit=0 0s | 1	/home/runner/work/_temp/rc-out/files
