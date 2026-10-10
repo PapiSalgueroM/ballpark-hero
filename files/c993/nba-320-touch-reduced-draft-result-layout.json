@@ -1,0 +1,97 @@
+{
+  "width": 320,
+  "scrollWidth": 320,
+  "scrollY": 579,
+  "headings": [
+    {
+      "text": "This is your moment.",
+      "top": -236,
+      "bottom": -147.828125,
+      "height": 88.171875
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stage_xof9u_12",
+      "text": "NBA Road to the DraftThis is your moment.Detroit Pistons",
+      "width": 286,
+      "scrollWidth": 297
+    },
+    {
+      "tag": "DIV",
+      "className": "_stadium_xof9u_17",
+      "text": "",
+      "width": 286,
+      "scrollWidth": 398
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "This is your moment.",
+      "width": 1,
+      "scrollWidth": 169
+    },
+    {
+      "tag": "SPAN",
+      "className": "block truncate text-xs font-bold",
+      "text": "New Orleans Pelicans",
+      "width": 67,
+      "scrollWidth": 146
+    },
+    {
+      "tag": "SPAN",
+      "className": "block truncate text-xs font-bold",
+      "text": "Memphis Grizzlies",
+      "width": 67,
+      "scrollWidth": 123
+    },
+    {
+      "tag": "SPAN",
+      "className": "block truncate text-xs font-bold",
+      "text": "Golden State Warriors",
+      "width": 67,
+      "scrollWidth": 150
+    },
+    {
+      "tag": "SPAN",
+      "className": "block truncate text-xs font-bold",
+      "text": "Boston Celtics",
+      "width": 67,
+      "scrollWidth": 96
+    },
+    {
+      "tag": "SPAN",
+      "className": "min-w-0 flex-1 truncate font-semibold",
+      "text": "Dallas Mavericks",
+      "width": 109,
+      "scrollWidth": 114
+    },
+    {
+      "tag": "SPAN",
+      "className": "min-w-0 flex-1 truncate font-semibold",
+      "text": "Philadelphia 76ers",
+      "width": 109,
+      "scrollWidth": 126
+    },
+    {
+      "tag": "P",
+      "className": "sr-only",
+      "text": "Round 1, pick 14, 14 overall. Detroit Pistons take you.",
+      "width": 1,
+      "scrollWidth": 430
+    }
+  ],
+  "controls": [
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Start your career",
+      "width": 258,
+      "height": 44
+    }
+  ]
+}

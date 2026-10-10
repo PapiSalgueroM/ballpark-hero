@@ -1,0 +1,9 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+walk exit=1 157s | playDraftNight: 40 FAILURE(S) in 40 nights
+walk-late exit=1 7s | playDraftNight [control late]: 1 FAILURE(S) of its own check (height), as it must
+walk-spoiler exit=2 7s | Control spoiler changed nothing its check can see (height). Refusing to call that a result.
+walk-fold exit=1 7s | playDraftNight [control fold]: 2 FAILURE(S) of its own check (fold), as it must
+walk-hidden exit=2 3s | Control hidden changed nothing its check can see (no failure at all). Refusing to call that a result.
+career993 exit=1 23s | Node.js v24.21.0
+career993-reveal exit=0 4s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-reveal
+career993-choice exit=0 5s | Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-choice

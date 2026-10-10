@@ -1,0 +1,100 @@
+{
+  "started": "2026-10-10T12:49:48.430Z",
+  "cases": [
+    {
+      "id": "nfl-390-touch",
+      "route": "/nfl-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "reduced": false,
+      "screenshots": [
+        "nfl-390-touch-rules.png",
+        "nfl-390-touch-failure.png"
+      ],
+      "steps": [
+        {
+          "stage": "rules",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 1057,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": -708.890625,
+              "bottom": -650.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": -442,
+              "bottom": -419.609375,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_xof9u_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "3 seasonsBig college programEvery game on TV and scouts at every practice. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsSmall schoolFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "localFailures": [],
+      "visibility": [
+        {
+          "label": "Entry title",
+          "top": -708.890625,
+          "bottom": -650.109375,
+          "height": 58.78125,
+          "viewportHeight": 844,
+          "scrollY": 1057,
+          "visible": false
+        }
+      ],
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Entry title must appear without driver scrolling: {\"top\":-708.890625,\"bottom\":-650.109375,\"height\":58.78125,\"viewportHeight\":844,\"scrollY\":1057}\n    at readable (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:143:7)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:173:7"
+    }
+  ],
+  "finished": "2026-10-10T12:49:51.185Z"
+}

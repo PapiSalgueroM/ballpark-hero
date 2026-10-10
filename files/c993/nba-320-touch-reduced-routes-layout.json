@@ -1,0 +1,58 @@
+{
+  "width": 320,
+  "scrollWidth": 320,
+  "scrollY": 233,
+  "headings": [
+    {
+      "text": "Your career starts here.",
+      "top": 110,
+      "bottom": 227.5625,
+      "height": 117.5625
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stage_xof9u_12",
+      "text": "NBA Road to the DraftYour career starts here.Choose the road. Build your stock. Find your team.",
+      "width": 286,
+      "scrollWidth": 297
+    },
+    {
+      "tag": "DIV",
+      "className": "_stadium_xof9u_17",
+      "text": "",
+      "width": 286,
+      "scrollWidth": 398
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "Your career starts here.",
+      "width": 1,
+      "scrollWidth": 187
+    }
+  ],
+  "controls": [
+    {
+      "text": " Back to player",
+      "width": 111.90625,
+      "height": 44
+    },
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+      "width": 258,
+      "height": 143.34375
+    },
+    {
+      "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+      "width": 258,
+      "height": 165.1875
+    }
+  ]
+}

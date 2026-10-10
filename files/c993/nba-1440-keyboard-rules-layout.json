@@ -1,0 +1,62 @@
+{
+  "width": 1440,
+  "scrollWidth": 1440,
+  "scrollY": 408,
+  "headings": [
+    {
+      "text": "Your career starts here.",
+      "top": -91,
+      "bottom": -6.75,
+      "height": 84.25
+    },
+    {
+      "text": "Make the league on your terms",
+      "top": 181.25,
+      "bottom": 203.640625,
+      "height": 22.390625
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_xof9u_17",
+      "text": "",
+      "width": 638,
+      "scrollWidth": 750
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "Your career starts here.",
+      "width": 1,
+      "scrollWidth": 187
+    }
+  ],
+  "controls": [
+    {
+      "text": " Back to player",
+      "width": 111.90625,
+      "height": 44
+    },
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Got it",
+      "width": 69.859375,
+      "height": 44
+    },
+    {
+      "text": "1 seasonOne year of collegeOne season on campus, then you declare.Start at age 18 · Draft at 19",
+      "width": 298,
+      "height": 143.34375
+    },
+    {
+      "text": "3 seasonsThree years of collegeThree seasons to grow into it. Less hype, more polish.Start at age 18 · Draft at 21",
+      "width": 298,
+      "height": 143.34375
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+nfl-390-touch: AssertionError [ERR_ASSERTION]: Entry title must appear without driver scrolling: {"top":-708.890625,"bottom":-650.109375,"height":58.78125,"viewportHeight":844,"scrollY":1057}
+    at readable (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:143:7)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:173:7
+Native reveal control: disabling scrollIntoView fails its own visibility assertion
+Native prospect evidence: /home/runner/work/_temp/rc-out/files/c993-reveal

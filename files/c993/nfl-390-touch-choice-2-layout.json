@@ -1,0 +1,52 @@
+{
+  "width": 390,
+  "scrollWidth": 390,
+  "scrollY": 575,
+  "headings": [
+    {
+      "text": "Scouts are watching.",
+      "top": -217.890625,
+      "bottom": -159.109375,
+      "height": 58.78125
+    },
+    {
+      "text": "The film roomThe coaching staff will stay late with you if you ask.Stay late eve",
+      "top": 195,
+      "bottom": 411,
+      "height": 216
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stadium_xof9u_17",
+      "text": "",
+      "width": 356,
+      "scrollWidth": 468
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "Scouts are watching.",
+      "width": 1,
+      "scrollWidth": 167
+    }
+  ],
+  "controls": [
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Stay late every nightDraft stock +2, Rating +1",
+      "width": 324,
+      "height": 66
+    },
+    {
+      "text": "Keep your own routineNo change",
+      "width": 324,
+      "height": 66
+    }
+  ]
+}

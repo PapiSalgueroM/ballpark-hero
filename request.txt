@@ -1,0 +1,11 @@
+#!build
+#!playwright
+#!serial
+walk: ENGINES=chromium node scripts/playDraftNight.mjs
+walk-late: PLAY_DRAFT_NIGHT_CONTROL=late RC_OUT="$RC_OUT/c-late" node scripts/playDraftNight.mjs
+walk-spoiler: PLAY_DRAFT_NIGHT_CONTROL=spoiler RC_OUT="$RC_OUT/c-spoiler" node scripts/playDraftNight.mjs
+walk-fold: PLAY_DRAFT_NIGHT_CONTROL=fold RC_OUT="$RC_OUT/c-fold" node scripts/playDraftNight.mjs
+walk-hidden: PLAY_DRAFT_NIGHT_CONTROL=hidden RC_OUT="$RC_OUT/c-hidden" node scripts/playDraftNight.mjs
+career993: ENGINES=chromium CAREER993_ARTIFACTS="$RC_OUT/c993" node scripts/qa/career993.mjs
+career993-reveal: ENGINES=chromium CAREER993_CONTROL=reveal CAREER993_ARTIFACTS="$RC_OUT/c993-reveal" node scripts/qa/career993.mjs
+career993-choice: ENGINES=chromium CAREER993_CONTROL=choice CAREER993_ARTIFACTS="$RC_OUT/c993-choice" node scripts/qa/career993.mjs

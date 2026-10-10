@@ -1,0 +1,58 @@
+{
+  "width": 320,
+  "scrollWidth": 320,
+  "scrollY": 572,
+  "headings": [
+    {
+      "text": "One last look.",
+      "top": -217.890625,
+      "bottom": -159.109375,
+      "height": 58.78125
+    }
+  ],
+  "overflow": [
+    {
+      "tag": "DIV",
+      "className": "_stage_xof9u_12",
+      "text": "NBA Road to the DraftOne last look.One year of college",
+      "width": 286,
+      "scrollWidth": 297
+    },
+    {
+      "tag": "DIV",
+      "className": "_stadium_xof9u_17",
+      "text": "",
+      "width": 286,
+      "scrollWidth": 398
+    },
+    {
+      "tag": "H3",
+      "className": "sr-only",
+      "text": "One last look.",
+      "width": 1,
+      "scrollWidth": 110
+    }
+  ],
+  "controls": [
+    {
+      "text": "Road to the draft help",
+      "width": 44,
+      "height": 44
+    },
+    {
+      "text": "Go all outPush every drill to the limit.Grade A +10, B +4, C -3, D -8",
+      "width": 258,
+      "height": 94
+    },
+    {
+      "text": "Play it safeStay within yourself.Grade A +5, B +2, C -1, D -3",
+      "width": 258,
+      "height": 94
+    },
+    {
+      "text": "Skip itNo drill and no grade. The scouts notice.Draft stock -2",
+      "width": 258,
+      "height": 110
+    }
+  ]
+}

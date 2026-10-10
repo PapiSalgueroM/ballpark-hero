@@ -1,0 +1,5 @@
+  FAIL [height] mlb-390-late-watch: the card went from 762.1875 to 764.1875 and the journey from 1248.1875 to 1250.1875 while the night played
+  FAIL [fold] mlb-390-late-watch: the closing row landed at 995 to 1049 in a 844 high viewport
+  FAIL [fold] mlb-390-late-watch: the closing row sits at 995 to 1049 in a 844 high viewport, covered
+  walked mlb-390-late-watch: pick 432, 8 rows, card 764 high, 332 frames
+playDraftNight [control fold]: 2 FAILURE(S) of its own check (fold), as it must

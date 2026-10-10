@@ -1,0 +1,235 @@
+{
+  "started": "2026-10-10T12:49:52.425Z",
+  "cases": [
+    {
+      "id": "nfl-390-touch",
+      "route": "/nfl-my-career",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "touch": true,
+      "reduced": false,
+      "screenshots": [
+        "nfl-390-touch-rules.png",
+        "nfl-390-touch-entry-visible.png",
+        "nfl-390-touch-routes.png",
+        "nfl-390-touch-failure.png"
+      ],
+      "steps": [
+        {
+          "stage": "rules",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 1030,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": -681.890625,
+              "bottom": -623.109375,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": -415,
+              "bottom": -392.609375,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_xof9u_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "3 seasonsBig college programEvery game on TV and scouts at every practice. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsSmall schoolFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "entry-visible",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 248,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 100.109375,
+              "bottom": 158.890625,
+              "height": 58.78125
+            },
+            {
+              "text": "Make the league on your terms",
+              "top": 367,
+              "bottom": 389.390625,
+              "height": 22.390625
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_xof9u_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "Got it",
+              "width": 69.859375,
+              "height": 44
+            },
+            {
+              "text": "3 seasonsBig college programEvery game on TV and scouts at every practice. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsSmall schoolFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        },
+        {
+          "stage": "routes",
+          "width": 390,
+          "scrollWidth": 390,
+          "scrollY": 129,
+          "headings": [
+            {
+              "text": "Your career starts here.",
+              "top": 219.109375,
+              "bottom": 277.890625,
+              "height": 58.78125
+            }
+          ],
+          "overflow": [
+            {
+              "tag": "DIV",
+              "className": "_stadium_xof9u_17",
+              "text": "",
+              "width": 356,
+              "scrollWidth": 468
+            },
+            {
+              "tag": "H3",
+              "className": "sr-only",
+              "text": "Your career starts here.",
+              "width": 1,
+              "scrollWidth": 187
+            }
+          ],
+          "controls": [
+            {
+              "text": " Back to player",
+              "width": 111.90625,
+              "height": 44
+            },
+            {
+              "text": "Road to the draft help",
+              "width": 44,
+              "height": 44
+            },
+            {
+              "text": "3 seasonsBig college programEvery game on TV and scouts at every practice. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            },
+            {
+              "text": "3 seasonsSmall schoolFewer eyes on you, so the scouts have to come looking. Three seasons before you can declare.Start at age 18 · Draft at 21",
+              "width": 324,
+              "height": 143.34375
+            }
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "localFailures": [],
+      "visibility": [
+        {
+          "label": "Entry title",
+          "top": 24.109375,
+          "bottom": 82.890625,
+          "height": 58.78125,
+          "viewportHeight": 844,
+          "scrollY": 324,
+          "visible": true
+        },
+        {
+          "label": "Entry instructions",
+          "top": 291,
+          "bottom": 313.390625,
+          "height": 22.390625,
+          "viewportHeight": 844,
+          "scrollY": 324,
+          "visible": true
+        },
+        {
+          "label": "New choice",
+          "top": 770,
+          "bottom": 986,
+          "height": 216,
+          "viewportHeight": 844,
+          "scrollY": 0,
+          "visible": false
+        }
+      ],
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: New choice must appear without driver scrolling: {\"top\":770,\"bottom\":986,\"height\":216,\"viewportHeight\":844,\"scrollY\":0}\n    at readable (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:143:7)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/career993.mjs:200:11"
+    }
+  ],
+  "finished": "2026-10-10T12:49:56.347Z"
+}
