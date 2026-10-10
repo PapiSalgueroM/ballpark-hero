@@ -1,0 +1,14 @@
+   fired  exit 1  twintable          simGmDraftOrder: CONTROL twintable FIRED. Red by section 1: 1; every other section green.
+   NOT OK exit 2  oddsrow            simGmDraftOrder: CONTROL oddsrow DID NOT FIRE AS EXPECTED. Red: 2: 5070, 3: 33030, 7: 1, 8: 2; it must turn exactly section(s) 2 and 3 red.
+   fired  exit 1  mathrandom         simGmDraftOrder: CONTROL mathrandom FIRED. Red by section 2: 14998, 4: 5963; every other section green.
+   NOT OK exit 2  noflip             simGmDraftOrder: CONTROL noflip DID NOT FIRE AS EXPECTED. Red: 3: 123206, 4: 6200; it must turn exactly section(s) 3 red.
+   fired  exit 1  champfirst         simGmDraftOrder: CONTROL champfirst FIRED. Red by section 4: 12000; every other section green.
+   fired  exit 1  flipbranchoff      simGmDraftOrder: CONTROL flipbranchoff FIRED. Red by section 4: 6200; every other section green.
+   fired  exit 1  anyfield           simGmDraftOrder: CONTROL anyfield FIRED. Red by section 4: 3; every other section green.
+   fired  exit 1  skipslot           simGmDraftOrder: CONTROL skipslot FIRED. Red by section 5: 3600, 6: 1, 10: 4034; every other section green.
+   fired  exit 1  winsloose          simGmDraftOrder: CONTROL winsloose FIRED. Red by section 6: 2; every other section green.
+   fired  exit 1  hidemine           simGmDraftOrder: CONTROL hidemine FIRED. Red by section 7: 1184; every other section green.
+   fired  exit 1  literaltime        simGmDraftOrder: CONTROL literaltime FIRED. Red by section 7: 2; every other section green.
+   fired  exit 1  tableline          simGmDraftOrder: CONTROL tableline FIRED. Red by section 8: 800; every other section green.
+   fired  exit 1  drymarker          simGmDraftOrder: CONTROL drymarker FIRED. Red by section 10: 60; every other section green.
+simGmDraftOrder controls (shard 2/3 of 40): 2 of 13 DID NOT FIRE as expected.

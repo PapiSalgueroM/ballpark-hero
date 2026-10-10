@@ -1,0 +1,15 @@
+   fired  exit 1  onesource          simGmDraftOrder: CONTROL onesource FIRED. Red by section 1: 1; every other section green.
+   fired  exit 1  closespan          simGmDraftOrder: CONTROL closespan FIRED. Red by section 1: 31; every other section green.
+   fired  exit 1  extradraw          simGmDraftOrder: CONTROL extradraw FIRED. Red by section 2: 9999; every other section green.
+   NOT OK exit 2  nosplit            simGmDraftOrder: CONTROL nosplit DID NOT FIRE AS EXPECTED. Red: 3: 10367, 8: 1; it must turn exactly section(s) 3 red.
+   NOT OK exit 2  flipbeforelottery  simGmDraftOrder: CONTROL flipbeforelottery DID NOT FIRE AS EXPECTED. Red: 3: 11521, 4: 540; it must turn exactly section(s) 3 red.
+   fired  exit 1  laterasfirst       simGmDraftOrder: CONTROL laterasfirst FIRED. Red by section 3: 123206, 4: 5839; every other section green.
+   fired  exit 1  thinplayed         simGmDraftOrder: CONTROL thinplayed FIRED. Red by section 4: 21; every other section green.
+   fired  exit 1  rowkey             simGmDraftOrder: CONTROL rowkey FIRED. Red by section 4: 7625; every other section green.
+   fired  exit 1  trustall           simGmDraftOrder: CONTROL trustall FIRED. Red by section 6: 19; every other section green.
+   fired  exit 1  capcount           simGmDraftOrder: CONTROL capcount FIRED. Red by section 7: 2032; every other section green.
+   fired  exit 1  slowcards          simGmDraftOrder: CONTROL slowcards FIRED. Red by section 7: 632; every other section green.
+   fired  exit 1  headlineswapped    simGmDraftOrder: CONTROL headlineswapped FIRED. Red by section 7: 155; every other section green.
+   fired  exit 1  mounted            simGmDraftOrder: CONTROL mounted FIRED. Red by section 9: 1; every other section green.
+   fired  exit 1  shownread          simGmDraftOrder: CONTROL shownread FIRED. Red by section 10: 400; every other section green.
+simGmDraftOrder controls (shard 0/3 of 40): 2 of 14 DID NOT FIRE as expected.
