@@ -1,0 +1,22 @@
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCmRealFixtures-all: CM_REAL_FIXTURE_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+simCmVar-all: CM_VAR_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmVar.mjs
+simFixtureBalance: node scripts/simFixtureBalance.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simMatchScreen-seed1: SIM_SEED=1 node scripts/simMatchScreen.mjs
+simMatchScreen-seed2: SIM_SEED=2 node scripts/simMatchScreen.mjs
+simMatchScreen-seed3: SIM_SEED=3 node scripts/simMatchScreen.mjs
+simMatchScreen-seed4: SIM_SEED=4 node scripts/simMatchScreen.mjs
+simMatchScreen-seed5: SIM_SEED=5 node scripts/simMatchScreen.mjs
+simMatchScreen-twoengines: MATCH_SCREEN_CONTROL=twoengines node scripts/simMatchScreen.mjs
+simWorldEditor: node scripts/simWorldEditor.mjs
+simWorldEditor-observer: SIM_WORLD_EDITOR_CONTROL=observer node scripts/simWorldEditor.mjs
+simReportedGamePools: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simReportedGamePools.mjs
+simDartDraftPool: node scripts/simDartDraftPool.mjs
+simStatDetectiveMotion: node scripts/simStatDetectiveMotion.mjs
+varProbe-full: node .rc/x/varProbe.mjs full
+varProbe-off-before-var: git worktree add -f /tmp/pre 484ee1d3 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/pre/node_modules; W="$PWD"; cd /tmp/pre && node "$W/.rc/x/varProbe.mjs" off | tail -1
+varProbe-off-head: node .rc/x/varProbe.mjs off | tail -1

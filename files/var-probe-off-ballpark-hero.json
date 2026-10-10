@@ -1,0 +1,38 @@
+{
+  "clubs": 8,
+  "perClub": 50,
+  "matches": 345,
+  "offDigest": "93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488",
+  "A": {
+    "compared": 0,
+    "reportEqual": 0,
+    "scoreEqual": 0,
+    "scorersEqual": 0,
+    "cardsEqual": 0,
+    "drawsEqual": 0,
+    "nextEqual": 0,
+    "tableEqual": 0,
+    "notCompared": 0,
+    "firstDifference": null
+  },
+  "B": {
+    "compared": 0,
+    "reportEqual": 0,
+    "scoreDiffers": 0,
+    "scorersDiffer": 0,
+    "cardsDiffer": 0,
+    "resultDiffers": 0,
+    "drawsDiffer": 0,
+    "nextDiffers": 0,
+    "matchesWithReview": 0,
+    "reviews": 0,
+    "disallowed": 0,
+    "confirmedGoals": 0,
+    "penaltyConfirmed": 0,
+    "penaltyAwarded": 0,
+    "goalsOff": 0,
+    "goalsOn": 0,
+    "firstDifference": null
+  },
+  "offMatchesWithReviewLines": 0
+}

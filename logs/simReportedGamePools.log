@@ -1,0 +1,225 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ × src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains the eligible season window before play and in reopened help 127ms
+   → Unable to find an element with the text: Recorded seasons and franchises cover NBA seasons with 500+ minutes in these case files. Years are season end years. Short stints and other seasons can be missing.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<main[39m
+      [33mclass[39m=[32m"min-h-screen bg-background"[39m
+      [33mid[39m=[32m"dukb-main"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"How to play"[39m
+          [33mclass[39m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"max-w-2xl mx-auto px-4 py-6 md:py-10"[39m
+      ...
+ × src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > shows recorded seasons and franchises without claiming complete career dates 144ms
+   → expect(received).toHaveTextContent()
+
+received value must be a Node.
+Received has type:  Null
+Received has value: null
+ × src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > captures the exact random case and mode while keeping the answer out of visible play 56ms
+   → expected { …(9) } to deeply equal { …(9) }
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps the strongest three and varies five without replacement beyond the old best eight 5ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps used names and wrong positions out while preserving distinct accented names 1ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > uses the same compact variety policy for bonus slots and leaves the shared legends intact 2ms
+ × src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages global 2026 rows past 900 and 1000 while excluding other years and unknown positions 21ms
+   → expected [ { …(11) }, { …(11) }, …(1998) ] to have a length of 2105 but got 2000
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path 6ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages the targeted position fallback beyond 12 after an unavailable country read 1208ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > fails closed rather than returning a partial global or country pool after a later page fails 2406ms
+
+ Test Files  2 failed (2)
+      Tests  4 failed | 6 passed (10)
+   Start at  08:00:08
+   Duration  5.32s (transform 1.08s, setup 164ms, collect 1.89s, tests 3.98s, environment 800ms, prepare 320ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/reported-pools-healthy.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages global 2026 rows past 900 and 1000 while excluding other years and unknown positions
+AssertionError: expected [ { …(11) }, { …(11) }, …(1998) ] to have a length of 2105 but got 2000
+
+- Expected
++ Received
+
+- 2105
++ 2000
+
+ ❯ src/test/dartDraftPools.test.ts:91:28
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains the eligible season window before play and in reopened help
+TestingLibraryElementError: Unable to find an element with the text: Recorded seasons and franchises cover NBA seasons with 500+ minutes in these case files. Years are season end years. Short stints and other seasons can be missing.. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<main[39m
+      [33mclass[39m=[32m"min-h-screen bg-background"[39m
+      [33mid[39m=[32m"dukb-main"[39m
+    [36m>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"relative z-10 mx-auto w-full max-w-4xl"[39m
+      [36m>[39m
+        [36m<button[39m
+          [33maria-label[39m=[32m"How to play"[39m
+          [33mclass[39m=[32m"absolute top-0 left-0 p-2 text-muted-foreground hover:text-primary transition-colors rounded-full hover:bg-surface-2 min-h-[44px] min-w-[44px]"[39m
+          [33mtype[39m=[32m"button"[39m
+        [36m>[39m
+          [36m<svg[39m
+            [33mclass[39m=[32m"lucide lucide-circle-help w-5 h-5 md:w-6 md:h-6"[39m
+            [33mfill[39m=[32m"none"[39m
+            [33mheight[39m=[32m"24"[39m
+            [33mstroke[39m=[32m"currentColor"[39m
+            [33mstroke-linecap[39m=[32m"round"[39m
+            [33mstroke-linejoin[39m=[32m"round"[39m
+            [33mstroke-width[39m=[32m"2"[39m
+            [33mviewBox[39m=[32m"0 0 24 24"[39m
+            [33mwidth[39m=[32m"24"[39m
+            [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+          [36m>[39m
+            [36m<circle[39m
+              [33mcx[39m=[32m"12"[39m
+              [33mcy[39m=[32m"12"[39m
+              [33mr[39m=[32m"10"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"[39m
+            [36m/>[39m
+            [36m<path[39m
+              [33md[39m=[32m"M12 17h.01"[39m
+            [36m/>[39m
+          [36m</svg>[39m
+        [36m</button>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"max-w-2xl mx-auto px-4 py-6 md:py-10"[39m
+      ...
+ ❯ Object.getElementError node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ getByText node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/test/statDetectiveScope.test.tsx:42:17
+     40|   it('explains the eligible season window before play and in reopened …
+     41|     const view = await ready();
+     42|     expect(view.getByText(scope)).toBeVisible();
+       |                 ^
+     43|     const help = view.getByRole('button', { name: 'How to play' });
+     44|     help.focus(); fireEvent.click(help);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > shows recorded seasons and franchises without claiming complete career dates
+Error: expect(received).toHaveTextContent()
+
+received value must be a Node.
+Received has type:  Null
+Received has value: null
+ ❯ src/test/statDetectiveScope.test.tsx:58:81
+     56|     const view = await ready(); fireEvent.click(view.getByRole('button…
+     57|     for (const profile of wrong) choose(view, profile);
+     58|     expect(view.container.querySelector('[data-stat-clue="Recorded sea…
+       |                                                                                 ^
+     59|     expect(view.container.querySelector('[data-stat-clue="Recorded fra…
+     60|     expect(view.container.querySelector('[data-stat-profile-scope]')).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > captures the exact random case and mode while keeping the answer out of visible play
+AssertionError: expected { …(9) } to deeply equal { …(9) }
+
+- Expected
++ Received
+
+  {
+    "difficulty": "deep",
+    "guesses": [],
+    "phase": "playing",
+    "player": "Fixture Case Anchor",
+-   "profileScope": "recorded-500-minute-seasons",
++   "profileScope": "career-span-every-season-on-file",
+    "puzzleId": "fixture-case|1994-95|FXB",
+    "recordedSeasons": "1990-1996",
+    "season": "1994-95",
+    "team": "FXB",
+  }
+
+ ❯ src/test/statDetectiveScope.test.tsx:71:27
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Only the exact intended outcomes may fail
++ actual - expected
+
++ [
++   'captures the exact random case and mode while keeping the answer out of visible play',
++   'explains the eligible season window before play and in reopened help',
++   'pages global 2026 rows past 900 and 1000 while excluding other years and unknown positions',
++   'shows recorded seasons and franchises without claiming complete career dates'
++ ]
+- []
+
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simReportedGamePools.mjs:73:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: [
+    'captures the exact random case and mode while keeping the answer out of visible play',
+    'explains the eligible season window before play and in reopened help',
+    'pages global 2026 rows past 900 and 1000 while excluding other years and unknown positions',
+    'shows recorded seasons and franchises without claiming complete career dates'
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

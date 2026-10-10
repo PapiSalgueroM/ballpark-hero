@@ -1,0 +1,74 @@
+{
+  "clubs": 8,
+  "perClub": 50,
+  "matches": 345,
+  "offDigest": "93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488",
+  "A": {
+    "compared": 345,
+    "reportEqual": 345,
+    "scoreEqual": 345,
+    "scorersEqual": 345,
+    "cardsEqual": 345,
+    "drawsEqual": 345,
+    "nextEqual": 345,
+    "tableEqual": 345,
+    "notCompared": 0,
+    "firstDifference": null
+  },
+  "B": {
+    "compared": 345,
+    "reportEqual": 155,
+    "scoreDiffers": 92,
+    "scorersDiffer": 93,
+    "cardsDiffer": 16,
+    "resultDiffers": 40,
+    "drawsDiffer": 62,
+    "nextDiffers": 62,
+    "matchesWithReview": 190,
+    "reviews": 274,
+    "disallowed": 43,
+    "confirmedGoals": 85,
+    "penaltyConfirmed": 63,
+    "penaltyAwarded": 83,
+    "goalsOff": 891,
+    "goalsOn": 920,
+    "firstDifference": {
+      "club": "Everton",
+      "entry": 0,
+      "seed": 900001,
+      "off": [
+        "Everton",
+        "Crystal Palace",
+        1,
+        1,
+        "regular",
+        null
+      ],
+      "on": [
+        "Everton",
+        "Crystal Palace",
+        0,
+        1,
+        "regular",
+        null
+      ],
+      "reviews": [
+        {
+          "id": "2026:Everton:0:Crystal Palace:45:90:opp:72:0:Ismaïla Sarr:penalty",
+          "incident": "penalty",
+          "decision": "confirmed",
+          "reason": "penalty_stands"
+        },
+        {
+          "id": "2026:Everton:0:Crystal Palace:45:90:me:75:0:Thierno Barry:goal",
+          "incident": "goal",
+          "decision": "disallowed",
+          "reason": "handball"
+        }
+      ],
+      "drawsOff": 1329,
+      "drawsOn": 1329
+    }
+  },
+  "offMatchesWithReviewLines": 0
+}
