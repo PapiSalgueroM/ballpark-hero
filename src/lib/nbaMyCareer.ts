@@ -13,10 +13,12 @@ import { NBA_TEAMS } from '@/data/conquestDataNba';
 import { nbaEraNeutral, nbaEraScale } from '@/data/nbaLeagueNorms';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
-import { nbaFieldZ, nbaSeasonScore, wonAward } from './careerAwards';
-import { decideNbaAwards } from './nbaCareerAwards';
+import { nbaSeasonScore, wonAward } from './careerAwards';
+import { decideNbaAwards, NBA_FIELD } from './nbaCareerAwards';
 import { draftRival, judgeRivalSeason } from './careerRival';
-import type { CareerRival } from './careerRival';
+import type { CareerRival, RivalSeasonPlay } from './careerRival';
+import { keyedRng } from './keyedRng';
+import { nbaStatLine } from './usCareerStatLine';
 
 import type { PlayerAppearance } from './soccerCareerAppearance';
 import { getNbaLifeEventsA } from './nbaCareerLifeA';
@@ -642,18 +644,61 @@ function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: 
   return { games: L - 4 + Math.floor(rng() * 5), note: null };
 }
 
-/** The field of the line before Round 1103, mean and sd of the season score by position, frozen. It is the old
- *  line as the same fleet lived it (scripts/data/nbaAwardsSenseBaseline.json, the five seed mean of its `field`
- *  rows: every season of half a schedule or more, bench years included), because the new field is measured on
- *  that population too and the bridge maps one onto the other. The August 2026 rows that sat in careerAwards.ts
- *  were measured on starters only and are narrower (46.4/11.4 at PG): bridged through those, my share of the
- *  head to head years came out at 65 percent against main's 62 to 63. Only the rival bridge in simNbaSeason
- *  reads this. Round 1112 deletes it. */
-const NBA_RIVAL_SCALE: Record<string, readonly [number, number]> = { PG: [46.3, 15.2], SG: [46.0, 15.1], SF: [47.7, 16.2], PF: [46.1, 14.3], C: [43.2, 13.8] };
-/** The new line's scores lean to the right of the old line's at the same mean and spread, so a plain z bridge
- *  left my share of the head to head years about a point under main's (61.1 to 61.9 percent on five shrunk
- *  fleets against 62.3 to 63.0). This many old scale points put it back. Measured, and deleted with the bridge. */
-const NBA_RIVAL_BRIDGE_SHIFT = 0.4;
+/* ─── Round 1112: the rival plays on the player's own line ───
+   Until this round the rival's season came off careerRival.ts's own copy of the line before Round 1103 (whole
+   number points off a rating, no archetype, no minutes, no bench) and the player's score was bridged onto that
+   scale at the call site, so about one judged year in three printed a verdict the two printed lines
+   contradicted. Now his season is nbaStatLineFor, the function the player's own line comes from, fed HIS rating
+   and form, and it is printed by nbaStatLine, the function that prints the player's.
+
+   What is fixed for a rival, read off him and never drawn:
+     archetype  one of his position's three, by a hash of his name and position.
+     role       a starter, every rival, every year. He is the man from your draft class who got the job. A bench
+                season scores under half a starter's (section A3 of scripts/simNbaAwardsSense.mjs), so a rival
+                on a bench for his career would be a formality, not a rivalry.
+   What the season hands him: its year (the league's level that year), the seasons his draft class has played
+   (he is a rookie when you are, and earns his minutes the same way) and the season's real length off the
+   ledger. He plays all of it.
+
+   THE STREAM. The line before this round took one draw of the season's stream after the swing. This takes
+   exactly that one and seeds a keyed stream with it (his name, the year, the draw), which pays for the line's
+   seven draws and the All-Star pass's nine. So the player's own stream is what it was, draw for draw: his
+   lines, his awards and every card he is dealt off that stream do not move (scripts/simNbaAwardsSense.mjs
+   section R holds a digest of them). */
+
+/** The rival's kind of player. Fixed for him. */
+export function nbaRivalArchetype(r: Pick<CareerRival, 'name' | 'pos'>): NbaArchetype {
+  const list = NBA_ARCHETYPES[r.pos as NbaCareerPos] ?? NBA_ARCHETYPES.PG;
+  return list[Math.floor(keyedRng(`nba-rival-kind|${r.name}|${r.pos}`)() * list.length)];
+}
+/** The rival's job. Fixed for every rival (see above). */
+export const NBA_RIVAL_ROLE: NbaLineInput['role'] = 'starter';
+
+/** The rival's season of `year`, as the hook judgeRivalSeason takes (careerRival.ts, RivalSeasonPlay).
+ *  `seasonsPlayed` is the player's own count going in: the two were drafted together. */
+export function nbaRivalSeason(year: number, seasonsPlayed: number): RivalSeasonPlay {
+  return (r, form, rng) => {
+    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);
+    const archetype = nbaRivalArchetype(r);
+    const pos = (r.pos in NBA_ARCHETYPES ? r.pos : 'PG') as NbaCareerPos;
+    const stat = nbaStatLineFor({ form, pos, archetype, role: NBA_RIVAL_ROLE, seasonsPlayed, year }, keyed);
+    /* Did he make the All-Star roster? The same pass that decides the player's (nbaCareerAwards.ts), on his
+       line. A rival has no club record and no following on the save, so both are the field's own middle (an
+       even club, the average fanbase): his line is the whole of his case. Only the All-Star answer is read. */
+    const L = nbaSeasonGames(year);
+    const won = decideNbaAwards(keyed, {
+      pos, defenceRep: (NBA_ARCH_DEFENSE[archetype.id] ?? NBA_DEFENSE_UNKNOWN).rep,
+      bench: NBA_RIVAL_ROLE === 'backup', rookie: seasonsPlayed === 0, year, seasonLength: L, games: L,
+      ppg: stat.ppg, rpg: stat.rpg, apg: stat.apg, spg: stat.spg, bpg: stat.bpg,
+      winShare: 0.5, madePlayoffs: false, fanbase: NBA_FIELD.fans[0], prev: null, everAllNba: false,
+    });
+    return {
+      line: nbaStatLine({ ppg: stat.ppg, rpg: stat.rpg, apg: stat.apg, mpg: stat.mpg, teamResult: '' }),
+      score: nbaSeasonScore(nbaEraNeutral(stat, year)),
+      year, allStar: !!won.allStar,
+    };
+  };
+}
 
 /** Round 1048: every team result simNbaSeason writes, in playoff depth order. The Season Center reads the
  *  stage by exact equality against this list, never out of a sentence (the Round 103 rule). */
@@ -812,13 +857,9 @@ export function simNbaSeason(
   // Round 104: the rival played his season too, on the same scale as mine,
   // so the head to head is an honest comparison rather than a vibe.
   if (c.rival && !c.rival.retired) {
-    /* Round 1103: the rival's season is still scored by careerRival.ts's own copy of the OLD line, on the old
-       scale. Until he moves onto nbaStatLineFor (Round 1112, which deletes this bridge and NBA_RIVAL_SCALE),
-       my season is handed over as how far past a normal season for my job I got, on the scale he still lives
-       on: the old field's mean plus my z against the new field, times the old field's sd. */
-    const old = NBA_RIVAL_SCALE[c.pos] ?? NBA_RIVAL_SCALE.PG;
-    const bridged = old[0] + nbaFieldZ(c.pos, statScore) * old[1] + NBA_RIVAL_BRIDGE_SHIFT;
-    for (const n of judgeRivalSeason(c.rival, bridged, c.name, 'nba', rng)) notes.push(n);
+    /* Round 1112: he plays his season on my line (nbaRivalSeason above), so the two scores are one scale and
+       no bridge stands between them. */
+    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);
   }
   /* Round 525: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship and the NFL binding roll their

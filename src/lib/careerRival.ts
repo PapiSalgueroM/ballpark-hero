@@ -42,7 +42,24 @@ export interface CareerRival {
   lastLine: string;
   /** His score last season, so the comparison is on the record. */
   lastScore: number;
+  /** Round 1112: the season his last line belongs to, and whether that season made the All-Star roster. Only a
+   *  sport that plays its rival through a RivalSeasonPlay writes them (the NBA); a save from before has neither. */
+  lastYear?: number;
+  lastAllStar?: boolean;
 }
+
+/** Round 1112: what a sport's own rival season hands back. `line` is printed as it stands; `score` is that
+ *  line scored the way the caller scores the player's, because the two are compared and nothing else is. */
+export interface RivalSeasonResult { line: string; score: number; year?: number; allStar?: boolean }
+/**
+ * Round 1112: the one per sport hook. A sport whose rival plays on the player's OWN stat line hands this to
+ * judgeRivalSeason, and the built in line for that sport below is not used. It gets the rival, his form for
+ * the season (rating plus the season's swing, drawn here exactly as it always was) and the season's stream.
+ * THE RULE FOR A SPORT THAT MOVES OVER: take from `rng` exactly the draws that sport's built in line took (the
+ * NBA's took one), and key everything else off the rival (keyedRng), so the player's own stream does not move
+ * by one draw. The NBA binding is nbaRivalSeason in nbaMyCareer.ts.
+ */
+export type RivalSeasonPlay = (r: CareerRival, form: number, rng: () => number) => RivalSeasonResult;
 
 /* Fictional names, deliberately common combinations so nothing reads as a
    specific real player. Same approach the soccer rival uses. */
@@ -76,17 +93,16 @@ export function draftRival(
   };
 }
 
+/** The sports whose rival line is still built in below. The NBA's is not: Round 1112 moved it onto the
+ *  player's own line (nbaRivalSeason in nbaMyCareer.ts), so an NBA call has to hand in its play. */
+export type BuiltInRivalSport = Exclude<RivalSport, 'nba'>;
+
 /** Roll the rival's season and return a printable line plus a score. */
-export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => number): { line: string; score: number } {
+export function simRivalSeason(r: CareerRival, sport: RivalSport, rng: () => number, play?: RivalSeasonPlay): RivalSeasonResult {
   const form = r.ovr + seasonSwing(rng, r.age);
+  if (play) return play(r, form, rng);
   let line = '', score = 0;
-  if (sport === 'nba') {
-    const ppg = Math.max(3, Math.round((5 + (form - 64) * 0.62) + rng() * 3));
-    const rpg = Math.max(1, Math.round((2 + (form - 64) * 0.22) * 10) / 10);
-    const apg = Math.max(0.5, Math.round((1.5 + (form - 64) * 0.24) * 10) / 10);
-    line = `${ppg} ppg, ${rpg} rpg, ${apg} apg`;
-    score = ppg * 1.6 + rpg * 1.4 + apg * 1.7;
-  } else if (sport === 'nhl') {
+  if (sport === 'nhl') {
     const g = Math.max(1, Math.round((6 + (form - 62) * 0.9) + rng() * 4));
     const a = Math.max(1, Math.round((9 + (form - 62) * 1.1) + rng() * 5));
     line = `${g}G ${a}A ${g + a}P`;
@@ -160,13 +176,20 @@ export function ageRival(r: CareerRival, rng: () => number): void {
  * `myScore` is the player's own season on the same scale as the rival's.
  */
 export function judgeRivalSeason(
-  r: CareerRival, myScore: number, myName: string, sport: RivalSport, rng: () => number,
+  r: CareerRival, myScore: number, myName: string, sport: BuiltInRivalSport, rng: () => number,
+): string[];
+export function judgeRivalSeason(
+  r: CareerRival, myScore: number, myName: string, sport: RivalSport, rng: () => number, play: RivalSeasonPlay,
+): string[];
+export function judgeRivalSeason(
+  r: CareerRival, myScore: number, myName: string, sport: RivalSport, rng: () => number, play?: RivalSeasonPlay,
 ): string[] {
   const notes: string[] = [];
   if (r.retired) return notes;
-  const { line, score } = simRivalSeason(r, sport, rng);
+  const { line, score, year, allStar } = simRivalSeason(r, sport, rng, play);
   r.lastLine = line;
   r.lastScore = score;
+  if (play) { r.lastYear = year; r.lastAllStar = allStar === true; }
   // A ring of his own, roughly as often as anyone good gets one.
   if (rng() < 0.08 + Math.max(0, (r.ovr - 80)) * 0.004) r.rings += 1;
 

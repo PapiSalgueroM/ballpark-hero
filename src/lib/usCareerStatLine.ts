@@ -126,7 +126,7 @@ export function nflMajorAward(p: CareerPos): { one: string; many: string } {
  *  recorded minutes) prints each of them to one decimal, "17.0 ppg"; a season saved before it prints exactly
  *  what it always did. Three parts on purpose: the hub's Career Log tile has room for three and cuts a longer
  *  line off, and the season card says the minutes, steals and blocks in a note of its own. */
-export function nbaStatLine(s: NbaSeasonLine): string {
+export function nbaStatLine(s: Pick<NbaSeasonLine, 'ppg' | 'rpg' | 'apg' | 'mpg' | 'teamResult'>): string {
   const one = isNum(s.mpg);
   const avg = (n: number): string => (one ? n.toFixed(1) : formatNumber(n));
   return seasonLine(s.teamResult, [[s.ppg, n => `${avg(n)} ppg`], [s.rpg, n => `${avg(n)} rpg`], [s.apg, n => `${avg(n)} apg`]]);
