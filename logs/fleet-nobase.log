@@ -1,0 +1,3 @@
+dailies: green (2 clubs)
+simCmFixtureFleet: NOT RUN, nofetch and oldsaves: they compare with a base engine and no CM_FIXTURE_BASE was given.
+simCmFixtureFleet: green. 1 registered league(s), 0 in a file of their own. nofetch NOT RUN, oldsaves NOT RUN, dailies 2 clubs.
