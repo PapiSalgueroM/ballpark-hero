@@ -1,0 +1,152 @@
+simFreeAgents
+   5 clubs
+1) ending a contract costs, and the wage bill still sees it
+   of the released wage, 49.6% left the bill and 50.4% stayed as a settlement
+   ok   a release keeps 50.4% of the wage on the books as a settlement
+   ok   the settlement is a real liability, not a token
+2) sacking the worst contracts does not beat keeping them
+   of the wages sacked, 49.6% came back as cap headroom
+   ok   sacking returns only 49.6% of the wages as cap room (ceiling 75%)
+   over 10 releases, the settlement is 50.4% of what keeping the man would have cost
+   ok   a settlement costs 50.4% of keeping him over the rest of his deal (floor 40%)
+3) a free agent signs out of window, and nothing else does
+   ok   all 3 transfer paths work with the window open and refuse with it shut
+   ok   a free agent signs with the window shut, and leaves the pool when he does
+4) the pool stays weak and clears itself out
+   ok   a far better player than the club refuses to sign, and a weak one in the same spot signs
+   ok   the pool ages out: kept Fresh, dropped Stale and Dead
+   ok   an unsigned man loses a year and a rating point over the summer
+   ok   a real rollover runs the decay over the pool
+5) no duplicates, and nobody who retired
+   ok   the same man offered to the pool twice appears once (pool holds 14)
+   ok   a retired name cannot enter the pool, on a release that went through
+   ok   a fresh release replaces a stale record for the same man
+6) an old save opens and plays on
+   ok   an old save's wage bill reads 533 thousand before anything repairs it
+   ok   an old save plays a week and comes out with both lists
+   ok   an old save opens with 6 journeymen before a ball is kicked
+7) one week billed is one week counted off the settlement
+   40 calls charged 51 weeks and counted 51 off a quote of 108: 1.00 counted per week charged
+   ok   one week charged is one week counted (1.00 over 51 weeks)
+   ok   a settlement with one week left is billed that week, then clears
+8) a settlement does not follow you to a new club
+   ok   a settlement is dropped when the manager changes club
+9) letting deals expire does not beat renewing them
+   Everton level 82.2: 4 of 17 of its own seniors (24%) would sign as free agents
+   Brentford level 82.5: 3 of 23 of its own seniors (13%) would sign as free agents
+   Napoli level 83.5: 7 of 24 of its own seniors (29%) would sign as free agents
+   Ajax level 80.5: 11 of 22 of its own seniors (50%) would sign as free agents
+   Arsenal level 89.7: 5 of 22 of its own seniors (23%) would sign as free agents
+   mean across 5 clubs: 28%, worst 50%
+   ok   no club's best player would sign for nothing, at any of the 5 clubs
+   ok   a man whose deal ran out this season cannot be taken back, and the same man a season later can
+   ok   a man you released cannot be taken back, even a season later
+10) the release wiring goes to the right function
+   ok   the academy release goes to the prospect release
+   ok   the contracts release goes to the contract termination
+11) a release leaves the squad the way every other exit does
+   ok   nobody can be released with a match paused, and the same man can once it is over
+   ok   the last keeper cannot be released, and one of two can
+   ok   a released man leaves the XI, every set piece job and every bid
+12) nobody is in the squad and the pool at once
+   ok   a man bought off the market leaves the free agent pool
+   ok   the summer fill took 3 men from the pool and none you released
+   ok   after the summer nobody in the squad is still listed as a free agent
+   ok   the summer fill paid 2 journeymen the wages they asked
+   ok   with the pool empty the fill signed 4 off the fallback list and none of the 12 you released
+   ok   two free agents whose names slug the same get two ids (fa-probe-michal-twin-s1, fa-probe-michal-twin-s1-2)
+13) a new save has free agents, and they are made up cover
+   Everton: 0 of the day one journeymen still listed two summers later
+   90 journeymen inspected across 5 clubs and three seasons each
+   ok   every save holds 6 journeymen on day one and after each of two summers
+   ok   every journeyman is flagged made up and none claims to be from your club
+   ok   no journeyman wears a real name or a name already in the squad
+   ok   every journeyman is willing and sits 14 or more below the club, so none is an upgrade
+   a journeyman asks 25% of the raw curve wage, and 24% of his squad's median senior wage
+   ok   a journeyman is priced off his squad's values, 25% of the raw curve wage (ceiling 60%)
+   ok   all 60 journeymen made up this summer ask exactly the wage their squad prices
+   Everton to Lommel (level 59.0): 6 journeymen rated 40, 40, 40, 40, 40, 40, {"signable":6}
+   Arsenal to St Johnstone (level 59.2): 6 journeymen rated 40, 40, 40, 40, 40, 40, {"signable":6}
+   Lommel to Arsenal (level 90.6): 6 journeymen rated 71, 71, 65, 67, 66, 69, {"signable":6}
+   ok   none of the old club's journeymen follow the manager to a new job (3 moves, 18 journeymen at the new clubs)
+   ok   after a job move every journeyman is willing cover at the new club and asks what its squad prices
+14) the projection bills a settlement only for the weeks it has left
+   a 5 week row adds 0.200m (expected 0.200m), a 500 week row adds 2.160m (expected 2.160m over 54 weeks)
+   ok   each settlement is projected for the weeks it still runs, and no further than the season
+15) the contracts card agrees with the engine on every button
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at DeskCueLine (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66933:24)
+    at div
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at DeskCueLine (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66933:24)
+    at div
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at DeskCueLine (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66933:24)
+    at div
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at DeskCueLine (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66933:24)
+    at div
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at DeskCueLine (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66933:24)
+    at div
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at DeskCueLine (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66933:24)
+    at div
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+Warning: useLayoutEffect does nothing on the server, because its effect cannot be encoded into the server renderer's output format. This will lead to a mismatch between the initial, non-hydrated UI and the intended UI. To avoid this, useLayoutEffect should only be used in components that render exclusively on the client. See https://reactjs.org/link/uselayouteffect-ssr for common fixes.
+    at DeskCueLine (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66933:24)
+    at div
+    at ContractsCard (/home/runner/work/_temp/t-simFreeAgents/freeagents-4zvTJr/bundle.cjs:66986:26)
+   224 buttons over 7 saves: 169 live, 55 off
+   ok   every Release and Sign button is live exactly when the engine would go through with it
+   ok   every live Sign button quotes the wage, length and signing on fee the signing then commits
+   ok   a release only fires from the confirmation that states the cost
+16) signing a journeyman to sell him on does not pay
+   Everton: signed 6 for 4.2m in fees, sold 4, -0.22m a sale against what he cost
+   Brentford: signed 6 for 4.2m in fees, sold 4, -0.30m a sale against what he cost
+   Napoli: signed 6 for 4.1m in fees, sold 5, -0.42m a sale against what he cost
+   Ajax: signed 5 for 2.5m in fees, sold 5, -0.18m a sale against what he cost
+   Arsenal: signed 5 for 9.9m in fees, sold 4, -1.65m a sale against what he cost
+   Inter Miami: signed 6 for 3.0m in fees, sold 4, -0.17m a sale against what he cost
+   ok   over 26 sales at 6 clubs, every club loses money on each journeyman it signs to sell
+17) a man you release never signs for you again, by any door
+   ok   Michael Keane is off the market once released, and would be back on it without the list
+   ok   a deal cannot sign Michael Keane back, and the same deal goes through without the list
+   ok   Michael Keane cannot be signed off the free agent list whatever his record says
+18) a modern day one opens with today's real free agents, and only then
+   ok   none of the 7 ledger men is on any of 5107 baked squad places or the 5081 name market
+   ok   the generator accepts the ledger and the shipped file is exactly what it writes
+   ok   a real free agent is rated, valued and placed by the roster bake's own curves, one module both import
+   ok   day one at 7 clubs lists exactly the ledger's 7 men
+   ok   every one is in as the file rates, ages and values him, priced by freeAgentTerms off that value
+   ok   the 6 made up journeymen are still there beside them
+   ok   two journeymen signed on day one, and the summer tops the made up men back up to 6 with the real men still listed
+   ok   never in an era save, a job move, an old save or a later summer; a signed man never comes back and the rest age out in two
+   454 clubs, day one and season two: 8140 signable strangers (1607 real men on day one), 753 would start in the picked XI (9.3 percent), 0 raise the best eleven
+   ok   no signable stranger at 454 clubs raises the best eleven, on day one or in season two
+   ok   1607 real free agents are signable on day one across 454 clubs (floor 620)
+   ok   9.3 percent of signable strangers would start in the picked XI (ceiling 13)
+   ok   all 246 of your own ex-players in season three above the eleventh best come back under the level rule, as before the round
+   ok   at Burnley a man level with the eleventh best signs and one point above him does not
+   50 real free agents signed and sold on at 10 clubs, -0.08m a sale against what he cost
+   ok   signing a real free agent to sell him on does not pay: 8 percent of sales at a profit (ceiling 25), -0.08m a sale
+simFreeAgents: all sections passed

@@ -1,0 +1,15 @@
+gen-freeagents exit=0 0s | genClubManagerFreeAgents --check: up to date, 7 men
+gen-russia exit=0 0s | src/data/clubManagerRussia2026.ts is a fresh generation from scripts/data/gatheredSquads/russia2026/research.json (sha256 ccbb26127e4609f743ef07593f186efa36ebed6f6c163622
+gen-aleague exit=0 0s | A-League file unchanged by a fresh generation
+vitest exit=0 4s |    Duration  3.66s (transform 1.50s, setup 79ms, collect 1.81s, tests 695ms, environment 476ms, prepare 231ms)
+simClubManagerALeague exit=0 9s | simClubManagerALeague: all checks passed
+simClubManagerGathered exit=0 1s | simClubManagerGathered: all checks passed (1 gathered league(s), 403 men, 1436 printed squad entries accounted for, 83 addresses, 5 cited facts, the old save)
+simEraBakeExtend exit=0 0s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simFreeAgents exit=0 19s | simFreeAgents: all sections passed
+eslint-new exit=0 2s | 
+simLiveScores-head exit=1 0s | simLiveScores: 1 failure
+simLiveScores-base exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+dashes exit=0 0s | revDashes: 9 files read, 0 lines with a dash, 0 commit message lines with a dash
+simCmDataOnDemand exit=0 12s | simCmDataOnDemand: green. No page downloads data it never reads, and a past season brings its own.
+vitest-neighbours exit=0 11s |    Duration  11.11s (transform 4.57s, setup 142ms, collect 1.46s, tests 11.63s, environment 915ms, prepare 419ms)
+tsc exit=0 68s | 

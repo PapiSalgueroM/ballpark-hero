@@ -1,0 +1,9 @@
+faf0a5f3e
+1) the shaping says what a fan says and puts now first
+   14 names, the sort, 5 showability cases, the window, the labels, hostile rows
+2) the feed stays server side
+   1831 browser files, none name the feed; the poller reads its secrets from the database and checks the caller
+3) no secret in the repo
+   3 files scanned for key shaped literals, 0 found
+
+simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.

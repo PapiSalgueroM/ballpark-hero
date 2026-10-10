@@ -1,0 +1,31 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mreproduces all2163 frozen candidate grades fictional prices and years without named overrides
+[22m[39mNFL_LAYER_MOVES {"linemenAndDefendersHeld":1456,"offenseMenMoved":423}
+
+ [32m✓[39m src/test/cmWorldIdentity1052.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 2941[2mms[22m[39m
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2msaves only five original lineage fields below700KiB and reloads them without rerating
+[22m[39mNFL_RATING_SAVE_SIZE {"rawBytes":635466,"gzipBytes":67042,"players":2163}
+
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap
+[22m[39mNFL_RATING_CAMPAIGN {"games":1088,"playoffs":52,"drafted":84,"saves":24,"maxSave":639964,"finalSeason":2030,"scope":"One seeded normal simulation; salary-matching trades are separately known to permit negative cap."}
+
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mdeals the same board league for a seed as the tree recorded before the opening files were unified
+[22m[39mNFL_BOARD_LEAGUE_DIGESTS ["a43660e29ceec1925fd3771184c2878f4a7e918aae7458654e2b33f3c23c7a8d","7578b53a5edea40e60e1321df949bff0c3906e392a1c199b4369b6fee94acd46","9ec6dba554f8c1a25658282309589c2f4d7a500f69ee45e41d569de3ebe1f829"]
+
+[90mstdout[2m | src/lib/frontOfficeRatings.test.ts[2m > [22m[2mNFL opening rating checkpoint[2m > [22m[2mprints one opening number per man in the starters and depth files with no override left
+[22m[39mNFL_ONE_NUMBER {"men":2163,"fifteenWhoseSeedDiffers":446}
+
+ [32m✓[39m src/lib/frontOfficeRatings.test.ts [2m([22m[2m17 tests[22m[2m)[22m[33m 8685[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mretains dated-role partial labels and their concrete limitation reasons [33m 320[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mplays four actual seasons playoffs drafts and summers with bounded saves and a nonnegative normal cap [33m 499[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mrefuses stale identity or source records before the real generator CLI writes outputs [33m 3910[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mdeals the same board league for a seed as the tree recorded before the opening files were unified [33m 376[2mms[22m[39m
+   [33m[2m✓[22m[39m NFL opening rating checkpoint[2m > [22mloads a Release AK franchise unchanged and plays its next week exactly as Release AK would [33m 345[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m23 passed[39m[22m[90m (23)[39m
+[2m   Start at [22m 09:35:20
+[2m   Duration [22m 11.11s[2m (transform 4.57s, setup 142ms, collect 1.46s, tests 11.63s, environment 915ms, prepare 419ms)[22m
+
