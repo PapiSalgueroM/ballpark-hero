@@ -1,0 +1,17 @@
+  1 set 11: 1000 fields, at the floor 0, fell back 0, plain fields strict 0 of 445
+  1 set 23: 1000 fields, at the floor 0, fell back 0, plain fields strict 0 of 449
+  1 set 37: 1000 fields, at the floor 0, fell back 0, plain fields strict 0 of 453
+  1 by (clubs of the association with most in one pot, most in one pot): fields | at the floor | fell back | mean tries | floors seen (breaks ; over the cap)
+    4 clubs, 3 in a pot         20 |     0 |   0 | 1.05 | 0 ; 0
+    4 clubs, 4 in a pot         30 |     0 |   0 | 1.17 | 0 ; 0
+    5 clubs, 2 in a pot         54 |     0 |   0 | 1.04 | 0 ; 0
+    5 clubs, 3 in a pot        992 |     0 |   0 | 1.03 | 0 ; 0
+    5 clubs, 4 in a pot        608 |     0 |   0 | 1.03 | 0 ; 0
+    5 clubs, 5 in a pot        183 |     0 |   0 | 1.04 | 1,2 ; 0
+    6 clubs, 2 in a pot         29 |     0 |   0 | 1.03 | 0 ; 0
+    6 clubs, 3 in a pot        604 |     0 |   0 | 1.03 | 0 ; 0
+    6 clubs, 4 in a pot        313 |     0 |   0 | 1.04 | 0 ; 2
+    6 clubs, 5 in a pot        165 |     0 |   0 | 1.04 | 1,2 ; 2
+    6 clubs, 6 in a pot          2 |     0 |   0 | 1.00 | 3 ; 0
+  1 one association swollen past anything the game ships: 8 clubs: 0 of 8 at the floor, 0 on the pattern | 10 clubs: 0 of 8 at the floor, 0 on the pattern | 12 clubs: 0 of 8 at the floor, 0 on the pattern | 18 clubs: 0 of 8 at the floor, 0 on the pattern | 36 clubs: 8 of 8 at the floor, 0 on the pattern
+simCmLeaguePhase control sameassoc: FIRED (3019 of its own failures, e.g. [BUDGET] 9 breaks, more than its budget of 2 (set 11, field 0))
