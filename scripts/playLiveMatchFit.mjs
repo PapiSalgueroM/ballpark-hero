@@ -84,11 +84,20 @@
  * there to the net nobody of the side that got it is at the ball; the ball turns by 20 degrees or more; in the net
  * he alone holds his head and nobody of his side has his arms up. Screenshots (two in flight, one with the card)
  * go to LIVE_FIT_SHOTS or RC_OUT. The section runs at the end of the default walk, and alone with LIVE_FIT_OWN=1.
+ *   The floor of 20 degrees is a bound of the geometry for a back and, since the review of this round, for a
+ *   keeper too (his own goal ends in the corner on the side the ball came from; before that, whichever keeper's
+ *   own goal the engine search met first could turn by 2 degrees). src/test/pitchOwnGoal.test.tsx, OG5, sweeps
+ *   it by hand: no place of the men gives a turn under 27 off a back or under 43 off a keeper, and a goal that
+ *   is not an own goal turns by 3.3 at most. So a red on this line is the picture, never the luck of the seed.
  *   NEGATIVE CONTROL 6: LIVE_FIT_OWN=1 LIVE_FIT_CONTROL=ogbefore is for a BUILD that draws the picture from before
  *   Round 1216 (the one entry line of ownGoalFrame taken out of src/components/pitch-motion/motion.tsx, then
  *   built): the card must still read (O.G) in all four watches and section 9 must go red on the last touch and
  *   on the turn. Exit 1 when it does, as it must, 3 when not. Taking the tag off the save would prove less: the
- *   bug that was reported is the card saying one thing and the grass another.
+ *   bug that was reported is the card saying one thing and the grass another. The edit is one script, so the
+ *   control runs from the repo alone, on a runner or a throwaway checkout (it writes a source file in place):
+ *     node scripts/lib/ownGoalBeforeBuild.mjs && npm run build
+ *     LIVE_FIT_OWN=1 LIVE_FIT_CONTROL=ogbefore node scripts/playLiveMatchFit.mjs     (against that build, served)
+ *     git checkout -- src/components/pitch-motion/motion.tsx                         (and build again)
  *
  *   node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs
@@ -426,6 +435,8 @@ async function startSampler(page) {
             dots: [...pitch.querySelectorAll('[data-cm-dot], [data-cm-dot-opp]')].map(el => ({
               mine: el.hasAttribute('data-cm-dot'), id: el.getAttribute('data-cm-dot') ?? el.getAttribute('data-cm-dot-opp'), at: at(el),
               rue: !!el.querySelector('[data-pm-rue]'), up: !!el.querySelector('[data-cm-actor-pose="celebrate"]'),
+              /* How far the figure itself leans, in degrees, read off what is drawn (a dive lays it on its side). */
+              lean: (() => { const turned = /rotate\((-?[0-9.e-]+)/.exec(el.querySelector('svg g[transform]')?.getAttribute('transform') ?? ''); return turned ? Math.abs(Number(turned[1])) : 0; })(),
             })),
             cardLine: cardLine ? cardLine.textContent.replace(/\s+/g, ' ').trim() : null,
           };
@@ -967,6 +978,15 @@ function judgeOwnGoal(watched, save) {
   else if (cheer) fail(`a man of the side that conceded has his arms up on ${cheer} frames of the net`);
   else if (!arms) fail('nobody of the side that got the goal raises his arms');
   else ok(`in the net he alone holds his head (${rued} frames), nobody of his side has his arms up, and the side that got it does (${arms} frames)`);
+  /* He ends on his feet, read off the drawing and not off the mark: the figure draws hands at a head only when it
+     is upright, so a keeper who put it in gets up as it goes in (a back never leaves his feet). Lying in his dive
+     he leans by 68 degrees, as the beaten keeper of any goal does. */
+  const first = net[0].dots.find(isMan)?.lean ?? 0, last = net[net.length - 1].dots.find(isMan)?.lean ?? 0;
+  /* 20 degrees is two thirds of the way through the net at the latest (68 eased back by a smoothstep); a page that
+     drops frames near the end may sample no later than that, so a figure well on its way up (under half of where
+     it started) passes too. A keeper left lying is at 68 on both frames. */
+  if (last > Math.max(20, first / 2)) fail(`the man the card names is still lying in his dive on the last frame of the net (his figure leans by ${last.toFixed(1)} degrees, ${first.toFixed(1)} when the ball went in): no hands at a head are drawn on him`);
+  else ok(`he ends on his feet: his figure leans by ${last.toFixed(1)} degrees on the last frame of the net (${first.toFixed(1)} when the ball went in)`);
 }
 /** Section 9: an own goal for me and one against me, each watched on a phone and on a wide screen. */
 async function ownGoalSection() {
