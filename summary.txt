@@ -1,0 +1,11 @@
+mk-base exit=0 42s | probeUsRev fleet: root /tmp/base, hooks off, 600 careers, 8351 seasons, 600 saves cut
+mk-head-hooked exit=0 42s | probeUsRev fleet: root /home/runner/work/ballpark-hero/ballpark-hero, hooks ON (no plan chosen), 600 careers, 8351 seasons, 600 saves cut
+mk-head-plain exit=0 42s | probeUsRev fleet: root /home/runner/work/ballpark-hero/ballpark-hero, hooks off, 600 careers, 8351 seasons, 600 saves cut
+eq-noplan-base-vs-head exit=0 0s | probeUsRev compare base-plain-vs-head-with-hooks-and-no-plan: 600 careers, 8351 seasons compared (save, line, team quality and draw count each season), 0 differ. BYTE EQU
+eq-engines-base-vs-head exit=0 0s | probeUsRev compare base-vs-head-engines-alone: 600 careers, 8351 seasons compared (save, line, team quality and draw count each season), 0 differ. BYTE EQUAL
+resume-oldsaves exit=0 32s | probeUsRev resume: 600 old saves loaded and played on with hooks ON; saves that arrived with a plan field: 0; saves that ended with one: 0
+eq-oldsaves exit=0 0s | probeUsRev compare saves-made-by-base-played-on-by-head: 600 careers, 5975 seasons compared (save, line, team quality and draw count each season), 0 differ. BYTE EQUAL
+ctl-mk-plan exit=0 52s | probeUsRev fleet: root /home/runner/work/ballpark-hero/ballpark-hero, hooks ON (no plan chosen), 600 careers, 8351 seasons, 600 saves cut
+ctl-plan-must-differ exit=1 0s | probeUsRev compare CONTROL-a-plan-every-season-must-differ: 600 careers, 8351 seasons compared (save, line, team quality and draw count each season), 600 differ. RED
+plans exit=0 82s | probeUsRev plans: 349 tallies, 185 of them name a disagreement between a card and the season.
+damage exit=0 4s | probeUsRev damage: 520 damaged saves over four sports, 0 threw, 0 changed the season, 12 dropped the damaged field and played the good plan, 220 leave the panel locked a 

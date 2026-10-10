@@ -1,0 +1,7 @@
+  DIFF nfl:0 first differs at season 0 (14 vs 14)
+  DIFF nfl:1 first differs at season 0 (12 vs 12)
+  DIFF nfl:2 first differs at season 0 (14 vs 14)
+  DIFF nfl:3 first differs at season 0 (14 vs 14)
+  DIFF nfl:4 first differs at season 0 (14 vs 14)
+  DIFF nfl:5 first differs at season 0 (14 vs 14)
+probeUsRev compare CONTROL-a-plan-every-season-must-differ: 600 careers, 8351 seasons compared (save, line, team quality and draw count each season), 600 differ. RED

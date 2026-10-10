@@ -1,0 +1,12 @@
+#!serial
+mk-base: git worktree add -q /tmp/base 24f57a98fa44e280f1c848276a27d86e0a3e2745 && node .rc/x/probeUsRev.mjs --root /tmp/base --mode fleet --n 150 --out /tmp/base.json --saves /tmp/saves.json
+mk-head-hooked: node .rc/x/probeUsRev.mjs --root . --mode fleet --n 150 --out /tmp/head.json
+mk-head-plain: node .rc/x/probeUsRev.mjs --root . --mode fleet --hooks off --n 150 --out /tmp/headplain.json
+eq-noplan-base-vs-head: node .rc/x/probeUsRev.mjs --mode compare --a /tmp/base.json --b /tmp/head.json --label base-plain-vs-head-with-hooks-and-no-plan
+eq-engines-base-vs-head: node .rc/x/probeUsRev.mjs --mode compare --a /tmp/base.json --b /tmp/headplain.json --label base-vs-head-engines-alone
+resume-oldsaves: node .rc/x/probeUsRev.mjs --root . --mode resume --in /tmp/saves.json --out /tmp/resume.json
+eq-oldsaves: node .rc/x/probeUsRev.mjs --mode compare --a /tmp/base.json --b /tmp/resume.json --label saves-made-by-base-played-on-by-head
+ctl-mk-plan: node .rc/x/probeUsRev.mjs --root . --mode fleet --n 150 --plan push --out /tmp/headpush.json
+ctl-plan-must-differ: node .rc/x/probeUsRev.mjs --mode compare --a /tmp/base.json --b /tmp/headpush.json --label CONTROL-a-plan-every-season-must-differ
+plans: node .rc/x/probeUsRev.mjs --root . --mode plans --k 3 > $RC_OUT/plans.txt 2>&1; s=$?; tail -1 $RC_OUT/plans.txt; exit $s
+damage: node .rc/x/probeUsRev.mjs --root . --mode damage > $RC_OUT/damage.txt 2>&1; s=$?; tail -1 $RC_OUT/damage.txt; exit $s

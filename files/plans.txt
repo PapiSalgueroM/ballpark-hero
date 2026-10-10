@@ -1,0 +1,350 @@
+   381  mlb bonus:steady chosen
+    34  mlb bonus:steady one season later the bank holds MORE than was banked   e.g. banked 0.0666, bank differs by 0.1 (SP/crafty age 29) | banked 0.2286, bank differs by 0.3 (SP/workhorse age 29) | banked 0.0585, bank differs by 0.1 (RF/complete age 29)
+    77  mlb bonus:steady one season later the bank holds NOTHING of it (rounded away)   e.g. banked 0.0585, bank differs by 0 (RF/wall_rf age 33) | banked 0.0072, bank differs by 0 (LF/grinder age 21) | banked 0.0072, bank differs by 0 (LF/grinder age 24)
+    21  mlb bonus:steady one season later the bank holds part of it   e.g. banked 0.1035, bank differs by 0.1 (SP/crafty age 33) | banked 0.1179, bank differs by 0.1 (RF/cannon age 29) | banked 0.1413, bank differs by 0.1 (DH/veteran_bat age 29)
+   157  mlb bonus:steady outcome completed
+   224  mlb bonus:steady outcome missed
+    86  mlb bonus:steady paid: net 0.05M or more
+    71  mlb bonus:steady paid: net under 0.05M (below the one decimal the bank is kept in)
+   381  mlb bonus:stretch chosen
+    27  mlb bonus:stretch one season later the bank holds MORE than was banked   e.g. banked 0.1665, bank differs by 0.2 (SP/crafty age 29) | banked 0.2588, bank differs by 0.3 (SP/crafty age 33) | banked 0.1463, bank differs by 0.2 (RF/complete age 29)
+    34  mlb bonus:stretch one season later the bank holds NOTHING of it (rounded away)   e.g. banked 0.018, bank differs by 0 (LF/grinder age 24) | banked 0.018, bank differs by 0 (RF/cannon age 21) | banked 0.0068, bank differs by 0 (RP/closer age 21)
+    18  mlb bonus:stretch one season later the bank holds part of it   e.g. banked 0.5018, bank differs by 0.5 (SP/flame age 29) | banked 0.2498, bank differs by 0.2 (LF/leadoff age 29) | banked 0.216, bank differs by 0.2 (DH/pure_masher age 29)
+    91  mlb bonus:stretch outcome completed
+   290  mlb bonus:stretch outcome missed
+    55  mlb bonus:stretch paid: net 0.05M or more
+    36  mlb bonus:stretch paid: net under 0.05M (below the one decimal the bank is kept in)
+    79  mlb expectation:steady CARD SAYS morale 3 at the end, save got 0   e.g. SP/crafty age 24 morale before 100 | SP/crafty age 29 morale before 100 | SP/crafty age 33 morale before 100
+    15  mlb expectation:steady CARD SAYS morale 3 at the end, save got 1   e.g. RP/closer age 24 morale before 99 | DH/veteran_bat age 29 morale before 99 | CF/wall age 29 morale before 99
+    16  mlb expectation:steady CARD SAYS morale 3 at the end, save got 2   e.g. LF/slugger_lf age 33 morale before 98 | RF/complete age 33 morale before 98 | RF/cannon age 29 morale before 98
+   381  mlb expectation:steady chosen
+   247  mlb expectation:steady outcome completed
+   134  mlb expectation:steady outcome missed
+    75  mlb expectation:stretch CARD SAYS morale 6 at the end, save got 0   e.g. RF/wall_rf age 33 morale before 100 | LF/grinder age 29 morale before 100 | SP/crafty age 24 morale before 100
+    16  mlb expectation:stretch CARD SAYS morale 6 at the end, save got 1   e.g. LF/slugger_lf age 29 morale before 99 | RP/closer age 24 morale before 99 | DH/veteran_bat age 29 morale before 99
+    20  mlb expectation:stretch CARD SAYS morale 6 at the end, save got 2   e.g. RF/cannon age 29 morale before 98 | LF/slugger_lf age 33 morale before 98 | LF/leadoff age 29 morale before 98
+     9  mlb expectation:stretch CARD SAYS morale 6 at the end, save got 3   e.g. SP/crafty age 29 morale before 97 | RP/closer age 33 morale before 97 | RP/setup age 29 morale before 97
+     9  mlb expectation:stretch CARD SAYS morale 6 at the end, save got 4   e.g. RP/sidearm age 29 morale before 96 | RF/wall_rf age 29 morale before 96 | 1B/masher age 33 morale before 96
+     5  mlb expectation:stretch CARD SAYS morale 6 at the end, save got 5   e.g. CF/fivetool age 33 morale before 95 | RP/sidearm age 33 morale before 95 | 1B/contact age 24 morale before 95
+   381  mlb expectation:stretch chosen
+   240  mlb expectation:stretch outcome completed
+   141  mlb expectation:stretch outcome missed
+   381  mlb partnership:build chosen
+   248  mlb partnership:build outcome completed
+   133  mlb partnership:build outcome missed
+    71  mlb partnership:build year 2 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. LF/grinder age 24 morale 100 | SP/crafty age 24 morale 100 | SP/crafty age 29 morale 100
+     5  mlb partnership:build year 2 CARD SAYS morale +2 for 1 completed year(s), season got 1   e.g. LF/slugger_lf age 29 morale 99 | SP/crafty age 33 morale 99 | RP/closer age 29 morale 99
+   136  mlb partnership:build year 2: 0 completed year(s) gave morale +0
+   131  mlb partnership:build year 2: 1 completed year(s) gave morale +2
+    11  mlb partnership:build year 3 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. RF/wall_rf age 33 morale 100 | LF/grinder age 29 morale 100 | DH/pure_masher age 33 morale 100
+     1  mlb partnership:build year 3 CARD SAYS morale +2 for 1 completed year(s), season got 1   e.g. 2B/scrapper age 29 morale 99
+    58  mlb partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 0   e.g. SP/flame age 24 morale 100 | SP/flame age 29 morale 100 | SP/crafty age 33 morale 100
+     4  mlb partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 1   e.g. 2B/gap age 21 morale 99 | 2B/gap age 24 morale 99 | RF/complete age 24 morale 99
+     5  mlb partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 2   e.g. SP/crafty age 21 morale 98 | C/field_general age 24 morale 98 | 1B/contact age 33 morale 98
+     3  mlb partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 3   e.g. RP/setup age 24 morale 97 | RP/setup age 29 morale 97 | LF/grinder age 24 morale 97
+   110  mlb partnership:build year 3: 0 completed year(s) gave morale +0
+    24  mlb partnership:build year 3: 1 completed year(s) gave morale +2
+    73  mlb partnership:build year 3: 2 completed year(s) gave morale +4
+     6  mlb partnership:build year 4 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. RP/closer age 29 morale 100 | CF/fivetool age 29 morale 100 | DH/professional age 29 morale 100
+     8  mlb partnership:build year 4 CARD SAYS morale +4 for 2 completed year(s), season got 0   e.g. RF/wall_rf age 33 morale 100 | DH/pure_masher age 24 morale 100 | SP/crafty age 21 morale 100
+    23  mlb partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 0   e.g. RF/cannon age 29 morale 100 | RP/closer age 21 morale 100 | C/framer age 29 morale 100
+     3  mlb partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 2   e.g. SP/crafty age 21 morale 98 | C/framer age 29 morale 98 | 3B/hot_corner age 33 morale 98
+     3  mlb partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 4   e.g. LF/grinder age 21 morale 96 | DH/pure_masher age 33 morale 96 | RP/sidearm age 21 morale 96
+     1  mlb partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 5   e.g. 3B/thumper age 21 morale 95
+    67  mlb partnership:build year 4: 0 completed year(s) gave morale +0
+    11  mlb partnership:build year 4: 1 completed year(s) gave morale +2
+    12  mlb partnership:build year 4: 2 completed year(s) gave morale +4
+    20  mlb partnership:build year 4: 3 completed year(s) gave morale +6
+    25  mlb reinvention:maintain CARD SAYS durability 0.06, season got 0.00   e.g. SP/crafty age 33 durability 1 | DH/veteran_bat age 33 durability 1 | DH/pure_masher age 33 durability 1
+    22  mlb reinvention:maintain CARD SAYS durability 0.06, season got 0.05   e.g. RF/cannon age 33 durability 0.95 | LF/leadoff age 33 durability 0.95 | CF/wall age 33 durability 0.95
+    84  mlb reinvention:maintain chosen
+    84  mlb reinvention:maintain outcome completed
+    15  mlb skipped (retired, banned or out of contract)
+   109  mlb tactics:attack CARD SAYS morale 6, season got 0   e.g. RF/wall_rf age 29 morale 100 | RF/wall_rf age 33 morale 100 | LF/grinder age 29 morale 100
+    11  mlb tactics:attack CARD SAYS morale 6, season got 1   e.g. RP/closer age 33 morale 99 | SP/flame age 24 morale 99 | RF/complete age 24 morale 99
+     5  mlb tactics:attack CARD SAYS morale 6, season got 2   e.g. RP/setup age 24 morale 98 | RP/sidearm age 29 morale 98 | 2B/scrapper age 29 morale 98
+     6  mlb tactics:attack CARD SAYS morale 6, season got 3   e.g. SP/crafty age 29 morale 97 | RP/sidearm age 33 morale 97 | RF/wall_rf age 29 morale 97
+     8  mlb tactics:attack CARD SAYS morale 6, season got 4   e.g. LF/slugger_lf age 29 morale 96 | SP/crafty age 29 morale 96 | 2B/scrapper age 33 morale 96
+    12  mlb tactics:attack CARD SAYS morale 6, season got 5   e.g. SP/flame age 33 morale 95 | RF/cannon age 29 morale 95 | LF/leadoff age 33 morale 95
+   381  mlb tactics:attack chosen
+   381  mlb tactics:attack outcome completed
+   106  mlb tactics:support CARD SAYS durability 0.06, season got 0.00   e.g. LF/grinder age 21 durability 1 | LF/grinder age 24 durability 1 | LF/grinder age 29 durability 1
+    94  mlb tactics:support CARD SAYS durability 0.06, season got 0.05   e.g. RF/cannon age 21 durability 0.95 | RF/cannon age 24 durability 0.95 | RF/cannon age 29 durability 0.95
+   381  mlb tactics:support chosen
+   381  mlb tactics:support outcome completed
+   108  mlb workload:push CARD SAYS morale 6, season got 0   e.g. RF/wall_rf age 29 morale 100 | RF/wall_rf age 33 morale 100 | LF/grinder age 29 morale 100
+    11  mlb workload:push CARD SAYS morale 6, season got 1   e.g. RP/closer age 33 morale 99 | SP/flame age 24 morale 99 | RF/complete age 24 morale 99
+     5  mlb workload:push CARD SAYS morale 6, season got 2   e.g. RP/setup age 24 morale 98 | RP/sidearm age 29 morale 98 | 2B/scrapper age 29 morale 98
+     6  mlb workload:push CARD SAYS morale 6, season got 3   e.g. SP/crafty age 29 morale 97 | RP/sidearm age 33 morale 97 | RF/wall_rf age 29 morale 97
+     8  mlb workload:push CARD SAYS morale 6, season got 4   e.g. LF/slugger_lf age 29 morale 96 | SP/crafty age 29 morale 96 | 2B/scrapper age 33 morale 96
+    12  mlb workload:push CARD SAYS morale 6, season got 5   e.g. SP/flame age 33 morale 95 | RF/cannon age 29 morale 95 | LF/leadoff age 33 morale 95
+   381  mlb workload:push chosen
+   381  mlb workload:push outcome completed
+   195  mlb workload:recover CARD SAYS health 8, season got 0   e.g. SP/flame age 21 health 100 | SP/flame age 29 health 100 | RF/wall_rf age 21 health 100
+     3  mlb workload:recover CARD SAYS health 8, season got 1   e.g. SS/sparkplug age 24 health 99 | DH/pure_masher age 33 health 99 | SS/slugging age 29 health 99
+    14  mlb workload:recover CARD SAYS health 8, season got 2   e.g. RP/closer age 24 health 98 | RP/setup age 29 health 98 | DH/pure_masher age 33 health 98
+    27  mlb workload:recover CARD SAYS health 8, season got 3   e.g. LF/grinder age 24 health 97 | RF/cannon age 29 health 97 | LF/slugger_lf age 29 health 97
+    19  mlb workload:recover CARD SAYS health 8, season got 4   e.g. LF/grinder age 29 health 96 | RF/complete age 24 health 96 | LF/leadoff age 24 health 96
+     8  mlb workload:recover CARD SAYS health 8, season got 5   e.g. SP/crafty age 33 health 95 | SP/crafty age 24 health 95 | 2B/gap age 29 health 95
+     9  mlb workload:recover CARD SAYS health 8, season got 6   e.g. SP/flame age 24 health 94 | C/framer age 29 health 94 | 1B/clutch age 33 health 94
+     7  mlb workload:recover CARD SAYS health 8, season got 7   e.g. RF/wall_rf age 33 health 93 | 1B/masher age 33 health 93 | DH/professional age 29 health 93
+   381  mlb workload:recover chosen
+   381  mlb workload:recover outcome completed
+   148  nba bonus:steady chosen
+     6  nba bonus:steady one season later the bank holds MORE than was banked   e.g. banked 0.3798, bank differs by 0.4 (PF/bruiser age 31) | banked 0.0945, bank differs by 0.1 (SG/twoway age 32) | banked 0.1647, bank differs by 0.2 (SG/bucket age 28)
+     2  nba bonus:steady one season later the bank holds NOTHING of it (rounded away)   e.g. banked 0.0585, bank differs by 0 (SG/bucket age 24) | banked 0.0225, bank differs by 0 (PG/scoringpg age 20)
+    10  nba bonus:steady one season later the bank holds part of it   e.g. banked 0.1098, bank differs by 0.1 (PG/scoringpg age 31) | banked 0.3231, bank differs by 0.3 (PF/bruiser age 29) | banked 0.1098, bank differs by 0.1 (PG/pointgod age 28)
+    42  nba bonus:steady outcome completed
+   106  nba bonus:steady outcome missed
+    27  nba bonus:steady paid: net 0.05M or more
+    15  nba bonus:steady paid: net under 0.05M (below the one decimal the bank is kept in)
+   148  nba bonus:stretch chosen
+     7  nba bonus:stretch one season later the bank holds MORE than was banked   e.g. banked 1.2443, bank differs by 1.3 (PG/pointgod age 29) | banked 0.27, bank differs by 0.3 (SG/bucket age 32) | banked 0.2363, bank differs by 0.3 (SG/twoway age 32)
+     3  nba bonus:stretch one season later the bank holds part of it   e.g. banked 0.1463, bank differs by 0.1 (SG/bucket age 24) | banked 1.0373, bank differs by 1 (SG/sniper age 31) | banked 1.0035, bank differs by 1 (PF/bruiser age 28)
+    22  nba bonus:stretch outcome completed
+   126  nba bonus:stretch outcome missed
+    21  nba bonus:stretch paid: net 0.05M or more
+     1  nba bonus:stretch paid: net under 0.05M (below the one decimal the bank is kept in)
+    18  nba expectation:steady CARD SAYS morale 3 at the end, save got 0   e.g. PG/pointgod age 29 morale before 100 | PG/pointgod age 32 morale before 100 | C/paintbeast age 32 morale before 100
+     8  nba expectation:steady CARD SAYS morale 3 at the end, save got 1   e.g. C/anchor age 32 morale before 99 | PG/pest age 23 morale before 99 | PG/scoringpg age 22 morale before 99
+     6  nba expectation:steady CARD SAYS morale 3 at the end, save got 2   e.g. C/paintbeast age 23 morale before 98 | SG/bucket age 24 morale before 98 | SG/bucket age 33 morale before 98
+   148  nba expectation:steady chosen
+   135  nba expectation:steady outcome completed
+    13  nba expectation:steady outcome missed
+    22  nba expectation:stretch CARD SAYS morale 6 at the end, save got 0   e.g. PG/pointgod age 32 morale before 100 | PG/pest age 23 morale before 100 | SF/alpha age 24 morale before 100
+     5  nba expectation:stretch CARD SAYS morale 6 at the end, save got 1   e.g. PG/scoringpg age 24 morale before 99 | C/paintbeast age 32 morale before 99 | PF/bruiser age 29 morale before 99
+     6  nba expectation:stretch CARD SAYS morale 6 at the end, save got 2   e.g. C/stretch age 32 morale before 98 | SG/bucket age 32 morale before 98 | PF/swiss age 33 morale before 98
+     2  nba expectation:stretch CARD SAYS morale 6 at the end, save got 3   e.g. SF/alpha age 31 morale before 97 | SF/pointforward age 31 morale before 97
+     5  nba expectation:stretch CARD SAYS morale 6 at the end, save got 4   e.g. PG/pointgod age 23 morale before 96 | PF/bruiser age 31 morale before 96 | PG/scoringpg age 22 morale before 96
+     3  nba expectation:stretch CARD SAYS morale 6 at the end, save got 5   e.g. PG/pest age 29 morale before 95 | SG/twoway age 32 morale before 95 | PF/bruiser age 28 morale before 95
+   148  nba expectation:stretch chosen
+   124  nba expectation:stretch outcome completed
+    24  nba expectation:stretch outcome missed
+   148  nba partnership:build chosen
+   142  nba partnership:build outcome completed
+     6  nba partnership:build outcome missed
+    15  nba partnership:build year 2 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. PG/scoringpg age 31 morale 100 | SG/bucket age 24 morale 100 | PF/bruiser age 31 morale 100
+     2  nba partnership:build year 2 CARD SAYS morale +2 for 1 completed year(s), season got 1   e.g. PG/scoringpg age 27 morale 99 | PF/stretch4 age 32 morale 99
+     6  nba partnership:build year 2: 0 completed year(s) gave morale +0
+    51  nba partnership:build year 2: 1 completed year(s) gave morale +2
+     2  nba partnership:build year 3 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. PG/pest age 28 morale 100 | SG/bucket age 28 morale 100
+     8  nba partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 0   e.g. C/anchor age 32 morale 100 | SG/bucket age 32 morale 100 | PG/pointgod age 28 morale 100
+     3  nba partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 2   e.g. PF/bruiser age 31 morale 98 | SG/sniper age 20 morale 98 | SF/alpha age 19 morale 98
+     6  nba partnership:build year 3: 0 completed year(s) gave morale +0
+    44  nba partnership:build year 3: 2 completed year(s) gave morale +4
+     1  nba partnership:build year 4 CARD SAYS morale +2 for 1 completed year(s), season got 1   e.g. PF/stretch4 age 32 morale 99
+    11  nba partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 0   e.g. SG/bucket age 32 morale 100 | PG/pointgod age 28 morale 100 | SG/sniper age 20 morale 100
+     1  nba partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 2   e.g. SF/alpha age 19 morale 98
+     2  nba partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 4   e.g. C/stretch age 19 morale 96 | SG/twoway age 20 morale 96
+     1  nba partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 5   e.g. C/anchor age 21 morale 95
+     6  nba partnership:build year 4: 0 completed year(s) gave morale +0
+     1  nba partnership:build year 4: 1 completed year(s) gave morale +2
+    31  nba partnership:build year 4: 3 completed year(s) gave morale +6
+     6  nba reinvention:maintain CARD SAYS durability 0.06, season got 0.00   e.g. SG/twoway age 32 durability 1 | SF/threed age 32 durability 1 | SG/twoway age 32 durability 1
+    12  nba reinvention:maintain CARD SAYS durability 0.06, season got 0.05   e.g. PG/pointgod age 32 durability 0.95 | C/anchor age 32 durability 0.95 | C/stretch age 32 durability 0.95
+    31  nba reinvention:maintain chosen
+    31  nba reinvention:maintain outcome completed
+    32  nba skipped (retired, banned or out of contract)
+   148  nba tactics:attack chosen
+   148  nba tactics:attack outcome completed
+   148  nba tactics:support chosen
+   148  nba tactics:support outcome completed
+    39  nba workload:push CARD SAYS morale 6, season got 0   e.g. PG/pointgod age 32 morale 100 | PG/scoringpg age 24 morale 100 | PG/scoringpg age 27 morale 100
+     4  nba workload:push CARD SAYS morale 6, season got 1   e.g. PG/pointgod age 29 morale 99 | C/paintbeast age 32 morale 99 | C/stretch age 29 morale 99
+     2  nba workload:push CARD SAYS morale 6, season got 2   e.g. PF/swiss age 28 morale 98 | SG/twoway age 31 morale 98
+     1  nba workload:push CARD SAYS morale 6, season got 3   e.g. C/stretch age 32 morale 97
+     4  nba workload:push CARD SAYS morale 6, season got 4   e.g. PG/scoringpg age 31 morale 96 | PF/swiss age 24 morale 96 | SG/twoway age 23 morale 96
+     7  nba workload:push CARD SAYS morale 6, season got 5   e.g. C/anchor age 32 morale 95 | C/paintbeast age 28 morale 95 | SF/alpha age 29 morale 95
+   148  nba workload:push chosen
+   148  nba workload:push outcome completed
+    88  nba workload:recover CARD SAYS health 8, season got 0   e.g. PG/pointgod age 19 health 100 | PG/pointgod age 23 health 100 | SF/threed age 21 health 100
+     1  nba workload:recover CARD SAYS health 8, season got 1   e.g. PF/swiss age 24 health 99
+     9  nba workload:recover CARD SAYS health 8, season got 2   e.g. C/anchor age 22 health 98 | C/paintbeast age 23 health 98 | SF/alpha age 24 health 98
+     8  nba workload:recover CARD SAYS health 8, season got 3   e.g. PG/pest age 23 health 97 | SG/bucket age 32 health 97 | SG/sniper age 22 health 97
+     2  nba workload:recover CARD SAYS health 8, season got 4   e.g. PG/pointgod age 22 health 96 | SG/sniper age 24 health 96
+     6  nba workload:recover CARD SAYS health 8, season got 5   e.g. PG/scoringpg age 27 health 95 | C/paintbeast age 32 health 95 | SG/twoway age 23 health 95
+     3  nba workload:recover CARD SAYS health 8, season got 6   e.g. C/anchor age 22 health 94 | PG/pest age 24 health 94 | PF/swiss age 33 health 94
+     6  nba workload:recover CARD SAYS health 8, season got 7   e.g. PG/pointgod age 29 health 93 | PF/bruiser age 22 health 93 | SF/alpha age 31 health 93
+   148  nba workload:recover chosen
+   148  nba workload:recover outcome completed
+   211  nfl bonus:steady chosen
+    15  nfl bonus:steady one season later the bank holds MORE than was banked   e.g. banked 0.1782, bank differs by 0.2 (WR/burner age 30) | banked 0.0531, bank differs by 0.1 (WR/possession age 22) | banked 0.0729, bank differs by 0.1 (QB/dual age 22)
+    23  nfl bonus:steady one season later the bank holds NOTHING of it (rounded away)   e.g. banked 0.0459, bank differs by 0 (WR/burner age 22) | banked 0.0225, bank differs by 0 (RB/bell age 22) | banked 0.0171, bank differs by 0 (LB/thumper age 22)
+     6  nfl bonus:steady one season later the bank holds part of it   e.g. banked 0.1233, bank differs by 0.1 (QB/cannon age 22) | banked 0.1035, bank differs by 0.1 (WR/burner age 30) | banked 0.1485, bank differs by 0.1 (LB/thumper age 30)
+    86  nfl bonus:steady outcome completed
+   125  nfl bonus:steady outcome missed
+    34  nfl bonus:steady paid: net 0.05M or more
+    52  nfl bonus:steady paid: net under 0.05M (below the one decimal the bank is kept in)
+   211  nfl bonus:stretch chosen
+     7  nfl bonus:stretch one season later the bank holds MORE than was banked   e.g. banked 0.1823, bank differs by 0.2 (QB/dual age 22) | banked 0.0563, bank differs by 0.1 (RB/bell age 22) | banked 0.468, bank differs by 0.5 (LB/cover age 34)
+     8  nfl bonus:stretch one season later the bank holds NOTHING of it (rounded away)   e.g. banked 0.054, bank differs by 0 (LB/thumper age 22) | banked 0.009, bank differs by 0 (K/leg age 22) | banked 0.009, bank differs by 0 (K/clutch age 22)
+     6  nfl bonus:stretch one season later the bank holds part of it   e.g. banked 0.1013, bank differs by 0.1 (WR/possession age 22) | banked 0.1035, bank differs by 0.1 (TE/inline age 22) | banked 0.225, bank differs by 0.2 (TE/inline age 34)
+    41  nfl bonus:stretch outcome completed
+   170  nfl bonus:stretch outcome missed
+    24  nfl bonus:stretch paid: net 0.05M or more
+    17  nfl bonus:stretch paid: net under 0.05M (below the one decimal the bank is kept in)
+    36  nfl expectation:steady CARD SAYS morale 3 at the end, save got 0   e.g. QB/cannon age 30 morale before 100 | QB/cannon age 34 morale before 100 | WR/burner age 30 morale before 100
+     1  nfl expectation:steady CARD SAYS morale 3 at the end, save got 1   e.g. K/leg age 25 morale before 99
+     1  nfl expectation:steady CARD SAYS morale 3 at the end, save got 2   e.g. EDGE/hybrid age 30 morale before 98
+   211  nfl expectation:steady chosen
+   155  nfl expectation:steady outcome completed
+    56  nfl expectation:steady outcome missed
+    27  nfl expectation:stretch CARD SAYS morale 6 at the end, save got 0   e.g. WR/burner age 30 morale before 100 | QB/surgeon age 34 morale before 100 | RB/satellite age 25 morale before 100
+     5  nfl expectation:stretch CARD SAYS morale 6 at the end, save got 1   e.g. QB/cannon age 25 morale before 99 | WR/alpha age 25 morale before 99 | EDGE/power age 25 morale before 99
+    10  nfl expectation:stretch CARD SAYS morale 6 at the end, save got 2   e.g. WR/possession age 25 morale before 98 | TE/joker age 30 morale before 98 | TE/seam age 34 morale before 98
+     4  nfl expectation:stretch CARD SAYS morale 6 at the end, save got 3   e.g. TE/seam age 25 morale before 97 | CB/nickel age 30 morale before 97 | CB/ballhawk age 34 morale before 97
+     8  nfl expectation:stretch CARD SAYS morale 6 at the end, save got 4   e.g. QB/cannon age 30 morale before 96 | WR/burner age 34 morale before 96 | WR/possession age 30 morale before 96
+     2  nfl expectation:stretch CARD SAYS morale 6 at the end, save got 5   e.g. LB/thumper age 25 morale before 95 | EDGE/bender age 25 morale before 95
+   211  nfl expectation:stretch chosen
+   141  nfl expectation:stretch outcome completed
+    70  nfl expectation:stretch outcome missed
+   211  nfl partnership:build chosen
+   155  nfl partnership:build outcome completed
+    56  nfl partnership:build outcome missed
+    13  nfl partnership:build year 2 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. WR/burner age 30 morale 100 | TE/seam age 25 morale 100 | WR/burner age 30 morale 100
+     1  nfl partnership:build year 2 CARD SAYS morale +2 for 1 completed year(s), season got 1   e.g. EDGE/bender age 34 morale 99
+    40  nfl partnership:build year 2: 0 completed year(s) gave morale +0
+    54  nfl partnership:build year 2: 1 completed year(s) gave morale +2
+     2  nfl partnership:build year 3 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. QB/surgeon age 22 morale 100 | QB/cannon age 22 morale 100
+     9  nfl partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 0   e.g. WR/alpha age 25 morale 100 | LB/thumper age 30 morale 100 | TE/inline age 34 morale 100
+     1  nfl partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 2   e.g. TE/seam age 22 morale 98
+     2  nfl partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 3   e.g. WR/alpha age 22 morale 97 | EDGE/bender age 22 morale 97
+    26  nfl partnership:build year 3: 0 completed year(s) gave morale +0
+    12  nfl partnership:build year 3: 1 completed year(s) gave morale +2
+    42  nfl partnership:build year 3: 2 completed year(s) gave morale +4
+     1  nfl partnership:build year 4 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. LB/cover age 34 morale 100
+     2  nfl partnership:build year 4 CARD SAYS morale +4 for 2 completed year(s), season got 0   e.g. LB/green age 22 morale 100 | LB/green age 22 morale 100
+     1  nfl partnership:build year 4 CARD SAYS morale +4 for 2 completed year(s), season got 3   e.g. RB/bell age 22 morale 97
+     3  nfl partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 0   e.g. QB/cannon age 22 morale 100 | WR/burner age 22 morale 100 | TE/seam age 25 morale 100
+     2  nfl partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 2   e.g. WR/possession age 22 morale 98 | WR/alpha age 25 morale 98
+     3  nfl partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 3   e.g. CB/ballhawk age 22 morale 97 | K/leg age 34 morale 97 | QB/cannon age 22 morale 97
+     2  nfl partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 4   e.g. K/clutch age 22 morale 96 | K/journey age 22 morale 96
+     2  nfl partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 5   e.g. TE/seam age 22 morale 95 | K/journey age 34 morale 95
+    29  nfl partnership:build year 4: 0 completed year(s) gave morale +0
+     4  nfl partnership:build year 4: 1 completed year(s) gave morale +2
+     5  nfl partnership:build year 4: 2 completed year(s) gave morale +4
+    32  nfl partnership:build year 4: 3 completed year(s) gave morale +6
+    16  nfl reinvention:maintain CARD SAYS durability 0.06, season got 0.00   e.g. QB/surgeon age 30 durability 1 | QB/surgeon age 34 durability 1 | WR/possession age 34 durability 1
+     9  nfl reinvention:maintain CARD SAYS durability 0.06, season got 0.05   e.g. TE/inline age 30 durability 0.95 | TE/inline age 34 durability 0.95 | TE/inline age 30 durability 0.95
+    67  nfl reinvention:maintain chosen
+     6  nfl reinvention:maintain health +3 cut by the cap of 100
+    67  nfl reinvention:maintain outcome completed
+    77  nfl skipped (retired, banned or out of contract)
+    37  nfl tactics:attack CARD SAYS morale 6, season got 0   e.g. QB/surgeon age 34 morale 100 | RB/satellite age 25 morale 100 | QB/dual age 34 morale 100
+     5  nfl tactics:attack CARD SAYS morale 6, season got 1   e.g. WR/burner age 30 morale 99 | RB/hammer age 25 morale 99 | LB/cover age 34 morale 99
+     7  nfl tactics:attack CARD SAYS morale 6, season got 2   e.g. TE/joker age 30 morale 98 | WR/alpha age 25 morale 98 | LB/thumper age 25 morale 98
+     3  nfl tactics:attack CARD SAYS morale 6, season got 3   e.g. EDGE/bender age 34 morale 97 | QB/cannon age 34 morale 97 | K/leg age 30 morale 97
+     4  nfl tactics:attack CARD SAYS morale 6, season got 4   e.g. WR/possession age 30 morale 96 | WR/alpha age 25 morale 96 | EDGE/power age 30 morale 96
+     3  nfl tactics:attack CARD SAYS morale 6, season got 5   e.g. QB/cannon age 30 morale 95 | TE/seam age 34 morale 95 | EDGE/power age 25 morale 95
+   211  nfl tactics:attack chosen
+   211  nfl tactics:attack outcome completed
+    46  nfl tactics:support CARD SAYS durability 0.06, season got 0.00   e.g. QB/surgeon age 22 durability 1 | QB/surgeon age 25 durability 1 | QB/surgeon age 30 durability 1
+    27  nfl tactics:support CARD SAYS durability 0.06, season got 0.05   e.g. RB/satellite age 22 durability 0.95 | RB/satellite age 25 durability 0.95 | RB/satellite age 22 durability 0.95
+   211  nfl tactics:support chosen
+   211  nfl tactics:support outcome completed
+    38  nfl workload:push CARD SAYS morale 6, season got 0   e.g. QB/surgeon age 34 morale 100 | RB/satellite age 25 morale 100 | QB/dual age 34 morale 100
+     4  nfl workload:push CARD SAYS morale 6, season got 1   e.g. WR/burner age 30 morale 99 | RB/hammer age 25 morale 99 | LB/cover age 34 morale 99
+     7  nfl workload:push CARD SAYS morale 6, season got 2   e.g. TE/joker age 30 morale 98 | WR/alpha age 25 morale 98 | LB/thumper age 25 morale 98
+     3  nfl workload:push CARD SAYS morale 6, season got 3   e.g. EDGE/bender age 34 morale 97 | QB/cannon age 34 morale 97 | K/leg age 30 morale 97
+     4  nfl workload:push CARD SAYS morale 6, season got 4   e.g. WR/possession age 30 morale 96 | TE/joker age 25 morale 96 | EDGE/power age 30 morale 96
+     3  nfl workload:push CARD SAYS morale 6, season got 5   e.g. QB/cannon age 30 morale 95 | TE/seam age 34 morale 95 | EDGE/power age 25 morale 95
+   211  nfl workload:push chosen
+   211  nfl workload:push outcome completed
+   124  nfl workload:recover CARD SAYS health 8, season got 0   e.g. QB/cannon age 22 health 100 | QB/cannon age 30 health 100 | QB/cannon age 34 health 100
+     3  nfl workload:recover CARD SAYS health 8, season got 1   e.g. EDGE/hybrid age 25 health 99 | CB/ballhawk age 30 health 99 | K/journey age 34 health 99
+    12  nfl workload:recover CARD SAYS health 8, season got 2   e.g. QB/cannon age 25 health 98 | QB/surgeon age 30 health 98 | TE/inline age 30 health 98
+    16  nfl workload:recover CARD SAYS health 8, season got 3   e.g. WR/burner age 30 health 97 | WR/possession age 25 health 97 | RB/hammer age 25 health 97
+     6  nfl workload:recover CARD SAYS health 8, season got 4   e.g. TE/inline age 25 health 96 | TE/joker age 30 health 96 | TE/seam age 25 health 96
+     5  nfl workload:recover CARD SAYS health 8, season got 5   e.g. WR/burner age 25 health 95 | RB/satellite age 25 health 95 | WR/possession age 25 health 95
+     8  nfl workload:recover CARD SAYS health 8, season got 6   e.g. TE/seam age 25 health 94 | TE/inline age 25 health 94 | WR/alpha age 25 health 94
+     3  nfl workload:recover CARD SAYS health 8, season got 7   e.g. WR/alpha age 34 health 93 | TE/joker age 30 health 93 | EDGE/power age 25 health 93
+   211  nfl workload:recover chosen
+   211  nfl workload:recover outcome completed
+   116  nhl bonus:steady chosen
+    15  nhl bonus:steady one season later the bank holds MORE than was banked   e.g. banked 0.0477, bank differs by 0.1 (G/workhorse_g age 30) | banked 0.1377, bank differs by 0.2 (C/power age 26) | banked 0.1269, bank differs by 0.2 (C/power age 31)
+    19  nhl bonus:steady one season later the bank holds NOTHING of it (rounded away)   e.g. banked 0.0081, bank differs by 0 (C/generational age 19) | banked 0.0225, bank differs by 0 (RW/netfront age 27) | banked 0.0396, bank differs by 0 (C/twoway age 27)
+     4  nhl bonus:steady one season later the bank holds part of it   e.g. banked 0.1161, bank differs by 0.1 (C/generational age 27) | banked 0.1017, bank differs by 0.1 (D/puckmover age 31) | banked 0.1089, bank differs by 0.1 (D/shutdown age 26)
+    45  nhl bonus:steady outcome completed
+    71  nhl bonus:steady outcome missed
+    21  nhl bonus:steady paid: net 0.05M or more
+    24  nhl bonus:steady paid: net under 0.05M (below the one decimal the bank is kept in)
+   116  nhl bonus:stretch chosen
+    12  nhl bonus:stretch one season later the bank holds MORE than was banked   e.g. banked 0.2903, bank differs by 0.3 (C/generational age 27) | banked 0.0788, bank differs by 0.1 (G/athlete age 19) | banked 0.3172, bank differs by 0.4 (C/power age 31)
+     8  nhl bonus:stretch one season later the bank holds NOTHING of it (rounded away)   e.g. banked 0.0563, bank differs by 0 (RW/netfront age 27) | banked 0.009, bank differs by 0 (C/twoway age 18) | banked 0.009, bank differs by 0 (D/offensive age 18)
+     4  nhl bonus:stretch one season later the bank holds part of it   e.g. banked 0.1148, bank differs by 0.1 (LW/sniper age 26) | banked 0.2723, bank differs by 0.2 (D/shutdown age 26) | banked 0.2115, bank differs by 0.2 (RW/playmaker age 31)
+    29  nhl bonus:stretch outcome completed
+    87  nhl bonus:stretch outcome missed
+    21  nhl bonus:stretch paid: net 0.05M or more
+     8  nhl bonus:stretch paid: net under 0.05M (below the one decimal the bank is kept in)
+    32  nhl expectation:steady CARD SAYS morale 3 at the end, save got 0   e.g. C/generational age 27 morale before 100 | C/generational age 30 morale before 100 | C/twoway age 27 morale before 100
+     6  nhl expectation:steady CARD SAYS morale 3 at the end, save got 1   e.g. RW/netfront age 31 morale before 99 | G/workhorse_g age 31 morale before 99 | D/offensive age 30 morale before 99
+     6  nhl expectation:steady CARD SAYS morale 3 at the end, save got 2   e.g. LW/sniper age 30 morale before 98 | D/puckmover age 31 morale before 98 | C/generational age 31 morale before 98
+   116  nhl expectation:steady chosen
+   103  nhl expectation:steady outcome completed
+    13  nhl expectation:steady outcome missed
+    21  nhl expectation:stretch CARD SAYS morale 6 at the end, save got 0   e.g. C/generational age 30 morale before 100 | RW/speedster age 27 morale before 100 | C/power age 31 morale before 100
+     7  nhl expectation:stretch CARD SAYS morale 6 at the end, save got 1   e.g. C/generational age 27 morale before 99 | LW/sniper age 30 morale before 99 | D/puckmover age 26 morale before 99
+     2  nhl expectation:stretch CARD SAYS morale 6 at the end, save got 2   e.g. C/power age 26 morale before 98 | D/puckmover age 31 morale before 98
+     6  nhl expectation:stretch CARD SAYS morale 6 at the end, save got 3   e.g. C/twoway age 27 morale before 97 | G/workhorse_g age 30 morale before 97 | C/faceoff age 30 morale before 97
+     5  nhl expectation:stretch CARD SAYS morale 6 at the end, save got 4   e.g. C/generational age 31 morale before 96 | C/twoway age 26 morale before 96 | RW/netfront age 27 morale before 96
+     2  nhl expectation:stretch CARD SAYS morale 6 at the end, save got 5   e.g. C/twoway age 30 morale before 95 | LW/sniper age 30 morale before 95
+   116  nhl expectation:stretch chosen
+    89  nhl expectation:stretch outcome completed
+    27  nhl expectation:stretch outcome missed
+   116  nhl partnership:build chosen
+   104  nhl partnership:build outcome completed
+    12  nhl partnership:build outcome missed
+    20  nhl partnership:build year 2 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. C/twoway age 27 morale 100 | G/workhorse_g age 30 morale 100 | C/power age 26 morale 100
+     2  nhl partnership:build year 2 CARD SAYS morale +2 for 1 completed year(s), season got 1   e.g. D/offensive age 31 morale 99 | G/athlete age 26 morale 99
+    17  nhl partnership:build year 2: 0 completed year(s) gave morale +0
+    58  nhl partnership:build year 2: 1 completed year(s) gave morale +2
+     2  nhl partnership:build year 3 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. RW/playmaker age 26 morale 100 | RW/speedster age 27 morale 100
+    19  nhl partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 0   e.g. C/generational age 30 morale 100 | C/power age 26 morale 100 | C/power age 31 morale 100
+     2  nhl partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 1   e.g. LW/powerforward age 31 morale 99 | RW/playmaker age 31 morale 99
+     2  nhl partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 2   e.g. C/generational age 27 morale 98 | G/workhorse_g age 26 morale 98
+     1  nhl partnership:build year 3 CARD SAYS morale +4 for 2 completed year(s), season got 3   e.g. C/faceoff age 27 morale 97
+    10  nhl partnership:build year 3: 0 completed year(s) gave morale +0
+     8  nhl partnership:build year 3: 1 completed year(s) gave morale +2
+    40  nhl partnership:build year 3: 2 completed year(s) gave morale +4
+     1  nhl partnership:build year 4 CARD SAYS morale +2 for 1 completed year(s), season got 0   e.g. D/offensive age 30 morale 100
+     2  nhl partnership:build year 4 CARD SAYS morale +4 for 2 completed year(s), season got 0   e.g. RW/netfront age 27 morale 100 | C/twoway age 26 morale 100
+     9  nhl partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 0   e.g. C/power age 26 morale 100 | G/acrobat age 27 morale 100 | D/shutdown age 26 morale 100
+     2  nhl partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 4   e.g. G/calm age 27 morale 96 | RW/speedster age 31 morale 96
+     1  nhl partnership:build year 4 CARD SAYS morale +6 for 3 completed year(s), season got 5   e.g. D/puckmover age 27 morale 95
+     2  nhl partnership:build year 4: 0 completed year(s) gave morale +0
+     1  nhl partnership:build year 4: 1 completed year(s) gave morale +2
+     2  nhl partnership:build year 4: 2 completed year(s) gave morale +4
+     5  nhl partnership:build year 4: 3 completed year(s) gave morale +6
+     7  nhl reinvention:maintain CARD SAYS durability 0.06, season got 0.00   e.g. C/twoway age 30 durability 1 | G/workhorse_g age 30 durability 1 | C/faceoff age 30 durability 1
+     7  nhl reinvention:maintain CARD SAYS durability 0.06, season got 0.05   e.g. G/athlete age 31 durability 0.95 | D/puckmover age 31 durability 0.95 | RW/playmaker age 31 durability 0.95
+    35  nhl reinvention:maintain chosen
+     6  nhl reinvention:maintain health +3 cut by the cap of 100
+    35  nhl reinvention:maintain outcome completed
+    64  nhl skipped (retired, banned or out of contract)
+     7  nhl tactics:attack CARD SAYS morale 6, season got 0   e.g. G/workhorse_g age 30 morale 100 | G/workhorse_g age 31 morale 100 | G/calm age 27 morale 100
+     1  nhl tactics:attack CARD SAYS morale 6, season got 2   e.g. G/calm age 30 morale 98
+     1  nhl tactics:attack CARD SAYS morale 6, season got 5   e.g. G/acrobat age 27 morale 95
+   116  nhl tactics:attack chosen
+   116  nhl tactics:attack outcome completed
+    11  nhl tactics:support CARD SAYS durability 0.06, season got 0.00   e.g. G/workhorse_g age 19 durability 1 | G/workhorse_g age 26 durability 1 | G/workhorse_g age 30 durability 1
+     5  nhl tactics:support CARD SAYS durability 0.06, season got 0.05   e.g. G/athlete age 19 durability 0.95 | G/athlete age 31 durability 0.95 | G/athlete age 18 durability 0.95
+     6  nhl tactics:support CARD SAYS scoring multiplier -0.08, season got 0.000   e.g. D/shutdown age 18 mult 0.4 | D/shutdown age 26 mult 0.4 | D/shutdown age 18 mult 0.4
+   116  nhl tactics:support chosen
+   116  nhl tactics:support outcome completed
+    45  nhl workload:push CARD SAYS morale 6, season got 0   e.g. C/generational age 27 morale 100 | C/generational age 30 morale 100 | RW/netfront age 31 morale 100
+     3  nhl workload:push CARD SAYS morale 6, season got 1   e.g. RW/playmaker age 26 morale 99 | C/faceoff age 27 morale 99 | LW/sniper age 22 morale 99
+     2  nhl workload:push CARD SAYS morale 6, season got 2   e.g. C/generational age 31 morale 98 | G/calm age 30 morale 98
+     2  nhl workload:push CARD SAYS morale 6, season got 4   e.g. D/offensive age 30 morale 96 | C/twoway age 30 morale 96
+     5  nhl workload:push CARD SAYS morale 6, season got 5   e.g. C/twoway age 30 morale 95 | LW/sniper age 26 morale 95 | G/acrobat age 27 morale 95
+   116  nhl workload:push chosen
+   116  nhl workload:push outcome completed
+    72  nhl workload:recover CARD SAYS health 8, season got 0   e.g. C/generational age 19 health 100 | C/generational age 27 health 100 | RW/netfront age 19 health 100
+     4  nhl workload:recover CARD SAYS health 8, season got 1   e.g. G/acrobat age 27 health 99 | RW/speedster age 27 health 99 | LW/agitator age 30 health 99
+     4  nhl workload:recover CARD SAYS health 8, season got 2   e.g. LW/sniper age 26 health 98 | D/shutdown age 26 health 98 | C/twoway age 26 health 98
+     5  nhl workload:recover CARD SAYS health 8, season got 3   e.g. D/puckmover age 31 health 97 | C/twoway age 27 health 97 | G/calm age 27 health 97
+     1  nhl workload:recover CARD SAYS health 8, season got 4   e.g. C/generational age 30 health 96
+     4  nhl workload:recover CARD SAYS health 8, season got 5   e.g. C/twoway age 30 health 95 | D/shutdown age 27 health 95 | RW/netfront age 27 health 95
+     2  nhl workload:recover CARD SAYS health 8, season got 6   e.g. LW/sniper age 30 health 94 | G/workhorse_g age 31 health 94
+   116  nhl workload:recover chosen
+   116  nhl workload:recover outcome completed
+probeUsRev plans: 349 tallies, 185 of them name a disagreement between a card and the season.
