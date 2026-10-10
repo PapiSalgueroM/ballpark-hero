@@ -1,0 +1,34 @@
+MAKE wrote 12 saves of 6 clubs to /tmp/saves.json (1245 KB)
+load exit 0
+info Arsenal between: next kickoff Premier League · Round 5, asked for reviews, lit: true
+ok   Arsenal halftime (Premier League · Round 5): finishing an old live match is the same match whether reviews are asked for or not
+ok   Arsenal halftime: a match kicked off before this release shows no review even when asked
+info Burnley between: next kickoff EFL Championship · Round 6, asked for reviews, lit: false
+ok   Burnley halftime (EFL Championship · Round 6): finishing an old live match is the same match whether reviews are asked for or not
+ok   Burnley halftime: a match kicked off before this release shows no review even when asked
+info Real Madrid between: next kickoff La Liga · Round 5, asked for reviews, lit: true
+ok   Real Madrid halftime (La Liga · Round 5): finishing an old live match is the same match whether reviews are asked for or not
+ok   Real Madrid halftime: a match kicked off before this release shows no review even when asked
+info Ajax between: next kickoff Eredivisie · Round 6, asked for reviews, lit: false
+ok   Ajax halftime (Eredivisie · Round 6): finishing an old live match is the same match whether reviews are asked for or not
+ok   Ajax halftime: a match kicked off before this release shows no review even when asked
+info Juventus between: next kickoff Serie A · Round 6, asked for reviews, lit: true
+ok   Juventus halftime (Serie A · Round 6): finishing an old live match is the same match whether reviews are asked for or not
+ok   Juventus halftime: a match kicked off before this release shows no review even when asked
+info Celtic between: next kickoff Champions League · Group MD2, asked for reviews, lit: true
+ok   Celtic halftime (Champions League · Group MD2): finishing an old live match is the same match whether reviews are asked for or not
+ok   Celtic halftime: a match kicked off before this release shows no review even when asked
+LOAD 12 old saves: 0 failure(s) in pass 2
+D Arsenal between loaded=0ca11fab9df9d712f323 six=28d350d28a443382389f
+D Arsenal halftime loaded=0ca2a077ea93d5769a33 optIn=false match=927f8057e14f7c088307 after=09b6cb07e1def4fa5264 reviewLines=0 three=404579baef0766b7acae
+D Burnley between loaded=d2cdd4ee82caf578414a six=23ff0e1c7bbdbf65361b
+D Burnley halftime loaded=6ccc70c3ff562d058e11 optIn=false match=0642b8b8b4deeeab012f after=b9153d66e6b08db019fa reviewLines=0 three=15786b804442ea9d881e
+D Real Madrid between loaded=cb82715401f3ec38f4ce six=53b6e125a4a6128d7360
+D Real Madrid halftime loaded=5384f89f7e53d833dbd0 optIn=false match=6015397322c17b3c8d60 after=5f3a05d2c59d2bbf12d4 reviewLines=0 three=9a88d6e03ad0145535f0
+D Ajax between loaded=6bddf38d95cfc41a425b six=ca2c2266c6652383bd6f
+D Ajax halftime loaded=bc426a40c79cd2f3d0d1 optIn=false match=6aaf8291c8f90edf01a2 after=f576604895e5de143ad6 reviewLines=0 three=0e209d7af95471dbac3b
+D Juventus between loaded=14ed2984603f6e540f4a six=75a5d139b57e9baee03c
+D Juventus halftime loaded=5c080743f32966882868 optIn=false match=299d43d5c7c0b1dc4318 after=4332dab99572953cdeca reviewLines=0 three=27c77a3ad04672ec3878
+D Celtic between loaded=3d1c07429d14ee7f84eb six=da3de04035806bd92a9c
+D Celtic halftime loaded=32b8d46e6adb245264a3 optIn=false match=b7163ca17890b3059b30 after=27c0c91225f1607bebcd reviewLines=0 three=67ce7ba9ba0995cbaa4e
+OLD SAVES HOLD: 12 digest lines equal on both trees

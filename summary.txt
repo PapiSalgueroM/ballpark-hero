@@ -1,0 +1,4 @@
+armC-fleet exit=0 26s | ARM C HOLDS over the fleet: FLEET digest 647837df4d9733a113c9c719f6b8af4f8af8af437cd4755adde092070c96af9b on both trees
+old-saves exit=0 2s | OLD SAVES HOLD: 12 digest lines equal on both trees
+asked exit=0 27s | ASKED total: 1789 kickoffs in 60 league and competition pairs, 317 lit, 0 problem(s)
+probe-full exit=0 6s | varProbe: A HOLDS (showing a review or skipping it is the same match)
