@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+walk: node scripts/playUsRivalLines.mjs
+walk-rivalflip: PLAY_US_RIVAL_CONTROL=rivalflip RIVAL_WALK_POS=QB,CB,K node scripts/playUsRivalLines.mjs
+walk-oldline: PLAY_US_RIVAL_CONTROL=oldline node scripts/playUsRivalLines.mjs
+playNbaNumbers: node scripts/playNbaNumbers.mjs
+playUsSeasonCentre: node scripts/playUsSeasonCentre.mjs
+playNflTruth: node scripts/playNflTruth.mjs
+playSeasonReveal: node scripts/playSeasonReveal.mjs
+playCareerPress: node scripts/playCareerPress.mjs
+playGames-nfl: ENGINES=chromium ONLY=/nfl-my-career node scripts/playGames.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
