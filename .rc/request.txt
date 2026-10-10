@@ -1,0 +1,5 @@
+#!serial
+dumps-head: bash .rc/x/dumps.sh . /tmp/rows-head nhl 2000 base 1 2 3 4 5
+dumps-base: git worktree add -q /tmp/base f78037dcddea12c1a02586c7d5c0e185efb86121 && ln -s "$PWD/node_modules" /tmp/base/node_modules && bash .rc/x/dumps.sh /tmp/base /tmp/rows-base nhl 2000 base 1 2 3 4 5
+dumps-mut: node .rc/x/mut84.mjs && bash .rc/x/dumps.sh . /tmp/rows-mut nhl 2000 base 1 2 3 4 5; s=$?; git checkout -- src; git status --short | head -5; exit $s
+cause: set -o pipefail; node .rc/x/cause.mjs /tmp/rows-head /tmp/rows-base /tmp/rows-mut . | tee $RC_OUT/cause.txt
