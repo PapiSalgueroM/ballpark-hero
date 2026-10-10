@@ -123,6 +123,19 @@
  * saves, all but "rookie"). The player's own stream did not move: scripts/
  * simNbaAwardsSense.mjs section P proves that on a fleet that answers no
  * card. 1,872,641 bytes.
+ * Round 1149 (the other three careers get what the NBA rival got)
+ * re-recorded it on purpose on 2026-10-10, on a GitHub runner, once a step,
+ * each from the branch commit its header names.
+ * Step a, the Trophy Case tile's row for every award (recorded from
+ * 62b7752f): the NFL and the NBA are byte for byte the same. In the MLB and
+ * the NHL every click and every save is the same; what moved is the hub's
+ * Trophy Case box on the screens of a career that holds a lesser award. MLB:
+ * 28 fields, all on the fixed saves' screens, 26 markup hashes and 2 box
+ * labels (fixed save "suspended" steps 47 and 55, "Empty, Nothing in it. Go
+ * and win something" is now "1 honour, 1 in other awards, no ring yet"). NHL:
+ * 41 fields, all on the click path, 40 markup hashes and 1 box label (step
+ * 290, "2 honours" is now "3 honours" over the same "1 Cup, 1 All-Star
+ * nods"). 1,872,637 bytes.
  * same (cmp exit 0), which is what makes a red replay mean something. There is no
  * band here on purpose: the check is byte equality, and a path either
  * replays or it does not.
