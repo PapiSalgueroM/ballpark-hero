@@ -41,6 +41,23 @@
  * must fail in all four games and every other check stay green; the run
  * refuses to count if the rewrite matched nothing.
  *
+ * Review of Round 1210 (2026-10-10): "one missing button costs one check and
+ * not the run" held for a button that is MISSING and not for one that is there
+ * and does nothing. With the season review's back button given an empty
+ * handler and the site rebuilt, the walk failed one check in the NFL game,
+ * could not find the next three boxes, threw on the Trophy Case click and
+ * never reached the other three games. Three changes: when the way back is
+ * clicked and the opened screen is still up, the walk reloads exactly as it
+ * does for a missing button; the Trophy Case click is guarded like the box
+ * loop's; and a game that throws anyway fails by name and the walk goes on to
+ * the next game.
+ * NEGATIVE CONTROL: CAREER_HUB_CONTROL=deadback makes the Career Log's way back
+ * do nothing, in the page (a listener on the button itself stops the click
+ * before React hears it at the root; no served code is rewritten). "Back from
+ * Career Log returned to all 6 boxes" must fail in all four games, every other
+ * check stay green and all four games finish; the run refuses to count if the
+ * listener was not put on in every game.
+ *
  * Run: npm run build && node scripts/lib/hostLikeServer.mjs dist 4173, then
  *      ENGINES=chromium node scripts/playCareerHub.mjs
  */
@@ -51,7 +68,7 @@ const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
 const CONTROL = process.env.CAREER_HUB_CONTROL || '';
-const CONTROLS = ['revert', 'logback'];
+const CONTROLS = ['revert', 'logback', 'deadback'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`CAREER_HUB_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -103,13 +120,16 @@ const tile = (page, word) =>
   page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(word, 'i') }).first();
 
 const browser = await chromium.launch();
+/* deadback rewrites nothing that is served: its proof is the count of games in
+   which the walk put its listener on the way back. */
+if (on('deadback')) proof.deadBack = 0;
 
-for (const game of GAMES) {
+async function walkGame(game) {
   console.log(`${game.name} My Career`);
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   /* The walk never talks to the live database: a career is local storage. */
   await ctx.route(/supabase\.co/, r => r.abort());
-  if (CONTROL) await installServedCodeControl(ctx, MUTATIONS[CONTROL], proof);
+  if (MUTATIONS[CONTROL]) await installServedCodeControl(ctx, MUTATIONS[CONTROL], proof);
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
@@ -200,21 +220,40 @@ for (const game of GAMES) {
       say(await page.locator('button:has(div.uppercase)').count() === N, `${game.name}: a reload reached the hub again after "${word}" had no way back`, on('revert'));
       continue;
     }
+    if (on('deadback') && word === 'Career Log') {
+      proof.deadBack += await back.evaluate(el => { el.addEventListener('click', e => e.stopPropagation()); return 1; });
+    }
     await back.click();
     await page.waitForTimeout(400);
-    say(await page.locator('button:has(div.uppercase)').count() === N, `${game.name}: back from "${word}" returned to all ${N} boxes`, on('revert'));
+    const boxesBack = await page.locator('button:has(div.uppercase)').count();
+    say(boxesBack === N, `${game.name}: back from "${word}" returned to all ${N} boxes`, on('revert') || (on('deadback') && word === 'Career Log'));
+    if (boxesBack === 0) {
+      /* The way back is there and did nothing: the opened screen is still up.
+         The same cure as a missing button, so the next box is not looked for
+         on a screen that is not the hub. */
+      await page.reload({ waitUntil: 'networkidle' });
+      await page.waitForTimeout(1300);
+      say(await page.locator('button:has(div.uppercase)').count() === N, `${game.name}: a reload reached the hub again after the way back from "${word}" did nothing`, on('revert'));
+      continue;
+    }
     if (word === 'Career Log') {
       const focused = await page.evaluate(() => (document.activeElement instanceof HTMLElement ? document.activeElement.innerText : ''));
       say(/Career Log/i.test(focused), `${game.name}: coming back from the Career Log put focus on its own box (focus is on "${focused.replace(/\n/g, ' / ').slice(0, 60)}")`);
     }
   }
 
-  /* The trophy case, read off the screen against the history written above. */
-  await tile(page, 'Trophy Case').click();
-  await page.waitForTimeout(500);
+  /* The trophy case, read off the screen against the history written above.
+     Guarded like the box loop: with no such box on screen the check fails by
+     name and the case is read as empty, where the click used to wait thirty
+     seconds and throw. */
+  const caseBox = await tile(page, 'Trophy Case').count();
+  if (caseBox) {
+    await tile(page, 'Trophy Case').click();
+    await page.waitForTimeout(500);
+  }
   const case_ = page.locator('[data-trophy-case]');
-  say(await case_.count() === 1, `${game.name}: the trophy case is its own screen`);
-  const caseText = await case_.innerText();
+  say(await case_.count() === 1, `${game.name}: the trophy case is its own screen${caseBox ? '' : ' (no Trophy Case box on screen to open it from)'}`);
+  const caseText = await case_.count() === 1 ? await case_.innerText() : '';
   say(/Probe Award/.test(caseText), `${game.name}: the case names the award that was won`);
   say(/x2/.test(caseText), `${game.name}: the case counted the award won twice`);
   say(/2027, 2028/.test(caseText), `${game.name}: the case dated both wins`);
@@ -227,12 +266,29 @@ for (const game of GAMES) {
   await ctx.close();
 }
 
+/* A game that throws fails by name and the walk goes on: a stack in the first
+   game is how this walk stayed unread for five days. */
+let finished = 0;
+for (const game of GAMES) {
+  try {
+    await walkGame(game);
+    finished += 1;
+  } catch (e) {
+    say(false, `${game.name}: the walk got through this game (it threw: ${String(e).split('\n')[0].slice(0, 200)})`);
+  }
+}
+say(finished === GAMES.length, `the walk finished all ${GAMES.length} games (finished ${finished})`);
+
 await browser.close();
 /* Per game under revert: the box count, the hub naming the Inbox, the Inbox
    box itself, the Bank's headline, and the way back from the five boxes that
    are still there (nine). Per game under logback: the Career Log's way back
-   (one). */
-const MIN_GUARDED = { revert: GAMES.length * 9, logback: GAMES.length };
+   (one). Per game under deadback: coming back from the Career Log (one). */
+const MIN_GUARDED = { revert: GAMES.length * 9, logback: GAMES.length, deadback: GAMES.length };
+if (on('deadback') && proof.deadBack !== GAMES.length) {
+  console.error(`playCareerHub control deadback: REFUSING TO COUNT. The listener went on in ${proof.deadBack} of ${GAMES.length} games.`);
+  process.exit(1);
+}
 const code = verdict('playCareerHub', CONTROL ? proof : null, { minGuarded: MIN_GUARDED[CONTROL] ?? 1 });
 if (code || CONTROL) process.exit(code);
 console.log('playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.');
