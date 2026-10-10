@@ -1,0 +1,1 @@
+eras-base: git worktree add -q /tmp/base 46e4231c && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node scripts/simEras.mjs
