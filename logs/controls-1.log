@@ -1,0 +1,14 @@
+   fired  exit 1  thinoutside        simGmDraftOrder: CONTROL thinoutside FIRED. Red by section 1: 1; every other section green.
+   fired  exit 1  flat               simGmDraftOrder: CONTROL flat FIRED. Red by section 2: 5065, 3: 17793, 8: 3; every other section green.
+   fired  exit 1  seconddraw         simGmDraftOrder: CONTROL seconddraw FIRED. Red by section 2: 9999, 4: 11229, 6: 3, 10: 2084; every other section green.
+   fired  exit 1  tiebyid            simGmDraftOrder: CONTROL tiebyid FIRED. Red by section 3: 21; every other section green.
+   fired  exit 1  acrossbyfield      simGmDraftOrder: CONTROL acrossbyfield FIRED. Red by section 3: 28358; every other section green.
+   fired  exit 1  restlevel          simGmDraftOrder: CONTROL restlevel FIRED. Red by section 4: 1482; every other section green.
+   fired  exit 1  anytable           simGmDraftOrder: CONTROL anytable FIRED. Red by section 4: 3; every other section green.
+   fired  exit 1  origpicks          simGmDraftOrder: CONTROL origpicks FIRED. Red by section 5: 600, 10: 2408; every other section green.
+   fired  exit 1  trustnight         simGmDraftOrder: CONTROL trustnight FIRED. Red by section 6: 13; every other section green.
+   fired  exit 1  ghostrow           simGmDraftOrder: CONTROL ghostrow FIRED. Red by section 7: 4601; every other section green.
+   fired  exit 1  shortend           simGmDraftOrder: CONTROL shortend FIRED. Red by section 7: 32; every other section green.
+   fired  exit 1  staleexample       simGmDraftOrder: CONTROL staleexample FIRED. Red by section 8: 3; every other section green.
+   fired  exit 1  norivals           simGmDraftOrder: CONTROL norivals FIRED. Red by section 10: 2521; every other section green.
+simGmDraftOrder controls (shard 1/3 of 40): all 13 fired, each in exactly its own sections.
