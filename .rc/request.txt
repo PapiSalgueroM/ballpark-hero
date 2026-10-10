@@ -1,0 +1,8 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+suite-runner: ONLY=simCmLeagueFixtures node scripts/runAllSims.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+expect-wrong: CM_LEAGUE_FIXTURES_EXPECT=8 node scripts/simCmLeagueFixtures.mjs
