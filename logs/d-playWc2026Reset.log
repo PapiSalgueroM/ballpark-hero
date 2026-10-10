@@ -1,0 +1,26 @@
+1) Random All preserves a completed bracket, real score changes invalidate it
+  PASS: auto fill produced a champion before the edit
+  PASS: auto fill saved knockout picks before the edit
+  PASS: Random All kept the completed knockout picks when every group score was already filled
+  PASS: Random All kept the champion when it had no group score to fill
+  PASS: the score edit cleared knockout storage
+  PASS: the score edit cleared the knockout signature
+  PASS: the score edit cleared the champion
+2) Reset All clears parent and child state
+  PASS: Reset All cleared knockout picks
+  PASS: Reset All cleared the knockout signature
+  PASS: Reset All cleared award picks
+  PASS: Reset All cleared the champion
+  PASS: Reset All cleared the scored bracket rounds
+3) Reset All cancels pending Auto Fill Everything writes
+  PASS: pending timers did not refill group predictions
+  PASS: pending timers did not refill knockout picks
+  PASS: pending timers did not restore a knockout signature
+  PASS: pending timers did not reopen the bracket
+  PASS: the auto-fill control returned to idle
+4) Reset All cannot be followed by a rank fill write
+  PASS: a rank fill did not survive Reset All
+  PASS: no page errors (clean)
+
+playWc2026Reset: all green
+[draws] total 702 in 4 page loads of 1 contexts, walk exit 0; by path: /world-cup-bracket 702, blank 0

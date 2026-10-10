@@ -1,0 +1,74 @@
+ok   390x844 birth: actual recorded goal total appears in the family paragraph
+ok   390x844 birth: summary matches the saved birth timing
+ok   390x844 birth: no horizontal overflow
+ok   390x844 birth: viewing summary leaves career save bytes unchanged
+ok   390x844 birth: reload preserves yearly copy and exact career bytes
+ok   390x844 birth: no page errors
+ok   390x844 later: actual recorded goal total appears in the family paragraph
+ok   390x844 later: summary matches the saved birth timing
+ok   390x844 later: later family copy does not keep announcing a newborn
+ok   390x844 later: no horizontal overflow
+ok   390x844 later: viewing summary leaves career save bytes unchanged
+ok   390x844 later: reload preserves yearly copy and exact career bytes
+ok   390x844 later: no page errors
+ok   390x844 next: actual recorded goal total appears in the family paragraph
+ok   390x844 next: summary matches the saved birth timing
+ok   390x844 next: later family copy does not keep announcing a newborn
+ok   390x844 next: no horizontal overflow
+ok   390x844 next: viewing summary leaves career save bytes unchanged
+ok   390x844 next: reload preserves yearly copy and exact career bytes
+ok   390x844 next: no page errors
+ok   390x844 legacy: actual recorded goal total appears in the family paragraph
+ok   390x844 legacy: later family copy does not keep announcing a newborn
+ok   390x844 legacy: missing old birth history does not invent an age
+ok   390x844 legacy: no horizontal overflow
+ok   390x844 legacy: viewing summary leaves career save bytes unchanged
+ok   390x844 legacy: reload preserves yearly copy and exact career bytes
+ok   390x844 legacy: no page errors
+ok   390x844 legacy-next: actual recorded goal total appears in the family paragraph
+ok   390x844 legacy-next: later family copy does not keep announcing a newborn
+ok   390x844 legacy-next: missing old birth history does not invent an age
+ok   390x844 legacy-next: no horizontal overflow
+ok   390x844 legacy-next: viewing summary leaves career save bytes unchanged
+ok   390x844 legacy-next: reload preserves yearly copy and exact career bytes
+ok   390x844 legacy-next: no page errors
+ok   390x844: adjacent years change recorded family progression
+ok   390x844: adjacent old-save years change family wording
+ok   1280x900 birth: actual recorded goal total appears in the family paragraph
+ok   1280x900 birth: summary matches the saved birth timing
+ok   1280x900 birth: no horizontal overflow
+ok   1280x900 birth: viewing summary leaves career save bytes unchanged
+ok   1280x900 birth: reload preserves yearly copy and exact career bytes
+ok   1280x900 birth: no page errors
+ok   1280x900 later: actual recorded goal total appears in the family paragraph
+ok   1280x900 later: summary matches the saved birth timing
+ok   1280x900 later: later family copy does not keep announcing a newborn
+ok   1280x900 later: no horizontal overflow
+ok   1280x900 later: viewing summary leaves career save bytes unchanged
+ok   1280x900 later: reload preserves yearly copy and exact career bytes
+ok   1280x900 later: no page errors
+ok   1280x900 next: actual recorded goal total appears in the family paragraph
+ok   1280x900 next: summary matches the saved birth timing
+ok   1280x900 next: later family copy does not keep announcing a newborn
+ok   1280x900 next: no horizontal overflow
+ok   1280x900 next: viewing summary leaves career save bytes unchanged
+ok   1280x900 next: reload preserves yearly copy and exact career bytes
+ok   1280x900 next: no page errors
+ok   1280x900 legacy: actual recorded goal total appears in the family paragraph
+ok   1280x900 legacy: later family copy does not keep announcing a newborn
+ok   1280x900 legacy: missing old birth history does not invent an age
+ok   1280x900 legacy: no horizontal overflow
+ok   1280x900 legacy: viewing summary leaves career save bytes unchanged
+ok   1280x900 legacy: reload preserves yearly copy and exact career bytes
+ok   1280x900 legacy: no page errors
+ok   1280x900 legacy-next: actual recorded goal total appears in the family paragraph
+ok   1280x900 legacy-next: later family copy does not keep announcing a newborn
+ok   1280x900 legacy-next: missing old birth history does not invent an age
+ok   1280x900 legacy-next: no horizontal overflow
+ok   1280x900 legacy-next: viewing summary leaves career save bytes unchanged
+ok   1280x900 legacy-next: reload preserves yearly copy and exact career bytes
+ok   1280x900 legacy-next: no page errors
+ok   1280x900: adjacent years change recorded family progression
+ok   1280x900: adjacent old-save years change family wording
+playSoccerCareerFamily: 72 checks, 0 failed
+[draws] total 110 in 20 page loads of 10 contexts, walk exit 0; by path: /soccer-career 110

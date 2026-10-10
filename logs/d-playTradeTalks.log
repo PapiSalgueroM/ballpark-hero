@@ -1,0 +1,25 @@
+1) A lopsided offer in your favor gets the handshake
+  PASS  their roster lists targets (saw 15)
+  PASS  the talks card is up
+  PASS  the card names the partner
+  PASS  the lopsided offer got the straight handshake (card says: Shake on it)
+  PASS  the call ended with the deal
+  PASS  the feed carries the deal
+  PASS  Zachariah Branch actually arrived on the roster
+2) The push spends its one shot in the UI
+  PASS  the second call raised the card
+  PASS  the push button died after one use
+  PASS  there is always a way off the phone
+  PASS  walking away hung up
+3) A reload ends the call, talks are transient
+  PASS  a third call opened
+  PASS  the reload ended the call
+  PASS  no page errors on the walk (clean)
+4) The shared card serves the NBA desk too
+  PASS  the NBA call raised the shared card
+  PASS  the NBA card names the partner
+  PASS  the NBA walk-away hung up
+  PASS  no page errors on the NBA leg (clean)
+
+ALL TRADE TALKS WALK CHECKS PASSED
+[draws] total 1691 in 3 page loads of 2 contexts, walk exit 0; by path: /front-office 1216, /nba-front-office 475

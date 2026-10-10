@@ -1,0 +1,252 @@
+fixture simulated: 15 held seasons2026-2040; Arsenal relegated2026, promoted2027; exact derived tables settle every swap
+ok   390x844/2026: currentLeague follows the club's actual next-year membership
+ok   390x844/2026: current summary prints the exact saved relegated
+ok   390x844/2026: summary clearly labels fictional league results
+ok   390x844/2026: kickoff uses the saved division Premier League
+ok   390x844/2026: full phone opponents match the saved field and calendar
+ok   390x844/2026: every visible final-table cell equals the actual derived season
+ok   390x844/2026: review labels the simulation and exact saved club movement
+ok   390x844/2026: champion agrees with the saved field and table
+ok   390x844/2026: keyboard focus stays in the replay
+ok   390x844/2026: all replay views preserve exact save, totals and page position
+ok   390x844/2026: reload preserves the exact league world and career totals
+ok   390x844/2026: no page errors or horizontal overflow
+ok   390x844/2027: currentLeague follows the club's actual next-year membership
+ok   390x844/2027: current summary prints the exact saved promoted
+ok   390x844/2027: summary clearly labels fictional league results
+ok   390x844/2027: kickoff uses the saved division Championship
+ok   390x844/2027: full phone opponents match the saved field and calendar
+ok   390x844/2027: every visible final-table cell equals the actual derived season
+ok   390x844/2027: review labels the simulation and exact saved club movement
+ok   390x844/2027: champion agrees with the saved field and table
+ok   390x844/2027: keyboard focus stays in the replay
+ok   390x844/2027: all replay views preserve exact save, totals and page position
+ok   390x844/2027: reload preserves the exact league world and career totals
+ok   390x844/2027: no page errors or horizontal overflow
+ok   390x844/2040: currentLeague follows the club's actual next-year membership
+ok   390x844/2040: summary clearly labels fictional league results
+ok   390x844/2040: kickoff uses the saved division Premier League
+ok   390x844/2040: full phone opponents match the saved field and calendar
+ok   390x844/2040: every visible final-table cell equals the actual derived season
+ok   390x844/2040: review labels the simulation and exact saved club movement
+ok   390x844/2040: champion agrees with the saved field and table
+ok   390x844/2040: keyboard focus stays in the replay
+ok   390x844/2026: all15 saved league worlds remain replayable
+ok   390x844/2026: kickoff uses the saved division Premier League
+ok   390x844/2026: full phone opponents match the saved field and calendar
+ok   390x844/2026: every visible final-table cell equals the actual derived season
+ok   390x844/2026: review labels the simulation and exact saved club movement
+ok   390x844/2026: champion agrees with the saved field and table
+ok   390x844/2026: keyboard focus stays in the replay
+ok   390x844/2027: all15 saved league worlds remain replayable
+ok   390x844/2027: kickoff uses the saved division Championship
+ok   390x844/2027: full phone opponents match the saved field and calendar
+ok   390x844/2027: every visible final-table cell equals the actual derived season
+ok   390x844/2027: review labels the simulation and exact saved club movement
+ok   390x844/2027: champion agrees with the saved field and table
+ok   390x844/2027: keyboard focus stays in the replay
+ok   390x844/2028: all15 saved league worlds remain replayable
+ok   390x844/2028: kickoff uses the saved division Premier League
+ok   390x844/2028: full phone opponents match the saved field and calendar
+ok   390x844/2028: every visible final-table cell equals the actual derived season
+ok   390x844/2028: review labels the simulation and exact saved club movement
+ok   390x844/2028: champion agrees with the saved field and table
+ok   390x844/2028: keyboard focus stays in the replay
+ok   390x844/2029: all15 saved league worlds remain replayable
+ok   390x844/2029: kickoff uses the saved division Premier League
+ok   390x844/2029: full phone opponents match the saved field and calendar
+ok   390x844/2029: every visible final-table cell equals the actual derived season
+ok   390x844/2029: review labels the simulation and exact saved club movement
+ok   390x844/2029: champion agrees with the saved field and table
+ok   390x844/2029: keyboard focus stays in the replay
+ok   390x844/2030: all15 saved league worlds remain replayable
+ok   390x844/2030: kickoff uses the saved division Premier League
+ok   390x844/2030: full phone opponents match the saved field and calendar
+ok   390x844/2030: every visible final-table cell equals the actual derived season
+ok   390x844/2030: review labels the simulation and exact saved club movement
+ok   390x844/2030: champion agrees with the saved field and table
+ok   390x844/2030: keyboard focus stays in the replay
+ok   390x844/2031: all15 saved league worlds remain replayable
+ok   390x844/2031: kickoff uses the saved division Premier League
+ok   390x844/2031: full phone opponents match the saved field and calendar
+ok   390x844/2031: every visible final-table cell equals the actual derived season
+ok   390x844/2031: review labels the simulation and exact saved club movement
+ok   390x844/2031: champion agrees with the saved field and table
+ok   390x844/2031: keyboard focus stays in the replay
+ok   390x844/2032: all15 saved league worlds remain replayable
+ok   390x844/2032: kickoff uses the saved division Premier League
+ok   390x844/2032: full phone opponents match the saved field and calendar
+ok   390x844/2032: every visible final-table cell equals the actual derived season
+ok   390x844/2032: review labels the simulation and exact saved club movement
+ok   390x844/2032: champion agrees with the saved field and table
+ok   390x844/2032: keyboard focus stays in the replay
+ok   390x844/2033: all15 saved league worlds remain replayable
+ok   390x844/2033: kickoff uses the saved division Premier League
+ok   390x844/2033: full phone opponents match the saved field and calendar
+ok   390x844/2033: every visible final-table cell equals the actual derived season
+ok   390x844/2033: review labels the simulation and exact saved club movement
+ok   390x844/2033: champion agrees with the saved field and table
+ok   390x844/2033: keyboard focus stays in the replay
+ok   390x844/2034: all15 saved league worlds remain replayable
+ok   390x844/2034: kickoff uses the saved division Premier League
+ok   390x844/2034: full phone opponents match the saved field and calendar
+ok   390x844/2034: every visible final-table cell equals the actual derived season
+ok   390x844/2034: review labels the simulation and exact saved club movement
+ok   390x844/2034: champion agrees with the saved field and table
+ok   390x844/2034: keyboard focus stays in the replay
+ok   390x844/2035: all15 saved league worlds remain replayable
+ok   390x844/2035: kickoff uses the saved division Premier League
+ok   390x844/2035: full phone opponents match the saved field and calendar
+ok   390x844/2035: every visible final-table cell equals the actual derived season
+ok   390x844/2035: review labels the simulation and exact saved club movement
+ok   390x844/2035: champion agrees with the saved field and table
+ok   390x844/2035: keyboard focus stays in the replay
+ok   390x844/2036: all15 saved league worlds remain replayable
+ok   390x844/2036: kickoff uses the saved division Premier League
+ok   390x844/2036: full phone opponents match the saved field and calendar
+ok   390x844/2036: every visible final-table cell equals the actual derived season
+ok   390x844/2036: review labels the simulation and exact saved club movement
+ok   390x844/2036: champion agrees with the saved field and table
+ok   390x844/2036: keyboard focus stays in the replay
+ok   390x844/2037: all15 saved league worlds remain replayable
+ok   390x844/2037: kickoff uses the saved division Premier League
+ok   390x844/2037: full phone opponents match the saved field and calendar
+ok   390x844/2037: every visible final-table cell equals the actual derived season
+ok   390x844/2037: review labels the simulation and exact saved club movement
+ok   390x844/2037: champion agrees with the saved field and table
+ok   390x844/2037: keyboard focus stays in the replay
+ok   390x844/2038: all15 saved league worlds remain replayable
+ok   390x844/2038: kickoff uses the saved division Premier League
+ok   390x844/2038: full phone opponents match the saved field and calendar
+ok   390x844/2038: every visible final-table cell equals the actual derived season
+ok   390x844/2038: review labels the simulation and exact saved club movement
+ok   390x844/2038: champion agrees with the saved field and table
+ok   390x844/2038: keyboard focus stays in the replay
+ok   390x844/2039: all15 saved league worlds remain replayable
+ok   390x844/2039: kickoff uses the saved division Premier League
+ok   390x844/2039: full phone opponents match the saved field and calendar
+ok   390x844/2039: every visible final-table cell equals the actual derived season
+ok   390x844/2039: review labels the simulation and exact saved club movement
+ok   390x844/2039: champion agrees with the saved field and table
+ok   390x844/2039: keyboard focus stays in the replay
+ok   390x844/2040: all replay views preserve exact save, totals and page position
+ok   390x844/2040: reload preserves the exact league world and career totals
+ok   390x844/2040: no page errors or horizontal overflow
+ok   1280x900/2026: currentLeague follows the club's actual next-year membership
+ok   1280x900/2026: current summary prints the exact saved relegated
+ok   1280x900/2026: summary clearly labels fictional league results
+ok   1280x900/2026: kickoff uses the saved division Premier League
+ok   1280x900/2026: every visible final-table cell equals the actual derived season
+ok   1280x900/2026: review labels the simulation and exact saved club movement
+ok   1280x900/2026: champion agrees with the saved field and table
+ok   1280x900/2026: keyboard focus stays in the replay
+ok   1280x900/2026: all replay views preserve exact save, totals and page position
+ok   1280x900/2026: reload preserves the exact league world and career totals
+ok   1280x900/2026: no page errors or horizontal overflow
+ok   1280x900/2027: currentLeague follows the club's actual next-year membership
+ok   1280x900/2027: current summary prints the exact saved promoted
+ok   1280x900/2027: summary clearly labels fictional league results
+ok   1280x900/2027: kickoff uses the saved division Championship
+ok   1280x900/2027: every visible final-table cell equals the actual derived season
+ok   1280x900/2027: review labels the simulation and exact saved club movement
+ok   1280x900/2027: champion agrees with the saved field and table
+ok   1280x900/2027: keyboard focus stays in the replay
+ok   1280x900/2027: all replay views preserve exact save, totals and page position
+ok   1280x900/2027: reload preserves the exact league world and career totals
+ok   1280x900/2027: no page errors or horizontal overflow
+ok   1280x900/2040: currentLeague follows the club's actual next-year membership
+ok   1280x900/2040: summary clearly labels fictional league results
+ok   1280x900/2040: kickoff uses the saved division Premier League
+ok   1280x900/2040: every visible final-table cell equals the actual derived season
+ok   1280x900/2040: review labels the simulation and exact saved club movement
+ok   1280x900/2040: champion agrees with the saved field and table
+ok   1280x900/2040: keyboard focus stays in the replay
+ok   1280x900/2026: all15 saved league worlds remain replayable
+ok   1280x900/2026: kickoff uses the saved division Premier League
+ok   1280x900/2026: every visible final-table cell equals the actual derived season
+ok   1280x900/2026: review labels the simulation and exact saved club movement
+ok   1280x900/2026: champion agrees with the saved field and table
+ok   1280x900/2026: keyboard focus stays in the replay
+ok   1280x900/2027: all15 saved league worlds remain replayable
+ok   1280x900/2027: kickoff uses the saved division Championship
+ok   1280x900/2027: every visible final-table cell equals the actual derived season
+ok   1280x900/2027: review labels the simulation and exact saved club movement
+ok   1280x900/2027: champion agrees with the saved field and table
+ok   1280x900/2027: keyboard focus stays in the replay
+ok   1280x900/2028: all15 saved league worlds remain replayable
+ok   1280x900/2028: kickoff uses the saved division Premier League
+ok   1280x900/2028: every visible final-table cell equals the actual derived season
+ok   1280x900/2028: review labels the simulation and exact saved club movement
+ok   1280x900/2028: champion agrees with the saved field and table
+ok   1280x900/2028: keyboard focus stays in the replay
+ok   1280x900/2029: all15 saved league worlds remain replayable
+ok   1280x900/2029: kickoff uses the saved division Premier League
+ok   1280x900/2029: every visible final-table cell equals the actual derived season
+ok   1280x900/2029: review labels the simulation and exact saved club movement
+ok   1280x900/2029: champion agrees with the saved field and table
+ok   1280x900/2029: keyboard focus stays in the replay
+ok   1280x900/2030: all15 saved league worlds remain replayable
+ok   1280x900/2030: kickoff uses the saved division Premier League
+ok   1280x900/2030: every visible final-table cell equals the actual derived season
+ok   1280x900/2030: review labels the simulation and exact saved club movement
+ok   1280x900/2030: champion agrees with the saved field and table
+ok   1280x900/2030: keyboard focus stays in the replay
+ok   1280x900/2031: all15 saved league worlds remain replayable
+ok   1280x900/2031: kickoff uses the saved division Premier League
+ok   1280x900/2031: every visible final-table cell equals the actual derived season
+ok   1280x900/2031: review labels the simulation and exact saved club movement
+ok   1280x900/2031: champion agrees with the saved field and table
+ok   1280x900/2031: keyboard focus stays in the replay
+ok   1280x900/2032: all15 saved league worlds remain replayable
+ok   1280x900/2032: kickoff uses the saved division Premier League
+ok   1280x900/2032: every visible final-table cell equals the actual derived season
+ok   1280x900/2032: review labels the simulation and exact saved club movement
+ok   1280x900/2032: champion agrees with the saved field and table
+ok   1280x900/2032: keyboard focus stays in the replay
+ok   1280x900/2033: all15 saved league worlds remain replayable
+ok   1280x900/2033: kickoff uses the saved division Premier League
+ok   1280x900/2033: every visible final-table cell equals the actual derived season
+ok   1280x900/2033: review labels the simulation and exact saved club movement
+ok   1280x900/2033: champion agrees with the saved field and table
+ok   1280x900/2033: keyboard focus stays in the replay
+ok   1280x900/2034: all15 saved league worlds remain replayable
+ok   1280x900/2034: kickoff uses the saved division Premier League
+ok   1280x900/2034: every visible final-table cell equals the actual derived season
+ok   1280x900/2034: review labels the simulation and exact saved club movement
+ok   1280x900/2034: champion agrees with the saved field and table
+ok   1280x900/2034: keyboard focus stays in the replay
+ok   1280x900/2035: all15 saved league worlds remain replayable
+ok   1280x900/2035: kickoff uses the saved division Premier League
+ok   1280x900/2035: every visible final-table cell equals the actual derived season
+ok   1280x900/2035: review labels the simulation and exact saved club movement
+ok   1280x900/2035: champion agrees with the saved field and table
+ok   1280x900/2035: keyboard focus stays in the replay
+ok   1280x900/2036: all15 saved league worlds remain replayable
+ok   1280x900/2036: kickoff uses the saved division Premier League
+ok   1280x900/2036: every visible final-table cell equals the actual derived season
+ok   1280x900/2036: review labels the simulation and exact saved club movement
+ok   1280x900/2036: champion agrees with the saved field and table
+ok   1280x900/2036: keyboard focus stays in the replay
+ok   1280x900/2037: all15 saved league worlds remain replayable
+ok   1280x900/2037: kickoff uses the saved division Premier League
+ok   1280x900/2037: every visible final-table cell equals the actual derived season
+ok   1280x900/2037: review labels the simulation and exact saved club movement
+ok   1280x900/2037: champion agrees with the saved field and table
+ok   1280x900/2037: keyboard focus stays in the replay
+ok   1280x900/2038: all15 saved league worlds remain replayable
+ok   1280x900/2038: kickoff uses the saved division Premier League
+ok   1280x900/2038: every visible final-table cell equals the actual derived season
+ok   1280x900/2038: review labels the simulation and exact saved club movement
+ok   1280x900/2038: champion agrees with the saved field and table
+ok   1280x900/2038: keyboard focus stays in the replay
+ok   1280x900/2039: all15 saved league worlds remain replayable
+ok   1280x900/2039: kickoff uses the saved division Premier League
+ok   1280x900/2039: every visible final-table cell equals the actual derived season
+ok   1280x900/2039: review labels the simulation and exact saved club movement
+ok   1280x900/2039: champion agrees with the saved field and table
+ok   1280x900/2039: keyboard focus stays in the replay
+ok   1280x900/2040: all replay views preserve exact save, totals and page position
+ok   1280x900/2040: reload preserves the exact league world and career totals
+ok   1280x900/2040: no page errors or horizontal overflow
+playSoccerCareerLeagueWorld: 249 checks, 0 failed; screenshots /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/shots
+[draws] total 42 in 6 page loads of 6 contexts, walk exit 0; by path: /soccer-career 42

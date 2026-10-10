@@ -1,0 +1,15 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+d-playSoccerCareerDiscipline exit=0 9s | [draws] total 14 in 2 page loads of 2 contexts, walk exit 0; by path: /soccer-career 14
+d-playSoccerCareerFamily exit=0 18s | [draws] total 110 in 20 page loads of 10 contexts, walk exit 0; by path: /soccer-career 110
+d-playSoccerCareerLeagueWorld exit=0 11s | [draws] total 42 in 6 page loads of 6 contexts, walk exit 0; by path: /soccer-career 42
+d-playSoccerCareerOpponents exit=0 10s | [draws] total 28 in 4 page loads of 4 contexts, walk exit 0; by path: /soccer-career 28
+d-playSoftFourOhFour exit=0 7s | [draws] total 0 in 1 page loads of 1 contexts, walk exit 0; by path: / 0
+d-playSponsors exit=1 34s | Node.js v24.21.0
+d-playStartingXi exit=124 300s | [draws] total 1069 in 2 page loads of 1 contexts, walk exit 143; by path: /soccer-career 1069
+d-playStorageBlocked exit=0 264s | [draws] total 10328 in 176 page loads of 173 contexts, walk exit 0; by path: /front-office 7277, /build-your-xi 1520, /stadium-tycoon 407, /soccer-career 154, / 77, /foot
+d-playTradeTalks exit=0 17s | [draws] total 1691 in 3 page loads of 2 contexts, walk exit 0; by path: /front-office 1216, /nba-front-office 475
+d-playTycoonGearFit exit=0 6s | [draws] total 16 in 4 page loads of 4 contexts, walk exit 0; by path: / 16
+d-playUsCareerSaveSeam exit=0 30s | [draws] total 119 in 15 page loads of 15 contexts, walk exit 0; by path: /nba-my-career 40, /nfl-my-career 24, /mlb-my-career 24, /nhl-my-career 24, /world-cup-bracket 7
+d-playWc2026Reset exit=0 21s | [draws] total 702 in 4 page loads of 1 contexts, walk exit 0; by path: /world-cup-bracket 702, blank 0
+d-playWilderness exit=1 35s | Node.js v24.21.0
+d-playWorldXiReportFit exit=0 3s | [draws] total 0 in 0 page loads of 8 contexts, walk exit 0; by path: none

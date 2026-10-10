@@ -1,0 +1,166 @@
+ok   390x844 opponents: old save stays results only with no invented table
+ok   390x844 opponents: overlay fits and page scroll stays fixed
+ok   390x844 opponents: 34 fixtures name each of the 17 real league opponents twice
+ok   390x844 opponents: no placeholder or own club among opponents
+ok   390x844 opponents: match score names Anderlecht and a real opponent (Anderlecht v Beveren)
+ok   390x844 opponents: opposition goal names Beveren in league game 1
+ok   390x844 opponents: named match keeps the derived score 0-3
+ok   390x844 opponents: closing returns to the same page position
+ok   390x844 opponents: career save bytes and recorded totals unchanged
+ok   390x844 opponents reload: career save bytes and recorded totals unchanged
+ok   390x844 opponents: a zero World Cup tile opens an honest empty cabinet
+ok   390x844 opponents: Escape leaves the empty cabinet without moving the page
+ok   390x844 opponents empty cabinet: career save bytes and recorded totals unchanged
+ok   390x844 opponents: no page errors
+ok   390x844 trophies league: keyboard opens a focused dialog inside the viewport
+ok   390x844 trophies league: only saved winning seasons appear, newest first, with their clubs
+ok   390x844 trophies league: Tab keeps focus in the cabinet
+ok   390x844 trophies: ? opens rules with a worked example
+ok   390x844 trophies league: detail shows that winning season's club, year and recorded totals
+ok   390x844 trophies league: Tab from the detail heading stays inside the cabinet
+ok   390x844 trophies league: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   390x844 trophies league: All wins returns inside the cabinet without scrolling the page
+ok   390x844 trophies league: Back or Escape restores the tile focus and page position
+ok   390x844 trophies league: career save bytes and recorded totals unchanged
+ok   390x844 trophies domestic: keyboard opens a focused dialog inside the viewport
+ok   390x844 trophies domestic: only saved winning seasons appear, newest first, with their clubs
+ok   390x844 trophies domestic: Tab keeps focus in the cabinet
+ok   390x844 trophies domestic: detail shows that winning season's club, year and recorded totals
+ok   390x844 trophies domestic: Tab from the detail heading stays inside the cabinet
+ok   390x844 trophies domestic: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   390x844 trophies domestic: All wins returns inside the cabinet without scrolling the page
+ok   390x844 trophies domestic: Back or Escape restores the tile focus and page position
+ok   390x844 trophies domestic: career save bytes and recorded totals unchanged
+ok   390x844 trophies ucl: keyboard opens a focused dialog inside the viewport
+ok   390x844 trophies ucl: only saved winning seasons appear, newest first, with their clubs
+ok   390x844 trophies ucl: Tab keeps focus in the cabinet
+ok   390x844 trophies ucl: detail shows that winning season's club, year and recorded totals
+ok   390x844 trophies ucl: Tab from the detail heading stays inside the cabinet
+ok   390x844 trophies ucl: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   390x844 trophies ucl: All wins returns inside the cabinet without scrolling the page
+ok   390x844 trophies ucl: Back or Escape restores the tile focus and page position
+ok   390x844 trophies ucl: career save bytes and recorded totals unchanged
+ok   390x844 trophies club: keyboard opens a focused dialog inside the viewport
+ok   390x844 trophies club: only saved winning seasons appear, newest first, with their clubs
+ok   390x844 trophies club: Tab keeps focus in the cabinet
+ok   390x844 trophies club: detail shows that winning season's club, year and recorded totals
+ok   390x844 trophies club: Tab from the detail heading stays inside the cabinet
+ok   390x844 trophies club: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   390x844 trophies club: All wins returns inside the cabinet without scrolling the page
+ok   390x844 trophies club: Back or Escape restores the tile focus and page position
+ok   390x844 trophies club: career save bytes and recorded totals unchanged
+ok   390x844 trophies world: keyboard opens a focused dialog inside the viewport
+ok   390x844 trophies world: only saved winning seasons appear, newest first, with their clubs
+ok   390x844 trophies world: Tab keeps focus in the cabinet
+ok   390x844 trophies world: detail shows that winning season's club, year and recorded totals
+ok   390x844 trophies world: international totals come from the saved season
+ok   390x844 trophies world: Tab from the detail heading stays inside the cabinet
+ok   390x844 trophies world: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   390x844 trophies world: All wins returns inside the cabinet without scrolling the page
+ok   390x844 trophies world: Back or Escape restores the tile focus and page position
+ok   390x844 trophies world: career save bytes and recorded totals unchanged
+ok   390x844 trophies continental: keyboard opens a focused dialog inside the viewport
+ok   390x844 trophies continental: only saved winning seasons appear, newest first, with their clubs
+ok   390x844 trophies continental: Tab keeps focus in the cabinet
+ok   390x844 trophies continental: detail shows that winning season's club, year and recorded totals
+ok   390x844 trophies continental: international totals come from the saved season
+ok   390x844 trophies continental: Tab from the detail heading stays inside the cabinet
+ok   390x844 trophies continental: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   390x844 trophies continental: All wins returns inside the cabinet without scrolling the page
+ok   390x844 trophies continental: Back or Escape restores the tile focus and page position
+ok   390x844 trophies continental: career save bytes and recorded totals unchanged
+ok   390x844 trophies ballon: keyboard opens a focused dialog inside the viewport
+ok   390x844 trophies ballon: only saved winning seasons appear, newest first, with their clubs
+ok   390x844 trophies ballon: Tab keeps focus in the cabinet
+ok   390x844 trophies ballon: detail shows that winning season's club, year and recorded totals
+ok   390x844 trophies ballon: Tab from the detail heading stays inside the cabinet
+ok   390x844 trophies ballon: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   390x844 trophies ballon: All wins returns inside the cabinet without scrolling the page
+ok   390x844 trophies ballon: Back or Escape restores the tile focus and page position
+ok   390x844 trophies ballon: career save bytes and recorded totals unchanged
+ok   390x844 trophies reload: career save bytes and recorded totals unchanged
+ok   390x844 trophies: no sideways scroll or page errors
+ok   1280x900 opponents: old save stays results only with no invented table
+ok   1280x900 opponents: overlay fits and page scroll stays fixed
+ok   1280x900 opponents: 34 fixtures name each of the 17 real league opponents twice
+ok   1280x900 opponents: no placeholder or own club among opponents
+ok   1280x900 opponents: match score names Anderlecht and a real opponent (Anderlecht v Beveren)
+ok   1280x900 opponents: opposition goal names Beveren in league game 1
+ok   1280x900 opponents: named match keeps the derived score 0-3
+ok   1280x900 opponents: closing returns to the same page position
+ok   1280x900 opponents: career save bytes and recorded totals unchanged
+ok   1280x900 opponents reload: career save bytes and recorded totals unchanged
+ok   1280x900 opponents: a zero World Cup tile opens an honest empty cabinet
+ok   1280x900 opponents: Escape leaves the empty cabinet without moving the page
+ok   1280x900 opponents empty cabinet: career save bytes and recorded totals unchanged
+ok   1280x900 opponents: no page errors
+ok   1280x900 trophies league: keyboard opens a focused dialog inside the viewport
+ok   1280x900 trophies league: only saved winning seasons appear, newest first, with their clubs
+ok   1280x900 trophies league: Tab keeps focus in the cabinet
+ok   1280x900 trophies: ? opens rules with a worked example
+ok   1280x900 trophies league: detail shows that winning season's club, year and recorded totals
+ok   1280x900 trophies league: Tab from the detail heading stays inside the cabinet
+ok   1280x900 trophies league: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   1280x900 trophies league: All wins returns inside the cabinet without scrolling the page
+ok   1280x900 trophies league: Back or Escape restores the tile focus and page position
+ok   1280x900 trophies league: career save bytes and recorded totals unchanged
+ok   1280x900 trophies domestic: keyboard opens a focused dialog inside the viewport
+ok   1280x900 trophies domestic: only saved winning seasons appear, newest first, with their clubs
+ok   1280x900 trophies domestic: Tab keeps focus in the cabinet
+ok   1280x900 trophies domestic: detail shows that winning season's club, year and recorded totals
+ok   1280x900 trophies domestic: Tab from the detail heading stays inside the cabinet
+ok   1280x900 trophies domestic: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   1280x900 trophies domestic: All wins returns inside the cabinet without scrolling the page
+ok   1280x900 trophies domestic: Back or Escape restores the tile focus and page position
+ok   1280x900 trophies domestic: career save bytes and recorded totals unchanged
+ok   1280x900 trophies ucl: keyboard opens a focused dialog inside the viewport
+ok   1280x900 trophies ucl: only saved winning seasons appear, newest first, with their clubs
+ok   1280x900 trophies ucl: Tab keeps focus in the cabinet
+ok   1280x900 trophies ucl: detail shows that winning season's club, year and recorded totals
+ok   1280x900 trophies ucl: Tab from the detail heading stays inside the cabinet
+ok   1280x900 trophies ucl: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   1280x900 trophies ucl: All wins returns inside the cabinet without scrolling the page
+ok   1280x900 trophies ucl: Back or Escape restores the tile focus and page position
+ok   1280x900 trophies ucl: career save bytes and recorded totals unchanged
+ok   1280x900 trophies club: keyboard opens a focused dialog inside the viewport
+ok   1280x900 trophies club: only saved winning seasons appear, newest first, with their clubs
+ok   1280x900 trophies club: Tab keeps focus in the cabinet
+ok   1280x900 trophies club: detail shows that winning season's club, year and recorded totals
+ok   1280x900 trophies club: Tab from the detail heading stays inside the cabinet
+ok   1280x900 trophies club: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   1280x900 trophies club: All wins returns inside the cabinet without scrolling the page
+ok   1280x900 trophies club: Back or Escape restores the tile focus and page position
+ok   1280x900 trophies club: career save bytes and recorded totals unchanged
+ok   1280x900 trophies world: keyboard opens a focused dialog inside the viewport
+ok   1280x900 trophies world: only saved winning seasons appear, newest first, with their clubs
+ok   1280x900 trophies world: Tab keeps focus in the cabinet
+ok   1280x900 trophies world: detail shows that winning season's club, year and recorded totals
+ok   1280x900 trophies world: international totals come from the saved season
+ok   1280x900 trophies world: Tab from the detail heading stays inside the cabinet
+ok   1280x900 trophies world: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   1280x900 trophies world: All wins returns inside the cabinet without scrolling the page
+ok   1280x900 trophies world: Back or Escape restores the tile focus and page position
+ok   1280x900 trophies world: career save bytes and recorded totals unchanged
+ok   1280x900 trophies continental: keyboard opens a focused dialog inside the viewport
+ok   1280x900 trophies continental: only saved winning seasons appear, newest first, with their clubs
+ok   1280x900 trophies continental: Tab keeps focus in the cabinet
+ok   1280x900 trophies continental: detail shows that winning season's club, year and recorded totals
+ok   1280x900 trophies continental: international totals come from the saved season
+ok   1280x900 trophies continental: Tab from the detail heading stays inside the cabinet
+ok   1280x900 trophies continental: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   1280x900 trophies continental: All wins returns inside the cabinet without scrolling the page
+ok   1280x900 trophies continental: Back or Escape restores the tile focus and page position
+ok   1280x900 trophies continental: career save bytes and recorded totals unchanged
+ok   1280x900 trophies ballon: keyboard opens a focused dialog inside the viewport
+ok   1280x900 trophies ballon: only saved winning seasons appear, newest first, with their clubs
+ok   1280x900 trophies ballon: Tab keeps focus in the cabinet
+ok   1280x900 trophies ballon: detail shows that winning season's club, year and recorded totals
+ok   1280x900 trophies ballon: Tab from the detail heading stays inside the cabinet
+ok   1280x900 trophies ballon: Shift+Tab and Tab wrap inside the dialog without moving the page
+ok   1280x900 trophies ballon: All wins returns inside the cabinet without scrolling the page
+ok   1280x900 trophies ballon: Back or Escape restores the tile focus and page position
+ok   1280x900 trophies ballon: career save bytes and recorded totals unchanged
+ok   1280x900 trophies reload: career save bytes and recorded totals unchanged
+ok   1280x900 trophies: no sideways scroll or page errors
+playSoccerCareerOpponents: 164 checks, 0 failed
+[draws] total 28 in 4 page loads of 4 contexts, walk exit 0; by path: /soccer-career 28
