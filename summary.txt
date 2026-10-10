@@ -1,0 +1,10 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+depth exit=0 11s | playSoccerCareerDepth: 80 checks, 0 failed
+play-career exit=0 54s | Played 1 games. 0 findings, 0 the harness could not drive.
+play-nfl exit=0 51s | Played 1 games. 0 findings, 0 the harness could not drive.
+weight exit=0 27s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+simUsBoardParity exit=0 36s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simCareerRivalryEvents exit=0 6s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+simSoccerCareer exit=0 4s | PASS: no crashes, no snubs, homegrown path live
+simCareerSquad exit=0 278s | simCareerSquad: 2215 checks, 0 failed

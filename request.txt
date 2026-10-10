@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+depth: SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerCareerDepth.mjs > /tmp/depth.log 2>&1; s=$?; grep -E "^FAIL|AssertionError|Error:" /tmp/depth.log | head -12 | cut -c1-300; tail -1 /tmp/depth.log | cut -c1-300; exit $s
+play-career: ONLY=/soccer-career ENGINES=chromium node scripts/playGames.mjs > /tmp/play-career.log 2>&1; s=$?; tail -3 /tmp/play-career.log | cut -c1-300; exit $s
+play-nfl: ONLY=/nfl-my-career ENGINES=chromium node scripts/playGames.mjs > /tmp/play-nfl.log 2>&1; s=$?; tail -3 /tmp/play-nfl.log | cut -c1-300; exit $s
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/weight.log 2>&1; s=$?; grep -E "FAIL|/soccer-career|/nfl-my-career|/club-manager|sweepWeight:" /tmp/weight.log | head -14 | cut -c1-300; tail -1 /tmp/weight.log | cut -c1-300; exit $s
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simSoccerCareer: node scripts/simSoccerCareer.mjs
+simCareerSquad: node scripts/simCareerSquad.mjs

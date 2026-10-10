@@ -1,0 +1,18 @@
+
+=== ROUND 54 SOCCER CAREER PLAYTEST ===
+careers simulated : 60/60
+crashes           : 0
+avg peak OVR      : 74.7   (min 48, median 77, max 92)
+peak 90+ rate     : 5%  (should be RARE now)
+peak 85+ rate     : 12%
+avg pro seasons   : 11.7
+avg career goals  : 42.0
+homegrown offers  : 60   academy signings: 74
+monster seasons   : 0   podiumed: 0   SNUBBED: 0  (snubs must be 0)
+prison seasons    : 1   convictions: 1
+distinct events   : 206
+  corruption ids  : 7
+  realism ids     : 80
+shop items usable : 105/110
+
+PASS: no crashes, no snubs, homegrown path live
