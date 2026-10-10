@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+playUs: ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playUs-column: ENGINES=chromium PORT=4398 US_SEASON_PLAY_CONTROL=column node scripts/playUsSeasonCentre.mjs
+weight: SWEEP_OFFLINE=1 ENGINES=chromium node scripts/sweepWeight.mjs
