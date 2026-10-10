@@ -1,0 +1,13 @@
+simTrustCopy: the registry holds 133 games and prints them as 130+
+1) one disclaimer a page
+   1374 source files read with comments stripped; the footer says it 1 time(s), section 6 of the Terms keeps its clause (1)
+2) one game count
+   the shapes catch 9 of 9 site counts and leave 10 of 10 sport ones alone
+   typed counts read and held to 130+: index.html 4, src/pages/Index.tsx 1, public/llms.txt 1
+   allowed as written: 1 in the What's New log, 1 on NOT_THE_SITE
+3) held by the other lane, listed and not failed (9 files, 2 with something to show)
+   src/pages/About.tsx: a trademark disclaimer of its own; types "over 100 free sports trivia games"; types "Over 100 games"
+   src/pages/Contact.tsx: a trademark disclaimer of its own
+   teeth: comments stripped before any match, the footer counted, the shapes proved on fixed sentences, five TRUST_CONTROL runs that plant one defect each
+
+simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
