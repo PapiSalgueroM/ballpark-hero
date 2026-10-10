@@ -1,0 +1,10 @@
+m-endoff exit=1 14s | MUT endoff harness=1 vitest=1 build=skipped walk=skipped | simCareerPreDraft [seed set a]: 8 FAILURE(S) | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯ | 
+m-tailoff exit=1 14s | MUT tailoff harness=1 vitest=1 build=skipped walk=skipped | simCareerPreDraft [seed set a]: 8 FAILURE(S) | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯ | 
+m-rangeedge exit=0 14s | MUT rangeedge harness=0 vitest=0 build=skipped walk=skipped | simCareerPreDraft [seed set a]: ALL GREEN |  Tests  115 passed (115) | 
+m-rowswap exit=0 14s | MUT rowswap harness=0 vitest=0 build=skipped walk=skipped | simCareerPreDraft [seed set a]: ALL GREEN |  Tests  115 passed (115) | 
+m-lineswap exit=0 14s | MUT lineswap harness=0 vitest=0 build=skipped walk=skipped | simCareerPreDraft [seed set a]: ALL GREEN |  Tests  115 passed (115) | 
+m-hioff exit=1 14s | MUT hioff harness=1 vitest=0 build=skipped walk=skipped | simCareerPreDraft [seed set a]: 2 FAILURE(S) |  Tests  115 passed (115) | 
+m-confearly exit=1 14s | MUT confearly harness=0 vitest=1 build=skipped walk=skipped | simCareerPreDraft [seed set a]: ALL GREEN | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯ | 
+m-motionoff exit=1 14s | MUT motionoff harness=0 vitest=1 build=skipped walk=skipped | simCareerPreDraft [seed set a]: ALL GREEN | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯ | 
+m-seedswap exit=1 14s | MUT seedswap harness=1 vitest=0 build=skipped walk=skipped | simCareerPreDraft [seed set a]: 2 FAILURE(S) |  Tests  115 passed (115) | 
+m-movedflip exit=0 13s | MUT movedflip harness=0 vitest=0 build=skipped walk=skipped | simCareerPreDraft [seed set a]: ALL GREEN |  Tests  115 passed (115) | 

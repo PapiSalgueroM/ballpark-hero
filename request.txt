@@ -1,0 +1,11 @@
+#!serial
+m-endoff: bash .rc/x/mrun.sh endoff
+m-tailoff: bash .rc/x/mrun.sh tailoff
+m-rangeedge: bash .rc/x/mrun.sh rangeedge
+m-rowswap: bash .rc/x/mrun.sh rowswap
+m-lineswap: bash .rc/x/mrun.sh lineswap
+m-hioff: bash .rc/x/mrun.sh hioff
+m-confearly: bash .rc/x/mrun.sh confearly
+m-motionoff: bash .rc/x/mrun.sh motionoff
+m-seedswap: bash .rc/x/mrun.sh seedswap
+m-movedflip: bash .rc/x/mrun.sh movedflip

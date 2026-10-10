@@ -1,0 +1,1 @@
+MUT endoff harness=1 vitest=1 build=skipped walk=skipped | simCareerPreDraft [seed set a]: 8 FAILURE(S) | [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m | 

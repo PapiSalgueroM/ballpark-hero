@@ -1,0 +1,95 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/careerPreDraft.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 412[2mms[22m[39m
+ [31m❯[39m src/test/careerDraftNight.test.tsx [2m([22m[2m23 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 1472[2mms[22m[39m
+[31m   [31m×[31m the clock is the component's, and every night lands inside the ceiling[2m > [22mNFL now: picks 1 to 12, the last four and undrafted[39m[32m 26[2mms[22m[39m
+[31m     → expected 2 to be 1 // Object.is equality[39m
+[31m   [31m×[31m the clock is the component's, and every night lands inside the ceiling[2m > [22mNFL 2005: picks 1 to 12, the last four and undrafted[39m[32m 6[2mms[22m[39m
+[31m     → expected 2 to be 1 // Object.is equality[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNBA now: picks 1 to 12, the last four and undrafted[32m 8[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNBA 2003: picks 1 to 12, the last four and undrafted[32m 6[2mms[22m[39m
+[31m   [31m×[31m the clock is the component's, and every night lands inside the ceiling[2m > [22mMLB now: picks 1 to 12, the last four and undrafted[39m[32m 8[2mms[22m[39m
+[31m     → expected 2 to be 1 // Object.is equality[39m
+[31m   [31m×[31m the clock is the component's, and every night lands inside the ceiling[2m > [22mMLB 2004: picks 1 to 12, the last four and undrafted[39m[32m 11[2mms[22m[39m
+[31m     → expected 2 to be 1 // Object.is equality[39m
+[31m   [31m×[31m the clock is the component's, and every night lands inside the ceiling[2m > [22mNHL now: picks 1 to 12, the last four and undrafted[39m[32m 6[2mms[22m[39m
+[31m     → expected 2 to be 1 // Object.is equality[39m
+[31m   [31m×[31m the clock is the component's, and every night lands inside the ceiling[2m > [22mNHL 2006: picks 1 to 12, the last four and undrafted[39m[32m 5[2mms[22m[39m
+[31m     → expected 2 to be 1 // Object.is equality[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNFL now: every row, both buttons and no spoiler[32m 189[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNFL 2005: every row, both buttons and no spoiler[32m 66[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNBA now: every row, both buttons and no spoiler[32m 70[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNBA 2003: every row, both buttons and no spoiler[32m 50[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mMLB now: every row, both buttons and no spoiler[32m 56[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mMLB 2004: every row, both buttons and no spoiler[32m 44[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNHL now: every row, both buttons and no spoiler[32m 39[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mNHL 2006: every row, both buttons and no spoiler[32m 33[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mthe closing row landing is what ends the night, and only that row[32m 19[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mskipped is the last frame: no delays, no skip, the result said once [33m 798[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22man undrafted night ends on the last pick and names the club that signs him[32m 4[2mms[22m[39m
+   [32m✓[39m the card that hosts the night[2m > [22mwithout the new props it is the card it was[32m 11[2mms[22m[39m
+   [32m✓[39m the card that hosts the night[2m > [22mprints the range before the draft, from the arithmetic the draft draws with[32m 3[2mms[22m[39m
+   [32m✓[39m the card that hosts the night[2m > [22mwith a night: the night sits above the result, the result waits, and the way on is the night's own[32m 10[2mms[22m[39m
+   [32m✓[39m one lottery table, typed twice on main[2m > [22mthe career road and the front office use the same NBA odds[32m 0[2mms[22m[39m
+ [32m✓[39m src/components/motion/LotteryReveal.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 305[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 1729[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed [33m 523[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProspect.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 8502[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 472[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' plays every saved prospect stage into the earned career and first season [33m 696[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' plays every saved prospect stage into the earned career and first season [33m 544[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' plays every saved prospect stage into the earned career and first season [33m 474[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' plays every saved prospect stage into the earned career and first season [33m 422[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rejects corrupt nested journey saves without changing storage [33m 656[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rejects corrupt nested journey saves without changing storage [33m 613[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rejects corrupt nested journey saves without changing storage [33m 653[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rejects corrupt nested journey saves without changing storage [33m 639[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe clock is the component's, and every night lands inside the ceiling[2m > [22mNFL now: picks 1 to 12, the last four and undrafted
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe clock is the component's, and every night lands inside the ceiling[2m > [22mNFL 2005: picks 1 to 12, the last four and undrafted
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe clock is the component's, and every night lands inside the ceiling[2m > [22mMLB now: picks 1 to 12, the last four and undrafted
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe clock is the component's, and every night lands inside the ceiling[2m > [22mMLB 2004: picks 1 to 12, the last four and undrafted
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe clock is the component's, and every night lands inside the ceiling[2m > [22mNHL now: picks 1 to 12, the last four and undrafted
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe clock is the component's, and every night lands inside the ceiling[2m > [22mNHL 2006: picks 1 to 12, the last four and undrafted
+[31m[1mAssertionError[22m: expected 2 to be 1 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 2[39m
+
+[36m [2m❯[22m src/test/careerDraftNight.test.tsx:[2m66:34[22m[39m
+    [90m 64| [39m    // Every board length this sport can show was timed, the longest i…
+    [90m 65| [39m    [34mexpect[39m([33mMath[39m[33m.[39m[34mmax[39m([33m...[39mlengths))[33m.[39m[34mtoBe[39m(desc[33m.[39mlottery [33m?[39m [34m5[39m [33m:[39m [34m8[39m)[33m;[39m
+    [90m 66| [39m    [34mexpect[39m([33mMath[39m[33m.[39m[34mmin[39m([33m...[39mlengths))[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+    [90m   | [39m                                 [31m^[39m
+    [90m 67| [39m  })[33m;[39m
+    [90m 68| [39m})[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m109 passed[39m[22m[90m (115)[39m
+[2m   Start at [22m 13:36:49
+[2m   Duration [22m 11.30s[2m (transform 2.30s, setup 336ms, collect 6.19s, tests 12.42s, environment 2.22s, prepare 661ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the clock is the component's%2C and every night lands inside the ceiling > NFL now%3A picks 1 to 12%2C the last four and undrafted,line=66,column=34::AssertionError: expected 2 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 2%0A%0A ❯ src/test/careerDraftNight.test.tsx:66:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the clock is the component's%2C and every night lands inside the ceiling > NFL 2005%3A picks 1 to 12%2C the last four and undrafted,line=66,column=34::AssertionError: expected 2 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 2%0A%0A ❯ src/test/careerDraftNight.test.tsx:66:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the clock is the component's%2C and every night lands inside the ceiling > MLB now%3A picks 1 to 12%2C the last four and undrafted,line=66,column=34::AssertionError: expected 2 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 2%0A%0A ❯ src/test/careerDraftNight.test.tsx:66:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the clock is the component's%2C and every night lands inside the ceiling > MLB 2004%3A picks 1 to 12%2C the last four and undrafted,line=66,column=34::AssertionError: expected 2 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 2%0A%0A ❯ src/test/careerDraftNight.test.tsx:66:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the clock is the component's%2C and every night lands inside the ceiling > NHL now%3A picks 1 to 12%2C the last four and undrafted,line=66,column=34::AssertionError: expected 2 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 2%0A%0A ❯ src/test/careerDraftNight.test.tsx:66:34%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the clock is the component's%2C and every night lands inside the ceiling > NHL 2006%3A picks 1 to 12%2C the last four and undrafted,line=66,column=34::AssertionError: expected 2 to be 1 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1%0A+ 2%0A%0A ❯ src/test/careerDraftNight.test.tsx:66:34%0A%0A

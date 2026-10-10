@@ -1,0 +1,106 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [31m❯[39m src/test/careerDraftNight.test.tsx [2m([22m[2m23 tests[22m[2m | [22m[31m8 failed[39m[2m)[22m[33m 1319[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNFL now: picks 1 to 12, the last four and undrafted[32m 9[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNFL 2005: picks 1 to 12, the last four and undrafted[32m 4[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNBA now: picks 1 to 12, the last four and undrafted[32m 4[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNBA 2003: picks 1 to 12, the last four and undrafted[32m 5[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mMLB now: picks 1 to 12, the last four and undrafted[32m 5[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mMLB 2004: picks 1 to 12, the last four and undrafted[32m 6[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNHL now: picks 1 to 12, the last four and undrafted[32m 6[2mms[22m[39m
+   [32m✓[39m the clock is the component's, and every night lands inside the ceiling[2m > [22mNHL 2006: picks 1 to 12, the last four and undrafted[32m 4[2mms[22m[39m
+[31m   [31m×[31m the first frame holds the whole night[2m > [22mNFL now: every row, both buttons and no spoiler[39m[32m 185[2mms[22m[39m
+[31m     → expected <span …(2)></span> to be null[39m
+[31m   [31m×[31m the first frame holds the whole night[2m > [22mNFL 2005: every row, both buttons and no spoiler[39m[32m 51[2mms[22m[39m
+[31m     → expected <span …(2)></span> to be null[39m
+[31m   [31m×[31m the first frame holds the whole night[2m > [22mNBA now: every row, both buttons and no spoiler[39m[32m 67[2mms[22m[39m
+[31m     → expected <span …(2)></span> to be null[39m
+[31m   [31m×[31m the first frame holds the whole night[2m > [22mNBA 2003: every row, both buttons and no spoiler[39m[32m 72[2mms[22m[39m
+[31m     → expected <span …(2)></span> to be null[39m
+[31m   [31m×[31m the first frame holds the whole night[2m > [22mMLB now: every row, both buttons and no spoiler[39m[32m 47[2mms[22m[39m
+[31m     → expected <span …(2)></span> to be null[39m
+[31m   [31m×[31m the first frame holds the whole night[2m > [22mMLB 2004: every row, both buttons and no spoiler[39m[32m 43[2mms[22m[39m
+[31m     → expected <span …(2)></span> to be null[39m
+[31m   [31m×[31m the first frame holds the whole night[2m > [22mNHL now: every row, both buttons and no spoiler[39m[32m 28[2mms[22m[39m
+[31m     → expected <span …(2)></span> to be null[39m
+[31m   [31m×[31m the first frame holds the whole night[2m > [22mNHL 2006: every row, both buttons and no spoiler[39m[32m 47[2mms[22m[39m
+[31m     → expected <span …(2)></span> to be null[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22mthe closing row landing is what ends the night, and only that row[32m 31[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mskipped is the last frame: no delays, no skip, the result said once [33m 666[2mms[22m[39m
+   [32m✓[39m the first frame holds the whole night[2m > [22man undrafted night ends on the last pick and names the club that signs him[32m 5[2mms[22m[39m
+   [32m✓[39m the card that hosts the night[2m > [22mwithout the new props it is the card it was[32m 9[2mms[22m[39m
+   [32m✓[39m the card that hosts the night[2m > [22mprints the range before the draft, from the arithmetic the draft draws with[32m 3[2mms[22m[39m
+   [32m✓[39m the card that hosts the night[2m > [22mwith a night: the night sits above the result, the result waits, and the way on is the night's own[32m 20[2mms[22m[39m
+   [32m✓[39m one lottery table, typed twice on main[2m > [22mthe career road and the front office use the same NBA odds[32m 1[2mms[22m[39m
+ [32m✓[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 1929[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed [33m 530[2mms[22m[39m
+ [32m✓[39m src/test/careerPreDraft.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 340[2mms[22m[39m
+ [32m✓[39m src/components/motion/LotteryReveal.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 226[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProspect.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 8556[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 512[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' plays every saved prospect stage into the earned career and first season [33m 830[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' plays every saved prospect stage into the earned career and first season [33m 499[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' plays every saved prospect stage into the earned career and first season [33m 494[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' plays every saved prospect stage into the earned career and first season [33m 379[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rejects corrupt nested journey saves without changing storage [33m 654[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rejects corrupt nested journey saves without changing storage [33m 619[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rejects corrupt nested journey saves without changing storage [33m 663[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rejects corrupt nested journey saves without changing storage [33m 640[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 8 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe first frame holds the whole night[2m > [22mNFL now: every row, both buttons and no spoiler
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe first frame holds the whole night[2m > [22mNFL 2005: every row, both buttons and no spoiler
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe first frame holds the whole night[2m > [22mNBA now: every row, both buttons and no spoiler
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe first frame holds the whole night[2m > [22mNBA 2003: every row, both buttons and no spoiler
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe first frame holds the whole night[2m > [22mMLB now: every row, both buttons and no spoiler
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe first frame holds the whole night[2m > [22mMLB 2004: every row, both buttons and no spoiler
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe first frame holds the whole night[2m > [22mNHL now: every row, both buttons and no spoiler
+[41m[1m FAIL [22m[49m src/test/careerDraftNight.test.tsx[2m > [22mthe first frame holds the whole night[2m > [22mNHL 2006: every row, both buttons and no spoiler
+[31m[1mAssertionError[22m: expected <span …(2)></span> to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+<span
+  class="absolute -top-2 w-1.5 h-2.5 cm-confetti"
+  style="left: 41.03838075576641%; background-color: rgb(34, 197, 94); animation-duration: 1.915264681273038s; animation-delay: 0.2633376393783692s; transform: rotate(305deg);"
+/>
+
+[36m [2m❯[22m src/test/careerDraftNight.test.tsx:[2m89:48[22m[39m
+    [90m 87| [39m    for (const b of within(root).getAllByRole('button')) expect(b.text…
+    [90m 88| [39m    // The burst fires on mount, so it may not be here before the clos…
+    [90m 89| [39m    [34mexpect[39m(root[33m.[39m[34mquerySelector[39m([32m'.cm-confetti'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                                               [31m^[39m
+    [90m 90| [39m    [34mexpect[39m([34mwithin[39m(root)[33m.[39m[34mgetByRole[39m([32m'status'[39m))[33m.[39m[34mtoBeEmptyDOMElement[39m()[33m;[39m
+    [90m 91| [39m    expect(root.querySelector('[data-night-range]')).toHaveTextContent…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m8 failed[39m[22m[2m | [22m[1m[32m107 passed[39m[22m[90m (115)[39m
+[2m   Start at [22m 13:38:14
+[2m   Duration [22m 11.36s[2m (transform 2.29s, setup 317ms, collect 6.07s, tests 12.37s, environment 2.31s, prepare 441ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the first frame holds the whole night > NFL now%3A every row%2C both buttons and no spoiler,line=89,column=48::AssertionError: expected <span …(2)></span> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<span%0A  class="absolute -top-2 w-1.5 h-2.5 cm-confetti"%0A  style="left: 41.03838075576641%25; background-color: rgb(34, 197, 94); animation-duration: 1.915264681273038s; animation-delay: 0.2633376393783692s; transform: rotate(305deg);"%0A/>%0A%0A ❯ src/test/careerDraftNight.test.tsx:89:48%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the first frame holds the whole night > NFL 2005%3A every row%2C both buttons and no spoiler,line=89,column=48::AssertionError: expected <span …(2)></span> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<span%0A  class="absolute -top-2 w-1.5 h-2.5 cm-confetti"%0A  style="left: 41.03838075576641%25; background-color: rgb(34, 197, 94); animation-duration: 1.915264681273038s; animation-delay: 0.2633376393783692s; transform: rotate(305deg);"%0A/>%0A%0A ❯ src/test/careerDraftNight.test.tsx:89:48%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the first frame holds the whole night > NBA now%3A every row%2C both buttons and no spoiler,line=89,column=48::AssertionError: expected <span …(2)></span> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<span%0A  class="absolute -top-2 w-1.5 h-2.5 cm-confetti"%0A  style="left: 41.03838075576641%25; background-color: rgb(34, 197, 94); animation-duration: 1.915264681273038s; animation-delay: 0.2633376393783692s; transform: rotate(305deg);"%0A/>%0A%0A ❯ src/test/careerDraftNight.test.tsx:89:48%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the first frame holds the whole night > NBA 2003%3A every row%2C both buttons and no spoiler,line=89,column=48::AssertionError: expected <span …(2)></span> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<span%0A  class="absolute -top-2 w-1.5 h-2.5 cm-confetti"%0A  style="left: 41.03838075576641%25; background-color: rgb(34, 197, 94); animation-duration: 1.915264681273038s; animation-delay: 0.2633376393783692s; transform: rotate(305deg);"%0A/>%0A%0A ❯ src/test/careerDraftNight.test.tsx:89:48%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the first frame holds the whole night > MLB now%3A every row%2C both buttons and no spoiler,line=89,column=48::AssertionError: expected <span …(2)></span> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<span%0A  class="absolute -top-2 w-1.5 h-2.5 cm-confetti"%0A  style="left: 41.03838075576641%25; background-color: rgb(34, 197, 94); animation-duration: 1.915264681273038s; animation-delay: 0.2633376393783692s; transform: rotate(305deg);"%0A/>%0A%0A ❯ src/test/careerDraftNight.test.tsx:89:48%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the first frame holds the whole night > MLB 2004%3A every row%2C both buttons and no spoiler,line=89,column=48::AssertionError: expected <span …(2)></span> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<span%0A  class="absolute -top-2 w-1.5 h-2.5 cm-confetti"%0A  style="left: 41.03838075576641%25; background-color: rgb(34, 197, 94); animation-duration: 1.915264681273038s; animation-delay: 0.2633376393783692s; transform: rotate(305deg);"%0A/>%0A%0A ❯ src/test/careerDraftNight.test.tsx:89:48%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the first frame holds the whole night > NHL now%3A every row%2C both buttons and no spoiler,line=89,column=48::AssertionError: expected <span …(2)></span> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<span%0A  class="absolute -top-2 w-1.5 h-2.5 cm-confetti"%0A  style="left: 41.03838075576641%25; background-color: rgb(34, 197, 94); animation-duration: 1.915264681273038s; animation-delay: 0.2633376393783692s; transform: rotate(305deg);"%0A/>%0A%0A ❯ src/test/careerDraftNight.test.tsx:89:48%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerDraftNight.test.tsx,title=src/test/careerDraftNight.test.tsx > the first frame holds the whole night > NHL 2006%3A every row%2C both buttons and no spoiler,line=89,column=48::AssertionError: expected <span …(2)></span> to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A<span%0A  class="absolute -top-2 w-1.5 h-2.5 cm-confetti"%0A  style="left: 41.03838075576641%25; background-color: rgb(34, 197, 94); animation-duration: 1.915264681273038s; animation-delay: 0.2633376393783692s; transform: rotate(305deg);"%0A/>%0A%0A ❯ src/test/careerDraftNight.test.tsx:89:48%0A%0A

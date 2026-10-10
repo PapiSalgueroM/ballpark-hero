@@ -1,0 +1,98 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/careerDraftNight.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 1367[2mms[22m[39m
+   [33m[2m✓[22m[39m the first frame holds the whole night[2m > [22mskipped is the last frame: no delays, no skip, the result said once [33m 692[2mms[22m[39m
+ [31m❯[39m src/test/usCareerDraftNightBoard.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 1974[2mms[22m[39m
+   [33m[2m✓[22m[39m draft night on the actual boards[2m > [22m'NFL' the night plays, holds its ending, lands, and starts the career it showed [33m 504[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' the night plays, holds its ending, lands, and starts the career it showed[32m 231[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'MLB' the night plays, holds its ending, lands, and starts the career it showed[32m 168[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NHL' the night plays, holds its ending, lands, and starts the career it showed[32m 172[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NFL' skip lands the last frame, and a reload shows the result with no night[32m 139[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' skip lands the last frame, and a reload shows the result with no night[32m 165[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'MLB' skip lands the last frame, and a reload shows the result with no night[32m 155[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NHL' skip lands the last frame, and a reload shows the result with no night[32m 88[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NFL' with the chunk not here yet the press shows the result it always showed[32m 46[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NBA' with the chunk not here yet the press shows the result it always showed[32m 36[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'MLB' with the chunk not here yet the press shows the result it always showed[32m 37[2mms[22m[39m
+   [32m✓[39m draft night on the actual boards[2m > [22m'NHL' with the chunk not here yet the press shows the result it always showed[32m 46[2mms[22m[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'NFL' less motion starts on the last frame and an undrafted night names no club early[39m[32m 64[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"data-night-stage"[32m[31m[2m, [22m[32m[32m"skipped"[32m[31m[2m) // element.getAttribute("data-night-stage") === "skipped"[22m
+
+Expected the element to have attribute:
+[32m  data-night-stage="skipped"[31m
+Received:
+[31m  data-night-stage="live"[31m[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'NBA' less motion starts on the last frame and an undrafted night names no club early[39m[32m 36[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"data-night-stage"[32m[31m[2m, [22m[32m[32m"skipped"[32m[31m[2m) // element.getAttribute("data-night-stage") === "skipped"[22m
+
+Expected the element to have attribute:
+[32m  data-night-stage="skipped"[31m
+Received:
+[31m  data-night-stage="live"[31m[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'MLB' less motion starts on the last frame and an undrafted night names no club early[39m[32m 39[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"data-night-stage"[32m[31m[2m, [22m[32m[32m"skipped"[32m[31m[2m) // element.getAttribute("data-night-stage") === "skipped"[22m
+
+Expected the element to have attribute:
+[32m  data-night-stage="skipped"[31m
+Received:
+[31m  data-night-stage="live"[31m[39m
+[31m   [31m×[31m draft night on the actual boards[2m > [22m'NHL' less motion starts on the last frame and an undrafted night names no club early[39m[32m 47[2mms[22m[39m
+[31m     → [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"data-night-stage"[32m[31m[2m, [22m[32m[32m"skipped"[32m[31m[2m) // element.getAttribute("data-night-stage") === "skipped"[22m
+
+Expected the element to have attribute:
+[32m  data-night-stage="skipped"[31m
+Received:
+[31m  data-night-stage="live"[31m[39m
+ [32m✓[39m src/test/careerPreDraft.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 323[2mms[22m[39m
+ [32m✓[39m src/components/motion/LotteryReveal.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 280[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProspect.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 8506[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' quiet legacy restore preserves the existing career unchanged [33m 484[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' plays every saved prospect stage into the earned career and first season [33m 795[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' plays every saved prospect stage into the earned career and first season [33m 479[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' plays every saved prospect stage into the earned career and first season [33m 554[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' plays every saved prospect stage into the earned career and first season [33m 432[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NFL' rejects corrupt nested journey saves without changing storage [33m 658[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NBA' rejects corrupt nested journey saves without changing storage [33m 612[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'MLB' rejects corrupt nested journey saves without changing storage [33m 654[2mms[22m[39m
+   [33m[2m✓[22m[39m US career prospect on the actual boards[2m > [22m'NHL' rejects corrupt nested journey saves without changing storage [33m 638[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'NFL' less motion starts on the last frame and an undrafted night names no club early
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'NBA' less motion starts on the last frame and an undrafted night names no club early
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'MLB' less motion starts on the last frame and an undrafted night names no club early
+[41m[1m FAIL [22m[49m src/test/usCareerDraftNightBoard.test.tsx[2m > [22mdraft night on the actual boards[2m > [22m'NHL' less motion starts on the last frame and an undrafted night names no club early
+[31m[1mError[22m: [2mexpect([22m[31melement[31m[2m).toHaveAttribute([22m[32m[32m"data-night-stage"[32m[31m[2m, [22m[32m[32m"skipped"[32m[31m[2m) // element.getAttribute("data-night-stage") === "skipped"[22m
+
+Expected the element to have attribute:
+[32m  data-night-stage="skipped"[31m
+Received:
+[31m  data-night-stage="live"[31m[39m
+[36m [2m❯[22m src/test/usCareerDraftNightBoard.test.tsx:[2m183:29[22m[39m
+    [90m181| [39m      [35mawait[39m [34mnightLoaded[39m()[33m;[39m
+    [90m182| [39m      fireEvent.click(buttons(view).getByRole('button', { name: 'Draft…
+    [90m183| [39m      expect(nightOf(view)).toHaveAttribute('data-night-stage', 'skipp…
+    [90m   | [39m                            [31m^[39m
+    [90m184| [39m      expect(journey(view).querySelector('[data-night-hold]')).toBeNul…
+    [90m185| [39m      expect(closingRow(view)).toHaveAttribute('data-night-row', 'unpi…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m111 passed[39m[22m[90m (115)[39m
+[2m   Start at [22m 13:38:28
+[2m   Duration [22m 11.32s[2m (transform 2.28s, setup 358ms, collect 6.16s, tests 12.45s, environment 2.17s, prepare 647ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'NFL' less motion starts on the last frame and an undrafted night names no club early,line=183,column=29::Error: expect(element).toHaveAttribute("data-night-stage", "skipped") // element.getAttribute("data-night-stage") === "skipped"%0A%0AExpected the element to have attribute:%0A  data-night-stage="skipped"%0AReceived:%0A  data-night-stage="live"%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:183:29%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'NBA' less motion starts on the last frame and an undrafted night names no club early,line=183,column=29::Error: expect(element).toHaveAttribute("data-night-stage", "skipped") // element.getAttribute("data-night-stage") === "skipped"%0A%0AExpected the element to have attribute:%0A  data-night-stage="skipped"%0AReceived:%0A  data-night-stage="live"%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:183:29%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'MLB' less motion starts on the last frame and an undrafted night names no club early,line=183,column=29::Error: expect(element).toHaveAttribute("data-night-stage", "skipped") // element.getAttribute("data-night-stage") === "skipped"%0A%0AExpected the element to have attribute:%0A  data-night-stage="skipped"%0AReceived:%0A  data-night-stage="live"%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:183:29%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerDraftNightBoard.test.tsx,title=src/test/usCareerDraftNightBoard.test.tsx > draft night on the actual boards > 'NHL' less motion starts on the last frame and an undrafted night names no club early,line=183,column=29::Error: expect(element).toHaveAttribute("data-night-stage", "skipped") // element.getAttribute("data-night-stage") === "skipped"%0A%0AExpected the element to have attribute:%0A  data-night-stage="skipped"%0AReceived:%0A  data-night-stage="live"%0A ❯ src/test/usCareerDraftNightBoard.test.tsx:183:29%0A%0A
