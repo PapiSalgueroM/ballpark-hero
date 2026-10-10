@@ -316,14 +316,16 @@ async function main() {
         /* A fresh engine for each side of a comparison: the engine numbers its inbox messages from a counter of its
            own, so two matches played one after the other on one engine differ in those ids and in nothing else. */
         const both = (state, seed, opts) => withCmVarSeed(seed, () => { const result = candidateFactory().playNextEntry(state, opts); return { result, next: Math.random() }; });
-        const optIn = (state, seed) => { const stop = withCmVarSeed(seed, () => cm.playNextEntry(state, { noCoach: true, varReviews: true })); return stop.kind === 'halftime' ? stop.state.live.varReviews === true : null; };
-        let outside = 0;
+        const optIn = (state, seed) => { const stop = withCmVarSeed(seed, () => cm.playNextEntry(state, { noCoach: true, varReviews: true })); return stop.kind === 'halftime' ? { lit: stop.state.live.varReviews === true, europe: stop.state.live.compLabel.startsWith('Champions League') } : null; };
+        let outside = 0, abroad = 0;
         for (const [c, club] of ['Wolves', 'Ajax', 'Lyon', 'Celtic'].entries()) {
           let state = withCmVarSeed(4200 + c, () => cm.startCareer(club)), matches = 0;
           for (let i = 0; i < 60 && matches < 12; i++) {
             const seed = 8100 + c * 101 + i;
-            const lit = optIn(state, seed);
-            if (lit !== null) assert.equal(lit, false, `${club}: a match in a competition without reviews carries no opt in`);
+            const at = optIn(state, seed);
+            /* A club from a league without reviews still meets them in the Champions League, whose row says yes. */
+            if (at?.europe) { assert.equal(at.lit, true, `${club}: its Champions League match carries the opt in`); abroad += 1; state = both(state, seed, { skipHalftime: true, noCoach: true }).result.state; continue; }
+            if (at) assert.equal(at.lit, false, `${club}: a match in a competition without reviews carries no opt in`);
             const asked = both(state, seed, { skipHalftime: true, noCoach: true, varReviews: true }), plain = both(state, seed, { skipHalftime: true, noCoach: true });
             assert.deepEqual(asked, plain, `${club}: where the competition has no reviews, asking for them plays the same match and leaves the stream where it was`);
             if (asked.result.kind === 'seasonOver' || asked.result.state?.sacked) break;
@@ -356,7 +358,7 @@ async function main() {
         assert.deepEqual(['R16', 'QF', 'SF', 'F'].map(s => staged.cmVarCovers('cup:FA Cup', s)), [false, true, true, true], 'A cup is covered from its first stage with reviews on');
         assert.deepEqual(['group', 'R16', 'QF', 'SF', 'F'].map(s => staged.cmVarCovers('ucl', s)), [true, true, true, true, true]);
         assert.deepEqual([staged.cmVarCovers('league:premier'), staged.cmVarCovers('league:championship'), staged.cmVarCovers('cup:FA Cup'), staged.cmVarCovers('toString'), staged.cmVarCovers('league:atlantis')], [true, false, false, false, false]);
-        metrics.coverage = { outside, league, cup, europe };
+        metrics.coverage = { outside, abroad, league, cup, europe };
       },
       /* Round 1218. The generated rates themselves, on a fleet of league matches in the leagues whose row says
          yes (scripts/lib/cmVarFleet.mjs: 20 clubs, one season a seed). Each outcome a match must sit inside the
@@ -406,6 +408,7 @@ async function main() {
     }
     if (control) console.log(`simCmVar ${control}: CAUGHT by "${String(rows.find(r => r.status === 'failed')?.message).split('\n')[0].slice(0, 220)}"`);
     if (metrics.bands) console.log(`simCmVar bands: ${JSON.stringify(metrics.bands)}`);
+    if (metrics.coverage) console.log(`simCmVar coverage: ${JSON.stringify(metrics.coverage)}`);
     console.log(`simCmVar ${control || 'normal'}: actual review outcomes and full prior baseline passed.`);
   } finally {
     process.off('unhandledRejection', capture); process.off('uncaughtExceptionMonitor', capture);
