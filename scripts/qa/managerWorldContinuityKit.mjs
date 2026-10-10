@@ -91,16 +91,21 @@ export async function loadEngine({ original = false, patch, label = 'current' } 
   const code = bundle.outputFiles[0].text;
   const scopes = [];
   async function fresh(scopeLabel = label) {
-    const module = { exports: {} }; const scopeStore = new Map();
+    const module = { exports: {} }; const scopeStore = new Map(); let heldClock = 1791633600000;
+    class ScopeDate extends HeldDate {
+      constructor(...args) { super(...(args.length ? args : [heldClock])); }
+      static now() { return heldClock; }
+    }
+    const clock = { now: () => heldClock, setNow: value => { assert.ok(Number.isSafeInteger(value)); heldClock = value; } };
     const storage = { getItem: key => scopeStore.get(key) ?? null, setItem: (key, value) => scopeStore.set(key, String(value)),
       removeItem: key => scopeStore.delete(key), clear: () => scopeStore.clear() };
     const context = vm.createContext({ module, exports: module.exports, require: createRequire(path.join(ROOT, 'package.json')),
-      console, process, Buffer, Math, Date: HeldDate, URL, URLSearchParams, TextEncoder, TextDecoder, structuredClone,
+      console, process, Buffer, Math, Date: ScopeDate, URL, URLSearchParams, TextEncoder, TextDecoder, structuredClone,
       setTimeout, clearTimeout, setInterval, clearInterval, localStorage: storage, fetch: globalThis.fetch });
     vm.runInContext(code, context, { filename: `manager-world-${scopeLabel}.cjs` });
     await module.exports.eras.ensureAllEraRosters();
     const scope = { label: scopeLabel, bundleSha256: sha(code) }; scopes.push(scope);
-    return { ...module.exports, loaded, receipts, store: scopeStore, bundleSha256: scope.bundleSha256, fresh, scopes };
+    return { ...module.exports, loaded, receipts, store: scopeStore, clock, bundleSha256: scope.bundleSha256, fresh, scopes };
   }
   return fresh(label);
 }

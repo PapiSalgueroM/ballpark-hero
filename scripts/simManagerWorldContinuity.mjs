@@ -1,5 +1,5 @@
 /* Manager persistence and private trajectories: complete retained outcomes against actual09df.
-   Run remotely with MANAGER_WORLD_CONTINUITY_CONTROL=all for ten effective copied faults.
+   Run remotely with MANAGER_WORLD_CONTINUITY_CONTROL=all for eleven effective copied faults.
    This does not change historical fixtures or certify unrelated historical source fences. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -22,6 +22,12 @@ const CONTROLS = {
   identity: { file: LEDGER, from: 'return player.name === origin.name && year - player.age === origin.birthYear;', to: 'return player.name === origin.name && player.position === origin.position && year - player.age === origin.birthYear;', fails: ['identity'] },
   seed: { file: ERAS, from: "const key = `${trajectoryEra}|${y}${seed === undefined ? '' : `|seed:${seed}`}`;", to: 'const key = `${trajectoryEra}|${y}`;', fails: ['seeded-world'] },
   draw: { file: CORE, from: "const random = keyedRng(`world-roster|${worldSeedOf(career) ?? 'legacy'}|${record.key}|${next}`);", to: 'const random = Math.random;', fails: ['refresh'] },
+  entropy: { file: CORE, from: String.raw`const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName,
+      state.manager ? [state.manager.name, state.manager.nationality, state.manager.background, state.manager.style] : null,
+      state.squad.map(p => [p.name, p.position, p.age, p.rating, p.potential]),
+      [state.academy?.recruitment, state.academy?.coaching, state.academy?.facilities,
+        state.academy?.prospects.map(p => [p.name, p.position, p.age, p.rating, p.potential])]]);`,
+    to: 'const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName, state.manager, state.squad, state.academy]);', fails: ['constructors'] },
 };
 if (CONTROL && CONTROL !== 'all' && !CONTROLS[CONTROL]) throw new Error(`Unknown manager control ${CONTROL}`);
 const GROUPS = ['inactive', 'constructors', 'identity', 'buy-job', 'year-away', 'sale', 'option', 'release', 'refresh', 'seeded-world'];
@@ -145,13 +151,29 @@ async function arm(control) {
       const originalScope = await A.fresh(label + '-original'), currentScope = await B.fresh(label + '-current'), replayScope = await B.fresh(label + '-replay');
       const original = tape(seed, () => originalScope.cm.startCareer(club)); const current = tape(seed, () => currentScope.cm.startCareer(club));
       const again = tape(seed, () => replayScope.cm.startCareer(club));
+      const clockBefore = currentScope.clock.now();
+      const noise = tape(seed + 7301, () => currentScope.cm.startCareer('Real Madrid'));
+      let interleaved;
+      try {
+        currentScope.clock.setNow(clockBefore + 86400000);
+        interleaved = tape(seed, () => currentScope.cm.startCareer(club));
+      } finally { currentScope.clock.setNow(clockBefore); }
       observations.push({ club, seed, scopes: { original: label + '-original', current: label + '-current', replay: label + '-replay' },
-        original: clone(original), current: clone(current), again: clone(again) });
+        clock: { before: clockBefore, interleaved: clockBefore + 86400000, restored: currentScope.clock.now() },
+        original: clone(original), current: clone(current), again: clone(again), noise: clone(noise), interleaved: clone(interleaved) });
+      pairs++;
+    }
+    report.counts.constructorPairs = pairs; report.counts.constructorInterleaves = pairs; assert.equal(pairs, 6);
+    for (const row of observations) {
+      const { original, current, again, interleaved } = row;
       assert.ok(Number.isSafeInteger(current.value.worldSeed) && current.value.worldSeed >= 0 && current.value.worldSeed <= 0xffffffff);
       equal(current.value, { ...original.value, worldSeed: current.value.worldSeed }, 'Fresh constructor changes only the declared held seed');
-      equal(current.draws, original.draws, 'Fresh seed uses no extra global draw'); equal(again, current, 'Fresh seed and whole constructor replay exactly'); pairs++;
+      equal(current.draws, original.draws, 'Fresh seed uses no extra global draw'); equal(again, current, 'Fresh seed and whole constructor replay exactly');
+      assert.equal(row.clock.restored, row.clock.before, 'Each VM clock is restored after the interleaved witness');
+      assert.notDeepEqual(interleaved.value.academy.candidates.map(p => p.id), current.value.academy.candidates.map(p => p.id), 'Actual constructor candidate IDs changed across the held clock and other career');
+      equal(interleaved.draws, current.draws, 'Same-module interleaving retains the entire constructor draw vector');
+      assert.equal(interleaved.value.worldSeed, current.value.worldSeed, 'Same-module careers and clocks do not change the saved world seed');
     }
-    report.counts.constructorPairs = pairs; assert.equal(pairs, 6);
   });
   await group('identity', observations => {
     const c = synthetic(); const input = clone(c);

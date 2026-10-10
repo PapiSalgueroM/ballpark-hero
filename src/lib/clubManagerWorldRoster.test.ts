@@ -6,6 +6,7 @@ import {
   startCareer, startNextSeason, worldRosterFor, worldRosterXIAvg,
 } from '@/lib/clubManager';
 import { joinClubNow } from '@/lib/clubManagerCalendar';
+import { ensureEraRosters } from '@/lib/clubManagerEras';
 import {
   readWorldRoster, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterKey, worldRosterOwner,
   type WorldRosterCareer, type WorldRosterPlayer, type WorldRosterState,
@@ -332,6 +333,39 @@ function applyAndJoin(c: CareerState, destination: string): CareerState {
 }
 
 describe('actual world roster continuity through manager callbacks', () => {
+  it('keeps the fresh world seed and complete constructor draw vector stable across other careers and clocks', async () => {
+    await ensureEraRosters('era2010');
+    const clock = vi.spyOn(Date, 'now').mockReturnValue(1791633600000);
+    const run = (club: string, era: string, seed: number, manager?: CareerState['manager']) => {
+      let a = seed >>> 0; const draws: number[] = [];
+      const random = vi.spyOn(Math, 'random').mockImplementation(() => {
+        a |= 0; a = (a + 0x6d2b79f5) | 0;
+        let t = Math.imul(a ^ (a >>> 15), 1 | a);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        const value = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+        draws.push(value); return value;
+      });
+      try { return { value: startCareer(club, era, undefined, manager), draws }; }
+      finally { random.mockRestore(); }
+    };
+    try {
+      const fixtures = [
+        { club: 'Everton', era: 'now' },
+        { club: 'Lincoln City', era: 'now', manager: { name: 'Harness Manager', nationality: 'England', background: 'coachingBadges', style: 'counter' } as CareerState['manager'] },
+        { club: 'Barcelona', era: 'era2010' },
+      ];
+      for (const [index, fixture] of fixtures.entries()) {
+        clock.mockReturnValue(1791633600000);
+        const first = run(fixture.club, fixture.era, 311 + index, fixture.manager);
+        run('Real Madrid', 'now', 7301);
+        clock.mockReturnValue(1791720000000);
+        const interleaved = run(fixture.club, fixture.era, 311 + index, fixture.manager);
+        expect(interleaved.draws).toEqual(first.draws);
+        expect(interleaved.value.worldSeed).toBe(first.value.worldSeed);
+        expect(interleaved.value.academy!.candidates.map(p => p.id)).not.toEqual(first.value.academy!.candidates.map(p => p.id));
+      }
+    } finally { clock.mockRestore(); }
+  });
   it('records a first purchase from the actual seeded future market', () => {
     const future = withRoll(0.6, () => startNextSeason(realCareer(), 'Liverpool'));
     const c = { ...future, budget: 9999, wageCap: 9999 };

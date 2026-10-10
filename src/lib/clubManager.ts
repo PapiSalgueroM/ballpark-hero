@@ -17640,7 +17640,11 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
      every other save draws exactly what it did. */
   if (lateWeeks !== null) for (const msg of fireDueBreaks(state)) pushMessage(state, msg);
   if (!world) {
-    const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName, state.manager, state.squad, state.academy]);
+    const entropy = JSON.stringify([state.eraId, state.startYear, state.clubName,
+      state.manager ? [state.manager.name, state.manager.nationality, state.manager.background, state.manager.style] : null,
+      state.squad.map(p => [p.name, p.position, p.age, p.rating, p.potential]),
+      [state.academy?.recruitment, state.academy?.coaching, state.academy?.facilities,
+        state.academy?.prospects.map(p => [p.name, p.position, p.age, p.rating, p.potential])]]);
     state.worldSeed = Math.floor(keyedRng(`manager-world|${entropy}`)() * 0x100000000);
   } else if (world.worldSeed !== undefined && state.worldSeed === undefined) {
     state.worldSeed = world.worldSeed;
