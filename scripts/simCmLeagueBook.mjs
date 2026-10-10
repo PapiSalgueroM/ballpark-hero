@@ -69,6 +69,9 @@
  *   mathrandom    the scorer pick reads Math.random                  -> stream
  *   dropmine      my own league match is not noted                   -> law, and with it the three other
  *                 sections that check the law (names, oldsave, doors)
+ *   byeweek       the results of a week I do not play (a league with an odd number of clubs) are not
+ *                 noted                                              -> law (shapes may go with it: those
+ *                 goals are then missing from the rows the shares are counted on)
  *   cleanside     the clean sheet goes to the side that did not score -> law
  *   bought        the book's eleven keeps a man now in my squad      -> names
  *   wrongman      a goal against me goes to the first outfield man on their pitch, whoever the report
@@ -131,6 +134,9 @@ const DEADLINE = 'src/lib/deadlineDay.ts';
    plays every career on it too, on the same seeded stream. `n` is how many times the anchor must occur. */
 const NOTE_MINE = 'noteBookMine(state, myLeagueId, entry.round, fx, live, xi, myGoals, oppGoals, oppScorers);';
 const NOTE_RESULT = 'noteBookResult(state, myLeagueId, entry.round, h, a, hg, ag);';
+/* The same call where playNextEntry plays a week I am not part of (a league with an odd number of clubs):
+   it sits two spaces deeper than the week's close, so with its indent it occurs once. */
+const NOTE_BYE = `          ${NOTE_RESULT}`;
 const OPEN_LINE = '  state.leagueBook = openBook(bookStampOf(state, careerLeagueOf(state).id));';
 const BOOK_OFF = [
   { file: ENGINE, from: OPEN_LINE, to: '  void openBook;' },
@@ -149,6 +155,7 @@ const CONTROLS = {
   weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes'] },
   mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream' },
   dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors'] },
+  byeweek: { patch: [{ file: ENGINE, from: NOTE_BYE, to: '' }], red: 'law', also: ['shapes'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
   bought: { patch: [{ file: ENGINE, from: '  const notTheirs = mySquadNames(state);', to: '  const notTheirs = NO_NAMES;' }], red: 'names' },
   wrongman: { patch: [{ file: ENGINE, from: '    let man: OppXiLine | null = bookNamed(there, line.name) ?? bookNamed(theirs, line.name);', to: "    let man: OppXiLine | null = there.find(p => p.p !== 'GK') ?? bookNamed(theirs, line.name);" }], red: 'names' },
@@ -169,12 +176,17 @@ const CONTROLS = {
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control "${CONTROL}"`);
 if (CONTROL && CONTROLS[CONTROL].needs === 'base' && !BASE) cannot(`control ${CONTROL} is judged against the base commit: set BOOK_BASE`);
 
-/* The fleet: [club, era]. The clubs cover the league sizes (20, 18, 24) and both pair ledger cases. */
+/* The fleet: [club, era]. The clubs cover the league sizes (20, 18, 24 and 15) and both pair ledger cases.
+   The last one is there for its league's ODD number of clubs: fifteen clubs means a week I do not play in
+   which the rest of the round does, and the engine notes those results at a call of its own (the bye week
+   of playNextEntry), which no league with an even number of clubs ever reaches. It is in the default
+   fleet too, because the suite runs the default. */
 const ALL_CLUBS = [
   ['Everton', 'now'], ['Arsenal', 'now'], ['Bayern Munich', 'now'], ['Southampton', 'now'],
   ['Hertha BSC', 'now'], ['Real Madrid', 'now'], ['Ajax', 'now'], ['Barcelona', 'era2010'],
+  ['New England Revolution', 'now'],
 ];
-const CLUBS = FULL ? ALL_CLUBS : [ALL_CLUBS[0], ALL_CLUBS[3], ALL_CLUBS[4], ALL_CLUBS[7]];
+const CLUBS = FULL ? ALL_CLUBS : [ALL_CLUBS[0], ALL_CLUBS[3], ALL_CLUBS[4], ALL_CLUBS[7], ALL_CLUBS[8]];
 const SEEDS = FULL ? 3 : 1;
 const seedOf = (clubIndex, k) => (0x1229 + SEEDSET * 7919 + clubIndex * 131 + k * 17) >>> 0;
 
@@ -412,6 +424,9 @@ const newAcc = () => ({
      name that club's roster holds and the lines it does not, set piece lines, assists, and the matches left
      out because the opponent played a second match inside the same entry. */
   report: { matches: 0, lines: 0, known: 0, offRoster: 0, setPieces: 0, assists: 0, twice: 0 },
+  /* A league with an odd number of clubs: weeks I did not play in which the rest of the round did, club
+     entries that held two matches of one club, and club seasons whose clean sheets the table could not tell. */
+  byeWeeks: 0, twoInOne: 0, untold: 0,
 });
 const played = r => r.w + r.d + r.l;
 const rivalsOf = s => s.leagueClubs.filter(c => c !== s.clubName);
@@ -515,11 +530,14 @@ function reportAgainstBook(mod, acc, label, where, after, rep, opp, d) {
 function watcher(mod, label, acc, opts = {}) {
   const { cm } = mod;
   let keptByClub = new Map();
+  /* Clubs whose clean sheets the table could not tell this season (see the entry hook). */
+  let untold = new Set();
   let myKept = 0;
   let leagueId = '';
   const hooks = {
     opened(s, seasonIndex) {
       keptByClub = new Map();
+      untold = new Set();
       myKept = 0;
       leagueId = cm.careerLeagueOf(s).id;
       tick('law');
@@ -550,13 +568,33 @@ function watcher(mod, label, acc, opts = {}) {
         acc.reviews += (r.report.detail?.play ?? []).filter(e => e.kind === 'var').length;
         if (theirs === 0) myKept += 1;
       }
+      /* League rounds played in this entry without me: the most matches a rival played, less my own. */
+      const meWas = before.table.get(after.clubName);
+      const meNow = after.table.find(row => row.club === after.clubName);
+      let mostGames = 0;
       for (const club of rivalsOf(after)) {
         const was = before.table.get(club);
         const now = after.table.find(row => row.club === club);
         if (!was || !now || played(now) === was.p) continue;
         const xi = before.xi.get(club);
         const scored = now.gf - was.gf;
-        if (now.ga === was.ga && xi) keptByClub.set(club, (keptByClub.get(club) ?? 0) + 1);
+        /* Clean sheets by the TABLE, a match at a time. In a league with an even number of clubs one entry
+           is one match of a club. With an odd number, one call can play a week I am not part of (the club
+           meets somebody else) and then my own match against it: what it conceded to me is the report's
+           number, the rest is the other match's. Two matches elsewhere in one entry with something
+           conceded cannot be told apart from the table, so that club's count is not judged that season. */
+        const games = played(now) - was.p;
+        const vsMe = club === myOpp ? 1 : 0;
+        const mineOnThem = vsMe ? (rep.home === after.clubName ? rep.homeGoals : rep.awayGoals) : 0;
+        const elsewhere = games - vsMe;
+        mostGames = Math.max(mostGames, games);
+        if (games > 1) acc.twoInOne += 1;
+        if (xi) {
+          let kept = vsMe && mineOnThem === 0 ? 1 : 0;
+          if (elsewhere > 0 && now.ga - was.ga - mineOnThem === 0) kept += elsewhere;
+          else if (elsewhere > 1) untold.add(club);
+          if (kept) keptByClub.set(club, (keptByClub.get(club) ?? 0) + kept);
+        }
         const lg = (acc.thin[leagueId] ??= { weeks: 0, bare: 0, clubs: new Map(), rivals: new Set() });
         lg.weeks += 1;
         lg.rivals.add(club);
@@ -604,7 +642,7 @@ function watcher(mod, label, acc, opts = {}) {
         /* My own league match: the book against the report. Only when that match was the opponent's one
            match of the entry (in a league with an odd number of clubs one entry can play my bye week, in
            which they met somebody else, and then my match against them: their rows then hold both). */
-        if (gained && played(now) - was.p === 1) {
+        if (gained && games === 1) {
           reportAgainstBook(mod, acc, label, where, after, rep, club, {
             ...gained, og: entry.og - prior.og, u: entry.u - prior.u, rows: Object.keys(entry.m).length, mineBefore: before.mine, mineNow,
           });
@@ -616,7 +654,7 @@ function watcher(mod, label, acc, opts = {}) {
           acc.aiGoals += scored;
           /* Every goal is its own roll: when the club scored two or more in this ONE match, did one man take
              them all, and how often should he by the harness's own table for this eleven and this score. */
-          if (scored >= 2 && played(now) - was.p === 1) {
+          if (scored >= 2 && games === 1) {
             const p = allToOneMan(xi, scored);
             acc.multi.n += 1;
             acc.multi.exp += p;
@@ -625,6 +663,7 @@ function watcher(mod, label, acc, opts = {}) {
           }
         }
       }
+      if (meWas && meNow) acc.byeWeeks += Math.max(0, mostGames - (played(meNow) - meWas.p));
       opts.onEntry?.(after, r, season);
     },
     seasonEnd(s, season) {
@@ -633,6 +672,7 @@ function watcher(mod, label, acc, opts = {}) {
       if (!book) return;
       /* The clean sheets on a club's keeper rows are the matches it conceded nothing in, with an eleven named. */
       for (const club of rivalsOf(s)) {
+        if (untold.has(club)) { acc.untold += 1; continue; }
         tick('law');
         const onKeepers = Object.entries(book.c[club]?.m ?? {}).filter(([key]) => key.endsWith('|GK')).reduce((n, [, row]) => n + row[2], 0);
         const kept = keptByClub.get(club) ?? 0;
@@ -742,6 +782,9 @@ fleet.filter(f => f.era === 'now').slice(0, FULL ? 6 : 2).forEach(f => playCaree
 }, 1));
 tick('law');
 if (!accVar.reviews) fail('law', 'with the video referee on, no league match of mine had a review: the arm proved nothing');
+/* And the week I do not play: only a league with an odd number of clubs has one, and the fleet must hold it. */
+tick('law');
+if (!acc.byeWeeks) fail('law', 'no career of the fleet had a week it did not play while the rest of its league round did: the note call of that week was never run');
 
 /* ---------- section stream: the same careers with the book taken out, and on the base commit ---------- */
 let tOff = Date.now();
@@ -1121,7 +1164,7 @@ function printBoards(title, seasons) {
     const xs = seasons.filter(x => x.league === league);
     console.log(`        ${league.padEnd(12)} ${xs[0].clubs} clubs, ${String(xs.length).padStart(2)} seasons: top scorer mean ${fmt(mean(xs.map(x => x.bootBook)))} (${xs.map(x => x.bootBook).join(' ')}), old race mean ${fmt(mean(xs.map(x => x.bootRace)))}, most assists mean ${fmt(mean(xs.map(x => x.assistTop)))}, leading keeper's clean sheets mean ${fmt(mean(xs.map(x => x.keeperTop)))}`);
   }
-  for (const [what, xs] of [['38 game leagues', seasons.filter(x => x.clubs === 20)], ['34 game leagues', seasons.filter(x => x.clubs === 18)], ['46 game leagues', seasons.filter(x => x.clubs === 24)]]) {
+  for (const [what, xs] of [['38 game leagues', seasons.filter(x => x.clubs === 20)], ['34 game leagues', seasons.filter(x => x.clubs === 18)], ['46 game leagues', seasons.filter(x => x.clubs === 24)], ['28 game leagues (15 clubs)', seasons.filter(x => x.clubs === 15)]]) {
     if (!xs.length) continue;
     const boots = xs.map(x => x.bootBook);
     const m = mean(boots);
@@ -1150,6 +1193,7 @@ if (process.env.BOOK_MEASURE === '1' && !CONTROL) {
 }
 
 /* ---------- the verdict ---------- */
+console.log(`law     ${acc.byeWeeks} weeks I did not play in which the rest of the round did (a league with an odd number of clubs), ${acc.twoInOne} club entries holding two matches of one club, ${acc.untold} club seasons whose clean sheets the table could not tell`);
 console.log(`law     ${checked.get('law')} checks over ${acc.entries} entries of ${fleet.length} careers, and ${accVar.entries} entries of ${accVar.seasons.length} seasons with the video referee on (${accVar.myLeagueMatches} league matches of mine, ${accVar.reviews} reviews, ${accVar.shortLines} reports whose lines did not add up to the score)`);
 let total = 0;
 for (const s of SECTIONS) {
