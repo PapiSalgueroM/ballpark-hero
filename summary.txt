@@ -1,0 +1,2 @@
+basehead exit=0 0s |  4 files changed, 448 insertions(+), 14 deletions(-)
+probe exit=0 2s | probe: done (it asserts nothing; read the lines above).

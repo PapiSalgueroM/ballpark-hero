@@ -1,0 +1,47 @@
+probe: building real saves with the BASE engines at /tmp/base...
+probe: building real saves with the branch engines...
+probe: the seam answers null (null means the keeper really runs)
+
+S1. put back A, then put the other one back (the undo): what does the card offer after it?
+   /fight-gym         played between false after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B], the card offers NOTHING; A is still kept aside
+   /fight-gym         played between true  after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B, 2026-10-10T08-01-02=A-played], the card offers A-played; A is still kept aside
+   /club-manager      played between false after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B], the card offers NOTHING; A is still kept aside
+   /club-manager      played between true  after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B, 2026-10-10T08-01-02=A-played], the card offers A-played; A is still kept aside
+   /nfl-my-career     played between false after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B], the card offers NOTHING; A is still kept aside
+   /nfl-my-career     played between true  after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B, 2026-10-10T08-01-02=A-played], the card offers A-played; A is still kept aside
+   /soccer-career     played between false after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B], the card offers NOTHING; A is still kept aside
+   /soccer-career     played between true  after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B, 2026-10-10T08-01-02=A-played], the card offers A-played; A is still kept aside
+   /stadium-tycoon    played between false after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B], the card offers NOTHING; A is still kept aside
+   /stadium-tycoon    played between true  after the undo: key=B, backups=[2026-10-04T09-00-00=A, 2026-10-10T08-00-02=B, 2026-10-10T08-01-02=A-played], the card offers A-played; A is still kept aside
+   Round 958's swap, same presses on /fight-gym: key=B, backups=[2026-10-10T08-01-00=A], the card offers A
+
+S2. the same at the cap: three kept aside saves, a put back, a little play, the undo
+   press 1 (A3): {"path":"/fight-gym","ok":true,"kept":true} -> key=A3, backups=[2026-10-01T09-00-00=A1, 2026-10-02T09-00-00=A2, 2026-10-03T09-00-00=A3, 2026-10-10T08-00-02=B]
+   press 2 (the undo):  {"path":"/fight-gym","ok":true,"kept":true} -> key=B, backups=[2026-10-02T09-00-00=A2, 2026-10-03T09-00-00=A3, 2026-10-10T08-00-02=B, 2026-10-10T08-01-02=A3-played]
+   kept aside saves that are now in NO key: A1  (the card's line for kept:true is "...so nothing was deleted.")
+   Round 958's swap, same presses: key=B, backups=[2026-10-01T09-00-00=A1, 2026-10-02T09-00-00=A2, 2026-10-10T08-01-00=A3-played], in no key: none
+
+S3. an ordinary boot over the whole fleet (through the real seam), branch made and base made saves
+   branch: 4 boots over 84 real saves: 0 writes or removes, 0 values changed, 0 keys added
+   base: 4 boots over 84 real saves: 0 writes or removes, 0 values changed, 0 keys added
+   base made saves byte equal to branch made ones: 56 of 84 (differ: /club-manager#0, /club-manager#1, /club-manager#2, /club-manager#3, /front-office#0, /front-office#1, /front-office#2, /front-office#3, /cfb-dynasty#0, /cfb-dynasty#1, /cfb-dynasty#2, /cfb-dynasty#3)
+   base made saves opened by the branch's own loaders: 40 of 40
+
+S4. a save of a game that REFUSES another version, holding no version number at all, or a text one
+   /club-manager          version missing the game REFUSES it; copies kept aside by the boot: 0
+   /club-manager          version text    the game REFUSES it; copies kept aside by the boot: 0
+   /rebuild               version missing the game REFUSES it; copies kept aside by the boot: 0
+   /rebuild               version text    the game REFUSES it; copies kept aside by the boot: 0
+   /stadium-tycoon        version missing the game REFUSES it; copies kept aside by the boot: 0
+   /stadium-tycoon        version text    the game REFUSES it; copies kept aside by the boot: 0
+   /wonderkid-factory     version missing the game REFUSES it; copies kept aside by the boot: 0
+   /wonderkid-factory     version text    the game REFUSES it; copies kept aside by the boot: 0
+   /hall-of-champions     version missing the game REFUSES it; copies kept aside by the boot: 0
+   /hall-of-champions     version text    the game REFUSES it; copies kept aside by the boot: 0
+   /aussie-rules-manager  version missing the game REFUSES it; copies kept aside by the boot: 0
+   /aussie-rules-manager  version text    the game REFUSES it; copies kept aside by the boot: 0
+
+S5. the quiet copy, with one older kept aside save the player never answered
+   before the boot the card offers the unanswered save; after the quiet copy it offers NOTHING (2 kept aside)
+
+probe: done (it asserts nothing; read the lines above).

@@ -1,0 +1,606 @@
+{
+ "seam": null,
+ "S1": [
+  {
+   "route": "/fight-gym",
+   "playedBetween": false,
+   "offeredAfterUndo": null,
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/fight-gym",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/fight-gym",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "route": "/fight-gym",
+   "playedBetween": true,
+   "offeredAfterUndo": "A-played",
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/fight-gym",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/fight-gym",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B",
+       "2026-10-10T08-01-02=A-played"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "route": "/club-manager",
+   "playedBetween": false,
+   "offeredAfterUndo": null,
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/club-manager",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/club-manager",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "route": "/club-manager",
+   "playedBetween": true,
+   "offeredAfterUndo": "A-played",
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/club-manager",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/club-manager",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B",
+       "2026-10-10T08-01-02=A-played"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "playedBetween": false,
+   "offeredAfterUndo": null,
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/nfl-my-career",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/nfl-my-career",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "route": "/nfl-my-career",
+   "playedBetween": true,
+   "offeredAfterUndo": "A-played",
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/nfl-my-career",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/nfl-my-career",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B",
+       "2026-10-10T08-01-02=A-played"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "playedBetween": false,
+   "offeredAfterUndo": null,
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/soccer-career",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/soccer-career",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "route": "/soccer-career",
+   "playedBetween": true,
+   "offeredAfterUndo": "A-played",
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/soccer-career",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/soccer-career",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B",
+       "2026-10-10T08-01-02=A-played"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "route": "/stadium-tycoon",
+   "playedBetween": false,
+   "offeredAfterUndo": null,
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/stadium-tycoon",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/stadium-tycoon",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "route": "/stadium-tycoon",
+   "playedBetween": true,
+   "offeredAfterUndo": "A-played",
+   "aStillInABackup": true,
+   "aAtKey": false,
+   "steps": [
+    {
+     "press": 1,
+     "offered": "A",
+     "outcome": {
+      "path": "/stadium-tycoon",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "A",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B"
+      ]
+     }
+    },
+    {
+     "press": 2,
+     "offered": "B",
+     "outcome": {
+      "path": "/stadium-tycoon",
+      "ok": true,
+      "kept": true
+     },
+     "after": {
+      "key": "B",
+      "backups": [
+       "2026-10-04T09-00-00=A",
+       "2026-10-10T08-00-02=B",
+       "2026-10-10T08-01-02=A-played"
+      ]
+     }
+    }
+   ]
+  }
+ ],
+ "S1main": {
+  "after": {
+   "key": "B",
+   "backups": [
+    "2026-10-10T08-01-00=A"
+   ]
+  },
+  "offeredAfterUndo": "A"
+ },
+ "S2": {
+  "press1": {
+   "offered": "A3",
+   "outcome": {
+    "path": "/fight-gym",
+    "ok": true,
+    "kept": true
+   },
+   "after": {
+    "key": "A3",
+    "backups": [
+     "2026-10-01T09-00-00=A1",
+     "2026-10-02T09-00-00=A2",
+     "2026-10-03T09-00-00=A3",
+     "2026-10-10T08-00-02=B"
+    ]
+   }
+  },
+  "press2": {
+   "outcome": {
+    "path": "/fight-gym",
+    "ok": true,
+    "kept": true
+   },
+   "after": {
+    "key": "B",
+    "backups": [
+     "2026-10-02T09-00-00=A2",
+     "2026-10-03T09-00-00=A3",
+     "2026-10-10T08-00-02=B",
+     "2026-10-10T08-01-02=A3-played"
+    ]
+   }
+  },
+  "inNoKeyAfter": [
+   "A1"
+  ]
+ },
+ "S2main": {
+  "after": {
+   "key": "B",
+   "backups": [
+    "2026-10-01T09-00-00=A1",
+    "2026-10-02T09-00-00=A2",
+    "2026-10-10T08-01-00=A3-played"
+   ]
+  },
+  "inNoKeyAfter": []
+ },
+ "S3": {
+  "branch": {
+   "boots": 4,
+   "saves": 84,
+   "writes": 0,
+   "changed": 0,
+   "extra": 0
+  },
+  "base": {
+   "boots": 4,
+   "saves": 84,
+   "writes": 0,
+   "changed": 0,
+   "extra": 0
+  },
+  "baseVsBranch": {
+   "same": 56,
+   "total": 84,
+   "differ": [
+    "/club-manager#0",
+    "/club-manager#1",
+    "/club-manager#2",
+    "/club-manager#3",
+    "/front-office#0",
+    "/front-office#1",
+    "/front-office#2",
+    "/front-office#3",
+    "/cfb-dynasty#0",
+    "/cfb-dynasty#1",
+    "/cfb-dynasty#2",
+    "/cfb-dynasty#3"
+   ],
+   "baseSavesOpenedByBranchLoaders": 40,
+   "asked": 40,
+   "refused": []
+  }
+ },
+ "S4": [
+  {
+   "route": "/club-manager",
+   "kind": "missing",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/club-manager",
+   "kind": "text",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/rebuild",
+   "kind": "missing",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/rebuild",
+   "kind": "text",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/stadium-tycoon",
+   "kind": "missing",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/stadium-tycoon",
+   "kind": "text",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/wonderkid-factory",
+   "kind": "missing",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/wonderkid-factory",
+   "kind": "text",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/hall-of-champions",
+   "kind": "missing",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/hall-of-champions",
+   "kind": "text",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/aussie-rules-manager",
+   "kind": "missing",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  },
+  {
+   "route": "/aussie-rules-manager",
+   "kind": "text",
+   "gameOpensIt": false,
+   "copiesMade": 0,
+   "backups": 0
+  }
+ ],
+ "S5": {
+  "offeredBefore": "stadiumTycoonSaveV1.broken-2026-10-01T09-00-00",
+  "offeredAfter": null,
+  "backups": 2
+ }
+}

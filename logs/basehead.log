@@ -1,0 +1,7 @@
+09df145abfb241679022b41903d2f19bc254ebf9
+09df145abfb241679022b41903d2f19bc254ebf9
+ src/components/BrokenSaveRestore.tsx |  61 +++++-
+ src/lib/brokenSaveRecovery.ts        |  38 +++-
+ src/lib/saveKeeper.ts                | 362 +++++++++++++++++++++++++++++++++++
+ src/pages/WhatsNew.tsx               |   1 +
+ 4 files changed, 448 insertions(+), 14 deletions(-)
