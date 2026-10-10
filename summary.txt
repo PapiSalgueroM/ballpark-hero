@@ -1,0 +1,7 @@
+law-compare exit=0 25s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+default exit=0 26s | simUsSeasonCentre: 98 checks, 0 failed
+lay-print exit=0 29s | simUsSeasonCentre digest print: 10 digests over 71 bundled files, written to /home/runner/work/_temp/rc-out/files/usSeasonLayDigest.json
+base-law exit=0 32s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+lawdrift exit=1 31s | simUsSeasonCentre digest compare: 11 digests, 5 moved (control lawdrift)
+anchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 56s | 
