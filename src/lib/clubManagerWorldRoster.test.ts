@@ -2,10 +2,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { compressToUTF16 } from 'lz-string';
 const codecCalls = vi.hoisted(() => ({ decompress: 0 }));
 vi.mock('lz-string', async importActual => {
-  const actual = await importActual<typeof import('lz-string')>();
-  return { ...actual, decompressFromUTF16: (value: string) => {
+  const actual = await importActual<typeof import('lz-string') & { default?: typeof import('lz-string') }>();
+  const codec = actual.default ?? actual;
+  return { ...actual, compressToUTF16: codec.compressToUTF16, decompressFromUTF16: (value: string) => {
     codecCalls.decompress += 1;
-    return actual.decompressFromUTF16(value);
+    return codec.decompressFromUTF16(value);
   } };
 });
 import type { CareerState, CMPlayer } from '@/lib/clubManager';

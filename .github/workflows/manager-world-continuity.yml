@@ -71,6 +71,19 @@ jobs:
           python -m pip install fonttools pillow
           sha256sum package.json package-lock.json > manager-world-continuity-artifacts/packages-after.txt
           cmp manager-world-continuity-artifacts/packages-before.txt manager-world-continuity-artifacts/packages-after.txt
+      - name: Diagnostic focused cache preflight, no final build credit
+        run: |
+          mkdir -p manager-world-continuity-artifacts/preflight
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/clubManagerWorldRoster.test.ts src/lib/clubManagerTrajectory.test.ts --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=manager-world-continuity-artifacts/preflight/focused-unit.json 2>&1 | tee manager-world-continuity-artifacts/preflight/focused-unit.log
+          MANAGER_CACHE_CONTROL_ARTIFACTS=manager-world-continuity-artifacts/preflight/cache-control NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/qa/managerRosterCacheControl.mjs 2>&1 | tee manager-world-continuity-artifacts/preflight/cache-control.log
+      - name: Retain diagnostic focused cache preflight
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-world-cache-preflight-${{ github.run_id }}-${{ github.run_attempt }}
+          path: manager-world-continuity-artifacts/preflight
+          retention-days: 5
+          if-no-files-found: ignore
       - name: Actual app types then production build
         id: build
         run: |
