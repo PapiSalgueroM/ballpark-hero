@@ -211,6 +211,33 @@ function observationControl(directory,manifest) {
   return{file:path.relative(OUT,path.join(control,'receipt.json')).replaceAll('\\','/'),sha256:sha(fs.readFileSync(path.join(control,'receipt.json')))};
 }
 
+function retainSharedTapes() {
+  const directory=path.join(OUT,'shared-tapes');fs.mkdirSync(directory,{recursive:true});
+  const aliases=[];let beforeBytes=0,afterBytes=0;
+  for(const arm of Object.keys(REFS)){
+    const logical=['plain','observed'].map(mode=>`${arm}/${mode}/random.float64le.gz`);
+    const files=logical.map(file=>path.join(OUT,file)),bytes=files.map(file=>fs.readFileSync(file));
+    assert.deepEqual(bytes[0],bytes[1],'Only whole byte-identical paired tapes share physical storage');
+    const packedSha256=sha(bytes[0]),raw=gunzipSync(bytes[0]),rawSha256=sha(raw);
+    const shared=`shared-tapes/${arm}-${packedSha256}.float64le.gz`,target=path.join(OUT,shared);
+    for(let index=0;index<logical.length;index++){
+      const metadata=JSON.parse(fs.readFileSync(path.join(OUT,arm,index===0?'plain':'observed','random.json')));
+      assert.equal(metadata.archiveSha256,packedSha256);assert.equal(metadata.sha256,rawSha256);assert.equal(metadata.count*8,raw.length);
+      aliases.push({logicalFile:logical[index],physicalFile:shared,before:{bytes:bytes[index].length,sha256:sha(bytes[index])},
+        after:{bytes:bytes[0].length,sha256:packedSha256},raw:{bytes:raw.length,sha256:rawSha256,count:metadata.count}});
+      beforeBytes+=bytes[index].length;
+    }
+    fs.renameSync(files[0],target);assert.deepEqual(fs.readFileSync(target),bytes[0]);
+    fs.unlinkSync(files[1]);afterBytes+=fs.statSync(target).size;
+    assert(!fs.existsSync(files[0])&&!fs.existsSync(files[1]));
+    for(const alias of aliases.filter(row=>row.physicalFile===shared))assert.equal(sha(fs.readFileSync(path.join(OUT,alias.physicalFile))),alias.before.sha256);
+  }
+  assert.equal(aliases.length,4);assert(beforeBytes>afterBytes);
+  json(path.join(OUT,'logical-tape-aliases.json'),{format:'Complete gzip tape logical paths share exact physical bytes after all full paired comparisons',
+    scope:'Every original/plain, original/observed, current/plain and current/observed stream remains reconstructable without filtering or truncation',
+    beforeBytes,afterBytes,savedBytes:beforeBytes-afterBytes,aliases});
+}
+
 const results=[];
 try {
   for(const [arm,ref]of Object.entries(REFS)){
@@ -254,6 +281,7 @@ try {
       console.log(`DIAGNOSTIC ${arm}/${mode}: historical exit ${result.status}, ${random.count} complete random values${mode==='observed'?', all36 cohort cases retained':''}`);
     }
   }
+  retainSharedTapes();
   const sourceAfter=held();assert.deepEqual(sourceAfter,sourceBefore);
   json(path.join(OUT,'report.json'),{head:HEAD,tree:TREE,refs:REFS,trees:TREES,clock:CLOCK,simSeed:process.env.SIM_SEED??null,
     scope:'Full36 original/current historical cohort diagnosis only, actual original/current harness status remains qualified',sourceBefore,sourceAfter,sourceHeld:true,results});
