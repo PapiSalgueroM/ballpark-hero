@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+# Round 1215 step (a): the base readings on origin/main 074a9054 (this branch's head before any edit).
+walk-main: node scripts/playLiveMatchFit.mjs
+motion-main: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+bundle-main: LIVE_MOTION_ONLY=bundle node scripts/simLiveSimMotion.mjs
+weight-main: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+walk-main-2: PORT=4192 node scripts/playLiveMatchFit.mjs

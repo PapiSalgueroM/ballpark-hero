@@ -1,0 +1,6 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+bundle-main exit=0 0s | simLiveSimMotion: the bundle section alone is green. The part is 19526 bytes minified, 8179 gzipped, and carries nothing of Club Manager.
+weight-main exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+motion-main exit=0 52s |    Duration  52.02s (transform 2.11s, setup 91ms, collect 2.76s, tests 48.24s, environment 468ms, prepare 121ms)
+walk-main exit=0 100s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
+walk-main-2 exit=0 95s | playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.
