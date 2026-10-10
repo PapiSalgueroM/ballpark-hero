@@ -1,0 +1,55 @@
+simCmLeagueBook: 24 careers x 2 seasons (full fleet, seed set 0)
+stream  96 of 96 faces (the whole save but the book, and the count of draws) equal with the book taken out
+        wall time of the fleet: 30.8s with the book and this harness watching every entry, 27.0s with the book out and nothing watching
+stream  96 of 96 faces equal to the source of the base commit
+shapes  credited rival goals 33081: forwards 55.7%, midfielders 34.4%, defenders 9.9%, keepers 0 goals
+        between other clubs (32423 goals), dealt against the weight: ATT 17592 vs 17662.9 (z -0.79), MID 10785 vs 10731.5 (z 0.63), DEF 3150 vs 3137.0 (z 0.24)
+        assists 20181 on 33081 credited goals = 0.610 a goal (the rule 0.614, z -1.34); own goals 942 of 34023 = 2.77% (the rule 2.75%, z 0.21)
+        unnamed goals 10001 (club weeks with no named eleven: 9574); my league matches 1800, reports whose lines did not add up to the score: 0
+        no named eleven in premier: 76 of 8664 club weeks, 2 of 30 rival clubs seen (Millwall, Swansea City)
+        no named eleven in championship: 2484 of 6348 club weeks, 9 of 29 rival clubs seen (Blackburn Rovers, Bolton Wanderers, Cardiff City, Charlton Athletic, Lincoln City, Millwall, Portsmouth, Preston North End, ...)
+        no named eleven in bundesliga: 408 of 3468 club weeks, 5 of 21 rival clubs seen (Elversberg, Heidenheim, Holstein Kiel, Schalke 04, St. Pauli)
+        no named eleven in bundesliga2: 3298 of 3468 club weeks, 18 of 20 rival clubs seen (Arminia Bielefeld, Bochum, Braunschweig, Darmstadt, Dynamo Dresden, Elversberg, Energie Cottbus, Greuther Fürth, ...)
+        no named eleven in laliga: 836 of 4332 club weeks, 9 of 25 rival clubs seen (Almería, Castellón, Espanyol, FC Andorra, Girona, Mallorca, Málaga, Racing Santander, ...)
+        no named eleven in eredivisie: 2244 of 3468 club weeks, 11 of 17 rival clubs seen (ADO Den Haag, Cambuur, Excelsior, Fortuna Sittard, Go Ahead Eagles, Groningen, NEC Nijmegen, PEC Zwolle, ...)
+        no named eleven in laliga2010: 228 of 4332 club weeks, 1 of 19 rival clubs seen (Levante)
+        top ten of the Goals board held by forwards and wingers: 9.21 on the book, 5.35 on the old race, rise 3.85 (floor 1) over 48 seasons
+names   79747 checks; 3 purchases probed (the best scorer of the rivals signed at week 22, twelve entries played on)
+oldsave 836 checks: 4 saves with no book finished on the candidate and on the book out engine and the base engine, the season after each, and five unreadable books
+doors   2439 checks: three takeovers and two joined jobs (season one and season three), the law at the handover and after every entry to the end of the season
+dailies 93 checks: 4 Hot Seat dates played to a verdict, handed over and played on, 3 Deadline Day dates, each state byte equal to the book out engine's and the base engine's
+boards  by league, the book against the old race on the same seasons (penalties and free kicks to the taker)
+        premier      20 clubs, 12 seasons: top scorer mean 28.2 (28 26 26 27 26 28 27 23 31 32 33 31), old race mean 31.3, most assists mean 11.8, leading keeper's clean sheets mean 17.7
+        championship 24 clubs,  6 seasons: top scorer mean 36.8 (39 41 35 38 35 33), old race mean 40.8, most assists mean 13.7, leading keeper's clean sheets mean 24.0
+        bundesliga   18 clubs,  6 seasons: top scorer mean 24.0 (21 27 23 27 24 22), old race mean 29.3, most assists mean 11.3, leading keeper's clean sheets mean 18.8
+        bundesliga2  18 clubs,  6 seasons: top scorer mean 19.2 (31 14 23 17 19 11), old race mean 28.5, most assists mean 8.2, leading keeper's clean sheets mean 14.8
+        laliga       20 clubs,  6 seasons: top scorer mean 27.3 (31 26 22 32 28 25), old race mean 35.5, most assists mean 11.3, leading keeper's clean sheets mean 23.7
+        eredivisie   18 clubs,  6 seasons: top scorer mean 25.3 (32 31 23 24 20 22), old race mean 29.7, most assists mean 11.2, leading keeper's clean sheets mean 21.8
+        laliga2010   20 clubs,  6 seasons: top scorer mean 31.3 (30 32 34 33 33 26), old race mean 34.8, most assists mean 13.5, leading keeper's clean sheets mean 24.7
+        38 game leagues: 24 seasons, top scorer mean 28.75, standard deviation 3.34, standard error 0.68; old race mean 33.21
+        34 game leagues: 18 seasons, top scorer mean 22.83, standard deviation 5.45, standard error 1.28; old race mean 29.17
+        46 game leagues: 6 seasons, top scorer mean 36.83, standard deviation 2.73, standard error 1.12; old race mean 40.83
+        the top scorer was a: ATT 48, MID 0, DEF 0 (of 48 seasons)
+        the old race on the same seasons: 27706 of 44024 rival goals given to anybody (62.9%), of those forwards 49.6%, midfielders 50.4%; the book names a man for 75.1% and marks 942 own goals and 10001 unnamed
+        a Clean sheets board of every man (keepers and defenders): its top ten holds men of 2.42 clubs and 2.10 keepers on average
+        a back four picked by clean sheets + goals + assists: 3.21 men of one club on average; by goals + assists (club clean sheets, then table place, to split): 1.73, with 0.04 of the four on no goal and no assist
+boards  the same seasons with penalties and free kicks dealt by the weight (CM_BOOK_TAKER false)
+        premier      20 clubs, 12 seasons: top scorer mean 23.0 (23 22 18 21 22 25 22 18 26 27 25 27), old race mean 31.3, most assists mean 11.8, leading keeper's clean sheets mean 17.7
+        championship 24 clubs,  6 seasons: top scorer mean 31.2 (39 33 30 34 28 23), old race mean 40.8, most assists mean 13.7, leading keeper's clean sheets mean 24.0
+        bundesliga   18 clubs,  6 seasons: top scorer mean 22.7 (20 23 22 27 22 22), old race mean 29.3, most assists mean 11.3, leading keeper's clean sheets mean 18.8
+        bundesliga2  18 clubs,  6 seasons: top scorer mean 15.5 (19 12 18 17 16 11), old race mean 28.5, most assists mean 8.2, leading keeper's clean sheets mean 14.8
+        laliga       20 clubs,  6 seasons: top scorer mean 23.2 (24 23 21 27 23 21), old race mean 35.5, most assists mean 11.3, leading keeper's clean sheets mean 23.7
+        eredivisie   18 clubs,  6 seasons: top scorer mean 21.3 (23 21 20 24 18 22), old race mean 29.7, most assists mean 11.2, leading keeper's clean sheets mean 21.8
+        laliga2010   20 clubs,  6 seasons: top scorer mean 27.7 (30 27 28 28 26 27), old race mean 34.8, most assists mean 13.5, leading keeper's clean sheets mean 24.7
+        38 game leagues: 24 seasons, top scorer mean 24.21, standard deviation 3.14, standard error 0.64; old race mean 33.21
+        34 game leagues: 18 seasons, top scorer mean 19.83, standard deviation 3.93, standard error 0.93; old race mean 29.17
+        46 game leagues: 6 seasons, top scorer mean 31.17, standard deviation 5.01, standard error 2.05; old race mean 40.83
+law     45366 checks over 2185 entries of 24 careers
+green stream   192 checks
+green law      45366 checks
+green names    79747 checks
+green shapes   7 checks
+green oldsave  836 checks
+green doors    2439 checks
+green dailies  93 checks
+simCmLeagueBook: green, 7 sections, 24 careers x 2 seasons (128s)
