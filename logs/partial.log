@@ -1,0 +1,19 @@
+MUTATION partial APPLIED in src/lib/usSeasonShape.ts: "const rest = playoffGames(Math.max(0, stage - skip - known.length), draw, sport);" -> "const rest = playoffGames(Math.max(0, stage - skip), draw, sport);"
+LEDGER
+simUsSeasonLedger: green. 2967 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+VITEST
+[31m   [31m×[31m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it[39m[33m 33772[2mms[22m[39m
+[31m     → keys that moved against the committed fixture: expected [ 'mlb|y2004|SP', …(10) ] to deeply equal [][39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usCareerTruthDigest.test.ts[2m > [22mRound 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[31m[1mAssertionError[22m: keys that moved against the committed fixture: expected [ 'mlb|y2004|SP', …(10) ] to deeply equal [][39m
+    [90m118| [39m    const moved = names.filter(k => committed.keys[k].digest !== now.k…
+    [90m120| [39m      expect(moved, 'keys that moved against the committed fixture').t…
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerTruthDigest.test.ts,title=src/test/usCareerTruthDigest.test.ts > Round 1104%3A the US career truth digest > every key equals the committed fixture%2C or moved only where this step is allowed to move it,line=120,column=70::AssertionError: keys that moved against the committed fixture: expected [ 'mlb|y2004|SP', …(10) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "mlb|y2004|SP",%0A+   "mlb|y2004|RP",%0A+   "mlb|y2004|C",%0A+   "mlb|y2004|1B",%0A+   "mlb|y2004|2B",%0A+   "mlb|y2004|3B",%0A+   "mlb|y2004|SS",%0A+   "mlb|y2004|LF",%0A+   "mlb|y2004|CF",%0A+   "mlb|y2004|RF",%0A+   "mlb|y2004|DH",%0A+ ]%0A%0A ❯ src/test/usCareerTruthDigest.test.ts:120:70%0A%0A
+PARITY
+   Vitest exit 0, passed [nfl, nba, mlb, nhl], failed []
+
+simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+RESULT partial ledger=0 vitest=1 parity=0 awards=skipped

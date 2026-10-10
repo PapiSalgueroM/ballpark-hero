@@ -1,0 +1,19 @@
+MUTATION oldsave APPLIED in src/lib/usSeasonShape.ts: "return line.slate ?? US_ENGINE_SEASON[sport];" -> "return line.slate ?? seasonLength(sport, (line as { year?: number }).year ?? 0, (line as { team?: string }).team);"
+LEDGER
+simUsSeasonLedger: green. 2967 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+VITEST
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 33483[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonSlate.test.ts[2m > [22mRound 1226: a saved NHL season keeps the length it was played on[2m > [22mreads an old line as an 82 game season everywhere a saved line is read
+[31m[1mAssertionError[22m: expected 84 to be 82 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/usSeasonSlate.test.ts[2m > [22mRound 1226: a saved MLB season keeps the length it was played on[2m > [22mreads an old Yankees 2026 line as the 162 it was played on
+[31m[1mAssertionError[22m: expected 161 to be 162 // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (6)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonSlate.test.ts,title=src/test/usSeasonSlate.test.ts > Round 1226%3A a saved NHL season keeps the length it was played on > reads an old line as an 82 game season everywhere a saved line is read,line=50,column=36::AssertionError: expected 84 to be 82 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 82%0A+ 84%0A%0A ❯ src/test/usSeasonSlate.test.ts:50:36%0A%0A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonSlate.test.ts,title=src/test/usSeasonSlate.test.ts > Round 1226%3A a saved MLB season keeps the length it was played on > reads an old Yankees 2026 line as the 162 it was played on,line=92,column=42::AssertionError: expected 161 to be 162 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 162%0A+ 161%0A%0A ❯ src/test/usSeasonSlate.test.ts:92:42%0A%0A
+PARITY
+   Vitest exit 0, passed [nfl, nba, mlb, nhl], failed []
+
+simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+RESULT oldsave ledger=0 vitest=1 parity=0 awards=skipped
