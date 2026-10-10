@@ -18,9 +18,12 @@ import { CONTINUE_SAVES, type ContinueSave } from '@/data/continueSaves';
  * The backup key is the game's own key plus BROKEN_SAVE_MARK plus a stamp, so
  * it sorts next to the save it came from and no game ever reads it by
  * mistake. The way back is src/components/BrokenSaveRestore.tsx: on the
- * game's own page it offers to put the newest backup back (restoreBackup),
- * because the crash that led to a fresh start may have been a code bug that
- * a later deploy fixes, and the career must still be there when it does.
+ * game's own page it offers to put the newest backup back, because the crash
+ * that led to a fresh start may have been a code bug that a later deploy
+ * fixes, and the career must still be there when it does. Since Round 1219
+ * the card does that through src/lib/saveKeeper.ts, which stages the put
+ * back and applies it as the next page loads; restoreBackup below swaps at
+ * once and must never be called with a game in the page's memory.
  *
  * Backups do not pile up for ever: each game keeps its newest BACKUPS_KEPT,
  * which the boundary tells the player before the click, and the card lets the
@@ -224,6 +227,13 @@ export function backupKeysOf(entry: ContinueSave, storage: ListableStorage | nul
  * now (one started since the fresh start) is set aside first, the same way,
  * so the swap never deletes anything. The backup goes only after the restored
  * copy reads back identical. Never throws.
+ *
+ * Round 1219: NOT for a page with a game in memory. Five long games write
+ * their in memory game as the page leaves, and that write lands on top of
+ * the save this just put back, whose backup this has already removed
+ * (measured by scripts/playSaveKeeper.mjs). The card uses restoreNow in
+ * src/lib/saveKeeper.ts instead. Kept for its tests and for that walk's
+ * control, which swaps in place on purpose to show the loss.
  */
 export function restoreBackup(entry: ContinueSave, backupKey: string, storage: SaveStorage | null, now: Date = new Date()): { ok: boolean } {
   if (!storage || !backupKey.startsWith(`${entry.saveKey}${BROKEN_SAVE_MARK}`)) return { ok: false };

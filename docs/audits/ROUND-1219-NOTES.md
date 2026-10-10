@@ -18,6 +18,15 @@ Those three games make a fresh game when they open with no save and write it wit
 this is the headline flow of Round 958 itself: page broke, Start a fresh game, later Put that
 save back.
 
+The grown walk (remote check `r1219-walk1`) then put real engine saves on all 21 routes and gave
+Hall of Champions a catalog to open with. On the build of origin/main the save was lost on FIVE
+routes, in every walk there: `/club-manager`, `/stadium-tycoon`, `/wonderkid-factory`,
+`/hall-of-champions`, `/idle-arena`. They are the five long games that write their in memory game
+as the page leaves. The other sixteen survived on main. (Soccer Career on main shows the put back
+save's exact bytes in no key, because the game saves it again in its own shape as it loads and
+main removed the backup; the save IS the game on screen there, so that is not a loss and the
+walk's verdict says so.)
+
 ## What changed
 
 - `src/lib/saveKeeper.ts` (new). A put back is STAGED (one journal record under
