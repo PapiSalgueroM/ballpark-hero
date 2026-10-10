@@ -118,6 +118,19 @@
  * The fleet's loop itself lives in scripts/lib/usSeasonFleet.mjs since that
  * round (a pure move: the careers digests of both receipts hold it).
  *
+ * Round 1212 (MLB bound through the shared seam): a third RECEIPT, seam
+ * (US_SEASON_DIGEST_RECEIPT=seam). Its record is
+ * scripts/data/usSeasonSeamDigest.json, made on the round's base (Release AU's
+ * integration branch with Rounds 1226 and 1300 merged, before one line of the
+ * seam was written), and the only bundled files that may differ under it are
+ * the shared files the seam edits. It is the proof that what the NBA and NFL
+ * Season Centers are handed did not move while baseball was bound. Its control
+ * (with compare and that receipt):
+ *   seam       the same two shuffles as `lay`, drawn in the other order: the
+ *              season digest of BOTH sports must move on every seed set; the
+ *              careers, the counts and the stray draws must hold.
+ * A digest run reads the NBA and the NFL only, whatever else is bound.
+ *
  * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
  * 2026-10-09 for the NFL): see the block above the bands in section 7.
  *
@@ -157,6 +170,12 @@ const DIGEST_RECEIPTS = {
     moved: ['src/lib/season/us.ts', 'src/lib/season/usPlayoffs.ts', 'src/data/usPostseasonFormat.ts'],
     what: 'What the NBA and NFL Season Centers are handed for every season of the fleet of scripts/simUsSeasonCentre.mjs (the derived season and the playoff path), on the head of Round 1221, before Round 1300 lifted usPlayoffLay out of usPlayoffPath. A receipt of that lift, in no gate.',
     tail: "a receipt of Round 1300's playoff lay, in no gate", notOf: 'the playoff lay',
+  },
+  seam: {
+    file: 'scripts/data/usSeasonSeamDigest.json', round: 1212, control: 'seam',
+    moved: ['src/lib/season/us.ts', 'src/data/usSeasonLengths.ts', 'src/data/usLeagueShape.ts', 'src/lib/usCareerSport.ts'],
+    what: 'What the NBA and NFL Season Centers are handed for every season of the fleet of scripts/simUsSeasonCentre.mjs (the derived season and the playoff path), on the base of Round 1212 (Release AU with Rounds 1226 and 1300 merged), before the shared seam was widened for baseball. A receipt of that round, in no gate.',
+    tail: "a receipt of Round 1212's seam, in no gate", notOf: 'the seam',
   },
 };
 const RECEIPT = process.env.US_SEASON_DIGEST_RECEIPT ?? 'law';
@@ -221,6 +240,8 @@ const CONTROLS = {
      the two keyed shuffles that name a playoff run's opponents are drawn in the other order */
   lay: { section: 'digest', patches: [{ file: US, from: "    const conf = shuffled(Array.from({ length: ctx.confSlots }, (_, i) => i + 1), rng);\n    const other = shuffled(Array.from({ length: ctx.order.length - 1 - ctx.confSlots }, (_, i) => ctx.confSlots + 1 + i), rng);\n", to: "    const other = shuffled(Array.from({ length: ctx.order.length - 1 - ctx.confSlots }, (_, i) => ctx.confSlots + 1 + i), rng);\n    const conf = shuffled(Array.from({ length: ctx.confSlots }, (_, i) => i + 1), rng);\n" }] },
 };
+/* Round 1212: the seam receipt's own control is the same swap (the path is in both sports' season digests) */
+CONTROLS.seam = CONTROLS.lay;
 /* which sport a control needs in the run (its patched file is only bundled with that sport) */
 const CONTROL_SPORT = {
   stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
@@ -283,7 +304,8 @@ for (const slug of Object.keys(SPORT_DEFS)) {
   const bound = /loadSeasonCentre\s*:/.test(norm(readFileSync(path.join(ROOT, d.bindingFile), 'utf8')).replace(/\/\*[\s\S]*?\*\//g, ''));
   if (has && ASKED.includes(slug)) SPORTS.push(slug);
   else console.log(`SKIPPED ${slug}: ${has ? 'not asked for (SPORTS)' : 'no number file yet'}`);
-  if (!SPORTS.includes(slug) && bound) { console.error(`FAIL: the ${slug} binding has a Season Center loader and was skipped`); process.exit(1); }
+  /* Round 1212: a digest run is a receipt over the NBA and the NFL alone, so it is not "a button nobody checked" */
+  if (!SPORTS.includes(slug) && bound && !DIGEST) { console.error(`FAIL: the ${slug} binding has a Season Center loader and was skipped`); process.exit(1); }
 }
 if (SPORTS.length === 0) { console.error('simUsSeasonCentre: no sport to run'); process.exit(1); }
 if (CONTROL && CONTROL_SPORT[CONTROL] && !SPORTS.includes(CONTROL_SPORT[CONTROL])) { console.error(`control ${CONTROL} patches the ${CONTROL_SPORT[CONTROL]} files, and that sport is not in this run: refusing to run`); process.exit(2); }
@@ -1000,16 +1022,17 @@ if (DIGEST) {
     console.log(`simUsSeasonCentre digest compare: ${n} digests, ${badN} moved (control lawdrift)`);
     process.exit(ok ? 1 : 2);
   }
-  if (CONTROL === 'lay') {
+  if (CONTROL === 'lay' || CONTROL === 'seam') {
     /* the lay names a playoff run's opponents and nothing else: both sports' season digests move on every seed set
-       (the path is in them); the careers, the counts of seasons and of derived seasons and the stray draws hold */
+       (the path is in them); the careers, the counts of seasons and of derived seasons and the stray draws hold.
+       Round 1212's `seam` is the same swap under its own receipt. */
     const moved = SPORTS.every(slug => SEEDSETS.every(k => differs[`${slug}|${k}`].includes('season')));
     const restHeld = strayOk && SPORTS.every(slug => SEEDSETS.every(k => differs[`${slug}|${k}`].every(f => f === 'season')));
     const ok = moved && restHeld;
     console.log(ok
-      ? `control lay: RED AT THE NAMED CHECK (the season digest of every sport moved on every seed set of this run; the careers, the counts and the stray draws held)`
-      : `control lay: DID NOT FIRE AT ITS NAMED CHECK (the season digests ${moved ? 'moved on every seed set' : 'did NOT all move'}; the rest ${restHeld ? 'held' : 'did NOT hold'})`);
-    console.log(`simUsSeasonCentre digest compare: ${n} digests, ${badN} moved (control lay)`);
+      ? `control ${CONTROL}: RED AT THE NAMED CHECK (the season digest of every sport moved on every seed set of this run; the careers, the counts and the stray draws held)`
+      : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (the season digests ${moved ? 'moved on every seed set' : 'did NOT all move'}; the rest ${restHeld ? 'held' : 'did NOT hold'})`);
+    console.log(`simUsSeasonCentre digest compare: ${n} digests, ${badN} moved (control ${CONTROL})`);
     process.exit(ok ? 1 : 2);
   }
   console.log(`simUsSeasonCentre digest compare: ${n} digests, ${badN} moved (${DIGEST_RECEIPTS[RECEIPT].tail})`);
