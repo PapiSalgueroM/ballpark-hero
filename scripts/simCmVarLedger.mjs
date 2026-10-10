@@ -6,17 +6,23 @@
  * It plays no match. What it holds:
  *   1. every rates row is a real reading: a known publisher, an https url that is not a wiki, the lines it was
  *      read from, and every figure printed in one of those lines;
- *   2. a quantity the engine models is counted by two publishers and by two seasons from 2022-23 on, and every
- *      figure belongs to a declared quantity;
+ *   2. a quantity the engine models has a FIGURE (that quantity in one competition in one season) that two
+ *      publishers on two hosts each counted, the generated rates are the stricter (lower) of those counts over
+ *      the engine figure (recomputed here from the rows alone, so a generator that read the higher count fails),
+ *      every figure belongs to a declared quantity, and what the lead asked for and the pages do not give (two
+ *      seasons from 2022-23 on, each on two publishers) is written under owed: while an owed entry is open the
+ *      switch CM_VAR_LIVE must be false;
  *   3. the competitions file names every competition the engine can play exactly once and none it cannot
- *      (the keys are read off REAL_LEAGUES and the rules table of the bundled engine), and a yes or a no
- *      stands on two publishers on two hosts;
+ *      (the keys are read off REAL_LEAGUES and the rules table of the bundled engine), a yes or a no
+ *      stands on two publishers on two hosts, and the competitions the help names are the ones kickOff covers;
  *   4. each receipt carries the hash of the ledger it vouches for, what the generator writes is on disk (a hand
  *      edit of the generated rates file fails here), and the engine figures the rates stand on were measured;
  *   5. no dash of the two banned kinds in any of the files.
  *
  * Controls, each of which changes the data in memory, proves it changed something, and must go red for its own
- * reason: CM_VAR_LEDGER_CONTROL=thin | wiki | figure | missing | extra | onesource | receipt | handedit.
+ * reason: CM_VAR_LEDGER_CONTROL=thin | wiki | figure | missing | extra | onesource | receipt | handedit |
+ * highest (the rate read off the higher count) | names (the help names a league kickOff does not cover) |
+ * owedlive (the switch on while the ledger still owes).
  * A control that fires ends "FIRED" and exits 1. One that changes nothing or is not caught exits 3.
  */
 import './lib/offlineTransport.cjs';
@@ -26,7 +32,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-import { settle, stampedReceipts, generatedSource, LEDGERS } from './genCmVarRates.mjs';
+import { settle, derive, stampedReceipts, generatedSource, LEDGERS } from './genCmVarRates.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_FWD = ROOT.replaceAll('\\', '/');
@@ -36,14 +42,17 @@ const EXPECT = {
   thin: /goalsRuledOut is modelled but THIN/, wiki: /is a wiki/, figure: /is not printed in its literals/,
   missing: /is not in the ledger/, extra: /the engine cannot play/, onesource: /stands on fewer than two publishers/,
   receipt: /does not carry the hash/, handedit: /is not what the generator writes \(a hand edit/,
+  highest: /goalReview is not the stricter count/, names: /the help would name/, owedlive: /CM_VAR_LIVE is true while the rates ledger still owes/,
 };
 if (CONTROL && !Object.hasOwn(EXPECT, CONTROL)) { console.log(`simCmVarLedger: unknown control ${CONTROL}`); process.exit(2); }
 
 const fails = [];
 let checks = 0;
 const ok = (cond, msg) => { checks += 1; if (!cond) fails.push(msg); };
-const WORDS = { zehn: 10 };
+const WORDS = { zehn: 10, acht: 8 };
 const isWiki = url => /wikipedia|wikimedia|fandom|wiki\./i.test(new URL(url).host);
+const hostOf = url => new URL(url).host.replace(/^www\./, '');
+const n6 = x => Number(x.toFixed(6));
 const RECENT = '2022-23';
 
 const rates = JSON.parse(text('scripts/data/cmVarRates.json'));
@@ -60,6 +69,17 @@ if (CONTROL === 'receipt') { receiptTwist = s => `${s} `; changed = true; }
 /* handedit: a rate typed into the generated file. In memory: the comparison below reads the file through this twist. */
 let generatedTwist = s => s;
 if (CONTROL === 'handedit') { generatedTwist = s => s.replace(/goalReview: [0-9.]+/, 'goalReview: 0.16'); changed = generatedTwist(text('src/data/clubManagerVarRates.ts')) !== text('src/data/clubManagerVarRates.ts'); }
+/* highest and names: what the generator derived, twisted in memory the way a wrong generator would have it. */
+let deriveTwist = d => d;
+if (CONTROL === 'highest') { deriveTwist = d => ({ ...d, rates: { ...d.rates, goalReview: n6(d.goals.high / d.engine.reviewableGoalsPerMatch) } }); const d = derive(); changed = deriveTwist(d).rates.goalReview !== d.rates.goalReview; }
+if (CONTROL === 'names') { deriveTwist = d => ({ ...d, names: [...d.names, 'EFL Championship'] }); changed = true; }
+/* owedlive: the switch read as on, with something still owed. */
+let switchTwist = s => s;
+if (CONTROL === 'owedlive') {
+  switchTwist = s => s.replace(/^export const CM_VAR_LIVE: boolean = (true|false);$/m, 'export const CM_VAR_LIVE: boolean = true;');
+  if (!(rates.owed ?? []).some(o => o.state === 'open')) rates.owed = [...(rates.owed ?? []), { id: 'control', state: 'open', rule: 'An entry this control put here so that something is owed.' }];
+  changed = /^export const CM_VAR_LIVE: boolean = true;$/m.test(switchTwist(text('src/lib/clubManagerVarLive.ts')));
+}
 if (CONTROL && !changed) { console.log(`simCmVarLedger control ${CONTROL}: ABORTED, the control changed nothing.`); process.exit(3); }
 
 /* 1. Every rates row is a reading somebody can open. */
@@ -81,16 +101,61 @@ for (const row of rates.rows) {
   }
 }
 
-/* 2. Two publishers and two recent seasons behind everything the engine models. */
+/* 2. Behind everything the engine models: a figure two publishers each counted, and the stricter count of it. */
+const rowOf = id => rates.rows.find(r => r.id === id);
 for (const [name, q] of Object.entries(rates.quantities)) {
   const s = settle(rates, name);
   if (q.modelled) {
     ok(s.used, `${name} is modelled but THIN (${s.why ?? ''})`);
-    const recent = new Set(s.readings.filter(r => r.season >= RECENT).map(r => r.season));
-    ok(recent.size >= 2, `${name} is modelled on ${recent.size} season(s) from ${RECENT} on`);
+    for (const f of s.confirmed) {
+      const rows = f.readings.map(r => rowOf(r.id));
+      ok(new Set(rows.map(r => r.publisher)).size >= 2 && new Set(rows.map(r => hostOf(r.url))).size >= 2, `${name}, ${f.key}: used and not counted by two publishers on two hosts`);
+      ok(new Set(rows.map(r => r.matches)).size === 1, `${name}, ${f.key}: its publishers do not agree on the matches of the season`);
+    }
     if (s.used) ok(s.low > 0 && s.low <= s.high && s.target.perMatch === s.low, `${name}: the target is not the lowest reading`);
   } else ok(typeof q.why === 'string' && q.why.length > 20, `${name} is not modelled and does not say why`);
 }
+/* 2b. The stricter reading, recomputed HERE from the rows alone and not through the generator's settle(): the
+   lowest count among the competition seasons that two publishers on two hosts counted. The generated rate is
+   that, over the engine figure. A generator that read the higher count, or a figure one publisher counted, fails. */
+const ownLow = quantity => {
+  const groups = new Map();
+  for (const row of rates.rows) if (typeof row.figures[quantity] === 'number') {
+    const k = `${row.competition}|${row.season}`;
+    groups.set(k, [...(groups.get(k) ?? []), row]);
+  }
+  let low = Infinity;
+  for (const rows of groups.values()) {
+    if (new Set(rows.map(r => r.publisher)).size < 2 || new Set(rows.map(r => hostOf(r.url))).size < 2) continue;
+    for (const r of rows) low = Math.min(low, r.figures[quantity] / r.matches);
+  }
+  return low;
+};
+const derived = deriveTwist(derive());
+const engineNow = JSON.parse(text('scripts/data/cmVarEngine.json'));
+ok(derived.rates.goalReview === n6(ownLow('goalsRuledOut') / engineNow.reviewableGoalsPerMatch),
+  `goalReview is not the stricter count of a figure two publishers counted, over the engine figure (${derived.rates.goalReview} against ${n6(ownLow('goalsRuledOut') / engineNow.reviewableGoalsPerMatch)})`);
+ok(derived.rates.missedFoulReview === n6(ownLow('penaltiesAwarded') / engineNow.awardsPerMatchPerUnitRate),
+  `missedFoulReview is not the stricter count of a figure two publishers counted, over the engine figure (${derived.rates.missedFoulReview} against ${n6(ownLow('penaltiesAwarded') / engineNow.awardsPerMatchPerUnitRate)})`);
+/* 2c. What the lead asked for and the pages do not give is written down, counted right, and holds the switch. */
+const owed = rates.owed ?? [];
+for (const o of owed) {
+  ok(typeof o.id === 'string' && ['open', 'accepted'].includes(o.state) && typeof o.rule === 'string' && o.rule.length > 20, `owed ${o.id}: no id, state or rule`);
+  if (o.state === 'accepted') ok(typeof o.ruling === 'string' && o.ruling.length > 20, `owed ${o.id} is accepted and carries no ruling (who, when, in what words)`);
+}
+const modelled = Object.entries(rates.quantities).filter(([, q]) => q.modelled).map(([name]) => name);
+const recentOf = name => new Set(settle(rates, name).confirmed.filter(f => f.season >= RECENT).map(f => f.season)).size;
+const haveRecent = Math.min(...modelled.map(recentOf));
+const recentOwed = owed.find(o => o.id === 'recent-seasons');
+ok(haveRecent >= 2 || !!recentOwed, `the modelled quantities stand on ${haveRecent} season(s) from ${RECENT} on that two publishers counted, the lead asked for 2, and the ledger does not say it is owed`);
+if (recentOwed) {
+  ok(recentOwed.have === haveRecent && recentOwed.need === 2 && recentOwed.from === RECENT, 'owed recent-seasons does not count what the rows hold');
+  ok(haveRecent < 2, 'owed recent-seasons is stale: the rows now hold two recent seasons on two publishers each, so take the entry out');
+}
+const openOwed = owed.filter(o => o.state === 'open');
+const switchLine = /^export const CM_VAR_LIVE: boolean = (true|false);$/m.exec(switchTwist(text('src/lib/clubManagerVarLive.ts')));
+ok(!!switchLine, 'the switch line of src/lib/clubManagerVarLive.ts was not found');
+ok(!(switchLine?.[1] === 'true' && openOwed.length > 0), `CM_VAR_LIVE is true while the rates ledger still owes: ${openOwed.map(o => o.id).join(', ')}`);
 
 /* 3. Every competition the engine can play, exactly once, and none it cannot. */
 const store = new Map();
@@ -113,7 +178,6 @@ for (const key of engineKeys) {
 }
 for (const key of named) ok(engineKeys.includes(key), `${key} is in the ledger and the engine cannot play it`);
 const CUP_STAGES = ['R16', 'QF', 'SF', 'F'], UCL_STAGES = ['group', 'R16', 'QF', 'SF', 'F'];
-const hostOf = url => new URL(url).host.replace(/^www\./, '');
 for (const row of comps.rows) {
   ok(['yes', 'no', 'unknown'].includes(row.verdict), `${row.key}: verdict ${row.verdict}`);
   for (const s of row.sources) {
@@ -129,6 +193,10 @@ for (const row of comps.rows) {
   if (row.key.startsWith('league:')) ok(row.from === undefined, `${row.key}: a league has no stages`);
 }
 const yes = comps.rows.filter(r => r.verdict === 'yes').map(r => r.key);
+/* The help prints the names and kickOff reads the coverage: both must be exactly the rows that say yes. */
+const yesNames = comps.rows.filter(r => r.verdict === 'yes').map(r => r.name);
+ok(JSON.stringify(derived.names) === JSON.stringify(yesNames) && JSON.stringify(Object.keys(derived.coverage)) === JSON.stringify(yes),
+  `the help would name ${derived.names.join(', ')} and kickOff covers ${Object.keys(derived.coverage).join(', ')}: not both the rows that say yes (${yes.join(', ')})`);
 
 /* 4. The receipts vouch for these ledgers, and what the generator writes is on disk. */
 for (const { ledger, receipt } of LEDGERS) {
@@ -147,7 +215,8 @@ for (const file of LEDGERS.flatMap(l => [l.ledger, l.receipt])) ok(!DASHES.some(
 
 for (const f of fails.slice(0, 40)) console.log(`FAIL ${f}`);
 const used = Object.keys(rates.quantities).filter(q => settle(rates, q).used);
-console.log(`simCmVarLedger: ${rates.rows.length} rate rows from ${Object.keys(rates.publishers).length} publishers, used: ${used.join(', ')}.`);
+console.log(`simCmVarLedger: ${rates.rows.length} rate rows from ${Object.keys(rates.publishers).length} publishers, counted by two: ${used.join(', ')}.`);
+if (openOwed.length) console.log(`simCmVarLedger: OWED and open, so the switch must stay off: ${openOwed.map(o => `${o.id} (have ${o.have ?? '?'} of ${o.need ?? '?'})`).join(', ')}.`);
 console.log(`simCmVarLedger: ${engineKeys.length} competitions of the engine (${leagueKeys.length} leagues, ${cupKeys.length} cups, the Champions League), yes: ${yes.join(', ') || 'none'}.`);
 if (CONTROL) {
   const hit = fails.find(f => EXPECT[CONTROL].test(f));

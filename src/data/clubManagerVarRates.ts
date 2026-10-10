@@ -5,19 +5,25 @@
  *     cmVarEngine.json (the engine, measured on a runner).
  * Engine figures: 6780 league matches, runner result r1218-b1, head b6d1cf80.
  *
- * Goals ruled out after a review: lowest reading 29 in 380 (pieri-seriea-2017-18) = 0.076316 a match, highest 0.144737.
+ * A figure (a quantity in one competition in one season) is used only when two publishers counted it; the
+ * stricter, lower count is the one derived from. Figures one publisher counted are on file and not read.
+ * OWED (recent-seasons): see owed in scripts/data/cmVarRates.json. CM_VAR_LIVE stays false while this line is here.
+ *
+ * Goals ruled out after a review: Serie A 2017-18, counted by 2 publishers: 29 in 380 (pieri-seriea-2017-18) and 31 in 380 (agi-seriea-2017-18).
+ *   The stricter count 29 in 380 (pieri-seriea-2017-18) = 0.076316 a match; the range runs to 0.081579.
  *   The engine draws 2.3895 goals a match a review can look at (no penalty, no direct free kick).
  *   goalReview = 0.076316 / 2.3895 = 0.031938 a goal. overturn = 1 and penaltyReview = 0: no publisher
  *   counts reviews that end with the call standing by kind of call, so the game shows none.
- * Penalties awarded after a review: lowest reading 25 in 380 (espn-pl-2024-25) = 0.065789 a match, highest 0.130719.
+ * Penalties awarded after a review: Serie A 2017-18, counted by 2 publishers: 34 in 380 (agi-seriea-2017-18) and 35 in 380 (pieri-seriea-2017-18).
+ *   The stricter count 34 in 380 (agi-seriea-2017-18) = 0.089474 a match; the range runs to 0.092105.
  *   The engine awards 18.252 penalties a match per unit of rate (measured at 0.004 a foul).
- *   missedFoulReview = 0.065789 / 18.252 = 0.003605 a foul.
+ *   missedFoulReview = 0.089474 / 18.252 = 0.004902 a foul.
  * The kick: the engine's own penalty law, SHOOTOUT_BASE_RATE 0.76 and SHOOTOUT_SAVE_SHARE 0.65.
  */
-export const CM_VAR_RATES = { goalReview: 0.031938, overturn: 1, penaltyReview: 0, missedFoulReview: 0.003605, penaltyScores: 0.76, penaltyOnTarget: 0.65 } as const;
+export const CM_VAR_RATES = { goalReview: 0.031938, overturn: 1, penaltyReview: 0, missedFoulReview: 0.004902, penaltyScores: 0.76, penaltyOnTarget: 0.65 } as const;
 
 /** Real football, a match: what the harness bands and the help text read. */
-export const CM_VAR_REAL = { goalsRuledOut: { low: 0.076316, high: 0.144737 }, penaltiesAwarded: { low: 0.065789, high: 0.130719 } } as const;
+export const CM_VAR_REAL = { goalsRuledOut: { low: 0.076316, high: 0.081579 }, penaltiesAwarded: { low: 0.089474, high: 0.092105 } } as const;
 
 /** The same competitions by the name the help text prints. */
 export const CM_VAR_COVERED_NAMES: readonly string[] = ['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Champions League'];

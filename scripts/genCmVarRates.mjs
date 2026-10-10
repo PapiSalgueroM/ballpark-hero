@@ -10,8 +10,10 @@
  *      scripts/data/cmVar*.receipt.json      each receipt carries the sha256 of the ledger it vouches for
  *
  * THE ARITHMETIC (every step is in the generated file's header with its numbers):
- *   A quantity is USED when two publishers count it. Its target is the LOWEST per match reading in the rows
- *   (the stricter reading), its range is lowest to highest.
+ *   A FIGURE is one quantity in one competition in one season. It is USED when two publishers each counted it
+ *   (the lead's decision 1: a figure with one source is THIN and is not used). Where the two differ the
+ *   STRICTER, lower count is taken. A quantity's target is the lowest per match figure among its used
+ *   figures, its range runs from there to the highest count among them. One publisher's figures are never read.
  *   goals:      the engine draws goals, then a review may take one away. A goal can be reviewed when it is
  *               not a penalty and not a direct free kick. So
  *                 ruledOutPerGoal = target goals ruled out a match / reviewable drawn goals a match (engine)
@@ -45,13 +47,31 @@ export function readings(rates, quantity) {
     .map(row => ({ id: row.id, publisher: row.publisher, season: row.season, count: row.figures[quantity], matches: row.matches, perMatch: row.figures[quantity] / row.matches }));
 }
 
-/** USED, with its target (the lowest reading) and range, or THIN with the reason. */
+/** The FIGURES of one quantity: one per competition and season, each with every publisher's own count of it.
+ *  A figure is confirmed when two publishers counted it. strict is its lower count, loose its higher. */
+export function figuresOf(rates, quantity) {
+  const by = new Map();
+  for (const r of readings(rates, quantity)) {
+    const row = rates.rows.find(x => x.id === r.id), key = `${row.competition}|${row.season}`;
+    if (!by.has(key)) by.set(key, { key, competition: row.competition, season: row.season, readings: [] });
+    by.get(key).readings.push(r);
+  }
+  return [...by.values()].map(f => {
+    const sorted = [...f.readings].sort((a, b) => a.perMatch - b.perMatch || a.id.localeCompare(b.id));
+    return { ...f, confirmed: new Set(f.readings.map(r => r.publisher)).size >= 2, strict: sorted[0], loose: sorted.at(-1) };
+  });
+}
+
+/** USED, with its target (the lowest count among the figures two publishers counted) and its range, or THIN with
+ *  the reason. A figure one publisher counted is never read here: not for the target and not for the range. */
 export function settle(rates, quantity) {
-  const all = readings(rates, quantity);
-  const publishers = [...new Set(all.map(r => r.publisher))];
-  if (publishers.length < 2) return { quantity, used: false, why: `${publishers.length} publisher(s)`, readings: all };
-  const sorted = [...all].sort((a, b) => a.perMatch - b.perMatch || a.id.localeCompare(b.id));
-  return { quantity, used: true, publishers, readings: all, target: sorted[0], low: sorted[0].perMatch, high: sorted.at(-1).perMatch };
+  const all = readings(rates, quantity), figures = figuresOf(rates, quantity);
+  const confirmed = figures.filter(f => f.confirmed);
+  if (!confirmed.length) return { quantity, used: false, why: `${figures.length} figure(s), none counted by two publishers`, readings: all, figures, confirmed };
+  const strict = confirmed.map(f => f.strict).sort((a, b) => a.perMatch - b.perMatch || a.id.localeCompare(b.id));
+  const loose = confirmed.map(f => f.loose).sort((a, b) => a.perMatch - b.perMatch || a.id.localeCompare(b.id));
+  const figure = confirmed.find(f => f.strict === strict[0]);
+  return { quantity, used: true, readings: all, figures, confirmed, figure, target: strict[0], low: strict[0].perMatch, high: loose.at(-1).perMatch };
 }
 
 /** The receipts as they should read: each with the hash of its ledger. */
@@ -82,9 +102,11 @@ export function derive() {
   const goals = settle(rates, 'goalsRuledOut'), pens = settle(rates, 'penaltiesAwarded');
   if (!goals.used || !pens.used) throw new Error('genCmVarRates: a modelled quantity is THIN, nothing can be derived');
   const law = penaltyLaw();
-  const coverage = Object.fromEntries(comps.rows.filter(r => r.verdict === 'yes').map(r => [r.key, r.key.startsWith('league:') ? 'all' : r.from]));
+  /* ONE list: the competitions kickOff covers and the names the help prints are the same rows, in the same order. */
+  const covered = comps.rows.filter(r => r.verdict === 'yes');
+  const coverage = Object.fromEntries(covered.map(r => [r.key, r.key.startsWith('league:') ? 'all' : r.from]));
   return {
-    engine, goals, pens, law, coverage, names: comps.rows.filter(r => r.verdict === 'yes').map(r => r.name),
+    engine, goals, pens, law, coverage, names: covered.map(r => r.name),
     rates: {
       goalReview: n6(goals.low / engine.reviewableGoalsPerMatch), overturn: 1, penaltyReview: 0,
       missedFoulReview: n6(pens.low / engine.awardsPerMatchPerUnitRate), penaltyScores: law.scores, penaltyOnTarget: law.onTarget,
@@ -95,6 +117,9 @@ export function derive() {
 export function generatedSource() {
   const d = derive(), g = d.goals, p = d.pens, e = d.engine;
   const frac = t => `${t.count} in ${t.matches} (${t.id})`;
+  /* The used figure as both of its publishers count it, the stricter first. */
+  const both = s => `${s.figure.competition} ${s.figure.season}, counted by ${s.figure.readings.length} publishers: ${[...s.figure.readings].sort((a, b) => a.count - b.count || a.id.localeCompare(b.id)).map(frac).join(' and ')}`;
+  const open = (JSON.parse(text('scripts/data/cmVarRates.json')).owed ?? []).filter(o => o.state === 'open');
   return [
     '/* GENERATED by scripts/genCmVarRates.mjs. Do not edit: change a ledger and run the generator.',
     ' * scripts/simCmVarLedger.mjs fails when this file is not what the ledgers give.',
@@ -103,11 +128,17 @@ export function generatedSource() {
     ' *     cmVarEngine.json (the engine, measured on a runner).',
     e.provisional ? ' * PROVISIONAL: the engine figures below are not measured yet. Nothing may ship on this file.' : ` * Engine figures: ${e.leagueMatches} league matches, runner result ${e.runner}, head ${e.head}.`,
     ' *',
-    ` * Goals ruled out after a review: lowest reading ${frac(g.target)} = ${n6(g.low)} a match, highest ${n6(g.high)}.`,
+    ' * A figure (a quantity in one competition in one season) is used only when two publishers counted it; the',
+    ' * stricter, lower count is the one derived from. Figures one publisher counted are on file and not read.',
+    ...(open.length ? [` * OWED (${open.map(o => o.id).join(', ')}): see owed in scripts/data/cmVarRates.json. CM_VAR_LIVE stays false while this line is here.`] : []),
+    ' *',
+    ` * Goals ruled out after a review: ${both(g)}.`,
+    ` *   The stricter count ${frac(g.target)} = ${n6(g.low)} a match; the range runs to ${n6(g.high)}.`,
     ` *   The engine draws ${e.reviewableGoalsPerMatch} goals a match a review can look at (no penalty, no direct free kick).`,
     ` *   goalReview = ${n6(g.low)} / ${e.reviewableGoalsPerMatch} = ${d.rates.goalReview} a goal. overturn = 1 and penaltyReview = 0: no publisher`,
     ' *   counts reviews that end with the call standing by kind of call, so the game shows none.',
-    ` * Penalties awarded after a review: lowest reading ${frac(p.target)} = ${n6(p.low)} a match, highest ${n6(p.high)}.`,
+    ` * Penalties awarded after a review: ${both(p)}.`,
+    ` *   The stricter count ${frac(p.target)} = ${n6(p.low)} a match; the range runs to ${n6(p.high)}.`,
     ` *   The engine awards ${e.awardsPerMatchPerUnitRate} penalties a match per unit of rate (measured at ${e.probeRate} a foul).`,
     ` *   missedFoulReview = ${n6(p.low)} / ${e.awardsPerMatchPerUnitRate} = ${d.rates.missedFoulReview} a foul.`,
     ` * The kick: the engine's own penalty law, SHOOTOUT_BASE_RATE ${d.law.scores} and SHOOTOUT_SAVE_SHARE ${d.law.onTarget}.`,

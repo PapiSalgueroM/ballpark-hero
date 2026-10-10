@@ -12,5 +12,5 @@
     "Matches a season is arithmetic on the league's size, not a figure read on the page, except where the literal prints it."
   ],
   "checkedBy": "scripts/simCmVarLedger.mjs",
-  "sha256": "9a778c72712a429b7bd2764fce2de82ebca210087ca3eb9040c863399b471fb9"
+  "sha256": "7a12b78956d52a37062afea1a88d44129df97326920a011df2e635950dfba3e4"
 }
