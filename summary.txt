@@ -1,0 +1,17 @@
+finish exit=0 23s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4813 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+finish-train1178 exit=0 1s | ATTRIBUTION train1178: src/lib/soccerCareerEngine.ts, src/lib/soccerPhone.ts bundled with the train taken out and Rounds 1185 and 1187 reversed; 16 of 16 careers record t
+finish-stream exit=1 21s | simCareerLeagueFinish: control stream turned section 4 red and nothing else. The check works.
+social exit=0 39s | ALL SOCIAL AND BRAND CHECKS PASSED
+awards-reorderdraw exit=1 97s | simCareerAwardsNight: 9 FAILURES
+awards exit=0 100s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+social-reorder exit=1 40s | 2 FAILURES
+seasons exit=0 48s | simCareerLeagueSeasons: all sections green
+keep exit=0 105s | simCareerKeepPlaying: 1463 checks, 0 failures
+keep-norehabrow exit=1 103s | simCareerKeepPlaying: 1471 checks, 137 failures (control norehabrow, red expected)
+keep-noconvictionrow exit=1 123s | simCareerKeepPlaying: 1463 checks, 24 failures (control noconvictionrow, red expected)
+keep-nomoney exit=1 116s | simCareerKeepPlaying: 1469 checks, 79 failures (control nomoney, red expected)
+keep-nomoneytrial exit=1 106s | simCareerKeepPlaying: 1463 checks, 32 failures (control nomoneytrial, red expected)
+keep-nosummertrial exit=1 111s | simCareerKeepPlaying: 1469 checks, 14 failures (control nosummertrial, red expected)
+appeal-attrib exit=0 0s | 195:    "scripts/simClubManagerSlots.mjs": "79ade2511fa3100d6990c895f877a0f1edd6ed712cee2afec98264add849ef77",
+keep-zerorehab exit=1 95s | simCareerKeepPlaying: 1471 checks, 102 failures (control zerorehab, red expected)
+squad exit=1 280s | simCareerSquad: 2215 checks, 1 failed
