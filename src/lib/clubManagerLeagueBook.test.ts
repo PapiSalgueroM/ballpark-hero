@@ -29,6 +29,39 @@ describe('dealGoals', () => {
     expect(many('one')).not.toEqual(many('two'));
   });
 
+  it('rolls every goal of one match on its own: two or three goals are one man\'s only as often as the weights say', () => {
+    /* Open play only and no own goal, so who scored is one weighted pick a goal and nothing else. With the
+       goal's index out of the key every goal of a side would be the same roll: the same man every time. */
+    const plain: BookRules = { pen: 0, fk: 0, ownGoalOneIn: 1e9, assist: 0.7, taker: false };
+    const outfield = XI.filter(m => m.p !== 'GK');
+    const total = outfield.reduce((s, m) => s + goalWeight(m.p, m.r), 0);
+    const share = outfield.map(m => goalWeight(m.p, m.r) / total);
+    const pTwo = share.reduce((s, p) => s + p * p, 0);
+    const pThree = share.reduce((s, p) => s + p * p * p, 0);
+    const N = 6000;
+    let firstTwo = 0;
+    let allThree = 0;
+    let sameAssister = 0;
+    let bothAssisted = 0;
+    const firstScorers = new Set<string>();
+    for (let k = 0; k < N; k += 1) {
+      const [a, b, c] = dealGoals(`brace|${k}`, 3, XI, plain);
+      expect(a.kind).toBe('open');
+      firstScorers.add(a.scorer!.n);
+      if (a.scorer === b.scorer) firstTwo += 1;
+      if (a.scorer === b.scorer && b.scorer === c.scorer) allThree += 1;
+      if (a.assist && b.assist) { bothAssisted += 1; if (a.assist === b.assist) sameAssister += 1; }
+    }
+    expect(firstScorers.size).toBe(outfield.length);
+    expect(pTwo).toBeLessThan(0.3);
+    expect(Math.abs(firstTwo - N * pTwo)).toBeLessThan(4 * sd(N, pTwo));
+    expect(Math.abs(allThree - N * pThree)).toBeLessThan(4 * sd(N, pThree));
+    /* The assist of each goal is its own roll too: about half of the matches have one on both of the
+       first two goals (0.7 x 0.7), and it is one man's on well under half of those. */
+    expect(Math.abs(bothAssisted - N * 0.49)).toBeLessThan(4 * sd(N, 0.49));
+    expect(sameAssister).toBeLessThan(bothAssisted * 0.5);
+  });
+
   it('shares the open play goals by the weight, each man inside four binomial standard deviations', () => {
     const outfield = XI.filter(m => m.p !== 'GK');
     const total = outfield.reduce((s, m) => s + goalWeight(m.p, m.r), 0);
