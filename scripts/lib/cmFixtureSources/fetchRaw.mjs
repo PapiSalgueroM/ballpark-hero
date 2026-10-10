@@ -19,6 +19,9 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
+/* A folder on the owner's PC, beside the handoff. On any other machine this path does not exist (on Linux it
+   would even be a relative one), so the tool refuses to run without --dir or CM_FIXTURE_RAW there rather
+   than make a folder of this name inside the repo (scripts/genCmLeagueFixtures.mjs). */
 export const DEFAULT_RAW_ROOT = 'C:/Users/antho/dukb-handoff/2026-10-10/cm-fixtures-raw';
 export const rawRoot = () => (process.env.CM_FIXTURE_RAW || DEFAULT_RAW_ROOT).replaceAll('\\', '/');
 

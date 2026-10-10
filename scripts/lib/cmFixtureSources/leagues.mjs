@@ -7,7 +7,10 @@
  * (url, or pages for a source that prints one matchday a page), the address
  * the game links (citedUrl, when the fetched address is not fit to link), the
  * committed parser that turns its bytes into rows, and the table that maps the
- * source's club spellings onto the game's own (names). The table is explicit
+ * source's club spellings onto the game's own (names). A source that is a
+ * document with no publication stamp of its own also says the day its list
+ * came out (released) and where that day was read (releasedNote); an article
+ * never does, its day is the stamp in its own bytes. The table is explicit
  * and exact on purpose: these lists hold Milan and Inter, Sporting CP and
  * Sporting Braga, two clubs from Bruges. Nothing is ever matched by likeness.
  * A source spelling that is already the game's spelling needs no line.
@@ -18,8 +21,15 @@
  * No harness looks a source up by its kind.
  *
  * orderSource is the index of the source whose order of matches inside a
- * round the ledger keeps. Round numbers are always the matchday numbers of the
- * list as it was first published, never the order games ended up played in.
+ * round the ledger keeps. Round numbers are always the league's own matchday
+ * numbers, as both sources label or count them, never the order games ended
+ * up played in. Whether a ledger is the list as first published or the list
+ * as it stood on the day it was read is NOT a property of this table: the
+ * tool works it out a league from the sources (one of them must be a release
+ * day copy, see listAsOfFrom in build.mjs) and writes it into the receipt. On
+ * 2026-10-10 that made seriea, bundesliga, bundesliga2 and championship lists
+ * as first published, and laliga, ligue2, eredivisie, primeira and superlig
+ * lists as both sources showed them that day.
  */
 const feed = slug => `https://fixturedownload.com/feed/json/${slug}`;
 const maxifoot = slug => `https://www.maxifoot.fr/calendrier-${slug}-2026-2027.htm`;
