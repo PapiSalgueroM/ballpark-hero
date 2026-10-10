@@ -1,0 +1,14 @@
+simLiveMatch exit=0 6s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
+simStatsCentre exit=0 4s | ALL STATS CENTRE CHECKS PASSED
+simAwardRaces exit=0 11s | ALL AWARD RACE CHECKS PASSED
+simDailyDeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+simMatchScreen exit=0 5s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+simStorageWrites exit=0 4s | simStorageWrites: all green (owed: 12)
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoInventedQuotes exit=0 27s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simCmRealFixtures exit=1 5s | Node.js v24.21.0
+simCmOwnGoals exit=0 82s | simCmOwnGoals: PASS, 8 sections green
+simCmVar exit=1 28s | Node.js v24.21.0
+saveSize-uncapped exit=1 41s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
