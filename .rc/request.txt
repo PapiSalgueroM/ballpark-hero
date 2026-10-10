@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+hub: ENGINES=chromium node scripts/playCareerHub.mjs
+hub-revert: CAREER_HUB_CONTROL=revert ENGINES=chromium node scripts/playCareerHub.mjs
+hub-logback: CAREER_HUB_CONTROL=logback ENGINES=chromium node scripts/playCareerHub.mjs
+hub-base: mkdir -p .rcbase && ln -s ../scripts/lib .rcbase/lib && git show 074a9054:scripts/playCareerHub.mjs > .rcbase/hub.mjs && ENGINES=chromium node .rcbase/hub.mjs
+evidence: node .rc/x/evidence1210.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+anchors: node scripts/simHarnessAnchors.mjs
+rivals: node scripts/simNoRivalNames.mjs
