@@ -1,0 +1,3 @@
+var-off-head exit=0 3s | varProbe off: 345 matches over 8 clubs; off digest 93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488
+var-off-pre exit=0 4s | varProbe off: 345 matches over 8 clubs; off digest 93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488
+var-full exit=0 8s | varProbe: A HOLDS (showing a review or skipping it is the same match)
