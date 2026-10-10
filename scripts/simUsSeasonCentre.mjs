@@ -100,6 +100,10 @@
  * The record was made on the commit BEFORE the move and compared on the
  * move commit, its child. It is a RECEIPT of that round, in no gate: any
  * later round that changes a career or a season on purpose moves it.
+ * Since the move the controls minutes, points, forty, level and oddtd (and
+ * lawdrift) patch the law where it lives, src/lib/gameLaws/nflScore.ts and
+ * src/lib/gameLaws/nfl.ts; every other NFL control still patches the
+ * number file.
  *
  * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
  * 2026-10-09 for the NFL): see the block above the bands in section 7.
@@ -131,6 +135,9 @@ if (DIGEST && DIGEST !== 'print' && DIGEST !== 'compare') { console.error(`unkno
 const US = 'src/lib/season/us.ts';
 const NBA = 'src/lib/season/nba.ts';
 const NFL = 'src/lib/season/nfl.ts';
+/* Round 1221: the NFL's score law lives in two files of its own; the controls that change the law patch it there */
+const NFL_SCORE = 'src/lib/gameLaws/nflScore.ts';
+const NFL_STORY = 'src/lib/gameLaws/nfl.ts';
 const WINDOW = { file: 'src/data/usLeagueShape.ts', from: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },", to: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },\n  { sport: 'nba', era: 'y2004', from: 2003, to: null, shape: NBA_2025 }," };
 const CONTROLS = {
   stream: { section: 6, patches: [{ file: US, from: 'const key = usSeasonKey(bind, career, row);', to: 'const key = usSeasonKey(bind, career, row); Math.random();' }] },
@@ -164,17 +171,17 @@ const CONTROLS = {
   lumpy: { section: 7, label: 'sit on a per game cap', patches: [{ file: NFL, from: '      return 1 + swing * (0.62 * mine + 0.18 * team + 0.2 * scored);', to: '      return (1 + mine / 2) * (0.7 + g.us / 60) * (1 + (tdKey ? of(g, tdKey) : 0));' }] },
   flat: { section: 7, label: 'game to game spread sits inside', patches: [{ file: NFL, from: '      return 1 + swing * (0.62 * mine + 0.18 * team + 0.2 * scored);', to: '      return 1;' }] },
   tdform: { section: 7, label: 'touchdown passes scatter', patches: [{ file: NFL, from: 'teamFor: true, teamPoints: 7, formPower: TD_FORM_POWER }', to: 'teamFor: true, teamPoints: 7 }' }] },
-  minutes: { section: 7, label: 'under three minutes apart', patches: [{ file: NFL, from: '        const crowded = used.has(m - 1) || used.has(m) || used.has(m + 1) || (side !== undefined && drives[side].some(x => Math.abs(x - m) < DRIVE_GAP));', to: '        const crowded = false;' }] },
+  minutes: { section: 7, label: 'under three minutes apart', patches: [{ file: NFL_STORY, from: '      const crowded = used.has(m - 1) || used.has(m) || used.has(m + 1) || (side !== undefined && drives[side].some(x => Math.abs(x - m) < DRIVE_GAP));', to: '      const crowded = false;' }] },
   order: { section: 7, label: 'order of the games reads oddly', patches: [{ file: NFL, from: '  for (let t = 0; t < ORDER_TRIES && least > 0; t += 1) {', to: '  for (let t = 0; t < 1; t += 1) {' }] },
-  points: { section: 7, label: 'points a team game', patches: [{ file: NFL, from: 'const TD_A_GAME = 2.6;', to: 'const TD_A_GAME = 3.4;' }] },
-  forty: { section: 7, label: 'scores 40 or more', patches: [{ file: NFL, from: '(TD_A_GAME + 0.05 * e) / DRIVES', to: '(TD_A_GAME + 0.4 * e) / DRIVES' }] },
-  level: { section: 7, label: 'level games stay under', patches: [{ file: NFL, from: '    if (home) us += more; else them += more;', to: '    if (home) us += 0 * more; else them += 0 * more;' }] },
-  oddtd: { section: 7, label: 'touchdowns not worth seven', patches: [{ file: NFL, from: '        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });', to: '        out.push({ t, f, s, cost: 4 * s });' }] },
+  points: { section: 7, label: 'points a team game', patches: [{ file: NFL_SCORE, from: 'const TD_A_GAME = 2.6;', to: 'const TD_A_GAME = 3.4;' }] },
+  forty: { section: 7, label: 'scores 40 or more', patches: [{ file: NFL_SCORE, from: '(TD_A_GAME + 0.05 * e) / DRIVES', to: '(TD_A_GAME + 0.4 * e) / DRIVES' }] },
+  level: { section: 7, label: 'level games stay under', patches: [{ file: NFL_SCORE, from: '    if (home) us += more; else them += more;', to: '    if (home) us += 0 * more; else them += 0 * more;' }] },
+  oddtd: { section: 7, label: 'touchdowns not worth seven', patches: [{ file: NFL_STORY, from: '        out.push({ t, f, s, cost: Math.abs(rest - 7 * t) + 4 * s });', to: '        out.push({ t, f, s, cost: 4 * s });' }] },
   bigkick: { section: 7, label: 'makes five or six', patches: [{ file: NFL, from: '    const need = left / (n - k);', to: '    const need = MAX_FG;' }] },
   /* Release AP: the line an engine that only makes halves no longer needs, and every older save does */
   oddsack: { section: 3, label: 'sacks in tenths still opens', patches: [{ file: NFL, from: '    if (left % 5 > 0) t[t.indexOf(Math.max(...t))] += left % 5;\n', to: '' }] },
   /* Round 1221: the digest's own control (run with US_SEASON_DIGEST=compare): a field goal ends one drive in a hundred more */
-  lawdrift: { section: 'digest', patches: [{ file: NFL, from: 'const FG_A_DRIVE = 0.1445;', to: 'const FG_A_DRIVE = 0.1545;' }] },
+  lawdrift: { section: 'digest', patches: [{ file: NFL_SCORE, from: 'const FG_A_DRIVE = 0.1445;', to: 'const FG_A_DRIVE = 0.1545;' }] },
 };
 /* which sport a control needs in the run (its patched file is only bundled with that sport) */
 const CONTROL_SPORT = {
