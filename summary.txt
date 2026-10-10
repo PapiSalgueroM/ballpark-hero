@@ -1,0 +1,4 @@
+digest-record exit=0 41s |    Duration  40.23s (transform 1.25s, setup 66ms, collect 1.60s, tests 37.45s, environment 398ms, prepare 297ms)
+simUsBoardParity exit=0 45s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 58s | 
+sense-full exit=0 99s | simNbaAwardsSense: 173 checks, 0 failed (full size), 99s

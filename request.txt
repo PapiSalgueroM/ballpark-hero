@@ -1,0 +1,4 @@
+digest-record: DIGEST_RECORD=1 DIGEST_ALLOW='nba|*' node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=900000 --hookTimeout=120000 && cp src/test/fixtures/usCareerTruthDigest.json "$RC_OUT/usCareerTruthDigest.json"
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+sense-full: SENSE_PROVE_AGAINST=cd9c3d50 SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs

@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/usCareerTruthDigest.test.ts[2m > [22m[2mRound 1104: the US career truth digest[2m > [22m[2mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[22m[39mdigest: 10 of 58 keys moved (80 of 464 careers; 0 careers were below zero on the committed code); allow=nba|*; outside the allow list: 0
+digest moved: nba|now|PG nba|now|SG nba|now|SF nba|now|PF nba|now|C nba|y2004|PG nba|y2004|SG nba|y2004|SF nba|y2004|PF nba|y2004|C
+
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 37453[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 37451[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 02:25:25
+[2m   Duration [22m 40.23s[2m (transform 1.25s, setup 66ms, collect 1.60s, tests 37.45s, environment 398ms, prepare 297ms)[22m
+
