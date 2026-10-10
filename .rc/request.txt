@@ -1,0 +1,8 @@
+#!serve
+#!playwright
+#!serial
+playReducedMotion-alone: node scripts/playReducedMotion.mjs
+playReducedMotion-nowheel: node .rc/x/mutAU.mjs nowheel && npm run build > /dev/null 2>&1 && node scripts/playReducedMotion.mjs; s=$?; git checkout -- src; npm run build > /dev/null 2>&1; echo "src differs from the head in $(git diff --name-only HEAD -- src | wc -l) file(s), walk exit $s"; exit $s
+base-build: git worktree add /tmp/base 24f57a98fa44e280f1c848276a27d86e0a3e2745 && cd /tmp/base && ln -s "$OLDPWD/node_modules" node_modules && npm run build 2>&1 | tail -2
+playReducedMotion-base: cd /tmp/base && git rev-parse --short HEAD && node scripts/playReducedMotion.mjs
+sweepWeight-base: cd /tmp/base && (node scripts/lib/hostLikeServer.mjs dist 4174 > /dev/null 2>&1 &) ; sleep 4; BASE=http://localhost:4174 SWEEP_BASE=http://localhost:4174 SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
