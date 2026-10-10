@@ -1,0 +1,15 @@
+MUTATION m12 applied to src/lib/season/usPlayoffs.ts
+ src/lib/season/usPlayoffs.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines
+--- harness ACCEPTANCE and tail
+     the try taken (0 is the first): 0:507 1:348 2:297 3:211 4:143 5:118 6:113 7:79 8:52 9:57 10:42 11:34
+     repairs a laid out run needed: 0:1850 1:147 2:4 3+:0; the regular season's repairs a season, for scale: 0.30
+ACCEPTANCE one point playoff games 6.10% against the regular season's spread over the seed sets 5.61% to 5.73%: OUTSIDE, above it. A FINDING for the lead (the repaired share above is how much of it a repair made)
+ok   X no call reaches Math.random while a season is observed (0 calls)
+
+simUsPostseason: 26 checks, 0 failed, 1 findings for the lead
+--- vitest
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m29 passed[39m[22m[90m (29)[39m
+MUT m12 harness=0 vitest=0 laycompare=- centre=- dirty=0

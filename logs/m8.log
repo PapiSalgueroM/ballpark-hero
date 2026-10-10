@@ -1,0 +1,5 @@
+MUTATION m8 applied to src/lib/season/usPlayoffs.ts
+1:✘ [ERROR] patch: its string is not exactly once in src/lib/season/usPlayoffs.ts, refusing to run:   return { season: { ...s, teams: labels.length, labels, games, rounds [plugin us-postseason-patches]
+45:node_modules/esbuild/lib/main.js:1275:27: ERROR: [plugin: us-postseason-patches] patch: its string is not exactly once in src/lib/season/usPlayoffs.ts, refusing to run:   return { season: { ...s, teams: labels.length, labels, games, rounds
+lines in the log: 60
+MUT m8 control-sum-exit=1 (a stale patch string: the control never ran)

@@ -1,0 +1,14 @@
+merge exit=0 head=24f57a98f
+ create mode 100644 src/test/trophyCabinetCampaign.test.tsx
+ create mode 100644 src/test/usTrophyTile.test.ts
+tsc=0
+post=0
+info P nba seed set 0: the careers are the lay receipt's, career for career
+ok   F nba: not one playoff season the Season Center opens fails closed (2001 checked)
+ok   F nba: the core had to repair 76 of 22033 playoff games (0.34%), at most 1.0%
+ACCEPTANCE one point playoff games 5.61% against the regular season's spread over the seed sets 5.61% to 5.73%: INSIDE
+simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+simUsSeasonCentre: 98 checks, 0 failed
+simUsSeasonCentre digest compare: NOT COMPARED, 7 bundled files are not the ones the record was made on (exit 3: this is no red of the playoff lay)
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m101 passed[39m[22m[90m (101)[39m

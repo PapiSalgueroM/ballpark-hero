@@ -1,0 +1,24 @@
+MUTATION m22 applied to src/lib/season/us.ts
+ src/lib/season/us.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+--- harness FAIL lines
+--- harness ACCEPTANCE and tail
+     the try taken (0 is the first): 0:594 1:436 2:278 3:190 4:144 5:92 6:61 7:64 8:63 9:32 10:26 11:21
+     repairs a laid out run needed: 0:1925 1:76 2:0 3+:0; the regular season's repairs a season, for scale: 0.30
+ACCEPTANCE one point playoff games 5.61% against the regular season's spread over the seed sets 5.61% to 5.73%: INSIDE
+ok   X no call reaches Math.random while a season is observed (0 calls)
+
+simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+--- vitest
+[31m     → expected [ [ 1, 1, null, true ], …(2) ] to deeply equal [ [ 1, 1, 1, true ], …(2) ][39m
+[31m     → expected 0 to be greater than 0[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/usPlayoffs.test.ts[2m > [22musPlayoffLay[2m > [22mreads a one game round as one game, and refuses a count that is not the rounds played
+[31m[1mAssertionError[22m: expected [ [ 1, 1, null, true ], …(2) ] to deeply equal [ [ 1, 1, 1, true ], …(2) ][39m
+[41m[1m FAIL [22m[49m src/test/usPlayoffs.test.ts[2m > [22musPostseason, sport neutral[2m > [22mlays out an NFL line that holds playoff numbers under the same naming rule, through the NFL bind
+[31m[1mAssertionError[22m: expected 0 to be greater than 0[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m27 passed[39m[22m[90m (29)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPlayoffs.test.ts,title=src/test/usPlayoffs.test.ts > usPlayoffLay > reads a one game round as one game%2C and refuses a count that is not the rounds played,line=203,column=67::AssertionError: expected [ [ 1, 1, null, true ], …(2
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usPlayoffs.test.ts,title=src/test/usPlayoffs.test.ts > usPostseason%2C sport neutral > lays out an NFL line that holds playoff numbers under the same naming rule%2C through the NFL bind,line=345,column=18::AssertionError: expected 0
+MUT m22 harness=0 vitest=1 laycompare=- centre=- dirty=0

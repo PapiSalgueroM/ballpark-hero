@@ -1,0 +1,7 @@
+m12 exit=0 20s | MUT m12 harness=0 vitest=0 laycompare=- centre=- dirty=0
+m20 exit=0 17s | MUT m20 harness=0 vitest=1 laycompare=- centre=- dirty=0
+m22 exit=0 17s | MUT m22 harness=0 vitest=1 laycompare=- centre=- dirty=0
+m25 exit=0 23s | MUT m25 harness=1 vitest=0 laycompare=- centre=- dirty=0
+m8 exit=0 0s | MUT m8 control-sum-exit=1 (a stale patch string: the control never ran)
+merge-at exit=0 116s |       Tests  101 passed (101)
+merge-1226 exit=0 92s | simUsSeasonCentre: 98 checks, 0 failed
