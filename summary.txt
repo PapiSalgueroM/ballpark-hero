@@ -1,0 +1,8 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+sim-as-committed exit=1 2s | Node.js v24.21.0
+sim-base-before-merge exit=0 57s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+playCareerProgramme exit=1 119s | Node.js v24.21.0
+playSoccerSeasonCalendar exit=0 50s | Calendar native: 6 cases, 301 checks, 1 effective copied observation control
+cup-stream-control-expect-exit-1 exit=1 8s | control stream fired: sections 1 red, as it must
+restore exit=0 1s | scripts restored
