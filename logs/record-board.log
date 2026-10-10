@@ -1,0 +1,13 @@
+recording from 21317751cef83a6ec14dcf15cf54442aa7f12b9c (not main: src differs from f78037dcddea12c1a02586c7d5c0e185efb86121)
+  nfl: 459 clicks on the path, 24 seasons, 15 fixed saves, 685 screen steps
+  nba: 507 clicks on the path, 24 seasons, 15 fixed saves, 705 screen steps
+  mlb: 449 clicks on the path, 24 seasons, 15 fixed saves, 688 screen steps
+  nhl: 415 clicks on the path, 24 seasons, 15 fixed saves, 688 screen steps
+recordUsBoardFixture: wrote ../../_temp/rc-out/files/usBoardFixture.json (1869465 bytes)
+header fields that differ: recordedFrom
+  recordedFrom: "5bdd0a9c21f2bfd1e893cbfe1ef32f12c83228e4 (not main: src differs from 09df145abfb241679022b41903d2f19bc254ebf9)" -> "21317751cef83a6ec14dcf15cf54442aa7f12b9c (not main: src differs from f78037dcddea12c1a02586c7d5c0e185efb86121)"
+sports/nfl: byte equal (451649 bytes committed, 451649 retaken)
+sports/nba: byte equal (488419 bytes committed, 488419 retaken)
+sports/mlb: byte equal (448544 bytes committed, 448544 retaken)
+sports/nhl: byte equal (420993 bytes committed, 420993 retaken)
+cmprec2: the retaken recording is the committed one apart from header.recordedFrom

@@ -1,0 +1,4 @@
+record-board exit=0 29s | cmprec2: the retaken recording is the committed one apart from header.recordedFrom
+record-digest exit=0 28s | digest retake: byte equal to the committed file
+head-parity exit=0 29s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+head-digest exit=0 27s |    Duration  27.37s (transform 764ms, setup 38ms, collect 966ms, tests 25.84s, environment 222ms, prepare 102ms)
