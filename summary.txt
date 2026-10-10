@@ -1,0 +1,9 @@
+ledger exit=0 4s | simUsSeasonLedger: green. 3023 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+hall-nhl exit=3 4s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+local1 exit=0 2s | local1 exit 0, lines 72
+local4 exit=0 34s | local4 exit 0, lines 21
+tsc exit=0 72s | 
+parity exit=0 48s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+head exit=0 0s | rc request r1226-verify1 for 573ea1ff078948d0d5aa1096bf7beb939210854d
+digest exit=0 37s |    Duration  36.13s (transform 1.72s, setup 151ms, collect 2.99s, tests 33.50s, environment 798ms, prepare 302ms)
+ctl-all exit=0 156s | controls fired: 59 of 59

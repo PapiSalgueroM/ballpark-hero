@@ -1,0 +1,72 @@
+== MLB October: games of a run by year and result (min..max, n, share at the min) ==
+2005 | Lost the Championship Series   | 7..9 | n=1081 | at min 32.2%
+2005 | Lost the Division Series       | 3..5 | n=5684 | at min 15.6%
+2005 | Lost the World Series          | 13..19 | n=528 | at min 3.6%
+2005 | WON THE WORLD SERIES           | 13..19 | n=668 | at min 4.8%
+2005 | hitter lines 5330, not his hits over his at bats: 0, HR over hits: 0, leading zero: 0
+2008 | Lost the Championship Series   | 7..9 | n=1038 | at min 34.7%
+2008 | Lost the Division Series       | 3..5 | n=5726 | at min 15.6%
+2008 | Lost the World Series          | 13..19 | n=504 | at min 7.5%
+2008 | WON THE WORLD SERIES           | 13..19 | n=681 | at min 6.9%
+2008 | hitter lines 5296, not his hits over his at bats: 0, HR over hits: 0, leading zero: 0
+2015 | Lost the Championship Series   | 8..10 | n=1069 | at min 27.6%
+2015 | Lost the Division Series       | 4..6 | n=1953 | at min 15.2%
+2015 | Lost the Wild Card Game        | 1..1 | n=3644 | at min 100.0%
+2015 | Lost the World Series          | 13..19 | n=548 | at min 6.4%
+2015 | WON THE WORLD SERIES           | 14..20 | n=651 | at min 5.4%
+2015 | hitter lines 5280, not his hits over his at bats: 0, HR over hits: 0, leading zero: 0
+2020 | Lost the Championship Series   | 9..12 | n=1041 | at min 16.7%
+2020 | Lost the Division Series       | 5..8 | n=1949 | at min 7.1%
+2020 | Lost the Wild Card series      | 2..3 | n=3731 | at min 43.0%
+2020 | Lost the World Series          | 13..19 | n=573 | at min 7.0%
+2020 | WON THE WORLD SERIES           | 15..22 | n=632 | at min 3.2%
+2020 | hitter lines 5313, not his hits over his at bats: 0, HR over hits: 0, leading zero: 0
+2021 | Lost the Championship Series   | 8..10 | n=1025 | at min 32.5%
+2021 | Lost the Division Series       | 4..6 | n=2000 | at min 17.1%
+2021 | Lost the Wild Card Game        | 1..1 | n=3720 | at min 100.0%
+2021 | Lost the World Series          | 13..19 | n=552 | at min 7.1%
+2021 | WON THE WORLD SERIES           | 14..20 | n=616 | at min 7.0%
+2021 | hitter lines 5262, not his hits over his at bats: 0, HR over hits: 0, leading zero: 0
+2023 | Lost the Championship Series   | 10..14 | n=1031 | at min 15.6%
+2023 | Lost the Division Series       | 5..8 | n=2024 | at min 8.9%
+2023 | Lost the Wild Card series      | 2..3 | n=3645 | at min 42.7%
+2023 | Lost the World Series          | 13..19 | n=550 | at min 7.5%
+2023 | WON THE WORLD SERIES           | 16..22 | n=689 | at min 1.0%
+2023 | hitter lines 5347, not his hits over his at bats: 0, HR over hits: 0, leading zero: 0
+2026 | Lost the Championship Series   | 10..14 | n=1058 | at min 15.8%
+2026 | Lost the Division Series       | 5..8 | n=2021 | at min 7.9%
+2026 | Lost the Wild Card series      | 2..3 | n=3621 | at min 41.6%
+2026 | Lost the World Series          | 13..19 | n=584 | at min 6.7%
+2026 | WON THE WORLD SERIES           | 16..22 | n=671 | at min 1.3%
+2026 | hitter lines 5306, not his hits over his at bats: 0, HR over hits: 0, leading zero: 0
+== MLB season games by year, club, position (min..max) ==
+2020 BOS CF: games 20..60, HR 3..15, wins -
+2020 BOS SP: games 4..12, HR -, wins 2..8
+2020 BOS RP: games 8..26, HR -, wins 0..2
+2020 DET CF: games 20..58, HR 3..14, wins -
+2020 DET SP: games 4..11, HR -, wins 2..8
+2020 DET RP: games 8..25, HR -, wins 0..2
+2026 NYY CF: games 56..161, HR 8..40, wins -
+2026 NYY SP: games 11..32, HR -, wins 5..22
+2026 NYY RP: games 22..71, HR -, wins 0..6
+2026 BOS CF: games 56..162, HR 8..40, wins -
+2026 BOS SP: games 11..32, HR -, wins 5..22
+2026 BOS RP: games 22..71, HR -, wins 0..6
+2005 CIN CF: games 56..163, HR 8..40, wins -
+2005 CIN SP: games 11..32, HR -, wins 5..22
+2005 CIN RP: games 22..71, HR -, wins 0..6
+== NHL season games by year, club, position (min..max) ==
+2012 BOS C: games 21..48, points 23..82, wins -
+2012 BOS G: games 16..39, points -, wins 8..27
+2019 CAR C: games 30..68, points 35..117, wins -
+2019 CAR G: games 23..56, points -, wins 12..38
+2019 ATL C: games 36..82, points 42..141, wins -
+2019 ATL G: games 28..67, points -, wins 14..46
+2019 PHX C: games 36..82, points 42..141, wins -
+2019 PHX G: games 28..67, points -, wins 14..46
+2020 BOS C: games 25..56, points 26..95, wins -
+2020 BOS G: games 19..46, points -, wins 10..31
+2026 BOS C: games 38..84, points 33..144, wins -
+2026 BOS G: games 28..67, points -, wins 13..47
+2025 BOS C: games 36..82, points 41..141, wins -
+2025 BOS G: games 28..67, points -, wins 15..47
