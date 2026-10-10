@@ -1,0 +1,4 @@
+own exit=1 19s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/pitchOwnGoal.test.tsx,title=src/test/pitchOwnGoal.test.tsx > Round 1216%3A an own goal in the live mat
+simLiveSimCelebration exit=0 2s | simLiveSimCelebration: 17 outcome checks passed, correct side, net-first, real figure, freeze/expiry, reduced motion, the three recorded digests of the lift, the part beh
+simLiveSimMotion exit=0 57s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+tsc exit=0 71s | 

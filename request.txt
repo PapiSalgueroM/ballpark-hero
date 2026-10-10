@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+own: node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+simLiveSimCelebration: node scripts/simLiveSimCelebration.mjs
