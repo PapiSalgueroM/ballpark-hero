@@ -1,0 +1,319 @@
+{
+  "base": "http://localhost:4173",
+  "parts": {
+    "p1": {
+      "day1": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 0,
+        "hasBook": true,
+        "bytes": 56230,
+        "bookBytes": 38,
+        "stamp": "premier|1lxqw32",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "afterLive": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 1,
+        "hasBook": true,
+        "bytes": 72679,
+        "bookBytes": 2306,
+        "stamp": "premier|1lxqw32",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 16,
+        "rows": 59,
+        "goalsFor": 27,
+        "onRows": 26,
+        "og": 1,
+        "u": 0,
+        "assists": 20,
+        "sheets": 25,
+        "my": 0,
+        "race": 38,
+        "played": 1
+      },
+      "afterSix": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 7,
+        "hasBook": true,
+        "bytes": 93732,
+        "bookBytes": 6131,
+        "stamp": "premier|1lxqw32",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 177,
+        "goalsFor": 146,
+        "onRows": 143,
+        "og": 3,
+        "u": 0,
+        "assists": 92,
+        "sheets": 190,
+        "my": 8,
+        "race": 38,
+        "played": 6
+      },
+      "afterReload": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 7,
+        "hasBook": true,
+        "bytes": 93732,
+        "bookBytes": 6131,
+        "stamp": "premier|1lxqw32",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 177,
+        "goalsFor": 146,
+        "onRows": 143,
+        "og": 3,
+        "u": 0,
+        "assists": 92,
+        "sheets": 190,
+        "my": 8,
+        "race": 38,
+        "played": 6
+      },
+      "card": "All comps League FA Cup 🏅 AWARD RACES 👟 GOLDEN BOOT 1 Cole Palmer Chelsea 8 2 Morgan Gibbs-White Nottingham Forest 7 3 Bazoumana Touré Newcastle 5 4 Bryan Mbeumo Manchester United 5 5 Declan Rice Arsenal 5 6 Anthony Elanga Newcastle 4 7 Dango Ouattara Brentford 4 8 Junior Kroupi Bournemouth 4 🎖️ PLAYER OF THE SEASON WATCH Cole Palmer Chelsea 8 gls · form score 9.1 Bazoumana Touré Newcastle 5 gls · form score 8.5 Morgan Gibbs-White Nottingham Forest 7 gls · form score 8.4 One formula for everyone: goals plus a lift for playing high in the table. 🌍 BALLON D'OR WATCH Cole Palmer Chelsea · 8 l"
+    },
+    "p2": {
+      "opened": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 7,
+        "hasBook": true,
+        "bytes": 93732,
+        "bookBytes": 6131,
+        "stamp": "premier|1lxqw32",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 177,
+        "goalsFor": 146,
+        "onRows": 143,
+        "og": 3,
+        "u": 0,
+        "assists": 92,
+        "sheets": 190,
+        "my": 8,
+        "race": 38,
+        "played": 6
+      },
+      "end": {
+        "save": true,
+        "club": "Crystal Palace",
+        "season": 1,
+        "week": 7,
+        "hasBook": true,
+        "bytes": 93732,
+        "bookBytes": 6131,
+        "stamp": "premier|1lxqw32",
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 19,
+        "rows": 177,
+        "goalsFor": 146,
+        "onRows": 143,
+        "og": 3,
+        "u": 0,
+        "assists": 92,
+        "sheets": 190,
+        "my": 8,
+        "race": 38,
+        "played": 6
+      },
+      "card": null,
+      "live": {
+        "done": 0,
+        "halftimes": 0
+      },
+      "quick": {
+        "done": 0,
+        "halftimes": 0
+      }
+    },
+    "p3": {
+      "opened": {
+        "save": true,
+        "club": "Sevilla",
+        "season": 1,
+        "week": 48,
+        "hasBook": false,
+        "bytes": 135088,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "end": {
+        "save": true,
+        "club": "Sevilla",
+        "season": 1,
+        "week": 48,
+        "hasBook": false,
+        "bytes": 135088,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "card": null,
+      "played": {
+        "done": 0,
+        "halftimes": 0
+      }
+    },
+    "p4": {
+      "opened": {
+        "save": true,
+        "club": "Valencia",
+        "season": 1,
+        "week": 48,
+        "hasBook": false,
+        "bytes": 129093,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "end": {
+        "save": true,
+        "club": "Valencia",
+        "season": 1,
+        "week": 48,
+        "hasBook": false,
+        "bytes": 129093,
+        "bookBytes": 0,
+        "stamp": null,
+        "nullInBook": false,
+        "bad": [],
+        "clubsWithEntry": 0,
+        "rows": 0,
+        "goalsFor": 0,
+        "onRows": 0,
+        "og": 0,
+        "u": 0,
+        "assists": 0,
+        "sheets": 0,
+        "my": 0,
+        "race": 38,
+        "played": 0
+      },
+      "card": null,
+      "played": {
+        "done": 0,
+        "halftimes": 0
+      }
+    },
+    "p5/manager-hot-seat": {
+      "pressed": [
+        "Track stats"
+      ],
+      "store": [
+        {
+          "k": "cookie-consent",
+          "bytes": 9,
+          "book": false
+        },
+        {
+          "k": "dukb-guest-handle",
+          "bytes": 16,
+          "book": false
+        },
+        {
+          "k": "rules-gate-seen:/manager-hot-seat",
+          "bytes": 1,
+          "book": false
+        }
+      ]
+    },
+    "p5/deadline-day": {
+      "pressed": [
+        "Track stats"
+      ],
+      "store": [
+        {
+          "k": "cookie-consent",
+          "bytes": 9,
+          "book": false
+        },
+        {
+          "k": "rules-gate-seen:/deadline-day",
+          "bytes": 1,
+          "book": false
+        },
+        {
+          "k": "dukb-guest-handle",
+          "bytes": 17,
+          "book": false
+        }
+      ]
+    }
+  },
+  "findings": [
+    "p1-390: the Stats screen shows league book copy, and this round ships no screen",
+    "part 1: only 0 of 2 fixtures were played after the reload",
+    "part 1: the league did not move after the reload",
+    "p2-1280: no Stats tile on the hub",
+    "part 2: the live match under reduced motion did not finish",
+    "part 3: the old save played no fixture",
+    "p3-390-old: no Stats tile on the hub",
+    "part 4: the old save played no fixture",
+    "p4-1280-old: no Stats tile on the hub"
+  ],
+  "pageErrors": []
+}

@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk1229.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs

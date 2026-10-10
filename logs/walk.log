@@ -1,0 +1,29 @@
+1) a new career at 390 x 844, motion on
+   part 1, day one: Crystal Palace season 1 week 0: book 38 bytes, 0 clubs, 0 rows, 0+0+0 of 0 goals, 0 assists, 0 sheets, mine 0; save 56230 bytes
+   part 1: fixtures played live 1, half times seen 1
+   part 1, after one live match: Crystal Palace season 1 week 1: book 2306 bytes, 16 clubs, 59 rows, 26+1+0 of 27 goals, 20 assists, 25 sheets, mine 0; save 72679 bytes
+   part 1, after five quick sims more: Crystal Palace season 1 week 7: book 6131 bytes, 19 clubs, 177 rows, 143+3+0 of 146 goals, 92 assists, 190 sheets, mine 8; save 93732 bytes
+   FINDING p1-390: the Stats screen shows league book copy, and this round ships no screen
+   FINDING part 1: only 0 of 2 fixtures were played after the reload
+   part 1, two fixtures after a page reload: Crystal Palace season 1 week 7: book 6131 bytes, 19 clubs, 177 rows, 143+3+0 of 146 goals, 92 assists, 190 sheets, mine 8; save 93732 bytes
+   FINDING part 1: the league did not move after the reload
+2) the same career at 1280 x 900, reduced motion
+   part 2, opened: Crystal Palace season 1 week 7: book 6131 bytes, 19 clubs, 177 rows, 143+3+0 of 146 goals, 92 assists, 190 sheets, mine 8; save 93732 bytes
+   FINDING p2-1280: no Stats tile on the hub
+   FINDING part 2: the live match under reduced motion did not finish
+   part 2, after one live and three quick: Crystal Palace season 1 week 7: book 6131 bytes, 19 clubs, 177 rows, 143+3+0 of 146 goals, 92 assists, 190 sheets, mine 8; save 93732 bytes
+3) an old save with no book: scripts/data/cmOldSave1052Fixture.json, 390 wide, reduced motion true
+   part 3, old save opened: Sevilla season 1 week 48: book none; save 135088 bytes
+   FINDING part 3: the old save played no fixture
+   part 3, old save after 0 fixtures: Sevilla season 1 week 48: book none; save 135088 bytes
+   FINDING p3-390-old: no Stats tile on the hub
+4) an old save with no book: scripts/data/cmSecondTierOldSaveFixture.json, 1280 wide, reduced motion false
+   part 4, old save opened: Valencia season 1 week 48: book none; save 129093 bytes
+   FINDING part 4: the old save played no fixture
+   part 4, old save after 0 fixtures: Valencia season 1 week 48: book none; save 129093 bytes
+   FINDING p4-1280-old: no Stats tile on the hub
+5) /manager-hot-seat at 390 x 844
+   /manager-hot-seat: pressed [Track stats], stored keys cookie-consent:9, dukb-guest-handle:16, rules-gate-seen:/manager-hot-seat:1
+5) /deadline-day at 390 x 844
+   /deadline-day: pressed [Track stats], stored keys cookie-consent:9, rules-gate-seen:/deadline-day:1, dukb-guest-handle:17
+walk1229: 9 FINDING(S), 0 page error(s)
