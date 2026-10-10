@@ -424,11 +424,19 @@ const DRIVE = {
 };
 const SPORTS = Object.keys(DRIVE);
 
-/* Floors: the measured size of each walk on seeds 1,2,3 (see MEASURED). A walk that shrinks under its floor proves nothing. */
-const T = {
-  minLeagues: 58, minRealSaves: 168, minFeedsWithOffers: 23, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
-  minReach: 455, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minMen: 2290, minYoung: 7600, minPairs: 730000, minCuts: 200,
+/* Floors. A walk that shrinks under its floor proves nothing, so each walk has one, near 70 percent of the lowest of
+   the three measured seed sets (see MEASURED).
+     PER3   walks that grow with the seeds, written for three seeds. A run is held to the figure times its own seed
+            count over three, so one seed, two or six are each judged at their own size. (Before this the floors
+            were absolute counts for three seeds, and a run on one seed was red on its size alone.)
+     FIXED  walks that read the first league of each sport whatever the seeds. */
+const PER3 = {
+  minLeagues: 58, minRealSaves: 168, minOffers: 8400, minBadlyOffers: 1570, minClimb: 560, minClosed: 3300, minQuietOpen: 2300,
+  minReach: 455, minVerdicts: 780, minLosing: 348, minFiredCloses: 348, minCases: 6100, minYoung: 7600, minPairs: 730000,
 };
+const FIXED = { minFeedsWithOffers: 23, minMen: 2290, minCuts: 200 };
+const T = { ...FIXED, ...Object.fromEntries(Object.entries(PER3).map(([k, v]) => [k, Math.floor((v * SEEDS.length) / 3)])) };
+if (!SEEDS.length || SEEDS.some(s => !Number.isInteger(s))) { console.error(`SIM_GM_DESK_HOST_SEEDS must be whole numbers, read ${process.env.SIM_GM_DESK_HOST_SEEDS}`); process.exit(2); }
 /* CONTROL COUNTS, measured 2026-10-10 on a GitHub runner, seeds 1,2,3, each control run alone. Every one fired in
    its own check; the failures counted there, then any other check it also turned red:
      mutate 21 in 1          dropclub 63 in 1        fillmet 2640 in 2       readwrites 120 in 2 (and 6)
