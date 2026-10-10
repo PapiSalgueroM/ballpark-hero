@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+walk: node .rc/x/walk.mjs
+markers: n=$(grep -rlE "nfl-14|playoffs start again from|won going away|gmBracket: the game played" dist/assets | wc -l); p=$(grep -rl "Play the final week" dist/assets | wc -l); echo "chunks of the head build holding a string of a new module: $n; chunks holding the board's own string (so the grep can see): $p"; test "$n" = 0 && test "$p" -ge 1
+oldsave: git worktree add -q /tmp/base 5d6ffbefd0b7ddc3df4b48ff9e2e2ce2157e4f79 && ln -s $PWD/node_modules /tmp/base/node_modules && (cd /tmp/base && npm run build > $RC_OUT/base-build.log 2>&1; echo "base build exit=$?") && (node scripts/lib/hostLikeServer.mjs /tmp/base/dist 4174 > $RC_OUT/base-server.log 2>&1 &) ; sleep 3; BASE_OLD=http://localhost:4174 node .rc/x/oldsave.mjs; s=$?; pkill -f "hostLikeServer.mjs /tmp/base/dist"; exit $s
