@@ -1,0 +1,5 @@
+c-mathrandom exit=1 31s | simCmLeagueBook: CONTROL mathrandom FIRED: section stream went red (16 failures) and no other section did (31s)
+c-dropmine exit=1 31s | simCmLeagueBook: CONTROL dropmine FIRED: section law went red (4492 failures), with names, oldsave, doors as it must and no other section did (31s)
+c-weight exit=3 37s | simCmLeagueBook: CONTROL weight DID NOT FIRE as it must: stream has 11 failures, other red sections [oldsave] (36s)
+book-default-s0 exit=1 23s | simCmLeagueBook: 9 FAILURE(S) (23s)
+book-default-s2 exit=1 23s | simCmLeagueBook: 9 FAILURE(S) (24s)
