@@ -33,13 +33,19 @@
  *    press with the save through JSON between presses, it gives the engine's
  *    thirteen games, champion, next 64 draws and records, for every season;
  *    the engine's own run is held to scripts/data/gmBracketFixture.json; the
- *    data's structure; and a doctored winner, a doctored pairing and a tie
- *    played out of turn are each named by bracketProblems.
+ *    data's structure; a doctored winner, a doctored pairing and a tie
+ *    played out of turn are each named by bracketProblems; and the mover and
+ *    the validator agree: asked for any tie in any order, a game at a time,
+ *    the mover never makes a save the validator finds a problem in.
  *  5 PURE. Telling every game of a season right after the engine plays it
  *    leaves the engine's stream, its draw count, its 272 winners and its 32
  *    records exactly where they were; the same key tells the same final and
  *    story twice and through JSON; and the round's new files hold no
- *    Math.random, no Date and no localStorage (comments stripped).
+ *    Math.random, no Date and no localStorage (comments stripped). And THE
+ *    CEILING: a score above 999 is read by neither save guard and told by
+ *    nobody, without the story law being asked (with no ceiling a saved
+ *    250000 threw out of the NFL's law and a saved 1e21 never came back),
+ *    and the NFL tells no final above its own top score.
  *  6 NOBODY MOUNTS IT YET. No file under src imports the new modules but the
  *    modules themselves and their tests. The round that binds a board turns
  *    this into "the cards are lazy".
@@ -48,18 +54,37 @@
  * be in its file exactly once (or the run refuses, exit 2), always exits 1
  * when its NAMED checks are among the reds, and exits 2 when they are not:
  *   winner      the winner test taken out of decidedScore            section 1
+ *   level       the winner's score told for both sides               section 1 (a told final is never level)
+ *   refuse      the quick path refuses a game in five by its key     section 1 (the law never refuses), and
+ *               section 3's count of games told and measured
+ *   lowmax      the NFL's top score typed as 30                      section 1 (no told final above it), and
+ *               section 2's "every told final has a story"
  *   twopaths    the told path keys its final differently             section 1
  *   tries       the law is asked twice, not 24 times                 section 1 (the swapped share)
  *   offbyone    a field goal told as four points                     section 2
  *   olddraw     the engine's base and margin score told instead      section 3 (losers on 15 or fewer: none)
  *   pairing     the Divisional ranks swapped in the NFL data         section 4
  *   validator   the replay check answers "no problems" at once       section 4
+ *   strict      the replay check calls a one game tie empty          section 4 (an over strict validator: a false
+ *               problem wipes a real bracket through the repair; the machine's own games must stay green)
+ *   outofturn   the mover plays a tie before an earlier week is in   section 4 (the any order walk)
  *   enginedrift the engine's margin draw changed, in the engine      section 4 (the recorded fixture ALONE: the
  *               machine still agrees with the engine it is played beside, which must stay green)
  *   random      a Math.random() planted in gameStory                 section 5
  *   stream      a Math.random() planted in decidedScore              section 5
  *   unkeyed     the story's stream keyed to a counter, not the game  section 5 (twice, and through JSON)
+ *   ceiling     the library's ceiling typed as 100000                section 5 (both save guards, and the story)
+ *   lawmax      the NFL's game day law claims a top score of 999     section 5 (no final above the sport's own)
  *   mounted     an import planted in memory in a route file          section 6
+ * NOT HELD HERE: the save guard and the repair with every field damaged
+ * (isGmBracketSave, repairGmBracket, readGmLastGame). They are held by the
+ * unit files src/lib/gmBracket.test.ts, src/lib/gmGameDay.test.ts and
+ * src/lib/gmGameScore.test.ts, and seven mutations of those rules leave this
+ * harness green: a gate that carries this round names all three beside it.
+ * WITHOUT A CONTROL OF THEIR OWN: "a save survives JSON after every press",
+ * "the fixture is of this fleet" and the five checks of the data's structure
+ * (they compare constants of the data file and the fleet file with numbers
+ * typed here; the `pairing` control is the one that moves the data).
  *
  * MEASURED (2026-10-10, seed sets 0 to 4, 22,800 games a set, 114,000 in
  * all; the harness prints this table when it closes, and the runs are named
@@ -87,7 +112,8 @@
  *   NOT printed beside them: the league's real figures. None was read on two
  *   sources in this round, so none is typed here.
  *
- * Nothing here reads the network or the clock.
+ * Nothing here reads the network. The clock is read only to time the run
+ * for its own log lines: no check and nothing that is played depends on it.
  * Run: node scripts/simGmGameDay.mjs            (SEEDSET=2 for one seed set)
  */
 import fs from 'node:fs';
@@ -108,9 +134,12 @@ const NEW_FILES = [SCORE, DAY, BRACKET, NFL_DAY, NFL_DATA, NFL_HELP];
 const ROUTE_FILE = 'src/pages/FrontOffice.tsx';
 
 /* `labels`: pieces of the check labels that must ALL be among the reds of the control's section for it to count
-   as fired. `clean`: pieces that must be among no red at all (the control is aimed at one fence, not its neighbour). */
+   as fired. `elsewhere`: pieces that must ALSO be among the reds, in whatever section they sit. `clean`: pieces that
+   must be among no red at all (the control is aimed at one fence, not its neighbour). */
 const CONTROLS = {
   winner: { section: 1, labels: ['never names another winner'], patches: [{ file: SCORE, from: 'if ((s[0] > s[1]) === d.homeWon) return', to: 'if (s[0] !== s[1]) return' }] },
+  level: { section: 1, labels: ['a told final is never level'], patches: [{ file: SCORE, from: 'return { home: s[0], away: s[1], tries: t + 1, swapped: false };', to: 'return { home: s[0], away: s[0], tries: t + 1, swapped: false };' }] },
+  refuse: { section: 1, labels: ['never refuses a game of the fleet'], elsewhere: ['every game of the fleet was told and measured'], patches: [{ file: SCORE, from: "typeof f.away !== 'string' || f.home === f.away) return null;", to: "typeof f.away !== 'string' || f.home === f.away || f.key.length % 5 === 0) return null;" }] },
   twopaths: { section: 1, labels: ["tells the quick path's final"], patches: [{ file: DAY, from: 'const told = quickGame(score, f);', to: 'const told = quickGame(score, { ...f, key: f.key + "|again" });' }] },
   tries: { section: 1, labels: ['the swapped share'], patches: [{ file: SCORE, from: 'export const SCORE_TRIES = 24;', to: 'export const SCORE_TRIES = 2;' }] },
   offbyone: { section: 2, labels: ['adds up by the independent checker'], patches: [{ file: DAY, from: 'events.push({ ...e, side });', to: 'events.push({ ...e, side, pts: e.kind === "fg" ? 4 : e.pts });' }] },
@@ -120,10 +149,15 @@ const CONTROLS = {
     { file: NFL_DATA, from: 'home: { rankedWinnerOf: wc, rank: 0 }, away: { rankedWinnerOf: wc, rank: 1 }', to: 'home: { rankedWinnerOf: wc, rank: 1 }, away: { rankedWinnerOf: wc, rank: 2 }' },
   ] },
   validator: { section: 4, labels: ['names a doctored winner', 'names a doctored pairing', 'names a tie played out of turn'], patches: [{ file: BRACKET, from: 'const seen = new Set<string>();', to: 'const seen = new Set<string>(); if (seen.size === 0) return problems;' }] },
+  strict: { section: 4, labels: ['bracketProblems finds nothing in a bracket the machine played', 'finds nothing after any game'], clean: ['playBracketAll gives', 'four presses of playBracketWeek'], patches: [{ file: BRACKET, from: 'if (p.games.length === 0) problems.push(`${p.id} is listed with no game`);', to: 'if (p.games.length <= 1) problems.push(`${p.id} is listed with no game`);' }] },
+  outofturn: { section: 4, labels: ['finds nothing after any game'], clean: ['playBracketAll gives', 'four presses of playBracketWeek'], patches: [{ file: BRACKET, from: 'if (!format.order && format.ties.some(t => t.week < tie.week && !done[t.id])) return save;', to: '' }] },
   enginedrift: { section: 4, labels: ['is the recorded one'], clean: ['playBracketAll gives', 'four presses of playBracketWeek'], patches: [{ file: 'src/lib/frontOffice.ts', from: 'const margin = 1 + Math.floor(rng() * 17);', to: 'const margin = 1 + Math.floor(rng() * 16);' }] },
   random: { section: 5, labels: ['holds no Math.random', 'takes no draw from Math.random'], patches: [{ file: DAY, from: "const flip = viewAs === 'away';", to: "const flip = viewAs === 'away'; Math.random();" }] },
   stream: { section: 5, labels: ['holds no Math.random', 'takes no draw from Math.random', 'moves none of its 272 winners'], patches: [{ file: SCORE, from: 'let first: [number, number] | null = null;', to: 'let first: [number, number] | null = null; Math.random();' }] },
   unkeyed: { section: 5, labels: ['the same story twice', 'through JSON, tells the same story'], patches: [{ file: DAY, from: 'keyedRng(`${g.key}|story|${g.homeScore}-${g.awayScore}`)', to: 'keyedRng(`${g.key}|story|${(globalThis.__gmDayCalls = (globalThis.__gmDayCalls ?? 0) + 1)}`)' }] },
+  ceiling: { section: 5, labels: ['the save guards refuse a score above the ceiling', 'a final above the ceiling is told nothing'], patches: [{ file: SCORE, from: 'export const GM_SCORE_CEILING = 999;', to: 'export const GM_SCORE_CEILING = 100000;' }] },
+  lawmax: { section: 5, labels: ["tells no final above the sport's own top score"], patches: [{ file: NFL_DAY, from: 'maxScore: NFL_MAX_SCORE,', to: 'maxScore: 999,' }] },
+  lowmax: { section: 1, labels: ["has a side above the sport's own top score"], elsewhere: ['every told final has a story'], patches: [{ file: NFL_DAY, from: 'export const NFL_MAX_SCORE = 7 * DRIVES + 3;', to: 'export const NFL_MAX_SCORE = 30;' }] },
   mounted: { section: 6, labels: ['no file under src imports'], patches: [], plant: { file: ROUTE_FILE, text: "\nimport { gameStory } from '@/lib/gmGameDay';\n" } },
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown GM_GAMEDAY_CONTROL ${CONTROL} (${Object.keys(CONTROLS).join(', ')})`); process.exit(2); }
@@ -254,6 +288,7 @@ function storyProblems(story, quick, view) {
   for (let i = ev.length - 1; i > last + 1; i -= 1) if (ev[i].side === win) { want.push(ev[i]); break; }
   if (story.deciding.length !== want.length || story.deciding.some((e, i) => e !== want[i])) out.push('the deciding plays are not the rule\'s');
   if (story.deciding.some(e => !ev.includes(e))) out.push('a deciding play is not a play of the game');
+  if (story.goAhead !== goAhead) out.push('the go ahead the story names is not the rule\'s');
   const margin = Math.abs(us - them);
   const shape = margin >= nflDay.NFL_ROUT ? 'rout' : hole >= nflDay.NFL_COMEBACK ? 'comeback' : goAhead && goAhead.min > HOUR - NFL_CLOCK.minutes ? 'late' : last === -1 ? 'wire' : 'trade';
   if (story.shape !== shape) out.push(`shape ${story.shape}, the rule says ${shape}`);
@@ -297,9 +332,9 @@ const decile = p => Math.min(9, Math.floor(p * 10));
 
 for (const set of SEEDSETS) {
   const t1 = Date.now();
-  const s1 = { winner: tally(), level: tally(), refused: tally(), paths: tally() };
+  const s1 = { winner: tally(), level: tally(), refused: tally(), paths: tally(), top: tally() };
   const s2 = { story: tally(), adds: tally() };
-  const s4 = { all: tally(), weeks: tally(), sound: tally(), json: tally(), dWinner: tally(), dPairing: tally(), dTurn: tally() };
+  const s4 = { all: tally(), weeks: tally(), sound: tally(), json: tally(), dWinner: tally(), dPairing: tally(), dTurn: tally(), anyOrder: tally() };
   const s5 = { state: tally(), calls: tally(), winners: tally(), records: tally(), twice: tally(), reload: tally(), bracket: tally() };
   const told = { games: 0, points: 0, losers15: 0, shutouts: 0, forty: 0, swapped: 0 };
   const free = { games: 0, points: 0, losers15: 0, shutouts: 0, forty: 0 };
@@ -316,6 +351,7 @@ for (const set of SEEDSETS) {
     if (!quick) return;
     count(s1.level, quick.homeScore !== quick.awayScore, () => `${id} ${key}: ${quick.homeScore}-${quick.awayScore}`);
     count(s1.winner, S.toldWinner(quick) === g.winner, () => `${id} ${key}: told ${quick.homeScore}-${quick.awayScore}, the engine's winner is ${g.winner}`);
+    count(s1.top, quick.homeScore <= GAME_DAY.maxScore && quick.awayScore <= GAME_DAY.maxScore, () => `${id} ${key}: told ${quick.homeScore}-${quick.awayScore}, the sport's top score is ${GAME_DAY.maxScore}`);
     const t = D.tellGame(LAW, GAME_DAY, f, view);
     count(s1.paths, t !== null && same(t.told, quick), () => `${id} ${key}: told ${t ? `${t.told.homeScore}-${t.told.awayScore}` : 'nothing'}, quick ${quick.homeScore}-${quick.awayScore}`);
     const story = t ? t.story : null;
@@ -394,6 +430,22 @@ for (const set of SEEDSETS) {
         }
       }
 
+      /* section 4, the mover against the validator: any tie asked for in any order, a game at a time, with a keyed coin
+         for a game (nothing of the engine: no draw from Math.random). The validator must find nothing after any game. */
+      {
+        const pick = M.keyedRng(`any order|${id}`);
+        const coin = (home, away) => (pick() < 0.5 ? { homeScore: 24, awayScore: 17, winner: home } : { homeScore: 17, awayScore: 24, winner: away });
+        let save = B.openBracket(FORMAT, A.lg.season, seeds);
+        let wrong = '';
+        for (let ask = 0; ask < 2000 && !wrong && B.bracketChampion(FORMAT, save) === null; ask += 1) {
+          const next = B.playBracketGame(FORMAT, save, FORMAT.ties[Math.floor(pick() * FORMAT.ties.length)].id, coin);
+          if (next === save) continue;
+          save = JSON.parse(JSON.stringify(next));
+          wrong = B.bracketProblems(FORMAT, save, isClub)[0] ?? '';
+        }
+        count(s4.anyOrder, !wrong && B.bracketChampion(FORMAT, save) !== null, () => `${id}: ${wrong || 'the walk did not reach a champion'}`);
+      }
+
       /* B: the same season with every game told the moment the engine has played it (sections 1, 2, 3 and 5) */
       const winnersB = [];
       const told17 = playRegularSeason(M, set, kind, i, (g, pHome, week, lg) => {
@@ -421,6 +473,7 @@ for (const set of SEEDSETS) {
   settle(1, `set ${set}: a told final is never level`, s1.level);
   settle(1, `set ${set}: a told final never names another winner than the engine's`, s1.winner);
   settle(1, `set ${set}: the told path tells the quick path's final`, s1.paths);
+  settle(1, `set ${set}: no told final of the fleet has a side above the sport's own top score`, s1.top);
   const swappedShare = told.games ? told.swapped / told.games : 1;
   check(1, `set ${set}: the swapped share ${swappedShare.toFixed(5)} is under ${SWAPPED_MOST}`, swappedShare < SWAPPED_MOST);
   settle(2, `set ${set}: every told final has a story`, s2.story);
@@ -438,6 +491,7 @@ for (const set of SEEDSETS) {
   settle(4, `set ${set}: bracketProblems names a doctored winner`, s4.dWinner);
   settle(4, `set ${set}: bracketProblems names a doctored pairing`, s4.dPairing);
   settle(4, `set ${set}: bracketProblems names a tie played out of turn`, s4.dTurn);
+  settle(4, `set ${set}: asked for any tie in any order, a game at a time, the mover makes a save in which bracketProblems finds nothing after any game`, s4.anyOrder);
   const rec = fixture.sets[set];
   check(4, `set ${set}: the engine's postseason over the set is the recorded one (scripts/data/gmBracketFixture.json)`, !!rec && rec.seasons === lines.length && rec.digest === sha1(lines.join('\n')),
     rec ? `digest ${sha1(lines.join('\n')).slice(0, 12)} against the recorded ${String(rec.digest).slice(0, 12)}; the first kept season that differs: ${(rec.kept.find(k => !lines.includes(JSON.stringify(k))) ?? { id: 'none of the kept ones' }).id}; ${fixtureFiles}. If the change is meant, record again in the same commit: node scripts/recordGmBracketFixture.mjs` : 'the fixture has no such set');
@@ -482,6 +536,27 @@ for (const set of SEEDSETS) {
   check(5, 'the source scan looked at every new file', seen === NEW_FILES.length * FORBIDDEN.length);
 }
 
+/* ─── Section 5, the ceiling (once): one damaged number in a save never reaches a story law ─── */
+{
+  const [a, b] = [...CLUBS];
+  /* the numbers are typed here, not read off the library: a control that moves the library's ceiling must not move them */
+  const AT = 999;
+  const OVER = [1000, 250000, 1e21];
+  const last = n => JSON.parse(JSON.stringify({ v: 1, key: 'ceiling', where: 'w1', home: a, away: b, homeScore: n, awayScore: 17, winner: a }));
+  const tie = n => JSON.parse(JSON.stringify({ v: 1, format: FORMAT.id, season: 2026, seeds: [a, b], played: [{ id: 'x', home: a, away: b, games: [{ homeScore: n, awayScore: 17, winner: a }] }] }));
+  const told = n => ({ key: 'ceiling', home: a, away: b, homeScore: n, awayScore: 17 });
+  check(5, `the library's ceiling is ${AT} and the save guards read a score of ${AT}`, S.GM_SCORE_CEILING === AT && S.readGmLastGame(last(AT), isClub) !== null && B.isGmBracketSave(tie(AT), isClub) === true);
+  const read = OVER.filter(n => S.readGmLastGame(last(n), isClub) !== null || B.isGmBracketSave(tie(n), isClub) !== false);
+  check(5, `the save guards refuse a score above the ceiling (a saved last game and a saved bracket game on ${OVER.join(', ')})`, read.length === 0, `read: ${read.join(', ')}`);
+  /* a sport that claims no top score of its own: the library's ceiling alone must keep the law from being asked */
+  let asked = 0;
+  const anything = { ...GAME_DAY, maxScore: Number.POSITIVE_INFINITY, story: { ...GAME_DAY.story, events: (h, w, rng) => { asked += 1; return GAME_DAY.story.events(h, w, rng); } } };
+  const toldOver = OVER.filter(n => D.gameStory(anything, told(n), 'home') !== null);
+  check(5, `a final above the ceiling is told nothing and its law is never asked (${OVER.join(', ')})`, toldOver.length === 0 && asked === 0, `told: ${toldOver.join(', ') || 'none'}; the law was asked ${asked} times`);
+  const top = nflDay.NFL_MAX_SCORE;
+  check(5, `the NFL tells a final of ${top} to 17 and tells no final above the sport's own top score`, D.gameStory(GAME_DAY, told(top), 'home') !== null && D.gameStory(GAME_DAY, told(top + 1), 'home') === null && D.gameStory(GAME_DAY, { ...told(17), awayScore: top + 1 }, 'away') === null);
+}
+
 /* ─── Section 6: nobody mounts it yet ─── */
 {
   const ts = (await import('typescript')).default;
@@ -493,7 +568,11 @@ for (const set of SEEDSETS) {
     if (s.startsWith('@/')) return `src/${s.slice(2)}`;
     return s.startsWith('.') ? path.posix.normalize(path.posix.join(path.posix.dirname(from), s)) : '';
   };
-  const walk = dir => fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).flatMap(d => (d.isDirectory() ? walk(`${dir}/${d.name}`) : /\.tsx?$/.test(d.name) ? [`${dir}/${d.name}`] : []));
+  const walk = dir => {
+    let list;
+    try { list = fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }); } catch { return []; /* a directory another harness made under src and took away while this one walked */ }
+    return list.flatMap(d => (d.isDirectory() ? walk(`${dir}/${d.name}`) : /\.tsx?$/.test(d.name) ? [`${dir}/${d.name}`] : []));
+  };
   const files = walk('src');
   if (!files.includes(ROUTE_FILE)) { console.error(`simGmGameDay: ${ROUTE_FILE} is gone, the mounted control has nowhere to plant: refusing to report`); process.exit(2); }
   const importers = [];
@@ -535,9 +614,10 @@ if (CONTROL) {
   const mine = failsBy.get(String(c.section)) ?? [];
   const every = [...failsBy.values()].flat();
   const named = c.labels.filter(l => mine.some(x => x.includes(l)));
+  const far = (c.elsewhere ?? []).filter(l => every.some(x => x.includes(l)));
   const dirty = (c.clean ?? []).filter(l => every.some(x => x.includes(l)));
-  const ok = mine.length > 0 && named.length === c.labels.length && dirty.length === 0;
-  const which = `its named checks red: ${named.length} of ${c.labels.length} (${c.labels.map(l => `"${l}"`).join(', ')})${c.clean ? `; checks that had to stay green and did not: ${dirty.length ? dirty.join(', ') : 'none'}` : ''}`;
+  const ok = mine.length > 0 && named.length === c.labels.length && far.length === (c.elsewhere ?? []).length && dirty.length === 0;
+  const which = `its named checks red: ${named.length} of ${c.labels.length} (${c.labels.map(l => `"${l}"`).join(', ')})${c.elsewhere ? `; its named checks of other sections red: ${far.length} of ${c.elsewhere.length} (${c.elsewhere.map(l => `"${l}"`).join(', ')})` : ''}${c.clean ? `; checks that had to stay green and did not: ${dirty.length ? dirty.join(', ') : 'none'}` : ''}`;
   console.log(ok
     ? `control ${CONTROL}: RED AT THE NAMED CHECK (section ${c.section}); ${which}; sections red: ${red.join(', ')}`
     : `control ${CONTROL}: DID NOT FIRE AT ITS NAMED CHECK (section ${c.section}); ${which}; sections red: ${red.join(', ') || 'none'}`);
