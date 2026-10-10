@@ -431,8 +431,12 @@ async function main() {
         cm.__fixtureSyncResults.length = 0;
         seeded(4400, () => cm.__fixtureSyncProbe(state, 1));
         const rows = cm.__fixtureSyncResults.filter(r => r.leagueId === LEAGUE);
-        assertRound(rows, rounds[0], 'actual world round');
-        assert.equal(state.world[LEAGUE].round, 1); assert.deepEqual(actualTable(state.world[LEAGUE].table), tableFrom(rows, clubs));
+        /* The world keeps other leagues in step with my season's length, so one round of a 22 round league is
+           more than one matchday of a longer one. Every matchday it settled is held, in order. */
+        const settled = state.world[LEAGUE].round;
+        assert.ok(settled >= 1, 'The world settled at least one matchday of the league'); assert.equal(rows.length, settled * perRound);
+        for (let round = 0; round < settled; round++) assertRound(rows.slice(round * perRound, (round + 1) * perRound), rounds[round], `actual world round ${round + 1}`);
+        assert.deepEqual(actualTable(state.world[LEAGUE].table), tableFrom(rows, clubs));
       },
       eligibility() {
         const state = seeded(4107, () => cm.startCareer(myClub));
