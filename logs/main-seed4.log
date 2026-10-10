@@ -1,0 +1,5 @@
+simCareerSquad: 200 careers an era, seed 4
+   29325 played seasons: league games minus the plan, mean -0.30
+   FAIL [9] mean of league games minus the plan -0.30, the line is 0.3
+FAILED [9] mean of league games minus the plan -0.30, the line is 0.3
+simCareerSquad: 2177 checks, 1 failed

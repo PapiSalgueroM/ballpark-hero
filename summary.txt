@@ -1,0 +1,5 @@
+main-seed3 exit=0 171s | simCareerSquad: 2186 checks, 0 failed
+main-seed1 exit=0 181s | simCareerSquad: 2181 checks, 0 failed
+main-seed2 exit=0 181s | simCareerSquad: 2184 checks, 0 failed
+main-seed4 exit=1 132s | simCareerSquad: 2177 checks, 1 failed
+main-seed5 exit=0 129s | simCareerSquad: 2186 checks, 0 failed
