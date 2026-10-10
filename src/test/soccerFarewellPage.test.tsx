@@ -99,12 +99,14 @@ function mount(saved: E.CareerState) {
   expect(localStorage.getItem(OTHER)).toBe('held other career');
   return view;
 }
-function tape(seed = 12345) {
+function tape(seed = 12345, stacks?: string[]) {
   const draws: number[] = [];
   let state = seed >>> 0;
   vi.mocked(Math.random).mockImplementation(() => {
     state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
-    const value = state / 4294967296; draws.push(value); return value;
+    const value = state / 4294967296; draws.push(value);
+    stacks?.push(new Error('Farewell action random draw').stack ?? '');
+    return value;
   });
   return draws;
 }
@@ -183,13 +185,17 @@ describe('Soccer farewell real page actions', () => {
     const expectedDraws = tape(), banked = closeSeasonMoments(copy(before), E.FALLBACK_CLUBS);
     expect(readSeasonMoments(banked.seasonMoments)?.banked).toBe(1);
     const expected = copy(E.advanceProSeason(banked, E.FALLBACK_CLUBS));
-    const actualDraws = tape(), button = nextButton(view);
+    const actualStacks: string[] = [], actualDraws = tape(12345, actualStacks), button = nextButton(view);
     await act(async () => {
       fireEvent.click(button); fireEvent.click(button);
       await import('@/lib/season/soccerMoments');
       await Promise.resolve(); await Promise.resolve();
     });
-    expect(read()).toEqual(expected); expect(actualDraws).toEqual(expectedDraws);
+    expect(read()).toEqual(expected);
+    const firstMismatch = actualDraws.findIndex((value, index) => value !== expectedDraws[index]);
+    expect(actualDraws, JSON.stringify({ expectedCount: expectedDraws.length, actualCount: actualDraws.length,
+      firstMismatch, mismatchStack: actualStacks[firstMismatch], extraTail: actualDraws.slice(expectedDraws.length),
+      extraTailStacks: actualStacks.slice(expectedDraws.length) })).toEqual(expectedDraws);
     expect(read().age).toBe(before.age + 1); expect(read().seasons).toHaveLength(before.seasons.length + 1);
     expect(lastRow(read()).year).toBe(2027); expect(readSeasonMoments(read().seasonMoments)?.banked).toBe(1);
     expect(localStorage.getItem(OTHER)).toBe('held other career');
