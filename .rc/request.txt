@@ -1,0 +1,10 @@
+#!build
+#!playwright
+#!serial
+# Round 1215 step (b), head 33efc2ce: the walk's old controls and its measuring pass still behave.
+bar: LIVE_FIT_CONTROL=bar node scripts/playLiveMatchFit.mjs
+silentlist: LIVE_FIT_CONTROL=silentlist node scripts/playLiveMatchFit.mjs
+report: LIVE_FIT_REPORT=1 node scripts/playLiveMatchFit.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+rivals: node scripts/simNoRivalNames.mjs
+anchors: node scripts/simHarnessAnchors.mjs
