@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { sortedUclGroup, uclGroupTiebreakFootnote, projectedUclBracket, uclFirstKoRound } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
+import { isUclLeagueStage } from '@/lib/clubManagerUclLeague';
 
 interface UclGroupsCardProps {
   career: CareerState;
@@ -39,6 +40,32 @@ export function UclGroupsCard({ career, onClubClick }: UclGroupsCardProps) {
   const [pick, setPick] = useState('A');
   const group = career.uclGroup;
   if (!group) return null;
+  if (group.format === 'league36') {
+    if (!isUclLeagueStage(group)) return <p className="text-xs text-muted-foreground">The saved league phase could not be read.</p>;
+    const rows = sortedUclGroup(career, group.table);
+    const final = group.matchday === 8;
+    return (
+      <div className="space-y-2">
+        <p className="text-xs text-muted-foreground">
+          36 clubs, eight different opponents, four home and four away. Top eight go straight to the round of 16.
+          Places 9 to 24 play two legs for the other eight places. Places 25 to 36 go out.
+        </p>
+        <p className="text-[10px] text-muted-foreground">Example: finish 12th and win your playoff to reach the last 16. Finish 6th and skip the playoff.</p>
+        <div className="max-h-[32rem] overflow-y-auto rounded-2xl" tabIndex={0} role="region" aria-label="Champions League league table">
+          <LeagueTableCard rows={rows} myClub={career.clubName} zoneTop={8}
+            title={`⭐ UCL league phase · ${final ? 'final table' : `MD${group.matchday}/8`}`}
+            preseason={group.matchday === 0} onClubClick={onClubClick}
+            footnote={uclGroupTiebreakFootnote(career, rows)} />
+        </div>
+        {final && <p className="text-[10px] text-muted-foreground">The final table stays here. Follow every playoff and knockout tie in the bracket below.</p>}
+        <p className="text-[9px] text-muted-foreground">
+          This game draws its own fixtures. Entrants come from its qualification model using saved league standings.
+          Real qualifying playoffs, coefficient pots and association limits are not modelled.
+        </p>
+        <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[44px] text-xs text-primary hover:underline">Competition rules and format history</Link>
+      </div>
+    );
+  }
 
   const world = career.uclWorld ?? [];
   const letters = ['A', ...world.map(g => g.letter)];

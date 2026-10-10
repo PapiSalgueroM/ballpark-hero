@@ -8,12 +8,12 @@
         "startYear": 2026,
         "emoji": "📅"
       },
-      "firstKo": "QF",
+      "firstKo": "PO",
       "legs": 2,
       "awayGoals": false,
       "realId": "league-phase",
-      "matchesReal": false,
-      "line": "Eight groups of four into the quarter-finals, two legged ties, no away goals rule. A stand in: the real 2026-27 competition runs thirty six clubs in one league table, which the engine does not play yet."
+      "matchesReal": true,
+      "line": "Thirty six clubs in one table, eight different opponents, four home and four away. Top eight into the round of 16; places 9 to 24 play two legged playoffs. No away goals rule. Qualification and the fixture draw are simulated; coefficient pots and association limits are not modelled."
     },
     {
       "era": {

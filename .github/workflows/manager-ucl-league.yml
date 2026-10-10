@@ -1,0 +1,216 @@
+name: Manager UCL League Phase
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/manager-ucl-league.yml
+      - src/lib/clubManager.ts
+      - src/lib/clubManagerCalendar.ts
+      - src/lib/clubManagerEras.ts
+      - src/lib/clubManagerUclGroups.ts
+      - src/lib/clubManagerUclLeague.ts
+      - src/lib/clubManagerUclLeague.test.ts
+      - src/test/managerUclCalendarUi.test.tsx
+      - src/lib/uclFormatHistoryEngine.ts
+      - src/data/uclEngineShapes.json
+      - src/components/club-manager/UclGroupsCard.tsx
+      - src/components/club-manager/UclBracketCard.tsx
+      - src/components/club-manager/CalendarCard.tsx
+      - src/components/club-manager/LeagueTableCard.tsx
+      - src/components/club-manager/CalendarScreen.tsx
+      - src/pages/ClubManager.tsx
+      - src/hooks/useClubManager.ts
+      - scripts/genUclEngineShapes.mjs
+      - scripts/simManagerUclLeague.mjs
+      - scripts/playManagerUclLeague.mjs
+      - scripts/qa/managerUclLeagueKit.mjs
+      - scripts/qa/managerWorldBrowser1077.mjs
+      - scripts/simUclFormatHistory.mjs
+      - scripts/simClubManagerEraUcl.mjs
+      - scripts/lib/offlineTransport.cjs
+      - package.json
+      - package-lock.json
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: manager-ucl-league-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      SEO_SPLIT_BASE_REF: HEAD
+      MANAGER_WORLD_FONT_CACHE: manager-ucl-league-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Locked dependencies and actual browser fonts
+        run: |
+          mkdir -p manager-ucl-league-artifacts
+          git rev-parse HEAD > manager-ucl-league-artifacts/source-head.txt
+          git rev-parse "HEAD^{tree}" > manager-ucl-league-artifacts/source-tree.txt
+          npm ci
+          node scripts/qa/managerUclLeagueKit.mjs dependencies before
+          npm install --no-save --package-lock=false playwright@1.64.0
+          node scripts/qa/managerUclLeagueKit.mjs dependencies after
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/managerWorldBrowser1077.mjs --prefetch-fonts-only 2>&1 | tee manager-ucl-league-artifacts/fonts.log
+      - name: Actual app types, generated engine shapes and SEO build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee manager-ucl-league-artifacts/types.log
+          cp src/data/uclEngineShapes.json manager-ucl-league-artifacts/uclEngineShapes-checked-in.json
+          trap 'cp manager-ucl-league-artifacts/uclEngineShapes-checked-in.json src/data/uclEngineShapes.json' EXIT
+          node scripts/genUclEngineShapes.mjs 2>&1 | tee manager-ucl-league-artifacts/engine-shapes.log
+          cp src/data/uclEngineShapes.json manager-ucl-league-artifacts/uclEngineShapes-generated.json
+          cmp manager-ucl-league-artifacts/uclEngineShapes-checked-in.json manager-ucl-league-artifacts/uclEngineShapes-generated.json 2>&1 | tee manager-ucl-league-artifacts/engine-shapes-held.log
+          trap - EXIT
+          npm run build:seo 2>&1 | tee manager-ucl-league-artifacts/build.log
+          git diff --binary HEAD -- public scripts/data/lastmod.json > manager-ucl-league-artifacts/generated-public.patch
+          find public -type f -print0 | sort -z | xargs -0 sha256sum > manager-ucl-league-artifacts/generated-public-sha256.txt
+          sha256sum scripts/data/lastmod.json > manager-ucl-league-artifacts/generated-lastmod-sha256.txt
+          tar -czf manager-ucl-league-artifacts/generated-public-and-lastmod.tar.gz public scripts/data/lastmod.json
+          sha256sum manager-ucl-league-artifacts/generated-public-and-lastmod.tar.gz > manager-ucl-league-artifacts/generated-public-archive-sha256.txt
+      - name: Actual fifty model and one expanded Calendar unit outcomes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/lib/clubManagerUclLeague.test.ts src/test/managerUclCalendarUi.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=manager-ucl-league-artifacts/units.json 2>&1 | tee manager-ucl-league-artifacts/units.log
+          node scripts/qa/managerUclLeagueKit.mjs units
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const r = JSON.parse(fs.readFileSync('manager-ucl-league-artifacts/units.json', 'utf8'));
+          assert.equal(r.success, true);
+          assert.equal(r.numPassedTests, 51);
+          assert.equal(r.numFailedTests, 0);
+          assert.equal(r.numPendingTests, 0);
+          assert.equal(r.numTodoTests ?? 0, 0);
+          assert.equal(r.testResults.length, 2);
+          for (const [name, count] of [['clubManagerUclLeague.test.ts', 50], ['managerUclCalendarUi.test.tsx', 1]]) {
+            const suite = r.testResults.find(s => s.name.endsWith('/' + name));
+            assert(suite);
+            assert.equal(suite.assertionResults.length, count);
+            assert(suite.assertionResults.every(a => a.status === 'passed'));
+          }
+          console.log('PASS exactly fifty model and one expanded saved-calendar assertions, zero skipped/pending/todo.');
+          NODE
+      - name: Complete original seasons and effective copied-source controls
+        id: pure
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simManagerUclLeague.mjs 2>&1 | tee manager-ucl-league-artifacts/pure.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const r = JSON.parse(fs.readFileSync('manager-ucl-league-artifacts/pure-report.json', 'utf8'));
+          assert.equal(r.ok, true);
+          assert.equal(r.neutralPairs.length, 60);
+          assert.equal(r.groups.length, 4);
+          assert(r.groups.every(g => g.ok));
+          assert.equal(r.controls.length, 4);
+          for (const c of r.controls) {
+            assert.equal(c.result.length, 4);
+            const failed = c.result.filter(g => !g.ok);
+            assert.deepEqual(failed.map(g => g.name), c.expected);
+            assert(failed.every(g => g.error.name === 'AssertionError'));
+            assert.equal(c.faults.length, 1);
+            assert.equal(c.faults[0].count, 1);
+            assert.notEqual(c.faults[0].beforeSha256, c.faults[0].afterSha256);
+            assert(c.loaded.length > 0);
+          }
+          assert.deepEqual(r.sourceAfter, r.sourceBefore);
+          for (const name of ['historic-complete-season', 'old-modern-complete-season']) assert(fs.statSync('manager-ucl-league-artifacts/' + name + '.json.gz').size > 0);
+          assert.equal(r.legacyCalendar.length, 3);
+          for (const receipt of [...r.legacyCalendar, r.metadata, ...r.jobMoves]) assert(fs.statSync('manager-ucl-league-artifacts/' + receipt.file).size > 0);
+          for (const originalMode of [false, true]) assert.equal(r.jobMoves.filter(j => j.originalMode === originalMode && j.accepted).length, 1);
+          const fixtures = JSON.parse(fs.readFileSync('manager-ucl-league-artifacts/native-fixtures.json', 'utf8'));
+          assert.deepEqual(fixtures.map(f => f.id).sort(), ['out', 'playoff', 'top8']);
+          console.log('PASS sixty complete original/current callbacks, two complete legacy seasons, three original Calendar reads, both actual job handovers and four exact effective source controls.');
+          NODE
+      - name: Actual built Manager journeys and strict observation controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.pure.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playManagerUclLeague.mjs 2>&1 | tee manager-ucl-league-artifacts/native.log
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import fs from 'node:fs';
+          const r = JSON.parse(fs.readFileSync('manager-ucl-league-artifacts/native/report.json', 'utf8'));
+          assert.equal(r.ok, true);
+          assert.equal(r.cases.length, 9);
+          assert(r.cases.every(c => c.ok && c.errors.length === 0));
+          assert.equal(r.cases.reduce((n, c) => n + c.shots.length, 0), 27);
+          assert.equal(r.cases.reduce((n, c) => n + c.reloads.length, 0), 18);
+          assert.equal(r.controls.length, 3);
+          assert(r.controls.every(c => c.changed && c.undo));
+          assert.equal(r.forwardedRequests, 0);
+          assert.deepEqual(r.sourceAfter, r.sourceBefore);
+          assert(r.fontManifest.length > 0);
+          console.log('PASS nine complete native cases, twenty-seven fresh PNGs, eighteen raw reloads and three effective observation controls.');
+          NODE
+      - name: Early exact-source evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-ucl-league-early-${{ github.run_id }}
+          path: manager-ucl-league-artifacts/
+          retention-days: 5
+      - name: Existing historical and modern format regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simUclFormatHistory simClubManagerEraUcl; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-ucl-league-artifacts/$harness.log" || failed=1
+            grep -Eq 'PASS[[:space:]]+sim' "manager-ucl-league-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-ucl-league-artifacts/$harness.log"; then failed=1; fi
+          done
+          for control in gap legs table; do
+            NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" UCL_FORMAT_CONTROL="$control" node scripts/simUclFormatHistory.mjs 2>&1 | tee "manager-ucl-league-artifacts/format-control-$control.log" || failed=1
+            grep -Fq "simUclFormatHistory control: green. UCL_FORMAT_CONTROL=$control was reported by section" "manager-ucl-league-artifacts/format-control-$control.log" || failed=1
+          done
+          exit "$failed"
+      - name: All fifteen rebuilt readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-ucl-league-artifacts/$harness.log" || failed=1
+            grep -Eq 'PASS[[:space:]]+sim' "manager-ucl-league-artifacts/$harness.log" || failed=1
+            if grep -Eq '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "manager-ucl-league-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Exact authored source and dependency versions held
+        if: ${{ !cancelled() }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$(cat manager-ucl-league-artifacts/source-head.txt)"
+          test "$(git rev-parse "HEAD^{tree}")" = "$(cat manager-ucl-league-artifacts/source-tree.txt)"
+          node scripts/qa/managerUclLeagueKit.mjs dependencies after 2>&1 | tee manager-ucl-league-artifacts/dependencies-held.log
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json index.html ':!scripts/data/lastmod.json' 2>&1 | tee manager-ucl-league-artifacts/source-held.log
+      - name: Final exact-source evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: manager-ucl-league-final-${{ github.run_id }}
+          path: manager-ucl-league-artifacts/
+          retention-days: 5

@@ -408,7 +408,7 @@ export function clubTag(name: string): string {
   return up(words.slice(0, 3).map(w => w[0]).join(''));
 }
 
-const ROUND_RANK: Record<'R16' | 'QF' | 'SF' | 'F', number> = { R16: 0, QF: 1, SF: 2, F: 3 };
+const ROUND_RANK: Record<'PO' | 'R16' | 'QF' | 'SF' | 'F', number> = { PO: -1, R16: 0, QF: 1, SF: 2, F: 3 };
 
 /**
  * A knockout round ahead of the one my club is in, while it is still in the
@@ -437,7 +437,7 @@ function pendingLabel(state: CareerState, entry: CalendarEntry): string {
   const league = careerLeagueOf(state);
   if (entry.type === 'cup' && entry.cupRound) return `${league.cupName} · ${CUP_LABELS[entry.cupRound]}`;
   if (entry.type === 'uclKo' && entry.uclRound) return `Champions League · ${UCL_LABELS[entry.uclRound]}`;
-  if (entry.type === 'uclGroup') return `Champions League · Group MD${entry.round + 1}`;
+  if (entry.type === 'uclGroup') return `Champions League · ${state.uclGroup?.format === 'league36' ? 'League' : 'Group'} MD${entry.round + 1}`;
   return `${league.name} · Round ${entry.round + 1}`;
 }
 
@@ -893,6 +893,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
       yearsOn,
       uclField: career.uclField ?? null,
       keepLeagueOverrides: true,
+      uclFormat: career.uclFormat === 'league36' || career.uclGroup?.format === 'league36' ? 'league36' : 'groups',
     });
   } catch {
     return null;

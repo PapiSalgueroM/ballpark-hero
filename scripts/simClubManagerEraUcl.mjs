@@ -159,6 +159,7 @@ import os from 'node:os';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { bundleUcl, scheduleProof, runSeason, OUT as UCL_PROOF_OUT } from './qa/managerUclLeagueKit.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -310,6 +311,17 @@ const store = new Map();
 globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k), clear: () => store.clear() };
 const { cm, UclGroupsCard, UclBracketCard, render, staticPool, eraRosters } = createRequire(import.meta.url)(BUNDLE);
 const twinCm = createRequire(import.meta.url)(TWIN_BUNDLE).cm;
+// Explicit original saves retain the old group regression sample and its RNG stream.
+const beforeOriginalBoot = Math.random;
+const originalBootDraws = [];
+Math.random = (() => { const draw = mulberry(520); return () => { const value = draw(); originalBootDraws.push(value); return value; }; })();
+let originalGroupBundle;
+try { originalGroupBundle = await bundleUcl({ original: true }); } finally { Math.random = beforeOriginalBoot; }
+const originalGroupEngine = originalGroupBundle.value.E;
+const retainedOriginalStarts = [];
+function originalGroupStart(club) { const state = originalGroupEngine.startCareer(club); if (state.uclGroup?.format) throw new Error('Original group fixture unexpectedly has a new format'); retainedOriginalStarts.push(clone(state)); return state; }
+fs.mkdirSync(UCL_PROOF_OUT, { recursive: true });
+fs.writeFileSync(path.join(UCL_PROOF_OUT, 'era-harness-original-source.json'), JSON.stringify({ base: '09df145abfb241679022b41903d2f19bc254ebf9', loaded: originalGroupBundle.loaded, startupDraws: originalBootDraws, scope: 'Additional original-module startup is separate from the unchanged harness action stream.' }, null, 2));
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await cm.ensureAllEraRosters();
 const {
@@ -768,7 +780,7 @@ function checkMigration(tally) {
     tally.shapes += 1;
   }
   // A modern save is left exactly as it was.
-  let m = startCareer('Real Madrid');
+  let m = originalGroupStart('Real Madrid');
   m = playUntil(m, st => (st.uclGroup?.matchday ?? 0) >= 3);
   const mOld = clone(m);
   delete mOld.pairResults;
@@ -1151,7 +1163,7 @@ const tally = {
 function runCareer(tag, club, eraId) {
   const isEra = !!eraId;
   let koStart = null;
-  let s = eraId ? startCareer(club, eraId) : startCareer(club);
+  let s = eraId ? startCareer(club, eraId) : originalGroupStart(club);
   /* Round 478: every group of every save is read on every group night, not
      only at the final whistle, so the mid group fall back is walked too. */
   let seenMd = -1;
@@ -1221,8 +1233,8 @@ const ERA_CAREERS = [
   ['PSG 2020', 'PSG', 'era2020'],
 ];
 for (const [tag, club, era] of ERA_CAREERS) runCareer(tag, club, era);
-runCareer('Real Madrid (modern control)', 'Real Madrid');
-runCareer('Arsenal (modern control)', 'Arsenal');
+runCareer('Real Madrid (original modern group save)', 'Real Madrid');
+runCareer('Arsenal (original modern group save)', 'Arsenal');
 checkRule();
 checkMigration(tally);
 checkGroupRule(tally);
@@ -1356,7 +1368,7 @@ function modernDigest(engine) {
   const saved = Math.random;
   Math.random = mulberry(1028);
   try {
-    let s = engine.startCareer('Real Madrid');
+    let s = clone(twinOriginalInput);
     const parts = [];
     let guard = 0;
     while (guard++ < 200) {
@@ -1372,9 +1384,32 @@ function modernDigest(engine) {
     Math.random = saved;
   }
 }
+const beforeTwinFixture = Math.random;
+let twinOriginalInput;
+Math.random = mulberry(1028);
+try { twinOriginalInput = originalGroupStart('Real Madrid'); } finally { Math.random = beforeTwinFixture; }
 checkEraNights(tally);
 const twinBefore = modernDigest(twinCm);
 const twinNow = modernDigest(cm);
+// The new-format witness is additional to every original historic and old-save floor.
+const beforeModern = Math.random;
+Math.random = mulberry(1253);
+let modernLeague;
+try {
+  const start = cm.startCareer('Arsenal', 'now');
+  const field = cm.seasonOneUclField('now');
+  scheduleProof(start.uclGroup, field, start.clubName);
+  modernLeague = runSeason({ E: cm }, start, 1253);
+  const state = modernLeague.state;
+  scheduleProof(state.uclGroup, field, state.clubName);
+  if (state.week !== state.calendar.length || state.uclGroup.matchday !== 8 || state.uclGroup.results.length !== 144) note('format', 'the genuine modern league phase did not finish all eight matchdays and 144 games');
+  for (const [round, count] of [['PO', 8], ['R16', 8], ['QF', 4], ['SF', 2], ['F', 1]]) {
+    const ties = state.uclBracket.filter(tie => tie.round === round);
+    if (ties.length !== count || ties.some(tie => tie.winner !== tie.home && tie.winner !== tie.away)) note('format', `the modern ${round} path did not finish all ${count} ties`);
+  }
+  fs.writeFileSync(path.join(UCL_PROOF_OUT, 'era-harness-new-modern.json'), JSON.stringify({ start, complete: modernLeague }, null, 2));
+} finally { Math.random = beforeModern; }
+fs.writeFileSync(path.join(UCL_PROOF_OUT, 'era-harness-original-saves.json'), JSON.stringify({ originals: retainedOriginalStarts, twinInput: twinOriginalInput, current: twinNow, pre1028: twinBefore }, null, 2));
 
 /* ---------- the report ---------- */
 let failures = 0;
@@ -1385,8 +1420,9 @@ function section(title, bucket, lines, extra) {
   for (const m of buckets[bucket]) console.error('  FAIL: ' + m);
   failures += buckets[bucket].length;
 }
-section('1) The format: an era plays eight groups into a round of 16, the modern save keeps its shape', 'format', [
-  `${tally.careers} careers played to the final whistle (${ERA_CAREERS.length} era, 2 modern), ${tally.sacked} ended in the sack first`,
+section('1) The format: historic and original groups stay held, new modern seasons finish the league phase', 'format', [
+  `${tally.careers} careers played to the final whistle (${ERA_CAREERS.length} era, 2 original modern group saves), ${tally.sacked} ended in the sack first`,
+  `New modern witness: 36 clubs, eight matchdays, 144 saved games, eight completed PO ties and a full round of 16.`,
 ], () => {
   if (tally.careers < 10) note('format', `only ${tally.careers} careers reached the final whistle (floor 10)`);
 });

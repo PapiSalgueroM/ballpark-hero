@@ -4,7 +4,7 @@ import { CelebrationStyles } from '@/components/club-manager/Celebration';
 // Round 983: the cup card holds the moment and the club line; this card shares them.
 import { BracketSide, tieKey, tieMoment, trophyGlow, useBracketMoment } from '@/components/club-manager/CupBracketCard';
 
-const UCL_ROUNDS: UclKoRound[] = ['R16', 'QF', 'SF', 'F'];
+const UCL_ROUNDS: UclKoRound[] = ['PO', 'R16', 'QF', 'SF', 'F'];
 
 interface UclBracketCardProps {
   career: CareerState;
@@ -12,6 +12,7 @@ interface UclBracketCardProps {
 }
 
 const ROUND_LABEL: Record<UclKoRound, string> = {
+  PO: 'Knockout playoffs',
   R16: 'Round of 16',
   QF: 'Quarter-finals',
   SF: 'Semi-finals',
@@ -33,7 +34,8 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
   if (!bracket || bracket.length === 0) return null;
 
   // Round 462: an era bracket opens with the round of 16 it really had.
-  const rounds: UclKoRound[] = bracket.some(t => t.round === 'R16') ? UCL_ROUNDS : ['QF', 'SF', 'F'];
+  const rounds: UclKoRound[] = bracket.some(t => t.round === 'PO') ? UCL_ROUNDS
+    : bracket.some(t => t.round === 'R16') ? UCL_ROUNDS.filter(round => round !== 'PO') : ['QF', 'SF', 'F'];
   const champion = bracket.find(t => t.round === 'F')?.winner ?? null;
 
   return (
