@@ -1,0 +1,2 @@
+rmut keynolist: applied (1 edit(s))
+simDailyDeals: CONTROL binddeadline DID NOT FIRE as it must: red on [2026-10-11, 2026-10-12, 2026-10-18, 2026-11-01, 2026-11-09] and [], wanted exactly [2026-10-18, 2026-11-01, 2026-11-09]

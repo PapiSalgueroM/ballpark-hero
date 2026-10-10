@@ -1,0 +1,17 @@
+/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:17436
+  if (!ledger) throw new Error(`Club Manager: the ${entry.key} fixture list is not loaded yet (await ensureRealLeagueFixtures first)`);
+                     ^
+
+Error: Club Manager: the laliga-2026-27-v1 fixture list is not loaded yet (await ensureRealLeagueFixtures first)
+    at savedList (/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:17436:22)
+    at realLeagueFixturePairs (/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:17440:16)
+    at careerRoundPairs (/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:37641:10)
+    at fixtureFor (/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:40197:19)
+    at myNextMatchWeek (/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:32607:42)
+    at fireDueBreaks (/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:32645:20)
+    at runIntlBreaks (/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:36788:21)
+    at playNextEntry (/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:41533:22)
+    at /home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:42614:57
+    at withSeed (/home/runner/work/_temp/t-k-keynolist-bind/daily-deals-vdqjjd/daily.cjs:42463:12)
+
+Node.js v24.21.0

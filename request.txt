@@ -1,0 +1,8 @@
+#!serial
+k-keynolist-daily: node .rc/x/rmut.mjs keynolist && node scripts/simDailyDeals.mjs > "$RC_OUT/k-keynolist-daily.log" 2>&1; s=$?; git checkout -q -- src scripts; tail -1 "$RC_OUT/k-keynolist-daily.log" | cut -c1-300; exit $s
+k-keynolist-bind: node .rc/x/rmut.mjs keynolist && DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs > "$RC_OUT/k-keynolist-bind.log" 2>&1; s=$?; git checkout -q -- src scripts; tail -1 "$RC_OUT/k-keynolist-bind.log" | cut -c1-300; exit $s
+k-keynolist-binddeadline: node .rc/x/rmut.mjs keynolist && DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs > "$RC_OUT/k-keynolist-binddeadline.log" 2>&1; s=$?; git checkout -q -- src scripts; tail -1 "$RC_OUT/k-keynolist-binddeadline.log" | cut -c1-300; exit $s
+k-pllazy-daily: node .rc/x/rmut.mjs pllazy && node scripts/simDailyDeals.mjs > "$RC_OUT/k-pllazy-daily.log" 2>&1; s=$?; git checkout -q -- src scripts; tail -1 "$RC_OUT/k-pllazy-daily.log" | cut -c1-300; exit $s
+k-pllazy-bind: node .rc/x/rmut.mjs pllazy && DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs > "$RC_OUT/k-pllazy-bind.log" 2>&1; s=$?; git checkout -q -- src scripts; tail -1 "$RC_OUT/k-pllazy-bind.log" | cut -c1-300; exit $s
+k-pllazy-binddeadline: node .rc/x/rmut.mjs pllazy && DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs > "$RC_OUT/k-pllazy-binddeadline.log" 2>&1; s=$?; git checkout -q -- src scripts; tail -1 "$RC_OUT/k-pllazy-binddeadline.log" | cut -c1-300; exit $s
+tree-clean: test -z "$(git status --porcelain -- src scripts)" && echo "src and scripts are as committed"

@@ -1,0 +1,24 @@
+  hot      2026-10-10    34412a45b0e5bb50c77c Athletic Club: 15 of 20 after 8, 8 pts, target 5; Elche 1-1, Real Sociedad 3-2, Alavés 0-2, Atlético Madrid 0-1, Espanyol 1-0; survived
+  hot      2026-10-11    4a366598389ab2892176 Young Boys: 2 of 12 after 9, 18 pts, target 10; Grasshopper 1-0, Thun 1-1, FC Zürich 1-0, Lugano 3-0, Vaduz 2-0; survived
+  hot      2026-10-12    cb14ddd446a9e7fd66cb Westerlo: 12 of 18 after 8, 10 pts, target 6; Beveren 3-1, Cercle Brugge 1-1, Gent 3-2; survived
+  hot      2026-10-13    bef144e095aa3d1420d8 Celta Vigo: 20 of 20 after 7, 2 pts, target 3; Valencia 1-1, Elche 2-0; survived
+  hot      2026-10-14    1ef2cd0784039671c51c Monza: 20 of 20 after 9, 2 pts, target 3; Lecce 3-1; survived
+  hot      2026-10-15    f80bb07d1fc4d8a0ff29 Osasuna: 20 of 20 after 14, 8 pts, target 3; Racing Santander 2-2, Rayo Vallecano 1-1, Espanyol 0-1, Deportivo La Coruña 1-1, Real Betis 1-0; survived
+  hot      2026-10-16    ebda0cd99fe400a8d2f4 Cruz Azul: 16 of 18 after 9, 6 pts, target 7; Pachuca 0-0, Guadalajara 1-1, Puebla 0-1, Santos Laguna 0-0, Tijuana 1-2; sacked
+  hot      2026-10-27 PL c9af2ca70b2ea9ce4f3e Nottingham Forest: 6 of 20 after 11, 19 pts, target 6; Newcastle 2-0, Leeds United 1-0; survived
+  hot      2026-11-14 PL d31a907e262a745a4246 Sunderland: 18 of 20 after 7, 6 pts, target 3; Coventry City 0-2, Ipswich Town 2-3, Hull City 1-1, Fulham 1-2, Arsenal 2-2, Brentford 0-2; sacked
+  hot      2027-01-19 PL e233082a22176e8e1cd8 Fulham: 13 of 20 after 12, 15 pts, target 5; Crystal Palace 0-4, Everton 4-2, Leeds United 0-1, Arsenal 1-0, Chelsea 1-1, Brentford 0-0; survived
+  hot      2027-01-30 PL 7ef7837d86a8088ad0fe Everton: 9 of 20 after 9, 12 pts, target 4; Hull City 1-0, Chelsea 2-4, Sunderland 1-0; survived
+  hot      2027-02-06 PL 2784bbcba11e0777c580 Bournemouth: 3 of 20 after 13, 25 pts, target 6; Newcastle 3-1, Ipswich Town 0-0, Middlesbrough 1-0, Coventry City 1-0; survived
+  deadline 2026-10-10    e57fbb3c1e90b2d46068 Rangers: 3 needs, 9 targets, 3 sales, budget 21
+  deadline 2026-10-11    a0c9a61cde6e2fbaad54 Borussia Dortmund: 3 needs, 9 targets, 3 sales, budget 94.5
+FAIL deadline 2026-10-11 (Borussia Dortmund): the state carries the real fixture key
+  deadline 2026-10-12    57bff3d44d9920c4cd6b Atalanta: 3 needs, 9 targets, 3 sales, budget 70
+FAIL deadline 2026-10-12 (Atalanta): the state carries the real fixture key
+  deadline 2026-10-18 PL 58f28ed0ec217ebbad3e Nottingham Forest: 3 needs, 9 targets, 3 sales, budget 72.5
+FAIL deadline 2026-10-18 (Nottingham Forest): the state carries the real fixture key
+  deadline 2026-11-01 PL 903c3cc05441b1d6e93a Manchester United: 4 needs, 12 targets, 3 sales, budget 204.5
+FAIL deadline 2026-11-01 (Manchester United): the state carries the real fixture key
+  deadline 2026-11-09 PL 8bea270b4e6a58d33e87 Sunderland: 3 needs, 9 targets, 3 sales, budget 88.5
+FAIL deadline 2026-11-09 (Sunderland): the state carries the real fixture key
+simDailyDeals: CONTROL binddeadline DID NOT FIRE as it must: red on [2026-10-11, 2026-10-12, 2026-10-18, 2026-11-01, 2026-11-09] and [], wanted exactly [2026-10-18, 2026-11-01, 2026-11-09]

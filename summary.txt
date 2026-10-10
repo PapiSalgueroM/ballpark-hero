@@ -1,0 +1,7 @@
+k-keynolist-daily exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+k-keynolist-bind exit=1 0s | Node.js v24.21.0
+k-keynolist-binddeadline exit=3 2s | simDailyDeals: CONTROL binddeadline DID NOT FIRE as it must: red on [2026-10-11, 2026-10-12, 2026-10-18, 2026-11-01, 2026-11-09] and [], wanted exactly [2026-10-18, 2026-
+k-pllazy-daily exit=0 2s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+k-pllazy-bind exit=3 2s | simDailyDeals: CONTROL bind DID NOT FIRE as it must: red on [] and [], wanted exactly [2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06]
+k-pllazy-binddeadline exit=3 2s | simDailyDeals: CONTROL binddeadline DID NOT FIRE as it must: red on [] and [], wanted exactly [2026-10-18, 2026-11-01, 2026-11-09]
+tree-clean exit=0 0s | src and scripts are as committed
