@@ -1,3 +1,7 @@
+## Codex 1241-1243 IN PROGRESS, 2026-10-10: national-team comeback
+
+Isolated codex/career-national-comeback from09df145a. Capped players can intentionally make themselves available again; actual selector decides appearances. Strict actual-year optional receipt, no instant cap/reward/draw, past history and inactive saves held. Full contract docs/ROUND1241-1243.md. Remote proof pending. G owns integration/main/merge/publish; PR216/217/218/219 remain frozen. Original state below preserved.
+
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,
