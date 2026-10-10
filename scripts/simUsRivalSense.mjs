@@ -661,9 +661,10 @@ if (BOUND.includes('nfl')) {
   {
     /* SITE_POWER: the fewest both seasons a position must be EXPECTED to show (one place) or must SHOW (more
        places) for the count to mean anything. Measured 2026-10-10 on the head (runner r1227-x3, 800 careers a
-       position, 3,200 seasons): expected QB 2,378, RB 2,469, TE 2,025, K 165 and 0 seen; seen WR 2,237, LB
-       2,045, CB 1,615, EDGE 2,390. 50 is under a third of the lowest, and it is a guard that the count could
-       have fired, not a band on a share. */
+       position, 3,200 seasons): expected QB 2,378, RB 2,469, TE 2,024, K 165 and 0 seen; seen WR 2,237, LB
+       2,045, CB 1,615, EDGE 2,390 (the run reviewer's own probe printed the same counts). Under control
+       `oneslotsite` on the same run: both seen at QB 2,253, RB 2,428, TE 1,818, K 174. 50 is under a third of
+       the lowest, and it is a guard that the count could have fired, not a band on a share. */
     const SITE_POWER = 50;
     const st = nflOnePlaceSite(E); const many = FLEET.nfl.pos.filter(p => !ONE_PLACE.includes(p));
     for (const pos of FLEET.nfl.pos) { const t = st[pos]; console.log(`     N.U6 ${pos.padEnd(5)} ${ONE_PLACE.includes(pos) ? 'one place  ' : 'more places'} seasons ${t.seasons}  mine ${t.mine}  his ${t.his}  both ${t.both}  his rate when I am not on it ${f1(pc(t.hisWhenNotMine, t.notMine))}%, so ${Math.round(t.expected)} both seasons expected if nothing forbade them`); }
