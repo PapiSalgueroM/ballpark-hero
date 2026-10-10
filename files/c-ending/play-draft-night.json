@@ -1,0 +1,83 @@
+{
+  "control": "ending",
+  "results": [
+    {
+      "id": "nba-844-late-watch",
+      "mode": "watch",
+      "kind": "late",
+      "pick": 35,
+      "team": "DEN",
+      "closeAtS": 4.1,
+      "frames": 367,
+      "cardHeight": [
+        694.59375,
+        694.59375
+      ],
+      "journeyHeight": [
+        1171.59375,
+        1171.59375
+      ],
+      "scroll": [
+        702,
+        586
+      ],
+      "nightHeight": 547,
+      "viewport": [
+        844,
+        390
+      ],
+      "scrollSettledMs": 183,
+      "nightTopAtRest": 84,
+      "endingMovedPx": 0,
+      "heldFrames": 235,
+      "landing": {
+        "ms": 4184,
+        "top": 506,
+        "bottom": 560,
+        "vh": 390
+      },
+      "shown": {
+        "ms": 5200,
+        "top": 506,
+        "bottom": 560,
+        "vh": 390
+      },
+      "rows": 5,
+      "tiles": 4,
+      "closing": [
+        506,
+        560
+      ],
+      "nightRect": 547,
+      "tileFit": {
+        "room": 247,
+        "widest": {
+          "text": "Timberwolves",
+          "need": 83
+        },
+        "seedRoom": 247,
+        "widestSeed": {
+          "text": "Seed 2 · Down 2",
+          "need": 78
+        },
+        "font": "Inter",
+        "inter": true,
+        "cut": [],
+        "clubs": [],
+        "seeds": []
+      }
+    }
+  ],
+  "failures": [
+    {
+      "id": "nba-844-late-watch",
+      "check": "fold",
+      "message": "a second after it landed the closing row sits at 506 to 560 in a 390 high viewport (it landed at 506 to 560)"
+    },
+    {
+      "id": "nba-844-late-watch",
+      "check": "fold",
+      "message": "the closing row sits at 506 to 560 in a 390 high viewport, covered"
+    }
+  ]
+}

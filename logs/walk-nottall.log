@@ -1,0 +1,3 @@
+  FAIL [fold] nba-844-late-watch: the night starts off screen: once the page is at rest its top is at -169 in a 390 high viewport
+  walked nba-844-late-watch: pick 35, 5 rows and 4 lottery tiles, card 695 high, 367 frames
+playDraftNight [control nottall]: 1 FAILURE(S) of its own check (fold), as it must
