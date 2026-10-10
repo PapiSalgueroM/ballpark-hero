@@ -1,0 +1,16 @@
+vitest exit=0 4s |    Duration  3.39s (transform 503ms, setup 451ms, collect 1.23s, tests 1.17s, environment 3.30s, prepare 810ms)
+sim exit=0 11s | simGmDraftOrder: green. 602997 checks over 10 sections: the order is the league's, the lottery is drawn once on its own stream and saved, and nothing mounts the lift yet.
+tsc exit=0 67s | 
+controls-0 exit=0 115s | simGmDraftOrder controls (shard 0/3 of 40): all 14 fired, each in exactly its own sections.
+c-unknown exit=3 0s | SIM_GM_DRAFT_ORDER_CONTROL=nosuchcontrol is not a control this harness knows (onesource, thinoutside, twintable, closespan, flat, oddsrow, extradraw, seconddraw, mathrand
+controls-1 exit=0 110s | simGmDraftOrder controls (shard 1/3 of 40): all 13 fired, each in exactly its own sections.
+reveal exit=0 9s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+livescores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
+scm exit=0 14s | simSeasonCentreMotion: 17 checks, 0 failed
+rivals exit=0 14s | No rival product names found. 0 findings.
+storage exit=0 1s | simStorageWrites: all green
+gmpicks exit=0 9s | simGmPicks: 1199 checks passed over 4 leagues, 5 seeds and 10 seasons each. The lottery tables are the published ones and the draws sit inside their bands, an old save ke
+where exit=0 0s | presenter files in src/components/motion: 0
+added-only exit=0 1s | files that are not added: 0
+anchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+controls-2 exit=0 106s | simGmDraftOrder controls (shard 2/3 of 40): all 13 fired, each in exactly its own sections.

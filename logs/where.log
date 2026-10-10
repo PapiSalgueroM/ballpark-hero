@@ -1,0 +1,6 @@
+556d1a39d rc request r1222-f2a for 2e731a0a23aea59e28757294b1922cc0976f69e5
+2e731a0a2 Round 1222: the notes carry the fix pass's runner results
+src/components/lottery/LotteryReveal.test.tsx
+src/components/lottery/LotteryReveal.tsx
+src/lib/lotteryReveal.ts
+presenter files in src/components/motion: 0
