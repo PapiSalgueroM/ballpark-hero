@@ -96,6 +96,21 @@ const ENGINE_CONTROLS = {
   mlbrounds: { expect: ['E4'], from: 'const poG = playoffRunGames("mlb", c.year, depth, rng);', to: 'const poG = playoffGames(depth, rng, "mlb");' },
   /* One ladder for every year again: a Wild Card series in 2004 and in 2012. */
   mlbladder: { expect: ['E4'], from: 'result = stages[postseasonRung("mlb", c.year, stage)];', to: 'result = ladder[stage];' },
+  /* The fix pass, E8. The award score read off the saved (short) line again, not off the full draw. */
+  nhlawards: { expect: ['E8a'], from: 'const statScore = nhlSeasonScore(c.pos, full);', to: 'const statScore = nhlSeasonScore(c.pos, line);' },
+  mlbawards: { expect: ['E8a'], from: 'const statScore = mlbSeasonScore(c.pos, full);', to: 'const statScore = mlbSeasonScore(c.pos, line);' },
+  /* One award gate of games read off the saved line: nobody plays 78 games of 48, or 130 of 60. */
+  nhlgates: { expect: ['E8a'], from: 'fullGames >= 78 && c.health >= 80', to: 'line.games >= 78 && c.health >= 80' },
+  mlbgates: { expect: ['E8a'], from: 'c.pos !== "DH" && fullGames >= 130', to: 'c.pos !== "DH" && line.games >= 130' },
+  /* The head to head scored off the saved line against the rival's full season: the review's major. */
+  nhlhead: { expect: ['E8a'], from: '((full.svpct ?? 0.9) - 0.9) * 900)) : full.points ?? 0;', to: '((full.svpct ?? 0.9) - 0.9) * 900)) : line.points ?? 0;' },
+  mlbhead: { expect: ['E8a'], from: 'Math.round((full.hr ?? 0) * 1.6 + ((full.avg ?? 0.24) - 0.24) * 300);', to: 'Math.round((line.hr ?? 0) * 1.6 + ((line.avg ?? 0.24) - 0.24) * 300);' },
+  /* One count left on the full season in the saved line. */
+  nhlcarry: { expect: ['E8b'], from: 'line.goals = cut(full.goals);', to: 'line.goals = full.goals;' },
+  mlbcarry: { expect: ['E8b'], from: 'if (v !== void 0) line[k] = cut(v);', to: 'if (v !== void 0) line[k] = k === "hr" ? v : cut(v);' },
+  /* The comeback gate reads the season before as raw games: 48 of 48 or 60 of 60 is a lost year again. */
+  nhlcomeback: { expect: ['E8c'], from: 'const prevEq = prevSeason ? fullSeasonOf("nhl", prevSeason.games, nhlWorkSlate(c.pos, prevSeason.slate ?? US_ENGINE_SEASON.nhl)) : 0;', to: 'const prevEq = prevSeason ? prevSeason.games : 0;' },
+  mlbcomeback: { expect: ['E8c'], from: 'const prevEq = prevSeason ? fullSeasonOf("mlb", prevSeason.games, mlbWorkSlate(c.pos, prevSeason.slate ?? US_ENGINE_SEASON.mlb)) : 0;', to: 'const prevEq = prevSeason ? prevSeason.games : 0;' },
 };
 if (ENGINE_CONTROLS[CONTROL]) {
   const k = ENGINE_CONTROLS[CONTROL]; const text = readFileSync(OUT, 'utf8');
@@ -840,6 +855,116 @@ const MLB_OWN = 162;
     if (!ok) { bad++; if (!first) first = `${line.poLine} in ${line.poGames} games`; }
   }
   check('E7', read > 2000 && bad === 0, `${bad} of ${read} October lines of a hitter are not his hits over his at bats in the season line's shape (the first: "${first}")`);
+}
+
+/* ===== Round 1226 (the fix pass), E8: a short season is the full season, carried. =====
+   Both engines draw every season on their own length and judge the awards
+   and the rival on that draw; the saved line is that draw carried to the
+   season the club really played. So, for ONE saved state and ONE stream:
+   E8a  the awards of a season of another length are the awards of the same
+        season played on the engine's own length, award for award, and so is
+        the head to head with the rival (the same score for him, the same
+        tally); his printed counts are his full counts carried. Exact:
+        nothing here is a rate, so there is no band.
+   E8b  every count on the saved line is the full season's count carried to
+        the length his position worked through, the points are the goals plus
+        the assists, the rates did not move, and a first choice starter never
+        has more wins than starts.
+   E8c  the comeback gate reads the season before as the full season it
+        stands for: nobody whose short season was no lost year by this file's
+        own arithmetic (more than 35 games of 82, more than 70 of 162) wins
+        it, and a hitter whose 2020 really was a lost one still can.
+   The pair is the season's own year and 1990, a year before both ledgers
+   (the engine's own length and its own ladder). The floors under the counts
+   only prove the fleet reaches what is being compared. MEASURED on the tree
+   this was written on (2026-10-10), 6,000 paired seasons a sport over four
+   year and club cells: 5,418 NHL and 6,269 MLB awards in the full seasons
+   (floor 400); the year went to the player 4,119 times and to the rival
+   1,881 in the NHL, 1,900 and 4,100 in MLB (floors 800); every comparison
+   equal. After the short year, 6,000 seasons a sport: no comeback award off
+   a season that was no lost year; 104 hitters whose 2020 was a lost one, 79
+   of them the comeback player of 2021 (floors 50 and 30). What each control
+   turned red: nhlawards 1,745 seasons with other awards, mlbawards 1,340,
+   nhlgates 725, mlbgates 718, nhlhead 1,705 other verdicts, mlbhead 915,
+   nhlcarry 4,401 counts, mlbcarry 2,000, nhlcomeback 381 comebacks off a
+   whole 48 game season, mlbcomeback 2,979 off a whole 60 game one.
+   Controls: nhlawards, mlbawards, nhlgates, mlbgates, nhlhead, mlbhead
+   (E8a), nhlcarry, mlbcarry (E8b), nhlcomeback, mlbcomeback (E8c). */
+{
+  const S = game.shape; const FULL_YEAR = 1990;
+  const SPORTS = [
+    { key: 'nhl', E: game.nhlEngine, own: ENGINE_OWN, start: 'startNhlCareer', sim: 'simNhlSeason', progress: 'nhlProgress', assign: 'nhlAssignRole', arch: game.nhlEngine.NHL_ARCHETYPES,
+      positions: ['C', 'LW', 'RW', 'D', 'G'], canWin: pos => pos !== 'G', era: y => (y < 2026 ? 'y2006' : undefined), work: (pos, slate) => (pos === 'G' ? Math.min(slate, ENGINE_OWN) : slate),
+      counts: ['games', 'wins', 'goals', 'assists'], rates: ['svpct'], cells: [[2012, 'BOS'], [2019, 'CAR'], [2020, 'BOS'], [2026, 'BOS']],
+      rivalCounts: text => (text.match(/^(\d+)G (\d+)A \d+P$/) ?? []).slice(1, 3).map(Number), floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2012, lost: 35, lostYears: 0, lostWon: 0 } },
+    { key: 'mlb', E: game.mlbEngine, own: MLB_OWN, start: 'startMlbCareer', sim: 'simMlbSeason', progress: 'mlbProgress', assign: 'mlbAssignRole', arch: game.mlbEngine.MLB_ARCHETYPES,
+      positions: ['CF', 'SS', '1B', 'C', 'SP', 'RP'], canWin: pos => pos !== 'SP' && pos !== 'RP', era: y => (y < 2026 ? 'y2004' : undefined), work: (pos, slate) => (pos === 'SP' || pos === 'RP' ? Math.min(slate, MLB_OWN) : slate),
+      counts: ['games', 'wins', 'lossesP', 'so', 'saves', 'holds', 'hr', 'rbi', 'sb', 'doubles'], rates: ['avg', 'obp', 'era'], cells: [[2005, 'CIN'], [2020, 'BOS'], [2020, 'DET'], [2026, 'NYY']],
+      rivalCounts: text => (text.match(/, (\d+) HR$/) ?? []).slice(1, 2).map(Number), floors: { awards: 400, mine: 800, his: 800 }, comeback: { year: 2020, lost: 70, lostYears: 50, lostWon: 30 } },
+  ];
+  for (const sp of SPORTS) {
+    const carry = (n, to) => (to === sp.own ? n : Math.round(n * to / sp.own));
+    let seasons = 0; let awardsFull = 0; let awardBad = 0; let headBad = 0; let carryBad = 0; let rateBad = 0; let rivalBad = 0; let recordBad = 0; let mine = 0; let his = 0; let first = '';
+    for (const [year, team] of sp.cells) {
+      const slate = S.seasonLength(sp.key, year, team);
+      check('E8a', slate !== sp.own, `the ${sp.key.toUpperCase()} ${year} season of ${team} is the engine's own ${sp.own} games, so it compares nothing`);
+      for (let i = 0; i < 1500; i++) {
+        const rng = mulberry(year * 4409 + i * 13 + 5);
+        const pos = sp.positions[i % sp.positions.length];
+        const c = sp.E[sp.start]('Ledger Check', pos, sp.arch[pos][i % sp.arch[pos].length], rng, null, sp.era(year));
+        c.team = team; c.health = 100; c.ovr = 74 + (i * 7) % 23; c.pot = Math.max(c.pot, c.ovr);
+        /* The rival within three of him either way, so both verdicts are common. */
+        if (c.rival) { c.rival.ovr = Math.max(55, Math.min(95, c.ovr + (i % 7) - 3)); c.rival.pot = Math.max(c.rival.pot, c.rival.ovr); }
+        /* Two in three have a season behind them, so the rookie award and the comeback gate are both in play. */
+        if (i % 3) { c.year = year - 1; sp.E[sp.sim](c, 80, rng); sp.E[sp.progress](c, rng); }
+        c.year = year; sp.E[sp.assign](c, 80, rng);
+        const snap = JSON.stringify(c); const seed = year * 7001 + i; const before = JSON.parse(snap).rival;
+        const a = JSON.parse(snap); const A = sp.E[sp.sim](a, 82, mulberry(seed)).line;
+        const b = JSON.parse(snap); b.year = FULL_YEAR; const B = sp.E[sp.sim](b, 82, mulberry(seed)).line;
+        seasons++; awardsFull += B.awards.length;
+        if (JSON.stringify(A.awards) !== JSON.stringify(B.awards)) { awardBad++; if (!first) first = `${year} ${team} ${pos}: [${A.awards.join(', ')}] against [${B.awards.join(', ')}] in full`; }
+        if (before && !before.retired) {
+          if (b.rival.myYears > before.myYears) mine++; else his++;
+          if (a.rival.myYears !== b.rival.myYears || a.rival.hisYears !== b.rival.hisYears || a.rival.lastScore !== b.rival.lastScore) headBad++;
+          const shown = sp.rivalCounts(a.rival.lastLine); const full = sp.rivalCounts(b.rival.lastLine);
+          if (!full.length || shown.length !== full.length || shown.some((n, k) => n !== carry(full[k], slate))) rivalBad++;
+        }
+        const w = sp.work(pos, slate);
+        for (const k of sp.counts) if (B[k] !== undefined && A[k] !== carry(B[k], w)) carryBad++;
+        if (A.goals !== undefined && A.points !== A.goals + A.assists) carryBad++;
+        if (A.slate !== slate || 'slate' in B) carryBad++;
+        for (const k of sp.rates) if (A[k] !== B[k]) rateBad++;
+        if (pos === 'SP' && a.role !== 'backup' && A.wins > A.games) recordBad++;
+      }
+    }
+    const U = sp.key.toUpperCase();
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE E8 ${sp.key}: ${seasons} paired seasons, ${awardsFull} awards in the full ones, the year mine ${mine} and his ${his}`);
+    check('E8a', awardsFull >= sp.floors.awards && mine >= sp.floors.mine && his >= sp.floors.his, `the ${U} fleet is too thin to compare: ${awardsFull} awards, ${mine} years won and ${his} lost against the rival over ${seasons} seasons (floors ${sp.floors.awards}, ${sp.floors.mine}, ${sp.floors.his})`);
+    check('E8a', awardBad === 0, `${awardBad} of ${seasons} ${U} seasons of another length hold other awards than the same season played in full (the first: ${first})`);
+    check('E8a', headBad === 0, `${headBad} of ${seasons} ${U} seasons of another length score the head to head with the rival differently from the same season played in full`);
+    check('E8b', carryBad === 0 && rateBad === 0, `${carryBad} counts on a saved ${U} line are not the full season's count carried to the season's length, and ${rateBad} rates moved`);
+    check('E8a', rivalBad === 0, `${rivalBad} printed ${U} rival lines are not his full season's counts carried to the season's length`);
+    check('E8b', recordBad === 0, `${recordBad} first choice ${U} starters have more wins than starts`);
+
+    /* E8c: the season after a short one. */
+    const cb = sp.comeback; let after = 0; let wrong = 0; let lostYears = 0; let lostWon = 0;
+    for (let i = 0; i < 6000; i++) {
+      const rng = mulberry(cb.year * 6151 + i);
+      const pos = sp.positions[i % sp.positions.length];
+      const c = sp.E[sp.start]('Ledger Check', pos, sp.arch[pos][i % sp.arch[pos].length], rng, null, sp.era(cb.year));
+      c.team = 'BOS'; c.year = cb.year; c.ovr = 80 + (i * 5) % 17; c.pot = Math.max(c.pot, c.ovr); c.health = 55 + (i % 4) * 15;
+      sp.E[sp.sim](c, 80, rng); sp.E[sp.progress](c, rng);
+      const prev = c.seasons[c.seasons.length - 1];
+      const prevFull = prev.games * sp.own / sp.work(pos, prev.slate ?? sp.own);
+      c.health = 100;
+      const won = sp.E[sp.sim](c, 80, rng).line.awards.includes('Comeback Player of the Year');
+      if (prev.slate !== undefined && prev.slate !== sp.own) after++;
+      if (prevFull > cb.lost) { if (won) wrong++; } else if (sp.canWin(pos)) { lostYears++; if (won) lostWon++; }
+    }
+    if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE E8c ${sp.key}: ${after} seasons after the short ${cb.year}, ${wrong} wrong comebacks, ${lostYears} lost years before, ${lostWon} comebacks off them`);
+    check('E8c', after === 6000 && wrong === 0, `${wrong} of ${after} ${U} seasons after the short ${cb.year} one won the comeback award although the season before was no lost year (more than ${cb.lost} games of ${sp.own} as a full season)`);
+    check('E8c', lostYears >= cb.lostYears && lostWon >= cb.lostWon, `only ${lostWon} comebacks off ${lostYears} lost ${U} seasons of ${cb.year}: the gate no longer opens for a lost short season (floors ${cb.lostWon} and ${cb.lostYears})`);
+  }
 }
 
 /* ===== NOTES FOR THE BINDING ROUNDS: where an engine plays something the ledger does not say. Never a red. ===== */
