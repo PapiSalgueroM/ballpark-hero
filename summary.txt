@@ -1,0 +1,4 @@
+simCareerProgramme exit=1 3s | Node.js v24.21.0
+units216 exit=0 42s | vitest=0 check=0
+vitest-seams exit=0 49s |    Duration  48.67s (transform 10.97s, setup 918ms, collect 20.90s, tests 74.01s, environment 5.34s, prepare 1.40s)
+tsc exit=0 81s | 

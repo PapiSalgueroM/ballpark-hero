@@ -1,0 +1,55 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/soccerClubSquad.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 1616[2mms[22m[39m
+   [33m[2m✓[22m[39m the living squad[2m > [22mnames the right man as the last one in ahead of him: never himself, always the lowest of his line in the eleven [33m 558[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCareerProgramme.test.ts [2m([22m[2m66 tests[22m[2m)[22m[32m 134[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerProgrammeUi.test.tsx [2m([22m[2m34 tests[22m[2m)[22m[33m 5140[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer career programme UI[2m > [22mshows rules and a worked example before any choices and can reopen them [33m 641[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer career programme UI[2m > [22mrestores the list position and help trigger after reopening rules from the list [33m 449[2mms[22m[39m
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/soccerSeasonCompetitions.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 2823[2mms[22m[39m
+   [33m[2m✓[22m[39m saved Soccer Career competitions[2m > [22mshows both saved continental final legs, grounds and aggregate in the existing panel [33m 394[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career competition navigation keeps the actual league view[2m > [22mfreezes and resumes the same live clock, pause state and completed review across cup tabs [33m 1947[2mms[22m[39m
+ [32m✓[39m src/lib/usCareerProgramme.test.ts [2m([22m[2m55 tests[22m[2m)[22m[32m 277[2mms[22m[39m
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 1906[2mms[22m[39m
+   [33m[2m✓[22m[39m US programme choices and restoration[2m > [22mshows the actual rules and worked example before the choice tiles [33m 301[2mms[22m[39m
+ [32m✓[39m src/test/soccerClubStartingElevenUi.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 812[2mms[22m[39m
+   [33m[2m✓[22m[39m club Starting 11 names positions and ratings[2m > [22moffers an explicit Starting 11 control and keeps Back and reopened rules available [33m 327[2mms[22m[39m
+ [32m✓[39m src/test/cookieConsentStorage.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 569[2mms[22m[39m
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mEssential only receives focus inside initial rules and keeps its original consent behavior
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mAccept receives focus inside initial rules and keeps its original consent behavior
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mkeeps its single pending banner reachable when initial help is dismissed
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mreuses the banner and its choices when help is reopened without a decision
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mhonors storage choices and restores pending choices within the same open rules
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/helpConsentFocus.test.tsx[2m > [22m[2mpending cookie choices belong to the open help focus scope[2m > [22m[2mpreserves the normal modal trap and manual opener once consent is answered
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/helpConsentFocus.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 874[2mms[22m[39m
+ [32m✓[39m src/test/soccerSeasonCalendarUi.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 908[2mms[22m[39m
+   [33m[2m✓[22m[39m cup nights in the actual Season Centre[2m > [22mopens the saved domestic cup after league game five and keeps the next opponent hidden until its result [33m 335[2mms[22m[39m
+ [32m✓[39m src/lib/soccerSeasonCalendar.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m src/lib/soccerCupOpening.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m src/test/careerChanceWheelUi.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 420[2mms[22m[39m
+ [32m✓[39m src/lib/careerChanceWheel.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m14 passed[39m[22m[90m (14)[39m
+[2m      Tests [22m [1m[32m304 passed[39m[22m[90m (304)[39m
+[2m   Start at [22m 18:04:49
+[2m   Duration [22m 41.33s[2m (transform 6.19s, setup 1.08s, collect 11.58s, tests 15.58s, environment 7.79s, prepare 1.71s)[22m
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/career-programme-artifacts/units.json
+All 14 required suites actually passed: 304 cases.
+vitest=0 check=0
