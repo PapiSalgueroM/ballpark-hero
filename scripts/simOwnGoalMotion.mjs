@@ -15,6 +15,8 @@
  *   cheer      the hop is left on the man who delivered it                          OG3
  *   through    nobody steps aside when the man's walk passes through a team mate    OG4
  *   straight   the ball meets the man ON the straight line to the corner: no turn   OG5
+ *   keepercorner  a keeper's own goal ends in the corner the line's own flank or the
+ *              minute's parity picks, not the one on the side the ball came from    OG5 (the sweep by hand)
  *   absent     a named man who is not there falls back to the first outfield man    OG6
  *   reducedog  the hook follows the clock under reduced motion                      OG7
  *   setpiece   og is honoured on a penalty and on a free kick                       OG8
@@ -22,7 +24,11 @@
  *   ruemoved   the hands stop short of the head                                     RUE (the recorded figure)
  *   viewerplain  the same change as plain, read in the live match                   the live match draws an own goal (both sides)
  *   castnow    the viewer no longer holds the cast while a chance plays             the twin of Release AR's test
- * A control exits 1 when its test went red on an assertion, as it must, and 3 when it did anything else. */
+ * A control exits 1 when its test went red on an assertion, as it must, and 3 when it did anything else.
+ *
+ * OWN_GOAL_FLEET=<n> (1 or more) hands the test file another dense fleet for its first describe (the same five
+ * clubs on other seeds). One fleet is one sample: a bound that is green on the committed fleet and red on
+ * another is a coin toss, so a bound is read on several before its number is written down. */
 import assert from 'node:assert/strict';
 import { readFile, writeFile, mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
@@ -45,6 +51,7 @@ const controls = {
   cheer: { file: MOTION, anchor: 'for (const key in poses) delete poses[key].hop;', replacement: 'void poses;', test: 'OG3: nobody is the scorer', fails: 1 },
   through: { file: MOTION, anchor: 'if (ease <= 0) return now;', replacement: 'if (ease <= 1) return now;', test: 'OG4: nobody stands on a team mate', fails: 1 },
   straight: { file: MOTION, anchor: 'if (Math.abs(x - straight) < 5) x = straight + (x < straight ? -5 : 5);', replacement: 'x = straight;', test: 'OG5: the turn can be seen', fails: 1 },
+  keepercorner: { file: MOTION, anchor: "const flank: PitchEvent['flank'] = !man ? own.flank : (man.keeper ? drawn(own.flank, PLANT_SPAN).ball.x : man.x) < 50 ? 'left' : 'right';", replacement: "const flank: PitchEvent['flank'] = !man || man.keeper ? own.flank : man.x < 50 ? 'left' : 'right';", test: 'OG5: the turn can be seen', fails: 1 },
   absent: { file: MOTION, anchor: '(event.text ? conceding.find(p => p.name === event.text) : undefined) ?? null;', replacement: '(event.text ? conceding.find(p => p.name === event.text) : undefined) ?? conceding.find(p => !p.keeper) ?? null;', test: 'OG6: who it goes in off', fails: 1 },
   reducedog: { file: MOTION, anchor: 'reduced ? 1.05 : clock - action.event.at', replacement: 'clock - action.event.at', test: 'OG7: reduced motion shows the last frame at once', fails: 1 },
   setpiece: { file: MOTION, anchor: ' && !action.event.penalty && !action.event.freeKick) return ownGoalFrame', replacement: ') return ownGoalFrame', test: 'OG8: a goal from the spot or from a direct free kick', fails: 1 },

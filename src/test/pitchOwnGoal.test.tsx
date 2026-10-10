@@ -1,12 +1,19 @@
 /* Round 1216: an own goal is drawn as one by the shared pitch part.
  *
- * THE MATERIAL is a DENSE fleet: the five clubs and seeds of liveSimMotion.test.tsx, twenty matches each, 200
+ * THE MATERIAL is a DENSE fleet: five clubs on five seeds of this file's own (they began as the ones
+ * liveSimMotion.test.tsx walks; nothing needs the two lists to stay equal), up to twenty matches each, about 200
  * half feeds through the real engine and the viewer's own stagePitchInput, with one thing changed for this
  * file only: the tag roll of '@/lib/ownGoalRule' always says yes, so every eligible goal is an own goal with
  * the engine's OWN named man (the role roll is the real one). The tag is a keyed re-label and no draw, so no
  * result moves. Each own goal is read on the cast the VIEWER holds for it (the eleven at the floor of the
  * instant its action starts), never on the half's opening eleven: a substitute who came on at 60 and puts it
  * in at 75 is on the grass.
+ *
+ * ONE FLEET IS ONE SAMPLE. OWN_GOAL_FLEET=<n> (1 or more) reads every rule of the first describe on ANOTHER
+ * fleet: the same five clubs on the seeds n * 100003 + 17 to 21. A rule that is green on the committed fleet
+ * and red on another is a coin toss, so every number written beside a bound below was read on the committed
+ * fleet and on fleets 1 to 16, and a bound that is called a bound of the geometry is also read off the
+ * geometry itself, on scenes swept by hand across every place the men can stand.
  *
  * EVERY RULE IS READ AGAINST A BASELINE ARM: the same line with `og` taken off, through the same function,
  * which is the picture before this round (a man of the side that got the goal shoots and celebrates). A rule
@@ -38,10 +45,9 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
 
 type Point = { x: number; y: number };
-const FIVE_CLUBS = [
-  { seed: 110101, club: 'Aston Villa' }, { seed: 110102, club: 'Real Madrid' }, { seed: 110103, club: 'Lyon' },
-  { seed: 110104, club: 'Ajax' }, { seed: 110105, club: 'Celtic' },
-] as const;
+const FLEET = Number(process.env.OWN_GOAL_FLEET || 0);
+if (!Number.isInteger(FLEET) || FLEET < 0) throw new Error(`OWN_GOAL_FLEET must be a whole number from 0 up, not "${process.env.OWN_GOAL_FLEET}"`);
+const FIVE_CLUBS = ['Aston Villa', 'Real Madrid', 'Lyon', 'Ajax', 'Celtic'].map((club, i) => ({ club, seed: FLEET ? FLEET * 100003 + 17 + i : 110101 + i }));
 const MATCHES_EACH = 20;
 const boardAt = (career: CareerState, cap: number) => (cap === 45 ? career.live!.added?.h1 : career.live!.added?.h2) ?? 0;
 const clockPos = (e: { minute: number; plus?: number }) => e.minute + (e.plus ?? 0);
@@ -164,10 +170,13 @@ describe('Round 1216: an own goal on real feeds', () => {
     const f = buildFleet();
     const present = f.owns.filter(o => o.man);
     const keepers = present.filter(o => o.man!.keeper);
-    console.log(`[1216 material] ${f.matches} matches, ${f.halves} half feeds; own goals staged ${f.owns.length} (goals left as they were: ${f.plainGoals}), for me ${f.owns.filter(o => o.mine).length}, against me ${f.owns.filter(o => !o.mine).length}; the named man on the viewer's cast ${present.length}, not on it ${f.owns.length - present.length}; by a back ${present.length - keepers.length}, by the keeper ${keepers.length}; actions that start outside the goal's own minute ${f.offMinute}, wound up as a last kick ${f.lastKick}`);
+    console.log(`[1216 material] fleet ${FLEET} (${FIVE_CLUBS.map(c => `${c.club} ${c.seed}`).join(', ')}): ${f.matches} matches, ${f.halves} half feeds; own goals staged ${f.owns.length} (goals left as they were: ${f.plainGoals}), for me ${f.owns.filter(o => o.mine).length}, against me ${f.owns.filter(o => !o.mine).length}; the named man on the viewer's cast ${present.length}, not on it ${f.owns.length - present.length}; by a back ${present.length - keepers.length}, by the keeper ${keepers.length}; actions that start outside the goal's own minute ${f.offMinute}, wound up as a last kick ${f.lastKick}`);
     for (const o of f.owns.filter(x => !x.man).slice(0, 5)) console.log(`[1216 material] not on the grass: ${o.label}`);
-    expect(f.matches).toBe(100);
-    expect(f.halves).toBe(200);
+    /* A walk ends early when the club sacks its manager, so the count of matches is a floor and never an exact
+       number: the committed fleet walks 100, and other fleets of five clubs were measured at 82, 93, 93 and 97.
+       Every match that is walked hands over both its halves. */
+    expect(f.matches).toBeGreaterThanOrEqual(50);
+    expect(f.halves).toBe(2 * f.matches);
     /* Floors at half of what was measured (163 staged, 79 for me, 84 against me, 139 by a back, 24 by the keeper, 163 on the grass). */
     expect(f.owns.length).toBeGreaterThanOrEqual(81);
     expect(f.owns.filter(o => o.mine).length).toBeGreaterThanOrEqual(39);
@@ -316,30 +325,80 @@ describe('Round 1216: an own goal on real feeds', () => {
 
   it('OG5: the turn can be seen, and the ball comes to the man', () => {
     const present = buildFleet().owns.filter(o => o.man);
-    const ownTurns: number[] = [], plainTurns: number[] = [], walks: number[] = [], homeWalks: number[] = [];
-    let away = 0, short = 0;
+    const turns = { back: [] as number[], keeper: [] as number[] }, plainTurns: number[] = [], walks: number[] = [];
+    let outside = 0, beyond = 0, short = 0;
+    const low: string[] = [];
     for (const o of present) {
       const frames = framesOf(o, 'own');
       const { turn, at } = sharpestTurn(frames);
-      ownTurns.push(turn);
+      const who = o.man!.keeper ? 'keeper' : 'back';
+      turns[who].push(turn);
+      if (turn < 30 && low.length < 6) low.push(`${who} ${turn.toFixed(1)} ${o.label}`);
       plainTurns.push(sharpestTurn(framesOf(o, 'plain')).turn);
-      const last = everybody(frames[frames.length - 1]).find(p => p.key === o.man!.key)!;
-      const walk = gapTo(last, o.man!);
-      walks.push(walk);
-      /* A back who stands in his own third when it starts. One the cast has further up the pitch is counted apart. */
-      if (depthOf(o, o.man!.y) <= 24) homeWalks.push(walk); else away++;
+      if (!o.man!.keeper) {
+        /* How far a back goes to meet it. A keeper is brought nowhere: he dives, as on any goal. */
+        const walk = gapTo(everybody(frames[frames.length - 1]).find(p => p.key === o.man!.key)!, o.man!);
+        walks.push(walk);
+        /* How far he stands outside the band he meets it in: 13 to 18 from his own line, 24 to 76 across. */
+        const depth = depthOf(o, o.man!.y);
+        const across = Math.max(24 - o.man!.x, o.man!.x - 76, 0), along = Math.max(13 - depth, depth - 18, 0);
+        if (across || along) outside++;
+        if (walk > Math.hypot(across + 5, along) + 1e-6) beyond++;
+      }
       /* For the lead: is the man shown by his number alone (a crowd) at the touch? The viewer's own rule. */
       const touch = touchOf(o, Math.max(0, at)).frame;
       if (labelsShort(everybody(touch).map(p => ({ key: p.key, x: p.x, y: p.y }))).has(o.man!.key)) short++;
     }
-    console.log(`[1216 OG5] the sharpest turn of the ball in flight, degrees: own goal arm ${spreadOf(ownTurns)}; baseline arm ${spreadOf(plainTurns)}; the floor is 20`);
-    console.log(`[1216 OG5 walk] how far the man goes to meet it: ${spreadOf(walks)}; from his own third (${homeWalks.length} of ${present.length}): ${spreadOf(homeWalks)}; standing further up when it starts ${away}; shown by his number alone at the touch ${short}`);
-    /* Measured on 163 own goals: the own goal arm never under 34.1 (median 63.6) and the baseline arm never over
-       3.3. The floor of 20 sits between them, a bound of the geometry on every own goal and not a statistic. */
-    expect(ownTurns.filter(turn => turn < 20).length).toBe(0);
+    const ownTurns = [...turns.back, ...turns.keeper];
+    console.log(`[1216 OG5] fleet ${FLEET}: the sharpest turn of the ball in flight, degrees: off a back (${turns.back.length}) ${spreadOf(turns.back)}; off a keeper (${turns.keeper.length}) ${spreadOf(turns.keeper)}; baseline arm ${spreadOf(plainTurns)}; the floor is 20${low.length ? ` | under 30: ${low.join('; ')}` : ''}`);
+    console.log(`[1216 OG5 walk] fleet ${FLEET}: how far a back goes to meet it (${walks.length}): ${spreadOf(walks)}; standing outside the band when it starts ${outside}; brought further than into the band and 5 across ${beyond}; shown by his number alone at the touch ${short}`);
+
+    /* THE FLOOR READ OFF THE GEOMETRY ITSELF, so it does not rest on what a fleet happens to hold: the man who
+       delivers it at every place across the box, for each side. A keeper where the plan keeps him and well off
+       it, on each parity of the minute and each flank a line can carry (the corner must not be left to either).
+       A back at every place of his own half. */
+    const FLIGHT = TICKS.filter(t => t > .2 && t < .8);
+    const swept = { keeper: [] as number[], back: [] as number[] };
+    let farCorner = 0;
+    for (const side of ['me', 'opp'] as const) {
+      const [keeper, back] = side === 'me' ? ['Away keeper', 'Away back'] : ['Home keeper', 'Home back'];
+      for (let hx = 20; hx <= 80; hx += 2.5) {
+        const scene = structuredClone(sceneFor(side));
+        const conceding = side === 'me' ? scene.theirs : scene.mine;
+        (side === 'me' ? scene.mine : scene.theirs)[5].x = hx;
+        for (const kx of [44, 47, 50, 53, 56]) for (const minute of [4, 5]) for (const flank of [undefined, 'left', 'right'] as const) {
+          conceding[0].x = kx;
+          const line = handLine(side, keeper, { minute, flank });
+          swept.keeper.push(sharpestTurn(FLIGHT.map(t => actionFrame(scene, line, t))).turn);
+          /* The corner it ends in is on the side it came from, so it comes back across him. */
+          if ((actionFrame(scene, line, .25).ball.x < 50) !== (actionFrame(scene, line, ACTION_SPAN).ball.x < 50)) farCorner++;
+        }
+        conceding[0].x = 50;
+        if (hx % 5) continue;
+        for (let bx = 2; bx <= 98; bx += 6) for (let depth = 3; depth <= 48; depth += 5) {
+          Object.assign(conceding[1], { x: bx, y: side === 'me' ? depth : 100 - depth });
+          swept.back.push(sharpestTurn(FLIGHT.map(t => actionFrame(scene, handLine(side, back), t))).turn);
+        }
+      }
+    }
+    /* The scene the review worked by hand: the man who delivers it wide on the left, their keeper, an odd minute.
+       With the corner left to the minute's parity the ball went almost straight through his gloves (7.2 degrees). */
+    const wide = structuredClone(HAND('m9'));
+    Object.assign(wide.mine[5], { x: 30, y: 27 });
+    const worked = sharpestTurn(TICKS.map(t => actionFrame(wide, handLine('me', 'Away keeper'), t))).turn;
+    console.log(`[1216 OG5 geometry] swept by hand: off a keeper (${swept.keeper.length} scenes) ${spreadOf(swept.keeper)}, the corner on the far side from where it came ${farCorner}; off a back (${swept.back.length} scenes) ${spreadOf(swept.back)}; the scene the review worked by hand ${worked.toFixed(1)}`);
+
+    /* The baseline arm never turns by 20 (the same line with og off: measured at most 3.3 on seventeen fleets). */
     expect(plainTurns.filter(turn => turn >= 20).length).toBe(0);
-    /* Bounds of the geometry, on every own goal: a back in his own third is moved into a band and off a line, never across the box. */
-    expect(homeWalks.every(walk => walk <= 15)).toBe(true);
+    /* The floor of 20, a bound of the geometry: on the sweep, for a keeper and for a back, and so on every own goal of the fleet. */
+    expect(farCorner).toBe(0);
+    expect(swept.keeper.filter(turn => turn < 20).length).toBe(0);
+    expect(swept.back.filter(turn => turn < 20).length).toBe(0);
+    expect(worked).toBeGreaterThanOrEqual(20);
+    expect(ownTurns.filter(turn => turn < 20).length).toBe(0);
+    /* A bound of the geometry on every back's own goal: he is brought into the band and at most 5 further across, never beyond. */
+    expect(beyond).toBe(0);
+    /* Two statistics of the fleet, with room over what was measured (written here once the fleets are read). */
     expect(quantile(walks, .5)).toBeLessThanOrEqual(3);
     expect(quantile(walks, .9)).toBeLessThanOrEqual(8);
   }, 300000);

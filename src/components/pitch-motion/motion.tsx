@@ -156,14 +156,18 @@ export function ownGoalFigure<T extends MotionPlayer>(conceding: T[], event: Pit
  *  and nobody hops as a scorer or walks to one. The ball comes to the man, not the man to the ball: he meets
  *  it where he stands, kept 13 to 18 from his own goal line, no wider than 26 from the middle, and 5 off the
  *  straight line to that corner so the turn can be seen. His keeper goes the other way. When the man IS the
- *  keeper, the ball goes to where his dive has him and off his gloves into the other corner. A named man who
- *  is not on the grass moves nobody: the ball turns in front of that goal on its own. */
+ *  keeper, the ball goes to where his dive has him and off his gloves into the other corner, which is the one
+ *  on the side the ball came from: it comes back across him, so the turn can be seen there too (with the
+ *  corner left to the line's own flank a ball from the far side went straight through his gloves). A named
+ *  man who is not on the grass has no figure moved to the ball: it turns in front of that goal on its own
+ *  (anyone standing on its way from there to the net still steps off it). */
 function ownGoalFrame<T extends MotionPlayer>(scene: MotionScene<T>, action: MotionEvent, elapsed: number): MotionFrame<T> {
   const own = action.event;
   const mine = own.side === 'me';
   const man = ownGoalFigure(mine ? scene.theirs : scene.mine, own);
-  const flank: PitchEvent['flank'] = man && !man.keeper ? (man.x < 50 ? 'left' : 'right') : own.flank;
-  const at = (t: number) => actionFrame(scene, { ...action, event: { ...own, og: false, text: '', flank } }, t);
+  const drawn = (side: PitchEvent['flank'], t: number) => actionFrame(scene, { ...action, event: { ...own, og: false, text: '', flank: side } }, t);
+  const flank: PitchEvent['flank'] = !man ? own.flank : (man.keeper ? drawn(own.flank, PLANT_SPAN).ball.x : man.x) < 50 ? 'left' : 'right';
+  const at = (t: number) => drawn(flank, t);
   const whole = at(elapsed);
   /* Where everybody stands is read no later than net contact: after it a goal walks two men to its scorer. */
   const stood = elapsed > NET_AT ? at(NET_AT) : whole;
