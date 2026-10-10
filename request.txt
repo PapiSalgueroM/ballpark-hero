@@ -1,0 +1,5 @@
+#!serial
+setup: git worktree add -f /tmp/m 074a9054 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/m/node_modules; ls /tmp/m | head -3 | tr "\n" " "
+hardening-main-1: cd /tmp/m && node scripts/simDailySaveHardening.mjs 2>&1 | tail -4
+hardening-main-2: cd /tmp/m && node scripts/simDailySaveHardening.mjs 2>&1 | tail -4
+hardening-head: node scripts/simDailySaveHardening.mjs 2>&1 | tail -4

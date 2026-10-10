@@ -1,0 +1,4 @@
+setup exit=0 1s | AI_RULES.md CLAUDE.md COMMIT_ROUND10.bat 
+hardening-main-1 exit=0 58s | simDailySaveHardening: 2 failure(s)
+hardening-main-2 exit=0 58s | simDailySaveHardening: 2 failure(s)
+hardening-head exit=0 57s | simDailySaveHardening: part all green
