@@ -13,9 +13,9 @@
    generator and no Math.random moves, the same key always tells the same
    final, and nothing has to be stored to tell it again.
 
-   FAILS CLOSED: a law that hands back something that is not two whole
-   scores, or a level game on its first try and no winner in the tries after
-   it, gets null, and the caller keeps the engine's own score.
+   FAILS CLOSED: a law that throws, that hands back something that is not
+   two whole scores, or a level game on its first try and no winner in the
+   tries after it, gets null, and the caller keeps the engine's own score.
 
    THE CEILING. A score is a whole number from 0 to GM_SCORE_CEILING, here
    and in everything that reads one off a save (src/lib/gmGameDay.ts,
@@ -60,18 +60,23 @@ export interface ToldGame { key: string; home: string; away: string; homeScore: 
  *  and its higher side is the engine's winner. Null: the law refused. */
 export function decidedScore(law: ScoreLaw, d: DecidedGame, key: string): ToldScore | null {
   if (!d || typeof d.pHome !== 'number' || !Number.isFinite(d.pHome) || typeof d.homeWon !== 'boolean') return null;
-  let first: [number, number] | null = null;
-  for (let t = 0; t < SCORE_TRIES; t += 1) {
-    const s = law.score(d.pHome, keyedRng(`${key}|score|${t}`), d);
-    const ok = Array.isArray(s) && isGmScore(s[0]) && isGmScore(s[1]);
-    if (t === 0) first = ok ? [s[0], s[1]] : null;
-    if (!ok || s[0] === s[1]) continue;
-    if ((s[0] > s[1]) === d.homeWon) return { home: s[0], away: s[1], tries: t + 1, swapped: false };
+  try {
+    let first: [number, number] | null = null;
+    for (let t = 0; t < SCORE_TRIES; t += 1) {
+      const s = law.score(d.pHome, keyedRng(`${key}|score|${t}`), d);
+      const ok = Array.isArray(s) && isGmScore(s[0]) && isGmScore(s[1]);
+      if (t === 0) first = ok ? [s[0], s[1]] : null;
+      if (!ok || s[0] === s[1]) continue;
+      if ((s[0] > s[1]) === d.homeWon) return { home: s[0], away: s[1], tries: t + 1, swapped: false };
+    }
+    if (!first || first[0] === first[1]) return null;
+    const hi = Math.max(first[0], first[1]);
+    const lo = Math.min(first[0], first[1]);
+    return { home: d.homeWon ? hi : lo, away: d.homeWon ? lo : hi, tries: SCORE_TRIES, swapped: true };
+  } catch {
+    /* a law that throws has refused: a press handler keeps the engine's score, it does not crash */
+    return null;
   }
-  if (!first || first[0] === first[1]) return null;
-  const hi = Math.max(first[0], first[1]);
-  const lo = Math.min(first[0], first[1]);
-  return { home: d.homeWon ? hi : lo, away: d.homeWon ? lo : hi, tries: SCORE_TRIES, swapped: true };
 }
 
 /** THE QUICK PATH: the final of a decided fixture and nothing else. Null when

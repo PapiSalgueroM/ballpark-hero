@@ -120,11 +120,15 @@ describe('gameStory, with the NFL law', () => {
         expect(s.deciding.length).toBeGreaterThanOrEqual(1);
         expect(s.deciding.length).toBeLessThanOrEqual(3);
         for (const d of s.deciding) expect(s.game.events).toContain(d);
+        /* the go ahead is one of the deciding plays, a score of the side that won, and the first of them by that side */
+        expect(s.deciding).toContain(s.goAhead);
+        expect(s.goAhead).toBe(s.deciding.find(d => d.side === (s.game.us > s.game.them ? 'us' : 'them')));
         expect(mins(s.game.events)).toEqual([...mins(s.game.events)].sort((x, y) => x - y));
       }
       expect(a.periods).toEqual({ us: h.periods.them, them: h.periods.us });
       expect(a.shape).toBe(h.shape);
       expect(mins(a.deciding)).toEqual(mins(h.deciding));
+      expect(a.goAhead.min).toBe(h.goAhead.min);
       expect(a.game.events.map(e => e.side)).toEqual(h.game.events.map(e => (e.side === 'us' ? 'them' : 'us')));
       expect(gameStory(NFL_GAME_DAY, JSON.parse(JSON.stringify(g)), 'home', 4)).toEqual(h);
     }
@@ -162,8 +166,10 @@ describe('gameStory, with the NFL law', () => {
     expect(s.periods).toEqual({ us: [7, 7, 7, 3], them: [7, 7, 0, 3] });
     expect(NFL_GAME_DAY_HELP.examples[0].body).toContain('7, 7, 7 and 3');
     expect(NFL_GAME_DAY_HELP.examples[0].body).toContain('7, 7, 0 and 3');
-    const go = s.deciding.find(e => e.side === 'us')!;
-    expect([go.kind, NFL_GAME_DAY.periods.name(NFL_GAME_DAY.periods.of(go.min))]).toEqual(['td', 'Q3']);
+    /* three plays decided it by the rule (the losers' touchdown for 14 all, the go ahead, the winners' last score); the one the sheet speaks of is the go ahead */
+    expect(mins(s.deciding)).toEqual([20, 38, 50]);
+    const go = s.goAhead;
+    expect([go.kind, go.side, NFL_GAME_DAY.periods.name(NFL_GAME_DAY.periods.of(go.min))]).toEqual(['td', 'us', 'Q3']);
   });
 });
 
@@ -263,7 +269,7 @@ const ICE: GameDayLaw = {
   /* past regulation: level after sixty minutes, and the winner's last goal in the extra period */
   storyBeyond: (h, a) => (Math.abs(h - a) !== 1 ? null : [...goals(Math.min(h, a), 'us', 1), ...goals(Math.min(h, a), 'them', 30), { min: 63, kind: 'goal', side: h > a ? 'us' : 'them', pts: 1 }]),
   maxScore: 20,
-  periods: { count: 4, of: m => (m > 60 ? 3 : Math.min(2, Math.max(0, Math.ceil(m / 20) - 1))), name: i => (i === 3 ? 'OT' : `P${i + 1}`) },
+  periods: { count: 4, regulation: 3, of: m => (m > 60 ? 3 : Math.min(2, Math.max(0, Math.ceil(m / 20) - 1))), name: i => (i === 3 ? 'OT' : `P${i + 1}`) },
   shape: { rout: 4, comeback: 2, say: (shape, winner) => `${winner}: ${shape}.` },
 };
 const ICE_SCORE: ScoreLaw = { id: 'ice', score: (_p, _rng, d) => (d?.homeWon ? [3, 2] : [2, 3]) };
@@ -309,6 +315,43 @@ describe('a game that went past regulation', () => {
     /* a two goal game cannot have ended in the extra period: the sport's list for it is null */
     expect(gameStory(ICE, { ...told(4, 2), beyond: true }, 'home')).toBeNull();
     expect(gameStory(ICE, told(4, 2), 'home')).not.toBeNull();
+  });
+
+  it('has the last period it was played to: late is the third period of a game in sixty minutes, the extra one of a game past them', () => {
+    const list = (events: SeasonEvent[]): GameDayLaw => ({ ...ICE, story: { ...ICE.story, events: () => events }, storyBeyond: () => events });
+    /* 1 to 1 after two periods, and the winner in the third */
+    const third: SeasonEvent[] = [{ min: 5, kind: 'goal', side: 'them', pts: 1 }, { min: 25, kind: 'goal', side: 'us', pts: 1 }, { min: 55, kind: 'goal', side: 'us', pts: 1 }];
+    const s = gameStory(list(third), told(2, 1), 'home')!;
+    expect([s.shape, s.goAhead.min, s.periods.us]).toEqual(['late', 55, [0, 1, 1, 0]]);
+    /* the same three goals with the winner in the extra period */
+    const extra = third.map(e => (e.min === 55 ? { ...e, min: 62 } : e));
+    const past = gameStory(list(extra), { ...told(2, 1), beyond: true }, 'home')!;
+    expect([past.shape, past.goAhead.min, past.periods.us]).toEqual(['late', 62, [0, 1, 0, 1]]);
+    /* a game that was not past regulation has no play in the extra period */
+    expect(gameStory(list(extra), told(2, 1), 'home')).toBeNull();
+    /* and a go ahead in the second period is not late in either */
+    const second: SeasonEvent[] = [{ min: 25, kind: 'goal', side: 'us', pts: 1 }, { min: 30, kind: 'goal', side: 'us', pts: 1 }, { min: 55, kind: 'goal', side: 'them', pts: 1 }];
+    expect(gameStory(list(second), told(2, 1), 'home')!.shape).toBe('wire');
+    /* a sport with no such number has all its periods in every game: the NFL's fourth quarter */
+    expect(NFL_GAME_DAY.periods.regulation).toBeUndefined();
+  });
+});
+
+describe('gameStory and a law that throws', () => {
+  const boom = () => { throw new Error('boom'); };
+  it('answers null, wherever in the law the throw comes from', () => {
+    expect(gameStory({ ...NFL_GAME_DAY, story: { ...NFL_GAME_DAY.story, events: boom } }, told(24, 17), 'home')).toBeNull();
+    expect(gameStory({ ...NFL_GAME_DAY, periods: { ...NFL_GAME_DAY.periods, of: boom } }, told(24, 17), 'home')).toBeNull();
+    expect(gameStory({ ...ICE, storyBeyond: boom }, { ...told(3, 2), beyond: true }, 'home')).toBeNull();
+    expect(gameStory(Object.defineProperty({ ...NFL_GAME_DAY }, 'shape', { get: boom }), told(24, 17), 'home')).toBeNull();
+    expect(gameStory(null as never, told(24, 17), 'home')).toBeNull();
+  });
+
+  it('leaves the quick path its final: the told path hands back the final with no story', () => {
+    const f = { key: '2026|w3|AAA|BBB|0', home: 'AAA', away: 'BBB', decided: { homeWon: true, pHome: 0.5 } };
+    const t = tellGame(NFL_SCORE_LAW, { ...NFL_GAME_DAY, story: { ...NFL_GAME_DAY.story, events: boom } }, f, 'home')!;
+    expect(t.told).toEqual(quickGame(NFL_SCORE_LAW, f));
+    expect(t.story).toBeNull();
   });
 });
 

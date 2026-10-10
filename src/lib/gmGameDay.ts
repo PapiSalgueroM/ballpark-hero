@@ -21,8 +21,10 @@
    FAILS CLOSED: a final with no winner, a final with a side above the
    sport's own `maxScore` or above GM_SCORE_CEILING (src/lib/gmGameScore.ts
    says why: such a final is refused BEFORE the law is asked), a final the law
-   has no list for, a list that does not add up to the final, or a minute
-   outside the clock gives null, and a card then shows the final alone.
+   has no list for, a list that does not add up to the final, a minute outside
+   the clock, a game marked past regulation in a sport that tells no such
+   game, or a law that throws gives null, and a card then shows the final
+   alone.
 
    THE SAVE FIELD (`GmLastGame`) is the one shape all four boards save for
    Game Day: the GM club's last told game. It is optional, absent on a bye
@@ -42,8 +44,8 @@ export interface GameDayLaw {
   storyBeyond?: StoryLaw['events'];
   /** The highest score a side can have in a final this sport's score law gives. A final above it was never told by that law, and `gameStory` refuses it without asking the story law. */
   maxScore: number;
-  /** How the law's clock is cut: `count` periods, the one (0 based) a minute falls in, and its short name. */
-  periods: { count: number; of(minute: number): number; name(i: number): string };
+  /** How the law's clock is cut: `count` periods, the one (0 based) a minute falls in, and its short name. `regulation`: how many of them a game that did NOT go past regulation has (absent: all of them). The periods after those are only reached by a game marked `beyond`; a play there in any other game is refused, and the last period, the one the shape `late` reads, is the last one that game has. */
+  periods: { count: number; regulation?: number; of(minute: number): number; name(i: number): string };
   /** THIS SIM'S OWN: the margin that makes a rout, the deficit that makes a comeback, and the sentence for each shape. */
   shape: { rout: number; comeback: number; say(shape: StoryShape, winner: string, loser: string): string };
 }
@@ -55,6 +57,8 @@ export interface GameStory {
   periods: { us: number[]; them: number[] };
   /** One to three of `game.events`, minute ordered: see `decidingPlays`. */
   deciding: SeasonEvent[];
+  /** The one of `deciding` that is the go ahead that stood: the play a card calls the one that decided it. */
+  goAhead: SeasonEvent;
   shape: StoryShape;
 }
 
@@ -90,6 +94,15 @@ export function decidingPlays(events: readonly SeasonEvent[], winner: 'us' | 'th
 
 /** The story of a told final from one club's side. Null: see FAILS CLOSED above. */
 export function gameStory(law: GameDayLaw, g: ToldGame, viewAs: 'home' | 'away', md = 1): GameStory | null {
+  try {
+    return storyOf(law, g, viewAs, md);
+  } catch {
+    /* a law that throws has refused: a card shows the final alone, it does not crash */
+    return null;
+  }
+}
+
+function storyOf(law: GameDayLaw, g: ToldGame, viewAs: 'home' | 'away', md: number): GameStory | null {
   if (!g || typeof g.key !== 'string' || !isGmScore(g.homeScore) || !isGmScore(g.awayScore) || g.homeScore === g.awayScore) return null;
   /* written so that a law with no number here (or one that is not a number) is told nothing */
   if (typeof law.maxScore !== 'number' || !(g.homeScore <= law.maxScore) || !(g.awayScore <= law.maxScore)) return null;
@@ -100,6 +113,8 @@ export function gameStory(law: GameDayLaw, g: ToldGame, viewAs: 'home' | 'away',
   if (!Array.isArray(raw)) return null;
   const length = law.story.clock.length;
   const count = law.periods.count;
+  /* the last period THIS game has: the extra ones are only reached by a game past regulation */
+  const last = (past ? count : law.periods.regulation ?? count) - 1;
   const us: number[] = Array.from({ length: count }, () => 0);
   const them: number[] = Array.from({ length: count }, () => 0);
   const flip = viewAs === 'away';
@@ -111,7 +126,7 @@ export function gameStory(law: GameDayLaw, g: ToldGame, viewAs: 'home' | 'away',
   for (const e of [...raw].sort((a, b) => a.min - b.min)) {
     const side: 'us' | 'them' = flip ? (e.side === 'us' ? 'them' : 'us') : e.side;
     const p = law.periods.of(e.min);
-    if (!Number.isInteger(p) || p < 0 || p >= count) return null;
+    if (!Number.isInteger(p) || p < 0 || p >= count || !(p <= last)) return null;
     (side === 'us' ? us : them)[p] += pointsOf(e);
     events.push({ ...e, side });
   }
@@ -124,10 +139,10 @@ export function gameStory(law: GameDayLaw, g: ToldGame, viewAs: 'home' | 'away',
   const margin = Math.abs(mine - theirs);
   const shape: StoryShape = margin >= law.shape.rout ? 'rout'
     : decided.deficit >= law.shape.comeback ? 'comeback'
-      : law.periods.of(decided.goAhead.min) === count - 1 ? 'late'
+      : law.periods.of(decided.goAhead.min) === last ? 'late'
         : decided.first ? 'wire' : 'trade';
   const game: DerivedGame = { md, opp: 0, home: !flip, us: mine, them: theirs, fixed: false, played: true, started: true, line: {}, events };
-  return { game, periods: { us, them }, deciding: decided.plays, shape };
+  return { game, periods: { us, them }, deciding: decided.plays, goAhead: decided.goAhead, shape };
 }
 
 /** THE TOLD PATH: the quick path's final for a decided fixture, and its story

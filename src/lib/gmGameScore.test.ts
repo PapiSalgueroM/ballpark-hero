@@ -62,6 +62,16 @@ describe('decidedScore, with laws written for the test', () => {
     }
   });
 
+  it('refuses a law that throws, on its first try or a later one, and never lets the throw out', () => {
+    const boom: ScoreLaw = { id: 'boom', score: () => { throw new Error('boom'); } };
+    expect(decidedScore(boom, home, 'k')).toBeNull();
+    expect(quickGame(boom, { key: 'k', home: 'AAA', away: 'BBB', decided: home })).toBeNull();
+    let calls = 0;
+    const later: ScoreLaw = { id: 'later', score: () => { calls += 1; if (calls > 3) throw new Error('boom'); return [10, 20]; } };
+    expect(decidedScore(later, home, 'k')).toBeNull();
+    expect(calls).toBe(4);
+  });
+
   it('calls a whole number from 0 to the ceiling a score, and nothing else', () => {
     for (const ok of [0, 1, 69, GM_SCORE_CEILING]) expect(isGmScore(ok), String(ok)).toBe(true);
     for (const bad of [-1, 0.5, GM_SCORE_CEILING + 1, 250000, 1e21, Number.MAX_VALUE, Number.NaN, Number.POSITIVE_INFINITY, '7', null, undefined, [7]]) expect(isGmScore(bad), String(bad)).toBe(false);
