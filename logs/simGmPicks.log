@@ -1,0 +1,14 @@
+   1. the lottery tables are the published ones: 13 checks
+   2. the draws sit inside sampling bands of the published odds: 800 checks
+   3. an old number[] save migrates with every pick kept: 141 checks
+   4. picks and players conserved through ten seasons of trades: 135 checks
+   5. no deal between the deadline and the season close: 80 checks
+   6. compensatory picks follow the net loss and both caps: 30 checks
+   measured: lottery |z| over 275 club shares, median 0.64, 95th percentile 1.79 (band 4.5)
+   measured: later slot |z| over 320 club and slot shares, median 0.58, 95th percentile 1.98 (band 4.5)
+   measured: compensatory awards/clubs owed more than four/drafts at the league cap per seed: 1776/297/40  1762/257/40  1724/299/40  1770/290/40  1740/284/40
+   measured: nfl deals/picks moved/late tries/offseason deals/acquired picks used per seed: 444/1035/960/112/756  411/968/960/112/711  417/981/960/122/729  466/1045/960/129/789  429/945/960/109/693
+   measured: nba deals/picks moved/late tries/offseason deals/acquired picks used per seed: 414/771/960/80/321  386/713/960/79/322  357/645/960/68/284  421/738/960/82/309  393/677/960/88/281
+   measured: nhl deals/picks moved/late tries/offseason deals/acquired picks used per seed: 993/2056/600/193/1221  959/2051/600/188/1230  934/2013/600/165/1220  1002/2144/600/171/1259  947/1989/600/175/1170
+   measured: mlb deals/picks moved/late tries/offseason deals/acquired picks used per seed: 69/0/1080/9/0  90/0/1080/23/0  71/0/1080/9/0  77/0/1080/11/0  80/0/1080/13/0
+simGmPicks: 1199 checks passed over 4 leagues, 5 seeds and 10 seasons each. The lottery tables are the published ones and the draws sit inside their bands, an old save keeps every pick, picks are conserved through every deal and every summer, and nothing is traded after the deadline.

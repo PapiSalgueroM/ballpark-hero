@@ -1,0 +1,27 @@
+NEGATIVE CONTROL ON: mounted. Sections 9 must go red and no other.
+1) the ledger: two reads a fact, the spans, the table
+   14 facts and 30 reads joined by key; spans held from each game's first draft to 2060; no address in the 11 owned files
+2) the draw adds nothing and is drawn once
+   5000 of 5000 keys: the saved wins and round one are runLottery by hand on key|lottery, with one stream and 4 numbers a build
+   70 club shares of the first pick over 40000 lotteries each (seeds 11, 23, 37, 59, 71): distance from the table in standard errors, median 0.55, 95th percentile 2.03, band 4.5
+3) level records, all three cases
+   3000 leagues: 5258 level pairs and 6881 larger groups in the field (6825 with an odd combination), every one split in whole combinations
+   level pairs reversed in round two: 50648 outside the field, 44200 inside it (11521 of them reordered by the lottery first), 14179 across the line
+   21 shares of a drawing won over 20000 keys each: distance from an even chance in standard errors, median 0.38, 95th percentile 1.04, band 4.5
+4) the order of every round
+   3 rule sets, 2000 leagues each: every round a permutation, each round by its rule, 8464 climbs (245 stopped exactly at the cap), 6000 reorderings drew the same night
+5) slots over a ledger
+   600 leagues: 8785 of this year's picks changed hands, 600 leagues hold a club with three or more picks and 351 a club with none, 202 awarded picks; every pick one slot, used by its holder at its first owner's place
+6) the saved order and the saved night fail closed
+   26 corruptions refused (15 of a saved order, 11 of a saved night); a valid one and an unknown rule id read back
+7) the reveals
+   lottery pace fits 3750 ms for 1 to 32 tiles (largest real field 16); 600 lottery nights (276 with his tile), longest 3700 ms
+   3000 runs: 2032 longer than 9 rows, 1184 of those after his own pick and it is always a row; longest run 3780 ms against 5000
+8) the worked example is the table
+   the worked example is computed for every lottery table on the pick rules; the card's three blocks hold the table's own numbers
+9) nothing mounts it, and the presenter knows no sport
+  FAIL: src/components/nba-front-office/NbaFrontOfficeBoard.tsx names the lift and is not on the allowlist. A bind adds its files to MOUNT_ALLOW in this harness; nothing else may mount it.
+   1843 source files read with comments stripped: 1 outside the 9 allowed name the lift, 0 import the old draftOrder; the presenter imports only what it is allowed
+10) the night through a toy host
+   400 nights: 5256 traded picks used by their holders (1427 of them his), he was on the clock 2091 times (39 at the first pick, 1 nights with no slot at all) and saved and reloaded each time
+simGmDraftOrder: CONTROL mounted FIRED. Red by section 9: 1; every other section green.
