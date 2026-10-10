@@ -1,0 +1,6005 @@
+{
+ "results": [
+  {
+   "where": "up-390-motion",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "Miami Heat",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 0,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 0
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "mid": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 5,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 0
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "end": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 0.992098
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "back": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "after": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 1,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "up-390-reduced",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "Miami Heat",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "mid": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "end": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "back": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "after": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 1,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "up-1280-motion",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "Miami Heat",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 0,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 0
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "mid": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 5,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 0
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "end": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "back": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "after": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 1,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "up-1280-reduced",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "Miami Heat",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "mid": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "end": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "back": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "after": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 1,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "early-390-motion",
+   "before": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 0,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 0
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "after": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 1,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "errors": []
+  },
+  {
+   "where": "early-1280-motion",
+   "before": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 0,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 0
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 3720,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "after": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 1,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "errors": []
+  },
+  {
+   "where": "down-390-reduced",
+   "info": {
+    "scenario": "down",
+    "me": "POR",
+    "meLabel": "Portland Trail Blazers",
+    "seed": 2,
+    "plain": null,
+    "first": [
+     "ORL",
+     "IND",
+     "MIA",
+     "POR",
+     "NYK",
+     "PHI",
+     "GSW",
+     "PHX",
+     "WAS",
+     "BKN",
+     "BOS",
+     "DEN",
+     "MIN",
+     "LAC"
+    ],
+    "field": [
+     {
+      "club": "POR",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "NYK",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "ORL",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "GSW",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "IND",
+      "seed": 7,
+      "pct": 6.800000000000001
+     },
+     {
+      "club": "PHX",
+      "seed": 8,
+      "pct": 6.7
+     },
+     {
+      "club": "WAS",
+      "seed": 9,
+      "pct": 4.5
+     },
+     {
+      "club": "BKN",
+      "seed": 10,
+      "pct": 3
+     },
+     {
+      "club": "BOS",
+      "seed": 11,
+      "pct": 2
+     },
+     {
+      "club": "DEN",
+      "seed": 12,
+      "pct": 1.5
+     },
+     {
+      "club": "MIN",
+      "seed": 13,
+      "pct": 1
+     },
+     {
+      "club": "LAC",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "ORL",
+      "seed": 3,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "IND",
+      "seed": 7,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "MIA",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "POR",
+      "seed": 1,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "PHI",
+      "GSW"
+     ],
+     [
+      "IND",
+      "PHX"
+     ],
+     [
+      "TOR",
+      "CLE"
+     ],
+     [
+      "HOU",
+      "DET"
+     ]
+    ],
+    "records": {
+     "ATL": "50-32 x",
+     "BOS": "32-50",
+     "BKN": "30-52",
+     "CHA": "41-41 x",
+     "CHI": "56-26 x",
+     "CLE": "45-37 x",
+     "DAL": "39-43 x",
+     "DEN": "33-49",
+     "DET": "52-30 x",
+     "GSW": "23-59",
+     "HOU": "52-30 x",
+     "IND": "26-56",
+     "LAC": "36-46",
+     "LAL": "54-28 x",
+     "MEM": "43-39 x",
+     "MIA": "24-58",
+     "MIL": "47-35 x",
+     "MIN": "34-48",
+     "NOP": "60-22 x",
+     "NYK": "19-63",
+     "OKC": "58-24 x",
+     "ORL": "20-62",
+     "PHI": "23-59",
+     "PHX": "26-56",
+     "POR": "18-64",
+     "SAC": "59-23 x",
+     "SAS": "37-45 x",
+     "TOR": "45-37 x",
+     "UTA": "61-21 x",
+     "WAS": "28-54"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 4th, down 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Portland Trail Blazers",
+     "Philadelphia 76ers",
+     "Golden State Warriors",
+     "Washington Wizards",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "44Portland Trail BlazersSeed 1 · Down 3 · you",
+    "grid": [
+     "1Orlando MagicSeed 3 · Up 2",
+     "2Indiana PacersSeed 7 · Up 5",
+     "3Miami HeatSeed 6 · Up 3",
+     "4Portland Trail BlazersSeed 1 · Down 3 · you",
+     "5New York KnicksSeed 2 · Down 3",
+     "6Philadelphia 76ersSeed 4 · Down 2",
+     "7Golden State WarriorsSeed 5 · Down 2",
+     "8Phoenix SunsSeed 8 · Held",
+     "9Washington WizardsSeed 9 · Held",
+     "10Brooklyn NetsSeed 10 · Held",
+     "11Boston CelticsSeed 11 · Held",
+     "12Denver NuggetsSeed 12 · Held",
+     "13Minnesota TimberwolvesSeed 13 · Held",
+     "14Los Angeles ClippersSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 4th, down 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Portland Trail Blazers",
+     "Philadelphia 76ers",
+     "Golden State Warriors",
+     "Washington Wizards",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "44Portland Trail BlazersSeed 1 · Down 3 · you",
+    "grid": [
+     "1Orlando MagicSeed 3 · Up 2",
+     "2Indiana PacersSeed 7 · Up 5",
+     "3Miami HeatSeed 6 · Up 3",
+     "4Portland Trail BlazersSeed 1 · Down 3 · you",
+     "5New York KnicksSeed 2 · Down 3",
+     "6Philadelphia 76ersSeed 4 · Down 2",
+     "7Golden State WarriorsSeed 5 · Down 2",
+     "8Phoenix SunsSeed 8 · Held",
+     "9Washington WizardsSeed 9 · Held",
+     "10Brooklyn NetsSeed 10 · Held",
+     "11Boston CelticsSeed 11 · Held",
+     "12Denver NuggetsSeed 12 · Held",
+     "13Minnesota TimberwolvesSeed 13 · Held",
+     "14Los Angeles ClippersSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "notin-390-reduced",
+   "info": {
+    "scenario": "notin",
+    "me": "DAL",
+    "meLabel": "Dallas Mavericks",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club is not in the lottery. Its own round one pick is 22nd.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": null,
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club is not in the lottery. Its own round one pick is 22nd.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": null,
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "plain-390-reduced",
+   "info": {
+    "scenario": "plain",
+    "me": "LAL",
+    "meLabel": "Los Angeles Lakers",
+    "seed": 1,
+    "plain": "field-size",
+    "first": [
+     "BOS",
+     "PHI",
+     "MIN",
+     "MIA",
+     "LAC",
+     "ORL",
+     "TOR",
+     "MEM",
+     "CLE",
+     "OKC",
+     "SAS",
+     "LAL",
+     "NOP",
+     "PHX"
+    ],
+    "field": null,
+    "wins": null,
+    "level": [
+     [
+      "MIA",
+      "LAC"
+     ],
+     [
+      "CLE",
+      "OKC",
+      "SAS"
+     ],
+     [
+      "LAL",
+      "NOP"
+     ],
+     [
+      "PHX",
+      "DET"
+     ],
+     [
+      "IND",
+      "MIL"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46",
+     "GSW": "61-21 x",
+     "HOU": "38-44",
+     "IND": "39-43",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 429
+    },
+    "stageH": 264,
+    "belowTop": 481,
+    "tiles": 9,
+    "facesShown": 9,
+    "headline": {
+     "text": "Your club's own pick is 12th in round one.",
+     "opacity": 1
+    },
+    "rule": "No lottery was drawn: the playoff field is not the size the odds table is for.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "1212Los Angeles Lakersyou",
+    "grid": [
+     "1Boston Celtics",
+     "2Philadelphia 76ers",
+     "3Minnesota Timberwolves",
+     "4Miami Heat",
+     "5Los Angeles Clippers",
+     "6Orlando Magic",
+     "7Toronto Raptors",
+     "8Memphis Grizzlies",
+     "12Los Angeles Lakersyou"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 429
+    },
+    "stageH": 264,
+    "belowTop": 481,
+    "tiles": 9,
+    "facesShown": 9,
+    "headline": {
+     "text": "Your club's own pick is 12th in round one.",
+     "opacity": 1
+    },
+    "rule": "No lottery was drawn: the playoff field is not the size the odds table is for.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": {
+     "scrollH": 262,
+     "clientH": 262,
+     "text": 1259
+    },
+    "continues": 0,
+    "mineText": "1212Los Angeles Lakersyou",
+    "grid": [
+     "1Boston Celtics",
+     "2Philadelphia 76ers",
+     "3Minnesota Timberwolves",
+     "4Miami Heat",
+     "5Los Angeles Clippers",
+     "6Orlando Magic",
+     "7Toronto Raptors",
+     "8Memphis Grizzlies",
+     "12Los Angeles Lakersyou"
+    ]
+   },
+   "helpText": [
+    "How round one is ordered",
+    "The clubs that missed the playoffs pick first, worst record first. The playoff clubs pick after them.",
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled."
+   ],
+   "errors": []
+  },
+  {
+   "where": "level-390-reduced",
+   "info": {
+    "scenario": "level",
+    "me": "SAS",
+    "meLabel": "San Antonio Spurs",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 553
+    },
+    "stageH": 372,
+    "belowTop": 605,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick stays 10th.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "1010San Antonio SpursSeed 10 · Held · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held · you",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 553
+    },
+    "stageH": 372,
+    "belowTop": 605,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick stays 10th.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "1010San Antonio SpursSeed 10 · Held · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held · you",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "abbr-390-reduced",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "MIA",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22MIASeed 5 · Up 3 · you",
+    "grid": [
+     "1BOSSeed 1 · Held",
+     "2MIASeed 5 · Up 3 · you",
+     "3ORLSeed 6 · Up 3",
+     "4PHISeed 2 · Down 2",
+     "5MINSeed 3 · Down 2",
+     "6LACSeed 4 · Down 2",
+     "7TORSeed 7 · Held",
+     "8MEMSeed 8 · Held",
+     "9CLESeed 9 · Held",
+     "10SASSeed 10 · Held",
+     "11OKCSeed 11 · Held",
+     "12NOPSeed 12 · Held",
+     "13LALSeed 13 · Held",
+     "14PHXSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "22MIASeed 5 · Up 3 · you",
+    "grid": [
+     "1BOSSeed 1 · Held",
+     "2MIASeed 5 · Up 3 · you",
+     "3ORLSeed 6 · Up 3",
+     "4PHISeed 2 · Down 2",
+     "5MINSeed 3 · Down 2",
+     "6LACSeed 4 · Down 2",
+     "7TORSeed 7 · Held",
+     "8MEMSeed 8 · Held",
+     "9CLESeed 9 · Held",
+     "10SASSeed 10 · Held",
+     "11OKCSeed 11 · Held",
+     "12NOPSeed 12 · Held",
+     "13LALSeed 13 · Held",
+     "14PHXSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "seen-390-motion",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "Miami Heat",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "norules-390-reduced",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "Miami Heat",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 16,
+     "y": 40,
+     "w": 358,
+     "h": 573
+    },
+    "stageH": 372,
+    "belowTop": 625,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [
+     "Philadelphia 76ers",
+     "Minnesota Timberwolves",
+     "Los Angeles Clippers",
+     "Memphis Grizzlies",
+     "Cleveland Cavaliers",
+     "San Antonio Spurs",
+     "Oklahoma City Thunder",
+     "New Orleans Pelicans",
+     "Los Angeles Lakers"
+    ],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 844,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 128
+    },
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "How this night was drawn",
+    "It was drawn under an earlier rule of this game, on the odds table of the 2026 draft."
+   ],
+   "errors": []
+  },
+  {
+   "where": "down-1280-reduced",
+   "info": {
+    "scenario": "down",
+    "me": "POR",
+    "meLabel": "Portland Trail Blazers",
+    "seed": 2,
+    "plain": null,
+    "first": [
+     "ORL",
+     "IND",
+     "MIA",
+     "POR",
+     "NYK",
+     "PHI",
+     "GSW",
+     "PHX",
+     "WAS",
+     "BKN",
+     "BOS",
+     "DEN",
+     "MIN",
+     "LAC"
+    ],
+    "field": [
+     {
+      "club": "POR",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "NYK",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "ORL",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "GSW",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "IND",
+      "seed": 7,
+      "pct": 6.800000000000001
+     },
+     {
+      "club": "PHX",
+      "seed": 8,
+      "pct": 6.7
+     },
+     {
+      "club": "WAS",
+      "seed": 9,
+      "pct": 4.5
+     },
+     {
+      "club": "BKN",
+      "seed": 10,
+      "pct": 3
+     },
+     {
+      "club": "BOS",
+      "seed": 11,
+      "pct": 2
+     },
+     {
+      "club": "DEN",
+      "seed": 12,
+      "pct": 1.5
+     },
+     {
+      "club": "MIN",
+      "seed": 13,
+      "pct": 1
+     },
+     {
+      "club": "LAC",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "ORL",
+      "seed": 3,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "IND",
+      "seed": 7,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "MIA",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "POR",
+      "seed": 1,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "PHI",
+      "GSW"
+     ],
+     [
+      "IND",
+      "PHX"
+     ],
+     [
+      "TOR",
+      "CLE"
+     ],
+     [
+      "HOU",
+      "DET"
+     ]
+    ],
+    "records": {
+     "ATL": "50-32 x",
+     "BOS": "32-50",
+     "BKN": "30-52",
+     "CHA": "41-41 x",
+     "CHI": "56-26 x",
+     "CLE": "45-37 x",
+     "DAL": "39-43 x",
+     "DEN": "33-49",
+     "DET": "52-30 x",
+     "GSW": "23-59",
+     "HOU": "52-30 x",
+     "IND": "26-56",
+     "LAC": "36-46",
+     "LAL": "54-28 x",
+     "MEM": "43-39 x",
+     "MIA": "24-58",
+     "MIL": "47-35 x",
+     "MIN": "34-48",
+     "NOP": "60-22 x",
+     "NYK": "19-63",
+     "OKC": "58-24 x",
+     "ORL": "20-62",
+     "PHI": "23-59",
+     "PHX": "26-56",
+     "POR": "18-64",
+     "SAC": "59-23 x",
+     "SAS": "37-45 x",
+     "TOR": "45-37 x",
+     "UTA": "61-21 x",
+     "WAS": "28-54"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 4th, down 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "44Portland Trail BlazersSeed 1 · Down 3 · you",
+    "grid": [
+     "1Orlando MagicSeed 3 · Up 2",
+     "2Indiana PacersSeed 7 · Up 5",
+     "3Miami HeatSeed 6 · Up 3",
+     "4Portland Trail BlazersSeed 1 · Down 3 · you",
+     "5New York KnicksSeed 2 · Down 3",
+     "6Philadelphia 76ersSeed 4 · Down 2",
+     "7Golden State WarriorsSeed 5 · Down 2",
+     "8Phoenix SunsSeed 8 · Held",
+     "9Washington WizardsSeed 9 · Held",
+     "10Brooklyn NetsSeed 10 · Held",
+     "11Boston CelticsSeed 11 · Held",
+     "12Denver NuggetsSeed 12 · Held",
+     "13Minnesota TimberwolvesSeed 13 · Held",
+     "14Los Angeles ClippersSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 4th, down 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "44Portland Trail BlazersSeed 1 · Down 3 · you",
+    "grid": [
+     "1Orlando MagicSeed 3 · Up 2",
+     "2Indiana PacersSeed 7 · Up 5",
+     "3Miami HeatSeed 6 · Up 3",
+     "4Portland Trail BlazersSeed 1 · Down 3 · you",
+     "5New York KnicksSeed 2 · Down 3",
+     "6Philadelphia 76ersSeed 4 · Down 2",
+     "7Golden State WarriorsSeed 5 · Down 2",
+     "8Phoenix SunsSeed 8 · Held",
+     "9Washington WizardsSeed 9 · Held",
+     "10Brooklyn NetsSeed 10 · Held",
+     "11Boston CelticsSeed 11 · Held",
+     "12Denver NuggetsSeed 12 · Held",
+     "13Minnesota TimberwolvesSeed 13 · Held",
+     "14Los Angeles ClippersSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "notin-1280-reduced",
+   "info": {
+    "scenario": "notin",
+    "me": "DAL",
+    "meLabel": "Dallas Mavericks",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club is not in the lottery. Its own round one pick is 22nd.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": null,
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club is not in the lottery. Its own round one pick is 22nd.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": null,
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "plain-1280-reduced",
+   "info": {
+    "scenario": "plain",
+    "me": "LAL",
+    "meLabel": "Los Angeles Lakers",
+    "seed": 1,
+    "plain": "field-size",
+    "first": [
+     "BOS",
+     "PHI",
+     "MIN",
+     "MIA",
+     "LAC",
+     "ORL",
+     "TOR",
+     "MEM",
+     "CLE",
+     "OKC",
+     "SAS",
+     "LAL",
+     "NOP",
+     "PHX"
+    ],
+    "field": null,
+    "wins": null,
+    "level": [
+     [
+      "MIA",
+      "LAC"
+     ],
+     [
+      "CLE",
+      "OKC",
+      "SAS"
+     ],
+     [
+      "LAL",
+      "NOP"
+     ],
+     [
+      "PHX",
+      "DET"
+     ],
+     [
+      "IND",
+      "MIL"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46",
+     "GSW": "61-21 x",
+     "HOU": "38-44",
+     "IND": "39-43",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 426
+    },
+    "stageH": 264,
+    "belowTop": 478,
+    "tiles": 9,
+    "facesShown": 9,
+    "headline": {
+     "text": "Your club's own pick is 12th in round one.",
+     "opacity": 1
+    },
+    "rule": "No lottery was drawn: the playoff field is not the size the odds table is for.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "1212Los Angeles Lakersyou",
+    "grid": [
+     "1Boston Celtics",
+     "2Philadelphia 76ers",
+     "3Minnesota Timberwolves",
+     "4Miami Heat",
+     "5Los Angeles Clippers",
+     "6Orlando Magic",
+     "7Toronto Raptors",
+     "8Memphis Grizzlies",
+     "12Los Angeles Lakersyou"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 426
+    },
+    "stageH": 264,
+    "belowTop": 478,
+    "tiles": 9,
+    "facesShown": 9,
+    "headline": {
+     "text": "Your club's own pick is 12th in round one.",
+     "opacity": 1
+    },
+    "rule": "No lottery was drawn: the playoff field is not the size the odds table is for.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": {
+     "scrollH": 262,
+     "clientH": 262,
+     "text": 1259
+    },
+    "continues": 0,
+    "mineText": "1212Los Angeles Lakersyou",
+    "grid": [
+     "1Boston Celtics",
+     "2Philadelphia 76ers",
+     "3Minnesota Timberwolves",
+     "4Miami Heat",
+     "5Los Angeles Clippers",
+     "6Orlando Magic",
+     "7Toronto Raptors",
+     "8Memphis Grizzlies",
+     "12Los Angeles Lakersyou"
+    ]
+   },
+   "helpText": [
+    "How round one is ordered",
+    "The clubs that missed the playoffs pick first, worst record first. The playoff clubs pick after them.",
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled."
+   ],
+   "errors": []
+  },
+  {
+   "where": "level-1280-reduced",
+   "info": {
+    "scenario": "level",
+    "me": "SAS",
+    "meLabel": "San Antonio Spurs",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick stays 10th.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "1010San Antonio SpursSeed 10 · Held · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held · you",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick stays 10th.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "1010San Antonio SpursSeed 10 · Held · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held · you",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "abbr-1280-reduced",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "MIA",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22MIASeed 5 · Up 3 · you",
+    "grid": [
+     "1BOSSeed 1 · Held",
+     "2MIASeed 5 · Up 3 · you",
+     "3ORLSeed 6 · Up 3",
+     "4PHISeed 2 · Down 2",
+     "5MINSeed 3 · Down 2",
+     "6LACSeed 4 · Down 2",
+     "7TORSeed 7 · Held",
+     "8MEMSeed 8 · Held",
+     "9CLESeed 9 · Held",
+     "10SASSeed 10 · Held",
+     "11OKCSeed 11 · Held",
+     "12NOPSeed 12 · Held",
+     "13LALSeed 13 · Held",
+     "14PHXSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "22MIASeed 5 · Up 3 · you",
+    "grid": [
+     "1BOSSeed 1 · Held",
+     "2MIASeed 5 · Up 3 · you",
+     "3ORLSeed 6 · Up 3",
+     "4PHISeed 2 · Down 2",
+     "5MINSeed 3 · Down 2",
+     "6LACSeed 4 · Down 2",
+     "7TORSeed 7 · Held",
+     "8MEMSeed 8 · Held",
+     "9CLESeed 9 · Held",
+     "10SASSeed 10 · Held",
+     "11OKCSeed 11 · Held",
+     "12NOPSeed 12 · Held",
+     "13LALSeed 13 · Held",
+     "14PHXSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "seen-1280-motion",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "Miami Heat",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 1356
+    },
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "The league's rule",
+    "Every club that misses the playoffs is in the lottery, and only those clubs.",
+    "A lottery club that is not drawn picks after the drawn picks, worst record first.",
+    "Every playoff club picks after every lottery club in round one, worst record first, whatever it did in the playoffs.",
+    "Round two is every club by record, worst first. The lottery changes nothing there except the order among lottery clubs level on record.",
+    "Level records are split by a random drawing. Level lottery clubs share their chances, and the winner of the drawing gets the odd combination.",
+    "Clubs level on record pick in round two in the reverse of their round one order.",
+    "The league used this rule from its 2019 draft to its 2026 draft.",
+    "This game's own",
+    "The league switched to a new lottery from its 2027 draft. This game still runs this one for every draft it plays.",
+    "Every prospect, every record and every draw here is this game's own.",
+    "When three or more lottery clubs are level, the leftover combinations go one each in the order of the drawing. That detail is this game's.",
+    "The league's new lottery (16 clubs, from its 2027 draft) is not modelled.",
+    "A worked example",
+    "By the table, the worst record's chance at the first pick is 14%. The best record in the lottery gets 0.5%.",
+    "4 picks are drawn, so the worst record can be passed 4 times at most and picks no lower than 5th."
+   ],
+   "errors": []
+  },
+  {
+   "where": "norules-1280-reduced",
+   "info": {
+    "scenario": "up",
+    "me": "MIA",
+    "meLabel": "Miami Heat",
+    "seed": 1,
+    "plain": null,
+    "first": [
+     "BOS",
+     "MIA",
+     "ORL",
+     "PHI",
+     "MIN",
+     "LAC",
+     "TOR",
+     "MEM",
+     "CLE",
+     "SAS",
+     "OKC",
+     "NOP",
+     "LAL",
+     "PHX"
+    ],
+    "field": [
+     {
+      "club": "BOS",
+      "seed": 1,
+      "pct": 14
+     },
+     {
+      "club": "PHI",
+      "seed": 2,
+      "pct": 14
+     },
+     {
+      "club": "MIN",
+      "seed": 3,
+      "pct": 14
+     },
+     {
+      "club": "LAC",
+      "seed": 4,
+      "pct": 11.5
+     },
+     {
+      "club": "MIA",
+      "seed": 5,
+      "pct": 11.5
+     },
+     {
+      "club": "ORL",
+      "seed": 6,
+      "pct": 9
+     },
+     {
+      "club": "TOR",
+      "seed": 7,
+      "pct": 7.5
+     },
+     {
+      "club": "MEM",
+      "seed": 8,
+      "pct": 6
+     },
+     {
+      "club": "CLE",
+      "seed": 9,
+      "pct": 3.2
+     },
+     {
+      "club": "SAS",
+      "seed": 10,
+      "pct": 3.2
+     },
+     {
+      "club": "OKC",
+      "seed": 11,
+      "pct": 3.1
+     },
+     {
+      "club": "NOP",
+      "seed": 12,
+      "pct": 1.3
+     },
+     {
+      "club": "LAL",
+      "seed": 13,
+      "pct": 1.2
+     },
+     {
+      "club": "PHX",
+      "seed": 14,
+      "pct": 0.5
+     }
+    ],
+    "wins": [
+     {
+      "draw": 1,
+      "club": "BOS",
+      "seed": 1,
+      "slot": 1
+     },
+     {
+      "draw": 2,
+      "club": "MIA",
+      "seed": 5,
+      "slot": 2
+     },
+     {
+      "draw": 3,
+      "club": "ORL",
+      "seed": 6,
+      "slot": 3
+     },
+     {
+      "draw": 4,
+      "club": "PHI",
+      "seed": 2,
+      "slot": 4
+     }
+    ],
+    "level": [
+     [
+      "LAC",
+      "MIA"
+     ],
+     [
+      "CLE",
+      "SAS",
+      "OKC"
+     ],
+     [
+      "NOP",
+      "LAL"
+     ],
+     [
+      "MIL",
+      "IND"
+     ],
+     [
+      "CHA",
+      "GSW"
+     ]
+    ],
+    "records": {
+     "ATL": "45-37 x",
+     "BOS": "18-64",
+     "BKN": "41-41 x",
+     "CHA": "61-21 x",
+     "CHI": "60-22 x",
+     "CLE": "30-52",
+     "DAL": "44-38 x",
+     "DEN": "49-33 x",
+     "DET": "36-46 x",
+     "GSW": "61-21 x",
+     "HOU": "38-44 x",
+     "IND": "39-43 x",
+     "LAC": "24-58",
+     "LAL": "35-47",
+     "MEM": "28-54",
+     "MIA": "24-58",
+     "MIL": "39-43 x",
+     "MIN": "20-62",
+     "NOP": "35-47",
+     "NYK": "51-31 x",
+     "OKC": "30-52",
+     "ORL": "26-56",
+     "PHI": "19-63",
+     "PHX": "36-46",
+     "POR": "43-39 x",
+     "SAC": "53-29 x",
+     "SAS": "30-52",
+     "TOR": "27-55",
+     "UTA": "46-36 x",
+     "WAS": "42-40 x"
+    }
+   },
+   "first": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": null,
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "help": {
+    "card": {
+     "x": 304,
+     "y": 40,
+     "w": 672,
+     "h": 537
+    },
+    "stageH": 372,
+    "belowTop": 589,
+    "tiles": 14,
+    "facesShown": 14,
+    "headline": {
+     "text": "Your club's own pick lands 2nd, up 3 places.",
+     "opacity": 1
+    },
+    "rule": "14 clubs are in the lottery and the top 4 picks are drawn. The 3 worst records share the best chance at the first pick, 14% each.",
+    "cut": [],
+    "animEndMs": 0,
+    "overflowX": 0,
+    "docH": 900,
+    "panel": {
+     "scrollH": 370,
+     "clientH": 370,
+     "text": 128
+    },
+    "continues": 0,
+    "mineText": "22Miami HeatSeed 5 · Up 3 · you",
+    "grid": [
+     "1Boston CelticsSeed 1 · Held",
+     "2Miami HeatSeed 5 · Up 3 · you",
+     "3Orlando MagicSeed 6 · Up 3",
+     "4Philadelphia 76ersSeed 2 · Down 2",
+     "5Minnesota TimberwolvesSeed 3 · Down 2",
+     "6Los Angeles ClippersSeed 4 · Down 2",
+     "7Toronto RaptorsSeed 7 · Held",
+     "8Memphis GrizzliesSeed 8 · Held",
+     "9Cleveland CavaliersSeed 9 · Held",
+     "10San Antonio SpursSeed 10 · Held",
+     "11Oklahoma City ThunderSeed 11 · Held",
+     "12New Orleans PelicansSeed 12 · Held",
+     "13Los Angeles LakersSeed 13 · Held",
+     "14Phoenix SunsSeed 14 · Held"
+    ]
+   },
+   "helpText": [
+    "How this night was drawn",
+    "It was drawn under an earlier rule of this game, on the odds table of the 2026 draft."
+   ],
+   "errors": []
+  },
+  {
+   "where": "run-390-reduced",
+   "info": {
+    "headline": "Picks 1 to 11 are in. You are on the clock at 12.",
+    "hidden": 2,
+    "made": 11,
+    "onClock": 12,
+    "rows": [
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ]
+   },
+   "rows": [
+    "3. Memphis Grizzlies take Prospect 3C88",
+    "4. Boston Celtics take Prospect 4G88",
+    "5. Atlanta Hawks take Prospect 5F87",
+    "6. Phoenix Suns take Prospect 6C87",
+    "7. Indiana Pacers take Prospect 7G87",
+    "8. Philadelphia 76ers take Prospect 8F86",
+    "9. Denver Nuggets take Prospect 9C86",
+    "10. Oklahoma City Thunder take Prospect 10G85",
+    "11. Houston Rockets take Prospect 11F85"
+   ],
+   "cardHead": "9 went off the board.",
+   "errors": []
+  },
+  {
+   "where": "run-1280-reduced",
+   "info": {
+    "headline": "Picks 1 to 11 are in. You are on the clock at 12.",
+    "hidden": 2,
+    "made": 11,
+    "onClock": 12,
+    "rows": [
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11
+    ]
+   },
+   "rows": [
+    "3. Memphis Grizzlies take Prospect 3C88",
+    "4. Boston Celtics take Prospect 4G88",
+    "5. Atlanta Hawks take Prospect 5F87",
+    "6. Phoenix Suns take Prospect 6C87",
+    "7. Indiana Pacers take Prospect 7G87",
+    "8. Philadelphia 76ers take Prospect 8F86",
+    "9. Denver Nuggets take Prospect 9C86",
+    "10. Oklahoma City Thunder take Prospect 10G85",
+    "11. Houston Rockets take Prospect 11F85"
+   ],
+   "cardHead": "9 went off the board.",
+   "errors": []
+  }
+ ],
+ "problems": [],
+ "shots": [
+  "up-390-motion-1-first.png",
+  "up-390-motion-2-mid.png",
+  "up-390-motion-3-end.png",
+  "up-390-motion-3-mine.png",
+  "up-390-motion-4-help.png",
+  "up-390-motion-5-help-bottom.png",
+  "up-390-reduced-1-first.png",
+  "up-390-reduced-2-mid.png",
+  "up-390-reduced-3-end.png",
+  "up-390-reduced-3-mine.png",
+  "up-390-reduced-4-help.png",
+  "up-390-reduced-5-help-bottom.png",
+  "up-1280-motion-1-first.png",
+  "up-1280-motion-2-mid.png",
+  "up-1280-motion-3-end.png",
+  "up-1280-motion-3-mine.png",
+  "up-1280-motion-4-help.png",
+  "up-1280-motion-5-help-bottom.png",
+  "up-1280-reduced-1-first.png",
+  "up-1280-reduced-2-mid.png",
+  "up-1280-reduced-3-end.png",
+  "up-1280-reduced-3-mine.png",
+  "up-1280-reduced-4-help.png",
+  "up-1280-reduced-5-help-bottom.png",
+  "early-390-motion-pressed.png",
+  "early-1280-motion-pressed.png",
+  "down-390-reduced-1.png",
+  "notin-390-reduced-1.png",
+  "plain-390-reduced-1.png",
+  "plain-390-reduced-2-help.png",
+  "level-390-reduced-1.png",
+  "abbr-390-reduced-1.png",
+  "seen-390-motion-1.png",
+  "norules-390-reduced-1.png",
+  "norules-390-reduced-2-help.png",
+  "down-1280-reduced-1.png",
+  "notin-1280-reduced-1.png",
+  "plain-1280-reduced-1.png",
+  "plain-1280-reduced-2-help.png",
+  "level-1280-reduced-1.png",
+  "abbr-1280-reduced-1.png",
+  "seen-1280-motion-1.png",
+  "norules-1280-reduced-1.png",
+  "norules-1280-reduced-2-help.png",
+  "run-390-reduced-1.png",
+  "run-1280-reduced-1.png"
+ ]
+}
