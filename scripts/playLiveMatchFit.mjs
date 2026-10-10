@@ -74,7 +74,33 @@
  *     plain stored save (what localStorage holds under dukb-club-manager-save, a match in flight): the walk
  *     then picks its goal by its own rule. A later round can hand it a save an engine search found.
  *
+ * Round 1216, section 9: AN OWN GOAL IS DRAWN AS ONE. A player's report (2026-10-09): the card said (O.G) and the
+ * pitch showed a striker scoring. Two saves are FOUND in node by the engine on the walk's seed plus nine (a first
+ * half already drawn that holds an own goal on its own, one for me and one against me), put into storage before
+ * the page loads, and each is watched on a phone (390 by 844) and on a wide screen (1280 by 900). Everything
+ * sections 1 and 7 hold for any goal is held, and from the ball and the dots, read in pitch percent off the page's
+ * own styles on flight frames only: the card ends (O.G); the last touch is the man the card names, told by who he
+ * is (one of mine by his id, one of theirs by the number on his back, never by a label a crowd can hide); from
+ * there to the net nobody of the side that got it is at the ball; the ball turns by 20 degrees or more; in the net
+ * he alone holds his head and nobody of his side has his arms up. Screenshots (two in flight, one with the card)
+ * go to LIVE_FIT_SHOTS or RC_OUT. The section runs at the end of the default walk, and alone with LIVE_FIT_OWN=1.
+ *   The floor of 20 degrees is a bound of the geometry for a back and, since the review of this round, for a
+ *   keeper too (his own goal ends in the corner on the side the ball came from; before that, whichever keeper's
+ *   own goal the engine search met first could turn by 2 degrees). src/test/pitchOwnGoal.test.tsx, OG5, sweeps
+ *   it by hand: no place of the men gives a turn under 27 off a back or under 43 off a keeper, and a goal that
+ *   is not an own goal turns by 3.3 at most. So a red on this line is the picture, never the luck of the seed.
+ *   NEGATIVE CONTROL 6: LIVE_FIT_OWN=1 LIVE_FIT_CONTROL=ogbefore is for a BUILD that draws the picture from before
+ *   Round 1216 (the one entry line of ownGoalFrame taken out of src/components/pitch-motion/motion.tsx, then
+ *   built): the card must still read (O.G) in all four watches and section 9 must go red on the last touch and
+ *   on the turn. Exit 1 when it does, as it must, 3 when not. Taking the tag off the save would prove less: the
+ *   bug that was reported is the card saying one thing and the grass another. The edit is one script, so the
+ *   control runs from the repo alone, on a runner or a throwaway checkout (it writes a source file in place):
+ *     node scripts/lib/ownGoalBeforeBuild.mjs && npm run build
+ *     LIVE_FIT_OWN=1 LIVE_FIT_CONTROL=ogbefore node scripts/playLiveMatchFit.mjs     (against that build, served)
+ *     git checkout -- src/components/pitch-motion/motion.tsx                         (and build again)
+ *
  *   node scripts/playLiveMatchFit.mjs
+ *   LIVE_FIT_OWN=1 node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_SEED=12345 node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
  *   LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
@@ -101,7 +127,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { hashName, pageDraws, pageSeedOf, seedPages } from './lib/pageSeed.mjs';
 
@@ -113,7 +139,12 @@ const KEY = 'dukb-club-manager-save';
 const REPORT = process.env.LIVE_FIT_REPORT === '1';
 const REPLAY = process.env.LIVE_FIT_REPLAY === '1';
 const CONTROL = process.env.LIVE_FIT_CONTROL || '';
-if (CONTROL && !['bar', 'silentlist', 'earlyscore', 'nocard', 'noseed'].includes(CONTROL)) { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['bar', 'silentlist', 'earlyscore', 'nocard', 'noseed', 'ogbefore'].includes(CONTROL)) { console.error(`unknown LIVE_FIT_CONTROL ${CONTROL}`); process.exit(2); }
+/* Round 1216: LIVE_FIT_OWN=1 runs section 9 (an own goal) alone. Its control, ogbefore, is for a build that
+   still draws the picture from before Round 1216 and nothing else. */
+const OWN_ONLY = process.env.LIVE_FIT_OWN === '1';
+if ((CONTROL === 'ogbefore') !== (OWN_ONLY && !!CONTROL)) { console.error('LIVE_FIT_CONTROL=ogbefore is section 9\'s control and its only one: set LIVE_FIT_OWN=1 with it, and no other control with LIVE_FIT_OWN'); process.exit(2); }
+if (OWN_ONLY && (process.env.LIVE_FIT_REPLAY === '1' || process.env.LIVE_FIT_REPORT === '1' || process.env.LIVE_FIT_SAVE)) { console.error('LIVE_FIT_OWN runs section 9 alone, from saves it finds itself: not with LIVE_FIT_REPLAY, LIVE_FIT_REPORT or LIVE_FIT_SAVE'); process.exit(2); }
 if ((CONTROL === 'noseed') !== (REPLAY && !!CONTROL)) { console.error('LIVE_FIT_CONTROL=noseed is the replay mode\'s control and its only one: set LIVE_FIT_REPLAY=1 with it, and no other control with LIVE_FIT_REPLAY'); process.exit(2); }
 const V = !!process.env.VERBOSE;
 
@@ -194,7 +225,7 @@ if (SAVE_FILE) {
 const startState = () => (START ? { storageState: { cookies: [], origins: [{ origin: BASE, localStorage: [{ name: KEY, value: START.raw }] }] } } : {});
 
 /* The save as it stood when the last goal was picked to be watched, per context, for the dump of a red. */
-const VIEW_OF = { 1: 'phone', 2: 'calm', 7: 'wide' };
+const VIEW_OF = { 1: 'phone', 2: 'calm', 7: 'wide', 9: 'own' };
 let kept = null;
 const dumped = new Set();
 function dumpSave() {
@@ -390,6 +421,26 @@ async function startSampler(page) {
         pitch: pitch ? (() => { const r = pitch.getBoundingClientRect(); return [r.left, r.top, r.right, r.bottom]; })() : null,
         minute: root ? Number(root.getAttribute('data-cm-live-minute')) : null,
         y: window.scrollY,
+        /* Round 1216, section 9 only (window.__fitOwn): where the ball and every dot are, in PITCH percent. The
+           page draws a point at left x%, top y% of the pitch box, or at left (100 - y)%, top x% when the pitch is
+           on its side, so the style is turned back through the orientation and no pixel is measured. */
+        ...(window.__fitOwn && pitch ? (() => {
+          const land = pitch.getAttribute('data-pm-orient') === 'landscape';
+          const at = el => { const l = parseFloat(el.style.left), t = parseFloat(el.style.top); return land ? [t, 100 - l] : [l, t]; };
+          const ball = pitch.querySelector('[data-cm-ball]');
+          const cardLine = card ? card.querySelector('[data-cm-goal-card-line]') : null;
+          return {
+            own: pitch.getAttribute('data-pm-own-goal'),
+            ball: ball ? at(ball) : null,
+            dots: [...pitch.querySelectorAll('[data-cm-dot], [data-cm-dot-opp]')].map(el => ({
+              mine: el.hasAttribute('data-cm-dot'), id: el.getAttribute('data-cm-dot') ?? el.getAttribute('data-cm-dot-opp'), at: at(el),
+              rue: !!el.querySelector('[data-pm-rue]'), up: !!el.querySelector('[data-cm-actor-pose="celebrate"]'),
+              /* How far the figure itself leans, in degrees, read off what is drawn (a dive lays it on its side). */
+              lean: (() => { const turned = /rotate\((-?[0-9.e-]+)/.exec(el.querySelector('svg g[transform]')?.getAttribute('transform') ?? ''); return turned ? Math.abs(Number(turned[1])) : 0; })(),
+            })),
+            cardLine: cardLine ? cardLine.textContent.replace(/\s+/g, ' ').trim() : null,
+          };
+        })() : {}),
       });
       requestAnimationFrame(read);
     };
@@ -813,6 +864,182 @@ async function noGoal(page, view, words) {
 }
 const PHONE = { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true };
 
+/* ---- Round 1216, section 9: an own goal is drawn as one ---- */
+/* What section 9 found red, for its control's closing line. */
+let ownTouchMissed = false, ownTurnMissed = false, ownCardFine = 0;
+/**
+ * Two saves with a first half already drawn that holds an own goal the walk can watch, one for me and one
+ * against me: FOUND in node by the engine itself on a seed (the walk's seed plus nine), never dealt by luck and
+ * never typed. The engine is bundled the way scripts/playCmQuickSubs.mjs bundles it; cm.trimCareer gives a save
+ * its stored shape. The goal is on its own (no other goal within four minutes, no review at its place), outside
+ * the board, and the match is put back three minutes before it.
+ */
+async function findOwnGoalSaves() {
+  const out = fs.mkdtempSync(path.join(os.tmpdir(), 'live-fit-own-'));
+  const bundle = path.join(out, 'engine.mjs');
+  const { build } = await import('esbuild');
+  await build({ entryPoints: [path.join(ROOT, 'src/lib/clubManager.ts')], bundle: true, platform: 'node', format: 'esm', outfile: bundle, alias: { '@': path.join(ROOT, 'src') }, logLevel: 'error' });
+  const memory = new Map();
+  if (!globalThis.localStorage) globalThis.localStorage = { getItem: key => memory.get(key) ?? null, setItem: (key, value) => memory.set(key, String(value)), removeItem: key => memory.delete(key) };
+  const cm = await import(pathToFileURL(bundle).href);
+  const ambient = Math.random;
+  let a = seedAt(9);
+  Math.random = () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const found = {};
+  let matches = 0;
+  try {
+    /* Up to ninety seasons, five clubs in turn. Measured on the walk's own seed: the one for me was in match 69
+       of the search and the one against me in match 371, and ninety seasons are over ten times that many matches,
+       so a search that finds none is a defect and not bad luck. */
+    for (let season = 0; season < 90 && !(found.me && found.opp); season++) {
+      let career = cm.startCareer(['Aston Villa', 'Real Madrid', 'Lyon', 'Ajax', 'Celtic'][season % 5]);
+      for (let guard = 0; guard < 400 && !(found.me && found.opp); guard++) {
+        const next = cm.playNextEntry(career);
+        career = next.state;
+        if (next.kind === 'seasonOver' || career.sacked) break;
+        if (!career.live) continue;
+        matches++;
+        const live = career.live;
+        const feed = cm.liveFeed(live);
+        for (const goal of feed) {
+          if (goal.kind !== 'goal' || !goal.og || goal.plus || goal.minute < 6 || goal.minute > 38 || found[goal.side]) continue;
+          if (feed.some(e => e !== goal && ((e.kind === 'goal' && Math.abs(e.minute + (e.plus ?? 0) - goal.minute) < 4) || (e.kind === 'var' && Math.abs(e.minute - goal.minute) < 2)))) continue;
+          /* Who he is on the page: one of mine by his id, one of theirs by the number on his back. */
+          const started = (live.oppXi ?? []).findIndex(p => p.n === goal.text);
+          const who = goal.side === 'opp'
+            ? { mine: true, id: career.squad.find(p => p.name === goal.text)?.id ?? null }
+            : { mine: false, id: String(started >= 0 ? started + 1 : 12 + (live.oppBench ?? []).findIndex(p => p.n === goal.text)) };
+          if (who.id === null) continue;
+          const copy = structuredClone(career);
+          copy.live.minute = goal.minute - 3;
+          found[goal.side] = {
+            raw: JSON.stringify(cm.trimCareer(copy)), who, club: career.clubName, opponent: live.opponent, match: matches,
+            target: { minute: goal.minute, plus: 0, place: goal.minute, side: goal.side, own: true, name: goal.text },
+          };
+        }
+        career = cm.resumeMatch(career).state;
+      }
+    }
+  } finally { Math.random = ambient; fs.rmSync(bundle, { force: true }); }
+  return { found, matches };
+}
+/** The sharpest turn of the ball over the frames of its flight, in degrees of pitch percent: the heading of
+ *  the step into one point against the heading of the step out of the next, so a corner a frame cuts counts in
+ *  full. Frames that drew the ball in the same place are one point. */
+function sharpestTurn(points) {
+  const pts = points.filter((p, i) => !i || Math.hypot(p[0] - points[i - 1][0], p[1] - points[i - 1][1]) > 0.02);
+  let best = 0;
+  for (let i = 1; i + 2 < pts.length; i++) {
+    const turn = Math.abs(Math.atan2(pts[i][1] - pts[i - 1][1], pts[i][0] - pts[i - 1][0]) - Math.atan2(pts[i + 2][1] - pts[i + 1][1], pts[i + 2][0] - pts[i + 1][0])) * 180 / Math.PI;
+    best = Math.max(best, turn > 180 ? 360 - turn : turn);
+  }
+  return best;
+}
+/** Section 9's own reading of a watched own goal: the card, the last touch, the turn, and who does what after. */
+function judgeOwnGoal(watched, save) {
+  const frames = watched.samples.filter(s => !s.tapped && s.score !== null && s.dots);
+  const playing = frames.filter(f => f.motion === 'goal');
+  const flight = playing.filter(f => f.phase === 'flight' && f.ball);
+  const net = playing.filter(f => f.phase === 'net');
+  if (flight.length < 5 || net.length < 5) { fail(`only ${flight.length} frames of the flight and ${net.length} of the net were sampled with the ball and the dots`); return; }
+  const isMan = d => d.mine === save.who.mine && String(d.id) === String(save.who.id);
+  const gap = (f, d) => Math.hypot(d.at[0] - f.ball[0], d.at[1] - f.ball[1]);
+  /* The card: GOAL!, the man, the minute and (O.G). */
+  const lines = [...new Set(frames.map(f => f.cardLine).filter(Boolean))];
+  const wanted = `${save.target.minute}' (O.G)`;
+  if (lines.length !== 1 || !lines[0].startsWith('GOAL!') || !lines[0].includes(save.target.name) || !lines[0].endsWith(wanted)) fail(`the card read ${JSON.stringify(lines)}, not GOAL!, ${save.target.name} and ${wanted}`);
+  else { ownCardFine++; ok(`the card reads "${lines[0]}"`); }
+  /* The pitch says it is an own goal on every frame of it. */
+  const unmarked = playing.filter(f => f.own === null || f.own === '').length;
+  if (unmarked) fail(`the pitch did not mark the action as an own goal with its man on ${unmarked} of ${playing.length} frames`);
+  else ok(`the pitch marks the action as an own goal on all ${playing.length} frames of it`);
+  /* The last touch: on the frame of the flight where the ball is nearest the man the card names, no dot is nearer it. */
+  const withMan = flight.filter(f => f.dots.some(isMan));
+  if (!withMan.length) { ownTouchMissed = true; fail(`the man the card names (${save.who.mine ? 'mine, id ' : 'theirs, number '}${save.who.id}) is not on the grass while the ball flies`); return; }
+  const touch = withMan.reduce((x, y) => (gap(x, x.dots.find(isMan)) <= gap(y, y.dots.find(isMan)) ? x : y));
+  const nearest = touch.dots.reduce((x, y) => (gap(touch, x) <= gap(touch, y) ? x : y));
+  const reach = gap(touch, touch.dots.find(isMan));
+  if (!isMan(nearest) || reach > 3) { ownTouchMissed = true; fail(`the last touch: the ball never comes to the man the card names (nearest ${reach.toFixed(1)} away, and the dot nearest the ball then is ${nearest.mine ? 'one of mine' : 'one of theirs'}, ${nearest.id})`); }
+  else ok(`the last touch is the man the card names: the ball comes within ${reach.toFixed(1)} of him and no dot is nearer`);
+  /* From there to the net nobody of the side that got the goal is at the ball. */
+  const crowd = flight.filter(f => f.t > touch.t && f.dots.some(d => d.mine !== save.who.mine && gap(f, d) < 2)).length;
+  if (crowd) fail(`after the touch a man of the side that got the goal is within 2 of the ball on ${crowd} frames`);
+  else ok('from the touch to the net no man of the side that got the goal is at the ball');
+  /* The turn, in pitch percent, on flight frames only (during the plant the ball is being brought to a foot). */
+  const turn = sharpestTurn(flight.map(f => f.ball));
+  if (turn < 20) { ownTurnMissed = true; fail(`the ball turns by ${turn.toFixed(1)} degrees at most in its flight, under the floor of 20: it never goes in OFF anybody`); }
+  else ok(`the ball turns by ${turn.toFixed(1)} degrees in its flight (the floor is 20; a goal that is not an own goal stays under 4)`);
+  /* In the net: he alone holds his head, and nobody of his side has his arms up. */
+  const settled = net.slice(3);
+  const rued = settled.filter(f => f.dots.filter(d => d.rue).length === 1 && f.dots.some(d => d.rue && isMan(d))).length;
+  const cheer = net.filter(f => f.dots.some(d => d.mine === save.who.mine && d.up)).length;
+  const arms = net.filter(f => f.dots.some(d => d.mine !== save.who.mine && d.up)).length;
+  if (rued !== settled.length) fail(`the man holds his head, and he alone, on ${rued} of ${settled.length} frames of the net`);
+  else if (cheer) fail(`a man of the side that conceded has his arms up on ${cheer} frames of the net`);
+  else if (!arms) fail('nobody of the side that got the goal raises his arms');
+  else ok(`in the net he alone holds his head (${rued} frames), nobody of his side has his arms up, and the side that got it does (${arms} frames)`);
+  /* He ends on his feet, read off the drawing and not off the mark: the figure draws hands at a head only when it
+     is upright, so a keeper who put it in gets up as it goes in (a back never leaves his feet). Lying in his dive
+     he leans by 68 degrees, as the beaten keeper of any goal does. */
+  const first = net[0].dots.find(isMan)?.lean ?? 0, last = net[net.length - 1].dots.find(isMan)?.lean ?? 0;
+  /* 20 degrees is two thirds of the way through the net at the latest (68 eased back by a smoothstep); a page that
+     drops frames near the end may sample no later than that, so a figure well on its way up (under half of where
+     it started) passes too. A keeper left lying is at 68 on both frames. */
+  if (last > Math.max(20, first / 2)) fail(`the man the card names is still lying in his dive on the last frame of the net (his figure leans by ${last.toFixed(1)} degrees, ${first.toFixed(1)} when the ball went in): no hands at a head are drawn on him`);
+  else ok(`he ends on his feet: his figure leans by ${last.toFixed(1)} degrees on the last frame of the net (${first.toFixed(1)} when the ball went in)`);
+}
+/** Section 9: an own goal for me and one against me, each watched on a phone and on a wide screen. */
+async function ownGoalSection() {
+  section = 9;
+  console.log(CONTROL === 'ogbefore'
+    ? '9) An own goal, NEGATIVE CONTROL ogbefore: this build is expected to draw the picture from before Round 1216'
+    : '9) An own goal is drawn as one');
+  const { found, matches } = await findOwnGoalSaves();
+  for (const side of ['me', 'opp']) {
+    const save = found[side];
+    if (!save) { fail(`the engine search (seed ${seedAt(9)}, ${matches} matches) found no first half with an own goal ${side === 'me' ? 'for me' : 'against me'} that can be watched`); continue; }
+    console.log(`  [own goal ${side === 'me' ? 'for me' : 'against me'}] found by the engine on seed ${seedAt(9)} in match ${save.match} of the search: ${save.club} v ${save.opponent}, ${goalWords(save.target)}; the man on the page is ${save.who.mine ? 'mine, id ' : 'theirs, number '}${save.who.id}`);
+    for (const [name, options, wide] of [['390', PHONE, false], ['1280', { viewport: { width: 1280, height: 900 } }, true]]) {
+      const label = `own-${side}-${name}`;
+      /* The walk's own way of starting from a save: every context it opens while START is set starts from it, is
+         held as soon as its stage is up, and watches that very goal. */
+      START = { raw: save.raw, target: save.target, digest: null };
+      try {
+        const context = await seededContext(options, seedAt(side === 'me' ? 10 : 11));
+        const page = await openPage(context);
+        await takeJob(page);
+        if (!(await startLive(page))) { fail(`${label}: the live viewer never opened from the engine's save`); await context.close(); continue; }
+        await holdIfSaved(page);
+        await opening(page, label, seedAt(side === 'me' ? 10 : 11));
+        await page.evaluate(() => { window.__fitOwn = true; });
+        const watched = await watchAGoal(page, { tapCard: false, onTick: ownShots(page, label), view: 'own' });
+        if (!watched) await noGoal(page, 'own', `${label}: the own goal could not be watched`);
+        else { console.log(`  ${label}:`); judgeGoal(watched, { reduced: false, wide }); judgeOwnGoal(watched, save); }
+        errors.push(...page.errors);
+        await context.close();
+      } finally { START = null; }
+    }
+  }
+}
+/** Screenshots of the own goal being watched: two with the ball in the air, one with the card up. */
+function ownShots(page, prefix) {
+  const done = new Map();
+  return async () => {
+    if (!SHOTS || done.has('card')) return;
+    const now = await page.evaluate(() => {
+      const p = document.querySelector('[data-cm-live-pitch]');
+      return { motion: p ? p.getAttribute('data-cm-motion') : null, phase: p ? p.getAttribute('data-cm-motion-phase') : null, card: !!document.querySelector('[data-cm-goal-card]'), t: performance.now() };
+    }).catch(() => null);
+    if (!now) return;
+    if (now.motion === 'goal' && now.phase === 'flight' && !done.has('a')) { done.set('a', now.t); await shoot(page, prefix + '-flight-a'); }
+    else if (now.motion === 'goal' && now.phase === 'flight' && !done.has('b')) { done.set('b', now.t); await shoot(page, prefix + '-flight-b'); }
+    /* The card is shot seven tenths of a second after it rises, in the middle of its hold: by then the man has
+       his hands to his head and the side that got the goal has its arms up. */
+    else if (now.card && !done.has('seen')) done.set('seen', now.t);
+    else if (now.card && !done.has('card') && now.t - done.get('seen') >= 700) { done.set('card', now.t); await shoot(page, prefix + '-card'); }
+  };
+}
+
 await startServer();
 const browser = await chromium.launch();
 const errors = [];
@@ -860,6 +1087,8 @@ try {
       if (idle.length) fail(`the page drew while nobody touched it (${idle.map(r => `${r.label} ${r.idle}`).join(', ')} draws in five idle seconds): a draw on a timer breaks a seed`);
       else ok('the page drew nothing in five idle seconds of any context (2.5 before the job, 2.5 into the match)');
     }
+  } else if (OWN_ONLY) {
+    await ownGoalSection();
   } else {
   const phone = await seededContext(PHONE, seedAt(0));
   let page = await openPage(phone);
@@ -1084,6 +1313,8 @@ try {
     errors.push(...wide.errors);
     await desk.close();
   }
+  /* Round 1216: an own goal, from saves the engine finds. Not under a control, in the measuring pass or from a file. */
+  if (!CONTROL && !REPORT && !START) await ownGoalSection();
   }
 } catch (e) {
   fail(`the walk stopped: ${e && e.message ? e.message : e}`);
@@ -1135,8 +1366,19 @@ if (CONTROL === 'earlyscore' || CONTROL === 'nocard') {
     : `playLiveMatchFit: control ${CONTROL} did NOT behave: red sections ${[...failed].sort().join(', ') || 'none'}, its own line fired ${line}, ${tampered} nodes touched.`);
   process.exit(asItMust ? 1 : 3);
 }
+if (CONTROL === 'ogbefore') {
+  /* On the picture from before Round 1216 the card is right (it has been since Round 1146) and the grass is not:
+     section 9 must go red on the last touch and on the turn, in all four watches, and the card must read (O.G). */
+  const asItMust = ownTouchMissed && ownTurnMissed && ownCardFine === 4 && failed.has(9) && failed.size === 1;
+  console.log(asItMust
+    ? 'playLiveMatchFit: control ogbefore turned section 9 red on the lines it must (the last touch is not the man the card names, the ball never turns) with the card reading (O.G) in all four watches, as it must on the picture from before Round 1216.'
+    : `playLiveMatchFit: control ogbefore did NOT behave: red sections ${[...failed].sort().join(', ') || 'none'}, the last touch missed ${ownTouchMissed}, the turn missed ${ownTurnMissed}, cards reading (O.G) ${ownCardFine} of 4.`);
+  process.exit(asItMust ? 1 : 3);
+}
 console.log(failures
   ? `playLiveMatchFit: ${failures} failure${failures === 1 ? '' : 's'}.`
   : REPORT ? 'playLiveMatchFit: measuring pass done, sections 1, 2, 4 and 5 green, section 3 printed and not asserted.'
-    : 'playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.');
+    : OWN_ONLY ? 'playLiveMatchFit: section 9 alone is green. An own goal for me and one against me, each on a phone and on a wide screen: the card says (O.G), the ball goes in off the man it names, he holds his head and nobody of his side celebrates.'
+    : START ? 'playLiveMatchFit: all green from the file. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen.'
+    : 'playLiveMatchFit: all green. The goal in order, reduced motion, the fit at five sizes, nothing moves the page, the reload, Back, a wide screen, an own goal drawn as one.');
 process.exit(failures ? 1 : 0);

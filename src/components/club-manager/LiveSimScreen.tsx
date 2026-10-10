@@ -409,7 +409,7 @@ function LiveMatchHelp({ onClose, reviews }: { onClose: () => void; reviews?: bo
         <li>The half you are watching has already been played by the game. You are seeing it back minute by minute.</li>
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
         <li>{reviews ? 'A reviewed goal waits for confirmation, then the score changes when the ball is in the net.' : 'The score changes when the ball is in the net, not before.'}</li>
-        <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net.</li>
+        <li>A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head.</li>
         {reviews && <li>VAR uses simplified game rules. A ruled-out goal adds no score, scorer or shot stats. A missed foul can earn a penalty, and that kick can score, be saved or miss.</li>}
         <li>Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change.</li>
         <li>Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on.</li>
