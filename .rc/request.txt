@@ -1,0 +1,22 @@
+#!serial
+setup: for p in "main 074a9054" "b 484ee1d3" "c 5d31eaa6" "d de39ef18" "e 2ee41bd6"; do set -- $p; git worktree add -f /tmp/t-$1 $2 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/t-$1/node_modules; done; ls /tmp | grep t- | tr '\n' ' '
+ms-main: cd /tmp/t-main && node scripts/simMatchScreen.mjs
+ms-b: cd /tmp/t-b && node scripts/simMatchScreen.mjs
+ms-c: cd /tmp/t-c && node scripts/simMatchScreen.mjs
+ms-main-s1: cd /tmp/t-main && SIM_SEED=1 node scripts/simMatchScreen.mjs
+ms-main-s2: cd /tmp/t-main && SIM_SEED=2 node scripts/simMatchScreen.mjs
+ms-main-s3: cd /tmp/t-main && SIM_SEED=3 node scripts/simMatchScreen.mjs
+ms-main-s4: cd /tmp/t-main && SIM_SEED=4 node scripts/simMatchScreen.mjs
+ms-main-s5: cd /tmp/t-main && SIM_SEED=5 node scripts/simMatchScreen.mjs
+ms-head-s1: SIM_SEED=1 node scripts/simMatchScreen.mjs
+ms-head-s2: SIM_SEED=2 node scripts/simMatchScreen.mjs
+ms-head-s3: SIM_SEED=3 node scripts/simMatchScreen.mjs
+ms-head-s4: SIM_SEED=4 node scripts/simMatchScreen.mjs
+ms-head-s5: SIM_SEED=5 node scripts/simMatchScreen.mjs
+lsm-main: cd /tmp/t-main && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "the material is 200" --testTimeout=300000 2>&1 | grep -E "1101 material|passed|failed|expected" | head -8
+lsm-b: cd /tmp/t-b && node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "the material is 200" --testTimeout=300000 2>&1 | grep -E "1101 material|passed|failed|expected" | head -8
+lsm-head: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx -t "the material is 200" --testTimeout=300000 2>&1 | grep -E "1101 material|passed|failed|expected" | head -8
+kp-main: cd /tmp/t-main && node scripts/simCareerKeepPlaying.mjs
+kp-d: cd /tmp/t-d && node scripts/simCareerKeepPlaying.mjs
+kp-e: cd /tmp/t-e && node scripts/simCareerKeepPlaying.mjs
+dart-main: cd /tmp/t-main && node scripts/simDartDraftPool.mjs
