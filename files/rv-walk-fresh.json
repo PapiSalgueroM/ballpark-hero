@@ -1,0 +1,133 @@
+[
+ {
+  "ctx": "390m",
+  "season": 1,
+  "mineText": "4.7 ppg, 1.5 rpg, 2.3 apg",
+  "rival": "🪞 Zane Brennan went 5.0 ppg, 1.7 rpg, 2.4 apg and had the better year of the two of you. Head to head 0-1.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "390m",
+  "season": 2,
+  "mineText": "3.5 ppg, 1.2 rpg, 1.7 apg",
+  "rival": "🪞 Zane Brennan went 5.3 ppg, 1.9 rpg, 2.3 apg and had the better year of the two of you. Head to head 0-2.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "390m",
+  "rivalryCard": "🪞 RIVALRY ☀️ Summer Pickup Zane Brennan turns up at the summer pickup run you have played in for years. Neither of you leaves until the gym closes. Morale +3, the rivalry heats up Probe Player 72 VS Zane Brennan 68 Continue",
+  "afterSeason": 2
+ },
+ {
+  "ctx": "390m",
+  "season": 3,
+  "mineText": "4.0 ppg, 1.4 rpg, 1.9 apg",
+  "rival": "🪞 Zane Brennan went 5.0 ppg, 1.8 rpg, 2.2 apg and had the better year of the two of you. Head to head 0-3.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "390m",
+  "rivalryCard": "🪞 RIVALRY 💍 Rival Gets His Ring Zane Brennan just won a ring. You are still chasing your first. Motivation boost: Morale -5, focus sharpens Probe Player 73 VS Zane Brennan 69 Continue",
+  "afterSeason": 3
+ },
+ {
+  "ctx": "390r",
+  "season": 1,
+  "mineText": "2.7 ppg, 1.0 rpg, 1.2 apg",
+  "rival": "🪞 Dominic Marchetti went 4.4 ppg, 1.6 rpg, 1.8 apg and had the better year of the two of you. Head to head 0-1.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "390r",
+  "season": 2,
+  "mineText": "5.1 ppg, 1.7 rpg, 2.7 apg",
+  "rival": "🪞 Dominic Marchetti went 5.7 ppg, 1.9 rpg, 2.7 apg and had the better year of the two of you. Head to head 0-2.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "390r",
+  "rivalryCard": "🪞 RIVALRY 📋 Cap Squeeze Word around the building is the front office is choosing between you and Dominic Marchetti for the same cap space. Morale -5 Probe Player 72 VS Dominic Marchetti 69 Continue",
+  "afterSeason": 2
+ },
+ {
+  "ctx": "390r",
+  "season": 3,
+  "mineText": "2.4 ppg, 0.9 rpg, 0.7 apg",
+  "rival": "🪞 Dominic Marchetti went 5.0 ppg, 1.6 rpg, 1.9 apg and had the better year of the two of you. Head to head 0-3.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "390r",
+  "rivalryCard": "🪞 RIVALRY ☀️ Summer Pickup Dominic Marchetti turns up at the summer pickup run you have played in for years. Neither of you leaves until the gym closes. Morale +3, the rivalry heats up Probe Player 73 VS Dominic Marchetti 70 Continue",
+  "afterSeason": 3
+ },
+ {
+  "ctx": "1280m",
+  "season": 1,
+  "mineText": "5.2 ppg, 1.7 rpg, 2.8 apg",
+  "rival": "🪞 Elias Vasquez went 12.4 ppg, 3.4 rpg, 4.6 apg and had the better year of the two of you. Head to head 0-1.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "1280m",
+  "rivalryCard": "🪞 RIVALRY ☀️ Summer Pickup Elias Vasquez turns up at the summer pickup run you have played in for years. Neither of you leaves until the gym closes. Morale +3, the rivalry heats up Probe Player 77 VS Elias Vasquez 80 Continue",
+  "afterSeason": 1
+ },
+ {
+  "ctx": "1280m",
+  "season": 2,
+  "mineText": "14.5 ppg, 4.0 rpg, 7.3 apg",
+  "rival": "🪞 Elias Vasquez went 8.2 ppg, 2.8 rpg, 2.7 apg. You had the better year. Head to head 1-1.",
+  "allStar": false,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280m",
+  "rivalryCard": "🪞 RIVALRY 💍 Rival Gets His Ring Elias Vasquez just won a ring. You are still chasing your first. Motivation boost: Morale -5, focus sharpens Probe Player 80 VS Elias Vasquez 82 Continue",
+  "afterSeason": 2
+ },
+ {
+  "ctx": "1280m",
+  "season": 3,
+  "mineText": "9.5 ppg, 2.6 rpg, 5.1 apg",
+  "rival": "🪞 Elias Vasquez went 8.9 ppg, 3.1 rpg, 3.7 apg. You had the better year. Head to head 2-1.",
+  "allStar": false,
+  "verdict": "mine"
+ },
+ {
+  "ctx": "1280r",
+  "season": 1,
+  "mineText": "4.0 ppg, 1.3 rpg, 2.2 apg",
+  "rival": "🪞 Andre Ashford went 9.0 ppg, 2.0 rpg, 2.3 apg and had the better year of the two of you. Head to head 0-1.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "1280r",
+  "rivalryCard": "🪞 RIVALRY 😬 Rival Becomes Teammate Andre Ashford just signed with your team. The locker room just got a lot more interesting. The feud cools, Morale +3, Fanbase +5 Probe Player 73 VS Andre Ashford 71 Continue",
+  "afterSeason": 1
+ },
+ {
+  "ctx": "1280r",
+  "season": 2,
+  "mineText": "7.3 ppg, 1.8 rpg, 3.5 apg",
+  "rival": "🪞 Andre Ashford went 9.6 ppg, 2.7 rpg, 2.9 apg and had the better year of the two of you. Head to head 0-2.",
+  "allStar": false,
+  "verdict": "his"
+ },
+ {
+  "ctx": "1280r",
+  "season": 3,
+  "mineText": "5.0 ppg, 1.4 rpg, 2.4 apg",
+  "rival": "🪞 Andre Ashford went 10.7 ppg, 2.9 rpg, 3.1 apg and had the better year of the two of you. Head to head 0-3.",
+  "allStar": false,
+  "verdict": "his"
+ }
+]

@@ -1,0 +1,202 @@
+fresh, 390 wide, motion on
+  note fresh, 390 wide, motion on: the rival's note was on the card 2 ms after the card
+  ok   fresh, 390 wide, motion on, season 1: the season card does not scroll sideways (0 px over)
+  ok   fresh, 390 wide, motion on, season 1: nothing on the season card pokes out of it (clean)
+  ok   fresh, 390 wide, motion on, season 1: both lines are three averages to one decimal (mine "4.7 ppg, 1.5 rpg, 2.3 apg", note "🪞 Zane Brennan went 5.0 ppg, 1.7 rpg, 2.4 apg and had the better year of the two of you. Head to head 0-1.")
+  ok   fresh, 390 wide, motion on, season 1: the note (his) is what the two printed lines say (mine 4.7 ppg, 1.5 rpg, 2.3 apg = 13.53, his 5.0 ppg, 1.7 rpg, 2.4 apg = 14.46)
+  ok   fresh, 390 wide, motion on, season 1: the note's head to head is the save's tally (Head to head 0-1 against 0-1)
+  ok   fresh, 390 wide, motion on, season 2: the season card does not scroll sideways (0 px over)
+  ok   fresh, 390 wide, motion on, season 2: nothing on the season card pokes out of it (clean)
+  ok   fresh, 390 wide, motion on, season 2: both lines are three averages to one decimal (mine "3.5 ppg, 1.2 rpg, 1.7 apg", note "🪞 Zane Brennan went 5.3 ppg, 1.9 rpg, 2.3 apg and had the better year of the two of you. Head to head 0-2.")
+  ok   fresh, 390 wide, motion on, season 2: the note (his) is what the two printed lines say (mine 3.5 ppg, 1.2 rpg, 1.7 apg = 10.17, his 5.3 ppg, 1.9 rpg, 2.3 apg = 15.05)
+  ok   fresh, 390 wide, motion on, season 2: the tally on the save moved by one to the right side (0-1 to 0-2)
+  ok   fresh, 390 wide, motion on, season 2: the note's head to head is the save's tally (Head to head 0-2 against 0-2)
+  ok   fresh, 390 wide, motion on, season 3: the season card does not scroll sideways (0 px over)
+  ok   fresh, 390 wide, motion on, season 3: nothing on the season card pokes out of it (clean)
+  ok   fresh, 390 wide, motion on, season 3: both lines are three averages to one decimal (mine "4.0 ppg, 1.4 rpg, 1.9 apg", note "🪞 Zane Brennan went 5.0 ppg, 1.8 rpg, 2.2 apg and had the better year of the two of you. Head to head 0-3.")
+  ok   fresh, 390 wide, motion on, season 3: the note (his) is what the two printed lines say (mine 4.0 ppg, 1.4 rpg, 1.9 apg = 11.59, his 5.0 ppg, 1.8 rpg, 2.2 apg = 14.26)
+  ok   fresh, 390 wide, motion on, season 3: the tally on the save moved by one to the right side (0-2 to 0-3)
+  ok   fresh, 390 wide, motion on, season 3: the note's head to head is the save's tally (Head to head 0-3 against 0-3)
+  FAIL fresh, 390 wide, motion on, season 4: the season card came up after Play (the screen reads "NBA My Career Draft night to jersey retirement. Every summer bends the career. Probe Player · PG Detroit Pistons 2029 · age 24 OVR 76 $2.5M x1 🪑 Second unit Th")
+  ok   fresh, 390 wide, motion on: no page errors (clean)
+  ok   fresh, 390 wide, motion on: no request to the live database finished (0)
+fresh, 390 wide, reduced motion
+  note fresh, 390 wide, reduced motion: the rival's note was on the card 1 ms after the card
+  ok   fresh, 390 wide, reduced motion, season 1: nothing is still animating on the season card under reduced motion (none)
+  ok   fresh, 390 wide, reduced motion, season 1: the season card does not scroll sideways (0 px over)
+  ok   fresh, 390 wide, reduced motion, season 1: nothing on the season card pokes out of it (clean)
+  ok   fresh, 390 wide, reduced motion, season 1: both lines are three averages to one decimal (mine "2.7 ppg, 1.0 rpg, 1.2 apg", note "🪞 Dominic Marchetti went 4.4 ppg, 1.6 rpg, 1.8 apg and had the better year of the two of you. Head to head 0-1.")
+  ok   fresh, 390 wide, reduced motion, season 1: the note (his) is what the two printed lines say (mine 2.7 ppg, 1.0 rpg, 1.2 apg = 7.76, his 4.4 ppg, 1.6 rpg, 1.8 apg = 12.34)
+  ok   fresh, 390 wide, reduced motion, season 1: the note's head to head is the save's tally (Head to head 0-1 against 0-1)
+  ok   fresh, 390 wide, reduced motion, season 2: nothing is still animating on the season card under reduced motion (none)
+  ok   fresh, 390 wide, reduced motion, season 2: the season card does not scroll sideways (0 px over)
+  ok   fresh, 390 wide, reduced motion, season 2: nothing on the season card pokes out of it (clean)
+  ok   fresh, 390 wide, reduced motion, season 2: both lines are three averages to one decimal (mine "5.1 ppg, 1.7 rpg, 2.7 apg", note "🪞 Dominic Marchetti went 5.7 ppg, 1.9 rpg, 2.7 apg and had the better year of the two of you. Head to head 0-2.")
+  ok   fresh, 390 wide, reduced motion, season 2: the note (his) is what the two printed lines say (mine 5.1 ppg, 1.7 rpg, 2.7 apg = 15.13, his 5.7 ppg, 1.9 rpg, 2.7 apg = 16.37)
+  ok   fresh, 390 wide, reduced motion, season 2: the tally on the save moved by one to the right side (0-1 to 0-2)
+  ok   fresh, 390 wide, reduced motion, season 2: the note's head to head is the save's tally (Head to head 0-2 against 0-2)
+  ok   fresh, 390 wide, reduced motion, season 3: nothing is still animating on the season card under reduced motion (none)
+  ok   fresh, 390 wide, reduced motion, season 3: the season card does not scroll sideways (0 px over)
+  ok   fresh, 390 wide, reduced motion, season 3: nothing on the season card pokes out of it (clean)
+  ok   fresh, 390 wide, reduced motion, season 3: both lines are three averages to one decimal (mine "2.4 ppg, 0.9 rpg, 0.7 apg", note "🪞 Dominic Marchetti went 5.0 ppg, 1.6 rpg, 1.9 apg and had the better year of the two of you. Head to head 0-3.")
+  ok   fresh, 390 wide, reduced motion, season 3: the note (his) is what the two printed lines say (mine 2.4 ppg, 0.9 rpg, 0.7 apg = 6.29, his 5.0 ppg, 1.6 rpg, 1.9 apg = 13.47)
+  ok   fresh, 390 wide, reduced motion, season 3: the tally on the save moved by one to the right side (0-2 to 0-3)
+  ok   fresh, 390 wide, reduced motion, season 3: the note's head to head is the save's tally (Head to head 0-3 against 0-3)
+  FAIL fresh, 390 wide, reduced motion, season 4: the season card came up after Play (the screen reads "NBA My Career Draft night to jersey retirement. Every summer bends the career. Probe Player · PG Minnesota Timberwolves 2029 · age 23 OVR 73 $2.5M x1 🪑 Second ")
+  ok   fresh, 390 wide, reduced motion: no page errors (clean)
+  ok   fresh, 390 wide, reduced motion: no request to the live database finished (0)
+fresh, 1280 wide, motion on
+  note fresh, 1280 wide, motion on: the rival's note was on the card 1 ms after the card
+  ok   fresh, 1280 wide, motion on, season 1: the season card does not scroll sideways (0 px over)
+  ok   fresh, 1280 wide, motion on, season 1: nothing on the season card pokes out of it (clean)
+  ok   fresh, 1280 wide, motion on, season 1: both lines are three averages to one decimal (mine "5.2 ppg, 1.7 rpg, 2.8 apg", note "🪞 Elias Vasquez went 12.4 ppg, 3.4 rpg, 4.6 apg and had the better year of the two of you. Head to head 0-1.")
+  ok   fresh, 1280 wide, motion on, season 1: the note (his) is what the two printed lines say (mine 5.2 ppg, 1.7 rpg, 2.8 apg = 15.46, his 12.4 ppg, 3.4 rpg, 4.6 apg = 32.42)
+  ok   fresh, 1280 wide, motion on, season 1: the note's head to head is the save's tally (Head to head 0-1 against 0-1)
+  ok   fresh, 1280 wide, motion on, season 2: the season card does not scroll sideways (0 px over)
+  ok   fresh, 1280 wide, motion on, season 2: nothing on the season card pokes out of it (clean)
+  ok   fresh, 1280 wide, motion on, season 2: both lines are three averages to one decimal (mine "14.5 ppg, 4.0 rpg, 7.3 apg", note "🪞 Elias Vasquez went 8.2 ppg, 2.8 rpg, 2.7 apg. You had the better year. Head to head 1-1.")
+  ok   fresh, 1280 wide, motion on, season 2: the note (mine) is what the two printed lines say (mine 14.5 ppg, 4.0 rpg, 7.3 apg = 41.21, his 8.2 ppg, 2.8 rpg, 2.7 apg = 21.63)
+  ok   fresh, 1280 wide, motion on, season 2: the tally on the save moved by one to the right side (0-1 to 1-1)
+  ok   fresh, 1280 wide, motion on, season 2: the note's head to head is the save's tally (Head to head 1-1 against 1-1)
+  ok   fresh, 1280 wide, motion on, season 3: the season card does not scroll sideways (0 px over)
+  ok   fresh, 1280 wide, motion on, season 3: nothing on the season card pokes out of it (clean)
+  ok   fresh, 1280 wide, motion on, season 3: both lines are three averages to one decimal (mine "9.5 ppg, 2.6 rpg, 5.1 apg", note "🪞 Elias Vasquez went 8.9 ppg, 3.1 rpg, 3.7 apg. You had the better year. Head to head 2-1.")
+  ok   fresh, 1280 wide, motion on, season 3: the note (mine) is what the two printed lines say (mine 9.5 ppg, 2.6 rpg, 5.1 apg = 27.51, his 8.9 ppg, 3.1 rpg, 3.7 apg = 24.87)
+  ok   fresh, 1280 wide, motion on, season 3: the tally on the save moved by one to the right side (1-1 to 2-1)
+  ok   fresh, 1280 wide, motion on, season 3: the note's head to head is the save's tally (Head to head 2-1 against 2-1)
+  FAIL fresh, 1280 wide, motion on, season 4: the season card came up after Play (the screen reads "NBA My Career Draft night to jersey retirement. Every summer bends the career. Probe Player · PG Utah Jazz 2029 · age 23 OVR 81 $2.5M x1 ⭐ Starting five The fin")
+  ok   fresh, 1280 wide, motion on: no page errors (clean)
+  ok   fresh, 1280 wide, motion on: no request to the live database finished (0)
+fresh, 1280 wide, reduced motion
+  note fresh, 1280 wide, reduced motion: the rival's note was on the card 2 ms after the card
+  ok   fresh, 1280 wide, reduced motion, season 1: nothing is still animating on the season card under reduced motion (none)
+  ok   fresh, 1280 wide, reduced motion, season 1: the season card does not scroll sideways (0 px over)
+  ok   fresh, 1280 wide, reduced motion, season 1: nothing on the season card pokes out of it (clean)
+  ok   fresh, 1280 wide, reduced motion, season 1: both lines are three averages to one decimal (mine "4.0 ppg, 1.3 rpg, 2.2 apg", note "🪞 Andre Ashford went 9.0 ppg, 2.0 rpg, 2.3 apg and had the better year of the two of you. Head to head 0-1.")
+  ok   fresh, 1280 wide, reduced motion, season 1: the note (his) is what the two printed lines say (mine 4.0 ppg, 1.3 rpg, 2.2 apg = 11.96, his 9.0 ppg, 2.0 rpg, 2.3 apg = 21.11)
+  ok   fresh, 1280 wide, reduced motion, season 1: the note's head to head is the save's tally (Head to head 0-1 against 0-1)
+  ok   fresh, 1280 wide, reduced motion, season 2: nothing is still animating on the season card under reduced motion (none)
+  ok   fresh, 1280 wide, reduced motion, season 2: the season card does not scroll sideways (0 px over)
+  ok   fresh, 1280 wide, reduced motion, season 2: nothing on the season card pokes out of it (clean)
+  ok   fresh, 1280 wide, reduced motion, season 2: both lines are three averages to one decimal (mine "7.3 ppg, 1.8 rpg, 3.5 apg", note "🪞 Andre Ashford went 9.6 ppg, 2.7 rpg, 2.9 apg and had the better year of the two of you. Head to head 0-2.")
+  ok   fresh, 1280 wide, reduced motion, season 2: the note (his) is what the two printed lines say (mine 7.3 ppg, 1.8 rpg, 3.5 apg = 20.15, his 9.6 ppg, 2.7 rpg, 2.9 apg = 24.07)
+  ok   fresh, 1280 wide, reduced motion, season 2: the tally on the save moved by one to the right side (0-1 to 0-2)
+  ok   fresh, 1280 wide, reduced motion, season 2: the note's head to head is the save's tally (Head to head 0-2 against 0-2)
+  ok   fresh, 1280 wide, reduced motion, season 3: nothing is still animating on the season card under reduced motion (none)
+  ok   fresh, 1280 wide, reduced motion, season 3: the season card does not scroll sideways (0 px over)
+  ok   fresh, 1280 wide, reduced motion, season 3: nothing on the season card pokes out of it (clean)
+  ok   fresh, 1280 wide, reduced motion, season 3: both lines are three averages to one decimal (mine "5.0 ppg, 1.4 rpg, 2.4 apg", note "🪞 Andre Ashford went 10.7 ppg, 2.9 rpg, 3.1 apg and had the better year of the two of you. Head to head 0-3.")
+  ok   fresh, 1280 wide, reduced motion, season 3: the note (his) is what the two printed lines say (mine 5.0 ppg, 1.4 rpg, 2.4 apg = 14.04, his 10.7 ppg, 2.9 rpg, 3.1 apg = 26.45)
+  ok   fresh, 1280 wide, reduced motion, season 3: the tally on the save moved by one to the right side (0-2 to 0-3)
+  ok   fresh, 1280 wide, reduced motion, season 3: the note's head to head is the save's tally (Head to head 0-3 against 0-3)
+  FAIL fresh, 1280 wide, reduced motion, season 4: the season card came up after Play (the screen reads "NBA My Career Draft night to jersey retirement. Every summer bends the career. Probe Player · PG Denver Nuggets 2029 · age 22 OVR 80 $2.5M x1 🪑 Second unit The")
+  ok   fresh, 1280 wide, reduced motion: no page errors (clean)
+  ok   fresh, 1280 wide, reduced motion: no request to the live database finished (0)
+card k306_mine, 390 wide, reduced motion
+  ok   card k306_mine, 390 wide, reduced motion: wrote the engine made save
+  ok   card k306_mine, 390 wide, reduced motion: the board opens on the pending rivalry card
+  ok   card k306_mine, 390 wide, reduced motion: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out. You are on one and Theo Hendricks is not. Morale +5 Sim 62 88 VS Theo Hendricks 87 Continue")
+  ok   card k306_mine, 390 wide, reduced motion: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_mine, 390 wide, reduced motion: the card does not scroll sideways (0 px over)
+  ok   card k306_mine, 390 wide, reduced motion: nothing is still animating under reduced motion (none)
+  ok   card k306_mine, 390 wide, reduced motion: Continue moved exactly what the card promised (morale 78 to 83, fanbase 72 to 72; promised "Morale +5")
+  note card k306_mine, 390 wide, reduced motion: back on the hub the feed does NOT show what happened
+card k306_both, 390 wide, reduced motion
+  ok   card k306_both, 390 wide, reduced motion: wrote the engine made save
+  ok   card k306_both, 390 wide, reduced motion: the board opens on the pending rivalry card
+  ok   card k306_both, 390 wide, reduced motion: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out, and you and Reese Moreau are both on them. Fanbase +3 Sim 1164 85 VS Reese Moreau 89 Continue")
+  ok   card k306_both, 390 wide, reduced motion: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_both, 390 wide, reduced motion: the card does not scroll sideways (0 px over)
+  ok   card k306_both, 390 wide, reduced motion: nothing is still animating under reduced motion (none)
+  ok   card k306_both, 390 wide, reduced motion: Continue moved exactly what the card promised (morale 85 to 85, fanbase 48 to 51; promised "Fanbase +3")
+  note card k306_both, 390 wide, reduced motion: back on the hub the feed does NOT show what happened
+  ok   cards, 390 wide, reduced motion: no page errors (clean)
+  ok   cards, 390 wide, reduced motion: no request to the live database finished (0)
+card k306_mine, 1280 wide, motion on
+  ok   card k306_mine, 1280 wide, motion on: wrote the engine made save
+  ok   card k306_mine, 1280 wide, motion on: the board opens on the pending rivalry card
+  ok   card k306_mine, 1280 wide, motion on: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out. You are on one and Theo Hendricks is not. Morale +5 Sim 62 88 VS Theo Hendricks 87 Continue")
+  ok   card k306_mine, 1280 wide, motion on: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_mine, 1280 wide, motion on: the card does not scroll sideways (0 px over)
+  note card k306_mine, 1280 wide, motion on: animations running with motion on: none
+  ok   card k306_mine, 1280 wide, motion on: Continue moved exactly what the card promised (morale 78 to 83, fanbase 72 to 72; promised "Morale +5")
+  note card k306_mine, 1280 wide, motion on: back on the hub the feed does NOT show what happened
+card k306_both, 1280 wide, motion on
+  ok   card k306_both, 1280 wide, motion on: wrote the engine made save
+  ok   card k306_both, 1280 wide, motion on: the board opens on the pending rivalry card
+  ok   card k306_both, 1280 wide, motion on: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out, and you and Reese Moreau are both on them. Fanbase +3 Sim 1164 85 VS Reese Moreau 89 Continue")
+  ok   card k306_both, 1280 wide, motion on: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_both, 1280 wide, motion on: the card does not scroll sideways (0 px over)
+  note card k306_both, 1280 wide, motion on: animations running with motion on: none
+  ok   card k306_both, 1280 wide, motion on: Continue moved exactly what the card promised (morale 85 to 85, fanbase 48 to 51; promised "Fanbase +3")
+  note card k306_both, 1280 wide, motion on: back on the hub the feed does NOT show what happened
+  ok   cards, 1280 wide, motion on: no page errors (clean)
+  ok   cards, 1280 wide, motion on: no request to the live database finished (0)
+card k306_his, 390 wide, motion on
+  ok   card k306_his, 390 wide, motion on: wrote the engine made save
+  ok   card k306_his, 390 wide, motion on: the board opens on the pending rivalry card
+  ok   card k306_his, 390 wide, motion on: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out. Malik Vasquez is on one and you are not. Morale -5 Sim 8 83 VS Malik Vasquez 85 Continue")
+  ok   card k306_his, 390 wide, motion on: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_his, 390 wide, motion on: the card does not scroll sideways (0 px over)
+  note card k306_his, 390 wide, motion on: animations running with motion on: none
+  ok   card k306_his, 390 wide, motion on: Continue moved exactly what the card promised (morale 90 to 85, fanbase 44 to 44; promised "Morale -5")
+  note card k306_his, 390 wide, motion on: back on the hub the feed does NOT show what happened
+card old306, 390 wide, motion on
+  ok   card old306, 390 wide, motion on: wrote the engine made save
+  ok   card old306, 390 wide, motion on: the board opens on the pending rivalry card
+  ok   card old306, 390 wide, motion on: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Ballot Squeeze Only one of you is making the All-Star roster at the position this year, and it comes down to Devon Hendricks. 50/50 outcome Sim 1 85 VS Devon Hendricks 83 Conti")
+  ok   card old306, 390 wide, motion on: nothing on the card is cut off or pokes out (clean)
+  ok   card old306, 390 wide, motion on: the card does not scroll sideways (0 px over)
+  note card old306, 390 wide, motion on: animations running with motion on: none
+  note card old306, 390 wide, motion on: the old coin card said "Only one of you is making the All-Star roster at the position this year, and it comes down to Devon Hendricks." [50/50 outcome] and Continue moved morale 0, fanbase 0; the feed shows nothing of it
+  ok   card old306, 390 wide, motion on: the old card is cleared and the save plays on
+  ok   cards, 390 wide, motion on: no page errors (clean)
+  ok   cards, 390 wide, motion on: no request to the live database finished (0)
+card k306_his, 1280 wide, reduced motion
+  ok   card k306_his, 1280 wide, reduced motion: wrote the engine made save
+  ok   card k306_his, 1280 wide, reduced motion: the board opens on the pending rivalry card
+  ok   card k306_his, 1280 wide, reduced motion: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Rosters The All-Star rosters are out. Malik Vasquez is on one and you are not. Morale -5 Sim 8 83 VS Malik Vasquez 85 Continue")
+  ok   card k306_his, 1280 wide, reduced motion: nothing on the card is cut off or pokes out (clean)
+  ok   card k306_his, 1280 wide, reduced motion: the card does not scroll sideways (0 px over)
+  ok   card k306_his, 1280 wide, reduced motion: nothing is still animating under reduced motion (none)
+  ok   card k306_his, 1280 wide, reduced motion: Continue moved exactly what the card promised (morale 90 to 85, fanbase 44 to 44; promised "Morale -5")
+  note card k306_his, 1280 wide, reduced motion: back on the hub the feed does NOT show what happened
+card old306, 1280 wide, reduced motion
+  ok   card old306, 1280 wide, reduced motion: wrote the engine made save
+  ok   card old306, 1280 wide, reduced motion: the board opens on the pending rivalry card
+  ok   card old306, 1280 wide, reduced motion: the card prints the engine's title, words and consequence ("🪞 RIVALRY 🗳️ All-Star Ballot Squeeze Only one of you is making the All-Star roster at the position this year, and it comes down to Devon Hendricks. 50/50 outcome Sim 1 85 VS Devon Hendricks 83 Conti")
+  ok   card old306, 1280 wide, reduced motion: nothing on the card is cut off or pokes out (clean)
+  ok   card old306, 1280 wide, reduced motion: the card does not scroll sideways (0 px over)
+  ok   card old306, 1280 wide, reduced motion: nothing is still animating under reduced motion (none)
+  note card old306, 1280 wide, reduced motion: the old coin card said "Only one of you is making the All-Star roster at the position this year, and it comes down to Devon Hendricks." [50/50 outcome] and Continue moved morale 0, fanbase 0; the feed shows nothing of it
+  ok   card old306, 1280 wide, reduced motion: the old card is cleared and the save plays on
+  ok   cards, 1280 wide, reduced motion: no page errors (clean)
+  ok   cards, 1280 wide, reduced motion: no request to the live database finished (0)
+tile lesserOnly, 390 wide, reduced motion
+  ok   tile lesserOnly, 390 wide, reduced motion: the tile counts 1 (rings 0, 0 MVPs, 0 All-NBA nods, 0 All-Star nods, 1 in other awards) and reads "🏆 TROPHY CASE 1 honour 1 in other awards, no ring yet"
+  ok   tile lesserOnly, 390 wide, reduced motion: no line of the tile is cut off (clean)
+  note tile lesserOnly, 390 wide, reduced motion: the case behind it says "1 individual honour across 9 seasons"; the tile said "🏆 TROPHY CASE 1 honour 1 in other awards, no ring yet"
+  ok   tile lesserOnly, 390 wide, reduced motion: the case does not scroll sideways (0 px over)
+tile star, 390 wide, reduced motion
+  ok   tile star, 390 wide, reduced motion: the tile counts 24 (rings 2, 2 MVPs, 5 All-NBA nods, 6 All-Star nods, 9 in other awards) and reads "🏆 TROPHY CASE 24 honours 2 rings, 9 in other awards"
+  ok   tile star, 390 wide, reduced motion: no line of the tile is cut off (clean)
+  note tile star, 390 wide, reduced motion: the case behind it says "22 individual honours across 9 seasons"; the tile said "🏆 TROPHY CASE 24 honours 2 rings, 9 in other awards"
+  ok   tile star, 390 wide, reduced motion: the case does not scroll sideways (0 px over)
+  ok   tile, 390 wide, reduced motion: no page errors (clean)
+  ok   tile, 390 wide, reduced motion: no request to the live database finished (0)
+tile lesserOnly, 1280 wide, motion on
+  ok   tile lesserOnly, 1280 wide, motion on: the tile counts 1 (rings 0, 0 MVPs, 0 All-NBA nods, 0 All-Star nods, 1 in other awards) and reads "🏆 TROPHY CASE 1 honour 1 in other awards, no ring yet"
+  ok   tile lesserOnly, 1280 wide, motion on: no line of the tile is cut off (clean)
+  note tile lesserOnly, 1280 wide, motion on: the case behind it says "1 individual honour across 9 seasons"; the tile said "🏆 TROPHY CASE 1 honour 1 in other awards, no ring yet"
+  ok   tile lesserOnly, 1280 wide, motion on: the case does not scroll sideways (0 px over)
+tile star, 1280 wide, motion on
+  ok   tile star, 1280 wide, motion on: the tile counts 24 (rings 2, 2 MVPs, 5 All-NBA nods, 6 All-Star nods, 9 in other awards) and reads "🏆 TROPHY CASE 24 honours 2 rings, 9 in other awards"
+  ok   tile star, 1280 wide, motion on: no line of the tile is cut off (clean)
+  note tile star, 1280 wide, motion on: the case behind it says "22 individual honours across 9 seasons"; the tile said "🏆 TROPHY CASE 24 honours 2 rings, 9 in other awards"
+  ok   tile star, 1280 wide, motion on: the case does not scroll sideways (0 px over)
+  ok   tile, 1280 wide, motion on: no page errors (clean)
+  ok   tile, 1280 wide, motion on: no request to the live database finished (0)
+pages, 390 wide, motion on
+  FAIL ./rv-walk3.mjs stopped: locator.innerText: Timeout 30000ms exceeded. | Call log: |   - waiting for locator('main') | 
+
+rv-walk: 163 checks, 5 failed
