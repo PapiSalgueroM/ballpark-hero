@@ -1,0 +1,15 @@
+lf-controls-new exit=0 5s | unregistered:laliga exit=1 CONTROL unregistered FIRED as expected on laliga: sections HJ went red for laliga and nothing else
+leaguefx exit=0 15s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+cmfix-championship-all exit=0 81s | simCmRealFixtures championship: 12 actual outcome groups, 1104 fixture reads, 1104 calendar reads and 11 effective controls passed against the base 980654facb2d41a6c9ddc0
+cmfix-premier-all exit=0 92s | simCmRealFixtures premier: 13 actual outcome groups, 760 fixture reads, 760 calendar reads and 11 effective controls passed against the base 980654facb2d41a6c9ddc029c4371
+cmfix-laliga-all exit=0 93s | simCmRealFixtures laliga: 12 actual outcome groups, 760 fixture reads, 760 calendar reads and 11 effective controls passed against the base 980654facb2d41a6c9ddc029c43710
+cmfix-six exit=0 65s | ligue2 exit=0 simCmRealFixtures normal ligue2: 12 outcome groups passed on 18 clubs, 34 matchdays and 306 fixtures, generate
+cmfix-bundesliga-all exit=0 88s | simCmRealFixtures bundesliga: 12 actual outcome groups, 612 fixture reads, 612 calendar reads and 11 effective controls passed against the base 980654facb2d41a6c9ddc029c4
+fleet-prefetch exit=1 67s | simCmFixtureFleet: CONTROL prefetch FIRED: section nofetch went red for exactly its 9 league(s) (bundesliga, bundesliga2, championship, eredivisie, laliga, ligue2, primei
+fleet-nostrip exit=1 8s | simCmFixtureFleet: CONTROL nostrip FIRED: section dailies went red for exactly its 10 league(s) (bundesliga, bundesliga2, championship, eredivisie, laliga, ligue2, premie
+daily exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+daily-bind exit=1 4s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+daily-binddeadline exit=1 4s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+fleet-keyless exit=1 71s | simCmFixtureFleet: CONTROL keyless FIRED: section oldsaves went red for exactly its 10 league(s) (bundesliga, bundesliga2, championship, eredivisie, laliga, ligue2, premi
+fixbal exit=0 3s | simFixtureBalance: PASS. Generated schedules keep the run-of-two contract at every league size, old saves keep their generated list, rollovers converge the flag, the AI w
+fleet exit=0 159s | simCmFixtureFleet: green. 10 registered league(s), 9 in a file of their own. nofetch 250 careers, oldsaves 132 saves, dailies 11 clubs, against the base 980654facb2d41a6c

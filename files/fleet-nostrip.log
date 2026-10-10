@@ -1,0 +1,23 @@
+  dailies premier Arsenal: RED
+  dailies championship West Ham: RED
+  dailies laliga Real Madrid: RED
+  dailies seriea Inter Milan: RED
+  dailies bundesliga Bayern Munich: RED
+  dailies eredivisie Ajax: RED
+  dailies primeira Porto: RED
+  dailies superlig Galatasaray: RED
+  dailies bundesliga2 Wolfsburg: RED
+  dailies ligue2 Nantes: RED
+  dailies scottish Rangers: no key, the same day with and without the lists (458cbe407c45fbacb407)
+dailies: RED for premier, championship, laliga, seriea, bundesliga, eredivisie, primeira, superlig, bundesliga2, ligue2 (11 clubs)
+  FAIL premier: Arsenal: the day carries the real fixture key
+  FAIL championship: West Ham: the day carries the real fixture key once the lists are fetched
+  FAIL laliga: Real Madrid: the day carries the real fixture key once the lists are fetched
+  FAIL seriea: Inter Milan: the day carries the real fixture key once the lists are fetched
+  FAIL bundesliga: Bayern Munich: the day carries the real fixture key once the lists are fetched
+  FAIL eredivisie: Ajax: the day carries the real fixture key once the lists are fetched
+  FAIL primeira: Porto: the day carries the real fixture key once the lists are fetched
+  FAIL superlig: Galatasaray: the day carries the real fixture key once the lists are fetched
+  FAIL bundesliga2: Wolfsburg: the day carries the real fixture key once the lists are fetched
+  FAIL ligue2: Nantes: the day carries the real fixture key once the lists are fetched
+simCmFixtureFleet: CONTROL nostrip FIRED: section dailies went red for exactly its 10 league(s) (bundesliga, bundesliga2, championship, eredivisie, laliga, ligue2, premier, primeira, seriea, superlig) and no other
