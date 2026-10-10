@@ -1,0 +1,36 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-pools: node_modules/.bin/vitest run src/test/dartDraftPool.test.ts src/test/dartDraftPools.test.ts src/test/statDetectiveMotion.test.tsx src/test/statDetectiveScope.test.tsx src/test/statDetectiveSpans --testTimeout=300000 --hookTimeout=120000
+vitest-lsm: node_modules/.bin/vitest run src/test/liveSimMotion.test.tsx --testTimeout=300000 --hookTimeout=120000
+simLiveSimMotion: node scripts/simLiveSimMotion.mjs
+dart: export TMPDIR=/tmp/t-d0; mkdir -p $TMPDIR; node scripts/simDartDraftPool.mjs
+dart-pool900: export TMPDIR=/tmp/t-d-pool900; mkdir -p $TMPDIR; DART_POOL_CONTROL=pool900 node scripts/simDartDraftPool.mjs
+dart-nofloor: export TMPDIR=/tmp/t-d-nofloor; mkdir -p $TMPDIR; DART_POOL_CONTROL=nofloor node scripts/simDartDraftPool.mjs
+dart-nobest: export TMPDIR=/tmp/t-d-nobest; mkdir -p $TMPDIR; DART_POOL_CONTROL=nobest node scripts/simDartDraftPool.mjs
+dart-onepage: export TMPDIR=/tmp/t-d-onepage; mkdir -p $TMPDIR; DART_POOL_CONTROL=onepage node scripts/simDartDraftPool.mjs
+dart-pagefloor: export TMPDIR=/tmp/t-d-pagefloor; mkdir -p $TMPDIR; DART_POOL_CONTROL=pagefloor node scripts/simDartDraftPool.mjs
+dart-nomysteryfloor: export TMPDIR=/tmp/t-d-nomysteryfloor; mkdir -p $TMPDIR; DART_POOL_CONTROL=nomysteryfloor node scripts/simDartDraftPool.mjs
+dart-pagemystery: export TMPDIR=/tmp/t-d-pagemystery; mkdir -p $TMPDIR; DART_POOL_CONTROL=pagemystery node scripts/simDartDraftPool.mjs
+dart-machinehalf: export TMPDIR=/tmp/t-d-machinehalf; mkdir -p $TMPDIR; DART_POOL_CONTROL=machinehalf node scripts/simDartDraftPool.mjs
+dart-lasttile: export TMPDIR=/tmp/t-d-lasttile; mkdir -p $TMPDIR; DART_POOL_CONTROL=lasttile node scripts/simDartDraftPool.mjs
+dart-nobest3: export TMPDIR=/tmp/t-d-nobest3; mkdir -p $TMPDIR; DART_POOL_CONTROL=nobest3 node scripts/simDartDraftPool.mjs
+dart-fixed8: export TMPDIR=/tmp/t-d-fixed8; mkdir -p $TMPDIR; DART_POOL_CONTROL=fixed8 node scripts/simDartDraftPool.mjs
+dart-impure: export TMPDIR=/tmp/t-d-impure; mkdir -p $TMPDIR; DART_POOL_CONTROL=impure node scripts/simDartDraftPool.mjs
+dart-anyslot: export TMPDIR=/tmp/t-d-anyslot; mkdir -p $TMPDIR; DART_POOL_CONTROL=anyslot node scripts/simDartDraftPool.mjs
+rep: node scripts/simReportedGamePools.mjs
+rep-stat-span: REPORTED_POOLS_CONTROL=stat-span node scripts/simReportedGamePools.mjs
+rep-stat-franchises: REPORTED_POOLS_CONTROL=stat-franchises node scripts/simReportedGamePools.mjs
+rep-stat-scope: REPORTED_POOLS_CONTROL=stat-scope node scripts/simReportedGamePools.mjs
+rep-stat-context: REPORTED_POOLS_CONTROL=stat-context node scripts/simReportedGamePools.mjs
+rep-dart-variety: REPORTED_POOLS_CONTROL=dart-variety node scripts/simReportedGamePools.mjs
+rep-dart-best: REPORTED_POOLS_CONTROL=dart-best node scripts/simReportedGamePools.mjs
+rep-dart-used: REPORTED_POOLS_CONTROL=dart-used node scripts/simReportedGamePools.mjs
+rep-dart-slot: REPORTED_POOLS_CONTROL=dart-slot node scripts/simReportedGamePools.mjs
+rep-dart-global: REPORTED_POOLS_CONTROL=dart-global node scripts/simReportedGamePools.mjs
+rep-dart-country: REPORTED_POOLS_CONTROL=dart-country node scripts/simReportedGamePools.mjs
+rep-dart-position: REPORTED_POOLS_CONTROL=dart-position node scripts/simReportedGamePools.mjs
+rep-dart-year: REPORTED_POOLS_CONTROL=dart-year node scripts/simReportedGamePools.mjs
+rep-dart-nation: REPORTED_POOLS_CONTROL=dart-nation node scripts/simReportedGamePools.mjs
+rep-dart-partial: REPORTED_POOLS_CONTROL=dart-partial node scripts/simReportedGamePools.mjs
+simStat: node scripts/simStatDetectiveMotion.mjs
+dev-all: CAREER_DEVELOPMENT_CONTROL=all node scripts/simSoccerCareerDevelopment.mjs
+role-all: CAREER_STORY_ROLE_CONTROL=all node scripts/simCareerStoryRole.mjs

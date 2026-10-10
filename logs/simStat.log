@@ -1,0 +1,55 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > reveals each real profile-backed clue and only the newest guess without remounting older rows 717ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps the non-first native option mounted during focus transfer and preserves input Enter-first matching 163ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > cues a committed win once with exact helper feedback, share truth and undefined completion score 212ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > ends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty 608ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > derives the real sparse-profile unlock gaps without inventing career clues 248ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > keeps short and duplicate queries quiet and clears owned feedback timers on unmount 147ms
+ ✓ src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door 128ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  10:28:11
+   Duration  3.99s (transform 517ms, setup 75ms, collect 838ms, tests 2.23s, environment 376ms, prepare 215ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveMotion.test.tsx > actual Stat Detective committed feedback and access > shows accurate rules and example before play and reopens the same native help door
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+simStatDetectiveMotion: seven actual-page outcomes passed with the real matcher, hints, stat line, share and once-only undefined-score completion.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > holds this file's copy of the view to the rows the migration's SQL is held to 9ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > makes one career per name, out of the men who reached the floor and nobody else 7ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > cuts two men apart only past the cohort gap 7ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the spans view and what the page makes of its rows > counts the floor in the view at the number the page uses, and keeps the first draft columns first 7ms
+ ✓ src/test/statDetectiveSpans.test.tsx > a career span belongs to a man, not to a name > does not let a namesake who never reached 500 minutes stretch a famous career 80ms
+ ✓ src/test/statDetectiveSpans.test.tsx > a career span belongs to a man, not to a name > keeps two men who both reached the floor as the one generous profile they always were 55ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > counts every team he has a row for as a franchise he played for 49ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > reads the true first and last season for a man whose career ran past his 500 minute seasons 32ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > judges the era of a guess on the true span 29ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > fails the whole load when the spans cannot be read, and never falls back to the 500 minute span 3715ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > reads a view deeper than the pages it asks for at once to the end, and asks again for a page that failed once 867ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective career spans come from every season, not the 500 minute ones > gives a name the view lacks no span at all and says so, rather than guessing one 26ms
+ ✓ src/test/statDetectiveSpans.test.tsx > Stat Detective mysteries do not move with the span > builds byte identical mystery pools, and they do not depend on what the view says 44ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > opens its retry state when the spans cannot be read, and recovers when they can 1490ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > prints the true years beside a name in the guess box 187ms
+ ✓ src/test/statDetectiveSpans.test.tsx > the Stat Detective page over the same table > prints the famous man his own years beside a name he shares 159ms
+
+ Test Files  1 passed (1)
+      Tests  16 passed (16)
+   Start at  10:28:15
+   Duration  8.92s (transform 622ms, setup 83ms, collect 1.05s, tests 6.76s, environment 447ms, prepare 175ms)
+
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+simStatDetectiveMotion: 16 span outcomes passed: the view copy against the migration's expected rows, one career per name from the men who reached the floor, the cohort gap, the floor shared with the SQL, a namesake under the floor left out, two men over it kept as one profile, franchises from every row, true first and last season, era on the true span, all or nothing spans read, a deep view read to its end with a retried page, no guessed span, byte identical mystery pools, page retry state and guess box years for both.
+simStatDetectiveMotion: controls never alter engines, pools, routes, saved data or the original page.

@@ -1,0 +1,47 @@
+fixture: 5496 rows of 2026 (name, nationality, club and value as pulled); position and age real for 2497, drawn for 2999
+   row 900 is worth 15M, row 2000 5M; in the top 2,000 the position is real for 1360
+NEGATIVE CONTROL ON: the map copy lets The Machine draw from the top half at a slot, with no cap of forty
+1) the pool is the top 2,000 in two pages, and the old 900 are still its first 900
+   before: 900 players from 900 rows; after: 2000 players from 2000 rows, asked for as 0+1000 and 1000+1000
+   the cheapest man: 15M before, 5M after; the storm floor is 15M in both
+   what the pool costs to read, as JSON before compression: 146 KiB in one request before, 324 KiB over two requests after
+2) the gold zones: the best three always, five drawn from the pool, a pure function of the seed
+   792 seeded throws, 11 slots in three zones: the best three lead every one, every tile is from the pool and fits, and each throw replays from its seed
+   the drawn five: more than five names over 24 seeds at 30 of 30 slot and zone pairs with more than eight who fit (between 8 and 105 names); 3 pairs have eight or fewer and show everybody
+3) the storm did not get worse
+   cheapest storm tile before>after, and what the deeper pool would have handed out: GK 15M>15M (5M with no floor), RB 15M>15M (5M with no floor), CB 15M>15M (5M with no floor), LB 15M>15M (5M with no floor), CM 15M>15M (5M with no floor), RW 15M>15M (5M with no floor), ST 15M>15M (5M with no floor), LW 16M>15M (5M with no floor)
+   the five storm tiles' average rating fell by -0.36 a slot on average (slot by slot: -0.80, -0.40, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, -0.60, 0.00, -2.20); 0 slots fell by more than half a point
+   with no floor it would have fallen by 4.29 a slot on average (slot by slot: 6.20, 6.20, 2.80, 2.80, 5.00, 3.80, 3.80, 3.80, 3.60, 4.80, 4.40)
+4) a country hit keeps its best four and reaches deeper for the rest
+   739 country and slot pairs have real players; 218 of them run deeper than eight
+   names a country hit could show: 3242 before, 6470 after 30 hits each (2.00x)
+5) the mystery zone pays what it paid, and the deeper pool shows as a fourth tile
+   names a mystery tile could be, summed over the 11 slots: 1878 before, 4078 after
+   the best tile is rated 83.31 on average before (median 83), 83.24 after (median 83); three from anywhere in the deeper pool would have given 81.10 (median 81)
+   4400 of 4400 hits carried a fourth tile from under the 15M line; 0 hits had one of the three under it
+6) The Machine is the opponent it was
+   The Machine's XI is rated 84.60 on average before (median 85), 81.51 after (median 81): a move of -3.09
+   players at a slot, fewest to most: 49 to 234 before, 134 to 553 after; The Machine draws from the top forty or the top half, whichever is fewer
+7) 2000 whole drafts a model, before and after, graded by the game's own functions
+   the twelve dearest nations: France, Spain, United Kingdom, Brazil, Germany, Argentina, Portugal, Netherlands, Italy, Norway, Sweden, Côte d'Ivoire
+   sharp thrower, best pick, before: XI 86.91 on average, median 87 (S); grades F 0, D 0, C 0, B 0, A 181, S 1819
+   sharp thrower, best pick, after: XI 86.96 on average, median 87 (S); grades F 0, D 0, C 0, B 0, A 150, S 1850
+   sharp thrower, random pick, before: XI 81.02 on average, median 81 (A); grades F 0, D 0, C 0, B 71, A 1824, S 105
+   sharp thrower, random pick, after: XI 77.64 on average, median 78 (A); grades F 0, D 0, C 0, B 990, A 1005, S 5
+   land thrower, best pick, before: XI 73.69 on average, median 74 (B); grades F 0, D 3, C 227, B 1544, A 226, S 0
+   land thrower, best pick, after: XI 73.55 on average, median 74 (B); grades F 0, D 6, C 243, B 1524, A 227, S 0
+   land thrower, random pick, before: XI 69.80 on average, median 70 (B); grades F 0, D 39, C 839, B 1115, A 7, S 0
+   land thrower, random pick, after: XI 69.18 on average, median 69 (C); grades F 1, D 42, C 974, B 980, A 3, S 0
+   any thrower, best pick, before: XI 51.81 on average, median 52 (F); grades F 1279, D 642, C 79, B 0, A 0, S 0
+   any thrower, best pick, after: XI 51.50 on average, median 51 (F); grades F 1341, D 595, C 63, B 1, A 0, S 0
+   any thrower, random pick, before: XI 49.97 on average, median 50 (F); grades F 1554, D 427, C 19, B 0, A 0, S 0
+   any thrower, random pick, after: XI 49.77 on average, median 49 (F); grades F 1598, D 380, C 22, B 0, A 0, S 0
+8) clubs the league lookup does not know
+   pool players at a club the lookup does not know: 0.9% of the old 900, 10.2% of the 2000
+   96 clubs in the pool are unknown to the lookup; the twenty with the most players (players, dearest in M): FC Toulouse (8, 27); Clube de Regatas Vasco da Gama (7, 11); SK Slavia Prague (7, 10); Fluminense Football Club (6, 13); Leicester City (6, 13); Deportivo Toluca (6, 11); Stade Brestois 29 (6, 10); CF América (5, 11); CD Cruz Azul (5, 10); FC Copenhagen (5, 8); Stade Reims (4, 22); Al-Sadd SC (4, 13); FC Twente Enschede (4, 11); Tigres UANL (4, 10); AC Sparta Prague (4, 8); AS Saint-Étienne (3, 16); Grêmio Foot-Ball Porto Alegrense (3, 13); Without Club (3, 11); BSC Young Boys (3, 10); Dynamo Kyiv (3, 10)
+   players a country hit reads (every 2026 row of each nation since Round 1182; it was the top 120): 5467, 46.7% at a club the lookup does not know
+   before: 8000 aimed drafts carry 1.97 such players each; in 20.7% of them the chemistry bonus counts unknown clubs as one league (1.76 rating points when it does)
+   after: 8000 aimed drafts carry 2.57 such players each; in 30.8% of them the chemistry bonus counts unknown clubs as one league (1.94 rating points when it does)
+  FAIL: The Machine's average XI moved from 84.60 to 81.51: the opponent changed
+
+simDartDraftPool control machinehalf: fired, 1 failure(s) above. Exit 1 is the expected result.

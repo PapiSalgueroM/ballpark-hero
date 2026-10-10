@@ -1,0 +1,76 @@
+Effective copied control dart-nation: exact binding changed once.
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps the strongest three and varies five without replacement beyond the old best eight 10ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > keeps used names and wrong positions out while preserving distinct accented names 1ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > uses the same compact variety policy for bonus slots and leaves the shared legends intact 4ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions 15ms
+ × src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path 20ms
+   → expected [ { …(11) }, { …(11) }, …(1304) ] to have a length of 1305 but got 1306
+ × src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages the targeted position fallback beyond 12 after an unavailable country read 10ms
+   → expected [] to deeply equal [ +0, 1000 ]
+ ✓ src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains what the career span covers before play and in reopened help 318ms
+ ✓ src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > shows the complete career span and franchises under their shipped labels 180ms
+ ✓ src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > captures the exact random case and mode while keeping the answer out of visible play 152ms
+ ✓ src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > fails closed rather than returning a partial global or country pool after a later page fails 2407ms
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 8 passed (10)
+   Start at  10:28:05
+   Duration  5.51s (transform 1.93s, setup 282ms, collect 3.66s, tests 3.12s, environment 1.31s, prepare 413ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/reported-pools-dart-nation.json
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stderr | src/test/statDetectiveScope.test.tsx > Stat Detective recorded profile scope > explains what the career span covers before play and in reopened help
+Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path
+AssertionError: expected [ { …(11) }, { …(11) }, …(1304) ] to have a length of 1305 but got 1306
+
+- Expected
++ Received
+
+- 1305
++ 1306
+
+ ❯ src/test/dartDraftPools.test.ts:116:18
+    114|     vi.spyOn(Math, 'random').mockReturnValue(0.999999);
+    115|     const pool = await fetchCountryPool(nation);
+    116|     expect(pool).toHaveLength(1305); expect(pool.at(-1)?.name).toBe('F…
+       |                  ^
+    117|     const picks = await countryChoices(nation, slot, new Set(['Fixture…
+    118|     expect(picks).toHaveLength(8); expect(names(picks)).toContain('Fix…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/test/dartDraftPools.test.ts > Dart Draft wider existing pools and varied picks > pages the targeted position fallback beyond 12 after an unavailable country read
+AssertionError: expected [] to deeply equal [ +0, 1000 ]
+
+- Expected
++ Received
+
+- [
+-   0,
+-   1000,
+- ]
++ []
+
+ ❯ src/test/dartDraftPools.test.ts:131:45
+    129|     expect(picks.every(pick => pick.player.nationality === nation.name…
+    130|     const targeted = source.calls.filter(call => call.positions);
+    131|     expect(targeted.map(call => call.from)).toEqual([0, 1000]);
+       |                                             ^
+    132|     expect(targeted.every(call => call.year === 2026 && call.nationals…
+    133|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+Assertion outcomes dart-nation: [{"title":"keeps the strongest three and varies five without replacement beyond the old best eight","status":"passed"},{"title":"keeps used names and wrong positions out while preserving distinct accented names","status":"passed"},{"title":"uses the same compact variety policy for bonus slots and leaves the shared legends intact","status":"passed"},{"title":"reads exactly the first 2,000 global 2026 rows in two pages while excluding other years and unknown positions","status":"passed"},{"title":"pages a country beyond 120 and 1000 and keeps nationality and era in the actual choice path","status":"failed"},{"title":"pages the targeted position fallback beyond 12 after an unavailable country read","status":"failed"},{"title":"fails closed rather than returning a partial global or country pool after a later page fails","status":"passed"},{"title":"explains what the career span covers before play and in reopened help","status":"passed"},{"title":"shows the complete career span and franchises under their shipped labels","status":"passed"},{"title":"captures the exact random case and mode while keeping the answer out of visible play","status":"passed"}]
+simReportedGamePools dart-nation: 2 exact intended outcomes failed, all 8 unrelated outcomes passed.

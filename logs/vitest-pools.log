@@ -1,0 +1,35 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstderr[2m | src/test/statDetectiveMotion.test.tsx[2m > [22m[2mactual Stat Detective committed feedback and access[2m > [22m[2mshows accurate rules and example before play and reopens the same native help door
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/statDetectiveMotion.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2111[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Stat Detective committed feedback and access[2m > [22mreveals each real profile-backed clue and only the newest guess without remounting older rows [33m 733[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Stat Detective committed feedback and access[2m > [22mends exactly eight misses, then starts a quiet different case and rearms one completion per difficulty [33m 496[2mms[22m[39m
+   [33m[2m✓[22m[39m actual Stat Detective committed feedback and access[2m > [22mderives the real sparse-profile unlock gaps without inventing career clues [33m 301[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPools.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 3675[2mms[22m[39m
+   [33m[2m✓[22m[39m Dart Draft wider existing pools and varied picks[2m > [22mpages the targeted position fallback beyond 12 after an unavailable country read [33m 1216[2mms[22m[39m
+   [33m[2m✓[22m[39m Dart Draft wider existing pools and varied picks[2m > [22mfails closed rather than returning a partial global or country pool after a later page fails [33m 2414[2mms[22m[39m
+[90mstderr[2m | src/test/statDetectiveScope.test.tsx[2m > [22m[2mStat Detective recorded profile scope[2m > [22m[2mexplains what the career span covers before play and in reopened help
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/statDetectiveScope.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 1006[2mms[22m[39m
+   [33m[2m✓[22m[39m Stat Detective recorded profile scope[2m > [22mexplains what the career span covers before play and in reopened help [33m 403[2mms[22m[39m
+   [33m[2m✓[22m[39m Stat Detective recorded profile scope[2m > [22mshows the complete career span and franchises under their shipped labels [33m 316[2mms[22m[39m
+ [32m✓[39m src/test/dartDraftPool.test.ts [2m([22m[2m14 tests[22m[2m)[22m[33m 2955[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dart Draft pool[2m > [22mis both pages or nothing [33m 2406[2mms[22m[39m
+   [33m[2m✓[22m[39m the Dart Draft pool[2m > [22masks again for a page that failed once, and still never asks past the 2,000th row [33m 412[2mms[22m[39m
+ [32m✓[39m src/test/statDetectiveSpans.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 7200[2mms[22m[39m
+   [33m[2m✓[22m[39m Stat Detective career spans come from every season, not the 500 minute ones[2m > [22mfails the whole load when the spans cannot be read, and never falls back to the 500 minute span [33m 3850[2mms[22m[39m
+   [33m[2m✓[22m[39m Stat Detective career spans come from every season, not the 500 minute ones[2m > [22mreads a view deeper than the pages it asks for at once to the end, and asks again for a page that failed once [33m 955[2mms[22m[39m
+   [33m[2m✓[22m[39m the Stat Detective page over the same table[2m > [22mopens its retry state when the spans cannot be read, and recovers when they can [33m 1524[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m47 passed[39m[22m[90m (47)[39m
+[2m   Start at [22m 10:24:41
+[2m   Duration [22m 11.00s[2m (transform 2.19s, setup 534ms, collect 5.99s, tests 16.95s, environment 3.19s, prepare 1.01s)[22m
+

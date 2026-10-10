@@ -1,0 +1,80 @@
+fixture: 5496 rows of 2026 (name, nationality, club and value as pulled); position and age real for 2497, drawn for 2999
+   row 900 is worth 15M, row 2000 5M; in the top 2,000 the position is real for 1360
+NEGATIVE CONTROL ON: a gold zone keeps no best three: all eight tiles are drawn
+1) the pool is the top 2,000 in two pages, and the old 900 are still its first 900
+   before: 900 players from 900 rows; after: 2000 players from 2000 rows, asked for as 0+1000 and 1000+1000
+   the cheapest man: 15M before, 5M after; the storm floor is 15M in both
+   what the pool costs to read, as JSON before compression: 146 KiB in one request before, 324 KiB over two requests after
+2) the gold zones: the best three always, five drawn from the pool, a pure function of the seed
+  FAIL: wildcard at GK: seed 1: the first three tiles rate 83, 80, 78 and the best three who fit rate 86, 85, 84
+  FAIL: wildcard at RB: seed 1: the first three tiles rate 83, 80, 79 and the best three who fit rate 87, 87, 87
+  FAIL: wildcard at CB: seed 1: the first three tiles rate 84, 80, 79 and the best three who fit rate 87, 86, 86
+  FAIL: wildcard at CB: seed 1: the first three tiles rate 84, 80, 79 and the best three who fit rate 87, 86, 86
+  FAIL: wildcard at LB: seed 1: the first three tiles rate 84, 80, 79 and the best three who fit rate 87, 87, 86
+  FAIL: wildcard at CM: seed 1: the first three tiles rate 85, 80, 78 and the best three who fit rate 90, 89, 89
+  FAIL: wildcard at CM: seed 1: the first three tiles rate 85, 80, 78 and the best three who fit rate 90, 89, 89
+  FAIL: wildcard at CM: seed 1: the first three tiles rate 85, 80, 78 and the best three who fit rate 90, 89, 89
+  FAIL: wildcard at RW: seed 1: the first three tiles rate 84, 81, 79 and the best three who fit rate 90, 89, 88
+  FAIL: wildcard at ST: seed 1: the first three tiles rate 84, 81, 80 and the best three who fit rate 92, 91, 88
+  FAIL: wildcard at LW: seed 1: the first three tiles rate 83, 80, 79 and the best three who fit rate 88, 87, 87
+  FAIL: wonderkid at GK: seed 1 dealt 2 tiles where 5 were due (5 fit)
+  FAIL: wonderkid at RB: seed 1: the first three tiles rate 82, 81, 80 and the best three who fit rate 85, 85, 84
+  FAIL: wonderkid at CB: seed 1: the first three tiles rate 84, 81, 80 and the best three who fit rate 85, 85, 84
+  FAIL: wonderkid at CB: seed 1: the first three tiles rate 84, 81, 80 and the best three who fit rate 85, 85, 84
+  FAIL: wonderkid at LB: seed 1: the first three tiles rate 84, 82, 80 and the best three who fit rate 85, 85, 84
+  FAIL: wonderkid at CM: seed 1: the first three tiles rate 84, 82, 82 and the best three who fit rate 87, 85, 85
+  FAIL: wonderkid at CM: seed 1: the first three tiles rate 84, 82, 82 and the best three who fit rate 87, 85, 85
+  FAIL: wonderkid at CM: seed 1: the first three tiles rate 84, 82, 82 and the best three who fit rate 87, 85, 85
+  FAIL: wonderkid at RW: seed 1: the first three tiles rate 83, 80, 80 and the best three who fit rate 87, 87, 83
+  FAIL: wonderkid at ST: seed 1: the first three tiles rate 82, 81, 80 and the best three who fit rate 83, 83, 83
+  FAIL: wonderkid at LW: seed 1: the first three tiles rate 82, 81, 80 and the best three who fit rate 86, 83, 83
+  FAIL: legend at RB: seed 1: the first three tiles rate 91, 90, 90 and the best three who fit rate 91, 91, 91
+  FAIL: legend at CB: seed 1: the first three tiles rate 91, 90, 90 and the best three who fit rate 91, 91, 91
+  FAIL: legend at CB: seed 1: the first three tiles rate 91, 90, 90 and the best three who fit rate 91, 91, 91
+  FAIL: legend at LB: seed 1: the first three tiles rate 91, 90, 90 and the best three who fit rate 91, 91, 91
+  FAIL: legend at CM: seed 3: the first three tiles rate 91, 91, 90 and the best three who fit rate 91, 91, 91
+  FAIL: legend at CM: seed 3: the first three tiles rate 91, 91, 90 and the best three who fit rate 91, 91, 91
+  FAIL: legend at CM: seed 3: the first three tiles rate 91, 91, 90 and the best three who fit rate 91, 91, 91
+  FAIL: legend at RW: seed 1 dealt 5 tiles where 8 were due (8 fit)
+  FAIL: legend at ST: seed 1: the first three tiles rate 92, 91, 91 and the best three who fit rate 92, 92, 92
+  FAIL: legend at LW: seed 1 dealt 0 tiles where 2 were due (2 fit)
+  FAIL: the legend zone offers nobody at LW
+  FAIL: only 1 slot and zone pairs had more than eight who fit; the wildcard zone alone should give 11
+   62 seeded throws, 11 slots in three zones: the best three lead every one, every tile is from the pool and fits, and each throw replays from its seed
+   the drawn five: more than five names over 24 seeds at 1 of 1 slot and zone pairs with more than eight who fit (between 8 and 8 names); 0 pairs have eight or fewer and show everybody
+3) the storm did not get worse
+   cheapest storm tile before>after, and what the deeper pool would have handed out: GK 15M>15M (5M with no floor), RB 15M>15M (5M with no floor), CB 15M>15M (5M with no floor), LB 15M>15M (5M with no floor), CM 15M>15M (5M with no floor), RW 15M>15M (5M with no floor), ST 15M>15M (5M with no floor), LW 16M>15M (5M with no floor)
+   the five storm tiles' average rating fell by -0.36 a slot on average (slot by slot: -0.80, -0.40, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, -0.60, 0.00, -2.20); 0 slots fell by more than half a point
+   with no floor it would have fallen by 4.29 a slot on average (slot by slot: 6.20, 6.20, 2.80, 2.80, 5.00, 3.80, 3.80, 3.80, 3.60, 4.80, 4.40)
+4) a country hit keeps its best four and reaches deeper for the rest
+   739 country and slot pairs have real players; 218 of them run deeper than eight
+   names a country hit could show: 3242 before, 6468 after 30 hits each (2.00x)
+5) the mystery zone pays what it paid, and the deeper pool shows as a fourth tile
+   names a mystery tile could be, summed over the 11 slots: 1878 before, 4078 after
+   the best tile is rated 83.31 on average before (median 83), 83.23 after (median 83); three from anywhere in the deeper pool would have given 81.11 (median 81)
+   4400 of 4400 hits carried a fourth tile from under the 15M line; 0 hits had one of the three under it
+6) The Machine is the opponent it was
+   The Machine's XI is rated 86.91 on average before (median 87), 86.72 after (median 87): a move of -0.19
+   players at a slot, fewest to most: 49 to 234 before, 134 to 553 after; The Machine draws from the top forty or the top half, whichever is fewer
+7) 2000 whole drafts a model, before and after, graded by the game's own functions
+   the twelve dearest nations: France, Spain, United Kingdom, Brazil, Germany, Argentina, Portugal, Netherlands, Italy, Norway, Sweden, Côte d'Ivoire
+   sharp thrower, best pick, before: XI 87.02 on average, median 87 (S); grades F 0, D 0, C 0, B 0, A 150, S 1850
+   sharp thrower, best pick, after: XI 87.00 on average, median 87 (S); grades F 0, D 0, C 0, B 0, A 146, S 1854
+   sharp thrower, random pick, before: XI 81.00 on average, median 81 (A); grades F 0, D 0, C 0, B 66, A 1834, S 100
+   sharp thrower, random pick, after: XI 77.62 on average, median 78 (A); grades F 0, D 0, C 0, B 998, A 995, S 7
+   land thrower, best pick, before: XI 73.62 on average, median 74 (B); grades F 0, D 3, C 243, B 1526, A 228, S 0
+   land thrower, best pick, after: XI 73.59 on average, median 74 (B); grades F 0, D 7, C 240, B 1504, A 248, S 1
+   land thrower, random pick, before: XI 69.79 on average, median 70 (B); grades F 0, D 33, C 875, B 1087, A 5, S 0
+   land thrower, random pick, after: XI 69.05 on average, median 69 (C); grades F 0, D 58, C 981, B 955, A 6, S 0
+   any thrower, best pick, before: XI 51.71 on average, median 51 (F); grades F 1289, D 650, C 61, B 0, A 0, S 0
+   any thrower, best pick, after: XI 51.60 on average, median 51 (F); grades F 1296, D 627, C 76, B 1, A 0, S 0
+   any thrower, random pick, before: XI 50.19 on average, median 50 (F); grades F 1526, D 443, C 30, B 1, A 0, S 0
+   any thrower, random pick, after: XI 49.82 on average, median 50 (F); grades F 1591, D 393, C 16, B 0, A 0, S 0
+8) clubs the league lookup does not know
+   pool players at a club the lookup does not know: 0.9% of the old 900, 10.2% of the 2000
+   96 clubs in the pool are unknown to the lookup; the twenty with the most players (players, dearest in M): FC Toulouse (8, 27); Clube de Regatas Vasco da Gama (7, 11); SK Slavia Prague (7, 10); Fluminense Football Club (6, 13); Leicester City (6, 13); Deportivo Toluca (6, 11); Stade Brestois 29 (6, 10); CF América (5, 11); CD Cruz Azul (5, 10); FC Copenhagen (5, 8); Stade Reims (4, 22); Al-Sadd SC (4, 13); FC Twente Enschede (4, 11); Tigres UANL (4, 10); AC Sparta Prague (4, 8); AS Saint-Étienne (3, 16); Grêmio Foot-Ball Porto Alegrense (3, 13); Without Club (3, 11); BSC Young Boys (3, 10); Dynamo Kyiv (3, 10)
+   players a country hit reads (every 2026 row of each nation since Round 1182; it was the top 120): 5467, 46.7% at a club the lookup does not know
+   before: 8000 aimed drafts carry 1.98 such players each; in 20.6% of them the chemistry bonus counts unknown clubs as one league (1.77 rating points when it does)
+   after: 8000 aimed drafts carry 2.57 such players each; in 30.7% of them the chemistry bonus counts unknown clubs as one league (1.94 rating points when it does)
+
+simDartDraftPool control nobest3: fired, 34 failure(s) above. Exit 1 is the expected result.
