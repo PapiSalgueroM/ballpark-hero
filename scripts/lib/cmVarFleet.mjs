@@ -37,13 +37,15 @@ export async function bundleCm(root, folder, { ratesSource = null, engineSource 
   return require(out);
 }
 
-const realRandom = Math.random, realNow = Date.now;
-/** One seeded stretch of engine code, on a fixed clock. */
+/** One seeded stretch of engine code, on a fixed clock. Whatever Math.random and Date.now were on the way in
+ *  are put back on the way out. scripts/simCmVar.mjs exports this same function as withCmVarSeed, so the
+ *  harness, the fleet and the walk seed a match one way. */
 export function seeded(seed, fn) {
+  const previous = Math.random, previousNow = Date.now;
   let a = seed >>> 0;
   Math.random = () => { a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   Date.now = () => 1791547200000;
-  try { return fn(); } finally { Math.random = realRandom; Date.now = realNow; }
+  try { return fn(); } finally { Math.random = previous; Date.now = previousNow; }
 }
 
 /** Five clubs from each league whose row says yes, so the fleet is the football the rule applies to. */
