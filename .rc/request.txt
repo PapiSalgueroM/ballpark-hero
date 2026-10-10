@@ -1,0 +1,88 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+keeper-dropkey: SIM_SAVE_KEEPER_CONTROL=dropkey node scripts/simSaveKeeper.mjs
+keeper-versiontable: SIM_SAVE_KEEPER_CONTROL=versiontable node scripts/simSaveKeeper.mjs
+keeper-norow: SIM_SAVE_KEEPER_CONTROL=norow node scripts/simSaveKeeper.mjs
+keeper-onebyte: SIM_SAVE_KEEPER_CONTROL=onebyte node scripts/simSaveKeeper.mjs
+keeper-bootwrite: SIM_SAVE_KEEPER_CONTROL=bootwrite node scripts/simSaveKeeper.mjs
+keeper-noaside: SIM_SAVE_KEEPER_CONTROL=noaside node scripts/simSaveKeeper.mjs
+keeper-journalfirst: SIM_SAVE_KEEPER_CONTROL=journalfirst node scripts/simSaveKeeper.mjs
+keeper-pileup: SIM_SAVE_KEEPER_CONTROL=pileup node scripts/simSaveKeeper.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simWritesAreSent: node scripts/simWritesAreSent.mjs
+simSchemaNames: node scripts/simSchemaNames.mjs
+simFetchRetry: node scripts/simFetchRetry.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simReportRelay: node scripts/simReportRelay.mjs
+simNavbarStatsReads: node scripts/simNavbarStatsReads.mjs
+simLeaderboardCaps: node scripts/simLeaderboardCaps.mjs
+simScoringCoverage: node scripts/simScoringCoverage.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+storage-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+storage-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+storage-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+storage-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+storage-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+storage-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+storage-recheck: SIM_STORAGE_WRITES_CONTROL=recheck node scripts/simStorageWrites.mjs
+storage-once: SIM_STORAGE_WRITES_CONTROL=once node scripts/simStorageWrites.mjs
+storage-unlearn: SIM_STORAGE_WRITES_CONTROL=unlearn node scripts/simStorageWrites.mjs
+storage-held: SIM_STORAGE_WRITES_CONTROL=held node scripts/simStorageWrites.mjs
+simErrorBoundary: node scripts/simErrorBoundary.mjs
+boundary-unwrapped: BOUNDARY_CONTROL=unwrapped node scripts/simErrorBoundary.mjs
+boundary-nocatch: BOUNDARY_CONTROL=nocatch node scripts/simErrorBoundary.mjs
+simStaleChunk: node scripts/simStaleChunk.mjs
+stale-nolistener: SIM_STALE_CHUNK_CONTROL=nolistener node scripts/simStaleChunk.mjs
+stale-noguard: SIM_STALE_CHUNK_CONTROL=noguard node scripts/simStaleChunk.mjs
+stale-noprerender: SIM_STALE_CHUNK_CONTROL=noprerender node scripts/simStaleChunk.mjs
+stale-nosave: SIM_STALE_CHUNK_CONTROL=nosave node scripts/simStaleChunk.mjs
+stale-nooffline: SIM_STALE_CHUNK_CONTROL=nooffline node scripts/simStaleChunk.mjs
+stale-norelease: SIM_STALE_CHUNK_CONTROL=norelease node scripts/simStaleChunk.mjs
+stale-barenudge: SIM_STALE_CHUNK_CONTROL=barenudge node scripts/simStaleChunk.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+homecopy-commenttpl: HOME_COPY_CONTROL=commenttpl node scripts/simHomeCopy.mjs
+homecopy-commentapp: HOME_COPY_CONTROL=commentapp node scripts/simHomeCopy.mjs
+homecopy-descdrift: HOME_COPY_CONTROL=descdrift node scripts/simHomeCopy.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+homefront-aussiefield: HOME_FRONT_CONTROL=aussiefield node scripts/simHomeFront.mjs
+homefront-aussiekey: HOME_FRONT_CONTROL=aussiekey node scripts/simHomeFront.mjs
+homefront-aussiemissing: HOME_FRONT_CONTROL=aussiemissing node scripts/simHomeFront.mjs
+homefront-aussieround: HOME_FRONT_CONTROL=aussieround node scripts/simHomeFront.mjs
+homefront-continuecold: HOME_FRONT_CONTROL=continuecold node scripts/simHomeFront.mjs
+homefront-continuefield: HOME_FRONT_CONTROL=continuefield node scripts/simHomeFront.mjs
+homefront-continueguard: HOME_FRONT_CONTROL=continueguard node scripts/simHomeFront.mjs
+homefront-continuekey: HOME_FRONT_CONTROL=continuekey node scripts/simHomeFront.mjs
+homefront-favfirst: HOME_FRONT_CONTROL=favfirst node scripts/simHomeFront.mjs
+homefront-favtrust: HOME_FRONT_CONTROL=favtrust node scripts/simHomeFront.mjs
+homefront-noglyph: HOME_FRONT_CONTROL=noglyph node scripts/simHomeFront.mjs
+homefront-progress: HOME_FRONT_CONTROL=progress node scripts/simHomeFront.mjs
+homefront-rail: HOME_FRONT_CONTROL=rail node scripts/simHomeFront.mjs
+homefront-savekey: HOME_FRONT_CONTROL=savekey node scripts/simHomeFront.mjs
+homefront-shipped: HOME_FRONT_CONTROL=shipped node scripts/simHomeFront.mjs
+homefront-stage: HOME_FRONT_CONTROL=stage node scripts/simHomeFront.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simSoccerCareerSaveRecovery: node scripts/simSoccerCareerSaveRecovery.mjs
+simFrontOfficeSaveRecovery: node scripts/simFrontOfficeSaveRecovery.mjs
+simRebuildSave: node scripts/simRebuildSave.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
