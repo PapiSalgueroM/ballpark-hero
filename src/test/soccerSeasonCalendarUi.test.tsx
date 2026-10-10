@@ -15,7 +15,7 @@ beforeEach(() => {
 });
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 function open(model: CentreModel, md = 5) {
-  const view = render(<MemoryRouter><SeasonCentre model={model} exitLabel="Back to your career" onClose={() => {}} resume={{ key: model.season.key, md, year: 2026, speed: 'results', stable: true }} /></MemoryRouter>);
+  const view = render(<MemoryRouter><SeasonCentre model={model} exitLabel="Back to your career" onClose={() => {}} resume={{ md, speed: 'results' }} /></MemoryRouter>);
   const gotIt = screen.queryByRole('button', { name: /Got it/ });
   if (gotIt) fireEvent.click(gotIt);
   fireEvent.click(screen.getByRole('button', { name: /▶ Matchday 6/ }));

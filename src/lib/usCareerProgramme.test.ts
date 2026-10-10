@@ -3,17 +3,17 @@ import { NFL_CAREER_SPORT } from './nflCareerSport';
 import { NBA_CAREER_SPORT } from './nbaCareerSport';
 import { MLB_CAREER_SPORT } from './mlbCareerSport';
 import { NHL_CAREER_SPORT } from './nhlCareerSport';
-import type { UsCareerSeason, UsCareerSport } from './usCareerSport';
+import type { UsCareerCore, UsCareerSeason, UsCareerSport } from './usCareerSport';
 import { currentUsCareerProgramme, expireUsCareerProgramme, prepareUsCareerProgramme, restoreUsCareerProgramme, saveUsCareerProgramme, settleUsCareerProgramme, usProgrammeDefaults, usProgrammeMenus, type ProgrammeCareer, type ProgrammeChoices } from '@/lib/usCareerProgramme';
 
-const sports = [NFL_CAREER_SPORT, NBA_CAREER_SPORT, MLB_CAREER_SPORT, NHL_CAREER_SPORT];
+const sports: UsCareerSport[] = [NFL_CAREER_SPORT, NBA_CAREER_SPORT, MLB_CAREER_SPORT, NHL_CAREER_SPORT];
 const copy = <T,>(v: T): T => structuredClone(v);
-function fixture(sport: UsCareerSport): ProgrammeCareer {
-  const c = sport.startCareer('Generated Programme Test', sport.create.defaultPos, sport.create.archetypes[sport.create.defaultPos][0], () => 0.5, null, sport.create.eras[0].id) as ProgrammeCareer;
+function fixture<C extends UsCareerCore>(sport: UsCareerSport<C>): C & ProgrammeCareer {
+  const c = sport.startCareer('Generated Programme Test', sport.create.defaultPos, sport.create.archetypes[sport.create.defaultPos][0], () => 0.5, null, sport.create.eras[0].id) as C & ProgrammeCareer;
   c.age = 31; c.health = 80; c.morale = 70; c.salary = 5; c.contractYears = 4; c.role = 'starter';
   return c;
 }
-function plan(c: ProgrammeCareer, sport: UsCareerSport, changes: Partial<ProgrammeChoices>) { return saveUsCareerProgramme(c, sport.slug, { ...usProgrammeDefaults(), ...changes }); }
+function plan<C extends ProgrammeCareer>(c: C, sport: UsCareerSport, changes: Partial<ProgrammeChoices>) { return saveUsCareerProgramme(c, sport.slug, { ...usProgrammeDefaults(), ...changes }); }
 function heldLine(c: ProgrammeCareer, extra: Record<string, unknown> = {}): UsCareerSeason {
   const row = { year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: c.programme?.sport === 'nfl' ? 17 : c.programme?.sport === 'mlb' ? c.pos === 'SP' ? 32 : c.pos === 'RP' ? 65 : 162 : 82, awards: [], teamResult: 'Recorded test season', salary: c.salary, ...extra };
   c.seasons.push(row); return row;

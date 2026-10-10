@@ -2,7 +2,7 @@ import { useState } from "react";
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import recorded from "../../scripts/data/careerLeagueWorldSaves1100.json";
-import { CAREER_CLUB_POOL } from "@/data/soccerCareerClubPool";
+import { FALLBACK_CLUBS } from "@/lib/soccerCareerEngine";
 import type { CareerState } from "@/lib/soccerCareerEngine";
 import { cancelProgramme, chooseProgramme, programmeOptions } from "@/lib/soccerCareerProgramme";
 import SoccerCareerProgramme from "@/components/soccer-career/SoccerCareerProgramme";
@@ -20,7 +20,7 @@ function fixture(id?: ProgrammeId): CareerState {
   const career = JSON.parse(JSON.stringify(captured)) as CareerState;
   career.phase = "playing"; career.retired = false; career.position = "CM";
   career.overall = 85; career.age = 26; career.morale = 70;
-  const parent = CAREER_CLUB_POOL.find(club => club.name === "Anderlecht")!;
+  const parent = FALLBACK_CLUBS.find(club => club.name === "Anderlecht")!;
   if (id === "negotiation") {
     career.phase = "transfer_window";
     career.transferSituation = { type: "one_offer", offer: { club: parent, contractYears: 3, wage: 15000, transferFee: 5 } };
@@ -92,9 +92,11 @@ describe("Soccer career programme UI", () => {
     const { changed } = mount(career);
     await plans();
     const selected = await detail(id);
-    expect(within(selected).getByText(option.effect)).toBeInTheDocument();
-    expect(within(selected).getByText(option.tradeoff)).toBeInTheDocument();
-    await press(selected.querySelector<HTMLButtonElement>(`[data-programme-choice="${choice}"]`)!);
+    const choose = selected.querySelector<HTMLButtonElement>(`[data-programme-choice="${choice}"]`)!;
+    const optionCard = choose.closest<HTMLElement>("[data-programme-option]")!;
+    expect(within(optionCard).getByText(option.effect)).toBeInTheDocument();
+    expect(within(optionCard).getByText(option.tradeoff)).toBeInTheDocument();
+    await press(choose);
     expect(changed).toHaveBeenCalledTimes(1);
     expect(changed.mock.calls[0][0]).toEqual(expected);
     expect(JSON.stringify(career)).toBe(before);
@@ -259,8 +261,10 @@ describe("Soccer career programme UI", () => {
   });
   it("uses explicit 44 pixel controls and caps scrolling inside the shared dialog", async () => {
     mount(fixture()); await plans(); await detail("tactics");
-    for (const button of screen.getAllByRole("button")) {
-      if (!button.closest("[data-soccer-programme]")) continue;
+    const dialog = screen.getByRole("dialog");
+    const controls = dialog.querySelectorAll<HTMLButtonElement>("[data-programme-back], [data-programme-help], [data-programme-close], [data-programme-choice]");
+    expect(controls).toHaveLength(6);
+    for (const button of controls) {
       expect(button.className).toContain("min-h-11"); expect(button.className).toContain("min-w-11");
     }
     expect(screen.getByRole("dialog").className).toContain("max-h-[88dvh]");
