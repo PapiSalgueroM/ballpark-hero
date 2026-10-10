@@ -1,0 +1,2 @@
+vitest exit=0 3s |    Duration  2.16s (transform 283ms, setup 76ms, collect 344ms, tests 686ms, environment 433ms, prepare 237ms)
+tsc exit=2 58s |   Property 'reason' does not exist on type '{ ok: true; desk: GmDesk; report: HostAwayReport; }'.

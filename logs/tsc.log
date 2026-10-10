@@ -1,0 +1,2 @@
+src/lib/gmDeskHost.test.ts(540,38): error TS2339: Property 'reason' does not exist on type 'HostAwayResult'.
+  Property 'reason' does not exist on type '{ ok: true; desk: GmDesk; report: HostAwayReport; }'.
