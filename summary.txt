@@ -1,0 +1,2 @@
+tsc exit=0 109s | 
+vitest exit=1 541s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/statDetectiveScope.test.tsx,title=src/test/statDetectiveScope.test.tsx > Stat Detective recorded profi
