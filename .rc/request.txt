@@ -1,0 +1,28 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim-expect9: CM_LEAGUE_FIXTURES_EXPECT=9 node scripts/simCmLeagueFixtures.mjs
+sim-plain: node scripts/simCmLeagueFixtures.mjs
+sim-expect8-must-fail: CM_LEAGUE_FIXTURES_EXPECT=8 node scripts/simCmLeagueFixtures.mjs
+suite-runner: ONLY=simCmLeagueFixtures node scripts/runAllSims.mjs
+ctl-swapvenue-laliga: CM_LEAGUE_FIXTURES_CONTROL=swapvenue CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=laliga node scripts/simCmLeagueFixtures.mjs
+ctl-droprow-eredivisie: CM_LEAGUE_FIXTURES_CONTROL=droprow CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=eredivisie node scripts/simCmLeagueFixtures.mjs
+ctl-twiceinround-championship: CM_LEAGUE_FIXTURES_CONTROL=twiceinround CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=championship node scripts/simCmLeagueFixtures.mjs
+ctl-ghostclub-bundesliga: CM_LEAGUE_FIXTURES_CONTROL=ghostclub CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga node scripts/simCmLeagueFixtures.mjs
+ctl-receiptdrift-bundesliga2: CM_LEAGUE_FIXTURES_CONTROL=receiptdrift CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga2 node scripts/simCmLeagueFixtures.mjs
+ctl-samehost-seriea: CM_LEAGUE_FIXTURES_CONTROL=samehost CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=seriea node scripts/simCmLeagueFixtures.mjs
+ctl-wikihost-superlig: CM_LEAGUE_FIXTURES_CONTROL=wikihost CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=superlig node scripts/simCmLeagueFixtures.mjs
+ctl-datein-primeira: CM_LEAGUE_FIXTURES_CONTROL=datein CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=primeira node scripts/simCmLeagueFixtures.mjs
+ctl-extrakey-ligue2: CM_LEAGUE_FIXTURES_CONTROL=extrakey CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=ligue2 node scripts/simCmLeagueFixtures.mjs
+ctl-refreeze-seriea: CM_LEAGUE_FIXTURES_CONTROL=refreeze CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=seriea node scripts/simCmLeagueFixtures.mjs
+ctl-lostfile-laliga: CM_LEAGUE_FIXTURES_CONTROL=lostfile CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=laliga node scripts/simCmLeagueFixtures.mjs
+ctl-default-league: CM_LEAGUE_FIXTURES_CONTROL=swapvenue node scripts/simCmLeagueFixtures.mjs
+ctl-unknown-name: CM_LEAGUE_FIXTURES_CONTROL=nosuchcontrol node scripts/simCmLeagueFixtures.mjs
+ctl-unknown-league: CM_LEAGUE_FIXTURES_CONTROL=swapvenue CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=nosuch node scripts/simCmLeagueFixtures.mjs
+ctl-with-only-other-league: CM_LEAGUE_FIXTURES_ONLY=laliga CM_LEAGUE_FIXTURES_CONTROL=swapvenue CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=seriea node scripts/simCmLeagueFixtures.mjs
+only-each: set -o pipefail; for l in laliga ligue2 eredivisie primeira seriea bundesliga superlig bundesliga2 championship; do CM_LEAGUE_FIXTURES_ONLY=$l CM_LEAGUE_FIXTURES_EXPECT=1 node scripts/simCmLeagueFixtures.mjs | tail -1 || exit 1; done
+simLiveScores: node scripts/simLiveScores.mjs
+simLiveScores-citedespn: LIVE_CONTROL=citedespn node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+at-tree: H=$(git rev-parse HEAD) && git worktree add -q /tmp/at origin/release-at-int && ln -s "$PWD/node_modules" /tmp/at/node_modules && cd /tmp/at && git checkout -q $H -- scripts/simCmLeagueFixtures.mjs scripts/genCmLeagueFixtures.mjs scripts/lib/cmFixtureSources scripts/data/cmLeagueFixtures.frozen.json 'scripts/data/clubManager*Fixtures2026.receipt.json' 'src/data/clubManager*Fixtures2026.ts' && ls src/data/clubManager*Fixtures2026.ts | wc -l && git rev-parse origin/release-at-int && CM_LEAGUE_FIXTURES_EXPECT=10 node scripts/simCmLeagueFixtures.mjs
+at-tree-fences: set -o pipefail; H=$(git rev-parse HEAD) && git worktree add -q /tmp/at2 origin/release-at-int && ln -s "$PWD/node_modules" /tmp/at2/node_modules && cd /tmp/at2 && git checkout -q $H -- scripts/simCmLeagueFixtures.mjs scripts/genCmLeagueFixtures.mjs scripts/lib/cmFixtureSources scripts/data/cmLeagueFixtures.frozen.json 'scripts/data/clubManager*Fixtures2026.receipt.json' 'src/data/clubManager*Fixtures2026.ts' && node scripts/simNoRivalNames.mjs | tail -3 && node scripts/simHarnessAnchors.mjs | tail -2 && node_modules/.bin/tsc --noEmit -p tsconfig.app.json && echo AT-TREE-TSC-ZERO
