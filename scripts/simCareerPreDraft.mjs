@@ -692,7 +692,7 @@ const NIGHT_ROWS_MAX = 12;
         const inside = s.draft.pick === null ? p.hi > total : s.draft.pick >= p.lo && s.draft.pick <= p.hi;
         if (!inside) { outside += 1; note(i, [`pick ${s.draft.pick} is outside the quoted range ${p.lo} to ${p.hi} of ${p.total}`]); }
         for (const tense of ['have', 'had']) {
-          const line = M.careerNightProjectionLine(p, tense);
+          const line = M.preDraftProjectionLine(p, tense);
           const nums = p.lo > p.total ? [p.total] : p.hi > p.total ? [p.lo, p.total] : [p.lo, p.hi, p.total];
           if (!line.includes(` ${tense} you `) || nums.some(n => !line.includes(String(n))) || anyDash.test(line)) note(i, [`the range line "${line}" lost a number`]);
         }

@@ -99,16 +99,9 @@ export function buildCareerDraftNight(desc: PreDraftDescriptor, s: PreDraftState
 }
 
 /* The words, built from the numbers so a line can never say something the
-   rows do not show. */
-
-/** What the scouts say before the draft ("have") and what the night's
- *  heading recalls ("had"). */
-export function careerNightProjectionLine(p: PreDraftProjection, tense: 'have' | 'had'): string {
-  if (p.lo > p.total) return `The scouts ${tense} you outside the ${p.total} picks of this draft.`;
-  if (p.hi > p.total) return `The scouts ${tense} you between pick ${p.lo} and undrafted. This draft has ${p.total} picks.`;
-  if (p.lo === p.hi) return `The scouts ${tense} you at pick ${p.lo} of ${p.total}.`;
-  return `The scouts ${tense} you between pick ${p.lo} and pick ${p.hi} of ${p.total}.`;
-}
+   rows do not show. (The range line is preDraftProjectionLine, beside the
+   range itself in careerPreDraft.ts, because the card prints it before the
+   draft and this file is only loaded for the night.) */
 
 export function careerNightGapLine(row: Extract<CareerNightRow, { kind: 'gap' }>): string {
   const picks = `Picks ${row.from} to ${row.to} come off the board`;

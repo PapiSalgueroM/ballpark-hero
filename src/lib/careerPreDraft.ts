@@ -326,6 +326,15 @@ export function preDraftProjection(desc: PreDraftDescriptor, s: Pick<PreDraftSta
   return { lo: preDraftBoardRankAt(s.stock, total, 0) + off, hi: preDraftBoardRankAt(s.stock, total, 1) + off, total };
 }
 
+/** The range in words, built from the numbers: what the scouts say before
+ *  the draft ("have") and what draft night recalls ("had"). */
+export function preDraftProjectionLine(p: PreDraftProjection, tense: 'have' | 'had'): string {
+  if (p.lo > p.total) return `The scouts ${tense} you outside the ${p.total} picks of this draft.`;
+  if (p.hi > p.total) return `The scouts ${tense} you between pick ${p.lo} and undrafted. This draft has ${p.total} picks.`;
+  if (p.lo === p.hi) return `The scouts ${tense} you at pick ${p.lo} of ${p.total}.`;
+  return `The scouts ${tense} you between pick ${p.lo} and pick ${p.hi} of ${p.total}.`;
+}
+
 export function preDraftRoute(desc: PreDraftDescriptor, routeId: string): PreDraftRoute {
   return desc.routes.find(r => r.id === routeId) ?? desc.routes[0];
 }
