@@ -1,0 +1,4 @@
+kc exit=1 12s | simOwnGoalMotion: control keepercorner turned "OG5: the turn can be seen" red on an assertion (1 failed) and the material stayed green, as it must.
+fleet0 exit=0 14s | [1216 OG5 geometry] swept by hand: off a keeper (1500 scenes) least 43.3, median 96.9, 90th percentile 115.0, most 121.6, the corner on the far side from where it came 0;
+straight exit=1 8s | simOwnGoalMotion: control straight turned "OG5: the turn can be seen" red on an assertion (1 failed) and the material stayed green, as it must.
+tsc exit=0 66s | 
