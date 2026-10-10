@@ -108,7 +108,8 @@ The player ages on his position (a back falls off at 28, a kicker at 39) and eve
   line and do not count). A linebacker on tackles, sacks and interceptions. A corner on interceptions, passes
   defended and tackles. An edge rusher on sacks, tackles and forced fumbles. A kicker on his makes and his longest
   (his attempts are on the line and do not count). Inside six percent of his number it is a near tie, and a dead
-  heat is his year." Worked example: "You: 3,654 yds, 22 TD, 14 INT. Him: 2,664 yds, 12 TD, 21 INT. Yours is the
+  heat is his year." (For whoever writes the "?": a near tie still goes on the head to head, to whoever had the
+  higher number; only the season note reads differently. src/lib/careerRival.ts, judgeRivalSeason.) Worked example: "You: 3,654 yds, 22 TD, 14 INT. Him: 2,664 yds, 12 TD, 21 INT. Yours is the
   better year." (Corrected by the fixer on 2026-10-10: the first writing said a receiver is read on his catches.
   The code is src/lib/careerAwards.ts nflSeasonScore, which reads a receiver's yards and touchdowns only.)
 - A RIVAL WHO HAD ALREADY RETIRED ON AN OLD SAVE keeps his old shape last line for good (the critic's advice 16):
@@ -119,8 +120,9 @@ The player ages on his position (a back falls off at 28, a kicker at 39) and eve
   SENSE_PROVE_1149 and simNbaAwardsSense's `lastyearnfl`.
 - ROUND B (MLB and the NHL): binds to rivalSeasonStream, rivalSeasonDraws, rivalKindOf, rosterBeat (with `own`),
   ALL_STAR_ROSTER, mlbLineAsPrinted and nhlLineAsPrinted; adds its sports to BOUND, ROSTER and SHAPES-driven
-  sections of simUsRivalSense; deletes ownRosterBeat and the three built in lines of simRivalSeason when its last
-  caller goes; moves the anchors of oldgateown and droppedanyyear with them.
+  sections of simUsRivalSense; deletes ownRosterBeat and the two built in lines left in simRivalSeason (MLB's and
+  the NHL's; the NFL's went in this round's closing fix) when its last caller goes; moves the anchors of
+  oldgateown and droppedanyyear with them.
 
 ## The fix pass after the two reviews (2026-10-10, the fixer)
 The reviews are review-run-1227.md and review-read-1227.md, the closing report is fix-1227.md, all in
@@ -141,7 +143,8 @@ C:/Users/antho/dukb-handoff/2026-10-10/results-g/. What changed on the branch af
   control (`impure`). A note beside `HELD_TOL`: when a later round moves an NFL draw, measure and retype, never
   widen.
 - THE WALK (scripts/playUsRivalLines.mjs) plays seasons at all four size and motion pairs, and walks the old
-  saves and the roster cards at 390 with motion on and at 1280 with reduced motion.
+  saves and the roster cards at 390 with motion on and at 1280 with reduced motion (all four since the closing
+  fix, below).
 - THE STEP h RECORDINGS HAVE THEIR SINGLE INPUT NOW. On 55339449 alone (the floor) step c's recordings replay
   green and the digest passes plain; on 5bdd0a9c (the cards) both are red, the board at fixed save "negNet"
   steps 52 to 54. Runners r1227-x1 and r1227-x2; written in the header of scripts/simUsBoardParity.mjs.
@@ -153,20 +156,56 @@ NOT FIXED, and why (each is in the closing report for the lead):
   record sourced twice and moves the player's own line and the recordings: a small round of its own.
 - Beat 204 ("you had the better box score", dealt in any year), THE BALLOT CAMPAIGN choice card, the dead NFL
   lines inside `simRivalSeason`, and the old shape line of a rival who had already retired on an old save: each
-  deferred by the critic or by the lead's decision 1, each still open.
+  deferred by the critic or by the lead's decision 1, each still open (the dead NFL lines are gone since the
+  closing fix, below; the other three stand).
 - The weight row: /nfl-my-career measures just over its budget in scripts/sweepWeight.mjs (the closing report
-  has the measured size). The budget number is the lead's.
+  has the measured size). The budget number is the lead's. (Inside its budget since the closing fix, below.)
 - A slot count that knows its year (two running backs through the 2015 season), as said above.
 
 THE RECORDINGS AFTER THE FIX PASS: the board recording was taken again from 4c010129 on runner r1227-x6 and came
 back byte equal in all four sports (only `recordedFrom` moved, commit a727c460); the truth digest taken again
 with the nfl keys allowed came back byte equal and has no commit.
 
-FOR WHOEVER MERGES ROUND 1226 WITH THIS ROUND (read only trial, `git merge-tree`, against 4bcfa116): the only
+FOR WHOEVER MERGES ROUND 1226 WITH THIS ROUND (read only trial, `git merge-tree`, against 4bcfa116, and again
+against 573ea1ff in the closing fix): the only
 conflicts are scripts/data/usBoardFixture.json and src/pages/WhatsNew.tsx. src/lib/careerRival.ts and the truth
 digest merge by themselves, and that is exactly why the second lander must still run the type gate, P1, the
 board replay and the digest plain on the merged tree, and take the NFL section of both recordings again from the
 merged head: a recording that merged without a conflict is still a recording nobody took.
+
+## The closing fix (2026-10-10, the second fixer, after the closing check)
+The closing check listed nine things. The closing report is fix2-1227.md in
+C:/Users/antho/dukb-handoff/2026-10-10/results-g/. What changed on the branch after 5cc880b0:
+- THE NFL'S BUILT IN RIVAL LINES ARE GONE from `simRivalSeason` in src/lib/careerRival.ts (commit d26bd8da). This
+  round bound the NFL rival, so no caller could reach them (`BuiltInRivalSport` has not admitted 'nfl' since step
+  c and `judgeRivalSeason` cannot be called for the NFL without a play). 41 lines out, no draw and no live line
+  moved: the proof is P1 and P2 of scripts/simUsRivalSense.mjs against 5cc880b0 with nothing named as moved
+  (runner r1227-y1; the closing report has how it ended). MLB's and the NHL's built in lines stay until Round B.
+- THE WEIGHT ROW IS INSIDE ITS BUDGET, by a little. With those lines gone /nfl-my-career measures 469.4K of
+  gzipped JavaScript over 47 files against 469K (it was 469.7K; runner r1227-y0). scripts/sweepWeight.mjs rounds
+  to the kilobyte and fails above the budget, so the row is green with about a tenth of a kilobyte to spare. No
+  budget number was touched. The next thing that adds weight to that page needs the lead's number.
+- THE WALK reads the old saves and the roster cards at all four size and motion pairs, as it already did for the
+  stretch that plays seasons (commit fffdcd06). `SIDE_SIZES` is gone.
+- THE TRIAL MERGE WITH ROUND 1226 was read again after the edit to src/lib/careerRival.ts (`git merge-tree`,
+  against its head 573ea1ff): still only scripts/data/usBoardFixture.json and src/pages/WhatsNew.tsx conflict,
+  and the merged careerRival.ts reads right (Round 1226's `cut` on the NHL and MLB lines, no NFL lines).
+
+STILL NOT FIXED after the closing fix, each on purpose, each in the closing report with its reason:
+- A kicker's long field goal has no cap. A cap moves the player's own line (the lead's decision 5 says his path
+  does not move in this round), his All-Pro odds, the kicker rows of every typed table and the recordings. A
+  small round of its own, with the record as data by era (68 yards since 2 November 2025, 66 from 26 September
+  2021, 64 before: the sources are in fix-1227.md).
+- The slot count does not know its year (two running backs on the real first team through the 2015 season). An
+  award table change the brief forbids here; it moves the player's own odds. The words claim nothing else.
+- Beat 204 and THE BALLOT CAMPAIGN choice card: the critic's answers 4 and 8, one small round for all four
+  sports at once.
+- A rival who had already retired on an old save keeps his old shape last line, and the rules behind a "?" on
+  the rival card: both need src/components/us-career/SocialPanel.tsx, the other lane's ground.
+- The floor at zero in `nflStatLineFor` is kept: a model choice for the lead, held by N.U7 and its control.
+- The board replay's timing race at NFL fixed save "noCoachKey" step 38 is not this round's and is not fixed
+  here: making the read wait for the lazy banner changes what every sport's recording shows at that step, so it
+  is one retake at integration, by whoever owns src/test/usBoardFixture.test.tsx.
 
 ## What a later session must not trust
 - Anything below marked NOT RUN.
