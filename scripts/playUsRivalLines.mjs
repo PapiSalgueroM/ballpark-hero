@@ -1,8 +1,10 @@
 /* playUsRivalLines.mjs (Round 1227). The NFL rival's line, on the real screens of a served build.
 
    scripts/simUsRivalSense.mjs proves the engine: the rival plays the player's position on the player's own stat
-   line and the verdict is read off the two printed lines. This walk reads what a PLAYER sees, in Chromium, at
-   390 by 844 with motion on and at 1280 by 900 with reduced motion, with the live database's host aborted:
+   line and the verdict is read off the two printed lines. This walk reads what a PLAYER sees, in Chromium, with
+   the live database's host aborted. The stretch that plays seasons (new) runs at all four pairs: 390 by 844 and
+   1280 by 900, each with motion on and with reduced motion. The old saves and the roster cards are walked at
+   390 with motion on and at 1280 with reduced motion.
 
    new    for each of the eight positions, a career built by this tree's own code (two seasons driven the way
           the board drives them) is put in localStorage and two more seasons are played through the real UI.
@@ -12,7 +14,7 @@
           "Last season he went" line is the same line. Measured rectangles: the note and that line end inside
           their cards and are not cut, and nothing scrolls sideways.
    old    the five saves of src/test/fixtures/usRivalOldSaves.json (built by the code before the round): a save
-          sitting on a card that release dealt shows that card, Continue is above the fold at 390, and the tap
+          sitting on a card that release dealt shows that card, Continue is above the fold, and the tap
           moves exactly what the chip says (read back from the save); a corner's and a kicker's old shape line
           shows on the Rival screen until a season is played and is the new shape after it.
    cards  a roster card of each kind this tree deals (only you, only him, and both when the search finds one),
@@ -128,7 +130,7 @@ async function open(width, height, reduced) {
   await page.locator('input[placeholder*="name"]').first().fill('Probe Player');
   await page.locator('button:has-text("Enter the draft")').click();
   await page.waitForTimeout(900);
-  return { ctx, page, seen, width, label: `${width} wide${reduced ? ', reduced motion' : ''}` };
+  return { ctx, page, seen, width, label: `${width} wide, ${reduced ? 'reduced motion' : 'motion on'}` };
 }
 /** Put a career on the save the page just made and load it, the way a returning player's save loads. */
 async function load(page, c) {
@@ -237,7 +239,12 @@ async function close(w, what) {
 }
 const shot = (page, name) => page.screenshot({ path: path.join(SHOTS, `${name}.png`) }).catch(() => {});
 
-const SIZES = [[390, 844, false], [1280, 900, true]];
+/* Every size with motion on AND reduced for the stretch that plays seasons (the brief names all four pairs; the
+   first walk held two, 390 with motion on and 1280 reduced, and the run reviewer walked the other two by hand).
+   The old saves and the roster cards are walked at both widths, one motion setting each (SIDE_SIZES). */
+const SIZES = [[390, 844, false], [390, 844, true], [1280, 900, false], [1280, 900, true]];
+const SIDE_SIZES = [[390, 844, false], [1280, 900, true]];
+const tagOf = (wd, reduced) => `${wd}${reduced ? 'r' : 'm'}`;
 if (STRETCH === 'all' || STRETCH === 'new') {
   for (const [wd, ht, reduced] of SIZES) {
     for (const pos of WALK_POS) {
@@ -248,7 +255,7 @@ if (STRETCH === 'all' || STRETCH === 'new') {
       if (c && await toHub(page, what)) {
         for (let n = 1; n <= 2; n += 1) {
           const hisText = await playOne(page, pos, `${what}, season ${n}`);
-          if (n === 1) await shot(page, `new-${pos}-${wd}-card`);
+          if (n === 1) await shot(page, `new-${pos}-${tagOf(wd, reduced)}-card`);
           if (!(await toHub(page, `${what}, season ${n}`))) break;
           if (!hisText) continue;
           const r = await rivalScreen(page, `${what}, season ${n}`);
@@ -261,7 +268,8 @@ if (STRETCH === 'all' || STRETCH === 'new') {
       await close(w, what);
     }
   }
-  say(notesRead >= WALK_POS.length * 2, `the walk read the rival's note on ${notesRead} season cards (floor ${WALK_POS.length * 2}: half of the ${WALK_POS.length * 4} it played)`);
+  const playedCards = WALK_POS.length * SIZES.length * 2;
+  say(notesRead >= playedCards / 2, `the walk read the rival's note on ${notesRead} season cards (floor ${playedCards / 2}: half of the ${playedCards} it played)`);
 }
 
 /** A save sitting on a rivalry card: the card is on the screen, Continue is above the fold, the tap pays the chip. */
@@ -288,41 +296,45 @@ const MOVES = { 'Morale +5': { morale: 5 }, 'Morale -5': { morale: -5 }, 'Fanbas
 
 if (STRETCH === 'all' || STRETCH === 'old') {
   const old = JSON.parse(readFileSync(path.join(ROOT, 'src/test/fixtures/usRivalOldSaves.json'), 'utf8')).saves;
-  const w = await open(390, 844, false); const { page } = w;
-  console.log('old saves, 390 wide');
-  if (CONTROL !== 'oldline') {
-    for (const key of ['nflMade', 'nflDropped', 'nfl221']) await cardPays(page, old[key], `old ${key}`, MOVES[old[key].pendingRivalryEvent.consequence]);
+  for (const [wd, ht, reduced] of SIDE_SIZES) {
+    const w = await open(wd, ht, reduced); const { page } = w;
+    console.log(`old saves, ${w.label}`);
+    if (CONTROL !== 'oldline') {
+      for (const key of ['nflMade', 'nflDropped', 'nfl221']) await cardPays(page, old[key], `old ${key}, ${w.label}`, MOVES[old[key].pendingRivalryEvent.consequence]);
+    }
+    for (const key of ['nflCB', 'nflK']) {
+      const save = old[key]; const pos = save.pos; const what = `old ${key}, ${w.label}`;
+      say(await load(page, save), `${what}: the save is loaded`);
+      if (!(await toHub(page, what))) continue;
+      const before = await rivalScreen(page, what);
+      await shot(page, `old-${key}-${tagOf(wd, reduced)}-before`);
+      if (CONTROL === 'oldline') { say(!!before && whole(pos).test(before.line), `${what}: (control) the line of the save from before the round is held to the new shape ("${before?.line}")`, 'oldline'); continue; }
+      say(!!before && before.line === save.rival.lastLine && !whole(pos).test(before.line), `${what}: the Rival screen still prints the line the old code saved ("${before?.line}")`);
+      const hisText = await playOne(page, pos, `${what}, one season on`);
+      if (!(await toHub(page, what))) continue;
+      const after = await rivalScreen(page, what);
+      say(!!after && !!hisText && after.line === hisText && whole(pos).test(after.line), `${what}: after one season the Rival screen prints his position's own line ("${after?.line}")`);
+      const tally = (await saveOf(page))?.c?.rival;
+      say(!!tally && tally.myYears + tally.hisYears === save.rival.myYears + save.rival.hisYears + 1, `${what}: the head to head kept its record and added one year (${save.rival.myYears}-${save.rival.hisYears} to ${tally?.myYears}-${tally?.hisYears})`);
+    }
+    await close(w, `old saves, ${w.label}`);
   }
-  for (const key of ['nflCB', 'nflK']) {
-    const save = old[key]; const pos = save.pos; const what = `old ${key}`;
-    say(await load(page, save), `${what}: the save is loaded`);
-    if (!(await toHub(page, what))) continue;
-    const before = await rivalScreen(page, what);
-    await shot(page, `old-${key}-before`);
-    if (CONTROL === 'oldline') { say(!!before && whole(pos).test(before.line), `${what}: (control) the line of the save from before the round is held to the new shape ("${before?.line}")`, 'oldline'); continue; }
-    say(!!before && before.line === save.rival.lastLine && !whole(pos).test(before.line), `${what}: the Rival screen still prints the line the old code saved ("${before?.line}")`);
-    const hisText = await playOne(page, pos, `${what}, one season on`);
-    if (!(await toHub(page, what))) continue;
-    const after = await rivalScreen(page, what);
-    say(!!after && !!hisText && after.line === hisText && whole(pos).test(after.line), `${what}: after one season the Rival screen prints his position's own line ("${after?.line}")`);
-    const tally = (await saveOf(page))?.c?.rival;
-    say(!!tally && tally.myYears + tally.hisYears === save.rival.myYears + save.rival.hisYears + 1, `${what}: the head to head kept its record and added one year (${save.rival.myYears}-${save.rival.hisYears} to ${tally?.myYears}-${tally?.hisYears})`);
-  }
-  await close(w, 'old saves');
 }
 
 if (STRETCH === 'all' || STRETCH === 'cards') {
   const found = rosterCardSaves(Number(process.env.RIVAL_WALK_CARD_DRIVES || 2500));
-  console.log(`roster cards of this tree, 390 wide: found ${Object.keys(found).join(', ') || 'none'}`);
+  console.log(`roster cards of this tree: found ${Object.keys(found).join(', ') || 'none'}`);
   say(!!found.onlyYou && !!found.onlyHim, `a save sitting on "only you" and one on "only him" were built by this tree's code (${Object.keys(found).join(', ') || 'none'})`);
   if (!found.both) console.log('  note cards: no career in the search was dealt the "both" card (it needs both on a first team that names two or more): its words and its payment are held on fixtures by scripts/simCareerRivalryEvents.mjs');
-  const w = await open(390, 844, false);
   for (const [kind, save] of Object.entries(found)) {
     const says = { both: /are both on the first team[.]/, onlyYou: /You are on the first team and .+ is not[.]/, onlyHim: /is on the first team and you are not[.]/ }[kind];
     say(says.test(save.pendingRivalryEvent.description), `card ${kind}: the save's card reads the ${kind} words ("${save.pendingRivalryEvent.description}")`);
-    await cardPays(w.page, save, `card ${kind} (${save.pos})`, MOVES[save.pendingRivalryEvent.consequence]);
   }
-  await close(w, 'roster cards');
+  for (const [wd, ht, reduced] of SIDE_SIZES) {
+    const w = await open(wd, ht, reduced);
+    for (const [kind, save] of Object.entries(found)) await cardPays(w.page, save, `card ${kind} (${save.pos}), ${w.label}`, MOVES[save.pendingRivalryEvent.consequence]);
+    await close(w, `roster cards, ${w.label}`);
+  }
 }
 await browser.close();
 
