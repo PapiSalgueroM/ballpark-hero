@@ -1,0 +1,82 @@
+fonts: {"status":"loaded","loaded":["Inter","Space Grotesk"],"body":"Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", san"}
+  390-wheel-toast toast over the wheel buttons: {"first":{"ms":2,"reachable":true,"spin":{"top":657,"bottom":699},"toasts":[{"top":746,"bottom":819,"text":"Morale +5, Pace +1 next season, 30% chance of a nagging issu"}]},"spinReachableAfterMs":2,"toastGoneAfterMs":4297,"samples":18}
+  391-wheel-toast toast over the wheel buttons: {"first":{"ms":4,"reachable":true,"spin":{"top":556,"bottom":597},"toasts":[{"top":563,"bottom":636,"text":"Morale +5, Pace +1 next season, 30% chance of a nagging issu"}]},"spinReachableAfterMs":4,"toastGoneAfterMs":4301,"samples":18}
+  390-cup-win saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":true},{"stage":"QF","opp":"Portsmouth","won":true,"for":1,"against":0,"home":false},{"stage":"SF","opp":"Aston Villa","won":false,"for":0,"against":2}],"opening":{"opp":"Millwall","country":"England","league":"Championship","won":true,"for":5,"against":1,"home":true},"year":2029,"club":"Brighton","league":26}
+  390-cup-win centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 390-cup-win kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  390-cup-win league games played before the cup night: 5
+  390-cup-win the button after league game 5: ▶ FA Cup: Opening cup tie
+  390-cup-win cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 390-cup-win cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"8","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"9","size":11}]
+  390-cup-win cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  390-cup-win cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Opening cup tie | Millwall | 5-1","h":58},{"id":"domestic:1","after":"25","text":"FA Cup · Quarter-final | Portsmouth","h":54}]
+  390-cup-win bracket: {"rounds":["Opening cup tie | Opening cup tie | Millwall | 5-1","↓ Quarter-final | Quarter-final | Portsmouth | 1-0","↓ Semi-final | Semi-final | Aston Villa | 0-2"],"games":3}
+  390-cup-win bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Brighton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Opening cup tie
+
+Brighton vs Millwall
+
+5-1
+
+Home
+
+Through
+
+Simplified simulated opening tie. Other early rounds were not recorded.
+
+‹ Previous game
+› Next game
+  390-cup-win continue button: ▶ Matchday 6
+  390-cup-win reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","▶ Matchday 6","⏭ Straight to the final table","↺ From the start","🗓 Fixtures"]
+  390-cup-win the button a returning player presses: ▶ Matchday 6
+  390-cup-win after resume: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  390-cup-win cup rows at the review: ["domestic:0","domestic:1","domestic:2"]
+  391-cup-win saved cup run: {"cup":"FA Cup","stages":[{"stage":"early","won":true},{"stage":"QF","opp":"Portsmouth","won":true,"for":1,"against":0,"home":false},{"stage":"SF","opp":"Aston Villa","won":false,"for":0,"against":2}],"opening":{"opp":"Millwall","country":"England","league":"Championship","won":true,"for":5,"against":1,"home":true},"year":2029,"club":"Brighton","league":26}
+  391-cup-win centre help on first open: {"cupExample":true,"cupRule":true}
+  PROBLEM 391-cup-win kickoff: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"0","size":11},{"text":"-","size":11},{"text":"0","size":11},{"text":"0","size":11}]
+  391-cup-win league games played before the cup night: 5
+  391-cup-win the button after league game 5: ▶ FA Cup: Opening cup tie
+  391-cup-win cup night before the reveal: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  PROBLEM 391-cup-win cup night: text under 12px: [{"text":"#","size":10},{"text":"Club","size":10},{"text":"W","size":10},{"text":"D","size":10},{"text":"L","size":10},{"text":"GF-GA","size":10},{"text":"GD","size":10},{"text":"Pts","size":10},{"text":"8","size":11},{"text":"-","size":11},{"text":"4","size":11},{"text":"9","size":11}]
+  391-cup-win cup night after the reveal: {"id":"domestic:0","revealed":"true","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Matchday 6","⏭ Sim the rest","1x","3x","Results"]}
+  391-cup-win cup rows in the fixture list after the reveal: [{"id":"domestic:0","after":"5","text":"FA Cup · Opening cup tie | Millwall | 5-1","h":58},{"id":"domestic:1","after":"25","text":"FA Cup · Quarter-final | Portsmouth","h":54}]
+  391-cup-win bracket: {"rounds":["Opening cup tie | Opening cup tie | Millwall | 5-1","↓ Quarter-final | Quarter-final | Portsmouth | 1-0","↓ Semi-final | Semi-final | Aston Villa | 0-2"],"games":3}
+  391-cup-win bracket tie opened: 📺 FA Cup
+?
+Back to your career
+
+Brighton · 2029/30
+
+Premier League
+FA Cup
+Current squad
+‹ All games
+Opening cup tie
+
+Brighton vs Millwall
+
+5-1
+
+Home
+
+Through
+
+Simplified simulated opening tie. Other early rounds were not recorded.
+
+‹ Previous game
+› Next game
+  391-cup-win continue button: ▶ Matchday 6
+  391-cup-win reopened: buttons: ["?","Back to your career","Premier League","FA Cup","Current squad","▶ Matchday 6","⏭ Straight to the final table","↺ From the start","🗓 Fixtures"]
+  391-cup-win the button a returning player presses: ▶ Matchday 6
+  391-cup-win after resume: {"id":"domestic:0","revealed":"false","text":"FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket","buttons":["?","Back to your career","Premier League","FA Cup","Current squad","Open FA Cup bracket","🗓 Fixtures","▶ Show saved cup result","⏭ Sim the rest","1x","3x","Results"]}
+  391-cup-win cup rows at the review: ["domestic:0","domestic:1","domestic:2"]
+review-sc-screens walk: 4 journeys, 0 stopped early, 4 measured problems, 26 shots

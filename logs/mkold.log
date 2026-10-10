@@ -1,0 +1,11 @@
+mk old: plan found in career 0, phase playing, 3 played rows, Everton
+mk old: keeper found in career 0, phase playing, 2 played rows, Everton
+mk old: real found in career 0, phase playing, 1 played rows, Man United
+mk old: roles found in career 0, phase playing, 2 played rows, Al Sadd
+mk old: summaryWin found in career 1, phase season_summary, 3 played rows, Brighton
+mk old: summaryOut found in career 0, phase season_summary, 3 played rows, Everton
+mk old: summaryEuro found in career 0, phase season_summary, 1 played rows, Chelsea
+mk old: offerNo found in career 0, phase transfer_window, 2 played rows, Everton
+mk old: offerYes found in career 1, phase transfer_window, 9 played rows, Liverpool
+mk old: wrote 9 of 9 saves to /tmp/rev-old.json; missing: none
+mk notes: {"size_plan":24283,"size_keeper":22227,"size_real":15351,"size_roles":16853,"size_summaryWin":30761,"size_summaryOut":27170,"size_summaryEuro":23545,"size_offerNo":22402,"size_offerYes":62609}

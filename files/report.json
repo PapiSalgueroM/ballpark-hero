@@ -1,0 +1,767 @@
+{
+ "base": "http://localhost:4173",
+ "notes": {
+  "new": {
+   "event": {
+    "title": "The Scan Room",
+    "choice": 1,
+    "label": "Back in training tomorrow",
+    "wheel": "The Scan Room",
+    "chance": 0.3
+   },
+   "planned": {
+    "year": 2030,
+    "club": "Everton",
+    "choices": {
+     "tactics": "finisher",
+     "promise": "starter",
+     "bonuses": "appearances",
+     "set_pieces": "penalties"
+    },
+    "bonusEuros": 19744
+   },
+   "settledReceipt": {
+    "year": 2030,
+    "club": "Everton",
+    "choices": {
+     "tactics": "finisher",
+     "promise": "starter",
+     "bonuses": "appearances",
+     "set_pieces": "penalties"
+    },
+    "status": "completed",
+    "outcomes": {
+     "tactics": "27 recorded club appearances.",
+     "set_pieces": "1 penalty goals and 0 free kick goals, included in your 6 recorded goals. This is the simulation's season duty allocation.",
+     "promise": "The 26-appearance promise was missed: 23 league appearances. You can request a move in the transfer window.",
+     "bonuses": "The recorded target was not met; no bonus was paid."
+    },
+    "bonusEuros": 0,
+    "penaltyGoals": 1,
+    "freeKickGoals": 0,
+    "secondaryPosition": null,
+    "promise": "broken"
+   },
+   "size_plan": 24826,
+   "size_keeper": 22654,
+   "size_real": 15505,
+   "size_roles": 17017,
+   "size_summaryWin": 31231,
+   "size_summaryOut": 27650,
+   "size_summaryEuro": 23791,
+   "size_offerNo": 22638,
+   "size_offerYes": 63851,
+   "size_event": 23324,
+   "size_appeal": 22870,
+   "size_unseenHub": 22184,
+   "size_settledSummary": 34665,
+   "size_settled": 30841,
+   "size_edited": 24939
+  },
+  "old": {
+   "size_plan": 24283,
+   "size_keeper": 22227,
+   "size_real": 15351,
+   "size_roles": 16853,
+   "size_summaryWin": 30761,
+   "size_summaryOut": 27170,
+   "size_summaryEuro": 23545,
+   "size_offerNo": 22402,
+   "size_offerYes": 62609
+  }
+ },
+ "journeys": [
+  {
+   "id": "390-wheel-toast",
+   "facts": [
+    {
+     "label": "toast over the wheel buttons",
+     "value": {
+      "first": {
+       "ms": 2,
+       "reachable": true,
+       "spin": {
+        "top": 657,
+        "bottom": 699
+       },
+       "toasts": [
+        {
+         "top": 746,
+         "bottom": 819,
+         "text": "Morale +5, Pace +1 next season, 30% chance of a nagging issu"
+        }
+       ]
+      },
+      "spinReachableAfterMs": 2,
+      "toastGoneAfterMs": 4297,
+      "samples": 18
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": []
+  },
+  {
+   "id": "391-wheel-toast",
+   "facts": [
+    {
+     "label": "toast over the wheel buttons",
+     "value": {
+      "first": {
+       "ms": 4,
+       "reachable": true,
+       "spin": {
+        "top": 556,
+        "bottom": 597
+       },
+       "toasts": [
+        {
+         "top": 563,
+         "bottom": 636,
+         "text": "Morale +5, Pace +1 next season, 30% chance of a nagging issu"
+        }
+       ]
+      },
+      "spinReachableAfterMs": 4,
+      "toastGoneAfterMs": 4301,
+      "samples": 18
+     }
+    }
+   ],
+   "problems": [],
+   "errors": [],
+   "shots": []
+  },
+  {
+   "id": "390-cup-win",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": {
+       "opp": "Millwall",
+       "country": "England",
+       "league": "Championship",
+       "won": true,
+       "for": 5,
+       "against": 1,
+       "home": true
+      },
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Millwall | 5-1",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Millwall | 5-1",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nBrighton vs Millwall\n\n5-1\n\nHome\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    },
+    {
+     "label": "the button a returning player presses",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "after resume",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows at the review",
+     "value": [
+      "domestic:0",
+      "domestic:1",
+      "domestic:2"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "8",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "9",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "390-cup-win-summary-with-watch.jpg",
+    "390-cup-win-centre-help.jpg",
+    "390-cup-win-kickoff.jpg",
+    "390-cup-win-league-five-full-time.jpg",
+    "390-cup-win-cup-before.jpg",
+    "390-cup-win-cup-result.jpg",
+    "390-cup-win-fixtures-with-cup.jpg",
+    "390-cup-win-bracket.jpg",
+    "390-cup-win-bracket-tie.jpg",
+    "390-cup-win-back-on-league.jpg",
+    "390-cup-win-reopened.jpg",
+    "390-cup-win-resumed.jpg",
+    "390-cup-win-review.jpg"
+   ]
+  },
+  {
+   "id": "391-cup-win",
+   "facts": [
+    {
+     "label": "saved cup run",
+     "value": {
+      "cup": "FA Cup",
+      "stages": [
+       {
+        "stage": "early",
+        "won": true
+       },
+       {
+        "stage": "QF",
+        "opp": "Portsmouth",
+        "won": true,
+        "for": 1,
+        "against": 0,
+        "home": false
+       },
+       {
+        "stage": "SF",
+        "opp": "Aston Villa",
+        "won": false,
+        "for": 0,
+        "against": 2
+       }
+      ],
+      "opening": {
+       "opp": "Millwall",
+       "country": "England",
+       "league": "Championship",
+       "won": true,
+       "for": 5,
+       "against": 1,
+       "home": true
+      },
+      "year": 2029,
+      "club": "Brighton",
+      "league": 26
+     }
+    },
+    {
+     "label": "centre help on first open",
+     "value": {
+      "cupExample": true,
+      "cupRule": true
+     }
+    },
+    {
+     "label": "league games played before the cup night",
+     "value": 5
+    },
+    {
+     "label": "the button after league game 5",
+     "value": "▶ FA Cup: Opening cup tie"
+    },
+    {
+     "label": "cup night before the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup night after the reveal",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "true",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\n5-1\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Matchday 6",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows in the fixture list after the reveal",
+     "value": [
+      {
+       "id": "domestic:0",
+       "after": "5",
+       "text": "FA Cup · Opening cup tie | Millwall | 5-1",
+       "h": 58
+      },
+      {
+       "id": "domestic:1",
+       "after": "25",
+       "text": "FA Cup · Quarter-final | Portsmouth",
+       "h": 54
+      }
+     ]
+    },
+    {
+     "label": "bracket",
+     "value": {
+      "rounds": [
+       "Opening cup tie | Opening cup tie | Millwall | 5-1",
+       "↓ Quarter-final | Quarter-final | Portsmouth | 1-0",
+       "↓ Semi-final | Semi-final | Aston Villa | 0-2"
+      ],
+      "games": 3
+     }
+    },
+    {
+     "label": "bracket tie opened",
+     "value": "📺 FA Cup\n?\nBack to your career\n\nBrighton · 2029/30\n\nPremier League\nFA Cup\nCurrent squad\n‹ All games\nOpening cup tie\n\nBrighton vs Millwall\n\n5-1\n\nHome\n\nThrough\n\nSimplified simulated opening tie. Other early rounds were not recorded.\n\n‹ Previous game\n› Next game"
+    },
+    {
+     "label": "continue button",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "reopened: buttons",
+     "value": [
+      "?",
+      "Back to your career",
+      "Premier League",
+      "FA Cup",
+      "Current squad",
+      "▶ Matchday 6",
+      "⏭ Straight to the final table",
+      "↺ From the start",
+      "🗓 Fixtures"
+     ]
+    },
+    {
+     "label": "the button a returning player presses",
+     "value": "▶ Matchday 6"
+    },
+    {
+     "label": "after resume",
+     "value": {
+      "id": "domestic:0",
+      "revealed": "false",
+      "text": "FA Cup · Opening cup tie\n\nAfter league game 5. Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.\n\nBrighton vs Millwall\n\nHome\n\nThis is the result already kept in your career. Watching it does not replay the simulation.\n\nOpen FA Cup bracket",
+      "buttons": [
+       "?",
+       "Back to your career",
+       "Premier League",
+       "FA Cup",
+       "Current squad",
+       "Open FA Cup bracket",
+       "🗓 Fixtures",
+       "▶ Show saved cup result",
+       "⏭ Sim the rest",
+       "1x",
+       "3x",
+       "Results"
+      ]
+     }
+    },
+    {
+     "label": "cup rows at the review",
+     "value": [
+      "domestic:0",
+      "domestic:1",
+      "domestic:2"
+     ]
+    }
+   ],
+   "problems": [
+    {
+     "label": "kickoff: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      },
+      {
+       "text": "0",
+       "size": 11
+      }
+     ]
+    },
+    {
+     "label": "cup night: text under 12px",
+     "value": [
+      {
+       "text": "#",
+       "size": 10
+      },
+      {
+       "text": "Club",
+       "size": 10
+      },
+      {
+       "text": "W",
+       "size": 10
+      },
+      {
+       "text": "D",
+       "size": 10
+      },
+      {
+       "text": "L",
+       "size": 10
+      },
+      {
+       "text": "GF-GA",
+       "size": 10
+      },
+      {
+       "text": "GD",
+       "size": 10
+      },
+      {
+       "text": "Pts",
+       "size": 10
+      },
+      {
+       "text": "8",
+       "size": 11
+      },
+      {
+       "text": "-",
+       "size": 11
+      },
+      {
+       "text": "4",
+       "size": 11
+      },
+      {
+       "text": "9",
+       "size": 11
+      }
+     ]
+    }
+   ],
+   "errors": [],
+   "shots": [
+    "391-cup-win-summary-with-watch.jpg",
+    "391-cup-win-centre-help.jpg",
+    "391-cup-win-kickoff.jpg",
+    "391-cup-win-league-five-full-time.jpg",
+    "391-cup-win-cup-before.jpg",
+    "391-cup-win-cup-result.jpg",
+    "391-cup-win-fixtures-with-cup.jpg",
+    "391-cup-win-bracket.jpg",
+    "391-cup-win-bracket-tie.jpg",
+    "391-cup-win-back-on-league.jpg",
+    "391-cup-win-reopened.jpg",
+    "391-cup-win-resumed.jpg",
+    "391-cup-win-review.jpg"
+   ]
+  }
+ ],
+ "fonts": {
+  "status": "loaded",
+  "loaded": [
+   "Inter",
+   "Space Grotesk"
+  ],
+  "body": "Inter, system-ui, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Noto Color Emoji\", san"
+ }
+}
