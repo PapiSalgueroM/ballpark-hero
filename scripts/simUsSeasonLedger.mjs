@@ -88,14 +88,19 @@ await build({
    change the bundle's text and nothing on disk, and refuse to run when the
    line they change is not there. */
 const ENGINE_CONTROLS = {
-  nhltyped: { expect: ['E2'], from: 'const slate = seasonLength("nhl", c.year, c.team);', to: 'const slate = 82;' },
+  /* A typed length also empties E8: no season is of another length any more, so its cells compare nothing. */
+  nhltyped: { expect: ['E2', 'E8a', 'E8b', 'E8c'], from: 'const slate = seasonLength("nhl", c.year, c.team);', to: 'const slate = 82;' },
   /* The average of an October printed from the draw again, not from his hits over his at bats. */
   mlbavg: { expect: ['E7'], from: 'const shown = hits / ab;', to: 'const shown = drawn;' },
-  mlbtyped: { expect: ['E6'], from: 'const slate = seasonLength("mlb", c.year, c.team);', to: 'const slate = 162;' },
+  mlbtyped: { expect: ['E6', 'E8a', 'E8b', 'E8c'], from: 'const slate = seasonLength("mlb", c.year, c.team);', to: 'const slate = 162;' },
   /* The engine's old law for the games of an October, for every year. */
   mlbrounds: { expect: ['E4'], from: 'const poG = playoffRunGames("mlb", c.year, depth, rng);', to: 'const poG = playoffGames(depth, rng, "mlb");' },
   /* One ladder for every year again: a Wild Card series in 2004 and in 2012. */
   mlbladder: { expect: ['E4'], from: 'result = stages[postseasonRung("mlb", c.year, stage)];', to: 'result = ladder[stage];' },
+  /* The fix pass, E4 before 2022: the review's mutations fold and partial, and the lost final back on the law for one round fewer. */
+  mlbfold: { expect: ['E4'], from: 'if (known.length === 0) return playoffGames(Math.max(0, stage - skip), draw, sport);', to: 'if (known.length === 0) return playoffGames(stage, draw, sport);' },
+  mlbpartial: { expect: ['E4'], from: 'const rest = playoffGames(Math.max(0, stage - skip - known.length), draw, sport);', to: 'const rest = playoffGames(Math.max(0, stage - skip), draw, sport);' },
+  mlblostfinal: { expect: ['E4'], from: 'if (known.length < played.length && stage === ENGINE_ROUNDS - 1) return playoffGames(stage, draw, sport);', to: '' },
   /* The fix pass, E8. The award score read off the saved (short) line again, not off the full draw. */
   nhlawards: { expect: ['E8a'], from: 'const statScore = nhlSeasonScore(c.pos, full);', to: 'const statScore = nhlSeasonScore(c.pos, line);' },
   mlbawards: { expect: ['E8a'], from: 'const statScore = mlbSeasonScore(c.pos, full);', to: 'const statScore = mlbSeasonScore(c.pos, line);' },
@@ -709,9 +714,17 @@ const ENGINE_OWN = 82;
        inside the rounds it went through, with a swept Wild Card Series among
        them (measured: 43.3 to 44.2 percent of Wild Card exits are two games,
        over three years of 6,000 seasons each and about 1,900 exits a year;
-       the law makes it 42.4; the band is 34 to 51). Controls: mlbrounds,
-       mlbladder. */
+       the law makes it 42.4; the band is 34 to 51). Before 2022 the later
+       rounds are not in the ledger, so every run is held to the engine's own
+       law for the rounds that year had (OWN_LAW), on top of the one game or
+       the best of three of 2020 the ledger does hold, and a lost World Series
+       keeps the 13 to 19 the engine always gave it (measured over 6,000
+       seasons a year: 272 to 293 lost World Series a year, every one 13 to
+       19; 525 to 583 lost Championship Series). Controls: mlbrounds,
+       mlbladder, mlbfold, mlbpartial, mlblostfinal. */
 const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championship Series', 'World Series'], series: [[2, 3], [3, 5], [4, 7], [4, 7]], from: 2022, game: [1, 1], series2020: [2, 3] };
+/* What the engine's own law, round(rounds * 4 * (0.82 to 1.18)), can print for one to five rounds' worth. */
+const OWN_LAW = { 1: [3, 5], 2: [7, 9], 3: [10, 14], 4: [13, 19], 5: [16, 22] };
 {
   const S = game.shape; const M = game.mlbEngine;
   const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
@@ -760,6 +773,19 @@ const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championsh
       const swept = 100 * (by.get(RESULTS.wcs) ?? []).filter(g => g === 2).length / Math.max(1, n('wcs'));
       if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE mlb ${year}: ${swept.toFixed(1)} percent of ${n('wcs')} Wild Card exits are two games; Division Series exits by games 5 to 8: ${[5, 6, 7, 8].map(g => (by.get(RESULTS.ds) ?? []).filter(x => x === g).length).join(' ')}`);
       check('E4', swept >= 34 && swept <= 51, `${swept.toFixed(1)} percent of the Wild Card exits of ${year} are two games; the law makes it 42.4 (band 34 to 51)`);
+    } else {
+      /* Before 2022 (the fix pass). The rounds after the first are not in the ledger, so a run is held
+         to the engine's own law for the rounds that year really had, on top of the wild card round the
+         ledger does hold (one game, or the best of three of 2020). A lost final keeps the count the
+         engine always gave that result, 13 to 19: the law for three rounds starts at 10, and a count
+         of 10 or 11 under "Lost the World Series" was the review's major 1. */
+      const first = w[2] === null ? null : w[2] === 'Wild Card Game' ? OWN_OCTOBER.game : OWN_OCTOBER.series2020;
+      const add = r => (first ? [r[0] + first[0], r[1] + first[1]] : r);
+      const want = { ds: add(OWN_LAW[1]), cs: add(OWN_LAW[2]), ws: OWN_LAW[4], won: add(OWN_LAW[4]) };
+      if (first) want[w[2] === 'Wild Card Game' ? 'wcg' : 'wcs'] = first;
+      const bad = Object.entries(want).reduce((sum, [k, r]) => sum + outside(by.get(RESULTS[k]), r[0], r[1]), 0);
+      if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE mlb ${year}: ${Object.keys(want).map(k => `${k} ${n(k)} runs, ${Math.min(...(by.get(RESULTS[k]) ?? [0]))} to ${Math.max(...(by.get(RESULTS[k]) ?? [0]))} games`).join('; ')}`);
+      check('E4', n('cs') > 100 && n('ws') > 50 && bad === 0, `${bad} runs of ${year} hold a count of games outside the engine's law for the rounds that year had (${Object.entries(want).map(([k, r]) => `${k} ${r[0]} to ${r[1]}`).join(', ')}; ${n('cs')} lost Championship Series and ${n('ws')} lost World Series read)`);
     }
   }
   const stripC = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -775,8 +801,8 @@ const OWN_OCTOBER = { names: ['Wild Card Series', 'Division Series', 'Championsh
        healthy hitter misses seven at most, about an eighth of them play the
        whole schedule in a full season and a quarter in the short one
        (measured 10.1 to 14.2 percent and 25.0 percent over ten year and club
-       cells of 2,400 seasons, about 1,520 healthy hitters each; the band is
-       8 to 32), a starter and a
+       cells of 2,400 seasons, about 1,520 healthy hitters each; the bands
+       are 8 to 17 and 19 to 31), a starter and a
        reliever fit a short season, and the saved line carries the length
        exactly when it is not the engine's own. Control: mlbtyped. */
 const MLB_OWN = 162;
@@ -822,7 +848,12 @@ const MLB_OWN = 162;
     if (process.env.US_LEDGER_MEASURE) console.log(`MEASURE mlb ${year} ${team} want ${want}: whole ${share.toFixed(1)} percent of ${healthy} healthy hitter seasons`);
     check('E6', over === 0 && far === 0, `${over} seasons of ${SEASONS} hold more games than the ${want} of the ${year} season of ${team}, and ${far} healthy hitters missed more than seven`);
     check('E6', arms === 0, `${arms} pitcher seasons of ${year} (${team}) hold more starts or appearances than a ${want} game season can`);
-    check('E6', share >= 8 && share <= 32, `${share.toFixed(1)} percent of healthy hitter seasons are the whole ${want} game schedule of ${year} (${team}); band 8 to 32`);
+    /* Two expectations, two bands (the review's minor 9): the engine's draw is eight equal counts, so an
+       eighth of healthy hitters play a whole full season (measured 10.1 to 14.2 percent over eight cells
+       of about 1,520; band 8 to 17), and a 58 or 60 game season folds two of the eight onto its last
+       game, so a quarter do (measured 25.0 twice; band 19 to 31). */
+    const band = want < 100 ? [19, 31] : [8, 17];
+    check('E6', share >= band[0] && share <= band[1], `${share.toFixed(1)} percent of healthy hitter seasons are the whole ${want} game schedule of ${year} (${team}); band ${band[0]} to ${band[1]}`);
     check('E6', slateBad === 0, `${slateBad} of ${SEASONS} saved lines of ${year} (${team}) carry the wrong season length, or carry one where the engine's own was played`);
   }
   const stripC = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -1007,7 +1038,7 @@ const MLB_OWN = 162;
   const nhlWords = (nhlSrc.match(/const stages = \[([^\]]*)\]/) ?? [])[1] ?? '';
   const say = (sport, words, rows) => rows.map(r => `stage ${r.stage} saves ${r.counts[0]} to ${r.counts[r.counts.length - 1]} games, the real rounds hold ${r.lo} to ${r.hi}: ${r.bad} percent cannot fit`).join('; ');
   const mlbAsks = mlbSrc.includes("playoffRunGames('mlb', c.year, depth, rng)");
-  if (mlbAsks) notes.push(`MLB engine: the games of an October are held to the ledger's rounds (Round 1226, src/lib/usSeasonShape.ts): from ${mlb.MLB_PLAYOFF_FORMAT.from} every run fits its rounds, the wild card of ${yearsOf('Wild Card Game')} is one game, and no Wild Card result is written in ${yearsOf(null)}. What it still plays by its own law, because the ledger does not hold the length: every round after the first before ${mlb.MLB_PLAYOFF_FORMAT.from}${mlb.MLB_FIRST_ROUND.some(w => w.wildCard && w.series === null) ? `, and the Wild Card Series of ${mlb.MLB_FIRST_ROUND.filter(w => w.wildCard && w.series === null).map(w => w.from).join(', ')}` : ''} (MLB_THIN). It models no first round bye (MLB_PLAYOFF_FORMAT.byesPerLeague): a career's club always plays the first round.`);
+  if (mlbAsks) notes.push(`MLB engine: the games of an October are held to the ledger's rounds (Round 1226, src/lib/usSeasonShape.ts): from ${mlb.MLB_PLAYOFF_FORMAT.from} every run fits its rounds, the wild card of ${yearsOf('Wild Card Game')} is one game, and no Wild Card result is written in ${yearsOf(null)}. What it still plays by its own law, because the ledger does not hold the length: every round after the first before ${mlb.MLB_PLAYOFF_FORMAT.from}${mlb.MLB_FIRST_ROUND.some(w => w.wildCard && w.series === null) ? `, and the Wild Card Series of ${mlb.MLB_FIRST_ROUND.filter(w => w.wildCard && w.series === null).map(w => w.from).join(', ')}` : ''} (MLB_THIN); a lost World Series there keeps the 13 to 19 games the engine always gave it. It models no first round bye (MLB_PLAYOFF_FORMAT.byesPerLeague): a career's club always plays the first round.`);
   else notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
   notes.push(`NHL playoff games (the same law against four best of sevens): ${say('nhl', nhlWords, fits('nhl', nhl.NHL_PLAYOFF_FORMAT.series))}. Stages: ${nhlWords}.`);
   const npf = nhl.NHL_PLAYOFF_FORMAT;

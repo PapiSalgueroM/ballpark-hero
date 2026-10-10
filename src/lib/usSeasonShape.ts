@@ -133,7 +133,12 @@ export function postseasonRung(sport: ShapeSport, year: number, stage: number): 
  *  - No round played is in the ledger: the engine's law over the rounds played.
  *  - Every round played is in the ledger: the engine's count stands when those
  *    rounds can hold it, and is drawn again inside them when they cannot.
- *  - Some are: the ledger's rounds inside their own lengths, the rest by the law. */
+ *  - Some are: the ledger's rounds inside their own lengths, the rest by the law.
+ *  - A LOST FINAL with a round the ledger does not hold keeps the count this
+ *    engine always gave that result (13 to 19 for baseball). The law over one
+ *    round fewer starts at 10, and a run through every round of a year cannot
+ *    be trusted to a law that does not know how long those rounds were: a
+ *    count the engine already printed for that result stays. */
 export function playoffRunGames(sport: ShapeSport, year: number, stage: number, rng: () => number): number {
   const rounds = postseasonRounds(sport, year);
   const skip = ENGINE_ROUNDS - rounds.length;
@@ -142,6 +147,7 @@ export function playoffRunGames(sport: ShapeSport, year: number, stage: number, 
   const known = played.filter(r => r.series !== null);
   let u = 0;
   const draw = () => (u = rng());
+  if (known.length < played.length && stage === ENGINE_ROUNDS - 1) return playoffGames(stage, draw, sport);
   if (known.length === 0) return playoffGames(Math.max(0, stage - skip), draw, sport);
   const lo = known.reduce((t, r) => t + r.series![0], 0);
   const hi = known.reduce((t, r) => t + r.series![1], 0);
