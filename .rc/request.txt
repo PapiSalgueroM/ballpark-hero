@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+nottall-1: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n1" node scripts/playDraftNight.mjs 2>&1 | grep "measured\|FAIL|ontrol\|control"; exit ${PIPESTATUS[0]}
+nottall-2: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n2" node scripts/playDraftNight.mjs 2>&1 | grep "measured\|FAIL|ontrol\|control"; exit ${PIPESTATUS[0]}
+nottall-3: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n3" node scripts/playDraftNight.mjs 2>&1 | grep "measured\|FAIL|ontrol\|control"; exit ${PIPESTATUS[0]}
+nottall-4: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n4" node scripts/playDraftNight.mjs 2>&1 | grep "measured\|FAIL|ontrol\|control"; exit ${PIPESTATUS[0]}
+nottall-5: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n5" node scripts/playDraftNight.mjs 2>&1 | grep "measured\|FAIL|ontrol\|control"; exit ${PIPESTATUS[0]}
+nottall-6: PLAY_DRAFT_NIGHT_CONTROL=nottall RC_OUT="$RC_OUT/n6" node scripts/playDraftNight.mjs 2>&1 | grep "measured\|FAIL|ontrol\|control"; exit ${PIPESTATUS[0]}
+ending-1: PLAY_DRAFT_NIGHT_CONTROL=ending RC_OUT="$RC_OUT/e1" node scripts/playDraftNight.mjs 2>&1 | grep "measured\|FAIL|ontrol\|control"; exit ${PIPESTATUS[0]}
+ending-2: PLAY_DRAFT_NIGHT_CONTROL=ending RC_OUT="$RC_OUT/e2" node scripts/playDraftNight.mjs 2>&1 | grep "measured\|FAIL|ontrol\|control"; exit ${PIPESTATUS[0]}
+ending-3: PLAY_DRAFT_NIGHT_CONTROL=ending RC_OUT="$RC_OUT/e3" node scripts/playDraftNight.mjs 2>&1 | grep "measured\|FAIL|ontrol\|control"; exit ${PIPESTATUS[0]}
