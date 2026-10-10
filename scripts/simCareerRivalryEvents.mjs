@@ -70,7 +70,12 @@
  *              says nothing of it: section 9 must name it.
  *   coin306    (Round 1112) NBA beat 306 decides who made the All-Star
  *              roster on a coin again instead of the two seasons: section
- *              7's All-Star check must name it.
+ *              7's All-Star check must name it. Since Round 1149 the swap
+ *              is in the shared builder (factBeat), so every sport whose
+ *              beat is built on it must name it too.
+ *   oldcard    (Round 1149) the tap stops reading the card it was shown, so
+ *              a card dealt on the old coin is paid out on today's facts:
+ *              the fact beat check's old card half must name it.
  *
  *   Each control asserts the text it rewrites is present first, so a
  *   control that rewrites a string the file does not contain cannot pass
@@ -88,7 +93,7 @@ import { US_CAREER_BOARD, allWrapperProblems } from './lib/usCareerFiles.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RIVALRY_CONTROL || '';
-const CONTROLS = ['deaf', 'collision', 'beatlie', 'beatheat', 'coin306'];
+const CONTROLS = ['deaf', 'collision', 'beatlie', 'beatheat', 'coin306', 'oldcard'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`RIVALRY_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -151,23 +156,89 @@ function beatWords(label, defs, gates) {
         const lines = [];
         def.apply(s, jclone(r1), () => roll, l => lines.push(l));
         beatApplies++; applies++;
-        const read = lines.length ? lines.join(' ') : String(def.consequence);
+        /* Round 1149: a fact beat's promise is read off the two facts, like its words. */
+        const promise = typeof def.consequence === 'function' ? def.consequence(p1, r1) : def.consequence;
+        const read = lines.length ? lines.join(' ') : String(promise);
         const moved = {
           morale: s.morale - before.morale, fanbase: s.fanbase - before.fanbase, health: s.health - before.health,
           rating: s.ovr - before.ovr, netWorth: Math.round(((s.netWorth ?? 0) - (before.netWorth ?? 0)) * 100) / 100,
         };
         if (beatKey(beatNumbers(read)) !== beatKey(moved)) fail(`${label} beat ${id}: the player reads "${read}" and the save moved [${beatKey(moved)}]`);
         const heat = (s.rivalryIntensity ?? 0) - (before.rivalryIntensity ?? 0);
-        const heatWord = /intensif|heats up/i.test(def.consequence) ? 1 : /soften/i.test(def.consequence) ? -1 : 0;
-        if (Math.sign(heat) !== heatWord) fail(`${label} beat ${id}: "${def.consequence}" and the rivalry moved ${heat}`);
+        const heatWord = /intensif|heats up/i.test(promise) ? 1 : /soften/i.test(promise) ? -1 : 0;
+        if (Math.sign(heat) !== heatWord) fail(`${label} beat ${id}: "${promise}" and the rivalry moved ${heat}`);
         const others = o => { const x = { ...o }; for (const k of ['morale', 'fanbase', 'health', 'ovr', 'netWorth', 'rivalryIntensity']) delete x[k]; return JSON.stringify(x); };
         if (others(s) !== others(before)) fail(`${label} beat ${id}: moved something its words do not name`);
         ends.push(beatKey(moved));
       }
-      if (/50\/50/.test(def.consequence) && ends[1] === ends[2]) fail(`${label} beat ${id}: sold as 50/50 and rolls of 0.4999 and 0.5001 land the same end`);
+      if (typeof def.consequence === 'string' && /50\/50/.test(def.consequence) && ends[1] === ends[2]) fail(`${label} beat ${id}: sold as 50/50 and rolls of 0.4999 and 0.5001 land the same end`);
     }
     if (applies < 4) fail(`${label} beat ${id}: only ${applies} applies made`);
   }
+}
+
+/* ─── Round 1149: a fact beat, checked the same way in every sport ──────────
+   factBeat (careerRivalryEvents.ts) builds a beat from cards, each supported
+   by facts already on the save. `never` lists fixtures the beat must not be
+   dealt on; `deal` lists one fixture a card with what it must read (says),
+   must not claim (silent, for a sport that knows nothing of the rival's
+   roster), promise (reads), move, and push into the feed (told). Each dealt
+   card is applied at four rolls through the real applyRivalryEvent: nothing
+   may be drawn, the move must be exactly the promise, nothing unnamed may
+   move. Then the OLD CARD: the same facts with the card a save from before
+   would be sitting on (its promise reads "50/50 outcome"), which must move
+   nothing, draw nothing and push only its title. And the promises of one
+   beat's cards must all differ, because the promise is how the tap finds
+   the card it was shown. Deterministic. Controls: coin306 (the tap picks a
+   card by a draw) and oldcard (the tap stops reading the card it was shown). */
+const OLD_COIN_PROMISE = '50/50 outcome';
+let factCardsApplied = 0;
+function factBeatCheck(label, defs, id, { never = [], deal }) {
+  const def = defs.find(d => d.id === id);
+  if (!def) { fail(`${label} beat ${id} is missing from its table`); return 0; }
+  for (const n of never) if (def.when(n.p, n.r)) fail(`${label} beat ${id} is dealt ${n.name}`);
+  const zero = { morale: 0, fanbase: 0, health: 0, rating: 0, netWorth: 0 };
+  const movedOf = (s, p) => ({
+    morale: s.morale - p.morale, fanbase: s.fanbase - p.fanbase, health: (s.health ?? 0) - (p.health ?? 0),
+    rating: s.ovr - p.ovr, netWorth: Math.round(((s.netWorth ?? 0) - (p.netWorth ?? 0)) * 100) / 100,
+  });
+  const others = o => { const x = { ...o }; for (const k of ['morale', 'fanbase', 'health', 'ovr', 'netWorth', 'rivalryIntensity']) delete x[k]; return JSON.stringify(x); };
+  const promises = new Set();
+  let dealt = 0;
+  for (const k of deal) {
+    const built = rivalryMod.rivalryEventPool(k.p, k.r, defs).find(e => e.id === id);
+    if (!built) { fail(`${label} beat ${id} is not dealt ${k.name}`); continue; }
+    dealt += 1;
+    promises.add(built.consequence);
+    if (!k.says.test(built.description)) fail(`${label} beat ${id} (${k.name}) reads "${built.description}"`);
+    if (k.silent && k.silent.test(built.description)) fail(`${label} beat ${id} (${k.name}) claims what the save cannot know: "${built.description}"`);
+    if (built.consequence !== k.reads) fail(`${label} beat ${id} (${k.name}) promises "${built.consequence}", expected "${k.reads}"`);
+    for (const roll of [0.25, 0.4999, 0.5001, 0.75]) {
+      const s = jclone(k.p); const lines = []; let draws = 0;
+      rivalryMod.applyRivalryEvent(s, jclone(k.r), built, defs, () => { draws += 1; return roll; }, l => lines.push(l));
+      factCardsApplied += 1;
+      const moved = movedOf(s, k.p);
+      if (draws !== 0) fail(`${label} beat ${id} (${k.name}) drew ${draws} times: it has no coin to flip`);
+      if (beatKey(moved) !== beatKey({ ...zero, ...k.move })) fail(`${label} beat ${id} (${k.name}, roll ${roll}) promised "${built.consequence}" and moved [${beatKey(moved)}]`);
+      if (beatKey(beatNumbers(built.consequence)) !== beatKey(moved)) fail(`${label} beat ${id}: the consequence "${built.consequence}" does not read as what moved`);
+      const heat = (s.rivalryIntensity ?? 0) - (k.p.rivalryIntensity ?? 0);
+      const heatWord = /intensif|heats up/i.test(built.consequence) ? 1 : /soften/i.test(built.consequence) ? -1 : 0;
+      if (Math.sign(heat) !== heatWord) fail(`${label} beat ${id} (${k.name}): "${built.consequence}" and the rivalry moved ${heat}`);
+      if (!lines.some(l => k.told.test(l))) fail(`${label} beat ${id} (${k.name}) pushed "${lines.join(' | ')}"`);
+      if (k.silent && lines.some(l => k.silent.test(l))) fail(`${label} beat ${id} (${k.name}) pushed a claim the save cannot know: "${lines.join(' | ')}"`);
+      if (others(s) !== others(k.p)) fail(`${label} beat ${id} moved something its words do not name`);
+    }
+    {
+      const s = jclone(k.p); const lines = []; let draws = 0;
+      const oldCard = { ...built, title: 'Ballot Squeeze', description: 'a card dealt before the beat left its coin', consequence: OLD_COIN_PROMISE };
+      rivalryMod.applyRivalryEvent(s, jclone(k.r), oldCard, defs, () => { draws += 1; return 0.25; }, l => lines.push(l));
+      if (draws !== 0) fail(`${label} beat ${id} (${k.name}): resolving a card dealt on the old coin drew ${draws} times`);
+      if (JSON.stringify(s) !== JSON.stringify(k.p)) fail(`${label} beat ${id} (${k.name}): a card that promised "${OLD_COIN_PROMISE}" moved the save (${beatKey(movedOf(s, k.p))}), paid out on today's facts`);
+      if (lines.length !== 1 || !lines[0].includes(oldCard.title)) fail(`${label} beat ${id} (${k.name}): the old card pushed "${lines.join(' | ')}", expected its title and nothing else`);
+    }
+  }
+  if (promises.size !== dealt) fail(`${label} beat ${id}: ${dealt} cards dealt and ${promises.size} different promises, and the promise is how the tap finds its card`);
+  return dealt;
 }
 
 const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'careerrivalry-'));
@@ -227,10 +298,17 @@ const BEAT_CONTROLS = {
     from: '      s.morale = clamp(s.morale - 2, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
     to: '      s.morale = clamp(s.morale - 5, 0, 100);\n      s.rivalryIntensity = clamp((s.rivalryIntensity ?? 0) + 6, 0, 100);',
   },
-  coin306: { /* NBA 306 back on a coin: the card's own facts no longer decide what it does */
-    file: 'src/lib/nbaCareerRivalryEvents.ts',
-    from: '    apply: (s, r, _rng, pushLine) => {\n      const f = nbaAllStarFacts(s, r);\n      if (!f) return;',
-    to: '    apply: (s, r, _rng, pushLine) => {\n      const f = _rng() < 0.5 ? { mine: true, his: false } : { mine: false, his: true };',
+  coin306: { /* a fact beat back on a coin: the tap picks a card by a draw, not the card the player was shown.
+                Round 1149 moved the beat onto the shared builder, so this one swap breaks every sport on it. */
+    file: 'src/lib/careerRivalryEvents.ts',
+    from: '      const card = spec.cards.find(k => (!event || k.consequence === event.consequence) && k.when(s, r));',
+    to: '      const card = spec.cards[Math.floor(_rng() * spec.cards.length)];',
+  },
+  oldcard: { /* (Round 1149) the tap no longer looks at the card it was shown: a card dealt before the beat
+                moved off its coin ("50/50 outcome") is then paid out as whatever today's facts say */
+    file: 'src/lib/careerRivalryEvents.ts',
+    from: '      const card = spec.cards.find(k => (!event || k.consequence === event.consequence) && k.when(s, r));',
+    to: '      const card = spec.cards.find(k => k.when(s, r));',
   },
   beatheat: { /* NHL 319 heats the rivalry and its line says nothing of it */
     file: 'src/lib/nhlCareerRivalryEvents.ts',
@@ -254,7 +332,7 @@ const redirectPlugin = {
   name: 'rivalry-control',
   setup(b) {
     b.onResolve({ filter: /careerRivalryEvents(\.ts)?$/ }, () => (redirects.careerRivalryEvents ? { path: redirects.careerRivalryEvents } : undefined));
-    b.onLoad({ filter: /(nfl|nhl|nba)CareerRivalryEvents\.ts$/ }, args => {
+    b.onLoad({ filter: /[cC]areerRivalryEvents\.ts$/ }, args => {
       if (!beatPatch || path.resolve(args.path) !== path.resolve(beatPatch.path)) return undefined;
       return { contents: beatPatch.contents, loader: 'ts', resolveDir: path.dirname(args.path) };
     });
@@ -319,6 +397,9 @@ console.log('1) Source: careerRivalryEvents.ts is the only home for the rule');
     { home: 'src/lib/careerRivalryEvents.ts', what: 'the season roll, no repeat', re: /\.filter\(e => e\.id !== lastId\)/ },
     { home: 'src/lib/careerRivalryEvents.ts', what: 'the forced retirement lookup', re: /export function forcedRetirementEvent\b/ },
     { home: 'src/lib/careerRivalryEvents.ts', what: 'the apply-and-log function', re: /export function applyRivalryEvent\b/ },
+    /* Round 1149: the fact beat builder and the season view the ticks hand the roll. */
+    { home: 'src/lib/careerRivalryEvents.ts', what: 'the fact beat builder', re: /export function factBeat\b/ },
+    { home: 'src/lib/careerRivalryEvents.ts', what: 'the season view a tick rolls on', re: /seasons: \[\.\.\.c\.seasons, season\]/ },
   ];
   for (const rule of RULES) {
     if (!rule.re.test(code.get(rule.home) ?? '')) fail(`${rule.what} is not in ${rule.home}, so the fingerprint is stale and this check proves nothing`);
@@ -906,47 +987,24 @@ console.log('7) The NBA binding: every beat reachable and correct, and the tick 
      All-Stars for real, so the card could contradict the season card of the same year. Every pair of facts,
      as a card and as an apply: dealt only when one of you made it and the two facts are one season's, the
      words say those facts, the consequence is exactly what moves, and nothing is drawn. Deterministic: 3
-     cases that must not be dealt and 3 that must, each applied at 4 rolls. */
+     cases that must not be dealt and 3 that must, each applied at 4 rolls. Round 1149: the beat is built on
+     the shared factBeat now, so the check is the shared one (factBeatCheck above), with the old card half. */
   {
-    const def306 = nbaRivalry.NBA_RIVALRY_EVENTS.find(d => d.id === 306);
     const season = (allStar, year = 2030) => ({ year, awards: allStar ? ['All-Star'] : [], ...(allStar ? { allStar: 'reserve' } : {}) });
-    const cases = [
-      { mine: true, his: false, says: /You are on one and Rival NBA is not/, reads: 'Morale +5', move: { morale: 5, fanbase: 0 } },
-      { mine: false, his: true, says: /Rival NBA is on one and you are not/, reads: 'Morale -5', move: { morale: -5, fanbase: 0 } },
-      { mine: true, his: true, says: /you and Rival NBA are both on them/, reads: 'Fanbase +3', move: { morale: 0, fanbase: 3 } },
-    ];
-    let dealt = 0;
-    if (!def306) fail('NBA beat 306 is missing from its table');
-    else {
-      const neither = [nbaFixture({ ovr: 90, seasons: [season(false)] }), rivalFixture({ ovr: 90, lastYear: 2030, lastAllStar: false })];
-      if (def306.when(...neither)) fail('NBA beat 306 is dealt in a season neither of you made the All-Star roster');
-      const otherYear = [nbaFixture({ seasons: [season(true, 2031)] }), rivalFixture({ lastYear: 2030, lastAllStar: true })];
-      if (def306.when(...otherYear)) fail('NBA beat 306 is dealt on two different seasons (mine of 2031, his of 2030)');
-      const oldSave = [nbaFixture({ ovr: 90, seasons: [season(false)] }), rivalFixture({ ovr: 90 })];
-      if (def306.when(...oldSave)) fail('NBA beat 306 is dealt on the two ratings again (both at 90, nobody on the roster, a rival from before Round 1112)');
-      for (const k of cases) {
-        const p = nbaFixture({ seasons: [season(k.mine)] });
-        const r = rivalFixture({ lastYear: 2030, lastAllStar: k.his });
-        const built = rivalryMod.rivalryEventPool(p, r, nbaRivalry.NBA_RIVALRY_EVENTS).find(e => e.id === 306);
-        if (!built) { fail(`NBA beat 306 is not dealt when mine=${k.mine} his=${k.his}`); continue; }
-        dealt += 1;
-        if (!k.says.test(built.description)) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}) reads "${built.description}"`);
-        if (built.consequence !== k.reads) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}) promises "${built.consequence}", expected "${k.reads}"`);
-        for (const roll of [0.25, 0.4999, 0.5001, 0.75]) {
-          const s = jclone(p); const lines = []; let draws = 0;
-          rivalryMod.applyRivalryEvent(s, jclone(r), built, nbaRivalry.NBA_RIVALRY_EVENTS, () => { draws += 1; return roll; }, l => lines.push(l));
-          const moved = { morale: s.morale - p.morale, fanbase: s.fanbase - p.fanbase };
-          if (draws !== 0) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}) drew ${draws} times: it has no coin to flip`);
-          if (moved.morale !== k.move.morale || moved.fanbase !== k.move.fanbase) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}, roll ${roll}) promised "${built.consequence}" and moved morale ${moved.morale}, fanbase ${moved.fanbase}`);
-          if (beatKey(beatNumbers(built.consequence)) !== beatKey({ morale: moved.morale, fanbase: moved.fanbase, health: 0, rating: 0, netWorth: 0 })) fail(`NBA beat 306: the consequence "${built.consequence}" does not read as what moved`);
-          const told = k.mine && k.his ? /both made the All-Star roster/ : k.mine ? /You made the All-Star roster and Rival NBA did not/ : /Rival NBA made the All-Star roster and you did not/;
-          if (!lines.some(l => told.test(l))) fail(`NBA beat 306 (mine=${k.mine} his=${k.his}) pushed "${lines.join(' | ')}"`);
-          const others = o => { const x = { ...o }; delete x.morale; delete x.fanbase; return JSON.stringify(x); };
-          if (others(s) !== others(p)) fail('NBA beat 306 moved something its words do not name');
-        }
-      }
-    }
-    console.log(`   the All-Star beat: ${dealt} of 3 fact pairs dealt and applied at 4 rolls each, never on a coin, never when neither made it`);
+    const pair = (mine, his) => ({ p: nbaFixture({ seasons: [season(mine)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: his }) });
+    const dealt = factBeatCheck('NBA', nbaRivalry.NBA_RIVALRY_EVENTS, 306, {
+      never: [
+        { name: 'in a season neither of you made the All-Star roster', p: nbaFixture({ ovr: 90, seasons: [season(false)] }), r: rivalFixture({ ovr: 90, lastYear: 2030, lastAllStar: false }) },
+        { name: 'on two different seasons (mine of 2031, his of 2030)', p: nbaFixture({ seasons: [season(true, 2031)] }), r: rivalFixture({ lastYear: 2030, lastAllStar: true }) },
+        { name: 'on the two ratings again (both at 90, nobody on the roster, a rival from before Round 1112)', p: nbaFixture({ ovr: 90, seasons: [season(false)] }), r: rivalFixture({ ovr: 90 }) },
+      ],
+      deal: [
+        { name: 'mine=true his=false', ...pair(true, false), says: /You are on one and Rival NBA is not/, reads: 'Morale +5', move: { morale: 5 }, told: /You made the All-Star roster and Rival NBA did not/ },
+        { name: 'mine=false his=true', ...pair(false, true), says: /Rival NBA is on one and you are not/, reads: 'Morale -5', move: { morale: -5 }, told: /Rival NBA made the All-Star roster and you did not/ },
+        { name: 'mine=true his=true', ...pair(true, true), says: /you and Rival NBA are both on them/, reads: 'Fanbase +3', move: { fanbase: 3 }, told: /both made the All-Star roster/ },
+      ],
+    });
+    console.log(`   the All-Star beat: ${dealt} of 3 fact pairs dealt and applied at 4 rolls each, never on a coin, never when neither made it, and a card from the old coin resolves with no effect`);
     if (dealt < 3) fail(`only ${dealt} of 3 All-Star fact pairs were dealt`);
   }
   let reachable = 0, correct = 0;

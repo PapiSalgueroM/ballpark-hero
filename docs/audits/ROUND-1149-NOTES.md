@@ -8,8 +8,8 @@ step, so a later session can finish from it. What is not listed under DONE is no
 
 | Step | What | State |
 |---|---|---|
-| a | The Trophy Case tile row for every award, NFL, MLB and NHL, with its test and harness section | BUILT, see below |
-| b | The shared lift: one fact beat builder in `careerRivalryEvents.ts`, the NBA's beat 306 moved onto it | not started |
+| a | The Trophy Case tile row for every award, NFL, MLB and NHL, with its test and harness section | DONE, green on runners at 8da17c5f |
+| b | The shared lift: one fact beat builder in `careerRivalryEvents.ts`, the NBA's beat 306 moved onto it | BUILT, see below |
 | c | MLB beat 206 read off the season, no coin | not started |
 | d | NHL beat 306 read off the season, no coin | not started |
 | e | NFL beats 206 and 219, no coin | not started |
@@ -39,9 +39,41 @@ K, which now runs on all four fleets. New controls, each red in K and nowhere el
 `norownhl`, `twicecounted` (MLB's Cy Young counted by two rows). The NBA's `norow` control was re-anchored on the
 shared call.
 
+## Step b, the shared lift (built; nothing a player sees moves)
+
+`src/lib/careerRivalryEvents.ts` gained three things, and the NBA binding uses them:
+
+- `factBeat({ id, emoji, title, cards })` builds a beat from cards. A card has `when` (the facts support it),
+  `description`, `consequence` (what it promises), `move` (what the tap does) and `line` (what it logs). The beat
+  is dealt when a card is supported. The tap finds its card BY THE PROMISE PRINTED ON THE PENDING CARD and only
+  then moves anything, so nothing is drawn, the tap does what the card says, and a save sitting on a card dealt
+  on the old coin (its promise reads "50/50 outcome") resolves with no effect: Continue only logs its title.
+  For that, `applyRivalryEvent` now hands `apply` the pending card as a fifth argument (soccer and every other
+  beat ignore it).
+- `withSeasonPlayed(c, season)` is the save as the roll must see it (the season is pushed after the roll). It was
+  one line inside the NBA tick.
+- `lastSeasonHolds(p, award)` reads an award off the last season, for the three sports whose fact is an award word.
+
+The NBA's beat 306 is now three cards on `factBeat`, with not a word or a number changed.
+
+Harness: `scripts/simCareerRivalryEvents.mjs` has one shared `factBeatCheck` (each card at four rolls, nothing
+drawn, the move is the promise, the old card moves nothing, every promise of a beat is different). Control
+`coin306` now swaps the shared builder (the tap picks a card by a draw) and a new control `oldcard` makes the tap
+ignore the card it was shown. `scripts/simNbaAwardsSense.mjs` got section Q, this round's before and after proof
+(`SENSE_PROVE_1149=808dbbdc`): all four sports' players, rivals and season notes byte equal, a beat dealt in the
+same seasons, the NBA's cards word for word the same, and each sport the round has moved (`Q_MOVED`, all false
+at step b) differing in its cards. Control `tickdraws` (one more draw in the MLB tick) turns Q red.
+`oldgate306` was re-anchored on the "only him" card.
+
+Local, shrunk (seed 1): Q all ok, 2,230 NBA beats and 4,614 NFL, 5,624 MLB, 6,229 NHL beats compared, 0 differ.
+Controls fired locally: coin306 (45 failures), oldcard (6), oldgate306 (92 of 157 cards dealt when neither made
+it), tickdraws (Q red, MLB).
+
 ## Decisions taken (the lead may overrule)
 
-Recorded as they are made. None yet beyond the brief.
+1. The tap finds its card by the promise printed on the pending card (not by a new save field and not by a new
+   beat id). That gives the old card rule with no change to any save, so a recording moves only where a card
+   really changed.
 
 ## Owed to the other lane (guide sentences that become false)
 

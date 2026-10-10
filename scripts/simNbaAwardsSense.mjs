@@ -156,6 +156,13 @@
        notes, summer cards and final numbers) while the rival's line is not; and in the NFL, MLB and NHL the
        player's careers and the rival's own trail are byte equal, and the only notes that moved are near ties.
        A proof for one round, like C: once another round edits these engines the commit is stale.
+   Q   The proof of Round 1149, under SENSE_PROVE_1149=<commit> only (the commit before the round's first
+       edit, 808dbbdc). The round took the coin out of the roster beats of the NFL, MLB and NHL careers and
+       moved the NBA's beat 306 onto the shared builder (factBeat in careerRivalryEvents.ts). The same fleets
+       on both trees: in all four sports the player's careers, the rival's trail and every season note are
+       byte equal, and a beat is dealt in exactly the same seasons; the NBA's cards are the same word for
+       word; and in each sport the round has moved (Q_MOVED) the cards differ somewhere, so the two trees are
+       not one. A proof for one round, like P and C.
    R, H and B6 compare the mean over the run's seeds with the mean over main's, within a FIXED width typed in
    HELD_TOL (heldAt below says why a seed by seed band was thrown away, and why the width is no longer worked
    out from the spread of the run being judged). Each width is what three standard errors came to at full
@@ -195,6 +202,7 @@
      norowmlb         the same row taken out of the MLB career         K red
      norownhl         the same row taken out of the NHL career         K red
      twicecounted     MLB's Cy Young no longer named, so counted twice K red
+     tickdraws        the MLB rivalry tick taking one more draw        Q red (needs SENSE_PROVE_1149=<commit>)
    With SENSE_PROVE_AGAINST=<commit> set, rivaldraws must also turn P red (the player's digest moves).
      noscale          the legacy constant back to 1                    H red (refuses when it is 1)
      nomvpworth       an MVP worth nothing to the legacy score         H red
@@ -250,6 +258,10 @@ const PROVE_OTHERS = process.env.SENSE_PROVE_OTHERS === '1';
 const PROVE_AGAINST = process.env.SENSE_PROVE_AGAINST || '';
 if (PROVE_AGAINST && !/^[0-9a-f]{7,40}$/.test(PROVE_AGAINST)) { console.error('SENSE_PROVE_AGAINST needs a commit hash (7 to 40 hex digits)'); process.exit(2); }
 const PROVE_CAREERS = Number(process.env.SENSE_PROVE_CAREERS || 1500);
+/* Section Q: SENSE_PROVE_1149=<commit> is Round 1149's own before and after proof (the commit before its first
+   edit), the way SENSE_PROVE_AGAINST is Round 1112's. */
+const PROVE_1149 = process.env.SENSE_PROVE_1149 || '';
+if (PROVE_1149 && !/^[0-9a-f]{7,40}$/.test(PROVE_1149)) { console.error('SENSE_PROVE_1149 needs a commit hash (7 to 40 hex digits)'); process.exit(2); }
 const BASELINE_FILE = path.join(ROOT, 'scripts', 'data', 'nbaAwardsSenseBaseline.json');
 const norm = s => s.replace(/\r\n/g, '\n');
 /* Section E's tolerances: how far a seed's measured field may sit from the committed row. */
@@ -339,7 +351,10 @@ const CONTROLS = {
     put: "    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);", needs: 'R' },
   /* R: the All-Star beat dealt on the two ratings again (both at 80), as it was while it flipped a coin. It then
      turns up in years neither made the roster, saying one of them did. */
-  oldgate306: { file: 'src/lib/nbaCareerRivalryEvents.ts', find: '    when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && (f.mine || f.his); },', put: '    when: (s, r) => s.ovr >= 80 && r.ovr >= 80,', needs: 'R' },
+  oldgate306: { file: 'src/lib/nbaCareerRivalryEvents.ts', find: '        when: (s, r) => { const f = nbaAllStarFacts(s, r); return !!f && !f.mine && f.his; },', put: '        when: (s, r) => s.ovr >= 80 && r.ovr >= 80,', needs: 'R' },
+  /* Q, Round 1149: the MLB tick taking one more draw of the season's stream (every draw of the player's after it
+     moves). Judged under SENSE_PROVE_1149=<commit> only, like othersport under SENSE_PROVE_OTHERS. */
+  tickdraws: { file: 'src/lib/mlbCareerRivalryEvents.ts', find: '  const rolled = rollRivalryEvent(c, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);', put: '  rng(); const rolled = rollRivalryEvent(c, c.rival, lastId, MLB_RIVALRY_EVENTS, rng);', needs: 'Q' },
   /* R: the rival's season taking a second draw of the season's stream (every draw of the player's after it moves). */
   rivaldraws: { file: 'src/lib/nbaMyCareer.ts', find: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng()}`);", put: "    const keyed = keyedRng(`nba-rival|${r.name}|${year}|${rng() + rng()}`);", needs: PROVE_AGAINST ? 'R,P' : 'R' },
   /* K: the Trophy Case tile's row for the lesser awards taken out. */
@@ -541,6 +556,8 @@ const ARCH_IDS = POS.flatMap(p => nba.NBA_ARCHETYPES[p].map(a => a.id));
 /* ------------------------------------------------------------------ */
 /** Plays `careers` NBA careers on one seed, the board's own order. Every season is kept with what the engine
  *  knew going in (rating, morale, club, role, seasons played), so a section can replay it through a function. */
+/** A rivalry card as the player reads it, for a word for word comparison of two trees (section Q). */
+const cardText = e => `${e.id}|${e.emoji}|${e.title}|${e.description}|${e.consequence}`;
 function playFleet(seed, careers, M = E, digest = false) {
   const nba = M.nba;
   const rnd = mulberry32(seed);
@@ -579,7 +596,9 @@ function playFleet(seed, careers, M = E, digest = false) {
         if (h) trail.push({ role: c.role ?? 'starter', tq, line, notes: seasonNotes.filter(n => !n.startsWith(MIRROR)) });
         nearTies.push(...nearTieOf(seasonNotes, c.rival));
         seasons.push({ i, pos, arch: arch.id, era, tq, ...pre, prev, line, won: (c.rival?.myYears ?? 0) - pre.my, lost: (c.rival?.hisYears ?? 0) - pre.his, rivalScore: c.rival?.lastScore ?? null, rivalLine: c.rival?.lastLine ?? null,
-          rivalAllStar: c.rival?.lastAllStar === true, beat306: beat && beat.id === 306 ? { says: beat.description, does: beat.consequence } : null, beatDealt: !!beat });
+          rivalAllStar: c.rival?.lastAllStar === true, beat306: beat && beat.id === 306 ? { says: beat.description, does: beat.consequence } : null, beatDealt: !!beat,
+          /* Q: the card as dealt, word for word. */
+          beatCard: beat ? cardText(beat) : '' });
       }
       nba.nbaProgress(c, rnd);
       const ev = nba.drawNbaEvent(c, rnd);
@@ -1025,6 +1044,8 @@ function playOther(sport, seed, per, M = E) {
   /* Round 1149, K: the sport's own descriptor, for what its Trophy Case tile counts. */
   const desc = { nfl: M.NFL_CAREER_SPORT, mlb: M.MLB_CAREER_SPORT, nhl: M.NHL_CAREER_SPORT }[sport];
   const careers = [];
+  /* Round 1149, Q and S: one entry a season, the rivalry beat dealt in it (or none) beside the season's awards. */
+  const beats = [];
   /* Round 1112: the rival's own trail (his line, his score, the tally, his rings, rating, age, whether he has
      retired) hashed apart from the player's, the season notes kept for section P, the near ties for section T. */
   const hr = crypto.createHash('sha256');
@@ -1041,7 +1062,13 @@ function playOther(sport, seed, per, M = E) {
     let tq = null; let guard = 0; let done = false;
     while (!done && guard++ < 30) {
       tq = d.tq(tq, rnd);
+      /* The fleet never answers a rivalry card, so the pending one can be an older season's: a beat is this
+         season's only when the object is new (the same rule the NBA fleet reads its beats by). */
+      const pendingBefore = c.pendingRivalryEvent;
+      const pre = { ovr: c.ovr, rivalOvr: c.rival?.ovr ?? null };
       const played = d.sim(c, tq, rnd);
+      const beat = c.pendingRivalryEvent && c.pendingRivalryEvent !== pendingBefore ? c.pendingRivalryEvent : null;
+      beats.push({ card: beat ? cardText(beat) : '', id: beat?.id ?? null, says: beat?.description ?? '', does: beat?.consequence ?? '', awards: played?.line?.awards ?? [], rival: c.rival?.name ?? '', ...pre });
       const r = c.rival;
       if (r) hr.update(JSON.stringify([r.lastLine, r.lastScore, r.myYears, r.hisYears, r.rings, r.ovr, r.age, r.retired]));
       notes.push(played?.notes ?? []);
@@ -1058,7 +1085,7 @@ function playOther(sport, seed, per, M = E) {
     careers.push({ pos, tile: M.honoursTotal({ rings, honours: rows }), rings, awardsHeld: c.seasons.reduce((n, s) => n + (s.awards ?? []).length, 0),
       named: rows.filter(r => r.label !== 'in other awards').reduce((n, r) => n + r.n, 0) });
   }
-  return { hash: h.digest('hex'), lines, rivalHash: hr.digest('hex'), notes, nearTies, careers };
+  return { hash: h.digest('hex'), lines, rivalHash: hr.digest('hex'), notes, nearTies, careers, beats };
 }
 
 /* ------------------------------------------------------------------ */
@@ -1128,6 +1155,9 @@ const HELD_TOL = {
 const RIVAL_1112 = { myShare: [61.01, 60.83, 61.44, 61.06, 61.09] };
 /* K: careers a full size seed must still find whose only awards are the lesser ones (see the header). */
 const LESSER_ONLY_FLOOR = 230;
+/* Q, Round 1149: the sports whose roster beat the round has taken off its coin so far. In those the cards must
+   differ between the two trees; in the others every card must be the same. */
+const Q_MOVED = { nfl: false, mlb: false, nhl: false };
 /* K, Round 1149: the same floor for the other three careers, a seed of 500 (see the header). */
 const OTHER_LESSER_ONLY_FLOOR = { nfl: 7, mlb: 7, nhl: 3 };
 /* T: how many near tie notes of each kind a full size run must still find in each sport (see the header). */
@@ -1665,6 +1695,53 @@ else {
     exact('P', same, `${sport.toUpperCase()}: the player's careers hash equal before and after on every seed`);
     exact('P', rivalSame, `${sport.toUpperCase()}: the rival's own trail is byte equal before and after on every seed (his line, his score, the tally, rings, rating, age, retired)`);
     exact('P', otherWords === 0, `${sport.toUpperCase()}: the only season notes that moved are near ties, after "Nothing in it again." (${notesMoved} moved)${first ? `; the first other: ${first}` : ''}`);
+  }
+}
+
+/* Q, the proof of Round 1149 (judged only when asked, like P and C). The round took the coin out of the roster
+   beats of the NFL, MLB and NHL careers and moved the NBA's onto the shared builder. So, the same fleets on this
+   tree and on the tree before: in all four sports the player's own path is byte equal and so is the rival's
+   trail and every season note, and a beat is dealt in exactly the same seasons (nothing new is drawn). What may
+   differ is WHICH card a season deals and what it says, and only in a sport the round has moved (Q_MOVED): there
+   it must differ somewhere, so the two trees are not one. */
+if (!PROVE_1149) console.log('  note [Q] the before and after proof of Round 1149: not judged in a plain run (SENSE_PROVE_1149=<commit> plays both trees)');
+else {
+  const before = await bundleAt(PROVE_1149);
+  console.log(`  note [Q] against ${PROVE_1149}: ${before.changed.length} src files differ, ${before.served.length} read at that commit (${before.served.map(x => x.replace('src/lib/', '')).join(', ')})`);
+  exact('Q', before.served.length > 0, 'the tree before is a different tree (at least one bundled file was read at the commit)');
+  const mine = []; const rivalMoved = []; const cardsMoved = []; const cardsDealt = [];
+  for (const seed of SEEDS) {
+    const a = playFleet(seed, PROVE_CAREERS, before.mod, true); const b = playFleet(seed, PROVE_CAREERS, E, true);
+    mine.push(a.digest === b.digest && a.seasons.length === b.seasons.length);
+    rivalMoved.push(a.seasons.filter((x, k) => x.rivalLine !== b.seasons[k]?.rivalLine || x.rivalScore !== b.seasons[k]?.rivalScore || x.rivalAllStar !== b.seasons[k]?.rivalAllStar).length);
+    cardsMoved.push(a.seasons.filter((x, k) => x.beatCard !== b.seasons[k]?.beatCard).length);
+    cardsDealt.push(b.seasons.filter(x => x.beatCard).length);
+  }
+  exact('Q', mine.every(Boolean), `NBA: the player's own path is byte equal before and after on every seed (${PROVE_CAREERS} careers a seed)`);
+  exact('Q', rivalMoved.every(n => n === 0), `NBA: the rival's line, score and All-Star season are the same in every season (seasons that differ: ${rivalMoved.join(', ')})`);
+  exact('Q', cardsDealt.every(n => n > 0) && cardsMoved.every(n => n === 0), `NBA: every rivalry beat dealt is the same card, word for word, so the lift onto the shared builder moved nothing (${cardsDealt.join(', ')} beats a seed, ${cardsMoved.join(', ')} differ)`);
+  for (const sport of Object.keys(OTHER)) {
+    let same = true; let rivalSame = true; let notesMoved = 0; let dealtApart = 0; let cards = 0; let moved = 0; let first = '';
+    for (const seed of SEEDS) {
+      const a = playOther(sport, seed, OTHERS_PER, before.mod); const b = playOther(sport, seed, OTHERS_PER, E);
+      if (a.hash !== b.hash) same = false;
+      if (a.rivalHash !== b.rivalHash) rivalSame = false;
+      a.notes.forEach((na, k) => { if (JSON.stringify(na) !== JSON.stringify(b.notes[k] ?? [])) notesMoved++; });
+      a.beats.forEach((x, k) => {
+        const y = b.beats[k];
+        if (!!x.card !== !!y?.card) dealtApart++;
+        if (y?.card) cards++;
+        if (x.card !== y?.card) { moved++; if (!first) first = `"${x.card}" became "${y?.card}"`; }
+      });
+      if (a.beats.length !== b.beats.length) dealtApart++;
+    }
+    const S = sport.toUpperCase();
+    exact('Q', same, `${S}: the player's careers hash equal before and after on every seed (every season line and every counter)`);
+    exact('Q', rivalSame, `${S}: the rival's own trail is byte equal before and after on every seed`);
+    exact('Q', notesMoved === 0, `${S}: every season's notes are the same (${notesMoved} seasons differ)`);
+    exact('Q', dealtApart === 0 && cards > 0, `${S}: a rivalry beat is dealt in exactly the same seasons, so nothing new is drawn (${cards} beats, ${dealtApart} seasons apart)`);
+    if (Q_MOVED[sport]) exact('Q', moved > 0, `${S}: the cards did move, so the two trees are not one (${moved} of ${cards} beats read differently; the first: ${first})`);
+    else exact('Q', moved === 0, `${S}: not moved yet, so every beat dealt is the same card, word for word (${moved} of ${cards} differ${first ? `; the first: ${first}` : ''})`);
   }
 }
 
