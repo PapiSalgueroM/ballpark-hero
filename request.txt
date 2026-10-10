@@ -1,0 +1,12 @@
+#!serial
+setup: bash .rc/x/follow.sh setup
+merge: cd /tmp/r1220 && git -c user.name=rehearsal -c user.email=rehearsal@example.invalid merge --no-edit -q 2e731a0a23aea59e28757294b1922cc0976f69e5 && echo "merged, unmerged paths: $(git diff --name-only --diff-filter=U | wc -l)" && git ls-files | grep -i lotteryreveal && grep -n "LotteryReveal'" src/components/career/DraftNightSequence.tsx && echo "presenter files in src/components/motion: $(git ls-files src/components/motion | grep -c -i lottery)"
+merged-tsc: cd /tmp/r1220 && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+merged-scm: cd /tmp/r1220 && node scripts/simSeasonCentreMotion.mjs
+oneline: cd /tmp/r1220 && sed -i "s#@/components/motion/LotteryReveal#@/components/lottery/LotteryReveal#g" src/components/career/DraftNightSequence.tsx && git diff --stat | tail -1
+fixed-tsc: cd /tmp/r1220 && node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fixed-scm: cd /tmp/r1220 && node scripts/simSeasonCentreMotion.mjs
+fixed-vitest: cd /tmp/r1220 && node_modules/.bin/vitest run src/components/lottery/LotteryReveal.test.tsx src/components/front-office-shared/GmLotteryCard.test.tsx src/test/careerDraftNight.test.tsx src/test/usCareerDraftNightBoard.test.tsx --testTimeout=300000 --hookTimeout=120000
+fixed-sim: cd /tmp/r1220 && node scripts/simGmDraftOrder.mjs
+fixed-reveal: cd /tmp/r1220 && node scripts/simRevealMoments.mjs
+fixed-anchors: cd /tmp/r1220 && node scripts/simHarnessAnchors.mjs

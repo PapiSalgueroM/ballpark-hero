@@ -1,0 +1,1 @@
+src/components/career/DraftNightSequence.tsx(33,31): error TS2307: Cannot find module '@/components/motion/LotteryReveal' or its corresponding type declarations.
