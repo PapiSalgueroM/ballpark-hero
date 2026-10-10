@@ -1,0 +1,18 @@
+#!serve
+#!playwright
+#!serial
+# Round 1215: draws counted (nothing seeded) on the pages of unedited walks, part 3.
+d-playFreeAgency: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playFreeAgency.mjs
+d-playGmPress: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playGmPress.mjs
+d-playGridCellGeometry: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playGridCellGeometry.mjs
+d-playGridCls: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playGridCls.mjs
+d-playHomeFold: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playHomeFold.mjs
+d-playHomeReveal: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playHomeReveal.mjs
+d-playHowTo: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playHowTo.mjs
+d-playInboxCard: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playInboxCard.mjs
+d-playIndexing: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playIndexing.mjs
+d-playIphone: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playIphone.mjs
+d-playLeagueTableFit: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playLeagueTableFit.mjs
+d-playLegacy: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playLegacy.mjs
+d-playLightMode: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playLightMode.mjs
+d-playLineupValidator: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playLineupValidator.mjs

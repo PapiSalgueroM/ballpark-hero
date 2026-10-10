@@ -1,0 +1,33 @@
+playHomeFold: what a visitor is offered before they are asked for anything
+1) a phone sees something to play, high enough to see it
+  PASS  the ticker is on the page under its label, so its links were excluded and not counted as tiles
+  PASS  first game tile at y=315 (ceiling 430), /soccer-career
+  PASS  it is inside the first screen at all (315 of 844)
+  PASS  1 place(s) above it ask for an account (max 2) | y~48: Log In + Sign Up
+  PASS  the page has one h1, drawn by the app, and on screen it reads the template's "DoUKnowBall" (["DoUKnowBall"])
+  PASS  nothing in the h1 is hidden: the words a renderer reads are the words on screen (read ["DoUKnowBall"], shown ["DoUKnowBall"])
+2) desktop, same rule
+  PASS  first game tile at y=281, /soccer-career
+3) the tiles say what the games are
+  PASS  3 tile subtitles, all different: "3×3 grid puzzle with rar", "Spin team seasons, draft", "Connect two players thro"
+4) a returning player gets NO checklist, and the record never moves the first tile
+  PASS  the retired checklist stays retired even for a planted record
+  PASS  the planted record does not move the first tile (fresh y=315, planted y=315)
+  PASS  a fresh profile still gets its first tile in the same place
+5) the maker note lives on the About page, not on the home page
+  PASS  no maker note card on the home page
+  PASS  the footer links to About, where the note lives
+  PASS  the About page carries the note under "A note from the maker"
+  PASS  the note asks for nothing, no account language inside
+6) a returning player: saves bring a Continue row under the stage, and a sport pick leads the list
+  PASS  [6a] 21 planted saves leave the first tile where it was (fresh y=315, planted y=315, ceiling 430)
+  PASS  [6b] a visitor with no saves gets no Continue row at all
+  PASS  [6b] the row sits under the stage (stage ends y=637, row starts y=653) with 21 of 21 cards in list order
+  PASS  [6c] the cards read the saves: /club-manager "Planted FC, season 3", /soccer-career "Planted Town, age 24"
+  PASS  [6d] 21 cards and 13 chips, none under 32px (none), page 390px wide
+  PASS  [6e] a stored hockey pick leads the sport sections (first section: fresh soccer, picked hockey) and its chip reads pressed
+  PASS  [6f] a stored value that is not a sport is ignored (first section soccer)
+  PASS  [6g] tapping Golf moves golf first (golf), remembers it (golf), and the page does not move (scroll 0 to 0, chips at 3808 to 3808)
+
+playHomeFold: green. The first thing on the page is something to play.
+[draws] total 88 in 13 page loads of 12 contexts, walk exit 0; by path: / 84, /about 4

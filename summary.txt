@@ -1,0 +1,15 @@
+build exit=0 28s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+d-playFreeAgency exit=0 16s | [draws] total 130 in 4 page loads of 2 contexts, walk exit 0; by path: /nfl-my-career 66, /nhl-my-career 64
+d-playGmPress exit=1 30s | [draws] total 31198 in 6 page loads of 2 contexts, walk exit 1; by path: /front-office 30333, /nba-front-office 474, /mlb-front-office 218, /nhl-front-office 173
+d-playGridCellGeometry exit=1 1s | Node.js v24.21.0
+d-playGridCls exit=0 30s | [draws] total 42 in 6 page loads of 6 contexts, walk exit 0; by path: /soccer-grid 7, /football-grid 7, /college-grid 7, /nba-grid 7, /mlb-grid 7, /hockey-grid 7
+d-playHomeFold exit=0 29s | [draws] total 88 in 13 page loads of 12 contexts, walk exit 0; by path: / 84, /about 4
+d-playHomeReveal exit=0 13s | [draws] total 15 in 2 page loads of 2 contexts, walk exit 0; by path: / 14, /cage-clash 1
+d-playHowTo exit=0 177s | [draws] total 1302 in 133 page loads of 1 contexts, walk exit 0; by path: /teammates 601, /nba-starting-5 112, /stadium-tycoon 10, /higher-lower 8, /budget-builder 7, /wo
+d-playInboxCard exit=0 11s | [draws] total 16 in 8 page loads of 8 contexts, walk exit 0; by path: / 16
+d-playIndexing exit=0 19s | [draws] total 61 in 13 page loads of 1 contexts, walk exit 0; by path: /stadium-tycoon 10, / 7, /club-manager 4, /soccer-career 4, /college 4, /leaderboard 4
+d-playIphone exit=1 24s | [draws] total 71 in 14 page loads of 3 contexts, walk exit 1; by path: /leaderboard 18, / 11, /stadium-tycoon 10, /minefield 8, /club-manager 4, /soccer-career 4
+d-playLeagueTableFit exit=0 4s | [draws] total 0 in 1 page loads of 1 contexts, walk exit 0; by path: blank 0
+d-playLegacy exit=0 12s | [draws] total 73 in 3 page loads of 1 contexts, walk exit 0; by path: /stadium-tycoon 73
+d-playLightMode exit=0 16s | [draws] total 55 in 12 page loads of 1 contexts, walk exit 0; by path: / 15, /higher-lower 8, /soccer 4, /squad-deal 4, /world-xi 4, /club-manager 4
+d-playLineupValidator exit=0 32s | [draws] total 2725 in 11 page loads of 11 contexts, walk exit 0; by path: /build-your-xi 2725

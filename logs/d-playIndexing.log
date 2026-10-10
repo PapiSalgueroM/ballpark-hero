@@ -1,0 +1,57 @@
+1) Every indexable page hands a crawler a complete head
+  PASS  /: "DoUKnowBall: Free Sports Trivia Games and Dai canonical=https://douknowball.com/ robots=none
+  PASS  /: exactly one h1 (1)
+  PASS  /: structured data and social tags present
+  PASS  /club-manager: "Club Manager: Free Football Management Game | canonical=https://douknowball.com/club-manager robots=none
+  PASS  /club-manager: exactly one h1 (1)
+  PASS  /club-manager: structured data and social tags present
+  PASS  /stadium-tycoon: "Stadium Tycoon: Free Idle Soccer Club Game |  canonical=https://douknowball.com/stadium-tycoon robots=none
+  PASS  /stadium-tycoon: exactly one h1 (1)
+  PASS  /stadium-tycoon: structured data and social tags present
+  PASS  /soccer-career: "Soccer Career: Free Football Career Simulator canonical=https://douknowball.com/soccer-career robots=none
+  PASS  /soccer-career: exactly one h1 (1)
+  PASS  /soccer-career: structured data and social tags present
+  PASS  /college: "College Sports Games: CFB and CBB Trivia and  canonical=https://douknowball.com/college robots=none
+  PASS  /college: exactly one h1 (1)
+  PASS  /college: structured data and social tags present
+  PASS  /leaderboard: "World Leaderboard: Total Points | DoUKnowBall canonical=https://douknowball.com/leaderboard robots=none
+  PASS  /leaderboard: exactly one h1 (1)
+  PASS  /leaderboard: structured data and social tags present
+  PASS  /whats-new: "What's New | DoUKnowBall Updates" canonical=https://douknowball.com/whats-new robots=none
+  PASS  /whats-new: exactly one h1 (1)
+  PASS  /whats-new: structured data and social tags present
+  PASS  /about: "About DoUKnowBall | Free Daily Sports Trivia  canonical=https://douknowball.com/about robots=none
+  PASS  /about: exactly one h1 (1)
+  PASS  /about: structured data and social tags present
+  PASS  /privacy: "Privacy Policy - DoUKnowBall" canonical=https://douknowball.com/privacy robots=none
+  PASS  /privacy: exactly one h1 (1)
+  PASS  /privacy: structured data and social tags present
+  PASS  every walked page has its own title (9 of 9)
+2) Every hidden page says noindex, and stops advertising itself
+  PASS  /shirt-number: robots is noindex, follow
+  PASS  /shirt-number: keeps its self canonical
+  PASS  /shirt-number: nothing advertising this page itself (nothing)
+  PASS  /pack-battle: robots is noindex, follow
+  PASS  /pack-battle: keeps its self canonical
+  PASS  /pack-battle: nothing advertising this page itself (nothing)
+  PASS  /guess-nfl-team: robots is noindex, follow
+  PASS  /guess-nfl-team: keeps its self canonical
+  PASS  /guess-nfl-team: nothing advertising this page itself (nothing)
+  PASS  /reset-password: robots is noindex, follow
+  PASS  /reset-password: keeps its self canonical
+  PASS  /reset-password: nothing advertising this page itself (nothing)
+3) The crawl instructions themselves
+  PASS  robots.txt serves (200)
+  PASS  robots.txt points at the sitemap
+  PASS  robots.txt keeps crawlers out of the admin screens
+  PASS  sitemap.xml serves (200)
+  PASS  the college hub is in the served sitemap
+  PASS  the root is submitted with the same trailing slash its canonical uses
+  PASS  /shirt-number is not submitted
+  PASS  /pack-battle is not submitted
+  PASS  /guess-nfl-team is not submitted
+  PASS  /reset-password is not submitted
+  PASS  no real page errors on the walk (clean)
+
+playIndexing: green. A crawler gets a complete head on every page that wants one.
+[draws] total 61 in 13 page loads of 1 contexts, walk exit 0; by path: /stadium-tycoon 10, / 7, /club-manager 4, /soccer-career 4, /college 4, /leaderboard 4

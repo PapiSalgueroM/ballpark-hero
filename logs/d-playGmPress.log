@@ -1,0 +1,37 @@
+1) A fresh hire faces the room
+  PASS  the introduction presser is on the hub
+  PASS  it is the introduction, by name
+  PASS  all three registers are on the card
+  PASS  the bold answer talks Super Bowl in the NFL room
+  PASS  the owner card shares the hub with the presser
+2) The measured answer moves trust by exactly its flat effect
+  PASS  an answered presser leaves the hub
+  PASS  trust reads 63 after the +3 measured answer (card says: 🏛️ OWNERSHIP)
+  PASS  the answer landed in the feed
+  PASS  a reload never resurrects an answered presser
+  PASS  the answered trust survived the reload
+3) A doomed season ends in the scrum, and the draft waits
+  PASS  the recap carries a presser
+  PASS  a missed title ask produces the scrum
+  PASS  the patience answer discloses its tilt
+  PASS  the draft button waits while the room does
+4) Patience answered: the tilt survives to the next mandate
+  PASS  the scrum ends when answered
+  PASS  the draft button returns
+  FAIL  the offseason set a new mandate
+  FAIL  the feed credits the press answer for the softer bar
+  PASS  no page errors on the NFL walk (clean)
+5) The NBA, NHL and MLB rooms exist and know their sport
+  PASS  /nba-front-office: the introduction presser is on the hub
+  PASS  /nba-front-office: the bold answer talks Finals
+  PASS  /nba-front-office: the answer ends the presser
+  PASS  /nhl-front-office: the introduction presser is on the hub
+  PASS  /nhl-front-office: the bold answer talks Stanley Cup
+  PASS  /nhl-front-office: the answer ends the presser
+  PASS  /mlb-front-office: the introduction presser is on the hub
+  PASS  /mlb-front-office: the bold answer talks World Series
+  PASS  /mlb-front-office: the answer ends the presser
+  PASS  no page errors on the tri-sport walk (clean)
+
+playGmPress: 2 failures
+[draws] total 31198 in 6 page loads of 2 contexts, walk exit 1; by path: /front-office 30333, /nba-front-office 474, /mlb-front-office 218, /nhl-front-office 173

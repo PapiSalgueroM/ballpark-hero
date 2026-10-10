@@ -1,0 +1,10 @@
+grid CLS with database responses held 1500ms, ceiling 0.05:
+   ok   /soccer-grid cls=0
+   ok   /football-grid cls=0
+   ok   /college-grid cls=0
+   ok   /nba-grid cls=0
+   ok   /mlb-grid cls=0
+   ok   /hockey-grid cls=0
+
+playGridCls: green. The boards hold their ground; the network only fills them in.
+[draws] total 42 in 6 page loads of 6 contexts, walk exit 0; by path: /soccer-grid 7, /football-grid 7, /college-grid 7, /nba-grid 7, /mlb-grid 7, /hockey-grid 7

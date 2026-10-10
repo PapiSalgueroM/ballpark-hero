@@ -1,0 +1,28 @@
+1) A fresh club: the boardroom is there, locked, honest
+  PASS  the Legacy drawer button is on the page
+  PASS  no point balance is shown when there is nothing to spend
+  PASS  the boardroom opens
+  PASS  Boardroom Sway is on the board
+  PASS  the streak shield is on the board
+  PASS  all eight perks sit at level 0
+  PASS  every price button is disabled at zero points (8/8)
+2) A banked balance buys a perk through the real screen
+  PASS  the farewell save existed to doctor
+  PASS  the drawer button carries the 10 point balance
+  PASS  the Sway card is addressable
+  PASS  the balance fell by exactly the 3 point cost
+  PASS  Boardroom Sway sits at level 1 of 5
+3) The sell-up button quotes its legacy, and selling banks it
+  PASS  the post-purchase save existed to doctor
+  PASS  the sell-up button is lit
+  PASS  a bottom-league sale quotes +1 legacy point (⭐ Sell up: +1 star, +1 legacy point)
+  PASS  the sale banked its point (7 held + 1 for the sale = 8)
+  PASS  the bought perk survived the sale
+4) The boardroom invented no badges
+  PASS  the badge wall still counts 47 (🏅
+Badges
+3/47)
+  PASS  no real page errors across the walk (clean)
+
+playLegacy: green. The boardroom sells permanence and the screen tells the truth about it.
+[draws] total 73 in 3 page loads of 1 contexts, walk exit 0; by path: /stadium-tycoon 73

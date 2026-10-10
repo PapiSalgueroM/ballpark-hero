@@ -1,0 +1,18 @@
+1) The wrappers exist and the first grid reveals as it enters view
+  PASS  the home page has reveal sections (saw 15)
+  PASS  the first grid revealed itself as it entered the viewport
+2) Scrolling reveals everything and hides nothing
+  PASS  every section revealed by the bottom (still hidden: 0)
+  PASS  no tile is left transparent after its entrance (saw 0)
+3) The stagger is real and capped
+  PASS  tile one leads and tile two waits its turn (delays: 0s, 0.06s, 0.12s)
+4) A revealed tile still navigates
+  PASS  clicking the first tile landed on /cage-clash
+  PASS  no page errors on the curtain walk (clean)
+5) prefers-reduced-motion kills the curtain dead
+  PASS  no tile animates under reduced motion
+  PASS  every tile is instantly visible under reduced motion
+  PASS  no page errors on the reduced-motion walk (clean)
+
+ALL HOME REVEAL WALK CHECKS PASSED
+[draws] total 15 in 2 page loads of 2 contexts, walk exit 0; by path: / 14, /cage-clash 1
