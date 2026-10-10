@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+m-timer400-replay exit=1 71s | playLiveMatchFit: the replay is RED, 2 failures.
+m-timer10000-replay exit=1 70s | playLiveMatchFit: the replay is RED, 1 failure.
+m-timer10000-replay-2 exit=1 71s | playLiveMatchFit: the replay is RED, 1 failure.
+restored exit=0 0s | tracked files that differ: 0

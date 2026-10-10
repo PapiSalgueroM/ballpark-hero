@@ -1,0 +1,17 @@
+MUTATED src/main.tsx: the page now draws once every 10000 ms
+the timer is in the bundle
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs
+8) The replay: the first match in three fresh contexts on seed 3208792607 and in one on seed 3208792608
+  [match replay A] seed 3208792607, 1869 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  [draws replay A] 7 once the page had settled, 7 after 2.5 seconds untouched, 736 with the job taken, 1869 at kick off, 1870 after 2.5 seconds of the match
+  [match replay B] seed 3208792607, 1869 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  [draws replay B] 7 once the page had settled, 7 after 2.5 seconds untouched, 736 with the job taken, 1869 at kick off, 1869 after 2.5 seconds of the match
+  [match replay C] seed 3208792607, 1869 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  [draws replay C] 7 once the page had settled, 7 after 2.5 seconds untouched, 736 with the job taken, 1869 at kick off, 1869 after 2.5 seconds of the match
+  [match replay D] seed 3208792608, 1799 draws at kick off, digest e14582e9 over 4503 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  [draws replay D] 7 once the page had settled, 7 after 2.5 seconds untouched, 727 with the job taken, 1799 at kick off, 1799 after 2.5 seconds of the match
+  ok    one seed, one match, three times: seed 3208792607 gave digest 421656fa in A, B and C (Crystal Palace v Brighton)
+  ok    the page drew 1869 times before kick off in A, B and C
+  ok    another seed, another match: seed 3208792608 gave digest e14582e9
+  FAIL: the page drew while nobody touched it (replay A 1 draws in five idle seconds): a draw on a timer breaks a seed
+playLiveMatchFit: the replay is RED, 1 failure.
