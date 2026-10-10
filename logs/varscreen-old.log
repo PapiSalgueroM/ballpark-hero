@@ -1,0 +1,33 @@
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net[39m[33m 1208[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed')[39m[33m 1358[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded')[39m[33m 1365[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it[39m[33m 1768[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 1328[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 5254[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 376[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty[39m[33m 335[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion[39m[33m 370[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 2510[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the whistle: its review opens and closes before the half ends [33m 1617[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 2225[2mms[22m[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 6 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net
+[31m[1mAssertionError[22m: the ruled out goal was not drawn before its review: expected false to be true // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed')
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded')
+[31m[1mAssertionError[22m: expected 335 to be less than 147[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it
+[31m[1mAssertionError[22m: expected 33 to be 34 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty
+[31m[1mAssertionError[22m: expected [ 33 ] to deeply equal [ 34 ][39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion
+[31m[1mAssertionError[22m: the decision is not up as long as it is with motion (1.2 s): expected 800 to be greater than or equal to 1150[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m6 passed[39m[22m[90m (12)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal a review rules out is drawn first%2C and its review opens with the ball 
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a review never opens over another action%3A the goal of the minute before is in
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a review never opens over another action%3A the goal of the minute before is in
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a penalty a review gives%3A the foul is told%2C the card opens at its minute%2C
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > leaving the site in the middle of a review and coming back shows the review aga
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > reduced motion%3A a short wait%2C nothing moves under the card%2C and the decis
+RESULT old-screen=1
+restored
