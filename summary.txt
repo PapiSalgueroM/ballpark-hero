@@ -1,0 +1,6 @@
+earlyreturn exit=0 14s | simEarlyReturnScope: all green
+accessibility exit=0 0s | simAccessibility: all green
+storagewrites exit=0 4s | simStorageWrites: all green (owed: 12)
+cmstart exit=0 3s | simClubManagerStart: green. The defaults are the shipped game, the currency never reaches the engine, and no setting can switch off the haggle.
+vitest-cm exit=0 48s |  Test Files  16 passed (16)       Tests  188 passed (188) 
+tsc exit=0 61s | 
