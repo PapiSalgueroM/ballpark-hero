@@ -1,0 +1,15 @@
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simClubManagerSaveSize: node scripts/simClubManagerSaveSize.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
+book-default: node scripts/simCmLeagueBook.mjs
+book-full-base: git worktree add -q /tmp/base1229 24f57a98 && BOOK_BASE=/tmp/base1229 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
