@@ -1,0 +1,36 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/test/footleUnlimitedSession.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 2483[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle Unlimited session outcomes[2m > [22mrestores exact unfinished clues after the fetched pool changes [33m 846[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle Unlimited session outcomes[2m > [22mreveals a given-up answer before advancing without touching protected records [33m 431[2mms[22m[39m
+[90mstderr[2m | src/test/footlePractice.test.tsx[2m > [22m[2mFootle practice mounted outcomes[2m > [22m[2mshows worked rules and derives examples from a loaded non-answer player
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+[90mstderr[2m | src/test/footlePractice.test.tsx[2m > [22m[2mFootle practice mounted outcomes[2m > [22m[2mprints the answer nationality with its flag in the feedback line, the Nation row and the example
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/footlePractice.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 4209[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle practice mounted outcomes[2m > [22mfinishes five puzzles with the exact receipt and untouched daily record [33m 2499[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle practice mounted outcomes[2m > [22mprints the answer nationality with its flag in the feedback line, the Nation row and the example [33m 358[2mms[22m[39m
+[90mstderr[2m | src/test/footleClueDesk.test.tsx[2m > [22m[2mFootle clue desk outcomes[2m > [22m[2mreopens clue instructions and restores the help trigger without changing reviewed clues
+[22m[39mWarning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}.
+
+ [32m✓[39m src/test/footleClueDesk.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 4966[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mrenders all eight actual clues with honest unknown zero and opposite directions [33m 737[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mrevisits revealed guesses selects the next actual guess and returns focus to search [33m 518[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mresets selected history when mode and puzzle change with equal guess counts [33m 1082[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mreviews every finished round from frozen clues after reload without saved record writes [33m 1656[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mshows a zero-guess miss honestly and exits review without carrying it into a new run [33m 470[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle clue desk outcomes[2m > [22mreopens clue instructions and restores the help trigger without changing reviewed clues [33m 324[2mms[22m[39m
+ [32m✓[39m src/test/footleResultCurrency.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[33m 1169[2mms[22m[39m
+   [33m[2m✓[22m[39m Footle result currency follows the stored USD value[2m > [22mdaily won result retains $216M and matches its guess tiles [33m 553[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m34 passed[39m[22m[90m (34)[39m
+[2m   Start at [22m 10:38:01
+[2m   Duration [22m 10.12s[2m (transform 1.67s, setup 766ms, collect 7.30s, tests 12.83s, environment 3.69s, prepare 1.38s)[22m
+
