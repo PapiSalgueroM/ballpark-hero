@@ -659,6 +659,14 @@ function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: 
    What the season hands him: its year (the league's level that year), the seasons his draft class has played
    (he is a rookie when you are, and earns his minutes the same way) and the season's real length off the
    ledger. He plays all of it.
+   His form is what careerRival.ts has always handed a rival: his rating plus the season's swing. No morale
+   and no club term, because a rival has neither on the save (a level head on an average club). The player's
+   own morale runs high (88 on average over the harness fleet, about two and a half rating points of form),
+   so at the same rating a rival's line sits about an eighth under a starting player's: rated 84 to 87 from
+   the third season on, 19.4 points, 6.6 rebounds and 4.1 assists against his 16.8, 6.2 and 3.6 (measured
+   2026-10-09, 1,500 careers). That edge, less the bench years only the player has (about a fifth of his
+   seasons, of which he takes one in six), is where his 61 percent of the head to head years comes from (62
+   to 63 before this round, on the old rival line).
 
    THE STREAM. The line before this round took one draw of the season's stream after the swing. This takes
    exactly that one and seeds a keyed stream with it (his name, the year, the draw), which pays for the line's
