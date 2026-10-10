@@ -1,0 +1,10 @@
+#!serve
+#!playwright
+#!serial
+hub: ENGINES=chromium node scripts/playCareerHub.mjs
+hub-revert: CAREER_HUB_CONTROL=revert ENGINES=chromium node scripts/playCareerHub.mjs
+hub-logback: CAREER_HUB_CONTROL=logback ENGINES=chromium node scripts/playCareerHub.mjs
+hub-deadback: CAREER_HUB_CONTROL=deadback ENGINES=chromium node scripts/playCareerHub.mjs
+hub-unknown: CAREER_HUB_CONTROL=nonsense ENGINES=chromium node scripts/playCareerHub.mjs
+mut-h2: node .rc/x/reviewMut.mjs h2 && npm run build > /tmp/build2.log 2>&1 && ENGINES=chromium node scripts/playCareerHub.mjs > /tmp/h2.log 2>&1; a=$?; grep -E "FAIL|My Career$" /tmp/h2.log | cut -c1-200 | head -30; tail -2 /tmp/h2.log; git checkout -q HEAD -- src scripts; exit $a
+rebuilt: git diff --quiet HEAD -- src scripts && npm run build > /tmp/build3.log 2>&1 && ENGINES=chromium node scripts/playCareerHub.mjs | tail -1
