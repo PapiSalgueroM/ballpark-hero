@@ -64,7 +64,10 @@
  *     from the league's table in standard errors, median 0.55, 95th
  *     percentile 2.03. The band is 4.5, the one simGmPicks section 2 uses for
  *     the same draw, so a healthy module sits far inside it; the flat control
- *     puts 5,065 checks outside and oddsrow 5,070.
+ *     puts 5,065 checks outside and oddsrow 5,070. Both also redden section 8
+ *     (2 checks: the line of a night is no longer the table's), nosplit
+ *     reddens it by its floor (no night with shared chances), and noflip and
+ *     flipbeforelottery redden section 4's fourth fleet (6,200 and 540).
  *   Section 3. 3,000 leagues: 5,258 level pairs and 6,881 larger groups in
  *     the field, 6,825 with an odd combination. Level pairs reversed in round
  *     two: 50,648 outside the field, 44,200 inside it (11,521 of those were
@@ -97,7 +100,9 @@
  *     line STARTED (3,700 ms for 14 clubs) while Chromium measured the
  *     screen at 4,000; shortend puts 32 checks outside and literaltime 2.
  *     600 lottery nights, 276 with his tile: 60 up, 95 down, 121 held
- *     (floors 20, 50 and 20); headlineswapped reddens the 155 that moved.
+ *     (floor 10 of each, low enough that a control which skews the draw,
+ *     oddsrow with 18 held, does not trip it by accident); headlineswapped
+ *     reddens the 155 that moved.
  *   Section 8. 600 nights: 200 drawn on the table and 400 where level clubs
  *     shared their chances, 263 of those at the top of the table (floors
  *     100, 200 and 100); tableline reddens 800 checks.
@@ -148,18 +153,23 @@ const CONTROLS = {
   /* in memory: a second lottery table with the name and the size of the first */
   twintable: { expect: [1] },
   closespan: { expect: [1], swaps: { rules: [['  plays: { from: 2027, to: null },', '  plays: { from: 2027, to: 2030 },']] } },
-  flat: { expect: [2, 3], swaps: { order: [['  const pct = pool.map((_, i) => (i < lottery.odds.length ? lottery.odds[i] : 0));', '  const pct = pool.map((_, i) => (i < lottery.odds.length ? 100 / lottery.odds.length : 0));']] } },
-  oddsrow: { expect: [2, 3], swaps: { order: [['  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[i] }));', '  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[pool.length - 1 - i] }));']] } },
+  /* flat and oddsrow hand the field chances that are not the table's. Section 8 sees that on its own since the fix
+     pass: a night with no level records is no longer drawn on the table, so its line is not the table's line. */
+  flat: { expect: [2, 3, 8], swaps: { order: [['  const pct = pool.map((_, i) => (i < lottery.odds.length ? lottery.odds[i] : 0));', '  const pct = pool.map((_, i) => (i < lottery.odds.length ? 100 / lottery.odds.length : 0));']] } },
+  oddsrow: { expect: [2, 3, 8], swaps: { order: [['  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[i] }));', '  return pool.map((club, i) => ({ club, seed: i + 1, pct: pct[pool.length - 1 - i] }));']] } },
   extradraw: { expect: [2], swaps: { order: [['    const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|lottery`));', '    const stray = keyedRng(`${key}|lottery`); stray(); const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, stray);']] } },
   /* round one then comes from a second draw the saved wins do not describe. Section 4 sees it in the order, and since
      the validator replays the saved wins (review finding 6) it refuses such an order outright, so the two sections
      that read a real order back as valid, 6 and 10, go red with it. */
   seconddraw: { expect: [2, 4, 6, 10], swaps: { order: [['    top = drawn.order;', '    top = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|again`)).order;']] } },
   mathrandom: { expect: [2, 4], swaps: { order: [['    const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, keyedRng(`${key}|lottery`));', '    const drawn = runLottery(missed.order, { ...pickRules.lottery, odds: field.map(f => f.pct) }, Math.random);']] } },
-  nosplit: { expect: [3], swaps: { order: [["  if (rules.level.odds === 'split') {", "  if (rules.level.odds === 'never') {"]] } },
+  /* with no split there is no night where level clubs shared their chances, which section 8 needs 200 of */
+  nosplit: { expect: [3, 8], swaps: { order: [["  if (rules.level.odds === 'split') {", "  if (rules.level.odds === 'never') {"]] } },
   tiebyid: { expect: [3], swaps: { order: [['        const pick = Math.floor(rng() * (k + 1));', '        const pick = k;']] } },
-  noflip: { expect: [3], swaps: { order: [["  const flip = rules.level.later === 'reverse-of-first' ? -1 : 1;", '  const flip = 1;']] } },
-  flipbeforelottery: { expect: [3], swaps: { order: [['  const place = new Map(first.map((id, i) => [id, i]));', '  const place = new Map([...missed.order, ...rest.order].map((id, i) => [id, i]));']] } },
+  /* noflip and flipbeforelottery break the reverse of round one for EVERY rule set, so the fourth fleet of section 4
+     (level clubs flipped in a later round off the lottery) goes red with section 3 */
+  noflip: { expect: [3, 4], swaps: { order: [["  const flip = rules.level.later === 'reverse-of-first' ? -1 : 1;", '  const flip = 1;']] } },
+  flipbeforelottery: { expect: [3, 4], swaps: { order: [['  const place = new Map(first.map((id, i) => [id, i]));', '  const place = new Map([...missed.order, ...rest.order].map((id, i) => [id, i]));']] } },
   acrossbyfield: { expect: [3], swaps: { order: [['      .sort((a, b) => byRecord(a, b) || flip * ((place.get(a.id) ?? 0) - (place.get(b.id) ?? 0)))', '      .sort((a, b) => byRecord(a, b) || Number(a.made) - Number(b.made) || flip * ((place.get(a.id) ?? 0) - (place.get(b.id) ?? 0)))']] } },
   champfirst: { expect: [4], swaps: { order: [['  const cmp = (a: DraftClubRow, b: DraftClubRow) => (byClass ? (a.cls ?? 0) - (b.cls ?? 0) : 0) || byRecord(a, b);', '  const cmp = (a: DraftClubRow, b: DraftClubRow) => (byClass ? (b.cls ?? 0) - (a.cls ?? 0) : 0) || byRecord(a, b);']] } },
   laterasfirst: { expect: [3, 4], swaps: { order: [
@@ -974,7 +984,7 @@ open(7);
   }
   check(seen.mine >= 100 && seen.notMine >= 100 && seen.runsWithMine >= 500 && seen.longAfterMine >= 200 && seen.capped >= 500, `the sample is too thin: ${JSON.stringify(seen)}`);
   check(DN.MAX_REVEALED === MAX_ROWS, `a run shows ${DN.MAX_REVEALED} rows at most, and this harness was written for ${MAX_ROWS}`);
-  check(seen.up >= 20 && seen.down >= 50 && seen.held >= 20, `the closing line's direction was not looked at enough: ${seen.up} up, ${seen.down} down, ${seen.held} held`);
+  check(seen.up >= 10 && seen.down >= 10 && seen.held >= 10, `the closing line's direction was not looked at enough: ${seen.up} up, ${seen.down} down, ${seen.held} held`);
   console.log(`   lottery pace fits ${allowedMs} ms to the END of the run for 1 to ${2 * largest} tiles (largest real field ${largest}: 14 tiles end at ${R.lotteryRevealPace(14).totalMs} ms, 16 at ${R.lotteryRevealPace(16).totalMs}); 600 lottery nights (${seen.mine} with his tile: ${seen.up} up, ${seen.down} down, ${seen.held} held), longest ${longestNight} ms`);
   console.log(`   3000 runs: ${seen.capped} longer than ${MAX_ROWS} rows, ${seen.longAfterMine} of those after his own pick and it is always a row; longest run ${longestRun} ms against ${HOUSE_CEILING_MS}`);
 }
