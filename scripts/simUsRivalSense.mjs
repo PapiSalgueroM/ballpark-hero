@@ -31,8 +31,21 @@
         N.U3  the same rival, form, year and draws give the same season; the rival object is left untouched.
         N.U5  at a position whose first team names one man (QB, RB, TE, K) he is never on it in a season the
               player is. There is no U4: no NFL line reads a kind.
+        N.U6  the same rule AT ITS CALL SITE. N.U5 hands the hook the fact itself, so it cannot see whether
+              simSeason passes the true one, and in the plain fleet two men on one first team is so rare that
+              ONE dealt card was the whole net (the reviewers' mutation: the call site passing `firstTeam:
+              false` left every gate green but that card). So the REAL simSeason is played on hand boosted
+              careers (both men rated 97 at 26 every year, 800 careers a position, four seasons each): no
+              season at QB, RB, TE or K has both on the first team, the fleet had the power to see one (the
+              count expected if nothing forbade it is printed and floored), and where the team names more than
+              one man both is common. Control `oneslotsite`.
+        N.U7  nflStatLineFor returns no count below zero and prints no number below zero, at every position,
+              over forms 40 to 99 (a player's form bottoms near 42, a rookie rival's near 44), 1 to 17 games
+              and three streams (every draw 0, every draw 0.999, a seeded one). The fleet's own count of
+              printed numbers below zero (N.F1) is 0 with or without the floor on the gate's seeds, so it
+              cannot fail for the thing it names: this grid is what holds the floor. Control `nofloor`.
         N.F1  every rival line of the fleet is in the player's own shape, and no printed line of either man
-              carries a number below zero.
+              carries a number below zero (true and printed; the floor itself is held by N.U7).
         N.F2  both lines read back off their printed text and scored by the season score (a back's catches at 8
               yards, typed here): the verdict on the save never disagrees, and no line is unread.
         N.F3  my share of the head to head years is held at what Round 1227 measured (RIVAL_1227 below), within
@@ -40,7 +53,9 @@
               share a rating, so a binomial over years is far too narrow), typed once from the full size run of
               2026-10-10. By position the share is printed, never judged.
         N.F5  every All-Pro card (beat 206) dealt says and promises what the two seasons support, none is one of
-              the two own cards of Round 1149, and none is "both" where the first team names one man.
+              the two own cards of Round 1149, and none is "both" where the first team names one man. And,
+              card or no card: no judged season of the fleet at QB, RB, TE or K has both men on the first team
+              (the count the table already printed, judged since the review).
         N.O   the committed saves built by the code before the round (src/test/fixtures/usRivalOldSaves.json).
    P1   Under RIVAL_PROVE=<commit>, with RIVAL_MOVED and RIVAL_CARDS naming the sports the step moved: the same
         fleets on both trees. In all four sports the player's season lines and counters, the seasons a beat is
@@ -126,6 +141,15 @@ const CONTROLS = {
   bridge: { file: 'src/lib/usCareerStatLine.ts', needs: 'N.U2,N.F2', find: 'export const NFL_RB_PRINTED_YARDS_A_CATCH = 8;', put: 'export const NFL_RB_PRINTED_YARDS_A_CATCH = 0;' },
   /* N.U5: the one place rule taken out (two men on a first team that names one). */
   oneslot: { file: 'src/lib/nflMyCareer.ts', needs: 'N.U5', find: '      year, allStar: won && !(onePlace && mine.firstTeam),', put: '      year, allStar: won,' },
+  /* N.U6: the rule left whole in the hook and starved at its call site (simSeason tells the hook the player is
+     never on the first team). N.U5 cannot see this: it hands the hook the fact itself. */
+  oneslotsite: { file: 'src/lib/nflMyCareer.ts', needs: 'N.U6', find: 'nflRivalSeason(c.year, { pos: c.pos, firstTeam: line.awards.includes(NFL_ROSTER_AWARD) })', put: 'nflRivalSeason(c.year, { pos: c.pos, firstTeam: false })' },
+  /* N.U7: the floor at zero taken off a back's rushing yards (they go under zero below a form of 56 on a low draw). */
+  nofloor: { file: 'src/lib/nflMyCareer.ts', needs: 'N.U7', find: '    line.rushYds = Math.max(0, Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g)));',
+    put: '    line.rushYds = Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g));' },
+  /* N.U3: the hook writes on the rival it was handed (the object must be left as it was: judgeRivalSeason is
+     the one place a rival's season is written onto him). */
+  impure: { file: 'src/lib/nflMyCareer.ts', needs: 'N.U3', find: '    const len = nflSeasonLength(year);', put: '    const len = nflSeasonLength(year); (r as { lastScore?: number }).lastScore = form;' },
   /* N.U2: the rival plays a 17 game line whatever the season's length (the defect of the built in line: Round
      1104 measured the player's share falling at every position in a 16 game season because of it). */
   workload17: { file: 'src/lib/nflMyCareer.ts', needs: 'N.U2', find: '    const len = nflSeasonLength(year);', put: '    const len = NFL_RATE_GAMES;' },
@@ -486,6 +510,13 @@ const ONE_PLACE = ['QB', 'RB', 'TE', 'K'];
    fixed width it is held within: three times the 0.27 points one standard error came to over careers. */
 const RIVAL_1227 = { nfl: [38.7, 40.0, 39.0, 38.1, 38.9] };
 const HELD_TOL = { nfl: 0.81 };
+/* FOR THE BUILDER OF A LATER ROUND (Round B first): on an unchanged tree the run is deterministic and N.F3 is
+   exact. The day a round legitimately moves one NFL draw, the typed mean above and the new run are TWO samples:
+   their difference has an error of 0.27 times root two, 0.38 points, so 0.81 is about 2.1 of those and roughly
+   one such round in thirty turns N.F3 red for no reason of its own. The same holds for the "only him" floor of
+   N.F5 (12 against 21 measured; a count that small has a spread near 4.6). When that happens: prove the player's
+   path first (P1), then MEASURE five full size seeds again and RETYPE the means, the floors and the date here.
+   Never widen a width or lower a floor to get a green. */
 function nflUnit(M) {
   const NAMES = ['Marcus Whitaker', 'Devon Delgado', 'Kai Okafor', 'Theo Novak', 'Cruz Halstead'];
   const YEARS = [2005, 2012, 2020, 2021, 2026, 2031];
@@ -518,6 +549,60 @@ function nflUnit(M) {
     if (JSON.stringify(again) !== JSON.stringify(out) || JSON.stringify(r) !== frozen) note(bad.pure, `${pos} ${year}: a second run from the same draws differs, or the rival was written`);
   }
   return { n, bad, made, reached, lens: [...lens].sort() };
+}
+
+/* N.U6: the one place rule at its call site, on the REAL simSeason. Both men are put at 97 in their prime
+   before every season (the first team All-Pro is then common for both), on a 90 club, the player a healthy
+   starter. Counted by position: the seasons he made it, the seasons the rival did, the seasons both did, and
+   the rival's rate in the seasons the player did NOT make it, which gives the both seasons to expect if
+   nothing forbade them (mine times that rate): the power of the count. Its own seeds, never RIVAL_SEEDS, so
+   it is exact at every size. It is the run reviewer's probe of 2026-10-10, written into the harness. */
+const SITE_CAREERS = 800;
+function nflOnePlaceSite(M) {
+  const S = M.NFL_CAREER_SPORT; const st = {};
+  for (const pos of FLEET.nfl.pos) {
+    const t = (st[pos] = { seasons: 0, mine: 0, his: 0, both: 0, hisWhenNotMine: 0, notMine: 0, expected: 0 });
+    for (let i = 0; i < SITE_CAREERS; i += 1) {
+      const rnd = mulberry32(31000 + i * 13 + pos.length * 7);
+      const keep = Math.random; Math.random = rnd;
+      try {
+        const archs = S.create.archetypes[pos];
+        const c = S.startCareer('Sim', pos, archs[i % archs.length], rnd, null, i % 2 ? 'y2005' : 'now');
+        const tq = 90; S.assignRole(c, tq, rnd);
+        for (let g = 0; g < 4 && c.rival; g += 1) {
+          S.campBattle(c, tq, rnd);
+          c.ovr = 97; c.pot = 99; c.morale = 95; c.health = 100; c.role = 'starter'; c.age = 26;
+          c.rival.ovr = 97; c.rival.pot = 99; c.rival.age = 26; c.rival.retired = false;
+          const played = S.simSeason(c, tq, rnd);
+          const mine = (played?.line?.awards ?? []).includes(ROSTER.nfl.award); const his = c.rival.lastAllStar === true;
+          t.seasons += 1; if (mine) t.mine += 1; if (his) t.his += 1; if (mine && his) t.both += 1;
+          if (!mine) { t.notMine += 1; if (his) t.hisWhenNotMine += 1; }
+          S.progress(c, rnd);
+        }
+      } finally { Math.random = keep; }
+    }
+    t.expected = t.notMine ? t.mine * (t.hisWhenNotMine / t.notMine) : 0;
+  }
+  return st;
+}
+
+/* N.U7: no count below zero out of the line function, and no number below zero in its printed text. The forms
+   are the reachable range and a little under it (a player's form bottoms near 42, a rookie rival's at 55 less
+   the swing's 11); below 33 an unfloored count that football never sees negative could go under (a corner's
+   tackles), so the grid stops at 40 and says so. */
+function nflFloorGrid(M) {
+  const bad = []; let n = 0; let total = 0;
+  const streams = [() => () => 0, () => () => 0.999, () => mulberry32(4242)];
+  for (const pos of FLEET.nfl.pos) for (let form = 40; form <= 99; form += 1) for (let games = 1; games <= 17; games += 1) for (const [k, mk] of streams.entries()) {
+    const stat = M.nfl.nflStatLineFor({ form, pos, games }, mk());
+    const text = M.lines.nflStatLine({ ...stat, teamResult: '' }, pos);
+    n += 1;
+    const under = Object.entries(stat).filter(([, v]) => typeof v === 'number' && v < 0);
+    if (!under.length && !/(^|[ ,])-\d/.test(text)) continue;
+    total += 1;
+    if (bad.length < 3) bad.push(`${pos} at form ${form}, ${games} games, stream ${k}: ${under.map(([key, v]) => `${key} ${v}`).join(', ') || 'a printed number'} ("${text}")`);
+  }
+  return { n, bad, total };
 }
 
 console.log(`simUsRivalSense: seeds ${SEEDS.join(', ')}, ${CAREERS} careers a sport a seed${FULL ? ' (full size)' : ' (SHRUNK: exact checks only)'}${CONTROL ? `, control ${CONTROL}` : ''}${PROVE ? `, proving against ${PROVE} (moved: ${MOVED.join(', ') || 'none'}; cards: ${CARDS.join(', ') || 'none'})` : ''}`);
@@ -573,6 +658,21 @@ if (BOUND.includes('nfl')) {
   check('N.U3', u.bad.pure.length === 0, `the same rival, form, year and draws give the same season, and the rival is left untouched${u.bad.pure.length ? `: ${u.bad.pure.join(' | ')}` : ''}`);
   check('N.U5', u.bad.place.length === 0 && ONE_PLACE.every(p => (u.reached[p] ?? 0) > 0) && FLEET.nfl.pos.every(p => (u.made[p] ?? 0) > 0),
     `where the first team names one man he is never on it in a season the player is (reached ${ONE_PLACE.map(p => `${p} ${u.reached[p] ?? 0}`).join(', ')} times; he made a first team at every position: ${FLEET.nfl.pos.map(p => `${p} ${u.made[p] ?? 0}`).join(', ')})${u.bad.place.length ? `: ${u.bad.place.join(' | ')}` : ''}`);
+  {
+    /* SITE_POWER: the fewest both seasons a position must be EXPECTED to show (one place) or must SHOW (more
+       places) for the count to mean anything. Measured 2026-10-10 on the head (runner r1227-x3, 800 careers a
+       position, 3,200 seasons): expected QB 2,378, RB 2,469, TE 2,025, K 165 and 0 seen; seen WR 2,237, LB
+       2,045, CB 1,615, EDGE 2,390. 50 is under a third of the lowest, and it is a guard that the count could
+       have fired, not a band on a share. */
+    const SITE_POWER = 50;
+    const st = nflOnePlaceSite(E); const many = FLEET.nfl.pos.filter(p => !ONE_PLACE.includes(p));
+    for (const pos of FLEET.nfl.pos) { const t = st[pos]; console.log(`     N.U6 ${pos.padEnd(5)} ${ONE_PLACE.includes(pos) ? 'one place  ' : 'more places'} seasons ${t.seasons}  mine ${t.mine}  his ${t.his}  both ${t.both}  his rate when I am not on it ${f1(pc(t.hisWhenNotMine, t.notMine))}%, so ${Math.round(t.expected)} both seasons expected if nothing forbade them`); }
+    const broke = ONE_PLACE.filter(p => st[p].both > 0); const weak = ONE_PLACE.filter(p => st[p].expected < SITE_POWER); const blind = many.filter(p => st[p].both < SITE_POWER);
+    check('N.U6', broke.length === 0 && weak.length === 0 && blind.length === 0,
+      `through the real simSeason on boosted careers, no season at ${ONE_PLACE.join(', ')} has both men on the first team (both: ${ONE_PLACE.map(p => `${p} ${st[p].both}`).join(', ')}; expected if nothing forbade it: ${ONE_PLACE.map(p => `${p} ${Math.round(st[p].expected)}`).join(', ')}, floor ${SITE_POWER}), and where the team names more than one man both is seen (${many.map(p => `${p} ${st[p].both}`).join(', ')}, floor ${SITE_POWER})${broke.length ? `: BROKEN at ${broke.join(', ')}` : ''}${weak.length ? `: no power at ${weak.join(', ')}` : ''}${blind.length ? `: the count saw too few both seasons at ${blind.join(', ')}` : ''}`);
+    const fl = nflFloorGrid(E);
+    check('N.U7', fl.n > 0 && fl.total === 0, `nflStatLineFor returns no count below zero and prints no number below zero (${fl.total} of ${fl.n} lines: every position, forms 40 to 99, 1 to 17 games, three streams)${fl.bad.length ? `: ${fl.bad.join(' | ')}` : ''}`);
+  }
   const all = Object.values(NOW.nfl.total.by).reduce((a, m) => ({ judged: a.judged + m.judged, off: a.off + m.off, unread: a.unread + m.unread, disagree: a.disagree + m.disagree }), { judged: 0, off: 0, unread: 0, disagree: 0 });
   check('N.F1', all.judged > 0 && all.off === 0, `every rival line the fleet prints is in the player's own shape at his position (${all.off} of ${all.judged} off shape)`);
   check('N.F2', all.judged > 0 && all.unread === 0 && all.disagree === 0, `the verdict on the save never disagrees with the two printed lines scored the one way (${all.disagree} of ${all.judged} judged years disagree, ${all.unread} unread)`);
@@ -603,6 +703,13 @@ if (BOUND.includes('nfl')) {
   const count = k => cards.map(list => list.filter(x => kindOf(x) === k).length);
   console.log(`     the first team All-Pro in judged seasons, by position (mine, his, both, percent): ${FLEET.nfl.pos.map(p => { const m = NOW.nfl.total.by[p]; return `${p} ${f2(pc(m.honMine, m.judged))} ${f2(pc(m.honHis, m.judged))} ${f2(pc(m.honBoth, m.judged))}`; }).join('; ')}`);
   check('N.F5', cards.flat().length > 0 && wrong.length === 0, `every All-Pro card dealt says and promises what the two seasons support: ${wrong.length} of ${cards.flat().length} wrong (a seed: both ${count('both').join(', ')}; only you ${count('onlyYou').join(', ')}; only him ${count('onlyHim').join(', ')})${wrong.length ? `; the first, a ${wrong[0].pos} in ${wrong[0].year}: "${wrong[0].says}" promising "${wrong[0].does}" with mine ${wrong[0].mine}, his ${wrong[0].his}` : ''}`);
+
+  /* Card or no card. The table above already counted the judged seasons in which both men hold the honour;
+     where the first team names one man that count is judged here (it was printed and not judged, and under the
+     reviewers' mutation of the call site it read QB 0.01, RB 0.03, TE 0.01 and K 0.01 percent, about seven
+     seasons, while one dealt card was the only red). Exact at every size; N.U6 is the check with power. */
+  const bothOne = ONE_PLACE.map(p => [p, NOW.nfl.total.by[p]?.honBoth ?? 0]);
+  check('N.F5', bothOne.every(([, n]) => n === 0), `no judged season of the fleet at a one place position has both men on the first team (${bothOne.map(([p, n]) => `${p} ${n}`).join(', ')})`);
 
   /* Banded, at full size: the two cards a season can really deal still turn up. Measured 2026-10-10 on five
      seeds: only you 4, 8, 9, 9, 13 (43) and only him 5, 4, 8, 1, 3 (21); each floor is six tenths of the run's
