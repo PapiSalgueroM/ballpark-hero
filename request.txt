@@ -1,0 +1,17 @@
+#!serial
+init: git rev-parse HEAD > /tmp/h1229 && echo "src/pages/WhatsNew.tsx merge=union" >> .git/info/attributes && git fetch -q origin r1218-cm-var-true r1225-cm-fixtures-bind r1216-own-goal-motion && cat /tmp/h1229
+m1218: git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1218-cm-var-true && git log --oneline -1
+m1218-tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+m1218-book: node scripts/simCmLeagueBook.mjs
+m1218-cmvar: node scripts/simCmVar.mjs
+m1218-owngoals: node scripts/simCmOwnGoals.mjs
+m1225: git reset -q --hard $(cat /tmp/h1229) && git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1225-cm-fixtures-bind && git log --oneline -1
+m1225-tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+m1225-book: node scripts/simCmLeagueBook.mjs
+m1225-realfix: node scripts/simCmRealFixtures.mjs
+m1225-realfix-base: node .rc/x/patchRealFixtures.mjs && CM_FIXTURE_BASE=980654fa node scripts/simCmRealFixtures.mjs; s=$?; git checkout -- scripts; exit $s
+m1225-dailydeals: node scripts/simDailyDeals.mjs
+m1216: git reset -q --hard $(cat /tmp/h1229) && git -c user.name=rc -c user.email=rc@users.noreply.github.com merge -q --no-edit origin/r1216-own-goal-motion && git log --oneline -1
+m1216-tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+m1216-book: node scripts/simCmLeagueBook.mjs
+m1216-livematch: node scripts/simLiveMatch.mjs

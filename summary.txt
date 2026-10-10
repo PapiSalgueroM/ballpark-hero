@@ -1,0 +1,16 @@
+init exit=0 0s | e231cebaeefcef0124b92ae2662641cc12670896
+m1218 exit=0 0s | 5554d7ddd Merge remote-tracking branch 'origin/r1218-cm-var-true' into rc/r1229-m2
+m1218-tsc exit=0 60s | 
+m1218-book exit=0 19s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (19s)
+m1218-cmvar exit=1 74s | Node.js v24.21.0
+m1218-owngoals exit=0 54s | simCmOwnGoals: PASS, 8 sections green
+m1225 exit=0 1s | 40c745bc0 Merge remote-tracking branch 'origin/r1225-cm-fixtures-bind' into rc/r1229-m2
+m1225-tsc exit=0 60s | 
+m1225-book exit=0 19s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (19s)
+m1225-realfix exit=0 3s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+m1225-realfix-base exit=1 6s | Node.js v24.21.0
+m1225-dailydeals exit=0 2s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+m1216 exit=0 0s | c29f14d84 Merge remote-tracking branch 'origin/r1216-own-goal-motion' into rc/r1229-m2
+m1216-tsc exit=0 60s | 
+m1216-book exit=0 19s | simCmLeagueBook: green, 7 sections, 4 careers x 2 seasons (19s)
+m1216-livematch exit=0 4s | simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven
