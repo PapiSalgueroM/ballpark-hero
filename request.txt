@@ -1,0 +1,7 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmLeagueFixtures: node scripts/simCmLeagueFixtures.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+premier-pending: git worktree add -q /tmp/prem HEAD && ln -s "$PWD/node_modules" /tmp/prem/node_modules && cd /tmp/prem && git show origin/release-at-int:src/data/clubManagerPremierFixtures2026.ts > src/data/clubManagerPremierFixtures2026.ts && git show origin/release-at-int:scripts/data/clubManagerPremierFixtures2026.receipt.json > scripts/data/clubManagerPremierFixtures2026.receipt.json && node scripts/simCmLeagueFixtures.mjs
