@@ -1,0 +1,13 @@
+vitest exit=0 4s |    Duration  3.51s (transform 981ms, setup 228ms, collect 2.14s, tests 1.61s, environment 1.27s, prepare 376ms)
+record-board exit=0 58s | recordUsBoardFixture: wrote ../../_temp/rc-out/files/usBoardFixture.json (1869467 bytes)
+tsc exit=2 84s |     Type '{ year: number; }' has no properties in common with type 'Pick<NbaSeasonLine, "allStar">'.
+record-digest exit=0 47s |    Duration  45.84s (transform 1.72s, setup 77ms, collect 2.14s, tests 42.66s, environment 423ms, prepare 188ms)
+digest-none-expected-red exit=0 58s |    Duration  57.09s (transform 1.68s, setup 47ms, collect 2.11s, tests 54.10s, environment 296ms, prepare 148ms)
+parity-expected-red exit=1 56s | simUsBoardParity: 3 failures
+rivalry exit=0 8s | simCareerRivalryEvents: green. Soccer is unchanged, the NFL, MLB, NBA and NHL beats fire, and the rival is never a real player.
+simNflCareer exit=0 2s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+simNflTruth exit=0 84s | simNflTruth: green. Seasons are their real length, awards survive a 16 game schedule, rookies are paid their slot, kickers go in round four or later, sacks come in halves
+simAwards exit=0 6s | PASS: ALL AWARD SCARCITY CHECKS PASSED
+simCareerRealism exit=0 7s | ALL CAREER REALISM CHECKS PASSED
+sense-c exit=0 144s | simNbaAwardsSense: 174 checks, 0 failed (full size), 144s
+rival-p exit=0 1650s | simUsRivalSense: 39 checks, 0 failed (full size)

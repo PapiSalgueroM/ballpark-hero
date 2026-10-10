@@ -1,0 +1,13 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usRivalLine.test.ts src/test/nflTruthRules1104.test.ts --testTimeout=300000 --hookTimeout=120000
+rival-p: RIVAL_PROVE=dd3896ac RIVAL_MOVED=nfl node scripts/simUsRivalSense.mjs
+record-board: node scripts/recordUsBoardFixture.mjs $RC_OUT/usBoardFixture.json
+record-digest: DIGEST_RECORD=1 DIGEST_ALLOW='nfl|*' node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000 && cp src/test/fixtures/usCareerTruthDigest.json $RC_OUT/usCareerTruthDigest.json
+digest-none-expected-red: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+parity-expected-red: node scripts/simUsBoardParity.mjs
+sense-c: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs

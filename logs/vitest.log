@@ -1,0 +1,14 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/usRivalLine.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 652[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1227: a picker returns exactly what its printer prints[2m > [22mNFL: every position, printed parts only, a back's catches at the bridge [33m 313[2mms[22m[39m
+ [32m✓[39m src/test/nflTruthRules1104.test.ts [2m([22m[2m6 tests[22m[2m)[22m[33m 955[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: awards and injuries read the season length[2m > [22m2005: the gate is the schedule less two, and an injury is counted off the schedule [33m 531[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: awards and injuries read the season length[2m > [22m2026: the gate is the schedule less two, and an injury is counted off the schedule [33m 381[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m13 passed[39m[22m[90m (13)[39m
+[2m   Start at [22m 18:09:33
+[2m   Duration [22m 3.51s[2m (transform 981ms, setup 228ms, collect 2.14s, tests 1.61s, environment 1.27s, prepare 376ms)[22m
+
