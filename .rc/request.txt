@@ -1,0 +1,3 @@
+#!serve
+#!playwright
+walk: WALK_ONLY=old node .rc/x/walk.mjs
