@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; cp /tmp/w.log "$RC_OUT/weight-base.log"; grep -E "FAIL|/club-manager|/manager-hot-seat|/deadline-day|sweepWeight:" /tmp/w.log | cut -c1-220 | head -14; exit $s
+daily: node scripts/simDailyDeals.mjs > /tmp/d.log 2>&1; s=$?; cp /tmp/d.log "$RC_OUT/daily-base.log"; tail -1 /tmp/d.log | cut -c1-300; exit $s
+daily-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+daily-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+cmfix: TZ=UTC node scripts/simCmRealFixtures.mjs > /tmp/c.log 2>&1; s=$?; cp /tmp/c.log "$RC_OUT/cmfix-base.log"; tail -1 /tmp/c.log | cut -c1-300; exit $s
+cmfix-all: TZ=UTC CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs > /tmp/ca.log 2>&1; s=$?; cp /tmp/ca.log "$RC_OUT/cmfix-all-base.log"; tail -1 /tmp/ca.log | cut -c1-300; exit $s
+fixbal: node scripts/simFixtureBalance.mjs > /tmp/f.log 2>&1; s=$?; cp /tmp/f.log "$RC_OUT/fixbal-base.log"; tail -1 /tmp/f.log | cut -c1-300; exit $s
+leaguefx: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs 2>&1 | tail -1 | cut -c1-300; exit ${PIPESTATUS[0]}
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
