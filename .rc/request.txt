@@ -1,0 +1,19 @@
+#!serve
+#!playwright
+#!serial
+# Round 1215: draws counted (nothing seeded) on the pages of unedited walks, part 1.
+d-calibrate: LIVE_FIT_REPLAY=1 LIVE_FIT_CONTROL=noseed node --import ./.rc/x/drawcount.mjs scripts/playLiveMatchFit.mjs
+d-playAdRoutes: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playAdRoutes.mjs
+d-playArcadeHelp: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playArcadeHelp.mjs
+d-playAutocompleteRace: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playAutocompleteRace.mjs
+d-playBootShift: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playBootShift.mjs
+d-playCareerHub: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playCareerHub.mjs
+d-playCareerMoments: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playCareerMoments.mjs
+d-playCareerPress: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playCareerPress.mjs
+d-playChainTimelineMotion: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playChainTimelineMotion.mjs
+d-playClubManager: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playClubManager.mjs
+d-playClubManagerNewCountries: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playClubManagerNewCountries.mjs
+d-playClubManagerSaveLeave: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playClubManagerSaveLeave.mjs
+d-playClubManagerSlots: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playClubManagerSlots.mjs
+d-playCmDataOnDemand: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playCmDataOnDemand.mjs
+d-playCollegeGridFirstTap: timeout -k 5 300 node --import ./.rc/x/drawcount.mjs scripts/playCollegeGridFirstTap.mjs
