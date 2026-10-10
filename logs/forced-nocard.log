@@ -1,0 +1,41 @@
+-rw-r--r-- 1 runner runner 85510 Oct 10 10:00 /home/runner/work/_temp/rc-out/files/nocard-live-fit-save-wide.json
+--- first run, exit 1
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_CONTROL=nocard node scripts/playLiveMatchFit.mjs
+  [match phone] seed 3208792607, 1869 draws at kick off, digest 421656fa over 6203 characters of drawn match: Crystal Palace v Brighton, goals of the first half 28' Diego Gómez, 32' Mats Wieffer; own goals among them 0
+  the goal watched: 28' Diego Gómez, against me; own goals in its half 0 of 2 goals
+  [labels 390] mean overlapping name labels a frame 0.83 over 24 frames of 21 labels; before match mode 1.63 at 6b1caa20, ratio 0.51
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace0 - 2BrightonPaused at 47'Back t", and the clock held at 47' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (47' to 48')
+  [match calm] seed 3208792608, 1799 draws at kick off, digest e14582e9 over 4503 characters of drawn match: Crystal Palace v Chelsea, goals of the first half none; own goals among them 0
+  the goal watched: 57' João Pedro, against me; own goals in its half 0 of 2 goals
+  [match wide] seed 3208792609, 1829 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+  FAIL: no scorer card was ever on screen around the goal
+      RED TO REPLAY: section 7 (wide), match digest 50a7cae5, the goal watched 5' Lewis Hall (own goal), for me
+      its save is in /home/runner/work/_temp/rc-out/files/nocard-live-fit-save-wide.json (70855 bytes as stored). Replay that half with: LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/nocard-live-fit-save-wide.json LIVE_FIT_CONTROL=nocard node scripts/playLiveMatchFit.mjs
+playLiveMatchFit: control nocard turned section 7 red on the line it must (no scorer card was ever on screen, 1 node touched) and left the rest green.
+--- replay from the file, exit 1
+playLiveMatchFit: seed 3208792607 (the walk's own, from its file name). Replay this run with: LIVE_FIT_SEED=3208792607 LIVE_FIT_CONTROL=nocard LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/nocard-live-fit-save-wide.json node scripts/playLiveMatchFit.mjs
+Starting every context from /home/runner/work/_temp/rc-out/files/nocard-live-fit-save-wide.json: 70855 bytes as stored, Crystal Palace v Newcastle, match digest 50a7cae5, to watch the goal at 5' Lewis Hall (own goal), for me.
+Back in the match at Crystal Palace, from the file.
+  [match phone] seed 3208792607, 7 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  ok    the match that opened is the one in the file (digest 50a7cae5)
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+  [labels 390] mean overlapping name labels a frame 0.54 over 24 frames of 22 labels; before match mode 1.63 at 6b1caa20, ratio 0.33
+6) Back folds the match away
+  ok    Back folds the match to a card reading "Premier League · Round 1Crystal Palace1 - 0NewcastlePaused at 21'Back ", and the clock held at 21' for 2.6 seconds
+  ok    Back to the match puts the stage back and the clock runs on (21' to 22')
+  [match calm] seed 3208792608, 7 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  ok    the match that opened is the one in the file (digest 50a7cae5)
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+  [match wide] seed 3208792609, 7 draws at kick off, digest 50a7cae5 over 4920 characters of drawn match: Crystal Palace v Newcastle, goals of the first half 5' Lewis Hall (own goal); own goals among them 1
+  ok    the match that opened is the one in the file (digest 50a7cae5)
+  the goal watched: 5' Lewis Hall (own goal), for me; own goals in its half 1 of 1 goals
+  FAIL: no scorer card was ever on screen around the goal
+      RED TO REPLAY: section 7 (wide), match digest 50a7cae5, the goal watched 5' Lewis Hall (own goal), for me
+      its save is in /home/runner/work/_temp/rc-out/files/nocard-live-fit-save-wide-replay.json (70855 bytes as stored). Replay that half with: LIVE_FIT_SAVE=/home/runner/work/_temp/rc-out/files/nocard-live-fit-save-wide-replay.json LIVE_FIT_CONTROL=nocard node scripts/playLiveMatchFit.mjs
+playLiveMatchFit: control nocard turned section 7 red on the line it must (no scorer card was ever on screen, 1 node touched) and left the rest green.
+first :       RED TO REPLAY: section 7 (wide), match digest 50a7cae5, the goal watched 5' Lewis Hall (own goal), for me
+replay:       RED TO REPLAY: section 7 (wide), match digest 50a7cae5, the goal watched 5' Lewis Hall (own goal), for me
+FORCED RED REPLAYED: control nocard went red twice on one goal of one match (exits 1 and 1)
