@@ -1,0 +1,9 @@
+#!build
+#!playwright
+#!serial
+# Reviewer (run lens), Round 1215, head 36f333be: the PAGE draws on a timer (the product mutated on the runner only, restored in the line).
+# In r1215-run-b the minifier dropped a bare Math.random() call, so those three timer lines proved nothing; here the number is kept.
+m-timer400-replay: node .rc/x/rmut.mjs timer400 && npm run build > /dev/null 2>&1 && test -n "$(grep -l __reviewDraws dist/assets/*.js | head -1)" && echo "the timer is in the bundle" && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-timer10000-replay: node .rc/x/rmut.mjs timer10000 && npm run build > /dev/null 2>&1 && test -n "$(grep -l __reviewDraws dist/assets/*.js | head -1)" && echo "the timer is in the bundle" && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+m-timer10000-replay-2: node .rc/x/rmut.mjs timer10000 && npm run build > /dev/null 2>&1 && test -n "$(grep -l __reviewDraws dist/assets/*.js | head -1)" && echo "the timer is in the bundle" && LIVE_FIT_REPLAY=1 node scripts/playLiveMatchFit.mjs; s=$?; git checkout -- scripts src; exit $s
+restored: echo "tracked files that differ: $(git status --short | grep -c -v '^??')"
