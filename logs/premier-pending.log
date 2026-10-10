@@ -1,0 +1,12 @@
+simCmLeagueFixtures: 2 ledger(s) on disk: laliga, premier
+A) shape: green for 2 ledger(s)
+B) no club twice in a matchday: green for 2 ledger(s)
+C) each pair once at each ground: green for 2 ledger(s)
+D) the game's own clubs: green for 2 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 2 ledger(s)
+F) two independent sources: green for 2 ledger(s)
+G) nothing excluded got in: RED for premier
+  FAIL: premier: a receipt row carries a field beyond its line, reference, matchday and clubs: duplicate
+I) frozen: green for 2 ledger(s)
+K) the controls: not run, the ledgers themselves are red
+simCmLeagueFixtures: FAILED, 1 failure(s): 2 ledger(s), 1 frozen, 1 pending (premier), 760 fixtures, 0 of 0 controls fired

@@ -1,0 +1,12 @@
+simCmLeagueFixtures: 1 ledger(s) on disk: laliga
+NEGATIVE CONTROL ON: wikihost on a copy of laliga, sections F must go red and nothing else
+A) shape: green for 1 ledger(s)
+B) no club twice in a matchday: green for 1 ledger(s)
+C) each pair once at each ground: green for 1 ledger(s)
+D) the game's own clubs: green for 1 ledger(s)
+E) the drift guard: ledger equals each source in the receipt: green for 1 ledger(s)
+F) two independent sources: RED for laliga
+  FAIL: laliga: a wiki is not a source: en.wikipedia.org
+G) nothing excluded got in: green for 1 ledger(s)
+I) frozen: green for 1 ledger(s)
+CONTROL wikihost FIRED as expected on laliga: sections F went red for laliga and nothing else
