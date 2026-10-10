@@ -1,0 +1,6 @@
+recorded (as committed): 383 list items
+basewhatsnew: 394 list items on the saved page
+head: 395 list items on the saved page
+items only on the head's page: 2; items only on the page drawn with the base's WhatsNew.tsx: 1; items the base's page has that the committed recording lacks: 12
+the head's own item: // Owner 2026-08-05: no third-party editor badge should ever show on the // live site. The host injects a floating "Edit
+src and public restored: 0 file(s) differ from the head
