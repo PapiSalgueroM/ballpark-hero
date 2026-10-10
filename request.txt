@@ -1,0 +1,19 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usRivalLine.test.ts src/test/usRivalOldSaves.test.ts src/test/nflTruthRules1104.test.ts --testTimeout=300000 --hookTimeout=120000
+rival-p: RIVAL_PROVE=83d42fec RIVAL_MOVED=none RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+record-board: node scripts/recordUsBoardFixture.mjs $RC_OUT/usBoardFixture.json
+parity-expected-red: node scripts/simUsBoardParity.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+rivalry-allstar221: RIVALRY_CONTROL=allstar221 node scripts/simCareerRivalryEvents.mjs
+rivalry-owndealt206: RIVALRY_CONTROL=owndealt206 node scripts/simCareerRivalryEvents.mjs
+rivalry-coin306: RIVALRY_CONTROL=coin306 node scripts/simCareerRivalryEvents.mjs
+rivalry-oldcard: RIVALRY_CONTROL=oldcard node scripts/simCareerRivalryEvents.mjs
+sense-c: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-oldgateown: SIM_NBA_SENSE_CONTROL=oldgateown node scripts/simNbaAwardsSense.mjs
+sense-droppedanyyear: SIM_NBA_SENSE_CONTROL=droppedanyyear node scripts/simNbaAwardsSense.mjs
+sense-oldgate306: SIM_NBA_SENSE_CONTROL=oldgate306 node scripts/simNbaAwardsSense.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simAwards: node scripts/simAwards.mjs
+record-digest: DIGEST_RECORD=1 DIGEST_ALLOW='nfl|*' node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000 && cp src/test/fixtures/usCareerTruthDigest.json $RC_OUT/usCareerTruthDigest.json

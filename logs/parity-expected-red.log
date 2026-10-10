@@ -1,0 +1,19 @@
+A) the fixture is whole
+   recorded from 96c3f64def6dc495caa3ac0b893a93c818d1deec (not main: src differs from 09df145abfb241679022b41903d2f19bc254ebf9)
+   nfl: 459 clicks, 24 seasons, 15 fixed saves, 685 screen steps
+   nba: 507 clicks, 24 seasons, 15 fixed saves, 705 screen steps
+   mlb: 449 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+   nhl: 415 clicks, 24 seasons, 15 fixed saves, 688 screen steps
+B) the replay: every click, every save, every screen
+   Vitest exit 1, passed [nba, mlb, nhl], failed [nfl]
+   nfl save "negNet" step 52 (after "hub: Play the 2034 season"): the save differs first in c.pendingRivalryEvent
+   nfl save "negNet" step 53 (after "curtain: Continue"): the save differs; the screen reads "🪞 Rivalry🏈Head to Head WinYour team beat Jonah Brennan's team this season, and you had the better box score.Fanbase +5, confidence boostRy", fixture "🪞 Rivalry🗳️All-Pro TeamThe All-Pro team is out and you are not on the first team, a year after you were. It goes down as one more line in "
+   nfl save "negNet" step 54 (after "rival beat: Continue"): the save differs first in c.morale, c.lastRivalryEventId; the markup differs under the same words ("Ryder Blaze · WRNew York Jets2035 · age 31OVR 83$23.8M x1⭐ S")
+  FAIL: the replay exited 1
+  FAIL: the replay passed [nba, mlb, nhl], not all four sports
+  FAIL: 4 steps differ from the fixture
+
+  If your round meant to change what a US career does, re-record from your tree
+  (node scripts/recordUsBoardFixture.mjs), commit the fixture with the change and say so in the
+  commit. If it did not, the red is a real change: read the first differing step above.
+simUsBoardParity: 3 failures

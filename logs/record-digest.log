@@ -1,0 +1,15 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+[90mstdout[2m | src/test/usCareerTruthDigest.test.ts[2m > [22m[2mRound 1104: the US career truth digest[2m > [22m[2mevery key equals the committed fixture, or moved only where this step is allowed to move it
+[22m[39mdigest: 3 of 58 keys moved (5 of 464 careers; 0 careers were below zero on the committed code); allow=nfl|*; outside the allow list: 0
+digest moved: nfl|y2005|LB nfl|y2005|CB nfl|y2005|EDGE
+
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 28332[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 28331[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m   Start at [22m 19:00:29
+[2m   Duration [22m 30.08s[2m (transform 792ms, setup 47ms, collect 1.06s, tests 28.33s, environment 224ms, prepare 89ms)[22m
+
