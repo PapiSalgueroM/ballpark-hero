@@ -12,7 +12,7 @@ import {
 import { NBA_SEASON } from '@/lib/season/nba';
 import { NFL_SEASON } from '@/lib/season/nfl';
 import { NBA_MISSED_PLAYOFFS, NBA_PLAYOFF_RESULTS, nbaTeamLabelOf } from '@/lib/nbaMyCareer';
-import { NFL_PLAYOFF_RESULTS, nflTeamLabelOf } from '@/lib/nflMyCareer';
+import { NFL_PLAYOFF_RESULTS, teamLabelOf as nflTeamLabelOf } from '@/lib/nflMyCareer';
 import { usPostseasonRounds } from '@/data/usPostseasonFormat';
 
 const nbaRow = (over: Record<string, unknown> = {}): UsRow => ({
@@ -22,7 +22,7 @@ const nbaRow = (over: Record<string, unknown> = {}): UsRow => ({
 const who = (name: string) => ({ name, pos: 'PG', eraId: undefined as string | undefined });
 function nba(name: string, row: UsRow) {
   const b = buildUsSeason(NBA_SEASON, who(name), row, nbaTeamLabelOf);
-  if (!b.ok) throw new Error(b.line);
+  if (b.ok === false) throw new Error(b.line);
   return b;
 }
 /** The whole total a saved mean is held to, typed here on its own (never the module's). */
@@ -99,9 +99,12 @@ describe('usPostTotals', () => {
     const sum: StatTotal = { key: 'passTd', kind: 'sum', total: 6, perGameCap: 6, teamFor: true, teamPoints: 7 };
     expect(usPostTotals([sum], 2)).toEqual([sum]);
     expect(usPostTotals([mean(24.5)], 5)).toEqual([{ key: 'pts', kind: 'sum', total: 123, perGameCap: 60, formPower: 0.5 }]);
-    /* 2.3 times 5 is 11.499999999999998 as a float: the tenths make it 11.5, which rounds to 12 */
-    expect(Math.round(2.3 * 5)).toBe(11);
-    expect(usPostTotals([mean(2.3)], 5)![0]).toMatchObject({ total: 12 });
+    /* 4.1 times 15 is 61.49999999999999 as a float and 2.3 times 25 is 57.49999999999999: plain rounding
+       drops both a point, the tenths make them 61.5 and 57.5 */
+    expect(Math.round(4.1 * 15)).toBe(61);
+    expect(usPostTotals([mean(4.1)], 15)![0]).toMatchObject({ total: 62 });
+    expect(Math.round(2.3 * 25)).toBe(57);
+    expect(usPostTotals([mean(2.3)], 25)![0]).toMatchObject({ total: 58 });
     expect(usPostTotals([mean(0)], 7)![0]).toMatchObject({ total: 0 });
   });
 
@@ -195,7 +198,7 @@ describe('usPlayoffLay', () => {
     const base = { year: 2030, team: 'BUF', age: 27, ovr: 88, games: 17, awards: [], salary: 30, passYds: 4310, passTd: 31, ints: 9, poLine: '811 yds, 6 TD, 1 INT' };
     const row = { ...base, teamResult: NFL_PLAYOFF_RESULTS[2], poGames: 3 } as UsRow;
     const b = buildUsSeason(NFL_SEASON, { name: 'Lay Six', pos: 'QB', eraId: undefined }, row, nflTeamLabelOf);
-    if (!b.ok) throw new Error(b.line);
+    if (b.ok === false) throw new Error(b.line);
     const lay = usPlayoffLay(NFL_SEASON, row, b.ctx, b.key)!;
     expect(lay.series.map(s => [s.need, s.most, s.games, s.won])).toEqual([[1, 1, 1, true], [1, 1, 1, true], [1, 1, 1, false]]);
     expect(usPlayoffPath(NFL_SEASON, row, b.ctx, b.key)!.steps.map(s => s.score)).toEqual([null, null, null]);
@@ -327,7 +330,7 @@ describe('usPostseason, sport neutral', () => {
         passYds: 4310, passTd: 31, ints: 9, poGames: 2, poPassYds: 540, poPassTd: 4, poInts: 1,
       } as UsRow;
       const b = buildUsSeason(NFL_SEASON, { name, pos: 'QB', eraId: undefined }, row, nflTeamLabelOf);
-      if (!b.ok) throw new Error(b.line);
+      if (b.ok === false) throw new Error(b.line);
       const p = usPostseason(NFL_SEASON, row, b.ctx, b.key);
       if (!p) continue;
       laid += 1;
