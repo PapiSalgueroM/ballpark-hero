@@ -1,0 +1,33 @@
+1) A manager who has spent nothing is playing the game that shipped
+   8 effects, each identity on a fresh block, an absent block and six junk blocks
+   7 trees, every one of them describing what a point buys
+2) Levels get dearer, and the trees cannot be overfilled
+   36 levels, 34 of them dearer than the one before, cap hands out exactly 35 points
+   level 2 costs 400, level 36 costs 29508 in total
+3) A point cannot be conjured, and a tree cannot go past its cap
+   one point held at one, one tree held at 5, the board held at 35
+   8 of 8 effects move between an empty board and a full one
+   35 of 35 individual points buy something they did not at the point before
+4) A mangled block reads as a fresh one rather than poisoning the save
+   8 malformed blocks refused, an overfilled tree refused, a good one accepted
+5) Every source pays, and a trophy beats a season of wins
+   7 of 7 sources move the total, a trophy pays 120 against 3 a win
+6) The trees are a long game somebody could actually walk
+   a good season pays 555 XP
+   first point 0.7 seasons, ten points 8.7, the whole board 53.2
+7) A maxed manager against an untouched one, paired season by season
+   48 paired seasons, 2189 matches untouched and 2197 maxed, 48 budget pairs
+   budget after a season: 126.8m untouched, 131.1m maxed, gap +4.3m
+   the maxed manager lost 444 of 2197 (20.21 percent)
+   points per game 1.945 untouched, 2.012 maxed, gap +0.068 (NOT asserted on, see the note above)
+8) A maxed manager cannot buy his way out of Round 506 haggling
+   untouched: 0 agreed, 10 ran out, 30 hijacked, of 40 opened
+   maxed    : 0 agreed, 20 ran out, 20 hijacked, of 40 opened
+9) Every background hands over exactly one point, in its own tree, once
+   7 backgrounds, 7 distinct trees, each one point that reads exactly like a bought one
+   a Round 303 save got its point once: 1 free before and after, Man Management 1 after two reloads
+   a full tree hands its gift back, no manager gets nothing, a bad gift fails closed, a full board offers nothing
+10) A background point and a bought point make the same money in the real engine
+   3 clubs, 8 weeks each: gifted and bought budgets equal at every club, both off the untouched one at 3
+
+simManagerXp: green. Nothing spent is the game that shipped, every point moves something, and nothing can be conjured.

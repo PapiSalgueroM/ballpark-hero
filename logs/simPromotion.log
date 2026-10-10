@@ -1,0 +1,15 @@
+1) one English summer: three up, three down, the world re-ranked
+   up: Birmingham City, Blackburn Rovers, Bolton Wanderers; down: Nottingham Forest, Sunderland, Tottenham; weakest newcomer ranked 20
+2) one German summer: two up, two down, sizes 18 and 18
+   up: Arminia Bielefeld, Bochum; down: Union Berlin, Werder Bremen; England summarized in one line
+3) the player goes down: a real Championship season follows
+   24 clubs, 46 rounds, 23 dugouts, no UCL
+4) and comes straight back up, without a Champions League place
+   back in the premier, 38 rounds, and the UCL fallback stayed shut
+5) ten seasons of yo-yo never corrupt the world
+   10 rollovers, 454 club names intact every summer, budgets finite throughout
+6) historic eras and custom clubs are exempt
+   era2010 rollover: no overrides; custom club rollover: no overrides
+   teeth: memberships diffed against the static defs, the union conserved by name, the board and the calendar read off the moved world, not the tables that moved it
+
+simPromotion: all green
