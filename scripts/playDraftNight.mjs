@@ -13,7 +13,10 @@
  *   3. NO SPOILER. Until the closing row starts to land, the title, the club
  *      line, the result block and the closing row itself are at opacity 0.
  *      The opacity is read on the elements that carry the hold (it is not
- *      inherited, so a child of a held parent reports 1).   Control `spoiler`.
+ *      inherited, so a child of a held parent reports 1). The moment is the
+ *      closing row's OWN animation delay, never the page's number for the
+ *      hold, and each held element's own delay must reach it, so a hold that
+ *      ends early is red whatever the frames caught.        Control `spoiler`.
  *   4. YOU SEE YOUR NAME CALLED. At the frame the closing row lands it is
  *      wholly inside the viewport, with no scroll from the driver, and
  *      nothing is drawn over it.                              Control `fold`.
@@ -261,8 +264,20 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     await press('Draft day');
     await page.locator('[data-prospect-phase="done"]').waitFor();
     await page.locator('[data-career-night]').waitFor({ timeout: 3000 });
-    const hold = mode === 'reduced' ? 0 : parseFloat(await page.locator('[data-prospect-journey]').evaluate(el => el.style.getPropertyValue('--night-hold')) || '0');
+    /* When the closing row starts to land, read off THAT ROW's own animation. The words above the
+       board are judged against it, never against the journey's --night-hold: that is the page's own
+       number for the hold, and a hold that ended early would move the yardstick with it. */
+    const clock = mode === 'reduced' ? { close: 0 } : await page.evaluate(() => {
+      const delay = el => (el ? parseFloat(getComputedStyle(el).animationDelay) || 0 : null);
+      const j = document.querySelector('[data-prospect-journey]');
+      return { close: delay(document.querySelector("[data-night-row='you'], [data-night-row='unpicked']")), title: delay(j.querySelector('[data-arrival] h2')), club: delay(j.querySelector('[data-arrival] h2 + p')), result: delay(document.querySelector('[data-testid="draft-result"]')) };
+    });
+    const hold = clock.close;
     row.closeAtS = hold;
+    if (mode !== 'reduced') {
+      if (!(hold > 0)) fail(id, 'spoiler', 'the closing row has no delay of its own to judge the hold against');
+      for (const what of ['title', 'club', 'result']) if (!(clock[what] >= hold - 0.001)) fail(id, 'spoiler', `the ${what} is held for ${clock[what]} s and the closing row only starts to land at ${hold} s`);
+    }
     /* 5. Nothing live is hidden and everything pressable is big enough, in the first frames. */
     const controls = await page.evaluate(BUTTONS);
     for (const c of controls) {
