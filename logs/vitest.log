@@ -1,0 +1,94 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/nbaTrophyTile.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [31m❯[39m src/test/usTrophyTile.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 250[2mms[22m[39m
+   [32m✓[39m Round 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mNFL: one lesser award alone is one honour on the tile, whichever it is[32m 3[2mms[22m[39m
+   [32m✓[39m Round 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mNFL: the rows before this round are what read Empty for that same player (the check can fail)[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mNFL: an award with a row of its own is counted once[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mMLB: one lesser award alone is one honour on the tile, whichever it is[32m 2[2mms[22m[39m
+   [32m✓[39m Round 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mMLB: the rows before this round are what read Empty for that same player (the check can fail)[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mMLB: an award with a row of its own is counted once[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mNHL: one lesser award alone is one honour on the tile, whichever it is[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mNHL: the rows before this round are what read Empty for that same player (the check can fail)[32m 0[2mms[22m[39m
+[31m   [31m×[31m Round 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mNHL: an award with a row of its own is counted once[39m[32m 7[2mms[22m[39m
+[31m     → expected 3 to be 2 // Object.is equality[39m
+[31m   [31m×[31m Round 1149: on the real engines the tile is the rings plus every award on the seasons[2m > [22mNFL: 120 seeded careers, each tile equal to its rings plus its awards[39m[32m 127[2mms[22m[39m
+[31m     → NFL career 102 (EDGE): expected 6 to be 5 // Object.is equality[39m
+   [32m✓[39m Round 1149: on the real engines the tile is the rings plus every award on the seasons[2m > [22mMLB: 120 seeded careers, each tile equal to its rings plus its awards[32m 102[2mms[22m[39m
+[31m   [31m×[31m Round 1149: on the real engines the tile is the rings plus every award on the seasons[2m > [22mNHL: 120 seeded careers, each tile equal to its rings plus its awards[39m[32m 5[2mms[22m[39m
+[31m     → NHL career 1 (LW): expected 6 to be 5 // Object.is equality[39m
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 32556[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 32555[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/usTrophyTile.test.ts[2m > [22mRound 1149: the lesser awards are not an empty case, in the NFL, MLB and NHL[2m > [22mNHL: an award with a row of its own is counted once
+[31m[1mAssertionError[22m: expected 3 to be 2 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 2[39m
+[31m+ 3[39m
+
+[36m [2m❯[22m src/test/usTrophyTile.test.ts:[2m97:64[22m[39m
+    [90m 95| [39m      const c = careerWith(S.zero, [[S.lesser[0]], [...S.named.awards,…
+    [90m 96| [39m      [35mconst[39m rows [33m=[39m [33mS[39m[33m.[39msport[33m.[39m[34mhonours[39m(c)[33m;[39m
+    [90m 97| [39m      [34mexpect[39m(rows[33m.[39m[34mfind[39m(r [33m=>[39m r[33m.[39mlabel [33m===[39m [32m'in other awards'[39m)[33m?.[39mn)[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+    [90m   | [39m                                                               [31m^[39m
+    [90m 98| [39m      expect(honoursTotal({ rings: 0, honours: rows })).toBe(S.named.a…
+    [90m 99| [39m    })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usTrophyTile.test.ts[2m > [22mRound 1149: on the real engines the tile is the rings plus every award on the seasons[2m > [22mNFL: 120 seeded careers, each tile equal to its rings plus its awards
+[31m[1mAssertionError[22m: NFL career 102 (EDGE): expected 6 to be 5 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 5[39m
+[31m+ 6[39m
+
+[36m [2m❯[22m src/test/usTrophyTile.test.ts:[2m138:92[22m[39m
+    [90m136| [39m        const held = (c.seasons as { awards?: string[] }[]).reduce((n,…
+    [90m137| [39m        seasons [33m+=[39m c[33m.[39mseasons[33m.[39mlength[33m;[39m
+    [90m138| [39m        expect(honoursTotal({ rings, honours: rows }), `${F.S.name} ca…
+    [90m   | [39m                                                                                           [31m^[39m
+    [90m139| [39m        [35mif[39m (held [33m>[39m [34m0[39m) withAwards [33m+=[39m [34m1[39m[33m;[39m
+    [90m140| [39m        if (held > 0 && rings + rows.filter(r => r.label !== 'in other…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usTrophyTile.test.ts[2m > [22mRound 1149: on the real engines the tile is the rings plus every award on the seasons[2m > [22mNHL: 120 seeded careers, each tile equal to its rings plus its awards
+[31m[1mAssertionError[22m: NHL career 1 (LW): expected 6 to be 5 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 5[39m
+[31m+ 6[39m
+
+[36m [2m❯[22m src/test/usTrophyTile.test.ts:[2m138:92[22m[39m
+    [90m136| [39m        const held = (c.seasons as { awards?: string[] }[]).reduce((n,…
+    [90m137| [39m        seasons [33m+=[39m c[33m.[39mseasons[33m.[39mlength[33m;[39m
+    [90m138| [39m        expect(honoursTotal({ rings, honours: rows }), `${F.S.name} ca…
+    [90m   | [39m                                                                                           [31m^[39m
+    [90m139| [39m        [35mif[39m (held [33m>[39m [34m0[39m) withAwards [33m+=[39m [34m1[39m[33m;[39m
+    [90m140| [39m        if (held > 0 && rings + rows.filter(r => r.label !== 'in other…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[2m | [22m[1m[32m17 passed[39m[22m[90m (20)[39m
+[2m   Start at [22m 08:18:41
+[2m   Duration [22m 34.49s[2m (transform 1.11s, setup 196ms, collect 2.65s, tests 32.83s, environment 1.23s, prepare 475ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usTrophyTile.test.ts,title=src/test/usTrophyTile.test.ts > Round 1149%3A the lesser awards are not an empty case%2C in the NFL%2C MLB and NHL > NHL%3A an award with a row of its own is counted once,line=97,column=64::AssertionError: expected 3 to be 2 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 2%0A+ 3%0A%0A ❯ src/test/usTrophyTile.test.ts:97:64%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usTrophyTile.test.ts,title=src/test/usTrophyTile.test.ts > Round 1149%3A on the real engines the tile is the rings plus every award on the seasons > NFL%3A 120 seeded careers%2C each tile equal to its rings plus its awards,line=138,column=92::AssertionError: NFL career 102 (EDGE): expected 6 to be 5 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 5%0A+ 6%0A%0A ❯ src/test/usTrophyTile.test.ts:138:92%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usTrophyTile.test.ts,title=src/test/usTrophyTile.test.ts > Round 1149%3A on the real engines the tile is the rings plus every award on the seasons > NHL%3A 120 seeded careers%2C each tile equal to its rings plus its awards,line=138,column=92::AssertionError: NHL career 1 (LW): expected 6 to be 5 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 5%0A+ 6%0A%0A ❯ src/test/usTrophyTile.test.ts:138:92%0A%0A

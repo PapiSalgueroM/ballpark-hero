@@ -1,0 +1,7 @@
+#!serial
+apply: cp .rc/x/m2-nflCareerSport.ts src/lib/nflCareerSport.ts && cp .rc/x/m5-nhlCareerSport.ts src/lib/nhlCareerSport.ts && git diff --stat -- src | tail -1
+sense: node scripts/simNbaAwardsSense.mjs
+vitest: node_modules/.bin/vitest run src/test/usTrophyTile.test.ts src/test/nbaTrophyTile.test.ts src/test/usCareerTruthDigest.test.ts --testTimeout=300000 --hookTimeout=120000
+parity: node scripts/simUsBoardParity.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs

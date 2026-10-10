@@ -1,0 +1,6 @@
+apply exit=0 0s |  2 files changed, 2 insertions(+), 2 deletions(-)
+sense exit=1 96s | simNbaAwardsSense: 171 checks, 2 failed (full size), 95s
+vitest exit=1 35s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usTrophyTile.test.ts,title=src/test/usTrophyTile.test.ts > Round 1149%3A on the real engines the tile 
+parity exit=0 35s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+simNflCareer exit=0 1s | PASS: no crashes, every position produces stats, shop fully reachable, deck C drawn, every card dealt only where its words hold (its words, odds and money: simUsCareerDec
+simNhlCareer exit=0 12s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, life cards tagged
