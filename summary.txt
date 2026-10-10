@@ -1,0 +1,10 @@
+head exit=0 0s | 45abe1083 Round 1213: the notes say what the fix round changed and how the binding round freezes the Premier line
+sim exit=0 8s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 166 of 166 controls fired
+f9-count exit=0 0s | F9-COUNT zero-receipts-flag=0
+sim-plain exit=0 8s | simCmLeagueFixtures: OK, sections A to G and I green: 9 ledger(s), 9 frozen, 0 pending, 3148 fixtures, 166 of 166 controls fired
+ctl-noreadtime-pages exit=1 1s | CONTROL noreadtime FIRED as expected on bundesliga2: sections E went red for bundesliga2 and nothing else
+ctl-noreadtime exit=1 1s | CONTROL noreadtime FIRED as expected on laliga: sections E went red for laliga and nothing else
+suite-runner exit=0 9s | All 1 harnesses green.
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 40s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 74s | 

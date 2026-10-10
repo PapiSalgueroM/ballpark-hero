@@ -1,0 +1,10 @@
+head: git log --oneline -3 | cat
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+sim: CM_LEAGUE_FIXTURES_EXPECT=9 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=9 node scripts/simCmLeagueFixtures.mjs
+sim-plain: node scripts/simCmLeagueFixtures.mjs
+f9-count: z=0; for f in scripts/data/clubManager*Fixtures2026.receipt.json; do c=$(grep -c readAtUtc $f); echo "$(basename $f): readAtUtc=$c"; [ "$c" -gt 0 ] || z=1; done; echo "F9-COUNT zero-receipts-flag=$z"; exit $z
+ctl-noreadtime: CM_LEAGUE_FIXTURES_CONTROL=noreadtime CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=laliga node scripts/simCmLeagueFixtures.mjs
+ctl-noreadtime-pages: CM_LEAGUE_FIXTURES_CONTROL=noreadtime CM_LEAGUE_FIXTURES_CONTROL_LEAGUE=bundesliga2 node scripts/simCmLeagueFixtures.mjs
+suite-runner: ONLY=simCmLeagueFixtures node scripts/runAllSims.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
