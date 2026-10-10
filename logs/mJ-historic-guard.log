@@ -1,0 +1,10 @@
+MUTATED J: src/lib/clubManager.ts, 1 place(s):  && !isHistoricEra(state.eraId ?? DEFAULT_ERA_ID)
+      && cmVarCovers(  ->  
+      && cmVarCovers(
+RESULT simCmVar=1
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+FAILED asks for reviews only where the competition uses them and plays the same match everywhere else | A historic era save carries no opt in, on a 2026 clock in a covered competition
+restored

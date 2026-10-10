@@ -1,0 +1,3 @@
+#!serial
+# Round 1218 closing check (verify), request B: the run reviewer's own mutation J (the historic era clause taken out of kickOff), the exact line of r1218-run-e, on the pushed head. It restores in the same line.
+mJ-historic-guard: node .rc/x/r1218mut.mjs J && { node scripts/simCmVar.mjs > /tmp/m.log 2>&1; echo "RESULT simCmVar=$?"; tail -4 /tmp/m.log | cut -c1-500; node -e 'const r=require("./cm-var-artifacts/outcomes/normal-report.json"); for (const c of r.cases) if (c.status==="failed") console.log("FAILED", c.title, "|", String(c.message).split(String.fromCharCode(10))[0].slice(0,300))'; }; git checkout HEAD -- src scripts; git status --short | head -3; echo restored
