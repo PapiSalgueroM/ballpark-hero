@@ -1,0 +1,172 @@
+
+1) Every cue is a finite, audible, short buffer
+   ok   whistle: 18522 samples, 0.420 s (declared 0.42 s, at most 1.5)
+   ok   whistle: every sample finite
+   ok   whistle: starts and ends on zero
+   ok   whistle: peak 0.500 (declared 0.5, at most 0.9)
+   ok   whistle: mean 2.8e-7 (within 0.01 of zero)
+   ok   whistle: two renders are sample for sample identical
+   ok   whistle: rms 0.257 on the default seed, 0.248 to 0.261 over 21 seeds (band 0.186 to 0.326)
+   ok   net: 13230 samples, 0.300 s (declared 0.3 s, at most 1.5)
+   ok   net: every sample finite
+   ok   net: starts and ends on zero
+   ok   net: peak 0.700 (declared 0.7, at most 0.9)
+   ok   net: mean 2.0e-4 (within 0.01 of zero)
+   ok   net: two renders are sample for sample identical
+   ok   net: rms 0.098 on the default seed, 0.087 to 0.103 over 21 seeds (band 0.065 to 0.129)
+   ok   crowd: 61740 samples, 1.400 s (declared 1.4 s, at most 1.5)
+   ok   crowd: every sample finite
+   ok   crowd: starts and ends on zero
+   ok   crowd: peak 0.450 (declared 0.45, at most 0.9)
+   ok   crowd: mean -6.9e-6 (within 0.01 of zero)
+   ok   crowd: two renders are sample for sample identical
+   ok   crowd: rms 0.079 on the default seed, 0.061 to 0.085 over 21 seeds (band 0.046 to 0.106)
+   ok   tick: 2205 samples, 0.050 s (declared 0.05 s, at most 1.5)
+   ok   tick: every sample finite
+   ok   tick: starts and ends on zero
+   ok   tick: peak 0.350 (declared 0.35, at most 0.9)
+   ok   tick: mean -1.4e-4 (within 0.01 of zero)
+   ok   tick: two renders are sample for sample identical
+   ok   tick: rms 0.071 on the default seed, 0.067 to 0.079 over 21 seeds (band 0.05 to 0.099)
+   ok   sting: 39690 samples, 0.900 s (declared 0.9 s, at most 1.5)
+   ok   sting: every sample finite
+   ok   sting: starts and ends on zero
+   ok   sting: peak 0.600 (declared 0.6, at most 0.9)
+   ok   sting: mean 2.3e-6 (within 0.01 of zero)
+   ok   sting: two renders are sample for sample identical
+   ok   sting: rms 0.121 on the default seed, 0.121 to 0.121 over 21 seeds (band 0.091 to 0.151)
+   ok   thud: 9702 samples, 0.220 s (declared 0.22 s, at most 1.5)
+   ok   thud: every sample finite
+   ok   thud: starts and ends on zero
+   ok   thud: peak 0.800 (declared 0.8, at most 0.9)
+   ok   thud: mean 1.2e-3 (within 0.01 of zero)
+   ok   thud: two renders are sample for sample identical
+   ok   thud: rms 0.145 on the default seed, 0.140 to 0.147 over 21 seeds (band 0.105 to 0.183)
+
+2) Each cue sounds like what it says
+   ok   whistle: share of energy from 2,500 to 3,600 Hz: 0.982 to 0.983 over 21 seeds (at least 0.85)
+   ok   whistle: the thud in its place scores 0.000 and fails that row
+   ok   net: centroid above 500 Hz, first 60 ms over 150 to 300 ms: 1.518 to 1.706 over 21 seeds (at least 1.25)
+   ok   net: noise that does not fall in its place scores 1.034 and fails that row
+   ok   crowd: rms of 0.35 to 0.85 s over the first 0.12 s: 19.698 to 23.049 over 21 seeds (at least 5)
+   ok   crowd: flat noise in its place scores 0.996 and fails that row
+   ok   crowd: rms of 0.35 to 0.85 s over the last 0.12 s: 23.348 to 27.704 over 21 seeds (at least 5)
+   ok   crowd: flat noise in its place scores 0.995 and fails that row
+   ok   crowd: share of energy above 4,000 Hz: 0.030 to 0.034 over 21 seeds (at most 0.15)
+   ok   crowd: flat noise in its place scores 0.818 and fails that row
+   ok   tick: share of energy from 1,000 to 3,000 Hz: 0.994 to 0.996 over 21 seeds (at least 0.85)
+   ok   tick: the thud in its place scores 0.000 and fails that row
+   ok   tick: share of energy in the first 25 ms: 0.996 to 0.996 over 21 seeds (at least 0.9)
+   ok   tick: flat noise in its place scores 0.486 and fails that row
+   ok   sting: note 1 leads the other three in its window: 11.538 to 11.538 over 21 seeds (at least 1.4)
+   ok   sting: the sting played backwards in its place scores 0.002 and fails that row
+   ok   sting: note 2 leads the other three in its window: 4.293 to 4.293 over 21 seeds (at least 1.4)
+   ok   sting: the sting played backwards in its place scores 0.157 and fails that row
+   ok   sting: note 3 leads the other three in its window: 4.701 to 4.701 over 21 seeds (at least 1.4)
+   ok   sting: the sting played backwards in its place scores 0.402 and fails that row
+   ok   sting: note 4 leads the other three in its window: 2.034 to 2.034 over 21 seeds (at least 1.4)
+   ok   sting: the sting played backwards in its place scores 0.920 and fails that row
+   ok   thud: share of energy below 600 Hz: 0.993 to 0.993 over 21 seeds (at least 0.85)
+   ok   thud: the whistle in its place scores 0.000 and fails that row
+   ok   thud: the tick in its place scores 0.000 and fails that row
+   ok   thud: share of energy from 300 to 1,500 Hz (what a phone can carry): 0.206 to 0.211 over 21 seeds (at least 0.1)
+   ok   thud: the thud with no knock in its place scores 0.002 and fails that row
+
+3) Every moment mixes cleanly
+   ok   the moments table has exactly the 10 names of the SoundMoment union (10 rows)
+   ok   tap: 1 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   tap: 0.050 s, peak after the master gain 0.210 (0.15 to 0.9, at most 2 s)
+   ok   tap: buzz none (at most three, 10 to 80 ms each, 200 ms in all)
+   ok   kickoff: 1 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   kickoff: 0.420 s, peak after the master gain 0.300 (0.15 to 0.9, at most 2 s)
+   ok   kickoff: buzz none (at most three, 10 to 80 ms each, 200 ms in all)
+   ok   halftime: 2 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   halftime: 0.920 s, peak after the master gain 0.300 (0.15 to 0.9, at most 2 s)
+   ok   halftime: buzz none (at most three, 10 to 80 ms each, 200 ms in all)
+   ok   fulltime: 3 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   fulltime: 1.420 s, peak after the master gain 0.300 (0.15 to 0.9, at most 2 s)
+   ok   fulltime: buzz none (at most three, 10 to 80 ms each, 200 ms in all)
+   ok   goal: 2 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   goal: 1.450 s, peak after the master gain 0.420 (0.15 to 0.9, at most 2 s)
+   ok   goal: buzz [40] (at most three, 10 to 80 ms each, 200 ms in all)
+   ok   goalAgainst: 2 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   goalAgainst: 0.300 s, peak after the master gain 0.486 (0.15 to 0.9, at most 2 s)
+   ok   goalAgainst: buzz none (at most three, 10 to 80 ms each, 200 ms in all)
+   ok   made: 1 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   made: 0.900 s, peak after the master gain 0.252 (0.15 to 0.9, at most 2 s)
+   ok   made: buzz [20] (at most three, 10 to 80 ms each, 200 ms in all)
+   ok   missed: 1 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   missed: 0.220 s, peak after the master gain 0.480 (0.15 to 0.9, at most 2 s)
+   ok   missed: buzz none (at most three, 10 to 80 ms each, 200 ms in all)
+   ok   award: 1 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   award: 0.900 s, peak after the master gain 0.360 (0.15 to 0.9, at most 2 s)
+   ok   award: buzz none (at most three, 10 to 80 ms each, 200 ms in all)
+   ok   awardWin: 2 step(s), every one a known cue at zero or later with a gain above 0 and at most 1.5
+   ok   awardWin: 1.700 s, peak after the master gain 0.360 (0.15 to 0.9, at most 2 s)
+   ok   awardWin: buzz [30,40,30] (at most three, 10 to 80 ms each, 200 ms in all)
+
+4) No audio file, no audio element, one home for the audio graph
+   ok   2232 files under src and public, audio files among them: none
+   ok   1529 source files read as code (tests left out, comments stripped)
+   ok   an audio element, new Audio( or HTMLAudioElement: none
+   ok   a quoted path ending in an audio extension: none
+   ok   AudioContext outside src/lib/soundKit.ts: none
+   ok   createBufferSource outside src/lib/soundKit.ts: none
+   ok   createOscillator outside src/lib/soundKit.ts: none
+   ok   navigator.vibrate or .vibrate( outside src/lib/soundKit.ts: none
+   ok   the kit lives at src/lib/soundKit.ts (the build names its chunk after the file, and freshBuild's guard matches that name)
+   ok   a static import of the kit: none
+   ok   the one dynamic import of the kit is in src/lib/sound.ts: src/lib/sound.ts (1)
+   ok   the quoted kit mark is in src/lib/soundKit.ts alone, once: src/lib/soundKit.ts (1)
+   ok   the quoted storage key is in src/lib/sound.ts alone, once: src/lib/sound.ts (1)
+   ok   Math.random in useSoundPlan.ts, sound.ts, soundKit.ts: none
+   ok   src/lib/sound.ts has no import statement at all (it reaches the kit's type through typeof import), so no React
+
+5) Off means off
+   ok   a. a bare process, no window, no document, no navigator: nothing throws and soundOn() is false
+   ok   b. choice absent, page tapped, a goal: contexts 0, starts 0, buzzes 0, listeners 0 (all zero: the kit was never entered)
+   ok   c. choice off, a goal: contexts 0, starts 0, buzzes 0, listeners 0
+   ok   d. a stored "ON", a goal: contexts 0, starts 0, buzzes 0, listeners 0
+   ok   d. a stored "1", a goal: contexts 0, starts 0, buzzes 0, listeners 0
+   ok   d. a stored "true", a goal: contexts 0, starts 0, buzzes 0, listeners 0
+   ok   d. a stored " on", a goal: contexts 0, starts 0, buzzes 0, listeners 0
+   ok   d. a stored "{\"on\":true}", a goal: contexts 0, starts 0, buzzes 0, listeners 0
+   ok   d. a read that throws, a goal: contexts 0, starts 0, buzzes 0, listeners 0
+   ok   e. choice on, page NOT tapped, a goal: contexts 0, starts 0 (nothing before a tap)
+   ok   e. then the tap arrives: contexts 1, starts 0 (the goal he missed is not played late)
+   ok   e. then a goal: starts [[0,13230],[0.05,61740]] (the net at 0, the crowd at 0.05), buzz [[40]]
+   ok   f. choice on, tab hidden, a goal: contexts 0, starts 0, buzzes 0, listeners 0
+   ok   g. choice on, the prerender flag, a goal: contexts 0, starts 0, buzzes 0, listeners 0
+   ok   h. choice on, reduced motion, a goal: starts 2, buzzes 0 (he hears it, the phone does not shake)
+   ok   i. a goal, then switched off: stops 2, suspends 1 (both sources stopped, the context rests)
+   ok   i. a goal while off: starts still 2
+   ok   i. switched on again: contexts 1, one more start of 2205 samples (the tick)
+   ok   j. a context that never wakes: contexts 1, starts 0
+   ok   k. a delayed tap, hushed in the same tick: starts 0
+   ok   k. a delayed winner's night, scheduled, then hushed: starts 2, stops 2, buzzes 0 past its time (its buzz never fires)
+   ok   k. two scopes each with a winner's night, one hushed: starts 4, stops 2, buzzes 1 (only its two sources stop, the other's buzz still fires)
+   ok   k. two scopes each waiting on a tap, one hushed in the same tick: 1 start (the other's)
+   ok   m. twenty taps: contexts 1, starts 20
+   ok   n. storage that throws, switched on: soundOn() true for the visit, contexts 1, starts 1
+   ok   o. a browser with no userActivation, a goal before any event: contexts 0, starts 0
+   ok   o. after a key press, a goal: contexts 1, starts 2
+   ok   p. a context that wakes 400 ms late: contexts 1, starts 0 (the goal had passed)
+   ok   q. an award asked for 2 s ahead: 1 start at 2 on the audio clock
+   ok   r. a tap the kit hears of 400 ms late: starts 0 (dropped, never late)
+   ok   r. an award 2 s ahead that the kit hears of 400 ms late: 1 start at 1.6 (1.6: the wait came off its delay)
+   ok   prime. choice on, primed, no tap: gesture listeners 3, contexts 0, starts 0
+   ok   prime. then his first tap anywhere: contexts 1, resumes 1, starts 0 (made and woken inside the tap)
+   ok   prime. then a goal: starts 2
+   ok   prime. choice absent, primed: contexts 0, starts 0, buzzes 0, listeners 0 (the kit is never entered)
+   ok   prime. choice off, primed: contexts 0, starts 0, buzzes 0, listeners 0 (the kit is never entered)
+   ok   prime. choice on under the prerender flag, primed: contexts 0, starts 0, buzzes 0, listeners 0 (the kit is never entered)
+
+6) The always loaded part is small and the kit is not in it
+   ok   the always loaded part (switch, toggle, hook): 2825 bytes minified, 1318 gzipped (at most 1515)
+   ok   no line of the audio graph in it: none of AudioContext, createBufferSource, vibrate or the kit mark
+   ok   it reaches the kit through exactly one dynamic import
+   ok   the once guard is one comparison in the built code, 1 found (.current.playedKey===e): playSoundGate's everytick control breaks exactly that
+   ok   the kit: 5153 bytes minified, 2382 gzipped (at most 2739)
+   ok   the kit carries its mark and one activation guard (t?t.hasBeenActive:k): playSoundGate finds the chunk and plants nowait by them
+
+simSound: 158 checks, 0 failed
