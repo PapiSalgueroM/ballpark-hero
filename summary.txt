@@ -1,0 +1,4 @@
+ctl-everywhere exit=0 3s | simCmVar everywhere: actual review outcomes and full prior baseline passed.
+anchors exit=0 46s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+ctl-oldmissedfoul exit=0 68s | simCmVar oldmissedfoul: actual review outcomes and full prior baseline passed.
+simCmVar exit=1 87s | Node.js v24.21.0

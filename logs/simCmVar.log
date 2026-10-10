@@ -1,0 +1,55 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Celtic: a match in a competition without reviews carries no opt in\n' +
++       '\n' +
++       'true !== false\n',
++     stack: 'AssertionError [ERR_ASSERTION]: Celtic: a match in a competition without reviews carries no opt in\n' +
++       '\n' +
++       'true !== false\n' +
++       '\n' +
++       '    at Object.coverage (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:326:38)\n' +
++       '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:393:33)\n' +
++       '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:417:46',
++     status: 'failed',
++     title: 'asks for reviews only where the competition uses them and plays the same match everywhere else'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:404:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:417:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'asks for reviews only where the competition uses them and plays the same match everywhere else',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Celtic: a match in a competition without reviews carries no opt in\n' +
+        '\n' +
+        'true !== false\n',
+      stack: 'AssertionError [ERR_ASSERTION]: Celtic: a match in a competition without reviews carries no opt in\n' +
+        '\n' +
+        'true !== false\n' +
+        '\n' +
+        '    at Object.coverage (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:326:38)\n' +
+        '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:393:33)\n' +
+        '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:417:46'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

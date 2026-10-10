@@ -1,0 +1,4 @@
+simCmVar: node scripts/simCmVar.mjs
+ctl-everywhere: CM_VAR_CONTROL=everywhere node scripts/simCmVar.mjs
+ctl-oldmissedfoul: CM_VAR_CONTROL=oldmissedfoul node scripts/simCmVar.mjs
+anchors: node scripts/simHarnessAnchors.mjs
