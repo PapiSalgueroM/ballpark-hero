@@ -139,6 +139,40 @@
       "says": ["The regular-season finale between the Baltimore Orioles and New York Yankees on Sunday was canceled because of sustained rain", "Baltimore finished 79-82", "The Yankees finished 93-68.", "This marked the first time since 2002 the Yankees didn't play all 162 games in a non-shortened season."],
       "note": "Both copies read today (ABC News and tsn.ca) print 93-68. The scout's note of a 93-67 copy was not found. Neither copy says in words that the game will not be made up; the league's own report by that title could not be opened (its site refused the reader), and the final standings on 161 are the proof."
     },
+    "br-2026-finale": {
+      "sport": "mlb", "group": "bleacherreport", "publisher": "Bleacher Report (Doric Sam)", "title": "Yankees vs. Orioles Canceled Due to Inclement Weather, Final Game of Season Won't Be Rescheduled", "published": "2026-09-27",
+      "url": "https://bleacherreport.com/articles/25503717-yankees-vs-orioles-canceled-due-inclement-weather-final-game-season-wont-be-rescheduled", "read": "2026-10-10",
+      "says": ["has been canceled due to the forecast of sustained inclement weather", "and it won't be rescheduled.", "will finish the season with a 93-68 record", "will finish at 79-82"],
+      "note": "Read in the fix pass of the round. It names the weather and not rain, and it is the second source in words that the game was not made up."
+    },
+    "flm-2026-finale": {
+      "sport": "mlb", "group": "fieldlevelmedia", "publisher": "Field Level Media", "title": "Yankees, Orioles won't play Game 162 as storm scraps finale", "published": "2026-09-27",
+      "url": "https://fieldlevelmedia.com/mlb/yankees-orioles-wont-play-game-162-as-storm-scraps-finale/", "read": "2026-10-10",
+      "says": ["due to continued inclement weather from this weekend's nor'easter.", "The Yankees completed the regular season with a 93-68 record.", "The Orioles finished 79-82"],
+      "note": "Read in the fix pass of the round. It does not say whether the game will be made up."
+    },
+    "bref-schedule": {
+      "sport": "mlb", "group": "retrosheet", "publisher": "Baseball Reference", "title": "<year> <club> Schedule (every game of the season, home or away, by opponent)",
+      "url": "https://www.baseball-reference.com/teams/<club>/<year>-schedule-scores.shtml", "read": "2026-10-10",
+      "years": {
+        "2023": "Detroit: 162 games, 81 at home. 13 against each division rival: White Sox and Twins seven at home and six away, Guardians and Royals six and seven (26 at home). Seven against Baltimore, the Yankees, Texas and Oakland and six against the other six clubs of the league (32 at home). Pittsburgh four, two in each park (16 and 17 May at home, 1 and 2 August away). One three game series against each of the other 14 National League clubs, seven of them at home.",
+        "2024": "Texas: 162 games, 81 at home. 13 against each division rival: Houston and the Angels seven at home and six away, Oakland and Seattle six and seven (26 at home). Seven against Detroit, Minnesota, Baltimore and the White Sox and six against the other six clubs of the league (32 at home). Arizona four, two in each park. One three game series against each of the other 14 National League clubs, seven of them at home (Cubs, Reds, Nationals, Giants, Mets, Padres, Pirates).",
+        "2025": "Detroit: 162 games, 81 at home. 13 against each division rival: Guardians and Royals seven at home and six away, White Sox and Twins six and seven (26 at home). Seven against the Angels and Toronto and six against the other eight clubs of the league (31 at home). Pittsburgh six, three in each park. One three game series against each of the other 14 National League clubs, seven of them at home.",
+        "2026": "Detroit, Toronto, Texas and Houston, each 162 games and 81 at home. Each: 13 against each division rival, seven at home against two of them and six against the other two (26 at home); seven against two clubs of the league and six against the other eight (31 at home); six against one National League club, three in each park (Detroit and Pittsburgh, Toronto and Philadelphia, Texas and Arizona, Houston and Colorado); one three game series against each of the other 14, seven of them at home. Texas hosted the same seven National League clubs as in 2024. Where two of the four met, both pages print the same split."
+      },
+      "values": {
+        "clubs": [
+          { "club": "DET", "year": 2023, "home": 81, "division": { "CHW": [7, 6], "CLE": [6, 7], "KCR": [6, 7], "MIN": [7, 6] }, "league": { "BAL": [4, 3], "NYY": [4, 3], "TEX": [3, 4], "OAK": [3, 4], "BOS": [3, 3], "HOU": [3, 3], "LAA": [3, 3], "SEA": [3, 3], "TBR": [3, 3], "TOR": [3, 3] }, "rival": ["PIT", 2, 2], "nlHome": ["CHC", "CIN", "SDP", "SFG", "ARI", "ATL", "NYM"], "nlAway": ["COL", "PHI", "STL", "WSN", "LAD", "MIA", "MIL"] },
+          { "club": "TEX", "year": 2024, "home": 81, "division": { "HOU": [7, 6], "OAK": [6, 7], "SEA": [6, 7], "LAA": [7, 6] }, "league": { "DET": [3, 4], "MIN": [4, 3], "BAL": [3, 4], "CHW": [4, 3], "TBR": [3, 3], "KCR": [3, 3], "CLE": [3, 3], "TOR": [3, 3], "BOS": [3, 3], "NYY": [3, 3] }, "rival": ["ARI", 2, 2], "nlHome": ["CHC", "CIN", "WSN", "SFG", "NYM", "SDP", "PIT"], "nlAway": ["ATL", "COL", "PHI", "MIA", "LAD", "MIL", "STL"] },
+          { "club": "DET", "year": 2025, "home": 81, "division": { "CHW": [6, 7], "CLE": [7, 6], "KCR": [7, 6], "MIN": [6, 7] }, "league": { "LAA": [3, 4], "TOR": [4, 3], "ATH": [3, 3], "BAL": [3, 3], "BOS": [3, 3], "HOU": [3, 3], "NYY": [3, 3], "SEA": [3, 3], "TBR": [3, 3], "TEX": [3, 3] }, "rival": ["PIT", 3, 3], "nlHome": ["ARI", "ATL", "CHC", "CIN", "NYM", "SDP", "SFG"], "nlAway": ["COL", "LAD", "MIA", "MIL", "PHI", "STL", "WSN"] },
+          { "club": "DET", "year": 2026, "home": 81, "division": { "CHW": [6, 7], "CLE": [7, 6], "KCR": [7, 6], "MIN": [6, 7] }, "league": { "BOS": [3, 4], "HOU": [4, 3], "ATH": [3, 3], "BAL": [3, 3], "LAA": [3, 3], "NYY": [3, 3], "SEA": [3, 3], "TBR": [3, 3], "TEX": [3, 3], "TOR": [3, 3] }, "rival": ["PIT", 3, 3], "nlHome": ["COL", "LAD", "MIA", "MIL", "PHI", "STL", "WSN"], "nlAway": ["ARI", "ATL", "CHC", "CIN", "NYM", "SDP", "SFG"] },
+          { "club": "TOR", "year": 2026, "home": 81, "division": { "BOS": [7, 6], "TBR": [7, 6], "NYY": [6, 7], "BAL": [6, 7] }, "league": { "MIN": [3, 4], "TEX": [4, 3], "ATH": [3, 3], "CHW": [3, 3], "LAA": [3, 3], "CLE": [3, 3], "DET": [3, 3], "HOU": [3, 3], "SEA": [3, 3], "KCR": [3, 3] }, "rival": ["PHI", 3, 3], "nlHome": ["COL", "LAD", "PIT", "MIA", "NYM", "STL", "CIN"], "nlAway": ["MIL", "ARI", "ATL", "SFG", "SDP", "CHC", "WSN"] },
+          { "club": "TEX", "year": 2026, "home": 81, "division": { "ATH": [6, 7], "HOU": [7, 6], "LAA": [6, 7], "SEA": [7, 6] }, "league": { "TBR": [4, 3], "TOR": [3, 4], "BAL": [3, 3], "BOS": [3, 3], "CHW": [3, 3], "CLE": [3, 3], "DET": [3, 3], "KCR": [3, 3], "MIN": [3, 3], "NYY": [3, 3] }, "rival": ["ARI", 3, 3], "nlHome": ["CHC", "CIN", "NYM", "PIT", "SDP", "SFG", "WSN"], "nlAway": ["ATL", "COL", "LAD", "MIA", "MIL", "PHI", "STL"] },
+          { "club": "HOU", "year": 2026, "home": 81, "division": { "LAA": [7, 6], "ATH": [6, 7], "SEA": [7, 6], "TEX": [6, 7] }, "league": { "DET": [3, 4], "CHW": [4, 3], "BOS": [3, 3], "CLE": [3, 3], "NYY": [3, 3], "BAL": [3, 3], "MIN": [3, 3], "KCR": [3, 3], "TOR": [3, 3], "TBR": [3, 3] }, "rival": ["COL", 3, 3], "nlHome": ["STL", "LAD", "MIL", "PIT", "MIA", "ARI", "ATL"], "nlAway": ["CIN", "CHC", "WSN", "SDP", "SFG", "NYM", "PHI"] }
+        ]
+      },
+      "note": "Read in the fix pass of the round, as the games actually played: each page was asked for home and away games by opponent and every table adds up to 162 games and 81 at home. Each split is [home, away]. Two first readings slipped (Oakland left out of Detroit 2023, one club of the league feed below) and were asked again. Baseball Reference shares the retrosheet group."
+    },
     "espn-divisions-2026": {
       "sport": "mlb", "group": "espn", "publisher": "ESPN", "title": "MLB Standings 2026, grouped by division",
       "url": "https://www.espn.com/mlb/standings/_/season/2026/group/division", "read": "2026-10-10",
@@ -150,40 +184,41 @@
       "says": ["AL East: Tampa Bay Rays, New York Yankees, Boston Red Sox, Baltimore Orioles, Toronto Blue Jays", "AL Central: Cleveland Guardians, Chicago White Sox, Minnesota Twins, Detroit Tigers, Kansas City Royals", "AL West: Houston Astros, Texas Rangers, Seattle Mariners, Athletics, Los Angeles Angels", "NL East: Atlanta Braves, Philadelphia Phillies, Miami Marlins, Washington Nationals, New York Mets", "NL Central: Milwaukee Brewers, Chicago Cubs, Pittsburgh Pirates, St. Louis Cardinals, Cincinnati Reds", "NL West: Los Angeles Dodgers, San Diego Padres, Arizona Diamondbacks, San Francisco Giants, Colorado Rockies"]
     },
     "usatoday-2025-schedule": {
-      "sport": "mlb", "group": "usatoday", "publisher": "USA TODAY (Scott Boeck), carried by Yahoo Sports", "title": "2025 MLB regular season schedule: LA Dodgers, Chicago Cubs open in Tokyo", "published": "2024-07-18",
+      "sport": "mlb", "seasons": [2025], "group": "usatoday", "publisher": "USA TODAY (Scott Boeck), carried by Yahoo Sports", "title": "2025 MLB regular season schedule: LA Dodgers, Chicago Cubs open in Tokyo", "published": "2024-07-18",
       "url": "https://ca.sports.yahoo.com/news/2025-mlb-regular-season-schedule-195432725.html", "read": "2026-10-10",
       "says": ["each team will play 13 games against each division rival (52 games)", "and six or seven against each other club in its league for a total of 62.", "The remaining 48 games are against interleague opponents,", "with a single three-game series against each of the 14 other clubs in the opposite league."]
     },
     "ticketmaster-2026": {
-      "sport": "mlb", "group": "ticketmaster", "publisher": "Ticketmaster", "title": "A Look at the 2026 MLB Schedule and New Rules", "published": "2026-05-19",
+      "sport": "mlb", "seasons": [2026], "group": "ticketmaster", "publisher": "Ticketmaster", "title": "A Look at the 2026 MLB Schedule and New Rules", "published": "2026-05-19",
       "url": "https://blog.ticketmaster.com/mlb-schedule-explained/", "read": "2026-10-10",
       "says": ["each team now plays their divisional opponents in only 52 games", "13 games in four series against each division rival, seven at home and six away or the reverse (reported by the reader, not quoted)", "a total of 26 divisional games at home and 26 away", "MLB intraleague play was also shortened to 62 games, down from the previous 66 games.", "will consist of six games against eight intraleague teams and seven games against two intraleague teams.", "Each team now plays 48 games, up from 20, against teams from the opposite league.", "a home-and-home series totaling six games against the natural rival (reported by the reader)", "a single, three-game series against the other 14 interleague teams, with seven series at home and seven away", "Rival pairs named: Cubs vs. White Sox, Mets vs. Yankees, Angels vs. Dodgers; Astros vs. Rockies; Athletics vs. Giants; Blue Jays vs. Phillies; Guardians vs. Reds; Mariners vs. Padres; Orioles vs. Nationals; Rangers vs. Diamondbacks; Rays vs. Marlins; Red Sox vs. Braves; Royals vs. Cardinals; Tigers vs. Pirates, and Twins vs. Brewers."],
       "note": "It gives no home and away split for the 62 league games and no total of home games."
     },
     "mlb-release-2025": {
-      "sport": "mlb", "group": "mlb", "publisher": "Major League Baseball, press release, as printed by The Highland County Press", "title": "MLB announces 2025 regular-season schedule", "published": "2024-07-22",
+      "sport": "mlb", "seasons": [2025], "group": "mlb", "publisher": "Major League Baseball, press release, as printed by The Highland County Press", "title": "MLB announces 2025 regular-season schedule", "published": "2024-07-22",
       "url": "https://highlandcountypress.com/sports/mlb-announces-2025-regular-season-schedule", "read": "2026-10-10",
-      "says": ["For 2025, prime Interleague rivals will increase their number of matchups from four to six", "while playing a pair of three-game series rather than a pair of two-game series.", "As a result, each of the 30 Clubs will play two fewer games against non-division league opponents.", "featuring 11 series between prime Interleague rivals and four other regional matchups which include Pittsburgh vs Philadelphia; Colorado vs. Arizona; Detroit vs. Toronto; and Houston vs. Texas."]
+      "says": ["For 2025, prime Interleague rivals will increase their number of matchups from four to six", "while playing a pair of three-game series rather than a pair of two-game series.", "As a result, each of the 30 Clubs will play two fewer games against non-division league opponents.", "featuring 11 series between prime Interleague rivals and four other regional matchups which include Pittsburgh vs Philadelphia; Colorado vs. Arizona; Detroit vs. Toronto; and Houston vs. Texas."],
+      "note": "\"published\" is the day the newspaper printed the release, not the day the league put it out: USA TODAY reported the same schedule on 18 July 2024."
     },
     "mlb-release-2026": {
-      "sport": "mlb", "group": "mlb", "publisher": "Major League Baseball, press release, as printed by The Highland County Press", "title": "MLB announces 2026 regular-season schedule", "published": "2025-09-01",
+      "sport": "mlb", "seasons": [2026], "group": "mlb", "publisher": "Major League Baseball, press release, as printed by The Highland County Press", "title": "MLB announces 2026 regular-season schedule", "published": "2025-09-01",
       "url": "https://highlandcountypress.com/sports/mlb-announces-2026-regular-season-schedule", "read": "2026-10-10",
       "says": ["Prime Interleague rivals will again play a pair of three-game series against one another in 2026.", "In 2026, each of the 30 Clubs will host the same Interleague opponents as they hosted in 2024.", "The final day of the 2026 regular season will be Sunday, Sept. 27, featuring nine divisional matchups."],
-      "note": "The league's own site refuses the reader (HTTP 406 on every address tried), so its releases were read where a newspaper printed them."
+      "note": "The league's own site refuses the reader (HTTP 406 on every address tried), so its releases were read where a newspaper printed them. \"published\" is the date on the newspaper's page, which carries no date for the league's own release."
     },
     "espn-2023-format": {
-      "sport": "mlb", "group": "espn", "publisher": "ESPN (Jesse Rogers)", "title": "All 30 Major League Baseball teams to play one another in a season for first time in 2023", "published": "2022-08-24",
+      "sport": "mlb", "seasons": [2023], "group": "espn", "publisher": "ESPN (Jesse Rogers)", "title": "All 30 Major League Baseball teams to play one another in a season for first time in 2023", "published": "2022-08-24",
       "url": "https://www.espn.com/mlb/story/_/id/34452964/all-30-major-league-baseball-teams-play-one-another-season-first-2023", "read": "2026-10-10",
       "says": ["There are 52 total games against divisional opponents, down from 76.", "Teams will play six or seven home/road games against divisional opponents.", "There are 64 total games -- 32 home and 32 away -- against non-divisional league opponents, down from 66.", "Teams will play six games against six league opponents and seven games against four league opponents.", "There are 46 total games against interleague opponents, up from just 20.", "All 30 MLB teams will be paired with a \"natural rival\" for a four-game interleague series, with each team hosting two games.", "Teams will play 42 games against other interleague opponents, including seven series (21 games) at home and seven series (21 games) on the road.", "Pairs: New York Mets-New York Yankees, Chicago Cubs-Chicago White Sox, LA Dodgers-LA Angels, San Francisco Giants-Oakland A's, Cincinnati Reds-Cleveland Guardians, Miami Marlins-Tampa Bay Rays, Washington Nationals-Baltimore Orioles, St. Louis Cardinals-Kansas City Royals, Milwaukee Brewers-Minnesota Twins, Atlanta Braves-Boston Red Sox, Pittsburgh Pirates-Detroit Tigers, Phila. Phillies-Toronto Blue Jays, Arizona D-backs-Texas Rangers, Colorado Rockies-Houston Astros, San Diego Padres-Seattle Mariners"]
     },
     "ap-2023-format": {
-      "sport": "mlb", "group": "ap", "publisher": "The Associated Press (Ronald Blum), carried by Boston.com", "title": "MLB teams to play all 29 opponents under 2023 balanced schedule", "published": "2022-08-25",
+      "sport": "mlb", "seasons": [2023], "group": "ap", "publisher": "The Associated Press (Ronald Blum), carried by Boston.com", "title": "MLB teams to play all 29 opponents under 2023 balanced schedule", "published": "2022-08-25",
       "url": "https://www.boston.com/sports/mlb/2022/08/25/mlb-teams-to-play-all-29-opponents-under-balanced-schedule/", "read": "2026-10-10",
       "says": ["A team will play 13 games against each division rival for a total of 52.", "six or seven against each other club in its league for a total of 64.", "The remaining 46 games are against interleague opponents.", "a home and road two-game series against a so-called natural rival", "a single three-game series against each of the 14 other clubs in the opposite league.", "Natural interleague rivals include Mets-Yankees, Cubs-White Sox, Dodgers-Angels, Giants-Athletics, Reds-Indians, Marlins-Rays, Orioles-Nationals, Royals-Cardinals and Brewers-Twins.", "Among the teams with no geographic interleague rivals, MLB paired Red Sox-Braves, Pirates-Tigers, Phillies-Blue Jays, Rangers-Diamondbacks, Astros-Rockies and Padres-Mariners."],
       "note": "The reader gave the Cleveland pair as Reds-Indians; the club was the Guardians by then, and ESPN's list of the same week prints Guardians."
     },
     "cbs-2026-rivalry": {
-      "sport": "mlb", "group": "cbs", "publisher": "CBS Sports (Matt Snyder)", "title": "Ranking all 15 matchups for MLB Rivalry Weekend: Why Chicago beats the Subway Series", "published": "2026-05-15",
+      "sport": "mlb", "seasons": [2026], "group": "cbs", "publisher": "CBS Sports (Matt Snyder)", "title": "Ranking all 15 matchups for MLB Rivalry Weekend: Why Chicago beats the Subway Series", "published": "2026-05-15",
       "url": "https://cbssports.com/mlb/news/ranking-15-matchups-mlb-rivalry-weekend", "read": "2026-10-10",
       "says": ["The fifteen series it ranks: Diamondbacks vs. Rockies, Giants vs. A's, Marlins vs. Rays, Orioles vs. Nationals, Red Sox vs. Braves, Blue Jays vs. Tigers, Padres vs. Mariners, Brewers vs. Twins, Rangers vs. Astros, Dodgers vs. Angels, Royals vs. Cardinals, Reds vs. Guardians, Phillies vs. Pirates, Yankees vs. Mets, Cubs vs. White Sox", "Let's keep that in mind even as I point out a few of the matchups below aren't actual rivalries."],
       "note": "Eleven of these are interleague rival pairs of the ledger. The other four are the regional series the league's releases set apart; their eight clubs are exactly the clubs of the ledger's four remaining pairs."
@@ -357,12 +392,31 @@
     "si-playoff-format": {
       "sport": "nhl", "group": "si", "publisher": "Sports Illustrated (Joe Lago)", "title": "NHL Stanley Cup Playoffs: Format, Teams, Rules & Changes Through the Years", "published": "2025-04-10",
       "url": "https://www.si.com/nhl/nhl-stanley-cup-playoffs-format-teams-rules-changes-through-the-years", "read": "2026-10-10",
-      "says": ["Sixteen teams qualify for the Stanley Cup playoffs.", "The Stanley Cup playoffs comprise four rounds with winners determined by best-of-seven game series.", "First-round winners advance to the second round.", "Second-round winners move on to the conference finals.", "The conference champions meet in the Stanley Cup Final.", "Outside of the modified 2020 and 2021 tournaments due to COVID-19."]
+      "says": ["Sixteen teams qualify for the Stanley Cup playoffs.", "The Stanley Cup playoffs comprise four rounds with winners determined by best-of-seven game series.", "First-round winners advance to the second round.", "Second-round winners move on to the conference finals.", "The conference champions meet in the Stanley Cup Final.", "Outside of the modified 2020 and 2021 tournaments due to COVID-19,", "the NHL has used the same Stanley Cup playoffs format since 2013-14 when it introduced its current postseason setup."],
+      "note": "The last two lines are one sentence, read again in the fix pass of the round."
+    },
+    "hr-playoffs": {
+      "sport": "nhl", "group": "sportsreference-hockey", "publisher": "Hockey Reference", "title": "<year> NHL Stanley Cup Playoffs Summary (every series, by round)",
+      "url": "https://www.hockey-reference.com/playoffs/NHL_<year the season ends in>.html", "read": "2026-10-10",
+      "years": {
+        "2006": "The 2007 playoffs: 16 clubs, fifteen series, every winner on four wins and none longer than seven games. Its round names: Conference Quarter-Finals (8), Conference Semi-Finals (4), Conference Finals (2), Final.",
+        "2013": "The 2014 playoffs: 16 clubs, fifteen series, every winner on four wins and none longer than seven games. Its round names: First Round (8), Second Round (4), Conference Finals (2), Final. The Final was played by the two winners of the Conference Finals.",
+        "2019": "The 2020 playoffs: 24 clubs. A Qualifying Round of eight series, each won with three wins, and a Round Robin in two groups came before the First Round; then First Round (8), Second Round (4), Conference Finals (2) and Final, each won with four wins.",
+        "2020": "The 2021 playoffs: 16 clubs. First Round (8), Second Round (4), Semi-Finals (2: Montreal and Vegas, Tampa Bay and the New York Islanders), Final. No round is called Conference Finals."
+      },
+      "note": "Read in the fix pass of the round. Keyed by the year the season starts in, like the other NHL receipts. It prints the last round as \"Final\"."
+    },
+    "nhl-points": {
+      "sport": "nhl", "group": "nhl", "publisher": "National Hockey League, its own standings feed", "title": "Standings on the last day of the 2025-26 regular season (wins, losses, overtime losses and points for every club)",
+      "url": "https://api-web.nhle.com/v1/standings/2026-04-16", "read": "2026-10-10",
+      "says": ["All 32 clubs: points are twice the wins plus the overtime losses, and wins, losses and overtime losses add up to the 82 games played.", "Colorado: 55 wins, 16 losses, 11 overtime losses, 121 points.", "Winnipeg: 35 wins, 35 losses, 12 overtime losses, 82 points.", "Vancouver: 25 wins, 49 losses, 8 overtime losses, 58 points.", "The overtime losses add up to 326."],
+      "values": { "records": { "COL": [55, 16, 11, 121], "WPG": [35, 35, 12, 82], "VAN": [25, 49, 8, 58] } },
+      "note": "Read in the fix pass of the round: the point a club keeps for a game lost after sixty minutes, in the league's own arithmetic. The first reading slipped on Winnipeg (35, 37, 11, which is 83 games) and it was asked again. Each record is [wins, losses, overtime losses, points]."
     },
     "si-overtime": {
       "sport": "nhl", "group": "si", "publisher": "Sports Illustrated (Karl Rasmussen)", "title": "NHL Overtime Rules Explained: Playoffs and Regular Season", "published": "2025-03-05",
       "url": "https://www.si.com/nhl/nhl-overtime-rules-explained-playoffs-and-regular-season-01jnm1y8qd0e", "read": "2026-10-10",
-      "says": ["if the game is still tied after the opening three 20-minute periods", "Rather than the usual 5-on-5 format, NHL overtime is played 3-on-3.", "since 2015, the NHL has adopted a 3-on-3 format for the overtime period in the regular season.", "If the game is still tied after five minutes, teams go to a penalty shootout to determine the winner.", "After 2005, the league introduced the shootout to determine a winner and a loser.", "both teams are awarded a single point", "There are no shootouts in playoff hockey.", "a 20-minute, sudden-death overtime period until a winner is determined"]
+      "says": ["if the game is still tied after the opening three 20-minute periods", "Rather than the usual 5-on-5 format, NHL overtime is played 3-on-3.", "since 2015, the NHL has adopted a 3-on-3 format for the overtime period in the regular season.", "If the game is still tied after five minutes, teams go to a penalty shootout to determine the winner.", "After 2005, the league introduced the shootout to determine a winner and a loser.", "When a regular-season NHL game goes to overtime, both teams are awarded a single point.", "Each team gets three initial penalty takers to determine the outcome.", "There are no shootouts in playoff hockey.", "a 20-minute, sudden-death overtime period until a winner is determined"]
     },
     "nbc-overtime": {
       "sport": "nhl", "group": "nbc", "publisher": "NBC Chicago (Bryan Murphy)", "title": "Everything to Know About NHL Overtime Rules", "published": "2023-05-19",

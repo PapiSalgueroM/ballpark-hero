@@ -155,7 +155,7 @@ export const NHL_ALIGNMENTS: readonly NhlAlignment[] = [
 ];
 export const NHL_ALIGNMENTS_SRC: readonly string[] = ['nhl', 'hr', 'espn-nhl'];
 
-/* THE 84 GAME FORMULA, from 2026-27. NHL.com, "10 things to know about
+/* THE 84 GAME FORMULA, from 2026-27. The league's own site, "10 things to know about
    2026-27 NHL regular season" (16 July 2026), and ESPN, "NHL releases
    expanded 84-game schedule for 2026-27 season" (16 July 2026), agree on
    every number: four games against each of the 7 division rivals, two at
@@ -172,20 +172,38 @@ export const NHL_FORMULA_84 = {
   src: ['nhl-84', 'espn-84'],
 } as const;
 
-/* THE PLAYOFFS: sixteen clubs, four rounds, every one a best of seven; the
-   conference champions meet in the Stanley Cup Final. NHL.com, "Playoff
-   Format" ("Each of the four rounds is a best-of-7"; its headings give the
-   round names), and Sports Illustrated, "NHL Stanley Cup Playoffs: Format,
-   Teams, Rules & Changes Through the Years" (10 April 2025). `modified` are
-   the two seasons (start years) Sports Illustrated sets apart; how they
-   differed is thin. `series` is [wins needed, most games]. */
+/* THE PLAYOFFS, FROM 2013-14: sixteen clubs, four rounds, every one a best
+   of seven. The league's own site, "Playoff Format" ("Each of the four
+   rounds is a best-of-7"; its headings give the round names), and Sports
+   Illustrated, "NHL Stanley Cup Playoffs: Format, Teams, Rules & Changes
+   Through the Years" (10 April 2025). `series` is [wins needed, most games].
+
+   `from` (a start year): Sports Illustrated dates this format from 2013-14,
+   and Hockey Reference's page of the 2014 playoffs is the first to print a
+   First Round and a Second Round (its 2007 page prints Conference
+   Quarter-Finals and Conference Semi-Finals). THIS BLOCK SAYS NOTHING OF
+   2006-07 TO 2012-13: what those seven seasons' playoffs were has one
+   source and is in NHL_THIN.
+
+   `modified` (start years): the two tournaments Sports Illustrated sets
+   apart, and Hockey Reference shows both: the 2020 playoffs began with a
+   Qualifying Round and a Round Robin and held 24 clubs, and the 2021
+   playoffs had Semi-Finals where the other three pages read (2007, 2014
+   and 2020) have Conference Finals.
+
+   That the conference champions meet in the Final is one source's sentence
+   and is in NHL_THIN, not here. */
 export const NHL_PLAYOFF_FORMAT = {
+  from: 2013,
   clubs: 16,
   rounds: ['First Round', 'Second Round', 'Conference Finals', 'Stanley Cup Final'],
   series: [[4, 7], [4, 7], [4, 7], [4, 7]],
   modified: [2019, 2020],
-  src: ['nhl-playoff-format', 'si-playoff-format'],
+  src: ['nhl-playoff-format', 'si-playoff-format', 'hr-playoffs'],
 } as const;
+/** For `from` and for `modified`, each on its own: the league's page speaks of today only. */
+export const NHL_PLAYOFF_FROM_SRC: readonly string[] = ['si-playoff-format', 'hr-playoffs'];
+export const NHL_PLAYOFF_MODIFIED_SRC: readonly string[] = ['si-playoff-format', 'hr-playoffs'];
 
 /* LEAGUE SCORING, goals per team game, by era id: 2006-07 for the throwback
    and 2025-26, the last finished season, for the present day era. There are
@@ -222,7 +240,13 @@ export const NHL_OVERTIME_SRC: readonly string[] = ['nhl', 'hr', 'hr-shootout'];
    Illustrated, "NHL Overtime Rules Explained: Playoffs and Regular Season"
    (5 March 2025), and NBC Chicago, "Everything to Know About NHL Overtime
    Rules" (19 May 2023). Every season this ledger holds had the shootout: the
-   feed counts 164 of them in 2006-07. `skatersBefore2015` is thin. */
+   feed counts 164 of them in 2006-07. `skatersBefore2015` is thin.
+
+   THE LOSER'S POINT has its own two sources, because NBC Chicago says
+   nothing of it: Sports Illustrated ("both teams are awarded a single
+   point") and the league's own standings feed for the last day of 2025-26,
+   where every one of the 32 clubs has twice its wins plus its overtime
+   losses in points (NHL_OVERTIME_POINT_SRC). */
 export const NHL_OVERTIME_RULES: {
   minutes: number; skatersFrom2015: number; skatersBefore2015: number | null; shootoutRounds: number;
   loserGetsAPoint: boolean; playoffPeriodMinutes: number; playoffShootout: boolean;
@@ -231,6 +255,7 @@ export const NHL_OVERTIME_RULES: {
   loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false,
 };
 export const NHL_OVERTIME_RULES_SRC: readonly string[] = ['si-overtime', 'nbc-overtime'];
+export const NHL_OVERTIME_POINT_SRC: readonly string[] = ['si-overtime', 'nhl-points'];
 
 /** The game clock: three periods of 20 minutes (the same two articles). */
 export const NHL_CLOCK = { periods: 3, minutes: 20 } as const;
@@ -255,8 +280,18 @@ export const NHL_THIN: readonly { what: string; oneSource: string; tried: string
   },
   {
     what: 'How the 2020 and 2021 playoffs differed (the seasons that started in 2019 and 2020).',
-    oneSource: 'Sports Illustrated says only that they were "modified". The detail is in src/lib/nhlPlayoffFormatHistory.ts, from pages not read again today.',
-    tried: 'NHL.com, "Playoff Format", describes today only.',
+    oneSource: 'Hockey Reference: the 2020 playoffs held 24 clubs, with a Qualifying Round of eight series won with three wins and a Round Robin before the First Round; the 2021 playoffs had Semi-Finals in place of Conference Finals. Sports Illustrated says only that they were "modified". More detail is in src/lib/nhlPlayoffFormatHistory.ts, from pages not read again today.',
+    tried: 'The league\'s own "Playoff Format" page describes today only.',
+  },
+  {
+    what: 'The playoffs of 2006-07 to 2012-13: how many clubs, how many rounds, how long each series, and what the rounds were called.',
+    oneSource: 'Hockey Reference, the 2007 playoffs: sixteen clubs, fifteen series each won with four wins, under the names Conference Quarter-Finals, Conference Semi-Finals, Conference Finals and Final. One season of the seven was read. src/lib/nhlPlayoffFormatHistory.ts says best of seven in every round since 1986-87, from pages not read again today.',
+    tried: 'Sports Illustrated dates today\'s format from 2013-14 and the league\'s own page describes today only, so NHL_PLAYOFF_FORMAT starts in 2013.',
+  },
+  {
+    what: 'That the Stanley Cup Final is the only round against the other conference.',
+    oneSource: 'Sports Illustrated: "The conference champions meet in the Stanley Cup Final." Hockey Reference agrees for the one season read for it: on its 2014 page the Final is played by the winners of the two Conference Finals. It was not read season by season.',
+    tried: 'The league\'s own "Playoff Format" page does not say who meets in the Final.',
   },
   {
     what: 'Why 2012-13 had 48 games, why 2019-20 stopped and why 2020-21 had 56.',

@@ -20,7 +20,10 @@
    - Engines against the ledger (notes): the playoff game law fits every NHL
      count; for MLB 84.7 percent of Wild Card exits and 32.6 percent of
      Division Series exits save a count the real rounds cannot hold.
-   1,243 checks in all. No band here was set by feel: every check is an
+   - The home and away numbers of the MLB formulas against the games played:
+     seven club seasons read on Baseball Reference's schedule pages (one in
+     2023, 2024 and 2025, four in 2026), each 162 games and 81 at home.
+   1,381 checks in all. No band here was set by feel: every check is an
    equality, a sum or a set.
 
    IDENTITIES, NOT ONLY COUNTS (the fix pass of 2026-10-10). A count cannot
@@ -30,7 +33,17 @@
    pairs, the first round windows, every NHL alignment division by division,
    the 31 club games of 2019-20 and the rules after sixty minutes. A single
    changed fact in a ledger's source is red here (the review's mutations A,
-   B, D, E, G, H and O, each green before this pass).
+   B, D, E, G, H, N and O, each green before this pass).
+
+   A SOURCE MUST SPEAK OF THE SEASON IT IS CITED FOR. A place cited with
+   seasons (a formula row, its home and away numbers, the rival pairs of
+   2026) counts only receipts that speak of one of those seasons, every one
+   of its seasons must be read by somebody, and a dated receipt about
+   another season is red (R1, R2). The values a block's general receipts do
+   not all cover have a source list of their own (`homeSrc`,
+   NHL_PLAYOFF_FROM_SRC, NHL_PLAYOFF_MODIFIED_SRC, NHL_OVERTIME_POINT_SRC).
+   WHAT THIS STILL CANNOT SEE: whether the words of a receipt support a
+   value. That is a reader's job; R5 guards a typed list of empty fields.
 
    CONTROLS (US_LEDGER_CONTROL=<name>): each changes one fact in the loaded
    data, refuses to run (exit 2, "CONTROL ... ABORTED") when the thing it
@@ -133,7 +146,11 @@ const OWN = {
   /* The rules after sixty minutes. */
   nhlRules: { minutes: 5, skatersFrom2015: 3, shootoutRounds: 3, loserGetsAPoint: true, playoffPeriodMinutes: 20, playoffShootout: false },
   /* How many entries each THIN list holds: one cannot quietly lose a line. */
-  thin: { mlb: 10, nhl: 7 },
+  thin: { mlb: 10, nhl: 9 },
+  /* Club seasons whose schedule page was read for the home and away numbers. */
+  mlbPlayed: 'DET 2023|TEX 2024|DET 2025|DET 2026|TOR 2026|TEX 2026|HOU 2026',
+  /* The NHL playoff block: its first season, the two modified tournaments, its round names. */
+  nhlPlayoff: { from: 2013, modified: [2019, 2020], rounds: ['First Round', 'Second Round', 'Conference Finals', 'Stanley Cup Final'] },
 };
 
 /* EVERY NHL ALIGNMENT, typed here division by division: key: [from, to, { division: [conference, its clubs] }]. */
@@ -179,6 +196,13 @@ const CONTROLS = {
   mlbown: { expect: ['M5'], run() { const g = mlbRow(2026).clubs[0]; must(g && g.ids.includes('NYY'), 'the 2026 Yankees on 161'); g.clubs = g.clubs.filter(c => c !== 'New York Yankees'); g.ids = g.ids.filter(i => i !== 'NYY'); g.clubs.push('Boston Red Sox'); g.ids.push('BOS'); } },
   mlbdiv: { expect: ['M6'], run() { const w = mlb.MLB_DIVISIONS_2026.find(x => x.name === 'AL West'); const c = mlb.MLB_DIVISIONS_2026.find(x => x.name === 'AL Central'); must(w && c && w.teams.includes('HOU') && c.teams.includes('MIN'), 'Houston in the AL West and Minnesota in the AL Central'); w.teams = w.teams.map(t => (t === 'HOU' ? 'MIN' : t)); c.teams = c.teams.map(t => (t === 'MIN' ? 'HOU' : t)); } },
   mlbformula: { expect: ['M7'], run() { const f = mlb.MLB_FORMULAS.find(x => x.from === 2025); must(f && f.division.games === 13, 'the 13 division games'); f.division.games = 14; } },
+  /* A home and away number off by one, with every total untouched: eight of the 14 interleague series at home. */
+  mlbhome: { expect: ['M7'], run() { const f = mlb.MLB_FORMULAS.find(x => x.from === 2025); must(f && f.interleague.homeSeries === 7, 'the seven interleague series at home'); f.interleague.homeSeries = 8; } },
+  /* A report about another season stands in for a source: the 2025 and 2026 home numbers lean on the 2023 article. */
+  otherseason: { expect: ['R1', 'R2'], run() { const f = mlb.MLB_FORMULAS.find(x => x.from === 2025); must(f && f.homeSrc.includes('bref-schedule') && SRC['espn-2023-format'], 'the schedule pages behind the 2025 and 2026 home numbers'); f.homeSrc = f.homeSrc.map(k => (k === 'bref-schedule' ? 'espn-2023-format' : k)); } },
+  nhlfrom: { expect: ['N6'], run() { must(nhl.NHL_PLAYOFF_FORMAT.from === 2013, 'the playoff block starting in 2013'); nhl.NHL_PLAYOFF_FORMAT.from = 2006; } },
+  /* The league's own arithmetic stops giving the loser a point: a club of the receipt on twice its wins. */
+  nhlpoint: { expect: ['N8'], run() { const r = SRC['nhl-points']?.values?.records?.COL; must(r && r[3] === 2 * r[0] + r[2], 'the Colorado record in the receipt'); r[3] = 2 * r[0]; } },
   mlbrival: { expect: ['M8'], run() { const p = mlb.MLB_RIVALS.find(x => x[0] === 'SEA'); must(p && p[1] === 'SDP', 'the Mariners and Padres pair'); p[1] = 'TEX'; } },
   mlbplayoff: { expect: ['M9'], run() { must(mlb.MLB_PLAYOFF_FORMAT.series[0][1] === 3, 'the best of three'); mlb.MLB_PLAYOFF_FORMAT.series[0][1] = 4; } },
   mlbscore: { expect: ['M10'], run() { must(mlb.MLB_SCORING.now === 4.48, 'the 4.48'); mlb.MLB_SCORING.now = 4.84; } },
@@ -295,8 +319,42 @@ const OWN_MLB_DIVISIONS = {
     check('M7', f.interleague.opponents * f.interleague.games === f.interleague.total && f.interleague.opponents + 1 === 15, `${tag}: the other league is not 14 series and a rival`);
     check('M7', f.division.total + f.league.total + f.interleague.total + f.rival.games === f.games && f.games === 162, `${tag}: ${f.division.total} + ${f.league.total} + ${f.interleague.total} + ${f.rival.games} is not ${f.games}`);
     check('M7', f.rival.home * 2 === f.rival.games && f.division.homeOrAway[0] + f.division.homeOrAway[1] === f.division.games, `${tag}: a home and away split does not add up`);
+    check('M7', f.interleague.homeSeries * 2 === f.interleague.opponents, `${tag}: ${f.interleague.homeSeries} of the ${f.interleague.opponents} interleague series at home is not half of them`);
   }
   check('M7', mlb.MLB_FORMULAS.some(f => f.from <= 2026 && f.to >= 2026), 'no MLB formula covers 2026');
+
+  /* M7 again, against the games actually played: every club season whose schedule page is in the
+     receipts fits the formula of its year, home and away included. [home, away] each. */
+  const played = SRC['bref-schedule']?.values?.clubs ?? [];
+  check('M7', played.map(c => `${c.club} ${c.year}`).join('|') === OWN.mlbPlayed, `the schedule pages in the receipts are ${played.map(c => `${c.club} ${c.year}`).join('|')}, this harness's own table says ${OWN.mlbPlayed}`);
+  for (const f of mlb.MLB_FORMULAS) for (const y of rangeOf(f.from, f.to)) check('M7', played.some(c => c.year === y), `MLB formula ${f.from} to ${f.to}: no schedule page was read for ${y}`);
+  const today = Object.fromEntries(divs.flatMap(d => d.teams.map(t => [t, d])));
+  for (const c of played) {
+    const tag = `${c.club} ${c.year} as played`;
+    const f = mlb.MLB_FORMULAS.find(x => c.year >= x.from && c.year <= x.to);
+    if (!f) { check('M7', false, `${tag}: no formula covers the season`); continue; }
+    const div = Object.values(c.division); const lg = Object.values(c.league);
+    const sum = (list, i) => list.reduce((t, x) => t + x[i], 0);
+    check('M7', div.length === f.division.opponents && div.every(([h, a]) => h + a === f.division.games && Math.max(h, a) === f.division.homeOrAway[0] && Math.min(h, a) === f.division.homeOrAway[1]),
+      `${tag}: the division games are not ${f.division.opponents} rivals at ${f.division.homeOrAway.join(' and ')}: ${JSON.stringify(c.division)}`);
+    check('M7', lg.filter(([h, a]) => h + a === 6).length === f.league.sixGames && lg.filter(([h, a]) => h + a === 7).length === f.league.sevenGames,
+      `${tag}: the league games are not six against ${f.league.sixGames} and seven against ${f.league.sevenGames}`);
+    check('M7', c.rival[1] === f.rival.home && c.rival[1] + c.rival[2] === f.rival.games, `${tag}: the rival was met ${c.rival[1]} at home and ${c.rival[2]} away, the formula says ${f.rival.home} of ${f.rival.games} at home`);
+    check('M7', c.nlHome.length === f.interleague.homeSeries && c.nlHome.length + c.nlAway.length === f.interleague.opponents,
+      `${tag}: ${c.nlHome.length} of ${c.nlHome.length + c.nlAway.length} interleague series at home, the formula says ${f.interleague.homeSeries} of ${f.interleague.opponents}`);
+    if (f.division.homeTotal !== null) check('M7', sum(div, 0) === f.division.homeTotal, `${tag}: ${sum(div, 0)} division games at home, the formula says ${f.division.homeTotal}`);
+    if (f.league.homeTotal !== null) check('M7', sum(lg, 0) === f.league.homeTotal, `${tag}: ${sum(lg, 0)} league games at home, the formula says ${f.league.homeTotal}`);
+    const games = sum(div, 0) + sum(div, 1) + sum(lg, 0) + sum(lg, 1) + c.rival[1] + c.rival[2] + f.interleague.games * (c.nlHome.length + c.nlAway.length);
+    const home = sum(div, 0) + sum(lg, 0) + c.rival[1] + f.interleague.games * c.nlHome.length;
+    check('M7', games === f.games && home === c.home, `${tag}: the page adds up to ${games} games and ${home} at home, the formula says ${f.games} and the page ${c.home}`);
+    /* M6 again, against the games actually played: the clubs a 2026 page shows met 13 times are that
+       club's division, the six and seven game clubs the rest of its league, the others the other league. */
+    if (c.year === 2026 && today[c.club]) {
+      const mine = today[c.club]; const others = game.MLB_TEAMS.map(t => t.id).filter(id => id !== c.club);
+      check('M6', sameSet(Object.keys(c.division), mine.teams.filter(t => t !== c.club)) && sameSet(Object.keys(c.league), others.filter(id => today[id].conf === mine.conf && today[id] !== mine))
+        && sameSet([c.rival[0], ...c.nlHome, ...c.nlAway], others.filter(id => today[id].conf !== mine.conf)), `${tag}: the opponents are not the division, the league and the other league of ${c.club} as MLB_DIVISIONS_2026 has them`);
+    }
+  }
 
   /* M8: fifteen pairs, an American League club with a National League club, every club once. */
   const leagueOf = Object.fromEntries(divs.flatMap(d => d.teams.map(t => [t, d.conf])));
@@ -306,6 +364,11 @@ const OWN_MLB_DIVISIONS = {
   /* WHO with whom: this file's own fifteen pairs. */
   const pairs = mlb.MLB_RIVALS.map(([a, n]) => `${a}-${n}`);
   check('M8', sameSet(pairs, OWN.mlbRivals.split(' ')), `the rival pairs are ${[...pairs].sort().join(' ')}, this harness's own table says ${OWN.mlbRivals.split(' ').sort().join(' ')}`);
+  /* And the 2026 fixtures: the one club of the other league each schedule page shows met in both parks. */
+  for (const c of played.filter(x => x.year === 2026)) {
+    const pair = mlb.MLB_RIVALS.find(p => p.includes(c.club)) ?? [];
+    check('M8', pair.find(id => id !== c.club) === c.rival[0], `the rival of ${c.club} is ${pair.find(id => id !== c.club)}, its 2026 schedule page shows ${c.rival[0]} met in both parks`);
+  }
 
   /* M9: the rounds and their lengths, and a first round for every season from 2004. */
   const pf = mlb.MLB_PLAYOFF_FORMAT;
@@ -315,8 +378,7 @@ const OWN_MLB_DIVISIONS = {
   check('M9', fr[0].from === OWN.mlbYears[0] && fr[fr.length - 1].to === null && fr.every((w, i) => i === 0 || w.from === fr[i - 1].to + 1), 'the first round windows leave a gap or overlap');
   /* WHICH years: this file's own windows, the middle ones too. */
   const windows = JSON.stringify(fr.map(w => [w.from, w.to, w.round, w.clubs]));
-  check('M9', windows === JSON.stringify(OWN.mlbFirstRound), `the first round windows are ${windows}, this harness's own table says ${JSON.stringify(OWN.mlbFirstRound)}`);
-  const cur = fr[fr.length - 1];
+  check('M9', windows === JSON.stringify(OWN.mlbFirstRound), `the first round windows are ${windows}, this harness's own table says ${JSON.stringify(OWN.mlbFirstRound)}`);  const cur = fr[fr.length - 1];
   check('M9', cur.from === pf.from && cur.round === pf.rounds[0] && JSON.stringify(cur.series) === JSON.stringify(pf.series[0]) && cur.clubs === pf.clubs, 'the last first round window is not the format');
   check('M9', mlb.MLB_NO_TIEBREAKER_GAME_FROM === pf.from, 'the tiebreaker game did not end with the format');
   /* No club played a 163rd game once the tiebreaker game was gone. */
@@ -416,6 +478,10 @@ const OWN_MLB_DIVISIONS = {
   /* N6: sixteen clubs, four best of sevens. */
   const pf = nhl.NHL_PLAYOFF_FORMAT;
   check('N6', pf.clubs === 16 && pf.rounds.length === 4 && pf.series.length === 4 && pf.series.every(([w, m]) => w === 4 && m === 7), 'the NHL playoffs are not sixteen clubs and four best of sevens');
+  /* From WHEN, which tournaments were modified, and the names: this file's own table, and a receipt for each of those seasons. */
+  check('N6', pf.from === OWN.nhlPlayoff.from && JSON.stringify(pf.modified) === JSON.stringify(OWN.nhlPlayoff.modified) && JSON.stringify(pf.rounds) === JSON.stringify(OWN.nhlPlayoff.rounds),
+    `the NHL playoff block starts in ${pf.from}, sets ${JSON.stringify(pf.modified)} apart and names ${pf.rounds.join(', ')}; this harness's own table says ${OWN.nhlPlayoff.from}, ${JSON.stringify(OWN.nhlPlayoff.modified)} and ${OWN.nhlPlayoff.rounds.join(', ')}`);
+  for (const y of [pf.from, ...pf.modified]) check('N6', typeof SRC['hr-playoffs']?.years?.[y] === 'string', `the playoffs receipt holds nothing for the season that starts in ${y}`);
 
   /* N7: scoring and overtime for both of the game's eras, against both receipts. */
   for (const era of game.NHL_ERAS) {
@@ -434,6 +500,10 @@ const OWN_MLB_DIVISIONS = {
   /* N8: the rules after sixty minutes, value for value, against this file's own table. */
   for (const [k, v] of Object.entries(OWN.nhlRules)) check('N8', nhl.NHL_OVERTIME_RULES[k] === v, `NHL_OVERTIME_RULES.${k} is ${nhl.NHL_OVERTIME_RULES[k]}, this harness's own table says ${v}`);
   check('N8', sameSet(Object.keys(nhl.NHL_OVERTIME_RULES), [...Object.keys(OWN.nhlRules), 'skatersBefore2015']), `NHL_OVERTIME_RULES holds ${Object.keys(nhl.NHL_OVERTIME_RULES).join(', ')}`);
+  /* The loser's point in the league's own arithmetic: points are twice the wins plus the overtime losses. */
+  const records = Object.entries(SRC['nhl-points']?.values?.records ?? {});
+  check('N8', records.length >= 3 && nhl.NHL_OVERTIME_RULES.loserGetsAPoint === records.every(([, [w, , o, p]]) => o > 0 && p === 2 * w + o),
+    `NHL_OVERTIME_RULES.loserGetsAPoint is ${nhl.NHL_OVERTIME_RULES.loserGetsAPoint}; the standings receipt holds ${records.map(([id, r]) => `${id} ${r.join('-')}`).join(', ') || 'no record'}`);
 }
 
 /* ===== THE RECEIPTS ===== */
@@ -441,7 +511,9 @@ const OWN_MLB_DIVISIONS = {
   const cited = [];
   for (const r of mlb.MLB_SEASONS) cited.push([`MLB ${r.year}`, r.year, r.src]);
   for (const s of mlb.MLB_NAME_SPANS) cited.push([`MLB span ${s.id}`, null, s.src]);
-  for (const f of mlb.MLB_FORMULAS) cited.push([`MLB formula ${f.from}`, null, f.src]);
+  /* A place cited with [from, to] makes a claim about those seasons: its receipts must speak of them. */
+  for (const f of mlb.MLB_FORMULAS) cited.push([`MLB formula ${f.from}`, [f.from, f.to], f.src], [`MLB formula ${f.from}, home and away`, [f.from, f.to], f.homeSrc ?? []]);
+  cited.push(['MLB_RIVALS in 2026', [2026, 2026], mlb.MLB_RIVALS_2026_SRC ?? []]);
   for (const o of mlb.MLB_OUTSIDE_CLUBS) cited.push([`MLB outside club ${o.team}`, null, o.src]);
   cited.push(['MLB_PLAYOFF_FORMAT', null, mlb.MLB_PLAYOFF_FORMAT.src]);
   for (const [name, keys] of Object.entries(mlb)) if (name.endsWith('_SRC')) cited.push([name, null, keys]);
@@ -450,15 +522,26 @@ const OWN_MLB_DIVISIONS = {
   cited.push(['NHL_FORMULA_84', null, nhl.NHL_FORMULA_84.src], ['NHL_PLAYOFF_FORMAT', null, nhl.NHL_PLAYOFF_FORMAT.src]);
   for (const [name, keys] of Object.entries(nhl)) if (name.endsWith('_SRC')) cited.push([name, null, keys]);
 
-  for (const [where, year, keys] of cited) {
+  /* Which seasons a receipt speaks of: its season by season lines, or its `seasons` (an article about
+     one schedule or one format). A receipt with neither speaks of no season in particular. */
+  const dated = s => !!(s.years || s.seasons);
+  const speaksOf = (s, y) => (s.years ? typeof s.years[y] === 'string' : (s.seasons ?? []).includes(y));
+  for (const [where, when, keys] of cited) {
     const got = keys.map(k => SRC[k]);
+    const year = typeof when === 'number' ? when : null;
+    const span = Array.isArray(when) ? rangeOf(when[0], when[1]) : null;
     /* R1: every key is a receipt, and a season by season receipt holds that season. */
     keys.forEach((k, i) => {
       check('R1', !!got[i], `${where} names the receipt "${k}", which does not exist`);
       if (got[i] && year !== null && got[i].years) check('R1', typeof got[i].years[year] === 'string', `${where}: the receipt "${k}" holds nothing for ${year}`);
+      /* A report about another season is no receipt for this one. */
+      if (got[i] && span && dated(got[i])) check('R1', span.some(y => speaksOf(got[i], y)), `${where}: the receipt "${k}" speaks of none of the seasons ${when.join(' to ')}`);
     });
-    /* R2: two independent sources at least. Two receipts of one group are one source. */
-    const groups = new Set(got.filter(s => s && !s.thin).map(s => s.group));
+    /* And no season of the place goes unread. */
+    if (span) for (const y of span) check('R1', got.some(s => s && !s.thin && dated(s) && speaksOf(s, y)), `${where}: no receipt speaks of ${y}`);
+    /* R2: two independent sources at least. Two receipts of one group are one source, and for a place
+       with seasons only a receipt that speaks of one of them counts. */
+    const groups = new Set(got.filter(s => s && !s.thin && (!span || !dated(s) || span.some(y => speaksOf(s, y)))).map(s => s.group));
     check('R2', groups.size >= 2, `${where} has ${groups.size} independent source(s) behind it: ${keys.join(', ')}`);
     /* R4: nothing leans on a receipt marked thin. */
     check('R4', got.every(s => !s || !s.thin), `${where} leans on a receipt marked thin`);
@@ -477,11 +560,10 @@ const OWN_MLB_DIVISIONS = {
   const empty = [
     ...Object.values(mlb.MLB_GAME_SHARES), mlb.MLB_GAME_RULES.innings, mlb.MLB_GAME_RULES.extraInningRunnerFrom,
     ...mlb.MLB_OUTSIDE_CLUBS.flatMap(o => [o.league, o.games]),
-    ...mlb.MLB_FORMULAS.flatMap(f => [f.homeGames, f.league.homeTotal, f.division.series, f.division.homeTotal]),
+    ...mlb.MLB_FORMULAS.flatMap(f => [f.homeGames, f.division.series, f.from >= 2025 ? f.league.homeTotal : f.division.homeTotal]),
     nhl.NHL_OVERTIME_RULES.skatersBefore2015,
   ];
-  check('R5', empty.every(v => v === null), 'a number only one source gave has been filled');
-  for (const t of [...mlb.MLB_THIN, ...nhl.NHL_THIN]) check('R5', [t.what, t.oneSource, t.tried].every(x => typeof x === 'string' && x.length > 8), 'a THIN entry is not whole');
+  check('R5', empty.every(v => v === null), 'a number only one source gave has been filled');  for (const t of [...mlb.MLB_THIN, ...nhl.NHL_THIN]) check('R5', [t.what, t.oneSource, t.tried].every(x => typeof x === 'string' && x.length > 8), 'a THIN entry is not whole');
   check('R5', mlb.MLB_THIN.length === OWN.thin.mlb && nhl.NHL_THIN.length === OWN.thin.nhl, `the THIN lists hold ${mlb.MLB_THIN.length} and ${nhl.NHL_THIN.length} entries, this harness's own table says ${OWN.thin.mlb} and ${OWN.thin.nhl}`);
 
   /* D1: no en dash and no em dash in the ledgers, the receipts, this file or the round's notes. */
@@ -489,8 +571,7 @@ const OWN_MLB_DIVISIONS = {
   for (const f of ['src/data/usSeasonLedgerMlb.ts', 'src/data/usSeasonLedgerNhl.ts', 'scripts/data/usSeasonSources1211.json', 'scripts/simUsSeasonLedger.mjs', 'docs/audits/ROUND-1211-NOTES.md']) {
     const text = readFileSync(path.join(ROOT, f), 'utf8') + EXTRA.text;
     check('D1', !dashes.some(d => text.includes(d)), `${f} holds an en dash or an em dash`);
-  }
-}
+  }}
 
 /* ===== NOTES FOR THE BINDING ROUNDS: where an engine plays something the ledger does not say. Never a red. ===== */
 {
@@ -528,6 +609,8 @@ const OWN_MLB_DIVISIONS = {
   const say = (sport, words, rows) => rows.map(r => `stage ${r.stage} saves ${r.counts[0]} to ${r.counts[r.counts.length - 1]} games, the real rounds hold ${r.lo} to ${r.hi}: ${r.bad} percent cannot fit`).join('; ');
   notes.push(`MLB playoff games (careerVariance.playoffGames against MLB_PLAYOFF_FORMAT): ${say('mlb', mlbWords, fits('mlb', mlb.MLB_PLAYOFF_FORMAT.series))}. Stages are the engine results in order: ${mlbWords}.`);
   notes.push(`NHL playoff games (the same law against four best of sevens): ${say('nhl', nhlWords, fits('nhl', nhl.NHL_PLAYOFF_FORMAT.series))}. Stages: ${nhlWords}.`);
+  const npf = nhl.NHL_PLAYOFF_FORMAT;
+  notes.push(`NHL engine: it writes the same four results in every year. The ledger: NHL_PLAYOFF_FORMAT is two sourced from ${npf.from}-${String(npf.from + 1).slice(2)} only; what the playoffs of ${nhl.NHL_SEASONS[0].year} to ${npf.from - 1} were has one source (NHL_THIN: the same sixteen clubs and four rounds, under other round names), and the tournaments of the seasons that started in ${npf.modified.join(' and ')} were modified. A binding round that draws a path before ${npf.from} must source it first or draw none.`);
   /* The years are read from the windows, never typed: a note may not contradict the data it describes. */
   const yearsOf = round => mlb.MLB_FIRST_ROUND.filter(w => w.round === round).map(w => (w.to === null ? `from ${w.from}` : w.from === w.to ? `${w.from}` : `${w.from} to ${w.to}`)).join(' and ');
   if (mlbWords.includes('Wild Card')) notes.push(`MLB engine: it writes a Wild Card result in every year. The ledger: no wild card round in ${yearsOf(null)}, one game in ${yearsOf('Wild Card Game')}, a series only in ${yearsOf('Wild Card Series')}; and the engine models no first round bye.`);

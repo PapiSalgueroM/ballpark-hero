@@ -27,6 +27,9 @@
              league, all 23 seasons. Baseball Reference builds on Retrosheet's
              game files, so retro, bref and bref-league count as ONE source
              here, never as two.
+   bref-schedule  Baseball Reference, "<year> <club> Schedule": every game of
+             a club's season, home or away, by opponent. Read for seven club
+             seasons, 2023 to 2026 (the same ONE source as retro and bref).
    espn-runs ESPN's 2004 and 2026 standings again, for the runs columns.
    almanac-  Baseball Almanac, "Year In Review" for a league and year (wins,
              losses, ties) and "MLB Postseason Playoffs 1969 - 2026".
@@ -167,11 +170,15 @@ export const MLB_SEASONS: readonly MlbSeasonRow[] = [
   },
   { year: 2025, games: 162, teamGames: 4860, src: ['retro', 'espn', 'bref-league'], clubs: [] },
   {
-    /* Retrosheet has no 2026 page yet; the second independent source is the
-       Associated Press report of the game that was never played. */
-    year: 2026, games: 162, teamGames: 4858, src: ['espn', 'bref', 'bref-league', 'ap-2026-finale'],
+    /* Retrosheet has no 2026 page yet; the other independent sources are
+       three reports of the game that was never played. The Associated Press
+       says "because of sustained rain"; Bleacher Report ("sustained inclement
+       weather", "it won't be rescheduled") and Field Level Media ("continued
+       inclement weather") name the weather and not rain, so the `why` says
+       the weather. */
+    year: 2026, games: 162, teamGames: 4858, src: ['espn', 'bref', 'bref-league', 'ap-2026-finale', 'br-2026-finale', 'flm-2026-finale'],
     clubs: [{
-      games: 161, why: 'had its last game called off for rain, so it finished on 161 games',
+      games: 161, why: 'had its last game called off for the weather and never made up, so it finished on 161 games',
       clubs: ['Baltimore Orioles', 'New York Yankees'], ids: ['BAL', 'NYY'],
     }],
   },
@@ -210,21 +217,21 @@ export const MLB_DIVISIONS_SRC: readonly string[] = ['espn-divisions-2026', 'bre
    kind of opponent. What is claimed nowhere: who met whom on which day.
 
    2025 and 2026 (162 = 52 + 62 + 48):
-   - 13 games against each of the 4 division rivals, seven in one park and
-     six in the other: USA TODAY, "2025 MLB regular season schedule" (18 July
-     2024), and Ticketmaster, "A Look at the 2026 MLB Schedule and New Rules"
-     (19 May 2026); the seven and six also in ESPN's 2022 report below.
+   - 13 games against each of the 4 division rivals: USA TODAY, "2025 MLB
+     regular season schedule" (18 July 2024), and Ticketmaster, "A Look at
+     the 2026 MLB Schedule and New Rules" (19 May 2026).
    - 62 against the other 10 clubs of the league, six or seven each: both of
      the above. Six against 8 of them and seven against 2 is Ticketmaster's
      own sentence, and the only way 10 clubs at six or seven make 62.
    - 48 against the other league: one three game series against 14 of its
-     clubs (both of the above; seven of those series at home: Ticketmaster,
-     and ESPN's 2022 report) and six against the interleague rival, a three
-     game series in each park: Major League Baseball's own releases, "MLB
-     announces 2025 regular-season schedule" (22 July 2024: "from four to
-     six", "each of the 30 Clubs will play two fewer games against
-     non-division league opponents") and "MLB announces 2026 regular-season
-     schedule" (1 September 2025: "again"), and Ticketmaster.
+     clubs (both of the above) and six against the interleague rival, a
+     three game series in each park: Major League Baseball's own releases,
+     "MLB announces 2025 regular-season schedule" ("from four to six", "each
+     of the 30 Clubs will play two fewer games against non-division league
+     opponents") and "MLB announces 2026 regular-season schedule" ("again"),
+     and Ticketmaster. Both releases were read where The Highland County
+     Press printed them, on pages dated 22 July 2024 and 1 September 2025:
+     those are the newspaper's days, not the league's.
    2023 and 2024 (162 = 52 + 64 + 46): ESPN, "All 30 Major League Baseball
    teams to play one another in a season for first time in 2023" (24 August
    2022), and the Associated Press, "MLB teams to play all 29 opponents under
@@ -232,30 +239,46 @@ export const MLB_DIVISIONS_SRC: readonly string[] = ['espn-divisions-2026', 'bre
    then, two in each park. Explainers that still print 64 and 46 describe
    these two seasons, not today's.
 
+   HOME AND AWAY (`homeSrc`): each row's home and away numbers have their own
+   two sources, each of them speaking of a season of THAT row. An article
+   about one format is no source for the other.
+   - 2025 and 2026: Ticketmaster of 2026 (seven and six against a division
+     rival, 26 of the 52 at home, seven of the 14 interleague series at
+     home) and the games actually played, on Baseball Reference's schedule
+     pages: Detroit 2025, and Detroit, Toronto, Texas and Houston 2026.
+   - 2023 and 2024: ESPN's report of the 2023 format ("six or seven
+     home/road games against divisional opponents", 32 at home of the 64,
+     "seven series (21 games) at home") and Baseball Reference's schedule
+     pages: Detroit 2023 and Texas 2024.
+   So within a row one season has the article and the played games and the
+   other has the played games alone (2025, 2024). The lead may hold that
+   stricter than this file does: it is said in the round's notes.
+
    A `null` below is a number only one source gave (MLB_THIN says which). */
 export const MLB_FORMULAS = [
   {
     from: 2025, to: 2026, games: 162,
-    division: { opponents: 4, games: 13, total: 52, homeOrAway: [7, 6], series: null, homeTotal: null },
+    division: { opponents: 4, games: 13, total: 52, homeOrAway: [7, 6], series: null, homeTotal: 26 },
     league: { sixGames: 8, sevenGames: 2, total: 62, homeTotal: null },
     rival: { games: 6, series: 2, home: 3 },
     interleague: { opponents: 14, games: 3, total: 42, homeSeries: 7 },
     homeGames: null,
-    src: ['usatoday-2025-schedule', 'ticketmaster-2026', 'mlb-release-2025', 'mlb-release-2026', 'espn-2023-format'],
+    src: ['usatoday-2025-schedule', 'ticketmaster-2026', 'mlb-release-2025', 'mlb-release-2026', 'bref-schedule'],
+    /* For homeOrAway, division.homeTotal, rival.home and homeSeries. */
+    homeSrc: ['ticketmaster-2026', 'bref-schedule'],
   },
   {
     from: 2023, to: 2024, games: 162,
     division: { opponents: 4, games: 13, total: 52, homeOrAway: [7, 6], series: null, homeTotal: null },
-    league: { sixGames: 6, sevenGames: 4, total: 64, homeTotal: null },
+    league: { sixGames: 6, sevenGames: 4, total: 64, homeTotal: 32 },
     rival: { games: 4, series: 2, home: 2 },
     interleague: { opponents: 14, games: 3, total: 42, homeSeries: 7 },
     homeGames: null,
-    src: ['espn-2023-format', 'ap-2023-format'],
+    src: ['espn-2023-format', 'ap-2023-format', 'bref-schedule'],
+    /* For homeOrAway, league.homeTotal, rival.home and homeSeries. */
+    homeSrc: ['espn-2023-format', 'bref-schedule'],
   },
 ] as const;
-/* `homeOrAway: [7, 6]` and `homeSeries: 7` each have two sources that speak of
-   different seasons of the same balanced format: ESPN of 2023, Ticketmaster
-   of 2026. Neither says it of the other's year. */
 
 /* THE FIFTEEN INTERLEAGUE RIVAL PAIRS the formula's six games go to, as
    [American League id, National League id] by today's ids. Three sources
@@ -271,15 +294,21 @@ export const MLB_FORMULAS = [
    Astros) are what the league's releases call "four other regional
    matchups", and they are made of exactly the eight clubs of the four pairs
    left over (Pirates and Tigers, Phillies and Blue Jays, Rangers and
-   Diamondbacks, Astros and Rockies). So those four pairs rest on
-   Ticketmaster's 2026 guide and the two 2022 reports, not on a 2026 fixture
-   list: the league's own schedule pages could not be opened. */
+   Diamondbacks, Astros and Rockies). For those four pairs the 2026 fixture
+   source is the games actually played: Baseball Reference's 2026 schedule
+   pages of Detroit, Toronto, Texas and Houston each show exactly one
+   National League club met six times, three in each park, and it is the
+   Pirates, the Phillies, the Diamondbacks and the Rockies. The league's
+   own schedule pages could not be opened. */
 export const MLB_RIVALS: readonly (readonly [string, string])[] = [
   ['NYY', 'NYM'], ['CHW', 'CHC'], ['LAA', 'LAD'], ['ATH', 'SFG'], ['CLE', 'CIN'],
   ['TBR', 'MIA'], ['BAL', 'WSN'], ['KCR', 'STL'], ['MIN', 'MIL'], ['BOS', 'ATL'],
   ['DET', 'PIT'], ['TOR', 'PHI'], ['TEX', 'ARI'], ['HOU', 'COL'], ['SEA', 'SDP'],
 ];
-export const MLB_RIVALS_SRC: readonly string[] = ['ticketmaster-2026', 'espn-2023-format', 'ap-2023-format', 'cbs-2026-rivalry'];
+export const MLB_RIVALS_SRC: readonly string[] = ['ticketmaster-2026', 'espn-2023-format', 'ap-2023-format', 'cbs-2026-rivalry', 'bref-schedule'];
+/** The receipts that speak of the 2026 season itself: all fifteen pairs in
+ *  Ticketmaster, eleven in CBS Sports, the other four in the games played. */
+export const MLB_RIVALS_2026_SRC: readonly string[] = ['ticketmaster-2026', 'cbs-2026-rivalry', 'bref-schedule'];
 
 /* THE POSTSEASON. From 2022: twelve clubs, six a league; the two division
    winners with the best records in each league skip the first round; the
@@ -374,14 +403,14 @@ export const MLB_THIN: readonly { what: string; oneSource: string; tried: string
     tried: 'Baseball Reference (team pitching table not received), the league site (refused), one web search.',
   },
   {
-    what: 'A division rival is met in four series, 26 of the 52 division games are at home.',
-    oneSource: 'Ticketmaster, "A Look at the 2026 MLB Schedule and New Rules".',
-    tried: 'USA TODAY, the league releases and the 2022 ESPN report give the 13 games and the seven and six, not the series count or the 26.',
+    what: 'A division rival is met in four series (any season), and 26 of the 52 division games at home in 2023 and 2024.',
+    oneSource: 'The four series: Ticketmaster, "A Look at the 2026 MLB Schedule and New Rules". The 26 of 2023 and 2024: Baseball Reference, the schedule pages of Detroit 2023 and Texas 2024.',
+    tried: 'USA TODAY, the league releases and the 2022 ESPN report give the 13 games, not the series count; ESPN gives six or seven at home against a rival, not the 26. For 2025 and 2026 the 26 is filled: Ticketmaster and Baseball Reference agree.',
   },
   {
     what: 'Home and away inside the 62 games against the rest of the league (2025 and 2026), and the 81 home games of a season.',
-    oneSource: 'the 2022 ESPN report, of the 2023 format only: 32 at home and 32 away of 64, one home and one road series of three or four games against each club.',
-    tried: 'Ticketmaster and USA TODAY do not give the split; no source read states 81.',
+    oneSource: 'Baseball Reference, the schedule pages: 31 at home and 31 away of the 62 in all five club seasons read (Detroit 2025 and 2026, Toronto, Texas and Houston 2026), and 81 home games in all seven read.',
+    tried: 'Ticketmaster and USA TODAY do not give the split; no article read states 81. For 2023 and 2024 the 32 of 64 is filled: ESPN and Baseball Reference agree.',
   },
   {
     what: 'The first season of the extra inning runner (2020), and the rule that a game has nine innings and plays on until one side leads.',
@@ -400,7 +429,7 @@ export const MLB_THIN: readonly { what: string; oneSource: string; tried: string
   },
   {
     what: 'Why each club on 161 fell short and what each 163rd game was, season by season.',
-    oneSource: 'Only 2026 (rain: the Associated Press) and the two ties (2005 and 2016: the Associated Press and NBC Sports) were read. The rows say "finished on 161 games" and "played a 163rd game" and no more.',
+    oneSource: 'None for the throwback seasons. Only 2026 (the weather: the Associated Press, Bleacher Report and Field Level Media) and the two ties (2005 and 2016: the Associated Press and NBC Sports) were read, and those three are in their rows. That the 2026 game was rain is the Associated Press alone. Every other row says "finished on 161 games" or "played a 163rd game" and no more.',
     tried: 'Not gathered: 16 seasons hold such a club.',
   },
   {
