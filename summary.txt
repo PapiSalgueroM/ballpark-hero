@@ -1,0 +1,16 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simGuideHeadings-traininglocation exit=1 1s | simGuideHeadings control traininglocation: section 1 red and every other section green, the break was caught where it should be (exit 1)
+simGuideHeadings exit=0 1s | simGuideHeadings: green. 131 guides carry keyword h2s over h3 and h4 sections with every original sentence intact, and all 133 blocks render a clean outline.
+genkw-noop exit=0 1s |   guide source hash df71d4d9bdb75441
+simSiteSearch exit=0 3s | simSiteSearch: green. Every game is findable by name, typos included, and the ranking can explain itself.
+simStorageWrites exit=0 3s | simStorageWrites: all green
+simLegalPages exit=0 1s | simLegalPages: all green
+simNoRivalNames exit=0 20s | No rival product names found. 0 findings.
+simNoInventedConduct exit=0 1s | simNoInventedConduct: green. A real player can score in your sim and get hurt in it. He cannot fall out with the board in it.
+simInventedNames exit=0 9s | simInventedNames: green. Every invented man on this site is invented all the way down.
+simTrustCopy exit=0 0s | simTrustCopy: green. One disclaimer under every page and one count of the games, the registry's own.
+simNoInventedQuotes exit=0 30s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simAccessibility exit=0 0s | simAccessibility: all green
+simHarnessAnchors exit=0 49s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simBrowserHarnessDiscovery exit=0 16s | Retained actual child receipts: .sim-control/browser-discovery-PxfXLc/report.json
+simNumberFormatting exit=0 129s | Number formatting: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/number-formatting-artifacts/outcomes

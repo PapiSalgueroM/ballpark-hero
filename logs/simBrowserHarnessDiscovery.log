@@ -1,0 +1,7 @@
+Browser discovery: actual three dynamic drivers omitted by default and selected with browser opt-in.
+simBracketMoment and simLoginReturn guard their own browser import and stay in the default run.
+Static imports and direct require retain browser selection.
+Comments, copied source strings and the actual rival-name guard retain node selection.
+Effective copied control adds exactly six dynamic children while the node baseline stays unchanged.
+Effective copied control drops exactly three self guarded children when the self-guard rule is removed.
+Retained actual child receipts: .sim-control/browser-discovery-PxfXLc/report.json
