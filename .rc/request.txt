@@ -1,0 +1,12 @@
+#!serve
+#!playwright
+#!serial
+weight1: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w1.log 2>&1; s=$?; cp /tmp/w1.log "$RC_OUT/weight1-full.log"; grep -E "FAIL|K gz over|probe sets|sweepWeight:" /tmp/w1.log | head -40; exit $s
+weight2: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w2.log 2>&1; s=$?; grep -E "FAIL|K gz over|sweepWeight:" /tmp/w2.log | head -40; exit $s
+buildhead: WEIGHT_JSON=/tmp/head-modules.json node_modules/.bin/vite build --config .rc/x/vite.weight.config.mjs --outDir /tmp/hw --emptyOutDir 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+buildbase: R="$PWD"; git worktree add /tmp/base 54e3820a > /tmp/wt.log 2>&1 && ln -s "$R/node_modules" /tmp/base/node_modules && cd /tmp/base && WEIGHT_JSON=/tmp/base-modules.json node_modules/.bin/vite build --config "$R/.rc/x/vite.weight.config.mjs" --outDir /tmp/bw --emptyOutDir 2>&1 | tail -4; exit ${PIPESTATUS[0]}
+attrib: node scripts/lib/hostLikeServer.mjs /tmp/hw 4301 > /tmp/s1.log 2>&1 & p1=$!; node scripts/lib/hostLikeServer.mjs /tmp/bw 4302 > /tmp/s2.log 2>&1 & p2=$!; sleep 3; node .rc/x/weightAttrib.mjs; s=$?; kill $p1 $p2; exit $s
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
