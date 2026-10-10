@@ -1,0 +1,32 @@
+1) An expired deal opens the market, not a season
+  PASS  created a career and reached the season hub
+  PASS  the free agency screen opened instead of a season
+  PASS  exactly one card is marked Your team
+  PASS  at least two live offers on the table (saw 2)
+  PASS  the cards show the roster quality number
+  PASS  the cards show money times length
+2) The push spends once and talks back
+  PASS  push buttons are on the live cards
+  PASS  the pushed offer spent its one negotiation
+  PASS  the talk line reports how it went
+3) Signing puts the deal on the hub
+  PASS  signing returns to the season hub
+  PASS  the market screen closed
+  PASS  the news feed carries the signing
+  PASS  no page errors on the NFL walk (clean)
+4) The era market never calls from the future
+  PASS  created a 2006-07 career and reached its hub
+  PASS  the era career opened its market
+  PASS  Vegas is not on the 2006 market
+  PASS  Kraken is not on the 2006 market
+  PASS  Winnipeg is not on the 2006 market
+  PASS  Utah is not on the 2006 market
+  PASS  Mammoth is not on the 2006 market
+  PASS  Seattle is not on the 2006 market
+5) Signing away moves the career to the new club
+  PASS  the era window has an outside offer to take (saw 2)
+  PASS  the era signing returns to the hub
+  PASS  the era news feed carries the signing
+  PASS  no page errors on the NHL era walk (clean)
+
+ALL FREE AGENCY WALK CHECKS PASSED

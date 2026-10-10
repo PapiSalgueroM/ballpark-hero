@@ -1,0 +1,69 @@
+ok   [open] nba open: nothing is said and the prospect is on the browser's store (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+ok   [errors] nba open: no page error and no sideways scroll at 390
+ok   [blocked] nba blocked: the page plays, the line says blocked, and no save is called refused (line blocked 0..28, Retry notice none, save toasts 0, refused writes 0, on the browser's store: nothing)
+ok   [blocked] nba blocked: nothing reached the browser's own store (nothing)
+ok   [errors] nba blocked: no page error and no sideways scroll at 390
+ok   [full] nba full: the line says full, the Retry notice is up for a write and nothing reached the store (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [full] nba full: the Retry notice is in view on the first screen with nothing over it (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [full] nba full: the refused save is said in exactly one toast (1 of 1 on screen)
+ok   [full] nba full: the line and the Retry notice do not overlap (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [banner] nba full: the save toast is on the screen, on top, and clear of the cookie banner (toast 576..689 seen, banner 701..844, shared 0 px)
+ok   [retry] nba full: once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line full 0..28, Retry notice none, save toasts 1, refused writes 6, on the browser's store: prospect)
+ok   [toast] nba full: the toast that said the save had failed is gone with the notice (Retry pressed 907 ms after the refusal)
+ok   [line] nba full: after the Retry that worked the line at the top leaves on the same page and the game moves up by no more than it (gone, no page load, the game moved 0 px, the line was 28 px)
+ok   [errors] nba full: no page error and no sideways scroll at 390
+ok   [open] nfl open: nothing is said and the prospect is on the browser's store (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+ok   [errors] nfl open: no page error and no sideways scroll at 390
+ok   [blocked] nfl blocked: the page plays, the line says blocked, and no save is called refused (line blocked 0..28, Retry notice none, save toasts 0, refused writes 0, on the browser's store: nothing)
+ok   [blocked] nfl blocked: nothing reached the browser's own store (nothing)
+ok   [errors] nfl blocked: no page error and no sideways scroll at 390
+ok   [full] nfl full: the line says full, the Retry notice is up for a write and nothing reached the store (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [full] nfl full: the Retry notice is in view on the first screen with nothing over it (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [full] nfl full: the refused save is said in exactly one toast (1 of 1 on screen)
+ok   [full] nfl full: the line and the Retry notice do not overlap (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [banner] nfl full: the save toast is on the screen, on top, and clear of the cookie banner (toast 576..689 seen, banner 701..844, shared 0 px)
+ok   [retry] nfl full: once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line full 0..28, Retry notice none, save toasts 1, refused writes 6, on the browser's store: prospect)
+ok   [toast] nfl full: the toast that said the save had failed is gone with the notice (Retry pressed 908 ms after the refusal)
+ok   [line] nfl full: after the Retry that worked the line at the top leaves on the same page and the game moves up by no more than it (gone, no page load, the game moved 0 px, the line was 28 px)
+ok   [errors] nfl full: no page error and no sideways scroll at 390
+ok   [open] mlb open: nothing is said and the prospect is on the browser's store (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+ok   [errors] mlb open: no page error and no sideways scroll at 390
+ok   [blocked] mlb blocked: the page plays, the line says blocked, and no save is called refused (line blocked 0..28, Retry notice none, save toasts 0, refused writes 0, on the browser's store: nothing)
+ok   [blocked] mlb blocked: nothing reached the browser's own store (nothing)
+ok   [errors] mlb blocked: no page error and no sideways scroll at 390
+ok   [full] mlb full: the line says full, the Retry notice is up for a write and nothing reached the store (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [full] mlb full: the Retry notice is in view on the first screen with nothing over it (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [full] mlb full: the refused save is said in exactly one toast (1 of 1 on screen)
+ok   [full] mlb full: the line and the Retry notice do not overlap (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [banner] mlb full: the save toast is on the screen, on top, and clear of the cookie banner (toast 576..689 seen, banner 701..844, shared 0 px)
+ok   [retry] mlb full: once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line full 0..28, Retry notice none, save toasts 1, refused writes 6, on the browser's store: prospect)
+ok   [toast] mlb full: the toast that said the save had failed is gone with the notice (Retry pressed 908 ms after the refusal)
+ok   [line] mlb full: after the Retry that worked the line at the top leaves on the same page and the game moves up by no more than it (gone, no page load, the game moved 0 px, the line was 28 px)
+ok   [errors] mlb full: no page error and no sideways scroll at 390
+ok   [open] nhl open: nothing is said and the prospect is on the browser's store (line none, Retry notice none, save toasts 0, refused writes 0, on the browser's store: prospect)
+ok   [errors] nhl open: no page error and no sideways scroll at 390
+ok   [blocked] nhl blocked: the page plays, the line says blocked, and no save is called refused (line blocked 0..28, Retry notice none, save toasts 0, refused writes 0, on the browser's store: nothing)
+ok   [blocked] nhl blocked: nothing reached the browser's own store (nothing)
+ok   [errors] nhl blocked: no page error and no sideways scroll at 390
+ok   [full] nhl full: the line says full, the Retry notice is up for a write and nothing reached the store (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [full] nhl full: the Retry notice is in view on the first screen with nothing over it (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [full] nhl full: the refused save is said in exactly one toast (1 of 1 on screen)
+ok   [full] nhl full: the line and the Retry notice do not overlap (line full 0..28, Retry notice write 225..342 seen, save toasts 1, refused writes 6, on the browser's store: nothing)
+ok   [banner] nhl full: the save toast is on the screen, on top, and clear of the cookie banner (toast 576..689 seen, banner 701..844, shared 0 px)
+ok   [retry] nhl full: once the browser takes writes again Retry save puts the prospect on the store and the notice goes (line full 0..28, Retry notice none, save toasts 1, refused writes 6, on the browser's store: prospect)
+ok   [toast] nhl full: the toast that said the save had failed is gone with the notice (Retry pressed 907 ms after the refusal)
+ok   [line] nhl full: after the Retry that worked the line at the top leaves on the same page and the game moves up by no more than it (gone, no page load, the game moved 0 px, the line was 28 px)
+ok   [errors] nhl full: no page error and no sideways scroll at 390
+ok   [quota] nba quota returning: on a page that saves what it loaded the line says full and stays (line full (none@93 full@251), a new key is refused, Retry notice none, on the store: nothing, 55 fillers)
+ok   [quota] nba quota returning: on the next game the line still says full (line full (none@93 full@251), a new key is refused, Retry notice none, on the store: nothing, no page load)
+ok   [quota] nba quota returning: the career's first save is refused and the line at the top says why (line full (none@93 full@251), a new key is refused, Retry notice up, on the store: nothing)
+ok   [errors] nba quota returning: no page error
+ok   [quota] nba quota little: the first save is refused and the line says full (line full (none@87 full@214), a new key is refused, Retry notice up, on the store: nothing)
+ok   [quota] nba quota little: with about 204 characters of room Retry save is refused again and the line still says full (line full (none@87 full@214), a new key is taken, Retry notice up, on the store: nothing)
+ok   [quota] nba quota little: with real room Retry save goes through (370 characters) and the line leaves on the same page (line left (none@87 full@214), a new key is taken, Retry notice none, on the store: prospect, no page load)
+ok   [errors] nba quota little: no page error
+ok   [kept] nba quota kept: the cookie choice is taken while the store is full and the line still says full (banner up then gone, on the store: nothing, line full (none@47 full@152), a new key is refused, Retry notice none, on the store: nothing)
+ok   [kept] nba quota kept: once there is room the line leaves and the choice made under it is on the device (on the store: essential, line left (none@47 full@152), a new key is taken, Retry notice none, on the store: nothing)
+ok   [errors] nba quota kept: no page error
+requests to supabase.co aborted: 15
+playUsCareerSaveSeam: 15 journeys, 67 checks, 0 failed

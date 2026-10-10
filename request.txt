@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+playCareerHub: node scripts/playCareerHub.mjs
+playDepthChart: node scripts/playDepthChart.mjs
+playExtension: node scripts/playExtension.mjs
+playFreeAgency: node scripts/playFreeAgency.mjs
+playUsCareerSaveSeam: node scripts/playUsCareerSaveSeam.mjs
+playSessionMarks: node scripts/playSessionMarks.mjs
+playReducedMotion: node scripts/playReducedMotion.mjs
+playStorageBlocked: node scripts/playStorageBlocked.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
