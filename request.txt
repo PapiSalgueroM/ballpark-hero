@@ -1,0 +1,3 @@
+#!serial
+make: git worktree add -f /tmp/base 65ef763996a3203cb0eb7bac4820f52ccf33e66e >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; W="$PWD"; cd /tmp/base && git rev-parse --short HEAD && node "$W/.rc/x/oldSaveProbeAU.mjs" make /tmp/old-saves.json
+play: node .rc/x/oldSaveProbeAU.mjs play /tmp/old-saves.json

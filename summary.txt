@@ -1,0 +1,2 @@
+make exit=0 2s | oldSaveProbeAU make: 36 Soccer Career saves (36 not at a season start, 20 with seven or more recorded rows), 25 Club Manager saves (7 on a real fixture list, 1 at half ti
+play exit=0 7s | oldSaveProbeAU: green. Every save made by the old code loads, is read by the new screens and plays on.
