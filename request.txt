@@ -1,0 +1,4 @@
+#!serial
+squad-head: SEED=1 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs 2>&1 | grep -E "league games minus the plan|^simCareerSquad|FAIL" | head -8; exit ${PIPESTATUS[0]}
+squad-noform: node .rc/x/noform.mjs && SEED=1 CAREER_SQUAD_NO_CONTROLS=1 node scripts/simCareerSquad.mjs 2>&1 | grep -E "noform|league games minus the plan|^simCareerSquad|FAIL" | head -8; s=${PIPESTATUS[0]}; git checkout -- src scripts; exit $s
+restored: git status --short | grep -v "^??" | wc -l

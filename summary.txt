@@ -1,0 +1,3 @@
+squad-head exit=1 166s | simCareerSquad: 2191 checks, 1 failed
+squad-noform exit=0 166s | simCareerSquad: 2189 checks, 0 failed
+restored exit=0 0s | 0
