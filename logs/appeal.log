@@ -1,0 +1,22 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Historical engine and original assertion hold: src/lib/clubManager.ts
++ actual - expected
+
++ '92175737245cd95ad8bb83a2223ba8f754e8733ebb522cf7b03e6d4d433de3ad'
+- '1ab749127d12f742406afe6a56eba7a082b85b7568073054b62a3e9597a31fc2'
+
+    at characterize (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerAppealIsolation.mjs:142:83)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simManagerAppealIsolation.mjs:275:33 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '92175737245cd95ad8bb83a2223ba8f754e8733ebb522cf7b03e6d4d433de3ad',
+  expected: '1ab749127d12f742406afe6a56eba7a082b85b7568073054b62a3e9597a31fc2',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

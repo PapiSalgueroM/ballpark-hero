@@ -1,0 +1,8 @@
+appeal exit=1 11s | Node.js v24.21.0
+cmsave exit=0 14s | simClubManagerSave: all sections green
+dailydeals exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+matchplans exit=0 8s | simManagerMatchPlans: 13 actual outcomes passed.
+ledger exit=0 1s | simCmVarLedger: all 316 checks passed.
+varlive exit=0 6s |    Duration  4.51s (transform 1.98s, setup 55ms, collect 2.55s, tests 668ms, environment 413ms, prepare 264ms)
+varlive-control exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+tsc exit=0 68s | 
