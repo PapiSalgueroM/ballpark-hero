@@ -1,0 +1,4 @@
+MUTATED F: src/lib/clubManager.ts, 1 place(s): `league:${careerLeagueOf(state).id}`  ->  'league:premier'
+RESULT simCmVar=1
+FAILED asks for reviews only where the competition uses them and plays the same match everywhere else | Wolves: a match in a competition without reviews carries no opt in
+restored

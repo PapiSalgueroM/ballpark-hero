@@ -1,0 +1,4 @@
+MUTATED C: src/lib/clubManager.ts, 1 place(s): entry.type === 'cup' ? `cup:${careerLeagueOf(state).cupName}` : 'ucl'  ->  'ucl'
+RESULT simCmVar=1
+FAILED asks for reviews only where the competition uses them and plays the same match everywhere else | Wolves: a match in a competition without reviews carries no opt in
+restored

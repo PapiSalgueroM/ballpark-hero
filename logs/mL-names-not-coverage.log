@@ -1,0 +1,12 @@
+MUTATED L: scripts/genCmVarRates.mjs, 1 place(s): names: comps.rows.filter(r => r.verdict === 'yes').map(r => r.name)  ->  names: comps.rows.filter(r => r.verdict !== 'no').map(r => r.name)
+genCmVarRates: 3 file(s) in step with the ledgers.
+CM_VAR_COVERED_NAMES: readonly string[] = ['Premier League', 'La Liga', 'Serie A', 'Bundesliga', 'Champions League', 'EFL Championship', 'Ligue 1', '2. Bundesliga'];
+genCmVarRates --check: 3 file(s) in step with the ledgers.
+RESULT gencheck=0
+simCmVarLedger: all 316 checks passed.
+RESULT ledger=0
+RESULT simCmVar=0
+simCmVar normal: actual review outcomes and full prior baseline passed.
+RESULT tsc=0
+RESULT vitest=0
+restored

@@ -1,0 +1,4 @@
+MUTATED G: src/lib/clubManagerVar.ts, 1 place(s): CM_VAR_GAME_RATES.missedFoulReview  ->  (CM_VAR_GAME_RATES.missedFoulReview * 2)
+RESULT simCmVar=1
+FAILED links every reviewed penalty to one actual penalty resolution without extra shots | Expected values to be strictly equal:
+restored

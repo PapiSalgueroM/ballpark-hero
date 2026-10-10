@@ -1,0 +1,13 @@
+MUTATED D: src/lib/clubManager.ts, 1 place(s): ...(varReviews && worldYear(state) >= 2026  ->  ...(varReviews && worldYear(state) > 2026
+RESULT simCmVar=1
+FAILED overturns an actual drawn goal before scorer credit and goal-shot commitment | No actual disallowed review in the bounded engine fixture search
+FAILED links every reviewed penalty to one actual penalty resolution without extra shots | No actual penalty review in the bounded engine fixture search
+FAILED awards actual penalties from saved defensive foul incidents and resolves scored and missed kicks once | No actual awarded_scored review in the bounded engine fixture search
+FAILED retains the exact stored decisions on save load and deterministic settlement | No actual disallowed review in the bounded engine fixture search
+FAILED keeps played reviews and scores while only the future is recut after a tactical change | No actual disallowed review in the bounded engine fixture search
+FAILED holds the accepted goal and penalty shot until its own saved decision is shown | No actual confirmed review in the bounded engine fixture search
+FAILED shows already played reviewed goals and added-time events when a saved later period opens | No actual confirmed review in the bounded engine fixture search
+FAILED uses stated game rates with bilateral outcomes and reports the enabled baseline delta | Enabled actual matches draw reviewed goals, overturned goals and reviewed penalties
+FAILED holds every review outcome a match inside the range real football gives, on the generated rates | Goals ruled out a match 0 is outside real football's 0.0763 to 0.1447 (headroom 0.2)
+FAILED asks for reviews only where the competition uses them and plays the same match everywhere else | Celtic: its Champions League match carries the opt in
+restored
