@@ -197,7 +197,8 @@ const END = () => {
   const r = closing.getBoundingClientRect();
   const at = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
   return { text: closing.innerText, top: r.top, bottom: r.bottom, vh: window.innerHeight, covered: !(at && closing.contains(at)),
-    rows: night.querySelectorAll('[data-night-row]').length, tiles: night.querySelectorAll('[data-lottery-slot]').length, kinds: [...night.querySelectorAll('[data-night-row]')].map(x => x.dataset.nightRow) };
+    rows: night.querySelectorAll('[data-night-row]').length, tiles: night.querySelectorAll('[data-lottery-slot]').length, kinds: [...night.querySelectorAll('[data-night-row]')].map(x => x.dataset.nightRow),
+    tileWords: [...night.querySelectorAll('[data-lottery-slot]')].map(li => [li.dataset.lotterySlot, ...[...li.querySelectorAll('[data-lottery-face] > span:last-child > span')].map(x => x.textContent)].join(' | ')) };
 };
 
 async function open(browser, sport, size, p, mode) {
@@ -330,6 +331,15 @@ async function run(browser, sport, size, found, mode, { startCareer = false, sho
     const said = end.text.replace(/\s+/g, ' ').trim();
     const wantSaid = out.pick === null ? `The last pick is in. Your name was not called. Your first club: ${club}.` : `Pick ${out.pick}: ${club} Your name is called. Round ${out.round}, pick ${out.pickInRound}.`;
     if (said !== wantSaid) fail(id, 'save', `the closing row says "${said}", the save says "${wantSaid}"`);
+    /* Each lottery tile is the engine's winner of that pick, with its seed and the way it moved
+       worked out here from the order (seed 1 is the worst record, so a club that won a pick
+       better than its record moved UP). */
+    const order = M.preDraftOrder(desc, done.seed);
+    const wantTiles = desc.lottery ? order.lotteryWinners.map((team, i) => {
+      const slot = i + 1, seed = order.standings.indexOf(team) + 1;
+      return [slot, (desc.teamShort ?? desc.teamLabel)(team), `Seed ${seed} · ${seed > slot ? `Up ${seed - slot}` : seed < slot ? `Down ${slot - seed}` : 'Held'}`].join(' | ');
+    }) : [];
+    if (JSON.stringify(end.tileWords) !== JSON.stringify(wantTiles)) fail(id, 'save', `the lottery tiles say ${JSON.stringify(end.tileWords)}, the order says ${JSON.stringify(wantTiles)}`);
     /* 9. The words on a lottery tile fit the tile, in the site's own typeface. */
     if (end.tiles) {
       const fit = await page.evaluate(FIT, desc.teamIds().map(team => (desc.teamShort ?? desc.teamLabel)(team)));

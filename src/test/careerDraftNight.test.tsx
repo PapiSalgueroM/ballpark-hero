@@ -218,18 +218,46 @@ describe('the lottery tile names each winner in words that fit', () => {
     }
   });
 
-  it.each(LOTTERIES)('%s: each tile prints the winner by that name, and the line under the tiles keeps the city', (_, desc) => {
+  it.each(LOTTERIES)('%s: each tile is the winner by that name, its seed and which way it moved', (_, desc) => {
+    const ways = new Set<string>();
     for (let n = 0; n < 12; n += 1) {
       const state = endedAt(desc, 40, `tile-${n}`);
       const o = preDraftOrder(desc, state.seed);
       const view = render(<DraftNightSequence night={buildCareerDraftNight(desc, state)!} desc={desc} draftYear={state.draft!.draftYear} stage="skipped" onLanded={noop} onSkip={noop} onContinue={noop} />);
       for (let slot = 1; slot <= desc.lottery!.drawn; slot += 1) {
+        const club = o.lotteryWinners[slot - 1];
+        // Seed 1 is the worst record, so a club that won a pick better than its record moved UP.
+        // Worked out here from the order itself, never from the number the mount hands the tile.
+        const seed = o.standings.indexOf(club) + 1;
+        const way = seed > slot ? `Up ${seed - slot}` : seed < slot ? `Down ${slot - seed}` : 'Held';
+        ways.add(way.split(' ')[0]);
         const face = view.container.querySelector<HTMLElement>(`[data-lottery-slot='${slot}'] [data-lottery-face]`)!;
-        expect(face.lastElementChild!.children[0].textContent).toBe(desc.teamShort!(o.lotteryWinners[slot - 1]));
+        expect([...face.lastElementChild!.children].map(el => el.textContent)).toEqual([desc.teamShort!(club), `Seed ${seed} · ${way}`]);
       }
+      // The line under the tiles keeps the city.
       expect(view.container.querySelector('[data-lottery-headline]')!.textContent).toBe(`${desc.teamLabel(o.lotteryWinners[0])} hold the first pick.`);
       view.unmount();
     }
+    // These seeds drew clubs that rose, fell and stayed, so all three words were read.
+    expect([...ways].sort()).toEqual(['Down', 'Held', 'Up']);
+  });
+
+  it('typed out: the fifth worst record winning the second pick reads "Up 3", and the worst record at pick 4 "Down 3"', () => {
+    const desc = nbaPreDraftDescriptor('now');
+    // Find the two cases in real orders, so the words are read off real tiles.
+    let up = false, down = false;
+    for (let n = 0; n < 400 && !(up && down); n += 1) {
+      const state = endedAt(desc, 40, `typed-${n}`);
+      const o = preDraftOrder(desc, state.seed);
+      const want = (slot: number, seed: number) => o.standings.indexOf(o.lotteryWinners[slot - 1]) + 1 === seed;
+      if (!((want(2, 5) && !up) || (want(4, 1) && !down))) continue;
+      const view = render(<DraftNightSequence night={buildCareerDraftNight(desc, state)!} desc={desc} draftYear={2026} stage="skipped" onLanded={noop} onSkip={noop} onContinue={noop} />);
+      const line = (slot: number) => view.container.querySelector(`[data-lottery-slot='${slot}'] [data-lottery-face]`)!.lastElementChild!.children[1].textContent;
+      if (want(2, 5)) { expect(line(2)).toBe('Seed 5 · Up 3'); up = true; }
+      if (want(4, 1)) { expect(line(4)).toBe('Seed 1 · Down 3'); down = true; }
+      view.unmount();
+    }
+    expect({ up, down }).toEqual({ up: true, down: true });
   });
 });
 
