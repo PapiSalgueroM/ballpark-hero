@@ -110,7 +110,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
-          for harness in simCareerDomesticCup simCareerDerbies simCareerSeasonRatings simCareerPositionRatings simCareerRecordedStats simCareerStory simCareerLifeCooldowns simSeasonCentreAgreement simSeasonCentreNeutral simSeasonCentreTable simSoccerSeasonCompetitions simNoInventedQuotes simUsCareerWeight simUsBoardParity simUsSeasonCentre simUsCareerDeckC simCareerRivalryEvents simCareerHub; do
+          for harness in simCareerDomesticCup simCareerDerbies simCareerSeasonRatings simCareerPositionRatings simCareerRecordedStats simCareerStory simCareerLifeCooldowns simSeasonCentreAgreement simSeasonCentreNeutral simSeasonCentreTable simSoccerSeasonCompetitions simNoInventedQuotes simUsCareerWeight simUsBoardParity simUsSeasonCentre simUsCareerDeckC simCareerRivalryEvents simCareerHub simSoccerOfferReview; do
             ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "career-programme-artifacts/$harness.log" || failed=1
           done
           exit "$failed"

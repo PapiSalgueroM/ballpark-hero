@@ -15,7 +15,7 @@ const required={
   'src/lib/soccerCupOpening.test.ts':14,
   'src/lib/soccerClubSquad.test.ts':1,
   'src/test/soccerSeasonCompetitions.test.tsx':1,
-  'src/test/cookieConsentStorage.test.tsx':7,
+  'src/test/cookieConsentStorage.test.tsx':11,
   'src/test/helpConsentFocus.test.tsx':7,
 };
 assert.equal(receipt.numFailedTests,0);assert.equal(receipt.numFailedTestSuites,0);

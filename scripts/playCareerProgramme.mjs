@@ -17,9 +17,10 @@ const base='http://127.0.0.1:'+port,server=spawn(process.execPath,['scripts/lib/
 await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Server start timeout')),15000);server.stdout.on('data',v=>{if(String(v).includes('host-like server:')){clearTimeout(timer);resolve();}});server.once('error',reject);server.once('exit',v=>reject(Error('Server exited '+v)));});
 const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),cases:[],checks:0,forwarded:0,controls:[],fontManifest,scope:'Actual production actions and raw saved-byte holds. The seeded page stream is fixture setup, not an independent native RNG oracle.'};
 const browser=await pw.chromium.launch({headless:true});
-function cookieFailures(v){return v.controls.every(c=>c.painted&&!c.clipped)?[]:['cookie-painted'];}
+function viewportFailures(v){return v.inner.width>v.requested.width+1||v.client.width>v.requested.width+1||(v.visual&&Math.abs(v.visual.scale-1)>0.01)?['viewport-scale']:[];}
+function cookieFailures(v){return[...(v.controls.every(c=>c.painted&&!c.clipped)?[]:['cookie-painted']),...viewportFailures(v.viewport)];}
 function openingFailures(v){return v.after.y===v.before.y?[]:['opening-position'];}
-function layoutFailures(v){return[...(v.overflow?['overflow']:[]),...(!v.inside?['dialog-viewport']:[]),...(!v.painted?['dialog-painted']:[]),...(v.stableFrames<4||v.finiteAnimations||v.fonts!=='loaded'||v.fontFaces.some(f=>f.status==='error')?['capture-readiness']:[]),...(v.controls.some(c=>c.width<43.5||c.height<43.5)?['touch-size']:[]),...(v.controls.some(c=>!c.painted&&!c.clipped)?['painted-controls']:[])];}
+function layoutFailures(v){return[...(v.overflow?['overflow']:[]),...viewportFailures(v.viewport),...(!v.inside?['dialog-viewport']:[]),...(!v.painted?['dialog-painted']:[]),...(v.stableFrames<4||v.finiteAnimations||v.fonts!=='loaded'||v.fontFaces.some(f=>f.status==='error')?['capture-readiness']:[]),...(v.controls.some(c=>c.width<43.5||c.height<43.5)?['touch-size']:[]),...(v.controls.some(c=>!c.painted&&!c.clipped)?['painted-controls']:[])];}
 try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=width+'-'+fixture.slug+(fixture.id?'-'+fixture.id:''),soccer=fixture.slug==='soccer-career',row={id,choices:[],shots:[],layouts:[],reloads:[],errors:[],assetErrors:[],blocked:[],fontsUsed:[],toasts:[],checks:0};report.cases.push(row);
   const context=await browser.newContext({viewport:{width,height:width===320?568:width===390?844:900},hasTouch:width<1000,isMobile:width<1000}),page=await context.newPage();
   const check=(value,label)=>{assert(value,id+': '+label);report.checks++;row.checks++;};
@@ -56,24 +57,26 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
         row.toasts.push({name,observed:toasts,disappeared:true});check(true,name+': observed transient toast disappears before capture');
       }
       await page.evaluate(async()=>{await document.fonts.ready;});
-      const v=await target.evaluate(async e=>{
+      const v=await target.evaluate(async(e,requested)=>{
         const sample=()=>{
+          const viewport={requested,inner:{width:innerWidth,height:innerHeight},client:{width:document.documentElement.clientWidth,height:document.documentElement.clientHeight},visual:visualViewport?{width:visualViewport.width,height:visualViewport.height,scale:visualViewport.scale,offsetLeft:visualViewport.offsetLeft,offsetTop:visualViewport.offsetTop}:null,meta:document.querySelector('meta[name=viewport]')?.getAttribute('content')??null},viewWidth=Math.min(requested.width,document.documentElement.clientWidth),viewHeight=requested.height;
           const r=e.getBoundingClientRect(),rect=x=>({x:x.x,y:x.y,width:x.width,height:x.height,top:x.top,bottom:x.bottom,left:x.left,right:x.right});
           const points=x=>{const ix=Math.min(8,x.width/4),iy=Math.min(8,x.height/4);return[[x.x+x.width/2,x.y+x.height/2],[x.left+ix,x.top+iy],[x.right-ix,x.top+iy],[x.left+ix,x.bottom-iy],[x.right-ix,x.bottom-iy]];};
           const hits=(element,x)=>points(x).map(([px,py])=>{const hit=document.elementFromPoint(px,py);return !!hit&&(hit===element||element.contains(hit));});
           const skipped=[],controls=[...e.querySelectorAll('button')].flatMap(b=>{
             const x=b.getBoundingClientRect(),style=getComputedStyle(b);if(style.display==='none'||style.visibility==='hidden'||x.width===0||x.height===0){skipped.push({label:b.textContent,reason:'hidden'});return[];}
-            const clip={left:0,right:innerWidth,top:0,bottom:innerHeight};
+            const clip={left:0,right:viewWidth,top:0,bottom:viewHeight};
             for(let parent=b.parentElement;parent;parent=parent.parentElement){const ps=getComputedStyle(parent),pr=parent.getBoundingClientRect();if(/auto|scroll|hidden|clip/.test(ps.overflowX)){clip.left=Math.max(clip.left,pr.left);clip.right=Math.min(clip.right,pr.right);}if(/auto|scroll|hidden|clip/.test(ps.overflowY)){clip.top=Math.max(clip.top,pr.top);clip.bottom=Math.min(clip.bottom,pr.bottom);}}
             const paintedPoints=hits(b,x);return[{label:b.getAttribute('aria-label')||b.textContent,disabled:b.disabled,...rect(x),clip,paintedPoints,painted:Number(style.opacity)>0&&paintedPoints.every(Boolean),clipped:x.left<clip.left-0.5||x.right>clip.right+0.5||x.top<clip.top-0.5||x.bottom>clip.bottom+0.5}];
           });
           const style=getComputedStyle(e),center=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2),finiteAnimations=document.getAnimations().filter(a=>a.playState==='running'&&Number.isFinite(a.effect?.getComputedTiming().endTime)).length;
-          return{rect:rect(r),overflow:document.documentElement.scrollWidth>innerWidth+1,inside:r.left>=-0.5&&r.right<=innerWidth+0.5&&r.top>=-0.5&&r.bottom<=innerHeight+0.5,painted:style.visibility!=='hidden'&&Number(style.opacity)===1&&!!center&&(center===e||e.contains(center)),controls,skipped,finiteAnimations,fonts:document.fonts.status,fontFaces:[...document.fonts].map(f=>({family:f.family,status:f.status})),body:{inline:document.body.style.overflow,computed:getComputedStyle(document.body).overflow,locked:document.body.getAttribute('data-scroll-locked')},scroll:[...e.querySelectorAll('[data-programme-body],[data-us-programme-scroll]')].map(b=>({top:b.scrollTop,height:b.clientHeight,total:b.scrollHeight})),pageY:scrollY};
+          const overflow=document.documentElement.scrollWidth>viewWidth+1,overflowElements=overflow?[...document.body.querySelectorAll('*')].filter(n=>{const x=n.getBoundingClientRect(),s=getComputedStyle(n);return x.width>0&&s.display!=='none'&&s.visibility!=='hidden'&&(x.right>viewWidth+1||x.left< -1);}).slice(0,60).map(n=>({tag:n.tagName,className:n.className,text:n.textContent?.slice(0,180),rect:rect(n.getBoundingClientRect()),scrollWidth:n.scrollWidth,minWidth:getComputedStyle(n).minWidth,whiteSpace:getComputedStyle(n).whiteSpace})):[];
+          return{viewport,overflowElements,rect:rect(r),overflow,inside:r.left>=-0.5&&r.right<=viewWidth+0.5&&r.top>=-0.5&&r.bottom<=viewHeight+0.5,painted:style.visibility!=='hidden'&&Number(style.opacity)===1&&!!center&&(center===e||e.contains(center)),controls,skipped,finiteAnimations,fonts:document.fonts.status,fontFaces:[...document.fonts].map(f=>({family:f.family,status:f.status})),body:{inline:document.body.style.overflow,computed:getComputedStyle(document.body).overflow,locked:document.body.getAttribute('data-scroll-locked')},scroll:[...e.querySelectorAll('[data-programme-body],[data-us-programme-scroll]')].map(b=>({top:b.scrollTop,height:b.clientHeight,total:b.scrollHeight})),pageY:scrollY};
         };
         const start=performance.now();let last='',stableFrames=0,v;
         do{await new Promise(requestAnimationFrame);v=sample();const signature=JSON.stringify(v);stableFrames=signature===last?stableFrames+1:1;last=signature;if(stableFrames>=4&&!v.finiteAnimations&&v.fonts==='loaded'&&v.painted)return{...v,stableFrames};}while(performance.now()-start<2000);
         return{...v,stableFrames};
-      });
+      },page.viewportSize());
       row.layouts.push({name,...v});check(v.controls.length>0,name+': actual controls observed');check(layoutFailures(v).length===0,name+': painted usable layout');return v;
     }
     async function shot(name,target=dialog){await measure(name+'-capture',target);const file=id+'-'+name+'.png';await target.screenshot({path:path.join(out,file)});row.shots.push({file,sha256:sha(fs.readFileSync(path.join(out,file)))});}
@@ -137,10 +140,10 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
     if(!report.controls.some(c=>c.name==='entry-observations')){
       const held=await bytes(),observed={cookie:cookieLayout,opening:openingObservation},failures=v=>[...cookieFailures(v.cookie),...openingFailures(v.opening)];
       check(failures(observed).length===0,'Actual consent and opening observations pass before the copied control');
-      const faulty=structuredClone(observed),painted=faulty.cookie.controls[0].painted,pageY=faulty.opening.after.y;faulty.cookie.controls[0].painted=false;faulty.opening.after.y=pageY+1;
-      check(painted===true&&JSON.stringify(faulty)!==JSON.stringify(observed),'Copied entry control alters an actual painted button and opening position');assert.deepEqual(failures(faulty),['cookie-painted','opening-position']);check(true,'Copied entry detector rejects exactly the obstructed consent button and modal page jump');
-      faulty.cookie.controls[0].painted=painted;faulty.opening.after.y=pageY;check(JSON.stringify(faulty)===JSON.stringify(observed)&&failures(faulty).length===0,'Copied entry detector restores the complete observations');check(await bytes()===held,'Copied entry detector preserves the entire actual raw save');
-      report.controls.push({name:'entry-observations',effective:true,failed:['cookie-painted','opening-position'],restored:true,scope:'Copied actual observation, not a served product mutation'});
+      const faulty=structuredClone(observed),painted=faulty.cookie.controls[0].painted,pageY=faulty.opening.after.y,innerWidth=faulty.cookie.viewport.inner.width;faulty.cookie.controls[0].painted=false;faulty.cookie.viewport.inner.width=faulty.cookie.viewport.requested.width+51;faulty.opening.after.y=pageY+1;
+      check(painted===true&&JSON.stringify(faulty)!==JSON.stringify(observed),'Copied entry control alters an actual painted button viewport width and opening position');assert.deepEqual(failures(faulty),['cookie-painted','viewport-scale','opening-position']);check(true,'Copied entry detector rejects exactly the obstructed consent button expanded viewport and modal page jump');
+      faulty.cookie.controls[0].painted=painted;faulty.cookie.viewport.inner.width=innerWidth;faulty.opening.after.y=pageY;check(JSON.stringify(faulty)===JSON.stringify(observed)&&failures(faulty).length===0,'Copied entry detector restores the complete observations');check(await bytes()===held,'Copied entry detector preserves the entire actual raw save');
+      report.controls.push({name:'entry-observations',effective:true,failed:['cookie-painted','viewport-scale','opening-position'],restored:true,scope:'Copied actual observation, not a served product mutation'});
     }
     await dialog.locator(soccer?'[data-programme-start]':'[data-us-programme-start]').click();
     const tileSelector=soccer?'[data-programme-tile]':'[data-us-programme-tile]',tiles=await dialog.locator(tileSelector).evaluateAll(es=>es.map(e=>e.getAttribute('data-programme-tile')??e.getAttribute('data-us-programme-tile')));

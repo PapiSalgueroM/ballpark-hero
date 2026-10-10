@@ -2443,11 +2443,11 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
       {situation.type === "one_offer" && (
         <div className="space-y-3">
           <OfferCard offer={situation.offer} onAccept={() => onAcceptOffer(situation.offer)} career={career} />
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={onStay} className="flex-1 h-9 text-sm">
+          <div className="grid grid-cols-2 gap-2">
+            <Button variant="outline" onClick={onStay} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Reject & Stay
             </Button>
-            <Button variant="outline" onClick={onRequestTransfer} className="flex-1 h-9 text-sm">
+            <Button variant="outline" onClick={onRequestTransfer} className="min-w-0 min-h-11 h-auto whitespace-normal px-2 py-2 text-sm">
               Reject & Request Transfer 📤
             </Button>
           </div>
