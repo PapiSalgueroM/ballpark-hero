@@ -10,6 +10,7 @@ on:
       - src/components/CookieConsent.tsx
       - src/test/soccer*Farewell*
       - scripts/*SoccerFarewell*.mjs
+      - scripts/simSoccerContractMoves.mjs
       - scripts/qa/*soccerFarewell*.mjs
       - scripts/qa/*SoccerFarewell*.mjs
   workflow_dispatch:
