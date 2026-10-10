@@ -1,0 +1,58 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmDraftNight.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m src/lib/gmDraftOrder.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+ [32m✓[39m src/components/lottery/LotteryReveal.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 500[2mms[22m[39m
+ [32m✓[39m src/lib/gmPicks.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 201[2mms[22m[39m
+ [31m❯[39m src/lib/gmLotteryNight.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 240[2mms[22m[39m
+   [32m✓[39m ordinal[2m > [22mreads the way a person says it[32m 3[2mms[22m[39m
+   [32m✓[39m lottery night[2m > [22mturns over every lottery club once, the last slot first and the first pick last[32m 101[2mms[22m[39m
+   [32m✓[39m lottery night[2m > [22msays where his club landed in words about a club and a slot, each kind of move[32m 89[2mms[22m[39m
+   [32m✓[39m lottery night[2m > [22mflags nobody for a playoff club and says its slot[32m 0[2mms[22m[39m
+   [32m✓[39m lottery night[2m > [22mdraws the order with no reveal when no drawing was held, and says why[32m 8[2mms[22m[39m
+   [32m✓[39m the line under the heading is true of the night it sits on[2m > [22mprints the table when the night was drawn on the table[32m 5[2mms[22m[39m
+[31m   [31m×[31m the line under the heading is true of the night it sits on[2m > [22mprints the night's own chances when level clubs shared theirs: the 3rd and 4th worst level are NOT three clubs on 14 each[39m[32m 18[2mms[22m[39m
+[31m     → expected [ 14, 14, 13.3, …(2) ] to deeply equal [ 14, 14, 13.3, 13.2, 10.5 ][39m
+   [32m✓[39m the line under the heading is true of the night it sits on[2m > [22mprints the saved chances for a night whose table this build does not carry[32m 0[2mms[22m[39m
+   [32m✓[39m the rules behind the "?"[2m > [22mbuilds the league block from the table, keeps the game block apart, and computes the example[32m 4[2mms[22m[39m
+   [32m✓[39m the rules behind the "?"[2m > [22mcomputes the example from whatever table it is handed[32m 1[2mms[22m[39m
+   [32m✓[39m the rules behind the "?"[2m > [22mdegrades to the saved table's own words for a rule this build no longer carries[32m 0[2mms[22m[39m
+   [32m✓[39m the rules behind the "?"[2m > [22msays why there was no drawing, and never shows an example for a table that was not used[32m 1[2mms[22m[39m
+ [32m✓[39m src/components/front-office-shared/GmLotteryCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 175[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmLotteryNight.test.ts[2m > [22mthe line under the heading is true of the night it sits on[2m > [22mprints the night's own chances when level clubs shared theirs: the 3rd and 4th worst level are NOT three clubs on 14 each
+[31m[1mAssertionError[22m: expected [ 14, 14, 13.3, …(2) ] to deeply equal [ 14, 14, 13.3, 13.2, 10.5 ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  [[22m
+[2m    14,[22m
+[2m    14,[22m
+[2m    13.3,[22m
+[32m-   13.2,[39m
+[31m+   13.200000000000001,[39m
+[2m    10.5,[22m
+[2m  ][22m
+
+[36m [2m❯[22m src/lib/gmLotteryNight.test.ts:[2m123:61[22m[39m
+    [90m121| [39m    [35mconst[39m pair [33m=[39m [34mlevelNight[39m([[34m2[39m[33m,[39m [34m3[39m])[33m;[39m
+    [90m122| [39m    /* 140 and 125 combinations pooled are 265: 133 to the winner of t…
+    [90m123| [39m    expect(pair.lottery!.field.slice(0, 5).map(f => f.pct)).toEqual([1…
+    [90m   | [39m                                                            [31m^[39m
+    [90m124| [39m    expect(lotteryNightRule(pair, table)).toBe('14 clubs are in the lo…
+    [90m125| [39m    [35mconst[39m four [33m=[39m [34mlevelNight[39m([[34m0[39m[33m,[39m [34m1[39m[33m,[39m [34m2[39m[33m,[39m [34m3[39m])[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m5 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m100 passed[39m[22m[90m (101)[39m
+[2m   Start at [22m 14:27:33
+[2m   Duration [22m 3.58s[2m (transform 433ms, setup 506ms, collect 1.11s, tests 1.23s, environment 3.88s, prepare 754ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmLotteryNight.test.ts,title=src/lib/gmLotteryNight.test.ts > the line under the heading is true of the night it sits on > prints the night's own chances when level clubs shared theirs%3A the 3rd and 4th worst level are NOT three clubs on 14 each,line=123,column=61::AssertionError: expected [ 14, 14, 13.3, …(2) ] to deeply equal [ 14, 14, 13.3, 13.2, 10.5 ]%0A%0A- Expected%0A+ Received%0A%0A  [%0A    14,%0A    14,%0A    13.3,%0A-   13.2,%0A+   13.200000000000001,%0A    10.5,%0A  ]%0A%0A ❯ src/lib/gmLotteryNight.test.ts:123:61%0A%0A
