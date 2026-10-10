@@ -1,0 +1,11 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/lib/clubManagerGoalWeight.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmOwnGoals: node scripts/simCmOwnGoals.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simAwardRaces: node scripts/simAwardRaces.mjs
+simStatsCentre: node scripts/simStatsCentre.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
