@@ -1,0 +1,28 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+og-clean: node scripts/simOwnGoalMotion.mjs > $RC_OUT/og-clean.txt 2>&1; s=$?; grep -h "FAIL\|AssertionError\|1216 digest\|1216 OG10\|1216 OG3" $RC_OUT/og-clean.txt | cut -c1-500 | tail -12; tail -1 $RC_OUT/og-clean.txt; exit $s
+f1: OWN_GOAL_FLEET=1 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f1.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f1.txt | cut -c1-420 | tail -1; exit $s
+f2: OWN_GOAL_FLEET=2 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f2.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f2.txt | cut -c1-420 | tail -1; exit $s
+f3: OWN_GOAL_FLEET=3 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f3.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f3.txt | cut -c1-420 | tail -1; exit $s
+f4: OWN_GOAL_FLEET=4 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f4.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f4.txt | cut -c1-420 | tail -1; exit $s
+f5: OWN_GOAL_FLEET=5 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f5.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f5.txt | cut -c1-420 | tail -1; exit $s
+f6: OWN_GOAL_FLEET=6 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f6.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f6.txt | cut -c1-420 | tail -1; exit $s
+f7: OWN_GOAL_FLEET=7 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f7.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f7.txt | cut -c1-420 | tail -1; exit $s
+f8: OWN_GOAL_FLEET=8 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f8.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f8.txt | cut -c1-420 | tail -1; exit $s
+f9: OWN_GOAL_FLEET=9 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f9.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f9.txt | cut -c1-420 | tail -1; exit $s
+f10: OWN_GOAL_FLEET=10 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f10.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f10.txt | cut -c1-420 | tail -1; exit $s
+f11: OWN_GOAL_FLEET=11 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f11.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f11.txt | cut -c1-420 | tail -1; exit $s
+f12: OWN_GOAL_FLEET=12 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f12.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f12.txt | cut -c1-420 | tail -1; exit $s
+f13: OWN_GOAL_FLEET=13 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f13.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f13.txt | cut -c1-420 | tail -1; exit $s
+f14: OWN_GOAL_FLEET=14 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f14.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f14.txt | cut -c1-420 | tail -1; exit $s
+f15: OWN_GOAL_FLEET=15 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f15.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f15.txt | cut -c1-420 | tail -1; exit $s
+f16: OWN_GOAL_FLEET=16 node_modules/.bin/vitest run src/test/pitchOwnGoal.test.tsx -t "on real feeds" --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/f16.txt 2>&1; s=$?; grep -h "1216 OG5. fleet" $RC_OUT/f16.txt | cut -c1-420 | tail -1; exit $s
+c-keepercorner: OWN_GOAL_CONTROL=keepercorner node scripts/simOwnGoalMotion.mjs
+c-keeperdown: OWN_GOAL_CONTROL=keeperdown node scripts/simOwnGoalMotion.mjs
+c-kind: OWN_GOAL_CONTROL=kind node scripts/simOwnGoalMotion.mjs
+c-bandlow: OWN_GOAL_CONTROL=bandlow node scripts/simOwnGoalMotion.mjs
+c-bandhigh: OWN_GOAL_CONTROL=bandhigh node scripts/simOwnGoalMotion.mjs
+c-clamp: OWN_GOAL_CONTROL=clamp node scripts/simOwnGoalMotion.mjs
+c-cheer: OWN_GOAL_CONTROL=cheer node scripts/simOwnGoalMotion.mjs
+c-setpiece: OWN_GOAL_CONTROL=setpiece node scripts/simOwnGoalMotion.mjs
+lm-clean: node scripts/simLiveSimMotion.mjs
+lc-clean: node scripts/simLiveSimCelebration.mjs
