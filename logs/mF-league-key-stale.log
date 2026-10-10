@@ -1,0 +1,8 @@
+MUTATED F: src/lib/clubManager.ts, 1 place(s): `league:${careerLeagueOf(state).id}`  ->  'league:premier'
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+RESULT simCmVar=1
+restored

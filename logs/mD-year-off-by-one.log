@@ -1,0 +1,8 @@
+MUTATED D: src/lib/clubManager.ts, 1 place(s): ...(varReviews && worldYear(state) >= 2026  ->  ...(varReviews && worldYear(state) > 2026
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+RESULT simCmVar=1
+restored

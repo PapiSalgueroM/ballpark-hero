@@ -1,0 +1,17 @@
+MUTATED B: src/lib/clubManagerVar.ts, 2 place(s): const rng = keyedRng(id);  ->  const rng = Math.random;
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":3950,"ruledOut":279,"ruledOutPerMatch":0.0706,"awarded":274,"awardedPerMatch":0.0694,"awardedScored":227,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.6322,"goalsPerMatchOff":2.6785,"goalGap":-0.0463,"resultMoved":1749,"penaltiesPerMatch":0.4294,"matchesWithReview":520,"perSeed":[[650,0.0723,0.06],[659,0.0774,0.0637],[626,0.0671,0.0783],[653,0.0643,0.0735],[682,0.0718,0.0733],[680,0.0706,0.0676]]}
+simCmVar coverage: {"outside":48,"abroad":5,"league":7,"cup":1,"europe":2}
+simCmVar normal: actual review outcomes and full prior baseline passed.
+RESULT simCmVar=0
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 14:29:13
+[2m   Duration [22m 2.89s[2m (transform 1.25s, setup 58ms, collect 1.58s, tests 528ms, environment 323ms, prepare 143ms)[22m
+
+RESULT varlive=0
+A (reviews on, live path against quick path): 345 of 345 whole reports equal; score 345, scorers 345, cards 345, table row 345, draw count 345, next three draws 345; 0 not compared
+B (reviews on against off, same save and seed): 158 of 345 whole reports equal; score differs in 159, result (W, D, L) in 88, scorers in 179, cards in 186, draw count in 181, next three draws in 181; 32 matches had a review (34 reviews: 16 goals ruled out, 0 goals confirmed, 0 penalties confirmed, 18 penalties awarded); goals 891 off, 865 on
+varProbe: A HOLDS (showing a review or skipping it is the same match)
+RESULT probe=0
+restored

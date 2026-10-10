@@ -1,0 +1,16 @@
+MUTATED A: scripts/genCmVarRates.mjs, 1 place(s): goals.low / engine.reviewableGoalsPerMatch  ->  goals.high / engine.reviewableGoalsPerMatch
+MUTATED A: scripts/genCmVarRates.mjs, 1 place(s): pens.low / engine.awardsPerMatchPerUnitRate  ->  pens.high / engine.awardsPerMatchPerUnitRate
+genCmVarRates: wrote src/data/clubManagerVarRates.ts
+genCmVarRates: 3 file(s) in step with the ledgers.
+goalReview: 0.060572
+missedFoulReview: 0.007162
+genCmVarRates --check: 3 file(s) in step with the ledgers.
+RESULT gencheck=0
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, ucl.
+simCmVarLedger: all 316 checks passed.
+RESULT ledger=0
+simCmVar bands: {"seeds":[31,32,33,34,35,36],"leagueMatches":3993,"ruledOut":556,"ruledOutPerMatch":0.1392,"awarded":528,"awardedPerMatch":0.1322,"awardedScored":413,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.6301,"goalsPerMatchOff":2.6669,"goalGap":-0.0368,"resultMoved":362,"penaltiesPerMatch":0.4969,"matchesWithReview":969,"perSeed":[[645,0.1674,0.1349],[656,0.1494,0.1402],[675,0.1481,0.1289],[633,0.1216,0.1264],[702,0.1311,0.1396],[682,0.1188,0.1232]]}
+simCmVar coverage: {"outside":48,"abroad":5,"league":7,"cup":1,"europe":2}
+simCmVar normal: actual review outcomes and full prior baseline passed.
+RESULT simCmVar=0
+restored

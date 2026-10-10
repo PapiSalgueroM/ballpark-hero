@@ -1,0 +1,8 @@
+mA-derive-from-highest exit=0 70s | restored
+mB-math-random exit=0 78s | restored
+mC-cup-asks-as-ucl exit=0 67s | restored
+mD-year-off-by-one exit=0 80s | restored
+mE-unknown-is-covered exit=0 65s | restored
+mF-league-key-stale exit=0 68s | restored
+mG-missed-foul-twice exit=0 70s | restored
+appeal-attribution exit=0 33s | restored

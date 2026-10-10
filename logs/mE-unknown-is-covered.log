@@ -1,0 +1,16 @@
+MUTATED E: scripts/genCmVarRates.mjs, 1 place(s): comps.rows.filter(r => r.verdict === 'yes').map(r => [r.key,  ->  comps.rows.filter(r => r.verdict !== 'no').map(r => [r.key,
+genCmVarRates: wrote src/data/clubManagerVarRates.ts
+genCmVarRates: 3 file(s) in step with the ledgers.
+CM_VAR_COVERAGE: Readonly<Record<string, string>> = { 'league:premier': 'all', 'league:laliga': 'all', 'league:seriea': 'all', 'league:bundesliga': 'all', 'ucl': 'group', 'league:championship': 'all', 'league:ligue1': 'all', 'league:bundesliga2': 'all' };
+genCmVarRates --check: 3 file(s) in step with the ledgers.
+RESULT gencheck=0
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, ucl.
+simCmVarLedger: all 316 checks passed.
+RESULT ledger=0
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+RESULT simCmVar=1
+restored

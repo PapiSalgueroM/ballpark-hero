@@ -1,0 +1,61 @@
+{
+  "clubs": 8,
+  "perClub": 50,
+  "matches": 345,
+  "offDigest": "93805ba678e3b838641265b7bc453cf0bba5dd35b9d5b6de1bb92237c30fd488",
+  "A": {
+    "compared": 345,
+    "reportEqual": 345,
+    "scoreEqual": 345,
+    "scorersEqual": 345,
+    "cardsEqual": 345,
+    "drawsEqual": 345,
+    "nextEqual": 345,
+    "tableEqual": 345,
+    "notCompared": 0,
+    "firstDifference": null
+  },
+  "B": {
+    "compared": 345,
+    "reportEqual": 158,
+    "scoreDiffers": 159,
+    "scorersDiffer": 179,
+    "cardsDiffer": 186,
+    "resultDiffers": 88,
+    "drawsDiffer": 181,
+    "nextDiffers": 181,
+    "matchesWithReview": 32,
+    "reviews": 34,
+    "disallowed": 16,
+    "confirmedGoals": 0,
+    "penaltyConfirmed": 0,
+    "penaltyAwarded": 18,
+    "goalsOff": 891,
+    "goalsOn": 865,
+    "firstDifference": {
+      "club": "Everton",
+      "entry": 0,
+      "seed": 900001,
+      "off": [
+        "Everton",
+        "Crystal Palace",
+        1,
+        1,
+        "regular",
+        null
+      ],
+      "on": [
+        "Everton",
+        "Crystal Palace",
+        0,
+        0,
+        "regular",
+        null
+      ],
+      "reviews": [],
+      "drawsOff": 1329,
+      "drawsOn": 1309
+    }
+  },
+  "offMatchesWithReviewLines": 0
+}

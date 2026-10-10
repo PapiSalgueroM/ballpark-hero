@@ -1,0 +1,8 @@
+MUTATED G: src/lib/clubManagerVar.ts, 1 place(s): CM_VAR_GAME_RATES.missedFoulReview  ->  (CM_VAR_GAME_RATES.missedFoulReview * 2)
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+RESULT simCmVar=1
+restored

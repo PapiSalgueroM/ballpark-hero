@@ -1,0 +1,8 @@
+MUTATED C: src/lib/clubManager.ts, 1 place(s): entry.type === 'cup' ? `cup:${careerLeagueOf(state).cupName}` : 'ucl'  ->  'ucl'
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
+RESULT simCmVar=1
+restored
