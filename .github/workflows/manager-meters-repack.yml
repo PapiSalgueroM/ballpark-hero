@@ -1,0 +1,95 @@
+name: Manager Meters Exact Artifact Recovery
+on:
+  push:
+    branches: [codex/manager-meters-diagnostic]
+    paths: [.github/workflows/manager-meters-repack.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: manager-meters-repack-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Recover and verify the exact previously uploaded ZIP
+        env:
+          RECOVERY_GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p recovery/chunks recovery/manifest
+          git rev-parse HEAD > recovery/manifest/recovery-head.txt
+          git rev-parse 'HEAD^{tree}' > recovery/manifest/recovery-tree.txt
+          git diff --exit-code 49df180a4a36d49314b5455a6e9d08fdc7235249 HEAD -- src scripts package.json package-lock.json .github/workflows/manager-meters-diagnostic.yml > recovery/manifest/source-held.log
+          sha256sum package.json package-lock.json > recovery/manifest/packages-before.txt
+          curl --fail --silent --show-error -H "Authorization: Bearer $RECOVERY_GITHUB_TOKEN" -H 'Accept: application/vnd.github+json' 'https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/11683617073' -o recovery/manifest/original-artifact-metadata.json
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const a=JSON.parse(fs.readFileSync('recovery/manifest/original-artifact-metadata.json','utf8'));
+          assert.equal(a.id,11683617073);assert.equal(a.name,'manager-meters-diagnostic-38088635115-1');assert.equal(a.size_in_bytes,720830129);
+          assert.equal(a.digest,'sha256:ae8da018908454a2853554c32ebe1f35cdcddbc00c3a0a064a151dce79583897');assert.equal(a.expired,false);
+          assert.equal(a.workflow_run.id,38088635115);assert.equal(a.workflow_run.head_sha,'49df180a4a36d49314b5455a6e9d08fdc7235249');
+          JS
+          curl --fail --location --silent --show-error -H "Authorization: Bearer $RECOVERY_GITHUB_TOKEN" -H 'Accept: application/vnd.github+json' 'https://api.github.com/repos/PapiSalgueroM/ballpark-hero/actions/artifacts/11683617073/zip' -o recovery/original.zip
+          test "$(stat -c '%s' recovery/original.zip)" = 720830129
+          printf '%s\n' 'ae8da018908454a2853554c32ebe1f35cdcddbc00c3a0a064a151dce79583897  recovery/original.zip' | sha256sum --check
+          split -b 200000000 -d -a 3 recovery/original.zip recovery/chunks/original.zip.part-
+          cat recovery/chunks/original.zip.part-* > recovery/restored.zip
+          cmp recovery/original.zip recovery/restored.zip
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
+          async function hash(file){const h=createHash('sha256');for await(const b of fs.createReadStream(file))h.update(b);return h.digest('hex');}
+          const names=fs.readdirSync('recovery/chunks').sort();assert.deepEqual(names,[0,1,2,3].map(i=>'original.zip.part-'+String(i).padStart(3,'0')));
+          const parts=[];for(const name of names){const file='recovery/chunks/'+name,bytes=fs.statSync(file).size;assert(bytes>0&&bytes<=200000000);parts.push({name,bytes,sha256:await hash(file)});}
+          const sha256=await hash('recovery/original.zip');assert.equal(sha256,'ae8da018908454a2853554c32ebe1f35cdcddbc00c3a0a064a151dce79583897');assert.equal(await hash('recovery/restored.zip'),sha256);assert.equal(parts.reduce((sum,p)=>sum+p.bytes,0),720830129);
+          const manifest={scope:'Byte-exact data recovery only. Original diagnostic size gate remains failed. No application, harness, build or acceptance rerun.',original:{artifactId:11683617073,runId:38088635115,head:'49df180a4a36d49314b5455a6e9d08fdc7235249',tree:'6815d3ccab77f425adbb65973374de02a14e8a2a',bytes:720830129,sha256},parts,concatenatedByteIdentical:true,restoredSha256:sha256};
+          fs.writeFileSync('recovery/manifest/recovery-manifest.json',JSON.stringify(manifest,null,2)+'\n');
+          JS
+          sha256sum package.json package-lock.json > recovery/manifest/packages-after.txt
+          cmp recovery/manifest/packages-before.txt recovery/manifest/packages-after.txt
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json > recovery/manifest/final-source-held.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: manager-meters-11683617073-part-000
+          path: recovery/chunks/original.zip.part-000
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        with:
+          name: manager-meters-11683617073-part-001
+          path: recovery/chunks/original.zip.part-001
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        with:
+          name: manager-meters-11683617073-part-002
+          path: recovery/chunks/original.zip.part-002
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        with:
+          name: manager-meters-11683617073-part-003
+          path: recovery/chunks/original.zip.part-003
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 5
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: manager-meters-11683617073-recovery-manifest
+          path: recovery/manifest/
+          if-no-files-found: error
+          retention-days: 5
