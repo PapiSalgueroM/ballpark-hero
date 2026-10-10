@@ -1,0 +1,6 @@
+MUTATED V1
+simCmMatchCentre: PASS. Every stat on the report and the live strip is counted off the committed play and lines, and every timeline row is an event the engine drew.
+simLiveMatch: PASS. Each half is committed as one stream, the report is counted off it, a change keeps the past and redraws the future, and the other dugout fields eleven named men who come and go on the same clock.
+  FAIL: h2 stoppage 7 for a half with 6 stoppages in it
+simMatchDetail: 1 FAILURES
+   240 matches: 6 second yellows (2.5%), 15 straight reds, 8.8% of matches ended a man short

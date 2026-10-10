@@ -1,0 +1,8 @@
+V1-ruled-out-goal-still-counts exit=1 17s | Node.js v24.21.0
+V2-reviews-in-every-year-and-era exit=1 16s | Node.js v24.21.0
+V3-ten-times-the-missed-foul-rate exit=1 17s | Node.js v24.21.0
+V5-reviews-dealt-from-the-match-stream exit=0 16s | simCmVar normal: actual review outcomes and full prior baseline passed.
+F0-healthy-titles exit=0 3s | +     title: 'preserves the whole generated old save, random draws, match outcome and reload bytes'
+F1-season-two-keeps-the-list exit=0 4s | +     title: 'refuses stale keys in later seasons, other years and changed league membership'
+F2-a-job-move-binds exit=0 3s | +     title: 'preserves the whole generated old save, random draws, match outcome and reload bytes'
+V1-simLiveMatch-family exit=0 11s |    240 matches: 6 second yellows (2.5%), 15 straight reds, 8.8% of matches ended a man short

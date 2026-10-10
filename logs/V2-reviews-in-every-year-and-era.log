@@ -1,0 +1,144 @@
+MUTATED V2
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Pre-2026 clocks ignore review opt-in\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'halftime',\n" +
++       '    live: {\n' +
++       '      added: {\n' +
++       '        h1: 3\n' +
++       '...\n' +
++       '      talk: null,\n' +
++       '+     varReviews: true,\n' +
++       '      week: 0\n' +
++       '    },\n' +
++       '    state: {\n' +
++       '      academy: {\n' +
++       '        candidates: [\n' +
++       '...\n' +
++       '        talk: null,\n' +
++       '+       varReviews: true,\n' +
++       '        week: 0\n' +
++       '      },\n' +
++       '      loanedOut: [],\n' +
++       '      managerXp: {\n' +
++       '        points: {\n',
++     stack: 'AssertionError [ERR_ASSERTION]: Pre-2026 clocks ignore review opt-in\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       "    kind: 'halftime',\n" +
++       '    live: {\n' +
++       '      added: {\n' +
++       '        h1: 3\n' +
++       '...\n' +
++       '      talk: null,\n' +
++       '+     varReviews: true,\n' +
++       '      week: 0\n' +
++       '    },\n' +
++       '    state: {\n' +
++       '      academy: {\n' +
++       '        candidates: [\n' +
++       '...\n' +
++       '        talk: null,\n' +
++       '+       varReviews: true,\n' +
++       '        week: 0\n' +
++       '      },\n' +
++       '      loanedOut: [],\n' +
++       '      managerXp: {\n' +
++       '        points: {\n' +
++       '\n' +
++       '    at Object.baseline (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:260:16)\n' +
++       '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:281:33)\n' +
++       '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46',
++     status: 'failed',
++     title: 'preserves the full prior default match and old live or historical kickoff behavior'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:292:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'preserves the full prior default match and old live or historical kickoff behavior',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Pre-2026 clocks ignore review opt-in\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'halftime',\n" +
+        '    live: {\n' +
+        '      added: {\n' +
+        '        h1: 3\n' +
+        '...\n' +
+        '      talk: null,\n' +
+        '+     varReviews: true,\n' +
+        '      week: 0\n' +
+        '    },\n' +
+        '    state: {\n' +
+        '      academy: {\n' +
+        '        candidates: [\n' +
+        '...\n' +
+        '        talk: null,\n' +
+        '+       varReviews: true,\n' +
+        '        week: 0\n' +
+        '      },\n' +
+        '      loanedOut: [],\n' +
+        '      managerXp: {\n' +
+        '        points: {\n',
+      stack: 'AssertionError [ERR_ASSERTION]: Pre-2026 clocks ignore review opt-in\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        "    kind: 'halftime',\n" +
+        '    live: {\n' +
+        '      added: {\n' +
+        '        h1: 3\n' +
+        '...\n' +
+        '      talk: null,\n' +
+        '+     varReviews: true,\n' +
+        '      week: 0\n' +
+        '    },\n' +
+        '    state: {\n' +
+        '      academy: {\n' +
+        '        candidates: [\n' +
+        '...\n' +
+        '        talk: null,\n' +
+        '+       varReviews: true,\n' +
+        '        week: 0\n' +
+        '      },\n' +
+        '      loanedOut: [],\n' +
+        '      managerXp: {\n' +
+        '        points: {\n' +
+        '\n' +
+        '    at Object.baseline (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:260:16)\n' +
+        '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:281:33)\n' +
+        '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

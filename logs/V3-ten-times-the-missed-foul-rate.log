@@ -1,0 +1,240 @@
+MUTATED V3
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++ actual - expected
+
++ [
++   {
++     errorName: 'AssertionError',
++     message: 'Expected values to be strictly equal:\n' +
++       '+ actual - expected\n' +
++       '\n' +
++       "+ 'awarded'\n" +
++       "- 'confirmed'\n",
++     stack: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
++       '+ actual - expected\n' +
++       '\n' +
++       "+ 'awarded'\n" +
++       "- 'confirmed'\n" +
++       '\n' +
++       '    at Object.penalty (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:145:18)\n' +
++       '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:281:33)\n' +
++       '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46',
++     status: 'failed',
++     title: 'links every reviewed penalty to one actual penalty resolution without extra shots'
++   },
++   {
++     errorName: 'AssertionError',
++     message: 'Expected values to be strictly deep-equal:\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 3,\n' +
++       '...\n' +
++       '          penalty: true,\n' +
++       '+         plus: undefined,\n' +
++       '          review: {\n' +
++       "            decision: 'awarded',\n" +
++       "            id: '2026:Everton:0:Liverpool:0:45:opp:6:0:Florian Wirtz:missed-penalty',\n" +
++       "            incident: 'penalty',\n" +
++       "            reason: 'missed_foul',\n",
++     stack: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  {\n' +
++       '    academy: {\n' +
++       '      candidates: [\n' +
++       '        {\n' +
++       '          fee: 3,\n' +
++       '...\n' +
++       '          penalty: true,\n' +
++       '+         plus: undefined,\n' +
++       '          review: {\n' +
++       "            decision: 'awarded',\n" +
++       "            id: '2026:Everton:0:Liverpool:0:45:opp:6:0:Florian Wirtz:missed-penalty',\n" +
++       "            incident: 'penalty',\n" +
++       "            reason: 'missed_foul',\n" +
++       '\n' +
++       '    at Object.saved (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:180:93)\n' +
++       '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:281:33)\n' +
++       '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46',
++     status: 'failed',
++     title: 'retains the exact stored decisions on save load and deterministic settlement'
++   },
++   {
++     errorName: 'AssertionError',
++     message: 'Played review decisions and all played football survive the recut\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  [\n' +
++       '    {\n' +
++       "      flank: 'left',\n" +
++       "      kind: 'corner',\n" +
++       '      minute: 4,\n' +
++       '...\n' +
++       '      penalty: true,\n' +
++       '-     plus: undefined,\n' +
++       '      review: {\n' +
++       "        decision: 'awarded',\n" +
++       "        id: '2026:Everton:0:Liverpool:0:45:opp:6:0:Florian Wirtz:missed-penalty',\n" +
++       "        incident: 'penalty',\n" +
++       "        reason: 'missed_foul',\n",
++     stack: 'AssertionError [ERR_ASSERTION]: Played review decisions and all played football survive the recut\n' +
++       '+ actual - expected\n' +
++       '... Skipped lines\n' +
++       '\n' +
++       '  [\n' +
++       '    {\n' +
++       "      flank: 'left',\n" +
++       "      kind: 'corner',\n" +
++       '      minute: 4,\n' +
++       '...\n' +
++       '      penalty: true,\n' +
++       '-     plus: undefined,\n' +
++       '      review: {\n' +
++       "        decision: 'awarded',\n" +
++       "        id: '2026:Everton:0:Liverpool:0:45:opp:6:0:Florian Wirtz:missed-penalty',\n" +
++       "        incident: 'penalty',\n" +
++       "        reason: 'missed_foul',\n" +
++       '\n' +
++       '    at Object.past (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:188:16)\n' +
++       '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:281:33)\n' +
++       '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
++       '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46',
++     status: 'failed',
++     title: 'keeps played reviews and scores while only the future is recut after a tactical change'
++   }
++ ]
+- []
+
+    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:292:14)
+    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: [
+    {
+      title: 'links every reviewed penalty to one actual penalty resolution without extra shots',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Expected values to be strictly equal:\n' +
+        '+ actual - expected\n' +
+        '\n' +
+        "+ 'awarded'\n" +
+        "- 'confirmed'\n",
+      stack: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n' +
+        '+ actual - expected\n' +
+        '\n' +
+        "+ 'awarded'\n" +
+        "- 'confirmed'\n" +
+        '\n' +
+        '    at Object.penalty (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:145:18)\n' +
+        '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:281:33)\n' +
+        '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46'
+    },
+    {
+      title: 'retains the exact stored decisions on save load and deterministic settlement',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Expected values to be strictly deep-equal:\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 3,\n' +
+        '...\n' +
+        '          penalty: true,\n' +
+        '+         plus: undefined,\n' +
+        '          review: {\n' +
+        "            decision: 'awarded',\n" +
+        "            id: '2026:Everton:0:Liverpool:0:45:opp:6:0:Florian Wirtz:missed-penalty',\n" +
+        "            incident: 'penalty',\n" +
+        "            reason: 'missed_foul',\n",
+      stack: 'AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  {\n' +
+        '    academy: {\n' +
+        '      candidates: [\n' +
+        '        {\n' +
+        '          fee: 3,\n' +
+        '...\n' +
+        '          penalty: true,\n' +
+        '+         plus: undefined,\n' +
+        '          review: {\n' +
+        "            decision: 'awarded',\n" +
+        "            id: '2026:Everton:0:Liverpool:0:45:opp:6:0:Florian Wirtz:missed-penalty',\n" +
+        "            incident: 'penalty',\n" +
+        "            reason: 'missed_foul',\n" +
+        '\n' +
+        '    at Object.saved (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:180:93)\n' +
+        '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:281:33)\n' +
+        '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46'
+    },
+    {
+      title: 'keeps played reviews and scores while only the future is recut after a tactical change',
+      status: 'failed',
+      errorName: 'AssertionError',
+      message: 'Played review decisions and all played football survive the recut\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  [\n' +
+        '    {\n' +
+        "      flank: 'left',\n" +
+        "      kind: 'corner',\n" +
+        '      minute: 4,\n' +
+        '...\n' +
+        '      penalty: true,\n' +
+        '-     plus: undefined,\n' +
+        '      review: {\n' +
+        "        decision: 'awarded',\n" +
+        "        id: '2026:Everton:0:Liverpool:0:45:opp:6:0:Florian Wirtz:missed-penalty',\n" +
+        "        incident: 'penalty',\n" +
+        "        reason: 'missed_foul',\n",
+      stack: 'AssertionError [ERR_ASSERTION]: Played review decisions and all played football survive the recut\n' +
+        '+ actual - expected\n' +
+        '... Skipped lines\n' +
+        '\n' +
+        '  [\n' +
+        '    {\n' +
+        "      flank: 'left',\n" +
+        "      kind: 'corner',\n" +
+        '      minute: 4,\n' +
+        '...\n' +
+        '      penalty: true,\n' +
+        '-     plus: undefined,\n' +
+        '      review: {\n' +
+        "        decision: 'awarded',\n" +
+        "        id: '2026:Everton:0:Liverpool:0:45:opp:6:0:Florian Wirtz:missed-penalty',\n" +
+        "        incident: 'penalty',\n" +
+        "        reason: 'missed_foul',\n" +
+        '\n' +
+        '    at Object.past (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:188:16)\n' +
+        '    at main (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:281:33)\n' +
+        '    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n' +
+        '    at async file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simCmVar.mjs:303:46'
+    }
+  ],
+  expected: [],
+  operator: 'deepStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
