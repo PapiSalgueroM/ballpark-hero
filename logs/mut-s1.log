@@ -1,0 +1,5 @@
+MUT s1 applied to src/components/us-career/UsCareerBoard.tsx: "return holdPendingSave(() => { retrySave(); return pendingSave.current" is now "return undefined;"
+MUT s1 applied to src/components/us-career/UsCareerBoard.tsx: "  }, [saveFailed, retrySave]);" is now "  }, [saveFailed, retrySave]);
+  useEffect(() => { if (sport.saveKey ="
+           NAMED names nothing for state:saveFailure: src/components/us-career/UsCareerBoard.tsx has 1 holdPendingSave call(s) and none sits in a function that reads it (the state or a const made from it, or the save function by name, in the function's own body or its hook's dependency list), so a reload would throw the refused 
+simStorageWrites: 1 failed (owed: 12)

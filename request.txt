@@ -1,0 +1,28 @@
+#!serial
+storage: node scripts/simStorageWrites.mjs
+c-unguard: SIM_STORAGE_WRITES_CONTROL=unguard node scripts/simStorageWrites.mjs
+c-order: SIM_STORAGE_WRITES_CONTROL=order node scripts/simStorageWrites.mjs
+c-client: SIM_STORAGE_WRITES_CONTROL=client node scripts/simStorageWrites.mjs
+c-caller: SIM_STORAGE_WRITES_CONTROL=caller node scripts/simStorageWrites.mjs
+c-nocatch: SIM_STORAGE_WRITES_CONTROL=nocatch node scripts/simStorageWrites.mjs
+c-probe: SIM_STORAGE_WRITES_CONTROL=probe node scripts/simStorageWrites.mjs
+c-recheck: SIM_STORAGE_WRITES_CONTROL=recheck node scripts/simStorageWrites.mjs
+c-once: SIM_STORAGE_WRITES_CONTROL=once node scripts/simStorageWrites.mjs
+c-unlearn: SIM_STORAGE_WRITES_CONTROL=unlearn node scripts/simStorageWrites.mjs
+c-held: SIM_STORAGE_WRITES_CONTROL=held node scripts/simStorageWrites.mjs
+c-unnamed: SIM_STORAGE_WRITES_CONTROL=unnamed node scripts/simStorageWrites.mjs
+c-newsite: SIM_STORAGE_WRITES_CONTROL=newsite node scripts/simStorageWrites.mjs
+c-stale: SIM_STORAGE_WRITES_CONTROL=stale node scripts/simStorageWrites.mjs
+c-deadhold: SIM_STORAGE_WRITES_CONTROL=deadhold node scripts/simStorageWrites.mjs
+c-partial: SIM_STORAGE_WRITES_CONTROL=partial node scripts/simStorageWrites.mjs
+c-second: SIM_STORAGE_WRITES_CONTROL=second node scripts/simStorageWrites.mjs
+c-twolists: SIM_STORAGE_WRITES_CONTROL=twolists node scripts/simStorageWrites.mjs
+c-gone: SIM_STORAGE_WRITES_CONTROL=gone node scripts/simStorageWrites.mjs
+c-floor: SIM_STORAGE_WRITES_CONTROL=floor node scripts/simStorageWrites.mjs
+c-unknown: SIM_STORAGE_WRITES_CONTROL=nonsense node scripts/simStorageWrites.mjs
+mut-s1: node .rc/x/reviewMut.mjs s1 && node scripts/simStorageWrites.mjs > /tmp/s1.log 2>&1; a=$?; grep -E "NAMED|stale|no list" /tmp/s1.log | cut -c1-330 | tail -3; tail -1 /tmp/s1.log; git checkout -q HEAD -- src scripts; exit $a
+mut-s5b: node .rc/x/reviewMut.mjs s5b && node scripts/simStorageWrites.mjs > /tmp/s5b.log 2>&1; a=$?; grep -E "NAMED|stale|no list" /tmp/s5b.log | cut -c1-330 | tail -3; tail -1 /tmp/s5b.log; git checkout -q HEAD -- src scripts; exit $a
+mut-s9: node .rc/x/reviewMut.mjs s9 && node scripts/simStorageWrites.mjs > /tmp/s9.log 2>&1; a=$?; grep -E "NAMED|stale|no list" /tmp/s9.log | cut -c1-330 | tail -3; tail -1 /tmp/s9.log; git checkout -q HEAD -- src scripts; exit $a
+mut-s11: node .rc/x/reviewMut.mjs s11 && node scripts/simStorageWrites.mjs > /tmp/s11.log 2>&1; a=$?; grep -E "NAMED|stale|no list" /tmp/s11.log | cut -c1-330 | tail -3; tail -1 /tmp/s11.log; git checkout -q HEAD -- src scripts; exit $a
+clean: git diff --quiet HEAD -- src scripts && node scripts/simStorageWrites.mjs
+anchors: node scripts/simHarnessAnchors.mjs

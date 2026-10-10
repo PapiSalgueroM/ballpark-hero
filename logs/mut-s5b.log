@@ -1,0 +1,5 @@
+MUT s5b applied to src/components/us-career/UsCareerBoard.tsx: "  const saveFailed = saveFailure !== null;" is now "  const saveFailed = saveFailure !== null;
+  const [draftSaveBlocked, "
+MUT s5b applied to scripts/simStorageWrites.mjs: "const NOTHING_HELD = [" is now "NAMED.push({ file: 'src/components/us-career/UsCareerBoard.tsx', keys:"
+           NAMED names nothing for state:draftSaveBlocked: src/components/us-career/UsCareerBoard.tsx has 1 holdPendingSave call(s) and none sits in a function that reads it (the state or a const made from it, or the save function by name, in the function's own body or its hook's dependency list), so a reload would throw the ref
+simStorageWrites: 1 failed (owed: 12)
