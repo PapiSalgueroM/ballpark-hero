@@ -25,6 +25,7 @@ import { MLB_BADGES } from '@/lib/careerBadges';
 import { mlbUnreadInboxCount, answerMlbInboxMessage, mlbDraftNightInbox, MLB_CALENDAR } from '@/lib/mlbCareerInbox';
 import { dismissMlbRivalryEvent, resolveMlbRivalryChoice } from '@/lib/mlbCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
+import { slateField } from '@/lib/usSeasonShape';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { MLB_CAREER_HALL } from '@/lib/mlbCareerHall';
 import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
@@ -85,6 +86,8 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     awards: [], teamResult: 'SUSPENDED', salary: 0,
+    /* Round 1226: a season sat out still says how long it was (60 in 2020). */
+    ...slateField('mlb', c.year, c.team),
   }),
   suspendedNote: '🚫 Season served on the suspended list. No baseball, no money, no going back.',
 

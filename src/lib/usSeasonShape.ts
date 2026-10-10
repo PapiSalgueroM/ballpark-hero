@@ -78,6 +78,15 @@ export function slateOf(sport: ShapeSport, line: { slate?: number }): number {
   return line.slate ?? US_ENGINE_SEASON[sport];
 }
 
+/** The `slate` a line of that year and club is saved with: the season's
+ *  length where it is not the engine's own, and nothing at all where it is,
+ *  so a line of the engine's own season is the line it always was. A season
+ *  sat out on the suspended list is saved with it too. */
+export function slateField(sport: ShapeSport, year: number, club?: string): { slate?: number } {
+  const games = seasonLength(sport, year, club);
+  return games === US_ENGINE_SEASON[sport] ? {} : { slate: games };
+}
+
 /** A workload drawn on the engine's own season, carried to a season of
  *  `slate` games. The same length hands the draw back untouched. */
 export function toSlate(sport: ShapeSport, draw: number, slate: number): number {
