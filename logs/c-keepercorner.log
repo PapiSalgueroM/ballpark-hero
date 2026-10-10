@@ -1,0 +1,63 @@
+Negative control changed temporary source: keepercorner (src/components/pitch-motion/motion.tsx)
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it
+[1216 material] fleet 0 (Aston Villa 110101, Real Madrid 110102, Lyon 110103, Ajax 110104, Celtic 110105): 100 matches, 200 half feeds; own goals staged 163 (goals left as they were: 118), for me 79, against me 84; the named man on the viewer's cast 163, not on it 0; by a back 139, by the keeper 24; actions that start outside the goal's own minute 0, wound up as a last kick 0
+
+stdout | src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG5: the turn can be seen, and the ball comes to the man
+[1216 OG5] fleet 0: the sharpest turn of the ball in flight, degrees: off a back (139) least 41.6, median 61.2, 90th percentile 123.6, most 130.2; off a keeper (24) least 34.1, median 69.8, 90th percentile 86.4, most 97.8; baseline arm least 1.3, median 3.1, 90th percentile 3.2, most 3.3; the floor is 20
+[1216 OG5 walk] fleet 0: how far a back goes to meet it (139): least 0.0, median 0.0, 90th percentile 3.0, most 29.2; standing outside the band when it starts 52; brought further than into the band and 5 across 0; shown by his number alone at the touch 0
+[1216 OG5 geometry] swept by hand: off a keeper (1500 scenes) least 0.0, median 60.0, 90th percentile 111.8, most 121.6, the corner on the far side from where it came 750; off a back (4420 scenes) least 27.1, median 100.6, 90th percentile 129.9, most 134.8; the scene the review worked by hand 7.2
+
+ ❯ src/test/pitchOwnGoal.test.tsx (16 tests | 1 failed | 14 skipped) 5142ms
+   ✓ Round 1216: an own goal on real feeds > the material is a dense fleet of own goals, each on the cast the viewer holds for it  2173ms
+   ↓ Round 1216: an own goal on real feeds > OG1: the ball goes in off the man the line names
+   ↓ Round 1216: an own goal on real feeds > OG9: from the touch to the net the ball passes nobody else
+   ↓ Round 1216: an own goal on real feeds > OG2: the instants are the goal it always was
+   ↓ Round 1216: an own goal on real feeds > OG3: nobody is the scorer, and the man holds his head
+   ↓ Round 1216: an own goal on real feeds > OG4: nobody stands on a team mate while it plays
+   × Round 1216: an own goal on real feeds > OG5: the turn can be seen, and the ball comes to the man 2967ms
+     → expected 750 to be +0 // Object.is equality
+   ↓ Round 1216: an own goal on scenes made by hand > OG6: who it goes in off, and a man who is not there moves nobody
+   ↓ Round 1216: an own goal on scenes made by hand > OG7: reduced motion shows the last frame at once, the man with his head in his hands
+   ↓ Round 1216: an own goal on scenes made by hand > OG8: a goal from the spot or from a direct free kick is never drawn as an own goal
+   ↓ Round 1216: an own goal on scenes made by hand > OG10: a back meets it in a band in front of his own goal, wherever he stands
+   ↓ Round 1216: the recorded own goal > OWN: every own goal frame of the hand made scenes is the recorded one
+   ↓ Round 1216: the recorded own goal > RUE: the figure with his head in his hands is the recorded one, and at rue 0 it is the figure it was
+   ↓ Round 1216: an own goal in the live match > the live match draws an own goal for me off the man on its card
+   ↓ Round 1216: an own goal in the live match > the live match draws an own goal for opp off the man on its card
+   ↓ Round 1216: an own goal and a change of line up off the clock > an own goal still on its way when the line up changes off the clock keeps its net, its card and its men
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 passed | 14 skipped (16)
+   Start at  15:23:12
+   Duration  9.62s (transform 2.51s, setup 76ms, collect 3.29s, tests 5.14s, environment 431ms, prepare 99ms)
+
+JSON report written to /home/runner/work/ballpark-hero/ballpark-hero/.sim-control/own-goal-nF0Yrg/result.json
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/test/pitchOwnGoal.test.tsx > Round 1216: an own goal on real feeds > OG5: the turn can be seen, and the ball comes to the man
+AssertionError: expected 750 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 750
+
+ ❯ src/test/pitchOwnGoal.test.tsx:409:23
+    407|     expect(plainTurns.filter(turn => turn >= 20).length).toBe(0);
+    408|     /* The floor of 20, a bound of the geometry: on the sweep, for a k…
+    409|     expect(farCorner).toBe(0);
+       |                       ^
+    410|     expect(swept.keeper.filter(turn => turn < 20).length).toBe(0);
+    411|     expect(swept.back.filter(turn => turn < 20).length).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+simOwnGoalMotion: control keepercorner turned "OG5: the turn can be seen" red on an assertion (1 failed) and the material stayed green, as it must.

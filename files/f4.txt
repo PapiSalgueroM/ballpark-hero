@@ -1,0 +1,40 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mthe material is a dense fleet of own goals, each on the cast the viewer holds for it
+[22m[39m[1216 material] fleet 4 (Aston Villa 400029, Real Madrid 400030, Lyon 400031, Ajax 400032, Celtic 400033): 100 matches, 200 half feeds; own goals staged 168 (goals left as they were: 121), for me 77, against me 91; the named man on the viewer's cast 168, not on it 0; by a back 146, by the keeper 22; actions that start outside the goal's own minute 1, wound up as a last kick 1
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG1: the ball goes in off the man the line names
+[22m[39m[1216 OG1] own goals with the man on the grass 168; at the touch the figure nearest the ball is the named man, within 1: own goal arm 168, baseline arm 0; the man's gap to the ball at the touch: least 0.0, median 0.1, 90th percentile 0.1, most 0.1
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG9: from the touch to the net the ball passes nobody else
+[22m[39m[1216 OG9] own goals whose ball comes within 2 of another figure between the touch and the net: 0 of 168 (a keeper 0, a man of the side that got it 0); the man placed on that line by hand is never nearer the ball than 3.60
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG2: the instants are the goal it always was
+[22m[39m[1216 OG2] own goals 168, samples 7224; samples whose phase, action, net, net pulse or holder differ from the baseline arm's 0; frames with the ball in the goal mouth 2206, outside flight and net 0; own goals with a frame in the net 168
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG3: nobody is the scorer, and the man holds his head
+[22m[39m[1216 OG3] own goals 168; with a hop on a net frame: own goal arm 0, baseline arm 168; net frames where the man has no rue 0, where he celebrates 0, where a man of his side celebrates 0, where the raised arms are more than three or not alike 0, where a man with raised arms has moved 0; net frames with arms raised 2016; keepers who put it in 22: not on their feet holding their head on the last frame 0, leaning back down on the way up 0; the same keeper lying in his dive on the baseline arm's last frame 22
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG4: nobody stands on a team mate while it plays
+[22m[39m[1216 OG4] own goals 168; pairs of one side overlapping two samples running 0; the scene made by hand: the man covers 28.0 past a team mate, pairs overlapping two samples running 0
+
+[90mstdout[2m | src/test/pitchOwnGoal.test.tsx[2m > [22m[2mRound 1216: an own goal on real feeds[2m > [22m[2mOG5: the turn can be seen, and the ball comes to the man
+[22m[39m[1216 OG5] fleet 4: the sharpest turn of the ball in flight, degrees: off a back (146) least 44.4, median 108.1, 90th percentile 123.8, most 126.3; off a keeper (22) least 61.6, median 76.7, 90th percentile 90.3, most 105.7; baseline arm least 1.1, median 3.0, 90th percentile 3.2, most 3.3; the floor is 20
+[1216 OG5 walk] fleet 4: how far a back goes to meet it (146): least 0.0, median 0.5, 90th percentile 4.8, most 27.2; standing outside the band when it starts 70; brought further than into the band and 5 across 0; shown by his number alone at the touch 0
+[1216 OG5 geometry] swept by hand: off a keeper (1500 scenes) least 43.3, median 96.9, 90th percentile 115.0, most 121.6, the corner on the far side from where it came 0; off a back (4420 scenes) least 27.1, median 100.6, 90th percentile 129.9, most 134.8; the scene the review worked by hand 103.8
+
+ [32m✓[39m src/test/pitchOwnGoal.test.tsx [2m([22m[2m16 tests[22m[2m | [22m[33m9 skipped[39m[2m)[22m[33m 7480[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mthe material is a dense fleet of own goals, each on the cast the viewer holds for it [33m 2008[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mOG1: the ball goes in off the man the line names [33m 433[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mOG9: from the touch to the net the ball passes nobody else [33m 444[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1216: an own goal on real feeds[2m > [22mOG5: the turn can be seen, and the ball comes to the man [33m 3893[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m7 passed[39m[22m[2m | [22m[33m9 skipped[39m[90m (16)[39m
+[2m   Start at [22m 15:21:55
+[2m   Duration [22m 12.21s[2m (transform 2.87s, setup 63ms, collect 3.71s, tests 7.48s, environment 388ms, prepare 230ms)[22m
+

@@ -1,0 +1,8 @@
+[1216 OG3] own goals 163; with a hop on a net frame: own goal arm 0, baseline arm 163; net frames where the man has no rue 0, where he celebrates 0, where a man of his side celebrates 0, where the raised arms are more than three or not alike 0, where a man with raised arms has moved 0; net frames with arms raised 1956; keepers who put it in 24: not on their feet holding their head on the last frame 0, leaning back down on the way up 0; the same keeper lying in his dive on the baseline arm's last
+[1216 OG10] the band a back meets it in, read on 216 scenes made by hand: 13 to 18 from his own line, 24 to 76 across, 5 off the straight line
+[1216 digest] OWN c648618c
+[1216 digest] RUE c9817b1a
+ FAIL  src/test/pitchOwnGoal.test.tsx > Round 1216: the recorded own goal > OWN: every own goal frame of the hand made scenes is the recorded one
+AssertionError: expected 'c648618c' to be '669ef935' // Object.is equality
+    616|     console.log(`[1216 digest] OWN ${digest(frames)}`);
+simOwnGoalMotion: RED. vitest exit 1, 1 failed, 15 passed of 16 (wanted 16).
