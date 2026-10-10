@@ -207,6 +207,11 @@ import { careerDiscipline1176Attribution } from './lib/careerDiscipline1176.mjs'
 import { SOCCER_CONTRACT_1177_BASELINE_PATCHES } from './lib/soccerContractBaseline1177.mjs';
 import { withoutTrainFields } from './lib/soccerTrain1178.mjs';
 import { inverseCareerDevelopment, careerDevelopmentOriginalPlugin, careerDevelopmentBaseReceipt } from './lib/careerDevelopmentAttribution1185.mjs';
+/* Release AT: Rounds 1190 and 1191 moved these careers after Rounds 1185 and 1187 had (the New Manager card
+   queues a smaller role; two goal tally articles and the two news returns). The third inverse puts exactly those
+   five edits back on the copied engine, beside the two already composed here. Proof that they are all that moved
+   the recording: remote check rAT-sc-engine-g. See scripts/lib/careerStoryRoleAttribution1190.mjs. */
+import { inverseCareerStoryRole } from './lib/careerStoryRoleAttribution1190.mjs';
 
 /* Release AT: two attributions meet in section 1. Release AQ replays the old fixture with the Soccer
    Career train (Rounds 1169 to 1178) taken out through these four lists. Rounds 1185 and 1187 replay it
@@ -371,7 +376,7 @@ const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/careerAwardsNight
   'src/lib/soccerCareerSelection.ts', 'src/lib/soccerCareerPreparation.ts', 'src/lib/soccerCareerMentor.ts',
   'src/pages/SoccerCareer.tsx', 'src/components/career/AwardsNightCard.tsx', 'src/components/soccer-career/InternationalPanel.tsx',
   'scripts/lib/careerAwardsNightProbe.mjs', 'scripts/lib/careerAwardsNightBundle.mjs',
-  'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/data/careerAwardsNightFixture.json', 'scripts/simCareerAwardsNight.mjs'];
+  'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/lib/careerStoryRoleAttribution1190.mjs', 'scripts/data/careerAwardsNightFixture.json', 'scripts/simCareerAwardsNight.mjs'];
 function sourceHashes() {
   const result = {};
   for (const file of sourceFiles) {
@@ -381,7 +386,7 @@ function sourceHashes() {
   return result;
 }
 const proof = { control: CONTROL, base: careerDevelopmentBaseReceipt(), sourceBefore: sourceHashes(), sourceAfter: null,
-  sourceHeld: false, attribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
+  sourceHeld: false, attribution: [], storyRoleAttribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
 const writeProof = (file, value) => fs.writeFileSync(path.join(ARTIFACTS, file), JSON.stringify(value, null, 2));
 
 /* The actual original tree is loaded independently. The sole page append is
@@ -440,7 +445,7 @@ async function attributedAwardsBundle() {
     proof.faultEdits.push({ file, beforeSha256: createHash('sha256').update(before).digest('hex'),
       afterSha256: createHash('sha256').update(controlled).digest('hex'), effective: true });
   }
-  const inverse = inverseCareerDevelopment(controlled, proof.attribution);
+  const inverse = inverseCareerStoryRole(inverseCareerDevelopment(controlled, proof.attribution), proof.storyRoleAttribution);
   fs.writeFileSync(path.join(ARTIFACTS, 'current-engine.ts'), authored);
   fs.writeFileSync(path.join(ARTIFACTS, 'controlled-engine.ts'), controlled);
   fs.writeFileSync(path.join(ARTIFACTS, 'attributed-engine.ts'), inverse);

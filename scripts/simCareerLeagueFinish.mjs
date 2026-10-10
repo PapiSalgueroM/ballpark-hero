@@ -56,6 +56,11 @@
 import { build } from 'esbuild';
 import assert from 'node:assert/strict';
 import { inverseCareerDevelopment, careerDevelopmentOriginalPlugin, careerDevelopmentBaseReceipt } from './lib/careerDevelopmentAttribution1185.mjs';
+/* Release AT: Rounds 1190 and 1191 moved these careers after Rounds 1185 and 1187 had (the New Manager card
+   queues a smaller role; two goal tally articles and the two news returns). The third inverse puts exactly those
+   five edits back on the copied engine, beside the two already composed here. Proof that they are all that moved
+   the recording: remote check rAT-sc-engine-g. See scripts/lib/careerStoryRoleAttribution1190.mjs. */
+import { inverseCareerStoryRole } from './lib/careerStoryRoleAttribution1190.mjs';
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -94,10 +99,10 @@ const lib = `${ROOT}/src/lib/`.replaceAll('\\', '/');
 const ARTIFACTS = path.resolve(ROOT, process.env.SIM_LEAGUE_FINISH_ARTIFACTS || '.tmp-fx/career-league-finish', CONTROL || 'healthy');
 const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLeague.ts', 'src/lib/careerEras.ts',
   'src/lib/soccerCareerSelection.ts', 'src/lib/soccerCareerPreparation.ts', 'src/lib/soccerCareerMentor.ts',
-  'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/simCareerLeagueFinish.mjs'];
+  'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/lib/careerStoryRoleAttribution1190.mjs', 'scripts/simCareerLeagueFinish.mjs'];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file,
   crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
-const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], originalSources: [], careers: [] };
+const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], originalSources: [], careers: [] };
 
 /* A control edits a COPY. The copies live outside src/lib, so their relative
    imports are pointed back at the real files, except the engine's import of
@@ -162,7 +167,7 @@ async function originalEngine() {
    stream defect. Only the two guarded development edits are reversed. */
 async function attributionEngine() {
   const before = fs.readFileSync(enginePath, 'utf8').replaceAll('\r\n', '\n');
-  const attributed = inverseCareerDevelopment(before, proof.attribution);
+  const attributed = inverseCareerStoryRole(inverseCareerDevelopment(before, proof.attribution), proof.storyRoleAttribution);
   assert.notEqual(attributed, before, 'Historical attribution changes its copied engine');
   const file = path.join(WORK, 'attributedEngine.ts'), entry = path.join(WORK, 'attributedEntry.mjs'), out = path.join(WORK, 'attributedBundle.mjs');
   fs.writeFileSync(file, relocate(attributed, CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : ''));
@@ -195,7 +200,7 @@ function bothOutPlugin() {
       const rel = full.slice(base.length + 1);
       if (rel !== ENGINE_REL && !SOCCER_TRAIN_FILES.includes(rel)) return undefined;
       let text = out.rewrite(rel, fs.readFileSync(args.path, 'utf8')).split('\r\n').join('\n');
-      if (rel === ENGINE_REL) text = inverseCareerDevelopment(text, proof.attribution);
+      if (rel === ENGINE_REL) text = inverseCareerStoryRole(inverseCareerDevelopment(text, proof.attribution), proof.storyRoleAttribution);
       return { contents: text, loader: rel.endsWith('.tsx') ? 'tsx' : 'ts' };
     });
   } } };
