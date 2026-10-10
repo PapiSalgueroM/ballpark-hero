@@ -93,14 +93,14 @@ jobs:
           import assert from 'node:assert/strict';
           import fs from 'node:fs';
           import path from 'node:path';
-          import os from 'node:os';
           import {createHash} from 'node:crypto';
           import {spawnSync} from 'node:child_process';
           const root=process.cwd(),out=path.join(root,'career-trophy-runs-artifacts'),file=path.join(root,'src/components/soccer-career/TrophyCabinet.tsx');
           const raw=fs.readFileSync(file),source=raw.toString('utf8').replaceAll('\r\n','\n'),from='!picked && !help ? listScroll.current : 0',to='0';
           assert.equal(source.split(from).length-1,1,'Unique live scroll restoration expression');
           const faulty=source.replace(from,to),sha=v=>createHash('sha256').update(v).digest('hex');assert.notEqual(sha(faulty),sha(source));
-          const temp=fs.mkdtempSync(path.join(os.tmpdir(),'trophy-scroll-control-'));
+          const tempRoot=path.join(root,'.sim-control');fs.mkdirSync(tempRoot,{recursive:true});
+          const temp=fs.mkdtempSync(path.join(tempRoot,'trophy-scroll-control-'));assert.equal(path.dirname(temp),tempRoot);
           try {
             const copied=path.join(temp,'TrophyCabinet.tsx');fs.writeFileSync(copied,faulty);fs.symlinkSync(path.join(root,'src/components/soccer-career/CupRunLines.tsx'),path.join(temp,'CupRunLines.tsx'));
             const log=spawnSync(process.execPath,['node_modules/vitest/vitest.mjs','run','src/test/trophyCabinetCampaign.test.tsx','--maxWorkers=1','--minWorkers=1','--reporter=json',`--outputFile=${out}/scroll-control-unit.json`],{cwd:root,env:{...process.env,NO_DOUBLE_SWAP:JSON.stringify({'@/components/soccer-career/TrophyCabinet':copied})},encoding:'utf8',maxBuffer:8*1024*1024});
@@ -111,7 +111,7 @@ jobs:
             assert(failed[0].failureMessages.some(message=>/AssertionError|expected/.test(message)),'Effective assertion outcome, not an import error');
             fs.writeFileSync(path.join(out,'scroll-control-source.tsx'),faulty);fs.writeFileSync(path.join(out,'scroll-control-receipt.json'),JSON.stringify({effective:true,from,to,originalSha256:sha(source),copiedSha256:sha(faulty),rawHeldSha256:sha(raw),failed:failed.map(row=>row.fullName),unrelatedPassed:17,scope:'Copied actual product unit, not a served native mutation'},null,2));
             assert.deepEqual(fs.readFileSync(file),raw,'Original source stays byte-exact');console.log('CONTROL FIRED(scroll): exact list-restoration assertion only;17 unrelated cases passed.');
-          }finally{fs.rmSync(temp,{recursive:true,force:true});assert.deepEqual(fs.readFileSync(file),raw);}
+          }finally{assert.equal(path.dirname(path.resolve(temp)),path.resolve(tempRoot));assert(path.basename(temp).startsWith('trophy-scroll-control-'));fs.rmSync(temp,{recursive:true,force:true});assert.deepEqual(fs.readFileSync(file),raw);}
           JS
       - name: Actual native Trophy Cabinet journeys
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}

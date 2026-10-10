@@ -73,7 +73,7 @@ export function TrophyClubCampaign({ career, row }: { career: CareerState; row: 
   const competition = savedSeasonCompetitions(career, row).find(item => item.id === 'club');
   const firstStageGames = run?.firstStage?.stages.reduce((total, stage) => total + stage.games.length, 0) ?? 0;
   return <section aria-label="Saved club cup campaign" className="space-y-2" data-trophy-campaign>
-    <h4 className="text-sm font-bold" data-trophy-campaign-name>{competition?.name ?? 'Club cup campaign'}</h4>
+    <h4 className="text-sm font-bold"><span data-trophy-campaign-name>{competition?.name ?? 'Club cup campaign'}</span> campaign</h4>
     <p className="text-xs text-muted-foreground">Saved simulated campaign. Scores are from {row.club}'s side.</p>
     {run && competition && <>
       <p className="text-xs font-semibold" data-trophy-campaign-result>{competition.result}</p>
