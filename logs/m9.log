@@ -1,0 +1,16 @@
+MUT APPLIED m9 in src/lib/gameLaws/nflScore.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+DEFAULT
+
+simUsSeasonCentre: 98 checks, 0 failed
+COMPARE
+FAIL digest nfl seed set 0: season 7c8a18c60832c9879b4e6351de9704cb8253503c now, 7a20cde138dc6d0945d7b68aa9a105e8126dc9fe at the record
+FAIL digest nfl seed set 1: season eca51b9d81f57046f2aba2ed33ce9ea8202a3c41 now, 4f2fd0fa8f71336d4af08ad5d86a02d70ce14abe at the record
+FAIL digest nfl seed set 2: season b7dd06098ac1e1f03c6650e98c32510312b9fc20 now, 2d9db73e2c744d5d81e7a07eb225a470ffcce222 at the record
+FAIL digest nfl seed set 3: season 42412ce7ffdbb1eb96f198a27b66fdaf4f14ee28 now, af115f6f56e6d834deafccb72c1d8bc35e6ccdc0 at the record
+FAIL digest nfl seed set 4: season cb8d2d22148db1a1eb2ce2e735dd462df9323699 now, 6e0f577a8914feef3ee4b3332621a048770a70fb at the record
+simUsSeasonCentre digest compare: 11 digests, 5 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+ Test Files  5 passed (5)
+      Tests  88 passed (88)
+MUT m9 default=0 compare=1 vitest=0

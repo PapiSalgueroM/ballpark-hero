@@ -1,0 +1,14 @@
+MUT APPLIED m12 in src/lib/gameLaws/nflScore.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+DEFAULT
+
+simUsSeasonCentre: 98 checks, 0 failed
+COMPARE
+simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+ FAIL  src/test/gameLawNfl.test.ts > NFL_SCORE_LAW: the law for a game outside the Season Center > is nflScore at home with the venue unit taken off the edge for that share of wins
+AssertionError: pHome 0.05 game 3: expected [ 28, 35 ] to deeply equal [ 24, 35 ]
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 87 passed (88)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gameLawNfl.test.ts,title=src/test/gameLawNfl.test.ts > NFL_SCORE_LAW%3A the law for a game outside the Season Center > is nflScore at home with the venue unit tak
+MUT m12 default=0 compare=0 vitest=1

@@ -1,0 +1,6 @@
+m6 exit=0 33s | MUT m6 default=0 compare=0 vitest=0
+m7 exit=0 32s | MUT m7 default=0 compare=0 vitest=1
+m8 exit=0 32s | MUT m8 default=0 compare=0 vitest=1
+m9 exit=0 32s | MUT m9 default=0 compare=1 vitest=0
+m10 exit=0 32s | MUT m10 default=0 compare=3 vitest=0
+m12 exit=0 32s | MUT m12 default=0 compare=0 vitest=1

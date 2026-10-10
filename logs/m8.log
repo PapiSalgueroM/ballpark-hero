@@ -1,0 +1,17 @@
+MUT APPLIED m8 in src/lib/gameLaws/nfl.ts
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+DEFAULT
+
+simUsSeasonCentre: 98 checks, 0 failed
+COMPARE
+simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+ FAIL  src/test/gameLawNfl.test.ts > NFL_STORY_LAW.events: the scoring plays of a final > for every final from 0-0 to 70-70: both sides add up, in minute order, one line a minute, club lines only
+AssertionError: expected [ '0-2: the lines make 2-0', …(4691) ] to deeply equal []
+ FAIL  src/test/gameLawNfl.test.ts > NFL_STORY_LAW.events: the scoring plays of a final > tells one final one way for one key, and another key another way
+AssertionError: expected [ { min: 20, kind: 'td', …(2) }, …(6) ] to deeply equal [ { min: 20, kind: 'fg', …(2) }, …(6) ]
+ Test Files  1 failed | 4 passed (5)
+      Tests  2 failed | 86 passed (88)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gameLawNfl.test.ts,title=src/test/gameLawNfl.test.ts > NFL_STORY_LAW.events%3A the scoring plays of a final > for every final from 0-0 to 70-70%3A both sides add 
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gameLawNfl.test.ts,title=src/test/gameLawNfl.test.ts > NFL_STORY_LAW.events%3A the scoring plays of a final > tells one final one way for one key%2C and another k
+MUT m8 default=0 compare=0 vitest=1

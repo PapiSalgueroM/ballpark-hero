@@ -1,0 +1,12 @@
+MUT APPLIED m10 in src/lib/season/us.ts
+ 1 file changed, 2 insertions(+)
+DEFAULT
+
+simUsSeasonCentre: 98 checks, 0 failed
+COMPARE
+inputs moved under the digest: src/lib/season/us.ts (3bccd4b40c17 at the record, c3e1dbb07cc7 now)
+simUsSeasonCentre digest compare: NOT COMPARED, 1 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+VITEST
+ Test Files  5 passed (5)
+      Tests  88 passed (88)
+MUT m10 default=0 compare=3 vitest=0

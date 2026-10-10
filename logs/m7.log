@@ -1,0 +1,17 @@
+MUT APPLIED m7 in src/lib/season/nfl.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+DEFAULT
+
+simUsSeasonCentre: 98 checks, 0 failed
+COMPARE
+simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+ FAIL  src/test/gameLawNfl.test.ts > the lines about a club > is the Season Center's own line for every club kind, value, side and kicker flag
+AssertionError: td 6 them true: expected '🏈 Touchdown, Bills. The two point tr…' to be '🏈 Touchdown, Bills. The kick after i…' // Object.is equality
+ FAIL  src/test/usSeasonNfl.test.ts > the NFL words > says every kind of drive, and a touchdown that is not a seven says why
+AssertionError: expected '🏈 Touchdown, Bills. The two point tr…' to be '🏈 Touchdown, Bills. The kick after i…' // Object.is equality
+ Test Files  2 failed | 3 passed (5)
+      Tests  2 failed | 86 passed (88)
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/gameLawNfl.test.ts,title=src/test/gameLawNfl.test.ts > the lines about a club > is the Season Center's own line for every club kind%2C value%2C side and kicker fl
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usSeasonNfl.test.ts,title=src/test/usSeasonNfl.test.ts > the NFL words > says every kind of drive%2C and a touchdown that is not a seven says why,line=399,column=
+MUT m7 default=0 compare=0 vitest=1

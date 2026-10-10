@@ -1,0 +1,11 @@
+MUT APPLIED m6 in src/lib/gameLaws/nflScore.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+DEFAULT
+
+simUsSeasonCentre: 98 checks, 0 failed
+COMPARE
+simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+VITEST
+ Test Files  5 passed (5)
+      Tests  88 passed (88)
+MUT m6 default=0 compare=0 vitest=0
