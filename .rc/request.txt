@@ -1,0 +1,37 @@
+rival-p: RIVAL_PROVE=f78037dc RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+rival: node scripts/simUsRivalSense.mjs
+c-oneslotsite: US_RIVAL_CONTROL=oneslotsite node scripts/simUsRivalSense.mjs
+c-nofloor: US_RIVAL_CONTROL=nofloor node scripts/simUsRivalSense.mjs
+c-impure: US_RIVAL_CONTROL=impure node scripts/simUsRivalSense.mjs
+c-oneslot: US_RIVAL_CONTROL=oneslot node scripts/simUsRivalSense.mjs
+c-workload17: US_RIVAL_CONTROL=workload17 node scripts/simUsRivalSense.mjs
+c-verdictswap: US_RIVAL_CONTROL=verdictswap node scripts/simUsRivalSense.mjs
+c-oldscalenfl: US_RIVAL_CONTROL=oldscalenfl node scripts/simUsRivalSense.mjs
+c-fullscorenfl: US_RIVAL_CONTROL=fullscorenfl node scripts/simUsRivalSense.mjs
+c-offshapenfl: US_RIVAL_CONTROL=offshapenfl node scripts/simUsRivalSense.mjs
+c-drawsnfl: US_RIVAL_CONTROL=drawsnfl node scripts/simUsRivalSense.mjs
+c-bridge: US_RIVAL_CONTROL=bridge node scripts/simUsRivalSense.mjs
+c-rostergate: US_RIVAL_CONTROL=rostergate node scripts/simUsRivalSense.mjs
+c-owndealt: US_RIVAL_CONTROL=owndealt node scripts/simUsRivalSense.mjs
+c-owndead: US_RIVAL_CONTROL=owndead node scripts/simUsRivalSense.mjs
+c-lastyearnfl: US_RIVAL_CONTROL=lastyearnfl node scripts/simUsRivalSense.mjs
+rivalry: node scripts/simCareerRivalryEvents.mjs
+sense-c: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+parity: node scripts/simUsBoardParity.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simAwards: node scripts/simAwards.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+anchors: node scripts/simHarnessAnchors.mjs
+norival: node scripts/simNoRivalNames.mjs
+storage: node scripts/simStorageWrites.mjs
+livescores: node scripts/simLiveScores.mjs
+quotes: node scripts/simNoInventedQuotes.mjs
+conduct: node scripts/simNoInventedConduct.mjs
+names: node scripts/simInventedNames.mjs
+legal: node scripts/simLegalPages.mjs
+numbers: node scripts/simNumberFormatting.mjs
+trustcopy: node scripts/simTrustCopy.mjs
+sitesearch: node scripts/simSiteSearch.mjs
