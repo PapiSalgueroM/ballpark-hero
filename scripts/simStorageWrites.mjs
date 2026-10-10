@@ -463,8 +463,10 @@ const NOTHING_HELD = [
     why: 'reload once markers in session storage; a refused marker means no reload, and it asks settlePendingSaves first' },
   { file: 'src/components/RouteErrorBoundary.tsx', keys: ['keeps:reloadOnceForStaleChunk'],
     why: 'the same reload once marker, asked from the error boundary' },
-  { file: 'src/lib/brokenSaveRecovery.ts', keys: ['write:moveAside', 'write:restoreBackup', 'write:dismissBackup'],
-    why: 'recovery of a save that would not open: each answers its caller and leaves the stored bytes where they were' },
+  { file: 'src/lib/brokenSaveRecovery.ts', keys: ['write:copyAside', 'write:restoreBackup', 'write:dismissBackup'],
+    why: 'recovery of a save that would not open: each answers its caller and leaves the stored bytes where they were (Round 1219 moved the guarded write of moveAside into copyAside)' },
+  { file: 'src/lib/saveKeeper.ts', keys: ['write:stageRestore', 'write:applyPending'],
+    why: 'a put back that cannot be staged or applied changes nothing: the save stays at its key, the backup stays kept aside, and the card says so (Round 1219)' },
   { file: 'src/lib/completions.ts', keys: ['write:getGuestHandle'],
     why: 'a guest handle kept for the visit when it cannot be stored: a name, not progress' },
   /* a flag that says "seen", not a save */

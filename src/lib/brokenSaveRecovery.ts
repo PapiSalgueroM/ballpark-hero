@@ -18,9 +18,12 @@ import { CONTINUE_SAVES, type ContinueSave } from '@/data/continueSaves';
  * The backup key is the game's own key plus BROKEN_SAVE_MARK plus a stamp, so
  * it sorts next to the save it came from and no game ever reads it by
  * mistake. The way back is src/components/BrokenSaveRestore.tsx: on the
- * game's own page it offers to put the newest backup back (restoreBackup),
- * because the crash that led to a fresh start may have been a code bug that
- * a later deploy fixes, and the career must still be there when it does.
+ * game's own page it offers to put the newest backup back, because the crash
+ * that led to a fresh start may have been a code bug that a later deploy
+ * fixes, and the career must still be there when it does. Since Round 1219
+ * the card does that through src/lib/saveKeeper.ts, which stages the put
+ * back and applies it as the next page loads; restoreBackup below swaps at
+ * once and must never be called with a game in the page's memory.
  *
  * Backups do not pile up for ever: each game keeps its newest BACKUPS_KEPT,
  * which the boundary tells the player before the click, and the card lets the
@@ -113,6 +116,13 @@ export const BACKUPS_KEPT = 3;
  * just written). backupKey is null when there was no save left to move
  * (another tab cleared it), which is still a fresh start. Never throws and
  * never removes the original unless an identical copy is already stored.
+ *
+ * Round 1219 review: an older backup that holds the very same bytes as the
+ * save just moved is removed first and does not count toward the cap. Since
+ * that round a put back keeps the backup it came from, so a save that was put
+ * back, broke the page again and was set aside again would otherwise sit in
+ * two slots, then three, and the cap would drop a different career to make
+ * room for copies of bytes the browser already held.
  */
 export function setAsideSave(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date()): SetAsideResult {
   const moved = moveAside(entry, storage, now);
@@ -127,14 +137,34 @@ export function setAsideSave(entry: ContinueSave, storage: SaveStorage | null, n
  */
 function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, keep: string): void {
   if (!storage || typeof (storage as ListableStorage).key !== 'function') return;
-  const others = backupKeysOf(entry, storage as ListableStorage).filter(k => k !== keep);
+  const others: string[] = [];
+  try {
+    const kept = storage.getItem(keep);
+    for (const k of backupKeysOf(entry, storage as ListableStorage)) {
+      if (k === keep) continue;
+      /* A twin of the save just set aside: `keep` holds the same bytes, so nothing is lost with it. */
+      if (kept !== null && storage.getItem(k) === kept) storage.removeItem(k);
+      else others.push(k);
+    }
+  } catch {
+    /* A store that stopped answering: nothing is pruned on a guess. */
+    return;
+  }
   for (const k of others.slice(BACKUPS_KEPT - 1)) {
     try { storage.removeItem(k); } catch { /* left in place, harmless */ }
   }
 }
 
-/** setAsideSave without the pruning, for restoreBackup's swap. */
-function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date): SetAsideResult {
+/**
+ * Round 1219: the copy on its own. The save is copied to a fresh dated key and
+ * the copy is read back; the original STAYS where it is, and nothing is
+ * pruned (a copy made with no press must never drop a backup the player was
+ * told is kept). backupKey is null when there was no save to copy. This is
+ * the first half of moveAside, split out for src/lib/saveKeeper.ts, which
+ * copies a save before it is replaced or refused instead of moving it: a key
+ * that is never emptied is never lost to a crash between two writes.
+ */
+export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date()): SetAsideResult {
   if (!storage) return { ok: false };
   let raw: string | null;
   try {
@@ -160,17 +190,23 @@ function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date):
     try { storage.removeItem(backupKey); } catch { /* nothing more to do */ }
     return { ok: false };
   }
+  return { ok: true, backupKey };
+}
 
+/** setAsideSave without the pruning, for restoreBackup's swap: copyAside, then the original goes. */
+function moveAside(entry: ContinueSave, storage: SaveStorage | null, now: Date): SetAsideResult {
+  const copied = copyAside(entry, storage, now);
+  if (!storage || !copied.ok || copied.backupKey === null) return copied;
   try {
     storage.removeItem(entry.saveKey);
   } catch {
     /* The copy landed but the original would not go. Take the copy back out,
        so the screen's "left it where it was" stays true and a retry does not
        stack up backups of the same save. */
-    try { storage.removeItem(backupKey); } catch { /* a duplicate copy is harmless */ }
+    try { storage.removeItem(copied.backupKey); } catch { /* a duplicate copy is harmless */ }
     return { ok: false };
   }
-  return { ok: true, backupKey };
+  return copied;
 }
 
 export type ListableStorage = SaveStorage & Pick<Storage, 'length' | 'key'>;
@@ -210,6 +246,13 @@ export function backupKeysOf(entry: ContinueSave, storage: ListableStorage | nul
  * now (one started since the fresh start) is set aside first, the same way,
  * so the swap never deletes anything. The backup goes only after the restored
  * copy reads back identical. Never throws.
+ *
+ * Round 1219: NOT for a page with a game in memory. Five long games write
+ * their in memory game as the page leaves, and that write lands on top of
+ * the save this just put back, whose backup this has already removed
+ * (measured by scripts/playSaveKeeper.mjs). The card uses restoreNow in
+ * src/lib/saveKeeper.ts instead. Kept for its tests and for that walk's
+ * control, which swaps in place on purpose to show the loss.
  */
 export function restoreBackup(entry: ContinueSave, backupKey: string, storage: SaveStorage | null, now: Date = new Date()): { ok: boolean } {
   if (!storage || !backupKey.startsWith(`${entry.saveKey}${BROKEN_SAVE_MARK}`)) return { ok: false };
@@ -256,36 +299,68 @@ export function deleteBackup(entry: ContinueSave, backupKey: string, storage: Sa
 
 /**
  * Where "Leave it aside" is remembered: one key for the whole site holding, per
- * game's save key, the backup the player last waved off. Its name does not
- * start with any game's key, so no backup listing ever picks it up.
+ * game's save key, the backups the player waved off. Its name does not start
+ * with any game's key, so no backup listing ever picks it up.
+ *
+ * Round 1219 review: a LIST per game. It used to be the one backup last waved
+ * off, which only worked while the card looked at nothing but the newest
+ * backup. A lone string (written before that round, or by an older cached
+ * build) is read as a list of one.
  */
 export const SET_ASIDE_SEEN_KEY = 'dukb-set-aside-seen';
 
-function seenMap(storage: SaveStorage): Record<string, string> {
+function seenMap(storage: SaveStorage): Record<string, string[]> {
+  const out: Record<string, string[]> = {};
   try {
     const parsed: unknown = JSON.parse(storage.getItem(SET_ASIDE_SEEN_KEY) ?? '{}');
-    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? (parsed as Record<string, string>) : {};
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return out;
+    for (const [k, v] of Object.entries(parsed)) {
+      if (typeof v === 'string') out[k] = [v];
+      else if (Array.isArray(v)) out[k] = v.filter((x): x is string => typeof x === 'string');
+    }
   } catch {
     return {};
   }
+  return out;
 }
 
 /**
- * The backup the restore card should offer on this game: the newest one,
- * unless the player already said "Leave it aside" to that very backup. A newer one
- * (the next fresh start, or the save set aside by a swap) is offered again.
+ * The backup the restore card should offer on this game: the newest one the
+ * player has not said "Leave it aside" to and that is not, byte for byte, the
+ * save he is playing right now (there would be nothing to put back).
+ *
+ * Round 1219 review: it used to look at the newest backup only and answer null
+ * when that one was waved off or was the save being played. Since a put back
+ * keeps the backup it came from, that hid every older kept aside save behind
+ * it: put a save back, put the other one back again, and the first career was
+ * in storage with no screen that offered it. The card is the only door to a
+ * kept aside save, so each one is passed over only for its own reason.
  */
 export function offeredBackup(entry: ContinueSave, storage: ListableStorage | null): string | null {
-  const newest = backupKeysOf(entry, storage)[0];
-  if (!newest || !storage) return null;
-  return seenMap(storage)[entry.saveKey] === newest ? null : newest;
+  if (!storage) return null;
+  const waved = seenMap(storage)[entry.saveKey] ?? [];
+  try {
+    const playing = storage.getItem(entry.saveKey);
+    for (const k of backupKeysOf(entry, storage)) {
+      if (waved.includes(k)) continue;
+      if (playing !== null && storage.getItem(k) === playing) continue;
+      return k;
+    }
+  } catch {
+    /* A store that stopped answering offers nothing. */
+  }
+  return null;
 }
 
 /** Remembers "Leave it aside" for this backup. Never throws; false if not stored. */
 export function dismissBackup(entry: ContinueSave, backupKey: string, storage: SaveStorage | null): boolean {
   if (!storage) return false;
   try {
-    storage.setItem(SET_ASIDE_SEEN_KEY, JSON.stringify({ ...seenMap(storage), [entry.saveKey]: backupKey }));
+    const map = seenMap(storage);
+    /* Backups that are gone (the cap, a delete) drop off the list, so it never grows past what is held. */
+    const held = typeof (storage as ListableStorage).key === 'function' ? backupKeysOf(entry, storage as ListableStorage) : [];
+    const before = (map[entry.saveKey] ?? []).filter(k => k !== backupKey && (held.length === 0 || held.includes(k)));
+    storage.setItem(SET_ASIDE_SEEN_KEY, JSON.stringify({ ...map, [entry.saveKey]: [...before, backupKey] }));
     return true;
   } catch {
     return false;
