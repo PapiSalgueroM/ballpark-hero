@@ -139,7 +139,7 @@ describe('saved season availability', () => {
   });
 
   it.each([0, 1, 'false', undefined, null])('does not coerce invalid injury severity %s into a boolean', injurySevere => {
-    expect(savedSeasonAvailability(season({ injurySevere: injurySevere as boolean })).injurySevere).toBeNull();
+    expect(savedSeasonAvailability(season({ injurySevere: injurySevere as unknown as boolean })).injurySevere).toBeNull();
   });
 
   it('retains saved weeks even when an injury is explicitly absent', () => {

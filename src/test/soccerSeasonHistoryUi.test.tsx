@@ -33,7 +33,7 @@ async function open(career: Source) {
   await waitFor(() => expect(screen.getByRole('heading', { name: 'Season Ratings' })).toHaveFocus());
   return { launcher, dialog, scroll: dialog.querySelector<HTMLDivElement>('[data-season-history-scroll]')! };
 }
-const press = (label: string) => fireEvent.click(screen.getByRole('button', { name: label, exact: true }));
+const press = (label: string) => fireEvent.click(screen.getByRole('button', { name: label }));
 const choose = (label: string, value: string) => fireEvent.change(screen.getByRole('combobox', { name: label }), { target: { value } });
 const metric = (key: string) => Array.from(document.querySelector(`[data-season-history-stat="${key}"]`)!.querySelectorAll('[data-season-history-value]')).map(node => node.textContent);
 const availability = (key: string) => document.querySelector(`[data-season-availability-field="${key}"]`)?.textContent;
