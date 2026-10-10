@@ -604,6 +604,15 @@ if (BOUND.includes('nfl')) {
   console.log(`     the first team All-Pro in judged seasons, by position (mine, his, both, percent): ${FLEET.nfl.pos.map(p => { const m = NOW.nfl.total.by[p]; return `${p} ${f2(pc(m.honMine, m.judged))} ${f2(pc(m.honHis, m.judged))} ${f2(pc(m.honBoth, m.judged))}`; }).join('; ')}`);
   check('N.F5', cards.flat().length > 0 && wrong.length === 0, `every All-Pro card dealt says and promises what the two seasons support: ${wrong.length} of ${cards.flat().length} wrong (a seed: both ${count('both').join(', ')}; only you ${count('onlyYou').join(', ')}; only him ${count('onlyHim').join(', ')})${wrong.length ? `; the first, a ${wrong[0].pos} in ${wrong[0].year}: "${wrong[0].says}" promising "${wrong[0].does}" with mine ${wrong[0].mine}, his ${wrong[0].his}` : ''}`);
 
+  /* Banded, at full size: the two cards a season can really deal still turn up. Measured 2026-10-10 on five
+     seeds: only you 4, 8, 9, 9, 13 (43) and only him 5, 4, 8, 1, 3 (21); each floor is six tenths of the run's
+     total, a sum over the run and not a floor a seed (one seed dealt "only him" once). "Both" was dealt 0 times
+     on every seed (both on a first team in 0.00 to 0.03 percent of judged seasons, and only where the team names
+     two or more): it is reported, not floored, and its words and payment are held on fixtures by
+     scripts/simCareerRivalryEvents.mjs and on a real screen by scripts/playUsRivalLines.mjs. */
+  const sum = k => count(k).reduce((a, n) => a + n, 0);
+  if (FULL) check('N.F5', sum('onlyYou') >= 25 && sum('onlyHim') >= 12, `the two cards a season deals still turn up over the run: only you ${sum('onlyYou')} (floor 25), only him ${sum('onlyHim')} (floor 12); both ${sum('both')} (reported, no floor)`);
+
   /* N.O: saves from before this round, built by the base code and committed (src/test/fixtures/
      usRivalOldSaves.json, recorded by --record-old-saves). A card the release before dealt pays what it printed;
      an old shape last line stays until his next season and is his position's own shape after it. */
@@ -654,7 +663,8 @@ if (PROVE) {
       if (!CARDS.includes(sport)) check(sport === 'nba' ? 'L' : 'P1', same('beats'), `${sport}: every card dealt reads word for word and promises exactly what it did`);
     }
   }
-  for (const sport of BOUND) {
+  /* Only the step that binds a sport is proven against the old line; a later step's tree before is bound already. */
+  for (const sport of BOUND.filter(s => MOVED.includes(s))) {
     const t = Object.values(WAS[sport].total.by).reduce((a, m) => a + m.off, 0);
     check('B', t > 0, `${sport}: the tree before was not clean (${t} rival lines off the player's shape), so this proof is against the old line`);
   }
