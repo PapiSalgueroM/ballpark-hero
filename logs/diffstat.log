@@ -1,0 +1,18 @@
+ scripts/data/cmAgesBasis2026.json   |  391 +++++++++++++
+ scripts/data/cmBirthDates2026.json  |  112 ++++
+ scripts/data/finalTables2025.json   |  867 +++++++++++++++++++++++++++++
+ scripts/lib/cmAges.mjs              |  192 +++++++
+ scripts/lib/cmValueCurve.mjs        |  183 ++++++-
+ src/lib/cmAgeRead.ts                |   74 +++
+ src/test/cmValueCurve.test.ts       | 1026 +++++++++++++++++++++++++++++++++++
+ src/test/fixtures/cmValueCurve.json |    1 +
+ 8 files changed, 2843 insertions(+), 3 deletions(-)
+
+A	scripts/data/cmAgesBasis2026.json
+A	scripts/data/cmBirthDates2026.json
+A	scripts/data/finalTables2025.json
+A	scripts/lib/cmAges.mjs
+M	scripts/lib/cmValueCurve.mjs
+A	src/lib/cmAgeRead.ts
+A	src/test/cmValueCurve.test.ts
+A	src/test/fixtures/cmValueCurve.json
