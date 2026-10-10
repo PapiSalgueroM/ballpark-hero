@@ -1,0 +1,10 @@
+build exit=0 29s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+set-refuse-lower exit=2 1s | refused with exit 2, file unchanged
+set-refuse-norow exit=2 0s | refused with exit 2, file unchanged
+weight-set exit=0 28s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+weight-set-planted exit=1 26s | CONTROL planted FIRED: exactly three findings, all for /club-manager, one for each planted probe
+weight-set-late exit=1 26s | CONTROL late FIRED: SoccerCareer-CESpseoH.js arrived after the measuring window (section 1 never weighed it) and section 4 still named it for /club-manager, 1 finding and
+weight-one-lower exit=1 26s | sweepWeight: 4 failures
+weight-plain exit=1 26s | sweepWeight: 4 failures
+simFlagshipWeight exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+tree-clean exit=0 0s | scripts/sweepWeight.mjs is as committed

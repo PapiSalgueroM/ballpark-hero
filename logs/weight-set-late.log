@@ -1,0 +1,2 @@
+  FAIL: /club-manager fetches SoccerCareer-CESpseoH.js, which holds 40 of the 40 probes for the national team pools: the page downloads data it never reads
+CONTROL late FIRED: SoccerCareer-CESpseoH.js arrived after the measuring window (section 1 never weighed it) and section 4 still named it for /club-manager, 1 finding and none elsewhere

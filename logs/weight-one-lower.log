@@ -1,0 +1,5 @@
+  FAIL: /club-manager: 582K of gzipped JavaScript against a budget of 581K
+  FAIL: /soccer-career: 796K of gzipped JavaScript against a budget of 795K
+  FAIL: /manager-hot-seat: 600K of gzipped JavaScript against a budget of 599K
+  FAIL: /deadline-day: 610K of gzipped JavaScript against a budget of 609K
+sweepWeight: 4 failures

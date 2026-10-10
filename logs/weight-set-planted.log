@@ -1,0 +1,5 @@
+   CONTROL planted: one pools probe, one 2010 nationality probe and one Footle probe appended in memory to ClubManager-1C1cig3S.js
+  FAIL: /club-manager fetches ClubManager-1C1cig3S.js, which holds 1 of the 40 probes for the national team pools: the page downloads data it never reads
+  FAIL: /club-manager fetches ClubManager-1C1cig3S.js, which holds 1 of the 40 probes for Footle's data: the page downloads data it never reads
+  FAIL: /club-manager fetches ClubManager-1C1cig3S.js, which holds 1 of the 40 probes for the era2010 nationalities: the page downloads data it never reads
+CONTROL planted FIRED: exactly three findings, all for /club-manager, one for each planted probe
