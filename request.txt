@@ -1,0 +1,5 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+appeal-head: node scripts/simManagerAppealIsolation.mjs
+appeal-attrib: git checkout e037ead1 -- src/lib/clubManager.ts src/lib/clubManagerFixtures.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- src/lib/clubManager.ts src/lib/clubManagerFixtures.ts; exit $s
+appeal-repinned: node .rc/x/repin.mjs && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout HEAD -- scripts/fixtures; exit $s

@@ -1,0 +1,4 @@
+tsc exit=0 57s | 
+appeal-head exit=1 6s | Node.js v24.21.0
+appeal-attrib exit=0 31s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+appeal-repinned exit=0 32s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
