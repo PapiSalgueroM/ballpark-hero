@@ -1,0 +1,76 @@
+fix-mut regulation: applied to src/lib/gmGameDay.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 172[2mms[22m[39m
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+ [31m❯[39m src/lib/gmGameDay.test.ts [2m([22m[2m31 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 649[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mnames the go ahead that stood, the score it answered and the last score of the winner[32m 2[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mis one play when the winner scored first, was never caught and never scored again[32m 1[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mmeasures the deepest hole the winner was in[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22manswers null when the side named as the winner is not ahead at the end[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mleaves the game level or the loser ahead after play (2), on every final the NFL law can tell[32m 275[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mrout: the margin is the number or more, whatever else happened[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mcomeback: the winner was that far behind[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mlate: the go ahead that stood came in the last period[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mwire: the winner scored first and was never level or behind again[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mtrade: anything else[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mone under each number is not that shape[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22madds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random[32m 282[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcuts the hour where the clock label does, and as the ledger says[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22msays each shape in one sentence that names the winner, with the numbers the law holds[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcarries a "?" that marks the clock thin and whose worked example is a game the rules tell that way[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final with no winner, a final no drive list makes, and a told game that does not read as one[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a list that is not the final, one damaged thing at a time[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final above the ceiling, without ever asking the law[32m 2[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final above what the sport says its score law can give, and for a sport that says nothing[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mnever has to refuse a final of the NFL score law: no side of one is above the number[32m 41[2mms[22m[39m
+   [32m✓[39m tellGame: one law, two paths[2m > [22mtells the final the quick path gives, and a story of that final[32m 21[2mms[22m[39m
+   [32m✓[39m tellGame: one law, two paths[2m > [22mrefuses exactly when the quick path does[32m 0[2mms[22m[39m
+   [32m✓[39m a game that went past regulation[2m > [22mis told by the sport as one, and the same final in sixty minutes is told as the other[32m 1[2mms[22m[39m
+   [32m✓[39m a game that went past regulation[2m > [22mis still that game after a save and a reload: the save field keeps the mark[32m 1[2mms[22m[39m
+   [32m✓[39m a game that went past regulation[2m > [22mis told nothing by a sport that has no such game, or when the sport has no list for it[32m 0[2mms[22m[39m
+[31m   [31m×[31m a game that went past regulation[2m > [22mhas the last period it was played to: late is the third period of a game in sixty minutes, the extra one of a game past them[39m[32m 10[2mms[22m[39m
+[31m     → expected [ 'trade', 55, [ +0, 1, 1, +0 ] ] to deeply equal [ 'late', 55, [ +0, 1, 1, +0 ] ][39m
+   [32m✓[39m gameStory and a law that throws[2m > [22manswers null, wherever in the law the throw comes from[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory and a law that throws[2m > [22mleaves the quick path its final: the told path hands back the final with no story[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mis made from a told game and read back as it was, through JSON[32m 1[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mhands back a fresh object of the known fields only[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22manswers null for every field damaged, one at a time, and never throws[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22ma game that went past regulation[2m > [22mhas the last period it was played to: late is the third period of a game in sixty minutes, the extra one of a game past them
+[31m[1mAssertionError[22m: expected [ 'trade', 55, [ +0, 1, 1, +0 ] ] to deeply equal [ 'late', 55, [ +0, 1, 1, +0 ] ][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -1,7 +1,7 @@[39m
+[2m  [[22m
+[32m-   "late",[39m
+[31m+   "trade",[39m
+[2m    55,[22m
+[2m    [[22m
+[2m      0,[22m
+[2m      1,[22m
+[2m      1,[22m
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m325:52[22m[39m
+    [90m323| [39m    const third: SeasonEvent[] = [{ min: 5, kind: 'goal', side: 'them'…
+    [90m324| [39m    [35mconst[39m s [33m=[39m [34mgameStory[39m([34mlist[39m(third)[33m,[39m [34mtold[39m([34m2[39m[33m,[39m [34m1[39m)[33m,[39m [32m'home'[39m)[33m![39m[33m;[39m
+    [90m325| [39m    expect([s.shape, s.goAhead.min, s.periods.us]).toEqual(['late', 55…
+    [90m   | [39m                                                   [31m^[39m
+    [90m326| [39m    [90m/* the same three goals with the winner in the extra period */[39m
+    [90m327| [39m    const extra = third.map(e => (e.min === 55 ? { ...e, min: 62 } : e…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m62 passed[39m[22m[90m (63)[39m
+[2m   Start at [22m 19:29:40
+[2m   Duration [22m 1.69s[2m (transform 356ms, setup 202ms, collect 536ms, tests 1.05s, environment 1.28s, prepare 439ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > has the last period it was played to%3A late is the third period of a game in sixty minutes%2C the extra one of a game past them,line=325,column=52::AssertionError: expected [ 'trade', 55, [ +0, 1, 1, +0 ] ] to deeply equal [ 'late', 55, [ +0, 1, 1, +0 ] ]%0A%0A- Expected%0A+ Received%0A%0A@@ -1,7 +1,7 @@%0A  [%0A-   "late",%0A+   "trade",%0A    55,%0A    [%0A      0,%0A      1,%0A      1,%0A%0A ❯ src/lib/gmGameDay.test.ts:325:52%0A%0A

@@ -1,0 +1,101 @@
+fix-mut outofturn: applied to src/lib/gmBracket.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 205[2mms[22m[39m
+ [31m❯[39m src/lib/gmBracket.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 98[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mis the fourteen club format of the two sourced ledger, for the seasons that ledger gives it[32m 2[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mgives each conference one bye, to its top seed, and thirteen single games[32m 2[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mplays the worked example of the "?" the way the "?" tells it[32m 1[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mpairs the top seed with the lowest seed left whoever came through, and the better seed hosts[32m 10[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mgives the home side of every game before the title game to the better seed, in both conferences, whoever wins[32m 12[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mis the same bracket all at once and a round a press, and never touches the save it is handed[32m 14[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22msays in its "?" what is dated and what is this sim own lean, and the lean is the engine arithmetic[32m 5[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays a play in and best of seven rounds, a game at a time or a round at a time[32m 3[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays a format with an order of its own in that order, and still a round at a time[32m 1[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mrefuses a game whose winner is neither side, and plays nothing for a tie it cannot name[32m 1[2mms[22m[39m
+[31m   [31m×[31m the shapes the other front offices bring[2m > [22mplays no tie out of turn: a tie that can be named is still not played before an earlier week is settled[39m[32m 17[2mms[22m[39m
+[31m     → expected { v: 1, format: 'nfl-14', …(3) } to be { v: 1, format: 'nfl-14', …(3) } // Object.is equality[39m
+[31m   [31m×[31m the shapes the other front offices bring[2m > [22mnever makes a save the validator condemns, whatever tie is asked for next[39m[32m 4[2mms[22m[39m
+[31m     → nfl-14 run 0 after 6 games: expected [ Array(1) ] to deeply equal [][39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mreads a sound save and refuses every field damaged, one at a time, without ever throwing[32m 13[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mnames what is wrong with a save that reads but does not replay[32m 5[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mhands a sound save back untouched, rebuilds from the same seeds when they still read, and from fresh ones when they do not[32m 4[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22masks the league about the seeds of a save that replays soundly, and starts again from fresh ones when it says no[32m 1[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22manswers a save with no block like a damaged one, which is why a board asks first whether the save is in its postseason[32m 0[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mthrows when the fresh seeds themselves do not open a bracket, and only then[32m 2[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameDay.test.ts [2m([22m[2m31 tests[22m[2m)[22m[33m 622[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmBracket.test.ts[2m > [22mthe shapes the other front offices bring[2m > [22mplays no tie out of turn: a tie that can be named is still not played before an earlier week is settled
+[31m[1mAssertionError[22m: expected { v: 1, format: 'nfl-14', …(3) } to be { v: 1, format: 'nfl-14', …(3) } // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -35,10 +35,22 @@[39m
+[2m          },[22m
+[2m        ],[22m
+[2m        "home": "S4",[22m
+[2m        "id": "AFC-WC-3",[22m
+[2m      },[22m
+[31m+     {[39m
+[31m+       "away": "S4",[39m
+[31m+       "games": [[39m
+[31m+         {[39m
+[31m+           "awayScore": 20,[39m
+[31m+           "homeScore": 27,[39m
+[31m+           "winner": "S1",[39m
+[31m+         },[39m
+[31m+       ],[39m
+[31m+       "home": "S1",[39m
+[31m+       "id": "AFC-DIV-1",[39m
+[31m+     },[39m
+[2m    ],[22m
+[2m    "season": 2026,[22m
+[2m    "seeds": [[22m
+[2m      "S1",[22m
+[2m      "S2",[22m
+
+[36m [2m❯[22m src/lib/gmBracket.test.ts:[2m218:67[22m[39m
+    [90m216| [39m    for (const id of ['AFC-WC-1', 'AFC-WC-2', 'AFC-WC-3']) s = playBra…
+    [90m217| [39m    [34mexpect[39m(s[33m.[39mplayed[33m.[39mlength)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m218| [39m    expect(playBracketGame(NFL_BRACKET, s, 'AFC-DIV-1', chalk())).toBe…
+    [90m   | [39m                                                                  [31m^[39m
+    [90m219| [39m    expect(playBracketGame(NFL_BRACKET, s, 'AFC-DIV-2', chalk())).toBe…
+    [90m220| [39m    for (const id of ['NFC-WC-1', 'NFC-WC-2', 'NFC-WC-3']) s = playBra…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmBracket.test.ts[2m > [22mthe shapes the other front offices bring[2m > [22mnever makes a save the validator condemns, whatever tie is asked for next
+[31m[1mAssertionError[22m: nfl-14 run 0 after 6 games: expected [ Array(1) ] to deeply equal [][39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- [][39m
+[31m+ [[39m
+[31m+   "NFC-DIV-2 was played out of turn, before AFC-WC-2 was settled",[39m
+[31m+ ][39m
+
+[36m [2m❯[22m src/lib/gmBracket.test.ts:[2m243:102[22m[39m
+    [90m241| [39m          moves [33m+=[39m [34m1[39m[33m;[39m
+    [90m242| [39m          s [33m=[39m [33mJSON[39m[33m.[39m[34mparse[39m([33mJSON[39m[33m.[39m[34mstringify[39m(next))[33m;[39m
+    [90m243| [39m          expect(bracketProblems(format, s, isClub), `${format.id} run…
+    [90m   | [39m                                                                                                     [31m^[39m
+    [90m244| [39m          expect(repairGmBracket(format, s, 2026, () => seeds, isClub)…
+    [90m245| [39m        }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m61 passed[39m[22m[90m (63)[39m
+[2m   Start at [22m 19:29:11
+[2m   Duration [22m 1.72s[2m (transform 324ms, setup 260ms, collect 488ms, tests 926ms, environment 1.29s, prepare 270ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the shapes the other front offices bring > plays no tie out of turn%3A a tie that can be named is still not played before an earlier week is settled,line=218,column=67::AssertionError: expected { v: 1, format: 'nfl-14', …(3) } to be { v: 1, format: 'nfl-14', …(3) } // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A@@ -35,10 +35,22 @@%0A          },%0A        ],%0A        "home": "S4",%0A        "id": "AFC-WC-3",%0A      },%0A+     {%0A+       "away": "S4",%0A+       "games": [%0A+         {%0A+           "awayScore": 20,%0A+           "homeScore": 27,%0A+           "winner": "S1",%0A+         },%0A+       ],%0A+       "home": "S1",%0A+       "id": "AFC-DIV-1",%0A+     },%0A    ],%0A    "season": 2026,%0A    "seeds": [%0A      "S1",%0A      "S2",%0A%0A ❯ src/lib/gmBracket.test.ts:218:67%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the shapes the other front offices bring > never makes a save the validator condemns%2C whatever tie is asked for next,line=243,column=102::AssertionError: nfl-14 run 0 after 6 games: expected [ Array(1) ] to deeply equal []%0A%0A- Expected%0A+ Received%0A%0A- []%0A+ [%0A+   "NFC-DIV-2 was played out of turn, before AFC-WC-2 was settled",%0A+ ]%0A%0A ❯ src/lib/gmBracket.test.ts:243:102%0A%0A

@@ -1,0 +1,316 @@
+fix-mut storyignoresbeyond: applied to src/lib/gmGameDay.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 182[2mms[22m[39m
+ [32m✓[39m src/lib/gmBracket.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 222[2mms[22m[39m
+ [31m❯[39m src/lib/gmGameDay.test.ts [2m([22m[2m31 tests[22m[2m | [22m[31m5 failed[39m[2m)[22m[33m 681[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mnames the go ahead that stood, the score it answered and the last score of the winner[32m 3[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mis one play when the winner scored first, was never caught and never scored again[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mmeasures the deepest hole the winner was in[32m 1[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22manswers null when the side named as the winner is not ahead at the end[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mleaves the game level or the loser ahead after play (2), on every final the NFL law can tell[32m 271[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mrout: the margin is the number or more, whatever else happened[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mcomeback: the winner was that far behind[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mlate: the go ahead that stood came in the last period[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mwire: the winner scored first and was never level or behind again[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mtrade: anything else[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mone under each number is not that shape[32m 0[2mms[22m[39m
+   [33m[2m✓[22m[39m gameStory, with the NFL law[2m > [22madds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random [33m 306[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcuts the hour where the clock label does, and as the ledger says[32m 2[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22msays each shape in one sentence that names the winner, with the numbers the law holds[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcarries a "?" that marks the clock thin and whose worked example is a game the rules tell that way[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final with no winner, a final no drive list makes, and a told game that does not read as one[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a list that is not the final, one damaged thing at a time[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final above the ceiling, without ever asking the law[32m 2[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final above what the sport says its score law can give, and for a sport that says nothing[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mnever has to refuse a final of the NFL score law: no side of one is above the number[32m 48[2mms[22m[39m
+   [32m✓[39m tellGame: one law, two paths[2m > [22mtells the final the quick path gives, and a story of that final[32m 21[2mms[22m[39m
+   [32m✓[39m tellGame: one law, two paths[2m > [22mrefuses exactly when the quick path does[32m 0[2mms[22m[39m
+[31m   [31m×[31m a game that went past regulation[2m > [22mis told by the sport as one, and the same final in sixty minutes is told as the other[39m[32m 11[2mms[22m[39m
+[31m     → expected { us: [ 3, +0, +0, +0 ], …(1) } to deeply equal { us: [ 2, +0, +0, 1 ], …(1) }[39m
+[31m   [31m×[31m a game that went past regulation[2m > [22mis still that game after a save and a reload: the save field keeps the mark[39m[32m 4[2mms[22m[39m
+[31m     → expected { Object (game, periods, ...) } to not deeply equal { Object (game, periods, ...) }[39m
+[31m   [31m×[31m a game that went past regulation[2m > [22mis told nothing by a sport that has no such game, or when the sport has no list for it[39m[32m 1[2mms[22m[39m
+[31m     → expected { Object (game, periods, ...) } to be null[39m
+[31m   [31m×[31m a game that went past regulation[2m > [22mhas the last period it was played to: late is the third period of a game in sixty minutes, the extra one of a game past them[39m[32m 1[2mms[22m[39m
+[31m     → Cannot read properties of null (reading 'shape')[39m
+[31m   [31m×[31m gameStory and a law that throws[2m > [22manswers null, wherever in the law the throw comes from[39m[32m 1[2mms[22m[39m
+[31m     → expected { Object (game, periods, ...) } to be null[39m
+   [32m✓[39m gameStory and a law that throws[2m > [22mleaves the quick path its final: the told path hands back the final with no story[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mis made from a told game and read back as it was, through JSON[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mhands back a fresh object of the known fields only[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22manswers null for every field damaged, one at a time, and never throws[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22ma game that went past regulation[2m > [22mis told by the sport as one, and the same final in sixty minutes is told as the other
+[31m[1mAssertionError[22m: expected { us: [ 3, +0, +0, +0 ], …(1) } to deeply equal { us: [ 2, +0, +0, 1 ], …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -4,11 +4,11 @@[39m
+[2m      2,[22m
+[2m      0,[22m
+[2m      0,[22m
+[2m    ],[22m
+[2m    "us": [[22m
+[32m-     2,[39m
+[31m+     3,[39m
+[31m+     0,[39m
+[2m      0,[22m
+[2m      0,[22m
+[32m-     1,[39m
+[2m    ],[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m287:33[22m[39m
+    [90m285| [39m    expect(inTime.told).toEqual({ key: '2026|r4|AAA|BBB', home: 'AAA',…
+    [90m286| [39m    expect('beyond' in tellGame(ICE_SCORE, ICE, fixture(false), 'home'…
+    [90m287| [39m    expect(past.story!.periods).toEqual({ us: [2, 0, 0, 1], them: [0, …
+    [90m   | [39m                                [31m^[39m
+    [90m288| [39m    expect(inTime.story!.periods).toEqual({ us: [3, 0, 0, 0], them: [0…
+    [90m289| [39m    expect(ICE.periods.name(ICE.periods.of(past.story!.game.events[pas…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22ma game that went past regulation[2m > [22mis still that game after a save and a reload: the save field keeps the mark
+[31m[1mAssertionError[22m: expected { Object (game, periods, ...) } to not deeply equal { Object (game, periods, ...) }[39m
+
+[2mCompared values have no visual difference.[22m
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m302:46[22m[39m
+    [90m300| [39m    [34mexpect[39m(back)[33m.[39m[34mtoEqual[39m(saved)[33m;[39m
+    [90m301| [39m    expect(gameStory(ICE, back, 'home')).toEqual(gameStory(ICE, past, …
+    [90m302| [39m    expect(gameStory(ICE, back, 'home')).not.toEqual(gameStory(ICE, qu…
+    [90m   | [39m                                             [31m^[39m
+    [90m303| [39m    /* a game in sixty minutes saves no such key, so a sport that draw…
+    [90m304| [39m    const plain = makeGmLastGame(quickGame(ICE_SCORE, fixture())!, 'r4…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22ma game that went past regulation[2m > [22mis told nothing by a sport that has no such game, or when the sport has no list for it
+[31m[1mAssertionError[22m: expected { Object (game, periods, ...) } to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+{
+  "deciding": [
+    {
+      "kind": "goal",
+      "min": 1,
+      "pts": 1,
+      "side": "us",
+    },
+    {
+      "kind": "goal",
+      "min": 3,
+      "pts": 1,
+      "side": "us",
+    },
+  ],
+  "game": {
+    "events": [
+      {
+        "kind": "goal",
+        "min": 1,
+        "pts": 1,
+        "side": "us",
+      },
+      {
+        "kind": "goal",
+        "min": 2,
+        "pts": 1,
+        "side": "us",
+      },
+      {
+        "kind": "goal",
+        "min": 3,
+        "pts": 1,
+        "side": "us",
+      },
+      {
+        "kind": "goal",
+        "min": 30,
+        "pts": 1,
+        "side": "them",
+      },
+      {
+        "kind": "goal",
+        "min": 31,
+        "pts": 1,
+        "side": "them",
+      },
+    ],
+    "fixed": false,
+    "home": true,
+    "line": {},
+    "md": 1,
+    "opp": 0,
+    "played": true,
+    "started": true,
+    "them": 2,
+    "us": 3,
+  },
+  "goAhead": {
+    "kind": "goal",
+    "min": 1,
+    "pts": 1,
+    "side": "us",
+  },
+  "periods": {
+    "them": [
+      0,
+      2,
+      0,
+      0,
+    ],
+    "us": [
+      3,
+      0,
+      0,
+      0,
+    ],
+  },
+  "shape": "wire",
+}
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m312:73[22m[39m
+    [90m310| [39m  it('is told nothing by a sport that has no such game, or when the sp…
+    [90m311| [39m    [35mconst[39m past [33m=[39m [34mquickGame[39m([33mICE_SCORE[39m[33m,[39m [34mfixture[39m([35mtrue[39m))[33m![39m[33m;[39m
+    [90m312| [39m    expect(gameStory({ ...ICE, storyBeyond: undefined }, past, 'home')…
+    [90m   | [39m                                                                        [31m^[39m
+    [90m313| [39m    expect(gameStory(NFL_GAME_DAY, { ...told(24, 17), beyond: true }, …
+    [90m314| [39m    expect(gameStory(NFL_GAME_DAY, { ...told(24, 17), beyond: false },…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22ma game that went past regulation[2m > [22mhas the last period it was played to: late is the third period of a game in sixty minutes, the extra one of a game past them
+[31m[1mTypeError[22m: Cannot read properties of null (reading 'shape')[39m
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m329:18[22m[39m
+    [90m327| [39m    const extra = third.map(e => (e.min === 55 ? { ...e, min: 62 } : e…
+    [90m328| [39m    const past = gameStory(list(extra), { ...told(2, 1), beyond: true …
+    [90m329| [39m    expect([past.shape, past.goAhead.min, past.periods.us]).toEqual(['…
+    [90m   | [39m                 [31m^[39m
+    [90m330| [39m    /* a game that was not past regulation has no play in the extra pe…
+    [90m331| [39m    [34mexpect[39m([34mgameStory[39m([34mlist[39m(extra)[33m,[39m [34mtold[39m([34m2[39m[33m,[39m [34m1[39m)[33m,[39m [32m'home'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22mgameStory and a law that throws[2m > [22manswers null, wherever in the law the throw comes from
+[31m[1mAssertionError[22m: expected { Object (game, periods, ...) } to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+{
+  "deciding": [
+    {
+      "kind": "goal",
+      "min": 1,
+      "pts": 1,
+      "side": "us",
+    },
+    {
+      "kind": "goal",
+      "min": 3,
+      "pts": 1,
+      "side": "us",
+    },
+  ],
+  "game": {
+    "events": [
+      {
+        "kind": "goal",
+        "min": 1,
+        "pts": 1,
+        "side": "us",
+      },
+      {
+        "kind": "goal",
+        "min": 2,
+        "pts": 1,
+        "side": "us",
+      },
+      {
+        "kind": "goal",
+        "min": 3,
+        "pts": 1,
+        "side": "us",
+      },
+      {
+        "kind": "goal",
+        "min": 30,
+        "pts": 1,
+        "side": "them",
+      },
+      {
+        "kind": "goal",
+        "min": 31,
+        "pts": 1,
+        "side": "them",
+      },
+    ],
+    "fixed": false,
+    "home": true,
+    "line": {},
+    "md": 1,
+    "opp": 0,
+    "played": true,
+    "started": true,
+    "them": 2,
+    "us": 3,
+  },
+  "goAhead": {
+    "kind": "goal",
+    "min": 1,
+    "pts": 1,
+    "side": "us",
+  },
+  "periods": {
+    "them": [
+      0,
+      2,
+      0,
+      0,
+    ],
+    "us": [
+      3,
+      0,
+      0,
+      0,
+    ],
+  },
+  "shape": "wire",
+}
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m345:95[22m[39m
+    [90m343| [39m    expect(gameStory({ ...NFL_GAME_DAY, story: { ...NFL_GAME_DAY.story…
+    [90m344| [39m    expect(gameStory({ ...NFL_GAME_DAY, periods: { ...NFL_GAME_DAY.per…
+    [90m345| [39m    expect(gameStory({ ...ICE, storyBeyond: boom }, { ...told(3, 2), b…
+    [90m   | [39m                                                                                              [31m^[39m
+    [90m346| [39m    expect(gameStory(Object.defineProperty({ ...NFL_GAME_DAY }, 'shape…
+    [90m347| [39m    [34mexpect[39m([34mgameStory[39m([35mnull[39m [35mas[39m never[33m,[39m [34mtold[39m([34m24[39m[33m,[39m [34m17[39m)[33m,[39m [32m'home'[39m))[33m.[39m[34mtoBeNull[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m58 passed[39m[22m[90m (63)[39m
+[2m   Start at [22m 19:29:26
+[2m   Duration [22m 1.74s[2m (transform 347ms, setup 252ms, collect 496ms, tests 1.09s, environment 1.31s, prepare 265ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > is told by the sport as one%2C and the same final in sixty minutes is told as the other,line=287,column=33::AssertionError: expected { us: [ 3, +0, +0, +0 ], …(1) } to deeply equal { us: [ 2, +0, +0, 1 ], …(1) }%0A%0A- Expected%0A+ Received%0A%0A@@ -4,11 +4,11 @@%0A      2,%0A      0,%0A      0,%0A    ],%0A    "us": [%0A-     2,%0A+     3,%0A+     0,%0A      0,%0A      0,%0A-     1,%0A    ],%0A  }%0A%0A ❯ src/lib/gmGameDay.test.ts:287:33%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > is still that game after a save and a reload%3A the save field keeps the mark,line=302,column=46::AssertionError: expected { Object (game, periods, ...) } to not deeply equal { Object (game, periods, ...) }%0A%0ACompared values have no visual difference.%0A%0A ❯ src/lib/gmGameDay.test.ts:302:46%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > is told nothing by a sport that has no such game%2C or when the sport has no list for it,line=312,column=73::AssertionError: expected { Object (game, periods, ...) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "deciding": [%0A    {%0A      "kind": "goal",%0A      "min": 1,%0A      "pts": 1,%0A      "side": "us",%0A    },%0A    {%0A      "kind": "goal",%0A      "min": 3,%0A      "pts": 1,%0A      "side": "us",%0A    },%0A  ],%0A  "game": {%0A    "events": [%0A      {%0A        "kind": "goal",%0A        "min": 1,%0A        "pts": 1,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "goal",%0A        "min": 2,%0A        "pts": 1,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "goal",%0A        "min": 3,%0A        "pts": 1,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "goal",%0A        "min": 30,%0A        "pts": 1,%0A        "side": "them",%0A      },%0A      {%0A        "kind": "goal",%0A        "min": 31,%0A        "pts": 1,%0A        "side": "them",%0A      },%0A    ],%0A    "fixed": false,%0A    "home": true,%0A    "line": {},%0A    "md": 1,%0A    "opp": 0,%0A    "played": true,%0A    "started": true,%0A    "them": 2,%0A    "us": 3,%0A  },%0A  "goAhead": {%0A    "kind": "goal",%0A    "min": 1,%0A    "pts": 1,%0A    "side": "us",%0A  },%0A  "periods": {%0A    "them": [%0A      0,%0A      2,%0A      0,%0A      0,%0A    ],%0A    "us": [%0A      3,%0A      0,%0A      0,%0A      0,%0A    ],%0A  },%0A  "shape": "wire",%0A}%0A%0A ❯ src/lib/gmGameDay.test.ts:312:73%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > has the last period it was played to%3A late is the third period of a game in sixty minutes%2C the extra one of a game past them,line=329,column=18::TypeError: Cannot read properties of null (reading 'shape')%0A ❯ src/lib/gmGameDay.test.ts:329:18%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > gameStory and a law that throws > answers null%2C wherever in the law the throw comes from,line=345,column=95::AssertionError: expected { Object (game, periods, ...) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "deciding": [%0A    {%0A      "kind": "goal",%0A      "min": 1,%0A      "pts": 1,%0A      "side": "us",%0A    },%0A    {%0A      "kind": "goal",%0A      "min": 3,%0A      "pts": 1,%0A      "side": "us",%0A    },%0A  ],%0A  "game": {%0A    "events": [%0A      {%0A        "kind": "goal",%0A        "min": 1,%0A        "pts": 1,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "goal",%0A        "min": 2,%0A        "pts": 1,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "goal",%0A        "min": 3,%0A        "pts": 1,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "goal",%0A        "min": 30,%0A        "pts": 1,%0A        "side": "them",%0A      },%0A      {%0A        "kind": "goal",%0A        "min": 31,%0A        "pts": 1,%0A        "side": "them",%0A      },%0A    ],%0A    "fixed": false,%0A    "home": true,%0A    "line": {},%0A    "md": 1,%0A    "opp": 0,%0A    "played": true,%0A    "started": true,%0A    "them": 2,%0A    "us": 3,%0A  },%0A  "goAhead": {%0A    "kind": "goal",%0A    "min": 1,%0A    "pts": 1,%0A    "side": "us",%0A  },%0A  "periods": {%0A    "them": [%0A      0,%0A      2,%0A      0,%0A      0,%0A    ],%0A    "us": [%0A      3,%0A      0,%0A      0,%0A      0,%0A    ],%0A  },%0A  "shape": "wire",%0A}%0A%0A ❯ src/lib/gmGameDay.test.ts:345:95%0A%0A

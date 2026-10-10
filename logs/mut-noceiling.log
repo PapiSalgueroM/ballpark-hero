@@ -1,0 +1,1130 @@
+fix-mut noceiling: applied to src/lib/gmGameScore.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/lib/gmGameScore.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 229[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mkeeps the first try that is not level and has the winner ahead[32m 3[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mwalks past a level first try to a later one[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mhands the first try to the winner after every try has missed, and says so[32m 0[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a law that is level on its first try and never gives the winner[32m 1[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with laws written for the test[2m > [22mrefuses whatever is not two whole scores, one damaged answer at a time[39m[32m 11[2mms[22m[39m
+[31m     → [1000,3]: expected { home: 1000, away: 3, tries: 1, …(1) } to be null[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a law that throws, on its first try or a later one, and never lets the throw out[32m 1[2mms[22m[39m
+[31m   [31m×[31m decidedScore, with laws written for the test[2m > [22mcalls a whole number from 0 to the ceiling a score, and nothing else[39m[32m 3[2mms[22m[39m
+[31m     → 1000: expected true to be false // Object.is equality[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mrefuses a decided game that does not read as one, without asking the law[32m 1[2mms[22m[39m
+   [32m✓[39m decidedScore, with laws written for the test[2m > [22mhands the law the decided game itself, so an engine that draws overtime can say so[32m 1[2mms[22m[39m
+   [32m✓[39m decidedScore, with the NFL law[2m > [22mnever names another winner, is never level, and takes no draw from Math.random[32m 194[2mms[22m[39m
+   [32m✓[39m decidedScore, with the NFL law[2m > [22mtells the same final for the same key, and another for another key[32m 9[2mms[22m[39m
+   [32m✓[39m quickGame and toldWinner[2m > [22mcarries the key and the clubs with the told final[32m 0[2mms[22m[39m
+   [32m✓[39m quickGame and toldWinner[2m > [22mcarries the mark of a game past regulation when the engine drew one, and no such key otherwise[32m 1[2mms[22m[39m
+   [32m✓[39m quickGame and toldWinner[2m > [22mrefuses a fixture that does not read as one, one damaged field at a time[32m 1[2mms[22m[39m
+ [31m❯[39m src/lib/gmBracket.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 244[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mis the fourteen club format of the two sourced ledger, for the seasons that ledger gives it[32m 3[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mgives each conference one bye, to its top seed, and thirteen single games[32m 3[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mplays the worked example of the "?" the way the "?" tells it[32m 2[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mpairs the top seed with the lowest seed left whoever came through, and the better seed hosts[32m 10[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mgives the home side of every game before the title game to the better seed, in both conferences, whoever wins[32m 10[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mis the same bracket all at once and a round a press, and never touches the save it is handed[32m 11[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22msays in its "?" what is dated and what is this sim own lean, and the lean is the engine arithmetic[32m 5[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays a play in and best of seven rounds, a game at a time or a round at a time[32m 3[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays a format with an order of its own in that order, and still a round at a time[32m 1[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mrefuses a game whose winner is neither side, and plays nothing for a tie it cannot name[32m 2[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays no tie out of turn: a tie that can be named is still not played before an earlier week is settled[32m 1[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mnever makes a save the validator condemns, whatever tie is asked for next[32m 161[2mms[22m[39m
+[31m   [31m×[31m the saved bracket: optional, guarded and repairable[2m > [22mreads a sound save and refuses every field damaged, one at a time, without ever throwing[39m[32m 20[2mms[22m[39m
+[31m     → homeScore = 1000: expected true to be false // Object.is equality[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mnames what is wrong with a save that reads but does not replay[32m 6[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mhands a sound save back untouched, rebuilds from the same seeds when they still read, and from fresh ones when they do not[32m 2[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22masks the league about the seeds of a save that replays soundly, and starts again from fresh ones when it says no[32m 1[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22manswers a save with no block like a damaged one, which is why a board asks first whether the save is in its postseason[32m 0[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mthrows when the fresh seeds themselves do not open a bracket, and only then[32m 1[2mms[22m[39m
+ [31m❯[39m src/lib/gmGameDay.test.ts [2m([22m[2m31 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 703[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mnames the go ahead that stood, the score it answered and the last score of the winner[32m 3[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mis one play when the winner scored first, was never caught and never scored again[32m 1[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22mmeasures the deepest hole the winner was in[32m 0[2mms[22m[39m
+   [32m✓[39m decidingPlays[2m > [22manswers null when the side named as the winner is not ahead at the end[32m 0[2mms[22m[39m
+   [33m[2m✓[22m[39m decidingPlays[2m > [22mleaves the game level or the loser ahead after play (2), on every final the NFL law can tell [33m 325[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mrout: the margin is the number or more, whatever else happened[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mcomeback: the winner was that far behind[32m 3[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mlate: the go ahead that stood came in the last period[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mwire: the winner scored first and was never level or behind again[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mtrade: anything else[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory: the shape of a game, first match wins[2m > [22mone under each number is not that shape[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22madds up by side and by quarter, mirrors for the away club, and tells the same story twice without Math.random[32m 270[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcuts the hour where the clock label does, and as the ledger says[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22msays each shape in one sentence that names the winner, with the numbers the law holds[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory, with the NFL law[2m > [22mcarries a "?" that marks the clock thin and whose worked example is a game the rules tell that way[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final with no winner, a final no drive list makes, and a told game that does not read as one[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a list that is not the final, one damaged thing at a time[32m 1[2mms[22m[39m
+[31m   [31m×[31m gameStory fails closed[2m > [22mfor a final above the ceiling, without ever asking the law[39m[32m 20[2mms[22m[39m
+[31m     → home on 1000: expected { Object (game, periods, ...) } to be null[39m
+   [32m✓[39m gameStory fails closed[2m > [22mfor a final above what the sport says its score law can give, and for a sport that says nothing[32m 0[2mms[22m[39m
+   [32m✓[39m gameStory fails closed[2m > [22mnever has to refuse a final of the NFL score law: no side of one is above the number[32m 42[2mms[22m[39m
+   [32m✓[39m tellGame: one law, two paths[2m > [22mtells the final the quick path gives, and a story of that final[32m 23[2mms[22m[39m
+   [32m✓[39m tellGame: one law, two paths[2m > [22mrefuses exactly when the quick path does[32m 0[2mms[22m[39m
+   [32m✓[39m a game that went past regulation[2m > [22mis told by the sport as one, and the same final in sixty minutes is told as the other[32m 1[2mms[22m[39m
+   [32m✓[39m a game that went past regulation[2m > [22mis still that game after a save and a reload: the save field keeps the mark[32m 1[2mms[22m[39m
+   [32m✓[39m a game that went past regulation[2m > [22mis told nothing by a sport that has no such game, or when the sport has no list for it[32m 0[2mms[22m[39m
+   [32m✓[39m a game that went past regulation[2m > [22mhas the last period it was played to: late is the third period of a game in sixty minutes, the extra one of a game past them[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory and a law that throws[2m > [22manswers null, wherever in the law the throw comes from[32m 1[2mms[22m[39m
+   [32m✓[39m gameStory and a law that throws[2m > [22mleaves the quick path its final: the told path hands back the final with no story[32m 0[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mis made from a told game and read back as it was, through JSON[32m 1[2mms[22m[39m
+   [32m✓[39m the save field: the last told game[2m > [22mhands back a fresh object of the known fields only[32m 0[2mms[22m[39m
+[31m   [31m×[31m the save field: the last told game[2m > [22manswers null for every field damaged, one at a time, and never throws[39m[32m 2[2mms[22m[39m
+[31m     → home on 1000: expected { v: 1, …(7) } to be null[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmBracket.test.ts[2m > [22mthe saved bracket: optional, guarded and repairable[2m > [22mreads a sound save and refuses every field damaged, one at a time, without ever throwing
+[31m[1mAssertionError[22m: homeScore = 1000: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m damaged src/lib/gmBracket.test.ts:[2m285:94[22m[39m
+    [90m283| [39m        [35mconst[39m bad [33m=[39m [34mcopy[39m(sound) [35mas[39m [33mRecord[39m[33m<[39mstring[33m,[39m any[33m>[39m[33m;[39m
+    [90m284| [39m        [34medit[39m(bad[33m,[39m v[33m,[39m field)[33m;[39m
+    [90m285| [39m        expect(isGmBracketSave(bad, isClub), `${field} = ${JSON.string…
+    [90m   | [39m                                                                                             [31m^[39m
+    [90m286| [39m        expect(bracketProblems(NFL_BRACKET, bad as GmBracketSave, isCl…
+    [90m287| [39m        expect(repairGmBracket(NFL_BRACKET, bad, 2026, () => SEEDS, is…
+[90m [2m❯[22m src/lib/gmBracket.test.ts:[2m294:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22mgameStory fails closed[2m > [22mfor a final above the ceiling, without ever asking the law
+[31m[1mAssertionError[22m: home on 1000: expected { Object (game, periods, ...) } to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+{
+  "deciding": [
+    {
+      "kind": "td",
+      "min": 1,
+      "pts": 7,
+      "side": "us",
+    },
+    {
+      "kind": "td",
+      "min": 60,
+      "pts": 7,
+      "side": "us",
+    },
+  ],
+  "game": {
+    "events": [
+      {
+        "kind": "td",
+        "min": 1,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 1,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 1,
+        "pts": 7,
+        "side": "them",
+      },
+      {
+        "kind": "td",
+        "min": 2,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 2,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 3,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 3,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 4,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 4,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 4,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 5,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 6,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 7,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 7,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 7,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 8,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 9,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 9,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 9,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 9,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 9,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 10,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 11,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 11,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 11,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 11,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 12,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 12,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 13,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 13,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 14,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 14,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 14,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 15,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 15,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 15,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 16,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 16,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 17,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 17,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 18,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 18,
+        "pts": 7,
+        "side": "them",
+      },
+      {
+        "kind": "td",
+        "min": 19,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 19,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 19,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 20,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 21,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 21,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "fg",
+        "min": 21,
+        "pts": 3,
+        "side": "them",
+      },
+      {
+        "kind": "td",
+        "min": 22,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 22,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 22,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 23,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 23,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 23,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 24,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 24,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 24,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 24,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 25,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 25,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "fg",
+        "min": 25,
+        "pts": 3,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 26,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 26,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 26,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 26,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 27,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 27,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 28,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 28,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 29,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 30,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 30,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 31,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 31,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 32,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 32,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 32,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 32,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 33,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 33,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 34,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 34,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 34,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 34,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 34,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 35,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 36,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 36,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 36,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 37,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 37,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 38,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 38,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 38,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 39,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 40,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 40,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 40,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 41,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 41,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 42,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 43,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 43,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 43,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 44,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 44,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 44,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 44,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 44,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 45,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 45,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 46,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 46,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 46,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 47,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 47,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 48,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 48,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 48,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 49,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 50,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 50,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 50,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 51,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 52,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 52,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 53,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 54,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 55,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 55,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 55,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 56,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 56,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 56,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 56,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 57,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 57,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 57,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 58,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 58,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 58,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 58,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 59,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "fg",
+        "min": 59,
+        "pts": 3,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 60,
+        "pts": 7,
+        "side": "us",
+      },
+      {
+        "kind": "td",
+        "min": 60,
+        "pts": 7,
+        "side": "us",
+      },
+    ],
+    "fixed": false,
+    "home": true,
+    "line": {},
+    "md": 1,
+    "opp": 0,
+    "played": true,
+    "started": true,
+    "them": 17,
+    "us": 1000,
+  },
+  "goAhead": {
+    "kind": "td",
+    "min": 1,
+    "pts": 7,
+    "side": "us",
+  },
+  "periods": {
+    "them": [
+      7,
+      10,
+      0,
+      0,
+    ],
+    "us": [
+      245,
+      241,
+      273,
+      241,
+    ],
+  },
+  "shape": "rout",
+}
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m209:76[22m[39m
+    [90m207| [39m    /* 1000 first: with no ceiling the NFL's story law answers it at o…
+    [90m208| [39m    for (const big of [GM_SCORE_CEILING + 1, 250000, 1e21, Number.MAX_…
+    [90m209| [39m      expect(gameStory(anything, told(big, 17), 'home'), `home on ${bi…
+    [90m   | [39m                                                                           [31m^[39m
+    [90m210| [39m      expect(gameStory(anything, told(17, big), 'away'), `away on ${bi…
+    [90m211| [39m      expect(gameStory(NFL_GAME_DAY, told(big, 17), 'home'), `the NFL,…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameDay.test.ts[2m > [22mthe save field: the last told game[2m > [22manswers null for every field damaged, one at a time, and never throws
+[31m[1mAssertionError[22m: home on 1000: expected { v: 1, …(7) } to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+{
+  "away": "BBB",
+  "awayScore": 24,
+  "home": "AAA",
+  "homeScore": 1000,
+  "key": "2026|w6|AAA|BBB|23-20",
+  "v": 1,
+  "where": "w6",
+  "winner": "AAA",
+}
+
+[36m [2m❯[22m src/lib/gmGameDay.test.ts:[2m404:86[22m[39m
+    [90m402| [39m    [34mexpect[39m([34mreadGmLastGame[39m(top[33m,[39m isClub))[33m.[39m[34mtoEqual[39m(top)[33m;[39m
+    [90m403| [39m    for (const big of [GM_SCORE_CEILING + 1, 250000, 1e21, Number.MAX_…
+    [90m404| [39m      expect(readGmLastGame({ ...sound, homeScore: big }, isClub), `ho…
+    [90m   | [39m                                                                                     [31m^[39m
+    [90m405| [39m      expect(readGmLastGame({ ...sound, awayScore: big, winner: 'BBB' …
+    [90m406| [39m      expect(readGmLastGame(JSON.parse(JSON.stringify({ ...sound, home…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameScore.test.ts[2m > [22mdecidedScore, with laws written for the test[2m > [22mrefuses whatever is not two whole scores, one damaged answer at a time
+[31m[1mAssertionError[22m: [1000,3]: expected { home: 1000, away: 3, tries: 1, …(1) } to be null[39m
+
+[32m- Expected:[39m 
+null
+
+[31m+ Received:[39m 
+{
+  "away": 3,
+  "home": 1000,
+  "swapped": false,
+  "tries": 1,
+}
+
+[36m [2m❯[22m src/lib/gmGameScore.test.ts:[2m57:92[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmGameScore.test.ts[2m > [22mdecidedScore, with laws written for the test[2m > [22mcalls a whole number from 0 to the ceiling a score, and nothing else
+[31m[1mAssertionError[22m: 1000: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/lib/gmGameScore.test.ts:[2m77:189[22m[39m
+    [90m 75| [39m  it('calls a whole number from 0 to the ceiling a score, and nothing …
+    [90m 76| [39m    for (const ok of [0, 1, 69, GM_SCORE_CEILING]) expect(isGmScore(ok…
+    [90m 77| [39m    for (const bad of [-1, 0.5, GM_SCORE_CEILING + 1, 250000, 1e21, Nu…
+    [90m   | [39m                                                                                                                                                                                            [31m^[39m
+    [90m 78| [39m    expect(decidedScore(scripted([[GM_SCORE_CEILING, 3]]), home, 'k'))…
+    [90m 79| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m3 failed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m58 passed[39m[22m[90m (63)[39m
+[2m   Start at [22m 19:28:56
+[2m   Duration [22m 1.82s[2m (transform 348ms, setup 192ms, collect 564ms, tests 1.18s, environment 1.35s, prepare 454ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the saved bracket%3A optional%2C guarded and repairable > reads a sound save and refuses every field damaged%2C one at a time%2C without ever throwing,line=285,column=94::AssertionError: homeScore = 1000: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ damaged src/lib/gmBracket.test.ts:285:94%0A ❯ src/lib/gmBracket.test.ts:294:5%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > gameStory fails closed > for a final above the ceiling%2C without ever asking the law,line=209,column=76::AssertionError: home on 1000: expected { Object (game, periods, ...) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "deciding": [%0A    {%0A      "kind": "td",%0A      "min": 1,%0A      "pts": 7,%0A      "side": "us",%0A    },%0A    {%0A      "kind": "td",%0A      "min": 60,%0A      "pts": 7,%0A      "side": "us",%0A    },%0A  ],%0A  "game": {%0A    "events": [%0A      {%0A        "kind": "td",%0A        "min": 1,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 1,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 1,%0A        "pts": 7,%0A        "side": "them",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 2,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 2,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 3,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 3,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 4,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 4,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 4,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 5,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 6,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 7,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 7,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 7,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 8,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 9,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 9,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 9,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 9,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 9,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 10,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 11,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 11,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 11,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 11,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 12,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 12,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 13,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 13,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 14,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 14,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 14,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 15,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 15,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 15,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 16,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 16,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 17,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 17,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 18,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 18,%0A        "pts": 7,%0A        "side": "them",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 19,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 19,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 19,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 20,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 21,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 21,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "fg",%0A        "min": 21,%0A        "pts": 3,%0A        "side": "them",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 22,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 22,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 22,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 23,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 23,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 23,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 24,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 24,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 24,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 24,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 25,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 25,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "fg",%0A        "min": 25,%0A        "pts": 3,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 26,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 26,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 26,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 26,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 27,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 27,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 28,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 28,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 29,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 30,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 30,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 31,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 31,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 32,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 32,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 32,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 32,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 33,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 33,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 34,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 34,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 34,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 34,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 34,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 35,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 36,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 36,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 36,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 37,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 37,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 38,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 38,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 38,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 39,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 40,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 40,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 40,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 41,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 41,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 42,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 43,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 43,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 43,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 44,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 44,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 44,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 44,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 44,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 45,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 45,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 46,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 46,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 46,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 47,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 47,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 48,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 48,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 48,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 49,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 50,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 50,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 50,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 51,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 52,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 52,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 53,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 54,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 55,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 55,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 55,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 56,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 56,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 56,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 56,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 57,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 57,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 57,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 58,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 58,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 58,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 58,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 59,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "fg",%0A        "min": 59,%0A        "pts": 3,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 60,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A      {%0A        "kind": "td",%0A        "min": 60,%0A        "pts": 7,%0A        "side": "us",%0A      },%0A    ],%0A    "fixed": false,%0A    "home": true,%0A    "line": {},%0A    "md": 1,%0A    "opp": 0,%0A    "played": true,%0A    "started": true,%0A    "them": 17,%0A    "us": 1000,%0A  },%0A  "goAhead": {%0A    "kind": "td",%0A    "min": 1,%0A    "pts": 7,%0A    "side": "us",%0A  },%0A  "periods": {%0A    "them": [%0A      7,%0A      10,%0A      0,%0A      0,%0A    ],%0A    "us": [%0A      245,%0A      241,%0A      273,%0A      241,%0A    ],%0A  },%0A  "shape": "rout",%0A}%0A%0A ❯ src/lib/gmGameDay.test.ts:209:76%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > the save field%3A the last told game > answers null for every field damaged%2C one at a time%2C and never throws,line=404,column=86::AssertionError: home on 1000: expected { v: 1, …(7) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "away": "BBB",%0A  "awayScore": 24,%0A  "home": "AAA",%0A  "homeScore": 1000,%0A  "key": "2026|w6|AAA|BBB|23-20",%0A  "v": 1,%0A  "where": "w6",%0A  "winner": "AAA",%0A}%0A%0A ❯ src/lib/gmGameDay.test.ts:404:86%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameScore.test.ts,title=src/lib/gmGameScore.test.ts > decidedScore%2C with laws written for the test > refuses whatever is not two whole scores%2C one damaged answer at a time,line=57,column=92::AssertionError: [1000,3]: expected { home: 1000, away: 3, tries: 1, …(1) } to be null%0A%0A- Expected: %0Anull%0A%0A+ Received: %0A{%0A  "away": 3,%0A  "home": 1000,%0A  "swapped": false,%0A  "tries": 1,%0A}%0A%0A ❯ src/lib/gmGameScore.test.ts:57:92%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameScore.test.ts,title=src/lib/gmGameScore.test.ts > decidedScore%2C with laws written for the test > calls a whole number from 0 to the ceiling a score%2C and nothing else,line=77,column=189::AssertionError: 1000: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ src/lib/gmGameScore.test.ts:77:189%0A%0A

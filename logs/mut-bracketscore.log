@@ -1,0 +1,57 @@
+fix-mut bracketscore: applied to src/lib/gmBracket.ts
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/gmGameScore.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 183[2mms[22m[39m
+ [31m❯[39m src/lib/gmBracket.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 230[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mis the fourteen club format of the two sourced ledger, for the seasons that ledger gives it[32m 2[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mgives each conference one bye, to its top seed, and thirteen single games[32m 2[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mplays the worked example of the "?" the way the "?" tells it[32m 1[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mpairs the top seed with the lowest seed left whoever came through, and the better seed hosts[32m 11[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mgives the home side of every game before the title game to the better seed, in both conferences, whoever wins[32m 15[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22mis the same bracket all at once and a round a press, and never touches the save it is handed[32m 7[2mms[22m[39m
+   [32m✓[39m the NFL bracket as data[2m > [22msays in its "?" what is dated and what is this sim own lean, and the lean is the engine arithmetic[32m 15[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays a play in and best of seven rounds, a game at a time or a round at a time[32m 3[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays a format with an order of its own in that order, and still a round at a time[32m 1[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mrefuses a game whose winner is neither side, and plays nothing for a tie it cannot name[32m 1[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mplays no tie out of turn: a tie that can be named is still not played before an earlier week is settled[32m 1[2mms[22m[39m
+   [32m✓[39m the shapes the other front offices bring[2m > [22mnever makes a save the validator condemns, whatever tie is asked for next[32m 140[2mms[22m[39m
+[31m   [31m×[31m the saved bracket: optional, guarded and repairable[2m > [22mreads a sound save and refuses every field damaged, one at a time, without ever throwing[39m[32m 18[2mms[22m[39m
+[31m     → homeScore = 1000: expected true to be false // Object.is equality[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mnames what is wrong with a save that reads but does not replay[32m 5[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mhands a sound save back untouched, rebuilds from the same seeds when they still read, and from fresh ones when they do not[32m 3[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22masks the league about the seeds of a save that replays soundly, and starts again from fresh ones when it says no[32m 1[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22manswers a save with no block like a damaged one, which is why a board asks first whether the save is in its postseason[32m 0[2mms[22m[39m
+   [32m✓[39m the saved bracket: optional, guarded and repairable[2m > [22mthrows when the fresh seeds themselves do not open a bracket, and only then[32m 1[2mms[22m[39m
+ [32m✓[39m src/lib/gmGameDay.test.ts [2m([22m[2m31 tests[22m[2m)[22m[33m 643[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/lib/gmBracket.test.ts[2m > [22mthe saved bracket: optional, guarded and repairable[2m > [22mreads a sound save and refuses every field damaged, one at a time, without ever throwing
+[31m[1mAssertionError[22m: homeScore = 1000: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m damaged src/lib/gmBracket.test.ts:[2m285:94[22m[39m
+    [90m283| [39m        [35mconst[39m bad [33m=[39m [34mcopy[39m(sound) [35mas[39m [33mRecord[39m[33m<[39mstring[33m,[39m any[33m>[39m[33m;[39m
+    [90m284| [39m        [34medit[39m(bad[33m,[39m v[33m,[39m field)[33m;[39m
+    [90m285| [39m        expect(isGmBracketSave(bad, isClub), `${field} = ${JSON.string…
+    [90m   | [39m                                                                                             [31m^[39m
+    [90m286| [39m        expect(bracketProblems(NFL_BRACKET, bad as GmBracketSave, isCl…
+    [90m287| [39m        expect(repairGmBracket(NFL_BRACKET, bad, 2026, () => SEEDS, is…
+[90m [2m❯[22m src/lib/gmBracket.test.ts:[2m294:5[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m62 passed[39m[22m[90m (63)[39m
+[2m   Start at [22m 19:29:02
+[2m   Duration [22m 1.69s[2m (transform 366ms, setup 187ms, collect 527ms, tests 1.06s, environment 1.26s, prepare 267ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the saved bracket%3A optional%2C guarded and repairable > reads a sound save and refuses every field damaged%2C one at a time%2C without ever throwing,line=285,column=94::AssertionError: homeScore = 1000: expected true to be false // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- false%0A+ true%0A%0A ❯ damaged src/lib/gmBracket.test.ts:285:94%0A ❯ src/lib/gmBracket.test.ts:294:5%0A%0A

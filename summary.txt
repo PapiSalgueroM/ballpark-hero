@@ -1,0 +1,17 @@
+mut-noceiling exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameScore.test.ts,title=src/lib/gmGameScore.test.ts > decidedScore%2C with laws written for the test 
+mut-nolawmax exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > gameStory fails closed > for a final above what the
+mut-bracketscore exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the saved bracket%3A optional%2C guarded and repair
+mut-noseedsok exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the saved bracket%3A optional%2C guarded and repair
+mut-nofreshcheck exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the saved bracket%3A optional%2C guarded and repair
+mut-outofturn exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the shapes the other front offices bring > never ma
+mut-cchost exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmBracket.test.ts,title=src/lib/gmBracket.test.ts > the NFL bracket as data > gives the home side of ev
+mut-quickdropsbeyond exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameScore.test.ts,title=src/lib/gmGameScore.test.ts > quickGame and toldWinner > carries the mark of 
+mut-savedropsbeyond exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > is still that ga
+mut-readdropsbeyond exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > is still that ga
+mut-storyignoresbeyond exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > gameStory and a law that throws > answers null%2C w
+mut-nobeyondlaw exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > is told nothing 
+mut-scorethrows exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameScore.test.ts,title=src/lib/gmGameScore.test.ts > decidedScore%2C with laws written for the test 
+mut-storythrows exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > gameStory and a law that throws > leaves the quick 
+mut-goahead exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > has the last per
+mut-regulation exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/lib/gmGameDay.test.ts,title=src/lib/gmGameDay.test.ts > a game that went past regulation > has the last per
+clean-after exit=0 2s |    Duration  1.73s (transform 391ms, setup 192ms, collect 573ms, tests 1.10s, environment 1.28s, prepare 265ms)
