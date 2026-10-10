@@ -1,0 +1,93 @@
+NEGATIVE CONTROL ON: the quick path kicks off a second half of its own, so the two ways stop agreeing; section 6 must go red
+1) The clock: stoppage time on the screen, for both halves, from the half it followed
+   348 halves: the board is the base, the half's stoppages and the roll in 347; 1 (0.29%) kept a board that a change at the half's last minute played out differently
+     late change: Everton Everton 2-0 Newcastle: 90+8 after a half with 3 stoppages
+   174 reports rendered, every one showing 45+n' and 90+m' as the screen's own row
+   first half board 1 to 5 (mean 3.70), second half 2 to 8 (mean 6.03)
+2) Possession: two shares of one hundred, both wearing a percent sign
+   174 pairs on screen, every one summing to 100 and every one the sim's own share
+3) Both clubs named, counted rather than string matched
+   174 reports name the other club 4 to 12 times (mean 7.3, floor 3.5), and 12 live viewers name both clubs
+4) Every text block centred inside the card
+   174 cards rendered, 0 left aligned blocks, every card centring its text
+5) Momentum reads as swings, not as one number
+   174 charts: 2.91 sign changes a match (floor 1.9), 85.6 percent reach both sides (floor 62)
+   every chart drew the report's own nine buckets
+6) Historical no-coach baseline: the same fixture and seed finish identically
+  FAIL [6]: Everton week 0: the two ways played different matches
+        live : {"home":"Everton","away":"Crystal Palace","hg":2,"ag":3,"decidedBy":"regular","mine":["Thierno Barry 39 Kiernan Dewsbury-Hall","Thierno Barry 65 "],"theirs":["Quinten Timber 35","Daichi Kamada 77","Jø
+        quick: {"home":"Everton","away":"Crystal Palace","hg":3,"ag":3,"decidedBy":"regular","mine":["Vitaliy Mykolenko 2 James Tarkowski","Kiernan Dewsbury-Hall 29 ","Vitaliy Mykolenko 49 Kiernan Dewsbury-Hall"],"t
+  FAIL [6]: Everton week 1: the two ways played different matches
+        live : {"home":"Bournemouth","away":"Everton","hg":1,"ag":0,"decidedBy":"regular","mine":[],"theirs":["Justin Kluivert 39"],"poss":45,"xg":0.54,"oppXg":1.35,"shots":5,"added":{"h1":4,"h2":3},"momentum":[-0.8
+        quick: {"home":"Bournemouth","away":"Everton","hg":1,"ag":1,"decidedBy":"regular","mine":["Hayden Hackney 88 Thierno Barry"],"theirs":["Rayan 20"],"poss":42,"xg":1.27,"oppXg":1.5,"shots":12,"added":{"h1":4,"
+  FAIL [6]: Everton week 2: the two ways played different matches
+        live : {"home":"Everton","away":"Manchester United","hg":0,"ag":2,"decidedBy":"regular","mine":[],"theirs":["Bryan Mbeumo 56","Mason Mount 74"],"poss":49,"xg":0.69,"oppXg":1.61,"shots":7,"added":{"h1":2,"h2"
+        quick: {"home":"Everton","away":"Manchester United","hg":1,"ag":3,"decidedBy":"regular","mine":["Kiernan Dewsbury-Hall 6 "],"theirs":["Matheus Cunha 2","Kobbie Mainoo 11","Kobbie Mainoo 45"],"poss":48,"xg":1
+  FAIL [6]: Everton week 3: the two ways played different matches
+        live : {"home":"Tottenham","away":"Everton","hg":2,"ag":1,"decidedBy":"regular","mine":["Thierno Barry 17 "],"theirs":["Omar Marmoush 37","Mohammed Kudus 62"],"poss":41,"xg":0.92,"oppXg":1.72,"shots":9,"adde
+        quick: {"home":"Tottenham","away":"Everton","hg":2,"ag":1,"decidedBy":"regular","mine":["Brennan Johnson 62 James Tarkowski"],"theirs":["Lucas Bergvall 66","Archie Gray 90"],"poss":45,"xg":0.65,"oppXg":2.13,
+  FAIL [6]: Everton week 5: the two ways played different matches
+        live : {"home":"Everton","away":"Ipswich Town","hg":1,"ag":0,"decidedBy":"regular","mine":["Thierno Barry 44 "],"theirs":[],"poss":53,"xg":1.69,"oppXg":0.96,"shots":15,"added":{"h1":3,"h2":5},"momentum":[0.2
+        quick: {"home":"Everton","away":"Ipswich Town","hg":1,"ag":1,"decidedBy":"regular","mine":["Thierno Barry 69 Jarrad Branthwaite"],"theirs":["Anis Mehmeti 49"],"poss":50,"xg":1.33,"oppXg":1.27,"shots":13,"add
+  FAIL [6]: Everton week 6: the two ways played different matches
+        live : {"home":"Hull City","away":"Everton","hg":3,"ag":0,"decidedBy":"regular","mine":[],"theirs":["Tim Iroegbunam 3","Robinio Vaz 45","Robinio Vaz 55"],"poss":47,"xg":0.32,"oppXg":2.17,"shots":6,"added":{"
+        quick: {"home":"Hull City","away":"Everton","hg":2,"ag":0,"decidedBy":"regular","mine":[],"theirs":["Brooke Norton-Cuffy 23","Robinio Vaz 37"],"poss":45,"xg":0.86,"oppXg":1.46,"shots":9,"added":{"h1":4,"h2":
+  FAIL [6]: Real Madrid week 0: the two ways played different matches
+        live : {"home":"Atlético Madrid","away":"Real Madrid","hg":3,"ag":2,"decidedBy":"regular","mine":["Jude Bellingham 4 ","Federico Valverde 67 Jude Bellingham"],"theirs":["Julián Alvarez 59","Julián Alvarez 63
+        quick: {"home":"Atlético Madrid","away":"Real Madrid","hg":3,"ag":2,"decidedBy":"regular","mine":["Vinicius Junior 15 Ibrahima Konaté","Jude Bellingham 21 "],"theirs":["Johnny Cardoso 12","Julián Alvarez 45"
+  FAIL [6]: Real Madrid week 1: the two ways played different matches
+        live : {"home":"Real Madrid","away":"Deportivo La Coruña","hg":3,"ag":1,"decidedBy":"regular","mine":["Jude Bellingham 2 Federico Valverde","Kylian Mbappé 33 Jude Bellingham","Federico Valverde 89 Vinicius J
+        quick: {"home":"Real Madrid","away":"Deportivo La Coruña","hg":1,"ag":0,"decidedBy":"regular","mine":["Leo Román 12 "],"theirs":[],"poss":67,"xg":1.96,"oppXg":0.36,"shots":15,"added":{"h1":4,"h2":5},"momentu
+  FAIL [6]: Real Madrid week 2: the two ways played different matches
+        live : {"home":"Real Madrid","away":"Real Sociedad","hg":5,"ag":2,"decidedBy":"regular","mine":["Rodrygo 21 ","Vinicius Junior 30 ","Kylian Mbappé 38 Federico Valverde","Jude Bellingham 90 ","Sergio Gómez 90
+        quick: {"home":"Real Madrid","away":"Real Sociedad","hg":0,"ag":1,"decidedBy":"regular","mine":[],"theirs":["Mamadou Sarr 45"],"poss":63,"xg":0.99,"oppXg":0.89,"shots":8,"added":{"h1":4,"h2":5},"momentum":[0
+  FAIL [6]: Real Madrid week 3: the two ways played different matches
+        live : {"home":"Real Madrid","away":"PSG","hg":2,"ag":1,"decidedBy":"regular","mine":["Vinicius Junior 20 Jude Bellingham","Vinicius Junior 41 Jude Bellingham"],"theirs":["Ousmane Dembélé 21"],"poss":48,"xg"
+        quick: {"home":"Real Madrid","away":"PSG","hg":0,"ag":3,"decidedBy":"regular","mine":[],"theirs":["Warren Zaïre-Emery 5","Warren Zaïre-Emery 25","Warren Zaïre-Emery 82"],"poss":48,"xg":0.66,"oppXg":2.47,"sho
+  FAIL [6]: Real Madrid week 4: the two ways played different matches
+        live : {"home":"Málaga","away":"Real Madrid","hg":1,"ag":2,"decidedBy":"regular","mine":["Vinicius Junior 73 Arda Güler","Jude Bellingham 79 "],"theirs":["Jens Cajuste 87"],"poss":67,"xg":1.96,"oppXg":1.06,"
+        quick: {"home":"Málaga","away":"Real Madrid","hg":1,"ag":1,"decidedBy":"regular","mine":["Vinicius Junior 85 Arda Güler"],"theirs":["Jens Cajuste 5"],"poss":68,"xg":2.01,"oppXg":0.41,"shots":14,"added":{"h1"
+  FAIL [6]: Real Madrid week 5: the two ways played different matches
+        live : {"home":"Real Madrid","away":"Athletic Club","hg":1,"ag":0,"decidedBy":"regular","mine":["Ibrahima Konaté 33 Vinicius Junior"],"theirs":[],"poss":58,"xg":1.25,"oppXg":0.11,"shots":11,"added":{"h1":3,"
+        quick: {"home":"Real Madrid","away":"Athletic Club","hg":1,"ag":1,"decidedBy":"regular","mine":["Álvaro Carreras 46 "],"theirs":["Nico Williams 39"],"poss":60,"xg":1.62,"oppXg":0.78,"shots":15,"added":{"h1":
+  FAIL [6]: Wolves week 0: the two ways played different matches
+        live : {"home":"Wolves","away":"Derby County","hg":2,"ag":0,"decidedBy":"regular","mine":["Adam Armstrong 50 ","Bertrand Traoré 66 "],"theirs":[],"poss":61,"xg":1.95,"oppXg":0.07,"shots":16,"added":{"h1":1,"
+        quick: {"home":"Wolves","away":"Derby County","hg":1,"ag":1,"decidedBy":"regular","mine":["Adam Armstrong 19 Yerson Mosquera"],"theirs":["Carlton Morris 85"],"poss":62,"xg":1.81,"oppXg":0.96,"shots":14,"adde
+  FAIL [6]: Wolves week 1: the two ways played different matches
+        live : {"home":"Millwall","away":"Wolves","hg":2,"ag":1,"decidedBy":"regular","mine":["Mateus Mané 69 "],"theirs":["Romain Esse 47","Casper De Norre 73"],"poss":53,"xg":1.45,"oppXg":1.37,"shots":12,"added":{
+        quick: {"home":"Millwall","away":"Wolves","hg":0,"ag":2,"decidedBy":"regular","mine":["Mateus Mané 12 Yerson Mosquera","Rafiki Saïd 13 Adam Armstrong"],"theirs":[],"poss":54,"xg":1.35,"oppXg":0.84,"shots":12
+  FAIL [6]: Wolves week 2: the two ways played different matches
+        live : {"home":"Wolves","away":"Cardiff City","hg":3,"ag":0,"decidedBy":"regular","mine":["Mateus Mané 40 Yerson Mosquera","Fer López 64 ","Jean-Ricner Bellegarde 66 Fer López"],"theirs":[],"poss":66,"xg":3.
+        quick: {"home":"Wolves","away":"Cardiff City","hg":0,"ag":1,"decidedBy":"regular","mine":[],"theirs":["Yousef Salech 53"],"poss":69,"xg":1.12,"oppXg":0.48,"shots":11,"added":{"h1":1,"h2":7},"momentum":[0.9,0
+  FAIL [6]: Wolves week 3: the two ways played different matches
+        live : {"home":"Stoke City","away":"Wolves","hg":1,"ag":5,"decidedBy":"regular","mine":["Adam Armstrong 1 Bertrand Traoré","Rafiki Saïd 6 Bertrand Traoré","Jean-Ricner Bellegarde 89 ","Mateus Mané 90 Rafiki 
+        quick: {"home":"Stoke City","away":"Wolves","hg":1,"ag":1,"decidedBy":"regular","mine":["Rafiki Saïd 40 "],"theirs":["Jesurun Rak-Sakyi 90"],"poss":55,"xg":1.27,"oppXg":0.96,"shots":13,"added":{"h1":3,"h2":7
+  FAIL [6]: Wolves week 5: the two ways played different matches
+        live : {"home":"Wolves","away":"Bristol City","hg":2,"ag":2,"decidedBy":"regular","mine":["Fer López 39 ","Rafiki Saïd 45 Adam Armstrong"],"theirs":["Max Bird 29","Scott Twine 48"],"poss":58,"xg":1.62,"oppXg
+        quick: {"home":"Wolves","away":"Bristol City","hg":0,"ag":0,"decidedBy":"regular","mine":[],"theirs":[],"poss":59,"xg":0.91,"oppXg":0.8,"shots":10,"added":{"h1":4,"h2":6},"momentum":[-0.66,0.82,-0.66,0.82,0.
+  FAIL [6]: Wolves week 6: the two ways played different matches
+        live : {"home":"West Brom","away":"Wolves","hg":3,"ag":2,"decidedBy":"regular","mine":["Bertrand Traoré 39 Adam Armstrong","Rafiki Saïd 81 Bertrand Traoré"],"theirs":["Josh Maja 14","Josh Maja 53","Mikey Joh
+        quick: {"home":"West Brom","away":"Wolves","hg":0,"ag":3,"decidedBy":"regular","mine":["Adam Armstrong 28 ","Rafiki Saïd 45 Fer López","Mateus Mané 74 Yerson Mosquera"],"theirs":[],"poss":52,"xg":2,"oppXg":0
+  FAIL [6]: Ajax week 0: the two ways played different matches
+        live : {"home":"Ajax","away":"ADO Den Haag","hg":3,"ag":0,"decidedBy":"regular","mine":["Jorthy Mokio 23 Maher Carrizo","Maher Carrizo 57 Caio Henrique","Oscar Gloukh 90 Caio Henrique"],"theirs":[],"poss":68
+        quick: {"home":"Ajax","away":"ADO Den Haag","hg":0,"ag":0,"decidedBy":"regular","mine":[],"theirs":[],"poss":69,"xg":1.38,"oppXg":0.41,"shots":13,"added":{"h1":1,"h2":2},"momentum":[-0.58,-0.09,0.9,0.4,0.3,0
+  FAIL [6]: Ajax week 1: the two ways played different matches
+        live : {"home":"Ajax","away":"NEC Nijmegen","hg":2,"ag":0,"decidedBy":"regular","mine":["Tolu Arokodare 48 Oscar Gloukh","Tolu Arokodare 90 Oscar Gloukh"],"theirs":[],"poss":65,"xg":2,"oppXg":0.07,"shots":15
+        quick: {"home":"Ajax","away":"NEC Nijmegen","hg":2,"ag":0,"decidedBy":"regular","mine":["Tolu Arokodare 73 ","Julian Brandt 74 Simon Adingra"],"theirs":[],"poss":68,"xg":2.31,"oppXg":0.35,"shots":17,"added":
+  FAIL [6]: Ajax week 2: the two ways played different matches
+        live : {"home":"PSV","away":"Ajax","hg":0,"ag":0,"decidedBy":"regular","mine":[],"theirs":[],"poss":47,"xg":1.01,"oppXg":0.64,"shots":11,"added":{"h1":2,"h2":5},"momentum":[0.72,0.72,0.72,-0.02,-0.02,-0.02,0
+        quick: {"home":"PSV","away":"Ajax","hg":1,"ag":0,"decidedBy":"regular","mine":[],"theirs":["Paul Wanner 31"],"poss":47,"xg":0.92,"oppXg":1.36,"shots":9,"added":{"h1":5,"h2":7},"momentum":[-0.02,-0.08,0.35,-1
+  FAIL [6]: Ajax week 3: the two ways played different matches
+        live : {"home":"Ajax","away":"PEC Zwolle","hg":4,"ag":0,"decidedBy":"regular","mine":["Jorthy Mokio 11 Julian Brandt","Simon Adingra 40 Maher Carrizo","Maher Carrizo 45 Oscar Gloukh","Oscar Gloukh 90 "],"the
+        quick: {"home":"Ajax","away":"PEC Zwolle","hg":4,"ag":0,"decidedBy":"regular","mine":["Tolu Arokodare 20 ","Tolu Arokodare 24 ","Tolu Arokodare 45 Maher Carrizo","Oscar Gloukh 79 "],"theirs":[],"poss":71,"xg
+  FAIL [6]: Ajax week 5: the two ways played different matches
+        live : {"home":"Excelsior","away":"Ajax","hg":0,"ag":1,"decidedBy":"regular","mine":["Oliver Edvardsen 32 "],"theirs":[],"poss":64,"xg":1.7,"oppXg":0.51,"shots":13,"added":{"h1":3,"h2":6},"momentum":[0.9,-0.
+        quick: {"home":"Excelsior","away":"Ajax","hg":0,"ag":5,"decidedBy":"regular","mine":["Oliver Edvardsen 16 Simon Adingra","Maher Carrizo 18 Julian Brandt","Kasper Dolberg 22 Julian Brandt","Oliver Edvardsen 3
+  FAIL [6]: Ajax week 6: the two ways played different matches
+        live : {"home":"Ajax","away":"Utrecht","hg":1,"ag":0,"decidedBy":"regular","mine":["Kasper Dolberg 47 Caio Henrique"],"theirs":[],"poss":62,"xg":1.59,"oppXg":0.47,"shots":12,"added":{"h1":2,"h2":6},"momentum
+        quick: {"home":"Ajax","away":"Utrecht","hg":5,"ag":1,"decidedBy":"regular","mine":["Oscar Gloukh 2 ","Simon Adingra 36 Kasper Dolberg","Kasper Dolberg 50 Julian Brandt","Caio Henrique 78 Kasper Dolberg","Kas
+   24 fixtures replayed both ways, 15 distinct scorelines, every pair identical down to the momentum series
+  FAIL [6]: 2 places kick a match off, and there is one
+   the engine plays a match in 1 places, both off one kick off, and each of the two screens offers exactly 2 ways in (7 buttons on the Match Centre)
+
+simMatchScreen: PASS. Effective twoengines fault failed only section 6; untouched baseline passed and source bytes held.

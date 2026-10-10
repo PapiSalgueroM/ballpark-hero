@@ -1,0 +1,15 @@
+1) Quick sim path (Everton, full season)
+   39 matches, mean |xG - goals| = 0.50, 41 goals scored
+2) Halftime path with substitutions
+3) Pre-match facts
+   next: Hull City, odds 39/26/35, they have 2 names to watch
+4) H2H across seasons
+5) Assists are real teammates, stoppage and attendance stay in band
+   25 matches, 36 assists verified, stoppage and crowds in band
+   custom ground: 3 home crowds fit the chosen 28k capacity
+6) Their eleven get rated too, honestly
+   12 sheets checked: eleven starters plus their subs (12 sheets with men who came on, floor 1), 15 scorers all on the pitch, 6 clean-sheet keepers floored right
+   thin-world control: 2 Lustenau meetings, all sheetless as designed
+7) Two yellows is a red, and nobody leaves before his own last goal
+   240 matches: 7 second yellows (2.9%), 17 straight reds, 10.0% of matches ended a man short
+simMatchDetail: all green

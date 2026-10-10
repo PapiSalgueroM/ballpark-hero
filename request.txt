@@ -1,0 +1,31 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000 > /tmp/vitest-all.log 2>&1; s=$?; grep -E "FAIL|Test Files|Tests " /tmp/vitest-all.log | tail -30 | cut -c1-260; exit $s
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-control: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+save5: f=0; for i in 1 2 3 4 5; do node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/save-$i.log 2>&1 || f=$((f+1)); grep -E "Tests " /tmp/save-$i.log | tail -1; done; echo "clubManagerSave alone: $f of 5 runs red"; exit $f
+dailydeals: export TMPDIR=/tmp/tf-47 TEMP=/tmp/tf-47 TMP=/tmp/tf-47; mkdir -p $TMPDIR; node scripts/simDailyDeals.mjs
+dailydeals-bind: export TMPDIR=/tmp/tf-48 TEMP=/tmp/tf-48 TMP=/tmp/tf-48; mkdir -p $TMPDIR; DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+dailydeals-binddeadline: export TMPDIR=/tmp/tf-49 TEMP=/tmp/tf-49 TMP=/tmp/tf-49; mkdir -p $TMPDIR; DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
+dailydeals-verify-as: git worktree add -f /tmp/base 54e3820a >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; export TMPDIR=/tmp/tf-50 TEMP=/tmp/tf-50 TMP=/tmp/tf-50; mkdir -p $TMPDIR; node scripts/simDailyDeals.mjs --root /tmp/base --print --verify
+simManagerHotSeat: export TMPDIR=/tmp/tf-51 TEMP=/tmp/tf-51 TMP=/tmp/tf-51; mkdir -p $TMPDIR; node scripts/simManagerHotSeat.mjs
+simDeadlineDay: export TMPDIR=/tmp/tf-52 TEMP=/tmp/tf-52 TMP=/tmp/tf-52; mkdir -p $TMPDIR; node scripts/simDeadlineDay.mjs
+simDailyClubPool: export TMPDIR=/tmp/tf-53 TEMP=/tmp/tf-53 TMP=/tmp/tf-53; mkdir -p $TMPDIR; node scripts/simDailyClubPool.mjs
+simCmVar-all: export TMPDIR=/tmp/tf-54 TEMP=/tmp/tf-54 TMP=/tmp/tf-54; mkdir -p $TMPDIR; CM_VAR_CONTROL=all node scripts/simCmVar.mjs
+cmfix-all: export TMPDIR=/tmp/tf-55 TEMP=/tmp/tf-55 TMP=/tmp/tf-55; mkdir -p $TMPDIR; CM_REAL_FIXTURE_CONTROL=all node scripts/simCmRealFixtures.mjs
+appeal: export TMPDIR=/tmp/tf-56 TEMP=/tmp/tf-56 TMP=/tmp/tf-56; mkdir -p $TMPDIR; node scripts/simManagerAppealIsolation.mjs
+simLiveSimMotion: export TMPDIR=/tmp/tf-57 TEMP=/tmp/tf-57 TMP=/tmp/tf-57; mkdir -p $TMPDIR; node scripts/simLiveSimMotion.mjs
+simClubManager: export TMPDIR=/tmp/tf-58 TEMP=/tmp/tf-58 TMP=/tmp/tf-58; mkdir -p $TMPDIR; node scripts/simClubManager.mjs
+simClubManagerSave: export TMPDIR=/tmp/tf-59 TEMP=/tmp/tf-59 TMP=/tmp/tf-59; mkdir -p $TMPDIR; node scripts/simClubManagerSave.mjs
+simLiveMatch: export TMPDIR=/tmp/tf-60 TEMP=/tmp/tf-60 TMP=/tmp/tf-60; mkdir -p $TMPDIR; node scripts/simLiveMatch.mjs
+simFixtureBalance: export TMPDIR=/tmp/tf-61 TEMP=/tmp/tf-61 TMP=/tmp/tf-61; mkdir -p $TMPDIR; node scripts/simFixtureBalance.mjs
+simClubManagerSlots: export TMPDIR=/tmp/tf-62 TEMP=/tmp/tf-62 TMP=/tmp/tf-62; mkdir -p $TMPDIR; node scripts/simClubManagerSlots.mjs
+simMatchDetail: export TMPDIR=/tmp/tf-63 TEMP=/tmp/tf-63 TMP=/tmp/tf-63; mkdir -p $TMPDIR; node scripts/simMatchDetail.mjs
+matchscreen-seedfile: export TMPDIR=/tmp/tf-64 TEMP=/tmp/tf-64 TMP=/tmp/tf-64; mkdir -p $TMPDIR; MATCH_SCREEN_ARTIFACTS=/tmp/fa-msf node scripts/simMatchScreen.mjs
+matchscreen-seed1: export TMPDIR=/tmp/tf-65 TEMP=/tmp/tf-65 TMP=/tmp/tf-65; mkdir -p $TMPDIR; SIM_SEED=1 MATCH_SCREEN_ARTIFACTS=/tmp/fa-ms1 node scripts/simMatchScreen.mjs
+matchscreen-seed2: export TMPDIR=/tmp/tf-66 TEMP=/tmp/tf-66 TMP=/tmp/tf-66; mkdir -p $TMPDIR; SIM_SEED=2 MATCH_SCREEN_ARTIFACTS=/tmp/fa-ms2 node scripts/simMatchScreen.mjs
+matchscreen-seed3: export TMPDIR=/tmp/tf-67 TEMP=/tmp/tf-67 TMP=/tmp/tf-67; mkdir -p $TMPDIR; SIM_SEED=3 MATCH_SCREEN_ARTIFACTS=/tmp/fa-ms3 node scripts/simMatchScreen.mjs
+matchscreen-seed4: export TMPDIR=/tmp/tf-68 TEMP=/tmp/tf-68 TMP=/tmp/tf-68; mkdir -p $TMPDIR; SIM_SEED=4 MATCH_SCREEN_ARTIFACTS=/tmp/fa-ms4 node scripts/simMatchScreen.mjs
+matchscreen-seed5: export TMPDIR=/tmp/tf-69 TEMP=/tmp/tf-69 TMP=/tmp/tf-69; mkdir -p $TMPDIR; SIM_SEED=5 MATCH_SCREEN_ARTIFACTS=/tmp/fa-ms5 node scripts/simMatchScreen.mjs
+matchscreen-flatboard: export TMPDIR=/tmp/tf-70 TEMP=/tmp/tf-70 TMP=/tmp/tf-70; mkdir -p $TMPDIR; MATCH_SCREEN_ARTIFACTS=/tmp/fa-ms-flatboard MATCH_SCREEN_CONTROL=flatboard node scripts/simMatchScreen.mjs
+matchscreen-noclock: export TMPDIR=/tmp/tf-71 TEMP=/tmp/tf-71 TMP=/tmp/tf-71; mkdir -p $TMPDIR; MATCH_SCREEN_ARTIFACTS=/tmp/fa-ms-noclock MATCH_SCREEN_CONTROL=noclock node scripts/simMatchScreen.mjs
+matchscreen-twoengines: export TMPDIR=/tmp/tf-72 TEMP=/tmp/tf-72 TMP=/tmp/tf-72; mkdir -p $TMPDIR; MATCH_SCREEN_ARTIFACTS=/tmp/fa-ms-twoengines MATCH_SCREEN_CONTROL=twoengines node scripts/simMatchScreen.mjs
