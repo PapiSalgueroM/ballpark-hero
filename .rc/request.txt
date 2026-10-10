@@ -1,0 +1,21 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=1 node scripts/simCmLeagueFixtures.mjs
+expect-wrong: CM_LEAGUE_FIXTURES_EXPECT=2 node scripts/simCmLeagueFixtures.mjs
+ctl-swapvenue: CM_LEAGUE_FIXTURES_CONTROL=swapvenue node scripts/simCmLeagueFixtures.mjs
+ctl-droprow: CM_LEAGUE_FIXTURES_CONTROL=droprow node scripts/simCmLeagueFixtures.mjs
+ctl-twiceinround: CM_LEAGUE_FIXTURES_CONTROL=twiceinround node scripts/simCmLeagueFixtures.mjs
+ctl-ghostclub: CM_LEAGUE_FIXTURES_CONTROL=ghostclub node scripts/simCmLeagueFixtures.mjs
+ctl-receiptdrift: CM_LEAGUE_FIXTURES_CONTROL=receiptdrift node scripts/simCmLeagueFixtures.mjs
+ctl-samehost: CM_LEAGUE_FIXTURES_CONTROL=samehost node scripts/simCmLeagueFixtures.mjs
+ctl-wikihost: CM_LEAGUE_FIXTURES_CONTROL=wikihost node scripts/simCmLeagueFixtures.mjs
+ctl-datein: CM_LEAGUE_FIXTURES_CONTROL=datein node scripts/simCmLeagueFixtures.mjs
+ctl-extrakey: CM_LEAGUE_FIXTURES_CONTROL=extrakey node scripts/simCmLeagueFixtures.mjs
+ctl-refreeze: CM_LEAGUE_FIXTURES_CONTROL=refreeze node scripts/simCmLeagueFixtures.mjs
+ctl-lostfile: CM_LEAGUE_FIXTURES_CONTROL=lostfile node scripts/simCmLeagueFixtures.mjs
+ctl-nosuch: CM_LEAGUE_FIXTURES_CONTROL=nosuch node scripts/simCmLeagueFixtures.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simLiveScores-citedespn: LIVE_CONTROL=citedespn node scripts/simLiveScores.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+premier-pending: git worktree add -q /tmp/prem HEAD && ln -s "$PWD/node_modules" /tmp/prem/node_modules && cd /tmp/prem && git show origin/release-at-int:src/data/clubManagerPremierFixtures2026.ts > src/data/clubManagerPremierFixtures2026.ts && git show origin/release-at-int:scripts/data/clubManagerPremierFixtures2026.receipt.json > scripts/data/clubManagerPremierFixtures2026.receipt.json && CM_LEAGUE_FIXTURES_EXPECT=2 node scripts/simCmLeagueFixtures.mjs
