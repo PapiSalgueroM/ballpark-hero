@@ -1,0 +1,615 @@
+{
+ "base": "http://localhost:4173",
+ "poolSize": 2000,
+ "fixtureRows": 5496,
+ "runs": [
+  {
+   "game": "dart-draft",
+   "viewport": "390x844",
+   "reducedMotion": true,
+   "topic": "Current Stars",
+   "throws": [
+    {
+     "throw": 1,
+     "slot": "GK",
+     "view": "world",
+     "aim": "country fr",
+     "zonesOnMap": []
+    }
+   ],
+   "notes": [],
+   "error": "page.waitForFunction: Timeout 20000ms exceeded.\n    at dartRound (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:205:18)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:338:3",
+   "pageErrors": [],
+   "writes": []
+  },
+  {
+   "game": "dart-draft",
+   "viewport": "1280x900",
+   "reducedMotion": false,
+   "topic": "Current Stars",
+   "throws": [
+    {
+     "throw": 1,
+     "slot": "GK",
+     "view": "world",
+     "aim": "country fr",
+     "zonesOnMap": []
+    }
+   ],
+   "notes": [],
+   "error": "page.waitForFunction: Timeout 20000ms exceeded.\n    at dartRound (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:205:18)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:339:3",
+   "pageErrors": [],
+   "writes": []
+  },
+  {
+   "game": "dart-draft",
+   "viewport": "1280x900",
+   "reducedMotion": false,
+   "topic": "All-Time",
+   "throws": [
+    {
+     "throw": 1,
+     "slot": "GK",
+     "view": "world",
+     "aim": "country fr",
+     "zonesOnMap": []
+    }
+   ],
+   "notes": [],
+   "error": "page.waitForFunction: Timeout 20000ms exceeded.\n    at dartRound (/home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:205:18)\n    at async file:///home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walk.mjs:340:3",
+   "pageErrors": [],
+   "writes": []
+  },
+  {
+   "game": "stat-detective",
+   "viewport": "390x844",
+   "reducedMotion": true,
+   "steps": {
+    "pick": {
+     "scopeShown": true,
+     "scopeText": "Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.",
+     "starsButton": {
+      "top": 675,
+      "bottom": 813,
+      "h": 138
+     },
+     "deepButton": {
+      "top": 825,
+      "bottom": 963,
+      "h": 138
+     },
+     "rulesCard": {
+      "top": 261,
+      "bottom": 659,
+      "h": 398
+     },
+     "viewportHeight": 844,
+     "overflowPx": 0,
+     "caseFiles": [
+      "Stars\n\nBig names having big seasons. Season rating 85 or higher.\n\n523 case files",
+      "Deep Cuts\n\nStarters, sixth men and cult heroes. Season rating 60 to 84.\n\n2,308 case files"
+     ],
+     "starsButtonWithoutScope": {
+      "top": 547,
+      "bottom": 685
+     }
+    },
+    "help": {
+     "scopeShown": true,
+     "box": {
+      "top": 121,
+      "bottom": 723,
+      "h": 602
+     },
+     "text": "Stat Detective rules\n\nStudy the era, position and per 36 minute stat line. Type at least two letters and pick a player. You have eight guesses.\n\nA miss tells you whether your guess shares a franchise with the mystery player.\n\nClues unlock after each of the first six misses when a career profile is available. Without that profile, they unlock after misses 2, 4, 5 and 6.\n\nCareer span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.\n\nExample: a Shared franchise chip means your guess played for the mystery team at some point. After a miss, read the new clue and try another name.\n\nLet's Play!\nClose"
+    },
+    "caseStart": {
+     "input": {
+      "top": 687,
+      "bottom": 737,
+      "h": 50
+     },
+     "cluesBox": {
+      "top": 498,
+      "bottom": 671,
+      "h": 173
+     },
+     "scopeInClues": "Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.",
+     "scopeBox": {
+      "top": 541,
+      "bottom": 621,
+      "h": 80
+     },
+     "viewportHeight": 844,
+     "scrollY": 0,
+     "nameVisible": 0
+    },
+    "suggest": {
+     "options": [
+      "Fixture Guess Three",
+      "Fixture Guess Two1995",
+      "Fixture Guess One1989-2000"
+     ],
+     "titles": [
+      "Career span, season end years",
+      "Career span, season end years",
+      "Career span, season end years"
+     ]
+    },
+    "misses": [
+     {
+      "guess": "Fixture Guess One",
+      "clues": [
+       "Career span: 1990-2001"
+      ],
+      "chip": "Fixture Guess One\n#1\nShared franchise"
+     },
+     {
+      "guess": "Fixture Guess Two",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A"
+      ],
+      "chip": "Fixture Guess Two\n#2\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Guess Three",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3"
+      ],
+      "chip": "Fixture Guess Three\n#3\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Able",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics"
+      ],
+      "chip": "Fixture Decoy Able\n#4\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Baker",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics",
+       "First name starts with: F"
+      ],
+      "chip": "Fixture Decoy Baker\n#5\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Charlie",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics",
+       "First name starts with: F",
+       "Exact season: 1995-96"
+      ],
+      "chip": "Fixture Decoy Charlie\n#6\nNo shared franchise"
+     }
+    ],
+    "afterMisses": {
+     "overflowPx": 0,
+     "scopeStillShown": 1,
+     "pageHeight": 6015
+    },
+    "report": {
+     "dialogText": "Report an Issue\n\nHelp us fix wrong answers or outdated info.\n\nWrong answer\nWrong info\nBug\nIdea\nDuplicate question\nOther\nSubmit Report\nClose",
+     "answerInDialog": false,
+     "submitEnabled": true,
+     "box": {
+      "top": 255,
+      "bottom": 590,
+      "h": 335
+     }
+    },
+    "result": {
+     "kind": "won",
+     "text": "Case closed / Fixture Case Anchor / 1995-96 · Boston Celtics · PG / Cracked it with the case about to close. / 🟩🟩🟩",
+     "overflowPx": 0
+    }
+   },
+   "notes": [],
+   "requests": {
+    "seasons": 25,
+    "spans": [
+     "0+1000 served 1000 order player_name.asc,cohort.asc",
+     "1000+1000 served 1000 order player_name.asc,cohort.asc",
+     "2000+1000 served 829 order player_name.asc,cohort.asc",
+     "3000+1000 served 0 order player_name.asc,cohort.asc",
+     "4000+1000 served 0 order player_name.asc,cohort.asc",
+     "5000+1000 served 0 order player_name.asc,cohort.asc"
+    ],
+    "other": [
+     "live_scores"
+    ]
+   },
+   "pageErrors": [],
+   "writes": [
+    {
+     "method": "POST",
+     "path": "/rest/v1/game_completions"
+    }
+   ]
+  },
+  {
+   "game": "stat-detective",
+   "viewport": "1280x900",
+   "reducedMotion": false,
+   "steps": {
+    "pick": {
+     "scopeShown": true,
+     "scopeText": "Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.",
+     "starsButton": {
+      "top": 479,
+      "bottom": 617,
+      "h": 138
+     },
+     "deepButton": {
+      "top": 479,
+      "bottom": 617,
+      "h": 138
+     },
+     "rulesCard": {
+      "top": 225,
+      "bottom": 463,
+      "h": 238
+     },
+     "viewportHeight": 900,
+     "overflowPx": 0,
+     "caseFiles": [
+      "Stars\n\nBig names having big seasons. Season rating 85 or higher.\n\n523 case files",
+      "Deep Cuts\n\nStarters, sixth men and cult heroes. Season rating 60 to 84.\n\n2,308 case files"
+     ],
+     "starsButtonWithoutScope": {
+      "top": 411,
+      "bottom": 549
+     }
+    },
+    "help": {
+     "scopeShown": true,
+     "box": {
+      "top": 194,
+      "bottom": 728,
+      "h": 534
+     },
+     "text": "Stat Detective rules\n\nStudy the era, position and per 36 minute stat line. Type at least two letters and pick a player. You have eight guesses.\n\nA miss tells you whether your guess shares a franchise with the mystery player.\n\nClues unlock after each of the first six misses when a career profile is available. Without that profile, they unlock after misses 2, 4, 5 and 6.\n\nCareer span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.\n\nExample: a Shared franchise chip means your guess played for the mystery team at some point. After a miss, read the new clue and try another name.\n\nLet's Play!\nClose"
+    },
+    "caseStart": {
+     "input": {
+      "top": 607,
+      "bottom": 657,
+      "h": 50
+     },
+     "cluesBox": {
+      "top": 450,
+      "bottom": 591,
+      "h": 141
+     },
+     "scopeInClues": "Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.",
+     "scopeBox": {
+      "top": 493,
+      "bottom": 541,
+      "h": 48
+     },
+     "viewportHeight": 900,
+     "scrollY": 0,
+     "nameVisible": 0
+    },
+    "suggest": {
+     "options": [
+      "Fixture Guess Three",
+      "Fixture Guess Two1995",
+      "Fixture Guess One1989-2000"
+     ],
+     "titles": [
+      "Career span, season end years",
+      "Career span, season end years",
+      "Career span, season end years"
+     ]
+    },
+    "misses": [
+     {
+      "guess": "Fixture Guess One",
+      "clues": [
+       "Career span: 1990-2001"
+      ],
+      "chip": "Fixture Guess One\n#1\nShared franchise"
+     },
+     {
+      "guess": "Fixture Guess Two",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A"
+      ],
+      "chip": "Fixture Guess Two\n#2\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Guess Three",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3"
+      ],
+      "chip": "Fixture Guess Three\n#3\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Able",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics"
+      ],
+      "chip": "Fixture Decoy Able\n#4\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Baker",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics",
+       "First name starts with: F"
+      ],
+      "chip": "Fixture Decoy Baker\n#5\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Charlie",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics",
+       "First name starts with: F",
+       "Exact season: 1995-96"
+      ],
+      "chip": "Fixture Decoy Charlie\n#6\nNo shared franchise"
+     }
+    ],
+    "afterMisses": {
+     "overflowPx": 0,
+     "scopeStillShown": 1,
+     "pageHeight": 4499
+    },
+    "report": {
+     "dialogText": "Report an Issue\n\nHelp us fix wrong answers or outdated info.\n\nWrong answer\nWrong info\nBug\nIdea\nDuplicate question\nOther\nSubmit Report\nClose",
+     "answerInDialog": false,
+     "submitEnabled": true,
+     "box": {
+      "top": 283,
+      "bottom": 618,
+      "h": 335
+     }
+    },
+    "result": {
+     "kind": "won",
+     "text": "Case closed / Fixture Case Anchor / 1995-96 · Boston Celtics · PG / Cracked it with the case about to close. / 🟩🟩🟩",
+     "overflowPx": 0
+    }
+   },
+   "notes": [],
+   "requests": {
+    "seasons": 25,
+    "spans": [
+     "0+1000 served 1000 order player_name.asc,cohort.asc",
+     "1000+1000 served 1000 order player_name.asc,cohort.asc",
+     "2000+1000 served 829 order player_name.asc,cohort.asc",
+     "3000+1000 served 0 order player_name.asc,cohort.asc",
+     "4000+1000 served 0 order player_name.asc,cohort.asc",
+     "5000+1000 served 0 order player_name.asc,cohort.asc"
+    ],
+    "other": [
+     "live_scores"
+    ]
+   },
+   "pageErrors": [],
+   "writes": [
+    {
+     "method": "POST",
+     "path": "/rest/v1/game_completions"
+    }
+   ]
+  },
+  {
+   "game": "stat-detective",
+   "viewport": "390x844",
+   "reducedMotion": false,
+   "steps": {
+    "pick": {
+     "scopeShown": true,
+     "scopeText": "Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.",
+     "starsButton": {
+      "top": 675,
+      "bottom": 813,
+      "h": 138
+     },
+     "deepButton": {
+      "top": 825,
+      "bottom": 963,
+      "h": 138
+     },
+     "rulesCard": {
+      "top": 261,
+      "bottom": 659,
+      "h": 398
+     },
+     "viewportHeight": 844,
+     "overflowPx": 0,
+     "caseFiles": [
+      "Stars\n\nBig names having big seasons. Season rating 85 or higher.\n\n523 case files",
+      "Deep Cuts\n\nStarters, sixth men and cult heroes. Season rating 60 to 84.\n\n2,308 case files"
+     ],
+     "starsButtonWithoutScope": {
+      "top": 547,
+      "bottom": 685
+     }
+    },
+    "help": {
+     "scopeShown": true,
+     "box": {
+      "top": 148,
+      "bottom": 720,
+      "h": 572
+     },
+     "text": "Stat Detective rules\n\nStudy the era, position and per 36 minute stat line. Type at least two letters and pick a player. You have eight guesses.\n\nA miss tells you whether your guess shares a franchise with the mystery player.\n\nClues unlock after each of the first six misses when a career profile is available. Without that profile, they unlock after misses 2, 4, 5 and 6.\n\nCareer span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.\n\nExample: a Shared franchise chip means your guess played for the mystery team at some point. After a miss, read the new clue and try another name.\n\nLet's Play!\nClose"
+    },
+    "caseStart": {
+     "input": {
+      "top": 687,
+      "bottom": 737,
+      "h": 50
+     },
+     "cluesBox": {
+      "top": 498,
+      "bottom": 671,
+      "h": 173
+     },
+     "scopeInClues": "Career span and Career franchises count every NBA season on file for the player, short stints included. Years are season end years. The files run from 1949-50 to 2024-25, so a career that started earlier or is still going shows only those seasons.",
+     "scopeBox": {
+      "top": 541,
+      "bottom": 621,
+      "h": 80
+     },
+     "viewportHeight": 844,
+     "scrollY": 0,
+     "nameVisible": 0
+    },
+    "suggest": {
+     "options": [
+      "Fixture Guess Three",
+      "Fixture Guess Two1995",
+      "Fixture Guess One1989-2000"
+     ],
+     "titles": [
+      "Career span, season end years",
+      "Career span, season end years",
+      "Career span, season end years"
+     ]
+    },
+    "misses": [
+     {
+      "guess": "Fixture Guess One",
+      "clues": [
+       "Career span: 1990-2001"
+      ],
+      "chip": "Fixture Guess One\n#1\nShared franchise"
+     },
+     {
+      "guess": "Fixture Guess Two",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A"
+      ],
+      "chip": "Fixture Guess Two\n#2\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Guess Three",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3"
+      ],
+      "chip": "Fixture Guess Three\n#3\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Able",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics"
+      ],
+      "chip": "Fixture Decoy Able\n#4\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Baker",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics",
+       "First name starts with: F"
+      ],
+      "chip": "Fixture Decoy Baker\n#5\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Charlie",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics",
+       "First name starts with: F",
+       "Exact season: 1995-96"
+      ],
+      "chip": "Fixture Decoy Charlie\n#6\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Dog",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics",
+       "First name starts with: F",
+       "Exact season: 1995-96"
+      ],
+      "chip": "Fixture Decoy Dog\n#7\nNo shared franchise"
+     },
+     {
+      "guess": "Fixture Decoy Easy",
+      "clues": [
+       "Career span: 1990-2001",
+       "Surname starts with: A",
+       "Career franchises: 3",
+       "Team: Boston Celtics",
+       "First name starts with: F",
+       "Exact season: 1995-96"
+      ],
+      "chip": "Fixture Decoy Easy\n#8\nNo shared franchise"
+     }
+    ],
+    "afterMisses": {
+     "overflowPx": 0,
+     "scopeStillShown": 1,
+     "pageHeight": 6922
+    },
+    "result": {
+     "kind": "lost",
+     "text": "The trail went cold / Fixture Case Anchor / 1995-96 · Boston Celtics · PG / Eight guesses, no name. It happens to the best detectives. / 🟩🟩🟩",
+     "overflowPx": 0
+    }
+   },
+   "notes": [],
+   "requests": {
+    "seasons": 25,
+    "spans": [
+     "0+1000 served 1000 order player_name.asc,cohort.asc",
+     "1000+1000 served 1000 order player_name.asc,cohort.asc",
+     "2000+1000 served 829 order player_name.asc,cohort.asc",
+     "3000+1000 served 0 order player_name.asc,cohort.asc",
+     "4000+1000 served 0 order player_name.asc,cohort.asc",
+     "5000+1000 served 0 order player_name.asc,cohort.asc"
+    ],
+    "other": [
+     "live_scores"
+    ]
+   },
+   "pageErrors": [],
+   "writes": [
+    {
+     "method": "POST",
+     "path": "/rest/v1/game_completions"
+    }
+   ]
+  }
+ ]
+}

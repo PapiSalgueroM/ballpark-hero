@@ -1,0 +1,7 @@
+ERROR dart-draft 390x844: page.waitForFunction: Timeout 20000ms exceeded.
+ERROR dart-draft 1280x900: page.waitForFunction: Timeout 20000ms exceeded.
+ERROR dart-draft 1280x900: page.waitForFunction: Timeout 20000ms exceeded.
+WRITES ATTEMPTED stat-detective 390x844: [{"method":"POST","path":"/rest/v1/game_completions"}]
+WRITES ATTEMPTED stat-detective 1280x900: [{"method":"POST","path":"/rest/v1/game_completions"}]
+WRITES ATTEMPTED stat-detective 390x844: [{"method":"POST","path":"/rest/v1/game_completions"}]
+pools walk: 6 runs, 6 with an error. Evidence and screenshots in /home/runner/work/_temp/rc-out/files
