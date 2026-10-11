@@ -91,7 +91,7 @@ function observe(source, baseline, patches) {
   return text;
 }
 const faultDefinitions = [
-  { id: 'duration', file: CONTRACTS, from: 'contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears)', to: 'contractYears: offeredYears', failures: ['terms', 'homecoming', 'signing', 'boundaries'] },
+  { id: 'duration', file: CONTRACTS, from: 'return { wage: quote.weeklyWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };', to: 'return { wage: quote.weeklyWage, contractYears: offeredYears };', failures: ['terms', 'homecoming', 'signing', 'boundaries'] },
   { id: 'wage', file: CONTRACTS, from: 'return { wage: quote.weeklyWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };', to: 'return { wage: offeredWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };', failures: ['terms', 'homecoming', 'signing', 'boundaries'] },
   { id: 'homecoming-route', file: ENGINE, from: '      const terms = soccerTransferTerms(state, homecoming.wage, homecoming.contractYears);', to: '      const terms = { wage: homecoming.wage, contractYears: homecoming.contractYears };', failures: ['homecoming', 'signing'] },
   { id: 'young', file: CONTRACTS, from: 'if (career.age < 30) return { wage: offeredWage, contractYears: offeredYears };', to: 'if (career.age < 30) return { wage: offeredWage + 1, contractYears: offeredYears };', failures: ['young', 'signing', 'boundaries'] },
