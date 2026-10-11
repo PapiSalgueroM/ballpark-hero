@@ -74,6 +74,7 @@ vi.mock('@/components/game/PostGameStats', () => ({ default: () => null }));
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import { availableSpeeches, givenSpeechOf, type GivenSpeech } from '@/lib/careerAwardsNight';
+import { acknowledgeChanceWheel } from '@/lib/careerChanceWheel';
 import { localizeMoney } from '@/lib/soccerCurrency';
 import SoccerCareer from '@/pages/SoccerCareer';
 
@@ -131,7 +132,10 @@ function saveWhere(
           case 'rehab_choice': s = E.applyRehabChoice(s, 1); break;
           case 'newspaper': s = E.dismissNewspaper(s); break;
           case 'season_summary': s = E.dismissSummary(s, clubs); break;
-          case 'random_events': s = s.pendingEvents?.[0] ? E.applyEventChoice(s, 0, clubs) : { ...s, pendingEvents: [], phase: 'playing' }; break;
+          /* Release AU fix pass: an event choice with odds leaves a chance wheel on the save (Rounds 1197 to 1208),
+             and a player answers it where he makes the choice: its Continue is this same call on the page. A save
+             that kept it unseen would open the wheel over the ceremony this test came to press. */
+          case 'random_events': s = s.pendingEvents?.[0] ? acknowledgeChanceWheel(E.applyEventChoice(s, 0, clubs)) : { ...s, pendingEvents: [], phase: 'playing' }; break;
           case 'moral_dilemma': s = s.pendingMoralDilemma ? E.applyMoralDilemmaChoice(s, 1) : E.dismissMoralDilemma(s, clubs); break;
           case 'social_media_action':
             if (s.pendingCoverAthleteEvent) s = E.handleCoverAthleteDecision(s, false);

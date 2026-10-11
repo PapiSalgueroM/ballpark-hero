@@ -61,6 +61,11 @@ import { inverseCareerDevelopment, careerDevelopmentOriginalPlugin, careerDevelo
    five edits back on the copied engine, beside the two already composed here. Proof that they are all that moved
    the recording: remote check rAT-sc-engine-g. See scripts/lib/careerStoryRoleAttribution1190.mjs. */
 import { inverseCareerStoryRole } from './lib/careerStoryRoleAttribution1190.mjs';
+/* Release AU: Rounds 1197 to 1208 keep a chance wheel receipt on a save. The fourth inverse takes it out of the
+   copied wheel library the two historical bundles load, so the stream recorded before the round still replays
+   (the wheel alone moves this recording: remote check rAU-sc-engine-mut). See
+   scripts/lib/careerNextTenAttribution1197.mjs. */
+import { NEXT_TEN_WHEEL_FILE, inverseCareerNextTen } from './lib/careerNextTenAttribution1197.mjs';
 import crypto from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -102,7 +107,7 @@ const sourceFiles = ['src/lib/soccerCareerEngine.ts', 'src/lib/soccerCareerLeagu
   'scripts/lib/careerDevelopmentAttribution1185.mjs', 'scripts/lib/careerStoryRoleAttribution1190.mjs', 'scripts/simCareerLeagueFinish.mjs'];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file,
   crypto.createHash('sha256').update(fs.readFileSync(path.join(ROOT, file))).digest('hex')]));
-const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], originalSources: [], careers: [] };
+const proof = { control: CONTROL, sourceBefore: sourceHashes(), sourceAfter: null, sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], originalSources: [], careers: [] };
 
 /* A control edits a COPY. The copies live outside src/lib, so their relative
    imports are pointed back at the real files, except the engine's import of
@@ -165,6 +170,16 @@ async function originalEngine() {
 }
 /* The optional attribution bundle shares the same copied league, including a
    stream defect. Only the two guarded development edits are reversed. */
+/* The wheel library as a historical bundle must load it: the real file, with the one line that stores the receipt out. */
+function wheelOutPlugin() {
+  const wheel = path.resolve(ROOT, NEXT_TEN_WHEEL_FILE).split(path.sep).join('/').toLowerCase();
+  return { name: 'next-ten-wheel-out', setup(b) {
+    b.onLoad({ filter: /careerChanceWheel\.ts$/ }, args => {
+      if (path.resolve(args.path).split(path.sep).join('/').toLowerCase() !== wheel) return undefined;
+      return { contents: inverseCareerNextTen(NEXT_TEN_WHEEL_FILE, fs.readFileSync(args.path, 'utf8').split('\r\n').join('\n'), proof.nextTenAttribution, ['wheel']), loader: 'ts' };
+    });
+  } };
+}
 async function attributionEngine() {
   const before = fs.readFileSync(enginePath, 'utf8').replaceAll('\r\n', '\n');
   const attributed = inverseCareerStoryRole(inverseCareerDevelopment(before, proof.attribution), proof.storyRoleAttribution);
@@ -173,7 +188,7 @@ async function attributionEngine() {
   fs.writeFileSync(file, relocate(attributed, CONTROL === 'stream' || CONTROL === 'notitle' ? 'soccerCareerLeague' : ''));
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${file.replaceAll('\\', '/')}';\n`);
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
-    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT });
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin()] });
   const attributedEngine = await import(pathToFileURL(out).href);
   assert.equal(JSON.stringify(attributedEngine.FALLBACK_CLUBS), JSON.stringify(engine.FALLBACK_CLUBS), 'Attribution keeps the complete club pool');
   fs.mkdirSync(ARTIFACTS, { recursive: true });
@@ -211,7 +226,7 @@ async function bothOutEngine() {
   fs.writeFileSync(entry, `globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };\nexport * from '${lib}soccerCareerEngine.ts';\n`);
   const both = bothOutPlugin();
   await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,
-    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [both.plugin] });
+    logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT, plugins: [wheelOutPlugin(), both.plugin] });
   const mod = await import(pathToFileURL(out).href);
   assert(both.seen().includes(ENGINE_REL), 'The train was taken out of the engine the bundle loaded');
   assert.equal(JSON.stringify(mod.FALLBACK_CLUBS), JSON.stringify(engine.FALLBACK_CLUBS), 'Taking the train and the development edits out keeps the complete club pool');

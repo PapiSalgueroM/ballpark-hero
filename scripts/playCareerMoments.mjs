@@ -94,6 +94,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 import { loadEngine, signingSave, wonTournamentSave, MAX_SEEDS } from './lib/careerMomentSaves.mjs';
+import { WHEEL, answerChanceWheel } from './lib/chanceWheelWalk.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = path.join(ROOT, 'dist');
@@ -285,6 +286,11 @@ async function open(save, view) {
   });
   await page.goto(`${BASE}/soccer-career`, { waitUntil: 'networkidle' });
   await page.waitForTimeout(500);
+  /* Release AU fix pass: the saves are made through an event choice, and since Rounds 1197 to 1208 such a save
+     holds a chance wheel nobody has seen, which opens over the screen. The walk answers it as a player does
+     (Show result, Continue) and goes on to the scene it came for. */
+  await page.waitForSelector(WHEEL, { timeout: 1500 }).catch(() => undefined);
+  await answerChanceWheel(page, 'skip');
   return { ctx, page, trouble, unloaded: () => unloaded };
 }
 /* Small readers, all on the scene the selector names. */

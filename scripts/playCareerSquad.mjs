@@ -73,6 +73,9 @@
  *   noscroll the sheet's body can neither give way nor scroll      -> 7b red
  *   notrap  Tab is left to the browser                             -> 4b red
  *   ellipsis a long surname goes back under an ellipsis            -> 7 red
+ *   midword a word of a name is no longer one box on its line, so a
+ *           long surname breaks in its middle behind a first name
+ *           that leaves room for half of it (Release AU fix pass)  -> 7 red
  *   static  (page) the page imports the sheet chunk as it loads    -> 1 red
  *   label   (page) the home footer reads "Close"                   -> 9 red
  *   timeline (page) the walk itself lifts the season list out of its
@@ -92,6 +95,7 @@ import { build } from 'esbuild';
 import { createRequire } from 'node:module';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
+import { WHEEL, answerChanceWheel } from './lib/chanceWheelWalk.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -104,7 +108,7 @@ const PORT = Number(process.env.PORT || 4577);
 const BASE = `http://127.0.0.1:${PORT}`;
 const SHOTS = path.resolve(ROOT, process.env.SHOTS || '.tmp-fx/shots');
 const CONTROL = process.env.CAREER_SQUAD_PLAY_CONTROL ?? '';
-const CONTROLS = ['rank', 'write', 'still', 'nofill', 'clip', 'shift', 'static', 'label', 'noscroll', 'notrap', 'ellipsis', 'timeline'];
+const CONTROLS = ['rank', 'write', 'still', 'nofill', 'clip', 'shift', 'static', 'label', 'noscroll', 'notrap', 'ellipsis', 'timeline', 'midword'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) throw new Error(`unknown CAREER_SQUAD_PLAY_CONTROL ${CONTROL}`);
 const SAVE_KEY = 'soccerCareerSave';
 
@@ -251,6 +255,8 @@ const UNPINNED_BOX = SHEET_BOX.replace('fixed inset-0', 'absolute inset-0');
 /* The classes of the sheet's body and of a name in the eleven, as SquadSheet.tsx writes them. */
 const BODY_BOX = 'flex min-h-0 flex-col overflow-y-auto overscroll-contain';
 const CELL_NAME = 'w-full text-xs font-semibold leading-tight [overflow-wrap:anywhere]';
+/* The classes of one word of a name in the eleven, as SquadSheet.tsx writes them (softBreaks). */
+const WORD_BOX = 'inline-block max-w-full';
 function served(name, body) {
   const edit = (needle, swap) => {
     const n = body.split(needle).length - 1;
@@ -280,6 +286,9 @@ function served(name, body) {
     edit(CELL_NAME, 'w-full truncate text-xs font-semibold');
     edit('children: softBreaks(cellName(m))', 'children: cellName(m)');
   }
+  /* Release AU fix pass: a word of a name stops being one box on the line, the way the cell was drawn before
+     (the soft break inside a long word is then taken before the space in front of it). */
+  if (CONTROL === 'midword' && name.endsWith('.js')) edit(WORD_BOX, 'inline');
   if (CONTROL === 'still' && name.endsWith('.css')) {
     edit('prefers-reduced-motion:reduce', 'prefers-reduced-motion:x-never');
     edit('prefers-reduced-motion: reduce', 'prefers-reduced-motion: x-never');
@@ -591,7 +600,38 @@ const reach = page => page.evaluate(sel => {
    out, on the cell or on anything it holds. */
 const cutCells = page => page.evaluate(sel => {
   const over = el => el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 1;
-  const out = { cells: 0, roles: 0, cutRoles: 0, cutNames: 0, labels: [] };
+  const out = { cells: 0, roles: 0, cutRoles: 0, cutNames: 0, labels: [], names: 0, midWord: [], wideWords: [], mostLines: 0 };
+  /* Release AU fix pass. Where the browser really broke a name, read off the
+     boxes of its letters and not off the markup: every letter's own box, the
+     letters of a word gathered, and a word whose letters sit on two lines is
+     broken. A break after a hyphen is the hyphen's own. Any other break
+     inside a word is right only when the word is wider than the cell. */
+  const brokenWords = nameEl => {
+    const letters = [];
+    const walker = document.createTreeWalker(nameEl, NodeFilter.SHOW_TEXT);
+    const range = document.createRange();
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      for (let i = 0; i < node.data.length; i += 1) {
+        range.setStart(node, i); range.setEnd(node, i + 1);
+        const box = range.getClientRects()[0];
+        letters.push({ ch: node.data[i], top: box ? box.top : null, width: box ? box.width : 0 });
+      }
+    }
+    const words = [[]];
+    for (const l of letters) { if (/\s/.test(l.ch)) words.push([]); else words[words.length - 1].push(l); }
+    const lines = new Set(letters.filter(l => l.top !== null && !/\s/.test(l.ch)).map(l => Math.round(l.top / 4)));
+    const found = { lines: lines.size, mid: [], wide: [] };
+    for (const word of words.filter(w => w.length)) {
+      const text = word.map(l => l.ch).join('');
+      const natural = word.reduce((sum, l) => sum + l.width, 0);
+      let at = -1;
+      for (let i = 1; i < word.length; i += 1) if (word[i].top !== null && word[i - 1].top !== null && Math.abs(word[i].top - word[i - 1].top) > 3 && word[i - 1].ch !== '-') { at = i; break; }
+      if (at < 0) continue;
+      const shown = `${text.slice(0, at)}|${text.slice(at)} (${Math.round(natural)} px in a ${nameEl.clientWidth} px cell)`;
+      if (natural <= nameEl.clientWidth + 0.5) found.mid.push(shown); else found.wide.push(shown);
+    }
+    return found;
+  };
   for (const c of document.querySelectorAll(`${sel} [data-squad-xi] [data-squad-man]`)) {
     out.cells += 1;
     const role = c.querySelector('[data-squad-role-cell]');
@@ -601,6 +641,14 @@ const cutCells = page => page.evaluate(sel => {
       out.labels.push(role.innerText.split(/\s+/).filter(Boolean).join(' '));
       if (cut) out.cutRoles += 1;
     } else if (cut) out.cutNames += 1;
+    const nameEl = c.querySelector('[data-squad-cell-name]');
+    if (nameEl) {
+      out.names += 1;
+      const b = brokenWords(nameEl);
+      out.midWord.push(...b.mid.map(w => `${nameEl.textContent.trim()}: ${w}`));
+      out.wideWords.push(...b.wide);
+      out.mostLines = Math.max(out.mostLines, b.lines);
+    }
   }
   return out;
 }, SHEET);
@@ -615,6 +663,7 @@ const rowNames = page => page.evaluate(sel => {
   return out;
 }, SHEET);
 
+let midWordNames = 0;
 for (const [width, height] of [[390, 844], [1280, 800]]) {
   for (const k of ['A', 'D', 'R', 'B', 'M', 'E']) {
     const { ctx, page } = await open(SAVES[k], { width, height });
@@ -679,11 +728,19 @@ for (const [width, height] of [[390, 844], [1280, 800]]) {
         `${where}: every role in the eleven reads whole (${xi ? `${xi.roles} role cells, ${xi.cutRoles} cut, e.g. "${xi.labels[0]}"` : 'no eleven measured'})`);
     } else {
       check(!!xi && xi.cells === 11 && xi.cutNames === 0, `${where}: no name in the eleven is cut short (${xi ? `${xi.cutNames} of ${xi.cells} cut` : 'no eleven measured'})`);
+      /* Release AU fix pass (ruling R4): a name is read whole. No line of a
+         cell ends inside a word that would fit a line of that cell by itself
+         ("Marcus Rash" over "ford"); a word wider than the cell is the only
+         one that may take its soft break, and those are printed. */
+      midWordNames += xi?.names ?? 0;
+      check(!!xi && xi.names >= 1 && xi.names + xi.roles === xi.cells && xi.midWord.length === 0,
+        `${where}: no name in the eleven is broken inside a word that fits a line of its cell (${xi ? `${xi.names} names read, at most ${xi.mostLines} lines; ${xi.midWord.slice(0, 3).join(' ; ') || 'none broken that way'}${xi.wideWords.length ? `; wider than the cell and split in two: ${xi.wideWords.slice(0, 3).join(' ; ')}` : ''}` : 'no eleven measured'})`);
     }
     check(rowsSeen >= 10 && cutRows.length === 0, `${where}: no name in a row of the bench or of his line is cut short (${rowsSeen} rows read; cut: ${cutRows.slice(0, 3).join(', ') || 'none'})`);
     await ctx.close();
   }
 }
+check(midWordNames >= 11, `7. the mid word check read real cells: ${midWordNames} names in the eleven over every save and width`);
 
 /* ── 7b. short screens: the way out is always on the screen ─────────────── */
 /* A small phone with its browser bars showing, the smallest phone still sold,
@@ -967,6 +1024,11 @@ if (mounted) {
       page.on('request', r => { const u = r.url(); if (u.includes('/assets/') && u.endsWith('.js')) js.push(u.split('/').pop()); });
       await page.goto(`${BASE2}/soccer-career`, { waitUntil: 'domcontentloaded', timeout: 60000 });
       await page.waitForSelector(TILE, { timeout: 30000 });
+      /* Release AU fix pass: these saves are made through an event choice, and since Rounds 1197 to 1208 such a
+         save holds a chance wheel nobody has seen, which opens over the hub. The walk answers it as a player
+         does (Show result, Continue) and goes on to the squad. */
+      await page.waitForSelector(WHEEL, { timeout: 1500 }).catch(() => {});
+      await answerChanceWheel(page, 'skip');
       return { ctx, page, js };
     };
     if (CONTROL === 'static') controlEdits += 1;

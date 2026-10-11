@@ -365,7 +365,19 @@ const { soccer, inboxMod, choices, nfl, nflInbox, nflRivalry, awards, intl, nba,
 console.log('1) Soccer unchanged: the inbox and the four rival dilemmas against the pre-lift fixture');
 {
   const fixture = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/data/soccerInboxFixture796.json'), 'utf8'));
-  const now = JSON.parse(JSON.stringify(probeSoccer({ soccer, inboxMod })));
+  /* Release AU: since Rounds 1197 to 1208 a choice with odds keeps the receipt of its one draw on the state
+     (state.chanceWheel). The fixture was recorded before that field existed, so the receipt is left out of
+     this compare, and only the receipt: it stores a draw the engine already made and moves nothing else
+     (remote check rAU-G10: with the one line that stores it out of the source, this section is green as it
+     stands). The wheel has its own tests (src/lib/careerChanceWheel.test.ts). The count below keeps this
+     from going quietly idle: if no state of the probe holds a receipt any more, the section says so. */
+  let receiptsLeftOut = 0;
+  const withoutWheel = v => Array.isArray(v) ? v.map(withoutWheel)
+    : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).filter(([k]) => { if (k !== 'chanceWheel') return true; receiptsLeftOut += 1; return false; }).map(([k, x]) => [k, withoutWheel(x)]))
+    : v;
+  const now = withoutWheel(JSON.parse(JSON.stringify(probeSoccer({ soccer, inboxMod }))));
+  if (receiptsLeftOut === 0) console.log('   note  no state of the soccer probe holds a chance wheel receipt any more: the Release AU allowance above is idle and can go');
+  else console.log(`   note  ${receiptsLeftOut} chance wheel receipt(s) left out of the compare with the pre-lift fixture (Release AU)`);
   /* The first place two JSON values part, as a readable path. */
   const firstDiff = (a, b, where) => {
     if (JSON.stringify(a) === JSON.stringify(b)) return null;

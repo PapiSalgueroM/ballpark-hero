@@ -1,3 +1,82 @@
+## Release AT LIVE, 2026-10-10 16:53 EDT: eighteen Soccer Career and Club Manager rounds from the other lane (the real Premier League fixture list, a record book, targets, a mentor, story chapters, trophy runs, season and derby history), and six of this lane's (the US rivalry beats and Trophy Case, flags in Footle, three new data ledgers)
+
+Claude lane (session G). main fb8d6811, deployment cc93f227-a456-4b34-b843-561aff7a9a74, entry index-pUtEpMvo.js (was index-CDom0l2f.js, Release AS,
+published 02:34 on 2026-10-10). Proof at 16:54: x-deployment-id carries cc93f227; /whats-new carries "the real 2026/27 Premier League fixture list", "Flags in Footle, and six countries find their home" and "the roster card stops flipping a coin", and no VAR entry; /club-manager and /soccer-career answer 200 and a browser read no console error on either. Eighth publish since 2026-10-08 (AL, AN, AO, AP, AQ, AR, AS, AT).
+
+What shipped:
+- The other lane's PR208 to PR215, eighteen rounds, merged as one train (nothing held):
+  Round 1184, Club Manager: a new original Premier League career opens on the real 2026/27 fixture list (who you
+  play, where, in which matchday; dates, times and results stay simulated and the calendar says so).
+  Rounds 1179 and 1180, Soccer Career: a personal target for the next season, and a record book.
+  Rounds 1185 to 1187: last season's form moves selection, a preseason plan, a youngster to mentor.
+  Rounds 1188 to 1191: the Phone and Training row on phones, story chapters, a reduced role under a new manager,
+  personal goal milestones. Round 1192: a trophy opens the campaign that won it. Rounds 1193 and 1194: compare
+  two seasons, availability history. Rounds 1195 and 1196: derby history and records against a rival.
+  Rounds 1182 and 1183: Dart Draft's legends, wonderkids and wildcards vary from throw to throw (over the 2,000
+  roster), Stat Detective says what its years mean. PR211: one obsolete proof workflow retired.
+- ROUND 1181, VAR IN CLUB MANAGER, SHIPS SWITCHED OFF (one constant, CM_VAR_LIVE in
+  src/lib/clubManagerVarLive.ts). Measured over 345 seeded matches: showing or skipping a review is the same
+  match and a match without reviews equals the old engine, but with reviews on a penalty is awarded by review in
+  about one match in four and VAR runs in every competition of a modern save, on rates with no source. Round 1218
+  of this lane (built, in review) gives it rates from real football and a ledger of the competitions that use
+  VAR, then switches it on in the next release.
+- This lane: Round 1149 (NFL, MLB and NHL My Career: the roster card in the rivalry reads the season instead of
+  a coin, and the Trophy Case tile counts every award); Round 1210 (Footle prints a flag beside every
+  nationality; Niger, Namibia, Mauritius, South Sudan, Turkmenistan and French Guiana sit under their
+  confederation; the Career Hub walk, the daily save check and the storage seam's ledger tell the truth again);
+  Rounds 1211, 1213, 1214 (three sets of sourced data and libraries nothing imports yet: the MLB and NHL season
+  shapes, nine more leagues' 2026/27 fixture lists, the Club Manager ratings curve and ages); Round 1215 (the
+  live match walk is seeded and a red hands back its match).
+
+Found and fixed inside the train, by six adversarial reviewers and a fixer (reports in
+C:\Users\antho\dukb-handoff\2026-10-10\results-g\):
+1. MANAGER HOT SEAT WOULD HAVE RE-DEALT EVERY PREMIER LEAGUE DAY (the daily builds its state with startCareer,
+   which now binds the real list). Proven on a runner, fixed: no daily carries the fixture key, and the new
+   scripts/simDailyDeals.mjs holds the deals of both dailies by digest against Release AS, with two controls.
+2. A damaged saved mentor stopped a Soccer Career (192 of 1,920 malformed saves threw): a malformed optional
+   field now gives no effect.
+3. The Dart Draft pool's year filter had no check that could fail; it has one now.
+4. Six of the other lane's harnesses compared the engine with their own branch base and were red on any
+   integrated head: pointed at the merge commits.
+5. Two coin toss gates measured and made rates: simMatchScreen's stoppage bound (red on main on one seed in six)
+   and simCareerSquad section 9.
+
+GATE ON GITHUB RUNNERS on 980654fa, then the fixed head 24f57a98, seven lanes plus the live pass: lane A 81 of 81, lane B 61 of 61, lane C 58 of 58 (with the whole vitest suite), sweep and play 19 of 19, the other lane's walks 16 of 16, the live pass 15 of 15 (playSoccerCareer all checks and playGames on eight routes against real data). The browser lanes were 16 of 19 and 23 of 24: three walks red that were green on Release AS (simMobileChrome, playCareerSquad, playSeasonReveal). A fixer closed them in five commits: two walks had to follow intended changes (a new tile's button matched "next season"; a rival choice card the walk never answered, red on main about one run in two) and each got a control that proves it still catches the real fault; the squad help really did scroll on a phone and its words were tightened with no rule dropped. Final run on 24f57a98: the full build:seo and every dist fence 21 of 21; the walks, the sims around them and the whole suite 18 of 19 (playSoccerCareer check 6 on a blocked runner, green live). The committed head fb8d6811 re-proven on a plain build, 20 of 20.
+Budgets moved, each with its measured cause in the row: /club-manager 582K, /soccer-career 797K,
+/manager-hot-seat 600K, /deadline-day 610K, /footle 348K, /nfl-my-career 469K. Build output: the saved pages of /soccer-career and /whats-new, the sitemap and the ledger (five more pages changed only their head tag order and stay as committed).
+
+Known and left for follow ups: the Premier League fixture list rides in the engine chunk (Round 1225 makes the
+lists lazy); src/components/soccer-career/TrophyCabinet.tsx prints a nationality with no flag (one owed entry in
+the flags fence); twelve refused saves are named in simStorageWrites as owed to the storage seam; NFL beat 221
+still says both make the all star roster off two ratings.
+
+### For Codex
+1. Release AT is on main at fb8d6811 and live. All eight of your pull requests shipped: do not push to those
+   branches again; a follow up goes on a new branch from main. PR216 (1197 to 1208) is next: I integrate it as
+   Release AU on top of this. It will meet your own eighteen rounds in src/pages/SoccerCareer.tsx and
+   src/lib/soccerCareerEngine.ts; keep it frozen.
+2. VAR is off by one constant and this lane's Round 1218 turns it on with sourced rates and competition
+   coverage. Do not flip CM_VAR_LIVE or tune CM_VAR_GAME_RATES in a branch of yours.
+3. Your files the fixer edited, so a rebase keeps them (the full list is fix-AT.md section 8.2): the six base
+   constants of your harnesses; the third inverse in simCareerAwardsNight, simCareerLeagueFinish and
+   simCareerSocialBrands with scripts/lib/careerStoryRoleAttribution1190.mjs; validMentor in
+   src/lib/soccerCareerMentor.ts; the form count in src/lib/soccerCareerSelection.ts (min of league games and
+   games); the load drop and the verdict move cancel in soccerCareerEngine.ts; small copy and layout fixes in
+   CareerMentorTile, CareerRecordsSheet, SeasonAmbitionTile, SoccerSeasonHistory, soccerClubSquadSheet,
+   dartMap.ts, StatDetective.tsx, DartDraft.tsx, ClubManagerHelp.tsx, clubManagerFixtures.ts.
+4. Your seven new workflows fire on any pull request that touches SoccerCareer.tsx, soccerCareerEngine.ts or
+   clubManager.ts and three still carry an old base and tree (career-trophy-runs.yml line 55,
+   career-season-history.yml 59, career-derby-history.yml 58); career-next-batch.yml runs playCmVar, which
+   refuses a dark build. Point them at main or retire them, as PR211 did.
+5. Owed to your files: TrophyCabinet.tsx "Won with {career.nationality}" needs the flag component (and then the
+   OWED_BARE entry in scripts/simNationalityFlags.mjs is deleted in the same round); Soccer Career, Footle's
+   useGame.ts and Rank Em each name a refused save to the storage seam (the recipe is in
+   docs/audits/ROUND-1210-NOTES.md) and their OWED entries in scripts/simStorageWrites.mjs move to NAMED in the
+   same round; the NHL guide still says 82 games (the league plays 84 from 2026-27; this lane's Round 1226
+   fixes the engine); copy still loose in your tiles ("Ambition achieved" against "Target met", "Earn a 8.7").
+6. A legal note on fixture lists is at the end of docs/LEGAL_REVIEW.md, with one decision open for Anthony (the
+   two German lists).
+
 ## Release AS LIVE, 2026-10-10 02:34 EDT: NBA My Career, the numbers tell the truth and the rival plays on your scale
 
 Claude lane (session F). main 808dbbdc, deployment b0d516e6-6d64-4ee2-8e97-a5fa27f7fca5, entry index-CDom0l2f.js (was index-DNvMbg1w.js, Release AR,
