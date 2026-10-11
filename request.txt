@@ -1,0 +1,22 @@
+# Review (run lens) of Round 1212 on 1e1066fb: old saves and the one press season over a fleet, tree against tree
+#!serial
+setup: mkdir -p /tmp/fl && git worktree add -f .wt/main f78037dcddea12c1a02586c7d5c0e185efb86121 && git worktree add -f .wt/pre 60188732 && git worktree add -f .wt/r1226 2c86ecc7 && git -C .wt/main log --oneline -1 && git -C .wt/pre log --oneline -1 && git -C .wt/r1226 log --oneline -1
+play-head: node .rc/x/review-run-fleet.mjs play . /tmp/fl/play-head.json
+play-pre: node .rc/x/review-run-fleet.mjs play .wt/pre /tmp/fl/play-pre.json
+play-r1226: node .rc/x/review-run-fleet.mjs play .wt/r1226 /tmp/fl/play-r1226.json
+same-play-pre-head: node .rc/x/review-run-fleet.mjs same /tmp/fl/play-pre.json /tmp/fl/play-head.json one-press-pre-against-head
+same-play-r1226-head: node .rc/x/review-run-fleet.mjs same /tmp/fl/play-r1226.json /tmp/fl/play-head.json one-press-r1226-against-head
+make-main: node .rc/x/review-run-fleet.mjs make .wt/main /tmp/fl/saves-main.json
+make-pre: node .rc/x/review-run-fleet.mjs make .wt/pre /tmp/fl/saves-pre.json
+cont-main-pre: node .rc/x/review-run-fleet.mjs cont .wt/pre /tmp/fl/saves-main.json /tmp/fl/cont-main-pre.json
+cont-main-head: node .rc/x/review-run-fleet.mjs cont . /tmp/fl/saves-main.json /tmp/fl/cont-main-head.json
+same-cont-main: node .rc/x/review-run-fleet.mjs same /tmp/fl/cont-main-pre.json /tmp/fl/cont-main-head.json live-saves-continued-pre-against-head
+cont-pre-pre: node .rc/x/review-run-fleet.mjs cont .wt/pre /tmp/fl/saves-pre.json /tmp/fl/cont-pre-pre.json
+cont-pre-head: node .rc/x/review-run-fleet.mjs cont . /tmp/fl/saves-pre.json /tmp/fl/cont-pre-head.json
+same-cont-pre: node .rc/x/review-run-fleet.mjs same /tmp/fl/cont-pre-pre.json /tmp/fl/cont-pre-head.json base-saves-continued-pre-against-head
+view-main-head: node .rc/x/review-run-fleet.mjs view . /tmp/fl/saves-main.json $RC_OUT/view-main-head.json
+view-pre-head: node .rc/x/review-run-fleet.mjs view . /tmp/fl/saves-pre.json $RC_OUT/view-pre-head.json
+view-contmain-head: node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('/tmp/fl/cont-main-head.json','utf8'));const o={};for(const k of Object.keys(j))o[k]={save:j[k].final,tq:0.5};fs.writeFileSync('/tmp/fl/saves-contmain.json',JSON.stringify(o))" && node .rc/x/review-run-fleet.mjs view . /tmp/fl/saves-contmain.json $RC_OUT/view-contmain-head.json
+ctl-draw: node .rc/x/review-run-mut.mjs draw && { node .rc/x/review-run-fleet.mjs play . /tmp/fl/play-head-draw.json; node .rc/x/review-run-fleet.mjs cont . /tmp/fl/saves-main.json /tmp/fl/cont-main-draw.json; git checkout -- src scripts; node .rc/x/review-run-fleet.mjs same /tmp/fl/play-pre.json /tmp/fl/play-head-draw.json CONTROL-one-press; a=$?; node .rc/x/review-run-fleet.mjs same /tmp/fl/cont-main-pre.json /tmp/fl/cont-main-draw.json CONTROL-continued; b=$?; echo "CONTROL draw: one press compare exit $a, continued compare exit $b (both must be 1)"; }; git checkout -- src scripts; git status --short | head -3; exit 0
+law-compare: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs

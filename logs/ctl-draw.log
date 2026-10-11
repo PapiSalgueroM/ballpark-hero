@@ -1,0 +1,17 @@
+MUTATION draw APPLIED to src/lib/mlbMyCareer.ts
+play /home/runner/work/ballpark-hero/ballpark-hero: 440 careers, 8768 seasons, sha 2f30d08dc3aba3cc
+cont /home/runner/work/ballpark-hero/ballpark-hero: 440 saves, 1758 more seasons, sha 553787791f0b2407
+first differing careers: now|C|0, now|C|1, now|C|2, now|C|3, now|C|4, now|C|5, now|C|6, now|C|7
+  now|C|0: seasons 20 against 19, first differing season index 0
+  now|C|0: differing fields of the final save: year, age, ovr, morale, health, seasons, allStars, earnings, netWorth, heat, purchased, lifeFlags
+  now|C|1: seasons 19 against 22, first differing season index 0
+  now|C|1: differing fields of the final save: year, age, morale, fanbase, health, seasons, rings, earnings, netWorth, heat, lifeFlags, rival
+DIFFERENT CONTROL-one-press: 440 of 440 careers differ
+first differing careers: now|C|0, now|C|1, now|C|2, now|C|3, now|C|4, now|C|5, now|C|6, now|C|7
+  now|C|0: seasons 4 against 4, first differing season index 0
+  now|C|0: differing fields of the final save: ovr, morale, fanbase, seasons, allStars, earnings, netWorth, purchased, rival, pendingRivalryEvent
+  now|C|1: seasons 4 against 4, first differing season index 0
+  now|C|1: differing fields of the final save: team, ovr, morale, fanbase, health, seasons, allStars, dirtyMoney, heat, lifeFlags, rival, pendingRivalryEvent
+DIFFERENT CONTROL-continued: 440 of 440 careers differ
+CONTROL draw: one press compare exit 1, continued compare exit 1 (both must be 1)
+?? .wt/
