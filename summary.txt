@@ -1,0 +1,3 @@
+build exit=0 33s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+labels-pure exit=0 25s | PASS simSoccerOpponentLabels: complete original/current careers, display controls and whole undo
+labels-browser exit=0 11s | PASS simSoccerOpponentLabels browser: 3 actual saved-row journeys, complete saves and read vectors

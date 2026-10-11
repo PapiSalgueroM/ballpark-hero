@@ -1,0 +1,3679 @@
+{
+  "status": "pass",
+  "head": "4a0aabf186eaf02d682e902ec05834540735f4f7",
+  "input": {
+    "root": "/tmp/labels-proof",
+    "file": "fixtures.json",
+    "sha256": "32877bcfe27cb560c8f6f3a2a518a5910864c84099ac007ff93dbddbd2271ddb",
+    "reportSha256": "b29695352ff4055d76657bedc524aa85563ac66ef62af7790b555af8cf546670"
+  },
+  "journeys": [
+    {
+      "width": 320,
+      "height": 844,
+      "status": "pass",
+      "save": "e8fb76eb43a9b52f38c75f470c2270dd3a57836d747e91e1bfefd5cc7334e1df",
+      "reads": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "shots": [
+        {
+          "file": "shots/320-game2.png",
+          "bytes": 49819,
+          "sha256": "5ed66ccb2723fabbbd88ce627e8ad5cfed7fdee70711944e22eb6470a57f3fc8"
+        },
+        {
+          "file": "shots/320-fixtures.png",
+          "bytes": 46237,
+          "sha256": "f25cdc9cf4399eec0bfdcfae6fe8d234da5133c81774a1fdd647ca0e194c319c"
+        },
+        {
+          "file": "shots/320-game2-reload.png",
+          "bytes": 49819,
+          "sha256": "5ed66ccb2723fabbbd88ce627e8ad5cfed7fdee70711944e22eb6470a57f3fc8"
+        }
+      ],
+      "layouts": [
+        {
+          "label": "game2 scoreboard",
+          "width": 320,
+          "height": 844,
+          "visualWidth": 320,
+          "visualHeight": 844,
+          "scale": 1,
+          "overflow": false,
+          "stableFrames": 4,
+          "finiteAnimations": 0,
+          "rect": {
+            "x": 12,
+            "y": 248,
+            "width": 296,
+            "height": 44
+          },
+          "inside": true,
+          "points": [
+            {
+              "px": 160,
+              "py": 270,
+              "hit": "<span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span>",
+              "painted": true
+            },
+            {
+              "px": 71.2,
+              "py": 256.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 248.8,
+              "py": 256.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 71.2,
+              "py": 283.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 248.8,
+              "py": 283.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            }
+          ],
+          "body": {
+            "attribute": "overflow: hidden;",
+            "declarations": [
+              [
+                "overflow-x",
+                "hidden",
+                ""
+              ],
+              [
+                "overflow-y",
+                "hidden",
+                ""
+              ]
+            ]
+          },
+          "fonts": "loaded"
+        },
+        {
+          "label": "reloaded game2 scoreboard",
+          "width": 320,
+          "height": 844,
+          "visualWidth": 320,
+          "visualHeight": 844,
+          "scale": 1,
+          "overflow": false,
+          "stableFrames": 4,
+          "finiteAnimations": 0,
+          "rect": {
+            "x": 12,
+            "y": 248,
+            "width": 296,
+            "height": 44
+          },
+          "inside": true,
+          "points": [
+            {
+              "px": 160,
+              "py": 270,
+              "hit": "<span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span>",
+              "painted": true
+            },
+            {
+              "px": 71.2,
+              "py": 256.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 248.8,
+              "py": 256.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 71.2,
+              "py": 283.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 248.8,
+              "py": 283.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            }
+          ],
+          "body": {
+            "attribute": "overflow: hidden;",
+            "declarations": [
+              [
+                "overflow-x",
+                "hidden",
+                ""
+              ],
+              [
+                "overflow-y",
+                "hidden",
+                ""
+              ]
+            ]
+          },
+          "fonts": "loaded"
+        }
+      ],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:4597/assets/index-C7mDbA-E.css",
+          "status": 200,
+          "body": "191768da365412af3efb361244417a2c2dcd87d2af26f8aa923265cfd53ea4c3",
+          "bytes": 199057,
+          "sha256": "65129a5758a258f45d5738f507761e09549516dc499109c600e68454c72a3ad9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-DfMOQy1y.js",
+          "status": 200,
+          "body": "3ac7c5034b1f1a1a05eb99242606590739403fb602038b5dabafdafd172f838b",
+          "bytes": 794422,
+          "sha256": "d3ab797d0ff0049b732db35b0de46a61eb84bc81b330720bdc32cc3b2363f27b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubRivalries-DuNC-DyB.js",
+          "status": 200,
+          "body": "304fd655f79fbe29de8acff3d960d8f93a79c2315677d7805886d59c9181ffde",
+          "bytes": 36634,
+          "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/formatNumber-CGuttX8h.js",
+          "status": 200,
+          "body": "0d67d996c829790e40bcb45f4f004459e9502d6a884dd583a8a969968b509ece",
+          "bytes": 152,
+          "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/dialogA11y-BCgxbiii.js",
+          "status": 200,
+          "body": "e9126765f01f791950b99f5256225db320d77e15034699c1bda69af19a7e8bae",
+          "bytes": 150,
+          "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useGameCompletion-BmKT4znx.js",
+          "status": 200,
+          "body": "815d5be946d165c5420eba28f88b8cc93310283f3a56930763f016b90f7b62a6",
+          "bytes": 810,
+          "sha256": "1d9e0640ac5d16ca3cb0eec92b1be43091d59ffb9211c6efe2c8727d4930c196"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/badges-DBtIdUic.js",
+          "status": 200,
+          "body": "2757f6d2034b086d92356fce601f7a12a8134437db01bfc9d9b2b9a66e96bd32",
+          "bytes": 5813,
+          "sha256": "2972ce479984631335659072871383bddfa3ff82e16df41eb6d6e9691d25fecf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameSeoContent-DHC4fQgP.js",
+          "status": 200,
+          "body": "a8a7cb126379c12b4361592003f4f64e0432ee8e09dadc749e3941662411e9b9",
+          "bytes": 6832,
+          "sha256": "6a336da96d8c5d4a64b1bf40467c6727d7a5c3cd62d401d89408594dab1c731f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/guideShape-QckYG0z8.js",
+          "status": 200,
+          "body": "12d01af48f27f12c29cbcd9d62e8f4c12c264a3178220cfc090876d9f39a5405",
+          "bytes": 5398,
+          "sha256": "d720afadf8a25548873f342c3e9ec7b112521a4f8d1600850f59d76e267b68f1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useCareerMoment-DLS_9gR5.js",
+          "status": 200,
+          "body": "447b22a64e1ef872b959b3ace5c52a8ae388487b231a2f70dd281f1aceebec85",
+          "bytes": 267307,
+          "sha256": "be8d9ae9b78f2381b5f3ecb3daabc48a54fba87e57061fd181f056bbba0e82b0"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameNavbar-B7AYloU5.js",
+          "status": 200,
+          "body": "a51a0fc77289d4d935e471c8d669d28f90ef71572fe7f0cd11d8b1be04270796",
+          "bytes": 10360,
+          "sha256": "09ba53d53603e4975c2e688891f7a26f583f936fcb97f130e33ba9d5d7b67b09"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arrow-left-DM1xLtpT.js",
+          "status": 200,
+          "body": "47cf92f51945c2bfa4cabfab00bae8d75e49d149a4e3f13be823fd1d5bccf63a",
+          "bytes": 333,
+          "sha256": "d6c038dae365ec110be9f751ac96a75945e4d9c6d29066a3267df3f6c4ede3ae"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/star-HtLWnA8S.js",
+          "status": 200,
+          "body": "33ce389f11df692b538708d89a3827b0edcc4887f869dfe87ecc9336057255c4",
+          "bytes": 641,
+          "sha256": "ec53f3043c679e5a0af37e14c8c380853b7072f0060f3b3e58de2aae6e6d81a5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameHelp-BM_A752h.js",
+          "status": 200,
+          "body": "6040bfe9c28fb59df08b4ea50cf142e01e1b2115103b1142f6eaacbd5c037a8f",
+          "bytes": 1649,
+          "sha256": "ae8652e0fb28a2678378009d7d2636940fac55eabb14ab60ad3dacf18de0a753"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/HowToPlayPopover-BDrxcw6u.js",
+          "status": 200,
+          "body": "aa1b86ef7848374e3d386a4da38d6af652d74278849fa18f3192aec5adfc3efa",
+          "bytes": 1367,
+          "sha256": "6a250faee01b9e993cdb37abb40845acbfed1202b3c8fad7d5cdeefb212f6b00"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/medal-AEhvHme8.js",
+          "status": 200,
+          "body": "4761c2959901d58e2e1588130fb137bc4401f9c1784508405cddd4bc97428b46",
+          "bytes": 604,
+          "sha256": "f969156906ec0996414236b584dc1cb2107b026a80836e540e06708482b57dbc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/circle-help-DyEqZblG.js",
+          "status": 200,
+          "body": "e01d1c97c070158362185f566d9dda9a222360ad019b852dfc5442b48de35d53",
+          "bytes": 407,
+          "sha256": "85fae08676cacea7eaeab123feb523a3d8f4cfc5e2e724615c2e475257a77712"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/VictoryMoment-ZzaNoZdu.js",
+          "status": 200,
+          "body": "81ed703be8cbf6e7c16042dcef89d7e8da79f9d20469e30d9e2140d130bfbe9d",
+          "bytes": 3669,
+          "sha256": "16efe7b95a99ac2dd0b11159c81fe82509cf7d482943813364c6c5f0677877b5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/confederationGroups-8jgsrX6T.js",
+          "status": 200,
+          "body": "2593aa92c119eb1bc09ce8176119707f820a41895fa8a81738084d93b950bf8f",
+          "bytes": 1449,
+          "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/select-BdkP9F7h.js",
+          "status": 200,
+          "body": "d2c1ee59971555119783676a3c3ab7ed715d705090cfe7b9669fb326aa567e80",
+          "bytes": 21290,
+          "sha256": "be29dd4df9b0bc2ca4f683906ef4aa381bffd48ff0aee5ba2dd92e6a957d8531"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-up-BOXxp5rl.js",
+          "status": 200,
+          "body": "54cec69297f629d53799d25673ea6a44b2dfc01b6bb420b1b07a720af73e4828",
+          "bytes": 291,
+          "sha256": "ae13165ba6ee481a349f84d9aa0cdca41fa86ffb1458dd263735cce271c929c4"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedRng-BKZQ2UGv.js",
+          "status": 200,
+          "body": "42f16cbcf4a0f4e37315181e6274511ded22c71195fe6b4d398b6a94a637628e",
+          "bytes": 254,
+          "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/managerOffers-Mi85K8qd.js",
+          "status": 200,
+          "body": "e010c06f5e702aabaf127d8a467dfdcecbfcf0845daec772ce3ec022acf30c5c",
+          "bytes": 5870,
+          "sha256": "b5defae9c817a44f8cb972332b2b4e068676735450c1660119a980b2c5028bda"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-down-CFtPYTW4.js",
+          "status": 200,
+          "body": "a12de5e4375af8046ab4f816c31475f2934e5e500d4bf86c0161c9ce23693e58",
+          "bytes": 291,
+          "sha256": "07e74935745964ef243439b6d8a6f63f5a4414d25c50b3390f5c2ae2a43da51f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/intlNames-DiJYNZJt.js",
+          "status": 200,
+          "body": "9e92447b6b60e6d43cd62e937828ffde663a5eb76e8c15bd8d3a71ed5235433d",
+          "bytes": 13296,
+          "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerInternational-FiWGI8ks.js",
+          "status": 200,
+          "body": "a2bbd0dd80b4db4f6422a4a8220901fa4bda19663a1fcd657b5dcfc02e3a8345",
+          "bytes": 21073,
+          "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PlayerAvatar-BAWCapKs.js",
+          "status": 200,
+          "body": "66c58b765799feb50b4f82f56c49ad2adefaffdae8c3e37dae5e83ef8be06b52",
+          "bytes": 15162,
+          "sha256": "1e8528b496a2726c0067059b89c49d97bcb4752d4e15ff943b853d666f37dfff"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/uclFormatHistory-DwuhruDw.js",
+          "status": 200,
+          "body": "229778c3c389f2ecfdce7782b81b5ce6b2edbfe157cf5c664bce910572026181",
+          "bytes": 12334,
+          "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBoots-BK_dXNrV.js",
+          "status": 200,
+          "body": "37dcfe225bff2eea807784a9cabd5c630ec89525a63f4a80b7f9d37b4eaf7d8a",
+          "bytes": 2017,
+          "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBootIds-BWkyFIXk.js",
+          "status": 200,
+          "body": "957d6aa2a5cff95dbee9eb770c0538581ec1bc9ab1c955c7b319f93e867a9f86",
+          "bytes": 293,
+          "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerCareerAppearance-BF4Z2JDW.js",
+          "status": 200,
+          "body": "a2c70e3a2098c30cf2dc45a93211670997ca2902b30c44885b682fb32e17c48f",
+          "bytes": 6180,
+          "sha256": "b1d9923c44e1f7a6b417cc44eda7de94b9616be8b599c27be3afef4ca7df08fb"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerRivalryChoices-MJgJuT1K.js",
+          "status": 200,
+          "body": "837ed35afb464c05d63efa7a3b07f630af6d16ffbdf73462834e012151cb166b",
+          "bytes": 9017,
+          "sha256": "47f59d03b8a9b8fa59adf3c4f1469bcdd54f2fffb79bd1c747d5394bcd037608"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/AppearanceBuilder-ZjSYZlIu.js",
+          "status": 200,
+          "body": "4a53aaaedbc88a1b872eba781c8ac97f877285e70428e62b192d21ca4e374d0d",
+          "bytes": 46290,
+          "sha256": "3e46ec0bf666139da5fd1d18d1a77eda570875e4c5e532689fcc602d375c41a1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerAwardsNight-BDQnO6dK.js",
+          "status": 200,
+          "body": "b88c195f22bbfe3ba2e31b93613f6b416c68a9059741ce8973ebb2990d3cded0",
+          "bytes": 2575,
+          "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arcade-CUT7KVjC.js",
+          "status": 200,
+          "body": "3dbdaf124cf5bbcfeb7d7c90a8649118b3742b6b70037ec674cec7decc7f110f",
+          "bytes": 489,
+          "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/freeKick-BSoL5hQo.js",
+          "status": 200,
+          "body": "8d2365869f6f11aa6c18482c64bb70c95b4f947a8510624e5d800e9d8c53262b",
+          "bytes": 1943,
+          "sha256": "050f7197d308868940e8ebf4e2384275bfdcc83047d98066eef53234aad4950c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/FlagImg-biaAPlPh.js",
+          "status": 200,
+          "body": "642d1dc3d5e2235708e6c10fb12888e3a0f1cf60a1a65688e993b7cd53cbf3eb",
+          "bytes": 5846,
+          "sha256": "6d0808a49a54ca4ddbe203ea5310a270525244f18068102955c27e3c30cbf643"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Confetti-DHAkqkOB.js",
+          "status": 200,
+          "body": "db0e6c09e364530db81ca571783a1ae0a880ef7e8a0a5f1f36a6f64d44cf7620",
+          "bytes": 904,
+          "sha256": "6ad7932d4aa84bbf54a442f77b3bd214c247b9356dbda9b317b8b782a18426ab"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CelebrationStyles-DFsKnF7w.js",
+          "status": 200,
+          "body": "e9f103cfb66e4eeb2829270454cd1c2b8d7ef0f75bd01a7cd9c7110839b8576b",
+          "bytes": 2126,
+          "sha256": "57ccfe47ddcbb3720f47b7ed0cc09f1c3f4fdf71d375ab04628447bd7c17048b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Celebration-DikPtGsy.js",
+          "status": 200,
+          "body": "8f7ac64c2c928040d8a6712913991c5c1ad06f1d3868fd6bf0bdf6f72a9e3695",
+          "bytes": 1527,
+          "sha256": "9a12448d4aba27b2845e23a37b4545f965fc39ff2a05cab48fa32f1f4b4cf502"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ShareButtons-BfKQqQ_N.js",
+          "status": 200,
+          "body": "0c7f39f89c649dfc51838fe81695c7c2082cefffe4b5606b58bb8237008f1287",
+          "bytes": 11646,
+          "sha256": "eb2cdb97ff0cd300a89a4dfabf6d6e615a6cc36ce14cdf327cb4790b485b14cf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useRevealScroll-DG1bPS9T.js",
+          "status": 200,
+          "body": "fae5b21c46e08883493ccc89a8e7842d3447088a4c1a6d1acfc50d4914f105c7",
+          "bytes": 1935,
+          "sha256": "b57518d37e50c94896a6c7c40dbf5f8e4ec39ee3a55467b4d17a3a57c464a7c7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/copy-CBvorOcw.js",
+          "status": 200,
+          "body": "705569342e6540ced6e6125cd29c2efb922e035e1e2d1db9de47700e58f2cb9b",
+          "bytes": 405,
+          "sha256": "b009205da952884f9cbf8e705d4cd1301c3de6506df43e07f5298aa86dbf4ddc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerCareer-D-l99MYG.js",
+          "status": 200,
+          "body": "ae04d1c93a61420bea7a458cece92f77888ea552dae6ee71de2a3b2a45bcce09",
+          "bytes": 1392480,
+          "sha256": "c7d3a802bfa625038f730c5c7c9fbf616e802e625ce7129e9ea4f359e7b9daa2"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/seoMetaPart30-C2bf-ABQ.js",
+          "status": 200,
+          "body": "86287a19ce18c98a69d2143ca1ab535982329f19acfaf3f06b68fb531c13d809",
+          "bytes": 1935,
+          "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccer2-CiBXpLBm.js",
+          "status": 200,
+          "body": "b1d758d94e9338fc73b244063529bfd98555dcce517a979b2884f5b5fe511fb5",
+          "bytes": 108547,
+          "sha256": "8c3a97b7b7fed272dbf32514e3f51d4e0c7bdc879d11465f07c1f925957d3950"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerSeasonCentre-BurvPrN4.js",
+          "status": 200,
+          "body": "68ed6b2f610c0243939494043bb7bed7cd6247cdc594fc2011c5c2ed0cd9eddd",
+          "bytes": 39691,
+          "sha256": "a42164fade0ed55b23d9b9e5e19a99b6f8e8c1f279a606a8120de499a0a220d6"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerMoments-CwGFkaLr.js",
+          "status": 200,
+          "body": "07f6c055a069855d382c51db437a50303ccb7c510866577037b5b8cbd7375495",
+          "bytes": 22343,
+          "sha256": "dd05b297b1dce7536d6ef5af251491008a24f329a5c472e9cac8a2bf6dbe8e0c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/core-Dsglyqbx.js",
+          "status": 200,
+          "body": "2cab022b9bf672a779790590b02c7954b6d5a5b001053218e402e34327960c70",
+          "bytes": 18979,
+          "sha256": "776b700241560c51c00f73e11ce26112a8b4e103e684e8197ba263bdd5419dbf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/leagueCore--DUG-EXw.js",
+          "status": 200,
+          "body": "2cf6d8728d6ede37bff92a8a60cb2aaa2e03c3ebd0c3d4f1f22f27156d763b09",
+          "bytes": 671,
+          "sha256": "d4de939f32c16be245e082dc10ab932e36f78734720c82832a7b9e5e49577ec9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/throughBallDrill-B9fNBoXH.js",
+          "status": 200,
+          "body": "1a604ff0eacbd65e538710e3a1235b8ee0fb27ae5c9d3ce49cb309f75e185c3f",
+          "bytes": 4784,
+          "sha256": "ab5ddf11e0270d06e80ec67f0f60f4d657e9c41bc9c17157c4e4a3774a5b9b87"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedShuffle-CJAps3xO.js",
+          "status": 200,
+          "body": "427035975e4308108cb357a36fe2a150741328689043db6663dbb845cc1f7a15",
+          "bytes": 144,
+          "sha256": "d3a78deb57b4135d45c23a9507a0c0374b0b296a166155667b5b14c1fa14cacc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ownGoalRule-J3XQry1d.js",
+          "status": 200,
+          "body": "da54cb5c724464dcb8ea77b8667bca8d2f9aa8f5ed99c267305f93de17edafc5",
+          "bytes": 179,
+          "sha256": "429872db3c8ff95d979e20c77adf793a66537433b1c4c5b49849cd000d60a144"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/resume-iKq-NREI.js",
+          "status": 200,
+          "body": "471c50e5472112930e5afcf91444a8e77853401602b487444be3dd631703e98c",
+          "bytes": 670,
+          "sha256": "2921cc3af2bde88afae3eea6ab19640952224509721968a152a4a98fa05ff7ed"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useBodyLock-JijVNd8t.js",
+          "status": 200,
+          "body": "d3555fd32e60da890620fb9bb794d92ec6929db3544a488b08f57c73c4f27ea0",
+          "bytes": 449,
+          "sha256": "270b732df41d1d8309184122ab6fd94d03b9b0d6b8a0d54b26fd10843e685074"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerSeasonCompetitions-CbSNBy3C.js",
+          "status": 200,
+          "body": "540055ec98b1a6c30045749a954c4074bc65bac8d217e94e3650e36bad050ce4",
+          "bytes": 3298,
+          "sha256": "3210b07e6fd0c4e30130445bcc5214a165f7686bf9c76dcc60ded785fe84a62e"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonCentre-eO44Xua8.js",
+          "status": 200,
+          "body": "ce69be39fed8dc0246e04c6b1e9fff2eeab7603bb230cc19d70da16ff1bad8cb",
+          "bytes": 45758,
+          "sha256": "8634a5574b6a4baf73be54218d6d13fa18a6c9b07e5394e1b8041fb6fd8baadd"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback--eiU5Aah.css",
+          "status": 200,
+          "body": "020289145711468b9904a80be4eb83e018b681e74249ff71554135575b0ef495",
+          "bytes": 2937,
+          "sha256": "8ef6cdb5d751c1854c6d5b299b25480dc00f24e28a83c1a024fd7e1a95b69831"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/LeagueTableCard-BFQaz56D.js",
+          "status": 200,
+          "body": "5432679bacfc39badec1e48d1506f31521242c5317acffe03f44e769a762f8fd",
+          "bytes": 3018,
+          "sha256": "933b04cfb86bf3c9369e69429abf335d96c905f5358015a70739cfc9fde08a37"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback-CAJnNlhw.js",
+          "status": 200,
+          "body": "06f02ae5e7c10defa255fe95da27b74a6313313971fcb60d98150c360ac7d89b",
+          "bytes": 1955,
+          "sha256": "afb6ca312569927cbd3b0e2dc7e31c93a387dbd6a472c0bf003f9c0c6427a717"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubManagerClock-C1EiWjUJ.js",
+          "status": 200,
+          "body": "235409e268e08740289a2e1f6f3989d0825518d42ca343c960af3cc5bfdb1d19",
+          "bytes": 245,
+          "sha256": "e0c6bd45cb144a1afde374e35a9f845119fb09c2427002d97746ce5e828211d5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-BrcOvsZb.css",
+          "status": 200,
+          "body": "18b18e89756a48c068ce7f31b280faa4a50f140d82aac9d269307feb48abe805",
+          "bytes": 3106,
+          "sha256": "4c52fd4406e8ce4b486465b909cbb5e2b37c6f84c764f30daff027ba85d3a56b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/MiniPitch-BW5q0-sz.js",
+          "status": 200,
+          "body": "6c7c900f7c3ed250ee90cfb775e4e436713d2ec42dfb1cfc4aac546de1c9371b",
+          "bytes": 4097,
+          "sha256": "fb4d66d3299b8589fb91ff63a19f5d6e05bc4086c99341f1b406c946537af0f3"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-CkPIsZtO.js",
+          "status": 200,
+          "body": "e723b1de3097e29d3f2b0ce82ca712b4532f199784bc935414a4ea7832323628",
+          "bytes": 9856,
+          "sha256": "b20232fe70082bbaef59a5dbb5c7cbe1d67700556cb825a90db81ebfd12e0ab8"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonResumeChip-xOl-QtBn.js",
+          "status": 200,
+          "body": "b6c829bbd57929e7d23d74e79c18bc15a2d19a9be77a73b472deeaa75d8d26fa",
+          "bytes": 715,
+          "sha256": "ea2e23e9adc3cc239a9f1c9f694513ed5ba57dee903243cc16084d177553a4dc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-C7mDbA-E.css",
+          "status": 200,
+          "body": "191768da365412af3efb361244417a2c2dcd87d2af26f8aa923265cfd53ea4c3",
+          "bytes": 199057,
+          "sha256": "65129a5758a258f45d5738f507761e09549516dc499109c600e68454c72a3ad9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-DfMOQy1y.js",
+          "status": 200,
+          "body": "3ac7c5034b1f1a1a05eb99242606590739403fb602038b5dabafdafd172f838b",
+          "bytes": 794422,
+          "sha256": "d3ab797d0ff0049b732db35b0de46a61eb84bc81b330720bdc32cc3b2363f27b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubRivalries-DuNC-DyB.js",
+          "status": 200,
+          "body": "304fd655f79fbe29de8acff3d960d8f93a79c2315677d7805886d59c9181ffde",
+          "bytes": 36634,
+          "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/formatNumber-CGuttX8h.js",
+          "status": 200,
+          "body": "0d67d996c829790e40bcb45f4f004459e9502d6a884dd583a8a969968b509ece",
+          "bytes": 152,
+          "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/dialogA11y-BCgxbiii.js",
+          "status": 200,
+          "body": "e9126765f01f791950b99f5256225db320d77e15034699c1bda69af19a7e8bae",
+          "bytes": 150,
+          "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useGameCompletion-BmKT4znx.js",
+          "status": 200,
+          "body": "815d5be946d165c5420eba28f88b8cc93310283f3a56930763f016b90f7b62a6",
+          "bytes": 810,
+          "sha256": "1d9e0640ac5d16ca3cb0eec92b1be43091d59ffb9211c6efe2c8727d4930c196"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/badges-DBtIdUic.js",
+          "status": 200,
+          "body": "2757f6d2034b086d92356fce601f7a12a8134437db01bfc9d9b2b9a66e96bd32",
+          "bytes": 5813,
+          "sha256": "2972ce479984631335659072871383bddfa3ff82e16df41eb6d6e9691d25fecf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameSeoContent-DHC4fQgP.js",
+          "status": 200,
+          "body": "a8a7cb126379c12b4361592003f4f64e0432ee8e09dadc749e3941662411e9b9",
+          "bytes": 6832,
+          "sha256": "6a336da96d8c5d4a64b1bf40467c6727d7a5c3cd62d401d89408594dab1c731f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/guideShape-QckYG0z8.js",
+          "status": 200,
+          "body": "12d01af48f27f12c29cbcd9d62e8f4c12c264a3178220cfc090876d9f39a5405",
+          "bytes": 5398,
+          "sha256": "d720afadf8a25548873f342c3e9ec7b112521a4f8d1600850f59d76e267b68f1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameNavbar-B7AYloU5.js",
+          "status": 200,
+          "body": "a51a0fc77289d4d935e471c8d669d28f90ef71572fe7f0cd11d8b1be04270796",
+          "bytes": 10360,
+          "sha256": "09ba53d53603e4975c2e688891f7a26f583f936fcb97f130e33ba9d5d7b67b09"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arrow-left-DM1xLtpT.js",
+          "status": 200,
+          "body": "47cf92f51945c2bfa4cabfab00bae8d75e49d149a4e3f13be823fd1d5bccf63a",
+          "bytes": 333,
+          "sha256": "d6c038dae365ec110be9f751ac96a75945e4d9c6d29066a3267df3f6c4ede3ae"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/star-HtLWnA8S.js",
+          "status": 200,
+          "body": "33ce389f11df692b538708d89a3827b0edcc4887f869dfe87ecc9336057255c4",
+          "bytes": 641,
+          "sha256": "ec53f3043c679e5a0af37e14c8c380853b7072f0060f3b3e58de2aae6e6d81a5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/medal-AEhvHme8.js",
+          "status": 200,
+          "body": "4761c2959901d58e2e1588130fb137bc4401f9c1784508405cddd4bc97428b46",
+          "bytes": 604,
+          "sha256": "f969156906ec0996414236b584dc1cb2107b026a80836e540e06708482b57dbc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameHelp-BM_A752h.js",
+          "status": 200,
+          "body": "6040bfe9c28fb59df08b4ea50cf142e01e1b2115103b1142f6eaacbd5c037a8f",
+          "bytes": 1649,
+          "sha256": "ae8652e0fb28a2678378009d7d2636940fac55eabb14ab60ad3dacf18de0a753"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/HowToPlayPopover-BDrxcw6u.js",
+          "status": 200,
+          "body": "aa1b86ef7848374e3d386a4da38d6af652d74278849fa18f3192aec5adfc3efa",
+          "bytes": 1367,
+          "sha256": "6a250faee01b9e993cdb37abb40845acbfed1202b3c8fad7d5cdeefb212f6b00"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/circle-help-DyEqZblG.js",
+          "status": 200,
+          "body": "e01d1c97c070158362185f566d9dda9a222360ad019b852dfc5442b48de35d53",
+          "bytes": 407,
+          "sha256": "85fae08676cacea7eaeab123feb523a3d8f4cfc5e2e724615c2e475257a77712"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/VictoryMoment-ZzaNoZdu.js",
+          "status": 200,
+          "body": "81ed703be8cbf6e7c16042dcef89d7e8da79f9d20469e30d9e2140d130bfbe9d",
+          "bytes": 3669,
+          "sha256": "16efe7b95a99ac2dd0b11159c81fe82509cf7d482943813364c6c5f0677877b5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-down-CFtPYTW4.js",
+          "status": 200,
+          "body": "a12de5e4375af8046ab4f816c31475f2934e5e500d4bf86c0161c9ce23693e58",
+          "bytes": 291,
+          "sha256": "07e74935745964ef243439b6d8a6f63f5a4414d25c50b3390f5c2ae2a43da51f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-up-BOXxp5rl.js",
+          "status": 200,
+          "body": "54cec69297f629d53799d25673ea6a44b2dfc01b6bb420b1b07a720af73e4828",
+          "bytes": 291,
+          "sha256": "ae13165ba6ee481a349f84d9aa0cdca41fa86ffb1458dd263735cce271c929c4"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/select-BdkP9F7h.js",
+          "status": 200,
+          "body": "d2c1ee59971555119783676a3c3ab7ed715d705090cfe7b9669fb326aa567e80",
+          "bytes": 21290,
+          "sha256": "be29dd4df9b0bc2ca4f683906ef4aa381bffd48ff0aee5ba2dd92e6a957d8531"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/confederationGroups-8jgsrX6T.js",
+          "status": 200,
+          "body": "2593aa92c119eb1bc09ce8176119707f820a41895fa8a81738084d93b950bf8f",
+          "bytes": 1449,
+          "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/managerOffers-Mi85K8qd.js",
+          "status": 200,
+          "body": "e010c06f5e702aabaf127d8a467dfdcecbfcf0845daec772ce3ec022acf30c5c",
+          "bytes": 5870,
+          "sha256": "b5defae9c817a44f8cb972332b2b4e068676735450c1660119a980b2c5028bda"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedRng-BKZQ2UGv.js",
+          "status": 200,
+          "body": "42f16cbcf4a0f4e37315181e6274511ded22c71195fe6b4d398b6a94a637628e",
+          "bytes": 254,
+          "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/intlNames-DiJYNZJt.js",
+          "status": 200,
+          "body": "9e92447b6b60e6d43cd62e937828ffde663a5eb76e8c15bd8d3a71ed5235433d",
+          "bytes": 13296,
+          "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerInternational-FiWGI8ks.js",
+          "status": 200,
+          "body": "a2bbd0dd80b4db4f6422a4a8220901fa4bda19663a1fcd657b5dcfc02e3a8345",
+          "bytes": 21073,
+          "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/uclFormatHistory-DwuhruDw.js",
+          "status": 200,
+          "body": "229778c3c389f2ecfdce7782b81b5ce6b2edbfe157cf5c664bce910572026181",
+          "bytes": 12334,
+          "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/AppearanceBuilder-ZjSYZlIu.js",
+          "status": 200,
+          "body": "4a53aaaedbc88a1b872eba781c8ac97f877285e70428e62b192d21ca4e374d0d",
+          "bytes": 46290,
+          "sha256": "3e46ec0bf666139da5fd1d18d1a77eda570875e4c5e532689fcc602d375c41a1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerCareerAppearance-BF4Z2JDW.js",
+          "status": 200,
+          "body": "a2c70e3a2098c30cf2dc45a93211670997ca2902b30c44885b682fb32e17c48f",
+          "bytes": 6180,
+          "sha256": "b1d9923c44e1f7a6b417cc44eda7de94b9616be8b599c27be3afef4ca7df08fb"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBoots-BK_dXNrV.js",
+          "status": 200,
+          "body": "37dcfe225bff2eea807784a9cabd5c630ec89525a63f4a80b7f9d37b4eaf7d8a",
+          "bytes": 2017,
+          "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBootIds-BWkyFIXk.js",
+          "status": 200,
+          "body": "957d6aa2a5cff95dbee9eb770c0538581ec1bc9ab1c955c7b319f93e867a9f86",
+          "bytes": 293,
+          "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerRivalryChoices-MJgJuT1K.js",
+          "status": 200,
+          "body": "837ed35afb464c05d63efa7a3b07f630af6d16ffbdf73462834e012151cb166b",
+          "bytes": 9017,
+          "sha256": "47f59d03b8a9b8fa59adf3c4f1469bcdd54f2fffb79bd1c747d5394bcd037608"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PlayerAvatar-BAWCapKs.js",
+          "status": 200,
+          "body": "66c58b765799feb50b4f82f56c49ad2adefaffdae8c3e37dae5e83ef8be06b52",
+          "bytes": 15162,
+          "sha256": "1e8528b496a2726c0067059b89c49d97bcb4752d4e15ff943b853d666f37dfff"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerAwardsNight-BDQnO6dK.js",
+          "status": 200,
+          "body": "b88c195f22bbfe3ba2e31b93613f6b416c68a9059741ce8973ebb2990d3cded0",
+          "bytes": 2575,
+          "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useRevealScroll-DG1bPS9T.js",
+          "status": 200,
+          "body": "fae5b21c46e08883493ccc89a8e7842d3447088a4c1a6d1acfc50d4914f105c7",
+          "bytes": 1935,
+          "sha256": "b57518d37e50c94896a6c7c40dbf5f8e4ec39ee3a55467b4d17a3a57c464a7c7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/FlagImg-biaAPlPh.js",
+          "status": 200,
+          "body": "642d1dc3d5e2235708e6c10fb12888e3a0f1cf60a1a65688e993b7cd53cbf3eb",
+          "bytes": 5846,
+          "sha256": "6d0808a49a54ca4ddbe203ea5310a270525244f18068102955c27e3c30cbf643"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arcade-CUT7KVjC.js",
+          "status": 200,
+          "body": "3dbdaf124cf5bbcfeb7d7c90a8649118b3742b6b70037ec674cec7decc7f110f",
+          "bytes": 489,
+          "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/freeKick-BSoL5hQo.js",
+          "status": 200,
+          "body": "8d2365869f6f11aa6c18482c64bb70c95b4f947a8510624e5d800e9d8c53262b",
+          "bytes": 1943,
+          "sha256": "050f7197d308868940e8ebf4e2384275bfdcc83047d98066eef53234aad4950c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Confetti-DHAkqkOB.js",
+          "status": 200,
+          "body": "db0e6c09e364530db81ca571783a1ae0a880ef7e8a0a5f1f36a6f64d44cf7620",
+          "bytes": 904,
+          "sha256": "6ad7932d4aa84bbf54a442f77b3bd214c247b9356dbda9b317b8b782a18426ab"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Celebration-DikPtGsy.js",
+          "status": 200,
+          "body": "8f7ac64c2c928040d8a6712913991c5c1ad06f1d3868fd6bf0bdf6f72a9e3695",
+          "bytes": 1527,
+          "sha256": "9a12448d4aba27b2845e23a37b4545f965fc39ff2a05cab48fa32f1f4b4cf502"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CelebrationStyles-DFsKnF7w.js",
+          "status": 200,
+          "body": "e9f103cfb66e4eeb2829270454cd1c2b8d7ef0f75bd01a7cd9c7110839b8576b",
+          "bytes": 2126,
+          "sha256": "57ccfe47ddcbb3720f47b7ed0cc09f1c3f4fdf71d375ab04628447bd7c17048b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ShareButtons-BfKQqQ_N.js",
+          "status": 200,
+          "body": "0c7f39f89c649dfc51838fe81695c7c2082cefffe4b5606b58bb8237008f1287",
+          "bytes": 11646,
+          "sha256": "eb2cdb97ff0cd300a89a4dfabf6d6e615a6cc36ce14cdf327cb4790b485b14cf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/copy-CBvorOcw.js",
+          "status": 200,
+          "body": "705569342e6540ced6e6125cd29c2efb922e035e1e2d1db9de47700e58f2cb9b",
+          "bytes": 405,
+          "sha256": "b009205da952884f9cbf8e705d4cd1301c3de6506df43e07f5298aa86dbf4ddc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useCareerMoment-DLS_9gR5.js",
+          "status": 200,
+          "body": "447b22a64e1ef872b959b3ace5c52a8ae388487b231a2f70dd281f1aceebec85",
+          "bytes": 267307,
+          "sha256": "be8d9ae9b78f2381b5f3ecb3daabc48a54fba87e57061fd181f056bbba0e82b0"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerCareer-D-l99MYG.js",
+          "status": 200,
+          "body": "ae04d1c93a61420bea7a458cece92f77888ea552dae6ee71de2a3b2a45bcce09",
+          "bytes": 1392480,
+          "sha256": "c7d3a802bfa625038f730c5c7c9fbf616e802e625ce7129e9ea4f359e7b9daa2"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/resume-iKq-NREI.js",
+          "status": 200,
+          "body": "471c50e5472112930e5afcf91444a8e77853401602b487444be3dd631703e98c",
+          "bytes": 670,
+          "sha256": "2921cc3af2bde88afae3eea6ab19640952224509721968a152a4a98fa05ff7ed"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/seoMetaPart30-C2bf-ABQ.js",
+          "status": 200,
+          "body": "86287a19ce18c98a69d2143ca1ab535982329f19acfaf3f06b68fb531c13d809",
+          "bytes": 1935,
+          "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonResumeChip-xOl-QtBn.js",
+          "status": 200,
+          "body": "b6c829bbd57929e7d23d74e79c18bc15a2d19a9be77a73b472deeaa75d8d26fa",
+          "bytes": 715,
+          "sha256": "ea2e23e9adc3cc239a9f1c9f694513ed5ba57dee903243cc16084d177553a4dc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccer2-CiBXpLBm.js",
+          "status": 200,
+          "body": "b1d758d94e9338fc73b244063529bfd98555dcce517a979b2884f5b5fe511fb5",
+          "bytes": 108547,
+          "sha256": "8c3a97b7b7fed272dbf32514e3f51d4e0c7bdc879d11465f07c1f925957d3950"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerSeasonCentre-BurvPrN4.js",
+          "status": 200,
+          "body": "68ed6b2f610c0243939494043bb7bed7cd6247cdc594fc2011c5c2ed0cd9eddd",
+          "bytes": 39691,
+          "sha256": "a42164fade0ed55b23d9b9e5e19a99b6f8e8c1f279a606a8120de499a0a220d6"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/leagueCore--DUG-EXw.js",
+          "status": 200,
+          "body": "2cf6d8728d6ede37bff92a8a60cb2aaa2e03c3ebd0c3d4f1f22f27156d763b09",
+          "bytes": 671,
+          "sha256": "d4de939f32c16be245e082dc10ab932e36f78734720c82832a7b9e5e49577ec9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedShuffle-CJAps3xO.js",
+          "status": 200,
+          "body": "427035975e4308108cb357a36fe2a150741328689043db6663dbb845cc1f7a15",
+          "bytes": 144,
+          "sha256": "d3a78deb57b4135d45c23a9507a0c0374b0b296a166155667b5b14c1fa14cacc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/core-Dsglyqbx.js",
+          "status": 200,
+          "body": "2cab022b9bf672a779790590b02c7954b6d5a5b001053218e402e34327960c70",
+          "bytes": 18979,
+          "sha256": "776b700241560c51c00f73e11ce26112a8b4e103e684e8197ba263bdd5419dbf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerMoments-CwGFkaLr.js",
+          "status": 200,
+          "body": "07f6c055a069855d382c51db437a50303ccb7c510866577037b5b8cbd7375495",
+          "bytes": 22343,
+          "sha256": "dd05b297b1dce7536d6ef5af251491008a24f329a5c472e9cac8a2bf6dbe8e0c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback--eiU5Aah.css",
+          "status": 200,
+          "body": "020289145711468b9904a80be4eb83e018b681e74249ff71554135575b0ef495",
+          "bytes": 2937,
+          "sha256": "8ef6cdb5d751c1854c6d5b299b25480dc00f24e28a83c1a024fd7e1a95b69831"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubManagerClock-C1EiWjUJ.js",
+          "status": 200,
+          "body": "235409e268e08740289a2e1f6f3989d0825518d42ca343c960af3cc5bfdb1d19",
+          "bytes": 245,
+          "sha256": "e0c6bd45cb144a1afde374e35a9f845119fb09c2427002d97746ce5e828211d5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback-CAJnNlhw.js",
+          "status": 200,
+          "body": "06f02ae5e7c10defa255fe95da27b74a6313313971fcb60d98150c360ac7d89b",
+          "bytes": 1955,
+          "sha256": "afb6ca312569927cbd3b0e2dc7e31c93a387dbd6a472c0bf003f9c0c6427a717"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/throughBallDrill-B9fNBoXH.js",
+          "status": 200,
+          "body": "1a604ff0eacbd65e538710e3a1235b8ee0fb27ae5c9d3ce49cb309f75e185c3f",
+          "bytes": 4784,
+          "sha256": "ab5ddf11e0270d06e80ec67f0f60f4d657e9c41bc9c17157c4e4a3774a5b9b87"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ownGoalRule-J3XQry1d.js",
+          "status": 200,
+          "body": "da54cb5c724464dcb8ea77b8667bca8d2f9aa8f5ed99c267305f93de17edafc5",
+          "bytes": 179,
+          "sha256": "429872db3c8ff95d979e20c77adf793a66537433b1c4c5b49849cd000d60a144"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/LeagueTableCard-BFQaz56D.js",
+          "status": 200,
+          "body": "5432679bacfc39badec1e48d1506f31521242c5317acffe03f44e769a762f8fd",
+          "bytes": 3018,
+          "sha256": "933b04cfb86bf3c9369e69429abf335d96c905f5358015a70739cfc9fde08a37"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useBodyLock-JijVNd8t.js",
+          "status": 200,
+          "body": "d3555fd32e60da890620fb9bb794d92ec6929db3544a488b08f57c73c4f27ea0",
+          "bytes": 449,
+          "sha256": "270b732df41d1d8309184122ab6fd94d03b9b0d6b8a0d54b26fd10843e685074"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerSeasonCompetitions-CbSNBy3C.js",
+          "status": 200,
+          "body": "540055ec98b1a6c30045749a954c4074bc65bac8d217e94e3650e36bad050ce4",
+          "bytes": 3298,
+          "sha256": "3210b07e6fd0c4e30130445bcc5214a165f7686bf9c76dcc60ded785fe84a62e"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonCentre-eO44Xua8.js",
+          "status": 200,
+          "body": "ce69be39fed8dc0246e04c6b1e9fff2eeab7603bb230cc19d70da16ff1bad8cb",
+          "bytes": 45758,
+          "sha256": "8634a5574b6a4baf73be54218d6d13fa18a6c9b07e5394e1b8041fb6fd8baadd"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-BrcOvsZb.css",
+          "status": 200,
+          "body": "18b18e89756a48c068ce7f31b280faa4a50f140d82aac9d269307feb48abe805",
+          "bytes": 3106,
+          "sha256": "4c52fd4406e8ce4b486465b909cbb5e2b37c6f84c764f30daff027ba85d3a56b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/MiniPitch-BW5q0-sz.js",
+          "status": 200,
+          "body": "6c7c900f7c3ed250ee90cfb775e4e436713d2ec42dfb1cfc4aac546de1c9371b",
+          "bytes": 4097,
+          "sha256": "fb4d66d3299b8589fb91ff63a19f5d6e05bc4086c99341f1b406c946537af0f3"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-CkPIsZtO.js",
+          "status": 200,
+          "body": "e723b1de3097e29d3f2b0ce82ca712b4532f199784bc935414a4ea7832323628",
+          "bytes": 9856,
+          "sha256": "b20232fe70082bbaef59a5dbb5c7cbe1d67700556cb825a90db81ebfd12e0ab8"
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "externalRequests": [
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+        "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-11T09%3A06%3A40.570Z&start_at=lte.2026-10-12T17%3A06%3A40.570Z",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/am.png",
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+        "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-11T09%3A06%3A42.130Z&start_at=lte.2026-10-12T17%3A06%3A42.130Z",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/am.png"
+      ],
+      "fontScope": "network-free installed fallback fonts, actual document.fonts.ready; saved help preference already seen",
+      "document": "24cfc751dba814c5bc7f4137b9a2bf8aff4a88dccd3a71b85364e91482c4f36b",
+      "startup": "1bd4d87f4e4a80c5c560f2fc26d2d6ab4852a5170a78b360427bd2f7191d8273",
+      "loadedSave": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "bodyBefore": {
+        "attribute": null,
+        "declarations": [],
+        "overflow": "visible",
+        "pointerEvents": "auto",
+        "marginRight": "0px",
+        "position": "static"
+      },
+      "game2": {
+        "game": "eddb1de11cfd8305d3ac79215f924aeadb8f8e26281e817dc2e31fc472ba011f",
+        "name": "Cercle Brugge",
+        "bar": "Cercle Brugge\n2-2\nAnderlecht",
+        "scoreboard": [
+          "Cercle Brugge",
+          "2-2",
+          "Anderlecht"
+        ],
+        "events": [
+          "28'⚽ Goal, Cercle Brugge",
+          "32'⚽ Goal, Cercle Brugge",
+          "58'🔁 You come on",
+          "64'⚽ You score!",
+          "76'⚽ You score!"
+        ],
+        "expected": [
+          "⚽ Goal, Cercle Brugge",
+          "⚽ Goal, Cercle Brugge",
+          "🔁 You come on",
+          "⚽ You score!",
+          "⚽ You score!"
+        ],
+        "clock": "2-2"
+      },
+      "fixtureText": [
+        "Antwerp",
+        "Cercle Brugge",
+        "Charleroi",
+        "Club Brugge",
+        "Dender",
+        "Genk",
+        "Gent",
+        "La Louviere",
+        "Mechelen",
+        "OH Leuven",
+        "Sint-Truiden",
+        "Standard Liege",
+        "Union Saint-Gilloise",
+        "Westerlo",
+        "Zulte Waregem",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Antwerp",
+        "Cercle Brugge",
+        "Charleroi",
+        "Club Brugge",
+        "Dender",
+        "Genk",
+        "Gent",
+        "La Louviere",
+        "Mechelen",
+        "OH Leuven",
+        "Sint-Truiden",
+        "Standard Liege",
+        "Union Saint-Gilloise",
+        "Westerlo",
+        "Zulte Waregem",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded"
+      ],
+      "saveAfter": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "bodyAfter": {
+        "attribute": "",
+        "declarations": [],
+        "overflow": "visible",
+        "pointerEvents": "auto",
+        "marginRight": "0px",
+        "position": "static"
+      },
+      "reloadStartup": "94dd5b17b0ba68eee42a6e2a33c74e0f716cef48ceb37856618c5f29c3982db3",
+      "reloadSave": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "reloadedGame2": {
+        "game": "eddb1de11cfd8305d3ac79215f924aeadb8f8e26281e817dc2e31fc472ba011f",
+        "name": "Cercle Brugge",
+        "bar": "Cercle Brugge\n2-2\nAnderlecht",
+        "scoreboard": [
+          "Cercle Brugge",
+          "2-2",
+          "Anderlecht"
+        ],
+        "events": [
+          "28'⚽ Goal, Cercle Brugge",
+          "32'⚽ Goal, Cercle Brugge",
+          "58'🔁 You come on",
+          "64'⚽ You score!",
+          "76'⚽ You score!"
+        ],
+        "expected": [
+          "⚽ Goal, Cercle Brugge",
+          "⚽ Goal, Cercle Brugge",
+          "🔁 You come on",
+          "⚽ You score!",
+          "⚽ You score!"
+        ],
+        "clock": "2-2"
+      },
+      "reloadFinalSave": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "reloadReads": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "bodyReloadAfter": {
+        "attribute": "",
+        "declarations": [],
+        "overflow": "visible",
+        "pointerEvents": "auto",
+        "marginRight": "0px",
+        "position": "static"
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "status": "pass",
+      "save": "e8fb76eb43a9b52f38c75f470c2270dd3a57836d747e91e1bfefd5cc7334e1df",
+      "reads": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "shots": [
+        {
+          "file": "shots/390-game2.png",
+          "bytes": 52721,
+          "sha256": "756d9bbba951cd0470bd11f12611276c9ff30b23192c144cc7f061c23815e35f"
+        },
+        {
+          "file": "shots/390-fixtures.png",
+          "bytes": 51320,
+          "sha256": "51e44d58c35f085a130bcbfe6513e5a685329ff956a5d4e6d59c4c6b117aa059"
+        },
+        {
+          "file": "shots/390-game2-reload.png",
+          "bytes": 52721,
+          "sha256": "756d9bbba951cd0470bd11f12611276c9ff30b23192c144cc7f061c23815e35f"
+        }
+      ],
+      "layouts": [
+        {
+          "label": "game2 scoreboard",
+          "width": 390,
+          "height": 844,
+          "visualWidth": 390,
+          "visualHeight": 844,
+          "scale": 1,
+          "overflow": false,
+          "stableFrames": 4,
+          "finiteAnimations": 0,
+          "rect": {
+            "x": 12,
+            "y": 232,
+            "width": 366,
+            "height": 44
+          },
+          "inside": true,
+          "points": [
+            {
+              "px": 195,
+              "py": 254,
+              "hit": "<span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span>",
+              "painted": true
+            },
+            {
+              "px": 85.2,
+              "py": 240.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 304.8,
+              "py": 240.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 85.2,
+              "py": 267.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 304.8,
+              "py": 267.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            }
+          ],
+          "body": {
+            "attribute": "overflow: hidden;",
+            "declarations": [
+              [
+                "overflow-x",
+                "hidden",
+                ""
+              ],
+              [
+                "overflow-y",
+                "hidden",
+                ""
+              ]
+            ]
+          },
+          "fonts": "loaded"
+        },
+        {
+          "label": "reloaded game2 scoreboard",
+          "width": 390,
+          "height": 844,
+          "visualWidth": 390,
+          "visualHeight": 844,
+          "scale": 1,
+          "overflow": false,
+          "stableFrames": 4,
+          "finiteAnimations": 0,
+          "rect": {
+            "x": 12,
+            "y": 232,
+            "width": 366,
+            "height": 44
+          },
+          "inside": true,
+          "points": [
+            {
+              "px": 195,
+              "py": 254,
+              "hit": "<span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span>",
+              "painted": true
+            },
+            {
+              "px": 85.2,
+              "py": 240.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 304.8,
+              "py": 240.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 85.2,
+              "py": 267.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 304.8,
+              "py": 267.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            }
+          ],
+          "body": {
+            "attribute": "overflow: hidden;",
+            "declarations": [
+              [
+                "overflow-x",
+                "hidden",
+                ""
+              ],
+              [
+                "overflow-y",
+                "hidden",
+                ""
+              ]
+            ]
+          },
+          "fonts": "loaded"
+        }
+      ],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:4597/assets/index-C7mDbA-E.css",
+          "status": 200,
+          "body": "191768da365412af3efb361244417a2c2dcd87d2af26f8aa923265cfd53ea4c3",
+          "bytes": 199057,
+          "sha256": "65129a5758a258f45d5738f507761e09549516dc499109c600e68454c72a3ad9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-DfMOQy1y.js",
+          "status": 200,
+          "body": "3ac7c5034b1f1a1a05eb99242606590739403fb602038b5dabafdafd172f838b",
+          "bytes": 794422,
+          "sha256": "d3ab797d0ff0049b732db35b0de46a61eb84bc81b330720bdc32cc3b2363f27b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useCareerMoment-DLS_9gR5.js",
+          "status": 200,
+          "body": "447b22a64e1ef872b959b3ace5c52a8ae388487b231a2f70dd281f1aceebec85",
+          "bytes": 267307,
+          "sha256": "be8d9ae9b78f2381b5f3ecb3daabc48a54fba87e57061fd181f056bbba0e82b0"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubRivalries-DuNC-DyB.js",
+          "status": 200,
+          "body": "304fd655f79fbe29de8acff3d960d8f93a79c2315677d7805886d59c9181ffde",
+          "bytes": 36634,
+          "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/formatNumber-CGuttX8h.js",
+          "status": 200,
+          "body": "0d67d996c829790e40bcb45f4f004459e9502d6a884dd583a8a969968b509ece",
+          "bytes": 152,
+          "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/dialogA11y-BCgxbiii.js",
+          "status": 200,
+          "body": "e9126765f01f791950b99f5256225db320d77e15034699c1bda69af19a7e8bae",
+          "bytes": 150,
+          "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useGameCompletion-BmKT4znx.js",
+          "status": 200,
+          "body": "815d5be946d165c5420eba28f88b8cc93310283f3a56930763f016b90f7b62a6",
+          "bytes": 810,
+          "sha256": "1d9e0640ac5d16ca3cb0eec92b1be43091d59ffb9211c6efe2c8727d4930c196"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/badges-DBtIdUic.js",
+          "status": 200,
+          "body": "2757f6d2034b086d92356fce601f7a12a8134437db01bfc9d9b2b9a66e96bd32",
+          "bytes": 5813,
+          "sha256": "2972ce479984631335659072871383bddfa3ff82e16df41eb6d6e9691d25fecf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameSeoContent-DHC4fQgP.js",
+          "status": 200,
+          "body": "a8a7cb126379c12b4361592003f4f64e0432ee8e09dadc749e3941662411e9b9",
+          "bytes": 6832,
+          "sha256": "6a336da96d8c5d4a64b1bf40467c6727d7a5c3cd62d401d89408594dab1c731f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/guideShape-QckYG0z8.js",
+          "status": 200,
+          "body": "12d01af48f27f12c29cbcd9d62e8f4c12c264a3178220cfc090876d9f39a5405",
+          "bytes": 5398,
+          "sha256": "d720afadf8a25548873f342c3e9ec7b112521a4f8d1600850f59d76e267b68f1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameNavbar-B7AYloU5.js",
+          "status": 200,
+          "body": "a51a0fc77289d4d935e471c8d669d28f90ef71572fe7f0cd11d8b1be04270796",
+          "bytes": 10360,
+          "sha256": "09ba53d53603e4975c2e688891f7a26f583f936fcb97f130e33ba9d5d7b67b09"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arrow-left-DM1xLtpT.js",
+          "status": 200,
+          "body": "47cf92f51945c2bfa4cabfab00bae8d75e49d149a4e3f13be823fd1d5bccf63a",
+          "bytes": 333,
+          "sha256": "d6c038dae365ec110be9f751ac96a75945e4d9c6d29066a3267df3f6c4ede3ae"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/star-HtLWnA8S.js",
+          "status": 200,
+          "body": "33ce389f11df692b538708d89a3827b0edcc4887f869dfe87ecc9336057255c4",
+          "bytes": 641,
+          "sha256": "ec53f3043c679e5a0af37e14c8c380853b7072f0060f3b3e58de2aae6e6d81a5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/medal-AEhvHme8.js",
+          "status": 200,
+          "body": "4761c2959901d58e2e1588130fb137bc4401f9c1784508405cddd4bc97428b46",
+          "bytes": 604,
+          "sha256": "f969156906ec0996414236b584dc1cb2107b026a80836e540e06708482b57dbc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameHelp-BM_A752h.js",
+          "status": 200,
+          "body": "6040bfe9c28fb59df08b4ea50cf142e01e1b2115103b1142f6eaacbd5c037a8f",
+          "bytes": 1649,
+          "sha256": "ae8652e0fb28a2678378009d7d2636940fac55eabb14ab60ad3dacf18de0a753"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/HowToPlayPopover-BDrxcw6u.js",
+          "status": 200,
+          "body": "aa1b86ef7848374e3d386a4da38d6af652d74278849fa18f3192aec5adfc3efa",
+          "bytes": 1367,
+          "sha256": "6a250faee01b9e993cdb37abb40845acbfed1202b3c8fad7d5cdeefb212f6b00"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/circle-help-DyEqZblG.js",
+          "status": 200,
+          "body": "e01d1c97c070158362185f566d9dda9a222360ad019b852dfc5442b48de35d53",
+          "bytes": 407,
+          "sha256": "85fae08676cacea7eaeab123feb523a3d8f4cfc5e2e724615c2e475257a77712"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/VictoryMoment-ZzaNoZdu.js",
+          "status": 200,
+          "body": "81ed703be8cbf6e7c16042dcef89d7e8da79f9d20469e30d9e2140d130bfbe9d",
+          "bytes": 3669,
+          "sha256": "16efe7b95a99ac2dd0b11159c81fe82509cf7d482943813364c6c5f0677877b5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/select-BdkP9F7h.js",
+          "status": 200,
+          "body": "d2c1ee59971555119783676a3c3ab7ed715d705090cfe7b9669fb326aa567e80",
+          "bytes": 21290,
+          "sha256": "be29dd4df9b0bc2ca4f683906ef4aa381bffd48ff0aee5ba2dd92e6a957d8531"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-down-CFtPYTW4.js",
+          "status": 200,
+          "body": "a12de5e4375af8046ab4f816c31475f2934e5e500d4bf86c0161c9ce23693e58",
+          "bytes": 291,
+          "sha256": "07e74935745964ef243439b6d8a6f63f5a4414d25c50b3390f5c2ae2a43da51f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-up-BOXxp5rl.js",
+          "status": 200,
+          "body": "54cec69297f629d53799d25673ea6a44b2dfc01b6bb420b1b07a720af73e4828",
+          "bytes": 291,
+          "sha256": "ae13165ba6ee481a349f84d9aa0cdca41fa86ffb1458dd263735cce271c929c4"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/confederationGroups-8jgsrX6T.js",
+          "status": 200,
+          "body": "2593aa92c119eb1bc09ce8176119707f820a41895fa8a81738084d93b950bf8f",
+          "bytes": 1449,
+          "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/managerOffers-Mi85K8qd.js",
+          "status": 200,
+          "body": "e010c06f5e702aabaf127d8a467dfdcecbfcf0845daec772ce3ec022acf30c5c",
+          "bytes": 5870,
+          "sha256": "b5defae9c817a44f8cb972332b2b4e068676735450c1660119a980b2c5028bda"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedRng-BKZQ2UGv.js",
+          "status": 200,
+          "body": "42f16cbcf4a0f4e37315181e6274511ded22c71195fe6b4d398b6a94a637628e",
+          "bytes": 254,
+          "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerInternational-FiWGI8ks.js",
+          "status": 200,
+          "body": "a2bbd0dd80b4db4f6422a4a8220901fa4bda19663a1fcd657b5dcfc02e3a8345",
+          "bytes": 21073,
+          "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/intlNames-DiJYNZJt.js",
+          "status": 200,
+          "body": "9e92447b6b60e6d43cd62e937828ffde663a5eb76e8c15bd8d3a71ed5235433d",
+          "bytes": 13296,
+          "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/uclFormatHistory-DwuhruDw.js",
+          "status": 200,
+          "body": "229778c3c389f2ecfdce7782b81b5ce6b2edbfe157cf5c664bce910572026181",
+          "bytes": 12334,
+          "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PlayerAvatar-BAWCapKs.js",
+          "status": 200,
+          "body": "66c58b765799feb50b4f82f56c49ad2adefaffdae8c3e37dae5e83ef8be06b52",
+          "bytes": 15162,
+          "sha256": "1e8528b496a2726c0067059b89c49d97bcb4752d4e15ff943b853d666f37dfff"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBoots-BK_dXNrV.js",
+          "status": 200,
+          "body": "37dcfe225bff2eea807784a9cabd5c630ec89525a63f4a80b7f9d37b4eaf7d8a",
+          "bytes": 2017,
+          "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBootIds-BWkyFIXk.js",
+          "status": 200,
+          "body": "957d6aa2a5cff95dbee9eb770c0538581ec1bc9ab1c955c7b319f93e867a9f86",
+          "bytes": 293,
+          "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerCareerAppearance-BF4Z2JDW.js",
+          "status": 200,
+          "body": "a2c70e3a2098c30cf2dc45a93211670997ca2902b30c44885b682fb32e17c48f",
+          "bytes": 6180,
+          "sha256": "b1d9923c44e1f7a6b417cc44eda7de94b9616be8b599c27be3afef4ca7df08fb"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerRivalryChoices-MJgJuT1K.js",
+          "status": 200,
+          "body": "837ed35afb464c05d63efa7a3b07f630af6d16ffbdf73462834e012151cb166b",
+          "bytes": 9017,
+          "sha256": "47f59d03b8a9b8fa59adf3c4f1469bcdd54f2fffb79bd1c747d5394bcd037608"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerAwardsNight-BDQnO6dK.js",
+          "status": 200,
+          "body": "b88c195f22bbfe3ba2e31b93613f6b416c68a9059741ce8973ebb2990d3cded0",
+          "bytes": 2575,
+          "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useRevealScroll-DG1bPS9T.js",
+          "status": 200,
+          "body": "fae5b21c46e08883493ccc89a8e7842d3447088a4c1a6d1acfc50d4914f105c7",
+          "bytes": 1935,
+          "sha256": "b57518d37e50c94896a6c7c40dbf5f8e4ec39ee3a55467b4d17a3a57c464a7c7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/AppearanceBuilder-ZjSYZlIu.js",
+          "status": 200,
+          "body": "4a53aaaedbc88a1b872eba781c8ac97f877285e70428e62b192d21ca4e374d0d",
+          "bytes": 46290,
+          "sha256": "3e46ec0bf666139da5fd1d18d1a77eda570875e4c5e532689fcc602d375c41a1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arcade-CUT7KVjC.js",
+          "status": 200,
+          "body": "3dbdaf124cf5bbcfeb7d7c90a8649118b3742b6b70037ec674cec7decc7f110f",
+          "bytes": 489,
+          "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/freeKick-BSoL5hQo.js",
+          "status": 200,
+          "body": "8d2365869f6f11aa6c18482c64bb70c95b4f947a8510624e5d800e9d8c53262b",
+          "bytes": 1943,
+          "sha256": "050f7197d308868940e8ebf4e2384275bfdcc83047d98066eef53234aad4950c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/FlagImg-biaAPlPh.js",
+          "status": 200,
+          "body": "642d1dc3d5e2235708e6c10fb12888e3a0f1cf60a1a65688e993b7cd53cbf3eb",
+          "bytes": 5846,
+          "sha256": "6d0808a49a54ca4ddbe203ea5310a270525244f18068102955c27e3c30cbf643"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Confetti-DHAkqkOB.js",
+          "status": 200,
+          "body": "db0e6c09e364530db81ca571783a1ae0a880ef7e8a0a5f1f36a6f64d44cf7620",
+          "bytes": 904,
+          "sha256": "6ad7932d4aa84bbf54a442f77b3bd214c247b9356dbda9b317b8b782a18426ab"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Celebration-DikPtGsy.js",
+          "status": 200,
+          "body": "8f7ac64c2c928040d8a6712913991c5c1ad06f1d3868fd6bf0bdf6f72a9e3695",
+          "bytes": 1527,
+          "sha256": "9a12448d4aba27b2845e23a37b4545f965fc39ff2a05cab48fa32f1f4b4cf502"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CelebrationStyles-DFsKnF7w.js",
+          "status": 200,
+          "body": "e9f103cfb66e4eeb2829270454cd1c2b8d7ef0f75bd01a7cd9c7110839b8576b",
+          "bytes": 2126,
+          "sha256": "57ccfe47ddcbb3720f47b7ed0cc09f1c3f4fdf71d375ab04628447bd7c17048b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/copy-CBvorOcw.js",
+          "status": 200,
+          "body": "705569342e6540ced6e6125cd29c2efb922e035e1e2d1db9de47700e58f2cb9b",
+          "bytes": 405,
+          "sha256": "b009205da952884f9cbf8e705d4cd1301c3de6506df43e07f5298aa86dbf4ddc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ShareButtons-BfKQqQ_N.js",
+          "status": 200,
+          "body": "0c7f39f89c649dfc51838fe81695c7c2082cefffe4b5606b58bb8237008f1287",
+          "bytes": 11646,
+          "sha256": "eb2cdb97ff0cd300a89a4dfabf6d6e615a6cc36ce14cdf327cb4790b485b14cf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerCareer-D-l99MYG.js",
+          "status": 200,
+          "body": "ae04d1c93a61420bea7a458cece92f77888ea552dae6ee71de2a3b2a45bcce09",
+          "bytes": 1392480,
+          "sha256": "c7d3a802bfa625038f730c5c7c9fbf616e802e625ce7129e9ea4f359e7b9daa2"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/seoMetaPart30-C2bf-ABQ.js",
+          "status": 200,
+          "body": "86287a19ce18c98a69d2143ca1ab535982329f19acfaf3f06b68fb531c13d809",
+          "bytes": 1935,
+          "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccer2-CiBXpLBm.js",
+          "status": 200,
+          "body": "b1d758d94e9338fc73b244063529bfd98555dcce517a979b2884f5b5fe511fb5",
+          "bytes": 108547,
+          "sha256": "8c3a97b7b7fed272dbf32514e3f51d4e0c7bdc879d11465f07c1f925957d3950"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerSeasonCentre-BurvPrN4.js",
+          "status": 200,
+          "body": "68ed6b2f610c0243939494043bb7bed7cd6247cdc594fc2011c5c2ed0cd9eddd",
+          "bytes": 39691,
+          "sha256": "a42164fade0ed55b23d9b9e5e19a99b6f8e8c1f279a606a8120de499a0a220d6"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/throughBallDrill-B9fNBoXH.js",
+          "status": 200,
+          "body": "1a604ff0eacbd65e538710e3a1235b8ee0fb27ae5c9d3ce49cb309f75e185c3f",
+          "bytes": 4784,
+          "sha256": "ab5ddf11e0270d06e80ec67f0f60f4d657e9c41bc9c17157c4e4a3774a5b9b87"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/leagueCore--DUG-EXw.js",
+          "status": 200,
+          "body": "2cf6d8728d6ede37bff92a8a60cb2aaa2e03c3ebd0c3d4f1f22f27156d763b09",
+          "bytes": 671,
+          "sha256": "d4de939f32c16be245e082dc10ab932e36f78734720c82832a7b9e5e49577ec9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedShuffle-CJAps3xO.js",
+          "status": 200,
+          "body": "427035975e4308108cb357a36fe2a150741328689043db6663dbb845cc1f7a15",
+          "bytes": 144,
+          "sha256": "d3a78deb57b4135d45c23a9507a0c0374b0b296a166155667b5b14c1fa14cacc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ownGoalRule-J3XQry1d.js",
+          "status": 200,
+          "body": "da54cb5c724464dcb8ea77b8667bca8d2f9aa8f5ed99c267305f93de17edafc5",
+          "bytes": 179,
+          "sha256": "429872db3c8ff95d979e20c77adf793a66537433b1c4c5b49849cd000d60a144"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/resume-iKq-NREI.js",
+          "status": 200,
+          "body": "471c50e5472112930e5afcf91444a8e77853401602b487444be3dd631703e98c",
+          "bytes": 670,
+          "sha256": "2921cc3af2bde88afae3eea6ab19640952224509721968a152a4a98fa05ff7ed"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerSeasonCompetitions-CbSNBy3C.js",
+          "status": 200,
+          "body": "540055ec98b1a6c30045749a954c4074bc65bac8d217e94e3650e36bad050ce4",
+          "bytes": 3298,
+          "sha256": "3210b07e6fd0c4e30130445bcc5214a165f7686bf9c76dcc60ded785fe84a62e"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useBodyLock-JijVNd8t.js",
+          "status": 200,
+          "body": "d3555fd32e60da890620fb9bb794d92ec6929db3544a488b08f57c73c4f27ea0",
+          "bytes": 449,
+          "sha256": "270b732df41d1d8309184122ab6fd94d03b9b0d6b8a0d54b26fd10843e685074"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/core-Dsglyqbx.js",
+          "status": 200,
+          "body": "2cab022b9bf672a779790590b02c7954b6d5a5b001053218e402e34327960c70",
+          "bytes": 18979,
+          "sha256": "776b700241560c51c00f73e11ce26112a8b4e103e684e8197ba263bdd5419dbf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerMoments-CwGFkaLr.js",
+          "status": 200,
+          "body": "07f6c055a069855d382c51db437a50303ccb7c510866577037b5b8cbd7375495",
+          "bytes": 22343,
+          "sha256": "dd05b297b1dce7536d6ef5af251491008a24f329a5c472e9cac8a2bf6dbe8e0c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubManagerClock-C1EiWjUJ.js",
+          "status": 200,
+          "body": "235409e268e08740289a2e1f6f3989d0825518d42ca343c960af3cc5bfdb1d19",
+          "bytes": 245,
+          "sha256": "e0c6bd45cb144a1afde374e35a9f845119fb09c2427002d97746ce5e828211d5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback--eiU5Aah.css",
+          "status": 200,
+          "body": "020289145711468b9904a80be4eb83e018b681e74249ff71554135575b0ef495",
+          "bytes": 2937,
+          "sha256": "8ef6cdb5d751c1854c6d5b299b25480dc00f24e28a83c1a024fd7e1a95b69831"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonCentre-eO44Xua8.js",
+          "status": 200,
+          "body": "ce69be39fed8dc0246e04c6b1e9fff2eeab7603bb230cc19d70da16ff1bad8cb",
+          "bytes": 45758,
+          "sha256": "8634a5574b6a4baf73be54218d6d13fa18a6c9b07e5394e1b8041fb6fd8baadd"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback-CAJnNlhw.js",
+          "status": 200,
+          "body": "06f02ae5e7c10defa255fe95da27b74a6313313971fcb60d98150c360ac7d89b",
+          "bytes": 1955,
+          "sha256": "afb6ca312569927cbd3b0e2dc7e31c93a387dbd6a472c0bf003f9c0c6427a717"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/LeagueTableCard-BFQaz56D.js",
+          "status": 200,
+          "body": "5432679bacfc39badec1e48d1506f31521242c5317acffe03f44e769a762f8fd",
+          "bytes": 3018,
+          "sha256": "933b04cfb86bf3c9369e69429abf335d96c905f5358015a70739cfc9fde08a37"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-BrcOvsZb.css",
+          "status": 200,
+          "body": "18b18e89756a48c068ce7f31b280faa4a50f140d82aac9d269307feb48abe805",
+          "bytes": 3106,
+          "sha256": "4c52fd4406e8ce4b486465b909cbb5e2b37c6f84c764f30daff027ba85d3a56b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-CkPIsZtO.js",
+          "status": 200,
+          "body": "e723b1de3097e29d3f2b0ce82ca712b4532f199784bc935414a4ea7832323628",
+          "bytes": 9856,
+          "sha256": "b20232fe70082bbaef59a5dbb5c7cbe1d67700556cb825a90db81ebfd12e0ab8"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/MiniPitch-BW5q0-sz.js",
+          "status": 200,
+          "body": "6c7c900f7c3ed250ee90cfb775e4e436713d2ec42dfb1cfc4aac546de1c9371b",
+          "bytes": 4097,
+          "sha256": "fb4d66d3299b8589fb91ff63a19f5d6e05bc4086c99341f1b406c946537af0f3"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonResumeChip-xOl-QtBn.js",
+          "status": 200,
+          "body": "b6c829bbd57929e7d23d74e79c18bc15a2d19a9be77a73b472deeaa75d8d26fa",
+          "bytes": 715,
+          "sha256": "ea2e23e9adc3cc239a9f1c9f694513ed5ba57dee903243cc16084d177553a4dc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-C7mDbA-E.css",
+          "status": 200,
+          "body": "191768da365412af3efb361244417a2c2dcd87d2af26f8aa923265cfd53ea4c3",
+          "bytes": 199057,
+          "sha256": "65129a5758a258f45d5738f507761e09549516dc499109c600e68454c72a3ad9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-DfMOQy1y.js",
+          "status": 200,
+          "body": "3ac7c5034b1f1a1a05eb99242606590739403fb602038b5dabafdafd172f838b",
+          "bytes": 794422,
+          "sha256": "d3ab797d0ff0049b732db35b0de46a61eb84bc81b330720bdc32cc3b2363f27b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/formatNumber-CGuttX8h.js",
+          "status": 200,
+          "body": "0d67d996c829790e40bcb45f4f004459e9502d6a884dd583a8a969968b509ece",
+          "bytes": 152,
+          "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubRivalries-DuNC-DyB.js",
+          "status": 200,
+          "body": "304fd655f79fbe29de8acff3d960d8f93a79c2315677d7805886d59c9181ffde",
+          "bytes": 36634,
+          "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/dialogA11y-BCgxbiii.js",
+          "status": 200,
+          "body": "e9126765f01f791950b99f5256225db320d77e15034699c1bda69af19a7e8bae",
+          "bytes": 150,
+          "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useGameCompletion-BmKT4znx.js",
+          "status": 200,
+          "body": "815d5be946d165c5420eba28f88b8cc93310283f3a56930763f016b90f7b62a6",
+          "bytes": 810,
+          "sha256": "1d9e0640ac5d16ca3cb0eec92b1be43091d59ffb9211c6efe2c8727d4930c196"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/badges-DBtIdUic.js",
+          "status": 200,
+          "body": "2757f6d2034b086d92356fce601f7a12a8134437db01bfc9d9b2b9a66e96bd32",
+          "bytes": 5813,
+          "sha256": "2972ce479984631335659072871383bddfa3ff82e16df41eb6d6e9691d25fecf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/guideShape-QckYG0z8.js",
+          "status": 200,
+          "body": "12d01af48f27f12c29cbcd9d62e8f4c12c264a3178220cfc090876d9f39a5405",
+          "bytes": 5398,
+          "sha256": "d720afadf8a25548873f342c3e9ec7b112521a4f8d1600850f59d76e267b68f1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameNavbar-B7AYloU5.js",
+          "status": 200,
+          "body": "a51a0fc77289d4d935e471c8d669d28f90ef71572fe7f0cd11d8b1be04270796",
+          "bytes": 10360,
+          "sha256": "09ba53d53603e4975c2e688891f7a26f583f936fcb97f130e33ba9d5d7b67b09"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arrow-left-DM1xLtpT.js",
+          "status": 200,
+          "body": "47cf92f51945c2bfa4cabfab00bae8d75e49d149a4e3f13be823fd1d5bccf63a",
+          "bytes": 333,
+          "sha256": "d6c038dae365ec110be9f751ac96a75945e4d9c6d29066a3267df3f6c4ede3ae"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/star-HtLWnA8S.js",
+          "status": 200,
+          "body": "33ce389f11df692b538708d89a3827b0edcc4887f869dfe87ecc9336057255c4",
+          "bytes": 641,
+          "sha256": "ec53f3043c679e5a0af37e14c8c380853b7072f0060f3b3e58de2aae6e6d81a5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/medal-AEhvHme8.js",
+          "status": 200,
+          "body": "4761c2959901d58e2e1588130fb137bc4401f9c1784508405cddd4bc97428b46",
+          "bytes": 604,
+          "sha256": "f969156906ec0996414236b584dc1cb2107b026a80836e540e06708482b57dbc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameHelp-BM_A752h.js",
+          "status": 200,
+          "body": "6040bfe9c28fb59df08b4ea50cf142e01e1b2115103b1142f6eaacbd5c037a8f",
+          "bytes": 1649,
+          "sha256": "ae8652e0fb28a2678378009d7d2636940fac55eabb14ab60ad3dacf18de0a753"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/HowToPlayPopover-BDrxcw6u.js",
+          "status": 200,
+          "body": "aa1b86ef7848374e3d386a4da38d6af652d74278849fa18f3192aec5adfc3efa",
+          "bytes": 1367,
+          "sha256": "6a250faee01b9e993cdb37abb40845acbfed1202b3c8fad7d5cdeefb212f6b00"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameSeoContent-DHC4fQgP.js",
+          "status": 200,
+          "body": "a8a7cb126379c12b4361592003f4f64e0432ee8e09dadc749e3941662411e9b9",
+          "bytes": 6832,
+          "sha256": "6a336da96d8c5d4a64b1bf40467c6727d7a5c3cd62d401d89408594dab1c731f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/VictoryMoment-ZzaNoZdu.js",
+          "status": 200,
+          "body": "81ed703be8cbf6e7c16042dcef89d7e8da79f9d20469e30d9e2140d130bfbe9d",
+          "bytes": 3669,
+          "sha256": "16efe7b95a99ac2dd0b11159c81fe82509cf7d482943813364c6c5f0677877b5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/circle-help-DyEqZblG.js",
+          "status": 200,
+          "body": "e01d1c97c070158362185f566d9dda9a222360ad019b852dfc5442b48de35d53",
+          "bytes": 407,
+          "sha256": "85fae08676cacea7eaeab123feb523a3d8f4cfc5e2e724615c2e475257a77712"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-down-CFtPYTW4.js",
+          "status": 200,
+          "body": "a12de5e4375af8046ab4f816c31475f2934e5e500d4bf86c0161c9ce23693e58",
+          "bytes": 291,
+          "sha256": "07e74935745964ef243439b6d8a6f63f5a4414d25c50b3390f5c2ae2a43da51f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useCareerMoment-DLS_9gR5.js",
+          "status": 200,
+          "body": "447b22a64e1ef872b959b3ace5c52a8ae388487b231a2f70dd281f1aceebec85",
+          "bytes": 267307,
+          "sha256": "be8d9ae9b78f2381b5f3ecb3daabc48a54fba87e57061fd181f056bbba0e82b0"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-up-BOXxp5rl.js",
+          "status": 200,
+          "body": "54cec69297f629d53799d25673ea6a44b2dfc01b6bb420b1b07a720af73e4828",
+          "bytes": 291,
+          "sha256": "ae13165ba6ee481a349f84d9aa0cdca41fa86ffb1458dd263735cce271c929c4"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/confederationGroups-8jgsrX6T.js",
+          "status": 200,
+          "body": "2593aa92c119eb1bc09ce8176119707f820a41895fa8a81738084d93b950bf8f",
+          "bytes": 1449,
+          "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerInternational-FiWGI8ks.js",
+          "status": 200,
+          "body": "a2bbd0dd80b4db4f6422a4a8220901fa4bda19663a1fcd657b5dcfc02e3a8345",
+          "bytes": 21073,
+          "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/managerOffers-Mi85K8qd.js",
+          "status": 200,
+          "body": "e010c06f5e702aabaf127d8a467dfdcecbfcf0845daec772ce3ec022acf30c5c",
+          "bytes": 5870,
+          "sha256": "b5defae9c817a44f8cb972332b2b4e068676735450c1660119a980b2c5028bda"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedRng-BKZQ2UGv.js",
+          "status": 200,
+          "body": "42f16cbcf4a0f4e37315181e6274511ded22c71195fe6b4d398b6a94a637628e",
+          "bytes": 254,
+          "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/select-BdkP9F7h.js",
+          "status": 200,
+          "body": "d2c1ee59971555119783676a3c3ab7ed715d705090cfe7b9669fb326aa567e80",
+          "bytes": 21290,
+          "sha256": "be29dd4df9b0bc2ca4f683906ef4aa381bffd48ff0aee5ba2dd92e6a957d8531"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/uclFormatHistory-DwuhruDw.js",
+          "status": 200,
+          "body": "229778c3c389f2ecfdce7782b81b5ce6b2edbfe157cf5c664bce910572026181",
+          "bytes": 12334,
+          "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/intlNames-DiJYNZJt.js",
+          "status": 200,
+          "body": "9e92447b6b60e6d43cd62e937828ffde663a5eb76e8c15bd8d3a71ed5235433d",
+          "bytes": 13296,
+          "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerCareerAppearance-BF4Z2JDW.js",
+          "status": 200,
+          "body": "a2c70e3a2098c30cf2dc45a93211670997ca2902b30c44885b682fb32e17c48f",
+          "bytes": 6180,
+          "sha256": "b1d9923c44e1f7a6b417cc44eda7de94b9616be8b599c27be3afef4ca7df08fb"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PlayerAvatar-BAWCapKs.js",
+          "status": 200,
+          "body": "66c58b765799feb50b4f82f56c49ad2adefaffdae8c3e37dae5e83ef8be06b52",
+          "bytes": 15162,
+          "sha256": "1e8528b496a2726c0067059b89c49d97bcb4752d4e15ff943b853d666f37dfff"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBoots-BK_dXNrV.js",
+          "status": 200,
+          "body": "37dcfe225bff2eea807784a9cabd5c630ec89525a63f4a80b7f9d37b4eaf7d8a",
+          "bytes": 2017,
+          "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/AppearanceBuilder-ZjSYZlIu.js",
+          "status": 200,
+          "body": "4a53aaaedbc88a1b872eba781c8ac97f877285e70428e62b192d21ca4e374d0d",
+          "bytes": 46290,
+          "sha256": "3e46ec0bf666139da5fd1d18d1a77eda570875e4c5e532689fcc602d375c41a1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/copy-CBvorOcw.js",
+          "status": 200,
+          "body": "705569342e6540ced6e6125cd29c2efb922e035e1e2d1db9de47700e58f2cb9b",
+          "bytes": 405,
+          "sha256": "b009205da952884f9cbf8e705d4cd1301c3de6506df43e07f5298aa86dbf4ddc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ShareButtons-BfKQqQ_N.js",
+          "status": 200,
+          "body": "0c7f39f89c649dfc51838fe81695c7c2082cefffe4b5606b58bb8237008f1287",
+          "bytes": 11646,
+          "sha256": "eb2cdb97ff0cd300a89a4dfabf6d6e615a6cc36ce14cdf327cb4790b485b14cf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBootIds-BWkyFIXk.js",
+          "status": 200,
+          "body": "957d6aa2a5cff95dbee9eb770c0538581ec1bc9ab1c955c7b319f93e867a9f86",
+          "bytes": 293,
+          "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerAwardsNight-BDQnO6dK.js",
+          "status": 200,
+          "body": "b88c195f22bbfe3ba2e31b93613f6b416c68a9059741ce8973ebb2990d3cded0",
+          "bytes": 2575,
+          "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arcade-CUT7KVjC.js",
+          "status": 200,
+          "body": "3dbdaf124cf5bbcfeb7d7c90a8649118b3742b6b70037ec674cec7decc7f110f",
+          "bytes": 489,
+          "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/freeKick-BSoL5hQo.js",
+          "status": 200,
+          "body": "8d2365869f6f11aa6c18482c64bb70c95b4f947a8510624e5d800e9d8c53262b",
+          "bytes": 1943,
+          "sha256": "050f7197d308868940e8ebf4e2384275bfdcc83047d98066eef53234aad4950c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useRevealScroll-DG1bPS9T.js",
+          "status": 200,
+          "body": "fae5b21c46e08883493ccc89a8e7842d3447088a4c1a6d1acfc50d4914f105c7",
+          "bytes": 1935,
+          "sha256": "b57518d37e50c94896a6c7c40dbf5f8e4ec39ee3a55467b4d17a3a57c464a7c7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerRivalryChoices-MJgJuT1K.js",
+          "status": 200,
+          "body": "837ed35afb464c05d63efa7a3b07f630af6d16ffbdf73462834e012151cb166b",
+          "bytes": 9017,
+          "sha256": "47f59d03b8a9b8fa59adf3c4f1469bcdd54f2fffb79bd1c747d5394bcd037608"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/FlagImg-biaAPlPh.js",
+          "status": 200,
+          "body": "642d1dc3d5e2235708e6c10fb12888e3a0f1cf60a1a65688e993b7cd53cbf3eb",
+          "bytes": 5846,
+          "sha256": "6d0808a49a54ca4ddbe203ea5310a270525244f18068102955c27e3c30cbf643"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Confetti-DHAkqkOB.js",
+          "status": 200,
+          "body": "db0e6c09e364530db81ca571783a1ae0a880ef7e8a0a5f1f36a6f64d44cf7620",
+          "bytes": 904,
+          "sha256": "6ad7932d4aa84bbf54a442f77b3bd214c247b9356dbda9b317b8b782a18426ab"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Celebration-DikPtGsy.js",
+          "status": 200,
+          "body": "8f7ac64c2c928040d8a6712913991c5c1ad06f1d3868fd6bf0bdf6f72a9e3695",
+          "bytes": 1527,
+          "sha256": "9a12448d4aba27b2845e23a37b4545f965fc39ff2a05cab48fa32f1f4b4cf502"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CelebrationStyles-DFsKnF7w.js",
+          "status": 200,
+          "body": "e9f103cfb66e4eeb2829270454cd1c2b8d7ef0f75bd01a7cd9c7110839b8576b",
+          "bytes": 2126,
+          "sha256": "57ccfe47ddcbb3720f47b7ed0cc09f1c3f4fdf71d375ab04628447bd7c17048b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerCareer-D-l99MYG.js",
+          "status": 200,
+          "body": "ae04d1c93a61420bea7a458cece92f77888ea552dae6ee71de2a3b2a45bcce09",
+          "bytes": 1392480,
+          "sha256": "c7d3a802bfa625038f730c5c7c9fbf616e802e625ce7129e9ea4f359e7b9daa2"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonResumeChip-xOl-QtBn.js",
+          "status": 200,
+          "body": "b6c829bbd57929e7d23d74e79c18bc15a2d19a9be77a73b472deeaa75d8d26fa",
+          "bytes": 715,
+          "sha256": "ea2e23e9adc3cc239a9f1c9f694513ed5ba57dee903243cc16084d177553a4dc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/resume-iKq-NREI.js",
+          "status": 200,
+          "body": "471c50e5472112930e5afcf91444a8e77853401602b487444be3dd631703e98c",
+          "bytes": 670,
+          "sha256": "2921cc3af2bde88afae3eea6ab19640952224509721968a152a4a98fa05ff7ed"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/seoMetaPart30-C2bf-ABQ.js",
+          "status": 200,
+          "body": "86287a19ce18c98a69d2143ca1ab535982329f19acfaf3f06b68fb531c13d809",
+          "bytes": 1935,
+          "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccer2-CiBXpLBm.js",
+          "status": 200,
+          "body": "b1d758d94e9338fc73b244063529bfd98555dcce517a979b2884f5b5fe511fb5",
+          "bytes": 108547,
+          "sha256": "8c3a97b7b7fed272dbf32514e3f51d4e0c7bdc879d11465f07c1f925957d3950"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerSeasonCentre-BurvPrN4.js",
+          "status": 200,
+          "body": "68ed6b2f610c0243939494043bb7bed7cd6247cdc594fc2011c5c2ed0cd9eddd",
+          "bytes": 39691,
+          "sha256": "a42164fade0ed55b23d9b9e5e19a99b6f8e8c1f279a606a8120de499a0a220d6"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/core-Dsglyqbx.js",
+          "status": 200,
+          "body": "2cab022b9bf672a779790590b02c7954b6d5a5b001053218e402e34327960c70",
+          "bytes": 18979,
+          "sha256": "776b700241560c51c00f73e11ce26112a8b4e103e684e8197ba263bdd5419dbf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/leagueCore--DUG-EXw.js",
+          "status": 200,
+          "body": "2cf6d8728d6ede37bff92a8a60cb2aaa2e03c3ebd0c3d4f1f22f27156d763b09",
+          "bytes": 671,
+          "sha256": "d4de939f32c16be245e082dc10ab932e36f78734720c82832a7b9e5e49577ec9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useBodyLock-JijVNd8t.js",
+          "status": 200,
+          "body": "d3555fd32e60da890620fb9bb794d92ec6929db3544a488b08f57c73c4f27ea0",
+          "bytes": 449,
+          "sha256": "270b732df41d1d8309184122ab6fd94d03b9b0d6b8a0d54b26fd10843e685074"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerSeasonCompetitions-CbSNBy3C.js",
+          "status": 200,
+          "body": "540055ec98b1a6c30045749a954c4074bc65bac8d217e94e3650e36bad050ce4",
+          "bytes": 3298,
+          "sha256": "3210b07e6fd0c4e30130445bcc5214a165f7686bf9c76dcc60ded785fe84a62e"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedShuffle-CJAps3xO.js",
+          "status": 200,
+          "body": "427035975e4308108cb357a36fe2a150741328689043db6663dbb845cc1f7a15",
+          "bytes": 144,
+          "sha256": "d3a78deb57b4135d45c23a9507a0c0374b0b296a166155667b5b14c1fa14cacc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/throughBallDrill-B9fNBoXH.js",
+          "status": 200,
+          "body": "1a604ff0eacbd65e538710e3a1235b8ee0fb27ae5c9d3ce49cb309f75e185c3f",
+          "bytes": 4784,
+          "sha256": "ab5ddf11e0270d06e80ec67f0f60f4d657e9c41bc9c17157c4e4a3774a5b9b87"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerMoments-CwGFkaLr.js",
+          "status": 200,
+          "body": "07f6c055a069855d382c51db437a50303ccb7c510866577037b5b8cbd7375495",
+          "bytes": 22343,
+          "sha256": "dd05b297b1dce7536d6ef5af251491008a24f329a5c472e9cac8a2bf6dbe8e0c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ownGoalRule-J3XQry1d.js",
+          "status": 200,
+          "body": "da54cb5c724464dcb8ea77b8667bca8d2f9aa8f5ed99c267305f93de17edafc5",
+          "bytes": 179,
+          "sha256": "429872db3c8ff95d979e20c77adf793a66537433b1c4c5b49849cd000d60a144"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback--eiU5Aah.css",
+          "status": 200,
+          "body": "020289145711468b9904a80be4eb83e018b681e74249ff71554135575b0ef495",
+          "bytes": 2937,
+          "sha256": "8ef6cdb5d751c1854c6d5b299b25480dc00f24e28a83c1a024fd7e1a95b69831"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonCentre-eO44Xua8.js",
+          "status": 200,
+          "body": "ce69be39fed8dc0246e04c6b1e9fff2eeab7603bb230cc19d70da16ff1bad8cb",
+          "bytes": 45758,
+          "sha256": "8634a5574b6a4baf73be54218d6d13fa18a6c9b07e5394e1b8041fb6fd8baadd"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubManagerClock-C1EiWjUJ.js",
+          "status": 200,
+          "body": "235409e268e08740289a2e1f6f3989d0825518d42ca343c960af3cc5bfdb1d19",
+          "bytes": 245,
+          "sha256": "e0c6bd45cb144a1afde374e35a9f845119fb09c2427002d97746ce5e828211d5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback-CAJnNlhw.js",
+          "status": 200,
+          "body": "06f02ae5e7c10defa255fe95da27b74a6313313971fcb60d98150c360ac7d89b",
+          "bytes": 1955,
+          "sha256": "afb6ca312569927cbd3b0e2dc7e31c93a387dbd6a472c0bf003f9c0c6427a717"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/LeagueTableCard-BFQaz56D.js",
+          "status": 200,
+          "body": "5432679bacfc39badec1e48d1506f31521242c5317acffe03f44e769a762f8fd",
+          "bytes": 3018,
+          "sha256": "933b04cfb86bf3c9369e69429abf335d96c905f5358015a70739cfc9fde08a37"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/MiniPitch-BW5q0-sz.js",
+          "status": 200,
+          "body": "6c7c900f7c3ed250ee90cfb775e4e436713d2ec42dfb1cfc4aac546de1c9371b",
+          "bytes": 4097,
+          "sha256": "fb4d66d3299b8589fb91ff63a19f5d6e05bc4086c99341f1b406c946537af0f3"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-BrcOvsZb.css",
+          "status": 200,
+          "body": "18b18e89756a48c068ce7f31b280faa4a50f140d82aac9d269307feb48abe805",
+          "bytes": 3106,
+          "sha256": "4c52fd4406e8ce4b486465b909cbb5e2b37c6f84c764f30daff027ba85d3a56b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-CkPIsZtO.js",
+          "status": 200,
+          "body": "e723b1de3097e29d3f2b0ce82ca712b4532f199784bc935414a4ea7832323628",
+          "bytes": 9856,
+          "sha256": "b20232fe70082bbaef59a5dbb5c7cbe1d67700556cb825a90db81ebfd12e0ab8"
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "externalRequests": [
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+        "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-11T09%3A06%3A43.508Z&start_at=lte.2026-10-12T17%3A06%3A43.508Z",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w40/am.png",
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+        "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-11T09%3A06%3A44.908Z&start_at=lte.2026-10-12T17%3A06%3A44.908Z",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/am.png"
+      ],
+      "fontScope": "network-free installed fallback fonts, actual document.fonts.ready; saved help preference already seen",
+      "document": "24cfc751dba814c5bc7f4137b9a2bf8aff4a88dccd3a71b85364e91482c4f36b",
+      "startup": "d8ebaac16db278e9a9e6902cb6ea20f68181780f5cfa646f9e22848ad1270363",
+      "loadedSave": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "bodyBefore": {
+        "attribute": null,
+        "declarations": [],
+        "overflow": "visible",
+        "pointerEvents": "auto",
+        "marginRight": "0px",
+        "position": "static"
+      },
+      "game2": {
+        "game": "eddb1de11cfd8305d3ac79215f924aeadb8f8e26281e817dc2e31fc472ba011f",
+        "name": "Cercle Brugge",
+        "bar": "Cercle Brugge\n2-2\nAnderlecht",
+        "scoreboard": [
+          "Cercle Brugge",
+          "2-2",
+          "Anderlecht"
+        ],
+        "events": [
+          "28'⚽ Goal, Cercle Brugge",
+          "32'⚽ Goal, Cercle Brugge",
+          "58'🔁 You come on",
+          "64'⚽ You score!",
+          "76'⚽ You score!"
+        ],
+        "expected": [
+          "⚽ Goal, Cercle Brugge",
+          "⚽ Goal, Cercle Brugge",
+          "🔁 You come on",
+          "⚽ You score!",
+          "⚽ You score!"
+        ],
+        "clock": "2-2"
+      },
+      "fixtureText": [
+        "Antwerp",
+        "Cercle Brugge",
+        "Charleroi",
+        "Club Brugge",
+        "Dender",
+        "Genk",
+        "Gent",
+        "La Louviere",
+        "Mechelen",
+        "OH Leuven",
+        "Sint-Truiden",
+        "Standard Liege",
+        "Union Saint-Gilloise",
+        "Westerlo",
+        "Zulte Waregem",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Antwerp",
+        "Cercle Brugge",
+        "Charleroi",
+        "Club Brugge",
+        "Dender",
+        "Genk",
+        "Gent",
+        "La Louviere",
+        "Mechelen",
+        "OH Leuven",
+        "Sint-Truiden",
+        "Standard Liege",
+        "Union Saint-Gilloise",
+        "Westerlo",
+        "Zulte Waregem",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded"
+      ],
+      "saveAfter": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "bodyAfter": {
+        "attribute": "",
+        "declarations": [],
+        "overflow": "visible",
+        "pointerEvents": "auto",
+        "marginRight": "0px",
+        "position": "static"
+      },
+      "reloadStartup": "f42fa83b76f1056f46e106589ce0d69c5bb23f6d4f644fabcd1c3451b58a70ac",
+      "reloadSave": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "reloadedGame2": {
+        "game": "eddb1de11cfd8305d3ac79215f924aeadb8f8e26281e817dc2e31fc472ba011f",
+        "name": "Cercle Brugge",
+        "bar": "Cercle Brugge\n2-2\nAnderlecht",
+        "scoreboard": [
+          "Cercle Brugge",
+          "2-2",
+          "Anderlecht"
+        ],
+        "events": [
+          "28'⚽ Goal, Cercle Brugge",
+          "32'⚽ Goal, Cercle Brugge",
+          "58'🔁 You come on",
+          "64'⚽ You score!",
+          "76'⚽ You score!"
+        ],
+        "expected": [
+          "⚽ Goal, Cercle Brugge",
+          "⚽ Goal, Cercle Brugge",
+          "🔁 You come on",
+          "⚽ You score!",
+          "⚽ You score!"
+        ],
+        "clock": "2-2"
+      },
+      "reloadFinalSave": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "reloadReads": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "bodyReloadAfter": {
+        "attribute": "",
+        "declarations": [],
+        "overflow": "visible",
+        "pointerEvents": "auto",
+        "marginRight": "0px",
+        "position": "static"
+      }
+    },
+    {
+      "width": 1280,
+      "height": 900,
+      "status": "pass",
+      "save": "e8fb76eb43a9b52f38c75f470c2270dd3a57836d747e91e1bfefd5cc7334e1df",
+      "reads": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "shots": [
+        {
+          "file": "shots/1280-game2.png",
+          "bytes": 132211,
+          "sha256": "e386a5fc99ab5acc9230bd24195cbac658256d68f405bbbf31393314caec04d9"
+        },
+        {
+          "file": "shots/1280-fixtures.png",
+          "bytes": 132211,
+          "sha256": "e386a5fc99ab5acc9230bd24195cbac658256d68f405bbbf31393314caec04d9"
+        },
+        {
+          "file": "shots/1280-game2-reload.png",
+          "bytes": 132211,
+          "sha256": "e386a5fc99ab5acc9230bd24195cbac658256d68f405bbbf31393314caec04d9"
+        }
+      ],
+      "layouts": [
+        {
+          "label": "game2 scoreboard",
+          "width": 1280,
+          "height": 900,
+          "visualWidth": 1280,
+          "visualHeight": 900,
+          "scale": 1,
+          "overflow": false,
+          "stableFrames": 4,
+          "finiteAnimations": 0,
+          "rect": {
+            "x": 367,
+            "y": 187,
+            "width": 426,
+            "height": 44
+          },
+          "inside": true,
+          "points": [
+            {
+              "px": 580,
+              "py": 209,
+              "hit": "<span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span>",
+              "painted": true
+            },
+            {
+              "px": 452.2,
+              "py": 195.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 707.8,
+              "py": 195.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 452.2,
+              "py": 222.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 707.8,
+              "py": 222.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            }
+          ],
+          "body": {
+            "attribute": "overflow: hidden;",
+            "declarations": [
+              [
+                "overflow-x",
+                "hidden",
+                ""
+              ],
+              [
+                "overflow-y",
+                "hidden",
+                ""
+              ]
+            ]
+          },
+          "fonts": "loaded"
+        },
+        {
+          "label": "reloaded game2 scoreboard",
+          "width": 1280,
+          "height": 900,
+          "visualWidth": 1280,
+          "visualHeight": 900,
+          "scale": 1,
+          "overflow": false,
+          "stableFrames": 4,
+          "finiteAnimations": 0,
+          "rect": {
+            "x": 367,
+            "y": 187,
+            "width": 426,
+            "height": 44
+          },
+          "inside": true,
+          "points": [
+            {
+              "px": 580,
+              "py": 209,
+              "hit": "<span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span>",
+              "painted": true
+            },
+            {
+              "px": 452.2,
+              "py": 195.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 707.8,
+              "py": 195.8,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 452.2,
+              "py": 222.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            },
+            {
+              "px": 707.8,
+              "py": 222.2,
+              "hit": "<div class=\"flex items-center justify-between gap-2 rounded-xl bg-muted/30 px-3 py-2\"><span class=\"min-w-0 flex-1 truncate text-sm font-bold\">Cercle Brugge</span><span class=\" shrink-0 text-xl font-black tabular-nums\" data-score-bug=\"true\">2-2</span><span class=\"min-w-0 flex-1 truncate text-right text-sm font-bold\">Anderlecht</span></div>",
+              "painted": true
+            }
+          ],
+          "body": {
+            "attribute": "overflow: hidden;",
+            "declarations": [
+              [
+                "overflow-x",
+                "hidden",
+                ""
+              ],
+              [
+                "overflow-y",
+                "hidden",
+                ""
+              ]
+            ]
+          },
+          "fonts": "loaded"
+        }
+      ],
+      "assets": [
+        {
+          "url": "http://127.0.0.1:4597/assets/index-C7mDbA-E.css",
+          "status": 200,
+          "body": "191768da365412af3efb361244417a2c2dcd87d2af26f8aa923265cfd53ea4c3",
+          "bytes": 199057,
+          "sha256": "65129a5758a258f45d5738f507761e09549516dc499109c600e68454c72a3ad9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-DfMOQy1y.js",
+          "status": 200,
+          "body": "3ac7c5034b1f1a1a05eb99242606590739403fb602038b5dabafdafd172f838b",
+          "bytes": 794422,
+          "sha256": "d3ab797d0ff0049b732db35b0de46a61eb84bc81b330720bdc32cc3b2363f27b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/dialogA11y-BCgxbiii.js",
+          "status": 200,
+          "body": "e9126765f01f791950b99f5256225db320d77e15034699c1bda69af19a7e8bae",
+          "bytes": 150,
+          "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubRivalries-DuNC-DyB.js",
+          "status": 200,
+          "body": "304fd655f79fbe29de8acff3d960d8f93a79c2315677d7805886d59c9181ffde",
+          "bytes": 36634,
+          "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/formatNumber-CGuttX8h.js",
+          "status": 200,
+          "body": "0d67d996c829790e40bcb45f4f004459e9502d6a884dd583a8a969968b509ece",
+          "bytes": 152,
+          "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useGameCompletion-BmKT4znx.js",
+          "status": 200,
+          "body": "815d5be946d165c5420eba28f88b8cc93310283f3a56930763f016b90f7b62a6",
+          "bytes": 810,
+          "sha256": "1d9e0640ac5d16ca3cb0eec92b1be43091d59ffb9211c6efe2c8727d4930c196"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/badges-DBtIdUic.js",
+          "status": 200,
+          "body": "2757f6d2034b086d92356fce601f7a12a8134437db01bfc9d9b2b9a66e96bd32",
+          "bytes": 5813,
+          "sha256": "2972ce479984631335659072871383bddfa3ff82e16df41eb6d6e9691d25fecf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/guideShape-QckYG0z8.js",
+          "status": 200,
+          "body": "12d01af48f27f12c29cbcd9d62e8f4c12c264a3178220cfc090876d9f39a5405",
+          "bytes": 5398,
+          "sha256": "d720afadf8a25548873f342c3e9ec7b112521a4f8d1600850f59d76e267b68f1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameNavbar-B7AYloU5.js",
+          "status": 200,
+          "body": "a51a0fc77289d4d935e471c8d669d28f90ef71572fe7f0cd11d8b1be04270796",
+          "bytes": 10360,
+          "sha256": "09ba53d53603e4975c2e688891f7a26f583f936fcb97f130e33ba9d5d7b67b09"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arrow-left-DM1xLtpT.js",
+          "status": 200,
+          "body": "47cf92f51945c2bfa4cabfab00bae8d75e49d149a4e3f13be823fd1d5bccf63a",
+          "bytes": 333,
+          "sha256": "d6c038dae365ec110be9f751ac96a75945e4d9c6d29066a3267df3f6c4ede3ae"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/star-HtLWnA8S.js",
+          "status": 200,
+          "body": "33ce389f11df692b538708d89a3827b0edcc4887f869dfe87ecc9336057255c4",
+          "bytes": 641,
+          "sha256": "ec53f3043c679e5a0af37e14c8c380853b7072f0060f3b3e58de2aae6e6d81a5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useCareerMoment-DLS_9gR5.js",
+          "status": 200,
+          "body": "447b22a64e1ef872b959b3ace5c52a8ae388487b231a2f70dd281f1aceebec85",
+          "bytes": 267307,
+          "sha256": "be8d9ae9b78f2381b5f3ecb3daabc48a54fba87e57061fd181f056bbba0e82b0"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameHelp-BM_A752h.js",
+          "status": 200,
+          "body": "6040bfe9c28fb59df08b4ea50cf142e01e1b2115103b1142f6eaacbd5c037a8f",
+          "bytes": 1649,
+          "sha256": "ae8652e0fb28a2678378009d7d2636940fac55eabb14ab60ad3dacf18de0a753"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/HowToPlayPopover-BDrxcw6u.js",
+          "status": 200,
+          "body": "aa1b86ef7848374e3d386a4da38d6af652d74278849fa18f3192aec5adfc3efa",
+          "bytes": 1367,
+          "sha256": "6a250faee01b9e993cdb37abb40845acbfed1202b3c8fad7d5cdeefb212f6b00"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/circle-help-DyEqZblG.js",
+          "status": 200,
+          "body": "e01d1c97c070158362185f566d9dda9a222360ad019b852dfc5442b48de35d53",
+          "bytes": 407,
+          "sha256": "85fae08676cacea7eaeab123feb523a3d8f4cfc5e2e724615c2e475257a77712"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameSeoContent-DHC4fQgP.js",
+          "status": 200,
+          "body": "a8a7cb126379c12b4361592003f4f64e0432ee8e09dadc749e3941662411e9b9",
+          "bytes": 6832,
+          "sha256": "6a336da96d8c5d4a64b1bf40467c6727d7a5c3cd62d401d89408594dab1c731f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/VictoryMoment-ZzaNoZdu.js",
+          "status": 200,
+          "body": "81ed703be8cbf6e7c16042dcef89d7e8da79f9d20469e30d9e2140d130bfbe9d",
+          "bytes": 3669,
+          "sha256": "16efe7b95a99ac2dd0b11159c81fe82509cf7d482943813364c6c5f0677877b5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-down-CFtPYTW4.js",
+          "status": 200,
+          "body": "a12de5e4375af8046ab4f816c31475f2934e5e500d4bf86c0161c9ce23693e58",
+          "bytes": 291,
+          "sha256": "07e74935745964ef243439b6d8a6f63f5a4414d25c50b3390f5c2ae2a43da51f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-up-BOXxp5rl.js",
+          "status": 200,
+          "body": "54cec69297f629d53799d25673ea6a44b2dfc01b6bb420b1b07a720af73e4828",
+          "bytes": 291,
+          "sha256": "ae13165ba6ee481a349f84d9aa0cdca41fa86ffb1458dd263735cce271c929c4"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/confederationGroups-8jgsrX6T.js",
+          "status": 200,
+          "body": "2593aa92c119eb1bc09ce8176119707f820a41895fa8a81738084d93b950bf8f",
+          "bytes": 1449,
+          "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerInternational-FiWGI8ks.js",
+          "status": 200,
+          "body": "a2bbd0dd80b4db4f6422a4a8220901fa4bda19663a1fcd657b5dcfc02e3a8345",
+          "bytes": 21073,
+          "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/select-BdkP9F7h.js",
+          "status": 200,
+          "body": "d2c1ee59971555119783676a3c3ab7ed715d705090cfe7b9669fb326aa567e80",
+          "bytes": 21290,
+          "sha256": "be29dd4df9b0bc2ca4f683906ef4aa381bffd48ff0aee5ba2dd92e6a957d8531"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/medal-AEhvHme8.js",
+          "status": 200,
+          "body": "4761c2959901d58e2e1588130fb137bc4401f9c1784508405cddd4bc97428b46",
+          "bytes": 604,
+          "sha256": "f969156906ec0996414236b584dc1cb2107b026a80836e540e06708482b57dbc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedRng-BKZQ2UGv.js",
+          "status": 200,
+          "body": "42f16cbcf4a0f4e37315181e6274511ded22c71195fe6b4d398b6a94a637628e",
+          "bytes": 254,
+          "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/uclFormatHistory-DwuhruDw.js",
+          "status": 200,
+          "body": "229778c3c389f2ecfdce7782b81b5ce6b2edbfe157cf5c664bce910572026181",
+          "bytes": 12334,
+          "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/intlNames-DiJYNZJt.js",
+          "status": 200,
+          "body": "9e92447b6b60e6d43cd62e937828ffde663a5eb76e8c15bd8d3a71ed5235433d",
+          "bytes": 13296,
+          "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/managerOffers-Mi85K8qd.js",
+          "status": 200,
+          "body": "e010c06f5e702aabaf127d8a467dfdcecbfcf0845daec772ce3ec022acf30c5c",
+          "bytes": 5870,
+          "sha256": "b5defae9c817a44f8cb972332b2b4e068676735450c1660119a980b2c5028bda"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerCareerAppearance-BF4Z2JDW.js",
+          "status": 200,
+          "body": "a2c70e3a2098c30cf2dc45a93211670997ca2902b30c44885b682fb32e17c48f",
+          "bytes": 6180,
+          "sha256": "b1d9923c44e1f7a6b417cc44eda7de94b9616be8b599c27be3afef4ca7df08fb"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerAwardsNight-BDQnO6dK.js",
+          "status": 200,
+          "body": "b88c195f22bbfe3ba2e31b93613f6b416c68a9059741ce8973ebb2990d3cded0",
+          "bytes": 2575,
+          "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useRevealScroll-DG1bPS9T.js",
+          "status": 200,
+          "body": "fae5b21c46e08883493ccc89a8e7842d3447088a4c1a6d1acfc50d4914f105c7",
+          "bytes": 1935,
+          "sha256": "b57518d37e50c94896a6c7c40dbf5f8e4ec39ee3a55467b4d17a3a57c464a7c7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/FlagImg-biaAPlPh.js",
+          "status": 200,
+          "body": "642d1dc3d5e2235708e6c10fb12888e3a0f1cf60a1a65688e993b7cd53cbf3eb",
+          "bytes": 5846,
+          "sha256": "6d0808a49a54ca4ddbe203ea5310a270525244f18068102955c27e3c30cbf643"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/AppearanceBuilder-ZjSYZlIu.js",
+          "status": 200,
+          "body": "4a53aaaedbc88a1b872eba781c8ac97f877285e70428e62b192d21ca4e374d0d",
+          "bytes": 46290,
+          "sha256": "3e46ec0bf666139da5fd1d18d1a77eda570875e4c5e532689fcc602d375c41a1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PlayerAvatar-BAWCapKs.js",
+          "status": 200,
+          "body": "66c58b765799feb50b4f82f56c49ad2adefaffdae8c3e37dae5e83ef8be06b52",
+          "bytes": 15162,
+          "sha256": "1e8528b496a2726c0067059b89c49d97bcb4752d4e15ff943b853d666f37dfff"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arcade-CUT7KVjC.js",
+          "status": 200,
+          "body": "3dbdaf124cf5bbcfeb7d7c90a8649118b3742b6b70037ec674cec7decc7f110f",
+          "bytes": 489,
+          "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CelebrationStyles-DFsKnF7w.js",
+          "status": 200,
+          "body": "e9f103cfb66e4eeb2829270454cd1c2b8d7ef0f75bd01a7cd9c7110839b8576b",
+          "bytes": 2126,
+          "sha256": "57ccfe47ddcbb3720f47b7ed0cc09f1c3f4fdf71d375ab04628447bd7c17048b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Confetti-DHAkqkOB.js",
+          "status": 200,
+          "body": "db0e6c09e364530db81ca571783a1ae0a880ef7e8a0a5f1f36a6f64d44cf7620",
+          "bytes": 904,
+          "sha256": "6ad7932d4aa84bbf54a442f77b3bd214c247b9356dbda9b317b8b782a18426ab"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Celebration-DikPtGsy.js",
+          "status": 200,
+          "body": "8f7ac64c2c928040d8a6712913991c5c1ad06f1d3868fd6bf0bdf6f72a9e3695",
+          "bytes": 1527,
+          "sha256": "9a12448d4aba27b2845e23a37b4545f965fc39ff2a05cab48fa32f1f4b4cf502"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/freeKick-BSoL5hQo.js",
+          "status": 200,
+          "body": "8d2365869f6f11aa6c18482c64bb70c95b4f947a8510624e5d800e9d8c53262b",
+          "bytes": 1943,
+          "sha256": "050f7197d308868940e8ebf4e2384275bfdcc83047d98066eef53234aad4950c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/copy-CBvorOcw.js",
+          "status": 200,
+          "body": "705569342e6540ced6e6125cd29c2efb922e035e1e2d1db9de47700e58f2cb9b",
+          "bytes": 405,
+          "sha256": "b009205da952884f9cbf8e705d4cd1301c3de6506df43e07f5298aa86dbf4ddc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBoots-BK_dXNrV.js",
+          "status": 200,
+          "body": "37dcfe225bff2eea807784a9cabd5c630ec89525a63f4a80b7f9d37b4eaf7d8a",
+          "bytes": 2017,
+          "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBootIds-BWkyFIXk.js",
+          "status": 200,
+          "body": "957d6aa2a5cff95dbee9eb770c0538581ec1bc9ab1c955c7b319f93e867a9f86",
+          "bytes": 293,
+          "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ShareButtons-BfKQqQ_N.js",
+          "status": 200,
+          "body": "0c7f39f89c649dfc51838fe81695c7c2082cefffe4b5606b58bb8237008f1287",
+          "bytes": 11646,
+          "sha256": "eb2cdb97ff0cd300a89a4dfabf6d6e615a6cc36ce14cdf327cb4790b485b14cf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerRivalryChoices-MJgJuT1K.js",
+          "status": 200,
+          "body": "837ed35afb464c05d63efa7a3b07f630af6d16ffbdf73462834e012151cb166b",
+          "bytes": 9017,
+          "sha256": "47f59d03b8a9b8fa59adf3c4f1469bcdd54f2fffb79bd1c747d5394bcd037608"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerCareer-D-l99MYG.js",
+          "status": 200,
+          "body": "ae04d1c93a61420bea7a458cece92f77888ea552dae6ee71de2a3b2a45bcce09",
+          "bytes": 1392480,
+          "sha256": "c7d3a802bfa625038f730c5c7c9fbf616e802e625ce7129e9ea4f359e7b9daa2"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/seoMetaPart30-C2bf-ABQ.js",
+          "status": 200,
+          "body": "86287a19ce18c98a69d2143ca1ab535982329f19acfaf3f06b68fb531c13d809",
+          "bytes": 1935,
+          "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccer2-CiBXpLBm.js",
+          "status": 200,
+          "body": "b1d758d94e9338fc73b244063529bfd98555dcce517a979b2884f5b5fe511fb5",
+          "bytes": 108547,
+          "sha256": "8c3a97b7b7fed272dbf32514e3f51d4e0c7bdc879d11465f07c1f925957d3950"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/leagueCore--DUG-EXw.js",
+          "status": 200,
+          "body": "2cf6d8728d6ede37bff92a8a60cb2aaa2e03c3ebd0c3d4f1f22f27156d763b09",
+          "bytes": 671,
+          "sha256": "d4de939f32c16be245e082dc10ab932e36f78734720c82832a7b9e5e49577ec9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedShuffle-CJAps3xO.js",
+          "status": 200,
+          "body": "427035975e4308108cb357a36fe2a150741328689043db6663dbb845cc1f7a15",
+          "bytes": 144,
+          "sha256": "d3a78deb57b4135d45c23a9507a0c0374b0b296a166155667b5b14c1fa14cacc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/core-Dsglyqbx.js",
+          "status": 200,
+          "body": "2cab022b9bf672a779790590b02c7954b6d5a5b001053218e402e34327960c70",
+          "bytes": 18979,
+          "sha256": "776b700241560c51c00f73e11ce26112a8b4e103e684e8197ba263bdd5419dbf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerSeasonCentre-BurvPrN4.js",
+          "status": 200,
+          "body": "68ed6b2f610c0243939494043bb7bed7cd6247cdc594fc2011c5c2ed0cd9eddd",
+          "bytes": 39691,
+          "sha256": "a42164fade0ed55b23d9b9e5e19a99b6f8e8c1f279a606a8120de499a0a220d6"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/throughBallDrill-B9fNBoXH.js",
+          "status": 200,
+          "body": "1a604ff0eacbd65e538710e3a1235b8ee0fb27ae5c9d3ce49cb309f75e185c3f",
+          "bytes": 4784,
+          "sha256": "ab5ddf11e0270d06e80ec67f0f60f4d657e9c41bc9c17157c4e4a3774a5b9b87"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerMoments-CwGFkaLr.js",
+          "status": 200,
+          "body": "07f6c055a069855d382c51db437a50303ccb7c510866577037b5b8cbd7375495",
+          "bytes": 22343,
+          "sha256": "dd05b297b1dce7536d6ef5af251491008a24f329a5c472e9cac8a2bf6dbe8e0c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/resume-iKq-NREI.js",
+          "status": 200,
+          "body": "471c50e5472112930e5afcf91444a8e77853401602b487444be3dd631703e98c",
+          "bytes": 670,
+          "sha256": "2921cc3af2bde88afae3eea6ab19640952224509721968a152a4a98fa05ff7ed"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerSeasonCompetitions-CbSNBy3C.js",
+          "status": 200,
+          "body": "540055ec98b1a6c30045749a954c4074bc65bac8d217e94e3650e36bad050ce4",
+          "bytes": 3298,
+          "sha256": "3210b07e6fd0c4e30130445bcc5214a165f7686bf9c76dcc60ded785fe84a62e"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/LeagueTableCard-BFQaz56D.js",
+          "status": 200,
+          "body": "5432679bacfc39badec1e48d1506f31521242c5317acffe03f44e769a762f8fd",
+          "bytes": 3018,
+          "sha256": "933b04cfb86bf3c9369e69429abf335d96c905f5358015a70739cfc9fde08a37"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonCentre-eO44Xua8.js",
+          "status": 200,
+          "body": "ce69be39fed8dc0246e04c6b1e9fff2eeab7603bb230cc19d70da16ff1bad8cb",
+          "bytes": 45758,
+          "sha256": "8634a5574b6a4baf73be54218d6d13fa18a6c9b07e5394e1b8041fb6fd8baadd"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ownGoalRule-J3XQry1d.js",
+          "status": 200,
+          "body": "da54cb5c724464dcb8ea77b8667bca8d2f9aa8f5ed99c267305f93de17edafc5",
+          "bytes": 179,
+          "sha256": "429872db3c8ff95d979e20c77adf793a66537433b1c4c5b49849cd000d60a144"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback--eiU5Aah.css",
+          "status": 200,
+          "body": "020289145711468b9904a80be4eb83e018b681e74249ff71554135575b0ef495",
+          "bytes": 2937,
+          "sha256": "8ef6cdb5d751c1854c6d5b299b25480dc00f24e28a83c1a024fd7e1a95b69831"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useBodyLock-JijVNd8t.js",
+          "status": 200,
+          "body": "d3555fd32e60da890620fb9bb794d92ec6929db3544a488b08f57c73c4f27ea0",
+          "bytes": 449,
+          "sha256": "270b732df41d1d8309184122ab6fd94d03b9b0d6b8a0d54b26fd10843e685074"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback-CAJnNlhw.js",
+          "status": 200,
+          "body": "06f02ae5e7c10defa255fe95da27b74a6313313971fcb60d98150c360ac7d89b",
+          "bytes": 1955,
+          "sha256": "afb6ca312569927cbd3b0e2dc7e31c93a387dbd6a472c0bf003f9c0c6427a717"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubManagerClock-C1EiWjUJ.js",
+          "status": 200,
+          "body": "235409e268e08740289a2e1f6f3989d0825518d42ca343c960af3cc5bfdb1d19",
+          "bytes": 245,
+          "sha256": "e0c6bd45cb144a1afde374e35a9f845119fb09c2427002d97746ce5e828211d5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-BrcOvsZb.css",
+          "status": 200,
+          "body": "18b18e89756a48c068ce7f31b280faa4a50f140d82aac9d269307feb48abe805",
+          "bytes": 3106,
+          "sha256": "4c52fd4406e8ce4b486465b909cbb5e2b37c6f84c764f30daff027ba85d3a56b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/MiniPitch-BW5q0-sz.js",
+          "status": 200,
+          "body": "6c7c900f7c3ed250ee90cfb775e4e436713d2ec42dfb1cfc4aac546de1c9371b",
+          "bytes": 4097,
+          "sha256": "fb4d66d3299b8589fb91ff63a19f5d6e05bc4086c99341f1b406c946537af0f3"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-CkPIsZtO.js",
+          "status": 200,
+          "body": "e723b1de3097e29d3f2b0ce82ca712b4532f199784bc935414a4ea7832323628",
+          "bytes": 9856,
+          "sha256": "b20232fe70082bbaef59a5dbb5c7cbe1d67700556cb825a90db81ebfd12e0ab8"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonResumeChip-xOl-QtBn.js",
+          "status": 200,
+          "body": "b6c829bbd57929e7d23d74e79c18bc15a2d19a9be77a73b472deeaa75d8d26fa",
+          "bytes": 715,
+          "sha256": "ea2e23e9adc3cc239a9f1c9f694513ed5ba57dee903243cc16084d177553a4dc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-C7mDbA-E.css",
+          "status": 200,
+          "body": "191768da365412af3efb361244417a2c2dcd87d2af26f8aa923265cfd53ea4c3",
+          "bytes": 199057,
+          "sha256": "65129a5758a258f45d5738f507761e09549516dc499109c600e68454c72a3ad9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/index-DfMOQy1y.js",
+          "status": 200,
+          "body": "3ac7c5034b1f1a1a05eb99242606590739403fb602038b5dabafdafd172f838b",
+          "bytes": 794422,
+          "sha256": "d3ab797d0ff0049b732db35b0de46a61eb84bc81b330720bdc32cc3b2363f27b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubRivalries-DuNC-DyB.js",
+          "status": 200,
+          "body": "304fd655f79fbe29de8acff3d960d8f93a79c2315677d7805886d59c9181ffde",
+          "bytes": 36634,
+          "sha256": "5ea8ade9519709ad8788ca3f666d4f51ac64d465c83ffad40c91540135f03fdf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/formatNumber-CGuttX8h.js",
+          "status": 200,
+          "body": "0d67d996c829790e40bcb45f4f004459e9502d6a884dd583a8a969968b509ece",
+          "bytes": 152,
+          "sha256": "58dc28dd5f384db5153e394318702b8e573ed47cfeeb3498c564a267ad6d3f5c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/dialogA11y-BCgxbiii.js",
+          "status": 200,
+          "body": "e9126765f01f791950b99f5256225db320d77e15034699c1bda69af19a7e8bae",
+          "bytes": 150,
+          "sha256": "6436f8738bab1b88955f6b7fcd1414133f60345fade87214c06a004db8acb8b7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-up-BOXxp5rl.js",
+          "status": 200,
+          "body": "54cec69297f629d53799d25673ea6a44b2dfc01b6bb420b1b07a720af73e4828",
+          "bytes": 291,
+          "sha256": "ae13165ba6ee481a349f84d9aa0cdca41fa86ffb1458dd263735cce271c929c4"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/badges-DBtIdUic.js",
+          "status": 200,
+          "body": "2757f6d2034b086d92356fce601f7a12a8134437db01bfc9d9b2b9a66e96bd32",
+          "bytes": 5813,
+          "sha256": "2972ce479984631335659072871383bddfa3ff82e16df41eb6d6e9691d25fecf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useGameCompletion-BmKT4znx.js",
+          "status": 200,
+          "body": "815d5be946d165c5420eba28f88b8cc93310283f3a56930763f016b90f7b62a6",
+          "bytes": 810,
+          "sha256": "1d9e0640ac5d16ca3cb0eec92b1be43091d59ffb9211c6efe2c8727d4930c196"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/star-HtLWnA8S.js",
+          "status": 200,
+          "body": "33ce389f11df692b538708d89a3827b0edcc4887f869dfe87ecc9336057255c4",
+          "bytes": 641,
+          "sha256": "ec53f3043c679e5a0af37e14c8c380853b7072f0060f3b3e58de2aae6e6d81a5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameSeoContent-DHC4fQgP.js",
+          "status": 200,
+          "body": "a8a7cb126379c12b4361592003f4f64e0432ee8e09dadc749e3941662411e9b9",
+          "bytes": 6832,
+          "sha256": "6a336da96d8c5d4a64b1bf40467c6727d7a5c3cd62d401d89408594dab1c731f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameNavbar-B7AYloU5.js",
+          "status": 200,
+          "body": "a51a0fc77289d4d935e471c8d669d28f90ef71572fe7f0cd11d8b1be04270796",
+          "bytes": 10360,
+          "sha256": "09ba53d53603e4975c2e688891f7a26f583f936fcb97f130e33ba9d5d7b67b09"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/confederationGroups-8jgsrX6T.js",
+          "status": 200,
+          "body": "2593aa92c119eb1bc09ce8176119707f820a41895fa8a81738084d93b950bf8f",
+          "bytes": 1449,
+          "sha256": "fd61f2c15ffacbbb463b39be678fa21e15d988f587359d4d1de1d52315cc0943"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/guideShape-QckYG0z8.js",
+          "status": 200,
+          "body": "12d01af48f27f12c29cbcd9d62e8f4c12c264a3178220cfc090876d9f39a5405",
+          "bytes": 5398,
+          "sha256": "d720afadf8a25548873f342c3e9ec7b112521a4f8d1600850f59d76e267b68f1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/chevron-down-CFtPYTW4.js",
+          "status": 200,
+          "body": "a12de5e4375af8046ab4f816c31475f2934e5e500d4bf86c0161c9ce23693e58",
+          "bytes": 291,
+          "sha256": "07e74935745964ef243439b6d8a6f63f5a4414d25c50b3390f5c2ae2a43da51f"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/select-BdkP9F7h.js",
+          "status": 200,
+          "body": "d2c1ee59971555119783676a3c3ab7ed715d705090cfe7b9669fb326aa567e80",
+          "bytes": 21290,
+          "sha256": "be29dd4df9b0bc2ca4f683906ef4aa381bffd48ff0aee5ba2dd92e6a957d8531"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/medal-AEhvHme8.js",
+          "status": 200,
+          "body": "4761c2959901d58e2e1588130fb137bc4401f9c1784508405cddd4bc97428b46",
+          "bytes": 604,
+          "sha256": "f969156906ec0996414236b584dc1cb2107b026a80836e540e06708482b57dbc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/GameHelp-BM_A752h.js",
+          "status": 200,
+          "body": "6040bfe9c28fb59df08b4ea50cf142e01e1b2115103b1142f6eaacbd5c037a8f",
+          "bytes": 1649,
+          "sha256": "ae8652e0fb28a2678378009d7d2636940fac55eabb14ab60ad3dacf18de0a753"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arrow-left-DM1xLtpT.js",
+          "status": 200,
+          "body": "47cf92f51945c2bfa4cabfab00bae8d75e49d149a4e3f13be823fd1d5bccf63a",
+          "bytes": 333,
+          "sha256": "d6c038dae365ec110be9f751ac96a75945e4d9c6d29066a3267df3f6c4ede3ae"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/HowToPlayPopover-BDrxcw6u.js",
+          "status": 200,
+          "body": "aa1b86ef7848374e3d386a4da38d6af652d74278849fa18f3192aec5adfc3efa",
+          "bytes": 1367,
+          "sha256": "6a250faee01b9e993cdb37abb40845acbfed1202b3c8fad7d5cdeefb212f6b00"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/circle-help-DyEqZblG.js",
+          "status": 200,
+          "body": "e01d1c97c070158362185f566d9dda9a222360ad019b852dfc5442b48de35d53",
+          "bytes": 407,
+          "sha256": "85fae08676cacea7eaeab123feb523a3d8f4cfc5e2e724615c2e475257a77712"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/VictoryMoment-ZzaNoZdu.js",
+          "status": 200,
+          "body": "81ed703be8cbf6e7c16042dcef89d7e8da79f9d20469e30d9e2140d130bfbe9d",
+          "bytes": 3669,
+          "sha256": "16efe7b95a99ac2dd0b11159c81fe82509cf7d482943813364c6c5f0677877b5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerInternational-FiWGI8ks.js",
+          "status": 200,
+          "body": "a2bbd0dd80b4db4f6422a4a8220901fa4bda19663a1fcd657b5dcfc02e3a8345",
+          "bytes": 21073,
+          "sha256": "238dc990e29f7820b45236694c325593a81f1bd852f74f856a2d4526d7843a47"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/managerOffers-Mi85K8qd.js",
+          "status": 200,
+          "body": "e010c06f5e702aabaf127d8a467dfdcecbfcf0845daec772ce3ec022acf30c5c",
+          "bytes": 5870,
+          "sha256": "b5defae9c817a44f8cb972332b2b4e068676735450c1660119a980b2c5028bda"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedRng-BKZQ2UGv.js",
+          "status": 200,
+          "body": "42f16cbcf4a0f4e37315181e6274511ded22c71195fe6b4d398b6a94a637628e",
+          "bytes": 254,
+          "sha256": "ed2516675a46f7b0ad18af1d9b335ef31cb58d91ba87656738edf333fcb22b5b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/intlNames-DiJYNZJt.js",
+          "status": 200,
+          "body": "9e92447b6b60e6d43cd62e937828ffde663a5eb76e8c15bd8d3a71ed5235433d",
+          "bytes": 13296,
+          "sha256": "a62e87891a274f570c1dd2f29b74023a108247f1f79afaadccb276287933aa55"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useCareerMoment-DLS_9gR5.js",
+          "status": 200,
+          "body": "447b22a64e1ef872b959b3ace5c52a8ae388487b231a2f70dd281f1aceebec85",
+          "bytes": 267307,
+          "sha256": "be8d9ae9b78f2381b5f3ecb3daabc48a54fba87e57061fd181f056bbba0e82b0"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/uclFormatHistory-DwuhruDw.js",
+          "status": 200,
+          "body": "229778c3c389f2ecfdce7782b81b5ce6b2edbfe157cf5c664bce910572026181",
+          "bytes": 12334,
+          "sha256": "ca54024ac47979e8a3222dae2210a42ff8dbc22794fcba8052b125f1a17a6d71"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PlayerAvatar-BAWCapKs.js",
+          "status": 200,
+          "body": "66c58b765799feb50b4f82f56c49ad2adefaffdae8c3e37dae5e83ef8be06b52",
+          "bytes": 15162,
+          "sha256": "1e8528b496a2726c0067059b89c49d97bcb4752d4e15ff943b853d666f37dfff"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerCareerAppearance-BF4Z2JDW.js",
+          "status": 200,
+          "body": "a2c70e3a2098c30cf2dc45a93211670997ca2902b30c44885b682fb32e17c48f",
+          "bytes": 6180,
+          "sha256": "b1d9923c44e1f7a6b417cc44eda7de94b9616be8b599c27be3afef4ca7df08fb"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBootIds-BWkyFIXk.js",
+          "status": 200,
+          "body": "957d6aa2a5cff95dbee9eb770c0538581ec1bc9ab1c955c7b319f93e867a9f86",
+          "bytes": 293,
+          "sha256": "5e2ab21a19d43c52a07be5f295b188d90448aa4cd27dd69bdf014464929a736b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerRivalryChoices-MJgJuT1K.js",
+          "status": 200,
+          "body": "837ed35afb464c05d63efa7a3b07f630af6d16ffbdf73462834e012151cb166b",
+          "bytes": 9017,
+          "sha256": "47f59d03b8a9b8fa59adf3c4f1469bcdd54f2fffb79bd1c747d5394bcd037608"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerBoots-BK_dXNrV.js",
+          "status": 200,
+          "body": "37dcfe225bff2eea807784a9cabd5c630ec89525a63f4a80b7f9d37b4eaf7d8a",
+          "bytes": 2017,
+          "sha256": "5bf0a4f627a4298097b07e6c41baa043308c73c2cb077b82879ccfd46d0d0bf1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/careerAwardsNight-BDQnO6dK.js",
+          "status": 200,
+          "body": "b88c195f22bbfe3ba2e31b93613f6b416c68a9059741ce8973ebb2990d3cded0",
+          "bytes": 2575,
+          "sha256": "1fa94f499889b61e63917a3ca07b35862c3ba634a14526edf99926b0aafa3abf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useRevealScroll-DG1bPS9T.js",
+          "status": 200,
+          "body": "fae5b21c46e08883493ccc89a8e7842d3447088a4c1a6d1acfc50d4914f105c7",
+          "bytes": 1935,
+          "sha256": "b57518d37e50c94896a6c7c40dbf5f8e4ec39ee3a55467b4d17a3a57c464a7c7"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/arcade-CUT7KVjC.js",
+          "status": 200,
+          "body": "3dbdaf124cf5bbcfeb7d7c90a8649118b3742b6b70037ec674cec7decc7f110f",
+          "bytes": 489,
+          "sha256": "4111f89d2385fa6fe3ef19e7bb2713c60d58a84961d84be44f3762f09c9c1224"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/FlagImg-biaAPlPh.js",
+          "status": 200,
+          "body": "642d1dc3d5e2235708e6c10fb12888e3a0f1cf60a1a65688e993b7cd53cbf3eb",
+          "bytes": 5846,
+          "sha256": "6d0808a49a54ca4ddbe203ea5310a270525244f18068102955c27e3c30cbf643"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/freeKick-BSoL5hQo.js",
+          "status": 200,
+          "body": "8d2365869f6f11aa6c18482c64bb70c95b4f947a8510624e5d800e9d8c53262b",
+          "bytes": 1943,
+          "sha256": "050f7197d308868940e8ebf4e2384275bfdcc83047d98066eef53234aad4950c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Confetti-DHAkqkOB.js",
+          "status": 200,
+          "body": "db0e6c09e364530db81ca571783a1ae0a880ef7e8a0a5f1f36a6f64d44cf7620",
+          "bytes": 904,
+          "sha256": "6ad7932d4aa84bbf54a442f77b3bd214c247b9356dbda9b317b8b782a18426ab"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/Celebration-DikPtGsy.js",
+          "status": 200,
+          "body": "8f7ac64c2c928040d8a6712913991c5c1ad06f1d3868fd6bf0bdf6f72a9e3695",
+          "bytes": 1527,
+          "sha256": "9a12448d4aba27b2845e23a37b4545f965fc39ff2a05cab48fa32f1f4b4cf502"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/CelebrationStyles-DFsKnF7w.js",
+          "status": 200,
+          "body": "e9f103cfb66e4eeb2829270454cd1c2b8d7ef0f75bd01a7cd9c7110839b8576b",
+          "bytes": 2126,
+          "sha256": "57ccfe47ddcbb3720f47b7ed0cc09f1c3f4fdf71d375ab04628447bd7c17048b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/copy-CBvorOcw.js",
+          "status": 200,
+          "body": "705569342e6540ced6e6125cd29c2efb922e035e1e2d1db9de47700e58f2cb9b",
+          "bytes": 405,
+          "sha256": "b009205da952884f9cbf8e705d4cd1301c3de6506df43e07f5298aa86dbf4ddc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ShareButtons-BfKQqQ_N.js",
+          "status": 200,
+          "body": "0c7f39f89c649dfc51838fe81695c7c2082cefffe4b5606b58bb8237008f1287",
+          "bytes": 11646,
+          "sha256": "eb2cdb97ff0cd300a89a4dfabf6d6e615a6cc36ce14cdf327cb4790b485b14cf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/AppearanceBuilder-ZjSYZlIu.js",
+          "status": 200,
+          "body": "4a53aaaedbc88a1b872eba781c8ac97f877285e70428e62b192d21ca4e374d0d",
+          "bytes": 46290,
+          "sha256": "3e46ec0bf666139da5fd1d18d1a77eda570875e4c5e532689fcc602d375c41a1"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerCareer-D-l99MYG.js",
+          "status": 200,
+          "body": "ae04d1c93a61420bea7a458cece92f77888ea552dae6ee71de2a3b2a45bcce09",
+          "bytes": 1392480,
+          "sha256": "c7d3a802bfa625038f730c5c7c9fbf616e802e625ce7129e9ea4f359e7b9daa2"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonResumeChip-xOl-QtBn.js",
+          "status": 200,
+          "body": "b6c829bbd57929e7d23d74e79c18bc15a2d19a9be77a73b472deeaa75d8d26fa",
+          "bytes": 715,
+          "sha256": "ea2e23e9adc3cc239a9f1c9f694513ed5ba57dee903243cc16084d177553a4dc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/resume-iKq-NREI.js",
+          "status": 200,
+          "body": "471c50e5472112930e5afcf91444a8e77853401602b487444be3dd631703e98c",
+          "bytes": 670,
+          "sha256": "2921cc3af2bde88afae3eea6ab19640952224509721968a152a4a98fa05ff7ed"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/seoMetaPart30-C2bf-ABQ.js",
+          "status": 200,
+          "body": "86287a19ce18c98a69d2143ca1ab535982329f19acfaf3f06b68fb531c13d809",
+          "bytes": 1935,
+          "sha256": "fa322000c7ab681eb67b4f8b5f3d110159fec59feea13bf7ce8ccb344c5d7474"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccer2-CiBXpLBm.js",
+          "status": 200,
+          "body": "b1d758d94e9338fc73b244063529bfd98555dcce517a979b2884f5b5fe511fb5",
+          "bytes": 108547,
+          "sha256": "8c3a97b7b7fed272dbf32514e3f51d4e0c7bdc879d11465f07c1f925957d3950"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback--eiU5Aah.css",
+          "status": 200,
+          "body": "020289145711468b9904a80be4eb83e018b681e74249ff71554135575b0ef495",
+          "bytes": 2937,
+          "sha256": "8ef6cdb5d751c1854c6d5b299b25480dc00f24e28a83c1a024fd7e1a95b69831"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SoccerSeasonCentre-BurvPrN4.js",
+          "status": 200,
+          "body": "68ed6b2f610c0243939494043bb7bed7cd6247cdc594fc2011c5c2ed0cd9eddd",
+          "bytes": 39691,
+          "sha256": "a42164fade0ed55b23d9b9e5e19a99b6f8e8c1f279a606a8120de499a0a220d6"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/leagueCore--DUG-EXw.js",
+          "status": 200,
+          "body": "2cf6d8728d6ede37bff92a8a60cb2aaa2e03c3ebd0c3d4f1f22f27156d763b09",
+          "bytes": 671,
+          "sha256": "d4de939f32c16be245e082dc10ab932e36f78734720c82832a7b9e5e49577ec9"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/keyedShuffle-CJAps3xO.js",
+          "status": 200,
+          "body": "427035975e4308108cb357a36fe2a150741328689043db6663dbb845cc1f7a15",
+          "bytes": 144,
+          "sha256": "d3a78deb57b4135d45c23a9507a0c0374b0b296a166155667b5b14c1fa14cacc"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/core-Dsglyqbx.js",
+          "status": 200,
+          "body": "2cab022b9bf672a779790590b02c7954b6d5a5b001053218e402e34327960c70",
+          "bytes": 18979,
+          "sha256": "776b700241560c51c00f73e11ce26112a8b4e103e684e8197ba263bdd5419dbf"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerMoments-CwGFkaLr.js",
+          "status": 200,
+          "body": "07f6c055a069855d382c51db437a50303ccb7c510866577037b5b8cbd7375495",
+          "bytes": 22343,
+          "sha256": "dd05b297b1dce7536d6ef5af251491008a24f329a5c472e9cac8a2bf6dbe8e0c"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/throughBallDrill-B9fNBoXH.js",
+          "status": 200,
+          "body": "1a604ff0eacbd65e538710e3a1235b8ee0fb27ae5c9d3ce49cb309f75e185c3f",
+          "bytes": 4784,
+          "sha256": "ab5ddf11e0270d06e80ec67f0f60f4d657e9c41bc9c17157c4e4a3774a5b9b87"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ownGoalRule-J3XQry1d.js",
+          "status": 200,
+          "body": "da54cb5c724464dcb8ea77b8667bca8d2f9aa8f5ed99c267305f93de17edafc5",
+          "bytes": 179,
+          "sha256": "429872db3c8ff95d979e20c77adf793a66537433b1c4c5b49849cd000d60a144"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/clubManagerClock-C1EiWjUJ.js",
+          "status": 200,
+          "body": "235409e268e08740289a2e1f6f3989d0825518d42ca343c960af3cc5bfdb1d19",
+          "bytes": 245,
+          "sha256": "e0c6bd45cb144a1afde374e35a9f845119fb09c2427002d97746ce5e828211d5"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/soccerSeasonCompetitions-CbSNBy3C.js",
+          "status": 200,
+          "body": "540055ec98b1a6c30045749a954c4074bc65bac8d217e94e3650e36bad050ce4",
+          "bytes": 3298,
+          "sha256": "3210b07e6fd0c4e30130445bcc5214a165f7686bf9c76dcc60ded785fe84a62e"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/useBodyLock-JijVNd8t.js",
+          "status": 200,
+          "body": "d3555fd32e60da890620fb9bb794d92ec6929db3544a488b08f57c73c4f27ea0",
+          "bytes": 449,
+          "sha256": "270b732df41d1d8309184122ab6fd94d03b9b0d6b8a0d54b26fd10843e685074"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/LeagueTableCard-BFQaz56D.js",
+          "status": 200,
+          "body": "5432679bacfc39badec1e48d1506f31521242c5317acffe03f44e769a762f8fd",
+          "bytes": 3018,
+          "sha256": "933b04cfb86bf3c9369e69429abf335d96c905f5358015a70739cfc9fde08a37"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/ArcadeShotFeedback-CAJnNlhw.js",
+          "status": 200,
+          "body": "06f02ae5e7c10defa255fe95da27b74a6313313971fcb60d98150c360ac7d89b",
+          "bytes": 1955,
+          "sha256": "afb6ca312569927cbd3b0e2dc7e31c93a387dbd6a472c0bf003f9c0c6427a717"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/SeasonCentre-eO44Xua8.js",
+          "status": 200,
+          "body": "ce69be39fed8dc0246e04c6b1e9fff2eeab7603bb230cc19d70da16ff1bad8cb",
+          "bytes": 45758,
+          "sha256": "8634a5574b6a4baf73be54218d6d13fa18a6c9b07e5394e1b8041fb6fd8baadd"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-BrcOvsZb.css",
+          "status": 200,
+          "body": "18b18e89756a48c068ce7f31b280faa4a50f140d82aac9d269307feb48abe805",
+          "bytes": 3106,
+          "sha256": "4c52fd4406e8ce4b486465b909cbb5e2b37c6f84c764f30daff027ba85d3a56b"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/PitchSurface-CkPIsZtO.js",
+          "status": 200,
+          "body": "e723b1de3097e29d3f2b0ce82ca712b4532f199784bc935414a4ea7832323628",
+          "bytes": 9856,
+          "sha256": "b20232fe70082bbaef59a5dbb5c7cbe1d67700556cb825a90db81ebfd12e0ab8"
+        },
+        {
+          "url": "http://127.0.0.1:4597/assets/MiniPitch-BW5q0-sz.js",
+          "status": 200,
+          "body": "6c7c900f7c3ed250ee90cfb775e4e436713d2ec42dfb1cfc4aac546de1c9371b",
+          "bytes": 4097,
+          "sha256": "fb4d66d3299b8589fb91ff63a19f5d6e05bc4086c99341f1b406c946537af0f3"
+        }
+      ],
+      "errors": [],
+      "assetErrors": [],
+      "externalRequests": [
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+        "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-11T09%3A06%3A46.248Z&start_at=lte.2026-10-12T17%3A06%3A46.248Z",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w40/am.png",
+        "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap",
+        "https://flawuiqbvjobmkfkauhw.supabase.co/rest/v1/live_scores?select=*&order=start_at.asc&limit=150&start_at=gte.2026-10-11T09%3A06%3A47.762Z&start_at=lte.2026-10-12T17%3A06%3A47.762Z",
+        "https://flagcdn.com/w80/be.png",
+        "https://flagcdn.com/w40/be.png",
+        "https://flagcdn.com/w40/am.png"
+      ],
+      "fontScope": "network-free installed fallback fonts, actual document.fonts.ready; saved help preference already seen",
+      "document": "24cfc751dba814c5bc7f4137b9a2bf8aff4a88dccd3a71b85364e91482c4f36b",
+      "startup": "a6e368d6e2d318beaf0ce559bbedbb6b57e9d4922cd8a0e1ece5d9d40b013ef4",
+      "loadedSave": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "bodyBefore": {
+        "attribute": null,
+        "declarations": [],
+        "overflow": "visible",
+        "pointerEvents": "auto",
+        "marginRight": "0px",
+        "position": "static"
+      },
+      "game2": {
+        "game": "eddb1de11cfd8305d3ac79215f924aeadb8f8e26281e817dc2e31fc472ba011f",
+        "name": "Cercle Brugge",
+        "bar": "Cercle Brugge\n2-2\nAnderlecht",
+        "scoreboard": [
+          "Cercle Brugge",
+          "2-2",
+          "Anderlecht"
+        ],
+        "events": [
+          "28'⚽ Goal, Cercle Brugge",
+          "32'⚽ Goal, Cercle Brugge",
+          "58'🔁 You come on",
+          "64'⚽ You score!",
+          "76'⚽ You score!"
+        ],
+        "expected": [
+          "⚽ Goal, Cercle Brugge",
+          "⚽ Goal, Cercle Brugge",
+          "🔁 You come on",
+          "⚽ You score!",
+          "⚽ You score!"
+        ],
+        "clock": "2-2"
+      },
+      "fixtureText": [
+        "Antwerp",
+        "Cercle Brugge",
+        "Charleroi",
+        "Club Brugge",
+        "Dender",
+        "Genk",
+        "Gent",
+        "La Louviere",
+        "Mechelen",
+        "OH Leuven",
+        "Sint-Truiden",
+        "Standard Liege",
+        "Union Saint-Gilloise",
+        "Westerlo",
+        "Zulte Waregem",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Antwerp",
+        "Cercle Brugge",
+        "Charleroi",
+        "Club Brugge",
+        "Dender",
+        "Genk",
+        "Gent",
+        "La Louviere",
+        "Mechelen",
+        "OH Leuven",
+        "Sint-Truiden",
+        "Standard Liege",
+        "Union Saint-Gilloise",
+        "Westerlo",
+        "Zulte Waregem",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded",
+        "Opponent not recorded"
+      ],
+      "saveAfter": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "bodyAfter": {
+        "attribute": "",
+        "declarations": [],
+        "overflow": "visible",
+        "pointerEvents": "auto",
+        "marginRight": "0px",
+        "position": "static"
+      },
+      "reloadStartup": "7d5593c0fc7192b67569755f2948aa6a1178cf2a247850c5f3107c5a8f328816",
+      "reloadSave": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "reloadedGame2": {
+        "game": "eddb1de11cfd8305d3ac79215f924aeadb8f8e26281e817dc2e31fc472ba011f",
+        "name": "Cercle Brugge",
+        "bar": "Cercle Brugge\n2-2\nAnderlecht",
+        "scoreboard": [
+          "Cercle Brugge",
+          "2-2",
+          "Anderlecht"
+        ],
+        "events": [
+          "28'⚽ Goal, Cercle Brugge",
+          "32'⚽ Goal, Cercle Brugge",
+          "58'🔁 You come on",
+          "64'⚽ You score!",
+          "76'⚽ You score!"
+        ],
+        "expected": [
+          "⚽ Goal, Cercle Brugge",
+          "⚽ Goal, Cercle Brugge",
+          "🔁 You come on",
+          "⚽ You score!",
+          "⚽ You score!"
+        ],
+        "clock": "2-2"
+      },
+      "reloadFinalSave": "e2f894c2f47627ba7ef75013ce3788cfdaf87acd15bd34543b8bf6a35c1dff74",
+      "reloadReads": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "bodyReloadAfter": {
+        "attribute": "",
+        "declarations": [],
+        "overflow": "visible",
+        "pointerEvents": "auto",
+        "marginRight": "0px",
+        "position": "static"
+      }
+    }
+  ],
+  "detectors": [
+    {
+      "kind": "geometry",
+      "original": "a86898be70d5f6ddb1a8ef27f0352d2d5e30bf66357bbac79f76fc217262107e",
+      "fault": "da158c22893af7d7f18a203751ab07bfbf1359eed1594b7f58905bc93b9e0ea1",
+      "undo": "a86898be70d5f6ddb1a8ef27f0352d2d5e30bf66357bbac79f76fc217262107e",
+      "failures": [
+        "width",
+        "height",
+        "visualWidth",
+        "visualHeight",
+        "scale",
+        "overflow",
+        "animations",
+        "inside",
+        "stable",
+        "fonts",
+        "painted",
+        "rect"
+      ]
+    },
+    {
+      "kind": "facts",
+      "original": "5ac3fa97f2e43cc8de9248ddd3916bfc3ad7d61ef63d546aabca8f5ba9f2cb0f",
+      "fault": "344e3af78d8ceed7f9c2bdb98b697458215c62c75760ad926a0643b3936838b3",
+      "undo": "5ac3fa97f2e43cc8de9248ddd3916bfc3ad7d61ef63d546aabca8f5ba9f2cb0f",
+      "failures": [
+        "whole-save",
+        "scoreboard",
+        "goal-labels",
+        "fixture-order",
+        "read-vector",
+        "body-restore",
+        "page-errors",
+        "reloaded-game2"
+      ],
+      "emptyAttributeEquivalent": "f84155530e360c2c1ca499f7e3b575a8d7c0c302441af0d8d45feed7f6497bf9",
+      "nonemptyAttributeFault": "81c350b992e28cf0fe4703523bbe4b82d0bf703e29b5d7aec097fd881617cb6e",
+      "bodyAttributeUndo": "5ac3fa97f2e43cc8de9248ddd3916bfc3ad7d61ef63d546aabca8f5ba9f2cb0f",
+      "bodyAttributeFailures": [
+        "body-restore"
+      ]
+    }
+  ]
+}
