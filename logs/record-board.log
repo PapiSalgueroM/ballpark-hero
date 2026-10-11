@@ -1,0 +1,13 @@
+recording from fd1a91a0f55290f90b35a7d87040f7fcf7e56b88 (not main: src differs from aa564f16019b9e821981d5c4e3e0262312c73b62)
+  nfl: 459 clicks on the path, 24 seasons, 15 fixed saves, 685 screen steps
+  nba: 507 clicks on the path, 24 seasons, 15 fixed saves, 705 screen steps
+  mlb: 449 clicks on the path, 24 seasons, 15 fixed saves, 688 screen steps
+  nhl: 415 clicks on the path, 24 seasons, 15 fixed saves, 688 screen steps
+recordUsBoardFixture: wrote ../../_temp/rc-out/files/usBoardFixture.json (1870889 bytes)
+header fields that differ from ours: recordedFrom
+  recordedFrom: "1ed3806d25f32c2b87be1e3eea32af47055006be (not main: src differs from f78037dcddea12c1a02586c7d5c0e185efb86121)" -> "fd1a91a0f55290f90b35a7d87040f7fcf7e56b88 (not main: src differs from aa564f16019b9e821981d5c4e3e0262312c73b62)"
+sports/nfl: retaken 451649 bytes; DIFFERS from ours (450906); byte equal to theirs (451649)
+sports/nba: retaken 488419 bytes; byte equal to ours (488419); byte equal to theirs (488419)
+sports/mlb: retaken 448525 bytes; byte equal to ours (448525); DIFFERS from theirs (448544)
+sports/nhl: retaken 422436 bytes; byte equal to ours (422436); DIFFERS from theirs (420993)
+cmprec3: apart from header.recordedFrom and sports/nfl the retaken recording is ours
