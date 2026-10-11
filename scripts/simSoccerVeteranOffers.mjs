@@ -13,8 +13,8 @@ import { gzipSync } from 'node:zlib';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(ROOT, process.env.SOCCER_VETERAN_OFFERS_OUT || '.tmp-fx/soccer-veteran-offers');
-const BASE = 'f78037dcddea12c1a02586c7d5c0e185efb86121';
-const BASE_TREE = '1c9e7dcb11992442060cb162c288d0bcf37db0c2';
+const BASE = '70d283872268f73674fc384da72f6ec4bbd34444';
+const BASE_TREE = 'dfa637171d7a6cedf9561617096a68f1a818e597';
 const ENGINE = 'src/lib/soccerCareerEngine.ts', CONTRACTS = 'src/lib/soccerCareerContracts.ts';
 const REVIEW = 'src/lib/soccerOfferReview.ts';
 const ENV_EXPRESSION = '{"DEV":false,"PROD":true,"MODE":"production"}';
