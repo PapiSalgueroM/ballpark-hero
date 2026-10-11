@@ -145,6 +145,10 @@ ok(derived.rates.goalReview === n6(ownLow('goalsRuledOut') / engineNow.reviewabl
   `goalReview is not the stricter count of a figure two publishers counted, over the engine figure (${derived.rates.goalReview} against ${n6(ownLow('goalsRuledOut') / engineNow.reviewableGoalsPerMatch)})`);
 ok(derived.rates.missedFoulReview === n6(ownLow('penaltiesAwarded') / engineNow.awardsPerMatchPerUnitRate),
   `missedFoulReview is not the stricter count of a figure two publishers counted, over the engine figure (${derived.rates.missedFoulReview} against ${n6(ownLow('penaltiesAwarded') / engineNow.awardsPerMatchPerUnitRate)})`);
+/* 2b2. Round 1302, decision 4: the season total of penalties, the band a match with reviews on is held against
+   (scripts/simCmVar.mjs plays it), stands on a figure two publishers counted like everything else that is read. */
+ok(settle(rates, 'penaltiesTotal').used, 'penaltiesTotal, the band of all penalties a match, is not counted by two publishers for one season');
+ok(JSON.stringify(derived.holds) === JSON.stringify((rates.owed ?? []).filter(o => o.state === 'open').map(o => o.id)), 'the generated list of what the ledger still owes is not its open owed entries');
 /* 2c. What the lead asked for and the pages do not give is written down, counted right, and holds the switch. */
 const owed = rates.owed ?? [];
 for (const o of owed) {

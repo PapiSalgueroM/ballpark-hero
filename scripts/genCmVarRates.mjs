@@ -108,12 +108,16 @@ export function derive() {
   const engine = JSON.parse(text('scripts/data/cmVarEngine.json'));
   const goals = settle(rates, 'goalsRuledOut'), pens = settle(rates, 'penaltiesAwarded');
   if (!goals.used || !pens.used) throw new Error('genCmVarRates: a modelled quantity is THIN, nothing can be derived');
+  /* Round 1302, decision 4: all the penalties of a season, the band a match with reviews on is held against. */
+  const total = settle(rates, 'penaltiesTotal');
+  if (!total.used) throw new Error('genCmVarRates: the season total of penalties is THIN, the band has nothing to stand on');
+  const holds = (rates.owed ?? []).filter(o => o.state === 'open').map(o => o.id);
   const law = penaltyLaw();
   /* ONE list: the competitions kickOff covers and the names the help prints are the same rows, in the same order. */
   const covered = comps.rows.filter(r => r.verdict === 'yes');
   const coverage = Object.fromEntries(covered.map(r => [r.key, r.key.startsWith('league:') ? 'all' : r.from]));
   return {
-    engine, goals, pens, law, coverage, names: covered.map(helpName),
+    engine, goals, pens, total, holds, law, coverage, names: covered.map(helpName),
     rates: {
       goalReview: n6(goals.low / engine.reviewableGoalsPerMatch), overturn: 1, penaltyReview: 0,
       missedFoulReview: n6(pens.low / engine.awardsPerMatchPerUnitRate), penaltyScores: law.scores, penaltyOnTarget: law.onTarget,
@@ -149,11 +153,17 @@ export function generatedSource() {
     ` *   The engine awards ${e.awardsPerMatchPerUnitRate} penalties a match per unit of rate (measured at ${e.probeRate} a foul).`,
     ` *   missedFoulReview = ${n6(p.low)} / ${e.awardsPerMatchPerUnitRate} = ${d.rates.missedFoulReview} a foul.`,
     ` * The kick: the engine's own penalty law, SHOOTOUT_BASE_RATE ${d.law.scores} and SHOOTOUT_SAVE_SHARE ${d.law.onTarget}.`,
+    ` * All penalties of a season (Round 1302, the band a match with reviews on is held against): ${both(d.total)}.`,
+    ` *   ${n6(d.total.low)} to ${n6(d.total.high)} a match. scripts/simCmVar.mjs holds the engine's total against it.`,
     ' */',
     `export const CM_VAR_RATES = { goalReview: ${d.rates.goalReview}, overturn: ${d.rates.overturn}, penaltyReview: ${d.rates.penaltyReview}, missedFoulReview: ${d.rates.missedFoulReview}, penaltyScores: ${d.rates.penaltyScores}, penaltyOnTarget: ${d.rates.penaltyOnTarget} } as const;`,
     '',
     '/** Real football, a match: what the harness bands and the help text read. */',
-    `export const CM_VAR_REAL = { goalsRuledOut: { low: ${n6(g.low)}, high: ${n6(g.high)} }, penaltiesAwarded: { low: ${n6(p.low)}, high: ${n6(p.high)} } } as const;`,
+    `export const CM_VAR_REAL = { goalsRuledOut: { low: ${n6(g.low)}, high: ${n6(g.high)} }, penaltiesAwarded: { low: ${n6(p.low)}, high: ${n6(p.high)} }, penaltiesTotal: { low: ${n6(d.total.low)}, high: ${n6(d.total.high)} } } as const;`,
+    '',
+    '/** Round 1302. What the rates ledger still owes (its open owed entries). While this list is not empty the',
+    ' *  switch CM_VAR_LIVE stays false: scripts/simCmVarLedger.mjs and scripts/simCmVar.mjs read it. */',
+    `export const CM_VAR_HOLDS: readonly string[] = ${JSON.stringify(d.holds).replaceAll('"', "'").replaceAll("','", "', '")};`,
     '',
     '/** The same competitions by the name the help text prints. */',
     `export const CM_VAR_COVERED_NAMES: readonly string[] = ${JSON.stringify(d.names).replaceAll('"', "'").replaceAll("','", "', '")};`,

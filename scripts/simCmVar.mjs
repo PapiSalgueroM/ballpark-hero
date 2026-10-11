@@ -38,9 +38,15 @@ const clone = value => JSON.parse(JSON.stringify(value));
    here on the SAME match played with and without reviews. Measured: -0.0007 -0.0054 -0.0085 0.0002 -0.0015 -0.0180 0.0020.
    scoredShare: how far the share of review penalties that go in may sit from the engine penalty law's 0.76.
    Measured: 0.774 0.755 0.740 0.818 0.760 0.777 0.785 (349 to 388 kicks a fleet, one standard deviation 0.022).
-   No Club Manager harness holds penalties a match, so none is held here either: the figure is printed (0.45 to 0.48
-   with reviews on, of which 0.087 to 0.097 a review awarded) and that is all. About 630 league matches in 4,000
-   have a review and about 240 end with another result than the same match without reviews. */
+   Round 1302 (the lead's decision 4): penalties a match with reviews on IS held now, against all the penalties of a
+   real season in the ledger (penaltiesTotal: 120 and 126 in 380 by two publishers, 0.3158 to 0.3316 a match; with
+   the same headroom the band is 0.2526 to 0.3979). MEASURED: seven fleets of Round 1218 gave 0.4515 0.4526 0.4679
+   0.4780 0.4692 0.4518 0.4613 with reviews on (of which 0.087 to 0.097 a review awarded), every one above the band,
+   the nearest by 13%, so the engine is outside it and not by sampling. What the band then asks is that penalties
+   by review stay OFF: the ledger's open entry penalties-total holds the switch, and this harness is red when the
+   engine is outside the band and that entry is gone (control penaltyband), or inside it with the entry still there.
+   About 630 league matches in 4,000 have a review and about 240 end with another result than the same match
+   without reviews. */
 const BANDS = { seeds: '31,32,33,34,35,36', headroom: 0.20, goalGap: 0.05, scoredShare: 0.10 };
 const BASE = 'c33d013965aa33b87f5db23e2ca270be6fcd977c';
 /** One seeded stretch on a fixed clock: the fleet's own function (scripts/lib/cmVarFleet.mjs), under the name the walk imports. */
@@ -108,6 +114,9 @@ const controls = {
   oldmissedfoul: { file: rates, from: /missedFoulReview: [0-9.]+/, to: 'missedFoulReview: 0.015', test: 'bands' },
   oldpenaltyscores: { file: rates, from: /penaltyScores: [0-9.]+/, to: 'penaltyScores: 0.74', test: 'bands' },
   oldpenaltyontarget: { file: rates, from: /penaltyOnTarget: [0-9.]+/, to: 'penaltyOnTarget: 0.7', test: 'bands' },
+  /* Round 1302: the generated rates no longer say the ledger holds the switch for the season total of penalties,
+     while the engine is outside that band. */
+  penaltyband: { file: rates, from: "'penalties-total'", to: "'penalties-total-let-go'", test: 'bands' },
 };
 async function main() {
   const control = process.env.CM_VAR_CONTROL || '';
@@ -139,7 +148,7 @@ async function main() {
     async function bundle(source, varSource, name, ratesSource = withFixtureRates(sources[rates])) {
       const entry = path.join(folder, `${name}.ts`), leaf = path.join(folder, `${name}-var.ts`), ratesLeaf = path.join(folder, `${name}-rates.ts`), output = path.join(folder, `${name}.cjs`);
       await writeFile(ratesLeaf, ratesSource);
-      await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce, cmVarCovers } from '@/lib/clubManagerVar';\n`);
+      await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce, cmVarCovers } from '@/lib/clubManagerVar';\nexport { CM_VAR_REAL, CM_VAR_HOLDS } from '@/data/clubManagerVarRates';\n`);
       await writeFile(leaf, varSource);
       await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': entry, '@/lib/clubManagerVar': leaf, '@/data/clubManagerVarRates': ratesLeaf, '@': path.join(root, 'src') } });
       return () => { delete require.cache[require.resolve(output)]; return require(output); };
@@ -450,6 +459,19 @@ async function main() {
         const share = L.penaltyAwarded ? L.awardedScored / L.penaltyAwarded : 0;
         metrics.bands.awardedScoredShare = r4(share);
         assert.ok(Math.abs(share - d.law.scores) <= BANDS.scoredShare, `Review penalties went in ${r4(share)} of the time, more than ${BANDS.scoredShare} from the engine penalty law's ${d.law.scores}`);
+        /* Round 1302, the lead's decision 4. ALL penalties a match with reviews on, against all the penalties of a
+           real season (the ledger's penaltiesTotal, the generated CM_VAR_REAL.penaltiesTotal). A penalty a review
+           gives is one of a real season's penalties; here it comes on top of the engine's own. Outside the band,
+           penalties by review must stay off, and what keeps them off is the ledger's open entry penalties-total
+           (the generated CM_VAR_HOLDS, which holds the switch in scripts/simCmVarLedger.mjs). So: outside the band
+           and not held is red, and so is held while inside (the entry would be stale). Never a wider band. */
+        const total = per(L.penalties), totalOff = per(L.penaltiesOff), band = real.CM_VAR_REAL.penaltiesTotal, holds = real.CM_VAR_HOLDS;
+        assert.ok(band && band.low > 0 && band.high >= band.low && Array.isArray(holds), 'The generated rates carry the season total of penalties and what the ledger still owes');
+        const insideTotal = inside(total, band), held = holds.includes('penalties-total');
+        metrics.bands.penaltiesPerMatchOff = r4(totalOff);
+        metrics.bands.penaltiesTotalBand = { low: r4(band.low * (1 - BANDS.headroom)), high: r4(band.high * (1 + BANDS.headroom)), inside: insideTotal, held };
+        assert.ok(insideTotal || held, `Penalties a match with reviews on ${r4(total)} (without: ${r4(totalOff)}) is outside real football's ${r4(band.low)} to ${r4(band.high)} (headroom ${BANDS.headroom}) and the ledger does not hold the switch for it (owed penalties-total)`);
+        assert.ok(!(insideTotal && held), `Penalties a match with reviews on ${r4(total)} is inside real football's ${r4(band.low)} to ${r4(band.high)} (headroom ${BANDS.headroom}): the ledger's owed entry penalties-total is stale, take it out`);
       },
       /* Round 1218 fix (review finding 6, fix-AT section 7 item 3). A review is dealt from its own keyed generator,
          never from the match's random stream. Each helper is called inside a seeded stretch: the stream's next two
