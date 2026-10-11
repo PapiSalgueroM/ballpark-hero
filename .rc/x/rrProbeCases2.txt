@@ -1,0 +1,75 @@
+
+  /* ==== REVIEWPROBE 2: the run reviewer's second pass. Never part of the repo: spliced into a copy on the runner. ==== */
+  type Probe = { k: number; cls: string; h: Half; goal?: LiveFeedEvent };
+  function lateRuledOut2(limit: number, from: number, to: number): Probe[] {
+    const out: Probe[] = [], count: Record<string, number> = {};
+    for (let k = 0; k < 3; k++) {
+      const pre = entry(k);
+      for (let seed = from; seed < to; seed++) {
+        const res = seeded(seed, () => playNextEntry(pre, { varReviews: true }));
+        if (res.kind !== 'halftime' || !res.state.live || res.state.live.varReviews !== true) continue;
+        const live = res.state.live, feed = liveFeed(live), all = reviewsOf(feed), whistle = 45 + (live.added?.h1 ?? 0);
+        if (all.length === 0) {
+          /* the baseline: a real goal at the whistle's own place in a half with no review at all */
+          const g = feed.find(e => e.kind === 'goal' && place(e) === whistle);
+          if (g) { count.baseline = (count.baseline ?? 0) + 1; if (count.baseline <= 5) out.push({ k, cls: 'baseline', goal: g, h: { career: structuredClone(res.state), review: g, feed, live, whistle, seed } }); }
+          continue;
+        }
+        if (all.length !== 1) continue;
+        const r = all[0];
+        if (r.review!.decision !== 'disallowed' || place(r) < whistle - 1) continue;
+        const room = !feed.some(e => isChance(e) && place(e) >= place(r) - 1);
+        const prevOnly = !room && !feed.some(e => isChance(e) && place(e) >= place(r));
+        const cls = room ? 'room' : prevOnly ? 'prevOnly' : 'crowded';
+        count[cls] = (count[cls] ?? 0) + 1;
+        if (cls === 'room' || (count[cls] ?? 0) > limit) continue;
+        out.push({ k, cls, h: { career: structuredClone(res.state), review: r, feed, live, whistle, seed } });
+      }
+    }
+    console.info(`REVIEWPROBE2 found ${JSON.stringify(count)} in seeds ${from} to ${to} of three league matches`);
+    return out;
+  }
+  async function playLate2(p: Probe) {
+    const h = p.h, r = h.review, isBase = p.cls === 'baseline';
+    const mounted = openAt(h, 44.2);
+    const toWhistle = await run(mounted, 30000, fs => fs[fs.length - 1].stage === 'interval');
+    const whistle = toWhistle.findIndex(f => f.stage === 'interval');
+    const frames = await run(mounted, 3200, undefined, 1, toWhistle);
+    const first = frames.findIndex(cardUp), last = frames.map(cardUp).lastIndexOf(true);
+    const runs: string[] = [];
+    for (const f of frames) { const m = `${f.stage === 'interval' ? 'INT:' : ''}${f.motion}/${f.phase}${cardUp(f) ? '(var)' : ''}${f.goalCard !== null ? '(goalcard)' : ''}`; if (runs[runs.length - 1] !== m) runs.push(m); }
+    const win = h.feed.filter(e => isChance(e) && place(e) >= 45);
+    const up = frames.filter(cardUp);
+    const underList = [...new Set(up.filter(f => f.goalCard !== null || !(f.motion === 'pass' || (f.motion === 'goal' && f.phase === 'net'))).map(f => `${f.motion}/${f.phase}${f.goalCard !== null ? '+goalcard' : ''}`))];
+    const under = up.filter(f => f.goalCard !== null || !(f.motion === 'pass' || (f.motion === 'goal' && f.phase === 'net'))).length;
+    const goals = win.filter(e => e.kind === 'goal').map(g => {
+      const at = frames.findIndex(f => f.goalCard !== null && f.goalCard.includes(g.text));
+      return { who: g.text, side: g.side, at: place(g), card: at, cardStage: at >= 0 ? frames[at].stage : null, cardBeforeWhistle: at >= 0 && at < whistle };
+    });
+    const row = {
+      cls: p.cls, match: p.k + 1, seed: h.seed, whistle: h.whistle, review: isBase ? null : { side: r.side, at: place(r), who: r.text },
+      window: win.map(e => `${e.kind}:${e.side}@${place(e)}`), runs: runs.slice(0, 40), first, last, whistleFrame: whistle, frames: frames.length,
+      under, underList, staged: first >= 0 && frames[first].motion === 'goal' && frames[first].phase === 'net',
+      atFirst: first >= 0 ? `${frames[first].motion}/${frames[first].phase} score ${frames[first].score}` : null,
+      endScore: whistle >= 0 ? frames[whistle].score : null, engineScore: scoreBy(h.feed, h.whistle), goals,
+      realGoalFlights: frames.filter((f, i) => f.motion === 'goal' && f.phase === 'flight' && !(i > 0 && frames[i - 1].motion === 'goal' && frames[i - 1].phase === 'flight')).length,
+    };
+    const bad: string[] = [];
+    if (whistle < 0) bad.push('the half never ended');
+    if (!isBase && whistle >= 0 && whistle <= last) bad.push('the half ended under the review card');
+    if (under > 0) bad.push(`${under} frames under the review card with ${underList.join(', ')}`);
+    if (row.endScore !== row.engineScore) bad.push(`the half ended ${row.endScore}, the engine says ${row.engineScore}`);
+    for (const g of goals) if (g.card < 0) bad.push(`the real goal of ${g.who} at ${g.at} never got its scorer card (3.2 s into the interval included)`);
+    if (!isBase && p.cls !== 'room' && row.staged) bad.push(`${p.cls} half: the ruled out goal took the pitch (the card opened on a goal in the net) although a real chance is in its last places`);
+    console.info(`REVIEWPROBE2 ${bad.length ? 'BAD' : 'ok'} ${JSON.stringify({ ...row, bad })}`);
+    cleanup();
+    return bad.map(b => `${p.cls} match ${p.k + 1} seed ${h.seed}: ${b}`);
+  }
+
+  it('REVIEWPROBE2 late ruled out goals beside a real chance, and the baseline', async () => {
+    const found = lateRuledOut2(Number(process.env.RR_LIMIT ?? 12), Number(process.env.RR_FROM ?? 1700), Number(process.env.RR_TO ?? 6700));
+    const bad: string[] = [];
+    for (const p of found) bad.push(...await playLate2(p));
+    console.info(`REVIEWPROBE2 SUMMARY played ${found.length} halves, ${bad.length} problem(s)`);
+    expect(bad).toEqual([]);
+  }, 1500000);
