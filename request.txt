@@ -1,0 +1,22 @@
+# Release AU proof, lane C, part 1 of 3: a plain build, three at a time
+#!build
+#!playwright
+simCmQuickSubs: node scripts/simCmQuickSubs.mjs
+simCmMatchCentre: node scripts/simCmMatchCentre.mjs
+simCmShootoutOrder: node scripts/simCmShootoutOrder.mjs
+simCmStoppageTime: node scripts/simCmStoppageTime.mjs
+simHalftime: node scripts/simHalftime.mjs
+simLiveMatch: node scripts/simLiveMatch.mjs
+simMatchDetail: node scripts/simMatchDetail.mjs
+simMatchScreen: node scripts/simMatchScreen.mjs
+simClubManagerSlots: node scripts/simClubManagerSlots.mjs
+simManagerWorldBrowser: node scripts/simManagerWorldBrowser.mjs
+simManagerMatchPlans: node scripts/simManagerMatchPlans.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simClubManagerMeters: node scripts/simClubManagerMeters.mjs
+simClubManagerDecisions: node scripts/simClubManagerDecisions.mjs
+simClubManager: node scripts/simClubManager.mjs
+simClubManagerSave: node scripts/simClubManagerSave.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simDeadlineDay: node scripts/simDeadlineDay.mjs
+simDailyClubPool: node scripts/simDailyClubPool.mjs
