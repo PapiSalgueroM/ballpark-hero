@@ -1,0 +1,9 @@
+lm-plain exit=0 44s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+lm-redraw exit=1 6s | simLiveSimMotion: control redraw turned "a tactics redraw cancels" red on an assertion (1 failed), as it must.
+lm-pause exit=1 4s | simLiveSimMotion: control pause turned "pause freezes" red on an assertion (1 failed), as it must.
+ledger exit=0 1s | simCmVarLedger: all 640 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+l-stage exit=1 1s | simCmVarLedger control stage: FIRED (the help would name Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Li
+tsc exit=0 57s | 
+varscreen exit=0 58s |    Duration  57.80s (transform 1.84s, setup 45ms, collect 2.44s, tests 54.33s, environment 326ms, prepare 98ms)
+varlive exit=0 3s |    Duration  2.05s (transform 784ms, setup 28ms, collect 1.00s, tests 655ms, environment 166ms, prepare 43ms)

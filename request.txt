@@ -1,0 +1,10 @@
+# Round 1302 closing check (verifier) on the pushed head: the type gate, the screen test, the live motion harness plain and its two mended controls, the ledger harness, its stage control, the generator's check.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+lm-plain: node scripts/simLiveSimMotion.mjs
+lm-redraw: LIVE_MOTION_CONTROL=redraw node scripts/simLiveSimMotion.mjs
+lm-pause: LIVE_MOTION_CONTROL=pause node scripts/simLiveSimMotion.mjs
+ledger: node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+l-stage: CM_VAR_LEDGER_CONTROL=stage node scripts/simCmVarLedger.mjs
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.ts --testTimeout=300000 --hookTimeout=120000
