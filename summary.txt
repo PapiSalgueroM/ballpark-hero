@@ -1,0 +1,9 @@
+mkbase exit=0 1s | base commit 1a6a394102f8d712807ff82c8399467ed0641a2c
+realfix-default exit=0 2s | simCmRealFixtures normal premier: 10 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, BASE GROUPS NOT RUN.
+realfix-base exit=0 7s | simCmRealFixtures normal premier: 13 outcome groups passed on 20 clubs, 38 matchdays and 380 fixtures, generated baseline held against the base 1a6a394102f8d712807ff82c83
+realfix-base-all exit=0 55s | simCmRealFixtures premier: 13 actual outcome groups, 760 fixture reads, 760 calendar reads and 11 effective controls passed against the base 1a6a394102f8d712807ff82c83994
+fleet-base exit=0 115s | simCmFixtureFleet: green. 10 registered league(s), 9 in a file of their own. nofetch 250 careers, oldsaves 132 saves, dailies 11 clubs, against the base 1a6a394102f8d7128
+fleet-prefetch exit=1 47s | simCmFixtureFleet: CONTROL prefetch FIRED: section nofetch went red for exactly its 9 league(s) (bundesliga, bundesliga2, championship, eredivisie, laliga, ligue2, primei
+fleet-keyless exit=1 49s | simCmFixtureFleet: CONTROL keyless FIRED: section oldsaves went red for exactly its 10 league(s) (bundesliga, bundesliga2, championship, eredivisie, laliga, ligue2, premi
+fleet-nostrip exit=1 5s | simCmFixtureFleet: CONTROL nostrip FIRED: section dailies went red for exactly its 10 league(s) (bundesliga, bundesliga2, championship, eredivisie, laliga, ligue2, premie
+leaguefixtures exit=0 10s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired

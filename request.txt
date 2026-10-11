@@ -1,0 +1,11 @@
+# Release AV proof, decision 3: Round 1225's two base harnesses on the merged line, with the base Round 1229's closing check names (the train with the league book and without Round 1225). Round 1225 is already in, so the base is built here in a throwaway worktree: the head with Round 1225's merge 3247a167 reverted (resolveBase1225.mjs resolves the engine's one import hunk). Nothing is committed to the branch.
+#!serial
+mkbase: R=$PWD && git worktree add -q --detach /tmp/b1225 HEAD^ && cd /tmp/b1225 && (git revert -m 1 --no-commit 3247a167 > /tmp/revert.log 2>&1; tail -4 /tmp/revert.log) ; node $R/.rc/x/resolveBase1225.mjs && git add -A && git -c user.name=rc -c user.email=rc@users.noreply.github.com commit -q -m "base for the fixture harnesses: the head without Round 1225" && git rev-parse HEAD > /tmp/base1225.sha && git diff --stat HEAD~1 HEAD -- src | tail -6 && echo "base commit $(cat /tmp/base1225.sha)"
+realfix-default: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+realfix-base: CM_FIXTURE_BASE=$(cat /tmp/base1225.sha) NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+realfix-base-all: CM_FIXTURE_BASE=$(cat /tmp/base1225.sha) CM_REAL_FIXTURE_CONTROL=all NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs
+fleet-base: CM_FIXTURE_BASE=$(cat /tmp/base1225.sha) node scripts/simCmFixtureFleet.mjs
+fleet-prefetch: CM_FIXTURE_BASE=$(cat /tmp/base1225.sha) CM_FIXTURE_FLEET_CONTROL=prefetch node scripts/simCmFixtureFleet.mjs
+fleet-keyless: CM_FIXTURE_BASE=$(cat /tmp/base1225.sha) CM_FIXTURE_FLEET_CONTROL=keyless node scripts/simCmFixtureFleet.mjs
+fleet-nostrip: CM_FIXTURE_FLEET_CONTROL=nostrip node scripts/simCmFixtureFleet.mjs
+leaguefixtures: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs

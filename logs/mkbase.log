@@ -1,0 +1,18 @@
+error: could not revert 3247a1674... Release AU: merge Round 1225, Club Manager plays the real 2026/27 fixture list in nine more leagues
+hint: after resolving the conflicts, mark the corrected paths
+hint: with 'git add <paths>' or 'git rm <paths>'
+hint: Disable this message with "git config set advice.mergeConflict false"
+unmerged after the revert: src/components/club-manager/ClubManagerHelp.tsx, src/lib/clubManager.ts, src/pages/WhatsNew.tsx
+src/components/club-manager/ClubManagerHelp.tsx: the head's text (not the engine)
+src/pages/WhatsNew.tsx: the head's text (not the engine)
+  engine hunk line 1: the line before Round 1225: import { REAL_PREMIER_FIXTURE_KEY, canBindRealPremierFixtures, realPremierFixturePairs, realPremierFixtureCove
+  engine hunk line 2: the head's line: import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, type CmVarDecision } from '@/
+engine: 0 conflict marks left; names the premier only key: true; names the ten league key: false; keeps the league book: true
+resolveBase1225: resolved
+ src/hooks/useClubManager.ts                 | 134 +++----------------------
+ src/lib/clubManager.ts                      |  36 ++-----
+ src/lib/clubManagerFixtures.ts              | 148 +++-------------------------
+ src/pages/ClubManager.tsx                   |  24 +----
+ src/test/clubManagerStartWait.test.tsx      | 139 --------------------------
+ 6 files changed, 45 insertions(+), 455 deletions(-)
+base commit 1a6a394102f8d712807ff82c8399467ed0641a2c
