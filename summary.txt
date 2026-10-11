@@ -1,0 +1,1 @@
+varscreen exit=0 28s |    Duration  27.92s (transform 1.50s, setup 46ms, collect 1.94s, tests 25.22s, environment 273ms, prepare 139ms)
