@@ -1,0 +1,12 @@
+# Release AU fix 2: the served controls of playSeasonCentreMotion part C after its repair (a plain build, one at a time)
+#!build
+#!playwright
+#!serial
+motion-floor: ONLY=C SEASON_MOTION_CONTROL=floor node scripts/playSeasonCentreMotion.mjs
+motion-lock: ONLY=C SEASON_MOTION_CONTROL=lock node scripts/playSeasonCentreMotion.mjs
+motion-tableview: ONLY=C SEASON_MOTION_CONTROL=tableview node scripts/playSeasonCentreMotion.mjs
+motion-pitchlayer: ONLY=C SEASON_MOTION_CONTROL=pitchlayer node scripts/playSeasonCentreMotion.mjs
+motion-held: ONLY=C SEASON_MOTION_CONTROL=held node scripts/playSeasonCentreMotion.mjs
+motion-otherplace: ONLY=C SEASON_MOTION_CONTROL=otherplace node scripts/playSeasonCentreMotion.mjs
+motion-chipword: ONLY=C SEASON_MOTION_CONTROL=chipword node scripts/playSeasonCentreMotion.mjs
+motion-pitchgone: ONLY=C SEASON_MOTION_CONTROL=pitchgone node scripts/playSeasonCentreMotion.mjs
