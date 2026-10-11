@@ -108,7 +108,9 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
   return (
     <span data-season-centre-entry className="mt-2 block sm:ml-2 sm:mt-0 sm:inline-block">
       {held ? (
-        <span data-season-centre-held className="text-[11px] text-muted-foreground">{held}</span>
+        /* Round 1212 (fix pass): on a phone the line sits under the Play button as a block of its own with a
+           snug leading (a club's line runs to three or four lines there); from sm up it is inline, as it was */
+        <span data-season-centre-held className="block text-[11px] leading-snug text-muted-foreground sm:inline">{held}</span>
       ) : (
         <button
           type="button"
