@@ -1,0 +1,5 @@
+build exit=0 22s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+return-outcomes exit=0 3s | PASS international return outcomes: {"mode":"outcomes","groups":8,"originalWholePairs":90,"readVectors":90,"sourceControls":6,"branches":4,"sourceHeld":true}
+return-native exit=2 98s | Node.js v24.21.0
+return-native-mut exit=1 123s | MUTATED walk exit=1 (expected: not 0, three tournament journeys FAIL on the history check, nine PASS)

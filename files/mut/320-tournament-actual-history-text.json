@@ -1,0 +1,46 @@
+{
+  "expected": [
+    [
+      "2030",
+      "World Cup",
+      "Denmark",
+      "Round of 32"
+    ],
+    [
+      "2028",
+      "Euros",
+      "Netherlands",
+      "Winner"
+    ]
+  ],
+  "actual": [
+    [
+      "2030",
+      "World Cup",
+      "World Cup",
+      "Round of 32"
+    ],
+    [
+      "2030",
+      "World Cup"
+    ],
+    [
+      "🇩🇰World Cup",
+      "Round of 32"
+    ],
+    [
+      "2028",
+      "Euros",
+      "Euros",
+      "Winner"
+    ],
+    [
+      "2028",
+      "Euros"
+    ],
+    [
+      "🇳🇱Euros",
+      "Winner"
+    ]
+  ]
+}
