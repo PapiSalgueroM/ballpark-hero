@@ -1,0 +1,3 @@
+fleet: PART=fleet node .rc/x/probeRun.mjs
+scan: PART=scan node .rc/x/probeRun.mjs
+saves: PART=saves node .rc/x/probeRun.mjs

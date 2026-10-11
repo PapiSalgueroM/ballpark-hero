@@ -1,0 +1,89 @@
+probe: head tree has actingClubsByLeague=true; base cbfa94fd has it=false
+SCAN) every string of a past season save, searched for a club of today that the season does not have
+   head era2010: 10 careers (0 stuck, 2 sacked), 353 clubs of today not in the season; roots with a hit: inbox=28 scorerRace=18 squad=12 intl=10
+      inbox: era2010/Barcelona@e6 inbox[].text: Santos <= International break: the window runs 6 Sep to 14 Sep, and your fixtures do not stop for it, so they went strai
+      inbox: era2010/Barcelona@e12 inbox[].text: Santos <= International break: the window runs 11 Oct to 19 Oct, and your fixtures do not stop for it, so they went stra
+      inbox: era2010/Barcelona@e24 inbox[].text: Santos <= International break: the window runs 15 Nov to 23 Nov, and your fixtures do not stop for it, so they went stra
+      scorerRace: era2010/Barcelona@start scorerRace[].name: León <= Pedro León
+      squad: era2010/Barcelona@start squad[].name: Santos <= Jonathan dos Santos
+      intl: era2010/Barcelona@e6 intl.last.called[].name: Santos <= Jonathan dos Santos
+   head era2015: 10 careers (0 stuck, 4 sacked), 351 clubs of today not in the season; roots with a hit: scorerRace=26
+      scorerRace: era2015/Celta Vigo@start scorerRace[].name: Santos <= Giovani dos Santos
+      scorerRace: era2015/Celta Vigo@start scorerRace[].name: León <= Pedro León
+   head era2005: 10 careers (0 stuck, 1 sacked), 351 clubs of today not in the season; roots with a hit: inbox=41 squad=21 transferLog=17 intl=16 scorerRace=14 goneNames=10 incomingBids=2 aiHeadlines=2
+      inbox: era2005/Mallorca@e12 inbox[].text: Santos <= International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they went stra
+      inbox: era2005/Mallorca@e18 inbox[].text: Santos <= International break: the window runs 14 Nov to 22 Nov, and your fixtures do not stop for it, so they went stra
+      inbox: era2005/Mallorca@e36 inbox[].text: Santos <= International break: the window runs 20 Mar to 28 Mar, and your fixtures do not stop for it, so they went stra
+      squad: era2005/Mallorca@start squad[].name: Santos <= Gonzalo de los Santos
+      squad: era2005/Inter Milan@start squad[].name: Córdoba <= Iván Córdoba
+      transferLog: era2005/Werder Bremen@start transferLog[].name: Córdoba <= Iván Córdoba
+      intl: era2005/Mallorca@e12 intl.last.called[].name: Santos <= Gonzalo de los Santos
+      intl: era2005/Inter Milan@e6 intl.last.called[].name: Córdoba <= Iván Córdoba
+      scorerRace: era2005/Nice@start scorerRace[].name: Santos <= Santos
+      goneNames: era2005/Werder Bremen@start goneNames[]: Córdoba <= Iván Córdoba
+      incomingBids: era2005/Inter Milan@e30 incomingBids[].playerName: Córdoba <= Iván Córdoba
+      aiHeadlines: era2005/Werder Bremen@start aiHeadlines[]: Córdoba <= Real Madrid sign Iván Córdoba from Inter Milan for £14m.
+   head era2020: 10 careers (0 stuck, 4 sacked), 346 clubs of today not in the season; roots with a hit: scorerRace=17
+      scorerRace: era2020/Roma@s2start scorerRace[].name: Remo <= Remo Freuler
+      scorerRace: era2020/Freiburg@start scorerRace[].name: Córdoba <= Jhon Córdoba
+   base era2010: 10 careers (0 stuck, 3 sacked), 353 clubs of today not in the season; roots with a hit: transferLog=142 negotiation=72 inbox=28 aiHeadlines=21 scorerRace=18 squad=12 intl=10
+      transferLog: era2010/Arsenal@talkEnd transferLog[].to: Trabzonspor <= Trabzonspor
+      transferLog: era2010/Arsenal@talkEnd transferLog[].to: Vancouver Whitecaps <= Vancouver Whitecaps
+      transferLog: era2010/Arsenal@s2e30 transferLog[].to: Bournemouth <= Bournemouth
+      negotiation: era2010/Arsenal@talk negotiation.rivalBidder: Trabzonspor <= Trabzonspor
+      negotiation: era2010/Arsenal@talk negotiation.note: Trabzonspor <= Trabzonspor just entered the race at £30.4m. Bidding war.
+      negotiation: era2010/Arsenal@talkEnd negotiation.note: Trabzonspor <= Trabzonspor closed the deal at £30.4m while you hesitated.
+      inbox: era2010/Barcelona@e6 inbox[].text: Santos <= International break: the window runs 6 Sep to 14 Sep, and your fixtures do not stop for it, so they went strai
+      inbox: era2010/Barcelona@e12 inbox[].text: Santos <= International break: the window runs 11 Oct to 19 Oct, and your fixtures do not stop for it, so they went stra
+      inbox: era2010/Barcelona@e24 inbox[].text: Santos <= International break: the window runs 15 Nov to 23 Nov, and your fixtures do not stop for it, so they went stra
+      aiHeadlines: era2010/Arsenal@s2e30 aiHeadlines[]: Bournemouth <= Bournemouth sign Leonardo Bonucci from Juventus for £26m.
+      aiHeadlines: era2010/Arsenal@s2e30 aiHeadlines[]: Hull City <= Hull City sign Álvaro Negredo from Sevilla for £12m.
+      aiHeadlines: era2010/Everton@start aiHeadlines[]: Porto <= Porto sign Emmanuel Adebayor from Manchester City for £23m.
+      scorerRace: era2010/Barcelona@start scorerRace[].name: León <= Pedro León
+      squad: era2010/Barcelona@start squad[].name: Santos <= Jonathan dos Santos
+      intl: era2010/Barcelona@e6 intl.last.called[].name: Santos <= Jonathan dos Santos
+   base era2015: 10 careers (0 stuck, 4 sacked), 351 clubs of today not in the season; roots with a hit: transferLog=175 negotiation=72 scorerRace=26 aiHeadlines=23
+      transferLog: era2015/Arsenal@start transferLog[].to: Freiburg <= Freiburg
+      transferLog: era2015/Arsenal@start transferLog[].to: Al-Qadsiah <= Al-Qadsiah
+      transferLog: era2015/Arsenal@start transferLog[].to: Al-Ahli <= Al-Ahli
+      negotiation: era2015/Arsenal@talk negotiation.rivalBidder: Chicago Fire <= Chicago Fire
+      negotiation: era2015/Arsenal@talk negotiation.note: Chicago Fire <= Chicago Fire just entered the race at £31.6m. Bidding war.
+      negotiation: era2015/Arsenal@talkEnd negotiation.note: Chicago Fire <= Chicago Fire closed the deal at £31.6m while you hesitated.
+      scorerRace: era2015/Celta Vigo@start scorerRace[].name: Santos <= Giovani dos Santos
+      scorerRace: era2015/Celta Vigo@start scorerRace[].name: León <= Pedro León
+      aiHeadlines: era2015/Arsenal@start aiHeadlines[]: Freiburg <= Freiburg sign Philipp Lahm from Bayern Munich for £22m.
+      aiHeadlines: era2015/Arsenal@start aiHeadlines[]: Al-Qadsiah <= Al-Qadsiah sign İlkay Gündoğan from Borussia Dortmund for £22m.
+      aiHeadlines: era2015/Arsenal@start aiHeadlines[]: Al-Ahli <= Al-Ahli sign Miralem Pjanić from Roma for £28m.
+   base era2005: 10 careers (0 stuck, 1 sacked), 351 clubs of today not in the season; roots with a hit: transferLog=226 negotiation=44 aiHeadlines=43 inbox=41 squad=21 intl=16 scorerRace=15 goneNames=10 incomingBids=2
+      transferLog: era2005/Arsenal@talkEnd transferLog[].to: Corinthians <= Corinthians
+      transferLog: era2005/Arsenal@talkEnd transferLog[].to: St Mirren <= St Mirren
+      transferLog: era2005/Arsenal@talkEnd transferLog[].to: St. Pauli <= St. Pauli
+      negotiation: era2005/Arsenal@talk negotiation.rivalBidder: Corinthians <= Corinthians
+      negotiation: era2005/Arsenal@talk negotiation.note: Corinthians <= Corinthians just entered the race at £17.6m. Bidding war.
+      negotiation: era2005/Arsenal@talkEnd negotiation.note: Corinthians <= Corinthians closed the deal at £17.6m while you hesitated.
+      aiHeadlines: era2005/Arsenal@e30 aiHeadlines[]: Sporting CP <= Sporting CP sign Sidney Govou from Lyon for £14m.
+      aiHeadlines: era2005/Arsenal@e30 aiHeadlines[]: Crystal Palace <= Crystal Palace sign Carles Puyol from Barcelona for £19m.
+      aiHeadlines: era2005/Arsenal@e30 aiHeadlines[]: Al-Ahli <= Al-Ahli sign Djibril Cissé from Liverpool for £22m.
+      inbox: era2005/Mallorca@e12 inbox[].text: Santos <= International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they went stra
+      inbox: era2005/Mallorca@e18 inbox[].text: Santos <= International break: the window runs 14 Nov to 22 Nov, and your fixtures do not stop for it, so they went stra
+      inbox: era2005/Mallorca@e36 inbox[].text: Santos <= International break: the window runs 20 Mar to 28 Mar, and your fixtures do not stop for it, so they went stra
+      squad: era2005/Mallorca@start squad[].name: Santos <= Gonzalo de los Santos
+      squad: era2005/Inter Milan@start squad[].name: Córdoba <= Iván Córdoba
+      intl: era2005/Mallorca@e12 intl.last.called[].name: Santos <= Gonzalo de los Santos
+      intl: era2005/Inter Milan@e6 intl.last.called[].name: Córdoba <= Iván Córdoba
+      scorerRace: era2005/Nice@start scorerRace[].name: Santos <= Santos
+      goneNames: era2005/Werder Bremen@start goneNames[]: Córdoba <= Iván Córdoba
+      incomingBids: era2005/Inter Milan@e30 incomingBids[].playerName: Córdoba <= Iván Córdoba
+   base era2020: 10 careers (0 stuck, 4 sacked), 346 clubs of today not in the season; roots with a hit: transferLog=79 negotiation=68 scorerRace=17 aiHeadlines=11
+      transferLog: era2020/Manchester City@talkEnd transferLog[].to: Sturm Graz <= Sturm Graz
+      transferLog: era2020/Manchester City@talkEnd transferLog[].to: Al-Nassr <= Al-Nassr
+      transferLog: era2020/Manchester City@talkEnd transferLog[].to: Spartak Moscow <= Spartak Moscow
+      negotiation: era2020/Manchester City@talk negotiation.rivalBidder: Sturm Graz <= Sturm Graz
+      negotiation: era2020/Manchester City@talk negotiation.note: Sturm Graz <= Sturm Graz just entered the race at £93.5m. Bidding war.
+      negotiation: era2020/Manchester City@talkEnd negotiation.note: Sturm Graz <= Sturm Graz closed the deal at £93.5m while you hesitated.
+      scorerRace: era2020/Roma@s2start scorerRace[].name: Remo <= Remo Freuler
+      scorerRace: era2020/Freiburg@start scorerRace[].name: Córdoba <= Jhon Córdoba
+      aiHeadlines: era2020/Arsenal@start aiHeadlines[]: Nottingham Forest <= Nottingham Forest sign Stefan de Vrij from Inter Milan for £60m.
+      aiHeadlines: era2020/Arsenal@start aiHeadlines[]: Benfica <= Benfica sign Mateo Kovacic from Chelsea for £37m.
+      aiHeadlines: era2020/Arsenal@start aiHeadlines[]: Bournemouth <= Bournemouth sign Renan Lodi from Atlético Madrid for £47m.
+probe: done

@@ -1,0 +1,42 @@
+probe: head tree has actingClubsByLeague=true; base cbfa94fd has it=false
+SAVES) past season saves written by the base engine, loaded and played on the head engine
+   era2010 Arsenal depth 0: saved=true 28613b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=Başakşehir (OF TODAY) end=open over=true sacked=false entries=51 | old save roots: aiHeadlines=3 negotiation=2 transferLog=2 | headlines at season end: none | after season two start: transferLog=2
+   era2010 Espanyol depth 3: saved=true 38164b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=Flamengo (OF TODAY) end=hijacked over=true sacked=false entries=39 | old save roots: aiHeadlines=4 transferLog=3 negotiation=2 scorerRace=1 | headlines at season end: none | after season two start: transferLog=4
+   era2010 Chievo Verona depth 9: saved=true 50367b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=false sacked=true entries=27 | old save roots: transferLog=1 | headlines at season end: none | after season two start: transferLog=1
+   era2010 Gladbach depth 14: saved=true 59609b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=24 | old save roots: transferLog=2 | headlines at season end: none | after season two start: transferLog=2
+   era2010 Lille depth 20: saved=true 67947b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=21 | old save roots: none | headlines at season end: none | after season two start: none
+   era2010 Bolton Wanderers depth 27: saved=true 78563b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=15 | old save roots: transferLog=1 | headlines at season end: none | after season two start: transferLog=1
+   era2015 Arsenal depth 0: saved=true 28952b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=Villarreal end=hijacked over=true sacked=false entries=50 | old save roots: aiHeadlines=3 transferLog=2 | headlines at season end: none | after season two start: transferLog=2
+   era2015 Eibar depth 3: saved=true 38903b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=Porto end=hijacked over=false sacked=true entries=20 | old save roots: scorerRace=2 aiHeadlines=1 transferLog=1 | headlines at season end: none | after season two start: scorerRace=2 transferLog=1
+   era2015 Sassuolo depth 9: saved=true 50663b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=32 | old save roots: aiHeadlines=1 transferLog=1 | headlines at season end: none | after season two start: transferLog=1
+   era2015 Eintracht Frankfurt depth 14: saved=true 59844b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=24 | old save roots: transferLog=1 | headlines at season end: none | after season two start: transferLog=1
+   era2015 PSG depth 20: saved=true 69708b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=34 | old save roots: transferLog=1 | headlines at season end: none | after season two start: transferLog=1
+   era2015 Everton depth 27: saved=true 82887b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=21 | old save roots: transferLog=1 | headlines at season end: none | after season two start: transferLog=1
+   era2005 Arsenal depth 0: saved=true 28225b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=Olympiacos end=hijacked over=true sacked=false entries=56 | old save roots: none | headlines at season end: none | after season two start: none
+   era2005 Celta Vigo depth 3: saved=true 38529b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=AEK Athens (OF TODAY) end=hijacked over=false sacked=true entries=26 | old save roots: negotiation=2 | headlines at season end: none | after season two start: transferLog=1
+   era2005 Livorno depth 9: saved=true 48264b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=false sacked=true entries=18 | old save roots: none | headlines at season end: none | after season two start: none
+   era2005 Stuttgart depth 14: saved=true 58601b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=25 | old save roots: transferLog=1 | headlines at season end: none | after season two start: transferLog=1
+   era2005 AC Ajaccio depth 20: saved=true 60066b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=21 | old save roots: transferLog=2 scorerRace=1 | headlines at season end: none | after season two start: transferLog=2
+   era2005 Charlton Athletic depth 27: saved=true 72788b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=17 | old save roots: transferLog=2 | headlines at season end: none | after season two start: transferLog=2
+   era2020 Manchester City depth 0: saved=true 31493b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=Wolves end=hijacked over=true sacked=false entries=49 | old save roots: none | headlines at season end: none | after season two start: none
+   era2020 Real Betis depth 3: saved=true 45085b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=Anderlecht (OF TODAY) end=hijacked over=true sacked=false entries=44 | old save roots: negotiation=2 aiHeadlines=1 transferLog=1 | headlines at season end: none | after season two start: transferLog=2
+   era2020 Genoa depth 9: saved=true 53256b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=32 | old save roots: none | headlines at season end: none | after season two start: scorerRace=1
+   era2020 Köln depth 14: saved=true 61399b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=23 | old save roots: inbox=3 squad=1 intl=1 | headlines at season end: none | after season two start: inbox=3 squad=1
+   era2020 Lille depth 20: saved=true 68779b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=true sacked=false entries=32 | old save roots: none | headlines at season end: none | after season two start: none
+   era2020 West Ham depth 27: saved=true 73576b loads=true sameLoadAsBase=true squadKept=true logKept=true rival=- end=- over=false sacked=true entries=1 | old save roots: transferLog=1 | headlines at season end: none | after season two start: transferLog=1
+   DIFF modern save Arsenal: season
+   DIFF modern save Atlético Madrid: season,next,two
+   DIFF modern save Gladbach: season,next,two
+   DIFF modern save Fortuna Sittard: season,next,two
+   DIFF modern save Nashville SC: season,next,two
+   DIFF modern save Arouca: season,next,two
+   DIFF modern save Gençlerbirliği: season,next,two
+   DIFF modern save Zulte Waregem: next,two
+   DIFF modern save AEK Athens: season,next,two
+   DIFF modern save Luzern: season,next,two
+   DIFF modern save Flamengo: season,next,two
+   DIFF modern save Wellington Phoenix: season
+   DIFF modern save Nancy: season,next,two
+   DIFF modern save Baltika: season,next,two
+   modern saves written mid season by the base engine and played on: 0 byte equal on both engines, 14 differ
+probe: done

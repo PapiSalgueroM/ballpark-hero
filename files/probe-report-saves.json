@@ -1,0 +1,663 @@
+{
+ "saves": {
+  "era": [
+   {
+    "eraId": "era2010",
+    "club": "Arsenal",
+    "depth": 0,
+    "saved": true,
+    "bytes": 28613,
+    "before": "aiHeadlines=3 negotiation=2 transferLog=2",
+    "beforeHeads": 5,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "rival": "Başakşehir",
+    "rivalOfToday": true,
+    "rivalEnd": "open",
+    "over": true,
+    "sacked": false,
+    "entries": 51,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=2",
+    "afterSamples": [
+     "after transferLog[].to: Atalanta <= Atalanta",
+     "after transferLog[].to: Brighton <= Brighton"
+    ]
+   },
+   {
+    "eraId": "era2010",
+    "club": "Espanyol",
+    "depth": 3,
+    "saved": true,
+    "bytes": 38164,
+    "before": "aiHeadlines=4 transferLog=3 negotiation=2 scorerRace=1",
+    "beforeHeads": 5,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "rival": "Flamengo",
+    "rivalOfToday": true,
+    "rivalEnd": "hijacked",
+    "over": true,
+    "sacked": false,
+    "entries": 39,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=4",
+    "afterSamples": [
+     "after transferLog[].to: Como <= Como",
+     "after transferLog[].to: Al-Ahli <= Al-Ahli"
+    ]
+   },
+   {
+    "eraId": "era2010",
+    "club": "Chievo Verona",
+    "depth": 9,
+    "saved": true,
+    "bytes": 50367,
+    "before": "transferLog=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": false,
+    "sacked": true,
+    "entries": 27,
+    "headsAtSeasonEnd": "none",
+    "after": "transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: Real Betis <= Real Betis"
+    ]
+   },
+   {
+    "eraId": "era2010",
+    "club": "Gladbach",
+    "depth": 14,
+    "saved": true,
+    "bytes": 59609,
+    "before": "transferLog=2",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 24,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=2",
+    "afterSamples": [
+     "after transferLog[].to: Beşiktaş <= Beşiktaş",
+     "after transferLog[].to: Strasbourg <= Strasbourg"
+    ]
+   },
+   {
+    "eraId": "era2010",
+    "club": "Lille",
+    "depth": 20,
+    "saved": true,
+    "bytes": 67947,
+    "before": "none",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 21,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "none",
+    "afterSamples": []
+   },
+   {
+    "eraId": "era2010",
+    "club": "Bolton Wanderers",
+    "depth": 27,
+    "saved": true,
+    "bytes": 78563,
+    "before": "transferLog=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 15,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: Burnley <= Burnley"
+    ]
+   },
+   {
+    "eraId": "era2015",
+    "club": "Arsenal",
+    "depth": 0,
+    "saved": true,
+    "bytes": 28952,
+    "before": "aiHeadlines=3 transferLog=2",
+    "beforeHeads": 7,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "rival": "Villarreal",
+    "rivalOfToday": false,
+    "rivalEnd": "hijacked",
+    "over": true,
+    "sacked": false,
+    "entries": 50,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=2",
+    "afterSamples": [
+     "after transferLog[].to: Brentford <= Brentford",
+     "after transferLog[].to: RB Leipzig <= RB Leipzig"
+    ]
+   },
+   {
+    "eraId": "era2015",
+    "club": "Eibar",
+    "depth": 3,
+    "saved": true,
+    "bytes": 38903,
+    "before": "scorerRace=2 aiHeadlines=1 transferLog=1",
+    "beforeHeads": 5,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "rival": "Porto",
+    "rivalOfToday": false,
+    "rivalEnd": "hijacked",
+    "over": false,
+    "sacked": true,
+    "entries": 20,
+    "headsAtSeasonEnd": "none",
+    "after": "scorerRace=2 transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: Al-Hilal <= Al-Hilal",
+     "after scorerRace[].name: León <= Pedro León",
+     "after scorerRace[].name: Santos <= Giovani dos Santos"
+    ]
+   },
+   {
+    "eraId": "era2015",
+    "club": "Sassuolo",
+    "depth": 9,
+    "saved": true,
+    "bytes": 50663,
+    "before": "aiHeadlines=1 transferLog=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 32,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: Fulham <= Fulham"
+    ]
+   },
+   {
+    "eraId": "era2015",
+    "club": "Eintracht Frankfurt",
+    "depth": 14,
+    "saved": true,
+    "bytes": 59844,
+    "before": "transferLog=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 24,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: Fenerbahçe <= Fenerbahçe"
+    ]
+   },
+   {
+    "eraId": "era2015",
+    "club": "PSG",
+    "depth": 20,
+    "saved": true,
+    "bytes": 69708,
+    "before": "transferLog=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 34,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: RB Leipzig <= RB Leipzig"
+    ]
+   },
+   {
+    "eraId": "era2015",
+    "club": "Everton",
+    "depth": 27,
+    "saved": true,
+    "bytes": 82887,
+    "before": "transferLog=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 21,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: Al-Ahli <= Al-Ahli"
+    ]
+   },
+   {
+    "eraId": "era2005",
+    "club": "Arsenal",
+    "depth": 0,
+    "saved": true,
+    "bytes": 28225,
+    "before": "none",
+    "beforeHeads": 4,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "rival": "Olympiacos",
+    "rivalOfToday": false,
+    "rivalEnd": "hijacked",
+    "over": true,
+    "sacked": false,
+    "entries": 56,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "none",
+    "afterSamples": []
+   },
+   {
+    "eraId": "era2005",
+    "club": "Celta Vigo",
+    "depth": 3,
+    "saved": true,
+    "bytes": 38529,
+    "before": "negotiation=2",
+    "beforeHeads": 7,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "rival": "AEK Athens",
+    "rivalOfToday": true,
+    "rivalEnd": "hijacked",
+    "over": false,
+    "sacked": true,
+    "entries": 26,
+    "headsAtSeasonEnd": "none",
+    "after": "transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: AEK Athens <= AEK Athens"
+    ]
+   },
+   {
+    "eraId": "era2005",
+    "club": "Livorno",
+    "depth": 9,
+    "saved": true,
+    "bytes": 48264,
+    "before": "none",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": false,
+    "sacked": true,
+    "entries": 18,
+    "headsAtSeasonEnd": "none",
+    "after": "none",
+    "afterSamples": []
+   },
+   {
+    "eraId": "era2005",
+    "club": "Stuttgart",
+    "depth": 14,
+    "saved": true,
+    "bytes": 58601,
+    "before": "transferLog=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 25,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: Al-Hilal <= Al-Hilal"
+    ]
+   },
+   {
+    "eraId": "era2005",
+    "club": "AC Ajaccio",
+    "depth": 20,
+    "saved": true,
+    "bytes": 60066,
+    "before": "transferLog=2 scorerRace=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 21,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=2",
+    "afterSamples": [
+     "after transferLog[].to: Nottingham Forest <= Nottingham Forest",
+     "after transferLog[].to: Feyenoord <= Feyenoord"
+    ]
+   },
+   {
+    "eraId": "era2005",
+    "club": "Charlton Athletic",
+    "depth": 27,
+    "saved": true,
+    "bytes": 72788,
+    "before": "transferLog=2",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 17,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=2",
+    "afterSamples": [
+     "after transferLog[].to: Burnley <= Burnley",
+     "after transferLog[].to: Trabzonspor <= Trabzonspor"
+    ]
+   },
+   {
+    "eraId": "era2020",
+    "club": "Manchester City",
+    "depth": 0,
+    "saved": true,
+    "bytes": 31493,
+    "before": "none",
+    "beforeHeads": 4,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "rival": "Wolves",
+    "rivalOfToday": false,
+    "rivalEnd": "hijacked",
+    "over": true,
+    "sacked": false,
+    "entries": 49,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "none",
+    "afterSamples": []
+   },
+   {
+    "eraId": "era2020",
+    "club": "Real Betis",
+    "depth": 3,
+    "saved": true,
+    "bytes": 45085,
+    "before": "negotiation=2 aiHeadlines=1 transferLog=1",
+    "beforeHeads": 7,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "rival": "Anderlecht",
+    "rivalOfToday": true,
+    "rivalEnd": "hijacked",
+    "over": true,
+    "sacked": false,
+    "entries": 44,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "transferLog=2",
+    "afterSamples": [
+     "after transferLog[].to: Como <= Como",
+     "after transferLog[].to: Anderlecht <= Anderlecht"
+    ]
+   },
+   {
+    "eraId": "era2020",
+    "club": "Genoa",
+    "depth": 9,
+    "saved": true,
+    "bytes": 53256,
+    "before": "none",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 32,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "scorerRace=1",
+    "afterSamples": [
+     "after scorerRace[].name: Remo <= Remo Freuler"
+    ]
+   },
+   {
+    "eraId": "era2020",
+    "club": "Köln",
+    "depth": 14,
+    "saved": true,
+    "bytes": 61399,
+    "before": "inbox=3 squad=1 intl=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 23,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 12,
+    "after": "inbox=3 squad=1",
+    "afterSamples": [
+     "after squad[].name: Córdoba <= Jhon Córdoba",
+     "after inbox[].text: Córdoba <= International break: the window runs 6 Sep to 14 Sep, and your fixtures do not stop for it, so they went strai",
+     "after inbox[].playerName: Córdoba <= Jhon Córdoba"
+    ]
+   },
+   {
+    "eraId": "era2020",
+    "club": "Lille",
+    "depth": 20,
+    "saved": true,
+    "bytes": 68779,
+    "before": "none",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": true,
+    "sacked": false,
+    "entries": 32,
+    "headsAtSeasonEnd": "none",
+    "seasonTwo": 9,
+    "after": "none",
+    "afterSamples": []
+   },
+   {
+    "eraId": "era2020",
+    "club": "West Ham",
+    "depth": 27,
+    "saved": true,
+    "bytes": 73576,
+    "before": "transferLog=1",
+    "beforeHeads": 8,
+    "loads": true,
+    "sameLoad": true,
+    "squadKept": true,
+    "logKept": true,
+    "over": false,
+    "sacked": true,
+    "entries": 1,
+    "headsAtSeasonEnd": "none",
+    "after": "transferLog=1",
+    "afterSamples": [
+     "after transferLog[].to: Nottingham Forest <= Nottingham Forest"
+    ]
+   }
+  ],
+  "modern": [
+   {
+    "club": "Arsenal",
+    "bad": [
+     "season"
+    ]
+   },
+   {
+    "club": "Atlético Madrid",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Gladbach",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Fortuna Sittard",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Nashville SC",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Arouca",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Gençlerbirliği",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Zulte Waregem",
+    "bad": [
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "AEK Athens",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Luzern",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Flamengo",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Wellington Phoenix",
+    "bad": [
+     "season"
+    ]
+   },
+   {
+    "club": "Nancy",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   },
+   {
+    "club": "Baltika",
+    "bad": [
+     "season",
+     "next",
+     "two"
+    ]
+   }
+  ]
+ }
+}

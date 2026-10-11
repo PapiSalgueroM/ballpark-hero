@@ -1,0 +1,539 @@
+{
+ "scan": {
+  "head": {
+   "era2010": {
+    "careers": 10,
+    "stuck": 0,
+    "sacked": 2,
+    "hits": {
+     "squad": {
+      "n": 12,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@start squad[].name: Santos <= Jonathan dos Santos"
+      ],
+      "paths": {
+       "squad[].name": 12
+      }
+     },
+     "scorerRace": {
+      "n": 18,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@start scorerRace[].name: León <= Pedro León"
+      ],
+      "paths": {
+       "scorerRace[].name": 18
+      }
+     },
+     "inbox": {
+      "n": 28,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@e6 inbox[].text: Santos <= International break: the window runs 6 Sep to 14 Sep, and your fixtures do not stop for it, so they went strai",
+       "era2010/Barcelona@e12 inbox[].text: Santos <= International break: the window runs 11 Oct to 19 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@e24 inbox[].text: Santos <= International break: the window runs 15 Nov to 23 Nov, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@e42 inbox[].text: Santos <= International break: the window runs 21 Mar to 29 Mar, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@s2e30 inbox[].text: Santos <= International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@s2e30 inbox[].text: Santos <= International break: the window runs 5 Sep to 13 Sep, and your fixtures do not stop for it, so they went strai"
+      ],
+      "paths": {
+       "inbox[].text": 28
+      }
+     },
+     "intl": {
+      "n": 10,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@e6 intl.last.called[].name: Santos <= Jonathan dos Santos"
+      ],
+      "paths": {
+       "intl.last.called[].name": 10
+      }
+     }
+    }
+   },
+   "era2015": {
+    "careers": 10,
+    "stuck": 0,
+    "sacked": 4,
+    "hits": {
+     "scorerRace": {
+      "n": 26,
+      "exact": 0,
+      "samples": [
+       "era2015/Celta Vigo@start scorerRace[].name: Santos <= Giovani dos Santos",
+       "era2015/Celta Vigo@start scorerRace[].name: León <= Pedro León"
+      ],
+      "paths": {
+       "scorerRace[].name": 26
+      }
+     }
+    }
+   },
+   "era2005": {
+    "careers": 10,
+    "stuck": 0,
+    "sacked": 1,
+    "hits": {
+     "squad": {
+      "n": 21,
+      "exact": 0,
+      "samples": [
+       "era2005/Mallorca@start squad[].name: Santos <= Gonzalo de los Santos",
+       "era2005/Inter Milan@start squad[].name: Córdoba <= Iván Córdoba"
+      ],
+      "paths": {
+       "squad[].name": 21
+      }
+     },
+     "inbox": {
+      "n": 41,
+      "exact": 0,
+      "samples": [
+       "era2005/Mallorca@e12 inbox[].text: Santos <= International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2005/Mallorca@e18 inbox[].text: Santos <= International break: the window runs 14 Nov to 22 Nov, and your fixtures do not stop for it, so they went stra",
+       "era2005/Mallorca@e36 inbox[].text: Santos <= International break: the window runs 20 Mar to 28 Mar, and your fixtures do not stop for it, so they went stra",
+       "era2005/Mallorca@s2e30 inbox[].text: Santos <= International break: the window runs 13 Nov to 21 Nov, and your fixtures do not stop for it, so they went stra",
+       "era2005/Mallorca@s2e30 inbox[].text: Santos <= International break: the window runs 9 Oct to 17 Oct, and your fixtures do not stop for it, so they went strai",
+       "era2005/Mallorca@s2e30 inbox[].text: Santos <= International break: the window runs 4 Sep to 12 Sep, and your fixtures do not stop for it, so they went strai"
+      ],
+      "paths": {
+       "inbox[].text": 40,
+       "inbox[].playerName": 1
+      }
+     },
+     "intl": {
+      "n": 16,
+      "exact": 0,
+      "samples": [
+       "era2005/Mallorca@e12 intl.last.called[].name: Santos <= Gonzalo de los Santos",
+       "era2005/Inter Milan@e6 intl.last.called[].name: Córdoba <= Iván Córdoba"
+      ],
+      "paths": {
+       "intl.last.called[].name": 16
+      }
+     },
+     "incomingBids": {
+      "n": 2,
+      "exact": 0,
+      "samples": [
+       "era2005/Inter Milan@e30 incomingBids[].playerName: Córdoba <= Iván Córdoba"
+      ],
+      "paths": {
+       "incomingBids[].playerName": 2
+      }
+     },
+     "aiHeadlines": {
+      "n": 2,
+      "exact": 0,
+      "samples": [
+       "era2005/Werder Bremen@start aiHeadlines[]: Córdoba <= Real Madrid sign Iván Córdoba from Inter Milan for £14m."
+      ],
+      "paths": {
+       "aiHeadlines[]": 2
+      }
+     },
+     "goneNames": {
+      "n": 10,
+      "exact": 0,
+      "samples": [
+       "era2005/Werder Bremen@start goneNames[]: Córdoba <= Iván Córdoba"
+      ],
+      "paths": {
+       "goneNames[]": 10
+      }
+     },
+     "transferLog": {
+      "n": 17,
+      "exact": 0,
+      "samples": [
+       "era2005/Werder Bremen@start transferLog[].name: Córdoba <= Iván Córdoba"
+      ],
+      "paths": {
+       "transferLog[].name": 17
+      }
+     },
+     "scorerRace": {
+      "n": 14,
+      "exact": 14,
+      "samples": [
+       "era2005/Nice@start scorerRace[].name: Santos <= Santos"
+      ],
+      "paths": {
+       "scorerRace[].name": 14
+      }
+     }
+    }
+   },
+   "era2020": {
+    "careers": 10,
+    "stuck": 0,
+    "sacked": 4,
+    "hits": {
+     "scorerRace": {
+      "n": 17,
+      "exact": 0,
+      "samples": [
+       "era2020/Roma@s2start scorerRace[].name: Remo <= Remo Freuler",
+       "era2020/Freiburg@start scorerRace[].name: Córdoba <= Jhon Córdoba"
+      ],
+      "paths": {
+       "scorerRace[].name": 17
+      }
+     }
+    }
+   }
+  },
+  "base": {
+   "era2010": {
+    "careers": 10,
+    "stuck": 0,
+    "sacked": 3,
+    "hits": {
+     "negotiation": {
+      "n": 72,
+      "exact": 36,
+      "samples": [
+       "era2010/Arsenal@talk negotiation.rivalBidder: Trabzonspor <= Trabzonspor",
+       "era2010/Arsenal@talk negotiation.note: Trabzonspor <= Trabzonspor just entered the race at £30.4m. Bidding war.",
+       "era2010/Arsenal@talkEnd negotiation.note: Trabzonspor <= Trabzonspor closed the deal at £30.4m while you hesitated.",
+       "era2010/Arsenal@talk negotiation.rivalBidder: Vancouver Whitecaps <= Vancouver Whitecaps",
+       "era2010/Arsenal@talk negotiation.note: Vancouver Whitecaps <= Vancouver Whitecaps just entered the race at £27.1m. Bidding war.",
+       "era2010/Arsenal@talkEnd negotiation.note: Vancouver Whitecaps <= Vancouver Whitecaps closed the deal at £27.1m while you hesitated."
+      ],
+      "paths": {
+       "negotiation.rivalBidder": 36,
+       "negotiation.note": 36
+      }
+     },
+     "transferLog": {
+      "n": 142,
+      "exact": 142,
+      "samples": [
+       "era2010/Arsenal@talkEnd transferLog[].to: Trabzonspor <= Trabzonspor",
+       "era2010/Arsenal@talkEnd transferLog[].to: Vancouver Whitecaps <= Vancouver Whitecaps",
+       "era2010/Arsenal@s2e30 transferLog[].to: Bournemouth <= Bournemouth",
+       "era2010/Arsenal@s2e30 transferLog[].to: Hull City <= Hull City",
+       "era2010/Everton@start transferLog[].to: Porto <= Porto",
+       "era2010/Everton@start transferLog[].to: Brentford <= Brentford"
+      ],
+      "paths": {
+       "transferLog[].to": 142
+      }
+     },
+     "aiHeadlines": {
+      "n": 21,
+      "exact": 0,
+      "samples": [
+       "era2010/Arsenal@s2e30 aiHeadlines[]: Bournemouth <= Bournemouth sign Leonardo Bonucci from Juventus for £26m.",
+       "era2010/Arsenal@s2e30 aiHeadlines[]: Hull City <= Hull City sign Álvaro Negredo from Sevilla for £12m.",
+       "era2010/Everton@start aiHeadlines[]: Porto <= Porto sign Emmanuel Adebayor from Manchester City for £23m.",
+       "era2010/Everton@start aiHeadlines[]: Brentford <= Brentford sign Aaron Lennon from Tottenham for £24m.",
+       "era2010/Barcelona@s2start aiHeadlines[]: Nottingham Forest <= Nottingham Forest sign Philippe Mexès from Roma for £19m.",
+       "era2010/Mallorca@start aiHeadlines[]: Club Brugge <= Club Brugge sign Jérémy Toulalan from Lyon for £17m."
+      ],
+      "paths": {
+       "aiHeadlines[]": 21
+      }
+     },
+     "squad": {
+      "n": 12,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@start squad[].name: Santos <= Jonathan dos Santos"
+      ],
+      "paths": {
+       "squad[].name": 12
+      }
+     },
+     "scorerRace": {
+      "n": 18,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@start scorerRace[].name: León <= Pedro León"
+      ],
+      "paths": {
+       "scorerRace[].name": 18
+      }
+     },
+     "inbox": {
+      "n": 28,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@e6 inbox[].text: Santos <= International break: the window runs 6 Sep to 14 Sep, and your fixtures do not stop for it, so they went strai",
+       "era2010/Barcelona@e12 inbox[].text: Santos <= International break: the window runs 11 Oct to 19 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@e24 inbox[].text: Santos <= International break: the window runs 15 Nov to 23 Nov, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@e42 inbox[].text: Santos <= International break: the window runs 21 Mar to 29 Mar, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@s2e30 inbox[].text: Santos <= International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2010/Barcelona@s2e30 inbox[].text: Santos <= International break: the window runs 5 Sep to 13 Sep, and your fixtures do not stop for it, so they went strai"
+      ],
+      "paths": {
+       "inbox[].text": 28
+      }
+     },
+     "intl": {
+      "n": 10,
+      "exact": 0,
+      "samples": [
+       "era2010/Barcelona@e6 intl.last.called[].name: Santos <= Jonathan dos Santos"
+      ],
+      "paths": {
+       "intl.last.called[].name": 10
+      }
+     }
+    }
+   },
+   "era2015": {
+    "careers": 10,
+    "stuck": 0,
+    "sacked": 4,
+    "hits": {
+     "aiHeadlines": {
+      "n": 23,
+      "exact": 0,
+      "samples": [
+       "era2015/Arsenal@start aiHeadlines[]: Freiburg <= Freiburg sign Philipp Lahm from Bayern Munich for £22m.",
+       "era2015/Arsenal@start aiHeadlines[]: Al-Qadsiah <= Al-Qadsiah sign İlkay Gündoğan from Borussia Dortmund for £22m.",
+       "era2015/Arsenal@start aiHeadlines[]: Al-Ahli <= Al-Ahli sign Miralem Pjanić from Roma for £28m.",
+       "era2015/Arsenal@e30 aiHeadlines[]: RB Leipzig <= RB Leipzig sign Edinson Cavani from PSG for £44m.",
+       "era2015/Arsenal@e30 aiHeadlines[]: Fulham <= Fulham sign Edin Dzeko from Roma for £21m.",
+       "era2015/Liverpool@start aiHeadlines[]: Strasbourg <= Strasbourg sign Antonio Candreva from Lazio for £23m."
+      ],
+      "paths": {
+       "aiHeadlines[]": 23
+      }
+     },
+     "transferLog": {
+      "n": 175,
+      "exact": 175,
+      "samples": [
+       "era2015/Arsenal@start transferLog[].to: Freiburg <= Freiburg",
+       "era2015/Arsenal@start transferLog[].to: Al-Qadsiah <= Al-Qadsiah",
+       "era2015/Arsenal@start transferLog[].to: Al-Ahli <= Al-Ahli",
+       "era2015/Arsenal@talkEnd transferLog[].to: Chicago Fire <= Chicago Fire",
+       "era2015/Arsenal@talkEnd transferLog[].to: New York City FC <= New York City FC",
+       "era2015/Arsenal@e30 transferLog[].to: RB Leipzig <= RB Leipzig"
+      ],
+      "paths": {
+       "transferLog[].to": 175
+      }
+     },
+     "negotiation": {
+      "n": 72,
+      "exact": 36,
+      "samples": [
+       "era2015/Arsenal@talk negotiation.rivalBidder: Chicago Fire <= Chicago Fire",
+       "era2015/Arsenal@talk negotiation.note: Chicago Fire <= Chicago Fire just entered the race at £31.6m. Bidding war.",
+       "era2015/Arsenal@talkEnd negotiation.note: Chicago Fire <= Chicago Fire closed the deal at £31.6m while you hesitated.",
+       "era2015/Arsenal@talk negotiation.rivalBidder: New York City FC <= New York City FC",
+       "era2015/Arsenal@talk negotiation.note: New York City FC <= New York City FC just entered the race at £34.6m. Bidding war.",
+       "era2015/Arsenal@talkEnd negotiation.note: New York City FC <= New York City FC closed the deal at £34.6m while you hesitated."
+      ],
+      "paths": {
+       "negotiation.rivalBidder": 36,
+       "negotiation.note": 36
+      }
+     },
+     "scorerRace": {
+      "n": 26,
+      "exact": 0,
+      "samples": [
+       "era2015/Celta Vigo@start scorerRace[].name: Santos <= Giovani dos Santos",
+       "era2015/Celta Vigo@start scorerRace[].name: León <= Pedro León"
+      ],
+      "paths": {
+       "scorerRace[].name": 26
+      }
+     }
+    }
+   },
+   "era2005": {
+    "careers": 10,
+    "stuck": 0,
+    "sacked": 1,
+    "hits": {
+     "negotiation": {
+      "n": 44,
+      "exact": 22,
+      "samples": [
+       "era2005/Arsenal@talk negotiation.rivalBidder: Corinthians <= Corinthians",
+       "era2005/Arsenal@talk negotiation.note: Corinthians <= Corinthians just entered the race at £17.6m. Bidding war.",
+       "era2005/Arsenal@talkEnd negotiation.note: Corinthians <= Corinthians closed the deal at £17.6m while you hesitated.",
+       "era2005/Arsenal@talk negotiation.rivalBidder: St Mirren <= St Mirren",
+       "era2005/Arsenal@talk negotiation.note: St Mirren <= St Mirren just entered the race at £19.7m. Bidding war.",
+       "era2005/Arsenal@talkEnd negotiation.note: St Mirren <= St Mirren closed the deal at £19.7m while you hesitated."
+      ],
+      "paths": {
+       "negotiation.rivalBidder": 22,
+       "negotiation.note": 22
+      }
+     },
+     "transferLog": {
+      "n": 226,
+      "exact": 209,
+      "samples": [
+       "era2005/Arsenal@talkEnd transferLog[].to: Corinthians <= Corinthians",
+       "era2005/Arsenal@talkEnd transferLog[].to: St Mirren <= St Mirren",
+       "era2005/Arsenal@talkEnd transferLog[].to: St. Pauli <= St. Pauli",
+       "era2005/Arsenal@e30 transferLog[].to: Sporting CP <= Sporting CP",
+       "era2005/Arsenal@e30 transferLog[].to: Crystal Palace <= Crystal Palace",
+       "era2005/Arsenal@e30 transferLog[].to: Al-Ahli <= Al-Ahli"
+      ],
+      "paths": {
+       "transferLog[].to": 209,
+       "transferLog[].name": 17
+      }
+     },
+     "aiHeadlines": {
+      "n": 43,
+      "exact": 0,
+      "samples": [
+       "era2005/Arsenal@e30 aiHeadlines[]: Sporting CP <= Sporting CP sign Sidney Govou from Lyon for £14m.",
+       "era2005/Arsenal@e30 aiHeadlines[]: Crystal Palace <= Crystal Palace sign Carles Puyol from Barcelona for £19m.",
+       "era2005/Arsenal@e30 aiHeadlines[]: Al-Ahli <= Al-Ahli sign Djibril Cissé from Liverpool for £22m.",
+       "era2005/Arsenal@s2start aiHeadlines[]: FC Copenhagen <= FC Copenhagen sign Marcelinho Paraíba from Hertha BSC for £4m.",
+       "era2005/Arsenal@s2e30 aiHeadlines[]: Genk <= Genk sign Harry Kewell from Liverpool for £11m.",
+       "era2005/Arsenal@s2e30 aiHeadlines[]: Zenit <= Zenit sign Mahamadou Diarra from Lyon for £10m."
+      ],
+      "paths": {
+       "aiHeadlines[]": 43
+      }
+     },
+     "squad": {
+      "n": 21,
+      "exact": 0,
+      "samples": [
+       "era2005/Mallorca@start squad[].name: Santos <= Gonzalo de los Santos",
+       "era2005/Inter Milan@start squad[].name: Córdoba <= Iván Córdoba"
+      ],
+      "paths": {
+       "squad[].name": 21
+      }
+     },
+     "inbox": {
+      "n": 41,
+      "exact": 0,
+      "samples": [
+       "era2005/Mallorca@e12 inbox[].text: Santos <= International break: the window runs 10 Oct to 18 Oct, and your fixtures do not stop for it, so they went stra",
+       "era2005/Mallorca@e18 inbox[].text: Santos <= International break: the window runs 14 Nov to 22 Nov, and your fixtures do not stop for it, so they went stra",
+       "era2005/Mallorca@e36 inbox[].text: Santos <= International break: the window runs 20 Mar to 28 Mar, and your fixtures do not stop for it, so they went stra",
+       "era2005/Mallorca@s2e30 inbox[].text: Santos <= International break: the window runs 13 Nov to 21 Nov, and your fixtures do not stop for it, so they went stra",
+       "era2005/Mallorca@s2e30 inbox[].text: Santos <= International break: the window runs 9 Oct to 17 Oct, and your fixtures do not stop for it, so they went strai",
+       "era2005/Mallorca@s2e30 inbox[].text: Santos <= International break: the window runs 4 Sep to 12 Sep, and your fixtures do not stop for it, so they went strai"
+      ],
+      "paths": {
+       "inbox[].text": 40,
+       "inbox[].playerName": 1
+      }
+     },
+     "intl": {
+      "n": 16,
+      "exact": 0,
+      "samples": [
+       "era2005/Mallorca@e12 intl.last.called[].name: Santos <= Gonzalo de los Santos",
+       "era2005/Inter Milan@e6 intl.last.called[].name: Córdoba <= Iván Córdoba"
+      ],
+      "paths": {
+       "intl.last.called[].name": 16
+      }
+     },
+     "incomingBids": {
+      "n": 2,
+      "exact": 0,
+      "samples": [
+       "era2005/Inter Milan@e30 incomingBids[].playerName: Córdoba <= Iván Córdoba"
+      ],
+      "paths": {
+       "incomingBids[].playerName": 2
+      }
+     },
+     "goneNames": {
+      "n": 10,
+      "exact": 0,
+      "samples": [
+       "era2005/Werder Bremen@start goneNames[]: Córdoba <= Iván Córdoba"
+      ],
+      "paths": {
+       "goneNames[]": 10
+      }
+     },
+     "scorerRace": {
+      "n": 15,
+      "exact": 15,
+      "samples": [
+       "era2005/Nice@start scorerRace[].name: Santos <= Santos"
+      ],
+      "paths": {
+       "scorerRace[].name": 15
+      }
+     }
+    }
+   },
+   "era2020": {
+    "careers": 10,
+    "stuck": 0,
+    "sacked": 4,
+    "hits": {
+     "negotiation": {
+      "n": 68,
+      "exact": 34,
+      "samples": [
+       "era2020/Manchester City@talk negotiation.rivalBidder: Sturm Graz <= Sturm Graz",
+       "era2020/Manchester City@talk negotiation.note: Sturm Graz <= Sturm Graz just entered the race at £93.5m. Bidding war.",
+       "era2020/Manchester City@talkEnd negotiation.note: Sturm Graz <= Sturm Graz closed the deal at £93.5m while you hesitated.",
+       "era2020/Manchester City@talk negotiation.rivalBidder: Al-Nassr <= Al-Nassr",
+       "era2020/Manchester City@talk negotiation.note: Al-Nassr <= Al-Nassr just entered the race at £80.2m. Bidding war.",
+       "era2020/Manchester City@talkEnd negotiation.note: Al-Nassr <= Al-Nassr closed the deal at £80.2m while you hesitated."
+      ],
+      "paths": {
+       "negotiation.rivalBidder": 34,
+       "negotiation.note": 34
+      }
+     },
+     "transferLog": {
+      "n": 79,
+      "exact": 79,
+      "samples": [
+       "era2020/Manchester City@talkEnd transferLog[].to: Sturm Graz <= Sturm Graz",
+       "era2020/Manchester City@talkEnd transferLog[].to: Al-Nassr <= Al-Nassr",
+       "era2020/Manchester City@talkEnd transferLog[].to: Spartak Moscow <= Spartak Moscow",
+       "era2020/Manchester City@e30 transferLog[].to: Sunderland <= Sunderland",
+       "era2020/Arsenal@start transferLog[].to: Nottingham Forest <= Nottingham Forest",
+       "era2020/Arsenal@start transferLog[].to: Benfica <= Benfica"
+      ],
+      "paths": {
+       "transferLog[].to": 79
+      }
+     },
+     "aiHeadlines": {
+      "n": 11,
+      "exact": 0,
+      "samples": [
+       "era2020/Arsenal@start aiHeadlines[]: Nottingham Forest <= Nottingham Forest sign Stefan de Vrij from Inter Milan for £60m.",
+       "era2020/Arsenal@start aiHeadlines[]: Benfica <= Benfica sign Mateo Kovacic from Chelsea for £37m.",
+       "era2020/Arsenal@start aiHeadlines[]: Bournemouth <= Bournemouth sign Renan Lodi from Atlético Madrid for £47m.",
+       "era2020/Sevilla@s2start aiHeadlines[]: Bournemouth <= Bournemouth sign Denis Zakaria from Gladbach for £38m.",
+       "era2020/Osasuna@e24 aiHeadlines[]: Nottingham Forest <= Nottingham Forest sign Gabriel Jesus from Manchester City for £64m.",
+       "era2020/Roma@s2start aiHeadlines[]: Bournemouth <= Bournemouth sign Victor Osimhen from Napoli for £64m."
+      ],
+      "paths": {
+       "aiHeadlines[]": 11
+      }
+     },
+     "scorerRace": {
+      "n": 17,
+      "exact": 0,
+      "samples": [
+       "era2020/Roma@s2start scorerRace[].name: Remo <= Remo Freuler",
+       "era2020/Freiburg@start scorerRace[].name: Córdoba <= Jhon Córdoba"
+      ],
+      "paths": {
+       "scorerRace[].name": 17
+      }
+     }
+    }
+   }
+  }
+ }
+}
