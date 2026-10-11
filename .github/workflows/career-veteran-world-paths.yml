@@ -194,9 +194,45 @@ jobs:
             const detect=f=>{const red=[];if(f.count!==300)red.push('complete-cohort');if(f.eligible!==f.declared)red.push('complete-season-records');if(f.tapeHash!==f.plainTapeHash)red.push('unfiltered-tape');if(f.firstStart!==0||f.initialEnd<f.firstStart)red.push('phase-cursors');return red;};assert.deepEqual(detect(originalFacts),[]);
             const fault=structuredClone(originalFacts);fault.count--;fault.eligible--;fault.tapeHash='0'.repeat(64);fault.firstStart++;assert.deepEqual(detect(fault),['complete-cohort','complete-season-records','unfiltered-tape','phase-cursors']);const undo=structuredClone(fault);undo.count++;undo.eligible++;undo.tapeHash=originalFacts.tapeHash;undo.firstStart--;assert.deepEqual(undo,originalFacts);assert.deepEqual(detect(undo),[]);report.observationControl={original:put(originalFacts),fault:put(fault),undo:put(undo),failures:detect(fault),qualification:'Copied derived observations only; full actual career objects and unfiltered streams remain held.'};
           }catch(error){report.errors.push({group:'closing-comparison',name:error.name,message:error.message,stack:error.stack});}
-          report.status=report.errors.length?'failed':'measured';write('report.json',report);
-          let bytes=0,files=0;const visit=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())visit(file);else if(entry.isFile()){bytes+=fs.statSync(file).size;files++;}}};visit(OUT);write('size.json',{beforeSizeReceiptBytes:bytes,files,cap:500000000});bytes=0;files=0;visit(OUT);assert(bytes<500000000,'unchanged complete evidence cap');console.log(JSON.stringify({status:report.status,summaries:report.summaries,errors:report.errors,bytes,files}));assert.equal(report.status,'measured','all diagnostic measurements must close');
+          try{
+            const compiled=[];
+            for(const arm of report.arms){
+              const found=[],collect=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())collect(file);else{assert(entry.isFile(),'complete compiled body is a regular file');found.push(path.relative(OUT,file).replaceAll('\\','/'));}}};
+              collect(path.join(OUT,arm.id,'compiled'));found.sort();assert.equal(found.length,119,arm.id+' complete compiled body count');compiled.push(...found);
+            }
+            assert.equal(compiled.length,595,'all five complete compiled body sets');
+            const aliases=[];let first=null;
+            for(const logicalPath of compiled){
+              const raw=fs.readFileSync(path.join(OUT,logicalPath)),rawSha256=hash(raw),packed=zlib.gzipSync(raw,{level:9}),packedPath='packed-compiled/'+rawSha256+'.gz';
+              fs.mkdirSync(path.join(OUT,'packed-compiled'),{recursive:true});
+              if(fs.existsSync(path.join(OUT,packedPath)))assert.deepEqual(fs.readFileSync(path.join(OUT,packedPath)),packed,'same complete compiled body encoding');
+              else fs.writeFileSync(path.join(OUT,packedPath),packed);
+              const retained=fs.readFileSync(path.join(OUT,packedPath));assert.deepEqual(retained,packed);assert.deepEqual(zlib.gunzipSync(retained),raw,'complete compiled body roundtrip');
+              const alias={logicalPath,rawBytes:raw.length,rawSha256,packedPath,packedBytes:retained.length,packedSha256:hash(retained)};
+              aliases.push(alias);if(!first&&raw.length)first={raw,packed:retained,alias};
+            }
+            assert(first,'actual nonempty complete compiled body control');
+            const detect=packed=>{const raw=zlib.gunzipSync(packed);return raw.length===first.alias.rawBytes&&hash(raw)===first.alias.rawSha256?[]:['whole-text-body'];};
+            assert.deepEqual(detect(first.packed),[]);
+            const badRaw=Buffer.from(first.raw);badRaw[0]^=1;assert.notDeepEqual(badRaw,first.raw);const fault=zlib.gzipSync(badRaw,{level:9});assert.deepEqual(detect(fault),['whole-text-body']);
+            const undoRaw=zlib.gunzipSync(fault);undoRaw[0]^=1;assert.deepEqual(undoRaw,first.raw);const undo=zlib.gzipSync(undoRaw,{level:9});assert.deepEqual(undo,first.packed);assert.deepEqual(detect(undo),[]);
+            fs.mkdirSync(path.join(OUT,'packaging-control'),{recursive:true});fs.writeFileSync(path.join(OUT,'packaging-control/fault.gz'),fault);fs.writeFileSync(path.join(OUT,'packaging-control/undo.gz'),undo);
+            const controlRef=(file,packed)=>({file,packedBytes:packed.length,packedSha256:hash(packed),rawBytes:zlib.gunzipSync(packed).length,rawSha256:hash(zlib.gunzipSync(packed))});
+            const manifest={codec:'gzip',level:9,qualification:'Lossless physical packaging only. Every logical compiled body is reconstructed in full; observations, tapes, objects and source archives are unchanged.',aliases,control:{original:first.alias,fault:controlRef('packaging-control/fault.gz',fault),undo:controlRef('packaging-control/undo.gz',undo),failures:detect(fault),undoFailures:detect(undo)}};
+            write('compiled-text-aliases.json',manifest);assert.deepEqual(JSON.parse(fs.readFileSync(path.join(OUT,'compiled-text-aliases.json'),'utf8')),manifest);
+            for(const alias of aliases){
+              const raw=fs.readFileSync(path.join(OUT,alias.logicalPath)),packed=fs.readFileSync(path.join(OUT,alias.packedPath));
+              assert.equal(raw.length,alias.rawBytes);assert.equal(hash(raw),alias.rawSha256);assert.equal(packed.length,alias.packedBytes);assert.equal(hash(packed),alias.packedSha256);assert.deepEqual(zlib.gunzipSync(packed),raw);
+            }
+            for(const alias of aliases)fs.unlinkSync(path.join(OUT,alias.logicalPath));
+            report.packaging={manifest:'compiled-text-aliases.json',manifestSha256:hash(fs.readFileSync(path.join(OUT,'compiled-text-aliases.json'))),logicalFiles:aliases.length,rawBytes:aliases.reduce((n,a)=>n+a.rawBytes,0),physicalFiles:new Set(aliases.map(a=>a.packedPath)).size,fullByteRoundtrips:aliases.length,controlFailures:manifest.control.failures,controlUndoHeld:true};
+            report.status=report.errors.length?'failed':'measured';write('report.json',report);
+            let bytes=0,files=0;const visit=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())visit(file);else if(entry.isFile()){bytes+=fs.statSync(file).size;files++;}}};visit(OUT);write('size.json',{beforeSizeReceiptBytes:bytes,files,cap:500000000});bytes=0;files=0;visit(OUT);assert(bytes<500000000,'unchanged complete evidence cap');console.log(JSON.stringify({status:report.status,summaries:report.summaries,errors:report.errors,bytes,files}));assert.equal(report.status,'measured','all diagnostic measurements must close');
+          }catch(error){
+            report.status='failed';report.errors.push({group:'packaging-footer',name:error.name,message:error.message,stack:error.stack});write('report.json',report);console.error(JSON.stringify({status:report.status,errors:report.errors}));throw error;
+          }
           JS
+          set -o pipefail
           node career-veteran-world-paths-artifacts/diagnostic.mjs 2>&1 | tee career-veteran-world-paths-artifacts/diagnostic.log
       - name: Whole source and installed package bodies held
         if: ${{ !cancelled() && steps.prep.outcome == 'success' }}
