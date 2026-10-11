@@ -1,0 +1,5 @@
+# Release AV proof, Round 1227: the before and after proof against the line just before its merge (f6dfa9b3), and the controls only that proof judges
+rival-prove: RIVAL_PROVE=f6dfa9b3 RIVAL_MOVED=nfl RIVAL_CARDS=nfl node scripts/simUsRivalSense.mjs
+rivalp-liftcard: RIVAL_PROVE=f6dfa9b3 RIVAL_MOVED=nfl RIVAL_CARDS=nfl US_RIVAL_CONTROL=liftcard node scripts/simUsRivalSense.mjs
+rivalp-liftkey: RIVAL_PROVE=f6dfa9b3 RIVAL_MOVED=nfl RIVAL_CARDS=nfl US_RIVAL_CONTROL=liftkey node scripts/simUsRivalSense.mjs
+rivalp-tickdraws: RIVAL_PROVE=f6dfa9b3 RIVAL_MOVED=nfl RIVAL_CARDS=nfl US_RIVAL_CONTROL=tickdraws node scripts/simUsRivalSense.mjs
