@@ -1,0 +1,77 @@
+1) wiring: every live game reaches the shared moment, or is on LEFT with a reason
+   133 live games: 89 wired to the moment, 26 left with a reason (no single result), 18 still ending on a surface of their own (follow up round)
+     own surface /dart-draft            its own done panel in the page, the squad grade, the series score and the XI
+     own surface /who-am-i              its own won or lost panel in the page, the secret player and the guess rows
+     own surface /world-xi              its own won or lost panel in the page, with a season sim report on a win
+     own surface /alphabet-sprint       its own done panel in the page, the sprint points and the letters
+     own surface /clue-auction          its own won or lost panel in the page, the bank and the clues bought
+     own surface /sign-the-player       its own showdown table in the page, a league table with a champion, not one score
+     own surface /free-kick             its own done card in FreeKickBoard, goals out of ten and points
+     own surface /world-cup-bracket     a bracket scored against the real results at the foot of the page, no run end
+     own surface /fantasy-draft         its own draft complete panel in the page, a verdict, a season sim and a vote
+     own surface /cage-clash            its own fight result overlay in CageClashBoard, the winner and the method over the cage, then a damage line
+     own surface /buzzer-beater         its own done card in BuzzerBeaterBoard, makes out of ten and points
+     own surface /stat-detective        its own done panel in the page, the guess count out of eight
+     own surface /nba-starting-5        its own result panel in the page, the verdict on the five
+     own surface /perfect-lineup-nba    its own grade card in GenericLineupBoard, grade, rating and chemistry
+     own surface /perfect-lineup-nhl    its own grade card in GenericLineupBoard, grade, rating and chemistry
+     own surface /perfect-lineup-f1     its own grade card in GenericLineupBoard, grade, rating and chemistry
+     own surface /minefield             its own done panel in the page, the banked score and rounds won
+     own surface /aussie-rules-manager  its own season over panel in AussieRulesLeagueBoard, with VictoryMoment for a premiership and the Grand Final score
+2) score: how many <ResultScreen> calls pass the score their moment reveals
+   84 ResultScreen calls: 21 pass a score, 63 do not yet (their pill shows the game's emoji until a follow up round adds one)
+     passes a score src/components/ball-iq/BallIqBoard.tsx:83
+     passes a score src/components/deadline-day/DeadlineDayBoard.tsx:385
+     passes a score src/components/emoji-guess/EmojiGuessBoard.tsx:83
+     passes a score src/components/hof-or-bust/HofOrBustBoard.tsx:125
+     passes a score src/components/mystery-box/MysteryBoxBoard.tsx:96
+     passes a score src/components/quiz-board/QuizBoard.tsx:196
+     passes a score src/pages/AflHigherLower.tsx:121
+     passes a score src/pages/CfbHigherLower.tsx:120
+     passes a score src/pages/ChampOrNot.tsx:212
+     passes a score src/pages/F1HigherLower.tsx:123
+     passes a score src/pages/FaceOff.tsx:282
+     passes a score src/pages/GolfHigherLower.tsx:122
+     passes a score src/pages/HigherLower.tsx:113
+     passes a score src/pages/HockeyHigherLower.tsx:151
+     passes a score src/pages/MlbHigherLower.tsx:120
+     passes a score src/pages/NbaHigherLower.tsx:121
+     passes a score src/pages/NflHigherLower.tsx:128
+     passes a score src/pages/RankEm.tsx:410
+     passes a score src/pages/SilverwareSort.tsx:210
+     passes a score src/pages/TennisHigherLower.tsx:123
+     passes a score src/pages/WhodTheyBeat.tsx:170
+3) copy and score: three states, three lines, the score as given
+   win   copy="Nailed it" score="9/9" headline="Head win"
+   close copy="Good try" score="7/9" headline="Head close"
+   loss  copy="Not this time" score="0" headline="Head loss"
+   win   copy="Nailed it" score="$1.25M" headline="Head win"
+   ResultScreen {"won":true}                     -> win, first h2 "Grid over", score "7/9", confetti 28
+   ResultScreen {"won":false}                    -> loss, first h2 "Grid over", score "7/9", confetti 0
+   ResultScreen {}                               -> close, first h2 "Grid over", score "7/9", confetti 0
+   ResultScreen {"won":false,"outcome":"close"}  -> close, first h2 "Grid over", score "7/9", confetti 0
+4) sport: the ink and the glyph follow the registry category
+   /soccer-grid      sport=soccer glyphs=soccer,soccer --tile=145 55% 52% kicker=rgb(65, 200, 121)
+   /nba-grid         sport=basketball glyphs=basketball,basketball --tile=24 90% 58% kicker=rgb(244, 129, 52)
+   /mlb-grid         sport=baseball glyphs=baseball,baseball --tile=354 80% 66% kicker=rgb(238, 99, 113)
+   /hockey-grid      sport=hockey glyphs=hockey,hockey --tile=190 75% 55% kicker=rgb(54, 198, 226)
+   /nfl-connections  sport=football glyphs=football,football --tile=214 80% 66% kicker=rgb(99, 159, 238)
+   /ufc              sport=combat glyphs=combat,combat --tile=290 55% 70% kicker=rgb(207, 136, 221)
+   /f1-higher-lower  sport=f1 glyphs=f1,f1 --tile=322 75% 66% kicker=rgb(233, 103, 186)
+   /rank-em          sport=world glyphs=world,world --tile=43 85% 55% kicker=rgb(238, 183, 43)
+5) layout: nothing moves while it plays; the phone card fits
+   won=true      first {"moment":[40,177],"next":[229,24],"pill":[81,80],"card":[16,697]} last {"moment":[40,177],"next":[229,24],"pill":[81,80],"card":[16,697]}
+   won=false     first {"moment":[40,177],"next":[229,24],"pill":[81,80],"card":[16,697]} last {"moment":[40,177],"next":[229,24],"pill":[81,80],"card":[16,697]}
+   won=undefined first {"moment":[40,177],"next":[229,24],"pill":[81,80],"card":[16,697]} last {"moment":[40,177],"next":[229,24],"pill":[81,80],"card":[16,697]}
+   390px "$1,234,567"  scrollWidth=390 card 16..374 pill 109..281 small targets 0
+   390px 0             scrollWidth=390 card 16..374 pill 151..239 small targets 0
+   390px "Grade A+"    scrollWidth=390 card 16..374 pill 108..282 small targets 0
+6) reduced: under reduce the settled frame shows at once; otherwise it plays
+   reduce        win   rm-mark:none/0.14 rm-burst:rmBurst/0/hidden rm-score:none/1 rm-badge:none/1 rm-head:none/1
+   reduce        close rm-mark:none/0.14 rm-score:none/1 rm-badge:none/1 rm-head:none/1
+   reduce        loss  rm-mark:none/0.14 rm-score:none/1 rm-badge:none/1 rm-head:none/1
+   no-preference win   rm-mark:rmMark/0.14 rm-burst:rmBurst/0.9 rm-score:rmPop/0 rm-badge:rmPop/0 rm-head:rmRise/0
+   no-preference close rm-mark:rmMark/0.14 rm-score:rmPop/0 rm-badge:rmPop/0 rm-head:rmRise/0
+   no-preference loss  rm-mark:rmMark/0.14 rm-score:rmSettle/0 rm-badge:rmPop/0 rm-head:rmRise/0
+
+simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three states say their own lines in the sport's ink, nothing moves while it plays, and reduced motion shows the final frame at once.
