@@ -8,7 +8,7 @@ import { createRequire } from 'node:module';
 import { build } from 'esbuild';
 
 export const ROOT = process.cwd();
-export const BASE = '09df145abfb241679022b41903d2f19bc254ebf9';
+export const BASE = '9d73ce5f261d93b73bf0993469c4fb330afa202b';
 export const NOW = 1791658800000;
 export const OUT = path.resolve('soccer-international-return-artifacts');
 export const KEY = 'soccerCareerSave';
