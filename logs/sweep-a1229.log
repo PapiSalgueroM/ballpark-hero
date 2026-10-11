@@ -1,0 +1,10 @@
+  FAIL: /club-manager: 587K of gzipped JavaScript against a budget of 586K
+  FAIL: /manager-hot-seat: 604K of gzipped JavaScript against a budget of 603K
+  FAIL: /deadline-day: 614K of gzipped JavaScript against a budget of 613K
+   /club-manager       587K gz over  39 files (budget 586K, 587.0K to the tenth)
+   /soccer-career      808K gz over  45 files (budget 808K, 808.1K to the tenth)
+   /nfl-my-career      479K gz over  47 files (budget 479K, 479.0K to the tenth)
+   /front-office       361K gz over  34 files (budget 362K, 361.2K to the tenth)
+   /manager-hot-seat   604K gz over  41 files (budget 603K, 604.4K to the tenth)
+   /deadline-day       614K gz over  45 files (budget 613K, 614.5K to the tenth)
+sweepWeight: 3 failures

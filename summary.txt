@@ -1,0 +1,15 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+flag-head-alone exit=1 0s | simFlagshipWeight: 1 failure
+sweep-head-alone exit=1 25s | sweepWeight: 3 failures
+mk-main exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+flag-main exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+sweep-main exit=0 29s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+index-diff exit=0 0s | chunks only on the base: 
+mk-b1227 exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+flag-b1227 exit=0 0s | simFlagshipWeight: green. The flagship carries its own game and nobody else's.
+mk-a1227 exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+flag-a1227 exit=1 0s | simFlagshipWeight: 1 failure
+mk-b1229 exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweep-b1229 exit=0 30s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
+mk-a1229 exit=0 24s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+sweep-a1229 exit=1 30s | sweepWeight: 3 failures
