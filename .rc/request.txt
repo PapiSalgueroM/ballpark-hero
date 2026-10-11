@@ -1,0 +1,4 @@
+# Release AW part one, reviewer facts-fences, request E: which merge moved the /soccer-career row of sweepWeight (the base, each merge commit and the head, each built and served by the extra file)
+#!playwright
+#!serial
+weightPerMerge: bash .rc/x/weightPerMerge.sh
