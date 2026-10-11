@@ -1,0 +1,17 @@
+vitest-promise exit=0 6s |    Duration  4.60s (transform 1.93s, setup 120ms, collect 2.68s, tests 453ms, environment 531ms, prepare 335ms)
+simCareerSocialBrands exit=0 41s | ALL SOCIAL AND BRAND CHECKS PASSED
+simCareerLeagueFinish exit=0 22s | simCareerLeagueFinish: green. 756 careers, 6048 seasons, 4813 in a verified league; finish and title agree, the ladder holds, the historical stream holds after documented
+tsc exit=0 94s | 
+simCareerLeagueSeasons exit=0 29s | simCareerLeagueSeasons: all sections green
+simSoccerCareerDevelopment exit=0 5s | simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+simCareerTrophyRuns exit=0 4s | Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/ca
+simCareerAwardsNight exit=0 109s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+simSoccerSeasonHistory exit=0 3s | Season history: 9 groups,24 full AR season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/season-
+simSoccerContractMoves exit=0 2s | simSoccerContractMoves: all full-save contract and club-move checks passed
+simSoccerDerbyHistory exit=0 3s | Derby history: 11 groups,24 full main season pairs,192 full campaign/RNG pairs,0 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/derby
+simSoccerCareer exit=0 7s | PASS: no crashes, no snubs, homegrown path live
+simSoccerOfferReview exit=0 13s | Soccer offer review: passed.
+simStorageWrites exit=0 5s | simStorageWrites: all green (owed: 12)
+simCareerStoryRole exit=0 58s | simCareerStoryRole: 16 groups, 0 failed, 48 full AR pairs
+simHarnessAnchors exit=0 48s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simSoccerVeteranOffers exit=0 779s | PASS Soccer veteran offers: 7 groups, 11 retained bundle arms
