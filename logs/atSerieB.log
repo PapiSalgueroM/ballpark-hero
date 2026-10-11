@@ -1,0 +1,9 @@
+AT 9e9af21b = 9e9af21b0 2026-10-06 Round 1040: Serie B joins Club Manager, first step: the serieb rules row and its twenty clubs, Serie A relegates into it, the ros
+== simEra2020 at 9e9af21b0f exit=1
+  FAIL: 2020-only Mathew Leckie is on the 2026 market
+  FAIL: 2020-only Hiroki Sakai is on the 2026 market
+  FAIL: 2020-only Marcel Tisserand is on the 2026 market
+   964 era-exclusive names checked against the 2026 market, 3 leaks
+   46 era-only clubs, 18 of them in more than one era; reversing ERA_LEAGUES moves 0
+closing line: simEra2020: 3 failure(s).
+DONE at 9e9af21b0f worst=1

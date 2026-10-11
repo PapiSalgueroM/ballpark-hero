@@ -1,0 +1,23 @@
+AT 0bdc970d = 0bdc970d9 2026-10-08 Round 1052: step 4, the gathered leagues table, its generator and the Russian Premier League's 16 generated squads (nothing impor
+== simEra2005 at 0bdc970d9c exit=0
+   1713 era-exclusive names checked against the 2026 market, 0 leaks
+closing line: simEra2005: green. 2005 is real, sealed, and plays like 2005.
+== simEra2010 at 0bdc970d9c exit=0
+   1716 era-exclusive names checked against the 2026 market, 0 leaks
+closing line: simEra2010: green. 2010 is real, sealed, and plays like 2010.
+== simEra2015 at 0bdc970d9c exit=1
+  FAIL: 2015-only Hiroki Sakai is on the 2026 market
+  FAIL: 2015-only Mathew Leckie is on the 2026 market
+  FAIL: 2015-only Tom Lawrence is on the 2026 market
+   1434 era-exclusive names checked against the 2026 market, 3 leaks
+closing line: simEra2015: 3 failures
+== simEra2020 at 0bdc970d9c exit=1
+  FAIL: 2020-only Mathew Leckie is on the 2026 market
+  FAIL: 2020-only Hiroki Sakai is on the 2026 market
+  FAIL: 2020-only Marcel Tisserand is on the 2026 market
+   947 era-exclusive names checked against the 2026 market, 3 leaks
+   29 era-only clubs, 6 of them in more than one era; reversing ERA_LEAGUES moves 0
+  FAIL: only 6 era-only clubs sit in two eras; the order check has nothing to bite on
+  FAIL: an unscoped leagueOf('Cádiz') reads segunda; it has always read laliga2005
+closing line: simEra2020: 5 failure(s).
+DONE at 0bdc970d9c worst=1

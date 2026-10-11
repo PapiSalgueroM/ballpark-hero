@@ -1,0 +1,15 @@
+AT 709e103f = 709e103f5 2026-10-06 Round 1035: Club Manager's value curve lifted into scripts/lib/cmValueCurve.mjs, the bake imports it
+== simEra2005 at 709e103f5d exit=0
+   1713 era-exclusive names checked against the 2026 market, 0 leaks
+closing line: simEra2005: green. 2005 is real, sealed, and plays like 2005.
+== simEra2010 at 709e103f5d exit=0
+   1716 era-exclusive names checked against the 2026 market, 0 leaks
+closing line: simEra2010: green. 2010 is real, sealed, and plays like 2010.
+== simEra2015 at 709e103f5d exit=0
+   1443 era-exclusive names checked against the 2026 market, 0 leaks
+closing line: simEra2015: green. 2015 is real, sealed, and plays like 2015.
+== simEra2020 at 709e103f5d exit=0
+   981 era-exclusive names checked against the 2026 market, 0 leaks
+   53 era-only clubs, 21 of them in more than one era; reversing ERA_LEAGUES moves 0
+closing line: simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+DONE at 709e103f5d worst=0

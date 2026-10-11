@@ -1,0 +1,12 @@
+AT d557a8ae = d557a8aeb 2026-10-06 Round 1040: the Segunda División joins Club Manager, so La Liga relegates for real. The segunda rules row (four down, the playof
+== simEra2020 at d557a8aeb0 exit=1
+  FAIL: 2020-only Mathew Leckie is on the 2026 market
+  FAIL: 2020-only Hiroki Sakai is on the 2026 market
+  FAIL: 2020-only Marcel Tisserand is on the 2026 market
+   934 era-exclusive names checked against the 2026 market, 3 leaks
+  FAIL: 1 names shared by 2020 and now age impossibly: Juan Cruz (2020 27, now 25); verify each as two men before listing it
+   29 era-only clubs, 6 of them in more than one era; reversing ERA_LEAGUES moves 0
+  FAIL: only 6 era-only clubs sit in two eras; the order check has nothing to bite on
+  FAIL: an unscoped leagueOf('Cádiz') reads segunda; it has always read laliga2005
+closing line: simEra2020: 6 failure(s).
+DONE at d557a8aeb0 worst=1

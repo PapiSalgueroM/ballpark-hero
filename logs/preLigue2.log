@@ -1,0 +1,9 @@
+AT 3d412fcd = 3d412fcd3 2026-10-06 Round 1040: Serie B gated. The daily club pool is a committed append only file (src/data/dailyClubPool.json, scripts/genDailyClub
+== simEra2020 at 3d412fcd30 exit=1
+  FAIL: 2020-only Mathew Leckie is on the 2026 market
+  FAIL: 2020-only Hiroki Sakai is on the 2026 market
+  FAIL: 2020-only Marcel Tisserand is on the 2026 market
+   964 era-exclusive names checked against the 2026 market, 3 leaks
+   46 era-only clubs, 18 of them in more than one era; reversing ERA_LEAGUES moves 0
+closing line: simEra2020: 3 failure(s).
+DONE at 3d412fcd30 worst=1

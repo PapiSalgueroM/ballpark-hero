@@ -1,0 +1,25 @@
+AT 5010ae3f = 5010ae3f2 2026-10-08 Round 1052: step 5, Russia is in the engine (rules row, league row, nation, the join, the nationality fold, the side tables, the 
+== simEra2005 at 5010ae3f22 exit=1
+  FAIL: 2005-only Ronaldo is on the 2026 market
+   1713 era-exclusive names checked against the 2026 market, 1 leaks
+closing line: simEra2005: 1 failure
+== simEra2010 at 5010ae3f22 exit=1
+  FAIL: 2010-only Wendel is on the 2026 market
+   1716 era-exclusive names checked against the 2026 market, 1 leaks
+closing line: simEra2010: 1 failure
+== simEra2015 at 5010ae3f22 exit=1
+  FAIL: 2015-only Hiroki Sakai is on the 2026 market
+  FAIL: 2015-only Mathew Leckie is on the 2026 market
+  FAIL: 2015-only Tom Lawrence is on the 2026 market
+   1434 era-exclusive names checked against the 2026 market, 4 leaks
+closing line: simEra2015: 3 failures
+== simEra2020 at 5010ae3f22 exit=1
+  FAIL: 2020-only Lucas Olaza is on the 2026 market
+  FAIL: 2020-only Mathew Leckie is on the 2026 market
+  FAIL: 2020-only Jhon Córdoba is on the 2026 market
+   947 era-exclusive names checked against the 2026 market, 8 leaks
+   29 era-only clubs, 6 of them in more than one era; reversing ERA_LEAGUES moves 0
+  FAIL: only 6 era-only clubs sit in two eras; the order check has nothing to bite on
+  FAIL: an unscoped leagueOf('Cádiz') reads segunda; it has always read laliga2005
+closing line: simEra2020: 5 failure(s).
+DONE at 5010ae3f22 worst=1

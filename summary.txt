@@ -1,0 +1,13 @@
+pre1035 exit=0 16s | DONE at 709e103f5d worst=0
+at1035 exit=0 16s | DONE at b777801df1 worst=1
+preSerieB exit=0 3s | DONE at fc30942e08 worst=1
+atSerieB exit=0 3s | DONE at 9e9af21b0f worst=1
+preLigue2 exit=0 3s | DONE at 3d412fcd30 worst=1
+atLigue2 exit=0 4s | DONE at fa77f44742 worst=1
+atSegunda exit=0 4s | DONE at d557a8aeb0 worst=1
+pre1052 exit=0 36s | DONE at 0bdc970d9c worst=1
+at1052 exit=0 36s | DONE at 5010ae3f22 worst=1
+statsPre1072 exit=0 1s | DONE at 5b70b05f6d worst=0
+statsAt1072 exit=0 2s | DONE at ba13dc2ea2 worst=1
+statsPre1146 exit=0 3s | DONE at 6b3e01ca8c worst=1
+statsAt1146 exit=0 3s | DONE at 21fe2c06a3 worst=0

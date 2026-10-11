@@ -1,0 +1,12 @@
+AT ba13dc2e = ba13dc2ea 2026-10-07 Release AL: merge Codex Round 1072 (PR163), Club Manager: substitutions in quick sim
+== simStatsCentre at ba13dc2ea2 exit=1
+  FAIL: 605 total apps across 52 matches, expected 572
+  FAIL: league: 440 apps for 38 matches
+  FAIL: cup: 48 apps for 4 matches
+  FAIL: ucl: 117 apps for 10 matches
+   52 matches -> 605 appearances, 11 per match in every bucket
+  FAIL: season apps went wrong after the strip
+  FAIL: splits hold 69 apps, expected 66 (post-update matches only)
+6 FAILURES
+closing line: 6 FAILURES
+DONE at ba13dc2ea2 worst=1
