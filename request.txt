@@ -1,0 +1,4 @@
+# Release AX commit c: the walker edit must replay the recording byte for byte, before PR217 is merged
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+fixture-sha: sha256sum scripts/data/usBoardFixture.json src/test/usBoardFixture.test.tsx
