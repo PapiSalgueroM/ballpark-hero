@@ -1,0 +1,30 @@
+
+== nhl: 12000 careers pooled (2000, 2000, 2000, 2000, 2000, 2000)
+  C: n 2400, median seasons 20, Hall on 1 28.2%, median score 343
+     goals: median 601, from 954, to 1130; ramp 3.69 seasons, to over median 1.88
+     assists: median 833, from 1010, to 1160; ramp 2.97 seasons, to over median 1.39
+     points: median 1472, from 1860, to 2130; ramp 2.90 seasons, to over median 1.45
+     standout: [{ stat: 'goals', from: 954, to: 1130, label: 'goals' }, { stat: 'assists', from: 1010, to: 1160, label: 'assists' }, { stat: 'points', from: 1860, to: 2130, label: 'points' }]
+  LW: n 2400, median seasons 19, Hall on 1 29.2%, median score 362
+     goals: median 635, from 891, to 1080; ramp 4.03 seasons, to over median 1.70
+     assists: median 781, from 959, to 1120; ramp 3.19 seasons, to over median 1.43
+     points: median 1441, from 1770, to 2040; ramp 2.90 seasons, to over median 1.42
+     standout: [{ stat: 'goals', from: 891, to: 1080, label: 'goals' }, { stat: 'assists', from: 959, to: 1120, label: 'assists' }, { stat: 'points', from: 1770, to: 2040, label: 'points' }]
+  RW: n 2400, median seasons 20, Hall on 1 27.5%, median score 350
+     goals: median 689, from 858, to 991; ramp 3.10 seasons, to over median 1.44
+     assists: median 794, from 956, to 1070; ramp 2.38 seasons, to over median 1.35
+     points: median 1483, from 1800, to 2040; ramp 2.67 seasons, to over median 1.38
+     standout: [{ stat: 'goals', from: 858, to: 991, label: 'goals' }, { stat: 'assists', from: 956, to: 1070, label: 'assists' }, { stat: 'points', from: 1800, to: 2040, label: 'points' }]
+  D: n 2400, median seasons 20, Hall on 1 27.3%, median score 348
+     assists: median 941, from 1120, to 1260; ramp 2.50 seasons, to over median 1.34
+     points: median 1203, from 1460, to 1640; ramp 2.47 seasons, to over median 1.36
+     standout: [{ stat: 'assists', from: 1120, to: 1260, label: 'assists' }, { stat: 'points', from: 1460, to: 1640, label: 'points' }]
+  G: n 2400, median seasons 21, Hall on 1 36.8%, median score 410
+     wins: median 656, from 720, to 792 (ramp floor); ramp 2.10 seasons, to over median 1.21
+     standout: [{ stat: 'wins', from: 720, to: 792, label: 'wins' }]
+  bands at 2000 careers: a cell's share at or over from 6.3 to 14.0 percent over 72 cell runs (band 4.3 to 15.9); pooled from 9.15 11.06 10.38 9.48 9.77 9.85 (band 8.19 to 12.02); pooled to 0.88 0.92 0.92 0.67 0.94 0.94 (band 0.53 to 1.07)
+  outcome: Hall share on 1 28.5 29.1 30.4 30.2 31.1 29.3; on 2 29.8 30.7 31.6 31.6 32.1 30.5 (ceiling 34.4); newly in 26 31 23 27 20 24; pooled top 5 percent gain 15.0 16.7 22.5 23.0 20.0 16.7 points (floor 7.5); owed to the standout alone 7.5 8.8 6.3 11.7 7.1 7.5 (floor 3.1)
+  points paid: median 364 364 363 357 370 352 -> 366 367 369 363 372 354; mean 441.8 445.2 445.1 443.3 452.2 440.6 -> 458.4 466.3 465 461.5 471 459.9
+
+genCareerHallMarks: wrote scripts/data/careerHallMarks.json (the block of calibration 3: nhl)
+ 1 file changed, 414 insertions(+)

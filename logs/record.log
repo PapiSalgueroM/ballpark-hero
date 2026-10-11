@@ -1,0 +1,5 @@
+simCareerHall nfl: CALIBRATION 3 RECORDED INTO scripts/data/careerHallV3.json, NOT A GREEN RUN (nothing red)
+simCareerHall nba: CALIBRATION 3 RECORDED INTO scripts/data/careerHallV3.json, NOT A GREEN RUN (nothing red)
+simCareerHall mlb: CALIBRATION 3 RECORDED INTO scripts/data/careerHallV3.json, NOT A GREEN RUN (nothing red)
+simCareerHall nhl: CALIBRATION 3 RECORDED INTO scripts/data/careerHallV3.json, NOT A GREEN RUN (red [halfrule])
+-rw-r--r-- 1 runner runner 49108 Oct 11 00:01 scripts/data/careerHallV3.json

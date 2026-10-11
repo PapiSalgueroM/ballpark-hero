@@ -1,0 +1,76 @@
+simCareerHall nba: 2000 careers, 0 crashed, seed base
+  hof 34.2% (684), first ballot 88.3% of them; bottom third 64.9%, top third 100%
+  outcomes {"inducted":684,"notOnBallot":569,"waiting":747}; jerseys 854; talk reached 100% of careers
+  ladder 0.333 0.414 0.473 0.547 0.620 0.681 0.756 0.840 0.888 0.966; smallest step 0.048
+  deciles 0.34 0.59 0.90 1.00 1.00 1.00 1.00 1.00 1.00 1.00; cuts 0.60 0.52 0.39 0.29 0.23 0.20 0.17 0.15 0.13; smallest cut 0.130
+  misses: iff 0, outcome 0, table [], offset 0, promise 0/969, draws 0, notSame 0, sides 0, talk 0+0, jersey 0
+  talk timing: talks a career, median 1; first talk at 36; career ends at 38; non finite scores 0
+  board loop: 0 careers a policy, 0 crashed; talks answered one more year 0; identity misses 0
+  ends: retire now 0, talk farewells 0, deck farewells 0, misses 0
+  once: 0 offseasons with the talk (0 asked mid-summer, 0 after a banned year), 0 offered a retirement card; listed ids seen 0, unseen [nbaB_retireHealthy,nbaB_farewellTour], farewell cards not listed [] (decks probed on 0 careers)
+  seek: 0 talks caught in the board loop, 0 forged summers on a deck retirement card, 0 landed on it with no hold-out (at card 1 0, at a later card 0), 0 with the board's
+  jersey (deck): 0 recorded, 0 at a club other than the one with most seasons, 0 misnamed; synthetic 0, 0 missed; wait answers 0, 0 wrote a club
+  era: verified from the Class of 2025; {"boundary":{"below":100,"above":100}}; misses 0
+  16 never below: table misses []; 0 of 2000 careers lower on 2; 2000 moved up, 319 up a verdict tier, 54 newly in the Hall
+  19 (b) Hall share 31.5 -> 34.2 percent; legacy score median 337 -> 361, mean 462.5 -> 507.6 (points paid)
+     by position: PG 32.3 -> 36.5, SG 31.5 -> 34.0, SF 33.3 -> 35.8, PF 32.0 -> 34.0, C 28.5 -> 30.8
+  15 (d) calibration 2 as recorded: the table and the rules equal the recording; 0 of 20 recorded saves are told something else on 2 (4 of them with a standout)
+  15 (e) calibration 3 as recorded: the table and the rules equal the recording; 0 of 20 recorded saves are told something else on 3 (4 of them with a standout)
+  17 (a) marks: 12 standout cells; at or over from, pooled 9.71 percent (band 7.98 to 12.65), cells out of 4.8 to 13.8: []; at or over to, pooled 1.25 percent (band 0.00 to 2.46)
+  17 (b) half rule and ledger: 0 misses []
+     ramps (width in seasons at the from mark's own rate, to over the median): PG pts 4.5s x1.75, PG ast 5.0s x1.75, SG pts 4.1s x1.66, SG reb 4.0s x1.61, SG ast 3.5s x1.63, SF pts 4.6s x1.68, SF reb 2.4s x1.42, SF ast 4.4s x1.85, PF pts 3.4s x1.56, PF reb 3.9s x1.58, C pts 3.5s x1.64, C reb 3.1s x1.56
+  17 (c) outcome: top 5 percent by family, Hall share on 1 > on 2: PG pts 100>100, PG ast 65>80, SG pts 95>100, SG reb 95>95, SG ast 100>100, SF pts 95>100, SF reb 90>100, SF ast 90>100, PF pts 100>100, PF reb 90>95, C pts 95>100, C reb 95>95
+     pooled over the cells under 90 percent on 1: 13 -> 16 of 20 careers, a gain of 15.0 points (needs 6.3); over the first ballot line (650) on 2 and not on 1: 54 careers (6 of them newly in the Hall)
+     the standout's own part, every cell: 224 in with the standout taken out, 233 with it, of 240, a gain of 3.8 points (needs 2.3)
+  17 (d) cap: 0 of 2000 careers off the restated score on 2; the standout paid on 329
+  19 (a) base: median base credit PG 20.6 (19.5 to 21.7), SG 22.3 (21.8 to 22.8), SF 21.6 (21.2 to 23.2), PF 20.6 (19.9 to 21.0), C 18.6 (18.0 to 18.7); misses []
+  19 (c) words: example PG ast 7368 to 13700: +300 on 2, +0 on 1; card lines off 0 of 4000 records (287 name a standout, 42 had one worth under 30 points and stay quiet); longest line the table can print 177 characters (budget 200); misses []
+  18 anchors: 14 men in 14 rows ({"first":10,"later":2,"never":2} men on the main ballot, 0 by a committee, printed apart); the majority call is first from a score of 543
+     what the agreement's controls can reach here: a real never or later in the books reading 1, and the band with every push tripled breaks (standoutbig can fire); agreeing on 2 by the push alone 0, and the band with every push switched off holds (standoutgone CANNOT fire)
+     nba-reb-1 C reb real first: raw 1565 first > 1955 first; books 1548 first > 1848 first
+     nba-reb-2 C reb real first: raw 2486 first > 2876 first; books 2481 first > 2781 first
+     nba-reb-3 C reb real first: raw 2649 first > 3039 first; books 2654 first > 3044 first
+     nba-reb-4 PF reb real first: raw 575 first > 965 first; books 563 first > 863 first
+     nba-reb-5 PF reb real first: raw 1220 first > 1610 first; books 1211 first > 1511 first
+     nba-ast-1 PG ast real first: raw 726 first > 1116 first; books 720 first > 1020 first
+     nba-ast-2 PG ast real first: raw 576 first > 715 first; books 581 first > 881 first
+     nba-ast-3 PG ast real first: raw 830 first > 830 first; books 844 first > 1144 first
+     nba-ast-4 PG ast real never: raw 165 never > 165 never; books 175 never > 475 never
+     nba-ast-5 PG ast real first: raw 1835 first > 1835 first; books 1850 first > 2150 first
+     nba-reb-6 C reb real first: raw 698 first > 698 first; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nba-reb-7 C reb real later: raw 146 never > 146 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nba-reb-8 C reb real later: raw 161 never > 161 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     nba-reb-9 PF reb real never: raw 223 never > 475 never; books none > none (raw only: his position does not carry the family, or he is not off a list)
+     agreement, in or out and exact ballot, calibration 1 > 2: raw 12 > 12 and 12 > 12 of 14; books 10 > 10 and 10 > 10 of 10; decisions the anchors made: []
+     moved past his real ballot by calibration 2 (in for a real never, first for a real later, and read lower on 1), must be none: raw [], books []
+  15 (c) calibration rule: 0 misses over 13 cases and 2000 careers; engine careers stamped 2000
+  20 board stamp: 0 board careers retired, 0 stamped 3, 0 scored on another calibration
+  15 v1: 20 recorded saves (base 8fe82a4d), 0 read differently today; 0 of 2000 engine careers off the Round 123 formula on calibration 1
+  ok   crashes: 0 crashed of 2000
+  ok   iff: 0 disagree with the engine's own legacyOf, 684 inducted
+  ok   outcome: 0 careers outside the Hall with the wrong outcome; 569 off the ballot, 747 on it, 0 early fall offs
+  ok   table: rules off the audit table: [], 0 careers on the wrong first class
+  ok   rises: smallest of the nine decile cuts 0.130 (needs 0.06), smallest ladder step 0.048 (needs over 0.015)
+  ok   promise: 0 of 969 promised first ballots missed
+  ok   keyed: 0 Math.random draws, 0 records that changed on a second run
+  ok   sides: 0 ballots on the wrong side of a rule
+  ok   talk: 0 talks off the rule, 0 before the age, reached 100.0 percent (needs 70)
+  ok   answers: 0 answers that did not do what the button says; answered {"retireNow":500,"oneMore":500,"farewell":500}
+  ok   jersey: 0 jerseys off the rule or misnamed, 0 named by a bare club id, 854 retired
+  ok   v1replay: 0 readings of 20 recorded saves differ from the version 1 recording
+  ok   v2replay: calibration 2 against its recording: the table and the rules equal, 0 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 3)
+  ok   v3replay: calibration 3 against its recording: the table and the rules equal, 0 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 4)
+  ok   v1formula: 0 of 2000 engine careers score off the Round 123 formula on calibration 1
+  ok   calrule: 0 readings off the calibration rule; 2000 of 2000 engine careers stamped
+  ok   neverbelow: calibration 2 drops or changes [] of calibration 1; 0 of 2000 careers score lower, lose a tier or leave the Hall on 2 (2000 moved up)
+  ok   marks: at or over from: pooled 9.71 percent, 0 cells out of band []; at or over to: pooled 1.25 percent
+  ok   halfrule: 0 cells off the half rule, the ledger's marks or the ramp floor []
+  ok   standoutgain: top 5 percent by family: 13 -> 16 of 20 in the Hall, a gain of 15.0 points (needs 6.3); owed to the standout alone 3.8 points (needs 2.3)
+  ok   standoutcap: 0 careers off the restated score on 2 (one family, capped); the standout paid on 329
+  ok   base: 0 base misses []
+  ok   words: 0 misses in the rule, the example or the card []; 0 card lines off
+  ok   anchorshape: 0 misses in the ledger's shape []; 66 anchors in the file, sports built [mlb, nba, nhl, nfl]
+  ok   anchors: agreement on 2 against 1: raw in or out 12 > 12, exact 12 > 12; books in or out 10 > 10, exact 10 > 10 (must not fall, and must stay within two of the measured {"raw2":{"inOut":12,"exact":12,"n":14},"books2":{"inOut":10,"exact":10,"n":10},"realNotFirstInBooks":1,"pushAlone":0,"standoutbigFires":true,"standoutgoneFires":false,"read":"Calibration 1 agreed just as often (raw 12 and 12 of 14, books 10 and 10 of 10): nine of the ten list men are in on hardware either way. The one real never with a books reading (nba-ast-4) stays out on calibration 2 at 486 against a line of 500, so the full push at point guard holds, by 14 points. No decision. The two real laters (raw only) are out on both calibrations: the engine's line was set for careers half again as long."}); a real never or later in the books reading 1, agreeing by the push alone 0, the band breaks with every push tripled true, with every push off false (all four as recorded: true); moved past a real ballot by calibration 2: raw 0, books 0 (must be none)
+  ok   anchorcalls: 0 anchor readings whose majority call is not the one firstBallotChance gives []
+  ok   hallshare: Hall share 31.5 -> 34.2 percent (ceiling 38.0)
+simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)

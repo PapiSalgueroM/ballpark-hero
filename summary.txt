@@ -1,0 +1,10 @@
+tsc exit=0 58s | 
+dumps exit=0 19s | dumps: 6 row files of nhl in /tmp/rows, 6 runs in 19 s
+gen-guard exit=0 0s | calibration 2 has shipped and its block of the ledger is never written again. MARKS_OUT=<file> derives it beside the ledger (a check); MARKS_CALIBRATION=<n> measures a la
+gen exit=0 0s |  1 file changed, 414 insertions(+)
+record exit=0 17s | -rw-r--r-- 1 runner runner 49108 Oct 11 00:01 scripts/data/careerHallV3.json
+hall-nhl exit=3 3s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [halfrule])
+hall-nfl exit=3 4s | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+hall-nba exit=3 4s | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+hall-mlb exit=3 5s | simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+vitest exit=0 43s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nhl%3A the retirement talk on t
