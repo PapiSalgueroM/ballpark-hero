@@ -1,0 +1,32 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22mthe case is the one it says it is: the first press leaves the draft open with no summer run[32m 97[2mms[22m[39m
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk off: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk off: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22mexactly one row is his, and it is the man he pressed[32m 44[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22mthe rival rows are the picks the engine made, in order, each on the club its row names[32m 35[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22mNBA draft night, GM desk off: the card shows the picks the engine made[2m > [22mevery rival row carries the grade the draft screen printed for that prospect before the press[32m 37[2mms[22m[39m
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mthe rival rows are the picks the engine made, in order, each on the club its row names
+[22m[39mNBA draft night, desk on: the engine took 5 for rival clubs, the card drew 5 rival rows
+
+[90mstdout[2m | src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22m[2mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22m[2mevery rival row carries the grade the draft screen printed for that prospect before the press
+[22m[39mNBA draft night, desk on: 5 of 5 rival rows were on the draft screen before the press, each grade equal
+
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22mthe case is the one it says it is: the first press leaves the draft open with no summer run[32m 39[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22mexactly one row is his, and it is the man he pressed[32m 26[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22mthe rival rows are the picks the engine made, in order, each on the club its row names[32m 29[2mms[22m[39m
+ [32m✓[39m src/components/nba-front-office/NbaDraftNightRivals.test.tsx[2m > [22mNBA draft night, GM desk on: the card shows the picks the engine made[2m > [22mevery rival row carries the grade the draft screen printed for that prospect before the press[32m 20[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m8 passed[39m[22m[90m (8)[39m
+[2m   Start at [22m 19:57:13
+[2m   Duration [22m 2.25s[2m (transform 725ms, setup 55ms, collect 1.08s, tests 327ms, environment 335ms, prepare 129ms)[22m
+

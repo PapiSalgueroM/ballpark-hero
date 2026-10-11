@@ -1,0 +1,2 @@
+vitest-rivals exit=0 3s |    Duration  2.25s (transform 725ms, setup 55ms, collect 1.08s, tests 327ms, environment 335ms, prepare 129ms)
+tsc exit=0 48s | 

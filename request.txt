@@ -1,0 +1,2 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-rivals: node_modules/.bin/vitest run src/components/nba-front-office/NbaDraftNightRivals.test.tsx --reporter=verbose --testTimeout=300000 --hookTimeout=120000
