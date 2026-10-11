@@ -1,0 +1,28 @@
+# Reviewer us-careers, Release AV head 5ed04ae7: the area's harnesses on the final head, a control a line.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest: node_modules/.bin/vitest run src/test/usCareerTruthDigest.test.ts src/test/usSeasonSlate.test.ts src/test/usRivalLine.test.ts src/test/usRivalOldSaves.test.ts src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/usPlayoffs.test.ts src/test/usPostseasonFormat.test.ts src/test/usSeasonMlb.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonCentreEntry.test.tsx src/test/usSeasonCentreScreens.test.tsx src/test/usCareerActionConfirm.test.tsx src/lib/leagueSlate.test.ts --testTimeout=300000 --hookTimeout=300000
+rival: node scripts/simUsRivalSense.mjs
+nbasense: node scripts/simNbaAwardsSense.mjs
+nbasense-others: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+parity: node scripts/simUsBoardParity.mjs
+ledger: node scripts/simUsSeasonLedger.mjs
+ledger-mlbladder: US_LEDGER_CONTROL=mlbladder node scripts/simUsSeasonLedger.mjs
+ledger-mlbsum: US_LEDGER_CONTROL=mlbsum node scripts/simUsSeasonLedger.mjs
+ledger-nhl84: US_LEDGER_CONTROL=nhl84 node scripts/simUsSeasonLedger.mjs
+centre: node scripts/simUsSeasonCentre.mjs
+centre-sum: US_SEASON_CONTROL=sum node scripts/simUsSeasonCentre.mjs
+centre-lay: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+postseason: node scripts/simUsPostseason.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+rivalryEvents: node scripts/simCareerRivalryEvents.mjs
+hall-nfl: node scripts/simCareerHall.mjs nfl
+hall-nba: node scripts/simCareerHall.mjs nba
+hall-mlb: node scripts/simCareerHall.mjs mlb
+hall-nhl: node scripts/simCareerHall.mjs nhl
+summer-nfl-rest: SIM_SPORTS=nfl SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
+summer-nba-rest: SIM_SPORTS=nba SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
+summer-mlb-rest: SIM_SPORTS=mlb SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
+summer-nhl-rest: SIM_SPORTS=nhl SIM_SECTIONS=1,2,3,3b,4,5,7,8,9,10,11,12 node scripts/simUsCareerSummer.mjs
