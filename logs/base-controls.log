@@ -1,0 +1,5 @@
+f78037dcd
+[dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+MAIN moments control used exit=1 | Error: control refused: ",-1,[])" appears 0 times in the chunk
+MAIN moments control fixtures exit=1 | Error: control refused: the Fixtures guard appears 0 times in the chunk
+MAIN moments control label exit=1 | playSeasonMoments: 117 checks, 1 failed (control label)
