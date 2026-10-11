@@ -1,0 +1,9 @@
+tsc exit=0 57s | 
+varscreen exit=0 77s |    Duration  77.05s (transform 1.51s, setup 46ms, collect 1.95s, tests 74.39s, environment 263ms, prepare 158ms)
+varlive exit=0 3s |    Duration  3.00s (transform 1.20s, setup 44ms, collect 1.49s, tests 837ms, environment 258ms, prepare 117ms)
+ledger exit=0 0s | simCmVarLedger: all 658 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 39s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 3s | simStorageWrites: all green (owed: 12)
+simLiveScores exit=0 1s | simLiveScores: green. The scores on the strip are shaped honestly, read from the table, and the keys stay in the database.
