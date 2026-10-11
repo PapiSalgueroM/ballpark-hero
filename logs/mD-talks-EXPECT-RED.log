@@ -1,0 +1,21 @@
+MUTATION APPLIED (D): the contract talk pays 20 percent whatever the card says
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: healthy exact intended failure groups
+
+'["policy"]' !== '[]'
+
+    at equal (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerVeteranTalks.mjs:20:53)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simSoccerVeteranTalks.mjs:243:86
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '["policy"]',
+  expected: '[]',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

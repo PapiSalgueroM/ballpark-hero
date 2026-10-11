@@ -1,0 +1,47 @@
+ok   uncopied complete PR208 baseline
+ok   form boundaries
+ok   form eligibility
+ok   form purity and chronology
+ok   form projections and actual draws
+ok   neutral complete saves and RNG against actual PR208
+ok   plan choice binding and risk
+ok   plan skill caps and once-only settlement
+ok   plan interruptions and foreign targets
+ok   mentor deterministic creation and saved rows
+ok   mentor pauses graduation and moves
+ok   mentor retirement
+ok   actual injury risk
+ok   actual recorded plan growth and mentor credit
+ok   actual interruption paths
+ok   actual moves and retirement
+ok   actual Youth Mentor choice keeps old effects and RNG
+ok   repeated Youth Mentor event preserves every saved spell
+simSoccerCareerDevelopment: 18 outcome groups, 16+16 complete baseline saves/RNG, 16 form draws, 16 played plan seasons, 7 interruption paths, 0 failed
+ok   copied formEligibility defect caught only by its intended outcomes
+ok   copied formHeld defect caught only by its intended outcomes
+ok   copied formBoundary defect caught only by its intended outcomes
+ok   copied formDraw defect caught only by its intended outcomes
+ok   copied formRng defect caught only by its intended outcomes
+ok   copied trustForm defect caught only by its intended outcomes
+ok   copied sheetForm defect caught only by its intended outcomes
+ok   copied neutralDraw defect caught only by its intended outcomes
+ok   copied planPhase defect caught only by its intended outcomes
+ok   copied planBinding defect caught only by its intended outcomes
+ok   copied planConsume defect caught only by its intended outcomes
+ok   copied planOnce defect caught only by its intended outcomes
+ok   copied planRisk defect caught only by its intended outcomes
+ok   copied riskCap defect caught only by its intended outcomes
+ok   copied planGrowth defect caught only by its intended outcomes
+ok   copied planInterrupted defect caught only by its intended outcomes
+ok   copied planPause defect caught only by its intended outcomes
+ok   copied mentorRng defect caught only by its intended outcomes
+ok   copied mentorOnce defect caught only by its intended outcomes
+ok   copied mentorMinimum defect caught only by its intended outcomes
+ok   copied mentorGraduate defect caught only by its intended outcomes
+ok   copied mentorRemember defect caught only by its intended outcomes
+ok   copied mentorMove defect caught only by its intended outcomes
+ok   copied mentorRetire defect caught only by its intended outcomes
+ok   copied mentorValid defect caught only by its intended outcomes
+ok   copied mentorRepair defect caught only by its intended outcomes
+ok   copied mentorRecord defect caught only by its intended outcomes
+simSoccerCareerDevelopment: healthy outcomes passed, 27 effective controls caught

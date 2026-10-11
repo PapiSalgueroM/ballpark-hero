@@ -1,0 +1,766 @@
+PASS engine baseline
+PASS reader baseline
+PASS saved markup
+PASS missing markup
+PASS actual campaign baseline
+PASS actual campaign markup
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+PASS engine baseline
+PASS reader baseline
+FAIL saved markup: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 2',
+    matches: [
+      {
+...
+        round: 'Quarter-final, leg 1',
++       score: '3-1'
+-       score: '2-1'
+      },
+      {
+        extraTime: null,
+        home: 'Away',
+        note: '2-3 on aggregate',
+...
+        round: 'Quarter-final, leg 2',
++       score: '1-2'
+-       score: '0-2'
+      }
+    ],
+    missing: false,
+    name: 'Champions League',
+    result: 'Quarter-final'
+
+PASS missing markup
+PASS actual campaign baseline
+FAIL actual campaign markup: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 5',
+    matches: [
+      {
+...
+        round: 'League phase, game 1',
++       score: '4-0'
+-       score: '3-0'
+      },
+      {
+        extraTime: null,
+        home: 'Away',
+        note: null,
+...
+        round: 'League phase, game 2',
++       score: '3-0'
+-       score: '2-0'
+      },
+      {
+        extraTime: null,
+        home: 'Home',
+        note: null,
+...
+        round: 'League phase, game 3',
++       score: '5-0'
+-       score: '4-0'
+      },
+      {
+        extraTime: null,
+        home: 'Away',
+        note: null,
+...
+        round: 'League phase, game 4',
++       score: '1-0'
+-       score: '0-0'
+      },
+      {
+        extraTime: null,
+        home: 'Home',
+        note: null,
+...
+        round: 'League phase, game 5',
++       score: '3-0'
+-       score: '2-0'
+      },
+      {
+        extraTime: null,
+        home: 'Away',
+        note: null,
+...
+        round: 'League phase, game 6',
++       score: '2-0'
+-       score: '1-0'
+      },
+      {
+        extraTime: null,
+        home: 'Home',
+        note: null,
+...
+        round: 'League phase, game 7',
++       score: '6-0'
+-       score: '5-0'
+      },
+      {
+        extraTime: null,
+        home: 'Away',
+        note: null,
+...
+        round: 'League phase, game 8',
++       score: '3-0'
+-       score: '2-0'
+      },
+      {
+        extraTime: null,
+        home: 'Home',
+        note: null,
+...
+        round: 'Round of 16, leg 1',
++       score: '2-1'
+-       score: '1-1'
+      },
+      {
+        extraTime: null,
+        home: 'Away',
+        note: '3-2 on aggregate',
+...
+        round: 'Round of 16, leg 2',
++       score: '3-1'
+-       score: '2-1'
+      },
+      {
+        extraTime: null,
+        home: 'Home',
+        note: null,
+...
+        round: 'Quarter-final, leg 1',
++       score: '2-0'
+-       score: '1-0'
+      },
+      {
+        extraTime: null,
+        home: 'Away',
+        note: '2-1 on aggregate',
+...
+        round: 'Quarter-final, leg 2',
++       score: '2-1'
+-       score: '1-1'
+      },
+      {
+        extraTime: null,
+        home: 'Home',
+        note: null,
+...
+        round: 'Semi-final, leg 1',
++       score: '2-1'
+-       score: '1-1'
+      },
+      {
+        extraTime: null,
+        home: 'Away',
+        note: '7-1 on aggregate',
+...
+        round: 'Semi-final, leg 2',
++       score: '7-0'
+-       score: '6-0'
+      },
+      {
+        extraTime: 'Goals in extra time: 1-0 (included in the score).',
+        home: null,
+        note: '1-0 on aggregate · After extra time',
+...
+        round: 'Final',
++       score: '2-0'
+-       score: '1-0'
+      }
+    ],
+    missing: false,
+    name: 'Champions League',
+    result: 'Winner'
+
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+CONTROL FIRED(score): saved markup, actual campaign markup
+PASS engine baseline
+PASS reader baseline
+FAIL saved markup: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 2',
+    matches: [
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Barcelona',
+        playerGoals: 'Your goals in this game: 1',
+        round: 'Quarter-final, leg 1',
+        score: '2-1'
+      },
+      {
+...
+        note: '2-3 on aggregate',
++       opponent: 'A wrong opponent',
+-       opponent: 'Barcelona',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Quarter-final, leg 2',
+        score: '0-2'
+      }
+    ],
+
+PASS missing markup
+PASS actual campaign baseline
+FAIL actual campaign markup: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 5',
+    matches: [
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Liverpool',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'League phase, game 1',
+        score: '3-0'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Dortmund',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'League phase, game 2',
+        score: '2-0'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Chelsea',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'League phase, game 3',
+        score: '4-0'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Benfica',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'League phase, game 4',
+        score: '0-0'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'PSG',
+        playerGoals: 'Your goals in this game: 2',
+        round: 'League phase, game 5',
+        score: '2-0'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Napoli',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'League phase, game 6',
+        score: '1-0'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Newcastle',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'League phase, game 7',
+        score: '5-0'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Barcelona',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'League phase, game 8',
+        score: '2-0'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Juventus',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Round of 16, leg 1',
+        score: '1-1'
+      },
+      {
+...
+        note: '3-2 on aggregate',
++       opponent: 'A wrong opponent',
+-       opponent: 'Juventus',
+        playerGoals: 'Your goals in this game: 2',
+        round: 'Round of 16, leg 2',
+        score: '2-1'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Real Madrid',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Quarter-final, leg 1',
+        score: '1-0'
+      },
+      {
+...
+        note: '2-1 on aggregate',
++       opponent: 'A wrong opponent',
+-       opponent: 'Real Madrid',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Quarter-final, leg 2',
+        score: '1-1'
+      },
+      {
+...
+        note: null,
++       opponent: 'A wrong opponent',
+-       opponent: 'Inter Milan',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Semi-final, leg 1',
+        score: '1-1'
+      },
+      {
+...
+        note: '7-1 on aggregate',
++       opponent: 'A wrong opponent',
+-       opponent: 'Inter Milan',
+        playerGoals: 'Your goals in this game: 1',
+        round: 'Semi-final, leg 2',
+        score: '6-0'
+      },
+      {
+...
+        note: '1-0 on aggregate · After extra time',
++       opponent: 'A wrong opponent',
+-       opponent: 'Arsenal',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Final',
+        score: '1-0'
+      }
+    ],
+
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+CONTROL FIRED(opponent): saved markup, actual campaign markup
+PASS engine baseline
+PASS reader baseline
+FAIL saved markup: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 1',
+    matches: [
+      {
+        extraTime: null,
++       home: 'Away',
+-       home: null,
+        note: null,
+        opponent: 'Barcelona',
+        playerGoals: 'Your goals in this game: 1',
+        round: 'Final',
+        score: '2-0'
+
+PASS missing markup
+PASS actual campaign baseline
+FAIL actual campaign markup: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 5',
+    matches: [
+      {
+...
+        extraTime: 'Goals in extra time: 1-0 (included in the score).',
++       home: 'Away',
+-       home: null,
+        note: '1-0 on aggregate · After extra time',
+        opponent: 'Arsenal',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Final',
+        score: '1-0'
+
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+CONTROL FIRED(venue): saved markup, actual campaign markup
+PASS engine baseline
+PASS reader baseline
+FAIL saved markup: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 2',
+    matches: [
+      {
+...
+        home: 'Away',
++       note: null,
+-       note: '2-3 on aggregate',
+        opponent: 'Barcelona',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Quarter-final, leg 2',
+        score: '0-2'
+      }
+
+PASS missing markup
+PASS actual campaign baseline
+FAIL actual campaign markup: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 5',
+    matches: [
+      {
+...
+        home: 'Away',
++       note: null,
+-       note: '3-2 on aggregate',
+        opponent: 'Juventus',
+        playerGoals: 'Your goals in this game: 2',
+        round: 'Round of 16, leg 2',
+        score: '2-1'
+      },
+...
+        home: 'Away',
++       note: null,
+-       note: '2-1 on aggregate',
+        opponent: 'Real Madrid',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Quarter-final, leg 2',
+        score: '1-1'
+      },
+...
+        home: 'Away',
++       note: null,
+-       note: '7-1 on aggregate',
+        opponent: 'Inter Milan',
+        playerGoals: 'Your goals in this game: 1',
+        round: 'Semi-final, leg 2',
+        score: '6-0'
+      },
+...
+        home: null,
++       note: null,
+-       note: '1-0 on aggregate · After extra time',
+        opponent: 'Arsenal',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Final',
+        score: '1-0'
+      }
+
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+CONTROL FIRED(settlement): saved markup, actual campaign markup
+PASS engine baseline
+FAIL reader baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      id: 'domestic',
+      matches: [
+        {
+...
+      id: 'club',
++     matches: [],
+-     matches: [
+-       {
+-         goalsAgainst: 1,
+-         goalsFor: 0,
+-         home: true,
+-         opponent: 'Juventus',
+-         playerGoals: 0,
+-         round: 'League phase, game 1'
+-       },
+-       {
+-         goalsAgainst: 1,
+-         goalsFor: 1,
+-         home: false,
+-         opponent: 'Dortmund',
+-         playerGoals: 1,
+-         round: 'League phase, game 2'
+-       }
+-     ],
+      name: 'Champions League',
+      note: undefined,
+      result: 'League Phase'
+    }
+  ]
+
+FAIL saved markup: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 2',
++   matches: [],
++   missing: true,
+-   matches: [
+-     {
+-       extraTime: null,
+-       home: 'Home',
+-       note: null,
+-       opponent: 'Juventus',
+-       playerGoals: 'Your goals in this game: 0',
+-       round: 'League phase, game 1',
+-       score: '0-1'
+-     },
+-     {
+-       extraTime: null,
+-       home: 'Away',
+-       note: null,
+-       opponent: 'Dortmund',
+-       playerGoals: 'Your goals in this game: 1',
+-       round: 'League phase, game 2',
+-       score: '1-1'
+-     }
+-   ],
+-   missing: false,
+    name: 'Champions League',
+    result: 'League Phase'
+  }
+
+PASS missing markup
+PASS actual campaign baseline
+FAIL actual campaign markup: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  {
+    format: null,
+    goals: 'Your saved campaign goals: 5',
+    matches: [
+      {
+...
+        note: null,
+-       opponent: 'Liverpool',
+-       playerGoals: 'Your goals in this game: 0',
+-       round: 'League phase, game 1',
+-       score: '3-0'
+-     },
+-     {
+-       extraTime: null,
+-       home: 'Away',
+-       note: null,
+-       opponent: 'Dortmund',
+-       playerGoals: 'Your goals in this game: 0',
+-       round: 'League phase, game 2',
+-       score: '2-0'
+-     },
+-     {
+-       extraTime: null,
+-       home: 'Home',
+-       note: null,
+-       opponent: 'Chelsea',
+-       playerGoals: 'Your goals in this game: 0',
+-       round: 'League phase, game 3',
+-       score: '4-0'
+-     },
+-     {
+-       extraTime: null,
+-       home: 'Away',
+-       note: null,
+-       opponent: 'Benfica',
+-       playerGoals: 'Your goals in this game: 0',
+-       round: 'League phase, game 4',
+-       score: '0-0'
+-     },
+-     {
+-       extraTime: null,
+-       home: 'Home',
+-       note: null,
+-       opponent: 'PSG',
+-       playerGoals: 'Your goals in this game: 2',
+-       round: 'League phase, game 5',
+-       score: '2-0'
+-     },
+-     {
+-       extraTime: null,
+-       home: 'Away',
+-       note: null,
+-       opponent: 'Napoli',
+-       playerGoals: 'Your goals in this game: 0',
+-       round: 'League phase, game 6',
+-       score: '1-0'
+-     },
+-     {
+-       extraTime: null,
+-       home: 'Home',
+-       note: null,
+-       opponent: 'Newcastle',
+-       playerGoals: 'Your goals in this game: 0',
+-       round: 'League phase, game 7',
+-       score: '5-0'
+-     },
+-     {
+-       extraTime: null,
+-       home: 'Away',
+-       note: null,
+-       opponent: 'Barcelona',
+-       playerGoals: 'Your goals in this game: 0',
+-       round: 'League phase, game 8',
+-       score: '2-0'
+-     },
+-     {
+-       extraTime: null,
+-       home: 'Home',
+-       note: null,
+        opponent: 'Juventus',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Round of 16, leg 1',
+        score: '1-1'
+      },
+...
+      {
++       extraTime: null,
+-       extraTime: 'Goals in extra time: 1-0 (included in the score).',
+        home: null,
+        note: '1-0 on aggregate · After extra time',
+        opponent: 'Arsenal',
+        playerGoals: 'Your goals in this game: 0',
+        round: 'Final',
+
+PASS snapshot precedence
+PASS read boundary
+PASS winning seasons
+CONTROL FIRED(firstStage): reader baseline, saved markup, actual campaign markup
+PASS engine baseline
+FAIL reader baseline: Expected values to be strictly deep-equal:
++ actual - expected
+... Skipped lines
+
+  [
+    {
+      id: 'domestic',
+      matches: [
+        {
+...
+      id: 'club',
++     matches: [
++       {
++         goalsAgainst: 0,
++         goalsFor: 2,
++         note: undefined,
++         opponent: 'Barcelona',
++         playerGoals: 1,
++         result: 'Through',
++         round: 'Final'
++       }
++     ],
++     name: 'Champions League',
++     note: undefined,
+-     matches: [],
+-     name: 'European club cup',
+-     note: 'The match details for this season were not kept in this save.',
+      result: 'Winners'
+    }
+  ]
+
+PASS saved markup
+FAIL missing markup: Expected values to be strictly equal:
+
+false !== true
+
+PASS actual campaign baseline
+PASS actual campaign markup
+FAIL snapshot precedence: Expected values to be strictly equal:
++ actual - expected
+
++ {
++   club: 'Arsenal',
++   competition: 'Champions League',
++   isTopScorer: false,
++   matches: [
++     {
++       goalsAgainst: 1,
++       goalsFor: 2,
++       home: true,
++       leg: 1,
++       opponent: 'Barcelona',
++       playerGoals: 1,
++       round: 'QF',
++       won: true
++     },
++     {
++       aggAgainst: 3,
++       aggFor: 2,
++       decidedBy: 'aggregate',
++       goalsAgainst: 2,
++       goalsFor: 0,
++       home: false,
++       leg: 2,
++       opponent: 'Barcelona',
++       playerGoals: 0,
++       round: 'QF',
++       won: false
++     }
++   ],
++   playerGoals: 2,
++   qualified: true,
++   result: 'Quarter-final',
++   seasonYear: 2026
++ }
+- null
+
+PASS read boundary
+PASS winning seasons
+CONTROL FIRED(anchor): reader baseline, missing markup, snapshot precedence
+PASS engine baseline
+PASS reader baseline
+PASS saved markup
+PASS missing markup
+PASS actual campaign baseline
+PASS actual campaign markup
+PASS snapshot precedence
+FAIL read boundary: Expected values to be strictly deep-equal:
++ actual - expected
+
+  {
+    career: {
+      lastUCLResult: null,
++     money: 1
+    },
+    row: {
+      age: 23,
+      apps: 42,
+      assists: 9,
+
+PASS winning seasons
+CONTROL FIRED(mutation): read boundary
+Trophy campaigns: 9 groups, 24 full AR season pairs, 192 full campaign/RNG pairs, 7 effective controls; artifacts /home/runner/work/ballpark-hero/ballpark-hero/.tmp-fx/career-trophy-runs/outcomes

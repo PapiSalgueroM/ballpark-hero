@@ -1,0 +1,97 @@
+MUTATION APPLIED (C): a brief offer is paid for the drawn tier, not the club tier
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerTransferBriefPromise.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 405[2mms[22m[39m
+ [32m✓[39m src/test/soccerTransferBriefUi.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 1545[2mms[22m[39m
+ [31m❯[39m src/test/soccerCareerTransferBrief.test.ts [2m([22m[2m54 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 166[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22msaves and cancels one current-window choice without mutating its input or drawing[32m 14[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mranks minutes by minimum then maximum, retains tied clubs and uses zero seasons at the destination[32m 3[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mselects the lowest eligible tier and exact home country without widening the supplied pool[32m 3[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mpreviews all three eligible counts and baseline bands with no draws, writes or out-of-tier candidates[32m 6[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mexcludes the player club by canonical alias only in the opted pool[32m 3[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mdoes not choose a brief in phase playing[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mdoes not choose a brief in phase season_summary[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mdoes not choose a brief in phase retired[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mrejects loan and compulsory windows while retaining their complete state[32m 3[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mignores stale context field club without deleting it[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mignores stale context field seasonCount without deleting it[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mignores stale context field lastYear without deleting it[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mignores stale context field overall without deleting it[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mignores stale context field age without deleting it[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief choices and preview[2m > [22mignores stale context field nationality without deleting it[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mreloads an exact offered receipt semantically regardless of object key order[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects unknown version and leaves all malformed saved bytes alone[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects unknown priority and leaves all malformed saved bytes alone[32m 4[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects extra context key and leaves all malformed saved bytes alone[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects missing offer wage and leaves all malformed saved bytes alone[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects non-finite wage and leaves all malformed saved bytes alone[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects negative fee and leaves all malformed saved bytes alone[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects invalid contract years and leaves all malformed saved bytes alone[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects unexpected offer key and leaves all malformed saved bytes alone[32m 6[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects unexpected club key and leaves all malformed saved bytes alone[32m 3[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects loan offer and leaves all malformed saved bytes alone[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects unknown status and leaves all malformed saved bytes alone[32m 5[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects impossible matching count and leaves all malformed saved bytes alone[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects offered without matching clubs and leaves all malformed saved bytes alone[32m 4[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects offered without projection and leaves all malformed saved bytes alone[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects wrong projection and leaves all malformed saved bytes alone[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects no-match with offer and leaves all malformed saved bytes alone[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects no-interest with offer and leaves all malformed saved bytes alone[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects missing result and leaves all malformed saved bytes alone[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects a result whose actual request offer differs in wage[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects a result whose actual request offer differs in club[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects a result whose actual request offer differs in flags[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects a result whose actual request offer differs in absent[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief result validation[2m > [22mrejects duplicate own-club and foreign-home offers even when both snapshots match[32m 1[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mpreserves the entire old page result and draw vector for absent input[32m 12[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mpreserves the entire old page result and draw vector for invalid input[32m 9[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mpreserves the entire old page result and draw vector for stale input[32m 8[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mpreserves the entire old page result and draw vector for loan input[32m 6[2mms[22m[39m
+[31m   [31m×[31m Agent destination brief actual requests[2m > [22muses actual eligible minutes destinations with the seven existing offer draws[39m[32m 13[2mms[22m[39m
+[31m     → expected 42500 to be 27500 // Object.is equality[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22muses actual eligible level destinations with the seven existing offer draws[32m 3[2mms[22m[39m
+[31m   [31m×[31m Agent destination brief actual requests[2m > [22muses actual eligible home destinations with the seven existing offer draws[39m[32m 3[2mms[22m[39m
+[31m     → expected 42500 to be 27500 // Object.is equality[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mretains a declined request in the window, then reuses it after reload without a second roll[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mrecords a successful request with no matching home club, without inventing a foreign alternative[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mreuses a complete held offer without changing terms, drawing or reviving it in a different window[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mclears a valid owned brief on sign and preserves all absent or invalid behavior[32m 3[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mclears a valid owned brief on loan and preserves all absent or invalid behavior[32m 3[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mclears a valid owned brief on stay and preserves all absent or invalid behavior[32m 2[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mclears a valid owned brief on extend and preserves all absent or invalid behavior[32m 6[2mms[22m[39m
+   [32m✓[39m Agent destination brief actual requests[2m > [22mkeeps the brief when a loan acceptance is refused by the existing loan guard[32m 3[2mms[22m[39m
+ [32m✓[39m src/test/soccerTransferBriefPage.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 719[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerCareerTransferBrief.test.ts[2m > [22mAgent destination brief actual requests[2m > [22muses actual eligible minutes destinations with the seven existing offer draws
+[41m[1m FAIL [22m[49m src/test/soccerCareerTransferBrief.test.ts[2m > [22mAgent destination brief actual requests[2m > [22muses actual eligible home destinations with the seven existing offer draws
+[31m[1mAssertionError[22m: expected 42500 to be 27500 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 27500[39m
+[31m+ 42500[39m
+
+[36m [2m❯[22m src/test/soccerCareerTransferBrief.test.ts:[2m239:30[22m[39m
+    [90m237| [39m    [34mexpect[39m(held[33m.[39mstatus)[33m.[39m[34mtoBe[39m([32m'offered'[39m)[33m;[39m
+    [90m238| [39m    expect(held.offer!.club).toEqual(priority === 'level' ? top : home…
+    [90m239| [39m    expect(held.offer!.wage).toBe(priority === 'level' ? 42500 : 27500…
+    [90m   | [39m                             [31m^[39m
+    [90m240| [39m    [34mexpect[39m(held[33m.[39moffer[33m![39m[33m.[39mtransferFee)[33m.[39m[34mtoBe[39m([34m36.1[39m)[33m;[39m
+    [90m241| [39m    [34mexpect[39m(held[33m.[39moffer[33m![39m[33m.[39mcontractYears)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m86 passed[39m[22m[90m (88)[39m
+[2m   Start at [22m 11:38:28
+[2m   Duration [22m 4.27s[2m (transform 1.97s, setup 251ms, collect 5.63s, tests 2.83s, environment 1.76s, prepare 486ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerTransferBrief.test.ts,title=src/test/soccerCareerTransferBrief.test.ts > Agent destination brief actual requests > uses actual eligible minutes destinations with the seven existing offer draws,line=239,column=30::AssertionError: expected 42500 to be 27500 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 27500%0A+ 42500%0A%0A ❯ src/test/soccerCareerTransferBrief.test.ts:239:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerCareerTransferBrief.test.ts,title=src/test/soccerCareerTransferBrief.test.ts > Agent destination brief actual requests > uses actual eligible home destinations with the seven existing offer draws,line=239,column=30::AssertionError: expected 42500 to be 27500 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 27500%0A+ 42500%0A%0A ❯ src/test/soccerCareerTransferBrief.test.ts:239:30%0A%0A
