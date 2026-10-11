@@ -1,0 +1,14 @@
+#!serve
+#!playwright
+#!serial
+walkEraWild: node .rc/x/walkEraWild.mjs
+playWilderness: ENGINES=chromium node scripts/playWilderness.mjs
+playWilderness-nooffers: WILDERNESS_CONTROL=nooffers ENGINES=chromium node scripts/playWilderness.mjs
+playEra2005: ENGINES=chromium node scripts/playEra2005.mjs
+playEra2010: ENGINES=chromium node scripts/playEra2010.mjs
+playEra2015: ENGINES=chromium node scripts/playEra2015.mjs
+playEra2020: ENGINES=chromium node scripts/playEra2020.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+playClubManager: ENGINES=chromium node scripts/playClubManager.mjs
+walkEraWild-base: bash .rc/x/walkBase.sh 94647e74
