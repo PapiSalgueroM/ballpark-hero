@@ -1,0 +1,12 @@
+lay-print-cmp exit=0 20s | lay record: a fresh print on this head is byte equal to the committed file
+lay-compare exit=0 20s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1300's playoff lay, in no gate)
+lay-control exit=1 20s | simUsSeasonCentre digest compare: 11 digests, 10 moved (control lay)
+law-compare exit=3 19s | simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+seam-compare exit=3 19s | simUsSeasonCentre digest compare: NOT COMPARED, 9 bundled files are not the ones the record was made on (exit 3: this is no red of the seam)
+parity exit=0 38s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+sense-plain exit=0 101s | simNbaAwardsSense: 169 checks, 0 failed (full size), 101s
+sense-others-head exit=1 102s | simNbaAwardsSense: 172 checks, 2 failed (full size), 101s
+sense-others-main exit=0 102s | simNbaAwardsSense: 174 checks, 0 failed (full size), 101s
+sense-others-after1226 exit=1 102s | simNbaAwardsSense: 174 checks, 2 failed (full size), 101s
+sense-others-after1227 exit=1 102s | simNbaAwardsSense: 172 checks, 2 failed (full size), 101s
+sense-record-others exit=0 103s |  1 file changed, 11 insertions(+), 11 deletions(-)

@@ -1,0 +1,14 @@
+# Release AV proof, the recordings: the lay record is what the harness prints on this head; the three receipts; the other sports baseline of simNbaAwardsSense before and after
+#!serial
+lay-print-cmp: US_SEASON_DIGEST=print US_SEASON_DIGEST_RECEIPT=lay US_SEASON_DIGEST_COMMIT=5db0724bd380cb8fbfc4f8777641cbb6c1c7b7bf US_SEASON_DIGEST_OUT=$RC_OUT/usSeasonLayDigest.json node scripts/simUsSeasonCentre.mjs && cmp $RC_OUT/usSeasonLayDigest.json scripts/data/usSeasonLayDigest.json && echo "lay record: a fresh print on this head is byte equal to the committed file"
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+lay-control: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+law-compare: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+parity: node scripts/simUsBoardParity.mjs
+sense-plain: node scripts/simNbaAwardsSense.mjs
+sense-others-head: SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-others-main: git worktree add -q --detach /tmp/s0 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/s0/node_modules && cd /tmp/s0 && SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-others-after1226: git worktree add -q --detach /tmp/s1 803afd3e && ln -s "$PWD/node_modules" /tmp/s1/node_modules && cd /tmp/s1 && SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-others-after1227: git worktree add -q --detach /tmp/s2 a1e4f86b251c545aa771a7ceb3efacc0fdedfd8e && ln -s "$PWD/node_modules" /tmp/s2/node_modules && cd /tmp/s2 && SENSE_PROVE_OTHERS=1 node scripts/simNbaAwardsSense.mjs
+sense-record-others: node scripts/simNbaAwardsSense.mjs --record-others; s=$?; cp scripts/data/nbaAwardsSenseBaseline.json $RC_OUT/nbaAwardsSenseBaseline.json; git diff --stat -- scripts/data/nbaAwardsSenseBaseline.json | tail -1; git checkout -q -- scripts/data/nbaAwardsSenseBaseline.json; exit $s
