@@ -1,0 +1,4 @@
+livemotion exit=0 55s |    Duration  54.52s (transform 3.79s, setup 664ms, collect 8.89s, tests 50.95s, environment 2.57s, prepare 865ms)
+tsc exit=0 71s | 
+varscreen exit=0 78s |    Duration  77.80s (transform 2.78s, setup 110ms, collect 3.85s, tests 72.64s, environment 467ms, prepare 162ms)
+lm-plain exit=0 40s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
