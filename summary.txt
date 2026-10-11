@@ -1,0 +1,5 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+agent-outcomes exit=0 10s | PASS agent review outcomes: {"mode":"outcomes","groups":8,"originalWholePairs":120,"readVectors":120,"sourceControls":7,"branches":4,"sourceHeld":true}
+agent-native exit=2 332s | Node.js v24.21.0
+extract exit=0 0s | failed cases: 3 320-cousin phase=random_events wheel=UNSEEN The Agent Poach event=Party Scandal! ; 390-cousin phase=random_events wheel=UNSEEN The Agent Poach event=Party

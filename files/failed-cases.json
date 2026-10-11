@@ -1,0 +1,305 @@
+[
+  {
+    "id": "320-cousin",
+    "checks": 127,
+    "error": "AssertionError [ERR_ASSERTION]: 320-cousin: One actual queued continuation for random_events |     at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:25:26) |     at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:4",
+    "phase": "random_events",
+    "age": 32,
+    "seasons": 5,
+    "agentId": "cousin",
+    "chanceWheel": {
+      "title": "The Agent Poach",
+      "chance": 0.5,
+      "roll": 0.772153919795528,
+      "hit": "Your agent finds interest",
+      "miss": "Your agent goes quiet",
+      "result": false,
+      "seen": false
+    },
+    "pendingEvents": [
+      {
+        "id": 13,
+        "title": "Party Scandal!",
+        "choices": [
+          "Apologize publicly :: Popularity -3, Manager relationship saved",
+          "Deny it :: 50/50: believed or more backlash",
+          "Laugh it off on social media :: Popularity +5 with fans, -5 with manager"
+        ]
+      }
+    ],
+    "eventTitle": "Party Scandal!",
+    "lastEvents": [
+      "📱 🏋️ Post training video: gained 0.1M followers!",
+      "🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year!",
+      "🎺 The mariachi band followed him for three days. Prank war: won",
+      "🤝 Told your agent about the napkin. The silence on the phone lasted a while"
+    ],
+    "actions": [
+      {
+        "name": "award-reveal-1",
+        "op": "reveal",
+        "from": "ballon_dor",
+        "to": "ballon_dor"
+      },
+      {
+        "name": "finish-ballon_dor-1",
+        "op": "ballon_dor",
+        "seed": 901,
+        "argument": null,
+        "from": "ballon_dor",
+        "to": "social_media_action"
+      },
+      {
+        "name": "social-choice-2",
+        "op": "social-choice",
+        "seed": 802,
+        "argument": "training_video",
+        "from": "social_media_action",
+        "to": "social_media_action"
+      },
+      {
+        "name": "finish-social_media_action-2",
+        "op": "social_media_action",
+        "seed": 902,
+        "argument": null,
+        "from": "social_media_action",
+        "to": "random_events"
+      },
+      {
+        "name": "finish-random_events-3",
+        "op": "random_events",
+        "seed": 903,
+        "argument": 0,
+        "from": "random_events",
+        "to": "random_events"
+      },
+      {
+        "name": "finish-random_events-4",
+        "op": "random_events",
+        "seed": 904,
+        "argument": 0,
+        "from": "random_events",
+        "to": "random_events"
+      }
+    ],
+    "errors": [],
+    "failureBody": {
+      "y": 388,
+      "inline": "",
+      "computed": "hidden",
+      "locked": "1",
+      "declarations": [
+        {
+          "name": "pointer-events",
+          "value": "none",
+          "priority": ""
+        }
+      ],
+      "pointerEvents": "none",
+      "marginRight": "0px",
+      "position": "relative"
+    }
+  },
+  {
+    "id": "390-cousin",
+    "checks": 127,
+    "error": "AssertionError [ERR_ASSERTION]: 390-cousin: One actual queued continuation for random_events |     at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:25:26) |     at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:4",
+    "phase": "random_events",
+    "age": 32,
+    "seasons": 5,
+    "agentId": "cousin",
+    "chanceWheel": {
+      "title": "The Agent Poach",
+      "chance": 0.5,
+      "roll": 0.772153919795528,
+      "hit": "Your agent finds interest",
+      "miss": "Your agent goes quiet",
+      "result": false,
+      "seen": false
+    },
+    "pendingEvents": [
+      {
+        "id": 13,
+        "title": "Party Scandal!",
+        "choices": [
+          "Apologize publicly :: Popularity -3, Manager relationship saved",
+          "Deny it :: 50/50: believed or more backlash",
+          "Laugh it off on social media :: Popularity +5 with fans, -5 with manager"
+        ]
+      }
+    ],
+    "eventTitle": "Party Scandal!",
+    "lastEvents": [
+      "📱 🏋️ Post training video: gained 0.1M followers!",
+      "🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year!",
+      "🎺 The mariachi band followed him for three days. Prank war: won",
+      "🤝 Told your agent about the napkin. The silence on the phone lasted a while"
+    ],
+    "actions": [
+      {
+        "name": "award-reveal-1",
+        "op": "reveal",
+        "from": "ballon_dor",
+        "to": "ballon_dor"
+      },
+      {
+        "name": "finish-ballon_dor-1",
+        "op": "ballon_dor",
+        "seed": 901,
+        "argument": null,
+        "from": "ballon_dor",
+        "to": "social_media_action"
+      },
+      {
+        "name": "social-choice-2",
+        "op": "social-choice",
+        "seed": 802,
+        "argument": "training_video",
+        "from": "social_media_action",
+        "to": "social_media_action"
+      },
+      {
+        "name": "finish-social_media_action-2",
+        "op": "social_media_action",
+        "seed": 902,
+        "argument": null,
+        "from": "social_media_action",
+        "to": "random_events"
+      },
+      {
+        "name": "finish-random_events-3",
+        "op": "random_events",
+        "seed": 903,
+        "argument": 0,
+        "from": "random_events",
+        "to": "random_events"
+      },
+      {
+        "name": "finish-random_events-4",
+        "op": "random_events",
+        "seed": 904,
+        "argument": 0,
+        "from": "random_events",
+        "to": "random_events"
+      }
+    ],
+    "errors": [],
+    "failureBody": {
+      "y": 284,
+      "inline": "",
+      "computed": "hidden",
+      "locked": "1",
+      "declarations": [
+        {
+          "name": "pointer-events",
+          "value": "none",
+          "priority": ""
+        }
+      ],
+      "pointerEvents": "none",
+      "marginRight": "0px",
+      "position": "relative"
+    }
+  },
+  {
+    "id": "1280-cousin",
+    "checks": 127,
+    "error": "AssertionError [ERR_ASSERTION]: 1280-cousin: One actual queued continuation for random_events |     at check (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:25:26) |     at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerAgentReview.mjs:118:4",
+    "phase": "random_events",
+    "age": 32,
+    "seasons": 5,
+    "agentId": "cousin",
+    "chanceWheel": {
+      "title": "The Agent Poach",
+      "chance": 0.5,
+      "roll": 0.772153919795528,
+      "hit": "Your agent finds interest",
+      "miss": "Your agent goes quiet",
+      "result": false,
+      "seen": false
+    },
+    "pendingEvents": [
+      {
+        "id": 13,
+        "title": "Party Scandal!",
+        "choices": [
+          "Apologize publicly :: Popularity -3, Manager relationship saved",
+          "Deny it :: 50/50: believed or more backlash",
+          "Laugh it off on social media :: Popularity +5 with fans, -5 with manager"
+        ]
+      }
+    ],
+    "eventTitle": "Party Scandal!",
+    "lastEvents": [
+      "📱 🏋️ Post training video: gained 0.1M followers!",
+      "🏪 NEW SPONSORSHIP: Local Brand Deal, €0.5M/year!",
+      "🎺 The mariachi band followed him for three days. Prank war: won",
+      "🤝 Told your agent about the napkin. The silence on the phone lasted a while"
+    ],
+    "actions": [
+      {
+        "name": "award-reveal-1",
+        "op": "reveal",
+        "from": "ballon_dor",
+        "to": "ballon_dor"
+      },
+      {
+        "name": "finish-ballon_dor-1",
+        "op": "ballon_dor",
+        "seed": 901,
+        "argument": null,
+        "from": "ballon_dor",
+        "to": "social_media_action"
+      },
+      {
+        "name": "social-choice-2",
+        "op": "social-choice",
+        "seed": 802,
+        "argument": "training_video",
+        "from": "social_media_action",
+        "to": "social_media_action"
+      },
+      {
+        "name": "finish-social_media_action-2",
+        "op": "social_media_action",
+        "seed": 902,
+        "argument": null,
+        "from": "social_media_action",
+        "to": "random_events"
+      },
+      {
+        "name": "finish-random_events-3",
+        "op": "random_events",
+        "seed": 903,
+        "argument": 0,
+        "from": "random_events",
+        "to": "random_events"
+      },
+      {
+        "name": "finish-random_events-4",
+        "op": "random_events",
+        "seed": 904,
+        "argument": 0,
+        "from": "random_events",
+        "to": "random_events"
+      }
+    ],
+    "errors": [],
+    "failureBody": {
+      "y": 34,
+      "inline": "",
+      "computed": "hidden",
+      "locked": "1",
+      "declarations": [
+        {
+          "name": "pointer-events",
+          "value": "none",
+          "priority": ""
+        }
+      ],
+      "pointerEvents": "none",
+      "marginRight": "0px",
+      "position": "relative"
+    }
+  }
+]
