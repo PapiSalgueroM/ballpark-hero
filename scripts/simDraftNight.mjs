@@ -255,6 +255,13 @@ if (CONTROL === 'norivals') {
   }
   nbaCopy = board.replace(FROM, TO);
   if (nbaCopy === board || nbaCopy.includes(FROM)) { console.error('control cannot run: the rewrite of the NBA board changed nothing'); process.exit(2); }
+  /* The copy is run from dist/.draft-control, so an import the board makes
+     relative to its own folder is given its full path in the copy (the same
+     rewrite the four NBA rotation harnesses make in theirs). On its first
+     run this control found the copy could not load for exactly that, and
+     said so instead of calling the load error a firing. */
+  nbaCopy = nbaCopy.replace(/from '\.\/([^']+)'/g, "from '@/components/nba-front-office/$1'");
+  if (/from '\.\.?\//.test(nbaCopy)) { console.error('control cannot run: the copy of the NBA board still holds an import relative to its own folder'); process.exit(2); }
 }
 
 /* ---------- 5. The boards really use it ---------- */
