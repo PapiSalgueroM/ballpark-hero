@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+simSoccerVeteranTalks exit=0 61s | ok   five production browser fixtures including USD, all raw amounts remain EUR
+playSoccerVeteranTalks exit=0 163s | ok   strict geometry and three effective copied observation detectors
+simCareerProgramme-forwalk exit=0 74s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou
+playCareerProgramme exit=0 132s | Career programme native: 1154 checks, 21/21 completed gameplay journeys
