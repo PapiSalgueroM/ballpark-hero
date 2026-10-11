@@ -1,0 +1,6 @@
+# Release AW closing pass, C4 on 8d3f54c6: the save keeper walk with its base arm (the gate invocation), then the ruling taken back out under the harness (EXPECT exit 1, section 1 red on the sentences of the three parts)
+#!serve
+#!playwright
+#!serial
+playSaveKeeper: git fetch -q origin fb8d6811 2>/dev/null; git worktree add -q /tmp/base fb8d6811 && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
+sk-c3reverted: for f in soccerAgentReview soccerInternationalReturn soccerCareerFarewell; do git show 7c49d32c:src/lib/$f.ts > src/lib/$f.ts; done; node scripts/simSaveKeeper.mjs; s=$?; git checkout -- src/lib; test "$(git status --porcelain --untracked-files=no | wc -l)" = 0 || echo NOT-RESTORED; exit $s
