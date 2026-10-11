@@ -1,0 +1,7 @@
+simBuildYourXiFit exit=0 3s | simBuildYourXiFit: all checks green
+simQuotaHonesty exit=0 0s | simQuotaHonesty: green. When the allowance is gone, Soccer Grid says so and stops asking for retries; Build Your XI blocks the one pick, keeps the search box and never sa
+simLineupRecordPositions exit=0 4s | PASS simLineupRecordPositions
+simValidatorRefusalHold exit=0 1s | simValidatorRefusalHold: green. 9 validators run: a stored refusal waits for the records, and every failure mode fails closed.
+edge-sha exit=0 0s | 22561 supabase/functions/validate-player/index.ts
+simLineupValidatorClient exit=0 2s | simLineupValidatorClient: 55 checks passed. Only the boolean true on an ok response reads as valid; an allowance answer, a failed status, a body that is not a verdict, a 
+tsc exit=0 51s | 

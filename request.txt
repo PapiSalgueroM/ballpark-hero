@@ -1,0 +1,8 @@
+# Release AX, merge a (PR231) on 86d0466c: the type gate, PR231's own harness, the offline readers of the edge file
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simLineupRecordPositions: LINEUP_RECORD_POSITIONS_OUT="$RC_OUT/xi-proof" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLineupRecordPositions.mjs
+simBuildYourXiFit: node scripts/simBuildYourXiFit.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simValidatorRefusalHold: node scripts/simValidatorRefusalHold.mjs
+simLineupValidatorClient: node scripts/simLineupValidatorClient.mjs
+edge-sha: sha256sum supabase/functions/validate-player/index.ts && wc -c supabase/functions/validate-player/index.ts
