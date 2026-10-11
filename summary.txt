@@ -1,0 +1,5 @@
+era2015-main exit=1 13s | simEra2015: 3 failures
+era2005-main exit=1 13s | simEra2005: 1 failure
+era2010-main exit=1 13s | simEra2010: 1 failure
+era2020-main exit=1 8s | simEra2020: 5 failure(s).
+eras-main exit=1 570s | 3 FAILURES

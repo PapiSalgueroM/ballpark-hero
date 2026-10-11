@@ -1,0 +1,6 @@
+# rAV-cm-base: reviewer cm. The five era harnesses that are red on the Release AV head, run the same way on a worktree of origin/main aa564f16 with main's own copy of each harness, to see whether main is red the same way
+era2005-main: git worktree add -q --detach /tmp/e1 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/e1/node_modules && cd /tmp/e1 && node scripts/simEra2005.mjs
+era2010-main: git worktree add -q --detach /tmp/e2 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/e2/node_modules && cd /tmp/e2 && node scripts/simEra2010.mjs
+era2015-main: git worktree add -q --detach /tmp/e3 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/e3/node_modules && cd /tmp/e3 && node scripts/simEra2015.mjs
+era2020-main: git worktree add -q --detach /tmp/e4 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/e4/node_modules && cd /tmp/e4 && node scripts/simEra2020.mjs
+eras-main: git worktree add -q --detach /tmp/e5 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/e5/node_modules && cd /tmp/e5 && node scripts/simEras.mjs
