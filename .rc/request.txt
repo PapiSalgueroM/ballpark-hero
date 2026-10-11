@@ -1,0 +1,9 @@
+# Release AW: merge c (PR228), head d69a448c: its own sim and walk, and the chance wheel's walk (the 320 by 568 result line of Release AU)
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simSoccerVeteranTalks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranTalks.mjs
+playSoccerVeteranTalks: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" ENGINES=chromium NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerVeteranTalks.mjs
+simCareerProgramme-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+playCareerProgramme: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerProgramme.mjs
