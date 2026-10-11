@@ -1,0 +1,7 @@
+# REVIEW-run Round 1306, head b7943c61: old saves made by the base (c9a1f86a) carried on by the head; the default path over every league; damage; hot seat handover; a rollback
+old-A: B=$PWD/rcb-A && git worktree add -q $B c9a1f86a && mkdir -p /tmp/oA && TMPDIR=/tmp/oA node .rc/x/oldsave.mjs $B A
+old-B: B=$PWD/rcb-B && git worktree add -q $B c9a1f86a && mkdir -p /tmp/oB && TMPDIR=/tmp/oB node .rc/x/oldsave.mjs $B B
+old-C: B=$PWD/rcb-C && git worktree add -q $B c9a1f86a && mkdir -p /tmp/oC && TMPDIR=/tmp/oC node .rc/x/oldsave.mjs $B C
+old-D: B=$PWD/rcb-D && git worktree add -q $B c9a1f86a && mkdir -p /tmp/oD && TMPDIR=/tmp/oD node .rc/x/oldsave.mjs $B D
+old-E: B=$PWD/rcb-E && git worktree add -q $B c9a1f86a && mkdir -p /tmp/oE && TMPDIR=/tmp/oE node .rc/x/oldsave.mjs $B E
+old-Amid: B=$PWD/rcb-Amid && git worktree add -q $B c9a1f86a && mkdir -p /tmp/oAmid && TMPDIR=/tmp/oAmid PICK=mid node .rc/x/oldsave.mjs $B A
