@@ -1,0 +1,5 @@
+build exit=0 23s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSafari exit=1 1s | simSafari: 2 failures
+gitclean exit=0 0s | 0
+simHarnessAnchors exit=0 29s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+tsc exit=0 44s | 
