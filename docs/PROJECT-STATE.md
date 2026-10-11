@@ -1,3 +1,79 @@
+## Release AU LIVE, 2026-10-11 02:50 EDT: ten Soccer Career planning systems, cup nights and a named starting eleven from the other lane, a planning panel in the four US My Careers, and eight rounds of this lane (a save you cannot lose, the draft night, an own goal drawn as one, the real fixture list in nine more leagues)
+
+Claude lane (session G). main 0dbbb371, deployment aa7795c9-3689-43e8-93bf-4787cbfb694c, entry index-CSV31ZtP.js (was index-pUtEpMvo.js, Release AT,
+published 16:53 on 2026-10-10). Proof at 02:51: x-deployment-id carries aa7795c9; /whats-new carries "Put that save back: now it stays back" and the draft night and own goal entries, and no VAR entry; /, /soccer-career, /club-manager, /nfl-my-career and /mlb-my-career answer 200; a browser read no console error on /nfl-my-career and /soccer-career. Ninth publish since 2026-10-08 (AL, AN, AO, AP, AQ, AR, AS, AT, AU).
+
+What shipped:
+- The other lane's PR216, Rounds 1197 to 1208. Soccer Career: ten planning systems (tactical roles, a secondary
+  position, set piece duties, appearance promises, counteroffers, performance bonuses, new club adaptation, loan
+  to buy, a managed return from injury, captain duties), cup nights between league games in the Season Centre,
+  a fully named starting eleven, saved chance wheels. The four US My Careers: a planning panel (workload, role,
+  expectations, partnership, bonuses, late career reinvention).
+- This lane: Round 1219 (a put back that survives: pressing "Put that save back" used to LOSE the save on five
+  games; now it is staged, applied before the page mounts, and the game being played is copied aside first; a
+  copy is also kept before a newer version of a game refuses or migrates a save); Round 1220 (the draft night
+  you watch in all four US My Careers, built from the order the engine already made, with the NBA lottery);
+  Round 1216 (an own goal is drawn as one in Club Manager's live match: the right man, the net, nobody
+  celebrating); Round 1225 (a new career in the Championship, La Liga, Ligue 2, the Eredivisie, the Primeira
+  Liga, Serie A, the Bundesliga, the 2. Bundesliga or the Super Lig opens on its real 2026/27 fixture list, as
+  the Premier League does); Rounds 1221, 1222, 1223 (three libraries for the GM games that nothing mounts yet:
+  the NFL score law in a shared home, the draft order and lottery, one desk host for the four front offices);
+  Round 1218 (VAR's review rates derived from a ledger by a generator, coverage read at kickoff).
+- VAR IS STILL SWITCHED OFF. Round 1218 could source its rates on one season only and read 6 of 48
+  competitions; Round 1302 (building) finishes both ledgers and flips CM_VAR_LIVE.
+
+Found and fixed inside the train, by five adversarial reviewers and two fix passes (reports in
+C:\Users\antho\dukb-handoff\2026-10-10\results-g\, names ending -AU.md):
+1. A US plan card stated a gain the season did not get (health and morale clamp at 100) and still charged the
+   cost, and a paid bonus was lost to rounding a season later: the card states what lands, a plan with nothing
+   to add is not charged, the bonus is banked at the engine's precision.
+2. The named starting eleven broke names in the middle of a word; the chance wheel cut its own result line on a
+   short phone: both fixed in the page, each held by a walk.
+3. The save keeper's version table was false for five games on the merged tree and its check could not see it:
+   the fixtures are real played saves now and the check fails when a game with a version is left out.
+4. Three Season Centre walks and five of the other lane's base pinned harnesses followed PR216's wheel, opening
+   tie and recorded ground, with no assertion removed.
+
+GATE ON GITHUB RUNNERS on 7ccdd143 (0757b2a9 plus the budget rows), seven lanes plus the live pass: lane A 81 of 81, the sweep and play lane 19 of 19, the other lane's walks 19 of 19, the live pass 14 of 14 (sent 00:47, clear of the midnight rollover: playSoccerCareer all checks and playGames on seven routes against real data). Lane B 65 of 66, lane C 59 of 60, browser lanes 19 of 20 and 24 of 26: playSoccerCareer check 6 on a blocked runner (green live), and four lines the lead had called bare; sent again with their own invocation, simCmLeagueFixtures (10 ledgers, 10 frozen, 10 bound), playCmQuickSubs and playSaveKeeper (832 seconds, with its base arm on a build of main) are green. The fix pass itself had proven the gate's own lists on 0757b2a9: the type gate, the whole vitest suite (6,270 passed), every harness lane, 13 play routes, 34 of 35 walks. The committed head 0dbbb371 re-proven on a plain build, 20 of 20.
+Budgets moved, each with its measured cause in the row: / 243K, /club-manager 586K, /soccer-career 808K,
+/nfl-my-career 479K, /stadium-tycoon 300K, /wonderkid-factory 273K, /minefield 291K, /footle 350K,
+/front-office 362K, /soccer-grid 315K, /manager-hot-seat 603K, /deadline-day 613K, /transfer-path 376K. The
+save keeper adds about 1.9K to the entry every page loads; moving it to a lazy chunk was tried and did not meet
+the bar. Build output: the saved page of /whats-new, the sitemap and the ledger (five pages changed only their head tag order and stay as committed).
+
+Known and left for follow ups: five controls of playSeasonCentreMotion and two of playSeasonMoments refuse to
+run on a served build (they anchor on minified text; the same on Release AT); scripts/simDraftNight.mjs
+(an old front office harness, in no gate list) is red on this head and red the same way on Release AT: the NBA board does not hand the captured rival picks to the draft night, so three of four front offices show it; Round 1222's bind for the NBA is the fix; club names are cut at 320 wide on the shared lottery tile; the Premier League fixture list is
+still eager in the engine chunk.
+
+### For Codex
+1. Release AU is on main at 0dbbb371 and live. PR216 shipped whole: do not push to codex/career-next-ten again; a
+   follow up goes on a new branch from main. Your codex/career-press-market (1230 to 1234) goes in the next
+   train when your notes call it READY: say which base you proved it on; it will meet PR216 and this lane's
+   draft night in the US career files.
+2. Your files the fixers edited (the full lists are fix-AU.md section 10 and fix2-AU.md section 10):
+   src/lib/usCareerProgramme.ts (a card states the gain that lands; a plan with nothing to add is not charged;
+   the bonus's precision) with src/test/usProgrammeCardTruth.test.ts; SquadSheet.tsx (names whole);
+   CareerChanceWheel.tsx (the result on a short phone); your five base pinned harnesses and
+   scripts/lib/careerNextTenAttribution1197.mjs (the inverse of PR216's three additions on the copy the base
+   groups use); playSoccerCareerDevelopment, playCareerStoryRole and playCareerProgramme (they answer the wheel
+   and read the page position at the press); scripts/playSoccerCareerCompetitions.mjs.
+3. PLEASE CONFIRM ONE RULE: commit 4c8c92ef makes scripts/playSoccerCareerCompetitions.mjs assert what PR216's
+   own unit test states about the recorded ground (the quarter final of the shared fixture says Away and no
+   other ground, the semi final and the final claim none). If the older rule stands, say so here and that
+   commit and the page's one line go back.
+4. VAR is still off. This lane's Round 1302 turns it on: do not flip CM_VAR_LIVE or edit
+   src/data/clubManagerVarRates.ts (it is generated from scripts/data/cmVarRates.json).
+5. Still owed to your files from Release AT's record, unchanged: TrophyCabinet.tsx prints a nationality with no
+   flag; three saves named to the storage seam; the NHL guide's 82 games (84 from 2026-27; Round 1226, closed and
+   waiting for its Hall of Fame calibration, fixes the engine); your seven workflows' old bases.
+6. This lane's rounds closed and waiting for the next train: 1224 (game day and bracket libraries), 1226 with
+   1301 (the MLB and NHL engines play the true seasons), 1227 (the NFL rival on the player's position), 1228 (the
+   Champions League league phase libraries), 1229 (the league book kept in Club Manager), 1300 (the playoff
+   deriver); building: 1212 (MLB week by week on the Season Center: src/lib/season/us.ts, a new mlb.ts, the
+   UsSeasonCentre files; not one line of UsCareerBoard.tsx), 1302 (VAR on). This lane's next numbers are 1303 to
+   1349.
+
 ## Release AT LIVE, 2026-10-10 16:53 EDT: eighteen Soccer Career and Club Manager rounds from the other lane (the real Premier League fixture list, a record book, targets, a mentor, story chapters, trophy runs, season and derby history), and six of this lane's (the US rivalry beats and Trophy Case, flags in Footle, three new data ledgers)
 
 Claude lane (session G). main fb8d6811, deployment cc93f227-a456-4b34-b843-561aff7a9a74, entry index-pUtEpMvo.js (was index-CDom0l2f.js, Release AS,
