@@ -67,8 +67,9 @@ describe.each(sports)('$label season programme', sport => {
     const extra = sport.slug === 'nfl' ? { passTd: 30 } : sport.slug === 'nba' ? { apg: 7 } : sport.slug === 'mlb' ? { hr: 30 } : { assists: 60, goals: 40 };
     const row = heldLine(c, extra), before = copy(row), earnings = c.earnings, bank = c.netWorth ?? 0;
     const result = settleUsCareerProgramme(c, row, sport.slug);
-    expect(result).toMatchObject({ bonusGross: 0.1, bonusNet: 0.045 });
-    expect(c.earnings).toBeCloseTo(earnings + 0.1); expect(c.netWorth).toBeCloseTo(bank + 0.045); expect(row).toEqual(before);
+    /* Release AU fix pass: the share is banked in the bank's own tenth of a million, and 45% of $0.1M is under it (src/test/usProgrammeCardTruth.test.ts holds the paid cases). */
+    expect(result).toMatchObject({ bonusGross: 0.1, bonusNet: 0 });
+    expect(c.earnings).toBeCloseTo(earnings + 0.1); expect(c.netWorth).toBeCloseTo(bank); expect(row).toEqual(before);
     expect(settleUsCareerProgramme(c, row, sport.slug)).toBeNull();
   });
   it('requires games as well as the stat threshold for a bonus', () => {

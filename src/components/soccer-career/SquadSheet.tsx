@@ -59,12 +59,19 @@ const seasonOf = (year: number) => `${year}/${String((year + 1) % 100).padStart(
     the browser used to break a longer surname wherever the line ran out,
     which left one letter alone ("Sessegno" over "n"). Now it splits into two
     halves. A word that fits is not broken, and a hyphenated one keeps the
-    break its hyphen already gives it. The text itself is unchanged. */
+    break its hyphen already gives it. The text itself is unchanged.
+
+    Release AU fix pass: the cell holds the whole name now, and with a first
+    name in front the browser took the soft break before it tried the space
+    ("Marcus Rash" over "ford", in a cell where "Rashford" fits a line by
+    itself). So each word is one box on the line: a word that fits moves to
+    the next line whole, and the soft break is only ever taken inside a
+    word that is wider than the cell. */
 function softBreaks(name: string): ReactNode {
   return name.split(' ').map((word, i) => {
     const half = Math.ceil(word.length / 2);
     const long = word.length >= 7 && !word.includes('-');
-    return <Fragment key={i}>{i ? ' ' : null}{long ? <>{word.slice(0, half)}<wbr />{word.slice(half)}</> : word}</Fragment>;
+    return <Fragment key={i}>{i ? ' ' : null}<span data-squad-word className="inline-block max-w-full">{long ? <>{word.slice(0, half)}<wbr />{word.slice(half)}</> : word}</span></Fragment>;
   });
 }
 

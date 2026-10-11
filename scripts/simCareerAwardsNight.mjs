@@ -212,6 +212,10 @@ import { inverseCareerDevelopment, careerDevelopmentOriginalPlugin, careerDevelo
    five edits back on the copied engine, beside the two already composed here. Proof that they are all that moved
    the recording: remote check rAT-sc-engine-g. See scripts/lib/careerStoryRoleAttribution1190.mjs. */
 import { inverseCareerStoryRole } from './lib/careerStoryRoleAttribution1190.mjs';
+/* Release AU: Rounds 1197 to 1208 add a chance wheel receipt and an opening cup tie to a save. The fourth inverse
+   takes them out of the copied files the historical bundle loads, so the recording made before them still
+   replays: scripts/lib/careerNextTenAttribution1197.mjs. */
+import { NEXT_TEN_WHEEL_FILE, inverseCareerNextTen } from './lib/careerNextTenAttribution1197.mjs';
 
 /* Release AT: two attributions meet in section 1. Release AQ replays the old fixture with the Soccer
    Career train (Rounds 1169 to 1178) taken out through these four lists. Rounds 1185 and 1187 replay it
@@ -386,7 +390,7 @@ function sourceHashes() {
   return result;
 }
 const proof = { control: CONTROL, base: careerDevelopmentBaseReceipt(), sourceBefore: sourceHashes(), sourceAfter: null,
-  sourceHeld: false, attribution: [], storyRoleAttribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
+  sourceHeld: false, attribution: [], storyRoleAttribution: [], nextTenAttribution: [], faultEdits: [], originalSources: [], replays: {}, originalFixtureMatches: false, fixtureMatches: false };
 const writeProof = (file, value) => fs.writeFileSync(path.join(ARTIFACTS, file), JSON.stringify(value, null, 2));
 
 /* The actual original tree is loaded independently. The sole page append is
@@ -445,11 +449,15 @@ async function attributedAwardsBundle() {
     proof.faultEdits.push({ file, beforeSha256: createHash('sha256').update(before).digest('hex'),
       afterSha256: createHash('sha256').update(controlled).digest('hex'), effective: true });
   }
-  const inverse = inverseCareerStoryRole(inverseCareerDevelopment(controlled, proof.attribution), proof.storyRoleAttribution);
+  const inverse = inverseCareerNextTen(file, inverseCareerStoryRole(inverseCareerDevelopment(controlled, proof.attribution), proof.storyRoleAttribution), proof.nextTenAttribution, ['opening']);
+  /* The wheel's receipt is stored by another file, so that file is patched whole the same way. */
+  const wheelAuthored = fs.readFileSync(path.join(ROOT, NEXT_TEN_WHEEL_FILE), 'utf8').replaceAll('\r\n', '\n');
+  const wheelInverse = inverseCareerNextTen(NEXT_TEN_WHEEL_FILE, wheelAuthored, proof.nextTenAttribution, ['wheel']);
+  assert.equal(proof.nextTenAttribution.length, 2, 'The copied engine and the copied wheel each receive the Rounds 1197 to 1208 inverse once');
   fs.writeFileSync(path.join(ARTIFACTS, 'current-engine.ts'), authored);
   fs.writeFileSync(path.join(ARTIFACTS, 'controlled-engine.ts'), controlled);
   fs.writeFileSync(path.join(ARTIFACTS, 'attributed-engine.ts'), inverse);
-  return bundleAwardsNight(ROOT, { patches: [...TRAIN_OUT.filter(p => p.file !== file), ...patches.filter(p => p.file !== file), { file, from: authored, to: inverse }] });
+  return bundleAwardsNight(ROOT, { patches: [...TRAIN_OUT.filter(p => p.file !== file), ...patches.filter(p => p.file !== file), { file, from: authored, to: inverse }, { file: NEXT_TEN_WHEEL_FILE, from: wheelAuthored, to: wheelInverse }] });
 }
 
 /* Observe assignments of the probe's existing seeded generators. A wrapper

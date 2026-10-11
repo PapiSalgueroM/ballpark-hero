@@ -3,6 +3,9 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } 
 import { currentUsCareerProgramme, saveUsCareerProgramme, usProgrammeDefaults, usProgrammeMenus, usProgrammeResults, usProgrammeStateValid, type ProgrammeCareer, type ProgrammeChoice, type ProgrammeSection } from '@/lib/usCareerProgramme';
 import type { UsSport } from '@/lib/usCoachCareer';
 
+/** A gross bonus the way a player reads money: thousands under a tenth of a million, millions above. */
+const grossMoney = (millions: number) => millions < 0.095 ? '$' + Math.round(millions * 1000) + 'K' : '$' + millions.toFixed(2) + 'M';
+
 export default function UsCareerProgramme({ career, sport, onChange }: { career: ProgrammeCareer; sport: UsSport; onChange: (next: ProgrammeCareer) => void }) {
   const [open, setOpen] = useState(false);
   const [mode, setMode] = useState<ProgrammeSection | 'menu' | 'help'>('help');
@@ -15,8 +18,9 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
   const helpTop = useRef(0);
   const selected = useRef<ProgrammeSection | null>(null);
   const pending = useRef<{ top: number; target: ProgrammeSection | 'help' } | null>(null);
-  const menus = usProgrammeMenus(career, sport);
   const held = currentUsCareerProgramme(career, sport);
+  /* Release AU fix pass: the cards are drawn against the plan held so far, so each states what its own choice will land. */
+  const menus = usProgrammeMenus(career, sport, held);
   const results = usProgrammeResults(career);
   const last = results[results.length - 1];
   const disabled = !usProgrammeStateValid(career) || career.retired || (career.suspendedSeasons ?? 0) > 0;
@@ -40,8 +44,8 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
     <p className="mt-1 text-xs text-muted-foreground">{held ? 'Programme saved for ' + career.year + ' at ' + career.team + '.' : 'Choose how to approach the season. Your usual routine stays available.'}</p>
     {last && <div data-us-programme-result className="mt-2 text-xs">
       <p className="font-bold">{last.year}: {last.outcome === 'interrupted' ? 'Programme interrupted' : 'Programme completed'}</p>
-      {last.decisions.map(d => <p key={d.section}>{d.label}: {d.outcome}{d.target !== undefined ? ' (' + (d.actual ?? 'not recorded') + '/' + d.target + ' ' + d.unit + ')' : ''}.</p>)}
-      {last.bonusGross > 0 && <p>Bonus: $ {last.bonusGross.toFixed(4)}M gross, $ {last.bonusNet.toFixed(4)}M banked.</p>}
+      {last.decisions.map(d => <p key={d.section}>{d.label}: {d.outcome === 'unused' ? 'not used, it had nothing to add and cost nothing' : d.outcome}{d.target !== undefined ? ' (' + (d.actual ?? 'not recorded') + '/' + d.target + ' ' + d.unit + ')' : ''}.</p>)}
+      {last.bonusGross > 0 && <p data-us-programme-bonus>Bonus: {grossMoney(last.bonusGross)} gross, {last.bonusNet >= 0.05 ? '$' + last.bonusNet.toFixed(1) + 'M banked.' : 'none of it banked (the 45% share was under the $0.1M the bank counts in).'}</p>}
       {last.partnershipProgress > 0 && <p>Partnership progress: {last.partnershipProgress}/3.</p>}
     </div>}
     <Dialog open={open} onOpenChange={next => { setOpen(next); if (next) { returnMode.current = 'menu'; setMode('help'); } }}>
@@ -66,8 +70,9 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
             <p>These are choices for your generated career. Nothing changes until you play the season. Moving teams cancels the pending programme.</p>
             <p>Workload trades form against injury risk. Tactical preparation changes existing simulation inputs. Your real season decides stats, awards and injuries together.</p>
             <p>Coach targets use games played. Partnership progress needs enough games at this team in consecutive seasons. A missed year resets its progress. Teammates are described by role, with no invented real player.</p>
-            <p>Bonus targets use your saved position stats and enough games played. A successful challenge adds 2% or 5% of that season's salary to gross earnings; 45% reaches the bank. Targets and rewards never alter the recorded stats.</p>
+            <p>Bonus targets use your saved position stats and enough games played. A successful challenge adds 2% or 5% of that season's salary to gross earnings. 45% of it reaches the bank, counted in tenths of a million like the rest of your bank, so each card shows what your salary would bank. Targets and rewards never alter the recorded stats.</p>
             <p>Veteran adaptation is available from age 30. It trades form for durability this season and earns health +3 for next year after games played. It cannot promise another contract or prevent retirement.</p>
+            <p>Each card shows what its choice adds as things stand. Health and morale top out at 100 and durability has a ceiling too: a choice with nothing left to add says so and costs nothing, and the training camp can still move your morale before the season starts.</p>
             <p>Example: Prioritize recovery adds 8 to season health, capped at 100, and subtracts 6 from season morale. Injury losses still count. After the sim, temporary preparation is removed before normal career growth.</p>
             <p>A suspension or a season with no games interrupts the programme and pays no reward. Your usual routine preserves the original simulation.</p>
             <button data-us-programme-start className={button + ' w-full'} onClick={() => setMode(returnMode.current)}>Continue to programme</button>

@@ -41,7 +41,8 @@ describe('US programme choices and restoration', () => {
     { sport: 'nba', pos: 'PF', attack: 'Season scoring multiplier +8%, rebounding multiplier -8%. Your position stays the same.', support: 'Season rebounding multiplier +8%, scoring multiplier -8%. Your position stays the same.' },
     { sport: 'nhl', pos: 'C', attack: 'Season scoring multiplier +0.08, favoring goals over assists.', support: 'Season scoring multiplier -0.08 (minimum 0.4), favoring assists over goals.' },
   ] satisfies { sport: UsSport; pos: string; attack: string; support: string }[])('shows the distinct tactical tradeoff on each actual option for $sport $pos', async ({ sport, pos, attack, support }) => {
-    const { changed } = mount({ ...fixture(), pos }, sport); await open(sport); start(); fireEvent.click(tile('tactics'));
+    /* Release AU fix pass: a real career holds an archetype, and a card now states what will land on it (durability 0.9 leaves room for the full trade). */
+    const { changed } = mount({ ...fixture(), pos, archetype: { durability: 0.9, scoring: 1, playmaking: 1, rebounding: 1, scoringMult: 1 } } as ProgrammeCareer, sport); await open(sport); start(); fireEvent.click(tile('tactics'));
     const attackButton = document.querySelector('[data-us-programme-choice="tactics:attack"]');
     const supportButton = document.querySelector('[data-us-programme-choice="tactics:support"]');
     expect(attackButton).toHaveTextContent(attack); expect(attackButton).not.toHaveTextContent(support);
@@ -99,10 +100,10 @@ describe('US programme choices and restoration', () => {
     await waitFor(() => expect(opener).toHaveFocus());
   });
   it('renders the earned outcome using saved target and bonus values', () => {
-    const c = fixture(); c.programmeResults = [{ sport: 'nba', year: 2025, team: 'BOS', outcome: 'completed', bonusGross: 0.1, bonusNet: 0.045, partnershipProgress: 2, decisions: [{ section: 'bonus', label: 'Match the benchmark', outcome: 'completed', target: 4, actual: 7, unit: 'assists per game' }] }];
+    const c = fixture(); c.programmeResults = [{ sport: 'nba', year: 2025, team: 'BOS', outcome: 'completed', bonusGross: 0.25, bonusNet: 0.1, partnershipProgress: 2, decisions: [{ section: 'bonus', label: 'Match the benchmark', outcome: 'completed', target: 4, actual: 7, unit: 'assists per game' }] }];
     mount(c);
     expect(screen.getByText('Match the benchmark: completed (7/4 assists per game).')).toBeInTheDocument();
-    expect(screen.getByText('Bonus: $ 0.1000M gross, $ 0.0450M banked.')).toBeInTheDocument();
+    expect(screen.getByText('Bonus: $0.25M gross, $0.1M banked.')).toBeInTheDocument();
     expect(screen.getByText('Partnership progress: 2/3.')).toBeInTheDocument();
   });
 });
