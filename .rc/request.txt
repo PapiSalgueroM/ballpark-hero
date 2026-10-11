@@ -1,0 +1,7 @@
+# Release AW part one, reviewer facts-fences, request F: the other lane's veteran talks sim and walk on the pushed head 64d87aed, with the walk's own screenshots brought back so the label a EUR player reads can be looked at
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+simSoccerVeteranTalks: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerVeteranTalks.mjs
+playSoccerVeteranTalks: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" ENGINES=chromium NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerVeteranTalks.mjs; s=$?; ls .tmp-fx/soccer-veteran-talks-browser | head -90; cp .tmp-fx/soccer-veteran-talks-browser/390-*.png "$RC_OUT"/ 2>/dev/null; cp .tmp-fx/soccer-veteran-talks-browser/320-*pending-card.png "$RC_OUT"/ 2>/dev/null; cp .tmp-fx/soccer-veteran-talks-browser/320-*wheel-skipped.png "$RC_OUT"/ 2>/dev/null; cp .tmp-fx/soccer-veteran-talks-browser/1280-*pending-card.png "$RC_OUT"/ 2>/dev/null; exit $s
