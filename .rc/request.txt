@@ -1,0 +1,12 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-mlb: node_modules/.bin/vitest run src/test/usSeasonMlb.test.ts src/test/usSeasonCentre.test.tsx src/test/usSeasonSlate.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+ctl-ledger-mlbinnings: US_LEDGER_CONTROL=mlbinnings node scripts/simUsSeasonLedger.mjs
+ctl-ledger-inningsleague: US_LEDGER_CONTROL=inningsleague node scripts/simUsSeasonLedger.mjs
+ctl-ledger-filled: US_LEDGER_CONTROL=filled node scripts/simUsSeasonLedger.mjs
+simUsSeasonCentre-mlb0: SPORTS=mlb SEEDSET=0 US_SEASON_CONTROL=mlblevel node scripts/simUsSeasonCentre.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
