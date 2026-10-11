@@ -1,0 +1,109 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[22m[39mclubManagerVarScreen: the 44 and 45 case was found on seed 2042, whistle 50
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 6203, whistle 49, review at 49, card at 49, played shot save shot goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 4670, whistle 50, review at 49, card at 50, played shot save shot save goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 2219, whistle 49, review at 49, card at 49, played shot shot goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 1987, whistle 49, review at 48, card at 47, played goal shot
+
+ [31m❯[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m29 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 30173[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net [33m 781[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed') [33m 1067[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded') [33m 808[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal [33m 1565[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it [33m 912[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 662[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 2652[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time [33m 834[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 320[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty [33m 901[2mms[22m[39m
+   [32m✓[39m Club Manager: the review screen[2m > [22mreduced motion: a short wait, nothing moves under the card, and the decision stays up as long as with motion[32m 208[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 1349[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 914[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 1260[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net [33m 680[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net [33m 987[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way[39m[33m 1235[2mms[22m[39m
+[31m     → the real goal of Brennan Johnson at 49 is on the score and was not told before the card opened: expected '\n      @keyframes cmRise { 0% { opac…' to contain 'GOAL! Free kick, Brennan Johnson'[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way [33m 1056[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way [33m 1204[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way [33m 1060[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way [33m 1067[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 1107[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal [33m 1065[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1047[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing [33m 988[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing [33m 875[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole [33m 1058[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has [33m 1244[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has [33m 1264[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: the real goal of Brennan Johnson at 49 is on the score and was not told before the card opened: expected '\n      @keyframes cmRise { 0% { opac…' to contain 'GOAL! Free kick, Brennan Johnson'[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- GOAL! Free kick, Brennan Johnson[39m
+[31m+[39m
+[31m+       @keyframes cmRise { 0% { opacity: 0; transform: translateY(7px); } 100% { opacity: 1; transform: translateY(0); } }[39m
+[31m+       .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }[39m
+[31m+       @keyframes cmSlam { 0% { opacity: 0; transform: scale(1.6); } 60% { opacity: 1; transform: scale(0.94); } 100% { opacity: 1; transform: scale(1); } }[39m
+[31m+       .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }[39m
+[31m+       @keyframes cmWinPulse { 0% { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100% { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }[39m
+[31m+       .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }[39m
+[31m+       @keyframes cmLossShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 55% { transform: translateX(3px); } 80% { transform: translateX(-2px); } }[39m
+[31m+       .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }[39m
+[31m+       @keyframes cmGoldGlow { 0%, 100% { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }[39m
+[31m+       .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }[39m
+[31m+       @keyframes cmTickIn { 0% { opacity: 0; transform: translateX(-6px); } 100% { opacity: 1; transform: translateX(0); } }[39m
+[31m+       .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }[39m
+[31m+       /* cm-rise for a control that must not be pressed before it shows: hidden[39m
+[31m+          (so unclickable) through its delay, visible from its first frame. */[39m
+[31m+       @keyframes cmRiseGated { 0% { opacity: 0; visibility: visible; transform: translateY(7px); } 100% { opacity: 1; visibility: visible; transform: translateY(0); } }[39m
+[31m+       .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }[39m
+[31m+[39m
+[31m+[39m
+[31m+       @media (prefers-reduced-motion: reduce) {[39m
+[31m+         .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }[39m
+[31m+         .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }[39m
+[31m+       }[39m
+[31m+     ?Everton2 - 0Aston VillaPremier League · Round 2LIVE 45+4'Stats1 Suzuki2 Maatsen3 Wan-Bissaka456 Onana7 Kamara89 Manzambi10 Garnacho11 Jackson1 Branthwaite2 Garner3 Tarkowski4 Keane5 Mykolenko6 Dewsbury-Hall7 Hackney8 Röhl9 Johnson10 Barry11 GrealishCVAR: checking the goalAlejandro Garnacho, Aston Villa, 45+3'Play waits for the decision.Balance of play: Poss 52% 48%Shots 10 (5) 4 (1)xG 1.29 0.36Throw in, Aston Villa0.5x1x2x4x SkipAs it happens45+4'Throw in, Aston Villa45+4'Throw in, Aston Villa45+3'Shot: Nicolas Jackson45+2'GOAL! Merlin Röhl45+2'Throw in, EvertonEvertonBalance of playAston Villa52%48%10 (5)Shots (on target)4 (1)1.29xG0.364Corners27Fouls61Saves31Yellow00Red00Subs0[39m
+
+[36m [2m❯[22m src/test/clubManagerVarScreen.test.tsx:[2m563:135[22m[39m
+    [90m561| [39m      /* The words the screen puts in front of a scorer (the pill and …
+    [90m562| [39m      const lead = g.og ? 'GOAL! Own goal, ' : g.penalty ? 'GOAL! Pena…
+    [90m563| [39m      expect(frames[first].text, `the real goal of ${g.text} at ${plac…
+    [90m   | [39m                                                                                                                                      [31m^[39m
+    [90m564| [39m    }
+    [90m565| [39m    console.info(`clubManagerVarScreen: at the card ${told.length} rea…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m28 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 03:46:00
+[2m   Duration [22m 31.85s[2m (transform 936ms, setup 27ms, collect 1.22s, tests 30.17s, environment 156ms, prepare 64ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…')%3A it is drawn%2C in its own net%2C and nothing real gives way,line=563,column=135::AssertionError: the real goal of Brennan Johnson at 49 is on the score and was not told before the card opened: expected '\n      @keyframes cmRise { 0%25 { opac…' to contain 'GOAL! Free kick, Brennan Johnson'%0A%0A- Expected%0A+ Received%0A%0A- GOAL! Free kick, Brennan Johnson%0A+%0A+       @keyframes cmRise { 0%25 { opacity: 0; transform: translateY(7px); } 100%25 { opacity: 1; transform: translateY(0); } }%0A+       .cm-rise { opacity: 0; animation: cmRise 0.45s ease-out forwards; }%0A+       @keyframes cmSlam { 0%25 { opacity: 0; transform: scale(1.6); } 60%25 { opacity: 1; transform: scale(0.94); } 100%25 { opacity: 1; transform: scale(1); } }%0A+       .cm-slam { opacity: 0; animation: cmSlam 0.4s cubic-bezier(0.2, 0.8, 0.3, 1.2) forwards; }%0A+       @keyframes cmWinPulse { 0%25 { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); } 100%25 { box-shadow: 0 0 0 26px rgba(34,197,94,0); } }%0A+       .cm-win-pulse { animation: cmWinPulse 0.9s ease-out 1; }%0A+       @keyframes cmLossShake { 0%25, 100%25 { transform: translateX(0); } 25%25 { transform: translateX(-4px); } 55%25 { transform: translateX(3px); } 80%25 { transform: translateX(-2px); } }%0A+       .cm-loss-shake { animation: cmLossShake 0.4s ease-in-out 1; }%0A+       @keyframes cmGoldGlow { 0%25, 100%25 { box-shadow: 0 0 8px rgba(234,179,8,0.35); } 50%25 { box-shadow: 0 0 22px rgba(234,179,8,0.75); } }%0A+       .cm-gold-glow { animation: cmGoldGlow 1.5s ease-in-out infinite; }%0A+       @keyframes cmTickIn { 0%25 { opacity: 0; transform: translateX(-6px); } 100%25 { opacity: 1; transform: translateX(0); } }%0A+       .cm-tick-in { opacity: 0; animation: cmTickIn 0.35s ease-out forwards; }%0A+       /* cm-rise for a control that must not be pressed before it shows: hidden%0A+          (so unclickable) through its delay, visible from its first frame. */%0A+       @keyframes cmRiseGated { 0%25 { opacity: 0; visibility: visible; transform: translateY(7px); } 100%25 { opacity: 1; visibility: visible; transform: translateY(0); } }%0A+       .cm-rise-gated { opacity: 0; visibility: hidden; animation: cmRiseGated 0.45s ease-out forwards; }%0A+%0A+%0A+       @media (prefers-reduced-motion: reduce) {%0A+         .cm-rise, .cm-slam, .cm-tick-in, .cm-rise-gated { animation: none; opacity: 1; transform: none; visibility: visible; }%0A+         .cm-win-pulse, .cm-loss-shake, .cm-gold-glow { animation: none; }%0A+       }%0A+     ?Everton2 - 0Aston VillaPremier League · Round 2LIVE 45+4'Stats1 Suzuki2 Maatsen3 Wan-Bissaka456 Onana7 Kamara89 Manzambi10 Garnacho11 Jackson1 Branthwaite2 Garner3 Tarkowski4 Keane5 Mykolenko6 Dewsbury-Hall7 Hackney8 Röhl9 Johnson10 Barry11 GrealishCVAR: checking the goalAlejandro Garnacho, Aston Villa, 45+3'Play waits for the decision.Balance of play: Poss 52%25 48%25Shots 10 (5) 4 (1)xG 1.29 0.36Throw in, Aston Villa0.5x1x2x4x SkipAs it happens45+4'Throw in, Aston Villa45+4'Throw in, Aston Villa45+3'Shot: Nicolas Jackson45+2'GOAL! Merlin Röhl45+2'Throw in, EvertonEvertonBalance of playAston Villa52%2548%2510 (5)Shots (on target)4 (1)1.29xG0.364Corners27Fouls61Saves31Yellow00Red00Subs0%0A%0A ❯ src/test/clubManagerVarScreen.test.tsx:563:135%0A%0A

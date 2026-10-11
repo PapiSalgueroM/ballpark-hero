@@ -1,0 +1,64 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[22m[39mclubManagerVarScreen: the 44 and 45 case was found on seed 2042, whistle 50
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 1 real goal(s) of that clock place had been told (Brennan Johnson)
+clubManagerVarScreen: the crowded end was found on seed 42322, whistle 49, review at 48, card at 49, played shot goal goal goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 6203, whistle 49, review at 49, card at 49, played shot save shot goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 4670, whistle 50, review at 49, card at 50, played shot save shot save goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 2219, whistle 49, review at 49, card at 49, played shot shot goal
+
+[90mstdout[2m | src/test/clubManagerVarScreen.test.tsx[2m > [22m[2mClub Manager: the review screen[2m > [22m[2ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+[22m[39mclubManagerVarScreen: at the card 0 real goal(s) of that clock place had been told (none there)
+clubManagerVarScreen: the crowded end was found on seed 1987, whistle 49, review at 48, card at 47, played goal shot
+
+ [32m✓[39m src/test/clubManagerVarScreen.test.tsx [2m([22m[2m29 tests[22m[2m)[22m[33m 29920[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net [33m 772[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed') [33m 1067[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('awarded') [33m 808[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal [33m 1576[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it [33m 888[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives that is saved: the save is drawn after the card and the score stays [33m 653[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn [33m 2636[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mtwo goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time [33m 825[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mSkip to the whistle during a review takes the card away and leaves the half as the engine has it [33m 317[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mleaving the site in the middle of a review and coming back shows the review again, then its penalty [33m 880[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma penalty a review gives in the last minute of a half is still played before the whistle [33m 1351[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 909[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends [33m 1237[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net [33m 666[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net [33m 983[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way [33m 1218[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way [33m 1071[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way [33m 1191[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way [33m 1063[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way [33m 1062[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review at the very end of a crowded half is still shown once, and the half ends on the engine score [33m 1098[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal [33m 1047[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing [33m 1038[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing [33m 975[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's 'red' (a chance at the same place: false): both are told, and the card sits over nothing [33m 839[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole [33m 1052[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has [33m 1236[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22ma review in extra time ('awarded'): its own card, over nothing, on the score the engine has [33m 1255[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m29 passed[39m[22m[90m (29)[39m
+[2m   Start at [22m 03:46:34
+[2m   Duration [22m 31.59s[2m (transform 944ms, setup 25ms, collect 1.23s, tests 29.92s, environment 143ms, prepare 65ms)[22m
+

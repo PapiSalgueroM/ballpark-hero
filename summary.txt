@@ -1,0 +1,4 @@
+m-linelate exit=1 33s | MUT linelate: vitest exit 1
+clean exit=0 0s | tree after the mutation: 0 changed path(s)
+varscreen exit=0 32s |    Duration  31.59s (transform 944ms, setup 25ms, collect 1.23s, tests 29.92s, environment 143ms, prepare 65ms)
+tsc exit=0 33s | 

@@ -1,0 +1,6 @@
+#!serial
+# Round 1302 fix pass: the one mutation the first proof did not catch, tried again on the corrected assertion.
+m-linelate: node .rc/x/fxMut.mjs linelate && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/m.log 2>&1; s=$?; cp /tmp/m.log "$RC_OUT/m-linelate.log"; grep -a -E "AssertionError|Tests |FAIL " /tmp/m.log | cut -c1-330 | head -40; git checkout -- src scripts; echo "MUT linelate: vitest exit $s"; exit $s
+clean: echo "tree after the mutation: $(git status --short | wc -l) changed path(s)"
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
