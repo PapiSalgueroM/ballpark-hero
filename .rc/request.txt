@@ -1,0 +1,2 @@
+# Release AV, the base number for rAV-S2: the NFL balance section of simUsCareerSummer on main's own tree (aa564f16, main's own copy of the harness), at the size the release line runs (12000 careers a seed; main's default is 8000), alone on its runner. A measurement to compare with, not a gate
+summer-nfl-6-main: git worktree add -q --detach /tmp/s0 aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$PWD/node_modules" /tmp/s0/node_modules && cd /tmp/s0 && SIM_BALANCE_CAREERS=12000 SIM_SPORTS=nfl SIM_SECTIONS=6 node scripts/simUsCareerSummer.mjs
