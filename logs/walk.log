@@ -1,0 +1,235 @@
+makesaves nfl QB: 3 seasons, year 2029, team NO, rival Andre Brennan (QB) last "3472 yds, 23 TD, 14 INT" lastYear none
+makesaves nfl K: 3 seasons, year 2029, team NYJ, rival Kai Hendricks (K) last "27 field goals" lastYear none
+makesaves nba PG: 3 seasons, year 2029, team BKN, rival Jaxon Delgado (PG) last "8.7 ppg, 3.1 rpg, 3.5 apg" lastYear 2028
+makesaves mlb CF: 3 seasons, year 2029, team PIT, rival Zane Ferreira (CF) last "0.273, 15 HR" lastYear none
+makesaves mlb SP: 3 seasons, year 2029, team DET, rival Rhys Fitzgerald (SP) last "0.257, 15 HR" lastYear none
+makesaves nhl C: 3 seasons, year 2029, team UTA, rival Cole Vasquez (C) last "11G 17A 28P" lastYear none
+makesaves nhl G: 3 seasons, year 2029, team CAR, rival Silas Salvatore (G) last "27G 34A 61P" lastYear none
+uscWalk makesaves: 7 saves by /tmp/base
+ok   held pitcher at 390: the hub shows a held line and no Week by week button (team DET, year 2026, pos SP)
+note held pitcher at 390: "📺 No week by week for pitchers yet: this view cannot yet show which games were your wins." is 2 line(s), 30px tall at 15.125px a line, ends at 357 of 390; sideways 0px
+ok   held pitcher at 390: no page errors (clean)
+ok   held pitcher at 1280: the hub shows a held line and no Week by week button (team DET, year 2026, pos SP)
+note held pitcher at 1280: "📺 No week by week for pitchers yet: this view cannot yet show which games were your wins." is 1 line(s), 14px tall at 15.125px a line, ends at 891 of 1280; sideways 0px
+ok   held pitcher at 1280: no page errors (clean)
+ok   held reliever at 390: the hub shows a held line and no Week by week button (team MIL, year 2026, pos RP)
+note held reliever at 390: "📺 No week by week for pitchers yet: this view cannot yet show which games were your wins." is 2 line(s), 30px tall at 15.125px a line, ends at 357 of 390; sideways 0px
+ok   held reliever at 390: no page errors (clean)
+ok   held reliever at 1280: the hub shows a held line and no Week by week button (team MIL, year 2026, pos RP)
+note held reliever at 1280: "📺 No week by week for pitchers yet: this view cannot yet show which games were your wins." is 1 line(s), 14px tall at 15.125px a line, ends at 891 of 1280; sideways 0px
+ok   held reliever at 1280: no page errors (clean)
+ok   held y2020 at 390: the hub shows a held line and no Week by week button (team MIL, year 2020, pos CF)
+note held y2020 at 390: "📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162." is 2 line(s), 30px tall at 15.125px a line, ends at 357 of 390; sideways 0px
+ok   held y2020 at 390: no page errors (clean)
+ok   held y2020 at 1280: the hub shows a held line and no Week by week button (team MIL, year 2020, pos CF)
+note held y2020 at 1280: "📺 No week by week this season: the real 2020 season had 60 games and the week by week view is built for 162." is 1 line(s), 14px tall at 15.125px a line, ends at 941 of 1280; sideways 0px
+ok   held y2020 at 1280: no page errors (clean)
+ok   held y2020-58 at 390: the hub shows a held line and no Week by week button (team DET, year 2020, pos CF)
+note held y2020-58 at 390: "📺 No week by week this season: in the real 2020 season your club finished on 58 games, two short of the 60 on the schedule that year, and the week by week view is built for 162." is 4 line(s), 61px tall at 15.125px a line, ends at 357 of 390; sideways 0px
+ok   held y2020-58 at 390: no page errors (clean)
+ok   held y2020-58 at 1280: the hub shows a held line and no Week by week button (team DET, year 2020, pos CF)
+note held y2020-58 at 1280: "📺 No week by week this season: in the real 2020 season your club finished on 58 games, two short of the 60 on the schedule that year, and the week by week view is built for 162." is 3 line(s), 38px tall at 15.125px a line, ends at 943 of 1280; sideways 0px
+ok   held y2020-58 at 1280: no page errors (clean)
+ok   held off-schedule-2004 at 390: the hub shows a held line and no Week by week button (team MIL, year 2004, pos CF)
+note held off-schedule-2004 at 390: "📺 No week by week this season: in the real 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162." is 3 line(s), 45px tall at 15.125px a line, ends at 357 of 390; sideways 0px
+ok   held off-schedule-2004 at 390: no page errors (clean)
+ok   held off-schedule-2004 at 1280: the hub shows a held line and no Week by week button (team MIL, year 2004, pos CF)
+note held off-schedule-2004 at 1280: "📺 No week by week this season: in the real 2004 season your club finished on 161 games, one short of the 162 on the schedule, and the week by week view is built for 162." is 3 line(s), 38px tall at 15.125px a line, ends at 937 of 1280; sideways 0px
+ok   held off-schedule-2004 at 1280: no page errors (clean)
+ok   held now-2026-bal-nyy at 390: the hub shows a held line and no Week by week button (team NYY, year 2026, pos CF)
+note held now-2026-bal-nyy at 390: "📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162." is 4 line(s), 61px tall at 15.125px a line, ends at 357 of 390; sideways 0px
+ok   held now-2026-bal-nyy at 390: no page errors (clean)
+ok   held now-2026-bal-nyy at 1280: the hub shows a held line and no Week by week button (team NYY, year 2026, pos CF)
+note held now-2026-bal-nyy at 1280: "📺 No week by week this season: in the real 2026 season your club had its last game called off for the weather and never made up, so it finished on 161 games, and the week by week view is built for 162." is 3 line(s), 38px tall at 15.125px a line, ends at 936 of 1280; sideways 0px
+ok   held now-2026-bal-nyy at 1280: no page errors (clean)
+ok   held abroad at 390: the hub shows a held line and no Week by week button (team Yomiuri Giants, year 2028, pos CF)
+note held abroad at 390: "📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season." is 3 line(s), 45px tall at 15.125px a line, ends at 357 of 390; sideways 0px
+ok   held abroad at 390: no page errors (clean)
+ok   held abroad at 1280: the hub shows a held line and no Week by week button (team Yomiuri Giants, year 2028, pos CF)
+note held abroad at 1280: "📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season." is 3 line(s), 46px tall at 15.125px a line, ends at 937 of 1280; sideways 0px
+ok   held abroad at 1280: no page errors (clean)
+note mlb season centre at 390: seed 11, the saved season: {"year":2027,"team":"PIT","age":22,"ovr":69,"games":79,"awards":[],"teamResult":"WON THE WORLD SERIES","salary":0.8,"avg":0.251,"hr":6,"rbi":21,"sb":2,"doubles":13,"obp":0.325,"poGames":22,"poLine":"22 for 88 (.250), 2 HR"}
+ok   mlb season centre at 390: the first card offers Play ball
+note mlb season centre at 390: game one reads "📺 Season Center Pittsburgh Pirates · 2027 ? Back to your season Game 1 · Home PIT 6-3 WSN FINAL Final 2nd ⚾ Washington Nationals put 1 on the board in the 2nd 3rd ⚾ Pittsburgh Pirates put 2 on the board in the 3rd 4th ⚾ Pittsburgh Pirates put 1 on the board in the 4th 7th ⚾ Washington Nationals put 2 on the board in the 7th 7th ⚾ Pittsburgh Pirates put 3 on the board in the 7th 1-4 After game 1 1-0 Home 1-0 Away 0-0"
+note mlb season centre at 390: the review reads "Season review | 107-55 · WON THE WORLD SERIES | 79 | Games | .251 | AVG | 6 | HR | 21 | RBI | Regular season, the same numbers as your season card. | ⭐ Best game: Game 65, W 4-0 vs San Diego Padres, 2 for 4 with a home run, a double and 2 RBI | Last five: | W | W | W | W | L | MLB champions | PLAYOFFS | W | Wild Card Series | beat another team 2-1 | W | Division Series | beat another team 3-2 | W | Championship Series | beat another team 4-3 | W | World Series | beat another team 4-3 | Your playoffs: 22 games, 22 for 88 (.250), 2 HR"
+ok   mlb season centre at 390: the review says something of the postseason (WON THE WORLD SERIES, 22 playoff games on the card)
+note mlb season centre at 390: playoff path block: "PLAYOFFS | W | Wild Card Series | beat another team 2-1 | W | Division Series | beat another team 3-2 | W | Championship Series | beat another team 4-3 | W | World Series | beat another team 4-3 | Your playoffs: 22 games, 22 for 88 (.250), 2 HR"
+ok   mlb season centre at 390: nothing scrolls sideways (0px)
+ok   mlb season centre at 390: no page errors (clean)
+note mlb season centre at 1280: seed 11, the saved season: {"year":2027,"team":"PIT","age":22,"ovr":69,"games":79,"awards":[],"teamResult":"WON THE WORLD SERIES","salary":0.8,"avg":0.251,"hr":6,"rbi":21,"sb":2,"doubles":13,"obp":0.325,"poGames":22,"poLine":"22 for 88 (.250), 2 HR"}
+ok   mlb season centre at 1280: the first card offers Play ball
+note mlb season centre at 1280: game one reads "📺 Season Center Pittsburgh Pirates · 2027 ? Back to your season 1 H WSN W 6-3 2 H WSN 3 H WSN 4 A MIL 5 A MIL 6 A MIL 7 A COL 8 A COL 9 A COL 10 H CHC 11 H CHC 12 H CHC 13 A BAL 14 A BAL 15 A BAL 16 A NYM 17 A NYM 18 A NYM 19 H NYY 20 H NYY 21 H NYY 22 A ATH 23 A ATH 24 A ATH 25 H SEA 26 H SEA 27 H SEA 28 A CHC 29 A CHC 30 A CHC 31 A CHC 32 A TEX 33 A TEX 34 A TEX 35 H SDP 36 H SDP 37 H SDP 38 H CIN 39 H CIN 40 H CI"
+note mlb season centre at 1280: the review reads "Season review | 107-55 · WON THE WORLD SERIES | 79 | Games | .251 | AVG | 6 | HR | 21 | RBI | Regular season, the same numbers as your season card. | ⭐ Best game: Game 65, W 4-0 vs San Diego Padres, 2 for 4 with a home run, a double and 2 RBI | Last five: | W | W | W | W | L | MLB champions | PLAYOFFS | W | Wild Card Series | beat another team 2-1 | W | Division Series | beat another team 3-2 | W | Championship Series | beat another team 4-3 | W | World Series | beat another team 4-3 | Your playoffs: 22 games, 22 for 88 (.250), 2 HR"
+ok   mlb season centre at 1280: the review says something of the postseason (WON THE WORLD SERIES, 22 playoff games on the card)
+note mlb season centre at 1280: playoff path block: "PLAYOFFS | W | Wild Card Series | beat another team 2-1 | W | Division Series | beat another team 3-2 | W | Championship Series | beat another team 4-3 | W | World Series | beat another team 4-3 | Your playoffs: 22 games, 22 for 88 (.250), 2 HR"
+ok   mlb season centre at 1280: nothing scrolls sideways (0px)
+ok   mlb season centre at 1280: no page errors (clean)
+note mlb season centre at 390 reduced motion: seed 11, the saved season: {"year":2027,"team":"PIT","age":22,"ovr":69,"games":79,"awards":[],"teamResult":"WON THE WORLD SERIES","salary":0.8,"avg":0.251,"hr":6,"rbi":21,"sb":2,"doubles":13,"obp":0.325,"poGames":22,"poLine":"22 for 88 (.250), 2 HR"}
+ok   mlb season centre at 390 reduced motion: the first card offers Play ball
+note mlb season centre at 390 reduced motion: game one reads "📺 Season Center Pittsburgh Pirates · 2027 ? Back to your season Game 1 · Home PIT 6-3 WSN FINAL Final 2nd ⚾ Washington Nationals put 1 on the board in the 2nd 3rd ⚾ Pittsburgh Pirates put 2 on the board in the 3rd 4th ⚾ Pittsburgh Pirates put 1 on the board in the 4th 7th ⚾ Washington Nationals put 2 on the board in the 7th 7th ⚾ Pittsburgh Pirates put 3 on the board in the 7th 1-4 After game 1 1-0 Home 1-0 Away 0-0"
+note mlb season centre at 390 reduced motion: the review reads "Season review | 107-55 · WON THE WORLD SERIES | 79 | Games | .251 | AVG | 6 | HR | 21 | RBI | Regular season, the same numbers as your season card. | ⭐ Best game: Game 65, W 4-0 vs San Diego Padres, 2 for 4 with a home run, a double and 2 RBI | Last five: | W | W | W | W | L | MLB champions | PLAYOFFS | W | Wild Card Series | beat another team 2-1 | W | Division Series | beat another team 3-2 | W | Championship Series | beat another team 4-3 | W | World Series | beat another team 4-3 | Your playoffs: 22 games, 22 for 88 (.250), 2 HR"
+ok   mlb season centre at 390 reduced motion: the review says something of the postseason (WON THE WORLD SERIES, 22 playoff games on the card)
+note mlb season centre at 390 reduced motion: playoff path block: "PLAYOFFS | W | Wild Card Series | beat another team 2-1 | W | Division Series | beat another team 3-2 | W | Championship Series | beat another team 4-3 | W | World Series | beat another team 4-3 | Your playoffs: 22 games, 22 for 88 (.250), 2 HR"
+ok   mlb season centre at 390 reduced motion: nothing scrolls sideways (0px)
+ok   mlb season centre at 390 reduced motion: no page errors (clean)
+ok   plan card nhl-2012 at 390: the hub has Plan your season (year 2012, team SJS, last season 80 games)
+note plan card nhl-2012 at 390: expectation card reads "NHL season programme | Season 2012, SJS. Choices apply once when this team plays the year. | Back | ? | Close | Coach expectations | No extra target | Keep the normal season. | Steady availability | Play 68 games: morale +3 (morale tops out at 100). Miss it: morale -3. | Earn a bigger role | Play 78 games: morale +6 (morale tops out at 100). Miss it: morale -5. This does not guarantee a starting spot. | Each choice saves immediately. You can change it before playing."
+note plan card nhl-2012 at 390: partnership card reads "NHL season programme | Season 2012, SJS. Choices apply once when this team plays the year. | Back | ? | Close | Teammate partnership | Keep your own routine | No extra partnership input. | Build line chemistry | A role-based teammate partnership, with no invented player. At least 55 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. | Each choice saves immediately. You can change it before playing."
+note plan card nhl-2012 at 390: bonus card reads "NHL season programme | Season 2012, SJS. Choices apply once when this team plays the year. | Back | ? | Close | Performance bonus | No bonus challenge | Keep the normal pay. | Match the benchmark | 30 goals and 55 games: 2% of season salary as a gross bonus. At your salary of $1.5M, none of it reaches the bank: your 45% share is under the $0.1M the bank counts in. It still counts in career earnings. | Stretch the benchmark | 34 goals and 55 games: 5% of season salary as a gross bonus. At your salary of $1.5M, none of it reaches the bank: your 45% share is under the $0.1M the bank counts in. It still counts in career earnings. | Each choice saves immediately. You can change it before playing."
+ok   plan card nhl-2012 at 390: no page errors (clean)
+ok   plan card nhl-2012 at 1280: the hub has Plan your season (year 2012, team SJS, last season 80 games)
+note plan card nhl-2012 at 1280: expectation card reads "NHL season programme | Season 2012, SJS. Choices apply once when this team plays the year. | Back | ? | Close | Coach expectations | No extra target | Keep the normal season. | Steady availability | Play 68 games: morale +3 (morale tops out at 100). Miss it: morale -3. | Earn a bigger role | Play 78 games: morale +6 (morale tops out at 100). Miss it: morale -5. This does not guarantee a starting spot. | Each choice saves immediately. You can change it before playing."
+note plan card nhl-2012 at 1280: partnership card reads "NHL season programme | Season 2012, SJS. Choices apply once when this team plays the year. | Back | ? | Close | Teammate partnership | Keep your own routine | No extra partnership input. | Build line chemistry | A role-based teammate partnership, with no invented player. At least 55 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. | Each choice saves immediately. You can change it before playing."
+note plan card nhl-2012 at 1280: bonus card reads "NHL season programme | Season 2012, SJS. Choices apply once when this team plays the year. | Back | ? | Close | Performance bonus | No bonus challenge | Keep the normal pay. | Match the benchmark | 30 goals and 55 games: 2% of season salary as a gross bonus. At your salary of $1.5M, none of it reaches the bank: your 45% share is under the $0.1M the bank counts in. It still counts in career earnings. | Stretch the benchmark | 34 goals and 55 games: 5% of season salary as a gross bonus. At your salary of $1.5M, none of it reaches the bank: your 45% share is under the $0.1M the bank counts in. It still counts in career earnings. | Each choice saves immediately. You can change it before playing."
+ok   plan card nhl-2012 at 1280: no page errors (clean)
+ok   plan card mlb-2020 at 390: the hub has Plan your season (year 2020, team MIL, last season 157 games)
+note plan card mlb-2020 at 390: expectation card reads "MLB season programme | Season 2020, MIL. Choices apply once when this team plays the year. | Back | ? | Close | Coach expectations | No extra target | Keep the normal season. | Steady availability | Play 133 games: morale +3 (morale tops out at 100). Miss it: morale -3. | Earn a bigger role | Play 143 games: morale +6 (morale tops out at 100). Miss it: morale -5. This does not guarantee a starting spot. | Each choice saves immediately. You can change it before playing."
+note plan card mlb-2020 at 390: partnership card reads "MLB season programme | Season 2020, MIL. Choices apply once when this team plays the year. | Back | ? | Close | Teammate partnership | Keep your own routine | No extra partnership input. | Build a lineup partnership | A role-based teammate partnership, with no invented player. At least 100 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. | Each choice saves immediately. You can change it before playing."
+note plan card mlb-2020 at 390: bonus card reads "MLB season programme | Season 2020, MIL. Choices apply once when this team plays the year. | Back | ? | Close | Performance bonus | No bonus challenge | Keep the normal pay. | Match the benchmark | 15 home runs and 100 games: 2% of season salary as a gross bonus. At your salary of $0.3M, none of it reaches the bank: your 45% share is under the $0.1M the bank counts in. It still counts in career earnings. | Stretch the benchmark | 19 home runs and 100 games: 5% of season salary as a gross bonus. At your salary of $0.3M, none of it reaches the bank: your 45% share is under the $0.1M the bank counts in. It still counts in career earnings. | Each choice saves immediately. You can change it befor"
+ok   plan card mlb-2020 at 390: no page errors (clean)
+ok   plan card mlb-2020 at 1280: the hub has Plan your season (year 2020, team MIL, last season 157 games)
+note plan card mlb-2020 at 1280: expectation card reads "MLB season programme | Season 2020, MIL. Choices apply once when this team plays the year. | Back | ? | Close | Coach expectations | No extra target | Keep the normal season. | Steady availability | Play 133 games: morale +3 (morale tops out at 100). Miss it: morale -3. | Earn a bigger role | Play 143 games: morale +6 (morale tops out at 100). Miss it: morale -5. This does not guarantee a starting spot. | Each choice saves immediately. You can change it before playing."
+note plan card mlb-2020 at 1280: partnership card reads "MLB season programme | Season 2020, MIL. Choices apply once when this team plays the year. | Back | ? | Close | Teammate partnership | Keep your own routine | No extra partnership input. | Build a lineup partnership | A role-based teammate partnership, with no invented player. At least 100 games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6. | Each choice saves immediately. You can change it before playing."
+note plan card mlb-2020 at 1280: bonus card reads "MLB season programme | Season 2020, MIL. Choices apply once when this team plays the year. | Back | ? | Close | Performance bonus | No bonus challenge | Keep the normal pay. | Match the benchmark | 15 home runs and 100 games: 2% of season salary as a gross bonus. At your salary of $0.3M, none of it reaches the bank: your 45% share is under the $0.1M the bank counts in. It still counts in career earnings. | Stretch the benchmark | 19 home runs and 100 games: 5% of season salary as a gross bonus. At your salary of $0.3M, none of it reaches the bank: your 45% share is under the $0.1M the bank counts in. It still counts in career earnings. | Each choice saves immediately. You can change it befor"
+ok   plan card mlb-2020 at 1280: no page errors (clean)
+ok   old nfl QB save at 390: the save made by /tmp/base opens on the hub
+ok   old nfl QB save at 390: opening it left its 3 season rows as they were
+note old nfl QB save at 390: the Rival screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Andre Brennan QB · New Orleans Saints · age 25 74 overall 0 rings 0-3 head to head Andre Brennan leads after 3 seasons measured side by side. Last season he went 347"
+note old nfl QB save at 390: the season card reads "THE 2029 SEASON New Orleans Saints · age 25 · QB Lost in the Divisional round 3,706 yds, 24 TD, 14 INT 📊 Playoffs: 2 games, 454 yds, 3 TD, 1 INT. 🪞 Andre Brennan went 3,784 yds, 24 TD, 13 INT. Nothing in it again. He leads the head to head 4-0. Continue"
+ok   old nfl QB save at 390: nothing scrolls sideways on the season card (0px)
+ok   old nfl QB save at 390: the walk gets back to the hub after the season
+ok   old nfl QB save at 390: one season was added (3 to 4)
+ok   old nfl QB save at 390: the rows the save already held are byte for byte the same after playing on
+note old nfl QB save at 390: the new row {"year":2029,"team":"NO","age":25,"ovr":76,"games":17,"awards":[],"teamResult":"Lost in the Divisional round","salary":1.9,"passYds":3706,"passTd":24,"ints":14,"poGames":2,"poLine":"454 yds, 3 TD, 1 INT"}; rival now "3,784 yds, 24 TD, 13 INT" lastYear 2029 h2h 0-4
+ok   old nfl QB save at 390: no page errors (clean)
+ok   old nfl QB save at 1280: the save made by /tmp/base opens on the hub
+ok   old nfl QB save at 1280: opening it left its 3 season rows as they were
+note old nfl QB save at 1280: the Rival screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Andre Brennan QB · New Orleans Saints · age 25 74 overall 0 rings 0-3 head to head Andre Brennan leads after 3 seasons measured side by side. Last season he went 347"
+note old nfl QB save at 1280: the season card reads "THE 2029 SEASON New Orleans Saints · age 25 · QB Lost in the Divisional round 3,706 yds, 24 TD, 14 INT 📊 Playoffs: 2 games, 454 yds, 3 TD, 1 INT. 🪞 Andre Brennan went 3,784 yds, 24 TD, 13 INT. Nothing in it again. He leads the head to head 4-0. Continue"
+ok   old nfl QB save at 1280: nothing scrolls sideways on the season card (0px)
+ok   old nfl QB save at 1280: the walk gets back to the hub after the season
+ok   old nfl QB save at 1280: one season was added (3 to 4)
+ok   old nfl QB save at 1280: the rows the save already held are byte for byte the same after playing on
+note old nfl QB save at 1280: the new row {"year":2029,"team":"NO","age":25,"ovr":76,"games":17,"awards":[],"teamResult":"Lost in the Divisional round","salary":1.9,"passYds":3706,"passTd":24,"ints":14,"poGames":2,"poLine":"454 yds, 3 TD, 1 INT"}; rival now "3,784 yds, 24 TD, 13 INT" lastYear 2029 h2h 0-4
+ok   old nfl QB save at 1280: no page errors (clean)
+ok   old nfl K save at 390: the save made by /tmp/base opens on the hub
+ok   old nfl K save at 390: opening it left its 3 season rows as they were
+note old nfl K save at 390: the Rival screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Kai Hendricks K · New York Jets · age 25 78 overall 1 ring 0-3 head to head Kai Hendricks leads after 3 seasons measured side by side. Last season he went 27 field g"
+note old nfl K save at 390: the season card reads "THE 2029 SEASON New York Jets · age 25 · K WON THE SUPER BOWL 23 of 26 FG, long of 62 💍 A RING. 📊 Playoffs: 4 games, 7 of 7 on field goals. 🪞 Kai Hendricks went 28 of 32 FG, long of 56 and had the better year of the two of you. Head to head 0-4. Continue"
+ok   old nfl K save at 390: nothing scrolls sideways on the season card (0px)
+ok   old nfl K save at 390: the walk gets back to the hub after the season
+ok   old nfl K save at 390: one season was added (3 to 4)
+ok   old nfl K save at 390: the rows the save already held are byte for byte the same after playing on
+note old nfl K save at 390: the new row {"year":2029,"team":"NYJ","age":25,"ovr":76,"games":17,"awards":[],"teamResult":"WON THE SUPER BOWL","salary":1.2,"fgAtt":26,"fgMade":23,"longFg":62,"poGames":4,"poLine":"7 of 7 on field goals"}; rival now "28 of 32 FG, long of 56" lastYear 2029 h2h 0-4
+ok   old nfl K save at 390: no page errors (clean)
+ok   old nfl K save at 1280: the save made by /tmp/base opens on the hub
+ok   old nfl K save at 1280: opening it left its 3 season rows as they were
+note old nfl K save at 1280: the Rival screen reads "NFL My Career Draft night to retirement speech. Every choice bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Kai Hendricks K · New York Jets · age 25 78 overall 1 ring 0-3 head to head Kai Hendricks leads after 3 seasons measured side by side. Last season he went 27 field g"
+note old nfl K save at 1280: the season card reads "THE 2029 SEASON New York Jets · age 25 · K WON THE SUPER BOWL 23 of 26 FG, long of 62 💍 A RING. 📊 Playoffs: 4 games, 7 of 7 on field goals. 🪞 Kai Hendricks went 28 of 32 FG, long of 56 and had the better year of the two of you. Head to head 0-4. Continue"
+ok   old nfl K save at 1280: nothing scrolls sideways on the season card (0px)
+ok   old nfl K save at 1280: the walk gets back to the hub after the season
+ok   old nfl K save at 1280: one season was added (3 to 4)
+ok   old nfl K save at 1280: the rows the save already held are byte for byte the same after playing on
+note old nfl K save at 1280: the new row {"year":2029,"team":"NYJ","age":25,"ovr":76,"games":17,"awards":[],"teamResult":"WON THE SUPER BOWL","salary":1.2,"fgAtt":26,"fgMade":23,"longFg":62,"poGames":4,"poLine":"7 of 7 on field goals"}; rival now "28 of 32 FG, long of 56" lastYear 2029 h2h 0-4
+ok   old nfl K save at 1280: no page errors (clean)
+ok   old nba PG save at 390: the save made by /tmp/base opens on the hub
+ok   old nba PG save at 390: opening it left its 3 season rows as they were
+note old nba PG save at 390: the Rival screen reads "NBA My Career Draft night to jersey retirement. Every summer bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Jaxon Delgado PG · Brooklyn Nets · age 23 76 overall 0 rings 1-2 head to head Jaxon Delgado leads after 3 seasons measured side by side. Last season he went 8.7 ppg,"
+note old nba PG save at 390: the season card reads "THE 2029 SEASON Brooklyn Nets · age 23 · PG Missed the playoffs 5.8 ppg, 1.7 rpg, 3.0 apg 🪑 Still the second unit. The minutes will come, keep pushing. 🪑 Second unit season: your numbers come in bench minutes. 📊 16.4 mpg, 0.7 spg, 0.1 bpg. 🪞 Jaxon Delgado went 12.7 ppg, 3.5 rpg, 4.2 apg and had the better year of the two of you. Head to head 1-3. Continue"
+ok   old nba PG save at 390: nothing scrolls sideways on the season card (0px)
+ok   old nba PG save at 390: the walk gets back to the hub after the season
+ok   old nba PG save at 390: one season was added (3 to 4)
+ok   old nba PG save at 390: the rows the save already held are byte for byte the same after playing on
+note old nba PG save at 390: the new row {"year":2029,"team":"BKN","age":23,"ovr":77,"games":79,"ppg":5.8,"rpg":1.7,"apg":3,"awards":[],"teamResult":"Missed the playoffs","salary":2.5,"mpg":16.4,"spg":0.7,"bpg":0.1,"clubWins":31,"clubLosses":51}; rival now "12.7 ppg, 3.5 rpg, 4.2 apg" lastYear 2029 h2h 1-3
+ok   old nba PG save at 390: no page errors (clean)
+ok   old nba PG save at 1280: the save made by /tmp/base opens on the hub
+ok   old nba PG save at 1280: opening it left its 3 season rows as they were
+note old nba PG save at 1280: the Rival screen reads "NBA My Career Draft night to jersey retirement. Every summer bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Jaxon Delgado PG · Brooklyn Nets · age 23 76 overall 0 rings 1-2 head to head Jaxon Delgado leads after 3 seasons measured side by side. Last season he went 8.7 ppg,"
+note old nba PG save at 1280: the season card reads "THE 2029 SEASON Brooklyn Nets · age 23 · PG Missed the playoffs 5.8 ppg, 1.7 rpg, 3.0 apg 🪑 Still the second unit. The minutes will come, keep pushing. 🪑 Second unit season: your numbers come in bench minutes. 📊 16.4 mpg, 0.7 spg, 0.1 bpg. 🪞 Jaxon Delgado went 12.7 ppg, 3.5 rpg, 4.2 apg and had the better year of the two of you. Head to head 1-3. Continue"
+ok   old nba PG save at 1280: nothing scrolls sideways on the season card (0px)
+ok   old nba PG save at 1280: the walk gets back to the hub after the season
+ok   old nba PG save at 1280: one season was added (3 to 4)
+ok   old nba PG save at 1280: the rows the save already held are byte for byte the same after playing on
+note old nba PG save at 1280: the new row {"year":2029,"team":"BKN","age":23,"ovr":77,"games":79,"ppg":5.8,"rpg":1.7,"apg":3,"awards":[],"teamResult":"Missed the playoffs","salary":2.5,"mpg":16.4,"spg":0.7,"bpg":0.1,"clubWins":31,"clubLosses":51}; rival now "12.7 ppg, 3.5 rpg, 4.2 apg" lastYear 2029 h2h 1-3
+ok   old nba PG save at 1280: no page errors (clean)
+ok   old mlb CF save at 390: the save made by /tmp/base opens on the hub
+ok   old mlb CF save at 390: opening it left its 3 season rows as they were
+note old mlb CF save at 390: the Rival screen reads "MLB My Career Draft day to the farewell tour. Every offseason bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Zane Ferreira CF · Pittsburgh Pirates · age 24 75 overall 0 rings 0-3 head to head Zane Ferreira leads after 3 seasons measured side by side. Last season he went 0."
+note old mlb CF save at 390: the season card reads "THE 2029 SEASON Pittsburgh Pirates · age 24 · CF Missed October .271, 17 HR, 67 RBI 🪞 Zane Ferreira went 0.284, 21 HR and had the better year of the two of you. Head to head 0-4. Continue"
+ok   old mlb CF save at 390: nothing scrolls sideways on the season card (0px)
+ok   old mlb CF save at 390: the walk gets back to the hub after the season
+ok   old mlb CF save at 390: one season was added (3 to 4)
+ok   old mlb CF save at 390: the rows the save already held are byte for byte the same after playing on
+note old mlb CF save at 390: the new row {"year":2029,"team":"PIT","age":24,"ovr":72,"games":159,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.271,"hr":17,"rbi":67,"sb":4,"doubles":33,"obp":0.341}; rival now "0.284, 21 HR" lastYear none h2h 0-4
+ok   old mlb CF save at 390: no page errors (clean)
+ok   old mlb CF save at 1280: the save made by /tmp/base opens on the hub
+ok   old mlb CF save at 1280: opening it left its 3 season rows as they were
+note old mlb CF save at 1280: the Rival screen reads "MLB My Career Draft day to the farewell tour. Every offseason bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Zane Ferreira CF · Pittsburgh Pirates · age 24 75 overall 0 rings 0-3 head to head Zane Ferreira leads after 3 seasons measured side by side. Last season he went 0."
+note old mlb CF save at 1280: the season card reads "THE 2029 SEASON Pittsburgh Pirates · age 24 · CF Missed October .271, 17 HR, 67 RBI 🪞 Zane Ferreira went 0.284, 21 HR and had the better year of the two of you. Head to head 0-4. Continue"
+ok   old mlb CF save at 1280: nothing scrolls sideways on the season card (0px)
+ok   old mlb CF save at 1280: the walk gets back to the hub after the season
+ok   old mlb CF save at 1280: one season was added (3 to 4)
+ok   old mlb CF save at 1280: the rows the save already held are byte for byte the same after playing on
+note old mlb CF save at 1280: the new row {"year":2029,"team":"PIT","age":24,"ovr":72,"games":159,"awards":[],"teamResult":"Missed October","salary":0.8,"avg":0.271,"hr":17,"rbi":67,"sb":4,"doubles":33,"obp":0.341}; rival now "0.284, 21 HR" lastYear none h2h 0-4
+ok   old mlb CF save at 1280: no page errors (clean)
+ok   old mlb SP save at 390: the save made by /tmp/base opens on the hub
+ok   old mlb SP save at 390: opening it left its 3 season rows as they were
+note old mlb SP save at 390: the Rival screen reads "MLB My Career Draft day to the farewell tour. Every offseason bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Rhys Fitzgerald SP · Detroit Tigers · age 24 78 overall 0 rings 0-3 head to head Rhys Fitzgerald leads after 3 seasons measured side by side. Last season he went 0."
+note old mlb SP save at 390: the season card reads "THE 2029 SEASON Detroit Tigers · age 24 · SP Missed October 14-6, 5.18 ERA, 167 K 🪞 Rhys Fitzgerald went 0.271, 19 HR and had the better year of the two of you. Head to head 0-4. Continue"
+ok   old mlb SP save at 390: nothing scrolls sideways on the season card (0px)
+ok   old mlb SP save at 390: the walk gets back to the hub after the season
+ok   old mlb SP save at 390: one season was added (3 to 4)
+ok   old mlb SP save at 390: the rows the save already held are byte for byte the same after playing on
+note old mlb SP save at 390: the new row {"year":2029,"team":"DET","age":24,"ovr":75,"games":32,"awards":[],"teamResult":"Missed October","salary":0.8,"era":5.18,"wins":14,"lossesP":6,"so":167}; rival now "0.271, 19 HR" lastYear none h2h 0-4
+ok   old mlb SP save at 390: no page errors (clean)
+ok   old mlb SP save at 1280: the save made by /tmp/base opens on the hub
+ok   old mlb SP save at 1280: opening it left its 3 season rows as they were
+note old mlb SP save at 1280: the Rival screen reads "MLB My Career Draft day to the farewell tour. Every offseason bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Rhys Fitzgerald SP · Detroit Tigers · age 24 78 overall 0 rings 0-3 head to head Rhys Fitzgerald leads after 3 seasons measured side by side. Last season he went 0."
+note old mlb SP save at 1280: the season card reads "THE 2029 SEASON Detroit Tigers · age 24 · SP Missed October 14-6, 5.18 ERA, 167 K 🪞 Rhys Fitzgerald went 0.271, 19 HR and had the better year of the two of you. Head to head 0-4. Continue"
+ok   old mlb SP save at 1280: nothing scrolls sideways on the season card (0px)
+ok   old mlb SP save at 1280: the walk gets back to the hub after the season
+ok   old mlb SP save at 1280: one season was added (3 to 4)
+ok   old mlb SP save at 1280: the rows the save already held are byte for byte the same after playing on
+note old mlb SP save at 1280: the new row {"year":2029,"team":"DET","age":24,"ovr":75,"games":32,"awards":[],"teamResult":"Missed October","salary":0.8,"era":5.18,"wins":14,"lossesP":6,"so":167}; rival now "0.271, 19 HR" lastYear none h2h 0-4
+ok   old mlb SP save at 1280: no page errors (clean)
+ok   old nhl C save at 390: the save made by /tmp/base opens on the hub
+ok   old nhl C save at 390: opening it left its 3 season rows as they were
+note old nhl C save at 390: the Rival screen reads "NHL My Career Draft day to the farewell tour. Every offseason bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Cole Vasquez C · Utah Mammoth · age 21 76 overall 1 Cup 2-1 head to head Old Save leads after 3 seasons measured side by side. Last season he went 11G 17A 28P. NHL "
+note old nhl C save at 390: the season card reads "THE 2029 SEASON Utah Mammoth · age 21 · C Missed the playoffs 46 G, 39 A, 85 P 🪞 Cole Vasquez went 20G 28A 48P. You had the better year. Head to head 3-1. Continue"
+ok   old nhl C save at 390: nothing scrolls sideways on the season card (0px)
+ok   old nhl C save at 390: the walk gets back to the hub after the season
+ok   old nhl C save at 390: one season was added (3 to 4)
+ok   old nhl C save at 390: the rows the save already held are byte for byte the same after playing on
+note old nhl C save at 390: the new row {"year":2029,"team":"UTA","age":21,"ovr":79,"games":83,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"goals":46,"assists":39,"points":85}; rival now "20G 28A 48P" lastYear none h2h 3-1
+ok   old nhl C save at 390: no page errors (clean)
+ok   old nhl C save at 1280: the save made by /tmp/base opens on the hub
+ok   old nhl C save at 1280: opening it left its 3 season rows as they were
+note old nhl C save at 1280: the Rival screen reads "NHL My Career Draft day to the farewell tour. Every offseason bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Cole Vasquez C · Utah Mammoth · age 21 76 overall 1 Cup 2-1 head to head Old Save leads after 3 seasons measured side by side. Last season he went 11G 17A 28P. NHL "
+note old nhl C save at 1280: the season card reads "THE 2029 SEASON Utah Mammoth · age 21 · C Missed the playoffs 46 G, 39 A, 85 P 🪞 Cole Vasquez went 20G 28A 48P. You had the better year. Head to head 3-1. Continue"
+ok   old nhl C save at 1280: nothing scrolls sideways on the season card (0px)
+ok   old nhl C save at 1280: the walk gets back to the hub after the season
+ok   old nhl C save at 1280: one season was added (3 to 4)
+ok   old nhl C save at 1280: the rows the save already held are byte for byte the same after playing on
+note old nhl C save at 1280: the new row {"year":2029,"team":"UTA","age":21,"ovr":79,"games":83,"awards":[],"teamResult":"Missed the playoffs","salary":0.9,"slate":84,"goals":46,"assists":39,"points":85}; rival now "20G 28A 48P" lastYear none h2h 3-1
+ok   old nhl C save at 1280: no page errors (clean)
+ok   old nhl G save at 390: the save made by /tmp/base opens on the hub
+ok   old nhl G save at 390: opening it left its 3 season rows as they were
+note old nhl G save at 390: the Rival screen reads "NHL My Career Draft day to the farewell tour. Every offseason bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Silas Salvatore G · Carolina Hurricanes · age 21 79 overall 1 Cup 2-1 head to head Old Save leads after 3 seasons measured side by side. Last season he went 27G 34A"
+note old nhl G save at 390: the season card reads "THE 2029 SEASON Carolina Hurricanes · age 21 · G Lost in Round 2 33 W, .923 SV% 📊 Playoffs: 10 games, 6 wins, 0.929 SV%. 🪞 Silas Salvatore went 16G 26A 42P. You had the better year. Head to head 3-1. Continue"
+ok   old nhl G save at 390: nothing scrolls sideways on the season card (0px)
+ok   old nhl G save at 390: the walk gets back to the hub after the season
+ok   old nhl G save at 390: one season was added (3 to 4)
+ok   old nhl G save at 390: the rows the save already held are byte for byte the same after playing on
+note old nhl G save at 390: the new row {"year":2029,"team":"CAR","age":21,"ovr":80,"games":63,"awards":[],"teamResult":"Lost in Round 2","salary":0.9,"slate":84,"wins":33,"svpct":0.923,"poGames":10,"poWins":6,"poSvpct":0.929}; rival now "16G 26A 42P" lastYear none h2h 3-1
+ok   old nhl G save at 390: no page errors (clean)
+ok   old nhl G save at 1280: the save made by /tmp/base opens on the hub
+ok   old nhl G save at 1280: opening it left its 3 season rows as they were
+note old nhl G save at 1280: the Rival screen reads "NHL My Career Draft day to the farewell tour. Every offseason bends the career. Hub 📰 News Feed 📰 Paper 📸 SocialGram 🪞 Rival 🪞 YOUR RIVAL, DRAFTED THE SAME YEAR Silas Salvatore G · Carolina Hurricanes · age 21 79 overall 1 Cup 2-1 head to head Old Save leads after 3 seasons measured side by side. Last season he went 27G 34A"
+note old nhl G save at 1280: the season card reads "THE 2029 SEASON Carolina Hurricanes · age 21 · G Lost in Round 2 33 W, .923 SV% 📊 Playoffs: 10 games, 6 wins, 0.929 SV%. 🪞 Silas Salvatore went 16G 26A 42P. You had the better year. Head to head 3-1. Continue"
+ok   old nhl G save at 1280: nothing scrolls sideways on the season card (0px)
+ok   old nhl G save at 1280: the walk gets back to the hub after the season
+ok   old nhl G save at 1280: one season was added (3 to 4)
+ok   old nhl G save at 1280: the rows the save already held are byte for byte the same after playing on
+note old nhl G save at 1280: the new row {"year":2029,"team":"CAR","age":21,"ovr":80,"games":63,"awards":[],"teamResult":"Lost in Round 2","salary":0.9,"slate":84,"wins":33,"svpct":0.923,"poGames":10,"poWins":6,"poSvpct":0.929}; rival now "16G 26A 42P" lastYear none h2h 3-1
+ok   old nhl G save at 1280: no page errors (clean)
+uscWalk: 0 failed, 80 notes; screenshots in /home/runner/work/_temp/rc-out/files
