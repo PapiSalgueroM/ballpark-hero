@@ -1,0 +1,9 @@
+# Release AU, four gate lines sent again with the invocation each needs (the first send called them bare)
+#!serve
+#!playwright
+#!serial
+simCmLeagueFixtures: CM_LEAGUE_FIXTURES_EXPECT=10 CM_LEAGUE_FIXTURES_EXPECT_FROZEN=10 CM_LEAGUE_FIXTURES_EXPECT_BOUND=10 node scripts/simCmLeagueFixtures.mjs
+simDraftNight-head: node scripts/simDraftNight.mjs
+simDraftNight-main: git worktree add -q /tmp/basem origin/main && ln -s "$PWD/node_modules" /tmp/basem/node_modules && cd /tmp/basem && node scripts/simDraftNight.mjs
+playCmQuickSubs: mkdir -p cm-quick-subs-artifacts/font-cache && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only && FREE_KICK_FONT_CACHE="$PWD/cm-quick-subs-artifacts/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmQuickSubs.mjs
+playSaveKeeper: git worktree add -q /tmp/base origin/main && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && node_modules/.bin/vite build --outDir /tmp/base-dist > /tmp/base-build.log 2>&1; tail -1 /tmp/base-build.log) && KEEPER_BASE_DIST=/tmp/base-dist node scripts/playSaveKeeper.mjs
