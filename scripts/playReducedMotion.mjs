@@ -28,6 +28,18 @@
  * before removing them, because a control that deletes something absent changes
  * nothing and is green for the wrong reason.
  *
+ * RELEASE AU FIX PASS (2026-10-10). The two Soccer Career scenes are reached
+ * through a save that holds an unseen chance wheel, so the walk answers the
+ * wheel as a player does (scripts/lib/chanceWheelWalk.mjs) and holds the wheel
+ * itself to three things: under reduce it does not spin; its result line, the
+ * one line it exists to show, is whole on the screen at 320 by 568, 375 by
+ * 667, 390 by 664 and 390 by 844, before and after the reveal; and it can
+ * always be answered (Spin and Show result, then Continue, each whole and at
+ * least 44 px tall). A picture of each size goes to RC_OUT (or a temp folder).
+ * REDUCED_MOTION_CONTROL=wheelcut pushes the result line under the fold of
+ * its dialog, where a short phone had it before the fix, and the wheel stage
+ * must then go red while every other stage stays green.
+ *
  * Run: node scripts/playReducedMotion.mjs
  */
 import pw from './lib/playwrightLoader.mjs';
@@ -35,6 +47,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
+import os from 'node:os';
+import { WHEEL, WHEEL_WAITING, answerChanceWheel, wheelBoxes } from './lib/chanceWheelWalk.mjs';
 const { chromium } = pw;
 
 /* Relative to this file, not a hardcoded checkout. It used to read
@@ -63,7 +77,7 @@ if (!/prefers-reduced-motion/.test(css)) {
    duration out of the served stylesheets and documents, and that stage must
    then go red; it refuses if it rewrote nothing. */
 const CONTROL = process.env.REDUCED_MOTION_CONTROL || '';
-if (CONTROL && CONTROL !== 'noguard' && CONTROL !== 'noblanket') {
+if (CONTROL && CONTROL !== 'noguard' && CONTROL !== 'noblanket' && CONTROL !== 'wheelcut') {
   console.error(`REDUCED_MOTION_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -88,6 +102,19 @@ const html = `<!doctype html><html><head><style>${cssUnderTest}</style></head><b
   <span class="cm-confetti" id="confetti"></span>
 </body></html>`;
 
+/** answerChanceWheel, with a picture of the revealed wheel taken before Continue is pressed. */
+async function answerChanceWheelKeeping(page, how, shot) {
+  const dialog = page.locator(WHEEL);
+  const started = Date.now();
+  await dialog.locator(how === 'spin' ? '[data-wheel-spin]' : '[data-wheel-skip]').click();
+  await page.waitForFunction(waiting => { const r = document.querySelector('[data-wheel-result]'); return !!r && r.textContent !== waiting && !!document.querySelector('[data-wheel-continue]'); }, WHEEL_WAITING, { timeout: 10000 });
+  const revealMs = Date.now() - started;
+  const after = await wheelBoxes(page);
+  await page.screenshot({ path: shot });
+  await dialog.locator('[data-wheel-continue]').click();
+  await dialog.waitFor({ state: 'hidden', timeout: 10000 });
+  return { after, revealMs };
+}
 const browser = await chromium.launch({ args: ['--no-sandbox'] });
 let bad = 0;
 for (const pref of ['no-preference', 'reduce']) {
@@ -153,6 +180,10 @@ let slowRoutes = 0;
 let rewrittenCss = 0;
 const REVEAL_CLASSES = ['cm-rise', 'cm-slam', 'cm-tick-in', 'cm-gold-glow', 'cm-win-pulse', 'cm-loss-shake', 'fo-draft-row', 'fo-draft-head', 'fo-draft-continue', 'hf-art', 'hf-cone', 'hf-ball'];
 let badRoutes = 0;
+/* Release AU fix pass: the chance wheel's own findings, kept apart so each control can name its stage. */
+let wheelBad = 0;
+let wheelsAnswered = 0;
+let wheelSizes = 0;
 let routesWithOurCss = 0;
 if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
   console.error('  FAIL: dist/index.html is missing, so the route stage cannot run; build first (npm run build)');
@@ -395,6 +426,24 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
       await p.route('**://*.supabase.co/**', r => r.abort());
       await p.goto(base + '/soccer-career', { waitUntil: 'networkidle' });
       await p.waitForTimeout(600);
+      /* Release AU fix pass (ruling R2). The helper makes these saves through
+         an event choice, and since Rounds 1197 to 1208 such a save holds a
+         chance wheel nobody has seen, which opens over the screen. A player is
+         not stuck behind it (it always carries Spin and Show result, then
+         Continue), so the walk answers it as he would, measures the wheel
+         itself under reduce on the way, and goes on to the scene. */
+      try {
+        await p.waitForSelector(WHEEL, { timeout: 2500 }).catch(() => {});
+        const wheel = await answerChanceWheel(p, 'spin');
+        if (wheel) {
+          wheelsAnswered += 1;
+          const canAnswer = wheel.before.buttons.filter(b => b.enabled && b.whole && b.height >= 44).length;
+          console.log(`   Release AU    ${s.name.padEnd(13)} a chance wheel was open: ${canAnswer} button(s) to answer it, result ${wheel.revealMs}ms after Spin, disk transition ${wheel.after.disk?.transitionMs}ms, result line ${wheel.after.result?.whole ? 'whole' : 'CUT'} at ${wheel.after.viewport}`);
+          if (canAnswer < 2) { console.error(`  FAIL: ${s.name}: the chance wheel over it shows ${canAnswer} whole, enabled button(s) of at least 44px; a player needs Spin and Show result`); wheelBad += 1; }
+          if (wheel.revealMs > 1500 || !(wheel.after.disk?.transitionMs <= SLOW_MS)) { console.error(`  FAIL: ${s.name}: under reduce the wheel still spins (result after ${wheel.revealMs}ms, disk transition ${wheel.after.disk?.transitionMs}ms)`); wheelBad += 1; }
+          if (!wheel.after.result?.whole) { console.error(`  FAIL: ${s.name}: the wheel's result line is not whole on the screen at ${wheel.after.viewport}`); wheelBad += 1; }
+        }
+      } catch (err) { console.error(`  FAIL: ${s.name}: a chance wheel was open and could not be answered: ${String(err?.message || err).split('\n')[0]}`); wheelBad += 1; }
       let reached = true;
       try { await s.reach(p); await p.waitForSelector(s.scene, { timeout: 20000 }); } catch { reached = false; }
       await p.waitForTimeout(700);
@@ -426,6 +475,50 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
       if (r.notGone > 0) { console.error(`  FAIL: ${s.name}: ${r.notGone} old number or ring layer(s) are still drawn under reduce`); badRoutes += 1; }
       if (r.confetti > 0) { console.error(`  FAIL: ${s.name}: ${r.confetti} confetti piece(s) fall under reduce`); badRoutes += 1; }
       if (r.slow > 0) { console.error(`  FAIL: ${s.name}: ${r.slow} element(s) in its card still move for more than ${SLOW_MS}ms under reduce`); slowRoutes += 1; }
+    }
+    /* Release AU fix pass (ruling R4): the wheel on the phones that cut it. The
+       dialog needed 608 px and a short phone gives it less, so the result line
+       sat under the fold of a panel nothing said could scroll. It is outside
+       that panel now. Each size opens the same save, reads the line before the
+       reveal, answers the wheel, reads the line again, and keeps a picture. */
+    {
+      const held = (() => { try { return JSON.parse(won?.save ?? 'null')?.chanceWheel ?? null; } catch { return null; } })();
+      const SHOTS = process.env.RC_OUT || fs.mkdtempSync(path.join(os.tmpdir(), 'playReducedMotion-'));
+      if (!held || held.seen) {
+        console.error('  FAIL: chance wheel: the trophy save holds no unseen wheel, so nothing about the wheel was measured');
+        wheelBad += 1;
+      } else for (const [width, height, motion] of [[320, 568, 'reduce'], [375, 667, 'no-preference'], [390, 664, 'no-preference'], [390, 844, 'no-preference']]) {
+        const wctx = await browser.newContext({ reducedMotion: motion, viewport: { width, height } });
+        await wctx.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* ignored */ } });
+        const p = await wctx.newPage();
+        await p.addInitScript(([flag, v]) => { try { if (!sessionStorage.getItem(flag)) { sessionStorage.setItem(flag, '1'); localStorage.setItem('soccerCareerSave', v); } } catch { /* ignored */ } }, [`rm-wheel-${width}`, won.save]);
+        await p.route('**://*.supabase.co/**', r => r.abort());
+        const where = `chance wheel at ${width} by ${height}${motion === 'reduce' ? ' under reduce' : ''}`;
+        try {
+          await p.goto(base + '/soccer-career', { waitUntil: 'networkidle' });
+          await p.waitForSelector(WHEEL, { timeout: 20000 });
+          await p.waitForTimeout(400);
+          if (CONTROL === 'wheelcut') await p.addStyleTag({ content: '[data-wheel-result]{margin-top:120vh !important}' });
+          const before = await wheelBoxes(p);
+          const answered = await answerChanceWheelKeeping(p, motion === 'reduce' ? 'spin' : 'skip', path.join(SHOTS, `wheel-${width}x${height}.png`));
+          const after = answered.after;
+          wheelSizes += 1;
+          const want = held.result ? held.hit : held.miss;
+          const answerable = before.buttons.filter(b => b.enabled && b.whole && b.height >= 44).length;
+          const cont = after.buttons.find(b => b.name === 'Continue');
+          console.log(`   Release AU    ${where}: result line ${before.result?.top} to ${before.result?.bottom} before (${before.result?.whole ? 'whole' : 'CUT'}), ${after.result?.top} to ${after.result?.bottom} after (${after.result?.whole ? 'whole' : 'CUT'}), dialog ${after.dialog.top} to ${after.dialog.bottom} of ${height}, disk ${after.disk?.height}px ${after.disk?.whole ? 'whole' : 'partly scrolled'}, ${answerable} button(s) before, reveal ${answered.revealMs}ms`);
+          if (!before.result?.whole || before.result.text !== WHEEL_WAITING) { console.error(`  FAIL: ${where}: before the reveal the result line is not whole on the screen (${JSON.stringify(before.result)})`); wheelBad += 1; }
+          if (!after.result?.whole) { console.error(`  FAIL: ${where}: after the reveal the result line is not whole on the screen (${JSON.stringify(after.result)})`); wheelBad += 1; }
+          if (after.result?.text !== want) { console.error(`  FAIL: ${where}: the wheel shows "${after.result?.text}" and the save holds "${want}"`); wheelBad += 1; }
+          if (answerable < 2) { console.error(`  FAIL: ${where}: ${answerable} whole, enabled button(s) of at least 44px before the reveal; a player needs Spin and Show result`); wheelBad += 1; }
+          if (!cont || !cont.whole || cont.height < 44) { console.error(`  FAIL: ${where}: Continue is not a whole 44px button after the reveal (${JSON.stringify(cont ?? null)})`); wheelBad += 1; }
+          if (motion === 'reduce' && (answered.revealMs > 1500 || !(after.disk?.transitionMs <= SLOW_MS))) { console.error(`  FAIL: ${where}: the wheel still spins under reduce (result after ${answered.revealMs}ms, disk transition ${after.disk?.transitionMs}ms)`); wheelBad += 1; }
+          const seen = await p.evaluate(() => { try { return JSON.parse(localStorage.getItem('soccerCareerSave') ?? 'null')?.chanceWheel?.seen === true; } catch { return false; } });
+          if (!seen) { console.error(`  FAIL: ${where}: Continue closed the wheel and the save does not hold it as seen`); wheelBad += 1; }
+        } catch (err) { console.error(`  FAIL: ${where}: ${String(err?.message || err).split('\n')[0]}`); wheelBad += 1; }
+        await wctx.close();
+      }
+      console.log(`   Release AU    chance wheel pictures: ${SHOTS}`);
     }
   }
   /* The stage has to have seen our own keyframe CSS somewhere, or it proved
@@ -484,6 +577,14 @@ if (CONTROL === 'noguard') {
   console.error(`playReducedMotion control: RED. The guards were removed and ${bad === 0 ? 'the synthetic page' : 'the routes'} stayed green, so that stage proves nothing.`);
   process.exit(1);
 }
+if (CONTROL === 'wheelcut') {
+  if (wheelBad > 0 && wheelSizes > 0 && bad + badRoutes + slowRoutes === 0) {
+    console.log(`playReducedMotion control: green. With the wheel's result line pushed under the fold of its dialog the wheel stage went red (${wheelBad} finding${wheelBad === 1 ? '' : 's'} over ${wheelSizes} screen size(s)) and nothing else moved.`);
+    process.exit(0);
+  }
+  console.error(`playReducedMotion control: RED. The wheel's result line was pushed out of sight and the wheel stage reported ${wheelBad} finding(s) over ${wheelSizes} size(s) while the other stages reported ${bad + badRoutes + slowRoutes}, so it is not the stage that caught it.`);
+  process.exit(1);
+}
 if (CONTROL === 'noblanket') {
   if (slowRoutes > 0 && bad + badRoutes === 0) {
     console.log(`playReducedMotion control: green. With the blanket rule's transition duration rewritten out of ${rewrittenCss} served file(s), the duration stage went red on ${slowRoutes} route(s) and nothing else moved.`);
@@ -492,8 +593,8 @@ if (CONTROL === 'noblanket') {
   console.error(`playReducedMotion control: RED. The blanket rule was rewritten and the duration stage reported ${slowRoutes} route(s) while the other stages reported ${bad + badRoutes}, so it is not the stage that caught it.`);
   process.exit(1);
 }
-if (bad + badRoutes + slowRoutes > 0) {
-  console.error(`playReducedMotion: ${bad + badRoutes + slowRoutes} problem(s)`);
+if (bad + badRoutes + slowRoutes + wheelBad > 0) {
+  console.error(`playReducedMotion: ${bad + badRoutes + slowRoutes + wheelBad} problem(s)${wheelBad ? ` (${wheelBad} of them the chance wheel's)` : ''}`);
   process.exit(1);
 }
-console.log('playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration.');
+console.log(`playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration. The chance wheel was answered ${wheelsAnswered} time(s) on the way to a scene and its result line is whole on ${wheelSizes} screen size(s).`);
