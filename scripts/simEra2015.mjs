@@ -47,8 +47,18 @@
  *      292 Bundesliga and 253 Ligue 1 players, the seven thin clubs by name,
  *      one man at one club in the whole world, the eight men earlier rounds
  *      removed who are home now, the thirteen folds, a sample of the window.
- * Four negative controls, SIM_ERA2015_CONTROL=dupe|stale|threeleagues|longname,
- * each of which must end the run red (see the block where they are defined).
+ * Round 1304: the modern world this harness compares with is the JOINED one
+ * the game reads (src/data/clubManagerWorldRosters.ts: the value table's bake,
+ * the A-League Men of Round 1035 and the Russian Premier League of Round
+ * 1052), no longer the bake alone. Reading the bake alone called Hiroki
+ * Sakai, Mathew Leckie, Tom Lawrence and Jhon Cordoba, real 2026 men of those
+ * two files eleven years older, 2015 men on the 2026 market (red from Round
+ * 1035's commit b777801d; docs/audits/ROUND-1304-NOTES.md has the table). The
+ * namesake pass of section 2 is the check that judges them now.
+ *
+ * Six negative controls, SIM_ERA2015_CONTROL=dupe|stale|threeleagues|longname|
+ * leak|joinage, each of which must end the run red (see the block where they
+ * are defined).
  *
  * Run: node scripts/simEra2015.mjs
  */
@@ -59,8 +69,11 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = path.join(os.tmpdir(), 'era2015Entry.mjs');
-const BUNDLE = path.join(os.tmpdir(), 'era2015.bundle.mjs');
+/* Round 1304: a name of its own for each run, so the harness and one of its
+   controls can run side by side without reading each other's bundle. */
+const TAG = `${process.pid}-${Date.now()}`;
+const ENTRY = path.join(os.tmpdir(), `era2015Entry-${TAG}.mjs`);
+const BUNDLE = path.join(os.tmpdir(), `era2015-${TAG}.bundle.mjs`);
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
@@ -68,15 +81,18 @@ const engine = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.t
 const eras = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManagerEras.ts');
 const era2015 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2015.ts');
 const era2010 = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerEra2010.ts');
-const modern = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
-export { engine, eras, era2015, era2010, modern };
+const modern = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerWorldRosters.ts');
+const baked = await import('${ROOT.replaceAll('\\', '/')}/src/data/clubManagerRosters.ts');
+export { engine, eras, era2015, era2010, modern, baked };
 `);
 execSync(
   `${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`,
   { stdio: 'inherit' },
 );
 
-const { engine: cm, eras: ER, era2015: E15, era2010: E10, modern: MOD } = await import(pathToFileURL(BUNDLE).href);
+const { engine: cm, eras: ER, era2015: E15, era2010: E10, modern: MOD, baked: BAKED } = await import(pathToFileURL(BUNDLE).href);
+fs.rmSync(ENTRY, { force: true });
+fs.rmSync(BUNDLE, { force: true });
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await ER.ensureAllEraRosters();
 const { eraUpliftRating, eraRosters, projectedRoster } = ER;
@@ -86,7 +102,12 @@ const {
 } = cm;
 const { ERA2015_ROSTERS, ERA2015_META, ERA2015_PARTIAL } = E15;
 const { ERA2010_ROSTERS } = E10;
-const { CM_ROSTERS } = MOD;
+/* Round 1304: the modern world is the joined one, the same object both
+   engine files read, so a league that joins the game joins this harness.
+   The bake alone is kept only to tell which clubs a generated league added
+   (control joinage). */
+const { CM_WORLD_ROSTERS: CM_ROSTERS } = MOD;
+const BAKED_CLUBS = new Set(Object.keys(BAKED.CM_ROSTERS));
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -106,9 +127,16 @@ const REAL_RANDOM = Math.random;
                    the league count, the sizes and the 98 demands must fail.
      longname      section 7b's old save holds names the engine never had
                    in place of the two old long names: its strength and
-                   association checks must fail. */
+                   association checks must fail.
+     leak          (Round 1304) the modern save is handed the 2015 market, as
+                   a market cache that forgot the era would hand it: section
+                   2's "2015-only ... is on the 2026 market" must fail.
+     joinage       (Round 1304) one man the 2015 world shares with a
+                   generated league (a club the bake does not hold) reads ten
+                   years older in memory: section 2's namesake pass must fail
+                   on him, which proves the pass reads the generated leagues. */
 const CONTROL = process.env.SIM_ERA2015_CONTROL ?? '';
-if (CONTROL && !['dupe', 'stale', 'threeleagues', 'longname'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dupe', 'stale', 'threeleagues', 'longname', 'leak', 'joinage'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 function controlDupe(rosters) {
   const row = (rosters['PSG'] ?? []).find(p => p.n === 'Ángel Di María');
@@ -224,9 +252,18 @@ console.log('2) Three worlds (2026, 2015, 2010), and none of them leak');
   else if (aguero.age !== 26) fail(`market Aguero is ${aguero.age}, 2015 says 26`);
 
   Math.random = seeded(29);
-  const now = startCareer('Arsenal');
-  const nowNames = new Set(buildMarket(now).map(p => p.name));
+  let now = startCareer('Arsenal');
+  /* Round 1304: the modern names are the joined world's, the one the game
+     reads. The market comes out of the engine and this list out of the data
+     files, so the two can still disagree, which is the whole check. */
   const modernNames = new Set(Object.values(CM_ROSTERS).flat().map(p => p.n));
+  if (CONTROL === 'leak') {
+    const eraOnly = Object.values(ERA2015_ROSTERS).flat().filter(p => !modernNames.has(p.n)).length;
+    if (!eraOnly) controlRefuse('no 2015 man is missing from the modern world, so nobody could leak');
+    now = { ...now, eraId: 'era2015' };
+    console.log(`   CONTROL leak applied: the modern save reads the 2015 market (${eraOnly} era-only men could be on it)`);
+  }
+  const nowNames = new Set(buildMarket(now).map(p => p.name));
   let checked = 0, leaked = 0;
   for (const roster of Object.values(ERA2015_ROSTERS)) {
     for (const p of roster) {
@@ -296,6 +333,17 @@ console.log('2) Three worlds (2026, 2015, 2010), and none of them leak');
   for (const roster of Object.values(ERA2015_ROSTERS)) for (const p of roster) eraByName.set(p.n, p);
   const modByName = new Map();
   for (const roster of Object.values(CM_ROSTERS)) for (const p of roster) modByName.set(p.n, p);
+  if (CONTROL === 'joinage') {
+    let hit = null;
+    for (const [club, roster] of Object.entries(CM_ROSTERS)) {
+      if (BAKED_CLUBS.has(club)) continue;
+      hit = roster.find(p => eraByName.has(p.n) && !NAMESAKES_2026.has(p.n)) ?? null;
+      if (hit) break;
+    }
+    if (!hit) controlRefuse('the 2015 world shares no man with a generated league');
+    modByName.set(hit.n, { ...hit, a: hit.a + 10 });
+    console.log(`   CONTROL joinage applied: ${hit.n}, a man of a generated league, reads ten years older`);
+  }
   let shared = 0, weird = 0, namesakes = 0;
   const weirdList = [];
   for (const [name, p15] of eraByName) {
