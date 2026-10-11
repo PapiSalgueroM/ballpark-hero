@@ -45,7 +45,7 @@ export function FarewellSeasonCard({ career, onAnnounce }: { career: CareerState
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto text-xs leading-relaxed">
           {help ? <div data-farewell-help className="space-y-3">
             <p>Announcing a farewell commits you to one final year. There is no undo button for the announcement.</p>
-            <p>{complete ? 'Your final year is saved. Finish its results and queued ceremonies, then retire.' : plan ? 'Your announcement is saved. Finish the declared year to reach retirement.' : sourcePhase === 'retirement_suggestion' ? 'This year has already started. Confirming resumes that same year, without ageing you again.' : 'Announcing does not play a match. Use Next Season or Watch week by week when you are ready.'}</p>
+            <p>{complete ? 'Your final year is saved. Finish its results and queued ceremonies, then retire.' : plan ? 'Your announcement is saved. Finish the declared year to reach retirement.' : sourcePhase === 'retirement_suggestion' ? 'This year has already started. Confirming resumes that same year, without ageing you again.' : 'Announcing does not play a match. Use Next Season or the 📺 Week by week button when you are ready.'}</p>
             <p>You see the actual season results and any queued award, international or rivalry ceremonies, then retire before another transfer window or year.</p>
             <p>Injuries, bans and the existing forced retirement rules still apply. A farewell does not guarantee appearances, fitness or silverware.</p>
             <p>Example: announce {seasonLabel(year)}. Even if you have a great year, your career ends after its results and queued ceremonies.</p>

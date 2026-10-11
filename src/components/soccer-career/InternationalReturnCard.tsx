@@ -30,7 +30,7 @@ export function InternationalReturnCard({ career, onReturn }: { career: CareerSt
 
   return <div data-international-return-status={saved ? 'saved' : 'available'} className="rounded-xl border border-blue-500/30 bg-card p-3 text-sm">
     <p className="font-bold">{saved ? active ? 'Available for national-team selection' : 'International plans already changed this season' : 'Your country again?'}</p>
-    <p className="mt-1 text-xs text-muted-foreground">{saved ? 'Your choice is saved. Squad selection still decides who plays.' : 'Make yourself available again and earn your next squad place.'}</p>
+    <p className="mt-1 text-xs text-muted-foreground">{saved ? active ? 'Your choice is saved. Squad selection still decides who plays.' : 'Your choice is saved. You are out of national-team selection again, and one comeback a season is the limit.' : 'Make yourself available again and earn your next squad place.'}</p>
     <Dialog open={open} onOpenChange={changeOpen}>
       <DialogTrigger asChild>
         <Button ref={trigger} data-international-return-open variant="outline" className="mt-3 min-h-11 w-full whitespace-normal">{saved ? 'International comeback help' : 'National-team comeback'}</Button>
