@@ -1,0 +1,9 @@
+reviewWalk: the checkout is DARK (as it ships).
+reviewWalk: first half seed 5193: Ryan Gravenberch (opp) at 18', disallowed
+HELP 390-howto: ok | blocks 0 | 
+HELP 1280-howto: ok | blocks 0 | 
+CASE 390-motion: ok | h1 {"me":1,"opp":1} | h2 {"seed":21153,"minute":48,"who":"Brennan Johnson"} {"me":2,"opp":1} | cards []
+CASE 390-reduced: ok | h1 {"me":1,"opp":1} | h2 {"seed":21153,"minute":48,"who":"Brennan Johnson"} {"me":2,"opp":1} | cards []
+CASE 1280-motion: ok | h1 {"me":1,"opp":1} | h2 {"seed":21153,"minute":48,"who":"Brennan Johnson"} {"me":2,"opp":1} | cards []
+CASE 1280-reduced: ok | h1 {"me":1,"opp":1} | h2 {"seed":21153,"minute":48,"who":"Brennan Johnson"} {"me":2,"opp":1} | cards []
+reviewWalk (dark): 6 cases, 0 failed assertion(s). green.

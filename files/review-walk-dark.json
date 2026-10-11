@@ -1,0 +1,153 @@
+{
+ "lit": false,
+ "kinds": [],
+ "h1": {
+  "seed": 5193,
+  "minute": 18,
+  "who": "Ryan Gravenberch"
+ },
+ "cases": [
+  {
+   "id": "390-howto",
+   "shots": [
+    "dark-390-howto-1.jpg"
+   ],
+   "fail": [],
+   "blocks": 0,
+   "varWords": []
+  },
+  {
+   "id": "1280-howto",
+   "shots": [
+    "dark-1280-howto-1.jpg"
+   ],
+   "fail": [],
+   "blocks": 0,
+   "varWords": []
+  },
+  {
+   "id": "390-motion",
+   "shots": [
+    "dark-390-motion-1-hub.jpg",
+    "dark-390-motion-2-match-help.jpg",
+    "dark-390-motion-3-h1-goal-counts.jpg",
+    "dark-390-motion-6-interval.jpg",
+    "dark-390-motion-7-h2-goal-counts.jpg",
+    "dark-390-motion-10-full-time.jpg",
+    "dark-390-motion-11-report.jpg"
+   ],
+   "fail": [],
+   "notes": [
+    "dark: at 20' the page shows {\"me\":1,\"opp\":1}; the engine without reviews has {\"me\":1,\"opp\":1} by 19', with the goal kind it would have {\"me\":1,\"opp\":0}"
+   ],
+   "matchHelp": "Watching the match | The half you are watching has already been played by the game. You are seeing it back minute by minute. | Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them. | The score changes when the ball is in the net, not before. | A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head. | Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change. | Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on. | Worked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+   "h1ScoreAfter": {
+    "me": 1,
+    "opp": 1
+   },
+   "h2": {
+    "seed": 21153,
+    "minute": 48,
+    "who": "Brennan Johnson"
+   },
+   "h2ScoreAfter": {
+    "me": 2,
+    "opp": 1
+   },
+   "timeline": [],
+   "cards": []
+  },
+  {
+   "id": "390-reduced",
+   "shots": [
+    "dark-390-reduced-1-hub.jpg",
+    "dark-390-reduced-3-h1-goal-counts.jpg",
+    "dark-390-reduced-6-interval.jpg",
+    "dark-390-reduced-7-h2-goal-counts.jpg",
+    "dark-390-reduced-10-full-time.jpg",
+    "dark-390-reduced-11-report.jpg"
+   ],
+   "fail": [],
+   "notes": [
+    "dark: at 20' the page shows {\"me\":1,\"opp\":1}; the engine without reviews has {\"me\":1,\"opp\":1} by 19', with the goal kind it would have {\"me\":1,\"opp\":0}"
+   ],
+   "h1ScoreAfter": {
+    "me": 1,
+    "opp": 1
+   },
+   "h2": {
+    "seed": 21153,
+    "minute": 48,
+    "who": "Brennan Johnson"
+   },
+   "h2ScoreAfter": {
+    "me": 2,
+    "opp": 1
+   },
+   "timeline": [],
+   "cards": []
+  },
+  {
+   "id": "1280-motion",
+   "shots": [
+    "dark-1280-motion-1-hub.jpg",
+    "dark-1280-motion-2-match-help.jpg",
+    "dark-1280-motion-3-h1-goal-counts.jpg",
+    "dark-1280-motion-6-interval.jpg",
+    "dark-1280-motion-7-h2-goal-counts.jpg",
+    "dark-1280-motion-10-full-time.jpg",
+    "dark-1280-motion-11-report.jpg"
+   ],
+   "fail": [],
+   "notes": [
+    "dark: at 20' the page shows {\"me\":1,\"opp\":1}; the engine without reviews has {\"me\":1,\"opp\":1} by 19', with the goal kind it would have {\"me\":1,\"opp\":0}"
+   ],
+   "matchHelp": "Watching the match | The half you are watching has already been played by the game. You are seeing it back minute by minute. | Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them. | The score changes when the ball is in the net, not before. | A goal marked (P) was a penalty. A goal marked (O.G) is an own goal: it counts for the club it is listed under, and the man named put it into his own net. On the pitch the ball goes in off him and he holds his head. | Tap one of your players to make a sub or change shape. Everything up to that minute stays. The rest of the half is played again with your change. | Pause, pick a speed, or Skip to the whistle. Tap a goal card to move on. | Worked example: It is 0-0 at 61'. You tap your striker, bring on fresh legs and go Attacking. The first 61 minutes stay exactly as they were. From 62' the half is played again with your change, and that new half is what you watch next.",
+   "h1ScoreAfter": {
+    "me": 1,
+    "opp": 1
+   },
+   "h2": {
+    "seed": 21153,
+    "minute": 48,
+    "who": "Brennan Johnson"
+   },
+   "h2ScoreAfter": {
+    "me": 2,
+    "opp": 1
+   },
+   "timeline": [],
+   "cards": []
+  },
+  {
+   "id": "1280-reduced",
+   "shots": [
+    "dark-1280-reduced-1-hub.jpg",
+    "dark-1280-reduced-3-h1-goal-counts.jpg",
+    "dark-1280-reduced-6-interval.jpg",
+    "dark-1280-reduced-7-h2-goal-counts.jpg",
+    "dark-1280-reduced-10-full-time.jpg",
+    "dark-1280-reduced-11-report.jpg"
+   ],
+   "fail": [],
+   "notes": [
+    "dark: at 20' the page shows {\"me\":1,\"opp\":1}; the engine without reviews has {\"me\":1,\"opp\":1} by 19', with the goal kind it would have {\"me\":1,\"opp\":0}"
+   ],
+   "h1ScoreAfter": {
+    "me": 1,
+    "opp": 1
+   },
+   "h2": {
+    "seed": 21153,
+    "minute": 48,
+    "who": "Brennan Johnson"
+   },
+   "h2ScoreAfter": {
+    "me": 2,
+    "opp": 1
+   },
+   "timeline": [],
+   "cards": []
+  }
+ ]
+}
