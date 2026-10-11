@@ -1,0 +1,26 @@
+tsc exit=0 94s | 
+book-weight-main exit=1 51s | simCmLeagueBook: CONTROL weight FIRED: section stream went red (15 failures), with shapes as it must and no other section did (49s)
+book-main-full exit=0 156s | simCmLeagueBook: green, 7 sections, 27 careers x 2 seasons (155s)
+book-main-full-s3 exit=0 160s | simCmLeagueBook: green, 7 sections, 27 careers x 2 seasons (159s)
+book-mathrandom exit=1 46s | simCmLeagueBook: CONTROL mathrandom FIRED: section stream went red (20 failures) and no other section did (46s)
+book-dropmine exit=1 46s | simCmLeagueBook: CONTROL dropmine FIRED: section law went red (5030 failures), with names, oldsave, doors as it must and no other section did (46s)
+book-byeweek exit=1 47s | simCmLeagueBook: CONTROL byeweek FIRED: section law went red (365 failures) and no other section did (47s)
+book-redeal exit=1 45s | simCmLeagueBook: CONTROL redeal FIRED: section oldsave went red (4 failures) and no other section did (45s)
+book-strip exit=1 46s | simCmLeagueBook: CONTROL strip FIRED: section dailies went red (8 failures) and no other section did (46s)
+book-stripdeadline exit=1 45s | simCmLeagueBook: CONTROL stripdeadline FIRED: section dailies went red (6 failures) and no other section did (45s)
+dailies exit=0 4s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+dailies-bind exit=1 4s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+dailies-binddeadline exit=1 4s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+varlive exit=0 6s |    Duration  5.15s (transform 1.96s, setup 64ms, collect 2.55s, tests 1.62s, environment 368ms, prepare 190ms)
+varlive-on exit=1 5s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR ships dar
+var-switch exit=0 0s | 1
+book-keyindex exit=1 45s | simCmLeagueBook: CONTROL keyindex FIRED: section shapes went red (1 failures) and no other section did (45s)
+book-seasonstamp exit=1 45s | simCmLeagueBook: CONTROL seasonstamp FIRED: section doors went red (32 failures) and no other section did (45s)
+leaguephase exit=0 31s | simCmLeaguePhase: GREEN, 7021 checks, 0 failed, sections all.
+savesize exit=0 52s | simClubManagerSaveSize: all sections green
+varledger exit=0 0s | simCmVarLedger: all 658 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+savesize-uncapped exit=1 54s | simClubManagerSaveSize: CONTROL FIRED as it should, SAVE_SIZE_CONTROL=uncapped turned section 1 red (33 failures) and nothing else
+appeal-pin exit=0 56s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simCmVar exit=0 97s | simCmVar normal: actual review outcomes and full prior baseline passed.
+vitest-cm exit=0 109s |    Duration  108.36s (transform 4.04s, setup 738ms, collect 5.32s, tests 106.05s, environment 3.03s, prepare 1.12s)
