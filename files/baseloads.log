@@ -1,0 +1,25 @@
+
+ RUN  v3.2.7 /tmp/base
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > a hub save after Week 6, the GM desk off
+R1305 old build: a hub save after Week 6, the GM desk off: loaded, played on, next save holds no gameLog key
+
+ ✓ src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > this really is the build before the round: it has no season log module 3ms
+stdout | src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > a hub save after Week 6, the GM desk on
+R1305 old build: a hub save after Week 6, the GM desk on: loaded, played on, next save holds no gameLog key
+
+stdout | src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > a recap save after the one press finish
+R1305 old build: a recap save after the one press finish: loaded, played on, next save holds no gameLog key
+
+ ✓ src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > a hub save after Week 6, the GM desk off 120ms
+ ✓ src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > a hub save after Week 6, the GM desk on 66ms
+ ✓ src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > a recap save after the one press finish 52ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  21:05:00
+   Duration  1.91s (transform 639ms, setup 53ms, collect 928ms, tests 242ms, environment 298ms, prepare 146ms)
+

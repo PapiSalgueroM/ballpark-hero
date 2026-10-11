@@ -1,0 +1,21 @@
+
+ RUN  v3.2.7 /home/runner/work/ballpark-hero/ballpark-hero
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+stdout | src/test/r1305WriteSaves.test.tsx > the round's board writes three saves that hold a log
+R1305 wrote 3 saves: a hub save after Week 6, the GM desk off (83977 bytes, 1 games in the log); a hub save after Week 6, the GM desk on (100495 bytes, 1 games in the log); a recap save after the one press finish (86483 bytes, 4 games in the log)
+
+stdout | src/test/r1305WriteSaves.test.tsx > prints the bytes of a save before and after one full season, with and without the log
+R1305 SAVE BYTES fifteen league, desk on: at the start 100644; after sixteen weeks 102855 (1986 of it the log, 16 games); at the recap 104536 (2253 of it the log, 18 games)
+R1305 SAVE BYTES deep league, desk on: at the start 653932; after sixteen weeks 656135 (1986 of it the log, 16 games); at the recap 657815 (2251 of it the log, 18 games)
+
+ ✓ src/test/r1305WriteSaves.test.tsx (2 tests) 1469ms
+   ✓ prints the bytes of a save before and after one full season, with and without the log  1218ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  21:04:56
+   Duration  3.26s (transform 1.12s, setup 55ms, collect 991ms, tests 1.47s, environment 314ms, prepare 149ms)
+

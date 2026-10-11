@@ -1,0 +1,12 @@
+R1305 wrote 3 saves: a hub save after Week 6, the GM desk off (83977 bytes, 1 games in the log); a hub save after Week 6, the GM desk on (100495 bytes, 1 games in the log); a recap save after the one press finish (86483 bytes, 4 games in the log)
+R1305 SAVE BYTES fifteen league, desk on: at the start 100644; after sixteen weeks 102855 (1986 of it the log, 16 games); at the recap 104536 (2253 of it the log, 18 games)
+R1305 SAVE BYTES deep league, desk on: at the start 653932; after sixteen weeks 656135 (1986 of it the log, 16 games); at the recap 657815 (2251 of it the log, 18 games)
+      Tests  2 passed (2)
+R1305 old build: a hub save after Week 6, the GM desk off: loaded, played on, next save holds no gameLog key
+ ✓ src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > this really is the build before the round: it has no season log module 3ms
+R1305 old build: a hub save after Week 6, the GM desk on: loaded, played on, next save holds no gameLog key
+R1305 old build: a recap save after the one press finish: loaded, played on, next save holds no gameLog key
+ ✓ src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > a hub save after Week 6, the GM desk off 120ms
+ ✓ src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > a hub save after Week 6, the GM desk on 66ms
+ ✓ src/test/r1305BaseLoads.test.tsx > the build before Round 1305 loads a save the round wrote > a recap save after the one press finish 52ms
+      Tests  4 passed (4)
