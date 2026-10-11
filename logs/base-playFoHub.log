@@ -1,0 +1,6 @@
+26
+  FAIL  NFL: the hub opens on five boxes (saw 9)
+  FAIL  NFL: every box carries a fact, not just a label (Roster:4 Free agency:4 Trades:4 This week:4 Standings:4 Staff:4 Re-sign desk:4 Draft picks:4 Trade desk
+  FAIL  NFL: back returned to all five boxes
+  FAIL  NFL: back returned to all five boxes
+playFoHub: 26 failures
