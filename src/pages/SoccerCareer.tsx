@@ -80,6 +80,7 @@ import { SquadTile } from "@/components/soccer-career/SquadTile";
 import { ReducedRolePlanNote, ReducedRoleSeasonNote } from "@/components/soccer-career/ReducedRoleNote";
 import { personalGoalMilestone } from "@/lib/soccerCareerMilestone";
 import { REDUCED_ROLE_GAMES } from "@/lib/soccerCareerRole";
+import PressRoomTile from "@/components/soccer-career/PressRoomTile";
 import type { TrophyCategory } from "@/components/soccer-career/TrophyCabinet";
 import { CareerRecordsTile } from '@/components/soccer-career/CareerRecordsTile';
 import { SeasonAmbitionTile, SeasonAmbitionResult } from '@/components/soccer-career/SeasonAmbitionTile';
@@ -4458,6 +4459,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               </Suspense>
             </CentreMountBoundary>
           )}
+          {onCareerPatch && <PressRoomTile career={career} onCareer={onCareerPatch} />}
 
           {/* Financial & Lifestyle Panel */}
           {(career.phase === "youth" || career.phase === "playing" || career.phase === "retired") && (

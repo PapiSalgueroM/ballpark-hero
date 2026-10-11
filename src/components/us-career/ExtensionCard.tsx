@@ -18,12 +18,15 @@
    The numbers are printed final from frame one (Round 147). Reduced motion
    lands everything on its final frame through CelebrationStyles. */
 
+import { useLayoutEffect, useRef } from 'react';
 import { PenLine, TrendingUp } from 'lucide-react';
 import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import { extensionHeadline } from '@/lib/usCareerExtension';
 import type { ExtensionTalk } from '@/lib/usCareerExtension';
 import { cn } from '@/lib/utils';
 import motion from './ExtensionMotion.module.css';
+import type { MarketResult, MarketWheel } from '@/lib/usCareerMarket';
+import MarketChanceWheel from './MarketChanceWheel';
 
 interface Props {
   talk: ExtensionTalk;
@@ -32,15 +35,29 @@ interface Props {
   onPush: () => void;
   onSign: () => void;
   onDecline: () => void;
+  wheel?: MarketWheel;
+  onWheelContinue?: () => void;
+  odds?: Record<MarketResult, number>;
 }
 
-export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecline }: Props) {
+export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecline, wheel, onWheelContinue, odds }: Props) {
+  const root = useRef<HTMLDivElement>(null);
+  const returnFromWheel = useRef(false);
+  useLayoutEffect(() => {
+    if (wheel && !wheel.seen) { returnFromWheel.current = true; return; }
+    if (!returnFromWheel.current) return;
+    returnFromWheel.current = false;
+    const target = root.current?.querySelector<HTMLButtonElement>('[data-ext-sign]')
+      ?? root.current?.querySelector<HTMLButtonElement>('[data-ext-decline]');
+    target?.focus({ preventScroll: true });
+  }, [wheel]);
   const o = talk.offer;
   /* Under, at, or over what the market would pay. Stated as a fact, not as
      advice: the card never tells you which one to take. */
   const gap = o ? Math.round(((o.salary - talk.market) / Math.max(0.1, talk.market)) * 100) : 0;
+  if (wheel && !wheel.seen && onWheelContinue) return <div ref={root}><MarketChanceWheel wheel={wheel} onContinue={onWheelContinue} /></div>;
   return (
-    <div className="space-y-3" data-extension-talk>
+    <div ref={root} className="space-y-3" data-extension-talk>
       <CelebrationStyles />
       <div className="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center">
         <p className="font-display text-lg font-bold text-foreground">
@@ -50,6 +67,7 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
           This is the last {seasonWord} on your deal. Sign the extension and you are set,
           usually a little under what the open market pays. Turn it down and you play the
           year out and reach free agency, where everybody bids and nothing is promised.
+          {onWheelContinue && <> This talk and your one push survive reload. A wheel reveals the already saved result. For example, 30% fills 30 of 100 equal parts; spinning changes no terms.</>}
         </p>
         <p key={talk.note} data-extension-reply={talk.pushed ? 'resolved' : 'opening'} className={cn('mt-1 text-[11px] font-semibold text-gold', talk.pushed && motion.reply)}>{talk.note}</p>
       </div>
@@ -81,17 +99,24 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
             </div>
           </div>
           <p className="mt-2 text-[11px] text-muted-foreground">{o.line}</p>
+          {!talk.pushed && odds && <p className="mt-2 text-[11px] text-muted-foreground" data-market-odds="extension">
+            Before you push: <span data-market-chance="raised" data-probability={odds.raised}>Raise accepted {Math.round(odds.raised * 1000) / 10}%</span>
+            {' · '}<span data-market-chance="held" data-probability={odds.held}>Held {Math.round(odds.held * 1000) / 10}%</span>
+            {' · '}<span data-market-chance="withdrawn" data-probability={odds.withdrawn}>Withdrawn {Math.round(odds.withdrawn * 1000) / 10}%</span>
+          </p>}
           <div className="mt-3 grid gap-1.5">
             <button
+              data-ext-sign={onWheelContinue ? '' : undefined}
               onClick={onSign}
-              className="w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+              className={cn('w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90', onWheelContinue && 'min-h-11')}
             >
               Sign it: {extensionHeadline(talk)}
             </button>
             <button
+              data-ext-push={onWheelContinue ? '' : undefined}
               onClick={onPush}
               disabled={talk.pushed}
-              className="w-full rounded-full border border-border px-4 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-foreground disabled:opacity-40"
+              className={cn('w-full rounded-full border border-border px-4 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-foreground disabled:opacity-40', onWheelContinue && 'min-h-11')}
             >
               <TrendingUp className="mr-1 inline h-3.5 w-3.5" />
               {talk.pushed ? 'You have made your case' : 'Ask for more, once'}
@@ -101,8 +126,9 @@ export default function ExtensionCard({ talk, seasonWord, onPush, onSign, onDecl
       ) : null}
 
       <button
+        data-ext-decline={onWheelContinue ? '' : undefined}
         onClick={onDecline}
-        className="cm-rise w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm font-bold text-muted-foreground hover:border-gold hover:text-foreground"
+        className={cn('cm-rise w-full rounded-full border border-border bg-card px-4 py-2.5 text-sm font-bold text-muted-foreground hover:border-gold hover:text-foreground', onWheelContinue && 'min-h-11')}
         style={{ animationDelay: o ? '0.4s' : '0.2s' }}
       >
         {o ? 'Turn it down and play the year out' : 'Play the year out'}

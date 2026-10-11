@@ -16,6 +16,7 @@ import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionRes
 import { recentClubForm } from './soccerCareerSelection';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
 import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, validMentor, type CareerMentor } from './soccerCareerMentor';
+import { settleSoccerPress, type SoccerPressState } from './soccerCareerPress';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
@@ -887,6 +888,8 @@ export interface CareerState {
   currentLeague: string;
   /** Membership for the next unplayed future season. Absent on older saves. */
   leagueWorld?: CareerLeagueWorld;
+  /** Optional public answers and their recorded follow-up seasons. */
+  pressRoom?: SoccerPressState;
   contractYearsLeft: number;
   weeklyWage: number;
   marketValue: number;
@@ -1814,6 +1817,7 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
     row.injury = r.name; row.injuryWeeks = r.weeks; row.injurySevere = true;
     if (s.loan) row.onLoanFrom = s.loan.parentClub;
     s.seasons = [...s.seasons, row];
+    settleSoccerPress(s, row);
     simulateSeasonFinances(s, row);
     runTournamentSummer(s, row, row.year, true);
     settleCareerAmbition(s, row);
@@ -5194,6 +5198,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.pendingSummary = s.seasons[s.seasons.length - 1];
       settleReducedRole(s, s.pendingSummary);
       interruptSoccerProgramme(s, s.pendingSummary);
+      settleSoccerPress(s, s.pendingSummary);
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       settleCareerAmbition(s, s.pendingSummary);
@@ -5226,6 +5231,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
     s.pendingSummary = s.seasons[s.seasons.length - 1];
     settleReducedRole(s, s.pendingSummary);
     interruptSoccerProgramme(s, s.pendingSummary);
+    settleSoccerPress(s, s.pendingSummary);
     s.phase = "season_summary";
     simulateSeasonFinances(s, s.pendingSummary);
     settleCareerAmbition(s, s.pendingSummary);
@@ -5287,6 +5293,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
        calendar fell a year behind his age (the prison row comes the year
        after). A tournament that summer is played without him. */
     s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+    settleSoccerPress(s, s.seasons[s.seasons.length - 1]);
     simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
     runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
     settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);
@@ -5334,6 +5341,7 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerSt
       s.pendingSummary = s.seasons[s.seasons.length - 1];
       settleReducedRole(s, s.pendingSummary);
       interruptSoccerProgramme(s, s.pendingSummary);
+      settleSoccerPress(s, s.pendingSummary);
       s.phase = "season_summary";
       simulateSeasonFinances(s, s.pendingSummary);
       settleCareerAmbition(s, s.pendingSummary);
@@ -5488,6 +5496,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       if (s.loan) injuryRow.onLoanFrom = s.loan.parentClub;
       s.seasons = [...s.seasons, injuryRow];
       settleReducedRole(s, injuryRow);
+      settleSoccerPress(s, injuryRow);
       simulateSeasonFinances(s, injuryRow);
       settleSoccerProgramme(s, injuryRow);
       runTournamentSummer(s, injuryRow, injuryRow.year, true);
@@ -5812,6 +5821,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       s.events.push(`🧊 A season in the cold at ${s.currentClub} is over. You are back in the group and back in the reckoning.`);
     }
   }
+  settleSoccerPress(s, season);
   s.pendingSummary = season;
   // Generate newspaper articles
   const news = generateNewsArticles(s, season, totalGoals, totalApps);
@@ -6245,6 +6255,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
     if (lastRow && lastRow.age < s.age) {
       s.events = [...s.events];
       s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];
+      settleSoccerPress(s, s.seasons[s.seasons.length - 1]);
       simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);
       runTournamentSummer(s, s.seasons[s.seasons.length - 1], s.seasons[s.seasons.length - 1].year, true);
       settleCareerAmbition(s, s.seasons[s.seasons.length - 1]);

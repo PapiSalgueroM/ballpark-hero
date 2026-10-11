@@ -29,6 +29,9 @@ import { FA_TIER_WORD, faTotalValue } from '@/lib/usCareerFreeAgency';
 import type { FaOffer, FaWindow } from '@/lib/usCareerFreeAgency';
 import { cn } from '@/lib/utils';
 import motion from './FreeAgencyFeedback.module.css';
+import type { MarketResult, MarketWheel } from '@/lib/usCareerMarket';
+import MarketChanceWheel from './MarketChanceWheel';
+import MarketCompare from './MarketCompare';
 
 interface Props {
   window: FaWindow;
@@ -38,6 +41,10 @@ interface Props {
   talkLine: string | null;
   onPush: (index: number) => void;
   onSign: (index: number) => void;
+  wheel?: MarketWheel;
+  onWheelContinue?: () => void;
+  compare?: boolean;
+  odds?: Record<MarketResult, number>[];
 }
 
 interface PushIntent {
@@ -47,8 +54,28 @@ interface PushIntent {
   opener: HTMLButtonElement;
 }
 
-export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush, onSign }: Props) {
+export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush, onSign, wheel, onWheelContinue, compare = false, odds }: Props) {
   const [intent, setIntent] = useState<PushIntent | null>(null);
+  const [comparing, setComparing] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const returnPush = useRef<number | null>(null);
+  const compareReturn = useRef<number | null>(null);
+  useLayoutEffect(() => {
+    if (wheel && !wheel.seen) { returnPush.current = wheel.offerIndex; return; }
+    if (returnPush.current !== null) {
+      const index = returnPush.current;
+      returnPush.current = null;
+      const target = root.current?.querySelector<HTMLButtonElement>(`[data-fa-sign="${index}"]`)
+        ?? root.current?.querySelector<HTMLButtonElement>('[data-fa-sign]');
+      target?.focus({ preventScroll: true });
+    }
+    if (!comparing && compareReturn.current !== null) {
+      const y = compareReturn.current;
+      compareReturn.current = null;
+      root.current?.querySelector<HTMLButtonElement>('[data-market-compare-open]')?.focus({ preventScroll: true });
+      window.scrollTo({ top: y, behavior: 'auto' });
+    }
+  }, [wheel, comparing]);
   const focusRequest = useRef<PushIntent | null>(null);
   const receipt = useRef<HTMLParagraphElement>(null);
   const settled = intent && w !== intent.window ? w.offers[intent.index] : null;
@@ -88,17 +115,22 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
     onPush(index);
   };
 
+  if (wheel && !wheel.seen && onWheelContinue) return <div ref={root}><MarketChanceWheel wheel={wheel} onContinue={onWheelContinue} /></div>;
+  if (comparing) return <div ref={root}><MarketCompare window={w} onBack={() => setComparing(false)} /></div>;
   return (
     /* data-fa-window scopes the browser harness to this screen, because the
        sitewide ticker above it also talks about teams and signings. */
-    <div className="space-y-3" data-fa-window>
+    <div ref={root} className="space-y-3" data-fa-window>
       <CelebrationStyles />
+      {compare && <button type="button" data-market-compare-open onClick={() => { compareReturn.current = window.scrollY; setComparing(true); }}
+        className="min-h-11 w-full rounded-xl border border-border px-3 py-2 text-xs font-bold">Compare offers</button>}
       <div className="cm-rise rounded-2xl border border-gold/40 bg-card p-4 text-center">
         <p className="font-display text-lg font-bold text-foreground">🖊️ Free agency</p>
         <p className="mt-1 text-xs text-muted-foreground">
           Your deal is up. Every {sportNoun} below is a real destination with its own money,
           length and roster. You can push any offer for more, once. Push too hard and an
           offer can disappear, but your own {sportNoun} never walks away.
+          {compare && <> Your offers and each spent push survive reload. A wheel reveals the saved negotiation, never another attempt. For example, a 30% chance fills 30 of 100 equal parts; it does not promise a raise.</>}
         </p>
         <p className="mt-1 text-[11px] font-semibold text-gold">{w.note}</p>
         {talkLine && <p key={talkLine} className="cm-rise mt-2 rounded-xl bg-secondary px-3 py-2 text-xs text-foreground">{talkLine}</p>}
@@ -141,15 +173,22 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
                   {resultLine}
                 </p>
               )}
+              {!o.pushed && odds?.[i] && <p className="mt-2 text-[11px] text-muted-foreground" data-market-odds={i}>
+                Before you push: <span data-market-chance="raised" data-probability={odds[i].raised}>Raise accepted {Math.round(odds[i].raised * 1000) / 10}%</span>
+                {' · '}<span data-market-chance="held" data-probability={odds[i].held}>Held {Math.round(odds[i].held * 1000) / 10}%</span>
+                {' · '}<span data-market-chance="withdrawn" data-probability={odds[i].withdrawn}>Withdrawn {Math.round(odds[i].withdrawn * 1000) / 10}%</span>
+              </p>}
               {!o.gone && (
                 <div className="mt-2 grid grid-cols-2 gap-1.5">
                   <button
+                    data-fa-sign={onWheelContinue ? i : undefined}
                     onClick={() => onSign(i)}
                     className="flex min-h-[44px] items-center justify-center gap-1 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground hover:opacity-90"
                   >
                     <Handshake className="h-3.5 w-3.5" /> Sign
                   </button>
                   <button
+                    data-fa-push={onWheelContinue ? i : undefined}
                     onClick={event => push(i, event.currentTarget)}
                     disabled={o.pushed}
                     className={cn(
