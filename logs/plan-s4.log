@@ -1,0 +1,8 @@
+rates nhl skaters: steady target met 95.8 short, 96.7 full; partnership kept 97.5, 97.8; bonus 43.3, 40.0; a held partnership lost 2.3, 2.0 (seasons 360 short, 360 full)
+rates nhl goalies: steady target met 60.4 short, 52.9 full; partnership kept 60.4, 53.3; bonus 40.0, 37.5; a held partnership lost 2.5, 4.5 (seasons 240 short, 240 full)
+rates mlb hitters and relievers: steady target met 66.7 short, 68.3 full; partnership kept 69.2, 68.3; bonus 45.8, 40.4; a held partnership lost 5.9, 4.1 (seasons 120 short, 240 full)
+rates mlb starters: steady target met 43.3 short, 36.3 full; partnership kept 43.3, 36.3; bonus 35.8, 23.3; a held partnership lost 11.0, 13.0 (seasons 240 short, 240 full)
+green card: 10501 checks, 0 failed
+green judge: 9121 checks, 0 failed
+green rates: 16 checks, 0 failed
+simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 4).

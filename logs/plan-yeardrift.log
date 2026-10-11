@@ -1,0 +1,16 @@
+rates nhl skaters: steady target met 96.7 short, 95.0 full; partnership kept 35.8, 96.1; bonus 40.0, 38.9; a held partnership lost 64.2, 4.0 (seasons 360 short, 360 full)
+rates nhl goalies: steady target met 54.2 short, 52.1 full; partnership kept 49.6, 52.5; bonus 38.8, 40.0; a held partnership lost 39.2, 6.5 (seasons 240 short, 240 full)
+rates mlb hitters and relievers: steady target met 74.2 short, 66.3 full; partnership kept 0.0, 66.3; bonus 42.5, 40.0; a held partnership lost 100.0, 7.1 (seasons 120 short, 240 full)
+rates mlb starters: steady target met 45.8 short, 44.2 full; partnership kept 0.0, 44.2; bonus 30.8, 29.6; a held partnership lost 100.0, 10.8 (seasons 240 short, 240 full)
+green card: 10501 checks, 0 failed
+RED   judge: 9121 checks, 1097 failed
+   FAIL: nhl 2012 C career 0 (47 games of 48): the card said At least 32 games, the partnership was judged on 55
+   FAIL: nhl 2012 C career 1 (48 games of 48): the card said At least 32 games, the partnership was judged on 55
+   FAIL: nhl 2012 C career 2 (47 games of 48): the card said At least 32 games, the partnership was judged on 55
+   FAIL: nhl 2012 C career 3 (47 games of 48): the card said At least 32 games, the partnership was judged on 55
+RED   rates: 16 checks, 7 failed
+   FAIL: nhl skaters: partner is 35.8 in a short year and 96.1 in a full one, further apart than 12 points
+   FAIL: nhl skaters: lost is 64.2 in a short year and 4.0 in a full one, further apart than 12 points
+   FAIL: nhl goalies: lost is 39.2 in a short year and 6.5 in a full one, further apart than 25 points
+   FAIL: mlb hitters and relievers: partner is 0.0 in a short year and 66.3 in a full one, further apart than 22 points
+simUsPlanSeason control yeardrift: FIRED (must turn exactly judge and rates red; red: judge, rates)

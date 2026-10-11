@@ -1,0 +1,4 @@
+abfc109a4 rc request rAV-vf-1 for ede8317293ed11f27c6d3b663fb9422a566fe9b8
+ede831729 Release AV fix pass: the header of simUsSeasonCentre says the law and seam records were taken again (a comment
+30d823d11 Release AV fix pass: the seam receipt of simUsSeasonCentre taken again from 41bc8793 (runner rAV-fx-r), the at
+src and scripts diff against ede83172 printed above (empty means the checked tree is the pushed head)

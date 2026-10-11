@@ -1,0 +1,10 @@
+plan exit=0 2s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 0).
+plan-s4 exit=0 2s | simUsPlanSeason: green. 19638 checks, 0 failed, 954 cards read over both ledgers, 2280 seasons played and settled (60 careers a case, seed set 4).
+probe exit=0 4s | uscPlan: done on /home/runner/work/ballpark-hero/ballpark-hero
+plan-yeardrift exit=1 2s | simUsPlanSeason control yeardrift: FIRED (must turn exactly judge and rates red; red: judge, rates)
+plan-typed exit=1 2s | simUsPlanSeason control typed: FIRED (must turn exactly card and rates red; red: card, rates)
+plan-statfull exit=1 2s | simUsPlanSeason control statfull: FIRED (must turn exactly card and rates red; red: card, rates)
+vitest-plan exit=0 35s |    Duration  33.60s (transform 1.75s, setup 294ms, collect 5.19s, tests 32.07s, environment 1.95s, prepare 827ms)
+headsrc exit=0 0s | src and scripts diff against ede83172 printed above (empty means the checked tree is the pushed head)
+simUsBoardParity exit=0 38s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 52s | 
