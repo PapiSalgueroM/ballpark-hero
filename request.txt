@@ -1,0 +1,7 @@
+# Release AW part one, closing check: the other lane's farewell walk once more on d4cbc2aa, after the outcomes stage that writes its fixtures (it was red on 5 desktop journeys in rAW-vf-2)
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+farewell-outcomes: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-farewell-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerFarewell.mjs 2>&1 | tee soccer-farewell-artifacts/outcomes.log | tail -60; s=$?; node scripts/qa/checkSoccerFarewell.mjs outcomes; c=$?; exit $((s + c))
+farewell-native: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; mkdir -p soccer-farewell-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerFarewell.mjs 2>&1 | tee soccer-farewell-artifacts/native.log | tail -60; s=$?; node scripts/qa/checkSoccerFarewell.mjs native; c=$?; exit $((s + c))
