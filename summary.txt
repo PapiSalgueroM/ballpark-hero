@@ -1,0 +1,3 @@
+once-loans exit=0 246s | sc-engine probe once: green
+fleet-loans exit=0 379s | sc-engine probe fleet: green
+handoff-loans exit=0 716s | sc-engine probe handoff: green

@@ -1,0 +1,42 @@
+mode once, N 150, base /tmp/sb3, head /home/runner/work/ballpark-hero/ballpark-hero
+ok   the two bundles are really two trees (only the head has requestTransferDecision)
+brief: {"tw":1293,"filed":1293,"result":1293,"offered":630,"noInterest":657,"noMatch":6,"rerolled":0,"reloadLost":0,"reloadReroll":0,"changed":0,"midReload":0,"resolveBad":0,"vetOffers":410,"vetWrong":0,"youngOffers":220,"youngWrong":0,"vetMoved":190,"playOnErr":0}
+brief offers from 30, head wage over the wage with the offers condition out (ratio, count):
+    220  1.00
+    73  0.85
+    56  0.80
+    47  1.10
+    9  0.90
+    5  1.05
+ok   every filed brief stores one result (1293 of 1293; offered 630, no interest 657, no match 6)
+ok   a stored brief answer cannot be asked again, changed, cleared or lost by a reload, and a reload between filing and asking changes nothing
+ok   accepting the offer or staying clears the brief and ends the window
+ok   a brief offer from 30 carries exactly the veteran terms (410 offers, 0 wrong, 190 with a changed wage)
+ok   a brief offer under 30 keeps the drawn terms (220 offers, 0 wrong)
+ok   a career plays on after signing a brief offer
+farewell: {"n":317,"eligible":317,"twice":0,"retired":317,"notRetired":0,"lostPlan":0,"guardLeaks":0,"reloadDiff":0,"err":0,"sugg":150,"suggRetired":150,"bannerStuck":0,"promised":75,"loan":17,"loanBad":0}
+  rows after the announcement:
+    310  1 rows after the announcement, last type playing, last club a club, phase retirement_ceremony
+    75  with an appearance promise: final row receipt written, plan in the save closed
+    7  1 rows after the announcement, last type playing, last club YEAR OUT, phase retirement_ceremony
+  presses after the final row was written (phase left, careers):
+    317  season_summary
+    305  newspaper
+    303  ballon_dor
+    164  rivalry_event
+    92  world_cup
+    7  rehab_choice
+ok   enough farewell seasons were announced (317 of 317 saves, 150 at a retirement suggestion)
+ok   every announced farewell ends in retirement (317 retired, 0 did not, 0 errors)
+ok   one announcement, one final season: second press 0, guard leaks 0, plan lost mid way 0
+ok   a farewell season on loan ends back at the parent club with no loan left (17 careers, 0 wrong)
+ok   a reload after every press of a farewell season changes nothing (0)
+ok   no transfer window, second season, random event or retirement suggestion is pressed after the final row
+agent review: {"n":150,"changed":150,"twice":0,"lost":0,"openNext":150,"err":0}
+
+ok   the agent review changes once a season and its receipt stays readable to retirement (changed 150, twice 0, unreadable frames 0)
+ok   the review opens again the next season (150 of 150)
+national team: {"n":150,"back":150,"twice":0,"lost":0,"err":0}
+    150  retire then return changes: events.N | events.N | internationalReturn
+ok   the comeback works once a season and its receipt stays readable (back 150, twice 0, unreadable frames 0)
+sc-engine probe once: green

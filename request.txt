@@ -1,0 +1,4 @@
+# Reviewer sc-engine, Release AW part one, head 64d87aed: the probe again with loans (one career in five goes on loan at 21 and at 31 through acceptLoan), a farewell season on loan, and a farewell season with an appearance promise
+fleet-loans: mkdir -p /tmp/sb1 && git archive 5ed04ae7cd9618141ea8db4600206fcec2feeb07 src | tar -x -C /tmp/sb1 && ln -s "$PWD/node_modules" /tmp/sb1/node_modules && SC_LOANS=1 SC_BASE=/tmp/sb1 SC_MODE=fleet SC_FROM=401 SC_N=200 node .rc/x/scProbe.mjs
+handoff-loans: mkdir -p /tmp/sb2 && git archive 5ed04ae7cd9618141ea8db4600206fcec2feeb07 src | tar -x -C /tmp/sb2 && ln -s "$PWD/node_modules" /tmp/sb2/node_modules && SC_LOANS=1 SC_BASE=/tmp/sb2 SC_MODE=handoff SC_N=100 node .rc/x/scProbe.mjs
+once-loans: mkdir -p /tmp/sb3 && git archive 5ed04ae7cd9618141ea8db4600206fcec2feeb07 src | tar -x -C /tmp/sb3 && ln -s "$PWD/node_modules" /tmp/sb3/node_modules && SC_LOANS=1 SC_BASE=/tmp/sb3 SC_MODE=once SC_N=150 node .rc/x/scProbe.mjs
