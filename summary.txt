@@ -1,0 +1,2 @@
+tsc exit=0 66s | 
+varscreen exit=0 96s |    Duration  95.38s (transform 2.09s, setup 78ms, collect 2.68s, tests 91.51s, environment 421ms, prepare 225ms)
