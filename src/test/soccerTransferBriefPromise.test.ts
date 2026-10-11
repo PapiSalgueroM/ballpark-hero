@@ -1,0 +1,109 @@
+/* Release AW, a seam git merged without a word.
+ *
+ * Since the season plan (Rounds 1197 to 1208) a club that broke its appearance promise always grants a
+ * transfer request: requestTransfer draws its coin and then reads programmePromiseBroken. The agent brief
+ * (Rounds 1235 to 1237) was cut from a tree older than that rule, and its own request path,
+ * requestTransferDecision with a brief filed, carried a copy of the plain coin toss. On the merged head a
+ * player with a broken promise would get a certain answer without a brief and a coin toss with one.
+ *
+ * These cases hold the rule on BOTH paths, through the engine's own functions and a real settled season:
+ * a promise broken by a fit league shortfall, a refusing coin (0.9), and the request is still answered. The
+ * last two cases are the other half: with the promise met, or with no plan at all, the coin still decides,
+ * so the rule cannot be satisfied by granting everything.
+ */
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  acceptOffer, FALLBACK_CLUBS, initCareer, projectLeagueApps, repairCareer, requestTransferDecision,
+  type CareerState,
+} from '@/lib/soccerCareerEngine';
+import { chooseProgramme, nextProgrammeYear, programmePromiseBroken, settleSoccerProgramme } from '@/lib/soccerCareerProgramme';
+import { readTransferBrief, setTransferBrief, transferBriefResult } from '@/lib/soccerCareerTransferBrief';
+
+const parent = FALLBACK_CLUBS.find(club => club.name === 'Real Madrid')!;
+/* The first value is the request's coin: 0.9 is a refusal on a plain coin toss. The rest feed the offer. */
+const REFUSING = [0.9, 0.1, 0.2, 0.3, 0.25, 0.3, 0.4];
+
+/** A transfer window with no offer, after a second season at the club that held (or did not hold) a promise. */
+function windowAfter(leagueApps: number, promise: boolean): CareerState {
+  const overall = 77;
+  const stats = { pace: overall, shooting: overall, passing: overall, dribbling: overall, defending: overall, physical: overall, reflexes: overall };
+  const started = initCareer('Promise Tester', 'Brazil', 'ST', '2020s', stats, overall, 2026, FALLBACK_CLUBS, null, 99);
+  const pro = repairCareer(acceptOffer(started, { club: parent, contractYears: 4, wage: 100000, transferFee: 0 }));
+  const first = { ...started.seasons[0], year: 2027, age: 25, type: 'playing' as const, club: parent.name,
+    clubCountry: parent.country, clubTier: parent.tier, apps: 32, leagueApps: 30, goals: 12, assists: 6, rating: 7.2,
+    injury: null, injuryWeeks: 0, injurySevere: false };
+  let state: CareerState = { ...pro, age: 26, overall, phase: 'playing', retired: false, loan: null, rival: null,
+    transferSituation: null, seasons: [first] };
+  if (promise) {
+    state = chooseProgramme(state, 'promise', 'rotation');
+    expect(state.programme?.plan?.choices.promise, 'the fixture really agreed the 18 appearance promise').toBe('rotation');
+  }
+  const second = { ...first, year: nextProgrammeYear(state)!, age: 26, apps: leagueApps + 2, leagueApps };
+  state = { ...state, seasons: [...state.seasons, second] };
+  settleSoccerProgramme(state, second);
+  return { ...state, age: 27, phase: 'transfer_window', transferSituation: { type: 'no_interest' } };
+}
+function run<T>(action: () => T, values = REFUSING): { value: T; draws: number[] } {
+  const draws: number[] = [];
+  const random = vi.spyOn(Math, 'random').mockImplementation(() => {
+    const value = values[draws.length % values.length];
+    draws.push(value);
+    return value;
+  });
+  try { return { value: action(), draws }; } finally { random.mockRestore(); }
+}
+afterEach(() => vi.restoreAllMocks());
+
+describe('A broken appearance promise grants the transfer request, with or without an agent brief', () => {
+  it('the fixture is a real broken promise: 17 league games against 18 promised, fit all year', () => {
+    const state = windowAfter(17, true);
+    expect(state.programme?.receipts.slice(-1)[0]?.promise).toBe('broken');
+    expect(programmePromiseBroken(state)).toBe(true);
+    expect(programmePromiseBroken(windowAfter(30, true))).toBe(false);
+    expect(programmePromiseBroken(windowAfter(17, false))).toBe(false);
+  });
+
+  it('without a brief a refusing coin still brings the request an answer', () => {
+    const state = windowAfter(17, true);
+    const { value, draws } = run(() => requestTransferDecision(state, FALLBACK_CLUBS));
+    expect(draws[0]).toBe(0.9);
+    expect(value.phase).toBe('transfer_window');
+    expect(value.transferSituation?.type).toBe('request_result');
+    expect(value.transferSituation && 'offer' in value.transferSituation ? value.transferSituation.offer : null).not.toBeNull();
+  });
+
+  for (const priority of ['minutes', 'level', 'home'] as const) {
+    it(`with the ${priority} brief filed a refusing coin still brings the request an answer`, () => {
+      const filed = setTransferBrief(windowAfter(17, true), priority);
+      expect(readTransferBrief(filed, projectLeagueApps)?.priority, 'the brief is really filed for this window').toBe(priority);
+      expect(programmePromiseBroken(filed)).toBe(true);
+      const { value, draws } = run(() => requestTransferDecision(filed, FALLBACK_CLUBS));
+      /* The coin is drawn first, as the plain request draws it, and is then overruled by the broken promise. */
+      expect(draws[0]).toBe(0.9);
+      const result = transferBriefResult(value, projectLeagueApps);
+      expect(result, 'the request stored its one answer').not.toBeNull();
+      expect(result?.status).not.toBe('no_interest');
+      expect(['offered', 'no_match']).toContain(result?.status);
+    });
+  }
+
+  it('with the promise met the coin still decides the brief: a refusing coin is a refusal', () => {
+    const filed = setTransferBrief(windowAfter(30, true), 'level');
+    expect(readTransferBrief(filed, projectLeagueApps)?.priority).toBe('level');
+    const { value, draws } = run(() => requestTransferDecision(filed, FALLBACK_CLUBS));
+    expect(draws).toEqual([0.9]);
+    expect(transferBriefResult(value, projectLeagueApps)?.status).toBe('no_interest');
+  });
+
+  it('with no plan at all the coin still decides, on both paths', () => {
+    const plain = windowAfter(17, false);
+    const refused = run(() => requestTransferDecision(plain, FALLBACK_CLUBS));
+    expect(refused.draws).toEqual([0.9]);
+    expect(refused.value.phase).toBe('playing');
+    expect(refused.value.transferSituation).toBeNull();
+    const filed = setTransferBrief(plain, 'level');
+    const answered = run(() => requestTransferDecision(filed, FALLBACK_CLUBS));
+    expect(answered.draws).toEqual([0.9]);
+    expect(transferBriefResult(answered.value, projectLeagueApps)?.status).toBe('no_interest');
+  });
+});
