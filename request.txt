@@ -1,0 +1,3 @@
+# Reviewer sc-engine, Release AW part one, head 64d87aed: the real page on saves whose new field is damaged (a test file copied into the runner's checkout only), and the unit files of the four new parts beside it
+tiles-damaged: cp .rc/x/scTiles.test.tsx src/test/zzScTiles.test.tsx && node_modules/.bin/vitest run src/test/zzScTiles.test.tsx --testTimeout=300000 --hookTimeout=120000
+units-new-parts: node_modules/.bin/vitest run src/test/soccerCareerFarewell.test.ts src/test/soccerAgentReview.test.ts src/test/soccerInternationalReturn.test.ts src/test/soccerCareerTransferBrief.test.ts src/test/soccerTransferBriefPromise.test.tsx src/test/soccerCareerContracts.test.ts --testTimeout=300000 --hookTimeout=120000
