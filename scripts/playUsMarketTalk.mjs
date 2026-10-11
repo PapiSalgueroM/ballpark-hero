@@ -69,7 +69,7 @@ const saved = (page, key) => page.evaluate(k => localStorage.getItem(k), key);
 const parsed = async (page, key) => JSON.parse((await saved(page, key)) || 'null');
 const seasonsOf = s => s?.c?.seasons?.length ?? -1;
 const play = page => page.getByRole('button', { name: /^Play the [0-9]+ season$/ });
-const WEEK = '[data-season-centre-entry] button';
+const WEEK = '[data-season-centre-entry] [data-week-by-week]';
 const TALK = '[data-extension-talk]';
 const offerOf = page => page.evaluate(() => {
   const card = document.querySelector('[data-extension-talk]');
