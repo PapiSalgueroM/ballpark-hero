@@ -1,0 +1,2 @@
+vitest-all exit=0 558s |    Duration  557.11s (transform 33.82s, setup 25.65s, collect 159.81s, tests 1174.21s, environment 185.74s, prepare 38.81s)
+mut-watch exit=0 11s | MUT watch vitest=1
