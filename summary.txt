@@ -1,0 +1,5 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playUsMarketTalk exit=0 6s | playUsMarketTalk: 12 checks, 0 failed
+playUsMarketTalk-droptalk-EXPECT1 exit=1 33s | CONTROL droptalk: FIRED. The reload check went red in 2 sports and nothing else did.
+simHarnessAnchors exit=0 42s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 13s | No rival product names found. 0 findings.
