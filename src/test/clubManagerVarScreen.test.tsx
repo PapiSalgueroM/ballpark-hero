@@ -556,9 +556,13 @@ describe('Club Manager: the review screen', () => {
     /* A real goal at the clock place the card opens at is on the score by then, and has been told too (the last
        kick's line is not kept back for the review the whistle is waiting for). */
     const shown = frames[first].minute + frames[first].plus;
-    for (const g of h.feed.filter(e => e.kind === 'goal' && !e.og && !e.penalty && !e.freeKick && place(e) === shown)) {
-      expect(frames[first].text, `the real goal of ${g.text} at ${place(g)} is on the score and was not told before the card opened`).toContain(`GOAL! ${g.text}`);
+    const told = h.feed.filter(e => e.kind === 'goal' && place(e) === shown);
+    for (const g of told) {
+      /* The words the screen puts in front of a scorer (the pill and the list beside the pitch print the same run). */
+      const lead = g.og ? 'GOAL! Own goal, ' : g.penalty ? 'GOAL! Penalty, ' : g.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ';
+      expect(frames[first].text, `the real goal of ${g.text} at ${place(g)} is on the score and was not told before the card opened`).toContain(`${lead}${g.text}`);
     }
+    console.info(`clubManagerVarScreen: at the card ${told.length} real goal(s) of that clock place had been told (${told.map(g => g.text).join(', ') || 'none there'})`);
     console.info(`clubManagerVarScreen: the crowded end was found on seed ${h.seed}, whistle ${h.whistle}, review at ${place(v)}, card at ${frames[first].minute + frames[first].plus}, played ${runs.map(r => r.kind).join(' ')}`);
   }, 240000);
 
