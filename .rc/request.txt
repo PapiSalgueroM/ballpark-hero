@@ -1,0 +1,7 @@
+#!build
+#!playwright
+#!serial
+# Round 1302 review (run lens), request W2: playCmRealFixtures again, this time after its own sim (the walk reads a file the sim writes), dark, the way the release gate runs it.
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+simCmRealFixtures-forwalk: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCmRealFixtures.mjs > /tmp/sf.log 2>&1; s=$?; tail -3 /tmp/sf.log | cut -c1-400; echo "simCmRealFixtures exit $s"; exit $s
+playCmRealFixtures: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmRealFixtures.mjs > /tmp/rf.log 2>&1; s=$?; tail -6 /tmp/rf.log | cut -c1-400; echo "playCmRealFixtures exit $s"; exit $s
