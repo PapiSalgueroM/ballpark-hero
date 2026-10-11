@@ -1,0 +1,7 @@
+{"manager":25,"keyed":7,"entriesPlayed":919,"matches":876,"booksAfter":0,"us":64,"usPlayed":64,"usSeasons":192,"oldRows":256,"rivalsKept":64,"rivalsOldShape":49,"rivalsNewShape":16}
+  nfl: 16 saves played on, 48 new seasons; games on the new rows from 8 to 17 (48 rows with a games count)
+  nba: 16 saves played on, 48 new seasons; games on the new rows from 48 to 82 (48 rows with a games count)
+  mlb: 16 saves played on, 48 new seasons; games on the new rows from 32 to 162 (48 rows with a games count)
+  nhl: 16 saves played on, 48 new seasons; games on the new rows from 49 to 82 (48 rows with a games count)
+oldSaveProbeAV play: 25 Club Manager saves made by /tmp/base loaded (7 on a real fixture list), 919 entries and 876 matches played on, 0 hold a league book afterwards; 64 US career saves, 64 played on for 192 seasons over 256 old rows held byte for byte; 64 rivals kept (49 saved in the old shape, 16 in the new one after a season)
+oldSaveProbeAV: green. Every save made by the live build loads and plays on, and no season it already held moved.
