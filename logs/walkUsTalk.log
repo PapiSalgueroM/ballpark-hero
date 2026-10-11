@@ -1,0 +1,54 @@
+ok   R open: nfl: Play on a save in the last year of its deal opens the talk
+ok   R saved: nfl: the talk is on the save (phase extension, offer 16.6x4)
+ok   R reload: nfl: three reloads (Math.random not seeded) land on the same talk and the same save bytes, offer 16.6x4
+ok   R back: nfl: leaving for the home page and coming back (history Back, then a fresh visit) lands on the same talk and bytes
+ok   R push: nfl: the push is saved before the wheel is spun (held[0.759298]seen=false; offer now 16.6x4)
+ok   R wheel reload: nfl: a reload at the unspun wheel shows the wheel again on the same saved result
+ok   R wheel gate: nfl: with the wheel unseen no Sign, Decline or Push is on screen (none)
+ok   R spin reload: nfl: a reload in the middle of a spin changes nothing on the save
+ok   R skip: nfl: Skip reveals the saved result (held against saved held)
+ok   R continue: nfl: Continue marks the wheel seen and the offer is the saved one (16.6x4)
+ok   R one push: nfl: a second push changes nothing (disabled, forced)
+ok   R open: nba: Play on a save in the last year of its deal opens the talk
+ok   R saved: nba: the talk is on the save (phase extension, offer 31.5x5)
+ok   R reload: nba: three reloads (Math.random not seeded) land on the same talk and the same save bytes, offer 31.5x5
+ok   R back: nba: leaving for the home page and coming back (history Back, then a fresh visit) lands on the same talk and bytes
+ok   R push: nba: the push is saved before the wheel is spun (held[0.649751]seen=false; offer now 31.5x5)
+ok   R wheel reload: nba: a reload at the unspun wheel shows the wheel again on the same saved result
+ok   R wheel gate: nba: with the wheel unseen no Sign, Decline or Push is on screen (none)
+ok   R spin reload: nba: a reload in the middle of a spin changes nothing on the save
+ok   R skip: nba: Skip reveals the saved result (held against saved held)
+ok   R continue: nba: Continue marks the wheel seen and the offer is the saved one (31.5x5)
+ok   R one push: nba: a second push changes nothing (disabled, forced)
+ok   T same talk: nfl 1280: a second tab opens on the same saved talk (17.5x3)
+NOTE T nfl 1280: tab A pushed and saved withdrawn[0.004521]seen=false (offer no offer); tab B, loaded before that push, pushed again and the save now holds held[0.388144]seen=false (offer 17.5x3). A SECOND PUSH WAS DRAWN IN THE OTHER TAB: true
+FAIL T second tab cannot push again: nfl 1280: the one push stays spent across tabs (save after A withdrawn[0.004521]seen=false, after B held[0.388144]seen=false)
+NOTE T2 nfl 1280: opening offer 16.5x4; tab A pushed, saved result held, offer after the push 16.5x4; the stale tab B then pressed Sign: true; the save now holds salary 16.5 with 5 contract years, talk gone. THE PUSH WAS UNDONE BY THE STALE TAB: false
+ok   T stale tab cannot sign the offer as it was before the push: nfl 1280: after a push in tab A, tab B signed 16.5 with 5 years (the offer before the push was 16.5x4, after it 16.5x4)
+ok   T same talk: nba 390: a second tab opens on the same saved talk (33.6x4)
+NOTE T nba 390: tab A pushed and saved raised[0.113051,0.377352]seen=false (offer 36.8x4); tab B, loaded before that push, pushed again and the save now holds raised[0.353684,0.910362]seen=false (offer 38.4x4). A SECOND PUSH WAS DRAWN IN THE OTHER TAB: true
+FAIL T second tab cannot push again: nba 390: the one push stays spent across tabs (save after A raised[0.113051,0.377352]seen=false, after B raised[0.353684,0.910362]seen=false)
+NOTE T2 nba 390: opening offer 33.4x4; tab A pushed, saved result held, offer after the push 33.4x4; the stale tab B then pressed Sign: true; the save now holds salary 33.4 with 5 contract years, talk gone. THE PUSH WAS UNDONE BY THE STALE TAB: false
+ok   T stale tab cannot sign the offer as it was before the push: nba 390: after a push in tab A, tab B signed 33.4 with 5 years (the offer before the push was 33.4x4, after it 33.4x4)
+ok   F open: nhl 390: Play with no contract opens the market
+ok   F saved: nhl 390: the window is on the save (VAN:5.6x4 CBJ:6.2x4 MTL:5.7x3)
+ok   F reload: nhl 390: two reloads land on the same window and the same bytes
+ok   F compare: nhl 390: Compare opens, sorts and closes and writes nothing
+ok   F push: nhl 390: the push on offer 2 is saved before the wheel is spun (held[0.799251,0.842857]seen=false; VAN:5.6x4 CBJ:6.2x4 MTL:5.7x3p)
+ok   F wheel reload: nhl 390: a reload at the wheel shows the wheel on the same bytes and no Sign button
+ok   F one push an offer: nhl 390: a second push on the same offer changes nothing (disabled, forced)
+ok   F sign: nhl 390: Sign puts the offer on the career (VAN, 5.6 for 4 years), takes the talk off the save and plays nothing
+ok   F open: mlb 1280: Play with no contract opens the market
+ok   F saved: mlb 1280: the window is on the save (TEX:14x5 PIT:19x5 TOR:15.8x4)
+ok   F reload: mlb 1280: two reloads land on the same window and the same bytes
+ok   F compare: mlb 1280: Compare opens, sorts and closes and writes nothing
+ok   F push: mlb 1280: the push on offer 2 is saved before the wheel is spun (withdrawn[0.342600,0.008766]seen=false; TEX:14x5 PIT:19x5 TOR:15.8x4pg)
+ok   F wheel reload: mlb 1280: a reload at the wheel shows the wheel on the same bytes and no Sign button
+ok   F one push an offer: mlb 1280: a second push on the same offer changes nothing (no push button)
+ok   F sign: mlb 1280: Sign puts the offer on the career (TEX, 14 for 5 years), takes the talk off the save and plays nothing
+ok   M damaged talk: nfl: 15 of 15 damaged or stale talks opened on the hub, Play opened a fresh talk, and Decline played the season with nothing stale left on the save
+ok   M damaged talk: nba: 15 of 15 damaged or stale talks opened on the hub, Play opened a fresh talk, and Decline played the season with nothing stale left on the save
+ok   M damaged talk: mlb: 15 of 15 damaged or stale talks opened on the hub, Play opened a fresh talk, and Decline played the season with nothing stale left on the save
+ok   M damaged talk: nhl: 15 of 15 damaged or stale talks opened on the hub, Play opened a fresh talk, and Decline played the season with nothing stale left on the save
+ok   page errors: 0 uncaught page error(s) across the walk
+walkUsTalk: 49 checks, 2 failed, 4 notes. RED
