@@ -1,0 +1,5 @@
+# Release AV: saves MADE by the live build (main aa564f16, Release AU) and PLAYED by this head: Club Manager (the league book) and the four US My Careers (the true seasons, the NFL rival, the Hall marks). A scratch probe, never committed.
+#!serial
+make: git worktree add -f --detach /tmp/base aa564f16019b9e821981d5c4e3e0262312c73b62 >/dev/null 2>&1; ln -s "$PWD/node_modules" /tmp/base/node_modules; W="$PWD"; cd /tmp/base && git rev-parse --short HEAD && node "$W/.rc/x/oldSaveProbeAV.mjs" make /tmp/old-saves.json
+play: node .rc/x/oldSaveProbeAV.mjs play /tmp/old-saves.json
+play-on-main-itself: cd /tmp/base && node "$OLDPWD/.rc/x/oldSaveProbeAV.mjs" play /tmp/old-saves.json
