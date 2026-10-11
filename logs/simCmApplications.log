@@ -1,0 +1,24 @@
+0) 24 base careers played to about week ten
+   24 bases, tiers 1, 2, 3, 4, weeks 10 to 10, 0 live approach(es) turned down first
+1) Acceptance against standing and tier gap over 480 applications
+   480 answered (0 sacked while waiting): 66.0 percent yes; r vs standing 0.376, r vs tiers up -0.325 (reported, the paired gap below is the gate); standing 34 to 100; off schedule 0, quoted 0, no message 0, wrong options 0
+   yes by tiers applied up: 0: 249 of 326, 1: 47 of 93, 2: 17 of 47, 3: 4 of 14
+   paired tier check: 220 pairs (0 lost to a sacking), yes at my tier 68.2 percent, yes above it 47.7 percent, gap 20.5 points; pairs where only the bigger club said yes 1
+   paired trouble check: 240 pairs from 24 bases (0 lost to a sacking), odds where their season is fine 69.5 percent, where it is going badly 74.4 percent, gap 4.9 points (trouble 0.0 vs 10.9 when sent); pairs where the settled club's odds were higher 17
+   ok  acceptance rises with standing and with the trouble the club is in, falls with the tiers applied up, every answer on its fixed match day, every answer in the inbox from the club's board
+2) One at a time, a season long cooldown, three a season
+   ok  one open application at a time, a decline shuts the door through next season and no further (by hand and through two real rollovers), three a season and the count resets
+3) A yes answered with the summer moves the manager at the rollover, once
+   ok  4 booked summer moves fired at the rollover, over a different tapped offer, once each, with the board hit, the old board's letter and the interim recorded
+4) A yes answered with now moves the manager that week
+   ok  4 managers joined the club that said yes that week, record and honours intact, interim named, and played on
+5) A save from before the round opens and plays with nothing in flight
+   ok  an old save opens with nothing in flight, can apply, plays on without the field, and an application in flight survives a save and load
+6) An approach and an application never overlap
+   approaches drawn over 206, 207 and 207 matches: free 7, application out 0, move booked 0
+   ok  no approach while an application is out or a move is booked (7 drawn in the free arm), no handshake beside one, and no application beside a live approach
+7) Late in the season, at its end, and after the sack
+   sacked at Brentford in week 17 with a move to Manchester United booked; the other job taken is Lincoln City (a real call)
+   ok  an application goes out with 5 league games left and is answered in time, not with fewer; a waiting yes leads the summary; after the sack the job taken is the job you get
+
+simCmApplications: green. The answer is earned, the limits hold, a summer move fires once, joining now moves the manager that week, and old saves load.
