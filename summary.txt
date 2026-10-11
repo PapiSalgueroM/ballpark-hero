@@ -1,0 +1,10 @@
+varlive exit=0 14s |    Duration  12.98s (transform 2.02s, setup 63ms, collect 2.75s, tests 8.67s, environment 474ms, prepare 362ms)
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+litstatus exit=0 0s | cmVarLit: CM_VAR_LIVE is on, the game is handed goal
+simCmVarLedger-receipt-EXPECT1 exit=1 0s | simCmVarLedger control receipt: FIRED (scripts/data/cmVarRates.receipt.json does not carry the hash of scripts/data/cmVarRates.json)
+simCmVar-counted-EXPECT1 exit=0 2s | simCmVar counted: actual review outcomes and full prior baseline passed.
+simDailyDeals-bind-EXPECT1 exit=1 3s | simDailyDeals: CONTROL bind FIRED: its 5 Premier League dates went red (2026-10-27, 2026-11-14, 2027-01-19, 2027-01-30, 2027-02-06) and no other date moved
+simDailyDeals-binddeadline-EXPECT1 exit=1 3s | simDailyDeals: CONTROL binddeadline FIRED: its 3 Premier League dates went red (2026-10-18, 2026-11-01, 2026-11-09) and no other date moved
+gitclean exit=0 0s | 0
+livesimmotion exit=0 59s |    Duration  57.88s (transform 2.72s, setup 75ms, collect 3.47s, tests 52.71s, environment 545ms, prepare 350ms)
+varscreen exit=0 108s |    Duration  106.63s (transform 2.81s, setup 89ms, collect 3.66s, tests 101.38s, environment 433ms, prepare 372ms)
