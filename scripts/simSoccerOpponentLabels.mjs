@@ -15,9 +15,9 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(ROOT, process.env.SOCCER_OPPONENT_LABELS_OUT || 'career-opponent-labels-artifacts/proof');
-const BASE = 'f78037dcddea12c1a02586c7d5c0e185efb86121';
-const TREE = '1c9e7dcb11992442060cb162c288d0bcf37db0c2';
-const ORIGINAL_COMPONENT_SHA = '25386cbb704017aa1db4a85a9501fab791ea536faafd0eb1bd4accadcaf5c5ea';
+const BASE = '86d0466cae5db2e2353577123b5ab6e2828a0a36';
+const TREE = 'f98443d7948432461175285c9cf1ae0ccb79ae6c';
+const ORIGINAL_COMPONENT_SHA = 'b553b6277e1b6e697a608f167e7ba2f16be007c1ad7d90063b24ca074ff32aed';
 const PAGE = 'src/components/soccer-career/SoccerSeasonCentre.tsx';
 const HELPER = 'src/lib/season/belgianOpponentLabels.ts';
 const EXPORT = '\nexport { buildModel as __opponentModel };\n';
