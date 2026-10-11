@@ -183,6 +183,15 @@
  * and that is the whole of the commit. The truth digest taken again from
  * the same head with the nfl keys allowed came back byte equal, so it has
  * no commit.
+ * Release AV (2026-10-11) met Round 1226 (the true MLB and NHL seasons, which
+ * took the MLB and NHL sections again) with Round 1227 in this one file. The
+ * merge took Round 1226's file whole and the recording was taken again on a
+ * runner (rAV-f2) from the merged head a1e4f86b: the NFL section came back
+ * byte for byte Round 1227's own (451,649 bytes), and the NBA, the MLB and
+ * the NHL byte for byte the file before, so each round's section is the one
+ * it recorded alone and the two rounds do not move each other. 1,870,889
+ * bytes. The truth digest taken again from the same head with the nfl keys
+ * allowed came back byte equal to the merged file, so it has no commit.
  * Round 1149 (the other three careers get what the NBA rival got)
  * re-recorded it on purpose on 2026-10-10, on a GitHub runner, once a step,
  * each from the branch commit its header names.
