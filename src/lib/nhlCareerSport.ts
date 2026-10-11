@@ -13,7 +13,7 @@ import {
   NHL_SPEND_ITEMS, buyNhlItem, getNhlSpendItem,
   nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf,
   buildNhlFaWindow, nhlFaPushArgs, buildNhlExtension, nhlExtPushArgs,
-  nhlAssignRole, nhlCampBattle,
+  nhlAssignRole, nhlCampBattle, nhlWorkSlate,
   type NhlCareerPos, type NhlCareerState, type NhlSeasonLine,
 } from '@/lib/nhlMyCareer';
 import { countOf, nhlMajorAward, nhlStatLine } from '@/lib/usCareerStatLine';
@@ -25,10 +25,19 @@ import { NHL_BADGES } from '@/lib/careerBadges';
 import { nhlUnreadInboxCount, answerNhlInboxMessage, nhlDraftNightInbox, NHL_CALENDAR } from '@/lib/nhlCareerInbox';
 import { dismissNhlRivalryEvent, resolveNhlRivalryChoice } from '@/lib/nhlCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
-import { slateField } from '@/lib/usSeasonShape';
+import { slateField, seasonLength, slateOf, toSlate, fullSeasonOf } from '@/lib/usSeasonShape';
+import { bindUsProgrammeSeason } from '@/lib/usCareerProgramme';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NHL_CAREER_HALL } from '@/lib/nhlCareerHall';
 import { nhlSeasonReview } from '@/lib/usCareerSeasonReview';
+
+/* Release AV: the planning panel's games and counting targets follow the season this engine plays (the
+   ProgrammeSeasonShape of src/lib/usCareerProgramme.ts): the same reader of the ledger and the same
+   arithmetic simNhlSeason carries its own draws with, so a plan for a short year asks what that year can give. */
+bindUsProgrammeSeason('nhl', {
+  carry: (count, pos, year, team) => toSlate('nhl', count, nhlWorkSlate(pos, seasonLength('nhl', year, team))),
+  full: (count, pos, line) => fullSeasonOf('nhl', count, nhlWorkSlate(pos, slateOf('nhl', line as NhlSeasonLine))),
+});
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save

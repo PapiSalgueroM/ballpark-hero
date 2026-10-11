@@ -13,7 +13,7 @@ import {
   MLB_SPEND_ITEMS, buyMlbItem, getMlbSpendItem,
   mlbShouldRetire, mlbLegacyOf, mlbCareerTotals, mlbRollTeamQuality, mlbTeamLabelOf,
   buildMlbFaWindow, mlbFaPushArgs, buildMlbExtension, mlbExtPushArgs,
-  mlbAssignRole, mlbCampBattle,
+  mlbAssignRole, mlbCampBattle, mlbWorkSlate,
   type MlbCareerPos, type MlbCareerState, type MlbSeasonLine,
 } from '@/lib/mlbMyCareer';
 import { countOf, mlbCareerSoFar, mlbMajorAward, mlbStatLine } from '@/lib/usCareerStatLine';
@@ -25,11 +25,20 @@ import { MLB_BADGES } from '@/lib/careerBadges';
 import { mlbUnreadInboxCount, answerMlbInboxMessage, mlbDraftNightInbox, MLB_CALENDAR } from '@/lib/mlbCareerInbox';
 import { dismissMlbRivalryEvent, resolveMlbRivalryChoice } from '@/lib/mlbCareerRivalryEvents';
 import type { UsCareerSport } from '@/lib/usCareerSport';
-import { slateField } from '@/lib/usSeasonShape';
+import { slateField, seasonLength, slateOf, toSlate, fullSeasonOf } from '@/lib/usSeasonShape';
+import { bindUsProgrammeSeason } from '@/lib/usCareerProgramme';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { MLB_CAREER_HALL } from '@/lib/mlbCareerHall';
 import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
 import { mlbSeasonHeld } from '@/lib/mlbSeasonHeld';
+
+/* Release AV: the planning panel's games and counting targets follow the season this engine plays (the
+   ProgrammeSeasonShape of src/lib/usCareerProgramme.ts): the same reader of the ledger and the same
+   arithmetic simMlbSeason carries its own draws with, so a plan for a short year asks what that year can give. */
+bindUsProgrammeSeason('mlb', {
+  carry: (count, pos, year, team) => toSlate('mlb', count, mlbWorkSlate(pos, seasonLength('mlb', year, team))),
+  full: (count, pos, line) => fullSeasonOf('mlb', count, mlbWorkSlate(pos, slateOf('mlb', line as MlbSeasonLine))),
+});
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
