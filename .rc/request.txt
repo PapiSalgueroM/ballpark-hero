@@ -1,0 +1,5 @@
+# Release AW part one: why B1i of the Season Centre motion walk is red on this head: a measuring copy that prints, for each of the 40 interrupted cases, whether the two tables hold the same order (it adds facts, it changes no assertion)
+#!build
+#!playwright
+#!serial
+motion-diag: node .rc/x/mkMotionDiag.mjs && ONLY=B1i node scripts/zzSeasonMotionDiag.mjs > /tmp/diag.log 2>&1; s=$?; rm -f scripts/zzSeasonMotionDiag.mjs; grep -c "DIAG B1i" /tmp/diag.log; grep "DIAG B1i" /tmp/diag.log | grep "same order true$\|to 2[0-9] same order true; anim\|Probe 14" | head -30; grep "B1i" /tmp/diag.log | grep -v DIAG | head -8; tail -2 /tmp/diag.log; exit $s
