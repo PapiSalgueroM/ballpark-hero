@@ -1,0 +1,9 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+playCmVar exit=0 600s | playCmVar exit 0
+weight exit=0 27s | sweepWeight exit 0
+m-clean exit=0 10s | unmutated exit 0
+m-mended exit=1 14s | mended exit 1 (1 is the mutation caught)
+m-crash exit=1 10s | crash exit 1 (1 is the mutation caught)
+lk-control exit=1 336s | lk-control exit 1 (1 is the control firing: the screen as it was before c06dc974)
+clean exit=0 0s | 0

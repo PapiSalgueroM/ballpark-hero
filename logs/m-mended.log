@@ -1,0 +1,22 @@
+mutFails mended: the test file is mutated
+[31m     → the pitch under this card is quiet now: the open defect is mended, so set this row's under to 'quiet': expected 0 to be greater than 0[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: a real action is under the card of a penalty a review gives ('a real chance shares its place and an…') [33m 2530[2mms[22m[39m
+   [32m✓[39m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real goal is the last kick after it…')[32m 1[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real last kick follows it and the p…')[39m[32m 3[2mms[22m[39m
+[31m     → the kick this card gave is played out now: the open defect is mended, so set this row's kick to 'played': expected true to be false // Object.is equality[39m
+   [32m✓[39m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real chance shares its place and an…')[32m 1[2mms[22m[39m
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion false)
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1860, reduced motion false)
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22ma real goal that is the last kick of a first half gets its scorer card, and the whistle waits for it (seed 1742, reduced motion true)
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mtwo goals in the last two clock places of a first half are both drawn, each with its own card, in order (seed 1773)
+   [2m[90m↓[39m[22m Club Manager: the last kick of a half (finding 6 of Round 1302, mended in Round 1303)[2m > [22mSkip during the card of the last kick ends the half at once, on the engine score (seed 1742)
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mKNOWN OPEN, dark: a real action is under the card of a penalty a review gives ('a real last kick follows it and the p…')
+[31m[1mAssertionError[22m: the pitch under this card is quiet now: the open defect is mended, so set this row's under to 'quiet': expected 0 to be greater than 0[39m
+    [90m755| [39m  it.each(LATE_AWARDED.filter(r => r.kick === 'OPEN'))('KNOWN OPEN, da…
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real last kick follows it and the p…')
+[31m[1mAssertionError[22m: the kick this card gave is played out now: the open defect is mended, so set this row's kick to 'played': expected true to be false // Object.is equality[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[2m | [22m[33m42 skipped[39m[90m (48)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > KNOWN OPEN%2C dark%3A a real action is under the card of a penalty a review gives ('a real last kick follows it and the p…'),line=753,column=133::A
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > KNOWN OPEN%2C dark%3A the kick of a penalty a review gives is not played out ('a real last kick follows it and the p…'),line=759,column=137::Assert
+mended exit 1 (1 is the mutation caught)

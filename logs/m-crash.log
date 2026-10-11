@@ -1,0 +1,16 @@
+mutFails crash: the test file is mutated
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: a real action is under the card of a penalty a review gives ('a real goal is the last kick after it…') [33m 4367[2mms[22m[39m
+   [33m[2m✓[22m[39m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: a real action is under the card of a penalty a review gives ('a real chance shares its place and an…') [33m 2600[2mms[22m[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real goal is the last kick after it…')[39m[32m 8[2mms[22m[39m
+[31m     → probe: a crash in a helper, nothing to do with the defect[39m
+[31m   [31m×[31m Club Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real chance shares its place and an…')[39m[32m 1[2mms[22m[39m
+[31m     → probe: a crash in a helper, nothing to do with the defect[39m
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real goal is the last kick after it…')
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mKNOWN OPEN, dark: the kick of a penalty a review gives is not played out ('a real chance shares its place and an…')
+[31m[1mError[22m: probe: a crash in a helper, nothing to do with the defect[39m
+    [90m725| [39m    if (frames.length >= 0) throw new Error('probe: a crash in a helpe…
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[2m | [22m[33m42 skipped[39m[90m (46)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > KNOWN OPEN%2C dark%3A the kick of a penalty a review gives is not played out ('a real goal is the last kick after it…'),line=725,column=35::Error: 
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > KNOWN OPEN%2C dark%3A the kick of a penalty a review gives is not played out ('a real chance shares its place and an…'),line=725,column=35::Error: 
+crash exit 1 (1 is the mutation caught)
