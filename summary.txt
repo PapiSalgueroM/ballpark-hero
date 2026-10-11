@@ -1,0 +1,4 @@
+stream exit=0 22s | cmStreamProbe: GREEN. 1469 of 1469 faces equal to the base over 20 careers, 0 careers differ, 0 threw, 0 law failures.
+baseline-is-AS exit=0 4s | simDailyDeals: the recorded deals ARE the deals of the source at /tmp/as3 (12 Hot Seat dates, 6 Deadline Day dates)
+dailies60 exit=0 34s | cmDailiesProbe: GREEN. 60 dates, both dailies: 0 deals moved against the base, 0 states carry a book or the fixture key, 0 handovers carry one.
+dailies60-later exit=0 35s | cmDailiesProbe: GREEN. 60 dates, both dailies: 0 deals moved against the base, 0 states carry a book or the fixture key, 0 handovers carry one.
