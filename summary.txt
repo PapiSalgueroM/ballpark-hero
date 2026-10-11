@@ -1,0 +1,3 @@
+m-lineleft exit=1 72s | MUT lineleft: vitest exit 1
+m-lineonce exit=1 72s | MUT lineonce: vitest exit 1
+clean exit=0 0s | tree after the mutations: 0 changed path(s)

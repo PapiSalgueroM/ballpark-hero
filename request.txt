@@ -1,0 +1,5 @@
+#!serial
+# Round 1302 fix 2: the mutations of this pass (each line restores the tree). A line that exits 0 is a change NOBODY caught.
+m-lineleft: node .rc/x/fx2Mut.mjs lineleft && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/m.log 2>&1; s=$?; cp /tmp/m.log "$RC_OUT/m-lineleft.log"; grep -a -E "AssertionError|Tests |FAIL " /tmp/m.log | cut -c1-330 | head -40; git checkout -- src scripts; echo "MUT lineleft: vitest exit $s"; exit $s
+m-lineonce: node .rc/x/fx2Mut.mjs lineonce && node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/m.log 2>&1; s=$?; cp /tmp/m.log "$RC_OUT/m-lineonce.log"; grep -a -E "AssertionError|Tests |FAIL " /tmp/m.log | cut -c1-330 | head -40; git checkout -- src scripts; echo "MUT lineonce: vitest exit $s"; exit $s
+clean: echo "tree after the mutations: $(git status --short | wc -l) changed path(s)"; git status --short | head -5
