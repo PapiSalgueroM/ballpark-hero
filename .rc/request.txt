@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+r1-cards: node_modules/.bin/vitest run src/test/usProgrammeCardTruth.test.ts --testTimeout=300000 --hookTimeout=120000
+r1-theirs: node_modules/.bin/vitest run src/lib/usCareerProgramme.test.ts src/test/usCareerProgrammeUi.test.tsx src/test/usBoardFixture.test.tsx --testTimeout=300000 --hookTimeout=120000
+r1-units: node scripts/checkCareerProgrammeUnits.mjs
