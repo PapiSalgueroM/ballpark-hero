@@ -1,0 +1,21 @@
+1) every step: 414 table seasons, 285230 pairs of tables, 15051 of 15134 one matchday steps moved a club (153255 club moves)
+ok   1. the probe reached enough table seasons (414, floor 300)
+ok   1. every step of every season was compared (285230 pairs, floor 150000)
+ok   1. one matchday steps that moved at least one club: 99.5% (floor 90%)
+ok   1. every club's from and to are its places in the two tables
+ok   2. a record round trips under seasonCentre:v1:soccer
+ok   2. a cleared record is gone
+ok   2. 14 shapes that are not a record, text that is not JSON and a storage that throws: 0 read as a record, 0 threw
+2) the resume record: 48 careers, 875 played rows, 15792 checks against another career that played the same year
+ok   2. the probe gave enough careers and played rows (48 careers, 875 rows; floors 40 and 600)
+ok   2. every record finds its own row (875 of 875); rows of one career sharing a key: 0
+ok   2. a record finds nothing in another career (0 of 15792 did; floor 5000 checks)
+ok   2. a record that is not stable is held to the league year of the save (0 of 875 were not)
+ok   2. the career page holds its key template on one line (1 lines found)
+ok   2. the page's key for a season is the Season Centre's own key on every played row (0 of 875 differ)
+3) source fences: 1 files in src/lib/motion, 1 in src/components/motion, 8 that may draw nothing
+ok   3. the fenced folders are not empty
+ok   3. imports and random draws (0 findings)
+ok   3. the call written in a comment and in a string is not a finding
+ok   3. the same call in code is exactly one finding
+simSeasonCentreMotion: 17 checks, 0 failed
