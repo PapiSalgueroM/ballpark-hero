@@ -1,0 +1,4 @@
+#!serial
+eras-head: bash .rc/x/tb-old2.sh . head nfl nba mlb nhl
+eras-main: git worktree add -q --detach /tmp/main f78037dcddea12c1a02586c7d5c0e185efb86121 && ln -s "$PWD/node_modules" /tmp/main/node_modules && bash .rc/x/tb-old2.sh /tmp/main main nfl nba mlb nhl
+tree-clean: test -z "$(git status --short -- src scripts)" && echo "tree-clean: nothing left mutated"
