@@ -1,0 +1,30 @@
+# Release AX review, facts-fences, part a: the fences that need no served site, one at a time, on the pushed head
+#!build
+#!playwright
+#!serial
+head-sha: git rev-parse HEAD~1 2>/dev/null; git log --oneline -2 | cut -c1-120
+edge-sha: sha256sum supabase/functions/validate-player/index.ts; wc -c supabase/functions/validate-player/index.ts
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoInventedConduct: node scripts/simNoInventedConduct.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSingleFooter: node scripts/simSingleFooter.mjs
+simCompletionSlugs: node scripts/simCompletionSlugs.mjs
+simCompletionOnce: node scripts/simCompletionOnce.mjs
+simNoDoubleRecord: node scripts/simNoDoubleRecord.mjs
+simDailyPuzzleContract: node scripts/simDailyPuzzleContract.mjs
+simDailySaveHardening: node scripts/simDailySaveHardening.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+simResultMoment: node scripts/simResultMoment.mjs
+simGuideHeadings: node scripts/simGuideHeadings.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simVictoryMoment: node scripts/simVictoryMoment.mjs
+simHomeCopy: node scripts/simHomeCopy.mjs
+simTrustCopy: node scripts/simTrustCopy.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+simSaveKeeper: export TMPDIR=$(mktemp -d); node scripts/simSaveKeeper.mjs
