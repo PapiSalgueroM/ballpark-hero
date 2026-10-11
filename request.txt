@@ -1,0 +1,18 @@
+# Release AX d5 on c4a91cdc: the summer a sport a line, the digests' harnesses, the US board's other harnesses, the type gate
+summer-nfl: export TMPDIR=$(mktemp -d); SIM_SPORTS=nfl node scripts/simUsCareerSummer.mjs
+summer-nba: export TMPDIR=$(mktemp -d); SIM_SPORTS=nba node scripts/simUsCareerSummer.mjs
+summer-mlb: export TMPDIR=$(mktemp -d); SIM_SPORTS=mlb node scripts/simUsCareerSummer.mjs
+summer-nhl: export TMPDIR=$(mktemp -d); SIM_SPORTS=nhl node scripts/simUsCareerSummer.mjs
+simUsCareerDeckC: export TMPDIR=$(mktemp -d); node scripts/simUsCareerDeckC.mjs
+simUsSeasonCentre: export TMPDIR=$(mktemp -d); node scripts/simUsSeasonCentre.mjs
+simUsPostseason: export TMPDIR=$(mktemp -d); node scripts/simUsPostseason.mjs
+simUsCareerSaveRetry: export TMPDIR=$(mktemp -d); node scripts/simUsCareerSaveRetry.mjs
+simUsCareerPractice: export TMPDIR=$(mktemp -d); node scripts/simUsCareerPractice.mjs
+simUsCareerActionConfirm: export TMPDIR=$(mktemp -d); node scripts/simUsCareerActionConfirm.mjs
+simUsCareerProspect: export TMPDIR=$(mktemp -d); node scripts/simUsCareerProspect.mjs
+simUsCareerWeight: export TMPDIR=$(mktemp -d); node scripts/simUsCareerWeight.mjs
+simRevealMoments: export TMPDIR=$(mktemp -d); node scripts/simRevealMoments.mjs
+simExtension: export TMPDIR=$(mktemp -d); node scripts/simExtension.mjs
+simFreeAgency: export TMPDIR=$(mktemp -d); node scripts/simFreeAgency.mjs
+simCareerSeasonTruth: CAREER_SEASON_LOCAL_ONLY=1 node scripts/simCareerSeasonTruth.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json

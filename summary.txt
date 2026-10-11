@@ -1,0 +1,17 @@
+summer-mlb exit=0 3694s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
+summer-nba exit=0 3900s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
+simUsCareerDeckC exit=0 73s | simUsCareerDeckC: all checks passed
+simUsSeasonCentre exit=0 127s | simUsSeasonCentre: 158 checks, 0 failed
+simUsPostseason exit=0 18s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+summer-nfl exit=124 4200s | 6) balance: on against off, careers a seed nfl 12000, 3 seeds
+simUsCareerPractice exit=0 29s | simUsCareerPractice: 32 actual-board outcomes passed across NFL, NBA, MLB and NHL
+simUsCareerActionConfirm exit=0 9s | Career confirmation: CRLF controls bind, raw bytes held and owned copies cleaned. Simulated states/explicit events do not prove full-season gameplay or native Enter, view
+simUsCareerProspect exit=0 17s | simUsCareerProspect: 36 actual-board outcomes passed across all four sports
+simUsCareerWeight exit=0 0s | simUsCareerWeight: green. 31 checks: the four wrappers hand the board their own binding, no shared file or binding imports another sport, and every control fired.
+simRevealMoments exit=0 12s | simRevealMoments: green. No counting number, a reduced motion rule beside every keyframe, one pace for every stagger, every fact and number on the cards is the fixture's 
+simExtension exit=0 0s | simExtension: green. The last year of a deal is a decision in all four games now.
+simFreeAgency exit=0 2s | ALL FREE AGENCY CHECKS PASSED
+simCareerSeasonTruth exit=0 0s | simCareerSeasonTruth: all green
+simUsCareerSaveRetry exit=0 153s | US career save retry: passed. Evidence at /home/runner/work/ballpark-hero/ballpark-hero/us-career-save-recovery-artifacts/outcomes
+tsc exit=0 65s | 
+summer-nhl exit=0 901s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
