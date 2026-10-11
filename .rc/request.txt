@@ -1,0 +1,10 @@
+# Release AU proof, the five served harnesses: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+simMobileChrome: node scripts/simMobileChrome.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simSoccerCareerRecords: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRecords.mjs
+playLiveMatchFit-fresh: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
