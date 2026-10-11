@@ -45,6 +45,10 @@
  * the end of a half. Three of those four are wrong on the screen as it stands and are kept as cases marked
  * `fails`, open and unreachable today (see the comment above LATE_AWARDED). So: two cases staged by hand, five
  * marked `fails`, and every other case a half the engine drew, untouched, that must pass.
+ * Round 1303 moved two penalty cases to halves that hold their review on the lower penalty rate, and added a second
+ * block at the foot of the file that is NOT about reviews: finding 6 of Round 1302 (a real goal that is the last kick
+ * of a half), reproduced on halves nobody asks a review in, as three more cases marked `fails`. So: 42 cases, 34
+ * plain and 8 that pass by failing.
  */
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -885,5 +889,64 @@ describe('Club Manager: the review screen', () => {
       expect(card?.goalCard, 'the penalty a review gave got no scorer card').toContain(v.text);
       expect(card?.goalCard).toContain('(P)');
     }
+  }, 240000);
+});
+
+/* ---- Round 1303. NOT a review case: finding 6 of Round 1302's fix report, LIVE TODAY with VAR off ----
+   The lead's decision 4 of Round 1303 asked for it reproduced by a test that fails first, and then fixed. The
+   first half of that is here; the fix is NOT (see docs/audits/ROUND-1303-NOTES.md section 5: it is the live match
+   screen's own rule since Round 1101, "a goal fired late keeps the pill, and so does the last kick of a period",
+   and the plan playing nothing in the place before a last kick; the cure is the twin of the stoppage and wants a
+   round of its own). Nobody asks for a review in these halves: they are the game as it ships, on the halves the
+   run review of Round 1302 named (league match 1, seeds 1742 and 1860: a real goal at the whistle's own place;
+   seed 1773: goals at 45+2 and 45+3 with the whistle at 45+3).
+   Each case is marked `fails`: green while the defect is there, RED the day it is mended, and then it becomes a
+   plain case. A case marked `fails` is green on ANY throw, so each does its own work outside the one assertion
+   that is the defect: if the half is gone, the goal is not the last kick any more, or the half never ends, it
+   returns, and a `fails` case that returns is RED. */
+describe('Club Manager: the last kick of a half (finding 6 of Round 1302, live with VAR off)', () => {
+  type Late = { career: CareerState; feed: LiveFeedEvent[]; whistle: number; late: LiveFeedEvent[] };
+  /** The first half of league match 1 on this seed, nobody asking for reviews, when it holds what the case is about. */
+  function lateGoals(hint: number, want: (late: LiveFeedEvent[], whistle: number) => boolean): (Late & { seed: number }) | null {
+    for (const seed of [hint, ...Array.from({ length: 1500 }, (_, i) => 1700 + i)]) {
+      const res = seeded(seed, () => playNextEntry(entry(0), {}));
+      if (res.kind !== 'halftime' || !res.state.live || 'varReviews' in res.state.live) continue;
+      const feed = liveFeed(res.state.live), whistle = 45 + (res.state.live.added?.h1 ?? 0);
+      const late = feed.filter(e => e.kind === 'goal' && place(e) >= whistle - 1);
+      if (want(late, whistle)) return { career: structuredClone(res.state), feed, whistle, late, seed };
+    }
+    return null;
+  }
+  /** The half played from 44.2 to the interval and 3.2 seconds on, or null when it never gets there. */
+  async function played(h: Late): Promise<{ frames: Frame[]; whistle: number } | null> {
+    const career = structuredClone(h.career);
+    career.live!.minute = 44.2;
+    const mounted = mount(career);
+    let frames = await run(mounted, 40000, fs => fs[fs.length - 1].stage === 'interval');
+    const whistle = frames.findIndex(f => f.stage === 'interval');
+    if (whistle < 0) return null;
+    frames = await run(mounted, 3200, undefined, 1, frames);
+    return { frames, whistle };
+  }
+
+  it.fails.each([1742, 1860])('KNOWN OPEN, live today: a real goal that is the last kick of a first half gets no scorer card (seed %i)', async seed => {
+    let h: ReturnType<typeof lateGoals> = null, got: Awaited<ReturnType<typeof played>> = null;
+    try { h = lateGoals(seed, (late, whistle) => late.some(g => place(g) === whistle)); got = h ? await played(h) : null; } catch { return; }
+    if (!h || !got) return;
+    const goal = h.late.find(g => place(g) === h!.whistle)!;
+    /* The goal IS drawn and counted: what is missing is its card, not the goal. */
+    if (!got.frames.slice(0, got.whistle + 1).some(f => f.motion === 'goal') || got.frames[got.frames.length - 1].score !== scoreBy(h.feed, h.whistle)) return;
+    console.info(`clubManagerVarScreen: the last kick of the half, hint ${seed}, found on seed ${h.seed}: whistle ${h.whistle}, ${goal.side} goal by ${goal.text}, score at the end ${got.frames[got.frames.length - 1].score}, scorer cards seen ${got.frames.filter(f => f.goalCard !== null).length} frames`);
+    expect(got.frames.some(f => f.goalCard !== null && f.goalCard.includes(goal.text)), 'the goal that is the last kick of the half got no scorer card').toBe(true);
+  }, 240000);
+
+  it.fails('KNOWN OPEN, live today: of two goals in the last two clock places of a first half only one is drawn (seed 1773)', async () => {
+    let h: ReturnType<typeof lateGoals> = null, got: Awaited<ReturnType<typeof played>> = null;
+    try { h = lateGoals(1773, (late, whistle) => late.some(g => place(g) === whistle) && late.some(g => place(g) === whistle - 1)); got = h ? await played(h) : null; } catch { return; }
+    if (!h || !got) return;
+    if (got.frames[got.frames.length - 1].score !== scoreBy(h.feed, h.whistle)) return;
+    const drawn = actionRuns(got.frames.slice(0, got.whistle + 1)).filter(r => r.kind === 'goal').length;
+    console.info(`clubManagerVarScreen: two goals in the last two places, hint 1773, found on seed ${h.seed}: whistle ${h.whistle}, goals at ${h.late.map(place).join(' and ')}, goals drawn ${drawn}, score at the end ${got.frames[got.frames.length - 1].score}`);
+    expect(drawn, 'a goal in the place before a last kick was counted and never drawn').toBe(h.late.length);
   }, 240000);
 });
