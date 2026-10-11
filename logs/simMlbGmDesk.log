@@ -1,0 +1,18 @@
+1) a save from before the desk plays exactly as the engine did before this round
+   9 seasons replayed against 8f27082f
+2) over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written
+   1088 expiring men: 568 decided by the GM, 520 by the staff's rule; 415 tendered under club control; qualifying offers 163 taken, 79 turned down
+   165 draftees came up after exactly 3 seasons, 85 reached free agency at 6
+3) no trade lands after the deadline, and deals do land before it
+   472 deals before the deadline, 800 tries after it, 0 landed; 1560 buyer and 746 seller places at the deadline
+   2700 rounds where the trade paths' refusal matched the window; 4 of 4 board trade handlers ask the deadline first; the old paths carry no pick with the desk on
+4) picks are conserved league wide after every deal and every winter, and none ever moves
+   582 ledger checks; 400 packages carried a pick, 400 refused by MLB's rule; 49 deals with cash; 63 extra picks paid by turned down qualifying offers
+5) the staff's effects change their consumer at every level step
+   each post alone: manager win 0.495 to 0.513; pitching win 0.495 to 0.519; hitting win 0.495 to 0.524; scouting miss 2.242 to 0.567; farm grow 2.000 to 2.208; medical out 3.000 to 2.255
+   the desk's winter: 60 young men grow 131 points under a level 1 farm, 143 under a level 10 one; rivals unchanged
+   edge 0.00 to 3.00, win 0.495 to 0.564, miss 2.24 to 0.57, rounds out 3.00 to 2.25, winter growth 2.000 to 2.208
+6) migration keeps every marker, a corrupt block resets alone, cash in a deal holds its figure and its limits
+7) every desk panel draws, and the re-sign desk shows a tile for every expiring man
+   4 panels drawn, 4 re-sign tiles for 4 expiring men, the desk help drawn
+simMlbGmDesk: all seven checks passed (10 seeds x 10 seasons)

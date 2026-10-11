@@ -1,0 +1,17 @@
+1) a save from before the desk plays exactly as the engine did before this round
+   9 seasons replayed against f8e6cd06
+2) over ten seasons a seed, no expiring man of yours leaves without a recorded decision, applied as written
+   280 expiring men: 166 decided by the GM, 114 by the staff's rule; 99 draftees came up after exactly their entry level seasons
+3) no trade lands after the deadline, and deals do land before it
+   686 deals before the deadline, 400 tries after it, 0 landed; 1973 buyer and 498 seller places at the deadline
+   2000 rounds where the trade paths' refusal matched the window; 4 of 4 board trade handlers ask the deadline first
+4) picks are conserved league wide after every deal and every summer
+   796 ledger checks, 664 deals with a pick in them, 61 with salary retained
+   offer sheets cashed in: 22 by the GM, 3 by the staff's rule; 41 picks paid, 0 owed by a club with none left
+5) the staff's effects change their consumer at every level step
+   each post alone: hc win 0.566 to 0.614; specialTeams win 0.566 to 0.590; goalie win 0.566 to 0.590; scouting miss 2.227 to 0.566; medical out 3.000 to 2.252
+   edge 0.00 to 2.40, win 0.566 to 0.660, miss 2.23 to 0.57, rounds out 3.00 to 2.25
+6) migration keeps every marker, a corrupt block resets alone, retained salary holds its figure and its limits
+7) every desk panel draws, and the re-sign desk shows a tile for every expiring man
+   4 panels drawn, 5 re-sign tiles for 5 expiring men
+simNhlGmDesk: all seven checks passed (10 seeds x 10 seasons)

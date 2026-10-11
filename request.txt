@@ -1,0 +1,83 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: NO_COLOR=1 FORCE_COLOR=0 node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000 > $RC_OUT/vitest-all.log 2>&1; s=$?; grep -E ' × |FAIL ' $RC_OUT/vitest-all.log | cut -c1-200 | head -20; grep -E 'Test Files |Tests ' $RC_OUT/vitest-all.log; exit $s
+simGmGameDay: node scripts/simGmGameDay.mjs > $RC_OUT/simGmGameDay.log 2>&1; s=$?; grep -E "the board.s way|FAIL|^  the board" $RC_OUT/simGmGameDay.log | cut -c1-420; tail -1 $RC_OUT/simGmGameDay.log; exit $s
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerInboxBeats: node scripts/simCareerInboxBeats.mjs
+simDraftNight: node scripts/simDraftNight.mjs
+simFoHub: node scripts/simFoHub.mjs
+simFrontOfficeCuts: node scripts/simFrontOfficeCuts.mjs
+simFrontOfficeRoster: node scripts/simFrontOfficeRoster.mjs
+simFrontOfficeSaveRecovery: node scripts/simFrontOfficeSaveRecovery.mjs
+simFrontOfficeSchedule: node scripts/simFrontOfficeSchedule.mjs
+simGmDesk: node scripts/simGmDesk.mjs
+simGmDraftOrder: node scripts/simGmDraftOrder.mjs
+simGmReload: node scripts/simGmReload.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simLeagueCaps: node scripts/simLeagueCaps.mjs
+simMlbDraftCapital: node scripts/simMlbDraftCapital.mjs
+simMlbGmDesk: node scripts/simMlbGmDesk.mjs
+simMlbTradeRoster: node scripts/simMlbTradeRoster.mjs
+simNbaDraftCapital: node scripts/simNbaDraftCapital.mjs
+simNbaGmDesk: node scripts/simNbaGmDesk.mjs
+simNbaRatingEvidence: node scripts/simNbaRatingEvidence.mjs
+simNbaRotationReset: node scripts/simNbaRotationReset.mjs
+simNbaRotationUi: node scripts/simNbaRotationUi.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
+simNbaTipOffForecast: node scripts/simNbaTipOffForecast.mjs
+simNflDraftCapital: node scripts/simNflDraftCapital.mjs
+simNflGmDesk: node scripts/simNflGmDesk.mjs
+simNflOpeningRatings: node scripts/simNflOpeningRatings.mjs
+simNflPracticePromotion: node scripts/simNflPracticePromotion.mjs
+simNflRatingEvidence: node scripts/simNflRatingEvidence.mjs
+simNhlContributorsBoard: node scripts/simNhlContributorsBoard.mjs
+simNhlCpuRosters: node scripts/simNhlCpuRosters.mjs
+simNhlDraftCapital: node scripts/simNhlDraftCapital.mjs
+simNhlGmDesk: node scripts/simNhlGmDesk.mjs
+simNhlOpeningRatings: node scripts/simNhlOpeningRatings.mjs
+simNhlRatingEvidence: node scripts/simNhlRatingEvidence.mjs
+simNhlRosterLimit: node scripts/simNhlRosterLimit.mjs
+simNhlWaiverReceipt: node scripts/simNhlWaiverReceipt.mjs
+simRevealMoments: node scripts/simRevealMoments.mjs
+simSessionMarks: node scripts/simSessionMarks.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simUsCareerSummer: node scripts/simUsCareerSummer.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simGmDeskHost: node scripts/simGmDeskHost.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simInventedNames: node scripts/simInventedNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simDraftNight-dropai: DRAFT_CONTROL=dropai node scripts/simDraftNight.mjs
+simDraftNight-slowsteps: DRAFT_CONTROL=slowsteps node scripts/simDraftNight.mjs
+simDraftNight-norivals: DRAFT_CONTROL=norivals node scripts/simDraftNight.mjs
+simGmReload-replay: GM_RELOAD_CONTROL=replay node scripts/simGmReload.mjs
+simNflGmDesk-boardedges: SIM_NFL_GM_DESK_CONTROL=boardedges node scripts/simNflGmDesk.mjs
+simNbaDraftCapital-controls: bad=0; for m in original capital human eligibility rivalConsume budget pending zeroPending restoreBudget legacyReplay counter roundOne complete pool recovery density five prospect legacyQuota available missing zeroBudget; do NBA_DRAFT_CAPITAL_CONTROL=$m node scripts/simNbaDraftCapital.mjs > /tmp/ndc-$m.log 2>&1; c=$?; echo "$m exit=$c"; [ $c -eq 0 ] || bad=1; done; echo "22 controls run, bad=$bad"; exit $bad
+ctl-mounted: GM_GAMEDAY_CONTROL=mounted node scripts/simGmGameDay.mjs > $RC_OUT/ctl-mounted.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-mounted.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-mounted.log | cut -c1-200; exit $s
+ctl-static: GM_GAMEDAY_CONTROL=static node scripts/simGmGameDay.mjs > $RC_OUT/ctl-static.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-static.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-static.log | cut -c1-200; exit $s
+ctl-bindstream: GM_GAMEDAY_CONTROL=bindstream node scripts/simGmGameDay.mjs > $RC_OUT/ctl-bindstream.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-bindstream.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-bindstream.log | cut -c1-200; exit $s
+ctl-bindold: GM_GAMEDAY_CONTROL=bindold node scripts/simGmGameDay.mjs > $RC_OUT/ctl-bindold.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-bindold.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-bindold.log | cut -c1-200; exit $s
+ctl-bindrefuse: GM_GAMEDAY_CONTROL=bindrefuse node scripts/simGmGameDay.mjs > $RC_OUT/ctl-bindrefuse.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-bindrefuse.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-bindrefuse.log | cut -c1-200; exit $s
+ctl-bindchance: GM_GAMEDAY_CONTROL=bindchance node scripts/simGmGameDay.mjs > $RC_OUT/ctl-bindchance.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-bindchance.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-bindchance.log | cut -c1-200; exit $s
+ctl-logdrop: GM_GAMEDAY_CONTROL=logdrop node scripts/simGmGameDay.mjs > $RC_OUT/ctl-logdrop.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-logdrop.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-logdrop.log | cut -c1-200; exit $s
+ctl-logholes: GM_GAMEDAY_CONTROL=logholes node scripts/simGmGameDay.mjs > $RC_OUT/ctl-logholes.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-logholes.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-logholes.log | cut -c1-200; exit $s
+ctl-winner: GM_GAMEDAY_CONTROL=winner node scripts/simGmGameDay.mjs > $RC_OUT/ctl-winner.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-winner.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-winner.log | cut -c1-200; exit $s
+ctl-level: GM_GAMEDAY_CONTROL=level node scripts/simGmGameDay.mjs > $RC_OUT/ctl-level.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-level.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-level.log | cut -c1-200; exit $s
+ctl-refuse: GM_GAMEDAY_CONTROL=refuse node scripts/simGmGameDay.mjs > $RC_OUT/ctl-refuse.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-refuse.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-refuse.log | cut -c1-200; exit $s
+ctl-twopaths: GM_GAMEDAY_CONTROL=twopaths node scripts/simGmGameDay.mjs > $RC_OUT/ctl-twopaths.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-twopaths.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-twopaths.log | cut -c1-200; exit $s
+ctl-tries: GM_GAMEDAY_CONTROL=tries node scripts/simGmGameDay.mjs > $RC_OUT/ctl-tries.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-tries.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-tries.log | cut -c1-200; exit $s
+ctl-offbyone: GM_GAMEDAY_CONTROL=offbyone node scripts/simGmGameDay.mjs > $RC_OUT/ctl-offbyone.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-offbyone.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-offbyone.log | cut -c1-200; exit $s
+ctl-olddraw: GM_GAMEDAY_CONTROL=olddraw node scripts/simGmGameDay.mjs > $RC_OUT/ctl-olddraw.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-olddraw.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-olddraw.log | cut -c1-200; exit $s
+ctl-pairing: GM_GAMEDAY_CONTROL=pairing node scripts/simGmGameDay.mjs > $RC_OUT/ctl-pairing.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-pairing.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-pairing.log | cut -c1-200; exit $s
+ctl-validator: GM_GAMEDAY_CONTROL=validator node scripts/simGmGameDay.mjs > $RC_OUT/ctl-validator.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-validator.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-validator.log | cut -c1-200; exit $s
+ctl-strict: GM_GAMEDAY_CONTROL=strict node scripts/simGmGameDay.mjs > $RC_OUT/ctl-strict.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-strict.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-strict.log | cut -c1-200; exit $s
+ctl-outofturn: GM_GAMEDAY_CONTROL=outofturn node scripts/simGmGameDay.mjs > $RC_OUT/ctl-outofturn.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-outofturn.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-outofturn.log | cut -c1-200; exit $s
+ctl-enginedrift: GM_GAMEDAY_CONTROL=enginedrift node scripts/simGmGameDay.mjs > $RC_OUT/ctl-enginedrift.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-enginedrift.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-enginedrift.log | cut -c1-200; exit $s
+ctl-random: GM_GAMEDAY_CONTROL=random node scripts/simGmGameDay.mjs > $RC_OUT/ctl-random.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-random.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-random.log | cut -c1-200; exit $s
+ctl-stream: GM_GAMEDAY_CONTROL=stream node scripts/simGmGameDay.mjs > $RC_OUT/ctl-stream.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-stream.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-stream.log | cut -c1-200; exit $s
+ctl-unkeyed: GM_GAMEDAY_CONTROL=unkeyed node scripts/simGmGameDay.mjs > $RC_OUT/ctl-unkeyed.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-unkeyed.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-unkeyed.log | cut -c1-200; exit $s
+ctl-ceiling: GM_GAMEDAY_CONTROL=ceiling node scripts/simGmGameDay.mjs > $RC_OUT/ctl-ceiling.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-ceiling.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-ceiling.log | cut -c1-200; exit $s
+ctl-lawmax: GM_GAMEDAY_CONTROL=lawmax node scripts/simGmGameDay.mjs > $RC_OUT/ctl-lawmax.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-lawmax.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-lawmax.log | cut -c1-200; exit $s
+ctl-lowmax: GM_GAMEDAY_CONTROL=lowmax node scripts/simGmGameDay.mjs > $RC_OUT/ctl-lowmax.log 2>&1; s=$?; tail -1 $RC_OUT/ctl-lowmax.log | cut -c1-80; grep '^control ' $RC_OUT/ctl-lowmax.log | cut -c1-200; exit $s
+engine-untouched: git diff --stat cbfa94fd -- src/lib/frontOffice.ts src/lib/frontOfficeSave.ts src/lib/gmGameScore.ts src/lib/gmGameDay.ts src/lib/gmBracket.ts src/lib/gameLaws scripts/lib/gmGameDayFleet.mjs scripts/data/gmBracketFixture.json src/lib/draftNight.ts src/components/front-office-shared/DraftNightCard.tsx scripts/simNbaDraftCapital.mjs scripts/simNflGmDesk.mjs scripts/simSessionMarks.mjs src/data/gameContent scripts/sweepWeight.mjs | wc -l
