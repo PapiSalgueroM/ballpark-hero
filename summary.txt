@@ -1,0 +1,8 @@
+vitest-libs exit=0 3s |    Duration  3.12s (transform 617ms, setup 323ms, collect 979ms, tests 1.51s, environment 2.72s, prepare 1.18s)
+simGmGameDay exit=0 42s | simGmGameDay: 302 checks, 0 failed
+ctl-bindold exit=1 41s | control bindold: RED AT THE NAMED CHECK (section 8); its named checks red: 2 of 2 ("losers15 by the bind 0.0000", "tells the quick path's final for the chance"); its name
+tsc exit=0 69s | 
+ctl-bindstream exit=1 38s | control bindstream: RED AT THE NAMED CHECK (section 7); its named checks red: 3 of 3 ("with the bind takes no draw from Math.random", "with the bind moves none of its 272
+ctl-static exit=1 43s | control static: RED AT THE NAMED CHECK (section 6); its named checks red: 1 of 1 ("import no story law"); sections red: 6
+ctl-mounted exit=1 36s | control mounted: RED AT THE NAMED CHECK (section 6); its named checks red: 1 of 1 ("no file under src imports"); sections red: 6
+simHarnessAnchors exit=0 35s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
