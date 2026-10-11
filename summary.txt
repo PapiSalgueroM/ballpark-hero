@@ -1,0 +1,10 @@
+c-partrowus exit=1 5s | simSaveKeeper control partrowus: FIRED. Section 1 is red.
+c-partrow exit=1 5s | simSaveKeeper control partrow: FIRED. Section 1 is red.
+simSaveKeeper exit=0 5s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+c-norow exit=1 5s | simSaveKeeper control norow: FIRED. Section 1 is red.
+c-versiontable exit=1 5s | simSaveKeeper control versiontable: FIRED. Section 1 is red (and 2, 3, 5, which the same change reaches).
+c-dropkey exit=1 5s | simSaveKeeper control dropkey: FIRED. Section 0 is red.
+c-pileup exit=1 5s | simSaveKeeper control pileup: FIRED. Section 4 is red.
+c-numberonly exit=1 5s | simSaveKeeper control numberonly: FIRED. Section 4 is red.
+c-onebyte exit=1 5s | simSaveKeeper control onebyte: FIRED. Section 2 is red.
+keeper-units exit=0 2s |    Duration  1.35s (transform 260ms, setup 88ms, collect 394ms, tests 561ms, environment 514ms, prepare 216ms)
