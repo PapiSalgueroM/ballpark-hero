@@ -1,0 +1,4 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+playSaveKeeper-base-AT exit=0 842s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
+book-base-full exit=0 105s | simCmLeagueBook: green, 7 sections, 27 careers x 2 seasons (104s)
+book-weight exit=1 35s | simCmLeagueBook: CONTROL weight FIRED: section stream went red (15 failures), with shapes as it must and no other section did (34s)
