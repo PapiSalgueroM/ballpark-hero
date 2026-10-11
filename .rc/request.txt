@@ -1,0 +1,4 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+hall-nhl-skip: SIM_SKIP_BOARD=1 node scripts/simCareerHall.mjs nhl 2000 2>&1 | tail -1
