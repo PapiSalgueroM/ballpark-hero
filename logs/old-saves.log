@@ -1,0 +1,22 @@
+MAKE wrote 12 saves of 6 clubs to /tmp/saves.json (1245 KB)
+load exit 0
+info Arsenal between: next kickoff Premier League · Round 5, asked for reviews, lit: true
+ok   Arsenal halftime (Premier League · Round 5): finishing an old live match is the same match whether reviews are asked for or not
+ok   Arsenal halftime: a match kicked off before this release shows no review even when asked
+info Burnley between: next kickoff EFL Championship · Round 6, asked for reviews, lit: false
+ok   Burnley halftime (EFL Championship · Round 6): finishing an old live match is the same match whether reviews are asked for or not
+ok   Burnley halftime: a match kicked off before this release shows no review even when asked
+info Real Madrid between: next kickoff La Liga · Round 5, asked for reviews, lit: true
+ok   Real Madrid halftime (La Liga · Round 5): finishing an old live match is the same match whether reviews are asked for or not
+ok   Real Madrid halftime: a match kicked off before this release shows no review even when asked
+info Ajax between: next kickoff Eredivisie · Round 6, asked for reviews, lit: true
+ok   Ajax halftime (Eredivisie · Round 6): finishing an old live match is the same match whether reviews are asked for or not
+ok   Ajax halftime: a match kicked off before this release shows no review even when asked
+info Juventus between: next kickoff Serie A · Round 6, asked for reviews, lit: true
+ok   Juventus halftime (Serie A · Round 6): finishing an old live match is the same match whether reviews are asked for or not
+ok   Juventus halftime: a match kicked off before this release shows no review even when asked
+info Celtic between: next kickoff Champions League · Group MD2, asked for reviews, lit: true
+ok   Celtic halftime (Champions League · Group MD2): finishing an old live match is the same match whether reviews are asked for or not
+ok   Celtic halftime: a match kicked off before this release shows no review even when asked
+LOAD 12 old saves: 0 failure(s) in pass 2
+OLD SAVES HOLD: 12 digest lines equal on both trees
