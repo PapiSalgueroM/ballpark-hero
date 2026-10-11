@@ -1,0 +1,9 @@
+# Release AU proof, playGames part 2: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+playGames-buzzer-beater: ONLY=/buzzer-beater node scripts/playGames.mjs
+playGames-cage-clash: ONLY=/cage-clash node scripts/playGames.mjs
+playGames-stat-detective: ONLY=/stat-detective node scripts/playGames.mjs
+playGames-dart-draft: ONLY=/dart-draft node scripts/playGames.mjs
+playGames-manager-hot-seat: ONLY=/manager-hot-seat node scripts/playGames.mjs
