@@ -1,0 +1,9 @@
+mut F: 1 edits made in src/lib/nhlMyCareer.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.31 percent; at or over to, pooled 0.88 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 0 played and 24 reused, signature 1eab0c54fc63
+        at or over from, pooled 10.43 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 0.97 percent (band 0.78 to 1.19: the reference's 0.99, 0.20 from seed to seed); read against the marks of calibration 3 (the reference was read against 3)
+  FAIL v3replay: calibration 3 against its recording: the table and the rules differ, 2 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 4)
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 10.43 percent (band 9.84 to 10.95); at or over to, pooled 0.97 percent (band 0.78 to 1.19)
+  FAIL halfrule: 1 cells off the half rule, the ledger's marks or the ramp floor [C goals off the ledger's marks]
+MUT F: caught=yes | vitest exit 0,  | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v3replay,halfrule])

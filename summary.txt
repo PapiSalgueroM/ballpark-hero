@@ -1,0 +1,14 @@
+baseline-nhl exit=0 34s | simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+mut-A exit=0 18s | MUT A: caught=yes | vitest exit 1,  | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v2replay])
+mut-B exit=0 18s | MUT B: caught=yes | vitest exit 1,  | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v3replay,calrule,standoutgain,standoutcap,words])
+mut-C exit=0 71s | MUT C: caught=yes | vitest exit 0,  | hall nba exit 3: simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v3replay])
+mut-D82 exit=0 34s | MUT D82: caught=yes | vitest not run | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+mut-D83 exit=0 34s | MUT D83: caught=yes | vitest not run | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+mut-D85 exit=0 34s | MUT D85: caught=yes | vitest not run | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+mut-E exit=0 18s | MUT E: caught=yes | vitest exit 1,  | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [calrule])
+mut-F exit=0 5s | MUT F: caught=yes | vitest exit 0,  | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v3replay,halfrule])
+mut-G exit=0 65s | MUT G: caught=yes | vitest exit 1,  | hall mlb exit 3: simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v3replay,marks,halfrule,standoutgain,standoutcap,w
+mut-H exit=0 17s | MUT H: caught=yes | vitest exit 1,  | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [calrule])
+block3-again exit=0 13s | block3-again: the committed ledger is the generator own output from six fresh NHL runs, byte for byte
+gen-guard exit=0 0s | gen-guard: the generator with no variable exits 2
+tree-clean exit=0 0s | tree-clean: nothing left mutated

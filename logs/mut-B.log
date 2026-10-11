@@ -1,0 +1,25 @@
+mut B: 1 edits made in src/lib/careerHallOfFame.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/test/careerHall.test.tsx[2m > [22mRound 1051: the legacy scorer, the calibration and the words[2m > [22mhallCalibrationOf: a valid stamp wins; with none a retired career is 1 and a live one is today's
+[31m[1mAssertionError[22m: expected 1 to be 3 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/careerHall.test.tsx[2m > [22mRound 1051: the legacy scorer, the calibration and the words[2m > [22msanitizeHallCal takes exactly the whole numbers 1, 2 and 3
+[31m[1mAssertionError[22m: expected undefined to be 3 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nba: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:nba:0:open: calibration 3 is calibration 2 here: expected { score: 435, …(3) } to deeply equal { score: 512, …(4) }[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain mlb: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:mlb:11:open: calibration 3 is calibration 2 here: expected { score: 537, …(3) } to deeply equal { score: 579, …(4) }[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nhl: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:nhl:0:open: the calibration 3 table: expected 962 to be 1190 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nba: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: r1226:nba:0:open: calibration 3 is calibration 2 here: expected { score: 435, …(3) } to deeply equal { score: 512, …(4) }[39m
+cut: write error: Broken pipe
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 0.88 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 0 played and 24 reused, signature 1eab0c54fc63
+        at or over from, pooled 10.37 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 0.97 percent (band 0.78 to 1.19: the reference's 0.99, 0.20 from seed to seed); read against the marks of calibration 3 (the reference was read against 3)
+  FAIL v3replay: calibration 3 against its recording: the table and the rules equal, 4 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 4)
+  FAIL calrule: 265 readings off the calibration rule; 2000 of 2000 engine careers stamped
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 10.37 percent (band 9.84 to 10.95); at or over to, pooled 0.97 percent (band 0.78 to 1.19)
+  FAIL standoutgain: top 5 percent by family: 32 -> 32 of 40 in the Hall, a gain of 0.0 points (needs 7.5); owed to the standout alone 0.0 points (needs 3.1)
+  FAIL standoutcap: 264 careers off the restated score on 2 (one family, capped); the standout paid on 264
+  FAIL words: 1 misses in the rule, the example or the card [the card does not print the line on calibration 2]; 2000 card lines off
+MUT B: caught=yes | vitest exit 1,  | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v3replay,calrule,standoutgain,standoutcap,words])

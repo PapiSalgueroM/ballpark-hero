@@ -1,0 +1,22 @@
+mut G: 1 edits made in src/lib/mlbMyCareer.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain mlb: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:mlb:11:open: calibration 3 is calibration 2 here: expected { score: 537, …(3) } to deeply equal { score: 579, …(4) }[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 mlb: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: r1226:mlb:11:open: calibration 3 is calibration 2 here: expected { score: 537, …(3) } to deeply equal { score: 579, …(4) }[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mthe stamp is what keeps them: read on calibration 3 instead, NHL careers of the set 
+[31m[1mAssertionError[22m: main:mlb:101: 3 is 2 here: expected { score: 495, …(3) } to deeply equal { score: 569, …(4) }[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > main mlb%3A a career sti
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > r1226 mlb%3A a career st
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > the stamp is what keeps 
+  17 (a) marks, this run's one seed (printed, never the check): 0 standout cells; at or over from, pooled 0.00 percent; at or over to, pooled 0.00 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 0 rows, 24 played and 0 reused, signature 4409ba6c427a
+        at or over from, pooled 0.00 percent (band 9.17 to 10.62: the reference's 9.89 over 48 seeds, 0.73 from seed to seed); at or over to, pooled 0.00 percent (band 0.75 to 1.16: the reference's 0.95, 0.20 from seed to seed); read against the marks of calibration 2 (the reference was read against 2)
+  FAIL v3replay: calibration 3 against its recording: the table and the rules differ, 9 of 26 recorded saves told something else (a shipped calibration is never edited: add calibration 4)
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 0.00 percent (band 9.17 to 10.62); at or over to, pooled 0.00 percent (band 0.75 to 1.16)
+  FAIL halfrule: 23 cells off the half rule, the ledger's marks or the ramp floor [the table of calibration 3 is not the table the ledger's block of calibration 2 measured (a new table needs a block of its own); C hr due and missing; 1B hr due and missing; 3B hr due and missing]
+  FAIL standoutgain: top 5 percent by family: 0 -> 0 of 0 in the Hall, a gain of 0.0 points (needs 7.5); owed to the standout alone 0.0 points (needs 1.8)
+  FAIL standoutcap: 0 careers off the restated score on 2 (one family, capped); the standout paid on 0
+  FAIL words: 2 misses in the rule, the example or the card [CF sb is not a standout of the table; no example family or no floor to try the card on]; 0 card lines off
+  FAIL anchors: agreement on 2 against 1: raw in or out 9 > 9, exact 6 > 6; books in or out 0 > 0, exact 0 > 0 (must not fall, and must stay within two of the measured {"raw2":{"inOut":9,"exact":6,"n":9},"books2":{"inOut":4,"exact":3,"n":4},"realNotFirstInBooks":2,"pushAlone":0,"standoutbigFires":true,"standoutgoneFires":false}); a real never or later in the
+MUT G: caught=yes | vitest exit 1,  | hall mlb exit 3: simCareerHall mlb: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v3replay,marks,halfrule,standoutgain,standoutcap,words,anchors])

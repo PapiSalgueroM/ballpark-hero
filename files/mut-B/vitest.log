@@ -1,0 +1,648 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[90mstdout[2m | src/test/careerHallSaves1301.test.ts[2m > [22m[2mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22m[2mthe stamp is what keeps them: read on calibration 3 instead, NHL careers of the set score lower and Hall of Famers fall out
+[22m[39mcareerHallSaves1301 main: of 16 retired NHL saves, on calibration 3 11 would score lower, 0 higher, 8 Hall of Famers would fall out, 0 would come in; of 4 open careers 4 are scored lower on 3 than the old code would have
+
+ [31m❯[39m src/test/careerHallSaves1301.test.ts [2m([22m[2m19 tests[22m[2m | [22m[31m7 failed[39m[2m)[22m[32m 87[2mms[22m[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mthe fixture is two recordings of old code, both on calibration 2, deep enough to mean something[32m 3[2mms[22m[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nfl: every retired save reads what it was told (a Hall of Famer stays one, a miss stays a miss)[32m 19[2mms[22m[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nfl: a career still being played is judged on calibration 3 when it retires[32m 1[2mms[22m[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nba: every retired save reads what it was told (a Hall of Famer stays one, a miss stays a miss)[32m 4[2mms[22m[39m
+[31m   [31m×[31m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nba: a career still being played is judged on calibration 3 when it retires[39m[32m 10[2mms[22m[39m
+[31m     → main:nba:0:open: calibration 3 is calibration 2 here: expected { score: 435, …(3) } to deeply equal { score: 512, …(4) }[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain mlb: every retired save reads what it was told (a Hall of Famer stays one, a miss stays a miss)[32m 4[2mms[22m[39m
+[31m   [31m×[31m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain mlb: a career still being played is judged on calibration 3 when it retires[39m[32m 2[2mms[22m[39m
+[31m     → main:mlb:11:open: calibration 3 is calibration 2 here: expected { score: 537, …(3) } to deeply equal { score: 579, …(4) }[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nhl: every retired save reads what it was told (a Hall of Famer stays one, a miss stays a miss)[32m 13[2mms[22m[39m
+[31m   [31m×[31m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nhl: a career still being played is judged on calibration 3 when it retires[39m[32m 1[2mms[22m[39m
+[31m     → main:nhl:0:open: the calibration 3 table: expected 962 to be 1190 // Object.is equality[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nfl: every retired save reads what it was told (a Hall of Famer stays one, a miss stays a miss)[32m 3[2mms[22m[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nfl: a career still being played is judged on calibration 3 when it retires[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nba: every retired save reads what it was told (a Hall of Famer stays one, a miss stays a miss)[32m 3[2mms[22m[39m
+[31m   [31m×[31m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nba: a career still being played is judged on calibration 3 when it retires[39m[32m 1[2mms[22m[39m
+[31m     → r1226:nba:0:open: calibration 3 is calibration 2 here: expected { score: 435, …(3) } to deeply equal { score: 512, …(4) }[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 mlb: every retired save reads what it was told (a Hall of Famer stays one, a miss stays a miss)[32m 3[2mms[22m[39m
+[31m   [31m×[31m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 mlb: a career still being played is judged on calibration 3 when it retires[39m[32m 1[2mms[22m[39m
+[31m     → r1226:mlb:11:open: calibration 3 is calibration 2 here: expected { score: 537, …(3) } to deeply equal { score: 579, …(4) }[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nhl: every retired save reads what it was told (a Hall of Famer stays one, a miss stays a miss)[32m 11[2mms[22m[39m
+[31m   [31m×[31m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nhl: a career still being played is judged on calibration 3 when it retires[39m[32m 1[2mms[22m[39m
+[31m     → r1226:nhl:0:open: the calibration 3 table: expected 964 to be 1243 // Object.is equality[39m
+[31m   [31m×[31m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mthe stamp is what keeps them: read on calibration 3 instead, NHL careers of the set score lower and Hall of Famers fall out[39m[32m 4[2mms[22m[39m
+[31m     → main: expected { lower: 11, higher: +0, …(3) } to deeply equal { lower: 11, higher: +0, …(3) }[39m
+   [32m✓[39m Round 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mthe comparison can fail: forty goals on one old season are caught[32m 0[2mms[22m[39m
+[90mstderr[2m | src/test/usCareerHallBoard.test.tsx[2m > [22m[2mnfl: the retirement talk on the board[2m > [22m[2mRetire now ends the career on the last season played
+[22m[39mWarning: A suspended resource finished loading inside a test, but the event was not wrapped in act(...).
+
+When testing, code that resolves suspended data should be wrapped into act(...):
+
+act(() => {
+  /* finish loading suspended data */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act
+
+ [31m❯[39m src/test/careerHall.test.tsx [2m([22m[2m43 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 523[2mms[22m[39m
+   [32m✓[39m the retirement talk[2m > [22mcomes on a drop from peak or under the floor, only from the set age[32m 2[2mms[22m[39m
+   [32m✓[39m the retirement talk[2m > [22mnever comes when the sport has already ended the career[32m 0[2mms[22m[39m
+   [32m✓[39m the retirement talk[2m > [22mpeak reads the season lines and the rating now[32m 0[2mms[22m[39m
+   [32m✓[39m the three answers do what their buttons say[2m > [22mthere are exactly three, one per answer[32m 1[2mms[22m[39m
+   [32m✓[39m the three answers do what their buttons say[2m > [22mRetire now: this season was the last[32m 0[2mms[22m[39m
+   [32m✓[39m the three answers do what their buttons say[2m > [22mOne more year: he plays on, and the talk comes back unless he plays his way back up[32m 1[2mms[22m[39m
+   [32m✓[39m the three answers do what their buttons say[2m > [22mFarewell season: next season is the last whatever the numbers say[32m 1[2mms[22m[39m
+   [32m✓[39m the three answers do what their buttons say[2m > [22manswering leaves the old block untouched[32m 0[2mms[22m[39m
+   [32m✓[39m old and corrupt saves[2m > [22ma missing block reads as never asked[32m 0[2mms[22m[39m
+   [32m✓[39m old and corrupt saves[2m > [22ma good block survives, a bad one resets alone[32m 1[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mnfl: inducted is exactly hof, and the class follows the table[32m 44[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mnfl: the first ballot is certain where the verdict promises it[32m 1[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mnba: inducted is exactly hof, and the class follows the table[32m 48[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mnba: the first ballot is certain where the verdict promises it[32m 1[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mmlb: inducted is exactly hof, and the class follows the table[32m 68[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mmlb: the first ballot is certain where the verdict promises it[32m 1[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mnhl: inducted is exactly hof, and the class follows the table[32m 51[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mnhl: the first ballot is certain where the verdict promises it[32m 0[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mthe first ballot chance never falls as the score rises, at every step[32m 1[2mms[22m[39m
+   [32m✓[39m the ballot[2m > [22mthe same career always gets the same ballot[32m 0[2mms[22m[39m
+   [32m✓[39m the jersey[2m > [22mgoes to the club with the most seasons, ties to more games then the first club[32m 0[2mms[22m[39m
+   [32m✓[39m the jersey[2m > [22mgoes up for a Hall of Famer, a club icon just short of the Hall, or where the verdict promised it[32m 0[2mms[22m[39m
+   [32m✓[39m the induction speech[2m > [22m"Thank the fans" moves what its button says[32m 3[2mms[22m[39m
+   [32m✓[39m the induction speech[2m > [22m"Thank the locker room" moves what its button says[32m 4[2mms[22m[39m
+   [32m✓[39m the induction speech[2m > [22m"Tell the whole story, bad years too" moves what its button says[32m 6[2mms[22m[39m
+   [32m✓[39m the induction speech[2m > [22m"Keep it short" moves what its button says[32m 3[2mms[22m[39m
+   [32m✓[39m the induction speech[2m > [22mis given once, only by a Hall of Famer, and the same every time[32m 0[2mms[22m[39m
+   [32m✓[39m the induction speech[2m > [22mthanks roles, never a name[32m 1[2mms[22m[39m
+   [32m✓[39m the four sports, on careers their own engines play[2m > [22mnfl: the record reads the sport's own verdict and seasons[32m 40[2mms[22m[39m
+   [32m✓[39m the four sports, on careers their own engines play[2m > [22mnba: the record reads the sport's own verdict and seasons[32m 26[2mms[22m[39m
+   [32m✓[39m the four sports, on careers their own engines play[2m > [22mmlb: the record reads the sport's own verdict and seasons[32m 13[2mms[22m[39m
+   [32m✓[39m the four sports, on careers their own engines play[2m > [22mnhl: the record reads the sport's own verdict and seasons[32m 18[2mms[22m[39m
+   [32m✓[39m the two cards say what they do[2m > [22mthe farewell card offers the three answers with their own words[32m 140[2mms[22m[39m
+   [32m✓[39m the two cards say what they do[2m > [22mthe Hall card prints shares only where the Hall publishes them, and the speech buttons carry their effects[32m 35[2mms[22m[39m
+   [32m✓[39m Round 1051: the legacy scorer, the calibration and the words[2m > [22madds awards, seasons and the terms in the table order, and rounds once[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1051: the legacy scorer, the calibration and the words[2m > [22ma position with no entry reads the star entry, and a missing stat or award reads zero[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1051: the legacy scorer, the calibration and the words[2m > [22mthe standout: nothing at or under from, the top at to, a straight line between, capped[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1051: the legacy scorer, the calibration and the words[2m > [22monly the single largest credit counts, a tie goes to the earlier family, and a family can carry its own smaller top[32m 0[2mms[22m[39m
+[31m   [31m×[31m Round 1051: the legacy scorer, the calibration and the words[2m > [22mhallCalibrationOf: a valid stamp wins; with none a retired career is 1 and a live one is today's[39m[32m 7[2mms[22m[39m
+[31m     → expected 1 to be 3 // Object.is equality[39m
+[31m   [31m×[31m Round 1051: the legacy scorer, the calibration and the words[2m > [22msanitizeHallCal takes exactly the whole numbers 1, 2 and 3[39m[32m 1[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+   [32m✓[39m Round 1051: the legacy scorer, the calibration and the words[2m > [22mstampHallCalibration writes today's calibration on a retired, unstamped career and nothing else[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1051: the legacy scorer, the calibration and the words[2m > [22mhallWeighLine: the hardware, then what the table reads for the position, and the standout only when it is worth saying[32m 0[2mms[22m[39m
+   [32m✓[39m Round 1051: the legacy scorer, the calibration and the words[2m > [22mhallVoterRules: two lines, the numbers written in from the rules, the example family's own top when it has one[32m 1[2mms[22m[39m
+ [31m❯[39m src/test/usCareerActionConfirm.test.tsx [2m([22m[2m18 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2207[2mms[22m[39m
+   [33m[2m✓[22m[39m US career destructive action confirmation[2m > [22m'NFL' preserves live restore and engine state as an independent baseline [33m 328[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NBA' preserves live restore and engine state as an independent baseline[32m 174[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'MLB' preserves live restore and engine state as an independent baseline[32m 151[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NHL' preserves live restore and engine state as an independent baseline[32m 165[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NFL' keeps retirement pending until explicit acceptance and records its real legacy once[32m 259[2mms[22m[39m
+[31m   [31m×[31m US career destructive action confirmation[2m > [22m'NBA' keeps retirement pending until explicit acceptance and records its real legacy once[39m[32m 140[2mms[22m[39m
+[31m     → expected "spy" to be called once with arguments: [ '/nba-my-career', 57, …(2) ][90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m[2m  [[22m
+[2m    "/nba-my-career",[22m
+[32m-   57,[90m
+[31m+   54,[90m
+[2m    "Fixture player",[22m
+[2m    0,[22m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'MLB' keeps retirement pending until explicit acceptance and records its real legacy once[32m 131[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NHL' keeps retirement pending until explicit acceptance and records its real legacy once[32m 132[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NFL' keeps restart pending then deletes only its own career without another completion[32m 148[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NBA' keeps restart pending then deletes only its own career without another completion[32m 135[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'MLB' keeps restart pending then deletes only its own career without another completion[32m 143[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22m'NHL' keeps restart pending then deletes only its own career without another completion[32m 145[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22mkeeps closed mounts callback quiet and unrelated payloads exact as an independent baseline[32m 7[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22mretire starts on Cancel and returns both dismissal paths to its exact opener without scrolling[32m 39[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22mrestart starts on Cancel and returns both dismissal paths to its exact opener without scrolling[32m 41[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22maccepts two same-frame Confirm clicks once and rearms only after a new opening[32m 31[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22munmounts an open prompt without accepting or erasing its caller save[32m 14[2mms[22m[39m
+   [32m✓[39m US career destructive action confirmation[2m > [22mcontains the explicit keyboard boundary events while Cancel spends nothing[32m 24[2mms[22m[39m
+ [31m❯[39m src/test/usCareerHallBoard.test.tsx [2m([22m[2m95 tests[22m[2m | [22m[31m16 failed[39m[2m)[22m[33m 12061[2mms[22m[39m
+   [32m✓[39m nfl: the retirement talk on the board[2m > [22man old active save inside the rule opens on the talk, writes nothing, and a reload asks again[32m 139[2mms[22m[39m
+   [32m✓[39m nfl: the retirement talk on the board[2m > [22mRetire now ends the career on the last season played[32m 65[2mms[22m[39m
+   [32m✓[39m nfl: the retirement talk on the board[2m > [22mOne more year goes to the hub and is not asked again for that season[32m 51[2mms[22m[39m
+[31m   [31m×[31m nfl: the retirement talk on the board[2m > [22ma farewell season carries its banner, is played, and ends the career after it[39m[32m 43[2mms[22m[39m
+[31m     → expected 1 to be 3 // Object.is equality[39m
+   [32m✓[39m nfl: the retirement talk on the board[2m > [22ma farewell season on the last year of the deal opens no extension talk (review fix)[32m 29[2mms[22m[39m
+   [32m✓[39m nfl: the retirement talk on the board[2m > [22ma farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)[32m 59[2mms[22m[39m
+   [32m✓[39m nfl: the retirement talk on the board[2m > [22mRetire now in the middle of an offseason drops the dealt card unapplied[32m 41[2mms[22m[39m
+   [32m✓[39m nba: the retirement talk on the board[2m > [22man old active save inside the rule opens on the talk, writes nothing, and a reload asks again[32m 28[2mms[22m[39m
+   [32m✓[39m nba: the retirement talk on the board[2m > [22mRetire now ends the career on the last season played[32m 33[2mms[22m[39m
+   [32m✓[39m nba: the retirement talk on the board[2m > [22mOne more year goes to the hub and is not asked again for that season[32m 29[2mms[22m[39m
+[31m   [31m×[31m nba: the retirement talk on the board[2m > [22ma farewell season carries its banner, is played, and ends the career after it[39m[32m 21[2mms[22m[39m
+[31m     → expected 1 to be 3 // Object.is equality[39m
+   [32m✓[39m nba: the retirement talk on the board[2m > [22ma farewell season on the last year of the deal opens no extension talk (review fix)[32m 17[2mms[22m[39m
+   [32m✓[39m nba: the retirement talk on the board[2m > [22ma farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)[32m 52[2mms[22m[39m
+   [32m✓[39m nba: the retirement talk on the board[2m > [22mRetire now in the middle of an offseason drops the dealt card unapplied[32m 43[2mms[22m[39m
+   [32m✓[39m mlb: the retirement talk on the board[2m > [22man old active save inside the rule opens on the talk, writes nothing, and a reload asks again[32m 32[2mms[22m[39m
+   [32m✓[39m mlb: the retirement talk on the board[2m > [22mRetire now ends the career on the last season played[32m 21[2mms[22m[39m
+   [32m✓[39m mlb: the retirement talk on the board[2m > [22mOne more year goes to the hub and is not asked again for that season[32m 28[2mms[22m[39m
+[31m   [31m×[31m mlb: the retirement talk on the board[2m > [22ma farewell season carries its banner, is played, and ends the career after it[39m[32m 21[2mms[22m[39m
+[31m     → expected 1 to be 3 // Object.is equality[39m
+   [32m✓[39m mlb: the retirement talk on the board[2m > [22ma farewell season on the last year of the deal opens no extension talk (review fix)[32m 17[2mms[22m[39m
+   [32m✓[39m mlb: the retirement talk on the board[2m > [22ma farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)[32m 36[2mms[22m[39m
+   [32m✓[39m mlb: the retirement talk on the board[2m > [22mRetire now in the middle of an offseason drops the dealt card unapplied[32m 39[2mms[22m[39m
+   [32m✓[39m nhl: the retirement talk on the board[2m > [22man old active save inside the rule opens on the talk, writes nothing, and a reload asks again[32m 21[2mms[22m[39m
+   [32m✓[39m nhl: the retirement talk on the board[2m > [22mRetire now ends the career on the last season played[32m 64[2mms[22m[39m
+   [32m✓[39m nhl: the retirement talk on the board[2m > [22mOne more year goes to the hub and is not asked again for that season[32m 23[2mms[22m[39m
+[31m   [31m×[31m nhl: the retirement talk on the board[2m > [22ma farewell season carries its banner, is played, and ends the career after it[39m[32m 19[2mms[22m[39m
+[31m     → expected 1 to be 3 // Object.is equality[39m
+   [32m✓[39m nhl: the retirement talk on the board[2m > [22ma farewell season on the last year of the deal opens no extension talk (review fix)[32m 23[2mms[22m[39m
+   [32m✓[39m nhl: the retirement talk on the board[2m > [22ma farewell season with no deal left offers one year deals, and a push adds no year (closing check fix)[32m 41[2mms[22m[39m
+   [32m✓[39m nhl: the retirement talk on the board[2m > [22mRetire now in the middle of an offseason drops the dealt card unapplied[32m 51[2mms[22m[39m
+   [33m[2m✓[22m[39m nfl: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 6027[2mms[22m[39m
+   [32m✓[39m nfl: the Hall of Fame on the retirement screen[2m > [22mthe induction speech is given once and survives a reload[32m 34[2mms[22m[39m
+   [32m✓[39m nfl: the Hall of Fame on the retirement screen[2m > [22mContinue folds the card to its headline[32m 18[2mms[22m[39m
+   [32m✓[39m nfl: the Hall of Fame on the retirement screen[2m > [22ma corrupt retirement, speech or jersey block is dropped alone[32m 8[2mms[22m[39m
+   [33m[2m✓[22m[39m nba: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1017[2mms[22m[39m
+   [32m✓[39m nba: the Hall of Fame on the retirement screen[2m > [22mthe induction speech is given once and survives a reload[32m 50[2mms[22m[39m
+   [32m✓[39m nba: the Hall of Fame on the retirement screen[2m > [22mContinue folds the card to its headline[32m 16[2mms[22m[39m
+   [32m✓[39m nba: the Hall of Fame on the retirement screen[2m > [22ma corrupt retirement, speech or jersey block is dropped alone[32m 8[2mms[22m[39m
+   [33m[2m✓[22m[39m mlb: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1517[2mms[22m[39m
+   [32m✓[39m mlb: the Hall of Fame on the retirement screen[2m > [22mthe induction speech is given once and survives a reload[32m 57[2mms[22m[39m
+   [32m✓[39m mlb: the Hall of Fame on the retirement screen[2m > [22mContinue folds the card to its headline[32m 17[2mms[22m[39m
+   [32m✓[39m mlb: the Hall of Fame on the retirement screen[2m > [22ma corrupt retirement, speech or jersey block is dropped alone[32m 9[2mms[22m[39m
+   [33m[2m✓[22m[39m nhl: the Hall of Fame on the retirement screen[2m > [22man old retired save with no blocks shows the Hall card, and the Hall pill waits for the ballot [33m 1013[2mms[22m[39m
+   [32m✓[39m nhl: the Hall of Fame on the retirement screen[2m > [22mthe induction speech is given once and survives a reload[32m 28[2mms[22m[39m
+   [32m✓[39m nhl: the Hall of Fame on the retirement screen[2m > [22mContinue folds the card to its headline[32m 14[2mms[22m[39m
+   [32m✓[39m nhl: the Hall of Fame on the retirement screen[2m > [22ma corrupt retirement, speech or jersey block is dropped alone[32m 8[2mms[22m[39m
+[31m   [31m×[31m nfl: the calibration stamp (Round 1051)[2m > [22man active save retired through the board is saved with hallCal 2[39m[32m 55[2mms[22m[39m
+[31m     → expected 1 to be 3 // Object.is equality[39m
+   [32m✓[39m nfl: the calibration stamp (Round 1051)[2m > [22mwith no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one[32m 28[2mms[22m[39m
+   [32m✓[39m nfl: the calibration stamp (Round 1051)[2m > [22ma retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career[32m 38[2mms[22m[39m
+   [32m✓[39m nfl: the calibration stamp (Round 1051)[2m > [22ma junk stamp is dropped on load and the save reads calibration 1[32m 24[2mms[22m[39m
+   [32m✓[39m nfl: the calibration stamp (Round 1051)[2m > [22ma retired save stamped 2 reads calibration 2 on every later load and keeps its stamp[32m 45[2mms[22m[39m
+[31m   [31m×[31m nfl: the calibration stamp (Round 1051)[2m > [22mtwo tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote[39m[32m 26[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+[31m   [31m×[31m nfl: the calibration stamp (Round 1051)[2m > [22mthe stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone[39m[32m 2[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+[31m   [31m×[31m nba: the calibration stamp (Round 1051)[2m > [22man active save retired through the board is saved with hallCal 2[39m[32m 24[2mms[22m[39m
+[31m     → expected 1 to be 3 // Object.is equality[39m
+   [32m✓[39m nba: the calibration stamp (Round 1051)[2m > [22mwith no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one[32m 22[2mms[22m[39m
+   [32m✓[39m nba: the calibration stamp (Round 1051)[2m > [22ma retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career[32m 44[2mms[22m[39m
+   [32m✓[39m nba: the calibration stamp (Round 1051)[2m > [22ma junk stamp is dropped on load and the save reads calibration 1[32m 25[2mms[22m[39m
+   [32m✓[39m nba: the calibration stamp (Round 1051)[2m > [22ma retired save stamped 2 reads calibration 2 on every later load and keeps its stamp[32m 37[2mms[22m[39m
+[31m   [31m×[31m nba: the calibration stamp (Round 1051)[2m > [22mtwo tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote[39m[32m 31[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+[31m   [31m×[31m nba: the calibration stamp (Round 1051)[2m > [22mthe stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone[39m[32m 1[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+[31m   [31m×[31m mlb: the calibration stamp (Round 1051)[2m > [22man active save retired through the board is saved with hallCal 2[39m[32m 26[2mms[22m[39m
+[31m     → expected 1 to be 3 // Object.is equality[39m
+   [32m✓[39m mlb: the calibration stamp (Round 1051)[2m > [22mwith no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one[32m 22[2mms[22m[39m
+   [32m✓[39m mlb: the calibration stamp (Round 1051)[2m > [22ma retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career[32m 37[2mms[22m[39m
+   [32m✓[39m mlb: the calibration stamp (Round 1051)[2m > [22ma junk stamp is dropped on load and the save reads calibration 1[32m 28[2mms[22m[39m
+   [32m✓[39m mlb: the calibration stamp (Round 1051)[2m > [22ma retired save stamped 2 reads calibration 2 on every later load and keeps its stamp[32m 35[2mms[22m[39m
+[31m   [31m×[31m mlb: the calibration stamp (Round 1051)[2m > [22mtwo tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote[39m[32m 24[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+[31m   [31m×[31m mlb: the calibration stamp (Round 1051)[2m > [22mthe stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone[39m[32m 1[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+[31m   [31m×[31m nhl: the calibration stamp (Round 1051)[2m > [22man active save retired through the board is saved with hallCal 2[39m[32m 22[2mms[22m[39m
+[31m     → expected 1 to be 3 // Object.is equality[39m
+   [32m✓[39m nhl: the calibration stamp (Round 1051)[2m > [22mwith no Hall bound the same retirement writes no hallCal: the save is byte for byte the old one[32m 33[2mms[22m[39m
+   [32m✓[39m nhl: the calibration stamp (Round 1051)[2m > [22ma retired save with no stamp reads calibration 1 and is never stamped: not by the speech, not by a coach career[32m 29[2mms[22m[39m
+   [32m✓[39m nhl: the calibration stamp (Round 1051)[2m > [22ma junk stamp is dropped on load and the save reads calibration 1[32m 16[2mms[22m[39m
+   [32m✓[39m nhl: the calibration stamp (Round 1051)[2m > [22ma retired save stamped 2 reads calibration 2 on every later load and keeps its stamp[32m 28[2mms[22m[39m
+[31m   [31m×[31m nhl: the calibration stamp (Round 1051)[2m > [22mtwo tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote[39m[32m 23[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+[31m   [31m×[31m nhl: the calibration stamp (Round 1051)[2m > [22mthe stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone[39m[32m 1[2mms[22m[39m
+[31m     → expected undefined to be 3 // Object.is equality[39m
+   [32m✓[39m the card prints class years only from the verified class[2m > [22ma first class before verifiedFromClass shows ordinal ballots and no rule line; one at it shows the years[32m 9[2mms[22m[39m
+   [32m✓[39m nfl: the deck retirement cards never come after the talk[2m > [22mplaySeason: a season played inside the rule deals none, and none is shown after One more year[32m 51[2mms[22m[39m
+   [32m✓[39m nfl: the deck retirement cards never come after the talk[2m > [22mrestore: a save standing on a deck retirement card dealt before the talk never shows it[32m 11[2mms[22m[39m
+   [32m✓[39m nfl: the deck retirement cards never come after the talk[2m > [22mchooseOption: a deck retirement card later in the summer is skipped after the talk was answered[32m 15[2mms[22m[39m
+   [32m✓[39m nfl: the deck retirement cards never come after the talk[2m > [22mthe filter reads the career when it is asked, so a talk that comes mid-summer holds the cards out[32m 2[2mms[22m[39m
+   [32m✓[39m nba: the deck retirement cards never come after the talk[2m > [22mplaySeason: a season played inside the rule deals none, and none is shown after One more year[32m 50[2mms[22m[39m
+   [32m✓[39m nba: the deck retirement cards never come after the talk[2m > [22mrestore: a save standing on a deck retirement card dealt before the talk never shows it[32m 19[2mms[22m[39m
+   [32m✓[39m nba: the deck retirement cards never come after the talk[2m > [22mchooseOption: a deck retirement card later in the summer is skipped after the talk was answered[32m 14[2mms[22m[39m
+   [32m✓[39m nba: the deck retirement cards never come after the talk[2m > [22mthe filter reads the career when it is asked, so a talk that comes mid-summer holds the cards out[32m 2[2mms[22m[39m
+   [32m✓[39m mlb: the deck retirement cards never come after the talk[2m > [22mplaySeason: a season played inside the rule deals none, and none is shown after One more year[32m 43[2mms[22m[39m
+   [32m✓[39m mlb: the deck retirement cards never come after the talk[2m > [22mrestore: a save standing on a deck retirement card dealt before the talk never shows it[32m 10[2mms[22m[39m
+   [32m✓[39m mlb: the deck retirement cards never come after the talk[2m > [22mchooseOption: a deck retirement card later in the summer is skipped after the talk was answered[32m 13[2mms[22m[39m
+   [32m✓[39m mlb: the deck retirement cards never come after the talk[2m > [22mthe filter reads the career when it is asked, so a talk that comes mid-summer holds the cards out[32m 1[2mms[22m[39m
+   [32m✓[39m nhl: the deck retirement cards never come after the talk[2m > [22mplaySeason: a season played inside the rule deals none, and none is shown after One more year[32m 50[2mms[22m[39m
+   [32m✓[39m nhl: the deck retirement cards never come after the talk[2m > [22mrestore: a save standing on a deck retirement card dealt before the talk never shows it[32m 9[2mms[22m[39m
+   [32m✓[39m nhl: the deck retirement cards never come after the talk[2m > [22mchooseOption: a deck retirement card later in the summer is skipped after the talk was answered[32m 12[2mms[22m[39m
+   [32m✓[39m nhl: the deck retirement cards never come after the talk[2m > [22mthe filter reads the career when it is asked, so a talk that comes mid-summer holds the cards out[32m 1[2mms[22m[39m
+   [32m✓[39m nfl: the deck jersey card and the Hall card[2m > [22mthe card is offered only by a club he has played a season for[32m 2[2mms[22m[39m
+   [32m✓[39m nfl: the deck jersey card and the Hall card[2m > [22man old save whose deck card retired the number, with no club kept, shows no jersey line[32m 25[2mms[22m[39m
+   [32m✓[39m nba: the deck jersey card and the Hall card[2m > [22mthe card is offered only by a club he has played a season for[32m 2[2mms[22m[39m
+   [32m✓[39m nba: the deck jersey card and the Hall card[2m > [22man old save whose deck card retired the number, with no club kept, shows no jersey line[32m 32[2mms[22m[39m
+   [32m✓[39m mlb: the deck jersey card and the Hall card[2m > [22mthe card is offered only by a club he has played a season for[32m 1[2mms[22m[39m
+   [32m✓[39m mlb: the deck jersey card and the Hall card[2m > [22man old save whose deck card retired the number, with no club kept, shows no jersey line[32m 28[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 26 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/careerHall.test.tsx[2m > [22mRound 1051: the legacy scorer, the calibration and the words[2m > [22mhallCalibrationOf: a valid stamp wins; with none a retired career is 1 and a live one is today's
+[31m[1mAssertionError[22m: expected 1 to be 3 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 3[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/careerHall.test.tsx:[2m421:62[22m[39m
+    [90m419| [39m    // Round 1301: a career stamped 2 reads 2 for good, whatever today…
+    [90m420| [39m    [34mexpect[39m([34mhallCalibrationOf[39m({ retired[33m:[39m [35mtrue[39m[33m,[39m hallCal[33m:[39m [34m2[39m }))[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+    [90m421| [39m    [34mexpect[39m([34mhallCalibrationOf[39m({ retired[33m:[39m [35mtrue[39m[33m,[39m hallCal[33m:[39m [34m3[39m }))[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m   | [39m                                                             [31m^[39m
+    [90m422| [39m    [34mexpect[39m([34mhallCalibrationOf[39m({ retired[33m:[39m [35mfalse[39m[33m,[39m hallCal[33m:[39m [34m1[39m }))[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+    [90m423| [39m    [34mexpect[39m([34mhallCalibrationOf[39m({ retired[33m:[39m [35mtrue[39m[33m,[39m hallCal[33m:[39m [34m7[39m }))[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerHall.test.tsx[2m > [22mRound 1051: the legacy scorer, the calibration and the words[2m > [22msanitizeHallCal takes exactly the whole numbers 1, 2 and 3
+[31m[1mAssertionError[22m: expected undefined to be 3 // Object.is equality[39m
+
+[32m- Expected:[39m 
+3
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/careerHall.test.tsx:[2m430:32[22m[39m
+    [90m428| [39m    [34mexpect[39m([34msanitizeHallCal[39m([34m1[39m))[33m.[39m[34mtoBe[39m([34m1[39m)[33m;[39m
+    [90m429| [39m    [34mexpect[39m([34msanitizeHallCal[39m([34m2[39m))[33m.[39m[34mtoBe[39m([34m2[39m)[33m;[39m
+    [90m430| [39m    [34mexpect[39m([34msanitizeHallCal[39m([34m3[39m))[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m   | [39m                               [31m^[39m
+    [90m431| [39m    for (const junk of [4, 0, -1, '2', 1.5, null, undefined, {}, [], t…
+    [90m432| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nba: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:nba:0:open: calibration 3 is calibration 2 here: expected { score: 435, …(3) } to deeply equal { score: 512, …(4) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -2,15 +2,9 @@[39m
+[2m    "bullets": [[22m
+[2m      "18 seasons, 1 ring, 0 MVPs, 0 Finals MVPs, 3 All-NBA, 5 All-Star",[22m
+[2m      "22,456 points, 5,580 rebounds, 11,261 assists in 1,437 games",[22m
+[2m      "42M career earnings, drafted pick 63",[22m
+[2m    ],[22m
+[32m-   "hof": true,[39m
+[32m-   "score": 512,[39m
+[32m-   "standout": {[39m
+[32m-     "credit": 56.1,[39m
+[32m-     "label": "assists",[39m
+[32m-     "stat": "ast",[39m
+[32m-     "total": 11261,[39m
+[32m-   },[39m
+[32m-   "verdict": "Hall of Famer",[39m
+[31m+   "hof": false,[39m
+[31m+   "score": 435,[39m
+[31m+   "verdict": "Beloved star, Hall of Very Good",[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/careerHallSaves1301.test.ts:[2m124:73[22m[39m
+    [90m122| [39m          } [35melse[39m {
+    [90m123| [39m            // Football, basketball and baseball read 3 on their calib…
+    [90m124| [39m            expect(on3, `${e.id}: calibration 3 is calibration 2 here`…
+    [90m   | [39m                                                                        [31m^[39m
+    [90m125| [39m          }
+    [90m126| [39m        }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain mlb: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:mlb:11:open: calibration 3 is calibration 2 here: expected { score: 537, …(3) } to deeply equal { score: 579, …(4) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -3,14 +3,8 @@[39m
+[2m      "20 seasons, 1 ring, 0 Cy Youngs, 1 All-Star nods",[22m
+[2m      "299 wins, 3,684 strikeouts",[22m
+[2m      "272M career earnings, drafted pick 38",[22m
+[2m    ],[22m
+[2m    "hof": true,[22m
+[32m-   "score": 579,[39m
+[32m-   "standout": {[39m
+[32m-     "credit": 41.66666666666667,[39m
+[32m-     "label": "wins",[39m
+[32m-     "stat": "wins",[39m
+[32m-     "total": 299,[39m
+[32m-   },[39m
+[31m+   "score": 537,[39m
+[2m    "verdict": "Hall of Famer",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/careerHallSaves1301.test.ts:[2m124:73[22m[39m
+    [90m122| [39m          } [35melse[39m {
+    [90m123| [39m            // Football, basketball and baseball read 3 on their calib…
+    [90m124| [39m            expect(on3, `${e.id}: calibration 3 is calibration 2 here`…
+    [90m   | [39m                                                                        [31m^[39m
+    [90m125| [39m          }
+    [90m126| [39m        }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nhl: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:nhl:0:open: the calibration 3 table: expected 962 to be 1190 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1190[39m
+[31m+ 962[39m
+
+[36m [2m❯[22m src/test/careerHallSaves1301.test.ts:[2m121:67[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nba: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: r1226:nba:0:open: calibration 3 is calibration 2 here: expected { score: 435, …(3) } to deeply equal { score: 512, …(4) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -2,15 +2,9 @@[39m
+[2m    "bullets": [[22m
+[2m      "18 seasons, 1 ring, 0 MVPs, 0 Finals MVPs, 3 All-NBA, 5 All-Star",[22m
+[2m      "22,456 points, 5,580 rebounds, 11,261 assists in 1,437 games",[22m
+[2m      "42M career earnings, drafted pick 63",[22m
+[2m    ],[22m
+[32m-   "hof": true,[39m
+[32m-   "score": 512,[39m
+[32m-   "standout": {[39m
+[32m-     "credit": 56.1,[39m
+[32m-     "label": "assists",[39m
+[32m-     "stat": "ast",[39m
+[32m-     "total": 11261,[39m
+[32m-   },[39m
+[32m-   "verdict": "Hall of Famer",[39m
+[31m+   "hof": false,[39m
+[31m+   "score": 435,[39m
+[31m+   "verdict": "Beloved star, Hall of Very Good",[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/careerHallSaves1301.test.ts:[2m124:73[22m[39m
+    [90m122| [39m          } [35melse[39m {
+    [90m123| [39m            // Football, basketball and baseball read 3 on their calib…
+    [90m124| [39m            expect(on3, `${e.id}: calibration 3 is calibration 2 here`…
+    [90m   | [39m                                                                        [31m^[39m
+    [90m125| [39m          }
+    [90m126| [39m        }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 mlb: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: r1226:mlb:11:open: calibration 3 is calibration 2 here: expected { score: 537, …(3) } to deeply equal { score: 579, …(4) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[33m@@ -3,14 +3,8 @@[39m
+[2m      "20 seasons, 1 ring, 0 Cy Youngs, 1 All-Star nods",[22m
+[2m      "299 wins, 3,684 strikeouts",[22m
+[2m      "272M career earnings, drafted pick 38",[22m
+[2m    ],[22m
+[2m    "hof": true,[22m
+[32m-   "score": 579,[39m
+[32m-   "standout": {[39m
+[32m-     "credit": 41.66666666666667,[39m
+[32m-     "label": "wins",[39m
+[32m-     "stat": "wins",[39m
+[32m-     "total": 299,[39m
+[32m-   },[39m
+[31m+   "score": 537,[39m
+[2m    "verdict": "Hall of Famer",[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/careerHallSaves1301.test.ts:[2m124:73[22m[39m
+    [90m122| [39m          } [35melse[39m {
+    [90m123| [39m            // Football, basketball and baseball read 3 on their calib…
+    [90m124| [39m            expect(on3, `${e.id}: calibration 3 is calibration 2 here`…
+    [90m   | [39m                                                                        [31m^[39m
+    [90m125| [39m          }
+    [90m126| [39m        }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nhl: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: r1226:nhl:0:open: the calibration 3 table: expected 964 to be 1243 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1243[39m
+[31m+ 964[39m
+
+[36m [2m❯[22m src/test/careerHallSaves1301.test.ts:[2m121:67[22m[39m
+
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mthe stamp is what keeps them: read on calibration 3 instead, NHL careers of the set score lower and Hall of Famers fall out
+[31m[1mAssertionError[22m: main: expected { lower: 11, higher: +0, …(3) } to deeply equal { lower: 11, higher: +0, …(3) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "cameIn": 0,[22m
+[32m-   "fellOut": 2,[39m
+[31m+   "fellOut": 8,[39m
+[2m    "higher": 0,[22m
+[2m    "lower": 11,[22m
+[2m    "openLower": 4,[22m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/careerHallSaves1301.test.ts:[2m147:68[22m[39m
+    [90m145| [39m      /* Exact, because both sides are frozen: the fixture is never re…
+    [90m146| [39m         never edited. The one career that would score higher is a goa…
+    [90m147| [39m      expect({ lower, higher, fellOut, cameIn, openLower }, r.tag).toE…
+    [90m   | [39m                                                                   [31m^[39m
+    [90m148| [39m    }
+    [90m149| [39m    // And in the other three sports the two calibrations are one tabl…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerActionConfirm.test.tsx[2m > [22mUS career destructive action confirmation[2m > [22m'NBA' keeps retirement pending until explicit acceptance and records its real legacy once
+[31m[1mAssertionError[22m: expected "spy" to be called once with arguments: [ '/nba-my-career', 57, …(2) ][90m
+
+Received: 
+
+[1m  1st spy call:
+
+[22m[2m  [[22m
+[2m    "/nba-my-career",[22m
+[32m-   57,[90m
+[31m+   54,[90m
+[2m    "Fixture player",[22m
+[2m    0,[22m
+[2m  ][22m
+[31m[90m
+
+Number of calls: [1m1[22m
+[31m[39m
+[36m [2m❯[22m src/test/usCareerActionConfirm.test.tsx:[2m111:30[22m[39m
+    [90m109| [39m    (expected.c as CareerLike & { hallCal?: unknown }).hallCal = 3; //…
+    [90m110| [39m    expect(JSON.parse(localStorage.getItem(row.saveKey)!)).toEqual(exp…
+    [90m111| [39m    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith(`/${row.s…
+    [90m   | [39m                             [31m^[39m
+    [90m112| [39m    const retiredBytes = localStorage.getItem(row.saveKey); first.unmo…
+    [90m113| [39m    expect(within(document.body).getByText(`${saved.c.name} retires`))…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnfl: the retirement talk on the board[2m > [22ma farewell season carries its banner, is played, and ends the career after it
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnba: the retirement talk on the board[2m > [22ma farewell season carries its banner, is played, and ends the career after it
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mmlb: the retirement talk on the board[2m > [22ma farewell season carries its banner, is played, and ends the career after it
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnhl: the retirement talk on the board[2m > [22ma farewell season carries its banner, is played, and ends the career after it
+[31m[1mAssertionError[22m: expected 1 to be 3 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 3[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/usCareerHallBoard.test.tsx:[2m197:40[22m[39m
+    [90m195| [39m       two pressed handlers passed every test (mutation stampnotseason…
+    [90m196| [39m    [34mexpect[39m(after[33m.[39mc[33m.[39mhallCal)[33m.[39m[34mtoBe[39m([33mHALL_CALIBRATION[39m)[33m;[39m
+    [90m197| [39m    [34mexpect[39m([34mhallCalibrationOf[39m(after[33m.[39mc))[33m.[39m[34mtoBe[39m([33mHALL_CALIBRATION[39m)[33m;[39m
+    [90m   | [39m                                       [31m^[39m
+    [90m198| [39m  })[33m;[39m
+    [90m199| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnfl: the calibration stamp (Round 1051)[2m > [22man active save retired through the board is saved with hallCal 2
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnba: the calibration stamp (Round 1051)[2m > [22man active save retired through the board is saved with hallCal 2
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mmlb: the calibration stamp (Round 1051)[2m > [22man active save retired through the board is saved with hallCal 2
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnhl: the calibration stamp (Round 1051)[2m > [22man active save retired through the board is saved with hallCal 2
+[31m[1mAssertionError[22m: expected 1 to be 3 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 3[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/test/usCareerHallBoard.test.tsx:[2m388:38[22m[39m
+    [90m386| [39m    [34mexpect[39m(after[33m.[39mhallCal)[33m.[39m[34mtoBe[39m([33mHALL_CALIBRATION[39m)[33m;[39m
+    [90m387| [39m    [34mexpect[39m([33mHALL_CALIBRATION[39m)[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m388| [39m    [34mexpect[39m([34mhallCalibrationOf[39m(after))[33m.[39m[34mtoBe[39m([34m3[39m)[33m;[39m
+    [90m   | [39m                                     [31m^[39m
+    [90m389| [39m    // The retired screen reads the stamped career: its legacy is the …
+    [90m390| [39m    await waitFor(() => expect(document.body.textContent).toContain(`$…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnfl: the calibration stamp (Round 1051)[2m > [22mtwo tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnba: the calibration stamp (Round 1051)[2m > [22mtwo tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mmlb: the calibration stamp (Round 1051)[2m > [22mtwo tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnhl: the calibration stamp (Round 1051)[2m > [22mtwo tabs: retired a moment ago in another tab, this tab's retirement keeps the stamp that tab wrote
+[31m[1mAssertionError[22m: expected undefined to be 3 // Object.is equality[39m
+
+[32m- Expected:[39m 
+3
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/usCareerHallBoard.test.tsx:[2m499:27[22m[39m
+    [90m497| [39m    [35mconst[39m after [33m=[39m [34mread[39m(sport)[33m.[39mc [35mas[39m [33mUsCareerCore[39m[33m;[39m
+    [90m498| [39m    [34mexpect[39m(after[33m.[39mretired)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m499| [39m    [34mexpect[39m(after[33m.[39mhallCal)[33m.[39m[34mtoBe[39m([33mHALL_CALIBRATION[39m)[33m;[39m
+    [90m   | [39m                          [31m^[39m
+    [90m500| [39m    [34mexpect[39m([34mhallCalibrationOf[39m(after))[33m.[39m[34mtoBe[39m([33mHALL_CALIBRATION[39m)[33m;[39m
+    [90m501| [39m  }[33m,[39m [34m20000[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/26]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnfl: the calibration stamp (Round 1051)[2m > [22mthe stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnba: the calibration stamp (Round 1051)[2m > [22mthe stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mmlb: the calibration stamp (Round 1051)[2m > [22mthe stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone
+[41m[1m FAIL [22m[49m src/test/usCareerHallBoard.test.tsx[2m > [22mnhl: the calibration stamp (Round 1051)[2m > [22mthe stamp reads the disk: a live save stamps, the same man retired there hands his stamp on, anyone else's is left alone
+[31m[1mAssertionError[22m: expected undefined to be 3 // Object.is equality[39m
+
+[32m- Expected:[39m 
+3
+
+[31m+ Received:[39m 
+undefined
+
+[36m [2m❯[22m src/test/usCareerHallBoard.test.tsx:[2m523:23[22m[39m
+    [90m521| [39m    [35mconst[39m d [33m=[39m [34mretiring[39m()[33m;[39m
+    [90m522| [39m    [34mstampOnRetirement[39m(d[33m,[39m sport[33m.[39msaveKey)[33m;[39m
+    [90m523| [39m    [34mexpect[39m(d[33m.[39mhallCal)[33m.[39m[34mtoBe[39m([33mHALL_CALIBRATION[39m)[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m524| [39m    // The disk holds ANOTHER man retired and stamped: an old retired …
+    [90m525| [39m    [35mconst[39m stranger [33m=[39m [34mretiring[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/26]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m4 failed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[31m26 failed[39m[22m[2m | [22m[1m[32m149 passed[39m[22m[90m (175)[39m
+[2m   Start at [22m 05:04:50
+[2m   Duration [22m 14.37s[2m (transform 1.97s, setup 189ms, collect 4.65s, tests 14.88s, environment 1.36s, prepare 263ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHall.test.tsx,title=src/test/careerHall.test.tsx > Round 1051%3A the legacy scorer%2C the calibration and the words > hallCalibrationOf%3A a valid stamp wins; with none a retired career is 1 and a live one is today's,line=421,column=62::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/test/careerHall.test.tsx:421:62%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHall.test.tsx,title=src/test/careerHall.test.tsx > Round 1051%3A the legacy scorer%2C the calibration and the words > sanitizeHallCal takes exactly the whole numbers 1%2C 2 and 3,line=430,column=32::AssertionError: expected undefined to be 3 // Object.is equality%0A%0A- Expected: %0A3%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/careerHall.test.tsx:430:32%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > main nba%3A a career still being played is judged on calibration 3 when it retires,line=124,column=73::AssertionError: main:nba:0:open: calibration 3 is calibration 2 here: expected { score: 435, …(3) } to deeply equal { score: 512, …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -2,15 +2,9 @@%0A    "bullets": [%0A      "18 seasons, 1 ring, 0 MVPs, 0 Finals MVPs, 3 All-NBA, 5 All-Star",%0A      "22,456 points, 5,580 rebounds, 11,261 assists in 1,437 games",%0A      "42M career earnings, drafted pick 63",%0A    ],%0A-   "hof": true,%0A-   "score": 512,%0A-   "standout": {%0A-     "credit": 56.1,%0A-     "label": "assists",%0A-     "stat": "ast",%0A-     "total": 11261,%0A-   },%0A-   "verdict": "Hall of Famer",%0A+   "hof": false,%0A+   "score": 435,%0A+   "verdict": "Beloved star, Hall of Very Good",%0A  }%0A%0A ❯ src/test/careerHallSaves1301.test.ts:124:73%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > main mlb%3A a career still being played is judged on calibration 3 when it retires,line=124,column=73::AssertionError: main:mlb:11:open: calibration 3 is calibration 2 here: expected { score: 537, …(3) } to deeply equal { score: 579, …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -3,14 +3,8 @@%0A      "20 seasons, 1 ring, 0 Cy Youngs, 1 All-Star nods",%0A      "299 wins, 3,684 strikeouts",%0A      "272M career earnings, drafted pick 38",%0A    ],%0A    "hof": true,%0A-   "score": 579,%0A-   "standout": {%0A-     "credit": 41.66666666666667,%0A-     "label": "wins",%0A-     "stat": "wins",%0A-     "total": 299,%0A-   },%0A+   "score": 537,%0A    "verdict": "Hall of Famer",%0A  }%0A%0A ❯ src/test/careerHallSaves1301.test.ts:124:73%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > main nhl%3A a career still being played is judged on calibration 3 when it retires,line=121,column=67::AssertionError: main:nhl:0:open: the calibration 3 table: expected 962 to be 1190 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1190%0A+ 962%0A%0A ❯ src/test/careerHallSaves1301.test.ts:121:67%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > r1226 nba%3A a career still being played is judged on calibration 3 when it retires,line=124,column=73::AssertionError: r1226:nba:0:open: calibration 3 is calibration 2 here: expected { score: 435, …(3) } to deeply equal { score: 512, …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -2,15 +2,9 @@%0A    "bullets": [%0A      "18 seasons, 1 ring, 0 MVPs, 0 Finals MVPs, 3 All-NBA, 5 All-Star",%0A      "22,456 points, 5,580 rebounds, 11,261 assists in 1,437 games",%0A      "42M career earnings, drafted pick 63",%0A    ],%0A-   "hof": true,%0A-   "score": 512,%0A-   "standout": {%0A-     "credit": 56.1,%0A-     "label": "assists",%0A-     "stat": "ast",%0A-     "total": 11261,%0A-   },%0A-   "verdict": "Hall of Famer",%0A+   "hof": false,%0A+   "score": 435,%0A+   "verdict": "Beloved star, Hall of Very Good",%0A  }%0A%0A ❯ src/test/careerHallSaves1301.test.ts:124:73%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > r1226 mlb%3A a career still being played is judged on calibration 3 when it retires,line=124,column=73::AssertionError: r1226:mlb:11:open: calibration 3 is calibration 2 here: expected { score: 537, …(3) } to deeply equal { score: 579, …(4) }%0A%0A- Expected%0A+ Received%0A%0A@@ -3,14 +3,8 @@%0A      "20 seasons, 1 ring, 0 Cy Youngs, 1 All-Star nods",%0A      "299 wins, 3,684 strikeouts",%0A      "272M career earnings, drafted pick 38",%0A    ],%0A    "hof": true,%0A-   "score": 579,%0A-   "standout": {%0A-     "credit": 41.66666666666667,%0A-     "label": "wins",%0A-     "stat": "wins",%0A-     "total": 299,%0A-   },%0A+   "score": 537,%0A    "verdict": "Hall of Famer",%0A  }%0A%0A ❯ src/test/careerHallSaves1301.test.ts:124:73%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > r1226 nhl%3A a career still being played is judged on calibration 3 when it retires,line=121,column=67::AssertionError: r1226:nhl:0:open: the calibration 3 table: expected 964 to be 1243 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 1243%0A+ 964%0A%0A ❯ src/test/careerHallSaves1301.test.ts:121:67%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > the stamp is what keeps them%3A read on calibration 3 instead%2C NHL careers of the set score lower and Hall of Famers fall out,line=147,column=68::AssertionError: main: expected { lower: 11, higher: +0, …(3) } to deeply equal { lower: 11, higher: +0, …(3) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "cameIn": 0,%0A-   "fellOut": 2,%0A+   "fellOut": 8,%0A    "higher": 0,%0A    "lower": 11,%0A    "openLower": 4,%0A  }%0A%0A ❯ src/test/careerHallSaves1301.test.ts:147:68%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerActionConfirm.test.tsx,title=src/test/usCareerActionConfirm.test.tsx > US career destructive action confirmation > 'NBA' keeps retirement pending until explicit acceptance and records its real legacy once,line=111,column=30::AssertionError: expected "spy" to be called once with arguments: [ '/nba-my-career', 57, …(2) ]%0A%0AReceived: %0A%0A  1st spy call:%0A%0A  [%0A    "/nba-my-career",%0A-   57,%0A+   54,%0A    "Fixture player",%0A    0,%0A  ]%0A%0A%0ANumber of calls: 1%0A%0A ❯ src/test/usCareerActionConfirm.test.tsx:111:30%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nfl%3A the retirement talk on the board > a farewell season carries its banner%2C is played%2C and ends the career after it,line=197,column=40::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:197:40%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nba%3A the retirement talk on the board > a farewell season carries its banner%2C is played%2C and ends the career after it,line=197,column=40::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:197:40%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > mlb%3A the retirement talk on the board > a farewell season carries its banner%2C is played%2C and ends the career after it,line=197,column=40::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:197:40%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nhl%3A the retirement talk on the board > a farewell season carries its banner%2C is played%2C and ends the career after it,line=197,column=40::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:197:40%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nfl%3A the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2,line=388,column=38::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:388:38%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nfl%3A the calibration stamp (Round 1051) > two tabs%3A retired a moment ago in another tab%2C this tab's retirement keeps the stamp that tab wrote,line=499,column=27::AssertionError: expected undefined to be 3 // Object.is equality%0A%0A- Expected: %0A3%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:499:27%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nfl%3A the calibration stamp (Round 1051) > the stamp reads the disk%3A a live save stamps%2C the same man retired there hands his stamp on%2C anyone else's is left alone,line=523,column=23::AssertionError: expected undefined to be 3 // Object.is equality%0A%0A- Expected: %0A3%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:523:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nba%3A the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2,line=388,column=38::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:388:38%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nba%3A the calibration stamp (Round 1051) > two tabs%3A retired a moment ago in another tab%2C this tab's retirement keeps the stamp that tab wrote,line=499,column=27::AssertionError: expected undefined to be 3 // Object.is equality%0A%0A- Expected: %0A3%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:499:27%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nba%3A the calibration stamp (Round 1051) > the stamp reads the disk%3A a live save stamps%2C the same man retired there hands his stamp on%2C anyone else's is left alone,line=523,column=23::AssertionError: expected undefined to be 3 // Object.is equality%0A%0A- Expected: %0A3%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:523:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > mlb%3A the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2,line=388,column=38::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:388:38%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > mlb%3A the calibration stamp (Round 1051) > two tabs%3A retired a moment ago in another tab%2C this tab's retirement keeps the stamp that tab wrote,line=499,column=27::AssertionError: expected undefined to be 3 // Object.is equality%0A%0A- Expected: %0A3%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:499:27%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > mlb%3A the calibration stamp (Round 1051) > the stamp reads the disk%3A a live save stamps%2C the same man retired there hands his stamp on%2C anyone else's is left alone,line=523,column=23::AssertionError: expected undefined to be 3 // Object.is equality%0A%0A- Expected: %0A3%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:523:23%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nhl%3A the calibration stamp (Round 1051) > an active save retired through the board is saved with hallCal 2,line=388,column=38::AssertionError: expected 1 to be 3 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 3%0A+ 1%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:388:38%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nhl%3A the calibration stamp (Round 1051) > two tabs%3A retired a moment ago in another tab%2C this tab's retirement keeps the stamp that tab wrote,line=499,column=27::AssertionError: expected undefined to be 3 // Object.is equality%0A%0A- Expected: %0A3%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:499:27%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/usCareerHallBoard.test.tsx,title=src/test/usCareerHallBoard.test.tsx > nhl%3A the calibration stamp (Round 1051) > the stamp reads the disk%3A a live save stamps%2C the same man retired there hands his stamp on%2C anyone else's is left alone,line=523,column=23::AssertionError: expected undefined to be 3 // Object.is equality%0A%0A- Expected: %0A3%0A%0A+ Received: %0Aundefined%0A%0A ❯ src/test/usCareerHallBoard.test.tsx:523:23%0A%0A

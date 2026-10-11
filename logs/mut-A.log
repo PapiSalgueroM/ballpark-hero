@@ -1,0 +1,14 @@
+mut A: 1 edits made in src/lib/nhlMyCareer.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nhl: every retired save reads what it was told (a Hall of Famer stays one, a mi
+[31m[1mAssertionError[22m: main:nhl:11: legacy: expected { score: 397, …(4) } to deeply equal { score: 433, …(4) }[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nhl: every retired save reads what it was told (a Hall of Famer stays one, a m
+[31m[1mAssertionError[22m: r1226:nhl:11: legacy: expected { score: 438, …(4) } to deeply equal { score: 474, …(4) }[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > main nhl%3A every retire
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/careerHallSaves1301.test.ts,title=src/test/careerHallSaves1301.test.ts > Round 1301%3A a career the old code retired keeps the calibration and the ballot it was told > r1226 nhl%3A every retir
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 0.88 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 0 played and 24 reused, signature 1eab0c54fc63
+        at or over from, pooled 10.37 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 0.97 percent (band 0.78 to 1.19: the reference's 0.99, 0.20 from seed to seed); read against the marks of calibration 3 (the reference was read against 3)
+  FAIL v2replay: calibration 2 against its recording: the table and the rules differ, 6 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 3)
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 10.37 percent (band 9.84 to 10.95); at or over to, pooled 0.97 percent (band 0.78 to 1.19)
+MUT A: caught=yes | vitest exit 1,  | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v2replay])

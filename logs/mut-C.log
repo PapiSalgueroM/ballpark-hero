@@ -1,0 +1,8 @@
+mut C: 1 edits made in src/lib/nbaMyCareer.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.71 percent; at or over to, pooled 1.25 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 24 played and 0 reused, signature 993ef9d61f27
+        at or over from, pooled 9.81 percent (band 9.25 to 10.16: the reference's 9.71 over 48 seeds, 0.45 from seed to seed); at or over to, pooled 0.96 percent (band 0.79 to 1.14: the reference's 0.97, 0.17 from seed to seed); read against the marks of calibration 2 (the reference was read against 2)
+  FAIL v3replay: calibration 3 against its recording: the table and the rules equal, 14 of 20 recorded saves told something else (a shipped calibration is never edited: add calibration 4)
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 9.81 percent (band 9.25 to 10.16); at or over to, pooled 0.96 percent (band 0.79 to 1.14)
+MUT C: caught=yes | vitest exit 0,  | hall nba exit 3: simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [v3replay])

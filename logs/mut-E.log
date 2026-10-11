@@ -1,0 +1,21 @@
+mut E: 1 edits made in src/lib/careerHallOfFame.ts
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[41m[1m FAIL [22m[49m src/test/careerHall.test.tsx[2m > [22mRound 1051: the legacy scorer, the calibration and the words[2m > [22mstampHallCalibration writes today's calibration on a retired, unstamped career and nothing else
+[31m[1mAssertionError[22m: expected 2 to be 3 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nfl: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:nfl:0:open: the save that retires it is stamped 3: expected 2 to be 3 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nba: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:nba:0:open: the save that retires it is stamped 3: expected 2 to be 3 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain mlb: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:mlb:11:open: the save that retires it is stamped 3: expected 2 to be 3 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mmain nhl: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: main:nhl:0:open: the save that retires it is stamped 3: expected 2 to be 3 // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/careerHallSaves1301.test.ts[2m > [22mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22mr1226 nfl: a career still being played is judged on calibration 3 when it retires
+[31m[1mAssertionError[22m: r1226:nfl:0:open: the save that retires it is stamped 3: expected 2 to be 3 // Object.is equality[39m
+cut: write error: Broken pipe
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.15 percent; at or over to, pooled 0.88 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 0 played and 24 reused, signature 1eab0c54fc63
+        at or over from, pooled 10.37 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 0.97 percent (band 0.78 to 1.19: the reference's 0.99, 0.20 from seed to seed); read against the marks of calibration 3 (the reference was read against 3)
+  FAIL calrule: 0 readings off the calibration rule; 0 of 2000 engine careers stamped
+  ok   marks: the fleet of 24 seeds: at or over from, pooled 10.37 percent (band 9.84 to 10.95); at or over to, pooled 0.97 percent (band 0.78 to 1.19)
+MUT E: caught=yes | vitest exit 1,  | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [calrule])

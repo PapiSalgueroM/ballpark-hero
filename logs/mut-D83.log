@@ -1,0 +1,7 @@
+mut D83: 2 edits made in src/data/usSeasonLedgerNhl.ts
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+  17 (a) marks, this run's one seed (printed, never the check): 12 standout cells; at or over from, pooled 9.56 percent; at or over to, pooled 0.71 percent
+  17 (a) marks, the fleet: 24 seeds (6 to 29), 2000 careers a seed, 48000 rows, 24 played and 0 reused, signature 89a4216539cd
+        at or over from, pooled 9.48 percent (band 9.84 to 10.95: the reference's 10.39 over 48 seeds, 0.55 from seed to seed); at or over to, pooled 0.75 percent (band 0.78 to 1.19: the reference's 0.99, 0.20 from seed to seed); read against the marks of calibration 3 (the reference was read against 3)
+  FAIL marks: the fleet of 24 seeds: at or over from, pooled 9.48 percent (band 9.84 to 10.95); at or over to, pooled 0.75 percent (band 0.78 to 1.19)
+MUT D83: caught=yes | vitest not run | hall nhl exit 3: simCareerHall nhl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])

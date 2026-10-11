@@ -1,0 +1,3 @@
+dumps: 6 row files of nhl in /tmp/rows, 6 runs in 13 s
+genCareerHallMarks: wrote ../../../../../tmp/ledger-out.json (the block of calibration 3: nhl)
+block3-again: the committed ledger is the generator own output from six fresh NHL runs, byte for byte
