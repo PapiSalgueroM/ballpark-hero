@@ -1,0 +1,9 @@
+law-now exit=3 15s | simUsSeasonCentre digest compare: NOT COMPARED, 3 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+law-three-back exit=0 15s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+law-two-back exit=3 15s | simUsSeasonCentre digest compare: NOT COMPARED, 1 bundled files are not the ones the record was made on (exit 3: this is no red of the score law)
+law-print exit=0 14s | simUsSeasonCentre digest print: 10 digests over 72 bundled files, written to /home/runner/work/_temp/rc-out/files/usSeasonLawDigest.json
+law-values exit=0 0s | digestEq: 42 values compared, 0 differ
+law-new-compare exit=0 14s | simUsSeasonCentre digest compare: 11 digests, 0 moved (a receipt of Round 1221's law move, in no gate)
+law-new-control exit=1 15s | simUsSeasonCentre digest compare: 11 digests, 5 moved (control lawdrift)
+lay-now exit=3 14s | simUsSeasonCentre digest compare: NOT COMPARED, 10 bundled files are not the ones the record was made on (exit 3: this is no red of the playoff lay)
+mut-watch exit=0 8s | MUT watch vitest=1

@@ -1,0 +1,11 @@
+# Round 1212 fix pass: the attribution of re-record 1 (scripts/data/usSeasonLawDigest.json) reproduced, and the record taken again
+#!serial
+law-now: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+law-three-back: git cat-file -p bb182e87db73 > src/data/usLeagueShape.ts && git cat-file -p 62a6293dbffd > src/lib/careerRival.ts && git cat-file -p 3bccd4b40c17 > src/lib/season/us.ts && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- src; exit $s
+law-two-back: git cat-file -p bb182e87db73 > src/data/usLeagueShape.ts && git cat-file -p 3bccd4b40c17 > src/lib/season/us.ts && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- src; exit $s
+law-print: US_SEASON_DIGEST=print US_SEASON_DIGEST_OUT=$RC_OUT/usSeasonLawDigest.json node scripts/simUsSeasonCentre.mjs
+law-values: node .rc/x/digestEq.mjs scripts/data/usSeasonLawDigest.json $RC_OUT/usSeasonLawDigest.json
+law-new-compare: cp $RC_OUT/usSeasonLawDigest.json scripts/data/usSeasonLawDigest.json && US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- scripts/data; exit $s
+law-new-control: cp $RC_OUT/usSeasonLawDigest.json scripts/data/usSeasonLawDigest.json && US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs; s=$?; git checkout -- scripts/data; exit $s
+lay-now: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+mut-watch: node .rc/x/mutWatch.mjs && node_modules/.bin/vitest run src/test/usSeasonCentreEntry.test.tsx --testTimeout=300000 --hookTimeout=120000; s=$?; git checkout -- src; echo "MUT watch vitest=$s"; [ $s -ne 0 ]
