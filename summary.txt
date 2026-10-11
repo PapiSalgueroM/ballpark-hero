@@ -1,0 +1,5 @@
+brands exit=0 30s | ALL SOCIAL AND BRAND CHECKS PASSED
+tsc exit=0 73s | 
+awards exit=0 83s | simCareerAwardsNight: ALL 179 CHECKS PASSED
+units exit=0 11s |    Duration  10.40s (transform 4.66s, setup 341ms, collect 12.23s, tests 12.23s, environment 2.26s, prepare 603ms)
+programme exit=0 64s | Career programme:50 original/compatibility/full product season pairs with exact RNG,240 opted gameplay seasons,21 effective loaded faults,164 unchanged original chance ou

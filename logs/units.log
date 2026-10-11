@@ -1,0 +1,39 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/lib/usCareerProgramme.test.ts [2m([22m[2m55 tests[22m[2m)[22m[32m 167[2mms[22m[39m
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9748 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9748: 27 season rows, 26 story seasons, story 15443 bytes, save 122079 bytes, save without story 106636
+[save parts] seed 9748: rest 61936 bytes, cup games 41658 bytes over 22 seasons, division 11063 bytes over 18 seasons, ten divisions 4489 bytes
+[save parts] seed 9748: opening cup ties 1978 bytes over 18 seasons, chance wheel 149 bytes
+
+ [32m✓[39m src/test/usCareerProgrammeUi.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 1569[2mms[22m[39m
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9749 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9749: 28 season rows, 27 story seasons, story 17699 bytes, save 105625 bytes, save without story 87926
+[save parts] seed 9749: rest 74528 bytes, cup games 12274 bytes over 8 seasons, division 11566 bytes over 19 seasons, ten divisions 4501 bytes
+[save parts] seed 9749: opening cup ties 1967 bytes over 18 seasons, chance wheel 164 bytes
+
+[90mstdout[2m | src/test/careerStory.test.tsx[2m > [22m[2mSoccer Career: the story keeps the save small[2m > [22m[2mthe longest career on seed 9750 plus ten dugout seasons stays under the bound
+[22m[39m[story size] seed 9750: 29 season rows, 28 story seasons, story 21062 bytes, save 144287 bytes, save without story 123225
+[save parts] seed 9750: rest 79485 bytes, cup games 43473 bytes over 23 seasons, division 13504 bytes over 22 seasons, ten divisions 4500 bytes
+[save parts] seed 9750: opening cup ties 2276 bytes over 21 seasons, chance wheel 136 bytes
+
+ [32m✓[39m src/test/usProgrammeCardTruth.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 462[2mms[22m[39m
+ [32m✓[39m src/test/careerAwardsNightCard.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 4846[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual true ballot out of newspaper, summary, timeline and cabinet until its list [33m 1188[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22mkeeps the actual false ballot out of newspaper, summary, timeline and cabinet until its list [33m 574[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the Ballon d'Or ceremony card[2m > [22ma win offers the speech once, then shows what it did, and Continue leaves [33m 477[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the tournament winner's speech[2m > [22mstays on the card, shows what it really moved, a second tap does nothing, Continue leaves [33m 520[2mms[22m[39m
+ [32m✓[39m src/test/careerStory.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 5186[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps every season[2m > [22mtwelve seasons on seed 9741: every line kept, in order, once [33m 343[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9748 plus ten dugout seasons stays under the bound [33m 429[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9749 plus ten dugout seasons stays under the bound [33m 394[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story keeps the save small[2m > [22mthe longest career on seed 9750 plus ten dugout seasons stays under the bound [33m 428[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mLatest Events opens the story, a season opens, Back returns, Close shuts it [33m 804[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer Career: the story on the real page[2m > [22mthe retired screen carries the same story, the last chapter included [33m 492[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m105 passed[39m[22m[90m (105)[39m
+[2m   Start at [22m 00:47:17
+[2m   Duration [22m 10.40s[2m (transform 4.66s, setup 341ms, collect 12.23s, tests 12.23s, environment 2.26s, prepare 603ms)[22m
+

@@ -1,0 +1,5 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+awards: node scripts/simCareerAwardsNight.mjs
+brands: node scripts/simCareerSocialBrands.mjs
+programme: node scripts/simCareerProgramme.mjs
+units: node_modules/.bin/vitest run src/test/careerAwardsNightCard.test.tsx src/test/careerStory.test.tsx src/test/usProgrammeCardTruth.test.ts src/lib/usCareerProgramme.test.ts src/test/usCareerProgrammeUi.test.tsx --testTimeout=600000 --hookTimeout=120000
