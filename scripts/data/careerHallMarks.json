@@ -3738,5 +3738,527 @@
     }
    }
   }
+ },
+ "fleet": {
+  "note": "Round 1301: the fleet band of the [marks] check (scripts/simCareerHall.mjs, section 17 (a), which has the rule: what turns it red, the way back, who may record this again). Written by MARKS_FLEET=<sports> node scripts/genCareerHallMarks.mjs <dir> from measuring runs of the reference seeds; never edited by hand. Per sport: the calibration whose marks were read, and the mean and the deviation from seed to seed of the pooled share at or over from, at or over to, and of each cell. lo and hi are the band for a check fleet of checkSeeds: the mean plus and minus z deviations times the root of (1 / check seeds + 1 / reference seeds). Shares are fractions.",
+  "round": 1301,
+  "careers": 2000,
+  "checkSeeds": [
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29
+  ],
+  "refSeeds": [
+   30,
+   31,
+   32,
+   33,
+   34,
+   35,
+   36,
+   37,
+   38,
+   39,
+   40,
+   41,
+   42,
+   43,
+   44,
+   45,
+   46,
+   47,
+   48,
+   49,
+   50,
+   51,
+   52,
+   53,
+   54,
+   55,
+   56,
+   57,
+   58,
+   59,
+   60,
+   61,
+   62,
+   63,
+   64,
+   65,
+   66,
+   67,
+   68,
+   69,
+   70,
+   71,
+   72,
+   73,
+   74,
+   75,
+   76,
+   77
+  ],
+  "z": 4,
+  "sports": {
+   "nfl": {
+    "calibration": 2,
+    "fromPooled": {
+     "mean": 0.10298,
+     "sd": 0.0074,
+     "lo": 0.09558,
+     "hi": 0.11038,
+     "min": 0.08708,
+     "max": 0.11877
+    },
+    "toPooled": {
+     "mean": 0.00992,
+     "sd": 0.0023,
+     "lo": 0.00763,
+     "hi": 0.01222,
+     "min": 0.00554,
+     "max": 0.016
+    },
+    "cells": [
+     {
+      "pos": "QB",
+      "stat": "passYds",
+      "mean": 0.095,
+      "sd": 0.01908
+     },
+     {
+      "pos": "QB",
+      "stat": "passTd",
+      "mean": 0.09483,
+      "sd": 0.01768
+     },
+     {
+      "pos": "RB",
+      "stat": "rushYds",
+      "mean": 0.09942,
+      "sd": 0.01808
+     },
+     {
+      "pos": "RB",
+      "stat": "rushTd",
+      "mean": 0.11492,
+      "sd": 0.01985
+     },
+     {
+      "pos": "WR",
+      "stat": "rec",
+      "mean": 0.09408,
+      "sd": 0.01737
+     },
+     {
+      "pos": "WR",
+      "stat": "recYds",
+      "mean": 0.0875,
+      "sd": 0.01779
+     },
+     {
+      "pos": "TE",
+      "stat": "rec",
+      "mean": 0.094,
+      "sd": 0.02013
+     },
+     {
+      "pos": "TE",
+      "stat": "recYds",
+      "mean": 0.09317,
+      "sd": 0.01889
+     },
+     {
+      "pos": "TE",
+      "stat": "recTd",
+      "mean": 0.09675,
+      "sd": 0.01954
+     },
+     {
+      "pos": "LB",
+      "stat": "tackles",
+      "mean": 0.11342,
+      "sd": 0.0196
+     },
+     {
+      "pos": "LB",
+      "stat": "picks",
+      "mean": 0.1135,
+      "sd": 0.01726
+     },
+     {
+      "pos": "CB",
+      "stat": "picks",
+      "mean": 0.12233,
+      "sd": 0.02051
+     },
+     {
+      "pos": "CB",
+      "stat": "passDef",
+      "mean": 0.11983,
+      "sd": 0.01721
+     }
+    ]
+   },
+   "nba": {
+    "calibration": 2,
+    "fromPooled": {
+     "mean": 0.09705,
+     "sd": 0.00454,
+     "lo": 0.09251,
+     "hi": 0.10158,
+     "min": 0.08688,
+     "max": 0.10563
+    },
+    "toPooled": {
+     "mean": 0.00965,
+     "sd": 0.00173,
+     "lo": 0.00792,
+     "hi": 0.01138,
+     "min": 0.00583,
+     "max": 0.01313
+    },
+    "cells": [
+     {
+      "pos": "PG",
+      "stat": "pts",
+      "mean": 0.09995,
+      "sd": 0.01491
+     },
+     {
+      "pos": "PG",
+      "stat": "ast",
+      "mean": 0.10354,
+      "sd": 0.01257
+     },
+     {
+      "pos": "SG",
+      "stat": "pts",
+      "mean": 0.09948,
+      "sd": 0.01542
+     },
+     {
+      "pos": "SG",
+      "stat": "reb",
+      "mean": 0.09714,
+      "sd": 0.01516
+     },
+     {
+      "pos": "SG",
+      "stat": "ast",
+      "mean": 0.08818,
+      "sd": 0.01568
+     },
+     {
+      "pos": "SF",
+      "stat": "pts",
+      "mean": 0.10432,
+      "sd": 0.01091
+     },
+     {
+      "pos": "SF",
+      "stat": "reb",
+      "mean": 0.0876,
+      "sd": 0.01498
+     },
+     {
+      "pos": "SF",
+      "stat": "ast",
+      "mean": 0.09651,
+      "sd": 0.01271
+     },
+     {
+      "pos": "PF",
+      "stat": "pts",
+      "mean": 0.09766,
+      "sd": 0.01518
+     },
+     {
+      "pos": "PF",
+      "stat": "reb",
+      "mean": 0.09729,
+      "sd": 0.01373
+     },
+     {
+      "pos": "C",
+      "stat": "pts",
+      "mean": 0.09469,
+      "sd": 0.01375
+     },
+     {
+      "pos": "C",
+      "stat": "reb",
+      "mean": 0.09823,
+      "sd": 0.01325
+     }
+    ]
+   },
+   "mlb": {
+    "calibration": 2,
+    "fromPooled": {
+     "mean": 0.09894,
+     "sd": 0.00726,
+     "lo": 0.09167,
+     "hi": 0.1062,
+     "min": 0.08425,
+     "max": 0.11725
+    },
+    "toPooled": {
+     "mean": 0.00953,
+     "sd": 0.00202,
+     "lo": 0.0075,
+     "hi": 0.01155,
+     "min": 0.00475,
+     "max": 0.01325
+    },
+    "cells": [
+     {
+      "pos": "SP",
+      "stat": "wins",
+      "mean": 0.10623,
+      "sd": 0.0234
+     },
+     {
+      "pos": "SP",
+      "stat": "so",
+      "mean": 0.09947,
+      "sd": 0.02492
+     },
+     {
+      "pos": "C",
+      "stat": "hr",
+      "mean": 0.09753,
+      "sd": 0.0231
+     },
+     {
+      "pos": "C",
+      "stat": "rbi",
+      "mean": 0.09707,
+      "sd": 0.02545
+     },
+     {
+      "pos": "1B",
+      "stat": "hr",
+      "mean": 0.09295,
+      "sd": 0.02102
+     },
+     {
+      "pos": "1B",
+      "stat": "rbi",
+      "mean": 0.08368,
+      "sd": 0.01825
+     },
+     {
+      "pos": "2B",
+      "stat": "rbi",
+      "mean": 0.09936,
+      "sd": 0.01992
+     },
+     {
+      "pos": "3B",
+      "stat": "hr",
+      "mean": 0.09833,
+      "sd": 0.0253
+     },
+     {
+      "pos": "3B",
+      "stat": "rbi",
+      "mean": 0.09661,
+      "sd": 0.02272
+     },
+     {
+      "pos": "SS",
+      "stat": "hr",
+      "mean": 0.09799,
+      "sd": 0.02236
+     },
+     {
+      "pos": "SS",
+      "stat": "rbi",
+      "mean": 0.10806,
+      "sd": 0.02273
+     },
+     {
+      "pos": "SS",
+      "stat": "sb",
+      "mean": 0.10565,
+      "sd": 0.01921
+     },
+     {
+      "pos": "LF",
+      "stat": "hr",
+      "mean": 0.10027,
+      "sd": 0.01948
+     },
+     {
+      "pos": "LF",
+      "stat": "rbi",
+      "mean": 0.09833,
+      "sd": 0.01832
+     },
+     {
+      "pos": "LF",
+      "stat": "sb",
+      "mean": 0.10531,
+      "sd": 0.0138
+     },
+     {
+      "pos": "CF",
+      "stat": "hr",
+      "mean": 0.09638,
+      "sd": 0.02034
+     },
+     {
+      "pos": "CF",
+      "stat": "rbi",
+      "mean": 0.09398,
+      "sd": 0.02121
+     },
+     {
+      "pos": "CF",
+      "stat": "sb",
+      "mean": 0.10188,
+      "sd": 0.01726
+     },
+     {
+      "pos": "RF",
+      "stat": "hr",
+      "mean": 0.08656,
+      "sd": 0.02266
+     },
+     {
+      "pos": "RF",
+      "stat": "rbi",
+      "mean": 0.09692,
+      "sd": 0.01809
+     },
+     {
+      "pos": "DH",
+      "stat": "hr",
+      "mean": 0.10451,
+      "sd": 0.02135
+     },
+     {
+      "pos": "DH",
+      "stat": "rbi",
+      "mean": 0.10958,
+      "sd": 0.02133
+     }
+    ]
+   },
+   "nhl": {
+    "calibration": 3,
+    "fromPooled": {
+     "mean": 0.10395,
+     "sd": 0.00554,
+     "lo": 0.0984,
+     "hi": 0.10949,
+     "min": 0.09292,
+     "max": 0.11396
+    },
+    "toPooled": {
+     "mean": 0.00988,
+     "sd": 0.00204,
+     "lo": 0.00784,
+     "hi": 0.01192,
+     "min": 0.00542,
+     "max": 0.01354
+    },
+    "cells": [
+     {
+      "pos": "C",
+      "stat": "goals",
+      "mean": 0.10333,
+      "sd": 0.0115
+     },
+     {
+      "pos": "C",
+      "stat": "assists",
+      "mean": 0.10375,
+      "sd": 0.01365
+     },
+     {
+      "pos": "C",
+      "stat": "points",
+      "mean": 0.10286,
+      "sd": 0.01229
+     },
+     {
+      "pos": "LW",
+      "stat": "goals",
+      "mean": 0.10844,
+      "sd": 0.01563
+     },
+     {
+      "pos": "LW",
+      "stat": "assists",
+      "mean": 0.10339,
+      "sd": 0.01218
+     },
+     {
+      "pos": "LW",
+      "stat": "points",
+      "mean": 0.10526,
+      "sd": 0.01541
+     },
+     {
+      "pos": "RW",
+      "stat": "goals",
+      "mean": 0.09979,
+      "sd": 0.00981
+     },
+     {
+      "pos": "RW",
+      "stat": "assists",
+      "mean": 0.1037,
+      "sd": 0.01406
+     },
+     {
+      "pos": "RW",
+      "stat": "points",
+      "mean": 0.10458,
+      "sd": 0.01043
+     },
+     {
+      "pos": "D",
+      "stat": "assists",
+      "mean": 0.10328,
+      "sd": 0.01667
+     },
+     {
+      "pos": "D",
+      "stat": "points",
+      "mean": 0.10297,
+      "sd": 0.01756
+     },
+     {
+      "pos": "G",
+      "stat": "wins",
+      "mean": 0.10599,
+      "sd": 0.01393
+     }
+    ]
+   }
+  }
  }
 }
