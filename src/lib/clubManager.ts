@@ -51,7 +51,7 @@ import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWei
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
 import {
   bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
-  liveBook, openBook, readBook, type BookRules, type LeagueBook,
+  liveBook, openBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
@@ -385,12 +385,34 @@ const bookBacks = (xi: OppXiLine[]): OppXiLine[] => xi.filter(p => groupOf(p.p) 
 const bookNamed = <T extends { n: string; p: Position }>(men: readonly T[], name: string): T | null =>
   men.find(p => p.n === name && p.p !== 'GK') ?? men.find(p => p.n === name) ?? null;
 
+/**
+ * Round 1306. The eleven of a club that cannot field a named one, for the book: the men its roster has in
+ * the places a full eleven would give them and an empty shirt in every place it cannot fill
+ * (partialEleven). A shirt stands at the club's strength, the number the engine already plays that club
+ * at when it cannot see its men (projectedXIAvg pads a short roster the same way), and is never given a
+ * row. Null for a club with no roster man at all.
+ */
+function thinBookEleven(state: CareerState, club: string, roster: readonly ProjectedPlayer[]): { keeper: BookMan | null; outfield: BookMan[] } | null {
+  return partialEleven(roster.map(p => ({ n: p.n, p: p.p, r: p.r, ...(p.g ? { g: true } : {}) })), strengthOf(state, club), groupOf);
+}
+const thinBacks = (outfield: readonly BookMan[]): BookMan[] => outfield.filter(p => groupOf(p.p) === 'DEF');
+
 /** One side of a match between two other clubs: its goals dealt over its eleven, and its clean sheet. */
 function noteBookSide(state: CareerState, book: LeagueBook, key: string, club: string, goals: number, against: number, mine: ReadonlySet<string>): void {
-  const xi = leagueBookEleven(state, club, mine);
+  /* The roster is asked for once: a club with no named eleven needs it a second time below. */
+  const roster = oppRosterFor(state, club, mine);
+  const xi = pickOppSquad(roster)?.xi ?? null;
   if (!xi) {
-    /* Nobody to name: counted, never invented. */
-    for (let i = 0; i < goals; i++) creditGoal(book, club, null);
+    /* Round 1306: no named eleven. The men the roster does have are dealt their places' shares, and the
+       goals of the places it cannot fill stay unnamed. */
+    const thin = thinBookEleven(state, club, roster);
+    if (!thin) {
+      /* Nobody to name: counted, never invented. */
+      for (let i = 0; i < goals; i++) creditGoal(book, club, null);
+      return;
+    }
+    if (goals > 0) creditDeal(book, club, dealGoals(key, goals, thin.outfield, bookRules()));
+    if (against === 0) creditCleanSheet(book, club, thin.keeper, thinBacks(thin.outfield));
     return;
   }
   if (goals > 0) creditDeal(book, club, dealGoals(key, goals, xi, bookRules()));
@@ -449,6 +471,14 @@ function noteBookMine(
   });
   for (let i = lines.length; i < oppGoals; i++) creditGoal(book, opp, null);
   if (myGoals === 0 && live.oppXi) creditCleanSheet(book, opp, bookKeeper(live.oppXi), bookBacks(live.oppXi));
+  /* Round 1306: a side with no named eleven kept this one too. Its rostered keeper and named defenders
+     are the ones its other clean sheets go to (noteBookSide), so they get this one as well: without it
+     that keeper's row is one short every time he keeps one against me. */
+  if (myGoals === 0 && !live.oppXi) {
+    roster ??= oppRosterFor(state, opp);
+    const thin = thinBookEleven(state, opp, roster);
+    if (thin) creditCleanSheet(book, opp, thin.keeper, thinBacks(thin.outfield));
+  }
   if (oppGoals === 0) creditMine(book, played.filter(p => p.position === 'GK' || groupOf(p.position) === 'DEF').map(p => p.id));
 }
 

@@ -30,8 +30,13 @@ import { keyedRng } from '@/lib/keyedRng';
 import { ownGoalTagged } from '@/lib/ownGoalRule';
 import { assistWeight, goalWeight } from '@/lib/clubManagerGoalWeight';
 
-/** A man of an eleven, the shape the engine's opposition line already has: name, position, rating, made up. */
-export interface BookMan { n: string; p: Position; r: number; g?: boolean }
+/** A man of an eleven, the shape the engine's opposition line already has: name, position, rating, made up.
+ *  `e` marks an EMPTY SHIRT (Round 1306, partialEleven): a place of an eleven the data has no man for. It
+ *  takes its share of a deal like any man and is never given a row: its goals are counted unnamed. */
+export interface BookMan { n: string; p: Position; r: number; g?: boolean; e?: true }
+
+/** The line a position plays in. The engine hands its own grouping in (groupOf): never a second copy here. */
+export type BookLineOf = (pos: Position) => 'GK' | 'DEF' | 'MID' | 'ATT';
 
 /** One man's league season: goals, assists, clean sheets, and 1 when the game made him up. Always four numbers. */
 export type BookRow = [goals: number, assists: number, cleanSheets: number, gen: number];
@@ -41,7 +46,8 @@ export interface BookClub {
   m: Record<string, BookRow>;
   /** Goals FOR this club that were own goals: nobody's goal. */
   og: number;
-  /** Goals FOR this club with nobody to name: no named eleven, a scorer nobody can place, or the row cap. */
+  /** Goals FOR this club with nobody to name: a place of its eleven the data has no man for (an empty
+   *  shirt, or a club with no roster man at all), a scorer nobody can place, or the row cap. */
   u: number;
 }
 
@@ -128,6 +134,68 @@ export function readBook(raw: unknown, stamp: string): LeagueBook | null {
     if (!Array.isArray(pair) || pair.length !== 2 || typeof pair[0] !== 'string' || !isCount(pair[1])) return null;
   }
   return book;
+}
+
+/** The outfield places of an eleven, by line: the shape every full roster is picked in (four, four, two). */
+const PLACES = { DEF: 4, MID: 4, ATT: 2 } as const;
+const OUTFIELD_PLACES = 10;
+/** The position an empty shirt stands in, by the line it fills. */
+const SHIRT_POS = { ATT: 'ST', MID: 'CM', DEF: 'CB' } as const;
+
+/**
+ * Round 1306. The eleven of a club that cannot field a named one: THE MEN ITS ROSTER HAS, in the places a
+ * full eleven would give them, and an EMPTY SHIRT in every outfield place the roster cannot fill. A real
+ * man is then dealt the share his place in a full eleven earns and never the goals of the men the data
+ * does not have: with every goal dealt over the roster alone, a club with one man on file would give him
+ * every goal it scores, a number invented for a real person.
+ *
+ *  - null when the roster holds nobody: such a club stays wholly unnamed.
+ *  - the keeper is the roster's best rated one, or null: a missing keeper is nobody, never a shirt.
+ *  - the named outfield men are taken the way a full eleven is (by rating, a name once): four of the back
+ *    line, four of midfield, two forwards, then the best outfield men left, up to ten.
+ *  - every place still open is an empty shirt. The men of the last take cover the open places from the
+ *    back (defence, then midfield, then attack), so the shirts stand in the heaviest lines still short: a
+ *    striker's shirt for a forward's place, a central midfielder's, a centre back's. A shirt is rated at
+ *    the club's strength (the engine's own number for the men it cannot see) and named `?1`, `?2`, so two
+ *    of them are told apart inside a deal; no row key can begin with that mark.
+ *  - the list handed back is the named men in the order taken, then the shirts, forwards' first.
+ * `lineOf` is the engine's own grouping, handed in. Pure: no roll, and the roster is not changed.
+ */
+export function partialEleven(roster: readonly BookMan[], strength: number, lineOf: BookLineOf): { keeper: BookMan | null; outfield: BookMan[] } | null {
+  if (!roster.length) return null;
+  const byRating = [...roster].sort((a, b) => b.r - a.r);
+  const taken = new Set<string>();
+  const outfield: BookMan[] = [];
+  const take = (want: (m: BookMan) => boolean, count: number): number => {
+    let got = 0;
+    for (const m of byRating) {
+      if (got >= count || outfield.length >= OUTFIELD_PLACES) break;
+      if (taken.has(m.n) || !want(m)) continue;
+      outfield.push(m);
+      taken.add(m.n);
+      got += 1;
+    }
+    return got;
+  };
+  const keeper = byRating.find(m => m.p === 'GK') ?? null;
+  if (keeper) taken.add(keeper.n);
+  const open = {
+    DEF: PLACES.DEF - take(m => lineOf(m.p) === 'DEF', PLACES.DEF),
+    MID: PLACES.MID - take(m => lineOf(m.p) === 'MID', PLACES.MID),
+    ATT: PLACES.ATT - take(m => lineOf(m.p) === 'ATT', PLACES.ATT),
+  };
+  let cover = take(m => m.p !== 'GK', OUTFIELD_PLACES);
+  for (const line of ['DEF', 'MID', 'ATT'] as const) {
+    const filled = Math.min(open[line], cover);
+    open[line] -= filled;
+    cover -= filled;
+  }
+  const rating = Math.round(strength);
+  let shirts = 0;
+  for (const line of ['ATT', 'MID', 'DEF'] as const) {
+    for (let i = 0; i < open[line]; i += 1) outfield.push({ n: `?${++shirts}`, p: SHIRT_POS[line], r: rating, e: true });
+  }
+  return { keeper, outfield };
 }
 
 /** One weighted pick on a roll already drawn. A list with no weight at all falls back to an even pick. */
@@ -224,6 +292,9 @@ function clubOf(book: LeagueBook, club: string): BookClub | null {
 /** The row of a man, made on his first credit. Null at the row cap, unless he is exempt (a keeper always
  *  gets his), and null when the save holds something under his key that is not a row (see clubOf). */
 function rowOf(entry: BookClub, man: BookMan, exempt = false): BookRow | null {
+  /* An empty shirt is nobody, whatever a caller does with it: no goal, no assist and no clean sheet of
+     its own ever finds a row (creditGoal then counts the goal unnamed and pays no assist for it). */
+  if (man.e) return null;
   const key = rowKey(man);
   const have = entry.m[key] as unknown;
   if (Array.isArray(have)) return have as BookRow;

@@ -60,6 +60,19 @@
  *   dailies  Manager Hot Seat (four dates, played to a verdict, handed over to Club Manager and played
  *            on) and Deadline Day (three dates): no state ever carries a book, and every state is byte
  *            equal to the reference engines' for the same date
+ *   thin     Round 1306: a club that cannot field a named eleven is dealt over THE MEN ITS ROSTER HAS in
+ *            the places a full eleven would give them, with an empty shirt (rated at the club's strength,
+ *            never given a row) in every place it cannot fill. (i) at each season's end the clean sheets
+ *            on the rows of such a club's keepers are the matches it conceded nothing in while its roster
+ *            held a keeper, counted from the table, the ones against me included; (ii) every row such a
+ *            club gains is a man of its roster under that position, and no row key of any club begins
+ *            with the empty shirt's mark; (iii) the deal follows the weight for such a club too: of its
+ *            goals against other clubs, the count on named rows against what the harness's OWN copy of
+ *            the partial eleven and of the table says, inside four standard deviations; (iv) what was
+ *            not meant to change (needs BOOK_BASE): the entry of every rival club that had an eleven all
+ *            season is byte equal, at each season's end, to the base commit's; (v) printed: the share on
+ *            record and the top scorer of each league of the fleet. The first law for these clubs is
+ *            section law's, as for every club
  * Outside section stream "the reference engines" are the engine with the book out and, with BOOK_BASE,
  * the base commit; each pair is played on two FRESH copies of the bundles asked the same things in the
  * same order, because the engine numbers its youth players, press questions and messages as it goes.
@@ -101,6 +114,12 @@
  *   seasonstamp   the season's number is put back into the stamp     -> doors
  *   strip         the Hot Seat's strip of the book is taken out      -> dailies
  *   stripdeadline Deadline Day's strip is taken out                  -> dailies
+ *   nofill        a partial eleven gets no empty shirt: every goal of a thin club lands on the men its
+ *                 roster has                                         -> thin (iii)
+ *   shirtrow      an empty shirt is given a row like any man         -> thin (ii)
+ *   thinsheet     a thin club's clean sheet against ME is not written down -> thin (i)
+ *   thinall       every club is routed through the partial eleven: the same men in another order, so
+ *                 the same roll names another man (needs BOOK_BASE)  -> thin (iv)
  *
  * MEASURED: see the block above PURPOSE_FLOOR.
  *
@@ -154,6 +173,8 @@ const BOOK_OFF = [
   { file: ENGINE, from: NOTE_MINE, to: '' },
   { file: ENGINE, from: NOTE_RESULT, to: '', n: 2 },
 ];
+/* The line of noteBookSide that picks a club's eleven (null for a club that cannot field a named one). */
+const SIDE_XI = '  const xi = pickOppSquad(roster)?.xi ?? null;';
 /* The line of noteBookMine that credits a report's line and decides whether its assist is dealt. */
 const MINE_GATE = '    if (!creditGoal(book, opp, man) || !man || line.penalty || line.freeKick) return;';
 const SCORER_PICK = ': pickWeighted(outfield, m => goalWeight(m.p, m.r), scorerRoll);';
@@ -163,10 +184,10 @@ const TWO_MAN = ": ((men, roll) => { const two = men.filter(m => !['CB', 'LB', '
  *  that go red with it for the same reason and are allowed to (the law is checked in four sections, and the
  *  weight table is what the deal is judged against) } */
 const CONTROLS = {
-  weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes'] },
+  weight: { patch: [{ file: WEIGHT, from: "pos === 'ST' || pos === 'CF' ? 5 :", to: "pos === 'ST' || pos === 'CF' ? 8 :" }], red: 'stream', needs: 'base', also: ['shapes', 'thin'] },
   mathrandom: { patch: [{ file: BOOK, from: '    const scorerRoll = rng();', to: '    const scorerRoll = Math.random();' }], red: 'stream' },
-  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors'] },
-  byeweek: { patch: [{ file: ENGINE, from: NOTE_BYE, to: '' }], red: 'law', also: ['shapes'] },
+  dropmine: { patch: [{ file: ENGINE, from: NOTE_MINE, to: '' }], red: 'law', also: ['names', 'oldsave', 'doors', 'thin'] },
+  byeweek: { patch: [{ file: ENGINE, from: NOTE_BYE, to: '' }], red: 'law', also: ['shapes', 'thin'] },
   cleanside: { patch: [{ file: ENGINE, from: '  if (against === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));', to: '  if (goals === 0) creditCleanSheet(book, club, bookKeeper(xi), bookBacks(xi));' }], red: 'law' },
   bought: { patch: [{ file: ENGINE, from: '  const notTheirs = mySquadNames(state);', to: '  const notTheirs = NO_NAMES;' }], red: 'names' },
   wrongman: { patch: [{ file: ENGINE, from: '    let man: OppXiLine | null = bookNamed(there, line.name) ?? bookNamed(theirs, line.name);', to: "    let man: OppXiLine | null = there.find(p => p.p !== 'GK') ?? bookNamed(theirs, line.name);" }], red: 'names' },
@@ -174,8 +195,8 @@ const CONTROLS = {
   offbyone: { patch: [{ file: ENGINE, from: '  const lines = oppScorers.slice(0, oppGoals);', to: '  const lines = oppScorers.slice(0, Math.max(0, oppGoals - 1));' }], red: 'names' },
   penassistmine: { patch: [{ file: ENGINE, from: MINE_GATE, to: '    if (!creditGoal(book, opp, man) || !man) return;' }], red: 'names', also: ['shapes'] },
   assistbench: { patch: [{ file: ENGINE, from: '    const assist = dealAssist(`${key}|${i}`, man, there, rules);', to: '    const assist = dealAssist(`${key}|${i}`, man, theirs, rules);' }], red: 'names' },
-  twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }, { file: BOOK, from: '  const taker = rules.taker ? takerOf(outfield) : null;', to: '  const taker = null;' }], red: 'shapes' },
-  flat: { patch: [{ file: BOOK, from: SCORER_PICK, to: ': pickWeighted(outfield, () => 1, scorerRoll);' }], red: 'shapes' },
+  twoman: { patch: [{ file: BOOK, from: SCORER_PICK, to: TWO_MAN }, { file: BOOK, from: '  const taker = rules.taker ? takerOf(outfield) : null;', to: '  const taker = null;' }], red: 'shapes', also: ['thin'] },
+  flat: { patch: [{ file: BOOK, from: SCORER_PICK, to: ': pickWeighted(outfield, () => 1, scorerRoll);' }], red: 'shapes', also: ['thin'] },
   penassist: { patch: [{ file: BOOK, from: "assistFrom(rng, kind === 'open' ? scorer : null, outfield, rules);", to: "assistFrom(rng, kind === 'og' ? null : scorer, outfield, rules);" }], red: 'shapes' },
   noog: { patch: [{ file: BOOK, from: ": ownGoalTagged(`${key}|${i}|og`, rules.ownGoalOneIn) ? 'og' : 'open';", to: ": 'open';" }], red: 'shapes' },
   keyindex: { patch: [{ file: BOOK, from: '    const rng = keyedRng(`${key}|${i}`);', to: '    const rng = keyedRng(key);' }], red: 'shapes' },
@@ -184,6 +205,10 @@ const CONTROLS = {
   seasonstamp: { patch: [{ file: ENGINE, from: '`${leagueId}|${bookSalt(state.leagueClubs)}`;', to: '`${state.season}|${leagueId}|${bookSalt(state.leagueClubs)}`;' }], red: 'doors' },
   strip: { patch: [{ file: HOT, from: '  delete s.leagueBook;', to: '' }], red: 'dailies' },
   stripdeadline: { patch: [{ file: DEADLINE, from: '    delete state0.leagueBook;', to: '' }], red: 'dailies' },
+  nofill: { patch: [{ file: BOOK, from: '    for (let i = 0; i < open[line]; i += 1) outfield.push({ n: `?${++shirts}`, p: SHIRT_POS[line], r: rating, e: true });', to: '    void shirts;' }], red: 'thin' },
+  shirtrow: { patch: [{ file: BOOK, from: '  if (man.e) return null;', to: '' }], red: 'thin' },
+  thinsheet: { patch: [{ file: ENGINE, from: '    if (thin) creditCleanSheet(book, opp, thin.keeper, thinBacks(thin.outfield));', to: '    void thin;' }], red: 'thin' },
+  thinall: { patch: [{ file: ENGINE, from: SIDE_XI, to: '  const xi = null as OppXiLine[] | null; void pickOppSquad;' }], red: 'thin', needs: 'base' },
 };
 if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) cannot(`unknown control "${CONTROL}"`);
 if (CONTROL && CONTROLS[CONTROL].needs === 'base' && !BASE) cannot(`control ${CONTROL} is judged against the base commit: set BOOK_BASE`);
@@ -309,6 +334,8 @@ async function engine(label, root, patches = []) {
 const PURPOSE_FLOOR = 1.5;
 /** Section shapes (iv) is judged on at least this many matches: see MEASURED above. */
 const MULTI_FLOOR = 1000;
+/** Section thin (iii) is judged on at least this many goals of clubs with no eleven: see MEASURED, Round 1306. */
+const THIN_FLOOR = 800;
 
 /* ---------- the seeded stream, counted ---------- */
 function seeded(seed) {
@@ -398,6 +425,50 @@ function expectedByLine(xi) {
 }
 
 /**
+ * Round 1306. The partial eleven of a club that cannot field a named one, AS THE HARNESS READS THE RULE (its
+ * own copy, on purpose, like the table above): the roster's best keeper or nobody; the named men taken by
+ * rating, a name once, four of the back line, four of midfield, two forwards, then the best outfield men
+ * left up to ten; those last men cover the open places from the back, and every place still open is an
+ * empty shirt at the club's strength, a striker's for a forward's place, a central midfielder's, a centre
+ * back's. Null for a roster that holds nobody.
+ */
+function thinEleven(roster, strength) {
+  if (!roster.length) return null;
+  const byR = [...roster].sort((a, b) => b.r - a.r);
+  const taken = new Set();
+  const named = [];
+  const keeper = byR.find(m => m.p === 'GK') ?? null;
+  if (keeper) taken.add(keeper.n);
+  const grab = (want, count) => {
+    let got = 0;
+    for (const m of byR) {
+      if (got >= count || named.length >= 10) break;
+      if (taken.has(m.n) || !want(m)) continue;
+      named.push(m); taken.add(m.n); got += 1;
+    }
+    return got;
+  };
+  const open = { DEF: 4 - grab(m => lineOf(m.p) === 'DEF', 4), MID: 4 - grab(m => lineOf(m.p) === 'MID', 4), ATT: 2 - grab(m => lineOf(m.p) === 'ATT', 2) };
+  let cover = grab(m => m.p !== 'GK', 10);
+  for (const l of ['DEF', 'MID', 'ATT']) { const f = Math.min(open[l], cover); open[l] -= f; cover -= f; }
+  const shirts = [];
+  for (const [l, pos] of [['ATT', 'ST'], ['MID', 'CM'], ['DEF', 'CB']]) {
+    for (let i = 0; i < open[l]; i++) shirts.push({ n: `?${shirts.length + 1}`, p: pos, r: Math.round(strength), e: true });
+  }
+  return { keeper, named, shirts };
+}
+/** The chance that one goal of a thin club against another club lands on a NAMED man's row: the open play
+ *  share of the named men's weight, plus the set piece share when the taker (the heaviest of the ten, a
+ *  shirt's mark sorting before any name on a tie) is a named man. An own goal is on nobody's row. */
+function thinNamedShare(thin) {
+  const ten = [...thin.named, ...thin.shirts];
+  const total = ten.reduce((s, m) => s + W(m), 0);
+  if (!(total > 0)) return 0;
+  const taker = takerMan(ten);
+  return P_OPEN * thin.named.reduce((s, m) => s + W(m), 0) / total + (taker && !taker.e ? P_SET : 0);
+}
+
+/**
  * One career on one seeded stream: `seasons` whole seasons, every match a quick sim, summers included.
  * Hooks (all optional): start(cm) makes the first state; opened(s, seasonIndex) at each season start;
  * peek(s) before and entry(before, after, result, seasonIndex) after every calendar entry; seasonEnd(s,
@@ -439,7 +510,7 @@ function playCareer(mod, club, eraId, seed, hooks = {}, seasons = SEASONS) {
 }
 
 /* ---------- the sections ---------- */
-const SECTIONS = ['stream', 'law', 'names', 'shapes', 'oldsave', 'doors', 'dailies'];
+const SECTIONS = ['stream', 'law', 'names', 'shapes', 'oldsave', 'doors', 'dailies', 'thin'];
 const red = new Map(SECTIONS.map(s => [s, []]));
 const checked = new Map(SECTIONS.map(s => [s, 0]));
 const fail = (section, message) => { red.get(section).push(message); };
@@ -461,6 +532,12 @@ const newAcc = () => ({
   /* A league with an odd number of clubs: weeks I did not play in which the rest of the round did, club
      entries that held two matches of one club, and club seasons whose clean sheets the table could not tell. */
   byeWeeks: 0, twoInOne: 0, untold: 0, cover: [],
+  /* Round 1306, clubs with no named eleven: their goals against other clubs, how many of them a named row
+     took, what the harness's own copy of the rule expects of that and its variance; the club seasons whose
+     keeper rows were held against the table, the clean sheets on them, and the ones kept against me. */
+  thinDeal: { goals: 0, named: 0, exp: 0, vr: 0, exact: 0 }, thinKeepers: { clubSeasons: 0, sheets: 0, vsMe: 0 },
+  /* The book's entries at each season's end and the clubs that were without an eleven at any entry of it. */
+  ends: [],
 });
 const played = r => r.w + r.d + r.l;
 const rivalsOf = s => s.leagueClubs.filter(c => c !== s.clubName);
@@ -568,10 +645,13 @@ function watcher(mod, label, acc, opts = {}) {
   let untold = new Map();
   let myKept = 0;
   let leagueId = '';
+  /* Round 1306: the clubs that were without a named eleven at any entry of this season. */
+  let thinSeen = new Set();
   const hooks = {
     opened(s, seasonIndex) {
       keptByClub = new Map();
       untold = new Map();
+      thinSeen = new Set();
       myKept = 0;
       leagueId = cm.careerLeagueOf(s).id;
       tick('law');
@@ -580,10 +660,13 @@ function watcher(mod, label, acc, opts = {}) {
       else if (Object.keys(book.c).length || book.my.length) fail('law', `${label}: the book of season ${seasonIndex + 1} did not open empty`);
     },
     peek(s) {
+      const xi = new Map(rivalsOf(s).map(c => [c, cm.leagueBookEleven(s, c)]));
       return {
         table: new Map(s.table.map(r => [r.club, { p: played(r), gf: r.gf, ga: r.ga }])),
         mine: cm.mySquadNames(s),
-        xi: new Map(rivalsOf(s).map(c => [c, cm.leagueBookEleven(s, c)])),
+        xi,
+        /* A club with no eleven: its partial eleven by the harness's own copy of the rule (null: no roster man). */
+        thin: new Map(rivalsOf(s).filter(c => !xi.get(c)).map(c => [c, thinEleven(cm.oppRosterFor(s, c), cm.strengthOf(s, c))])),
         book: s.leagueBook ? JSON.parse(JSON.stringify(s.leagueBook)) : null,
       };
     },
@@ -623,8 +706,12 @@ function watcher(mod, label, acc, opts = {}) {
         const elsewhere = games - vsMe;
         mostGames = Math.max(mostGames, games);
         if (games > 1) acc.twoInOne += 1;
-        if (xi) {
+        /* Round 1306: a club with no eleven whose roster holds a keeper has its clean sheets written down too. */
+        const thin = xi ? null : (before.thin.get(club) ?? null);
+        if (!xi) thinSeen.add(club);
+        if (xi || thin?.keeper) {
           let kept = vsMe && mineOnThem === 0 ? 1 : 0;
+          if (kept && !xi) acc.thinKeepers.vsMe += 1;
           if (elsewhere > 0 && now.ga - was.ga - mineOnThem === 0) kept += elsewhere;
           else if (elsewhere > 1) untold.set(club, (untold.get(club) ?? 0) + elsewhere - 1);
           if (kept) keptByClub.set(club, (keptByClub.get(club) ?? 0) + kept);
@@ -660,10 +747,12 @@ function watcher(mod, label, acc, opts = {}) {
           const pos = key.slice(bar + 1);
           if (gained && row[0] !== old[0]) gained.goalsBy.set(name, (gained.goalsBy.get(name) ?? 0) + row[0] - old[0]);
           if (gained && row[1] !== old[1]) gained.assistsBy.set(name, (gained.assistsBy.get(name) ?? 0) + row[1] - old[1]);
-          tick('names');
-          /* He is on that club's roster as this save sees it, under that position ... */
+          /* He is on that club's roster as this save sees it, under that position (for a club with no
+             eleven this is section thin's: an empty shirt given a row is exactly a man on no roster) ... */
+          const rosterSection = xi ? 'names' : 'thin';
+          tick(rosterSection);
           roster ??= cm.oppRosterFor(after, club, EMPTY);
-          if (!roster.some(p => p.n === name && p.p === pos)) fail('names', `${label} ${where}: ${name} (${pos}) has a row at ${club} and is not on its roster`);
+          if (!roster.some(p => p.n === name && p.p === pos)) fail(rosterSection, `${label} ${where}: ${name} (${pos}) has a row at ${club} and is not on its roster`);
           /* ... and he was not one of mine when it was written. */
           if (before.mine.has(name) && mineNow.has(name)) fail('names', `${label} ${where}: ${name} is in my squad and was credited for ${club}`);
           got[lineOf(pos)] += row[0] - old[0];
@@ -681,6 +770,18 @@ function watcher(mod, label, acc, opts = {}) {
             ...gained, og: entry.og - prior.og, u: entry.u - prior.u, rows: Object.keys(entry.m).length, mineBefore: before.mine, mineNow,
           });
         } else if (gained) acc.report.twice += 1;
+        /* Round 1306, thin (iii). The goals of a club with no eleven against other clubs: how many a named
+           row took, against the harness's own copy of the partial eleven and of the table for that roster. */
+        if (club !== myOpp && !xi && thin && scored > 0) {
+          const p = thinNamedShare(thin);
+          const onRows = got.ATT + got.MID + got.DEF + got.GK;
+          acc.thinDeal.goals += scored;
+          acc.thinDeal.named += onRows;
+          acc.thinDeal.exp += scored * p;
+          acc.thinDeal.vr += scored * p * (1 - p);
+          tick('thin');
+          if (p === 0 && onRows > 0) { acc.thinDeal.exact += 1; fail('thin', `${label} ${where}: ${club} has no named outfield man and ${onRows} of its ${scored} goals found a row`); }
+        }
         /* A match between two other clubs, by a club with an eleven: the deal against the harness's own table. */
         if (club !== myOpp && xi && scored > 0) {
           const exp = expectedByLine(xi);
@@ -709,13 +810,24 @@ function watcher(mod, label, acc, opts = {}) {
       if (!book) return;
       /* The clean sheets on a club's keeper rows are the matches it conceded nothing in, with an eleven named. */
       for (const club of rivalsOf(s)) {
-        tick('law');
+        /* Round 1306, thin (i): a club that was without an eleven at any entry of the season is section
+           thin's (its keeper rows count the matches it conceded nothing in while its roster held a keeper). */
+        const section = thinSeen.has(club) ? 'thin' : 'law';
+        tick(section);
         const onKeepers = Object.entries(book.c[club]?.m ?? {}).filter(([key]) => key.endsWith('|GK')).reduce((n, [, row]) => n + row[2], 0);
         const kept = keptByClub.get(club) ?? 0;
         const maybe = untold.get(club) ?? 0;
         if (maybe) acc.untold += 1;
-        if (onKeepers < kept || onKeepers > kept + maybe) fail('law', `${label} ${where}: ${club} kept ${kept}${maybe ? ` to ${kept + maybe}` : ''} clean sheets by the table, its keepers hold ${onKeepers}`);
+        if (section === 'thin' && (kept || onKeepers)) { acc.thinKeepers.clubSeasons += 1; acc.thinKeepers.sheets += onKeepers; }
+        if (onKeepers < kept || onKeepers > kept + maybe) fail(section, `${label} ${where}: ${club} kept ${kept}${maybe ? ` to ${kept + maybe}` : ''} clean sheets by the table, its keepers hold ${onKeepers}`);
       }
+      /* Thin (ii): an empty shirt is nobody. No row key of any club begins with its mark. */
+      for (const [club, entry] of Object.entries(book.c)) {
+        tick('thin');
+        const shirt = Object.keys(entry?.m ?? {}).find(key => key.startsWith('?'));
+        if (shirt) fail('thin', `${label} ${where}: ${club} holds a row under an empty shirt's mark (${shirt})`);
+      }
+      acc.ends.push({ label, season, thinSeen: new Set(thinSeen), c: JSON.parse(JSON.stringify(book.c)), rivals: rivalsOf(s) });
       /* Mine: a league clean sheet has at least one keeper of mine on it, and no man more than there were. */
       tick('law');
       const mineAll = book.my.reduce((n, pair) => n + pair[1], 0);
@@ -771,7 +883,12 @@ function seasonBoards(mod, s, book, acc, myKept) {
   const byDeeds = [...backs].sort((a, b) => (b.goals + b.assists) - (a.goals + a.assists) || (clubCs.get(b.club) ?? 0) - (clubCs.get(a.club) ?? 0) || place(a.club) - place(b.club) || (a.name < b.name ? -1 : 1)).slice(0, 4);
   const keepers = all.filter(r => r.pos === 'GK').sort((a, b) => b.cleanSheets - a.cleanSheets);
   const sheetBoard = [...all].filter(r => r.cleanSheets > 0).sort((a, b) => b.cleanSheets - a.cleanSheets || (a.name < b.name ? -1 : 1)).slice(0, 10);
+  /* Round 1306: how much of the rivals' goals is on record (a named row or an own goal), and the best rival. */
+  let onRecord = 0;
+  let unnamed = 0;
+  for (const club of rivalsOf(s)) { const g = mod.book.bookClubGoals(book, club); onRecord += g.rows + g.og; unnamed += g.u; }
   acc.seasons.push({
+    onRecord, unnamed, bootRival: Math.max(0, ...rivalRows.map(r => r.goals)),
     league: cm.careerLeagueOf(s).id, clubs: s.leagueClubs.length,
     bootBook: bookTop[0]?.goals ?? 0, bootRace: raceTop[0]?.goals ?? 0, bootLine: bookTop[0] ? lineOf(bookTop[0].pos) : null,
     bookAtt: att(bookTop), raceAtt: att(raceTop), bookTop: bookTop.length, raceTop: raceTop.length,
@@ -785,8 +902,9 @@ function seasonBoards(mod, s, book, acc, myKept) {
 /* The literal reading of "a club with no eleven is dealt over the men it has": every goal of such a club to
    the men its roster holds, by the weight, with no empty shirt. Measured beside the rule the engine follows,
    never shipped. */
-const SIDE_XI = '  const xi = leagueBookEleven(state, club, mine);';
-const LITERAL = [{ file: ENGINE, from: SIDE_XI, to: "  const xi = leagueBookEleven(state, club, mine) ?? (men => (men.length ? men : null))(oppRosterFor(state, club, mine).map(p => ({ n: p.n, p: p.p, r: p.r, ...(p.g ? { g: true } : {}) })));" }];
+const LITERAL = [{ file: ENGINE, from: SIDE_XI, to: "  const xi = pickOppSquad(roster)?.xi ?? (men => (men.length ? men : null))(roster.map(p => ({ n: p.n, p: p.p, r: p.r, ...(p.g ? { g: true } : {}) })));" }];
+/* The rule before Round 1306, for the measuring mode: a club with no eleven is wholly unnamed. */
+const OLD_RULE = [{ file: BOOK, from: '  if (!roster.length) return null;', to: '  if (roster.length >= 0) return null;' }];
 
 /** One league season of one save, read the moment before finishSeason: what the lead rules on. */
 function readLeagueSeason(mod, s) {
@@ -803,11 +921,17 @@ function readLeagueSeason(mod, s) {
   const gaps = [];
   for (const club of rivalsOf(s)) {
     const xi = cm.leagueBookEleven(s, club, mine);
-    if (!xi) { const men = cm.oppRosterFor(s, club, mine); thin.push({ club, men: men.length, keepers: men.filter(p => p.p === 'GK').length }); continue; }
+    if (!xi) {
+      const men = cm.oppRosterFor(s, club, mine);
+      /* The critic's correction 6: is the heaviest man of its partial eleven (its taker) an empty shirt? */
+      const part = thinEleven(men, cm.strengthOf(s, club));
+      thin.push({ club, men: men.length, keepers: men.filter(p => p.p === 'GK').length, shirts: part ? part.shirts.length : 10, shirtHeaviest: part ? Boolean(takerMan([...part.named, ...part.shirts])?.e) : true });
+      continue;
+    }
     /* Critic's advice 15: is the club's strength on the scale of its eleven's ratings? */
     gaps.push(cm.strengthOf(s, club) - mean(xi.filter(p => p.p !== 'GK').map(p => p.r)));
   }
-  return { league: cm.careerLeagueOf(s).id, clubs: s.leagueClubs.length, rows, og, u, rivalTop, raceTop, myTop, thin, gaps };
+  return { league: cm.careerLeagueOf(s).id, clubs: s.leagueClubs.length, rows, og, u, rivalTop, raceTop, myTop, thin, gaps, bytes: JSON.stringify(s.leagueBook).length, saveBytes: JSON.stringify(s).length };
 }
 
 async function measureLeagues(arms) {
@@ -840,11 +964,11 @@ async function measureLeagues(arms) {
     const cols = arms.map(([name], ai) => {
       const xs = perArm[ai].filter(x => x && !x.error);
       const sum = xs.reduce((a, x) => ({ rows: a.rows + x.rows, og: a.og + x.og, u: a.u + x.u }), { rows: 0, og: 0, u: 0 });
-      return { name, share: share(sum), top: mean(xs.map(x => x.rivalTop)), mineLead: xs.filter(x => x.myTop > x.rivalTop).length, n: xs.length };
+      return { name, share: share(sum), top: mean(xs.map(x => x.rivalTop)), mineLead: xs.filter(x => x.myTop > x.rivalTop).length, n: xs.length, bytes: Math.round(mean(xs.map(x => x.bytes))), saveBytes: Math.round(mean(xs.map(x => x.saveBytes))) };
     });
     const xs0 = perArm[0].filter(x => x && !x.error);
     table.push({ era, id: first.league, cols });
-    console.log(`measure ${era.padEnd(7)} ${first.league.padEnd(14)} ${String(first.clubs).padStart(2)} clubs, no eleven ${String(first.thin.length).padStart(2)} of ${first.clubs - 1}${sizes.length ? ` (men ${sizes[0]} to ${sizes[sizes.length - 1]}, ${first.thin.filter(t => !t.keepers).length} with no keeper)` : ''}: ${cols.map(c => `${c.name} ${c.share} in 100, best rival ${fmt(c.top)}, mine leads ${c.mineLead} of ${c.n}`).join('; ')}; old race best rival ${fmt(mean(xs0.map(x => x.raceTop)))} (mine leads ${xs0.filter(x => x.myTop > x.raceTop).length} of ${xs0.length}), my best ${fmt(mean(xs0.map(x => x.myTop)))}`);
+    console.log(`measure ${era.padEnd(7)} ${first.league.padEnd(14)} ${String(first.clubs).padStart(2)} clubs, no eleven ${String(first.thin.length).padStart(2)} of ${first.clubs - 1}${sizes.length ? ` (men ${sizes[0]} to ${sizes[sizes.length - 1]}, ${first.thin.filter(t => !t.keepers).length} with no keeper, ${first.thin.filter(t => t.shirtHeaviest).length} whose heaviest man is an empty shirt, ${first.thin.reduce((n, t) => n + t.shirts, 0)} shirts in all)` : ''}: ${cols.map(c => `${c.name} ${c.share} in 100, best rival ${fmt(c.top)}, mine leads ${c.mineLead} of ${c.n}, book ${c.bytes} bytes of a save of ${c.saveBytes}`).join('; ')}; old race best rival ${fmt(mean(xs0.map(x => x.raceTop)))} (mine leads ${xs0.filter(x => x.myTop > x.raceTop).length} of ${xs0.length}), my best ${fmt(mean(xs0.map(x => x.myTop)))}`);
   });
   for (const [ai, [name]] of arms.entries()) {
     const shares = table.map(t => t.cols[ai].share).sort((a, b) => a - b);
@@ -876,8 +1000,12 @@ for (const pos of ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM
 if (process.env.BOOK_MEASURE === 'leagues') {
   if (CONTROL) cannot('the measuring mode runs with no control');
   let literal;
-  try { literal = await engine('literal', ROOT, LITERAL); } catch (e) { cannot(String(e?.message ?? e)); }
-  await measureLeagues([['the rule', candidate], ['literal', literal]]);
+  let oldRule;
+  try {
+    literal = await engine('literal', ROOT, LITERAL);
+    oldRule = await engine('oldrule', ROOT, OLD_RULE);
+  } catch (e) { cannot(String(e?.message ?? e)); }
+  await measureLeagues([['before the round', oldRule], ['the rule', candidate], ['literal', literal]]);
   process.exit(0);
 }
 
@@ -943,10 +1071,14 @@ const compareFaces = (name, faces) => {
   console.log(`        the book's own cost: ${sample.length} careers x ${SEASONS} seasons took ${on}ms with the book and ${off}ms with it out (${fmt(100 * (on - off) / Math.max(1, off))}% more)`);
 }
 let base = null;
+/* Round 1306, thin (iv): the base commit's book entries at each season's end, by career and season. */
+const baseEnds = new Map();
 if (BASE) {
   try { base = await engine('base', BASE); } catch (e) { cannot(`the base tree at ${BASE} did not build: ${String(e?.message ?? e)}`); }
   const n = fleet.length * SEASONS * 2;
-  console.log(`stream  ${compareFaces('base', fleet.map(f => playCareer(base, f.club, f.era, f.seed)))} of ${n} faces equal to the source of the base commit`);
+  console.log(`stream  ${compareFaces('base', fleet.map(f => playCareer(base, f.club, f.era, f.seed, {
+    seasonEnd(s, season) { baseEnds.set(`${f.club} (${f.era}, seed ${f.seed})|${season}`, JSON.parse(JSON.stringify(s.leagueBook?.c ?? null))); },
+  })))} of ${n} faces equal to the source of the base commit`);
 } else {
   console.log('stream  base arm NOT RUN: set BOOK_BASE to a worktree of the base commit');
 }
@@ -1003,6 +1135,52 @@ const purposeRise = mean(acc.seasons.map(x => x.bookAtt - x.raceAtt));
     if (t.bare) console.log(`        no named eleven in ${league}: ${t.bare} of ${t.weeks} club weeks, ${t.clubs.size} of ${t.rivals.size} rival clubs seen (${[...t.clubs.values()].sort().slice(0, 6).join('; ')}${t.clubs.size > 6 ? '; ...' : ''})`);
   }
   console.log(`        top ten of the Goals board held by forwards and wingers: ${fmt(mean(acc.seasons.map(x => x.bookAtt)), 2)} on the book, ${fmt(mean(acc.seasons.map(x => x.raceAtt)), 2)} on the old race, rise ${fmt(purposeRise, 2)} (floor ${PURPOSE_FLOOR}) over ${acc.seasons.length} seasons`);
+}
+
+/* ---------- section thin (Round 1306): a club with no named eleven ---------- */
+{
+  const t = acc.thinDeal;
+  /* (iii) THE DEAL FOLLOWS THE WEIGHT FOR A THIN CLUB TOO. A sum of unlike chances (each club its own
+     roster), so its own variance, the way shapes (iv) is judged. */
+  tick('thin');
+  const zt = (t.named - t.exp) / Math.max(1e-9, Math.sqrt(t.vr));
+  if (t.vr > 0 && Math.abs(zt) > 4) fail('thin', `${t.named} of ${t.goals} goals of clubs with no eleven against other clubs are on a named row, the harness's own partial eleven says ${fmt(t.exp)} (z ${fmt(zt, 2)})`);
+  tick('thin');
+  if (t.goals < THIN_FLOOR) fail('thin', `only ${t.goals} goals of clubs with no eleven against other clubs: too few to judge a share on (floor ${THIN_FLOOR})`);
+  /* (i) must have had something to hold: a thin club with a rostered keeper that kept one against me. */
+  tick('thin');
+  if (!acc.thinKeepers.clubSeasons || !acc.thinKeepers.vsMe) fail('thin', `the keeper rows of ${acc.thinKeepers.clubSeasons} club seasons with no eleven were held against the table, ${acc.thinKeepers.vsMe} of their clean sheets kept against me: nothing to judge on`);
+  /* (iv) WHAT WAS NOT MEANT TO CHANGE: a club that had an eleven at every entry of a season. */
+  let same = 0;
+  let compared = 0;
+  if (base && CONTROL !== 'weight') {
+    for (const end of acc.ends) {
+      const theirs = baseEnds.get(`${end.label}|${end.season}`);
+      for (const club of end.rivals) {
+        if (end.thinSeen.has(club)) continue;
+        tick('thin');
+        compared += 1;
+        if (JSON.stringify(end.c[club] ?? null) === JSON.stringify(theirs?.[club] ?? null)) same += 1;
+        else fail('thin', `${end.label} at the end of season ${end.season + 1}: the book's entry of ${club}, which had an eleven all season, is not the base commit's`);
+      }
+    }
+    tick('thin');
+    if (!compared) fail('thin', 'no club with an eleven all season was compared with the base commit');
+  }
+  console.log(`thin    clubs with no eleven, against other clubs: ${t.named} of ${t.goals} goals on a named row = ${fmt(100 * t.named / Math.max(1, t.goals))}% (the harness's own partial eleven says ${fmt(100 * t.exp / Math.max(1, t.goals))}%, z ${fmt(zt, 2)}, floor ${THIN_FLOOR} goals)`);
+  console.log(`        keeper rows of ${acc.thinKeepers.clubSeasons} club seasons with no eleven held against the table (${acc.thinKeepers.sheets} clean sheets on them, ${acc.thinKeepers.vsMe} kept against me)`);
+  console.log(base && CONTROL !== 'weight'
+    ? `        clubs with an eleven all season: ${same} of ${compared} entries byte equal to the base commit's at the season's end`
+    : '        thin (iv) NOT RUN: set BOOK_BASE to a worktree of the base commit');
+  /* (v) printed: the thin league beside the whole one of the same length (the brief's stop rule, kept as a
+     sanity print: a named man's edge over a shirt in his place is bounded, so it cannot fire by design). */
+  const boots = id => acc.seasons.filter(x => x.league === id).map(x => x.bootRival);
+  const se = xs => { const m = mean(xs); return Math.sqrt(mean(xs.map(x => (x - m) ** 2)) / Math.max(1, xs.length)); };
+  const [thinBoots, wholeBoots] = [boots('bundesliga2'), boots('bundesliga')];
+  if (thinBoots.length && wholeBoots.length) {
+    const gap = mean(thinBoots) - mean(wholeBoots);
+    console.log(`        best rival total, the thin league against the whole one of the same length: bundesliga2 ${fmt(mean(thinBoots), 2)} (${thinBoots.length} seasons, standard error ${fmt(se(thinBoots), 2)}), bundesliga ${fmt(mean(wholeBoots), 2)} (${wholeBoots.length}, ${fmt(se(wholeBoots), 2)}): ${fmt(gap, 2)}, ${fmt(gap / Math.max(1e-9, Math.hypot(se(thinBoots), se(wholeBoots))), 2)} standard errors`);
+  }
 }
 
 /* ---------- section names: the man I bought gains nothing more for the club he left ---------- */
@@ -1308,7 +1486,9 @@ function printBoards(title, seasons) {
   console.log(title);
   for (const league of [...new Set(seasons.map(x => x.league))]) {
     const xs = seasons.filter(x => x.league === league);
-    console.log(`        ${league.padEnd(12)} ${xs[0].clubs} clubs, ${String(xs.length).padStart(2)} seasons: top scorer mean ${fmt(mean(xs.map(x => x.bootBook)))} (${xs.map(x => x.bootBook).join(' ')}), old race mean ${fmt(mean(xs.map(x => x.bootRace)))}, most assists mean ${fmt(mean(xs.map(x => x.assistTop)))}, leading keeper's clean sheets mean ${fmt(mean(xs.map(x => x.keeperTop)))}`);
+    const rec = xs.reduce((n, x) => n + x.onRecord, 0);
+    const all = rec + xs.reduce((n, x) => n + x.unnamed, 0);
+    console.log(`        ${league.padEnd(12)} ${xs[0].clubs} clubs, ${String(xs.length).padStart(2)} seasons: on record ${all ? Math.floor(100 * rec / all) : 100} in 100 rival goals, best rival mean ${fmt(mean(xs.map(x => x.bootRival)))}, top scorer mean ${fmt(mean(xs.map(x => x.bootBook)))} (${xs.map(x => x.bootBook).join(' ')}), old race mean ${fmt(mean(xs.map(x => x.bootRace)))}, most assists mean ${fmt(mean(xs.map(x => x.assistTop)))}, leading keeper's clean sheets mean ${fmt(mean(xs.map(x => x.keeperTop)))}`);
   }
   for (const [what, xs] of [['38 game leagues', seasons.filter(x => x.clubs === 20)], ['34 game leagues', seasons.filter(x => x.clubs === 18)], ['46 game leagues', seasons.filter(x => x.clubs === 24)], ['28 game leagues (15 clubs)', seasons.filter(x => x.clubs === 15)]]) {
     if (!xs.length) continue;

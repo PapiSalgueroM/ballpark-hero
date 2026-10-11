@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { goalWeight } from '@/lib/clubManagerGoalWeight';
 import {
   BOOK_ROWS_PER_CLUB, bookClubGoals, bookRows, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal,
-  creditMine, creditOwnGoal, dealAssist, dealGoals, liveBook, mineSheets, openBook, readBook, rowKey, takerOf,
-  type BookMan, type BookRules, type LeagueBook,
+  creditMine, creditOwnGoal, dealAssist, dealGoals, liveBook, mineSheets, openBook, partialEleven, readBook, rowKey, takerOf,
+  type BookLineOf, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 
 /* Round 1229. A made up eleven in the shape the engine names a rival in: a keeper, four at the back,
@@ -281,5 +281,112 @@ describe('the book', () => {
     expect(bookSalt(['A', 'B', 'C'])).toBe(bookSalt(['A', 'B', 'C']));
     expect(bookSalt(['A', 'B', 'C'])).not.toBe(bookSalt(['B', 'A', 'C']));
     expect(openBook('laliga|abc')).toEqual({ s: 'laliga|abc', c: {}, my: [] });
+  });
+});
+
+/* Round 1306. A club that cannot field a named eleven: the men its roster has, and empty shirts. The line
+   of a position is handed in by the engine; this is the test's own reading of it. Roles only, nobody real. */
+const LINE: BookLineOf = pos => (pos === 'GK' ? 'GK' : ['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(pos) ? 'DEF' : ['CDM', 'CM', 'CAM', 'LM', 'RM'].includes(pos) ? 'MID' : 'ATT');
+const shirtsOf = (men: readonly BookMan[]): string[] => men.filter(m => m.e).map(m => `${m.n} ${m.p} ${m.r}`);
+const namesOf = (men: readonly BookMan[]): string[] => men.filter(m => !m.e).map(m => m.n);
+
+describe('partialEleven', () => {
+  it('is nothing for a roster that holds nobody, and never gives a full roster a shirt', () => {
+    expect(partialEleven([], 75, LINE)).toBeNull();
+    const bench: BookMan[] = [{ n: 'Spare Back', p: 'CB', r: 70 }, { n: 'Spare Mid', p: 'CM', r: 71 }, { n: 'Spare Striker', p: 'ST', r: 72 }, { n: 'Second Keeper', p: 'GK', r: 60 }];
+    const full = partialEleven([...bench, ...XI], 80, LINE);
+    expect(full?.keeper?.n).toBe('Keeper');
+    expect(shirtsOf(full?.outfield ?? [])).toEqual([]);
+    /* The ten a full eleven is picked as: by rating, four of the back line, four of midfield, two forwards. */
+    expect(namesOf(full?.outfield ?? [])).toEqual(['Centre Back A', 'Centre Back B', 'Right Back', 'Left Back', 'Number Ten', 'Centre Mid', 'Holder', 'Wide Mid', 'Striker', 'Winger']);
+  });
+
+  it('puts an empty shirt in every place the roster cannot fill, the heaviest lines first, at the club\'s strength', () => {
+    /* A keeper, three at the back and two in midfield: one back, two midfielders and both forwards are missing. */
+    const short: BookMan[] = [XI[0], XI[1], XI[2], XI[3], XI[5], XI[6]];
+    const got = partialEleven(short, 74.6, LINE);
+    expect(got?.keeper?.n).toBe('Keeper');
+    expect(namesOf(got?.outfield ?? [])).toEqual(['Centre Back A', 'Centre Back B', 'Left Back', 'Centre Mid', 'Holder']);
+    expect(shirtsOf(got?.outfield ?? [])).toEqual(['?1 ST 75', '?2 ST 75', '?3 CM 75', '?4 CM 75', '?5 CB 75']);
+    expect(got?.outfield.length).toBe(10);
+    /* One man on file: he holds one place and nine are shirts. He is never handed the others' goals. */
+    const one = partialEleven([XI[10]], 61, LINE);
+    expect(one?.keeper).toBeNull();
+    expect(namesOf(one?.outfield ?? [])).toEqual(['Striker']);
+    expect(shirtsOf(one?.outfield ?? [])).toEqual(['?1 ST 61', '?2 CM 61', '?3 CM 61', '?4 CM 61', '?5 CM 61', '?6 CB 61', '?7 CB 61', '?8 CB 61', '?9 CB 61']);
+    /* A keeper and nobody else: he is the keeper and all ten outfield places are shirts. */
+    const alone = partialEleven([XI[0]], 70, LINE);
+    expect(alone?.keeper?.n).toBe('Keeper');
+    expect(namesOf(alone?.outfield ?? [])).toEqual([]);
+    expect(alone?.outfield.length).toBe(10);
+  });
+
+  it('lets the spare men cover the open places from the back, so the shirts stand up front', () => {
+    /* Six defenders and no keeper: four hold the back line, two cover two midfield places. */
+    const backs = ['A', 'B', 'C', 'D', 'E', 'F'].map<BookMan>((x, i) => ({ n: `Back ${x}`, p: 'CB', r: 80 - i }));
+    const got = partialEleven(backs, 72, LINE);
+    expect(got?.keeper).toBeNull();
+    expect(namesOf(got?.outfield ?? [])).toEqual(['Back A', 'Back B', 'Back C', 'Back D', 'Back E', 'Back F']);
+    expect(shirtsOf(got?.outfield ?? [])).toEqual(['?1 ST 72', '?2 ST 72', '?3 CM 72', '?4 CM 72']);
+    /* Sixteen outfield men and no keeper: ten named, no shirt at all. */
+    const many = Array.from<unknown, BookMan>({ length: 16 }, (_, i) => ({ n: `Man ${i}`, p: i % 3 === 0 ? 'CB' : i % 3 === 1 ? 'CM' : 'ST', r: 60 + i }));
+    const sixteen = partialEleven(many, 70, LINE);
+    expect(sixteen?.outfield.length).toBe(10);
+    expect(shirtsOf(sixteen?.outfield ?? [])).toEqual([]);
+  });
+
+  it('takes a name once, as a full eleven does, and leaves the roster as it found it', () => {
+    const roster: BookMan[] = [{ n: 'Twin', p: 'GK', r: 70 }, { n: 'Twin', p: 'ST', r: 90 }, { n: 'Other', p: 'ST', r: 60 }];
+    const before = JSON.stringify(roster);
+    const got = partialEleven(roster, 70, LINE);
+    expect(got?.keeper?.p).toBe('GK');
+    expect(namesOf(got?.outfield ?? [])).toEqual(['Other']);
+    expect(JSON.stringify(roster)).toBe(before);
+  });
+
+  it('never gives an empty shirt a row: its goal is unnamed, and it gets no assist and no clean sheet', () => {
+    const shirt: BookMan = { n: '?1', p: 'ST', r: 75, e: true };
+    const backShirt: BookMan = { n: '?2', p: 'CB', r: 75, e: true };
+    const book = fresh();
+    expect(creditGoal(book, 'Thin', shirt)).toBe(false);
+    creditAssist(book, 'Thin', shirt);
+    creditCleanSheet(book, 'Thin', { n: '?3', p: 'GK', r: 75, e: true }, [backShirt, XI[2]]);
+    expect(book.c.Thin).toEqual({ m: { [rowKey(XI[2])]: [0, 0, 1, 0] }, og: 0, u: 1 });
+    /* A whole deal over a partial eleven: the law holds, no key carries the mark, and a goal that went to a
+       shirt paid no assist (assists never outnumber the goals on rows). */
+    const part = partialEleven([XI[0], XI[2], XI[6], XI[10]], 78, LINE);
+    const deal = Array.from({ length: 400 }, (_, i) => dealGoals(`thin|${i}`, 3, part?.outfield ?? [], RULES)).flat();
+    const dealt = fresh();
+    creditDeal(dealt, 'Thin', deal);
+    const g = bookClubGoals(dealt, 'Thin');
+    expect(g.rows + g.og + g.u).toBe(1200);
+    expect(g.u).toBeGreaterThan(0);
+    expect(Object.keys(dealt.c.Thin.m).every(key => !key.startsWith('?'))).toBe(true);
+    expect(Object.keys(dealt.c.Thin.m).sort()).toEqual([rowKey(XI[2]), rowKey(XI[6]), rowKey(XI[10])].sort());
+    const rows = bookRows(dealt);
+    expect(rows.reduce((n, r) => n + r.assists, 0)).toBeLessThanOrEqual(g.rows);
+    expect(readBook(roundTrip(dealt), STAMP)).not.toBeNull();
+    /* Every assist paid is for a goal a named man scored: a shirt's goal is in `u` and pays nothing. */
+    const paid = deal.filter(x => x.kind === 'open' && x.scorer && !x.scorer.e && x.assist && !x.assist.e).length;
+    expect(rows.reduce((n, r) => n + r.assists, 0)).toBe(paid);
+  });
+
+  it('deals a named man the share his own place earns, inside four standard deviations, and no more', () => {
+    /* One striker on file at a club of strength 75: nine shirts stand beside him. He is the heaviest man,
+       so the set pieces are his; of open play he gets his weight over the whole ten's. */
+    const part = partialEleven([{ n: 'Lone Striker', p: 'ST', r: 80 }], 75, LINE);
+    const ten = part?.outfield ?? [];
+    const total = ten.reduce((s, m) => s + goalWeight(m.p, m.r), 0);
+    const open = 1 - RULES.pen - RULES.fk;
+    const og = open / RULES.ownGoalOneIn;
+    const p = (open - og) * goalWeight('ST', 80) / total + RULES.pen + RULES.fk;
+    const n = 6000;
+    const book = fresh();
+    for (let i = 0; i < n; i += 1) creditDeal(book, 'Thin', dealGoals(`lone|${i}`, 1, ten, RULES));
+    const g = bookClubGoals(book, 'Thin');
+    expect(g.rows + g.og + g.u).toBe(n);
+    expect(Math.abs(g.rows - n * p)).toBeLessThan(4 * sd(n, p));
+    /* And nowhere near every goal: the literal reading (all of them his) is what this rule is not. */
+    expect(g.rows).toBeLessThan(n * 0.6);
   });
 });
