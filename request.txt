@@ -1,0 +1,10 @@
+# Release AW part one, FINAL PROOF on the last commit, the gate list part H3 (the same lines as Release AV's proof request rAV-H3, so each line compares with the base)
+#!serve
+#!playwright
+#!serial
+simMobileChrome: node scripts/simMobileChrome.mjs
+simNumberFormatting: node scripts/simNumberFormatting.mjs
+simBrowserHarnessDiscovery: node scripts/simBrowserHarnessDiscovery.mjs
+simGoogleOnlyReturn: node scripts/simGoogleOnlyReturn.mjs
+simSoccerCareerRecords: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerRecords.mjs
+playLiveMatchFit-fresh: LIVE_FIT_SEED=fresh node scripts/playLiveMatchFit.mjs
