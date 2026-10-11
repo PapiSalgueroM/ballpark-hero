@@ -1,0 +1,7 @@
+# Reviewer (screens) of Release AX: the saved contract talks of the four US careers, played on the built site at 320x568, 390x844 and 1280x900
+#!serve
+#!playwright
+us-nfl: SPORT=nfl node .rc/x/rsUs.mjs
+us-nba: SPORT=nba node .rc/x/rsUs.mjs
+us-mlb: SPORT=mlb node .rc/x/rsUs.mjs
+us-nhl: SPORT=nhl node .rc/x/rsUs.mjs
