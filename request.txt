@@ -1,0 +1,11 @@
+# Release AW: merge b with the fifth inverse composed (head 40f75cd8). The eight must replay.
+simCareerAwardsNight: node scripts/simCareerAwardsNight.mjs
+simCareerSocialBrands: node scripts/simCareerSocialBrands.mjs
+simCareerLeagueFinish: node scripts/simCareerLeagueFinish.mjs
+simCareerLeagueSeasons: node scripts/simCareerLeagueSeasons.mjs
+simSoccerCareerDevelopment: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerCareerDevelopment.mjs
+simCareerStoryRole: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerStoryRole.mjs
+simCareerTrophyRuns: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerTrophyRuns.mjs
+simSoccerSeasonHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerSeasonHistory.mjs
+simSoccerDerbyHistory: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simSoccerDerbyHistory.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
