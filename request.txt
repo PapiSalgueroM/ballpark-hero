@@ -1,0 +1,4 @@
+#!serial
+m-ffbool: node .rc/x/mut.mjs ffbool && { CM_VAR_LIVE_CONTROL=lit node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/m1.log 2>&1; a=$?; git checkout -- src scripts; echo "MUT ffbool: the lit rule exit $a ($(grep -a 'Tests ' /tmp/m1.log | head -1 | tr -s ' ')) $(grep -a 'AssertionError' /tmp/m1.log | head -1 | cut -c1-160)"; }
+m-helppen: node .rc/x/mut.mjs helppen && { node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx -t "match help" --testTimeout=300000 --hookTimeout=120000 > /tmp/m2.log 2>&1; a=$?; git checkout -- src scripts; echo "MUT helppen: the help cases exit $a ($(grep -a 'Tests ' /tmp/m2.log | head -1 | tr -s ' ')) $(grep -a 'AssertionError' /tmp/m2.log | head -1 | cut -c1-160)"; }
+clean: git status --porcelain --untracked-files=no | grep -v "^?? " | wc -l

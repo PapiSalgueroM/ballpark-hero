@@ -1,0 +1,2 @@
+MUT helppen APPLIED to src/components/club-manager/LiveSimScreen.tsx
+MUT helppen: the help cases exit 1 ([31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m) [31m[1mAssertionError[22m: expected 'Watching the matchThe half you are wa…' to contain 'VAR here reviews goals only, and you …'[39m

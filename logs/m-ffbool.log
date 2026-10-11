@@ -1,0 +1,2 @@
+MUT ffbool APPLIED to src/lib/clubManagerCalendar.ts
+MUT ffbool: the lit rule exit 1 ([31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m) [31m[1mAssertionError[22m: no seeded run the three asks play three ways, so the case proves nothing: expected 27300 to be less than 27300[39m

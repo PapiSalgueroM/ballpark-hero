@@ -1,0 +1,3 @@
+m-ffbool exit=0 113s | MUT ffbool: the lit rule exit 1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯) AssertionError: no seeded run the three asks play three ways, so the case pro
+m-helppen exit=0 3s | MUT helppen: the help cases exit 1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯) AssertionError: expected 'Watching the matchThe half you are wa…' to con
+clean exit=0 0s | 0
