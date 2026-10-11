@@ -1,0 +1,106 @@
+name: Soccer Results Layout
+on:
+  pull_request:
+    paths:
+      - .github/workflows/soccer-results-layout.yml
+      - src/pages/SoccerCareer.tsx
+      - src/components/soccer-career/InternationalPanel.tsx
+      - src/components/soccer-career/PhonePanel.tsx
+      - src/components/soccer-career/TrainingPanel.tsx
+      - scripts/playSoccerResultsLayout.mjs
+      - scripts/qa/soccerResultsLayout.mjs
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: soccer-results-layout-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    env:
+      SIM_NETWORK: offline
+      ENGINES: chromium
+      TZ: UTC
+      FREE_KICK_FONT_CACHE: soccer-results-layout-artifacts/font-cache
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Locked dependencies and actual font bytes
+        run: |
+          mkdir -p soccer-results-layout-artifacts
+          git rev-parse HEAD > soccer-results-layout-artifacts/source-head.txt
+          git rev-parse "HEAD^{tree}" > soccer-results-layout-artifacts/source-tree.txt
+          npm ci
+          node scripts/qa/soccerResultsLayout.mjs dependencies before
+          npm install --no-save playwright
+          node scripts/qa/soccerResultsLayout.mjs dependencies after
+          npx playwright install --with-deps chromium
+          python -m pip install fonttools pillow
+          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee soccer-results-layout-artifacts/fonts.log
+      - name: Actual app types and production build
+        id: build
+        run: |
+          node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee soccer-results-layout-artifacts/types.log
+          npm run build 2>&1 | tee soccer-results-layout-artifacts/build.log
+      - name: Existing recorded facts and phone restoration tests
+        if: ${{ !cancelled() }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerRecordedStats.test.tsx src/test/phonePanelFocus.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=soccer-results-layout-artifacts/units.json 2>&1 | tee soccer-results-layout-artifacts/units.log
+          node scripts/qa/soccerResultsLayout.mjs units
+      - name: Actual results and original source layout controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerResultsLayout.mjs 2>&1 | tee soccer-results-layout-artifacts/native.log
+      - name: Early focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-results-layout-early-${{ github.run_id }}
+          path: soccer-results-layout-artifacts/
+          retention-days: 5
+      - name: Related result and international source regressions
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simCareerDomesticCup simCareerRecordedStats simCareerHub simInternational simNationalPools simSeasonCentreAgreement simSoccerSeasonCompetitions; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-results-layout-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "soccer-results-layout-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: All fifteen built readers
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        run: |
+          failed=0
+          for harness in simAdsense simBrand simHeadTags simHiddenPages simHubs simIndexNow simIndexing simInternalLinks simNoRivalNames simPrerender simPrerenderBoot simRetiredRoutes simSchema simSitemap simSnapshotAssets; do
+            ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "soccer-results-layout-artifacts/$harness.log" || failed=1
+            if grep -E '(^|[[:space:]])(SKIP|EMPTY)([[:space:]]|$)' "soccer-results-layout-artifacts/$harness.log"; then failed=1; fi
+          done
+          exit "$failed"
+      - name: Exact tested source held
+        if: ${{ !cancelled() }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$(cat soccer-results-layout-artifacts/source-head.txt)"
+          test "$(git rev-parse "HEAD^{tree}")" = "$(cat soccer-results-layout-artifacts/source-tree.txt)"
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json 2>&1 | tee soccer-results-layout-artifacts/source-held.log
+      - name: Final focused evidence
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: soccer-results-layout-final-${{ github.run_id }}
+          path: soccer-results-layout-artifacts/
+          retention-days: 5
