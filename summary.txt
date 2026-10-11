@@ -1,0 +1,9 @@
+m-oppgate exit=0 111s | MUT oppgate: simCmVar exit 1 | +     message: 'The penalty kind alone shows no goal review\n' +       message: 'The penalty kind alone shows no goal review\n' + 
+m-savedlist exit=0 120s | MUT savedlist: simCmVar exit 1 | +     message: 'With the goal kind alone a review only ever rules a goal out\n\n259 !== 0\n', +     message: 'The second half of a match 
+m-askdefault exit=0 202s | MUT askdefault: simCmVar exit 1, varlive exit 1, tsc exit 0 | +     message: 'The game asks for the kinds it is handed\n' + | ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯�
+m-ffbool exit=0 138s | MUT ffbool: ledger exit 0, varlive exit 0, varlive-on exit 1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯), my lit probe exit 1 (⎯⎯⎯⎯⎯⎯⎯ Fail
+m-ffdrop exit=0 152s | MUT ffdrop: ledger exit 0, varlive exit 1, varlive-on exit 1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯), my lit probe exit 1 (⎯⎯⎯⎯⎯⎯⎯ Fail
+m-hookff exit=0 17s | MUT hookff: ledger exit 1, varlive exit 0, varlive-on exit 1 (⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯), my lit probe exit 1 (⎯⎯⎯⎯⎯⎯⎯ Fail
+m-helppen exit=0 90s | MUT helppen: varscreen and liveSimMotion exit 0 ( Tests  97 passed (97)), ledger exit 0
+m-genheld exit=0 1s | MUT genheld: ledger exit 0, control kindon exit 1 (simCmVarLedger control kindon: FIRED (the goal kind is on in the ledger while an open owed entry holds it (goals-level)
+clean exit=0 0s | 0

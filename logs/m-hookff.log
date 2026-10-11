@@ -1,0 +1,2 @@
+MUT hookff APPLIED to src/hooks/useClubManager.ts
+MUT hookff: ledger exit 1, varlive exit 0, varlive-on exit 1 ([31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m), my lit probe exit 1 ([31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m) | FAIL the hook does not ask for reviews through cmVarGameAsk(CM_VAR_LIVE) at exactly its two kickoffs

@@ -1,0 +1,2 @@
+MUT savedlist APPLIED to src/lib/clubManagerVar.ts
+MUT savedlist: simCmVar exit 1 | +     message: 'With the goal kind alone a review only ever rules a goal out\n\n259 !== 0\n', +     message: 'The second half of a match kicked off with the goal kind shows no penalty review\n' + 

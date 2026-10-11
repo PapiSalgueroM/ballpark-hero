@@ -1,0 +1,2 @@
+MUT askdefault APPLIED to src/lib/clubManagerVar.ts
+MUT askdefault: simCmVar exit 1, varlive exit 1, tsc exit 0 | +     message: 'The game asks for the kinds it is handed\n' + | [31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m

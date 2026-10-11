@@ -1,0 +1,2 @@
+MUT ffdrop APPLIED to src/lib/clubManagerCalendar.ts
+MUT ffdrop: ledger exit 0, varlive exit 1, varlive-on exit 1 ([31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 3 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m), my lit probe exit 1 ([31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m) | 

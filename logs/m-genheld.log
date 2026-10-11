@@ -1,0 +1,2 @@
+MUT genheld APPLIED to scripts/genCmVarRates.mjs
+MUT genheld: ledger exit 0, control kindon exit 1 (simCmVarLedger control kindon: FIRED (the goal kind is on in the ledger while an open owed entry holds it (goals-level))), gencheck exit 0
