@@ -1,0 +1,2 @@
+tsc exit=0 89s | 
+vitest-all exit=0 486s |    Duration  485.81s (transform 30.69s, setup 18.44s, collect 140.59s, tests 1043.82s, environment 149.78s, prepare 31.23s)
