@@ -119,13 +119,36 @@ function validPlan(c: UsCareerCore, sport: UsSport, plan: UsCareerProgramme): bo
   return !!plan && typeof plan === 'object' && plan.sport === sport && Number.isSafeInteger(plan.year)
     && typeof plan.team === 'string' && sections.every(key => usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]));
 }
-const gamesBase = (c: UsCareerCore, sport: UsSport) => Math.min(gamesCeiling(c, sport), sport === 'nfl' ? 10 : sport === 'nba' ? 55 : sport === 'nhl' ? c.pos === 'G' ? 35 : 55 : c.pos === 'SP' ? 24 : c.pos === 'RP' ? 45 : 100);
+/* Release AV: baseball and hockey play the season as long as it really was since Round 1226 (48 games in
+   2012-13, 56 in 2020-21, 60 in baseball's 2020), and every games and counting target below was typed on 162
+   and 82, so a plan for a short year promised games the season did not hold and then charged the miss. Those
+   two engines read their season from the sourced ledgers (src/lib/usSeasonShape.ts); each hands its reader in
+   here when its sport module loads (mlbCareerSport.ts, nhlCareerSport.ts), so a football or basketball page
+   never loads a baseball ledger. A target is still worked out on the engine's own season and then carried to
+   the season the club really plays, with the engine's own arithmetic, so a year of the engine's own length is
+   the card it always was. A sport that has bound nothing (the NFL and the NBA, which read their own table
+   below) is untouched. */
+export interface ProgrammeSeasonShape {
+  /** A count typed on the engine's own season, carried to this club's season of this year for this position. */
+  carry: (count: number, pos: string, year: number, team: string) => number;
+  /** A count SAVED on a season line, read back as the full season it stands for. */
+  full: (count: number, pos: string, line: UsCareerSeason) => number;
+}
+const SEASON_SHAPES: Partial<Record<UsSport, ProgrammeSeasonShape>> = {};
+export function bindUsProgrammeSeason(sport: UsSport, shape: ProgrammeSeasonShape | null): void {
+  if (shape) SEASON_SHAPES[sport] = shape; else delete SEASON_SHAPES[sport];
+}
+const carried = (c: UsCareerCore, sport: UsSport, count: number) => SEASON_SHAPES[sport]?.carry(count, c.pos, c.year, c.team) ?? count;
+const fullOf = (c: UsCareerCore, sport: UsSport, line: UsCareerSeason, count: number) => { const shape = SEASON_SHAPES[sport]; return shape ? Math.round(shape.full(count, c.pos, line)) : count; };
+/* fullBase and fullCeiling are on the engine's own season for baseball and hockey; gamesBase is what the card prints and the season is judged on. */
+const fullBase = (c: UsCareerCore, sport: UsSport) => Math.min(fullCeiling(c, sport), sport === 'nfl' ? 10 : sport === 'nba' ? 55 : sport === 'nhl' ? c.pos === 'G' ? 35 : 55 : c.pos === 'SP' ? 24 : c.pos === 'RP' ? 45 : 100);
+const gamesBase = (c: UsCareerCore, sport: UsSport) => carried(c, sport, fullBase(c, sport));
 const gamesStep = (c: UsCareerCore, sport: UsSport) => sport === 'nfl' ? 2 : sport === 'mlb' && c.pos === 'SP' ? 4 : 10;
-const gamesCeiling = (c: UsCareerCore, sport: UsSport) => sport === 'nfl' || sport === 'nba' ? usSeasonLength(sport, c.year) ?? (sport === 'nfl' ? 17 : 82) : sport === 'mlb' ? c.pos === 'SP' ? 32 : c.pos === 'RP' ? 71 : 162 : 82;
+const fullCeiling = (c: UsCareerCore, sport: UsSport) => sport === 'nfl' || sport === 'nba' ? usSeasonLength(sport, c.year) ?? (sport === 'nfl' ? 17 : 82) : sport === 'mlb' ? c.pos === 'SP' ? 32 : c.pos === 'RP' ? 71 : 162 : 82;
 function gamesTarget(c: UsCareerCore, sport: UsSport, stretch: boolean): number {
   const latest = [...c.seasons].reverse().find(s => s.team === c.team && s.games > 0);
-  const base = latest ? Math.max(gamesBase(c, sport), Math.round(latest.games * 0.85)) : gamesBase(c, sport);
-  return Math.min(gamesCeiling(c, sport), base + (stretch ? gamesStep(c, sport) : 0));
+  const base = latest ? Math.max(fullBase(c, sport), Math.round(fullOf(c, sport, latest, latest.games) * 0.85)) : fullBase(c, sport);
+  return carried(c, sport, Math.min(fullCeiling(c, sport), base + (stretch ? gamesStep(c, sport) : 0)));
 }
 function performance(c: UsCareerCore, sport: UsSport): { key: string; label: string; initial: number; step: number } {
   if (sport === 'nba') return c.pos === 'PG' ? { key: 'apg', label: 'assists per game', initial: 4, step: 1 } : c.pos === 'PF' || c.pos === 'C' ? { key: 'rpg', label: 'rebounds per game', initial: 6, step: 1 } : { key: 'ppg', label: 'points per game', initial: 15, step: 2 };
@@ -146,8 +169,9 @@ function performance(c: UsCareerCore, sport: UsSport): { key: string; label: str
 function bonusTarget(c: UsCareerCore, sport: UsSport, stretch: boolean) {
   const stat = performance(c, sport);
   const recent = [...c.seasons].reverse().find(s => s.games > 0 && validNumber((s as unknown as Record<string, unknown>)[stat.key]));
-  const held = recent ? (recent as unknown as Record<string, number>)[stat.key] : stat.initial;
-  return { ...stat, target: Math.max(stat.initial, held) + (stretch ? stat.step : 0) };
+  /* Release AV: baseball's and hockey's benchmarks are all counts (home runs, strikeouts, goals, assists, wins), so they follow the season's length like the games do. */
+  const held = recent ? fullOf(c, sport, recent, (recent as unknown as Record<string, number>)[stat.key]) : stat.initial;
+  return { ...stat, target: carried(c, sport, Math.max(stat.initial, held) + (stretch ? stat.step : 0)) };
 }
 /** The cards. `chosen` is the plan held so far: a card is drawn against what the choices in the sections above it leave (see TRADE_ORDER). */
 export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partial<ProgrammeChoices> | null = null): ProgrammeMenu[] {
@@ -259,6 +283,8 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
   const played = validNumber(line.games) && line.games > 0;
   const result: UsCareerProgrammeResult = { sport, year: line.year, team: line.team, outcome: played ? 'completed' : 'interrupted', decisions: [], bonusGross: 0, bonusNet: 0, partnershipProgress: 0 };
   const menus = usProgrammeMenus({ ...c, year: plan.year, seasons: c.seasons.filter(s => s !== line) }, sport);
+  /* Release AV: the season is judged in ITS year. The engine has already moved the career on a year by now, and the games a partnership or a bonus asks for follow the season's length. */
+  const then = { ...c, year: plan.year };
   for (const section of sections) {
     const choice = plan[section];
     if (choice === 'normal') continue;
@@ -273,7 +299,7 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
       const target = bonusTarget({ ...c, year: plan.year, seasons: c.seasons.filter(s => s !== line) }, sport, choice === 'stretch');
       const actual = (line as unknown as Record<string, unknown>)[target.key];
       decision.target = target.target; decision.actual = validNumber(actual) ? actual : undefined; decision.unit = target.label;
-      decision.outcome = validNumber(actual) && actual >= target.target && line.games >= gamesBase(c, sport) && validNumber(line.salary) ? 'completed' : 'missed';
+      decision.outcome = validNumber(actual) && actual >= target.target && line.games >= gamesBase(then, sport) && validNumber(line.salary) ? 'completed' : 'missed';
       if (decision.outcome === 'completed') {
         /* Ruling R1: the share is banked in the bank's own unit, so what the card printed is what the bank still holds once the engine has rounded it again. */
         result.bonusGross = bonusGrossOf(line.salary, choice === 'stretch');
@@ -283,7 +309,7 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
       }
     }
     if (section === 'partnership') {
-      decision.target = gamesBase(c, sport); decision.actual = line.games; decision.unit = 'games';
+      decision.target = gamesBase(then, sport); decision.actual = line.games; decision.unit = 'games';
       if (played && line.games >= decision.target) {
         const old = c.programmePartnership;
         result.partnershipProgress = old?.sport === sport && old.team === line.team && old.lastYear === line.year - 1 ? Math.min(3, old.progress + 1) : 1;

@@ -133,6 +133,14 @@
  * moved) and the control lay fires. The law and seam records were left as they
  * were: on this line both say NOT COMPARED, and their values part from the
  * head's in the NFL careers digest alone, by Round 1227.
+ * The fix pass of Release AV (the same day) took those two again as well, each
+ * in a commit of its own, after the same attribution was reproduced on runner
+ * rAV-fx-r: both old records equal the print of f6dfa9b3 (the line just before
+ * Round 1227's merge) in all 42 values, the print of a1e4f86b (that merge)
+ * parts from it in the five NFL careers digests and nothing else, and the print
+ * of 41bc8793 equals a1e4f86b's and the lay record's. The new records were
+ * printed on 41bc8793; with them both compares are exit 0 (11 digests, 0
+ * moved) and the controls lawdrift and seam fire.
  *
  * Round 1212 (MLB bound through the shared seam): a third RECEIPT, seam
  * (US_SEASON_DIGEST_RECEIPT=seam). Its record is
