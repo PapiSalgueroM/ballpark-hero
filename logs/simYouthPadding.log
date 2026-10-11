@@ -1,0 +1,32 @@
+simYouthPadding: seed base 0
+1) no youth pad sells for more than the rule allows in his first season
+   4506 pads at 581 padded clubs plus a rollover at every sixth club, 14151 offers
+   the curve would have sold these same kids at p50 6.00m, p95 16.00m
+   offers now: p50 0.50m, p90 1.20m, p95 1.30m
+   ok   the p95 offer for a pad is 1.30m, inside the 2.00m bound (measured 1.30m on four seeds, 16.9m to 17.1m with no stored value)
+   ok   all 4506 pads were created carrying youthPadValue for their rating and age (the engine against its own function: this catches a creation path that skips the rule, not a wrong rule; the check below tests the rule against the market)
+   3572 of 3893 day one pads have 5 or more real players of 21 and under within two rating points in their era; pad value over their median p10 0.73, p50 1.25, p90 1.88; 0 of them at the journeyman floor
+   ok   a pad is priced at 1.25 of the market's own teenagers of his level at the median, inside 0.6 to 1.8 (not the floor)
+2) selling every pad in the first window prints no real money
+   now: Başakşehir, Al-Nassr, Alanyaspor, Fluminense, Swansea City, Al-Ahli; 41 pads sold, gain over selling none p50 2.23m, p90 3.40m
+   era2015: Atalanta, Getafe, Lyon, Palermo, Udinese, Augsburg; 32 pads sold, gain over selling none p50 1.63m, p90 2.77m
+   era2010: Hércules, Hannover 96, Málaga, Napoli, Parma, Arles-Avignon; 29 pads sold, gain over selling none p50 1.53m, p90 2.04m
+   era2005: Kaiserslautern, Parma, Racing Santander, Bayer Leverkusen, Celta Vigo, Chievo Verona; 32 pads sold, gain over selling none p50 1.35m, p90 2.39m
+   ok   over 48 paired careers and 134 sales, selling every pad beats selling none by 1.53m at the median and 2.98m at the p90, inside 5.00m (measured p90 2.56m to 3.28m on four seeds, 31.4m to 38.4m with no stored value)
+3) an academy graduate who developed keeps the value he earned
+   97 graduates promoted, 97 of them grew 3 or more points over three summers
+   developed graduate's price / a pad of his rating and age: median 32.5
+   ok   none of the 97 graduates carries a stored value, so the curve prices what he becomes
+   ok   a developed graduate fetches 32.5 times a pad of his rating and age at the median (floor 8)
+4) a save written before the round loads valued and plays the same season
+   8 old saves, 116 pads in them; 116 valued on load, 0 wages moved, 0 other changes; 8 of 8 seasons played identically
+   ok   every one of 116 pads in 8 old saves loaded carrying youthPadValue
+   ok   an old save also values the pad out on loan, the pad in the free agent list and a re-signed pad, and leaves a graduate unvalued even when he is flagged isYouth
+   old money on pads in the save: 4 bids (13.7, 9.8, 17.3, 7.3m), a clause of 7.5m, a loan option of 5.8m; 6 figures checked after the load
+   ok   every bid, the clause and the loan option the old engine priced off a pad's curve price load moved onto his new sale price
+   ok   the repair moved no wage and nothing but the pads' value
+   ok   all 8 repaired saves played the rest of season one (396 calendar weeks in all) exactly as the old engine played them, bar the pads' value
+5) a pad earns what he earned before the round: wage bills and renewal asks over three seasons
+   6 clubs, three seasons each: 389 renewal asks compared (300 of them pads, 210 a season or more on), 0 differ; 4 pad free agent asks, 0 differ; 18 wage bills, 0 differ; 0 season squads parted
+   ok   every renewal ask (389, 300 of them pads, 210 a season or more on) and every wage bill (18) over three seasons matches the engine before Round 632
+simYouthPadding: 12 checks, 0 failures

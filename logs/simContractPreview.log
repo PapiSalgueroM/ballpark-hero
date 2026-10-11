@@ -1,0 +1,5 @@
+Contract preview: 15/15 actual-screen cases passed with real careers and renewal engines.
+Contract preview: plain and clause forecasts matched actual contracts, money, wages and saved/reloaded deals.
+Contract preview: exact-fee boundaries, insufficient money and affordable over-cap renewals passed.
+Contract preview: clause removal, legacy missing-cap committing/reload headers, read-only rendering and unchanged callback/key routing passed.
+Contract preview cleanup: owned copies/reports removed; production component, engine and test bytes stayed identical.
