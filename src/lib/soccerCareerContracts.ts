@@ -34,5 +34,5 @@ export function soccerExtensionQuote(career: ExtensionCareer, kind: 'extension' 
 export function soccerTransferTerms(career: ExtensionCareer, offeredWage: number, offeredYears: number) {
   if (career.age < 30) return { wage: offeredWage, contractYears: offeredYears };
   const quote = soccerExtensionQuote({ ...career, weeklyWage: offeredWage }, 'renewal');
-  return { wage: quote.weeklyWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };
+  return { wage: quote.weeklyWage, contractYears: offeredYears };
 }

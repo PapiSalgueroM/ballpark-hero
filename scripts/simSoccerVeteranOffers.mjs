@@ -91,8 +91,8 @@ function observe(source, baseline, patches) {
   return text;
 }
 const faultDefinitions = [
-  { id: 'duration', file: CONTRACTS, from: 'return { wage: quote.weeklyWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };', to: 'return { wage: quote.weeklyWage, contractYears: offeredYears };', failures: ['terms', 'homecoming', 'signing', 'boundaries'] },
-  { id: 'wage', file: CONTRACTS, from: 'return { wage: quote.weeklyWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };', to: 'return { wage: offeredWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };', failures: ['terms', 'homecoming', 'signing', 'boundaries'] },
+  { id: 'duration', file: CONTRACTS, from: '  return { wage: quote.weeklyWage, contractYears: offeredYears };', to: '  return { wage: quote.weeklyWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };', failures: ['terms', 'homecoming', 'signing', 'boundaries'] },
+  { id: 'wage', file: CONTRACTS, from: '  return { wage: quote.weeklyWage, contractYears: offeredYears };', to: '  return { wage: offeredWage, contractYears: offeredYears };', failures: ['terms', 'homecoming', 'signing', 'boundaries'] },
   { id: 'homecoming-route', file: ENGINE, from: '      const terms = soccerTransferTerms(state, homecoming.wage, homecoming.contractYears);', to: '      const terms = { wage: homecoming.wage, contractYears: homecoming.contractYears };', failures: ['homecoming', 'signing'] },
   { id: 'young', file: CONTRACTS, from: 'if (career.age < 30) return { wage: offeredWage, contractYears: offeredYears };', to: 'if (career.age < 30) return { wage: offeredWage + 1, contractYears: offeredYears };', failures: ['young', 'signing', 'boundaries'] },
   { id: 'draw', file: CONTRACTS, from: 'export function soccerTransferTerms(career: ExtensionCareer, offeredWage: number, offeredYears: number) {',
@@ -260,7 +260,6 @@ function expectedSituation(state, baseline) {
     assert.ok(raw, 'completed original offer retained');
     const penalty = expected.type === 'frozen_out' ? expected.mode === 'released' ? .7 : .85 : expected.type === 'contract_expiry' ? .85 : 1;
     offer.wage = Math.round(Math.round(raw.wage * multiplier(state)) * penalty);
-    offer.contractYears = Math.min(raw.contractYears, state.age >= 34 ? 1 : 2);
   }
   return expected;
 }
@@ -349,7 +348,7 @@ for (const arm of activeArms) {
     if (variant === 'no-playing') input.seasons = input.seasons.map(row => ({ ...row, type: 'youth' }));
     const id = 'boundary/' + caseIndex + '/' + years;
     const actual = record(arm.id, id, 'boundaries', current.run(1264, (module, state) => module.contracts.soccerTransferTerms(state, 100003, years), input));
-    const expected = { wage: Math.round(100003 * factor), contractYears: age < 30 ? years : Math.min(years, age >= 34 ? 1 : 2) };
+    const expected = { wage: Math.round(100003 * factor), contractYears: years };
     check(arm.id, 'boundaries', id, () => {
       assert.equal(actual.error, null); equal(actual.value, expected, 'independent age/form boundary');
       equal(actual.inputAfter, input, 'pure terms hold every saved field'); equal(actual.draws, [], 'pure terms zero draws');
