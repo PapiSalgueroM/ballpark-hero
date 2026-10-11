@@ -1,0 +1,28 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [32m✓[39m src/test/soccerInternationalReturn.test.ts [2m([22m[2m83 tests[22m[2m)[22m[33m 444[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerFarewell.test.ts [2m([22m[2m50 tests[22m[2m)[22m[33m 485[2mms[22m[39m
+[90mstdout[2m | src/test/soccerFarewellPage.test.tsx[2m > [22m[2mSoccer farewell real page actions[2m > [22m[2mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks
+[22m[39mFAREWELL_ASYNC_ACT_STARTUP {"scope":"Unfiltered empty async act initialization before either career action tape","values":[0.02040268573909998],"stacks":["Error: Farewell action random draw\n    at Math.<anonymous> (/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerFarewellPage.test.tsx:108:18)\n    at Math.mockCall (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/@vitest/spy/dist/index.js:96:15)\n    at Math.random (file:///home/runner/work/ballpark-hero/ballpark-hero/node_modules/tinyspy/dist/index.js:47:80)\n    at enqueueTask (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2458:45)\n    at recursivelyFlushAsyncActWork (/home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2634:9)\n    at /home/runner/work/ballpark-hero/ballpark-hero/node_modules/react/cjs/react.development.js:2545:15\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)"],"attribution":{"diagnosticRun":"38051776558","source":"11c30639","caller":"react.development.js:2458:45 enqueueTask, recursivelyFlushAsyncActWork"}}
+
+ [32m✓[39m src/test/soccerInternationalReturnUi.test.tsx [2m([22m[2m21 tests[22m[2m)[22m[33m 669[2mms[22m[39m
+ [32m✓[39m src/test/soccerTransferBriefPromise.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 366[2mms[22m[39m
+ [32m✓[39m src/test/soccerFarewellPage.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[33m 2352[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22msaves one next-year announcement for two captured confirmation clicks without playing or drawing [33m 342[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer farewell real page actions[2m > [22mbanks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks [33m 495[2mms[22m[39m
+ [32m✓[39m src/test/soccerInternationalReturnPage.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[33m 2289[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer international return real page actions[2m > [22mexecutes the real comeback mutation once for two captured same-render page callbacks [33m 307[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer international return real page actions[2m > [22muses the actual rules and confirmation once for two captured button clicks [33m 410[2mms[22m[39m
+   [33m[2m✓[22m[39m Soccer international return real page actions[2m > [22mkeeps an old active international save and its original retirement terms without adding a return receipt [33m 377[2mms[22m[39m
+ [32m✓[39m src/test/soccerCareerContracts.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m src/test/soccerFarewellUi.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 498[2mms[22m[39m
+ [32m✓[39m src/test/soccerFarewellOneBanner.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 403[2mms[22m[39m
+ [32m✓[39m src/test/soccerMoneyLineGrouped.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m src/test/soccerOfferReviewAgeRule.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 108[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m      Tests [22m [1m[32m221 passed[39m[22m[90m (221)[39m
+[2m   Start at [22m 15:47:07
+[2m   Duration [22m 7.92s[2m (transform 2.33s, setup 513ms, collect 7.99s, tests 7.69s, environment 3.99s, prepare 1.05s)[22m
+

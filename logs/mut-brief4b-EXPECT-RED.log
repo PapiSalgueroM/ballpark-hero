@@ -1,0 +1,69 @@
+MUTATION APPLIED (brief4b): the brief offer gets no seasons (decision 4b undone, the reviewer's mutation B)
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerTransferBriefPromise.test.tsx [2m([22m[2m11 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 219[2mms[22m[39m
+   [32m✓[39m The brief tells the player the chance that is really used[2m > [22ma player whose club broke its promise is told the request gets a response, not a coin toss[32m 113[2mms[22m[39m
+   [32m✓[39m The brief tells the player the chance that is really used[2m > [22mevery other player still reads the 50 percent rule[32m 71[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mthe fixture is a real broken promise: 17 league games against 18 promised, fit all year[32m 2[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwithout a brief a refusing coin still brings the request an answer[32m 3[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the minutes brief filed a refusing coin still brings the request an answer[32m 4[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the level brief filed a refusing coin still brings the request an answer[32m 2[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the home brief filed a refusing coin still brings the request an answer[32m 2[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith the promise met the coin still decides the brief: a refusing coin is a refusal[32m 2[2mms[22m[39m
+   [32m✓[39m A broken appearance promise grants the transfer request, with or without an agent brief[2m > [22mwith no plan at all the coin still decides, on both paths[32m 3[2mms[22m[39m
+[31m   [31m×[31m An offer that answers a brief follows age and form, like every other new club offer[2m > [22ma 34 year old after a 6.4 season is offered 80 percent of what his 29 year old twin is offered[39m[32m 10[2mms[22m[39m
+[31m     → expected 82875 to be 78000 // Object.is equality[39m
+[31m   [31m×[31m An offer that answers a brief follows age and form, like every other new club offer[2m > [22mthe same veteran after a 7.2 season keeps the drawn wage: it is his own last season the quote reads[39m[32m 4[2mms[22m[39m
+[31m     → expected 82875 to be 97500 // Object.is equality[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerTransferBriefPromise.test.tsx[2m > [22mAn offer that answers a brief follows age and form, like every other new club offer[2m > [22ma 34 year old after a 6.4 season is offered 80 percent of what his 29 year old twin is offered
+[31m[1mAssertionError[22m: expected 82875 to be 78000 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 78000[39m
+[31m+ 82875[39m
+
+[36m [2m❯[22m src/test/soccerTransferBriefPromise.test.tsx:[2m174:28[22m[39m
+    [90m172| [39m    [35mconst[39m drawn [33m=[39m young[33m.[39moffer[33m.[39mwage[33m;[39m
+    [90m173| [39m    [34mexpect[39m(drawn)[33m.[39m[34mtoBeGreaterThanOrEqual[39m([34m80000[39m)[33m;[39m
+    [90m174| [39m    expect(old.offer.wage).toBe(soccerTransferTerms(veteran, drawn, yo…
+    [90m   | [39m                           [31m^[39m
+    [90m175| [39m    [34mexpect[39m(old[33m.[39moffer[33m.[39mwage)[33m.[39m[34mtoBe[39m([33mMath[39m[33m.[39m[34mround[39m(drawn [33m*[39m [34m0.8[39m))[33m;[39m
+    [90m176| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerTransferBriefPromise.test.tsx[2m > [22mAn offer that answers a brief follows age and form, like every other new club offer[2m > [22mthe same veteran after a 7.2 season keeps the drawn wage: it is his own last season the quote reads
+[31m[1mAssertionError[22m: expected 82875 to be 97500 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 97500[39m
+[31m+ 82875[39m
+
+[36m [2m❯[22m src/test/soccerTransferBriefPromise.test.tsx:[2m180:57[22m[39m
+    [90m178| [39m  it('the same veteran after a 7.2 season keeps the drawn wage: it is …
+    [90m179| [39m    [35mconst[39m drawn [33m=[39m [34mbriefOffer[39m([34mbriefWindow[39m([34m29[39m[33m,[39m [34m6.4[39m))[33m.[39moffer[33m.[39mwage[33m;[39m
+    [90m180| [39m    [34mexpect[39m([34mbriefOffer[39m([34mbriefWindow[39m([34m34[39m[33m,[39m [34m7.2[39m))[33m.[39moffer[33m.[39mwage)[33m.[39m[34mtoBe[39m(drawn)[33m;[39m
+    [90m   | [39m                                                        [31m^[39m
+    [90m181| [39m    [34mexpect[39m([34mbriefOffer[39m([34mbriefWindow[39m([34m29[39m[33m,[39m [34m7.2[39m))[33m.[39moffer[33m.[39mwage)[33m.[39m[34mtoBe[39m(drawn)[33m;[39m
+    [90m182| [39m  })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m9 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 15:57:21
+[2m   Duration [22m 2.16s[2m (transform 968ms, setup 39ms, collect 1.33s, tests 219ms, environment 235ms, prepare 107ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerTransferBriefPromise.test.tsx,title=src/test/soccerTransferBriefPromise.test.tsx > An offer that answers a brief follows age and form%2C like every other new club offer > a 34 year old after a 6.4 season is offered 80 percent of what his 29 year old twin is offered,line=174,column=28::AssertionError: expected 82875 to be 78000 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 78000%0A+ 82875%0A%0A ❯ src/test/soccerTransferBriefPromise.test.tsx:174:28%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerTransferBriefPromise.test.tsx,title=src/test/soccerTransferBriefPromise.test.tsx > An offer that answers a brief follows age and form%2C like every other new club offer > the same veteran after a 7.2 season keeps the drawn wage%3A it is his own last season the quote reads,line=180,column=57::AssertionError: expected 82875 to be 97500 // Object.is equality%0A%0A- Expected%0A+ Received%0A%0A- 97500%0A+ 82875%0A%0A ❯ src/test/soccerTransferBriefPromise.test.tsx:180:57%0A%0A
