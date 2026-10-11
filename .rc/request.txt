@@ -1,0 +1,5 @@
+#!serve
+#!playwright
+#!serial
+playClubManager-again: ENGINES=chromium node scripts/playClubManager.mjs
+playClubManager-again2: ENGINES=chromium node scripts/playClubManager.mjs
