@@ -1,0 +1,4 @@
+build exit=0 27s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simCmLeagueFixtures exit=0 8s | simCmLeagueFixtures: OK, sections A to J green: 10 ledger(s), 10 frozen, 0 pending, 10 bound, 0 unbound, 3528 fixtures, 268 of 268 controls fired
+playCmQuickSubs exit=0 11s | playCmQuickSubs: 3 viewports, 2 actual saved fixtures, 6 settled reports, 3 effective controls, zero external forwarding; source held.
+playSaveKeeper exit=1 832s | playSaveKeeper: RED, 5 problem(s).
