@@ -10,7 +10,8 @@ import { soccerExtensionQuote, soccerTransferTerms, soccerWageDemand } from '@/l
 import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interruptSoccerProgramme, completeProgrammeLoanBuy, programmePromiseBroken } from './soccerCareerProgramme';
 import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
 import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';
-import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
+import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview } from './soccerCareerTransferBrief';
+import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
@@ -873,6 +874,7 @@ export interface CareerState {
   reducedRole?: ReducedRolePlan;
   programme?: SoccerProgrammeState;
   chanceWheel?: CareerChanceWheelReceipt;
+  transferBrief?: SoccerTransferBrief;
   playerName: string;
   nationality: string;
   position: string;
@@ -4428,6 +4430,7 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   const s = { ...prev };
   if (s.loan || !offer.isLoan) return s;
   cancelReducedRole(s);
+  clearTransferBrief(s, prev, projectLeagueApps);
   s.loan = {
     parentClub: s.currentClub, parentTier: s.currentClubTier, parentLeague: s.currentLeague,
     parentCountry: s.currentClubCountry, parentColor: s.currentClubColor,
@@ -4472,12 +4475,12 @@ export function completeClubVerdictMove(prev: CareerState): CareerState {
   return moved;
 }
 
-function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, seasons: CareerState['seasons'], isDream = false): ContractOffer | null {
-  const candidates = getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
+function makeOffer(clubs: ClubData[], tier: number, overall: number, age: number, exclude: Set<string>, marketValue: number, seasons: CareerState['seasons'], isDream = false, preferredCandidates?: ClubData[]): ContractOffer | null {
+  const candidates = preferredCandidates ?? getClubsByTier(clubs, tier).filter(c => !exclude.has(c.name));
   if (candidates.length === 0) return null;
   const club = pickAcrossLeagues(candidates);
   exclude.add(club.name);
-  let wage = wageForTier(tier, overall);
+  let wage = wageForTier(preferredCandidates ? club.tier : tier, overall);
   if (isDream) wage = Math.round(wage * 0.65);
   const fee = realisticTransferFee(overall, age);
   const terms = soccerTransferTerms({ age, overall, weeklyWage: wage, seasons }, wage, rand(1, 5));
@@ -4710,6 +4713,45 @@ export function requestTransfer(state: CareerState, clubs: ClubData[]): Transfer
   return { type: "request_result", offer: null };
 }
 
+function transferBriefPool(state: CareerState, clubs: ClubData[]): ClubData[] {
+  const year = (state.seasons[state.seasons.length - 1]?.year ?? 2024) + 1;
+  const tiers = getInterestedTiers(state.overall, state.age);
+  return projectLeagueWorldClubs(state, adjustClubsForYear(clubs, year), year)
+    .filter(club => tiers.includes(club.tier) && clubKeyOf(club.name) !== clubKeyOf(state.currentClub));
+}
+
+export function transferBriefPreview(state: CareerState, clubs: ClubData[]): TransferBriefPreview {
+  return previewTransferBrief(state, transferBriefPool(state, clubs), projectLeagueApps);
+}
+
+export function requestTransferDecision(prev: CareerState, clubs: ClubData[]): CareerState {
+  const brief = readTransferBrief(prev, projectLeagueApps);
+  if (brief?.result) return prev;
+  if (prev.phase !== 'transfer_window' || !prev.transferSituation
+    || !['no_interest', 'one_offer', 'dream_club'].includes(prev.transferSituation.type)) return prev;
+  if (!brief) {
+    const result = requestTransfer(prev, clubs);
+    const next = { ...prev, transferSituation: result };
+    if (result.type === 'request_result' && !result.offer) {
+      next.phase = 'playing';
+      next.transferSituation = null;
+    }
+    return next;
+  }
+  const pool = transferBriefPool(prev, clubs);
+  const candidates = transferBriefCandidates(prev, pool, projectLeagueApps);
+  const option = previewTransferBrief(prev, pool, projectLeagueApps).options.find(row => row.id === brief.priority)!;
+  if (Math.random() >= 0.5) {
+    return storeTransferBriefResult(prev, { status: 'no_interest', offer: null,
+      eligibleCount: option.eligibleCount, matchingCount: option.matchingCount, projection: option.projection });
+  }
+  const tier = pick(getInterestedTiers(prev.overall, prev.age));
+  const offer = makeOffer(pool, tier, prev.overall, prev.age, new Set([prev.currentClub]), prev.marketValue, prev.seasons, false, candidates);
+  return storeTransferBriefResult(prev, { status: offer ? 'offered' : 'no_match', offer,
+    eligibleCount: option.eligibleCount, matchingCount: option.matchingCount,
+    projection: offer ? projectLeagueApps(prev.overall, offer.club.tier, offer.club.name, 0) : null });
+}
+
 /* ─── Init career ─── */
 export function initCareer(
   playerName: string, nationality: string, position: string, era: string,
@@ -4883,6 +4925,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
 export function acceptOffer(prev: CareerState, offer: ContractOffer): CareerState {
   const s = { ...prev };
   if (offer.club.name !== prev.currentClub || prev.loan) cancelReducedRole(s);
+  clearTransferBrief(s, prev, projectLeagueApps);
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
   if (s.currentClub !== prev.currentClub) {
     delete s.seasonAmbition;
@@ -7800,6 +7843,7 @@ export function dismissAppealResult(prev: CareerState, clubs: ClubData[]): Caree
 /* ─── Stay at current club ─── */
 export function stayAtClub(prev: CareerState): CareerState {
   const s = { ...prev }; s.pendingOffers = []; s.transferSituation = null; s.pendingLoanOffers = null; s.phase = "playing";
+  clearTransferBrief(s, prev, projectLeagueApps);
   /* Round 257: refusing to leave when the club has listed you is a real
      choice with a real price. The verdict is read off the situation that was
      still on the state a line ago, so the UI needs no extra plumbing. */
@@ -7821,6 +7865,7 @@ export function stayAtClub(prev: CareerState): CareerState {
 /* ─── Sign extension ─── */
 export function signExtension(prev: CareerState): CareerState {
   const s = { ...prev };
+  clearTransferBrief(s, prev, projectLeagueApps);
   const quote = soccerExtensionQuote(s);
   const extraYears = quote.contractYears ?? rand(2, 4);
   s.contractYearsLeft = extraYears;
