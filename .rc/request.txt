@@ -1,0 +1,6 @@
+# Round 1212 step 3: the number file's tests; and whose are the two Soccer Career reds of the whole suite
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-mlb: node_modules/.bin/vitest run src/test/usSeasonMlb.test.ts --testTimeout=300000 --hookTimeout=300000
+soccer-two-head: node_modules/.bin/vitest run src/test/careerAwardsNightCard.test.tsx src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=300000
+soccer-two-base: git worktree add -q /tmp/base 60188732845f1ba27a9a2801d9b8c05133eaad22 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && node_modules/.bin/vitest run src/test/careerAwardsNightCard.test.tsx src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=300000
+soccer-two-au: git worktree add -q /tmp/au 20f2f47515a31896610a4f2b59ef2202def120df && ln -s "$PWD/node_modules" /tmp/au/node_modules && cd /tmp/au && node_modules/.bin/vitest run src/test/careerAwardsNightCard.test.tsx src/test/careerStory.test.tsx --testTimeout=300000 --hookTimeout=300000
