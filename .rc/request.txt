@@ -1,0 +1,6 @@
+simTrustCopy: node scripts/simTrustCopy.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simMissingElevenSources: node scripts/simMissingElevenSources.mjs
+simPerfectSeasonOdds: node scripts/simPerfectSeasonOdds.mjs
+simNbaLuxuryTax: node scripts/simNbaLuxuryTax.mjs
+simNbaSeasonStats: node scripts/simNbaSeasonStats.mjs
