@@ -1,0 +1,31 @@
+# Release AV fix pass, the closing proof on the pushed head: the type gate, every harness and test touched or named by a finding, each control touched, and the fences that read the files touched.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-touched: node_modules/.bin/vitest run src/lib/usCareerProgramme.test.ts src/test/usProgrammeCardTruth.test.ts src/test/usCareerProgrammeUi.test.tsx src/test/usCareerTruthDigest.test.ts src/test/usSeasonSlate.test.ts src/lib/uclLeaguePhase.test.ts src/lib/leagueSlate.test.ts --testTimeout=300000 --hookTimeout=120000
+plan: node scripts/simUsPlanSeason.mjs
+plan-s5: SEEDSET=5 node scripts/simUsPlanSeason.mjs
+plan-typed: US_PLAN_CONTROL=typed node scripts/simUsPlanSeason.mjs
+plan-yeardrift: US_PLAN_CONTROL=yeardrift node scripts/simUsPlanSeason.mjs
+plan-statfull: US_PLAN_CONTROL=statfull node scripts/simUsPlanSeason.mjs
+simCmLeaguePhase: node scripts/simCmLeaguePhase.mjs
+leaguephase-pot: CM_LEAGUE_PHASE_CONTROL=pot node scripts/simCmLeaguePhase.mjs
+leaguephase-order: CM_LEAGUE_PHASE_CONTROL=order node scripts/simCmLeaguePhase.mjs
+leaguephase-steps: CM_LEAGUE_PHASE_CONTROL=steps node scripts/simCmLeaguePhase.mjs
+law-compare: US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+law-control: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare node scripts/simUsSeasonCentre.mjs
+seam-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+seam-control: US_SEASON_CONTROL=seam US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=seam node scripts/simUsSeasonCentre.mjs
+lay-compare: US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+lay-control: US_SEASON_CONTROL=lay US_SEASON_DIGEST=compare US_SEASON_DIGEST_RECEIPT=lay node scripts/simUsSeasonCentre.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+simCareerProgramme: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerProgramme.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simInventedNames: node scripts/simInventedNames.mjs
