@@ -1,0 +1,1 @@
+summer-nhl: SIM_SPORTS=nhl node scripts/simUsCareerSummer.mjs > $RC_OUT/summer-nhl.log 2>&1; s=$?; grep -i "nhl  \|peak\|Hall\|FAIL\|6b" $RC_OUT/summer-nhl.log | tail -12 | cut -c1-220; tail -1 $RC_OUT/summer-nhl.log; exit $s
