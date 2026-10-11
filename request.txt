@@ -1,0 +1,33 @@
+# Round 1306 steps (b) and (c), head 4972c6d3: the base arm, the five seed sets, the assist control on five sets, the shapes controls again
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts --testTimeout=300000 --hookTimeout=120000
+book-full-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-full && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-default-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-def && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
+c-thinall: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-thinall && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B BOOK_CONTROL=thinall node scripts/simCmLeagueBook.mjs
+c-weight: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-weight && git worktree add -q $B 8d3f54c6 && BOOK_BASE=$B BOOK_CONTROL=weight node scripts/simCmLeagueBook.mjs
+c-assist-d0: BOOK_CONTROL=assistgoalweight node scripts/simCmLeagueBook.mjs
+c-assist-d1: SEEDSET=1 BOOK_CONTROL=assistgoalweight node scripts/simCmLeagueBook.mjs
+c-assist-d2: SEEDSET=2 BOOK_CONTROL=assistgoalweight node scripts/simCmLeagueBook.mjs
+c-assist-d3: SEEDSET=3 BOOK_CONTROL=assistgoalweight node scripts/simCmLeagueBook.mjs
+c-assist-d4: SEEDSET=4 BOOK_CONTROL=assistgoalweight node scripts/simCmLeagueBook.mjs
+c-assist-f0: BOOK_FLEET=full BOOK_CONTROL=assistgoalweight node scripts/simCmLeagueBook.mjs
+c-twoman: BOOK_CONTROL=twoman node scripts/simCmLeagueBook.mjs
+c-flat: BOOK_CONTROL=flat node scripts/simCmLeagueBook.mjs
+c-penassist: BOOK_CONTROL=penassist node scripts/simCmLeagueBook.mjs
+c-noog: BOOK_CONTROL=noog node scripts/simCmLeagueBook.mjs
+c-keyindex: BOOK_CONTROL=keyindex node scripts/simCmLeagueBook.mjs
+c-penassistmine: BOOK_CONTROL=penassistmine node scripts/simCmLeagueBook.mjs
+c-byeweek: BOOK_CONTROL=byeweek node scripts/simCmLeagueBook.mjs
+c-mathrandom: BOOK_CONTROL=mathrandom node scripts/simCmLeagueBook.mjs
+c-nofill: BOOK_CONTROL=nofill node scripts/simCmLeagueBook.mjs
+book-d1: SEEDSET=1 node scripts/simCmLeagueBook.mjs
+book-d2: SEEDSET=2 node scripts/simCmLeagueBook.mjs
+book-d3: SEEDSET=3 node scripts/simCmLeagueBook.mjs
+book-d4: SEEDSET=4 node scripts/simCmLeagueBook.mjs
+book-f1: SEEDSET=1 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f2: SEEDSET=2 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f3: SEEDSET=3 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+book-f4: SEEDSET=4 BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simLiveScores: node scripts/simLiveScores.mjs
