@@ -49,12 +49,17 @@ const one = (src,from,to,label) => { assert.equal(src.split(from).length-1,1,lab
 const FIXED_CLOCK=Date.UTC(2026,9,11,12);
 function rng(seed){let n=seed|0;return()=>{n=(n+0x6d2b79f5)|0;let t=Math.imul(n^(n>>>15),1|n);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
 
+/* Release AX: an image or a font is read as bytes in a block of its own, away from the source anchors, so the
+   line ending fence (scripts/simHarnessAnchors.mjs) can see that no anchor is ever searched in it. The three
+   text reads of this file normalise their line endings as they read, for the same fence: on a checkout with LF
+   endings every receipt is the byte it was. */
+function assetReceipt(absolute){const assetOut={b64:'',digest:''};{const bytes=fs.readFileSync(absolute);assetOut.b64=String(bytes.toString('base64'));assetOut.digest=createHash('sha256').update(bytes).digest('hex');}return assetOut;}
 async function bundle(name, sourceRoot, patch=null, options={}) {
   const dir=path.join(OUT,'bundles',name); fs.mkdirSync(dir,{recursive:true});
   const entry=`export * as engine from './src/lib/soccerCareerEngine';\nexport * as core from './src/lib/season/core';\nexport * as soccer from './src/lib/season/soccer';\nexport * as events from './src/lib/season/soccerEvents';\nexport * as moments from './src/lib/season/momentsSave';\nexport { __opponentModel as model } from './${PAGE}';\n`;
   const loaded=[],patches=[]; let effective=0;
   const result=await build({stdin:{contents:entry,sourcefile:'opponent-proof.tsx',resolveDir:sourceRoot,loader:'tsx'},outfile:path.join(dir,'compiled.cjs'),absWorkingDir:sourceRoot,bundle:true,format:'cjs',platform:'node',jsx:'automatic',metafile:true,minify:false,nodePaths:[path.join(ROOT,'node_modules')],alias:{'@':path.join(sourceRoot,'src')},define:{'import.meta.env':ENV},loader:{'.svg':'empty','.png':'empty','.jpg':'empty','.woff':'empty','.woff2':'empty'},plugins:[{name:'retained-opponent-source',setup(api){api.onLoad({filter:/\.(?:[cm]?[jt]sx?|json|css)$/},async args=>{
-    const raw=fs.readFileSync(args.path),rel=path.relative(sourceRoot,args.path).replaceAll(path.sep,'/'); let text=raw.toString('utf8').replace(/\r\n/g,'\n'); const before=text;
+    const raw=Buffer.from(fs.readFileSync(args.path,'utf8').replace(/\r\n/g,'\n')),rel=path.relative(sourceRoot,args.path).replaceAll(path.sep,'/'); let text=raw.toString('utf8').replace(/\r\n/g,'\n'); const before=text;
     if(patch&&rel===patch.file){text=one(text,patch.from,patch.to,name);effective++;patches.push({file:rel,before:hold(before),after:hold(text),undo:hold(text.replace(patch.to,patch.from))});}
     for(const fault of options.undoPatches??[])if(rel===fault.file){const healthy=text,bad=one(text,fault.from,fault.to,'compiled undo '+rel);text=bad.replace(fault.to,fault.from);assert.equal(text,healthy);patches.push({file:rel,kind:'compiled fault reversal',before:hold(healthy),fault:hold(bad),undo:hold(text)});}
     if(options.legacy&&rel===PAGE){const current=text;for(const[from,to]of REVERSE){assert.equal(text.split(from).length-1,1,'component reverse anchor');text=text.replace(from,to);}assert.equal(sha(Buffer.from(text)),ORIGINAL_COMPONENT_SHA,'complete canonical original component');patches.push({file:rel,kind:'exact original reconstruction',before:hold(current),after:hold(text),canonicalSha256:ORIGINAL_COMPONENT_SHA});}
@@ -68,7 +73,7 @@ async function bundle(name, sourceRoot, patch=null, options={}) {
     if(file.startsWith('<define:'))return{file,details,virtual:true,configuredExpression:ENV};
     if(file==='opponent-proof.tsx')return{file,details,virtual:true,actualEntry:hold(entry)};
     const absolute=path.resolve(sourceRoot,file);let record=loaded.find(r=>r.absolute===absolute);
-    if(!record&&/\.(svg|png|jpg|woff2?)$/.test(file)){const bytes=fs.readFileSync(absolute);record={file,absolute,rawEncoding:'base64',raw:hold(bytes.toString('base64')),rawSha256:sha(bytes),loaded:hold(''),loadedSha256:sha(Buffer.alloc(0)),loader:'empty'};loaded.push(record);}
+    if(!record&&/\.(svg|png|jpg|woff2?)$/.test(file)){const asset=assetReceipt(absolute);record={file,absolute,rawEncoding:'base64',raw:hold(asset.b64),rawSha256:asset.digest,loaded:hold(''),loadedSha256:sha(Buffer.alloc(0)),loader:'empty'};loaded.push(record);}
     assert(record,'all actual metafile inputs retained: '+file);return{file,details,record};
   });
   const startup=[]; const actual=Math.random; const taskMath=Object.create(Math); taskMath.random=()=>{const value=actual();startup.push({value,stack:new Error('bundle startup').stack});return value;};
@@ -146,7 +151,7 @@ function checkReading(row,item,original) {
 
 async function pure() {
   const report={status:'running',head:execFileSync('git',['rev-parse','HEAD'],{cwd:ROOT,encoding:'utf8'}).trim(),tree:execFileSync('git',['rev-parse','HEAD^{tree}'],{cwd:ROOT,encoding:'utf8'}).trim(),base:BASE,baseTree:TREE,cohort:{seeds:Array.from({length:32},(_,i)=>i+1),startYear:2010,nationality:'Belgium',overall:60,potential:92,position:'ST',bound:320,policy:'accept homegrown offer, stay unless released, first event choice, decline retirement suggestion'},arms:[],careers:[],readings:[],controls:[]};
-  const heldFiles=[PAGE,HELPER,'src/data/belgianSeasonMembership.ts','scripts/simSoccerOpponentLabels.mjs','package.json','package-lock.json'];const before=heldFiles.map(file=>({file,sha256:sha(fs.readFileSync(path.join(ROOT,file)))}));
+  const heldFiles=[PAGE,HELPER,'src/data/belgianSeasonMembership.ts','scripts/simSoccerOpponentLabels.mjs','package.json','package-lock.json'];const before=heldFiles.map(file=>({file,sha256:sha(fs.readFileSync(path.join(ROOT,file),'utf8').replace(/\r\n/g,'\n'))}));
   let oldRoot;
   try {
     let hasBase=false;try{hasBase=execFileSync('git',['rev-parse',BASE+'^{tree}'],{cwd:ROOT,encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim()===TREE;}catch{/* A normal shallow checkout uses the certified component reversal below. */}
@@ -194,7 +199,7 @@ async function pure() {
       const bad=checkReading(fault,first,healthy[0].original),undoRow=clone(fault);const target=field==='eventWords'?'output':field;undoRow[target]=original[target];if(field==='count')undoRow.draws=original.draws;same(undoRow,original);const expected=field==='output'?['whole-season','unrelated-model']:[id];same(failures(bad),expected);assert.equal(failures(checkReading(undoRow,first,healthy[0].original)).length,0);detectors.push({field,intended:expected,original:hold(original),fault:hold(fault),undo:hold(undoRow),failures:failures(bad)});
     }
     report.observationDetectors=detectors;write('fixtures.json',{save:selected.current.witness,row:hold(row),actual:hold(actual),model:healthy[0].current.output,seed:selected.current.seed,progression:hold(selected),names,readOnlyMoments:actual.ledger?'actual saved ledger replayed':'no saved moment ledger in this genuine engine progression, planned moments and full derived events held'});
-    report.sourceHold={before,after:heldFiles.map(file=>({file,sha256:sha(fs.readFileSync(path.join(ROOT,file)))}))};same(report.sourceHold.after,before);report.status='pass';write('objects.json',[...objects.values()]);write('report.json',report);
+    report.sourceHold={before,after:heldFiles.map(file=>({file,sha256:sha(fs.readFileSync(path.join(ROOT,file),'utf8').replace(/\r\n/g,'\n'))}))};same(report.sourceHold.after,before);report.status='pass';write('objects.json',[...objects.values()]);write('report.json',report);
     console.log(`ok   ${report.careers.length} complete original/current careers, ${report.careers.reduce((n,p)=>n+p.current.frames.length,0)} actual action frames and ${report.careers.reduce((n,p)=>n+p.current.count,0)} unfiltered current draws`);
     console.log(`ok   ${cases.length} whole reader cases, ${report.controls.length} source arms, ${detectors.length} effective observation controls`);
     console.log(`ok   all15 verified identities,4 unrecorded slots and paired venues; compiled/full runtime undo and ${before.length} source holds`);
