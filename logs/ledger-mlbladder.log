@@ -1,0 +1,14 @@
+MLB: 23 seasons, 16 with a club off the schedule, 50 club lines (2 on 58, 32 on 161, 2 on 162, 14 on 163)
+NHL: 21 seasons in 8 alignments; lengths 82, 48, null, 56, 84
+receipts: 52, cited from 77 places, 3 marked thin and cited by nothing
+file:///home/runner/work/_temp/t-ledger-mlbladder/us-season-ledger-2607.mjs:10543
+    result = ladder[stage];
+    ^
+
+ReferenceError: ladder is not defined
+    at Object.simMlbSeason (file:///home/runner/work/_temp/t-ledger-mlbladder/us-season-ledger-2607.mjs:10543:5)
+    at play (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simUsSeasonLedger.mjs:772:26)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/simUsSeasonLedger.mjs:781:16
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.21.0
