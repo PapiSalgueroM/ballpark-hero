@@ -10,8 +10,8 @@
  * The measure plays league matches with reviews asked for on PROBE rates: no goal is reviewed (so the goals
  * counted are the goals the engine draws before any review), and a missed foul is reviewed at a small known
  * rate. From it: reviewable goals a match, and penalties awarded a match per unit of rate.
- * Round 1303 fix: and every goal the engine draws a match (goalsPerMatch), which the generator needs for the
- * share of goals a review can look at: the engine draws that share's ruled out goals on top of its own.
+ * Round 1303 fix: and every goal the engine draws a match (goalsPerMatch), for the record: the generated file's
+ * header prints it beside the goals a review can look at. No rate is derived from it.
  */
 import './lib/offlineTransport.cjs';
 import fs from 'node:fs';

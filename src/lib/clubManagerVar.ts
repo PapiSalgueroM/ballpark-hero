@@ -1,5 +1,5 @@
 import { keyedRng } from '@/lib/keyedRng';
-import { CM_VAR_RATES as CM_VAR_GAME_RATES, CM_VAR_COVERAGE, CM_VAR_KINDS, CM_VAR_ENGINE } from '@/data/clubManagerVarRates';
+import { CM_VAR_RATES as CM_VAR_GAME_RATES, CM_VAR_COVERAGE, CM_VAR_KINDS } from '@/data/clubManagerVarRates';
 
 /** Round 1218: the rates and the coverage are DERIVED from real football by scripts/genCmVarRates.mjs
  * (scripts/data/cmVarRates.json, cmVarCompetitions.json) and read from the generated module. No rate is typed here.
@@ -45,12 +45,13 @@ export function cmVarGameAsk(switchOn: boolean, kinds: readonly CmVarKind[] = CM
 /** Round 1303 fix (owed goals-level, closed in the engine). The engine's goals are calibrated on goals that COUNTED,
  *  and real football's counted goals are already net of what reviews took away. So a match that reviews goals draws
  *  its goals a little more often, by exactly what its reviews rule out: those goals come ON TOP and goals a match
- *  stays where the engine without reviews has it. p is the chance a drawn goal is ruled out (the share a review can
- *  look at, times the review rate, times the overturn rate); drawing 1 / (1 - p) times as often and ruling out p of
- *  them leaves the same count. A match that does not review goals is not touched (the factor is exactly 1). */
+ *  stays where the engine without reviews has it. p is the chance a drawn goal is taken back (the review rate times
+ *  the overturn rate); drawing 1 / (1 - p) times as often and taking back p of them leaves the same count
+ *  (settleGoalReviews takes them back: with a review when a review can look at the goal, without one when it
+ *  cannot). A match that does not review goals is not touched (the factor is exactly 1). */
 export function cmVarGoalLift(kinds: readonly CmVarKind[]): number {
   if (!kinds.includes('goal')) return 1;
-  return 1 / (1 - CM_VAR_ENGINE.reviewableShare * CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn);
+  return 1 / (1 - CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn);
 }
 
 const CUP_STAGES = ['R16', 'QF', 'SF', 'F'], UCL_STAGES = ['group', 'R16', 'QF', 'SF', 'F'];
@@ -70,7 +71,13 @@ type ReviewLine = { minute: number; plus?: number; side: 'me' | 'opp'; kind: 'va
 export function settleGoalReviews<T extends Goal>(goals: T[], side: 'me' | 'opp', matchKey: string): { goals: T[]; reviews: ReviewLine[] } {
   const accepted: T[] = [], reviews: ReviewLine[] = [];
   for (const goal of goals) {
-    if (goal.penalty || goal.freeKick) { accepted.push(goal); continue; }
+    /* Round 1303 fix: a penalty or a direct free kick is not reviewed. A match that reviews goals draws every
+       goal a little more often (cmVarGoalLift), so one of these is taken back as often as a review rules a goal
+       out, with no review and no trace: only the goals a review can look at end up lifted. */
+    if (goal.penalty || goal.freeKick) {
+      if (keyedRng(`${matchKey}:${side}:${goal.minute}:${goal.plus ?? 0}:${goal.name}:lift`)() >= CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn) accepted.push(goal);
+      continue;
+    }
     const id = `${matchKey}:${side}:${goal.minute}:${goal.plus ?? 0}:${goal.name}:goal`;
     const rng = keyedRng(id);
     if (rng() >= CM_VAR_GAME_RATES.goalReview) { accepted.push(goal); continue; }

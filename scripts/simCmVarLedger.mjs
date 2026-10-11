@@ -171,22 +171,17 @@ const ownLow = quantity => ownRate(quantity).low;
 const derived = deriveTwist(derive());
 const engineNow = JSON.parse(text('scripts/data/cmVarEngine.json'));
 /* Round 1303 fix: the goals a review rules out are drawn ON TOP (cmVarGoalLift), so the rate is the chance for each
-   goal the engine DRAWS. Worked out here from the lowest reading and the two measured engine figures, not through
-   the generator: perCounted (ruled out for each goal that counts and could have been looked at) over 1 + share x
-   perCounted. And the pair (rate, share) must do what it is for: with goals drawn 1 / (1 - share x rate) times as
-   often (which leaves the goals that count where they were), the goals ruled out a match are the lowest reading's
-   to a ten thousandth. */
-const ownShare = n6(engineNow.reviewableGoalsPerMatch / engineNow.goalsPerMatch);
+   goal the engine DRAWS. Worked out here from the lowest reading and the measured engine figure, not through the
+   generator: perCounted (ruled out for each goal that counts and could have been looked at) over 1 + perCounted.
+   And the rate must do what it is for: with goals drawn 1 / (1 - rate) times as often (which leaves the goals that
+   count where they were), the goals ruled out a match are the lowest reading's to a ten thousandth. */
 const ownPerCounted = ownLow('goalsRuledOut') / engineNow.reviewableGoalsPerMatch;
-const ownGoalReview = n6(ownPerCounted / (1 + ownShare * ownPerCounted));
+const ownGoalReview = n6(ownPerCounted / (1 + ownPerCounted));
 ok(derived.rates.goalReview === ownGoalReview,
-  `goalReview is not the stricter count, the lowest reading on file over the engine figures (${derived.rates.goalReview} against ${ownGoalReview})`);
-ok(derived.share === ownShare && ownShare > 0.5 && ownShare <= 1, `the share of the engine's goals a review can look at is ${derived.share} in the generator and ${ownShare} off the measured engine figures`);
-const shareLine = /^export const CM_VAR_ENGINE = \{ reviewableShare: ([0-9.]+) \} as const;$/m.exec(generatedTwist(text('src/data/clubManagerVarRates.ts')));
-ok(!!shareLine && Number(shareLine[1]) === ownShare, `CM_VAR_ENGINE.reviewableShare on disk (${shareLine?.[1] ?? 'no line'}) is not the measured share ${ownShare}`);
-const ownLift = 1 / (1 - ownShare * derived.rates.goalReview * derived.rates.overturn);
-ok(Math.abs(ownLift * engineNow.goalsPerMatch * ownShare * derived.rates.goalReview * derived.rates.overturn - ownLow('goalsRuledOut')) < 1e-4,
-  `the goal rate and the share do not give the lowest reading's goals ruled out a match on top of a level goal count (${n6(ownLift * engineNow.goalsPerMatch * ownShare * derived.rates.goalReview * derived.rates.overturn)} against ${n6(ownLow('goalsRuledOut'))})`);
+  `goalReview is not the stricter count, the lowest reading on file over the engine figure (${derived.rates.goalReview} against ${ownGoalReview})`);
+const ownLift = 1 / (1 - derived.rates.goalReview * derived.rates.overturn);
+ok(Math.abs(ownLift * engineNow.reviewableGoalsPerMatch * derived.rates.goalReview * derived.rates.overturn - ownLow('goalsRuledOut')) < 1e-4,
+  `the goal rate does not give the lowest reading's goals ruled out a match on top of a level goal count (${n6(ownLift * engineNow.reviewableGoalsPerMatch * derived.rates.goalReview * derived.rates.overturn)} against ${n6(ownLow('goalsRuledOut'))})`);
 ok(derived.rates.missedFoulReview === n6(ownLow('penaltiesAwarded') / engineNow.awardsPerMatchPerUnitRate),
   `missedFoulReview is not the stricter count, the lowest reading on file over the engine figure (${derived.rates.missedFoulReview} against ${n6(ownLow('penaltiesAwarded') / engineNow.awardsPerMatchPerUnitRate)})`);
 /* 2b2. Round 1302, decision 4: the season total of penalties, the band a match with reviews on is held against
@@ -299,8 +294,8 @@ ok(generatedTwist(text('src/data/clubManagerVarRates.ts')) === generatedSource()
 const engineFigures = JSON.parse(text('scripts/data/cmVarEngine.json'));
 ok(engineFigures.provisional === false && /^[0-9a-f]{7,40}$/.test(engineFigures.head ?? '') && (engineFigures.runner ?? '').length > 3 && engineFigures.leagueMatches >= 3000,
   'scripts/data/cmVarEngine.json is provisional, or does not say where it was measured, or stands on fewer than 3,000 league matches');
-ok(engineFigures.goalsPerMatch > 0 && engineFigures.reviewableGoalsPerMatch > 0 && engineFigures.reviewableGoalsPerMatch <= engineFigures.goalsPerMatch,
-  'scripts/data/cmVarEngine.json does not carry every goal the engine draws a match beside the goals a review can look at (Round 1303 fix: measure again on a runner and adopt)');
+ok(engineFigures.reviewableGoalsPerMatch > 0 && (engineFigures.goalsPerMatch === undefined || engineFigures.reviewableGoalsPerMatch <= engineFigures.goalsPerMatch),
+  'scripts/data/cmVarEngine.json: the goals a review can look at are missing, or more than every goal the engine draws a match');
 
 /* 6. Round 1303: the GAME never stages every kind. varReviews: true is how a harness asks the engine for every
    kind it can play; the game asks with the ledger's list, through cmVarGameAsk, at both places the hook kicks a

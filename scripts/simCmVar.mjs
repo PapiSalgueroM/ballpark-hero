@@ -151,7 +151,10 @@ const controls = {
   /* Round 1303 fix: the goals a review rules out are no longer drawn on top (the lift taken out of a match that
      reviews goals), so the goal kind alone takes its goals out of the match again. This replaces the controls
      goalslevel and playsgoal, which twisted the owed entry goals-level: that entry is closed and gone. */
-  nolift: { file: helper, from: '  return 1 / (1 - CM_VAR_ENGINE.reviewableShare * CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn);', to: '  return 1;', test: 'bands' },
+  nolift: { file: helper, from: '  return 1 / (1 - CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn);', to: '  return 1;', test: 'bands' },
+  /* Round 1303 fix: a goal a review cannot look at (a penalty, a direct free kick) is no longer taken back, so the
+     lift reaches those goals too and penalties a match creep up with the goal kind on. */
+  liftpens: { file: helper, from: ":lift`)() >= CM_VAR_GAME_RATES.goalReview * CM_VAR_GAME_RATES.overturn) accepted.push(goal);", to: ':lift`)() >= 0) accepted.push(goal);', test: 'rates' },
   /* Round 1303 fix: the lift given to a match that does not review goals (kicked off with the penalty kind alone). */
   liftkind: { file: helper, from: "  if (!kinds.includes('goal')) return 1;", to: '  if (kinds.length === 0) return 1;', test: 'kinds' },
   /* Round 1303, the kinds: the engine reviewing goals in a match kicked off without the goal kind, giving penalties in
@@ -190,7 +193,7 @@ async function main() {
     async function bundle(source, varSource, name, ratesSource = withFixtureRates(sources[rates])) {
       const entry = path.join(folder, `${name}.ts`), leaf = path.join(folder, `${name}-var.ts`), ratesLeaf = path.join(folder, `${name}-rates.ts`), output = path.join(folder, `${name}.cjs`);
       await writeFile(ratesLeaf, ratesSource);
-      await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGameAsk, CM_VAR_KINDS } from '@/lib/clubManagerVar';\nexport { CM_VAR_REAL, CM_VAR_HOLDS, CM_VAR_ACCEPTED } from '@/data/clubManagerVarRates';\n`);
+      await writeFile(entry, source + `\nexport { settleGoalReviews, penaltyReviews, cmVarEventWaiting, cmVarPlayWaiting, CM_VAR_GAME_RATES, awardReviewedPenalties, cmVarPlayedReviewIds, cmVarCanAnnounce, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGameAsk, cmVarGoalLift, CM_VAR_KINDS } from '@/lib/clubManagerVar';\nexport { CM_VAR_REAL, CM_VAR_HOLDS, CM_VAR_ACCEPTED } from '@/data/clubManagerVarRates';\n`);
       await writeFile(leaf, varSource);
       await build({ entryPoints: [entry], bundle: true, platform: 'node', format: 'cjs', outfile: output, logLevel: 'silent', alias: { '@/lib/clubManager': entry, '@/lib/clubManagerVar': leaf, '@/data/clubManagerVarRates': ratesLeaf, '@': path.join(root, 'src') } });
       return () => { delete require.cache[require.resolve(output)]; return require(output); };
@@ -340,6 +343,22 @@ async function main() {
         // Wide bounds around explicit game constants, not a claim about real VAR frequencies.
         assert.ok(sampledReviews / candidates > 0.10 && sampledReviews / candidates < 0.23);
         assert.ok(sampledOverturns / candidates > 0.025 && sampledOverturns / candidates < 0.09);
+        /* Round 1303 fix: a match that reviews goals draws every goal a little more often (cmVarGoalLift), and a
+           goal a review cannot look at is taken back as often as a review rules a goal out, with no review shown,
+           so only reviewable goals end up lifted. Sampled on the same keys as above, on the fixture rates (0.16 x
+           0.32 = 0.0512 a goal; the bounds are the overturn bounds just above). Control liftpens. */
+        let spot = 0, spotKept = 0, spotReviews = 0, free = 0, freeKept = 0;
+        for (let seed = 0; seed < 8192; seed++) {
+          const pen = cm.settleGoalReviews([{ name: 'Simulated taker', minute: 25, penalty: true }], 'me', `rate:${seed}`);
+          const fk = cm.settleGoalReviews([{ name: 'Simulated taker', minute: 25, freeKick: true }], 'opp', `rate:${seed}`);
+          spot++; spotKept += pen.goals.length; spotReviews += pen.reviews.length + fk.reviews.length; free++; freeKept += fk.goals.length;
+        }
+        assert.equal(spotReviews, 0, 'A penalty or a direct free kick is never reviewed as a goal');
+        assert.ok(1 - spotKept / spot > 0.025 && 1 - spotKept / spot < 0.09, `A penalty goal is taken back as often as a review rules a goal out (${(1 - spotKept / spot).toFixed(4)} of ${spot})`);
+        assert.ok(1 - freeKept / free > 0.025 && 1 - freeKept / free < 0.09, `A direct free kick goal is taken back as often as a review rules a goal out (${(1 - freeKept / free).toFixed(4)} of ${free})`);
+        const lift = cm.cmVarGoalLift(['goal']), back = cm.CM_VAR_GAME_RATES.goalReview * cm.CM_VAR_GAME_RATES.overturn;
+        assert.ok(Math.abs(lift * (1 - back) - 1) < 1e-12 && lift > 1, 'Goals are drawn more often by exactly what is taken back');
+        assert.deepEqual([cm.cmVarGoalLift([]), cm.cmVarGoalLift(['penalty'])], [1, 1], 'A match that does not review goals draws them as it always did');
         Object.assign(metrics, { matches: 256, reviews, overturned, penalty, awarded, awardedGoals, enabledGoals, disabledGoals, sampledReviews, sampledOverturns, candidates, gameRates: cm.CM_VAR_GAME_RATES });
       },
       async baseline() {
