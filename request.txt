@@ -1,0 +1,13 @@
+# Round 1212 fix pass on e85701bb: the other walks that open the MLB hub
+#!serve
+#!playwright
+#!serial
+playUsCareerSaveSeam: ENGINES=chromium node scripts/playUsCareerSaveSeam.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+playGames-mlb: ONLY=/mlb-my-career ENGINES=chromium node scripts/playGames.mjs
+sweepGames-mlb: ONLY=/mlb-my-career ENGINES=chromium SIZES=phone,desktop node scripts/sweepGames.mjs
+playExtension: ENGINES=chromium node scripts/playExtension.mjs
+playFreeAgency: ENGINES=chromium node scripts/playFreeAgency.mjs
+playDepthChart: ENGINES=chromium node scripts/playDepthChart.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+playDraftNight: ENGINES=chromium node scripts/playDraftNight.mjs
