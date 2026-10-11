@@ -1,0 +1,10 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+ref-dumps: for s in nhl nfl nba mlb; do ( bash .rc/x/dumps.sh . /tmp/ref $s 2000 $(seq 30 77) | tail -1 ) & done; wait; ls /tmp/ref | grep -c "^rows-"
+fleet-gen: set -o pipefail; MARKS_FLEET=all node scripts/genCareerHallMarks.mjs /tmp/ref | tee $RC_OUT/fleet-gen.txt && cp scripts/data/careerHallMarks.json $RC_OUT/careerHallMarks.json && git diff --stat -- scripts/data/careerHallMarks.json | tail -1
+block3-again: set -o pipefail; bash .rc/x/dumps.sh . /tmp/rows nhl 2000 base 1 2 3 4 5 | tail -1 && MARKS_OUT=/tmp/ledger-out.json MARKS_CALIBRATION=3 node scripts/genCareerHallMarks.mjs /tmp/rows | tail -1 && cmp /tmp/ledger-out.json scripts/data/careerHallMarks.json && echo "block3-again: the block of calibration 3 comes out the same with the fleet in the file"
+sport-nhl: bash .rc/x/run-sport.sh nhl $RC_OUT
+sport-nfl: bash .rc/x/run-sport.sh nfl $RC_OUT
+sport-nba: bash .rc/x/run-sport.sh nba $RC_OUT
+sport-mlb: bash .rc/x/run-sport.sh mlb $RC_OUT
+base-refusals: git worktree add -q /tmp/base 2c86ecc7e0317e61739f9af0a9008700a8ddd555 && ln -s "$PWD/node_modules" /tmp/base/node_modules && cd /tmp/base && (SIM_SKIP_BOARD=1 SIM_CONTROL=nobase node scripts/simCareerHall.mjs mlb 2000 2>&1 | tail -1; SIM_SKIP_BOARD=1 SIM_CONTROL=plantbase node scripts/simCareerHall.mjs nba 2000 2>&1 | tail -1)
