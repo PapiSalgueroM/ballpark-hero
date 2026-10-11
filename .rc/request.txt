@@ -1,0 +1,1 @@
+nfl16-head7: SIM_SEED=7 SIM_SPORTS=nfl SIM_SECTIONS=6 SIM_BALANCE_CAREERS=16000 node scripts/simUsCareerSummer.mjs > $RC_OUT/nfl16-head7.log 2>&1; s=$?; grep -i "nfl\|peak\|legacy\|Hall\|headline\|balance\|FAIL" $RC_OUT/nfl16-head7.log | tail -14 | cut -c1-200; tail -1 $RC_OUT/nfl16-head7.log; exit $s
