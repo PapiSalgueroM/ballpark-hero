@@ -232,6 +232,37 @@
  * band here on purpose: the check is byte equality, and a path either
  * replays or it does not.
  *
+ * Release AX (2026-10-11) merged the other lane's Rounds 1230 to 1234: a
+ * contract talk and a free agency window are saved for their exact unplayed
+ * year (phase extension or freeagency and a contractTalk beside the career),
+ * a push shows a chance wheel in place of the card until it is seen, and the
+ * window carries a Compare button. That moves what a US career saves ON
+ * PURPOSE, so the fixture was taken again, once, on a GitHub runner, from
+ * 5d5926f6. The walker had learned the wheel one commit BEFORE the merge
+ * (934c29d9) and replayed the old recording byte for byte there, so nothing
+ * but the merge moved it. What moved, measured against the recording it
+ * replaces (.tmp-fx/compareFixture.mjs of the integration): no step before
+ * the first talk of any path differs (first talk at step 59, 52, 50 and 21);
+ * with the 'market wheel: ' steps out (16, 14, 6 and 6 on the paths, two a
+ * push) every path is the same sequence of presses and season counts, 459,
+ * 507, 449 and 415 of them; at every aligned step every career field, the
+ * team quality and the coach hash equal; all fifteen fixed saves of every
+ * sport are byte for byte the saves they were, and the coverage objects are
+ * equal. What differs on the paths is 40, 31, 21 and 19 steps: the phase
+ * inside a talk and the talk on the save (24, 19, 12 and 11 steps, with the
+ * talk screens' markup) and the step that leaves a talk (the phase and the
+ * talk go, the save bytes are the old ones); no markup moved outside a talk.
+ * A fixed save still plays thirty moves of its own (a wheel press is not
+ * counted), so each of its walks is the old one with the wheel steps out;
+ * the walks that reach no talk are byte identical (5, 6, 6 and 5 of fifteen).
+ * Four named saves are new in every sport: extTalk and faTalk (the first save
+ * inside each talk), wheel (the first with an unseen wheel: withdrawn in the
+ * NFL, held in the NBA and the NHL, raised in MLB) and extCut (extTalk with
+ * its talk cut to a stub, which must read as no talk at all). 475, 521, 455
+ * and 421 clicks, nineteen fixed saves a sport, 928, 932, 886 and 900 screen
+ * steps, 2,296,639 bytes. Section A now asks every sport for a wheel step, a
+ * step saved in each talk phase and the four saves, and two controls joined.
+ *
  * Controls, one per run (each is a full replay, about three minutes):
  *   US_BOARD_PARITY_CONTROL=label    one label changed in a copy of the shared
  *                                    board: all four sports go red on the words
@@ -255,6 +286,14 @@
  *                                    fixture: that sport goes red (no source
  *                                    is touched, so this is the replay's own
  *                                    comparison being proved)
+ *   US_BOARD_PARITY_CONTROL=wheel    the wheel steps of one sport renamed in a
+ *                                    copy of the fixture: section A goes red
+ *                                    for that sport alone, on the wheel floor
+ *                                    (no replay runs; this one takes a second)
+ *   US_BOARD_PARITY_CONTROL=talk     the restore stops reading the saved talk
+ *                                    in a copy of the shared board: all four
+ *                                    go red on the named save "extTalk", which
+ *                                    no longer opens on its talk
  *
  * Nothing here reaches the network. Run: node scripts/simUsBoardParity.mjs
  */
@@ -335,7 +374,48 @@ const SOURCE_CONTROLS = {
     red: ['nfl'],
     says: 'the save differs',
   },
+  /* Release AX: the restore no longer reads a saved talk. Only a save taken
+     inside a talk can see it, so this proves the named saves are in the
+     fixture and reopen their talk. The click path never reloads inside a
+     talk, so it stays as it was. */
+  talk: {
+    file: BOARD,
+    alias: '@/components/us-career/UsCareerBoard',
+    from: 'const heldTalk = restoreMarketTalk(s.contractTalk, loaded, sport.slug);',
+    to: 'const heldTalk = null;',
+    red: onSharedBoard,
+    says: 'save "extTalk"',
+  },
 };
+
+/* Section A as a function, so the wheel control can ask it of a changed copy. */
+const REQUIRED_SAVES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach', 'noRole', 'negNet', 'noCoachKey', 'coachPhaseNoCoach', 'retiredNoCoachKey'];
+/* Release AX: the saved talks. Every sport's path holds a push (a wheel), a
+   step saved inside each talk, and the four named saves taken there. */
+const MARKET_SAVES = ['extTalk', 'faTalk', 'wheel', 'extCut'];
+const WHEEL_STEP = 'market wheel: ';
+const MIN_SEASONS = 12;
+function wholeProblems(fx) {
+  const out = [];
+  for (const slug of SPORTS) {
+    const s = fx.sports?.[slug];
+    if (!s) continue;
+    const say = m => out.push({ slug, m: `${slug}: ${m}` });
+    const unreached = Object.keys(s.coverage).filter(k => !(s.coverage[k] > 0));
+    const noSave = REQUIRED_SAVES.filter(n => !s.saves[n] || !(s.screens[n]?.length > 0));
+    if (unreached.length) say(`the recorded path never reached ${unreached.join(', ')}`);
+    if (s.coverage.seasons < MIN_SEASONS) say(`${s.coverage.seasons} seasons on the path, the round asks for ${MIN_SEASONS}`);
+    if (noSave.length) say(`no fixed save or no screens for ${noSave.join(', ')}`);
+    if (s.path.some(st => !st.s || !st.m)) say('a path step carries no hash');
+    if (!s.path.some(st => st.a.startsWith(WHEEL_STEP))) say('the recorded path holds no market wheel step, so no push is on the record');
+    for (const phase of ['extension', 'freeagency']) {
+      if (!s.path.some(st => st.p === phase)) say(`no step of the recorded path is saved in the ${phase} phase`);
+    }
+    const noMarket = MARKET_SAVES.filter(n => !s.saves[n] || !(s.screens[n]?.length > 0));
+    if (noMarket.length) say(`no fixed save or no screens for the saved talks ${noMarket.join(', ')}`);
+  }
+  return out;
+}
 
 function replay(env) {
   const out = path.join(tmp, `report-${Date.now()}.json`);
@@ -364,6 +444,27 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const same = (a, b) => [...a].sort().join(',') === [...b].sort().join(',');
 
+if (CONTROL === 'wheel') {
+  /* Release AX: section A's own floor, proven on a changed copy. No source is
+     touched and no replay runs. The healthy fixture must pass section A first,
+     and the copy must be red for the one sport, on the wheel floor alone. */
+  const VICTIM = 'mlb';
+  const healthy = wholeProblems(JSON.parse(read(FIXTURE)));
+  const fx = JSON.parse(read(FIXTURE));
+  const steps = fx.sports?.[VICTIM]?.path.filter(st => st.a.startsWith(WHEEL_STEP)) ?? [];
+  if (!steps.length) { console.error(`control wheel: the ${VICTIM} path holds no wheel step to rename, so this control would change nothing and prove nothing`); process.exit(1); }
+  for (const st of steps) st.a = 'renamed ' + st.a;
+  const found = wholeProblems(fx);
+  console.log(`control wheel: ${steps.length} wheel steps of the ${VICTIM} path renamed in a copy; section A says [${found.map(p => p.m).join(' | ')}]`);
+  if (healthy.length) fail(`control wheel: the fixture in the tree is not whole to begin with (${healthy[0].m})`);
+  else if (!found.length) fail('control wheel left section A green');
+  else if (!found.every(p => p.slug === VICTIM)) fail(`control wheel should turn ${VICTIM} alone red, and it turned [${[...new Set(found.map(p => p.slug))].join(', ')}]`);
+  else if (found.length !== 1 || !found[0].m.includes('holds no market wheel step')) fail(`control wheel went red, but not for its own reason alone ("${found.map(p => p.m).join(' | ')}")`);
+  else console.log(`  CONTROL FIRED: [${VICTIM}] red on "holds no market wheel step", the rest green`);
+  if (failures) { console.error('simUsBoardParity control wheel: failed'); process.exit(1); }
+  console.log('simUsBoardParity control wheel: green. The control turned its own sport red for its own reason.');
+  process.exit(0);
+}
 if (CONTROL) {
   let r;
   let red;
@@ -381,7 +482,7 @@ if (CONTROL) {
     says = 'mlb click path step 40';
   } else {
     const c = SOURCE_CONTROLS[CONTROL];
-    if (!c) { console.error(`unknown control "${CONTROL}": use label, draw, binding, restore, era or fixture`); process.exit(1); }
+    if (!c) { console.error(`unknown control "${CONTROL}": use label, draw, binding, restore, era, fixture, wheel or talk`); process.exit(1); }
     const src = read(path.join(ROOT, c.file));
     if (!c.red.length) { console.error(`control ${CONTROL}: no sport is drawn by ${c.file}, so this control would prove nothing`); process.exit(1); }
     if (src.split(c.from).length !== 2) { console.error(`control ${CONTROL}: ${c.file} does not carry exactly one "${c.from.trim()}", so this control would change nothing and prove nothing`); process.exit(1); }
@@ -407,8 +508,6 @@ console.log('A) the fixture is whole');
 /* The six the round asked for, then the old shapes the restore repairs (a
    save from before Round 182, 422 or 126), so the restore cannot lose a
    repair with this harness green. */
-const REQUIRED_SAVES = ['rookie', 'mid', 'ext', 'fa', 'retired', 'coach', 'noRole', 'negNet', 'noCoachKey', 'coachPhaseNoCoach', 'retiredNoCoachKey'];
-const MIN_SEASONS = 12;
 if (!fs.existsSync(FIXTURE)) {
   fail('scripts/data/usBoardFixture.json is missing: node scripts/recordUsBoardFixture.mjs writes it');
 } else {
@@ -419,15 +518,12 @@ if (!fs.existsSync(FIXTURE)) {
   for (const slug of SPORTS) {
     const s = fx.sports?.[slug];
     if (!s) continue;
-    const unreached = Object.keys(s.coverage).filter(k => !(s.coverage[k] > 0));
-    const noSave = REQUIRED_SAVES.filter(n => !s.saves[n] || !(s.screens[n]?.length > 0));
     const screens = Object.values(s.screens).reduce((n, steps) => n + steps.length, 0);
-    console.log(`   ${slug}: ${s.path.length} clicks, ${s.coverage.seasons} seasons, ${Object.keys(s.saves).length} fixed saves, ${screens} screen steps`);
-    if (unreached.length) fail(`${slug}: the recorded path never reached ${unreached.join(', ')}`);
-    if (s.coverage.seasons < MIN_SEASONS) fail(`${slug}: ${s.coverage.seasons} seasons on the path, the round asks for ${MIN_SEASONS}`);
-    if (noSave.length) fail(`${slug}: no fixed save or no screens for ${noSave.join(', ')}`);
-    if (s.path.some(st => !st.s || !st.m)) fail(`${slug}: a path step carries no hash`);
+    const wheel = s.path.filter(st => st.a.startsWith(WHEEL_STEP)).length;
+    const inTalk = phase => s.path.filter(st => st.p === phase).length;
+    console.log(`   ${slug}: ${s.path.length} clicks, ${s.coverage.seasons} seasons, ${Object.keys(s.saves).length} fixed saves, ${screens} screen steps; ${wheel} wheel steps, ${inTalk('extension')} steps saved in an extension talk, ${inTalk('freeagency')} in free agency`);
   }
+  for (const p of wholeProblems(fx)) fail(p.m);
 }
 
 console.log('B) the replay: every click, every save, every screen');
