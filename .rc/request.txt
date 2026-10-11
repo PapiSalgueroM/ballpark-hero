@@ -1,0 +1,12 @@
+# reviewer us-board-recording, Release AX on 72f54789: a probe of the BUILT site (does a seen push stay spent across a reload), then the same mutation as request d (a reload forgets a seen push) asked of the checks that drive the built site: the other lane's outcomes stage and native walk, and this lane's new walk. mut-build mutates the board in the runner's checkout and rebuilds dist in place; nothing is restored because the checkout is thrown away.
+#!build
+#!playwright
+#!serial
+probe-head: node .rc/x/pushAgain.mjs
+walk-head: node scripts/playUsMarketTalk.mjs
+mut-build: node .rc/x/mutForget.mjs && node_modules/.bin/vite build > /tmp/mut-build.log 2>&1; s=$?; tail -2 /tmp/mut-build.log; git status --short | head -3; exit $s
+probe-mut: node .rc/x/pushAgain.mjs
+walk-mut: node scripts/playUsMarketTalk.mjs
+pm-fonts: mkdir -p career-press-market-artifacts && FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+pm-outcomes-mut: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/outcomes.log | tail -25 && node scripts/qa/checkCareerPressMarket.mjs outcomes
+pm-native-mut: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE=career-press-market-artifacts/font-cache; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCareerPressMarket.mjs 2>&1 | tee career-press-market-artifacts/native.log | tail -25 && node scripts/qa/checkCareerPressMarket.mjs native
