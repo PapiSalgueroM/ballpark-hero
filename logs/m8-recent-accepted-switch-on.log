@@ -1,0 +1,8 @@
+rrMut m8: generator exit 0: genCmVarRates: wrote src/data/clubManagerVarRates.ts | genCmVarRates: 3 file(s) in step with the ledgers. 
+rrMut m8: applied to src/lib/clubManagerVarLive.ts
+genCmVarRates --check: 3 file(s) in step with the ledgers.
+simCmVarLedger: 7 rate rows from 5 publishers, counted by two: goalsRuledOut, penaltiesAwarded, penaltiesCancelled, penaltiesTotal.
+simCmVarLedger: OWED and open, so the switch must stay off: penalties-total (have ? of ?).
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, league:ligue1, league:eredivisie, league:primeira, league:scottish, league:superlig, league:proleague, league:switzerland, league:austria, league:croatia, league:saudi, league:bundesliga2, league:denmark, league:greece, league:segunda, lea
+simCmVarLedger: 1 of 632 checks FAILED.
+MUT m8: gencheck exit 0, ledger exit 1

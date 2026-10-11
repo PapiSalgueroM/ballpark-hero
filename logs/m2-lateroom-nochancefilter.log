@@ -1,0 +1,5 @@
+rrMut m2: applied to src/components/club-manager/LiveSimScreen.tsx
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m76 passed[39m[22m[90m (76)[39m
+simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), and the part alone is 21153 byte
+MUT m2: vitest exit 0, simLiveSimMotion exit 0

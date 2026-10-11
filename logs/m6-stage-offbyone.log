@@ -1,0 +1,7 @@
+rrMut m6: applied to src/lib/clubManagerVar.ts
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++     errorName: 'AssertionError',
++     message: 'Ajax, KNVB Cup · Round of 16: a match in a competition whose row says yes carries the opt in\n' +
++     stack: 'AssertionError [ERR_ASSERTION]: Ajax, KNVB Cup · Round of 16: a match in a competition whose row says yes carries the opt in\n' +
+Node.js v24.21.0
+MUT m6: simCmVar exit 1

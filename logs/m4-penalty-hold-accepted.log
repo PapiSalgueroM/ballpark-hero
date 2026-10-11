@@ -1,0 +1,12 @@
+rrMut m4: penalties-total marked accepted
+rrMut m4: generator exit 0: genCmVarRates: wrote src/data/clubManagerVarRates.ts | genCmVarRates: 3 file(s) in step with the ledgers. 
+genCmVarRates --check: 3 file(s) in step with the ledgers.
+simCmVarLedger: OWED and open, so the switch must stay off: recent-seasons (have 0 of 2).
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, league:ligue1, league:eredivisie, league:primeira, league:scottish, league:superlig, league:proleague, league:switzerland, league:austria, 
+simCmVarLedger: all 632 checks passed.
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
++     errorName: 'AssertionError',
++     message: "Penalties a match with reviews on 0.4515 (without: 0.3674) is outside real football's 0.3158 to 0.3316 (headroom 0.2) and the ledger does not hold the switch for it (owed penalties-total)",
++     stack: "AssertionError [ERR_ASSERTION]: Penalties a match with reviews on 0.4515 (without: 0.3674) is outside real football's 0.3158 to 0.3316 (headroom 0.2) and the ledger does not hold the switch for it (owed penalties-total)\n" +
+Node.js v24.21.0
+MUT m4: gencheck exit 0, ledger exit 0, simCmVar exit 1

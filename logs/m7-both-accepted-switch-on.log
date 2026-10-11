@@ -1,0 +1,16 @@
+rrMut m7: 2 owed entries marked accepted
+rrMut m7: generator exit 0: genCmVarRates: wrote src/data/clubManagerVarRates.ts | genCmVarRates: 3 file(s) in step with the ledgers. 
+rrMut m7: applied to src/lib/clubManagerVarLive.ts
+genCmVarRates --check: 3 file(s) in step with the ledgers.
+simCmVarLedger: 7 rate rows from 5 publishers, counted by two: goalsRuledOut, penaltiesAwarded, penaltiesCancelled, penaltiesTotal.
+simCmVarLedger: 48 competitions of the engine (27 leagues, 20 cups, the Champions League), yes: league:premier, league:laliga, league:seriea, league:bundesliga, league:ligue1, league:eredivisie, league:primeira, league:scottish, league:superlig, league:proleague, league:switzerland, league:austria, 
+simCmVarLedger: all 633 checks passed.
++     message: "Penalties a match with reviews on 0.4515 (without: 0.3674) is outside real football's 0.3158 to 0.3316 (headroom 0.2) and the ledger does not hold the switch for it (owed penalties-total)",
++     stack: "AssertionError [ERR_ASSERTION]: Penalties a match with reviews on 0.4515 (without: 0.3674) is outside real football's 0.3158 to 0.3316 (headroom 0.2) and the ledger does not hold the switch for it (owed penalties-total)\n" +
+      message: "Penalties a match with reviews on 0.4515 (without: 0.3674) is outside real football's 0.3158 to 0.3316 (headroom 0.2) and the ledger does not hold the switch for it (owed penalties-total)",
+Node.js v24.21.0
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[31m[1mAssertionError[22m: CM_VAR_LIVE must be false until the VAR round sources its rates: expected true to be false // Object.is equality[39m
+[31m[1mAssertionError[22m: the saved match carries the review opt in: expected true to be false // Object.is equality[39m
+[31m[1mAssertionError[22m: match 1 shows a review: expected 2 to be +0 // Object.is equality[39m
+MUT m7: gencheck exit 0, ledger exit 0, simCmVar exit 1, varlive unit exit 1

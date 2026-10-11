@@ -1,0 +1,9 @@
+rrMut m3: applied to src/components/club-manager/LiveSimScreen.tsx
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, and its review closes before the half ends
+[31m[1mAssertionError[22m: the ruled out goal was not drawn before its review: expected false to be true // Object.is equality[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m75 passed[39m[22m[90m (76)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a goal ruled out 'at the whistle' is drawn before its card%2C and its review closes before the half ends,line=413,colum
+simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), and the part alone is 21153 byte
+MUT m3: vitest exit 1, simLiveSimMotion exit 0

@@ -1,0 +1,9 @@
+m1-lateroom-offbyone exit=0 93s | MUT m1: vitest exit 0, simLiveSimMotion exit 0
+m2-lateroom-nochancefilter exit=0 93s | MUT m2: vitest exit 0, simLiveSimMotion exit 0
+m3-committed-clause exit=1 91s | MUT m3: vitest exit 1, simLiveSimMotion exit 0
+m4-penalty-hold-accepted exit=1 66s | MUT m4: gencheck exit 0, ledger exit 0, simCmVar exit 1
+m5-helpname-no-stage exit=1 1s | MUT m5: gencheck exit 0, ledger exit 1
+m6-stage-offbyone exit=1 64s | MUT m6: simCmVar exit 1
+m7-both-accepted-switch-on exit=2 70s | MUT m7: gencheck exit 0, ledger exit 0, simCmVar exit 1, varlive unit exit 1
+m8-recent-accepted-switch-on exit=1 0s | MUT m8: gencheck exit 0, ledger exit 1
+clean exit=0 0s | tree after the mutations: 0 changed path(s)
