@@ -3,8 +3,6 @@ import type { CareerState } from '@/lib/soccerCareerEngine';
 import { internationalReturnEligibility, readInternationalReturn } from '@/lib/soccerInternationalReturn';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-/* Release AW: a nationality on screen wears its flag (the site's rule since Round 1210, held by simNationalityFlags). */
-import { FlagImg } from '@/components/FlagImg';
 
 export function InternationalReturnCard({ career, onReturn }: { career: CareerState; onReturn: () => void }) {
   const [open, setOpen] = useState(false);
@@ -40,7 +38,7 @@ export function InternationalReturnCard({ career, onReturn }: { career: CareerSt
         onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
         onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
         <DialogTitle ref={heading} data-international-return-title tabIndex={-1} className="shrink-0 pr-12 text-base">{saved ? 'Your international plans' : 'Make yourself available again'}</DialogTitle>
-        <DialogDescription className="shrink-0">National-team selection for <FlagImg name={career.nationality} size={12} showLabel />.</DialogDescription>
+        <DialogDescription className="shrink-0">National-team selection for {career.nationality}.</DialogDescription>
         <div className="min-h-0 flex-1 space-y-3 overflow-y-auto text-xs leading-relaxed">
           {help ? <div data-international-return-help className="space-y-3">
             <p>Returning opens national-team selection again. It does not give you a call-up or play a match.</p>

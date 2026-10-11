@@ -252,6 +252,15 @@ const OWED_BARE = [
     owner: 'the other lane (Soccer Career)', listed: '2026-10-10',
     why: 'the opened trophy prints "Won with {career.nationality}" bare since Round 1170; the cure is <FlagImg name={career.nationality} size={12} showLabel /> in its place',
   },
+  /* Release AW: the comeback card of Rounds 1241 to 1243 came in with the train. FlagImg with its label in place of the
+     name was tried on the release line (68db22b6) and taken back: the flag then sits between "for" and the name, and the
+     card's own unit test reads the sentence as one run of text ("National-team selection for Netherlands"), so the card
+     and its test have to change together, in the lane that owns both. */
+  {
+    file: 'src/components/soccer-career/InternationalReturnCard.tsx', site: 'career.nationality',
+    owner: 'the other lane (Soccer Career)', listed: '2026-10-11',
+    why: 'the comeback dialog prints "National-team selection for {career.nationality}." bare since Rounds 1241 to 1243; a cure that keeps its own test is the name as it is and <FlagImg name={career.nationality} size={12} /> after it on the same line',
+  },
 ];
 for (const o of OWED_BARE) if (!sources.has(o.file)) refuse(`OWED_BARE lists ${o.file}, which is not a page or component in this tree: delete that entry`);
 
