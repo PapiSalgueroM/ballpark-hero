@@ -1,0 +1,14 @@
+# Release AW fix pass 3, the final head: the type gate, what this pass touched, the three fences, the motion walk whole (served, one at a time)
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+f1-new: node_modules/.bin/vitest run src/test/soccerSavePartsReadAsAbsent.test.ts src/test/soccerFarewellOneBanner.test.tsx src/test/soccerCareerFarewell.test.ts src/test/soccerFarewellUi.test.tsx src/test/soccerFarewellPage.test.tsx --testTimeout=300000 --hookTimeout=120000
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+sk-partfarewell-EXPECT1: SIM_SAVE_KEEPER_CONTROL=partfarewell node scripts/simSaveKeeper.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
+b1i-samecut-EXPECT1: SEASON_MOTION_CONTROL=samecut ONLY=B1i node scripts/playSeasonCentreMotion.mjs
+gitclean: test -z "$(git status --porcelain --untracked-files=no)" && echo clean

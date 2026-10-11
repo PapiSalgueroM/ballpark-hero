@@ -1,0 +1,11 @@
+build exit=0 25s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 49s | 
+f1-new exit=0 5s |    Duration  4.56s (transform 1.86s, setup 236ms, collect 5.43s, tests 3.39s, environment 1.64s, prepare 462ms)
+simSaveKeeper exit=0 3s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+sk-partfarewell-EXPECT1 exit=1 3s | simSaveKeeper control partfarewell: FIRED. Section 1 is red.
+simNoRivalNames exit=0 10s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 31s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 1s | simStorageWrites: all green (owed: 12)
+playSeasonCentreMotion exit=0 129s | playSeasonCentreMotion: 80 checks, 0 failed
+b1i-samecut-EXPECT1 exit=1 11s | playSeasonCentreMotion: 4 checks, 1 failed (control samecut) (only B1i)
+gitclean exit=0 0s | clean

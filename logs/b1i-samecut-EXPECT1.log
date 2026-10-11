@@ -1,0 +1,11 @@
+CONTROL samecut: rewritten in the bundled source or in what is served, never a file on disk
+tables from node: 415 table seasons in the probe, five used: Probe 0 2000 Juventus (34); Probe 9 1998 Atletico Madrid (38); Probe 14 2036 Man City (38); Probe 28 2018 Inter Milan (38); Probe 34 2011 Bayern Munich (34)
+   B1i: 390 compact Probe 0 2000 Juventus from 2: table 3 holds the order of table 3, and the flight in the air was not left alone (5 transitions before it, 0 after)
+   B1i: 390 compact Probe 0 2000 Juventus from 2: table 3 holds the order of table 3, and Juventus is 29.00 px from where the first flight has it at its start
+   B1i: 390 compact Probe 0 2000 Juventus from 7: table 8 holds the order of table 8, and the flight in the air was not left alone (5 transitions before it, 0 after)
+   B1i: 390 compact Probe 0 2000 Juventus from 7: table 8 holds the order of table 8, and u11 is 87.00 px from where the first flight has it at its start
+ok   B1i. a flight was in the air when the second table landed in 37 of 38 cases (floor half)
+ok   B1i. the second flight starts at the first table's true places and ends at the second's, nothing left (0 bad starts, 0 bad ends, 0 leftovers; largest start deviation 0.000 px)
+ok   B1i. the same order came again with a flight in the air in 39 of 42 cases (floor half; 2 of them are two tables of the season itself, the rest table k + 1 handed in twice)
+FAIL B1i. the same order arriving mid flight starts nothing: the first flight is left alone, still begins where table k had its rows and ends in place, nothing left (39 cut or restarted, 281 bad starts, 0 bad ends, 0 leftovers; largest start deviation 232.000 px)
+playSeasonCentreMotion: 4 checks, 1 failed (control samecut) (only B1i)
