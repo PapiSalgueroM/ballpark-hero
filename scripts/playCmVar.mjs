@@ -200,7 +200,10 @@ const toHub = async w => { await w.page.goto(`${BASE}/club-manager`, { waitUntil
  *  the whistle must be the engine's own settlement of the same seeds, and the report's review rows must be whole. */
 async function finishMatch(w, row, check, id, cm, before, v, compare) {
   if (!(await w.page.locator('[data-cm-live-stage="interval"]').count())) {
-    await w.activate(w.page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Skip', exact: true }));
+    /* Round 1302: a review that closes a moment before the whistle leaves no time to press Skip: the half ends by
+       itself and the button goes with it. Skip is pressed only while the first half is still running. */
+    const ended = String(row.kind).startsWith('late') && await w.page.locator('[data-cm-live-stage="interval"]').waitFor({ timeout: 4000 }).then(() => true).catch(() => false);
+    if (!ended) await w.activate(w.page.locator('[data-cm-live-controls]').getByRole('button', { name: 'Skip', exact: true })).catch(async error => { if (!(await w.page.locator('[data-cm-live-stage="interval"]').count())) throw error; });
     await w.page.locator('[data-cm-live-stage="interval"]').waitFor({ timeout: 30000 });
   }
   check((await w.page.locator('[data-cm-var]').count()) === 0, 'a review card is still up at the interval');
@@ -288,7 +291,11 @@ async function runCase(profile, motion, kind, variant) {
       check(!under.some(s => s.goalCard), 'a goal card was up under a review card');
       check(under.every(s => s.motion === 'pass' || (ruledOut && s.motion === 'goal' && s.phase === 'net')), `an action was in flight under the review card: ${JSON.stringify(under.find(s => !(s.motion === 'pass' || (ruledOut && s.motion === 'goal' && s.phase === 'net'))))}`);
       check(new Set(under.filter(s => s.card.endsWith(mine)).map(s => s.score)).size === 1, 'the score moved while the review card was up');
-      if (DRAWN_FIRST.has(kind)) check(motion === 'reduce' ? under.some(s => s.motion === 'goal' && s.phase === 'net') : seen.slice(0, opened).some(s => s.motion === 'goal' && s.phase === 'flight'), 'the ruled out goal was not drawn before its review');
+      /* Round 1302: the flight has to be the action right before the card (a sample is kept only when the screen
+         changes, so those are the last few), with no goal card of its own, and the card has to sit on the ball in
+         the net. An earlier real goal of the same half does not count: the first lit walk of this round passed a
+         late case on one. */
+      if (DRAWN_FIRST.has(kind)) check(under.some(s => s.motion === 'goal' && s.phase === 'net') && (motion === 'reduce' || seen.slice(Math.max(0, opened - 8), opened).some(s => s.motion === 'goal' && s.phase === 'flight' && !s.goalCard)), 'the ruled out goal was not drawn before its review');
       if (kind === 'ownGoal') {
         /* The own goal of the minute after: its card rises only after the review is over, with the own goal mark. */
         const og = feed.find(e => e.kind === 'goal' && e.og && place(e) === place(v) + 1);
