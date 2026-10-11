@@ -94,6 +94,13 @@ export function penaltyLaw() {
   return { scores: Number(base[1]), onTarget: Number(save[1]) };
 }
 
+/** Round 1302. The name the help prints for a covered competition. A cup whose reviews start after the round of
+ *  16 (the first cup stage the engine plays) is named with its stage, so the help never promises an earlier round. */
+const LATE_STAGE = { QF: 'from the quarter finals', SF: 'from the semi finals', F: 'the final only' };
+export function helpName(row) {
+  return row.key.startsWith('cup:') && Object.hasOwn(LATE_STAGE, row.from) ? `${row.name} (${LATE_STAGE[row.from]})` : row.name;
+}
+
 /** Everything the generated file says, as data: the harness reads this too. */
 export function derive() {
   const rates = JSON.parse(text('scripts/data/cmVarRates.json'));
@@ -106,7 +113,7 @@ export function derive() {
   const covered = comps.rows.filter(r => r.verdict === 'yes');
   const coverage = Object.fromEntries(covered.map(r => [r.key, r.key.startsWith('league:') ? 'all' : r.from]));
   return {
-    engine, goals, pens, law, coverage, names: covered.map(r => r.name),
+    engine, goals, pens, law, coverage, names: covered.map(helpName),
     rates: {
       goalReview: n6(goals.low / engine.reviewableGoalsPerMatch), overturn: 1, penaltyReview: 0,
       missedFoulReview: n6(pens.low / engine.awardsPerMatchPerUnitRate), penaltyScores: law.scores, penaltyOnTarget: law.onTarget,

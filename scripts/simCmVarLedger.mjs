@@ -22,7 +22,10 @@
  * Controls, each of which changes the data in memory, proves it changed something, and must go red for its own
  * reason: CM_VAR_LEDGER_CONTROL=thin | wiki | figure | missing | extra | onesource | receipt | handedit |
  * highest (the rate read off the higher count) | names (the help names a league kickOff does not cover) |
- * owedlive (the switch on while the ledger still owes).
+ * owedlive (the switch on while the ledger still owes) | stage (Round 1302: a cup with reviews in its final only
+ * named as if every round had them) | unread (Round 1302: a competition put back on the not read list).
+ * Round 1302 also holds that every competition is a row: nothing in notRead, and an unknown row says what was
+ * looked for.
  * A control that fires ends "FIRED" and exits 1. One that changes nothing or is not caught exits 3.
  */
 import './lib/offlineTransport.cjs';
@@ -43,6 +46,7 @@ const EXPECT = {
   missing: /is not in the ledger/, extra: /the engine cannot play/, onesource: /stands on fewer than two publishers/,
   receipt: /does not carry the hash/, handedit: /is not what the generator writes \(a hand edit/,
   highest: /goalReview is not the stricter count/, names: /the help would name/, owedlive: /CM_VAR_LIVE is true while the rates ledger still owes/,
+  stage: /the help would name .*Australia Cup and kickOff/, unread: /notRead still lists FA Cup/,
 };
 if (CONTROL && !Object.hasOwn(EXPECT, CONTROL)) { console.log(`simCmVarLedger: unknown control ${CONTROL}`); process.exit(2); }
 
@@ -73,6 +77,10 @@ if (CONTROL === 'handedit') { generatedTwist = s => s.replace(/goalReview: [0-9.
 let deriveTwist = d => d;
 if (CONTROL === 'highest') { deriveTwist = d => ({ ...d, rates: { ...d.rates, goalReview: n6(d.goals.high / d.engine.reviewableGoalsPerMatch) } }); const d = derive(); changed = deriveTwist(d).rates.goalReview !== d.rates.goalReview; }
 if (CONTROL === 'names') { deriveTwist = d => ({ ...d, names: [...d.names, 'EFL Championship'] }); changed = true; }
+/* stage: the help names a cup that has reviews in its final only as if every round had them. */
+if (CONTROL === 'stage') { deriveTwist = d => ({ ...d, names: d.names.map(n => n.replace(' (the final only)', '')) }); const d = derive(); changed = JSON.stringify(deriveTwist(d).names) !== JSON.stringify(d.names); }
+/* unread: a competition taken out of the rows and put back on the not read list. */
+if (CONTROL === 'unread') { const n = comps.rows.length; comps.rows = comps.rows.filter(r => r.key !== 'cup:FA Cup'); comps.notRead.cups = [...comps.notRead.cups, 'FA Cup']; changed = comps.rows.length < n; }
 /* owedlive: the switch read as on, with something still owed. */
 let switchTwist = s => s;
 if (CONTROL === 'owedlive') {
@@ -194,7 +202,13 @@ for (const row of comps.rows) {
 }
 const yes = comps.rows.filter(r => r.verdict === 'yes').map(r => r.key);
 /* The help prints the names and kickOff reads the coverage: both must be exactly the rows that say yes. */
-const yesNames = comps.rows.filter(r => r.verdict === 'yes').map(r => r.name);
+/* Round 1302: a cup whose reviews start after the round of 16 is printed with its stage (worked out here, not
+   through the generator's helpName, so a generator that drops the stage fails). */
+const STAGE_WORDS = { QF: 'from the quarter finals', SF: 'from the semi finals', F: 'the final only' };
+const yesNames = comps.rows.filter(r => r.verdict === 'yes').map(r => (r.key.startsWith('cup:') && STAGE_WORDS[r.from] ? `${r.name} (${STAGE_WORDS[r.from]})` : r.name));
+/* Round 1302: every competition is READ. Nothing may sit in notRead, and an unknown row says what was looked for. */
+ok(comps.notRead.leagues.length === 0 && comps.notRead.cups.length === 0, `notRead still lists ${[...comps.notRead.leagues, ...comps.notRead.cups].join(', ')}: every competition has to be read and filed as a row`);
+for (const row of comps.rows) if (row.verdict === 'unknown') ok(typeof row.note === 'string' && row.note.length > 60, `${row.key} is unknown and does not say what was looked for`);
 ok(JSON.stringify(derived.names) === JSON.stringify(yesNames) && JSON.stringify(Object.keys(derived.coverage)) === JSON.stringify(yes),
   `the help would name ${derived.names.join(', ')} and kickOff covers ${Object.keys(derived.coverage).join(', ')}: not both the rows that say yes (${yes.join(', ')})`);
 
