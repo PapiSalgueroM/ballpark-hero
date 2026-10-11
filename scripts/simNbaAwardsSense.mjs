@@ -15,6 +15,12 @@
      others  a sha256 of every NFL, MLB and NHL career this harness plays (500 a sport a seed). A proof for one
              round (did my edit to a shared file move another sport), not a standing rule: it is judged only
              under SENSE_PROVE_OTHERS=1 and rewritten by --record-others.
+             Release AV (2026-10-11) recorded it again from the release line (8d57ffaf, runner rAV-Z), after
+             the same command at four steps of the line: on main all three sports held; right after Round
+             1226's merge (the true MLB and NHL seasons) the MLB and NHL hashes moved on all five seeds and
+             the NFL's held; after Round 1227's merge and at the head (Rounds 1301 and 1212 in) the same
+             three sets of hashes again. So MLB and NHL moved once, for Round 1226, and the NFL player's
+             careers never did.
    Both record commands refuse a dirty tree (git status of src and scripts, this file and the baseline aside).
 
    Run:  node scripts/simNbaAwardsSense.mjs            (detached at full size: it takes minutes)
