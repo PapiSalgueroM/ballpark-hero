@@ -1,0 +1,211 @@
+{
+ "fixtures": {
+  "ruledOut": {
+   "seed": 2460,
+   "minute": 9,
+   "side": "me",
+   "who": "Kiernan Dewsbury-Hall",
+   "decision": "disallowed"
+  },
+  "goalBefore": {
+   "seed": 1724,
+   "minute": 8,
+   "side": "opp",
+   "who": "João Gomes",
+   "decision": "disallowed"
+  },
+  "two": {
+   "seed": 4926,
+   "minute": 6,
+   "side": "opp",
+   "who": "Jérémy Jacquet",
+   "decision": "disallowed"
+  },
+  "lateWhistle": {
+   "seed": 1984,
+   "minute": 45,
+   "side": "opp",
+   "who": "Alejandro Garnacho",
+   "decision": "disallowed"
+  },
+  "lateBefore": {
+   "seed": 2591,
+   "minute": 45,
+   "side": "opp",
+   "who": "Nicolas Jackson",
+   "decision": "disallowed"
+  },
+  "ownGoal": {
+   "seed": 1940,
+   "minute": 10,
+   "side": "me",
+   "who": "Brennan Johnson",
+   "decision": "disallowed"
+  },
+  "injury": {
+   "seed": 3861,
+   "minute": 15,
+   "side": "opp",
+   "who": "Hugo Ekitiké",
+   "decision": "disallowed"
+  },
+  "red": {
+   "seed": 6513,
+   "minute": 34,
+   "side": "opp",
+   "who": "Nicolas Jackson",
+   "decision": "disallowed"
+  },
+  "crowdedGoal": {
+   "seed": 42322,
+   "minute": 45,
+   "side": "opp",
+   "who": "Alejandro Garnacho",
+   "decision": "disallowed"
+  },
+  "crowdedShot": {
+   "seed": 6203,
+   "minute": 45,
+   "side": "opp",
+   "who": "Nicolas Jackson",
+   "decision": "disallowed"
+  }
+ },
+ "cases": [
+  {
+   "id": "390-motion-crowdedGoal-plain",
+   "kind": "crowdedGoal",
+   "variant": "plain",
+   "seed": 42322,
+   "shots": [
+    "390-motion-crowdedGoal-plain-1-checking.jpg",
+    "390-motion-crowdedGoal-plain-2-decided.jpg",
+    "390-motion-crowdedGoal-plain-3-after.jpg",
+    "390-motion-crowdedGoal-plain-8-full-time.jpg",
+    "390-motion-crowdedGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [
+    "the last kick of the half never got its scorer card with the goal on the score: TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.",
+    "the last scorer card the screen showed is not the last kick's, in the half it belongs to: {\"card\":\"none\",\"motion\":\"goal\",\"phase\":\"net\",\"net\":\"top\",\"stage\":\"first\",\"goalPill\":false,\"line\":\"GOAL! Merlin Röhl\",\"goalCard\":true,\"goalText\":\"GOAL! Merlin Röhl 45+2'Everton · 1 this seasonTap to carry on\",\"minute\":\"45\",\"y\":0,\"score\":\"me=1 opp=0\",\"t\":24635}"
+   ],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 2,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "lastKick": {
+    "error": "TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.",
+    "goal": "me 45+4' Brennan Johnson",
+    "goalPlace": 49,
+    "whistlePlace": 49,
+    "cardAt": 47,
+    "intervalAt": 56,
+    "samples": 57
+   },
+   "result": "3-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 152
+  },
+  {
+   "id": "390-reduced-crowdedGoal-plain",
+   "kind": "crowdedGoal",
+   "variant": "plain",
+   "seed": 42322,
+   "shots": [
+    "390-reduced-crowdedGoal-plain-1-checking.jpg",
+    "390-reduced-crowdedGoal-plain-2-decided.jpg",
+    "390-reduced-crowdedGoal-plain-3-after.jpg",
+    "390-reduced-crowdedGoal-plain-8-full-time.jpg",
+    "390-reduced-crowdedGoal-plain-9-report-timeline.jpg"
+   ],
+   "fail": [
+    "the last kick of the half never got its scorer card with the goal on the score: TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.",
+    "the last scorer card the screen showed is not the last kick's, in the half it belongs to: {\"card\":\"none\",\"motion\":\"goal\",\"phase\":\"net\",\"net\":\"top\",\"stage\":\"first\",\"goalPill\":false,\"line\":\"GOAL! Merlin Röhl\",\"goalCard\":true,\"goalText\":\"GOAL! Merlin Röhl 45+2'Everton · 1 this seasonTap to carry on\",\"minute\":\"45\",\"y\":0,\"score\":\"me=1 opp=0\",\"t\":24179}"
+   ],
+   "engine": {
+    "minute": "45+3'",
+    "side": "opp",
+    "who": "Alejandro Garnacho",
+    "decision": "disallowed",
+    "prior": {
+     "me": 1,
+     "opp": 0
+    },
+    "kick": null
+   },
+   "card": {
+    "text": "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision.",
+    "x": 20,
+    "right": 371,
+    "top": 202,
+    "bottom": 284,
+    "vw": 390,
+    "vh": 844,
+    "animations": 0,
+    "cut": false
+   },
+   "scoreChecking": {
+    "me": 2,
+    "opp": 0
+   },
+   "minuteChecking": 45,
+   "plusChecking": 4,
+   "decided": "VAR: goal ruled out |  | Alejandro Garnacho, Aston Villa, 45+3' |  | No goal. The score does not change.",
+   "scoreAfter": {},
+   "lastKick": {
+    "error": "TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.",
+    "goal": "me 45+4' Brennan Johnson",
+    "goalPlace": 49,
+    "whistlePlace": 49,
+    "cardAt": 23,
+    "intervalAt": 28,
+    "samples": 29
+   },
+   "result": "3-0",
+   "timeline": [
+    {
+     "clock": "45+3'",
+     "side": "opp",
+     "title": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "shown": "📺 VAR: goal ruled out: Alejandro Garnacho",
+     "cut": false
+    }
+   ],
+   "seconds": 151
+  }
+ ],
+ "help": []
+}

@@ -1,0 +1,12 @@
+mkCrowdedOnly: wrote scripts/zzCrowdedOnly.mjs (50932 characters, the schedule cut to two crowdedGoal cases)
+playCmVar: the build plays goal.
+playCmVar: not walked on this build: penaltyScored (needs the penalty kind), penaltySaved (needs the penalty kind).
+LASTKICK 390-motion-crowdedGoal-plain: {"error":"TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":47,"intervalAt":56,"samples":57}
+LASTKICK 390-reduced-crowdedGoal-plain: {"error":"TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":23,"intervalAt":28,"samples":29}
+FAIL 390-motion-crowdedGoal-plain: the last kick of the half never got its scorer card with the goal on the score: TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.
+FAIL 390-motion-crowdedGoal-plain: the last scorer card the screen showed is not the last kick's, in the half it belongs to: {"card":"none","motion":"goal","phase":"net","net":"top","stage":"first","goalPill":false,"line":"GOAL! Merlin Röhl","goalCard":true,"goalText":"GOAL! Merlin Röhl 45+2'Everton · 1 this seasonTap to carry on","minute":"45","y":0,"score":"me=1 opp=0","t":24635}
+FAIL 390-reduced-crowdedGoal-plain: the last kick of the half never got its scorer card with the goal on the score: TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.
+FAIL 390-reduced-crowdedGoal-plain: the last scorer card the screen showed is not the last kick's, in the half it belongs to: {"card":"none","motion":"goal","phase":"net","net":"top","stage":"first","goalPill":false,"line":"GOAL! Merlin Röhl","goalCard":true,"goalText":"GOAL! Merlin Röhl 45+2'Everton · 1 this seasonTap to carry on","minute":"45","y":0,"score":"me=1 opp=0","t":24179}
+playCmVar: 2 cases and 0 help views at 390 and 1280, 10 of 12 fixtures found, 4 failed assertion(s).
+playCmVar: FAILED.
+lk-control exit 1 (1 is the control firing: the screen as it was before c06dc974)

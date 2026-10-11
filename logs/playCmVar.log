@@ -1,0 +1,20 @@
+playCmVar: the build plays goal.
+FIXTURE ruledOut: league match 1, seed 2460, me 9' Kiernan Dewsbury-Hall, disallowed
+FIXTURE penaltyScored: not played, the build does not play the penalty kind
+FIXTURE penaltySaved: not played, the build does not play the penalty kind
+FIXTURE goalBefore: league match 2, seed 1724, opp 8' João Gomes, disallowed
+FIXTURE two: league match 1, seed 4926, opp 6' Jérémy Jacquet, disallowed
+FIXTURE lateWhistle: league match 2, seed 1984, opp 45' Alejandro Garnacho, disallowed
+FIXTURE lateBefore: league match 2, seed 2591, opp 45' Nicolas Jackson, disallowed
+FIXTURE ownGoal: league match 2, seed 1940, me 10' Brennan Johnson, disallowed
+FIXTURE injury: league match 1, seed 3861, opp 15' Hugo Ekitiké, disallowed
+FIXTURE red: league match 2, seed 6513, opp 34' Nicolas Jackson, disallowed
+FIXTURE crowdedGoal: league match 2, seed 42322, opp 45' Alejandro Garnacho, disallowed
+FIXTURE crowdedShot: league match 2, seed 6203, opp 45' Nicolas Jackson, disallowed
+playCmVar: not walked on this build: penaltyScored (needs the penalty kind), penaltySaved (needs the penalty kind).
+LASTKICK 390-motion-crowdedGoal-plain: {"text":"GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on","minute":45,"plus":4,"stage":"first","reviewCardUp":0,"solid":true,"shot":"390-motion-crowdedGoal-plain-0-last-kick-card.jpg","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":51,"intervalAt":56,"samples":57}
+LASTKICK 1280-motion-crowdedGoal-plain: {"text":"GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on","minute":45,"plus":4,"stage":"first","reviewCardUp":0,"solid":true,"shot":"1280-motion-crowdedGoal-plain-0-last-kick-card.jpg","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":51,"intervalAt":56,"samples":57}
+LASTKICK 390-reduced-crowdedGoal-plain: {"text":"GOAL! Free kick,  | Brennan Johnson |  45+4' | Everton · 1 this season | Tap to carry on","minute":45,"plus":4,"stage":"first","reviewCardUp":0,"solid":true,"shot":"390-reduced-crowdedGoal-plain-0-last-kick-card.jpg","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":25,"intervalAt":29,"samples":30}
+playCmVar: 30 cases and 2 help views at 390 and 1280, 10 of 12 fixtures found, 0 failed assertion(s).
+playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
+playCmVar exit 0

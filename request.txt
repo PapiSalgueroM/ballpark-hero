@@ -1,0 +1,13 @@
+#!serve
+#!playwright
+#!serial
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tail -3
+playCmVar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs > /tmp/walk.log 2>&1; s=$?; cp /tmp/walk.log "$RC_OUT/walk.log"; grep -E "^FIXTURE|^LASTKICK|^FAIL|^playCmVar" /tmp/walk.log | cut -c1-640 | tail -40; echo "playCmVar exit $s"; exit $s
+simLiveScores: node scripts/simLiveScores.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+weight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs > /tmp/w.log 2>&1; s=$?; cp /tmp/w.log "$RC_OUT/weight.log"; grep -a "club-manager\|whats-new\|hot-seat\|deadline-day\|OVER" /tmp/w.log | cut -c1-200 | head -12; tail -2 /tmp/w.log | cut -c1-300; echo "sweepWeight exit $s"; exit $s
+lk-control: git show c06dc974^:src/components/club-manager/LiveSimScreen.tsx > src/components/club-manager/LiveSimScreen.tsx && npm run build > /tmp/ctl-build.log 2>&1 && node .rc/x/mkCrowdedOnly.mjs && BASE= FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/zzCrowdedOnly.mjs > /tmp/ctl.log 2>&1; s=$?; cp /tmp/ctl.log "$RC_OUT/lk-control.log"; grep -E "^LASTKICK|^FAIL|^playCmVar|^mkCrowdedOnly" /tmp/ctl.log | cut -c1-640 | tail -20; rm -f scripts/zzCrowdedOnly.mjs; git checkout -- src; echo "lk-control exit $s (1 is the control firing: the screen as it was before c06dc974)"; exit $s
+clean: git status --porcelain --untracked-files=no | wc -l

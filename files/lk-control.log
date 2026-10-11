@@ -1,0 +1,24 @@
+playCmVar: the build plays goal.
+FIXTURE ruledOut: league match 1, seed 2460, me 9' Kiernan Dewsbury-Hall, disallowed
+FIXTURE penaltyScored: not played, the build does not play the penalty kind
+FIXTURE penaltySaved: not played, the build does not play the penalty kind
+FIXTURE goalBefore: league match 2, seed 1724, opp 8' João Gomes, disallowed
+FIXTURE two: league match 1, seed 4926, opp 6' Jérémy Jacquet, disallowed
+FIXTURE lateWhistle: league match 2, seed 1984, opp 45' Alejandro Garnacho, disallowed
+FIXTURE lateBefore: league match 2, seed 2591, opp 45' Nicolas Jackson, disallowed
+FIXTURE ownGoal: league match 2, seed 1940, me 10' Brennan Johnson, disallowed
+FIXTURE injury: league match 1, seed 3861, opp 15' Hugo Ekitiké, disallowed
+FIXTURE red: league match 2, seed 6513, opp 34' Nicolas Jackson, disallowed
+FIXTURE crowdedGoal: league match 2, seed 42322, opp 45' Alejandro Garnacho, disallowed
+FIXTURE crowdedShot: league match 2, seed 6203, opp 45' Nicolas Jackson, disallowed
+playCmVar: not walked on this build: penaltyScored (needs the penalty kind), penaltySaved (needs the penalty kind).
+LASTKICK 390-motion-crowdedGoal-plain: {"error":"TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":47,"intervalAt":56,"samples":57}
+CASE 390-motion-crowdedGoal-plain: FAILED (2) the last kick of the half never got its scorer card with the goal on the score: TimeoutError: page.waitForFunction: Timeout 150000ms exceeded. | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 152s
+LASTKICK 390-reduced-crowdedGoal-plain: {"error":"TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.","goal":"me 45+4' Brennan Johnson","goalPlace":49,"whistlePlace":49,"cardAt":23,"intervalAt":28,"samples":29}
+CASE 390-reduced-crowdedGoal-plain: FAILED (2) the last kick of the half never got its scorer card with the goal on the score: TimeoutError: page.waitForFunction: Timeout 150000ms exceeded. | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 151s
+FAIL 390-motion-crowdedGoal-plain: the last kick of the half never got its scorer card with the goal on the score: TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.
+FAIL 390-motion-crowdedGoal-plain: the last scorer card the screen showed is not the last kick's, in the half it belongs to: {"card":"none","motion":"goal","phase":"net","net":"top","stage":"first","goalPill":false,"line":"GOAL! Merlin Röhl","goalCard":true,"goalText":"GOAL! Merlin Röhl 45+2'Everton · 1 this seasonTap to carry on","minute":"45","y":0,"score":"me=1 opp=0","t":24635}
+FAIL 390-reduced-crowdedGoal-plain: the last kick of the half never got its scorer card with the goal on the score: TimeoutError: page.waitForFunction: Timeout 150000ms exceeded.
+FAIL 390-reduced-crowdedGoal-plain: the last scorer card the screen showed is not the last kick's, in the half it belongs to: {"card":"none","motion":"goal","phase":"net","net":"top","stage":"first","goalPill":false,"line":"GOAL! Merlin Röhl","goalCard":true,"goalText":"GOAL! Merlin Röhl 45+2'Everton · 1 this seasonTap to carry on","minute":"45","y":0,"score":"me=1 opp=0","t":24179}
+playCmVar: 2 cases and 0 help views at 390 and 1280, 10 of 12 fixtures found, 4 failed assertion(s).
+playCmVar: FAILED.
