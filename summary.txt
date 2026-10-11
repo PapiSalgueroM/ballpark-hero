@@ -1,0 +1,3 @@
+build exit=0 21s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+simSoccerVeteranOffers exit=0 409s | PASS Soccer veteran offers: 7 groups, 11 retained bundle arms
+playSaveKeeper-base-AT exit=0 816s | playSaveKeeper: green. A save put back with a game in memory survives the load, and an ordinary visit stores nothing new.
