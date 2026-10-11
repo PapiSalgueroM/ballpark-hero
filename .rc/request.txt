@@ -1,0 +1,3 @@
+# REVIEW-run Round 1306, head b7943c61: parts B and D of the old save probe again, the saves written by a THIRD engine copy so head and base have the same history of calls
+old-B2: B=$PWD/rcb-B && git worktree add -q $B c9a1f86a && mkdir -p /tmp/oB && TMPDIR=/tmp/oB node .rc/x/oldsave2.mjs $B B
+old-D2: B=$PWD/rcb-D && git worktree add -q $B c9a1f86a && mkdir -p /tmp/oD && TMPDIR=/tmp/oD node .rc/x/oldsave2.mjs $B D
