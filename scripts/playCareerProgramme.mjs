@@ -110,7 +110,13 @@ try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=wid
     if(soccer&&!fixture.id){
       assert(fixture.expectedSquad?.eleven.length===11,'Fixture retains the existing reader eleven');
       const opener=page.locator('[data-squad-tile]'),squad=page.locator('[data-squad-sheet] [role="dialog"]');
-      await opener.scrollIntoViewIfNeeded();const squadBefore=await bodyState();await opener.click();await squad.waitFor();
+      await opener.scrollIntoViewIfNeeded();
+      /* Release AU: the position is read AT the press, the way the plans opener below is read. On a 320 by 568 screen the
+         Squad tile sits under the pinned bar, and Playwright's click scrolls it clear before it presses, so a reading taken
+         before the click (3 px) was of another position than the one the sheet opened on (245 px) and the walk called
+         Back a jump of 242 px. Measured by the screens review with this same listener: opens at 245, closes at 245. */
+      await opener.evaluate(e=>{window.__squadOpening=null;e.addEventListener('click',()=>{window.__squadOpening={y:scrollY,overflow:document.body.style.overflow,computed:getComputedStyle(document.body).overflow,locked:document.body.getAttribute('data-scroll-locked')};},{capture:true,once:true,passive:true});});
+      await opener.click();await squad.waitFor();const squadBefore=await page.evaluate(()=>window.__squadOpening);assert(squadBefore,'The Squad tile press was read at the press');
       await squad.locator('[data-squad-screen="help"]').waitFor();
       check(await bytes()===before,'Opening squad rules preserves every career field');await shot('squad-help',squad);
       await squad.getByRole('button',{name:'← Back',exact:true}).click();
