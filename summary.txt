@@ -1,0 +1,3 @@
+probe-head exit=1 26s | PROBE head: vitest exit 1
+probe-m1 exit=1 27s | PROBE m1: vitest exit 1
+probe-m2 exit=1 26s | PROBE m2: vitest exit 1

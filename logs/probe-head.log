@@ -1,0 +1,4 @@
+rrProbe: wrote src/test/reviewRunProbe.test.tsx (41092 + 6264 characters)
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[33m21 skipped[39m[90m (22)[39m
+PROBE head: vitest exit 1
