@@ -1,0 +1,11 @@
+# Release AV closing check (verify), no build: finding 1 (major) on the pushed head. The reviewer's own probe on main, on the reviewed head and on this head; the type gate; the new harness and its three controls; the plan unit files; the board parity.
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+probe: R="$PWD"; git worktree add -q --detach /tmp/base aa564f16019b9e821981d5c4e3e0262312c73b62 && ln -s "$R/node_modules" /tmp/base/node_modules && echo "== main aa564f16 ==" && (cd /tmp/base && USC_PLAN_N=60 node "$R/.rc/x/uscPlan.mjs" | grep -v "^   ") && echo "== reviewed head 5ed04ae7 ==" && git worktree add -q --detach /tmp/rev 5ed04ae7cd9618141ea8db4600206fcec2feeb07 && ln -s "$R/node_modules" /tmp/rev/node_modules && (cd /tmp/rev && USC_PLAN_N=60 node "$R/.rc/x/uscPlan.mjs" | grep -v "^   ") && echo "== this head $(git rev-parse HEAD~1 2>/dev/null) ==" && USC_PLAN_N=60 node .rc/x/uscPlan.mjs
+plan: node scripts/simUsPlanSeason.mjs
+plan-s4: SEEDSET=4 node scripts/simUsPlanSeason.mjs
+plan-typed: US_PLAN_CONTROL=typed node scripts/simUsPlanSeason.mjs
+plan-yeardrift: US_PLAN_CONTROL=yeardrift node scripts/simUsPlanSeason.mjs
+plan-statfull: US_PLAN_CONTROL=statfull node scripts/simUsPlanSeason.mjs
+vitest-plan: node_modules/.bin/vitest run src/lib/usCareerProgramme.test.ts src/test/usProgrammeCardTruth.test.ts src/test/usCareerProgrammeUi.test.tsx src/test/usCareerTruthDigest.test.ts src/test/usSeasonSlate.test.ts --testTimeout=300000 --hookTimeout=120000
+simUsBoardParity: node scripts/simUsBoardParity.mjs
+headsrc: git log --oneline -3 | cut -c1-120; git diff --stat ede8317293ed11f27c6d3b663fb9422a566fe9b8 HEAD -- src scripts | tail -3; echo "src and scripts diff against ede83172 printed above (empty means the checked tree is the pushed head)"
