@@ -1,0 +1,4 @@
+summer-mlb exit=0 3628s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
+summer-nba exit=0 3840s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
+summer-nfl exit=124 4200s | 6) balance: on against off, careers a seed nfl 12000, 3 seeds
+summer-nhl exit=0 755s | simUsCareerSummer: green. Sections 1, 2, 3, 3b, 4, 5, 6, 7, 8, 9, 10, 11, 12 held over 400 careers a sport.
