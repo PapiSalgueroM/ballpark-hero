@@ -10,10 +10,14 @@
  * Release AW merges two rounds of the other lane that change what a career of 30 or more is paid, on purpose:
  *   offers   Rounds 1262 to 1264 (PR230): a new club's wage, and a homecoming wage, follow the age and form
  *            quote from 30. One function, soccerTransferTerms, behind one condition.
- * Neither function draws: makeOffer still evaluates rand(1, 5) as an argument at the place it always did, so
- * with the condition out the old terms and the old draws come back and nothing else moves. With exactly that
- * taken out of a COPY of src/lib/soccerCareerContracts.ts, and nothing else touched, the eight replay as they
- * did on the release line before the merge. So this is an attribution, not a new recording: the recordings and
+ *   talks    Rounds 1265 to 1267 (PR228): the "Push for more money" choice of the contract event pays the
+ *            larger of the current wage and the renewal quote from 30, and says so on the card, in the
+ *            career's event line and on the wheel. One function, soccerWageDemand, behind one condition.
+ * Neither function draws: makeOffer still evaluates rand(1, 5) as an argument at the place it always did and
+ * the event still rolls its one chance, so with the two conditions out the old terms, the old strings
+ * ("20% wage raise", "Pushed for more, got a raise!") and the old draws come back and nothing else moves. With
+ * exactly those two taken out of a COPY of src/lib/soccerCareerContracts.ts, and nothing else touched, the
+ * eight replay as they did on the release line before the merges. So this is an attribution, not a new recording: the recordings and
  * the base pins stay as they were taken.
  *
  * Like the inverses beside it, this only ever rewrites a COPY of a file that a historical bundle loads. It
@@ -29,6 +33,12 @@ const EDITS = {
     file: VETERAN_PAY_FILE,
     from: '  if (career.age < 30) return { wage: offeredWage, contractYears: offeredYears };',
     to: '  return { wage: offeredWage, contractYears: offeredYears };',
+  },
+  /* The short text of this condition is also the start of the line above, so the anchor carries the line after it. */
+  talks: {
+    file: VETERAN_PAY_FILE,
+    from: '  if (career.age < 30) return {\n    weeklyWage: Math.round(career.weeklyWage * 1.2),',
+    to: '  return {\n    weeklyWage: Math.round(career.weeklyWage * 1.2),',
   },
 };
 export const VETERAN_PAY_ADDITIONS = Object.keys(EDITS);
