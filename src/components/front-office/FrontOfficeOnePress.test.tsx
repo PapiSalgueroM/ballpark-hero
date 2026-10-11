@@ -53,6 +53,12 @@
  * any of them records again with FO_ONE_PRESS=print and says so; a round
  * that does not mean to and finds a digest moved has changed the game.
  *
+ * THE LOG, SINCE THE ROUND THAT RECORDED THE DIGESTS. The digests set the
+ * key `gameLog` aside, so beside them each case holds what the key must be:
+ * on the recap save it reads whole and is Week 17 and then his playoff games
+ * with the very scores the saved rounds hold; it rides unchanged into the
+ * draft; and the summer ends it (the next season's hub holds no key).
+ *
  * Negative control: FO_BOARD_NFL points the file at a copy of the board, the
  * way scripts/simGmReload.mjs does for the season close test.
  */
@@ -60,6 +66,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { createHash } from 'node:crypto';
 import type { ComponentType } from 'react';
+import { readGmGameLog } from '@/lib/gmGameLog';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
@@ -220,6 +227,7 @@ for (const kind of KINDS) {
           /* point one: the final week and the whole postseason, one press */
           let G!: Awaited<ReturnType<typeof freshGame>>;
           let team = '';
+          let winsBefore = 0;
           let recap: any = null;
           let took: Ending = 'ordinary';
           let seed = PRESS_SEED;
@@ -229,6 +237,7 @@ for (const kind of KINDS) {
             G = await freshGame();
             const made = finalWeekSave(G, kind, desk, ending);
             team = made.team;
+            winsBefore = made.save.league.teams[team].wins;
             localStorage.setItem(SAVE_KEY, JSON.stringify(made.save));
             useRandom(lehmer(seed));
             const first = render(<G.Board />);
@@ -246,6 +255,18 @@ for (const kind of KINDS) {
           hold(`${id}|press seed`, String(seed));
           hold(`${id}|winners`, recap.postseason.rounds.flatMap((r: any) => r.games.map((g: any) => g.winner)).join(','));
           hold(`${id}|recap`, onePressDigest(raw()));
+          /* the season's log on the recap save: Week 17, then his playoff games, the saved rounds' own scores */
+          const logOf = (s: any) => readGmGameLog(s.gameLog, c => Object.prototype.hasOwnProperty.call(s.league.teams, c), s.league.season, s.myTeam);
+          const log = logOf(recap);
+          expect(log, 'the recap save holds a log that reads whole').not.toBeNull();
+          const his = recap.postseason.rounds.flatMap((r: any) => r.games.map((g: any) => ({ round: r.name, g }))).filter((x: any) => x.g.home === team || x.g.away === team);
+          expect(log!.games.map(g => g.where)).toEqual(['w17', ...his.map((x: any) => x.round)]);
+          expect(log!.games[0].winner === team ? 1 : 0, 'Week 17 in the log is the result the league took').toBe(recap.league.teams[team].wins - winsBefore);
+          his.forEach((x: any, k: number) => {
+            const e = log!.games[k + 1];
+            expect([e.home, e.away, e.homeScore, e.awayScore, e.winner]).toEqual([x.g.home, x.g.away, x.g.homeScore, x.g.awayScore, x.g.winner]);
+          });
+          if (ending === 'title') expect(log!.games[log!.games.length - 1]).toMatchObject({ where: 'Super Bowl', winner: team });
           if (took === 'fired') {
             expect(recap.phase).toBe('fired');
             return;
@@ -257,6 +278,7 @@ for (const kind of KINDS) {
           fireEvent.click(screen.getByText('Go to the draft'));
           expect(read().phase).toBe('draft');
           hold(`${id}|draft`, onePressDigest(raw()));
+          expect(read().gameLog, 'the finished season rides into the draft with its log').toEqual(recap.gameLog);
 
           /* point three: his picks (the first prospect on the screen each time), the rivals', and the summer */
           let presses = 0;
@@ -269,6 +291,7 @@ for (const kind of KINDS) {
           expect(hub.league.season).toBe(recap.league.season + 1);
           expect(hub.league.week).toBe(1);
           hold(`${id}|hub`, onePressDigest(raw()));
+          expect('gameLog' in hub, 'the summer ends the log: the new season holds no key').toBe(false);
         });
       }
     });

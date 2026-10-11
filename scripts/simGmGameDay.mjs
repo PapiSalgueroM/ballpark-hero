@@ -794,6 +794,11 @@ for (const set of SEEDSETS) {
   const MOUNT_ALLOW = new Map([
     ...NEW_FILES.map(f => [f, '*']),
     ...['src/lib/gmGameScore.test.ts', 'src/lib/gmGameDay.test.ts', 'src/lib/gmBracket.test.ts', 'src/lib/gmGameLog.test.ts', 'src/lib/frontOfficeGameDay.test.ts'].map(f => [f, '*']),
+    /* Round 1305, the press: the NFL board tells scores and keeps the log. The bind and the log, and nothing else. */
+    [NFL_BOARD, new Set([noExt(BIND), noExt(LOG)])],
+    /* its board tests read the log, the bind's words for a week and the quick path's final */
+    ['src/components/front-office/FrontOfficeGameDay.test.tsx', new Set([noExt(LOG), noExt(BIND), noExt(SCORE)])],
+    ['src/components/front-office/FrontOfficeOnePress.test.tsx', new Set([noExt(LOG)])],
   ]);
   /* an import's path from the repo root: the alias, or a path from the importing file; a package is nobody's */
   const target = (from, spec) => {
@@ -823,6 +828,10 @@ for (const set of SEEDSETS) {
   check(6, `no file under src imports the new modules but the files on the mount list, each within its own line of it (${files.length} files read)`, importers.length === 0, importers.slice(0, 5).join(', '));
   /* the scan can see an import at all: the libraries import each other and the tests import them */
   check(6, `the scan sees the modules' own imports (${own} of the ${MOUNT_ALLOW.size} files on the mount list import one)`, own >= 8);
+  /* the board really is bound: a mount list that allows an import nobody makes would be holding nothing */
+  const boardText = stripComments(readPatched(NFL_BOARD));
+  check(6, 'the NFL board imports the bind and the log, and calls nflTell on the week and on the one press postseason',
+    /from '@\/lib\/frontOfficeGameDay'/.test(boardText) && /from '@\/lib\/gmGameLog'/.test(boardText) && boardText.split('nflTell(').length - 1 === 2);
   /* NO BOARD READS THE STORY IN ITS OWN CHUNK. A press needs the score law, the bind and the log in the same tick, so
      those are static imports of a board. What only a drawn card reads (the told path, the story law, the game day law
      and the words of the "?") must reach a board through a lazy part or not at all, or a route that is on its weight

@@ -69,6 +69,12 @@ import {
 } from '@/lib/nflGmDesk';
 /* By its full path, not './': harnesses bundle a copy of this board from a temp folder. */
 import { NFL_DESK_PANELS, NFL_RECAP_PANELS, type NflDeskFacts } from '@/components/front-office/NflGmDesk';
+/* Round 1305: every score a GM reads is told by the football law for the
+   winner the engine decided, and his club's games of the season are kept in
+   the save. Both are needed in the press's own tick, so they are static;
+   the story of a game and its card are not imported here. */
+import { nflTell, nflWhere } from '@/lib/frontOfficeGameDay';
+import { addToGmGameLog, readGmGameLog, type GmGameLog } from '@/lib/gmGameLog';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save the way a
    Club Manager sacking does. */
@@ -112,6 +118,10 @@ interface SaveShape {
      before it, and on those the board plays exactly as it did until the GM
      opens a desk box. Each block inside is validated alone. */
   gm?: unknown;
+  /* Round 1305: his club's told games of the season (src/lib/gmGameLog.ts).
+     Absent on every older save, at the start of a franchise and of a season,
+     and whenever it does not read whole: never null, never an empty log. */
+  gameLog?: GmGameLog;
 }
 
 export default function FrontOfficeBoard() {
@@ -191,6 +201,13 @@ export default function FrontOfficeBoard() {
   const gmLive = useRef<GmDesk | null>(null);
   const setGm = (d: GmDesk | null) => { gmLive.current = d; setGmState(d); };
   const [gmOpen, setGmOpen] = useState<string | null>(null);
+  /* Round 1305: the season's told games of his club. Every save reads the
+     log from here, the desk's pattern above, so the press that has just told
+     a game saves it through the persist calls as they stand. Null: nothing
+     is told yet and the key stays off the save. No screen reads it in this
+     round, so it is a ref and not state. */
+  const gameLogLive = useRef<GmGameLog | null>(null);
+  const setGameLog = (l: GmGameLog | null) => { gameLogLive.current = l; };
 
   useGameCompletion('front-office', wonTitleNow, titles * 100 + seasonsPlayed * 5);
 
@@ -234,6 +251,10 @@ export default function FrontOfficeBoard() {
       setSeasonTradeLine(s.seasonTradeLine ?? null);
       /* Round 1019: no `gm` on the save means the desk stays off until it is opened. */
       setGm(s.gm === undefined ? null : readGmDesk(s.gm));
+      /* Round 1305: a log that does not read whole (another season's, another
+         club's, a damaged entry) is treated as absent. The save loads as it
+         would without one and the next press starts a fresh log. */
+      setGameLog(readGmGameLog(s.gameLog, id => Object.prototype.hasOwnProperty.call(s.league.teams, id), s.league.season, s.myTeam));
       /* Round 431: a reload on the recap screen used to replay the season.
          The save carried phase 'recap' with the league still at the final
          week and no postseason, this effect mapped it back to 'hub', the
@@ -262,6 +283,7 @@ export default function FrontOfficeBoard() {
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { rounds: playoffRounds, champion, gradeLine } : null,
         ...(gmLive.current ? { gm: gmLive.current } : {}),
+        ...(gameLogLive.current ? { gameLog: gameLogLive.current } : {}),
         ...patch,
       };
       localStorage.setItem(SAVE_KEY, JSON.stringify(base));
@@ -323,6 +345,8 @@ export default function FrontOfficeBoard() {
     /* Round 1019: a new front office opens with the desk on. Only a save from
        before it waits for the GM to open a desk box. */
     setGm(openNflDesk(lg, abbr)); setGmOpen(null);
+    /* Round 1305: the games of the club he ran before are not this club's season. */
+    setGameLog(null); /* a new franchise */
     persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
   };
 
@@ -405,6 +429,13 @@ export default function FrontOfficeBoard() {
     const injuries = deskWeek ? injuryPass(lg.teams, Math.random, deskWeek.weeksFor) : injuryPass(lg.teams, Math.random);
     const aiLog = aiWeeklyMoves(lg, myTeam, Math.random);
     const games = lg.schedule[lg.week - 1].map(g => (deskWeek ? simGame(g, lg.teams, Math.random, deskWeek.edges) : simGame(g, lg.teams, Math.random)));
+    /* Round 1305: the engine has decided every game. The football law now
+       tells each of them a score for that same winner, at the chance and
+       with the edges it was played with, and his own game goes into the
+       season's log. Nothing is drawn here and no record moves. */
+    const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));
+    const mine = told.find(t => t.game.home === myTeam || t.game.away === myTeam);
+    let log = addToGmGameLog(gameLogLive.current, lg.season, mine?.last ? [mine.last] : []);
     let nextGm = gm;
     const deskLines: string[] = [];
     if (gm) {
@@ -422,14 +453,25 @@ export default function FrontOfficeBoard() {
       feed.push(`🚑 ${inj.player} is out ${inj.weeks} week${inj.weeks === 1 ? '' : 's'}.`);
     }
     feed.push(...aiLog.slice(0, 2).map(l => `📰 ${l}`));
-    setWeekResults(games);
+    setWeekResults(told.map(t => t.game));
     setNewsFeed(feed);
     setFeedSlam(null);
 
     if (lg.week >= REGULAR_WEEKS) {
       const { rounds, champion: champ } = runPlayoffs(lg.teams, Math.random, nextGm ? nflDeskEdges(nextGm, lg, myTeam) : undefined);
+      /* Round 1305: the thirteen playoff games are told the same way, each
+         under its round's name, with the edges the bracket was played with
+         (read again: the desk draws nothing). The told rounds are what the
+         recap shows and what the save keeps, so no screen ever tells a game
+         a second score, and his own playoff games close the season's log. */
+      const playoffEdges = nextGm ? nflDeskEdges(nextGm, lg, myTeam) : undefined;
+      const toldPlayoffs = rounds.map(r => ({ name: r.name, told: r.games.map(g => nflTell(g, lg.teams, lg.season, r.name, playoffEdges)) }));
+      const toldRounds: PlayoffRound[] = toldPlayoffs.map(r => ({ name: r.name, games: r.told.map(t => t.game) }));
+      log = addToGmGameLog(log, lg.season, toldPlayoffs.flatMap(r => r.told)
+        .filter(t => t.game.home === myTeam || t.game.away === myTeam).flatMap(t => (t.last ? [t.last] : [])));
+      setGameLog(log);
       lg.champions.push({ season: lg.season, team: champ });
-      setPlayoffRounds(rounds);
+      setPlayoffRounds(toldRounds);
       setChampion(champ);
       const won = champ === myTeam;
       setWonTitleNow(won);
@@ -442,7 +484,7 @@ export default function FrontOfficeBoard() {
       let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
       let gradeVerdict: string | null = null;
       if (mandate) {
-        const post = nflPostseason(rounds, myTeam);
+        const post = nflPostseason(toldRounds, myTeam);
         const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
         const applied = applyMandateResult(trust, grade);
         newTrust = applied.trust;
@@ -462,11 +504,12 @@ export default function FrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds: toldRounds, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
       return;
     }
     lg.week += 1;
     setLeague(lg);
+    setGameLog(log);
     persist({}, lg, myTeam);
   };
 
@@ -612,6 +655,8 @@ export default function FrontOfficeBoard() {
       setNewsFeed(feed.slice(0, 8));
       setFeedSlam(null);
       setWeekResults([]);
+      /* Round 1305: the finished season's log ends here, before the save below. */
+      setGameLog(null); /* the summer */
       setPlayoffRounds([]);
       setChampion('');
       setWonTitleNow(false);
@@ -868,6 +913,7 @@ export default function FrontOfficeBoard() {
     setPressTilt(0);
     setSeasonTradeLine(null);
     setGm(null); setGmOpen(null);
+    setGameLog(null); /* abandoned */
   };
 
   /* Round 1019: the desk boxes. The first tap on one, on a save from before
