@@ -1,0 +1,7 @@
+build exit=0 30s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+fonts exit=0 1s | Prepared 9 declared font dependencies for local fulfillment.
+farewell-outcomes exit=0 6s | PASS farewell outcomes: {"mode":"outcomes","groups":9,"neutralPairs":168,"sourceControls":6,"preparedBranches":6,"sourceHeld":true}
+farewell-native exit=0 238s | PASS farewell native: {"mode":"native","checks":1310,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
+farewell-native-again exit=0 237s | PASS farewell native: {"mode":"native","checks":1310,"journeys":18,"wholePairs":105,"postStartupExactVectors":138,"rawReloads":72,"unfilteredStartupObservations":72,"layo
+brief-outcomes exit=0 6s | Outcomes:9 healthy groups,60 entire original/current state+RNG pairs,8 independently compiled effective exact faults,9 native fixture branches.
+brief-native exit=0 177s | Native: 1341 checks,27 journeys,90 whole-save pairs,90 raw reloads,81 exact post-startup read/engine RNG vectors,90 unfiltered startup value/stack observations,48 PNGs,20
