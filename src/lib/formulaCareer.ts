@@ -285,7 +285,7 @@ const gridSchema = z.object({ driverId: id, name: z.string().min(1).max(40), tea
 const schema = z.object({
   version: z.literal(1), rulebook: z.literal(FORMULA_RULEBOOK), careerId: id,
   rng: number.int().min(0).max(4294967295), draws: number.int().nonnegative(),
-  season: number.int().min(1).max(20), round: number.int().min(0).max(23), serial: number.int().positive(),
+  season: number.int().min(1).max(20), round: number.int().min(0).max(23), serial: number.int().positive().max(21 + 19 * (FORMULA_CAREER_SEASONS - 1)),
   phase: z.enum(['weekend', 'grid', 'result', 'contracts', 'retired']),
   drivers: z.array(z.object({ id, name: z.string().min(1).max(40), teamId: id, age: number.int().min(18).max(60),
     pace: rating, racecraft: rating, composure: rating, potential: rating })).length(20),

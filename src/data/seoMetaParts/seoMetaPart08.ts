@@ -2,12 +2,16 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 8 of 32: 1 entry. */
+/* Part 8 of 32: 2 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
   "/nba-grid": {
     title: "NBA Franchise Grid: Daily Basketball Trivia",
     description: "Fill the 3x3 NBA grid with players whose careers match the row and the column, from franchises to milestones. Daily board plus unlimited. Free basketball.",
+  },
+  "/f1-career": {
+    title: "Formula Career: F1 Driver Career Sim",
+    description: "Build a generated F1 driver career, qualify and race a full grid, earn better seats and chase championships. Free saved play with simplified 2025 rules.",
   },
 };
