@@ -1,0 +1,27 @@
+# Release AW closing pass, final proof P-CM2: ruling C2: Club Manager readers that are no gate line, part 2 (plain build, three at a time)
+#!build
+#!playwright
+simContracts: node scripts/simContracts.mjs
+simCreateClub: node scripts/simCreateClub.mjs
+simCup: node scripts/simCup.mjs
+simCustomClubValues: node scripts/simCustomClubValues.mjs
+simDealDepth: node scripts/simDealDepth.mjs
+simEra2005: node scripts/simEra2005.mjs
+simEra2010: node scripts/simEra2010.mjs
+simEra2015: node scripts/simEra2015.mjs
+simEra2020: node scripts/simEra2020.mjs
+simEraWorldTables: node scripts/simEraWorldTables.mjs
+simEras: node scripts/simEras.mjs
+simFinance: node scripts/simFinance.mjs
+simFootleLeagues: node scripts/simFootleLeagues.mjs
+simFreeAgents: node scripts/simFreeAgents.mjs
+simGmBooks: node scripts/simGmBooks.mjs
+simGmCalendar: node scripts/simGmCalendar.mjs
+simGmDealTableFixture: node scripts/simGmDealTableFixture.mjs
+simGmStaff: node scripts/simGmStaff.mjs
+simHeadlines: node scripts/simHeadlines.mjs
+simHomeFront: node scripts/simHomeFront.mjs
+simIntlFormatHistory: node scripts/simIntlFormatHistory.mjs
+simJobMarket: node scripts/simJobMarket.mjs
+simManagerCareer: node scripts/simManagerCareer.mjs
+simManagerSpec: node scripts/simManagerSpec.mjs
