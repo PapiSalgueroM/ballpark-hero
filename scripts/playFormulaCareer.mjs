@@ -39,6 +39,7 @@ const report = { status: 'running', base: BASE, source: [], input: {}, cases: []
   'Existing essential-cookie consent and a generated proof guest handle are saved before navigation. The new game rules are genuinely shown before first play; no fresh site cookie-choice interaction is claimed.',
   'Anonymous completed-play inserts omit score. The unchanged central recorder may save neutral zero for a signed-in account; no signed-in completion or point-conversion leaderboard submission is claimed.',
   'Rapid guard observations invoke the actual rendered React onClick or setup onSubmit closure twice synchronously, with the real measured currentTarget. Complete callback text/arguments and both invocation cursors are retained. Ordinary navigation uses painted Playwright clicks. These are captured-callback proofs, not a claim that two DOM clicks reached two listeners.',
+  'The read-only init-scope binding retains each original document href, origin and top status plus the actual frame URL. Storage and stream instrumentation run only in the top document at the exact BASE origin. Binding errors remain application errors and the top-document receipt is awaited before observations.',
   'Raw absent/empty body style attributes remain recorded. Only absent attributes with zero declarations are equivalent to an empty attribute for restoration; all declarations, computed styles and nonempty attributes remain strict.'
 ] };
 let browser;
@@ -89,7 +90,7 @@ function standings(s, season, kind) {
   return rows;
 }
 async function settle(page) {
-  await page.evaluate(async () => { await document.fonts.ready;
+  await page.evaluate(async () => { await window.__formulaInitScopeReceipt; await document.fonts.ready;
     const finite=document.getAnimations().filter(a=>Number.isFinite(a.effect.getComputedTiming().endTime));
     await Promise.all(finite.map(a=>a.finished.catch(()=>{})));
     for (let i=0;i<4;i++) await new Promise(requestAnimationFrame); });
@@ -134,18 +135,26 @@ async function geometry(page, locator, width, height, touch=44) {
   return result;
 }
 async function runCase(viewport, pure) {
-  const {width,height}=viewport, row={width,height,status:'running',steps:[],layouts:[],screenshots:[],reloads:[],errors:[],assets:[],external:[],startup:[],controls:[]}; report.cases.push(row);
+  const {width,height}=viewport, row={width,height,status:'running',steps:[],layouts:[],screenshots:[],reloads:[],errors:[],assets:[],external:[],startup:[],controls:[],initScopes:[]}; report.cases.push(row);
   const context=await browser.newContext({viewport,deviceScaleFactor:1,reducedMotion:'reduce',serviceWorkers:'block'});
   const pending=new Set(), appErrors=[];
   context.on('page',p=>p.on('pageerror',e=>appErrors.push({name:e.name,message:e.message,stack:e.stack})));
-  await context.addInitScript(({SAVE,COMPLETE})=>{
+  await context.exposeBinding('__formulaRecordInitScope', ({frame},scope)=>{
+    try { row.initScopes.push({...scope,frameUrl:frame.url(),parentFrameUrl:frame.parentFrame()?.url()??null}); }
+    catch(error){appErrors.push({name:error.name,message:error.message,stack:error.stack,qualification:'Actual init-scope binding failure'});throw error;}
+  });
+  await context.addInitScript(({SAVE,COMPLETE,origin})=>{
+    const scope={href:location.href,origin:location.origin,top:window===window.top};scope.eligible=scope.top&&scope.origin===origin;
+    window.__formulaInitScopeReceipt=window.__formulaRecordInitScope(scope);
+    window.__formulaInitScopeReceipt.catch(error=>{throw error;});
+    if(!scope.eligible)return;
     localStorage.setItem('cookie-consent','essential');localStorage.setItem('dukb-guest-handle','FormulaProof-12');
     window.__formulaBrowser={tape:[],writes:[],crypto:[],callbacks:[],failSave:false,seed:1};
     const realRandom=Math.random;Math.random=()=>{const value=realRandom();window.__formulaBrowser.tape.push({value,stack:new Error().stack});return value;};
     const set=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){if(this===localStorage){window.__formulaBrowser.writes.push({key,value:String(value),failed:key===SAVE&&window.__formulaBrowser.failSave,stack:new Error().stack});if(key===SAVE&&window.__formulaBrowser.failSave)throw new DOMException('Diagnostic saved-write refusal','QuotaExceededError');}return set.call(this,key,value);};
     const random=crypto.getRandomValues.bind(crypto);crypto.getRandomValues=function(array){if(array instanceof Uint32Array&&array.length===1){array[0]=window.__formulaBrowser.seed;window.__formulaBrowser.crypto.push({values:Array.from(array),qualification:'explicit declared setup entropy'});return array;}const result=random(array);window.__formulaBrowser.crypto.push({values:Array.from(array),qualification:'actual other startup entropy'});return result;};
     window.__formulaKeys={SAVE,COMPLETE};
-  },{SAVE,COMPLETE});
+  },{SAVE,COMPLETE,origin:new URL(BASE).origin});
   await context.route('**/*',async route=>{
     const req=route.request(),url=new URL(req.url());
     if(url.origin===new URL(BASE).origin){await route.continue();return;}
@@ -206,7 +215,7 @@ async function runCase(viewport, pure) {
   try {
     await page.goto(BASE+'/f1-career',{waitUntil:'networkidle'});await settle(page);
     const initial=await state(page);row.startup.push(retain(initial));assert.equal(initial.raw,null,'new setup has no career');assert.equal(completionRows().length,0,'opening is not a completed play');
-    const help=page.getByRole('dialog');assert.equal(await help.count(),1);assert(await button('Start career').isDisabled(),'rules shown before play');
+    const help=page.getByRole('dialog');assert.equal(await help.count(),1);const disabledStart=page.getByRole('button',{name:'Start career',exact:true,includeHidden:true});assert.equal(await disabledStart.count(),1,'unique disabled background setup control');assert(await disabledStart.isDisabled(),'rules shown before play');
     await shot('rules-before-play',help.getByRole('button',{name:"Let's play",exact:true}));await click("Let's play");assert.equal(await help.count(),0);
     await page.locator('#formula-driver-name').fill('Formula Proof 1');await capture('actual-setup',()=>click('Start career',true));await phase('weekend');
     const naturalInitial=readInput(pure.fixtures.initial);await save(naturalInitial,'setup seed1');assert.equal(completionRows().length,0);assert.equal((await state(page)).crypto.filter(c=>c.qualification==='explicit declared setup entropy').length,1,'rapid setup creates one world');
