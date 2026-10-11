@@ -336,6 +336,26 @@
       scripts/simCmLeagueBook.mjs holds the same thing from the other side:
       the whole save but the book, and the count of draws, equal with the
       book in and out and equal to the commit before the round.
+      Round 1304 (2026-10-11) re-took eras, all 20 entries, and nothing
+      else, for one fix: in a past season the news feed's buying club and
+      the rival of a negotiation are picked from that season's leagues, not
+      from today's (the engine's actingClubsByLeague; scripts/simEra2020.mjs
+      section 9 holds the rule). Attribution on GitHub runners, two legs.
+      Leg A, the commit before the fix (269ef5ea, remote check r1304-fx2a):
+      green whole on the file as it stood, so nothing else in the round
+      moved a hash. Leg B, the fix (754b0b2b, remote check r1304-fx2):
+      modern 27 of 27 and pure 48 of 48 matched untouched, which is the
+      proof that today's game reads the clubs it always read, and all 20
+      era entries differed. Every one moved in start, whole and wholeNext,
+      the hashes of a whole state, which holds the headlines and the
+      transfer log with their new buyers. Eleven moved in nothing else;
+      five more in world as well; and four (era2010|bundesliga2010,
+      era2010|ligue12010, era2015|ligue12015, era2005|bundesliga2005) in
+      the season's own views too (table, results, cup, summary and the
+      next season's), because the pool of clubs that can afford a man has
+      another size, so a deal exists or does not and the stream after it
+      shifts. Written with --part=eras --write on the tree itself, then run
+      green whole on the same runner.
    2. DIGEST, ERAS (hard). The same for every league of every historic era,
       one career each.
    3. DIGEST, PURE (hard). For every modern and era league: the drop count,
