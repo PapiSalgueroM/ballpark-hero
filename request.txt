@@ -1,0 +1,4 @@
+scan0: node .rc/x/scanPen.mjs 0 30000
+scan1: node .rc/x/scanPen.mjs 1 30000
+scan2: node .rc/x/scanPen.mjs 2 30000
+scan3: node .rc/x/scanPen.mjs 3 30000
