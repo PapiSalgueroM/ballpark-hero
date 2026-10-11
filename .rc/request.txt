@@ -1,0 +1,26 @@
+# Release AV proof, Round 1301 (the NHL Hall marks as calibration 3): simCareerHall's controls, part 1 of 3
+vitest-hall: node_modules/.bin/vitest run src/test/careerHallSaves1301.test.ts src/test/careerHall.test.tsx src/test/usCareerHallBoard.test.tsx src/test/careerHallV1Replay.test.ts --testTimeout=300000 --hookTimeout=300000
+hall-anchorwiki: SIM_SKIP_BOARD=1 SIM_CONTROL=anchorwiki node scripts/simCareerHall.mjs nhl 2000
+hall-basebig-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs nfl 2000
+hall-basebig-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=basebig node scripts/simCareerHall.mjs nhl 2000
+hall-below-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=below node scripts/simCareerHall.mjs mlb 2000
+hall-below-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=below node scripts/simCareerHall.mjs nba 2000
+hall-below-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=below node scripts/simCareerHall.mjs nfl 2000
+hall-below-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=below node scripts/simCareerHall.mjs nhl 2000
+hall-calflip: SIM_SKIP_BOARD=1 SIM_CONTROL=calflip node scripts/simCareerHall.mjs nhl 2000
+hall-catchersteals-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=catchersteals node scripts/simCareerHall.mjs mlb 2000
+hall-catchersteals-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=catchersteals node scripts/simCareerHall.mjs nba 2000
+hall-catchersteals-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=catchersteals node scripts/simCareerHall.mjs nfl 2000
+hall-catchersteals-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=catchersteals node scripts/simCareerHall.mjs nhl 2000
+hall-clausealways: SIM_SKIP_BOARD=1 SIM_CONTROL=clausealways node scripts/simCareerHall.mjs nhl 2000
+hall-decisionback-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs mlb 2000
+hall-decisionback-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs nfl 2000
+hall-decisionback-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=decisionback node scripts/simCareerHall.mjs nhl 2000
+hall-examplelie: SIM_SKIP_BOARD=1 SIM_CONTROL=examplelie node scripts/simCareerHall.mjs nhl 2000
+hall-markdrift-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=markdrift node scripts/simCareerHall.mjs mlb 2000
+hall-markdrift-nba: SIM_SKIP_BOARD=1 SIM_CONTROL=markdrift node scripts/simCareerHall.mjs nba 2000
+hall-markdrift-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=markdrift node scripts/simCareerHall.mjs nfl 2000
+hall-markdrift-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=markdrift node scripts/simCareerHall.mjs nhl 2000
+hall-nobase-mlb: SIM_SKIP_BOARD=1 SIM_CONTROL=nobase node scripts/simCareerHall.mjs mlb 2000
+hall-nobase-nfl: SIM_SKIP_BOARD=1 SIM_CONTROL=nobase node scripts/simCareerHall.mjs nfl 2000
+hall-nobase-nhl: SIM_SKIP_BOARD=1 SIM_CONTROL=nobase node scripts/simCareerHall.mjs nhl 2000
