@@ -1,0 +1,2 @@
+KINDS {"halves":1200,"lit":1200,"listKept":1200,"goalSecond":58,"penaltyInGoalOnly":0,"kickInGoalOnly":0,"penaltyInAll":81,"matchesAllHasPenalty":78,"bad":0}
+KINDS HOLD: the saved list survives a real save and load and the second half plays it

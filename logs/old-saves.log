@@ -1,0 +1,6 @@
+MAKE wrote 16 saves of 8 clubs to /tmp/saves.json (1775 KB)
+load exit 0
+D Liverpool between loaded=a4aec1621f79c8cccfa6 eight=76d8ac7842a134f9f558
+D Liverpool halftime loaded=38a4e28d62354c19d0f7 key=false/false match=bd283e39647c1ef6549d after=dc19655f55c3614f34a0 reviewLines=0 four=376eecb8ec99bdadb1b3
+D Everton between loaded=4161d4e06c0a91e076aa eight=7db30d4377ebeaafad84
+OLD SAVES HOLD: 16 digest lines equal on the r1302 base and the branch

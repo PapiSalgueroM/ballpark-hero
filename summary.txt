@@ -1,0 +1,7 @@
+base exit=0 1s | aa564f160 Record Release AU live: deployment aa7795c9, entry index-CSV
+fleet exit=0 55s | DEFAULT PATH BYTE EQUAL on three trees (branch, r1302 base, main): FLEET digest 09851c081462974d5553656b9035a2a4b4ba8888b433642fa4bab9a2e1115dbe
+old-saves exit=0 4s | OLD SAVES HOLD: 16 digest lines equal on the r1302 base and the branch
+new-saves-back exit=0 4s | SAVES OF THE BRANCH LOAD ON MAIN THE SAME: 16 digest lines equal
+kinds exit=0 14s | KINDS HOLD: the saved list survives a real save and load and the second half plays it
+gap exit=0 43s | GAP {"seeds":[2,3,4],"clubs":144,"matches":4297,"goalsOn":2.7114,"goalsOff":2.714,"ruledOut":351,"penaltyReviews":0,"resultMoved":233,"withReview":337,"ruledOutPerMatch":
+gap2 exit=0 44s | GAP {"seeds":[12,13,14],"clubs":144,"matches":4330,"goalsOn":2.7115,"goalsOff":2.7173,"ruledOut":327,"penaltyReviews":0,"resultMoved":244,"withReview":319,"ruledOutPerMat
