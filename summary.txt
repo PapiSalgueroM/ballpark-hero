@@ -1,0 +1,5 @@
+ledger exit=0 1s | simCmVarLedger: all 640 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+tsc exit=0 61s | 
+varscreen exit=0 64s |    Duration  62.90s (transform 1.81s, setup 41ms, collect 2.43s, tests 59.68s, environment 265ms, prepare 126ms)
+simCmVar exit=0 65s | simCmVar normal: actual review outcomes and full prior baseline passed.
