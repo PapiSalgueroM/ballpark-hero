@@ -1,0 +1,5 @@
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+pin-old: node scripts/simManagerAppealIsolation.mjs
+pin-reverted: git show bad382b9:src/lib/clubManager.ts > src/lib/clubManager.ts && node scripts/simManagerAppealIsolation.mjs; s=$?; git checkout -- src/lib/clubManager.ts; exit $s
+clean: test "$(git status --porcelain --untracked-files=no | wc -l)" = 0
