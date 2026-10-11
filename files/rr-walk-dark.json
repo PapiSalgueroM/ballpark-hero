@@ -1,0 +1,115 @@
+{
+ "mode": "dark",
+ "rows": [
+  {
+   "id": "dark-390-landing",
+   "shots": [
+    "dark-390-landing-1.jpg"
+   ],
+   "notes": [],
+   "bad": []
+  },
+  {
+   "id": "dark-1280-landing",
+   "shots": [
+    "dark-1280-landing-1.jpg"
+   ],
+   "notes": [],
+   "bad": []
+  },
+  {
+   "id": "dark-390-how-to-play",
+   "shots": [
+    "dark-390-how-to-play-1-open.jpg"
+   ],
+   "notes": [],
+   "bad": [],
+   "mentionsVar": false
+  },
+  {
+   "id": "dark-1280-how-to-play",
+   "shots": [
+    "dark-1280-how-to-play-1-open.jpg"
+   ],
+   "notes": [],
+   "bad": [],
+   "mentionsVar": false
+  },
+  {
+   "id": "dark-390-motion-match-2460",
+   "seed": 2460,
+   "shots": [
+    "dark-390-motion-match-2460-1-first-half.jpg",
+    "dark-390-motion-match-2460-2-interval.jpg",
+    "dark-390-motion-match-2460-3-second-half.jpg",
+    "dark-390-motion-match-2460-4-full-time.jpg",
+    "dark-390-motion-match-2460-5-report.jpg"
+   ],
+   "notes": [
+    "asked for reviews, this seed would hold 1 review(s) in the first half"
+   ],
+   "bad": [],
+   "optIn": null,
+   "varRows": 0,
+   "cards": 0,
+   "result": "1-0"
+  },
+  {
+   "id": "dark-1280-reduced-match-2460",
+   "seed": 2460,
+   "shots": [
+    "dark-1280-reduced-match-2460-1-first-half.jpg",
+    "dark-1280-reduced-match-2460-2-interval.jpg",
+    "dark-1280-reduced-match-2460-3-second-half.jpg",
+    "dark-1280-reduced-match-2460-4-full-time.jpg",
+    "dark-1280-reduced-match-2460-5-report.jpg"
+   ],
+   "notes": [
+    "asked for reviews, this seed would hold 1 review(s) in the first half"
+   ],
+   "bad": [],
+   "optIn": null,
+   "varRows": 0,
+   "cards": 0,
+   "result": "1-0"
+  },
+  {
+   "id": "dark-390-reduced-match-1735",
+   "seed": 1735,
+   "shots": [
+    "dark-390-reduced-match-1735-1-first-half.jpg",
+    "dark-390-reduced-match-1735-2-interval.jpg",
+    "dark-390-reduced-match-1735-3-second-half.jpg",
+    "dark-390-reduced-match-1735-4-full-time.jpg",
+    "dark-390-reduced-match-1735-5-report.jpg"
+   ],
+   "notes": [
+    "asked for reviews, this seed would hold 1 review(s) in the first half"
+   ],
+   "bad": [],
+   "optIn": null,
+   "varRows": 0,
+   "cards": 0,
+   "result": "1-1"
+  },
+  {
+   "id": "dark-1280-motion-match-1735",
+   "seed": 1735,
+   "shots": [
+    "dark-1280-motion-match-1735-1-first-half.jpg",
+    "dark-1280-motion-match-1735-2-interval.jpg",
+    "dark-1280-motion-match-1735-3-second-half.jpg",
+    "dark-1280-motion-match-1735-4-full-time.jpg",
+    "dark-1280-motion-match-1735-5-report.jpg"
+   ],
+   "notes": [
+    "asked for reviews, this seed would hold 1 review(s) in the first half"
+   ],
+   "bad": [],
+   "optIn": null,
+   "varRows": 0,
+   "cards": 0,
+   "result": "1-1"
+  }
+ ]
+}

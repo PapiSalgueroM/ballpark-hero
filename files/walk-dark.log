@@ -1,0 +1,10 @@
+rrWalk: mode dark, the switch in this checkout is off
+ROW dark-390-landing: ok
+ROW dark-1280-landing: ok
+ROW dark-390-how-to-play: ok | mentions VAR: false | null |  | 
+ROW dark-1280-how-to-play: ok | mentions VAR: false | null |  | 
+ROW dark-390-motion-match-2460: ok | opt in null | cards 0 | review rows 0 | result 1-0 | asked for reviews, this seed would hold 1 review(s) in the first half | 
+ROW dark-1280-reduced-match-2460: ok | opt in null | cards 0 | review rows 0 | result 1-0 | asked for reviews, this seed would hold 1 review(s) in the first half | 
+ROW dark-390-reduced-match-1735: ok | opt in null | cards 0 | review rows 0 | result 1-1 | asked for reviews, this seed would hold 1 review(s) in the first half | 
+ROW dark-1280-motion-match-1735: ok | opt in null | cards 0 | review rows 0 | result 1-1 | asked for reviews, this seed would hold 1 review(s) in the first half | 
+rrWalk dark: 8 rows, 0 problem(s).

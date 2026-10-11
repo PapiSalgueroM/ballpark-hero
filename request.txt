@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+# Round 1302 review (run lens), request D: the reviewer's own walk on the build as it ships (the switch off).
+darkwalk: RR_MODE=dark node .rc/x/rrWalk.mjs > /tmp/walk.log 2>&1; s=$?; cp /tmp/walk.log "$RC_OUT/walk-dark.log"; grep -E "^ROW|^PROBLEM|^rrWalk" /tmp/walk.log | cut -c1-700 | tail -40; echo "RESULT dark walk=$s"; exit $s
