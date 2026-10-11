@@ -42,9 +42,15 @@
  * the 2031 world (77 A-League, 91 Russia) and 21 of the 2036 one. Section 1
  * now also proves the join's own accounting from the files, so a man the
  * join drops, or a club no real source accounts for, is red here.
+ * Fix pass of the same round: and a man the join FAILS to move. The running
+ * reviewer kept Ryan Fraser at Southampton as well as at Macarthur FC and
+ * this harness passed, printing "less 0 moved by a newer squad list
+ * (nobody)"; only simClubManagerALeague, which is in no gate list, saw him
+ * twice. Section 1 now fails on any name that is at a club of the bake and
+ * at a club outside it at once (0 today; control twoclubs).
  *
- * Two negative controls, SIM_ERAS_CONTROL=dropman|unflag (see the block
- * where they are defined). A control run plays no seasons.
+ * Three negative controls, SIM_ERAS_CONTROL=dropman|unflag|twoclubs (see the
+ * block where they are defined). A control run plays no seasons.
  *
  * Run: node scripts/simEras.mjs
  */
@@ -85,7 +91,6 @@ fs.rmSync(BUNDLE, { force: true });
    accounting in section 1. */
 const BAKED = DATA.CM_ROSTERS;
 const REAL = WORLD.CM_WORLD_ROSTERS;
-const REAL_COUNT = Object.values(REAL).reduce((s, r) => s + r.length, 0);
 /* Round 832: an era's squads load with the era, so the harness fetches all three first. */
 await E.ensureAllEraRosters();
 const {
@@ -116,12 +121,33 @@ const fx = (v, n = 2) => Number(v).toFixed(n);
                count against the real data must both fail.
      unflag    one made up man of the 2031 world loses his MADE UP flag:
                section 6's "not in the real data and are not flagged as made
-               up" must fail, on exactly one man. */
+               up" must fail, on exactly one man.
+     twoclubs  (fix pass) the join fails to move one man: the first man a
+               newer squad list took out of a club of the bake is back at
+               that club as well, in the one world object the engine and
+               this harness both read, before anything reads it. Section
+               1's "at a club of the bake and at a club outside it at once"
+               must fail, and it is the only line of section 1 that can:
+               the world still matches itself and the count still adds up,
+               which is how the reviewer's mutation passed. */
 const CONTROL = process.env.SIM_ERAS_CONTROL ?? '';
-if (CONTROL && !['dropman', 'unflag'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
+if (CONTROL && !['dropman', 'unflag', 'twoclubs'].includes(CONTROL)) { console.error(`unknown control ${CONTROL}`); process.exit(2); }
 const controlRefuse = why => { console.error(`CONTROL ${CONTROL} did not apply: ${why}`); process.exit(2); };
 const SKIPPED = '   (a control run plays no seasons: section skipped)';
 let controlSaid = false;
+if (CONTROL === 'twoclubs') {
+  const outsideClubs = Object.keys(REAL).filter(c => !(c in BAKED));
+  let hit = null;
+  for (const club of Object.keys(BAKED)) {
+    const here = new Set((REAL[club] ?? []).map(p => p.n));
+    const gone = BAKED[club].find(p => !here.has(p.n) && outsideClubs.some(c => REAL[c].some(q => q.n === p.n)));
+    if (gone) { hit = { club, n: gone.n, now: outsideClubs.find(c => REAL[c].some(q => q.n === gone.n)) }; break; }
+  }
+  if (!hit) controlRefuse('no man of the bake was moved to a club outside it, so there is nobody to keep twice');
+  REAL[hit.club] = BAKED[hit.club];
+  console.log(`   CONTROL twoclubs applied: ${hit.n} is at ${hit.club} again as well as at ${hit.now}, in the world the engine reads`);
+}
+const REAL_COUNT = Object.values(REAL).reduce((s, r) => s + r.length, 0);
 /** The projected world of a year, as the sections that judge it read it:
  *  the engine's own, except for the one thing a control breaks. */
 const worldAt = y => {
@@ -232,6 +258,15 @@ console.log('1) Year zero is the identity');
     const at = outside.filter(c => REAL[c].some(p => p.n === m.n));
     if (at.length !== 1) fail(`${m.n} left the bake's ${m.club} and is at ${at.length} clubs outside the bake; a man the join moves is at exactly one`);
   }
+  /* Fix pass: and nobody is at a club of the bake AND at a club outside it.
+     A man the join failed to move passes every line above (he is not
+     "moved", his club is the bake's club whole, and one man too many is in
+     both sides of every count), so this is asked by name. Two different men
+     who share a name across the two halves would need a pin here, with two
+     sources, in the round that brings the second; there is none today. */
+  const outsideAt = new Map(outside.flatMap(c => REAL[c].map(p => [p.n, c])));
+  const twice = Object.keys(BAKED).flatMap(club => (REAL[club] ?? []).filter(p => outsideAt.has(p.n)).map(p => `${p.n} (${club} and ${outsideAt.get(p.n)})`));
+  if (twice.length) fail(`${twice.length} men are at a club of the bake and at a club outside it at once: ${twice.slice(0, 4).join('; ')}; a man a newer squad list holds is moved, never kept twice`);
   const outsideMen = outside.reduce((s, c) => s + REAL[c].length, 0);
   const leagues = WORLD.CM_GENERATED_LEAGUES;
   const shipped = leagues.reduce((s, g) => s + g.players, 0);
