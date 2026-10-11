@@ -1,0 +1,6 @@
+[22m[39mclubManagerVarScreen: STALE HINT, league match 3 hint 1894: the case was found on seed 2099
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m41 passed[39m[22m[90m (42)[39m
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarScreen.test.tsx,title=src/test/clubManagerVarScreen.test.tsx > Club Manager%3A the review screen > a review in the same minute as the other side's 'injury' (a chance at the same place%3A false)%3A both are told%2C and the card sits over nothing,line=106,column=9::Error: no first half of league match 3 holds the revie

@@ -1,0 +1,29 @@
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+varscreen: set -o pipefail; node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000 > $RC_OUT/varscreen-full.log 2>&1; s=$?; grep -a "STALE HINT\|Tests \|Test Files\|AssertionError\|FAIL\|Error: \|expected" $RC_OUT/varscreen-full.log | cut -c1-400 | tail -70; exit $s
+ledger: node scripts/simCmVarLedger.mjs
+l-highest: CM_VAR_LEDGER_CONTROL=highest node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+simCmVar: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-normal node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|kinds:\|normal:\|Error" | cut -c1-2200
+s41: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-s41 CM_VAR_BANDS_SEEDS=41,42,43,44,45,46 node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|normal:\|Error" | cut -c1-2200
+s51: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-s51 CM_VAR_BANDS_SEEDS=51,52,53,54,55,56 node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|normal:\|Error" | cut -c1-2200
+s61: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-s61 CM_VAR_BANDS_SEEDS=61,62,63,64,65,66 node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|normal:\|Error" | cut -c1-2200
+s71: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-s71 CM_VAR_BANDS_SEEDS=71,72,73,74,75,76 node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|normal:\|Error" | cut -c1-2200
+s101: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-s101 CM_VAR_BANDS_SEEDS=101,102,103,104,105,106 node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|normal:\|Error" | cut -c1-2200
+s201: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-s201 CM_VAR_BANDS_SEEDS=201,202,203,204,205,206 node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|normal:\|Error" | cut -c1-2200
+s301: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-s301 CM_VAR_BANDS_SEEDS=301,302,303,304,305,306 node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|normal:\|Error" | cut -c1-2200
+s501: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-s501 CM_VAR_BANDS_SEEDS=501,502,503,504,505,506 node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|normal:\|Error" | cut -c1-2200
+s901: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-s901 CM_VAR_BANDS_SEEDS=901,902,903,904,905,906 node scripts/simCmVar.mjs 2>&1 | grep -a "bands:\|normal:\|Error" | cut -c1-2200
+v-counted: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-counted CM_VAR_CONTROL=counted node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-decorative: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-decorative CM_VAR_CONTROL=decorative node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-disabled: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-disabled CM_VAR_CONTROL=disabled node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-streamgoal: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-streamgoal CM_VAR_CONTROL=streamgoal node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-oldgoalreview: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-oldgoalreview CM_VAR_CONTROL=oldgoalreview node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-oldoverturn: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-oldoverturn CM_VAR_CONTROL=oldoverturn node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-penaltyband: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-penaltyband CM_VAR_CONTROL=penaltyband node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-nolift: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-nolift CM_VAR_CONTROL=nolift node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-liftkind: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-liftkind CM_VAR_CONTROL=liftkind node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-liftpens: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-liftpens CM_VAR_CONTROL=liftpens node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-kindgoal: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-kindgoal CM_VAR_CONTROL=kindgoal node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-kindpenalty: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-kindpenalty CM_VAR_CONTROL=kindpenalty node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
+v-kindsaved: set -o pipefail; CM_VAR_ARTIFACTS=/tmp/cmv-kindsaved CM_VAR_CONTROL=kindsaved node scripts/simCmVar.mjs 2>&1 | grep -a "CAUGHT\|Error\|ABORT\|anchor" | cut -c1-330
