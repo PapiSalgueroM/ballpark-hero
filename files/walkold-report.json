@@ -1,0 +1,47 @@
+[
+ {
+  "label": "old era2010 save at 390 (reduce)",
+  "club": "Arsenal",
+  "oldHeadlines": [
+   "Atalanta sign Frank Lampard from Chelsea for £22m.",
+   "Brighton sign Esteban Cambiasso from Inter Milan for £30m.",
+   "Fulham sign Andrea Pirlo from AC Milan for £11m.",
+   "Mainz sign Diego Perotti from Sevilla for £18m.",
+   "💰 The window's biggest deal so far: Esteban Cambiasso to Brighton for £30m."
+  ],
+  "oldRival": "Başakşehir",
+  "oldSquad": 26,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button:has-text(\"Market\")').first()\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walkOld.mjs:41:61"
+ },
+ {
+  "label": "old era2010 save at 1280 (no-preference)",
+  "club": "Arsenal",
+  "oldHeadlines": [
+   "Atalanta sign Frank Lampard from Chelsea for £22m.",
+   "Brighton sign Esteban Cambiasso from Inter Milan for £30m.",
+   "Fulham sign Andrea Pirlo from AC Milan for £11m.",
+   "Mainz sign Diego Perotti from Sevilla for £18m.",
+   "💰 The window's biggest deal so far: Esteban Cambiasso to Brighton for £30m."
+  ],
+  "oldRival": "Başakşehir",
+  "oldSquad": 26,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button:has-text(\"Market\")').first()\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walkOld.mjs:41:61"
+ },
+ {
+  "label": "old era2005 save at 390 (no-preference)",
+  "club": "Chelsea",
+  "oldHeadlines": [
+   "🧱 Nobody is harder to score on than Chelsea: 3 conceded all season.",
+   "🎯 West Ham have come in for Ulrich Hollander. Match them or lose him: 2 matches left this season.",
+   "📊 Chelsea top the Premier League on 16 points after 6 rounds.",
+   "🧱 Nobody is harder to score on than Manchester United: 2 conceded all season.",
+   "⚽ Manchester United have the sharpest attack in the Premier League: 10 scored in 4 rounds.",
+   "📊 Manchester United top the Premier League on 9 points after 3 rounds.",
+   "⏰ Deadline day is done. The window is shut until January.",
+   "🔪 Derby week. Chelsea against Arsenal, and the table will not save anybody."
+  ],
+  "oldRival": null,
+  "oldSquad": 26,
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('button:has-text(\"Market\")').first()\n\n    at /home/runner/work/ballpark-hero/ballpark-hero/.rc/x/walkOld.mjs:41:61"
+ }
+]

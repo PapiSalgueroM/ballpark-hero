@@ -1,0 +1,55 @@
+  control  {n:"Jamie Vardy", confirmed in the served /assets/clubManagerEra2015-BUxVBSOC.js
+  control  {n:"Kasper Schmeichel", confirmed in the served /assets/clubManagerEra2015-BUxVBSOC.js
+  control  {n:"Paulo Dybala", confirmed in the served /assets/clubManager-C4LAUgf0.js
+  control  {n:"Gianluigi Buffon", confirmed in the served /assets/clubManagerEra2005-DZSwQTfX.js
+  control  {n:"Paul Pogba", confirmed in the served /assets/clubManager-C4LAUgf0.js
+1) The era step now holds three real seasons
+  PASS  the 2015-16 era tile is on the menu
+  PASS  the 2010-11 tile survived the addition
+  PASS  all three eras carry the REAL DATA badge
+  PASS  the 2015-16 tile sells the Leicester season
+2) Spain in 2015
+  PASS  England and Spain offered in 2015
+  PASS  Germany and France offered in 2015 (Round 899)
+  PASS  the Netherlands correctly absent from 2015
+  PASS  the 2015 La Liga is offered
+  PASS  2015 Eibar is a pickable club
+  PASS  Girona correctly absent from 2015 La Liga
+  PASS  the thin-squad marker shows for Las Palmas
+  PASS  the Barcelona tile demands the title
+  PASS  no real page errors on the Spain walk (clean)
+3) The 2015 Premier League
+  PASS  the 2015 Premier League is offered
+  PASS  2015 Leicester are a pickable club
+  PASS  2015 Norwich are a pickable club
+  PASS  Barcelona is not in the English league
+  PASS  August 2015 Leicester are NOT told to win the league
+  PASS  no Top N phrasing on the Leicester tile
+4) Into the 2015 dressing room
+  PASS  the career header says 2015-16
+  PASS  the Squad tab listed the Leicester squad
+  FAIL  Jamie Vardy is in the 2015 Leicester squad
+  FAIL  Kasper Schmeichel is in goal
+  PASS  no 2026 player leaked into 2015
+  PASS  no real page errors on the England walk (clean)
+5) Italy in 2015
+  PASS  Italy joined the 2015 nations
+  PASS  the 2015 Serie A is offered
+  PASS  2015 Juventus are a pickable club
+  PASS  2015 Carpi are a pickable club (their one top flight season)
+  PASS  2015 Chievo are a pickable club
+  PASS  2026 Como correctly absent from 2015 Serie A
+  PASS  the thin-squad marker shows for Frosinone
+  PASS  the Juventus tile demands the title
+6) Into the 2015 Turin dressing room
+  PASS  the career header says 2015-16
+  PASS  the Squad tab listed the Juventus squad
+  FAIL  Dybala arrived from Palermo, the window correction landed
+  FAIL  Buffon is in goal
+  FAIL  Pogba stayed for 2015-16, exactly as in real life
+  PASS  Vidal is gone to a league outside this world
+  PASS  no real page errors on the Italy walk (clean)
+
+   control: 6 served asset(s) rewritten, 5 of 5 target checks red, 0 other check(s) red
+   control: the page body still named Jamie Vardy, Gianluigi Buffon while the squad data had lost them
+playEra2015 control: green. Taking those men out of the era squad data was reported by exactly the checks that claim them, so the squad is read off the squad. Exiting non zero, because a run with findings fails.

@@ -1,0 +1,157 @@
+[
+ {
+  "label": "2005-06 Juventus 390 reduce",
+  "clubs": 98,
+  "news": [
+   "📰 Chelsea sign Ronaldinho from Barcelona for £47m.",
+   "📰 Roma sign Raúl from Real Madrid for £21m.",
+   "📰 Roma sign Xavi from Barcelona for £19m.",
+   "📰 Liverpool sign Walter Samuel from Inter Milan for £15m."
+  ],
+  "overflowNews": 0,
+  "talksTried": 1,
+  "rivalLine": "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+  "rival": null,
+  "note": "They want top money for him.",
+  "overflowWar": 0,
+  "end": "Negotiating",
+  "endNote": "Marseille are still ahead at £41.3m. Beat it or lose him.",
+  "log": [
+   "Ronaldinho: Barcelona to Chelsea 47",
+   "Raúl: Real Madrid to Roma 21",
+   "Xavi: Barcelona to Roma 19",
+   "Walter Samuel: Inter Milan to Liverpool 15"
+  ],
+  "cutRows": []
+ },
+ {
+  "label": "2010-11 Barcelona 1280 no-preference",
+  "clubs": 98,
+  "news": [
+   "📰 Athletic Club sign Diego López from Villarreal for £13m.",
+   "📰 Roma sign Karim Benzema from Real Madrid for £31m.",
+   "📰 Chelsea sign Anderson from Manchester United for £23m."
+  ],
+  "overflowNews": 0,
+  "talksTried": 1,
+  "rivalLine": "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+  "rival": null,
+  "note": "The selling club says he is not for sale... at the right price he is.",
+  "overflowWar": 0,
+  "end": "DEAL COLLAPSED",
+  "endNote": "They walked away from the table. Deal dead this window.",
+  "log": [
+   "Diego López: Villarreal to Athletic Club 13",
+   "Karim Benzema: Real Madrid to Roma 31",
+   "Anderson: Manchester United to Chelsea 23"
+  ],
+  "cutRows": []
+ },
+ {
+  "label": "2015-16 Chelsea 390 no-preference",
+  "clubs": 98,
+  "news": [
+   "📰 Juventus sign Marco Verratti from PSG for £44m.",
+   "📰 PSG sign Philipp Lahm from Bayern Munich for £20m.",
+   "📰 Bayern Munich sign Paul Pogba from Juventus for £59m.",
+   "📰 Real Madrid sign Luis Suárez from Barcelona for £89m."
+  ],
+  "overflowNews": 0,
+  "talksTried": 1,
+  "rivalLine": "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+  "rival": null,
+  "note": "Their sporting director picks up on the second ring. Everyone is for sale.",
+  "overflowWar": 0,
+  "end": "Negotiating",
+  "endNote": "You do not have £98.8m. The budget is £71m.",
+  "log": [
+   "Marco Verratti: PSG to Juventus 44",
+   "Philipp Lahm: Bayern Munich to PSG 20",
+   "Paul Pogba: Juventus to Bayern Munich 59",
+   "Luis Suárez: Barcelona to Real Madrid 89"
+  ],
+  "cutRows": []
+ },
+ {
+  "label": "2020-21 Bayern Munich 1280 reduce",
+  "clubs": 98,
+  "news": [
+   "📰 Borussia Dortmund sign Davinson Sánchez from Tottenham for £45m.",
+   "📰 Real Madrid sign Moussa Dembélé from Lyon for £52m.",
+   "📰 Bayer Leverkusen sign Donny van de Beek from Manchester United for £46m.",
+   "📰 Borussia Dortmund sign James Maddison from Leicester City for £57m.",
+   "📰 Napoli sign Nicolas Pépé from Arsenal for £44m."
+  ],
+  "overflowNews": 0,
+  "talksTried": 1,
+  "rivalLine": "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+  "rival": null,
+  "note": "They want top money for him.",
+  "overflowWar": 0,
+  "end": "Negotiating",
+  "endNote": "You do not have £163.9m. The budget is £119m.",
+  "log": [
+   "Davinson Sánchez: Tottenham to Borussia Dortmund 45",
+   "Moussa Dembélé: Lyon to Real Madrid 52",
+   "Donny van de Beek: Manchester United to Bayer Leverkusen 46",
+   "James Maddison: Leicester City to Borussia Dortmund 57",
+   "Nicolas Pépé: Arsenal to Napoli 44"
+  ],
+  "cutRows": []
+ },
+ {
+  "label": "2010-11 Chelsea 390 reduce",
+  "clubs": 98,
+  "news": [
+   "📰 Borussia Dortmund sign Claudio Marchisio from Juventus for £16m.",
+   "📰 Tottenham sign Robinho from AC Milan for £24m.",
+   "📰 Bayern Munich sign Xabi Alonso from Real Madrid for £31m.",
+   "📰 Manchester City sign Sergio Agüero from Atlético Madrid for £35m.",
+   "📰 Real Madrid sign Andrés Iniesta from Barcelona for £56m.",
+   "📰 Arsenal sign Javier Mascherano from Barcelona for £25m."
+  ],
+  "overflowNews": 0,
+  "talksTried": 1,
+  "rivalLine": "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+  "rival": null,
+  "note": "Their sporting director picks up on the second ring. Everyone is for sale.",
+  "overflowWar": 0,
+  "end": "Negotiating",
+  "endNote": "You do not have £74.7m. The budget is £49m.",
+  "log": [
+   "Claudio Marchisio: Juventus to Borussia Dortmund 16",
+   "Robinho: AC Milan to Tottenham 24",
+   "Xabi Alonso: Real Madrid to Bayern Munich 31",
+   "Sergio Agüero: Atlético Madrid to Manchester City 35",
+   "Andrés Iniesta: Barcelona to Real Madrid 56",
+   "Javier Mascherano: Barcelona to Arsenal 25"
+  ],
+  "cutRows": [
+   "Sergio Agüero · Atlético Madrid to Manchester City",
+   "Claudio Marchisio · Juventus to Borussia Dortmund"
+  ]
+ },
+ {
+  "label": "2005-06 Arsenal 1280 no-preference",
+  "clubs": 98,
+  "news": [
+   "📰 Lyon sign Xavi from Barcelona for £18m.",
+   "📰 Chelsea sign Valeri Bozhinov from Fiorentina for £15m.",
+   "📰 Chelsea sign Alex Frei from Rennes for £12m."
+  ],
+  "overflowNews": 0,
+  "talksTried": 1,
+  "rivalLine": "A full club-management sim in your browser: 454 clubs across 27 real leagues, from the Premier League, the 2. Bundesliga, Serie B, Ligue 2, the Segunda División and the Scottish Premiership to the Saudi Pro League, MLS, Brazil, Mexico, Australia, Russia, Croatia, Denmark, Switzerland, Austria and Greece, with real players at their real market values as of August 2026 (October for the A-League Men and the Russian Premier League) and thin squads topped up with made up youth, marked as such. Manage today or in a real past season: 2020-21 with Haaland's Dortmund and Mbappé's PSG, 2015-16 with Leicester at 5000 to 1, 2010-11 with prime Messi, or 2005-06 with Ronaldinho's Barcelona. Or create your own club with its own crest and stadium. Negotiate transfers, survive bidding wars, hit the board's named objectives, and chase titles season after season.",
+  "rival": null,
+  "note": "They want top money for him.",
+  "overflowWar": 0,
+  "end": "Negotiating",
+  "endNote": "You do not have £44.8m. The budget is £29m.",
+  "log": [
+   "Xavi: Barcelona to Lyon 18",
+   "Valeri Bozhinov: Fiorentina to Chelsea 15",
+   "Alex Frei: Rennes to Chelsea 12"
+  ],
+  "cutRows": []
+ }
+]

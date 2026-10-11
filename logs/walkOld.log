@@ -1,0 +1,14 @@
+== old era2010 save at 390 (reduce)
+  PASS  old era2010 save at 390 (reduce): the saved career opens on Arsenal
+  PASS  old era2010 save at 390 (reduce): the squad in the save is the squad that was saved (26 men)
+  FAIL  old era2010 save at 390 (reduce): the walk broke: locator.click: Timeout 30000ms exceeded.
+== old era2010 save at 1280 (no-preference)
+  PASS  old era2010 save at 1280 (no-preference): the saved career opens on Arsenal
+  PASS  old era2010 save at 1280 (no-preference): the squad in the save is the squad that was saved (26 men)
+  FAIL  old era2010 save at 1280 (no-preference): the walk broke: locator.click: Timeout 30000ms exceeded.
+== old era2005 save at 390 (no-preference)
+  PASS  old era2005 save at 390 (no-preference): the saved career opens on Chelsea
+  PASS  old era2005 save at 390 (no-preference): the squad in the save is the squad that was saved (26 men)
+  FAIL  old era2005 save at 390 (no-preference): the walk broke: locator.click: Timeout 30000ms exceeded.
+
+walkOld: 3 failures
