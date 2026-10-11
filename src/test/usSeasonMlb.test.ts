@@ -8,7 +8,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import { buildUsSeason, usBandOf, usBindOf, usPlayoffPath, type UsRow, type UsSeasonCtx } from '@/lib/season/us';
 import { deriveSeason, deriveSeasonOrWhy, disagreements, type DerivedGame } from '@/lib/season/core';
 import {
-  MLB_SEASON, mlbAtBats, mlbAvgText, mlbDeal, mlbDealProblems, mlbDealUnnamed, mlbOrderProblems, mlbScore, mlbSeriesList, mlbSpreadRuns, mlbWentExtra,
+  MLB_SEASON, mlbAtBats, mlbAtBatsCap, mlbAvgText, mlbDeal, mlbDealProblems, mlbDealUnnamed, mlbOrderProblems, mlbScore, mlbSeriesList, mlbSpreadRuns, mlbWentExtra,
 } from '@/lib/season/mlb';
 import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbSeasonHeld, mlbViewGames } from '@/lib/mlbSeasonHeld';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
@@ -195,6 +195,23 @@ describe('the at bats and hits a batting average allows', () => {
     expect(mlbAvgText(47, 164)).toBe('.287');
     expect(mlbAvgText(0, 0)).toBe('-');
   });
+  it('holds a sixth at bat for a game his side scores enough in (the second fix pass: a 4 for 6 in a 3-0 game)', () => {
+    const cap = (us: number, them: number, home: boolean, need = 0) => mlbAtBatsCap({ us, them, home }, need);
+    /* the game that was seen: a 3-0 win, a home run and a double on his line */
+    expect(cap(3, 0, false, 2)).toBe(5);
+    expect(cap(3, 0, true, 2)).toBe(5);
+    /* on the road, or in a loss at home, seven runs hold a sixth */
+    expect(cap(6, 9, false)).toBe(5);
+    expect(cap(7, 2, false)).toBe(6);
+    expect(cap(7, 8, true)).toBe(6);
+    /* a home win needs ten: the home side does not bat in a ninth it leads */
+    expect(cap(9, 1, true)).toBe(5);
+    expect(cap(10, 1, true)).toBe(6);
+    /* never fewer than his own line needs, and never more than six */
+    expect(cap(3, 0, false, 6)).toBe(6);
+    expect(cap(0, 4, false, 0)).toBe(5);
+    expect(cap(20, 4, false, 7)).toBe(6);
+  });
 });
 
 describe('held, said before he presses (the whole sentence, typed here)', () => {
@@ -273,7 +290,7 @@ function play(pos: string, seed: string, eraId: string, seasons = 6): UsCareerCo
 
 describe('a season derived from its saved line', () => {
   it('lands every hitter position on the save in both eras: the sums, the average, the innings', () => {
-    let seen = 0; let extras = 0; let homers = 0;
+    let seen = 0; let extras = 0; let homers = 0; let sixes = 0;
     for (const pos of HITTERS) for (const eraId of ['now', 'y2004']) {
       const career = play(pos, `mlb-derive|${pos}|${eraId}`, eraId);
       for (const season of career.seasons) {
@@ -300,6 +317,13 @@ describe('a season derived from its saved line', () => {
           if (mlbWentExtra(g)) { extras += 1; expect(Math.abs(g.us - g.them), `${label} game ${g.md}`).toBe(1); }
           homers += g.events.filter(e => e.kind === 'hr').length;
           if (!g.played) { expect(g.line, `${label} game ${g.md}`).toEqual({}); expect(MLB_SEASON.view.missed(g.why), label).toBe('Did not play'); }
+          else {
+            /* a sixth at bat only where his side scores seven, or ten in a home win (typed here, not read from the file) */
+            const sixth = g.us >= (g.home && g.us > g.them ? 10 : 7) || (g.line.hr ?? 0) + (g.line.doubles ?? 0) >= 6;
+            const gab = g.line.ab ?? 0;
+            expect(gab <= (sixth ? 6 : 5), `${label} game ${g.md}: ${gab} at bats, ${g.us}-${g.them}${g.home ? ' at home' : ''}`).toBe(true);
+            if (gab === 6) sixes += 1;
+          }
         }
         /* the same save, the same season, on a second read */
         expect(JSON.stringify(deriveSeason(b.sport, row, b.ctx)), label).toBe(JSON.stringify(s));
@@ -308,6 +332,8 @@ describe('a season derived from its saved line', () => {
     expect(seen).toBeGreaterThan(60);
     expect(extras).toBeGreaterThan(0);
     expect(homers).toBeGreaterThan(0);
+    /* the rule holds a sixth at bat back, it does not switch it off */
+    expect(sixes).toBeGreaterThan(0);
   }, 120000);
   it('opens an older line with no doubles and no on base percentage, and holds a line with no average to the plain tile', () => {
     const old = ROW({ doubles: undefined, obp: undefined });

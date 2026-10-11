@@ -184,6 +184,14 @@
  * Card Series exit, nine behind a Division Series exit): mlbOldLawTwin.
  *   mlbfit     the bind loses `pathNeedsFit`: a path is drawn
  *              for playoff games its rounds cannot hold          -> section 4
+ * The second fix pass (2026-10-11), a sixth at bat: a "4 for 6" was seen in
+ * a 3-0 game that ended in nine. A side that scores few sends few men to the
+ * plate, so six at bats are dealt only where his side scores seven, or ten
+ * in a home win (it does not bat in a ninth it leads). The numbers are this
+ * sim's own; this harness types them in its own table (OWN.mlb) and section
+ * 7 prints how many six at bat games there are and how many break the rule.
+ *   absix      every game may hold six at bats again, whatever
+ *              his side scores                                   -> section 3
  *
  * MEASURED (filled in from the five seed sets, 2026-10-07 for the NBA and
  * 2026-10-09 for the NFL): see the block above the bands in section 7.
@@ -314,6 +322,11 @@ const CONTROLS = {
     { file: MLB, from: '  const room = on.map(g => Math.min(g.us, RBI_MAX));', to: '  const room = on.map(() => RBI_MAX);' },
     { file: MLB, from: 'grbi < ghr || grbi > g.us || grbi > RBI_MAX)', to: 'grbi < ghr || grbi > RBI_MAX)' },
   ] },
+  /* the second fix pass: every game may hold six at bats again, whatever his side scores (a 4 for 6 in a 3-0 game) */
+  absix: { section: 3, label: 'independent checker', patches: [
+    { file: MLB, from: 'on.map((g, i) => mlbAtBatsCap(g, need[i]))', to: 'on.map(() => AB_MAX)' },
+    { file: MLB, from: 'gab > mlbAtBatsCap(g, ghr + g2b))', to: 'gab > AB_MAX)' },
+  ] },
   allstar: { section: 3, label: 'independent checker', patches: [{ file: MLB, from: "const star = row && Array.isArray(row.awards) && row.awards.includes('All-Star') ? ' You are an All-Star this year.' : '';", to: "const star = ' You are an All-Star this year.';" }] },
   pitcher: { section: 2, label: "every pitcher's season is held", patches: [{ file: MLB_HELD, from: '  return pos !== undefined && (MLB_PITCHERS as readonly string[]).includes(pos)', to: '  return pos !== undefined && ([] as readonly string[]).includes(pos)' }] },
   club: { section: 2, label: 'every 2026 season of the Orioles or the Yankees is held', patches: [{ file: MLB_LEDGER, from: "      clubs: ['Baltimore Orioles', 'New York Yankees'], ids: ['BAL', 'NYY'],", to: "      clubs: ['Baltimore Orioles', 'New York Yankees'], ids: []," }] },
@@ -354,7 +367,7 @@ const CONTROL_SPORT = {
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
   oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl',
   mlbstage: 'mlb', mlbformula: 'mlb', series: 'mlb', hits: 'mlb', rbi: 'mlb', allstar: 'mlb', pitcher: 'mlb', club: 'mlb', outside: 'mlb', mlbwho: 'mlb', pathyear: 'mlb', mlblevel: 'mlb',
-  mlbinnings: 'mlb', mlbcap: 'mlb', mlbold: 'mlb', mlborder: 'mlb', mlbfit: 'mlb',
+  mlbinnings: 'mlb', mlbcap: 'mlb', mlbold: 'mlb', mlborder: 'mlb', mlbfit: 'mlb', absix: 'mlb',
 };
 if (CONTROL && !CONTROLS[CONTROL]) { console.error(`unknown US_SEASON_CONTROL ${CONTROL}`); process.exit(2); }
 if (CONTROL === 'lawdrift' ? DIGEST !== 'compare' : !!(CONTROL && DIGEST) && !DIGEST_CONTROLS.includes(CONTROL)) { console.error("the digest mode has one control and that control has one mode: US_SEASON_CONTROL=lawdrift US_SEASON_DIGEST=compare, refusing to run"); process.exit(2); }
@@ -575,6 +588,8 @@ const OWN = {
     results: [MLB_WC_GAME, ...MLB_LADDER],
     bands: [[52, 86], [84, 95], [84, 95], [86, 100], [88, 103], [90, 105], [92, 108]],
     series: null,
+    /* the second fix pass: his side's runs a sixth at bat needs, seven, or ten in a home win (this harness's own numbers, typed here) */
+    sixRuns: 7, sixRunsHomeWin: 10,
   },
 };
 const ownBand = (slug, teamResult, year) => {
@@ -676,6 +691,9 @@ function shownIsSavedNfl(row, pos, s) {
  *  nine, was decided by one, and only its winner scores after the ninth; the home side does not bat in a
  *  ninth it leads; a home run of his is in an inning his side scores in. */
 const MLB_SUM_FIELDS = ['hr', 'rbi', 'sb', 'doubles'];
+/** Does his side score too few to send him up a sixth time? Under seven, or under ten in a home win (the
+ *  home side does not bat in a ninth it leads). The second fix pass: a "4 for 6" was seen in a 3-0 game. */
+const mlbSixIsThin = g => g.us < (g.home && g.us > g.them ? OWN.mlb.sixRunsHomeWin : OWN.mlb.sixRuns);
 function shownIsSavedMlb(row, bind, pos, s) {
   const out = [];
   const on = s.games.filter(g => g.played);
@@ -715,6 +733,8 @@ function shownIsSavedMlb(row, bind, pos, s) {
     }
     for (const k of ['ab', 'h', 'rbi', ...MLB_SUM_FIELDS]) if (g.line[k] !== undefined && (!Number.isInteger(g.line[k]) || g.line[k] < 0)) out.push(`md ${g.md}: ${k} ${g.line[k]}`);
     if (of(g, 'ab') < 1 || of(g, 'ab') > 6) out.push(`md ${g.md}: ${of(g, 'ab')} at bats`);
+    /* six at bats only where his side scores enough for a sixth, unless his own home runs and doubles are six */
+    if (of(g, 'ab') === 6 && mlbSixIsThin(g) && of(g, 'hr') + of(g, 'doubles') < 6) out.push(`md ${g.md}: six at bats in a game his team scores ${g.us}`);
     if (of(g, 'h') > of(g, 'ab')) out.push(`md ${g.md}: ${of(g, 'h')} hits in ${of(g, 'ab')} at bats`);
     if (of(g, 'h') < of(g, 'hr') + of(g, 'doubles')) out.push(`md ${g.md}: ${of(g, 'h')} hits with ${of(g, 'hr')} home runs and ${of(g, 'doubles')} doubles`);
     if (of(g, 'rbi') < of(g, 'hr')) out.push(`md ${g.md}: ${of(g, 'rbi')} RBI with ${of(g, 'hr')} home runs`);
@@ -1259,7 +1279,7 @@ const NFL_GAME_CAPS = { passYds: 520, rushYds: 290, rec: 15, recYds: 330, tackle
 /** A full season: he played 14 or more of the 17, so a game's share of his total means something. */
 const NFL_FULL = 14;
 /* Round 1212, baseball's section 7 numbers */
-const mlbSeen = { games: 0, level: 0, shut: 0, ten: 0, oneRun: 0, extra: 0, played: 0, ab: 0, hitless: 0, four: 0, allHis: 0, seasons: 0, oddOrder: 0, scoring: 0, five: 0, overNine: 0, oneFrame: 0, fourUp: 0, orderSeasons: 0, parkPast: 0, againSeasons: 0 };
+const mlbSeen = { games: 0, level: 0, shut: 0, ten: 0, oneRun: 0, extra: 0, played: 0, ab: 0, hitless: 0, four: 0, allHis: 0, six: 0, sixThin: 0, seasons: 0, oddOrder: 0, scoring: 0, five: 0, overNine: 0, oneFrame: 0, fourUp: 0, orderSeasons: 0, parkPast: 0, againSeasons: 0 };
 const poRounds = {};  // slug -> named playoff rounds checked for their conference: { early, finals }
 /* Round 1221, the digest mode: one running sha1 a sport and a seed set, fed every season in the order the
    fleet plays it with what the viewer is handed (see the header). Nothing is kept when the mode is off. */
@@ -1365,6 +1385,7 @@ function observe(c, line, who) {
       mlbSeen.ab += g.line.ab ?? 0;
       if ((g.line.h ?? 0) === 0) mlbSeen.hitless += 1;
       if ((g.line.h ?? 0) >= 4) mlbSeen.four += 1;
+      if ((g.line.ab ?? 0) === 6) { mlbSeen.six += 1; if (mlbSixIsThin(g)) mlbSeen.sixThin += 1; }
       if ((g.line.hr ?? 0) > 0 && g.us === (g.line.hr ?? 0)) mlbSeen.allHis += 1;
     }
     /* the order of the series, read here: a club met in back to back series (a run of five or more games
@@ -1772,6 +1793,7 @@ for (const slug of SPORTS) {
     console.log(`     level games: ${mlbSeen.level} of ${mlbSeen.games}; a side shut out: ${share(mlbSeen.shut, g2)} of team games; a side on ten or more: ${share(mlbSeen.ten, g2)}`);
     console.log(`     decided by one run: ${share(mlbSeen.oneRun, g1)} of games; past the ninth: ${share(mlbSeen.extra, g1)} of games (${share(mlbSeen.extra, Math.max(1, mlbSeen.oneRun))} of the one run games)`);
     console.log(`     his at bats a game: ${abg.toFixed(3)}; games he played with no hit: ${share(mlbSeen.hitless, pl)}; with four or more: ${share(mlbSeen.four, pl)}; his home runs are his team's whole score in ${share(mlbSeen.allHis, pl)}`);
+    console.log(`     games he played on six at bats: ${mlbSeen.six} of ${mlbSeen.played} (${share(mlbSeen.six, pl)}); of them in a game his side scores too few for a sixth (under 7, or under 10 in a home win): ${mlbSeen.sixThin}`);
     console.log(`     named seasons in which a club is met in back to back series: ${mlbSeen.oddOrder} of ${mlbSeen.seasons}`);
     check('7', mlbSeen.level === 0, `mlb no game is level (${mlbSeen.level} of ${mlbSeen.games})`);
     check('7', shut >= MLB_SHUTOUT[0] && shut <= MLB_SHUTOUT[1], `mlb a side is shut out in ${(100 * MLB_SHUTOUT[0]).toFixed(1)} to ${(100 * MLB_SHUTOUT[1]).toFixed(1)}% of team games (${share(mlbSeen.shut, g2)})`);
@@ -1943,6 +1965,7 @@ if (CONTROL) {
       series: ['p5', 'against one club in one park', 'are not played in series'],
       hits: ['p3', 'do not round to', 'show hits that do not round to the saved average'],
       rbi: ['p3', 'RBI in a game his team scores', 'show more RBI than his team has runs'],
+      absix: ['p3', 'six at bats in a game his team scores', 'show six at bats in a game his side scores too few for a sixth'],
       allstar: ['p3', 'prints the All-Star sentence', 'print the All-Star sentence with no award on the line'],
       pathyear: ['p4', 'before the rounds the ledger holds', 'draw a path before the ledger holds the rounds'],
     }[CONTROL];

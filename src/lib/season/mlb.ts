@@ -74,6 +74,12 @@ const EXTRA_SHARE = 0.3;
 const AB_MAX = 6;
 const AB_LOW = 2.2;
 const AB_HIGH = 4.5;
+/** A sixth at bat only in a game his side scores this many in (this sim's own
+ *  rule): seven, or ten when it wins at home, where it does not bat in the
+ *  ninth. A side that scores few sends few men to the plate, so a 4 for 6
+ *  never turns up in a 3-0 game. */
+const AB_SIX_RUNS = 7;
+const AB_SIX_RUNS_HOME_WIN = 10;
 /** The most runs he can drive in in one game (this sim's own cap). */
 const RBI_MAX = 8;
 /** His caps a game: home runs, doubles, steals. */
@@ -389,6 +395,14 @@ function settle(x: number[], total: number, mins: readonly number[], caps: reado
   return true;
 }
 
+/** The most at bats one game of his holds: six only where his side scores
+ *  enough for a sixth (AB_SIX_RUNS), five otherwise, and never fewer than his
+ *  own line needs that day (`need`: his home runs and doubles, each a hit). */
+export function mlbAtBatsCap(g: Pick<DerivedGame, 'us' | 'them' | 'home'>, need: number): number {
+  const six = g.us >= (g.home && g.us > g.them ? AB_SIX_RUNS_HOME_WIN : AB_SIX_RUNS);
+  return Math.min(AB_MAX, Math.max(need, six ? AB_MAX : AB_MAX - 1));
+}
+
 /** His season's at bats and hits: whole numbers whose quotient rounds to the
  *  saved average at three places, with at least `extra` hits (his home runs
  *  and doubles are hits), the at bats as near a keyed 3.5 to 4.0 a game as the
@@ -482,7 +496,7 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng, ctx?: 
   const need = on.map(g => of(g, 'hr') + of(g, 'doubles'));
   const fit = mlbAtBats(on.length, avg, need.reduce((a, b) => a + b, 0), rng);
   if (!fit) return false;
-  const ab = splitTotal(fit.ab, on.map(() => 0.8 + 0.4 * rng()), on.map(() => AB_MAX), need.map(x => Math.max(1, x)));
+  const ab = splitTotal(fit.ab, on.map(() => 0.8 + 0.4 * rng()), on.map((g, i) => mlbAtBatsCap(g, need[i])), need.map(x => Math.max(1, x)));
   if (!ab) return false;
   /* hits: each at bat a keyed try at his average, then moved one at a time onto the season's hits */
   const hits = ab.map((n, i) => { let h = 0; for (let k = 0; k < n; k += 1) if (rng() < avg) h += 1; return Math.min(n, Math.max(need[i], h)); });
@@ -540,7 +554,7 @@ function check(row: UsRow, _pos: string, s: DerivedSeason, ctx: UsSeasonCtx): st
     for (const e of homers) if (inning('us', e.min) < homers.filter(x => x.min === e.min).length) out.push(`game ${g.md}: a home run in an inning his side does not score in`);
     if (!g.played) { if (Object.keys(g.line).length) out.push(`game ${g.md}: a line in a game he missed`); continue; }
     const [gab, gh, ghr, g2b, grbi] = [of(g, 'ab'), of(g, 'h'), of(g, 'hr'), of(g, 'doubles'), of(g, 'rbi')];
-    if (!Number.isInteger(gab) || gab < 1 || gab > AB_MAX) out.push(`game ${g.md}: ${gab} at bats`);
+    if (!Number.isInteger(gab) || gab < 1 || gab > mlbAtBatsCap(g, ghr + g2b)) out.push(`game ${g.md}: ${gab} at bats in a game his team scores ${g.us}`);
     if (!Number.isInteger(gh) || gh < ghr + g2b || gh > gab) out.push(`game ${g.md}: ${gh} hits in ${gab} at bats with ${ghr} home runs and ${g2b} doubles`);
     if (!Number.isInteger(grbi) || grbi < ghr || grbi > g.us || grbi > RBI_MAX) out.push(`game ${g.md}: ${grbi} RBI with ${ghr} home runs in a game his team scores ${g.us}`);
   }
