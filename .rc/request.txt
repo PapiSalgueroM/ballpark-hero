@@ -1,0 +1,52 @@
+# Release AV proof, Rounds 1226 and 1212 (the true seasons): the season ledger harness, each control its own line
+simUsSeasonLedger: node scripts/simUsSeasonLedger.mjs
+ledger-dash: US_LEDGER_CONTROL=dash node scripts/simUsSeasonLedger.mjs
+ledger-filled: US_LEDGER_CONTROL=filled node scripts/simUsSeasonLedger.mjs
+ledger-firstnull: US_LEDGER_CONTROL=firstnull node scripts/simUsSeasonLedger.mjs
+ledger-host: US_LEDGER_CONTROL=host node scripts/simUsSeasonLedger.mjs
+ledger-inningsleague: US_LEDGER_CONTROL=inningsleague node scripts/simUsSeasonLedger.mjs
+ledger-mlbavg: US_LEDGER_CONTROL=mlbavg node scripts/simUsSeasonLedger.mjs
+ledger-mlbclub: US_LEDGER_CONTROL=mlbclub node scripts/simUsSeasonLedger.mjs
+ledger-mlbdiv: US_LEDGER_CONTROL=mlbdiv node scripts/simUsSeasonLedger.mjs
+ledger-mlbfirstround: US_LEDGER_CONTROL=mlbfirstround node scripts/simUsSeasonLedger.mjs
+ledger-mlbformula: US_LEDGER_CONTROL=mlbformula node scripts/simUsSeasonLedger.mjs
+ledger-mlbhome: US_LEDGER_CONTROL=mlbhome node scripts/simUsSeasonLedger.mjs
+ledger-mlbid: US_LEDGER_CONTROL=mlbid node scripts/simUsSeasonLedger.mjs
+ledger-mlbinnings: US_LEDGER_CONTROL=mlbinnings node scripts/simUsSeasonLedger.mjs
+ledger-mlbladder: US_LEDGER_CONTROL=mlbladder node scripts/simUsSeasonLedger.mjs
+ledger-mlbown: US_LEDGER_CONTROL=mlbown node scripts/simUsSeasonLedger.mjs
+ledger-mlbplayoff: US_LEDGER_CONTROL=mlbplayoff node scripts/simUsSeasonLedger.mjs
+ledger-mlbrival: US_LEDGER_CONTROL=mlbrival node scripts/simUsSeasonLedger.mjs
+ledger-mlbrivalswap: US_LEDGER_CONTROL=mlbrivalswap node scripts/simUsSeasonLedger.mjs
+ledger-mlbrounds: US_LEDGER_CONTROL=mlbrounds node scripts/simUsSeasonLedger.mjs
+ledger-mlbscore: US_LEDGER_CONTROL=mlbscore node scripts/simUsSeasonLedger.mjs
+ledger-mlbspan: US_LEDGER_CONTROL=mlbspan node scripts/simUsSeasonLedger.mjs
+ledger-mlbspanyear: US_LEDGER_CONTROL=mlbspanyear node scripts/simUsSeasonLedger.mjs
+ledger-mlbsum: US_LEDGER_CONTROL=mlbsum node scripts/simUsSeasonLedger.mjs
+ledger-mlbtyped: US_LEDGER_CONTROL=mlbtyped node scripts/simUsSeasonLedger.mjs
+ledger-mlbyear: US_LEDGER_CONTROL=mlbyear node scripts/simUsSeasonLedger.mjs
+ledger-nhl84: US_LEDGER_CONTROL=nhl84 node scripts/simUsSeasonLedger.mjs
+ledger-nhlalign: US_LEDGER_CONTROL=nhlalign node scripts/simUsSeasonLedger.mjs
+ledger-nhlaligndiv: US_LEDGER_CONTROL=nhlaligndiv node scripts/simUsSeasonLedger.mjs
+ledger-nhlclubgames: US_LEDGER_CONTROL=nhlclubgames node scripts/simUsSeasonLedger.mjs
+ledger-nhlformula: US_LEDGER_CONTROL=nhlformula node scripts/simUsSeasonLedger.mjs
+ledger-nhlfrom: US_LEDGER_CONTROL=nhlfrom node scripts/simUsSeasonLedger.mjs
+ledger-nhlgames: US_LEDGER_CONTROL=nhlgames node scripts/simUsSeasonLedger.mjs
+ledger-nhllist: US_LEDGER_CONTROL=nhllist node scripts/simUsSeasonLedger.mjs
+ledger-nhlplayoff: US_LEDGER_CONTROL=nhlplayoff node scripts/simUsSeasonLedger.mjs
+ledger-nhlpoint: US_LEDGER_CONTROL=nhlpoint node scripts/simUsSeasonLedger.mjs
+ledger-nhlrules: US_LEDGER_CONTROL=nhlrules node scripts/simUsSeasonLedger.mjs
+ledger-nhlscore: US_LEDGER_CONTROL=nhlscore node scripts/simUsSeasonLedger.mjs
+ledger-nhltyped: US_LEDGER_CONTROL=nhltyped node scripts/simUsSeasonLedger.mjs
+ledger-nhlyear: US_LEDGER_CONTROL=nhlyear node scripts/simUsSeasonLedger.mjs
+ledger-nosource: US_LEDGER_CONTROL=nosource node scripts/simUsSeasonLedger.mjs
+ledger-onesource: US_LEDGER_CONTROL=onesource node scripts/simUsSeasonLedger.mjs
+ledger-otherseason: US_LEDGER_CONTROL=otherseason node scripts/simUsSeasonLedger.mjs
+ledger-thincited: US_LEDGER_CONTROL=thincited node scripts/simUsSeasonLedger.mjs
+ledger-thinlost: US_LEDGER_CONTROL=thinlost node scripts/simUsSeasonLedger.mjs
+ledger-wiki: US_LEDGER_CONTROL=wiki node scripts/simUsSeasonLedger.mjs
+simMlbCareer: node scripts/simMlbCareer.mjs
+simNhlCareer: node scripts/simNhlCareer.mjs
+simNbaCareer: node scripts/simNbaCareer.mjs
+simNflCareer: node scripts/simNflCareer.mjs
+simAwards: node scripts/simAwards.mjs
