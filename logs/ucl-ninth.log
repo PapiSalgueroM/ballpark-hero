@@ -1,0 +1,20 @@
+  1 set 11: 1000 fields, at the floor 77, fell back 0, plain fields strict 38 of 445
+  1 set 23: 1000 fields, at the floor 84, fell back 0, plain fields strict 47 of 449
+  1 set 37: 1000 fields, at the floor 88, fell back 0, plain fields strict 52 of 453
+  1 by (clubs of the association with most in one pot, most in one pot): fields | at the floor | fell back | mean tries | floors seen (breaks ; over the cap)
+    4 clubs, 3 in a pot         20 |     0 |   0 | 1.00 | 0 ; 0
+    4 clubs, 4 in a pot         30 |     0 |   0 | 1.20 | 0 ; 0
+    5 clubs, 2 in a pot         54 |     7 |   0 | 1.06 | 0 ; 0
+    5 clubs, 3 in a pot        992 |   120 |   0 | 1.06 | 0 ; 0
+    5 clubs, 4 in a pot        608 |    23 |   0 | 1.16 | 0 ; 0
+    5 clubs, 5 in a pot        183 |     0 |   0 | 1.10 | 1,2 ; 0
+    6 clubs, 2 in a pot         29 |     3 |   0 | 1.17 | 0 ; 0
+    6 clubs, 3 in a pot        604 |    74 |   0 | 1.37 | 0 ; 0
+    6 clubs, 4 in a pot        313 |    22 |   0 | 1.58 | 0 ; 2
+    6 clubs, 5 in a pot        165 |     0 |   0 | 1.09 | 1,2 ; 2
+    6 clubs, 6 in a pot          2 |     0 |   0 | 1.00 | 3 ; 0
+  1 one association swollen past anything the game ships: 8 clubs: 4 of 8 at the floor, 0 on the pattern | 10 clubs: 0 of 8 at the floor, 0 on the pattern | 12 clubs: 0 of 8 at the floor, 0 on the pattern | 18 clubs: 0 of 8 at the floor, 5 on the pattern | 36 clubs: 0 of 8 at the floor, 0 on the pattern
+  1 one association with no club in one pot: 10 clubs: 1 of 8 at the floor, 0 on the pattern, 0 fewer on a longer climb | 11 clubs: 0 of 8 at the floor, 0 on the pattern, 0 fewer on a longer climb | 12 clubs: 0 of 8 at the floor, 0 on the pattern, 0 fewer on a longer climb | 13 clubs: 0 of 8 at the floor, 0 on the pattern, 0 fewer on a longer climb | 14 clubs: 0 of 8 at the floor, 2 on the pattern, 0 fewer on a longer climb
+  1 two or three swollen associations, 200 fields: the cap gave way and the ban held in 163, the ban gave way after the cap's budgets in 29, on the pattern 4
+  control ninth turned red: [COUNT] 6538, [DAY] 3269, [EIGHT] 6538, [HOMEAWAY] 6538, [POT] 6538, [EXACT] 1210, [RATE] 3, [ORDER] 8, [BUDGET] 47
+simCmLeaguePhase control ninth: FIRED (6538 of its own failures, e.g. [EIGHT] club 0 plays 9 matches against 8 clubs (set 11, field 0))
