@@ -272,6 +272,30 @@
       "says": ["a runner was automatically put on second base to start the 10th and onwards, shortening games.", "That's only a regular-season rule that won't be used in the postseason."],
       "note": "For The Win is a USA TODAY title, so it shares USA TODAY's group."
     },
+    "mlb-glossary-regulation": {
+      "sport": "mlb", "group": "mlb", "publisher": "Major League Baseball, the league site's Glossary", "title": "Regulation Game",
+      "url": "https://www.mlb.com/glossary/rules/regulation-game", "read": "2026-10-10",
+      "says": ["If not terminated early, regulation games last until the trailing team has had the chance to make 27 outs (nine innings).", "If the home team is leading after the visiting team has made three outs in the top of the ninth inning, the home team wins and does not have to come to bat in the bottom of the ninth.", "If the game is tied after both teams have made 27 outs each, the game will go to extra innings."],
+      "note": "Added in the fix pass of Round 1212. The page refuses a direct reader (HTTP 406), as it did in Round 1211; it was read through a web search reader, which printed these sentences, twice on the same day by two readers."
+    },
+    "obr-7-01": {
+      "sport": "mlb", "group": "mlb", "publisher": "Official Baseball Rules, as printed by Baseball Rules Academy", "title": "7.01 Regulation Games",
+      "url": "https://baseballrulesacademy.com/official-rule/mlb/7-01-regulation-games/", "read": "2026-10-10",
+      "says": ["A regulation game consists of nine innings, unless extended because of a tie score, or shortened", "(1) because the home team needs none of its half of the ninth inning or only a fraction of it", "If the score is tied after nine completed innings play shall continue until"],
+      "note": "Added in the fix pass of Round 1212. The rulebook is the league's own, so it shares the league's group whoever prints it: with the glossary it is ONE source."
+    },
+    "britannica-students": {
+      "sport": "mlb", "group": "britannica", "publisher": "Encyclopaedia Britannica, Britannica Students", "title": "baseball",
+      "url": "https://kids.britannica.com/students/article/baseball/273120", "read": "2026-10-10",
+      "says": ["nine innings make a normal game unless the home team is ahead at the end of 8 ½ innings, and in that case the game is complete", "The teams play additional innings until one side wins or until the game is called because of darkness or for some other reason."],
+      "note": "Added in the fix pass of Round 1212. The page refuses a direct reader (HTTP 403); it was read through a web search reader, which printed these sentences."
+    },
+    "espn-2023-runner": {
+      "sport": "mlb", "group": "espn", "publisher": "ESPN (Jesse Rogers)", "title": "Source: Extra-inning, extra-runner rule to remain", "published": "2023-02-13",
+      "url": "https://www.espn.com/mlb/story/_/id/35652660/source-extra-inning-extra-runner-rule-remain", "read": "2026-10-10",
+      "says": ["In all regular-season extra-inning games, a runner will be placed on second base to begin the 10th inning, and in every subsequent extra inning after that, until a winner is determined."],
+      "note": "Added in the fix pass of Round 1212, for the nine innings only: the first extra inning is the 10th, and extra innings run until there is a winner."
+    },
     "espn-expanded": {
       "sport": "mlb", "group": "espn", "thin": true, "publisher": "ESPN", "title": "MLB Expanded Standings <year> (records in extra inning games and in one run games)",
       "url": "https://www.espn.com/mlb/standings/_/season/<year>/view/expanded", "read": "2026-10-10",

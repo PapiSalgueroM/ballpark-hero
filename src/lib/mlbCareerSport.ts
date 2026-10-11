@@ -29,6 +29,7 @@ import { slateField } from '@/lib/usSeasonShape';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { MLB_CAREER_HALL } from '@/lib/mlbCareerHall';
 import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
+import { mlbSeasonHeld } from '@/lib/mlbSeasonHeld';
 
 /* The key this career saves under. It stays a named constant so the home
    page's Continue fence (simHomeFront section 7) can find where every save
@@ -138,4 +139,10 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
   retirementAvatar: false,
   /* Round 1039: the retirement talk, the farewell season and the Hall. */
   hall: MLB_CAREER_HALL,
+  /* Round 1212: the Season Center. Its numbers load when he first watches a
+     season; the held line is small and eager (src/lib/mlbSeasonHeld.ts), so the
+     hub can say a pitcher, a short season or a club outside the league has no
+     game by game view before he presses. */
+  loadSeasonCentre: () => import('@/lib/season/mlb').then(m => m.MLB_SEASON),
+  seasonCentreHeld: (year, eraId, who) => mlbSeasonHeld(year, eraId, who),
 });

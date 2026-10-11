@@ -1,8 +1,8 @@
 /* Round 1211: the real shape of the NHL season, 2006-07 to 2026-27, as a
-   sourced ledger. It is the data step for "NHL My Career, week by week": the
-   binding round folds these rows into src/data/usSeasonLengths.ts and
-   src/data/usLeagueShape.ts. NOTHING IMPORTS THIS FILE YET, and it imports
-   nothing. `year` is the year a season STARTS in (2012 is 2012-13).
+   sourced ledger. It is the data step for "NHL My Career, week by week". One
+   file reads it so far: src/lib/usSeasonShape.ts (Round 1226: the engine
+   plays these lengths). The game by game view of the NHL is not bound yet.
+   It imports nothing. `year` is the year a season STARTS in (2012 is 2012-13).
 
    THE RULE is the MLB ledger's (src/data/usSeasonLedgerMlb.ts): every fact
    was read on 2026-10-10 in two independent sources, neither a wiki; a fact

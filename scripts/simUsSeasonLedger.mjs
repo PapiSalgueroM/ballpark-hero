@@ -178,6 +178,8 @@ const OWN = {
   },
   mlb2026Short: ['BAL', 'NYY'],
   mlbSchedule: { 2020: 60 },
+  /* The innings of a regulation game (the fix pass of Round 1212 recorded the rule on two independent sources). */
+  mlbInnings: 9,
   /* id of the 2004 list: the last season it is a real club under that name, and its next name. */
   mlbSpans: {
     MON: [2004, 'Washington Nationals'], ANA: [2004, 'Los Angeles Angels of Anaheim'], TBD: [2007, 'Tampa Bay Rays'],
@@ -264,6 +266,9 @@ const CONTROLS = {
   mlbrival: { expect: ['M8'], run() { const p = mlb.MLB_RIVALS.find(x => x[0] === 'SEA'); must(p && p[1] === 'SDP', 'the Mariners and Padres pair'); p[1] = 'TEX'; } },
   mlbplayoff: { expect: ['M9'], run() { must(mlb.MLB_PLAYOFF_FORMAT.series[0][1] === 3, 'the best of three'); mlb.MLB_PLAYOFF_FORMAT.series[0][1] = 4; } },
   mlbscore: { expect: ['M10'], run() { must(mlb.MLB_SCORING.now === 4.48, 'the 4.48'); mlb.MLB_SCORING.now = 4.84; } },
+  /* The fix pass of Round 1212: a game of ten innings, and the nine innings left on the league's own two pages (one source). */
+  mlbinnings: { expect: ['M11'], run() { must(mlb.MLB_GAME_RULES.innings === 9, 'the nine innings'); mlb.MLB_GAME_RULES.innings = 10; } },
+  inningsleague: { expect: ['R2'], run() { const l = mlb.MLB_INNINGS_SRC; must(l.length === 4 && SRC[l[0]]?.group === 'mlb' && SRC[l[1]]?.group === 'mlb' && SRC[l[2]]?.group !== 'mlb' && SRC[l[3]]?.group !== 'mlb', 'the two league receipts first, then two other publishers'); l.splice(2); } },
   dash: { expect: ['D1'], run() { EXTRA.text = String.fromCharCode(0x2014); } },
   nosource: { expect: ['R1'], run() { mlbRow(2012).src.push('no-such-receipt'); } },
   onesource: { expect: ['R2'], run() { const r = mlbRow(2006); must(r.src.includes('espn'), 'ESPN on the 2006 row'); r.src = r.src.filter(k => k !== 'espn'); } },
@@ -456,6 +461,12 @@ const OWN_MLB_DIVISIONS = {
     check('M10', y === (era.id === 'now' ? mlb.MLB_LENGTHS_VERIFIED_TO : era.startYear), `MLB scoring for ${era.id} is of ${y}`);
   }
 
+  /* M11 (the fix pass of Round 1212): a regulation game is nine innings, against this file's own table.
+     Its receipts are MLB_INNINGS_SRC, which R1 to R4 hold like every list of that name: the league's
+     glossary and the league's rulebook are one group, so the rule stands on the two publishers beside them. */
+  check('M11', mlb.MLB_GAME_RULES.innings === OWN.mlbInnings, `MLB_GAME_RULES.innings is ${mlb.MLB_GAME_RULES.innings}, this harness's own table says ${OWN.mlbInnings}`);
+  check('M11', Array.isArray(mlb.MLB_INNINGS_SRC) && new Set(mlb.MLB_INNINGS_SRC.map(k => SRC[k]?.group)).has('mlb') && mlb.MLB_INNINGS_SRC.every(k => (SRC[k]?.says ?? []).some(s => /nine innings|10th inning/.test(s))), 'a receipt of the nine innings does not speak of nine innings or of the 10th, or the league itself is not among them');
+
   /* The club outside the league is in neither list. */
   for (const o of mlb.MLB_OUTSIDE_CLUBS) check('M3', !MLB_LISTS.some(l => l.teams.some(t => label(t) === o.team || t.id === o.team)), `${o.team} is in one of the game's MLB lists`);
 }
@@ -620,7 +631,7 @@ const OWN_MLB_DIVISIONS = {
 
   /* R5: a number only one source gave stays empty, and is named. */
   const empty = [
-    ...Object.values(mlb.MLB_GAME_SHARES), mlb.MLB_GAME_RULES.innings, mlb.MLB_GAME_RULES.extraInningRunnerFrom,
+    ...Object.values(mlb.MLB_GAME_SHARES), mlb.MLB_GAME_RULES.extraInningRunnerFrom,
     ...mlb.MLB_OUTSIDE_CLUBS.flatMap(o => [o.league, o.games]),
     ...mlb.MLB_FORMULAS.flatMap(f => [f.homeGames, f.division.series, f.from >= 2025 ? f.league.homeTotal : f.division.homeTotal]),
     nhl.NHL_OVERTIME_RULES.skatersBefore2015,

@@ -8,6 +8,7 @@
    (usCareerToCoach.ts), as it did before Round 900. */
 import UsCareerBoard from '@/components/us-career/UsCareerBoard';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
+import { UsSeasonCentreHost } from '@/components/us-career/season/UsSeasonCentreHost';
 
 /* Round 530 review: one number for round one, used by the pressure line and
    by the card's confetti rule, so the card and the line under it can never
@@ -15,5 +16,5 @@ import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 export const FIRST_ROUND_END = MLB_CAREER_SPORT.firstRoundEnd;
 
 export default function MlbMyCareerBoard() {
-  return <UsCareerBoard sport={MLB_CAREER_SPORT} />;
+  return <UsSeasonCentreHost sport={MLB_CAREER_SPORT}><UsCareerBoard sport={MLB_CAREER_SPORT} /></UsSeasonCentreHost>;
 }

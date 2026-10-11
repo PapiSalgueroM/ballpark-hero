@@ -14,6 +14,9 @@ import { NBA_SEASON } from '@/lib/season/nba';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
 import { nflSeasonLength } from '@/lib/nflMyCareer';
 import { NFL_SEASON } from '@/lib/season/nfl';
+import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
+import { MLB_SEASON } from '@/lib/season/mlb';
+import { mlbSeasonHeld } from '@/lib/mlbSeasonHeld';
 import { keyedRng } from '@/lib/keyedRng';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 import { resetCareerMomentsForTest } from '@/components/soccer-career/careerMoments';
@@ -237,4 +240,126 @@ describe('the US Season Center with the NFL bound', () => {
     expect(document.querySelector('[data-centre-tile]')!.textContent).toContain(usSeasonHeldLine('nfl', 2005)!);
     expect(document.querySelector('[data-kickoff]')).toBeNull();
   });
+});
+
+/* ─── Round 1212: baseball, bound to the same viewer (hitters; pitchers are held) ─── */
+const MLB_WITH_LOADER: UsCareerSport = { ...MLB_CAREER_SPORT, loadSeasonCentre: () => Promise.resolve(MLB_SEASON) };
+
+/** An MLB career played with the binding's own calls on a seeded stream. */
+function playMlb(pos: string, seed: string, seasons: number, eraId = 'now'): UsCareerCore {
+  const rng = keyedRng(seed);
+  const SB = MLB_CAREER_SPORT;
+  const c = SB.startCareer('Cal Linedrive', pos, SB.create.archetypes[pos][0], rng, null as never, eraId);
+  let tq = SB.rollTeamQuality(null, rng);
+  SB.assignRole(c, tq, rng);
+  for (let i = 0; i < seasons; i += 1) {
+    SB.campBattle(c, tq, rng);
+    SB.simSeason(c, tq, rng);
+    SB.progress(c, rng);
+    tq = SB.rollTeamQuality(tq, rng);
+  }
+  return JSON.parse(JSON.stringify(c));
+}
+
+/** The first keyed hitter career whose last season the view lays out (a season it refuses shows the plain tile). */
+function openMlb(pos: string, seed: string): UsCareerCore {
+  for (let n = 0; n < 12; n += 1) {
+    const career = playMlb(pos, `${seed}|${n}`, 2);
+    const row = career.seasons[career.seasons.length - 1] as UsRow;
+    const b = buildUsSeason(MLB_SEASON, career, row, MLB_CAREER_SPORT.teamLabelOf);
+    if (b.ok && deriveSeason(b.sport, row, b.ctx)) return career;
+  }
+  throw new Error(`usSeasonCentre.test: no ${pos} career of seed ${seed} has a season the view lays out`);
+}
+
+describe('the US Season Center with MLB bound', () => {
+  it('prints baseball\'s playoff line the way the other sports read: the games, then his line as the save holds it', () => {
+    const career = openMlb('CF', 'mlb-centre-po');
+    const base = career.seasons[career.seasons.length - 1];
+    /* a Division Series exit of today's rounds: seven games fit a best of three and a best of five */
+    const row = { ...base, teamResult: 'Lost the Division Series', poGames: 7, poLine: '9 for 28 (.321), 2 HR' } as UsRow;
+    const one: UsCareerCore = { ...career, seasons: [...career.seasons.slice(0, -1), row] };
+    const b = buildUsSeason(MLB_SEASON, one, row, MLB_CAREER_SPORT.teamLabelOf);
+    if (b.ok === false) throw new Error(`usSeasonCentre.test: ${b.why}`);
+    const s = deriveSeason(b.sport, row, b.ctx);
+    if (!s) throw new Error('usSeasonCentre.test: the season has no game by game view');
+    const review = buildUsModel(MLB_CAREER_SPORT, MLB_SEASON, one, row, b.ctx, s, b.key).review;
+    expect(review.path!.line).toBe('Your playoffs: 7 games, 9 for 28 (.321), 2 HR');
+    expect(review.path!.steps.map(st => st.label)).toEqual(['Wild Card Series', 'Division Series']);
+    expect(review.notes).toEqual([]);
+  });
+  it.each(['CF', 'C', 'DH'])('walks a %s season from the first pitch card to the review: innings on the clock, his line, the record and his totals', async pos => {
+    const career = openMlb(pos, `mlb-centre-${pos}`);
+    const saved = JSON.stringify(career);
+    const { row, onClose } = mount(MLB_WITH_LOADER, career);
+    await waitFor(() => expect(document.querySelector('[data-season-help]')).not.toBeNull());
+    const help = document.querySelector('[data-season-help]')!.textContent!;
+    expect(help).toContain('How the Season Center works');
+    expect(help).toContain('Baseball is played in series');
+    expect(help).toContain('Walks are not dealt game by game');
+    expect(help).toContain('this career has no first round bye');
+    press('Got it');
+    const kick = document.querySelector('[data-kickoff]')!;
+    expect(kick.textContent).toContain(MLB_CAREER_SPORT.teamLabelOf(row.team, career.eraId));
+    expect(kick.querySelector('[data-frame-line]')!.textContent).toMatch(/^162 games · 81 home, 81 away/);
+    expect(kick.textContent).toContain('▶ Play ball');
+    press('Play ball');
+    press('Results');
+    await waitFor(() => expect(document.querySelector('[data-full-time]')).not.toBeNull());
+    expect(document.querySelector('[data-full-time]')!.textContent).toBe('Final');
+    expect(document.querySelector('[data-clock-minute]')!.textContent).toBe('FINAL');
+    /* every line of the feed is an inning (or the one mark after the ninth), and the runs in it add up to the score */
+    const lines = [...document.querySelectorAll('[data-clock-events] li')];
+    expect(lines.length).toBeGreaterThan(0);
+    let runs = 0;
+    for (const li of lines) {
+      const time = li.querySelector('span')!;
+      expect(time.textContent).toMatch(/^([1-9](st|nd|rd|th)|EXT)$/);
+      const put = /put (\d+) on the board (in the [1-9](st|nd|rd|th)|in extra innings)$/.exec(li.textContent!);
+      if (put) runs += Number(put[1]);
+      else expect(li.textContent).toMatch(/You go deep (in the [1-9](st|nd|rd|th)|in extra innings)$/);
+    }
+    const [hg, ag] = document.querySelector('[data-score-bug]')!.textContent!.split('-').map(Number);
+    expect(runs).toBe(hg + ag);
+    expect(hg).not.toBe(ag);
+    /* his line is hits and at bats first, or the words for a game he sat out */
+    expect(document.querySelector('[data-his-line]')!.textContent).toMatch(/^(\d-\d|Did not play)/);
+    expect(document.querySelector('[data-record-panel]')!.getAttribute('data-record')).toMatch(/^(1-0|0-1)$/);
+    press('Sim the rest');
+    const review = document.querySelector('[data-review]')!;
+    expect(review.querySelector('[data-review-finish]')!.textContent).toContain(row.teamResult);
+    expect(review.querySelector('[data-review-finish]')!.textContent).toMatch(/^\d+-\d+ · /);
+    const line = row as unknown as Record<string, number>;
+    expect(review.querySelector('[data-review-tile="Games"]')!.textContent).toContain(String(line.games));
+    expect(review.querySelector('[data-review-tile="HR"]')!.textContent).toContain(String(line.hr));
+    expect(review.querySelector('[data-review-tile="RBI"]')!.textContent).toContain(String(line.rbi));
+    /* the average reads as the season card prints it (.276), never with the board review's leading zero */
+    const avgTile = review.querySelector('[data-review-tile="AVG"]')!.textContent!;
+    expect(avgTile).toContain((row as unknown as { avg: number }).avg.toFixed(3).slice(1));
+    expect(avgTile).not.toContain('0.');
+    expect(MLB_CAREER_SPORT.statLine(row as never, pos)).toContain((row as unknown as { avg: number }).avg.toFixed(3).slice(1));
+    act(() => { fireEvent.click(document.querySelector('[data-centre-exit]')!); });
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(JSON.stringify(career)).toBe(saved);
+    expect(Object.keys(localStorage)).toEqual(['seasonCentre:help:mlb']);
+  }, 60000);
+
+  it('shows the held line for a pitcher, for the 60 game season and for a club outside the league, never a guess', async () => {
+    const shows = async (career: UsCareerCore, row: UsCareerCore['seasons'][number], line: string) => {
+      render(<MemoryRouter><UsSeasonCentre sport={MLB_WITH_LOADER} career={career} row={row} onClose={vi.fn()} /></MemoryRouter>);
+      await waitFor(() => expect(document.querySelector('[data-centre-tile]')).not.toBeNull());
+      expect(document.querySelector('[data-centre-tile]')!.textContent).toContain(line);
+      expect(document.querySelector('[data-kickoff]')).toBeNull();
+      cleanup();
+    };
+    const pitcher = playMlb('SP', 'mlb-centre-sp', 1);
+    const pitcherLine = mlbSeasonHeld(pitcher.seasons[0].year, 'now', { pos: 'SP', team: pitcher.seasons[0].team })!;
+    expect(pitcherLine).toContain('for pitchers yet');
+    await shows(pitcher, pitcher.seasons[0], pitcherLine);
+    const hitter = playMlb('CF', 'mlb-centre-held', 1);
+    const short = { ...hitter.seasons[0], year: 2020, team: 'BOS' };
+    await shows({ ...hitter, eraId: 'y2004', seasons: [short] }, short, 'the real 2020 season had 60 games');
+    const abroad = { ...hitter.seasons[0], team: 'Yomiuri Giants' };
+    await shows({ ...hitter, seasons: [abroad] }, abroad, 'your club plays outside Major League Baseball');
+  }, 30000);
 });

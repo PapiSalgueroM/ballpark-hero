@@ -123,7 +123,7 @@
 /** A division, with the game's own team ids. */
 export interface UsDivision { conf: string; name: string; teams: readonly string[] }
 /** Which schedule formula a shape is dealt with (the dealer lives with the sport's number file). */
-export type UsFormula = { kind: 'nba82' } | { kind: 'nfl17' };
+export type UsFormula = { kind: 'nba82' } | { kind: 'nfl17' } | { kind: 'mlb162' };
 export interface UsShape { divisions: readonly UsDivision[]; formula: UsFormula }
 export interface UsShapeWindow { sport: 'nba' | 'nfl'; era: string; from: number; to: number | null; shape: UsShape }
 
