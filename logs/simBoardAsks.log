@@ -1,0 +1,39 @@
+1) Every ask a board makes is met by going and buying somebody
+   846 club and era combinations walked, 1673 asks issued
+   1673 of 1673 met by signing somebody the engine actually let through
+   worst pot share both asks cost: 84.4% (now Palmeiras, 22.8 of 27)
+   asks by shape: marquee 212, natQuota 495, posGap 343, veterans 315, youngStar 308
+   e.g. now Arsenal (pot 167): Spend £110m or more on one signing + Have 9 players from England in the squad
+   e.g. now Manchester City (pot 160): Sign someone 21 or under rated 89 or better + Have 6 players from England in the squad
+   e.g. now Liverpool (pot 137): Have 4 players aged 30 or over in the squad + Sign a midfielder this season
+   e.g. now Chelsea (pot 131): Sign someone 21 or under rated 89 or better + Have 9 players from England in the squad
+   e.g. now Manchester United (pot 118): Sign someone 21 or under rated 89 or better + Have 8 players from England in the squad
+   e.g. now Tottenham (pot 114): Have 6 players from England in the squad + Have 3 players aged 30 or over in the squad
+2) Every candidate ask carries measured headroom
+   marquee: 846 candidates, worst 3 ways, median 180
+   natQuota: 846 candidates, worst 5 ways, median 130
+   posGap: 846 candidates, worst 90 ways, median 424
+   veterans: 777 candidates, worst 203 ways, median 651
+   youngStar: 846 candidates, worst 5 ways, median 16
+   4161 candidate asks measured
+3) The asks grade where they should at the final whistle
+   country, experience, position, young star and marquee all flip at the whistle
+   loans are refused on the young star and the marquee, and accepted on the position ask
+   an ask with no window left reads behind rather than on track
+4) A save written before this round opens and is repaired
+   old save opened: 5 original objectives kept, 2 asks added, all 7 graded
+   a mid season save past its last window gains no ask it could not meet
+   every ask on the first 40 saves carries its own grading line
+   18 asks on nine founded clubs (three leagues, three budgets) all met by signing somebody
+5) The inbox: five new senders, and nobody real is quoted
+   314 inbox messages harvested over 10 careers
+   by kind: agent 50, boardChase 17, coachTip 11, drama 98, fanGroup 6, intlDuty 28, praise 8, reporter 15, roleTalk 32, startMe 37, wantMove 12
+   17 quoted spans checked against 56 objective labels these saves really carried
+6) The words on every ask label
+   1673 ask labels checked, 46 distinct shapes
+7) Every answer in the inbox moves a number that has a screen
+   the pot, the board meter, a contract, the training plan, the ticket price, the press mood and the dressing room all moved
+   2 places in answerMessage move the board meter, 2 of them floored at one
+   next season opens on 60.5 after a word kept, 57.5 with no word given, 54.5 after one broken (settled on Everton)
+
+simBoardAsks: green. Every ask a board makes can be met, and nobody real is quoted.

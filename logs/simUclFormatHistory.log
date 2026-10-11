@@ -1,0 +1,13 @@
+1) the timeline is contiguous from 1955 with exactly one open period
+   9 periods, 72 seasons each on exactly one row, 1955-56 to 1990-91 through 2024-25 onward
+2) every period rests on at least two publishers, and the provenance is well formed
+   40 sources across 4 publishers, 48 citations, verified 2026-09-10
+3) the generated block equals the engine, every era plays its real season, and the modern save admits it is a stand in
+   4 of 4 historic eras match their real season, 1 modern save declared a stand in, generated file fresh
+4) the shipped snapshot carries every row, the source list and the page
+   9 of 9 rows, 40 of 40 source URLs, 2438 readable words
+5) production guide rendering and saved summary claims
+   inspected production component at the affected table cell or answer
+   inspected saved HTML at the affected table cell or answer
+
+simUclFormatHistory: green. The timeline is whole, twice sourced, the generated block is fresh, and the engine plays what it says.
