@@ -652,7 +652,8 @@ describe('Club Manager: the review screen', () => {
          THEIR net with the score not moved yet, on 6428 on the last picture of a real shot.
        `kick`: the kick the card gives. 'played' is right. On 10321 and 2287 a real last kick follows, the plan plays
          nothing in the place before a last kick (the live screen's own limit, with or without reviews), so the card
-         says "Penalty to ..." and no kick is ever drawn: the score moves at the whistle.
+         says "Penalty to ..." and no kick is ever drawn: the score moves at the whistle. On 6428 the card comes
+         late (after the real shots), the kick starts, and the whistle goes before it is played out.
      Both are OPEN, unreachable today (VAR is dark, and penalties by review are held off by the ledger's owed entry
      penalties-total) and written up in docs/audits/ROUND-1302-NOTES.md. They are kept below as cases marked
      `fails`: each is green while the defect is there and goes RED the day it is mended, and then it becomes a
@@ -668,7 +669,7 @@ describe('Club Manager: the review screen', () => {
   const LATE_AWARDED: AwardedRow[] = [
     { what: 'a real goal is the last kick after it and a real goal has the place before it', match: 1, hint: 10321, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && x.real.some(e => e.kind === 'goal' && place(e) === x.whistle) && at(x, 2) },
     { what: 'a real last kick follows it and the pitch is free before', match: 1, hint: 2287, under: 'quiet', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && at(x, 0) && !at(x, 1) && !at(x, 2) && !at(x, 3) },
-    { what: 'a real chance shares its place and another has the place before', match: 1, hint: 6428, under: 'OPEN', kick: 'played', shape: x => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) && at(x, 2) },
+    { what: 'a real chance shares its place and another has the place before', match: 1, hint: 6428, under: 'OPEN', kick: 'OPEN', shape: x => place(x.r) === x.whistle - 1 && !at(x, 0) && at(x, 1) && at(x, 2) },
     { what: 'two places before the whistle, a real chance at its place and one after', match: 2, hint: 8615, under: 'quiet', kick: 'played', shape: x => place(x.r) === x.whistle - 2 && !at(x, 0) && at(x, 1) && at(x, 2) },
   ];
   type AwardedRun = { h: Half; frames: Frame[]; last: number; whistle: number };
@@ -693,7 +694,7 @@ describe('Club Manager: the review screen', () => {
     const first = frames.findIndex(cardUp), up = frames.filter(cardUp);
     const runs = actionRuns(frames.slice(0, whistle));
     const under = [...new Set(up.map(f => `${f.motion}/${f.phase}${f.netAt ? ` in the ${f.netAt} net` : ''}`))];
-    console.info(`clubManagerVarScreen: a penalty given at a crowded end, seed ${h.seed} of match ${row.match + 1}: whistle ${h.whistle}, review at ${place(v)} (${v.side}), card at ${frames[first].minute + frames[first].plus}, under the card ${under.join(' and ')}, score under it ${[...new Set(up.map(f => f.score))].join(' then ')}, at the whistle ${frames[whistle].score}, played ${runs.map(r => `${r.kind}${r.from > last ? ' (after the card)' : ''}`).join(', ') || 'nothing'}, the kick ${kickPlayed(got) ? 'played after the card' : 'NOT played'}, chances from 44 on ${h.feed.filter(e => isChance(e) && place(e) >= 44).map(e => `${e.side} ${e.kind} at ${place(e)}${e.penalty ? ' (P)' : ''}`).join(', ')}`);
+    console.info(`clubManagerVarScreen: a penalty given at a crowded end, seed ${h.seed} of match ${row.match + 1}: whistle ${h.whistle}, review at ${place(v)} (${v.side}), card at ${frames[first].minute + frames[first].plus}, under the card ${under.join(' and ')}, score under it ${[...new Set(up.map(f => f.score))].join(' then ')}, at the whistle ${frames[whistle].score}, played ${runs.map(r => `${r.kind}${r.from > last ? ' (after the card)' : ''}`).join(', ') || 'nothing'}, the kick ${kickPlayed(got) ? 'played after the card' : `NOT played out (goal pictures between the card and the whistle: ${[...new Set(frames.slice(last + 1, whistle).filter(f => f.motion === 'goal').map(f => f.phase))].join(' ') || 'nothing'})`}, chances from 44 on ${h.feed.filter(e => isChance(e) && place(e) >= 44).map(e => `${e.side} ${e.kind} at ${place(e)}${e.penalty ? ' (P)' : ''}`).join(', ')}`);
     expect(frames[last].cardText).toContain('VAR: penalty awarded');
     expect(new Set(up.map(f => f.score)).size, 'the score moved under the review card').toBe(1);
     expect(frames[first].score, 'the kick was on the score before its review opened').toBe(scoreBy(h.feed.filter(e => !(e.kind === 'goal' && e.penalty && e.side === v.side && place(e) === place(v))), frames[first].minute + frames[first].plus));
@@ -707,7 +708,7 @@ describe('Club Manager: the review screen', () => {
     try { got = await awardedRun(row); } catch { return; }
     nothingUnder(got.frames, new Map());
   }, 240000);
-  it.fails.each(LATE_AWARDED.filter(r => r.kick === 'OPEN'))('KNOWN OPEN, dark: the kick of a penalty a review gives is never played ($what)', async row => {
+  it.fails.each(LATE_AWARDED.filter(r => r.kick === 'OPEN'))('KNOWN OPEN, dark: the kick of a penalty a review gives is not played out ($what)', async row => {
     let got: AwardedRun;
     try { got = await awardedRun(row); } catch { return; }
     expect(kickPlayed(got), 'the kick the card gave was not played out before the whistle').toBe(true);
