@@ -179,18 +179,21 @@ const NATIONALITY_STRINGS: Record<string, string> = {
    "Centre-Back" and a key spelt with one could never be found. */
 const POSITION_ROLES: Record<string, string[]> = {
   "goalkeeper": ["GK"],
-  "centre back": ["CB"],
-  "right back": ["RB", "RWB"],
-  "left back": ["LB", "LWB"],
-  "defensive midfield": ["CDM", "CM"],
+  "centre back": ["CB", "LB", "RB"],
+  "right back": ["RB", "RWB", "LB", "RM"],
+  "left back": ["LB", "LWB", "RB", "LM"],
+  "right wing back": ["RWB", "RB", "LB", "LWB", "RM", "LM"],
+  "left wing back": ["LWB", "LB", "RB", "RWB", "LM", "RM"],
+  "defensive midfield": ["CDM", "CM", "CAM"],
   "central midfield": ["CM", "CDM", "CAM"],
-  "attacking midfield": ["CAM", "CM"],
-  "right midfield": ["RM", "RW"],
-  "left midfield": ["LM", "LW"],
-  "right winger": ["RW", "RM"],
-  "left winger": ["LW", "LM"],
-  "second striker": ["ST", "CF", "CAM"],
+  "attacking midfield": ["CAM", "CM", "CDM"],
+  "right midfield": ["RM", "RW", "LM", "LW", "RWB", "LWB"],
+  "left midfield": ["LM", "LW", "RM", "RW", "LWB", "RWB"],
+  "right winger": ["RW", "RM", "LW", "LM", "RWB", "LWB"],
+  "left winger": ["LW", "LM", "RW", "RM", "LWB", "RWB"],
+  "second striker": ["ST", "CF"],
   "centre forward": ["ST", "CF"],
+  "striker": ["ST", "CF"],
 };
 
 serve(async (req) => {
