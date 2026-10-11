@@ -1,0 +1,7 @@
+# Release AU fix 2: the three Season Centre walks after their repair (a plain build, Chromium, one at a time)
+#!build
+#!playwright
+#!serial
+playSeasonCentre: SHOTS=$RC_OUT/centre node scripts/playSeasonCentre.mjs
+playSeasonMoments: node scripts/playSeasonMoments.mjs
+playSeasonCentreMotion: node scripts/playSeasonCentreMotion.mjs
