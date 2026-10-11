@@ -22,7 +22,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
-      - name: Bind read-only recovery source and preserve the literal driver
+      - name: Bind read-only recovery source
         run: |
           set -euo pipefail
           mkdir -p recovery/manifest recovery/chunks recovery/originals recovery/reassembled
@@ -36,6 +36,9 @@ jobs:
           git diff --exit-code aa564f16019b9e821981d5c4e3e0262312c73b62 HEAD -- src scripts package.json package-lock.json > recovery/manifest/recovery-app-source-held.log
           cp .github/workflows/career-award-artifact-recovery.yml recovery/manifest/recovery-workflow.yml
           sha256sum package.json package-lock.json > recovery/manifest/packages-before.txt
+      - name: Preserve the literal recovery driver
+        run: |
+          set -euo pipefail
           cat > recovery/manifest/recovery-driver.py <<'PY'
           import copy
           import hashlib
