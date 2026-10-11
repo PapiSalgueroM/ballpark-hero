@@ -117,6 +117,22 @@
  *              stray draws must hold.
  * The fleet's loop itself lives in scripts/lib/usSeasonFleet.mjs since that
  * round (a pure move: the careers digests of both receipts hold it).
+ * Release AV (2026-10-11) took the lay record again, because on the release
+ * line 14 bundled files were no longer the ones it was made on and it compared
+ * nothing (exit 3). The attribution first, on runner rAV-g2: the digests were
+ * printed at five steps of the release line, each with that commit's own
+ * harness, and read link by link over 42 values. Round 1221's head to main
+ * (Release AU, aa564f16): the NFL careers digest moved on all five seed sets
+ * and nothing else did (Release AU's own later rounds, the roster card that
+ * lost its coin among them). Main to Round 1300 merged, and on to Rounds 1226
+ * and 1301 merged: 0 values moved. Round 1227 merged: the NFL careers digest on
+ * all five seed sets again (the rival on the save plays the player's position)
+ * and nothing else. Round 1212 merged (5db0724b): 0 values moved. So every
+ * season digest and both of the NBA's are still the first record's. The new
+ * record was printed on 5db0724b; with it the compare is exit 0 (11 digests, 0
+ * moved) and the control lay fires. The law and seam records were left as they
+ * were: on this line both say NOT COMPARED, and their values part from the
+ * head's in the NFL careers digest alone, by Round 1227.
  *
  * Round 1212 (MLB bound through the shared seam): a third RECEIPT, seam
  * (US_SEASON_DIGEST_RECEIPT=seam). Its record is
@@ -232,7 +248,7 @@ const DIGEST_RECEIPTS = {
   lay: {
     file: 'scripts/data/usSeasonLayDigest.json', round: 1300, control: 'lay',
     moved: ['src/lib/season/us.ts', 'src/lib/season/usPlayoffs.ts', 'src/data/usPostseasonFormat.ts'],
-    what: 'What the NBA and NFL Season Centers are handed for every season of the fleet of scripts/simUsSeasonCentre.mjs (the derived season and the playoff path), on the head of Round 1221, before Round 1300 lifted usPlayoffLay out of usPlayoffPath. A receipt of that lift, in no gate.',
+    what: 'What the NBA and NFL Season Centers are handed for every season of the fleet of scripts/simUsSeasonCentre.mjs (the derived season and the playoff path). First recorded on the head of Round 1221, before Round 1300 lifted usPlayoffLay out of usPlayoffPath, and taken again at Release AV on the release line with Rounds 1300, 1226, 1301, 1227 and 1212 merged: every season digest is still the first record\'s, and the NFL careers digest moved twice on purpose (the header of the harness says by what). A receipt of that lift, in no gate.',
     tail: "a receipt of Round 1300's playoff lay, in no gate", notOf: 'the playoff lay',
   },
   seam: {
