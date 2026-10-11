@@ -5,7 +5,7 @@ import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
 import { serveClubSuspension } from '@/lib/soccerDiscipline';
 import { cancelReducedRole, queueReducedRole, reducedRoleSwing, settleReducedRole, type ReducedRolePlan, type ReducedRoleResult } from './soccerCareerRole';
 import { personalGoalMilestoneNews } from './soccerCareerMilestone';
-import { soccerExtensionQuote, soccerTransferTerms } from '@/lib/soccerCareerContracts';
+import { soccerExtensionQuote, soccerTransferTerms, soccerWageDemand } from '@/lib/soccerCareerContracts';
 import { programmeEffects, prepareSoccerProgramme, settleSoccerProgramme, interruptSoccerProgramme, completeProgrammeLoanBuy, programmePromiseBroken } from './soccerCareerProgramme';
 import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
@@ -6341,8 +6341,8 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
       category: "negative", choices: [
         { label: "Accept lower wage, stay loyal", emoji: "🤝", color: "bg-blue-600", consequence: "Wage -15%, Morale +5",
           apply: s => { s.weeklyWage = Math.round(s.weeklyWage * 0.85); s.morale = clamp(s.morale + 5, 0, 100); s.events = [...s.events, "📝 Accepted lower wage, stayed loyal"]; return s; } },
-        { label: "Push for more money", emoji: "💰", color: "bg-amber-600", consequence: "50% chance: Wage +20% or relationship damaged",
-          apply: s => { if (rollCareerChance(s, 0.5, 'Contract negotiation', '20% wage raise', 'Relationship damaged')) { s.weeklyWage = Math.round(s.weeklyWage * 1.2); s.events = [...s.events, "📝 Pushed for more, got a raise!"]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "📝 Pushed too hard, relationship damaged"]; } return s; } },
+        { label: "Push for more money", emoji: "💰", color: "bg-amber-600", consequence: soccerWageDemand(state).consequence,
+          apply: s => { const demand = soccerWageDemand(s); if (rollCareerChance(s, 0.5, 'Contract negotiation', demand.hit, 'Relationship damaged')) { s.weeklyWage = demand.weeklyWage; s.events = [...s.events, demand.event]; } else { s.morale = clamp(s.morale - 10, 0, 100); s.events = [...s.events, "📝 Pushed too hard, relationship damaged"]; } return s; } },
         { label: "Walk away when contract expires", emoji: "🚶", color: "bg-red-600", consequence: "Contract not renewed, become free agent sooner",
           apply: s => { s.contractYearsLeft = Math.min(s.contractYearsLeft, 1); s.events = [...s.events, "📝 Walking away, will leave on free"]; return s; } },
       ] },

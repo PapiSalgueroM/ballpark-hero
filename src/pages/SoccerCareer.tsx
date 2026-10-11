@@ -1,4 +1,5 @@
 import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';
+import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';
 import { Component, Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useMemo, type ComponentType, type ReactNode, type CSSProperties } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -1171,7 +1172,8 @@ export default function SoccerCareer() {
     if (!event) return;
     const result = applyEventChoice(career, choiceIndex, clubs);
     setCareer(result);
-    toast(event.choices[choiceIndex].consequence);
+    const consequence = soccerEventChoiceConsequence(career, event.id, choiceIndex, event.choices[choiceIndex].consequence);
+    toast(event.id === 16 && choiceIndex === 1 ? money(consequence) : consequence);
   };
 
   const handleDismissDebut = () => {
@@ -2547,7 +2549,7 @@ function TransferWindowCard({ situation, career, onAcceptOffer, onStay, onSignEx
 }
 
 /* ─── Random Event Card ─── */
-function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; remaining: number; onChoice: (idx: number) => void }) {
+function RandomEventCard({ career, event, remaining, onChoice }: { career: CareerState; event: RandomEvent; remaining: number; onChoice: (idx: number) => void }) {
   const categoryColors: Record<string, string> = {
     positive: "border-emerald-500/40 bg-emerald-500/5",
     negative: "border-red-500/40 bg-red-500/5",
@@ -2581,7 +2583,7 @@ function RandomEventCard({ event, remaining, onChoice }: { event: RandomEvent; r
               <span className="text-lg">{choice.emoji}</span>
               <span className="font-bold text-sm">{choice.label}</span>
             </div>
-            <div className="text-[11px] mt-1 opacity-80 ml-8">{money(choice.consequence)}</div>
+            <div className="text-[11px] mt-1 opacity-80 ml-8">{money(soccerEventChoiceConsequence(career, event.id, idx, choice.consequence))}</div>
           </button>
         ))}
       </div>
@@ -4073,6 +4075,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* OVERLAY: Random Events */}
           {career.phase === "random_events" && career.pendingEvents.length > 0 && (
             <RandomEventCard
+              career={career}
               event={career.pendingEvents[0]}
               remaining={career.pendingEvents.length}
               onChoice={onEventChoice}
@@ -4373,7 +4376,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {validChanceWheel(career.chanceWheel) && !career.chanceWheel.seen && onCareerPatch && (
             <CentreMountBoundary what="chance wheel" onClose={() => onCareerPatch(acknowledgeChanceWheel)}>
               <Suspense fallback={null}>
-                <CareerChanceWheel key={`${career.chanceWheel.title}:${career.chanceWheel.roll}`} receipt={career.chanceWheel} onClose={() => onCareerPatch(acknowledgeChanceWheel)} />
+                <CareerChanceWheel key={`${career.chanceWheel.title}:${career.chanceWheel.roll}`} receipt={career.chanceWheel.title === 'Contract negotiation' ? { ...career.chanceWheel, hit: money(career.chanceWheel.hit), miss: money(career.chanceWheel.miss) } : career.chanceWheel} onClose={() => onCareerPatch(acknowledgeChanceWheel)} />
               </Suspense>
             </CentreMountBoundary>
           )}
