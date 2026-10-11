@@ -1,0 +1,260 @@
+name: Veteran offer Saudi path diagnostic
+on:
+  push:
+    branches: [codex/career-veteran-offers]
+    paths: [.github/workflows/career-veteran-world-paths.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: career-veteran-world-paths-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      SIM_NETWORK: offline
+      TZ: UTC
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Retain immutable sources and locked dependencies
+        id: prep
+        run: |
+          mkdir -p career-veteran-world-paths-artifacts sources/original sources/candidate
+          test "$(git rev-parse 'f78037dcddea12c1a02586c7d5c0e185efb86121^{tree}')" = 1c9e7dcb11992442060cb162c288d0bcf37db0c2
+          test "$(git rev-parse '6b1bc27abf56f093c418bdb66296de4fe49144c9^{tree}')" = 868729dd50d9322d6c388899b5d001290eb1b8e4
+          git diff --exit-code 6b1bc27abf56f093c418bdb66296de4fe49144c9 HEAD -- src scripts package.json package-lock.json
+          git rev-parse HEAD > career-veteran-world-paths-artifacts/driver-head.txt
+          git rev-parse 'HEAD^{tree}' > career-veteran-world-paths-artifacts/driver-tree.txt
+          git archive --format=zip --output=career-veteran-world-paths-artifacts/driver-source.zip HEAD
+          git archive --format=zip --output=career-veteran-world-paths-artifacts/original-source.zip f78037dcddea12c1a02586c7d5c0e185efb86121
+          git archive --format=zip --output=career-veteran-world-paths-artifacts/candidate-source.zip 6b1bc27abf56f093c418bdb66296de4fe49144c9
+          git ls-tree -r f78037dcddea12c1a02586c7d5c0e185efb86121 > career-veteran-world-paths-artifacts/original-inventory.txt
+          git ls-tree -r 6b1bc27abf56f093c418bdb66296de4fe49144c9 > career-veteran-world-paths-artifacts/candidate-inventory.txt
+          unzip -q career-veteran-world-paths-artifacts/original-source.zip -d sources/original
+          unzip -q career-veteran-world-paths-artifacts/candidate-source.zip -d sources/candidate
+          cmp sources/original/scripts/simCareerLeagueWorld.mjs sources/candidate/scripts/simCareerLeagueWorld.mjs
+          cmp sources/original/scripts/lib/careerStep.mjs sources/candidate/scripts/lib/careerStep.mjs
+          cmp sources/original/scripts/lib/careerClubPool.mjs sources/candidate/scripts/lib/careerClubPool.mjs
+          sha256sum package.json package-lock.json > career-veteran-world-paths-artifacts/packages-before.txt
+          npm ci
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8')),installed=[],omitted=[];
+          const fits=(rules,value)=>!rules||(!rules.some(x=>x==='!'+value)&&(rules.every(x=>x.startsWith('!'))||rules.includes(value)));
+          for(const [directory,expected]of Object.entries(lock.packages)){
+            if(!directory.startsWith('node_modules/')||!expected.version)continue;
+            const file=directory+'/package.json';
+            if(!fs.existsSync(file)){assert.equal(expected.optional,true,directory+' required dependency missing');assert((expected.os&&!fits(expected.os,process.platform))||(expected.cpu&&!fits(expected.cpu,process.arch)),directory+' optional omission needs a platform reason');omitted.push({directory,version:expected.version,optional:expected.optional,os:expected.os??null,cpu:expected.cpu??null});continue;}
+            const actual=JSON.parse(fs.readFileSync(file,'utf8'));assert.equal(actual.version,expected.version,directory);installed.push({directory,name:actual.name,version:actual.version});
+          }
+          assert.equal(installed.length,521);assert.equal(omitted.length,78);
+          fs.writeFileSync('career-veteran-world-paths-artifacts/dependencies-before.json',JSON.stringify({platform:process.platform,arch:process.arch,installed,omitted},null,2));
+          JS
+          find src scripts .github/workflows -type f -print0 | sort -z | xargs -0 sha256sum > career-veteran-world-paths-artifacts/source-before.txt
+      - name: Explain the complete fixed Saudi starter subcohort
+        if: ${{ !cancelled() && steps.prep.outcome == 'success' }}
+        run: |
+          cat > career-veteran-world-paths-artifacts/diagnostic.mjs <<'JS'
+          import fs from 'node:fs';import path from 'node:path';import os from 'node:os';import crypto from 'node:crypto';import zlib from 'node:zlib';import assert from 'node:assert/strict';import {spawnSync} from 'node:child_process';
+          const ROOT=process.cwd(),OUT=path.join(ROOT,'career-veteran-world-paths-artifacts'),H='scripts/simCareerLeagueWorld.mjs',B='scripts/lib/careerClubPool.mjs',C='src/lib/soccerCareerContracts.ts';
+          const hash=b=>crypto.createHash('sha256').update(b).digest('hex'),lf=s=>s.replaceAll('\r\n','\n');
+          const write=(file,v)=>fs.writeFileSync(path.join(OUT,file),JSON.stringify(v,null,2));
+          const put=v=>{const raw=Buffer.from(JSON.stringify(v)),sha=hash(raw),file='objects/'+sha+'.json.gz',packed=zlib.gzipSync(raw);fs.mkdirSync(path.join(OUT,'objects'),{recursive:true});if(!fs.existsSync(path.join(OUT,file)))fs.writeFileSync(path.join(OUT,file),packed);else assert.equal(hash(zlib.gunzipSync(fs.readFileSync(path.join(OUT,file)))),sha);return {file,sha256:sha,bytes:raw.length,packedSha256:hash(packed),packedBytes:packed.length};};
+          const read=ref=>{const packed=fs.readFileSync(path.join(OUT,ref.file));assert.equal(hash(packed),ref.packedSha256);const raw=zlib.gunzipSync(packed);assert.equal(hash(raw),ref.sha256);assert.equal(raw.length,ref.bytes);return JSON.parse(raw);};
+          const exact=(s,a,b,label)=>{assert.equal(s.split(a).length-1,1,label+' forward anchor');assert.notEqual(a,b);const changed=s.replace(a,b);assert.equal(changed.split(b).length-1,1,label+' reverse anchor');assert.equal(changed.replace(b,a),s,label+' whole undo');return changed;};
+          const original=path.join(ROOT,'sources/original'),candidate=path.join(ROOT,'sources/candidate');
+          assert.equal(hash(fs.readFileSync(path.join(original,H))),hash(fs.readFileSync(path.join(candidate,H))));
+          assert.equal(hash(fs.readFileSync(path.join(original,'scripts/lib/careerStep.mjs'))),hash(fs.readFileSync(path.join(candidate,'scripts/lib/careerStep.mjs'))));
+          const currentReturn='  return { wage: quote.weeklyWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };';
+          const definitions=[{id:'original-plain',root:original,observed:false},{id:'original-observed',root:original,observed:true},{id:'candidate',root:candidate,observed:true},{id:'duration-only',root:candidate,observed:true,to:'  return { wage: offeredWage, contractYears: Math.min(offeredYears, quote.contractYears ?? offeredYears) };'},{id:'wage-only',root:candidate,observed:true,to:'  return { wage: quote.weeklyWage, contractYears: offeredYears };'}];
+          const clock=1791676800000,report={scope:'Causal subcohort only. All 300 Saudi starters, original nation index 14, seed set 0, unchanged passive choices and 140-step bound. No full 17-nation gate credit.',baseline:{run:38104160454,artifact:11688894833,sha256:'AEB43C0914AAB338898F83A86C0809BEF655F28958EF37BD449727BA820213C3',original:{seasons:3797,printedTableShare:'79.6%'},candidate:{seasons:3819,printedTableShare:'75.0%'},floor:0.769},clock:{DateNow:clock,qualification:'Date.now held equally in the five child processes. Date constructors and timers unchanged; counts and printed shares must reproduce the retained full baseline.'},arms:[],errors:[],status:'running'};
+          const preload=String.raw`
+          const fs=require('node:fs'),path=require('node:path'),zlib=require('node:zlib'),crypto=require('node:crypto'),assert=require('node:assert/strict');
+          const OUT=process.env.PATH_DIAGNOSTIC_OUT,ARM=process.env.PATH_DIAGNOSTIC_ARM,OBS=process.env.PATH_DIAGNOSTIC_OBS==='1';
+          const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+          const put=v=>{const raw=Buffer.from(JSON.stringify(v)),sha=hash(raw),file='objects/'+sha+'.json.gz',packed=zlib.gzipSync(raw);fs.mkdirSync(path.join(OUT,'objects'),{recursive:true});const p=path.join(OUT,file);if(!fs.existsSync(p))fs.writeFileSync(p,packed);else assert.equal(hash(zlib.gunzipSync(fs.readFileSync(p))),sha);return {file,sha256:sha,bytes:raw.length,packedSha256:hash(packed),packedBytes:packed.length};};
+          Date.now=()=>Number(process.env.PATH_DIAGNOSTIC_CLOCK);
+          let seeded=false,cursor=0,writeAt=0,buffer=Buffer.alloc(262144),fd=fs.openSync(path.join(OUT,ARM,'seeded.u32'),'w'),startup=[],careers=[],active=null,measurements=[];
+          const flush=()=>{if(writeAt){fs.writeSync(fd,buffer,0,writeAt);writeAt=0;}};
+          const wrappers=new WeakSet();let current=Math.random;
+          const wrap=fn=>{if(wrappers.has(fn))return fn;const wrapped=function(){const v=fn();if(seeded){assert(Number.isFinite(v)&&v>=0&&v<1,'seeded value range');const n=v*4294967296;assert(Number.isInteger(n),'exact mulberry32 numerator');if(writeAt===buffer.length)flush();buffer.writeUInt32LE(n,writeAt);writeAt+=4;cursor++;}else startup.push({value:v,stack:new Error('unfiltered startup draw').stack});return v;};wrappers.add(wrapped);return wrapped;};
+          current=wrap(current);Object.defineProperty(Math,'random',{configurable:true,get:()=>current,set:fn=>{assert.equal(typeof fn,'function');current=wrap(fn);}});
+          const facts=s=>JSON.parse(JSON.stringify({phase:s.phase,retired:s.retired,age:s.age,overall:s.overall,club:s.currentClub,tier:s.currentClubTier,wage:s.weeklyWage,years:s.contractYearsLeft,seasons:s.seasons.length,netWorth:s.netWorth,morale:s.morale,transferSituation:s.transferSituation??null,pendingOffers:s.pendingOffers??null,pendingLoanOffers:s.pendingLoanOffers??null,pendingEvents:s.pendingEvents??null,pendingMoralDilemma:s.pendingMoralDilemma??null,deficitYears:s.consecutiveDeficitYears,totalEarnings:s.totalEarnings,lifestyle:s.lifestyleLevel,loan:s.loan??null,rehab:s.pendingRehab??null}));
+          const heldRead=(s,fn)=>{const before=JSON.stringify(s),at=cursor,v=fn();assert.equal(JSON.stringify(s),before,'observation input unchanged');assert.equal(cursor,at,'observation consumes no draws');return v;};
+          const api={
+            start(nat,ni,seed){assert.equal(seeded,false);assert.equal(nat,'Saudi Arabia');assert.equal(ni,14);assert.equal(seed,0x1100c+14*7919);seeded=true;api.seed={nat,ni,seed};},
+            constructorStart(c){active={id:c,start:cursor,initial:null,final:null,steps:[],seasons:[],pending:null};careers.push(active);},
+            initial(s,c){assert.equal(active.id,c);active.initial=heldRead(s,()=>put(s));active.initialEnd=cursor;},
+            before(s,c,step){if(OBS){assert.equal(active.id,c);const at=cursor;active.pending={step,start:at,before:heldRead(s,()=>facts(s)),savedBefore:['transfer_window','contract_offer'].includes(s.phase)?heldRead(s,()=>put(s)):null};}},
+            after(s,c,step,priorCount,measure,todayLeague,tap){if(OBS){assert.equal(active.id,c);assert.equal(active.pending.step,step);const pending=active.pending;pending.end=cursor;pending.after=heldRead(s,()=>facts(s));pending.savedAfter=pending.savedBefore?heldRead(s,()=>put(s)):null;active.steps.push(pending);active.pending=null;
+              for(let index=priorCount;index<s.seasons.length;index++){const row=s.seasons[index],eligible=index===s.seasons.length-1&&row.type==='playing'&&row.year>=2026&&row.apps>0&&!row.injurySevere;const reason=index!==s.seasons.length-1?'not-last-new-row':row.type!=='playing'?'not-playing':row.year<2026?'before-2026':!(row.apps>0)?'no-apps':row.injurySevere?'severe':null;
+                const measurement=row.type==='playing'?heldRead(s,()=>measure(s,row)):null;active.seasons.push({index,step,cursor,eligible,excludedReason:reason,row:heldRead(s,()=>put(row)),measurement:measurement?put(measurement):null,league:heldRead(s,()=>todayLeague(row.club)),age:s.age,drawInput:put(tap&&tap.length===1?tap[0]:null),finishInputs:put(tap??null)});
+              }
+            }},
+            finish(s,c,guard){assert.equal(active.id,c);active.final=heldRead(s,()=>put(s));active.end=cursor;active.guard=guard;active.termination=s.retired?'retired':guard>140?'step-bound':'other';assert.equal(active.pending,null);},
+            measure(s,row,m,input){const value=heldRead(s,()=>({careerId:Number(s.playerName.split('.').at(-1)),row,measurement:m,input,cursor}));measurements.push(put(value));},
+            done(result){api.result=result;},
+          };
+          globalThis.__saudiPath=api;
+          process.on('exit',()=>{flush();fs.closeSync(fd);const raw=fs.readFileSync(path.join(OUT,ARM,'seeded.u32')),packed=zlib.gzipSync(raw);fs.writeFileSync(path.join(OUT,ARM,'seeded.u32.gz'),packed);fs.unlinkSync(path.join(OUT,ARM,'seeded.u32'));fs.writeFileSync(path.join(OUT,ARM,'observation.json.gz'),zlib.gzipSync(Buffer.from(JSON.stringify({arm:ARM,observed:OBS,seed:api.seed??null,result:api.result??null,careers,measurements,tape:{file:ARM+'/seeded.u32.gz',encoding:'uint32LE / 4294967296',count:cursor,rawSha256:hash(raw),bytes:raw.length,packedSha256:hash(packed),packedBytes:packed.length},startup:put(startup)}))));});
+          `;
+          fs.writeFileSync(path.join(OUT,'observer.cjs'),preload);
+          const seedAnchor='    seedRandom(0x1100c + seedset * 100003 + ni * 7919);';
+          const initAnchor="      let s = engine.initCareer(`World ${seedset}.${ni}.${c}`, nat, POSITIONS[c % POSITIONS.length], '2025', abil(ovr), ovr, 2025, POOL, null);";
+          const stepAnchor='        s = careerStep(engine, s, POOL);';
+          const finishAnchor='    }\n  }\n}\nconst tally = () => ({ seasons: 0, finish: 0, table: 0, named: 0 });';
+          const branch=String.raw`if (process.env.SAUDI_PATH_DIAGNOSTIC === '1') {
+            globalThis.__leagueFinishTap = [];
+            const result = worldRun(0, 300, ['Saudi Arabia'], (career, row, m, input) => globalThis.__saudiPath.measure(career, row, m, input));
+            globalThis.__saudiPath.done(result);
+            console.log(JSON.stringify({scope:'Saudi starter subcohort',result,shares:shares(result.overall)}));
+            process.exit(0);
+          }
+          `;
+          const temp=fs.mkdtempSync(path.join(os.tmpdir(),'veteran-world-paths-'));
+          for(const def of definitions){
+            const dir=path.join(OUT,def.id),root=path.join(temp,def.id);fs.mkdirSync(dir,{recursive:true});const receipt={id:def.id,observed:def.observed,source:def.root===original?'f78037dcddea12c1a02586c7d5c0e185efb86121':'6b1bc27abf56f093c418bdb66296de4fe49144c9',status:null};report.arms.push(receipt);
+            try{
+              fs.cpSync(def.root,root,{recursive:true});fs.symlinkSync(path.join(ROOT,'node_modules'),path.join(root,'node_modules'),'dir');
+              const patches=[];
+              const change=(rel,mutate)=>{const raw=fs.readFileSync(path.join(root,rel)),before=lf(raw.toString()),after=mutate(before);assert.notEqual(after,before);fs.writeFileSync(path.join(root,rel),after);patches.push({rel,rawBefore:put(raw.toString()),before:put(before),after:put(after),beforeSha256:hash(before),afterSha256:hash(after)});};
+              if(def.to)change(C,s=>exact(s,currentReturn,def.to,def.id));
+              const boot='globalThis.__saudiPath.start(nat, ni, 0x1100c + seedset * 100003 + ni * 7919);\n'+seedAnchor;
+              change(H,s=>{
+                const pairs=[[seedAnchor,'    '+boot],["function recordWorld() {\n",branch+"function recordWorld() {\n"],[initAnchor,'      globalThis.__saudiPath.constructorStart(c);\n'+initAnchor+'\n      globalThis.__saudiPath.initial(s,c);'],[finishAnchor,'      globalThis.__saudiPath.finish(s,c,guard);\n'+finishAnchor]];
+                if(def.observed)pairs.push([stepAnchor,'        globalThis.__saudiPath.before(s,c,guard);\n'+stepAnchor+'\n        globalThis.__saudiPath.after(s,c,guard,rows,measureSeason,todayLeague,tap);']);
+                let value=s;for(const [a,b]of pairs)value=exact(value,a,b,H);let undo=value;for(const [a,b]of [...pairs].reverse())undo=undo.replace(b,a);assert.equal(undo,s,'whole copied harness undo');receipt.harnessUndoSha256=hash(undo);receipt.additiveHarnessPairs=pairs;return value;
+              });
+              change(B,s=>{
+                const actualBodyAnchor="          return { contents: f(src), loader: args.path.endsWith('x') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };";
+                const actualBody=String.raw`          const contents = f(src);
+                    const retain = path.join(process.env.PATH_DIAGNOSTIC_BUNDLE, 'actual-loaded', rel);
+                    fs.mkdirSync(path.dirname(retain), { recursive: true });
+                    fs.writeFileSync(retain, contents);
+                    return { contents, loader: args.path.endsWith('x') ? 'tsx' : 'ts', resolveDir: path.dirname(args.path) };`;
+                const pairs=[[actualBodyAnchor,actualBody],['  await build({\n','  const built = await build({\n'],["    entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out,","    entryPoints: [entry], bundle: true, format: 'esm', platform: 'node', outfile: out, metafile: true,"],["  return import(pathToFileURL(out).href);",String.raw`  const retain = process.env.PATH_DIAGNOSTIC_BUNDLE;
+            fs.mkdirSync(retain, { recursive: true });
+            fs.copyFileSync(entry, path.join(retain, 'entry.mjs'));
+            fs.copyFileSync(out, path.join(retain, 'bundle.mjs'));
+            fs.writeFileSync(path.join(retain, 'metafile.json'), JSON.stringify(built.metafile, null, 2));
+            const loaded = [];
+            for (const input of Object.keys(built.metafile.inputs)) {
+              const full = path.resolve(input);
+              const rel = path.relative(root, full).replaceAll('\\', '/');
+              const body = fs.readFileSync(full);
+              const held = path.join(retain, 'loaded', rel.startsWith('..') ? 'outside/' + loaded.length : rel);
+              fs.mkdirSync(path.dirname(held), { recursive: true });
+              fs.writeFileSync(held, body);
+              const sourceRel = path.relative(srcDir, full);
+              const actual = path.join(retain, 'actual-loaded', sourceRel);
+              const actualPath = !sourceRel.startsWith('..') && !path.isAbsolute(sourceRel) && fs.existsSync(actual) ? actual : held;
+              const actualBody = fs.readFileSync(actualPath);
+              loaded.push({ input, rel, held: path.relative(retain, held), bytes: body.length, actualHeld: path.relative(retain, actualPath), actualBytes: actualBody.length, transformed: actualPath !== held });
+            }
+            fs.writeFileSync(path.join(retain, 'loaded.json'), JSON.stringify(loaded, null, 2));
+            return import(pathToFileURL(out).href);`]];
+                let value=s;for(const [a,b]of pairs)value=exact(value,a,b,B);let undo=value;for(const [a,b]of [...pairs].reverse())undo=undo.replace(b,a);assert.equal(undo,s,'whole bundler undo');receipt.bundlerUndoSha256=hash(undo);receipt.additiveBundlerPairs=pairs;return value;
+              });
+              write(def.id+'/patches.json',patches);
+              if(def.to){const raw=lf(fs.readFileSync(path.join(def.root,C),'utf8')),changed=fs.readFileSync(path.join(root,C),'utf8');assert.equal(changed.split(def.to).length-1,1);const undo=changed.replace(def.to,currentReturn);assert.equal(undo,raw);receipt.policyUndo=put(undo);receipt.policyForwardCount=1;receipt.policyReverseCount=1;}
+              const before=patches.map(p=>({rel:p.rel,sha256:hash(fs.readFileSync(path.join(root,p.rel)))}));
+              const stdout=fs.openSync(path.join(dir,'stdout.log'),'w'),stderr=fs.openSync(path.join(dir,'stderr.log'),'w');
+              const child=spawnSync(process.execPath,[H],{cwd:root,stdio:['ignore',stdout,stderr],env:{...process.env,SEEDSET:'0',CAREERS:'300',RECORD:'',RECORD_PART:'',SIM_LEAGUE_WORLD_CONTROL:'',SAUDI_PATH_DIAGNOSTIC:'1',PATH_DIAGNOSTIC_OUT:OUT,PATH_DIAGNOSTIC_ARM:def.id,PATH_DIAGNOSTIC_OBS:def.observed?'1':'0',PATH_DIAGNOSTIC_CLOCK:String(clock),PATH_DIAGNOSTIC_BUNDLE:path.join(dir,'compiled'),NODE_OPTIONS:'--require='+path.join(root,'scripts/lib/offlineTransport.cjs')+' --require='+path.join(OUT,'observer.cjs'),SIM_OFFLINE_RECEIPT:path.join(dir,'traffic.log')},timeout:1200000});fs.closeSync(stdout);fs.closeSync(stderr);
+              receipt.status=child.status;receipt.signal=child.signal;receipt.error=child.error?{name:child.error.name,message:child.error.message,stack:child.error.stack}:null;
+              receipt.stdout={bytes:fs.statSync(path.join(dir,'stdout.log')).size,sha256:hash(fs.readFileSync(path.join(dir,'stdout.log')))};receipt.stderr={bytes:fs.statSync(path.join(dir,'stderr.log')).size,sha256:hash(fs.readFileSync(path.join(dir,'stderr.log')))};
+              receipt.sourceBefore=before;receipt.sourceAfter=before.map(p=>({rel:p.rel,sha256:hash(fs.readFileSync(path.join(root,p.rel)))}));assert.deepEqual(receipt.sourceAfter,before);
+              receipt.observation={file:def.id+'/observation.json.gz',sha256:hash(fs.readFileSync(path.join(dir,'observation.json.gz'))),rawSha256:hash(zlib.gunzipSync(fs.readFileSync(path.join(dir,'observation.json.gz'))))};
+            }catch(error){receipt.setupError={name:error.name,message:error.message,stack:error.stack};report.errors.push({arm:def.id,...receipt.setupError});}
+            write('report.json',report);
+          }
+          const observations=new Map();
+          for(const arm of report.arms){try{assert.equal(arm.status,0,arm.id+' diagnostic child');assert.equal(arm.setupError,undefined);const observationRaw=zlib.gunzipSync(fs.readFileSync(path.join(OUT,arm.observation.file)));assert.equal(hash(observationRaw),arm.observation.rawSha256);const o=JSON.parse(observationRaw);assert.equal(hash(fs.readFileSync(path.join(OUT,arm.observation.file))),arm.observation.sha256);observations.set(arm.id,o);read(o.startup);const raw=zlib.gunzipSync(fs.readFileSync(path.join(OUT,o.tape.file)));assert.equal(hash(raw),o.tape.rawSha256);assert.equal(raw.length,o.tape.count*4);assert.equal(o.seed.ni,14);assert.equal(o.seed.seed,0x1100c+14*7919);
+            if(o.observed){assert.equal(o.careers.length,300);let eligible=0;for(let id=0;id<300;id++){const c=o.careers[id];assert.equal(c.id,id);const first=read(c.initial),last=read(c.final);assert.equal(first.playerName,'World 0.14.'+id);assert.equal(first.nationality,'Saudi Arabia');assert(c.steps.length<=140);let at=c.initialEnd;for(const step of c.steps){assert.equal(step.start,at);assert(step.end>=step.start);at=step.end;if(step.savedBefore)read(step.savedBefore);if(step.savedAfter)read(step.savedAfter);}assert.equal(at,c.end);assert.equal(c.seasons.length,last.seasons.length-first.seasons.length);for(const row of c.seasons){const captured=read(row.row),finalRow=last.seasons[row.index];assert.equal(captured.year,finalRow.year);assert.equal(captured.age,finalRow.age);assert.equal(captured.club,finalRow.club);row.finalRow=put(finalRow);row.changedLater=JSON.stringify(captured)!==JSON.stringify(finalRow);if(row.measurement)read(row.measurement);read(row.drawInput);read(row.finishInputs);if(row.eligible)eligible++;}}
+              assert.equal(eligible,o.result.overall.seasons);assert.equal(o.measurements.length,eligible);arm.validatedObservation=put(o);
+            }for(const ref of o.measurements)read(ref);
+          }catch(error){report.errors.push({arm:arm.id,group:'full-observation',name:error.name,message:error.message,stack:error.stack});}}
+          try{
+            const plain=observations.get('original-plain'),observed=observations.get('original-observed');assert.deepEqual(plain.result,observed.result);assert.equal(plain.tape.rawSha256,observed.tape.rawSha256);assert.equal(plain.tape.count,observed.tape.count);assert.deepEqual(plain.measurements,observed.measurements);const boundaries=o=>o.careers.map(c=>({id:c.id,start:c.start,initialEnd:c.initialEnd,end:c.end,guard:c.guard,termination:c.termination,initial:c.initial,final:c.final}));assert.deepEqual(boundaries(plain),boundaries(observed),'all300 complete initial/final saves and cursors held');assert.deepEqual(fs.readFileSync(path.join(OUT,'original-plain/stdout.log')),fs.readFileSync(path.join(OUT,'original-observed/stdout.log')));assert.deepEqual(fs.readFileSync(path.join(OUT,'original-plain/stderr.log')),fs.readFileSync(path.join(OUT,'original-observed/stderr.log')));report.instrumentation={completeResult:true,all300InitialFinalSaves:true,fullSeededTape:true,everyMeasuredRow:true,fullStdoutStderr:true,plainQualification:'Boundary-only additive recording, no per-phase or additional season reads. Original core, passive actions and measurement callback unchanged.',startupQualification:'Complete values and caller stacks retained separately. Startup is not asserted zero or compared as seeded career draws.'};
+            for(const [id,expected]of [['original-observed',report.baseline.original],['candidate',report.baseline.candidate]]){const o=observations.get(id);assert.equal(o.result.overall.seasons,expected.seasons);assert.equal((100*o.result.overall.table/o.result.overall.seasons).toFixed(1)+'%',expected.printedTableShare);}
+            report.summaries=[...observations].map(([id,o])=>({id,overall:o.result.overall,leagues:o.result.leagues,printedTableShare:(100*o.result.overall.table/o.result.overall.seasons).toFixed(1)+'%',passesExistingSaudiFloor:o.result.overall.table/o.result.overall.seasons>=report.baseline.floor,draws:o.tape.count,termination:o.careers.reduce((a,c)=>(a[c.termination]=(a[c.termination]??0)+1,a),{})}));
+            const base=observations.get('original-observed');report.matched=[];
+            for(const id of ['candidate','duration-only','wage-only']){const o=observations.get(id),pairs=[];for(let c=0;c<300;c++){const a=base.careers[c],b=o.careers[c],firstStep=a.steps.findIndex((v,i)=>JSON.stringify(v)!==JSON.stringify(b.steps[i])),behavior=v=>v?{before:v.before,after:v.after,savedBefore:v.savedBefore?.sha256??null,savedAfter:v.savedAfter?.sha256??null}:null,firstBehaviorStep=a.steps.findIndex((v,i)=>JSON.stringify(behavior(v))!==JSON.stringify(behavior(b.steps[i])));pairs.push({careerId:c,firstBehaviorStep:firstBehaviorStep>=0?firstBehaviorStep:null,initialEqual:a.initial.sha256===b.initial.sha256,finalEqual:a.final.sha256===b.final.sha256,initialDraws:[a.start,a.initialEnd,b.start,b.initialEnd],endDraws:[a.end,b.end],firstStep:firstStep>=0?firstStep:a.steps.length===b.steps.length?null:Math.min(a.steps.length,b.steps.length),originalEligible:a.seasons.filter(r=>r.eligible).length,armEligible:b.seasons.filter(r=>r.eligible).length,originalTables:a.seasons.filter(r=>r.eligible&&read(r.measurement).table).length,armTables:b.seasons.filter(r=>r.eligible&&read(r.measurement).table).length});}report.matched.push({id,pairs});}
+            for(const id of ['duration-only','wage-only']){const o=observations.get(id),current=observations.get('candidate');assert(o.careers.some((c,i)=>c.final.sha256!==current.careers[i].final.sha256),id+' effective actual full output delta');}
+            const originalFacts={count:observed.careers.length,eligible:observed.careers.reduce((n,c)=>n+c.seasons.filter(r=>r.eligible).length,0),declared:observed.result.overall.seasons,tapeHash:observed.tape.rawSha256,plainTapeHash:plain.tape.rawSha256,firstStart:observed.careers[0].start,initialEnd:observed.careers[0].initialEnd};
+            const detect=f=>{const red=[];if(f.count!==300)red.push('complete-cohort');if(f.eligible!==f.declared)red.push('complete-season-records');if(f.tapeHash!==f.plainTapeHash)red.push('unfiltered-tape');if(f.firstStart!==0||f.initialEnd<f.firstStart)red.push('phase-cursors');return red;};assert.deepEqual(detect(originalFacts),[]);
+            const fault=structuredClone(originalFacts);fault.count--;fault.eligible--;fault.tapeHash='0'.repeat(64);fault.firstStart++;assert.deepEqual(detect(fault),['complete-cohort','complete-season-records','unfiltered-tape','phase-cursors']);const undo=structuredClone(fault);undo.count++;undo.eligible++;undo.tapeHash=originalFacts.tapeHash;undo.firstStart--;assert.deepEqual(undo,originalFacts);assert.deepEqual(detect(undo),[]);report.observationControl={original:put(originalFacts),fault:put(fault),undo:put(undo),failures:detect(fault),qualification:'Copied derived observations only; full actual career objects and unfiltered streams remain held.'};
+          }catch(error){report.errors.push({group:'closing-comparison',name:error.name,message:error.message,stack:error.stack});}
+          try{
+            const compiled=[];
+            for(const arm of report.arms){
+              const found=[],collect=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())collect(file);else{assert(entry.isFile(),'complete compiled body is a regular file');found.push(path.relative(OUT,file).replaceAll('\\','/'));}}};
+              collect(path.join(OUT,arm.id,'compiled'));found.sort();assert.equal(found.length,119,arm.id+' complete compiled body count');compiled.push(...found);
+            }
+            assert.equal(compiled.length,595,'all five complete compiled body sets');
+            const aliases=[];let first=null;
+            for(const logicalPath of compiled){
+              const raw=fs.readFileSync(path.join(OUT,logicalPath)),rawSha256=hash(raw),packed=zlib.gzipSync(raw,{level:9}),packedPath='packed-compiled/'+rawSha256+'.gz';
+              fs.mkdirSync(path.join(OUT,'packed-compiled'),{recursive:true});
+              if(fs.existsSync(path.join(OUT,packedPath)))assert.deepEqual(fs.readFileSync(path.join(OUT,packedPath)),packed,'same complete compiled body encoding');
+              else fs.writeFileSync(path.join(OUT,packedPath),packed);
+              const retained=fs.readFileSync(path.join(OUT,packedPath));assert.deepEqual(retained,packed);assert.deepEqual(zlib.gunzipSync(retained),raw,'complete compiled body roundtrip');
+              const alias={logicalPath,rawBytes:raw.length,rawSha256,packedPath,packedBytes:retained.length,packedSha256:hash(retained)};
+              aliases.push(alias);if(!first&&raw.length)first={raw,packed:retained,alias};
+            }
+            assert(first,'actual nonempty complete compiled body control');
+            const detect=packed=>{const raw=zlib.gunzipSync(packed);return raw.length===first.alias.rawBytes&&hash(raw)===first.alias.rawSha256?[]:['whole-text-body'];};
+            assert.deepEqual(detect(first.packed),[]);
+            const badRaw=Buffer.from(first.raw);badRaw[0]^=1;assert.notDeepEqual(badRaw,first.raw);const fault=zlib.gzipSync(badRaw,{level:9});assert.deepEqual(detect(fault),['whole-text-body']);
+            const undoRaw=zlib.gunzipSync(fault);undoRaw[0]^=1;assert.deepEqual(undoRaw,first.raw);const undo=zlib.gzipSync(undoRaw,{level:9});assert.deepEqual(undo,first.packed);assert.deepEqual(detect(undo),[]);
+            fs.mkdirSync(path.join(OUT,'packaging-control'),{recursive:true});fs.writeFileSync(path.join(OUT,'packaging-control/fault.gz'),fault);fs.writeFileSync(path.join(OUT,'packaging-control/undo.gz'),undo);
+            const controlRef=(file,packed)=>({file,packedBytes:packed.length,packedSha256:hash(packed),rawBytes:zlib.gunzipSync(packed).length,rawSha256:hash(zlib.gunzipSync(packed))});
+            const manifest={codec:'gzip',level:9,qualification:'Lossless physical packaging only. Every logical compiled body is reconstructed in full; observations, tapes, objects and source archives are unchanged.',aliases,control:{original:first.alias,fault:controlRef('packaging-control/fault.gz',fault),undo:controlRef('packaging-control/undo.gz',undo),failures:detect(fault),undoFailures:detect(undo)}};
+            write('compiled-text-aliases.json',manifest);assert.deepEqual(JSON.parse(fs.readFileSync(path.join(OUT,'compiled-text-aliases.json'),'utf8')),manifest);
+            for(const alias of aliases){
+              const raw=fs.readFileSync(path.join(OUT,alias.logicalPath)),packed=fs.readFileSync(path.join(OUT,alias.packedPath));
+              assert.equal(raw.length,alias.rawBytes);assert.equal(hash(raw),alias.rawSha256);assert.equal(packed.length,alias.packedBytes);assert.equal(hash(packed),alias.packedSha256);assert.deepEqual(zlib.gunzipSync(packed),raw);
+            }
+            for(const alias of aliases)fs.unlinkSync(path.join(OUT,alias.logicalPath));
+            report.packaging={manifest:'compiled-text-aliases.json',manifestSha256:hash(fs.readFileSync(path.join(OUT,'compiled-text-aliases.json'))),logicalFiles:aliases.length,rawBytes:aliases.reduce((n,a)=>n+a.rawBytes,0),physicalFiles:new Set(aliases.map(a=>a.packedPath)).size,fullByteRoundtrips:aliases.length,controlFailures:manifest.control.failures,controlUndoHeld:true};
+            report.status=report.errors.length?'failed':'measured';write('report.json',report);
+            let bytes=0,files=0;const visit=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())visit(file);else if(entry.isFile()){bytes+=fs.statSync(file).size;files++;}}};visit(OUT);write('size.json',{beforeSizeReceiptBytes:bytes,files,cap:500000000});bytes=0;files=0;visit(OUT);assert(bytes<500000000,'unchanged complete evidence cap');console.log(JSON.stringify({status:report.status,summaries:report.summaries,errors:report.errors,bytes,files}));assert.equal(report.status,'measured','all diagnostic measurements must close');
+          }catch(error){
+            report.status='failed';report.errors.push({group:'packaging-footer',name:error.name,message:error.message,stack:error.stack});write('report.json',report);console.error(JSON.stringify({status:report.status,errors:report.errors}));throw error;
+          }
+          JS
+          set -o pipefail
+          node career-veteran-world-paths-artifacts/diagnostic.mjs 2>&1 | tee career-veteran-world-paths-artifacts/diagnostic.log
+      - name: Whole source and installed package bodies held
+        if: ${{ !cancelled() && steps.prep.outcome == 'success' }}
+        run: |
+          find src scripts .github/workflows -type f -print0 | sort -z | xargs -0 sha256sum > career-veteran-world-paths-artifacts/source-after.txt
+          cmp career-veteran-world-paths-artifacts/source-before.txt career-veteran-world-paths-artifacts/source-after.txt
+          sha256sum package.json package-lock.json > career-veteran-world-paths-artifacts/packages-final.txt
+          cmp career-veteran-world-paths-artifacts/packages-before.txt career-veteran-world-paths-artifacts/packages-final.txt
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';import assert from 'node:assert/strict';
+          const before=JSON.parse(fs.readFileSync('career-veteran-world-paths-artifacts/dependencies-before.json','utf8'));
+          for(const row of before.installed){const actual=JSON.parse(fs.readFileSync(row.directory+'/package.json','utf8'));assert.equal(actual.name,row.name);assert.equal(actual.version,row.version);}
+          for(const row of before.omitted)assert(!fs.existsSync(row.directory+'/package.json'));
+          fs.writeFileSync('career-veteran-world-paths-artifacts/dependencies-final.json',JSON.stringify(before,null,2));console.log('PASS all 599 locked dependency identities held');
+          JS
+          git diff --exit-code HEAD -- src scripts .github/workflows package.json package-lock.json > career-veteran-world-paths-artifacts/source-held.log
+          du -sb career-veteran-world-paths-artifacts > career-veteran-world-paths-artifacts/artifact-size.log
+          test "$(du -sb career-veteran-world-paths-artifacts | cut -f1)" -lt 500000000
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: career-veteran-world-paths-${{ github.run_id }}-${{ github.run_attempt }}
+          path: career-veteran-world-paths-artifacts/
+          retention-days: 5
+          if-no-files-found: error
