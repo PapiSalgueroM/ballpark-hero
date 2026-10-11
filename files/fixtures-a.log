@@ -1,0 +1,111 @@
+{
+ "head": {
+  "seedsUsed": 4,
+  "found": {
+   "young": {
+    "seed": 1,
+    "constructed": false,
+    "age": 24,
+    "situation": null
+   },
+   "twOffer": {
+    "seed": 1,
+    "constructed": false,
+    "age": 31,
+    "situation": "contract_expiry"
+   },
+   "vet": {
+    "seed": 1,
+    "constructed": false,
+    "age": 31,
+    "situation": null
+   },
+   "twCut": {
+    "seed": 1,
+    "constructed": false,
+    "age": 37,
+    "situation": "contract_expiry"
+   },
+   "talk": {
+    "seed": 1,
+    "constructed": false,
+    "age": 39,
+    "situation": null
+   },
+   "twNone": {
+    "seed": 4,
+    "constructed": false,
+    "age": 30,
+    "situation": "no_interest"
+   },
+   "talkVet": {
+    "seed": 1,
+    "constructed": true,
+    "age": 31,
+    "situation": null
+   }
+  }
+ },
+ "base": {
+  "seedsUsed": 4,
+  "found": {
+   "young": {
+    "seed": 1,
+    "constructed": false,
+    "age": 24,
+    "situation": null
+   },
+   "twOffer": {
+    "seed": 1,
+    "constructed": false,
+    "age": 31,
+    "situation": "contract_expiry"
+   },
+   "vet": {
+    "seed": 1,
+    "constructed": false,
+    "age": 31,
+    "situation": null
+   },
+   "twCut": {
+    "seed": 1,
+    "constructed": false,
+    "age": 37,
+    "situation": "contract_expiry"
+   },
+   "talk": {
+    "seed": 1,
+    "constructed": false,
+    "age": 39,
+    "situation": null
+   },
+   "twNone": {
+    "seed": 4,
+    "constructed": false,
+    "age": 30,
+    "situation": "no_interest"
+   },
+   "talkVet": {
+    "seed": 1,
+    "constructed": true,
+    "age": 31,
+    "situation": null
+   }
+  }
+ }
+}
+young seed 1 age 24 ovr 91 wage 138813 agent cousin sit null offers [] elig {"farewell":{"eligible":false,"year":null,"reason":"A farewell year is available from age 30."},"agent":{"available":true,"reason":"Your choice applies to future deals and income. Existing contracts stay the same."},"ret":{"available":false,"reason":"You must have retired from international football before making yourself available again."}} parts 
+twOffer seed 1 age 31 ovr 93 wage 232229 agent cousin sit contract_expiry offers [{"club":"Flamengo","tier":1,"wage":272905,"years":2,"fee":0,"signedWage":259260},{"club":"Arsenal","tier":1,"wage":320470,"years":2,"fee":0,"signedWage":304447}] elig {"farewell":{"eligible":false,"year":null,"reason":"Choose a farewell year between seasons or at a retirement suggestion."},"agent":{"available":false,"reason":"Review your representation while continuing your playing career."},"ret":{"available":false,"reason":"This choice is available while continuing your playing career."}} parts 
+vet seed 1 age 31 ovr 93 wage 255452 agent cousin sit null offers [] elig {"farewell":{"eligible":true,"year":2036,"reason":"Play the declared year, then retire after its summary and queued ceremonies. An interrupted year still counts."},"agent":{"available":true,"reason":"Your choice applies to future deals and income. Existing contracts stay the same."},"ret":{"available":false,"reason":"You must have retired from international football before making yourself available again."}} parts 
+twCut seed 1 age 37 ovr 76 wage 337196 agent cousin sit contract_expiry offers [{"club":"Rangers","tier":2,"wage":24804,"years":1,"fee":0,"signedWage":23564},{"club":"AC Milan","tier":2,"wage":16615,"years":3,"fee":0,"signedWage":15784},{"club":"Real Madrid","tier":1,"wage":27503,"years":2,"fee":0,"signedWage":26128},{"club":"Chelsea","tier":1,"wage":48317,"years":3,"fee":0,"signedWage":45901}] elig {"farewell":{"eligible":false,"year":null,"reason":"Choose a farewell year between seasons or at a retirement suggestion."},"agent":{"available":false,"reason":"Review your representation while continuing your playing career."},"ret":{"available":false,"reason":"This choice is available while continuing your playing career."}} parts 
+talk seed 1 age 39 ovr 66 wage 243624 agent cousin sit null offers [] elig {"farewell":{"eligible":false,"year":null,"reason":"Choose a farewell year between seasons or at a retirement suggestion."},"agent":{"available":false,"reason":"Review your representation while continuing your playing career."},"ret":{"available":false,"reason":"This choice is available while continuing your playing career."}} parts 
+twNone seed 4 age 30 ovr 86 wage 132963 agent cousin sit no_interest offers [] elig {"farewell":{"eligible":false,"year":null,"reason":"Choose a farewell year between seasons or at a retirement suggestion."},"agent":{"available":false,"reason":"Review your representation while continuing your playing career."},"ret":{"available":false,"reason":"This choice is available while continuing your playing career."}} parts 
+talkVet seed 1 age 31 ovr 93 wage 255452 agent cousin sit null offers [] elig {"farewell":{"eligible":false,"year":null,"reason":"Choose a farewell year between seasons or at a retirement suggestion."},"agent":{"available":false,"reason":"Review your representation while continuing your playing career."},"ret":{"available":false,"reason":"This choice is available while continuing your playing career."}} parts 
+old-young seed 1 age 24 ovr 91 wage 138813 agent cousin sit null offers [] elig null parts 
+old-twOffer seed 1 age 31 ovr 93 wage 232229 agent cousin sit contract_expiry offers [{"club":"Flamengo","tier":1,"wage":248095,"years":2,"fee":0,"signedWage":235690},{"club":"Arsenal","tier":1,"wage":291336,"years":2,"fee":0,"signedWage":276769}] elig null parts 
+old-vet seed 1 age 31 ovr 93 wage 255452 agent cousin sit null offers [] elig null parts 
+old-twCut seed 1 age 37 ovr 76 wage 337196 agent cousin sit contract_expiry offers [{"club":"Rangers","tier":2,"wage":29181,"years":1,"fee":0,"signedWage":27722},{"club":"AC Milan","tier":2,"wage":19547,"years":3,"fee":0,"signedWage":18570},{"club":"Real Madrid","tier":1,"wage":32357,"years":2,"fee":0,"signedWage":30739},{"club":"Chelsea","tier":1,"wage":56844,"years":3,"fee":0,"signedWage":54002}] elig null parts 
+old-talk seed 1 age 39 ovr 66 wage 243624 agent cousin sit null offers [] elig null parts 
+old-twNone seed 4 age 30 ovr 86 wage 132963 agent cousin sit no_interest offers [] elig null parts 
+old-talkVet seed 1 age 31 ovr 93 wage 255452 agent cousin sit null offers [] elig null parts 
+fixtures written 14

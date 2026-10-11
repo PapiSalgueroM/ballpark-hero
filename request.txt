@@ -1,0 +1,5 @@
+# Reviewer sc-screens, Release AW part one: the veteran's playing screen, the three once a season cards and a farewell season, head save and base save, at 320, 390 and 1280
+#!serve
+#!playwright
+walkA: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-a.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-a.log 2>&1; FIXTURES=.tmp-fx/rv/fx-a.json REPORT=walk-a ONLY_S=vet node .rc/x/walk.mjs
+walkB: mkdir -p .tmp-fx/rv && node .rc/x/fixtures.mjs .tmp-fx/rv/fx-b.json 5ed04ae7cd9618141ea8db4600206fcec2feeb07 60 > $RC_OUT/fixtures-b.log 2>&1; FIXTURES=.tmp-fx/rv/fx-b.json REPORT=walk-b ONLY_S=oldvet,young node .rc/x/walk.mjs
