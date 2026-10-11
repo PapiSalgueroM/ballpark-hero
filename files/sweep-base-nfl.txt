@@ -1,0 +1,34 @@
+nfl seed 6 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 2 base misses [LB median base credit 112.9; CB median base credit 105.0]
+nfl seed 7 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 8 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 9 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks,base])
+  FAIL base: 1 base misses [LB median base credit 113.1]
+nfl seed 10 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 11 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 12 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [LB median base credit 112.7]
+nfl seed 13 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 14 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 15 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 16 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 17 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 18 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [EDGE median base credit 112.5]
+nfl seed 19 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks,hallshare])
+  FAIL hallshare: Hall share 22.1 -> 28.6 percent (ceiling 28.3)
+nfl seed 20 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 21 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 22 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [LB median base credit 112.3]
+nfl seed 23 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [EDGE median base credit 113.5]
+nfl seed 24 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [EDGE median base credit 112.3]
+nfl seed 25 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 26 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [marks])
+nfl seed 27 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+nfl seed 28 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [LB median base credit 112.7]
+nfl seed 29 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 26 checks that ran are green)
+sweep: nfl done, 24 seeds

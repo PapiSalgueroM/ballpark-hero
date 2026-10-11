@@ -1,0 +1,31 @@
+nba seed 6 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 7 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 8 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 9 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [SG median base credit 23.1]
+nba seed 10 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 11 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 12 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 13 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 14 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 15 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 16 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 17 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 18 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [PF median base credit 19.8]
+nba seed 19 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 2 base misses [PF median base credit 19.8; C median base credit 17.8]
+nba seed 20 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 21 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [PF median base credit 19.8]
+nba seed 22 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 23 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 24 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 25 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 26 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [C median base credit 18.0]
+nba seed 27 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 28 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (the 27 checks that ran are green)
+nba seed 29 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [C median base credit 18.7]
+sweep: nba done, 24 seeds

@@ -1,0 +1,35 @@
+/home/runner/work/_temp/rc-out/files/sweep-head-mlb.txt:25
+/home/runner/work/_temp/rc-out/files/sweep-head-nba.txt:25
+/home/runner/work/_temp/rc-out/files/sweep-head-nfl.txt:25
+/home/runner/work/_temp/rc-out/files/sweep-head-nhl.txt:25
+nba seed 9 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [SG median base credit 23.1]
+nba seed 18 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [PF median base credit 19.8]
+nba seed 19 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 2 base misses [PF median base credit 19.8; C median base credit 17.8]
+nba seed 21 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [PF median base credit 19.8]
+nba seed 26 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [C median base credit 18.0]
+nba seed 29 exit 3 | simCareerHall nba: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [C median base credit 18.7]
+nfl seed 6 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 2 base misses [LB median base credit 112.9; CB median base credit 105.0]
+nfl seed 9 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [LB median base credit 113.1]
+nfl seed 12 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [LB median base credit 112.7]
+nfl seed 18 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [EDGE median base credit 112.5]
+nfl seed 19 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [hallshare])
+  FAIL hallshare: Hall share 22.1 -> 28.6 percent (ceiling 28.3)
+nfl seed 22 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [LB median base credit 112.3]
+nfl seed 23 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [EDGE median base credit 113.5]
+nfl seed 24 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [EDGE median base credit 112.3]
+nfl seed 28 exit 3 | simCareerHall nfl: BOARD SECTIONS SKIPPED, NOT A GREEN RUN (red [base])
+  FAIL base: 1 base misses [LB median base credit 112.7]
+head-sweep: done

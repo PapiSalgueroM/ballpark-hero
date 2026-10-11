@@ -1,0 +1,3 @@
+#!serial
+head-sweep: for s in nhl nfl nba mlb; do ( bash .rc/x/sweep.sh . $s $(seq 6 29) > $RC_OUT/sweep-head-$s.txt 2>&1 ) & done; wait; grep -c "seed" $RC_OUT/sweep-head-*.txt; grep -h "red \[\|FAIL" $RC_OUT/sweep-head-*.txt | cut -c1-260 | head -80; echo "head-sweep: done"
+base-sweep: git worktree add -q /tmp/r1226 2c86ecc7e0317e61739f9af0a9008700a8ddd555 && ln -s "$PWD/node_modules" /tmp/r1226/node_modules && for s in nhl nfl nba mlb; do ( bash .rc/x/sweep.sh /tmp/r1226 $s $(seq 6 29) > $RC_OUT/sweep-base-$s.txt 2>&1 ) & done; wait; grep -c "seed" $RC_OUT/sweep-base-*.txt; grep -h "red \[" $RC_OUT/sweep-base-*.txt | cut -c1-200 | head -100; echo "base-sweep: done"
