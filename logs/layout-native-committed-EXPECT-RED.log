@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Copied original layout actually differs
+    at originalLayout (file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/qa/soccerResultsLayout.mjs:44:9)
+    at file:///home/runner/work/ballpark-hero/ballpark-hero/scripts/playSoccerResultsLayout.mjs:22:174 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '63cb6657b19a6488320bacb05d0c4908e7e824fc64ae1bf7083adec34675e767',
+  expected: '63cb6657b19a6488320bacb05d0c4908e7e824fc64ae1bf7083adec34675e767',
+  operator: 'notStrictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

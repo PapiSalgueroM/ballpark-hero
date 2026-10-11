@@ -1,0 +1,6 @@
+build exit=0 31s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+tsc exit=0 62s | 
+fonts exit=0 0s | Prepared 9 declared font dependencies for local fulfillment.
+layout-units exit=0 6s | PASS actual nonempty recorded-facts and phone suites: 20 assertions, no skipped/pending/todo cases
+layout-native-variant exit=1 182s | 320-original-history: ok=false checks=61 failed=3 first: unchanged: initial-load: complete state and every saved byte error: locator.waitFor: Timeout 30000ms exceeded. | 
+layout-native-committed-EXPECT-RED exit=1 1s | Node.js v24.21.0

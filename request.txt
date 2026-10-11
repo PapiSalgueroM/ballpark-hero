@@ -1,0 +1,9 @@
+# Release AW: merge h (PR222 reduced to the international history rows) with its pin, head 501249d6
+#!serve
+#!playwright
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+fonts: mkdir -p .tmp-fx/font-cache && FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+layout-units: set -o pipefail; export SIM_NETWORK=offline ENGINES=chromium TZ=UTC; mkdir -p soccer-results-layout-artifacts; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node node_modules/vitest/vitest.mjs run src/test/careerRecordedStats.test.tsx src/test/phonePanelFocus.test.tsx --maxWorkers=1 --minWorkers=1 --reporter=default --reporter=json --outputFile=soccer-results-layout-artifacts/units.json 2>&1 | tail -30; s=$?; node scripts/qa/soccerResultsLayout.mjs units; c=$?; exit $((s + c))
+layout-native-variant: export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; node .rc/x/mkLayoutVariant.mjs && NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/zzResultsLayoutVariant.mjs; s=$?; rm -f scripts/zzResultsLayoutVariant.mjs; node .rc/x/extractLayout.mjs variant; exit $s
+layout-native-committed-EXPECT-RED: export SIM_NETWORK=offline ENGINES=chromium TZ=UTC FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache"; NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playSoccerResultsLayout.mjs; s=$?; node .rc/x/extractLayout.mjs committed; exit $s
