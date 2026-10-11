@@ -1,0 +1,7 @@
+dump nfl: 600 careers (0 threw), 9939 seasons, 3110 rivalry cards answered, 336 saves kept; positions QB,RB,WR,TE,LB,CB,EDGE,K; eras now,y2005
+dump nba: 600 careers (0 threw), 11399 seasons, 3597 rivalry cards answered, 336 saves kept; positions PG,SG,SF,PF,C; eras now,y2004
+dump mlb: 600 careers (0 threw), 11752 seasons, 3481 rivalry cards answered, 336 saves kept; positions SP,CF,SS,1B,RP,C,2B,3B,LF,RF,DH; eras now,y2004
+dump nhl: 600 careers (0 threw), 12741 seasons, 3998 rivalry cards answered, 336 saves kept; positions C,LW,RW,D,G; eras now,y2006
+uscProbe dump: written /tmp/head2.json by /home/runner/work/ballpark-hero/ballpark-hero (Hall calibration 3)
+
+SUMMARY: nfl/plain: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nfl/cards: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nba/plain: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nba/cards: 300/300 careers byte equal, non rival keys moved in 0 season-keys | mlb/plain: 300/300 careers byte equal, non rival keys moved in 0 season-keys | mlb/cards: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nhl/plain: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nhl/cards: 300/300 careers byte equal, non rival keys moved in 0 season-keys

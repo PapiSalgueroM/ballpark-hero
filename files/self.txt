@@ -1,0 +1,225 @@
+uscCmp fleet: base made by /home/runner/work/ballpark-hero/ballpark-hero played by /home/runner/work/ballpark-hero/ballpark-hero (Hall calibration 3); head played by /home/runner/work/ballpark-hero/ballpark-hero (Hall calibration 3)
+
+== NFL ==
+  plain (fresh careers): 300 careers, 300 byte equal at every season; 4955 seasons compared (4955 base, 4955 head, 0 careers of another length), 4955 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 0 base, 0 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 4955, of them equal after 4955, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    HALL at the end of 300 careers: legacy (live read) equal 300, legacy (stamped at retirement) equal 300; Hall of Fame base 82, head 82 (in 0, out 0); stamp base to head: 3 to 3 300; calibration before retiring: 1 to 1 300; the card's weigh line equal 300; legacy score head minus base p10 0, median 0, p90 0
+  cards (fresh careers): 300 careers, 300 byte equal at every season; 4984 seasons compared (4984 base, 4984 head, 0 careers of another length), 4984 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 3110 base, 3110 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 4984, of them equal after 4984, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    HALL at the end of 300 careers: legacy (live read) equal 300, legacy (stamped at retirement) equal 300; Hall of Fame base 91, head 91 (in 0, out 0); stamp base to head: 3 to 3 300; calibration before retiring: 1 to 1 300; the card's weigh line equal 300; legacy score head minus base p10 0, median 0, p90 0
+
+== NBA ==
+  plain (fresh careers): 300 careers, 300 byte equal at every season; 5696 seasons compared (5696 base, 5696 head, 0 careers of another length), 5696 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 0 base, 0 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 5696, of them equal after 5696, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    HALL at the end of 300 careers: legacy (live read) equal 300, legacy (stamped at retirement) equal 300; Hall of Fame base 100, head 100 (in 0, out 0); stamp base to head: 3 to 3 300; calibration before retiring: 1 to 1 300; the card's weigh line equal 300; legacy score head minus base p10 0, median 0, p90 0
+  cards (fresh careers): 300 careers, 300 byte equal at every season; 5703 seasons compared (5703 base, 5703 head, 0 careers of another length), 5703 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 3597 base, 3597 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 5703, of them equal after 5703, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    HALL at the end of 300 careers: legacy (live read) equal 300, legacy (stamped at retirement) equal 300; Hall of Fame base 100, head 100 (in 0, out 0); stamp base to head: 3 to 3 300; calibration before retiring: 1 to 1 300; the card's weigh line equal 300; legacy score head minus base p10 0, median 0, p90 0
+
+== MLB ==
+  plain (fresh careers): 300 careers, 300 byte equal at every season; 5865 seasons compared (5865 base, 5865 head, 0 careers of another length), 5865 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 0 base, 0 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 5865, of them equal after 5865, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    year | rows | began equal | still equal | line differs | draw count differs | head slate | fields of the line that differ (began equal) | began unequal (line equal anyway)
+    2004 | 97 | 97 | 97 | 0 | 0 | eng 86, 161 11 | none | 0 (0)
+    2005 | 97 | 97 | 97 | 0 | 0 | eng 93, 163 4 | none | 0 (0)
+    2006 | 97 | 97 | 97 | 0 | 0 | eng 91, 161 6 | none | 0 (0)
+    2007 | 97 | 97 | 97 | 0 | 0 | eng 92, 163 5 | none | 0 (0)
+    2008 | 97 | 97 | 97 | 0 | 0 | eng 70, 161 18, 163 9 | none | 0 (0)
+    2009 | 97 | 97 | 97 | 0 | 0 | eng 84, 163 8, 161 5 | none | 0 (0)
+    2010 | 108 | 108 | 108 | 0 | 0 | eng 108 | none | 0 (0)
+    2011 | 108 | 108 | 108 | 0 | 0 | eng 108 | none | 0 (0)
+    2012 | 108 | 108 | 108 | 0 | 0 | eng 108 | none | 0 (0)
+    2013 | 108 | 108 | 108 | 0 | 0 | eng 104, 163 4 | none | 0 (0)
+    2014 | 108 | 108 | 108 | 0 | 0 | eng 108 | none | 0 (0)
+    2015 | 121 | 121 | 121 | 0 | 0 | eng 112, 161 9 | none | 0 (0)
+    2016 | 121 | 121 | 121 | 0 | 0 | eng 110, 161 11 | none | 0 (0)
+    2017 | 132 | 132 | 132 | 0 | 0 | eng 132 | none | 0 (0)
+    2018 | 132 | 132 | 132 | 0 | 0 | eng 118, 163 11, 161 3 | none | 0 (0)
+    2019 | 145 | 145 | 145 | 0 | 0 | eng 129, 161 16 | none | 0 (0)
+    2020 | 145 | 145 | 145 | 0 | 0 | 60 130, 58 10, eng 5 | none | 0 (0)
+    2021 | 143 | 143 | 143 | 0 | 0 | eng 136, 161 7 | none | 0 (0)
+    2022 | 125 | 125 | 125 | 0 | 0 | eng 125 | none | 0 (0)
+    2023 | 98 | 98 | 98 | 0 | 0 | eng 98 | none | 0 (0)
+    2024 | 75 | 75 | 75 | 0 | 0 | eng 72, 161 3 | none | 0 (0)
+    2025 | 49 | 49 | 49 | 0 | 0 | eng 49 | none | 0 (0)
+    2026 | 203 | 203 | 203 | 0 | 0 | eng 187, 161 16 | none | 0 (0)
+    2027 | 202 | 202 | 202 | 0 | 0 | eng 202 | none | 0 (0)
+    2028 | 200 | 200 | 200 | 0 | 0 | eng 200 | none | 0 (0)
+    2029 | 197 | 197 | 197 | 0 | 0 | eng 197 | none | 0 (0)
+    2030 | 194 | 194 | 194 | 0 | 0 | eng 194 | none | 0 (0)
+    2031 | 192 | 192 | 192 | 0 | 0 | eng 192 | none | 0 (0)
+    2032 | 191 | 191 | 191 | 0 | 0 | eng 191 | none | 0 (0)
+    2033 | 190 | 190 | 190 | 0 | 0 | eng 190 | none | 0 (0)
+    2034 | 185 | 185 | 185 | 0 | 0 | eng 185 | none | 0 (0)
+    2035 | 183 | 183 | 183 | 0 | 0 | eng 183 | none | 0 (0)
+    2036 | 175 | 175 | 175 | 0 | 0 | eng 175 | none | 0 (0)
+    2037 | 169 | 169 | 169 | 0 | 0 | eng 169 | none | 0 (0)
+    2038 | 164 | 164 | 164 | 0 | 0 | eng 164 | none | 0 (0)
+    2039 | 161 | 161 | 161 | 0 | 0 | eng 161 | none | 0 (0)
+    2040 | 154 | 154 | 154 | 0 | 0 | eng 154 | none | 0 (0)
+    2041 | 154 | 154 | 154 | 0 | 0 | eng 154 | none | 0 (0)
+    2042 | 153 | 153 | 153 | 0 | 0 | eng 153 | none | 0 (0)
+    2043 | 150 | 150 | 150 | 0 | 0 | eng 150 | none | 0 (0)
+    2044 | 123 | 123 | 123 | 0 | 0 | eng 123 | none | 0 (0)
+    2045 | 74 | 74 | 74 | 0 | 0 | eng 74 | none | 0 (0)
+    2046 | 43 | 43 | 43 | 0 | 0 | eng 43 | none | 0 (0)
+    HALL at the end of 300 careers: legacy (live read) equal 300, legacy (stamped at retirement) equal 300; Hall of Fame base 113, head 113 (in 0, out 0); stamp base to head: 3 to 3 300; calibration before retiring: 1 to 1 300; the card's weigh line equal 300; legacy score head minus base p10 0, median 0, p90 0
+  cards (fresh careers): 300 careers, 300 byte equal at every season; 5887 seasons compared (5887 base, 5887 head, 0 careers of another length), 5887 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 3481 base, 3481 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 5887, of them equal after 5887, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    year | rows | began equal | still equal | line differs | draw count differs | head slate | fields of the line that differ (began equal) | began unequal (line equal anyway)
+    2004 | 97 | 97 | 97 | 0 | 0 | eng 81, 161 16 | none | 0 (0)
+    2005 | 97 | 97 | 97 | 0 | 0 | eng 91, 163 6 | none | 0 (0)
+    2006 | 97 | 97 | 97 | 0 | 0 | eng 90, 161 7 | none | 0 (0)
+    2007 | 97 | 97 | 97 | 0 | 0 | eng 93, 163 4 | none | 0 (0)
+    2008 | 97 | 97 | 97 | 0 | 0 | eng 73, 161 17, 163 7 | none | 0 (0)
+    2009 | 97 | 97 | 97 | 0 | 0 | eng 76, 163 12, 161 9 | none | 0 (0)
+    2010 | 108 | 108 | 108 | 0 | 0 | eng 108 | none | 0 (0)
+    2011 | 108 | 108 | 108 | 0 | 0 | eng 105, 161 3 | none | 0 (0)
+    2012 | 108 | 108 | 108 | 0 | 0 | eng 108 | none | 0 (0)
+    2013 | 108 | 108 | 108 | 0 | 0 | eng 106, 163 2 | none | 0 (0)
+    2014 | 108 | 108 | 108 | 0 | 0 | eng 108 | none | 0 (0)
+    2015 | 121 | 121 | 121 | 0 | 0 | eng 112, 161 9 | none | 0 (0)
+    2016 | 121 | 121 | 121 | 0 | 0 | eng 110, 161 11 | none | 0 (0)
+    2017 | 132 | 132 | 132 | 0 | 0 | eng 132 | none | 0 (0)
+    2018 | 132 | 132 | 132 | 0 | 0 | eng 106, 163 21, 161 5 | none | 0 (0)
+    2019 | 146 | 146 | 146 | 0 | 0 | eng 139, 161 7 | none | 0 (0)
+    2020 | 144 | 144 | 144 | 0 | 0 | 60 132, 58 9, eng 3 | none | 0 (0)
+    2021 | 141 | 141 | 141 | 0 | 0 | eng 136, 161 5 | none | 0 (0)
+    2022 | 127 | 127 | 127 | 0 | 0 | eng 127 | none | 0 (0)
+    2023 | 99 | 99 | 99 | 0 | 0 | eng 99 | none | 0 (0)
+    2024 | 76 | 76 | 76 | 0 | 0 | eng 76 | none | 0 (0)
+    2025 | 49 | 49 | 49 | 0 | 0 | eng 49 | none | 0 (0)
+    2026 | 203 | 203 | 203 | 0 | 0 | eng 197, 161 6 | none | 0 (0)
+    2027 | 201 | 201 | 201 | 0 | 0 | eng 201 | none | 0 (0)
+    2028 | 199 | 199 | 199 | 0 | 0 | eng 199 | none | 0 (0)
+    2029 | 196 | 196 | 196 | 0 | 0 | eng 196 | none | 0 (0)
+    2030 | 192 | 192 | 192 | 0 | 0 | eng 192 | none | 0 (0)
+    2031 | 192 | 192 | 192 | 0 | 0 | eng 192 | none | 0 (0)
+    2032 | 192 | 192 | 192 | 0 | 0 | eng 192 | none | 0 (0)
+    2033 | 188 | 188 | 188 | 0 | 0 | eng 188 | none | 0 (0)
+    2034 | 185 | 185 | 185 | 0 | 0 | eng 185 | none | 0 (0)
+    2035 | 181 | 181 | 181 | 0 | 0 | eng 181 | none | 0 (0)
+    2036 | 174 | 174 | 174 | 0 | 0 | eng 174 | none | 0 (0)
+    2037 | 169 | 169 | 169 | 0 | 0 | eng 169 | none | 0 (0)
+    2038 | 163 | 163 | 163 | 0 | 0 | eng 163 | none | 0 (0)
+    2039 | 161 | 161 | 161 | 0 | 0 | eng 161 | none | 0 (0)
+    2040 | 154 | 154 | 154 | 0 | 0 | eng 154 | none | 0 (0)
+    2041 | 154 | 154 | 154 | 0 | 0 | eng 154 | none | 0 (0)
+    2042 | 154 | 154 | 154 | 0 | 0 | eng 154 | none | 0 (0)
+    2043 | 147 | 147 | 147 | 0 | 0 | eng 147 | none | 0 (0)
+    2044 | 129 | 129 | 129 | 0 | 0 | eng 129 | none | 0 (0)
+    2045 | 92 | 92 | 92 | 0 | 0 | eng 92 | none | 0 (0)
+    2046 | 51 | 51 | 51 | 0 | 0 | eng 51 | none | 0 (0)
+    HALL at the end of 300 careers: legacy (live read) equal 300, legacy (stamped at retirement) equal 300; Hall of Fame base 122, head 122 (in 0, out 0); stamp base to head: 3 to 3 300; calibration before retiring: 1 to 1 300; the card's weigh line equal 300; legacy score head minus base p10 0, median 0, p90 0
+
+== NHL ==
+  plain (fresh careers): 300 careers, 300 byte equal at every season; 6378 seasons compared (6378 base, 6378 head, 0 careers of another length), 6378 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 0 base, 0 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 6378, of them equal after 6378, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    year | rows | began equal | still equal | line differs | draw count differs | head slate | fields of the line that differ (began equal) | began unequal (line equal anyway)
+    2006 | 100 | 100 | 100 | 0 | 0 | eng 100 | none | 0 (0)
+    2007 | 100 | 100 | 100 | 0 | 0 | eng 100 | none | 0 (0)
+    2008 | 100 | 100 | 100 | 0 | 0 | eng 100 | none | 0 (0)
+    2009 | 100 | 100 | 100 | 0 | 0 | eng 100 | none | 0 (0)
+    2010 | 110 | 110 | 110 | 0 | 0 | eng 110 | none | 0 (0)
+    2011 | 110 | 110 | 110 | 0 | 0 | eng 110 | none | 0 (0)
+    2012 | 110 | 110 | 110 | 0 | 0 | 48 110 | none | 0 (0)
+    2013 | 110 | 110 | 110 | 0 | 0 | eng 110 | none | 0 (0)
+    2014 | 110 | 110 | 110 | 0 | 0 | eng 110 | none | 0 (0)
+    2015 | 125 | 125 | 125 | 0 | 0 | eng 125 | none | 0 (0)
+    2016 | 125 | 125 | 125 | 0 | 0 | eng 125 | none | 0 (0)
+    2017 | 135 | 135 | 135 | 0 | 0 | eng 135 | none | 0 (0)
+    2018 | 135 | 135 | 135 | 0 | 0 | eng 135 | none | 0 (0)
+    2019 | 150 | 150 | 150 | 0 | 0 | 70 54, 69 51, 71 21, eng 17, 68 7 | none | 0 (0)
+    2020 | 150 | 150 | 150 | 0 | 0 | 56 150 | none | 0 (0)
+    2021 | 150 | 150 | 150 | 0 | 0 | eng 150 | none | 0 (0)
+    2022 | 150 | 150 | 150 | 0 | 0 | eng 150 | none | 0 (0)
+    2023 | 150 | 150 | 150 | 0 | 0 | eng 150 | none | 0 (0)
+    2024 | 147 | 147 | 147 | 0 | 0 | eng 147 | none | 0 (0)
+    2025 | 145 | 145 | 145 | 0 | 0 | eng 145 | none | 0 (0)
+    2026 | 285 | 285 | 285 | 0 | 0 | 84 285 | none | 0 (0)
+    2027 | 241 | 241 | 241 | 0 | 0 | 84 241 | none | 0 (0)
+    2028 | 200 | 200 | 200 | 0 | 0 | 84 200 | none | 0 (0)
+    2029 | 200 | 200 | 200 | 0 | 0 | 84 200 | none | 0 (0)
+    2030 | 198 | 198 | 198 | 0 | 0 | 84 198 | none | 0 (0)
+    2031 | 193 | 193 | 193 | 0 | 0 | 84 193 | none | 0 (0)
+    2032 | 190 | 190 | 190 | 0 | 0 | 84 190 | none | 0 (0)
+    2033 | 190 | 190 | 190 | 0 | 0 | 84 190 | none | 0 (0)
+    2034 | 190 | 190 | 190 | 0 | 0 | 84 190 | none | 0 (0)
+    2035 | 187 | 187 | 187 | 0 | 0 | 84 187 | none | 0 (0)
+    2036 | 183 | 183 | 183 | 0 | 0 | 84 183 | none | 0 (0)
+    2037 | 175 | 175 | 175 | 0 | 0 | 84 175 | none | 0 (0)
+    2038 | 169 | 169 | 169 | 0 | 0 | 84 169 | none | 0 (0)
+    2039 | 161 | 161 | 161 | 0 | 0 | 84 161 | none | 0 (0)
+    2040 | 158 | 158 | 158 | 0 | 0 | 84 158 | none | 0 (0)
+    2041 | 150 | 150 | 150 | 0 | 0 | 84 150 | none | 0 (0)
+    2042 | 150 | 150 | 150 | 0 | 0 | 84 150 | none | 0 (0)
+    2043 | 150 | 150 | 150 | 0 | 0 | 84 150 | none | 0 (0)
+    2044 | 150 | 150 | 150 | 0 | 0 | 84 150 | none | 0 (0)
+    2045 | 142 | 142 | 142 | 0 | 0 | 84 142 | none | 0 (0)
+    2046 | 126 | 126 | 126 | 0 | 0 | 84 126 | none | 0 (0)
+    2047 | 78 | 78 | 78 | 0 | 0 | 84 78 | none | 0 (0)
+    HALL at the end of 300 careers: legacy (live read) equal 300, legacy (stamped at retirement) equal 300; Hall of Fame base 89, head 89 (in 0, out 0); stamp base to head: 3 to 3 300; calibration before retiring: 1 to 1 300; the card's weigh line equal 300; legacy score head minus base p10 0, median 0, p90 0
+  cards (fresh careers): 300 careers, 300 byte equal at every season; 6363 seasons compared (6363 base, 6363 head, 0 careers of another length), 6363 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 3998 base, 3998 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 6363, of them equal after 6363, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    year | rows | began equal | still equal | line differs | draw count differs | head slate | fields of the line that differ (began equal) | began unequal (line equal anyway)
+    2006 | 100 | 100 | 100 | 0 | 0 | eng 100 | none | 0 (0)
+    2007 | 100 | 100 | 100 | 0 | 0 | eng 100 | none | 0 (0)
+    2008 | 100 | 100 | 100 | 0 | 0 | eng 100 | none | 0 (0)
+    2009 | 100 | 100 | 100 | 0 | 0 | eng 100 | none | 0 (0)
+    2010 | 110 | 110 | 110 | 0 | 0 | eng 110 | none | 0 (0)
+    2011 | 110 | 110 | 110 | 0 | 0 | eng 110 | none | 0 (0)
+    2012 | 110 | 110 | 110 | 0 | 0 | 48 110 | none | 0 (0)
+    2013 | 110 | 110 | 110 | 0 | 0 | eng 110 | none | 0 (0)
+    2014 | 110 | 110 | 110 | 0 | 0 | eng 110 | none | 0 (0)
+    2015 | 125 | 125 | 125 | 0 | 0 | eng 125 | none | 0 (0)
+    2016 | 125 | 125 | 125 | 0 | 0 | eng 125 | none | 0 (0)
+    2017 | 135 | 135 | 135 | 0 | 0 | eng 135 | none | 0 (0)
+    2018 | 135 | 135 | 135 | 0 | 0 | eng 135 | none | 0 (0)
+    2019 | 150 | 150 | 150 | 0 | 0 | 69 49, 70 48, 71 33, 68 11, eng 9 | none | 0 (0)
+    2020 | 150 | 150 | 150 | 0 | 0 | 56 150 | none | 0 (0)
+    2021 | 150 | 150 | 150 | 0 | 0 | eng 150 | none | 0 (0)
+    2022 | 150 | 150 | 150 | 0 | 0 | eng 150 | none | 0 (0)
+    2023 | 150 | 150 | 150 | 0 | 0 | eng 150 | none | 0 (0)
+    2024 | 149 | 149 | 149 | 0 | 0 | eng 149 | none | 0 (0)
+    2025 | 144 | 144 | 144 | 0 | 0 | eng 144 | none | 0 (0)
+    2026 | 282 | 282 | 282 | 0 | 0 | 84 282 | none | 0 (0)
+    2027 | 246 | 246 | 246 | 0 | 0 | 84 246 | none | 0 (0)
+    2028 | 200 | 200 | 200 | 0 | 0 | 84 200 | none | 0 (0)
+    2029 | 199 | 199 | 199 | 0 | 0 | 84 199 | none | 0 (0)
+    2030 | 195 | 195 | 195 | 0 | 0 | 84 195 | none | 0 (0)
+    2031 | 192 | 192 | 192 | 0 | 0 | 84 192 | none | 0 (0)
+    2032 | 190 | 190 | 190 | 0 | 0 | 84 190 | none | 0 (0)
+    2033 | 190 | 190 | 190 | 0 | 0 | 84 190 | none | 0 (0)
+    2034 | 189 | 189 | 189 | 0 | 0 | 84 189 | none | 0 (0)
+    2035 | 188 | 188 | 188 | 0 | 0 | 84 188 | none | 0 (0)
+    2036 | 180 | 180 | 180 | 0 | 0 | 84 180 | none | 0 (0)
+    2037 | 173 | 173 | 173 | 0 | 0 | 84 173 | none | 0 (0)
+    2038 | 168 | 168 | 168 | 0 | 0 | 84 168 | none | 0 (0)
+    2039 | 162 | 162 | 162 | 0 | 0 | 84 162 | none | 0 (0)
+    2040 | 159 | 159 | 159 | 0 | 0 | 84 159 | none | 0 (0)
+    2041 | 150 | 150 | 150 | 0 | 0 | 84 150 | none | 0 (0)
+    2042 | 150 | 150 | 150 | 0 | 0 | 84 150 | none | 0 (0)
+    2043 | 150 | 150 | 150 | 0 | 0 | 84 150 | none | 0 (0)
+    2044 | 149 | 149 | 149 | 0 | 0 | 84 149 | none | 0 (0)
+    2045 | 144 | 144 | 144 | 0 | 0 | 84 144 | none | 0 (0)
+    2046 | 128 | 128 | 128 | 0 | 0 | 84 128 | none | 0 (0)
+    2047 | 66 | 66 | 66 | 0 | 0 | 84 66 | none | 0 (0)
+    HALL at the end of 300 careers: legacy (live read) equal 300, legacy (stamped at retirement) equal 300; Hall of Fame base 102, head 102 (in 0, out 0); stamp base to head: 3 to 3 300; calibration before retiring: 1 to 1 300; the card's weigh line equal 300; legacy score head minus base p10 0, median 0, p90 0
+
+SUMMARY: nfl/plain: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nfl/cards: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nba/plain: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nba/cards: 300/300 careers byte equal, non rival keys moved in 0 season-keys | mlb/plain: 300/300 careers byte equal, non rival keys moved in 0 season-keys | mlb/cards: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nhl/plain: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nhl/cards: 300/300 careers byte equal, non rival keys moved in 0 season-keys

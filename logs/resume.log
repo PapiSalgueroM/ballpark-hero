@@ -1,0 +1,84 @@
+resume nfl: 336 saves made by /tmp/base loaded by /tmp/base; 0 threw; 144 retired saves read; 1144 seasons played on
+resume nba: 336 saves made by /tmp/base loaded by /tmp/base; 0 threw; 144 retired saves read; 1152 seasons played on
+resume mlb: 336 saves made by /tmp/base loaded by /tmp/base; 0 threw; 144 retired saves read; 1152 seasons played on
+resume nhl: 336 saves made by /tmp/base loaded by /tmp/base; 0 threw; 144 retired saves read; 1152 seasons played on
+uscProbe resume: written /tmp/baseres.json
+resume nfl: 336 saves made by /tmp/base loaded by /home/runner/work/ballpark-hero/ballpark-hero; 0 threw; 144 retired saves read; 1144 seasons played on
+resume nba: 336 saves made by /tmp/base loaded by /home/runner/work/ballpark-hero/ballpark-hero; 0 threw; 144 retired saves read; 1152 seasons played on
+resume mlb: 336 saves made by /tmp/base loaded by /home/runner/work/ballpark-hero/ballpark-hero; 0 threw; 144 retired saves read; 1152 seasons played on
+resume nhl: 336 saves made by /tmp/base loaded by /home/runner/work/ballpark-hero/ballpark-hero; 0 threw; 144 retired saves read; 1152 seasons played on
+uscProbe resume: written /tmp/headres.json
+uscCmp resume: base made by /tmp/base played by /tmp/base (Hall calibration 2); head played by /home/runner/work/ballpark-hero/ballpark-hero (Hall calibration 3)
+
+== NFL ==
+  plain (saves made by base, played on): 96 careers, 0 byte equal at every season; 569 seasons compared (569 base, 569 head, 0 careers of another length), 0 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 569; rivalry cards answered 0 base, 0 head
+    keys of the save that differ (seasons): rival 569, pendingRivalryEvent 20
+    seasons that began from an equal save: 96, of them equal after 0, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): 2026/slate eng/state only: rival 16, 2029/slate eng/state only: rival 16, 2032/slate eng/state only: rival 16, 2005/slate eng/state only: rival 16, 2008/slate eng/state only: rival 16, 2016/slate eng/state only: rival 4, 2025/slate eng/state only: rival 4, 2023/slate eng/state only: rival 4, 2021/slate eng/state only: rival 4
+    a key other than rival differs, first cases: nfl/plain/18@0 season 3 (2029): pendingRivalryEvent ; nfl/plain/18@0 season 4 (2030): pendingRivalryEvent ; nfl/plain/18@0 season 5 (2031): pendingRivalryEvent ; nfl/plain/19@3 season 4 (2033): pendingRivalryEvent ; nfl/plain/28@3 season 2 (2010): pendingRivalryEvent ; nfl/plain/28@3 season 3 (2011): pendingRivalryEvent
+    HALL after playing on: calibration read base to head: live cal 2 to live cal 3 92, retired cal 1 to retired cal 1 4; live legacy equal 96 of 96; would retire into the Hall today: base 7, head 7
+    LOAD: 96 saves in progress; loading left the save byte equal on base 96, on head 96 (keys the head's load changed: none); the rows it already held were kept byte for byte after playing on: base 96, head 96
+  cards (saves made by base, played on): 96 careers, 0 byte equal at every season; 575 seasons compared (575 base, 575 head, 0 careers of another length), 0 seasons with every key of the save equal; lines that differ 2, printed stat lines that differ 2, rival trails that differ 575; rivalry cards answered 408 base, 408 head
+    keys of the save that differ (seasons): rival 575, lastRivalryEventId 17, morale 12, fanbase 6, rivalryIntensity 5, seasons 4
+    seasons that began from an equal save: 96, of them equal after 0, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): 2026/slate eng/state only: rival 16, 2029/slate eng/state only: rival 16, 2032/slate eng/state only: rival 16, 2005/slate eng/state only: rival 16, 2008/slate eng/state only: rival 16, 2016/slate eng/state only: rival 4, 2025/slate eng/state only: rival 4, 2023/slate eng/state only: rival 4, 2021/slate eng/state only: rival 3, 2021/slate eng/state only: fanbase+lastRivalryEventId+morale+rival 1
+    a key other than rival differs, first cases: nfl/cards/22@3 season 2 (2031): fanbase,lastRivalryEventId,morale,rivalryIntensity ; nfl/cards/22@3 season 3 (2032): fanbase,lastRivalryEventId,morale,rivalryIntensity ; nfl/cards/22@3 season 4 (2033): fanbase,lastRivalryEventId,morale,rivalryIntensity ; nfl/cards/22@3 season 5 (2034): fanbase,lastRivalryEventId,morale,rivalryIntensity,seasons ; nfl/cards/37@3 season 2 (2031): fanbase,lastRivalryEventId,morale ; nfl/cards/37@3 season 3 (2032): lastRivalryEventId,morale,seasons
+    HALL after playing on: calibration read base to head: live cal 2 to live cal 3 92, retired cal 1 to retired cal 1 4; live legacy equal 94 of 96; would retire into the Hall today: base 11, head 11
+    LOAD: 96 saves in progress; loading left the save byte equal on base 96, on head 96 (keys the head's load changed: none); the rows it already held were kept byte for byte after playing on: base 96, head 96
+  RETIRED SAVES made by base: 144; the head reads the same legacy (score, verdict, every field) on 144, the same calibration on 144, the same weigh line on 144, the same printed line for every season it held on 144; the stamp on disk survives the head's load on 144; the head's load left the save byte equal on 144
+    calibration read: disk 2 base 2 head 2 96, disk null base 1 head 1 48
+
+== NBA ==
+  plain (saves made by base, played on): 96 careers, 96 byte equal at every season; 576 seasons compared (576 base, 576 head, 0 careers of another length), 576 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 0 base, 0 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 576, of them equal after 576, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    HALL after playing on: calibration read base to head: live cal 2 to live cal 3 96; live legacy equal 96 of 96; would retire into the Hall today: base 7, head 7
+    LOAD: 96 saves in progress; loading left the save byte equal on base 96, on head 96 (keys the head's load changed: none); the rows it already held were kept byte for byte after playing on: base 96, head 96
+  cards (saves made by base, played on): 96 careers, 96 byte equal at every season; 576 seasons compared (576 base, 576 head, 0 careers of another length), 576 seasons with every key of the save equal; lines that differ 0, printed stat lines that differ 0, rival trails that differ 0; rivalry cards answered 408 base, 408 head
+    keys of the save that differ (seasons): none
+    seasons that began from an equal save: 576, of them equal after 576, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): none
+    HALL after playing on: calibration read base to head: live cal 2 to live cal 3 96; live legacy equal 96 of 96; would retire into the Hall today: base 7, head 7
+    LOAD: 96 saves in progress; loading left the save byte equal on base 96, on head 96 (keys the head's load changed: none); the rows it already held were kept byte for byte after playing on: base 96, head 96
+  RETIRED SAVES made by base: 144; the head reads the same legacy (score, verdict, every field) on 144, the same calibration on 144, the same weigh line on 144, the same printed line for every season it held on 144; the stamp on disk survives the head's load on 144; the head's load left the save byte equal on 144
+    calibration read: disk 2 base 2 head 2 96, disk null base 1 head 1 48
+
+== MLB ==
+  plain (saves made by base, played on): 96 careers, 15 byte equal at every season; 576 seasons compared (576 base, 576 head, 0 careers of another length), 178 seasons with every key of the save equal; lines that differ 230, printed stat lines that differ 9, rival trails that differ 3; rivalry cards answered 0 base, 0 head
+    keys of the save that differ (seasons): seasons 398, rival 3
+    seasons that began from an equal save: 259, of them equal after 178, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): 2007/slate eng/line 10, 2032/slate eng/line 8, 2026/slate eng/line 7, 2029/slate eng/line 7, 2034/slate eng/line 4, 2030/slate eng/line 4, 2004/slate eng/line 4, 2028/slate eng/line 3, 2004/slate 161/line 3, 2026/slate 161/line 3, 2005/slate eng/line 3, 2027/slate eng/line 3, 2011/slate eng/line 2, 2033/slate eng/line 2, 2025/slate eng/line 2, 2021/slate eng/line 2, 2031/slate eng/line 2, 2037/slate eng/line 1, 2006/slate eng/line 1, 2018/slate eng/line 1, 2035/slate eng/line 1, 2007/slate 163/line 1, 2008/slate 163/line 1, 2024/slate eng/line 1, 2008/slate 161/line 1, 2016/slate eng/line 1, 2005/slate 163/line 1, 2023/slate eng/line 1, 2018/slate 163/line 1
+    a key other than rival differs, first cases: mlb/plain/0@0 season 0 (2026): seasons ; mlb/plain/0@0 season 1 (2027): seasons ; mlb/plain/0@0 season 2 (2028): seasons ; mlb/plain/0@0 season 3 (2029): seasons ; mlb/plain/0@0 season 4 (2030): seasons ; mlb/plain/0@0 season 5 (2031): seasons
+    year | rows | began equal | still equal | line differs | draw count differs | head slate | fields of the line that differ (began equal) | began unequal (line equal anyway)
+    HALL after playing on: calibration read base to head: live cal 2 to live cal 3 96; live legacy equal 88 of 96; would retire into the Hall today: base 3, head 3
+    LOAD: 96 saves in progress; loading left the save byte equal on base 96, on head 96 (keys the head's load changed: none); the rows it already held were kept byte for byte after playing on: base 96, head 96
+  cards (saves made by base, played on): 96 careers, 17 byte equal at every season; 576 seasons compared (576 base, 576 head, 0 careers of another length), 196 seasons with every key of the save equal; lines that differ 221, printed stat lines that differ 9, rival trails that differ 3; rivalry cards answered 415 base, 415 head
+    keys of the save that differ (seasons): seasons 380, rival 3
+    seasons that began from an equal save: 275, of them equal after 196, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): 2032/slate eng/line 7, 2004/slate eng/line 7, 2007/slate eng/line 7, 2029/slate eng/line 5, 2030/slate eng/line 5, 2026/slate eng/line 5, 2031/slate eng/line 4, 2033/slate eng/line 4, 2027/slate eng/line 4, 2035/slate eng/line 3, 2021/slate eng/line 3, 2008/slate 161/line 3, 2028/slate eng/line 3, 2004/slate 161/line 3, 2008/slate eng/line 2, 2023/slate eng/line 2, 2009/slate 163/line 2, 2034/slate eng/line 1, 2025/slate eng/line 1, 2006/slate eng/line 1, 2017/slate eng/line 1, 2005/slate eng/line 1, 2008/slate 163/line 1, 2010/slate eng/line 1, 2016/slate eng/line 1, 2020/slate 60/line 1, 2036/slate eng/line 1
+    a key other than rival differs, first cases: mlb/cards/0@0 season 3 (2029): seasons ; mlb/cards/0@0 season 4 (2030): seasons ; mlb/cards/0@0 season 5 (2031): seasons ; mlb/cards/1@3 season 2 (2031): seasons ; mlb/cards/1@3 season 3 (2032): seasons ; mlb/cards/1@3 season 4 (2033): seasons
+    year | rows | began equal | still equal | line differs | draw count differs | head slate | fields of the line that differ (began equal) | began unequal (line equal anyway)
+    HALL after playing on: calibration read base to head: live cal 2 to live cal 3 96; live legacy equal 88 of 96; would retire into the Hall today: base 4, head 4
+    LOAD: 96 saves in progress; loading left the save byte equal on base 96, on head 96 (keys the head's load changed: none); the rows it already held were kept byte for byte after playing on: base 96, head 96
+  RETIRED SAVES made by base: 144; the head reads the same legacy (score, verdict, every field) on 144, the same calibration on 144, the same weigh line on 144, the same printed line for every season it held on 144; the stamp on disk survives the head's load on 144; the head's load left the save byte equal on 144
+    calibration read: disk 2 base 2 head 2 96, disk null base 1 head 1 48
+
+== NHL ==
+  plain (saves made by base, played on): 96 careers, 15 byte equal at every season; 576 seasons compared (576 base, 576 head, 0 careers of another length), 188 seasons with every key of the save equal; lines that differ 355, printed stat lines that differ 264, rival trails that differ 337; rivalry cards answered 0 base, 0 head
+    keys of the save that differ (seasons): seasons 388, rival 337
+    seasons that began from an equal save: 269, of them equal after 188, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): 2026/slate 84/line 30, 2029/slate 84/line 17, 2032/slate 84/line 16, 2012/slate 48/line 15, 2020/slate 56/line 1, 2019/slate 70/line 1, 2019/slate 69/line 1
+    a key other than rival differs, first cases: nhl/plain/0@0 season 0 (2026): seasons ; nhl/plain/0@0 season 1 (2027): seasons ; nhl/plain/0@0 season 2 (2028): seasons ; nhl/plain/0@0 season 3 (2029): seasons ; nhl/plain/0@0 season 4 (2030): seasons ; nhl/plain/0@0 season 5 (2031): seasons
+    year | rows | began equal | still equal | line differs | draw count differs | head slate | fields of the line that differ (began equal) | began unequal (line equal anyway)
+    HALL after playing on: calibration read base to head: live cal 2 to live cal 3 96; live legacy equal 28 of 96; would retire into the Hall today: base 3, head 3
+    LOAD: 96 saves in progress; loading left the save byte equal on base 96, on head 96 (keys the head's load changed: none); the rows it already held were kept byte for byte after playing on: base 96, head 96
+  cards (saves made by base, played on): 96 careers, 15 byte equal at every season; 576 seasons compared (576 base, 576 head, 0 careers of another length), 187 seasons with every key of the save equal; lines that differ 356, printed stat lines that differ 259, rival trails that differ 328; rivalry cards answered 413 base, 413 head
+    keys of the save that differ (seasons): seasons 389, rival 328
+    seasons that began from an equal save: 268, of them equal after 187, with another DRAW COUNT 0
+    first divergence of a career (year/slate/kind): 2026/slate 84/line 30, 2029/slate 84/line 17, 2032/slate 84/line 16, 2012/slate 48/line 15, 2019/slate 68/line 1, 2019/slate 70/line 1, 2019/slate 69/line 1
+    a key other than rival differs, first cases: nhl/cards/0@0 season 0 (2026): seasons ; nhl/cards/0@0 season 1 (2027): seasons ; nhl/cards/0@0 season 2 (2028): seasons ; nhl/cards/0@0 season 3 (2029): seasons ; nhl/cards/0@0 season 4 (2030): seasons ; nhl/cards/0@0 season 5 (2031): seasons
+    year | rows | began equal | still equal | line differs | draw count differs | head slate | fields of the line that differ (began equal) | began unequal (line equal anyway)
+    HALL after playing on: calibration read base to head: live cal 2 to live cal 3 96; live legacy equal 29 of 96; would retire into the Hall today: base 4, head 4
+    LOAD: 96 saves in progress; loading left the save byte equal on base 96, on head 96 (keys the head's load changed: none); the rows it already held were kept byte for byte after playing on: base 96, head 96
+  RETIRED SAVES made by base: 144; the head reads the same legacy

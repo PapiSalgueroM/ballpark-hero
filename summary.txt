@@ -1,0 +1,3 @@
+fleet exit=0 23s | SUMMARY: nfl/plain: 0/300 careers byte equal, non rival keys moved in 277 season-keys | nfl/cards: 0/300 careers byte equal, non rival keys moved in 2887 season-keys | nb
+resume exit=0 5s |   RETIRED SAVES made by base: 144; the head reads the same legacy
+selfsame exit=0 12s | SUMMARY: nfl/plain: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nfl/cards: 300/300 careers byte equal, non rival keys moved in 0 season-keys | nba
