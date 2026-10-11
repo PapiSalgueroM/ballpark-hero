@@ -979,6 +979,9 @@ export function LiveSimScreen({
      card in that corner opened 0.05 before the whistle on whatever was there: on the last kick's real goal in
      the net with the score not moved yet (league match 2, seed 42322), or on a real shot's last picture. */
   const nextRuledOutKey = nextReview && isRuledOut(nextReview) ? ruledOutKey(nextReview) : null;
+  /* Round 1302 fix 2: the goal a review is about to rule out is the action on the pitch, from its first frame until
+     its review is settled. The line under the pitch says nothing meanwhile (the effect below the banner effect). */
+  const ruledOutOn = !!nextRuledOutKey && motionEvent?.key === nextRuledOutKey;
   /* The next review is a ruled out goal the clock stops for. */
   const nextStopped = !!nextReview && isRuledOut(nextReview) && !ruledOutAt.has(nextReview.review!.id);
   const reviewOpensAt = (r: LiveFeedEvent): number => {
@@ -1157,6 +1160,12 @@ export function LiveSimScreen({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup, startAt, settledReviews, reviewDue]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
+  /* Round 1302 fix 2: the line under the pitch says nothing while a goal a review rules out is played and reviewed,
+     the rule a real goal has had since Round 1101. Before this the last small line told ("Throw in, Aston Villa")
+     sat under the ruled out goal and under its card. One rule for every way a line gets there: whatever is told
+     meanwhile (the list beside the pitch has it) is taken off the line again. The ruling itself ("VAR: goal ruled
+     out: ...") is told the moment the review is settled, and by then that goal is no longer the next review's. */
+  useEffect(() => { if (ruledOutOn && eventLine) setEventLine(null); }, [ruledOutOn, eventLine]);
   /* Round 1302, where a stoppage starts: the goal a review rules out, from the frame on the screen, with the match
      clock standing where it is. It is declared BELOW the banner effect on purpose. A real goal told in this very
      commit (the last kick's, when the clock stops at the whistle) has just put its pill up there, and the
