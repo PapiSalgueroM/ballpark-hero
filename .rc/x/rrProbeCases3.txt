@@ -1,0 +1,30 @@
+
+  /* ==== REVIEWPROBE 3: a late ruled out goal in a half whose last places also hold a REAL goal. Never part of the repo. ==== */
+  function lateBesideRealGoal(limit: number, from: number, to: number): Probe[] {
+    const out: Probe[] = []; let seen = 0, halves = 0;
+    for (let seed = from; seed < to && out.length < limit; seed++) {
+      for (let k = 0; k < 3; k++) {
+        const pre = entry(k);
+        const res = seeded(seed, () => playNextEntry(pre, { varReviews: true }));
+        if (res.kind !== 'halftime' || !res.state.live || res.state.live.varReviews !== true) continue;
+        halves += 1;
+        const live = res.state.live, feed = liveFeed(live), all = reviewsOf(feed), whistle = 45 + (live.added?.h1 ?? 0);
+        const r = all.find(v => v.review!.decision === 'disallowed' && place(v) >= whistle - 1);
+        if (!r) continue;
+        const g = feed.find(e => e.kind === 'goal' && place(e) >= place(r) - 1 && place(e) <= whistle);
+        if (!g) continue;
+        seen += 1;
+        out.push({ k, cls: `realGoal(${g.side}@${place(g)} ${g.text})`, h: { career: structuredClone(res.state), review: r, feed, live, whistle, seed } });
+      }
+    }
+    console.info(`REVIEWPROBE3 searched ${halves} first halves (seeds ${from} up, three league matches), found ${seen} with a late ruled out goal and a real goal in its last places`);
+    return out;
+  }
+
+  it('REVIEWPROBE3 a late ruled out goal beside a real goal', async () => {
+    const found = lateBesideRealGoal(Number(process.env.RR3_LIMIT ?? 8), Number(process.env.RR3_FROM ?? 1700), Number(process.env.RR3_TO ?? 81700));
+    const bad: string[] = [];
+    for (const p of found) bad.push(...await playLate2(p));
+    console.info(`REVIEWPROBE3 SUMMARY played ${found.length} halves, ${bad.length} problem(s)`);
+    expect(bad).toEqual([]);
+  }, 3000000);
