@@ -1,0 +1,7 @@
+ok   past: nfl 390x844: the save is one main wrote in the last year of a deal (phase season, 1 year left, no talk) and the hub offers Week by week (1)
+     nfl 390x844: under the centre of Week by week, the page not moved: <li> reading "Build your look: skin tone, hair, beard, accessori", inside fixed <div role="dialog" id="radix-:rc:">; the button's box is 116,362 159x44 in a 390x844 window
+ok   past: nfl 390x844: Week by week opened the talk and played nothing (viewer 0, 5 seasons as before, saved phase extension, talk extension)
+ok   reload: nfl 390x844: a reload lands on the same talk (talk on screen true, the same offer 18.5 against 18.5, the same save bytes true)
+FAIL the walk stopped: locator.waitFor: Timeout 15000ms exceeded. | Call log: |   - waiting for getByRole('button', { name: /^Play the [0-9]+ season$/ }) to be visible |  |     at /home/runner/work/ballpark-hero/ballpark-hero/scripts/playUsMarketTalk.mjs:140:26
+     3 requests to the live database were aborted by the walk's own route
+playUsMarketTalk: 3 checks, 1 failed
