@@ -10,7 +10,7 @@ import { createHash } from 'node:crypto';
 import { build } from 'esbuild';
 assert(process.env.CI, 'Programme checks run on remote CI');
 const root=process.cwd(),out=path.join(root,'career-programme-artifacts');fs.mkdirSync(out,{recursive:true});
-const base='a131ed713d65e844aa8d86c92dbb8be396ba55af',baseTree='ebd03b225527047d52a97ccbc9bf594edea536e1';
+const base='2f1919478db9e3a0f13b8f8b34373756944459c1',baseTree='877ae7877f37ddeb6e57385bed8ee4da7f95f108';
 const git=(...args)=>execFileSync('git',args,{encoding:'utf8',maxBuffer:20*1024*1024}).trim();
 assert.equal(git('rev-parse',base+'^{tree}'),baseTree);
 const copy=v=>JSON.parse(JSON.stringify(v)),sha=v=>createHash('sha256').update(v).digest('hex');
