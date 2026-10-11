@@ -1,0 +1,5 @@
+ROUTE /front-office: 361.2K gz over 34 files
+ROUTE /nfl-my-career: 479.2K gz over 47 files
+   /nfl-my-career      479K gz over  47 files (budget 479K, 479.2K to the tenth)
+   /front-office       361K gz over  34 files (budget 362K, 361.2K to the tenth)
+sweepWeight: green. Every page is inside its budget, and the budgets came down this round.

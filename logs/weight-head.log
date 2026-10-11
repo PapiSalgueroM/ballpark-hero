@@ -1,0 +1,5 @@
+  FAIL: /front-office: 363K of gzipped JavaScript against a budget of 362K
+  FAIL: /manager-hot-seat: 605K of gzipped JavaScript against a budget of 604K
+   /nfl-my-career      479K gz over  47 files (budget 479K, 479.2K to the tenth)
+   /front-office       363K gz over  36 files (budget 362K, 363.1K to the tenth)
+sweepWeight: 2 failures

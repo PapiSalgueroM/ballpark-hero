@@ -1,0 +1,4 @@
+build exit=0 34s | [dukb] inlined 1 stylesheet(s) and 1 module(s) into 180 snapshots (11 left alone)
+weight-head exit=1 28s | sweepWeight: 2 failures
+chunks-head exit=0 4s | ROUTE /nfl-my-career: 479.2K gz over 47 files
+weight-base exit=0 68s | sweepWeight: green. Every page is inside its budget, and the budgets came down this round.
