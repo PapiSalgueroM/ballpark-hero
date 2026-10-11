@@ -268,8 +268,10 @@ if (CONTROL === 'cover') {
   console.log('CONTROL cover: the served cover is hidden');
 }
 if (CONTROL === 'playfirst') {
-  /* the entry awaits the host's ready() in two places (the press, Watch again); both stop waiting */
-  const re = /await (\w+)\.ready\((\w+)\)/g;
+  /* the entry awaits the host's ready() in two places (the press, Watch again); both stop waiting.
+     Release AV: a minified name may hold a dollar sign (the merged build serves `await d.ready($)`), which \w
+     does not read, so the control refused with "0 chunks" on a build where the text was there twice. */
+  const re = /await ([\w$]+)\.ready\(([\w$]+)\)/g;
   const where = assets.filter(f => (textOf(f).match(re) ?? []).length > 0);
   if (where.length !== 1 || (textOf(where[0]).match(re) ?? []).length !== 2) throw new Error(`control playfirst refused: the entry's wait is in ${where.length} chunks (${where.map(f => (textOf(f).match(re) ?? []).length).join(', ')} times)`);
   served.set(where[0], textOf(where[0]).replace(re, (m, c, f) => `(${c}.ready(${f}),!0)`));
