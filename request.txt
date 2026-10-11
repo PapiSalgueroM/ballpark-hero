@@ -1,0 +1,3 @@
+# Round 1212 SECOND closing check on 22a93dde (verifier): finding 4, simCareerHall as a READING on the final head (expected red on the NHL marks band alone)
+#!serial
+simCareerHall: node scripts/simCareerHall.mjs
