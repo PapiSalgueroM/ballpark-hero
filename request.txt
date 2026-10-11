@@ -1,0 +1,12 @@
+# Round 1306 step (d), head 449361a1: the league rules digest whole (does step (d) move it?), the save size on six streams and its control, the whole unit suite
+#!build
+#!serial
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+saveSize-0: node scripts/simClubManagerSaveSize.mjs
+saveSize-1: SIM_SEED=1 node scripts/simClubManagerSaveSize.mjs
+saveSize-2: SIM_SEED=2 node scripts/simClubManagerSaveSize.mjs
+saveSize-3: SIM_SEED=3 node scripts/simClubManagerSaveSize.mjs
+saveSize-4: SIM_SEED=4 node scripts/simClubManagerSaveSize.mjs
+saveSize-5: SIM_SEED=5 node scripts/simClubManagerSaveSize.mjs
+saveSize-uncapped: SAVE_SIZE_CONTROL=uncapped node scripts/simClubManagerSaveSize.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
