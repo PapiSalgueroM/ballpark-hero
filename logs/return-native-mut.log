@@ -1,0 +1,15 @@
+MUTATION APPLIED: the champion name of a history row now prints the competition
+PASS 320-selected 73 checks
+PASS 320-not-selected 67 checks
+PASS 320-ban 75 checks
+FAIL 320-tournament AssertionError [ERR_ASSERTION]: 320-tournament: Actual history displays every unchanged saved year, tournament, champion and result
+PASS 390-selected 68 checks
+PASS 390-not-selected 67 checks
+PASS 390-ban 75 checks
+FAIL 390-tournament AssertionError [ERR_ASSERTION]: 390-tournament: Actual history displays every unchanged saved year, tournament, champion and result
+PASS 1280-selected 68 checks
+PASS 1280-not-selected 67 checks
+PASS 1280-ban 75 checks
+FAIL 1280-tournament AssertionError [ERR_ASSERTION]: 1280-tournament: Actual history displays every unchanged saved year, tournament, champion and result
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+MUTATED walk exit=1 (expected: not 0, three tournament journeys FAIL on the history check, nine PASS)
