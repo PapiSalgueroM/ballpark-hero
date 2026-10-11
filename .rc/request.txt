@@ -1,0 +1,14 @@
+simAwards: node scripts/simAwards.mjs
+simCareerInbox: node scripts/simCareerInbox.mjs
+simCareerRivalryEvents: node scripts/simCareerRivalryEvents.mjs
+simUsCareerAnnualBenefits: node scripts/simUsCareerAnnualBenefits.mjs
+simUsCoachCareer: node scripts/simUsCoachCareer.mjs
+simUsCoaching: node scripts/simUsCoaching.mjs
+simCareerParity: node scripts/simCareerParity.mjs
+simCareerRealism: node scripts/simCareerRealism.mjs
+simUsCareerDefects: node scripts/simUsCareerDefects.mjs
+simNflTruth: node scripts/simNflTruth.mjs
+simNbaAwardsSense: node scripts/simNbaAwardsSense.mjs
+simSportEras: node scripts/simSportEras.mjs
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=120000
