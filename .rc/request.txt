@@ -1,0 +1,1 @@
+finish: node scripts/simCareerLeagueFinish.mjs
