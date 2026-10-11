@@ -201,6 +201,41 @@ describe('Club Manager: the review screen', () => {
     }
   }, 120000);
 
+  /* Round 1302. THE ONE THE REVIEWER SAW (review-run of Round 1218, seed 2042 of the opener): my goal at 44', a
+     goal of theirs ruled out at 45'. On the screen as it was, the 45' card opened at "LIVE 44'" with my goal still
+     in the air and the score at 0-0, read "goal ruled out", and then my goal counted. Kept here as its own case,
+     played from before my goal to the whistle. The search asks for that shape (seed 2042 is tried first). */
+  it('the last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal', async () => {
+    const h = half(0, 2042, feed => {
+      const all = reviewsOf(feed), r = all[0];
+      return all.length === 1 && r.review!.decision === 'disallowed' && r.side === 'opp' && r.minute === 45 && !r.plus
+        && feed.some(e => e.kind === 'goal' && e.side === 'me' && place(e) === 44) ? r : null;
+    });
+    const v = h.review, id = v.review!.id;
+    const withMine = scoreBy(h.feed, 44), before = scoreBy(h.feed, 43);
+    expect(withMine).not.toBe(before);
+    expect(scoreBy(h.feed, 45), 'the ruled out goal is on the engine score').toBe(withMine);
+    const mounted = openAt(h, 43.2);
+    const frames = await run(mounted, 26000, fs => fs[fs.length - 1].stage === 'interval');
+    const first = frames.findIndex(cardUp), whistle = frames.findIndex(f => f.stage === 'interval');
+    expect(first, 'the review never opened').toBeGreaterThan(0);
+    expect(order(frames), 'the review was not shown exactly once').toEqual([id]);
+    /* My goal was seen whole before the review: its card rose and went, and the score had moved. */
+    expect(frames.slice(0, first).some(f => f.goalCard !== null && f.score === withMine), 'my goal of the minute before never got its card').toBe(true);
+    expect(frames[first].minute, 'the review opened before its own minute').toBeGreaterThanOrEqual(45);
+    for (const f of frames.filter(cardUp)) {
+      expect(f.score, `the score under the review card at ${f.ms} ms`).toBe(withMine);
+      expect(f.goalCard, `a goal card under the review card at ${f.ms} ms`).toBeNull();
+      expect(f.motion === 'pass' || (f.motion === 'goal' && f.phase === 'net'), `an action in flight under the review card at ${f.ms} ms: ${f.motion} ${f.phase}`).toBe(true);
+      expect(f.cardText).toContain(`${v.text}, ${h.live.opponent}, 45'`);
+    }
+    /* Their goal was drawn before its card (the ball went in), and the half ends on the engine score. */
+    expect(frames.slice(0, first).some(f => f.motion === 'goal' && f.phase === 'flight' && f.goalCard === null && f.score === withMine), 'the ruled out goal was not drawn before its review').toBe(true);
+    expect(whistle, 'the half never ended, or ended under the review card').toBeGreaterThan(frames.map(cardUp).lastIndexOf(true));
+    expect(frames[whistle].score).toBe(scoreBy(h.feed, h.whistle));
+    console.info(`clubManagerVarScreen: the 44 and 45 case was found on seed ${h.seed}, whistle ${h.whistle}`);
+  }, 180000);
+
   it('a penalty a review gives: the foul is told, the card opens at its minute, and the kick is played after it', async () => {
     const h = half(0, 1735, awardedAlone('scored'));
     const v = h.review, id = v.review!.id, before = scoreBy(h.feed, place(v) - 1), scored = scoreBy(h.feed, place(v));
