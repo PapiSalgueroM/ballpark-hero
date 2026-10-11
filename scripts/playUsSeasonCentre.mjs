@@ -825,6 +825,13 @@ async function walk(slug, vp) {
   await clickText(p, 'Sim the rest');
   await p.waitForSelector('[data-review]', { timeout: 8000 }).catch(() => {});
   const tiles = await p.evaluate(() => [...document.querySelectorAll('[data-review-tile]')].map(el => [el.dataset.reviewTile, el.firstElementChild?.textContent ?? '']));
+  /* the fix pass of Round 1212: the first pictures of the review were taken while its card was still revealing
+     (the finish line and the tiles blank in all three sports). When pictures are asked for, wait until nothing
+     on the page is still animating, then a beat more; the walk itself is not slowed without SHOTS. */
+  if (process.env.SHOTS) {
+    await p.waitForFunction(() => document.getAnimations().every(a => a.playState !== 'running'), null, { timeout: 5000 }).catch(() => {});
+    await p.waitForTimeout(400);
+  }
   await shot('review');
   {
     /* the whole season in the game log: no row wraps, whoever the opponent is */
