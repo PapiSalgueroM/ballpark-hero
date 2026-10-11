@@ -1,0 +1,2 @@
+press-ruling-EXPECT-RED exit=1 10s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerPressRoomReadAsAbsent.test.tsx,title=src/test/soccerPressRoomReadAsAbsent.test.tsx > pressRoom%3
+tsc exit=0 62s | 

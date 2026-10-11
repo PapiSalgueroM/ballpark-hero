@@ -1,0 +1,3 @@
+# Release AX d7 step 1b: the reworked tests on the commit BEFORE the reader changes: expected red (the road, the ruling's cases, the fleet's stayed shut check)
+press-ruling-EXPECT-RED: set -o pipefail; node_modules/.bin/vitest run src/test/soccerPressRoomReadAsAbsent.test.tsx --testTimeout=300000 2>&1 | sed "s/\x1b\[[0-9;]*m//g" | grep -E "press journey|FAIL|Tests |Test Files|stayed shut|AssertionError" | cut -c1-600 | head -60
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
