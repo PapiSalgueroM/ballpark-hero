@@ -107,7 +107,9 @@ in a scratch checkout.
   is the twin of Round 1302's stoppage for a real goal: hold the whistle while the last kick's goal has its
   sequence, and play a goal in the place before a last kick with the clock stopped. That is a change to the live
   match screen every player uses, held by `scripts/simLiveSimMotion.mjs` (55 tests, 12 controls) and five browser
-  walks; it wants a round of its own, with its test written first on the halves the run review named (league
-  match 1 of the screen test's career, seeds 1742, 1773, 1860, 2022 and 2057; on 1773 the goals are at 45+2 and
-  45+3).
+  walks; it wants a round of its own. Its test is written first and is in the repo: three cases marked `fails` at
+  the foot of `src/test/clubManagerVarScreen.test.tsx`, on halves nobody asks a review in (league match 1 of that
+  file's career). Measured on a runner (`r1303-lk`): seed 1742, my goal by the last kick at 45+4, no scorer card in
+  any frame; seed 1860, theirs at 45+3, none; seed 1773, goals at 45+2 and 45+3, one goal drawn of the two. Each
+  case is green while the defect is there and goes red the day it is mended, and then it becomes a plain case.
 - The two orderings Round 1302 chose knowingly (seed 1987, seed 42322) and its minors are as it left them.
