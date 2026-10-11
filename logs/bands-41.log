@@ -1,0 +1,4 @@
+simCmVar bands: {"seeds":[41,42,43,44,45,46],"leagueMatches":4065,"ruledOut":328,"ruledOutPerMatch":0.0807,"awarded":368,"awardedPerMatch":0.0905,"awardedScored":278,"goalConfirmed":0,"penaltyConfirmed":0,"goalsPerMatchOn":2.6905,"goalsPerMatchOff":2.6959,"goalGap":-0.0054,"resultMoved":228,"penaltiesPerMatch":0.4526,"matchesWithReview":629,"perSeed":[[666,0.0706,0.0946],[697,0.0818,0.0803],[677,0.0827,0.0901],[657,0.0928,0.1081],[685,0.0701,0.0891],[683,0.0864,0.082]],"awardedScoredShare":0.7554,"penaltiesPerMatchOff":0.3597,"penaltiesTotalBand":{"low":0.2526,"high":0.3979,"inside":false,"held":true}}
+simCmVar coverage: {"met":{"league":{"lit":36,"dark":11},"cup":{"lit":1,"dark":4},"europe":{"lit":6,"dark":0}},"leavesOut":["league:championship","cup:FA Cup"],"historicKey":"league:premier2010"}
+simCmVar stream: {"goal":77,"foul":21,"kick":100}
+simCmVar normal: actual review outcomes and full prior baseline passed.
