@@ -1,0 +1,22 @@
+# Release AV proof, the rounds' own walks, each control its own line: a plain served build, one at a time
+#!serve
+#!playwright
+#!serial
+playUsRivalLines: ENGINES=chromium node scripts/playUsRivalLines.mjs
+walkrival-oldline: ENGINES=chromium PLAY_US_RIVAL_CONTROL=oldline node scripts/playUsRivalLines.mjs
+walkrival-rivalflip-1: ENGINES=chromium PLAY_US_RIVAL_CONTROL=rivalflip RIVAL_WALK_POS=QB,CB,K node scripts/playUsRivalLines.mjs
+walkrival-rivalflip-2: ENGINES=chromium PLAY_US_RIVAL_CONTROL=rivalflip node scripts/playUsRivalLines.mjs
+playCareerHallLine: ENGINES=chromium node scripts/playCareerHallLine.mjs
+walkhall-noline: ENGINES=chromium PLAY_CONTROL=noline node scripts/playCareerHallLine.mjs
+playUsSeasonCentre: SHOTS=$RC_OUT ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-column: US_SEASON_PLAY_CONTROL=column SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-count: US_SEASON_PLAY_CONTROL=count SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-cover: US_SEASON_PLAY_CONTROL=cover SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-noaction: US_SEASON_PLAY_CONTROL=noaction SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-nohandover: US_SEASON_PLAY_CONTROL=nohandover SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-playfirst: US_SEASON_PLAY_CONTROL=playfirst SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-raw: US_SEASON_PLAY_CONTROL=raw SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-static: US_SEASON_PLAY_CONTROL=static SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-write-1: US_SEASON_PLAY_CONTROL=write SPORTS=mlb ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+walkseason-write-2: US_SEASON_PLAY_CONTROL=write SPORTS=nba ENGINES=chromium node scripts/playUsSeasonCentre.mjs
+playCmVar: FREE_KICK_FONT_CACHE="$PWD/.tmp-fx/font-cache" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/playCmVar.mjs

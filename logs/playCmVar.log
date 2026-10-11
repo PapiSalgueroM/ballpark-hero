@@ -1,0 +1,2 @@
+playCmVar: cannot run: VAR is switched off (CM_VAR_LIVE is false in src/lib/clubManagerVarLive.ts), so the page asks for no review.
+playCmVar: light a scratch checkout first: node scripts/qa/cmVarLit.mjs on, then npm run build, then this walk, then node scripts/qa/cmVarLit.mjs off.
