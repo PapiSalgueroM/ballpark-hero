@@ -173,3 +173,41 @@ Still open after the fix pass:
   transport: that walk refused a dark build with exit 2, and it runs on the plain build now, so that step has a
   real walk to pass from this round on; nothing in the file has to change. The saved page of `/club-manager` and of `/whats-new`, the
   sitemap dates and the page weight budgets are the lead's at release.
+
+## 7. The second fix pass (after the closing check): nothing in the game moves
+
+The closing check closed both majors and left seven open items. Three of them were this round's to close in the
+repo, and none of the three changes a line the game runs.
+
+- **One What's New entry** (the lead's decision 5). The entry for the last kick of a half is folded into the VAR
+  entry as its last sentences, under a title that names both. To ship dark: make `CM_VAR_LIVE` false and cut the
+  entry back to its last kick sentences (they are true in every era, with reviews or without).
+- **The last kick's scorer card is held in a real browser.** The `crowdedGoal` case of `scripts/playCmVar.mjs`
+  (a half that ends on a real goal at the whistle's own clock place; 390 and 1280 with motion, 390 with reduced
+  motion) waits for that goal's scorer card with the half's final score on the board, reads it in that very frame
+  (the words, the clock under it, whether a review card is up with it), photographs it (`0-last-kick-card`) and
+  asserts: the card names the scorer and his minute, the clock stands at the whistle's place with the half still
+  on, no review card is up, and the card is down before the interval. The walk prints one line `LASTKICK` a case.
+  Its negative control is the screen as it was before the fix (commit c06dc974's parent): on that build the same
+  case must fail on this check.
+- **No case of the review screen test passes by failing.** The four cases about a penalty a review gives at a
+  crowded end of a half were marked `fails`, which is green on any throw and on a timeout. Each is a plain case
+  now that asserts the open defect itself (a real action under that card on hints 10321 and 6428, the kick it
+  gave not played out on the same two): green only while exactly that is on the screen, red on a timeout or a
+  crash, red the day it is mended. They keep their KNOWN OPEN titles and their rows still say OPEN. The rates
+  ledger's line for the penalty kind says so too (its receipt carries the ledger's new hash).
+
+Still open, and why:
+
+- **The generator refuses both rates if the penalty readings stop agreeing** (1.987 against a limit of 2). It
+  fails closed and only in front of whoever edits the ledger. A "no penalty rate" state in the generated file,
+  the ledger harness and simCmVar belongs to the round that turns the penalty kind on.
+- **The previous manager's weeks before a takeover (`playRunIn`) and `simToDate` kick off without asking.** Those
+  are not the player's matches and nobody watches them; with the goal lift asking or not asking leaves the same
+  goal totals, so the table a takeover starts from is not biased. Threading the ask through the two takeovers
+  touches `src/lib/clubManagerCalendar.ts` (read by 14 harnesses) and every walk that mirrors the hook: a round of
+  its own.
+- **Page weight.** This round adds about 0.6K gzipped to each of the three Club Manager rows over its base (the
+  goal's own stoppage on the live screen, the kinds and the goal lift, the Help's list of competitions). The
+  budgets are the lead's and follow a release's own measurement.
+- **`scripts/simEras.mjs`** is red on origin/main with the same three failures; it reads none of this round's files.
