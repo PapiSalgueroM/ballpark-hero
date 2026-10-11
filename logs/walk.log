@@ -1,0 +1,296 @@
+  ok   today's calibration is 3 (reads 3)
+
+A. NHL careers the old code retired on calibration 2
+  main: 16 retired, calibration 3 would take out 2: main:nhl:85 540 to 485, main:nhl:137 500 to 472
+  ok   main: the fixture holds a Hall of Famer calibration 3 would take out
+  ok   main:nhl:85 byPush 390: the headline is the one the old code told ("Class of 2056, on ballot number 6.")
+  ok   main:nhl:85 byPush 390: the legacy pill is the score the old code told (pill 540, told 540)
+  ok   main:nhl:85 byPush 390: the card's sentence is the one the old code told
+  ok   main:nhl:85 byPush 390: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:85 byPush 390: the load wrote nothing
+  ok   main:nhl:85 byPush 390: the settled page is not wider than the viewport
+  ok   main:nhl:85 byPush 390: no page error
+  ok   main:nhl:85 byPush 390 reduced: the headline is the one the old code told ("Class of 2056, on ballot number 6.")
+  ok   main:nhl:85 byPush 390 reduced: the legacy pill is the score the old code told (pill 540, told 540)
+  ok   main:nhl:85 byPush 390 reduced: the card's sentence is the one the old code told
+  ok   main:nhl:85 byPush 390 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:85 byPush 390 reduced: the load wrote nothing
+  ok   main:nhl:85 byPush 390 reduced: the settled page is not wider than the viewport
+  ok   main:nhl:85 byPush 390 reduced: no page error
+  ok   main:nhl:85 byPush 1280: the headline is the one the old code told ("Class of 2056, on ballot number 6.")
+  ok   main:nhl:85 byPush 1280: the legacy pill is the score the old code told (pill 540, told 540)
+  ok   main:nhl:85 byPush 1280: the card's sentence is the one the old code told
+  ok   main:nhl:85 byPush 1280: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:85 byPush 1280: the load wrote nothing
+  ok   main:nhl:85 byPush 1280: the settled page is not wider than the viewport
+  ok   main:nhl:85 byPush 1280: no page error
+  ok   main:nhl:85 byPush 1280 reduced: the headline is the one the old code told ("Class of 2056, on ballot number 6.")
+  ok   main:nhl:85 byPush 1280 reduced: the legacy pill is the score the old code told (pill 540, told 540)
+  ok   main:nhl:85 byPush 1280 reduced: the card's sentence is the one the old code told
+  ok   main:nhl:85 byPush 1280 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:85 byPush 1280 reduced: the load wrote nothing
+  ok   main:nhl:85 byPush 1280 reduced: the settled page is not wider than the viewport
+  ok   main:nhl:85 byPush 1280 reduced: no page error
+  ok   main:nhl:137 byPush 390: the headline is the one the old code told ("Class of 2056, on ballot number 6.")
+  ok   main:nhl:137 byPush 390: the legacy pill is the score the old code told (pill 500, told 500)
+  ok   main:nhl:137 byPush 390: the card's sentence is the one the old code told
+  ok   main:nhl:137 byPush 390: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:137 byPush 390: the load wrote nothing
+  ok   main:nhl:137 byPush 390: the settled page is not wider than the viewport
+  ok   main:nhl:137 byPush 390: no page error
+  ok   main:nhl:137 byPush 390 reduced: the headline is the one the old code told ("Class of 2056, on ballot number 6.")
+  ok   main:nhl:137 byPush 390 reduced: the legacy pill is the score the old code told (pill 500, told 500)
+  ok   main:nhl:137 byPush 390 reduced: the card's sentence is the one the old code told
+  ok   main:nhl:137 byPush 390 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:137 byPush 390 reduced: the load wrote nothing
+  ok   main:nhl:137 byPush 390 reduced: the settled page is not wider than the viewport
+  ok   main:nhl:137 byPush 390 reduced: no page error
+  ok   main:nhl:137 byPush 1280: the headline is the one the old code told ("Class of 2056, on ballot number 6.")
+  ok   main:nhl:137 byPush 1280: the legacy pill is the score the old code told (pill 500, told 500)
+  ok   main:nhl:137 byPush 1280: the card's sentence is the one the old code told
+  ok   main:nhl:137 byPush 1280: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:137 byPush 1280: the load wrote nothing
+  ok   main:nhl:137 byPush 1280: the settled page is not wider than the viewport
+  ok   main:nhl:137 byPush 1280: no page error
+  ok   main:nhl:137 byPush 1280 reduced: the headline is the one the old code told ("Class of 2056, on ballot number 6.")
+  ok   main:nhl:137 byPush 1280 reduced: the legacy pill is the score the old code told (pill 500, told 500)
+  ok   main:nhl:137 byPush 1280 reduced: the card's sentence is the one the old code told
+  ok   main:nhl:137 byPush 1280 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:137 byPush 1280 reduced: the load wrote nothing
+  ok   main:nhl:137 byPush 1280 reduced: the settled page is not wider than the viewport
+  ok   main:nhl:137 byPush 1280 reduced: no page error
+  ok   main:nhl:11 nearPush 390: the headline is the one the old code told ("10 ballots and still waiting on the call.")
+  ok   main:nhl:11 nearPush 390: the legacy pill is the score the old code told (pill 433, told 433)
+  ok   main:nhl:11 nearPush 390: the card's sentence is the one the old code told
+  ok   main:nhl:11 nearPush 390: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:11 nearPush 390: the load wrote nothing
+  ok   main:nhl:11 nearPush 390: the settled page is not wider than the viewport
+  ok   main:nhl:11 nearPush 390: no page error
+  ok   main:nhl:11 nearPush 390 reduced: the headline is the one the old code told ("10 ballots and still waiting on the call.")
+  ok   main:nhl:11 nearPush 390 reduced: the legacy pill is the score the old code told (pill 433, told 433)
+  ok   main:nhl:11 nearPush 390 reduced: the card's sentence is the one the old code told
+  ok   main:nhl:11 nearPush 390 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:11 nearPush 390 reduced: the load wrote nothing
+  ok   main:nhl:11 nearPush 390 reduced: the settled page is not wider than the viewport
+  ok   main:nhl:11 nearPush 390 reduced: no page error
+  ok   main:nhl:11 nearPush 1280: the headline is the one the old code told ("10 ballots and still waiting on the call.")
+  ok   main:nhl:11 nearPush 1280: the legacy pill is the score the old code told (pill 433, told 433)
+  ok   main:nhl:11 nearPush 1280: the card's sentence is the one the old code told
+  ok   main:nhl:11 nearPush 1280: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:11 nearPush 1280: the load wrote nothing
+  ok   main:nhl:11 nearPush 1280: the settled page is not wider than the viewport
+  ok   main:nhl:11 nearPush 1280: no page error
+  ok   main:nhl:11 nearPush 1280 reduced: the headline is the one the old code told ("10 ballots and still waiting on the call.")
+  ok   main:nhl:11 nearPush 1280 reduced: the legacy pill is the score the old code told (pill 433, told 433)
+  ok   main:nhl:11 nearPush 1280 reduced: the card's sentence is the one the old code told
+  ok   main:nhl:11 nearPush 1280 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL main:nhl:11 nearPush 1280 reduced: the load wrote nothing
+  ok   main:nhl:11 nearPush 1280 reduced: the settled page is not wider than the viewport
+  ok   main:nhl:11 nearPush 1280 reduced: no page error
+  r1226: 16 retired, calibration 3 would take out 3: r1226:nhl:22 506 to 468, r1226:nhl:25 520 to 478, r1226:nhl:170 524 to 482
+  ok   r1226: the fixture holds a Hall of Famer calibration 3 would take out
+  ok   r1226:nhl:22 byPush 390: the headline is the one the old code told ("First ballot. Class of 2051.")
+  ok   r1226:nhl:22 byPush 390: the legacy pill is the score the old code told (pill 506, told 506)
+  ok   r1226:nhl:22 byPush 390: the card's sentence is the one the old code told
+  ok   r1226:nhl:22 byPush 390: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:22 byPush 390: the load wrote nothing
+  ok   r1226:nhl:22 byPush 390: the settled page is not wider than the viewport
+  ok   r1226:nhl:22 byPush 390: no page error
+  ok   r1226:nhl:22 byPush 390 reduced: the headline is the one the old code told ("First ballot. Class of 2051.")
+  ok   r1226:nhl:22 byPush 390 reduced: the legacy pill is the score the old code told (pill 506, told 506)
+  ok   r1226:nhl:22 byPush 390 reduced: the card's sentence is the one the old code told
+  ok   r1226:nhl:22 byPush 390 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:22 byPush 390 reduced: the load wrote nothing
+  ok   r1226:nhl:22 byPush 390 reduced: the settled page is not wider than the viewport
+  ok   r1226:nhl:22 byPush 390 reduced: no page error
+  ok   r1226:nhl:22 byPush 1280: the headline is the one the old code told ("First ballot. Class of 2051.")
+  ok   r1226:nhl:22 byPush 1280: the legacy pill is the score the old code told (pill 506, told 506)
+  ok   r1226:nhl:22 byPush 1280: the card's sentence is the one the old code told
+  ok   r1226:nhl:22 byPush 1280: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:22 byPush 1280: the load wrote nothing
+  ok   r1226:nhl:22 byPush 1280: the settled page is not wider than the viewport
+  ok   r1226:nhl:22 byPush 1280: no page error
+  ok   r1226:nhl:22 byPush 1280 reduced: the headline is the one the old code told ("First ballot. Class of 2051.")
+  ok   r1226:nhl:22 byPush 1280 reduced: the legacy pill is the score the old code told (pill 506, told 506)
+  ok   r1226:nhl:22 byPush 1280 reduced: the card's sentence is the one the old code told
+  ok   r1226:nhl:22 byPush 1280 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:22 byPush 1280 reduced: the load wrote nothing
+  ok   r1226:nhl:22 byPush 1280 reduced: the settled page is not wider than the viewport
+  ok   r1226:nhl:22 byPush 1280 reduced: no page error
+  ok   r1226:nhl:25 byPush 390: the headline is the one the old code told ("First ballot. Class of 2050.")
+  ok   r1226:nhl:25 byPush 390: the legacy pill is the score the old code told (pill 520, told 520)
+  ok   r1226:nhl:25 byPush 390: the card's sentence is the one the old code told
+  ok   r1226:nhl:25 byPush 390: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:25 byPush 390: the load wrote nothing
+  ok   r1226:nhl:25 byPush 390: the settled page is not wider than the viewport
+  ok   r1226:nhl:25 byPush 390: no page error
+  ok   r1226:nhl:25 byPush 390 reduced: the headline is the one the old code told ("First ballot. Class of 2050.")
+  ok   r1226:nhl:25 byPush 390 reduced: the legacy pill is the score the old code told (pill 520, told 520)
+  ok   r1226:nhl:25 byPush 390 reduced: the card's sentence is the one the old code told
+  ok   r1226:nhl:25 byPush 390 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:25 byPush 390 reduced: the load wrote nothing
+  ok   r1226:nhl:25 byPush 390 reduced: the settled page is not wider than the viewport
+  ok   r1226:nhl:25 byPush 390 reduced: no page error
+  ok   r1226:nhl:25 byPush 1280: the headline is the one the old code told ("First ballot. Class of 2050.")
+  ok   r1226:nhl:25 byPush 1280: the legacy pill is the score the old code told (pill 520, told 520)
+  ok   r1226:nhl:25 byPush 1280: the card's sentence is the one the old code told
+  ok   r1226:nhl:25 byPush 1280: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:25 byPush 1280: the load wrote nothing
+  ok   r1226:nhl:25 byPush 1280: the settled page is not wider than the viewport
+  ok   r1226:nhl:25 byPush 1280: no page error
+  ok   r1226:nhl:25 byPush 1280 reduced: the headline is the one the old code told ("First ballot. Class of 2050.")
+  ok   r1226:nhl:25 byPush 1280 reduced: the legacy pill is the score the old code told (pill 520, told 520)
+  ok   r1226:nhl:25 byPush 1280 reduced: the card's sentence is the one the old code told
+  ok   r1226:nhl:25 byPush 1280 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:25 byPush 1280 reduced: the load wrote nothing
+  ok   r1226:nhl:25 byPush 1280 reduced: the settled page is not wider than the viewport
+  ok   r1226:nhl:25 byPush 1280 reduced: no page error
+  ok   r1226:nhl:11 nearPush 390: the headline is the one the old code told ("10 ballots and still waiting on the call.")
+  ok   r1226:nhl:11 nearPush 390: the legacy pill is the score the old code told (pill 474, told 474)
+  ok   r1226:nhl:11 nearPush 390: the card's sentence is the one the old code told
+  ok   r1226:nhl:11 nearPush 390: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:11 nearPush 390: the load wrote nothing
+  ok   r1226:nhl:11 nearPush 390: the settled page is not wider than the viewport
+  ok   r1226:nhl:11 nearPush 390: no page error
+  ok   r1226:nhl:11 nearPush 390 reduced: the headline is the one the old code told ("10 ballots and still waiting on the call.")
+  ok   r1226:nhl:11 nearPush 390 reduced: the legacy pill is the score the old code told (pill 474, told 474)
+  ok   r1226:nhl:11 nearPush 390 reduced: the card's sentence is the one the old code told
+  ok   r1226:nhl:11 nearPush 390 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:11 nearPush 390 reduced: the load wrote nothing
+  ok   r1226:nhl:11 nearPush 390 reduced: the settled page is not wider than the viewport
+  ok   r1226:nhl:11 nearPush 390 reduced: no page error
+  ok   r1226:nhl:11 nearPush 1280: the headline is the one the old code told ("10 ballots and still waiting on the call.")
+  ok   r1226:nhl:11 nearPush 1280: the legacy pill is the score the old code told (pill 474, told 474)
+  ok   r1226:nhl:11 nearPush 1280: the card's sentence is the one the old code told
+  ok   r1226:nhl:11 nearPush 1280: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:11 nearPush 1280: the load wrote nothing
+  ok   r1226:nhl:11 nearPush 1280: the settled page is not wider than the viewport
+  ok   r1226:nhl:11 nearPush 1280: no page error
+  ok   r1226:nhl:11 nearPush 1280 reduced: the headline is the one the old code told ("10 ballots and still waiting on the call.")
+  ok   r1226:nhl:11 nearPush 1280 reduced: the legacy pill is the score the old code told (pill 474, told 474)
+  ok   r1226:nhl:11 nearPush 1280 reduced: the card's sentence is the one the old code told
+  ok   r1226:nhl:11 nearPush 1280 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nhl:11 nearPush 1280 reduced: the load wrote nothing
+  ok   r1226:nhl:11 nearPush 1280 reduced: the settled page is not wider than the viewport
+  ok   r1226:nhl:11 nearPush 1280 reduced: no page error
+
+B. NHL careers the old code left open, hung up today
+  ok   main:nhl:0:open open 390: retired through the talk, the save is stamped 3 (reads 3)
+  ok   main:nhl:0:open open 390: the pill is the engine's reading of the save the board wrote (pill 1190, engine 1190)
+  ok   main:nhl:0:open open 390: that is the calibration 3 score worked out before he retired (1190; on calibration 2 it would be 1226; the old code would have told 1226)
+  ok   main:nhl:0:open open 390: the headline is the engine's for the save ("First ballot. Class of 2050.")
+  ok   main:nhl:0:open open 390: the settled page is not wider than the viewport
+  ok   main:nhl:0:open open 390: a reload shows the same score and headline
+  ok   main:nhl:0:open open 390: the reload wrote nothing
+  ok   main:nhl:0:open open 390: no page error
+  ok   main:nhl:0:open open 390 reduced: retired through the talk, the save is stamped 3 (reads 3)
+  ok   main:nhl:0:open open 390 reduced: the pill is the engine's reading of the save the board wrote (pill 1190, engine 1190)
+  ok   main:nhl:0:open open 390 reduced: that is the calibration 3 score worked out before he retired (1190; on calibration 2 it would be 1226; the old code would have told 1226)
+  ok   main:nhl:0:open open 390 reduced: the headline is the engine's for the save ("First ballot. Class of 2050.")
+  ok   main:nhl:0:open open 390 reduced: the settled page is not wider than the viewport
+  ok   main:nhl:0:open open 390 reduced: a reload shows the same score and headline
+  ok   main:nhl:0:open open 390 reduced: the reload wrote nothing
+  ok   main:nhl:0:open open 390 reduced: no page error
+  ok   main:nhl:0:open open 1280: retired through the talk, the save is stamped 3 (reads 3)
+  ok   main:nhl:0:open open 1280: the pill is the engine's reading of the save the board wrote (pill 1190, engine 1190)
+  ok   main:nhl:0:open open 1280: that is the calibration 3 score worked out before he retired (1190; on calibration 2 it would be 1226; the old code would have told 1226)
+  ok   main:nhl:0:open open 1280: the headline is the engine's for the save ("First ballot. Class of 2050.")
+  ok   main:nhl:0:open open 1280: the settled page is not wider than the viewport
+  ok   main:nhl:0:open open 1280: a reload shows the same score and headline
+  ok   main:nhl:0:open open 1280: the reload wrote nothing
+  ok   main:nhl:0:open open 1280: no page error
+  ok   main:nhl:0:open open 1280 reduced: retired through the talk, the save is stamped 3 (reads 3)
+  ok   main:nhl:0:open open 1280 reduced: the pill is the engine's reading of the save the board wrote (pill 1190, engine 1190)
+  ok   main:nhl:0:open open 1280 reduced: that is the calibration 3 score worked out before he retired (1190; on calibration 2 it would be 1226; the old code would have told 1226)
+  ok   main:nhl:0:open open 1280 reduced: the headline is the engine's for the save ("First ballot. Class of 2050.")
+  ok   main:nhl:0:open open 1280 reduced: the settled page is not wider than the viewport
+  ok   main:nhl:0:open open 1280 reduced: a reload shows the same score and headline
+  ok   main:nhl:0:open open 1280 reduced: the reload wrote nothing
+  ok   main:nhl:0:open open 1280 reduced: no page error
+  ok   r1226:nhl:0:open open 390: retired through the talk, the save is stamped 3 (reads 3)
+  ok   r1226:nhl:0:open open 390: the pill is the engine's reading of the save the board wrote (pill 1243, engine 1243)
+  ok   r1226:nhl:0:open open 390: that is the calibration 3 score worked out before he retired (1243; on calibration 2 it would be 1269; the old code would have told 1269)
+  ok   r1226:nhl:0:open open 390: the headline is the engine's for the save ("First ballot. Class of 2050.")
+  ok   r1226:nhl:0:open open 390: the settled page is not wider than the viewport
+  ok   r1226:nhl:0:open open 390: a reload shows the same score and headline
+  ok   r1226:nhl:0:open open 390: the reload wrote nothing
+  ok   r1226:nhl:0:open open 390: no page error
+  ok   r1226:nhl:0:open open 390 reduced: retired through the talk, the save is stamped 3 (reads 3)
+  ok   r1226:nhl:0:open open 390 reduced: the pill is the engine's reading of the save the board wrote (pill 1243, engine 1243)
+  ok   r1226:nhl:0:open open 390 reduced: that is the calibration 3 score worked out before he retired (1243; on calibration 2 it would be 1269; the old code would have told 1269)
+  ok   r1226:nhl:0:open open 390 reduced: the headline is the engine's for the save ("First ballot. Class of 2050.")
+  ok   r1226:nhl:0:open open 390 reduced: the settled page is not wider than the viewport
+  ok   r1226:nhl:0:open open 390 reduced: a reload shows the same score and headline
+  ok   r1226:nhl:0:open open 390 reduced: the reload wrote nothing
+  ok   r1226:nhl:0:open open 390 reduced: no page error
+  ok   r1226:nhl:0:open open 1280: retired through the talk, the save is stamped 3 (reads 3)
+  ok   r1226:nhl:0:open open 1280: the pill is the engine's reading of the save the board wrote (pill 1243, engine 1243)
+  ok   r1226:nhl:0:open open 1280: that is the calibration 3 score worked out before he retired (1243; on calibration 2 it would be 1269; the old code would have told 1269)
+  ok   r1226:nhl:0:open open 1280: the headline is the engine's for the save ("First ballot. Class of 2050.")
+  ok   r1226:nhl:0:open open 1280: the settled page is not wider than the viewport
+  ok   r1226:nhl:0:open open 1280: a reload shows the same score and headline
+  ok   r1226:nhl:0:open open 1280: the reload wrote nothing
+  ok   r1226:nhl:0:open open 1280: no page error
+  ok   r1226:nhl:0:open open 1280 reduced: retired through the talk, the save is stamped 3 (reads 3)
+  ok   r1226:nhl:0:open open 1280 reduced: the pill is the engine's reading of the save the board wrote (pill 1243, engine 1243)
+  ok   r1226:nhl:0:open open 1280 reduced: that is the calibration 3 score worked out before he retired (1243; on calibration 2 it would be 1269; the old code would have told 1269)
+  ok   r1226:nhl:0:open open 1280 reduced: the headline is the engine's for the save ("First ballot. Class of 2050.")
+  ok   r1226:nhl:0:open open 1280 reduced: the settled page is not wider than the viewport
+  ok   r1226:nhl:0:open open 1280 reduced: a reload shows the same score and headline
+  ok   r1226:nhl:0:open open 1280 reduced: the reload wrote nothing
+  ok   r1226:nhl:0:open open 1280 reduced: no page error
+
+C. Football, basketball and baseball: one stamped save each, as told
+  ok   r1226:nfl:3 byPush 390: the headline is the one the old code told ("Class of 2052, on ballot number 4.")
+  ok   r1226:nfl:3 byPush 390: the legacy pill is the score the old code told (pill 550, told 550)
+  ok   r1226:nfl:3 byPush 390: the card's sentence is the one the old code told
+  ok   r1226:nfl:3 byPush 390: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nfl:3 byPush 390: the load wrote nothing
+  ok   r1226:nfl:3 byPush 390: the settled page is not wider than the viewport
+  ok   r1226:nfl:3 byPush 390: no page error
+  ok   r1226:nfl:3 byPush 1280 reduced: the headline is the one the old code told ("Class of 2052, on ballot number 4.")
+  ok   r1226:nfl:3 byPush 1280 reduced: the legacy pill is the score the old code told (pill 550, told 550)
+  ok   r1226:nfl:3 byPush 1280 reduced: the card's sentence is the one the old code told
+  ok   r1226:nfl:3 byPush 1280 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nfl:3 byPush 1280 reduced: the load wrote nothing
+  ok   r1226:nfl:3 byPush 1280 reduced: the settled page is not wider than the viewport
+  ok   r1226:nfl:3 byPush 1280 reduced: no page error
+  ok   r1226:nba:0 byPush 390: the headline is the one the old code told ("Class of 2053, on ballot number 6.")
+  ok   r1226:nba:0 byPush 390: the legacy pill is the score the old code told (pill 558, told 558)
+  ok   r1226:nba:0 byPush 390: the card's sentence is the one the old code told
+  ok   r1226:nba:0 byPush 390: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nba:0 byPush 390: the load wrote nothing
+  ok   r1226:nba:0 byPush 390: the settled page is not wider than the viewport
+  ok   r1226:nba:0 byPush 390: no page error
+  ok   r1226:nba:0 byPush 1280 reduced: the headline is the one the old code told ("Class of 2053, on ballot number 6.")
+  ok   r1226:nba:0 byPush 1280 reduced: the legacy pill is the score the old code told (pill 558, told 558)
+  ok   r1226:nba:0 byPush 1280 reduced: the card's sentence is the one the old code told
+  ok   r1226:nba:0 byPush 1280 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:nba:0 byPush 1280 reduced: the load wrote nothing
+  ok   r1226:nba:0 byPush 1280 reduced: the settled page is not wider than the viewport
+  ok   r1226:nba:0 byPush 1280 reduced: no page error
+  ok   r1226:mlb:9 hofPlain 390: the headline is the one the old code told ("First ballot. Class of 2050.")
+  ok   r1226:mlb:9 hofPlain 390: the legacy pill is the score the old code told (pill 604, told 604)
+  ok   r1226:mlb:9 hofPlain 390: the card's sentence is the one the old code told
+  ok   r1226:mlb:9 hofPlain 390: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:mlb:9 hofPlain 390: the load wrote nothing
+  ok   r1226:mlb:9 hofPlain 390: the settled page is not wider than the viewport
+  ok   r1226:mlb:9 hofPlain 390: no page error
+  ok   r1226:mlb:9 hofPlain 1280 reduced: the headline is the one the old code told ("First ballot. Class of 2050.")
+  ok   r1226:mlb:9 hofPlain 1280 reduced: the legacy pill is the score the old code told (pill 604, told 604)
+  ok   r1226:mlb:9 hofPlain 1280 reduced: the card's sentence is the one the old code told
+  ok   r1226:mlb:9 hofPlain 1280 reduced: the save still carries the stamp 2 (reads 2)
+  FAIL r1226:mlb:9 hofPlain 1280 reduced: the load wrote nothing
+  ok   r1226:mlb:9 hofPlain 1280 reduced: the settled page is not wider than the viewport
+  ok   r1226:mlb:9 hofPlain 1280 reduced: no page error
+
+D. The help
+  FAIL nhl help 390: the walk threw (TimeoutError: locator.waitFor: Timeout 15000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'New career' }).first() to be visible
+)
+  FAIL nhl help 1280: the walk threw (TimeoutError: locator.waitFor: Timeout 15000ms exceeded.
+Call log:
+  - waiting for getByRole('button', { name: 'New career' }).first() to be visible
+)
+walk1301: 279 checks, 32 FAILED

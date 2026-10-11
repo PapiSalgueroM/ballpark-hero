@@ -1,0 +1,14 @@
+  PASS  mlb standout 390 reduced: no page error
+
+/nhl-my-career
+  saves: standout RW, 18 seasons, retired through the hub, 963 then 999, line of 173 characters; plain C, 10 seasons, 160; old nhl-engine-0
+  CAUGHT  nhl standout 390 reduced: the line is in the card and fully shown
+  CAUGHT  nhl standout 390 reduced: the save is retired and stamped hallCal 3, today's calibration (it reads undefined)
+  CAUGHT  nhl standout 390 reduced: the line is the engine's own for this career (page "", engine "The voters weigh the hardware first: Cups, the major awards, All-Star years. Then your seasons and your numbers, and your 1,829 points sat near the top of this game's books.")
+  CAUGHT  nhl standout 390 reduced: the legacy pill is the calibration 2 score (pill 963, engine 999, calibration 1 963)
+  PASS  nhl standout 390 reduced: the settled page is not wider than the viewport (390 of 390; widest frame while landing 390)
+  PASS  nhl standout 390 reduced: the card's first button is inside the viewport and can be pressed
+  PASS  nhl standout 390 reduced: no page error
+
+playCareerHallLine control noline: all 16 guarded checks fired (mutations landed: {"seededRetired":4})
+playCareerHallLine: 4 routes, 4 walks, 28 checks, control noline, the control fired on every guarded check

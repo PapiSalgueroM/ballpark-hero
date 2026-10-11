@@ -1,0 +1,6 @@
+#!serve
+#!playwright
+#!serial
+walk: node .rc/x/walk1301.mjs
+round-walk: set -o pipefail; ENGINES=chromium SHOTS=$RC_OUT/round node scripts/playCareerHallLine.mjs 2>&1 | tail -60
+round-walk-noline: set -o pipefail; ENGINES=chromium PLAY_CONTROL=noline SHOTS=/tmp/shots-ctl node scripts/playCareerHallLine.mjs 2>&1 | tail -14
