@@ -90,10 +90,17 @@ async function walk(width, height) {
     await page.waitForSelector('[data-centre-cup-game="1"]');
     const domestic = await page.locator('[data-centre-cup-game]').innerText();
     check(domestic.includes('Quarter-final') && domestic.includes('Chelsea') && await page.locator('[data-centre-cup-score]').innerText() === '2-1', `${tag}: quarter-final opponent and exact saved score`);
-    check(!/Home|Away/.test(domestic), `${tag}: no unresearched cup ground is claimed`);
+    /* Release AU (Rounds 1197 to 1208): the saved competition view now copies the ground a cup tie's save recorded
+       (one line of src/lib/soccerSeasonCompetitions.ts; its unit test reads "recorded ground" and expects the
+       quarter-final of this same fixture away and every other tie with none). So the quarter-final says Away and
+       no other ground, and the semi-final and the final, where the save recorded none, still claim none. */
+    check(/\bAway\b/.test(domestic) && !/\bHome\b/.test(domestic), `${tag}: the quarter-final shows the one ground the save recorded (away) and no other`);
     await page.getByRole('button', { name: '› Next game', exact: true }).click();
+    const semi = await page.locator('[data-centre-cup-game]').innerText();
     await page.getByRole('button', { name: '› Next game', exact: true }).click();
-    check((await page.locator('[data-centre-cup-game]').innerText()).includes('5-4 on penalties') && await page.locator('[data-centre-cup-score]').innerText() === '1-1', `${tag}: the final keeps its score and penalty result`);
+    const last = await page.locator('[data-centre-cup-game]').innerText();
+    check(semi.includes('Semi-final') && last.includes('Final') && !/\b(Home|Away)\b/.test(semi) && !/\b(Home|Away)\b/.test(last), `${tag}: no unresearched cup ground is claimed (the semi-final and the final record none)`);
+    check(last.includes('5-4 on penalties') && await page.locator('[data-centre-cup-score]').innerText() === '1-1', `${tag}: the final keeps its score and penalty result`);
     await namedShot(page, `career-competitions-${width}-fa-cup.png`);
     await page.getByRole('button', { name: '‹ All games', exact: true }).click();
     await keyClick(page, '[data-centre-competition="club"]');
