@@ -1,0 +1,57 @@
+playCmVar: the build plays goal and penalty.
+FIXTURE ruledOut: league match 1, seed 2460, me 9' Kiernan Dewsbury-Hall, disallowed
+FIXTURE penaltyScored: league match 1, seed 1735, opp 34' Alexander Isak, awarded
+FIXTURE penaltySaved: league match 10, seed 1832, me 9' Thierno Barry, awarded
+FIXTURE goalBefore: league match 2, seed 1724, opp 8' João Gomes, disallowed
+FIXTURE two: league match 1, seed 2453, opp 12' Hugo Ekitiké, disallowed
+FIXTURE lateWhistle: league match 2, seed 1984, opp 45' Alejandro Garnacho, disallowed
+FIXTURE lateBefore: league match 2, seed 2591, opp 45' Nicolas Jackson, disallowed
+FIXTURE ownGoal: league match 2, seed 1940, me 10' Brennan Johnson, disallowed
+FIXTURE injury: league match 1, seed 3861, opp 15' Hugo Ekitiké, disallowed
+FIXTURE red: league match 2, seed 3827, opp 3' Nicolas Jackson, awarded
+FIXTURE crowdedGoal: league match 2, seed 42322, opp 45' Alejandro Garnacho, disallowed
+FIXTURE crowdedShot: league match 2, seed 6203, opp 45' Nicolas Jackson, disallowed
+HELP 390-hub-help: ok | 📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked r
+HELP 1280-hub-help: ok | 📺 VAR in today's game. In a save that starts in 2026/27, a match can go to a video review from its next kickoff, but only in the competitions we have checked r
+CASE 390-motion-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 390-motion-penaltyScored-plain: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 24s
+CASE 390-motion-penaltySaved-plain: ok | awarded me 9' | card "VAR: checking for a penalty |  | Thierno Barry, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 3-0 | 10s
+CASE 390-motion-goalBefore-plain: ok | disallowed opp 8' | card "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision." at 9' | score under it {"me":1,"opp":0} | result 3-1 | 11s
+CASE 1280-motion-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 1280-motion-penaltyScored-plain: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 23s
+CASE 1280-motion-penaltySaved-plain: ok | awarded me 9' | card "VAR: checking for a penalty |  | Thierno Barry, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 3-0 | 10s
+CASE 1280-motion-goalBefore-plain: ok | disallowed opp 8' | card "VAR: checking the goal |  | João Gomes, Aston Villa, 8' |  | Play waits for the decision." at 9' | score under it {"me":1,"opp":0} | result 3-1 | 10s
+CASE 390-reduced-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 8s
+CASE 390-reduced-penaltyScored-plain: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 22s
+CASE 1280-reduced-ruledOut-plain: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 8s
+CASE 1280-reduced-penaltyScored-plain: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 22s
+CASE 390-motion-two-plain: ok | disallowed opp 12' | card "VAR: checking the goal |  | Hugo Ekitiké, Liverpool, 12' |  | Play waits for the decision." at 12' | score under it {"me":0,"opp":0} | result 0-2 | 23s
+CASE 390-motion-lateWhistle-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":0,"opp":0} | result 1-0 | 29s
+CASE 390-motion-lateBefore-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 31s
+CASE 390-motion-ownGoal-plain: ok | disallowed me 10' | card "VAR: checking the goal |  | Brennan Johnson, Everton, 10' |  | Play waits for the decision." at 11' | score under it {"me":0,"opp":0} | result 2-0 | 10s
+CASE 390-motion-injury-plain: ok | disallowed opp 15' | card "VAR: checking the goal |  | Hugo Ekitiké, Liverpool, 15' |  | Play waits for the decision." at 15' | score under it {"me":0,"opp":0} | result 0-0 | 13s
+CASE 390-motion-red-plain: ok | awarded opp 3' | card "VAR: checking for a penalty |  | Nicolas Jackson, Aston Villa, 3' |  | Play waits for the decision." at 3' | score under it {"me":0,"opp":0} | result 2-2 | 6s
+CASE 1280-motion-lateWhistle-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":0,"opp":0} | result 1-0 | 29s
+CASE 1280-motion-lateBefore-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 32s
+CASE 1280-motion-ownGoal-plain: ok | disallowed me 10' | card "VAR: checking the goal |  | Brennan Johnson, Everton, 10' |  | Play waits for the decision." at 11' | score under it {"me":0,"opp":0} | result 2-0 | 10s
+CASE 1280-motion-injury-plain: ok | disallowed opp 15' | card "VAR: checking the goal |  | Hugo Ekitiké, Liverpool, 15' |  | Play waits for the decision." at 15' | score under it {"me":0,"opp":0} | result 0-0 | 13s
+CASE 1280-motion-red-plain: ok | awarded opp 3' | card "VAR: checking for a penalty |  | Nicolas Jackson, Aston Villa, 3' |  | Play waits for the decision." at 3' | score under it {"me":0,"opp":0} | result 2-2 | 6s
+CASE 390-motion-crowdedGoal-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 33s
+CASE 390-motion-crowdedShot-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 32s
+CASE 1280-motion-crowdedGoal-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 33s
+CASE 1280-motion-crowdedShot-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 32s
+CASE 390-reduced-lateWhistle-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":0,"opp":0} | result 1-0 | 27s
+CASE 390-reduced-lateBefore-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 30s
+CASE 1280-reduced-lateWhistle-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":0,"opp":0} | result 1-0 | 27s
+CASE 1280-reduced-lateBefore-plain: ok | disallowed opp 45+4' | card "VAR: checking the goal |  | Nicolas Jackson, Aston Villa, 45+4' |  | Play waits for the decision." at 45' | score under it {"me":1,"opp":1} | result 2-1 | 30s
+CASE 390-reduced-crowdedGoal-plain: ok | disallowed opp 45+3' | card "VAR: checking the goal |  | Alejandro Garnacho, Aston Villa, 45+3' |  | Play waits for the decision." at 45' | score under it {"me":2,"opp":0} | result 3-0 | 31s
+CASE 390-motion-ruledOut-leave: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 390-motion-penaltyScored-leave: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 24s
+CASE 1280-motion-ruledOut-leave: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 10s
+CASE 1280-motion-penaltyScored-leave: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 24s
+CASE 390-motion-ruledOut-skip: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 8s
+CASE 390-motion-penaltyScored-skip: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 22s
+CASE 1280-motion-ruledOut-skip: ok | disallowed me 9' | card "VAR: checking the goal |  | Kiernan Dewsbury-Hall, Everton, 9' |  | Play waits for the decision." at 9' | score under it {"me":0,"opp":0} | result 0-0 | 7s
+CASE 1280-motion-penaltyScored-skip: ok | awarded opp 34' | card "VAR: checking for a penalty |  | Alexander Isak, Liverpool, 34' |  | Play waits for the decision." at 34' | score under it {"me":1,"opp":1} | result 1-2 | 21s
+playCmVar: 40 cases and 2 help views at 390 and 1280, 12 of 12 fixtures found, 0 failed assertion(s).
+playCmVar: green. Every review a player can meet was shown whole, at its minute, over nothing else, and every match settled as the engine settles it.
