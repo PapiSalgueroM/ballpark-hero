@@ -1,0 +1,2 @@
+# Release AX d7 diagnostic: the first unreadable Press room part of the journey (seed 31), with the rows it points at
+diag: cp .rc/x/pressDiag.test.tsx src/test/pressDiag.test.tsx && node_modules/.bin/vitest run src/test/pressDiag.test.tsx --testTimeout=300000 2>&1 | grep -E "DIAG|Tests|Error" | cut -c1-6000
