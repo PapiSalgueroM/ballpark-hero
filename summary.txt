@@ -1,0 +1,7 @@
+sk-partbrief exit=1 4s | simSaveKeeper control partbrief: FIRED. Section 1 is red.
+simSaveKeeper exit=0 4s | simSaveKeeper: all green. The keeper holds on real saves of all 21 long games.
+sk-partagent exit=1 4s | simSaveKeeper control partagent: FIRED. Section 1 is red.
+sk-partfarewell exit=1 4s | simSaveKeeper control partfarewell: FIRED. Section 1 is red.
+sk-partreturn exit=1 4s | simSaveKeeper control partreturn: FIRED. Section 1 is red.
+sk-partrow exit=1 4s | simSaveKeeper control partrow: FIRED. Section 1 is red.
+sk-partrowus exit=1 2s | simSaveKeeper control partrowus: FIRED. Section 1 is red.

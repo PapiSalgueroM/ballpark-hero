@@ -1,0 +1,8 @@
+# Release AW closing pass, C4 on 8d3f54c6: the save keeper harness and its six part controls (each EXPECT exit 1, FIRED on its own sentence)
+simSaveKeeper: node scripts/simSaveKeeper.mjs
+sk-partbrief: SIM_SAVE_KEEPER_CONTROL=partbrief node scripts/simSaveKeeper.mjs
+sk-partagent: SIM_SAVE_KEEPER_CONTROL=partagent node scripts/simSaveKeeper.mjs
+sk-partreturn: SIM_SAVE_KEEPER_CONTROL=partreturn node scripts/simSaveKeeper.mjs
+sk-partfarewell: SIM_SAVE_KEEPER_CONTROL=partfarewell node scripts/simSaveKeeper.mjs
+sk-partrow: SIM_SAVE_KEEPER_CONTROL=partrow node scripts/simSaveKeeper.mjs
+sk-partrowus: SIM_SAVE_KEEPER_CONTROL=partrowus node scripts/simSaveKeeper.mjs
