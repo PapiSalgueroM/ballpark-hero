@@ -1053,10 +1053,20 @@ function scheduleProblems(slug, SB, row, eraId, s, named) {
 /* MEASURED FOR BASEBALL (Round 1212): see the block above the MLB bands, below. */
 const REFUSED_MAX = { nba: 0.01, nfl: 0.01, mlb: 0.01 };
 const NO_REPAIR_MIN = { nba: 0.8, nfl: 0.7, mlb: 0.7 };
-/* Round 1212, baseball's bands. PROVISIONAL until the five seed sets are measured on a runner (this comment is
-   rewritten with the numbers in the commit that binds the sport). The ledger marks the league's shares of
-   shutouts, one run games and extra inning games THIN (one source), so none of them is a target here: each
-   band is this career's own, set around what the score law itself measures, and says so. */
+/* Round 1212, baseball's bands. MEASURED on the five seed sets (40 careers a set, a GitHub runner, 2026-10-10,
+   the commit that binds the sport): 4,621 seasons, 3,757 open, 3,756 derived, 1 refused (in finish); no
+   repair in 86.2% (84.8 to 87.9 by seed set); runs a team game 4.56 in the present day era against the
+   ledger's 4.48 and 4.89 in the throwback against 4.81 (0.08 over in both, 274,428 and 334,044 games); a side
+   shut out in 4.2% of team games; games decided by one run 26.3%; past the ninth 7.9%; his at bats a game
+   3.754; games he played with no hit 26.3%; 0 of 1,694 named seasons meet a club in back to back series.
+   Seed sets 0 and 1 alone (a local run each) gave 4.2 and 4.2, 26.4 and 26.5, 7.9 and 8.0, 3.746 and 3.756,
+   26.2 and 26.2: the spread between sets is a tenth of a point, so every band below has whole points of room
+   on both sides and none is a coin toss. Medians of wins by result on the five sets pooled: missed 69 (middle
+   half 60.5 to 77.5), the Wild Card Game 89 and the Wild Card series 89 (86.75 to 92.25), the Division Series
+   92 (89.5 to 96.5), the Championship Series 96 (91.75 to 99.25), a lost World Series 97 (93.75 to 101.25), a
+   title 100 (96 to 104). The ledger marks the league's shares of shutouts, one run games and extra inning
+   games THIN (one source), so none of them is a target here: each band is this career's own, set around what
+   the score law itself measures, and says so. */
 const MLB_RUNS_OVER = [-0.05, 0.3];
 const MLB_SHUTOUT = [0.03, 0.065];
 const MLB_ONE_RUN = [0.22, 0.32];
