@@ -1,0 +1,11 @@
+m-latestaged exit=1 79s | MUT latestaged: vitest exit 1
+m-committed exit=1 79s | MUT committed: vitest exit 1
+m-nohold exit=1 75s | MUT nohold: vitest exit 1
+m-cardalone exit=1 76s | MUT cardalone: vitest exit 1
+m-capearly exit=1 78s | MUT capearly: vitest exit 1
+m-linelate exit=1 78s | MUT linelate: vitest exit 1
+m-othernet exit=1 78s | MUT othernet: vitest exit 1
+m-pillunder exit=1 78s | MUT pillunder: vitest exit 1
+m-lineleft exit=1 78s | MUT lineleft: vitest exit 1
+m-lineonce exit=1 78s | MUT lineonce: vitest exit 1
+clean exit=0 0s | tree after the mutations: 0 changed path(s)

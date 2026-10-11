@@ -1,0 +1,42 @@
+fx2Mut lineleft: applied to src/components/club-manager/LiveSimScreen.tsx
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 20 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal a review rules out is drawn first, and its review opens with the ball in the net
+[31m[1mAssertionError[22m: the line under the pitch while the ruled out goal was played and reviewed: expected [ 'Foul by Hayden Hackney' ] to deeply equal [ '' ][39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review never opens over another action: the goal of the minute before is in and counted first ('disallowed')
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 4560 ms: expected 'Throw in, Everton' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mthe last minute of a half, a goal of mine at 44 and theirs ruled out at 45: the card never sits on my goal
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 4960 ms: expected 'Foul by Jérémy Jacquet' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mtwo reviews in one half each get their own card, in turn
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 1824 ms: expected 'Throw in, Everton' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mtwo goals ruled out in one minute (staged by hand): each is drawn before its own card, one card at a time
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 1840 ms: expected 'Foul by Hayden Hackney' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mtwo goals ruled out in back to back minutes (staged by hand): each card on its own goal, the second not before its minute
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 1808 ms: expected 'Foul by Hayden Hackney' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out 'at the whistle' is drawn before its card, at its own minute, and its review closes before the half ends
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 4640 ms: expected 'Foul by Michael Keane' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out 'one clock place before the whistle' is drawn before its card, at its own minute, and its review closes before the half ends
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 5648 ms: expected 'Corner, left, Johan Manzambi' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'at the whistle': the card opens at its own minute on the ball in the net
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 3888 ms: expected 'Foul by Michael Keane' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22mreduced motion, a goal ruled out 'one clock place before the whistle': the card opens at its own minute on the ball in the net
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 4896 ms: expected 'Corner, left, Johan Manzambi' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real goal is the last kick after it…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 9104 ms: expected 'Throw in, Aston Villa' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and a real chanc…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 5648 ms: expected 'Throw in, Aston Villa' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real chance has its own place, one …'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 6640 ms: expected 'Foul by Vitaliy Mykolenko' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('it is at the whistle and so is a real…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 5648 ms: expected 'Shot: Brennan Johnson' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma goal ruled out at the end of a half that real chances fill ('a real last kick follows it and the p…'): it is drawn, in its own net, and nothing real gives way
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 4544 ms: expected 'Foul by Alejandro Garnacho' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22man own goal the minute after a ruled out goal: the review first, then the own goal as an own goal
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 2096 ms: expected 'Shot: James Garner' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: false): both are told, and the card sits over nothing
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 2112 ms: expected 'Corner, right, Jack Grealish' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in the same minute as the other side's 'injury' (a chance at the same place: true): both are told, and the card sits over nothing
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 1840 ms: expected 'Throw in, Liverpool' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in the same minute as the other side's substitution: the change is told and the review is whole
+[31m[1mAssertionError[22m: the line under the pitch under the card of a ruled out goal at 1808 ms: expected 'Foul by Michael Keane' to be '' // Object.is equality[39m
+[41m[1m FAIL [22m[49m src/test/clubManagerVarScreen.test.tsx[2m > [22mClub Manager: the review screen[2m > [22ma review in extra time ('disallowed'): its own card, over nothing, on the score the engine has
+MUT lineleft: vitest exit 1
