@@ -1,0 +1,30 @@
+varlive exit=0 5s |       Tests  5 passed | 3 skipped (8)
+varlive-dark exit=0 4s |       Tests  5 passed | 3 skipped (8)
+varlive-lit exit=0 9s |       Tests  5 passed | 3 skipped (8)
+varlive-on exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR with the 
+varlive-switch exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR with the 
+varlive-off exit=1 6s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR lit%2C go
+varlive-allkinds exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/clubManagerVarLive.test.tsx,title=src/test/clubManagerVarLive.test.tsx > Club Manager%3A VAR lit%2C go
+ledger exit=0 1s | simCmVarLedger: all 691 checks passed.
+gencheck exit=0 0s | genCmVarRates --check: 3 file(s) in step with the ledgers.
+l-thin exit=0 1s | simCmVarLedger control thin: FIRED (goalsRuledOut is modelled but THIN (1 publisher(s) on 2 host(s) counted it, a rate needs two))
+l-wiki exit=0 1s | simCmVarLedger control wiki: FIRED (espn-pl-2022-23: https://en.wikipedia.org/wiki/Video_assistant_referee is a wiki)
+l-figure exit=0 1s | simCmVarLedger control figure: FIRED (espn-pl-2024-25: goalsRuledOut 48 is not printed in its literals)
+l-missing exit=0 1s | simCmVarLedger control missing: FIRED (league:premier is not in the ledger)
+l-extra exit=0 1s | simCmVarLedger control extra: FIRED (league:atlantis is in the ledger and the engine cannot play it)
+l-onesource exit=0 1s | simCmVarLedger control onesource: FIRED (league:seriea says yes and stands on fewer than two publishers)
+l-receipt exit=0 1s | simCmVarLedger control receipt: FIRED (scripts/data/cmVarRates.receipt.json does not carry the hash of scripts/data/cmVarRates.json)
+l-handedit exit=0 1s | simCmVarLedger control handedit: FIRED (src/data/clubManagerVarRates.ts is not what the generator writes (a hand edit, or a ledger changed without the generator))
+l-highest exit=0 1s | simCmVarLedger control highest: FIRED (goalReview is not the stricter count, the lowest reading on file over the engine figure (0.060582 against 0.030501))
+l-names exit=0 1s | simCmVarLedger control names: FIRED (the help would name Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Li
+l-owedlive exit=0 1s | simCmVarLedger control owedlive: FIRED (CM_VAR_LIVE is true while the rates ledger still owes: no kind of review is played (goal: held by control; penalty: held by penalt
+l-stage exit=0 1s | simCmVarLedger control stage: FIRED (the help would name Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Eredivisie, Primeira Liga, Scottish Premiership, Süper Li
+l-unread exit=0 1s | simCmVarLedger control unread: FIRED (notRead still lists FA Cup: every competition has to be read and filed as a row)
+l-disagree exit=0 1s | simCmVarLedger control disagree: FIRED (goalsRuledOut is modelled and its readings do not agree within a factor of two (0.075163 to 0.152632 a match))
+tsc exit=0 52s | 
+l-receiptsilent exit=0 1s | simCmVarLedger control receiptsilent: FIRED (the rates receipt does not say that the publishers of goalsRuledOut count different leagues or seasons)
+l-kindon exit=0 1s | simCmVarLedger control kindon: FIRED (the penalty kind is on in the ledger while an open owed entry holds it (penalties-total))
+l-kindline exit=0 1s | simCmVarLedger control kindline: FIRED (CM_VAR_KINDS on disk plays goal, penalty and the ledger plays goal)
+l-gametrue exit=0 1s | simCmVarLedger control gametrue: FIRED (src/hooks/useClubManager.ts hands the engine varReviews: true, which stages every kind of review: the game asks with cmVarGameAsk)
+l-helprate exit=0 1s | simCmVarLedger control helprate: FIRED (the help states a number that is not the game's own in its VAR block (23, 306, 2023/24): the Help never states a real league's rat
+varscreen exit=0 71s |       Tests  46 passed (46)

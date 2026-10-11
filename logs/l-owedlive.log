@@ -1,0 +1,1 @@
+simCmVarLedger control owedlive: FIRED (CM_VAR_LIVE is true while the rates ledger still owes: no kind of review is played (goal: held by control; penalty: held by penalties-total, control))
