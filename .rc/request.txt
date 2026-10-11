@@ -1,0 +1,16 @@
+# Review (run lens) of Round 1212 on 1e1066fb: the other walks that open the MLB hub (not rerun by the builder on its last code commit)
+#!serve
+#!playwright
+#!serial
+playCareerHub: ENGINES=chromium node scripts/playCareerHub.mjs
+playSeasonReveal: ENGINES=chromium node scripts/playSeasonReveal.mjs
+playExtension: ENGINES=chromium node scripts/playExtension.mjs
+playFreeAgency: ENGINES=chromium node scripts/playFreeAgency.mjs
+playDepthChart: ENGINES=chromium node scripts/playDepthChart.mjs
+playUsCareerSaveSeam: ENGINES=chromium node scripts/playUsCareerSaveSeam.mjs
+playDraftNight: ENGINES=chromium node scripts/playDraftNight.mjs
+playReducedMotion: ENGINES=chromium node scripts/playReducedMotion.mjs
+simMobileChrome: node scripts/simMobileChrome.mjs
+playGames-mlb: ONLY=/mlb-my-career ENGINES=chromium node scripts/playGames.mjs
+sweepGames-mlb: ONLY=/mlb-my-career ENGINES=chromium SIZES=phone,desktop node scripts/sweepGames.mjs
+sweepWeight: SWEEP_OFFLINE=1 node scripts/sweepWeight.mjs
