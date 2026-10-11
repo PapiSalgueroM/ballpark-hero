@@ -1,0 +1,4 @@
+simHarnessAnchors exit=0 45s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+gitclean exit=0 1s | 0
+simUsCareerDeckC exit=0 52s | simUsCareerDeckC: all checks passed
+tsc exit=0 65s | 

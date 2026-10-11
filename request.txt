@@ -1,0 +1,5 @@
+# Release AW closing pass, on the final head: the one harness that reads the file the last merge brought, the type gate, and the three fences that read scripts
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+simUsCareerDeckC: node scripts/simUsCareerDeckC.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+gitclean: git status --porcelain --untracked-files=no | wc -l
