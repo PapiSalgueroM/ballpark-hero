@@ -1033,3 +1033,57 @@ describe('Club Manager: the last kick of a half (finding 6 of Round 1302, mended
     expect(mounted.callbacks.onMark.mock.calls).toEqual([[45]]);
   }, 240000);
 });
+
+/* ---- Round 1303 fix: the match's own help says what the kinds of review THIS match plays do ----
+   The run review of Round 1303 turned `penalties` on for any list of kinds (a goals only match then tells the
+   player of a penalty a review gives) and every unit file and harness of the round stayed green: those words were
+   held only by the browser walk, which needs a build that plays a kind. They are held here, on the real screen,
+   for the three states a saved match can be in. And no help of a match names a real season or prints a number of
+   its own about reviews (the lead's decision 1: the Help never states a real league's rate). */
+describe('Club Manager: the match help follows the kinds of review the match was kicked off with', () => {
+  function helpOf(ask: Parameters<typeof playNextEntry>[1]): { text: string; parts: string[]; live: LiveMatch } {
+    for (const seed of [1701, 1702, 1703, 1704, 1705, 1706]) {
+      const res = seeded(seed, () => playNextEntry(entry(0), ask));
+      if (res.kind !== 'halftime' || !res.state.live) continue;
+      const mounted = mount(structuredClone(res.state));
+      fireEvent.click(mounted.getByRole('button', { name: 'How watching a match works' }));
+      const help = mounted.container.querySelector('[data-cm-live-help]');
+      const text = help?.textContent ?? '', parts = [...(help?.querySelectorAll('li, p') ?? [])].map(el => el.textContent ?? '');
+      cleanup();
+      return { text, parts, live: res.state.live };
+    }
+    throw new Error('no first half of the opener was kicked off');
+  }
+  const PENALTY_WORDS = ['A penalty a review gives', 'can become a penalty', 'goals and penalties', 'penalty calls only', 'a review gives a penalty'];
+
+  it('a match that reviews goals only says so, and says nothing of a penalty by review', () => {
+    const { text, live } = helpOf({ varReviews: ['goal'] });
+    expect(live.varKinds).toEqual(['goal']);
+    expect(text).toContain('VAR here reviews goals only, and you only see a review that changed the call.');
+    expect(text).toContain('A goal that gets ruled out goes in first');
+    expect(text).toContain('VAR example: At 0-0 the ball goes in, a check opens and the goal is ruled out. It stays 0-0 and nobody gets a goal.');
+    for (const words of PENALTY_WORDS) expect(text, `a goals only match tells of "${words}"`).not.toContain(words);
+    expect(text).toContain('The score changes when the ball is in the net, not before.');
+  });
+
+  it('a match kicked off with every kind says both, and one nobody asked a review in says nothing about VAR', () => {
+    const all = helpOf({ varReviews: true });
+    expect(all.text).toContain('VAR here reviews goals and penalties only');
+    expect(all.text).toContain('A foul the referee missed can become a penalty');
+    expect(all.text).toContain('A penalty a review gives waits for the review first.');
+    const none = helpOf({});
+    expect('varReviews' in none.live).toBe(false);
+    expect(none.text).toContain('Watching the match');
+    expect(none.text).not.toContain('VAR');
+    for (const words of PENALTY_WORDS) expect(none.text).not.toContain(words);
+  });
+
+  it('no help of a match names a season or prints a figure about reviews', () => {
+    for (const help of [helpOf({ varReviews: ['goal'] }), helpOf({ varReviews: true })]) {
+      const about = help.parts.filter(part => part.includes('VAR') || part.includes('review'));
+      expect(about.length, 'the lines of the help that are about reviews').toBeGreaterThanOrEqual(2);
+      /* The only digits a line about reviews may hold are the 0-0 of its worked example. */
+      for (const part of about) expect(part.replace(/0-0/g, ''), `a figure in "${part}"`).not.toMatch(/[0-9]/);
+    }
+  });
+});
