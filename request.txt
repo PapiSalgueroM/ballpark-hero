@@ -1,0 +1,23 @@
+# Release AW part one, fix pass, proof 1: the type gate, the whole unit suite, the touched tests alone, the fences the task names, the touched harnesses, the flags fence with three controls, and LAST five mutations on the runner's copy (each put back)
+#!serial
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-touched: node_modules/.bin/vitest run src/test/soccerTransferBriefPromise.test.tsx src/test/soccerFarewellOneBanner.test.tsx src/test/soccerMoneyLineGrouped.test.ts src/test/soccerOfferReviewAgeRule.test.tsx src/test/soccerInternationalReturn.test.ts src/test/soccerInternationalReturnUi.test.tsx src/test/soccerInternationalReturnPage.test.tsx src/test/soccerCareerFarewell.test.ts src/test/soccerFarewellUi.test.tsx src/test/soccerFarewellPage.test.tsx src/test/soccerCareerContracts.test.ts --testTimeout=300000 --hookTimeout=300000
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simStorageWrites: node scripts/simStorageWrites.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
+simLegalPages: node scripts/simLegalPages.mjs
+simSoccerCurrency: node scripts/simSoccerCurrency.mjs
+simSoccerOfferReview: node scripts/simSoccerOfferReview.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simNationalityFlags: node scripts/simNationalityFlags.mjs
+flags-owedstale-EXPECT-RED: NATIONALITY_FLAGS_CONTROL=owedstale node scripts/simNationalityFlags.mjs
+flags-owedsecond-EXPECT-RED: NATIONALITY_FLAGS_CONTROL=owedsecond node scripts/simNationalityFlags.mjs
+flags-bare-EXPECT-RED: NATIONALITY_FLAGS_CONTROL=bare node scripts/simNationalityFlags.mjs
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+mut-banner-EXPECT-RED: node .rc/x/fxMut.mjs banner && node_modules/.bin/vitest run src/test/soccerFarewellOneBanner.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-group-EXPECT-RED: node .rc/x/fxMut.mjs group && node_modules/.bin/vitest run src/test/soccerMoneyLineGrouped.test.ts --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-brief4b-EXPECT-RED: node .rc/x/fxMut.mjs brief4b && node_modules/.bin/vitest run src/test/soccerTransferBriefPromise.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-agerule-EXPECT-RED: node .rc/x/fxMut.mjs agerule && node_modules/.bin/vitest run src/test/soccerOfferReviewAgeRule.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+mut-agepolicy-EXPECT-RED: node .rc/x/fxMut.mjs agepolicy && node_modules/.bin/vitest run src/test/soccerOfferReviewAgeRule.test.tsx --testTimeout=300000; s=$?; git checkout -- src scripts; exit $s
+clean-check: git diff --quiet -- src scripts && echo "the runner's copy is back to the pushed head"

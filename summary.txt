@@ -1,0 +1,21 @@
+tsc exit=0 62s | 
+vitest-touched exit=0 10s |    Duration  9.50s (transform 2.57s, setup 668ms, collect 9.32s, tests 9.04s, environment 4.63s, prepare 1.22s)
+simNoRivalNames exit=0 12s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 36s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simStorageWrites exit=0 2s | simStorageWrites: all green (owed: 12)
+simNoInventedQuotes exit=0 18s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+simLegalPages exit=0 0s | simLegalPages: all green
+simSoccerCurrency exit=0 5s | simSoccerCurrency: green. The money reads in your currency and the game underneath it never noticed.
+simSoccerOfferReview exit=0 7s | Soccer offer review: passed.
+simAccessibility exit=0 0s | simAccessibility: all green
+simNationalityFlags exit=0 1s | simNationalityFlags: green. Every nationality the site prints wears its flag (owed: 1), no code stands in for a name, and the long lists sit under their confederation.
+flags-owedstale-EXPECT-RED exit=0 1s | simNationalityFlags control: green. src/components/soccer-career/TrophyCabinet.tsx {career.nationality} got its flag in memory and its OWED_BARE entry was called stale (1
+flags-owedsecond-EXPECT-RED exit=0 1s | simNationalityFlags control: green. The second bare print was named as src/components/soccer-career/TrophyCabinet.tsx:210 and the entry still covers the first one only (1
+flags-bare-EXPECT-RED exit=0 1s | simNationalityFlags control: green. The bare site was reported and named as src/pages/HigherLower.tsx:204 (1 finding).
+vitest-all exit=0 605s |    Duration  604.05s (transform 32.36s, setup 26.81s, collect 163.92s, tests 1295.48s, environment 194.41s, prepare 40.62s)
+mut-banner-EXPECT-RED exit=1 4s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerFarewellOneBanner.test.tsx,title=src/test/soccerFarewellOneBanner.test.tsx > A farewell season i
+mut-group-EXPECT-RED exit=1 1s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerMoneyLineGrouped.test.ts,title=src/test/soccerMoneyLineGrouped.test.ts > the contract talk line 
+mut-brief4b-EXPECT-RED exit=1 3s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerTransferBriefPromise.test.tsx,title=src/test/soccerTransferBriefPromise.test.tsx > An offer that
+mut-agerule-EXPECT-RED exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerOfferReviewAgeRule.test.tsx,title=src/test/soccerOfferReviewAgeRule.test.tsx > the contract revi
+mut-agepolicy-EXPECT-RED exit=1 2s | ::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerOfferReviewAgeRule.test.tsx,title=src/test/soccerOfferReviewAgeRule.test.tsx > the contract revi
+clean-check exit=0 0s | the runner's copy is back to the pushed head

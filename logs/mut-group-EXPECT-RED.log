@@ -1,0 +1,37 @@
+MUTATION APPLIED (group): the grouped money line stops grouping
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerMoneyLineGrouped.test.ts [2m([22m[2m4 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 13[2mms[22m[39m
+   [32m✓[39m the contract talk line the page prints from 30[2m > [22mthe engine still writes the bare euro figure the save holds[32m 2[2mms[22m[39m
+[31m   [31m×[31m the contract talk line the page prints from 30[2m > [22min euros the page line has its commas, on the label and on the wheel line[39m[32m 7[2mms[22m[39m
+[31m     → expected 'Wage €280997/wk' to be 'Wage €280,997/wk' // Object.is equality[39m
+   [32m✓[39m the contract talk line the page prints from 30[2m > [22ma line with nothing to group comes back as typed[32m 0[2mms[22m[39m
+   [32m✓[39m the contract talk line the page prints from 30[2m > [22min every other currency the line is exactly what the page printed before, with no euro left[32m 4[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerMoneyLineGrouped.test.ts[2m > [22mthe contract talk line the page prints from 30[2m > [22min euros the page line has its commas, on the label and on the wheel line
+[31m[1mAssertionError[22m: expected 'Wage €280997/wk' to be 'Wage €280,997/wk' // Object.is equality[39m
+
+Expected: [32m"Wage €280[7m,[27m997/wk"[39m
+Received: [31m"Wage €280997/wk"[39m
+
+[36m [2m❯[22m src/test/soccerMoneyLineGrouped.test.ts:[2m36:50[22m[39m
+    [90m 34| [39m    const raise = soccerWageDemand(elite), held = soccerWageDemand(fad…
+    [90m 35| [39m    [34mexpect[39m(raise[33m.[39mweeklyWage)[33m.[39m[34mtoBe[39m([34m280997[39m)[33m;[39m
+    [90m 36| [39m    expect(localizeMoneyGrouped(raise.hit, EUR)).toBe('Wage €280,997/w…
+    [90m   | [39m                                                 [31m^[39m
+    [90m 37| [39m    expect(localizeMoneyGrouped(soccerEventChoiceConsequence(elite, 16…
+    [90m 38| [39m      [33m.[39m[34mtoBe[39m([32m'50% chance: Wage €280,997/wk or relationship damaged'[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (4)[39m
+[2m   Start at [22m 15:29:56
+[2m   Duration [22m 791ms[2m (transform 49ms, setup 52ms, collect 37ms, tests 13ms, environment 297ms, prepare 143ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerMoneyLineGrouped.test.ts,title=src/test/soccerMoneyLineGrouped.test.ts > the contract talk line the page prints from 30 > in euros the page line has its commas%2C on the label and on the wheel line,line=36,column=50::AssertionError: expected 'Wage €280997/wk' to be 'Wage €280,997/wk' // Object.is equality%0A%0AExpected: "Wage €280,997/wk"%0AReceived: "Wage €280997/wk"%0A%0A ❯ src/test/soccerMoneyLineGrouped.test.ts:36:50%0A%0A

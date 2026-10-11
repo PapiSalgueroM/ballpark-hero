@@ -1,0 +1,69 @@
+MUTATION APPLIED (banner): the old FINAL SEASON banner is drawn beside the farewell card again
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+ [31m❯[39m src/test/soccerFarewellOneBanner.test.tsx [2m([22m[2m3 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 312[2mms[22m[39m
+[31m   [31m×[31m A farewell season is announced by one box on the page[2m > [22mon the playing screen an announced plan shows its card and no second banner[39m[32m 175[2mms[22m[39m
+[31m     → expected { announced: 1, available: +0, …(1) } to deeply equal { announced: 1, available: +0, …(1) }[39m
+[31m   [31m×[31m A farewell season is announced by one box on the page[2m > [22mon the season summary of the final year the card is still the only one[39m[32m 94[2mms[22m[39m
+[31m     → expected { announced: 1, available: +0, …(1) } to deeply equal { announced: 1, available: +0, …(1) }[39m
+   [32m✓[39m A farewell season is announced by one box on the page[2m > [22ma player of 34 with no plan is offered the farewell once and told nothing yet[32m 41[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 2 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerFarewellOneBanner.test.tsx[2m > [22mA farewell season is announced by one box on the page[2m > [22mon the playing screen an announced plan shows its card and no second banner
+[31m[1mAssertionError[22m: expected { announced: 1, available: +0, …(1) } to deeply equal { announced: 1, available: +0, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "announced": 1,[22m
+[2m    "available": 0,[22m
+[32m-   "banner": false,[39m
+[31m+   "banner": true,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerFarewellOneBanner.test.tsx:[2m126:39[22m[39m
+    [90m124| [39m    expect(readSoccerFarewell(saved)?.year, 'the fixture really holds …
+    [90m125| [39m    expect(saved.isFinalSeason, 'and the flag the old banner reads is …
+    [90m126| [39m    expect(boxes(mount(copy(saved)))).toEqual({ announced: 1, availabl…
+    [90m   | [39m                                      [31m^[39m
+    [90m127| [39m  })[33m;[39m
+    [90m128| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/soccerFarewellOneBanner.test.tsx[2m > [22mA farewell season is announced by one box on the page[2m > [22mon the season summary of the final year the card is still the only one
+[31m[1mAssertionError[22m: expected { announced: 1, available: +0, …(1) } to deeply equal { announced: 1, available: +0, …(1) }[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[2m  {[22m
+[2m    "announced": 1,[22m
+[2m    "available": 0,[22m
+[32m-   "banner": false,[39m
+[31m+   "banner": true,[39m
+[2m  }[22m
+
+[36m [2m❯[22m src/test/soccerFarewellOneBanner.test.tsx:[2m133:33[22m[39m
+    [90m131| [39m    [34mexpect[39m([34mreadSoccerFarewell[39m(saved)[33m?.[39myear)[33m.[39m[34mtoBe[39m([34m2027[39m)[33m;[39m
+    [90m132| [39m    [34mexpect[39m(saved[33m.[39misFinalSeason)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m133| [39m    expect(boxes(mount(saved))).toEqual({ announced: 1, available: 0, …
+    [90m   | [39m                                [31m^[39m
+    [90m134| [39m  })[33m;[39m
+    [90m135| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 15:29:51
+[2m   Duration [22m 3.26s[2m (transform 1.63s, setup 52ms, collect 2.21s, tests 312ms, environment 297ms, prepare 120ms)[22m
+
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerFarewellOneBanner.test.tsx,title=src/test/soccerFarewellOneBanner.test.tsx > A farewell season is announced by one box on the page > on the playing screen an announced plan shows its card and no second banner,line=126,column=39::AssertionError: expected { announced: 1, available: +0, …(1) } to deeply equal { announced: 1, available: +0, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "announced": 1,%0A    "available": 0,%0A-   "banner": false,%0A+   "banner": true,%0A  }%0A%0A ❯ src/test/soccerFarewellOneBanner.test.tsx:126:39%0A%0A
+
+::error file=/home/runner/work/ballpark-hero/ballpark-hero/src/test/soccerFarewellOneBanner.test.tsx,title=src/test/soccerFarewellOneBanner.test.tsx > A farewell season is announced by one box on the page > on the season summary of the final year the card is still the only one,line=133,column=33::AssertionError: expected { announced: 1, available: +0, …(1) } to deeply equal { announced: 1, available: +0, …(1) }%0A%0A- Expected%0A+ Received%0A%0A  {%0A    "announced": 1,%0A    "available": 0,%0A-   "banner": false,%0A+   "banner": true,%0A  }%0A%0A ❯ src/test/soccerFarewellOneBanner.test.tsx:133:33%0A%0A
