@@ -147,31 +147,50 @@ const read = (): any => JSON.parse(raw());
 
 afterEach(() => { cleanup(); Math.random = REAL_RANDOM; localStorage.clear(); });
 
+
+/* The press is seeded 11, as in the shared season close test. A title is
+   three or four playoff wins at about 0.95 each for a roster of 99s, so one
+   seed does not always give one: the title case takes the FIRST seed from
+   11 up whose season his club wins, and the seed it took is recorded with
+   the digests (a head that needed another seed has moved a winner). */
+const PRESS_SEED = 11;
+const TITLE_SEEDS = 8;
+
 for (const kind of KINDS) {
   for (const desk of [false, true]) {
     describe(`NFL front office, ${kind} league, GM desk ${desk ? 'on' : 'off'}: one press of the final week`, () => {
       for (const ending of ENDINGS) {
         const id = `${kind}|desk ${desk ? 'on' : 'off'}|${ending}`;
         it(`${ending}: the save at the recap, the draft and the next season's hub is the base's`, async () => {
-          localStorage.clear();
-          const G = await freshGame();
-          const { save, team } = finalWeekSave(G, kind, desk, ending);
-          localStorage.setItem(SAVE_KEY, JSON.stringify(save));
-          useRandom(lehmer(11));
-
           /* point one: the final week and the whole postseason, one press */
-          const first = render(<G.Board />);
-          fireEvent.click(screen.getByText('This week'));
-          fireEvent.click(screen.getByText('Play the final week + playoffs'));
-          const recap = read();
+          let G!: Awaited<ReturnType<typeof freshGame>>;
+          let team = '';
+          let recap: any = null;
+          let took: Ending = 'ordinary';
+          let seed = PRESS_SEED;
+          for (; seed < PRESS_SEED + (ending === 'title' ? TITLE_SEEDS : 1); seed += 1) {
+            cleanup();
+            localStorage.clear();
+            G = await freshGame();
+            const made = finalWeekSave(G, kind, desk, ending);
+            team = made.team;
+            localStorage.setItem(SAVE_KEY, JSON.stringify(made.save));
+            useRandom(lehmer(seed));
+            const first = render(<G.Board />);
+            fireEvent.click(screen.getByText('This week'));
+            fireEvent.click(screen.getByText('Play the final week + playoffs'));
+            recap = read();
+            took = recap.fired ? 'fired' : recap.postseason.champion === team ? 'title' : 'ordinary';
+            first.unmount();
+            if (took === ending) break;
+          }
+          console.log(`FO_ONE_PRESS_ENDING|${id}|took ${took}|press seed ${seed}|phase ${recap.phase}|champion ${recap.postseason.champion}|his club ${team} ${recap.league.teams[team].wins}-${recap.league.teams[team].losses}|trust ${recap.trust}`);
+          expect(took, `the ${ending} case of ${id} must take the ${ending} ending`).toBe(ending);
           expect(recap.seasonsPlayed).toBe(1);
           expect(recap.postseason.rounds.flatMap((r: any) => r.games)).toHaveLength(13);
-          const took: Ending = recap.fired ? 'fired' : recap.postseason.champion === team ? 'title' : 'ordinary';
-          console.log(`FO_ONE_PRESS_ENDING|${id}|took ${took}|phase ${recap.phase}|champion ${recap.postseason.champion}|his club ${team} ${recap.league.teams[team].wins}-${recap.league.teams[team].losses}|trust ${recap.trust}`);
-          expect(took, `the ${ending} case of ${id} must take the ${ending} ending`).toBe(ending);
+          hold(`${id}|press seed`, String(seed));
           hold(`${id}|winners`, recap.postseason.rounds.flatMap((r: any) => r.games.map((g: any) => g.winner)).join(','));
           hold(`${id}|recap`, onePressDigest(raw()));
-          first.unmount();
           if (took === 'fired') {
             expect(recap.phase).toBe('fired');
             return;
@@ -207,7 +226,8 @@ describe('the record', () => {
       console.log(`FO_ONE_PRESS_RECORD ${printed.length} values\n${printed.join('\n')}`);
       return;
     }
-    /* four league and desk pairs, each: two endings at three points and a firing at one, and the thirteen winners of each */
-    expect(Object.keys(RECORDED)).toHaveLength(4 * (3 + 3 + 1 + 3));
+    /* four league and desk pairs, each: two endings at three points and a firing at one, and the press seed and the
+       thirteen winners of each of the three */
+    expect(Object.keys(RECORDED)).toHaveLength(4 * (3 + 3 + 1 + 3 + 3));
   });
 });
