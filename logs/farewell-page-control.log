@@ -1,0 +1,6 @@
+PASS copied page baseline:13 complete-state and callback cases.
+CONTROL FIRED announcement-reentry:1 actual callback equality failures,12 unrelated actual page cases pass.
+CONTROL FIRED advance-reentry:2 actual callback equality failures,11 unrelated actual page cases pass.
+CONTROL FIRED component-reentry:1 actual consume-once assertion,13 unrelated UI cases pass,14 healthy baseline cases.
+PASS farewell copied source held and complete evidence retained.
+PASS farewell page-control: {"mode":"page-control","baseline":13,"componentBaseline":14,"componentSourceControls":1,"pageSourceControls":2,"intendedFailures":[{"id":"announcement-reentry","failed":["resumes the already-aged suggestion exactly once for two captured page announcement callbacks"],"unrelatedPassed":12},{"id":"advance-reentry","failed":["plays one complete final year and draw vector for two captured Next Season clicks","banks a genuine open moment and plays one final year for two captured asynchronous Next Season clicks"],"unrelatedPassed":11}]}
