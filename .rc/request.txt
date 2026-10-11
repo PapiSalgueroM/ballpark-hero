@@ -1,0 +1,22 @@
+# Release AU proof, Round 1218: VAR dark, the ledger, the bands
+cmvar-all: CM_VAR_ARTIFACTS=/tmp/all CM_VAR_CONTROL=all node scripts/simCmVar.mjs
+ledger: node scripts/simCmVarLedger.mjs
+l-thin: CM_VAR_LEDGER_CONTROL=thin node scripts/simCmVarLedger.mjs
+l-wiki: CM_VAR_LEDGER_CONTROL=wiki node scripts/simCmVarLedger.mjs
+l-figure: CM_VAR_LEDGER_CONTROL=figure node scripts/simCmVarLedger.mjs
+l-missing: CM_VAR_LEDGER_CONTROL=missing node scripts/simCmVarLedger.mjs
+l-extra: CM_VAR_LEDGER_CONTROL=extra node scripts/simCmVarLedger.mjs
+l-onesource: CM_VAR_LEDGER_CONTROL=onesource node scripts/simCmVarLedger.mjs
+l-receipt: CM_VAR_LEDGER_CONTROL=receipt node scripts/simCmVarLedger.mjs
+l-handedit: CM_VAR_LEDGER_CONTROL=handedit node scripts/simCmVarLedger.mjs
+l-highest: CM_VAR_LEDGER_CONTROL=highest node scripts/simCmVarLedger.mjs
+l-names: CM_VAR_LEDGER_CONTROL=names node scripts/simCmVarLedger.mjs
+l-owedlive: CM_VAR_LEDGER_CONTROL=owedlive node scripts/simCmVarLedger.mjs
+gencheck: node scripts/genCmVarRates.mjs --check
+varscreen: node_modules/.bin/vitest run src/test/clubManagerVarScreen.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive: node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+varlive-on: CM_VAR_LIVE_CONTROL=on node_modules/.bin/vitest run src/test/clubManagerVarLive.test.tsx --testTimeout=300000 --hookTimeout=120000
+save10: r=0; for i in 1 2 3 4 5 6 7 8 9 10; do node_modules/.bin/vitest run src/test/clubManagerSave.test.tsx --testTimeout=300000 --hookTimeout=120000 > /tmp/save-$i.log 2>&1 || r=$((r+1)); done; echo "clubManagerSave alone, reviews off: $r of 10 runs red"; exit $r
+simDailyDeals: node scripts/simDailyDeals.mjs
+simDailyDeals-bind: DAILY_DEALS_CONTROL=bind node scripts/simDailyDeals.mjs
+simDailyDeals-binddeadline: DAILY_DEALS_CONTROL=binddeadline node scripts/simDailyDeals.mjs
