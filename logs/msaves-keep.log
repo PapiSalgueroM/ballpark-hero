@@ -1,0 +1,5 @@
+probe: head tree has actingClubsByLeague=true; base cbfa94fd has it=false
+MSAVES) modern saves written mid season by the base engine, loaded by fresh engines
+   27 modern saves (keep real fixtures key: true): fresh base against fresh head 27 byte equal, 0 differ
+   control, base that played the career against base that only loaded it: 1 equal, 26 differ (a difference here is the probe, or the base, never the round)
+probe: done
