@@ -1,0 +1,51 @@
+
+[1m[46m RUN [49m[22m [36mv3.2.7 [39m[90m/home/runner/work/ballpark-hero/ballpark-hero[39m
+
+Browserslist: browsers data (caniuse-lite) is 16 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ [2m[90m↓[39m[22m src/test/usBoardFixture.test.tsx [2m([22m[2m4 tests[22m[2m | [22m[33m4 skipped[39m[2m)[22m
+ [32m✓[39m src/test/usSeasonNfl.test.ts [2m([22m[2m35 tests[22m[2m)[22m[33m 1942[2mms[22m[39m
+   [33m[2m✓[22m[39m nflDrives[2m > [22mmakes every score from 0 to 70, with 0 to 5 touchdowns of his and every exact field goal count [33m 365[2mms[22m[39m
+   [33m[2m✓[22m[39m an NFL season, derived from its saved line[2m > [22mlands every total of every position, game by game, with drives that make each score [33m 372[2mms[22m[39m
+   [33m[2m✓[22m[39m the feed, minute by minute[2m > [22mnever puts two lines in back to back minutes, or two scoring drives of one side under three minutes apart, where the hour has room [33m 360[2mms[22m[39m
+ [32m✓[39m src/test/careerHall.test.tsx [2m([22m[2m43 tests[22m[2m)[22m[33m 780[2mms[22m[39m
+ [32m✓[39m src/test/usSeason.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 688[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1103: an NBA career plays the season the ledger holds[2m > [22mplays the ledger length in every year the ledger holds one, and 82 in a year it holds none for [33m 478[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentre.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[33m 1876[2mms[22m[39m
+   [33m[2m✓[22m[39m the US Season Center, mounted by itself[2m > [22mwalks an NBA season from the tip off card to the review and closes [33m 503[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonMlb.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 6952[2mms[22m[39m
+   [33m[2m✓[22m[39m mlbScore[2m > [22mis never level, and its runs a team game sit on the ledger mean of each era at even strength [33m 995[2mms[22m[39m
+   [33m[2m✓[22m[39m the innings of a game[2m > [22mspreads a side's runs the way the score law draws an inning: they add up, the minimums hold, nothing passes nine [33m 2556[2mms[22m[39m
+   [33m[2m✓[22m[39m the at bats and hits a batting average allows[2m > [22mwalks the whole grid the engine can write and finds a fit for all but the 25 pairs no whole numbers make [33m 569[2mms[22m[39m
+   [33m[2m✓[22m[39m a season derived from its saved line[2m > [22mlands every hitter position on the save in both eras: the sums, the average, the innings [33m 2483[2mms[22m[39m
+[90mstdout[2m | src/test/careerHallSaves1301.test.ts[2m > [22m[2mRound 1301: a career the old code retired keeps the calibration and the ballot it was told[2m > [22m[2mthe stamp is what keeps them: read on calibration 3 instead, NHL careers of the set score lower and Hall of Famers fall out
+[22m[39mcareerHallSaves1301 main: of 16 retired NHL saves, on calibration 3 11 would score lower, 0 higher, 2 Hall of Famers would fall out, 0 would come in; of 4 open careers 4 are scored lower on 3 than the old code would have
+careerHallSaves1301 r1226: of 16 retired NHL saves, on calibration 3 10 would score lower, 1 higher, 3 Hall of Famers would fall out, 0 would come in; of 4 open careers 3 are scored lower on 3 than the old code would have
+
+ [32m✓[39m src/test/careerHallSaves1301.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 185[2mms[22m[39m
+ [32m✓[39m src/test/usRivalLine.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 460[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreScreens.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 2954[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mdraws every screen exactly as the base did [33m 872[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: a group label changed moves a recorded screen [33m 569[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the halfway line changed moves a recorded screen [33m 395[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the first tile's label changed moves a recorded screen [33m 497[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: a review note changed moves a recorded screen [33m 315[2mms[22m[39m
+   [33m[2m✓[22m[39m the NBA and NFL Season Center screens, recorded on the base of Round 1212[2m > [22mcontrol: the help's footnote changed moves a recorded screen [33m 305[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonSlate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m src/test/usSeasonCentreEntry.test.tsx [2m([22m[2m64 tests[22m[2m)[22m[33m 15546[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 3617[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NBA' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 792[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 2392[2mms[22m[39m
+   [33m[2m✓[22m[39m 'NFL' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 791[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22msaves the same bytes after every press whether he presses Play or Week by week [33m 2858[2mms[22m[39m
+   [33m[2m✓[22m[39m 'MLB' My Career: watching changes nothing[2m > [22mCONTROL: one extra Math.random in the press makes the twin saves differ [33m 1089[2mms[22m[39m
+ [32m✓[39m src/test/usRivalOldSaves.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m src/test/usCareerTruthDigest.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 38896[2mms[22m[39m
+   [33m[2m✓[22m[39m Round 1104: the US career truth digest[2m > [22mevery key equals the committed fixture, or moved only where this step is allowed to move it [33m 38895[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m12 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (13)[39m
+[2m      Tests [22m [1m[32m252 passed[39m[22m[2m | [22m[33m4 skipped[39m[90m (256)[39m
+[2m   Start at [22m 07:23:30
+[2m   Duration [22m 54.57s[2m (transform 4.37s, setup 1.04s, collect 12.30s, tests 70.35s, environment 5.85s, prepare 1.60s)[22m
+

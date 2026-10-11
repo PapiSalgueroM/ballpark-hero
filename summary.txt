@@ -1,0 +1,11 @@
+parity exit=0 49s | simUsBoardParity: green. Four sports replayed click for click, save for save and screen for screen.
+tsc exit=0 73s | 
+season-ledger exit=0 3s | simUsSeasonLedger: green. 3043 checks passed over 23 MLB and 21 NHL seasons; 7 notes for the binding rounds.
+season-centre exit=0 87s | simUsSeasonCentre: 158 checks, 0 failed
+postseason exit=0 16s | simUsPostseason: 26 checks, 0 failed, 0 findings for the lead
+simMlbCareer exit=0 12s | PASS: no crashes, every position produces stats, shop fully reachable, deck C reachable, era gates hold, words match effects, every life card tagged
+vitest-us exit=0 55s |    Duration  54.57s (transform 4.37s, setup 1.04s, collect 12.30s, tests 70.35s, environment 5.85s, prepare 1.60s)
+rival exit=0 19s | simUsRivalSense: 14 checks, 0 failed (full size)
+ctl-absix exit=1 14s | simUsSeasonCentre: 58 checks, 2 failed (control absix)
+hall-mlb exit=0 179s | simCareerHall mlb: all 34 checks green
+hall-nhl exit=0 303s | simCareerHall nhl: all 35 checks green
