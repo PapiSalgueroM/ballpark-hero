@@ -260,10 +260,16 @@ console.log('2) Three worlds (2026, 2015, 2010), and none of them leak');
   if (CONTROL === 'leak') {
     const eraOnly = Object.values(ERA2015_ROSTERS).flat().filter(p => !modernNames.has(p.n)).length;
     if (!eraOnly) controlRefuse('no 2015 man is missing from the modern world, so nobody could leak');
-    now = { ...now, eraId: 'era2015' };
-    console.log(`   CONTROL leak applied: the modern save reads the 2015 market (${eraOnly} era-only men could be on it)`);
+    /* The era AND its year, or the save would read the 2015 world as it
+       stands eleven seasons on, where most real men have retired. */
+    now = { ...now, eraId: 'era2015', startYear: ER.eraById('era2015').startYear };
   }
   const nowNames = new Set(buildMarket(now).map(p => p.name));
+  if (CONTROL === 'leak') {
+    const onIt = Object.values(ERA2015_ROSTERS).flat().filter(p => !modernNames.has(p.n) && nowNames.has(p.n)).length;
+    if (!onIt) controlRefuse('the market handed over holds no 2015-only man, so the control changed nothing');
+    console.log(`   CONTROL leak applied: the modern save reads the 2015 market at year zero, ${onIt} 2015-only men are on it`);
+  }
   let checked = 0, leaked = 0;
   for (const roster of Object.values(ERA2015_ROSTERS)) {
     for (const p of roster) {
