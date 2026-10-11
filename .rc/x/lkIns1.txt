@@ -1,0 +1,16 @@
+    /* PROBE (never committed): the scorer card of the last kick of the half, the real goal at the whistle's own place. */
+    const lkWhistle = 45 + (live.added?.h1 ?? 0);
+    const lkGoal = feed.filter(e => e.kind === 'goal').sort((a, b) => place(b) - place(a))[0];
+    const lkWant = goalsBy(lkWhistle);
+    console.log(`LASTKICK ${id}: the engine's last goal of the half is ${lkGoal ? `${lkGoal.side} ${cm.minuteLabel(lkGoal)} ${lkGoal.text} (clock place ${place(lkGoal)})` : 'none'}, the whistle is at clock place ${lkWhistle}, the score then is ${JSON.stringify(lkWant)}`);
+    const lastKick = w.page.waitForFunction(({ me, opp }) => {
+      const card = document.querySelector('[data-cm-goal-card]');
+      const n = side => Number(document.querySelector(`[data-cm-live-stagebox] [data-cm-score-of="${side}"]`)?.textContent);
+      return !!card && n('me') === me && n('opp') === opp;
+    }, lkWant, { timeout: 150000 }).then(async () => {
+      const text = await w.page.locator('[data-cm-goal-card]').first().innerText().catch(() => '');
+      const clock = await w.page.locator('[data-cm-live-stage]').first().evaluate(el => `${el.dataset.cmLiveMinute}+${el.dataset.cmLivePlus ?? 0}, stage ${el.dataset.cmLiveStage}`).catch(() => '?');
+      const varUp = await w.page.locator('[data-cm-var]').count();
+      const name = await w.shot(`${id}-0-last-kick-card`);
+      return { text: text.split('\n').join(' | '), clock, reviewCardUp: varUp, shot: name };
+    }).catch(error => ({ error: String(error).slice(0, 200) }));
