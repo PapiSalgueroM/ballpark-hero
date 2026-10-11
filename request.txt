@@ -1,0 +1,31 @@
+# Release AX, H1 (merges a and b, the pins, the league test) on c1a2b0fe: type gate, the WHOLE unit suite, the gate lines that read the touched files, PR231's kit
+#!build
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-all: node_modules/.bin/vitest run --testTimeout=300000 --hookTimeout=300000
+simLineupRecordPositions: LINEUP_RECORD_POSITIONS_OUT="$RC_OUT/xi-proof" NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simLineupRecordPositions.mjs
+simSeasonCentreAgreement: node scripts/simSeasonCentreAgreement.mjs
+simSeasonCentreNeutral: node scripts/simSeasonCentreNeutral.mjs
+simSeasonCentreTable: node scripts/simSeasonCentreTable.mjs
+simSeasonLaw: node scripts/simSeasonLaw.mjs
+simAccessibility: node scripts/simAccessibility.mjs
+simSeasonMoments: node scripts/simSeasonMoments.mjs
+simQuotaHonesty: node scripts/simQuotaHonesty.mjs
+simSeasonCentreMotion: node scripts/simSeasonCentreMotion.mjs
+simSeasonFamilySummary: node scripts/simSeasonFamilySummary.mjs
+simSoccerCareerLeagueWorld: node scripts/simSoccerCareerLeagueWorld.mjs
+simSoccerCareerOpponents: node scripts/simSoccerCareerOpponents.mjs
+simFlagshipWeight: node scripts/simFlagshipWeight.mjs
+simUsCareerWeight: node scripts/simUsCareerWeight.mjs
+simUsSeasonCentre: node scripts/simUsSeasonCentre.mjs
+simSoccerOwnGoals: CAREERS=120 SEEDSET=0 node scripts/simSoccerOwnGoals.mjs
+simSoccerCompetitionNavigation: node scripts/simSoccerCompetitionNavigation.mjs
+simSoccerDiscipline: node scripts/simSoccerDiscipline.mjs
+simSoccerLeagueWorldLookup: node scripts/simSoccerLeagueWorldLookup.mjs
+simSoccerSeasonAvailability: node scripts/simSoccerSeasonAvailability.mjs
+simUsPostseason: node scripts/simUsPostseason.mjs
+simCareerLeagueWorld: node scripts/simCareerLeagueWorld.mjs
+simBuildYourXiFit: node scripts/simBuildYourXiFit.mjs
+simValidatorRefusalHold: node scripts/simValidatorRefusalHold.mjs
+simLineupValidatorClient: node scripts/simLineupValidatorClient.mjs
+simSiteSearch: node scripts/simSiteSearch.mjs
+# MISSING simWhatsNew
