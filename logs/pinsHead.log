@@ -1,0 +1,11 @@
+AT HEAD = f9b729354 2026-10-11 rc request r1304-s2 for f17dec1b16f5ede6a02337e76e93c737e655484b
+order ["era2010","era2015","era2005","era2020"] keys ["era2010","era2015","era2005","era2020"]
+PIN Wigan Athletic: reads premier2010; eras era2010,era2005; modern league no
+PIN Zaragoza: reads laliga2010; eras era2010,era2005; modern league no
+PIN Chievo Verona: reads seriea2010; eras era2010,era2015,era2005; modern league no
+PIN Bordeaux: reads ligue12010; eras era2010,era2015,era2005,era2020; modern league no
+PIN Caen: reads ligue12010; eras era2010,era2015; modern league no
+PIN Leicester City: reads premier2015; eras era2015,era2020; modern league no
+PIN Cádiz: reads segunda; eras era2005,era2020; modern league yes
+era-only 29, in two or more eras 6
+pins1304 done

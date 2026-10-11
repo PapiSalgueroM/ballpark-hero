@@ -1,0 +1,14 @@
+simEra2015 exit=0 17s | simEra2015: green. 2015 is real, sealed, and plays like 2015.
+simEra2010 exit=0 18s | simEra2010: green. 2010 is real, sealed, and plays like 2010.
+simEra2005 exit=0 20s | simEra2005: green. 2005 is real, sealed, and plays like 2005.
+simStatsCentre exit=0 3s | ALL STATS CENTRE CHECKS PASSED
+simEraBakeExtend exit=0 0s | simEraBakeExtend: green. The shared extend step still fails closed on every guard.
+simEraWorldTables exit=0 2s | simEraWorldTables: green. Era worlds play, the picker lists the truth, and the knockout takes the top twos.
+simEra2020 exit=0 13s | simEra2020: green. 2020-21 is real, sealed, and plays like 2020-21.
+simNoRivalNames exit=0 21s | No rival product names found. 0 findings.
+pins971 exit=0 1s | pins1304 done
+pinsPre1035 exit=0 1s | pins1304 done
+pinsPre1040seg exit=0 1s | pins1304 done
+pinsHead exit=0 1s | pins1304 done
+simHarnessAnchors exit=0 44s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simEras exit=0 786s | ALL ERA AND AGEING CHECKS PASSED

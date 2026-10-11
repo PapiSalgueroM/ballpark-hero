@@ -1,0 +1,11 @@
+AT 709e103f = 709e103f5 2026-10-06 Round 1035: Club Manager's value curve lifted into scripts/lib/cmValueCurve.mjs, the bake imports it
+order ["era2010","era2015","era2005","era2020"] keys ["era2010","era2015","era2005","era2020"]
+PIN Wigan Athletic: reads premier2010; eras era2010,era2005; modern league no
+PIN Zaragoza: reads laliga2010; eras era2010,era2005; modern league no
+PIN Chievo Verona: reads seriea2010; eras era2010,era2015,era2005; modern league no
+PIN Bordeaux: reads ligue12010; eras era2010,era2015,era2005,era2020; modern league no
+PIN Caen: reads ligue12010; eras era2010,era2015; modern league no
+PIN Leicester City: reads premier2015; eras era2015,era2020; modern league no
+PIN Cádiz: reads laliga2005; eras era2005,era2020; modern league no
+era-only 53, in two or more eras 21
+pins1304 done

@@ -1,0 +1,11 @@
+AT fa77f447 = fa77f4474 2026-10-06 Round 1040: Ligue 2 joins Club Manager and Ligue 1 relegates two, not three. The ligue2 rules row and its eighteen club
+order ["era2010","era2015","era2005","era2020"] keys ["era2010","era2015","era2005","era2020"]
+PIN Wigan Athletic: reads premier2010; eras era2010,era2005; modern league no
+PIN Zaragoza: reads laliga2010; eras era2010,era2005; modern league no
+PIN Chievo Verona: reads seriea2010; eras era2010,era2015,era2005; modern league no
+PIN Bordeaux: reads ligue12010; eras era2010,era2015,era2005,era2020; modern league no
+PIN Caen: reads ligue12010; eras era2010,era2015; modern league no
+PIN Leicester City: reads premier2015; eras era2015,era2020; modern league no
+PIN Cádiz: reads laliga2005; eras era2005,era2020; modern league no
+era-only 37, in two or more eras 11
+pins1304 done
