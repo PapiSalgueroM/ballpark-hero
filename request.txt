@@ -1,0 +1,27 @@
+# Round 1306: the eleven harnesses red on the sweep (r1306-sweep1), on the round's head and on its base c9a1f86a: is the base red the same way?
+#!build
+#!playwright
+#!serial
+base-setup: git worktree add -q /tmp/base c9a1f86a && ln -s "$PWD/node_modules" /tmp/base/node_modules && (cd /tmp/base && npm run build > /tmp/base-build.log 2>&1; echo "base build exit=$?"; tail -1 /tmp/base-build.log)
+head-simActivityNotCompletion: TMPDIR=$(mktemp -d) node scripts/simActivityNotCompletion.mjs
+base-simActivityNotCompletion: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simActivityNotCompletion.mjs
+head-simBracketMoment: TMPDIR=$(mktemp -d) node scripts/simBracketMoment.mjs
+base-simBracketMoment: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simBracketMoment.mjs
+head-simEra2005: TMPDIR=$(mktemp -d) node scripts/simEra2005.mjs
+base-simEra2005: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simEra2005.mjs
+head-simEra2010: TMPDIR=$(mktemp -d) node scripts/simEra2010.mjs
+base-simEra2010: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simEra2010.mjs
+head-simEra2015: TMPDIR=$(mktemp -d) node scripts/simEra2015.mjs
+base-simEra2015: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simEra2015.mjs
+head-simEra2020: TMPDIR=$(mktemp -d) node scripts/simEra2020.mjs
+base-simEra2020: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simEra2020.mjs
+head-simGmCalendar: TMPDIR=$(mktemp -d) node scripts/simGmCalendar.mjs
+base-simGmCalendar: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simGmCalendar.mjs
+head-simGmDealTableFixture: TMPDIR=$(mktemp -d) node scripts/simGmDealTableFixture.mjs
+base-simGmDealTableFixture: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simGmDealTableFixture.mjs
+head-simGmStaff: TMPDIR=$(mktemp -d) node scripts/simGmStaff.mjs
+base-simGmStaff: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simGmStaff.mjs
+head-simGmXp: TMPDIR=$(mktemp -d) node scripts/simGmXp.mjs
+base-simGmXp: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simGmXp.mjs
+head-simEras: TMPDIR=$(mktemp -d) node scripts/simEras.mjs
+base-simEras: cd /tmp/base && TMPDIR=$(mktemp -d) node scripts/simEras.mjs
