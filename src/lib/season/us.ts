@@ -103,10 +103,10 @@ export interface UsSeasonBind {
   fullSeason: number;
   /** The real season's games a team that year, from the sport's own two sourced ledger
    *  (src/data/usSeasonLengths.ts); null: no single length, or a year the ledger does not hold.
-   *  Round 1212: handed his club of that season too, for a ledger that knows a club's own length. */
-  realLength(year: number, team?: string): number | null;
+   *  Round 1212: handed his club of that season and the era too, for a ledger that knows a club's own length. */
+  realLength(year: number, team?: string, eraId?: string): number | null;
   /** Why that year has no game by game view, in the words the hub already shows; null: it has one. */
-  heldLine(year: number, team?: string): string | null;
+  heldLine(year: number, team?: string, eraId?: string): string | null;
   /** Round 1212: why a position has no game by game view yet, in the hub's words; null or absent: it has one. */
   heldFor?(pos: string): string | null;
   /** Round 1212: the league's shape from the sport's own ledger; absent: src/data/usLeagueShape.ts by slug. */
@@ -260,9 +260,9 @@ export function buildUsSeason(
   /* Round 1212: a position this number file cannot lay out yet is held before anything else */
   const posLine = bind.heldFor ? bind.heldFor(pos) : null;
   if (posLine !== null) return { ok: false, why: 'held', line: posLine };
-  const length = bind.realLength(row.year, row.team);
+  const length = bind.realLength(row.year, row.team, eraId);
   if (length === null || length !== bind.fullSeason) {
-    const line = bind.heldLine(row.year, row.team) ?? '📺 No week by week this season: the game has no verified length for the real season.';
+    const line = bind.heldLine(row.year, row.team, eraId) ?? '📺 No week by week this season: the game has no verified length for the real season.';
     return { ok: false, why: 'held', line };
   }
   if (!(row.games > 0) || row.teamResult === 'SUSPENDED') return { ok: false, why: 'empty', line: 'There are no games to show for this season.' };

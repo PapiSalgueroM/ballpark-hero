@@ -488,6 +488,27 @@ function gamesFor(c: MlbCareerState, rng: () => number): { games: number; note: 
   return { games: full, note: null };
 }
 
+/** Round 1212: the engine's own words for a season's end, exported so the
+ *  Season Center reads them by exact equality and never out of a sentence
+ *  (the Round 103 rule). No draw moved: simMlbSeason reads these where it
+ *  typed them before. */
+export const MLB_MISSED_PLAYOFFS = 'Missed October';
+/** The five results on today's ladder, a first exit to the title. */
+export const MLB_PLAYOFF_LADDER = ['Lost the Wild Card series', 'Lost the Division Series', 'Lost the Championship Series', 'Lost the World Series', 'WON THE WORLD SERIES'] as const;
+/** The first exit of a year whose wild card round was one game. */
+export const MLB_WILD_CARD_GAME_EXIT = 'Lost the Wild Card Game';
+/** The results a season of that year can end on, first exit to title: what
+ *  October was that year comes from the sourced ledger through
+ *  postseasonRounds (no wild card round from 2004 to 2011, so a first exit
+ *  there is the Division Series; one game from 2012 to 2019 and in 2021). */
+export function mlbPlayoffResults(year: number): string[] {
+  const ladder: string[] = [...MLB_PLAYOFF_LADDER];
+  const rounds = postseasonRounds('mlb', year);
+  const stages = ladder.slice(ladder.length - 1 - rounds.length);
+  if (stages.length === ladder.length && rounds[0].series?.[1] === 1) stages[0] = MLB_WILD_CARD_GAME_EXIT;
+  return stages;
+}
+
 export function simMlbSeason(
   c: MlbCareerState, teamQuality: number, rng: () => number,
 ): { line: MlbSeasonLine; notes: string[] } {
@@ -593,7 +614,7 @@ export function simMlbSeason(
 
   const strength = teamQuality + (c.ovr - 76) * 0.35;
   const playoffOdds = Math.max(0.05, Math.min(0.85, (strength - 68) / 30));
-  let result = 'Missed October';
+  let result: string = MLB_MISSED_PLAYOFFS;
   let poStage = -1;
   if (rng() < playoffOdds) {
     /* Round 1226: what October was that year comes from the sourced ledger
@@ -604,10 +625,7 @@ export function simMlbSeason(
        made, so the odds of a ring did not move: `stage` still counts 0 for a
        first exit and 4 for the title, and postseasonRung reads it on that
        year's ladder. */
-    const ladder = ['Lost the Wild Card series', 'Lost the Division Series', 'Lost the Championship Series', 'Lost the World Series', 'WON THE WORLD SERIES'];
-    const rounds = postseasonRounds('mlb', c.year);
-    const stages = ladder.slice(ladder.length - 1 - rounds.length);
-    if (stages.length === ladder.length && rounds[0].series?.[1] === 1) stages[0] = 'Lost the Wild Card Game';
+    const stages = mlbPlayoffResults(c.year);
     let stage = 0;
     while (stage < 4 && rng() < 0.42 + (strength - 78) / 85) stage++;
     poStage = stage;
