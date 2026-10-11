@@ -17,6 +17,16 @@
  * green with the wheel out) and rAU-sc-engine-mut (finish green with the wheel out alone; awards wants
  * both). So this is an attribution, not a re-record: the recordings stay as they were taken.
  *
+ * Second fix pass: the other lane's five base pinned harnesses (simSoccerCareerDevelopment, simCareerStoryRole,
+ * simSoccerDerbyHistory, simCareerTrophyRuns, simSoccerSeasonHistory) compare the engine, and two of them the saved
+ * competition reader, with the tree their round was cut from. They compose the same inverse for the groups that hold
+ * that comparison, and only for those. For the reader there is a third addition:
+ *   the ground   the saved competition view copies a non final cup tie's recorded ground (`home`), one line of
+ *                src/lib/soccerSeasonCompetitions.ts. Remote check rAU-G7: with the wheel, the opening and the
+ *                ground out, simCareerTrophyRuns and simSoccerSeasonHistory are green; with the ground in, their
+ *                reader group is the one left red, on `+ home`.
+ * nextTenPatches() hands the same edits out as patch rows for a harness that applies its own patches to a copy.
+ *
  * Like the inverses beside it, this only ever rewrites a COPY of a file that a historical bundle loads.
  * It refuses to run unless the line it takes out is there exactly once, so it cannot go quietly idle when
  * the source moves under it.
@@ -26,11 +36,22 @@ import assert from 'node:assert/strict';
 export const NEXT_TEN_WHEEL_FILE = 'src/lib/careerChanceWheel.ts';
 export const NEXT_TEN_ENGINE_FILE = 'src/lib/soccerCareerEngine.ts';
 export const NEXT_TEN_FILES = [NEXT_TEN_WHEEL_FILE, NEXT_TEN_ENGINE_FILE];
+export const NEXT_TEN_READER_FILE = 'src/lib/soccerSeasonCompetitions.ts';
 
 const EDITS = {
   wheel: { file: NEXT_TEN_WHEEL_FILE, from: '  state.chanceWheel = { title, chance, roll, hit, miss, result, seen: false };', to: '' },
   opening: { file: NEXT_TEN_ENGINE_FILE, from: 'includeOpening: true,', to: 'includeOpening: false,' },
+  ground: { file: NEXT_TEN_READER_FILE, from: '          ...(tie.home !== undefined && !final ? { home: tie.home } : {}),\n', to: '' },
 };
+
+/** The same additions as patch rows ({ id, addition, file, from, to }), for a harness that patches a copy itself. */
+export function nextTenPatches(which = ['wheel', 'opening']) {
+  return which.map(name => {
+    const row = EDITS[name];
+    assert.ok(row, `Unknown Rounds 1197 to 1208 addition: ${name}`);
+    return { id: `next-ten-${name}`, addition: name, file: row.file, from: row.from, to: row.to };
+  });
+}
 
 /**
  * One bundled file with Rounds 1197 to 1208's additions to a save taken out. `relative` is the file's path

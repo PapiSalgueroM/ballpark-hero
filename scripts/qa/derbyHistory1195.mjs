@@ -9,6 +9,7 @@ import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import { inverseCareerNextTen } from '../lib/careerNextTenAttribution1197.mjs';
 assert(process.env.CI, 'Derby history proof runs only in remote CI');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 /* Release AT: the base is the tree just before this round's own merge on the release line (3df03db1, Rounds 1193 and
@@ -28,7 +29,11 @@ export function withDerbyHistorySeed(seed, fn) {
   Date.now = () => 1791586800000;
   try { return { value: fn(), draws }; } finally { Math.random = random; Date.now = now; }
 }
-export async function bundleDerbyHistory({ original = false, patch } = {}) {
+export async function bundleDerbyHistory({ original = false, patch, without = [] } = {}) {
+  /* Release AU: `without` names the additions of Rounds 1197 to 1208 to take out of the COPY this bundle loads
+     (scripts/lib/careerNextTenAttribution1197.mjs), after a control's own patch. Only the groups that compare with
+     the base use such a bundle. */
+  const nextTen = [];
   const receipts = [], loaded = [], require = createRequire(path.join(ROOT, 'package.json'));
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'derby-history-')), output = path.join(tmp, 'bundle.cjs');
   const stdin = "export * as soccer from './src/lib/soccerCareerEngine'; export * as reader from './src/lib/soccerSeasonCompetitions'; export * as derby from './src/lib/soccerCareerDerby'; export * as fixtures from './src/test/fixtures/soccerSeasonCompetitions1173';" + (original ? '' : "export * as history from './src/lib/soccerCareerDerbyHistory';");
@@ -41,13 +46,15 @@ export async function bundleDerbyHistory({ original = false, patch } = {}) {
       source = source.replace(patch.from, patch.to); assert.notEqual(sha(source), before, patch.name + ': effective copied source change');
       receipts.push({ name: patch.name, file: rel, beforeSha256: before, afterSha256: sha(source), effective: true });
     }
+    if (!original && without.length) source = inverseCareerNextTen(rel, source, nextTen, without);
     loaded.push({ file: rel, beforeSha256: before, compiledSha256: sha(source), changed: before !== sha(source) });
     return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : rel.endsWith('.json') ? 'json' : 'ts' };
   }); } };
   try {
     await build({ stdin: { contents: stdin, resolveDir: ROOT, loader: 'ts' }, bundle: true, platform: 'node', format: 'cjs', outfile: output, alias: { '@': path.join(ROOT, 'src') }, plugins: [plugin], define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' }, loader: { '.css': 'empty', '.svg': 'empty', '.png': 'empty', '.jpg': 'empty', '.webp': 'empty' }, logLevel: 'error' });
     if (patch) assert.equal(receipts.length, 1, 'Copied helper defect was loaded exactly once');
-    return { ...require(output), receipts, loaded };
+    if (!original) assert.deepEqual(nextTen.map(row => row.addition).sort(), [...without].sort(), 'Each addition of Rounds 1197 to 1208 asked for was taken out of the copy exactly once');
+    return { ...require(output), receipts, loaded, nextTen };
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
 }
 // Independent raw-save oracle. No production reader or current career fields are used.
@@ -116,10 +123,11 @@ const CONTROLS=[
   {name:'merge-rival-names',file:HELPER,from:'byRival.get(meeting.rival)',to:'records.find(record => record.rival.toLowerCase() === meeting.rival.toLowerCase())',failed:['rival identities','rival totals']},
   {name:'double-rival-totals',file:HELPER,from:'addMeeting(record, meeting);',to:'addMeeting(record, meeting); addMeeting(record, meeting);',failed:['rival totals']},
 ];
-async function run(B,A,carrier,fixtures,dir){
+/* Release AU: N is B with the chance wheel receipt and the opening tie of Rounds 1197 to 1208 out of its copy; the engine baseline alone compares it with the base. */
+async function run(B,A,carrier,fixtures,dir,N=B){
   const report={head:git('rev-parse','HEAD'),tree:git('rev-parse','HEAD^{tree}'),baseHead:BASE,baseTree:BASE_TREE,cases:[],failed:[],counts:{},receipts:B.receipts,loaded:B.loaded,originalLoaded:A.loaded};
   const group=async(name,fn)=>{try{await fn();report.cases.push({name,passed:true});console.log('PASS '+name);}catch(error){report.cases.push({name,passed:false,errorName:error.name,error:String(error.stack||error)});report.failed.push(name);console.log('FAIL '+name+': '+error.message);}};
-  await group('engine baseline',()=>{const pairs=[];try{for(let i=0;i<24;i++){const input=copy(carrier);Object.assign(input,{phase:'playing',pendingSummary:null,pendingEvents:[],pendingBallonDor:null});const before=structuredClone(input),seed=1195100+i,original=withDerbyHistorySeed(seed,()=>A.soccer.advanceProSeason(copy(input),A.soccer.FALLBACK_CLUBS)),current=withDerbyHistorySeed(seed,()=>B.soccer.advanceProSeason(copy(input),B.soccer.FALLBACK_CLUBS));pairs.push({seed,input,original,current});assert.deepEqual(current,original);assert.deepEqual(input,before);}}finally{write(dir,'engine-pairs',pairs);report.counts.enginePairs=pairs.length;}});
+  await group('engine baseline',()=>{const pairs=[];try{for(let i=0;i<24;i++){const input=copy(carrier);Object.assign(input,{phase:'playing',pendingSummary:null,pendingEvents:[],pendingBallonDor:null});const before=structuredClone(input),seed=1195100+i,original=withDerbyHistorySeed(seed,()=>A.soccer.advanceProSeason(copy(input),A.soccer.FALLBACK_CLUBS)),current=withDerbyHistorySeed(seed,()=>N.soccer.advanceProSeason(copy(input),N.soccer.FALLBACK_CLUBS));pairs.push({seed,input,original,current});assert.deepEqual(current,original);assert.deepEqual(input,before);}}finally{write(dir,'engine-pairs',pairs);report.counts.enginePairs=pairs.length;}});
   await group('campaign baseline',()=>{const pairs=[];try{for(const item of campaigns(B,carrier))for(let i=0;i<32;i++){const seed=1195200+i,original=withDerbyHistorySeed(seed,()=>A.soccer.simulateUCL(copy(item.state),copy(item.row))),current=withDerbyHistorySeed(seed,()=>B.soccer.simulateUCL(copy(item.state),copy(item.row)));pairs.push({id:item.id,seed,input:item.state,row:item.row,original,current});assert.deepEqual(current,original);}}finally{write(dir,'campaign-pairs',pairs);report.counts.campaignPairs=pairs.length;}});
   await group('existing readers',()=>{const pairs=[];try{for(const item of fixtures)for(const row of item.career.seasons){const input=copy(row),original={read:A.derby.readSeasonDerbies(input),record:A.derby.derbyRecord(A.derby.readSeasonDerbies(input)),career:A.derby.careerDerbyRecord([input])},current={read:B.derby.readSeasonDerbies(input),record:B.derby.derbyRecord(B.derby.readSeasonDerbies(input)),career:B.derby.careerDerbyRecord([input])};pairs.push({id:item.id,input,original,current});assert.deepEqual(current,original);}}finally{write(dir,'existing-reader-pairs',pairs);report.counts.readerPairs=pairs.length;}});
   const observations=[];for(const item of fixtures){const input=copy(item.career),expected=rawDerbyHistory(input),actual=B.history.savedDerbyHistory(input);observations.push({id:item.id,input:copy(item.career),expected,actual});write(dir,item.id+'-history',observations.at(-1));}
@@ -137,7 +145,8 @@ async function run(B,A,carrier,fixtures,dir){
 }
 if(process.env.DERBY_HISTORY_IMPORT_ONLY!=='1'){
   assert.equal(git('rev-parse',BASE+'^{tree}'),BASE_TREE,'Exact unchanged main baseline tree');const before=hashes(),A=await bundleDerbyHistory({original:true}),B=await bundleDerbyHistory(),recorded=JSON.parse(text('scripts/data/careerLeagueWorldSaves1100.json')).saves.find(save=>save.id==='ere').state,carrier=B.soccer.repairCareer(copy(recorded)),fixtures=derbyFixtures(carrier);
-  const healthy=await run(B,A,carrier,fixtures,path.join(OUT,'healthy'));healthy.sourceBefore=before;healthy.sourceAfter=hashes();healthy.sourceHeld=JSON.stringify(before)===JSON.stringify(healthy.sourceAfter);write(path.join(OUT,'healthy'),'report',healthy);assert.equal(healthy.sourceHeld,true);assert.deepEqual(healthy.failed,[]);assert.equal(healthy.cases.length,11);write(OUT,'native-fixtures',{carrier,cases:fixtures});
-  const controls=[];if(process.env.DERBY_HISTORY_CONTROL==='all')for(const patch of CONTROLS){const faulty=await bundleDerbyHistory({patch}),result=await run(faulty,A,carrier,fixtures,path.join(OUT,patch.name));assert.deepEqual([...result.failed].sort(),[...patch.failed].sort(),patch.name+': exact intended failed groups');assert(result.cases.filter(row=>!row.passed).every(row=>row.errorName==='AssertionError'));assert.equal(result.cases.length,11);for(const n of['engine baseline','campaign baseline','existing readers'])assert(result.cases.find(row=>row.name===n).passed,patch.name+': independent original contracts remain green');controls.push({name:patch.name,failed:result.failed,effective:faulty.receipts[0].effective,receipts:faulty.receipts});console.log('CONTROL FIRED('+patch.name+'): '+result.failed.join(', '));}
+  const WITHOUT=['wheel','opening'],N=await bundleDerbyHistory({without:WITHOUT});
+  const healthy=await run(B,A,carrier,fixtures,path.join(OUT,'healthy'),N);healthy.sourceBefore=before;healthy.sourceAfter=hashes();healthy.sourceHeld=JSON.stringify(before)===JSON.stringify(healthy.sourceAfter);write(path.join(OUT,'healthy'),'report',healthy);assert.equal(healthy.sourceHeld,true);assert.deepEqual(healthy.failed,[]);assert.equal(healthy.cases.length,11);write(OUT,'native-fixtures',{carrier,cases:fixtures});
+  const controls=[];if(process.env.DERBY_HISTORY_CONTROL==='all')for(const patch of CONTROLS){const faulty=await bundleDerbyHistory({patch}),faultyN=await bundleDerbyHistory({patch,without:WITHOUT}),result=await run(faulty,A,carrier,fixtures,path.join(OUT,patch.name),faultyN);assert.deepEqual([...result.failed].sort(),[...patch.failed].sort(),patch.name+': exact intended failed groups');assert(result.cases.filter(row=>!row.passed).every(row=>row.errorName==='AssertionError'));assert.equal(result.cases.length,11);for(const n of['engine baseline','campaign baseline','existing readers'])assert(result.cases.find(row=>row.name===n).passed,patch.name+': independent original contracts remain green');controls.push({name:patch.name,failed:result.failed,effective:faulty.receipts[0].effective,receipts:faulty.receipts});console.log('CONTROL FIRED('+patch.name+'): '+result.failed.join(', '));}
   write(OUT,'controls',{head:healthy.head,tree:healthy.tree,controls,sourceHeld:JSON.stringify(before)===JSON.stringify(hashes())});console.log('Derby history: '+healthy.cases.length+' groups,24 full main season pairs,192 full campaign/RNG pairs,'+controls.length+' effective controls; artifacts '+OUT);
 }

@@ -8,6 +8,7 @@ import { createRequire } from 'node:module';
 import { execFileSync, spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import { nextTenPatches } from './lib/careerNextTenAttribution1197.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Release AT: the base is the tree just before Rounds 1185 to 1187 were merged on the release line (5d31eaa6, PR208
@@ -170,6 +171,12 @@ if (!IMPORT_ONLY) {
   const activePatches = CONTROL ? [controls[CONTROL]] : [];
   const report = { base: BASE, control: CONTROL, sourceBefore: hashes(), cases: [], baselinePairs: 0, uncopiedPairs: 0, formDrawPairs: 0, planSeasons: 0, mentorSeasons: 0, interruptionPaths: 0 };
   const B = await developmentBundle({ patches: activePatches }), original = CONTROL ? await developmentBundle() : B, old = await developmentBundle({ baseline: true });
+  /* Release AU: Rounds 1197 to 1208 add two things to a save on purpose, the chance wheel receipt and a cup's opening
+     tie (scripts/lib/careerNextTenAttribution1197.mjs). The two groups that compare whole saves with the base load a
+     COPY of the source with exactly those two taken out, each at its one line (a control's own patch first, so a
+     control still reaches them); every other group runs on the tree as it ships. */
+  const nextTen = nextTenPatches().map(patch => ({ ...patch, name: patch.id }));
+  const neutralB = await developmentBundle({ patches: [...activePatches, ...nextTen] }), neutralOriginal = CONTROL ? await developmentBundle({ patches: nextTen }) : neutralB;
   const mentorMetadata = seeded(118500, () => B.soccer.getAllEvents(developmentFixture(B)).find(event => event.id === 6)).value;
   async function check(name, fn) {
     try { await fn(); report.cases.push({ name, status: 'passed' }); console.log(`ok   ${name}`); }
@@ -178,12 +185,12 @@ if (!IMPORT_ONLY) {
   }
   await check('uncopied complete PR208 baseline', () => {
     for (const position of ['ST', 'CM', 'CB', 'GK']) for (let seed = 0; seed < 4; seed++) {
-      const input = developmentFixture(original, { position });
+      const input = developmentFixture(neutralOriginal, { position });
       if (seed === 1) delete input.seasons.at(-1).leagueApps;
       if (seed === 2) input.seasons.at(-1).club = 'Foreign Fixture Club';
       if (seed === 3) input.seasons.at(-1).leagueApps = 9;
-      const expected = advance(old, input, 118500 + seed), actual = advance(original, input, 118500 + seed);
-      const metadata = seeded(118500, () => original.soccer.getAllEvents(input).find(event => event.id === 6)).value;
+      const expected = advance(old, input, 118500 + seed), actual = advance(neutralOriginal, input, 118500 + seed);
+      const metadata = seeded(118500, () => neutralOriginal.soccer.getAllEvents(input).find(event => event.id === 6)).value;
       assert.equal(serial(actual.value), serial(updatedMentorMetadata(expected.value, metadata)), 'The uncopied engine keeps the complete certified PR208 baseline');
       assert.deepEqual(actual.draws, expected.draws); report.uncopiedPairs++;
     }
@@ -242,11 +249,11 @@ if (!IMPORT_ONLY) {
   });
   await check('neutral complete saves and RNG against actual PR208', () => {
     for (const position of ['ST', 'CM', 'CB', 'GK']) for (let seed = 0; seed < 4; seed++) {
-      const input = developmentFixture(B, { position });
+      const input = developmentFixture(neutralB, { position });
       if (seed === 1) delete input.seasons.at(-1).leagueApps;
       if (seed === 2) input.seasons.at(-1).club = 'Foreign Fixture Club';
       if (seed === 3) input.seasons.at(-1).leagueApps = 9;
-      const before = serial(input), expected = advance(old, input, 118500 + seed), actual = advance(B, input, 118500 + seed);
+      const before = serial(input), expected = advance(old, input, 118500 + seed), actual = advance(neutralB, input, 118500 + seed);
       fs.writeFileSync(path.join(OUT, `baseline-${position}-${seed}.json`), JSON.stringify({ input, expected: expected.value, actual: actual.value,
         expectedDraws: expected.draws, actualDraws: actual.draws }, null, 2));
       assert.equal(serial(actual.value), serial(updatedMentorMetadata(expected.value, mentorMetadata)), 'Neutral careers preserve the full actual PR208 save except the two certified pending event copy fields');

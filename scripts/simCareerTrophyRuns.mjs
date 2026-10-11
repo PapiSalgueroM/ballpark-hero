@@ -9,6 +9,7 @@ import { execFileSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import { inverseCareerNextTen } from './lib/careerNextTenAttribution1197.mjs';
 import { JSDOM } from 'jsdom';
 assert(process.env.CI, 'Run this proof only in remote CI');
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -29,7 +30,11 @@ export function withTrophySeed(seed, fn) {
   Date.now = () => 1791586800000;
   try { return { value: fn(), draws }; } finally { Math.random = oldRandom; Date.now = oldNow; }
 }
-export async function bundleTrophyRuns({ original = false, patch } = {}) {
+export async function bundleTrophyRuns({ original = false, patch, without = [] } = {}) {
+  /* Release AU: `without` names the additions of Rounds 1197 to 1208 to take out of the COPY this bundle loads
+     (scripts/lib/careerNextTenAttribution1197.mjs), after a control's own patch. Only the groups that compare with
+     the base use such a bundle. */
+  const nextTen = [];
   const receipts = [], loaded = [], require = createRequire(path.join(ROOT, 'package.json'));
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'trophy-runs-')), output = path.join(tmp, 'bundle.cjs');
   const stdin = `export * as soccer from './src/lib/soccerCareerEngine'; export * as reader from './src/lib/soccerSeasonCompetitions'; export * as fixtures from './src/test/fixtures/soccerSeasonCompetitions1173'; ${original ? '' : "import * as React from 'react'; import { renderToStaticMarkup } from 'react-dom/server'; import { TrophyClubCampaign } from './src/components/soccer-career/TrophyCabinet'; export * as cabinet from './src/components/soccer-career/TrophyCabinet'; export const renderCampaign=(career,row)=>renderToStaticMarkup(React.createElement(TrophyClubCampaign,{career,row}));"}`;
@@ -42,13 +47,15 @@ export async function bundleTrophyRuns({ original = false, patch } = {}) {
       const before = sha(source); source = source.replace(patch.from, patch.to); assert.notEqual(sha(source), before, `${patch.name}: effective copied source change`);
       receipts.push({ name: patch.name, file: rel, beforeSha256: before, afterSha256: sha(source), effective: true });
     }
+    if (!original && without.length) source = inverseCareerNextTen(rel, source, nextTen, without);
     loaded.push({ file: rel, beforeSha256: sourceBeforeSha256, compiledSha256: sha(source), changed: sourceBeforeSha256 !== sha(source) });
     return { contents: source, loader: rel.endsWith('.tsx') ? 'tsx' : rel.endsWith('.json') ? 'json' : 'ts' };
   }); } };
   try {
     await build({ stdin: { contents: stdin, resolveDir: ROOT, loader: 'tsx' }, bundle: true, platform: 'node', format: 'cjs', jsx: 'automatic', outfile: output, alias: { '@': path.join(ROOT, 'src') }, plugins: [plugin], define: { 'import.meta.env': '{"DEV":false,"PROD":true,"MODE":"production"}' }, loader: { '.css': 'empty', '.svg': 'empty', '.png': 'empty', '.jpg': 'empty', '.webp': 'empty' }, logLevel: 'error' });
     if (patch) assert.equal(receipts.length, 1, 'Copied product control was loaded exactly once');
-    return { ...require(output), receipts, loaded };
+    if (!original) assert.deepEqual(nextTen.map(row => row.addition).sort(), [...without].sort(), 'Each addition of Rounds 1197 to 1208 asked for was taken out of the copy exactly once');
+    return { ...require(output), receipts, loaded, nextTen };
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
 }
 // The oracle below derives display fields directly from saved games, independently of the production reader.
@@ -114,20 +121,22 @@ const CONTROLS = [
   { name: 'anchor', file: READER, from: 'run.seasonYear !== row.year || run.club !== row.club || ', to: '', failed: ['reader baseline', 'missing markup', 'snapshot precedence'] },
   { name: 'mutation', file: CABINET, from: 'const run = savedClubCampaign(career, row);', to: 'career.money = (career.money ?? 0) + 1; const run = savedClubCampaign(career, row);', failed: ['read boundary'] },
 ];
-async function run(B, A, prepared, dir) {
+/* Release AU: N is B with the chance wheel receipt, the opening tie and the recorded cup ground of Rounds 1197 to 1208
+   out of its copy; the engine baseline and the reader baseline alone compare it with the base. */
+async function run(B, A, prepared, dir, N = B) {
   const report = { head: git('rev-parse', 'HEAD'), tree: git('rev-parse', 'HEAD^{tree}'), baseHead: BASE, baseTree: BASE_TREE, cases: [], failed: [], receipts: B.receipts, loaded: B.loaded, counts: {} };
   const group = async (name, fn) => { try { await fn(); report.cases.push({ name, passed: true }); console.log(`PASS ${name}`); } catch (error) { report.cases.push({ name, passed: false, errorName: error.name, error: String(error.stack || error) }); report.failed.push(name); console.log(`FAIL ${name}: ${error.message}`); } };
   await group('engine baseline', () => {
     const pairs = [];
     for (let seed = 0; seed < 24; seed++) {
       const input = copy(prepared.carrier); input.phase = 'playing'; input.pendingSummary = null; input.pendingEvents = []; input.pendingBallonDor = null;
-      const before = structuredClone(input), old = withTrophySeed(1192100 + seed, () => A.soccer.advanceProSeason(copy(input), A.soccer.FALLBACK_CLUBS)), current = withTrophySeed(1192100 + seed, () => B.soccer.advanceProSeason(copy(input), B.soccer.FALLBACK_CLUBS));
+      const before = structuredClone(input), old = withTrophySeed(1192100 + seed, () => A.soccer.advanceProSeason(copy(input), A.soccer.FALLBACK_CLUBS)), current = withTrophySeed(1192100 + seed, () => N.soccer.advanceProSeason(copy(input), N.soccer.FALLBACK_CLUBS));
       pairs.push({ seed: 1192100 + seed, input, original: old, current }); assert.deepEqual(current, old); assert.deepEqual(input, before);
     }
     write(dir, 'engine-pairs', pairs); report.counts.enginePairs = pairs.length;
   });
   const held = fixtureCases(B), raw = [];
-  await group('reader baseline', () => { for (const item of held) { const original = A.reader.savedSeasonCompetitions(copy(item.career), copy(item.row)), current = B.reader.savedSeasonCompetitions(copy(item.career), copy(item.row)); raw.push({ ...item, original, current }); assert.deepEqual(current, original); } });
+  await group('reader baseline', () => { for (const item of held) { const original = A.reader.savedSeasonCompetitions(copy(item.career), copy(item.row)), current = N.reader.savedSeasonCompetitions(copy(item.career), copy(item.row)); raw.push({ ...item, original, current }); assert.deepEqual(current, original); } });
   await group('saved markup', () => { for (const item of held.filter(item => !['missing', 'wrong-year', 'wrong-club', 'unanchored'].includes(item.id))) { const expected = expectedCampaign(item.career, item.row), actual = renderedCampaign(B.renderCampaign(copy(item.career), copy(item.row))); write(dir, `held-${item.id}`, { ...item, expected, actual }); assert.deepEqual(actual, expected); } report.counts.heldCampaigns = 6; });
   await group('missing markup', () => { for (const item of held.slice(6)) { const actual = renderedCampaign(B.renderCampaign(copy(item.career), copy(item.row))); write(dir, `held-${item.id}`, { ...item, actual }); assert.equal(actual.missing, true); assert.deepEqual(actual.matches, []); assert.equal(actual.result, null); assert.equal(actual.goals, null); } report.counts.missingCampaigns = 4; });
   await group('actual campaign baseline', () => {
@@ -144,14 +153,15 @@ async function run(B, A, prepared, dir) {
 if (process.env.CAREER_TROPHY_RUNS_IMPORT_ONLY !== '1') {
   assert.equal(git('rev-parse', `${BASE}^{tree}`), BASE_TREE, 'Exact unchanged AR source tree');
   const before = sourceHashes(), A = await bundleTrophyRuns({ original: true }), B = await bundleTrophyRuns(), prepared = await prepareTrophyFixtures(B);
-  const healthy = await run(B, A, prepared, path.join(OUT, 'healthy')); healthy.sourceBefore = before; healthy.sourceAfter = sourceHashes(); healthy.sourceHeld = JSON.stringify(healthy.sourceBefore) === JSON.stringify(healthy.sourceAfter); write(path.join(OUT, 'healthy'), 'report', healthy);
+  const WITHOUT = ['wheel', 'opening', 'ground'], N = await bundleTrophyRuns({ without: WITHOUT });
+  const healthy = await run(B, A, prepared, path.join(OUT, 'healthy'), N); healthy.sourceBefore = before; healthy.sourceAfter = sourceHashes(); healthy.sourceHeld = JSON.stringify(healthy.sourceBefore) === JSON.stringify(healthy.sourceAfter); write(path.join(OUT, 'healthy'), 'report', healthy);
   assert.equal(healthy.sourceHeld, true); assert.deepEqual(healthy.failed, [], 'All nine healthy outcome groups pass'); assert.equal(healthy.cases.length, 9);
   const nativeCases = ['modern-europe', 'historical-europe', 'caf'].map(id => { const scenario = prepared.scenarios.find(scenario => scenario.id === id); return { id, category: scenario.country === 'England' ? 'ucl' : 'club', row: scenario.row, seed: scenario.winner.seed, simulation: 'Actual seeded simulated campaign, not a real historical result' }; });
   nativeCases.push({ id: 'older-missing', category: 'ucl', row: { ...copy(B.fixtures.cupSeason), championsLeague: true, clubCupRun: undefined }, simulation: 'Explicit held fictional trophy row without recorded matches' });
   write(OUT, 'native-fixtures', { carrier: prepared.carrier, cases: nativeCases });
   const controls = [];
   if (process.env.CAREER_TROPHY_RUNS_CONTROL === 'all') for (const patch of CONTROLS) {
-    const faulty = await bundleTrophyRuns({ patch }), result = await run(faulty, A, prepared, path.join(OUT, patch.name));
+    const faulty = await bundleTrophyRuns({ patch }), faultyN = await bundleTrophyRuns({ patch, without: WITHOUT }), result = await run(faulty, A, prepared, path.join(OUT, patch.name), faultyN);
     assert.deepEqual([...result.failed].sort(), [...patch.failed].sort(), `${patch.name}: exact intended failed groups`); assert(result.cases.filter(row => !row.passed).every(row => row.errorName === 'AssertionError'), `${patch.name}: assertion outcomes, not setup errors`); assert.equal(result.cases.length, healthy.cases.length);
     assert(result.cases.find(row => row.name === 'engine baseline').passed && result.cases.find(row => row.name === 'actual campaign baseline').passed, `${patch.name}: original AR full-state and RNG contracts still pass`);
     controls.push({ name: patch.name, failed: result.failed, effective: faulty.receipts[0].effective, receipts: faulty.receipts }); console.log(`CONTROL FIRED(${patch.name}): ${result.failed.join(', ')}`);
