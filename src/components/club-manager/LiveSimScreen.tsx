@@ -580,6 +580,10 @@ export function LiveSimScreen({
   const rafRef = useRef<number | null>(null);
   const lastTs = useRef<number | null>(null);
   const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /* Round 1302: true while the pill of a goal that has just been told is up. Set in the very tick the pill is
+     asked for (the state behind it lands a render later) and cleared by the pill's own timer. A stoppage does
+     not start under it: see where a stoppage starts. */
+  const goalPill = useRef(false);
   const finishedRef = useRef(false);
   const pausedBefore = useRef(false);
   /* The whistle takes the live match off the save in the same tick the report
@@ -609,7 +613,9 @@ export function LiveSimScreen({
   const finalOpp = report ? (report.home === career.clubName ? report.awayGoals : report.homeGoals) : null;
   const running = stage === 'first' || stage === 'second' || stage === 'extra';
   /* Round 670 review: no change while the engine is answering at 90. */
-  const canChange = running && !finished && !reviewEvent && !stopped && !(stage === 'second' && askedAt90) && !!liveNow;
+  /* Round 1302: nor during a stoppage, nor once the clock is at the whistle (it can stand there for a moment now,
+     while a ruled out goal the whistle waits for is played and reviewed: the period is over for changes). */
+  const canChange = running && !finished && !reviewEvent && !stopped && clock < stageStop && !(stage === 'second' && askedAt90) && !!liveNow;
 
   /* ---- the truth this walk goes through ---- */
   const feed: LiveFeedEvent[] = useMemo(() => (liveNow ? liveFeed(liveNow) : []), [liveNow]);
@@ -786,6 +792,7 @@ export function LiveSimScreen({
            night's score beside the banner often is not, so the engine says
            which (and gives the aggregate) rather than a line typed here. */
         setBanner({ segs: [{ t: 'Extra time' }], club: extraTimeCall(career, liveNow), tone: 'none' });
+        goalPill.current = false;
         if (bannerTimer.current) clearTimeout(bannerTimer.current);
         bannerTimer.current = setTimeout(() => setBanner(null), 2600);
         return;
@@ -1013,15 +1020,9 @@ export function LiveSimScreen({
   useEffect(() => {
     if (!running || finished || reviewEvent || !nextReview || !reviewDue) return;
     if (!nextStopped) { setReviewEvent(nextReview); return; }
-    /* The stoppage: first the goal, from the frame on the screen, with the match clock standing where it is;
-       then, with its ball in the net, the card. */
-    const id = nextReview.review!.id;
-    if (!stoppage || stoppage.id !== id) {
-      setStoppage({ id, t: 0 });
-      setMotionEvent({ event: { minute: nextReview.minute, ...(nextReview.plus ? { plus: nextReview.plus } : {}), side: nextReview.side, kind: 'goal', text: nextReview.text }, key: ruledOutKey(nextReview), at: clock });
-    } else if (stoppage.t >= stoppageOpen - 1e-9) setReviewEvent(nextReview);
-    // The clock stands still while this runs; the stoppage's own clock is the input that moves.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    /* The stoppage: first the goal (it starts further down, below the banner effect), and then, with its ball
+       in the net, the card. */
+    if (stoppage && stoppage.id === nextReview.review!.id && stoppage.t >= stoppageOpen - 1e-9) setReviewEvent(nextReview);
   }, [running, finished, reviewEvent, nextReview, reviewDue, nextStopped, stoppage, stoppageOpen]);
   /* A stoppage never outlives its review: if the review is gone (settled by Skip, or the rest of the period was
      drawn again without it), the match clock is let go at once. */
@@ -1148,13 +1149,29 @@ export function LiveSimScreen({
     if (big) {
       setBanner(big);
       if (bannerTimer.current) clearTimeout(bannerTimer.current);
-      bannerTimer.current = setTimeout(() => setBanner(null), 2600);
+      bannerTimer.current = setTimeout(() => { goalPill.current = false; setBanner(null); }, 2600);
+      goalPill.current = (big as Banner).tone !== 'none';
     }
     if (small) setEventLine(small);
     // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clock, stage, stageEnd, board, feed, extras, running, finished, terminalWindup, startAt, settledReviews, reviewDue]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
+  /* Round 1302, where a stoppage starts: the goal a review rules out, from the frame on the screen, with the match
+     clock standing where it is. It is declared BELOW the banner effect on purpose. A real goal told in this very
+     commit (the last kick's, when the clock stops at the whistle) has just put its pill up there, and the
+     stoppage waits for that pill to come down (2.6 seconds): a pill that says GOAL for one side straight above a
+     card that says "goal ruled out" for the other is the misreading this fix exists to end. The pill's own timer
+     clears it, which brings this effect round again (`banner` is an input for that reason alone). */
+  useEffect(() => {
+    if (!running || finished || reviewEvent || !nextReview || !reviewDue || !nextStopped) return;
+    const id = nextReview.review!.id;
+    if ((stoppage && stoppage.id === id) || goalPill.current) return;
+    setStoppage({ id, t: 0 });
+    setMotionEvent({ event: { minute: nextReview.minute, ...(nextReview.plus ? { plus: nextReview.plus } : {}), side: nextReview.side, kind: 'goal', text: nextReview.text }, key: ruledOutKey(nextReview), at: clock });
+    // The clock stands still while this runs; the review, the stoppage and the pill are the inputs.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [running, finished, reviewEvent, nextReview, reviewDue, nextStopped, stoppage, banner]);
 
   /* ---- the dots and the ball, off the shared pitch (Round 1101): the plan is built further up ---- */
   const sceneKey = pitchSceneKey(plan, clock);
@@ -1583,7 +1600,7 @@ export function LiveSimScreen({
                   )}
                   {/* event banner */}
                   {banner && (
-                    <div className={cn(
+                    <div data-cm-live-pill={banner.tone} className={cn(
                       /* Round 1101: under the six yard box, so the pill is never over a goal mouth. */
                       'absolute left-1/2 top-[8%] -translate-x-1/2 px-3 py-1.5 rounded-full text-[11px] font-bold shadow-lg animate-in fade-in slide-in-from-top-2 pointer-events-none text-center max-w-[92%]',
                       banner.tone === 'me' ? 'bg-emerald-500 text-black' : banner.tone === 'opp' ? 'bg-red-500 text-black' : 'bg-background/90 text-foreground border border-border',

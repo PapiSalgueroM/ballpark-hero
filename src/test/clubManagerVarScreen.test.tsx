@@ -560,7 +560,13 @@ describe('Club Manager: the review screen', () => {
     for (const g of told) {
       /* The words the screen puts in front of a scorer (the pill and the list beside the pitch print the same run). */
       const lead = g.og ? 'GOAL! Own goal, ' : g.penalty ? 'GOAL! Penalty, ' : g.freeKick ? 'GOAL! Free kick, ' : 'GOAL! ';
-      expect(frames[first].text, `the real goal of ${g.text} at ${place(g)} is on the score and was not told before the card opened`).toContain(`${lead}${g.text}`);
+      expect(frames.slice(0, first + 1).some(f => f.text.includes(`${lead}${g.text}`)), `the real goal of ${g.text} at ${place(g)} is on the score and was not told before the card opened`).toBe(true);
+      /* Its pill (the same words with its minute after them) had its time BEFORE the ruled out goal was played, and
+         is down when the card comes: a pill that says GOAL for one side is never straight above a card that says
+         "goal ruled out" for the other. */
+      const pill = `${lead}${g.text} ${g.minute}${g.plus ? `+${g.plus}` : ''}'`;
+      expect(frames.slice(0, own.from).some(f => f.text.includes(pill)), `the pill of ${g.text}'s goal was never up before the ruled out goal was played`).toBe(true);
+      expect(frames.slice(own.from, last + 1).some(f => f.text.includes(pill)), `the pill of ${g.text}'s real goal was up while the ruled out goal was played or reviewed`).toBe(false);
     }
     console.info(`clubManagerVarScreen: at the card ${told.length} real goal(s) of that clock place had been told (${told.map(g => g.text).join(', ') || 'none there'})`);
     console.info(`clubManagerVarScreen: the crowded end was found on seed ${h.seed}, whistle ${h.whistle}, review at ${place(v)}, card at ${frames[first].minute + frames[first].plus}, played ${runs.map(r => r.kind).join(' ')}`);
