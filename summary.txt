@@ -1,0 +1,7 @@
+book-default-base exit=0 77s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (75s)
+measure exit=0 146s | simCmLeagueBook: MEASURE leagues done, nothing gated (145s)
+simHarnessAnchors exit=0 57s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.
+simNoRivalNames exit=0 18s | No rival product names found. 0 findings.
+book-full-base exit=0 222s | simCmLeagueBook: green, 9 sections, 27 careers x 2 seasons (220s)
+simNoInventedQuotes exit=0 19s | simNoInventedQuotes: green. No real player is quoted or accused anywhere.
+measure-4seeds exit=0 248s | simCmLeagueBook: MEASURE leagues done, nothing gated (248s)

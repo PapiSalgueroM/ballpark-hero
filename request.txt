@@ -1,0 +1,8 @@
+# Round 1306 head 5f1313aa (ecb69867 plus the measuring mode's repair line, harness only): the measure of all leagues, the two fleets, the fences that read every harness
+measure: BOOK_MEASURE=leagues node scripts/simCmLeagueBook.mjs
+book-default-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-def && git worktree add -q $B c9a1f86a && BOOK_BASE=$B node scripts/simCmLeagueBook.mjs
+book-full-base: mkdir -p .tmp-fx && B=$PWD/.tmp-fx/base-full && git worktree add -q $B c9a1f86a && BOOK_BASE=$B BOOK_FLEET=full node scripts/simCmLeagueBook.mjs
+measure-4seeds: MEASURE_SEEDS=4 BOOK_MEASURE=leagues node scripts/simCmLeagueBook.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
+simNoInventedQuotes: node scripts/simNoInventedQuotes.mjs
