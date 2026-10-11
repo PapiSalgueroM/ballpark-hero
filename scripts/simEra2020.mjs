@@ -90,6 +90,14 @@
  *      both were drawn from today's leagues: 304 of 1809 deals and 106 of
  *      136 rivals on these seeds (the numbers are at the section).
  *
+ *  10. THE OUT OF WORK MARKET (Round 1304 fix pass, the same defect in a
+ *      third place): in every past season a sacked manager is offered jobs
+ *      by clubs of that season only, on that season's card, taking one puts
+ *      him at that club, and the eight week floor opens a job at a small
+ *      club of that season. Before the fix 342 of 429 calls on these seeds
+ *      came from a club of today and 188 of 240 jobs taken moved him
+ *      nowhere (the numbers are at the section).
+ *
  * Thirteen negative controls, SIM_ERA2020_CONTROL=dupe|stale|fourleagues|nofield|swapfinish|nolift|modernmarket|eraorder|leak|joinage|shiporder|modernnews|modernwar,
  * each of which must end the run red (see the block where they are defined).
  *
@@ -169,6 +177,7 @@ const {
   buildBoardObjectives, ERA_LEAGUES, ERA_UCL_FIELDS, eraPlayableClubs, worldSeasonLabel,
   eraUclHasR16, uclFirstKoRound, careerLeagueOf, leagueOf, eraLeagueOf,
   startNegotiation, makeOffer,
+  enterWilderness, wildernessWeek, acceptWildernessJob, eraClubDefFor,
 } = cm;
 const REAL_RANDOM_1304 = Math.random;
 const { ERA2020_ROSTERS, ERA2020_META, ERA2020_PARTIAL } = E20;
@@ -849,6 +858,107 @@ console.log('9) Every past season\'s news and bidding wars name clubs of that se
     if (wars < WAR_FLOOR) fail(`${eraId}: only ${wars} rivals in ${WAR_SEEDS} negotiations (floor ${WAR_FLOOR}); the rival check has too little to read`);
     if (strangers.length) fail(`${eraId}: ${strangers.length} of ${deals} deals in the news are bought by a club that is not in that season's leagues, e.g. ${strangers.slice(0, 3).join('; ')}`);
     if (rivals.length) fail(`${eraId}: ${rivals.length} of ${wars} rivals in a negotiation are clubs that are not in that season's leagues, e.g. ${rivals.slice(0, 3).join('; ')}`);
+  }
+  Math.random = REAL_RANDOM_1304;
+}
+
+/* ---------- 10. A sacked manager's phone rings from clubs of that season ---------- */
+console.log('10) Every past season\'s out of work market offers jobs at clubs of that season');
+{
+  /* Round 1304 fix pass, the third place of section 9's defect, found by the
+     reviewer who read the code: the out of work screen (Round 201) drew its
+     job offers, and the floor that opens after eight silent weeks, from
+     today's 454 clubs in every era. So a manager sacked in 2010-11 was rung
+     by Hearts of today's Scottish Premiership and by today's Championship,
+     the card of a club that exists in both worlds printed today's league,
+     tier and budget, and pressing "Take the job" at a club that season does
+     not hold moved him nowhere: the rollover refuses a club outside the era
+     (Round 146's guard), so he was back at the club that sacked him, with
+     the sack wiped.
+     What this reads, for every past season: seeded careers marked sacked and
+     waited through twelve weeks, every offer against that season's leagues
+     and the era's own club def; the newest offer taken, which must put the
+     manager at that club; the eight week floor on its own (a generator that
+     returns one constant keeps the phone silent, so the floor is all that
+     can answer); and a save from before the fix that still holds an offer
+     from a club of today, which must not be takeable and must be gone after
+     the next week, while an offer from a club of that season stays.
+     MEASURED 2026-10-11 on the engine before the fix (94647e74), these
+     seeds, 2010-11, 2015-16, 2005-06, 2020-21: of 119, 98, 109 and 103
+     calls, 99, 75, 83 and 85 came from a club not of that season and every
+     one of the rest printed a card of today (20, 23, 26, 18); of 60 jobs
+     taken an era, 10, 15, 17 and 10 moved the manager ("Barcelona to
+     Millwall: the save reads Barcelona"); of 30 floors an era, 24, 24, 24
+     and 30 were not a club of that season. The floors are about half of the
+     fewest calls and the fewest jobs taken these seeds gave an era on either
+     engine. */
+  const WILD_SEEDS = 60, WILD_WEEKS = 12, CALL_FLOOR = 45, TAKE_FLOOR = 30, FLOOR_CLUBS = 6;
+  const SILENT = [0.36, 0.5, 0.65, 0.8, 0.99];
+  const today = cm.REAL_LEAGUES.flatMap(l => l.clubs);
+  for (const eraId of Object.keys(ERA_LEAGUES)) {
+    const leagues = ERA_LEAGUES[eraId];
+    const leagueOfClub = new Map(leagues.flatMap(l => l.clubs.map(c => [c, l])));
+    let calls = 0, taken = 0, floors = 0;
+    const strangers = [], cards = [], unmoved = [], badFloor = [];
+    for (let i = 0; i < WILD_SEEDS; i++) {
+      Math.random = seeded(15013 + i * 7919);
+      const lg = leagues[i % leagues.length];
+      const club = lg.clubs[(i * 3) % lg.clubs.length];
+      const sacked = { ...startCareer(club, eraId), sacked: true };
+      let out = enterWilderness(sacked);
+      const rng = seeded(16001 + i * 104729);
+      const heard = new Set();
+      for (let w = 0; w < WILD_WEEKS; w++) {
+        out = wildernessWeek(out, rng);
+        for (const o of out.wilderness.offers) {
+          if (heard.has(o.club)) continue;
+          heard.add(o.club);
+          calls += 1;
+          const real = leagueOfClub.get(o.club);
+          if (!real) { strangers.push(`${o.club} of today's ${o.league} rang the sacked manager of ${club}`); continue; }
+          const def = eraClubDefFor(o.club, eraId);
+          if (o.league !== real.name || o.tier !== def.tier || o.budget !== def.budget) cards.push(`${o.club} as ${o.league}, tier ${o.tier}, ${o.budget}m (that season: ${real.name}, tier ${def.tier}, ${def.budget}m)`);
+        }
+      }
+      const offer = out.wilderness.offers[out.wilderness.offers.length - 1];
+      if (offer) {
+        taken += 1;
+        const next = acceptWildernessJob(out, offer.club);
+        if (!next || next.clubName !== offer.club || next.wilderness || next.sacked) unmoved.push(`${club} to ${offer.club}: ${next ? `the save reads ${next.clubName}` : 'nothing happened'}`);
+      }
+      if (i < FLOOR_CLUBS) {
+        for (const v of SILENT) {
+          const silent = { ...sacked, wilderness: { weeksOut: 7, formerClub: club, offers: [], seen: [] } };
+          const got = wildernessWeek(silent, () => v).wilderness.offers;
+          if (got.length !== 1) { fail(`${eraId}: eight silent weeks at ${club} opened ${got.length} jobs, the floor opens exactly one`); continue; }
+          floors += 1;
+          if (!leagueOfClub.has(got[0].club)) badFloor.push(`${got[0].club} of today's ${got[0].league}`);
+          else if (eraClubDefFor(got[0].club, eraId).tier < 3) badFloor.push(`${got[0].club}, tier ${eraClubDefFor(got[0].club, eraId).tier} that season`);
+        }
+      }
+    }
+    console.log(`   ${eraId}: ${calls} calls in ${WILD_SEEDS} sackings, ${strangers.length} from a club not of that season, ${cards.length} with a card of another season; ${taken} jobs taken, ${unmoved.length} did not move the manager; ${floors} floors, ${badFloor.length} not a small club of that season`);
+    if (calls < CALL_FLOOR) fail(`${eraId}: only ${calls} calls in ${WILD_SEEDS} sackings (floor ${CALL_FLOOR}); the offer check has too little to read`);
+    if (taken < TAKE_FLOOR) fail(`${eraId}: only ${taken} jobs taken in ${WILD_SEEDS} sackings (floor ${TAKE_FLOOR}); the move check has too little to read`);
+    if (floors !== FLOOR_CLUBS * SILENT.length) fail(`${eraId}: ${floors} floors read, ${FLOOR_CLUBS * SILENT.length} were asked for`);
+    if (strangers.length) fail(`${eraId}: ${strangers.length} of ${calls} job offers to a sacked manager come from a club that is not in that season's leagues, e.g. ${strangers.slice(0, 3).join('; ')}`);
+    if (cards.length) fail(`${eraId}: ${cards.length} of ${calls} job offers print a league, tier or budget that is not that season's, e.g. ${cards.slice(0, 2).join('; ')}`);
+    if (unmoved.length) fail(`${eraId}: ${unmoved.length} of ${taken} jobs taken from the out of work screen did not put the manager at that club, e.g. ${unmoved.slice(0, 3).join('; ')}`);
+    if (badFloor.length) fail(`${eraId}: ${badFloor.length} of ${floors} jobs the eight week floor opens are not at a small club of that season, e.g. ${badFloor.slice(0, 3).join('; ')}`);
+    /* The save from before the fix. Its offers were drawn from today's
+       clubs; one from a club that season does not hold cannot be honoured. */
+    const stale = today.find(c => !leagueOfClub.has(c));
+    const kept = leagues[1].clubs[5];
+    const home = leagues[0].clubs[0];
+    if (!stale) { fail(`${eraId}: every club of today is in that season's leagues, there is no stale offer to test`); continue; }
+    const card = name => ({ club: name, country: '', tier: 3, league: 'a league', brief: 'Stay up.', reason: 'They need a manager.', budget: 10, keenness: 40 });
+    Math.random = seeded(4242);
+    const old = { ...startCareer(home, eraId), sacked: true, wilderness: { weeksOut: 2, formerClub: home, offers: [card(stale), card(kept)], seen: [stale, kept] } };
+    const took = acceptWildernessJob(old, stale);
+    if (took) fail(`${eraId}: an old save's offer from ${stale}, a club that season does not hold, was taken and the save reads ${took.clubName}`);
+    const after = wildernessWeek(old, seeded(77)).wilderness.offers.map(o => o.club);
+    if (after.includes(stale)) fail(`${eraId}: an old save's offer from ${stale} is still on the out of work screen a week later`);
+    if (!after.includes(kept)) fail(`${eraId}: an old save's offer from ${kept}, a club of that season, was dropped with the stale one`);
   }
   Math.random = REAL_RANDOM_1304;
 }
