@@ -155,6 +155,12 @@ async function pure() {
   let oldRoot;
   try {
     let hasBase=false;try{hasBase=execFileSync('git',['rev-parse',BASE+'^{tree}'],{cwd:ROOT,encoding:'utf8',stdio:['ignore','pipe','ignore']}).trim()===TREE;}catch{/* A normal shallow checkout uses the certified component reversal below. */}
+    /* Release AX: the pinned base is "this head with the overlay out" only while no other source moved. Once a later
+       merge changes the engine (the Press room did: one more module in the bundle, and esbuild renames a helper that
+       two modules both call clamp, so the function bodies this proof stores in a pending event differ between the two
+       bundles although every career is the same), the whole base is no longer that tree. Then the original is the
+       certified reversal of this head's own component, which is the same comparison on the tree in front of us. */
+    if(hasBase){try{execFileSync('git',['diff','--quiet',BASE,'HEAD','--','src',':(exclude)'+PAGE,':(exclude)'+HELPER,':(exclude)src/data/belgianSeasonMembership.ts',':(exclude)src/test',':(exclude)src/**/*.test.ts',':(exclude)src/**/*.test.tsx'],{cwd:ROOT,stdio:'ignore'});}catch{hasBase=false;report.baseMoved='source outside the overlay differs from the pinned base, so the original is the certified reversal of this head';console.log('note: '+report.baseMoved);}}
     let old;if(hasBase){const tar=execFileSync('git',['archive','--format=tar',BASE],{cwd:ROOT,maxBuffer:150000000});write('original/source.tar.gz',gzipSync(tar,{level:9}));write('original/source-inventory.txt',execFileSync('git',['ls-tree','-r',BASE],{cwd:ROOT}));oldRoot=fs.mkdtempSync(path.join(os.tmpdir(),'opponent-original-'));execFileSync('tar',['-xf','-','-C',oldRoot],{input:tar});old=await bundle('original',oldRoot);report.originalScope='complete pinned f780 source';}
     else{old=await bundle('original',ROOT,null,{legacy:true});report.originalScope='canonical f780 component reconstructed, other engine/read modules from current shallow checkout';}
     const current=await bundle('current',ROOT);
