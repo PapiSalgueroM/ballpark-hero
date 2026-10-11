@@ -1,0 +1,4 @@
+#!serve
+#!playwright
+#!serial
+walk2: node .rc/x/walk2.mjs

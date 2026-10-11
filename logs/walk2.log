@@ -1,0 +1,20 @@
+walk2: the stamped save is main:nhl:85 (told 540); the unstamped one is nhl-engine-0 of the version 1 fixture
+  stamped 2 by old code (engine loop save): beats pressed 3; the save was rewritten; 7 paths differ: .c.netWorth: 5.6 -> 4.6 | .c.pendingRivalryChoice: {"id":"nhl_rival_youth_clinic","emoji":"💛","title":"TRUCE F -> null | .c.karma: 50 -> 58 | .c.pendingRivalryEvent: {"id":305,"emoji":"👋","title":"Rival Retires","description" -> null | .c.role: undefined -> "starter" | .c.lastRivalryEventId: undefined -> 305 | .c.rivalryIntensity: undefined -> 0
+  ok   stamped 2 by old code (engine loop save): the stamp is what it was (2 then, 2 now)
+  ok   stamped 2 by old code (engine loop save): no page error 
+  unstamped (version 1 fixture, board save): beats pressed 3; the save was rewritten; 7 paths differ: .c.netWorth: 6.2 -> 5.2 | .c.karma: 50 -> 58 | .c.pendingRivalryChoice: {"id":"nhl_rival_youth_clinic","emoji":"💛","title":"TRUCE F -> null | .c.pendingRivalryEvent: {"id":305,"emoji":"👋","title":"Rival Retires","description" -> null | .c.role: undefined -> "starter" | .c.lastRivalryEventId: undefined -> 305 | .c.rivalryIntensity: undefined -> 0
+  ok   unstamped (version 1 fixture, board save): the stamp is what it was (undefined then, undefined now)
+  ok   unstamped (version 1 fixture, board save): no page error 
+  ok   retired screen 390: the legacy pill is on the page
+  ok   help 390: the "?" is on the page
+  ok   help 390: the Hall rule is printed
+  ok   help 390: the example says a retired career keeps its ballot
+  help 390: the rules block is 3844 characters; season lengths named in it: none
+  ok   help 390: no page error 
+  ok   retired screen 1280: the legacy pill is on the page
+  ok   help 1280: the "?" is on the page
+  ok   help 1280: the Hall rule is printed
+  ok   help 1280: the example says a retired career keeps its ballot
+  help 1280: the rules block is 3844 characters; season lengths named in it: none
+  ok   help 1280: no page error 
+walk2: all passed
