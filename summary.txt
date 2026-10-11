@@ -1,0 +1,8 @@
+vitest-book exit=0 5s |    Duration  3.51s (transform 236ms, setup 210ms, collect 328ms, tests 1.83s, environment 1.24s, prepare 581ms)
+simCmLeagueBook exit=0 66s | simCmLeagueBook: green, 9 sections, 5 careers x 2 seasons (65s)
+simCmLeagueRules exit=0 65s | simCmLeagueRules: all checks passed (modern, eras, pure, drop4, cupless, shapes, chunks)
+simDailyDeals exit=0 3s | simDailyDeals: green. 12 Hot Seat dates (5 Premier League) and 6 Deadline Day dates (3 Premier League) deal what Release AS dealt, and no daily carries the real fixture k
+tsc exit=0 104s | 
+simManagerAppealIsolation exit=0 54s | Equivalent appeal outcomes must agree: passed for 24 original pairs and 3 separate generated-position pairs.
+simNoRivalNames exit=0 17s | No rival product names found. 0 findings.
+simHarnessAnchors exit=0 51s | simHarnessAnchors: green. Every harness parses and none carries an unmatchable anchor.

@@ -1,0 +1,9 @@
+# Round 1306 THE PUSHED HEAD b7943c61 (docs only over 5f1313aa): the type gate, the two unit files, the gate's own line of the harness, the fences
+tsc: node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+vitest-book: node_modules/.bin/vitest run src/lib/clubManagerLeagueBook.test.ts src/lib/clubManagerLeagueBoards.test.ts --testTimeout=300000 --hookTimeout=120000
+simCmLeagueBook: node scripts/simCmLeagueBook.mjs
+simCmLeagueRules: node scripts/simCmLeagueRules.mjs
+simManagerAppealIsolation: node scripts/simManagerAppealIsolation.mjs
+simDailyDeals: node scripts/simDailyDeals.mjs
+simHarnessAnchors: node scripts/simHarnessAnchors.mjs
+simNoRivalNames: node scripts/simNoRivalNames.mjs
