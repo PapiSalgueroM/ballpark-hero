@@ -1,0 +1,9 @@
+tsc exit=0 59s | 
+varscreen exit=0 46s |    Duration  45.87s (transform 1.48s, setup 54ms, collect 1.91s, tests 43.17s, environment 312ms, prepare 116ms)
+late-fails-first exit=1 8s | RESULT late-on-old-screen=1
+livemotion exit=0 45s |    Duration  44.43s (transform 2.44s, setup 403ms, collect 5.94s, tests 42.32s, environment 2.13s, prepare 460ms)
+save exit=0 4s |    Duration  3.55s (transform 1.69s, setup 103ms, collect 3.68s, tests 1.79s, environment 674ms, prepare 272ms)
+simLiveSimMotion exit=0 46s | simLiveSimMotion: green. 55 tests passed (the viewer on real feeds, the pitch part's rules on 200 half feeds and on feeds made by hand, the goal sequence, match mode), an
+simMatchScreen exit=0 3s | simMatchScreen: PASS. One match, two ways through it, and a report that names both clubs, shows the clock it ran to, splits the ball two ways and draws a graph that moves
+simCmOwnGoals exit=0 50s | simCmOwnGoals: PASS, 8 sections green
+simExtraTime exit=0 73s | simExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (
